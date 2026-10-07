@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"/>
+<title>THE WINDBOUND OATH v0.42</title>
+
+
+\n\n
+
+
+
+
+
+
+
+
+<meta name="build-version" content="v0.56-raider-ko-finish">
+
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div id="game"><div id="world">
+<div class="road" style="left:80px;top:560px;width:1600px;height:150px"></div><div class="road" style="left:680px;top:100px;width:150px;height:1000px"></div>
+<div class="river" style="left:1450px;top:0;width:180px;height:1250px"></div>
+<div class="house" style="left:180px;top:300px">エイダンの家<div class="door" data-room="home"></div></div>
+<div class="house" style="left:500px;top:270px">宿屋<div class="door" data-room="inn"></div></div>
+<div class="house" style="left:920px;top:270px">道具屋<div class="door" data-room="shop"></div></div>
+<div class="hill" style="left:1060px;top:70px;width:390px;height:310px"></div>
+<div class="house elderHouse" style="left:1120px;top:125px">長老の家<div style="font-size:12px;margin-top:24px;color:#d8c995">― 風見の丘 ―</div><div class="door" data-room="elder"></div></div>
+<div class="stone" style="left:1085px;top:345px">ᚠ</div><div class="stone" style="left:1390px;top:340px">ᚱ</div>
+<div class="tree" id="balloonTree" style="left:420px;top:770px"><span style="position:absolute;left:16px;top:-30px">🎈</span></div>
+<div class="tree" style="left:260px;top:850px"></div><div class="tree" style="left:1040px;top:850px"></div><div class="tree" style="left:1280px;top:400px"></div>
+<div class="npc kid" data-npc="kid" style="left:360px;top:690px">子</div>
+<div class="npc dog" data-npc="dog" style="left:720px;top:720px">犬</div>
+<div class="npc" data-npc="man" style="left:840px;top:480px">人</div>
+<div class="npc elder" data-npc="old" style="left:1080px;top:650px">老</div>
+<div class="npc kid" data-npc="catowner" style="left:1280px;top:570px">娘</div>
+<div class="npc" data-npc="cat" id="cat" style="left:1320px;top:980px;background:#ddd;color:#222">猫</div>
+<div class="zoneLabel" style="left:120px;top:1040px">南の農地</div>
+<div class="field" style="left:100px;top:1110px;width:360px;height:260px"></div>
+<div class="field" style="left:500px;top:1160px;width:330px;height:230px"></div>
+<div class="fence" style="left:70px;top:1080px;width:800px"></div>
+<div class="flower" style="left:570px;top:520px">🌼</div><div class="flower" style="left:620px;top:505px">🌿</div><div class="flower" style="left:675px;top:520px">🌼</div>
+<div class="well" id="well" style="left:730px;top:550px"></div>
+<div class="zoneLabel" style="left:675px;top:500px">村の広場</div>
+<div class="sign" id="squareSign" style="left:650px;top:690px">←住宅　訓練場→　北：風見の丘</div>
+<div class="training" style="left:1540px;top:800px"></div>
+<div class="zoneLabel" style="left:1630px;top:755px">訓練場</div>
+<div class="dummy" id="dummy1" style="left:1630px;top:900px"></div>
+<div class="dummy" id="dummy2" style="left:1760px;top:930px"></div>
+<div class="sign" id="trainingSign" style="left:1560px;top:1070px">リンド村 訓練場</div>
+<div class="bridge" style="left:1435px;top:540px"></div>
+<div class="zoneLabel" style="left:1465px;top:500px">東の小橋</div>
+<div class="arch" style="left:900px;top:1390px"></div>
+<div class="sign" id="hillExit" style="left:920px;top:1460px">南門　夕暮れの丘 →</div>
+<div class="npc kid walking" id="kid2" style="left:610px;top:620px">子</div>
+<div class="npc kid walking" id="kid3" style="left:660px;top:650px">子</div>
+<div class="npc dog walking" id="dog2" style="left:880px;top:690px">犬</div>
+<div class="npc walking" id="farmer" style="left:330px;top:1050px;background:#806849">農</div>
+<div class="npc walking" id="woman" style="left:570px;top:820px;background:#9b6e72">人</div>
+<div class="npc elder" id="hillOld" style="left:1230px;top:410px">老</div>
+<div id="miniToast"></div>
+<div class="fisher" id="fisher1" style="left:1390px;top:720px">釣<div class="rod" style="left:28px;top:18px"></div></div>
+<div class="float" style="left:1480px;top:770px"></div>
+<div class="fisher" id="fisher2" style="left:1375px;top:1010px">釣<div class="rod" style="left:28px;top:18px"></div></div>
+<div class="float" style="left:1470px;top:1060px"></div>
+<div id="fiona" style="left:1710px;top:845px">F</div>
+<div class="firefx" style="left:520px;top:320px"></div>
+<div class="firefx" style="left:930px;top:330px"></div>
+<div class="firefx" style="left:250px;top:410px"></div>
+<div class="firefx" style="left:1130px;top:260px"></div>
+<div class="debris" style="left:760px;top:620px;width:95px;height:32px"></div>
+<div class="debris" style="left:1050px;top:575px;width:75px;height:28px"></div>
+<div class="attackRubble" style="left:515px;top:220px;width:115px;height:38px"></div>
+<div class="attackRubble" style="left:710px;top:630px;width:145px;height:42px;transform:rotate(9deg)"></div>
+<div class="attackRubble" style="left:1240px;top:710px;width:120px;height:36px"></div>
+<div class="attackSmoke" style="left:560px;top:130px"></div>
+<div class="attackSmoke" style="left:805px;top:560px"></div>
+<div class="attackSmoke" style="left:1300px;top:620px"></div>
+<div class="attackFlame" style="left:590px;top:245px">♨</div>
+<div class="attackFlame" style="left:825px;top:670px">♨</div>
+<div class="attackFlame" style="left:1320px;top:735px">♨</div>
+<div class="attackNpc" id="royalKnight" style="left:980px;top:315px;background:#26364a;border-color:#b9a36a;color:#e9dfc7">騎士</div>
+<div class="attackGoblin" id="northGob1" style="left:1080px;top:350px">異形</div>
+<div class="attackGoblin" id="northGob2" style="left:1150px;top:395px">異形</div>
+<div id="northEscape" style="position:absolute;left:900px;top:180px;width:330px;height:90px;z-index:25;border-top:3px dashed #8f7b52;color:#d9c999;text-align:center;padding-top:10px;display:none">北の退路</div>
+<div class="attackNpc injured" id="attackOld" style="left:930px;top:1110px">老人</div>
+<div class="attackNpc" id="attackMother" style="left:1090px;top:940px">母</div>
+<div class="attackNpc child" id="attackChild" style="left:1160px;top:900px">子</div>
+<div class="attackGoblin" id="attackGob1" style="left:1060px;top:820px">異形</div>
+<div class="attackNpc fiona" id="attackFiona" style="left:1040px;top:690px">F</div>
+<div class="attackGoblin" id="attackGob2" style="left:1130px;top:665px">異形</div>
+<div id="player"></div></div>
+<div id="hud"><b>MAIN OBJECTIVE</b><div id="obj">訓練場でフィオナと話そう</div></div>
+<div id="questNotice"></div><div id="hint">画面をタップして移動 / 建物・村人をタップして調べる</div>
+<div id="msg"></div><div id="storyFlag"></div>
+<div id="battle">
+<div id="battleTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aHP"></div></div><span id="aHPtxt"></span><div class="tpbar"><div class="tpfill" id="aTP"></div></div><span class="tptext" id="aTPtxt"></span></div>
+<div class="panel"><b>訓練用木人</b><div class="hpbar"><div class="hpfill" id="dHP"></div></div><span id="dHPtxt"></span></div></div>
+<div id="battleField"><div class="battler" id="bAidan">エイダン</div><div class="battler" id="bFiona">フィオナ</div><div class="battler" id="bDummy">木人</div></div>
+<div class="panel" id="battleMsg">訓練開始！</div>
+<div id="battleCmd"><button id="atk">攻撃</button><button id="skill">一閃　TP30</button><button id="guard">防御</button></div>
+</div>
+<div id="rescueNotice"></div>
+<div id="attackBattle">
+<div id="battleTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aaHP"></div></div><span id="aaHPtxt"></span><div class="tpbar"><div class="tpfill" id="aaTP"></div></div><span class="tptext" id="aaTPtxt"></span></div>
+<div class="panel"><b id="enemyName">異常化ゴブリン</b><div class="hpbar"><div class="hpfill" id="ggHP"></div></div><span id="ggHPtxt"></span></div></div>
+<div id="attackRune">黒紫のルーンが脈動している……</div>
+<div class="v2BattleStage" id="battleField">
+<div class="v2Unit ally aidanUnit" id="v2AidanUnit">
+<div class="v2Float" id="floatAidan"></div>
+<div class="v2NearHud" id="hudAidan"><b>エイダン</b><div class="v2Bars"><i class="hp"><em id="v2AHP"></em></i><i class="tp"><em id="v2ATP"></em></i></div><small id="v2ATxt"></small></div>
+<div class="battler spriteBattler approvedRaster" id="bAidan2"><img alt="エイダン" src="img/battle/embedded/asset_001_728fe869af28.png"/></div>
+</div>
+<div class="v2Unit ally fionaUnit" id="v2FionaUnit">
+<div class="v2Float" id="floatFiona"></div>
+<div class="v2NearHud" id="hudFiona"><b>フィオナ</b><div class="v2Bars"><i class="hp"><em id="v2FHP"></em></i><i class="mp"><em id="v2FMP"></em></i></div><small id="v2FTxt"></small></div>
+<div class="battler spriteBattler approvedRaster" id="bFiona2"><img alt="フィオナ" src="img/battle/embedded/asset_002_f3e4ac449c20.png"/></div>
+</div>
+<div class="v2Unit enemy gobUnit" id="v2GobUnit">
+<div class="v2Float" id="floatGob"></div>
+<div class="v2NearHud enemyHud" id="hudGob"><b id="v2EnemyName">異常化ゴブリン</b><div class="v2Bars"><i class="hp"><em id="v2GHP"></em></i></div><small id="v2GTxt"></small></div>
+<div class="battler enemyAura spriteBattler approvedRaster enemyRaster" id="bGob"><img alt="異常化ゴブリン" src="img/battle/embedded/asset_003_93ecda87920e.png"/></div>
+</div>
+</div>
+<div class="panel" id="battleMsg2" style="position:absolute;left:4%;right:4%;bottom:15%;min-height:62px">異常化ゴブリンが立ちはだかった！</div>
+<div id="battleCmd" style="z-index:2"><button id="aatk">攻撃</button><button id="askill">一閃　TP30</button><button id="aguard">防御</button></div>
+<div id="normalPartyHud"><div class="partyCard" id="nCardA"><b>エイダン</b><div class="mini"><i id="nAHP"></i></div><span id="nATxt"></span></div><div class="partyCard" id="nCardF"><b>フィオナ</b><div class="mini"><i id="nFHP"></i></div><span id="nFTxt"></span></div></div>
+<div id="normalFiona">F</div>
+<div id="normalActor"></div>
+<div id="normalItems"></div>
+<button id="normalCommandToggle" type="button">COMMAND</button><div hidden="" id="normalBattleCmd"><button class="drawerClose" id="normalCommandClose" type="button">× 閉じる</button>
+<button id="nAtk">攻撃</button><button id="nSkill">一閃 TP30</button>
+<button id="nHeal">ヒール MP8</button><button id="nPrayer">風の祈り MP6</button>
+<button id="nGuard">防御</button><button id="nItem">アイテム</button>
+</div>
+</div>
+<div id="returnScene"><div id="returnBackdrop"><div id="returnRoad"></div><div id="returnAidan"></div><div id="returnFiona"></div><div id="returnGoblin"></div><div id="returnFlash"></div></div><div id="returnText"></div><div id="returnHint">タップして進む</div></div>
+<div id="dangerBanner">風が、止まった。</div>
+<div id="escapeScene"><div id="escapeRiver"></div><div id="escapeBank"></div><div id="escapeA">A</div><div id="escapeF">F</div><div id="escapeGob">異形</div><div id="escapeText"></div><div id="escapeHint">タップして進む</div></div>
+<div id="forestScene"><div id="forestWorld">
+<div class="fTree" style="left:160px;top:170px"></div><div class="fTree" style="left:420px;top:90px"></div><div class="fTree" style="left:720px;top:230px"></div><div class="fTree" style="left:980px;top:120px"></div><div class="fTree" style="left:1460px;top:180px"></div>
+<div class="fTree" style="left:240px;top:760px"></div><div class="fTree" style="left:590px;top:900px"></div><div class="fTree" style="left:930px;top:790px"></div><div class="fTree" style="left:1510px;top:760px"></div>
+<div class="fRock" style="left:760px;top:580px"></div><div class="fRock" style="left:1120px;top:680px"></div>
+<div class="fWall" style="left:500px;top:360px;width:360px;height:115px"></div>
+<div class="fWall" style="left:260px;top:610px;width:420px;height:100px"></div>
+<div class="fWall" style="left:910px;top:470px;width:115px;height:360px"></div>
+<div class="fWall" style="left:1190px;top:810px;width:390px;height:105px"></div>
+<button class="fChest" id="fChest1" style="left:420px;top:520px">▣</button>
+<button class="fChest" id="fChest2" style="left:1080px;top:930px">▣</button>
+<button class="fChest" id="fChest3" style="left:1450px;top:260px">▣</button>
+<button class="fGob" id="forestGob1" style="left:690px;top:760px">異形</button>
+<button class="fGob" id="forestGob2" style="left:1110px;top:250px">異形</button>
+<button class="fGob" id="forestGob3" style="left:1370px;top:690px">異形</button>
+<div id="louSeal"></div><div id="windPath"></div><button aria-label="風の気配" id="louSearch"></button><div id="louSprite">ルー</div>
+<div id="ancientStone">ᚠ</div><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div></div>
+<div id="louIntroScene"><div id="louIntroMoon"></div><div id="louIntroSpark"></div><div id="louIntroRing"></div><div id="louIntroLou">ルー</div><div id="louIntroText"></div></div>
+<div id="altarScene">
+<div id="altarRing"></div><div id="altarStone">ᚠ</div><div id="oathSword">†</div>
+<div class="altarGob" id="ag1">異形</div><div class="altarGob" id="ag2">異形</div><div class="altarGob" id="ag3">異形</div><div class="altarGob" id="ag4">異形</div>
+<div id="altarAidan">A</div><div id="altarFiona">F</div><div id="altarLou">ルー</div>
+<div id="altarText"></div></div>
+<div id="raiderBattle">
+<div id="rbParty"><div class="partyCard" id="cardA"><b>エイダン</b><div class="mini"><i id="pAHP"></i></div><span id="pAtext"></span></div><div class="partyCard" id="cardF"><b>フィオナ</b><div class="mini"><i id="pFHP"></i></div><span id="pFtext"></span></div></div><div id="rbTop"><div class="rbPanel" style="visibility:hidden"><b>エイダン</b><div class="rbBar"><div class="rbFill" id="rbAHP"></div></div><span id="rbAHPt"></span><div id="rbRune"><div class="rbRuneFill" id="rbRuneFill"></div></div><span id="rbRunet"></span></div>
+<div class="rbPanel"><b>ゴブリン・レイダー</b><div class="rbBar"><div class="rbFill" id="rbBHP"></div></div><span id="rbBHPt"></span><div id="rbPhase"></div></div></div>
+<div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/embedded/asset_004_c5839c8e084f.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/embedded/asset_005_005c69d45778.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/embedded/asset_006_cfb25133e1e2.png"/></div><div id="rbTurn"></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/embedded/asset_007_22b5dd3a2e2e.png"/></div><div id="rbMsg"></div>
+<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
+</div>
+<div id="aftermathScene"><div id="aftermathAltar"></div><div id="aftermathSword">†</div><div id="aftermathParty">A　F　✧</div><div id="aftermathText"></div></div><div id="fortScene"><div id="fortWall"></div><div id="fortGate"></div><div id="fortBanner">⚜</div><div id="fortParty">A　F　✧</div><div id="fortText"></div></div>
+<button id="menuOpen" type="button">☰ MENU</button>
+<div id="systemMenu"><div class="sysPanel"><div class="tabs">
+<button data-stab="status">STATUS</button><button data-stab="skill">SKILL</button>
+<button data-stab="party">PARTY</button><button data-stab="save">SAVE</button><button data-stab="settings">SETTINGS</button>
+<button id="systemClose">閉じる</button></div><div id="systemBody"></div></div></div>
+<div id="battleResult"><div class="resultPanel"><h2>VICTORY</h2><div class="reward"><span id="resultExp"></span><span id="resultGold"></span></div><div id="resultGrowth"></div><button id="resultContinue" type="button">次へ</button></div></div><div id="prologueEnd"><div><div>THE WINDBOUND OATH</div><h1>PROLOGUE END</h1><h2>Mionn na Gaoithe</h2><p>失った故郷。残された仲間。<br/>そして、風だけが知っていた真実。</p><button id="endReturn">タイトルへ戻る</button></div></div>
+<div id="cinema"><div id="hillScene"><div id="windVeil"></div><div id="hillGround"></div><div id="hillAidan"></div><div id="hillFiona"></div></div><div id="cinemaText"></div><div id="cinemaHint">タップして進む</div></div>
+<button id="devBtn">DEV ▶</button>
+<div id="devPanel"><button id="devClose">×</button><h3>DEVELOPMENT / EVENT JUMP</h3>
+<p>動作確認用。選択したイベントの直前状態へ移動します。製品版では削除予定。</p><div id="devGrid"></div></div>
+<button id="menuBtn">☰ QUEST</button>
+<button id="fs">⛶ FULLSCREEN</button>
+<div id="questMenu">
+<div class="journal">
+<div class="journalHead"><div><small>THE WINDBOUND OATH</small><h2>QUEST JOURNAL</h2></div><button id="menuClose">×</button></div>
+<div class="journalTabs"><button class="journalTab active" data-tab="main">メインクエスト</button><button class="journalTab" data-tab="sub">サブクエスト</button></div>
+<div class="journalPage" id="journalMain"></div>
+<div class="journalPage" id="journalSub" style="display:none"></div>
+</div>
+</div>
+<div id="inside"><div id="roomName">室内</div><div id="floorBadge"></div><div id="roomWorld"><div class="roomFloor"></div><div id="roomDecor"></div>
+<div id="inPlayer"></div>
+<button class="furn" id="drawer" style="left:120px;top:120px">タンス</button>
+<button class="furn" id="shelf" style="left:570px;top:105px">本棚</button>
+<button class="furn" id="bed" style="left:125px;top:440px">ベッド</button>
+<button class="furn pot" id="pot">壺</button>
+<button class="furn fire" id="fire">暖炉</button>
+<button class="furn table" id="table">テーブル</button>
+<button class="furn exit" id="leave">🚪 外へ</button>
+</div></div>
+</div>
+<script>
+const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
+let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
+function say(t){
+ msg.textContent=t;
+ msg.style.display='block';
+ document.body.classList.add('dialogueOpen');
+}
+function closeDialogue(){
+ msg.style.display='none';
+ msg.textContent='';
+ document.body.classList.remove('dialogueOpen');
+}
+
+function camera(){let x=Math.max(0,Math.min(2200-innerWidth,px-innerWidth/2)),y=Math.max(0,Math.min(1550-innerHeight,py-innerHeight/2));world.style.transform=`translate(${-x}px,${-y}px)`;pl.style.left=px+'px';pl.style.top=py+'px'}
+function blockedWorld(x,y){
+ // River occupies x 1450..1630. Crossing is allowed only over the bridge y 540..625.
+ let inRiver=(x+30>1450 && x<1630);
+ let onBridge=(y+42>540 && y<625);
+ return inRiver && !onBridge;
+}
+function move(){
+ if(target){
+  let dx=target.x-px,dy=target.y-py,d=Math.hypot(dx,dy);
+  if(d<5){target=null}
+  else{
+   let v=4,nx=px+dx/d*v,ny=py+dy/d*v;
+   if(!blockedWorld(nx,ny)){px=nx;py=ny}
+   else{target=null;toast('川は渡れない。橋を使おう。')}
+  }
+ }
+ camera();
+ requestAnimationFrame(move);
+}
+move();
+$('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;let r=world.getBoundingClientRect();let tx=e.clientX-r.left-17,ty=e.clientY-r.top-22;if(blockedWorld(tx,ty)){toast('川は渡れない。橋を使おう。');return}target={x:tx,y:ty}});
+addEventListener('keydown',e=>{let v=18;let ox=px,oy=py;if(e.key==='ArrowLeft'||e.key==='a')px-=v;if(e.key==='ArrowRight'||e.key==='d')px+=v;if(e.key==='ArrowUp'||e.key==='w')py-=v;if(e.key==='ArrowDown'||e.key==='s')py+=v;px=Math.max(0,Math.min(2160,px));py=Math.max(0,Math.min(1500,py));if(blockedWorld(px,py)){px=ox;py=oy}camera()});
+let ipx=485,ipy=575,itarget=null;
+let innFloor=1;
+function inCamera(){let rw=$('#roomWorld'),x=Math.max(0,Math.min(1000-innerWidth,ipx-innerWidth/2)),y=Math.max(0,Math.min(720-innerHeight,ipy-innerHeight/2));rw.style.transform=`translate(${-x}px,${-y}px)`;$('#inPlayer').style.left=ipx+'px';$('#inPlayer').style.top=ipy+'px'}
+function inMove(){if($('#inside').style.display==='block'&&itarget){let dx=itarget.x-ipx,dy=itarget.y-ipy,d=Math.hypot(dx,dy);if(d<5)itarget=null;else{ipx+=dx/d*3.5;ipy+=dy/d*3.5}}inCamera();requestAnimationFrame(inMove)}inMove();
+function dressRoom(){
+ const dec=$('#roomDecor');
+ dec.innerHTML='';
+ // defaults: shared props visible
+ ['drawer','shelf','bed','pot','fire','table'].forEach(id=>$('#'+id).style.display='block');
+ if(room==='shop'){
+   $('#roomName').textContent='道具屋「若葉の袋」';
+   $('#bed').style.display='none'; $('#fire').style.display='none';
+   dec.innerHTML='<div class="counter"></div><div id="shopKeeper">店</div><div class="shopShelf" style="left:90px;top:100px">薬草・薬瓶</div><div class="shopShelf" style="left:760px;top:105px">旅道具</div><div class="shopShelf" style="left:780px;top:330px">木箱</div>';
+   setTimeout(()=>$('#shopKeeper').onclick=()=>{if(Math.hypot(ipx-499,ipy-325)<240)say('店主「いらっしゃい。旅に出るなら薬は忘れるなよ。」');else say('カウンターの前まで行って話しかけよう。')},0);
+ } else if(room==='elder'){
+   $('#floorBadge').style.display='none';
+   $('#roomName').textContent='長老の家 ― 風見の丘';
+   $('#bed').style.display='none';
+   dec.innerHTML='<div class="elderRug"></div><div class="runeTable">古い村の地図</div><div class="stone" style="left:130px;top:280px">ᚠ</div><div class="stone" style="left:820px;top:280px">ᚱ</div>';
+ } else if(room==='inn'){
+   dressInn(1);
+ } else {
+   $('#floorBadge').style.display='none';
+   $('#roomName').textContent='エイダンの家';
+ }
+}
+function dressInn(floor){
+ innFloor=floor; const dec=$('#roomDecor');
+ dec.innerHTML=''; ['drawer','shelf','bed','pot','fire','table'].forEach(id=>$('#'+id).style.display='none');
+ $('#roomName').textContent='宿屋「風見鶏」'; $('#floorBadge').style.display='block'; $('#floorBadge').textContent=floor+'階';
+ if(floor===1){
+   dec.innerHTML='<div class="innCounter"></div><div id="innKeeper">宿</div>'+
+   '<div class="innTable" style="left:130px;top:160px"></div><div class="innTable" style="left:360px;top:170px"></div><div class="innTable" style="left:610px;top:165px"></div>'+
+   '<div class="innTable" style="left:210px;top:330px"></div><div class="innTable" style="left:610px;top:340px"></div>'+
+   '<div class="stairs" id="stairsUp" style="left:820px;top:120px">2階へ ▲</div>';
+   ipx=485;ipy=590;
+   setTimeout(()=>{
+    $('#innKeeper').onclick=()=>say('宿屋の主人「いらっしゃい。食事かい？ 泊まりなら二階に部屋があるよ。」');
+    $('#stairsUp').onclick=()=>{if(near($('#stairsUp'),180)){dressInn(2)}else say('階段の近くまで行こう。')};
+   },0);
+ } else {
+   dec.innerHTML='<div class="window" style="left:450px;top:80px"></div>'+
+   '<div class="guestDoor" id="guest1" style="left:120px;top:160px">客室 201</div><div class="guestDoor" id="guest2" style="left:440px;top:160px">客室 202</div><div class="guestDoor" id="guest3" style="left:750px;top:160px">客室 203</div>'+
+   '<div class="guestDoor" id="guest4" style="left:120px;top:390px">客室 204</div><div class="guestDoor" id="guest5" style="left:750px;top:390px">客室 205</div>'+
+   '<div class="stairs" id="stairsDown" style="left:430px;top:420px">1階へ ▼</div>';
+   ipx=485;ipy=330;
+   setTimeout(()=>{
+    ['guest1','guest2','guest3','guest4','guest5'].forEach(id=>$('#'+id).onclick=()=>needNear($('#'+id),()=>say('客室の扉だ。今は宿泊客が利用している。')));
+    $('#stairsDown').onclick=()=>{if(near($('#stairsDown'),180)){dressInn(1)}else say('階段の近くまで行こう。')};
+   },0);
+ }
+ itarget=null; inCamera();
+}
+document.querySelectorAll('.door').forEach(d=>d.onclick=()=>{
+ if(document.body.classList.contains('villageAttack')){
+   closeDialogue();
+   const names={home:'エイダンの家',inn:'宿屋',shop:'道具屋',elder:'長老の家'};
+   say((names[d.dataset.room]||'建物')+'は完全に倒壊している。炎と瓦礫で中へは入れない。');
+   return;
+ }
+ room=d.dataset.room;ipx=485;ipy=575;itarget=null;$('#inside').style.display='block';dressRoom();inCamera()
+});
+$('#inside').addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;let r=$('#roomWorld').getBoundingClientRect();itarget={x:e.clientX-r.left-16,y:e.clientY-r.top-21}});
+
+function near(el,range=150){let r=el.getBoundingClientRect(),p=$('#inPlayer').getBoundingClientRect();return Math.hypot((r.left+r.width/2)-(p.left+p.width/2),(r.top+r.height/2)-(p.top+p.height/2))<range}
+function needNear(el,fn){if(!near(el)){say('もう少し近づいて調べよう。');return}fn()}
+$('#leave').onclick=()=>needNear($('#leave'),()=>{$('#inside').style.display='none';$('#floorBadge').style.display='none';target=null});
+
+$('#drawer').onclick=()=>needNear($('#drawer'),()=>{if(room==='home'&&!flags.drawer){flags.drawer=true;say('タンスを調べた。きずぐすりを1個見つけた！')}else say('衣類がきれいに畳まれている。')});
+$('#shelf').onclick=()=>needNear($('#shelf'),()=>say(room==='home'?'父さんの古い剣術書だ。難しい言葉が並んでいる。':room==='elder'?'古びた書物だ。風とルーンについて記されているが、読めない箇所が多い。':'アルヴェリアの昔話が並んでいる。'));
+$('#bed').onclick=()=>needNear($('#bed'),()=>say(room==='home'?'使い慣れたベッドだ。今はまだ休む時間じゃない。':'ふかふかのベッドだ。'));
+$('#pot').onclick=()=>needNear($('#pot'),()=>{if(!flags.pot){flags.pot=true;say('壺の中を調べた。3Gを見つけた！')}else say('壺の中は空だ。')});
+$('#fire').onclick=()=>needNear($('#fire'),()=>say('薪がぱちぱちと燃えている。'));
+$('#table').onclick=()=>needNear($('#table'),()=>say(room==='elder'?'古い村の地図だ。村の北には、風を示す奇妙な紋様が刻まれている。':'木のテーブルだ。家族で食事をした跡が残っている。'));
+document.querySelectorAll('.npc').forEach(n=>n.onclick=()=>{let id=n.dataset.npc;
+ if(id==='kid'){if(!flags.balloon){flags.balloon=true;updateSubQuest('balloon','active','木に引っ掛かった風船を取ろう');say('子供「風船が木に引っかかっちゃった……取ってくれる？」')}else if(!flags.balloonDone)say('子供「赤い風船、あの木の上だよ！」');else say('子供「ありがとう、エイダン兄ちゃん！」')}
+ if(id==='dog')say('犬「ワン！」');
+ if(id==='man')say('村人「今日は風が気持ちいいな。訓練場へ行くのか？」');
+ if(id==='old')say('老人「風の音をよく聞くんじゃ。昔からこの村を守ってくれとる。」');
+ if(id==='shop')say('道具屋「旅支度なら任せな。薬草も毒消しもあるぞ。」');
+ if(id==='catowner'){
+   if(!flags.cat){flags.cat=true;updateSubQuest('cat','active','迷子の猫を探そう');say('女の子「ミルがいなくなっちゃったの。白い猫を見なかった？」')}
+   else if(flags.catFound&&!flags.catDone){flags.catDone=true;updateSubQuest('cat','done','迷子の猫','毒消し×2');say('女の子「ミルを見つけてくれたの！？ありがとう！」 毒消し×2をもらった。')}
+   else if(!flags.catDone)say('女の子「川の方へ行ったのかな……」');
+   else say('女の子「ミル、ちゃんと帰ってきたよ。ありがとう！」')
+ }
+ if(id==='cat'){
+   if(flags.cat&&!flags.catFound){flags.catFound=true;updateSubQuest('cat','active','女の子にミルの居場所を知らせよう！');say('白い猫のミルを見つけた！ 女の子に知らせに戻ろう。')}
+   else say('猫「ニャー」')
+ }
+});
+$('#balloonTree').onclick=()=>{if(flags.balloon&&!flags.balloonDone){flags.balloonDone=true;$('#balloonTree span').style.display='none';updateSubQuest('balloon','done','風に飛ばされた風船','きずぐすり×2');say('風船を取った！ 子供からきずぐすり×2をもらった。')}else say('大きな木だ。葉が風に揺れている。')};
+msg.addEventListener('click',()=>{closeDialogue()});
+$('#fs').onclick=()=>document.documentElement.requestFullscreen?.();
+$('#menuBtn').onclick=()=>{renderJournal();$('#questMenu').style.display='block'};
+$('#menuClose').onclick=()=>$('#questMenu').style.display='none';
+document.querySelectorAll('.journalTab').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.journalTab').forEach(x=>x.classList.toggle('active',x===b));
+ const main=b.dataset.tab==='main';$('#journalMain').style.display=main?'block':'none';$('#journalSub').style.display=main?'none':'block';
+});
+$('#questMenu').addEventListener('pointerdown',e=>{if(e.target===$('#questMenu'))$('#questMenu').style.display='none'});
+
+
+function toast(t){let e=$('#miniToast');if(!e)return;e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',1800)}
+$('#well').onclick=()=>say('村の共同井戸だ。冷たい水の音が聞こえる。');
+$('#squareSign').onclick=()=>say('木の案内板だ。村の道が丁寧に描かれている。');
+$('#trainingSign').onclick=()=>say('剣の傷がいくつも残っている。ここで村の若者たちが訓練しているようだ。');
+$('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用の木人だ。');
+$('#hillExit').onclick=()=>{if(storyStage<3)say('この先は夕暮れの丘へ続いている。今は訓練場へ向かおう。');else if(storyStage===3){storyStage=4;startHillScene()}else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
+$('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
+$('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
+$('#hillOld').onclick=()=>say('老人「この丘から見るリンド村が、わしは好きでな。」');
+$('#kid2').onclick=()=>say('子供「つかまえてみろー！」');
+$('#kid3').onclick=()=>say('子供「待て待てー！」');
+$('#dog2').onclick=()=>say('犬「ワフッ！」');
+
+let wanderFlip=false;
+setInterval(()=>{
+ if($('#inside').style.display==='block'||storyStage>=5)return;
+ wanderFlip=!wanderFlip;
+ let shifts=[
+  ['kid2',wanderFlip?690:610,wanderFlip?650:620],
+  ['kid3',wanderFlip?600:660,wanderFlip?610:650],
+  ['dog2',wanderFlip?930:880,wanderFlip?650:690],
+  ['farmer',wanderFlip?380:330,wanderFlip?1110:1050],
+  ['woman',wanderFlip?610:570,wanderFlip?850:820]
+ ];
+ shifts.forEach(([id,x,y])=>{let e=$('#'+id);e.style.left=x+'px';e.style.top=y+'px'});
+},1800);
+
+
+let storyStage=0, battleBusy=false, ahp=100,dhp=180,rune=0,atp=0,guarding=false;
+function storyToast(t){let e=$('#storyFlag');e.textContent=t;e.style.display='block';clearTimeout(storyToast.t);storyToast.t=setTimeout(()=>e.style.display='none',2200)}
+let currentObjective='訓練場でフィオナと話そう';
+const subQuests={
+ balloon:{title:'風に飛ばされた風船',state:'locked',objective:'',reward:'きずぐすり×2'},
+ cat:{title:'迷子の猫',state:'locked',objective:'',reward:'毒消し×2'}
+};
+function popObjective(){
+ const h=$('#hud'); $('#obj').textContent=currentObjective;
+ h.classList.remove('objectivePop'); void h.offsetWidth; h.classList.add('objectivePop');
+ setTimeout(()=>{if(h.classList.contains('objectivePop')){h.classList.remove('objectivePop');h.style.display='none'}},4300);
+}
+function setObj(t){currentObjective=t; popObjective(); renderJournal()}
+function questPop(text){
+ const q=$('#questNotice');q.textContent=text;q.classList.remove('pop');void q.offsetWidth;q.classList.add('pop');
+ setTimeout(()=>q.classList.remove('pop'),4100);
+}
+function updateSubQuest(id,state,objective,reward){
+ const q=subQuests[id]; if(!q)return;
+ q.state=state;q.objective=objective||q.objective;if(reward)q.reward=reward;
+ if(state==='active')questPop('SUB QUEST：'+q.title+'　'+q.objective);
+ if(state==='done')questPop('QUEST COMPLETE：'+q.title+'　報酬 '+q.reward);
+ renderJournal();
+}
+function mainQuestData(){
+ if(storyStage<=2)return {title:'いつもの訓練',desc:'朝、自室で目を覚ましたエイダン。幼なじみのフィオナが訓練場で待っている。'};
+ if(storyStage===3)return {title:'夕暮れの丘へ',desc:'訓練を終えた。フィオナと一緒に、村の南にある夕暮れの丘へ向かう。'};
+ if(storyStage===4)return {title:'風が止んだ夜',desc:'夕暮れの丘で異変が起きた。フィオナと急いでリンド村へ戻る。'};
+ if(storyStage<=6)return {title:'炎の中のリンド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
+ if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリンド村から逃げる。'};
+ if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、村の北に広がる古い森へ迷い込んだ。分岐を探索し、森の奥を調べる。'};
+ if(storyStage===10)return {title:'風を返す古代石',desc:'フィオナに反応する古代石を発見した。異常化した魔物を退け、石の周囲に残る風の気配を探す。'};
+ if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
+ if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇で魔物に包囲された。古代石から現れた「誓いの剣」を手に取り、突破口を開く。'};
+ if(storyStage===13)return {title:'新しい仲間',desc:'ゴブリン・レイダーを退けた。静けさを取り戻した古代祭壇でルーと話し、これからの行き先を決める。'};
+ if(storyStage===14)return {title:'夜明けの砦',desc:'ルーを新たな仲間に迎え、エイダンとフィオナは森を抜けてアーサー砦へ向かう。'};
+ if(storyStage>=15)return {title:'風に結ばれた誓い',desc:'リンド村を失ったエイダンたちは王国の砦へ到着した。黒いルーンの異変を追う旅は、ここから始まる。'};
+ return {title:'炎の中のリンド',desc:'フィオナと再会した。二人で村の北側へ向かい、襲撃の状況を確かめる。'};
+}
+function renderJournal(){
+ const m=mainQuestData();
+ $('#journalMain').innerHTML=`<div class="questCard"><div class="questState">MAIN QUEST / 進行中</div><h3>${m.title}</h3><p>${m.desc}</p><p><b>現在の目的：</b>${currentObjective}</p></div>`;
+ const entries=Object.values(subQuests).filter(q=>q.state!=='locked');
+ $('#journalSub').innerHTML=entries.length?entries.map(q=>`<div class="questCard ${q.state==='done'?'questDone':''}"><div class="questState">${q.state==='done'?'COMPLETE':'IN PROGRESS'}</div><h3>${q.title}</h3><p>${q.state==='done'?'達成済み':'現在の目的：'+q.objective}</p><p>報酬：${q.reward}</p></div>`).join(''):`<div class="questEmpty">現在受注しているサブクエストはありません。</div>`;
+}
+$('#fiona').onclick=()=>{
+ if(storyStage===0){
+  storyStage=1;
+  say('フィオナ「遅いよ、エイダン。今日は木人相手の訓練でしょ？」');
+  setObj('訓練用の木人を調べよう');
+  storyToast('フィオナが同行した');
+ }else if(storyStage===1) say('フィオナ「ほら、木人を調べて。私も後ろから見てるから。」');
+ else if(storyStage>=2) say('フィオナ「さっきの光……何だったんだろう。」');
+};
+function startTraining(){
+ if(storyStage!==1){say(storyStage===0?'先にフィオナと話そう。':'使い込まれた訓練用の木人だ。');return}
+ storyStage=2; ahp=100;dhp=180;rune=0;atp=0;guarding=false;
+ $('#battle').style.display='block'; updateBattle();
+ $('#battleMsg').textContent='フィオナ「実戦のつもりでいこう。危なくなったら私が回復するね！」';
+}
+$('#dummy1').onclick=$('#dummy2').onclick=startTraining;
+function updateBattle(){
+ $('#aHP').style.width=Math.max(0,ahp)+'%'; $('#aHPtxt').textContent=`HP ${Math.max(0,ahp)} / 100`;
+ $('#aTP').style.width=atp+'%'; $('#aTPtxt').textContent=`TP ${atp} / 100`;
+ $('#skill').disabled=atp<30; $('#skill').classList.toggle('tpLocked',atp<30);
+ $('#dHP').style.width=Math.max(0,dhp/180*100)+'%'; $('#dHPtxt').textContent=`HP ${Math.max(0,dhp)} / 180`;
+}
+function enemyTurn(){
+ if(dhp<=0)return winTraining();
+ let dmg=guarding?6:13; guarding=false; ahp-=dmg;
+ $('#battleMsg').textContent=`木人の反撃！ エイダンに${dmg}ダメージ。`;
+ if(ahp<=55){
+  setTimeout(()=>{ahp=Math.min(100,ahp+38);updateBattle();$('#bFiona').classList.add('runeGlow');$('#battleMsg').textContent='フィオナ「癒やしの手！」 HPが38回復した。淡い生命のルーンが一瞬だけ輝いた……';setTimeout(()=>$('#bFiona').classList.remove('runeGlow'),1800);battleBusy=false},650)
+ }else battleBusy=false;
+ updateBattle();
+}
+function act(type){
+ if(battleBusy)return;
+ if(type==='skill'&&atp<30){$('#battleMsg').textContent='TPが足りない。一閃にはTP30が必要だ。';return}
+ battleBusy=true;
+ if(type==='guard'){
+   guarding=true; atp=Math.min(100,atp+10); rune=Math.min(100,rune+15);
+   $('#battleMsg').textContent='エイダンは身構えた。次のダメージを軽減。TP +10';
+   updateBattle(); setTimeout(enemyTurn,650); return
+ }
+ let dmg=type==='skill'?42:28;
+ if(type==='skill') atp-=30; else atp=Math.min(100,atp+15);
+ dhp-=dmg; rune=Math.min(100,rune+(type==='skill'?12:8));
+ $('#battleMsg').textContent=type==='skill'
+   ?`エイダン「一閃！」 木人に${dmg}ダメージ！ TP -30`
+   :`エイダンの攻撃！ 木人に${dmg}ダメージ！ TP +15`;
+ updateBattle(); setTimeout(enemyTurn,650);
+}
+$('#atk').onclick=()=>act('atk'); $('#skill').onclick=()=>act('skill'); $('#guard').onclick=()=>act('guard');
+function winTraining(){
+ updateBattle(); $('#battleMsg').textContent='訓練終了！ エイダン EXP +20　RUNE +10';
+ setTimeout(()=>{
+  $('#battle').style.display='none'; storyStage=3;
+  say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」');
+  setObj('フィオナと夕暮れの丘へ向かおう');
+  storyToast('夕暮れの丘への道が開いた');
+ },1400);
+}
+
+const hillLines=[
+ 'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',
+ 'エイダン「訓練の後にここまで歩かされるとは思わなかったけどな。」',
+ 'フィオナ「ふふ。エイダン、昔からすぐそういうこと言う。」',
+ '……風が、草原を撫でていく。',
+ 'フィオナ「ねえ。エイダンは……王都へ行ったら、お父さんみたいな騎士になるの？」',
+ 'エイダン「まだ分からない。でも――守れるくらいには強くなりたい。」',
+ 'フィオナ「そっか。」',
+ '…………。',
+ 'フィオナ「……エイダン。」',
+ 'エイダン「どうした？」',
+ 'フィオナ「風が……止まってる。」',
+ '鳥の声も、木々のざわめきも消えた。',
+ '遠く、リンド村の方角で赤い光が揺れた。',
+ 'エイダン「村が――！」'
+];
+let hillIndex=0;
+function startHillScene(){
+ hillIndex=0; $('#cinema').style.display='block'; $('#cinemaText').textContent=hillLines[0];
+}
+$('#cinema').onclick=()=>{
+ hillIndex++;
+ if(hillIndex<hillLines.length){
+  $('#cinemaText').textContent=hillLines[hillIndex];
+  if(hillIndex===10){$('#windVeil').style.animation='none';$('#windVeil').style.opacity='0';}
+  if(hillIndex===12){$('#hillScene').style.background='radial-gradient(circle at 25% 58%,#c64e2e 0 3%,transparent 18%),linear-gradient(#18212a 0 45%,#493329 46% 56%,#1e2b21 57% 100%)';}
+ }else{
+  $('#cinema').style.display='none'; startReturnScene();
+ }
+};
+
+const returnLines=[
+ 'エイダン「急ぐぞ、フィオナ！」',
+ 'フィオナ「うん！　村のみんなが心配……！」',
+ '二人は夕暮れの丘を駆け下り、村へ続く道を走った。',
+ '――そのとき、村の入口から悲鳴が響いた。',
+ '村人「た、助けて！　魔物が……！」',
+ 'フィオナ「エイダン、あそこ！」',
+ '黒紫の光をまとったゴブリンが、逃げ遅れた村人へ迫っている。',
+ 'エイダン「俺が引きつける！　フィオナはその人を安全な場所へ！」',
+ 'フィオナ「でも、エイダン一人じゃ――」',
+ 'エイダン「大丈夫だ。あとで村の広場で合流しよう！」',
+ 'フィオナ「……分かった。絶対、無茶しないで！」',
+ 'エイダンは魔物の前へ飛び出した。',
+ '――爆ぜるような黒紫の光。',
+ 'エイダン「くっ……！」',
+ '煙と炎が道を遮る。フィオナの姿が見えない。',
+ 'エイダン「フィオナ！　……返事をしろ！」',
+ '返事はない。村の奥から、さらに悲鳴が聞こえた。',
+ 'エイダン「……先に広場へ。約束した場所にいるはずだ。」'
+];
+let returnIndex=0;
+function startReturnScene(){
+ returnIndex=0;
+ $('#returnScene').style.display='block';
+ $('#returnText').textContent=returnLines[0];
+}
+$('#returnScene').onclick=()=>{
+ returnIndex++;
+ if(returnIndex<returnLines.length){
+   $('#returnText').textContent=returnLines[returnIndex];
+   if(returnIndex===6) $('#returnGoblin').style.display='block';
+   if(returnIndex===12){
+     const rs=$('#returnScene'); rs.classList.remove('flash'); void rs.offsetWidth; rs.classList.add('flash');
+     $('#returnFiona').style.opacity='.15';
+   }
+ }else{
+   $('#returnScene').style.display='none';
+   enterBurningVillage();
+ }
+};
+function enterBurningVillage(){
+ storyStage=5;
+ world.classList.add('night');
+ document.body.classList.add('villageAttack');
+ // 襲撃開始後は平常時の屋内を利用不可にする。
+ if(typeof room!=='undefined' && room){
+   room=null;
+   const rs=document.querySelector('#roomScreen'); if(rs)rs.style.display='none';
+   const ws=document.querySelector('#screen'); if(ws)ws.style.display='block';
+ }
+
+
+ document.querySelectorAll('.firefx,.debris').forEach(e=>e.style.display='block');
+
+ // 襲撃後は平常時のNPCを全員いったん消す。
+ // サブクエスト進行状況に依存させない。
+ document.querySelectorAll('#world .npc, #world #fiona, #world [id^="fisher"], #world [id^="kid"], #world [id^="dog"], #world #farmer, #world #woman, #world #hillOld')
+   .forEach(e=>e.style.display='none');
+
+ // 平常時の建物内部に残っている人物も非表示にする。
+ document.querySelectorAll('#inside .npc, #inside .shopkeeper, #inside .innkeeper, #inside [data-npc], #inside [id*="keeper"], #inside [id*="owner"]')
+   .forEach(e=>e.style.display='none');
+
+ // 既存のクエスト完了通知は襲撃開始時に閉じる。
+ const questBox=document.querySelector('#questBox');
+ if(questBox) questBox.style.display='none';
+
+ px=970; py=1330; target=null; camera();
+ setObj('村の広場へ向かい、フィオナを探そう');
+
+ let b=$('#dangerBanner');
+ b.style.display='block';
+ clearTimeout(enterBurningVillage.t);
+ enterBurningVillage.t=setTimeout(()=>b.style.display='none',2400);
+
+ say('エイダン「広場で合流する約束だ……フィオナ、無事でいてくれ。」');
+}
+
+let attackStep=0, attackBattleBusy=false, aahp=100,aatp=0,gghp=220,agGuard=false,currentGoblin=null;
+function notice(t){const n=$('#rescueNotice');n.textContent=t;n.style.display='block';clearTimeout(notice.t);notice.t=setTimeout(()=>n.style.display='none',2200)}
+
+$('#attackOld').onclick=()=>{
+ if(storyStage<5)return;
+ say('老人「うぅ……広場の方へ、魔物が……。娘さんが、一人で追っていった……」');
+};
+$('#attackMother').onclick=()=>{
+ if(storyStage<5)return;
+ say('村人「この子だけでも……！　お願い、広場には近づかないで。黒い光をまとった魔物がいるの！」');
+};
+$('#attackChild').onclick=()=>{
+ if(storyStage<5)return;
+ say('子ども「お姉ちゃんが治してくれたの……それから、あっちへ走っていった……」');
+};
+
+$('#attackGob1').onclick=()=>{
+ if(storyStage<5)return;
+ startAttackBattle('attackGob1',180);
+};
+$('#attackGob2').onclick=()=>{
+ if(storyStage<5)return;
+ if(attackStep<1){say('エイダン「フィオナ……！　その前に、こいつを！」');}
+ startAttackBattle('attackGob2',220);
+};
+
+
+
+let battleBannerTimer=0;
+function showBattleBanner(text,ms=950){
+ const el=$('#battleMsg2'); if(!el)return;
+ clearTimeout(battleBannerTimer);
+ el.textContent=text;el.classList.add('is-visible');
+ battleBannerTimer=setTimeout(()=>el.classList.remove('is-visible'),ms);
+}
+function hideBattleBanner(){
+ clearTimeout(battleBannerTimer);$('#battleMsg2')?.classList.remove('is-visible');
+}
+
+function showNormalPartyBattle(){
+ normalActor='aidan';normalFHP=90;normalFMP=30;normalActs=[];normalGuardA=false;normalGuardF=false;
+ $('#normalPartyHud').style.display='flex';$('#normalFiona').style.display='grid';$('#normalActor').style.display='block';
+ $('#normalBattleCmd').style.display='flex';updateNormalPartyHud();updateNormalCommands();
+}
+function hideNormalPartyBattle(){
+ $('#normalPartyHud').style.display='none';$('#normalFiona').style.display='none';$('#normalActor').style.display='none';
+ $('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';$('#normalBattleCmd').style.display='none';
+}
+
+function v2Float(id,text,type='damage'){
+ const el=$('#'+id); if(!el)return;
+ el.className='v2Float '+type; void el.offsetWidth; el.textContent=text; el.classList.add('show');
+}
+function v2Hit(id){
+ const el=$('#'+id); if(!el)return;
+ el.classList.remove('hit'); void el.offsetWidth; el.classList.add('hit');
+ setTimeout(()=>el.classList.remove('hit'),260);
+}
+function updateV2BattleHud(){
+ if(!$('#v2AHP'))return;
+ const max=currentGoblin==='attackGob1'?180:(currentGoblin&&currentGoblin.startsWith('forestGob')?160:220);
+ $('#v2AHP').style.width=Math.max(0,aahp)+'%';
+ $('#v2ATP').style.width=Math.max(0,Math.min(100,aatp))+'%';
+ $('#v2FHP').style.width=Math.max(0,normalFHP/90*100)+'%';
+ $('#v2FMP').style.width=Math.max(0,normalFMP/30*100)+'%';
+ $('#v2GHP').style.width=Math.max(0,gghp/max*100)+'%';
+ $('#v2ATxt').textContent=`HP ${Math.max(0,aahp)}  TP ${aatp}`;
+ $('#v2FTxt').textContent=`HP ${Math.max(0,normalFHP)}  MP ${normalFMP}`;
+ $('#v2GTxt').textContent=`HP ${Math.max(0,gghp)}`;
+ const a=$('#v2AidanUnit'),f=$('#v2FionaUnit'),g=$('#v2GobUnit');
+ [[a,aahp],[f,normalFHP/90*100],[g,gghp/max*100]].forEach(([el,p])=>{
+   if(!el)return; el.classList.toggle('danger',p<=30);el.classList.toggle('critical',p<=10);
+ });
+ a?.classList.toggle('activeTurn',normalActor==='aidan');
+ f?.classList.toggle('activeTurn',normalActor==='fiona');
+}
+
+function updateNormalPartyHud(){
+ if(!$('#normalPartyHud'))return;
+ $('#nAHP').style.width=Math.max(0,aahp)+'%';$('#nATxt').textContent=`HP ${Math.max(0,aahp)} / 100　TP ${aatp}`;
+ $('#nFHP').style.width=Math.max(0,normalFHP/90*100)+'%';$('#nFTxt').textContent=`HP ${Math.max(0,normalFHP)} / 90　MP ${normalFMP}`;
+ $('#nCardA').classList.toggle('active',normalActor==='aidan');$('#nCardF').classList.toggle('active',normalActor==='fiona');
+ $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;updateV2BattleHud();
+}
+function updateNormalCommands(){
+ setNormalCommandDrawer(false);
+ const a=normalActor==='aidan';
+ ['nAtk','nSkill','nHeal','nPrayer','nGuard','nItem'].forEach(id=>$('#'+id).classList.remove('v2-visible'));
+ ['nAtk','nGuard','nItem'].forEach(id=>$('#'+id).classList.add('v2-visible'));
+ if(a){$('#nSkill').classList.add('v2-visible')}
+ else{$('#nAtk').classList.remove('v2-visible');['nHeal','nPrayer'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
+ $('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
+}
+function openNormalItems(){
+ const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${normalActor==='aidan'?'エイダン':'フィオナ'}</b><br>
+ <button data-ni="potion">きずぐすり ×${battleItems.potion}</button>
+ <button data-ni="ether">魔力の雫 ×${battleItems.ether}</button>
+ <button data-ni="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';setNormalCommandDrawer(false);
+}
+let normalActs=[],normalGuardA=false,normalGuardF=false;
+$('#normalItems').onclick=e=>{
+ const b=e.target.closest('[data-ni]');if(!b)return;e.stopPropagation();
+ const k=b.dataset.ni;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
+ if(k==='potion'&&!battleItems.potion){showBattleBanner('きずぐすりを持っていない。',800);return}
+ if(k==='ether'&&!battleItems.ether){showBattleBanner('魔力の雫を持っていない。',800);return}
+ if(k==='potion')battleItems.potion--; else battleItems.ether--;
+ normalActs.push({who:normalActor,kind:'item',item:k});$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';advanceNormalActor();
+};
+function advanceNormalActor(){
+ if(normalActor==='aidan'){
+   normalActor='fiona';attackBattleBusy=false;hideBattleBanner();updateNormalPartyHud();updateNormalCommands();
+ }else{
+   attackBattleBusy=true;resolveNormalRound();
+ }
+}
+function chooseNormalAct(kind){
+ if(attackBattleBusy)return;
+ if(normalActor==='aidan'&&kind==='skill'&&aatp<30){showBattleBanner('TPが足りない。一閃にはTP30が必要だ。',900);return}
+ if(normalActor==='fiona'&&kind==='heal'&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
+ if(normalActor==='fiona'&&kind==='prayer'&&normalFMP<6){showBattleBanner('MPが足りない。',800);return}
+ normalActs.push({who:normalActor,kind});advanceNormalActor();
+}
+function startAttackBattle(id,hp){
+ closeDialogue();
+ if(attackBattleBusy)return;
+ currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
+ if(id.startsWith('forestGob')){forestActive=false;$('#forestScene').style.display='none';}
+ document.body.classList.remove('raiderBattleMode');
+ document.body.classList.add('battleMode','normalBattleMode');
+ $('#attackBattle').style.display='block';
+ showNormalPartyBattle();
+ updateNormalCommands();
+ updateNormalPartyHud();
+ showBattleBanner('異常化ゴブリンが立ちはだかった！',850);
+ updateAttackBattle();
+}
+function updateAttackBattle(){
+ updateNormalCommands();updateNormalPartyHud();
+ $('#aaHP').style.width=Math.max(0,aahp)+'%';$('#aaHPtxt').textContent=`HP ${Math.max(0,aahp)} / 100`;
+ $('#aaTP').style.width=aatp+'%';$('#aaTPtxt').textContent=`TP ${aatp} / 100`;
+ $('#askill').disabled=aatp<30;$('#askill').classList.toggle('tpLocked',aatp<30);
+ const max=currentGoblin==='attackGob1'?180:(currentGoblin&&currentGoblin.startsWith('forestGob')?160:220);
+ $('#ggHP').style.width=Math.max(0,gghp/max*100)+'%';$('#ggHPtxt').textContent=`HP ${Math.max(0,gghp)} / ${max}`;
+ updateNormalPartyHud();updateNormalCommands();
+}
+function resolveNormalRound(){
+ let delay=0;
+ const act=(txt,fn)=>{setTimeout(()=>{if(fn)fn();showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=560};
+ normalActs.forEach(a=>{
+   if(a.who==='aidan'){
+     if(a.kind==='item'){
+       if(a.item==='potion')act('きずぐすり',()=>{aahp=Math.min(100,aahp+45);v2Float('floatAidan','+45','heal')});
+       else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
+     }else if(a.kind==='guard')act('エイダンは身構えた。',()=>{normalGuardA=true;aatp=Math.min(100,aatp+10);v2Float('floatAidan','TP +10','resource')});
+     else if(a.kind==='skill')act('一閃！',()=>{aatp-=30;gghp-=55;v2Float('floatGob','-55');v2Hit('v2GobUnit')});
+     else act('エイダンの攻撃！',()=>{gghp-=34;aatp=Math.min(100,aatp+15);v2Float('floatGob','-34');v2Hit('v2GobUnit');setTimeout(()=>v2Float('floatAidan','TP +15','resource'),180)});
+   }else{
+     if(a.kind==='item'){
+       if(a.item==='potion')act('きずぐすり',()=>{normalFHP=Math.min(90,normalFHP+45);v2Float('floatFiona','+45','heal')});
+       else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
+     }else if(a.kind==='guard')act('フィオナは防御した。',()=>normalGuardF=true);
+     else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(aahp/100<=normalFHP/90){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}});
+     else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')});
+     else act('フィオナの攻撃！',()=>{gghp-=20;v2Float('floatGob','-20');v2Hit('v2GobUnit')});
+   }
+ });
+ setTimeout(()=>{if(gghp<=0)finishAttackBattle();else normalEnemyTurn()},delay);
+}
+function normalEnemyTurn(){
+ let target=(aahp/100<=normalFHP/90)?'a':'f',d=17;
+ if(target==='a'){if(normalGuardA)d=Math.ceil(d/2);aahp-=d;v2Float('floatAidan','-'+d);v2Hit('v2AidanUnit');showBattleBanner('異常化ゴブリンの「黒爪」！',720);}
+ else {if(normalGuardF)d=Math.ceil(d/2);normalFHP-=d;v2Float('floatFiona','-'+d);v2Hit('v2FionaUnit');showBattleBanner('異常化ゴブリンの「黒爪」！',720);}
+ normalGuardA=normalGuardF=false;updateAttackBattle();
+ if(aahp<=0||normalFHP<=0){
+   showBattleBanner('二人は態勢を崩した……。',900);
+   setTimeout(()=>{aahp=Math.max(35,aahp);normalFHP=Math.max(32,normalFHP);normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle()},700);
+ }else{
+   normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle();
+ }
+}
+$('#nAtk').onclick=()=>chooseNormalAct('atk');
+$('#nSkill').onclick=()=>chooseNormalAct('skill');
+$('#nHeal').onclick=()=>chooseNormalAct('heal');
+$('#nPrayer').onclick=()=>chooseNormalAct('prayer');
+$('#nGuard').onclick=()=>chooseNormalAct('guard');
+$('#nItem').onclick=()=>openNormalItems();
+// Legacy normal-goblin buttons are hidden; all normal encounters use the party command row.
+$('#aatk').parentElement.style.display='none';
+
+function finishAttackBattle(){
+ const defeated=currentGoblin;
+ showBattleBanner('異常化ゴブリンを倒した。',900);
+ setTimeout(()=>{
+   $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
+   const e=$('#'+defeated);if(e)e.remove();
+   if(defeated&&defeated.startsWith('forestGob')){
+     forestGobWins++;hideNormalPartyBattle();
+     showBattleResult(18,7,()=>{forestActive=true;$('#forestScene').style.display='block';forestCamera();});
+     forestToast('異常化ゴブリンを退けた。森の空気が少し軽くなった。');
+     if(forestGobWins>=3){
+       storyStage=Math.max(storyStage,10);setObj('古代石の周囲で風の気配を探そう');
+       $('#louSeal').classList.add('open');$('#louSearch').style.display='block';
+       forestToast('3体の異常化ゴブリンを退けた。古代の風結界が消えた……。');
+     }
+   }else if(defeated==='northGob1'||defeated==='northGob2'){
+     hideNormalPartyBattle();notice('異常化ゴブリンを退けた');
+   }else if(defeated==='attackGob1'){
+     hideNormalPartyBattle();attackStep=Math.max(attackStep,1);setObj('村の広場へ向かい、フィオナを探そう');
+     notice('広場の方からフィオナの声が聞こえた');say('フィオナ「――こっちに来ないで！」　エイダン「フィオナ……！」');
+   }else{
+     hideNormalPartyBattle();attackStep=2;storyStage=6;$('#attackFiona').style.display='grid';setObj('フィオナに話しかけよう');notice('フィオナを見つけた');
+   }
+   attackBattleBusy=false;
+ },900);
+}
+$('#attackFiona').onclick=()=>{
+ if(storyStage<6)return;
+ storyStage=7;
+ say('フィオナ「エイダン……！ よかった。さっきの人たちは逃がせた。でも、この魔物たち……普通じゃない。」');
+ setObj('フィオナとともに村の北側へ向かおう');
+ notice('フィオナが再び同行した');
+ setTimeout(beginNorthAssault,700);
+};
+
+let northPhase=0;
+function beginNorthAssault(){
+ if(storyStage<7 || northPhase>0)return;
+ northPhase=1;
+ document.body.classList.add('northAssault');
+ $('#northEscape').style.display='block';
+ setObj('村の北側で王国騎士と合流しよう');
+ questPop('MAIN OBJECTIVE：村の北側で王国騎士と合流しよう');
+}
+$('#royalKnight').onclick=()=>{
+ if(storyStage<7)return;
+ closeDialogue();
+ if(northPhase===1){
+   northPhase=2;
+   say('王国騎士「生存者か！　北門はもう保たない。川沿いの退路から森へ抜けろ！　我々がここを食い止める！」');
+   setObj('北の退路へ向かい、リンド村を脱出しよう');
+ }else{
+   say('王国騎士「急げ！　この数は普通じゃない……黒いルーンに近づくな！」');
+ }
+};
+$('#northGob1').onclick=()=>{
+ if(storyStage<7)return;
+ startAttackBattle('northGob1',180);
+};
+$('#northGob2').onclick=()=>{
+ if(storyStage<7)return;
+ startAttackBattle('northGob2',180);
+};
+$('#northEscape').onclick=()=>{
+ if(northPhase<2){notice('先に王国騎士と話そう');return}
+ closeDialogue();
+ northPhase=3; storyStage=8;
+ document.body.classList.remove('northAssault');
+ $('#northEscape').style.display='none';
+ startEscapeScene();
+};
+
+const escapeLines=[
+ 'フィオナ「……行こう、エイダン。今は、生き残らないと。」',
+ '二人は炎上する村を背に、川沿いの細い退路を走った。',
+ '背後で角笛が鳴る。黒紫の光をまとった魔物たちが追ってくる。',
+ 'エイダン「橋は――駄目だ。向こうにもいる！」',
+ 'フィオナ「こっち！　川下に獣道があるはず！」',
+ '地面が大きく揺れ、焼けた崖の縁が崩れた。',
+ 'エイダン「フィオナ！」',
+ '二人の足元が崩れ、そのまま暗い谷へ落ちていった――。'
+];
+let escapeIndex=0;
+function startEscapeScene(){
+ closeDialogue(); escapeIndex=0;
+ $('#escapeScene').style.display='block';
+ $('#escapeText').textContent=escapeLines[0];
+ setObj('フィオナとともに村から脱出しよう');
+}
+$('#escapeScene').onclick=()=>{
+ escapeIndex++;
+ if(escapeIndex<escapeLines.length){
+   $('#escapeText').textContent=escapeLines[escapeIndex];
+   if(escapeIndex===2)$('#escapeGob').style.display='grid';
+   if(escapeIndex===5){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
+ }else{
+   $('#escapeScene').style.display='none';
+   enterMossForest();
+ }
+};
+
+let fpx=330,fpy=940,ffx=285,ffy=955,ftarget=null,forestActive=false,forestStoneSeen=false;
+
+// ===== v0.26 PARTY / LEVEL FOUNDATION =====
+// Future-ready: 6 command members + Lou support + multiple squads.
+const CHARACTER_DB={
+ aidan:{name:'エイダン',role:'剣士',maxHp:120,maxMp:12,atk:18,def:13,mag:7,spd:12,growth:{hp:6,mp:1,atk:3,def:2,mag:1,spd:2}},
+ fiona:{name:'フィオナ',role:'癒し手',maxHp:105,maxMp:36,atk:10,def:10,mag:18,spd:11,growth:{hp:4,mp:4,atk:1,def:2,mag:3,spd:2}},
+ liam:{name:'リアム',role:'トレジャーハンター',maxHp:112,maxMp:18,atk:16,def:10,mag:8,spd:18,growth:{hp:5,mp:2,atk:2,def:1,mag:1,spd:3}},
+ morwen:{name:'モルウェン',role:'黒魔道士',maxHp:92,maxMp:45,atk:8,def:8,mag:22,spd:10,growth:{hp:3,mp:5,atk:1,def:1,mag:4,spd:1}},
+ dwarf:{name:'？？？',role:'鍛冶屋／タンク',maxHp:150,maxMp:10,atk:17,def:22,mag:5,spd:7,growth:{hp:8,mp:1,atk:2,def:4,mag:1,spd:1}},
+ dancer:{name:'？？？',role:'踊り子',maxHp:100,maxMp:32,atk:11,def:9,mag:15,spd:17,growth:{hp:4,mp:3,atk:1,def:1,mag:2,spd:3}}
+};
+
+const SKILL_DB={
+ aidan:[
+  {lv:1,name:'一閃',desc:'TP30。鋭い踏み込みから放つ剣技。'},
+  {lv:5,name:'風切り',desc:'TP25。風をまとった斬撃。敵の行動速度を下げる。'},
+  {lv:9,name:'受け流し',desc:'TP20。次に受ける物理攻撃を大きく軽減する。'},
+  {lv:14,name:'二連閃',desc:'TP45。敵単体へ二連続攻撃。'}
+ ],
+ fiona:[
+  {lv:1,name:'ヒール',desc:'MP8。味方単体のHPを回復。'},
+  {lv:1,name:'風の祈り',desc:'MP6。味方を癒し、風の加護を与える。'},
+  {lv:5,name:'若葉の癒し',desc:'MP14。味方全体を小回復。'},
+  {lv:9,name:'風の加護',desc:'MP10。味方全体のSPDを上昇。'},
+  {lv:14,name:'森の抱擁',desc:'MP18。味方全体に継続回復。'}
+ ],
+ liam:[
+  {lv:1,name:'クイックスラッシュ',desc:'素早い斬撃。'},
+  {lv:5,name:'スティール',desc:'敵からアイテムを盗む。'},
+  {lv:10,name:'トレジャーセンス',desc:'隠された宝の気配を察知する。'}
+ ],
+ morwen:[
+  {lv:1,name:'シャドウボルト',desc:'影属性の魔法攻撃。共鳴+1。'},
+  {lv:5,name:'ルーンフレア',desc:'共鳴を利用する攻撃魔法。'},
+  {lv:10,name:'深淵共鳴',desc:'共鳴3で強力な影魔法を解放。'}
+ ],
+ dwarf:[
+  {lv:1,name:'挑発',desc:'敵の攻撃を自分へ引き付ける。'},
+  {lv:5,name:'かばう',desc:'危険な仲間への攻撃を肩代わりする。'},
+  {lv:10,name:'シールドバッシュ',desc:'BREAKを大きく削る。'}
+ ],
+ dancer:[
+  {lv:1,name:'鼓舞の舞',desc:'味方のATKを上昇。'},
+  {lv:5,name:'風舞',desc:'味方のSPDを上昇。'},
+  {lv:10,name:'月舞',desc:'敵のMAGを低下させる。'}
+ ]
+};
+function learnedSkills(id){
+ const lv=PartyManager.members[id]?.level||1;
+ return (SKILL_DB[id]||[]).filter(x=>x.lv<=lv);
+}
+
+const PartyManager={
+ members:{
+  aidan:{joined:true,level:1,exp:0},fiona:{joined:true,level:1,exp:0},
+  liam:{joined:false,level:1,exp:0},morwen:{joined:false,level:1,exp:0},
+  dwarf:{joined:false,level:1,exp:0},dancer:{joined:false,level:1,exp:0}
+ },
+ active:['aidan','fiona'],reserve:[],
+ squads:{A:[],B:[],C:[]},
+ support:{id:'lou',joined:false,fairyBlessing:1},
+ maxActive:4,
+ expToNext(level){return Math.round(55*Math.pow(level,1.55));},
+ addExp(amount){
+   const reports=[];
+   Object.entries(this.members).forEach(([id,m])=>{
+     if(!m.joined)return;
+     const before=m.level,oldSkills=(SKILL_DB[id]||[]).filter(x=>x.lv<=before).map(x=>x.name);m.exp+=amount;
+     while(m.level<50 && m.exp>=this.expToNext(m.level)){
+       m.exp-=this.expToNext(m.level);m.level++;
+     }
+     const newSkills=(SKILL_DB[id]||[]).filter(x=>x.lv<=m.level&&!oldSkills.includes(x.name)).map(x=>x.name);
+     reports.push({id,before,after:m.level,exp:m.exp,next:m.level<50?this.expToNext(m.level):0,newSkills});
+   });
+   return reports;
+ },
+ join(id){if(this.members[id])this.members[id].joined=true},
+ setActive(ids){this.active=ids.filter(id=>this.members[id]?.joined).slice(0,this.maxActive)},
+ setSquad(name,ids){if(this.squads[name])this.squads[name]=ids.filter(id=>this.members[id]?.joined)}
+};
+let gold=0,resultCallback=null;
+function charStats(id){
+ const b=CHARACTER_DB[id],m=PartyManager.members[id],n=Math.max(0,m.level-1);
+ return {maxHp:b.maxHp+b.growth.hp*n,maxMp:b.maxMp+b.growth.mp*n,atk:b.atk+b.growth.atk*n,def:b.def+b.growth.def*n,mag:b.mag+b.growth.mag*n,spd:b.spd+b.growth.spd*n};
+}
+function showBattleResult(exp,goldGain,callback){
+ const reports=PartyManager.addExp(exp);gold+=goldGain;resultCallback=callback||null;
+ $('#resultExp').textContent=`EXP +${exp}`;$('#resultGold').textContent=`GOLD +${goldGain}`;
+ $('#resultGrowth').innerHTML=reports.map(r=>{
+   const c=CHARACTER_DB[r.id],up=r.after>r.before;
+   const pct=r.next?Math.min(100,r.exp/r.next*100):100;
+   return `<div class="growthRow"><b>${c.name}</b>　LV ${r.after}${up?`　<span style="color:#d4bd79">LEVEL UP!（${r.before} → ${r.after}）</span>`:''}
+   <div>${r.after<50?`EXP ${r.exp} / ${r.next}`:'MAX LEVEL'}</div><div class="expTrack"><i style="width:${pct}%"></i></div>
+   ${r.newSkills?.length?`<div style="color:#d4bd79;margin-top:6px">SKILL LEARNED：${r.newSkills.join(' / ')}</div>`:''}</div>`;
+ }).join('');
+ $('#battleResult').style.display='grid';
+}
+
+const SAVE_KEY='windbound_oath_v028';
+function renderSystemTab(tab='status'){
+ document.querySelectorAll('[data-stab]').forEach(b=>b.classList.toggle('active',b.dataset.stab===tab));
+ const body=$('#systemBody');
+ if(tab==='status'){
+   body.innerHTML=Object.entries(PartyManager.members).filter(([,m])=>m.joined).map(([id,m])=>{
+     const c=CHARACTER_DB[id],st=charStats(id),next=m.level<50?PartyManager.expToNext(m.level):0;
+     return `<div class="charStatus"><b>${c.name}</b>　${c.role}　LV ${m.level}
+     <div><small>EXP ${m.exp}${next?' / '+next:' / MAX'}</small></div>
+     <div class="stats"><span>HP ${st.maxHp}</span><span>MP ${st.maxMp}</span><span>ATK ${st.atk}</span><span>DEF ${st.def}</span><span>MAG ${st.mag}</span><span>SPD ${st.spd}</span></div></div>`;
+   }).join('')+`<div class="charStatus"><b>ルー</b>　SUPPORT<br><small>${PartyManager.support.joined?'FAIRY BLESSING '+PartyManager.support.fairyBlessing:'未加入'}</small></div>`;
+ }else if(tab==='skill'){
+   body.innerHTML=Object.entries(PartyManager.members).filter(([,m])=>m.joined).map(([id,m])=>
+    `<div class="charStatus"><b>${CHARACTER_DB[id].name}</b>${learnedSkills(id).map(k=>`<div class="skill"><b>${k.name}</b><br><small>${k.desc}</small></div>`).join('')}</div>`
+   ).join('');
+ }else if(tab==='party'){
+   const active=PartyManager.active.map(id=>CHARACTER_DB[id].name).join(' / ')||'なし';
+   const reserve=Object.entries(PartyManager.members).filter(([id,m])=>m.joined&&!PartyManager.active.includes(id)).map(([id])=>CHARACTER_DB[id].name).join(' / ')||'なし';
+   body.innerHTML=`<h3>ACTIVE PARTY</h3><p>${active}</p><h3>RESERVE</h3><p>${reserve}</p><small>最大4人編成。正式な編成変更UIは仲間加入に合わせて実装予定です。</small>
+   <h3>SUPPORT</h3><p>${PartyManager.support.joined?'ルー / FAIRY BLESSING '+PartyManager.support.fairyBlessing:'未加入'}</p>`;
+ }else if(tab==='settings'){
+   const canFS=!!document.documentElement.requestFullscreen;
+   body.innerHTML=`<h3>SETTINGS</h3>
+   <div class="charStatus"><b>画面表示</b><p>スマートフォンではフルスクリーンにすると、ブラウザのアドレスバーを隠してゲーム画面を広く使えます。</p>
+   <button id="toggleFullscreen" type="button" ${canFS?'':'disabled'}>${document.fullscreenElement?'フルスクリーンを解除':'フルスクリーンにする'}</button>
+   <p><small>${canFS?'縦向き・横向きのどちらでも切り替えできます。':'このブラウザではFullscreen APIを利用できません。'}</small></p></div>`;
+   if(canFS)$('#toggleFullscreen').onclick=async()=>{
+     try{
+       if(document.fullscreenElement)await document.exitFullscreen();
+       else await document.documentElement.requestFullscreen();
+       renderSystemTab('settings');
+     }catch(e){body.insertAdjacentHTML('beforeend','<p><small>フルスクリーンへの切り替えが許可されませんでした。</small></p>')}
+   };
+ }else{
+   const exists=!!localStorage.getItem(SAVE_KEY);
+   body.innerHTML=`<h3>SAVE DATA</h3><p>現在の成長・パーティー状態・GOLDをブラウザに保存します。</p>
+   <button id="doSave" type="button">セーブ</button> <button id="doLoad" type="button" ${exists?'':'disabled'}>ロード</button>
+   <button id="eraseSave" type="button" ${exists?'':'disabled'}>セーブ削除</button><p id="saveMsg"><small>${exists?'セーブデータがあります。':'セーブデータはありません。'}</small></p>`;
+   $('#doSave').onclick=saveGrowthData;if(exists){$('#doLoad').onclick=loadGrowthData;$('#eraseSave').onclick=eraseGrowthData}
+ }
+}
+function saveGrowthData(){
+ const data={version:28,members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
+ localStorage.setItem(SAVE_KEY,JSON.stringify(data));$('#saveMsg').innerHTML='<small>セーブしました。</small>';
+}
+function loadGrowthData(){
+ try{
+  const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(!d)throw 0;
+  Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
+  PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
+  if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
+  gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
+  renderSystemTab('status');notice('成長データをロードしました');
+ }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>'}
+}
+function eraseGrowthData(){localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
+$('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
+$('#systemClose').onclick=()=>$('#systemMenu').style.display='none';
+document.addEventListener('fullscreenchange',()=>{if($('#systemMenu').style.display==='block'&&document.querySelector('[data-stab="settings"].active'))renderSystemTab('settings')});
+document.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>renderSystemTab(b.dataset.stab));
+
+$('#resultContinue').onclick=()=>{
+ $('#battleResult').style.display='none';const cb=resultCallback;resultCallback=null;if(cb)cb();
+};
+
+let forestChests={fChest1:false,fChest2:false,fChest3:false},forestGobWins=0,louFound=false;
+let battleItems={potion:4,ether:2}; let normalFHP=90,normalFMP=30,normalActor='aidan';
+function forestBlocked(x,y){
+ if(x<35||y<35||x>1720||y>1220)return true;
+ const walls=[
+  [500,360,360,115],[260,610,420,100],[910,470,115,360],[1190,810,390,105]
+ ];
+ if(forestGobWins<3 && x>1340 && x<1735 && y>380 && y<680)return true;
+ return walls.some(([wx,wy,ww,wh])=>x+34>wx&&x<wx+ww&&y+48>wy&&y<wy+wh);
+}
+function forestCamera(){
+ const fw=$('#forestWorld');
+ let x=Math.max(0,Math.min(1800-innerWidth,fpx-innerWidth/2));
+ let y=Math.max(0,Math.min(1300-innerHeight,fpy-innerHeight/2));
+ fw.style.transform=`translate(${-x}px,${-y}px)`;
+ $('#forestPlayer').style.left=fpx+'px';$('#forestPlayer').style.top=fpy+'px';
+ // Fiona follows with a soft trailing offset.
+ ffx+=(fpx-48-ffx)*.08; ffy+=(fpy+18-ffy)*.08;
+ $('#forestFiona').style.left=ffx+'px';$('#forestFiona').style.top=ffy+'px';
+}
+function forestLoop(){
+ if(forestActive&&ftarget){
+   let dx=ftarget.x-fpx,dy=ftarget.y-fpy,d=Math.hypot(dx,dy);
+   if(d<5)ftarget=null;
+   else{
+     let nx=fpx+dx/d*3.6,ny=fpy+dy/d*3.6;
+     if(!forestBlocked(nx,ny)){fpx=nx;fpy=ny}else ftarget=null;
+   }
+ }
+ if(forestActive)forestCamera();
+ requestAnimationFrame(forestLoop);
+}
+forestLoop();
+function enterMossForest(){
+ storyStage=9;forestActive=true;fpx=330;fpy=940;ffx=285;ffy=955;ftarget=null;
+ $('#forestScene').style.display='block';forestCamera();
+ questPop('SCENE：苔むした森');
+ setObj('森の奥を調べよう');
+ setTimeout(()=>say('フィオナ「……エイダン？　よかった……。ここ、村の北の森……？」'),350);
+}
+
+function forestToast(t){
+ const n=$('#forestToast');n.textContent=t;n.style.display='block';
+ clearTimeout(forestToast.t);forestToast.t=setTimeout(()=>n.style.display='none',2400);
+}
+const chestData={
+ fChest1:'きずぐすり ×2 を手に入れた。',
+ fChest2:'風よけの護符 ×1 を手に入れた。',
+ fChest3:'古びたルーン片 ×1 を手に入れた。'
+};
+Object.keys(chestData).forEach(id=>{
+ $('#'+id).onclick=e=>{
+  e.stopPropagation();
+  const el=$('#'+id),x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+  if(Math.hypot(fpx-x,fpy-y)>190){forestToast('宝箱には、もう少し近づく必要がある。');return}
+  if(forestChests[id]){forestToast('宝箱は空だ。');return}
+  forestChests[id]=true;el.classList.add('open');el.textContent='□';forestToast(chestData[id]);
+ };
+});
+['forestGob1','forestGob2','forestGob3'].forEach(id=>{
+ const g=$('#'+id);
+ g.onclick=e=>{
+  e.stopPropagation();
+  const x=parseFloat(g.style.left),y=parseFloat(g.style.top);
+  if(Math.hypot(fpx-x,fpy-y)>210){forestToast('異形のゴブリンがこちらを警戒している……。');return}
+  startAttackBattle(id,160);
+ };
+});
+const louIntroLines=[
+ '風結界がほどけた場所に近づくと、森の音がふっと遠のいた。',
+ 'フィオナ「……光？」　木々の間を、青白い粒子が蛍のように流れていく。',
+ '？？？「……こわくない？」',
+ 'エイダン「誰だ？」',
+ '小さな影が古代石の陰からおそるおそる姿を見せた。透き通る羽が、月明かりを受けて淡く揺れる。',
+ '？？？「人間……だよね。黒いのに染まった魔物じゃないよね？」',
+ 'フィオナ「大丈夫。私たちも、あの魔物に襲われたの。」',
+ '妖精はしばらく二人を見つめ、それから少しだけ肩の力を抜いた。',
+ 'ルー「……ルー。名前はルーだよ。」',
+ 'ルー「ここには前まで、ルーだけじゃなくて……もっとたくさん、仲間がいたの。」',
+ 'その言葉と同時に、周囲の光が一瞬だけ弱くなる。',
+ 'ルー「魔物が来て、みんな逃げて……それから、風の声もぐちゃぐちゃになった。」',
+ 'エイダン「君は、ここに残っていたのか？」',
+ 'ルー「うん。古い祭壇の奥から変な声がしてるの。仲間たちが襲われたことと、きっと関係があると思って。」',
+ 'フィオナ「その祭壇へ案内してくれる？」',
+ 'ルー「……うん。でも気をつけて。あそこには、まだすごく嫌な風がいる。」',
+ 'ルーが両手を広げると、蔦に覆われていた空間を淡い風が走り、今まで見えなかった細い道が浮かび上がった。'
+];
+let louIntroIndex=0;
+function startLouIntro(){
+ forestActive=false;louIntroIndex=0;$('#louIntroScene').style.display='block';$('#louIntroText').textContent=louIntroLines[0];
+}
+$('#louIntroScene').onclick=()=>{
+ louIntroIndex++;
+ if(louIntroIndex<louIntroLines.length){$('#louIntroText').textContent=louIntroLines[louIntroIndex];return}
+ $('#louIntroScene').style.display='none';louFound=true;forestActive=true;
+ $('#louSearch').style.display='none';$('#louSprite').style.display='grid';$('#windPath').style.display='block';
+ storyStage=11;setObj('ルーが示した隠し風道を調べよう');forestCamera();
+};
+$('#louSearch').onclick=e=>{
+ e.stopPropagation();
+ if(forestGobWins<3){forestToast('結界の向こうに何かの気配がある……。');return}
+ if(Math.hypot(fpx-1515,fpy-475)>230){forestToast('かすかな風の音がする……もう少し近くを探そう。');return}
+ if(louFound){forestToast('隠された風道が淡く輝いている。');return}
+ startLouIntro();
+};
+
+$('#windPath').onclick=e=>{
+ e.stopPropagation();
+ if(!louFound){forestToast('まだ道の形が見えない。');return}
+ if(Math.hypot(fpx-1390,fpy-430)>320){forestToast('ルーが示した風道へ近づこう。');return}
+ closeDialogue();forestActive=false;$('#forestScene').style.display='none';
+ startAltarScene();
+};
+$('#louSprite').onclick=e=>{
+ e.stopPropagation();
+ if(forestGobWins<3 || !louFound){
+   forestToast('結界の向こうから風の気配を感じる。しかし、まだ声は届かない。');
+   return;
+ }
+ if(Math.hypot(fpx-1540,fpy-490)>230){forestToast('ルーが隠し道の方で手招きしている。');return}
+ say('ルー「この先。普通に見ても道はないけど、風はちゃんと通ってるよ。」');
+};
+$('#forestScene').addEventListener('pointerdown',e=>{
+ if(e.target.closest('#ancientStone,#louSprite,#windPath,#msg,button'))return;
+ let r=$('#forestWorld').getBoundingClientRect();
+ ftarget={x:e.clientX-r.left-20,y:e.clientY-r.top-28};
+});
+$('#ancientStone').onclick=e=>{
+ e.stopPropagation();
+ if(Math.hypot(fpx-1250,fpy-350)>250){toast('もう少し近づいて調べよう。');return}
+ forestStoneSeen=true;storyStage=Math.max(storyStage,10);
+ say('フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。');
+ if(forestGobWins>=3){setObj('古代石の周囲で風の気配を探そう');$('#louSearch').style.display='block';}
+ else setObj('森を探索し、異常化した魔物を退けよう');
+};
+
+const altarLines=[
+ 'ルー「ここだよ……。この先だけ、森の風がずっと止まってる。」',
+ 'フィオナが足を踏み入れると、地面に埋もれた古代ルーンが一つ、また一つと淡く灯り始めた。',
+ 'フィオナ「私に反応してる……？　リンド村の石と同じ光……。」',
+ 'エイダン「ルー。この場所は昔からこうだったのか？」',
+ 'ルー「ううん。前はただの古い石だった。でも魔物が来た夜から、奥で誰かが呼んでるみたいになったの。」',
+ '風もないのに木々がざわめく。青白い光の粒が三人の周囲を円を描くように漂った。',
+ 'ルー「……この風、悲しんでる。」',
+ '突然、光が黒紫に濁る。四方の茂みから異常化ゴブリンが姿を現した。',
+ 'エイダン「下がって、二人とも！」',
+ 'ゴブリンの一撃を受け止めた瞬間、エイダンの剣が弾かれ、祭壇脇の暗い裂け目へ落ちていく。',
+ 'フィオナ「エイダン！」',
+ 'エイダン「剣が……！」',
+ 'ルー「待って！　別の声がする。あの石……エイダンを呼んでる！」',
+ '古代石の表面を、風を表すルーンが走る。鼓動のような低い音が森全体へ響いた。',
+ '――風が集まり、石の中に一本の剣の輪郭が浮かび上がる。',
+ '声なき声「……誓いを、もう一度。」',
+ 'エイダン「誓い……？」',
+ '脳裏に燃えるリンド村がよぎる。守れなかった人々。手を伸ばしても届かなかったもの。',
+ 'エイダン「……もう、目の前で誰かを失うのは嫌だ。」',
+ 'エイダンが柄を握る。封印が砕け、緑金の光とともに「誓いの剣」が目を覚ました。',
+ 'フィオナ「エイダン……その剣……。」',
+ 'ルー「風が戻ってきた……！」',
+ '周囲の小鬼たちが怯んだ、その瞬間――森の奥から地面を震わせる角笛が鳴り響く。',
+ 'ルー「来る……！　あいつ、仲間たちを襲った魔物と同じ匂いがする！」',
+ '小鬼たちの奥から、巨大なゴブリン・レイダーが戦斧を引きずりながら姿を現した。'
+]
+let altarIndex=0;
+function startAltarScene(){
+ storyStage=12;altarIndex=0;$('#altarScene').style.display='block';
+ $('#oathSword').style.display='none';$('#altarText').textContent=altarLines[0];
+ setObj('古代祭壇で包囲を突破しよう');
+}
+$('#altarScene').onclick=()=>{
+ altarIndex++;
+ if(altarIndex<altarLines.length){
+   $('#altarText').textContent=altarLines[altarIndex];
+   if(altarIndex===14)$('#oathSword').style.display='block';
+   if(altarIndex===19){
+     ['ag1','ag2','ag3','ag4'].forEach(id=>$('#'+id).style.opacity='.28');
+     $('#oathSword').style.filter='drop-shadow(0 0 28px #e7ffd8)';
+   }
+ }else{
+   $('#altarScene').style.display='none';startRaiderBattle();
+ }
+};
+
+
+let rbHP=120,rbTP=0,rbFHP=105,rbFMP=36,rbBoss=1250,rbRune=0,rbGuardA=false,rbGuardF=false,rbBusy=false,rbQueued=false,rbAdds=0,rbRound=1,rbActor='aidan',rbActs=[];
+function rbPhase(){return rbBoss>820?1:(rbBoss>400?2:3)}
+
+function syncRaiderCommandClasses(){
+ const ids=['rbAtk','rbSkill','rbHeal','rbRuneSkill','rbGuard','rbItem','rbWind'];
+ ids.forEach(id=>$('#'+id)?.classList.remove('rb-visible'));
+
+ // Command ownership is explicit. Never infer from display/disabled state.
+ if(rbActor==='aidan'){
+   ['rbAtk','rbSkill','rbGuard','rbItem'].forEach(id=>$('#'+id)?.classList.add('rb-visible'));
+   // 風の一閃 is Aidan's RUNE special. Keep it visible so readiness is understandable.
+   $('#rbWind')?.classList.add('rb-visible');
+ }else{
+   ['rbAtk','rbHeal','rbRuneSkill','rbGuard','rbItem'].forEach(id=>$('#'+id)?.classList.add('rb-visible'));
+ }
+
+ $('#rbSkill').disabled=rbTP<30;
+ $('#rbHeal').disabled=rbFMP<8;
+ $('#rbRuneSkill').disabled=rbFMP<6;
+ $('#rbWind').disabled=rbRune<100;
+}
+
+function updateRaider(){
+ setRaiderCommandDrawer(false);
+ $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
+ $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
+ $('#rbRuneFill').style.width=rbRune+'%';$('#rbRunet').textContent=`RUNE ${rbRune} / 100`;
+ $('#rbPhase').textContent=`PHASE ${rbPhase()}　増援 ${rbAdds}`;
+ $('#pAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#pAtext').textContent=`HP ${Math.max(0,rbHP)}　TP ${rbTP}`;
+ $('#pFHP').style.width=Math.max(0,rbFHP/1.05)+'%';$('#pFtext').textContent=`HP ${Math.max(0,rbFHP)}　MP ${rbFMP}`;
+ if($('#rbNearAHP')){
+   $('#rbNearAHP').style.width=Math.max(0,rbHP/1.2)+'%';
+   $('#rbNearATP').style.width=Math.max(0,Math.min(100,rbTP))+'%';
+   $('#rbNearFHP').style.width=Math.max(0,rbFHP/1.05)+'%';
+   $('#rbNearFMP').style.width=Math.max(0,Math.min(100,rbFMP/36*100))+'%';
+   $('#rbNearATxt').textContent=`HP ${Math.max(0,rbHP)}  TP ${rbTP}`;
+   $('#rbNearFTxt').textContent=`HP ${Math.max(0,rbFHP)}  MP ${rbFMP}`;
+ }
+ $('#cardA').classList.toggle('active',rbActor==='aidan');$('#cardF').classList.toggle('active',rbActor==='fiona');
+ $('#rbCmd').classList.toggle('fionaTurn',rbActor==='fiona');
+ $('#rbSkill').disabled=rbTP<30;$('#rbSkill').textContent=`一閃 TP30（${rbTP}）`;
+ $('#rbHeal').disabled=rbFMP<8;$('#rbRuneSkill').disabled=rbFMP<6;
+ const ready=rbRune>=100;$('#raiderBattle').classList.toggle('windReady',ready);$('#rbWind').disabled=!ready;
+ setTimeout(syncRaiderCommandClasses,0);
+ $('#rbTurn').textContent=`ROUND ${rbRound} / ${rbActor==='aidan'?'エイダン':'フィオナ'}のコマンド`;
+}
+function startRaiderBattle(){
+ rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
+ $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
+ $('#rbMsg').textContent='ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。';
+ updateRaider();
+}
+function choosePartyAct(kind){
+ if(rbBusy)return;
+ if(rbActor==='aidan'){
+   if(kind==='item'){openRaiderItems();return}
+   if(kind==='skill'&&rbTP<30){$('#rbMsg').textContent='TPが足りない。';return}
+   if(kind==='wind'&&rbRune<100)return;
+   rbActs.push({who:'aidan',kind});rbActor='fiona';
+   $('#rbMsg').textContent='フィオナの行動を選択。';updateRaider();return;
+ }
+ if(kind==='item'){openRaiderItems();return}
+ if(kind==='heal'&&rbFMP<8){$('#rbMsg').textContent='MPが足りない。';return}
+ if(kind==='rune'&&rbFMP<6){$('#rbMsg').textContent='MPが足りない。';return}
+ rbActs.push({who:'fiona',kind});rbBusy=true;resolvePartyRound();
+}
+
+function openRaiderItems(){
+ const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${rbActor==='aidan'?'エイダン':'フィオナ'}</b><br>
+ <button data-ri="potion">きずぐすり ×${battleItems.potion}</button>
+ <button data-ri="ether">魔力の雫 ×${battleItems.ether}</button>
+ <button data-ri="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';setRaiderCommandDrawer(false);
+}
+$('#normalItems').addEventListener('click',e=>{
+ const b=e.target.closest('[data-ri]');if(!b)return;e.stopPropagation();
+ let k=b.dataset.ri;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
+ if(k==='potion'&&!battleItems.potion){$('#rbMsg').textContent='きずぐすりを持っていない。';return}
+ if(k==='ether'&&!battleItems.ether){$('#rbMsg').textContent='魔力の雫を持っていない。';return}
+ if(k==='potion')battleItems.potion--;else battleItems.ether--;
+ rbActs.push({who:rbActor,kind:'item',item:k});$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';
+ if(rbActor==='aidan'){rbActor='fiona';$('#rbMsg').textContent='フィオナの行動を選択。';updateRaider()}
+ else {rbBusy=true;resolvePartyRound()}
+});
+
+function resolvePartyRound(){
+ let delay=0;
+ const sayAct=(txt,fn)=>{setTimeout(()=>{fn&&fn();$('#rbMsg').textContent=txt;updateRaider()},delay);delay+=650};
+ rbActs.forEach(a=>{
+   if(a.who==='aidan'){
+     if(a.kind==='item'){
+       if(a.item==='potion')sayAct('エイダンは きずぐすりを使った。HP +45',()=>rbHP=Math.min(120,rbHP+45));
+       else sayAct('エイダンは魔力の雫をフィオナに使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
+     }else if(a.kind==='guard'){sayAct('エイダンは身を固めた。TP +10 / RUNE +10',()=>{rbGuardA=true;rbTP=Math.min(100,rbTP+10);rbRune=Math.min(100,rbRune+10)})}
+     else if(a.kind==='wind'){sayAct('誓いの剣――「風の一閃」！ 255ダメージ！ 増援と破砕斬の構えを吹き飛ばした！',()=>{rbRune=0;rbBoss-=255;rbAdds=0;rbQueued=false})}
+     else if(a.kind==='skill'){sayAct('エイダンの「一閃」！ 68ダメージ。',()=>{rbTP-=30;rbBoss-=68;rbRune=Math.min(100,rbRune+14)})}
+     else sayAct('エイダンの攻撃！ 42ダメージ。TP +15',()=>{rbBoss-=42;rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)});
+   }else{
+     if(a.kind==='item'){
+       if(a.item==='potion')sayAct('フィオナは きずぐすりを使った。HP +45',()=>rbFHP=Math.min(105,rbFHP+45));
+       else sayAct('フィオナは魔力の雫を使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
+     }else if(a.kind==='guard'){sayAct('フィオナは防御した。RUNE +10',()=>{rbGuardF=true;rbRune=Math.min(100,rbRune+10)})}
+     else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=rbHP<=rbFHP?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)})}
+     else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)})}
+     else sayAct('フィオナが杖で応戦！ 22ダメージ。',()=>{rbBoss-=22;rbRune=Math.min(100,rbRune+7)});
+   }
+ });
+ setTimeout(()=>{if(rbBoss<=0)finishRaider();else rbEnemyParty()},delay);
+}
+function rbEnemyParty(){
+ const phase=rbPhase();let txt='';
+ if(rbQueued){
+   let base=phase===3?48:42;
+   let da=rbGuardA?Math.ceil(base/2):base, df=rbGuardF?Math.ceil((base-6)/2):base-6;
+   rbHP-=da;rbFHP-=df;rbQueued=false;txt=`レイダーの「破砕斬」！ エイダン ${da} / フィオナ ${df} ダメージ！`;
+ }else if((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4){
+   rbAdds=Math.min(4,rbAdds+2);txt='レイダーが角笛を吹いた！　増援が現れた。攻撃が激しくなる！';
+ }else if(rbRound%3===0 || (phase===3&&rbRound%2===0)){
+   rbQueued=true;txt='レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！';
+ }else{
+   let target=rbHP<=rbFHP?'a':'f',d=(phase===1?21:phase===2?27:32)+rbAdds*3;
+   if(target==='a'){if(rbGuardA)d=Math.ceil(d/2);rbHP-=d;txt=`レイダーがエイダンを狙う！ ${d}ダメージ。`}
+   else {if(rbGuardF)d=Math.ceil(d/2);rbFHP-=d;txt=`レイダーがフィオナを狙う！ ${d}ダメージ。`}
+ }
+ // Lou is support-only: modest automatic help, never a selectable turn.
+ if((rbHP<42||rbFHP<38) && rbRound%3===0){
+   rbHP=Math.min(120,rbHP+12);rbFHP=Math.min(105,rbFHP+12);txt+='　ルーの風が二人を包む！ HP +12';
+ }
+ rbGuardA=rbGuardF=false;
+ if(rbHP<=0||rbFHP<=0){
+   $('#rbMsg').textContent='パーティーが崩れた……。ルーの風が時間を巻き戻す。';
+   setTimeout(startRaiderBattle,1200);return;
+ }
+ rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;$('#rbMsg').textContent=txt;updateRaider();
+}
+function finishRaider(){
+ if($('#raiderBattle').style.display==='none')return;
+ rbBusy=true;rbBoss=0;updateRaider();
+ $('#rbMsg').textContent='ゴブリン・レイダーを倒した！　二人の力と誓いの剣が、黒紫のルーンを打ち砕いた。';
+ setTimeout(()=>{
+   // Result overlay is shown while the battle layer is still present, preventing map flash.
+   showBattleResult(120,45,()=>{
+     startRaiderAftermath();
+     $('#raiderBattle').style.display='none';document.body.classList.remove('battleMode','raiderBattleMode');
+   });
+ },1200);
+}
+$('#rbAtk').onclick=()=>choosePartyAct('atk');
+$('#rbSkill').onclick=()=>choosePartyAct('skill');
+$('#rbHeal').onclick=()=>choosePartyAct('heal');
+$('#rbRuneSkill').onclick=()=>choosePartyAct('rune');
+$('#rbGuard').onclick=()=>choosePartyAct('guard');$('#rbItem').onclick=()=>choosePartyAct('item');
+$('#rbWind').onclick=()=>choosePartyAct('wind');
+
+
+
+
+// v0.37 compact command drawers
+function setNormalCommandDrawer(open){
+ const panel=$('#normalBattleCmd'), toggle=$('#normalCommandToggle');
+ if(!panel||!toggle)return;
+ panel.hidden=!open;
+ toggle.hidden=!!open;
+ panel.classList.toggle('expanded',!!open);
+ panel.style.setProperty('display',open?'grid':'none','important');
+ panel.style.setProperty('visibility',open?'visible':'hidden','important');
+ panel.style.setProperty('pointer-events',open?'auto':'none','important');
+ toggle.style.setProperty('display',open?'none':'flex','important');
+}
+function setRaiderCommandDrawer(open){
+ const panel=$('#rbCmd'), toggle=$('#rbCommandToggle');
+ if(!panel||!toggle)return;
+ panel.hidden=!open;
+ toggle.hidden=!!open;
+ panel.classList.toggle('expanded',!!open);
+ panel.style.setProperty('display',open?'grid':'none','important');
+ panel.style.setProperty('visibility',open?'visible':'hidden','important');
+ panel.style.setProperty('pointer-events',open?'auto':'none','important');
+ toggle.style.setProperty('display',open?'none':'flex','important');
+}
+setNormalCommandDrawer(false);
+setRaiderCommandDrawer(false);
+$('#normalCommandToggle').onclick=()=>{ if(!attackBattleBusy)setNormalCommandDrawer(true); };
+$('#rbCommandToggle').onclick=()=>{ if(!rbBusy)setRaiderCommandDrawer(true); };
+$('#normalCommandClose').onclick=()=>setNormalCommandDrawer(false);
+$('#rbCommandClose').onclick=()=>setRaiderCommandDrawer(false);
+
+const aftermathLines=[
+ '静寂が戻った。砕けた黒紫のルーンが、風にほどけるように消えていく。',
+ 'フィオナ「……終わった、の？」',
+ 'エイダン「たぶん。」　握った「誓いの剣」から、さっきまでの光がゆっくり消えていった。',
+ '三人はしばらく何も言わなかった。森に戻った風だけが、祭壇の草を揺らしている。',
+ 'エイダン「……村を、守れなかった。」',
+ 'フィオナ「うん。でも、生き残った人たちもいる。私たちまでここで止まったら、本当に何も残らなくなる。」',
+ 'ルー「……ルーもね。守れなかったんだ。」',
+ 'フィオナ「ルー……？」',
+ 'ルー「ここには妖精がたくさんいたの。みんなで風の歌を聞いて、花の蜜を集めて……ずっと一緒だった。」',
+ 'ルー「でも黒い魔物が来た夜、仲間が襲われた。ルーの目の前で……動かなくなった子もいた。」',
+ 'ルー「みんな逃げたから、誰が無事なのか分からないの。森の外へ逃げられた子も、きっといると思う。」',
+ 'フィオナ「だから、ずっと一人で探していたのね。」',
+ 'ルー「うん……。この森だけじゃ見つけられない。風の声も、遠くへ続いてる。」',
+ 'エイダン「俺たちは、村を襲った魔物と黒いルーンの正体を追うつもりだ。」',
+ 'ルー「だったら……ルーも一緒に行っていい？」',
+ 'ルー「仲間を探したい。逃げ延びた子がいるなら、ちゃんと見つけたい。それに……あの黒いものが何なのか知りたい。」',
+ 'フィオナ「もちろん。一緒に探そう。」',
+ 'エイダン「俺たちも探す。ルーの仲間も、この異変の答えも。」',
+ 'ルー「……ほんと？」',
+ 'エイダン「ああ。よろしく、ルー。」',
+ 'ルーの羽がふわりと光る。止まっていた風が三人の間を通り抜け、夜明けの方角へ流れていった。',
+ 'ルー「うん！　よろしくね、エイダン、フィオナ！」',
+ '――こうしてルーは、二人の旅に加わった。',
+ '三人は夜明けを待ち、まず王国軍のアーサー砦を目指すことにした。'
+]
+let aftermathIndex=0;
+function startRaiderAftermath(){
+ storyStage=13;aftermathIndex=0;forestActive=false;
+ currentObjective='ルーと話し、これからの行き先を決めよう';renderJournal();
+ $('#aftermathScene').style.display='block';
+ $('#aftermathText').textContent=aftermathLines[0];
+ questPop('ゴブリン・レイダーを討伐した');
+}
+$('#aftermathScene').onclick=()=>{
+ aftermathIndex++;
+ if(aftermathIndex<aftermathLines.length){
+   $('#aftermathText').textContent=aftermathLines[aftermathIndex];
+ }else{
+   PartyManager.support.joined=true;
+   storyStage=14;
+   // Keep the aftermath layer visible as a transition cover.
+   // Hiding it here exposed the underlying Lind Village for ~650ms.
+   $('#aftermathText').textContent='夜が明ける。三人は風の向かう先――アーサー砦へ歩き出した。';
+   questPop('ルーがSUPPORTとして仲間になった');
+   setTimeout(()=>{
+     startFortFinale();
+     // Fort is now in front; only then remove the previous scene.
+     $('#aftermathScene').style.display='none';
+   },650);
+ }
+};
+
+const fortLines=[
+ '夜明け。長い森を抜けた先に、王国軍の小さな砦が見えた。',
+ 'フィオナ「……着いた。ここなら、少しは休めるかな。」',
+ 'ルー「でも、あの黒いルーン……普通の魔物じゃなかった。風もずっと怯えてたよ。」',
+ 'エイダンは「誓いの剣」の柄を握る。村を守れなかった重さが、まだ手の中に残っていた。',
+ '王国騎士「リンド村から来たのか！？　生存者だな。すぐ中へ。……王都にも異変を知らせる。」',
+ '遠く、朝日に照らされた山の向こうで、一瞬だけ黒い裂け目のようなものが空に滲んだ。',
+ '――これは、魔王の物語ではない。まだ誰も知らない「虚無」と、風の誓いを巡る旅の始まりだった。'
+];
+let fortIndex=0;
+function startFortFinale(){
+ document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode');
+ // Destination-first transition: never expose the base field between story scenes.
+ $('#fortScene').style.display='block';
+ storyStage=14;fortIndex=0;currentObjective='アーサー砦で王国騎士と合流しよう';renderJournal();
+ $('#fortText').textContent=fortLines[0];
+ // Hide only transient story layers after the fort is already visible.
+ ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','battle','attackBattle'].forEach(id=>{
+   const el=$('#'+id);if(el)el.style.display='none';
+ });
+ forestActive=false;popObjective();
+}
+$('#fortScene').onclick=()=>{
+ fortIndex++;
+ if(fortIndex<fortLines.length){$('#fortText').textContent=fortLines[fortIndex];}
+ else showPrologueEnd();
+};
+function showPrologueEnd(){
+ $('#fortScene').style.display='none';storyStage=15;currentObjective='プロローグクリア';renderJournal();
+ $('#prologueEnd').style.display='grid';
+}
+$('#endReturn').onclick=e=>{
+ e.stopPropagation();$('#prologueEnd').style.display='none';
+ // Development build: return to opening for repeated testing.
+ devJump('opening');
+};
+$('#fisher1').onclick=()=>say('釣り人「しーっ……今日は魚の機嫌がいいんだ。」');
+$('#fisher2').onclick=()=>say('釣り人「この川は昔から村の暮らしを支えてきたんだよ。」');
+
+new MutationObserver(()=>{
+ const open=getComputedStyle(msg).display!=='none';
+ document.body.classList.toggle('dialogueOpen',open);
+}).observe(msg,{attributes:true,attributeFilter:['style','class']});
+
+document.addEventListener('pointerdown',e=>{
+ if(!document.body.classList.contains('villageAttack'))return;
+ const el=e.target.closest?.('#shop,#inn,#aidanHouse,#elderHouse,.shopDoor,.innDoor');
+ if(!el)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ closeDialogue();
+ let n='建物';
+ if(el.closest('#shop')||el.matches('.shopDoor'))n='道具屋';
+ else if(el.closest('#inn')||el.matches('.innDoor'))n='宿屋';
+ else if(el.closest('#aidanHouse'))n='エイダンの家';
+ else if(el.closest('#elderHouse'))n='長老の家';
+ say(n+'は炎と瓦礫に塞がれている。今は中へ入れない。');
+},true);
+
+document.querySelectorAll('.attackRubble,.attackSmoke,.attackFlame').forEach(el=>{
+ el.addEventListener('pointerdown',e=>{
+   if(!document.body.classList.contains('villageAttack'))return;
+   e.stopPropagation();
+   say('焼けた木材と瓦礫が道を塞いでいる。炎の向こうから、建物が崩れる音がした。');
+ });
+});
+
+
+const DEV_EVENTS=[
+ ['opening','01　エイダンの家'],
+ ['training','02　訓練場・フィオナ'],
+ ['sunset','03　夕暮れの丘'],
+ ['attack','04　リンド村襲撃'],
+ ['reunion','05　フィオナ再合流後'],
+ ['north','06　王国騎士・北の退路'],
+ ['escape','07　川沿い脱出'],
+ ['forest','08　苔むした森'],
+ ['lou','09　ルー発見直前'],
+ ['altar','10　古代祭壇'],
+ ['raider','11　ゴブリン・レイダー'],
+ ['aftermath','12　レイダー討伐後・ルー加入'],
+ ['fort','13　夜明け・アーサー砦'],
+ ['prologueEnd','14　PROLOGUE END']
+];
+function devResetScreens(){
+ closeDialogue();
+ ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','aftermathScene','fortScene','prologueEnd','battle','attackBattle','questMenu'].forEach(id=>{
+   const e=$('#'+id);if(e)e.style.display='none';
+ });
+ document.body.classList.remove('northAssault');
+ $('#devPanel').style.display='none';
+}
+function devJump(key){
+ devResetScreens();
+ if(key==='opening'){
+   storyStage=0;room='home';ipx=190;ipy=500;itarget=null;$('#inside').style.display='block';dressRoom();inCamera();
+   currentObjective='家を出て、訓練場のフィオナに会いに行こう';
+   setTimeout(()=>say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'),120);
+ }else if(key==='training'){
+   storyStage=1;room='';px=1510;py=1010;target=null;currentObjective='訓練場でフィオナと話そう';camera();
+ }else if(key==='sunset'){
+   storyStage=3;room='';px=430;py=1370;target=null;currentObjective='フィオナと夕暮れの丘へ向かおう';camera();
+ }else if(key==='attack'){
+   storyStage=5;room='';px=420;py=1160;target=null;document.body.classList.add('villageAttack');currentObjective='炎上する村でフィオナを探そう';camera();
+ }else if(key==='reunion'){
+   storyStage=7;attackStep=2;room='';px=930;py=540;target=null;document.body.classList.add('villageAttack');currentObjective='フィオナとともに村の北側へ向かおう';camera();setTimeout(beginNorthAssault,100);
+ }else if(key==='north'){
+   storyStage=7;northPhase=1;room='';px=920;py=420;target=null;document.body.classList.add('villageAttack','northAssault');$('#northEscape').style.display='block';currentObjective='村の北側で王国騎士と合流しよう';camera();
+ }else if(key==='escape'){
+   storyStage=8;northPhase=3;document.body.classList.add('villageAttack');startEscapeScene();
+ }else if(key==='forest'){
+   storyStage=9;forestGobWins=0;louFound=false;forestStoneSeen=false;$('#louSeal').classList.remove('open');enterMossForest();
+ }else if(key==='lou'){
+   storyStage=10;forestGobWins=3;forestStoneSeen=true;louFound=false;forestActive=true;$('#louSeal').classList.add('open');fpx=1370;fpy=520;ffx=1320;ffy=535;
+   $('#forestScene').style.display='block';$('#louSearch').style.display='block';currentObjective='古代石の周囲で風の気配を探そう';forestCamera();
+ }else if(key==='altar'){
+   storyStage=12;louFound=true;$('#louSprite').style.display='grid';startAltarScene();
+  }else if(key==='raider'){
+   storyStage=12;startRaiderBattle();
+  }else if(key==='aftermath'){
+   storyStage=13;startRaiderAftermath();
+ }else if(key==='fort'){
+   storyStage=14;startFortFinale();
+ }else if(key==='prologueEnd'){
+   storyStage=15;showPrologueEnd();
+ }
+ renderJournal();popObjective();
+}
+$('#devGrid').innerHTML=DEV_EVENTS.map(([k,n])=>`<button data-jump="${k}">${n}</button>`).join('');
+$('#devBtn').onclick=()=>{$('#devPanel').style.display='block'};
+$('#devClose').onclick=()=>{$('#devPanel').style.display='none'};
+$('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b.dataset.jump)};
+
+// v0.23 opening: Aidan begins his day inside his own house, beside the bed.
+(function startAtHome(){
+ room='home'; ipx=190; ipy=500; itarget=null;
+ $('#inside').style.display='block'; dressRoom(); inCamera();
+ currentObjective='家を出て、訓練場のフィオナに会いに行こう';
+ renderJournal();
+ setTimeout(()=>{
+   popObjective();
+   say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');
+ },450);
+})();
+
+document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('selectstart',e=>e.preventDefault());camera();
+
+
+(function initOpeningHelp(){
+ const h=document.querySelector('#hint');
+ if(!h)return;
+ // 操作説明はゲーム開始時だけ。約5秒後に完全に消す。
+ setTimeout(()=>{
+   h.style.transition='opacity .45s ease';
+   h.style.opacity='0';
+   setTimeout(()=>{h.style.display='none'},480);
+ },5000);
+})();
+
+
+
+</script>
+<script id="v045-battle-overlay-root-fix">
+(function(){
+  function syncLog(el){
+    if(!el)return;
+    el.classList.toggle('battle-log-empty', !el.textContent.trim());
+  }
+  function ownBattleOverlays(){
+    ['battleMsg2','rbMsg','normalItems'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el && el.parentElement!==document.body) document.body.appendChild(el);
+    });
+    ['battleMsg2','rbMsg'].forEach(function(id){
+      var el=document.getElementById(id); if(!el)return;
+      syncLog(el);
+      new MutationObserver(function(){syncLog(el)}).observe(el,{childList:true,subtree:true,characterData:true});
+    });
+  }
+  ownBattleOverlays();
+  document.addEventListener('DOMContentLoaded',ownBattleOverlays,{once:true});
+})();
+</script>
+
+<script id="v051-approved-asset-registry">
+window.WINDBOUND_APPROVED_ASSETS={goblin:"img/battle/embedded/asset_008_de63533c5927.png",taintedGoblin:"img/battle/embedded/asset_003_93ecda87920e.png",raider:"img/battle/embedded/asset_009_c18f6d9e24ca.png",lou:"img/battle/embedded/asset_010_7d901e40e306.png"};
+</script>
+<script id="v053-action-cinematic-js">const V053={tainted:{idle:'img/battle/embedded/asset_011_e279f4b3eb31.png',attack:'img/battle/embedded/asset_012_a2b42f454622.png',damage:'img/battle/embedded/asset_013_1308ef593676.png',corrupted_attack:'img/battle/embedded/asset_012_a2b42f454622.png',summon:'img/battle/embedded/asset_014_efcd3ef1cf72.png',ko:'img/battle/embedded/asset_015_4dbf165690e7.png'},raider:{idle:'img/battle/embedded/asset_016_b89c9a5a66ae.png',attack:'img/battle/embedded/asset_017_fcde7cf29b27.png',horn:'img/battle/embedded/asset_018_791f68fbb49d.png',smash:'img/battle/embedded/asset_019_7ba16af45480.png',summon:'img/battle/embedded/asset_020_f05814716bd1.png',damage:'img/battle/embedded/asset_021_f7e80028fd81.png',rage:'img/battle/embedded/asset_022_960dc8412672.png',ko:'img/battle/embedded/asset_021_f7e80028fd81.png'}};function v53img(box,src){let i=box?.querySelector('img');if(i)i.src=src}function v53cin(f,t,ms){document.body.classList.add('actionCinematic');f?.classList.add('actionFocus');t?.classList.add('actionTarget');document.querySelectorAll('#attackBattle .v2Unit,#raiderBattle .rbRaster').forEach(x=>{if(x!==f&&x!==t)x.classList.add('actionDim')});return new Promise(r=>setTimeout(()=>{document.body.classList.remove('actionCinematic');document.querySelectorAll('.actionFocus,.actionTarget,.actionDim').forEach(x=>x.classList.remove('actionFocus','actionTarget','actionDim'));r()},ms||650))}function v53raider(p,ms){let r=document.querySelector('#raiderSprite');v53img(r,V053.raider[p]||V053.raider.idle);r?.classList.add('actionPose');return v53cin(r,null,ms||780).then(()=>{r?.classList.remove('actionPose');v53img(r,V053.raider.idle)})}function v53tainted(p,ms){let g=document.querySelector('#bGob');v53img(g,V053.tainted[p]||V053.tainted.idle);return v53cin(g,null,ms||650).then(()=>v53img(g,V053.tainted.idle))}const v53SA=startAttackBattle;startAttackBattle=function(id,hp){v53SA(id,hp);v53img(document.querySelector('#bGob'),V053.tainted.idle)};const v53SR=startRaiderBattle;startRaiderBattle=function(){v53SR();v53img(document.querySelector('#raiderSprite'),V053.raider.idle)};const v53NE=normalEnemyTurn;normalEnemyTurn=function(){attackBattleBusy=true;v53tainted('corrupted_attack',680).then(v53NE)};const v53RE=rbEnemyParty;rbEnemyParty=function(){let p=rbQueued?'smash':((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4?'horn':((rbRound%3===0||(rbPhase()===3&&rbRound%2===0))?'rage':'attack'));rbBusy=true;v53raider(p,800).then(v53RE)};const v53RN=resolveNormalRound;resolveNormalRound=function(){setNormalCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RN()};const v53RR=resolvePartyRound;resolvePartyRound=function(){setRaiderCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RR()};</script><script id="v054-battle-stage-js">
+const V054={
+ taintedIdle:'img/battle/embedded/asset_011_e279f4b3eb31.png',
+ raiderIdle:'img/battle/embedded/asset_016_b89c9a5a66ae.png'
+};
+function v54forceEnemyArt(){
+ const g=document.querySelector('#bGob img');
+ if(g){g.src=V054.taintedIdle;g.removeAttribute('hidden');}
+ const r=document.querySelector('#raiderSprite img');
+ if(r){r.src=V054.raiderIdle;r.removeAttribute('hidden');}
+}
+function v54watchImage(img,label){
+ if(!img)return;
+ img.addEventListener('error',()=>{console.error('[v0.54] failed battle asset:',label,img.src);img.style.display='block';img.style.minWidth='120px';img.style.minHeight='120px';});
+}
+window.addEventListener('DOMContentLoaded',()=>{
+ v54forceEnemyArt();
+ v54watchImage(document.querySelector('#bGob img'),'tainted_goblin');
+ v54watchImage(document.querySelector('#raiderSprite img'),'goblin_raider');
+});
+const v54SA=startAttackBattle;startAttackBattle=function(id,hp){v54SA(id,hp);requestAnimationFrame(v54forceEnemyArt)};
+const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimationFrame(v54forceEnemyArt)};
+</script>
+
+<script id="v056-raider-ko-finish-js">
+(function(){
+  let raiderFinishLock=false;
+  window.finishRaider=function(){
+    if(raiderFinishLock || !document.getElementById('raiderBattle') || document.getElementById('raiderBattle').style.display==='none') return;
+    raiderFinishLock=true; rbBusy=true; rbBoss=0;
+    const battle=document.getElementById('raiderBattle');
+    const sprite=document.getElementById('raiderSprite');
+    const img=sprite&&sprite.querySelector('img');
+    document.body.classList.add('raiderFinishing','actionCinematic');
+    setRaiderCommandDrawer(false);
+    document.getElementById('normalItems')?.classList.remove('isOpen');
+    if(img && window.V053?.raider?.ko) img.src=V053.raider.ko;
+    sprite?.classList.add('actionPose');
+    if(document.getElementById('rbBHP')) document.getElementById('rbBHP').style.width='0%';
+    if(document.getElementById('rbBHPt')) document.getElementById('rbBHPt').textContent='HP 0 / 1250';
+    setTimeout(()=>{
+      document.body.classList.remove('actionCinematic');
+      document.getElementById('rbMsg').textContent='ゴブリン・レイダーを倒した！　二人の力と誓いの剣が、黒紫のルーンを打ち砕いた。';
+      setTimeout(()=>{
+        showBattleResult(120,45,()=>{
+          document.getElementById('battleResult').style.display='none';
+          startRaiderAftermath();
+          battle.style.display='none';
+          document.body.classList.remove('battleMode','raiderBattleMode','raiderFinishing','actionCinematic');
+          sprite?.classList.remove('actionPose');
+          raiderFinishLock=false;
+        });
+      },700);
+    },1800);
+  };
+})();
+</script>
+
+<script src="js/assets.js"></script>
+<script src="js/game.js"></script>
+</body></html>
