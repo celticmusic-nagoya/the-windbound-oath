@@ -1,12 +1,18 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal']);
   const battles = {
-    normal: { image: '#bAidan2 img', health: () => [aahp, 100] },
-    raider: { image: '#rbAidan img', health: () => [rbHP, 120] }
+    normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
+    raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },
+    'normal:fiona': { actor: 'fiona', image: '#bFiona2 img', health: () => [normalFHP, 90] },
+    'raider:fiona': { actor: 'fiona', image: '#rbFiona img', health: () => [rbFHP, 105] }
   };
   for (const battle of Object.values(battles)) {
     Object.assign(battle, { state: 'idle', sequence: 0, timer: null, guard: false });
+  }
+  function lookup(context, actor = 'aidan') {
+    return battles[actor === 'aidan' ? context : context + ':' + actor];
   }
   function invalidate(battle) {
     clearTimeout(battle.timer);
@@ -16,44 +22,45 @@
   function paint(battle, state) {
     battle.state = state;
     const image = document.querySelector(battle.image);
-    const source = BATTLE_ASSETS.aidan[state];
+    const source = BATTLE_ASSETS[battle.actor][state];
     if (image && image.getAttribute('src') !== source) image.src = source;
   }
   function resting(battle) {
     const [hp, maxHp] = battle.health();
     return hp <= 0 ? 'ko' : battle.guard ? 'guard' : hp <= maxHp * .30 ? 'low_hp' : 'idle';
   }
-  function sync(context) {
-    const battle = battles[context];
+  function sync(context, actor = 'aidan') {
+    const battle = lookup(context, actor);
     if (!battle) return;
     if (battle.health()[0] <= 0 && battle.state !== 'ko') {
       invalidate(battle);
       paint(battle, 'ko');
-    } else if (!['ko', 'victory', 'attack', 'damage'].includes(battle.state)) {
+    } else if (!['ko', 'victory'].includes(battle.state) && !temporary.has(battle.state)) {
       paint(battle, resting(battle));
     }
   }
-  function set(actor, state, { battle: context, duration } = {}) {
-    if (actor !== 'aidan' || !states.has(state)) return false;
+  function set(actor, state, { battle: context, duration, next, nextDuration } = {}) {
+    if (!states.has(state) || !BATTLE_ASSETS[actor]?.[state]) return false;
     context ||= document.body.classList.contains('raiderBattleMode') ? 'raider' : 'normal';
-    const battle = battles[context];
+    const battle = lookup(context, actor);
     if (!battle) return false;
-    sync(context);
+    sync(context, actor);
     // KO outranks victory; neither can be replaced by a temporary pose.
     if (battle.state === 'ko' || (battle.state === 'victory' && state !== 'ko')) return false;
     if (state === 'idle' || state === 'low_hp') {
-      if (['attack', 'damage', 'guard'].includes(battle.state)) return false;
+      if (temporary.has(battle.state) || battle.state === 'guard') return false;
       state = resting(battle);
     }
     const sequence = invalidate(battle);
     if (state === 'guard') battle.guard = true;
     paint(battle, state);
-    if (duration && ['attack', 'damage'].includes(state)) {
+    if (duration && temporary.has(state)) {
       battle.timer = setTimeout(() => {
         if (battle.sequence !== sequence) return;
-        sync(context);
+        sync(context, actor);
         if (battle.sequence !== sequence || ['ko', 'victory'].includes(battle.state)) return;
         battle.timer = null;
+        if (next) return set(actor, next, { battle: context, duration: nextDuration });
         paint(battle, resting(battle));
       }, duration);
     }
@@ -62,25 +69,31 @@
   window.BattleActorState = Object.freeze({
     set,
     sync,
-    begin(context) {
-      const battle = battles[context];
+    begin(context, actor = 'aidan') {
+      const battle = lookup(context, actor);
       invalidate(battle);
       battle.guard = false;
       paint(battle, resting(battle));
     },
-    endGuard(context) {
-      battles[context].guard = false;
-      sync(context);
+    endGuard(context, actor = 'aidan') {
+      lookup(context, actor).guard = false;
+      sync(context, actor);
     },
     // Only called after the existing normal-battle recovery has restored HP.
-    recover(context) {
-      const battle = battles[context];
+    recover(context, actor = 'aidan') {
+      const battle = lookup(context, actor);
       if (battle.state === 'ko' && battle.health()[0] > 0) {
         invalidate(battle);
         paint(battle, resting(battle));
       }
     },
-    end(context) { invalidate(battles[context]); },
-    get(context) { return battles[context]?.state; }
+    end(context, actor = 'aidan') { invalidate(lookup(context, actor)); },
+    get(context, actor = 'aidan') { return lookup(context, actor)?.state; },
+    action(actor, state, { battle } = {}) {
+      if (actor === 'fiona' && state === 'heal') {
+        return set(actor, 'charge', { battle, duration: 260, next: 'heal', nextDuration: 500 });
+      }
+      return set(actor, state, { battle, duration: actor === 'aidan' ? 820 : state === 'attack' ? 680 : 760 });
+    }
   });
 })();
