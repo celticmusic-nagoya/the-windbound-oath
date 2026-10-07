@@ -1079,7 +1079,7 @@ document.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>renderSystemTa
 
 $('#resultContinue').onclick=()=>{
  $('#battleResult').style.display='none';const cb=resultCallback;resultCallback=null;if(cb)cb();
- BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('normal','tainted_goblin');BattleActorState.end('raider','fiona');BattleActorState.end('raider','lou');
+ BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('normal','tainted_goblin');BattleActorState.end('raider','fiona');BattleActorState.end('raider','lou');BattleActorState.end('raider','goblin_raider');
 };
 
 let forestChests={fChest1:false,fChest2:false,fChest3:false},forestGobWins=0,louFound=false;
@@ -1290,7 +1290,8 @@ function syncRaiderCommandClasses(){
 }
 
 function updateRaider(){
- BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');
+ BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');BattleActorState.sync('raider','goblin_raider');
+ BattleActorState.trackPhase('goblin_raider',rbPhase(),{battle:'raider'});
  setRaiderCommandDrawer(false);
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
@@ -1319,7 +1320,7 @@ function startRaiderBattle(){
  hideBattleBanner();hideRaiderBattleLog();
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
  $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
- BattleActorState.begin('raider');BattleActorState.begin('raider','fiona');BattleActorState.begin('raider','lou');
+ BattleActorState.begin('raider');BattleActorState.begin('raider','fiona');BattleActorState.begin('raider','lou');BattleActorState.begin('raider','goblin_raider');
  showRaiderBattleLog('ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。');
  updateRaider();
 }
@@ -1414,6 +1415,7 @@ function rbEnemyParty(){
 }
 function finishRaider(){
  if($('#raiderBattle').style.display==='none')return;
+ BattleActorState.set('goblin_raider','ko',{battle:'raider'});
  BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});BattleActorState.set('lou','victory',{battle:'raider'});
  rbBusy=true;rbBoss=0;updateRaider();
  const sprite=$('#raiderSprite'), img=sprite&&sprite.querySelector('img');
@@ -1734,12 +1736,10 @@ function v53cin(f,t,ms){
 }
 function v53raider(p,ms){
  const r=document.querySelector('#raiderSprite');
- v53img(r,V053.raider[p]||V053.raider.idle);r?.classList.add('actionPose');
- return v53cin(r,null,ms||780).then(()=>{
-  r?.classList.remove('actionPose');
-  // Do not overwrite the fixed KO image when an earlier pose timer finishes.
-  if(!r?.classList.contains('raiderKO'))v53img(r,V053.raider.idle);
- });
+ const state={horn:'call',summon:'call',smash:'attack',rage:'enrage',damage:'idle'}[p]||p;
+ BattleActorState.set('goblin_raider',state,{battle:'raider',duration:(ms||780)+(['attack','call'].includes(state)?940:0)});
+ r?.classList.add('actionPose');
+ return v53cin(r,null,ms||780).then(()=>{r?.classList.remove('actionPose')});
 }
 function v53tainted(p,ms){
  const g=document.querySelector('#bGob');
@@ -1751,13 +1751,13 @@ function v53tainted(p,ms){
 const v53SA=startAttackBattle;
 startAttackBattle=function(id,hp){v53SA(id,hp);BattleActorState.begin('normal','tainted_goblin')};
 const v53SR=startRaiderBattle;
-startRaiderBattle=function(){v53SR();v53img(document.querySelector('#raiderSprite'),V053.raider.idle)};
+startRaiderBattle=function(){v53SR();BattleActorState.sync('raider','goblin_raider')};
 const v53NE=normalEnemyTurn;
 normalEnemyTurn=function(){attackBattleBusy=true;v53tainted('corrupted_attack',680).then(v53NE)};
 const v53RE=rbEnemyParty;
 rbEnemyParty=function(){
  // CALL is reinforcement; a queued smash/wind-up uses the attack artwork.
- // Automatic phase-entry ENRAGE is deferred rather than changing turn logic.
+ // Phase-entry ENRAGE is managed by image state, independently of enemy turns.
  const p=rbQueued?'smash':((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4?'horn':'attack');
  rbBusy=true;v53raider(p,800).then(v53RE);
 };
@@ -1774,7 +1774,7 @@ function v54forceEnemyArt(){
  const g=document.querySelector('#bGob img');
  if(g){BattleActorState.sync('normal','tainted_goblin');g.removeAttribute('hidden');}
  const r=document.querySelector('#raiderSprite img');
- if(r){r.src=V054.raiderIdle;r.removeAttribute('hidden');}
+ if(r){BattleActorState.sync('raider','goblin_raider');r.removeAttribute('hidden');}
 }
 function v54watchImage(img,label){
  if(!img)return;

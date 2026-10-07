@@ -1,7 +1,7 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption']);
-  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage']);
   const battles = {
     normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
     raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },
@@ -10,7 +10,8 @@
     'raider:lou': { actor: 'lou', image: '#rbLou img', health: () => [null, null] },
     // Prepared adapter only; current encounters remain Tainted Goblins.
     'normal:goblin': { actor: 'goblin', image: '#bGob img', health: () => [gghp, null] },
-    'normal:tainted_goblin': { actor: 'tainted_goblin', image: '#bGob img', health: () => [gghp, null] }
+    'normal:tainted_goblin': { actor: 'tainted_goblin', image: '#bGob img', health: () => [gghp, null] },
+    'raider:goblin_raider': { actor: 'goblin_raider', image: '#raiderSprite img', health: () => [rbBoss, null] }
   };
   for (const battle of Object.values(battles)) {
     Object.assign(battle, { state: 'idle', sequence: 0, timer: null, guard: false });
@@ -78,6 +79,7 @@
       const battle = lookup(context, actor);
       invalidate(battle);
       battle.guard = false;
+      battle.phase = null;
       paint(battle, resting(battle));
     },
     endGuard(context, actor = 'aidan') {
@@ -94,6 +96,16 @@
     },
     end(context, actor = 'aidan') { invalidate(lookup(context, actor)); },
     get(context, actor = 'aidan') { return lookup(context, actor)?.state; },
+    trackPhase(actor, phase, { battle: context } = {}) {
+      const battle = lookup(context, actor);
+      if (!battle) return false;
+      const previous = battle.phase;
+      battle.phase = phase;
+      if (previous != null && phase > previous && battle.health()[0] > 0 && BATTLE_ASSETS[actor].enrage) {
+        return set(actor, 'enrage', { battle: context, duration: 780 });
+      }
+      return false;
+    },
     action(actor, state, { battle } = {}) {
       if (actor === 'lou' && state === 'heal') {
         return set(actor, 'charge', { battle, duration: 140, next: 'heal', nextDuration: 660 });
