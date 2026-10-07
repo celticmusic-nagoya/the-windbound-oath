@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"/>
-<title>THE WINDBOUND OATH v0.42</title>
+<title>THE WINDBOUND OATH v0.64</title>
 
 
 \n\n
@@ -12,9 +12,14 @@
 
 
 
-<meta name="build-version" content="v0.56-raider-ko-finish">
+<meta name="build-version" content="v0.66-impact-effects">
 
 <link rel="stylesheet" href="css/style.css">
+
+<style id="v0621-dev-command-style">
+.dev-only-command{border-color:#b88b45!important;color:#e6c987!important;background:rgba(70,38,12,.30)!important;font-size:.78rem!important}
+.dev-only-command::before{content:"⚙ ";opacity:.8}
+</style>
 </head><body>
 <div id="game"><div id="world">
 <div class="road" style="left:80px;top:560px;width:1600px;height:150px"></div><div class="road" style="left:680px;top:100px;width:150px;height:1000px"></div>
@@ -120,14 +125,14 @@
 <div class="battler enemyAura spriteBattler approvedRaster enemyRaster" id="bGob"><img alt="異常化ゴブリン" src="img/battle/embedded/asset_003_93ecda87920e.png"/></div>
 </div>
 </div>
-<div class="panel" id="battleMsg2" style="position:absolute;left:4%;right:4%;bottom:15%;min-height:62px">異常化ゴブリンが立ちはだかった！</div>
+<div class="panel battle-log-empty" id="battleMsg2" aria-live="polite"></div>
 <div id="battleCmd" style="z-index:2"><button id="aatk">攻撃</button><button id="askill">一閃　TP30</button><button id="aguard">防御</button></div>
 <div id="normalPartyHud"><div class="partyCard" id="nCardA"><b>エイダン</b><div class="mini"><i id="nAHP"></i></div><span id="nATxt"></span></div><div class="partyCard" id="nCardF"><b>フィオナ</b><div class="mini"><i id="nFHP"></i></div><span id="nFTxt"></span></div></div>
 <div id="normalFiona">F</div>
 <div id="normalActor"></div>
 <div id="normalItems"></div>
 <button id="normalCommandToggle" type="button">COMMAND</button><div hidden="" id="normalBattleCmd"><button class="drawerClose" id="normalCommandClose" type="button">× 閉じる</button>
-<button id="nAtk">攻撃</button><button id="nSkill">一閃 TP30</button>
+<button id="nAtk">攻撃</button><button id="nSkill">一閃 TP30</button><button id="nDevKill" class="dev-only-command">DEV｜一撃撃破</button>
 <button id="nHeal">ヒール MP8</button><button id="nPrayer">風の祈り MP6</button>
 <button id="nGuard">防御</button><button id="nItem">アイテム</button>
 </div>
@@ -160,8 +165,8 @@
 <div id="raiderBattle">
 <div id="rbParty"><div class="partyCard" id="cardA"><b>エイダン</b><div class="mini"><i id="pAHP"></i></div><span id="pAtext"></span></div><div class="partyCard" id="cardF"><b>フィオナ</b><div class="mini"><i id="pFHP"></i></div><span id="pFtext"></span></div></div><div id="rbTop"><div class="rbPanel" style="visibility:hidden"><b>エイダン</b><div class="rbBar"><div class="rbFill" id="rbAHP"></div></div><span id="rbAHPt"></span><div id="rbRune"><div class="rbRuneFill" id="rbRuneFill"></div></div><span id="rbRunet"></span></div>
 <div class="rbPanel"><b>ゴブリン・レイダー</b><div class="rbBar"><div class="rbFill" id="rbBHP"></div></div><span id="rbBHPt"></span><div id="rbPhase"></div></div></div>
-<div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/embedded/asset_004_c5839c8e084f.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/embedded/asset_005_005c69d45778.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/embedded/asset_006_cfb25133e1e2.png"/></div><div id="rbTurn"></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/embedded/asset_007_22b5dd3a2e2e.png"/></div><div id="rbMsg"></div>
-<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
+<div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/embedded/asset_004_c5839c8e084f.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/embedded/asset_005_005c69d45778.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/embedded/asset_006_cfb25133e1e2.png"/><span class="louSupportTag">SUPPORT</span></div><div id="rbTurn"></div><div class="rbEnemyHud" id="rbEnemyHud"><b>ゴブリン・レイダー</b><div class="rbEnemyBar"><i id="rbEnemyHP"></i></div><small id="rbEnemyTxt">HP 1250</small></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/embedded/asset_007_22b5dd3a2e2e.png"/></div><div class="battle-log-empty" id="rbMsg" aria-live="polite"></div>
+<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbDevKill" class="dev-only-command">DEV｜一撃撃破</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
 </div>
 <div id="aftermathScene"><div id="aftermathAltar"></div><div id="aftermathSword">†</div><div id="aftermathParty">A　F　✧</div><div id="aftermathText"></div></div><div id="fortScene"><div id="fortWall"></div><div id="fortGate"></div><div id="fortBanner">⚜</div><div id="fortParty">A　F　✧</div><div id="fortText"></div></div>
 <button id="menuOpen" type="button">☰ MENU</button>
@@ -605,15 +610,32 @@ $('#attackGob2').onclick=()=>{
 
 
 let battleBannerTimer=0;
+const battleLogTimers=new WeakMap();
+function setBattleLog(el,text,ms=950){
+ if(!el)return;
+ const oldTimer=battleLogTimers.get(el); if(oldTimer)clearTimeout(oldTimer);
+ const value=String(text||'').trim();
+ el.textContent=value;
+ el.classList.toggle('battle-log-empty',!value);
+ el.classList.toggle('is-visible',!!value);
+ if(!value)return;
+ const timer=setTimeout(()=>{
+   el.classList.remove('is-visible');
+   el.classList.add('battle-log-empty');
+   el.textContent='';
+   battleLogTimers.delete(el);
+ },ms);
+ battleLogTimers.set(el,timer);
+}
 function showBattleBanner(text,ms=950){
- const el=$('#battleMsg2'); if(!el)return;
  clearTimeout(battleBannerTimer);
- el.textContent=text;el.classList.add('is-visible');
- battleBannerTimer=setTimeout(()=>el.classList.remove('is-visible'),ms);
+ setBattleLog($('#battleMsg2'),text,ms);
 }
 function hideBattleBanner(){
- clearTimeout(battleBannerTimer);$('#battleMsg2')?.classList.remove('is-visible');
+ clearTimeout(battleBannerTimer);setBattleLog($('#battleMsg2'),'');
 }
+function showRaiderBattleLog(text,ms=1100){ setBattleLog($('#rbMsg'),text,ms); }
+function hideRaiderBattleLog(){ setBattleLog($('#rbMsg'),''); }
 
 function showNormalPartyBattle(){
  normalActor='aidan';normalFHP=90;normalFMP=30;normalActs=[];normalGuardA=false;normalGuardF=false;
@@ -663,7 +685,8 @@ function updateNormalPartyHud(){
 function updateNormalCommands(){
  setNormalCommandDrawer(false);
  const a=normalActor==='aidan';
- ['nAtk','nSkill','nHeal','nPrayer','nGuard','nItem'].forEach(id=>$('#'+id).classList.remove('v2-visible'));
+ ['nAtk','nSkill','nHeal','nPrayer','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id).classList.remove('v2-visible'));
+ $('#nDevKill')?.classList.add('v2-visible');
  ['nAtk','nGuard','nItem'].forEach(id=>$('#'+id).classList.add('v2-visible'));
  if(a){$('#nSkill').classList.add('v2-visible')}
  else{$('#nAtk').classList.remove('v2-visible');['nHeal','nPrayer'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
@@ -699,7 +722,7 @@ function chooseNormalAct(kind){
  normalActs.push({who:normalActor,kind});advanceNormalActor();
 }
 function startAttackBattle(id,hp){
- closeDialogue();
+ closeDialogue();hideBattleBanner();hideRaiderBattleLog();
  if(attackBattleBusy)return;
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
  if(id.startsWith('forestGob')){forestActive=false;$('#forestScene').style.display='none';}
@@ -723,28 +746,29 @@ function updateAttackBattle(){
 }
 function resolveNormalRound(){
  let delay=0;
- const act=(txt,fn)=>{setTimeout(()=>{if(fn)fn();showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=560};
+ const act=(txt,fn,motion)=>{setTimeout(()=>{if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();if(fn)fn();showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=700};
  normalActs.forEach(a=>{
    if(a.who==='aidan'){
      if(a.kind==='item'){
        if(a.item==='potion')act('きずぐすり',()=>{aahp=Math.min(100,aahp+45);v2Float('floatAidan','+45','heal')});
        else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
      }else if(a.kind==='guard')act('エイダンは身構えた。',()=>{normalGuardA=true;aatp=Math.min(100,aatp+10);v2Float('floatAidan','TP +10','resource')});
-     else if(a.kind==='skill')act('一閃！',()=>{aatp-=30;gghp-=55;v2Float('floatGob','-55');v2Hit('v2GobUnit')});
-     else act('エイダンの攻撃！',()=>{gghp-=34;aatp=Math.min(100,aatp+15);v2Float('floatGob','-34');v2Hit('v2GobUnit');setTimeout(()=>v2Float('floatAidan','TP +15','resource'),180)});
+     else if(a.kind==='skill')act('一閃！',()=>{aatp-=30;gghp-=55;v2Float('floatGob','-55');v2Hit('v2GobUnit')},'normalAidan');
+     else act('エイダンの攻撃！',()=>{gghp-=34;aatp=Math.min(100,aatp+15);v2Float('floatGob','-34');v2Hit('v2GobUnit');setTimeout(()=>v2Float('floatAidan','TP +15','resource'),180)},'normalAidan');
    }else{
      if(a.kind==='item'){
        if(a.item==='potion')act('きずぐすり',()=>{normalFHP=Math.min(90,normalFHP+45);v2Float('floatFiona','+45','heal')});
        else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
      }else if(a.kind==='guard')act('フィオナは防御した。',()=>normalGuardF=true);
-     else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(aahp/100<=normalFHP/90){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}});
-     else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')});
-     else act('フィオナの攻撃！',()=>{gghp-=20;v2Float('floatGob','-20');v2Hit('v2GobUnit')});
+     else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(aahp/100<=normalFHP/90){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}},'normalFionaMagic');
+     else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')},'normalFionaMagic');
+     else act('フィオナの攻撃！',()=>{gghp-=20;v2Float('floatGob','-20');v2Hit('v2GobUnit')},'normalFionaAttack');
    }
  });
  setTimeout(()=>{if(gghp<=0)finishAttackBattle();else normalEnemyTurn()},delay);
 }
 function normalEnemyTurn(){
+ if(window.WBActors)WBActors.normalEnemy();
  let target=(aahp/100<=normalFHP/90)?'a':'f',d=17;
  if(target==='a'){if(normalGuardA)d=Math.ceil(d/2);aahp-=d;v2Float('floatAidan','-'+d);v2Hit('v2AidanUnit');showBattleBanner('異常化ゴブリンの「黒爪」！',720);}
  else {if(normalGuardF)d=Math.ceil(d/2);normalFHP-=d;v2Float('floatFiona','-'+d);v2Hit('v2FionaUnit');showBattleBanner('異常化ゴブリンの「黒爪」！',720);}
@@ -762,25 +786,45 @@ $('#nHeal').onclick=()=>chooseNormalAct('heal');
 $('#nPrayer').onclick=()=>chooseNormalAct('prayer');
 $('#nGuard').onclick=()=>chooseNormalAct('guard');
 $('#nItem').onclick=()=>openNormalItems();
+$('#nDevKill').onclick=()=>{
+ if(attackBattleBusy)return;
+ setNormalCommandDrawer(false);
+ attackBattleBusy=true;
+ gghp=0; updateAttackBattle();
+ showBattleBanner('DEV｜一撃撃破！',260);
+ setTimeout(finishAttackBattle,280);
+};
 // Legacy normal-goblin buttons are hidden; all normal encounters use the party command row.
 $('#aatk').parentElement.style.display='none';
 
 function finishAttackBattle(){
  const defeated=currentGoblin;
+ attackBattleBusy=true; setNormalCommandDrawer(false);
+ const gobBox=$('#bGob'),gobImg=gobBox&&gobBox.querySelector('img');
+ if(gobImg && typeof V053!=='undefined' && V053.tainted && V053.tainted.ko) gobImg.src=V053.tainted.ko;
+ if(gobBox) gobBox.classList.add('taintedKO');
  showBattleBanner('異常化ゴブリンを倒した。',900);
  setTimeout(()=>{
-   $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
    const e=$('#'+defeated);if(e)e.remove();
    if(defeated&&defeated.startsWith('forestGob')){
      forestGobWins++;hideNormalPartyBattle();
-     showBattleResult(18,7,()=>{forestActive=true;$('#forestScene').style.display='block';forestCamera();});
+     /* Keep the battle stage behind VICTORY. Never reveal the field/map under results. */
+     showBattleResult(18,7,()=>{
+       $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
+       if(gobBox)gobBox.classList.remove('taintedKO');
+       forestActive=true;$('#forestScene').style.display='block';forestCamera();attackBattleBusy=false;
+     });
      forestToast('異常化ゴブリンを退けた。森の空気が少し軽くなった。');
      if(forestGobWins>=3){
        storyStage=Math.max(storyStage,10);setObj('古代石の周囲で風の気配を探そう');
        $('#louSeal').classList.add('open');$('#louSearch').style.display='block';
        forestToast('3体の異常化ゴブリンを退けた。古代の風結界が消えた……。');
      }
-   }else if(defeated==='northGob1'||defeated==='northGob2'){
+     return;
+   }
+   $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
+   if(gobBox)gobBox.classList.remove('taintedKO');
+   if(defeated==='northGob1'||defeated==='northGob2'){
      hideNormalPartyBattle();notice('異常化ゴブリンを退けた');
    }else if(defeated==='attackGob1'){
      hideNormalPartyBattle();attackStep=Math.max(attackStep,1);setObj('村の広場へ向かい、フィオナを探そう');
@@ -1230,6 +1274,7 @@ function syncRaiderCommandClasses(){
    ['rbAtk','rbHeal','rbRuneSkill','rbGuard','rbItem'].forEach(id=>$('#'+id)?.classList.add('rb-visible'));
  }
 
+ $('#rbDevKill')?.classList.add('rb-visible');
  $('#rbSkill').disabled=rbTP<30;
  $('#rbHeal').disabled=rbFMP<8;
  $('#rbRuneSkill').disabled=rbFMP<6;
@@ -1240,6 +1285,7 @@ function updateRaider(){
  setRaiderCommandDrawer(false);
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
+ if($('#rbEnemyHP')){$('#rbEnemyHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbEnemyTxt').textContent=`HP ${Math.max(0,rbBoss)}`;}
  $('#rbRuneFill').style.width=rbRune+'%';$('#rbRunet').textContent=`RUNE ${rbRune} / 100`;
  $('#rbPhase').textContent=`PHASE ${rbPhase()}　増援 ${rbAdds}`;
  $('#pAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#pAtext').textContent=`HP ${Math.max(0,rbHP)}　TP ${rbTP}`;
@@ -1261,23 +1307,24 @@ function updateRaider(){
  $('#rbTurn').textContent=`ROUND ${rbRound} / ${rbActor==='aidan'?'エイダン':'フィオナ'}のコマンド`;
 }
 function startRaiderBattle(){
+ hideBattleBanner();hideRaiderBattleLog();
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
  $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
- $('#rbMsg').textContent='ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。';
+ showRaiderBattleLog('ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。');
  updateRaider();
 }
 function choosePartyAct(kind){
  if(rbBusy)return;
  if(rbActor==='aidan'){
    if(kind==='item'){openRaiderItems();return}
-   if(kind==='skill'&&rbTP<30){$('#rbMsg').textContent='TPが足りない。';return}
+   if(kind==='skill'&&rbTP<30){showRaiderBattleLog('TPが足りない。');return}
    if(kind==='wind'&&rbRune<100)return;
    rbActs.push({who:'aidan',kind});rbActor='fiona';
-   $('#rbMsg').textContent='フィオナの行動を選択。';updateRaider();return;
+   showRaiderBattleLog('フィオナの行動を選択。');updateRaider();return;
  }
  if(kind==='item'){openRaiderItems();return}
- if(kind==='heal'&&rbFMP<8){$('#rbMsg').textContent='MPが足りない。';return}
- if(kind==='rune'&&rbFMP<6){$('#rbMsg').textContent='MPが足りない。';return}
+ if(kind==='heal'&&rbFMP<8){showRaiderBattleLog('MPが足りない。');return}
+ if(kind==='rune'&&rbFMP<6){showRaiderBattleLog('MPが足りない。');return}
  rbActs.push({who:'fiona',kind});rbBusy=true;resolvePartyRound();
 }
 
@@ -1290,17 +1337,17 @@ function openRaiderItems(){
 $('#normalItems').addEventListener('click',e=>{
  const b=e.target.closest('[data-ri]');if(!b)return;e.stopPropagation();
  let k=b.dataset.ri;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
- if(k==='potion'&&!battleItems.potion){$('#rbMsg').textContent='きずぐすりを持っていない。';return}
- if(k==='ether'&&!battleItems.ether){$('#rbMsg').textContent='魔力の雫を持っていない。';return}
+ if(k==='potion'&&!battleItems.potion){showRaiderBattleLog('きずぐすりを持っていない。');return}
+ if(k==='ether'&&!battleItems.ether){showRaiderBattleLog('魔力の雫を持っていない。');return}
  if(k==='potion')battleItems.potion--;else battleItems.ether--;
  rbActs.push({who:rbActor,kind:'item',item:k});$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';
- if(rbActor==='aidan'){rbActor='fiona';$('#rbMsg').textContent='フィオナの行動を選択。';updateRaider()}
+ if(rbActor==='aidan'){rbActor='fiona';showRaiderBattleLog('フィオナの行動を選択。');updateRaider()}
  else {rbBusy=true;resolvePartyRound()}
 });
 
 function resolvePartyRound(){
  let delay=0;
- const sayAct=(txt,fn)=>{setTimeout(()=>{fn&&fn();$('#rbMsg').textContent=txt;updateRaider()},delay);delay+=650};
+ const sayAct=(txt,fn,motion)=>{setTimeout(()=>{if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();fn&&fn();showRaiderBattleLog(txt);updateRaider()},delay);delay+=760};
  rbActs.forEach(a=>{
    if(a.who==='aidan'){
      if(a.kind==='item'){
@@ -1308,21 +1355,22 @@ function resolvePartyRound(){
        else sayAct('エイダンは魔力の雫をフィオナに使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
      }else if(a.kind==='guard'){sayAct('エイダンは身を固めた。TP +10 / RUNE +10',()=>{rbGuardA=true;rbTP=Math.min(100,rbTP+10);rbRune=Math.min(100,rbRune+10)})}
      else if(a.kind==='wind'){sayAct('誓いの剣――「風の一閃」！ 255ダメージ！ 増援と破砕斬の構えを吹き飛ばした！',()=>{rbRune=0;rbBoss-=255;rbAdds=0;rbQueued=false})}
-     else if(a.kind==='skill'){sayAct('エイダンの「一閃」！ 68ダメージ。',()=>{rbTP-=30;rbBoss-=68;rbRune=Math.min(100,rbRune+14)})}
-     else sayAct('エイダンの攻撃！ 42ダメージ。TP +15',()=>{rbBoss-=42;rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)});
+     else if(a.kind==='skill'){sayAct('エイダンの「一閃」！ 68ダメージ。',()=>{rbTP-=30;rbBoss-=68;rbRune=Math.min(100,rbRune+14)},'raiderAidan')}
+     else sayAct('エイダンの攻撃！ 42ダメージ。TP +15',()=>{rbBoss-=42;rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)},'raiderAidan');
    }else{
      if(a.kind==='item'){
        if(a.item==='potion')sayAct('フィオナは きずぐすりを使った。HP +45',()=>rbFHP=Math.min(105,rbFHP+45));
        else sayAct('フィオナは魔力の雫を使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
      }else if(a.kind==='guard'){sayAct('フィオナは防御した。RUNE +10',()=>{rbGuardF=true;rbRune=Math.min(100,rbRune+10)})}
-     else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=rbHP<=rbFHP?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)})}
-     else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)})}
-     else sayAct('フィオナが杖で応戦！ 22ダメージ。',()=>{rbBoss-=22;rbRune=Math.min(100,rbRune+7)});
+     else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=rbHP<=rbFHP?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)},'raiderFionaMagic')}
+     else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)},'raiderFionaMagic')}
+     else sayAct('フィオナが杖で応戦！ 22ダメージ。',()=>{rbBoss-=22;rbRune=Math.min(100,rbRune+7)},'raiderFionaAttack');
    }
  });
  setTimeout(()=>{if(rbBoss<=0)finishRaider();else rbEnemyParty()},delay);
 }
 function rbEnemyParty(){
+ if(window.WBActors)WBActors.raiderEnemy();
  const phase=rbPhase();let txt='';
  if(rbQueued){
    let base=phase===3?48:42;
@@ -1343,23 +1391,36 @@ function rbEnemyParty(){
  }
  rbGuardA=rbGuardF=false;
  if(rbHP<=0||rbFHP<=0){
-   $('#rbMsg').textContent='パーティーが崩れた……。ルーの風が時間を巻き戻す。';
+   showRaiderBattleLog('パーティーが崩れた……。ルーの風が時間を巻き戻す。');
    setTimeout(startRaiderBattle,1200);return;
  }
- rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;$('#rbMsg').textContent=txt;updateRaider();
+ rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;showRaiderBattleLog(txt);updateRaider();
 }
 function finishRaider(){
  if($('#raiderBattle').style.display==='none')return;
  rbBusy=true;rbBoss=0;updateRaider();
- $('#rbMsg').textContent='ゴブリン・レイダーを倒した！　二人の力と誓いの剣が、黒紫のルーンを打ち砕いた。';
+ const sprite=$('#raiderSprite'), img=sprite&&sprite.querySelector('img');
+ setRaiderCommandDrawer(false);
+ document.body.classList.add('raiderFinishing');
+ if(img && typeof V053!=='undefined' && V053.raider && V053.raider.ko) img.src=V053.raider.ko;
+ if(sprite){ sprite.classList.remove('actionFocus','actionPose'); sprite.classList.add('raiderKO'); }
+ showRaiderBattleLog('ゴブリン・レイダーを倒した！　二人の力と誓いの剣が、黒紫のルーンを打ち砕いた。');
  setTimeout(()=>{
-   // Result overlay is shown while the battle layer is still present, preventing map flash.
    showBattleResult(120,45,()=>{
      startRaiderAftermath();
-     $('#raiderBattle').style.display='none';document.body.classList.remove('battleMode','raiderBattleMode');
+     $('#raiderBattle').style.display='none';
+     document.body.classList.remove('battleMode','raiderBattleMode','raiderFinishing');
+     if(sprite) sprite.classList.remove('raiderKO');
    });
- },1200);
+ },1800);
 }
+$('#rbDevKill').onclick=()=>{
+ if(rbBusy)return;
+ setRaiderCommandDrawer(false);
+ rbBusy=true; rbBoss=0; updateRaider();
+ showRaiderBattleLog('DEV｜一撃撃破！',260);
+ setTimeout(finishRaider,280);
+};
 $('#rbAtk').onclick=()=>choosePartyAct('atk');
 $('#rbSkill').onclick=()=>choosePartyAct('skill');
 $('#rbHeal').onclick=()=>choosePartyAct('heal');
@@ -1663,37 +1724,156 @@ const v54SA=startAttackBattle;startAttackBattle=function(id,hp){v54SA(id,hp);req
 const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimationFrame(v54forceEnemyArt)};
 </script>
 
-<script id="v056-raider-ko-finish-js">
+<!-- v0.62: obsolete KO override removed; canonical finishRaider handles KO -->
+
+<script id="v062-battle-actor-system-js">
 (function(){
-  let raiderFinishLock=false;
-  window.finishRaider=function(){
-    if(raiderFinishLock || !document.getElementById('raiderBattle') || document.getElementById('raiderBattle').style.display==='none') return;
-    raiderFinishLock=true; rbBusy=true; rbBoss=0;
-    const battle=document.getElementById('raiderBattle');
-    const sprite=document.getElementById('raiderSprite');
-    const img=sprite&&sprite.querySelector('img');
-    document.body.classList.add('raiderFinishing','actionCinematic');
-    setRaiderCommandDrawer(false);
-    document.getElementById('normalItems')?.classList.remove('isOpen');
-    if(img && window.V053?.raider?.ko) img.src=V053.raider.ko;
-    sprite?.classList.add('actionPose');
-    if(document.getElementById('rbBHP')) document.getElementById('rbBHP').style.width='0%';
-    if(document.getElementById('rbBHPt')) document.getElementById('rbBHPt').textContent='HP 0 / 1250';
-    setTimeout(()=>{
-      document.body.classList.remove('actionCinematic');
-      document.getElementById('rbMsg').textContent='ゴブリン・レイダーを倒した！　二人の力と誓いの剣が、黒紫のルーンを打ち砕いた。';
-      setTimeout(()=>{
-        showBattleResult(120,45,()=>{
-          document.getElementById('battleResult').style.display='none';
-          startRaiderAftermath();
-          battle.style.display='none';
-          document.body.classList.remove('battleMode','raiderBattleMode','raiderFinishing','actionCinematic');
-          sprite?.classList.remove('actionPose');
-          raiderFinishLock=false;
-        });
-      },700);
-    },1800);
+  const motionClasses=['wb62-melee','wb62-ranged','wb62-magic','wb62-enemy','wb62-heavy'];
+  const timers=new WeakMap();
+  function pulse(el, cls, ms){
+    if(!el) return;
+    const old=timers.get(el); if(old) clearTimeout(old);
+    motionClasses.forEach(c=>el.classList.remove(c));
+    void el.offsetWidth;
+    el.classList.add(cls);
+    timers.set(el,setTimeout(()=>el.classList.remove(cls),ms||700));
+  }
+  function actor(id){ return document.getElementById(id); }
+  window.WBActors={
+    normalAidan:()=>pulse(actor('v2AidanUnit'),'wb62-melee',680),
+    normalFionaAttack:()=>pulse(actor('v2FionaUnit'),'wb62-ranged',640),
+    normalFionaMagic:()=>pulse(actor('v2FionaUnit'),'wb62-magic',740),
+    normalEnemy:()=>pulse(actor('v2GobUnit'),'wb62-enemy',740),
+    raiderAidan:()=>pulse(actor('rbAidan'),'wb62-melee',680),
+    raiderFionaAttack:()=>pulse(actor('rbFiona'),'wb62-ranged',640),
+    raiderFionaMagic:()=>pulse(actor('rbFiona'),'wb62-magic',740),
+    raiderEnemy:()=>pulse(actor('raiderSprite'),'wb62-heavy',840)
   };
+
+  // Hook the actual battle-message functions, not DOM mutation timing.
+  const oldBanner=window.showBattleBanner;
+  if(typeof oldBanner==='function') window.showBattleBanner=function(text,ms){
+    if(/エイダンの攻撃|一閃！/.test(text||'')) WBActors.normalAidan();
+    else if(/フィオナの攻撃/.test(text||'')) WBActors.normalFionaAttack();
+    else if(/フィオナの「(ヒール|風の祈り)」/.test(text||'')) WBActors.normalFionaMagic();
+    return oldBanner.apply(this,arguments);
+  };
+  const oldRLog=window.showRaiderBattleLog;
+  if(typeof oldRLog==='function') window.showRaiderBattleLog=function(text){
+    if(/エイダンの攻撃|エイダンの「一閃」|風の一閃/.test(text||'')) WBActors.raiderAidan();
+    else if(/フィオナが杖で応戦/.test(text||'')) WBActors.raiderFionaAttack();
+    else if(/フィオナの「(ヒール|風の祈り)」/.test(text||'')) WBActors.raiderFionaMagic();
+    if(/レイダーがエイダンを狙う|レイダーがフィオナを狙う|破砕斬/.test(text||'')) WBActors.raiderEnemy();
+    return oldRLog.apply(this,arguments);
+  };
+})();
+</script>
+
+
+<script id="v064-motion-root-fix-js">
+(function(){
+  /*
+    v0.64 root fix:
+    Legacy battle CSS owns `transform` with !important, so transform-keyframe
+    motion could never move the visible actors. Use the independent CSS
+    `translate` property through Web Animations instead. This does not fight
+    the legacy transform declarations and works on current Chromium/Chrome.
+  */
+  const running=new WeakMap();
+  function move(id, frames, duration){
+    const el=document.getElementById(id);
+    if(!el || typeof el.animate!=='function') return;
+    const prev=running.get(el); if(prev) try{prev.cancel()}catch(e){}
+    const anim=el.animate(frames,{duration,easing:'cubic-bezier(.16,.82,.18,1)',fill:'none'});
+    running.set(el,anim);
+    anim.onfinish=anim.oncancel=()=>{ if(running.get(el)===anim) running.delete(el); };
+  }
+  function vw(){return Math.max(document.documentElement.clientWidth||0,window.innerWidth||0)}
+  function isPortrait(){return innerHeight>innerWidth}
+  function allyLunge(id, ranged){
+    const d=ranged ? (isPortrait()?Math.min(72,vw()*.13):Math.min(150,vw()*.10))
+                   : (isPortrait()?Math.min(210,vw()*.42):Math.min(760,vw()*.47));
+    move(id,[
+      {translate:'0 0',scale:'1',rotate:'0deg',offset:0},{translate:(ranged?'-10px':'-28px')+' 4px',scale:'.97',rotate:(ranged?'-1deg':'-3deg'),offset:.15},
+      {translate:(d*1.10)+'px -16px',scale:(ranged?'1.07':'1.13'),rotate:(ranged?'2deg':'4deg'),offset:.47},
+      {translate:(d*1.16+24)+'px -6px',scale:(ranged?'1.09':'1.16'),rotate:(ranged?'1deg':'2deg'),offset:.61},
+      {translate:'0 0',scale:'1',rotate:'0deg',offset:1}
+    ],ranged?680:820);
+  }
+  function magic(id){
+    const d=isPortrait()?24:58;
+    move(id,[{translate:'0 0',scale:'1'},{translate:'-8px 3px',scale:'.98',offset:.18},{translate:(d*1.22)+'px -11px',scale:'1.08',offset:.48},{translate:(d*1.22)+'px -11px',scale:'1.08',offset:.66},{translate:'0 0',scale:'1'}],760);
+  }
+  function enemyLunge(id, heavy){
+    const d=heavy ? (isPortrait()?Math.min(205,vw()*.39):Math.min(700,vw()*.43))
+                  : (isPortrait()?Math.min(190,vw()*.36):Math.min(650,vw()*.40));
+    move(id,[
+      {translate:'0 0',scale:'1',rotate:'0deg',offset:0},{translate:'30px 5px',scale:'.97',rotate:'3deg',offset:.15},
+      {translate:(-d*1.12)+'px -14px',scale:(heavy?'1.12':'1.10'),rotate:'-4deg',offset:.46},
+      {translate:(-d*1.18-26)+'px -4px',scale:(heavy?'1.15':'1.13'),rotate:'-2deg',offset:.62},
+      {translate:'0 0',scale:'1',rotate:'0deg',offset:1}
+    ],heavy?940:820);
+  }
+  window.WBActors={
+    normalAidan:()=>allyLunge('v2AidanUnit',false),
+    normalFionaAttack:()=>allyLunge('v2FionaUnit',true),
+    normalFionaMagic:()=>magic('v2FionaUnit'),
+    normalEnemy:()=>enemyLunge('v2GobUnit',false),
+    raiderAidan:()=>allyLunge('rbAidan',false),
+    raiderFionaAttack:()=>allyLunge('rbFiona',true),
+    raiderFionaMagic:()=>magic('rbFiona'),
+    raiderEnemy:()=>enemyLunge('raiderSprite',true)
+  };
+})();
+</script>
+
+
+<script id="v066-impact-effects-js">
+(function(){
+  function layer(){
+    let l=document.getElementById('wbImpactLayer');
+    if(!l){l=document.createElement('div');l.id='wbImpactLayer';document.body.appendChild(l)}
+    return l;
+  }
+  function center(id){
+    const el=document.getElementById(id); if(!el)return null;
+    const r=el.getBoundingClientRect();
+    return {x:r.left+r.width*.5,y:r.top+r.height*.48};
+  }
+  function fx(kind,id,delay=0){
+    setTimeout(()=>{
+      const p=center(id);if(!p)return;
+      const e=document.createElement('div');e.className='wbFx '+kind;e.style.left=p.x+'px';e.style.top=p.y+'px';layer().appendChild(e);
+      requestAnimationFrame(()=>e.classList.add('go'));setTimeout(()=>e.remove(),900);
+    },delay);
+  }
+  function pop(id,text,delay=0){
+    setTimeout(()=>{const p=center(id);if(!p)return;const e=document.createElement('div');e.className='wbFx wbDamagePop';e.textContent=text;e.style.left=p.x+'px';e.style.top=(p.y-25)+'px';layer().appendChild(e);setTimeout(()=>e.remove(),800)},delay);
+  }
+  function shake(heavy=false,delay=0){setTimeout(()=>{const c=heavy?'wbHeavyShake':'wbShake';document.body.classList.remove(c);void document.body.offsetWidth;document.body.classList.add(c);setTimeout(()=>document.body.classList.remove(c),heavy?300:200)},delay)}
+  function hit(id,heavy=false,delay=360){fx('wbSlash',id,delay);fx('wbBurst',id,delay+25);shake(heavy,delay+20)}
+  function magic(id,delay=300){fx('wbMagic',id,delay);shake(false,delay+90)}
+
+  const old=window.WBActors||{};
+  window.WBActors={
+    ...old,
+    normalAidan:()=>{old.normalAidan?.();hit('v2GobUnit',false,380)},
+    normalFionaAttack:()=>{old.normalFionaAttack?.();hit('v2GobUnit',false,330)},
+    normalFionaMagic:()=>{old.normalFionaMagic?.();magic('v2FionaUnit',260)},
+    normalEnemy:()=>{old.normalEnemy?.();hit('v2AidanUnit',false,370)},
+    raiderAidan:()=>{old.raiderAidan?.();hit('raiderSprite',true,390)},
+    raiderFionaAttack:()=>{old.raiderFionaAttack?.();hit('raiderSprite',false,340)},
+    raiderFionaMagic:()=>{old.raiderFionaMagic?.();magic('rbFiona',260)},
+    raiderEnemy:()=>{old.raiderEnemy?.();hit('rbAidan',true,430)}
+  };
+
+  /* Damage-number companion: observe the game's existing floating damage nodes
+     and mirror only meaningful numeric hits near their current target. */
+  const watch=(id,target)=>{const n=document.getElementById(id);if(!n)return;new MutationObserver(()=>{const t=(n.textContent||'').trim();if(/^[-+]?\d+$/.test(t))pop(target,t.replace(/^-/,''),0)}).observe(n,{childList:true,characterData:true,subtree:true})};
+  window.addEventListener('DOMContentLoaded',()=>{
+    layer();
+    watch('v2GFloat','v2GobUnit'); watch('v2AFloat','v2AidanUnit'); watch('v2FFloat','v2FionaUnit');
+  },{once:true});
 })();
 </script>
 
