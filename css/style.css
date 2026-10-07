@@ -1,0 +1,2726 @@
+
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;height:100%;overflow:hidden;background:#0d120e;color:#eee3cc;font-family:Georgia,"Noto Serif JP",serif}
+#game{position:relative;width:100%;height:100%;overflow:hidden;background:#17271d;touch-action:none}
+#world{position:absolute;width:2200px;height:1550px;transform-origin:0 0;background:
+radial-gradient(circle at 18% 30%,#63805b 0 7%,transparent 8%),radial-gradient(circle at 72% 72%,#496b48 0 10%,transparent 11%),
+linear-gradient(18deg,#55744d,#6e8756 55%,#4f704d);transition:filter .3s}
+.road{position:absolute;background:#b7a178;border:3px solid #8c7858;border-radius:45%}.river{position:absolute;background:#537c86;border:5px solid #aac4b6}
+.house{position:absolute;width:180px;height:125px;background:#6e5439;border:7px solid #3b3024;border-radius:8px;box-shadow:0 10px 20px #0006;display:grid;place-items:center;font-weight:bold;color:#f2e4bd}
+.door{position:absolute;bottom:-4px;width:42px;height:48px;background:#33271e;border:3px solid #c5a45b;cursor:pointer}
+.tree{position:absolute;width:58px;height:58px;border-radius:50%;background:#274b2f;border:5px solid #17351f;box-shadow:0 7px 0 #553c25}
+.npc{position:absolute;width:34px;height:42px;border-radius:45% 45% 30% 30%;background:#c7b086;border:3px solid #46392d;display:grid;place-items:center;font-size:19px;z-index:8;cursor:pointer}
+.dog{background:#a47c50}.kid{background:#c9906f}.elder{background:#bcb6aa}.shopnpc{background:#8c6a46}
+#player{position:absolute;width:34px;height:44px;border-radius:45% 45% 25% 25%;background:#17372f;border:3px solid #c5a45b;z-index:20;box-shadow:0 5px 8px #0007}
+#hud{position:fixed;left:12px;top:12px;z-index:50;background:#101820e8;border:1px solid #c5a45b;padding:9px 13px;border-radius:6px;max-width:70%}
+#obj{font-size:12px;color:#d9c78f;margin-top:3px}#msg{position:fixed;left:4%;right:4%;bottom:4%;z-index:60;min-height:76px;background:#0c1415e9;border:1px solid #c5a45b;padding:14px 16px;border-radius:8px;display:none}
+#quest{position:fixed;right:12px;top:12px;z-index:50;background:#10201aeb;border:1px solid #8ca978;padding:9px 12px;border-radius:6px;font-size:12px;max-width:42%}
+#fs{position:fixed;right:12px;bottom:12px;z-index:70;background:#101820;color:#eee3cc;border:1px solid #c5a45b;padding:9px;border-radius:6px}
+#inside{position:fixed;inset:0;z-index:45;background:#18140f;display:none;overflow:hidden;touch-action:none}
+#roomWorld{position:absolute;width:1000px;height:720px;background:linear-gradient(90deg,#725d43,#80694b);border:28px solid #211b16}
+.roomFloor{position:absolute;inset:28px;background:repeating-linear-gradient(90deg,#745f45 0 48px,#6a563f 49px 52px)}
+.furn{position:absolute;padding:16px;background:#4c3928;border:3px solid #c5a45b;color:#fff;cursor:pointer;border-radius:5px;z-index:4}
+#inPlayer{position:absolute;width:32px;height:42px;border-radius:45% 45% 25% 25%;background:#17372f;border:3px solid #c5a45b;z-index:12}
+.exit{left:465px;top:635px}.pot{left:790px;top:470px}.fire{left:720px;top:100px}.table{left:400px;top:320px}
+#roomName{position:fixed;left:12px;top:12px;z-index:20;background:#101820dd;border:1px solid #c5a45b;padding:8px 12px;border-radius:5px}
+#hint{position:fixed;left:50%;top:8%;transform:translateX(-50%);z-index:55;background:#0c1415d9;padding:7px 12px;border-radius:20px;font-size:12px}
+
+.hill{position:absolute;background:#789064;border:5px solid #536d4e;border-radius:48%;box-shadow:inset 0 0 45px #425b3b88}
+.elderHouse{width:270px!important;height:175px!important;border-radius:42% 42% 12px 12px!important;background:#604c36!important;border-width:9px!important;box-shadow:0 14px 25px #0008!important}
+.elderHouse:before{content:"";position:absolute;left:24px;right:24px;top:-38px;height:62px;background:#493928;border:6px solid #2c241c;border-radius:50% 50% 18% 18%;z-index:-1}
+.stone{position:absolute;width:34px;height:48px;background:#6f746c;border:3px solid #454a43;border-radius:45% 45% 10% 10%;font-size:11px;color:#b9d4b2;display:grid;place-items:center}
+.counter{position:absolute;left:285px;top:235px;width:430px;height:72px;background:#4b3423;border:5px solid #241a13;z-index:7}
+#shopKeeper{position:absolute;left:480px;top:175px;width:38px;height:48px;border-radius:45% 45% 25% 25%;background:#8c6a46;border:3px solid #d0b56b;z-index:6;display:grid;place-items:center}
+.shopShelf{position:absolute;background:#38291f;border:4px solid #211914;color:#e9dfc7;padding:10px;z-index:3}
+.elderRug{position:absolute;left:310px;top:235px;width:380px;height:270px;border-radius:50%;background:#39483b;border:7px double #b49a5d}
+.runeTable{position:absolute;left:410px;top:310px;width:180px;height:100px;border-radius:50%;background:#55412d;border:5px solid #c5a45b;z-index:5;color:#d8c995;display:grid;place-items:center}
+
+/* v0.14 village dressing */
+.zoneLabel{position:absolute;color:#f0e5c5aa;font-size:18px;letter-spacing:.08em;text-shadow:0 2px 3px #0008;z-index:2}
+.fence{position:absolute;height:14px;background:repeating-linear-gradient(90deg,#6b4b2d 0 10px,#3d2b1e 11px 17px);border:2px solid #342417;z-index:3}
+.field{position:absolute;background:repeating-linear-gradient(90deg,#8d7c43 0 18px,#716434 19px 25px);border:5px solid #594b2f;border-radius:12px}
+.flower{position:absolute;font-size:22px;z-index:4}.well{position:absolute;width:92px;height:72px;border-radius:50%;background:#62645d;border:10px solid #9b947d;box-shadow:inset 0 0 0 10px #252d2c;z-index:5;cursor:pointer}
+.bridge{position:absolute;width:210px;height:85px;background:repeating-linear-gradient(90deg,#76583a 0 22px,#523d2a 23px 27px);border:5px solid #3a2b20;z-index:5}
+.training{position:absolute;width:390px;height:300px;background:#7a6b4c;border:8px solid #59452e;border-radius:18px}
+.dummy{position:absolute;width:34px;height:70px;background:#765236;border:5px solid #432f21;z-index:5;cursor:pointer}
+.sign{position:absolute;background:#6a4a2e;border:3px solid #392719;color:#f0dfb9;padding:7px 10px;z-index:8;cursor:pointer}
+.arch{position:absolute;width:180px;height:70px;border:12px solid #555c50;border-bottom:0;border-radius:90px 90px 0 0;z-index:4}
+.npc.walking{transition:left .8s linear,top .8s linear}
+#miniToast{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:80;background:#101820e8;border:1px solid #c5a45b;padding:8px 14px;border-radius:20px;display:none}
+
+.innCounter{position:absolute;left:280px;top:500px;width:440px;height:70px;background:#493324;border:5px solid #261b14;z-index:7}
+#innKeeper{position:absolute;left:480px;top:445px;width:38px;height:48px;border-radius:45% 45% 25% 25%;background:#966e55;border:3px solid #d0b56b;z-index:6;display:grid;place-items:center}
+.innTable{position:absolute;width:110px;height:75px;border-radius:50%;background:#503b29;border:5px solid #2b2018;z-index:4}
+.innChair{position:absolute;width:28px;height:28px;background:#62472f;border:3px solid #34251a;z-index:3}
+.stairs{position:absolute;width:125px;height:170px;background:repeating-linear-gradient(0deg,#76563a 0 15px,#3f2e21 16px 20px);border:5px solid #2d2118;z-index:6;display:grid;place-items:center;color:#fff;cursor:pointer}
+.guestDoor{position:absolute;width:115px;height:60px;background:#4b3425;border:4px solid #c5a45b;color:#eee3cc;z-index:5;display:grid;place-items:center;cursor:pointer}
+.window{position:absolute;width:95px;height:75px;background:#7897a0;border:7px solid #3b2c21;z-index:3}
+#floorBadge{position:fixed;right:12px;top:12px;z-index:22;background:#101820dd;border:1px solid #c5a45b;padding:8px 12px;border-radius:5px;display:none}
+
+.fisher{position:absolute;width:38px;height:48px;border-radius:45% 45% 28% 28%;background:#566858;border:3px solid #3a3226;display:grid;place-items:center;font-size:18px;z-index:8;cursor:pointer}
+.rod{position:absolute;width:95px;height:3px;background:#3a2a1d;transform:rotate(28deg);transform-origin:left center;pointer-events:none}
+.float{position:absolute;width:9px;height:9px;border-radius:50%;background:#eee;border:2px solid #333;pointer-events:none}
+
+#fiona{position:absolute;width:36px;height:46px;border-radius:48% 48% 28% 28%;background:#e8dfc8;border:3px solid #78936b;box-shadow:0 4px 8px #0006;z-index:9;display:grid;place-items:center;color:#25402d;font-weight:bold;cursor:pointer}
+#storyFlag{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:58;background:#101820e8;border:1px solid #c5a45b;padding:7px 12px;border-radius:18px;font-size:12px;display:none}
+#battle{position:fixed;inset:0;z-index:100;background:linear-gradient(#1a2820,#344c34 55%,#24291f);display:none;color:#f2eee3}
+#battleTop{position:absolute;left:4%;right:4%;top:4%;display:flex;justify-content:space-between;gap:10px}
+.panel{background:#101820e8;border:1px solid #c5a45b;border-radius:7px;padding:10px 14px}
+#battleField{position:absolute;left:5%;right:5%;top:22%;bottom:27%;border-bottom:4px solid #627257}
+.battler{position:absolute;bottom:15%;width:82px;height:120px;border-radius:45% 45% 22% 22%;display:grid;place-items:center;font-weight:bold;box-shadow:0 8px 15px #0007}
+#bAidan{left:12%;background:#17372f;border:4px solid #c5a45b}
+#bFiona{left:27%;background:#e5ddc7;color:#27422f;border:4px solid #86a278}
+#bDummy{right:15%;background:#765236;border:5px solid #3e2c1f}
+#battleMsg{position:absolute;left:4%;right:4%;bottom:15%;min-height:62px}
+#battleCmd{position:absolute;left:4%;right:4%;bottom:4%;display:flex;gap:8px;flex-wrap:wrap}
+#battleCmd button{flex:1;min-width:80px;padding:12px;background:#13241e;color:#f1e6ca;border:1px solid #c5a45b;border-radius:6px;font-family:inherit}
+.hpbar{height:9px;background:#3b2424;border:1px solid #bea96e;margin-top:5px;width:150px}.hpfill{height:100%;background:#829a6f}
+.runeGlow{animation:runePulse 1s ease-in-out 2}@keyframes runePulse{50%{filter:drop-shadow(0 0 16px #b9e6a4);transform:scale(1.08)}}
+
+/* v0.16 story transition */
+#cinema{position:fixed;inset:0;z-index:140;background:#0a1010;display:none;overflow:hidden;color:#eee3cc}
+#hillScene{position:absolute;inset:0;background:
+ radial-gradient(circle at 72% 25%,#e5a45d 0 4%,#b86549 5% 13%,transparent 14%),
+ linear-gradient(#304451 0 34%,#8f6658 35% 53%,#263727 54% 100%)}
+#hillGround{position:absolute;left:-10%;right:-10%;bottom:-18%;height:55%;background:#263d2c;border-radius:50% 50% 0 0}
+#hillAidan,#hillFiona{position:absolute;bottom:24%;width:54px;height:92px;border-radius:48% 48% 25% 25%;z-index:3}
+#hillAidan{left:39%;background:#17372f;border:4px solid #c5a45b}
+#hillFiona{left:55%;background:#e5ddc7;border:4px solid #86a278}
+#cinemaText{position:absolute;left:5%;right:5%;bottom:6%;min-height:92px;background:#0c1415ed;border:1px solid #c5a45b;padding:16px;border-radius:8px;z-index:5}
+#cinemaHint{position:absolute;right:7%;bottom:8%;z-index:6;font-size:12px;color:#cdbb88}
+#windVeil{position:absolute;inset:0;pointer-events:none;opacity:.35;background:repeating-linear-gradient(165deg,transparent 0 55px,#d9efe511 56px 58px,transparent 59px 100px);animation:windmove 1.4s linear infinite}
+@keyframes windmove{to{transform:translateX(120px)}}
+#world.night{filter:brightness(.48) saturate(.75) hue-rotate(8deg)}
+#world.night:after{content:"";position:absolute;inset:0;background:#08132355;pointer-events:none;z-index:30}
+.firefx{position:absolute;width:38px;height:60px;z-index:35;display:none;pointer-events:none}
+.firefx:before,.firefx:after{content:"";position:absolute;bottom:0;border-radius:55% 45% 55% 45%;transform:rotate(45deg);animation:flame .65s ease-in-out infinite alternate}
+.firefx:before{width:34px;height:50px;background:#e56d38;box-shadow:0 0 22px #d75a27}
+.firefx:after{left:9px;width:20px;height:32px;background:#e6b45d;animation-duration:.45s}
+@keyframes flame{to{transform:rotate(42deg) scale(.8,1.15) translateY(-4px)}}
+.debris{position:absolute;background:#382b22;border:4px solid #211a15;z-index:34;display:none;transform:rotate(18deg)}
+#dangerBanner{position:fixed;left:50%;top:14%;transform:translateX(-50%);z-index:90;background:#1a1111ee;border:1px solid #a86b59;color:#f1d2c4;padding:10px 18px;border-radius:4px;display:none;letter-spacing:.08em}
+
+body.villageAttack #world .npc,
+body.villageAttack #world #fiona,
+body.villageAttack #world [id^="fisher"],
+body.villageAttack #world [id^="kid"],
+body.villageAttack #world [id^="dog"],
+body.villageAttack #world #farmer,
+body.villageAttack #world #woman,
+body.villageAttack #world #hillOld,
+body.villageAttack #inside .npc,
+body.villageAttack #inside .shopkeeper,
+body.villageAttack #inside .innkeeper,
+body.villageAttack #inside [data-npc],
+body.villageAttack #inside [id*="keeper"],
+body.villageAttack #inside [id*="owner"]{display:none!important}
+body.villageAttack #world{filter:brightness(.48) saturate(.75) hue-rotate(8deg)}
+
+#returnScene{position:fixed;inset:0;z-index:145;background:#111820;display:none;color:#f0e5cf;overflow:hidden}
+#returnBackdrop{position:absolute;inset:0;background:
+ radial-gradient(circle at 72% 48%,#b84e2c55 0 6%,transparent 24%),
+ linear-gradient(#111923 0 54%,#252c24 55% 100%)}
+#returnRoad{position:absolute;left:10%;right:10%;bottom:-15%;height:58%;background:#4a4034;clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)}
+#returnAidan,#returnFiona{position:absolute;bottom:25%;width:48px;height:82px;border-radius:48% 48% 25% 25%;z-index:2}
+#returnAidan{left:39%;background:#17372f;border:3px solid #c5a45b}
+#returnFiona{left:54%;background:#e5ddc7;border:3px solid #86a278}
+#returnGoblin{position:absolute;right:15%;bottom:29%;width:50px;height:58px;border-radius:50% 50% 30% 30%;background:#253725;border:3px solid #69435d;box-shadow:0 0 16px #5d2f6c;display:none;z-index:2}
+#returnText{position:absolute;left:5%;right:5%;bottom:6%;min-height:92px;background:#0c1415ed;border:1px solid #c5a45b;padding:16px;border-radius:8px;z-index:5}
+#returnHint{position:absolute;right:7%;bottom:8%;z-index:6;font-size:12px;color:#cdbb88}
+#returnFlash{position:absolute;inset:0;background:#e7d6ba;opacity:0;pointer-events:none;z-index:4}
+#returnScene.flash #returnFlash{animation:impactFlash .35s ease-out}
+@keyframes impactFlash{0%{opacity:.8}100%{opacity:0}}
+
+.attackNpc{position:absolute;z-index:38;display:none;width:38px;height:48px;border-radius:45% 45% 28% 28%;background:#6f6254;border:3px solid #a58e70;color:#eee0c8;font-size:11px;place-items:center;box-shadow:0 4px 9px #0008;cursor:pointer}
+.attackNpc.injured{transform:rotate(75deg);background:#574c47}
+.attackNpc.child{background:#725b55}
+.attackNpc.fiona{background:#e5ddc7;border-color:#86a278;color:#27422f}
+.attackGoblin{position:absolute;z-index:39;display:none;width:45px;height:54px;border-radius:50% 50% 30% 30%;background:#263729;border:3px solid #714b78;box-shadow:0 0 15px #663e7d;color:#d8c2e0;font-size:10px;place-items:center;cursor:pointer}
+body.villageAttack .attackNpc,body.villageAttack .attackGoblin{display:grid}
+#royalKnight,#northGob1,#northGob2{display:none!important}
+body.northAssault #royalKnight,body.northAssault #northGob1,body.northAssault #northGob2{display:grid!important}
+#attackBattle{position:fixed;inset:0;z-index:160;background:linear-gradient(#151a20,#302d28 56%,#1b201c);display:none;color:#f2eee3}
+#attackBattle .enemyAura{box-shadow:0 0 26px #7a3e83}
+#attackRune{position:absolute;right:5%;top:16%;background:#17121bed;border:1px solid #8c6593;padding:8px 12px;border-radius:5px}
+#rescueNotice{position:fixed;left:50%;top:20%;transform:translateX(-50%);z-index:110;background:#151b18ef;border:1px solid #c5a45b;padding:9px 15px;border-radius:4px;display:none}
+
+/* v0.17.1 mobile HUD cleanup */
+@media (max-width:720px){
+  #hud{left:12px!important;right:12px!important;top:12px!important;width:auto!important;max-width:none!important;padding:10px 12px!important}
+  #hud h1,#hud .title{font-size:21px!important;margin:0 0 4px!important}
+  #obj{font-size:14px!important;line-height:1.45!important;padding-right:0!important}
+  #questBox{position:fixed!important;left:12px!important;right:12px!important;top:108px!important;width:auto!important;max-width:none!important;font-size:13px!important;line-height:1.45!important;padding:8px 11px!important;z-index:52!important}
+  #hint{position:fixed!important;left:50%!important;top:auto!important;bottom:76px!important;transform:translateX(-50%)!important;width:max-content!important;max-width:78vw!important;font-size:12px!important;line-height:1.35!important;padding:7px 10px!important;z-index:51!important;opacity:.82}
+  #fs{right:12px!important;bottom:14px!important}
+  #storyFlag{top:170px!important;max-width:80vw!important;text-align:center}
+}
+@media (max-width:420px){
+  #hud{padding:8px 10px!important}
+  #hud h1,#hud .title{font-size:19px!important}
+  #obj{font-size:13px!important}
+  #questBox{top:100px!important;font-size:12px!important}
+  #hint{bottom:72px!important;font-size:11px!important;max-width:72vw!important}
+}
+/* helper becomes unobtrusive after the opening seconds */
+#hint.hintFaded{opacity:.18!important;transition:opacity .6s ease}
+#hint.hintFaded:hover,#hint.hintFaded:active{opacity:.82!important}
+
+.tpbar{height:7px;background:#28252d;border:1px solid #8c7894;margin-top:5px;width:150px}
+.tpfill{height:100%;background:#9b8aad;width:0%}
+.tptext{font-size:11px;color:#d8cbe0;margin-left:5px}
+button.tpLocked{opacity:.42;filter:grayscale(.55);cursor:not-allowed}
+
+/* v0.17.3: compact portrait HUD */
+@media (orientation:portrait) and (max-width:720px){
+  #hud{
+    left:10px!important;right:10px!important;top:10px!important;
+    width:auto!important;max-width:none!important;
+    padding:8px 10px!important;
+  }
+  #hud h1,#hud .title{font-size:18px!important;line-height:1.15!important;margin:0 0 3px!important}
+  #obj{font-size:12px!important;line-height:1.35!important;white-space:normal!important}
+
+  /* Quest status is not a permanent HUD element on portrait screens. */
+  #questBox{
+    left:auto!important;right:10px!important;top:10px!important;
+    width:min(210px,45vw)!important;
+    padding:7px 9px!important;font-size:11px!important;line-height:1.35!important;
+    opacity:.92;
+  }
+
+  /* The control tutorial is opening-only; JS removes it completely. */
+  #hint{
+    left:50%!important;right:auto!important;top:auto!important;bottom:82px!important;
+    transform:translateX(-50%)!important;
+    max-width:72vw!important;width:max-content!important;
+    font-size:11px!important;line-height:1.35!important;padding:7px 10px!important;
+  }
+  #fs{right:10px!important;bottom:12px!important;font-size:12px!important;padding:10px 12px!important}
+  #storyFlag{top:92px!important;font-size:11px!important;max-width:74vw!important}
+}
+@media (orientation:landscape) and (max-height:520px){
+  #hint{font-size:11px!important;opacity:.75}
+}
+
+/* v0.17.4 — portrait HUD / battle fit */
+@media (orientation:portrait) and (max-width:720px){
+  /* Objective owns the top area. Quest box never shares that row. */
+  #hud{
+    left:10px!important;right:10px!important;top:10px!important;
+    width:auto!important;max-width:none!important;
+    padding:8px 10px!important;
+  }
+  #questBox{
+    left:10px!important;right:auto!important;
+    top:92px!important;
+    width:min(280px,calc(100vw - 20px))!important;
+    max-width:calc(100vw - 20px)!important;
+    padding:7px 10px!important;
+    font-size:11px!important;line-height:1.35!important;
+    z-index:53!important;
+  }
+
+  /* Battle status panels stack vertically enough to fit the full enemy HP bar. */
+  #battleTop{
+    left:4%!important;right:4%!important;top:3%!important;
+    gap:7px!important;
+  }
+  #battleTop .panel{
+    min-width:0!important;
+    width:calc(50% - 4px)!important;
+    box-sizing:border-box!important;
+    padding:8px 9px!important;
+    overflow:hidden!important;
+  }
+  #battleTop .panel b{font-size:14px!important;white-space:nowrap}
+  #battleTop .hpbar,
+  #battleTop .tpbar{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+  #battleTop .panel span{font-size:12px!important}
+  #battleTop .tptext{font-size:10px!important}
+
+  #battleField{top:22%!important;bottom:30%!important}
+  #battleMsg,#battleMsg2{
+    left:4%!important;right:4%!important;
+    bottom:16%!important;
+    font-size:13px!important;line-height:1.45!important;
+  }
+  #battleCmd{
+    left:4%!important;right:4%!important;bottom:3%!important;
+    gap:6px!important;
+  }
+  #battleCmd button{
+    min-width:0!important;padding:10px 5px!important;font-size:13px!important;
+  }
+}
+
+/* v0.17.5 — quest HUD is temporary and never covers objective */
+@media (orientation:portrait) and (max-width:720px){
+  #hud{
+    left:8px!important;
+    right:auto!important;
+    top:8px!important;
+    width:54vw!important;
+    max-width:54vw!important;
+    min-height:0!important;
+    padding:7px 9px!important;
+    box-sizing:border-box!important;
+  }
+  #hud h1,#hud .title{
+    font-size:16px!important;
+    line-height:1.1!important;
+    margin:0 0 3px!important;
+  }
+  #obj{
+    font-size:10.5px!important;
+    line-height:1.3!important;
+    overflow-wrap:anywhere!important;
+  }
+  #questBox{
+    left:auto!important;
+    right:8px!important;
+    top:8px!important;
+    width:39vw!important;
+    max-width:39vw!important;
+    box-sizing:border-box!important;
+    padding:6px 8px!important;
+    font-size:10px!important;
+    line-height:1.3!important;
+    z-index:54!important;
+  }
+}
+@media (orientation:portrait) and (max-width:420px){
+  #hud{width:55vw!important;max-width:55vw!important}
+  #questBox{width:38vw!important;max-width:38vw!important}
+  #hud h1,#hud .title{font-size:15px!important}
+  #obj{font-size:10px!important}
+  #questBox{font-size:9.5px!important}
+}
+
+/* v0.17.6 — quest visibility has an explicit state */
+#questBox.questHidden{display:none!important;opacity:0!important;pointer-events:none!important}
+#questBox.questVisible{display:block!important;opacity:1!important}
+
+/* v0.18 — transient objective + quest journal */
+#hud{pointer-events:none;opacity:0;display:none}
+#hud.objectivePop{display:block;opacity:1;animation:objectivePop 4.2s ease forwards}
+@keyframes objectivePop{0%{opacity:0;transform:translateY(-8px)}8%,78%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-5px)}}
+#questNotice{position:fixed;z-index:80;top:18px;right:18px;max-width:min(380px,44vw);padding:10px 14px;background:#10231ded;border:1px solid #8ba27a;border-radius:8px;color:#f2eee3;display:none;box-shadow:0 6px 18px #0007;pointer-events:none}
+#questNotice.pop{display:block;animation:objectivePop 4s ease forwards}
+#menuBtn{position:fixed;z-index:85;right:18px;bottom:78px;background:#101820ed;color:#e9dfc7;border:1px solid #c5a45b;border-radius:7px;padding:10px 13px;font-family:inherit}
+#questMenu{position:fixed;inset:0;z-index:220;background:#07100dcc;backdrop-filter:blur(5px);display:none;padding:4vh 4vw;box-sizing:border-box;color:#e9dfc7}
+.journal{max-width:820px;height:min(82vh,720px);margin:auto;background:linear-gradient(145deg,#111b18,#17251f);border:1px solid #c5a45b;border-radius:12px;box-shadow:0 20px 50px #000a;overflow:hidden}
+.journalHead{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid #7c6740}
+.journalHead small{color:#b9a36a;letter-spacing:.14em}.journalHead h2{margin:3px 0 0;font-size:25px}.journalHead button{font-size:28px;background:none;color:#e9dfc7;border:0}
+.journalTabs{display:flex;border-bottom:1px solid #514b39}.journalTab{flex:1;padding:13px;background:#0e1714;color:#bdb6a3;border:0;border-right:1px solid #514b39;font-family:inherit}.journalTab.active{color:#f3e8c9;background:#1b2c25;box-shadow:inset 0 -2px #c5a45b}
+.journalPage{padding:22px;overflow:auto;height:calc(100% - 126px);box-sizing:border-box}
+.questCard{padding:16px 17px;margin-bottom:13px;border:1px solid #665b3e;border-radius:8px;background:#0d1513b8}.questCard h3{margin:0 0 7px;color:#e7d6a4}.questCard p{margin:5px 0;line-height:1.65}.questState{font-size:12px;color:#b9a36a;letter-spacing:.08em}.questDone{opacity:.66}.questEmpty{text-align:center;margin-top:70px;color:#a9a394}
+@media (orientation:portrait) and (max-width:720px){
+ #hud{left:10px!important;right:10px!important;top:10px!important;width:auto!important;max-width:none!important;padding:8px 10px!important}
+ #hud b{font-size:11px!important;color:#c5a45b} #obj{font-size:12px!important;line-height:1.4!important}
+ #questNotice{left:10px!important;right:10px!important;top:10px!important;max-width:none!important;font-size:12px!important;padding:8px 10px!important}
+ #menuBtn{right:10px;bottom:68px;font-size:11px;padding:9px 10px}
+ .journal{height:88vh}.journalHead{padding:13px 15px}.journalHead h2{font-size:19px}.journalTabs button{font-size:12px;padding:11px 5px}.journalPage{padding:13px;height:calc(100% - 108px)}.questCard{padding:12px;font-size:12px}
+}
+
+/* v0.18.1 — dialogue takes visual priority */
+#msg{z-index:190!important}
+body.dialogueOpen #menuBtn,
+body.dialogueOpen #fs{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
+body.dialogueOpen #questNotice,
+body.dialogueOpen #hud{display:none!important}
+#menuBtn,#fs{transition:opacity .18s ease}
+@media (orientation:portrait) and (max-width:720px){
+  #msg{
+    left:4%!important;right:4%!important;bottom:3%!important;
+    z-index:190!important;
+    max-height:38vh!important;overflow:auto!important;
+    box-sizing:border-box!important;
+  }
+}
+
+#battle[style*="display: block"] ~ #msg,
+#attackBattle[style*="display: block"] ~ #msg{display:none!important}
+body.battleMode #msg{display:none!important}
+
+/* v0.20 — Lind Village destruction state */
+body.villageAttack .burnableBuilding{
+  filter:brightness(.58) saturate(.72);
+}
+body.villageAttack .burnableBuilding::after{
+  content:"";
+  position:absolute;inset:7% 10%;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 24% 78%,#ffcf66 0 4%,#f36b2b 5% 10%,transparent 12%),
+    radial-gradient(ellipse at 72% 66%,#ffd06a 0 3%,#e94d23 4% 9%,transparent 11%),
+    linear-gradient(28deg,transparent 45%,#17120f 46% 51%,transparent 52%);
+  opacity:.92;
+  animation:firePulse .7s ease-in-out infinite alternate;
+}
+@keyframes firePulse{to{filter:brightness(1.28);transform:translateY(-2px)}}
+.attackRubble{display:none;position:absolute;z-index:23;background:#382b22;border:3px solid #211915;box-shadow:9px 7px 0 #17110e;transform:rotate(-7deg)}
+body.villageAttack .attackRubble{display:block}
+.attackSmoke{display:none;position:absolute;z-index:24;width:46px;height:46px;border-radius:50%;background:#262622aa;box-shadow:25px -24px 0 #34332daa,3px -54px 0 #25262188;animation:smokeDrift 2.3s ease-in-out infinite alternate;pointer-events:none}
+body.villageAttack .attackSmoke{display:block}
+@keyframes smokeDrift{to{transform:translate(10px,-15px);opacity:.42}}
+.attackFlame{display:none;position:absolute;z-index:24;font-size:34px;filter:drop-shadow(0 0 8px #ff7b30);animation:firePulse .55s infinite alternate;pointer-events:none}
+body.villageAttack .attackFlame{display:block}
+body.villageAttack .peaceIndoorNpc{display:none!important}
+body.villageAttack .shopDoorBlocked,
+body.villageAttack .innDoorBlocked{pointer-events:auto!important}
+
+/* v0.21 — exact destroyed building state */
+body.villageAttack .house:has(.door[data-room="inn"]),
+body.villageAttack .house:has(.door[data-room="shop"]),
+body.villageAttack .house:has(.door[data-room="elder"]),
+body.villageAttack .house:has(.door[data-room="home"]){
+  background:#332820!important;border-color:#1c1714!important;color:#8f8375!important;
+  box-shadow:inset 0 -22px 0 #201915,0 12px 20px #0009!important;
+  overflow:visible!important;
+}
+body.villageAttack .house:has(.door[data-room="inn"]) .door,
+body.villageAttack .house:has(.door[data-room="shop"]) .door,
+body.villageAttack .house:has(.door[data-room="elder"]) .door,
+body.villageAttack .house:has(.door[data-room="home"]) .door{
+  background:#1d1714!important;border-color:#5b4030!important;transform:rotate(11deg);
+}
+body.villageAttack .house:has(.door[data-room="inn"])::before,
+body.villageAttack .house:has(.door[data-room="shop"])::before,
+body.villageAttack .house:has(.door[data-room="elder"])::before,
+body.villageAttack .house:has(.door[data-room="home"])::before{
+ content:"";position:absolute;left:8%;right:6%;top:-18px;height:48px;
+ background:repeating-linear-gradient(105deg,#251b16 0 24px,#0e0c0b 25px 31px,#4b2b1e 32px 46px);
+ clip-path:polygon(0 35%,15% 0,31% 44%,49% 8%,66% 52%,84% 3%,100% 38%,94% 100%,4% 100%);
+ border-bottom:6px solid #17110e;z-index:8;
+}
+body.villageAttack #inside{display:none!important}
+
+/* river escape cinematic */
+#escapeScene{position:fixed;inset:0;z-index:175;display:none;background:linear-gradient(#111820 0 42%,#34483e 43% 62%,#17201b 63%);color:#f1e6d0;overflow:hidden}
+#escapeRiver{position:absolute;left:58%;top:0;width:28%;height:100%;background:linear-gradient(90deg,#315b65,#62858a,#315b65);transform:skewX(-8deg)}
+#escapeBank{position:absolute;left:0;right:0;bottom:16%;height:28%;background:#28352b;clip-path:polygon(0 25%,52% 12%,61% 30%,100% 8%,100% 100%,0 100%)}
+#escapeA,#escapeF,#escapeGob{position:absolute;width:54px;height:78px;border-radius:46% 46% 28% 28%;display:grid;place-items:center;font-weight:bold}
+#escapeA{left:38%;bottom:25%;background:#123d35;border:4px solid #c5a45b}
+#escapeF{left:31%;bottom:26%;background:#e7dfc7;color:#17372f;border:4px solid #7f9d77}
+#escapeGob{right:16%;bottom:31%;background:#263629;border:4px solid #754579;box-shadow:0 0 24px #713e7b}
+#escapeText{position:absolute;left:5%;right:5%;bottom:4%;padding:15px 18px;background:#0d1418ee;border:1px solid #c5a45b;border-radius:8px;font-size:18px;line-height:1.65}
+#escapeHint{position:absolute;right:6%;bottom:1%;font-size:11px;color:#cbbd99}
+
+/* moss forest playable scene */
+#forestScene{position:fixed;inset:0;z-index:170;display:none;overflow:hidden;background:#0b1510;touch-action:none}
+#forestWorld{position:absolute;width:1800px;height:1300px;background:
+ radial-gradient(circle at 18% 28%,#314d36 0 5%,transparent 6%),
+ radial-gradient(circle at 72% 60%,#243d2c 0 7%,transparent 8%),
+ linear-gradient(#18271d,#101b15)}
+.fTree{position:absolute;width:100px;height:100px;border-radius:50%;background:#173822;border:9px solid #0d2416;box-shadow:0 25px 0 #30271c}
+.fRock{position:absolute;width:80px;height:55px;border-radius:45%;background:#59645b;border:6px solid #303a33}
+#forestPlayer,#forestFiona{position:absolute;width:42px;height:58px;border-radius:45% 45% 28% 28%;z-index:8;display:grid;place-items:center}
+#forestPlayer{background:#123d35;border:4px solid #c5a45b}
+#forestFiona{background:#e7dfc7;color:#17372f;border:4px solid #7f9d77}
+#ancientStone{position:absolute;left:1250px;top:350px;width:120px;height:145px;border-radius:48% 48% 12px 12px;background:#4b5750;border:8px solid #26332b;color:#9fd4bc;display:grid;place-items:center;font-size:42px;box-shadow:0 0 20px #5fa98a55;z-index:7}
+#forestLabel{position:fixed;left:14px;top:14px;z-index:12;padding:8px 12px;background:#0c1713dd;border:1px solid #8b7a50;color:#e9dfc7;border-radius:7px;font-size:13px}
+
+/* v0.22 — Moss Forest exploration */
+.fWall{position:absolute;background:#0b2114;border:10px solid #17331f;border-radius:45px;box-shadow:inset 0 0 25px #0008,0 18px 0 #201d16}
+.fChest{position:absolute;width:62px;height:48px;background:#72502d;border:5px solid #2a2018;border-radius:8px;color:#e8d59e;z-index:7;font-size:25px;display:grid;place-items:center;box-shadow:0 7px 0 #17130f}
+.fChest.open{background:#33291e;color:#7c715e;transform:translateY(5px)}
+.fGob{position:absolute;width:48px;height:62px;border-radius:45% 45% 28% 28%;background:#263729;border:4px solid #714b78;color:#d8c6dd;z-index:7;display:grid;place-items:center;font-size:12px;box-shadow:0 0 18px #754579}
+#louSearch{position:absolute;left:1515px;top:475px;width:105px;height:90px;border-radius:50%;background:radial-gradient(circle,#91dfe055 0 10%,transparent 60%);z-index:6;display:none}
+#louSprite{position:absolute;left:1540px;top:490px;width:38px;height:48px;border-radius:50%;background:#d8ffff;color:#16727c;border:3px solid #8de3e5;z-index:9;display:none;place-items:center;font-size:12px;box-shadow:0 0 25px #8ff}
+#windPath{position:absolute;left:1390px;top:430px;width:300px;height:170px;border:4px dashed #9de7dc88;border-radius:50%;transform:rotate(-18deg);z-index:5;display:none;box-shadow:0 0 30px #8bd9cf55 inset}
+#forestToast{position:fixed;left:50%;bottom:14%;transform:translateX(-50%);z-index:190;background:#0c1713ee;border:1px solid #c5a45b;color:#eee0c5;padding:10px 16px;border-radius:8px;display:none;max-width:82%;text-align:center}
+@media(max-width:700px){#forestLabel{font-size:11px}.fGob{width:42px;height:55px}.fChest{width:55px;height:43px}}
+
+/* v0.23 — Ancient altar / Oathblade / Goblin Raider */
+#altarScene{position:fixed;inset:0;z-index:176;display:none;overflow:hidden;background:
+ radial-gradient(circle at 50% 42%,#567264 0 3%,#26392f 4% 16%,transparent 17%),
+ linear-gradient(#101b16,#07100d);color:#eee3cc}
+#altarRing{position:absolute;left:50%;top:42%;width:310px;height:210px;transform:translate(-50%,-50%);border:9px double #66766d;border-radius:50%;box-shadow:0 0 35px #8fd7bd55 inset}
+#altarStone{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:105px;height:145px;background:#4b5650;border:7px solid #26322c;border-radius:48% 48% 10px 10px;display:grid;place-items:center;font-size:44px;color:#a7e5cd}
+#oathSword{position:absolute;left:50%;top:39%;transform:translate(-50%,-50%) rotate(12deg);font-size:66px;display:none;filter:drop-shadow(0 0 14px #d9f4d2)}
+.altarGob{position:absolute;width:50px;height:64px;border-radius:45% 45% 28% 28%;background:#27382a;border:4px solid #704677;color:#dbcce0;display:grid;place-items:center}
+#ag1{left:20%;top:32%}#ag2{right:20%;top:32%}#ag3{left:26%;bottom:25%}#ag4{right:26%;bottom:25%}
+#altarAidan,#altarFiona,#altarLou{position:absolute;display:grid;place-items:center}
+#altarAidan{left:43%;bottom:20%;width:48px;height:66px;border-radius:45% 45% 28% 28%;background:#143c35;border:4px solid #c5a45b}
+#altarFiona{left:51%;bottom:20%;width:48px;height:66px;border-radius:45% 45% 28% 28%;background:#e8dfc9;color:#17372f;border:4px solid #7e9c77}
+#altarLou{left:58%;bottom:29%;width:34px;height:42px;border-radius:50%;background:#d8ffff;color:#16727c;border:3px solid #8de3e5;box-shadow:0 0 22px #8ff}
+#altarText{position:absolute;left:5%;right:5%;bottom:4%;padding:14px 17px;background:#0b1411ee;border:1px solid #c5a45b;border-radius:8px;line-height:1.6;font-size:17px}
+#raiderBattle{position:fixed;inset:0;z-index:205;display:none;background:linear-gradient(#111a18,#09100e);color:#eee4cf}
+#rbTop{position:absolute;left:4%;right:4%;top:4%;display:flex;justify-content:space-between;gap:12px}
+.rbPanel{width:46%;max-width:390px;background:#101816e8;border:1px solid #8c7b53;padding:10px;border-radius:8px;box-sizing:border-box}
+.rbBar{height:10px;background:#2a2825;border:1px solid #75664b;margin-top:6px}.rbFill{height:100%;background:#d4d0bd}
+#rbRune{height:8px;background:#252d2b;border:1px solid #68897c;margin-top:5px}.rbRuneFill{height:100%;background:#a5d8c2;width:0}
+#raiderSprite{position:absolute;right:17%;top:31%;width:130px;height:160px;border-radius:45% 45% 25% 25%;background:#253529;border:8px solid #6d4775;box-shadow:0 0 35px #78447b;color:#eadced;display:grid;place-items:center;text-align:center;font-weight:bold}
+#rbAidan{position:absolute;left:18%;bottom:31%;width:74px;height:100px;border-radius:45% 45% 25% 25%;background:#143c35;border:6px solid #c5a45b;display:grid;place-items:center}
+#rbMsg{position:absolute;left:5%;right:5%;bottom:17%;min-height:54px;padding:12px 15px;background:#0c1412ed;border:1px solid #c5a45b;border-radius:8px;line-height:1.5}
+#rbCmd{position:absolute;left:5%;right:5%;bottom:4%;display:flex;gap:7px}
+#rbCmd button{flex:1;padding:11px 5px;background:#18251f;color:#eee1c8;border:1px solid #9b8656;border-radius:6px;font-family:inherit}
+#rbCmd button:disabled{opacity:.35}
+#rbWind{display:none!important}
+#raiderBattle.windReady #rbWind{display:block!important;box-shadow:0 0 14px #9fe2c4 inset}
+@media(orientation:portrait) and (max-width:720px){
+ #altarText{font-size:13px}.altarGob{width:40px;height:52px;font-size:10px}
+ #rbTop{gap:6px}.rbPanel{width:49%;font-size:11px;padding:7px}
+ #raiderSprite{right:10%;top:28%;width:95px;height:125px;font-size:12px}
+ #rbAidan{left:13%;bottom:34%;width:58px;height:78px;font-size:12px}
+ #rbMsg{font-size:12px;bottom:18%}#rbCmd button{font-size:11px;padding:9px 2px}
+}
+
+/* v0.23.1 — DEVELOPMENT EVENT JUMP */
+#devBtn{position:fixed;left:10px;bottom:10px;z-index:260;padding:8px 10px;border:1px solid #c5a45b;border-radius:6px;background:#351b1be8;color:#f3dfc3;font:11px inherit;letter-spacing:.04em}
+#devPanel{position:fixed;inset:5%;z-index:300;display:none;background:#0a1110f4;border:1px solid #c5a45b;border-radius:10px;color:#eee3cc;padding:16px;box-sizing:border-box;overflow:auto}
+#devPanel h3{margin:0 0 4px;color:#e4cd8c}#devPanel p{margin:0 0 12px;font-size:11px;color:#aaa28e}
+#devGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:7px}
+#devGrid button,#devClose{padding:10px;background:#18251f;color:#eee3cc;border:1px solid #786844;border-radius:5px;font-family:inherit;text-align:left}
+#devClose{position:absolute;right:14px;top:12px;width:auto}
+@media(max-width:600px){#devPanel{inset:3%;padding:14px 10px}#devGrid{grid-template-columns:1fr 1fr}#devGrid button{font-size:11px;padding:8px}}
+
+/* v0.24 — Battle System v2 / controllable party */
+#rbParty{position:absolute;left:3%;top:3%;width:min(430px,52%);display:flex;gap:6px;z-index:3}
+.partyCard{flex:1;background:#101816e8;border:1px solid #8c7b53;padding:7px;border-radius:7px;font-size:11px}
+.partyCard.active{outline:2px solid #d4b966;box-shadow:0 0 13px #d4b96666}
+.partyCard .mini{height:7px;background:#292724;border:1px solid #665a43;margin:3px 0}.partyCard .mini>i{display:block;height:100%;background:#d6d1bd}
+#rbFiona{position:absolute;left:29%;bottom:31%;width:68px;height:94px;border-radius:45% 45% 25% 25%;background:#e8dfc9;color:#17372f;border:6px solid #7e9c77;display:grid;place-items:center}
+#rbLou{position:absolute;left:38%;bottom:44%;width:34px;height:42px;border-radius:50%;background:#d8ffff;color:#16727c;border:3px solid #8de3e5;box-shadow:0 0 20px #8ff;display:grid;place-items:center;font-size:11px}
+#rbTurn{position:absolute;left:5%;bottom:28%;font-size:12px;color:#cdbf9e}
+#rbCmd.partyCmd{flex-wrap:wrap}#rbCmd.partyCmd button{min-width:18%}
+#rbHeal,#rbRuneSkill{display:none}
+#rbCmd.fionaTurn #rbSkill,#rbCmd.fionaTurn #rbWind{display:none!important}
+#rbCmd.fionaTurn #rbHeal,#rbCmd.fionaTurn #rbRuneSkill{display:block}
+@media(orientation:portrait) and (max-width:720px){
+ #rbParty{width:62%;top:2%}.partyCard{font-size:9px;padding:5px}
+ #rbFiona{left:29%;bottom:35%;width:48px;height:68px;font-size:10px}
+ #rbLou{left:41%;bottom:47%;width:28px;height:34px;font-size:9px}
+ #rbTurn{bottom:30%;font-size:10px}
+}
+
+/* v0.24.1 — party normal battles / items / Lou gate */
+#normalPartyHud{position:fixed;left:4%;top:5%;z-index:202;display:none;width:min(430px,58%);gap:6px}
+#normalPartyHud .partyCard{display:block}
+#normalFiona{position:fixed;left:27%;bottom:31%;z-index:202;width:58px;height:78px;border-radius:45% 45% 25% 25%;background:#e8dfc9;color:#17372f;border:5px solid #7e9c77;display:none;place-items:center}
+#normalActor{position:fixed;left:5%;bottom:27%;z-index:203;display:none;color:#d8c9a7;font-size:12px}
+#normalItems{position:fixed;left:8%;right:8%;bottom:7%;z-index:240;display:none;background:#0b1412f5;border:1px solid #c5a45b;border-radius:8px;padding:12px;color:#eee3cc}
+#normalItems button{margin:4px;padding:9px;background:#18251f;color:#eee3cc;border:1px solid #8c7b53;border-radius:5px}
+#louSeal{position:absolute;left:1360px;top:400px;width:350px;height:245px;border:8px solid #315547;border-radius:50%;z-index:8;background:radial-gradient(circle,#73b69b22,transparent 65%);box-shadow:0 0 35px #83c9aa88 inset;pointer-events:none}
+#louSeal::after{content:"ᚠ ᚢ ᚦ";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);color:#9ad5bd;font-size:25px;letter-spacing:8px}
+#louSeal.open{display:none}
+
+/* v0.25 — Prologue finale / Arthur's Fort */
+#fortScene{position:fixed;inset:0;z-index:178;display:none;overflow:hidden;background:
+ linear-gradient(#263d45 0 38%,#b7a980 38% 42%,#31442e 42% 100%);color:#eee3cc}
+#fortWall{position:absolute;left:8%;right:8%;top:19%;height:35%;background:#6c7068;border:10px solid #343b38;box-shadow:0 16px 0 #252d2a}
+#fortGate{position:absolute;left:43%;top:31%;width:14%;height:28%;background:#292c29;border:7px solid #4c4434;border-radius:45% 45% 0 0}
+#fortBanner{position:absolute;left:17%;top:23%;font-size:35px;color:#d3b867}
+#fortParty{position:absolute;left:38%;bottom:20%;font-size:18px;letter-spacing:12px}
+#fortText{position:absolute;left:5%;right:5%;bottom:4%;padding:14px 17px;background:#0b1411ee;border:1px solid #c5a45b;border-radius:8px;line-height:1.65}
+#prologueEnd{position:fixed;inset:0;z-index:340;display:none;background:#07100df5;color:#eee3cc;text-align:center;place-items:center}
+#prologueEnd>div{max-width:720px;padding:25px}
+#prologueEnd h1{font-size:clamp(28px,6vw,60px);letter-spacing:.12em;margin:0 0 8px;color:#d4bd79}
+#prologueEnd h2{font-weight:normal;font-size:clamp(14px,3vw,24px);margin:0 0 30px;color:#b8d3c3}
+#prologueEnd p{line-height:1.9}
+#prologueEnd button{margin-top:24px;padding:11px 20px;background:#18251f;color:#eee3cc;border:1px solid #c5a45b;border-radius:6px;font-family:inherit}
+
+/* v0.25.1 — Raider aftermath */
+#aftermathScene{position:fixed;inset:0;z-index:206;display:none;overflow:hidden;color:#eee3cc;
+background:radial-gradient(circle at 50% 38%,#526a58 0 8%,#263a30 24%,#101a15 68%,#08100d 100%)}
+#aftermathAltar{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:260px;height:155px;border:7px double #68776c;border-radius:50%;opacity:.8}
+#aftermathSword{position:absolute;left:49%;top:34%;font-size:56px;transform:rotate(12deg);filter:drop-shadow(0 0 16px #cdebcf)}
+#aftermathParty{position:absolute;left:50%;bottom:26%;transform:translateX(-50%);font-size:19px;letter-spacing:16px;white-space:nowrap}
+#aftermathText{position:absolute;left:5%;right:5%;bottom:5%;padding:14px 17px;background:#0b1411ee;border:1px solid #c5a45b;border-radius:8px;line-height:1.7}
+
+/* v0.26 — Growth / Party foundation */
+#battleResult{position:fixed;inset:0;z-index:330;display:none;place-items:center;background:#07100dea;color:#eee3cc}
+#battleResult .resultPanel{width:min(620px,90%);max-height:82%;overflow:auto;background:#101a16;border:1px solid #c5a45b;border-radius:10px;padding:20px}
+#battleResult h2{margin:0 0 12px;color:#d4bd79;letter-spacing:.15em}
+#battleResult .reward{display:flex;gap:22px;flex-wrap:wrap;margin:10px 0 15px;color:#c8d9cf}
+#battleResult .growthRow{padding:10px 0;border-top:1px solid #ffffff18}
+#battleResult .expTrack{height:7px;background:#26342e;border-radius:9px;overflow:hidden;margin-top:5px}
+#battleResult .expTrack i{display:block;height:100%;background:#bca56b}
+#battleResult button{margin-top:16px;padding:10px 20px;background:#18251f;color:#eee3cc;border:1px solid #c5a45b;border-radius:6px}
+
+/* v0.27 — normal party battle + Lou encounter staging */
+#normalBattleCmd{position:fixed;left:4%;right:4%;bottom:4%;z-index:221;display:none;gap:7px;flex-wrap:wrap}
+#normalBattleCmd button{padding:9px 12px;background:#14231e;color:#eee3cc;border:1px solid #9e895a;border-radius:5px}
+#normalBattleCmd button:disabled{opacity:.35}
+#louIntroScene{position:fixed;inset:0;z-index:177;display:none;overflow:hidden;color:#eef9f3;background:
+ radial-gradient(circle at 50% 35%,#7fb9a34d 0 9%,transparent 28%),
+ linear-gradient(#0c1814,#172c23 55%,#0a120f)}
+#louIntroMoon{position:absolute;right:12%;top:9%;width:90px;height:90px;border-radius:50%;background:#d9e8d8aa;box-shadow:0 0 45px #d9e8d888}
+#louIntroRing{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:260px;height:170px;border:2px solid #9ad5bd88;border-radius:50%;box-shadow:0 0 40px #7ed8b455 inset}
+#louIntroLou{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);width:40px;height:50px;border-radius:50%;background:#d9ffff;color:#16727c;border:3px solid #91e7e7;display:grid;place-items:center;box-shadow:0 0 30px #a9ffff}
+#louIntroSpark{position:absolute;inset:0;background:
+ radial-gradient(circle at 24% 35%,#d7fff4 0 2px,transparent 3px),
+ radial-gradient(circle at 72% 27%,#d7fff4 0 2px,transparent 3px),
+ radial-gradient(circle at 61% 53%,#d7fff4 0 2px,transparent 3px),
+ radial-gradient(circle at 36% 61%,#d7fff4 0 2px,transparent 3px);opacity:.75}
+#louIntroText{position:absolute;left:5%;right:5%;bottom:5%;padding:15px 18px;background:#08120fee;border:1px solid #9fc8ae;border-radius:8px;line-height:1.75}
+
+/* v0.28 — Status / Skills / Save */
+#systemMenu{position:fixed;inset:0;z-index:310;display:none;background:#07100deb;color:#eee3cc;padding:4%;overflow:auto}
+#systemMenu .sysPanel{max-width:760px;margin:auto;background:#101a16;border:1px solid #c5a45b;border-radius:10px;padding:18px}
+#systemMenu .tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+#systemMenu button{padding:9px 13px;background:#18251f;color:#eee3cc;border:1px solid #8f7c52;border-radius:5px}
+#systemMenu button.active{border-color:#d7bd73;background:#26372f}
+#systemBody .charStatus{border-top:1px solid #ffffff18;padding:11px 0}
+#systemBody .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;font-size:13px;margin-top:6px}
+#systemBody .skill{margin:7px 0;padding:8px;background:#ffffff08;border-radius:5px}
+#systemBody small{color:#b8c6be}
+#menuOpen{position:fixed;right:14px;bottom:62px;z-index:170;padding:8px 11px;background:#13231d;color:#eee3cc;border:1px solid #9e895a;border-radius:6px}
+@media(max-width:520px){#systemBody .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v0.28.1 — landscape battle readability */
+@media (orientation:landscape) and (max-height:620px){
+  #raiderBattle{overflow:hidden}
+  #raiderPartyHud{left:2.5%!important;right:auto!important;top:2.5%!important;width:49%!important;gap:6px!important}
+  #raiderPartyHud .partyCard{min-width:0!important;flex:1 1 0!important;padding:7px 9px!important;font-size:12px!important}
+  #raiderPartyHud .partyCard b{font-size:13px!important}
+  #raiderEnemy{left:auto!important;right:2.5%!important;top:2.5%!important;width:39%!important;padding:8px 11px!important;font-size:12px!important}
+  #raiderEnemy h2{font-size:16px!important;margin:0 0 5px!important}
+  #raiderEnemy .bar{height:10px!important}
+  #raiderActors{top:22%!important;bottom:auto!important;left:18%!important;right:20%!important;transform:scale(.82);transform-origin:center top}
+  #raiderMsg{left:5%!important;right:5%!important;bottom:19%!important;min-height:42px!important;padding:8px 12px!important;font-size:13px!important}
+  #raiderCommands{left:5%!important;right:5%!important;bottom:3%!important;gap:5px!important}
+  #raiderCommands button{min-height:40px!important;padding:7px 8px!important;font-size:13px!important}
+  #devJumpBtn{left:1.5%!important;bottom:2%!important;transform:scale(.82);transform-origin:left bottom}
+  #menuOpen{right:10px!important;bottom:10px!important;transform:scale(.88);transform-origin:right bottom}
+}
+@media (orientation:landscape) and (max-height:430px){
+  #raiderActors{top:20%!important;transform:scale(.68)}
+  #raiderMsg{bottom:20%!important;font-size:12px!important}
+  #raiderCommands button{min-height:34px!important;font-size:12px!important}
+}
+/* Fullscreen lives in SETTINGS, so no permanent field button is required. */
+
+/* =========================================================
+   v0.29 BATTLE UI REDESIGN
+   Classic JRPG hierarchy:
+   1) battlefield
+   2) message window
+   3) command/status deck
+   ========================================================= */
+#attackBattle,#raiderBattle{
+  --deck-h:190px;
+  --msg-h:72px;
+  box-sizing:border-box;
+  overflow:hidden!important;
+  background:linear-gradient(#101713 0 58%,#171a16 58% 100%)!important;
+}
+#attackBattle .battleTop,#raiderBattle .battleTop{pointer-events:none}
+
+/* NORMAL BATTLE: remove legacy duplicate top status blocks. */
+#attackBattle #aaPanel,#attackBattle #ggPanel{display:none!important}
+#normalPartyHud{
+  position:absolute!important;left:auto!important;right:2.5%!important;top:auto!important;bottom:18px!important;
+  width:46%!important;height:118px!important;display:flex;flex-direction:column!important;gap:5px!important;
+  z-index:225!important;box-sizing:border-box;
+}
+#normalPartyHud .partyCard{
+  width:100%!important;min-width:0!important;flex:1!important;box-sizing:border-box!important;
+  padding:6px 9px!important;border-radius:5px!important;font-size:12px!important;background:#0d1714f2!important;
+}
+#normalPartyHud .partyCard .bar{height:7px!important;margin:4px 0!important}
+#normalPartyHud .partyCard.active{box-shadow:inset 3px 0 #d1b466!important}
+
+/* battlefield sprites */
+#attackBattle #battleActors{
+  position:absolute!important;left:5%!important;right:5%!important;top:18%!important;bottom:auto!important;
+  height:38%!important;display:flex!important;align-items:flex-end!important;justify-content:space-between!important;
+  transform:none!important;
+}
+#attackBattle #battleActors .actor{transform:scale(.82);transform-origin:center bottom}
+#attackBattle #battleActors .enemy{transform:scale(.82);transform-origin:center bottom}
+
+/* message: one dedicated band, no floating central box */
+#attackBattle #battleMsg2{
+  position:absolute!important;left:2.5%!important;right:2.5%!important;bottom:132px!important;
+  min-height:58px!important;height:58px!important;box-sizing:border-box!important;padding:10px 13px!important;
+  background:#09120fee!important;border:1px solid #a98e55!important;border-radius:6px!important;
+  font-size:14px!important;line-height:1.45!important;z-index:224!important;
+}
+
+/* command deck */
+#normalActor{
+  position:absolute!important;left:2.5%!important;right:auto!important;bottom:101px!important;
+  width:48%!important;padding:0!important;background:none!important;border:0!important;color:#d6c8a5!important;
+  font-size:12px!important;z-index:225!important;
+}
+#normalBattleCmd{
+  position:absolute!important;left:2.5%!important;right:auto!important;bottom:18px!important;
+  width:48%!important;height:78px!important;display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:36px!important;gap:5px!important;z-index:225!important;
+}
+#normalBattleCmd button{
+  width:100%!important;min-width:0!important;min-height:0!important;padding:5px 7px!important;
+  font-size:13px!important;border-radius:5px!important;
+}
+#normalItems{left:2.5%!important;bottom:100px!important;top:auto!important;z-index:230!important}
+
+/* Raider: compact upper status and classic lower command deck. */
+#raiderPartyHud{
+  position:absolute!important;left:2.5%!important;top:2.5%!important;right:auto!important;bottom:auto!important;
+  width:45%!important;height:auto!important;display:flex!important;gap:5px!important;z-index:225!important;
+}
+#raiderPartyHud .partyCard{min-width:0!important;flex:1!important;padding:6px 8px!important;font-size:12px!important}
+#raiderEnemy{
+  position:absolute!important;left:auto!important;right:2.5%!important;top:2.5%!important;width:34%!important;height:auto!important;
+  padding:7px 10px!important;font-size:12px!important;z-index:225!important;
+}
+#raiderEnemy h2{font-size:15px!important;margin:0 0 4px!important}
+#raiderActors{
+  position:absolute!important;left:8%!important;right:8%!important;top:24%!important;bottom:auto!important;
+  height:30%!important;transform:none!important;display:flex!important;align-items:flex-end!important;justify-content:space-between!important;
+}
+#raiderActors .actor,#raiderActors .enemy{transform:scale(.72);transform-origin:center bottom}
+#raiderMsg{
+  position:absolute!important;left:2.5%!important;right:2.5%!important;bottom:116px!important;
+  height:58px!important;min-height:58px!important;box-sizing:border-box!important;padding:9px 12px!important;
+  font-size:13px!important;line-height:1.4!important;z-index:225!important;
+}
+#raiderCommands{
+  position:absolute!important;left:2.5%!important;right:auto!important;bottom:18px!important;width:62%!important;height:90px!important;
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:41px!important;gap:5px!important;z-index:225!important;
+}
+#raiderCommands button{width:100%!important;min-width:0!important;min-height:0!important;padding:5px 7px!important;font-size:13px!important}
+#raiderActorLabel{position:absolute!important;left:2.5%!important;bottom:110px!important;font-size:11px!important}
+
+/* Utility buttons never compete with battle commands. */
+#attackBattle~#menuOpen,#raiderBattle~#menuOpen{}
+body.battleMode #menuOpen{top:10px!important;right:10px!important;bottom:auto!important;transform:none!important;font-size:11px!important;padding:5px 8px!important;opacity:.82}
+body.battleMode #devJumpBtn{left:10px!important;bottom:auto!important;top:10px!important;transform:none!important;font-size:11px!important;padding:5px 8px!important;opacity:.72}
+
+/* Portrait: status is bottom deck; battlefield gets the large middle area. */
+@media (orientation:portrait){
+ #attackBattle,#raiderBattle{background:linear-gradient(#101713 0 66%,#171a16 66% 100%)!important}
+ #attackBattle #battleActors{top:26%!important;height:31%!important;left:8%!important;right:8%!important}
+ #attackBattle #battleActors .actor,#attackBattle #battleActors .enemy{transform:scale(.72)}
+ #attackBattle #battleMsg2{bottom:215px!important;height:66px!important;min-height:66px!important}
+ #normalActor{left:4%!important;bottom:180px!important;width:92%!important}
+ #normalBattleCmd{left:4%!important;bottom:18px!important;width:44%!important;height:150px!important;grid-template-columns:1fr!important;grid-auto-rows:34px!important}
+ #normalPartyHud{right:4%!important;bottom:18px!important;width:44%!important;height:150px!important;justify-content:center!important}
+ #normalPartyHud .partyCard{flex:0 0 69px!important}
+ #raiderPartyHud{left:4%!important;top:3%!important;width:58%!important;display:flex!important}
+ #raiderEnemy{right:4%!important;top:14%!important;width:43%!important}
+ #raiderActors{top:30%!important;height:28%!important}
+ #raiderMsg{left:4%!important;right:4%!important;bottom:205px!important;height:68px!important}
+ #raiderCommands{left:4%!important;bottom:18px!important;width:54%!important;height:175px!important;grid-template-columns:1fr!important;grid-auto-rows:38px!important}
+}
+
+/* Short landscape: everything fits in one screen without overlap. */
+@media (orientation:landscape) and (max-height:500px){
+ #attackBattle #battleActors{top:18%!important;height:34%!important}
+ #attackBattle #battleMsg2{bottom:104px!important;height:48px!important;min-height:48px!important;padding:7px 10px!important;font-size:12px!important}
+ #normalActor{bottom:80px!important}
+ #normalBattleCmd{bottom:8px!important;height:68px!important;grid-auto-rows:31px!important}
+ #normalPartyHud{bottom:8px!important;height:91px!important}
+ #normalPartyHud .partyCard{padding:4px 7px!important}
+ #raiderPartyHud{top:2%!important;width:43%!important}
+ #raiderEnemy{top:2%!important;width:31%!important}
+ #raiderActors{top:20%!important;height:29%!important}
+ #raiderMsg{bottom:91px!important;height:45px!important;min-height:45px!important;padding:6px 10px!important}
+ #raiderCommands{bottom:8px!important;height:78px!important;grid-auto-rows:35px!important}
+}
+
+/* =========================================================
+ v0.30 CLASSIC JRPG BATTLE UI
+ No overlapping windows. One bottom deck owns message/commands/status.
+ ========================================================= */
+#attackBattle,#raiderBattle{
+  --ui-gold:#bda468;--ui-bg:#07110eeb;--ui-bg2:#0d1915f2;
+  overflow:hidden!important;background:linear-gradient(#07140f 0%,#102119 64%,#151912 64%,#11150f 100%)!important;
+}
+body.battleMode #menuOpen{display:none!important}
+body.battleMode #devJumpBtn{top:8px!important;left:8px!important;bottom:auto!important;z-index:290!important;opacity:.55!important;
+ transform:scale(.72)!important;transform-origin:left top!important}
+
+/* -------- NORMAL BATTLE -------- */
+#attackBattle #aaPanel,#attackBattle #ggPanel{display:none!important}
+#attackBattle #battleActors{
+ position:absolute!important;left:5%!important;right:5%!important;top:8%!important;bottom:34%!important;height:auto!important;
+ display:flex!important;align-items:flex-end!important;justify-content:space-between!important;transform:none!important;z-index:210!important
+}
+#attackBattle #battleActors .actor,#attackBattle #battleActors .enemy{transform:scale(.72)!important;transform-origin:center bottom!important}
+#attackBattle #battleMsg2{
+ position:absolute!important;left:2%!important;right:2%!important;bottom:25%!important;height:8%!important;min-height:0!important;
+ margin:0!important;padding:7px 12px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;
+ background:var(--ui-bg)!important;border:1px solid var(--ui-gold)!important;border-radius:5px!important;
+ font-size:clamp(11px,1.8vh,14px)!important;line-height:1.25!important;z-index:240!important;overflow:hidden!important
+}
+#normalActor{
+ position:absolute!important;left:2%!important;bottom:21.5%!important;width:42%!important;height:3%!important;padding:0!important;
+ border:0!important;background:none!important;color:#cdbd96!important;font-size:clamp(10px,1.6vh,12px)!important;z-index:241!important
+}
+#normalBattleCmd{
+ position:absolute!important;left:2%!important;bottom:2%!important;width:43%!important;height:19%!important;
+ display:grid!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(2,1fr)!important;gap:5px!important;z-index:241!important
+}
+#normalBattleCmd button{
+ display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;margin:0!important;padding:3px 6px!important;
+ font-size:clamp(11px,2vh,15px)!important;background:var(--ui-bg2)!important;border:1px solid #8d7a50!important;border-radius:4px!important
+}
+
+#normalPartyHud{
+ position:absolute!important;left:auto!important;right:2%!important;bottom:2%!important;width:51%!important;height:19%!important;
+ display:grid!important;grid-template-columns:1fr!important;grid-template-rows:1fr 1fr!important;gap:4px!important;z-index:241!important
+}
+#normalPartyHud .partyCard{
+ width:100%!important;height:100%!important;min-width:0!important;margin:0!important;padding:5px 8px!important;box-sizing:border-box!important;
+ display:grid!important;grid-template-columns:90px 1fr!important;grid-template-rows:auto auto!important;align-items:center!important;
+ background:var(--ui-bg2)!important;border:1px solid #6f745e!important;border-radius:4px!important;font-size:clamp(10px,1.7vh,13px)!important
+}
+#normalPartyHud .partyCard b{grid-row:1/3;align-self:center;font-size:clamp(11px,1.8vh,14px)!important}
+#normalPartyHud .partyCard .bar{height:6px!important;margin:0!important}
+#normalPartyHud .partyCard.active{border-color:#d4b96f!important;box-shadow:inset 3px 0 #d4b96f!important}
+#normalItems{position:absolute!important;left:2%!important;bottom:22%!important;top:auto!important;width:43%!important;z-index:250!important}
+
+/* -------- RAIDER -------- */
+#raiderPartyHud{
+ position:absolute!important;left:2%!important;top:2%!important;width:42%!important;height:12%!important;right:auto!important;bottom:auto!important;
+ display:grid!important;grid-template-columns:1fr 1fr!important;gap:5px!important;z-index:230!important
+}
+#raiderPartyHud .partyCard{min-width:0!important;width:auto!important;height:100%!important;padding:5px 7px!important;box-sizing:border-box!important;font-size:clamp(10px,1.6vh,12px)!important}
+#raiderEnemy{
+ position:absolute!important;right:2%!important;top:2%!important;left:auto!important;width:31%!important;height:12%!important;padding:5px 8px!important;
+ box-sizing:border-box!important;overflow:hidden!important;z-index:230!important;font-size:clamp(10px,1.5vh,12px)!important
+}
+#raiderEnemy h2{font-size:clamp(12px,2vh,15px)!important;margin:0 0 3px!important}
+#raiderActors{
+ position:absolute!important;left:7%!important;right:7%!important;top:14%!important;bottom:34%!important;height:auto!important;
+ display:flex!important;align-items:flex-end!important;justify-content:space-between!important;transform:none!important;z-index:210!important
+}
+#raiderActors .actor,#raiderActors .enemy{transform:scale(.68)!important;transform-origin:center bottom!important}
+#raiderMsg{
+ position:absolute!important;left:2%!important;right:2%!important;bottom:25%!important;height:8%!important;min-height:0!important;margin:0!important;
+ padding:7px 12px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;background:var(--ui-bg)!important;
+ border:1px solid var(--ui-gold)!important;border-radius:5px!important;font-size:clamp(11px,1.8vh,14px)!important;line-height:1.25!important;
+ z-index:240!important;overflow:hidden!important
+}
+#raiderActorLabel{
+ position:absolute!important;left:2%!important;bottom:21.5%!important;width:55%!important;height:3%!important;padding:0!important;
+ background:none!important;border:0!important;font-size:clamp(10px,1.6vh,12px)!important;color:#cdbd96!important;z-index:241!important
+}
+#raiderCommands{
+ position:absolute!important;left:2%!important;bottom:2%!important;width:56%!important;height:19%!important;
+ display:grid!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(2,1fr)!important;gap:5px!important;z-index:241!important
+}
+#raiderCommands button{width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;margin:0!important;padding:3px 6px!important;
+ font-size:clamp(11px,1.9vh,14px)!important;background:var(--ui-bg2)!important;border:1px solid #8d7a50!important;border-radius:4px!important}
+#raiderCommands button:nth-child(n+5){display:none!important}
+
+/* Mobile portrait: same hierarchy, taller bottom deck, never place UI over battlefield. */
+@media (orientation:portrait){
+ #attackBattle,#raiderBattle{background:linear-gradient(#07140f 0%,#102119 59%,#151912 59%,#11150f 100%)!important}
+ #attackBattle #battleActors{top:9%!important;bottom:43%!important}
+ #attackBattle #battleActors .actor,#attackBattle #battleActors .enemy{transform:scale(.66)!important}
+ #attackBattle #battleMsg2{left:4%!important;right:4%!important;bottom:34%!important;height:8%!important}
+ #normalActor{left:4%!important;bottom:30.5%!important;width:92%!important}
+ #normalBattleCmd{left:4%!important;bottom:3%!important;width:43%!important;height:26%!important;grid-template-columns:1fr!important;grid-template-rows:repeat(4,1fr)!important}
+ #normalPartyHud{right:4%!important;bottom:3%!important;width:45%!important;height:26%!important}
+ #normalPartyHud .partyCard{grid-template-columns:1fr!important;grid-template-rows:auto 6px auto!important;padding:5px 7px!important}
+ #normalPartyHud .partyCard b{grid-row:auto!important}
+ #raiderPartyHud{left:4%!important;top:2%!important;width:60%!important;height:10%!important}
+ #raiderEnemy{right:4%!important;top:13%!important;width:44%!important;height:10%!important}
+ #raiderActors{top:17%!important;bottom:43%!important}
+ #raiderActors .actor,#raiderActors .enemy{transform:scale(.60)!important}
+ #raiderMsg{left:4%!important;right:4%!important;bottom:34%!important;height:8%!important}
+ #raiderActorLabel{left:4%!important;bottom:30.5%!important}
+ #raiderCommands{left:4%!important;bottom:3%!important;width:55%!important;height:26%!important;grid-template-columns:1fr!important;grid-template-rows:repeat(4,1fr)!important}
+}
+
+/* Short landscape phones */
+@media (orientation:landscape) and (max-height:430px){
+ #attackBattle #battleActors,#raiderActors{top:10%!important;bottom:35%!important}
+ #attackBattle #battleActors .actor,#attackBattle #battleActors .enemy,#raiderActors .actor,#raiderActors .enemy{transform:scale(.58)!important}
+ #attackBattle #battleMsg2,#raiderMsg{bottom:25%!important;height:8%!important;padding:4px 9px!important}
+ #normalBattleCmd,#normalPartyHud,#raiderCommands{bottom:1.5%!important;height:20%!important}
+ #normalActor,#raiderActorLabel{bottom:22%!important}
+}
+
+/* =========================================================
+   v0.30.1 ROOT FIX — battle UI visibility ownership
+   Never allow battle widgets to leak into field/interior scenes.
+   ========================================================= */
+
+/* Default: every battle-only widget is physically hidden. */
+#normalPartyHud,
+#normalActor,
+#normalBattleCmd,
+#normalItems,
+#raiderPartyHud,
+#raiderEnemy,
+#raiderActors,
+#raiderMsg,
+#raiderActorLabel,
+#raiderCommands{
+  display:none!important;
+}
+
+/* Normal battle owns ONLY normal-battle widgets. */
+body.normalBattleMode #normalPartyHud{display:grid!important}
+body.normalBattleMode #normalActor{display:block!important}
+body.normalBattleMode #normalBattleCmd{display:grid!important}
+
+/* Item popup is opened explicitly by JS. */
+body.normalBattleMode #normalItems.isOpen{display:block!important}
+
+/* Raider battle owns ONLY Raider widgets. */
+body.raiderBattleMode #raiderPartyHud{display:flex!important}
+body.raiderBattleMode #raiderEnemy{display:block!important}
+body.raiderBattleMode #raiderActors{display:flex!important}
+body.raiderBattleMode #raiderMsg{display:flex!important}
+body.raiderBattleMode #raiderActorLabel{display:block!important}
+body.raiderBattleMode #raiderCommands{display:grid!important}
+
+/* Field/interior scenes always win. */
+body:not(.normalBattleMode):not(.raiderBattleMode) #menuOpen{display:block!important}
+
+/* =========================================================
+   v0.31 BATTLE UI V2
+   Actor-local information + floating feedback + compact commands.
+   ========================================================= */
+body.normalBattleMode #normalPartyHud,
+body.normalBattleMode #normalFiona,
+body.normalBattleMode #attackBattle > #battleTop,
+body.normalBattleMode #attackRune{display:none!important}
+
+body.normalBattleMode #attackBattle{
+  overflow:hidden!important;
+  background:
+    radial-gradient(ellipse at 52% 38%,rgba(72,105,72,.22),transparent 42%),
+    linear-gradient(#07120f 0%,#102018 68%,#11150f 68%,#0b100d 100%)!important;
+}
+body.normalBattleMode #attackBattle .v2BattleStage{
+  position:absolute!important;left:0!important;right:0!important;top:0!important;
+  bottom:clamp(92px,18dvh,138px)!important;height:auto!important;
+  display:block!important;overflow:visible!important;
+}
+.v2Unit{position:absolute;z-index:3;width:clamp(82px,13vw,142px);height:clamp(110px,28vh,220px)}
+.v2Unit.aidanUnit{left:12%;bottom:13%}
+.v2Unit.fionaUnit{left:31%;bottom:7%}
+.v2Unit.gobUnit{right:15%;bottom:13%}
+
+.v2Unit .battler{
+  position:absolute!important;left:50%!important;bottom:0!important;right:auto!important;top:auto!important;
+  transform:translateX(-50%)!important;
+  width:clamp(58px,8vw,92px)!important;height:clamp(76px,15vh,122px)!important;
+  display:grid!important;place-items:center!important;
+  box-sizing:border-box!important;border-radius:13px 13px 9px 9px!important;
+  font-size:clamp(10px,1.5vw,13px)!important;
+  background:linear-gradient(#1c4036,#10251f)!important;border:2px solid #b89d5d!important;
+  box-shadow:0 12px 24px #0008!important;transition:.18s transform,.18s filter,.18s opacity!important;
+}
+.v2Unit.gobUnit .battler{background:linear-gradient(#293b2c,#17231a)!important;border-color:#76527d!important}
+
+.v2NearHud{
+  position:absolute;left:50%;bottom:calc(100% - 18px);transform:translateX(-50%);
+  width:clamp(98px,13vw,142px);padding:4px 6px 5px;box-sizing:border-box;
+  background:rgba(5,13,10,.82);border:1px solid rgba(197,164,91,.58);border-radius:7px;
+  box-shadow:0 4px 12px #0007;backdrop-filter:blur(3px);color:#eee5d2;
+  font-size:clamp(9px,1.35vw,11px);line-height:1.15;text-align:left;pointer-events:none;
+}
+.v2NearHud b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;font-size:inherit}
+.v2NearHud small{display:block;margin-top:3px;opacity:.82;font-size:clamp(8px,1.15vw,10px);white-space:nowrap}
+.v2Bars{display:grid;gap:2px}
+.v2Bars i{display:block;height:4px;border-radius:5px;background:#0009;overflow:hidden;border:1px solid #ffffff17}
+.v2Bars em{display:block;height:100%;width:100%;transition:width .28s ease}
+.v2Bars .hp em{background:linear-gradient(90deg,#6a9d66,#9ac77c)}
+.v2Bars .tp em{background:linear-gradient(90deg,#9a7a38,#d0b568)}
+.v2Bars .mp em{background:linear-gradient(90deg,#526f9c,#7da3d2)}
+.v2Unit.danger .v2NearHud{border-color:#b65e55;animation:v2DangerPulse 1.25s infinite}
+.v2Unit.danger .v2Bars .hp em{background:linear-gradient(90deg,#9b3f3f,#d56b59)}
+.v2Unit.critical .battler{transform:translateX(-50%) rotate(-3deg) translateY(5px)!important;filter:saturate(.65) brightness(.78)}
+.v2Unit.danger:not(.critical) .battler{transform:translateX(-50%) rotate(-1deg) translateY(2px)!important;filter:saturate(.82)}
+@keyframes v2DangerPulse{50%{box-shadow:0 0 12px #9f4d4066}}
+
+.v2Float{
+  position:absolute;z-index:20;left:50%;top:-8px;transform:translateX(-50%);
+  font-weight:800;font-size:clamp(15px,2.5vw,24px);letter-spacing:.02em;
+  text-shadow:0 2px 3px #000,0 0 8px #000;color:#f1ddd2;opacity:0;pointer-events:none;white-space:nowrap;
+}
+.v2Float.show{animation:v2Float .72s ease-out}
+.v2Float.heal{color:#bfe5b1}.v2Float.resource{color:#d9c57c}
+@keyframes v2Float{0%{opacity:0;transform:translate(-50%,12px) scale(.8)}20%{opacity:1}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px) scale(1.05)}}
+.v2Unit.hit .battler{animation:v2Hit .22s linear}
+@keyframes v2Hit{0%,100%{transform:translateX(-50%)}40%{transform:translateX(calc(-50% - 7px));filter:brightness(1.6)}70%{transform:translateX(calc(-50% + 5px))}}
+
+body.normalBattleMode #battleMsg2{
+  position:absolute!important;left:50%!important;right:auto!important;bottom:clamp(72px,13dvh,94px)!important;
+  transform:translateX(-50%)!important;width:min(76%,720px)!important;height:auto!important;min-height:0!important;
+  padding:4px 12px!important;border:0!important;background:rgba(5,12,9,.58)!important;border-radius:12px!important;
+  font-size:clamp(10px,1.45vw,12px)!important;text-align:center!important;color:#ddd3be!important;box-shadow:none!important;
+}
+body.normalBattleMode #normalActor{
+  position:absolute!important;left:3%!important;bottom:clamp(61px,10.5dvh,78px)!important;width:auto!important;height:auto!important;
+  padding:0!important;background:none!important;border:0!important;color:#d6c59d!important;
+  font-size:clamp(9px,1.4vw,11px)!important;letter-spacing:.08em!important;
+}
+body.normalBattleMode #normalBattleCmd{
+  position:absolute!important;left:3%!important;right:3%!important;bottom:max(8px,env(safe-area-inset-bottom))!important;
+  width:auto!important;height:clamp(50px,8.5dvh,64px)!important;display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:1fr!important;gap:6px!important;
+  padding:0!important;background:none!important;border:0!important;
+}
+body.normalBattleMode #normalBattleCmd button{
+  display:block;min-width:0!important;height:100%!important;padding:4px 6px!important;
+  border:1px solid rgba(197,164,91,.68)!important;border-radius:7px!important;
+  background:linear-gradient(rgba(23,55,47,.96),rgba(10,29,24,.98))!important;color:#f0e7d5!important;
+  font-size:clamp(11px,1.8vw,14px)!important;box-shadow:inset 0 1px #ffffff12,0 3px 9px #0006!important;
+}
+body.normalBattleMode #normalBattleCmd button:disabled{opacity:.32!important}
+body.normalBattleMode #normalItems{
+  left:3%!important;bottom:calc(clamp(50px,8.5dvh,64px) + 16px)!important;width:min(260px,55vw)!important;z-index:240!important
+}
+
+/* No nth-child command hiding: JS decides which four commands belong to the current actor. */
+body.normalBattleMode #normalBattleCmd button:nth-child(n){}
+
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle .v2BattleStage{bottom:clamp(128px,22dvh,175px)!important}
+ .v2Unit{width:92px;height:150px}
+ .v2Unit.aidanUnit{left:13%;bottom:15%}.v2Unit.fionaUnit{left:35%;bottom:7%}.v2Unit.gobUnit{right:13%;bottom:18%}
+ .v2Unit .battler{width:58px!important;height:82px!important}
+ .v2NearHud{width:100px;font-size:9px}
+ body.normalBattleMode #battleMsg2{bottom:clamp(108px,17.5dvh,135px)!important;width:86%!important}
+ body.normalBattleMode #normalActor{bottom:clamp(94px,15.5dvh,118px)!important}
+ body.normalBattleMode #normalBattleCmd{
+   height:clamp(82px,13dvh,104px)!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(2,1fr)!important;
+ }
+}
+
+
+/* =========================================================
+   v0.31.1 — NORMAL BATTLE LAYOUT REBUILD
+   Screenshot-driven correction:
+   - no giant dead space
+   - no message box crossing actors
+   - commands never overflow viewport
+   - portrait/landscape use different composition
+   ========================================================= */
+body.normalBattleMode #attackBattle{
+  position:fixed!important; inset:0!important; width:100%!important; height:100dvh!important;
+  min-height:0!important; overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:minmax(0,1fr) auto!important;
+  background:linear-gradient(#07150f 0%,#0d2419 66%,#0a120d 66%,#09100c 100%)!important;
+}
+body.normalBattleMode #attackBattle .v2BattleStage{
+  position:relative!important; inset:auto!important; width:100%!important; height:auto!important;
+  min-height:0!important; grid-row:1!important; overflow:hidden!important;
+  border-bottom:1px solid rgba(197,164,91,.32)!important;
+}
+body.normalBattleMode #normalBattleCmd{
+  position:relative!important; inset:auto!important; grid-row:2!important;
+  width:auto!important;height:auto!important;
+  margin:0!important;padding:8px max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:46px!important;
+  gap:7px!important;background:rgba(5,12,9,.97)!important;border:0!important;
+  box-sizing:border-box!important;z-index:60!important;
+}
+body.normalBattleMode #normalBattleCmd button{
+  min-width:0!important;width:100%!important;height:46px!important;margin:0!important;padding:0 5px!important;
+  overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+  font-size:clamp(12px,1.65vw,16px)!important;line-height:1!important;
+}
+body.normalBattleMode #normalActor{
+  position:absolute!important;left:max(14px,env(safe-area-inset-left))!important;bottom:70px!important;
+  z-index:62!important;width:auto!important;padding:3px 8px!important;margin:0!important;
+  background:rgba(5,12,9,.82)!important;border-radius:5px!important;
+  font-size:10px!important;letter-spacing:.08em!important;
+}
+body.normalBattleMode #battleMsg2{
+  position:absolute!important;left:50%!important;bottom:8px!important;right:auto!important;top:auto!important;
+  transform:translateX(-50%)!important;z-index:50!important;
+  width:min(68%,620px)!important;max-width:calc(100% - 32px)!important;
+  min-height:0!important;height:auto!important;margin:0!important;padding:5px 12px!important;
+  box-sizing:border-box!important;border:1px solid rgba(197,164,91,.42)!important;border-radius:7px!important;
+  background:rgba(4,11,8,.86)!important;color:#e6ddca!important;
+  font-size:clamp(10px,1.25vw,13px)!important;line-height:1.35!important;text-align:center!important;
+}
+.v2Unit{width:110px!important;height:150px!important}
+.v2Unit.aidanUnit{left:17%!important;bottom:16%!important}
+.v2Unit.fionaUnit{left:39%!important;bottom:8%!important}
+.v2Unit.gobUnit{right:17%!important;bottom:17%!important}
+.v2Unit .battler{width:62px!important;height:86px!important;font-size:11px!important}
+.v2NearHud{
+  width:112px!important;padding:4px 6px!important;font-size:9px!important;
+  bottom:calc(100% - 20px)!important;
+}
+.v2NearHud small{font-size:8px!important}
+.v2Bars i{height:3px!important}
+body.normalBattleMode #devJump{opacity:.38!important;transform:scale(.78)!important;transform-origin:bottom left!important}
+
+/* Portrait: compact battle stage + fixed 2x2 command deck. */
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle{
+   grid-template-rows:minmax(0,1fr) 142px!important;
+ }
+ body.normalBattleMode #normalBattleCmd{
+   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+   grid-template-rows:52px 52px!important;
+   gap:7px!important;padding:24px 12px max(10px,env(safe-area-inset-bottom))!important;
+ }
+ body.normalBattleMode #normalBattleCmd button{height:52px!important;font-size:14px!important}
+ body.normalBattleMode #normalActor{bottom:119px!important;left:12px!important}
+ body.normalBattleMode #battleMsg2{bottom:8px!important;width:84%!important;font-size:11px!important}
+ .v2Unit{width:92px!important;height:126px!important}
+ .v2Unit.aidanUnit{left:10%!important;bottom:22%!important}
+ .v2Unit.fionaUnit{left:34%!important;bottom:8%!important}
+ .v2Unit.gobUnit{right:10%!important;bottom:19%!important}
+ .v2Unit .battler{width:56px!important;height:76px!important}
+ .v2NearHud{width:100px!important}
+}
+
+/* Short landscape phones: battlefield gets most of the screen; one clean command row. */
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle{grid-template-rows:minmax(0,1fr) 64px!important}
+ body.normalBattleMode #normalBattleCmd{
+   grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:44px!important;
+   padding:10px max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+ }
+ body.normalBattleMode #normalBattleCmd button{height:44px!important;font-size:13px!important}
+ body.normalBattleMode #normalActor{bottom:50px!important}
+ body.normalBattleMode #battleMsg2{bottom:7px!important;width:min(56%,540px)!important;font-size:10px!important;padding:3px 9px!important}
+ .v2Unit{width:92px!important;height:118px!important}
+ .v2Unit.aidanUnit{left:18%!important;bottom:14%!important}
+ .v2Unit.fionaUnit{left:39%!important;bottom:7%!important}
+ .v2Unit.gobUnit{right:18%!important;bottom:15%!important}
+ .v2Unit .battler{width:54px!important;height:72px!important}
+ .v2NearHud{width:100px!important}
+}
+
+
+body.normalBattleMode #normalBattleCmd button{display:none!important}
+body.normalBattleMode #normalBattleCmd button.v2-visible{display:block!important}
+
+body.normalBattleMode #devJump{display:none!important}
+
+/* =========================================================
+   v0.32 UNIFIED JRPG BATTLE UI
+   Reference principles: large battlefield, characters first,
+   thin action banner, compact bottom command/status information.
+   ========================================================= */
+
+/* ---------- NORMAL BATTLE ---------- */
+body.normalBattleMode #attackBattle{
+  display:block!important;position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;
+  overflow:hidden!important;background:
+    radial-gradient(ellipse at 50% 64%,rgba(54,91,66,.34),transparent 46%),
+    linear-gradient(#06140f 0 72%,#101710 72% 100%)!important;
+}
+body.normalBattleMode #attackBattle .v2BattleStage{
+  position:absolute!important;inset:0 0 78px 0!important;width:auto!important;height:auto!important;
+  overflow:hidden!important;border:0!important;
+}
+/* actors become the visual focus */
+body.normalBattleMode .v2Unit{height:180px!important;width:120px!important}
+body.normalBattleMode .v2Unit.aidanUnit{left:18%!important;bottom:15%!important}
+body.normalBattleMode .v2Unit.fionaUnit{left:38%!important;bottom:9%!important}
+body.normalBattleMode .v2Unit.gobUnit{right:18%!important;bottom:16%!important}
+body.normalBattleMode .v2Unit .battler{
+  width:74px!important;height:108px!important;border-width:2px!important;
+  box-shadow:0 14px 24px #0009!important;font-size:12px!important;
+}
+/* actor-local HUD: no card; just a tiny readable strip */
+body.normalBattleMode .v2NearHud{
+  width:106px!important;bottom:calc(100% - 30px)!important;padding:0!important;
+  background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+  backdrop-filter:none!important;text-shadow:0 2px 3px #000,0 0 5px #000!important;
+}
+body.normalBattleMode .v2NearHud b{font-size:9px!important;margin:0 0 3px!important}
+body.normalBattleMode .v2NearHud small{font-size:8px!important;margin-top:2px!important;color:#e9dfc7!important}
+body.normalBattleMode .v2Bars{gap:2px!important}
+body.normalBattleMode .v2Bars i{height:3px!important;border:0!important;background:#000b!important;box-shadow:0 0 0 1px #d7c79555!important}
+
+/* FF-like slim action banner: never a large dialogue box */
+body.normalBattleMode #battleMsg2{
+  position:absolute!important;z-index:55!important;left:50%!important;top:14px!important;bottom:auto!important;
+  transform:translateX(-50%)!important;width:min(72%,680px)!important;max-width:calc(100% - 28px)!important;
+  min-height:0!important;height:auto!important;padding:5px 14px!important;
+  background:rgba(6,12,10,.72)!important;border:1px solid #9f895d99!important;border-radius:4px!important;
+  box-shadow:0 4px 12px #0006!important;font-size:11px!important;line-height:1.25!important;text-align:center!important;
+}
+/* command deck: compact lower-left, not full-screen buttons */
+body.normalBattleMode #normalBattleCmd{
+  position:absolute!important;z-index:65!important;left:max(14px,env(safe-area-inset-left))!important;
+  right:auto!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
+  width:min(390px,47vw)!important;height:58px!important;padding:5px!important;
+  display:grid!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(2,1fr)!important;
+  gap:4px!important;background:rgba(6,13,10,.88)!important;border:1px solid #9f895d99!important;border-radius:7px!important;
+  box-shadow:0 6px 18px #0008!important;
+}
+body.normalBattleMode #normalBattleCmd button.v2-visible{
+  display:block!important;width:100%!important;height:100%!important;min-height:0!important;padding:0 5px!important;margin:0!important;
+  background:rgba(20,43,35,.92)!important;border:1px solid #8e7b52!important;border-radius:4px!important;
+  font-size:11px!important;line-height:1!important;
+}
+body.normalBattleMode #normalActor{
+  position:absolute!important;z-index:66!important;left:max(18px,env(safe-area-inset-left))!important;
+  bottom:72px!important;padding:0!important;background:none!important;border:0!important;font-size:9px!important;
+  color:#cdbd96!important;
+}
+/* development controls must never compete with battle */
+body.normalBattleMode #devBtn,body.normalBattleMode #devPanel{display:none!important}
+
+/* ---------- RAIDER BATTLE: use ACTUAL rb* DOM ---------- */
+body.raiderBattleMode #raiderBattle{
+  position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;overflow:hidden!important;
+  background:radial-gradient(ellipse at 58% 62%,rgba(68,73,54,.28),transparent 44%),linear-gradient(#07140f 0 72%,#111710 72%)!important;
+}
+body.raiderBattleMode #rbParty{
+  position:absolute!important;left:max(14px,env(safe-area-inset-left))!important;right:auto!important;top:auto!important;
+  bottom:max(10px,env(safe-area-inset-bottom))!important;width:min(390px,47vw)!important;height:58px!important;
+  display:grid!important;grid-template-columns:1fr 1fr!important;gap:4px!important;z-index:65!important;
+  padding:5px!important;box-sizing:border-box!important;background:rgba(6,13,10,.88)!important;
+  border:1px solid #9f895d99!important;border-radius:7px!important;box-shadow:0 6px 18px #0008!important;
+}
+body.raiderBattleMode #rbParty .partyCard{
+  min-width:0!important;padding:4px 7px!important;border:0!important;background:transparent!important;box-shadow:none!important;
+  font-size:9px!important;border-radius:3px!important;
+}
+body.raiderBattleMode #rbParty .partyCard b{font-size:10px!important}
+body.raiderBattleMode #rbParty .mini{height:3px!important;margin:3px 0!important}
+body.raiderBattleMode #rbParty .partyCard span{font-size:8px!important}
+body.raiderBattleMode #rbTop{
+  position:absolute!important;right:max(14px,env(safe-area-inset-right))!important;top:14px!important;left:auto!important;
+  width:min(330px,36vw)!important;height:auto!important;z-index:55!important;display:block!important;
+}
+body.raiderBattleMode #rbTop .rbPanel{padding:7px 10px!important;background:rgba(6,13,10,.78)!important;border:1px solid #9f895d99!important;border-radius:6px!important}
+body.raiderBattleMode #rbTop .rbPanel b{font-size:12px!important}
+body.raiderBattleMode #rbTop .rbBar{height:4px!important;margin:4px 0!important}
+body.raiderBattleMode #rbTop .rbPanel span,body.raiderBattleMode #rbPhase{font-size:9px!important}
+body.raiderBattleMode #rbAidan{left:19%!important;bottom:25%!important;transform:scale(.78)!important}
+body.raiderBattleMode #rbFiona{left:34%!important;bottom:21%!important;transform:scale(.78)!important}
+body.raiderBattleMode #rbLou{left:44%!important;bottom:36%!important;transform:scale(.72)!important}
+body.raiderBattleMode #raiderSprite{right:18%!important;bottom:23%!important;transform:scale(.86)!important}
+body.raiderBattleMode #rbMsg{
+  position:absolute!important;left:50%!important;top:14px!important;bottom:auto!important;transform:translateX(-50%)!important;
+  width:min(48%,620px)!important;height:auto!important;min-height:0!important;padding:5px 12px!important;
+  background:rgba(6,12,10,.72)!important;border:1px solid #9f895d99!important;border-radius:4px!important;
+  font-size:11px!important;line-height:1.25!important;text-align:center!important;z-index:56!important;
+}
+body.raiderBattleMode #rbTurn{
+  position:absolute!important;left:50%!important;bottom:75px!important;transform:translateX(-50%)!important;
+  font-size:9px!important;color:#cdbd96!important;z-index:66!important;
+}
+body.raiderBattleMode #rbCmd{
+  position:absolute!important;right:max(14px,env(safe-area-inset-right))!important;left:auto!important;
+  bottom:max(10px,env(safe-area-inset-bottom))!important;width:min(390px,47vw)!important;height:58px!important;
+  display:grid!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(2,1fr)!important;
+  gap:4px!important;padding:5px!important;box-sizing:border-box!important;background:rgba(6,13,10,.88)!important;
+  border:1px solid #9f895d99!important;border-radius:7px!important;z-index:65!important;
+}
+body.raiderBattleMode #rbCmd button{
+  display:none!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;margin:0!important;
+  padding:0 5px!important;font-size:11px!important;line-height:1!important;border-radius:4px!important;
+}
+body.raiderBattleMode #rbCmd button.rb-visible{display:block!important}
+body.raiderBattleMode #devBtn,body.raiderBattleMode #devPanel{display:none!important}
+
+/* ---------- PORTRAIT ---------- */
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle .v2BattleStage{inset:0 0 124px 0!important}
+ body.normalBattleMode .v2Unit{height:150px!important;width:94px!important}
+ body.normalBattleMode .v2Unit.aidanUnit{left:9%!important;bottom:16%!important}
+ body.normalBattleMode .v2Unit.fionaUnit{left:34%!important;bottom:7%!important}
+ body.normalBattleMode .v2Unit.gobUnit{right:9%!important;bottom:17%!important}
+ body.normalBattleMode .v2Unit .battler{width:60px!important;height:88px!important}
+ body.normalBattleMode .v2NearHud{width:92px!important}
+ body.normalBattleMode #battleMsg2{top:12px!important;width:88%!important}
+ body.normalBattleMode #normalBattleCmd{
+   left:12px!important;right:12px!important;width:auto!important;height:102px!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
+ }
+ body.normalBattleMode #normalBattleCmd button.v2-visible{font-size:13px!important}
+ body.normalBattleMode #normalActor{bottom:118px!important}
+
+ body.raiderBattleMode #rbParty{
+   left:12px!important;right:12px!important;width:auto!important;height:54px!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
+ }
+ body.raiderBattleMode #rbCmd{
+   left:12px!important;right:12px!important;width:auto!important;height:102px!important;
+   bottom:74px!important;
+ }
+ body.raiderBattleMode #rbTop{right:12px!important;top:48px!important;width:46%!important}
+ body.raiderBattleMode #rbMsg{top:10px!important;width:88%!important}
+ body.raiderBattleMode #rbAidan{left:12%!important;bottom:31%!important;transform:scale(.68)!important}
+ body.raiderBattleMode #rbFiona{left:35%!important;bottom:26%!important;transform:scale(.68)!important}
+ body.raiderBattleMode #rbLou{left:43%!important;bottom:43%!important;transform:scale(.62)!important}
+ body.raiderBattleMode #raiderSprite{right:10%!important;bottom:31%!important;transform:scale(.72)!important}
+ body.raiderBattleMode #rbTurn{bottom:184px!important}
+}
+
+/* browser-height safety */
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle .v2BattleStage{inset:0 0 70px 0!important}
+ body.normalBattleMode .v2Unit{height:130px!important}
+ body.normalBattleMode .v2Unit .battler{width:58px!important;height:80px!important}
+ body.normalBattleMode #normalBattleCmd{height:54px!important}
+ body.normalBattleMode #normalActor{bottom:66px!important}
+ body.raiderBattleMode #rbParty,body.raiderBattleMode #rbCmd{height:54px!important}
+ body.raiderBattleMode #rbAidan{bottom:25%!important}
+ body.raiderBattleMode #rbFiona{bottom:20%!important}
+ body.raiderBattleMode #raiderSprite{bottom:22%!important}
+}
+
+
+/* v0.32.1 interaction safety */
+body.normalBattleMode #devJump,
+body.normalBattleMode #devBtn,
+body.normalBattleMode #devPanel{display:none!important}
+
+/* Battle command visibility has one owner: v2-visible. */
+body.normalBattleMode #normalBattleCmd{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+body.normalBattleMode #normalBattleCmd button{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.normalBattleMode #normalBattleCmd button.v2-visible{
+ display:block!important;visibility:visible!important;pointer-events:auto!important;opacity:1!important
+}
+
+
+/* =========================================================
+   v0.32.2 ROOT STRUCTURE FIX
+   Command DOM now lives inside #attackBattle.
+   ========================================================= */
+body.normalBattleMode #attackBattle #normalBattleCmd{
+ z-index:220!important;display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important
+}
+body.normalBattleMode #attackBattle #normalActor{z-index:221!important}
+body.normalBattleMode #attackBattle #normalItems{z-index:230!important}
+body.normalBattleMode #attackBattle #normalBattleCmd button{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.normalBattleMode #attackBattle #normalBattleCmd button.v2-visible{
+ display:block!important;visibility:visible!important;pointer-events:auto!important;opacity:1!important
+}
+/* Transient action banner: hidden by default, compact and always inside safe width. */
+body.normalBattleMode #battleMsg2{
+ display:block!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+ left:50%!important;right:auto!important;top:max(10px,env(safe-area-inset-top))!important;
+ width:min(72vw,560px)!important;max-width:calc(100vw - 28px)!important;
+ white-space:normal!important;overflow-wrap:anywhere!important;box-sizing:border-box!important;
+ transform:translate(-50%,-6px)!important;transition:opacity .16s ease,transform .16s ease,visibility .16s!important;
+}
+body.normalBattleMode #battleMsg2.is-visible{
+ opacity:1!important;visibility:visible!important;transform:translate(-50%,0)!important
+}
+@media (orientation:portrait){
+ body.normalBattleMode #battleMsg2{width:calc(100vw - 32px)!important;font-size:11px!important}
+ body.normalBattleMode #attackBattle #normalBattleCmd{
+   left:12px!important;right:12px!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
+   width:auto!important;height:102px!important;
+ }
+}
+
+
+/* =========================================================
+   v0.33 RESPONSIVE BATTLE UI
+   Portrait and landscape are intentionally different layouts.
+   Landscape prioritizes touch targets and battlefield width.
+   ========================================================= */
+
+/* Shared: cleaner, smaller local information */
+body.normalBattleMode .v2NearHud{
+  width:112px!important;
+}
+body.normalBattleMode .v2NearHud b{font-size:10px!important}
+body.normalBattleMode .v2NearHud small{font-size:8px!important}
+body.normalBattleMode .v2Bars i{height:4px!important}
+
+body.normalBattleMode #normalBattleCmd button.v2-visible,
+body.raiderBattleMode #rbCmd button.rb-visible{
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+
+/* ---------- PORTRAIT: use the generous vertical space ---------- */
+@media (orientation:portrait){
+  body.normalBattleMode #attackBattle .v2BattleStage{
+    inset:0 0 148px 0!important;
+  }
+  body.normalBattleMode .v2Unit.aidanUnit{left:10%!important;bottom:12%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:38%!important;bottom:5%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:9%!important;bottom:13%!important}
+  body.normalBattleMode .v2Unit .battler{
+    width:68px!important;height:100px!important;
+  }
+  body.normalBattleMode #normalBattleCmd{
+    left:16px!important;right:16px!important;bottom:max(12px,env(safe-area-inset-bottom))!important;
+    width:auto!important;height:124px!important;padding:7px!important;gap:6px!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible{
+    font-size:15px!important;min-height:50px!important;
+  }
+  body.normalBattleMode #normalActor{
+    left:20px!important;bottom:145px!important;font-size:10px!important;
+  }
+
+  /* Raider portrait: boss card must not cover boss sprite */
+  body.raiderBattleMode #rbTop{
+    top:52px!important;right:14px!important;width:40%!important;
+  }
+  body.raiderBattleMode #rbTop .rbPanel{
+    padding:6px 8px!important;
+  }
+  body.raiderBattleMode #rbTop .rbPanel b{font-size:10px!important}
+  body.raiderBattleMode #rbTop .rbPanel span,
+  body.raiderBattleMode #rbPhase{font-size:8px!important}
+  body.raiderBattleMode #raiderSprite{
+    right:10%!important;bottom:35%!important;transform:scale(.78)!important;
+  }
+  body.raiderBattleMode #rbAidan{left:12%!important;bottom:31%!important;transform:scale(.72)!important}
+  body.raiderBattleMode #rbFiona{left:36%!important;bottom:26%!important;transform:scale(.72)!important}
+  body.raiderBattleMode #rbLou{left:44%!important;bottom:43%!important;transform:scale(.66)!important}
+  body.raiderBattleMode #rbCmd{
+    left:14px!important;right:14px!important;bottom:76px!important;width:auto!important;
+    height:116px!important;padding:7px!important;gap:6px!important;
+  }
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    font-size:14px!important;min-height:46px!important;
+  }
+  body.raiderBattleMode #rbParty{
+    left:14px!important;right:14px!important;bottom:10px!important;width:auto!important;height:56px!important;
+  }
+  body.raiderBattleMode #rbTurn{
+    bottom:198px!important;font-size:9px!important;
+  }
+}
+
+/* ---------- LANDSCAPE: console/JRPG-like compact battlefield ---------- */
+@media (orientation:landscape){
+  /* Normal battle */
+  body.normalBattleMode #attackBattle .v2BattleStage{
+    inset:0 0 0 0!important;
+  }
+  body.normalBattleMode .v2Unit{
+    width:105px!important;height:138px!important;
+  }
+  body.normalBattleMode .v2Unit .battler{
+    width:62px!important;height:90px!important;
+  }
+  body.normalBattleMode .v2Unit.aidanUnit{left:17%!important;bottom:26%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:36%!important;bottom:18%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:17%!important;bottom:26%!important}
+
+  body.normalBattleMode #battleMsg2{
+    top:10px!important;width:min(54vw,620px)!important;font-size:10px!important;
+  }
+
+  /* Big, thumb-friendly 2x2 command box. No party card consuming the bottom. */
+  body.normalBattleMode #normalBattleCmd{
+    left:max(16px,env(safe-area-inset-left))!important;
+    right:auto!important;
+    bottom:max(12px,env(safe-area-inset-bottom))!important;
+    width:min(520px,46vw)!important;
+    height:104px!important;
+    padding:7px!important;gap:6px!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,minmax(44px,1fr))!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible{
+    font-size:14px!important;min-height:44px!important;padding:0 10px!important;
+  }
+  body.normalBattleMode #normalActor{
+    left:max(20px,env(safe-area-inset-left))!important;
+    bottom:122px!important;font-size:10px!important;
+  }
+
+  /* Raider: battlefield gets the whole screen; permanent bottom party panel removed.
+     Character-local HUD / bars carry battle status instead. */
+  body.raiderBattleMode #rbParty{
+    display:none!important;
+  }
+  body.raiderBattleMode #rbTop{
+    top:12px!important;right:max(16px,env(safe-area-inset-right))!important;
+    width:min(250px,23vw)!important;
+  }
+  body.raiderBattleMode #rbTop .rbPanel{
+    padding:5px 8px!important;
+  }
+  body.raiderBattleMode #rbTop .rbPanel b{font-size:10px!important}
+  body.raiderBattleMode #rbTop .rbPanel span,
+  body.raiderBattleMode #rbPhase{font-size:8px!important}
+  body.raiderBattleMode #rbTop .rbBar{height:4px!important}
+
+  body.raiderBattleMode #rbMsg{
+    top:10px!important;width:min(48vw,620px)!important;
+    font-size:10px!important;padding:5px 10px!important;
+  }
+
+  body.raiderBattleMode #rbAidan{
+    left:18%!important;bottom:29%!important;transform:scale(.72)!important;
+  }
+  body.raiderBattleMode #rbFiona{
+    left:36%!important;bottom:22%!important;transform:scale(.72)!important;
+  }
+  body.raiderBattleMode #rbLou{
+    left:45%!important;bottom:42%!important;transform:scale(.66)!important;
+  }
+  body.raiderBattleMode #raiderSprite{
+    right:17%!important;bottom:28%!important;transform:scale(.80)!important;
+  }
+
+  body.raiderBattleMode #rbCmd{
+    left:max(16px,env(safe-area-inset-left))!important;
+    right:auto!important;
+    bottom:max(12px,env(safe-area-inset-bottom))!important;
+    width:min(560px,48vw)!important;
+    height:104px!important;
+    padding:7px!important;gap:6px!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,minmax(44px,1fr))!important;
+  }
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    font-size:14px!important;min-height:44px!important;padding:0 10px!important;
+  }
+  body.raiderBattleMode #rbTurn{
+    left:max(20px,env(safe-area-inset-left))!important;
+    bottom:122px!important;transform:none!important;font-size:9px!important;
+  }
+}
+
+/* Short landscape browser viewport: this is the Android Chrome case in screenshots. */
+@media (orientation:landscape) and (max-height:560px){
+  body.normalBattleMode .v2Unit.aidanUnit{bottom:31%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{bottom:22%!important}
+  body.normalBattleMode .v2Unit.gobUnit{bottom:31%!important}
+  body.normalBattleMode #normalBattleCmd{
+    height:96px!important;width:min(500px,47vw)!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible{font-size:13px!important}
+  body.normalBattleMode #normalActor{bottom:112px!important}
+
+  body.raiderBattleMode #rbAidan{bottom:34%!important}
+  body.raiderBattleMode #rbFiona{bottom:26%!important}
+  body.raiderBattleMode #rbLou{bottom:46%!important}
+  body.raiderBattleMode #raiderSprite{bottom:33%!important}
+  body.raiderBattleMode #rbCmd{
+    height:96px!important;width:min(520px,49vw)!important;
+  }
+  body.raiderBattleMode #rbCmd button.rb-visible{font-size:13px!important}
+  body.raiderBattleMode #rbTurn{bottom:112px!important}
+}
+
+
+/* =========================================================
+   v0.34 BATTLE STAGE + COMMAND RAIL
+   Root layout rule:
+   LANDSCAPE = battlefield above / command rail below.
+   UI never floats over actors.
+   ========================================================= */
+
+@media (orientation:landscape){
+  /* ---------- NORMAL BATTLE ---------- */
+  body.normalBattleMode #attackBattle{
+    background:
+      radial-gradient(ellipse at 50% 55%,rgba(54,91,66,.32),transparent 48%),
+      linear-gradient(#06140f 0 72%,#101710 72% 100%)!important;
+  }
+
+  /* Reserve a real lower command rail instead of overlaying the stage. */
+  body.normalBattleMode #attackBattle .v2BattleStage{
+    inset:0 0 116px 0!important;
+    height:auto!important;
+    border-bottom:1px solid rgba(197,164,91,.32)!important;
+  }
+
+  body.normalBattleMode .v2Unit{
+    width:112px!important;height:142px!important;
+  }
+  body.normalBattleMode .v2Unit.aidanUnit{left:17%!important;bottom:12%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:37%!important;bottom:7%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:18%!important;bottom:12%!important}
+  body.normalBattleMode .v2Unit .battler{
+    width:64px!important;height:92px!important;
+  }
+
+  body.normalBattleMode #normalBattleCmd{
+    left:0!important;right:0!important;bottom:0!important;
+    width:100%!important;height:116px!important;
+    padding:30px 18px 10px!important;
+    box-sizing:border-box!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:1fr!important;
+    gap:8px!important;
+    background:linear-gradient(180deg,rgba(10,20,15,.97),rgba(5,12,9,.99))!important;
+    border:0!important;border-top:1px solid rgba(197,164,91,.55)!important;
+    border-radius:0!important;box-shadow:0 -10px 24px #0007!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible{
+    min-height:60px!important;height:60px!important;
+    font-size:14px!important;padding:0 8px!important;
+    border-radius:5px!important;
+  }
+  body.normalBattleMode #normalActor{
+    left:20px!important;bottom:88px!important;
+    font-size:10px!important;letter-spacing:.08em!important;
+    z-index:230!important;
+  }
+
+  /* ---------- RAIDER ---------- */
+  body.raiderBattleMode #rbParty{display:none!important}
+
+  /* Keep all actors in the upper battlefield. */
+  body.raiderBattleMode #rbAidan{
+    left:18%!important;bottom:31%!important;transform:scale(.72)!important;
+  }
+  body.raiderBattleMode #rbFiona{
+    left:36%!important;bottom:25%!important;transform:scale(.72)!important;
+  }
+  body.raiderBattleMode #rbLou{
+    left:46%!important;bottom:43%!important;transform:scale(.65)!important;
+  }
+  body.raiderBattleMode #raiderSprite{
+    right:17%!important;bottom:30%!important;transform:scale(.80)!important;
+  }
+
+  /* Boss information becomes a slim header, never a card over the boss. */
+  body.raiderBattleMode #rbTop{
+    top:12px!important;right:16px!important;left:auto!important;
+    width:min(290px,28vw)!important;
+  }
+  body.raiderBattleMode #rbTop .rbPanel{
+    padding:5px 8px!important;
+    background:rgba(6,13,10,.64)!important;
+  }
+
+  body.raiderBattleMode #rbMsg{
+    top:10px!important;width:min(48vw,620px)!important;
+  }
+
+  /* Same dedicated command rail as normal battle. */
+  body.raiderBattleMode #rbCmd{
+    left:0!important;right:0!important;bottom:0!important;
+    width:100%!important;height:116px!important;
+    padding:30px 18px 10px!important;
+    box-sizing:border-box!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:1fr!important;
+    gap:8px!important;
+    background:linear-gradient(180deg,rgba(10,20,15,.97),rgba(5,12,9,.99))!important;
+    border:0!important;border-top:1px solid rgba(197,164,91,.55)!important;
+    border-radius:0!important;box-shadow:0 -10px 24px #0007!important;
+  }
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    min-height:60px!important;height:60px!important;
+    font-size:14px!important;padding:0 8px!important;
+    border-radius:5px!important;
+  }
+  body.raiderBattleMode #rbTurn{
+    left:20px!important;bottom:88px!important;
+    transform:none!important;font-size:10px!important;z-index:230!important;
+  }
+}
+
+/* Android Chrome landscape: preserve useful touch height even with browser chrome. */
+@media (orientation:landscape) and (max-height:560px){
+  body.normalBattleMode #attackBattle .v2BattleStage{
+    inset:0 0 104px 0!important;
+  }
+  body.normalBattleMode .v2Unit.aidanUnit{bottom:9%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{bottom:5%!important}
+  body.normalBattleMode .v2Unit.gobUnit{bottom:9%!important}
+  body.normalBattleMode #normalBattleCmd,
+  body.raiderBattleMode #rbCmd{
+    height:104px!important;padding:27px 14px 8px!important;gap:7px!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible,
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    min-height:54px!important;height:54px!important;font-size:13px!important;
+  }
+  body.normalBattleMode #normalActor,
+  body.raiderBattleMode #rbTurn{bottom:78px!important}
+
+  body.raiderBattleMode #rbAidan{bottom:29%!important}
+  body.raiderBattleMode #rbFiona{bottom:23%!important}
+  body.raiderBattleMode #rbLou{bottom:42%!important}
+  body.raiderBattleMode #raiderSprite{bottom:29%!important}
+}
+
+/* Portrait was already the stronger layout in v0.33.
+   Only remove avoidable boss-card overlap and keep commands below actors. */
+@media (orientation:portrait){
+  body.raiderBattleMode #rbTop{
+    top:50px!important;right:14px!important;width:36%!important;
+  }
+  body.raiderBattleMode #rbTop .rbPanel{
+    background:rgba(6,13,10,.68)!important;
+  }
+  body.raiderBattleMode #raiderSprite{
+    right:9%!important;bottom:38%!important;
+  }
+}
+
+
+/* =========================================================
+   v0.35 SIDE COMMAND UI + TURN OWNERSHIP FIX
+   Landscape: commands are a left-side vertical rail.
+   ========================================================= */
+
+/* Old fionaTurn CSS must not decide visibility anymore. */
+body.raiderBattleMode #rbCmd.fionaTurn #rbSkill,
+body.raiderBattleMode #rbCmd.fionaTurn #rbWind{display:none!important}
+body.raiderBattleMode #rbCmd button{display:none!important}
+body.raiderBattleMode #rbCmd button.rb-visible{display:flex!important;align-items:center!important;justify-content:center!important}
+
+/* Item menu always above the battle layer in either battle mode. */
+body.raiderBattleMode #normalItems.isOpen,
+body.normalBattleMode #normalItems.isOpen{
+ display:block!important;z-index:400!important;
+}
+
+@media (orientation:landscape){
+  :root{--battle-rail-w:clamp(190px,24vw,300px)}
+
+  /* NORMAL: reserve the left rail physically. */
+  body.normalBattleMode #attackBattle .v2BattleStage{
+    left:var(--battle-rail-w)!important;right:0!important;top:0!important;bottom:0!important;
+    border-left:1px solid rgba(197,164,91,.28)!important;border-bottom:0!important;
+  }
+  body.normalBattleMode .v2Unit.aidanUnit{left:13%!important;bottom:15%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:37%!important;bottom:8%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:14%!important;bottom:15%!important}
+
+  body.normalBattleMode #normalBattleCmd{
+    left:0!important;right:auto!important;top:0!important;bottom:0!important;
+    width:var(--battle-rail-w)!important;height:100%!important;
+    padding:48px 12px 14px!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:repeat(4,minmax(52px,1fr))!important;
+    gap:8px!important;
+    background:linear-gradient(90deg,rgba(5,12,9,.99),rgba(10,20,15,.96))!important;
+    border:0!important;border-right:1px solid rgba(197,164,91,.55)!important;
+    box-shadow:10px 0 24px #0006!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible{
+    width:100%!important;height:auto!important;min-height:52px!important;
+    font-size:14px!important;
+  }
+  body.normalBattleMode #normalActor{
+    left:14px!important;top:16px!important;bottom:auto!important;
+    width:calc(var(--battle-rail-w) - 28px)!important;
+  }
+  body.normalBattleMode #battleMsg2{
+    left:calc(var(--battle-rail-w) + (100% - var(--battle-rail-w))/2)!important;
+    width:min(48vw,580px)!important;
+  }
+  body.normalBattleMode #normalItems{
+    left:calc(var(--battle-rail-w) + 18px)!important;right:auto!important;
+    bottom:18px!important;width:min(360px,34vw)!important;
+  }
+
+  /* RAIDER: same left command rail. Battlefield actors shift right. */
+  body.raiderBattleMode #rbCmd{
+    left:0!important;right:auto!important;top:0!important;bottom:0!important;
+    width:var(--battle-rail-w)!important;height:100%!important;
+    padding:48px 12px 14px!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:repeat(5,minmax(46px,1fr))!important;
+    gap:7px!important;
+    background:linear-gradient(90deg,rgba(5,12,9,.99),rgba(10,20,15,.96))!important;
+    border:0!important;border-right:1px solid rgba(197,164,91,.55)!important;
+    box-shadow:10px 0 24px #0006!important;
+  }
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    width:100%!important;height:auto!important;min-height:46px!important;
+    font-size:13px!important;padding:4px 8px!important;
+  }
+  body.raiderBattleMode #rbTurn{
+    left:14px!important;top:16px!important;bottom:auto!important;
+    width:calc(var(--battle-rail-w) - 28px)!important;
+  }
+  body.raiderBattleMode #rbAidan{left:31%!important;bottom:24%!important}
+  body.raiderBattleMode #rbFiona{left:48%!important;bottom:18%!important}
+  body.raiderBattleMode #rbLou{left:56%!important;bottom:39%!important}
+  body.raiderBattleMode #raiderSprite{right:10%!important;bottom:24%!important}
+  body.raiderBattleMode #rbMsg{
+    left:calc(var(--battle-rail-w) + (100% - var(--battle-rail-w))/2)!important;
+    width:min(44vw,600px)!important;
+  }
+  body.raiderBattleMode #rbTop{
+    right:14px!important;width:min(230px,22vw)!important;
+  }
+  body.raiderBattleMode #normalItems{
+    left:calc(var(--battle-rail-w) + 18px)!important;right:auto!important;
+    bottom:18px!important;width:min(360px,34vw)!important;
+  }
+}
+
+/* Short Android landscape: rail remains tappable without covering actors. */
+@media (orientation:landscape) and (max-height:560px){
+  :root{--battle-rail-w:clamp(180px,23vw,270px)}
+  body.normalBattleMode #normalBattleCmd,
+  body.raiderBattleMode #rbCmd{
+    height:100%!important;padding:42px 10px 10px!important;gap:6px!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible{
+    min-height:44px!important;font-size:12px!important;
+  }
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    min-height:40px!important;font-size:11px!important;
+  }
+  body.raiderBattleMode #rbAidan{left:30%!important;bottom:20%!important}
+  body.raiderBattleMode #rbFiona{left:47%!important;bottom:14%!important}
+  body.raiderBattleMode #rbLou{left:55%!important;bottom:38%!important}
+  body.raiderBattleMode #raiderSprite{right:9%!important;bottom:20%!important}
+}
+
+/* Portrait keeps v0.34's readable 2x2 / stacked design.
+   Wind special may create a fifth button, so let the Raider command box grow safely. */
+@media (orientation:portrait){
+  body.raiderBattleMode #rbCmd:has(#rbWind.rb-visible){
+    height:168px!important;
+    grid-template-rows:repeat(3,minmax(44px,1fr))!important;
+  }
+}
+
+
+/* =========================================================
+   v0.36 SAFE BATTLE LAYOUT
+   Fixes observed on Android Chrome:
+   - landscape command rail no longer clips below viewport
+   - portrait uses the large empty upper space and lifts commands
+   - dynamic viewport + safe-area aware
+   ========================================================= */
+
+body.normalBattleMode #attackBattle,
+body.raiderBattleMode #raiderBattle{
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+
+/* ---------- LANDSCAPE ---------- */
+@media (orientation:landscape){
+  :root{--battle-rail-w:clamp(180px,23vw,280px)}
+
+  body.normalBattleMode #normalBattleCmd,
+  body.raiderBattleMode #rbCmd{
+    position:absolute!important;
+    left:0!important;right:auto!important;
+    top:0!important;
+    bottom:0!important;
+    width:var(--battle-rail-w)!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+    box-sizing:border-box!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important;
+    padding:
+      max(42px,env(safe-area-inset-top))
+      10px
+      max(10px,env(safe-area-inset-bottom))
+      10px!important;
+    align-content:center!important;
+    grid-auto-rows:minmax(44px,58px)!important;
+    gap:7px!important;
+  }
+
+  body.normalBattleMode #normalBattleCmd button.v2-visible,
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    min-height:44px!important;
+    height:clamp(44px,11dvh,58px)!important;
+    max-height:58px!important;
+    flex:0 0 auto!important;
+  }
+
+  body.normalBattleMode #normalActor,
+  body.raiderBattleMode #rbTurn{
+    top:max(12px,env(safe-area-inset-top))!important;
+  }
+
+  /* Battlefield is explicitly outside the rail. */
+  body.normalBattleMode #attackBattle .v2BattleStage{
+    left:var(--battle-rail-w)!important;
+    width:calc(100% - var(--battle-rail-w))!important;
+  }
+
+  /* Move actors slightly toward center to use freed field cleanly. */
+  body.normalBattleMode .v2Unit.aidanUnit{left:14%!important;bottom:17%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:39%!important;bottom:10%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:13%!important;bottom:17%!important}
+
+  body.raiderBattleMode #rbAidan{left:31%!important;bottom:27%!important}
+  body.raiderBattleMode #rbFiona{left:48%!important;bottom:21%!important}
+  body.raiderBattleMode #rbLou{left:56%!important;bottom:43%!important}
+  body.raiderBattleMode #raiderSprite{right:9%!important;bottom:27%!important}
+}
+
+/* Very short landscape (browser chrome visible): compact vertically rather than clip. */
+@media (orientation:landscape) and (max-height:500px){
+  body.normalBattleMode #normalBattleCmd,
+  body.raiderBattleMode #rbCmd{
+    padding-top:34px!important;
+    padding-bottom:6px!important;
+    gap:5px!important;
+    grid-auto-rows:minmax(38px,48px)!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible,
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    min-height:38px!important;height:clamp(38px,10dvh,48px)!important;
+    font-size:11px!important;
+  }
+}
+
+/* ---------- PORTRAIT ---------- */
+@media (orientation:portrait){
+  /* The screenshots have unused sky above the actors.
+     Pull the whole encounter upward and reserve a safe bottom command zone. */
+  body.normalBattleMode .v2Unit.aidanUnit{bottom:36%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{bottom:30%!important}
+  body.normalBattleMode .v2Unit.gobUnit{bottom:36%!important}
+
+  body.normalBattleMode #normalBattleCmd{
+    left:18px!important;right:18px!important;
+    top:auto!important;
+    bottom:max(18px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    height:auto!important;
+    max-height:31dvh!important;
+    padding:12px!important;
+    box-sizing:border-box!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-auto-rows:minmax(54px,8dvh)!important;
+    gap:8px!important;
+    overflow-y:auto!important;
+  }
+  body.normalBattleMode #normalActor{
+    left:28px!important;
+    bottom:calc(min(31dvh,250px) + 22px)!important;
+  }
+
+  body.raiderBattleMode #rbAidan{bottom:39%!important}
+  body.raiderBattleMode #rbFiona{bottom:34%!important}
+  body.raiderBattleMode #rbLou{bottom:50%!important}
+  body.raiderBattleMode #raiderSprite{bottom:42%!important}
+
+  body.raiderBattleMode #rbCmd{
+    left:18px!important;right:18px!important;
+    top:auto!important;
+    bottom:max(18px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    height:auto!important;
+    max-height:31dvh!important;
+    padding:12px!important;
+    box-sizing:border-box!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-auto-rows:minmax(54px,8dvh)!important;
+    gap:8px!important;
+    overflow-y:auto!important;
+  }
+  body.raiderBattleMode #rbCmd:has(#rbWind.rb-visible){
+    height:auto!important;
+    max-height:36dvh!important;
+    grid-template-rows:none!important;
+  }
+  body.raiderBattleMode #rbTurn{
+    left:28px!important;
+    bottom:calc(min(31dvh,250px) + 22px)!important;
+  }
+
+  /* Encounter text belongs at the top, centered, and disappears by existing timer. */
+  body.normalBattleMode #battleMsg2,
+  body.raiderBattleMode #rbMsg{
+    top:18px!important;
+    bottom:auto!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+    width:calc(100% - 44px)!important;
+    max-width:620px!important;
+    box-sizing:border-box!important;
+  }
+}
+
+/* Narrow portrait: preserve button touch target while preventing nav-bar collision. */
+@media (orientation:portrait) and (max-width:430px){
+  body.normalBattleMode #normalBattleCmd,
+  body.raiderBattleMode #rbCmd{
+    bottom:max(12px,env(safe-area-inset-bottom))!important;
+    padding:9px!important;gap:7px!important;
+    grid-auto-rows:minmax(50px,7.2dvh)!important;
+  }
+  body.normalBattleMode #normalBattleCmd button.v2-visible,
+  body.raiderBattleMode #rbCmd button.rb-visible{
+    min-height:50px!important;
+  }
+}
+
+
+/* =========================================================
+   v0.37 COMPACT COMMAND DRAWER + VISIBLE PARTY STATUS
+   ========================================================= */
+
+/* Near-character Raider status: always readable, never behind commands. */
+.rbNearHud{
+ position:absolute;z-index:34;width:150px;padding:5px 7px;
+ color:#f2eee3;background:rgba(5,13,10,.78);
+ border:1px solid rgba(197,164,91,.62);border-radius:7px;
+ font-size:11px;line-height:1.2;pointer-events:none;
+ box-sizing:border-box;
+}
+.rbNearHud b{display:block;margin-bottom:4px;font-size:11px}
+.rbNearHud small{display:block;margin-top:3px;white-space:nowrap}
+.rbNearBars{display:grid;gap:3px}
+.rbNearBars i{display:block;height:5px;border:1px solid #7d7356;border-radius:5px;background:#111;overflow:hidden}
+.rbNearBars em{display:block;height:100%;width:100%;background:#9fca83}
+.rbNearBars i.tp em{background:#c8a85d}
+.rbNearBars i.mp em{background:#89aeda}
+
+/* Item selection is a true modal, not part of command geometry. */
+#normalItems.isOpen{
+ position:fixed!important;z-index:9999!important;
+ left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+ transform:translate(-50%,-50%)!important;
+ width:min(88vw,360px)!important;height:auto!important;max-height:70dvh!important;
+ padding:14px!important;box-sizing:border-box!important;
+ grid-template-columns:1fr!important;gap:8px!important;
+ overflow:auto!important;
+ background:rgba(5,14,10,.98)!important;
+ border:2px solid #b89b58!important;border-radius:10px!important;
+ box-shadow:0 18px 60px #000c!important;
+ color:#f2eee3!important;
+}
+#normalItems.isOpen button{
+ display:block!important;width:100%!important;min-height:52px!important;
+ margin:0!important;padding:10px!important;
+ color:#f2eee3!important;background:#10291f!important;
+ border:1px solid #a78e54!important;border-radius:7px!important;
+ font-size:16px!important;
+}
+
+/* The action list is hidden until COMMAND is tapped. */
+#normalBattleCmd:not(.expanded),
+#rbCmd:not(.expanded){display:none!important}
+
+#normalCommandToggle,#rbCommandToggle{
+ position:absolute;z-index:250;
+ color:#f2eee3;background:linear-gradient(#17372f,#0d211a);
+ border:1px solid #c5a45b;border-radius:7px;
+ font-family:inherit;letter-spacing:.08em;
+ box-shadow:0 5px 16px #0008;
+}
+
+/* ---------- LANDSCAPE ---------- */
+@media (orientation:landscape){
+ #normalCommandToggle,#rbCommandToggle{
+   left:14px;bottom:max(14px,env(safe-area-inset-bottom));
+   width:clamp(150px,19vw,220px);height:54px;font-size:15px;
+ }
+ body.normalBattleMode #normalBattleCmd.expanded,
+ body.raiderBattleMode #rbCmd.expanded{
+   display:grid!important;
+   left:12px!important;right:auto!important;top:auto!important;
+   bottom:76px!important;
+   width:clamp(180px,23vw,280px)!important;height:auto!important;max-height:calc(100dvh - 96px)!important;
+   padding:9px!important;gap:7px!important;
+   grid-template-columns:1fr!important;grid-auto-rows:minmax(46px,54px)!important;
+   overflow-y:auto!important;
+   background:rgba(5,14,10,.97)!important;
+   border:1px solid rgba(197,164,91,.72)!important;border-radius:9px!important;
+   box-shadow:8px 10px 28px #000a!important;
+ }
+ body.normalBattleMode #normalBattleCmd.expanded button.v2-visible,
+ body.raiderBattleMode #rbCmd.expanded button.rb-visible{
+   min-height:46px!important;height:50px!important;font-size:13px!important;
+ }
+
+ /* No permanent side rail: restore the battlefield to full width. */
+ body.normalBattleMode #attackBattle .v2BattleStage{
+   left:0!important;width:100%!important;border-left:0!important;
+ }
+ body.normalBattleMode .v2Unit.aidanUnit{left:20%!important}
+ body.normalBattleMode .v2Unit.fionaUnit{left:42%!important}
+ body.normalBattleMode .v2Unit.gobUnit{right:14%!important}
+
+ body.normalBattleMode #normalActor,
+ body.raiderBattleMode #rbTurn{
+   left:16px!important;top:auto!important;bottom:72px!important;
+   width:auto!important;font-size:10px!important;
+ }
+
+ .rbNearA{left:34%!important;bottom:54%!important}
+ .rbNearF{left:53%!important;bottom:47%!important}
+}
+
+/* ---------- PORTRAIT ---------- */
+@media (orientation:portrait){
+ #normalCommandToggle,#rbCommandToggle{
+   left:50%;transform:translateX(-50%);
+   bottom:max(22px,env(safe-area-inset-bottom));
+   width:calc(100% - 44px);height:58px;font-size:16px;
+ }
+ body.normalBattleMode #normalBattleCmd.expanded,
+ body.raiderBattleMode #rbCmd.expanded{
+   display:grid!important;
+   left:22px!important;right:22px!important;top:auto!important;
+   bottom:88px!important;width:auto!important;height:auto!important;
+   max-height:34dvh!important;padding:10px!important;gap:8px!important;
+   grid-template-columns:1fr 1fr!important;grid-auto-rows:minmax(54px,64px)!important;
+   overflow-y:auto!important;
+   background:rgba(5,14,10,.97)!important;
+   border:1px solid rgba(197,164,91,.72)!important;border-radius:10px!important;
+   box-shadow:0 -8px 30px #000a!important;
+ }
+ body.normalBattleMode #normalActor,
+ body.raiderBattleMode #rbTurn{
+   left:26px!important;bottom:86px!important;font-size:10px!important;
+ }
+ .rbNearA{left:8%!important;bottom:43%!important;width:138px}
+ .rbNearF{left:36%!important;bottom:36%!important;width:138px}
+
+ /* Existing bottom party cards are redundant and were being hidden by controls. */
+ body.raiderBattleMode #rbParty{display:none!important}
+ body.normalBattleMode #normalPartyHud{display:none!important}
+}
+
+/* Keep toggle visible even on very short landscape browser viewports. */
+@media (orientation:landscape) and (max-height:500px){
+ #normalCommandToggle,#rbCommandToggle{height:46px;bottom:8px;font-size:13px}
+ body.normalBattleMode #normalBattleCmd.expanded,
+ body.raiderBattleMode #rbCmd.expanded{
+   bottom:60px!important;max-height:calc(100dvh - 70px)!important;
+   grid-auto-rows:minmax(40px,46px)!important;
+ }
+ .rbNearHud{width:132px;font-size:9px}
+ .rbNearHud b{font-size:10px}
+}
+
+
+/* v0.42 drawer state correction */
+#normalCommandToggle.drawerHidden,
+#rbCommandToggle.drawerHidden{display:none!important}
+
+/* Close is part of the drawer, never treated as a character action. */
+#normalBattleCmd .drawerClose,
+#rbCmd .drawerClose{
+ display:flex!important;visibility:visible!important;pointer-events:auto!important;
+ align-items:center!important;justify-content:center!important;
+ min-height:38px!important;height:38px!important;
+ color:#d8c89d!important;background:rgba(20,25,20,.96)!important;
+ border:1px solid rgba(197,164,91,.55)!important;
+ font-size:12px!important;
+}
+
+/* Legacy rules hide every button unless it has v2-visible/rb-visible.
+   Explicitly exempt the drawer close control. */
+body.normalBattleMode #attackBattle #normalBattleCmd .drawerClose,
+body.raiderBattleMode #rbCmd .drawerClose{
+ display:flex!important;visibility:visible!important;pointer-events:auto!important;
+}
+
+@media (orientation:landscape){
+ body.normalBattleMode #normalBattleCmd.expanded,
+ body.raiderBattleMode #rbCmd.expanded{
+   bottom:max(12px,env(safe-area-inset-bottom))!important;
+ }
+}
+@media (orientation:portrait){
+ body.normalBattleMode #normalBattleCmd.expanded,
+ body.raiderBattleMode #rbCmd.expanded{
+   bottom:max(22px,env(safe-area-inset-bottom))!important;
+ }
+}
+
+
+/* =========================================================
+   v0.42 AUTHORITATIVE COMMAND DRAWER
+   hidden attribute + explicit state; legacy battle CSS cannot
+   keep action buttons visible while closed.
+========================================================= */
+#normalBattleCmd[hidden],
+#rbCmd[hidden]{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+#normalCommandToggle[hidden],
+#rbCommandToggle[hidden]{
+  display:none!important;
+}
+#normalCommandToggle:not([hidden]),
+#rbCommandToggle:not([hidden]){
+  display:flex!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+#normalBattleCmd:not([hidden]),
+#rbCmd:not([hidden]){
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+
+
+/* =========================================================
+   v0.42 ROOT UI STATE
+   Inline !important in JS is the authority. These rules are
+   defensive and deliberately outrank old body-mode rules.
+========================================================= */
+html body.normalBattleMode #attackBattle #normalBattleCmd[hidden],
+html body.raiderBattleMode #raiderBattle #rbCmd[hidden]{
+ display:none!important;visibility:hidden!important;pointer-events:none!important;
+}
+html body.normalBattleMode #normalCommandToggle[hidden],
+html body.raiderBattleMode #rbCommandToggle[hidden]{
+ display:none!important;
+}
+
+/* Item window: never inherit the old giant left-side panel. */
+body.normalBattleMode #normalItems.isOpen,
+body.raiderBattleMode #rbItems.isOpen{
+ position:fixed!important;
+ left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;
+ transform:translate(-50%,-50%)!important;
+ width:min(88vw,360px)!important;
+ max-height:min(60dvh,420px)!important;
+ overflow:auto!important;
+ box-sizing:border-box!important;
+ z-index:1000!important;
+ padding:12px!important;
+ background:rgba(6,17,13,.985)!important;
+ border:1px solid #c5a45b!important;
+ border-radius:10px!important;
+ box-shadow:0 18px 55px #000c!important;
+}
+body.normalBattleMode #normalItems.isOpen button,
+body.raiderBattleMode #rbItems.isOpen button{
+ width:100%!important;min-height:48px!important;height:auto!important;
+ margin:6px 0!important;padding:10px 12px!important;
+ font-size:14px!important;
+}
+
+
+
+/* v0.42 — canonical battle UI. This block owns the normal/Raider battle layout. */
+:root{--battle-rail:clamp(230px,24vw,330px);--battle-gold:#c5a45b;--battle-ink:#07150f;--battle-panel:rgba(8,24,17,.94);--battle-line:rgba(197,164,91,.72)}
+body.battleMode{overflow:hidden}
+body.normalBattleMode #attackBattle,body.raiderBattleMode #raiderBattle{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 45%,#123426 0,#061b13 52%,#03110c 100%)!important;z-index:700!important}
+/* Retire legacy battle chrome. */
+body.normalBattleMode #attackBattle>#battleTop,body.normalBattleMode #attackBattle>#attackRune,body.normalBattleMode #attackBattle>#battleCmd,body.normalBattleMode #attackBattle>#normalPartyHud,body.normalBattleMode #attackBattle>#normalFiona,body.raiderBattleMode #raiderBattle>#rbParty,body.raiderBattleMode #raiderBattle>#rbTop{display:none!important}
+/* Stage */
+body.normalBattleMode #attackBattle>.v2BattleStage{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;overflow:hidden!important;background:linear-gradient(to bottom,transparent 0 62%,rgba(18,43,28,.65) 62% 100%)!important}
+body.normalBattleMode .v2Unit{position:absolute!important;top:auto!important;bottom:18%!important;width:clamp(110px,17vw,190px)!important;height:clamp(180px,34vh,300px)!important;transform:none!important}
+body.normalBattleMode .v2Unit.aidanUnit{left:30%!important}.normalBattleMode .v2Unit.fionaUnit{left:51%!important}.normalBattleMode .v2Unit.gobUnit{left:auto!important;right:9%!important}
+body.normalBattleMode .v2Unit .battler{position:absolute!important;left:50%!important;bottom:0!important;transform:translateX(-50%)!important;width:clamp(72px,8vw,112px)!important;height:clamp(118px,21vh,176px)!important}
+body.normalBattleMode .v2NearHud{position:absolute!important;left:50%!important;top:0!important;bottom:auto!important;transform:translateX(-50%)!important;width:clamp(145px,16vw,215px)!important;max-width:215px!important;z-index:3!important}
+/* Raider stage actors */
+body.raiderBattleMode #rbAidan,body.raiderBattleMode #rbFiona,body.raiderBattleMode #raiderSprite,body.raiderBattleMode #rbLou{position:absolute!important;top:auto!important;transform:none!important}
+body.raiderBattleMode #rbAidan{left:31%!important;bottom:19%!important}body.raiderBattleMode #rbFiona{left:51%!important;bottom:15%!important}body.raiderBattleMode #rbLou{left:47%!important;bottom:45%!important}body.raiderBattleMode #raiderSprite{right:10%!important;left:auto!important;bottom:20%!important}
+body.raiderBattleMode .rbNearHud{position:absolute!important;top:auto!important;bottom:55%!important;width:clamp(150px,16vw,220px)!important;z-index:3!important}.raiderBattleMode .rbNearA{left:28%!important}.raiderBattleMode .rbNearF{left:48%!important}
+/* Enemy status on Raider: compact, never overlaps the sprite. */
+body.raiderBattleMode #rbTop{display:block!important;position:absolute!important;right:5%!important;top:12%!important;width:min(270px,24vw)!important;z-index:4!important;background:none!important}.raiderBattleMode #rbTop .rbPanel:last-child{display:block!important;width:100%!important;padding:10px 12px!important;background:rgba(5,18,13,.82)!important;border:1px solid var(--battle-line)!important;border-radius:10px!important}.raiderBattleMode #rbTop .rbPanel:first-child{display:none!important}
+/* Battle log: centered, bounded, and never allowed off-screen. */
+body.normalBattleMode #battleMsg2,body.raiderBattleMode #rbMsg{position:absolute!important;left:50%!important;right:auto!important;top:max(16px,env(safe-area-inset-top))!important;bottom:auto!important;transform:translateX(-50%)!important;width:min(680px,calc(100vw - 48px))!important;max-width:calc(100vw - 48px)!important;min-height:0!important;box-sizing:border-box!important;padding:10px 16px!important;margin:0!important;border:1px solid var(--battle-line)!important;border-radius:9px!important;background:rgba(4,17,12,.88)!important;color:#eee6d5!important;text-align:center!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:anywhere!important;z-index:20!important;pointer-events:none!important}
+/* Current actor label */
+body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{position:absolute!important;left:24px!important;bottom:calc(92px + env(safe-area-inset-bottom))!important;top:auto!important;right:auto!important;width:auto!important;height:auto!important;z-index:31!important;color:#d8caa7!important;font-size:clamp(12px,1.4vw,16px)!important;letter-spacing:.08em!important;pointer-events:none!important}
+/* Closed COMMAND button */
+body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{position:absolute!important;left:24px!important;bottom:calc(20px + env(safe-area-inset-bottom))!important;width:min(300px,calc(100vw - 48px))!important;height:62px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;border:1px solid var(--battle-gold)!important;border-radius:10px!important;background:linear-gradient(#123a2e,#0b2b21)!important;color:#f1e8d5!important;font:600 clamp(17px,2vw,23px) 'Cinzel',serif!important;letter-spacing:.08em!important;z-index:32!important}
+body.normalBattleMode #normalCommandToggle[hidden],body.raiderBattleMode #rbCommandToggle[hidden]{display:none!important}
+/* Expanded action drawer */
+body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]){position:absolute!important;left:24px!important;bottom:calc(20px + env(safe-area-inset-bottom))!important;top:auto!important;right:auto!important;width:min(330px,calc(100vw - 48px))!important;max-height:min(72dvh,520px)!important;overflow-y:auto!important;box-sizing:border-box!important;padding:10px!important;display:grid!important;grid-template-columns:1fr!important;gap:8px!important;background:rgba(5,21,15,.97)!important;border:1px solid var(--battle-gold)!important;border-radius:12px!important;z-index:40!important}
+body.normalBattleMode #normalBattleCmd button,body.raiderBattleMode #rbCmd button{min-height:52px!important;width:100%!important;margin:0!important;padding:8px 12px!important;box-sizing:border-box!important;border:1px solid rgba(197,164,91,.68)!important;border-radius:8px!important;background:#102d23!important;color:#f1eadc!important;font-size:clamp(15px,1.7vw,20px)!important}
+body.normalBattleMode #normalBattleCmd .drawerClose,body.raiderBattleMode #rbCmd .drawerClose{min-height:40px!important;background:#0a1d16!important;font-size:14px!important}
+/* Item window uses the same safe rail. */
+body.battleMode #normalItems.isOpen{position:absolute!important;left:24px!important;bottom:calc(20px + env(safe-area-inset-bottom))!important;top:auto!important;right:auto!important;width:min(330px,calc(100vw - 48px))!important;max-height:70dvh!important;overflow:auto!important;box-sizing:border-box!important;padding:12px!important;gap:8px!important;background:rgba(5,21,15,.98)!important;border:1px solid var(--battle-gold)!important;border-radius:12px!important;z-index:50!important;color:#f1eadc!important}
+body.battleMode #normalItems.isOpen button{min-height:52px!important;width:100%!important;margin:0!important}
+/* Landscape: a dedicated left control rail; battlefield starts to its right. */
+@media (orientation:landscape){
+ body.normalBattleMode #attackBattle,body.raiderBattleMode #raiderBattle{padding-left:var(--battle-rail)!important;box-sizing:border-box!important}
+ body.normalBattleMode #attackBattle::before,body.raiderBattleMode #raiderBattle::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--battle-rail);background:linear-gradient(180deg,rgba(5,20,15,.98),rgba(7,27,20,.96));border-right:1px solid rgba(197,164,91,.48);z-index:25;pointer-events:none}
+ body.normalBattleMode #attackBattle>.v2BattleStage{left:var(--battle-rail)!important}
+ body.normalBattleMode #battleMsg2,body.raiderBattleMode #rbMsg{left:calc(var(--battle-rail) + (100vw - var(--battle-rail))/2)!important;width:min(640px,calc(100vw - var(--battle-rail) - 48px))!important;max-width:calc(100vw - var(--battle-rail) - 48px)!important}
+ body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{left:18px!important;top:18px!important;bottom:auto!important;width:calc(var(--battle-rail) - 36px)!important;z-index:31!important}
+ body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{left:18px!important;bottom:calc(18px + env(safe-area-inset-bottom))!important;width:calc(var(--battle-rail) - 36px)!important;height:60px!important}
+ body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{left:18px!important;top:58px!important;bottom:calc(18px + env(safe-area-inset-bottom))!important;width:calc(var(--battle-rail) - 36px)!important;max-height:none!important}
+ body.normalBattleMode .v2Unit{bottom:12%!important}.normalBattleMode .v2Unit.aidanUnit{left:17%!important}.normalBattleMode .v2Unit.fionaUnit{left:45%!important}.normalBattleMode .v2Unit.gobUnit{right:8%!important}
+ body.raiderBattleMode #rbAidan{left:36%!important;bottom:17%!important}.raiderBattleMode #rbFiona{left:54%!important;bottom:13%!important}.raiderBattleMode #rbLou{left:50%!important;bottom:43%!important}.raiderBattleMode #raiderSprite{right:8%!important;bottom:17%!important}
+ body.raiderBattleMode .rbNearA{left:34%!important}.raiderBattleMode .rbNearF{left:52%!important}.raiderBattleMode .rbNearHud{bottom:55%!important}
+ body.raiderBattleMode #rbTop{right:4%!important;top:15%!important;width:min(230px,18vw)!important}
+}
+/* Portrait: use the vertical room; commands remain safely above browser/nav bars. */
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle>.v2BattleStage{bottom:185px!important}
+ body.normalBattleMode .v2Unit{bottom:7%!important;height:230px!important}.normalBattleMode .v2Unit.aidanUnit{left:12%!important}.normalBattleMode .v2Unit.fionaUnit{left:39%!important}.normalBattleMode .v2Unit.gobUnit{right:6%!important}
+ body.normalBattleMode .v2Unit .battler{height:150px!important}.normalBattleMode .v2NearHud{top:4px!important;width:150px!important}
+ body.raiderBattleMode #rbAidan{left:14%!important;bottom:34%!important}.raiderBattleMode #rbFiona{left:39%!important;bottom:29%!important}.raiderBattleMode #rbLou{left:45%!important;bottom:49%!important}.raiderBattleMode #raiderSprite{right:7%!important;bottom:39%!important}
+ body.raiderBattleMode .rbNearHud{bottom:57%!important;width:145px!important}.raiderBattleMode .rbNearA{left:8%!important}.raiderBattleMode .rbNearF{left:35%!important}
+ body.raiderBattleMode #rbTop{right:5%!important;top:19%!important;width:150px!important}
+ body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{left:7%!important;bottom:calc(102px + env(safe-area-inset-bottom))!important}
+ body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{left:6%!important;width:88%!important;bottom:calc(22px + env(safe-area-inset-bottom))!important;height:66px!important}
+ body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{left:6%!important;width:88%!important;bottom:calc(22px + env(safe-area-inset-bottom))!important;grid-template-columns:1fr 1fr!important;max-height:34dvh!important}
+ body.normalBattleMode #normalBattleCmd .drawerClose,body.raiderBattleMode #rbCmd .drawerClose{grid-column:1/-1!important}
+ body.normalBattleMode #battleMsg2,body.raiderBattleMode #rbMsg{top:18px!important;width:88%!important;max-width:88%!important;font-size:14px!important}
+}
+
+
+/* v0.42 — safe command rail + party formation pass */
+:root{--battle-safe-l:max(16px,env(safe-area-inset-left));--battle-safe-r:max(16px,env(safe-area-inset-right))}
+/* Prevent any legacy horizontal offset from clipping interactive battle UI. */
+body.battleMode #normalCommandToggle,body.battleMode #rbCommandToggle,
+body.battleMode #normalBattleCmd,body.battleMode #rbCmd,body.battleMode #normalItems{transform:none!important;margin-left:0!important;margin-right:0!important}
+body.battleMode #normalCommandToggle,body.battleMode #rbCommandToggle{padding:0 16px!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important}
+@media (orientation:landscape){
+ :root{--battle-rail:clamp(250px,27vw,360px)}
+ body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{left:var(--battle-safe-l)!important;width:calc(var(--battle-rail) - var(--battle-safe-l) - 16px)!important}
+ body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{left:var(--battle-safe-l)!important;width:calc(var(--battle-rail) - var(--battle-safe-l) - 16px)!important}
+ body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{left:var(--battle-safe-l)!important;width:calc(var(--battle-rail) - var(--battle-safe-l) - 16px)!important}
+ /* Give the battlefield a deliberate three-lane composition. */
+ body.normalBattleMode .v2Unit.aidanUnit{left:16%!important;bottom:11%!important}
+ body.normalBattleMode .v2Unit.fionaUnit{left:47%!important;bottom:20%!important}
+ body.normalBattleMode .v2Unit.gobUnit{right:7%!important;bottom:14%!important}
+ body.normalBattleMode .v2NearHud{top:-8px!important}
+}
+@media (orientation:portrait){
+ /* Reserve the bottom for COMMAND and use the stage as a real formation board.
+    Current two allies occupy separate slots; future four-member party maps cleanly to a 2x2 ally formation. */
+ body.normalBattleMode #attackBattle>.v2BattleStage{bottom:178px!important}
+ body.normalBattleMode .v2Unit{width:42%!important;height:230px!important}
+ body.normalBattleMode .v2Unit.aidanUnit{left:4%!important;bottom:10%!important}
+ body.normalBattleMode .v2Unit.fionaUnit{left:31%!important;bottom:31%!important}
+ body.normalBattleMode .v2Unit.gobUnit{left:auto!important;right:2%!important;bottom:16%!important;width:34%!important}
+ body.normalBattleMode .v2Unit .battler{width:92px!important;height:142px!important}
+ body.normalBattleMode .v2NearHud{top:-12px!important;width:138px!important;max-width:138px!important}
+ body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{left:8%!important;width:84%!important;min-width:0!important}
+ body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{left:6%!important;width:88%!important;min-width:0!important}
+ body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{left:8%!important}
+}
+
+\n/* v0.42 — hard viewport bounds for battle log/items + taller portrait command drawer. */\n:root{\n  --battle-edge-l:max(14px,env(safe-area-inset-left));\n  --battle-edge-r:max(14px,env(safe-area-inset-right));\n}\n/* Never center these panels with transforms: explicit left/right bounds are more reliable on Android content:// viewports. */\nbody.battleMode #battleMsg2,body.battleMode #rbMsg,body.battleMode #normalItems{\n  transform:none!important;\n  box-sizing:border-box!important;\n  margin-left:0!important;\n  margin-right:0!important;\n}\n@media (orientation:landscape){\n  /* Log belongs to the battlefield, not the control rail. */\n  body.normalBattleMode #battleMsg2,body.raiderBattleMode #rbMsg{\n    left:calc(var(--battle-rail) + 18px)!important;\n    right:var(--battle-edge-r)!important;\n    width:auto!important;\n    max-width:none!important;\n    top:14px!important;\n  }\n  /* Command/item drawers are clamped wholly inside the left rail. */\n  body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{\n    left:var(--battle-edge-l)!important;\n    right:auto!important;\n    width:calc(var(--battle-rail) - var(--battle-edge-l) - 14px)!important;\n    max-width:calc(var(--battle-rail) - var(--battle-edge-l) - 14px)!important;\n    overflow-x:hidden!important;\n  }\n  body.battleMode #normalItems.isOpen{padding:10px!important}\n  body.battleMode #normalItems.isOpen button{white-space:normal!important;overflow-wrap:anywhere!important}\n}\n@media (orientation:portrait){\n  /* Fixed gutters prevent the log from ever crossing either phone edge. */\n  body.normalBattleMode #battleMsg2,body.raiderBattleMode #rbMsg{\n    left:var(--battle-edge-l)!important;\n    right:var(--battle-edge-r)!important;\n    width:auto!important;\n    max-width:none!important;\n    top:16px!important;\n    transform:none!important;\n  }\n  /* Give COMMAND more thumb-friendly vertical space while keeping the collapsed state compact. */\n  body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{\n    left:7%!important;right:7%!important;width:auto!important;height:78px!important;\n    bottom:calc(20px + env(safe-area-inset-bottom))!important;\n  }\n  body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]){\n    left:5%!important;right:5%!important;width:auto!important;\n    bottom:calc(18px + env(safe-area-inset-bottom))!important;\n    max-height:46dvh!important;\n    grid-template-columns:1fr 1fr!important;\n    gap:10px!important;padding:12px!important;\n  }\n  body.normalBattleMode #normalBattleCmd button,body.raiderBattleMode #rbCmd button{\n    min-height:68px!important;font-size:clamp(17px,4.4vw,21px)!important;\n  }\n  body.normalBattleMode #normalBattleCmd .drawerClose,body.raiderBattleMode #rbCmd .drawerClose{\n    min-height:48px!important;grid-column:1/-1!important;\n  }\n  body.battleMode #normalItems.isOpen{\n    left:5%!important;right:5%!important;width:auto!important;max-width:none!important;\n    bottom:calc(18px + env(safe-area-inset-bottom))!important;max-height:46dvh!important;\n    overflow-x:hidden!important;\n  }\n  body.battleMode #normalItems.isOpen button{min-height:64px!important;font-size:17px!important}\n  body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{\n    left:7%!important;bottom:calc(112px + env(safe-area-inset-bottom))!important;\n  }\n}\n
+
+/* v0.44 — battle log is a viewport-owned centered toast.
+   It is reparented to <body> by JS so transformed battle ancestors cannot shift/crop it. */
+body.battleMode #battleMsg2,
+body.battleMode #rbMsg{
+  position:fixed!important;
+  left:50%!important;
+  right:auto!important;
+  top:calc(max(12px, env(safe-area-inset-top)) + 4px)!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  width:min(680px, calc(100vw - 32px))!important;
+  max-width:calc(100vw - 32px)!important;
+  margin:0!important;
+  padding:10px 16px!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  z-index:10000!important;
+  pointer-events:none!important;
+}
+@media (orientation:portrait){
+ body.battleMode #battleMsg2,body.battleMode #rbMsg{
+   width:calc(100vw - 28px)!important;max-width:calc(100vw - 28px)!important;
+   padding:10px 12px!important;font-size:clamp(13px,3.5vw,16px)!important;
+ }
+}
+@media (orientation:landscape){
+ body.battleMode #battleMsg2,body.battleMode #rbMsg{
+   width:min(720px,62vw)!important;max-width:calc(100vw - 40px)!important;
+   top:12px!important;font-size:clamp(12px,1.35vw,16px)!important;
+ }
+}
+
+
+/* v0.45 — viewport-owned battle overlays. No empty log box; item/command drawers share safe geometry. */
+body.battleMode #battleMsg2,
+body.battleMode #rbMsg{
+  position:fixed!important;
+  left:50%!important;
+  right:auto!important;
+  top:calc(max(12px,env(safe-area-inset-top)) + 4px)!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  width:min(680px,calc(100vw - 32px))!important;
+  max-width:calc(100vw - 32px)!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:9px 14px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  z-index:10000!important;
+  pointer-events:none!important;
+}
+/* An empty log must occupy absolutely no screen space. */
+body.battleMode #battleMsg2.battle-log-empty,
+body.battleMode #rbMsg.battle-log-empty{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+}
+/* Normal-battle messages remain transient; only show while the banner class is active. */
+body.normalBattleMode #battleMsg2:not(.is-visible){
+  display:none!important;
+}
+/* Item window is also viewport-owned so transformed battle stages cannot push it offscreen. */
+body.battleMode #normalItems.isOpen{
+  position:fixed!important;
+  transform:none!important;
+  box-sizing:border-box!important;
+  z-index:10020!important;
+  margin:0!important;
+}
+@media (orientation:landscape){
+  body.battleMode #battleMsg2,body.battleMode #rbMsg{
+    width:min(700px,58vw)!important;
+    max-width:calc(100vw - 40px)!important;
+    top:12px!important;
+  }
+  body.battleMode #normalItems.isOpen{
+    left:max(18px,env(safe-area-inset-left))!important;
+    right:auto!important;
+    top:58px!important;
+    bottom:calc(18px + env(safe-area-inset-bottom))!important;
+    width:calc(var(--battle-rail) - max(18px,env(safe-area-inset-left)) - 16px)!important;
+    max-width:calc(var(--battle-rail) - max(18px,env(safe-area-inset-left)) - 16px)!important;
+    max-height:none!important;
+    overflow:auto!important;
+  }
+}
+@media (orientation:portrait){
+  body.battleMode #battleMsg2,body.battleMode #rbMsg{
+    width:calc(100vw - 28px)!important;
+    max-width:calc(100vw - 28px)!important;
+    top:16px!important;
+  }
+  /* Expanded COMMAND intentionally uses the same large, thumb-friendly footprint as ITEM. */
+  body.normalBattleMode #normalBattleCmd:not([hidden]),
+  body.raiderBattleMode #rbCmd:not([hidden]),
+  body.battleMode #normalItems.isOpen{
+    position:fixed!important;
+    left:5%!important;
+    right:5%!important;
+    top:auto!important;
+    bottom:calc(18px + env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    max-width:none!important;
+    min-height:34dvh!important;
+    max-height:46dvh!important;
+    box-sizing:border-box!important;
+    overflow:auto!important;
+  }
+  body.normalBattleMode #normalBattleCmd:not([hidden]),
+  body.raiderBattleMode #rbCmd:not([hidden]){
+    grid-template-columns:1fr 1fr!important;
+    grid-auto-rows:minmax(68px,1fr)!important;
+    gap:10px!important;
+    padding:12px!important;
+  }
+  body.battleMode #normalItems.isOpen{
+    padding:12px!important;
+  }
+  body.battleMode #normalItems.isOpen button{
+    min-height:68px!important;
+  }
+}
+
+
+/* v0.46 — slimmer landscape command/item rail to give the battlefield more room. */
+@media (orientation:landscape){
+  :root{--battle-rail:clamp(210px,22vw,300px)!important;}
+  body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{
+    left:max(14px,env(safe-area-inset-left))!important;
+    width:calc(var(--battle-rail) - max(14px,env(safe-area-inset-left)) - 12px)!important;
+  }
+  body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{
+    left:max(14px,env(safe-area-inset-left))!important;
+    width:calc(var(--battle-rail) - max(14px,env(safe-area-inset-left)) - 12px)!important;
+    height:54px!important;
+  }
+  body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{
+    left:max(14px,env(safe-area-inset-left))!important;
+    width:calc(var(--battle-rail) - max(14px,env(safe-area-inset-left)) - 12px)!important;
+    max-width:calc(var(--battle-rail) - max(14px,env(safe-area-inset-left)) - 12px)!important;
+  }
+  body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]){padding:8px!important;gap:7px!important;}
+  body.normalBattleMode #normalBattleCmd button,body.raiderBattleMode #rbCmd button,body.battleMode #normalItems.isOpen button{
+    min-height:50px!important;font-size:clamp(14px,1.55vw,18px)!important;
+  }
+  body.battleMode #normalItems.isOpen{padding:8px!important;}
+  /* Reclaim the newly freed horizontal space for the formation board. */
+  body.normalBattleMode #attackBattle>.v2BattleStage{left:var(--battle-rail)!important;}
+}
+
+
+/* v0.47 — first integrated battle graphics pass + slimmer landscape command rail. */
+body.normalBattleMode .v2BattleStage{
+  background:
+    radial-gradient(ellipse at 52% 86%,rgba(92,118,70,.20),transparent 38%),
+    linear-gradient(180deg,rgba(4,28,20,.28),rgba(7,30,21,.78)),
+    repeating-linear-gradient(90deg,rgba(197,164,91,.025) 0 1px,transparent 1px 64px)!important;
+}
+body.normalBattleMode .v2BattleStage:after{
+  content:"";position:absolute;left:4%;right:4%;bottom:8%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(197,164,91,.18),transparent);
+  box-shadow:0 -12px 40px rgba(105,145,87,.08);pointer-events:none;z-index:1;
+}
+body.normalBattleMode .spriteBattler{
+  background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;
+  display:block!important;padding:0!important;color:transparent!important;
+}
+body.normalBattleMode .spriteBattler:before,body.normalBattleMode .spriteBattler:after{display:none!important}
+body.normalBattleMode .battleSpriteSvg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 8px 7px rgba(0,0,0,.45));}
+body.normalBattleMode #bAidan2,body.normalBattleMode #bFiona2{width:clamp(82px,9vw,126px)!important;height:clamp(124px,24vh,190px)!important}
+body.normalBattleMode #bGob{width:clamp(92px,10vw,140px)!important;height:clamp(128px,25vh,196px)!important}
+body.normalBattleMode .v2Unit.activeTurn .battleSpriteSvg{filter:drop-shadow(0 0 7px rgba(210,187,112,.55)) drop-shadow(0 8px 7px rgba(0,0,0,.45));}
+@media (orientation:landscape){
+  :root{--battle-rail:clamp(168px,18vw,245px)!important}
+  body.normalBattleMode #normalActor,body.raiderBattleMode #rbTurn{font-size:clamp(12px,1.25vw,16px)!important}
+  body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{height:54px!important;font-size:clamp(18px,2vw,25px)!important}
+  body.normalBattleMode #normalBattleCmd:not([hidden]),body.raiderBattleMode #rbCmd:not([hidden]),body.battleMode #normalItems.isOpen{padding:6px!important;gap:5px!important}
+  body.normalBattleMode #normalBattleCmd button,body.raiderBattleMode #rbCmd button,body.battleMode #normalItems.isOpen button{min-height:44px!important;font-size:clamp(12px,1.35vw,16px)!important;padding:6px 5px!important}
+  body.normalBattleMode .v2Unit.aidanUnit{left:19%!important;bottom:12%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:45%!important;bottom:18%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:8%!important;bottom:12%!important}
+}
+@media (orientation:portrait){
+  body.normalBattleMode #bAidan2,body.normalBattleMode #bFiona2{width:94px!important;height:148px!important}
+  body.normalBattleMode #bGob{width:102px!important;height:154px!important}
+  body.normalBattleMode .v2Unit.aidanUnit{left:10%!important;bottom:11%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:39%!important;bottom:24%!important}
+  body.normalBattleMode .v2Unit.gobUnit{right:7%!important;bottom:12%!important}
+}
+
+
+/* v0.51 — approved art integration. Formal design language, narrower landscape rail. */
+@media (orientation:landscape){
+ :root{--battle-rail:clamp(148px,15.5vw,210px)!important}
+ body.normalBattleMode #normalCommandToggle,body.raiderBattleMode #rbCommandToggle{height:50px!important}
+ body.normalBattleMode #normalBattleCmd button,body.raiderBattleMode #rbCmd button,body.battleMode #normalItems.isOpen button{min-height:40px!important}
+ body.normalBattleMode .v2Unit.aidanUnit{left:17%!important}
+ body.normalBattleMode .v2Unit.fionaUnit{left:43%!important}
+}
+/* Pixel-art rendering + tiny idle life. */
+body.normalBattleMode .battleSpriteSvg{image-rendering:pixelated;animation:wbIdle 1.8s steps(2,end) infinite}
+body.normalBattleMode .fionaSprite{animation-delay:-.6s}
+body.normalBattleMode .goblinSprite{animation:wbGobIdle 1.15s steps(2,end) infinite}
+@keyframes wbIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes wbGobIdle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2px) rotate(-1deg)}}
+/* Formal-design markers: Oathblade wind glint / Fiona nature-light / corruption pulse. */
+body.normalBattleMode #bAidan2:after{content:""!important;display:block!important;position:absolute;right:-7%;top:37%;width:34%;height:2px;background:linear-gradient(90deg,transparent,#d9d8c9,#a8ddd5,transparent);opacity:.55;transform:rotate(-38deg);pointer-events:none}
+body.normalBattleMode #bFiona2:after{content:""!important;display:block!important;position:absolute;right:7%;top:24%;width:9px;height:9px;border:1px solid rgba(171,221,183,.8);border-radius:50%;box-shadow:0 0 9px rgba(130,211,183,.55);pointer-events:none}
+body.normalBattleMode #bGob:after{content:""!important;display:block!important;position:absolute;inset:16% 5% 10%;border-radius:50%;box-shadow:0 0 18px rgba(116,78,134,.28);animation:wbCorrupt 1.4s ease-in-out infinite;pointer-events:none}
+@keyframes wbCorrupt{50%{box-shadow:0 0 27px rgba(139,70,162,.5)}}
+
+
+/* v0.51 — approved art integration: approved Aidan/Fiona visual language, battle-facing silhouettes. */
+body.normalBattleMode .productionSprite{
+  width:100%!important;height:100%!important;overflow:visible!important;
+  filter:drop-shadow(0 7px 4px rgba(0,0,0,.32));
+}
+body.normalBattleMode #bAidan2{transform-origin:55% 92%}
+body.normalBattleMode #bFiona2{transform-origin:52% 92%}
+@media (orientation:landscape){
+  :root{--battle-rail:clamp(138px,14.2vw,190px)!important}
+  body.normalBattleMode .v2Unit.aidanUnit{left:16.2%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:41.5%!important}
+}
+@media (orientation:portrait){
+  body.normalBattleMode .v2Unit.aidanUnit{left:10%!important}
+  body.normalBattleMode .v2Unit.fionaUnit{left:39%!important}
+}
+
+
+/* v0.51: approved reference-art integration.
+   These sprites are extracted directly from the user's approved design boards. */
+body.normalBattleMode .approvedRaster{
+  background:none!important;border:0!important;box-shadow:none!important;
+  overflow:visible!important;
+}
+body.normalBattleMode .approvedRaster img{
+  display:block;width:100%;height:100%;object-fit:contain;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  filter:drop-shadow(0 8px 5px rgba(0,0,0,.38));
+}
+body.normalBattleMode #bAidan2{width:118px!important;height:142px!important}
+body.normalBattleMode #bFiona2{width:112px!important;height:142px!important}
+
+/* Replace the old provisional blocky goblin visually without touching combat logic. */
+body.normalBattleMode #bGoblin2{
+  background:transparent url("assets/tainted-goblin-approved.png") center bottom/contain no-repeat!important;
+  border:0!important;box-shadow:none!important;color:transparent!important;
+}
+body.normalBattleMode #bGoblin2 > *{visibility:hidden!important}
+
+@media (orientation:landscape){
+  :root{--battle-rail:clamp(126px,12.8vw,174px)!important}
+  body.normalBattleMode #bAidan2{width:104px!important;height:128px!important}
+  body.normalBattleMode #bFiona2{width:100px!important;height:128px!important}
+}
+@media (orientation:portrait){
+  body.normalBattleMode #bAidan2{width:122px!important;height:150px!important}
+  body.normalBattleMode #bFiona2{width:116px!important;height:150px!important}
+}
+
+
+/* Single-file approved art: no relative image paths, safe for Android content:// */
+body.normalBattleMode .approvedRaster,
+body.normalBattleMode #bGob.approvedRaster{
+ background:none!important;border:0!important;box-shadow:none!important;color:transparent!important;
+ overflow:visible!important;
+}
+body.normalBattleMode .approvedRaster img{
+ display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;
+ image-rendering:pixelated!important;filter:drop-shadow(0 7px 4px rgba(0,0,0,.42));
+}
+body.normalBattleMode #bGob{width:126px!important;height:164px!important}
+body.normalBattleMode #bGob:after{z-index:-1!important}
+
+/* Raider approved sprites */
+#raiderBattle .rbRaster{
+ background:none!important;border:0!important;box-shadow:none!important;color:transparent!important;
+ display:block!important;overflow:visible!important;
+}
+#raiderBattle .rbRaster img{
+ display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;
+ image-rendering:pixelated!important;filter:drop-shadow(0 7px 4px rgba(0,0,0,.45));
+}
+#raiderBattle #rbAidan{width:105px!important;height:132px!important}
+#raiderBattle #rbFiona{width:100px!important;height:132px!important}
+#raiderBattle #rbLou{width:58px!important;height:72px!important}
+#raiderBattle #raiderSprite{width:148px!important;height:174px!important;background:none!important;border:0!important;box-shadow:none!important}
+
+@media (orientation:portrait){
+ body.normalBattleMode #bGob{width:132px!important;height:174px!important}
+ #raiderBattle #raiderSprite{width:142px!important;height:172px!important}
+}
+@media (orientation:landscape){
+ body.normalBattleMode #bGob{width:110px!important;height:142px!important}
+ #raiderBattle #raiderSprite{width:128px!important;height:150px!important}
+}
+
+
+#raiderBattle #rbFiona img,#raiderBattle #rbLou img,#raiderBattle #raiderSprite img{object-fit:contain!important;object-position:center bottom!important;}
+#raiderBattle #raiderSprite{overflow:visible!important;aspect-ratio:123/92!important;height:auto!important;}
+#raiderBattle #raiderSprite img{width:100%!important;height:auto!important;background:transparent!important;}
+
+body.actionCinematic #battleTop,body.actionCinematic #normalPartyHud,body.actionCinematic #normalActor,body.actionCinematic #normalCommandToggle,body.actionCinematic #normalBattleCmd,body.actionCinematic #normalItems,body.actionCinematic #battleMsg2,body.actionCinematic #attackRune,body.actionCinematic #rbHud,body.actionCinematic #rbTurn,body.actionCinematic #rbCommandToggle,body.actionCinematic #rbCmd,body.actionCinematic #rbMsg,body.actionCinematic #rbRune,body.actionCinematic .v2NearHud,body.actionCinematic .rbNearHud{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}body.actionCinematic .actionFocus{z-index:90!important;filter:drop-shadow(0 18px 28px #000a);animation:v053focus .62s cubic-bezier(.2,.8,.2,1) both}body.actionCinematic .actionTarget{animation:v053hit .34s ease both}body.actionCinematic .actionDim{opacity:.3!important;filter:saturate(.6) brightness(.65)!important}@keyframes v053focus{0%,100%{transform:translate(0) scale(1)}48%{transform:translate(var(--action-x,24px),-8px) scale(1.12)}}@keyframes v053hit{0%,100%{transform:translateX(0)}35%{transform:translateX(-10px)}65%{transform:translateX(8px)}}#raiderSprite.actionPose{width:min(46vw,430px)!important;height:min(62vh,500px)!important;right:5%!important;bottom:7%!important;z-index:95!important}#raiderSprite.actionPose img{width:100%!important;height:100%!important;object-fit:contain!important}@media(orientation:portrait){#raiderSprite.actionPose{width:min(76vw,430px)!important;height:min(48vh,500px)!important;right:-3%!important;bottom:29%!important}}
+
+/* v0.54: explicit stage ownership. Keep actors and enemies inside the battlefield. */
+body.normalBattleMode #attackBattle .v2BattleStage,
+body.raiderBattleMode #raiderBattle .rbField{overflow:hidden!important;isolation:isolate!important}
+body.normalBattleMode #v2AidanUnit,body.normalBattleMode #v2FionaUnit,body.normalBattleMode #v2GobUnit{display:block!important;visibility:visible!important;opacity:1!important;z-index:20!important}
+body.normalBattleMode #v2GobUnit{z-index:24!important;right:5%!important;left:auto!important;bottom:15%!important}
+body.normalBattleMode #bGob{display:block!important;visibility:visible!important;opacity:1!important;width:clamp(145px,20vw,270px)!important;height:clamp(180px,38vh,330px)!important;overflow:visible!important;background:none!important;border:0!important;box-shadow:none!important}
+body.normalBattleMode #bGob img{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 16px 14px rgba(0,0,0,.62))!important;image-rendering:auto!important}
+body.raiderBattleMode #raiderSprite{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;right:4%!important;left:auto!important;bottom:12%!important;width:clamp(230px,30vw,430px)!important;height:clamp(270px,58vh,500px)!important;z-index:25!important;overflow:visible!important;background:none!important;border:0!important;box-shadow:none!important}
+body.raiderBattleMode #raiderSprite img{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;image-rendering:auto!important;filter:drop-shadow(0 18px 18px rgba(0,0,0,.66))!important}
+/* allies stay clearly on the left half; final approved action art will replace legacy rasters next */
+body.normalBattleMode .v2Unit.aidanUnit{left:8%!important;right:auto!important;bottom:12%!important}
+body.normalBattleMode .v2Unit.fionaUnit{left:30%!important;right:auto!important;bottom:18%!important}
+body.raiderBattleMode #rbAidan{left:8%!important;bottom:13%!important}
+body.raiderBattleMode #rbFiona{left:29%!important;bottom:16%!important}
+body.raiderBattleMode #rbLou{left:40%!important;bottom:47%!important}
+@media (orientation:portrait){
+ body.normalBattleMode #v2GobUnit{right:3%!important;bottom:31%!important}
+ body.normalBattleMode #bGob{width:min(42vw,230px)!important;height:min(31vh,290px)!important}
+ body.normalBattleMode .v2Unit.aidanUnit{left:5%!important;bottom:12%!important}
+ body.normalBattleMode .v2Unit.fionaUnit{left:30%!important;bottom:16%!important}
+ body.raiderBattleMode #raiderSprite{right:-2%!important;bottom:31%!important;width:min(56vw,330px)!important;height:min(36vh,390px)!important}
+ body.raiderBattleMode #rbAidan{left:5%!important;bottom:13%!important}
+ body.raiderBattleMode #rbFiona{left:29%!important;bottom:16%!important}
+ body.raiderBattleMode #rbLou{left:38%!important;bottom:43%!important}
+}
+@media (orientation:landscape){
+ body.normalBattleMode #v2GobUnit{right:4%!important;bottom:8%!important}
+ body.normalBattleMode #bGob{width:min(22vw,250px)!important;height:min(52vh,310px)!important}
+ body.raiderBattleMode #raiderSprite{right:3%!important;bottom:5%!important;width:min(31vw,400px)!important;height:min(68vh,450px)!important}
+ /* narrower command rail, more battlefield */
+ body.battleMode{--battle-rail:220px!important}
+}
+
+#bGob img,#raiderSprite img{display:block!important;max-width:100%;max-height:100%;object-fit:contain}.v054EnemyFallback{display:none!important}
+
+/* v0.57 — Boss HUD must support the battlefield, never cover it. */
+body.raiderBattleMode #rbParty{
+  position:absolute!important;
+  left:50%!important; right:auto!important; top:auto!important;
+  bottom:max(8px,env(safe-area-inset-bottom))!important;
+  transform:translateX(-50%)!important;
+  width:min(260px,34vw)!important; height:38px!important;
+  padding:3px 5px!important; gap:3px!important;
+  display:grid!important; grid-template-columns:1fr 1fr!important;
+  background:rgba(5,12,9,.68)!important;
+  border:1px solid rgba(159,137,93,.58)!important;
+  border-radius:5px!important; box-shadow:none!important;
+  backdrop-filter:blur(2px)!important; z-index:65!important;
+}
+body.raiderBattleMode #rbParty .partyCard{
+  display:grid!important; grid-template-columns:auto 1fr!important;
+  grid-template-rows:14px 4px 10px!important; column-gap:5px!important;
+  align-items:center!important; padding:1px 3px!important;
+  min-width:0!important; background:transparent!important; border:0!important;
+  font-size:7px!important; line-height:1!important;
+}
+body.raiderBattleMode #rbParty .partyCard b{
+  grid-column:1!important; grid-row:1!important; font-size:8px!important;
+  white-space:nowrap!important; font-weight:600!important;
+}
+body.raiderBattleMode #rbParty .partyCard .mini{
+  grid-column:2!important; grid-row:1!important; height:3px!important;
+  margin:0!important; min-width:42px!important; opacity:.9!important;
+}
+body.raiderBattleMode #rbParty .partyCard span{
+  grid-column:1/3!important; grid-row:3!important; font-size:7px!important;
+  white-space:nowrap!important; opacity:.88!important;
+}
+/* Hide the obsolete large top status panel. Enemy identity/HP remains in the battlefield HUD. */
+body.raiderBattleMode #rbTop{display:none!important}
+body.raiderBattleMode #rbTurn{
+  left:50%!important; right:auto!important; top:auto!important;
+  bottom:50px!important; transform:translateX(-50%)!important;
+  font-size:8px!important; opacity:.72!important; white-space:nowrap!important;
+}
+@media (orientation:portrait){
+  body.raiderBattleMode #rbParty{
+    width:214px!important; height:36px!important;
+    bottom:118px!important; padding:2px 4px!important;
+  }
+  body.raiderBattleMode #rbParty .partyCard{grid-template-rows:13px 3px 9px!important}
+  body.raiderBattleMode #rbTurn{bottom:158px!important;font-size:7px!important}
+}
+@media (orientation:landscape) and (max-height:520px){
+  body.raiderBattleMode #rbParty{width:238px!important;height:34px!important;bottom:6px!important}
+  body.raiderBattleMode #rbTurn{bottom:43px!important}
+}
+body.raiderFinishing #rbParty,body.raiderFinishing #rbTurn{display:none!important}
+
+
+/* v0.51 — finalized transparent battle sprites. Embedded for Android content:// reliability. */
+body.normalBattleMode .approvedRaster img,#raiderBattle .rbRaster img{image-rendering:pixelated;image-rendering:crisp-edges;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 8px rgba(0,0,0,.42))}
+body.normalBattleMode #bAidan2{width:116px!important;height:150px!important}
+body.normalBattleMode #bFiona2{width:112px!important;height:150px!important}
+body.normalBattleMode #bGob{width:116px!important;height:150px!important}
+#raiderBattle #rbAidan{width:112px!important;height:140px!important}
+#raiderBattle #rbFiona{width:108px!important;height:140px!important}
+#raiderBattle #rbLou{width:72px!important;height:92px!important}
+#raiderBattle #raiderSprite{width:168px!important;height:154px!important}
+@media (orientation:landscape){body.normalBattleMode #bAidan2{width:100px!important;height:126px!important}body.normalBattleMode #bFiona2{width:96px!important;height:126px!important}body.normalBattleMode #bGob{width:102px!important;height:128px!important}#raiderBattle #raiderSprite{width:150px!important;height:136px!important}}
+
+
+#battleResult{z-index:10050!important}
+body.raiderFinishing #rbCommandToggle,body.raiderFinishing #rbCmd,body.raiderFinishing #rbHud,body.raiderFinishing #rbTurn,body.raiderFinishing #rbMsg,body.raiderFinishing #rbRune,body.raiderFinishing .rbNearHud{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.raiderFinishing #raiderSprite{z-index:120!important;filter:drop-shadow(0 18px 28px #000b)}
+body.raiderFinishing #raiderSprite img{object-fit:contain!important}
+
+/* v0.58 production UI overrides */
+:root{--cmd-tab-w:132px;--cmd-tab-h:38px}
+body.battleMode #normalCommandToggle,body.battleMode #rbCommandToggle{width:var(--cmd-tab-w)!important;height:var(--cmd-tab-h)!important;min-height:0!important;padding:4px 12px!important;font-size:13px!important;letter-spacing:.12em!important;border-radius:8px!important;opacity:.88!important}
+@media (orientation:landscape){
+ body.battleMode #normalCommandToggle,body.battleMode #rbCommandToggle{left:12px!important;right:auto!important;bottom:12px!important}
+ body.battleMode #normalBattleCmd:not([hidden]),body.battleMode #rbCmd:not([hidden]){left:12px!important;right:auto!important;bottom:12px!important;width:min(310px,28vw)!important;max-width:min(310px,28vw)!important;max-height:72dvh!important;grid-template-columns:1fr 1fr!important;padding:10px!important;gap:7px!important;background:rgba(5,28,23,.96)!important}
+ body.battleMode #normalBattleCmd button,body.battleMode #rbCmd button{min-height:46px!important;font-size:15px!important;padding:7px!important}
+ body.raiderBattleMode #rbHud{left:14px!important;right:auto!important;top:54px!important;bottom:auto!important;width:235px!important;max-width:24vw!important;transform:none!important;font-size:11px!important;opacity:.88!important}
+ body.raiderBattleMode #rbHud .hudName,body.raiderBattleMode #rbHud b{font-size:11px!important}
+ body.raiderBattleMode #rbHud .bar{height:5px!important}
+ body.raiderBattleMode #rbTurn{left:14px!important;top:34px!important;bottom:auto!important;font-size:10px!important;opacity:.65!important}
+}
+@media (orientation:portrait){
+ body.battleMode #normalCommandToggle,body.battleMode #rbCommandToggle{left:50%!important;right:auto!important;bottom:12px!important;transform:translateX(-50%)!important;width:126px!important;height:36px!important}
+ body.battleMode #normalBattleCmd:not([hidden]),body.battleMode #rbCmd:not([hidden]){left:5%!important;right:5%!important;bottom:10px!important;width:auto!important;max-height:44dvh!important;grid-template-columns:1fr 1fr!important;padding:10px!important;gap:8px!important}
+ body.battleMode #normalBattleCmd button,body.battleMode #rbCmd button{min-height:54px!important;font-size:16px!important}
+ body.raiderBattleMode #rbHud{left:10px!important;right:auto!important;top:86px!important;bottom:auto!important;width:210px!important;max-width:54vw!important;transform:none!important;font-size:10px!important;opacity:.86!important}
+ body.raiderBattleMode #rbHud .bar{height:4px!important}
+}
+body.battleResultMode #normalCommandToggle,body.battleResultMode #rbCommandToggle,body.battleResultMode #normalBattleCmd,body.battleResultMode #rbCmd,body.battleResultMode #rbHud,body.battleResultMode #rbTurn{display:none!important}
