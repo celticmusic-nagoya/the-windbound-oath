@@ -15,6 +15,7 @@
 <meta name="build-version" content="v0.66-impact-effects">
 
 <link rel="stylesheet" href="css/style.css">
+<script src="js/assets.js"></script>
 
 <style id="v0621-dev-command-style">
 .dev-only-command{border-color:#b88b45!important;color:#e6c987!important;background:rgba(70,38,12,.30)!important;font-size:.78rem!important}
@@ -112,17 +113,17 @@
 <div class="v2Unit ally aidanUnit" id="v2AidanUnit">
 <div class="v2Float" id="floatAidan"></div>
 <div class="v2NearHud" id="hudAidan"><b>エイダン</b><div class="v2Bars"><i class="hp"><em id="v2AHP"></em></i><i class="tp"><em id="v2ATP"></em></i></div><small id="v2ATxt"></small></div>
-<div class="battler spriteBattler approvedRaster" id="bAidan2"><img alt="エイダン" src="img/battle/embedded/asset_001_728fe869af28.png"/></div>
+<div class="battler spriteBattler approvedRaster" id="bAidan2"><img alt="エイダン" src="img/battle/characters/aidan/aidan_battle_idle.png"/></div>
 </div>
 <div class="v2Unit ally fionaUnit" id="v2FionaUnit">
 <div class="v2Float" id="floatFiona"></div>
 <div class="v2NearHud" id="hudFiona"><b>フィオナ</b><div class="v2Bars"><i class="hp"><em id="v2FHP"></em></i><i class="mp"><em id="v2FMP"></em></i></div><small id="v2FTxt"></small></div>
-<div class="battler spriteBattler approvedRaster" id="bFiona2"><img alt="フィオナ" src="img/battle/embedded/asset_002_f3e4ac449c20.png"/></div>
+<div class="battler spriteBattler approvedRaster" id="bFiona2"><img alt="フィオナ" src="img/battle/characters/fiona/fiona_battle_idle.png"/></div>
 </div>
 <div class="v2Unit enemy gobUnit" id="v2GobUnit">
 <div class="v2Float" id="floatGob"></div>
 <div class="v2NearHud enemyHud" id="hudGob"><b id="v2EnemyName">異常化ゴブリン</b><div class="v2Bars"><i class="hp"><em id="v2GHP"></em></i></div><small id="v2GTxt"></small></div>
-<div class="battler enemyAura spriteBattler approvedRaster enemyRaster" id="bGob"><img alt="異常化ゴブリン" src="img/battle/embedded/asset_003_93ecda87920e.png"/></div>
+<div class="battler enemyAura spriteBattler approvedRaster enemyRaster" id="bGob"><img alt="異常化ゴブリン" src="img/battle/enemies/tainted_goblin/goblin_battle_idle.png"/></div>
 </div>
 </div>
 <div class="panel battle-log-empty" id="battleMsg2" aria-live="polite"></div>
@@ -165,7 +166,7 @@
 <div id="raiderBattle">
 <div id="rbParty"><div class="partyCard" id="cardA"><b>エイダン</b><div class="mini"><i id="pAHP"></i></div><span id="pAtext"></span></div><div class="partyCard" id="cardF"><b>フィオナ</b><div class="mini"><i id="pFHP"></i></div><span id="pFtext"></span></div></div><div id="rbTop"><div class="rbPanel" style="visibility:hidden"><b>エイダン</b><div class="rbBar"><div class="rbFill" id="rbAHP"></div></div><span id="rbAHPt"></span><div id="rbRune"><div class="rbRuneFill" id="rbRuneFill"></div></div><span id="rbRunet"></span></div>
 <div class="rbPanel"><b>ゴブリン・レイダー</b><div class="rbBar"><div class="rbFill" id="rbBHP"></div></div><span id="rbBHPt"></span><div id="rbPhase"></div></div></div>
-<div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/embedded/asset_004_c5839c8e084f.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/embedded/asset_005_005c69d45778.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/embedded/asset_006_cfb25133e1e2.png"/><span class="louSupportTag">SUPPORT</span></div><div id="rbTurn"></div><div class="rbEnemyHud" id="rbEnemyHud"><b>ゴブリン・レイダー</b><div class="rbEnemyBar"><i id="rbEnemyHP"></i></div><small id="rbEnemyTxt">HP 1250</small></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/embedded/asset_007_22b5dd3a2e2e.png"/></div><div class="battle-log-empty" id="rbMsg" aria-live="polite"></div>
+<div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/characters/aidan/aidan_battle_idle.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/characters/fiona/fiona_battle_idle.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/characters/lou/lou_battle_idle.png"/><span class="louSupportTag">SUPPORT</span></div><div id="rbTurn"></div><div class="rbEnemyHud" id="rbEnemyHud"><b>ゴブリン・レイダー</b><div class="rbEnemyBar"><i id="rbEnemyHP"></i></div><small id="rbEnemyTxt">HP 1250</small></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/enemies/goblin_raider/goblin_raider_battle_idle.png"/></div><div class="battle-log-empty" id="rbMsg" aria-live="polite"></div>
 <button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbDevKill" class="dev-only-command">DEV｜一撃撃破</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
 </div>
 <div id="aftermathScene"><div id="aftermathAltar"></div><div id="aftermathSword">†</div><div id="aftermathParty">A　F　✧</div><div id="aftermathText"></div></div><div id="fortScene"><div id="fortWall"></div><div id="fortGate"></div><div id="fortBanner">⚜</div><div id="fortParty">A　F　✧</div><div id="fortText"></div></div>
@@ -1697,13 +1698,61 @@ document.addEventListener('contextmenu',e=>e.preventDefault());document.addEvent
 })();
 </script>
 
-<script id="v051-approved-asset-registry">
-window.WINDBOUND_APPROVED_ASSETS={goblin:"img/battle/embedded/asset_008_de63533c5927.png",taintedGoblin:"img/battle/embedded/asset_003_93ecda87920e.png",raider:"img/battle/embedded/asset_009_c18f6d9e24ca.png",lou:"img/battle/embedded/asset_010_7d901e40e306.png"};
-</script>
-<script id="v053-action-cinematic-js">const V053={tainted:{idle:'img/battle/embedded/asset_011_e279f4b3eb31.png',attack:'img/battle/embedded/asset_012_a2b42f454622.png',damage:'img/battle/embedded/asset_013_1308ef593676.png',corrupted_attack:'img/battle/embedded/asset_012_a2b42f454622.png',summon:'img/battle/embedded/asset_014_efcd3ef1cf72.png',ko:'img/battle/embedded/asset_015_4dbf165690e7.png'},raider:{idle:'img/battle/embedded/asset_016_b89c9a5a66ae.png',attack:'img/battle/embedded/asset_017_fcde7cf29b27.png',horn:'img/battle/embedded/asset_018_791f68fbb49d.png',smash:'img/battle/embedded/asset_019_7ba16af45480.png',summon:'img/battle/embedded/asset_020_f05814716bd1.png',damage:'img/battle/embedded/asset_021_f7e80028fd81.png',rage:'img/battle/embedded/asset_022_960dc8412672.png',ko:'img/battle/embedded/asset_021_f7e80028fd81.png'}};function v53img(box,src){let i=box?.querySelector('img');if(i)i.src=src}function v53cin(f,t,ms){document.body.classList.add('actionCinematic');f?.classList.add('actionFocus');t?.classList.add('actionTarget');document.querySelectorAll('#attackBattle .v2Unit,#raiderBattle .rbRaster').forEach(x=>{if(x!==f&&x!==t)x.classList.add('actionDim')});return new Promise(r=>setTimeout(()=>{document.body.classList.remove('actionCinematic');document.querySelectorAll('.actionFocus,.actionTarget,.actionDim').forEach(x=>x.classList.remove('actionFocus','actionTarget','actionDim'));r()},ms||650))}function v53raider(p,ms){let r=document.querySelector('#raiderSprite');v53img(r,V053.raider[p]||V053.raider.idle);r?.classList.add('actionPose');return v53cin(r,null,ms||780).then(()=>{r?.classList.remove('actionPose');v53img(r,V053.raider.idle)})}function v53tainted(p,ms){let g=document.querySelector('#bGob');v53img(g,V053.tainted[p]||V053.tainted.idle);return v53cin(g,null,ms||650).then(()=>v53img(g,V053.tainted.idle))}const v53SA=startAttackBattle;startAttackBattle=function(id,hp){v53SA(id,hp);v53img(document.querySelector('#bGob'),V053.tainted.idle)};const v53SR=startRaiderBattle;startRaiderBattle=function(){v53SR();v53img(document.querySelector('#raiderSprite'),V053.raider.idle)};const v53NE=normalEnemyTurn;normalEnemyTurn=function(){attackBattleBusy=true;v53tainted('corrupted_attack',680).then(v53NE)};const v53RE=rbEnemyParty;rbEnemyParty=function(){let p=rbQueued?'smash':((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4?'horn':((rbRound%3===0||(rbPhase()===3&&rbRound%2===0))?'rage':'attack'));rbBusy=true;v53raider(p,800).then(v53RE)};const v53RN=resolveNormalRound;resolveNormalRound=function(){setNormalCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RN()};const v53RR=resolvePartyRound;resolvePartyRound=function(){setRaiderCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RR()};</script><script id="v054-battle-stage-js">
+<script id="v053-action-cinematic-js">
+function v53img(box,src){
+ const i=box?.querySelector('img');if(i)i.src=src;
+}
+function v53cin(f,t,ms){
+ document.body.classList.add('actionCinematic');
+ f?.classList.add('actionFocus');t?.classList.add('actionTarget');
+ document.querySelectorAll('#attackBattle .v2Unit,#raiderBattle .rbRaster').forEach(x=>{
+  if(x!==f&&x!==t)x.classList.add('actionDim');
+ });
+ return new Promise(r=>setTimeout(()=>{
+  document.body.classList.remove('actionCinematic');
+  document.querySelectorAll('.actionFocus,.actionTarget,.actionDim').forEach(x=>{
+   x.classList.remove('actionFocus','actionTarget','actionDim');
+  });
+  r();
+ },ms||650));
+}
+function v53raider(p,ms){
+ const r=document.querySelector('#raiderSprite');
+ v53img(r,V053.raider[p]||V053.raider.idle);r?.classList.add('actionPose');
+ return v53cin(r,null,ms||780).then(()=>{
+  r?.classList.remove('actionPose');
+  // Do not overwrite the fixed KO image when an earlier pose timer finishes.
+  if(!r?.classList.contains('raiderKO'))v53img(r,V053.raider.idle);
+ });
+}
+function v53tainted(p,ms){
+ const g=document.querySelector('#bGob');
+ v53img(g,V053.tainted[p]||V053.tainted.idle);
+ return v53cin(g,null,ms||650).then(()=>{
+  if(!g?.classList.contains('taintedKO'))v53img(g,V053.tainted.idle);
+ });
+}
+const v53SA=startAttackBattle;
+startAttackBattle=function(id,hp){v53SA(id,hp);v53img(document.querySelector('#bGob'),V053.tainted.idle)};
+const v53SR=startRaiderBattle;
+startRaiderBattle=function(){v53SR();v53img(document.querySelector('#raiderSprite'),V053.raider.idle)};
+const v53NE=normalEnemyTurn;
+normalEnemyTurn=function(){attackBattleBusy=true;v53tainted('corrupted_attack',680).then(v53NE)};
+const v53RE=rbEnemyParty;
+rbEnemyParty=function(){
+ // CALL is reinforcement; a queued smash/wind-up uses the attack artwork.
+ // Automatic phase-entry ENRAGE is deferred rather than changing turn logic.
+ const p=rbQueued?'smash':((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4?'horn':'attack');
+ rbBusy=true;v53raider(p,800).then(v53RE);
+};
+const v53RN=resolveNormalRound;
+resolveNormalRound=function(){setNormalCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RN()};
+const v53RR=resolvePartyRound;
+resolvePartyRound=function(){setRaiderCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RR()};
+</script><script id="v054-battle-stage-js">
 const V054={
- taintedIdle:'img/battle/embedded/asset_011_e279f4b3eb31.png',
- raiderIdle:'img/battle/embedded/asset_016_b89c9a5a66ae.png'
+ taintedIdle:BATTLE_ASSETS.tainted_goblin.idle,
+ raiderIdle:BATTLE_ASSETS.goblin_raider.idle
 };
 function v54forceEnemyArt(){
  const g=document.querySelector('#bGob img');
@@ -1877,6 +1926,5 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 })();
 </script>
 
-<script src="js/assets.js"></script>
 <script src="js/game.js"></script>
 </body></html>
