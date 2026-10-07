@@ -1,7 +1,7 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call']);
-  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption']);
   const battles = {
     normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
     raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },
@@ -9,7 +9,8 @@
     'raider:fiona': { actor: 'fiona', image: '#rbFiona img', health: () => [rbFHP, 105] },
     'raider:lou': { actor: 'lou', image: '#rbLou img', health: () => [null, null] },
     // Prepared adapter only; current encounters remain Tainted Goblins.
-    'normal:goblin': { actor: 'goblin', image: '#bGob img', health: () => [gghp, null] }
+    'normal:goblin': { actor: 'goblin', image: '#bGob img', health: () => [gghp, null] },
+    'normal:tainted_goblin': { actor: 'tainted_goblin', image: '#bGob img', health: () => [gghp, null] }
   };
   for (const battle of Object.values(battles)) {
     Object.assign(battle, { state: 'idle', sequence: 0, timer: null, guard: false });

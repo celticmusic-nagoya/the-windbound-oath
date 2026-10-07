@@ -659,7 +659,7 @@ function v2Hit(id){
  setTimeout(()=>el.classList.remove('hit'),260);
 }
 function updateV2BattleHud(){
- BattleActorState.sync('normal');BattleActorState.sync('normal','fiona');
+ BattleActorState.sync('normal');BattleActorState.sync('normal','fiona');BattleActorState.sync('normal','tainted_goblin');
  if(!$('#v2AHP'))return;
  const max=currentGoblin==='attackGob1'?180:(currentGoblin&&currentGoblin.startsWith('forestGob')?160:220);
  $('#v2AHP').style.width=Math.max(0,aahp)+'%';
@@ -751,7 +751,7 @@ function updateAttackBattle(){
 }
 function resolveNormalRound(){
  let delay=0;
- const act=(txt,fn,motion,pose,actor='aidan')=>{setTimeout(()=>{if(pose)BattleActorState.action(actor,pose,{battle:'normal'});if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();if(fn)fn();showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=700};
+ const act=(txt,fn,motion,pose,actor='aidan')=>{setTimeout(()=>{if(pose)BattleActorState.action(actor,pose,{battle:'normal'});if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();const enemyHPBeforeAction=gghp;if(fn)fn();if(gghp<enemyHPBeforeAction)BattleActorState.set('tainted_goblin','damage',{battle:'normal',duration:520});showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=700};
  normalActs.forEach(a=>{
    if(a.who==='aidan'){
      if(a.kind==='item'){
@@ -803,6 +803,7 @@ $('#nDevKill').onclick=()=>{
 $('#aatk').parentElement.style.display='none';
 
 function finishAttackBattle(){
+ BattleActorState.set('tainted_goblin','ko',{battle:'normal'});
  BattleActorState.set('aidan','victory',{battle:'normal'});BattleActorState.set('fiona','victory',{battle:'normal'});
  const defeated=currentGoblin;
  attackBattleBusy=true; setNormalCommandDrawer(false);
@@ -1078,7 +1079,7 @@ document.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>renderSystemTa
 
 $('#resultContinue').onclick=()=>{
  $('#battleResult').style.display='none';const cb=resultCallback;resultCallback=null;if(cb)cb();
- BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('raider','fiona');BattleActorState.end('raider','lou');
+ BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('normal','tainted_goblin');BattleActorState.end('raider','fiona');BattleActorState.end('raider','lou');
 };
 
 let forestChests={fChest1:false,fChest2:false,fChest3:false},forestGobWins=0,louFound=false;
@@ -1742,13 +1743,13 @@ function v53raider(p,ms){
 }
 function v53tainted(p,ms){
  const g=document.querySelector('#bGob');
- v53img(g,V053.tainted[p]||V053.tainted.idle);
- return v53cin(g,null,ms||650).then(()=>{
-  if(!g?.classList.contains('taintedKO'))v53img(g,V053.tainted.idle);
- });
+ const state=p==='corrupted_attack'?'attack':p==='summon'?'corruption':p;
+ // Keep attack art through both the existing wind-up and existing lunge.
+ BattleActorState.set('tainted_goblin',state,{battle:'normal',duration:(ms||650)+(state==='attack'?820:0)});
+ return v53cin(g,null,ms||650);
 }
 const v53SA=startAttackBattle;
-startAttackBattle=function(id,hp){v53SA(id,hp);v53img(document.querySelector('#bGob'),V053.tainted.idle)};
+startAttackBattle=function(id,hp){v53SA(id,hp);BattleActorState.begin('normal','tainted_goblin')};
 const v53SR=startRaiderBattle;
 startRaiderBattle=function(){v53SR();v53img(document.querySelector('#raiderSprite'),V053.raider.idle)};
 const v53NE=normalEnemyTurn;
@@ -1771,7 +1772,7 @@ const V054={
 };
 function v54forceEnemyArt(){
  const g=document.querySelector('#bGob img');
- if(g){g.src=V054.taintedIdle;g.removeAttribute('hidden');}
+ if(g){BattleActorState.sync('normal','tainted_goblin');g.removeAttribute('hidden');}
  const r=document.querySelector('#raiderSprite img');
  if(r){r.src=V054.raiderIdle;r.removeAttribute('hidden');}
 }
