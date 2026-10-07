@@ -1,7 +1,7 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage']);
-  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer']);
   const battles = {
     normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
     raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },

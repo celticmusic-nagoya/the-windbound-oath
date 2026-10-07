@@ -766,7 +766,7 @@ function resolveNormalRound(){
        else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
      }else if(a.kind==='guard')act('フィオナは防御した。',()=>normalGuardF=true);
      else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(aahp/100<=normalFHP/90){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}},'normalFionaMagic','heal','fiona');
-     else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')},'normalFionaMagic','charge','fiona');
+     else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')},'normalFionaMagic','prayer','fiona');
      else act('フィオナの攻撃！',()=>{gghp-=20;v2Float('floatGob','-20');v2Hit('v2GobUnit')},'normalFionaAttack','attack','fiona');
    }
  });
@@ -1376,7 +1376,7 @@ function resolvePartyRound(){
        else sayAct('フィオナは魔力の雫を使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
      }else if(a.kind==='guard'){sayAct('フィオナは防御した。RUNE +10',()=>{rbGuardF=true;rbRune=Math.min(100,rbRune+10)})}
      else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=rbHP<=rbFHP?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)},'raiderFionaMagic','heal','fiona')}
-     else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)},'raiderFionaMagic','charge','fiona')}
+     else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)},'raiderFionaMagic','prayer','fiona')}
      else sayAct('フィオナが杖で応戦！ 22ダメージ。',()=>{rbBoss-=22;rbRune=Math.min(100,rbRune+7)},'raiderFionaAttack','attack','fiona');
    }
  });
