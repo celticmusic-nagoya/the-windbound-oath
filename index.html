@@ -1078,7 +1078,7 @@ document.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>renderSystemTa
 
 $('#resultContinue').onclick=()=>{
  $('#battleResult').style.display='none';const cb=resultCallback;resultCallback=null;if(cb)cb();
- BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('raider','fiona');
+ BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('raider','fiona');BattleActorState.end('raider','lou');
 };
 
 let forestChests={fChest1:false,fChest2:false,fChest3:false},forestGobWins=0,louFound=false;
@@ -1289,7 +1289,7 @@ function syncRaiderCommandClasses(){
 }
 
 function updateRaider(){
- BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');
+ BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');
  setRaiderCommandDrawer(false);
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
@@ -1318,7 +1318,7 @@ function startRaiderBattle(){
  hideBattleBanner();hideRaiderBattleLog();
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
  $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
- BattleActorState.begin('raider');BattleActorState.begin('raider','fiona');
+ BattleActorState.begin('raider');BattleActorState.begin('raider','fiona');BattleActorState.begin('raider','lou');
  showRaiderBattleLog('ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。');
  updateRaider();
 }
@@ -1398,6 +1398,7 @@ function rbEnemyParty(){
  }
  // Lou is support-only: modest automatic help, never a selectable turn.
  if((rbHP<42||rbFHP<38) && rbRound%3===0){
+   BattleActorState.action('lou','heal',{battle:'raider'});
    rbHP=Math.min(120,rbHP+12);rbFHP=Math.min(105,rbFHP+12);txt+='　ルーの風が二人を包む！ HP +12';
  }
  if(aidanHit)BattleActorState.set('aidan','damage',{battle:'raider',duration:360});
@@ -1405,13 +1406,14 @@ function rbEnemyParty(){
  rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');
  if(rbHP<=0||rbFHP<=0){
    showRaiderBattleLog('パーティーが崩れた……。ルーの風が時間を巻き戻す。');
+   BattleActorState.action('lou','blessing',{battle:'raider'});
    setTimeout(startRaiderBattle,1200);return;
  }
  rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;showRaiderBattleLog(txt);updateRaider();
 }
 function finishRaider(){
  if($('#raiderBattle').style.display==='none')return;
- BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});
+ BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});BattleActorState.set('lou','victory',{battle:'raider'});
  rbBusy=true;rbBoss=0;updateRaider();
  const sprite=$('#raiderSprite'), img=sprite&&sprite.querySelector('img');
  setRaiderCommandDrawer(false);

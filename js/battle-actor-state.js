@@ -1,12 +1,13 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal']);
-  const temporary = new Set(['attack', 'damage', 'charge', 'heal']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing']);
   const battles = {
     normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
     raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },
     'normal:fiona': { actor: 'fiona', image: '#bFiona2 img', health: () => [normalFHP, 90] },
-    'raider:fiona': { actor: 'fiona', image: '#rbFiona img', health: () => [rbFHP, 105] }
+    'raider:fiona': { actor: 'fiona', image: '#rbFiona img', health: () => [rbFHP, 105] },
+    'raider:lou': { actor: 'lou', image: '#rbLou img', health: () => [null, null] }
   };
   for (const battle of Object.values(battles)) {
     Object.assign(battle, { state: 'idle', sequence: 0, timer: null, guard: false });
@@ -27,12 +28,13 @@
   }
   function resting(battle) {
     const [hp, maxHp] = battle.health();
+    if (hp === null) return 'idle'; // Support actors have no invented HP resource.
     return hp <= 0 ? 'ko' : battle.guard ? 'guard' : hp <= maxHp * .30 ? 'low_hp' : 'idle';
   }
   function sync(context, actor = 'aidan') {
     const battle = lookup(context, actor);
     if (!battle) return;
-    if (battle.health()[0] <= 0 && battle.state !== 'ko') {
+    if (battle.health()[0] !== null && battle.health()[0] <= 0 && battle.state !== 'ko') {
       invalidate(battle);
       paint(battle, 'ko');
     } else if (!['ko', 'victory'].includes(battle.state) && !temporary.has(battle.state)) {
@@ -90,6 +92,10 @@
     end(context, actor = 'aidan') { invalidate(lookup(context, actor)); },
     get(context, actor = 'aidan') { return lookup(context, actor)?.state; },
     action(actor, state, { battle } = {}) {
+      if (actor === 'lou' && state === 'heal') {
+        return set(actor, 'charge', { battle, duration: 140, next: 'heal', nextDuration: 660 });
+      }
+      if (actor === 'lou' && state === 'blessing') return set(actor, state, { battle, duration: 1000 });
       if (actor === 'fiona' && state === 'heal') {
         return set(actor, 'charge', { battle, duration: 260, next: 'heal', nextDuration: 500 });
       }
