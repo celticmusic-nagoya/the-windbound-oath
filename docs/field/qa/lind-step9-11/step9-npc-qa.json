@@ -1,0 +1,788 @@
+[
+  {
+    "viewport": [
+      1280,
+      720
+    ],
+    "step": 9,
+    "actors": [
+      {
+        "id": "farmer_male",
+        "x": 970,
+        "y": 1144,
+        "width": 33.75539568345324,
+        "height": 46,
+        "footY": 1190,
+        "foot": {
+          "x": 961,
+          "y": 1182,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 2
+      },
+      {
+        "id": "farmer_female",
+        "x": 1150,
+        "y": 1156,
+        "width": 29.24550898203593,
+        "height": 44,
+        "footY": 1200,
+        "foot": {
+          "x": 1141,
+          "y": 1192,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "young_man",
+        "x": 630,
+        "y": 619,
+        "width": 18.111954459203034,
+        "height": 46,
+        "footY": 665,
+        "foot": {
+          "x": 621,
+          "y": 657,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "young_woman",
+        "x": 805,
+        "y": 621,
+        "width": 23.073170731707318,
+        "height": 44,
+        "footY": 665,
+        "foot": {
+          "x": 796,
+          "y": 657,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "elder_man",
+        "x": 460,
+        "y": 363,
+        "width": 26.79310344827586,
+        "height": 42,
+        "footY": 405,
+        "foot": {
+          "x": 451,
+          "y": 397,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "elder_woman",
+        "x": 790,
+        "y": 1021,
+        "width": 21.232927970065482,
+        "height": 39,
+        "footY": 1060,
+        "foot": {
+          "x": 781,
+          "y": 1052,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "boy",
+        "x": 600,
+        "y": 669,
+        "width": 14.335073068893527,
+        "height": 31,
+        "footY": 700,
+        "foot": {
+          "x": 591,
+          "y": 692,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "girl",
+        "x": 850,
+        "y": 694,
+        "width": 14.382066276803117,
+        "height": 31,
+        "footY": 725,
+        "foot": {
+          "x": 841,
+          "y": 717,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "merchant",
+        "x": 420,
+        "y": 645,
+        "width": 30.11439466158246,
+        "height": 45,
+        "footY": 690,
+        "foot": {
+          "x": 411,
+          "y": 682,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "innkeeper",
+        "x": 850,
+        "y": 375,
+        "width": 31.866028708133975,
+        "height": 45,
+        "footY": 420,
+        "foot": {
+          "x": 841,
+          "y": 412,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "fisherman",
+        "x": 1447,
+        "y": 1321,
+        "width": 34.190917516218725,
+        "height": 46,
+        "footY": 1367,
+        "foot": {
+          "x": 1438,
+          "y": 1359,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "caretaker",
+        "x": 1350,
+        "y": 1125,
+        "width": 23.42870544090056,
+        "height": 45,
+        "footY": 1170,
+        "foot": {
+          "x": 1341,
+          "y": 1162,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      }
+    ],
+    "overlaps": [],
+    "anchor": [
+      {
+        "id": "farmer_male",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "farmer_female",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "young_man",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "young_woman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "elder_man",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "elder_woman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "boy",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "girl",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "merchant",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "innkeeper",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "fisherman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "caretaker",
+        "bounded": true,
+        "ground": true
+      }
+    ],
+    "allInteractions": true,
+    "mouseOrTap": true,
+    "enter": true,
+    "movementBounds": true,
+    "waterContinues": true,
+    "saveAndLiveStateUnchanged": true,
+    "actorStopsOutsideReview": true,
+    "image404": 0,
+    "jsExceptions": 0,
+    "consoleErrors": 0
+  },
+  {
+    "viewport": [
+      844,
+      390
+    ],
+    "step": 9,
+    "actors": [
+      {
+        "id": "farmer_male",
+        "x": 970,
+        "y": 1144,
+        "width": 33.75539568345324,
+        "height": 46,
+        "footY": 1190,
+        "foot": {
+          "x": 961,
+          "y": 1182,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 2
+      },
+      {
+        "id": "farmer_female",
+        "x": 1150,
+        "y": 1156,
+        "width": 29.24550898203593,
+        "height": 44,
+        "footY": 1200,
+        "foot": {
+          "x": 1141,
+          "y": 1192,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "young_man",
+        "x": 630,
+        "y": 619,
+        "width": 18.111954459203034,
+        "height": 46,
+        "footY": 665,
+        "foot": {
+          "x": 621,
+          "y": 657,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "young_woman",
+        "x": 805,
+        "y": 621,
+        "width": 23.073170731707318,
+        "height": 44,
+        "footY": 665,
+        "foot": {
+          "x": 796,
+          "y": 657,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "elder_man",
+        "x": 460,
+        "y": 363,
+        "width": 26.79310344827586,
+        "height": 42,
+        "footY": 405,
+        "foot": {
+          "x": 451,
+          "y": 397,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "elder_woman",
+        "x": 790,
+        "y": 1021,
+        "width": 21.232927970065482,
+        "height": 39,
+        "footY": 1060,
+        "foot": {
+          "x": 781,
+          "y": 1052,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "boy",
+        "x": 600,
+        "y": 669,
+        "width": 14.335073068893527,
+        "height": 31,
+        "footY": 700,
+        "foot": {
+          "x": 591,
+          "y": 692,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "girl",
+        "x": 850,
+        "y": 694,
+        "width": 14.382066276803117,
+        "height": 31,
+        "footY": 725,
+        "foot": {
+          "x": 841,
+          "y": 717,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "merchant",
+        "x": 420,
+        "y": 645,
+        "width": 30.11439466158246,
+        "height": 45,
+        "footY": 690,
+        "foot": {
+          "x": 411,
+          "y": 682,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "innkeeper",
+        "x": 850,
+        "y": 375,
+        "width": 31.866028708133975,
+        "height": 45,
+        "footY": 420,
+        "foot": {
+          "x": 841,
+          "y": 412,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "fisherman",
+        "x": 1447,
+        "y": 1321,
+        "width": 34.190917516218725,
+        "height": 46,
+        "footY": 1367,
+        "foot": {
+          "x": 1438,
+          "y": 1359,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "caretaker",
+        "x": 1350,
+        "y": 1125,
+        "width": 23.42870544090056,
+        "height": 45,
+        "footY": 1170,
+        "foot": {
+          "x": 1341,
+          "y": 1162,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      }
+    ],
+    "overlaps": [],
+    "anchor": [
+      {
+        "id": "farmer_male",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "farmer_female",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "young_man",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "young_woman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "elder_man",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "elder_woman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "boy",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "girl",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "merchant",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "innkeeper",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "fisherman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "caretaker",
+        "bounded": true,
+        "ground": true
+      }
+    ],
+    "allInteractions": true,
+    "mouseOrTap": true,
+    "enter": true,
+    "movementBounds": true,
+    "waterContinues": true,
+    "saveAndLiveStateUnchanged": true,
+    "actorStopsOutsideReview": true,
+    "image404": 0,
+    "jsExceptions": 0,
+    "consoleErrors": 0
+  },
+  {
+    "viewport": [
+      390,
+      844
+    ],
+    "step": 9,
+    "actors": [
+      {
+        "id": "farmer_male",
+        "x": 970,
+        "y": 1144,
+        "width": 33.75539568345324,
+        "height": 46,
+        "footY": 1190,
+        "foot": {
+          "x": 961,
+          "y": 1182,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 2
+      },
+      {
+        "id": "farmer_female",
+        "x": 1150,
+        "y": 1156,
+        "width": 29.24550898203593,
+        "height": 44,
+        "footY": 1200,
+        "foot": {
+          "x": 1141,
+          "y": 1192,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "young_man",
+        "x": 630,
+        "y": 619,
+        "width": 18.111954459203034,
+        "height": 46,
+        "footY": 665,
+        "foot": {
+          "x": 621,
+          "y": 657,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "young_woman",
+        "x": 805,
+        "y": 621,
+        "width": 23.073170731707318,
+        "height": 44,
+        "footY": 665,
+        "foot": {
+          "x": 796,
+          "y": 657,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "elder_man",
+        "x": 460,
+        "y": 363,
+        "width": 26.79310344827586,
+        "height": 42,
+        "footY": 405,
+        "foot": {
+          "x": 451,
+          "y": 397,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "elder_woman",
+        "x": 790,
+        "y": 1021,
+        "width": 21.232927970065482,
+        "height": 39,
+        "footY": 1060,
+        "foot": {
+          "x": 781,
+          "y": 1052,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "boy",
+        "x": 600,
+        "y": 669,
+        "width": 14.335073068893527,
+        "height": 31,
+        "footY": 700,
+        "foot": {
+          "x": 591,
+          "y": 692,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "girl",
+        "x": 850,
+        "y": 694,
+        "width": 14.382066276803117,
+        "height": 31,
+        "footY": 725,
+        "foot": {
+          "x": 841,
+          "y": 717,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "merchant",
+        "x": 420,
+        "y": 645,
+        "width": 30.11439466158246,
+        "height": 45,
+        "footY": 690,
+        "foot": {
+          "x": 411,
+          "y": 682,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "innkeeper",
+        "x": 850,
+        "y": 375,
+        "width": 31.866028708133975,
+        "height": 45,
+        "footY": 420,
+        "foot": {
+          "x": 841,
+          "y": 412,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "fisherman",
+        "x": 1447,
+        "y": 1321,
+        "width": 34.190917516218725,
+        "height": 46,
+        "footY": 1367,
+        "foot": {
+          "x": 1438,
+          "y": 1359,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      },
+      {
+        "id": "caretaker",
+        "x": 1350,
+        "y": 1125,
+        "width": 23.42870544090056,
+        "height": 45,
+        "footY": 1170,
+        "foot": {
+          "x": 1341,
+          "y": 1162,
+          "width": 18,
+          "height": 8
+        },
+        "frameCount": 1
+      }
+    ],
+    "overlaps": [],
+    "anchor": [
+      {
+        "id": "farmer_male",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "farmer_female",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "young_man",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "young_woman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "elder_man",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "elder_woman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "boy",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "girl",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "merchant",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "innkeeper",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "fisherman",
+        "bounded": true,
+        "ground": true
+      },
+      {
+        "id": "caretaker",
+        "bounded": true,
+        "ground": true
+      }
+    ],
+    "allInteractions": true,
+    "mouseOrTap": true,
+    "enter": true,
+    "movementBounds": true,
+    "waterContinues": true,
+    "saveAndLiveStateUnchanged": true,
+    "actorStopsOutsideReview": true,
+    "image404": 0,
+    "jsExceptions": 0,
+    "consoleErrors": 0
+  }
+]

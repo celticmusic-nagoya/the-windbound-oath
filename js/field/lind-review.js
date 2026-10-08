@@ -69,8 +69,10 @@
     option.value = actor.id; option.textContent = actor.label;
     jump.append(option);
   });
+  window.LindFieldNPCs?.definitions.forEach(npc=>{const option=document.createElement('option');option.value=npc.id;option.textContent=npc.label;jump.append(option);});
   function focus(id) {
     if (!active) return false;
+    if(window.LindFieldNPCs?.focus(id))return true;
     const obj = assets.objects.find(item => item.id === id) || window.LindFieldAnimals?.actors.find(item => item.id === id);
     if (!obj) return false;
     target = null; px = obj.x+obj.width/2-17; py = obj.y+obj.height+20;
@@ -95,6 +97,7 @@
   document.body.append(controls);
   window.LindFieldTraining?.mount(layer, controls);
   window.LindFieldWindStone?.mount(layer, controls);
+  window.LindFieldNPCs?.mount(layer, controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -127,6 +130,7 @@
     active = value;
     window.LindFieldTraining?.clear();
     window.LindFieldWindStone?.clear();
+    window.LindFieldNPCs?.setActive(active);
     if (active) window.LindFieldAnimals?.start(); else window.LindFieldAnimals?.stop();
     document.body.classList.toggle('lindFieldReview', active);
     layer.hidden = !active;
@@ -146,7 +150,7 @@
       if (window.LindFieldRiver.blocked(x, y)) return true;
     } else if (originalBlocked(x, y)) return true;
     if (!active) return false;
-    if (window.LindFieldAnimals?.blocked(x, y)) return true;
+    if (window.LindFieldAnimals?.blocked(x, y) || window.LindFieldNPCs?.blocked(x,y)) return true;
     // Foot box, not full roof image; entrances remain approachable from below.
     return assets.objects.some(obj => (obj.collisions || (obj.collision ? [obj.collision] : [])).some(c => {
       return x+28 > obj.x+c[0] && x+6 < obj.x+c[0]+c[2] &&
@@ -176,7 +180,7 @@
       return;
     }
     if (e.key === 'Enter' || e.key === 'e') {
-      if(!window.LindFieldWindStone?.nearby()) window.LindFieldTraining?.nearby();
+      if(!window.LindFieldNPCs?.nearby()&&!window.LindFieldWindStone?.nearby()) window.LindFieldTraining?.nearby();
       e.preventDefault(); e.stopImmediatePropagation(); return;
     }
     if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','w','a','s','d'].includes(e.key)) {

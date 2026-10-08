@@ -56,3 +56,11 @@ body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { displ
 @media(prefers-reduced-motion:reduce) {
  .lind-stone-leaf { animation:none; }
 }
+/* Standalone NPC art and transparent touch targets are independent layers. */
+.lind-field-npc { position:absolute; pointer-events:none; }
+.lind-field-npc img { position:absolute; max-width:none; image-rendering:pixelated; }
+.lind-npc-interaction { position:absolute; pointer-events:auto; touch-action:manipulation;
+ background:transparent; border:0; box-shadow:none; padding:0; min-width:44px; min-height:44px; }
+.lind-npc-interaction:focus-visible { outline:1px solid #b79a58; outline-offset:2px; }
+#lindNPCNotice { flex-basis:100%; color:#f1e7c8; overflow-wrap:anywhere; }
+#lindNPCNotice[hidden] { display:none; }

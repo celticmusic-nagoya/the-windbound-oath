@@ -1,5 +1,29 @@
 /* Visible-content bounds (alpha >16); drawing only, PNG pixels unchanged. */
 window.LindFieldContentBounds = {
+  "lind_wind_stone_glow": [
+    1312,
+    1199,
+    294,
+    68,
+    816,
+    1080
+  ],
+  "lind_wind_stone": [
+    1312,
+    1199,
+    295,
+    75,
+    813,
+    1065
+  ],
+  "lind_wind_stone_off": [
+    1312,
+    1199,
+    293,
+    67,
+    816,
+    1078
+  ],
   "lind_reeds": [
     1536,
     1024,
@@ -448,28 +472,108 @@ window.LindFieldContentBounds = {
     1191,
     936
   ],
-  "lind_wind_stone": [
-    1312,
-    1199,
-    295,
-    75,
-    813,
-    1065
+  "farmer_male_idle": [
+    1377,
+    1142,
+    404,
+    98,
+    714,
+    973
   ],
-  "lind_wind_stone_glow": [
-    1312,
-    1199,
-    294,
-    68,
-    816,
-    1080
+  "farmer_female_idle": [
+    1360,
+    1156,
+    421,
+    92,
+    666,
+    1002
   ],
-  "lind_wind_stone_off": [
-    1312,
-    1199,
-    293,
-    67,
-    816,
-    1078
+  "young_man_idle": [
+    1298,
+    1212,
+    441,
+    79,
+    415,
+    1054
+  ],
+  "young_woman_idle": [
+    1303,
+    1207,
+    403,
+    125,
+    516,
+    984
+  ],
+  "elder_man_idle": [
+    1224,
+    1285,
+    316,
+    124,
+    703,
+    1102
+  ],
+  "elder_woman_idle": [
+    1230,
+    1278,
+    335,
+    138,
+    582,
+    1069
+  ],
+  "boy_idle": [
+    1291,
+    1218,
+    430,
+    150,
+    443,
+    958
+  ],
+  "girl_idle": [
+    1275,
+    1233,
+    406,
+    118,
+    476,
+    1026
+  ],
+  "merchant_idle": [
+    1322,
+    1190,
+    350,
+    78,
+    702,
+    1049
+  ],
+  "innkeeper_idle": [
+    1297,
+    1212,
+    351,
+    118,
+    740,
+    1045
+  ],
+  "fisherman_idle": [
+    1320,
+    1191,
+    339,
+    83,
+    802,
+    1079
+  ],
+  "caretaker_idle": [
+    1263,
+    1246,
+    354,
+    110,
+    555,
+    1066
+  ],
+  "farmer_male_walk": [
+    1377,
+    1142,
+    402,
+    97,
+    706,
+    968
   ]
 };
