@@ -1,0 +1,16 @@
+/* Art production staging only. No battle selector or motion rule. */
+#lindReviewLayer { position:absolute; inset:0; pointer-events:none; }
+#lindReviewLayer[hidden], #lindReviewControls[hidden] { display:none; }
+.lind-review-ground { position:absolute; image-rendering:pixelated; }
+.lind-review-object { position:absolute; object-fit:contain; pointer-events:none; }
+body.lindFieldReview #world > :not(#lindReviewLayer):not(#player):not(.bridge) { visibility:hidden; }
+body.lindFieldReview #player { z-index:2000; }
+body.lindFieldReview #game > :not(#world) { visibility:hidden!important; }
+body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { visibility:hidden!important; }
+body.lindFieldReview #world > .river, body.lindFieldReview #world > .bridge { z-index:1; }
+body.lindFieldReview #menuBtn, body.lindFieldReview #devBtn, body.lindFieldReview #msg,
+body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { display:none!important; }
+#lindReviewControls { position:fixed; top:8px; left:8px; right:8px; z-index:99999;
+ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px;
+ background:rgba(17,37,29,.94); border:1px solid #b79a58; color:#f1e7c8; font:12px sans-serif; }
+#lindReviewControls button { min-height:36px; padding:5px 16px; }

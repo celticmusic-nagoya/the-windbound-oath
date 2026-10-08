@@ -2,24 +2,24 @@
 
 開始基準: `73e02af6b89e236cdb5acd5e21cb422e8b0b8ce5`（fetch後の最新mainと一致）。今回の対象batchはSTEP 0〜3。NPC/Emma生成は後段。
 
-Source audit: 実施。Reference inventory: 実施したが、必要画像8種は未受領。
+Source audit: 実施。Reference inventory: ZIPで8画像を受領し、すべて目視照合済み。最新main `b0e90369271f868c5bf04ca9bd75f1bdd66c5a6d` をfetchで確認。
 
-**Production status: BLOCKED — REFERENCE IMAGES REQUIRED.** 画像生成機能は利用可能。機能不足を理由とする停止ではなく、確定デザイン・配置を参照できないためSTEP 1〜3の正式生成・配置は未実施。
+**Production status: REFERENCES VERIFIED — STEP 1〜3制作開始。** 添付はreferenceであり、切り抜いて実素材にしない。
 
 ## Reference inventory
 
-受領したファイルはProduction Instruction v2のテキストのみ。添付ディレクトリ、最新mainの追跡ファイル、img/を確認。
+資料は `docs/art/reference/lind/` に原本のまま保存。`inventory.json` にサイズ・モード・SHA-256を記録。
 
 | 指定資料 | 受領・視覚確認 | 依存STEP |
 |---|---|---|
-| リルド村 全体マップ（確定版） | 未受領 | 1〜3、配置・衝突定義・最終統合 |
-| 建物／施設素材資料 | 未受領 | 2 |
-| 宿屋デザイン資料 | 未受領 | 2 |
-| 農業／畜産施設資料 | 未受領 | 3 |
-| 訓練場資料 | 未受領 | 7 |
-| 地形／水辺／自然物資料 | 未受領 | 1、5、6 |
-| 村人NPC参考資料 | 未受領 | 9 |
-| Emma最新正式キャラクターデザイン資料 | 未受領。テキスト設定のみ認識済み | 10 |
+| リルド村 全体マップ（確定版） | 全体マップを確認 | 1〜3、配置・衝突定義・最終統合 |
+| 建物／施設素材資料 | 図鑑・宿屋資料で確認 | 2 |
+| 宿屋デザイン資料 | 図鑑・宿屋資料で確認 | 2 |
+| 農業／畜産施設資料 | 図鑑で確認 | 3 |
+| 訓練場資料 | 訓練場資料で確認 | 7 |
+| 地形／水辺／自然物資料 | 地形・水辺素材シートで確認 | 1、5、6 |
+| 村人NPC参考資料 | 村人スプライトシートで確認 | 9 |
+| Emma最新正式キャラクターデザイン資料 | ema.png / emadot.pngを確認 | 10 |
 
 既存 `img/battle/characters/aidan/aidan_reference_sheet.png` は戦闘用Aidan資料であり、村・Emmaの代用referenceにはしない。現在 `img/field/lind/` とEmma画像は存在しない。
 
@@ -43,7 +43,7 @@ Source audit: 実施。Reference inventory: 実施したが、必要画像8種�
 
 テキスト設定は [prologue-character-canon.json](../story/prologue-character-canon.json) に保存した。runtimeで読み込まず、NPC会話へ秘密を漏らさないauthoring metadata。
 
-Emmaの老齢・眼鏡・杖・曲がった腰・裁縫・植物刺繍、Fionaの服がEmmaの手作りである点を認識。Emma/Fionaが知るのは森で拾われた事実だけ。Elf救命と実の両親の死はauthor-only truth。Aidan母の病死と騎士への願いも記録。Emmaの最新画像は未受領のため「視覚確認済み」とは扱わず、家の正式割当・生成は未実施。
+Emmaの老齢・眼鏡・杖・曲がった腰・裁縫・植物刺繍、Fionaの服がEmmaの手作りである点を認識。Emma/Fionaが知るのは森で拾われた事実だけ。Elf救命と実の両親の死はauthor-only truth。Aidan母の病死と騎士への願いも記録。Emmaの2資料を目視確認。老齢・杖・丸眼鏡・まとめ髪・ショールの植物刺繍が設定と一致。原本に複数ポーズがあるが切り抜かない。家の正式割当・生成はSTEP 10まで保留。
 
 ## Baseline実行確認
 
@@ -61,10 +61,10 @@ Emmaの老齢・眼鏡・杖・曲がった腰・裁縫・植物刺繍、Fiona�
 | STEP | 状態 |
 |---|---|
 | 0 Source audit | 実施、既存source/実行接続点とstory metadataを記録 |
-| 0 Reference inventory | 実施、必要な8種すべて未受領 |
-| 1 Terrain | BLOCKED（確定マップ・地形reference待ち） |
-| 2 主要建物 | BLOCKED（建物・宿屋reference待ち） |
-| 3 農業／畜産施設 | BLOCKED（施設reference待ち） |
+| 0 Reference inventory | 実施、8画像すべて受領・目視確認・原本保存 |
+| 1 Terrain | 制作・QA中 |
+| 2 主要建物 | STEP 1のQA後に制作 |
+| 3 農業／畜産施設 | STEP 2のQA後に制作 |
 | 4〜15 | 今回の初期batchでは未着手。EmmaはSTEP 9の縮尺確定後に1点から制作 |
 
-参考画像の受領後に各STEPをstandalone generation→RGBA/目視QA→仮配置→collision/縮尺→3viewport確認→commit/pushの順で進める。reference crop、未確認デザインの独自生成、CSS代替の正式採用はしない。
+各STEPをstandalone generation→RGBA/目視QA→仮配置→collision/縮尺→3viewport確認→commit/pushの順で進める。reference crop、未確認デザインの独自生成、CSS代替の正式採用はしない。
