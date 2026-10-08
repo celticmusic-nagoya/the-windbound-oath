@@ -1,0 +1,19 @@
+/* Facing is image-local; translate/scale/rotate on the motion root stay independent. */
+.battleFacingImage{scale:var(--battle-facing,1) 1;transform-origin:center}
+.skillCutin{position:fixed;inset:0;z-index:10040;background:#08151266;display:grid;place-items:center;overflow:hidden;pointer-events:auto}
+.skillCutin img{width:min(92vw,1100px);height:min(45vh,365px);object-fit:contain;filter:drop-shadow(0 8px 15px #000a);animation:cutinEnter var(--cutin-duration) ease-out both}
+.skillCutin strong{position:absolute;left:10%;bottom:24%;color:#ede4bf;text-shadow:0 2px 5px #000;font-size:clamp(22px,4vw,40px);letter-spacing:.16em;border-bottom:1px solid #c5a45b99;padding:8px 16px;background:#12281fdd}
+.skillCutin.SPECIAL{background:radial-gradient(ellipse at center,#274a3655,#06130caa)}
+.skillCutin.SPECIAL img{height:min(56vh,430px);width:min(96vw,1200px)}
+.cutinRune{display:none;position:absolute;color:#d8c07e77;font-size:clamp(28px,8vw,90px);letter-spacing:.35em;top:17%}
+.SPECIAL .cutinRune{display:block}
+@keyframes cutinEnter{0%{opacity:0;translate:-8% 0}18%,82%{opacity:1;translate:0 0}100%{opacity:0;translate:5% 0}}
+.battleBanter{position:fixed;left:50%;top:12%;translate:-50% 0;z-index:10040;width:min(580px,86vw);box-sizing:border-box;padding:12px 20px;border:1px solid #9c8652;border-radius:8px;background:#0b201ef2;color:#eee5ce;font-size:clamp(12px,1.5vw,16px);text-align:center;box-shadow:0 6px 20px #0008}
+.battleBanter p{margin:3px 0;line-height:1.6}
+body.battlePresentationBusy #normalBattleCmd,body.battlePresentationBusy #rbCmd,body.battlePresentationBusy #battleTargetPanel,body.battlePresentationBusy .battleTargetHit,body.battlePresentationBusy #normalItems{pointer-events:none;visibility:hidden}
+.battleWindEffect{position:fixed;z-index:10026;pointer-events:none;border-radius:50%;box-shadow:0 0 22px #afd19777,inset 0 0 20px #e4d29355;animation:windSkillFlow .8s ease-out both}
+@keyframes windSkillFlow{from{opacity:.1;scale:.7;rotate:-15deg}40%{opacity:.8}to{opacity:0;scale:1.3;rotate:15deg}}
+#normalRuneReadout{position:absolute;top:14px;right:18px;font-size:11px;color:#dacb96;background:#10251fbb;padding:5px 9px;border:1px solid #9c865277;border-radius:4px;z-index:40}
+@media(orientation:portrait){.skillCutin img,.skillCutin.SPECIAL img{width:98vw;height:40vh}.skillCutin strong{left:5%;bottom:30%;font-size:24px}.cutinRune{top:26%}.battleBanter{top:14%;padding:10px 12px}}
+@media(orientation:landscape) and (max-height:520px){.skillCutin img,.skillCutin.SPECIAL img{height:55vh}.skillCutin strong{bottom:12%;font-size:24px}.battleBanter{top:7%;padding:8px 12px}.cutinRune{top:10%}#normalRuneReadout{top:8px}}
+@media(prefers-reduced-motion:reduce){.skillCutin img,.battleWindEffect{animation:none}}

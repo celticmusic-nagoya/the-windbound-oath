@@ -12,7 +12,7 @@ window.BATTLE_ASSET_PATHS = Object.freeze({
 const battleAssetFiles = {
   aidan: {
     idle: 'aidan_battle_idle.png', entry: 'aidan_battle_entry.png',
-    attack: 'aidan_attack.png', skill: 'aidan_skill_wind_slash.png',
+    attack: 'aidan_attack.png', skill: 'aidan_skill.png', wind: 'aidan_skill_wind_slash.png',
     charge: 'aidan_skill_charge.png', awaken: 'aidan_oath_awaken.png',
     evade: 'aidan_evade.png', guard: 'aidan_guard.png',
     damage: 'aidan_damage.png', low_hp: 'aidan_low_hp.png',
@@ -20,7 +20,7 @@ const battleAssetFiles = {
   },
   fiona: {
     idle: 'fiona_battle_idle.png', entry: 'fiona_battle_entry.png',
-    attack: 'fiona_attack.png', skill: 'fiona_skill_wind_slash.png',
+    attack: 'fiona_attack.png', skill: 'fiona_skill_windbloom.png',
     charge: 'fiona_skill_charge.png', heal: 'fiona_skill_heal.png',
     prayer: 'fiona_skill_wind_prayer.png', awaken: 'fiona_oath_awaken.png',
     evade: 'fiona_evade.png', guard: 'fiona_guard.png',
@@ -30,7 +30,7 @@ const battleAssetFiles = {
   lou: {
     idle: 'lou_battle_idle.png', entry: 'lou_battle_entry.png',
     support: 'lou_support.png', charge: 'lou_support_charge.png',
-    heal: 'lou_support_heal.png', blessing: 'lou_support_blessing.png',
+    rune: 'lou_skill_rune.png', heal: 'lou_support_heal.png', blessing: 'lou_support_blessing.png',
     evade: 'lou_evade.png', damage: 'lou_damage.png',
     low_hp: 'lou_low_hp.png', ko: 'lou_ko.png', victory: 'lou_victory.png'
   },
@@ -77,4 +77,13 @@ window.V053 = Object.freeze({
     smash: BATTLE_ASSETS.goblin_raider.attack,
     damage: BATTLE_ASSETS.goblin_raider.idle
   })
+});
+
+// Presentation art is deliberately separate from battlefield state images.
+window.BATTLE_CUTINS = Object.freeze({
+ skill: BATTLE_ASSET_PATHS.aidan + 'aidan_skill_cutin.png',
+ wind: BATTLE_ASSET_PATHS.aidan + 'aidan_wind_slash_cutin.png',
+ windbloom: BATTLE_ASSET_PATHS.fiona + 'fiona_skill_windbloom_cutin.png',
+ prayer: BATTLE_ASSET_PATHS.fiona + 'fiona_skill_wind_prayer_cutin.png',
+ blessing: BATTLE_ASSET_PATHS.lou + 'lou_skill_cutin.png'
 });

@@ -12,7 +12,7 @@
 
 
 
-<meta name="build-version" content="Phase 2.5.1a">
+<meta name="build-version" content="Phase 2.5.2">
 
 <link rel="stylesheet" href="css/style.css">
 <script src="js/assets.js"></script>
@@ -135,7 +135,7 @@
 <div id="normalItems"></div>
 <button id="normalCommandToggle" type="button">COMMAND</button><div hidden="" id="normalBattleCmd"><button class="drawerClose" id="normalCommandClose" type="button">× 閉じる</button>
 <button id="nAtk">攻撃</button><button id="nSkill">一閃 TP30</button><button id="nDevKill" class="dev-only-command">DEV｜一撃撃破</button>
-<button id="nHeal">ヒール MP8</button><button id="nPrayer">風の祈り MP6</button>
+<button id="nHeal">ヒール MP8</button><button id="nWindbloom">風花の舞 MP8</button><button id="nPrayer">風の祈り MP6</button>
 <button id="nGuard">防御</button><button id="nItem">アイテム</button>
 </div>
 </div>
@@ -168,7 +168,7 @@
 <div id="rbParty"><div class="partyCard" id="cardA"><b>エイダン</b><div class="mini"><i id="pAHP"></i></div><span id="pAtext"></span></div><div class="partyCard" id="cardF"><b>フィオナ</b><div class="mini"><i id="pFHP"></i></div><span id="pFtext"></span></div></div><div id="rbTop"><div class="rbPanel" style="visibility:hidden"><b>エイダン</b><div class="rbBar"><div class="rbFill" id="rbAHP"></div></div><span id="rbAHPt"></span><div id="rbRune"><div class="rbRuneFill" id="rbRuneFill"></div></div><span id="rbRunet"></span></div>
 <div class="rbPanel"><b>ゴブリン・レイダー</b><div class="rbBar"><div class="rbFill" id="rbBHP"></div></div><span id="rbBHPt"></span><div id="rbPhase"></div></div></div>
 <div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/characters/aidan/aidan_battle_idle.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/characters/fiona/fiona_battle_idle.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/characters/lou/lou_battle_idle.png"/><span class="louSupportTag">SUPPORT</span></div><div id="rbTurn"></div><div class="rbEnemyHud" id="rbEnemyHud"><b>ゴブリン・レイダー</b><div class="rbEnemyBar"><i id="rbEnemyHP"></i></div><small id="rbEnemyTxt">HP 1250</small></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/enemies/goblin_raider/goblin_raider_battle_idle.png"/></div><div class="battle-log-empty" id="rbMsg" aria-live="polite"></div>
-<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbDevKill" class="dev-only-command">DEV｜一撃撃破</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
+<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbDevKill" class="dev-only-command">DEV｜一撃撃破</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbWindbloom">風花の舞 MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
 </div>
 <div id="aftermathScene"><div id="aftermathAltar"></div><div id="aftermathSword">†</div><div id="aftermathParty">A　F　✧</div><div id="aftermathText"></div></div><div id="fortScene"><div id="fortWall"></div><div id="fortGate"></div><div id="fortBanner">⚜</div><div id="fortParty">A　F　✧</div><div id="fortText"></div></div>
 <button id="menuOpen" type="button">☰ MENU</button>
@@ -688,12 +688,12 @@ function updateNormalPartyHud(){
 function updateNormalCommands(){
  setNormalCommandDrawer(false);
  const a=normalActor==='aidan';
- ['nAtk','nSkill','nHeal','nPrayer','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id).classList.remove('v2-visible'));
+ ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id).classList.remove('v2-visible'));
  $('#nDevKill')?.classList.add('v2-visible');
  ['nAtk','nGuard','nItem'].forEach(id=>$('#'+id).classList.add('v2-visible'));
  if(a){$('#nSkill').classList.add('v2-visible')}
- else{['nHeal','nPrayer'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
- $('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
+ else{['nHeal','nPrayer','nWindbloom'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
+ $('#nWindbloom').disabled=normalFMP<8;$('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
 }
 function openNormalItems(){
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${normalActor==='aidan'?'エイダン':'フィオナ'}</b><br>
@@ -717,9 +717,9 @@ function advanceNormalActor(){
  }
 }
 function chooseNormalAct(kind,target){
- if(attackBattleBusy||BattleTargetSelector.active)return;
+ if(window.BattlePresentation?.busy||attackBattleBusy||BattleTargetSelector.active)return;
  if(normalActor==='aidan'&&kind==='skill'&&aatp<30){showBattleBanner('TPが足りない。一閃にはTP30が必要だ。',900);return}
- if(normalActor==='fiona'&&kind==='heal'&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
+ if(normalActor==='fiona'&&['heal','windbloom'].includes(kind)&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
  if(normalActor==='fiona'&&kind==='prayer'&&normalFMP<6){showBattleBanner('MPが足りない。',800);return}
  if(kind==='guard')BattleActorState.set(normalActor,'guard',{battle:'normal'});
  if(target===undefined){BattleActionTargets.request('normal',kind,normalActor,t=>chooseNormalAct(kind,t));return}
@@ -738,7 +738,7 @@ function startAttackBattle(id,hp){
  updateNormalCommands();
  updateNormalPartyHud();
  PrologueCombat.beginNormal(id);
- showBattleBanner(id==='attackGob1'?'母親が娘を庇っている――ゴブリンを退けよう！':id==='attackGob2'?'エイダン「こいつ……さっきの奴らと違う！」　フィオナ「この魔力……普通じゃない……！」':'魔物が立ちはだかった！',1000);
+ showBattleBanner(id==='attackGob1'?'母親が娘を庇っている――ゴブリンを退けよう！':'魔物が立ちはだかった！',1000);
  updateAttackBattle();
 }
 function updateAttackBattle(){
@@ -759,6 +759,7 @@ function normalEnemyTurn(){
 $('#nAtk').onclick=()=>chooseNormalAct('atk');
 $('#nSkill').onclick=()=>chooseNormalAct('skill');
 $('#nHeal').onclick=()=>chooseNormalAct('heal');
+$('#nWindbloom').onclick=()=>chooseNormalAct('windbloom');
 $('#nPrayer').onclick=()=>chooseNormalAct('prayer');
 $('#nGuard').onclick=()=>chooseNormalAct('guard');
 $('#nItem').onclick=()=>openNormalItems();
@@ -907,7 +908,7 @@ const SKILL_DB={
  ],
  fiona:[
   {lv:1,name:'ヒール',desc:'MP8。味方単体のHPを回復。'},
-  {lv:1,name:'風の祈り',desc:'MP6。味方を癒し、風の加護を与える。'},
+  {lv:1,name:'風の祈り',desc:'MP6。RUNEを28蓄積する風の祈り。'},
   {lv:5,name:'若葉の癒し',desc:'MP14。味方全体を小回復。'},
   {lv:9,name:'風の加護',desc:'MP10。味方全体のSPDを上昇。'},
   {lv:14,name:'森の抱擁',desc:'MP18。味方全体に継続回復。'}
@@ -1232,7 +1233,7 @@ let rbHP=120,rbTP=0,rbFHP=105,rbFMP=36,rbBoss=1250,rbRune=0,rbGuardA=false,rbGua
 function rbPhase(){return rbBoss>820?1:(rbBoss>400?2:3)}
 
 function syncRaiderCommandClasses(){
- const ids=['rbAtk','rbSkill','rbHeal','rbRuneSkill','rbGuard','rbItem','rbWind'];
+ const ids=['rbAtk','rbSkill','rbHeal','rbRuneSkill','rbWindbloom','rbGuard','rbItem','rbWind'];
  ids.forEach(id=>$('#'+id)?.classList.remove('rb-visible'));
 
  // Command ownership is explicit. Never infer from display/disabled state.
@@ -1241,11 +1242,11 @@ function syncRaiderCommandClasses(){
    // 風の一閃 is Aidan's RUNE special. Keep it visible so readiness is understandable.
    $('#rbWind')?.classList.add('rb-visible');
  }else{
-   ['rbAtk','rbHeal','rbRuneSkill','rbGuard','rbItem'].forEach(id=>$('#'+id)?.classList.add('rb-visible'));
+   ['rbAtk','rbHeal','rbRuneSkill','rbWindbloom','rbGuard','rbItem'].forEach(id=>$('#'+id)?.classList.add('rb-visible'));
  }
 
  $('#rbDevKill')?.classList.add('rb-visible');
- $('#rbSkill').disabled=rbTP<30;
+ $('#rbWindbloom').disabled=rbFMP<8;$('#rbSkill').disabled=rbTP<30;
  $('#rbHeal').disabled=rbFMP<8;
  $('#rbRuneSkill').disabled=rbFMP<6;
  $('#rbWind').disabled=rbRune<100;
@@ -1273,7 +1274,7 @@ function updateRaider(){
  }
  $('#cardA').classList.toggle('active',rbActor==='aidan');$('#cardF').classList.toggle('active',rbActor==='fiona');
  $('#rbCmd').classList.toggle('fionaTurn',rbActor==='fiona');
- $('#rbSkill').disabled=rbTP<30;$('#rbSkill').textContent=`一閃 TP30（${rbTP}）`;
+ $('#rbWindbloom').disabled=rbFMP<8;$('#rbSkill').disabled=rbTP<30;$('#rbSkill').textContent=`一閃 TP30（${rbTP}）`;
  $('#rbHeal').disabled=rbFMP<8;$('#rbRuneSkill').disabled=rbFMP<6;
  const ready=rbRune>=100;$('#raiderBattle').classList.toggle('windReady',ready);$('#rbWind').disabled=!ready;
  setTimeout(syncRaiderCommandClasses,0);
@@ -1289,7 +1290,7 @@ function startRaiderBattle(){
  updateRaider();
 }
 function choosePartyAct(kind,target){
- if(rbBusy||BattleTargetSelector.active)return;
+ if(window.BattlePresentation?.busy||rbBusy||BattleTargetSelector.active)return;
  if(target===undefined&&kind!=='item'){BattleActionTargets.request('raider',kind,rbActor,t=>choosePartyAct(kind,t));return}
  if(rbActor==='aidan'){
    if(kind==='item'){openRaiderItems();return}
@@ -1300,7 +1301,7 @@ function choosePartyAct(kind,target){
    showRaiderBattleLog('フィオナの行動を選択。');updateRaider();return;
  }
  if(kind==='item'){openRaiderItems();return}
- if(kind==='heal'&&rbFMP<8){showRaiderBattleLog('MPが足りない。');return}
+ if(['heal','windbloom'].includes(kind)&&rbFMP<8){showRaiderBattleLog('MPが足りない。');return}
  if(kind==='rune'&&rbFMP<6){showRaiderBattleLog('MPが足りない。');return}
  if(kind==='guard')BattleActorState.set('fiona','guard',{battle:'raider'});
  rbActs.push({who:'fiona',kind,target});rbBusy=true;resolvePartyRound();
@@ -1352,6 +1353,7 @@ $('#rbDevKill').onclick=()=>PrologueCombat.instantKill('raider');
 $('#rbAtk').onclick=()=>choosePartyAct('atk');
 $('#rbSkill').onclick=()=>choosePartyAct('skill');
 $('#rbHeal').onclick=()=>choosePartyAct('heal');
+$('#rbWindbloom').onclick=()=>choosePartyAct('windbloom');
 $('#rbRuneSkill').onclick=()=>choosePartyAct('rune');
 $('#rbGuard').onclick=()=>choosePartyAct('guard');$('#rbItem').onclick=()=>choosePartyAct('item');
 $('#rbWind').onclick=()=>choosePartyAct('wind');
@@ -1725,16 +1727,16 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
   // Hook the actual battle-message functions, not DOM mutation timing.
   const oldBanner=window.showBattleBanner;
   if(typeof oldBanner==='function') window.showBattleBanner=function(text,ms){
-    if(/エイダンの攻撃|一閃！/.test(text||'')) WBActors.normalAidan();
+    if(!window.BattlePresentation?.motionOwned && /エイダンの攻撃|一閃！/.test(text||'')) WBActors.normalAidan();
     else if(/フィオナの攻撃/.test(text||'')) WBActors.normalFionaAttack();
-    else if(/フィオナの「(ヒール|風の祈り)」/.test(text||'')) WBActors.normalFionaMagic();
+    else if(!window.BattlePresentation?.motionOwned && /フィオナの「(ヒール|風の祈り|風花の舞)」/.test(text||'')) WBActors.normalFionaMagic();
     return oldBanner.apply(this,arguments);
   };
   const oldRLog=window.showRaiderBattleLog;
   if(typeof oldRLog==='function') window.showRaiderBattleLog=function(text){
-    if(/エイダンの攻撃|エイダンの「一閃」|風の一閃/.test(text||'')) WBActors.raiderAidan();
+    if(!window.BattlePresentation?.motionOwned && /エイダンの攻撃|エイダンの「一閃」|風の一閃/.test(text||'')) WBActors.raiderAidan();
     else if(/フィオナが杖で応戦/.test(text||'')) WBActors.raiderFionaAttack();
-    else if(/フィオナの「(ヒール|風の祈り)」/.test(text||'')) WBActors.raiderFionaMagic();
+    else if(!window.BattlePresentation?.motionOwned && /フィオナの「(ヒール|風の祈り|風花の舞)」/.test(text||'')) WBActors.raiderFionaMagic();
     if(/レイダーがエイダンを狙う|レイダーがフィオナを狙う|破砕斬/.test(text||'')) WBActors.raiderEnemy();
     return oldRLog.apply(this,arguments);
   };
@@ -1863,4 +1865,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/prologue-dev.js"></script>
 <link rel="stylesheet" href="css/battle-polish.css">
 <script src="js/battle-party-layout.js"></script>
+<link href="css/battle-presentation.css" rel="stylesheet"/>
+<script src="js/battle-facing.js"></script>
+<script src="js/battle-presentation.js"></script>
 </body></html>

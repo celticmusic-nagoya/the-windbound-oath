@@ -1,7 +1,7 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer']);
-  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer', 'skill', 'wind', 'rune']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer', 'skill', 'wind', 'rune']);
   const battles = {
     normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
     raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },
@@ -29,6 +29,7 @@
     const image = document.querySelector(battle.image);
     const source = BATTLE_ASSETS[battle.actor][state];
     if (image && image.getAttribute('src') !== source) image.src = source;
+    window.BattleFacing?.paint(image, battle.actor, state);
   }
   function resting(battle) {
     const [hp, maxHp] = battle.health();

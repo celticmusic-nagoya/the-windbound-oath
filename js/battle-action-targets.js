@@ -6,14 +6,14 @@
   {id:'fiona',name:'フィオナ',node:r?'#rbFiona':'#bFiona2',hp:()=>r?rbFHP:normalFHP,active:window.PrologueCombat?.activeAlly(battle,'fiona')!==false}
  ];}
  function enemies(battle){return window.PrologueCombat?.targets(battle)||[{id:'enemy',name:battle==='raider'?'ゴブリンレイダー':'異常化ゴブリン',node:battle==='raider'?'#raiderSprite':'#bGob',hp:()=>battle==='raider'?rbBoss:gghp}];}
- function type(kind){return ['atk','skill'].includes(kind)?'enemy_single':kind==='wind'?'enemy_all':kind==='heal'?'ally_single':kind==='prayer'?'ally_all':kind==='rune'?'none':'self';}
+ function type(kind){return ['atk','skill','windbloom'].includes(kind)?'enemy_single':kind==='wind'?'enemy_all':kind==='heal'?'ally_single':['prayer','rune'].includes(kind)?'none':'self';}
  function request(battle,kind,actor,submit,item){
   const t=item==='potion'?'ally_single':item==='ether'?'ally_single':type(kind);
   if(battle==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);
   return BattleTargetSelector.open({type:t,battle,actor,candidates:t.startsWith('enemy')?enemies(battle):allies(battle).filter(x=>item!=='ether'||x.id==='fiona'),label:item?'アイテムの対象を選択':'行動の対象を選択',onConfirm:submit,onCancel:()=>{if(battle==='normal')setNormalCommandDrawer(true);else setRaiderCommandDrawer(true)}});
  }
  function item(battle,k){
-  if((battle==='normal'?attackBattleBusy:rbBusy)||BattleTargetSelector.active)return;
+  if(window.BattlePresentation?.busy||(battle==='normal'?attackBattleBusy:rbBusy)||BattleTargetSelector.active)return;
   if(!battleItems[k])return;
   const actor=battle==='normal'?normalActor:rbActor;
   request(battle,'item',actor,target=>{
