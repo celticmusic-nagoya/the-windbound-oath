@@ -2,6 +2,7 @@
 <html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"/>
 <title>THE WINDBOUND OATH v0.64</title>
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
+<script src="js/field/field-movement.js"></script>
 
 
 \n\n
@@ -228,11 +229,13 @@ function blockedWorld(x,y){
 function move(){
  if(target){
   let dx=target.x-px,dy=target.y-py,d=Math.hypot(dx,dy);
-  if(d<5){target=null}
+  if(d<.01){target=null}
   else{
-   let v=4,nx=px+dx/d*v,ny=py+dy/d*v;
-   if(!blockedWorld(nx,ny)){px=nx;py=ny}
-   else{target=null;toast('川は渡れない。橋を使おう。')}
+   const v=Math.min(d,FieldMovement.settings.pointerStep);
+   const moved=FieldMovement.advance(px,py,dx/d*v,dy/d*v,blockedWorld);
+   px=moved.x;py=moved.y;
+   if(moved.stopped){target=null;toast('その先へは進めない。')}
+   else if(d<=v)target=null;
   }
  }
  camera();
@@ -240,7 +243,13 @@ function move(){
 }
 move();
 $('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;let r=world.getBoundingClientRect();let tx=e.clientX-r.left-17,ty=e.clientY-r.top-22;if(blockedWorld(tx,ty)){toast('川は渡れない。橋を使おう。');return}target={x:tx,y:ty}});
-addEventListener('keydown',e=>{let v=18;let ox=px,oy=py;if(e.key==='ArrowLeft'||e.key==='a')px-=v;if(e.key==='ArrowRight'||e.key==='d')px+=v;if(e.key==='ArrowUp'||e.key==='w')py-=v;if(e.key==='ArrowDown'||e.key==='s')py+=v;px=Math.max(0,Math.min(2160,px));py=Math.max(0,Math.min(1500,py));if(blockedWorld(px,py)){px=ox;py=oy}camera()});
+addEventListener('keydown',e=>{
+ const directions={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
+ const direction=directions[e.key];if(!direction)return;
+ target=null;const v=FieldMovement.settings.keyboardStep;
+ const moved=FieldMovement.advance(px,py,direction[0]*v,direction[1]*v,blockedWorld);
+ px=moved.x;py=moved.y;camera();
+});
 let ipx=485,ipy=575,itarget=null;
 let innFloor=1;
 function inCamera(){let rw=$('#roomWorld'),x=Math.max(0,Math.min(1000-innerWidth,ipx-innerWidth/2)),y=Math.max(0,Math.min(720-innerHeight,ipy-innerHeight/2));rw.style.transform=`translate(${-x}px,${-y}px)`;$('#inPlayer').style.left=ipx+'px';$('#inPlayer').style.top=ipy+'px'}

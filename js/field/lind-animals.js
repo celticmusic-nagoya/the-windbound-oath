@@ -3,13 +3,26 @@
 (function () {
   'use strict';
   const definitions = [
-    {id:'cow', label:'牛', width:56, speed:5, rest:6, pen:{x:960,y:987,width:128,height:67}},
+    {id:'cow', label:'牛', width:56, displayScale:1.30, speed:5, rest:6, pen:{x:960,y:987,width:128,height:67}},
     {id:'pig', label:'豚', width:43, speed:7, rest:4, pen:{x:1120,y:985,width:128,height:67}},
     {id:'chicken', label:'鶏', width:24, speed:9, rest:3, pen:{x:1280,y:1000,width:120,height:52}}
   ];
   class FieldAnimal {
     constructor(definition, parent) {
       Object.assign(this, definition);
+      if(this.displayScale) {
+        const b=window.LindFieldContentBounds[this.id+'_idle'];
+        const baseHeight=this.width*b[5]/b[4];
+        this.groundAnchor=definition.pen.y+baseHeight;
+        const growX=this.width*(this.displayScale-1)/2;
+        const maxHeight=Math.max(...['idle','walk'].map(state=>{
+          const frame=window.LindFieldContentBounds[this.id+'_'+state];
+          return this.width*this.displayScale*frame[5]/frame[4];
+        }));
+        this.width*=this.displayScale;
+        this.pen={...this.pen,x:this.pen.x-growX,width:this.pen.width+growX*2,
+          y:this.groundAnchor-maxHeight,height:this.pen.y+this.pen.height-(this.groundAnchor-maxHeight)};
+      }
       this.paths = Object.fromEntries(['idle','walk'].map(state => [state,
         'img/field/lind/animals/'+this.id+'_'+state+'.png']));
       this.x = this.pen.x; this.y = this.pen.y;
@@ -44,6 +57,7 @@
       if (!b) return;
       const scale = this.width/b[4];
       this.height = b[5]*scale;
+      if(this.groundAnchor!==undefined)this.y=this.groundAnchor-this.height;
       Object.assign(this.element.style, {left:this.x+'px',top:this.y+'px',width:this.width+'px',
         height:this.height+'px',zIndex:String(Math.round(this.y+this.height))});
       Object.entries(this.frames).forEach(([state,image]) => { image.hidden = state !== frame; });
