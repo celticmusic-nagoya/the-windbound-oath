@@ -11,6 +11,7 @@ body.developmentMode #devPanel:not([style]),body.developmentMode #devPanel[style
 .battleDamageNumber{position:fixed;z-index:10025;pointer-events:none;translate:-50% -50%;color:#eee3cc;font-size:24px;text-align:center;text-shadow:0 2px 4px #000;animation:battleNumberRise .95s ease-out both}
 .battleDamageNumber span{display:block;font-size:12px;letter-spacing:.08em}
 .battleDamageNumber.isCritical{animation:battleCriticalHold 1.15s ease-out both;font-size:30px;color:#e5c77d;text-shadow:0 2px 4px #000,0 0 8px #ac894855}
+.battleDamageNumber.isCritical span{font-size:14px;font-weight:700;background:#081512e6;border:1px solid #9c865299;border-radius:4px;padding:2px 6px;white-space:nowrap}
 @keyframes battleCriticalHold{0%{opacity:0;scale:.85}10%{opacity:1;scale:1.08}15%,82%{opacity:1;scale:1}100%{opacity:0;translate:-50% -75%}}
 @keyframes battleNumberRise{0%{opacity:0;translate:-50% -30%}12%,65%{opacity:1}100%{opacity:0;translate:-50% -100%}}
 

@@ -14,7 +14,7 @@
  function valid(token){return token===PrologueCombat.generation;}
  function cancel(){
   epoch++;for(const finish of [...pending])finish(false);pending.clear();active.clear();queue=Promise.resolve();seen.clear();
-  document.body.classList.remove('battlePresentationBusy');document.querySelectorAll('.skillCutin,.battleBanter,.battleWindEffect').forEach(e=>e.remove());
+  document.body.classList.remove('battlePresentationBusy','wbShake','wbHeavyShake');document.querySelector('#wbImpactLayer')?.replaceChildren();document.querySelectorAll('.skillCutin,.battleBanter,.battleWindEffect,.battleDamageNumber').forEach(e=>e.remove());
  }
  function wait(ms,token,node){return new Promise(resolve=>{
   let done=false,timer;const finish=result=>{if(done)return;done=true;clearTimeout(timer);pending.delete(finish);node?.remove();resolve(result&&valid(token));};

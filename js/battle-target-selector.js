@@ -14,7 +14,7 @@
   }
   function cancel(){const p=pending;pending=null;clear();p?.onCancel?.();}
   function confirm(id){
-    const p=pending;if(!p)return false;
+    const p=pending;if(!p||window.BattlePresentation?.busy)return false;
     const chosen=p.candidates.find(x=>x.id===id);
     if(!chosen||!eligible(chosen,p.type))return false;
     pending=null;clear(); // Clear ownership before invoking action (double tap safe).
@@ -43,7 +43,7 @@
     });
   }
   function open({type,battle='normal',candidates=[],actor,onConfirm,onCancel,label='対象を選択'}){
-    if(pending)return false;
+    if(pending||window.BattlePresentation?.busy)return false;
     if(!types.has(type))return false;
     if(type==='none'){onConfirm(null);return true;}
     const valid=candidates.filter(x=>eligible(x,type));
@@ -55,7 +55,7 @@
     panel.querySelector('span').textContent=label+' / TARGET';panel.hidden=false;draw();return true;
   }
   addEventListener('keydown',e=>{
-    if(!pending)return;
+    if(!pending||window.BattlePresentation?.busy)return;
     if(!['ArrowLeft','ArrowRight','Enter',' ','Escape'].includes(e.key))return;
     e.preventDefault();e.stopImmediatePropagation();
     if(e.key==='Escape')return cancel();

@@ -1816,16 +1816,19 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
     return {x:r.left+r.width*.5,y:r.top+r.height*.48};
   }
   function fx(kind,id,delay=0){
+    const token=window.PrologueCombat?.generation;
     setTimeout(()=>{
+      if(token!==window.PrologueCombat?.generation)return;
       const p=center(id);if(!p)return;
       const e=document.createElement('div');e.className='wbFx '+kind;e.style.left=p.x+'px';e.style.top=p.y+'px';layer().appendChild(e);
       requestAnimationFrame(()=>e.classList.add('go'));setTimeout(()=>e.remove(),900);
     },delay);
   }
   function pop(id,text,delay=0){
-    setTimeout(()=>{const p=center(id);if(!p)return;const e=document.createElement('div');e.className='wbFx wbDamagePop';e.textContent=text;e.style.left=p.x+'px';e.style.top=(p.y-25)+'px';layer().appendChild(e);setTimeout(()=>e.remove(),800)},delay);
+    const token=window.PrologueCombat?.generation;
+    setTimeout(()=>{if(token!==window.PrologueCombat?.generation)return;const p=center(id);if(!p)return;const e=document.createElement('div');e.className='wbFx wbDamagePop';e.textContent=text;e.style.left=p.x+'px';e.style.top=(p.y-25)+'px';layer().appendChild(e);setTimeout(()=>e.remove(),800)},delay);
   }
-  function shake(heavy=false,delay=0){setTimeout(()=>{const c=heavy?'wbHeavyShake':'wbShake';document.body.classList.remove(c);void document.body.offsetWidth;document.body.classList.add(c);setTimeout(()=>document.body.classList.remove(c),heavy?300:200)},delay)}
+  function shake(heavy=false,delay=0){const token=window.PrologueCombat?.generation;setTimeout(()=>{if(token!==window.PrologueCombat?.generation)return;const c=heavy?'wbHeavyShake':'wbShake';document.body.classList.remove(c);void document.body.offsetWidth;document.body.classList.add(c);setTimeout(()=>document.body.classList.remove(c),heavy?300:200)},delay)}
   function hit(id,heavy=false,delay=360){if(['v2GobUnit','raiderSprite'].includes(id))id=window.PrologueCombat?.impactTarget()||id;fx('wbSlash',id,delay);fx('wbBurst',id,delay+25);shake(heavy,delay+20)}
   function magic(id,delay=300){fx('wbMagic',id,delay);shake(false,delay+90)}
 

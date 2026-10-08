@@ -101,7 +101,7 @@
   const token=generation;if(b==='normal')attackBattleBusy=true;else rbBusy=true;const statusStart=BattleStatus.snapshot(b);
   if(b==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);q('#normalItems').classList.remove('isOpen');
   for(const a of [...actions]){if(token!==generation)return;await situationalBanter(b,token);if(token!==generation)return;
-   if(BattlePresentation.definition(a.kind)&&canPresent(b,a)){if(!await BattlePresentation.action(b,a.kind,token))return;a.presented=true;}
+   if(BattlePresentation.definition(a.kind)&&canPresent(b,a)){impact=rosters[b].find(e=>e.id===a.target)?.unit||(a.kind==='wind'?'raiderSprite':impact);if(!await BattlePresentation.action(b,a.kind,token))return;a.presented=true;}
    if(token!==generation)return;const hit=heroAction(b,a);if(b==='normal')updateAttackBattle();else updateRaider();await situationalBanter(b,token);await sleep(hit?.critical?1000:900);if(token!==generation)return;if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
   if(token===generation)await enemyRound(b,statusStart);
  }
