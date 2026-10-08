@@ -2,7 +2,7 @@
 (() => {
  const q=s=>document.querySelector(s);
  const stats=Object.freeze({goblin:{hp:100,atk:12,def:10,spd:10},tainted_goblin:{hp:190,atk:15,def:11.5,spd:11.5}});
- let generation=0,roundNumber=1,impact=null,callFlags=[false,false],enragePending=false;
+ let generation=0,roundNumber=1,impact=null,callFlags=[false,false],enragePending=false,lastSupportRound=0,blessingUsed=false;
  const rosters={normal:[],raider:[]};
  const alive=b=>rosters[b].filter(e=>e.hp>0);
  function clean(b){
@@ -112,7 +112,7 @@
  }
 
  function beginRaider(){
-  generation++;impact=null;callFlags=[false,false];enragePending=false;BattleStatus.clear('raider');BattleTargetSelector.reset('raider');clean('raider');
+  generation++;impact=null;callFlags=[false,false];enragePending=false;lastSupportRound=0;blessingUsed=false;BattleStatus.clear('raider');BattleTargetSelector.reset('raider');clean('raider');
   const boss={id:'raider_enemy_0',key:'goblin_raider',type:'goblin_raider',maxHp:1250,def:10,extra:false,unit:'raiderSprite',node:'#raiderSprite',get hp(){return rbBoss},set hp(n){rbBoss=n}};
   rosters.raider=[boss];BattleActorState.register('raider',boss.key,boss.type,'#raiderSprite img',()=>[rbBoss,1250]);sync('raider');
  }
@@ -189,12 +189,33 @@
   updateRaider();await sleep(950);
   for(const e of alive('raider').filter(e=>e.extra)){if(token!==generation||rbBoss<=0)return;await addAction(e);}
   if(token!==generation||rbBoss<=0)return;
-  // Preserved support baseline until the support-policy checkpoint.
-  if((rbHP<42||rbFHP<38)&&rbRound%3===0){BattleActorState.action('lou','heal',{battle:'raider'});if(rbHP>0)rbHP=Math.min(120,rbHP+12);if(rbFHP>0)rbFHP=Math.min(105,rbFHP+12);log('raider','ルーの風が二人を包む！ HP +12');}
+  support();
   rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');BattleStatus.tick('raider',statusStart);
   if(rbHP<=0||rbFHP<=0){log('raider','パーティーが崩れた……。ルーの風が時間を巻き戻す。');BattleActorState.action('lou','blessing',{battle:'raider'});setTimeout(()=>{if(token===generation)startRaiderBattle()},1200);return}
   rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;updateRaider();
  }
 
- window.PrologueCombat=Object.freeze({stats,beginNormal,beginRaider,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor,spawn,supply,addAction,pendingCall,get callFlags(){return [...callFlags]},enrageMoment(){enragePending=true},get enragePending(){return enragePending}});
+
+ function buffParty(type){for(const ally of BattleActionTargets.allies('raider'))if(ally.active!==false&&ally.hp()>0)BattleStatus.apply({battle:'raider',target:ally.id,type,magnitude:.15,remainingTurns:3,source:'lou'});}
+ function support(force){
+  if(rbBoss<=0||BattleActorState.get('raider','lou')==='victory')return false;
+  if(force==='blessing'){
+   if(blessingUsed)return false;blessingUsed=true;enragePending=false;lastSupportRound=rbRound;
+   BattleActorState.action('lou','blessing',{battle:'raider'});buffParty('atk_up');buffParty('def_up');
+   log('raider','ルー「大丈夫、ルーもいるよ！」 《妖精の祝福》！ ATK / DEF +15%（3ターン）');return true;
+  }
+  if(rbRound-lastSupportRound<2)return false;
+  const danger=rbHP>0&&rbHP<42||rbFHP>0&&rbFHP<38;
+  if(!danger&&rbRound-lastSupportRound<3)return false;
+  lastSupportRound=rbRound;
+  if(danger){BattleActorState.action('lou','heal',{battle:'raider'});if(rbHP>0)rbHP=Math.min(120,rbHP+12);if(rbFHP>0)rbFHP=Math.min(105,rbFHP+12);log('raider','ルーの《妖精の癒し》！ HP +12');}
+  else {BattleActorState.action('lou','blessing',{battle:'raider'});buffParty('def_up');log('raider','ルーの《風の加護》！ DEF +15%（3ターン）');}
+  return true;
+ }
+ function enrageMoment(){
+  if(blessingUsed||enragePending)return;enragePending=true;const token=generation;
+  setTimeout(()=>{if(token===generation&&rbBoss>0&&rbPhase()===3)support('blessing')},800);
+ }
+
+ window.PrologueCombat=Object.freeze({stats,beginNormal,beginRaider,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor,spawn,supply,addAction,pendingCall,get callFlags(){return [...callFlags]},enrageMoment,support,get enragePending(){return enragePending}});
 })();
