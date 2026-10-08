@@ -1,5 +1,53 @@
 /* Visible-content bounds (alpha >16); drawing only, PNG pixels unchanged. */
 window.LindFieldContentBounds = {
+  "lind_reeds": [
+    1536,
+    1024,
+    328,
+    99,
+    906,
+    847
+  ],
+  "lind_fish_basket": [
+    1536,
+    1024,
+    427,
+    202,
+    764,
+    664
+  ],
+  "lind_river_rocks": [
+    1536,
+    1024,
+    242,
+    267,
+    1075,
+    581
+  ],
+  "lind_fishing_pier": [
+    1536,
+    1024,
+    138,
+    190,
+    1268,
+    636
+  ],
+  "lind_fishing_rod": [
+    1536,
+    1024,
+    265,
+    182,
+    1054,
+    680
+  ],
+  "lind_bridge": [
+    1774,
+    887,
+    23,
+    160,
+    1728,
+    584
+  ],
   "lind_stump": [
     1536,
     1024,
@@ -336,52 +384,68 @@ window.LindFieldContentBounds = {
     1191,
     936
   ],
-  "lind_bridge": [
-    1774,
-    887,
-    23,
-    160,
-    1728,
-    584
-  ],
-  "lind_fishing_pier": [
+  "train_ground": [
     1536,
     1024,
-    138,
-    190,
-    1268,
-    636
+    34,
+    194,
+    1468,
+    647
   ],
-  "lind_fishing_rod": [
+  "train_shed": [
     1536,
     1024,
-    265,
-    182,
-    1054,
-    680
+    296,
+    107,
+    978,
+    823
   ],
-  "lind_fish_basket": [
+  "train_weapon_rack": [
     1536,
     1024,
-    427,
-    202,
-    764,
-    664
+    184,
+    65,
+    1187,
+    890
   ],
-  "lind_reeds": [
+  "train_target": [
     1536,
     1024,
-    328,
+    458,
+    91,
+    639,
+    849
+  ],
+  "train_dummy": [
+    1312,
+    1199,
+    271,
     99,
-    906,
-    847
+    770,
+    1008
   ],
-  "lind_river_rocks": [
+  "train_post": [
     1536,
     1024,
-    242,
-    267,
-    1075,
-    581
+    543,
+    158,
+    465,
+    690
+  ],
+  "train_gate": [
+    1536,
+    1024,
+    245,
+    129,
+    1085,
+    799
+  ],
+  "train_flag_green": [
+    1536,
+    1024,
+    510,
+    61,
+    518,
+    861
   ]
 };

@@ -27,6 +27,9 @@
   terrain('stone', 570, 430, 350, 300);
   terrain('water', 1450, 0, 180, 1550, 128);
   terrain('riverbank', 1400, 0, 64, 1550, 128);
+  // Same central bridge leads onto the east-bank dirt approach, not a new crossing.
+  terrain('dirt', 1630, 565, 170, 60, 128);
+  terrain('dirt', 1730, 600, 95, 170, 128);
   assets.objects.forEach(obj => {
     const image = document.createElement('img');
     image.loading = 'lazy';
@@ -34,7 +37,7 @@
     image.src = obj.path;
     image.alt = obj.label;
     image.className = 'lind-review-object';
-    if (obj.motion === 'wind' || obj.id === 'lind_orchard_apple') image.classList.add('lind-wind-driven');
+    if (obj.motion === 'wind') image.classList.add('lind-wind-driven');
     image.dataset.assetId = obj.id;
     const draw = obj.draw || {x:obj.x, y:obj.y, width:obj.width, height:obj.height};
     Object.assign(image.style, {left:draw.x+'px', top:draw.y+'px', width:draw.width+'px',
@@ -87,6 +90,7 @@
   };
   controls.append(caption, jump, wind, close);
   document.body.append(controls);
+  window.LindFieldTraining?.mount(layer, controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -117,6 +121,7 @@
       snapshot = null;
     }
     active = value;
+    window.LindFieldTraining?.clear();
     if (active) window.LindFieldAnimals?.start(); else window.LindFieldAnimals?.stop();
     document.body.classList.toggle('lindFieldReview', active);
     layer.hidden = !active;
@@ -164,6 +169,10 @@
     if (e.target.closest('#lindReviewControls')) {
       e.stopImmediatePropagation();
       return;
+    }
+    if (e.key === 'Enter' || e.key === 'e') {
+      window.LindFieldTraining?.nearby();
+      e.preventDefault(); e.stopImmediatePropagation(); return;
     }
     if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','w','a','s','d'].includes(e.key)) {
       e.preventDefault(); e.stopImmediatePropagation();

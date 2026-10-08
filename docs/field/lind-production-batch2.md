@@ -73,12 +73,81 @@ review復元をPASS。画像404=0、JS例外=0。
 
 ## STEP 7
 
-未着手。各前工程のQAとcheckpoint push完了後に進める。
+8枚を単独生成: `train_ground`, `train_shed`, `train_weapon_rack`, `train_target`,
+`train_dummy`, `train_post`, `train_gate`, `train_flag_green`。
+全8枚RGBA・alpha・完全透明ピクセルあり。明るい背景で全画像を確認し、
+不要背景・大きな欠損なし。柵はSTEP 5を再利用。
+小さなopen木造小屋・土/草yardであり、要塞や軍事compoundにはしない。
+全training objectは川の東側x>=1630。従来の中央橋を渡った土の導線へ接続。
+
+dummyは独立したPNG／collision／44px以上の透明hit area／interaction ID。
+`LindFieldTraining`が近接範囲を確認し、クリック・tap・Enterで
+`lind-field-interaction`イベントを発行。`reviewOnly:true`付きで、story/saveを進めない。
+既存Aidan tutorialを呼び換えたり、新しいfield剣animationを作ったりしない。
+後工程のfield/tutorial連携用の受け口。既存live dummy1のtutorialは別途3サイズで再検証PASS。
+門は2本の柱のみcollision、中央通路は実際に矢印入力で通行確認。
+空のyardはwalkable、旗はwind-driven、dummy/rack/shedはstatic。
+
+3画面サイズでEast配置、門通行、dummy操作、wind、水流、家畜、
+collision、画像ロード、review終了時の原位置／flags／save／live river復元をPASS。
+証跡: `qa/lind-batch2/step7-qa.json`と3サイズの訓練場画面。
+
+## 最終QA
+
+| 項目 | 結果 |
+|---|---|
+| 新規素材 | 34枚: STEP 4=6 / STEP 5=14 / STEP 6=6 / STEP 7=8 |
+| Alpha / visual | 新規34枚すべてRGBA、実透明ピクセルあり、不要背景・重大欠損なし |
+| Animal anatomy | 牛/豚各4脚・1頭・1尾、鶏2脚・1頭、融合・重複顔なし |
+| Animal behavior | 独立IDLE/WALK、低速範囲内往復、足元collision、終了時RAF停止 |
+| River / water | 東側river、橋の横断、wind OFFでもwater flow継続 |
+| Fishing | SE bank、2人用standing spaces、桟橋polygon外の水面侵入禁止 |
+| Training | 橋東側、小さなyard、open gate、独立dummyのclick/tap/Enter |
+| Collision | 全declared colliderの足元、幹/支柱/柵、yardと門、橋とdockを確認 |
+| PC 1280×720 | PASS |
+| Mobile landscape 844×390 | PASS（tap destination/dummy/既存tutorial/COMMAND） |
+| Mobile portrait 390×844 | PASS（同上） |
+| Battle regression | normal/Tainted、Raider、COMMAND、攻撃中DEV撃破、KO固定、Victory、古いtimerの上書きなし |
+| Raider | HP1250、巨大sprite、spriteから独立したboss HUD維持 |
+| 全登録battle image | 61パスを3サイズのbrowserでロード、すべて成功 |
+| Image 404 | 0 |
+| JS exceptions / console errors | 0 / 0（最終再検証） |
+| Old / invalid runtime references | 0（embedded / numbered / old Lou、literal path監査） |
+| Battle source/assets差分 | 0 |
+| Batch 1既存PNG差分 | 0 |
+| DEV_MODE | true維持 |
+
+最終検証で検出した既存のimplicit `/favicon.ico` 404は、制作済み葉看板PNGを
+HTMLのiconに明示して解消。新しいicon画像生成やBattle変更なし。
+証跡: `final-source-audit.json`, `final-live-qa.json`, `final-battle-regression.json`。
+
+## Checkpoints
+
+全て通常push、force pushなし。
+
+| 工程 | Commit |
+|---|---|
+| START | `a5d6f6221cd9aaf15f94a79f4f44b4c6276c6f84` |
+| STEP 4 | `cb81bb32827169a1c709f80a372e35ecfd8b5aaf` |
+| STEP 5 assets/wind | `e99ba1b003f9d5552d926fd20ff59d0f392824f3` |
+| STEP 5 control sync | `c1a4c321637312277e4e69368ef0799eacfddf59` |
+| STEP 6 | `37a165354c9310ca4640abf1383aa0cfd446736f` |
+| STEP 7 / FINAL | このレポートを含むSTEP 7 checkpoint（Git log参照） |
+
+変更: 新規PNG34枚、`js/field/`のregistry/bounds/reviewと独立actor/environment/
+river/training modules、field専用CSS、indexのfield読み込みとicon参照、監査/manifest/QA文書。
+削除ファイルなし。Battle、ストーリー、save、Emma/NPC、正式主人公field素材は変更なし。
 
 ## 維持事項・警告
 
 Battle source/assets/actor state、DEV_MODE=trueを維持。
 Batch 1の高解像度生成素材・仮配置・未統合のmapという制約を継承。
 正式32×32タイル化／seamless境界、roof分離、story event再配置は今回の完了対象外。
+家畜のWALKは2ポーズの簡易歩行で、高度なAIや多方向フルanimationではない。
+釣り人／playerのstanding spotsは確保済みだが、NPC追加は今回未実施。
+正式field character/NPC scaleはSTEP 9以降、dummyの実tutorial接続はSTEP 12。
 各画像のmode・alpha数・寸法・SHA: `lind-asset-audit.json`。
 制作出典・工程・reviewOnly: `lind-production-manifest.json`。
+
+判定: **PASS WITH WARNINGS**。制作・仮配置・基礎動作のQAはPASS、最終map統合と
+正式character scaleは後工程。STEP 8以降へ進まず **PLAYER QA READY** で停止。

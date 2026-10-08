@@ -8,12 +8,14 @@
     collision:[Math.round(width*.18),Math.round(height*.62),Math.round(width*.64),Math.round(height*.27)]});
   const farm = (id, label, x, y, width, height, walkable = false) => ({id, label,
     path:base+'farm/'+id+'.png', x, y, width, height,
-    layer:walkable ? 'groundDecoration' : 'structure', motion:walkable ? 'wind' : 'static',
+    layer:walkable ? 'groundDecoration' : 'structure', motion:walkable || id==='lind_orchard_apple' ? 'wind' : 'static',
     collision:walkable ? null : [Math.round(width*.2),Math.round(height*.65),Math.round(width*.6),Math.round(height*.23)]});
   const prop = (id, label, folder, x, y, width, height, motion = 'static', solid = true) => ({id,label,
     path:base+folder+'/'+id+'.png',x,y,width,height,motion,
     layer:solid ? 'structure' : 'groundDecoration',
     collision:solid ? [Math.round(width*.15),Math.round(height*.76),Math.round(width*.7),Math.round(height*.2)] : null});
+  const training = (id, label, x, y, width, height, motion = 'static', solid = true) => ({
+    ...prop(id,label,'training',x,y,width,height,motion,solid),category:'training'});
   window.LindFieldAssets = {
     terrain: {
       grass: base + 'terrain/lind_grass.png',
@@ -69,7 +71,17 @@
       prop('lind_fish_basket', '釣り籠', 'river', 1360, 1380, 28, 25),
       prop('lind_reeds', '川辺の葦', 'river', 1390, 1190, 40, 50, 'wind', false),
       prop('lind_river_rocks', '川辺の小石', 'river', 1370, 1445, 55, 24, 'static', false),
-      {...prop('lind_crate', '釣り場の木箱', 'props', 1350, 1310, 36, 36),id:'fishing_crate',boundsId:'lind_crate'}
+      {...prop('lind_crate', '釣り場の木箱', 'props', 1350, 1310, 36, 36),id:'fishing_crate',boundsId:'lind_crate'},
+      training('train_ground', '橋東側の訓練場', 1690, 650, 440, 290, 'static', false),
+      training('train_shed', '小さな見張り小屋', 2020, 645, 110, 110),
+      training('train_weapon_rack', '練習用武器架', 2040, 825, 75, 65),
+      training('train_target', '弓の的', 1930, 810, 45, 65),
+      {...training('train_dummy', '独立した訓練人形', 1780, 805, 44, 65),interaction:'training_dummy'},
+      training('train_post', '木製の杭', 1710, 810, 14, 40),
+      training('train_gate', '訓練場の入口', 1730, 655, 95, 80),
+      training('train_flag_green', '緑の訓練旗', 1715, 725, 32, 70, 'wind'),
+      {...prop('lind_fence', '訓練場の柵・西', 'props', 1710, 930, 185, 70),id:'train_fence_west',boundsId:'lind_fence',category:'training'},
+      {...prop('lind_fence', '訓練場の柵・東', 'props', 1930, 930, 185, 70),id:'train_fence_east',boundsId:'lind_fence',category:'training'}
     ]
   };
   // Normalize transparent export margins in the renderer, without changing PNGs.
@@ -105,6 +117,15 @@
       obj.collision = null;
       obj.collisions = Array.from({length:6}, (_, i) => [Math.floor(obj.width*i/6),
         Math.round(obj.height*(.85-.3*i/5)),Math.ceil(obj.width/6),Math.round(obj.height*.15)]);
+    }
+    if (obj.id === 'train_gate') {
+      obj.collision = null;
+      obj.collisions = [.04,.86].map(x => [Math.round(obj.width*x),
+        Math.round(obj.height*.8),Math.round(obj.width*.1),Math.round(obj.height*.18)]);
+    }
+    if (obj.id === 'train_flag_green') {
+      obj.collision = [Math.round(obj.width*.35),Math.round(obj.height*.86),
+        Math.round(obj.width*.18),Math.round(obj.height*.12)];
     }
   });
 })();
