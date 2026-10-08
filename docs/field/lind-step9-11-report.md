@@ -27,3 +27,17 @@ All 12 NPCs: click/tap and near Enter, proximity rejection contract, independent
 38 px display height versus adults 39–46 / current placeholder player44, fixed foot anchor, independent foot collision, safe touch target. All 13 NPCs tested in three viewports: no structure/actor foot overlap, click/tap/Enter functional, save/progression unchanged. Emma does not patrol or carry story content. No origin reveal, illness/death/letter/late-game scenes. Battle regression follows each gate.
 
 STEP 9 checkpoint: `7189b175fcc02159bd3a0a4d798fb5a240745867`, pushed to preparation branch.
+
+STEP 10 checkpoint: `3edf25d1ff4272ffc3a4fd3680e74414ae1d7c47`, pushed to preparation branch.
+
+## STEP 11
+
+Two standalone bird PNGs (perched/flying), 1536×1024 RGBA: fully transparent 88.49% / 78.85%. The first perched candidate had an unwanted halo and was rejected; image-generation transparency edit retained the bird and produced the adopted clean outline. Raw and light/dark alpha composites visually inspected: one head/body/tail, two wings/feet, no baked background or major anatomy fault. No existing asset edited.
+
+Two ground birds and a reusable three-bird overhead flock; fixed five DOM nodes, no collisions/input interception. Ground birds take off over 1.1 seconds within 70px, fade into flight, wait at least 25 seconds and return only when the player is >100px away. Flock starts after 18 seconds, crosses for 12 seconds, rests 45 seconds. Reduced motion suppresses flock and shortens takeoff. NPC/animal/water timelines remain independent.
+
+Wind OFF hides birds and cancels their RAF/new spawns, pauses existing classified foliage/sign/laundry wind motion. Wind ON resumes. River water keeps animating in both states. No standalone waterfall exists in the current DEV asset set; waterfall integration is not claimed or expanded into STEP 12.
+
+QA passed three viewports: actual keyboard/tap approach and takeoff, flock, wind toggle, 60-second OFF clock advance without new flock, water change, reduced motion, bounded DOM, no horizontal overflow, full preview/save/story restoration. Long ambient delays are advanced through the same update API in 0.1-second steps; takeoff uses real input and RAF clock playback. Initial bird-review placement intersected the Wind Stone collision; moved the bird from y690 to y750 and confirmed the player focus is unblocked without changing existing colliders/movement.
+
+Normal/Raider regression passed all three viewports: COMMAND, enemy motion, DEV kill during motion, KO, Victory and stale-action protection. Image404 / JS exceptions / console errors zero in bird QA.

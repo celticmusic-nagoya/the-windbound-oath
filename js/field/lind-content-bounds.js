@@ -583,5 +583,21 @@ window.LindFieldContentBounds = {
     107,
     643,
     1145
+  ],
+  "lind_bird_perched": [
+    1536,
+    1024,
+    433,
+    242,
+    599,
+    575
+  ],
+  "lind_bird_flying": [
+    1536,
+    1024,
+    396,
+    115,
+    822,
+    736
   ]
 };

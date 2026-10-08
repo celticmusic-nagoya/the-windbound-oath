@@ -70,9 +70,11 @@
     jump.append(option);
   });
   window.LindFieldNPCs?.definitions.forEach(npc=>{const option=document.createElement('option');option.value=npc.id;option.textContent=npc.label;jump.append(option);});
+  if(window.LindFieldBirds){const option=document.createElement('option');option.value='lind_ground_birds';option.textContent='小鳥';jump.append(option);}
   function focus(id) {
     if (!active) return false;
     if(window.LindFieldNPCs?.focus(id))return true;
+    if(id==='lind_ground_birds')return window.LindFieldBirds?.focus()||false;
     const obj = assets.objects.find(item => item.id === id) || window.LindFieldAnimals?.actors.find(item => item.id === id);
     if (!obj) return false;
     target = null; px = obj.x+obj.width/2-17; py = obj.y+obj.height+20;
@@ -98,6 +100,7 @@
   window.LindFieldTraining?.mount(layer, controls);
   window.LindFieldWindStone?.mount(layer, controls);
   window.LindFieldNPCs?.mount(layer, controls);
+  window.LindFieldBirds?.mount(layer);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -131,6 +134,7 @@
     window.LindFieldTraining?.clear();
     window.LindFieldWindStone?.clear();
     window.LindFieldNPCs?.setActive(active);
+    window.LindFieldBirds?.setActive(active);
     if (active) window.LindFieldAnimals?.start(); else window.LindFieldAnimals?.stop();
     document.body.classList.toggle('lindFieldReview', active);
     layer.hidden = !active;

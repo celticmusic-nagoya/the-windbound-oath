@@ -64,3 +64,10 @@ body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { displ
 .lind-npc-interaction:focus-visible { outline:1px solid #b79a58; outline-offset:2px; }
 #lindNPCNotice { flex-basis:100%; color:#f1e7c8; overflow-wrap:anywhere; }
 #lindNPCNotice[hidden] { display:none; }
+/* Ambient birds never intercept touch or become ground collisions. */
+.lind-field-bird { position:absolute; pointer-events:none; }
+.lind-field-bird[hidden] { display:none; }
+.lind-field-bird img { position:absolute; max-width:none; image-rendering:pixelated; }
+.lind-bird-flying img { animation:lindBirdWing .18s ease-in-out infinite alternate; }
+@keyframes lindBirdWing { from { transform:rotate(-2deg); } to { transform:rotate(2deg); } }
+@media(prefers-reduced-motion:reduce) { .lind-bird-flying img { animation:none; } }
