@@ -10,7 +10,7 @@
  function request(battle,kind,actor,submit,item){
   const t=item==='potion'?'ally_single':item==='ether'?'ally_single':type(kind);
   if(battle==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);
-  return BattleTargetSelector.open({type:t,battle,actor,candidates:t.startsWith('enemy')?enemies(battle):allies(battle),label:item?'アイテムの対象を選択':'行動の対象を選択',onConfirm:submit,onCancel:()=>{if(battle==='normal')setNormalCommandDrawer(true);else setRaiderCommandDrawer(true)}});
+  return BattleTargetSelector.open({type:t,battle,actor,candidates:t.startsWith('enemy')?enemies(battle):allies(battle).filter(x=>item!=='ether'||x.id==='fiona'),label:item?'アイテムの対象を選択':'行動の対象を選択',onConfirm:submit,onCancel:()=>{if(battle==='normal')setNormalCommandDrawer(true);else setRaiderCommandDrawer(true)}});
  }
  function item(battle,k){
   if((battle==='normal'?attackBattleBusy:rbBusy)||BattleTargetSelector.active)return;

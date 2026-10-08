@@ -12,3 +12,7 @@ body.soloRescue.normalBattleMode #v2FionaUnit,body.soloRescue.normalBattleMode #
 #louSeal.corrupted{border-color:#604e70;background:radial-gradient(circle,#492d6077,transparent 65%);box-shadow:0 0 35px #6c488088 inset}
 #louSeal.corrupted::after{color:#aa7ac0}
 #forestScene.windRestored::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 80% 35%,#a1d7b155,transparent 50%);z-index:20}
+.raiderAdd{right:26%;bottom:18%}
+.raiderAdd.slot2{right:12%;bottom:6%}
+.corruptionSupply{position:fixed;height:5px;transform-origin:left center;z-index:10025;background:linear-gradient(90deg,#30193c,#aa70c7,#30193c);box-shadow:0 0 10px #b477c2;pointer-events:none}
+@media(orientation:portrait){.raiderAdd{right:28%;bottom:30%}.raiderAdd.slot2{right:3%;bottom:15%}}

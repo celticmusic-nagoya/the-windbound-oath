@@ -717,7 +717,7 @@ function advanceNormalActor(){
  }
 }
 function chooseNormalAct(kind,target){
- if(attackBattleBusy)return;
+ if(attackBattleBusy||BattleTargetSelector.active)return;
  if(normalActor==='aidan'&&kind==='skill'&&aatp<30){showBattleBanner('TPが足りない。一閃にはTP30が必要だ。',900);return}
  if(normalActor==='fiona'&&kind==='heal'&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
  if(normalActor==='fiona'&&kind==='prayer'&&normalFMP<6){showBattleBanner('MPが足りない。',800);return}
@@ -1257,7 +1257,8 @@ function syncRaiderCommandClasses(){
 
 function updateRaider(){
  BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');BattleActorState.sync('raider','goblin_raider');
- BattleActorState.trackPhase('goblin_raider',rbPhase(),{battle:'raider'});
+ const phaseEntered=BattleActorState.trackPhase('goblin_raider',rbPhase(),{battle:'raider'});
+ if(phaseEntered&&rbPhase()===3)window.PrologueCombat?.enrageMoment();
  setRaiderCommandDrawer(false);
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
@@ -1287,6 +1288,7 @@ function startRaiderBattle(){
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
  $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
  BattleActorState.begin('raider');BattleActorState.begin('raider','fiona');BattleActorState.begin('raider','lou');BattleActorState.begin('raider','goblin_raider');
+ PrologueCombat.beginRaider();
  showRaiderBattleLog('ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。');
  updateRaider();
 }
@@ -1323,59 +1325,16 @@ $('#normalItems').addEventListener('click',e=>{
 });
 
 function resolvePartyRound(){
- let delay=0;
- const sayAct=(txt,fn,motion,pose,actor='aidan')=>{setTimeout(()=>{if(pose)BattleActorState.action(actor,pose,{battle:'raider'});if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();fn&&fn();showRaiderBattleLog(txt);updateRaider()},delay);delay+=760};
- rbActs.forEach(a=>{
-   if(a.who==='aidan'){
-     if(a.kind==='item'){sayAct('アイテムを使った。',()=>BattleActionTargets.applyItem('raider',a))}else if(a.kind==='guard'){sayAct('エイダンは身を固めた。TP +10 / RUNE +10',()=>{rbGuardA=true;rbTP=Math.min(100,rbTP+10);rbRune=Math.min(100,rbRune+10)})}
-     else if(a.kind==='wind'){sayAct('誓いの剣――「風の一閃」！ 255ダメージ！ 増援と破砕斬の構えを吹き飛ばした！',()=>{rbRune=0;rbBoss-=255;rbAdds=0;rbQueued=false})}
-     else if(a.kind==='skill'){sayAct('エイダンの「一閃」！ 68ダメージ。',()=>{rbTP-=30;rbBoss-=68;rbRune=Math.min(100,rbRune+14)},'raiderAidan')}
-     else sayAct('エイダンの攻撃！ 42ダメージ。TP +15',()=>{rbBoss-=42;rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)},'raiderAidan','attack');
-   }else{
-     if(a.kind==='item'){sayAct('アイテムを使った。',()=>BattleActionTargets.applyItem('raider',a))}else if(a.kind==='guard'){sayAct('フィオナは防御した。RUNE +10',()=>{rbGuardF=true;rbRune=Math.min(100,rbRune+10)})}
-     else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=a.target==='aidan'?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)},'raiderFionaMagic','heal','fiona')}
-     else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)},'raiderFionaMagic','prayer','fiona')}
-     else sayAct('フィオナが杖で応戦！ 22ダメージ。',()=>{rbBoss-=22;rbRune=Math.min(100,rbRune+7)},'raiderFionaAttack','attack','fiona');
-   }
- });
- setTimeout(()=>{if(rbBoss<=0)finishRaider();else rbEnemyParty()},delay);
+ return PrologueCombat.round('raider',rbActs);
 }
 function rbEnemyParty(){
- if(window.WBActors)WBActors.raiderEnemy();
- const phase=rbPhase();let txt='',aidanHit=false,fionaHit=false;
- if(rbQueued){
-   let base=phase===3?48:42;
-   let da=rbGuardA?Math.ceil(base/2):base, df=rbGuardF?Math.ceil((base-6)/2):base-6;
-   aidanHit=fionaHit=true;rbHP-=da;rbFHP-=df;rbQueued=false;txt=`レイダーの「破砕斬」！ エイダン ${da} / フィオナ ${df} ダメージ！`;
- }else if((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4){
-   rbAdds=Math.min(4,rbAdds+2);txt='レイダーが角笛を吹いた！　増援が現れた。攻撃が激しくなる！';
- }else if(rbRound%3===0 || (phase===3&&rbRound%2===0)){
-   rbQueued=true;txt='レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！';
- }else{
-   let target=rbHP<=rbFHP?'a':'f',d=(phase===1?21:phase===2?27:32)+rbAdds*3;
-   if(target==='a'){if(rbGuardA)d=Math.ceil(d/2);aidanHit=true;rbHP-=d;txt=`レイダーがエイダンを狙う！ ${d}ダメージ。`}
-   else {if(rbGuardF)d=Math.ceil(d/2);fionaHit=true;rbFHP-=d;txt=`レイダーがフィオナを狙う！ ${d}ダメージ。`}
- }
- // Lou is support-only: modest automatic help, never a selectable turn.
- if((rbHP<42||rbFHP<38) && rbRound%3===0){
-   BattleActorState.action('lou','heal',{battle:'raider'});
-   rbHP=Math.min(120,rbHP+12);rbFHP=Math.min(105,rbFHP+12);txt+='　ルーの風が二人を包む！ HP +12';
- }
- if(aidanHit)BattleActorState.set('aidan','damage',{battle:'raider',duration:360});
- if(fionaHit)BattleActorState.set('fiona','damage',{battle:'raider',duration:360});
- rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');
- if(rbHP<=0||rbFHP<=0){
-   showRaiderBattleLog('パーティーが崩れた……。ルーの風が時間を巻き戻す。');
-   BattleActorState.action('lou','blessing',{battle:'raider'});
-   setTimeout(startRaiderBattle,1200);return;
- }
- rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;showRaiderBattleLog(txt);updateRaider();
+ return PrologueCombat.enemyRound('raider');
 }
 function finishRaider(){
  if($('#raiderBattle').style.display==='none')return;
  BattleActorState.set('goblin_raider','ko',{battle:'raider'});
  BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});BattleActorState.set('lou','victory',{battle:'raider'});
- rbBusy=true;rbBoss=0;updateRaider();
+ PrologueCombat.koAll('raider');rbBusy=true;rbBoss=0;updateRaider();
  const sprite=$('#raiderSprite'), img=sprite&&sprite.querySelector('img');
  setRaiderCommandDrawer(false);
  document.body.classList.add('raiderFinishing');
@@ -1393,6 +1352,7 @@ function finishRaider(){
 }
 $('#rbDevKill').onclick=()=>{
  if(rbBusy)return;
+ BattleTargetSelector.cancel();
  setRaiderCommandDrawer(false);
  rbBusy=true; rbBoss=0; updateRaider();
  showRaiderBattleLog('DEV｜一撃撃破！',260);
@@ -1713,12 +1673,7 @@ startRaiderBattle=function(){v53SR();BattleActorState.sync('raider','goblin_raid
 const v53NE=normalEnemyTurn;
 normalEnemyTurn=function(){return v53NE()};
 const v53RE=rbEnemyParty;
-rbEnemyParty=function(){
- // CALL is reinforcement; a queued smash/wind-up uses the attack artwork.
- // Phase-entry ENRAGE is managed by image state, independently of enemy turns.
- const p=rbQueued?'smash':((rbRound===2||rbRound===5||rbRound===8)&&rbAdds<4?'horn':'attack');
- rbBusy=true;v53raider(p,800).then(v53RE);
-};
+rbEnemyParty=function(){return v53RE()};
 const v53RN=resolveNormalRound;
 resolveNormalRound=function(){setNormalCommandDrawer(false);document.querySelector('#normalItems')?.classList.remove('isOpen');v53RN()};
 const v53RR=resolvePartyRound;
