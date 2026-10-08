@@ -24,7 +24,7 @@
    if(hud&&battle==='raider'){hud.style.setProperty('left',(center-hud.offsetWidth/2)+'px','important');hud.style.setProperty('bottom',((parseFloat(getComputedStyle(unit).bottom)||0)+height+10)+'px','important')}
    layout.push({id:actor.id,width,height,relative,center,row,column});
   });
-  q(battle==='normal'?'#attackBattle':'#raiderBattle').dataset.activeParty=String(count);return layout;
+  q(battle==='normal'?'#attackBattle':'#raiderBattle').dataset.activeParty=String(count);BattleTargetSelector.refresh();return layout;
  }
  function refresh(battle){return arrange(battle,current[battle].filter(actor=>PrologueCombat.activeAlly(battle,actor.id)))}
  addEventListener('resize',()=>{if(document.body.classList.contains('normalBattleMode'))refresh('normal');else if(document.body.classList.contains('raiderBattleMode'))refresh('raider')});

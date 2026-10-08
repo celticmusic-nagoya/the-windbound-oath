@@ -64,5 +64,5 @@
     pending.selected=a[(i+(e.key==='ArrowRight'?1:a.length-1))%a.length].id;draw();
   },true);
   addEventListener('resize',draw);
-  window.BattleTargetSelector=Object.freeze({open,cancel,confirm,get active(){return !!pending},get selected(){return pending?.selected},reset(battle){cancel();memory.delete(battle)}});
+  window.BattleTargetSelector=Object.freeze({open,cancel,confirm,refresh:draw,get active(){return !!pending},get selected(){return pending?.selected},reset(battle){cancel();memory.delete(battle)}});
 })();

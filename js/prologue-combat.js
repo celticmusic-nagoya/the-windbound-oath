@@ -1,7 +1,7 @@
 // Incremental encounter roster. Existing engine owns COMMAND, resources, motion and results.
 (() => {
  const q=s=>document.querySelector(s);
- const stats=Object.freeze({goblin:{hp:100,atk:12,def:10,spd:10},tainted_goblin:{hp:190,atk:15,def:11.5,spd:11.5}});
+ const stats=Object.freeze({goblin:{hp:100,atk:12,def:10,spd:10,cri:0},tainted_goblin:{hp:190,atk:15,def:11.5,spd:11.5,cri:0}});
  let generation=0,roundNumber=1,impact=null,callFlags=[false,false],enragePending=false,lastSupportRound=0,blessingUsed=false;
  const rosters={normal:[],raider:[]};
  const victories=new Map();
@@ -74,7 +74,7 @@
   n=BattleStatus.damage(b,who,e.id,Math.round(n*10/e.def));
   if(a.kind==='skill'){if(aatp<30)return;aatp-=30}else if(who==='aidan')aatp=Math.min(100,aatp+15);
   const hit=BattleCritical.resolve(a,n);
-  BattleActorState.action(who,'attack',{battle:b});damage(e,hit.damage,b);
+  if(hit.critical)BattleActorState.set(who,'attack',{battle:b,duration:(who==='aidan'?820:680)+100});else BattleActorState.action(who,'attack',{battle:b});damage(e,hit.damage,b);
   log(b,(who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):'フィオナの攻撃！')+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！');
   BattleCriticalPresentation.show(b,who,e,hit);return hit;
  }
@@ -125,7 +125,7 @@
 
  function beginRaider(){
   generation++;impact=null;callFlags=[false,false];enragePending=false;lastSupportRound=0;blessingUsed=false;BattleStatus.clear('raider');BattleTargetSelector.reset('raider');clean('raider');
-  const boss={id:'raider_enemy_0',key:'goblin_raider',type:'goblin_raider',maxHp:1250,def:10,extra:false,unit:'raiderSprite',node:'#raiderSprite',get hp(){return rbBoss},set hp(n){rbBoss=n}};
+  const boss={id:'raider_enemy_0',key:'goblin_raider',type:'goblin_raider',maxHp:1250,def:10,cri:0,extra:false,unit:'raiderSprite',node:'#raiderSprite',get hp(){return rbBoss},set hp(n){rbBoss=n}};
   rosters.raider=[boss];BattleActorState.register('raider',boss.key,boss.type,'#raiderSprite img',()=>[rbBoss,1250]);sync('raider');window.BattlePartyLayout?.refresh('raider');
  }
  function spawn(){
@@ -159,7 +159,7 @@
   n=BattleStatus.damage('raider',who,e.id,Math.round(n*10/e.def));
   if(who==='aidan'){if(a.kind==='skill'){if(rbTP<30)return;rbTP-=30;rbRune=Math.min(100,rbRune+14)}else{rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)}}else rbRune=Math.min(100,rbRune+7);
   const hit=BattleCritical.resolve(a,n);
-  BattleActorState.action(who,'attack',{battle:'raider'});damage(e,hit.damage,'raider');
+  if(hit.critical)BattleActorState.set(who,'attack',{battle:'raider',duration:(who==='aidan'?820:680)+100});else BattleActorState.action(who,'attack',{battle:'raider'});damage(e,hit.damage,'raider');
   log('raider',(who==='aidan'?(a.kind==='skill'?'エイダンの「一閃」！':'エイダンの攻撃！'):'フィオナが杖で応戦！')+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！');
   BattleCriticalPresentation.show('raider',who,e,hit);return hit;
  }
