@@ -43,7 +43,7 @@
   Object.entries(forestChests).forEach(([id,open])=>q('#'+id).classList.toggle('open',open));
   currentObjective=storyStage>=9&&storyStage<=10?objective():String(data.currentObjective||currentObjective);renderJournal();return true;
  }
- function seed(n){defeated=new Set(Object.values(ids).slice(0,n));louFound=false;sync();}
+ function seed(n, preceding=[]){defeated=new Set([...Object.values(ids).slice(0,n),...preceding.filter(id=>['attackGob1','attackGob2','northGob1','northGob2'].includes(id))]);louFound=false;sync();for(const id of ['attackGob1','attackGob2','northGob1','northGob2']){const el=q('#'+id);el.hidden=cleared(id);el.style.display=el.hidden?'none':''}}
  window.PrologueProgress=Object.freeze({cleared,defeat,sync,count,objective,serialize,load,seed});
  sync();
 })();
