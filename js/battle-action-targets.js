@@ -26,7 +26,7 @@
  }
  function applyItem(battle,a){
   const r=battle==='raider',ally=allies(battle).find(x=>x.id===a.target);
-  if(a.used||!ally||ally.hp()<=0||!battleItems[a.item])return false;
+  if(a.used||!ally||ally.active===false||ally.hp()<=0||!battleItems[a.item])return false;
   a.used=true;battleItems[a.item]--;
   if(a.item==='potion'){
    if(a.target==='aidan'){if(r)rbHP=Math.min(120,rbHP+45);else aahp=Math.min(100,aahp+45)}
