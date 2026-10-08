@@ -12,7 +12,7 @@
   if(key==='reunion')key='north';
   if(!entries.some(([k])=>k===key))return false;
   sandbox=true;PrologueCombat.cancel();BattleTargetSelector.cancel();
-  window.BattleCritical?.resetForce();
+  window.BattleCritical?.resetForce();const criticalButton=document.querySelector('#devForceCritical');if(criticalButton)criticalButton.textContent='DEV｜次の通常攻撃を会心に';
   document.querySelector('#battleResult').style.display='none';resultCallback=null;
   devResetScreens();
   document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','raiderFinishing','soloRescue','battleResultMode','villageAttack','northAssault','actionCinematic');
@@ -40,6 +40,6 @@
   if(index>=15){louFound=true;forestStoneSeen=true;PrologueProgress.sync()}
   renderJournal();return true;
  };
- const tools=document.createElement('div');tools.id='devBattleTools';const kill=document.createElement('button');kill.id='devInstantKill';kill.textContent='DEV｜生存敵を全てKO';kill.onclick=()=>PrologueCombat.instantKill(document.body.classList.contains('raiderBattleMode')?'raider':'normal');tools.append(kill);document.querySelector('#devPanel').append(tools);
+ const tools=document.createElement('div');tools.id='devBattleTools';const kill=document.createElement('button');kill.id='devInstantKill';kill.textContent='DEV｜生存敵を全てKO';kill.onclick=()=>PrologueCombat.instantKill(document.body.classList.contains('raiderBattleMode')?'raider':'normal');const crit=document.createElement('button');crit.id='devForceCritical';crit.textContent='DEV｜次の通常攻撃を会心に';crit.onclick=()=>{BattleCritical.force();crit.textContent='DEV｜次の通常攻撃：会心予約中'};tools.append(kill,crit);document.querySelector('#devPanel').append(tools);
  const grid=document.querySelector('#devGrid');grid.replaceChildren();for(const [key,name]of entries){const b=document.createElement('button');b.dataset.jump=key;b.textContent=name;grid.append(b)}
 })();

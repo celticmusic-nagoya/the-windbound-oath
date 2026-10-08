@@ -10,7 +10,7 @@
   if(results.has(action))return results.get(action);
   const canCrit=action.kind==='atk',forced=canCrit&&forceNext&&window.WINDBOUND_DEV===true;
   const result=calculate(base,{canCrit,cri:chance(action.who),forced});
-  if(forced)forceNext=false;
+  if(forced){forceNext=false;const button=document.querySelector('#devForceCritical');if(button)button.textContent='DEV｜次の通常攻撃を会心に';}
   results.set(action,result);return result;
  }
  window.BattleCritical=Object.freeze({MULTIPLIER,chance,calculate,resolve,force(){if(!window.WINDBOUND_DEV)return false;forceNext=true;return true},resetForce(){forceNext=false},get forced(){return forceNext}});

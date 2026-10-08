@@ -75,13 +75,14 @@
   if(a.kind==='skill'){if(aatp<30)return;aatp-=30}else if(who==='aidan')aatp=Math.min(100,aatp+15);
   const hit=BattleCritical.resolve(a,n);
   BattleActorState.action(who,'attack',{battle:b});damage(e,hit.damage,b);
-  log(b,who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):'フィオナの攻撃！');
+  log(b,(who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):'フィオナの攻撃！')+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！');
+  BattleCriticalPresentation.show(b,who,e,hit);return hit;
  }
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  async function round(b,actions){
   const token=generation;const statusStart=BattleStatus.snapshot(b);
   if(b==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);q('#normalItems').classList.remove('isOpen');
-  for(const a of [...actions]){if(token!==generation)return;heroAction(b,a);if(b==='normal')updateAttackBattle();else updateRaider();await sleep(900);if(token!==generation)return;if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
+  for(const a of [...actions]){if(token!==generation)return;const hit=heroAction(b,a);if(b==='normal')updateAttackBattle();else updateRaider();await sleep(hit?.critical?1000:900);if(token!==generation)return;if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
   if(token===generation)await enemyRound(b,statusStart);
  }
  function skillFor(e){
@@ -159,7 +160,8 @@
   if(who==='aidan'){if(a.kind==='skill'){if(rbTP<30)return;rbTP-=30;rbRune=Math.min(100,rbRune+14)}else{rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)}}else rbRune=Math.min(100,rbRune+7);
   const hit=BattleCritical.resolve(a,n);
   BattleActorState.action(who,'attack',{battle:'raider'});damage(e,hit.damage,'raider');
-  log('raider',who==='aidan'?(a.kind==='skill'?'エイダンの「一閃」！':'エイダンの攻撃！'):'フィオナが杖で応戦！');
+  log('raider',(who==='aidan'?(a.kind==='skill'?'エイダンの「一閃」！':'エイダンの攻撃！'):'フィオナが杖で応戦！')+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！');
+  BattleCriticalPresentation.show('raider',who,e,hit);return hit;
  }
  async function supply(e){
   if(e.hp<=0||rbBoss<=0||e.bornRound>=rbRound)return false;
