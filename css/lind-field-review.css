@@ -3,6 +3,8 @@
 #lindReviewLayer[hidden], #lindReviewControls[hidden] { display:none; }
 .lind-review-ground { position:absolute; image-rendering:pixelated; }
 .lind-review-object { position:absolute; object-fit:contain; pointer-events:none; }
+.lind-animal { position:absolute; pointer-events:none; }
+.lind-animal img { position:absolute; max-width:none; image-rendering:pixelated; }
 body.lindFieldReview #world > :not(#lindReviewLayer):not(#player):not(.bridge) { visibility:hidden; }
 body.lindFieldReview #game > :not(#world) { display:none!important; }
 body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { display:none!important; }

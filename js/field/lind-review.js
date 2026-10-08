@@ -38,6 +38,7 @@
       height:draw.height+'px', zIndex:obj.layer === 'groundDecoration' ? '1' : String(Math.round(obj.y+obj.height))});
     layer.append(image);
   });
+  window.LindFieldAnimals?.mount(layer);
   const controls = document.createElement('div');
   controls.id = 'lindReviewControls';
   controls.hidden = true;
@@ -56,9 +57,14 @@
     option.value = obj.id; option.textContent = obj.label;
     jump.append(option);
   });
+  window.LindFieldAnimals?.actors.forEach(actor => {
+    const option = document.createElement('option');
+    option.value = actor.id; option.textContent = actor.label;
+    jump.append(option);
+  });
   function focus(id) {
     if (!active) return false;
-    const obj = assets.objects.find(item => item.id === id);
+    const obj = assets.objects.find(item => item.id === id) || window.LindFieldAnimals?.actors.find(item => item.id === id);
     if (!obj) return false;
     target = null; px = obj.x+obj.width/2-17; py = obj.y+obj.height+20;
     camera(); return true;
@@ -96,6 +102,7 @@
       snapshot = null;
     }
     active = value;
+    if (active) window.LindFieldAnimals?.start(); else window.LindFieldAnimals?.stop();
     document.body.classList.toggle('lindFieldReview', active);
     layer.hidden = !active;
     controls.hidden = !active;
@@ -112,6 +119,7 @@
   function blocked(x, y) {
     if (originalBlocked(x, y)) return true;
     if (!active) return false;
+    if (window.LindFieldAnimals?.blocked(x, y)) return true;
     // Foot box, not full roof image; entrances remain approachable from below.
     return assets.objects.some(obj => (obj.collisions || (obj.collision ? [obj.collision] : [])).some(c => {
       return x+28 > obj.x+c[0] && x+6 < obj.x+c[0]+c[2] &&
