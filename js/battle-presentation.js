@@ -31,13 +31,14 @@
  async function showSkillCutin({actor,skill,type='SHORT',image,duration=durations[type]||550},token=PrologueCombat.generation){
   if(setting==='OFF')return valid(token);
   return run(async t=>{
-   const el=document.createElement('div');el.className='skillCutin '+(setting==='SHORT'?'SHORT':type);el.dataset.skill=skill;el.dataset.actor=actor;el.style.setProperty('--cutin-duration',duration+'ms');
+   const effectiveDuration=setting==='SHORT'?Math.min(duration,550):duration;
+   const el=document.createElement('div');el.className='skillCutin '+(setting==='SHORT'?'SHORT':type);el.dataset.skill=skill;el.dataset.actor=actor;el.style.setProperty('--cutin-duration',effectiveDuration+'ms');
    const art=document.createElement('img');art.src=image;art.alt=actor+' — '+skill;
    const name=document.createElement('strong');name.textContent=skill;const rune=document.createElement('span');rune.className='cutinRune';rune.textContent='᚛ ᚃ ᚑ ᚐ ᚈ ᚓ ᚜';
    el.append(rune,art,name);document.body.append(el);
    // Keep the display interval after decode; no first-use flash of an empty panel.
    await art.decode().catch(()=>{});if(!valid(t)){el.remove();return false;}
-   return wait(setting==='SHORT'?Math.min(duration,550):duration,t,el);
+   return wait(effectiveDuration,t,el);
   },token);
  }
  function banter(key,lines,battle,token=PrologueCombat.generation){
