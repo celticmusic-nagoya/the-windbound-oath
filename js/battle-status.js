@@ -18,7 +18,12 @@
   const host=document.querySelector(battle==='normal'?(id==='aidan'?'#hudAidan':'#hudFiona'):(id==='aidan'?'.rbNearA':'.rbNearF'))||document.querySelector(battle==='raider'?(id==='aidan'?'#rbAidan':'#rbFiona'):null);
   if(!host)continue;let el=host.querySelector('.battleStatuses');if(!el){el=document.createElement('small');el.className='battleStatuses';host.append(el)}
   const labels={atk_up:'ATK↑',atk_down:'ATK↓',def_up:'DEF↑'};
-  el.textContent=list(battle,id).map(e=>labels[e.type]+' '+e.remainingTurns).join(' ');
+  const current=list(battle,id),attack=current.filter(e=>e.type.startsWith('atk_'));
+  // Display the net ATK effect when UP and DOWN coexist; retain both records.
+  const shown=attack.length>1?[{type:multiplier(battle,id,'atk')>=1?'atk_up':'atk_down',remainingTurns:Math.min(...attack.map(e=>e.remainingTurns))},...current.filter(e=>!e.type.startsWith('atk_'))]:current;
+  el.textContent=shown.map(e=>labels[e.type]+' '+e.remainingTurns).join(' ');
+  el.title=current.map(e=>labels[e.type]+' '+Math.round(e.magnitude*100)+'% / '+e.remainingTurns+'ターン').join('、');
+  el.setAttribute('aria-label',el.title);
  }}
  window.BattleStatus=Object.freeze({apply,list,multiplier,damage,snapshot,tick,clear,render});
 })();
