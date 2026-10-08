@@ -969,7 +969,7 @@ const PartyManager={
 let gold=0,resultCallback=null;
 function charStats(id){
  const b=CHARACTER_DB[id],m=PartyManager.members[id],n=Math.max(0,m.level-1);
- return {maxHp:b.maxHp+b.growth.hp*n,maxMp:b.maxMp+b.growth.mp*n,atk:b.atk+b.growth.atk*n,def:b.def+b.growth.def*n,mag:b.mag+b.growth.mag*n,spd:b.spd+b.growth.spd*n};
+ return {maxHp:b.maxHp+b.growth.hp*n,maxMp:b.maxMp+b.growth.mp*n,atk:b.atk+b.growth.atk*n,def:b.def+b.growth.def*n,mag:b.mag+b.growth.mag*n,spd:b.spd+b.growth.spd*n,cri:window.BattleCritical?.chance(id)??5};
 }
 function showBattleResult(exp,goldGain,callback){
  const reports=PartyManager.addExp(exp);gold+=goldGain;resultCallback=callback||null;
@@ -993,7 +993,7 @@ function renderSystemTab(tab='status'){
      const c=CHARACTER_DB[id],st=charStats(id),next=m.level<50?PartyManager.expToNext(m.level):0;
      return `<div class="charStatus"><b>${c.name}</b>　${c.role}　LV ${m.level}
      <div><small>EXP ${m.exp}${next?' / '+next:' / MAX'}</small></div>
-     <div class="stats"><span>HP ${st.maxHp}</span><span>MP ${st.maxMp}</span><span>ATK ${st.atk}</span><span>DEF ${st.def}</span><span>MAG ${st.mag}</span><span>SPD ${st.spd}</span></div></div>`;
+     <div class="stats"><span>HP ${st.maxHp}</span><span>MP ${st.maxMp}</span><span>ATK ${st.atk}</span><span>DEF ${st.def}</span><span>MAG ${st.mag}</span><span>SPD ${st.spd}</span><span>CRI ${st.cri}%</span></div></div>`;
    }).join('')+`<div class="charStatus"><b>ルー</b>　SUPPORT<br><small>${PartyManager.support.joined?'FAIRY BLESSING '+PartyManager.support.fairyBlessing:'未加入'}</small></div>`;
  }else if(tab==='skill'){
    body.innerHTML=Object.entries(PartyManager.members).filter(([,m])=>m.joined).map(([id,m])=>
@@ -1852,6 +1852,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/battle-action-targets.js"></script>
 <link rel="stylesheet" href="css/prologue-combat.css">
 <script src="js/battle-status.js"></script>
+<script src="js/battle-critical.js"></script>
 <script src="js/prologue-combat.js"></script>
 <script src="js/prologue-progress.js"></script>
 <script src="js/prologue-dev.js"></script>

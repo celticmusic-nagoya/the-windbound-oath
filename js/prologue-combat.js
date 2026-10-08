@@ -73,7 +73,8 @@
   let n=who==='aidan'?(a.kind==='skill'?55:34):20;
   n=BattleStatus.damage(b,who,e.id,Math.round(n*10/e.def));
   if(a.kind==='skill'){if(aatp<30)return;aatp-=30}else if(who==='aidan')aatp=Math.min(100,aatp+15);
-  BattleActorState.action(who,'attack',{battle:b});damage(e,n,b);
+  const hit=BattleCritical.resolve(a,n);
+  BattleActorState.action(who,'attack',{battle:b});damage(e,hit.damage,b);
   log(b,who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):'フィオナの攻撃！');
  }
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -156,7 +157,8 @@
   impact=e.unit;let n=who==='aidan'?(a.kind==='skill'?68:42):22;
   n=BattleStatus.damage('raider',who,e.id,Math.round(n*10/e.def));
   if(who==='aidan'){if(a.kind==='skill'){if(rbTP<30)return;rbTP-=30;rbRune=Math.min(100,rbRune+14)}else{rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)}}else rbRune=Math.min(100,rbRune+7);
-  BattleActorState.action(who,'attack',{battle:'raider'});damage(e,n,'raider');
+  const hit=BattleCritical.resolve(a,n);
+  BattleActorState.action(who,'attack',{battle:'raider'});damage(e,hit.damage,'raider');
   log('raider',who==='aidan'?(a.kind==='skill'?'エイダンの「一閃」！':'エイダンの攻撃！'):'フィオナが杖で応戦！');
  }
  async function supply(e){
