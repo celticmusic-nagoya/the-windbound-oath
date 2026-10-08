@@ -29,7 +29,7 @@
   const types=id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
   rosters.normal=types.map((t,i)=>makeEnemy('normal',t,i));
   document.body.classList.toggle('soloRescue',id==='attackGob1');
-  sync('normal');
+  sync('normal');window.BattlePartyLayout?.refresh('normal');
  }
  function activeAlly(b,id){return !(b==='normal'&&currentGoblin==='attackGob1'&&id==='fiona');}
  function name(e){if(e.type==='goblin_raider')return 'ゴブリンレイダー';return e.type==='goblin'?'ゴブリン':'異常化ゴブリン';}
@@ -126,7 +126,7 @@
  function beginRaider(){
   generation++;impact=null;callFlags=[false,false];enragePending=false;lastSupportRound=0;blessingUsed=false;BattleStatus.clear('raider');BattleTargetSelector.reset('raider');clean('raider');
   const boss={id:'raider_enemy_0',key:'goblin_raider',type:'goblin_raider',maxHp:1250,def:10,extra:false,unit:'raiderSprite',node:'#raiderSprite',get hp(){return rbBoss},set hp(n){rbBoss=n}};
-  rosters.raider=[boss];BattleActorState.register('raider',boss.key,boss.type,'#raiderSprite img',()=>[rbBoss,1250]);sync('raider');
+  rosters.raider=[boss];BattleActorState.register('raider',boss.key,boss.type,'#raiderSprite img',()=>[rbBoss,1250]);sync('raider');window.BattlePartyLayout?.refresh('raider');
  }
  function spawn(){
   const i=rosters.raider.length,e={id:'raider_enemy_'+i,key:'reinforcement_'+i,type:'tainted_goblin',...stats.tainted_goblin,maxHp:stats.tainted_goblin.hp,extra:true,bornRound:rbRound,unit:'raiderAdd'+i,node:'#raiderAdd'+i+' .prologueSprite',actions:0};
