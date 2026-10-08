@@ -73,6 +73,7 @@
   }
   jump.onchange = () => focus(jump.value);
   const wind = document.createElement('button');
+  wind.id = 'lindWindToggle';
   wind.textContent = '風ON';
   wind.onclick = () => {
     const value = window.LindFieldEnvironment.setWind(!window.LindFieldEnvironment.wind);
