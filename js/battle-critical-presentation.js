@@ -11,7 +11,7 @@
   const huds=[...document.querySelectorAll('.v2NearHud,.prologueEnemyHud,.rbNearHud,.rbEnemyHud,#battleBanner,#rbMsg')].filter(el=>el.offsetWidth&&el.offsetHeight&&getComputedStyle(el).visibility!=='hidden').map(el=>el.getBoundingClientRect());
   const candidates=[[center,y],[r.left-45,y],[r.left-90,y],[r.right+45,y],[center,r.top-55],[center,r.bottom+55],[center,r.bottom+100]].map(([x,y])=>[Math.max(width/2+8,Math.min(innerWidth-width/2-8,x)),Math.max(90,Math.min(innerHeight-80,y))]);
   const position=candidates.find(([x,y])=>!huds.some(h=>x+width/2+8>h.left&&x-width/2-8<h.right&&y+height/2+16>h.top&&y-height/2-16<h.bottom))||candidates[0];
-  pop.style.left=position[0]+'px';pop.style.top=position[1]+'px';setTimeout(()=>pop.remove(),950);
+  pop.style.left=position[0]+'px';pop.style.top=position[1]+'px';setTimeout(()=>pop.remove(),hit.critical?1150:950);
   if(!hit.critical)return;
   const sourceId=battle==='normal'?(actor==='aidan'?'v2AidanUnit':'v2FionaUnit'):(actor==='aidan'?'rbAidan':'rbFiona');
   setTimeout(()=>{

@@ -10,7 +10,8 @@ body.developmentMode #devPanel:not([style]),body.developmentMode #devPanel[style
 #devBattleTools button{padding:10px;background:#18251f;color:#eee3cc;border:1px solid #786844;border-radius:5px;font-family:inherit}
 .battleDamageNumber{position:fixed;z-index:10025;pointer-events:none;translate:-50% -50%;color:#eee3cc;font-size:24px;text-align:center;text-shadow:0 2px 4px #000;animation:battleNumberRise .95s ease-out both}
 .battleDamageNumber span{display:block;font-size:12px;letter-spacing:.08em}
-.battleDamageNumber.isCritical{font-size:30px;color:#e5c77d;text-shadow:0 2px 4px #000,0 0 8px #ac894855}
+.battleDamageNumber.isCritical{animation:battleCriticalHold 1.15s ease-out both;font-size:30px;color:#e5c77d;text-shadow:0 2px 4px #000,0 0 8px #ac894855}
+@keyframes battleCriticalHold{0%{opacity:0;scale:.85}10%{opacity:1;scale:1.08}15%,82%{opacity:1;scale:1}100%{opacity:0;translate:-50% -75%}}
 @keyframes battleNumberRise{0%{opacity:0;translate:-50% -30%}12%,65%{opacity:1}100%{opacity:0;translate:-50% -100%}}
 
 @media(orientation:landscape) and (max-height:520px){body.developmentMode #devBtn{top:60px}}

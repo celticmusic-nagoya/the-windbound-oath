@@ -8,7 +8,8 @@
   actors.slice(0,4).forEach((actor,i)=>{
    const unit=q(actor.unit),visual=q(actor.visual);if(!unit||!visual)return;
    const fiona=actor.id==='fiona',base=actor.baseSize|| (battle==='normal'?{width:portrait?(fiona?112:116):(fiona?96:100),height:portrait?150:126}:{width:fiona?108:112,height:140});
-   const relative=(portrait?(fiona?1.15:1.17):short?(fiona?1.20:1.24):(fiona?1.30:1.32))*density;
+   const pc=!portrait&&!short&&innerWidth>=1024;
+   const relative=(portrait?(fiona?1.15:1.17):short?(fiona?1.20:1.24):(fiona?1.30:1.32))*density*(pc?(battle==='normal'?1.17:1.07):1);
    const width=base.width*relative,height=base.height*relative;
    visual.style.setProperty('width',width+'px','important');visual.style.setProperty('height',height+'px','important');
    const centers=portrait?[.22,.58]:battle==='normal'?(short?[.32,.49]:[.345,.478]):[.17,short?.35:.325];
@@ -26,7 +27,17 @@
   });
   q(battle==='normal'?'#attackBattle':'#raiderBattle').dataset.activeParty=String(count);BattleTargetSelector.refresh();return layout;
  }
- function refresh(battle){return arrange(battle,current[battle].filter(actor=>PrologueCombat.activeAlly(battle,actor.id)))}
+ function refresh(battle){
+  const result=arrange(battle,current[battle].filter(actor=>PrologueCombat.activeAlly(battle,actor.id)));
+  if(battle==='normal'){
+   const pc=innerWidth>=1024&&innerHeight>520&&innerWidth>innerHeight;
+   document.querySelectorAll('#bGob,#attackBattle .prologueSprite').forEach(el=>{
+    if(pc){el.style.setProperty('width',102*1.17+'px','important');el.style.setProperty('height',128*1.17+'px','important');}
+    else {el.style.removeProperty('width');el.style.removeProperty('height');}
+   });
+  }
+  BattleTargetSelector.refresh();return result;
+ }
  addEventListener('resize',()=>{if(document.body.classList.contains('normalBattleMode'))refresh('normal');else if(document.body.classList.contains('raiderBattleMode'))refresh('raider')});
  window.BattlePartyLayout=Object.freeze({arrange,refresh});
 })();
