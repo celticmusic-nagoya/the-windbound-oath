@@ -4,9 +4,8 @@
 .lind-review-ground { position:absolute; image-rendering:pixelated; }
 .lind-review-object { position:absolute; object-fit:contain; pointer-events:none; }
 body.lindFieldReview #world > :not(#lindReviewLayer):not(#player):not(.bridge) { visibility:hidden; }
-body.lindFieldReview #player { z-index:2000; }
-body.lindFieldReview #game > :not(#world) { visibility:hidden!important; }
-body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { visibility:hidden!important; }
+body.lindFieldReview #game > :not(#world) { display:none!important; }
+body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { display:none!important; }
 body.lindFieldReview #world > .river, body.lindFieldReview #world > .bridge { z-index:1; }
 body.lindFieldReview #menuBtn, body.lindFieldReview #devBtn, body.lindFieldReview #msg,
 body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { display:none!important; }
@@ -14,3 +13,5 @@ body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { displ
  display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px;
  background:rgba(17,37,29,.94); border:1px solid #b79a58; color:#f1e7c8; font:12px sans-serif; }
 #lindReviewControls button { min-height:36px; padding:5px 16px; }
+#lindReviewControls select { min-height:36px; max-width:180px; background:#17352a; color:#f1e7c8; }
+@media(max-width:500px) { #lindReviewControls span { max-width:130px; } #lindReviewControls select { max-width:110px; } }

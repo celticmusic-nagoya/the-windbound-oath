@@ -40,7 +40,21 @@ reference's diagonal river topology is also reserved for STEP 12.
 
 ## STEP 2 — major buildings
 
-Pending STEP 1 checkpoint.
+Ten standalone RGBA PNGs generated: inn, item shop, elder house, Aidan house,
+four residential variants, barn, storage. Each has real transparent pixels, with
+no baked backdrop/sheet neighbours or major roof/door damage seen in alpha
+composites. Three viewports tested: each image decoded/displayed, each foot
+collision blocked, front approach walkable, review state restored and training
+battle still playable. Source generation resolution is retained without PNG
+processing. World positions are DEV placement only; residential assignment to
+Emma/Fiona and room/event integration remain later gates. Grounded object depth
+uses foot Y; an object selector allows quick inspection. Images load lazily so
+inactive review does not eagerly fetch all field art. Review refuses to open
+during combat/attack progression, preserving live battle behavior.
+
+STEP 1 commit: `bd299b8d79dca69063fe9af235dc1d7bab2e689a`.
+Concurrent upstream `908fd63` (new Aidan cut-in PNG) was retained by rebase; no
+battle image was overwritten. Original pre-rebase commit c8b1174 is superseded.
 
 ## STEP 3 — farm facilities
 

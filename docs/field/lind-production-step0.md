@@ -21,7 +21,7 @@ Source audit: 実施。Reference inventory: ZIPで8画像を受領し、すべ�
 | 村人NPC参考資料 | 村人スプライトシートで確認 | 9 |
 | Emma最新正式キャラクターデザイン資料 | ema.png / emadot.pngを確認 | 10 |
 
-既存 `img/battle/characters/aidan/aidan_reference_sheet.png` は戦闘用Aidan資料であり、村・Emmaの代用referenceにはしない。現在 `img/field/lind/` とEmma画像は存在しない。
+既存 `img/battle/characters/aidan/aidan_reference_sheet.png` は戦闘用Aidan資料であり、村・Emmaの代用referenceにはしない。制作開始前は `img/field/lind/` と正式Emma画像は存在しなかった。新規制作の進捗は `lind-production-batch1.md` へ記録する。
 
 ## 動いている実装と再利用する接続点
 

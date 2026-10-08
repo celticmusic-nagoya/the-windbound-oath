@@ -4,7 +4,7 @@
   'use strict';
   if (!window.WINDBOUND_DEV || !window.LindFieldAssets) return;
   const assets = window.LindFieldAssets;
-  let active = false, snapshot = null;
+  let active = false, snapshot = null, depthFrame = null;
   const originalBlocked = window.blockedWorld;
   const layer = document.createElement('div');
   layer.id = 'lindReviewLayer';
@@ -26,6 +26,8 @@
   terrain('riverbank', 1400, 0, 64, 1550, 128);
   assets.objects.forEach(obj => {
     const image = document.createElement('img');
+    image.loading = 'lazy';
+    image.decoding = 'async';
     image.src = obj.path;
     image.alt = obj.label;
     image.className = 'lind-review-object';
@@ -42,7 +44,25 @@
   const close = document.createElement('button');
   close.textContent = '戻る';
   close.onclick = () => setActive(false);
-  controls.append(caption, close);
+  const jump = document.createElement('select');
+  jump.setAttribute('aria-label', '素材確認場所');
+  const placeholder = document.createElement('option');
+  placeholder.textContent = '素材へ移動'; placeholder.value = '';
+  jump.append(placeholder);
+  assets.objects.forEach(obj => {
+    const option = document.createElement('option');
+    option.value = obj.id; option.textContent = obj.label;
+    jump.append(option);
+  });
+  function focus(id) {
+    if (!active) return false;
+    const obj = assets.objects.find(item => item.id === id);
+    if (!obj) return false;
+    target = null; px = obj.x+obj.width/2-17; py = obj.y+obj.height+20;
+    camera(); return true;
+  }
+  jump.onchange = () => focus(jump.value);
+  controls.append(caption, jump, close);
   document.body.append(controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
@@ -51,15 +71,25 @@
 
   function setActive(value) {
     if (value === active) return;
+    if (value && (storyStage >= 5 || ['battle','attackBattle','raiderBattle','battleResult'].some(id => {
+      const el = document.getElementById(id);
+      return el && getComputedStyle(el).display !== 'none';
+    }))) {
+      toast('平和なリルド村へDEV Jumpしてから素材仮配置を開いてください。');
+      return;
+    }
     if (value) {
       // Only the field review is shown. No DEV Jump, story flags or save are changed.
-      snapshot = {px, py, target, roomDisplay:document.getElementById('inside').style.display};
+      snapshot = {px, py, target, playerZ:pl.style.zIndex,
+        roomDisplay:document.getElementById('inside').style.display};
       target = null;
       document.getElementById('inside').style.display = 'none';
       document.getElementById('devPanel').style.display = 'none';
       px = 620; py = 740;
     } else {
       px = snapshot.px; py = snapshot.py; target = snapshot.target;
+      cancelAnimationFrame(depthFrame);
+      pl.style.zIndex = snapshot.playerZ;
       document.getElementById('inside').style.display = snapshot.roomDisplay;
       snapshot = null;
     }
@@ -68,6 +98,14 @@
     layer.hidden = !active;
     controls.hidden = !active;
     camera();
+    if (active) {
+      const updateDepth = () => {
+        if (!active) return;
+        pl.style.zIndex = String(Math.round(py+44));
+        depthFrame = requestAnimationFrame(updateDepth);
+      };
+      updateDepth();
+    }
   }
   function blocked(x, y) {
     if (originalBlocked(x, y)) return true;
@@ -94,6 +132,6 @@
       e.preventDefault(); e.stopImmediatePropagation();
     }
   }, true);
-  window.LindFieldReview = Object.freeze({open:()=>setActive(true), close:()=>setActive(false),
+  window.LindFieldReview = Object.freeze({open:()=>setActive(true), close:()=>setActive(false), focus,
     get active(){return active;}, blocked});
 })();
