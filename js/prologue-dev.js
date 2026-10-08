@@ -40,5 +40,6 @@
   if(index>=15){louFound=true;forestStoneSeen=true;PrologueProgress.sync()}
   renderJournal();return true;
  };
+ const tools=document.createElement('div');tools.id='devBattleTools';const kill=document.createElement('button');kill.id='devInstantKill';kill.textContent='DEV｜生存敵を全てKO';kill.onclick=()=>PrologueCombat.instantKill(document.body.classList.contains('raiderBattleMode')?'raider':'normal');tools.append(kill);document.querySelector('#devPanel').append(tools);
  const grid=document.querySelector('#devGrid');grid.replaceChildren();for(const [key,name]of entries){const b=document.createElement('button');b.dataset.jump=key;b.textContent=name;grid.append(b)}
 })();

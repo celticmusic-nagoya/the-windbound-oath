@@ -762,20 +762,12 @@ $('#nHeal').onclick=()=>chooseNormalAct('heal');
 $('#nPrayer').onclick=()=>chooseNormalAct('prayer');
 $('#nGuard').onclick=()=>chooseNormalAct('guard');
 $('#nItem').onclick=()=>openNormalItems();
-$('#nDevKill').onclick=()=>{
- if(attackBattleBusy)return;
- BattleTargetSelector.cancel();
- setNormalCommandDrawer(false);
- attackBattleBusy=true;
- PrologueCombat.koAll('normal');gghp=0; updateAttackBattle();
- showBattleBanner('DEV｜一撃撃破！',260);
- const completion=PrologueCombat.generation;
- setTimeout(()=>{if(completion===PrologueCombat.generation)finishAttackBattle()},280);
-};
+$('#nDevKill').onclick=()=>PrologueCombat.instantKill('normal');
 // Legacy normal-goblin buttons are hidden; all normal encounters use the party command row.
 $('#aatk').parentElement.style.display='none';
 
 function finishAttackBattle(){
+ if(!PrologueCombat.claimVictory('normal'))return;
  const completion=PrologueCombat.generation;
  PrologueCombat.koAll('normal');
  BattleActorState.set('aidan','victory',{battle:'normal'});BattleActorState.set('fiona','victory',{battle:'normal'});
@@ -1335,7 +1327,7 @@ function rbEnemyParty(){
 }
 function finishRaider(){
  const completion=PrologueCombat.generation;
- if($('#raiderBattle').style.display==='none')return;
+ if($('#raiderBattle').style.display==='none'||!PrologueCombat.claimVictory('raider'))return;
  BattleActorState.set('goblin_raider','ko',{battle:'raider'});
  BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});BattleActorState.set('lou','victory',{battle:'raider'});
  PrologueCombat.koAll('raider');rbBusy=true;rbBoss=0;updateRaider();
@@ -1355,15 +1347,7 @@ function finishRaider(){
    });
  },1800);
 }
-$('#rbDevKill').onclick=()=>{
- if(rbBusy)return;
- BattleTargetSelector.cancel();
- setRaiderCommandDrawer(false);
- rbBusy=true; rbBoss=0; updateRaider();
- showRaiderBattleLog('DEV｜一撃撃破！',260);
- const completion=PrologueCombat.generation;
- setTimeout(()=>{if(completion===PrologueCombat.generation)finishRaider()},280);
-};
+$('#rbDevKill').onclick=()=>PrologueCombat.instantKill('raider');
 $('#rbAtk').onclick=()=>choosePartyAct('atk');
 $('#rbSkill').onclick=()=>choosePartyAct('skill');
 $('#rbHeal').onclick=()=>choosePartyAct('heal');

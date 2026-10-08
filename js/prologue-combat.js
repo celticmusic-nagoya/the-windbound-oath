@@ -4,6 +4,16 @@
  const stats=Object.freeze({goblin:{hp:100,atk:12,def:10,spd:10},tainted_goblin:{hp:190,atk:15,def:11.5,spd:11.5}});
  let generation=0,roundNumber=1,impact=null,callFlags=[false,false],enragePending=false,lastSupportRound=0,blessingUsed=false;
  const rosters={normal:[],raider:[]};
+ const victories=new Map();
+ function claimVictory(b){if(victories.get(b)===generation)return false;victories.set(b,generation);return true;}
+ function instantKill(b){
+  if(!window.WINDBOUND_DEV||!document.body.classList.contains(b==='normal'?'normalBattleMode':'raiderBattleMode')||!alive(b).length||victories.get(b)===generation)return false;
+  generation++;BattleTargetSelector.cancel();
+  q('#devPanel').style.display='none';q('#normalItems').classList.remove('isOpen');
+  if(b==='normal'){normalActs=[];attackBattleBusy=true;setNormalCommandDrawer(false)}else{rbActs=[];rbQueued=false;rbBusy=true;setRaiderCommandDrawer(false)}
+  koAll(b);if(b==='normal'){updateAttackBattle();finishAttackBattle()}else{updateRaider();finishRaider()}
+  return true;
+ }
  const alive=b=>rosters[b].filter(e=>e.hp>0);
  function clean(b){
   rosters[b].forEach(e=>{BattleActorState.unregister(b,e.key);if(e.extra)q('#'+e.unit)?.remove()});rosters[b]=[];
@@ -70,7 +80,7 @@
  async function round(b,actions){
   const token=generation;const statusStart=BattleStatus.snapshot(b);
   if(b==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);q('#normalItems').classList.remove('isOpen');
-  for(const a of [...actions]){if(token!==generation)return;heroAction(b,a);if(b==='normal')updateAttackBattle();else updateRaider();await sleep(900);if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
+  for(const a of [...actions]){if(token!==generation)return;heroAction(b,a);if(b==='normal')updateAttackBattle();else updateRaider();await sleep(900);if(token!==generation)return;if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
   if(token===generation)await enemyRound(b,statusStart);
  }
  function skillFor(e){
@@ -217,5 +227,5 @@
   setTimeout(()=>{if(token===generation&&rbBoss>0&&rbPhase()===3)support('blessing')},800);
  }
 
- window.PrologueCombat=Object.freeze({stats,beginNormal,beginRaider,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get generation(){return generation},get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor,spawn,supply,addAction,pendingCall,get callFlags(){return [...callFlags]},enrageMoment,support,get enragePending(){return enragePending}});
+ window.PrologueCombat=Object.freeze({stats,claimVictory,instantKill,beginNormal,beginRaider,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get generation(){return generation},get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor,spawn,supply,addAction,pendingCall,get callFlags(){return [...callFlags]},enrageMoment,support,get enragePending(){return enragePending}});
 })();
