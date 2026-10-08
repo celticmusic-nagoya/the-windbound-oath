@@ -4,3 +4,4 @@
 .battleTargetHit{position:fixed;z-index:10030;background:transparent;color:#f2eee3;border:1px solid #c5a45b55;border-radius:12px;touch-action:manipulation;user-select:none;font-size:11px;text-shadow:0 1px 3px #000;display:flex;align-items:flex-start;justify-content:center;padding-top:5px;cursor:pointer}
 .battleTargetHit.selected{border:2px solid #d1bd83;box-shadow:0 0 12px #9cbe9660 inset;background:#c5a45b0c}
 .battleTargetHit.selected::after{content:'TARGET';position:absolute;bottom:4px;color:#ebd69d;font-size:10px;letter-spacing:1px}
+@media(orientation:portrait){#battleTargetPanel{bottom:60px;width:calc(100vw - 32px);box-sizing:border-box;font-size:12px;gap:8px}}

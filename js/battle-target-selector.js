@@ -49,7 +49,9 @@
     const valid=candidates.filter(x=>eligible(x,type));
     if(type==='self') {const x=valid.find(x=>x.id===actor);if(!x)return false;onConfirm(x.id);return true;}
     if(!valid.length)return false;
-    pending={type,battle,candidates:valid,onConfirm,onCancel,selected:valid.some(x=>x.id===memory.get(battle))?memory.get(battle):valid[0].id};
+    const last=memory.get(battle),index=candidates.findIndex(x=>x.id===last);
+    const next=[...candidates.slice(index+1),...candidates.slice(0,index+1)].find(x=>eligible(x,type));
+    pending={type,battle,candidates:valid,onConfirm,onCancel,selected:valid.some(x=>x.id===last)?last:(next||valid[0]).id};
     panel.querySelector('span').textContent=label+' / TARGET';panel.hidden=false;draw();return true;
   }
   addEventListener('keydown',e=>{

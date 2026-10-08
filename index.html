@@ -769,12 +769,14 @@ $('#nDevKill').onclick=()=>{
  attackBattleBusy=true;
  PrologueCombat.koAll('normal');gghp=0; updateAttackBattle();
  showBattleBanner('DEV｜一撃撃破！',260);
- setTimeout(finishAttackBattle,280);
+ const completion=PrologueCombat.generation;
+ setTimeout(()=>{if(completion===PrologueCombat.generation)finishAttackBattle()},280);
 };
 // Legacy normal-goblin buttons are hidden; all normal encounters use the party command row.
 $('#aatk').parentElement.style.display='none';
 
 function finishAttackBattle(){
+ const completion=PrologueCombat.generation;
  PrologueCombat.koAll('normal');
  BattleActorState.set('aidan','victory',{battle:'normal'});BattleActorState.set('fiona','victory',{battle:'normal'});
  const defeated=currentGoblin;
@@ -784,6 +786,7 @@ function finishAttackBattle(){
  if(gobBox) gobBox.classList.add('taintedKO');
  showBattleBanner('魔物を退けた。',900);
  setTimeout(()=>{
+   if(completion!==PrologueCombat.generation)return;
    const e=$('#'+defeated);if(e){e.hidden=true;e.style.display='none'}
    PrologueProgress.defeat(defeated);
    if(defeated&&defeated.startsWith('forestGob')){
@@ -1024,7 +1027,7 @@ function renderSystemTab(tab='status'){
    };
  }else{
    const exists=!!localStorage.getItem(SAVE_KEY);
-   body.innerHTML=`<h3>SAVE DATA</h3><p>現在の成長・パーティー状態・GOLDをブラウザに保存します。</p>
+   body.innerHTML=`<h3>SAVE DATA</h3><p>成長・パーティー・アイテム・進行と、森の討伐記録を保存します。戦闘中は保存できません。</p>
    <button id="doSave" type="button">セーブ</button> <button id="doLoad" type="button" ${exists?'':'disabled'}>ロード</button>
    <button id="eraseSave" type="button" ${exists?'':'disabled'}>セーブ削除</button><p id="saveMsg"><small>${exists?'セーブデータがあります。':'セーブデータはありません。'}</small></p>`;
    $('#doSave').onclick=saveGrowthData;if(exists){$('#doLoad').onclick=loadGrowthData;$('#eraseSave').onclick=eraseGrowthData}
@@ -1331,6 +1334,7 @@ function rbEnemyParty(){
  return PrologueCombat.enemyRound('raider');
 }
 function finishRaider(){
+ const completion=PrologueCombat.generation;
  if($('#raiderBattle').style.display==='none')return;
  BattleActorState.set('goblin_raider','ko',{battle:'raider'});
  BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});BattleActorState.set('lou','victory',{battle:'raider'});
@@ -1342,6 +1346,7 @@ function finishRaider(){
  if(sprite){ sprite.classList.remove('actionFocus','actionPose'); sprite.classList.add('raiderKO'); }
  showRaiderBattleLog('ゴブリン・レイダーを倒した！　二人の力と誓いの剣が、黒紫のルーンを打ち砕いた。');
  setTimeout(()=>{
+   if(completion!==PrologueCombat.generation)return;
    showBattleResult(120,45,()=>{
      startRaiderAftermath();
      $('#raiderBattle').style.display='none';
@@ -1356,7 +1361,8 @@ $('#rbDevKill').onclick=()=>{
  setRaiderCommandDrawer(false);
  rbBusy=true; rbBoss=0; updateRaider();
  showRaiderBattleLog('DEV｜一撃撃破！',260);
- setTimeout(finishRaider,280);
+ const completion=PrologueCombat.generation;
+ setTimeout(()=>{if(completion===PrologueCombat.generation)finishRaider()},280);
 };
 $('#rbAtk').onclick=()=>choosePartyAct('atk');
 $('#rbSkill').onclick=()=>choosePartyAct('skill');

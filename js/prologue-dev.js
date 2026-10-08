@@ -1,9 +1,13 @@
 // Uses the existing DEV gate. No additional controls outside the development panel.
 (() => {
+ window.WINDBOUND_DEV=['localhost','127.0.0.1','[::1]'].includes(location.hostname)||new URLSearchParams(location.search).get('dev')==='1';
+ document.body.classList.toggle('developmentMode',WINDBOUND_DEV);
+ if(!WINDBOUND_DEV){document.querySelectorAll('.dev-only-command').forEach(b=>b.disabled=true);return;}
  const entries=[['mother','15 母娘救出'],['fionaRescue','16 フィオナ救出'],['moss1','17 森の穢れ 1'],['moss2','18 森の穢れ 2'],['moss3','19 森の穢れ 3'],['barrierBefore','20 結界解除前'],['barrierAfter','21 結界解除後']];
  const old=devJump;
  devJump=function(key){
   PrologueCombat.cancel();BattleTargetSelector.cancel();
+  document.querySelector('#battleResult').style.display='none';resultCallback=null;
   document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','raiderFinishing','soloRescue');attackBattleBusy=false;rbBusy=false;
   if(entries.some(([k])=>k===key)){
    if(key==='mother'||key==='fionaRescue'){

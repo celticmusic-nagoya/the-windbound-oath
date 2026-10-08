@@ -217,5 +217,5 @@
   setTimeout(()=>{if(token===generation&&rbBoss>0&&rbPhase()===3)support('blessing')},800);
  }
 
- window.PrologueCombat=Object.freeze({stats,beginNormal,beginRaider,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor,spawn,supply,addAction,pendingCall,get callFlags(){return [...callFlags]},enrageMoment,support,get enragePending(){return enragePending}});
+ window.PrologueCombat=Object.freeze({stats,beginNormal,beginRaider,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get generation(){return generation},get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor,spawn,supply,addAction,pendingCall,get callFlags(){return [...callFlags]},enrageMoment,support,get enragePending(){return enragePending}});
 })();

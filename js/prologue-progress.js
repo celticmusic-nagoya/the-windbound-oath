@@ -8,6 +8,7 @@
  function objective(){return '森を侵す異常化ゴブリンを討伐する　'+count()+' / 3';}
  function sync(){
   forestGobWins=count();
+  for(const id of ['attackMother','attackChild'])q('#'+id).style.display=defeated.has('attackGob1')?'none':'';
   Object.entries(ids).forEach(([field,id])=>{const el=q('#'+field);if(el){el.hidden=defeated.has(id);el.style.display=el.hidden?'none':''}});
   q('#louSeal').classList.toggle('corrupted',count()<3);
   q('#louSeal').classList.toggle('open',count()>=3);
