@@ -6,6 +6,7 @@
   const assets = window.LindFieldAssets;
   let active = false, snapshot = null, depthFrame = null;
   const originalBlocked = window.blockedWorld;
+  const originalSave = window.saveGrowthData;
   const layer = document.createElement('div');
   layer.id = 'lindReviewLayer';
   layer.hidden = true;
@@ -20,7 +21,7 @@
   terrain('grass', 0, 0, 2200, 1550, 256);
   terrain('dirt', 80, 560, 1350, 100, 128);
   terrain('dirt', 680, 100, 100, 1250, 128);
-  terrain('edge', 80, 528, 1350, 32);
+  terrain('edge', 80, 496, 1350, 64);
   terrain('stone', 570, 430, 350, 300);
   terrain('water', 1450, 0, 180, 1550, 128);
   terrain('riverbank', 1400, 0, 64, 1550, 128);
@@ -32,8 +33,9 @@
     image.alt = obj.label;
     image.className = 'lind-review-object';
     image.dataset.assetId = obj.id;
-    Object.assign(image.style, {left:obj.x+'px', top:obj.y+'px', width:obj.width+'px',
-      height:obj.height+'px', zIndex:String(Math.round(obj.y+obj.height))});
+    const draw = obj.draw || {x:obj.x, y:obj.y, width:obj.width, height:obj.height};
+    Object.assign(image.style, {left:draw.x+'px', top:draw.y+'px', width:draw.width+'px',
+      height:draw.height+'px', zIndex:obj.layer === 'groundDecoration' ? '1' : String(Math.round(obj.y+obj.height))});
     layer.append(image);
   });
   const controls = document.createElement('div');
@@ -111,13 +113,19 @@
     if (originalBlocked(x, y)) return true;
     if (!active) return false;
     // Foot box, not full roof image; entrances remain approachable from below.
-    return assets.objects.some(obj => obj.collision && (() => {
-      const c = obj.collision;
+    return assets.objects.some(obj => (obj.collisions || (obj.collision ? [obj.collision] : [])).some(c => {
       return x+28 > obj.x+c[0] && x+6 < obj.x+c[0]+c[2] &&
         y+42 > obj.y+c[1] && y+32 < obj.y+c[1]+c[3];
-    })());
+    }));
   }
   window.blockedWorld = blocked;
+  window.saveGrowthData = function (...args) {
+    if (active) {
+      toast('素材仮配置の座標は保存しません。戻ってからセーブしてください。');
+      return false;
+    }
+    return originalSave.apply(this, args);
+  };
   // Prevent live story/quest/save controls while reviewing art. Field pointer
   // destinations and existing arrow/WASD handlers remain available.
   document.addEventListener('pointerdown', e => {
@@ -128,6 +136,10 @@
   document.addEventListener('keydown', e => {
     if (!active) return;
     if (e.key === 'Escape') { setActive(false); e.stopImmediatePropagation(); return; }
+    if (e.target.closest('#lindReviewControls')) {
+      e.stopImmediatePropagation();
+      return;
+    }
     if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','w','a','s','d'].includes(e.key)) {
       e.preventDefault(); e.stopImmediatePropagation();
     }

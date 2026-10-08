@@ -62,9 +62,9 @@ Emmaの老齢・眼鏡・杖・曲がった腰・裁縫・植物刺繍、Fiona�
 |---|---|
 | 0 Source audit | 実施、既存source/実行接続点とstory metadataを記録 |
 | 0 Reference inventory | 実施、8画像すべて受領・目視確認・原本保存 |
-| 1 Terrain | 制作・QA中 |
-| 2 主要建物 | STEP 1のQA後に制作 |
-| 3 農業／畜産施設 | STEP 2のQA後に制作 |
+| 1 Terrain | 7枚制作・仮配置QA済み |
+| 2 主要建物 | 10枚制作・仮配置QA済み |
+| 3 農業／畜産施設 | 11枚制作・仮配置QA済み |
 | 4〜15 | 今回の初期batchでは未着手。EmmaはSTEP 9の縮尺確定後に1点から制作 |
 
 各STEPをstandalone generation→RGBA/目視QA→仮配置→collision/縮尺→3viewport確認→commit/pushの順で進める。reference crop、未確認デザインの独自生成、CSS代替の正式採用はしない。
