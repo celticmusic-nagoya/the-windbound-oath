@@ -816,7 +816,7 @@ $('#attackFiona').onclick=()=>{
  say('フィオナ「エイダン……！ よかった。さっきの人たちは逃がせた。でも、この魔物たち……普通じゃない。」');
  setObj('フィオナとともに村の北側へ向かおう');
  notice('フィオナが再び同行した');
- setTimeout(beginNorthAssault,700);
+ const eventGeneration=PrologueCombat.generation;setTimeout(()=>{if(eventGeneration===PrologueCombat.generation&&storyStage===7)beginNorthAssault()},700);
 };
 
 let northPhase=0;
@@ -1038,8 +1038,8 @@ function loadGrowthData(){
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
   if(d.prologue)PrologueProgress.load(d.prologue);
-  renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');
- }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>'}
+  renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
+ }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>';return false}
 }
 function eraseGrowthData(){localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
 $('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
@@ -1090,7 +1090,8 @@ function enterMossForest(){
  $('#forestScene').style.display='block';forestCamera();
  questPop('SCENE：苔むした森');
  PrologueProgress.sync();setObj(PrologueProgress.objective());
- setTimeout(()=>say('フィオナ「……エイダン？　よかった……。ここ、村の北の森……？」'),350);
+ const entryGeneration=window.PrologueCombat?.generation;
+ setTimeout(()=>{if(entryGeneration===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say('フィオナ「……エイダン？　よかった……。ここ、村の北の森……？」')},350);
 }
 
 function forestToast(t){
@@ -1433,7 +1434,9 @@ $('#aftermathScene').onclick=()=>{
    // Hiding it here exposed the underlying Lind Village for ~650ms.
    $('#aftermathText').textContent='夜が明ける。三人は風の向かう先――アーサー砦へ歩き出した。';
    questPop('ルーがSUPPORTとして仲間になった');
+   const eventGeneration=PrologueCombat.generation;
    setTimeout(()=>{
+     if(eventGeneration!==PrologueCombat.generation||storyStage!==14)return;
      startFortFinale();
      // Fort is now in front; only then remove the previous scene.
      $('#aftermathScene').style.display='none';
@@ -1537,7 +1540,7 @@ function devJump(key){
  if(key==='opening'){
    storyStage=0;room='home';ipx=190;ipy=500;itarget=null;$('#inside').style.display='block';dressRoom();inCamera();
    currentObjective='家を出て、訓練場のフィオナに会いに行こう';
-   setTimeout(()=>say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'),120);
+   setTimeout(()=>{if(storyStage===0&&room==='home')say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。')},120);
  }else if(key==='training'){
    storyStage=1;room='';px=1510;py=1010;target=null;currentObjective='訓練場でフィオナと話そう';camera();
  }else if(key==='sunset'){
@@ -1580,6 +1583,7 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
  currentObjective='家を出て、訓練場のフィオナに会いに行こう';
  renderJournal();
  setTimeout(()=>{
+   if(storyStage!==0||room!=='home')return;
    popObjective();
    say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');
  },450);

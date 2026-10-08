@@ -1,5 +1,5 @@
 /* DEV controls intentionally sit above combat/results only in development mode. */
-body.developmentMode #devBtn{display:block!important;z-index:10100}
+body.developmentMode #devBtn{display:block!important;z-index:10100;top:84px;bottom:auto}
 body.developmentMode #devPanel{z-index:10110}
 body.developmentMode.normalBattleMode #devPanel,body.developmentMode.raiderBattleMode #devPanel{display:block!important}
 /* Inline visibility owns the panel; legacy battle rules must not hide an opened panel. */
@@ -12,3 +12,5 @@ body.developmentMode #devPanel:not([style]),body.developmentMode #devPanel[style
 .battleDamageNumber span{display:block;font-size:12px;letter-spacing:.08em}
 .battleDamageNumber.isCritical{font-size:30px;color:#e5c77d;text-shadow:0 2px 4px #000,0 0 8px #ac894855}
 @keyframes battleNumberRise{0%{opacity:0;translate:-50% -30%}12%,65%{opacity:1}100%{opacity:0;translate:-50% -100%}}
+
+@media(orientation:landscape) and (max-height:520px){body.developmentMode #devBtn{top:60px}}

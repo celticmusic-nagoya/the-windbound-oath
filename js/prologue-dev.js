@@ -7,7 +7,7 @@
  const old=devJump;let sandbox=false;
  const save=saveGrowthData,load=loadGrowthData;
  saveGrowthData=function(){if(sandbox){notice('DEVジャンプ中は通常セーブを保護しています。ロードか再読み込みで解除できます。');return}return save()};
- loadGrowthData=function(){const value=load();sandbox=false;return value};
+ loadGrowthData=function(){const value=load();if(value===true&&sandbox){try{if(JSON.parse(localStorage.getItem(SAVE_KEY))?.prologue?.version===1)sandbox=false}catch{}}return value};
  devJump=function(key){
   if(key==='reunion')key='north';
   if(!entries.some(([k])=>k===key))return false;
