@@ -14,3 +14,8 @@ body.developmentMode #devPanel:not([style]),body.developmentMode #devPanel[style
 @keyframes battleNumberRise{0%{opacity:0;translate:-50% -30%}12%,65%{opacity:1}100%{opacity:0;translate:-50% -100%}}
 
 @media(orientation:landscape) and (max-height:520px){body.developmentMode #devBtn{top:60px}}
+
+/* Read-only build label stays beside the DEV button and never intercepts input. */
+#devBuildIndicator{position:fixed;left:84px;top:94px;z-index:10100;pointer-events:none;font-size:10px;color:#d6c48e;letter-spacing:.03em;background:#0b171bcc;padding:2px 5px;border-radius:3px}
+body:not(.developmentMode) #devBuildIndicator{display:none!important}
+@media(orientation:landscape) and (max-height:520px){#devBuildIndicator{top:70px}}
