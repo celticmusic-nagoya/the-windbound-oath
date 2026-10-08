@@ -5,6 +5,10 @@
 .lind-review-object { position:absolute; object-fit:contain; pointer-events:none; }
 .lind-animal { position:absolute; pointer-events:none; }
 .lind-animal img { position:absolute; max-width:none; image-rendering:pixelated; }
+.lind-animal img[hidden] { display:none; }
+.lind-wind-driven { transform-origin:50% 100%; animation:lindFieldWind 3.2s ease-in-out infinite alternate; }
+#lindReviewLayer[data-wind="off"] .lind-wind-driven { animation-play-state:paused; }
+@keyframes lindFieldWind { from { transform:rotate(-.35deg); } to { transform:rotate(.35deg); } }
 body.lindFieldReview #world > :not(#lindReviewLayer):not(#player):not(.bridge) { visibility:hidden; }
 body.lindFieldReview #game > :not(#world) { display:none!important; }
 body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { display:none!important; }
@@ -16,4 +20,9 @@ body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { displ
  background:rgba(17,37,29,.94); border:1px solid #b79a58; color:#f1e7c8; font:12px sans-serif; }
 #lindReviewControls button { min-height:36px; padding:5px 16px; }
 #lindReviewControls select { min-height:36px; max-width:180px; background:#17352a; color:#f1e7c8; }
-@media(max-width:500px) { #lindReviewControls span { max-width:130px; } #lindReviewControls select { max-width:110px; } }
+@media(max-width:500px) {
+ #lindReviewControls { gap:4px; padding:6px; font-size:11px; }
+ #lindReviewControls span { max-width:105px; }
+ #lindReviewControls select { max-width:95px; }
+ #lindReviewControls button { padding:5px 8px; white-space:nowrap; }
+}

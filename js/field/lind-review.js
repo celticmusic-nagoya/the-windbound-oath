@@ -10,6 +10,7 @@
   const layer = document.createElement('div');
   layer.id = 'lindReviewLayer';
   layer.hidden = true;
+  layer.dataset.wind = window.LindFieldEnvironment?.wind ? 'on' : 'off';
   world.prepend(layer);
   const terrain = (name, x, y, width, height, tile = 64) => {
     const el = document.createElement('div');
@@ -32,6 +33,7 @@
     image.src = obj.path;
     image.alt = obj.label;
     image.className = 'lind-review-object';
+    if (obj.motion === 'wind' || obj.id === 'lind_orchard_apple') image.classList.add('lind-wind-driven');
     image.dataset.assetId = obj.id;
     const draw = obj.draw || {x:obj.x, y:obj.y, width:obj.width, height:obj.height};
     Object.assign(image.style, {left:draw.x+'px', top:draw.y+'px', width:draw.width+'px',
@@ -70,7 +72,13 @@
     camera(); return true;
   }
   jump.onchange = () => focus(jump.value);
-  controls.append(caption, jump, close);
+  const wind = document.createElement('button');
+  wind.textContent = '風ON';
+  wind.onclick = () => {
+    const value = window.LindFieldEnvironment.setWind(!window.LindFieldEnvironment.wind);
+    wind.textContent = value ? '風ON' : '風OFF';
+  };
+  controls.append(caption, jump, wind, close);
   document.body.append(controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';

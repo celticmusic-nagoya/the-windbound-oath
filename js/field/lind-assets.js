@@ -8,8 +8,12 @@
     collision:[Math.round(width*.18),Math.round(height*.62),Math.round(width*.64),Math.round(height*.27)]});
   const farm = (id, label, x, y, width, height, walkable = false) => ({id, label,
     path:base+'farm/'+id+'.png', x, y, width, height,
-    layer:walkable ? 'groundDecoration' : 'structure',
+    layer:walkable ? 'groundDecoration' : 'structure', motion:walkable ? 'wind' : 'static',
     collision:walkable ? null : [Math.round(width*.2),Math.round(height*.65),Math.round(width*.6),Math.round(height*.23)]});
+  const prop = (id, label, folder, x, y, width, height, motion = 'static', solid = true) => ({id,label,
+    path:base+folder+'/'+id+'.png',x,y,width,height,motion,
+    layer:solid ? 'structure' : 'groundDecoration',
+    collision:solid ? [Math.round(width*.15),Math.round(height*.76),Math.round(width*.7),Math.round(height*.2)] : null});
   window.LindFieldAssets = {
     terrain: {
       grass: base + 'terrain/lind_grass.png',
@@ -42,13 +46,29 @@
       farm('lind_haystack', '干し草', 1190, 1320, 80, 100),
       farm('lind_hay_bale', '干し草ロール', 1300, 1330, 60, 60),
       farm('lind_cart', '荷車', 1110, 1235, 75, 75),
-      farm('lind_farm_tools', '農具', 1360, 1320, 70, 90)
+      farm('lind_farm_tools', '農具', 1360, 1320, 70, 90),
+      prop('lind_tree_01', '村の木', 'nature', 50, 180, 130, 160, 'wind'),
+      prop('lind_bush', '低木', 'nature', 470, 510, 55, 42, 'wind'),
+      prop('lind_flower_patch', '白・黄・紫の花', 'nature', 525, 540, 42, 28, 'wind', false),
+      prop('lind_grass_tuft', '草・クローバー', 'nature', 840, 740, 36, 28, 'wind', false),
+      prop('lind_rock_small', '小石', 'nature', 820, 930, 25, 18),
+      prop('lind_rock_large', '大きな石', 'nature', 80, 680, 60, 46),
+      prop('lind_stump', '切り株', 'nature', 870, 1110, 36, 30),
+      prop('lind_fence', '牛の牧区・柵', 'props', 950, 1025, 150, 30),
+      {...prop('lind_fence', '豚の牧区・柵', 'props', 1110, 1025, 150, 30),id:'pig_fence',boundsId:'lind_fence'},
+      {...prop('lind_fence', '鶏の牧区・柵', 'props', 1270, 1025, 140, 30),id:'chicken_fence',boundsId:'lind_fence'},
+      prop('lind_crate', '木箱', 'props', 1250, 825, 36, 36),
+      prop('lind_barrel', '樽', 'props', 1320, 810, 30, 42),
+      prop('lind_feed_sack', '飼料', 'props', 905, 965, 30, 38),
+      prop('lind_water_bucket', '水桶', 'props', 1055, 965, 38, 24),
+      prop('lind_laundry', '洗濯物', 'props', 470, 1230, 115, 95, 'wind'),
+      prop('lind_sign', '葉の看板', 'props', 540, 440, 30, 45, 'wind')
     ]
   };
   // Normalize transparent export margins in the renderer, without changing PNGs.
   // Coordinates/width describe visible content; source dimensions preserve aspect.
   window.LindFieldAssets.objects.forEach(obj => {
-    const b = window.LindFieldContentBounds?.[obj.id === 'cliff' ? 'lind_cliff' : obj.id];
+    const b = window.LindFieldContentBounds?.[obj.boundsId || (obj.id === 'cliff' ? 'lind_cliff' : obj.id)];
     if (!b) return;
     const oldHeight = obj.height;
     const scale = obj.width/b[4];
@@ -63,6 +83,21 @@
       obj.collision = null;
       obj.collisions = [.17,.62].map(x => [Math.round(obj.width*x),
         Math.round(obj.height*.74),Math.round(obj.width*.18),Math.round(obj.height*.16)]);
+    }
+    if (obj.id === 'lind_tree_01') {
+      obj.collision = [Math.round(obj.width*.4),Math.round(obj.height*.84),
+        Math.round(obj.width*.22),Math.round(obj.height*.15)];
+    }
+    if (obj.id === 'lind_laundry') {
+      obj.collision = null;
+      obj.collisions = [.05,.88].map(x => [Math.round(obj.width*x),
+        Math.round(obj.height*.85),Math.round(obj.width*.08),Math.round(obj.height*.13)]);
+    }
+    if (obj.id === 'lind_fence' || obj.boundsId === 'lind_fence') {
+      // Follow the reference's angled fence feet, rather than blocking its sky.
+      obj.collision = null;
+      obj.collisions = Array.from({length:6}, (_, i) => [Math.floor(obj.width*i/6),
+        Math.round(obj.height*(.85-.3*i/5)),Math.ceil(obj.width/6),Math.round(obj.height*.15)]);
     }
   });
 })();

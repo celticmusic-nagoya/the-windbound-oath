@@ -31,7 +31,25 @@ ANATOMY QA: 牛・豚の各idle/walkは頭1、胴体1、脚4、尾1。
 Scaleは既存34×44px CSS playerを仮の比較対象とした牛56px幅、豚43px、鶏24px。
 正式field character制作前なので最終scale確定とはしない。
 
-## STEP 5–7
+## STEP 5 — 自然・小物
+
+14枚を単独生成: 木、低木、白/黄/紫の花群、草/クローバー、小石、大石、切り株、
+柵、木箱、樽、飼料、水桶、洗濯物、葉の看板。荷車・干し草・農具はBatch 1を再利用。
+全14枚RGBA・完全透明ピクセルあり。明るい背景で全画像を視覚確認し、
+背景焼き込みや大きな欠損なし。出力PNGは変更せず、表示時に余白だけ補正。
+
+`motion: wind/static`の分類と`LindFieldEnvironment.setWind()`を用意。
+木・低木・草花・洗濯物・看板・既存作物/果樹だけが風の停止対象。
+静物と家畜には作用しない。DEV「風ON/OFF」で確認可能。
+storyの風停止イベントへの正式接続はSTEP 13。
+
+柵3配置で小屋前の牧区を明示。斜めの柵は6つの足元矩形、木は幹、
+洗濯物は2本の支柱のみcollision。草花はwalkable ground decoration。
+3画面サイズで画像ロード、家畜の維持、全新collider、風停止、
+click/tap/keyboard、review復元をPASS。画像404=0、JS例外=0。
+証跡: `qa/lind-batch2/step5-qa.json`と3サイズのスクリーンショット。
+
+## STEP 6–7
 
 未着手。各前工程のQAとcheckpoint push完了後に進める。
 
