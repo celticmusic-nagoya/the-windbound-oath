@@ -49,7 +49,29 @@ storyの風停止イベントへの正式接続はSTEP 13。
 click/tap/keyboard、review復元をPASS。画像404=0、JS例外=0。
 証跡: `qa/lind-batch2/step5-qa.json`と3サイズのスクリーンショット。
 
-## STEP 6–7
+## STEP 6 — 川・橋・釣り場
+
+水辺Referenceを使用し、橋・桟橋・釣り竿・籠・葦・河原の小石の6枚を単独生成。
+全6枚RGBA、透明ピクセルあり。明るい背景で全画像を視覚確認、不要背景や
+大きな欠損なし。水と河岸はBatch 1、木箱はSTEP 5を再利用。
+
+川は東側x1450–1630、橋は従来の中央東側crossing範囲内、釣り場は南東y1325付近。
+川の対岸や施設の地域関係を変更しない。直線河川は既存prototype地形の仮配置であり、
+Referenceの最終曲線・斜め河岸／seam調整はSTEP 12。
+
+`LindFieldRiver`で橋の床と桟橋の床polygonを定義。
+足元4点が床内にあることを確認し、画像の支柱・透過余白を水上歩行領域にしない。
+橋を矢印入力で実際に横断、桟橋から水へ踏み出せないことを確認。
+将来の釣り人(x1430,y1325)／player(x1475,y1337)用に2立ち位置を確保。
+NPCは未制作。仮配置の素材jumpも安全な足場へ移動する。
+
+水流は`lindWaterFlow`、風は`lindFieldWind`で別timeline。
+風OFFで草／葦／洗濯物が停止してもwaterのbackground-positionは進行し続ける。
+3画面サイズで透明画像・橋横断・水collision・2立ち位置・風停止中water継続・
+review復元をPASS。画像404=0、JS例外=0。
+証跡: `qa/lind-batch2/step6-qa.json`と3サイズの釣り場画面。
+
+## STEP 7
 
 未着手。各前工程のQAとcheckpoint push完了後に進める。
 

@@ -9,6 +9,9 @@
 .lind-wind-driven { transform-origin:50% 100%; animation:lindFieldWind 3.2s ease-in-out infinite alternate; }
 #lindReviewLayer[data-wind="off"] .lind-wind-driven { animation-play-state:paused; }
 @keyframes lindFieldWind { from { transform:rotate(-.35deg); } to { transform:rotate(.35deg); } }
+.lind-water-flow { animation:lindWaterFlow 8s linear infinite; }
+@keyframes lindWaterFlow { from { background-position:0 0; } to { background-position:0 128px; } }
+body.lindFieldReview #world > .bridge { visibility:hidden; }
 body.lindFieldReview #world > :not(#lindReviewLayer):not(#player):not(.bridge) { visibility:hidden; }
 body.lindFieldReview #game > :not(#world) { display:none!important; }
 body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { display:none!important; }

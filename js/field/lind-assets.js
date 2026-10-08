@@ -62,7 +62,14 @@
       prop('lind_feed_sack', '飼料', 'props', 905, 965, 30, 38),
       prop('lind_water_bucket', '水桶', 'props', 1055, 965, 38, 24),
       prop('lind_laundry', '洗濯物', 'props', 470, 1230, 115, 95, 'wind'),
-      prop('lind_sign', '葉の看板', 'props', 540, 440, 30, 45, 'wind')
+      prop('lind_sign', '葉の看板', 'props', 540, 440, 30, 45, 'wind'),
+      prop('lind_bridge', '川を渡る橋', 'river', 1435, 565, 210, 105, 'static', false),
+      prop('lind_fishing_pier', '南東の釣り場・桟橋', 'river', 1405, 1325, 185, 100, 'static', false),
+      {...prop('lind_fishing_rod', '釣り竿', 'river', 1520, 1335, 64, 55, 'static', false),layer:'structure'},
+      prop('lind_fish_basket', '釣り籠', 'river', 1360, 1380, 28, 25),
+      prop('lind_reeds', '川辺の葦', 'river', 1390, 1190, 40, 50, 'wind', false),
+      prop('lind_river_rocks', '川辺の小石', 'river', 1370, 1445, 55, 24, 'static', false),
+      {...prop('lind_crate', '釣り場の木箱', 'props', 1350, 1310, 36, 36),id:'fishing_crate',boundsId:'lind_crate'}
     ]
   };
   // Normalize transparent export margins in the renderer, without changing PNGs.

@@ -15,6 +15,7 @@
   const terrain = (name, x, y, width, height, tile = 64) => {
     const el = document.createElement('div');
     el.className = 'lind-review-ground';
+    if (name === 'water') el.classList.add('lind-water-flow');
     Object.assign(el.style, {left:x+'px', top:y+'px', width:width+'px', height:height+'px',
       backgroundImage:`url("${assets.terrain[name]}")`, backgroundSize:tile+'px '+tile+'px'});
     layer.append(el);
@@ -69,6 +70,11 @@
     const obj = assets.objects.find(item => item.id === id) || window.LindFieldAnimals?.actors.find(item => item.id === id);
     if (!obj) return false;
     target = null; px = obj.x+obj.width/2-17; py = obj.y+obj.height+20;
+    if (obj.id === 'lind_bridge') { px = 1390; py = 560; }
+    if (['lind_fishing_pier','lind_fishing_rod'].includes(obj.id)) {
+      const stand = window.LindFieldRiver.standingAreas.find(s=>s.id==='player');
+      px = stand.x; py = stand.y;
+    }
     camera(); return true;
   }
   jump.onchange = () => focus(jump.value);
@@ -126,7 +132,9 @@
     }
   }
   function blocked(x, y) {
-    if (originalBlocked(x, y)) return true;
+    if (active && window.LindFieldRiver) {
+      if (window.LindFieldRiver.blocked(x, y)) return true;
+    } else if (originalBlocked(x, y)) return true;
     if (!active) return false;
     if (window.LindFieldAnimals?.blocked(x, y)) return true;
     // Foot box, not full roof image; entrances remain approachable from below.
