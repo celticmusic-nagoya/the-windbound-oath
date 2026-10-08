@@ -727,7 +727,7 @@ function chooseNormalAct(kind,target){
 }
 function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
- if(attackBattleBusy)return;
+ if(attackBattleBusy||PrologueProgress.cleared(id))return;
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
  if(id.startsWith('forestGob')){forestActive=false;$('#forestScene').style.display='none';}
  document.body.classList.remove('raiderBattleMode');
@@ -784,9 +784,10 @@ function finishAttackBattle(){
  if(gobBox) gobBox.classList.add('taintedKO');
  showBattleBanner('魔物を退けた。',900);
  setTimeout(()=>{
-   const e=$('#'+defeated);if(e)e.remove();
+   const e=$('#'+defeated);if(e){e.hidden=true;e.style.display='none'}
+   PrologueProgress.defeat(defeated);
    if(defeated&&defeated.startsWith('forestGob')){
-     forestGobWins++;hideNormalPartyBattle();
+     hideNormalPartyBattle();
      /* Keep the battle stage behind VICTORY. Never reveal the field/map under results. */
      showBattleResult(18,7,()=>{
        $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
@@ -795,7 +796,7 @@ function finishAttackBattle(){
      });
      forestToast('異常化ゴブリンを退けた。森の空気が少し軽くなった。');
      if(forestGobWins>=3){
-       storyStage=Math.max(storyStage,10);setObj('古代石の周囲で風の気配を探そう');
+       storyStage=Math.max(storyStage,10);setObj(PrologueProgress.objective()+'　結界の奥へ向かおう');
        $('#louSeal').classList.add('open');$('#louSearch').style.display='block';
        forestToast('3体の異常化ゴブリンを退けた。古代の風結界が消えた……。');
      }
@@ -1030,7 +1031,8 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
- const data={version:28,members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
+ if(document.body.classList.contains('battleMode')){notice('戦闘中はセーブできません。');return}
+ const data={version:29,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
 function loadGrowthData(){
@@ -1040,7 +1042,8 @@ function loadGrowthData(){
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
-  renderSystemTab('status');notice('成長データをロードしました');
+  if(d.prologue)PrologueProgress.load(d.prologue);
+  renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');
  }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>'}
 }
 function eraseGrowthData(){localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
@@ -1091,7 +1094,7 @@ function enterMossForest(){
  storyStage=9;forestActive=true;fpx=330;fpy=940;ffx=285;ffy=955;ftarget=null;
  $('#forestScene').style.display='block';forestCamera();
  questPop('SCENE：苔むした森');
- setObj('森の奥を調べよう');
+ PrologueProgress.sync();setObj(PrologueProgress.objective());
  setTimeout(()=>say('フィオナ「……エイダン？　よかった……。ここ、村の北の森……？」'),350);
 }
 
@@ -1123,26 +1126,17 @@ Object.keys(chestData).forEach(id=>{
  };
 });
 const louIntroLines=[
- '風結界がほどけた場所に近づくと、森の音がふっと遠のいた。',
- 'フィオナ「……光？」　木々の間を、青白い粒子が蛍のように流れていく。',
- '？？？「……こわくない？」',
- 'エイダン「誰だ？」',
- '小さな影が古代石の陰からおそるおそる姿を見せた。透き通る羽が、月明かりを受けて淡く揺れる。',
- '？？？「人間……だよね。黒いのに染まった魔物じゃないよね？」',
- 'フィオナ「大丈夫。私たちも、あの魔物に襲われたの。」',
- '妖精はしばらく二人を見つめ、それから少しだけ肩の力を抜いた。',
- 'ルー「……ルー。名前はルーだよ。」',
- 'ルー「ここには前まで、ルーだけじゃなくて……もっとたくさん、仲間がいたの。」',
- 'その言葉と同時に、周囲の光が一瞬だけ弱くなる。',
- 'ルー「魔物が来て、みんな逃げて……それから、風の声もぐちゃぐちゃになった。」',
- 'エイダン「君は、ここに残っていたのか？」',
- 'ルー「うん。古い祭壇の奥から変な声がしてるの。仲間たちが襲われたことと、きっと関係があると思って。」',
- 'フィオナ「その祭壇へ案内してくれる？」',
- 'ルー「……うん。でも気をつけて。あそこには、まだすごく嫌な風がいる。」',
- 'ルーが両手を広げると、蔦に覆われていた空間を淡い風が走り、今まで見えなかった細い道が浮かび上がった。'
+ '黒紫の穢れがほどけ、古代のルーンが淡い緑に灯った。止まっていた風が、木々を揺らす。',
+ 'フィオナ「魔物が、この結界を歪めていたんだね……。」',
+ '小さな妖精が結界の奥から飛び出した。',
+ 'ルー「あなたたちが……あいつらを倒してくれたの？　ルー、ずっと出られなかったんだ……。」',
+ 'エイダン「もう大丈夫。君の名前は？」',
+ 'ルー「ルーだよ。……ありがとう！　でも、奥の祭壇にはまだ嫌な風がいるの。」',
+ 'ルーが羽を広げると、木々の間に細い風の道が浮かび上がった。'
 ];
 let louIntroIndex=0;
 function startLouIntro(){
+ if(PrologueProgress.count()<3)return;
  forestActive=false;louIntroIndex=0;$('#louIntroScene').style.display='block';$('#louIntroText').textContent=louIntroLines[0];
 }
 $('#louIntroScene').onclick=()=>{
@@ -1154,7 +1148,7 @@ $('#louIntroScene').onclick=()=>{
 };
 $('#louSearch').onclick=e=>{
  e.stopPropagation();
- if(forestGobWins<3){forestToast('結界の向こうに何かの気配がある……。');return}
+ if(PrologueProgress.count()<3){forestToast('黒紫の穢れが古代ルーンを歪めている……。異常化ゴブリンを退けよう。');return}
  if(Math.hypot(fpx-1515,fpy-475)>230){forestToast('かすかな風の音がする……もう少し近くを探そう。');return}
  if(louFound){forestToast('隠された風道が淡く輝いている。');return}
  startLouIntro();
@@ -1187,7 +1181,7 @@ $('#ancientStone').onclick=e=>{
  forestStoneSeen=true;storyStage=Math.max(storyStage,10);
  say('フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。');
  if(forestGobWins>=3){setObj('古代石の周囲で風の気配を探そう');$('#louSearch').style.display='block';}
- else setObj('森を探索し、異常化した魔物を退けよう');
+ else setObj(PrologueProgress.objective());
 };
 
 const altarLines=[
@@ -1914,4 +1908,6 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <link rel="stylesheet" href="css/prologue-combat.css">
 <script src="js/battle-status.js"></script>
 <script src="js/prologue-combat.js"></script>
+<script src="js/prologue-progress.js"></script>
+<script src="js/prologue-dev.js"></script>
 </body></html>
