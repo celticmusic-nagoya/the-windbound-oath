@@ -9,6 +9,7 @@
     if (layer) layer.dataset.wind = wind ? 'on' : 'off';
     const toggle = document.getElementById('lindWindToggle');
     if (toggle) toggle.textContent = wind ? '風ON' : '風OFF';
+    window.dispatchEvent(new CustomEvent('lind-wind-change',{detail:{wind}}));
     return wind;
   }
   window.LindFieldEnvironment = Object.freeze({setWind,get wind(){return wind;}});

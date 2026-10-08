@@ -11,6 +11,7 @@ try { for(const [w,h] of [[1280,720],[844,390],[390,844]]) {
  assert.ok(await page.locator('#lindReviewControls').isVisible());
  const loads=await page.evaluate(async()=>{const paths=[...Object.values(LindFieldAssets.terrain),...LindFieldAssets.objects.map(o=>o.path),...LindFieldAnimals.actors.flatMap(a=>Object.values(a.paths))];return Promise.all(paths.map(path=>new Promise(resolve=>{const i=new Image();i.onload=()=>resolve({path,ok:true});i.onerror=()=>resolve({path,ok:false});i.src=path})));});
  assert.ok(loads.every(i=>i.ok),'all production paths must load');
+ await page.locator('#lindReviewLayer img').evaluateAll(async els=>{els.forEach(i=>i.loading='eager');await Promise.all(els.map(i=>i.decode()))});
  await page.evaluate(()=>saveGrowthData());assert.equal(await page.evaluate(()=>JSON.stringify({...localStorage})),saved.storage);
  const animals=await page.evaluate(()=>LindFieldAnimals.actors.map(a=>({id:a.id,x:a.x,y:a.y,state:a.state,width:a.width,height:a.height,pen:a.pen})));
  assert.ok(animals.every(a=>a.state==='IDLE'));await page.clock.runFor(7000);

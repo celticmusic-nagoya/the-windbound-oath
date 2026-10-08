@@ -9,6 +9,7 @@
     for(let i=0;i<steps;i++) {
       const nx=Math.max(0,Math.min(2160,x+dx/steps));
       const ny=Math.max(0,Math.min(1500,y+dy/steps));
+      if(nx===x&&ny===y){stopped=true;break;}
       if(blocked(nx,ny)){stopped=true;break;}
       x=nx;y=ny;
     }

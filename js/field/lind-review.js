@@ -31,6 +31,7 @@
   terrain('dirt', 1630, 565, 170, 60, 128);
   terrain('dirt', 1730, 600, 95, 170, 128);
   assets.objects.forEach(obj => {
+    if(obj.actor === 'windStone') return;
     const image = document.createElement('img');
     image.loading = 'lazy';
     image.decoding = 'async';
@@ -73,6 +74,8 @@
     const obj = assets.objects.find(item => item.id === id) || window.LindFieldAnimals?.actors.find(item => item.id === id);
     if (!obj) return false;
     target = null; px = obj.x+obj.width/2-17; py = obj.y+obj.height+20;
+    // Side approach keeps the full tall monument below DEV controls on landscape screens.
+    if (obj.id === 'lind_wind_stone') { px=obj.x-65; py=obj.y+obj.height-75; }
     if (obj.id === 'lind_bridge') { px = 1390; py = 560; }
     if (['lind_fishing_pier','lind_fishing_rod'].includes(obj.id)) {
       const stand = window.LindFieldRiver.standingAreas.find(s=>s.id==='player');
@@ -91,6 +94,7 @@
   controls.append(caption, jump, wind, close);
   document.body.append(controls);
   window.LindFieldTraining?.mount(layer, controls);
+  window.LindFieldWindStone?.mount(layer, controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -122,6 +126,7 @@
     }
     active = value;
     window.LindFieldTraining?.clear();
+    window.LindFieldWindStone?.clear();
     if (active) window.LindFieldAnimals?.start(); else window.LindFieldAnimals?.stop();
     document.body.classList.toggle('lindFieldReview', active);
     layer.hidden = !active;
@@ -171,7 +176,7 @@
       return;
     }
     if (e.key === 'Enter' || e.key === 'e') {
-      window.LindFieldTraining?.nearby();
+      if(!window.LindFieldWindStone?.nearby()) window.LindFieldTraining?.nearby();
       e.preventDefault(); e.stopImmediatePropagation(); return;
     }
     if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','w','a','s','d'].includes(e.key)) {
