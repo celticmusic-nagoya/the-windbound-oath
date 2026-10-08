@@ -480,54 +480,6 @@ window.LindFieldContentBounds = {
     714,
     973
   ],
-  "farmer_female_idle": [
-    1360,
-    1156,
-    421,
-    92,
-    666,
-    1002
-  ],
-  "young_man_idle": [
-    1298,
-    1212,
-    441,
-    79,
-    415,
-    1054
-  ],
-  "young_woman_idle": [
-    1303,
-    1207,
-    403,
-    125,
-    516,
-    984
-  ],
-  "elder_man_idle": [
-    1224,
-    1285,
-    316,
-    124,
-    703,
-    1102
-  ],
-  "elder_woman_idle": [
-    1230,
-    1278,
-    335,
-    138,
-    582,
-    1069
-  ],
-  "boy_idle": [
-    1291,
-    1218,
-    430,
-    150,
-    443,
-    958
-  ],
   "girl_idle": [
     1275,
     1233,
@@ -535,14 +487,6 @@ window.LindFieldContentBounds = {
     118,
     476,
     1026
-  ],
-  "merchant_idle": [
-    1322,
-    1190,
-    350,
-    78,
-    702,
-    1049
   ],
   "innkeeper_idle": [
     1297,
@@ -552,13 +496,45 @@ window.LindFieldContentBounds = {
     740,
     1045
   ],
-  "fisherman_idle": [
-    1320,
-    1191,
-    339,
-    83,
-    802,
-    1079
+  "elder_woman_idle": [
+    1230,
+    1278,
+    335,
+    138,
+    582,
+    1069
+  ],
+  "merchant_idle": [
+    1322,
+    1190,
+    350,
+    78,
+    702,
+    1049
+  ],
+  "young_man_idle": [
+    1298,
+    1212,
+    441,
+    79,
+    415,
+    1054
+  ],
+  "farmer_female_idle": [
+    1360,
+    1156,
+    421,
+    92,
+    666,
+    1002
+  ],
+  "elder_man_idle": [
+    1224,
+    1285,
+    316,
+    124,
+    703,
+    1102
   ],
   "caretaker_idle": [
     1263,
@@ -568,6 +544,14 @@ window.LindFieldContentBounds = {
     555,
     1066
   ],
+  "boy_idle": [
+    1291,
+    1218,
+    430,
+    150,
+    443,
+    958
+  ],
   "farmer_male_walk": [
     1377,
     1142,
@@ -575,5 +559,29 @@ window.LindFieldContentBounds = {
     97,
     706,
     968
+  ],
+  "fisherman_idle": [
+    1320,
+    1191,
+    339,
+    83,
+    802,
+    1079
+  ],
+  "young_woman_idle": [
+    1303,
+    1207,
+    403,
+    125,
+    516,
+    984
+  ],
+  "emma_idle": [
+    1182,
+    1330,
+    317,
+    107,
+    643,
+    1145
   ]
 };

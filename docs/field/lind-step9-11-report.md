@@ -19,3 +19,11 @@ Aidan A1's explicitly designated Aidan/Fiona/Lou field reference was not found a
 Adults height 39–46 px, children 31 px; fixed foot anchors, narrow independent 18×8 ground collision, 44 px touch targets. NPCs placed by occupation in DEV review only, not the live story map. All actor foot rectangles clear static structure colliders and other NPCs. Farmer patrol ±24px at 3px/s, IDLE rest 4s, two-pose WALK. Other occupational NPCs stand idle intentionally; no unneeded animation bank. Walk pose is a basic two-pose patrol, not a full four-direction cycle.
 
 All 12 NPCs: click/tap and near Enter, proximity rejection contract, independent temporary interaction, stable save/story flags and preview exit. NPCs stop outside review. Three viewports passed; image 404/JS exception/console error zero. Battle regression passed normal and Raider COMMAND/enemy motion/DEV kill/KO/Victory/race tests in three viewports. Battle stable `73e02af` is an ancestor of this branch.
+
+## STEP 10
+
+`img/field/lind/npc/emma/emma_idle.png`: 1182×1330 RGBA, 1,056,558 fully transparent pixels (67.21%). New standalone generation from both approved Emma sources; no sheet crop. Normal peaceful IDLE only. Original and light-background composite checked for intact glasses/bun/embroidered green shawl/cane/shoes/hands and gentle elderly identity. No black/white/checker background. Sewing pouch retained. Distinct from generic red-kerchief braided-haired elder woman.
+
+38 px display height versus adults 39–46 / current placeholder player44, fixed foot anchor, independent foot collision, safe touch target. All 13 NPCs tested in three viewports: no structure/actor foot overlap, click/tap/Enter functional, save/progression unchanged. Emma does not patrol or carry story content. No origin reveal, illness/death/letter/late-game scenes. Battle regression follows each gate.
+
+STEP 9 checkpoint: `7189b175fcc02159bd3a0a4d798fb5a240745867`, pushed to preparation branch.
