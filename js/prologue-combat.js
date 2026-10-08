@@ -15,7 +15,7 @@
   BattleActorState.register(b,e.key,type,e.node+' img',()=>[e.hp,e.maxHp]);return e;
  }
  function beginNormal(id){
-  generation++;roundNumber=1;BattleTargetSelector.reset('normal');clean('normal');impact=null;
+  generation++;roundNumber=1;BattleStatus.clear('normal');BattleTargetSelector.reset('normal');clean('normal');impact=null;
   const types=id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
   rosters.normal=types.map((t,i)=>makeEnemy('normal',t,i));
   document.body.classList.toggle('soloRescue',id==='attackGob1');
@@ -60,33 +60,53 @@
   if(!e||e.hp<=0){log(b,'選んだ敵は倒れている。');return}
   impact=e.unit;
   let n=who==='aidan'?(a.kind==='skill'?55:34):20;
+  n=BattleStatus.damage(b,who,e.id,Math.round(n*10/e.def));
   if(a.kind==='skill'){if(aatp<30)return;aatp-=30}else if(who==='aidan')aatp=Math.min(100,aatp+15);
   BattleActorState.action(who,'attack',{battle:b});damage(e,n,b);
   log(b,who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):'フィオナの攻撃！');
  }
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  async function round(b,actions){
-  const token=generation;
+  const token=generation;const statusStart=BattleStatus.snapshot(b);
   setNormalCommandDrawer(false);q('#normalItems').classList.remove('isOpen');
   for(const a of [...actions]){if(token!==generation)return;heroAction(b,a);updateAttackBattle();await sleep(900);if(!alive(b).length){finishAttackBattle();return}}
-  if(token===generation)await enemyRound(b);
+  if(token===generation)await enemyRound(b,statusStart);
  }
- async function enemyRound(b){
+ function skillFor(e){
+  if(e.type!=='tainted_goblin')return 'attack';
+  const pattern=currentGoblin==='forestGob1'?['burst','attack','attack']:currentGoblin==='forestGob3'?['burst','frenzy','attack']:['attack','burst','frenzy','attack'];
+  const n=e.actions||0;e.actions=n+1;return pattern[n%pattern.length];
+ }
+ async function performEnemy(b,e,skill){
+  const token=generation;
+  const target=activeAlly(b,'fiona')&&normalFHP/90<aahp/100?'fiona':'aidan';
+  BattleActorState.set(e.key,skill==='burst'?'corruption':'attack',{battle:b,duration:skill==='frenzy'?2300:1500});await sleep(680);
+  if(token!==generation||!e.hp)return;
+  if(skill==='burst'){
+   BattleStatus.apply({battle:b,target,type:'atk_down',magnitude:.20,remainingTurns:3,source:e.id});
+   log(b,'異常化ゴブリンの《腐蝕の波動》！ '+(target==='aidan'?'エイダン':'フィオナ')+'の攻撃力が低下した！');
+   const el=q(e.node);el?.classList.add('corruptionPulse');setTimeout(()=>el?.classList.remove('corruptionPulse'),800);await sleep(850);return;
+  }
+  const hits=skill==='frenzy'?2:1;
+  for(let i=0;i<hits;i++){
+   if(token!==generation||!e.hp)return;
+   if(!e.extra)WBActors.normalEnemy();else WBActors.enemyAt(e.unit);
+   let n=BattleStatus.damage(b,e.id,target,Math.round(e.atk/2*(hits===2?.6:1)));
+   if(target==='aidan'?normalGuardA:normalGuardF)n=Math.ceil(n/2);
+   if(target==='aidan')aahp=Math.max(0,aahp-n);else normalFHP=Math.max(0,normalFHP-n);
+   BattleActorState.set(target,'damage',{battle:b,duration:360});v2Float(target==='aidan'?'floatAidan':'floatFiona','-'+n);log(b,name(e)+(hits===2?'の《狂爪連撃》！ '+(i+1)+'/2':'の攻撃！')+' '+n+'ダメージ。');updateAttackBattle();await sleep(850);
+  }
+ }
+ async function enemyRound(b,statusStart=BattleStatus.snapshot(b)){
   const token=generation;attackBattleBusy=true;
   for(const e of alive(b)){
    if(token!==generation||!e.hp)return;
-   BattleActorState.set(e.key,'attack',{battle:b,duration:1500});await sleep(680);
-   if(token!==generation||!e.hp)return;
-   if(!e.extra)WBActors.normalEnemy();else WBActors.enemyAt(e.unit);
-   const target=activeAlly(b,'fiona')&&normalFHP/90<aahp/100?'fiona':'aidan';
-   let n=e.type==='goblin'?6:8;if(target==='aidan'?normalGuardA:normalGuardF)n=Math.ceil(n/2);
-   if(target==='aidan')aahp=Math.max(0,aahp-n);else normalFHP=Math.max(0,normalFHP-n);
-   BattleActorState.set(target,'damage',{battle:b,duration:360});v2Float(target==='aidan'?'floatAidan':'floatFiona','-'+n);log(b,name(e)+'の攻撃！ '+n+'ダメージ。');updateAttackBattle();await sleep(850);
+   await performEnemy(b,e,skillFor(e));
   }
   if(token!==generation)return;
   normalGuardA=normalGuardF=false;BattleActorState.endGuard(b);BattleActorState.endGuard(b,'fiona');
   if(aahp<=0||normalFHP<=0){log(b,'態勢を立て直した……。');aahp=Math.max(35,aahp);normalFHP=Math.max(32,normalFHP);BattleActorState.recover(b);BattleActorState.recover(b,'fiona')}
-  roundNumber++;normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle();
+  BattleStatus.tick(b,statusStart);roundNumber++;normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle();
  }
- window.PrologueCombat=Object.freeze({stats,beginNormal,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage});
+ window.PrologueCombat=Object.freeze({stats,beginNormal,targets,sync,round,enemyRound,koAll,activeAlly,totalMax:b=>rosters[b].reduce((n,e)=>n+e.maxHp,0),impactTarget:()=>impact,get enemies(){return rosters},get roundNumber(){return roundNumber},cancel(){generation++;BattleTargetSelector.cancel()},damage,performEnemy,skillFor});
 })();
