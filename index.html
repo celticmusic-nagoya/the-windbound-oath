@@ -707,8 +707,7 @@ $('#normalItems').onclick=e=>{
  const k=b.dataset.ni;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
  if(k==='potion'&&!battleItems.potion){showBattleBanner('きずぐすりを持っていない。',800);return}
  if(k==='ether'&&!battleItems.ether){showBattleBanner('魔力の雫を持っていない。',800);return}
- if(k==='potion')battleItems.potion--; else battleItems.ether--;
- normalActs.push({who:normalActor,kind:'item',item:k});$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';advanceNormalActor();
+ BattleActionTargets.item('normal',k);
 };
 function advanceNormalActor(){
  if(normalActor==='aidan'){
@@ -717,13 +716,14 @@ function advanceNormalActor(){
    attackBattleBusy=true;resolveNormalRound();
  }
 }
-function chooseNormalAct(kind){
+function chooseNormalAct(kind,target){
  if(attackBattleBusy)return;
  if(normalActor==='aidan'&&kind==='skill'&&aatp<30){showBattleBanner('TPが足りない。一閃にはTP30が必要だ。',900);return}
  if(normalActor==='fiona'&&kind==='heal'&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
  if(normalActor==='fiona'&&kind==='prayer'&&normalFMP<6){showBattleBanner('MPが足りない。',800);return}
  if(kind==='guard')BattleActorState.set(normalActor,'guard',{battle:'normal'});
- normalActs.push({who:normalActor,kind});advanceNormalActor();
+ if(target===undefined){BattleActionTargets.request('normal',kind,normalActor,t=>chooseNormalAct(kind,t));return}
+ normalActs.push({who:normalActor,kind,target});advanceNormalActor();
 }
 function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
@@ -754,18 +754,12 @@ function resolveNormalRound(){
  const act=(txt,fn,motion,pose,actor='aidan')=>{setTimeout(()=>{if(pose)BattleActorState.action(actor,pose,{battle:'normal'});if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();const enemyHPBeforeAction=gghp;if(fn)fn();if(gghp<enemyHPBeforeAction)BattleActorState.set('tainted_goblin','damage',{battle:'normal',duration:520});showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=700};
  normalActs.forEach(a=>{
    if(a.who==='aidan'){
-     if(a.kind==='item'){
-       if(a.item==='potion')act('きずぐすり',()=>{aahp=Math.min(100,aahp+45);v2Float('floatAidan','+45','heal')});
-       else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
-     }else if(a.kind==='guard')act('エイダンは身構えた。',()=>{normalGuardA=true;aatp=Math.min(100,aatp+10);v2Float('floatAidan','TP +10','resource')});
+     if(a.kind==='item'){act('アイテムを使った。',()=>BattleActionTargets.applyItem('normal',a))}else if(a.kind==='guard')act('エイダンは身構えた。',()=>{normalGuardA=true;aatp=Math.min(100,aatp+10);v2Float('floatAidan','TP +10','resource')});
      else if(a.kind==='skill')act('一閃！',()=>{aatp-=30;gghp-=55;v2Float('floatGob','-55');v2Hit('v2GobUnit')},'normalAidan');
      else act('エイダンの攻撃！',()=>{gghp-=34;aatp=Math.min(100,aatp+15);v2Float('floatGob','-34');v2Hit('v2GobUnit');setTimeout(()=>v2Float('floatAidan','TP +15','resource'),180)},'normalAidan','attack');
    }else{
-     if(a.kind==='item'){
-       if(a.item==='potion')act('きずぐすり',()=>{normalFHP=Math.min(90,normalFHP+45);v2Float('floatFiona','+45','heal')});
-       else act('魔力の雫',()=>{normalFMP=Math.min(30,normalFMP+12);v2Float('floatFiona','MP +12','resource')});
-     }else if(a.kind==='guard')act('フィオナは防御した。',()=>normalGuardF=true);
-     else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(aahp/100<=normalFHP/90){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}},'normalFionaMagic','heal','fiona');
+     if(a.kind==='item'){act('アイテムを使った。',()=>BattleActionTargets.applyItem('normal',a))}else if(a.kind==='guard')act('フィオナは防御した。',()=>normalGuardF=true);
+     else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(a.target==='aidan'){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}},'normalFionaMagic','heal','fiona');
      else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')},'normalFionaMagic','prayer','fiona');
      else act('フィオナの攻撃！',()=>{gghp-=20;v2Float('floatGob','-20');v2Hit('v2GobUnit')},'normalFionaAttack','attack','fiona');
    }
@@ -1324,21 +1318,22 @@ function startRaiderBattle(){
  showRaiderBattleLog('ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。');
  updateRaider();
 }
-function choosePartyAct(kind){
- if(rbBusy)return;
+function choosePartyAct(kind,target){
+ if(rbBusy||BattleTargetSelector.active)return;
+ if(target===undefined&&kind!=='item'){BattleActionTargets.request('raider',kind,rbActor,t=>choosePartyAct(kind,t));return}
  if(rbActor==='aidan'){
    if(kind==='item'){openRaiderItems();return}
    if(kind==='skill'&&rbTP<30){showRaiderBattleLog('TPが足りない。');return}
    if(kind==='wind'&&rbRune<100)return;
    if(kind==='guard')BattleActorState.set('aidan','guard',{battle:'raider'});
-   rbActs.push({who:'aidan',kind});rbActor='fiona';
+   rbActs.push({who:'aidan',kind,target});rbActor='fiona';
    showRaiderBattleLog('フィオナの行動を選択。');updateRaider();return;
  }
  if(kind==='item'){openRaiderItems();return}
  if(kind==='heal'&&rbFMP<8){showRaiderBattleLog('MPが足りない。');return}
  if(kind==='rune'&&rbFMP<6){showRaiderBattleLog('MPが足りない。');return}
  if(kind==='guard')BattleActorState.set('fiona','guard',{battle:'raider'});
- rbActs.push({who:'fiona',kind});rbBusy=true;resolvePartyRound();
+ rbActs.push({who:'fiona',kind,target});rbBusy=true;resolvePartyRound();
 }
 
 function openRaiderItems(){
@@ -1352,10 +1347,7 @@ $('#normalItems').addEventListener('click',e=>{
  let k=b.dataset.ri;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
  if(k==='potion'&&!battleItems.potion){showRaiderBattleLog('きずぐすりを持っていない。');return}
  if(k==='ether'&&!battleItems.ether){showRaiderBattleLog('魔力の雫を持っていない。');return}
- if(k==='potion')battleItems.potion--;else battleItems.ether--;
- rbActs.push({who:rbActor,kind:'item',item:k});$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';
- if(rbActor==='aidan'){rbActor='fiona';showRaiderBattleLog('フィオナの行動を選択。');updateRaider()}
- else {rbBusy=true;resolvePartyRound()}
+ BattleActionTargets.item('raider',k);
 });
 
 function resolvePartyRound(){
@@ -1363,19 +1355,13 @@ function resolvePartyRound(){
  const sayAct=(txt,fn,motion,pose,actor='aidan')=>{setTimeout(()=>{if(pose)BattleActorState.action(actor,pose,{battle:'raider'});if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();fn&&fn();showRaiderBattleLog(txt);updateRaider()},delay);delay+=760};
  rbActs.forEach(a=>{
    if(a.who==='aidan'){
-     if(a.kind==='item'){
-       if(a.item==='potion')sayAct('エイダンは きずぐすりを使った。HP +45',()=>rbHP=Math.min(120,rbHP+45));
-       else sayAct('エイダンは魔力の雫をフィオナに使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
-     }else if(a.kind==='guard'){sayAct('エイダンは身を固めた。TP +10 / RUNE +10',()=>{rbGuardA=true;rbTP=Math.min(100,rbTP+10);rbRune=Math.min(100,rbRune+10)})}
+     if(a.kind==='item'){sayAct('アイテムを使った。',()=>BattleActionTargets.applyItem('raider',a))}else if(a.kind==='guard'){sayAct('エイダンは身を固めた。TP +10 / RUNE +10',()=>{rbGuardA=true;rbTP=Math.min(100,rbTP+10);rbRune=Math.min(100,rbRune+10)})}
      else if(a.kind==='wind'){sayAct('誓いの剣――「風の一閃」！ 255ダメージ！ 増援と破砕斬の構えを吹き飛ばした！',()=>{rbRune=0;rbBoss-=255;rbAdds=0;rbQueued=false})}
      else if(a.kind==='skill'){sayAct('エイダンの「一閃」！ 68ダメージ。',()=>{rbTP-=30;rbBoss-=68;rbRune=Math.min(100,rbRune+14)},'raiderAidan')}
      else sayAct('エイダンの攻撃！ 42ダメージ。TP +15',()=>{rbBoss-=42;rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)},'raiderAidan','attack');
    }else{
-     if(a.kind==='item'){
-       if(a.item==='potion')sayAct('フィオナは きずぐすりを使った。HP +45',()=>rbFHP=Math.min(105,rbFHP+45));
-       else sayAct('フィオナは魔力の雫を使った。MP +12',()=>rbFMP=Math.min(36,rbFMP+12));
-     }else if(a.kind==='guard'){sayAct('フィオナは防御した。RUNE +10',()=>{rbGuardF=true;rbRune=Math.min(100,rbRune+10)})}
-     else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=rbHP<=rbFHP?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)},'raiderFionaMagic','heal','fiona')}
+     if(a.kind==='item'){sayAct('アイテムを使った。',()=>BattleActionTargets.applyItem('raider',a))}else if(a.kind==='guard'){sayAct('フィオナは防御した。RUNE +10',()=>{rbGuardF=true;rbRune=Math.min(100,rbRune+10)})}
+     else if(a.kind==='heal'){sayAct('フィオナの「ヒール」！ 傷を癒した。',()=>{rbFMP-=8;let target=a.target==='aidan'?'a':'f';if(target==='a')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);rbRune=Math.min(100,rbRune+8)},'raiderFionaMagic','heal','fiona')}
      else if(a.kind==='rune'){sayAct('フィオナの「風の祈り」！ RUNEが大きく高まる。',()=>{rbFMP-=6;rbRune=Math.min(100,rbRune+28)},'raiderFionaMagic','prayer','fiona')}
      else sayAct('フィオナが杖で応戦！ 22ダメージ。',()=>{rbBoss-=22;rbRune=Math.min(100,rbRune+7)},'raiderFionaAttack','attack','fiona');
    }
@@ -1943,4 +1929,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 </script>
 
 <script src="js/game.js"></script>
+<link rel="stylesheet" href="css/battle-target.css">
+<script src="js/battle-target-selector.js"></script>
+<script src="js/battle-action-targets.js"></script>
 </body></html>
