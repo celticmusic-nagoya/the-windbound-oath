@@ -2,8 +2,8 @@
 (() => {
  const q=s=>document.querySelector(s);
  function allies(battle){const r=battle==='raider';return [
-  {id:'aidan',name:'エイダン',node:r?'#rbAidan':'#bAidan2',hp:()=>r?rbHP:aahp},
-  {id:'fiona',name:'フィオナ',node:r?'#rbFiona':'#bFiona2',hp:()=>r?rbFHP:normalFHP}
+  {id:'aidan',name:'エイダン',node:r?'#rbAidan':'#bAidan2',hp:()=>r?rbHP:aahp,active:window.PrologueCombat?.activeAlly(battle,'aidan')!==false},
+  {id:'fiona',name:'フィオナ',node:r?'#rbFiona':'#bFiona2',hp:()=>r?rbFHP:normalFHP,active:window.PrologueCombat?.activeAlly(battle,'fiona')!==false}
  ];}
  function enemies(battle){return window.PrologueCombat?.targets(battle)||[{id:'enemy',name:battle==='raider'?'ゴブリンレイダー':'異常化ゴブリン',node:battle==='raider'?'#raiderSprite':'#bGob',hp:()=>battle==='raider'?rbBoss:gghp}];}
  function type(kind){return ['atk','skill'].includes(kind)?'enemy_single':kind==='wind'?'enemy_all':kind==='heal'?'ally_single':kind==='prayer'?'ally_all':kind==='rune'?'none':'self';}

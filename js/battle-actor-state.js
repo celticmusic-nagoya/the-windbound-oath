@@ -46,10 +46,10 @@
     }
   }
   function set(actor, state, { battle: context, duration, next, nextDuration } = {}) {
-    if (!states.has(state) || !BATTLE_ASSETS[actor]?.[state]) return false;
+    if (!states.has(state)) return false;
     context ||= document.body.classList.contains('raiderBattleMode') ? 'raider' : 'normal';
     const battle = lookup(context, actor);
-    if (!battle) return false;
+    if (!battle || !BATTLE_ASSETS[battle.actor]?.[state]) return false;
     sync(context, actor);
     // KO outranks victory; neither can be replaced by a temporary pose.
     if (battle.state === 'ko' || (battle.state === 'victory' && state !== 'ko')) return false;
@@ -75,6 +75,13 @@
   window.BattleActorState = Object.freeze({
     set,
     sync,
+    register(context, key, actor, image, health) {
+      const id=context+':'+key;
+      if(battles[id]) invalidate(battles[id]);
+      battles[id]={actor,image,health,state:'idle',sequence:0,timer:null,guard:false};
+      paint(battles[id],resting(battles[id]));
+    },
+    unregister(context,key) { const id=context+':'+key; if(battles[id]){invalidate(battles[id]);delete battles[id];} },
     begin(context, actor = 'aidan') {
       const battle = lookup(context, actor);
       invalidate(battle);

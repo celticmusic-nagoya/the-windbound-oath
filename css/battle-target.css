@@ -1,6 +1,6 @@
-#battleTargetPanel{position:fixed;z-index:240;left:50%;bottom:12px;translate:-50% 0;display:flex;gap:14px;align-items:center;max-width:95vw;padding:8px 12px;background:#10241fec;border:1px solid #c5a45b;border-radius:8px;color:#f2eee3;font-size:13px}
+#battleTargetPanel{position:fixed;z-index:10040;left:50%;bottom:12px;translate:-50% 0;display:flex;gap:14px;align-items:center;max-width:95vw;padding:8px 12px;background:#10241fec;border:1px solid #c5a45b;border-radius:8px;color:#f2eee3;font-size:13px}
 #battleTargetPanel[hidden]{display:none}
 #battleTargetPanel button{min-height:40px;background:#254438;color:#f2eee3;border:1px solid #c5a45b;border-radius:5px}
-.battleTargetHit{position:fixed;z-index:235;background:transparent;color:#f2eee3;border:1px solid #c5a45b55;border-radius:12px;touch-action:manipulation;user-select:none;font-size:11px;text-shadow:0 1px 3px #000;display:flex;align-items:flex-start;justify-content:center;padding-top:5px;cursor:pointer}
+.battleTargetHit{position:fixed;z-index:10030;background:transparent;color:#f2eee3;border:1px solid #c5a45b55;border-radius:12px;touch-action:manipulation;user-select:none;font-size:11px;text-shadow:0 1px 3px #000;display:flex;align-items:flex-start;justify-content:center;padding-top:5px;cursor:pointer}
 .battleTargetHit.selected{border:2px solid #d1bd83;box-shadow:0 0 12px #9cbe9660 inset;background:#c5a45b0c}
 .battleTargetHit.selected::after{content:'TARGET';position:absolute;bottom:4px;color:#ebd69d;font-size:10px;letter-spacing:1px}

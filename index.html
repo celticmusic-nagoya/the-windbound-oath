@@ -91,7 +91,7 @@
 <div class="attackNpc injured" id="attackOld" style="left:930px;top:1110px">老人</div>
 <div class="attackNpc" id="attackMother" style="left:1090px;top:940px">母</div>
 <div class="attackNpc child" id="attackChild" style="left:1160px;top:900px">子</div>
-<div class="attackGoblin" id="attackGob1" style="left:1060px;top:820px">異形</div>
+<div class="attackGoblin" id="attackGob1" style="left:1060px;top:820px">ゴブリン</div>
 <div class="attackNpc fiona" id="attackFiona" style="left:1040px;top:690px">F</div>
 <div class="attackGoblin" id="attackGob2" style="left:1130px;top:665px">異形</div>
 <div id="player"></div></div>
@@ -592,7 +592,7 @@ $('#attackOld').onclick=()=>{
 };
 $('#attackMother').onclick=()=>{
  if(storyStage<5)return;
- say('村人「この子だけでも……！　お願い、広場には近づかないで。黒い光をまとった魔物がいるの！」');
+ if(attackStep<1){say('母親「この子だけでも……！」');setTimeout(()=>{if(storyStage===5&&attackStep<1)startAttackBattle('attackGob1',100)},500)}else say('母親「本当にありがとう。娘と一緒に逃げます！」');
 };
 $('#attackChild').onclick=()=>{
  if(storyStage<5)return;
@@ -605,7 +605,7 @@ $('#attackGob1').onclick=()=>{
 };
 $('#attackGob2').onclick=()=>{
  if(storyStage<5)return;
- if(attackStep<1){say('エイダン「フィオナ……！　その前に、こいつを！」');}
+ if(attackStep<1){say('エイダン「先にあの母娘を助けないと！」');return}
  startAttackBattle('attackGob2',220);
 };
 
@@ -659,9 +659,9 @@ function v2Hit(id){
  setTimeout(()=>el.classList.remove('hit'),260);
 }
 function updateV2BattleHud(){
- BattleActorState.sync('normal');BattleActorState.sync('normal','fiona');BattleActorState.sync('normal','tainted_goblin');
+ BattleActorState.sync('normal');BattleActorState.sync('normal','fiona');window.PrologueCombat?.sync('normal');
  if(!$('#v2AHP'))return;
- const max=currentGoblin==='attackGob1'?180:(currentGoblin&&currentGoblin.startsWith('forestGob')?160:220);
+ const max=window.PrologueCombat?.totalMax('normal')||220;
  $('#v2AHP').style.width=Math.max(0,aahp)+'%';
  $('#v2ATP').style.width=Math.max(0,Math.min(100,aatp))+'%';
  $('#v2FHP').style.width=Math.max(0,normalFHP/90*100)+'%';
@@ -669,7 +669,7 @@ function updateV2BattleHud(){
  $('#v2GHP').style.width=Math.max(0,gghp/max*100)+'%';
  $('#v2ATxt').textContent=`HP ${Math.max(0,aahp)}  TP ${aatp}`;
  $('#v2FTxt').textContent=`HP ${Math.max(0,normalFHP)}  MP ${normalFMP}`;
- $('#v2GTxt').textContent=`HP ${Math.max(0,gghp)}`;
+ window.PrologueCombat?.sync('normal');
  const a=$('#v2AidanUnit'),f=$('#v2FionaUnit'),g=$('#v2GobUnit');
  [[a,aahp],[f,normalFHP/90*100],[g,gghp/max*100]].forEach(([el,p])=>{
    if(!el)return; el.classList.toggle('danger',p<=30);el.classList.toggle('critical',p<=10);
@@ -692,7 +692,7 @@ function updateNormalCommands(){
  $('#nDevKill')?.classList.add('v2-visible');
  ['nAtk','nGuard','nItem'].forEach(id=>$('#'+id).classList.add('v2-visible'));
  if(a){$('#nSkill').classList.add('v2-visible')}
- else{$('#nAtk').classList.remove('v2-visible');['nHeal','nPrayer'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
+ else{['nHeal','nPrayer'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
  $('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
 }
 function openNormalItems(){
@@ -710,7 +710,7 @@ $('#normalItems').onclick=e=>{
  BattleActionTargets.item('normal',k);
 };
 function advanceNormalActor(){
- if(normalActor==='aidan'){
+ if(normalActor==='aidan'&&currentGoblin!=='attackGob1'){
    normalActor='fiona';attackBattleBusy=false;hideBattleBanner();updateNormalPartyHud();updateNormalCommands();
  }else{
    attackBattleBusy=true;resolveNormalRound();
@@ -737,7 +737,8 @@ function startAttackBattle(id,hp){
  showNormalPartyBattle();BattleActorState.begin('normal','fiona');
  updateNormalCommands();
  updateNormalPartyHud();
- showBattleBanner('異常化ゴブリンが立ちはだかった！',850);
+ PrologueCombat.beginNormal(id);
+ showBattleBanner(id==='attackGob1'?'母親が娘を庇っている――ゴブリンを退けよう！':id==='attackGob2'?'エイダン「こいつ……さっきの奴らと違う！」　フィオナ「この魔力……普通じゃない……！」':'魔物が立ちはだかった！',1000);
  updateAttackBattle();
 }
 function updateAttackBattle(){
@@ -745,39 +746,15 @@ function updateAttackBattle(){
  $('#aaHP').style.width=Math.max(0,aahp)+'%';$('#aaHPtxt').textContent=`HP ${Math.max(0,aahp)} / 100`;
  $('#aaTP').style.width=aatp+'%';$('#aaTPtxt').textContent=`TP ${aatp} / 100`;
  $('#askill').disabled=aatp<30;$('#askill').classList.toggle('tpLocked',aatp<30);
- const max=currentGoblin==='attackGob1'?180:(currentGoblin&&currentGoblin.startsWith('forestGob')?160:220);
+ const max=window.PrologueCombat?.totalMax('normal')||220;
  $('#ggHP').style.width=Math.max(0,gghp/max*100)+'%';$('#ggHPtxt').textContent=`HP ${Math.max(0,gghp)} / ${max}`;
  updateNormalPartyHud();updateNormalCommands();
 }
 function resolveNormalRound(){
- let delay=0;
- const act=(txt,fn,motion,pose,actor='aidan')=>{setTimeout(()=>{if(pose)BattleActorState.action(actor,pose,{battle:'normal'});if(motion&&window.WBActors&&WBActors[motion])WBActors[motion]();const enemyHPBeforeAction=gghp;if(fn)fn();if(gghp<enemyHPBeforeAction)BattleActorState.set('tainted_goblin','damage',{battle:'normal',duration:520});showBattleBanner(txt,720);updateAttackBattle()},delay);delay+=700};
- normalActs.forEach(a=>{
-   if(a.who==='aidan'){
-     if(a.kind==='item'){act('アイテムを使った。',()=>BattleActionTargets.applyItem('normal',a))}else if(a.kind==='guard')act('エイダンは身構えた。',()=>{normalGuardA=true;aatp=Math.min(100,aatp+10);v2Float('floatAidan','TP +10','resource')});
-     else if(a.kind==='skill')act('一閃！',()=>{aatp-=30;gghp-=55;v2Float('floatGob','-55');v2Hit('v2GobUnit')},'normalAidan');
-     else act('エイダンの攻撃！',()=>{gghp-=34;aatp=Math.min(100,aatp+15);v2Float('floatGob','-34');v2Hit('v2GobUnit');setTimeout(()=>v2Float('floatAidan','TP +15','resource'),180)},'normalAidan','attack');
-   }else{
-     if(a.kind==='item'){act('アイテムを使った。',()=>BattleActionTargets.applyItem('normal',a))}else if(a.kind==='guard')act('フィオナは防御した。',()=>normalGuardF=true);
-     else if(a.kind==='heal')act('フィオナの「ヒール」！ 傷を癒した。',()=>{normalFMP-=8;if(a.target==='aidan'){aahp=Math.min(100,aahp+42);v2Float('floatAidan','+42','heal')}else{normalFHP=Math.min(90,normalFHP+42);v2Float('floatFiona','+42','heal')}},'normalFionaMagic','heal','fiona');
-     else if(a.kind==='prayer')act('フィオナの「風の祈り」！ 二人を柔らかな風が包む。',()=>{normalFMP-=6;aahp=Math.min(100,aahp+8);normalFHP=Math.min(90,normalFHP+8);v2Float('floatAidan','+8','heal');v2Float('floatFiona','+8','heal')},'normalFionaMagic','prayer','fiona');
-     else act('フィオナの攻撃！',()=>{gghp-=20;v2Float('floatGob','-20');v2Hit('v2GobUnit')},'normalFionaAttack','attack','fiona');
-   }
- });
- setTimeout(()=>{if(gghp<=0)finishAttackBattle();else normalEnemyTurn()},delay);
+ return PrologueCombat.round('normal',normalActs);
 }
 function normalEnemyTurn(){
- if(window.WBActors)WBActors.normalEnemy();
- let target=(aahp/100<=normalFHP/90)?'a':'f',d=17;
- if(target==='a'){if(normalGuardA)d=Math.ceil(d/2);aahp-=d;BattleActorState.set('aidan','damage',{battle:'normal',duration:360});v2Float('floatAidan','-'+d);v2Hit('v2AidanUnit');showBattleBanner('異常化ゴブリンの「黒爪」！',720);}
- else {if(normalGuardF)d=Math.ceil(d/2);normalFHP-=d;BattleActorState.set('fiona','damage',{battle:'normal',duration:360});v2Float('floatFiona','-'+d);v2Hit('v2FionaUnit');showBattleBanner('異常化ゴブリンの「黒爪」！',720);}
- normalGuardA=normalGuardF=false;BattleActorState.endGuard('normal');BattleActorState.endGuard('normal','fiona');updateAttackBattle();
- if(aahp<=0||normalFHP<=0){
-   showBattleBanner('二人は態勢を崩した……。',900);
-   setTimeout(()=>{aahp=Math.max(35,aahp);normalFHP=Math.max(32,normalFHP);BattleActorState.recover('normal');BattleActorState.recover('normal','fiona');normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle()},700);
- }else{
-   normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle();
- }
+ return PrologueCombat.enemyRound('normal');
 }
 $('#nAtk').onclick=()=>chooseNormalAct('atk');
 $('#nSkill').onclick=()=>chooseNormalAct('skill');
@@ -787,9 +764,10 @@ $('#nGuard').onclick=()=>chooseNormalAct('guard');
 $('#nItem').onclick=()=>openNormalItems();
 $('#nDevKill').onclick=()=>{
  if(attackBattleBusy)return;
+ BattleTargetSelector.cancel();
  setNormalCommandDrawer(false);
  attackBattleBusy=true;
- gghp=0; updateAttackBattle();
+ PrologueCombat.koAll('normal');gghp=0; updateAttackBattle();
  showBattleBanner('DEV｜一撃撃破！',260);
  setTimeout(finishAttackBattle,280);
 };
@@ -797,14 +775,14 @@ $('#nDevKill').onclick=()=>{
 $('#aatk').parentElement.style.display='none';
 
 function finishAttackBattle(){
- BattleActorState.set('tainted_goblin','ko',{battle:'normal'});
+ PrologueCombat.koAll('normal');
  BattleActorState.set('aidan','victory',{battle:'normal'});BattleActorState.set('fiona','victory',{battle:'normal'});
  const defeated=currentGoblin;
  attackBattleBusy=true; setNormalCommandDrawer(false);
  const gobBox=$('#bGob'),gobImg=gobBox&&gobBox.querySelector('img');
- if(gobImg && typeof V053!=='undefined' && V053.tainted && V053.tainted.ko) gobImg.src=V053.tainted.ko;
+
  if(gobBox) gobBox.classList.add('taintedKO');
- showBattleBanner('異常化ゴブリンを倒した。',900);
+ showBattleBanner('魔物を退けた。',900);
  setTimeout(()=>{
    const e=$('#'+defeated);if(e)e.remove();
    if(defeated&&defeated.startsWith('forestGob')){
@@ -829,7 +807,7 @@ function finishAttackBattle(){
      hideNormalPartyBattle();notice('異常化ゴブリンを退けた');
    }else if(defeated==='attackGob1'){
      hideNormalPartyBattle();attackStep=Math.max(attackStep,1);setObj('村の広場へ向かい、フィオナを探そう');
-     notice('広場の方からフィオナの声が聞こえた');say('フィオナ「――こっちに来ないで！」　エイダン「フィオナ……！」');
+     notice('母娘は安全な道へ逃げていった');say('母親「ありがとう……！　さあ、逃げましょう！」　エイダン「広場へ……フィオナを探さないと。」');
    }else{
      hideNormalPartyBattle();attackStep=2;storyStage=6;$('#attackFiona').style.display='grid';setObj('フィオナに話しかけよう');notice('フィオナを見つけた');
    }
@@ -1735,11 +1713,11 @@ function v53tainted(p,ms){
  return v53cin(g,null,ms||650);
 }
 const v53SA=startAttackBattle;
-startAttackBattle=function(id,hp){v53SA(id,hp);BattleActorState.begin('normal','tainted_goblin')};
+startAttackBattle=function(id,hp){v53SA(id,hp)};
 const v53SR=startRaiderBattle;
 startRaiderBattle=function(){v53SR();BattleActorState.sync('raider','goblin_raider')};
 const v53NE=normalEnemyTurn;
-normalEnemyTurn=function(){attackBattleBusy=true;v53tainted('corrupted_attack',680).then(v53NE)};
+normalEnemyTurn=function(){return v53NE()};
 const v53RE=rbEnemyParty;
 rbEnemyParty=function(){
  // CALL is reinforcement; a queued smash/wind-up uses the attack artwork.
@@ -1758,7 +1736,7 @@ const V054={
 };
 function v54forceEnemyArt(){
  const g=document.querySelector('#bGob img');
- if(g){BattleActorState.sync('normal','tainted_goblin');g.removeAttribute('hidden');}
+ if(g){window.PrologueCombat?.sync('normal');g.removeAttribute('hidden');}
  const r=document.querySelector('#raiderSprite img');
  if(r){BattleActorState.sync('raider','goblin_raider');r.removeAttribute('hidden');}
 }
@@ -1870,6 +1848,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
     normalFionaAttack:()=>allyLunge('v2FionaUnit',true),
     normalFionaMagic:()=>magic('v2FionaUnit'),
     normalEnemy:()=>enemyLunge('v2GobUnit',false),
+    enemyAt:id=>enemyLunge(id,false),
     raiderAidan:()=>allyLunge('rbAidan',false),
     raiderFionaAttack:()=>allyLunge('rbFiona',true),
     raiderFionaMagic:()=>magic('rbFiona'),
@@ -1902,7 +1881,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
     setTimeout(()=>{const p=center(id);if(!p)return;const e=document.createElement('div');e.className='wbFx wbDamagePop';e.textContent=text;e.style.left=p.x+'px';e.style.top=(p.y-25)+'px';layer().appendChild(e);setTimeout(()=>e.remove(),800)},delay);
   }
   function shake(heavy=false,delay=0){setTimeout(()=>{const c=heavy?'wbHeavyShake':'wbShake';document.body.classList.remove(c);void document.body.offsetWidth;document.body.classList.add(c);setTimeout(()=>document.body.classList.remove(c),heavy?300:200)},delay)}
-  function hit(id,heavy=false,delay=360){fx('wbSlash',id,delay);fx('wbBurst',id,delay+25);shake(heavy,delay+20)}
+  function hit(id,heavy=false,delay=360){if(['v2GobUnit','raiderSprite'].includes(id))id=window.PrologueCombat?.impactTarget()||id;fx('wbSlash',id,delay);fx('wbBurst',id,delay+25);shake(heavy,delay+20)}
   function magic(id,delay=300){fx('wbMagic',id,delay);shake(false,delay+90)}
 
   const old=window.WBActors||{};
@@ -1932,4 +1911,6 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <link rel="stylesheet" href="css/battle-target.css">
 <script src="js/battle-target-selector.js"></script>
 <script src="js/battle-action-targets.js"></script>
+<link rel="stylesheet" href="css/prologue-combat.css">
+<script src="js/prologue-combat.js"></script>
 </body></html>
