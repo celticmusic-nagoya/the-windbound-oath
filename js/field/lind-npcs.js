@@ -11,6 +11,7 @@
     ['fisherman','釣り人',1447,1367,46],['caretaker','家畜の世話係',1350,1170,45]
   ].map(([id,label,x,footY,height])=>({id,label,x,footY,height,
     path:'img/field/lind/npc/villagers/'+id+'_idle.png'}));
+  window.LindFisherman?.configure(definitions.find(d=>d.id==='fisherman'));
   const actors=[];
   let active=false,notice=null,lastInteraction=null,frame=null,previous=null;
   function add(definition) {if(actors.length)throw new Error('Register field NPC before mounting');definitions.push(definition);}
@@ -38,7 +39,9 @@
         width:'44px',height:Math.max(44,d.height)+'px',zIndex:String(Math.round(d.footY+1))});
       hit.addEventListener('pointerdown',e=>e.stopPropagation());
       hit.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();interact(d.id)});
-      parent.append(hit);actor.hit=hit;actors.push(actor);render(actor);
+      parent.append(hit);actor.hit=hit;actors.push(actor);
+      if(d.id==='fisherman')window.LindFisherman?.mount(actor);
+      render(actor);
     });
   }
   function distance(a) {return Math.hypot(px+17-a.x,py+42-a.footY);}
@@ -61,6 +64,7 @@
   }
   function blocked(x,y) {return active&&actors.some(a=>x+28>a.foot.x&&x+6<a.foot.x+a.foot.width&&y+42>a.foot.y&&y+32<a.foot.y+a.foot.height);}
   function render(a) {
+    if(a.fishing){LindFisherman.render(a);return;}
     const state=a.frames.walk&&a.state==='WALK'&&Math.floor(a.elapsed*4)%2?'walk':'idle';
     const b=window.LindFieldContentBounds[a.boundsId||a.id+'_'+state],scale=a.height/b[5];
     a.width=b[4]*scale;a.y=a.footY-a.height;a.foot.x=a.x-9;
@@ -70,6 +74,7 @@
     a.hit.style.left=a.x-22+'px';a.element.dataset.state=a.state;
   }
   function update(seconds) {
+    actors.filter(a=>a.fishing).forEach(a=>LindFisherman.update(a,seconds));
     actors.filter(a=>a.frames.walk).forEach(a=>{
       a.elapsed+=seconds;
       if(a.state==='IDLE'){if(a.elapsed>=4){a.state='WALK';a.elapsed=0;}}
