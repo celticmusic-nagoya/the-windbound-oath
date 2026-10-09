@@ -16,6 +16,7 @@
   const terrain = (name, x, y, width, height, tile = 64) => {
     const el = document.createElement('div');
     el.className = 'lind-review-ground';
+    if (['dirt','stone','edge'].includes(name)) el.dataset.terrainRectangle = name;
     if (name === 'water') el.classList.add('lind-water-flow');
     Object.assign(el.style, {left:x+'px', top:y+'px', width:width+'px', height:height+'px',
       backgroundImage:`url("${assets.terrain[name]}")`, backgroundSize:tile+'px '+tile+'px'});
@@ -31,6 +32,7 @@
   // Same central bridge leads onto the east-bank dirt approach, not a new crossing.
   terrain('dirt', 1630, 565, 170, 60, 128);
   terrain('dirt', 1730, 600, 95, 170, 128);
+  window.LindFieldTerrain?.mount(layer, assets, collisionModel);
   assets.objects.forEach(obj => {
     if(obj.actor === 'windStone') return;
     const image = document.createElement('img');
@@ -154,6 +156,7 @@
     controls.hidden = !active;
     camera();
     if (active) {
+      window.LindFieldTerrain?.ready().catch(error=>console.error(error));
       const updateDepth = () => {
         if (!active) return;
         pl.style.zIndex = String(Math.round(py+44));

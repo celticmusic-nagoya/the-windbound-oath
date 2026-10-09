@@ -2,6 +2,8 @@
 #lindReviewLayer { position:absolute; inset:0; pointer-events:none; }
 #lindReviewLayer[hidden], #lindReviewControls[hidden] { display:none; }
 .lind-review-ground { position:absolute; image-rendering:pixelated; }
+.lind-terrain-transition { position:absolute; left:0; top:0; z-index:0;
+ width:2200px; height:1550px; pointer-events:none; image-rendering:pixelated; }
 .lind-review-object { position:absolute; object-fit:contain; pointer-events:none; }
 .lind-animal { position:absolute; pointer-events:none; }
 .lind-animal img { position:absolute; max-width:none; image-rendering:pixelated; }
