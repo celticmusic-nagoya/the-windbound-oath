@@ -11,3 +11,9 @@ body.lindFieldReview #player.aidan-field-active {
   display:flex; align-items:center; gap:6px; flex-wrap:wrap;
 }
 #lindReviewControls #aidanFieldToggle { white-space:normal; }
+/* Keep the review toolbar above landmarks on short landscape screens. */
+@media (max-height:500px) and (max-width:900px) {
+  #lindReviewControls > span { max-width:150px; }
+  #lindReviewControls select { max-width:120px; }
+  #lindReviewControls button { padding:5px 8px; }
+}

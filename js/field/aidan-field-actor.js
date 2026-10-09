@@ -41,7 +41,8 @@
   function apply() {
     if (!player) return;
     player.classList.toggle('aidan-field-active', active && enabled && loaded);
-    button.textContent = enabled ? (loaded ? 'Aidan A1（仮プレイヤーへ切替）' : 'Aidan A1 読込中') : '仮プレイヤー（Aidan A1へ切替）';
+    button.textContent = enabled ? (loaded ? 'Aidan A1 → 仮プレイヤー' : 'Aidan A1 読込中') : '仮プレイヤー → Aidan A1';
+    button.title = enabled ? '現在：Aidan A1。押すと仮プレイヤーへ切替' : '現在：仮プレイヤー。押すとAidan A1へ切替';
     button.setAttribute('aria-pressed', String(enabled)); render();
   }
   function update(now) {
