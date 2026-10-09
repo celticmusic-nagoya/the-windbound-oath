@@ -17,7 +17,7 @@
     a.life={...config,origin:{x:a.x,y:a.footY},index:0,rest:config.rests[0]+phase,
       elapsed:0,blocked:0,arrivals:0};a.element.dataset.routine=config.kind;
   }
-  function mount(actors) {actors.forEach((a,i)=>{if(routines[a.id])attach(a,routines[a.id],i*1.7);});}
+  function mount(actors) {actors.forEach((a,i)=>{if(routines[a.id]||a.routine)attach(a,routines[a.id]||a.routine,i*1.7);});}
   function update(seconds) {
     const api=window.LindFieldNPCs;
     api.actors.filter(a=>a.life).forEach(a=>{
