@@ -42,3 +42,77 @@ Navigation checkpoint browser errors: IMAGE404=0, JS EXCEPTIONS=0, CONSOLE ERROR
 The supplied file for this request is the instruction `.txt` only. The explicitly designated Aidan/Fiona/Lou Field Sprite Reference Sheet is not present in attachments or current repository reference files. An asynchronous request for its file/path was issued while Navigation continued. Aidan A1 remains pending that exact source of truth:0/20 generated, no asset or implementation checkpoint. No substitute battle source, guessed design, sheet crop, Fiona/Lou generation or A2 work.
 
 Navigation success is not an Aidan20/20 claim. Full requested completion/PLAYER QA READY must distinguish this missing prerequisite.
+
+NAVIGATION FIX COMMIT: `c7416314b32318a433a6d789d8777c43ef896d2e` (normal push succeeded).
+
+## Final required report
+
+FINAL RESULT: **FAIL for full requested scope (Aidan A1 incomplete due to missing reference)**. Navigation alone PASS WITH WARNINGS for planning latency under CPU throttling. No gameplay/battle regression detected.
+
+START COMMIT: `e9b5c952a1ad11b07f4fd26d7bb63b3ec19c4a62`
+START BRANCH: `work/lind-step9-11-prep`
+NAVIGATION FIX COMMIT: `c7416314b32318a433a6d789d8777c43ef896d2e`
+AIDAN ASSET COMMIT: NOT CREATED
+AIDAN IMPLEMENTATION/QA COMMIT: NOT CREATED
+FINAL COMMIT: final QA/report checkpoint at branch tip (completion response records its hash).
+PUSH: normal pushes to staging branch only. Main protected; no merge/reset/rebase/force push.
+
+| Navigation requirement | Result |
+|---|---|
+| Click destination | PASS |
+| Tap destination | PASS (real touchscreen events) |
+| Auto arrival | PASS, <=3px radius |
+| Destination replacement | PASS |
+| Manual input cancellation | PASS |
+| Blocked destination handling | PASS |
+| Wall sliding | PASS, unit + actual river edge |
+| Keyboard narrow passage | PASS |
+| Corner assist | PASS, <=3px/input, swept |
+| Bridge west→east | PASS |
+| Bridge east→west | PASS |
+| 10 round trips | PASS in each viewport |
+
+| Aidan requirement | Result |
+|---|---|
+| GENERATED PNG | **0/20** |
+| IDLE | 0/4 |
+| WALK | 0/16 |
+| RGBA/REAL ALPHA | NOT RUN |
+| ANATOMY | NOT RUN |
+| SWORD COUNT=1 | NOT RUN; no20/20 claim |
+| VISUAL CONSISTENCY | NOT RUN |
+| GROUND ANCHOR | NOT RUN |
+| WALK ANIMATION | NOT RUN |
+| FIELD SCALE | NOT RUN |
+| NAVIGATION ANCHOR | Aidan NOT RUN; existing placeholder foot-aligned click tested |
+
+| Environment/regression requirement | Result |
+|---|---|
+| PC1280×720 | Navigation/field/battle PASS; Aidan A1 NOT RUN |
+| Landscape844×390 | Navigation/field/battle PASS; Aidan A1 NOT RUN |
+| Portrait390×844 | Navigation/field/battle PASS; Aidan A1 NOT RUN |
+| STEP9 villagers | PASS, all12 NPC click/tap/Enter, bounded farmer walk, collisions/anchors |
+| STEP10 Emma | PASS, peaceful NPC interaction, source PNG unchanged |
+| STEP11 birds | PASS, real approach/takeoff, flock, bounded lifecycle |
+| WIND ON/OFF | PASS, birds/wind props stop and resume |
+| WATER | PASS, river continues while windOFF |
+| WIND STONE | PASS, NORMAL/GLOW/OFF, controls/interaction/collision |
+| BATTLE REGRESSION | PASS on exercised flows |
+| RAIDER HP | 1250 |
+| RAIDER SCALE/HUD | PASS, exact geometry match to STEP9–11 baseline in all3viewports |
+| COMMAND | PASS, mouse/touch open/close |
+| DEV INSTANT KILL | PASS, during enemy motion |
+| KO/VICTORY | PASS, fixed after stale motion timers |
+
+Actual player battle input rerun with console monitoring: Aidan/Fiona normal attacks, target selection, 一閃 TP30 consumption, Fiona Guard; enemy attack/turn progression and DEV kill/KO/Victory in normal/Raider. Existing four building entry/exits, fisherman and training tutorial also passed all3viewports. All registered battle asset/cut-in paths loaded successfully; no battle sources/assets/CSS changed. This is not an exhaustive replay of every battle skill/critical/back-attack variant.
+
+TECHNICAL QA: IMAGE404=0; JS EXCEPTIONS=0; CONSOLE ERRORS=0; OLD/INVALID ASSET REFERENCES=0. Protected176 source files unchanged; inline room/story/battle portion unchanged. Final worktree clean after final commit.
+
+Warnings:
+1. **Required Aidan/Fiona/Lou field reference image is missing.** Checked message attachments, repository reference files, existing ZIP inventories and remote branches (only main + this work branch). Provide that exact image or a readable path. No production Aidan image is generated from a guessed/substitute reference.
+2. Long detour planning reached ~278ms under4×CPU throttling; physical phone responsiveness requires PLAYER QA. Routes are reused during movement; cap/replan limits prevent perpetual wall-pushing.
+3. All mobile QA here is Chromium viewport/touch emulation, not physical-device testing.
+
+Only Navigation is PLAYER QA READY. Full Navigation+Aidan completion remains blocked by the reference. STEP12/A2/Fiona/Lou/story/battle expansion is not executed. Current placeholder is retained.
+
+Changed implementation files: `index.html` outdoor field portion + new script load; `js/field/field-movement.js`; new `js/field/field-navigation.js`; `js/field/lind-river.js` finite bridge strip; `js/field/lind-review.js` allocation-free equivalent static collision loop. Report/QA artifacts only otherwise. No production PNG changes.
