@@ -15,7 +15,7 @@
   };
   function attach(a,config,phase=0) {
     a.life={...config,origin:{x:a.x,y:a.footY},index:0,rest:config.rests[0]+phase,
-      elapsed:0,blocked:0,arrivals:0};a.element.dataset.routine=config.kind;
+      elapsed:0,blocked:0,arrivals:0,workTime:0};a.element.dataset.routine=config.kind;
   }
   function mount(actors) {actors.forEach((a,i)=>{if(routines[a.id]||a.routine)attach(a,routines[a.id]||a.routine,i*1.7);});}
   function update(seconds) {
@@ -24,14 +24,15 @@
       const r=a.life;r.elapsed+=seconds;a.elapsed+=seconds;
       if(a.interactionPause){a.state='IDLE';return;}
       if(r.rest>0){
-        r.rest=Math.max(0,r.rest-seconds);a.state=r.kind==='WORKER'?'WORK':'IDLE';
+        r.rest=Math.max(0,r.rest-seconds);r.workTime=Math.max(0,r.workTime-seconds);
+        a.state=r.kind==='WORKER'&&r.workTime>0?'WORK':'IDLE';
         // A glance at the end of a rest, without oscillating the whole body.
         if(r.rest>0&&r.rest<2)a.direction=r.index%2?-1:1;
         return;
       }
       const offset=r.offsets[r.index],goal={x:r.origin.x+offset[0],y:r.origin.y+offset[1]};
       if(Math.hypot(goal.x-a.x,goal.y-a.footY)<.5){
-        r.arrivals++;r.rest=r.rests[r.index];r.index=(r.index+1)%r.offsets.length;
+        r.arrivals++;r.workTime=1.4;r.rest=r.rests[r.index];r.index=(r.index+1)%r.offsets.length;
         r.blocked=0;a.state='IDLE';return;
       }
       const moved=api.moveToward(a,goal,r.speed,seconds);a.state=moved?'WALK':'IDLE';

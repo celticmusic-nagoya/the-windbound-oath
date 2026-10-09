@@ -4,6 +4,12 @@
   animation:lindChildStep .26s ease-in-out infinite alternate; transform-origin:50% 100%;
 }
 @keyframes lindChildStep { from { transform:rotate(-.7deg); } to { transform:rotate(.7deg); } }
+/* A short inclination toward crops/feed, followed by a long quiet rest. */
+.lind-field-npc[data-routine="WORKER"][data-state="WORK"] img {
+  animation:lindWorkerInspect .7s ease-in-out 2; transform-origin:50% 100%;
+}
+@keyframes lindWorkerInspect { 0%,100% { transform:rotate(0); } 50% { transform:rotate(-.8deg); } }
 @media(prefers-reduced-motion:reduce) {
-  .lind-field-npc[data-state="RUN"] img, .lind-field-npc[data-state="CHASE"] img { animation:none; }
+  .lind-field-npc[data-state="RUN"] img, .lind-field-npc[data-state="CHASE"] img,
+  .lind-field-npc[data-routine="WORKER"][data-state="WORK"] img { animation:none; }
 }
