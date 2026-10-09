@@ -186,3 +186,11 @@ Do not scale Lou like a normal child/human.
 Do not rename 誓いの剣.
 Do not replace final standalone art with composite-sheet crops.
 Do not casually rebalance the approved Goblin Raider encounter.
+
+## Player field camera (confirmed October 2026)
+
+Adjustable range: **1.00x–2.10x**. Default candidate: **1.80x, temporary**; reassess after
+Moss Forest, Dunvar Fortress and Caerdyn maps. Current public initial value stays unchanged.
+Release SETTINGS will expose カメラ距離 and persist the player's choice across maps/launches.
+Cinematic framing temporarily overrides position/zoom, then restores the selected player scale.
+See [camera distance / cinematic policy](field/field-camera-distance-option.md).
