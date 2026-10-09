@@ -43,6 +43,8 @@
       if(d.id==='fisherman')window.LindFisherman?.mount(actor);
       render(actor);
     });
+    window.LindChildren?.mount(actors);
+    actors.forEach(render);
   }
   function distance(a) {return Math.hypot(px+17-a.x,py+42-a.footY);}
   function interact(id) {
@@ -50,7 +52,8 @@
     const a=actors.find(a=>a.id===id);if(!a)return false;
     notice.hidden=false;
     if(distance(a)>90){notice.textContent=a.label+'へ近づいてください。';return false;}
-    target=null;lastInteraction={id:a.id,type:'field_npc',reviewOnly:true};
+    target=null;FieldNavigation.cancel();a.interactionPause=2;
+    lastInteraction={id:a.id,type:'field_npc',reviewOnly:true};
     notice.textContent='DEV · '+a.label+' — 仮interaction。正式な会話は後工程。';
     window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{...lastInteraction}}));return true;
   }
@@ -59,7 +62,7 @@
     const a=actors.find(a=>a.id===id);if(!a||!active)return false;
     target=null;px=a.x+38;py=a.footY-42;
     if(a.id==='boy')px=a.x-72;
-    if(a.id==='fisherman'){const stand=LindFieldRiver.standingAreas.find(s=>s.id==='player');px=stand.x;py=stand.y;}
+    if(a.id==='fisherman'){const stand=LindFieldRiver.standingAreas.find(s=>s.id==='player');px=Math.max(stand.x,a.x-69);py=stand.y;}
     camera();return true;
   }
   function blocked(x,y) {return active&&actors.some(a=>x+28>a.foot.x&&x+6<a.foot.x+a.foot.width&&y+42>a.foot.y&&y+32<a.foot.y+a.foot.height);}
@@ -67,14 +70,34 @@
     if(a.fishing){LindFisherman.render(a);return;}
     const state=a.frames.walk&&a.state==='WALK'&&Math.floor(a.elapsed*4)%2?'walk':'idle';
     const b=window.LindFieldContentBounds[a.boundsId||a.id+'_'+state],scale=a.height/b[5];
-    a.width=b[4]*scale;a.y=a.footY-a.height;a.foot.x=a.x-9;
-    Object.assign(a.element.style,{left:a.x-a.width/2+'px',top:a.y+'px',width:a.width+'px',height:a.height+'px',transform:a.direction<0?'scaleX(-1)':'none'});
+    a.width=b[4]*scale;a.y=a.footY-a.height;a.foot.x=a.x-9;a.foot.y=a.footY-8;
+    Object.assign(a.element.style,{left:a.x-a.width/2+'px',top:a.y+'px',width:a.width+'px',height:a.height+'px',zIndex:String(Math.round(a.footY)),transformOrigin:'50% 100%',transform:a.direction<0?'scaleX(-1)':'none'});
     Object.entries(a.frames).forEach(([key,image])=>{image.hidden=key!==state;});
     Object.assign(a.frames[state].style,{left:-b[2]*scale+'px',top:-b[3]*scale+'px',width:b[0]*scale+'px',height:b[1]*scale+'px'});
-    a.hit.style.left=a.x-22+'px';a.element.dataset.state=a.state;
+    Object.assign(a.hit.style,{left:a.x-22+'px',top:a.footY-Math.max(44,a.height)+'px',zIndex:String(Math.round(a.footY+1))});a.element.dataset.state=a.state;
+  }
+  function canMove(a,x,y) {
+    if(window.LindFieldReview?.staticBlocked(x-17,y-42))return false;
+    if(Math.hypot(px+17-x,py+42-y)<32)return false;
+    if(actors.some(b=>b!==a&&Math.abs(b.x-x)<21&&Math.abs(b.footY-y)<12))return false;
+    return !window.LindFieldAnimals?.blocked(x-17,y-42);
+  }
+  function moveToward(a,goal,speed,seconds) {
+    const dx=goal.x-a.x,dy=goal.y-a.footY,d=Math.hypot(dx,dy);if(d<.001)return true;
+    const distance=Math.min(d,speed*seconds),parts=Math.max(1,Math.ceil(distance/2));let progress=false;
+    for(let i=0;i<parts;i++){
+      const x=a.x+dx/d*distance/parts,y=a.footY+dy/d*distance/parts;
+      if(!canMove(a,x,y))break;
+      a.x=x;a.footY=y;progress=true;
+    }
+    if(Math.abs(dx)>.2)a.direction=dx>0?1:-1;
+    return progress;
   }
   function update(seconds) {
+    actors.forEach(a=>{a.interactionPause=Math.max(0,(a.interactionPause||0)-seconds);});
     actors.filter(a=>a.fishing).forEach(a=>LindFisherman.update(a,seconds));
+    window.LindChildren?.update(seconds);
+    actors.filter(a=>a.play).forEach(render);
     actors.filter(a=>a.frames.walk).forEach(a=>{
       a.elapsed+=seconds;
       if(a.state==='IDLE'){if(a.elapsed>=4){a.state='WALK';a.elapsed=0;}}
@@ -93,6 +116,6 @@
   }
   function clear(){lastInteraction=null;if(notice)notice.hidden=true;}
   window.LindFieldNPCs=Object.freeze({add,mount,focus,blocked,interact,nearby,clear,
-    setActive,update,get actors(){return actors;},get definitions(){return definitions;},
+    setActive,update,canMove,moveToward,get actors(){return actors;},get definitions(){return definitions;},
     get lastInteraction(){return lastInteraction;}});
 })();

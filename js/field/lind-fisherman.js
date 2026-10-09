@@ -6,7 +6,7 @@
   function random(a){a.fishing.seed=(Math.imul(a.fishing.seed,1664525)+1013904223)>>>0;return a.fishing.seed/4294967296;}
   function configure(d){
     const deck=LindFieldRiver.crossings.find(c=>c.id==='fishing_deck').polygon;
-    d.x=Math.max(...deck.map(p=>p[0]))-38;
+    d.x=Math.max(...deck.map(p=>p[0]))-23;
     d.footY=(Math.min(...deck.map(p=>p[1]))+Math.max(...deck.map(p=>p[1])))/2+11;
     d.height=40;
   }

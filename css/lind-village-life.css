@@ -1,2 +1,9 @@
 /* The provided fisherman carries his own rod; keep the old non-solid prop out of view. */
 #lindReviewLayer [data-asset-id="lind_fishing_rod"] { visibility:hidden; }
+.lind-field-npc[data-state="RUN"] img, .lind-field-npc[data-state="CHASE"] img {
+  animation:lindChildStep .26s ease-in-out infinite alternate; transform-origin:50% 100%;
+}
+@keyframes lindChildStep { from { transform:rotate(-.7deg); } to { transform:rotate(.7deg); } }
+@media(prefers-reduced-motion:reduce) {
+  .lind-field-npc[data-state="RUN"] img, .lind-field-npc[data-state="CHASE"] img { animation:none; }
+}
