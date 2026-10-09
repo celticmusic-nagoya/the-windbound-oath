@@ -1,0 +1,4 @@
+/* Image-only overlay. Never changes a motion root, actor layout, or HUD. */
+.battle-idle-canvas { position:absolute;inset:0;width:100%;height:100%;pointer-events:none; }
+.battle-idle-canvas[hidden] { display:none; }
+.battle-idle-active > img:first-of-type { visibility:hidden; }

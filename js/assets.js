@@ -87,3 +87,14 @@ window.BATTLE_CUTINS = Object.freeze({
  prayer: BATTLE_ASSET_PATHS.fiona + 'fiona_skill_wind_prayer_cutin.png',
  blessing: BATTLE_ASSET_PATHS.lou + 'lou_skill_cutin.png'
 });
+
+// Aidan idle prototype: audited source pixels and boot anchors; PNGs remain untouched.
+window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
+  type:'breathe', width:1536, height:1024, anchor:Object.freeze([888.5,1014]),
+  frames:Object.freeze([
+    Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_00.png',anchor:Object.freeze([889.75,1014])}),
+    Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_01.png',anchor:Object.freeze([891.5,1015])}),
+    Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_02.png',anchor:Object.freeze([893.5,1015])}),
+    Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_03.png',anchor:Object.freeze([891.75,1011])})
+  ])
+})});
