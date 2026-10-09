@@ -1,0 +1,476 @@
+{
+  "startCommit": "46d5683a763f431da166b2684130865f16e46a2d",
+  "sourceBranch": "work/lind-camera-extended-qa",
+  "publicDefault": 1,
+  "releaseLimitsAndDeviceDefaults": "undecided",
+  "viewports": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "browserZoom": 1,
+      "positionAndDestinationPreserved": true,
+      "reviewExitRestored": true,
+      "actualDevMenu": true,
+      "displayToggle": true,
+      "switchSequence": true,
+      "eventListenersStable": true,
+      "domNodesStable": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0,
+      "scales": [
+        1,
+        1.15,
+        1.2,
+        1.25,
+        1.28,
+        1.3,
+        1.35,
+        1.4,
+        1.45,
+        1.5,
+        1.55,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2,
+        2.1
+      ],
+      "bridgeRoundTrips": 85,
+      "edgeChecks": 136,
+      "allScaleChecksPassed": true
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "browserZoom": 1,
+      "positionAndDestinationPreserved": true,
+      "reviewExitRestored": true,
+      "actualDevMenu": true,
+      "displayToggle": true,
+      "switchSequence": true,
+      "eventListenersStable": true,
+      "domNodesStable": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0,
+      "scales": [
+        1,
+        1.15,
+        1.2,
+        1.25,
+        1.28,
+        1.3,
+        1.35,
+        1.4,
+        1.45,
+        1.5,
+        1.55,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2,
+        2.1
+      ],
+      "bridgeRoundTrips": 85,
+      "edgeChecks": 136,
+      "allScaleChecksPassed": true
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "browserZoom": 1,
+      "positionAndDestinationPreserved": true,
+      "reviewExitRestored": true,
+      "actualDevMenu": true,
+      "displayToggle": true,
+      "switchSequence": true,
+      "eventListenersStable": true,
+      "domNodesStable": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0,
+      "scales": [
+        1,
+        1.15,
+        1.2,
+        1.25,
+        1.28,
+        1.3,
+        1.35,
+        1.4,
+        1.45,
+        1.5,
+        1.55,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2,
+        2.1
+      ],
+      "bridgeRoundTrips": 85,
+      "edgeChecks": 136,
+      "allScaleChecksPassed": true
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "browserZoom": 1,
+      "positionAndDestinationPreserved": true,
+      "reviewExitRestored": true,
+      "actualDevMenu": true,
+      "displayToggle": true,
+      "switchSequence": true,
+      "eventListenersStable": true,
+      "domNodesStable": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0,
+      "scales": [
+        1,
+        1.15,
+        1.2,
+        1.25,
+        1.28,
+        1.3,
+        1.35,
+        1.4,
+        1.45,
+        1.5,
+        1.55,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2,
+        2.1
+      ],
+      "bridgeRoundTrips": 85,
+      "edgeChecks": 136,
+      "allScaleChecksPassed": true
+    }
+  ],
+  "bridgeRoundTrips": 340,
+  "bridgeMethod": "Physical mouse/touch goals with deterministic navigation sweeps, center and four off-center paths; keyboard crossings at every scale. Separate Aidan suite runs actual field RAF at 2.10x.",
+  "highZoomPhysicalHitRetest": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "scales": [
+        1.6,
+        1.8,
+        2,
+        2.1
+      ],
+      "physicalVisibleHit": true,
+      "centerAndPosition": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "scales": [
+        1.6,
+        1.8,
+        2,
+        2.1
+      ],
+      "physicalVisibleHit": true,
+      "centerAndPosition": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "scales": [
+        1.6,
+        1.8,
+        2,
+        2.1
+      ],
+      "physicalVisibleHit": true,
+      "centerAndPosition": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0
+    }
+  ],
+  "aidan": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "loadedFrames": 20,
+      "lazyReviewOnlyLoading": true,
+      "animation": [
+        {
+          "direction": "down",
+          "frames": [
+            "aidan_walk_down_01",
+            "aidan_walk_down_02",
+            "aidan_walk_down_03",
+            "aidan_walk_down_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "left",
+          "frames": [
+            "aidan_walk_left_01",
+            "aidan_walk_left_02",
+            "aidan_walk_left_03",
+            "aidan_walk_left_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "right",
+          "frames": [
+            "aidan_walk_right_01",
+            "aidan_walk_right_02",
+            "aidan_walk_right_03",
+            "aidan_walk_right_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "up",
+          "frames": [
+            "aidan_walk_up_01",
+            "aidan_walk_up_02",
+            "aidan_walk_up_03",
+            "aidan_walk_up_04"
+          ],
+          "idle": true
+        }
+      ],
+      "visualNavigationAnchor": true,
+      "bodyHeight": 44,
+      "keyboard": true,
+      "toggle": "mouse",
+      "saveAndExitRestored": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "loadedFrames": 20,
+      "lazyReviewOnlyLoading": true,
+      "animation": [
+        {
+          "direction": "down",
+          "frames": [
+            "aidan_walk_down_01",
+            "aidan_walk_down_02",
+            "aidan_walk_down_03",
+            "aidan_walk_down_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "left",
+          "frames": [
+            "aidan_walk_left_01",
+            "aidan_walk_left_02",
+            "aidan_walk_left_03",
+            "aidan_walk_left_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "right",
+          "frames": [
+            "aidan_walk_right_01",
+            "aidan_walk_right_02",
+            "aidan_walk_right_03",
+            "aidan_walk_right_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "up",
+          "frames": [
+            "aidan_walk_up_01",
+            "aidan_walk_up_02",
+            "aidan_walk_up_03",
+            "aidan_walk_up_04"
+          ],
+          "idle": true
+        }
+      ],
+      "visualNavigationAnchor": true,
+      "bodyHeight": 44,
+      "keyboard": true,
+      "toggle": "touch",
+      "saveAndExitRestored": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "loadedFrames": 20,
+      "lazyReviewOnlyLoading": true,
+      "animation": [
+        {
+          "direction": "down",
+          "frames": [
+            "aidan_walk_down_01",
+            "aidan_walk_down_02",
+            "aidan_walk_down_03",
+            "aidan_walk_down_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "left",
+          "frames": [
+            "aidan_walk_left_01",
+            "aidan_walk_left_02",
+            "aidan_walk_left_03",
+            "aidan_walk_left_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "right",
+          "frames": [
+            "aidan_walk_right_01",
+            "aidan_walk_right_02",
+            "aidan_walk_right_03",
+            "aidan_walk_right_04"
+          ],
+          "idle": true
+        },
+        {
+          "direction": "up",
+          "frames": [
+            "aidan_walk_up_01",
+            "aidan_walk_up_02",
+            "aidan_walk_up_03",
+            "aidan_walk_up_04"
+          ],
+          "idle": true
+        }
+      ],
+      "visualNavigationAnchor": true,
+      "bodyHeight": 44,
+      "keyboard": true,
+      "toggle": "touch",
+      "saveAndExitRestored": true,
+      "image404": 0,
+      "jsExceptions": 0,
+      "consoleErrors": 0
+    }
+  ],
+  "battle": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "battle": "normal",
+      "command": true,
+      "devInstantKill": true,
+      "ko": true,
+      "victory": true,
+      "raceProtected": true
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "battle": "raider",
+      "command": true,
+      "devInstantKill": true,
+      "ko": true,
+      "victory": true,
+      "raceProtected": true
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "battle": "normal",
+      "command": true,
+      "devInstantKill": true,
+      "ko": true,
+      "victory": true,
+      "raceProtected": true
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "battle": "raider",
+      "command": true,
+      "devInstantKill": true,
+      "ko": true,
+      "victory": true,
+      "raceProtected": true
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "battle": "normal",
+      "command": true,
+      "devInstantKill": true,
+      "ko": true,
+      "victory": true,
+      "raceProtected": true
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "battle": "raider",
+      "command": true,
+      "devInstantKill": true,
+      "ko": true,
+      "victory": true,
+      "raceProtected": true
+    }
+  ],
+  "raiderGeometry": "Exact match to c380 baseline in all three viewports",
+  "PNGAndStableSourceChanges": 0,
+  "legacyReferences": 0,
+  "warnings": [
+    "At 2.10x mobile landscape, full Wind Stone exceeds unobstructed viewport height; actor and interaction remain usable.",
+    "Formal camera min/default/max remain undecided; user PLAYER QA is still required."
+  ]
+}

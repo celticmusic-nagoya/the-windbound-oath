@@ -2,9 +2,18 @@
  * QA choices are session-only; normal field/battle rendering stays at 1.00x. */
 (function () {
   'use strict';
-  const scales = Object.freeze([1,1.15,1.20,1.25,1.28,1.30,1.35]);
-  let review = false, selected = 1, select = null, toolbar = null;
-  const effectiveScale = () => review ? selected : 1;
+  // QA limits are provisional. Release/device defaults remain undecided.
+  // Future SETTINGS/storage adapters can use this config and setScale; no persistence here.
+  const config = Object.freeze({
+    defaultScale: 1,
+    qaScales: Object.freeze([1,1.15,1.20,1.25,1.28,1.30,1.35,
+      1.40,1.45,1.50,1.55,1.60,1.70,1.80,1.90,2.00,2.10]),
+    release: Object.freeze({minScale:null,defaultScale:null,maxScale:null,step:null,
+      desktopDefault:null,mobileLandscapeDefault:null,mobilePortraitDefault:null})
+  });
+  const scales = config.qaScales;
+  let review = false, selected = config.defaultScale, select = null, toolbar = null;
+  const effectiveScale = () => review ? selected : config.defaultScale;
   function render(world, viewport, player, x, y) {
     const scale = effectiveScale(), view=viewport.getBoundingClientRect();
     const screenWidth=review ? Math.min(viewport.clientWidth,Math.max(0,window.innerWidth-view.left)) : viewport.clientWidth;
@@ -46,6 +55,6 @@
     if(stone){const row=document.createElement('div');row.className='lind-camera-row';stone.before(row);row.append(stone,label);}
     else controls.append(label);
   }
-  window.FieldCamera=Object.freeze({render,screenToWorld,worldToScreen,setScale,setReviewActive,mount,scales,
+  window.FieldCamera=Object.freeze({render,screenToWorld,worldToScreen,setScale,setReviewActive,mount,scales,config,
     get scale(){return effectiveScale();},get selectedScale(){return selected;},get reviewActive(){return review;}});
 })();
