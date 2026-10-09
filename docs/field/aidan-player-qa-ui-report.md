@@ -7,7 +7,7 @@ Branch: `work/lind-step9-11-prep`. Main remains `51cf09258b36c47ba1b9dc8954f385c
 
 Direct `git ls-remote` and an explicit branch fetch confirmed all 20 A1 PNGs and the DEV actor implementation at the remote branch start commit. The initial stale tracking ref was misleading: `remote.origin.fetch` fetches main only. The existing toggle was implemented, rather than only described in the report, but was labelled `Aidan 正式` / `Aidan 仮表示`. Main has neither the field actor script inclusion nor A1 assets. A work branch push alone does not establish Pages publication.
 
-The public Pages URL and repository Pages API both returned proxy tunnel 403. Consequently the actual Pages source branch and live deployment are NOT VERIFIED. Do not describe this as a browser-cache issue or assert a main-only Pages setting without further evidence. Previous PLAYER QA READY wording did not establish public availability.
+Initial public/API requests returned proxy tunnel 403. After network configuration propagation, both returned HTTP 200. Pages API confirms legacy deployment from `main` at `/`, status `built`; public HTML is byte-for-byte identical to `origin/main:index.html` and does not include `aidan-field-actor.js`. ROOT CAUSE: Aidan implementation/assets are pushed to the work branch, but Pages publishes main. Previous PLAYER QA READY wording incorrectly implied public availability. This is not a missing work-branch implementation or a cache diagnosis.
 
 ## Change
 
@@ -19,6 +19,8 @@ The read-only PNG audit passed 20/20 including recorded SHA, RGBA and real alpha
 
 ## Publication blocker
 
-GitHub Pages remains NOT YET POSSIBLE to confirm from this environment. Required network domains `api.github.com` and `celticmusic-nagoya.github.io` were saved in an environment configuration draft; applying them requires reviewing/saving the environment settings and publishing the environment. This does not change repository Pages settings. If Pages deploys main, user approval is still required before integrating this work branch into main. No main merge or Pages source change was performed.
+GitHub Pages: NOT YET POSSIBLE for Aidan PLAYER QA. Pages definitively deploys main. User approval is required before integrating the work branch into main; no main merge or Pages source change was performed. Network destinations were saved through the setup skill and subsequently became reachable; no remaining network blocker was observed. UI implementation commit: `6cb7ee9442442b27802ec1939734456a9a319fe3`, normally pushed and verified against remote.
 
-PLAYER QA READY on the work branch; public PLAYER QA is pending deployment verification.
+PLAYER QA READY on the work branch; public PLAYER QA awaits user-authorized integration/deployment.
+
+Navigation suite passed all three viewports: 20 rendered bridge crossings per viewport, actual click/tap destinations, arrows/WASD, cancellation, wall/corner handling, NPC interactions and save isolation. No app errors.
