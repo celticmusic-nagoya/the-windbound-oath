@@ -3,9 +3,9 @@
 (function () {
   'use strict';
   const bounds={width:2160,height:1500},maxNodes=12000;
-  let current=null,path=[],index=0,blockedFrames=0,replans=0,steps=0;
+  let current=null,path=[],index=0,blockedFrames=0,replans=0,steps=0,actorWaitFrames=0;
   let statistics={plans:0,expanded:0,milliseconds:0,outcome:'idle'};
-  function clear(){current=null;path=[];index=0;blockedFrames=0;replans=0;steps=0;}
+  function clear(){current=null;path=[];index=0;blockedFrames=0;replans=0;steps=0;actorWaitFrames=0;}
   function segment(a,b,blocked) {
     const distance=Math.hypot(b.x-a.x,b.y-a.y),n=Math.max(1,Math.ceil(distance/2));
     for(let i=1;i<=n;i++)if(blocked(a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n))return false;
@@ -54,32 +54,62 @@
   }
   function destination(x,y,blocked) {
     clear();
+    const staticBlocked=blocked.staticBlocked||blocked;
     const p={x:Math.max(0,Math.min(bounds.width,x)),y:Math.max(0,Math.min(bounds.height,y))};
-    if(!Number.isFinite(p.x)||!Number.isFinite(p.y)||blocked(p.x,p.y)){statistics.outcome='blocked-destination';return null;}
+    if(!Number.isFinite(p.x)||!Number.isFinite(p.y)||staticBlocked(p.x,p.y)){statistics.outcome='blocked-destination';return null;}
     statistics.outcome='moving';return p;
   }
   function follow(x,y,target,blocked) {
     if(!target){clear();return {x,y,target:null};}
+    // Optional Lind review policy: route around locked world geometry, then
+    // respect live actors during the movement sweep. Other callers are unchanged.
+    const staticBlocked=blocked.staticBlocked||blocked,dynamicBlocked=blocked.dynamicBlocked;
+    // Detours keep 2px clearance from live actors, avoiding a corner waypoint
+    // that grazes their feet. This does not inflate locked static geometry.
+    const detourBlocked=(qx,qy)=>staticBlocked(qx,qy)||dynamicBlocked(qx-2,qy-2)||
+      dynamicBlocked(qx+2,qy-2)||dynamicBlocked(qx-2,qy+2)||dynamicBlocked(qx+2,qy+2);
+    const waitForActor=()=>{
+      actorWaitFrames++;statistics.outcome='waiting-actor';
+      // Reuse the existing bounded planner for an actor that remains ahead.
+      // Failed live detours never invalidate the statically reachable destination.
+      if(actorWaitFrames%120===30&&!dynamicBlocked(x,y)&&!dynamicBlocked(target.x,target.y)){
+        const detour=plan({x,y},target,detourBlocked);
+        if(detour){path=detour;index=0;actorWaitFrames=0;statistics.outcome='detouring-actor';}
+      }
+      return {x,y,target};
+    };
     const finish=(outcome,unreachable=false)=>{clear();statistics.outcome=outcome;return {x,y,target:null,unreachable};};
     if(Math.hypot(target.x-x,target.y-y)<=FieldMovement.settings.arrivalRadius)return finish('arrived');
-    if(blocked(x,y)||blocked(target.x,target.y))return finish('blocked',true);
-    if(target!==current){clear();current=target;path=plan({x,y},target,blocked);if(!path)return finish('no-route',true);}
-    steps++;if(steps>3600)return finish('timeout',true);
+    if(staticBlocked(x,y)||staticBlocked(target.x,target.y))return finish('blocked',true);
+    if(target!==current){
+      clear();current=target;
+      const occupied=dynamicBlocked?.(x,y)||dynamicBlocked?.(target.x,target.y);
+      path=occupied?null:plan({x,y},target,blocked);
+      if(!path)path=plan({x,y},target,staticBlocked);
+      if(!path)return finish('no-route',true);
+    }
+    // A moving animal can overlap the stationary player's feet. Do not push the
+    // player or abandon their destination; resume on the existing RAF when clear.
+    if(dynamicBlocked?.(x,y))return waitForActor();
     while(index<path.length-1&&Math.hypot(path[index].x-x,path[index].y-y)<=1)index++;
     const next=path[index],distance=Math.hypot(next.x-x,next.y-y);
     const v=Math.min(distance,FieldMovement.settings.pointerStep);
-    const moved=FieldMovement.advance(x,y,distance?(next.x-x)/distance*v:0,
-      distance?(next.y-y)/distance*v:0,blocked,{assist:false});
+    const dx=distance?(next.x-x)/distance*v:0,dy=distance?(next.y-y)/distance*v:0;
+    const fromX=x,fromY=y,moved=FieldMovement.advance(x,y,dx,dy,blocked,{assist:false});
     const progress=Math.hypot(moved.x-x,moved.y-y);x=moved.x;y=moved.y;
+    // Preserve existing axis sliding around corners before deciding to wait.
+    if(progress<.1&&dynamicBlocked?.(x+dx,y+dy))return waitForActor();
+    actorWaitFrames=0;statistics.outcome='moving';
+    steps++;if(steps>3600){x=fromX;y=fromY;return finish('timeout',true);}
     blockedFrames=progress<.1?blockedFrames+1:0;
     if(blockedFrames>=12) {
       if(replans>=3)return finish('blocked',true);
-      replans++;blockedFrames=0;path=plan({x,y},target,blocked);index=0;
+      replans++;blockedFrames=0;path=plan({x,y},target,staticBlocked);index=0;
       if(!path)return finish('no-route',true);
     }
     if(Math.hypot(target.x-x,target.y-y)<=FieldMovement.settings.arrivalRadius)return finish('arrived');
     return {x,y,target};
   }
   window.FieldNavigation=Object.freeze({destination,follow,cancel:clear,
-    get status(){return {...statistics,blockedFrames,replans,waypoints:path.length,active:Boolean(current)};}});
+    get status(){return {...statistics,blockedFrames,actorWaitFrames,replans,waypoints:path.length,active:Boolean(current)};}});
 })();

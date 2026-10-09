@@ -1,0 +1,153 @@
+{
+  "metrics": {
+    "farmer_male": {
+      "kind": "WORKER",
+      "travel": 1844.6999999997204,
+      "maxRadius": 17.699999999997317,
+      "states": {
+        "IDLE": 10473,
+        "WALK": 6149,
+        "WORK": 1378
+      },
+      "initialBlocked": false
+    },
+    "farmer_female": {
+      "kind": "WORKER",
+      "travel": 1112.5400000002437,
+      "maxRadius": 12.22000000000266,
+      "states": {
+        "IDLE": 12512,
+        "WALK": 4279,
+        "WORK": 1209
+      },
+      "initialBlocked": false
+    },
+    "young_man": {
+      "kind": "LOCAL_WALKER",
+      "travel": 2671.500000000025,
+      "maxRadius": 19.50000000000067,
+      "states": {
+        "IDLE": 12657,
+        "WALK": 5343
+      },
+      "initialBlocked": false
+    },
+    "young_woman": {
+      "kind": "LOCAL_WALKER",
+      "travel": 2043.790000000266,
+      "maxRadius": 19.35000000000174,
+      "states": {
+        "IDLE": 13247,
+        "WALK": 4753
+      },
+      "initialBlocked": false
+    },
+    "elder_man": {
+      "kind": "ELDERLY",
+      "travel": 194.76000000000738,
+      "maxRadius": 3.6000000000001364,
+      "states": {
+        "IDLE": 16918,
+        "WALK": 1082
+      },
+      "initialBlocked": false
+    },
+    "elder_woman": {
+      "kind": "ELDERLY",
+      "travel": 152.47999999996966,
+      "maxRadius": 3.5199999999992997,
+      "states": {
+        "IDLE": 17047,
+        "WALK": 953
+      },
+      "initialBlocked": false
+    },
+    "merchant": {
+      "kind": "SHOP",
+      "travel": 302.7999999999828,
+      "maxRadius": 4.5999999999997385,
+      "states": {
+        "IDLE": 16486,
+        "WALK": 1514
+      },
+      "initialBlocked": false
+    },
+    "innkeeper": {
+      "kind": "SHOP",
+      "travel": 256.60000000005834,
+      "maxRadius": 4.600000000001046,
+      "states": {
+        "IDLE": 16717,
+        "WALK": 1283
+      },
+      "initialBlocked": false
+    },
+    "caretaker": {
+      "kind": "WORKER",
+      "travel": 1075.199999999786,
+      "maxRadius": 11.519999999997708,
+      "states": {
+        "IDLE": 13405,
+        "WALK": 3360,
+        "WORK": 1235
+      },
+      "initialBlocked": false
+    },
+    "emma": {
+      "kind": "EMMA",
+      "travel": 194.87999999994327,
+      "maxRadius": 4.0799999999987735,
+      "states": {
+        "IDLE": 16376,
+        "WALK": 1624
+      },
+      "initialBlocked": false
+    }
+  },
+  "synchronizedWalkFrames": 0,
+  "arrivals": [
+    {
+      "id": "farmer_male",
+      "arrivals": 106
+    },
+    {
+      "id": "farmer_female",
+      "arrivals": 93
+    },
+    {
+      "id": "young_man",
+      "arrivals": 137
+    },
+    {
+      "id": "young_woman",
+      "arrivals": 108
+    },
+    {
+      "id": "elder_man",
+      "arrivals": 60
+    },
+    {
+      "id": "elder_woman",
+      "arrivals": 50
+    },
+    {
+      "id": "merchant",
+      "arrivals": 72
+    },
+    {
+      "id": "innkeeper",
+      "arrivals": 61
+    },
+    {
+      "id": "caretaker",
+      "arrivals": 95
+    },
+    {
+      "id": "emma",
+      "arrivals": 54
+    }
+  ],
+  "image404": 0,
+  "jsExceptions": 0,
+  "consoleErrors": 0
+}
