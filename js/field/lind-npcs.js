@@ -62,7 +62,15 @@
   function focus(id) {
     const a=actors.find(a=>a.id===id);if(!a||!active)return false;
     target=null;px=a.x+38;py=a.footY-42;
-    if(a.id==='boy')px=a.x-72;
+    if(a.id!=='fisherman'){
+      // DEV focus must not place the player nearer to a passing child/neighbor.
+      const positions=[];
+      for(const radius of [35,45,55])for(const angle of [0,Math.PI,Math.PI/2,-Math.PI/2,Math.PI/4,-Math.PI/4,3*Math.PI/4,-3*Math.PI/4]){
+        const x=a.x+Math.cos(angle)*radius,y=a.footY+Math.sin(angle)*radius;
+        if(!blockedWorld(x-17,y-42)&&actors.every(b=>b===a||Math.hypot(b.x-x,b.footY-y)>radius+4))positions.push({x:x-17,y:y-42});
+      }
+      if(positions.length){px=positions[0].x;py=positions[0].y;}
+    }
     if(a.id==='fisherman'){const stand=LindFieldRiver.standingAreas.find(s=>s.id==='player');px=Math.max(stand.x,a.x-69);py=stand.y;}
     camera();return true;
   }
