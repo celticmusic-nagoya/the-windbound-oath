@@ -1,0 +1,9 @@
+/* DEV review only; field ground anchor remains (17,42), collider unchanged. */
+body.lindFieldReview #player.aidan-field-active {
+  border:0; border-radius:0; background:none; box-shadow:none;
+}
+#player > .aidan-field-frame {
+  position:absolute; max-width:none; pointer-events:none;
+  user-select:none; -webkit-user-drag:none;
+}
+#player > .aidan-field-frame[hidden] { display:none; }

@@ -101,6 +101,7 @@
   window.LindFieldWindStone?.mount(layer, controls);
   window.LindFieldNPCs?.mount(layer, controls);
   window.LindFieldBirds?.mount(layer);
+  window.AidanFieldActor?.mount(pl, controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -135,6 +136,7 @@
     window.LindFieldWindStone?.clear();
     window.LindFieldNPCs?.setActive(active);
     window.LindFieldBirds?.setActive(active);
+    window.AidanFieldActor?.setActive(active);
     if (active) window.LindFieldAnimals?.start(); else window.LindFieldAnimals?.stop();
     document.body.classList.toggle('lindFieldReview', active);
     layer.hidden = !active;

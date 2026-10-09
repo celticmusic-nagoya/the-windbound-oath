@@ -1,0 +1,67 @@
+{
+  "continuationStart": "3d17e6bf163c5c464c1056c9e8be916df9453bd5",
+  "branch": "work/lind-step9-11-prep",
+  "mainUnchanged": "51cf09258b36c47ba1b9dc8954f385cbeaf018d9",
+  "assetCommit": "0f148389e9c0a8e5733da6a9811e9473403c0788",
+  "acceptedPNG": 20,
+  "idle": 4,
+  "walk": 16,
+  "RGBA": 20,
+  "realTransparentPixels": 20,
+  "swordCountOneVisualReviews": 20,
+  "protectedExistingFilesUnchanged": 179,
+  "image404": 0,
+  "jsExceptions": 0,
+  "consoleErrors": 0,
+  "legacyReferences": 0,
+  "embeddedAbsent": true,
+  "tests": [
+    "Aidan field animation/anchor/keyboard/touch toggle/lifecycle3viewports",
+    "Aidan-visible bridge10 actual RAF round trips and20 swept microstep crossings per viewport",
+    "pointer/tap/manual override/diagonal/corner/slide/narrow path/no-route/dynamic replanning/save restoration",
+    "all13 NPC interaction/collision/patrol/restore3viewports",
+    "birds takeoff/flock/wind/water/reduced-motion/cleanup3viewports",
+    "Wind Stone3states/interaction/collision/wind/water3viewports",
+    "livestock/nature/river/fishing/training/restore3viewports",
+    "normal and Raider COMMAND/enemy motion/DEVkillmidmotion/KO/Victoryrace3viewports",
+    "doors/fishing/AidanFiona normal attacks/一閃/guard/turns3viewports",
+    "61 registered Battle images and actual tutorial/COMMAND/HUD3viewports",
+    "Raider sprite/HUD geometry equals prior baseline3viewports"
+  ],
+  "navPlanTimings": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "bridgeMs": 9.5,
+      "detourMs": 124.09999999403954,
+      "cpu": "normal"
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "bridgeMs": 31.600000008940697,
+      "detourMs": 199.79999999701977,
+      "cpu": "4x throttled"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "bridgeMs": 40.900000005960464,
+      "detourMs": 259.40000000596046,
+      "cpu": "4x throttled"
+    }
+  ],
+  "result": "PASS WITH WARNINGS",
+  "warnings": [
+    "Simple4-frame walk: fine foot sliding / alternation, cloak hem and embroidery require PLAYER visual QA.",
+    "PNG totalabout30MB,1536x1024each; lazy DEV-only load, production export optimization remains future work.",
+    "One-time obstacle detour plan up to259.4ms under4xCPU emulation; physical-phone QA remains."
+  ],
+  "stop": "PLAYER QA READY; no STEP12/A2/Fiona/Lou production or main merge"
+}
