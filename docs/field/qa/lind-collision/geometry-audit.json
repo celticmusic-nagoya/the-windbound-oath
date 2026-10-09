@@ -1,0 +1,3746 @@
+{
+  "objects": [
+    {
+      "id": "cliff",
+      "label": "崖",
+      "path": "img/field/lind/terrain/lind_cliff.png",
+      "x": 150,
+      "y": 50,
+      "width": 180,
+      "height": 149,
+      "collision": [
+        20,
+        79,
+        140,
+        50
+      ],
+      "draw": {
+        "x": 81.05504587155963,
+        "y": 17.38532110091743,
+        "width": 317.06422018348627,
+        "height": 211.37614678899084
+      }
+    },
+    {
+      "id": "lind_elder_house",
+      "label": "長老の家",
+      "path": "img/field/lind/buildings/lind_elder_house.png",
+      "x": 370,
+      "y": 150,
+      "width": 280,
+      "height": 218,
+      "collision": null,
+      "draw": {
+        "x": 356.15629984051037,
+        "y": 126.77830940988835,
+        "width": 304.33811802232856,
+        "height": 257.6714513556619
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 44.800000000000004,
+          "y": 128.62,
+          "width": 207.2,
+          "height": 52.32
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 5.6000000000000005,
+          "y": 150.42,
+          "width": 47.6,
+          "height": 32.699999999999996
+        },
+        {
+          "type": "rect",
+          "part": "left-bed",
+          "x": 42,
+          "y": 176.58,
+          "width": 50.4,
+          "height": 21.8
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 238,
+          "y": 152.6,
+          "width": 33.6,
+          "height": 30.520000000000003
+        },
+        {
+          "type": "rect",
+          "part": "right-bed",
+          "x": 165.2,
+          "y": 178.76,
+          "width": 75.60000000000001,
+          "height": 15.260000000000002
+        }
+      ],
+      "doorApproach": {
+        "x": 490.4,
+        "y": 357.1
+      }
+    },
+    {
+      "id": "lind_inn",
+      "label": "宿屋",
+      "path": "img/field/lind/buildings/lind_inn.png",
+      "x": 720,
+      "y": 110,
+      "width": 310,
+      "height": 267,
+      "collision": null,
+      "draw": {
+        "x": 716.6382649109217,
+        "y": 101.59566227730441,
+        "width": 315.0426026336174,
+        "height": 287.9085979860573
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 46.5,
+          "y": 152.19,
+          "width": 226.29999999999998,
+          "height": 74.76
+        },
+        {
+          "type": "rect",
+          "part": "awning-base",
+          "x": 12.4,
+          "y": 202.92000000000002,
+          "width": 93,
+          "height": 40.05
+        },
+        {
+          "type": "rect",
+          "part": "left-planters",
+          "x": 40.300000000000004,
+          "y": 232.29,
+          "width": 80.60000000000001,
+          "height": 21.36
+        },
+        {
+          "type": "rect",
+          "part": "right-cart",
+          "x": 257.3,
+          "y": 202.92000000000002,
+          "width": 43.400000000000006,
+          "height": 48.059999999999995
+        }
+      ],
+      "doorApproach": {
+        "x": 899.8,
+        "y": 366.32
+      }
+    },
+    {
+      "id": "lind_aidan_house",
+      "label": "エイダンの家",
+      "path": "img/field/lind/buildings/lind_aidan_house.png",
+      "x": 1100,
+      "y": 210,
+      "width": 290,
+      "height": 233,
+      "collision": null,
+      "draw": {
+        "x": 1038.9611562782295,
+        "y": 192.44805781391148,
+        "width": 402.3848238482385,
+        "height": 268.256549232159
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 40.6,
+          "y": 142.13,
+          "width": 203,
+          "height": 53.59
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 5.8,
+          "y": 156.11,
+          "width": 40.6,
+          "height": 46.6
+        },
+        {
+          "type": "rect",
+          "part": "left-bed",
+          "x": 43.5,
+          "y": 195.72,
+          "width": 87,
+          "height": 20.97
+        },
+        {
+          "type": "rect",
+          "part": "right-barrels",
+          "x": 240.7,
+          "y": 181.74,
+          "width": 40.6,
+          "height": 30.290000000000003
+        },
+        {
+          "type": "rect",
+          "part": "right-bed",
+          "x": 226.20000000000002,
+          "y": 205.04,
+          "width": 29,
+          "height": 11.65
+        }
+      ],
+      "doorApproach": {
+        "x": 1274,
+        "y": 433.67999999999995
+      }
+    },
+    {
+      "id": "lind_item_shop",
+      "label": "道具屋",
+      "path": "img/field/lind/buildings/lind_item_shop.png",
+      "x": 150,
+      "y": 450,
+      "width": 290,
+      "height": 239,
+      "collision": null,
+      "draw": {
+        "x": 87.98908098271156,
+        "y": 436.8061874431301,
+        "width": 405.3139217470428,
+        "height": 270.2092811646952
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 37.7,
+          "y": 141.01,
+          "width": 203,
+          "height": 59.75
+        },
+        {
+          "type": "rect",
+          "part": "left-barrels",
+          "x": 8.7,
+          "y": 174.47,
+          "width": 52.199999999999996,
+          "height": 43.019999999999996
+        },
+        {
+          "type": "rect",
+          "part": "front-barrels",
+          "x": 46.4,
+          "y": 203.15,
+          "width": 92.8,
+          "height": 26.29
+        },
+        {
+          "type": "rect",
+          "part": "right-crates",
+          "x": 211.7,
+          "y": 198.37,
+          "width": 63.8,
+          "height": 21.509999999999998
+        },
+        {
+          "type": "rect",
+          "part": "side-barrel",
+          "x": 258.1,
+          "y": 169.69,
+          "width": 26.099999999999998,
+          "height": 40.63
+        }
+      ],
+      "doorApproach": {
+        "x": 332.7,
+        "y": 681.8299999999999
+      }
+    },
+    {
+      "id": "lind_house_01",
+      "label": "村人の家 1",
+      "path": "img/field/lind/buildings/lind_house_01.png",
+      "x": 140,
+      "y": 810,
+      "width": 270,
+      "height": 212,
+      "collision": null,
+      "draw": {
+        "x": 101.23425692695214,
+        "y": 800.4785894206549,
+        "width": 348.2115869017632,
+        "height": 232.1410579345088
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 32.4,
+          "y": 129.32,
+          "width": 202.5,
+          "height": 53
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 5.4,
+          "y": 144.16,
+          "width": 32.4,
+          "height": 40.28
+        },
+        {
+          "type": "rect",
+          "part": "left-bed",
+          "x": 32.4,
+          "y": 180.2,
+          "width": 89.10000000000001,
+          "height": 16.96
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 234.9,
+          "y": 150.51999999999998,
+          "width": 27,
+          "height": 33.92
+        },
+        {
+          "type": "rect",
+          "part": "right-bed",
+          "x": 205.2,
+          "y": 180.2,
+          "width": 51.3,
+          "height": 14.840000000000002
+        }
+      ],
+      "doorApproach": {
+        "x": 304.7,
+        "y": 1013.52
+      }
+    },
+    {
+      "id": "lind_house_02",
+      "label": "村人の家 2",
+      "path": "img/field/lind/buildings/lind_house_02.png",
+      "x": 450,
+      "y": 960,
+      "width": 270,
+      "height": 244,
+      "collision": null,
+      "draw": {
+        "x": 376.46231155778895,
+        "y": 943.1758793969849,
+        "width": 416.8040201005025,
+        "height": 277.86934673366835
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 43.2,
+          "y": 143.95999999999998,
+          "width": 186.29999999999998,
+          "height": 65.88000000000001
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 5.4,
+          "y": 170.79999999999998,
+          "width": 43.2,
+          "height": 48.800000000000004
+        },
+        {
+          "type": "rect",
+          "part": "left-bed",
+          "x": 32.4,
+          "y": 207.4,
+          "width": 91.80000000000001,
+          "height": 24.400000000000002
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 229.5,
+          "y": 173.23999999999998,
+          "width": 35.1,
+          "height": 46.36
+        },
+        {
+          "type": "rect",
+          "part": "right-bed",
+          "x": 207.9,
+          "y": 209.84,
+          "width": 32.4,
+          "height": 14.639999999999999
+        }
+      ],
+      "doorApproach": {
+        "x": 617.4,
+        "y": 1194.24
+      }
+    },
+    {
+      "id": "lind_house_03",
+      "label": "村人の家 3",
+      "path": "img/field/lind/buildings/lind_house_03.png",
+      "x": 110,
+      "y": 1140,
+      "width": 270,
+      "height": 229,
+      "collision": null,
+      "draw": {
+        "x": 49.747899159663866,
+        "y": 1127.142857142857,
+        "width": 387.2268907563025,
+        "height": 258.1512605042017
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 35.1,
+          "y": 139.69,
+          "width": 189,
+          "height": 54.96
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 5.4,
+          "y": 162.59,
+          "width": 37.800000000000004,
+          "height": 43.51
+        },
+        {
+          "type": "rect",
+          "part": "left-bed",
+          "x": 32.4,
+          "y": 192.35999999999999,
+          "width": 97.2,
+          "height": 25.19
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 221.39999999999998,
+          "y": 160.29999999999998,
+          "width": 37.800000000000004,
+          "height": 45.800000000000004
+        },
+        {
+          "type": "rect",
+          "part": "right-bed",
+          "x": 197.1,
+          "y": 199.23,
+          "width": 35.1,
+          "height": 13.74
+        }
+      ],
+      "doorApproach": {
+        "x": 274.7,
+        "y": 1359.84
+      }
+    },
+    {
+      "id": "lind_house_04",
+      "label": "村人の家 4",
+      "path": "img/field/lind/buildings/lind_house_04.png",
+      "x": 430,
+      "y": 740,
+      "width": 270,
+      "height": 217,
+      "collision": null,
+      "draw": {
+        "x": 379.85714285714283,
+        "y": 727.7053571428571,
+        "width": 370.2857142857143,
+        "height": 246.85714285714286
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 40.5,
+          "y": 128.03,
+          "width": 189,
+          "height": 56.42
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 5.4,
+          "y": 151.89999999999998,
+          "width": 45.900000000000006,
+          "height": 41.230000000000004
+        },
+        {
+          "type": "rect",
+          "part": "left-bed",
+          "x": 35.1,
+          "y": 184.45,
+          "width": 91.80000000000001,
+          "height": 19.529999999999998
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 229.5,
+          "y": 151.89999999999998,
+          "width": 32.4,
+          "height": 39.059999999999995
+        },
+        {
+          "type": "rect",
+          "part": "right-bed",
+          "x": 197.1,
+          "y": 184.45,
+          "width": 45.900000000000006,
+          "height": 15.190000000000001
+        }
+      ],
+      "doorApproach": {
+        "x": 592,
+        "y": 948.3199999999999
+      }
+    },
+    {
+      "id": "lind_barn",
+      "label": "納屋",
+      "path": "img/field/lind/buildings/lind_barn.png",
+      "x": 970,
+      "y": 640,
+      "width": 250,
+      "height": 158,
+      "collision": null,
+      "draw": {
+        "x": 960.1588397790056,
+        "y": 637.9281767955802,
+        "width": 265.1933701657459,
+        "height": 176.79558011049724
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 40,
+          "y": 86.9,
+          "width": 180,
+          "height": 48.98
+        },
+        {
+          "type": "rect",
+          "part": "left-cart",
+          "x": 7.5,
+          "y": 104.28,
+          "width": 52.5,
+          "height": 34.76
+        },
+        {
+          "type": "rect",
+          "part": "left-stores",
+          "x": 25,
+          "y": 132.72,
+          "width": 70,
+          "height": 15.8
+        },
+        {
+          "type": "rect",
+          "part": "right-stores",
+          "x": 195,
+          "y": 118.5,
+          "width": 47.5,
+          "height": 22.12
+        },
+        {
+          "type": "rect",
+          "part": "front-stores",
+          "x": 145,
+          "y": 131.14,
+          "width": 77.5,
+          "height": 15.8
+        }
+      ],
+      "doorApproach": {
+        "x": 1087.5,
+        "y": 793.26
+      }
+    },
+    {
+      "id": "lind_storage",
+      "label": "倉庫",
+      "path": "img/field/lind/buildings/lind_storage.png",
+      "x": 1220,
+      "y": 660,
+      "width": 190,
+      "height": 141,
+      "collision": null,
+      "draw": {
+        "x": 1169.835589941973,
+        "y": 637.2147001934236,
+        "width": 282.2437137330754,
+        "height": 188.16247582205028
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "wall",
+          "x": 28.5,
+          "y": 71.91,
+          "width": 133,
+          "height": 49.349999999999994
+        },
+        {
+          "type": "rect",
+          "part": "left-crates",
+          "x": 13.3,
+          "y": 104.34,
+          "width": 36.1,
+          "height": 25.38
+        },
+        {
+          "type": "rect",
+          "part": "right-barrel",
+          "x": 159.6,
+          "y": 93.06,
+          "width": 26.6,
+          "height": 35.25
+        },
+        {
+          "type": "rect",
+          "part": "front-logs",
+          "x": 43.7,
+          "y": 118.44,
+          "width": 95,
+          "height": 11.28
+        }
+      ],
+      "doorApproach": {
+        "x": 1296,
+        "y": 803.8199999999999
+      }
+    },
+    {
+      "id": "lind_cowshed",
+      "label": "牛舎",
+      "path": "img/field/lind/farm/lind_cowshed.png",
+      "x": 950,
+      "y": 880,
+      "width": 150,
+      "height": 102,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 931.9612590799031,
+        "y": 870.5569007263922,
+        "width": 185.95641646489105,
+        "height": 123.97094430992736
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "shed",
+          "x": 19.5,
+          "y": 56.1,
+          "width": 111,
+          "height": 24.48
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 4.5,
+          "y": 73.44,
+          "width": 19.5,
+          "height": 19.38
+        },
+        {
+          "type": "rect",
+          "part": "front-fence",
+          "x": 25.500000000000004,
+          "y": 83.64,
+          "width": 81,
+          "height": 11.22
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 126,
+          "y": 66.3,
+          "width": 18,
+          "height": 21.419999999999998
+        }
+      ]
+    },
+    {
+      "id": "lind_pigsty",
+      "label": "豚舎",
+      "path": "img/field/lind/farm/lind_pigsty.png",
+      "x": 1110,
+      "y": 880,
+      "width": 150,
+      "height": 95,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 1102.2857142857142,
+        "y": 874.3214285714286,
+        "width": 164.57142857142856,
+        "height": 109.71428571428571
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "shed",
+          "x": 19.5,
+          "y": 52.25000000000001,
+          "width": 109.5,
+          "height": 22.8
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 4.5,
+          "y": 68.39999999999999,
+          "width": 21.000000000000004,
+          "height": 18.05
+        },
+        {
+          "type": "rect",
+          "part": "front-fence",
+          "x": 24,
+          "y": 77.89999999999999,
+          "width": 82.5,
+          "height": 10.45
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 124.5,
+          "y": 61.75,
+          "width": 19.5,
+          "height": 21.85
+        }
+      ]
+    },
+    {
+      "id": "lind_chicken_coop",
+      "label": "鶏小屋",
+      "path": "img/field/lind/farm/lind_chicken_coop.png",
+      "x": 1270,
+      "y": 880,
+      "width": 140,
+      "height": 110,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 1247.2037510656437,
+        "y": 874.6291560102302,
+        "width": 183.32480818414322,
+        "height": 122.21653878942881
+      },
+      "collisionCategory": "building",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "coop",
+          "x": 29.4,
+          "y": 55,
+          "width": 84,
+          "height": 30.800000000000004
+        },
+        {
+          "type": "rect",
+          "part": "left-fence",
+          "x": 7,
+          "y": 78.1,
+          "width": 19.6,
+          "height": 24.2
+        },
+        {
+          "type": "rect",
+          "part": "left-front-fence",
+          "x": 25.2,
+          "y": 93.5,
+          "width": 46.2,
+          "height": 11
+        },
+        {
+          "type": "rect",
+          "part": "right-fence",
+          "x": 112,
+          "y": 77,
+          "width": 18.2,
+          "height": 25.3
+        }
+      ]
+    },
+    {
+      "id": "lind_field_wheat",
+      "label": "小麦畑",
+      "path": "img/field/lind/farm/lind_field_wheat.png",
+      "x": 920,
+      "y": 1080,
+      "width": 150,
+      "height": 92,
+      "layer": "groundDecoration",
+      "motion": "wind",
+      "collision": null,
+      "draw": {
+        "x": 882.4274661508704,
+        "y": 1050.2611218568666,
+        "width": 222.82398452611216,
+        "height": 148.5493230174081
+      }
+    },
+    {
+      "id": "lind_field_vegetables",
+      "label": "野菜畑",
+      "path": "img/field/lind/farm/lind_field_vegetables.png",
+      "x": 1110,
+      "y": 1080,
+      "width": 150,
+      "height": 95,
+      "layer": "groundDecoration",
+      "motion": "wind",
+      "collision": null,
+      "draw": {
+        "x": 1075.4727793696275,
+        "y": 1049.7707736389684,
+        "width": 220.05730659025787,
+        "height": 146.7048710601719
+      }
+    },
+    {
+      "id": "lind_field_flower",
+      "label": "花畑",
+      "path": "img/field/lind/farm/lind_field_flower.png",
+      "x": 1280,
+      "y": 1080,
+      "width": 130,
+      "height": 73,
+      "layer": "groundDecoration",
+      "motion": "wind",
+      "collision": null,
+      "draw": {
+        "x": 1249.281663516068,
+        "y": 1043.015122873346,
+        "width": 188.73345935727787,
+        "height": 125.82230623818525
+      }
+    },
+    {
+      "id": "lind_orchard_apple",
+      "label": "リンゴ果樹",
+      "path": "img/field/lind/farm/lind_orchard_apple.png",
+      "x": 930,
+      "y": 1280,
+      "width": 250,
+      "height": 162,
+      "layer": "structure",
+      "motion": "wind",
+      "collision": null,
+      "draw": {
+        "x": 908.0868902439024,
+        "y": 1264.184451219512,
+        "width": 292.6829268292683,
+        "height": 195.1219512195122
+      },
+      "collisions": [
+        [
+          43,
+          120,
+          45,
+          26
+        ],
+        [
+          155,
+          120,
+          45,
+          26
+        ]
+      ]
+    },
+    {
+      "id": "lind_haystack",
+      "label": "干し草",
+      "path": "img/field/lind/farm/lind_haystack.png",
+      "x": 1190,
+      "y": 1320,
+      "width": 80,
+      "height": 77,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 1180.2824858757062,
+        "y": 1312.6177024482108,
+        "width": 98.22975517890771,
+        "height": 90.84745762711864
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "hay-base",
+          "x": 11.200000000000001,
+          "y": 47.74,
+          "width": 54.400000000000006,
+          "height": 23.87
+        }
+      ]
+    },
+    {
+      "id": "lind_hay_bale",
+      "label": "干し草ロール",
+      "path": "img/field/lind/farm/lind_hay_bale.png",
+      "x": 1300,
+      "y": 1330,
+      "width": 60,
+      "height": 51,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 1275.2941176470588,
+        "y": 1318.4941176470588,
+        "width": 108.4235294117647,
+        "height": 72.28235294117647
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "hay-base",
+          "x": 6,
+          "y": 29.58,
+          "width": 48,
+          "height": 18.36
+        }
+      ]
+    },
+    {
+      "id": "lind_cart",
+      "label": "荷車",
+      "path": "img/field/lind/farm/lind_cart.png",
+      "x": 1110,
+      "y": 1235,
+      "width": 75,
+      "height": 58,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 1097.820512820513,
+        "y": 1231.0897435897436,
+        "width": 98.46153846153845,
+        "height": 65.64102564102564
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "cart-body",
+          "x": 6,
+          "y": 17.4,
+          "width": 45,
+          "height": 25.52
+        },
+        {
+          "type": "rect",
+          "part": "shafts",
+          "x": 37.5,
+          "y": 37.12,
+          "width": 15.75,
+          "height": 9.28
+        },
+        {
+          "type": "rect",
+          "part": "shaft-ends",
+          "x": 54,
+          "y": 47.559999999999995,
+          "width": 15,
+          "height": 6.96
+        }
+      ]
+    },
+    {
+      "id": "lind_farm_tools",
+      "label": "農具",
+      "path": "img/field/lind/farm/lind_farm_tools.png",
+      "x": 1360,
+      "y": 1320,
+      "width": 70,
+      "height": 64,
+      "layer": "structure",
+      "motion": "static",
+      "collision": null,
+      "draw": {
+        "x": 1346.1443298969073,
+        "y": 1307.0103092783504,
+        "width": 94.89690721649484,
+        "height": 86.38144329896906
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "rack",
+          "x": 7,
+          "y": 46.08,
+          "width": 45.5,
+          "height": 12.8
+        },
+        {
+          "type": "rect",
+          "part": "bucket",
+          "x": 50.4,
+          "y": 49.28,
+          "width": 14,
+          "height": 11.52
+        }
+      ]
+    },
+    {
+      "id": "lind_tree_01",
+      "label": "村の木",
+      "path": "img/field/lind/nature/lind_tree_01.png",
+      "x": 50,
+      "y": 180,
+      "width": 130,
+      "height": 120,
+      "motion": "wind",
+      "layer": "structure",
+      "collision": [
+        52,
+        101,
+        29,
+        18
+      ],
+      "draw": {
+        "x": 15.769230769230774,
+        "y": 175.3846153846154,
+        "width": 196.9230769230769,
+        "height": 131.28205128205127
+      }
+    },
+    {
+      "id": "lind_bush",
+      "label": "低木",
+      "path": "img/field/lind/nature/lind_bush.png",
+      "x": 470,
+      "y": 510,
+      "width": 55,
+      "height": 33,
+      "motion": "wind",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 455.00991080277504,
+        "y": 498.77106045589693,
+        "width": 83.72646184340931,
+        "height": 55.81764122893954
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "bush-base",
+          "x": 5.5,
+          "y": 20.46,
+          "width": 44,
+          "height": 9.9
+        }
+      ]
+    },
+    {
+      "id": "lind_flower_patch",
+      "label": "白・黄・紫の花",
+      "path": "img/field/lind/nature/lind_flower_patch.png",
+      "x": 525,
+      "y": 540,
+      "width": 42,
+      "height": 31,
+      "motion": "wind",
+      "layer": "groundDecoration",
+      "collision": null,
+      "draw": {
+        "x": 511.8510638297872,
+        "y": 533.8297872340426,
+        "width": 65.36170212765957,
+        "height": 43.57446808510638
+      }
+    },
+    {
+      "id": "lind_grass_tuft",
+      "label": "草・クローバー",
+      "path": "img/field/lind/nature/lind_grass_tuft.png",
+      "x": 840,
+      "y": 740,
+      "width": 36,
+      "height": 29,
+      "motion": "wind",
+      "layer": "groundDecoration",
+      "collision": null,
+      "draw": {
+        "x": 827.784355179704,
+        "y": 734.5581395348837,
+        "width": 58.45243128964059,
+        "height": 38.96828752642706
+      }
+    },
+    {
+      "id": "lind_rock_small",
+      "label": "小石",
+      "path": "img/field/lind/nature/lind_rock_small.png",
+      "x": 820,
+      "y": 930,
+      "width": 25,
+      "height": 20,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 794.1951710261569,
+        "y": 914.0543259557344,
+        "width": 77.26358148893361,
+        "height": 51.50905432595574
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "rock-base",
+          "x": 3,
+          "y": 11.6,
+          "width": 19,
+          "height": 6.4
+        }
+      ]
+    },
+    {
+      "id": "lind_rock_large",
+      "label": "大きな石",
+      "path": "img/field/lind/nature/lind_rock_large.png",
+      "x": 80,
+      "y": 680,
+      "width": 60,
+      "height": 45,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 65.04347826086956,
+        "y": 672.1739130434783,
+        "width": 89.04347826086956,
+        "height": 59.36231884057971
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "rock-base",
+          "x": 6,
+          "y": 26.099999999999998,
+          "width": 48,
+          "height": 15.3
+        }
+      ]
+    },
+    {
+      "id": "lind_stump",
+      "label": "切り株",
+      "path": "img/field/lind/nature/lind_stump.png",
+      "x": 870,
+      "y": 1110,
+      "width": 36,
+      "height": 27,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 862.5013824884793,
+        "y": 1106.2506912442395,
+        "width": 50.964055299539176,
+        "height": 33.97603686635945
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "stump-base",
+          "x": 5.040000000000001,
+          "y": 17.55,
+          "width": 25.919999999999998,
+          "height": 7.5600000000000005
+        }
+      ]
+    },
+    {
+      "id": "lind_fence",
+      "label": "牛の牧区・柵",
+      "path": "img/field/lind/props/lind_fence.png",
+      "x": 950,
+      "y": 1025,
+      "width": 150,
+      "height": 78,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 935.5546995377504,
+        "y": 1002.4653312788906,
+        "width": 177.50385208012327,
+        "height": 118.33590138674884
+      },
+      "collisions": [
+        [
+          0,
+          66,
+          25,
+          12
+        ],
+        [
+          25,
+          62,
+          25,
+          12
+        ],
+        [
+          50,
+          57,
+          25,
+          12
+        ],
+        [
+          75,
+          52,
+          25,
+          12
+        ],
+        [
+          100,
+          48,
+          25,
+          12
+        ],
+        [
+          125,
+          43,
+          25,
+          12
+        ]
+      ]
+    },
+    {
+      "id": "pig_fence",
+      "label": "豚の牧区・柵",
+      "path": "img/field/lind/props/lind_fence.png",
+      "x": 1110,
+      "y": 1025,
+      "width": 150,
+      "height": 78,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "boundsId": "lind_fence",
+      "draw": {
+        "x": 1095.5546995377504,
+        "y": 1002.4653312788906,
+        "width": 177.50385208012327,
+        "height": 118.33590138674884
+      },
+      "collisions": [
+        [
+          0,
+          66,
+          25,
+          12
+        ],
+        [
+          25,
+          62,
+          25,
+          12
+        ],
+        [
+          50,
+          57,
+          25,
+          12
+        ],
+        [
+          75,
+          52,
+          25,
+          12
+        ],
+        [
+          100,
+          48,
+          25,
+          12
+        ],
+        [
+          125,
+          43,
+          25,
+          12
+        ]
+      ]
+    },
+    {
+      "id": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "path": "img/field/lind/props/lind_fence.png",
+      "x": 1270,
+      "y": 1025,
+      "width": 140,
+      "height": 72,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "boundsId": "lind_fence",
+      "draw": {
+        "x": 1256.517719568567,
+        "y": 1003.9676425269646,
+        "width": 165.6702619414484,
+        "height": 110.44684129429892
+      },
+      "collisions": [
+        [
+          0,
+          61,
+          24,
+          11
+        ],
+        [
+          23,
+          57,
+          24,
+          11
+        ],
+        [
+          46,
+          53,
+          24,
+          11
+        ],
+        [
+          70,
+          48,
+          24,
+          11
+        ],
+        [
+          93,
+          44,
+          24,
+          11
+        ],
+        [
+          116,
+          40,
+          24,
+          11
+        ]
+      ]
+    },
+    {
+      "id": "lind_crate",
+      "label": "木箱",
+      "path": "img/field/lind/props/lind_crate.png",
+      "x": 1250,
+      "y": 825,
+      "width": 36,
+      "height": 29,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 1234.8578199052133,
+        "y": 817.3222748815166,
+        "width": 65.51658767772513,
+        "height": 43.677725118483416
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "front-base",
+          "x": 2.88,
+          "y": 16.240000000000002,
+          "width": 25.919999999999998,
+          "height": 8.7
+        },
+        {
+          "type": "rect",
+          "part": "right-base",
+          "x": 25.919999999999998,
+          "y": 13.92,
+          "width": 7.2,
+          "height": 8.120000000000001
+        }
+      ]
+    },
+    {
+      "id": "lind_barrel",
+      "label": "樽",
+      "path": "img/field/lind/props/lind_barrel.png",
+      "x": 1320,
+      "y": 810,
+      "width": 30,
+      "height": 38,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 1301.2112259970459,
+        "y": 805.7459379615952,
+        "width": 68.06499261447563,
+        "height": 45.37666174298375
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "barrel-base",
+          "x": 3,
+          "y": 25.840000000000003,
+          "width": 24,
+          "height": 10.64
+        }
+      ]
+    },
+    {
+      "id": "lind_feed_sack",
+      "label": "飼料",
+      "path": "img/field/lind/props/lind_feed_sack.png",
+      "x": 905,
+      "y": 965,
+      "width": 30,
+      "height": 31,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 891.7784431137725,
+        "y": 961.3712574850299,
+        "width": 55.185628742514965,
+        "height": 36.790419161676645
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "sack-base",
+          "x": 4.2,
+          "y": 21.080000000000002,
+          "width": 21.599999999999998,
+          "height": 8.99
+        }
+      ]
+    },
+    {
+      "id": "lind_water_bucket",
+      "label": "水桶",
+      "path": "img/field/lind/props/lind_water_bucket.png",
+      "x": 1055,
+      "y": 965,
+      "width": 38,
+      "height": 23,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 1049.7088607594937,
+        "y": 959.7990506329114,
+        "width": 46.17721518987342,
+        "height": 30.78481012658228
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "left-base",
+          "x": 3.04,
+          "y": 12.190000000000001,
+          "width": 10.260000000000002,
+          "height": 9.200000000000001
+        },
+        {
+          "type": "rect",
+          "part": "middle-base",
+          "x": 13.299999999999999,
+          "y": 10.35,
+          "width": 12.16,
+          "height": 8.28
+        },
+        {
+          "type": "rect",
+          "part": "right-base",
+          "x": 25.46,
+          "y": 8.049999999999999,
+          "width": 10.64,
+          "height": 8.28
+        }
+      ]
+    },
+    {
+      "id": "lind_laundry",
+      "label": "洗濯物",
+      "path": "img/field/lind/props/lind_laundry.png",
+      "x": 470,
+      "y": 1230,
+      "width": 115,
+      "height": 65,
+      "motion": "wind",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 462.49633431085044,
+        "y": 1221.2316715542522,
+        "width": 129.50146627565982,
+        "height": 86.33431085043988
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "left-post",
+          "x": 2.3000000000000003,
+          "y": 55.25,
+          "width": 13.799999999999999,
+          "height": 8.450000000000001
+        },
+        {
+          "type": "rect",
+          "part": "right-post",
+          "x": 98.89999999999999,
+          "y": 40.95,
+          "width": 11.5,
+          "height": 8.450000000000001
+        }
+      ]
+    },
+    {
+      "id": "lind_sign",
+      "label": "葉の看板",
+      "path": "img/field/lind/props/lind_sign.png",
+      "x": 540,
+      "y": 440,
+      "width": 30,
+      "height": 48,
+      "motion": "wind",
+      "layer": "structure",
+      "collision": [
+        5,
+        36,
+        21,
+        10
+      ],
+      "draw": {
+        "x": 508.69565217391306,
+        "y": 434.1304347826087,
+        "width": 91.06719367588933,
+        "height": 60.71146245059288
+      }
+    },
+    {
+      "id": "lind_bridge",
+      "label": "川を渡る橋",
+      "path": "img/field/lind/river/lind_bridge.png",
+      "x": 1435,
+      "y": 565,
+      "width": 210,
+      "height": 71,
+      "motion": "static",
+      "layer": "groundDecoration",
+      "collision": null,
+      "draw": {
+        "x": 1432.204861111111,
+        "y": 545.5555555555555,
+        "width": 215.59027777777777,
+        "height": 107.79513888888889
+      }
+    },
+    {
+      "id": "lind_fishing_pier",
+      "label": "南東の釣り場・桟橋",
+      "path": "img/field/lind/river/lind_fishing_pier.png",
+      "x": 1405,
+      "y": 1325,
+      "width": 185,
+      "height": 93,
+      "motion": "static",
+      "layer": "groundDecoration",
+      "collision": null,
+      "draw": {
+        "x": 1384.865930599369,
+        "y": 1297.2791798107255,
+        "width": 224.10094637223978,
+        "height": 149.4006309148265
+      }
+    },
+    {
+      "id": "lind_fishing_rod",
+      "label": "釣り竿",
+      "path": "img/field/lind/river/lind_fishing_rod.png",
+      "x": 1520,
+      "y": 1335,
+      "width": 64,
+      "height": 41,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 1503.9089184060722,
+        "y": 1323.9487666034156,
+        "width": 93.26755218216319,
+        "height": 62.178368121442126
+      }
+    },
+    {
+      "id": "lind_fish_basket",
+      "label": "釣り籠",
+      "path": "img/field/lind/river/lind_fish_basket.png",
+      "x": 1360,
+      "y": 1380,
+      "width": 28,
+      "height": 24,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "draw": {
+        "x": 1344.3507853403141,
+        "y": 1372.5968586387435,
+        "width": 56.29319371727748,
+        "height": 37.52879581151832
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "basket-base",
+          "x": 2.8000000000000003,
+          "y": 17.04,
+          "width": 21.28,
+          "height": 6
+        }
+      ]
+    },
+    {
+      "id": "lind_reeds",
+      "label": "川辺の葦",
+      "path": "img/field/lind/river/lind_reeds.png",
+      "x": 1390,
+      "y": 1190,
+      "width": 40,
+      "height": 37,
+      "motion": "wind",
+      "layer": "groundDecoration",
+      "collision": null,
+      "draw": {
+        "x": 1375.5187637969095,
+        "y": 1185.6291390728477,
+        "width": 67.81456953642385,
+        "height": 45.209713024282564
+      }
+    },
+    {
+      "id": "lind_river_rocks",
+      "label": "川辺の小石",
+      "path": "img/field/lind/river/lind_river_rocks.png",
+      "x": 1370,
+      "y": 1445,
+      "width": 55,
+      "height": 30,
+      "motion": "static",
+      "layer": "groundDecoration",
+      "collision": null,
+      "draw": {
+        "x": 1357.6186046511627,
+        "y": 1431.339534883721,
+        "width": 78.5860465116279,
+        "height": 52.390697674418604
+      }
+    },
+    {
+      "id": "fishing_crate",
+      "label": "釣り場の木箱",
+      "path": "img/field/lind/props/lind_crate.png",
+      "x": 1350,
+      "y": 1310,
+      "width": 36,
+      "height": 29,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "boundsId": "lind_crate",
+      "draw": {
+        "x": 1334.8578199052133,
+        "y": 1302.3222748815165,
+        "width": 65.51658767772513,
+        "height": 43.677725118483416
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "front-base",
+          "x": 2.88,
+          "y": 16.240000000000002,
+          "width": 25.919999999999998,
+          "height": 8.7
+        },
+        {
+          "type": "rect",
+          "part": "right-base",
+          "x": 25.919999999999998,
+          "y": 13.92,
+          "width": 7.2,
+          "height": 8.120000000000001
+        }
+      ]
+    },
+    {
+      "id": "train_ground",
+      "label": "橋東側の訓練場",
+      "path": "img/field/lind/training/train_ground.png",
+      "x": 1690,
+      "y": 650,
+      "width": 440,
+      "height": 194,
+      "motion": "static",
+      "layer": "groundDecoration",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 1679.809264305177,
+        "y": 591.8528610354224,
+        "width": 460.38147138964575,
+        "height": 306.9209809264305
+      }
+    },
+    {
+      "id": "train_shed",
+      "label": "小さな見張り小屋",
+      "path": "img/field/lind/training/train_shed.png",
+      "x": 2020,
+      "y": 645,
+      "width": 110,
+      "height": 93,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 1986.7075664621677,
+        "y": 632.9652351738241,
+        "width": 172.76073619631902,
+        "height": 115.17382413087934
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "shed",
+          "x": 14.3,
+          "y": 51.150000000000006,
+          "width": 82.5,
+          "height": 27.9
+        },
+        {
+          "type": "rect",
+          "part": "left-post",
+          "x": 9.9,
+          "y": 74.4,
+          "width": 12.1,
+          "height": 12.09
+        },
+        {
+          "type": "rect",
+          "part": "floor-front",
+          "x": 22,
+          "y": 77.19,
+          "width": 71.5,
+          "height": 7.44
+        }
+      ]
+    },
+    {
+      "id": "train_weapon_rack",
+      "label": "練習用武器架",
+      "path": "img/field/lind/training/train_weapon_rack.png",
+      "x": 2040,
+      "y": 825,
+      "width": 75,
+      "height": 56,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 2028.374052232519,
+        "y": 820.8930075821398,
+        "width": 97.05139005897219,
+        "height": 64.70092670598146
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "rack-base",
+          "x": 7.5,
+          "y": 40.32,
+          "width": 58.5,
+          "height": 11.200000000000001
+        },
+        {
+          "type": "rect",
+          "part": "right-support",
+          "x": 66,
+          "y": 33.6,
+          "width": 7.5,
+          "height": 12.32
+        }
+      ]
+    },
+    {
+      "id": "train_target",
+      "label": "弓の的",
+      "path": "img/field/lind/training/train_target.png",
+      "x": 1930,
+      "y": 810,
+      "width": 45,
+      "height": 60,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 1897.7464788732395,
+        "y": 803.5915492957746,
+        "width": 108.16901408450704,
+        "height": 72.11267605633803
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "stand",
+          "x": 3.6,
+          "y": 46.800000000000004,
+          "width": 33.3,
+          "height": 10.200000000000001
+        }
+      ]
+    },
+    {
+      "id": "train_dummy",
+      "label": "独立した訓練人形",
+      "path": "img/field/lind/training/train_dummy.png",
+      "x": 1780,
+      "y": 805,
+      "width": 44,
+      "height": 58,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "interaction": "training_dummy",
+      "draw": {
+        "x": 1764.5142857142857,
+        "y": 799.3428571428572,
+        "width": 74.97142857142858,
+        "height": 68.5142857142857
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "stand",
+          "x": 9.24,
+          "y": 48.72,
+          "width": 25.959999999999997,
+          "height": 7.54
+        }
+      ]
+    },
+    {
+      "id": "train_post",
+      "label": "木製の杭",
+      "path": "img/field/lind/training/train_post.png",
+      "x": 1710,
+      "y": 810,
+      "width": 14,
+      "height": 21,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 1693.651612903226,
+        "y": 805.2430107526882,
+        "width": 46.245161290322585,
+        "height": 30.830107526881722
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "post-base",
+          "x": 2.66,
+          "y": 17.64,
+          "width": 7.700000000000001,
+          "height": 2.52
+        }
+      ]
+    },
+    {
+      "id": "train_gate",
+      "label": "訓練場の入口",
+      "path": "img/field/lind/training/train_gate.png",
+      "x": 1730,
+      "y": 655,
+      "width": 95,
+      "height": 70,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 1708.5483870967741,
+        "y": 643.705069124424,
+        "width": 134.4884792626728,
+        "height": 89.6589861751152
+      },
+      "collisions": [
+        [
+          4,
+          56,
+          10,
+          13
+        ],
+        [
+          82,
+          56,
+          10,
+          13
+        ]
+      ]
+    },
+    {
+      "id": "train_flag_green",
+      "label": "緑の訓練旗",
+      "path": "img/field/lind/training/train_flag_green.png",
+      "x": 1715,
+      "y": 725,
+      "width": 32,
+      "height": 53,
+      "motion": "wind",
+      "layer": "structure",
+      "collision": null,
+      "category": "training",
+      "draw": {
+        "x": 1683.4942084942086,
+        "y": 721.2316602316603,
+        "width": 94.8880308880309,
+        "height": 63.25868725868726
+      },
+      "collisionCategory": "prop",
+      "collisionShapes": [
+        {
+          "type": "rect",
+          "part": "pole-base",
+          "x": 3.84,
+          "y": 45.58,
+          "width": 4.16,
+          "height": 6.359999999999999
+        }
+      ]
+    },
+    {
+      "id": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "path": "img/field/lind/props/lind_fence.png",
+      "x": 1710,
+      "y": 930,
+      "width": 185,
+      "height": 96,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "boundsId": "lind_fence",
+      "category": "training",
+      "draw": {
+        "x": 1692.1841294298922,
+        "y": 902.2072419106318,
+        "width": 218.92141756548534,
+        "height": 145.94761171032357
+      },
+      "collisions": [
+        [
+          0,
+          82,
+          31,
+          14
+        ],
+        [
+          30,
+          76,
+          31,
+          14
+        ],
+        [
+          61,
+          70,
+          31,
+          14
+        ],
+        [
+          92,
+          64,
+          31,
+          14
+        ],
+        [
+          123,
+          59,
+          31,
+          14
+        ],
+        [
+          154,
+          53,
+          31,
+          14
+        ]
+      ]
+    },
+    {
+      "id": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "path": "img/field/lind/props/lind_fence.png",
+      "x": 1930,
+      "y": 930,
+      "width": 185,
+      "height": 96,
+      "motion": "static",
+      "layer": "structure",
+      "collision": null,
+      "boundsId": "lind_fence",
+      "category": "training",
+      "draw": {
+        "x": 1912.1841294298922,
+        "y": 902.2072419106318,
+        "width": 218.92141756548534,
+        "height": 145.94761171032357
+      },
+      "collisions": [
+        [
+          0,
+          82,
+          31,
+          14
+        ],
+        [
+          30,
+          76,
+          31,
+          14
+        ],
+        [
+          61,
+          70,
+          31,
+          14
+        ],
+        [
+          92,
+          64,
+          31,
+          14
+        ],
+        [
+          123,
+          59,
+          31,
+          14
+        ],
+        [
+          154,
+          53,
+          31,
+          14
+        ]
+      ]
+    },
+    {
+      "id": "lind_wind_stone",
+      "label": "風の石",
+      "actor": "windStone",
+      "path": "img/field/lind/landmarks/lind_wind_stone.png",
+      "x": 695,
+      "y": 490,
+      "width": 95,
+      "height": 124.44649446494465,
+      "motion": "static",
+      "collision": [
+        14,
+        100,
+        70,
+        23
+      ],
+      "draw": {
+        "x": 660.5289052890529,
+        "y": 481.2361623616236,
+        "width": 153.30873308733086,
+        "height": 140.10455104551045
+      }
+    }
+  ],
+  "shapes": [
+    {
+      "type": "rect",
+      "x": 170,
+      "y": 129,
+      "width": 140,
+      "height": 50,
+      "part": "0",
+      "id": "cliff:0",
+      "objectId": "cliff",
+      "label": "崖",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 414.8,
+      "y": 278.62,
+      "width": 207.2,
+      "height": 52.32,
+      "id": "lind_elder_house:wall",
+      "objectId": "lind_elder_house",
+      "label": "長老の家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 375.6,
+      "y": 300.41999999999996,
+      "width": 47.6,
+      "height": 32.699999999999996,
+      "id": "lind_elder_house:left-fence",
+      "objectId": "lind_elder_house",
+      "label": "長老の家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-bed",
+      "x": 412,
+      "y": 326.58000000000004,
+      "width": 50.4,
+      "height": 21.8,
+      "id": "lind_elder_house:left-bed",
+      "objectId": "lind_elder_house",
+      "label": "長老の家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 608,
+      "y": 302.6,
+      "width": 33.6,
+      "height": 30.520000000000003,
+      "id": "lind_elder_house:right-fence",
+      "objectId": "lind_elder_house",
+      "label": "長老の家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-bed",
+      "x": 535.2,
+      "y": 328.76,
+      "width": 75.60000000000001,
+      "height": 15.260000000000002,
+      "id": "lind_elder_house:right-bed",
+      "objectId": "lind_elder_house",
+      "label": "長老の家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 766.5,
+      "y": 262.19,
+      "width": 226.29999999999998,
+      "height": 74.76,
+      "id": "lind_inn:wall",
+      "objectId": "lind_inn",
+      "label": "宿屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "awning-base",
+      "x": 732.4,
+      "y": 312.92,
+      "width": 93,
+      "height": 40.05,
+      "id": "lind_inn:awning-base",
+      "objectId": "lind_inn",
+      "label": "宿屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-planters",
+      "x": 760.3,
+      "y": 342.28999999999996,
+      "width": 80.60000000000001,
+      "height": 21.36,
+      "id": "lind_inn:left-planters",
+      "objectId": "lind_inn",
+      "label": "宿屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-cart",
+      "x": 977.3,
+      "y": 312.92,
+      "width": 43.400000000000006,
+      "height": 48.059999999999995,
+      "id": "lind_inn:right-cart",
+      "objectId": "lind_inn",
+      "label": "宿屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 1140.6,
+      "y": 352.13,
+      "width": 203,
+      "height": 53.59,
+      "id": "lind_aidan_house:wall",
+      "objectId": "lind_aidan_house",
+      "label": "エイダンの家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 1105.8,
+      "y": 366.11,
+      "width": 40.6,
+      "height": 46.6,
+      "id": "lind_aidan_house:left-fence",
+      "objectId": "lind_aidan_house",
+      "label": "エイダンの家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-bed",
+      "x": 1143.5,
+      "y": 405.72,
+      "width": 87,
+      "height": 20.97,
+      "id": "lind_aidan_house:left-bed",
+      "objectId": "lind_aidan_house",
+      "label": "エイダンの家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-barrels",
+      "x": 1340.7,
+      "y": 391.74,
+      "width": 40.6,
+      "height": 30.290000000000003,
+      "id": "lind_aidan_house:right-barrels",
+      "objectId": "lind_aidan_house",
+      "label": "エイダンの家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-bed",
+      "x": 1326.2,
+      "y": 415.03999999999996,
+      "width": 29,
+      "height": 11.65,
+      "id": "lind_aidan_house:right-bed",
+      "objectId": "lind_aidan_house",
+      "label": "エイダンの家",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 187.7,
+      "y": 591.01,
+      "width": 203,
+      "height": 59.75,
+      "id": "lind_item_shop:wall",
+      "objectId": "lind_item_shop",
+      "label": "道具屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-barrels",
+      "x": 158.7,
+      "y": 624.47,
+      "width": 52.199999999999996,
+      "height": 43.019999999999996,
+      "id": "lind_item_shop:left-barrels",
+      "objectId": "lind_item_shop",
+      "label": "道具屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "front-barrels",
+      "x": 196.4,
+      "y": 653.15,
+      "width": 92.8,
+      "height": 26.29,
+      "id": "lind_item_shop:front-barrels",
+      "objectId": "lind_item_shop",
+      "label": "道具屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-crates",
+      "x": 361.7,
+      "y": 648.37,
+      "width": 63.8,
+      "height": 21.509999999999998,
+      "id": "lind_item_shop:right-crates",
+      "objectId": "lind_item_shop",
+      "label": "道具屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "side-barrel",
+      "x": 408.1,
+      "y": 619.69,
+      "width": 26.099999999999998,
+      "height": 40.63,
+      "id": "lind_item_shop:side-barrel",
+      "objectId": "lind_item_shop",
+      "label": "道具屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 172.4,
+      "y": 939.3199999999999,
+      "width": 202.5,
+      "height": 53,
+      "id": "lind_house_01:wall",
+      "objectId": "lind_house_01",
+      "label": "村人の家 1",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 145.4,
+      "y": 954.16,
+      "width": 32.4,
+      "height": 40.28,
+      "id": "lind_house_01:left-fence",
+      "objectId": "lind_house_01",
+      "label": "村人の家 1",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-bed",
+      "x": 172.4,
+      "y": 990.2,
+      "width": 89.10000000000001,
+      "height": 16.96,
+      "id": "lind_house_01:left-bed",
+      "objectId": "lind_house_01",
+      "label": "村人の家 1",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 374.9,
+      "y": 960.52,
+      "width": 27,
+      "height": 33.92,
+      "id": "lind_house_01:right-fence",
+      "objectId": "lind_house_01",
+      "label": "村人の家 1",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-bed",
+      "x": 345.2,
+      "y": 990.2,
+      "width": 51.3,
+      "height": 14.840000000000002,
+      "id": "lind_house_01:right-bed",
+      "objectId": "lind_house_01",
+      "label": "村人の家 1",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 493.2,
+      "y": 1103.96,
+      "width": 186.29999999999998,
+      "height": 65.88000000000001,
+      "id": "lind_house_02:wall",
+      "objectId": "lind_house_02",
+      "label": "村人の家 2",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 455.4,
+      "y": 1130.8,
+      "width": 43.2,
+      "height": 48.800000000000004,
+      "id": "lind_house_02:left-fence",
+      "objectId": "lind_house_02",
+      "label": "村人の家 2",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-bed",
+      "x": 482.4,
+      "y": 1167.4,
+      "width": 91.80000000000001,
+      "height": 24.400000000000002,
+      "id": "lind_house_02:left-bed",
+      "objectId": "lind_house_02",
+      "label": "村人の家 2",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 679.5,
+      "y": 1133.24,
+      "width": 35.1,
+      "height": 46.36,
+      "id": "lind_house_02:right-fence",
+      "objectId": "lind_house_02",
+      "label": "村人の家 2",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-bed",
+      "x": 657.9,
+      "y": 1169.84,
+      "width": 32.4,
+      "height": 14.639999999999999,
+      "id": "lind_house_02:right-bed",
+      "objectId": "lind_house_02",
+      "label": "村人の家 2",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 145.1,
+      "y": 1279.69,
+      "width": 189,
+      "height": 54.96,
+      "id": "lind_house_03:wall",
+      "objectId": "lind_house_03",
+      "label": "村人の家 3",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 115.4,
+      "y": 1302.59,
+      "width": 37.800000000000004,
+      "height": 43.51,
+      "id": "lind_house_03:left-fence",
+      "objectId": "lind_house_03",
+      "label": "村人の家 3",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-bed",
+      "x": 142.4,
+      "y": 1332.36,
+      "width": 97.2,
+      "height": 25.19,
+      "id": "lind_house_03:left-bed",
+      "objectId": "lind_house_03",
+      "label": "村人の家 3",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 331.4,
+      "y": 1300.3,
+      "width": 37.800000000000004,
+      "height": 45.800000000000004,
+      "id": "lind_house_03:right-fence",
+      "objectId": "lind_house_03",
+      "label": "村人の家 3",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-bed",
+      "x": 307.1,
+      "y": 1339.23,
+      "width": 35.1,
+      "height": 13.74,
+      "id": "lind_house_03:right-bed",
+      "objectId": "lind_house_03",
+      "label": "村人の家 3",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 470.5,
+      "y": 868.03,
+      "width": 189,
+      "height": 56.42,
+      "id": "lind_house_04:wall",
+      "objectId": "lind_house_04",
+      "label": "村人の家 4",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 435.4,
+      "y": 891.9,
+      "width": 45.900000000000006,
+      "height": 41.230000000000004,
+      "id": "lind_house_04:left-fence",
+      "objectId": "lind_house_04",
+      "label": "村人の家 4",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-bed",
+      "x": 465.1,
+      "y": 924.45,
+      "width": 91.80000000000001,
+      "height": 19.529999999999998,
+      "id": "lind_house_04:left-bed",
+      "objectId": "lind_house_04",
+      "label": "村人の家 4",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 659.5,
+      "y": 891.9,
+      "width": 32.4,
+      "height": 39.059999999999995,
+      "id": "lind_house_04:right-fence",
+      "objectId": "lind_house_04",
+      "label": "村人の家 4",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-bed",
+      "x": 627.1,
+      "y": 924.45,
+      "width": 45.900000000000006,
+      "height": 15.190000000000001,
+      "id": "lind_house_04:right-bed",
+      "objectId": "lind_house_04",
+      "label": "村人の家 4",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 1010,
+      "y": 726.9,
+      "width": 180,
+      "height": 48.98,
+      "id": "lind_barn:wall",
+      "objectId": "lind_barn",
+      "label": "納屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-cart",
+      "x": 977.5,
+      "y": 744.28,
+      "width": 52.5,
+      "height": 34.76,
+      "id": "lind_barn:left-cart",
+      "objectId": "lind_barn",
+      "label": "納屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-stores",
+      "x": 995,
+      "y": 772.72,
+      "width": 70,
+      "height": 15.8,
+      "id": "lind_barn:left-stores",
+      "objectId": "lind_barn",
+      "label": "納屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-stores",
+      "x": 1165,
+      "y": 758.5,
+      "width": 47.5,
+      "height": 22.12,
+      "id": "lind_barn:right-stores",
+      "objectId": "lind_barn",
+      "label": "納屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "front-stores",
+      "x": 1115,
+      "y": 771.14,
+      "width": 77.5,
+      "height": 15.8,
+      "id": "lind_barn:front-stores",
+      "objectId": "lind_barn",
+      "label": "納屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "wall",
+      "x": 1248.5,
+      "y": 731.91,
+      "width": 133,
+      "height": 49.349999999999994,
+      "id": "lind_storage:wall",
+      "objectId": "lind_storage",
+      "label": "倉庫",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-crates",
+      "x": 1233.3,
+      "y": 764.34,
+      "width": 36.1,
+      "height": 25.38,
+      "id": "lind_storage:left-crates",
+      "objectId": "lind_storage",
+      "label": "倉庫",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-barrel",
+      "x": 1379.6,
+      "y": 753.06,
+      "width": 26.6,
+      "height": 35.25,
+      "id": "lind_storage:right-barrel",
+      "objectId": "lind_storage",
+      "label": "倉庫",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "front-logs",
+      "x": 1263.7,
+      "y": 778.44,
+      "width": 95,
+      "height": 11.28,
+      "id": "lind_storage:front-logs",
+      "objectId": "lind_storage",
+      "label": "倉庫",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "shed",
+      "x": 969.5,
+      "y": 936.1,
+      "width": 111,
+      "height": 24.48,
+      "id": "lind_cowshed:shed",
+      "objectId": "lind_cowshed",
+      "label": "牛舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 954.5,
+      "y": 953.44,
+      "width": 19.5,
+      "height": 19.38,
+      "id": "lind_cowshed:left-fence",
+      "objectId": "lind_cowshed",
+      "label": "牛舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "front-fence",
+      "x": 975.5,
+      "y": 963.64,
+      "width": 81,
+      "height": 11.22,
+      "id": "lind_cowshed:front-fence",
+      "objectId": "lind_cowshed",
+      "label": "牛舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 1076,
+      "y": 946.3,
+      "width": 18,
+      "height": 21.419999999999998,
+      "id": "lind_cowshed:right-fence",
+      "objectId": "lind_cowshed",
+      "label": "牛舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "shed",
+      "x": 1129.5,
+      "y": 932.25,
+      "width": 109.5,
+      "height": 22.8,
+      "id": "lind_pigsty:shed",
+      "objectId": "lind_pigsty",
+      "label": "豚舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 1114.5,
+      "y": 948.4,
+      "width": 21.000000000000004,
+      "height": 18.05,
+      "id": "lind_pigsty:left-fence",
+      "objectId": "lind_pigsty",
+      "label": "豚舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "front-fence",
+      "x": 1134,
+      "y": 957.9,
+      "width": 82.5,
+      "height": 10.45,
+      "id": "lind_pigsty:front-fence",
+      "objectId": "lind_pigsty",
+      "label": "豚舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 1234.5,
+      "y": 941.75,
+      "width": 19.5,
+      "height": 21.85,
+      "id": "lind_pigsty:right-fence",
+      "objectId": "lind_pigsty",
+      "label": "豚舎",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "coop",
+      "x": 1299.4,
+      "y": 935,
+      "width": 84,
+      "height": 30.800000000000004,
+      "id": "lind_chicken_coop:coop",
+      "objectId": "lind_chicken_coop",
+      "label": "鶏小屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-fence",
+      "x": 1277,
+      "y": 958.1,
+      "width": 19.6,
+      "height": 24.2,
+      "id": "lind_chicken_coop:left-fence",
+      "objectId": "lind_chicken_coop",
+      "label": "鶏小屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "left-front-fence",
+      "x": 1295.2,
+      "y": 973.5,
+      "width": 46.2,
+      "height": 11,
+      "id": "lind_chicken_coop:left-front-fence",
+      "objectId": "lind_chicken_coop",
+      "label": "鶏小屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "part": "right-fence",
+      "x": 1382,
+      "y": 957,
+      "width": 18.2,
+      "height": 25.3,
+      "id": "lind_chicken_coop:right-fence",
+      "objectId": "lind_chicken_coop",
+      "label": "鶏小屋",
+      "category": "building"
+    },
+    {
+      "type": "rect",
+      "x": 973,
+      "y": 1400,
+      "width": 45,
+      "height": 26,
+      "part": "0",
+      "id": "lind_orchard_apple:0",
+      "objectId": "lind_orchard_apple",
+      "label": "リンゴ果樹",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1085,
+      "y": 1400,
+      "width": 45,
+      "height": 26,
+      "part": "1",
+      "id": "lind_orchard_apple:1",
+      "objectId": "lind_orchard_apple",
+      "label": "リンゴ果樹",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "hay-base",
+      "x": 1201.2,
+      "y": 1367.74,
+      "width": 54.400000000000006,
+      "height": 23.87,
+      "id": "lind_haystack:hay-base",
+      "objectId": "lind_haystack",
+      "label": "干し草",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "hay-base",
+      "x": 1306,
+      "y": 1359.58,
+      "width": 48,
+      "height": 18.36,
+      "id": "lind_hay_bale:hay-base",
+      "objectId": "lind_hay_bale",
+      "label": "干し草ロール",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "cart-body",
+      "x": 1116,
+      "y": 1252.4,
+      "width": 45,
+      "height": 25.52,
+      "id": "lind_cart:cart-body",
+      "objectId": "lind_cart",
+      "label": "荷車",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "shafts",
+      "x": 1147.5,
+      "y": 1272.12,
+      "width": 15.75,
+      "height": 9.28,
+      "id": "lind_cart:shafts",
+      "objectId": "lind_cart",
+      "label": "荷車",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "shaft-ends",
+      "x": 1164,
+      "y": 1282.56,
+      "width": 15,
+      "height": 6.96,
+      "id": "lind_cart:shaft-ends",
+      "objectId": "lind_cart",
+      "label": "荷車",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "rack",
+      "x": 1367,
+      "y": 1366.08,
+      "width": 45.5,
+      "height": 12.8,
+      "id": "lind_farm_tools:rack",
+      "objectId": "lind_farm_tools",
+      "label": "農具",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "bucket",
+      "x": 1410.4,
+      "y": 1369.28,
+      "width": 14,
+      "height": 11.52,
+      "id": "lind_farm_tools:bucket",
+      "objectId": "lind_farm_tools",
+      "label": "農具",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 102,
+      "y": 281,
+      "width": 29,
+      "height": 18,
+      "part": "0",
+      "id": "lind_tree_01:0",
+      "objectId": "lind_tree_01",
+      "label": "村の木",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "bush-base",
+      "x": 475.5,
+      "y": 530.46,
+      "width": 44,
+      "height": 9.9,
+      "id": "lind_bush:bush-base",
+      "objectId": "lind_bush",
+      "label": "低木",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "rock-base",
+      "x": 823,
+      "y": 941.6,
+      "width": 19,
+      "height": 6.4,
+      "id": "lind_rock_small:rock-base",
+      "objectId": "lind_rock_small",
+      "label": "小石",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "rock-base",
+      "x": 86,
+      "y": 706.1,
+      "width": 48,
+      "height": 15.3,
+      "id": "lind_rock_large:rock-base",
+      "objectId": "lind_rock_large",
+      "label": "大きな石",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "stump-base",
+      "x": 875.04,
+      "y": 1127.55,
+      "width": 25.919999999999998,
+      "height": 7.5600000000000005,
+      "id": "lind_stump:stump-base",
+      "objectId": "lind_stump",
+      "label": "切り株",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 950,
+      "y": 1091,
+      "width": 25,
+      "height": 12,
+      "part": "0",
+      "id": "lind_fence:0",
+      "objectId": "lind_fence",
+      "label": "牛の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 975,
+      "y": 1087,
+      "width": 25,
+      "height": 12,
+      "part": "1",
+      "id": "lind_fence:1",
+      "objectId": "lind_fence",
+      "label": "牛の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1000,
+      "y": 1082,
+      "width": 25,
+      "height": 12,
+      "part": "2",
+      "id": "lind_fence:2",
+      "objectId": "lind_fence",
+      "label": "牛の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1025,
+      "y": 1077,
+      "width": 25,
+      "height": 12,
+      "part": "3",
+      "id": "lind_fence:3",
+      "objectId": "lind_fence",
+      "label": "牛の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1050,
+      "y": 1073,
+      "width": 25,
+      "height": 12,
+      "part": "4",
+      "id": "lind_fence:4",
+      "objectId": "lind_fence",
+      "label": "牛の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1075,
+      "y": 1068,
+      "width": 25,
+      "height": 12,
+      "part": "5",
+      "id": "lind_fence:5",
+      "objectId": "lind_fence",
+      "label": "牛の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1110,
+      "y": 1091,
+      "width": 25,
+      "height": 12,
+      "part": "0",
+      "id": "pig_fence:0",
+      "objectId": "pig_fence",
+      "label": "豚の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1135,
+      "y": 1087,
+      "width": 25,
+      "height": 12,
+      "part": "1",
+      "id": "pig_fence:1",
+      "objectId": "pig_fence",
+      "label": "豚の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1160,
+      "y": 1082,
+      "width": 25,
+      "height": 12,
+      "part": "2",
+      "id": "pig_fence:2",
+      "objectId": "pig_fence",
+      "label": "豚の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1185,
+      "y": 1077,
+      "width": 25,
+      "height": 12,
+      "part": "3",
+      "id": "pig_fence:3",
+      "objectId": "pig_fence",
+      "label": "豚の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1210,
+      "y": 1073,
+      "width": 25,
+      "height": 12,
+      "part": "4",
+      "id": "pig_fence:4",
+      "objectId": "pig_fence",
+      "label": "豚の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1235,
+      "y": 1068,
+      "width": 25,
+      "height": 12,
+      "part": "5",
+      "id": "pig_fence:5",
+      "objectId": "pig_fence",
+      "label": "豚の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1270,
+      "y": 1086,
+      "width": 24,
+      "height": 11,
+      "part": "0",
+      "id": "chicken_fence:0",
+      "objectId": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1293,
+      "y": 1082,
+      "width": 24,
+      "height": 11,
+      "part": "1",
+      "id": "chicken_fence:1",
+      "objectId": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1316,
+      "y": 1078,
+      "width": 24,
+      "height": 11,
+      "part": "2",
+      "id": "chicken_fence:2",
+      "objectId": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1340,
+      "y": 1073,
+      "width": 24,
+      "height": 11,
+      "part": "3",
+      "id": "chicken_fence:3",
+      "objectId": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1363,
+      "y": 1069,
+      "width": 24,
+      "height": 11,
+      "part": "4",
+      "id": "chicken_fence:4",
+      "objectId": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1386,
+      "y": 1065,
+      "width": 24,
+      "height": 11,
+      "part": "5",
+      "id": "chicken_fence:5",
+      "objectId": "chicken_fence",
+      "label": "鶏の牧区・柵",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "front-base",
+      "x": 1252.88,
+      "y": 841.24,
+      "width": 25.919999999999998,
+      "height": 8.7,
+      "id": "lind_crate:front-base",
+      "objectId": "lind_crate",
+      "label": "木箱",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "right-base",
+      "x": 1275.92,
+      "y": 838.92,
+      "width": 7.2,
+      "height": 8.120000000000001,
+      "id": "lind_crate:right-base",
+      "objectId": "lind_crate",
+      "label": "木箱",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "barrel-base",
+      "x": 1323,
+      "y": 835.84,
+      "width": 24,
+      "height": 10.64,
+      "id": "lind_barrel:barrel-base",
+      "objectId": "lind_barrel",
+      "label": "樽",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "sack-base",
+      "x": 909.2,
+      "y": 986.08,
+      "width": 21.599999999999998,
+      "height": 8.99,
+      "id": "lind_feed_sack:sack-base",
+      "objectId": "lind_feed_sack",
+      "label": "飼料",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "left-base",
+      "x": 1058.04,
+      "y": 977.19,
+      "width": 10.260000000000002,
+      "height": 9.200000000000001,
+      "id": "lind_water_bucket:left-base",
+      "objectId": "lind_water_bucket",
+      "label": "水桶",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "middle-base",
+      "x": 1068.3,
+      "y": 975.35,
+      "width": 12.16,
+      "height": 8.28,
+      "id": "lind_water_bucket:middle-base",
+      "objectId": "lind_water_bucket",
+      "label": "水桶",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "right-base",
+      "x": 1080.46,
+      "y": 973.05,
+      "width": 10.64,
+      "height": 8.28,
+      "id": "lind_water_bucket:right-base",
+      "objectId": "lind_water_bucket",
+      "label": "水桶",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "left-post",
+      "x": 472.3,
+      "y": 1285.25,
+      "width": 13.799999999999999,
+      "height": 8.450000000000001,
+      "id": "lind_laundry:left-post",
+      "objectId": "lind_laundry",
+      "label": "洗濯物",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "right-post",
+      "x": 568.9,
+      "y": 1270.95,
+      "width": 11.5,
+      "height": 8.450000000000001,
+      "id": "lind_laundry:right-post",
+      "objectId": "lind_laundry",
+      "label": "洗濯物",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 545,
+      "y": 476,
+      "width": 21,
+      "height": 10,
+      "part": "0",
+      "id": "lind_sign:0",
+      "objectId": "lind_sign",
+      "label": "葉の看板",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "basket-base",
+      "x": 1362.8,
+      "y": 1397.04,
+      "width": 21.28,
+      "height": 6,
+      "id": "lind_fish_basket:basket-base",
+      "objectId": "lind_fish_basket",
+      "label": "釣り籠",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "front-base",
+      "x": 1352.88,
+      "y": 1326.24,
+      "width": 25.919999999999998,
+      "height": 8.7,
+      "id": "fishing_crate:front-base",
+      "objectId": "fishing_crate",
+      "label": "釣り場の木箱",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "right-base",
+      "x": 1375.92,
+      "y": 1323.92,
+      "width": 7.2,
+      "height": 8.120000000000001,
+      "id": "fishing_crate:right-base",
+      "objectId": "fishing_crate",
+      "label": "釣り場の木箱",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "shed",
+      "x": 2034.3,
+      "y": 696.15,
+      "width": 82.5,
+      "height": 27.9,
+      "id": "train_shed:shed",
+      "objectId": "train_shed",
+      "label": "小さな見張り小屋",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "left-post",
+      "x": 2029.9,
+      "y": 719.4,
+      "width": 12.1,
+      "height": 12.09,
+      "id": "train_shed:left-post",
+      "objectId": "train_shed",
+      "label": "小さな見張り小屋",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "floor-front",
+      "x": 2042,
+      "y": 722.19,
+      "width": 71.5,
+      "height": 7.44,
+      "id": "train_shed:floor-front",
+      "objectId": "train_shed",
+      "label": "小さな見張り小屋",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "rack-base",
+      "x": 2047.5,
+      "y": 865.32,
+      "width": 58.5,
+      "height": 11.200000000000001,
+      "id": "train_weapon_rack:rack-base",
+      "objectId": "train_weapon_rack",
+      "label": "練習用武器架",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "right-support",
+      "x": 2106,
+      "y": 858.6,
+      "width": 7.5,
+      "height": 12.32,
+      "id": "train_weapon_rack:right-support",
+      "objectId": "train_weapon_rack",
+      "label": "練習用武器架",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "stand",
+      "x": 1933.6,
+      "y": 856.8,
+      "width": 33.3,
+      "height": 10.200000000000001,
+      "id": "train_target:stand",
+      "objectId": "train_target",
+      "label": "弓の的",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "stand",
+      "x": 1789.24,
+      "y": 853.72,
+      "width": 25.959999999999997,
+      "height": 7.54,
+      "id": "train_dummy:stand",
+      "objectId": "train_dummy",
+      "label": "独立した訓練人形",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "post-base",
+      "x": 1712.66,
+      "y": 827.64,
+      "width": 7.700000000000001,
+      "height": 2.52,
+      "id": "train_post:post-base",
+      "objectId": "train_post",
+      "label": "木製の杭",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1734,
+      "y": 711,
+      "width": 10,
+      "height": 13,
+      "part": "0",
+      "id": "train_gate:0",
+      "objectId": "train_gate",
+      "label": "訓練場の入口",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1812,
+      "y": 711,
+      "width": 10,
+      "height": 13,
+      "part": "1",
+      "id": "train_gate:1",
+      "objectId": "train_gate",
+      "label": "訓練場の入口",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "part": "pole-base",
+      "x": 1718.84,
+      "y": 770.58,
+      "width": 4.16,
+      "height": 6.359999999999999,
+      "id": "train_flag_green:pole-base",
+      "objectId": "train_flag_green",
+      "label": "緑の訓練旗",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1710,
+      "y": 1012,
+      "width": 31,
+      "height": 14,
+      "part": "0",
+      "id": "train_fence_west:0",
+      "objectId": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1740,
+      "y": 1006,
+      "width": 31,
+      "height": 14,
+      "part": "1",
+      "id": "train_fence_west:1",
+      "objectId": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1771,
+      "y": 1000,
+      "width": 31,
+      "height": 14,
+      "part": "2",
+      "id": "train_fence_west:2",
+      "objectId": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1802,
+      "y": 994,
+      "width": 31,
+      "height": 14,
+      "part": "3",
+      "id": "train_fence_west:3",
+      "objectId": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1833,
+      "y": 989,
+      "width": 31,
+      "height": 14,
+      "part": "4",
+      "id": "train_fence_west:4",
+      "objectId": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1864,
+      "y": 983,
+      "width": 31,
+      "height": 14,
+      "part": "5",
+      "id": "train_fence_west:5",
+      "objectId": "train_fence_west",
+      "label": "訓練場の柵・西",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1930,
+      "y": 1012,
+      "width": 31,
+      "height": 14,
+      "part": "0",
+      "id": "train_fence_east:0",
+      "objectId": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1960,
+      "y": 1006,
+      "width": 31,
+      "height": 14,
+      "part": "1",
+      "id": "train_fence_east:1",
+      "objectId": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 1991,
+      "y": 1000,
+      "width": 31,
+      "height": 14,
+      "part": "2",
+      "id": "train_fence_east:2",
+      "objectId": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 2022,
+      "y": 994,
+      "width": 31,
+      "height": 14,
+      "part": "3",
+      "id": "train_fence_east:3",
+      "objectId": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 2053,
+      "y": 989,
+      "width": 31,
+      "height": 14,
+      "part": "4",
+      "id": "train_fence_east:4",
+      "objectId": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 2084,
+      "y": 983,
+      "width": 31,
+      "height": 14,
+      "part": "5",
+      "id": "train_fence_east:5",
+      "objectId": "train_fence_east",
+      "label": "訓練場の柵・東",
+      "category": "prop"
+    },
+    {
+      "type": "rect",
+      "x": 709,
+      "y": 590,
+      "width": 70,
+      "height": 23,
+      "part": "0",
+      "id": "lind_wind_stone:0",
+      "objectId": "lind_wind_stone",
+      "label": "風の石",
+      "category": "prop"
+    }
+  ],
+  "footprint": {
+    "x": 6,
+    "y": 32,
+    "width": 22,
+    "height": 10,
+    "anchorX": 17,
+    "anchorY": 42
+  },
+  "water": {
+    "x": 1450,
+    "y": 0,
+    "width": 180,
+    "height": 1550
+  },
+  "waterCollision": {
+    "x": 1448,
+    "y": 0,
+    "width": 188,
+    "height": 1550
+  },
+  "riverEquivalentSamples": 361221,
+  "cases": {
+    "rightHouse": true,
+    "rightLaundryPost": true,
+    "oldLaundryGhostClear": true,
+    "flagPost": true,
+    "chickenGateOpen": true
+  },
+  "aligned": [
+    {
+      "scale": 1,
+      "shapes": 130,
+      "maxError": 5.859375005456968e-05
+    },
+    {
+      "scale": 1.5,
+      "shapes": 130,
+      "maxError": 0.00027343749999886313
+    },
+    {
+      "scale": 1.8,
+      "shapes": 130,
+      "maxError": 0.00028686523455689894
+    },
+    {
+      "scale": 2.1,
+      "shapes": 130,
+      "maxError": 0.0003906250000085265
+    }
+  ],
+  "performance": {
+    "samples": 100000,
+    "times": [
+      215.60000002384186,
+      149.09999999403954,
+      37.400000005960464,
+      67.69999998807907,
+      29.900000005960464
+    ],
+    "blocked": 18930,
+    "debugOff": true
+  }
+}
