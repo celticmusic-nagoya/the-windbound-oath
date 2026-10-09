@@ -165,14 +165,21 @@
       updateDepth();
     }
   }
-  function blocked(x, y) {
+  function staticBlocked(x, y) {
     if (active && window.LindFieldRiver) {
       if (window.LindFieldRiver.blocked(x, y)) return true;
     } else if (originalBlocked(x, y)) return true;
     if (!active) return false;
-    if (window.LindFieldAnimals?.blocked(x, y) || window.LindFieldNPCs?.blocked(x,y)) return true;
     return collisionModel.blocked(x,y);
   }
+  function dynamicBlocked(x,y) {
+    return active && Boolean(window.LindFieldAnimals?.blocked(x,y) || window.LindFieldNPCs?.blocked(x,y));
+  }
+  function blocked(x,y) { return staticBlocked(x,y) || dynamicBlocked(x,y); }
+  // Navigation may keep destinations during live actor contacts; keyboard and
+  // collision debug retain the combined predicate and original native footprint.
+  blocked.staticBlocked=staticBlocked;
+  blocked.dynamicBlocked=dynamicBlocked;
   window.blockedWorld = blocked;
   window.saveGrowthData = function (...args) {
     if (active) {
@@ -204,5 +211,5 @@
     }
   }, true);
   window.LindFieldReview = Object.freeze({open:()=>setActive(true), close:()=>setActive(false), focus,
-    get active(){return active;}, blocked,collisionModel,collisionDebug});
+    get active(){return active;}, blocked,staticBlocked,dynamicBlocked,collisionModel,collisionDebug});
 })();
