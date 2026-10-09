@@ -7,3 +7,7 @@ body.lindFieldReview #player.aidan-field-active {
   user-select:none; -webkit-user-drag:none;
 }
 #player > .aidan-field-frame[hidden] { display:none; }
+#lindReviewControls .aidan-field-display {
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+}
+#lindReviewControls #aidanFieldToggle { white-space:normal; }

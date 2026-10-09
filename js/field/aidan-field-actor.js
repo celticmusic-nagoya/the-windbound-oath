@@ -24,7 +24,10 @@
     }
     button = document.createElement('button'); button.type = 'button';
     button.id = 'aidanFieldToggle'; button.onclick = () => {enabled=!enabled;apply();};
-    controls.insertBefore(button, document.getElementById('lindWindToggle')); apply();
+    const display = document.createElement('label');
+    display.className = 'aidan-field-display';
+    display.append('プレイヤー表示 ', button);
+    controls.insertBefore(display, document.getElementById('lindWindToggle')); apply();
   }
   function render() {
     const name = 'aidan_'+(state==='WALK'?'walk_'+direction+'_'+String(phase+1).padStart(2,'0'):'idle_'+direction);
@@ -38,7 +41,7 @@
   function apply() {
     if (!player) return;
     player.classList.toggle('aidan-field-active', active && enabled && loaded);
-    button.textContent = enabled ? (loaded ? 'Aidan 正式' : 'Aidan 読込中') : 'Aidan 仮表示';
+    button.textContent = enabled ? (loaded ? 'Aidan A1（仮プレイヤーへ切替）' : 'Aidan A1 読込中') : '仮プレイヤー（Aidan A1へ切替）';
     button.setAttribute('aria-pressed', String(enabled)); render();
   }
   function update(now) {
