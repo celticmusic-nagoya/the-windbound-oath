@@ -21,6 +21,9 @@ poses, although initial constructor metadata can still request it.
 Visual contact sheets reviewed all 187 images against a contrasting green matte.
 Opaque terrain tiles are intentional. Five Battle PNGs visibly retain a light
 background: Aidan evade, item, oath_awaken, skill_charge, skill_wind_slash_alt.
+These are P2 readiness warnings: current action definitions do not call Aidan
+evade/item/awaken/charge; the alternate wind image is unreferenced. Registration
+alone does not mean the image is displayed in the current game.
 Do not infer backgrounds from RGB alone: the issue is visible in the composite.
 No backgrounds were removed. Thumbnail review does not certify every edge,
 finger or effect; detailed art approval remains PLAYER QA.
