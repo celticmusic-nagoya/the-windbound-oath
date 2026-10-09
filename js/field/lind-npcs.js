@@ -44,6 +44,7 @@
       render(actor);
     });
     window.LindChildren?.mount(actors);
+    window.LindVillageLife?.mount(actors);
     actors.forEach(render);
   }
   function distance(a) {return Math.hypot(px+17-a.x,py+42-a.footY);}
@@ -98,15 +99,8 @@
     actors.filter(a=>a.fishing).forEach(a=>LindFisherman.update(a,seconds));
     window.LindChildren?.update(seconds);
     actors.filter(a=>a.play).forEach(render);
-    actors.filter(a=>a.frames.walk).forEach(a=>{
-      a.elapsed+=seconds;
-      if(a.state==='IDLE'){if(a.elapsed>=4){a.state='WALK';a.elapsed=0;}}
-      else {
-        a.x+=a.direction*3*seconds;
-        if(Math.abs(a.x-a.originX)>=24){a.x=a.originX+a.direction*24;a.direction*=-1;a.state='IDLE';a.elapsed=0;}
-      }
-      render(a);
-    });
+    window.LindVillageLife?.update(seconds);
+    actors.filter(a=>a.life).forEach(render);
   }
   function setActive(value) {
     active=Boolean(value);clear();cancelAnimationFrame(frame);previous=null;
