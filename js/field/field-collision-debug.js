@@ -49,7 +49,7 @@
       enabled=active&&Boolean(value);stop();paintButton();
       if(enabled){build(getGeometry());svg.removeAttribute('hidden');tick();}return enabled;
     }
-    button.onclick=()=>setEnabled(!enabled);paintButton();
+    button.onclick=event=>{setEnabled(!enabled);if(event.detail)button.blur();};paintButton();
     return Object.freeze({setEnabled,setActive(value){active=Boolean(value);if(!active)setEnabled(false);},
       get status(){return {active,enabled,renders,scheduled:frame!==null,overlays:svg?1:0};}});
   }

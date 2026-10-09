@@ -2,6 +2,10 @@
  * Stand areas reserve space for later fisherman/player integration, not NPCs. */
 (function () {
   'use strict';
+  const water=Object.freeze({x:1450,y:0,width:180,height:1550});
+  // Preserve the approved bank safety margin: existing x+30 / x<1630 checks
+  // equal feet overlap with 2px west and 6px east beyond the visible water.
+  const collisionEnvelope=Object.freeze({...water,x:water.x-2,width:water.width+8});
   const crossings = [
     // Finite deck strip, excluding transparent canvas and outer rail/supports.
     // Four extra pixels below the old strip remain over the visible bridge.
@@ -22,13 +26,14 @@
     return result;
   }
   function blocked(x, y) {
-    const foot = {x:x+6,y:y+32,width:22,height:10};
-    const inRiver = x+30>1450 && x<1630;
+    const inRiver = FieldCollision.overlaps(collisionEnvelope,x,y);
     if (!inRiver) return false;
+    const f=FieldCollision.footprint;
+    const foot = {x:x+f.x,y:y+f.y,width:f.width,height:f.height};
     return !crossings.some(c => c.polygon ?
       [[foot.x,foot.y],[foot.x+foot.width,foot.y],[foot.x,foot.y+foot.height],
         [foot.x+foot.width,foot.y+foot.height]].every(p=>inside(p,c.polygon)) :
       foot.x>=c.x && foot.x+foot.width<=c.x+c.width && foot.y>=c.y && foot.y+foot.height<=c.y+c.height);
   }
-  window.LindFieldRiver = Object.freeze({blocked,crossings,standingAreas});
+  window.LindFieldRiver = Object.freeze({blocked,crossings,standingAreas,water,collisionEnvelope});
 })();

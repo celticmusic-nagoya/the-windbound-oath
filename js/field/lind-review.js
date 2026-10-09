@@ -108,7 +108,7 @@
     getGeometry:()=>({staticShapes:collisionModel.shapes,
       dynamicShapes:[...(window.LindFieldNPCs?.actors||[]),...(window.LindFieldAnimals?.actors||[])]
         .map(a=>({...a.foot,id:a.id,category:'actor'})),
-      water:{rect:{x:1450,y:0,width:180,height:1550},crossings:LindFieldRiver.crossings},
+      water:{rect:LindFieldRiver.collisionEnvelope,crossings:LindFieldRiver.crossings},
       bounds:{width:world.offsetWidth,height:world.offsetHeight}})});
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
