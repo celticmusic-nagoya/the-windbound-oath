@@ -1,0 +1,51 @@
+{
+  "files": 187,
+  "bytes": 378990248,
+  "decoded_rgba_bytes": 1104298320,
+  "category_counts": {
+    "BATTLE;CHARACTER": 50,
+    "BATTLE;CUT-IN;CHARACTER": 5,
+    "BATTLE;ENEMY": 19,
+    "FIELD;CHARACTER": 20,
+    "FIELD": 45,
+    "FIELD;BUILDING": 10,
+    "FIELD;EFFECT": 2,
+    "FIELD;LANDMARK": 3,
+    "FIELD;NPC": 26,
+    "FIELD;TERRAIN": 7
+  },
+  "missing_literal": [],
+  "dynamic_expressions": [
+    {
+      "source": "js/field/lind-npcs.js",
+      "expression": "path:'img/field/lind/npc/villagers/'+id+'_idle.png'}));"
+    },
+    {
+      "source": "js/field/lind-animals.js",
+      "expression": "'img/field/lind/animals/'+this.id+'_'+state+'.png']));"
+    }
+  ],
+  "exact_duplicates": [],
+  "non_raster_or_errors": [],
+  "legacy_references": {
+    "battle/embedded": 0,
+    "asset_\\d+_": 0,
+    "battle/support/lou": 0
+  },
+  "embedded_exists": false,
+  "runtime_registry_or_requests": 178,
+  "missing_runtime_or_registry": [],
+  "retained_unreferenced": [
+    "img/battle/characters/aidan/aidan_battle_idle_alt.png",
+    "img/battle/characters/aidan/aidan_reference_sheet.png",
+    "img/battle/characters/aidan/aidan_skill_wind_slash_alt.png",
+    "img/battle/characters/fiona/fiona_battle_idle_alt.png",
+    "img/battle/characters/lou/lou_skill_heal.png",
+    "img/battle/enemies/forest_bat/idle/forest_bat_idle_00.png",
+    "img/battle/enemies/forest_bat/idle/forest_bat_idle_01.png",
+    "img/battle/enemies/forest_bat/idle/forest_bat_idle_02.png",
+    "img/battle/enemies/forest_bat/idle/forest_bat_idle_03.png"
+  ],
+  "rgba": 176,
+  "rgb": 11
+}
