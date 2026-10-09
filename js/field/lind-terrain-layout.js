@@ -8,7 +8,8 @@
     routes:[
       {id:'village-west-east',points:[[80,610],[600,610],[1000,610],[1435,605]],width:100,seed:11},
       {id:'village-north-south',points:[[730,100],[730,520],[730,970],[730,1350]],width:100,seed:23},
-      {id:'bridge-east',points:[[1630,595],[1777,595],[1777,770]],width:60,seed:37},
+      {id:'bridge-east',points:[[1630,595],[1800,595]],width:60,seed:37},
+      {id:'training-approach',points:[[1777.5,600],[1777.5,770]],width:95,seed:41},
       {id:'farm-work',points:[[900,1070],[1130,1070],[1400,1070]],width:30,seed:43},
       {id:'orchard-work',points:[[730,1250],[900,1250],[900,1355]],width:28,seed:59}
     ],
