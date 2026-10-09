@@ -43,6 +43,9 @@ body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { displ
  background:transparent; border:0; box-shadow:none; min-width:44px; min-height:44px; padding:0; }
 .lind-stone-interaction:focus-visible { outline:1px solid #b79a58; outline-offset:2px; }
 .lind-stone-controls { flex-basis:100%; display:flex; align-items:center; gap:8px; }
+.lind-camera-row { flex-basis:100%; display:flex; align-items:center; flex-wrap:wrap; gap:12px; }
+.lind-camera-row .lind-stone-controls { flex-basis:auto; }
+.lind-camera-controls { display:flex; align-items:center; gap:6px; }
 #lindStoneNotice { flex-basis:100%; color:#f1e7c8; overflow-wrap:anywhere; }
 #lindStoneNotice[hidden] { display:none; }
 .lind-stone-leaf { position:absolute; left:calc(35% + var(--leaf)*13%); top:calc(60% + var(--leaf)*9%);

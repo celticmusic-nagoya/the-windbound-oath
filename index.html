@@ -4,6 +4,7 @@
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
 <script src="js/field/field-movement.js"></script>
 <script src="js/field/field-navigation.js"></script>
+<script src="js/field/field-camera.js"></script>
 
 
 \n\n
@@ -220,7 +221,7 @@ function closeDialogue(){
  document.body.classList.remove('dialogueOpen');
 }
 
-function camera(){let x=Math.max(0,Math.min(2200-innerWidth,px-innerWidth/2)),y=Math.max(0,Math.min(1550-innerHeight,py-innerHeight/2));world.style.transform=`translate(${-x}px,${-y}px)`;pl.style.left=px+'px';pl.style.top=py+'px'}
+function camera(){FieldCamera.render(world,$('#game'),pl,px,py)}
 function blockedWorld(x,y){
  // River occupies x 1450..1630. Crossing is allowed only over the bridge y 540..625.
  let inRiver=(x+30>1450 && x<1630);
@@ -237,8 +238,8 @@ function move(){
  requestAnimationFrame(move);
 }
 move();
-$('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;let r=world.getBoundingClientRect();
- target=FieldNavigation.destination(e.clientX-r.left-FieldMovement.settings.anchorX,e.clientY-r.top-FieldMovement.settings.anchorY,blockedWorld);
+$('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;const point=FieldCamera.screenToWorld(world,e.clientX,e.clientY);
+ target=FieldNavigation.destination(point.x-FieldMovement.settings.anchorX,point.y-FieldMovement.settings.anchorY,blockedWorld);
  if(!target)toast('その場所へは進めない。');
 });
 const fieldHeldDirections=new Map();

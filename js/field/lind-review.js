@@ -102,6 +102,7 @@
   window.LindFieldNPCs?.mount(layer, controls);
   window.LindFieldBirds?.mount(layer);
   window.AidanFieldActor?.mount(pl, controls);
+  window.FieldCamera?.mount(controls);
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -132,6 +133,7 @@
       snapshot = null;
     }
     active = value;
+    window.FieldCamera?.setReviewActive(active);
     window.LindFieldTraining?.clear();
     window.LindFieldWindStone?.clear();
     window.LindFieldNPCs?.setActive(active);
