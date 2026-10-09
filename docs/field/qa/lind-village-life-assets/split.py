@@ -1,7 +1,7 @@
 from PIL import Image
 from pathlib import Path
 import json,hashlib
-root=Path('/workspace/the-windbound-oath');src=Path('/workspace/onboarding/lind-village-life-assets/fisherman_animation_sheet.png');im=Image.open(src)
+root=Path(__file__).resolve().parents[4];src=Path(__file__).with_name('fisherman_animation_sheet.png');im=Image.open(src)
 # Visually authored irregular frame regions, not a uniform grid.
 frames=[('idle_01',(0,0,320,235)),('idle_02',(320,0,620,235)),('idle_03',(620,0,925,235)),('bite_01',(0,235,335,505)),('reel_01',(335,235,625,505)),('reel_02',(625,235,895,505)),('catch_01',(1410,235,1660,505)),('inspect_01',(1660,235,1900,505)),('inspect_02',(1900,235,2172,505)),('inspect_03',(0,505,215,724)),('inspect_04',(215,505,470,724)),('reset_01',(470,505,720,724))]
 rows={}
