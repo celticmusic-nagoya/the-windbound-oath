@@ -30,7 +30,7 @@
     const source = BATTLE_ASSETS[battle.actor][state];
     if (image && image.getAttribute('src') !== source) image.src = source;
     window.BattleFacing?.paint(image, battle.actor, state);
-    window.BattleIdleMotion?.onState(battle.image, battle.actor, state);
+    (window.BattleMotion || window.BattleIdleMotion)?.onState(battle.image, battle.actor, state);
   }
   function resting(battle) {
     const [hp, maxHp] = battle.health();
@@ -86,7 +86,7 @@
     unregister(context,key) { const id=context+':'+key; if(battles[id]){invalidate(battles[id]);delete battles[id];} },
     begin(context, actor = 'aidan') {
       const battle = lookup(context, actor);
-      window.BattleIdleMotion?.begin(battle.image);
+      (window.BattleMotion || window.BattleIdleMotion)?.begin(battle.image);
       invalidate(battle);
       battle.guard = false;
       battle.phase = null;
@@ -104,7 +104,7 @@
         paint(battle, resting(battle));
       }
     },
-    end(context, actor = 'aidan') { const battle = lookup(context, actor); invalidate(battle); window.BattleIdleMotion?.stop(battle.image); },
+    end(context, actor = 'aidan') { const battle = lookup(context, actor); invalidate(battle); (window.BattleMotion || window.BattleIdleMotion)?.stop(battle.image); },
     get(context, actor = 'aidan') { return lookup(context, actor)?.state; },
     trackPhase(actor, phase, { battle: context } = {}) {
       const battle = lookup(context, actor);

@@ -9,20 +9,24 @@
   const range=(min,max)=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return min+seed/4294967296*(max-min);};
   profiles.set('breathe',r=>{
     r.cycles++;
-    const steps=[{frame:0,hold:range(1300,1900)},{frame:1,hold:range(850,1150)},
-      {frame:0,hold:range(1100,1600)},{frame:2,hold:range(850,1150)},{frame:0,hold:range(1300,2100)}];
+    const steps=[{frame:0,hold:range(700,1000)},{frame:1,hold:range(500,750)},
+      {frame:0,hold:range(600,900)},{frame:2,hold:range(500,750)},{frame:0,hold:range(900,1400)}];
     if(r.cycles>=r.specialAfter){
-      steps.push({frame:0,hold:range(2000,4000)},{frame:3,hold:range(1200,1900)},{frame:0,hold:range(1800,2400)});
+      steps.push({frame:0,hold:range(300,650)},{frame:3,hold:range(1000,1500)},{frame:0,hold:range(700,1000)});
       r.cycles=0;r.specialAfter=Math.floor(range(3,6));
     }
     return steps;
+  });
+  profiles.set('flap',r=>{
+    const hold=range(800,1300)/4;
+    return [0,1,2,3].map(frame=>({frame,hold}));
   });
   function currentContext(){return document.body.classList.contains('raiderBattleMode')?'raider':document.body.classList.contains('normalBattleMode')?'normal':null;}
   function eligible(r){return r.enabled&&r.state==='idle'&&r.context===currentContext();}
   function paused(){return document.hidden||document.body.classList.contains('battlePresentationBusy')||document.body.classList.contains('dialogueOpen')||document.body.classList.contains('actionCinematic');}
   function reset(r,now=performance.now()){
     r.cycles=0;r.specialAfter=Math.floor(range(3,6));r.steps=profiles.get(r.assets.type)(r);
-    r.step=0;r.frame=0;r.from=0;r.started=now;r.lastDraw=-1;r.transition=false;
+    r.step=0;r.frame=0;r.from=0;r.started=now+range(80,220);r.flightStart=now;r.lastDraw=-1;r.transition=false;
   }
   function preload(assets){
     if(cache.has(assets))return cache.get(assets);
@@ -47,17 +51,35 @@
     r.canvas.width=Math.round(width*density);r.canvas.height=Math.round(height*density);
     r.width=width;r.height=height;r.densityX=r.canvas.width/width;r.densityY=r.canvas.height/height;
     const style=getComputedStyle(r.image);r.canvas.style.filter=style.filter;r.canvas.style.imageRendering=style.imageRendering;
-    r.fit=Math.min(width/r.assets.width,height/r.assets.height);r.lastDraw=-1;
+    if(r.assets.motionType==='flying'){
+      const points=r.assets.frames.map(f=>[r.assets.anchor[0]-f.anchor[0],r.assets.anchor[1]-f.anchor[1]]);
+      r.bounds=[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),
+        r.assets.width+Math.max(...points.map(p=>p[0])),r.assets.height+Math.max(...points.map(p=>p[1]))];
+      // Reserve hover space; preserve every source pixel and never transform the actor root.
+      r.fit=Math.min((width-14)/(r.bounds[2]-r.bounds[0]),(height-14)/(r.bounds[3]-r.bounds[1]));
+    }else r.fit=Math.min(width/r.assets.width,height/r.assets.height);
+    r.lastDraw=-1;
   }
   function draw(r,now,force=false){
     if(!r.ctx||!r.entry?.ready||!r.width)return;
-    const mix=reduced.matches?1:Math.min(1,(now-r.started)/220);
-    if(!force&&!r.transition&&r.lastDraw===r.frame)return;
+    const mix=reduced.matches?1:Math.max(0,Math.min(1,(now-r.started)/(r.assets.crossfadeMs||220)));
+    if(!force&&!r.transition&&r.lastDraw===r.frame&&(!r.assets.hover||reduced.matches))return;
     const ctx=r.ctx;ctx.setTransform(r.densityX,0,0,r.densityY,0,0);ctx.clearRect(0,0,r.width,r.height);
     const paint=(index,opacity)=>{
       const f=r.assets.frames[index],s=r.fit;ctx.globalAlpha=opacity;
-      ctx.drawImage(r.entry.images[index],(r.width-r.assets.width*s)/2+(r.assets.anchor[0]-f.anchor[0])*s,
-        r.height-r.assets.height*s+(r.assets.anchor[1]-f.anchor[1])*s,r.assets.width*s,r.assets.height*s);
+      let x=(r.width-r.assets.width*s)/2,y=r.height-r.assets.height*s;
+      if(r.assets.motionType==='flying'){
+        const b=r.bounds;
+        x=(r.width-(b[2]-b[0])*s)/2-b[0]*s;
+        y=(r.height-(b[3]-b[1])*s)/2-b[1]*s;
+        if(!reduced.matches){
+          const t=now-r.flightStart;
+          y+=Math.sin(t/r.hoverPeriod*Math.PI*2+r.hoverPhase)*r.hoverAmplitude;
+          x+=Math.sin(t/(r.hoverPeriod*1.37)*Math.PI*2+r.hoverPhase)*r.assets.horizontalDrift;
+        }
+      }
+      ctx.drawImage(r.entry.images[index],x+(r.assets.anchor[0]-f.anchor[0])*s,
+        y+(r.assets.anchor[1]-f.anchor[1])*s,r.assets.width*s,r.assets.height*s);
     };
     // Linear source crossfade without a transparency dip: outgoing + incoming.
     if(r.transition&&mix<1){ctx.globalCompositeOperation='source-over';paint(r.from,1-mix);ctx.globalCompositeOperation='lighter';paint(r.frame,mix);ctx.globalCompositeOperation='source-over';}
@@ -99,14 +121,15 @@
   window.BattleIdleMotion=Object.freeze({
     register({context,actor,selector,assets}){
       if(!profiles.has(assets.type)||records.has(selector))return false;
-      records.set(selector,{context,actor,selector,assets,enabled:false,state:null,showing:false});return true;
+      records.set(selector,{context,actor,selector,assets,enabled:false,state:null,showing:false,hoverPeriod:range(1600,2400),hoverPhase:range(0,Math.PI*2),hoverAmplitude:range(2,5)});return true;
     },
+    unregister(selector){const r=records.get(selector);if(!r)return false;hide(r);r.resize?.disconnect();r.canvas?.remove();records.delete(selector);refresh();return true;},
     ready(selector){const r=records.get(selector);return r&&eligible(r)?preload(r.assets).promise.then(()=>cache.get(r.assets).ready):Promise.resolve(false);},
     defineType(name,sequenceFactory){if(profiles.has(name)||typeof sequenceFactory!=='function')return false;profiles.set(name,sequenceFactory);return true;},
     begin(selector){const r=records.get(selector);if(r){r.enabled=true;hide(r);reset(r);refresh();}},
     stop(selector){const r=records.get(selector);if(r){r.enabled=false;hide(r);refresh();}},
     onState(selector,actor,state){const r=records.get(selector);if(!r||r.actor!==actor)return;const changed=r.state!==state;r.state=state;if(changed)hide(r);refresh();},
-    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0}))};}
+    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,motionType:r.assets.motionType,hoverPeriod:r.hoverPeriod,hoverAmplitude:r.hoverAmplitude,canvasCount:r.canvas?1:0}))};}
   });
   BattleIdleMotion.register({context:'normal',actor:'aidan',selector:'#bAidan2 img',assets:BATTLE_IDLE_ASSETS.aidan});
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});

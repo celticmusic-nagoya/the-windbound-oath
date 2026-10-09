@@ -90,7 +90,7 @@ window.BATTLE_CUTINS = Object.freeze({
 
 // Aidan idle prototype: audited source pixels and boot anchors; PNGs remain untouched.
 window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
-  type:'breathe', width:1536, height:1024, anchor:Object.freeze([888.5,1014]),
+  type:'breathe', motionType:'grounded', width:1536, height:1024, anchor:Object.freeze([888.5,1014]),
   frames:Object.freeze([
     Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_00.png',anchor:Object.freeze([889.75,1014])}),
     Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_01.png',anchor:Object.freeze([891.5,1015])}),
@@ -98,3 +98,15 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
     Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_03.png',anchor:Object.freeze([891.75,1011])})
   ])
 })});
+
+// Flight/chest landmarks inspected on the original PNGs; wings are never used as anchors.
+window.FOREST_BAT_IDLE_ASSETS = Object.freeze({
+  type:'flap',motionType:'flying',width:1536,height:1024,anchor:Object.freeze([780,740]),
+  crossfadeMs:50,hover:true,horizontalDrift:0,
+  frames:Object.freeze([
+    Object.freeze({path:'img/battle/enemies/forest_bat/idle/forest_bat_idle_00.png',anchor:Object.freeze([780,740])}),
+    Object.freeze({path:'img/battle/enemies/forest_bat/idle/forest_bat_idle_01.png',anchor:Object.freeze([785,700])}),
+    Object.freeze({path:'img/battle/enemies/forest_bat/idle/forest_bat_idle_02.png',anchor:Object.freeze([790,670])}),
+    Object.freeze({path:'img/battle/enemies/forest_bat/idle/forest_bat_idle_03.png',anchor:Object.freeze([870,730])})
+  ])
+});
