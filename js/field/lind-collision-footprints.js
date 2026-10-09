@@ -13,9 +13,13 @@
     lind_aidan_house:{door:[.60,.96],parts:[
       ['wall',.14,.61,.70,.23],['left-fence',.02,.67,.14,.20],
       ['left-bed',.15,.84,.30,.09],['right-barrels',.83,.78,.14,.13],['right-bed',.78,.88,.10,.05]]},
-    lind_item_shop:{door:[.63,.97],parts:[
-      ['wall',.13,.59,.70,.25],['left-barrels',.03,.73,.18,.18],
-      ['front-barrels',.16,.85,.32,.11],['right-crates',.73,.83,.22,.09],['side-barrel',.89,.71,.09,.17]]},
+    lind_item_shop:{door:[.59,.91],lane:[.54,.84,.105,.16],depth:.84,parts:[
+      ['wall',.13,.59,.70,.25],['left-fence',.03,.73,.18,.18],
+      ['left-foundation',.13,.79,.395,.105],['right-foundation',.645,.79,.185,.10],
+      ['front-barrel-left',.21,.84,.14,.125],['front-barrel-right',.39,.83,.15,.137],
+      ['front-display',.645,.795,.125,.115],['front-crates',.77,.84,.12,.087],
+      ['display-post',.88,.78,.045,.10],['side-barrel',.86,.71,.10,.19],
+      ['right-bed',.72,.91,.16,.037]]},
     lind_house_01:{door:[.61,.96],parts:[
       ['wall',.12,.61,.75,.25],['left-fence',.02,.68,.12,.19],
       ['left-bed',.12,.85,.33,.08],['right-fence',.87,.71,.10,.16],['right-bed',.76,.85,.19,.07]]},
@@ -68,9 +72,15 @@
     if(!parts)continue;
     object.collisionCategory=building?'building':'prop';
     object.collisionShapes=parts.map(([part,x,y,width,height])=>({type:'rect',part,
+      role:building ? (/wall|foundation|shed|coop/.test(part)?'building':'front-prop') : undefined,
       x:x*object.width,y:y*object.height,width:width*object.width,height:height*object.height}));
     object.collision=null;delete object.collisions;
     if(building?.door)object.doorApproach={x:object.x+building.door[0]*object.width,
       y:object.y+building.door[1]*object.height};
+    if(building?.lane){const [x,y,width,height]=building.lane;
+      // Debug/QA metadata only: this lane never overrides a solid collision.
+      object.doorApproachLane={id:object.id+':door-approach',x:object.x+x*object.width,
+        y:object.y+y*object.height,width:width*object.width,height:height*object.height};}
+    if(building?.depth!==undefined)object.depthY=object.y+building.depth*object.height;
   }
 })();

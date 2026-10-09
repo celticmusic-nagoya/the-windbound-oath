@@ -43,7 +43,7 @@
     image.dataset.assetId = obj.id;
     const draw = obj.draw || {x:obj.x, y:obj.y, width:obj.width, height:obj.height};
     Object.assign(image.style, {left:draw.x+'px', top:draw.y+'px', width:draw.width+'px',
-      height:draw.height+'px', zIndex:obj.layer === 'groundDecoration' ? '1' : String(Math.round(obj.y+obj.height))});
+      height:draw.height+'px', zIndex:obj.layer === 'groundDecoration' ? '1' : String(Math.round(obj.depthY ?? obj.y+obj.height))});
     layer.append(image);
   });
   window.LindFieldAnimals?.mount(layer);
@@ -106,6 +106,7 @@
   window.FieldCamera?.mount(controls);
   const collisionDebug=FieldCollisionDebug.create({world,overlayParent:layer,controls,getPlayer:()=>({x:px,y:py}),
     getGeometry:()=>({staticShapes:collisionModel.shapes,
+      approachLanes:assets.objects.filter(o=>o.doorApproachLane).map(o=>o.doorApproachLane),
       dynamicShapes:[...(window.LindFieldNPCs?.actors||[]),...(window.LindFieldAnimals?.actors||[])]
         .map(a=>({...a.foot,id:a.id,category:'actor'})),
       water:{rect:LindFieldRiver.collisionEnvelope,crossings:LindFieldRiver.crossings},

@@ -9,13 +9,14 @@
   }
   function rect(shape,parent,category=shape.category) {
     return node('rect',{x:shape.x,y:shape.y,width:shape.width,height:shape.height,
-      'data-collision-category':category,'data-collision-id':shape.id||'',class:'field-collision-shape'},parent);
+      'data-collision-category':category,'data-collision-role':shape.role||'',
+      'data-collision-id':shape.id||'',class:'field-collision-shape'},parent);
   }
   function create({world,overlayParent=world,controls,getGeometry,getPlayer}) {
     if(!window.WINDBOUND_DEV)return null;
     let active=false,enabled=false,frame=null,renders=0,svg=null,foot=null,anchor=null,dynamic=[];
     const button=document.createElement('button');button.type='button';button.className='field-collision-toggle';
-    button.title='足元:紫 / 建物:橙 / 小物:黄 / 水:青 / マップ境界:緑';
+    button.title='足元:紫 / 建物本体:橙 / 正面小物:黄 / 玄関通路:緑破線 / 水:青';
     (controls.querySelector('.lind-camera-row')||controls).append(button);
     function paintButton(){button.textContent='COLLISION '+(enabled?'ON':'OFF');button.setAttribute('aria-pressed',String(enabled));}
     function stop(){cancelAnimationFrame(frame);frame=null;if(svg)svg.setAttribute('hidden','');}
@@ -32,6 +33,7 @@
         const area=rect(water.rect,svg,'water');area.setAttribute('mask','url(#'+maskId+')');
       }
       for(const shape of geometry.staticShapes)rect(shape,svg);
+      for(const lane of geometry.approachLanes||[])rect(lane,svg,'door-approach');
       for(const shape of geometry.dynamicShapes)dynamic.push(rect(shape,svg,'actor'));
       rect({x:0,y:0,...geometry.bounds},svg,'boundary');
       foot=rect({x:0,y:0,width:FieldCollision.footprint.width,height:FieldCollision.footprint.height},svg,'player');
