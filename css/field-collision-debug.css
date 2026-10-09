@@ -1,0 +1,10 @@
+.field-collision-debug { position:absolute; left:0; top:0; z-index:99998; pointer-events:none; overflow:visible; }
+.field-collision-debug[hidden] { display:none; }
+.field-collision-shape { stroke-width:1; vector-effect:non-scaling-stroke; fill-opacity:.19; }
+.field-collision-shape[data-collision-category="building"] { fill:#ffad57; stroke:#ffad57; }
+.field-collision-shape[data-collision-category="prop"] { fill:#e9d36f; stroke:#e9d36f; }
+.field-collision-shape[data-collision-category="actor"] { fill:#d4beff; stroke:#d4beff; }
+.field-collision-shape[data-collision-category="water"] { fill:#65bfff; stroke:#65bfff; }
+.field-collision-shape[data-collision-category="boundary"] { fill:none; stroke:#9be2a5; stroke-dasharray:5 3; }
+.field-collision-shape[data-collision-category="player"] { fill:#ff69cf; stroke:#ff69cf; fill-opacity:.5; }
+.field-collision-anchor { fill:white; stroke:#ff69cf; stroke-width:1; vector-effect:non-scaling-stroke; }

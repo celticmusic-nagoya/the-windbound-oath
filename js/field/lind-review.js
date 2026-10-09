@@ -4,6 +4,7 @@
   'use strict';
   if (!window.WINDBOUND_DEV || !window.LindFieldAssets) return;
   const assets = window.LindFieldAssets;
+  const collisionModel=FieldCollision.compile(assets.objects);
   let active = false, snapshot = null, depthFrame = null;
   const originalBlocked = window.blockedWorld;
   const originalSave = window.saveGrowthData;
@@ -103,6 +104,12 @@
   window.LindFieldBirds?.mount(layer);
   window.AidanFieldActor?.mount(pl, controls);
   window.FieldCamera?.mount(controls);
+  const collisionDebug=FieldCollisionDebug.create({world,overlayParent:layer,controls,getPlayer:()=>({x:px,y:py}),
+    getGeometry:()=>({staticShapes:collisionModel.shapes,
+      dynamicShapes:[...(window.LindFieldNPCs?.actors||[]),...(window.LindFieldAnimals?.actors||[])]
+        .map(a=>({...a.foot,id:a.id,category:'actor'})),
+      water:{rect:{x:1450,y:0,width:180,height:1550},crossings:LindFieldRiver.crossings},
+      bounds:{width:world.offsetWidth,height:world.offsetHeight}})});
   const launch = document.createElement('button');
   launch.textContent = 'リルド村 · 素材仮配置';
   launch.onclick = () => setActive(true);
@@ -133,6 +140,7 @@
       snapshot = null;
     }
     active = value;
+    collisionDebug?.setActive(active);
     window.FieldCamera?.setReviewActive(active);
     window.LindFieldTraining?.clear();
     window.LindFieldWindStone?.clear();
@@ -159,17 +167,8 @@
     } else if (originalBlocked(x, y)) return true;
     if (!active) return false;
     if (window.LindFieldAnimals?.blocked(x, y) || window.LindFieldNPCs?.blocked(x,y)) return true;
-    // Foot box, not full roof image; entrances remain approachable from below.
-    // Navigation sweeps call this frequently. Preserve the exact rectangles
-    // without allocating nested arrays/functions for every sample.
-    for(const obj of assets.objects) {
-      if(obj.collisions){for(const c of obj.collisions)if(footOverlaps(obj,c,x,y))return true;}
-      else if(obj.collision&&footOverlaps(obj,obj.collision,x,y))return true;
-    }
-    return false;
+    return collisionModel.blocked(x,y);
   }
-  function footOverlaps(obj,c,x,y){return x+28>obj.x+c[0]&&x+6<obj.x+c[0]+c[2]&&
-    y+42>obj.y+c[1]&&y+32<obj.y+c[1]+c[3];}
   window.blockedWorld = blocked;
   window.saveGrowthData = function (...args) {
     if (active) {
@@ -201,5 +200,5 @@
     }
   }, true);
   window.LindFieldReview = Object.freeze({open:()=>setActive(true), close:()=>setActive(false), focus,
-    get active(){return active;}, blocked});
+    get active(){return active;}, blocked,collisionModel,collisionDebug});
 })();
