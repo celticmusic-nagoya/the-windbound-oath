@@ -45,6 +45,6 @@ DEV → リルド村・素材仮配置 → カメラ dropdown. Compare 1.25 / 1.
 - [1.30x](qa/lind-camera/camera-1280-1.30.png)
 - [1.35x](qa/lind-camera/camera-1280-1.35.png)
 
-The work branch is ready for camera PLAYER QA. **Main is not merged and GitHub Pages still publishes the approved previous main; the camera selector is not yet on that public page.** No A2/Fiona/Lou/STEP12/story/settings work is included. Await the user's camera choice and any subsequent publication instruction.
+The initial work-branch camera QA was approved for main integration by the subsequent PUBLIC PLAYER QA DEPLOY instruction. This document records source-branch QA; main integration and public deployment verification are reported separately. Default remains 1.00x, and no standard camera choice is made. No A2/Fiona/Lou/STEP12/story/settings work is included. Await the user's camera choice.
 
 CAMERA PLAYER QA READY
