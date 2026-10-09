@@ -2,18 +2,46 @@
 (function () {
   'use strict';
   const multiplier=1.25;
-  const settings=Object.freeze({multiplier,pointerStep:4*multiplier,keyboardStep:18*multiplier});
-  function advance(x,y,dx,dy,blocked) {
+  const settings=Object.freeze({multiplier,pointerStep:4*multiplier,keyboardStep:18*multiplier,
+    anchorX:17,anchorY:42,arrivalRadius:3,microStep:2,cornerRadius:12});
+  function advance(x,y,dx,dy,blocked,options={}) {
     const distance=Math.hypot(dx,dy),steps=Math.max(1,Math.ceil(distance/2));
-    let stopped=false;
+    const startX=x,startY=y;
+    let collided=false,assisted=0,lastProgress=false;
+    const budget=options.assist===false?0:Math.min(3,distance*.15);
     for(let i=0;i<steps;i++) {
       const nx=Math.max(0,Math.min(2160,x+dx/steps));
       const ny=Math.max(0,Math.min(1500,y+dy/steps));
-      if(nx===x&&ny===y){stopped=true;break;}
-      if(blocked(nx,ny)){stopped=true;break;}
-      x=nx;y=ny;
+      const beforeX=x,beforeY=y;
+      if(!blocked(nx,ny)){x=nx;y=ny;}
+      else {
+        collided=true;
+        // Each axis is swept independently: a blocked component does not
+        // discard the other component or tunnel through a corner.
+        if(nx!==x&&!blocked(nx,y))x=nx;
+        if(ny!==y&&!blocked(x,ny))y=ny;
+      }
+      if(x===beforeX&&y===beforeY&&assisted<budget&&(dx===0)!==(dy===0)) {
+        const horizontal=dy===0,forward=Math.sign(horizontal?dx:dy)*settings.microStep;
+        let correction=0;
+        for(let offset=1;offset<=settings.cornerRadius&&!correction;offset++)for(const sign of [-1,1]) {
+          let clear=true;
+          for(let n=1;n<=offset;n++)if(blocked(horizontal?x:x+n*sign,horizontal?y+n*sign:y)){clear=false;break;}
+          if(clear&&!blocked(horizontal?x+forward:x+offset*sign,horizontal?y+offset*sign:y+forward)){
+            correction=sign;break;
+          }
+        }
+        if(correction) {
+          const amount=Math.min(.5,budget-assisted)*correction;
+          const ax=horizontal?x:x+amount,ay=horizontal?y+amount:y;
+          if(ax>=0&&ax<=2160&&ay>=0&&ay<=1500&&!blocked(ax,ay)){
+            x=ax;y=ay;assisted+=Math.abs(amount);
+          }
+        }
+      }
+      lastProgress=x!==beforeX||y!==beforeY;
     }
-    return {x,y,stopped};
+    return {x,y,stopped:!lastProgress||Math.hypot(x-startX,y-startY)<.001,collided,assisted};
   }
   window.FieldMovement=Object.freeze({settings,advance});
 })();

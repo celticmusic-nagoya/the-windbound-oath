@@ -156,11 +156,16 @@
     if (!active) return false;
     if (window.LindFieldAnimals?.blocked(x, y) || window.LindFieldNPCs?.blocked(x,y)) return true;
     // Foot box, not full roof image; entrances remain approachable from below.
-    return assets.objects.some(obj => (obj.collisions || (obj.collision ? [obj.collision] : [])).some(c => {
-      return x+28 > obj.x+c[0] && x+6 < obj.x+c[0]+c[2] &&
-        y+42 > obj.y+c[1] && y+32 < obj.y+c[1]+c[3];
-    }));
+    // Navigation sweeps call this frequently. Preserve the exact rectangles
+    // without allocating nested arrays/functions for every sample.
+    for(const obj of assets.objects) {
+      if(obj.collisions){for(const c of obj.collisions)if(footOverlaps(obj,c,x,y))return true;}
+      else if(obj.collision&&footOverlaps(obj,obj.collision,x,y))return true;
+    }
+    return false;
   }
+  function footOverlaps(obj,c,x,y){return x+28>obj.x+c[0]&&x+6<obj.x+c[0]+c[2]&&
+    y+42>obj.y+c[1]&&y+32<obj.y+c[1]+c[3];}
   window.blockedWorld = blocked;
   window.saveGrowthData = function (...args) {
     if (active) {

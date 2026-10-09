@@ -3,7 +3,9 @@
 (function () {
   'use strict';
   const crossings = [
-    {id:'bridge',x:1425,y:580,width:240,height:26},
+    // Finite deck strip, excluding transparent canvas and outer rail/supports.
+    // Four extra pixels below the old strip remain over the visible bridge.
+    {id:'bridge',x:1425,y:580,width:240,height:30},
     {id:'fishing_deck',polygon:[[1432,1345],[1583,1360],[1576,1393],[1411,1376]]}
   ];
   const standingAreas = [

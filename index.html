@@ -3,6 +3,7 @@
 <title>THE WINDBOUND OATH v0.64</title>
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
 <script src="js/field/field-movement.js"></script>
+<script src="js/field/field-navigation.js"></script>
 
 
 \n\n
@@ -228,28 +229,31 @@ function blockedWorld(x,y){
 }
 function move(){
  if(target){
-  let dx=target.x-px,dy=target.y-py,d=Math.hypot(dx,dy);
-  if(d<.01){target=null}
-  else{
-   const v=Math.min(d,FieldMovement.settings.pointerStep);
-   const moved=FieldMovement.advance(px,py,dx/d*v,dy/d*v,blockedWorld);
-   px=moved.x;py=moved.y;
-   if(moved.stopped){target=null;toast('その先へは進めない。')}
-   else if(d<=v)target=null;
-  }
- }
+  const moved=FieldNavigation.follow(px,py,target,blockedWorld);
+  px=moved.x;py=moved.y;target=moved.target;
+  if(moved.unreachable)toast('その先へは進めない。');
+ }else FieldNavigation.cancel();
  camera();
  requestAnimationFrame(move);
 }
 move();
-$('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;let r=world.getBoundingClientRect();let tx=e.clientX-r.left-17,ty=e.clientY-r.top-22;if(blockedWorld(tx,ty)){toast('川は渡れない。橋を使おう。');return}target={x:tx,y:ty}});
+$('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;let r=world.getBoundingClientRect();
+ target=FieldNavigation.destination(e.clientX-r.left-FieldMovement.settings.anchorX,e.clientY-r.top-FieldMovement.settings.anchorY,blockedWorld);
+ if(!target)toast('その場所へは進めない。');
+});
+const fieldHeldDirections=new Map();
 addEventListener('keydown',e=>{
  const directions={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
  const direction=directions[e.key];if(!direction)return;
- target=null;const v=FieldMovement.settings.keyboardStep;
- const moved=FieldMovement.advance(px,py,direction[0]*v,direction[1]*v,blockedWorld);
+ fieldHeldDirections.set(e.key,direction);
+ target=null;FieldNavigation.cancel();const v=FieldMovement.settings.keyboardStep;
+ let dx=0,dy=0;fieldHeldDirections.forEach(d=>{dx+=d[0];dy+=d[1]});
+ dx=Math.sign(dx);dy=Math.sign(dy);const length=Math.hypot(dx,dy)||1;
+ const moved=FieldMovement.advance(px,py,dx/length*v,dy/length*v,blockedWorld);
  px=moved.x;py=moved.y;camera();
 });
+addEventListener('keyup',e=>fieldHeldDirections.delete(e.key));
+addEventListener('blur',()=>fieldHeldDirections.clear());
 let ipx=485,ipy=575,itarget=null;
 let innFloor=1;
 function inCamera(){let rw=$('#roomWorld'),x=Math.max(0,Math.min(1000-innerWidth,ipx-innerWidth/2)),y=Math.max(0,Math.min(720-innerHeight,ipy-innerHeight/2));rw.style.transform=`translate(${-x}px,${-y}px)`;$('#inPlayer').style.left=ipx+'px';$('#inPlayer').style.top=ipy+'px'}
