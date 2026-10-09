@@ -1,0 +1,11 @@
+/* Opt-in DEV comparison, three representatives only. Geometry/anchors stay unchanged. */
+body.lindFieldReview[data-lind-character-rendering="smooth"] #player > .aidan-field-frame,
+body.lindFieldReview[data-lind-character-rendering="smooth"] .lind-field-npc[data-npc-id="emma"] img,
+body.lindFieldReview[data-lind-character-rendering="smooth"] .lind-field-npc[data-npc-id="farmer_male"] img {
+  image-rendering:auto;
+}
+/* Keep only the visible A1 frame in its own compositing layer at camera zoom.
+ * No transform/scale/position is added, and hidden frames do not reserve layers. */
+body.lindFieldReview[data-lind-character-rendering="smooth"] #player > .aidan-field-frame:not([hidden]) {
+  will-change:transform;
+}
