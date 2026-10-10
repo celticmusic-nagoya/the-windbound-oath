@@ -1,0 +1,4876 @@
+{
+ "schemaVersion": 2,
+ "id": "moss_forest_03_ancient_grove",
+ "region": "moss_forest",
+ "areaIndex": 3,
+ "displayName": {
+  "ja": "古樹の聖域",
+  "en": "Ancient Grove Sanctuary"
+ },
+ "locationCard": {
+  "regionJa": "モスの森",
+  "regionEn": "Moss Forest",
+  "areaJa": "古樹の聖域",
+  "areaEn": "Ancient Grove Sanctuary",
+  "triggerZone": "ev_a3_arrival"
+ },
+ "world": {
+  "width": 8400.0,
+  "height": 6600.0,
+  "tile": 32,
+  "coordBasis": "feet",
+  "unitScale": 2.5,
+  "compound": {
+   "translation": [
+    2340.0,
+    1950.0
+   ],
+   "note": "sanctuary compound is rigid: design coords + translation, not scaled"
+  }
+ },
+ "layers": [
+  "GROUND",
+  "GROUND_DETAIL",
+  "LOWER_PROP",
+  "ACTOR",
+  "UPPER_FOLIAGE",
+  "FOREGROUND"
+ ],
+ "spawns": {
+  "default": "from_area2",
+  "points": {
+   "from_area2": {
+    "x": 840,
+    "y": 6490.0,
+    "facing": "up"
+   },
+   "dev_sanctuary": {
+    "x": 4300,
+    "y": 3140,
+    "facing": "up",
+    "dev": true
+   }
+  }
+ },
+ "terrain": {
+  "base": {
+   "tiles": [
+    "gnd_moss_ground_01",
+    "gnd_moss_ground_02",
+    "gnd_moss_ground_03"
+   ],
+   "surface": "moss",
+   "seed": 3301
+  },
+  "patches": [
+   {
+    "id": "patch_clearing",
+    "texture": "gnd_moss_ground",
+    "tint": "#CFE8DA",
+    "surface": "moss",
+    "feather": 64,
+    "polygon": [
+     [
+      3840.0,
+      3250.0
+     ],
+     [
+      3900.0,
+      2850.0
+     ],
+     [
+      4140.0,
+      2650.0
+     ],
+     [
+      4640.0,
+      2600.0
+     ],
+     [
+      5090.0,
+      2750.0
+     ],
+     [
+      5190.0,
+      3100.0
+     ],
+     [
+      5090.0,
+      3400.0
+     ],
+     [
+      4640.0,
+      3500.0
+     ],
+     [
+      4140.0,
+      3250.0
+     ]
+    ]
+   },
+   {
+    "id": "patch_shrine",
+    "texture": "gnd_ancient_paving",
+    "tint": "#D8E0D6",
+    "surface": "stone",
+    "feather": 40,
+    "polygon": [
+     [
+      7230.0,
+      6050.0
+     ],
+     [
+      7186.1,
+      6138.2
+     ],
+     [
+      7071.1,
+      6192.7
+     ],
+     [
+      6928.9,
+      6192.7
+     ],
+     [
+      6813.9,
+      6138.2
+     ],
+     [
+      6770.0,
+      6050.0
+     ],
+     [
+      6813.9,
+      5961.8
+     ],
+     [
+      6928.9,
+      5907.3
+     ],
+     [
+      7071.1,
+      5907.3
+     ],
+     [
+      7186.1,
+      5961.8
+     ]
+    ]
+   },
+   {
+    "id": "patch_spring_shore",
+    "texture": "gnd_moss_ground",
+    "tint": "#BFEBE2",
+    "surface": "moss",
+    "feather": 48,
+    "polygon": [
+     [
+      5150.0,
+      3080.0
+     ],
+     [
+      5115.2,
+      3165.0
+     ],
+     [
+      5020.0,
+      3227.2
+     ],
+     [
+      4890.0,
+      3250.0
+     ],
+     [
+      4760.0,
+      3227.2
+     ],
+     [
+      4664.8,
+      3165.0
+     ],
+     [
+      4630.0,
+      3080.0
+     ],
+     [
+      4664.8,
+      2995.0
+     ],
+     [
+      4760.0,
+      2932.8
+     ],
+     [
+      4890.0,
+      2910.0
+     ],
+     [
+      5020.0,
+      2932.8
+     ],
+     [
+      5115.2,
+      2995.0
+     ]
+    ]
+   }
+  ],
+  "openAreas": [
+   {
+    "id": "open_clearing",
+    "shape": "polygon",
+    "points": [
+     [
+      3840.0,
+      3250.0
+     ],
+     [
+      3900.0,
+      2850.0
+     ],
+     [
+      4140.0,
+      2650.0
+     ],
+     [
+      4640.0,
+      2600.0
+     ],
+     [
+      5090.0,
+      2750.0
+     ],
+     [
+      5190.0,
+      3100.0
+     ],
+     [
+      5090.0,
+      3400.0
+     ],
+     [
+      4640.0,
+      3500.0
+     ],
+     [
+      4140.0,
+      3250.0
+     ]
+    ]
+   },
+   {
+    "id": "open_threshold",
+    "shape": "rect",
+    "x": 3155,
+    "y": 5905,
+    "w": 440,
+    "h": 340
+   }
+  ],
+  "paths": [
+   {
+    "id": "path_main",
+    "routeType": "main",
+    "stamp": "path_ancient_flagstone",
+    "surface": "stone",
+    "width": 112,
+    "widthJitter": 10,
+    "edge": "path_edge_moss",
+    "points": [
+     [
+      840,
+      6540.0
+     ],
+     [
+      2000.0,
+      5950.0
+     ],
+     [
+      3375.0,
+      6075.0
+     ],
+     [
+      5000.0,
+      5825.0
+     ],
+     [
+      6125.0,
+      5125.0
+     ],
+     [
+      5500.0,
+      4375.0
+     ],
+     [
+      4125.0,
+      4375.0
+     ],
+     [
+      3900.0,
+      3750.0
+     ],
+     [
+      3900.0,
+      3400.0
+     ],
+     [
+      3900.0,
+      3250.0
+     ]
+    ],
+    "ptsWidth": [
+     128,
+     128,
+     112,
+     112,
+     128,
+     112,
+     104,
+     140,
+     96,
+     96
+    ]
+   },
+   {
+    "id": "path_main_inner",
+    "routeType": "main",
+    "stamp": "path_ancient_flagstone",
+    "surface": "stone",
+    "width": 112,
+    "widthJitter": 10,
+    "edge": "path_edge_moss",
+    "rigid": true,
+    "points": [
+     [
+      3900.0,
+      3250.0
+     ],
+     [
+      4040.0,
+      3140.0
+     ],
+     [
+      4340.0,
+      3000.0
+     ],
+     [
+      4390.0,
+      2850.0
+     ]
+    ]
+   },
+   {
+    "id": "path_opt_shrine",
+    "routeType": "optional",
+    "stamp": "path_ancient_flagstone",
+    "surface": "stone",
+    "width": 88,
+    "widthJitter": 12,
+    "edge": "path_edge_moss",
+    "points": [
+     [
+      5000.0,
+      5825.0
+     ],
+     [
+      6000.0,
+      6125.0
+     ],
+     [
+      7000.0,
+      6050.0
+     ]
+    ]
+   },
+   {
+    "id": "path_opt_hollowlog",
+    "routeType": "optional",
+    "stamp": "path_dirt_stamp",
+    "surface": "moss",
+    "width": 80,
+    "widthJitter": 12,
+    "edge": "path_edge_moss",
+    "rigid": true,
+    "points": [
+     [
+      3860.0,
+      3000.0
+     ],
+     [
+      3740.0,
+      2960.0
+     ],
+     [
+      3640.0,
+      2920.0
+     ],
+     [
+      3590.0,
+      2904.0
+     ],
+     [
+      3420.0,
+      2904.0
+     ],
+     [
+      3200.0,
+      2904.0
+     ]
+    ]
+   },
+   {
+    "id": "path_opt_raider",
+    "routeType": "optional",
+    "stamp": "path_dirt_stamp",
+    "surface": "dirt",
+    "width": 96,
+    "widthJitter": 20,
+    "edge": "path_edge_moss",
+    "rigid": true,
+    "points": [
+     [
+      5220.0,
+      3450.0
+     ],
+     [
+      5340.0,
+      3600.0
+     ],
+     [
+      5490.0,
+      3700.0
+     ]
+    ]
+   },
+   {
+    "id": "path_hidden_wind",
+    "routeType": "trace",
+    "stamp": "fx_wind_trace",
+    "surface": "moss",
+    "width": 64,
+    "rigid": true,
+    "when": {
+     "flag": "moss_a3_lou_found",
+     "is": true
+    },
+    "points": [
+     [
+      4395.0,
+      2915.0
+     ],
+     [
+      4440.0,
+      2930.0
+     ],
+     [
+      4590.0,
+      3010.0
+     ],
+     [
+      4720.0,
+      3060.0
+     ]
+    ]
+   }
+  ],
+  "waters": [
+   {
+    "id": "spring_a3",
+    "kind": "spring",
+    "depth": "shallow",
+    "surface": "shallow_water",
+    "polygon": [
+     [
+      5040.0,
+      3080.0
+     ],
+     [
+      5028.6,
+      3114.4
+     ],
+     [
+      4996.1,
+      3143.6
+     ],
+     [
+      4947.4,
+      3163.1
+     ],
+     [
+      4890.0,
+      3170.0
+     ],
+     [
+      4832.6,
+      3163.1
+     ],
+     [
+      4783.9,
+      3143.6
+     ],
+     [
+      4751.4,
+      3114.4
+     ],
+     [
+      4740.0,
+      3080.0
+     ],
+     [
+      4751.4,
+      3045.6
+     ],
+     [
+      4783.9,
+      3016.4
+     ],
+     [
+      4832.6,
+      2996.9
+     ],
+     [
+      4890.0,
+      2990.0
+     ],
+     [
+      4947.4,
+      2996.9
+     ],
+     [
+      4996.1,
+      3016.4
+     ],
+     [
+      5028.6,
+      3045.6
+     ]
+    ],
+    "core": {
+     "depth": "deep",
+     "polygon": [
+      [
+       4970.0,
+       3080.0
+      ],
+      [
+       4963.9,
+       3097.2
+      ],
+      [
+       4946.6,
+       3111.8
+      ],
+      [
+       4920.6,
+       3121.6
+      ],
+      [
+       4890.0,
+       3125.0
+      ],
+      [
+       4859.4,
+       3121.6
+      ],
+      [
+       4833.4,
+       3111.8
+      ],
+      [
+       4816.1,
+       3097.2
+      ],
+      [
+       4810.0,
+       3080.0
+      ],
+      [
+       4816.1,
+       3062.8
+      ],
+      [
+       4833.4,
+       3048.2
+      ],
+      [
+       4859.4,
+       3038.4
+      ],
+      [
+       4890.0,
+       3035.0
+      ],
+      [
+       4920.6,
+       3038.4
+      ],
+      [
+       4946.6,
+       3048.2
+      ],
+      [
+       4963.9,
+       3062.8
+      ]
+     ]
+    }
+   }
+  ]
+ },
+ "props": [
+  {
+   "id": "p_bnd1_n",
+   "asset": "anc_boundary_stone_01",
+   "x": 3375.0,
+   "y": 6005.0,
+   "tags": [
+    "landmark",
+    "threshold"
+   ]
+  },
+  {
+   "id": "p_bnd1_s",
+   "asset": "anc_boundary_stone_01",
+   "x": 3375.0,
+   "y": 6145.0,
+   "tags": [
+    "landmark",
+    "threshold"
+   ]
+  },
+  {
+   "id": "p_bnd2_n",
+   "asset": "anc_boundary_stone_02",
+   "x": 4812.5,
+   "y": 4315.0,
+   "scale": 1.15,
+   "tags": [
+    "landmark"
+   ]
+  },
+  {
+   "id": "p_bnd2_s",
+   "asset": "anc_boundary_stone_02",
+   "x": 4812.5,
+   "y": 4435.0,
+   "scale": 1.15,
+   "tags": [
+    "landmark"
+   ]
+  },
+  {
+   "id": "p_rune_stone",
+   "asset": "anc_rune_broken_01",
+   "x": 3175.0,
+   "y": 5945.0,
+   "tags": [
+    "landmark",
+    "story"
+   ],
+   "interactZone": "ev_a3_rune_stone"
+  },
+  {
+   "id": "p_sentinel",
+   "asset": "tree_ancient_sentinel_01",
+   "x": 6255.0,
+   "y": 5175.0,
+   "tags": [
+    "landmark",
+    "rest"
+   ]
+  },
+  {
+   "id": "p_gate",
+   "asset": "anc_arch_broken_01",
+   "x": 3900.0,
+   "y": 3390.0,
+   "tags": [
+    "landmark",
+    "gate"
+   ]
+  },
+  {
+   "id": "p_throat_rock_w",
+   "asset": "rock_moss_L_01",
+   "x": 3780.0,
+   "y": 3270.0
+  },
+  {
+   "id": "p_throat_rock_e",
+   "asset": "rock_moss_L_02",
+   "x": 4040.0,
+   "y": 3280.0,
+   "flip": true
+  },
+  {
+   "id": "p_arc_0",
+   "asset": "anc_standing_L_01",
+   "x": 3940.0,
+   "y": 2730.0,
+   "tags": [
+    "landmark",
+    "standing_arc"
+   ]
+  },
+  {
+   "id": "p_arc_1",
+   "asset": "anc_standing_L_02",
+   "x": 3925.0,
+   "y": 2810.0,
+   "tags": [
+    "landmark",
+    "standing_arc"
+   ]
+  },
+  {
+   "id": "p_arc_2",
+   "asset": "anc_standing_L_03",
+   "x": 3920.0,
+   "y": 2890.0,
+   "tags": [
+    "landmark",
+    "standing_arc"
+   ]
+  },
+  {
+   "id": "p_arc_3",
+   "asset": "anc_standing_L_01",
+   "x": 3915.0,
+   "y": 3100.0,
+   "tags": [
+    "landmark",
+    "standing_arc"
+   ]
+  },
+  {
+   "id": "p_arc_4",
+   "asset": "anc_standing_L_02",
+   "x": 3925.0,
+   "y": 3165.0,
+   "tags": [
+    "landmark",
+    "standing_arc"
+   ]
+  },
+  {
+   "id": "p_great_tree",
+   "asset": "tree_ancient_great_01",
+   "x": 4440.0,
+   "y": 2740.0,
+   "tags": [
+    "landmark",
+    "center"
+   ]
+  },
+  {
+   "id": "p_dead_0",
+   "asset": "tree_dead_taint_M_01",
+   "x": 4220.0,
+   "y": 2710.0,
+   "tags": [
+    "taint"
+   ]
+  },
+  {
+   "id": "p_dead_1",
+   "asset": "tree_dead_taint_M_01",
+   "x": 4700.0,
+   "y": 2690.0,
+   "tags": [
+    "taint"
+   ]
+  },
+  {
+   "id": "p_dead_2",
+   "asset": "tree_dead_taint_M_01",
+   "x": 4630.0,
+   "y": 2820.0,
+   "tags": [
+    "taint"
+   ]
+  },
+  {
+   "id": "p_fairy_0",
+   "asset": "veg_fairy_flower_01",
+   "x": 5057.2,
+   "y": 3114.0
+  },
+  {
+   "id": "p_fairy_1",
+   "asset": "veg_fairy_flower_02",
+   "x": 4971.6,
+   "y": 3181.7
+  },
+  {
+   "id": "p_fairy_2",
+   "asset": "veg_fairy_flower_03",
+   "x": 4838.3,
+   "y": 3189.9
+  },
+  {
+   "id": "p_fairy_3",
+   "asset": "veg_fairy_flower_01",
+   "x": 4735.2,
+   "y": 3133.7
+  },
+  {
+   "id": "p_fairy_4",
+   "asset": "veg_fairy_flower_02",
+   "x": 4722.8,
+   "y": 3046.0
+  },
+  {
+   "id": "p_fairy_5",
+   "asset": "veg_fairy_flower_03",
+   "x": 4808.4,
+   "y": 2978.3
+  },
+  {
+   "id": "p_fairy_6",
+   "asset": "veg_fairy_flower_01",
+   "x": 4941.7,
+   "y": 2970.1
+  },
+  {
+   "id": "p_fairy_7",
+   "asset": "veg_fairy_flower_02",
+   "x": 5044.8,
+   "y": 3026.3
+  },
+  {
+   "id": "p_rune_decal_0",
+   "asset": "anc_rune_decal_01",
+   "x": 4320.0,
+   "y": 2810.0,
+   "layerHint": "GROUND_DETAIL"
+  },
+  {
+   "id": "p_rune_decal_1",
+   "asset": "anc_rune_decal_02",
+   "x": 4540.0,
+   "y": 2770.0,
+   "layerHint": "GROUND_DETAIL"
+  },
+  {
+   "id": "p_rune_decal_2",
+   "asset": "anc_rune_decal_03",
+   "x": 4400.0,
+   "y": 2960.0,
+   "layerHint": "GROUND_DETAIL"
+  },
+  {
+   "id": "p_rune_decal_3",
+   "asset": "anc_rune_decal_04",
+   "x": 3990.0,
+   "y": 3310.0,
+   "layerHint": "GROUND_DETAIL"
+  },
+  {
+   "id": "p_hollow_log",
+   "asset": "tree_log_hollow_A3_01",
+   "x": 3420.0,
+   "y": 2930.0,
+   "tags": [
+    "landmark",
+    "optional"
+   ]
+  },
+  {
+   "id": "p_shrine_a",
+   "asset": "anc_shrine_frag_01",
+   "x": 7060.0,
+   "y": 6010.0,
+   "tags": [
+    "landmark",
+    "optional"
+   ]
+  },
+  {
+   "id": "p_shrine_b",
+   "asset": "anc_shrine_frag_02",
+   "x": 6930.0,
+   "y": 5980.0
+  },
+  {
+   "id": "p_shrine_rune",
+   "asset": "anc_rune_broken_02",
+   "x": 7110.0,
+   "y": 6110.0
+  },
+  {
+   "id": "p_camp_fire",
+   "asset": "prop_campfire_cold_01",
+   "x": 5540.0,
+   "y": 3730.0,
+   "tags": [
+    "goblin_trace"
+   ]
+  },
+  {
+   "id": "p_camp_leanto",
+   "asset": "prop_lean_to_01",
+   "x": 5690.0,
+   "y": 3700.0,
+   "tags": [
+    "goblin_trace"
+   ]
+  },
+  {
+   "id": "p_camp_banner",
+   "asset": "prop_torn_banner_01",
+   "x": 5560.0,
+   "y": 3635.0
+  },
+  {
+   "id": "p_camp_stump",
+   "asset": "tree_stump_02",
+   "x": 5450.0,
+   "y": 3790.0
+  },
+  {
+   "id": "w_0",
+   "asset": "veg_thorn_L_01",
+   "x": 3140,
+   "y": 3020,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_1",
+   "asset": "rock_moss_M_01",
+   "x": 3140,
+   "y": 2960,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_2",
+   "asset": "veg_thorn_L_02",
+   "x": 3140,
+   "y": 2900,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_3",
+   "asset": "rock_moss_M_02",
+   "x": 3140,
+   "y": 2840,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_4",
+   "asset": "veg_thorn_L_01",
+   "x": 3180,
+   "y": 2780,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_5",
+   "asset": "rock_moss_M_01",
+   "x": 3240,
+   "y": 2780,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_6",
+   "asset": "veg_thorn_L_02",
+   "x": 3300,
+   "y": 2760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_7",
+   "asset": "rock_moss_M_02",
+   "x": 3360,
+   "y": 2760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_8",
+   "asset": "veg_thorn_L_01",
+   "x": 3420,
+   "y": 2760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_9",
+   "asset": "rock_moss_M_01",
+   "x": 3480,
+   "y": 2760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_10",
+   "asset": "veg_thorn_L_02",
+   "x": 3880,
+   "y": 2860,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_11",
+   "asset": "rock_moss_M_02",
+   "x": 3540,
+   "y": 2760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_12",
+   "asset": "veg_thorn_L_01",
+   "x": 3620,
+   "y": 2780,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_13",
+   "asset": "rock_moss_M_01",
+   "x": 3720,
+   "y": 2800,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_14",
+   "asset": "veg_thorn_L_02",
+   "x": 3800,
+   "y": 2820,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_15",
+   "asset": "rock_moss_M_02",
+   "x": 3940,
+   "y": 2820,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_16",
+   "asset": "veg_thorn_L_01",
+   "x": 4000,
+   "y": 2780,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_17",
+   "asset": "rock_moss_M_01",
+   "x": 4040,
+   "y": 2740,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_18",
+   "asset": "veg_thorn_L_02",
+   "x": 4080,
+   "y": 2700,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_19",
+   "asset": "rock_moss_M_02",
+   "x": 4140,
+   "y": 2660,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_20",
+   "asset": "veg_thorn_L_01",
+   "x": 4200,
+   "y": 2660,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_21",
+   "asset": "rock_moss_M_01",
+   "x": 4260,
+   "y": 2640,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_22",
+   "asset": "veg_thorn_L_02",
+   "x": 4320,
+   "y": 2640,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_23",
+   "asset": "rock_moss_M_02",
+   "x": 4380,
+   "y": 2640,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_24",
+   "asset": "veg_thorn_L_01",
+   "x": 4440,
+   "y": 2620,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_25",
+   "asset": "rock_moss_M_01",
+   "x": 4500,
+   "y": 2620,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_26",
+   "asset": "veg_thorn_L_02",
+   "x": 4560,
+   "y": 2620,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_27",
+   "asset": "rock_moss_M_02",
+   "x": 4620,
+   "y": 2620,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_28",
+   "asset": "veg_thorn_L_01",
+   "x": 4680,
+   "y": 2620,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_29",
+   "asset": "rock_moss_M_01",
+   "x": 4740,
+   "y": 2640,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_30",
+   "asset": "veg_thorn_L_02",
+   "x": 4800,
+   "y": 2660,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_31",
+   "asset": "rock_moss_M_02",
+   "x": 4860,
+   "y": 2680,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_32",
+   "asset": "veg_thorn_L_01",
+   "x": 4920,
+   "y": 2700,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_33",
+   "asset": "rock_moss_M_01",
+   "x": 4980,
+   "y": 2720,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_34",
+   "asset": "veg_thorn_L_02",
+   "x": 5040,
+   "y": 2740,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_35",
+   "asset": "rock_moss_M_02",
+   "x": 5080,
+   "y": 2780,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_36",
+   "asset": "veg_thorn_L_01",
+   "x": 5100,
+   "y": 2840,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_37",
+   "asset": "rock_moss_M_01",
+   "x": 5120,
+   "y": 2900,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_38",
+   "asset": "veg_thorn_L_02",
+   "x": 5140,
+   "y": 2960,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_39",
+   "asset": "rock_moss_M_02",
+   "x": 5160,
+   "y": 3020,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_40",
+   "asset": "veg_thorn_L_01",
+   "x": 5180,
+   "y": 3080,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_41",
+   "asset": "rock_moss_M_01",
+   "x": 5160,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_42",
+   "asset": "veg_thorn_L_02",
+   "x": 5560,
+   "y": 3300,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_43",
+   "asset": "rock_moss_M_02",
+   "x": 5480,
+   "y": 3280,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_44",
+   "asset": "veg_thorn_L_01",
+   "x": 5620,
+   "y": 3320,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_45",
+   "asset": "rock_moss_M_01",
+   "x": 5140,
+   "y": 3200,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_46",
+   "asset": "veg_thorn_L_02",
+   "x": 5420,
+   "y": 3280,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_47",
+   "asset": "rock_moss_M_02",
+   "x": 5700,
+   "y": 3360,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_48",
+   "asset": "veg_thorn_L_01",
+   "x": 5360,
+   "y": 3280,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_49",
+   "asset": "rock_moss_M_01",
+   "x": 5740,
+   "y": 3400,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_50",
+   "asset": "veg_thorn_L_02",
+   "x": 5300,
+   "y": 3280,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_51",
+   "asset": "rock_moss_M_02",
+   "x": 5780,
+   "y": 3440,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_52",
+   "asset": "veg_thorn_L_01",
+   "x": 5240,
+   "y": 3280,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_53",
+   "asset": "rock_moss_M_01",
+   "x": 5820,
+   "y": 3500,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_54",
+   "asset": "veg_thorn_L_02",
+   "x": 5120,
+   "y": 3260,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_55",
+   "asset": "rock_moss_M_02",
+   "x": 5180,
+   "y": 3300,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_56",
+   "asset": "veg_thorn_L_01",
+   "x": 5820,
+   "y": 3560,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_57",
+   "asset": "rock_moss_M_01",
+   "x": 5820,
+   "y": 3620,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_58",
+   "asset": "veg_thorn_L_02",
+   "x": 5800,
+   "y": 3680,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_59",
+   "asset": "rock_moss_M_02",
+   "x": 5760,
+   "y": 3720,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_60",
+   "asset": "veg_thorn_L_01",
+   "x": 5720,
+   "y": 3760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_61",
+   "asset": "rock_moss_M_01",
+   "x": 5660,
+   "y": 3800,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_62",
+   "asset": "veg_thorn_L_02",
+   "x": 5600,
+   "y": 3820,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_63",
+   "asset": "rock_moss_M_02",
+   "x": 5540,
+   "y": 3840,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_64",
+   "asset": "veg_thorn_L_01",
+   "x": 5480,
+   "y": 3860,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_65",
+   "asset": "rock_moss_M_01",
+   "x": 5420,
+   "y": 3860,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_66",
+   "asset": "veg_thorn_L_02",
+   "x": 4920,
+   "y": 3420,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_67",
+   "asset": "rock_moss_M_02",
+   "x": 5360,
+   "y": 3860,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_68",
+   "asset": "veg_thorn_L_01",
+   "x": 5300,
+   "y": 3860,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_69",
+   "asset": "rock_moss_M_01",
+   "x": 4920,
+   "y": 3480,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_70",
+   "asset": "veg_thorn_L_02",
+   "x": 5240,
+   "y": 3860,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_71",
+   "asset": "rock_moss_M_02",
+   "x": 4860,
+   "y": 3440,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_72",
+   "asset": "veg_thorn_L_01",
+   "x": 5180,
+   "y": 3840,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_73",
+   "asset": "rock_moss_M_01",
+   "x": 5120,
+   "y": 3820,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_74",
+   "asset": "veg_thorn_L_02",
+   "x": 4900,
+   "y": 3540,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_75",
+   "asset": "rock_moss_M_02",
+   "x": 5060,
+   "y": 3800,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_76",
+   "asset": "veg_thorn_L_01",
+   "x": 4900,
+   "y": 3600,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_77",
+   "asset": "rock_moss_M_01",
+   "x": 4800,
+   "y": 3460,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_78",
+   "asset": "veg_thorn_L_02",
+   "x": 5000,
+   "y": 3760,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_79",
+   "asset": "rock_moss_M_02",
+   "x": 4960,
+   "y": 3720,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_80",
+   "asset": "veg_thorn_L_01",
+   "x": 4920,
+   "y": 3660,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_81",
+   "asset": "rock_moss_M_01",
+   "x": 4740,
+   "y": 3460,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_82",
+   "asset": "veg_thorn_L_02",
+   "x": 4680,
+   "y": 3480,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_83",
+   "asset": "rock_moss_M_02",
+   "x": 4620,
+   "y": 3480,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_84",
+   "asset": "veg_thorn_L_01",
+   "x": 4560,
+   "y": 3460,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_85",
+   "asset": "rock_moss_M_01",
+   "x": 4500,
+   "y": 3420,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_86",
+   "asset": "veg_thorn_L_02",
+   "x": 4440,
+   "y": 3400,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_87",
+   "asset": "rock_moss_M_02",
+   "x": 4380,
+   "y": 3360,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_88",
+   "asset": "veg_thorn_L_01",
+   "x": 4320,
+   "y": 3340,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_89",
+   "asset": "rock_moss_M_01",
+   "x": 4260,
+   "y": 3300,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_90",
+   "asset": "veg_thorn_L_02",
+   "x": 4200,
+   "y": 3280,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_91",
+   "asset": "rock_moss_M_02",
+   "x": 3980,
+   "y": 3360,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_92",
+   "asset": "veg_thorn_L_01",
+   "x": 4140,
+   "y": 3240,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_93",
+   "asset": "rock_moss_M_01",
+   "x": 3980,
+   "y": 3300,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_94",
+   "asset": "veg_thorn_L_02",
+   "x": 3840,
+   "y": 3360,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_95",
+   "asset": "rock_moss_M_02",
+   "x": 4080,
+   "y": 3240,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_96",
+   "asset": "veg_thorn_L_01",
+   "x": 4020,
+   "y": 3240,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_97",
+   "asset": "rock_moss_M_01",
+   "x": 3840,
+   "y": 3300,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_98",
+   "asset": "veg_thorn_L_02",
+   "x": 3860,
+   "y": 3240,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_99",
+   "asset": "rock_moss_M_02",
+   "x": 3860,
+   "y": 3180,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_100",
+   "asset": "veg_thorn_L_01",
+   "x": 3860,
+   "y": 3120,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_101",
+   "asset": "rock_moss_M_01",
+   "x": 3600,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_102",
+   "asset": "veg_thorn_L_02",
+   "x": 3540,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_103",
+   "asset": "rock_moss_M_02",
+   "x": 3700,
+   "y": 3120,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_104",
+   "asset": "veg_thorn_L_01",
+   "x": 3480,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_105",
+   "asset": "rock_moss_M_01",
+   "x": 3420,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_106",
+   "asset": "veg_thorn_L_02",
+   "x": 3360,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_107",
+   "asset": "rock_moss_M_02",
+   "x": 3300,
+   "y": 3140,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_108",
+   "asset": "veg_thorn_L_01",
+   "x": 3780,
+   "y": 3100,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_109",
+   "asset": "rock_moss_M_01",
+   "x": 3240,
+   "y": 3120,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_110",
+   "asset": "veg_thorn_L_02",
+   "x": 3180,
+   "y": 3120,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_111",
+   "asset": "rock_moss_M_02",
+   "x": 3860,
+   "y": 3060,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  },
+  {
+   "id": "w_112",
+   "asset": "veg_thorn_L_01",
+   "x": 3140,
+   "y": 3080,
+   "tags": [
+    "perimeter"
+   ],
+   "noCollision": true
+  }
+ ],
+ "scatter": [
+  {
+   "id": "sc_tufts",
+   "pool": [
+    "veg_grass_tuft_moss_01",
+    "veg_grass_tuft_moss_02",
+    "veg_grass_tuft_moss_03"
+   ],
+   "count": 2400,
+   "region": {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 8400.0,
+    "h": 6600.0
+   },
+   "minDist": 40,
+   "avoid": [
+    "path_core",
+    "water",
+    "blockers"
+   ],
+   "seed": 31
+  },
+  {
+   "id": "sc_moss_patch",
+   "pool": [
+    "veg_moss_patch_01",
+    "veg_moss_patch_02",
+    "veg_moss_patch_03",
+    "veg_moss_patch_04"
+   ],
+   "count": 300,
+   "region": {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 8400.0,
+    "h": 6600.0
+   },
+   "minDist": 90,
+   "avoid": [
+    "water",
+    "blockers"
+   ],
+   "seed": 32
+  },
+  {
+   "id": "sc_ferns",
+   "pool": [
+    "veg_fern_S_01",
+    "veg_fern_M_01",
+    "veg_fern_M_02",
+    "veg_fern_L_01"
+   ],
+   "count": 360,
+   "region": {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 8400.0,
+    "h": 6600.0
+   },
+   "minDist": 60,
+   "avoid": [
+    "path_core",
+    "water",
+    "blockers"
+   ],
+   "seed": 33
+  },
+  {
+   "id": "sc_border_trees",
+   "pool": [
+    "tree_mossy_L_01",
+    "tree_mossy_L_02",
+    "tree_mossy_L_03",
+    "tree_oak_M_01"
+   ],
+   "count": 360,
+   "region": {
+    "shape": "ring",
+    "outer": {
+     "shape": "rect",
+     "x": 0,
+     "y": 0,
+     "w": 8400.0,
+     "h": 6600.0
+    },
+    "inset": 180
+   },
+   "minDist": 150,
+   "avoid": [
+    "path_core:+56",
+    "open:*",
+    "water",
+    "blockers"
+   ],
+   "seed": 34
+  },
+  {
+   "id": "sc_trees",
+   "pool": [
+    "tree_mossy_L_01",
+    "tree_mossy_L_02",
+    "tree_oak_M_01",
+    "tree_oak_M_02",
+    "tree_dead_taint_M_01"
+   ],
+   "weights": [
+    3,
+    3,
+    3,
+    3,
+    1
+   ],
+   "count": 220,
+   "region": {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 8400.0,
+    "h": 6600.0
+   },
+   "minDist": 190,
+   "avoid": [
+    "path_core:+64",
+    "open:*",
+    "water",
+    "blockers"
+   ],
+   "seed": 35
+  },
+  {
+   "id": "sc_rocks",
+   "pool": [
+    "rock_moss_S_01",
+    "rock_moss_S_02",
+    "rock_moss_M_01",
+    "rock_moss_L_01"
+   ],
+   "weights": [
+    3,
+    3,
+    2,
+    1
+   ],
+   "count": 140,
+   "region": {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 8400.0,
+    "h": 6600.0
+   },
+   "minDist": 140,
+   "avoid": [
+    "path_core:+32",
+    "open:*",
+    "water",
+    "blockers"
+   ],
+   "seed": 36
+  },
+  {
+   "id": "sc_fairy_flowers",
+   "pool": [
+    "veg_fairy_flower_01",
+    "veg_fairy_flower_02",
+    "veg_fairy_flower_03"
+   ],
+   "count": 30,
+   "region": {
+    "shape": "patch",
+    "ref": "patch_spring_shore"
+   },
+   "minDist": 60,
+   "avoid": [
+    "water",
+    "blockers"
+   ],
+   "seed": 37
+  }
+ ],
+ "effects": [
+  {
+   "id": "fx_light_center",
+   "asset": "fx_light_shaft_01",
+   "x": 4340,
+   "y": 3000,
+   "layer": "FOREGROUND",
+   "blend": "add",
+   "alpha": 0.4,
+   "anim": {
+    "pulse": {
+     "period": 11,
+     "amp": 0.06
+    }
+   }
+  },
+  {
+   "id": "fx_light_sentinel",
+   "asset": "fx_light_shaft_02",
+   "x": 6005,
+   "y": 5185,
+   "layer": "FOREGROUND",
+   "blend": "add",
+   "alpha": 0.26
+  },
+  {
+   "id": "fx_seal",
+   "asset": "fx_seal_barrier",
+   "x": 3910,
+   "y": 3240,
+   "layer": "FOREGROUND",
+   "blend": "add",
+   "alpha": 0.8,
+   "when": {
+    "flag": "moss_a3_seal_open",
+    "is": false
+   }
+  },
+  {
+   "id": "fx_lou_glow",
+   "asset": "fx_fairy_glow",
+   "x": 4395,
+   "y": 2819,
+   "layer": "FOREGROUND",
+   "blend": "add",
+   "alpha": 0.9,
+   "when": {
+    "flag": "moss_a3_lou_rescued",
+    "is": false
+   }
+  },
+  {
+   "id": "fx_spring_glow",
+   "asset": "fx_spring_glow",
+   "x": 4890,
+   "y": 3080,
+   "layer": "FOREGROUND",
+   "blend": "add",
+   "alpha": 0.35
+  },
+  {
+   "id": "fx_rune_glow_n",
+   "asset": "fx_rune_glow",
+   "x": 3375,
+   "y": 6005,
+   "layer": "GROUND_DETAIL",
+   "blend": "add",
+   "alpha": 0.4
+  },
+  {
+   "id": "fx_rune_glow_s",
+   "asset": "fx_rune_glow",
+   "x": 3375,
+   "y": 6145,
+   "layer": "GROUND_DETAIL",
+   "blend": "add",
+   "alpha": 0.4
+  }
+ ],
+ "collision": {
+  "bounds": {
+   "x": 0,
+   "y": 0,
+   "w": 8400.0,
+   "h": 6600.0
+  },
+  "stripe": 8,
+  "edgeBlockers": [
+   {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 8400.0,
+    "h": 60
+   },
+   {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 48,
+    "h": 6600.0
+   },
+   {
+    "shape": "rect",
+    "x": 8352.0,
+    "y": 0,
+    "w": 48,
+    "h": 6600.0
+   },
+   {
+    "shape": "rect",
+    "x": 0,
+    "y": 6540.0,
+    "w": 710,
+    "h": 60
+   },
+   {
+    "shape": "rect",
+    "x": 970,
+    "y": 6540.0,
+    "w": 7430.0,
+    "h": 60
+   }
+  ],
+  "blockers": [
+   {
+    "id": "cb_spring_core",
+    "tag": "water_deep",
+    "shape": "ellipse",
+    "cx": 4890.0,
+    "cy": 3080.0,
+    "rx": 80,
+    "ry": 45
+   },
+   {
+    "id": "cb_a3_seal",
+    "tag": "story_seal",
+    "shape": "rect",
+    "x": 3846.0,
+    "y": 3271.0,
+    "w": 128,
+    "h": 18,
+    "enabledWhen": {
+     "flag": "moss_a3_seal_open",
+     "is": false
+    }
+   },
+   {
+    "id": "cb_a3_enclosure",
+    "tag": "perimeter",
+    "shape": "rects",
+    "rects": [
+     [
+      3130.0,
+      2790.0,
+      20,
+      320
+     ],
+     [
+      3150.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3150.0,
+      3090.0,
+      20,
+      20
+     ],
+     [
+      3170.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3170.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3190.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3190.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3210.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3210.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3230.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3230.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3250.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3250.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3270.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3270.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3290.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3290.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3310.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3310.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3330.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3330.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3350.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3350.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3370.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3370.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3390.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3390.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3410.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3410.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3430.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3430.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3450.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3450.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3470.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3470.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3490.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3490.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3510.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3510.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3530.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3530.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3550.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3550.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3570.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3570.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3590.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      3590.0,
+      3130.0,
+      20,
+      20
+     ],
+     [
+      3610.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3610.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3630.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3630.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3650.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3650.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3670.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3670.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3690.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3690.0,
+      3110.0,
+      20,
+      20
+     ],
+     [
+      3710.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3710.0,
+      3090.0,
+      20,
+      20
+     ],
+     [
+      3730.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3730.0,
+      3090.0,
+      20,
+      20
+     ],
+     [
+      3750.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3750.0,
+      3090.0,
+      20,
+      20
+     ],
+     [
+      3770.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3770.0,
+      3090.0,
+      20,
+      20
+     ],
+     [
+      3790.0,
+      2810.0,
+      20,
+      20
+     ],
+     [
+      3790.0,
+      3070.0,
+      20,
+      20
+     ],
+     [
+      3810.0,
+      2810.0,
+      20,
+      20
+     ],
+     [
+      3810.0,
+      3070.0,
+      20,
+      20
+     ],
+     [
+      3830.0,
+      2830.0,
+      20,
+      20
+     ],
+     [
+      3830.0,
+      3050.0,
+      20,
+      20
+     ],
+     [
+      3830.0,
+      3250.0,
+      20,
+      120
+     ],
+     [
+      3850.0,
+      2830.0,
+      20,
+      20
+     ],
+     [
+      3850.0,
+      3050.0,
+      20,
+      20
+     ],
+     [
+      3850.0,
+      3110.0,
+      20,
+      140
+     ],
+     [
+      3870.0,
+      2850.0,
+      20,
+      20
+     ],
+     [
+      3870.0,
+      3070.0,
+      20,
+      40
+     ],
+     [
+      3890.0,
+      2850.0,
+      20,
+      20
+     ],
+     [
+      3910.0,
+      2830.0,
+      20,
+      20
+     ],
+     [
+      3930.0,
+      2810.0,
+      20,
+      20
+     ],
+     [
+      3950.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3970.0,
+      2790.0,
+      20,
+      20
+     ],
+     [
+      3970.0,
+      3250.0,
+      20,
+      120
+     ],
+     [
+      3990.0,
+      2770.0,
+      20,
+      20
+     ],
+     [
+      3990.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4010.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      4010.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4030.0,
+      2730.0,
+      20,
+      20
+     ],
+     [
+      4030.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4050.0,
+      2710.0,
+      20,
+      20
+     ],
+     [
+      4050.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4070.0,
+      2690.0,
+      20,
+      20
+     ],
+     [
+      4070.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4090.0,
+      2690.0,
+      20,
+      20
+     ],
+     [
+      4090.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4110.0,
+      2670.0,
+      20,
+      20
+     ],
+     [
+      4110.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4130.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4130.0,
+      3230.0,
+      20,
+      20
+     ],
+     [
+      4150.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4150.0,
+      3250.0,
+      20,
+      20
+     ],
+     [
+      4170.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4170.0,
+      3250.0,
+      20,
+      20
+     ],
+     [
+      4190.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4190.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      4210.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4210.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      4230.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4230.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      4250.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4250.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      4270.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4270.0,
+      3310.0,
+      20,
+      20
+     ],
+     [
+      4290.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4290.0,
+      3310.0,
+      20,
+      20
+     ],
+     [
+      4310.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4310.0,
+      3330.0,
+      20,
+      20
+     ],
+     [
+      4330.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4330.0,
+      3330.0,
+      20,
+      20
+     ],
+     [
+      4350.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4350.0,
+      3350.0,
+      20,
+      20
+     ],
+     [
+      4370.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4370.0,
+      3350.0,
+      20,
+      20
+     ],
+     [
+      4390.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4390.0,
+      3370.0,
+      20,
+      20
+     ],
+     [
+      4410.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4410.0,
+      3370.0,
+      20,
+      20
+     ],
+     [
+      4430.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4430.0,
+      3390.0,
+      20,
+      20
+     ],
+     [
+      4450.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4450.0,
+      3390.0,
+      20,
+      20
+     ],
+     [
+      4470.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4470.0,
+      3410.0,
+      20,
+      20
+     ],
+     [
+      4490.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4490.0,
+      3410.0,
+      20,
+      20
+     ],
+     [
+      4510.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4510.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4530.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4530.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4550.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4550.0,
+      3450.0,
+      20,
+      20
+     ],
+     [
+      4570.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4570.0,
+      3450.0,
+      20,
+      20
+     ],
+     [
+      4590.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4590.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4610.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4610.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4630.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4630.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4650.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4650.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4670.0,
+      2610.0,
+      20,
+      20
+     ],
+     [
+      4670.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4690.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4690.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4710.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4710.0,
+      3470.0,
+      20,
+      20
+     ],
+     [
+      4730.0,
+      2630.0,
+      20,
+      20
+     ],
+     [
+      4730.0,
+      3450.0,
+      20,
+      20
+     ],
+     [
+      4750.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4750.0,
+      3450.0,
+      20,
+      20
+     ],
+     [
+      4770.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4770.0,
+      3450.0,
+      20,
+      20
+     ],
+     [
+      4790.0,
+      2650.0,
+      20,
+      20
+     ],
+     [
+      4790.0,
+      3450.0,
+      20,
+      20
+     ],
+     [
+      4810.0,
+      2670.0,
+      20,
+      20
+     ],
+     [
+      4810.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4830.0,
+      2670.0,
+      20,
+      20
+     ],
+     [
+      4830.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4850.0,
+      2670.0,
+      20,
+      20
+     ],
+     [
+      4850.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4870.0,
+      2690.0,
+      20,
+      20
+     ],
+     [
+      4870.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4890.0,
+      2690.0,
+      20,
+      20
+     ],
+     [
+      4890.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4890.0,
+      3490.0,
+      20,
+      160
+     ],
+     [
+      4910.0,
+      2690.0,
+      20,
+      20
+     ],
+     [
+      4910.0,
+      3410.0,
+      20,
+      20
+     ],
+     [
+      4910.0,
+      3450.0,
+      20,
+      40
+     ],
+     [
+      4910.0,
+      3650.0,
+      20,
+      40
+     ],
+     [
+      4930.0,
+      2710.0,
+      20,
+      20
+     ],
+     [
+      4930.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      4930.0,
+      3690.0,
+      20,
+      20
+     ],
+     [
+      4950.0,
+      2710.0,
+      20,
+      20
+     ],
+     [
+      4950.0,
+      3710.0,
+      20,
+      20
+     ],
+     [
+      4970.0,
+      2710.0,
+      20,
+      20
+     ],
+     [
+      4970.0,
+      3730.0,
+      20,
+      20
+     ],
+     [
+      4990.0,
+      2730.0,
+      20,
+      20
+     ],
+     [
+      4990.0,
+      3750.0,
+      20,
+      20
+     ],
+     [
+      5010.0,
+      2730.0,
+      20,
+      20
+     ],
+     [
+      5010.0,
+      3770.0,
+      20,
+      20
+     ],
+     [
+      5030.0,
+      2730.0,
+      20,
+      20
+     ],
+     [
+      5030.0,
+      3770.0,
+      20,
+      20
+     ],
+     [
+      5050.0,
+      2750.0,
+      20,
+      20
+     ],
+     [
+      5050.0,
+      3790.0,
+      20,
+      20
+     ],
+     [
+      5070.0,
+      2750.0,
+      20,
+      40
+     ],
+     [
+      5070.0,
+      3790.0,
+      20,
+      20
+     ],
+     [
+      5090.0,
+      2790.0,
+      20,
+      60
+     ],
+     [
+      5090.0,
+      3810.0,
+      20,
+      20
+     ],
+     [
+      5110.0,
+      2850.0,
+      20,
+      80
+     ],
+     [
+      5110.0,
+      3250.0,
+      20,
+      60
+     ],
+     [
+      5110.0,
+      3810.0,
+      20,
+      20
+     ],
+     [
+      5130.0,
+      2930.0,
+      20,
+      60
+     ],
+     [
+      5130.0,
+      3190.0,
+      20,
+      60
+     ],
+     [
+      5130.0,
+      3310.0,
+      20,
+      20
+     ],
+     [
+      5130.0,
+      3810.0,
+      20,
+      20
+     ],
+     [
+      5150.0,
+      2990.0,
+      20,
+      80
+     ],
+     [
+      5150.0,
+      3130.0,
+      20,
+      60
+     ],
+     [
+      5150.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5150.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5170.0,
+      3070.0,
+      20,
+      60
+     ],
+     [
+      5170.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5170.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5190.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5190.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5210.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5210.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5230.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5230.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5250.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5250.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5270.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5270.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5290.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5290.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5310.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5310.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5330.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5330.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5350.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5350.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5370.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5370.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5390.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5390.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5410.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5410.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5430.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5430.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5450.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5450.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5470.0,
+      3270.0,
+      20,
+      20
+     ],
+     [
+      5470.0,
+      3850.0,
+      20,
+      20
+     ],
+     [
+      5490.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5490.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5510.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5510.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5530.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5530.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5550.0,
+      3290.0,
+      20,
+      20
+     ],
+     [
+      5550.0,
+      3830.0,
+      20,
+      20
+     ],
+     [
+      5570.0,
+      3310.0,
+      20,
+      20
+     ],
+     [
+      5570.0,
+      3810.0,
+      20,
+      20
+     ],
+     [
+      5590.0,
+      3310.0,
+      20,
+      20
+     ],
+     [
+      5590.0,
+      3810.0,
+      20,
+      20
+     ],
+     [
+      5610.0,
+      3310.0,
+      20,
+      20
+     ],
+     [
+      5610.0,
+      3810.0,
+      20,
+      20
+     ],
+     [
+      5630.0,
+      3330.0,
+      20,
+      20
+     ],
+     [
+      5630.0,
+      3790.0,
+      20,
+      20
+     ],
+     [
+      5650.0,
+      3330.0,
+      20,
+      20
+     ],
+     [
+      5650.0,
+      3790.0,
+      20,
+      20
+     ],
+     [
+      5670.0,
+      3350.0,
+      20,
+      20
+     ],
+     [
+      5670.0,
+      3770.0,
+      20,
+      20
+     ],
+     [
+      5690.0,
+      3350.0,
+      20,
+      20
+     ],
+     [
+      5690.0,
+      3770.0,
+      20,
+      20
+     ],
+     [
+      5710.0,
+      3370.0,
+      20,
+      20
+     ],
+     [
+      5710.0,
+      3750.0,
+      20,
+      20
+     ],
+     [
+      5730.0,
+      3390.0,
+      20,
+      20
+     ],
+     [
+      5730.0,
+      3730.0,
+      20,
+      20
+     ],
+     [
+      5750.0,
+      3410.0,
+      20,
+      20
+     ],
+     [
+      5750.0,
+      3710.0,
+      20,
+      20
+     ],
+     [
+      5770.0,
+      3430.0,
+      20,
+      20
+     ],
+     [
+      5770.0,
+      3690.0,
+      20,
+      20
+     ],
+     [
+      5790.0,
+      3450.0,
+      20,
+      40
+     ],
+     [
+      5790.0,
+      3650.0,
+      20,
+      40
+     ],
+     [
+      5810.0,
+      3490.0,
+      20,
+      160
+     ]
+    ]
+   }
+  ],
+  "carves": [],
+  "softZones": [
+   {
+    "id": "sz_spring_rim",
+    "shape": "ellipse",
+    "cx": 4890.0,
+    "cy": 3080.0,
+    "rx": 150,
+    "ry": 90,
+    "speedMul": 0.8,
+    "footstep": "shallow_water",
+    "fx": "fx_water_splash"
+   }
+  ]
+ },
+ "transitions": [
+  {
+   "id": "tr_to_area2",
+   "rect": {
+    "shape": "rect",
+    "x": 710,
+    "y": 6536.0,
+    "w": 260,
+    "h": 64
+   },
+   "toMap": "moss_forest_02_mossy_ravine",
+   "toSpawn": "from_area3",
+   "fade": {
+    "out": 0.35,
+    "in": 0.35
+   },
+   "enabled": true
+  },
+  {
+   "id": "tr_to_deep",
+   "rect": {
+    "shape": "rect",
+    "x": 4290,
+    "y": 0,
+    "w": 300,
+    "h": 64
+   },
+   "toMap": "TBD",
+   "toSpawn": "TBD",
+   "fade": {
+    "out": 0.35,
+    "in": 0.35
+   },
+   "enabled": false,
+   "note": "future: blocked by roots"
+  }
+ ],
+ "encounterZones": [
+  {
+   "id": "enc_a3_procession_1",
+   "shape": {
+    "shape": "rect",
+    "x": 1450,
+    "y": 4500,
+    "w": 2700,
+    "h": 520
+   },
+   "enabled": false,
+   "rate": "low",
+   "style": "step",
+   "enemies": [
+    {
+     "id": "tainted_goblin",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    1,
+    2
+   ],
+   "tags": [
+    "ecology:human_trail"
+   ]
+  },
+  {
+   "id": "enc_a3_procession_2",
+   "shape": {
+    "shape": "rect",
+    "x": 3150,
+    "y": 3350,
+    "w": 1900,
+    "h": 900
+   },
+   "enabled": false,
+   "rate": "low",
+   "style": "step",
+   "enemies": [
+    {
+     "id": "tainted_goblin",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    1,
+    2
+   ],
+   "tags": [
+    "ecology:human_trail"
+   ]
+  },
+  {
+   "id": "enc_a3_thorn_band",
+   "shape": {
+    "shape": "rect",
+    "x": 3990.0,
+    "y": 3430.0,
+    "w": 1200,
+    "h": 250
+   },
+   "enabled": false,
+   "rate": "mid",
+   "style": "symbol",
+   "enemies": [
+    {
+     "id": "tainted_thornling",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    1,
+    2
+   ],
+   "tags": [
+    "ecology:dense_plants"
+   ]
+  },
+  {
+   "id": "enc_a3_spring_edge",
+   "shape": {
+    "shape": "rect",
+    "x": 4690.0,
+    "y": 2900.0,
+    "w": 450,
+    "h": 350
+   },
+   "enabled": false,
+   "rate": "low",
+   "style": "step",
+   "enemies": [
+    {
+     "id": "tainted_moss_slime",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    1,
+    2
+   ],
+   "tags": [
+    "ecology:water_edge"
+   ]
+  },
+  {
+   "id": "enc_a3_canopy_edge",
+   "shape": {
+    "shape": "rect",
+    "x": 6025,
+    "y": 4875,
+    "w": 550,
+    "h": 350
+   },
+   "enabled": false,
+   "rate": "rare",
+   "style": "ambush",
+   "enemies": [
+    {
+     "id": "forest_bat",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    2,
+    3
+   ],
+   "tags": [
+    "ecology:canopy"
+   ]
+  },
+  {
+   "id": "enc_a3_raider_trail",
+   "shape": {
+    "shape": "rect",
+    "x": 5290.0,
+    "y": 3550.0,
+    "w": 300,
+    "h": 250
+   },
+   "enabled": false,
+   "rate": "low",
+   "style": "symbol",
+   "enemies": [
+    {
+     "id": "tainted_goblin",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    1,
+    2
+   ],
+   "tags": [
+    "ecology:human_trail"
+   ]
+  },
+  {
+   "id": "enc_a3_clearing_core",
+   "shape": {
+    "shape": "rect",
+    "x": 4040.0,
+    "y": 2780.0,
+    "w": 800,
+    "h": 470
+   },
+   "enabled": true,
+   "rate": "none",
+   "style": "step",
+   "enemies": [],
+   "groupSize": [
+    0,
+    0
+   ],
+   "noEncounter": true
+  },
+  {
+   "id": "boss_a3_goblin_raider",
+   "shape": {
+    "shape": "ellipse",
+    "cx": 4790,
+    "cy": 3280,
+    "rx": 380,
+    "ry": 230
+   },
+   "enabled": false,
+   "rate": "none",
+   "style": "scripted",
+   "enemies": [
+    {
+     "id": "goblin_raider",
+     "weight": 100
+    }
+   ],
+   "groupSize": [
+    1,
+    1
+   ],
+   "tags": [
+    "boss"
+   ]
+  }
+ ],
+ "treasurePoints": [
+  {
+   "id": "tr_a3_shrine",
+   "x": 6970,
+   "y": 6090,
+   "tier": "uncommon",
+   "route": "path_opt_shrine",
+   "hint": "fx_treasure_glint",
+   "contents": null,
+   "note": "legacy chest fChest3 (古びたルーン片)"
+  },
+  {
+   "id": "tr_a3_hollowlog",
+   "x": 3220,
+   "y": 2900,
+   "tier": "common",
+   "route": "path_opt_hollowlog",
+   "hint": "fx_treasure_glint",
+   "contents": null
+  },
+  {
+   "id": "tr_a3_raider",
+   "x": 5580,
+   "y": 3790,
+   "tier": "common",
+   "route": "path_opt_raider",
+   "hint": "fx_treasure_glint",
+   "contents": null
+  },
+  {
+   "id": "tr_a3_sentinel",
+   "x": 6175,
+   "y": 5215,
+   "tier": "common",
+   "route": null,
+   "hint": "none",
+   "contents": null,
+   "note": "root crevice, found by observation"
+  }
+ ],
+ "eventZones": [
+  {
+   "id": "ev_a3_arrival",
+   "type": "locationCard",
+   "shape": {
+    "shape": "rect",
+    "x": 640,
+    "y": 6300.0,
+    "w": 400,
+    "h": 220
+   },
+   "once": true
+  },
+  {
+   "id": "ev_a3_threshold",
+   "type": "ambienceShift",
+   "shape": {
+    "shape": "rect",
+    "x": 3205,
+    "y": 5945,
+    "w": 340,
+    "h": 260
+   },
+   "hook": "a3_threshold_birds_off"
+  },
+  {
+   "id": "ev_a3_rune_stone",
+   "type": "interact",
+   "ref": "p_rune_stone",
+   "textId": "msg_a3_rune_stone",
+   "eventId": "prologue_rune_stone"
+  },
+  {
+   "id": "ev_a3_rest_sentinel",
+   "type": "rest",
+   "shape": {
+    "shape": "rect",
+    "x": 5865,
+    "y": 5005,
+    "w": 400,
+    "h": 240
+   },
+   "noEncounter": true,
+   "hook": "future_rest"
+  },
+  {
+   "id": "ev_a3_clearing_reveal",
+   "type": "trigger",
+   "shape": {
+    "shape": "rect",
+    "x": 3940,
+    "y": 3130,
+    "w": 260,
+    "h": 200
+   },
+   "once": true,
+   "hook": "camera_reveal_clearing"
+  },
+  {
+   "id": "ev_a3_lou_intro",
+   "type": "interact",
+   "shape": {
+    "shape": "rect",
+    "x": 4285,
+    "y": 2815,
+    "w": 220,
+    "h": 160
+   },
+   "eventId": "prologue_lou_intro",
+   "requires": {
+    "flag": "moss_a3_seal_open",
+    "is": true
+   }
+  },
+  {
+   "id": "ev_a3_altar_trigger",
+   "type": "trigger",
+   "shape": {
+    "shape": "rect",
+    "x": 4670,
+    "y": 3010,
+    "w": 160,
+    "h": 120
+   },
+   "once": true,
+   "eventId": "prologue_altar_scene",
+   "requires": {
+    "flag": "moss_a3_lou_found",
+    "is": true
+   }
+  },
+  {
+   "id": "ev_a3_rest_spring",
+   "type": "rest",
+   "shape": {
+    "shape": "rect",
+    "x": 4690,
+    "y": 3050,
+    "w": 200,
+    "h": 220
+   },
+   "noEncounter": true,
+   "requires": {
+    "flag": "moss_a3_lou_rescued",
+    "is": true
+   },
+   "hook": "future_rest"
+  }
+ ],
+ "eventStages": [
+  {
+   "id": "stage_lou_rescue",
+   "bounds": {
+    "shape": "rect",
+    "x": 4040,
+    "y": 2780,
+    "w": 800,
+    "h": 470
+   },
+   "marks": {
+    "aidan": {
+     "x": 4300,
+     "y": 3140,
+     "facing": "up"
+    },
+    "fiona": {
+     "x": 4430,
+     "y": 3165,
+     "facing": "up"
+    },
+    "lou": {
+     "x": 4395,
+     "y": 2855,
+     "hover": 36,
+     "scale": 1
+    },
+    "camera": {
+     "x": 4370,
+     "y": 2950,
+     "zoom": 1.35
+    }
+   },
+   "keepClear": true,
+   "note": "Lou is palm-sized: pair with fx_fairy_glow; close shot zoom 1.5-2.0. Great-tree trunk bottom is y=gtree-30+55; stage starts 15px below"
+  },
+  {
+   "id": "stage_raider",
+   "bounds": {
+    "shape": "ellipse",
+    "cx": 4790,
+    "cy": 3280,
+    "rx": 380,
+    "ry": 230
+   },
+   "marks": {
+    "boss": {
+     "x": 4840,
+     "y": 3330
+    },
+    "approach": [
+     [
+      5490.0,
+      3700.0
+     ],
+     [
+      5340.0,
+      3600.0
+     ],
+     [
+      5220.0,
+      3450.0
+     ]
+    ],
+    "player": {
+     "x": 4490,
+     "y": 3220
+    },
+    "camera": {
+     "x": 4740,
+     "y": 3250,
+     "zoom": 0.85
+    }
+   },
+   "keepClear": true
+  }
+ ],
+ "cameraFocus": [
+  {
+   "id": "cf_a3_threshold",
+   "x": 3375,
+   "y": 6075,
+   "radius": 300,
+   "zoom": 1.0,
+   "priority": 2,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_sentinel",
+   "x": 6185,
+   "y": 5135,
+   "radius": 300,
+   "zoom": 1.0,
+   "priority": 2,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_rune_gate",
+   "x": 3900,
+   "y": 3360,
+   "radius": 260,
+   "zoom": 1.0,
+   "priority": 3,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_clearing_reveal",
+   "x": 4290,
+   "y": 3050,
+   "radius": 420,
+   "zoom": 0.85,
+   "priority": 4,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_great_tree",
+   "x": 4440,
+   "y": 2750,
+   "radius": 420,
+   "zoom": 0.8,
+   "priority": 3,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_lou",
+   "x": 4395,
+   "y": 2950,
+   "radius": 300,
+   "zoom": 1.5,
+   "priority": 5,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_spring",
+   "x": 4890,
+   "y": 3080,
+   "radius": 300,
+   "zoom": 1.0,
+   "priority": 2,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_boss",
+   "x": 4840,
+   "y": 3330,
+   "radius": 420,
+   "zoom": 0.85,
+   "priority": 3,
+   "mode": "bias",
+   "maxBiasPx": 90
+  },
+  {
+   "id": "cf_a3_shrine",
+   "x": 7000,
+   "y": 6050,
+   "radius": 260,
+   "zoom": 1.0,
+   "priority": 1,
+   "mode": "bias",
+   "maxBiasPx": 90
+  }
+ ],
+ "ambience": {
+  "grade": {
+   "id": "a3_grove",
+   "tint": "#BFE3DC",
+   "tintStrength": 0.14,
+   "brightness": 0.94,
+   "saturation": 0.95
+  },
+  "shadow": {
+   "dir": [
+    0.55,
+    0.83
+   ],
+   "alpha": 0.34
+  },
+  "wind": {
+   "strength": 0.2,
+   "dirDeg": 80,
+   "gustPeriodSec": [
+    9,
+    16
+   ],
+   "targets": {
+    "canopy": {
+     "ampPx": 1.2,
+     "speed": 0.6
+    },
+    "vegetation": {
+     "ampPx": 1.4,
+     "speed": 0.9
+    },
+    "fxLeaf": {
+     "drift": 0.2
+    }
+   }
+  },
+  "water": {
+   "pondLoop": {
+    "id": "sfx_spring_quiet",
+    "refs": [
+     "spring_a3"
+    ],
+    "maxDistPx": 360,
+    "volume": 0.4
+   },
+   "rippleRate": 0.25
+  }
+ },
+ "particles": [
+  {
+   "id": "pt_fairy_motes",
+   "type": "fairy_motes",
+   "region": {
+    "shape": "rect",
+    "x": 4590,
+    "y": 2880,
+    "w": 600,
+    "h": 400
+   },
+   "count": 14,
+   "layer": "FOREGROUND"
+  },
+  {
+   "id": "pt_taint_motes",
+   "type": "taint_motes",
+   "region": {
+    "shape": "rect",
+    "x": 4140,
+    "y": 2740,
+    "w": 600,
+    "h": 420
+   },
+   "count": 8,
+   "layer": "FOREGROUND",
+   "when": {
+    "flag": "moss_a3_lou_rescued",
+    "is": false
+   }
+  },
+  {
+   "id": "pt_mist",
+   "type": "mist",
+   "region": {
+    "shape": "rect",
+    "x": 0,
+    "y": 5700,
+    "w": 8400,
+    "h": 900
+   },
+   "count": 6,
+   "layer": "FOREGROUND"
+  }
+ ],
+ "audio": {
+  "bgm": {
+   "id": "bgm_moss_forest_a3",
+   "fadeInSec": 2.0
+  },
+  "layers": [
+   {
+    "id": "amb_wind_low",
+    "volume": 0.35
+   },
+   {
+    "id": "amb_birds_day",
+    "volume": 0.25
+   }
+  ],
+  "hooks": [
+   {
+    "zone": "ev_a3_threshold",
+    "action": "fadeLayer",
+    "layer": "amb_birds_day",
+    "to": 0.0,
+    "sec": 3
+   }
+  ]
+ },
+ "taint": {
+  "baseLevel": 3,
+  "maxCoverageRatio": 0.03,
+  "palette": {
+   "crack": "#120A1F",
+   "glow": "#8A4DFF"
+  },
+  "spots": [
+   {
+    "id": "ts_a3_gate",
+    "x": 3900,
+    "y": 3390,
+    "r": 90,
+    "level": 1,
+    "decals": [
+     "fx_taint_crack_ground_01"
+    ]
+   },
+   {
+    "id": "ts_a3_roots",
+    "x": 4390,
+    "y": 2870,
+    "r": 380,
+    "level": 3,
+    "decals": [
+     "fx_taint_crack_ground_02",
+     "fx_taint_crack_ground_03"
+    ],
+    "when": {
+     "flag": "moss_a3_lou_rescued",
+     "is": false
+    },
+    "note": "r is influence radius; crack decal coverage <= 30% of the circle"
+   },
+   {
+    "id": "ts_a3_spring_rim",
+    "x": 4740,
+    "y": 3070,
+    "r": 120,
+    "level": 2,
+    "decals": [
+     "fx_taint_crack_rock_01"
+    ],
+    "when": {
+     "flag": "moss_a3_lou_rescued",
+     "is": false
+    }
+   },
+   {
+    "id": "ts_a3_trail",
+    "x": 5340,
+    "y": 3570,
+    "r": 120,
+    "level": 2,
+    "decals": [
+     "fx_taint_crack_ground_01"
+    ]
+   }
+  ]
+ },
+ "story": {
+  "prologue": {
+   "stages": [
+    9,
+    10,
+    11,
+    12
+   ],
+   "symbols": [
+    {
+     "field": "forestGob1",
+     "id": "moss_corruption_01",
+     "x": 4740,
+     "y": 5725,
+     "hp": 160,
+     "interactRadius": 210,
+     "touchRadius": 90
+    },
+    {
+     "field": "forestGob2",
+     "id": "moss_corruption_02",
+     "x": 5672,
+     "y": 4750,
+     "hp": 160,
+     "interactRadius": 210,
+     "touchRadius": 90
+    },
+    {
+     "field": "forestGob3",
+     "id": "moss_corruption_03",
+     "x": 4215,
+     "y": 4175,
+     "hp": 160,
+     "interactRadius": 210,
+     "touchRadius": 90
+    }
+   ],
+   "seal": {
+    "blocker": "cb_a3_seal",
+    "fx": "fx_seal",
+    "flagOnOpen": "moss_a3_seal_open",
+    "openWhen": "PrologueProgress.count()>=3"
+   },
+   "followers": [
+    {
+     "id": "fiona",
+     "lag": 0.08,
+     "dx": -48,
+     "dy": 18,
+     "placeholder": true
+    }
+   ]
+  }
+ },
+ "culling": {
+  "chunk": 256,
+  "margin": 1,
+  "maxLiveNodes": 800,
+  "viewportWorst": [
+   1920,
+   1080
+  ],
+  "scatterRender": "chunkLayer"
+ },
+ "debug": {
+  "mainRouteLengthPx": 9834,
+  "mainRouteSecAt300": 32.8,
+  "speedPxPerSec": 300.0
+ }
+}

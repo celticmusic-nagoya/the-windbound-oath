@@ -1,7 +1,7 @@
 // Run: node tests/moss/scatter.test.js
 const S=require('../../js/field/forest-scatter.js');
 let fail=0;const ok=(c,x)=>{console.log(c?'ok  ':'FAIL',x);if(!c)fail++;};
-for(const file of ['moss_forest_01_sunlit_path','moss_forest_02_mossy_ravine']){
+for(const file of ['moss_forest_01_sunlit_path','moss_forest_02_mossy_ravine','moss_forest_03_ancient_grove']){
 const m=require('../../data/maps/'+file+'.json');console.log('--',file);
 const a=S.generate(m),b=S.generate(m);
 ok(JSON.stringify(a)===JSON.stringify(b),`deterministic (${a.length} items)`);
