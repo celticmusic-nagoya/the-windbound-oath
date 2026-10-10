@@ -22,6 +22,8 @@
     hooks=options.hooks||{};
     el.scene.addEventListener('pointerdown',onPointer);
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
+    if(window.FieldTimeOfDay)FieldTimeOfDay.configure(el.scene);
+    if(window.FieldVista)FieldVista.configure(el.scene);   // above the grade overlay (created after it)
     S.configured=true;
   }
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
@@ -65,6 +67,7 @@
   function unmount(){
     CAM.token++;CAM.focus=null;CAM.shakeUntil=0;
     if(S.forest)S.forest.destroy();
+    if(window.FieldVista)FieldVista.clear();
     for(const n of S.extra)n.remove();
     S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
     S.forest=null;S.map=null;S.inside.clear();S.zones={rest:null,ambience:null};
@@ -96,7 +99,8 @@
     el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
     for(const t of map.treasurePoints||[]){
       if(t.hint==='none')continue;
-      const n=addNode('forest-treasure'+(S.opened.has(t.id)?' open':''),t.x-24,t.y-36,48,36,S.opened.has(t.id)?'□':'▣',t.y);S.treasureNodes.set(t.id,n);
+      const herb=t.kind==='herb',done=S.opened.has(t.id);   // herb = gathering spot (草むら), same Inventory/treasure plumbing as a chest
+      const n=herb?addNode('forest-herb'+(done?' open':''),t.x-20,t.y-26,40,28,done?'':'✿',t.y):addNode('forest-treasure'+(done?' open':''),t.x-24,t.y-36,48,36,done?'□':'▣',t.y);S.treasureNodes.set(t.id,n);
     }
     const prologue=map.story&&map.story.prologue;
     if(prologue){
@@ -111,6 +115,7 @@
         S.sealNode.classList.toggle('corrupted',!(hooks.sealCorrupted&&hooks.sealCorrupted()===false));
       }
     }
+    if(window.FieldVista)FieldVista.mount(map.vista);
     refreshWind();
     S.zones={rest:null,ambience:null};
   }
@@ -146,6 +151,7 @@
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
     S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
+    if(window.FieldTimeOfDay)FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});   // maps without "timeOfDay" always read as day
     el.fade.style.opacity='1';
     await setFade(0,fadeMs(options.transition,'in'));
     S.busy=false;S.active=true;startLoop();
@@ -198,9 +204,10 @@
     if(hooks.onEvent)hooks.onEvent(z,S.map);
   }
   function openTreasure(t){
-    if(S.opened.has(t.id)){toast('宝箱は空だ。');return;}
+    const herb=t.kind==='herb';
+    if(S.opened.has(t.id)){toast(herb?'ここの草は、もう摘んでしまった。':'宝箱は空だ。');return;}
     S.opened.add(t.id);
-    const n=S.treasureNodes.get(t.id);if(n){n.classList.add('open');n.textContent='□';skin(n);}
+    const n=S.treasureNodes.get(t.id);if(n){n.classList.add('open');n.textContent=herb?'':'□';skin(n);}
     if(hooks.onTreasure)hooks.onTreasure(t,S.map);
   }
   function startBattle(sy){
@@ -219,7 +226,7 @@
     }
     for(const t of S.map.treasurePoints||[]){
       if(dist(wx,wy,t.x,t.y-18)<=55){
-        if(dist(fx,fy,t.x,t.y)>190){toast('宝箱には、もう少し近づく必要がある。');return true;}
+        if(dist(fx,fy,t.x,t.y)>190){toast(t.kind==='herb'?'草むらには、もう少し近づく必要がある。':'宝箱には、もう少し近づく必要がある。');return true;}
         openTreasure(t);return true;
       }
     }
@@ -260,6 +267,7 @@
       const k=(CAM.shakeUntil-now)/CAM.shakeMs,a=CAM.shakeAmp*k*k,t=now/23;
       el.world.style.transform='translate('+(Math.sin(t*1.7)*a).toFixed(2)+'px,'+(Math.cos(t*2.3)*a).toFixed(2)+'px) '+el.world.style.transform;
     }
+    if(window.FieldVista)FieldVista.sync(el.world.style.transform);
     const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;
     el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
@@ -287,6 +295,15 @@
       leg(home(),{x,y},ms,()=>setTimeout(()=>{if(token!==CAM.token){done(false);return;}leg({x,y},home(),ms,finish);},hold));
     });
   }
+  // Hold the camera on a world point (scenes): focus() glides there and STAYS until release() glides back to the player.
+  function glide(from,to,ms,token){
+    return new Promise(done=>{const t0=performance.now(),ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+      const step=now=>{if(token!==CAM.token){done(false);return;}const u=Math.min(1,(now-t0)/ms),e=ease(u);
+        CAM.focus={x:from.x+(to.x-from.x)*e,y:from.y+(to.y-from.y)*e};if(S.forest)render();if(u<1)requestAnimationFrame(step);else done(true);};requestAnimationFrame(step);});
+  }
+  const homePt=()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay});
+  function focus(x,y,{ms=1500}={}){if(!S.forest)return Promise.resolve(false);const token=++CAM.token;return glide(CAM.focus||homePt(),{x,y},ms,token);}
+  function release({ms=1200}={}){if(!S.forest||!CAM.focus)return Promise.resolve(true);const token=++CAM.token;return glide(CAM.focus,homePt(),ms,token).then(ok=>{if(ok&&token===CAM.token){CAM.focus=null;if(S.forest)render();}return ok;});}
   function checkZones(){
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
     for(const t of S.map.transitions||[]){
@@ -357,7 +374,7 @@
   }
   function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({shake,pan,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

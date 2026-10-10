@@ -19,3 +19,35 @@
 /* Real art for runtime entities (manifest.entity): replaces the coloured placeholder block */
 .forest-treasure.art,.forest-symbol.art,.forest-seal.art,.forest-lou.art,#forestWorld #forestFiona.art{background-color:transparent;background-size:contain;background-repeat:no-repeat;background-position:50% 100%;border:0;box-shadow:none;color:transparent;font-size:0;border-radius:0}
 .forest-treasure.art.open{transform:none}
+
+/* Time-of-day overlay (js/field/field-timeofday.js): screen-space grade, glow, vignette and stars */
+#forestTod{position:absolute;inset:0;pointer-events:none;z-index:60;--tod-ms:1600ms}
+#forestTod>*{position:absolute;inset:0;opacity:0;transition:opacity var(--tod-ms) ease,background var(--tod-ms) ease}
+.tod-tint{mix-blend-mode:multiply}
+.tod-tint-dusk{background:#ffae78}
+.tod-tint-night{background:#38508f}
+.tod-glow{mix-blend-mode:screen}
+.tod-glow-dusk{background:radial-gradient(circle at 50% 3%,#fff3c0 0,#ffd58a 2.5%,#ff9a4a 7%,rgba(255,110,50,.5) 24%,rgba(255,90,60,0) 58%),linear-gradient(180deg,rgba(255,140,70,.35),rgba(255,140,70,0) 45%)}
+.tod-glow-night{background:radial-gradient(circle at 82% 8%,#f4f8ff 0,#cfdcff 1.8%,rgba(150,180,255,.38) 9%,rgba(120,150,255,0) 38%)}
+.tod-stars{width:100%;height:100%;animation:todTwinkle 4s ease-in-out infinite alternate}
+@keyframes todTwinkle{from{filter:brightness(.8)}to{filter:brightness(1.25)}}
+@media (prefers-reduced-motion:reduce){.tod-stars{animation:none}}
+.forest-herb{position:absolute;box-sizing:border-box;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 50% 35%,#9bd36a 0,#4d8f3a 55%,#2f6a2a 100%);border:3px solid #2a4a24;color:#f6f2c2;font-size:16px;display:grid;place-items:center;box-shadow:0 0 12px #c8f58a88;pointer-events:none}
+.forest-herb.open{background:#4a5e3a;border-color:#33402b;color:#8b9a76;box-shadow:none;opacity:.6}
+
+/* FieldVista: far scenery above the grade overlay (burning village) */
+#forestVista{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0;pointer-events:none;z-index:70}
+.vista-node{position:absolute;opacity:0;pointer-events:none}
+.vf-glow{position:absolute;inset:-60px -80px -40px;background:radial-gradient(ellipse at 50% 62%,rgba(255,140,40,.7) 0,rgba(255,90,30,.35) 38%,rgba(255,60,20,0) 70%);mix-blend-mode:screen;animation:vfPulse 2.4s ease-in-out infinite alternate}
+.vf-house{position:absolute;background:#1a1420;box-shadow:0 0 0 1px #0d0912}
+.vf-roof{position:absolute;width:0;height:0;border-style:solid;border-color:transparent;border-bottom-color:#120c18}
+.vf-window{position:absolute;width:7px;height:8px;background:#ffb050;box-shadow:0 0 8px #ff8a30;animation:vfFlicker .9s steps(2) infinite}
+.vf-flame{position:absolute;border-radius:50% 50% 24% 24%/72% 72% 28% 28%;background:linear-gradient(to top,#ff3a10 0,#ff8a1c 38%,#ffd35a 72%,rgba(255,240,170,.0) 100%);mix-blend-mode:screen;transform-origin:50% 100%;filter:blur(.6px);animation:vfFlame .7s ease-in-out infinite alternate}
+.vf-smoke{position:absolute;width:56px;height:150px;background:radial-gradient(ellipse at 50% 100%,rgba(30,24,30,.82) 0,rgba(30,24,30,.5) 45%,rgba(30,24,30,0) 78%);filter:blur(5px);transform-origin:50% 100%;animation:vfSmoke 8s linear infinite}
+.vf-ember{position:absolute;width:3px;height:3px;border-radius:50%;background:#ffc060;box-shadow:0 0 5px #ff8a30;animation:vfEmber 3s linear infinite}
+@keyframes vfFlame{from{transform:scale(.88,.9) skewX(-4deg)}to{transform:scale(1.08,1.15) skewX(5deg)}}
+@keyframes vfFlicker{50%{opacity:.55}}
+@keyframes vfPulse{from{opacity:.75}to{opacity:1}}
+@keyframes vfSmoke{0%{transform:translate(0,40px) scale(.7,.5);opacity:0}15%{opacity:.9}100%{transform:translate(70px,-230px) scale(2.2,2.8);opacity:0}}
+@keyframes vfEmber{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(40px,-180px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.vf-flame,.vf-smoke,.vf-ember,.vf-glow,.vf-window{animation:none}.vf-smoke{opacity:.6}}

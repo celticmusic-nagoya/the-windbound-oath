@@ -25,6 +25,16 @@
         if(w.points){ctx.lineWidth=w.width||60;ctx.beginPath();w.points.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();}
         else if(w.polygon&&w.kind!=='fall'){ctx.beginPath();w.polygon.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();
           if(w.core){ctx.fillStyle='#2f6f9f';ctx.beginPath();w.core.polygon.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();}}}
+      for(const f of t.fills||[]){   // generic painted regions (sea, hillside): {id,color,alpha?,waves?,rects}
+        ctx.fillStyle=f.color;ctx.globalAlpha=f.alpha??1;const hit=[];
+        for(const r of f.rects)if(r[0]<ox+chunk+1&&r[0]+r[2]>ox&&r[1]<oy+chunk+1&&r[1]+r[3]>oy){ctx.fillRect(r[0],r[1],r[2]+.5,r[3]+.5);hit.push(r);}
+        ctx.globalAlpha=1;
+        if(f.waves&&hit.length){   // deterministic light wave dashes on a 56px lattice (same on every chunk/client)
+          ctx.strokeStyle='rgba(235,248,255,.38)';ctx.lineWidth=2;ctx.lineCap='round';
+          for(let wx=Math.floor(ox/56)*56;wx<ox+chunk+56;wx+=56)for(let wy=Math.floor(oy/56)*56;wy<oy+chunk+56;wy+=56){
+            const h=Math.imul(wx*73856093^wy*19349663,2654435761)>>>0;if(h%3)continue;
+            const px=wx+(h>>>8)%40,py=wy+(h>>>16)%40;if(!hit.some(r=>px>r[0]+4&&px<r[0]+r[2]-4&&py>r[1]+4&&py<r[1]+r[3]-4))continue;
+            const L=10+(h>>>4)%12;ctx.beginPath();ctx.moveTo(px-L/2,py);ctx.quadraticCurveTo(px,py-3,px+L/2,py);ctx.stroke();}}}
       for(const c of t.cliffs||[])for(const r of c.segments||[]){
         ctx.fillStyle=c.type==='face_visible'?'#5b4a3c':'#6f6a55';ctx.fillRect(r[0],r[1],r[2],r[3]);
         ctx.fillStyle=c.type==='face_visible'?'#8a7660':'#8e8a6c';ctx.fillRect(r[0],r[1],r[2],c.type==='face_visible'?18:10);}
