@@ -7,7 +7,7 @@ window.QuestData = Object.freeze({
     q_emma_charm: {
       name: 'エマの護符',
       complete: {item: 'charm_windward'},
-      reward: {ether: 1},
+      reward: {ether: 1, emma_charm: 1},
       objective: {active: '森の道で、エマの落とした護符を探す', complete: 'エマに護符を見せに行く'}
     },
     // 老人(男) ・ 農作業の女性 のクエスト。台詞は js/field/talk-data-quests.js

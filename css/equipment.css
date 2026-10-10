@@ -1,0 +1,11 @@
+/* EQUIP tab of the system menu (js/equipment-ui.js) */
+#systemBody .eqPick,#systemBody .eqSlots{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
+#systemBody .eqSlots .eqSlot{flex:1 1 140px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-height:56px}
+#systemBody .eqSlot.active,#systemBody .eqPick button.active{border-color:#d7bd73;background:#26372f}
+#systemBody .eqList .eqRow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border-top:1px solid #ffffff18;padding:10px 0}
+#systemBody .eqRow>div:first-child{flex:1 1 200px}
+#systemBody .eqDiff{font-size:13px;min-width:120px}
+#systemBody .eqDiff .up{color:#8fe08f}#systemBody .eqDiff .dn{color:#ff9a8a}
+#systemBody .eqStats{grid-template-columns:repeat(4,minmax(0,1fr))}
+#systemBody button:focus-visible{outline:2px solid #d7bd73;outline-offset:2px}
+@media(max-width:520px){#systemBody .eqStats{grid-template-columns:repeat(2,minmax(0,1fr))}#systemBody .eqRow button{width:100%;min-height:44px}}

@@ -41,6 +41,14 @@
     for (const id of Object.values(worn(c))) for (const [k, v] of Object.entries((def(id) || {}).mods || {})) b[k] = (b[k] || 0) + v;
     return b;
   }
+  // stat change if `slot` held `id` (null = empty) instead of what it holds now: {atk:+4, def:-1 ...} (only changed keys)
+  function delta(c, id, slot) {
+    const sum = w => { const b = {}; for (const i of Object.values(w)) for (const [k, v] of Object.entries((def(i) || {}).mods || {})) b[k] = (b[k] || 0) + v; return b; };
+    const cur = sum(worn(c)), nw = {...worn(c)}; if (id) nw[slot] = id; else delete nw[slot];
+    const nx = sum(nw), d = {};
+    for (const k of new Set([...Object.keys(cur), ...Object.keys(nx)])) { const v = (nx[k] || 0) - (cur[k] || 0); if (v) d[k] = v; }
+    return d;
+  }
   function apply(c, stats) {
     const b = bonus(c), o = {...stats};
     for (const [k, v] of Object.entries(b)) if (k in o) o[k] = o[k] + v;
@@ -60,5 +68,5 @@
     }
   }
   const reset = () => load(null);
-  window.EquipmentManager = Object.freeze({equip, unequip, get, bonus, apply, serialize, load, reset, canEquip: (c, id, slot) => why(c, id, slot), def});
+  window.EquipmentManager = Object.freeze({equip, unequip, get, bonus, delta, apply, serialize, load, reset, canEquip: (c, id, slot) => why(c, id, slot), def});
 })();
