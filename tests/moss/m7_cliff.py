@@ -8,7 +8,7 @@ def check(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
+    pg.goto('http://localhost:8765/index.html?legacyVillage=1'); pg.wait_for_timeout(1000)
     ev=lambda s,*a: pg.evaluate(s,*a) if a else pg.evaluate(s)
     ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();MossForest.reset()")
     # ---- gating from the village sign

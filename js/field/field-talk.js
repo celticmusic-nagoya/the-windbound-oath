@@ -178,7 +178,7 @@
   }
   const setFlag = (k, v = true) => { if (/^[a-z0-9_]{1,40}$/i.test(k)) flags[k] = Boolean(v); };
 
-  for (const src of [window.TalkData, window.TalkDataQuests, window.TalkDataScenes, window.TalkDataCapital]) if (src) for (const t of src.tables) loadTable(t);
+  for (const src of [window.TalkData, window.TalkDataQuests, window.TalkDataScenes, window.TalkDataCapital, window.TalkDataRilde]) if (src) for (const t of src.tables) loadTable(t);
   window.FieldTalk = Object.freeze({flag: flagOf, seenEntry: id => seen.has(id), register, loadTable, has, talk, pick, setFlag, setQuestProvider, serialize, load,
     get active() { return Boolean(live()); }, get history() { return history.slice(); }});
 })();

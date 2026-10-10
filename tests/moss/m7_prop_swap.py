@@ -10,14 +10,14 @@ def check(c,m):
     if not c: fails.append(m)
 def chk(): return subprocess.run([sys.executable,'tools/moss/check_assets.py'],capture_output=True,text=True)
 orig=open(MAN,encoding='utf-8').read()
-os.makedirs('img/field/moss/real',exist_ok=True)
+os.makedirs('img/field/moss/real_t',exist_ok=True)
 art={'fence_test':(22,64,(150,100,50,255)),'bench_test':(170,70,(60,60,200,255)),'stone_test':(90,220,(120,120,120,255))}
-for k,(w,h,c) in art.items(): Image.new('RGBA',(w*2,h*2),c).save('img/field/moss/real/%s.png'%k)
+for k,(w,h,c) in art.items(): Image.new('RGBA',(w*2,h*2),c).save('img/field/moss/real_t/%s.png'%k)
 def write(rules):
     m=json.loads(orig); m['node'][0:0]=rules; open(MAN,'w',encoding='utf-8').write(json.dumps(m,ensure_ascii=False,indent=1))
-rules=[{"match":"^prop_post_boundary_wood","file":"real/fence_test.png","w":22,"h":64},
-       {"match":"^prop_bench_view","file":"real/bench_test.png","w":170,"h":70},
-       {"match":"^anc_(standing|boundary_stone)","file":"real/stone_test.png","w":90,"h":220}]
+rules=[{"match":"^prop_post_boundary_wood","file":"real_t/fence_test.png","w":22,"h":64},
+       {"match":"^prop_bench_view","file":"real_t/bench_test.png","w":170,"h":70},
+       {"match":"^anc_(standing|boundary_stone)","file":"real_t/stone_test.png","w":90,"h":220}]
 errs=[]
 try:
     write(rules); r=chk(); print(r.stdout.strip().splitlines()[-1])
@@ -35,8 +35,8 @@ try:
                 p0=[q for q in m['props'] if q['asset']==asset]
                 if not p0 and key=='fence': p0=[q for q in m['props'] if q['asset'].startswith('prop_post')]
                 pg.evaluate("([x,y])=>MossForest.teleportFeet(x,y+60)",[p0[0]['x'],p0[0]['y']]); pg.wait_for_timeout(700)
-                n=pg.evaluate("k=>document.querySelectorAll('#forestWorld img[src*=\"real/%s_test\"]').length"%key,key)
-                sz=pg.evaluate("k=>{const i=document.querySelector('#forestWorld img[src*=\"real/'+k+'_test\"]');return i?[parseFloat(i.style.width||i.width),parseFloat(i.style.height||i.height)]:null}",key)
+                n=pg.evaluate("k=>document.querySelectorAll('#forestWorld img[src*=\"real_t/%s_test\"]').length"%key,key)
+                sz=pg.evaluate("k=>{const i=document.querySelector('#forestWorld img[src*=\"real_t/'+k+'_test\"]');return i?[parseFloat(i.style.width||i.width),parseFloat(i.style.height||i.height)]:null}",key)
                 check((n>0)==real,'%s: %s sprite is %s (%d nodes, size %s)'%(tag,key,'the temp art' if n else 'the stand-in/placeholder',n,sz))
                 if real and sz: check(sz==[art[key+'_test'][0],art[key+'_test'][1]],'%s: %s drawn at manifest w/h'%(tag,key))
             b.close()
@@ -44,6 +44,6 @@ try:
     open(MAN,'w',encoding='utf-8').write(orig); run('after removal',False)
     check(not errs,'0 console errors %s'%errs[:2])
 finally:
-    open(MAN,'w',encoding='utf-8').write(orig); shutil.rmtree('img/field/moss/real',ignore_errors=True)
-    check(open(MAN,encoding='utf-8').read()==orig and not os.path.exists('img/field/moss/real'),'manifest and art folder restored')
+    open(MAN,'w',encoding='utf-8').write(orig); shutil.rmtree('img/field/moss/real_t',ignore_errors=True)
+    check(open(MAN,encoding='utf-8').read()==orig and not os.path.exists('img/field/moss/real_t'),'manifest and art folder restored')
 sys.exit(1 if fails else 0)

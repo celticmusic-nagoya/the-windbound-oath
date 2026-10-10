@@ -2,7 +2,8 @@
  * Lives in its OWN layer above the time-of-day grade (#forestTod) and mirrors the world transform every frame, so a fire
  * keeps glowing at night instead of being tinted blue by the grade. Pure CSS/DOM (no image assets): when real art exists,
  * a map vista entry may carry {image:'file.png'} to use it instead of the procedural kind.
- * Map data:  "vista":[{"id":"village_fire","kind":"village_fire","x":..,"y":..,"w":..,"h":..,"seed":5}]  (world px, top-left)
+ * Map data:  "vista":[{"id":"village_fire","kind":"village_fire","x":..,"y":..,"w":..,"h":..,"seed":5,"on":false}]  (world px, top-left)
+ * kinds: village_fire (far village) · fire_spot (one burning ruin) · smoke_column · hearth (interior warm light); "on":true = shown as soon as the map mounts
  * API: configure(scene) · mount(defs) · clear() · set(id,on,{ms}) · sync(transform) · isOn(id) */
 (function () {
   'use strict';
@@ -32,7 +33,32 @@
     for (let i = 0; i < 16; i++) div('vf-ember', root, {left: 40 + r() * (def.w - 80) + 'px', top: def.h * .4 + r() * 40 + 'px', animationDuration: 2.2 + r() * 2.5 + 's', animationDelay: -r() * 4 + 's'});
     return root;
   }
-  const KINDS = {village_fire: villageFire};
+  // A single burning ruin / smouldering pile placed where a house stood (Rilde Village after the attack): a few flames, one smoke plume, embers.
+  function fireSpot(def) {
+    const r = rng(def.seed || 1), root = div('vista-node vista-fire-spot', null, {left: def.x + 'px', top: def.y + 'px', width: def.w + 'px', height: def.h + 'px'});
+    div('vf-glow', root, {inset: '-40px -70px -30px'});
+    const n = 2 + (def.w > 90 ? 1 : 0) + (def.w > 140 ? 1 : 0);
+    for (let k = 0; k < n; k++) {
+      const fw = 16 + r() * 18, fh = 30 + r() * 38;
+      div('vf-flame vf-flame-lite', root, {left: (.12 + .76 * (k + r() * .6) / n) * def.w - fw / 2 + 'px', top: def.h - fh - r() * 14 + 'px', width: fw + 'px', height: fh + 'px', animationDuration: .5 + r() * .5 + 's', animationDelay: -r() + 's'});
+    }
+    div('vf-smoke', root, {left: def.w * .35 + 'px', top: def.h - 180 + 'px', animationDuration: 6 + r() * 4 + 's', animationDelay: -r() * 6 + 's'});
+    for (let i = 0; i < 4; i++) div('vf-ember', root, {left: def.w * (.2 + r() * .6) + 'px', top: def.h * .5 + r() * 30 + 'px', animationDuration: 2.2 + r() * 2.5 + 's', animationDelay: -r() * 4 + 's'});
+    return root;
+  }
+  // Smoke only (burnt-out houses, a smouldering stone): two slow plumes.
+  function smokeColumn(def) {
+    const r = rng(def.seed || 1), root = div('vista-node vista-smoke-column', null, {left: def.x + 'px', top: def.y + 'px', width: def.w + 'px', height: def.h + 'px'});
+    for (let k = 0; k < 2; k++) div('vf-smoke', root, {left: def.w * (.25 + k * .3) + 'px', top: def.h - 150 + 'px', animationDuration: 7 + r() * 4 + 's', animationDelay: -r() * 7 + 's'});
+    div('vf-ember', root, {left: def.w * .5 + 'px', top: def.h * .6 + 'px', animationDuration: 3.4 + 's'});
+    return root;
+  }
+  // Warm hearth light on a room (interiors): a soft pulsing glow, no geometry.
+  function hearth(def) {
+    const root = div('vista-node vista-hearth', null, {left: def.x + 'px', top: def.y + 'px', width: def.w + 'px', height: def.h + 'px'});
+    div('vh-glow', root); return root;
+  }
+  const KINDS = {village_fire: villageFire, fire_spot: fireSpot, smoke_column: smokeColumn, hearth};
   function configure(scene) {
     if (layer && layer.parentNode) layer.remove();
     layer = div('forestVista', null); layer.id = 'forestVista'; layer.setAttribute('aria-hidden', 'true'); scene.appendChild(layer); nodes.clear();
@@ -41,7 +67,8 @@
     clear(); if (!layer) return;
     for (const d of defs || []) {
       const make = KINDS[d.kind]; if (!make || nodes.has(d.id)) continue;
-      const n = make(d); n.dataset.vista = d.id; n.style.display = 'none'; layer.appendChild(n); nodes.set(d.id, n);
+      const n = make(d); n.dataset.vista = d.id; layer.appendChild(n); nodes.set(d.id, n);
+      if (d.on) { n.style.display = 'block'; n.style.opacity = '1'; } else n.style.display = 'none';   // "on": visible from the moment the map is mounted (a state, not a story reveal)
     }
   }
   function clear() { for (const n of nodes.values()) n.remove(); nodes.clear(); }

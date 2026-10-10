@@ -1,6 +1,7 @@
 /* Time-of-day mood for field scenes (day / dusk / night). A screen-space overlay on top of the world, so it is
  * independent of map art: colour grade (multiply tint), sun/moon glow, vignette and a starfield.
  * Maps opt in with  "timeOfDay": {"default":"day"}  ; the story or the player switches with set(name,{ms}).
+ * Presets: day / dusk / night (cycle()) and ember (post-attack smoke light, set by map data only).
  * Not saved: time of day is derived (story stage / the player's own choice) and never blocks anything.
  * Canopy layers (forest maps opt in with  "timeOfDay":{"default":"day","canopy":true | {beams,dapple,leaves,moss}} , values 0..1 scale each layer):
  *   beams  - light shafts through the canopy      dapple - 木漏れ日, drifting sun spots on the ground
@@ -14,6 +15,8 @@
   const PRESETS = Object.freeze({
     day:   {tintDusk: 0,   tintNight: 0,   glowDusk: 0,   glowNight: 0,   vignette: 0,   vigColor: '0,0,0',     stars: 0, beams: .6,  dapple: .55, leaves: .4,  moss: .3,  beamColor: '255,246,200'},
     dusk:  {tintDusk: .62, tintNight: 0,   glowDusk: 1,   glowNight: 0,   vignette: .55, vigColor: '70,25,70',   stars: .12, beams: .5, dapple: .3,  leaves: .35, moss: .25, beamColor: '255,170,100'},
+    // ember: the burnt village (Rilde Village after the attack): smoky brown-red evening, no sun, heavy vignette. Not part of cycle().
+    ember: {tintDusk: .5,  tintNight: .34, glowDusk: 0,   glowNight: 0,   vignette: .7,  vigColor: '48,12,8',  stars: 0, beams: 0, dapple: 0, leaves: .15, moss: .25, beamColor: '255,150,90'},
     night: {tintDusk: 0,   tintNight: .82, glowDusk: 0,   glowNight: 1,   vignette: .6,  vigColor: '4,10,34',    stars: 1, beams: .14, dapple: 0,  leaves: .2,  moss: .3,  beamColor: '150,180,255'}
   });
   const CANOPY_KEYS = ['beams', 'dapple', 'leaves', 'moss'];

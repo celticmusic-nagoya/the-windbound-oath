@@ -12,8 +12,9 @@
     const key=(i,j)=>i+','+j;
     for(const e of options.items){const k=key(Math.floor(e.x/chunk),Math.floor(e.y/chunk));let l=buckets.get(k);if(!l)buckets.set(k,l=[]);l.push(e);}
     function ground(ctx,ox,oy){
-      const t=map.terrain,G=options.ground;ctx.fillStyle=t.baseColor||'#5d9a45';ctx.fillRect(0,0,chunk+1,chunk+1);
+      const t=map.terrain,G=options.ground;ctx.fillStyle=t.baseColor||'#5d9a45';ctx.fillRect(0,0,Math.min(chunk+1,map.world.width-ox),Math.min(chunk+1,map.world.height-oy));
       ctx.save();ctx.translate(-ox,-oy);
+      ctx.beginPath();ctx.rect(0,0,map.world.width,map.world.height);ctx.clip();   // nothing is painted outside the world (small interiors are centred on a dark screen)
       if(G&&G.grass){   // textured ground, world-aligned so chunks tile seamlessly; darkened toward the map's mood colour
         const pat=ctx.createPattern(G.grass,'repeat');pat.setTransform(new DOMMatrix().scale(G.tile/G.grass.width));
         ctx.fillStyle=pat;ctx.fillRect(ox,oy,chunk+1,chunk+1);

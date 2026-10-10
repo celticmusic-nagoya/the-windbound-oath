@@ -46,5 +46,5 @@ import shutil
 os.rename(src+'/fiona_idle_up.png',tmp+'/hold.png'); r=run('--hero','fiona','--dry-run'); check(r.returncode==1 and 'missing fiona_idle_up' in r.stdout,'missing direction rejected'); os.rename(tmp+'/hold.png',src+'/fiona_idle_up.png')
 os.rename(src+'/fiona_walk_left_05.png',tmp+'/hold.png'); r=run('--hero','fiona','--dry-run'); check(r.returncode==1 and 'same number' in r.stdout,'unequal walk counts rejected'); os.rename(tmp+'/hold.png',src+'/fiona_walk_left_05.png')
 bg=Image.new('RGBA',(600,700),(40,30,20,255)); bg.save(src+'/fiona_idle_down.png'); r=run('--hero','fiona','--dry-run'); check(r.returncode==1 and ('baked backdrop' in r.stdout),'opaque backdrop rejected')
-check(subprocess.run(['git','status','--porcelain','--','img','js/field/fiona-field-assets.js','js/field/aidan-field-assets.js'],capture_output=True,text=True).stdout.strip()=='','repo art untouched by the dry runs')
+check(subprocess.run(['git','status','--porcelain','--','img/field/moss/real','img/field/moss/aidan','js/field/fiona-field-assets.js','js/field/aidan-field-assets.js'],capture_output=True,text=True).stdout.strip()=='','repo art untouched by the dry runs')
 shutil.rmtree(tmp); print('\nFAILS',len(fails)); sys.exit(1 if fails else 0)

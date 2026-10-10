@@ -166,7 +166,7 @@
   // ---------- transitions between maps ----------
   async function enter(options){
     if(!S.configured)throw new Error('MossForest not configured');
-    const id=options.map,spawnId=options.spawn;
+    const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;   // logical ids (e.g. 'rilde_village' = peace/ruin by story state) resolve here
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     mountFionaSprite();
@@ -186,11 +186,13 @@
     if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
     if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
     el.fade.style.opacity='1';
+    playBgm();
     await setFade(0,fadeMs(options.transition,'in'));
     S.busy=false;S.active=true;startLoop();
     if(hooks.onEnter)hooks.onEnter(map,spawnId);
     return map;
   }
+  function playBgm(){if(!window.FieldBgm)return;const b=S.map&&S.map.audio&&S.map.audio.bgm;FieldBgm.play(b&&b.id);}
   // Coarse 32px flood fill from the area entrance with the live collision (used to validate restored positions).
   function reachable(x0,y0,x1,y1){
     const G=32,W=Math.ceil(S.map.world.width/G),H=Math.ceil(S.map.world.height/G),blocked=S.forest.blocked;
@@ -305,7 +307,7 @@
     const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);if(!S.fionaHold){S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;}   // fionaHold: a scene (FieldChoreo) is placing her
     el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
-    el.player.style.display=el.fiona.style.display='block';
+    el.player.style.display='block';el.fiona.style.display=(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false)?'none':'block';   // follower hidden indoors / before she joins
     const sc=FieldCamera.scale,rc=el.world.getBoundingClientRect();
     S.forest.update({x:-rc.left/sc,y:-rc.top/sc,width:el.scene.clientWidth/sc,height:el.scene.clientHeight/sc});
   }
@@ -407,8 +409,8 @@
     return null;
   }
   function show(){el.scene.style.display='block';}
-  function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';}
-  function resume(){show();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
+  function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
+  function resume(){show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
   function snapshot(){return {map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired]};}
   function restoreState(snap){
     S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);

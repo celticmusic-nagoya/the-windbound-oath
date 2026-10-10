@@ -67,7 +67,7 @@ with sync_playwright() as p:
     ev("(a)=>MossForest.enter({map:a[0],spawn:a[1]})",['fort_dunvall_01_courtyard','from_keep']); pg.wait_for_timeout(1000)
     t=[t for t in maps['fort_dunvall_01_courtyard']['transitions'] if t['id']=='tr_f1_to_village'][0]['rect']
     ev("([x,y])=>MossForest.goFeet(x,y)",[t['x']+t['w']/2,t['y']+t['h']/2]); pg.wait_for_timeout(9000)
-    check(not ev("forestActive") and ev("getComputedStyle(document.querySelector('#forestScene')).display")=='none','south gate returns to the village')
+    check(ev("MossForest.mapId").startswith('rilde_village_01_'),'south gate returns to the (Moss) Rilde village')
     check(not errs,'0 console errors %s'%errs[:3])
     b.close()
 sys.exit(1 if fails else 0)

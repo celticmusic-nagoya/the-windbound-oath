@@ -60,7 +60,7 @@
       const sp=nodeArt(e.asset),[w,h]=sp?[sp.w,sp.h]:pick(SIZE,e.asset,[36,36]);
       cull.add({id:e.id||(e.rule+':'+e.x+','+e.y),x:e.x-w/2,y:e.y-h,w,h,create(){
         const d=document.createElement(sp?'img':'div');d.className='forest-ent';d.dataset.asset=e.asset;
-        Object.assign(d.style,{position:'absolute',left:e.x-w/2+'px',top:e.y-h+'px',width:w+'px',height:h+'px',zIndex:String(Math.round(e.y)),pointerEvents:'none'});
+        Object.assign(d.style,{position:'absolute',left:e.x-w/2+'px',top:e.y-h+'px',width:w+'px',height:h+'px',zIndex:String(e.z!=null?e.z:Math.round(e.y)),pointerEvents:'none'});
         if(sp){d.src=sp.im.src;d.draggable=false;d.alt='';if(e.flip||((e.x*7+e.y*13)|0)%2)d.style.transform='scaleX(-1)';}
         else Object.assign(d.style,{background:pick(COLOR,e.asset,'#668'),borderRadius:/^tree_|^veg_/.test(e.asset)?'50% 50% 20% 20%':'4px',opacity:'.92'});
         return d;}});}
