@@ -353,6 +353,8 @@ $('#squareSign').onclick=()=>say('木の案内板だ。村の道が丁寧に描�
 $('#trainingSign').onclick=()=>say('剣の傷がいくつも残っている。ここで村の若者たちが訓練しているようだ。');
 $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用の木人だ。');
 $('#hillExit').onclick=()=>{if(storyStage<3)say('この先は風見の断崖へ続いている。今は訓練場へ向かおう。');else if(storyStage===3||storyStage>=15)enterCliff();else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
+// ドゥンヴァル砦('fort') / 王都('capital') の基礎マップへ入る（開発・確認用。物語には未接続）: enterWorldMap('fort')
+function enterWorldMap(id,spawn){closeDialogue();forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterMap(id,spawn);}
 function enterCliff(){
  closeDialogue();forestActive=true;$('#forestScene').style.display='block';
  MossForestStory.enterCliff().then(()=>{if(storyStage===3)setObj('崖の上のビューポイントへ向かおう')});
@@ -1821,6 +1823,8 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/inventory.js"></script>
 <script src="js/equipment.js"></script>
 <script src="js/equipment-ui.js"></script>
+<script src="js/data/shop-data.js"></script>
+<script src="js/shop.js"></script>
 <script src="js/field/quest-data.js"></script>
 <script src="js/quest.js"></script>
 <script src="js/field/talk-conditions.js"></script>

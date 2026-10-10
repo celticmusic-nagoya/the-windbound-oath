@@ -12,6 +12,10 @@ window.EquipmentData = Object.freeze({
   items: Object.freeze({
     wooden_sword: {name: '木剣', slot: 'weapon', mods: {}, motionVariant: 'wooden', equipBy: ['aidan'], desc: '稽古用の木剣。軽くて、手に馴染む。（能力補正なし）'},
     iron_sword:   {name: '鉄の剣', slot: 'weapon', mods: {atk: 5}, motionVariant: 'iron', equipBy: ['aidan', 'liam'], desc: '村の鍛冶場で打たれた、飾り気のない鉄の剣。'},
+    leather_cap:  {name: '革の帽子', slot: 'head', mods: {def: 1}, desc: 'なめした革を縫い合わせた、丈夫な帽子。'},
+    cloth_tunic:  {name: '布のチュニック', slot: 'body', mods: {def: 1}, desc: '村の織り手が仕立てた、動きやすい布の上着。'},
+    leather_armor:{name: '革の鎧', slot: 'body', mods: {def: 3}, desc: '胸と肩を硬い革で補強した軽鎧。旅の剣士の定番。'},
+    bronze_ring:  {name: '銅の指輪', slot: 'accessory', mods: {maxHp: 5}, desc: '素朴な銅の指輪。身につけると少し体が軽い。'},
     emma_charm:   {name: 'エマの護符', slot: 'accessory', mods: {def: 2, maxHp: 8}, desc: 'エマが祈りを込めて編んだ護符。身につけると不思議と落ち着く。'}
   })
 });

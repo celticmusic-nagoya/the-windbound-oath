@@ -122,6 +122,7 @@
     s.choice = null;
     const reply = o.reply ? pagesOf(o.reply) : [];
     applyEffects(o, reply);
+    if (o.shop && window.Shop) { finish(); Shop.open(o.shop); return; }   // choice opens a shop modal after the talk closes
     if (!reply.length) { finish(); return; }
     s.pages = reply; s.i = 0; show();
   }

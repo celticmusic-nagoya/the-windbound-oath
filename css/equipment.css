@@ -9,3 +9,15 @@
 #systemBody .eqStats{grid-template-columns:repeat(4,minmax(0,1fr))}
 #systemBody button:focus-visible{outline:2px solid #d7bd73;outline-offset:2px}
 @media(max-width:520px){#systemBody .eqStats{grid-template-columns:repeat(2,minmax(0,1fr))}#systemBody .eqRow button{width:100%;min-height:44px}}
+/* shop modal (js/shop.js) */
+#shopModal{position:fixed;inset:0;z-index:330;display:none;background:#07100deb;color:#eee3cc;padding:4%;overflow:auto}
+#shopModal .shopPanel{max-width:640px;margin:auto;background:#101a16;border:1px solid #c5a45b;border-radius:10px;padding:16px}
+#shopModal .shopHead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+#shopModal .shopHead h3{flex:1 1 auto;margin:0}
+#shopModal button{padding:9px 13px;background:#18251f;color:#eee3cc;border:1px solid #8f7c52;border-radius:5px;min-height:40px}
+#shopModal button:disabled{opacity:.45}
+#shopModal button:focus-visible{outline:2px solid #d7bd73;outline-offset:2px}
+#shopModal .shopRow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border-top:1px solid #ffffff18;padding:10px 0}
+#shopModal .shopRow>div:first-child{flex:1 1 200px}#shopModal .shopPrice{min-width:64px;text-align:right}
+#shopModal small{color:#b8c6be}
+@media(max-width:520px){#shopModal .shopRow button{width:100%;min-height:44px}}
