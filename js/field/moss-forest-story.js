@@ -69,16 +69,15 @@
     if(valid){mapId=moss.map;pos=[moss.x,moss.y];}
     else{
       const chests=(data&&data.forestChests)||{};
-      state={opened:[chests.fChest1&&'tr_a1_hollow',chests.fChest2&&'tr_a2_overlook',chests.fChest3&&'tr_a3_shrine'].filter(Boolean),fired:[]};
+      const keep=moss&&typeof moss==='object'?moss:{};
+      state={opened:[...(Array.isArray(keep.opened)?keep.opened:[]),chests.fChest1&&'tr_a1_hollow',chests.fChest2&&'tr_a2_overlook',chests.fChest3&&'tr_a3_shrine'].filter(x=>typeof x==='string'),fired:Array.isArray(keep.fired)?keep.fired:[]};
       if(ctx.louFound||ctx.storyStage>=11){mapId=A.a3;pos=[4395-17,2915-42];}
       else if(ctx.count>=3){mapId=A.a3;pos=[3910-17,3330-42];}
       else if(ctx.count>=1){mapId=A.a3;spawn='from_area2';}
       else{mapId=A.a1;spawn='from_cliff_fall';}
     }
-    // A closed seal cannot have the player inside the sanctuary: fall back to the area entrance.
-    if(mapId===A.a3&&pos&&ctx.count<3&&pos[1]+42<3300){pos=null;spawn='from_area2';}
     MossForest.reset();MossForest.restoreState(state);
-    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow()});
+    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true});
   }
   function syncFlags(){
     const f=flagsNow();for(const [k,v] of Object.entries(f))MossForest.setFlag(k,v);

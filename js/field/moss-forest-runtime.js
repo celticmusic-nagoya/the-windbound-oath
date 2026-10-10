@@ -100,8 +100,9 @@
     el.scene.style.display='block';
     unmount();mount(map);
     let spot;
-    if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)){spot={x:options.x,y:options.y};}
-    else{const sp=map.spawns.points[spawnId||map.spawns.default];spot={x:sp.x-FOOT.ax,y:sp.y-FOOT.ay};}
+    const sp0=map.spawns.points[spawnId||map.spawns.default];
+    if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
+    else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
     S.x=spot.x;S.y=spot.y;S.target=null;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
     el.fade.style.opacity='1';
@@ -109,6 +110,23 @@
     S.busy=false;S.active=true;startLoop();
     if(hooks.onEnter)hooks.onEnter(map,spawnId);
     return map;
+  }
+  // Coarse 32px flood fill from the area entrance with the live collision (used to validate restored positions).
+  function reachable(x0,y0,x1,y1){
+    const G=32,W=Math.ceil(S.map.world.width/G),H=Math.ceil(S.map.world.height/G),blocked=S.forest.blocked;
+    const seen=new Uint8Array(W*H),q=[],cell=(x,y)=>Math.floor(y/G)*W+Math.floor(x/G);
+    const start=cell(x0,y0),goal={i:Math.floor(x1/G),j:Math.floor(y1/G)};
+    seen[start]=1;q.push(start);
+    for(let h=0;h<q.length;h++){
+      const c=q[h],i=c%W,j=(c-i)/W;
+      if(Math.abs(i-goal.i)<=1&&Math.abs(j-goal.j)<=1)return true;
+      for(const [di,dj] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const ni=i+di,nj=j+dj;if(ni<0||nj<0||ni>=W||nj>=H)continue;const n=nj*W+ni;if(seen[n])continue;
+        // Sample along the step so walls thinner than one cell (the 18px seal) cannot be hopped over.
+        let ok=true;for(const t of [.25,.5,.75,1]){if(blocked((i+di*t)*G,(j+dj*t)*G)){ok=false;break;}}
+        if(!ok)continue;seen[n]=1;q.push(n);}
+    }
+    return false;
   }
   function transitionTo(t){
     if(S.busy)return;
