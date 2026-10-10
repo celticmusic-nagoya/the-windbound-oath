@@ -12,7 +12,7 @@
   ].map(([id,label,x,footY,height])=>({id,label,x,footY,height,
     path:'img/field/lind/npc/villagers/'+id+'_idle.png'}));
   window.LindFisherman?.configure(definitions.find(d=>d.id==='fisherman'));
-  const WALK_FPS=4,actors=[];
+  const WALK_FPS=4,RUN_FPS=6,actors=[];
   let active=false,notice=null,lastInteraction=null,frame=null,previous=null;
   function add(definition) {if(actors.length)throw new Error('Register field NPC before mounting');definitions.push(definition);}
   function mount(parent,controls) {
@@ -86,9 +86,13 @@
   function blocked(x,y) {return active&&actors.some(a=>x+28>a.foot.x&&x+6<a.foot.x+a.foot.width&&y+42>a.foot.y&&y+32<a.foot.y+a.foot.height);}
   function render(a) {
     if(a.fishing){LindFisherman.render(a);return;}
-    // Shared cadence for every NPC: 4 frame changes per second, as the farmer's original walk.
-    const state=a.state==='WALK'&&a.walkSeq?.length?a.walkSeq[Math.floor(a.elapsed*WALK_FPS)%a.walkSeq.length]:'idle';
-    const b=window.LindFieldContentBounds[a.boundsId&&state==='idle'?a.boundsId:a.id+'_'+state],scale=a.height/b[5];
+    // Walk cadence: 4 frame changes/s while walking (the farmer's original), 6/s for running children.
+    // The clock only advances while moving (see update), so a stride never restarts mid-step.
+    const moving=a.state==='WALK'||a.state==='RUN'||a.state==='CHASE';
+    const state=moving&&a.walkSeq?.length?a.walkSeq[Math.floor((a.walkClock||0)*(a.state==='WALK'?WALK_FPS:RUN_FPS))%a.walkSeq.length]:'idle';
+    // New walk frames share the idle canvas and scale: geometry comes from the idle bounds so the body never
+    // resizes between frames. Legacy farmer_male_walk keeps its own bounds.
+    const b=window.LindFieldContentBounds[state==='idle'||state.includes('_walk_')?(a.boundsId||a.id+'_idle'):a.id+'_'+state],scale=a.height/b[5];
     a.width=b[4]*scale;a.y=a.footY-a.height;a.foot.x=a.x-9;a.foot.y=a.footY-8;
     Object.assign(a.element.style,{left:a.x-a.width/2+'px',top:a.y+'px',width:a.width+'px',height:a.height+'px',zIndex:String(Math.round(a.footY)),transformOrigin:'50% 100%',transform:a.direction<0?'scaleX(-1)':'none'});
     Object.entries(a.frames).forEach(([key,image])=>{image.hidden=key!==state;});
@@ -113,7 +117,8 @@
     return progress;
   }
   function update(seconds) {
-    actors.forEach(a=>{a.interactionPause=Math.max(0,(a.interactionPause||0)-seconds);});
+    actors.forEach(a=>{a.interactionPause=Math.max(0,(a.interactionPause||0)-seconds);
+      if(a.state==='WALK'||a.state==='RUN'||a.state==='CHASE')a.walkClock=(a.walkClock||0)+seconds;});
     actors.filter(a=>a.fishing).forEach(a=>LindFisherman.update(a,seconds));
     window.LindChildren?.update(seconds);
     actors.filter(a=>a.play).forEach(render);
