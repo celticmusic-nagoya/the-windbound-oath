@@ -16,15 +16,21 @@
       const img=document.createElement('img');img.src=f.path;img.alt=a.label;img.hidden=true;
       a.element.append(img);a.frames[key]=img;
     }
-    a.fishing={state:'FISH_IDLE',elapsed:0,time:0,wait:12,seed:8721,catches:0,lastCatch:-90};
+    a.fishing={state:'FISH_IDLE',elapsed:0,time:0,wait:12,seed:8721,catches:0,lastCatch:0,nextCatch:catchInterval(8721)};
     a.direction=1;render(a);
   }
-  function update(a,seconds){
+  // Catch cadence: time from one CATCH to the next is uniform 45-75 s (mean 60 s). The
+  // BITE+REEL lead-in is scheduled so that CATCH itself lands on the target time, and a
+  // wait never overshoots it. Replaces the old 18% roll after a 60 s cool-down (~110 s mean).
+  const INTERVAL={min:45,max:75},LEAD=.8+1.4;
+  function catchInterval(seed){return INTERVAL.min+((Math.imul(seed,1664525)+1013904223)>>>0)/4294967296*(INTERVAL.max-INTERVAL.min);}
+  function boundedWait(a,f){return Math.max(1,Math.min(8+random(a)*17,f.nextCatch-LEAD-f.time));}
+  function advance(a,seconds){
     const f=a.fishing;f.time+=seconds;f.elapsed+=seconds;
-    if(f.state==='FISH_IDLE'&&f.elapsed>=1){f.state='WAIT';f.elapsed=0;f.wait=8+random(a)*17;}
+    if(f.state==='FISH_IDLE'&&f.elapsed>=1){f.state='WAIT';f.elapsed=0;f.wait=boundedWait(a,f);}
     else if(f.state==='WAIT'&&f.elapsed>=f.wait){
       f.elapsed=0;
-      if(f.time-f.lastCatch>=60&&random(a)<.18)f.state='BITE';
+      if(f.time>=f.nextCatch-LEAD-.001)f.state='BITE';
       else {f.state='ROD_ADJUST';}
     }
     else {
@@ -32,12 +38,12 @@
       if(durations[f.state]&&f.elapsed>=durations[f.state]){
         const next={ROD_ADJUST:'WAIT',BITE:'REEL',REEL:'CATCH',CATCH:'INSPECT',INSPECT:'RESET',RESET:'FISH_IDLE'};
         f.state=next[f.state];f.elapsed=0;
-        if(f.state==='WAIT')f.wait=8+random(a)*17;
-        if(f.state==='CATCH'){f.catches++;f.lastCatch=f.time;}
+        if(f.state==='WAIT')f.wait=boundedWait(a,f);
+        if(f.state==='CATCH'){f.catches++;f.lastCatch=f.time;f.nextCatch=f.time+INTERVAL.min+random(a)*(INTERVAL.max-INTERVAL.min);}
       }
     }
-    render(a);
   }
+  function update(a,seconds){advance(a,seconds);render(a);}
   function render(a){
     const f=a.fishing;
     const key=f.state==='BITE'?'bite_01':f.state==='REEL'?(f.elapsed<.7?'reel_01':'reel_02'):
@@ -52,5 +58,5 @@
     Object.assign(a.hit.style,{left:a.x-22+'px',top:a.footY-44+'px',zIndex:String(Math.round(a.footY+1))});
     Object.assign(a.foot,{x:a.x-9,y:a.footY-8});a.element.dataset.state=f.state;a.element.dataset.frame=key;
   }
-  window.LindFisherman=Object.freeze({configure,mount,update,render,scale});
+  window.LindFisherman=Object.freeze({configure,mount,update,advance,render,scale,interval:INTERVAL});
 })();
