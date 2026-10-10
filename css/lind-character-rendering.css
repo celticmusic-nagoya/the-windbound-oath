@@ -1,0 +1,44 @@
+/* Opt-in DEV comparison, three representatives only. Geometry/anchors stay unchanged. */
+body.lindFieldReview[data-lind-character-rendering="smooth"] #player > .aidan-field-frame,
+body.lindFieldReview[data-lind-character-rendering="smooth"] .lind-field-npc[data-npc-id="emma"] img,
+body.lindFieldReview[data-lind-character-rendering="smooth"] .lind-field-npc[data-npc-id="farmer_male"] img {
+  image-rendering:auto;
+}
+/* Keep only the visible A1 frame in its own compositing layer at camera zoom.
+ * No transform/scale/position is added, and hidden frames do not reserve layers. */
+body.lindFieldReview[data-lind-character-rendering="smooth"] #player > .aidan-field-frame:not([hidden]) {
+  will-change:transform;
+}
+
+/* Crisp trial uses a display-resolution canvas. No sharpening or coordinate snap. */
+body.lindFieldReview[data-lind-character-rendering="crisp"] #player > .aidan-field-frame,
+body.lindFieldReview[data-lind-character-rendering="crisp"] .lind-field-npc[data-npc-id="emma"] img,
+body.lindFieldReview[data-lind-character-rendering="crisp"] .lind-field-npc[data-npc-id="farmer_male"] img,
+body.lindFieldReview[data-lind-rendering-scope="all"][data-lind-character-rendering="smooth"] .lind-field-npc img,
+body.lindFieldReview[data-lind-rendering-scope="all"][data-lind-character-rendering="crisp"] .lind-field-npc img {
+  image-rendering:auto;
+}
+
+/* A brief observation gesture using the same portrait, not a new animation asset. */
+body.lindFieldReview .lind-field-npc[data-npc-id="emma"][data-state="WORK"] img {
+  transform:rotate(-.6deg);transform-origin:50% 100%;
+}
+@media(prefers-reduced-motion:reduce){
+  body.lindFieldReview .lind-field-npc[data-npc-id="emma"][data-state="WORK"] img {transform:none;}
+}
+
+.lind-crisp-source {opacity:0;}
+.lind-crisp-frame {position:absolute;pointer-events:none;image-rendering:auto;}
+.lind-field-npc[data-state="RUN"] .lind-crisp-frame,
+.lind-field-npc[data-state="CHASE"] .lind-crisp-frame {
+  animation:lindChildStep .26s ease-in-out infinite alternate;transform-origin:50% 100%;
+}
+.lind-field-npc[data-routine="WORKER"][data-state="WORK"] .lind-crisp-frame {
+  animation:lindWorkerInspect .7s ease-in-out 2;transform-origin:50% 100%;
+}
+body.lindFieldReview .lind-field-npc[data-npc-id="emma"][data-state="WORK"] .lind-crisp-frame {
+  transform:rotate(-.6deg);transform-origin:50% 100%;
+}
+@media(prefers-reduced-motion:reduce){
+  .lind-crisp-frame {animation:none!important;transform:none!important;}
+}
