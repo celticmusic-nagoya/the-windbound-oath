@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the Rilde Village maps for the Moss runtime (schema v2) and register their art in img/field/moss/manifest.json.
   outdoor : rilde_village_01_peace  /  rilde_village_01_ruin   (same geometry, spawns and exits; the ruin variant is the village after the attack)
-  indoor  : rilde_in_aidan, rilde_in_elder, rilde_in_inn_1f, rilde_in_inn_2f, rilde_in_shop, rilde_in_house_01..04, rilde_in_barn, rilde_in_storage, rilde_in_trainshed
+  indoor  : rilde_in_aidan, rilde_in_elder, rilde_in_inn_1f, rilde_in_inn_2f, rilde_in_shop, rilde_in_house_01..04, rilde_in_barn, rilde_in_storage
  The logical map id 'rilde_village' is resolved to peace/ruin by js/field/rilde-village.js (story state), so every door/exit just says toMap:'rilde_village'.
  Layout comes from the Lind village data (tools/moss/export_lind_layout.js); art from prepare_rilde_lind.py (village, ruins, villagers) and make_rilde_art.py (furniture, debris).
  usage: python3 tools/moss/prepare_rilde_lind.py && python3 tools/moss/make_rilde_art.py && python3 tools/moss/build_rilde_village.py   (exit 1 on validation problems)"""
@@ -85,7 +85,7 @@ DOOR = {   # logical room, spawn name, door dx from the building's centre, label
     'lind_aidan_house': ('rilde_in_aidan', 'from_aidan', 0, 'エイダンの家'), 'lind_elder_house': ('rilde_in_elder', 'from_elder', 0, '長老の家'), 'lind_inn': ('rilde_in_inn_1f', 'from_inn', 0, '宿屋「風見鶏」'),
     'lind_item_shop': ('rilde_in_shop', 'from_shop', 0, '道具屋「若葉の袋」'), 'lind_house_01': ('rilde_in_house_01', 'from_house_01', 0, '村人の家'), 'lind_house_02': ('rilde_in_house_02', 'from_house_02', 0, '村人の家'),
     'lind_house_03': ('rilde_in_house_03', 'from_house_03', 0, '村人の家'), 'lind_house_04': ('rilde_in_house_04', 'from_house_04', 0, '村人の家'), 'lind_barn': ('rilde_in_barn', 'from_barn', 0, '納屋'),
-    'lind_storage': ('rilde_in_storage', 'from_storage', 0, '倉庫'), 'train_shed': ('rilde_in_trainshed', 'from_trainshed', 0, '見張り小屋')}
+    'lind_storage': ('rilde_in_storage', 'from_storage', 0, '倉庫')}   # the training-ground hut (train_shed) is scenery only: everything about training stays outdoors
 DECAL = {'train_ground', 'lind_bridge', 'lind_fishing_pier', 'lind_field_wheat', 'lind_field_vegetables', 'lind_field_flower', 'lind_flower_patch', 'lind_grass_tuft', 'lind_reeds', 'lind_river_rocks'}
 SKIP_ALWAYS = {'cliff'}   # the Lind "cliff" tile is the review canvas' backdrop; here the cliff trail is the south exit
 SIGN = 'lind_sign'
@@ -188,7 +188,7 @@ def _blob(cx, cy, rx, ry, seed):
 PEACE_WALK = {   # registry id -> (path offsets, speed)
 }
 def npc_zone(R, nid, talk, label, x, y, r=78, **kw): return R.interact('ev_' + nid, x, y - 22, r, npc=talk, label=label, **kw)
-def place_npc(R, aid, nid, x, foot, talk, label, walk=None, speed=14, anim=False, fps=None, face=None):
+def place_npc(R, aid, nid, x, foot, talk, label, walk=None, speed=14, anim=False, fps=None, face=None, r=78):
     """Villager art `aid` standing/patrolling at visible feet (x, foot), talk table `talk`."""
     m = META['npc'][aid]; ix, iy = x - m['dx'], foot + m['dy']      # image anchor (bottom-centre of the full frame)
     if (walk or anim) and m['frames'] >= 2:
@@ -199,7 +199,7 @@ def place_npc(R, aid, nid, x, foot, talk, label, walk=None, speed=14, anim=False
         R.walkers.append(w)
     else:
         R.prop('rv_npc_' + aid, ix, iy, tags=['npc'], pid='p_' + nid)
-    if talk: npc_zone(R, nid, talk, label, x, foot)
+    if talk: npc_zone(R, nid, talk, label, x, foot, r=r)
 
 def people(R, ruin):
     reg = {n['id']: n for n in LIND['npcs']}
@@ -310,8 +310,8 @@ class Interior:
             if hook: kw['hook'] = hook
             if npc: kw['npc'] = npc
             R.interact(R.uid('ev_' + name), x, y - min(40, h * .4), r or max(50, FURN[name]['w'] * .5 if name in FURN else 60), label=label or name, **kw)
-    def person(s, aid, nid, x, foot, talk, label, text=None):
-        place_npc(s.R, aid, nid, x, foot, talk, label)
+    def person(s, aid, nid, x, foot, talk, label, text=None, r=78):
+        place_npc(s.R, aid, nid, x, foot, talk, label, r=r)
         s.R.solid(x - 14, foot - 10, 28, 10, 'npc')
     def doc(s): return s.R.doc()
 
@@ -344,7 +344,7 @@ def rooms():
     # ---------------- 宿屋 1F ----------------
     I = Interior('rilde_in_inn_1f', '宿屋「風見鶏」 1階', 'Inn "Kazamidori" 1F', 1200, 800, exit_to='from_inn', floor='#a4835a', wall='#6e5a46'); R = I.R; R.spawn('from_stairs', 1000, 330, 'down')
     I.put('window_wall', 560, 178); I.put('window_wall', 900, 178); I.put('tapestry', 720, 190)
-    I.put('counter_inn', 300, 346, text='磨かれた木のカウンターだ。主人に話しかけよう。', label='カウンター'); I.person('innkeeper', 'innkeeper', 300, 262, 'innkeeper', '宿屋の主人')
+    I.put('counter_inn', 300, 346); I.person('innkeeper', 'innkeeper', 300, 262, 'innkeeper', '宿屋の主人', r=150)
     I.put('shelf_pots', 120, 214, text='食器や保存食が並んでいる。', label='棚'); I.put('barrel', 440, 232); I.put('barrel', 490, 238)
     I.put('fireplace', 740, 216, text='大きな暖炉に火が入っている。旅人が足を休めている。', label='暖炉')
     I.put('stairs_up', 1040, 236); R.door('tr_inn_up', 990, 250, 110, 90, 'rilde_in_inn_2f', 'from_stairs', '2階へ', .25)
@@ -367,7 +367,7 @@ def rooms():
     I = Interior('rilde_in_shop', '道具屋「若葉の袋」', 'Item Shop "Wakaba no Fukuro"', 960, 720, exit_to='from_shop', floor='#a9895c', wall='#72604a')
     I.put('window_wall', 480, 178); I.put('herb_bundle', 300, 172); I.put('herb_bundle', 660, 172)
     I.put('shelf_goods', 130, 214, text='薬草と薬瓶が並んでいる。', label='薬棚'); I.put('shelf_goods', 830, 214, text='旅道具が整然と並んでいる。', label='旅道具の棚'); I.put('shelf_goods', 480, 214, text='干した薬草のいい匂いがする。', label='棚')
-    I.put('counter_shop', 480, 420, text='カウンターだ。店主に話しかけよう。', label='カウンター'); I.person('merchant', 'merchant', 480, 340, 'merchant', '道具屋の店主')
+    I.put('counter_shop', 480, 420); I.person('merchant', 'merchant', 480, 340, 'merchant', '道具屋の店主', r=150)
     I.put('rug_red', 480, 560); I.put('crate', 140, 560); I.put('sacks_pile', 210, 600); I.put('barrel', 820, 580); I.put('basket', 760, 620); I.put('plant_pot', 880, 400)
     out.append(I)
     # ---------------- 民家 ----------------
@@ -402,10 +402,6 @@ def rooms():
     I = Interior('rilde_in_storage', '倉庫', 'Storehouse', 760, 600, exit_to='from_storage', floor='#977a4f', wall='#68543e')
     I.put('shelf_goods', 150, 214, text='保存食や雑貨が整理されている。', label='棚'); I.put('shelf_pots', 600, 214, text='壺や瓶が並んでいる。', label='棚'); I.put('crates_stack', 380, 250, text='木箱が積まれている。', label='木箱')
     I.put('barrel', 140, 420); I.put('barrel', 190, 440); I.put('sacks_pile', 560, 420); I.put('crate', 640, 460); I.put('jar', 130, 500, text='壺の中は乾燥した豆だ。', label='壺'); I.put('basket', 500, 500)
-    out.append(I)
-    I = Interior('rilde_in_trainshed', '訓練場の見張り小屋', 'Training Ground Hut', 640, 520, exit_to='from_trainshed', floor='#9c7f55', wall='#69563f', sx=500)
-    I.put('window_wall', 320, 178); I.put('weapon_rack', 150, 214, text='稽古用の木剣と槍が並んでいる。', label='武器架'); I.put('weapon_rack', 490, 214, text='稽古用の木剣が立てかけてある。', label='武器架')
-    I.put('bench', 330, 350, text='訓練の合間に休むベンチだ。', label='ベンチ'); I.put('barrel', 560, 340); I.put('sacks_pile', 90, 350); I.put('bucket', 200, 410)
     out.append(I)
     return out
 

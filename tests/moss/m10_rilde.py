@@ -6,7 +6,7 @@ def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
 maps={os.path.basename(f)[:-5]:json.load(open(f,encoding='utf-8')) for f in glob.glob('data/maps/rilde_*.json')}
-check(len(maps)==14,'14 rilde maps (%d)'%len(maps))
+check(len(maps)==13,'13 rilde maps (%d)'%len(maps))
 INT=[k for k in maps if k.startswith('rilde_in_')]
 for k in INT:
     m=maps[k]; tos=[t for t in m.get('transitions',[])]
@@ -42,6 +42,13 @@ with sync_playwright() as p:
     for k in INT:
         ev("(a)=>MossForestStory.enterMap(a,'default')",k); pg.wait_for_timeout(700)
         check(ev("MossForest.mapId")==k,'enter '+k)
+    # keepers behind counters must be reachable from the customer side
+    for mid,zid,pt in (('rilde_in_inn_1f','ev_innkeeper',(300,372)),('rilde_in_shop','ev_merchant',(480,446))):
+        ev("(a)=>MossForestStory.enterMap(a,'default')",mid); pg.wait_for_timeout(700)
+        z=[e for e in maps[mid]['eventZones'] if e['id']==zid][0]['shape']
+        d=((pt[0]-z['cx'])**2+(pt[1]-z['cy'])**2)**.5
+        check(d<=z['r'] and not ev("([x,y])=>MossForest.blocked(x,y)",list(pt)),'%s reachable in front of the counter (d=%d r=%d)'%(zid,d,z['r']))
+    check(not [t for m in maps.values() for t in m.get('transitions',[]) if 'trainshed' in t.get('toMap','')],'no training-hut interior warp')
     # state switch
     ev("storyStage=15"); ev("MossForestStory.enterMap('rilde_village','from_plaza')"); pg.wait_for_timeout(2200)
     check(ev("MossForest.mapId")=='rilde_village_01_ruin','stage 15 -> ruin village')

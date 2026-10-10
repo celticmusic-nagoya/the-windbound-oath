@@ -369,10 +369,19 @@
     }
     if(!near)S.battleLatch=false;
   }
+  function unstick(bounds){
+    for(let r=6;r<=240;r+=6)for(let a=0;a<16;a++){
+      const x=S.x+Math.cos(a*Math.PI/8)*r,y=S.y+Math.sin(a*Math.PI/8)*r;
+      if(bounds&&(x<0||y<0||x>bounds.width||y>bounds.height))continue;
+      if(!S.forest.blocked(x,y)){S.x=x;S.y=y;S.target=null;return true;}
+    }
+    return false;
+  }
   function tick(){
     S.loopId=requestAnimationFrame(tick);
     if(!S.active||S.busy||!S.forest||el.scene.style.display==='none')return;
     const bounds=S.map.world;
+    if(S.forest.blocked(S.x,S.y))unstick(bounds);   // never leave the player embedded in a blocker (a spawn / warp / lock edge case): step to the nearest free spot
     let dx=0,dy=0;S.keys.forEach(d=>{dx+=d[0];dy+=d[1];});dx=Math.sign(dx);dy=Math.sign(dy);
     if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}

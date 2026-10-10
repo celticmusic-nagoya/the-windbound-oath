@@ -1,7 +1,7 @@
 # M10 リルデ村 本編統合 + 屋内マップ
 
 ## 概要
-- 村は `data/maps/rilde_village_01_peace.json`(襲撃前)/ `rilde_village_01_ruin.json`(襲撃後)と、屋内12マップ `rilde_in_*.json`。Moss ランタイム(schema v2)上で動く。
+- 村は `data/maps/rilde_village_01_peace.json`(襲撃前)/ `rilde_village_01_ruin.json`(襲撃後)と、屋内11マップ(訓練場関連は屋外のみ。見張り小屋は飾りで入れない) `rilde_in_*.json`。Moss ランタイム(schema v2)上で動く。
 - 論理ID `rilde_village` は `RildeVillage.resolve()` が状態で振り分ける。ドア/出口は常に `toMap:'rilde_village'`。peace/ruin のスポーン名は同一。
 - 状態: `storyStage >= 5` または flag `rilde_ruined` → ruin。それ以外 peace。DEV/テスト用に `RildeVillage.force('peace'|'ruin'|null)`。
 - `?legacyVillage=1` で従来の DOM 村に戻せる(`RildeVillage.enabled()===false`)。
