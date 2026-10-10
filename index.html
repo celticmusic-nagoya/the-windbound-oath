@@ -419,7 +419,7 @@ function mainQuestData(){
  if(storyStage===4)return {title:'風が止んだ夜',desc:'夕暮れの丘で異変が起きた。フィオナと急いでリンド村へ戻る。'};
  if(storyStage<=6)return {title:'炎の中のリンド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
  if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリンド村から逃げる。'};
- if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、村の北に広がる古い森へ迷い込んだ。分岐を探索し、森の奥を調べる。'};
+ if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、長老やエマからたびたび近付くなと言われていた古い森へ迷い込んだ。分岐を探索し、森の奥を調べる。'};
  if(storyStage===10)return {title:'風を返す古代石',desc:'フィオナに反応する古代石を発見した。異常化した魔物を退け、石の周囲に残る風の気配を探す。'};
  if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
  if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇で魔物に包囲された。古代石から現れた「誓いの剣」を手に取り、突破口を開く。'};
@@ -1112,7 +1112,7 @@ function enterMossForest(){
  questPop('SCENE：苔むした森');
  PrologueProgress.sync();setObj(PrologueProgress.objective());
  const entryGeneration=window.PrologueCombat?.generation;
- setTimeout(()=>{if(entryGeneration===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say('フィオナ「……エイダン？　よかった……。ここ、村の北の森……？」')},350);
+ setTimeout(()=>{if(entryGeneration===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say('フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、あれほど近付くなって言っていた森……だよね……？」')},350);
 }
 
 function forestToast(t){
