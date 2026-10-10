@@ -17,6 +17,9 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
     requireStage: 3,
     steps: [
       {lock: true},
+      {move: {actor: 'aidan', x: 2384, y: 1022, ms: 650}},      // sit down on the bench: Aidan and Fiona settle in front of it
+      {move: {actor: 'fiona', x: 2424, y: 1022, ms: 650}},
+      {wait: 500},
       {talk: 'scene_cliff_sunset'},
       {fade: {to: 1, ms: 1200}},
       {tod: {set: 'night', instant: true}},

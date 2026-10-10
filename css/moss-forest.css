@@ -85,3 +85,6 @@
 @keyframes wxDriftA{from{transform:translate3d(0,0,0)}to{transform:translate3d(-768px,0,0)}}
 @keyframes wxDriftB{from{transform:translate3d(0,0,0)}to{transform:translate3d(1100px,0,0)}}
 @media (prefers-reduced-motion:reduce){.wx-fog-a,.wx-fog-b{animation:none}}
+
+/* Fiona animated field sprite: the frames are positioned from her feet anchor; the placeholder box becomes invisible */
+#forestWorld #forestFiona.fiona-sprite{background:transparent;border:0;box-shadow:none;color:transparent;font-size:0;overflow:visible}

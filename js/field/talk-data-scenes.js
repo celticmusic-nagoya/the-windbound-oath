@@ -2,6 +2,15 @@
  * through FieldTalk, so the speaker plate / tap / choices behave like every other conversation.
  * npc ids are scene ids ("scene_*"), never placed on the field. Format: see js/field/talk-data.js. */
 window.TalkDataScenes = Object.freeze({tables: [
+  // 風見の断崖のベンチ (stage 3): sit? yes -> flag cliff_bench_sat + the sunset scene (main story advances) / no -> nothing changes, ask again any time
+  {npc: 'cliff_bench', entries: [
+    {id: 'cliff_bench_ask', priority: 20, when: {stage: [3, 3]}, mode: 'cycle', lines: [{pages: [
+      '頂上の草地に、古びたベンチがひとつ。ちょうど、夕日の正面だ。',
+      'フィオナ「ねえ、エイダン。少し座っていかない？　……夕日、見ていこうよ。」',
+      'ここに座って、夕日を眺めますか？'],
+      choice: {options: [
+        {label: 'はい', set: {cliff_bench_sat: true}, scene: 'cliff_sunset_to_fire'},
+        {label: 'いいえ', reply: ['フィオナ「そっか。……気が向いたら、いつでも声をかけてね。」', 'もう少し、あたりを見ていよう。']}]}}]}]},
   {npc: 'scene_cliff_sunset', entries: [
     {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{pages: [
       'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',

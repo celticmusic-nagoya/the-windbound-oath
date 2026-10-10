@@ -24,6 +24,7 @@
       const c=map.locationCard;if(c)questPop(c.regionJa+'　―　'+c.areaJa);return;
     }
     if(z.hook==='cliff_time_cycle'){
+      if(storyStage===3){FieldTalk.talk('cliff_bench',{source:'forest'});return;}   // sit down? はい -> sunset scene / いいえ -> stay (js/field/talk-data-scenes.js)
       if(storyStage>=15){const n=FieldTimeOfDay.cycle();say({day:'澄んだ空と、どこまでも広がる海。',dusk:'夕陽が海を染めている。胸の奥まで橙色になりそうだ。',night:'満天の星。波の音だけが、遠くで続いている。'}[n]);}
       else say('見晴らしのよい、ベンチ代わりの岩だ。');
       return;
@@ -34,7 +35,7 @@
     if(z.npc){if(!FieldTalk.talk(z.npc,{source:'forest'}))MossForest.toast('……。');return;}
     switch(z.eventId){
       case 'prologue_sunset_hill':
-        if(storyStage===3)FieldScene.play('cliff_sunset_to_fire');   // data-driven: js/field/scene-data.js
+        if(storyStage===3&&!FieldTalk.flag('cliff_bench_sat'))MossForest.toast('頂上のベンチで、夕日を眺めていこう。');   // the scene itself starts from the bench (cliff_bench talk)
         return;
       case 'prologue_rune_stone':
         forestStoneSeen=true;storyStage=Math.max(storyStage,10);say(TEXTS.msg_a3_rune_stone);

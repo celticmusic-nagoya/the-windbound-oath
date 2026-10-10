@@ -23,7 +23,27 @@ with sync_playwright() as p:
     # ---- summit scene
     ev("MossForest.teleportFeet(2400,1500)"); pg.wait_for_timeout(300)
     ev("MossForest.teleportFeet(2400,1020)"); pg.wait_for_timeout(900)
-    check(ev("FieldScene.running")=='cliff_sunset_to_fire','summit zone starts the scene')
+    check(not ev("FieldScene.running"),'summit zone alone no longer starts the scene (the bench does)')
+    def click_world(x,y):
+        pt=ev("([x,y])=>{const r=document.querySelector('#forestWorld').getBoundingClientRect(),s=FieldCamera.scale;return [r.left+x*s,r.top+y*s]}",[x,y]); pg.mouse.click(pt[0],pt[1]); pg.wait_for_timeout(500)
+    ev("MossForest.teleportFeet(2400,1040)"); pg.wait_for_timeout(1500)
+    click_world(2400,960)
+    check(ev("FieldTalk.active"),'clicking the bench opens the sit-down conversation')
+    for _ in range(4):
+        if pg.locator('.talkChoices button').count(): break
+        pg.click('#msg'); pg.wait_for_timeout(150)
+    check(pg.locator('.talkChoices button').count()==2 and pg.locator('.talkChoices button').first.inner_text()=='はい','choices はい / いいえ appear')
+    pg.locator('.talkChoices button').nth(1).click(); pg.wait_for_timeout(200)
+    for _ in range(4):
+        if not ev("FieldTalk.active"): break
+        pg.click('#msg'); pg.wait_for_timeout(150)
+    check(not ev("FieldScene.running") and ev("storyStage")==3 and not ev("FieldTalk.flag('cliff_bench_sat')"),'いいえ: nothing advances, back to normal state')
+    click_world(2400,960)
+    for _ in range(4):
+        if pg.locator('.talkChoices button').count(): break
+        pg.click('#msg'); pg.wait_for_timeout(150)
+    pg.locator('.talkChoices button').first.click(); pg.wait_for_timeout(500)
+    check(ev("FieldTalk.flag('cliff_bench_sat')") and ev("FieldScene.running")=='cliff_sunset_to_fire','はい: flag cliff_bench_sat set and the sunset scene (main story) starts')
     def msg(): return pg.evaluate("(document.querySelector('#msg .talkName')||{}).textContent+'|'+(document.querySelector('#msg .talkText')||{}).textContent||''")
     seen=[]; tod=[]; vista=False; guard=0
     while ev("FieldScene.running") and guard<200:
