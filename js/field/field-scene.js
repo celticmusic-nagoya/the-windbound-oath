@@ -19,6 +19,9 @@
     if (s.fade) { await MossForest.fade(s.fade.to, s.fade.ms); return; }
     if (s.tod) { FieldTimeOfDay.set(s.tod.set, s.tod); return s.tod.instant ? undefined : wait(s.tod.ms ?? 1600); }
     if (s.vista) { MossForest.vista(s.vista.id, s.vista.on, {ms: s.vista.ms}); return; }
+    if (s.approach) { const A = MossForest.actor(s.approach.a), B = MossForest.actor(s.approach.b); return FieldChoreo.approach(A, B, {...s.approach, blocked: MossForest.blocked}); }
+    if (s.move) { const A = MossForest.actor(s.move.actor); return FieldChoreo.moveTo(A, s.move, {...s.move, blocked: MossForest.blocked}); }
+    if (s.follow) { const A = MossForest.actor(s.follow); A.release && A.release(); return; }   // hand an actor back to the normal follow behaviour
     if (s.focus) { await MossForest.focus(s.focus.x, s.focus.y, s.focus); return; }
     if (s.release) { await MossForest.release(s.release); return; }
     if (s.pan) { MossForest.lock(false); await MossForest.pan(s.pan.x, s.pan.y, s.pan); MossForest.lock(true); return; }
@@ -29,9 +32,9 @@
     if (s.call) { const h = hooks.get(s.call); if (h) await h(); else console.warn('[FieldScene] no hook', s.call); }
   }
   async function play(id) {
-    const sc = FieldSceneData.scenes[id];
+    const sc = typeof id === 'object' && id ? id : FieldSceneData.scenes[id];   // an inline definition is allowed (tests / dev)
     if (!sc || running || !stageOk(sc.requireStage)) return false;
-    running = id;
+    running = typeof id === 'string' ? id : '(inline)';
     try { for (const s of sc.steps) await step(s); }
     finally { running = null; }
     return true;

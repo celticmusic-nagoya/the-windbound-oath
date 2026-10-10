@@ -149,7 +149,7 @@
     const sp0=map.spawns.points[spawnId||map.spawns.default];
     if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
-    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
+    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
     if(window.FieldTimeOfDay)FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});   // maps without "timeOfDay" always read as day
     el.fade.style.opacity='1';
@@ -268,7 +268,7 @@
       el.world.style.transform='translate('+(Math.sin(t*1.7)*a).toFixed(2)+'px,'+(Math.cos(t*2.3)*a).toFixed(2)+'px) '+el.world.style.transform;
     }
     if(window.FieldVista)FieldVista.sync(el.world.style.transform);
-    const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;
+    const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);if(!S.fionaHold){S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;}   // fionaHold: a scene (FieldChoreo) is placing her
     el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
     el.player.style.display=el.fiona.style.display='block';
@@ -364,6 +364,14 @@
       else if(!sy.alive&&alive){sy.alive=true;sy.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y);}}
     if(S.sealNode&&hooks.sealCorrupted){S.sealNode.classList.toggle('corrupted',hooks.sealCorrupted());skin(S.sealNode);}
   }
+  // Choreography adapters (see js/field/field-choreo.js). Aidan: moving S.x/S.y drives his walk animation by itself.
+  // Fiona: set() takes her off the follow-the-player easing until release().
+  function actor(id){
+    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
+    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
+      pose(state,dir){el.fiona.dataset.pose=state;el.fiona.dataset.dir=dir;},release(){S.fionaHold=false;delete el.fiona.dataset.pose;}};
+    return null;
+  }
   function show(){el.scene.style.display='block';}
   function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';}
   function resume(){show();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
@@ -374,7 +382,7 @@
   }
   function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

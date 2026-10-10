@@ -39,8 +39,10 @@ print('[entity] real art for: %s' % (', '.join(k for k, r in (man.get('entity') 
 
 # asset ids used by the maps, split by render kind (node = DOM sprite, layer = baked into canvas chunks)
 used = {'node': set(), 'layer': set()}
-for f in sorted(glob.glob(os.path.join(ROOT, 'data/maps/moss_forest_0*.json'))):
+presets = {}   # asset family (id without _NN) -> list of (map, [x,y,w,h]) collision rects, for the art-vs-collision check
+for f in sorted(glob.glob(os.path.join(ROOT, 'data/maps/moss_forest_0*.json')) + glob.glob(os.path.join(ROOT, 'data/maps/cliff_*.json'))):
     d = json.load(open(f, encoding='utf-8'))
+    for k, rects in (d.get('collision', {}).get('presets') or {}).items(): presets.setdefault(k, []).append((os.path.basename(f), rects))
     for p in d.get('props', []): used['node'].add(p['asset'])
     for s in d.get('scatter', []):
         for a in s.get('pool', []): used['node' if s.get('render') == 'node' else 'layer'].add(a)
@@ -74,5 +76,16 @@ for kind in ('node', 'layer'):
         n[c] += 1
         if '--table' in sys.argv: print('   %-28s %-8s %s' % (a, c, r['file'] if r and r.get('file') else '-'))
     print('   real=%d standin=%d placeholder=%d' % (n['real'], n['standin'], n['none']))
+    # COLLISION vs ART: a real sprite that is much wider than the preset blocker lets the player walk through its picture
+    # (and a much narrower picture leaves an invisible wall). Anchor is bottom-centre, so compare widths only.
+    if kind == 'node':
+        for a, w in sorted(cover.items()):
+            r = rules[w] if w is not None else None
+            if not r or not r.get('file') or r.get('standin'): continue
+            fam = re.sub(r'_\d+$', '', a)
+            for mapname, rects in presets.get(fam, []):
+                lo = min(x for x, y, ww, hh in rects); hi = max(x + ww for x, y, ww, hh in rects); cw = hi - lo
+                if r['w'] > cw * 1.6: warn('COLLISION %s (%s): art is %dpx wide but the blocker in %s is only %dpx - the player can walk into the picture; widen collision.presets[%s]' % (a, r['file'], r['w'], mapname, cw, fam))
+                elif r['w'] < cw * .6: warn('COLLISION %s (%s): art is %dpx wide but the blocker in %s is %dpx - an invisible wall beside the picture; narrow collision.presets[%s]' % (a, r['file'], r['w'], mapname, cw, fam))
 print('\n%d error(s), %d warning(s)' % (len(errs), len(warns)))
 sys.exit(1 if errs else 0)

@@ -28,7 +28,8 @@
     battle.state = state;
     const image = document.querySelector(battle.image);
     const source = BATTLE_ASSETS[battle.actor][state];
-    if (image && image.getAttribute('src') !== source) image.src = source;
+    // Delivered multi-frame motion (img/battle/motion-manifest.json) plays instead of the still; none installed -> still as before.
+    if (!(window.BattleMotion && BattleMotion.start(image, battle.actor, state)) && image && image.getAttribute('src') !== source) image.src = source;
     window.BattleFacing?.paint(image, battle.actor, state);
     window.BattleIdleMotion?.onState(battle.image, battle.actor, state);
   }
