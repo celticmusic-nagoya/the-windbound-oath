@@ -23,7 +23,7 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('#elderNpc').click()"); t=pg.evaluate("document.querySelector('#msg').textContent"); check('邪気が晴れ' in t,'elder open line: '+t)
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'emma'}}))")
     t=pg.evaluate("document.querySelector('#msg').textContent"); check('風がようやく' in t,'emma open line')
-    pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'merchant'}}))")
+    pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'elder_man'}}))")
     check(pg.evaluate("document.querySelector('#msg').textContent")==t,'other NPC ids ignored')
     # village NPC lines (children / prayer / well / hill)
     pg.evaluate("PrologueProgress.seed(0)")
