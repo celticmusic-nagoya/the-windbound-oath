@@ -1,0 +1,29 @@
+{
+  "_note": "Delivery plan for the protagonists' multi-frame battle motions (design only: nothing is installed until art arrives). Consumed by tools/battle/hero_motion_brief.py (brief + validation) and tests/battle/hero_motion_plan.py. Canvas = the state's current still (js/assets.js); budgets = tools/battle/install_motion_frames.py. Frame counts / hitFrame / ms are the per-asset data that end up in img/battle/motion-manifest.json (no fixed values in code).",
+  "actors": {
+    "aidan": {
+      "variants": ["wooden", "iron", "steel"],
+      "_variants_note": "equipment weaponMotionVariant (js/data/equipment-data.js): wooden = 少年期の木剣 (default sword at the start), iron / steel = 鉄/鋼の剣。変種は攻撃(attack)のみ。誓いの剣(Oathblade)取得後は variant 無し=本来の剣。",
+      "states": {
+        "attack": {"frames": 6, "hitFrame": 4, "ms": [90, 90, 130, 70, 110, 230], "lunge": "close", "poses": ["構え(足を引く)", "剣を大きく引く(予備動作)", "踏み込み開始・上体前傾", "斬撃の瞬間 [HIT] 剣先が最大伸長・踏み込み最大", "振り抜き・マントが後ろへ流れる", "残心→構えへ戻る"]},
+        "skill": {"frames": 8, "hitFrame": 5, "ms": [110, 110, 120, 140, 90, 120, 160, 250], "lunge": "close", "poses": ["一閃: 納刀に近い低い構え", "気を溜める(TP光)", "身を沈める", "抜刀", "斬撃 [HIT]", "振り抜き(残光)", "ゆっくり立ち上がる", "納刀・構え"]},
+        "wind": {"frames": 8, "hitFrame": 5, "ms": [110, 110, 120, 140, 90, 120, 160, 250], "lunge": "close", "poses": ["風の一閃(RUNE特殊): 誓いの剣を掲げる", "風が剣に集まる", "身を沈める", "渾身の踏み込み", "風の斬撃 [HIT]", "衝撃波・髪とマントが翻る", "余韻", "構え"]},
+        "charge": {"frames": 4, "hitFrame": null, "ms": [140, 140, 140, 140], "lunge": "none", "poses": ["構え", "気を溜める", "光が高まる", "溜め完了(保持)"]}
+      }
+    },
+    "fiona": {
+      "variants": [],
+      "states": {
+        "attack": {"frames": 5, "hitFrame": 3, "ms": [100, 110, 90, 130, 180], "lunge": "short", "poses": ["杖を構える", "杖を引く", "杖で突く/払う [HIT] 一歩だけ前へ(後衛なので控えめ)", "戻り・髪とローブの余韻", "構え"]},
+        "heal": {"frames": 6, "hitFrame": 4, "ms": [120, 120, 130, 140, 140, 110], "lunge": "none", "poses": ["杖を胸元へ", "祈るように目を閉じる", "杖を掲げる", "光が咲く [EFFECT] 回復の発動", "花びらが舞う", "微笑んで戻る"]},
+        "prayer": {"frames": 8, "hitFrame": 5, "ms": [110, 110, 120, 140, 140, 120, 160, 200], "lunge": "none", "poses": ["風の祈り: 両手で杖を持つ", "風が集まる", "髪・服が舞い上がる", "杖を高く掲げる", "祈りの解放 [EFFECT]", "風が広がる", "余韻", "戻り"]},
+        "charge": {"frames": 4, "hitFrame": null, "ms": [140, 140, 140, 140], "lunge": "none", "poses": ["構え", "目を閉じ集中", "光が高まる", "溜め完了(保持)"]}
+      }
+    }
+  },
+  "damage_timing": {
+    "today": "ダメージは攻撃開始と同時に適用(prologue-combat.js)。コマ数とは独立。",
+    "proposal": "表示(フラッシュ・数字ポップ・揺れ・HPバー)だけを BattleMotion.hitDelay(actor,state) だけ遅らせる。計算結果・ターン進行・TP/RUNE は一切変えない(安全)。ヒットストップとSEも 'battle-motion-hit' イベントに結ぶ。",
+    "not_proposed": "ダメージ計算自体をヒットコマまで遅延させること(ボス/バランス保護のため)。"
+  }
+}
