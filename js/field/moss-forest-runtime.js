@@ -28,6 +28,8 @@
     S.configured=true;
   }
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
+  const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
+  function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}
   const spr={frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
   function mountPlayerSprite(){
     const A=window.AidanFieldAssets;if(!A||!el.player)return;
@@ -45,7 +47,7 @@
       if(d>.01&&d<=23){const nx=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
         if(spr.state!=='WALK'||spr.dir!==nx){spr.since=now;spr.phase=0;}spr.dir=nx;spr.state='WALK';spr.moved=now;}
       else if(d>23||now-spr.moved>110){spr.state='IDLE';spr.phase=0;}
-      if(spr.state==='WALK')spr.phase=Math.floor((now-spr.since)/100)%4;
+      if(spr.state==='WALK')spr.phase=Math.floor((now-spr.since)/(walkCount(spr.frames,'aidan_',spr.dir)>4?75:100))%walkCount(spr.frames,'aidan_',spr.dir);
     }
     spr.px=S.x;spr.py=S.y;
     const name='aidan_'+(spr.state==='WALK'?'walk_'+spr.dir+'_'+String(spr.phase+1).padStart(2,'0'):'idle_'+spr.dir);
@@ -73,7 +75,7 @@
       else if(d>=60||now-fsp.moved>140){fsp.walking=false;if(Math.abs(S.x-48-S.fx)<3&&Math.abs(S.y+18-S.fy)<3){const px=S.x-S.fx,py=S.y-S.fy;fsp.dir=Math.abs(px)>Math.abs(py)?(px>0?'right':'left'):(py>0?'down':'up');}}
     }
     fsp.px=S.fx;fsp.py=S.fy;fsp.pt=now;
-    const name='fiona_'+(fsp.walking?'walk_'+fsp.dir+'_'+String(Math.floor((now-fsp.since)/105)%6+1).padStart(2,'0'):'idle_'+fsp.dir);
+    const name='fiona_'+(fsp.walking?'walk_'+fsp.dir+'_'+String(Math.floor((now-fsp.since)/105)%walkCount(fsp.frames,'fiona_',fsp.dir)+1).padStart(2,'0'):'idle_'+fsp.dir);
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }

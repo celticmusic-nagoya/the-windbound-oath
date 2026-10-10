@@ -68,4 +68,4 @@ def main():
         for n in nums: shutil.copy(os.path.join(src, files[n]), os.path.join(ROOT, man['base'], sub, '%s_%s_%02d.png' % (tag, state, n)))
         man['motions'].setdefault(actor + (':' + variant if variant else ''), {})[state] = {'dir': sub, 'pattern': '%s_%s_{n}.png' % (tag, state), 'frames': len(nums), 'ms': ms, 'hitFrame': hit, 'hold': 'last'}
     json.dump(man, open(MAN, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); print('manifest updated')
-main()
+if __name__ == "__main__": main()
