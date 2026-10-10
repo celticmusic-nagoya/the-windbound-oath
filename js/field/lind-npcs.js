@@ -2,15 +2,12 @@
 (function () {
   'use strict';
   if(!window.WINDBOUND_DEV)return;
-  const definitions=[
-    ['farmer_male','農夫',970,1190,46],['farmer_female','農作業の女性',1150,1200,44],
-    ['young_man','青年',630,665,46],['young_woman','若い女性',805,665,44],
-    ['elder_man','老人',460,405,42],['elder_woman','村の老婆',790,1060,39],
-    ['boy','男の子',600,700,31],['girl','女の子',850,725,31],
-    ['merchant','道具屋の商人',420,690,45],['innkeeper','宿屋の主人',850,420,45],
-    ['fisherman','釣り人',1447,1367,46],['caretaker','家畜の世話係',1350,1170,45]
-  ].map(([id,label,x,footY,height])=>({id,label,x,footY,height,
-    path:'img/field/lind/npc/villagers/'+id+'_idle.png'}));
+  // Placement / routine / appearance come from js/field/lind-npc-registry.js (the single source of truth).
+  const definitions=LindNpcRegistry.definitions(window.TalkConditions?TalkConditions.test:null,
+    {flag:n=>Boolean(window.FieldTalk&&FieldTalk.flag(n)),stage:()=>typeof storyStage==='number'?storyStage:0,
+     sealOpen:()=>Boolean(window.PrologueProgress&&PrologueProgress.count()>=3),treasure:()=>false,
+     item:id=>window.Inventory?Inventory.count(id):0,talked:id=>Boolean(window.FieldTalk&&FieldTalk.seenEntry(id)),
+     quest:id=>window.Quest?Quest.state(id):null});
   window.LindFisherman?.configure(definitions.find(d=>d.id==='fisherman'));
   const WALK_FPS=4,RUN_FPS=6,actors=[];
   let active=false,notice=null,lastInteraction=null,frame=null,previous=null;
@@ -63,7 +60,7 @@
     notice.hidden=false;
     if(distance(a)>90){notice.textContent=a.label+'へ近づいてください。';return false;}
     target=null;FieldNavigation.cancel();a.interactionPause=2;
-    lastInteraction={id:a.id,type:'field_npc',reviewOnly:true};
+    lastInteraction={id:a.id,talk:a.talk,type:'field_npc',reviewOnly:true};
     notice.textContent='DEV · '+a.label+' — 仮interaction。正式な会話は後工程。';
     window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{...lastInteraction}}));return true;
   }
