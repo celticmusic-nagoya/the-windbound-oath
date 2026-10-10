@@ -29,6 +29,7 @@
         ctx.fillStyle=f.color;ctx.globalAlpha=f.alpha??1;const hit=[];
         for(const r of f.rects)if(r[0]<ox+chunk+1&&r[0]+r[2]>ox&&r[1]<oy+chunk+1&&r[1]+r[3]>oy){ctx.fillRect(r[0],r[1],r[2]+.5,r[3]+.5);hit.push(r);}
         ctx.globalAlpha=1;
+        if(f.pattern&&hit.length)for(const r of hit)paint(ctx,f.pattern,r,ox,oy,chunk);
         if(f.waves&&hit.length){   // deterministic light wave dashes on a 56px lattice (same on every chunk/client)
           ctx.strokeStyle='rgba(235,248,255,.38)';ctx.lineWidth=2;ctx.lineCap='round';
           for(let wx=Math.floor(ox/56)*56;wx<ox+chunk+56;wx+=56)for(let wy=Math.floor(oy/56)*56;wy<oy+chunk+56;wy+=56){
@@ -44,6 +45,27 @@
       const stroke=p=>{ctx.beginPath();p.points.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();};
       if(dirt){ctx.strokeStyle='#4b3a22';ctx.globalAlpha=.45;for(const p of t.paths||[]){ctx.lineWidth=p.width+10;stroke(p);}ctx.globalAlpha=1;}   // halos first so crossings stay clean
       for(const p of t.paths||[]){ctx.strokeStyle=dirt||'#b08a5a';ctx.lineWidth=p.width;stroke(p);}
+      ctx.restore();
+    }
+    // Procedural masonry / planks / roof tiles for fills ({pattern:'flagstone'|'brick'|'planks'|'roof'|'cobble'}): world-aligned lattices so
+    // chunks tile seamlessly, deterministic (hash), no image assets. Shading lines are translucent so the fill colour still sets the mood.
+    const hash=(x,y)=>Math.imul(x*73856093^y*19349663,2654435761)>>>0;
+    function paint(ctx,kind,r,ox,oy,chunk){
+      const x0=Math.max(r[0],ox),y0=Math.max(r[1],oy),x1=Math.min(r[0]+r[2],ox+chunk+1),y1=Math.min(r[1]+r[3],oy+chunk+1);
+      if(x1<=x0||y1<=y0)return;
+      ctx.save();ctx.beginPath();ctx.rect(x0,y0,x1-x0,y1-y0);ctx.clip();
+      const dark='rgba(30,22,34,.22)',light='rgba(255,246,225,.16)',W=kind==='brick'?48:kind==='roof'?40:kind==='planks'?28:kind==='cobble'?24:64,H=kind==='brick'?24:kind==='roof'?26:kind==='planks'?1e6:kind==='cobble'?20:40;
+      ctx.lineWidth=2;
+      if(kind==='planks'){for(let x=Math.floor(x0/W)*W;x<x1;x+=W){ctx.fillStyle=dark;ctx.fillRect(x,y0,2,y1-y0);ctx.fillStyle=light;ctx.fillRect(x+2,y0,2,y1-y0);
+        for(let y=Math.floor(y0/90)*90+((hash(x,7)%60));y<y1;y+=90){ctx.fillStyle=dark;ctx.fillRect(x,y,W,2);}}}
+      else for(let row=Math.floor(y0/H)-1;row*H<y1;row++){
+        const y=row*H,off=(kind==='cobble'?(hash(row,3)%W):(row%2)*(W/2));
+        ctx.fillStyle=dark;ctx.fillRect(x0,y,x1-x0,2);ctx.fillStyle=light;ctx.fillRect(x0,y+2,x1-x0,2);
+        for(let x=Math.floor((x0-off)/W)*W+off;x<x1;x+=W){
+          const j=kind==='cobble'?(hash(x,y)%9)-4:0;ctx.fillStyle=dark;ctx.fillRect(x+j,y,2,H);
+          const h=hash(x,y);if(h%5===0){ctx.fillStyle=(h>>>3)%2?'rgba(255,246,225,.07)':'rgba(30,22,34,.09)';ctx.fillRect(x+2+j,y+4,W-4,H-6);}
+          if(kind==='roof'){ctx.fillStyle=dark;ctx.beginPath();ctx.arc(x+W/2,y,W/2-3,0,Math.PI);ctx.fill();}}}
+      if(kind==='brick'||kind==='roof'){ctx.fillStyle='rgba(255,246,225,.16)';ctx.fillRect(r[0],r[1],r[2],5);ctx.fillStyle='rgba(20,14,26,.30)';ctx.fillRect(r[0],r[1]+r[3]-12,r[2],12);}   // lit top edge, shaded foot
       ctx.restore();
     }
     function build(i,j){

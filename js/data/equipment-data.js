@@ -16,6 +16,11 @@ window.EquipmentData = Object.freeze({
     cloth_tunic:  {name: '布のチュニック', slot: 'body', mods: {def: 1}, desc: '村の織り手が仕立てた、動きやすい布の上着。'},
     leather_armor:{name: '革の鎧', slot: 'body', mods: {def: 3}, desc: '胸と肩を硬い革で補強した軽鎧。旅の剣士の定番。'},
     bronze_ring:  {name: '銅の指輪', slot: 'accessory', mods: {maxHp: 5}, desc: '素朴な銅の指輪。身につけると少し体が軽い。'},
+    // 王都限定（royal_arms）
+    knight_helm:  {name: '騎士の兜', slot: 'head', mods: {def: 2}, desc: '王都の騎士団が使う鉄兜。重いが、頭をしっかり守ってくれる。'},
+    chain_mail:   {name: '鎖帷子', slot: 'body', mods: {def: 5}, desc: '細かな鉄の輪を編み上げた鎧。王都の職人の仕事だ。'},
+    silver_ring:  {name: '銀の指輪', slot: 'accessory', mods: {maxHp: 12}, desc: '澄んだ光を返す銀の指輪。身につけると力が湧いてくる。'},
+    steel_sword:  {name: '鋼の剣', slot: 'weapon', mods: {atk: 9}, motionVariant: 'steel', equipBy: ['aidan', 'liam'], desc: '王都の鍛冶師が鍛えた鋼の剣。刃筋がまっすぐに通っている。'},
     emma_charm:   {name: 'エマの護符', slot: 'accessory', mods: {def: 2, maxHp: 8}, desc: 'エマが祈りを込めて編んだ護符。身につけると不思議と落ち着く。'}
   })
 });
