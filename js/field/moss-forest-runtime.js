@@ -72,7 +72,22 @@
   function addNode(cls,x,y,w,h,label,z){
     const d=document.createElement('div');d.className=cls;if(label)d.textContent=label;
     Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',zIndex:String(Math.round(z??y+h))});
-    el.world.appendChild(d);S.extra.push(d);return d;
+    d.dataset.box=[x,y,w,h].join(',');
+    el.world.appendChild(d);S.extra.push(d);skin(d);return d;
+  }
+  // Real art for runtime entities (manifest.entity). Bottom-centre anchored over the placeholder box; no art -> placeholder block.
+  const SKIN_KEYS=[['forest-treasure',d=>d.classList.contains('open')?'chest_open':'chest_closed'],['forest-symbol',()=>'symbol'],
+    ['forest-seal',d=>d.classList.contains('corrupted')?'seal_corrupted':'seal'],['forest-lou',()=>'lou']];
+  function skin(d){
+    const rule=SKIN_KEYS.find(([c])=>d.classList.contains(c));if(!rule)return;
+    const a=ForestLoader.entityArt(rule[1](d)),[x,y,w,h]=d.dataset.box.split(',').map(Number);
+    if(!a){d.classList.remove('art');d.style.backgroundImage='';Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});return;}
+    d.classList.add('art');d.style.backgroundImage='url("'+a.src+'")';
+    Object.assign(d.style,{left:(x+w/2-a.w/2)+'px',top:(y+h-a.h)+'px',width:a.w+'px',height:a.h+'px'});
+  }
+  function skinFiona(){
+    const a=ForestLoader.entityArt('fiona');if(!a){el.fiona.classList.remove('art');el.fiona.style.backgroundImage='';el.fiona.style.transform='';return;}
+    el.fiona.classList.add('art');el.fiona.style.backgroundImage='url("'+a.src+'")';el.fiona.style.width=a.w+'px';el.fiona.style.height=a.h+'px';el.fiona.style.transform='translate('+(17-a.w/2)+'px,'+(42-a.h)+'px)';
   }
   function mount(map){
     S.map=map;S.mapId=map.id;
@@ -119,6 +134,7 @@
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     const map=await loadMap(id);
+    skinFiona();
     if(options.flags)Object.assign(S.flags,options.flags);
     const first=!S.map;
     if(!first)await setFade(1,fadeMs(options.transition,'out'));
@@ -184,7 +200,7 @@
   function openTreasure(t){
     if(S.opened.has(t.id)){toast('宝箱は空だ。');return;}
     S.opened.add(t.id);
-    const n=S.treasureNodes.get(t.id);if(n){n.classList.add('open');n.textContent='□';}
+    const n=S.treasureNodes.get(t.id);if(n){n.classList.add('open');n.textContent='□';skin(n);}
     if(hooks.onTreasure)hooks.onTreasure(t,S.map);
   }
   function startBattle(sy){
@@ -329,7 +345,7 @@
     for(const sy of S.symbols){const alive=!(hooks.isCleared&&hooks.isCleared(sy.field));
       if(sy.alive&&!alive){sy.alive=false;if(sy.node){sy.node.remove();S.extra=S.extra.filter(x=>x!==sy.node);sy.node=null;}}
       else if(!sy.alive&&alive){sy.alive=true;sy.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y);}}
-    if(S.sealNode&&hooks.sealCorrupted)S.sealNode.classList.toggle('corrupted',hooks.sealCorrupted());
+    if(S.sealNode&&hooks.sealCorrupted){S.sealNode.classList.toggle('corrupted',hooks.sealCorrupted());skin(S.sealNode);}
   }
   function show(){el.scene.style.display='block';}
   function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';}

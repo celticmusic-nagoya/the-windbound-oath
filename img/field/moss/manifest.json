@@ -1,5 +1,5 @@
 {
-  "_note": "First matching rule wins. Real Moss Forest assets listed before the stand-in rules replace them; stand-ins are derived from Lind art by tools/moss/prepare_standins.py. 'w','h' are world px (bottom-center anchored on the entity position).",
+  "_note": "First matching rule wins. Real Moss Forest assets listed before the stand-in rules replace them; stand-ins are derived from Lind art by tools/moss/prepare_standins.py. 'w','h' are world px (bottom-center anchored on the entity position). 'entity' maps runtime objects (chest_closed, chest_open, symbol, seal, seal_corrupted, lou, fiona) to {file,w,h}; absent = coloured placeholder.",
   "base": "img/field/moss/",
   "ground": {"grass": "standin/ground_grass.png", "dirt": "standin/ground_dirt.png", "tile": 384},
   "node": [
@@ -17,5 +17,6 @@
     {"match": "^veg_grass_tuft", "file": "standin/grass.png", "w": 26, "h": 21, "standin": true},
     {"match": "^veg_flower", "file": "standin/flower.png", "w": 28, "h": 21, "standin": true},
     {"match": "^veg_fern", "file": "standin/grass.png", "w": 36, "h": 29, "standin": true}
-  ]
+  ],
+  "entity": {}
 }

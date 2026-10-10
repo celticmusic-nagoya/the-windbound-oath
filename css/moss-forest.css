@@ -15,3 +15,7 @@
 .forest-ent{will-change:auto}
 #forestPlayer.forest-sprite{background:none;border:none;box-shadow:none}
 #forestPlayer .forest-aidan{max-width:none}
+
+/* Real art for runtime entities (manifest.entity): replaces the coloured placeholder block */
+.forest-treasure.art,.forest-symbol.art,.forest-seal.art,.forest-lou.art,#forestWorld #forestFiona.art{background-color:transparent;background-size:contain;background-repeat:no-repeat;background-position:50% 100%;border:0;box-shadow:none;color:transparent;font-size:0;border-radius:0}
+.forest-treasure.art.open{transform:none}

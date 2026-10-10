@@ -29,6 +29,14 @@ for k in ('grass', 'dirt'):
     im = png(man['ground'][k], 'ground.' + k)
     if im and im.width != im.height: err('ground.%s must be square, got %s' % (k, im.size))
 
+ENTITY_KEYS = ['chest_closed', 'chest_open', 'symbol', 'seal', 'seal_corrupted', 'lou', 'fiona']
+for k, r in (man.get('entity') or {}).items():
+    if k not in ENTITY_KEYS: err('entity.%s unknown key (allowed: %s)' % (k, ', '.join(ENTITY_KEYS))); continue
+    if not r.get('file'): continue
+    if not (r.get('w', 0) > 0 and r.get('h', 0) > 0): err('entity.%s needs w/h > 0' % k)
+    png(r['file'], 'entity.' + k)
+print('[entity] real art for: %s' % (', '.join(k for k, r in (man.get('entity') or {}).items() if r.get('file')) or 'none (placeholders: ' + ', '.join(ENTITY_KEYS) + ')'))
+
 # asset ids used by the maps, split by render kind (node = DOM sprite, layer = baked into canvas chunks)
 used = {'node': set(), 'layer': set()}
 for f in sorted(glob.glob(os.path.join(ROOT, 'data/maps/moss_forest_0*.json'))):

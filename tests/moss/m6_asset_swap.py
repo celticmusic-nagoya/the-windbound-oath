@@ -23,6 +23,10 @@ try:
     good=json.loads(orig)
     good['node'][0:0]=[{"match":"^tree_oak_L_01$","file":"real/oak_test.png","w":170,"h":220},{"match":"^tree_ancient","file":"real/ancient_test.png","w":260,"h":380}]
     open(MAN,'w',encoding='utf-8').write(json.dumps(good,ensure_ascii=False,indent=1))
+    for k,(w,h) in {'chest_closed':(60,48),'chest_open':(60,48),'fiona':(56,84)}.items():
+        Image.new('RGBA',(w*2,h*2),(30,200,30,255)).save('img/field/moss/real/%s.png'%k)
+        good.setdefault('entity',{})[k]={"file":"real/%s.png"%k,"w":w,"h":h}
+    open(MAN,'w',encoding='utf-8').write(json.dumps(good,ensure_ascii=False,indent=1))
     r=chk(); check(r.returncode==0 and 'SHADOWED' not in r.stdout,'checker accepts the correctly ordered manifest'); print(r.stdout.strip().splitlines()[-1])
     errs=[]
     def run(tag,expect_real):
@@ -34,6 +38,8 @@ try:
             a1=pg.evaluate("document.querySelectorAll('#forestWorld img[src*=\"real/oak_test\"]').length")
             standin=pg.evaluate("document.querySelectorAll('#forestWorld img[src*=\"standin/tree\"]').length")
             check((a1>0)==expect_real,'%s: real oak sprites in A1 = %d (stand-in trees = %d)'%(tag,a1,standin))
+            ent=pg.evaluate("({chest:document.querySelectorAll('.forest-treasure.art').length,fiona:document.querySelector('#forestFiona').classList.contains('art'),fw:document.querySelector('#forestFiona').style.width})")
+            check((ent['chest']>0 and ent['fiona'])==expect_real,'%s: entity art on chests/Fiona = %s'%(tag,ent))
             if expect_real:
                 size=pg.evaluate("(()=>{const i=document.querySelector('#forestWorld img[src*=\"real/oak_test\"]');return [i.style.width||i.width,i.style.height||i.height]})()"); print('   sprite size',size)
             b.close()
@@ -43,5 +49,5 @@ try:
     check(not errs,'0 console errors %s'%errs[:2])
 finally:
     open(MAN,'w',encoding='utf-8').write(orig); shutil.rmtree('img/field/moss/real',ignore_errors=True)
-    check(subprocess.run(['git','status','--porcelain','--','img','data','js'],capture_output=True,text=True).stdout.strip()=='' ,'worktree restored (no stray art or manifest edits)')
+    check(open(MAN,encoding='utf-8').read()==orig and not os.path.exists('img/field/moss/real'),'manifest and art folder restored')
 sys.exit(1 if fails else 0)

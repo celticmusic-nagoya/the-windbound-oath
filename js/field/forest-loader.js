@@ -23,13 +23,15 @@
       try{
         const r=await fetch(ROOT+'img/field/moss/manifest.json');if(!r.ok)throw new Error('no manifest');
         const m=await r.json();art.manifest=m;art.node=compile(m.node);art.layer=compile(m.layer);
-        const files=new Set([m.ground.grass,m.ground.dirt,...[...m.node,...m.layer].filter(x=>x.file).map(x=>x.file)]);
+        const files=new Set([m.ground.grass,m.ground.dirt,...[...m.node,...m.layer,...Object.values(m.entity||{})].filter(x=>x&&x.file).map(x=>x.file)]);
         await Promise.all([...files].map(async f=>{const im=img(f);try{await im.decode();}catch(e){art.images.delete(f);}}));
         art.ground={grass:art.images.get(m.ground.grass)||null,dirt:art.images.get(m.ground.dirt)||null,tile:m.ground.tile||384};
       }catch(e){art.manifest=null;art.ground=null;}   // no art: everything falls back to placeholders
     })();
     return art.loading;
   }
+  // Runtime entities that are not map assets (chest, symbol, seal, Lou, Fiona): manifest.entity[key] = {file,w,h}
+  function entityArt(key){if(!art.manifest)return null;const r=art.manifest.entity&&art.manifest.entity[key];const im=r&&r.file&&art.images.get(r.file);return im?{src:im.src,w:r.w,h:r.h}:null;}
   function nodeArt(asset){if(!art.manifest)return null;const r=resolve(art.node,asset);const im=r&&art.images.get(r.file);return im?{im,w:r.w,h:r.h}:null;}
   function layerArt(asset){if(!art.manifest)return null;const r=resolve(art.layer,asset);const im=r&&art.images.get(r.file);return im?{im,w:r.w,h:r.h}:null;}
   function entities(map,scatter){
@@ -70,5 +72,5 @@
       spawn(id){const s=map.spawns.points[id||map.spawns.default];return {x:s.x-FOOT.ax,y:s.y-FOOT.ay,facing:s.facing};}};
   }
   async function load(url){const r=await fetch(url);if(!r.ok)throw new Error('map load failed: '+url);return r.json();}
-  window.ForestLoader=Object.freeze({load,loadAssets,mount,FOOT,get art(){return art;}});
+  window.ForestLoader=Object.freeze({load,loadAssets,entityArt,mount,FOOT,get art(){return art;}});
 })();
