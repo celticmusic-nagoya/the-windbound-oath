@@ -11,22 +11,6 @@
     msg_a3_rune_stone:'フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。'
   };
   const HOOK_TEXTS={a2_marker_crack_glint:'苔むした古い道標だ。割れ目の奥で、何かが一瞬きらりと光った。'};
-  // Chest rewards are real inventory grants (battleItems / gold), applied once when the chest opens.
-  // The opened flag lives in save v2 moss.opened and battleItems/gold in the save root, so they stay consistent.
-  const ITEM_NAMES={potion:'きずぐすり',ether:'魔力の雫'};
-  const TREASURE={
-    tr_a1_hollow:{potion:2},tr_a1_stream:{potion:1},tr_a1_meadow:{gold:30},tr_a1_ford_hidden:{ether:1,gold:20},
-    tr_a2_overlook:{ether:1},tr_a2_alcove:{potion:1,gold:20},tr_a2_fern:{potion:1},tr_a2_marker_side:{ether:1,gold:30},
-    tr_a3_shrine:{potion:1,ether:1},tr_a3_hollowlog:{potion:2},tr_a3_raider:{ether:1,gold:50},tr_a3_sentinel:{potion:1,gold:40}
-  };
-  function grant(reward){
-    const parts=[];
-    for(const [k,n] of Object.entries(reward)){
-      if(k==='gold'){gold+=n;parts.push(n+'G');}
-      else if(ITEM_NAMES[k]){battleItems[k]=(battleItems[k]||0)+n;parts.push(ITEM_NAMES[k]+' ×'+n);}
-    }
-    return parts;
-  }
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
   function flagsNow(){
@@ -56,9 +40,10 @@
     if(z.hook&&HOOK_TEXTS[z.hook]){say(HOOK_TEXTS[z.hook]);return;}
   }
   function onTreasure(t){
-    const r=TREASURE[t.id];
-    if(!r){MossForest.toast('箱の中は空っぽだった。');return;}
-    MossForest.toast(grant(r).join('、')+' を手に入れた。');
+    const got=Inventory.openTreasure(t.id);
+    if(!got.length){MossForest.toast('箱の中は空っぽだった。');return;}
+    const keys=got.filter(g=>g.kind==='key');
+    MossForest.toast(Inventory.describe(got)+' を手に入れた。'+(keys.length?'（大事なもの）':''));
   }
   function onSymbol(sy){startAttackBattle(sy.field,sy.hp||160);}
   function onVillageExit(){
@@ -96,9 +81,14 @@
     MossForest.reset();MossForest.restoreState(state);
     return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true});
   }
+  // Opened-chest ids recorded in a save (v2 moss.opened, or v1 forestChests mapped to the new ids).
+  function openedFromSave(data){
+    const moss=data&&data.moss,c=(data&&data.forestChests)||{};
+    return [...(moss&&Array.isArray(moss.opened)?moss.opened:[]),c.fChest1&&'tr_a1_hollow',c.fChest2&&'tr_a2_overlook',c.fChest3&&'tr_a3_shrine'].filter(x=>typeof x==='string');
+  }
   function syncFlags(){
     const f=flagsNow();for(const [k,v] of Object.entries(f))MossForest.setFlag(k,v);
     MossForest.syncSymbols();
   }
-  window.MossForestStory=Object.freeze({init,enterFromStart,enterAt,fromSave,syncFlags,flagsNow,MAP_IDS});
+  window.MossForestStory=Object.freeze({init,enterFromStart,enterAt,fromSave,openedFromSave,syncFlags,flagsNow,MAP_IDS});
 })();

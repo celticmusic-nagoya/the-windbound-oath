@@ -168,7 +168,7 @@
 <button id="menuOpen" type="button">☰ MENU</button>
 <div id="systemMenu"><div class="sysPanel"><div class="tabs">
 <button data-stab="status">STATUS</button><button data-stab="skill">SKILL</button>
-<button data-stab="party">PARTY</button><button data-stab="save">SAVE</button><button data-stab="settings">SETTINGS</button>
+<button data-stab="party">PARTY</button><button data-stab="items">ITEMS</button><button data-stab="save">SAVE</button><button data-stab="settings">SETTINGS</button>
 <button id="systemClose">閉じる</button></div><div id="systemBody"></div></div></div>
 <div id="battleResult"><div class="resultPanel"><h2>VICTORY</h2><div class="reward"><span id="resultExp"></span><span id="resultGold"></span></div><div id="resultGrowth"></div><button id="resultContinue" type="button">次へ</button></div></div><div id="prologueEnd"><div><div>THE WINDBOUND OATH</div><h1>PROLOGUE END</h1><h2>Mionn na Gaoithe</h2><p>失った故郷。残された仲間。<br/>そして、風だけが知っていた真実。</p><button id="endReturn">タイトルへ戻る</button></div></div>
 <div id="cinema"><div id="hillScene"><div id="windVeil"></div><div id="hillGround"></div><div id="hillAidan"></div><div id="hillFiona"></div></div><div id="cinemaText"></div><div id="cinemaHint">タップして進む</div></div>
@@ -1020,6 +1020,10 @@ function renderSystemTab(tab='status'){
    const reserve=Object.entries(PartyManager.members).filter(([id,m])=>m.joined&&!PartyManager.active.includes(id)).map(([id])=>CHARACTER_DB[id].name).join(' / ')||'なし';
    body.innerHTML=`<h3>ACTIVE PARTY</h3><p>${active}</p><h3>RESERVE</h3><p>${reserve}</p><small>最大4人編成。正式な編成変更UIは仲間加入に合わせて実装予定です。</small>
    <h3>SUPPORT</h3><p>${PartyManager.support.joined?'ルー / FAIRY BLESSING '+PartyManager.support.fairyBlessing:'未加入'}</p>`;
+ }else if(tab==='items'){
+   const row=i=>`<div class="charStatus"><b>${i.name}</b>　×${i.count}<br><small>${i.desc}</small></div>`;
+   const cons=Inventory.list('consumable'),keys=Inventory.list('key');
+   body.innerHTML=`<h3>ITEMS</h3>${cons.map(row).join('')||'<p><small>なし</small></p>'}<h3>大事なもの</h3>${keys.map(row).join('')||'<p><small>まだ何も持っていない。</small></p>'}<div class="charStatus"><b>GOLD</b>　${gold} G</div>`;
  }else if(tab==='settings'){
    const canFS=!!document.documentElement.requestFullscreen;
    body.innerHTML=`<h3>SETTINGS</h3>
@@ -1043,7 +1047,7 @@ function renderSystemTab(tab='status'){
 }
 function saveGrowthData(){
  if(document.body.classList.contains('battleMode')){notice('戦闘中はセーブできません。');return}
- const data={version:29,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
+ const data={version:30,inventory:Inventory.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
 function loadGrowthData(){
@@ -1053,7 +1057,9 @@ function loadGrowthData(){
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
+  Inventory.load(d.inventory);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
   if(d.prologue)PrologueProgress.load(d.prologue);
+  Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
   renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
  }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>';return false}
 }
@@ -1795,6 +1801,8 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/forest-loader.js"></script>
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
+<script src="js/data/item-data.js"></script>
+<script src="js/inventory.js"></script>
 <script src="js/field/field-talk.js"></script>
 <script src="js/field/forest-warnings.js"></script>
 <script src="js/field/lind-dialogue.js"></script>
