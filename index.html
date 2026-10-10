@@ -279,6 +279,8 @@ function dressRoom(){
    $('#roomName').textContent='長老の家 ― 風見の丘';
    $('#bed').style.display='none';
    dec.innerHTML='<div class="elderRug"></div><div class="runeTable">古い村の地図</div><div class="stone" style="left:130px;top:280px">ᚠ</div><div class="stone" style="left:820px;top:280px">ᚱ</div>';
+   dec.insertAdjacentHTML('beforeend','<div id="elderNpc">長老</div>');
+   setTimeout(()=>{const n=$('#elderNpc');if(n)n.onclick=()=>needNear(n,()=>say(ForestWarnings.line('elder')))},0);
  } else if(room==='inn'){
    dressInn(1);
  } else {
@@ -1913,6 +1915,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/forest-loader.js"></script>
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
+<script src="js/field/forest-warnings.js"></script>
 <script>if(MOSS_RT){MossForestStory.init();}</script>
 <script src="js/field/lind-content-bounds.js"></script>
 <script src="js/field/lind-assets.js"></script>
