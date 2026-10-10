@@ -76,6 +76,7 @@
         if (got && got.length && pages) pages.push({speaker: '', text: Inventory.describe(got) + ' を手に入れた。'});
       }
     }
+    if (o.take && window.Inventory) for (const [id, n] of Object.entries(o.take)) Inventory.take(id, n);
     if (o.give && window.Inventory) {
       const got = Inventory.grant(o.give);
       if (got.length && pages) pages.push({speaker: '', text: Inventory.describe(got) + ' を手に入れた。'});
