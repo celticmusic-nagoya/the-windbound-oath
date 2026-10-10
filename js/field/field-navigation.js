@@ -2,7 +2,8 @@
  * bridge coordinates, saved state or actor logic belong to this module. */
 (function () {
   'use strict';
-  const bounds={width:2160,height:1500},maxNodes=12000;
+  const defaults=Object.freeze({width:2160,height:1500,maxNodes:12000,grid:16});
+  let bounds={width:defaults.width,height:defaults.height},maxNodes=defaults.maxNodes,baseGrid=defaults.grid;
   let current=null,path=[],index=0,blockedFrames=0,replans=0,steps=0,actorWaitFrames=0;
   let statistics={plans:0,expanded:0,milliseconds:0,outcome:'idle'};
   function clear(){current=null;path=[];index=0;blockedFrames=0;replans=0;steps=0;actorWaitFrames=0;}
@@ -11,7 +12,7 @@
     for(let i=1;i<=n;i++)if(blocked(a.x+(b.x-a.x)*i/n,a.y+(b.y-a.y)*i/n))return false;
     return true;
   }
-  function plan(start,goal,blocked,grid=16) {
+  function plan(start,goal,blocked,grid=baseGrid) {
     const began=performance.now();statistics.plans++;
     if(segment(start,goal,blocked)){statistics.expanded=0;statistics.milliseconds=performance.now()-began;return [goal];}
     const columns=Math.floor(bounds.width/grid)+1,rows=Math.floor(bounds.height/grid)+1;
@@ -44,7 +45,7 @@
     statistics.expanded=expanded;statistics.milliseconds=performance.now()-began;
     // Most routes need only the coarser grid. Retry narrow passages at 8px
     // instead of paying that cost for every long-distance destination.
-    if(!found)return grid>8?plan(start,goal,blocked,8):null;
+    if(!found)return grid>8?plan(start,goal,blocked,Math.max(8,grid/2)):null;
     const result=[goal];for(let n=found;n;n=n.parent)result.unshift(point(n.id));
     // Remove redundant vertices only when the swept foot collider permits it.
     const smooth=[];let from=start;
@@ -95,7 +96,7 @@
     const next=path[index],distance=Math.hypot(next.x-x,next.y-y);
     const v=Math.min(distance,FieldMovement.settings.pointerStep);
     const dx=distance?(next.x-x)/distance*v:0,dy=distance?(next.y-y)/distance*v:0;
-    const fromX=x,fromY=y,moved=FieldMovement.advance(x,y,dx,dy,blocked,{assist:false});
+    const fromX=x,fromY=y,moved=FieldMovement.advance(x,y,dx,dy,blocked,{assist:false,bounds});
     const progress=Math.hypot(moved.x-x,moved.y-y);x=moved.x;y=moved.y;
     // Preserve existing axis sliding around corners before deciding to wait.
     if(progress<.1&&dynamicBlocked?.(x+dx,y+dy))return waitForActor();
@@ -110,6 +111,14 @@
     if(Math.hypot(target.x-x,target.y-y)<=FieldMovement.settings.arrivalRadius)return finish('arrived');
     return {x,y,target};
   }
-  window.FieldNavigation=Object.freeze({destination,follow,cancel:clear,
+  // Per-map configuration. configure() with no argument restores the Lind defaults.
+  // Large maps raise the grid (coarser A*) and maxNodes; pointer-follow movement is
+  // bounded by the same width/height through FieldNavigation.bounds.
+  function configure(options={}) {
+    bounds={width:options.width??defaults.width,height:options.height??defaults.height};
+    maxNodes=options.maxNodes??defaults.maxNodes;baseGrid=options.grid??defaults.grid;clear();
+  }
+  window.FieldNavigation=Object.freeze({destination,follow,cancel:clear,configure,
+    get bounds(){return {...bounds};},
     get status(){return {...statistics,blockedFrames,actorWaitFrames,replans,waypoints:path.length,active:Boolean(current)};}});
 })();

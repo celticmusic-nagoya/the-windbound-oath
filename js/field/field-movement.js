@@ -5,13 +5,15 @@
   const settings=Object.freeze({multiplier,pointerStep:4*multiplier,keyboardStep:18*multiplier,
     anchorX:17,anchorY:42,arrivalRadius:3,microStep:2,cornerRadius:12});
   function advance(x,y,dx,dy,blocked,options={}) {
+    // Map bounds are injectable; the default is the Lind world so existing callers are unchanged.
+    const maxX=options.bounds?.width??2160,maxY=options.bounds?.height??1500;
     const distance=Math.hypot(dx,dy),steps=Math.max(1,Math.ceil(distance/2));
     const startX=x,startY=y;
     let collided=false,assisted=0,lastProgress=false;
     const budget=options.assist===false?0:Math.min(3,distance*.15);
     for(let i=0;i<steps;i++) {
-      const nx=Math.max(0,Math.min(2160,x+dx/steps));
-      const ny=Math.max(0,Math.min(1500,y+dy/steps));
+      const nx=Math.max(0,Math.min(maxX,x+dx/steps));
+      const ny=Math.max(0,Math.min(maxY,y+dy/steps));
       const beforeX=x,beforeY=y;
       if(!blocked(nx,ny)){x=nx;y=ny;}
       else {
@@ -34,7 +36,7 @@
         if(correction) {
           const amount=Math.min(.5,budget-assisted)*correction;
           const ax=horizontal?x:x+amount,ay=horizontal?y+amount:y;
-          if(ax>=0&&ax<=2160&&ay>=0&&ay<=1500&&!blocked(ax,ay)){
+          if(ax>=0&&ax<=maxX&&ay>=0&&ay<=maxY&&!blocked(ax,ay)){
             x=ax;y=ay;assisted+=Math.abs(amount);
           }
         }
