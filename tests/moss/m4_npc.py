@@ -17,12 +17,12 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('#elderNpc').click()"); t=pg.evaluate("document.querySelector('#msg').textContent"); check('古い決まり' in t,'elder closed line 2 (cycles)')
     # Emma (review-mode interaction event)
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'emma',type:'field_npc'}}))")
-    t=pg.evaluate("document.querySelector('#msg').textContent"); check('入っちゃだめ' in t,'emma closed line: '+t)
+    t=pg.evaluate("document.querySelector('#msg').textContent"); check('背負い込んで' in t,'emma closed line: '+t)
     # seal-open branch
     pg.evaluate("PrologueProgress.seed(3)"); 
     pg.evaluate("document.querySelector('#elderNpc').click()"); t=pg.evaluate("document.querySelector('#msg').textContent"); check('風が戻った' in t,'elder open line: '+t)
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'emma'}}))")
-    t=pg.evaluate("document.querySelector('#msg').textContent"); check('ちゃんと帰ってきた' in t,'emma open line')
+    t=pg.evaluate("document.querySelector('#msg').textContent"); check('風がようやく' in t,'emma open line')
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'merchant'}}))")
     check(pg.evaluate("document.querySelector('#msg').textContent")==t,'other NPC ids ignored')
     print('errors',errs[:5]); b.close()

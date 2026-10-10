@@ -1,0 +1,21 @@
+{
+  "_note": "First matching rule wins. Real Moss Forest assets listed before the stand-in rules replace them; stand-ins are derived from Lind art by tools/moss/prepare_standins.py. 'w','h' are world px (bottom-center anchored on the entity position).",
+  "base": "img/field/moss/",
+  "ground": {"grass": "standin/ground_grass.png", "dirt": "standin/ground_dirt.png", "tile": 384},
+  "node": [
+    {"match": "^tree_stump", "file": "standin/stump.png", "w": 40, "h": 30, "standin": true},
+    {"match": "^tree_(log|ancient|dead)", "file": null},
+    {"match": "^tree_.*_L_", "file": "standin/tree.png", "w": 170, "h": 156, "standin": true},
+    {"match": "^tree_.*_M_", "file": "standin/tree.png", "w": 120, "h": 110, "standin": true},
+    {"match": "^tree_", "file": "standin/tree.png", "w": 100, "h": 92, "standin": true},
+    {"match": "^rock_(moss_)?L_", "file": "standin/rock_large.png", "w": 70, "h": 52, "standin": true},
+    {"match": "^rock_(moss_)?M_", "file": "standin/rock_large.png", "w": 48, "h": 36, "standin": true},
+    {"match": "^rock_", "file": "standin/rock_small.png", "w": 32, "h": 25, "standin": true},
+    {"match": "^veg_shrub", "file": "standin/bush.png", "w": 60, "h": 36, "standin": true}
+  ],
+  "layer": [
+    {"match": "^veg_grass_tuft", "file": "standin/grass.png", "w": 26, "h": 21, "standin": true},
+    {"match": "^veg_flower", "file": "standin/flower.png", "w": 28, "h": 21, "standin": true},
+    {"match": "^veg_fern", "file": "standin/grass.png", "w": 36, "h": 29, "standin": true}
+  ]
+}

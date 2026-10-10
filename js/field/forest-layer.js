@@ -12,8 +12,13 @@
     const key=(i,j)=>i+','+j;
     for(const e of options.items){const k=key(Math.floor(e.x/chunk),Math.floor(e.y/chunk));let l=buckets.get(k);if(!l)buckets.set(k,l=[]);l.push(e);}
     function ground(ctx,ox,oy){
-      const t=map.terrain;ctx.fillStyle=t.baseColor||'#5d9a45';ctx.fillRect(0,0,chunk+1,chunk+1);
+      const t=map.terrain,G=options.ground;ctx.fillStyle=t.baseColor||'#5d9a45';ctx.fillRect(0,0,chunk+1,chunk+1);
       ctx.save();ctx.translate(-ox,-oy);
+      if(G&&G.grass){   // textured ground, world-aligned so chunks tile seamlessly; darkened toward the map's mood colour
+        const pat=ctx.createPattern(G.grass,'repeat');pat.setTransform(new DOMMatrix().scale(G.tile/G.grass.width));
+        ctx.fillStyle=pat;ctx.fillRect(ox,oy,chunk+1,chunk+1);
+        ctx.globalCompositeOperation='multiply';ctx.fillStyle=t.baseColor||'#5d9a45';ctx.globalAlpha=.7;ctx.fillRect(ox,oy,chunk+1,chunk+1);
+        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}
       for(const p of t.patches||[]){ctx.beginPath();p.polygon.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();
         ctx.fillStyle=p.tint||'#fff';ctx.globalAlpha=.35;ctx.fill();ctx.globalAlpha=1;}
       for(const w of t.waters||[]){ctx.fillStyle=ctx.strokeStyle='#5b9fd6';ctx.lineCap=ctx.lineJoin='round';
@@ -24,8 +29,11 @@
         ctx.fillStyle=c.type==='face_visible'?'#5b4a3c':'#6f6a55';ctx.fillRect(r[0],r[1],r[2],r[3]);
         ctx.fillStyle=c.type==='face_visible'?'#8a7660':'#8e8a6c';ctx.fillRect(r[0],r[1],r[2],c.type==='face_visible'?18:10);}
       for(const w of t.waters||[])if(w.kind==='fall'){ctx.fillStyle='#cfe9f5';ctx.globalAlpha=.8;const q=w.polygon;ctx.fillRect(q[0][0],q[0][1],q[1][0]-q[0][0],q[2][1]-q[0][1]);ctx.globalAlpha=1;}
-      for(const p of t.paths||[]){ctx.strokeStyle='#b08a5a';ctx.lineCap=ctx.lineJoin='round';ctx.lineWidth=p.width;
-        ctx.beginPath();p.points.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();}
+      const dirt=G&&G.dirt?(()=>{const d=ctx.createPattern(G.dirt,'repeat');d.setTransform(new DOMMatrix().scale(G.tile/G.dirt.width));return d;})():null;
+      ctx.lineCap=ctx.lineJoin='round';
+      const stroke=p=>{ctx.beginPath();p.points.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();};
+      if(dirt){ctx.strokeStyle='#4b3a22';ctx.globalAlpha=.45;for(const p of t.paths||[]){ctx.lineWidth=p.width+10;stroke(p);}ctx.globalAlpha=1;}   // halos first so crossings stay clean
+      for(const p of t.paths||[]){ctx.strokeStyle=dirt||'#b08a5a';ctx.lineWidth=p.width;stroke(p);}
       ctx.restore();
     }
     function build(i,j){
@@ -34,6 +42,8 @@
       const ctx=canvas.getContext('2d'),ox=i*chunk,oy=j*chunk;ground(ctx,ox,oy);
       // Items overhang chunk borders by a few px: draw neighbours' items too (cheap, small radius).
       for(let a=i-1;a<=i+1;a++)for(let b=j-1;b<=j+1;b++)for(const e of buckets.get(key(a,b))||[]){
+        const sp=options.sprite&&options.sprite(e.asset);
+        if(sp){ctx.drawImage(sp.im,e.x-ox-sp.w/2,e.y-oy-sp.h,sp.w,sp.h);continue;}
         const s=style(e.asset);ctx.fillStyle=s.c;ctx.beginPath();ctx.ellipse(e.x-ox,e.y-oy,s.r,s.r*.7,0,0,6.2832);ctx.fill();}
       built++;return canvas;
     }

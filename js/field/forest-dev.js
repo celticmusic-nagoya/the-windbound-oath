@@ -3,6 +3,7 @@
   'use strict';
   const q=new URLSearchParams(location.search),mapUrl=q.get('map')||'../data/maps/moss_forest_01_sunlit_path.json';
   const world=document.getElementById('world'),viewport=document.getElementById('viewport'),player=document.getElementById('player'),hud=document.getElementById('hud');
+  await ForestLoader.loadAssets();
   const map=await ForestLoader.load(mapUrl);
   const flags={moss_a3_seal_open:false,moss_a3_lou_found:false};
   (q.get('flags')||'').split(',').filter(Boolean).forEach(n=>flags[n]=true);

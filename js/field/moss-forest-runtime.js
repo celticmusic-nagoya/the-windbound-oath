@@ -24,8 +24,34 @@
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     S.configured=true;
   }
+  // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
+  const spr={frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
+  function mountPlayerSprite(){
+    const A=window.AidanFieldAssets;if(!A||!el.player)return;
+    for(const [name,a] of Object.entries(A.frames)){
+      const im=new Image();im.className='aidan-field-frame forest-aidan';im.alt='';im.draggable=false;im.hidden=true;im.dataset.src=a.path;
+      Object.assign(im.style,{position:'absolute',width:a.width*a.scale+'px',height:a.height*a.scale+'px',left:FOOT.ax-a.anchor[0]*a.scale+'px',top:FOOT.ay-a.anchor[1]*a.scale+'px',pointerEvents:'none'});
+      el.player.appendChild(im);spr.frames.set(name,im);
+    }
+    Promise.all([...spr.frames.values()].map(im=>{im.src=im.dataset.src;return im.decode().catch(()=>{});})).then(()=>{spr.ready=true;el.player.classList.add('forest-sprite');});
+  }
+  function updateSprite(now){
+    if(!spr.frames.size)return;
+    if(spr.px!==null){
+      const dx=S.x-spr.px,dy=S.y-spr.py,d=Math.hypot(dx,dy);
+      if(d>.01&&d<=23){const nx=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
+        if(spr.state!=='WALK'||spr.dir!==nx){spr.since=now;spr.phase=0;}spr.dir=nx;spr.state='WALK';spr.moved=now;}
+      else if(d>23||now-spr.moved>110){spr.state='IDLE';spr.phase=0;}
+      if(spr.state==='WALK')spr.phase=Math.floor((now-spr.since)/100)%4;
+    }
+    spr.px=S.x;spr.py=S.y;
+    const name='aidan_'+(spr.state==='WALK'?'walk_'+spr.dir+'_'+String(spr.phase+1).padStart(2,'0'):'idle_'+spr.dir);
+    if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
+    else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
+  }
   async function loadMap(id){
     if(cache.has(id))return cache.get(id);
+    await ForestLoader.loadAssets();
     const map=await ForestLoader.load(MAP_BASE+id+'.json');cache.set(id,map);return map;
   }
   const fadeMs=(t,dflt)=>Math.round(((t&&t.fade&&t.fade[dflt])??.35)*1000);
@@ -90,6 +116,7 @@
     if(!S.configured)throw new Error('MossForest not configured');
     const id=options.map,spawnId=options.spawn;
     S.busy=true;S.active=false;
+    if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     const map=await loadMap(id);
     if(options.flags)Object.assign(S.flags,options.flags);
     const first=!S.map;
@@ -100,7 +127,7 @@
     const sp0=map.spawns.points[spawnId||map.spawns.default];
     if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
-    S.x=spot.x;S.y=spot.y;S.target=null;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
+    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
     el.fade.style.opacity='1';
     await setFade(0,fadeMs(options.transition,'in'));
@@ -251,7 +278,7 @@
     if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
-    render();checkZones();S.frames++;
+    render();updateSprite(performance.now());checkZones();S.frames++;
   }
   function streamFactor(){
     const st=S.map&&(S.map.terrain.waters||[]).find(w=>w.kind==='stream');
