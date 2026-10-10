@@ -8,6 +8,8 @@
  *   {vista:{id, on, ms?}}                      reveal / hide a map vista (burning village etc.)
  *   {pan:{x, y, ms, hold}}                     camera glide to a world point and back
  *   {focus:{x, y, ms}} … {release:{ms}}        camera glides to a point and STAYS (talk during it) until released
+ *   {approach:{a,b,gap?,ms?,share?}}             two actors walk toward each other (walk -> idle), e.g. {a:'aidan',b:'fiona',gap:46,ms:1400}
+ *   {move:{actor,x,y,ms?}} · {follow:'fiona'}   walk one actor to a point · give Fiona back to the follow behaviour
  *   {shake:{ms, amp}} · {wait:ms} · {set:{flag:true}} · {stage:n}  · {call:'hook'}
  * Stage flow: storyStage 3 (training done, road to the cliff open) -> this scene -> stage 4 -> returnScene -> 5 (village burning). */
 window.FieldSceneData = Object.freeze({scenes: Object.freeze({

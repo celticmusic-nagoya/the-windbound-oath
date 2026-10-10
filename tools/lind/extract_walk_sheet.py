@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Cut a generated walk-cycle CONTACT SHEET (opaque JPG/PNG, flat background, one character per cell) into
 1 frame = 1 transparent RGBA PNG, normalised for the field (shared scale, feet on one baseline, torso-centred).
+usage (battle motions: add --canvas 1536x1024 --height <idle bbox height> --anchor <idle anchor x,y> --suffix <state>):
 usage: extract_walk_sheet.py <sheet> <npc_id> <cols>x<rows> <outdir> [--bg white|green] [--frames N] [--canvas WxH] [--height H]
   - background removed by border flood-fill against a fitted background (gradient-aware), edge colour un-mixed (no green/white halo)
   - caption text under the sheet is dropped (small components)
@@ -78,7 +79,7 @@ def extract(path, mode, cols, rows):
             frames.append(Image.fromarray(crop, 'RGBA'))
     return frames
 
-def normalise(frames, canvas, height):
+def normalise(frames, canvas, height, anchor=None):
     W, H = canvas
     hs = [f.getchannel('A').point(lambda v: 255 if v > 24 else 0).getbbox() for f in frames]
     heights = sorted(b[3] - b[1] for b in hs); med = heights[len(heights) // 2]
@@ -89,7 +90,8 @@ def normalise(frames, canvas, height):
         a = np.asarray(f.getchannel('A')) > 24
         cx = int(np.average(np.where(a)[1])) if a.any() else f.width // 2      # torso-centred: centroid, not bbox
         c = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-        c.alpha_composite(f, (W // 2 - cx, H - 12 - f.height)); out.append(c)
+        ax, ay = anchor if anchor else (W // 2, H - 12)      # anchor = where the feet-centre / baseline lands
+        c.alpha_composite(f, (ax - cx, ay - f.height)); out.append(c)
     return out
 
 if __name__ == '__main__':
@@ -100,9 +102,11 @@ if __name__ == '__main__':
     opt = lambda k, d=None: a[a.index(k) + 1] if k in a else d
     mode = opt('--bg', 'green'); canvas = tuple(map(int, opt('--canvas', '420x520').split('x'))); height = int(opt('--height', '400'))
     os.makedirs(outdir, exist_ok=True)
-    frames = normalise(extract(sheet, mode, cols, rows), canvas, height)
+    anchor = tuple(map(int, opt('--anchor').split(','))) if opt('--anchor') else None
+    frames = normalise(extract(sheet, mode, cols, rows), canvas, height, anchor)
+    suffix = opt('--suffix', 'walk')    # output name: <id>_<suffix>_NN.png  (battle: --suffix attack --canvas 1536x1024 --anchor 889,1014)
     n = int(opt('--frames', len(frames))); frames = frames[:n]
-    for i, f in enumerate(frames, 1): f.save(os.path.join(outdir, '%s_walk_%02d.png' % (npc, i)), optimize=True)
+    for i, f in enumerate(frames, 1): f.save(os.path.join(outdir, '%s_%s_%02d.png' % (npc, suffix, i)), optimize=True)
     prev = Image.new('RGB', (canvas[0] * len(frames) // 2, canvas[1] // 2), (70, 100, 80))
     for i, f in enumerate(frames):
         t = f.resize((canvas[0] // 2, canvas[1] // 2), Image.LANCZOS); prev.paste(t, (i * canvas[0] // 2, 0), t)
