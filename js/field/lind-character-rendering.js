@@ -19,7 +19,7 @@
   }
   scopeLabel.append(scope);controls.append(scopeLabel);
   scope.addEventListener('change',()=>document.body.dataset.lindRenderingScope=scope.value);
-  document.body.dataset.lindRenderingScope='representatives';
+  document.body.dataset.lindRenderingScope='all';scope.value='all';   // Phase 3: all characters/NPCs by default
   const emmaLabel=document.createElement('label');emmaLabel.append('Emmaの生活動作（試験） ');
   const emma=document.createElement('select');emma.setAttribute('aria-label','Emmaの生活動作（試験）');
   for(const value of ['current','natural','active']){const option=document.createElement('option');
@@ -31,7 +31,8 @@
     if(!['original','smooth','crisp'].includes(next))return false;
     mode=next;select.value=next;document.body.dataset.lindCharacterRendering=next;return true;
   }
-  select.addEventListener('change',()=>setMode(select.value));setMode('original');
+  select.addEventListener('change',()=>setMode(select.value));setMode('crisp');   // Phase 3 default (Original/Smooth remain selectable for comparison)
+  emma.value='active';window.LindVillageLife?.setEmmaMode('active');   // Phase 3 candidate; formal adoption is decided in PLAYER QA
   window.LindCharacterRendering=Object.freeze({setMode,actors:Object.freeze(['aidan','emma','farmer_male']),
     get mode(){return mode;}});
 })();

@@ -12,7 +12,7 @@
   ].map(([id,label,x,footY,height])=>({id,label,x,footY,height,
     path:'img/field/lind/npc/villagers/'+id+'_idle.png'}));
   window.LindFisherman?.configure(definitions.find(d=>d.id==='fisherman'));
-  const actors=[];
+  const WALK_FPS=4,actors=[];
   let active=false,notice=null,lastInteraction=null,frame=null,previous=null;
   function add(definition) {if(actors.length)throw new Error('Register field NPC before mounting');definitions.push(definition);}
   function mount(parent,controls) {
@@ -28,9 +28,18 @@
         height:d.height+'px',zIndex:String(Math.round(d.footY))});
       const img=document.createElement('img');img.src=d.path;img.alt=d.label;
       actor.frames.idle=img;el.append(img);
-      if(d.id==='farmer_male'&&window.LindFieldContentBounds.farmer_male_walk){
+      // Walk frames. New art: <id>_walk_01.._06 (1 frame = 1 transparent RGBA PNG, 4-6 frames).
+      // Legacy farmer_male has the single <id>_walk frame and keeps its idle/walk alternation.
+      // An NPC with neither stays on its idle frame while walking (no fake animation).
+      const bounds=window.LindFieldContentBounds;actor.walkSeq=[];
+      for(let n=1;n<=6;n++){
+        const key=d.id+'_walk_0'+n;if(!bounds[key])break;
+        const walk=document.createElement('img');walk.src=d.path.replace('_idle.png','_walk_0'+n+'.png');walk.alt=d.label;
+        actor.frames[key]=walk;el.append(walk);actor.walkSeq.push(key);
+      }
+      if(!actor.walkSeq.length&&bounds[d.id+'_walk']){
         const walk=document.createElement('img');walk.src=d.path.replace('_idle.png','_walk.png');walk.alt=d.label;
-        actor.frames.walk=walk;el.append(walk);
+        actor.frames.walk=walk;el.append(walk);actor.walkSeq=['idle','walk'];
       }
       parent.append(el);actor.element=el;
       const hit=document.createElement('button');hit.type='button';hit.className='lind-npc-interaction';
@@ -77,8 +86,9 @@
   function blocked(x,y) {return active&&actors.some(a=>x+28>a.foot.x&&x+6<a.foot.x+a.foot.width&&y+42>a.foot.y&&y+32<a.foot.y+a.foot.height);}
   function render(a) {
     if(a.fishing){LindFisherman.render(a);return;}
-    const state=a.frames.walk&&a.state==='WALK'&&Math.floor(a.elapsed*4)%2?'walk':'idle';
-    const b=window.LindFieldContentBounds[a.boundsId||a.id+'_'+state],scale=a.height/b[5];
+    // Shared cadence for every NPC: 4 frame changes per second, as the farmer's original walk.
+    const state=a.state==='WALK'&&a.walkSeq?.length?a.walkSeq[Math.floor(a.elapsed*WALK_FPS)%a.walkSeq.length]:'idle';
+    const b=window.LindFieldContentBounds[a.boundsId&&state==='idle'?a.boundsId:a.id+'_'+state],scale=a.height/b[5];
     a.width=b[4]*scale;a.y=a.footY-a.height;a.foot.x=a.x-9;a.foot.y=a.footY-8;
     Object.assign(a.element.style,{left:a.x-a.width/2+'px',top:a.y+'px',width:a.width+'px',height:a.height+'px',zIndex:String(Math.round(a.footY)),transformOrigin:'50% 100%',transform:a.direction<0?'scaleX(-1)':'none'});
     Object.entries(a.frames).forEach(([key,image])=>{image.hidden=key!==state;});
