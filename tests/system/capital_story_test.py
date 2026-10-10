@@ -8,7 +8,7 @@ def check(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1200)
+    pg.goto('http://localhost:8765/index.html?legacyVillage=1'); pg.wait_for_timeout(1200)
     ev=lambda s: pg.evaluate(s)
     ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();EquipmentManager.reset();MossForest.reset();gold=0;battleItems.potion=0;battleItems.ether=0")
     maps={n:json.load(open('data/maps/%s.json'%n,encoding='utf-8')) for n in ['fort_dunvall_01_courtyard','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential']}

@@ -1051,6 +1051,8 @@ function renderSystemTab(tab='status'){
    <div class="charStatus"><b>画面表示</b><p>スマートフォンではフルスクリーンにすると、ブラウザのアドレスバーを隠してゲーム画面を広く使えます。</p>
    <button id="toggleFullscreen" type="button" ${canFS?'':'disabled'}>${document.fullscreenElement?'フルスクリーンを解除':'フルスクリーンにする'}</button>
    <p><small>${canFS?'縦向き・横向きのどちらでも切り替えできます。':'このブラウザではFullscreen APIを利用できません。'}</small></p></div>`;
+   body.insertAdjacentHTML('beforeend',`<div class="charStatus"><b>音楽</b><p>村・屋内・襲撃後の村で流れる音楽です。ブラウザの仕様で、最初の操作のあとに鳴り始めます。</p><button id="toggleBgm" type="button">${window.FieldBgm&&FieldBgm.muted?'音楽をオンにする':'音楽をオフにする'}</button></div>`);
+   $('#toggleBgm').onclick=()=>{if(window.FieldBgm){FieldBgm.toggle();renderSystemTab('settings');}};
    if(canFS)$('#toggleFullscreen').onclick=async()=>{
      try{
        if(document.fullscreenElement)await document.exitFullscreen();
@@ -1429,8 +1431,8 @@ function showPrologueEnd(){
 }
 $('#endReturn').onclick=e=>{
  e.stopPropagation();$('#prologueEnd').style.display='none';
- // Development build: return to opening for repeated testing.
- devJump('opening');
+ // Free roam from the fort (the village behind you is now the burnt one). ?legacyVillage=1: development loop back to the opening.
+ if(window.RildeVillage&&RildeVillage.enabled())RildeVillage.afterPrologue();else devJump('opening');
 };
 $('#fisher1').onclick=()=>say('釣り人「しーっ……今日は魚の機嫌がいいんだ。」');
 $('#fisher2').onclick=()=>say('釣り人「この川は昔から村の暮らしを支えてきたんだよ。」');
@@ -1477,7 +1479,9 @@ const DEV_EVENTS=[
  ['raider','11　ゴブリン・レイダー'],
  ['aftermath','12　レイダー討伐後・ルー加入'],
  ['fort','13　夜明け・ドゥンヴァル砦'],
- ['prologueEnd','14　PROLOGUE END']
+ ['prologueEnd','14　PROLOGUE END'],
+ ['rilde_ruin','15　リルド村・襲撃後（自由行動）'],
+ ['fort_free','16　ドゥンヴァル砦・自由行動']
 ];
 function devResetScreens(){
  closeDialogue();window.MossForest&&MossForest.hide();
@@ -1489,6 +1493,11 @@ function devResetScreens(){
 }
 function devJump(key){
  devResetScreens();
+ if(key==='opening'&&window.RildeVillage&&RildeVillage.enabled()){RildeVillage.startOpening();return;}
+ if(key==='training'&&window.RildeVillage&&RildeVillage.enabled()){storyStage=1;currentObjective='訓練場でフィオナと話そう';RildeVillage.enter('from_training');renderJournal();popObjective();return;}
+ if(key==='sunset'&&window.RildeVillage&&RildeVillage.enabled()){storyStage=3;currentObjective='フィオナと風見の断崖へ向かおう';RildeVillage.enter('from_sunset');renderJournal();popObjective();return;}
+ if(key==='rilde_ruin'){storyStage=15;currentObjective='プロローグクリア';if(window.RildeVillage&&RildeVillage.enabled())RildeVillage.enter('from_plaza');else enterWorldMap('fort','from_keep');renderJournal();popObjective();return;}
+ if(key==='fort_free'){RildeVillage.afterPrologue();renderJournal();popObjective();return;}
  if(key==='opening'){
    storyStage=0;room='home';ipx=190;ipy=500;itarget=null;$('#inside').style.display='block';dressRoom();inCamera();
    currentObjective='家を出て、訓練場のフィオナに会いに行こう';
@@ -1530,6 +1539,11 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
 
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
 (function startAtHome(){
+ if(!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
+   const go=()=>{if(window.RildeVillage&&RildeVillage.enabled())RildeVillage.startOpening();};
+   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
+   return;
+ }
  room='home'; ipx=190; ipy=500; itarget=null;
  $('#inside').style.display='block'; dressRoom(); inCamera();
  currentObjective='家を出て、訓練場のフィオナに会いに行こう';
@@ -1823,10 +1837,12 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/field-timeofday.js"></script>
 <script src="js/field/field-weather.js"></script>
 <script src="js/field/field-vista.js"></script>
+<script src="js/field/field-bgm.js"></script>
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/fiona-field-assets.js"></script>
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
+<script src="js/field/rilde-village.js"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js"></script>
 <script src="js/inventory.js"></script>
@@ -1841,6 +1857,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/talk-data-quests.js"></script>
 <script src="js/field/talk-data-scenes.js"></script>
 <script src="js/field/talk-data-capital.js"></script>
+<script src="js/field/talk-data-rilde.js"></script>
 <script src="js/field/field-talk.js"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>

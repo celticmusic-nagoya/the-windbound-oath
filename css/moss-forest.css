@@ -50,7 +50,12 @@
 @keyframes vfPulse{from{opacity:.75}to{opacity:1}}
 @keyframes vfSmoke{0%{transform:translate(0,40px) scale(.7,.5);opacity:0}15%{opacity:.9}100%{transform:translate(70px,-230px) scale(2.2,2.8);opacity:0}}
 @keyframes vfEmber{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(40px,-180px);opacity:0}}
-@media (prefers-reduced-motion:reduce){.vf-flame,.vf-smoke,.vf-ember,.vf-glow,.vf-window{animation:none}.vf-smoke{opacity:.6}}
+/* Rilde Village (post-attack fire spots, smoke, hearth light) */
+.vf-flame-lite{filter:none}
+.vista-fire-spot .vf-glow{background:radial-gradient(closest-side,rgba(255,150,50,.62) 0,rgba(255,100,30,.26) 55%,rgba(255,60,20,0) 100%);animation:vfPulse 2s ease-in-out infinite alternate}
+.vista-fire-spot,.vista-smoke-column,.vista-hearth{pointer-events:none}
+.vh-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,170,70,.4) 0,rgba(255,120,40,.16) 42%,rgba(255,90,30,0) 72%);animation:vfPulse 3.2s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){.vh-glow{animation:none}.vf-flame,.vf-smoke,.vf-ember,.vf-glow,.vf-window{animation:none}.vf-smoke{opacity:.6}}
 
 /* ---- canopy layers of FieldTimeOfDay: light shafts, 木漏れ日 dapple, swaying leaf shadows, moss at the edges ----
  * Cheap on purpose (plain alpha compositing, no blend modes / blur filters / masks on animated layers): software-rendered and phone GPUs stay smooth. */

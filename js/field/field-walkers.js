@@ -1,5 +1,5 @@
 /* Town walkers: NPC props that patrol a short path with a 6-frame walk cycle (tools/moss/make_npcs.py).
- * Map JSON (optional):  "walkers":[{"id","look","x","y","path":[[dx,dy],...],"speed":26,"rest":[2,4]}]
+ * Map JSON (optional):  "walkers":[{"id","look","x","y","path":[[dx,dy],...],"speed":26,"rest":[2,4],"anim":true,"fps":7}]   (anim: loop the frames in place)
  *   look  -> manifest node rule npc_slot_<look> with {walk:{file:"...{n}.png",frames:6}}; x,y = feet of the home position.
  * Pure presentation: the interact zone of the NPC stays at its home point. Walkers pause while the player stands close (<56px).
  * API: mount(map, worldEl) · clear() · update(sec) (called by the runtime loop) · get list */
@@ -20,20 +20,21 @@
       const frames = [base + r.file]; for (let n = 1; n <= r.walk.frames; n++) { frames.push(base + r.walk.file.replace('{n}', String(n).padStart(2, '0'))); }
       frames.forEach(f => { const i = new Image(); i.src = f; });
       const pts = [[w.x, w.y], ...(w.path || []).map(p => [w.x + p[0], w.y + p[1]])];
-      const rec = {id: w.id, look: w.look, el, frames, w: r.w, h: r.h, pts, i: 1, x: w.x, y: w.y, dir: 1, speed: w.speed || 26, rest: w.rest || [2, 4], wait: 1 + Math.random() * 2, clock: 0, state: 'idle', home: [w.x, w.y]};
+      const rec = {id: w.id, look: w.look, el, frames, w: r.w, h: r.h, pts, i: 1, x: w.x, y: w.y, dir: w.dir || 1, speed: w.speed || 26, anim: Boolean(w.anim), fps: w.fps || FPS, rest: w.rest || [2, 4], wait: 1 + Math.random() * 2, clock: 0, state: 'idle', home: [w.x, w.y]};
       layer.appendChild(el); list.push(rec); draw(rec);
     }
     if (list.length) { last = performance.now(); raf = requestAnimationFrame(tick); }
   }
   function draw(r) {
     const walking = r.state === 'walk';
-    const src = walking ? r.frames[1 + Math.floor(r.clock * FPS) % (r.frames.length - 1)] : r.frames[0];
+    const src = walking ? r.frames[1 + Math.floor(r.clock * r.fps) % (r.frames.length - 1)] : r.frames[0];
     if (r.el.dataset.src !== src) { r.el.dataset.src = src; r.el.src = src; }
     Object.assign(r.el.style, {left: r.x - r.w / 2 + 'px', top: r.y - r.h + 'px', zIndex: String(Math.round(r.y)), transform: r.dir < 0 ? 'scaleX(-1)' : 'none'});
   }
   function update(sec) {
     const me = window.MossForest && MossForest.snapshot ? MossForest.snapshot() : null;
     for (const r of list) {
+      if (r.anim) { r.clock += sec; r.state = 'walk'; draw(r); continue; }   // in-place loop (wooden-sword practice, idle fisherman)
       if (r.pts.length < 2) continue;
       const near = me && Math.hypot((me.x + 17) - r.x, (me.y + 42) - r.y) < 56;
       if (near) { r.state = 'idle'; draw(r); continue; }

@@ -25,7 +25,9 @@
     const focusX=x+(review?17:0), focusY=y+(review?22:0);
     const left=Math.max(0,Math.min(Math.max(0,world.offsetWidth-width),focusX-width/2));
     const top=Math.max(0,Math.min(Math.max(0,world.offsetHeight-height),focusY-(screenHeight+topInset)/(2*scale)));
-    world.style.transform=`translate(${-left*scale}px,${-top*scale}px) scale(${scale})`;
+    // a world smaller than the screen (a house interior) is centred instead of stuck to the top-left corner
+    const padX=Math.max(0,width-world.offsetWidth)/2, padY=Math.max(0,screenHeight/scale-world.offsetHeight)/2;
+    world.style.transform=`translate(${(padX-left)*scale}px,${(padY-top)*scale}px) scale(${scale})`;
     player.style.left=x+'px'; player.style.top=y+'px';
   }
   function screenToWorld(world, x, y) {

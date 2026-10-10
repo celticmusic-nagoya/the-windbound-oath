@@ -17,12 +17,14 @@
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
   function flagsNow(){
-    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13};
+    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5};
   }
   function onEvent(z,map){
     if(z.type==='locationCard'){
       const c=map.locationCard;if(c)questPop(c.regionJa+'　―　'+c.areaJa);return;
     }
+    if(z.hook&&z.hook.startsWith('rilde_')&&window.RildeVillage&&RildeVillage.hook(z,map))return;   // Rilde Village (js/field/rilde-village.js)
+    if(z.text){say(z.text);return;}   // plain inline text zone (signs, furniture)
     if(z.hook==='cliff_time_cycle'){
       if(storyStage===3){FieldTalk.talk('cliff_bench',{source:'forest'});return;}   // sit down? はい -> sunset scene / いいえ -> stay (js/field/talk-data-scenes.js)
       if(storyStage>=15){const n=FieldTimeOfDay.cycle();say({day:'澄んだ空と、どこまでも広がる海。',dusk:'夕陽が海を染めている。胸の奥まで橙色になりそうだ。',night:'満天の星。波の音だけが、遠くで続いている。'}[n]);}
@@ -79,6 +81,7 @@
   }
   function onSymbol(sy){startAttackBattle(sy.field,sy.hp||160);}
   function onVillageExit(t){
+    if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns
     if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
       if(storyStage===3||storyStage>=15){MossForest.lock(false);forestHideScene();return true;}
       MossForest.toast('今は、村へ戻る時ではない。');return true;
@@ -90,14 +93,15 @@
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
-      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit}});
+      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,
+      resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(window.RildeVillage)RildeVillage.onEnter(m);}}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.
   function enterCliff(){
     return MossForest.enter({map:CLIFF_ID,spawn:'from_lind',flags:flagsNow(),timeOfDay:storyStage===3?'dusk':'day'});
   }
   // ドゥンヴァル砦 / 王都: foundation maps (tools/moss/build_town_maps.py). Not wired into the story yet - reachable via enterWorldMap() / DEV.
-  const WORLD_MAPS={fort:'fort_dunvall_01_courtyard',capital:'royal_capital_01_market'};
+  const WORLD_MAPS={fort:'fort_dunvall_01_courtyard',capital:'royal_capital_01_market',rilde:'rilde_village'};   // 'rilde_village' resolves to the peace / ruin map by story state (RildeVillage.resolve)
   function enterMap(id,spawn){return MossForest.enter({map:WORLD_MAPS[id]||id,spawn,flags:flagsNow()});}
   FieldScene_hooks();
   function FieldScene_hooks(){
