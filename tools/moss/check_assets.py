@@ -40,7 +40,7 @@ print('[entity] real art for: %s' % (', '.join(k for k, r in (man.get('entity') 
 # asset ids used by the maps, split by render kind (node = DOM sprite, layer = baked into canvas chunks)
 used = {'node': set(), 'layer': set()}
 presets = {}   # asset family (id without _NN) -> list of (map, [x,y,w,h]) collision rects, for the art-vs-collision check
-for f in sorted(glob.glob(os.path.join(ROOT, 'data/maps/moss_forest_0*.json')) + glob.glob(os.path.join(ROOT, 'data/maps/cliff_*.json'))):
+for f in sorted(glob.glob(os.path.join(ROOT, 'data/maps/*.json'))):
     d = json.load(open(f, encoding='utf-8'))
     for k, rects in (d.get('collision', {}).get('presets') or {}).items(): presets.setdefault(k, []).append((os.path.basename(f), rects))
     for p in d.get('props', []): used['node'].add(p['asset'])

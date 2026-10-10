@@ -251,7 +251,7 @@ m = {
     'props': props, 'scatter': scatter, 'effects': [],
     'collision': {'bounds': {'x': 0, 'y': 0, 'w': float(W), 'h': float(H)}, 'edgeBlockers': edge_blockers,
                   'blockers': [{'id': 'cb_c1_terrain', 'tag': 'cliff_sea', 'shape': 'rects', 'rects': rects_block}],
-                  'presets': {'prop_post_boundary_wood': [[-8, -8, 16, 8]], 'prop_marker_signpost': [[-12, -10, 24, 10]], 'rock_moss_M': [[-30, -10, 60, 10]], 'rock_moss_S': [[-18, -14, 36, 14]], 'prop_bench_view': [[-40, -10, 80, 10]]}},
+                  'presets': {'prop_post_boundary_wood': [[-8, -8, 16, 8]], 'prop_marker_signpost': [[-12, -10, 24, 10]], 'rock_moss_M': [[-30, -10, 60, 10]], 'rock_moss_S': [[-18, -14, 36, 14]], 'prop_bench_view': [[-40, -10, 80, 10]], 'anc_standing_L': [[-24, -16, 48, 16]], 'anc_boundary_stone': [[-22, -14, 44, 14]]}},
     'transitions': transitions, 'encounterZones': [], 'treasurePoints': treasure, 'eventZones': events,
     'cameraFocus': [{'id': 'cf_c1_summit', 'x': view[0], 'y': view[1] - 160, 'radius': 400, 'zoom': 1.0, 'priority': 3, 'mode': 'bias', 'maxBiasPx': 120, 'tags': ['vista']}],
     'ambience': {'grade': {'id': 'c1_day', 'tint': '#FFF2D0', 'tintStrength': 0.06, 'brightness': 1.04, 'saturation': 1.08}, 'shadow': {'dir': [0.55, 0.83], 'alpha': 0.25},
