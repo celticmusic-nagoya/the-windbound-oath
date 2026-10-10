@@ -94,15 +94,15 @@
     if(dynamicBlocked?.(x,y))return waitForActor();
     while(index<path.length-1&&Math.hypot(path[index].x-x,path[index].y-y)<=1)index++;
     const next=path[index],distance=Math.hypot(next.x-x,next.y-y);
-    const v=Math.min(distance,FieldMovement.settings.pointerStep);
+    const frameScale=FieldMovement.frameScale||1,v=Math.min(distance,FieldMovement.settings.pointerStep*frameScale);
     const dx=distance?(next.x-x)/distance*v:0,dy=distance?(next.y-y)/distance*v:0;
     const fromX=x,fromY=y,moved=FieldMovement.advance(x,y,dx,dy,blocked,{assist:false,bounds});
     const progress=Math.hypot(moved.x-x,moved.y-y);x=moved.x;y=moved.y;
     // Preserve existing axis sliding around corners before deciding to wait.
     if(progress<.1&&dynamicBlocked?.(x+dx,y+dy))return waitForActor();
     actorWaitFrames=0;statistics.outcome='moving';
-    steps++;if(steps>3600){x=fromX;y=fromY;return finish('timeout',true);}
-    blockedFrames=progress<.1?blockedFrames+1:0;
+    steps+=frameScale;if(steps>3600){x=fromX;y=fromY;return finish('timeout',true);}
+    blockedFrames=progress<.1?blockedFrames+frameScale:0;
     if(blockedFrames>=12) {
       if(replans>=3)return finish('blocked',true);
       replans++;blockedFrames=0;path=plan({x,y},target,staticBlocked);index=0;

@@ -4,6 +4,16 @@
   const multiplier=1.25;
   const settings=Object.freeze({multiplier,pointerStep:4*multiplier,keyboardStep:18*multiplier,
     anchorX:17,anchorY:42,arrivalRadius:3,microStep:2,cornerRadius:12});
+  // Frame clock: per-frame step sizes are authored for 60 Hz. frameScale = frame time / (1/60 s), updated once
+  // per animation frame by this module's own loop (it is loaded first, so it runs before consumers each frame).
+  // Consumers multiply per-frame steps by frameScale, so 60/120/144 Hz all move at the same px/s.
+  let frameScale=1,lastNow=null;
+  function tickClock(now) {
+    if(lastNow!==null)frameScale=Math.max(.1,Math.min(3,Math.min(now-lastNow,100)/(1000/60)));
+    lastNow=now;
+  }
+  if(typeof requestAnimationFrame==='function'){const loop=now=>{tickClock(now);requestAnimationFrame(loop);};requestAnimationFrame(loop);}
+  const clock={get scale(){return frameScale;},set(value){frameScale=Number(value)||1;lastNow=null;}};
   function advance(x,y,dx,dy,blocked,options={}) {
     // Map bounds are injectable; the default is the Lind world so existing callers are unchanged.
     const maxX=options.bounds?.width??2160,maxY=options.bounds?.height??1500;
@@ -45,5 +55,5 @@
     }
     return {x,y,stopped:!lastProgress||Math.hypot(x-startX,y-startY)<.001,collided,assisted};
   }
-  window.FieldMovement=Object.freeze({settings,advance});
+  window.FieldMovement=Object.freeze({settings,advance,clock,get frameScale(){return frameScale;}});
 })();

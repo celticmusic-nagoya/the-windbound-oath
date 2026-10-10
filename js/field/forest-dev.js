@@ -31,7 +31,7 @@
   const stream=map.terrain.waters.find(w=>w.kind==='stream');
   function tick(){
     let dx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),dy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);
-    if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(inStream()?.85:1);
+    if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*(inStream()?.85:1);
       const r=FieldMovement.advance(px,py,dx/n*step,dy/n*step,f.blocked,{bounds:map.world});px=r.x;py=r.y;}
     else if(target){const r=FieldNavigation.follow(px,py,target,f.blocked);px=r.x;py=r.y;target=r.target;}
     FieldCamera.render(world,viewport,player,px,py);

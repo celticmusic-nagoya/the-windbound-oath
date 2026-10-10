@@ -234,7 +234,7 @@
   // ---------- frame loop ----------
   function render(){
     FieldCamera.render(el.world,el.scene,el.player,S.x,S.y);
-    S.fx+=(S.x-48-S.fx)*.08;S.fy+=(S.y+18-S.fy)*.08;
+    const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;
     el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
     el.player.style.display=el.fiona.style.display='block';
@@ -275,7 +275,7 @@
     if(!S.active||S.busy||!S.forest||el.scene.style.display==='none')return;
     const bounds=S.map.world;
     let dx=0,dy=0;S.keys.forEach(d=>{dx+=d[0];dy+=d[1];});dx=Math.sign(dx);dy=Math.sign(dy);
-    if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*streamFactor();
+    if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
     render();updateSprite(performance.now());checkZones();S.frames++;
