@@ -47,7 +47,8 @@
         const id=key(i,j);wanted.add(id);if(!live.has(id)){const c=build(i,j);parent.appendChild(c);live.set(id,c);}}
       for(const [id,c] of live)if(!wanted.has(id)){c.remove();live.delete(id);}
     }
-    return Object.freeze({update,get stats(){return {canvases:live.size,built,items:options.items.length};}});
+    function destroy(){for(const c of live.values())c.remove();live.clear();buckets.clear();lastKey='';}
+    return Object.freeze({update,destroy,get stats(){return {canvases:live.size,built,items:options.items.length};}});
   }
   window.ForestLayer=Object.freeze({create});
 })();

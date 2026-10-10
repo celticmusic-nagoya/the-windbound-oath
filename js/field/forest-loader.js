@@ -38,7 +38,8 @@
         return d;}});}
     const layer=ForestLayer.create({map,parent:world,items:layerItems,chunk:512,margin:1});
     const stats={entities:ents.length,layerItems:layerItems.length,rects:solid.shapes.length,buildMs:Math.round(performance.now()-t0)};
-    return {blocked:solid.blocked,solid,cull,layer,stats,flags,
+    function destroy(){cull.clear();layer.destroy();world.querySelectorAll('.forest-ent,.forest-chunk').forEach(n=>n.remove());}
+    return {blocked:solid.blocked,solid,cull,layer,stats,flags,destroy,
       update(view){layer.update(view);cull.update(view);},
       spawn(id){const s=map.spawns.points[id||map.spawns.default];return {x:s.x-FOOT.ax,y:s.y-FOOT.ay,facing:s.facing};}};
   }

@@ -22,6 +22,7 @@
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/lind-field-review.css">
+<link rel="stylesheet" href="css/moss-forest.css">
 <link rel="stylesheet" href="css/field-collision-debug.css">
 <script src="js/assets.js"></script>
 <script src="js/battle-actor-state.js"></script>
@@ -165,7 +166,7 @@
 <button class="fGob" id="forestGob2" style="left:1110px;top:250px">異形</button>
 <button class="fGob" id="forestGob3" style="left:1370px;top:690px">異形</button>
 <div id="louSeal"></div><div id="windPath"></div><button aria-label="風の気配" id="louSearch"></button><div id="louSprite">ルー</div>
-<div id="ancientStone">ᚠ</div><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div></div>
+<div id="ancientStone">ᚠ</div><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div><div id="forestFade"></div></div>
 <div id="louIntroScene"><div id="louIntroMoon"></div><div id="louIntroSpark"></div><div id="louIntroRing"></div><div id="louIntroLou">ルー</div><div id="louIntroText"></div></div>
 <div id="altarScene">
 <div id="altarRing"></div><div id="altarStone">ᚠ</div><div id="oathSword">†</div>
@@ -247,6 +248,7 @@ $('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,
 });
 const fieldHeldDirections=new Map();
 addEventListener('keydown',e=>{
+ if(forestActive)return;
  const directions={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
  const direction=directions[e.key];if(!direction)return;
  fieldHeldDirections.set(e.key,direction);
@@ -748,7 +750,7 @@ function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
  if(attackBattleBusy||PrologueProgress.cleared(id))return;
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
- if(id.startsWith('forestGob')){forestActive=false;$('#forestScene').style.display='none';}
+ if(id.startsWith('forestGob'))forestHideScene();
  document.body.classList.remove('raiderBattleMode');
  document.body.classList.add('battleMode','normalBattleMode');
  $('#attackBattle').style.display='block';
@@ -807,12 +809,12 @@ function finishAttackBattle(){
      showBattleResult(18,7,()=>{
        $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
        if(gobBox)gobBox.classList.remove('taintedKO');
-       forestActive=true;$('#forestScene').style.display='block';forestCamera();attackBattleBusy=false;
+       forestShow();attackBattleBusy=false;
      });
      forestToast('異常化ゴブリンを退けた。森の空気が少し軽くなった。');
      if(forestGobWins>=3){
        storyStage=Math.max(storyStage,10);setObj(PrologueProgress.objective()+'　結界の奥へ向かおう');
-       $('#louSeal').classList.add('open');$('#louSearch').style.display='block';
+       forestSealOpened();
        forestToast('3体の異常化ゴブリンを退けた。古代の風結界が消えた……。');
      }
      return;
@@ -905,6 +907,12 @@ $('#escapeScene').onclick=()=>{
  }
 };
 
+const MOSS_RT=!/[?&]legacyForest=1/.test(location.search);
+const FIONA_FOREST_LINE='フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、あれほど近付くなって言っていた森……だよね……？」';
+// Facades so the story code is independent of which forest renderer is active (legacy path is removed in a later commit).
+function forestShow(){forestActive=true;if(MOSS_RT){MossForest.resume();MossForestStory.syncFlags();}else{$('#forestScene').style.display='block';forestCamera();}}
+function forestHideScene(){forestActive=false;if(MOSS_RT)MossForest.hide();else $('#forestScene').style.display='none';}
+function forestSealOpened(){if(MOSS_RT){MossForestStory.syncFlags();return}$('#louSeal').classList.add('open');$('#louSearch').style.display='block';}
 let fpx=330,fpy=940,ffx=285,ffy=955,ftarget=null,forestActive=false,forestStoneSeen=false;
 
 // ===== v0.26 PARTY / LEVEL FOUNDATION =====
@@ -1084,6 +1092,7 @@ function forestBlocked(x,y){
  return walls.some(([wx,wy,ww,wh])=>x+34>wx&&x<wx+ww&&y+48>wy&&y<wy+wh);
 }
 function forestCamera(){
+ if(MOSS_RT)return;
  const fw=$('#forestWorld');
  let x=Math.max(0,Math.min(1800-innerWidth,fpx-innerWidth/2));
  let y=Math.max(0,Math.min(1300-innerHeight,fpy-innerHeight/2));
@@ -1094,7 +1103,7 @@ function forestCamera(){
  $('#forestFiona').style.left=ffx+'px';$('#forestFiona').style.top=ffy+'px';
 }
 function forestLoop(){
- if(forestActive&&ftarget){
+ if(!MOSS_RT&&forestActive&&ftarget){
    let dx=ftarget.x-fpx,dy=ftarget.y-fpy,d=Math.hypot(dx,dy);
    if(d<5)ftarget=null;
    else{
@@ -1102,19 +1111,29 @@ function forestLoop(){
      if(!forestBlocked(nx,ny)){fpx=nx;fpy=ny}else ftarget=null;
    }
  }
- if(forestActive)forestCamera();
+ if(forestActive&&!MOSS_RT)forestCamera();
  requestAnimationFrame(forestLoop);
 }
 forestLoop();
 function enterMossForest(){
- storyStage=9;forestActive=true;fpx=330;fpy=940;ffx=285;ffy=955;ftarget=null;
+ storyStage=9;forestActive=true;ftarget=null;
+ if(MOSS_RT){
+   $('#forestScene').style.display='block';
+   MossForestStory.enterFromStart().then(()=>{
+     questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
+     const g=window.PrologueCombat?.generation;
+     setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say(FIONA_FOREST_LINE)},350);
+   });
+   return;
+ }
+ fpx=330;fpy=940;ffx=285;ffy=955;
  $('#forestScene').style.display='block';forestCamera();
  questPop('SCENE：苔むした森');
  PrologueProgress.sync();setObj(PrologueProgress.objective());
  const entryGeneration=window.PrologueCombat?.generation;
- setTimeout(()=>{if(entryGeneration===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say('フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、あれほど近付くなって言っていた森……だよね……？」')},350);
+ setTimeout(()=>{if(entryGeneration===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say(FIONA_FOREST_LINE)},350);
 }
-
+function forestDevEnterA3(fx,fy){forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterAt(MossForestStory.MAP_IDS.a3,fx-17,fy-42,null);}
 function forestToast(t){
  const n=$('#forestToast');n.textContent=t;n.style.display='block';
  clearTimeout(forestToast.t);forestToast.t=setTimeout(()=>n.style.display='none',2400);
@@ -1154,14 +1173,14 @@ const louIntroLines=[
 let louIntroIndex=0;
 function startLouIntro(){
  if(PrologueProgress.count()<3)return;
- forestActive=false;louIntroIndex=0;$('#louIntroScene').style.display='block';$('#louIntroText').textContent=louIntroLines[0];
+ forestHideScene();louIntroIndex=0;$('#louIntroScene').style.display='block';$('#louIntroText').textContent=louIntroLines[0];
 }
 $('#louIntroScene').onclick=()=>{
  louIntroIndex++;
  if(louIntroIndex<louIntroLines.length){$('#louIntroText').textContent=louIntroLines[louIntroIndex];return}
- $('#louIntroScene').style.display='none';louFound=true;forestActive=true;
- $('#louSearch').style.display='none';$('#louSprite').style.display='grid';$('#windPath').style.display='block';
- storyStage=11;setObj('ルーが示した隠し風道を調べよう');forestCamera();
+ $('#louIntroScene').style.display='none';louFound=true;
+ if(!MOSS_RT){$('#louSearch').style.display='none';$('#louSprite').style.display='grid';$('#windPath').style.display='block';}
+ storyStage=11;setObj('ルーが示した隠し風道を調べよう');forestShow();
 };
 $('#louSearch').onclick=e=>{
  e.stopPropagation();
@@ -1550,7 +1569,7 @@ const DEV_EVENTS=[
  ['prologueEnd','14　PROLOGUE END']
 ];
 function devResetScreens(){
- closeDialogue();
+ closeDialogue();window.MossForest&&MossForest.hide();
  ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','aftermathScene','fortScene','prologueEnd','battle','attackBattle','questMenu'].forEach(id=>{
    const e=$('#'+id);if(e)e.style.display='none';
  });
@@ -1576,10 +1595,12 @@ function devJump(key){
  }else if(key==='escape'){
    storyStage=8;northPhase=3;document.body.classList.add('villageAttack');startEscapeScene();
  }else if(key==='forest'){
-   storyStage=9;forestGobWins=0;louFound=false;forestStoneSeen=false;$('#louSeal').classList.remove('open');enterMossForest();
+   storyStage=9;forestGobWins=0;louFound=false;forestStoneSeen=false;if(!MOSS_RT)$('#louSeal').classList.remove('open');enterMossForest();
  }else if(key==='lou'){
-   storyStage=10;forestGobWins=3;forestStoneSeen=true;louFound=false;forestActive=true;$('#louSeal').classList.add('open');fpx=1370;fpy=520;ffx=1320;ffy=535;
-   $('#forestScene').style.display='block';$('#louSearch').style.display='block';currentObjective='古代石の周囲で風の気配を探そう';forestCamera();
+   storyStage=10;forestGobWins=3;forestStoneSeen=true;louFound=false;forestActive=true;currentObjective='古代石の周囲で風の気配を探そう';
+   if(MOSS_RT){window.__devEnter=forestDevEnterA3(4300,3140);}
+   else{$('#louSeal').classList.add('open');fpx=1370;fpy=520;ffx=1320;ffy=535;
+   $('#forestScene').style.display='block';$('#louSearch').style.display='block';forestCamera();}
  }else if(key==='altar'){
    storyStage=12;louFound=true;$('#louSprite').style.display='grid';startAltarScene();
   }else if(key==='raider'){
@@ -1886,6 +1907,13 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
 <script src="js/prologue-dev.js"></script>
+<script src="js/field/field-culling.js"></script>
+<script src="js/field/forest-scatter.js"></script>
+<script src="js/field/forest-layer.js"></script>
+<script src="js/field/forest-loader.js"></script>
+<script src="js/field/moss-forest-runtime.js"></script>
+<script src="js/field/moss-forest-story.js"></script>
+<script>if(MOSS_RT){MossForestStory.init();}</script>
 <script src="js/field/lind-content-bounds.js"></script>
 <script src="js/field/lind-assets.js"></script>
 <script src="js/field/lind-animals.js"></script>

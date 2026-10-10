@@ -1,0 +1,280 @@
+/* Moss Forest runtime (M4). Hosts the three Moss Forest maps (A1 -> A2 -> A3) inside #forestScene:
+ * map switching with fades, click/keyboard movement, culled rendering, treasure, transitions,
+ * event zones, the A3 seal and the corruption symbols.
+ * Story knowledge lives in moss-forest-story.js and reaches this module only through hooks.
+ * Depends on FieldCollision/Movement/Navigation/Camera/Culling and ForestScatter/Layer/Loader. */
+(function () {
+  'use strict';
+  const FOOT={ax:17,ay:42};
+  const MAP_BASE='data/maps/';
+  const cache=new Map();
+  const S={configured:false,active:false,busy:false,map:null,forest:null,mapId:null,x:0,y:0,fx:0,fy:0,target:null,
+    flags:{moss_a3_seal_open:false,moss_a3_lou_found:false,moss_a3_lou_rescued:false},opened:new Set(),fired:new Set(),
+    inside:new Set(),extra:[],symbols:[],sealNode:null,windNodes:[],louNode:null,treasureNodes:new Map(),
+    transitionLatch:true,battleLatch:false,keys:new Map(),frames:0,zones:{rest:null,ambience:null},loopId:0};
+  let el={},hooks={};
+  const dist=(a,b,c,d)=>Math.hypot(a-c,b-d);
+  const $=s=>document.querySelector(s);
+
+  function configure(options){
+    el={scene:$(options.scene||'#forestScene'),world:$(options.world||'#forestWorld'),player:$(options.player||'#forestPlayer'),
+      fiona:$(options.fiona||'#forestFiona'),label:$(options.label||'#forestLabel'),toast:$(options.toast||'#forestToast'),fade:$(options.fade||'#forestFade')};
+    hooks=options.hooks||{};
+    // Replace any legacy hand-placed forest content; only the actors stay.
+    for(const child of [...el.world.children])if(child!==el.player&&child!==el.fiona)child.remove();
+    el.world.classList.add('mossRuntime');
+    el.scene.addEventListener('pointerdown',onPointer);
+    addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
+    S.configured=true;
+  }
+  async function loadMap(id){
+    if(cache.has(id))return cache.get(id);
+    const map=await ForestLoader.load(MAP_BASE+id+'.json');cache.set(id,map);return map;
+  }
+  const fadeMs=(t,dflt)=>Math.round(((t&&t.fade&&t.fade[dflt])??.35)*1000);
+  function setFade(opacity,ms){
+    el.fade.style.transitionDuration=ms+'ms';el.fade.style.opacity=String(opacity);
+    return new Promise(r=>setTimeout(r,ms+20));
+  }
+  function toast(t){hooks.toast?hooks.toast(t):(el.toast.textContent=t,el.toast.style.display='block',clearTimeout(toast.t),toast.t=setTimeout(()=>el.toast.style.display='none',2400));}
+
+  // ---------- map mount / unmount ----------
+  function unmount(){
+    if(S.forest)S.forest.destroy();
+    for(const n of S.extra)n.remove();
+    S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
+    S.forest=null;S.map=null;S.inside.clear();S.zones={rest:null,ambience:null};
+  }
+  function addNode(cls,x,y,w,h,label,z){
+    const d=document.createElement('div');d.className=cls;if(label)d.textContent=label;
+    Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',zIndex:String(Math.round(z??y+h))});
+    el.world.appendChild(d);S.extra.push(d);return d;
+  }
+  function mount(map){
+    S.map=map;S.mapId=map.id;
+    FieldNavigation.configure({width:map.world.width,height:map.world.height,grid:32,maxNodes:40000});
+    S.forest=ForestLoader.mount(map,el.world,{flags:S.flags});
+    el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
+    for(const t of map.treasurePoints||[]){
+      if(t.hint==='none')continue;
+      const n=addNode('forest-treasure'+(S.opened.has(t.id)?' open':''),t.x-24,t.y-36,48,36,S.opened.has(t.id)?'□':'▣',t.y);S.treasureNodes.set(t.id,n);
+    }
+    const prologue=map.story&&map.story.prologue;
+    if(prologue){
+      for(const sy of prologue.symbols||[]){
+        const rec={...sy,node:null,alive:!(hooks.isCleared&&hooks.isCleared(sy.field))};
+        if(rec.alive)rec.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y);
+        S.symbols.push(rec);
+      }
+      const sealB=(map.collision.blockers||[]).find(b=>b.id===(prologue.seal&&prologue.seal.blocker));
+      if(sealB&&!S.flags[prologue.seal.flagOnOpen]){
+        const r=sealB.rects[0];S.sealNode=addNode('forest-seal',r[0]-8,r[1]-70,r[2]+16,r[3]+70,'ᚠ ᚢ ᚦ',r[1]+r[3]);
+        S.sealNode.classList.toggle('corrupted',!(hooks.sealCorrupted&&hooks.sealCorrupted()===false));
+      }
+    }
+    refreshWind();
+    S.zones={rest:null,ambience:null};
+  }
+  function refreshWind(){
+    for(const n of S.windNodes)n.remove();S.windNodes=[];
+    if(S.louNode){S.louNode.remove();S.louNode=null;}
+    const map=S.map;if(!map||!S.flags.moss_a3_lou_found)return;
+    const path=(map.terrain.paths||[]).find(p=>p.id==='path_hidden_wind');if(!path)return;
+    for(let i=0;i<path.points.length-1;i++){
+      const [x0,y0]=path.points[i],[x1,y1]=path.points[i+1],len=dist(x0,y0,x1,y1),ang=Math.atan2(y1-y0,x1-x0);
+      const n=addNode('forest-windseg',x0,y0-10,len,20,'',y0-5);n.style.transformOrigin='0 50%';n.style.transform=`rotate(${ang}rad)`;S.windNodes.push(n);
+    }
+    const z=(map.eventZones||[]).find(e=>e.id==='ev_a3_lou_intro');
+    if(z){const cx=z.shape.x+z.shape.w/2,cy=z.shape.y+z.shape.h/2;S.louNode=addNode('forest-lou',cx-19,cy-48,38,48,'ルー',cy);}
+  }
+
+  // ---------- transitions between maps ----------
+  async function enter(options){
+    if(!S.configured)throw new Error('MossForest not configured');
+    const id=options.map,spawnId=options.spawn;
+    S.busy=true;S.active=false;
+    const map=await loadMap(id);
+    if(options.flags)Object.assign(S.flags,options.flags);
+    const first=!S.map;
+    if(!first)await setFade(1,fadeMs(options.transition,'out'));
+    el.scene.style.display='block';
+    unmount();mount(map);
+    let spot;
+    if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)){spot={x:options.x,y:options.y};}
+    else{const sp=map.spawns.points[spawnId||map.spawns.default];spot={x:sp.x-FOOT.ax,y:sp.y-FOOT.ay};}
+    S.x=spot.x;S.y=spot.y;S.target=null;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
+    S.keys.clear();render();
+    el.fade.style.opacity='1';
+    await setFade(0,fadeMs(options.transition,'in'));
+    S.busy=false;S.active=true;startLoop();
+    if(hooks.onEnter)hooks.onEnter(map,spawnId);
+    return map;
+  }
+  function transitionTo(t){
+    if(S.busy)return;
+    if(t.toMap==='lind_village'||t.toMap==='TBD'){
+      if(hooks.onVillageExit&&hooks.onVillageExit(t))return;   // hook returns true when it handled/blocked it
+      return;
+    }
+    enter({map:t.toMap,spawn:t.toSpawn,transition:t});
+  }
+
+  // ---------- geometry helpers ----------
+  function inShape(sh,x,y,pad=0){
+    if(!sh)return false;
+    if(sh.shape==='circle'||sh.r!=null)return dist(x,y,sh.cx,sh.cy)<=sh.r+pad;
+    return x>=sh.x-pad&&x<=sh.x+sh.w+pad&&y>=sh.y-pad&&y<=sh.y+sh.h+pad;
+  }
+  const centerOf=sh=>sh.shape==='circle'||sh.r!=null?{x:sh.cx,y:sh.cy}:{x:sh.x+sh.w/2,y:sh.y+sh.h/2};
+  const reqOk=z=>!z.requires||Boolean(S.flags[z.requires.flag])===Boolean(z.requires.is);
+  function zoneShape(z){
+    if(z.shape)return z.shape;
+    if(z.ref){const p=S.map.props.find(q=>q.id===z.ref);if(p)return {shape:'circle',cx:p.x,cy:p.y-30,r:110};}
+    return null;
+  }
+
+  // ---------- actions ----------
+  function fireEvent(z){
+    if(z.once){if(S.fired.has(z.id))return;S.fired.add(z.id);}
+    if(hooks.onEvent)hooks.onEvent(z,S.map);
+  }
+  function openTreasure(t){
+    if(S.opened.has(t.id)){toast('宝箱は空だ。');return;}
+    S.opened.add(t.id);
+    const n=S.treasureNodes.get(t.id);if(n){n.classList.add('open');n.textContent='□';}
+    if(hooks.onTreasure)hooks.onTreasure(t,S.map);
+  }
+  function startBattle(sy){
+    if(!sy.alive||S.busy)return;
+    S.target=null;FieldNavigation.cancel();S.active=false;
+    if(hooks.onSymbol)hooks.onSymbol(sy);
+  }
+  function interactAt(wx,wy){
+    const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
+    for(const sy of S.symbols){
+      if(!sy.alive)continue;
+      if(dist(wx,wy,sy.x,sy.y-30)<=75){
+        if(dist(fx,fy,sy.x,sy.y)>(sy.interactRadius||210)){toast('異形のゴブリンがこちらを警戒している……。');return true;}
+        startBattle(sy);return true;
+      }
+    }
+    for(const t of S.map.treasurePoints||[]){
+      if(dist(wx,wy,t.x,t.y-18)<=55){
+        if(dist(fx,fy,t.x,t.y)>190){toast('宝箱には、もう少し近づく必要がある。');return true;}
+        openTreasure(t);return true;
+      }
+    }
+    for(const z of S.map.eventZones||[]){
+      if(z.type!=='interact'||!reqOk(z))continue;
+      const sh=zoneShape(z);if(!sh||!inShape(sh,wx,wy,40))continue;
+      const c=centerOf(sh);
+      if(dist(fx,fy,c.x,c.y)>260){toast('もう少し近づいて調べよう。');return true;}
+      fireEvent(z);return true;
+    }
+    return false;
+  }
+
+  // ---------- input ----------
+  function onPointer(e){
+    if(!S.active||S.busy)return;
+    if(e.target.closest('#msg,button,#forestLabel'))return;
+    const w=FieldCamera.screenToWorld(el.world,e.clientX,e.clientY);
+    if(interactAt(w.x,w.y))return;
+    S.target=FieldNavigation.destination(w.x-FOOT.ax,w.y-FOOT.ay,S.forest.blocked);
+    if(!S.target)toast('その場所へは進めない。');
+  }
+  const DIRS={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
+  function onKeyDown(e){
+    if(!S.active||S.busy||!DIRS[e.key])return;
+    S.keys.set(e.key,DIRS[e.key]);S.target=null;FieldNavigation.cancel();
+  }
+
+  // ---------- frame loop ----------
+  function render(){
+    FieldCamera.render(el.world,el.scene,el.player,S.x,S.y);
+    S.fx+=(S.x-48-S.fx)*.08;S.fy+=(S.y+18-S.fy)*.08;
+    el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
+    el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
+    el.player.style.display=el.fiona.style.display='block';
+    const sc=FieldCamera.scale,rc=el.world.getBoundingClientRect();
+    S.forest.update({x:-rc.left/sc,y:-rc.top/sc,width:el.scene.clientWidth/sc,height:el.scene.clientHeight/sc});
+  }
+  function checkZones(){
+    const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
+    for(const t of S.map.transitions||[]){
+      if(!t.enabled)continue;
+      const inside=inShape(t.rect,fx,fy);
+      if(inside&&!S.transitionLatch){S.transitionLatch=true;S.inside.add(t.id);transitionTo(t);return;}
+      if(!inside&&S.inside.has(t.id)){S.inside.delete(t.id);}
+    }
+    if(![...S.map.transitions||[]].some(t=>t.enabled&&inShape(t.rect,fx,fy)))S.transitionLatch=false;
+    for(const z of S.map.eventZones||[]){
+      if(!reqOk(z))continue;
+      const sh=z.shape;if(!sh)continue;
+      const inside=inShape(sh,fx,fy),was=S.inside.has(z.id);
+      if(inside&&!was){
+        S.inside.add(z.id);
+        if(z.type==='rest')S.zones.rest=z.id;else if(z.type==='ambienceShift')S.zones.ambience=z.id;
+        else if(z.type==='locationCard'||z.type==='trigger'||(z.type==='interact'&&z.eventId))fireEvent(z);
+      }else if(!inside&&was){
+        S.inside.delete(z.id);
+        if(S.zones.rest===z.id)S.zones.rest=null;if(S.zones.ambience===z.id)S.zones.ambience=null;
+      }
+    }
+    let near=false;
+    for(const sy of S.symbols){
+      if(!sy.alive)continue;
+      if(dist(fx,fy,sy.x,sy.y)<=(sy.touchRadius||90)){near=true;if(!S.battleLatch){S.battleLatch=true;startBattle(sy);return;}}
+    }
+    if(!near)S.battleLatch=false;
+  }
+  function tick(){
+    S.loopId=requestAnimationFrame(tick);
+    if(!S.active||S.busy||!S.forest||el.scene.style.display==='none')return;
+    const bounds=S.map.world;
+    let dx=0,dy=0;S.keys.forEach(d=>{dx+=d[0];dy+=d[1];});dx=Math.sign(dx);dy=Math.sign(dy);
+    if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*streamFactor();
+      const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
+    else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
+    render();checkZones();S.frames++;
+  }
+  function streamFactor(){
+    const st=S.map&&(S.map.terrain.waters||[]).find(w=>w.kind==='stream');
+    return st&&ForestScatter.lineDist(S.x+FOOT.ax,S.y+FOOT.ay,st.points)<st.width/2?.85:1;
+  }
+  function startLoop(){if(!S.loopId)S.loopId=requestAnimationFrame(tick);}
+
+  // ---------- flags / visibility / persistence ----------
+  function setFlag(name,value){
+    const was=Boolean(S.flags[name]);S.flags[name]=Boolean(value);
+    if(name==='moss_a3_seal_open'&&value&&!was&&S.sealNode){const n=S.sealNode;S.sealNode=null;n.classList.add('opening');setTimeout(()=>{n.remove();S.extra=S.extra.filter(x=>x!==n);},1000);}
+    if(name==='moss_a3_seal_open'&&!value&&S.map&&!S.sealNode&&S.mapId==='moss_forest_03_ancient_grove'){
+      const b=S.map.collision.blockers.find(q=>q.id==='cb_a3_seal');if(b){const r=b.rects[0];S.sealNode=addNode('forest-seal corrupted',r[0]-8,r[1]-70,r[2]+16,r[3]+70,'ᚠ ᚢ ᚦ',r[1]+r[3]);}
+    }
+    if(name==='moss_a3_lou_found')refreshWind();
+  }
+  function syncSymbols(){
+    for(const sy of S.symbols){const alive=!(hooks.isCleared&&hooks.isCleared(sy.field));
+      if(sy.alive&&!alive){sy.alive=false;if(sy.node){sy.node.remove();S.extra=S.extra.filter(x=>x!==sy.node);sy.node=null;}}
+      else if(!sy.alive&&alive){sy.alive=true;sy.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y);}}
+    if(S.sealNode&&hooks.sealCorrupted)S.sealNode.classList.toggle('corrupted',hooks.sealCorrupted());
+  }
+  function show(){el.scene.style.display='block';}
+  function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';}
+  function resume(){show();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
+  function snapshot(){return {map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired]};}
+  function restoreState(snap){
+    S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);
+    S.fired=new Set(Array.isArray(snap&&snap.fired)?snap.fired.filter(x=>typeof x==='string'):[]);
+  }
+  function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
+
+  window.MossForest=Object.freeze({configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
+    get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
+    get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
+    get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
+    teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.battleLatch=true;S.transitionLatch=true;},
+    goFeet(x,y){S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
+    get target(){return S.target;},get status(){return FieldNavigation.status;}});
+})();

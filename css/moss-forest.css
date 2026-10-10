@@ -1,0 +1,15 @@
+/* Moss Forest runtime (M4): placeholder visuals until real assets (M5). */
+#forestWorld.mossRuntime{background:#0b1510;transform-origin:0 0;left:0;top:0}
+#forestPlayer,#forestFiona{box-sizing:border-box}
+#forestWorld.mossRuntime #forestPlayer{width:34px;height:42px;border-width:3px;pointer-events:none}
+#forestWorld.mossRuntime #forestFiona{width:30px;height:40px;border-width:3px;pointer-events:none}
+#forestFade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:300;transition:opacity .35s linear}
+.forest-treasure{position:absolute;background:#72502d;border:4px solid #2a2018;border-radius:7px;color:#e8d59e;font-size:20px;display:grid;place-items:center;box-shadow:0 6px 0 #17130f,0 0 14px #e8d59e55;pointer-events:none;box-sizing:border-box}
+.forest-treasure.open{background:#33291e;color:#7c715e;box-shadow:0 3px 0 #17130f;transform:translateY(4px)}
+.forest-symbol{position:absolute;border-radius:45% 45% 28% 28%;background:#263729;border:4px solid #714b78;color:#d8c6dd;display:grid;place-items:center;font-size:12px;box-shadow:0 0 18px #754579;pointer-events:none;box-sizing:border-box}
+.forest-seal{position:absolute;border:4px solid #315547;border-radius:10px 10px 4px 4px;background:linear-gradient(#2c4a3d99,#1b2f27cc);color:#9fd4bc;display:grid;place-items:center;font-size:22px;letter-spacing:6px;box-shadow:0 0 22px #5fa98a66;pointer-events:none;box-sizing:border-box;transition:opacity 1s ease,filter 1s ease}
+.forest-seal.corrupted{border-color:#604e70;background:linear-gradient(#492d6099,#25172fcc);color:#aa7ac0;box-shadow:0 0 22px #8a4ea0aa}
+.forest-seal.opening{opacity:0;filter:blur(6px) brightness(1.8)}
+.forest-windseg{position:absolute;border-top:3px dashed #9de7dc99;box-shadow:0 0 16px #8bd9cf66;pointer-events:none;height:0!important}
+.forest-lou{position:absolute;border-radius:50%;background:#d8ffff;color:#16727c;border:3px solid #8de3e5;display:grid;place-items:center;font-size:12px;box-shadow:0 0 25px #8ff;pointer-events:none;box-sizing:border-box}
+.forest-ent{will-change:auto}
