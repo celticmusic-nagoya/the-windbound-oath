@@ -9,7 +9,7 @@ The ancient Rune Civilization manipulated wind, fire, water, earth, light, shado
 
 Public history says a demon king tried to destroy the world and heroes sealed him.
 The deeper truth is that the demon king may have been resisting or sealing an entity from outside the world, and the heroes misunderstood him.
-The later true threat is 「虚無」, an outside-world force that consumes life and magic.
+The later true threat is a still-unnamed outside-world force (its name is never shown in code, data or UI) that consumes life and magic.
 
 Core emotional theme:
 「守れなかった者たちが、今度こそ誰かを守る」
@@ -114,7 +114,7 @@ Target: 15–25 minutes.
 
 Sequence:
 1. Title
-2. peaceful Lind Village
+2. peaceful Rilde Village (リルド村)
 3. Aidan's house
 4. training ground
 5. Fiona
@@ -139,7 +139,7 @@ Sequence:
 24. Goblin Raider
 25. aftermath / Lou formally joins
 26. dawn
-27. Arthur's Fort
+27. Dunvar Fortress
 28. PROLOGUE END
 
 ## Later broad route

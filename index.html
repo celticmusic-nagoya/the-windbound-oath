@@ -61,7 +61,7 @@
 <div class="zoneLabel" style="left:1630px;top:755px">訓練場</div>
 <div class="dummy" id="dummy1" style="left:1630px;top:900px"></div>
 <div class="dummy" id="dummy2" style="left:1760px;top:930px"></div>
-<div class="sign" id="trainingSign" style="left:1560px;top:1070px">リンド村 訓練場</div>
+<div class="sign" id="trainingSign" style="left:1560px;top:1070px">リルド村 訓練場</div>
 <div class="bridge" style="left:1435px;top:540px"></div>
 <div class="zoneLabel" style="left:1465px;top:500px">東の小橋</div>
 <div class="arch" style="left:900px;top:1390px"></div>
@@ -358,7 +358,7 @@ $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用�
 $('#hillExit').onclick=()=>{if(storyStage<3)say('この先は夕暮れの丘へ続いている。今は訓練場へ向かおう。');else if(storyStage===3){storyStage=4;startHillScene()}else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
 $('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
 $('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
-$('#hillOld').onclick=()=>say('老人「この丘から見るリンド村が、わしは好きでな。」');
+$('#hillOld').onclick=()=>say('老人「この丘から見るリルド村が、わしは好きでな。」');
 $('#kid2').onclick=()=>say('子供「つかまえてみろー！」');
 $('#kid3').onclick=()=>say('子供「待て待てー！」');
 $('#dog2').onclick=()=>say('犬「ワフッ！」');
@@ -405,17 +405,17 @@ function updateSubQuest(id,state,objective,reward){
 function mainQuestData(){
  if(storyStage<=2)return {title:'いつもの訓練',desc:'朝、自室で目を覚ましたエイダン。幼なじみのフィオナが訓練場で待っている。'};
  if(storyStage===3)return {title:'夕暮れの丘へ',desc:'訓練を終えた。フィオナと一緒に、村の南にある夕暮れの丘へ向かう。'};
- if(storyStage===4)return {title:'風が止んだ夜',desc:'夕暮れの丘で異変が起きた。フィオナと急いでリンド村へ戻る。'};
- if(storyStage<=6)return {title:'炎の中のリンド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
- if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリンド村から逃げる。'};
+ if(storyStage===4)return {title:'風が止んだ夜',desc:'夕暮れの丘で異変が起きた。フィオナと急いでリルド村へ戻る。'};
+ if(storyStage<=6)return {title:'炎の中のリルド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
+ if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリルド村から逃げる。'};
  if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、長老やエマからたびたび近付くなと言われていた古い森へ迷い込んだ。分岐を探索し、森の奥を調べる。'};
  if(storyStage===10)return {title:'風を返す古代石',desc:'フィオナに反応する古代石を発見した。異常化した魔物を退け、石の周囲に残る風の気配を探す。'};
  if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
  if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇で魔物に包囲された。古代石から現れた「誓いの剣」を手に取り、突破口を開く。'};
  if(storyStage===13)return {title:'新しい仲間',desc:'ゴブリン・レイダーを退けた。静けさを取り戻した古代祭壇でルーと話し、これからの行き先を決める。'};
- if(storyStage===14)return {title:'夜明けの砦',desc:'ルーを新たな仲間に迎え、エイダンとフィオナは森を抜けてアーサー砦へ向かう。'};
- if(storyStage>=15)return {title:'風に結ばれた誓い',desc:'リンド村を失ったエイダンたちは王国の砦へ到着した。黒いルーンの異変を追う旅は、ここから始まる。'};
- return {title:'炎の中のリンド',desc:'フィオナと再会した。二人で村の北側へ向かい、襲撃の状況を確かめる。'};
+ if(storyStage===14)return {title:'夜明けの砦',desc:'ルーを新たな仲間に迎え、エイダンとフィオナは森を抜けてドゥンヴァル砦へ向かう。'};
+ if(storyStage>=15)return {title:'風に結ばれた誓い',desc:'リルド村を失ったエイダンたちは王国の砦へ到着した。黒いルーンの異変を追う旅は、ここから始まる。'};
+ return {title:'炎の中のリルド',desc:'フィオナと再会した。二人で村の北側へ向かい、襲撃の状況を確かめる。'};
 }
 function renderJournal(){
  const m=mainQuestData();
@@ -495,7 +495,7 @@ const hillLines=[
  'エイダン「どうした？」',
  'フィオナ「風が……止まってる。」',
  '鳥の声も、木々のざわめきも消えた。',
- '遠く、リンド村の方角で赤い光が揺れた。',
+ '遠く、リルド村の方角で赤い光が揺れた。',
  'エイダン「村が――！」'
 ];
 let hillIndex=0;
@@ -843,7 +843,7 @@ $('#royalKnight').onclick=()=>{
  if(northPhase===1){
    northPhase=2;
    say('王国騎士「生存者か！　北門はもう保たない。川沿いの退路から森へ抜けろ！　我々がここを食い止める！」');
-   setObj('北の退路へ向かい、リンド村を脱出しよう');
+   setObj('北の退路へ向かい、リルド村を脱出しよう');
  }else{
    say('王国騎士「急げ！　この数は普通じゃない……黒いルーンに近づくな！」');
  }
@@ -1106,7 +1106,7 @@ $('#louIntroScene').onclick=()=>{
 const altarLines=[
  'ルー「ここだよ……。この先だけ、森の風がずっと止まってる。」',
  'フィオナが足を踏み入れると、地面に埋もれた古代ルーンが一つ、また一つと淡く灯り始めた。',
- 'フィオナ「私に反応してる……？　リンド村の石と同じ光……。」',
+ 'フィオナ「私に反応してる……？　リルド村の石と同じ光……。」',
  'エイダン「ルー。この場所は昔からこうだったのか？」',
  'ルー「ううん。前はただの古い石だった。でも魔物が来た夜から、奥で誰かが呼んでるみたいになったの。」',
  '風もないのに木々がざわめく。青白い光の粒が三人の周囲を円を描くように漂った。',
@@ -1121,7 +1121,7 @@ const altarLines=[
  '――風が集まり、石の中に一本の剣の輪郭が浮かび上がる。',
  '声なき声「……誓いを、もう一度。」',
  'エイダン「誓い……？」',
- '脳裏に燃えるリンド村がよぎる。守れなかった人々。手を伸ばしても届かなかったもの。',
+ '脳裏に燃えるリルド村がよぎる。守れなかった人々。手を伸ばしても届かなかったもの。',
  'エイダン「……もう、目の前で誰かを失うのは嫌だ。」',
  'エイダンが柄を握る。封印が砕け、緑金の光とともに「誓いの剣」が目を覚ました。',
  'フィオナ「エイダン……その剣……。」',
@@ -1337,7 +1337,7 @@ const aftermathLines=[
  'ルーの羽がふわりと光る。止まっていた風が三人の間を通り抜け、夜明けの方角へ流れていった。',
  'ルー「うん！　よろしくね、エイダン、フィオナ！」',
  '――こうしてルーは、二人の旅に加わった。',
- '三人は夜明けを待ち、まず王国軍のアーサー砦を目指すことにした。'
+ '三人は夜明けを待ち、まず王国軍のドゥンヴァル砦を目指すことにした。'
 ]
 let aftermathIndex=0;
 function startRaiderAftermath(){
@@ -1356,7 +1356,7 @@ $('#aftermathScene').onclick=()=>{
    storyStage=14;
    // Keep the aftermath layer visible as a transition cover.
    // Hiding it here exposed the underlying Lind Village for ~650ms.
-   $('#aftermathText').textContent='夜が明ける。三人は風の向かう先――アーサー砦へ歩き出した。';
+   $('#aftermathText').textContent='夜が明ける。三人は風の向かう先――ドゥンヴァル砦へ歩き出した。';
    questPop('ルーがSUPPORTとして仲間になった');
    const eventGeneration=PrologueCombat.generation;
    setTimeout(()=>{
@@ -1373,16 +1373,16 @@ const fortLines=[
  'フィオナ「……着いた。ここなら、少しは休めるかな。」',
  'ルー「でも、あの黒いルーン……普通の魔物じゃなかった。風もずっと怯えてたよ。」',
  'エイダンは「誓いの剣」の柄を握る。村を守れなかった重さが、まだ手の中に残っていた。',
- '王国騎士「リンド村から来たのか！？　生存者だな。すぐ中へ。……王都にも異変を知らせる。」',
+ '王国騎士「リルド村から来たのか！？　生存者だな。すぐ中へ。……王都にも異変を知らせる。」',
  '遠く、朝日に照らされた山の向こうで、一瞬だけ黒い裂け目のようなものが空に滲んだ。',
- '――これは、魔王の物語ではない。まだ誰も知らない「虚無」と、風の誓いを巡る旅の始まりだった。'
+ '――これは、魔王の物語ではない。まだ誰も知らない“何か”と、風の誓いを巡る旅の始まりだった。'
 ];
 let fortIndex=0;
 function startFortFinale(){
  document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode');
  // Destination-first transition: never expose the base field between story scenes.
  $('#fortScene').style.display='block';
- storyStage=14;fortIndex=0;currentObjective='アーサー砦で王国騎士と合流しよう';renderJournal();
+ storyStage=14;fortIndex=0;currentObjective='ドゥンヴァル砦で王国騎士と合流しよう';renderJournal();
  $('#fortText').textContent=fortLines[0];
  // Hide only transient story layers after the fort is already visible.
  ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','battle','attackBattle'].forEach(id=>{
@@ -1439,7 +1439,7 @@ const DEV_EVENTS=[
  ['opening','01　エイダンの家'],
  ['training','02　訓練場・フィオナ'],
  ['sunset','03　夕暮れの丘'],
- ['attack','04　リンド村襲撃'],
+ ['attack','04　リルド村襲撃'],
  ['reunion','05　フィオナ再合流後'],
  ['north','06　王国騎士・北の退路'],
  ['escape','07　川沿い脱出'],
@@ -1448,7 +1448,7 @@ const DEV_EVENTS=[
  ['altar','10　古代祭壇'],
  ['raider','11　ゴブリン・レイダー'],
  ['aftermath','12　レイダー討伐後・ルー加入'],
- ['fort','13　夜明け・アーサー砦'],
+ ['fort','13　夜明け・ドゥンヴァル砦'],
  ['prologueEnd','14　PROLOGUE END']
 ];
 function devResetScreens(){

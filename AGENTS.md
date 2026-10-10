@@ -58,7 +58,7 @@ Physical / TP-oriented.
 Final battle art is the standalone transparent asset, not an old composite crop.
 
 ### Fiona / フィオナ
-~16, human healer from Lind Village.
+~16, human healer from Rilde Village (リルド村).
 IMPORTANT:
 - ordinary HUMAN ears
 - NO elf ears
@@ -171,7 +171,7 @@ Permanent OBJECTIVE/subquest HUDs are obsolete.
 - No virtual controller.
 - OBJECTIVE means the player actually moves/interacts; do not auto-progress objectives.
 
-## 13. Lind Village
+## 13. Rilde Village (リルド村)
 Peaceful Lind is a real explorable place before destruction.
 Important locations: Aidan house, inn, shop, elder, training ground, river/bridges.
 Opening starts inside Aidan's house beside the bed.
@@ -193,7 +193,7 @@ Compact ~10-minute dungeon.
 
 ## 15. Prologue canonical route
 「風が止んだ夜」, roughly 15–25 minute vertical slice:
-Title → peaceful Lind → Aidan house → training → Fiona → tutorials → wooden dummy → Fiona joins/heals → sunset hill → wind stops → village attack → Fiona reunion → burning village → 2 abnormal goblins → royal knights → north escape → river fall → Moss Forest → ancient stone/Fiona → goblins surround/Aidan loses weapon → Lou appears → altar → 誓いの剣 → Goblin Raider → aftermath/Lou joins → dawn → Arthur's Fort → PROLOGUE END.
+Title → peaceful Rilde → Aidan house → training → Fiona → tutorials → wooden dummy → Fiona joins/heals → sunset hill → wind stops → village attack → Fiona reunion → burning village → 2 abnormal goblins → royal knights → north escape → river fall → Moss Forest → ancient stone/Fiona → goblins surround/Aidan loses weapon → Lou appears → altar → 誓いの剣 → Goblin Raider → aftermath/Lou joins → dawn → Arthur's Fort → PROLOGUE END.
 
 ## 16. Development-only tools
 Keep an obvious DEV gate.
@@ -215,7 +215,7 @@ Canonical Event Jump destinations:
 10 altar
 11 Raider
 12 aftermath/Lou join
-13 Arthur Fort
+13 Dunvar Fortress
 14 PROLOGUE END
 
 ## 17. Save

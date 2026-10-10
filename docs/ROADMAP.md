@@ -77,7 +77,7 @@ Versioned localStorage schema:
 Add migration/default behavior.
 
 ## Phase 6 — Prologue content polish
-- Verify full opening-to-Arthur-Fort route.
+- Verify full opening-to-Dunvar-Fortress route.
 - Improve field collision.
 - Check peaceful/burning Lind continuity.
 - Complete side-quest state persistence.

@@ -6,7 +6,7 @@
  document.body.classList.toggle('developmentMode',WINDBOUND_DEV);
  if(!WINDBOUND_DEV){devJump=()=>false;document.querySelectorAll('.dev-only-command').forEach(b=>b.disabled=true);return;}
  const indicator=document.createElement('span');indicator.id='devBuildIndicator';indicator.textContent='DEV BUILD · '+(document.querySelector('meta[name="build-version"]')?.content||'2.5.1a');document.body.append(indicator);
- const entries=[['opening','01 エイダンの家'],['training','02 訓練 / フィオナ'],['sunset','03 夕暮れ'],['attack','04 リンド村襲撃'],['mother','05 母娘救出'],['fionaRescue','06 フィオナ救出'],['north','07 北の道'],['escape','08 川への脱出'],['forest','09 苔の森入口'],['moss1','10 森の穢れ 1'],['moss2','11 森の穢れ 2'],['moss3','12 森の穢れ 3'],['barrierBefore','13 結界解除前'],['barrierAfter','14 結界解除後'],['lou','15 ルーとの出会い'],['altar','16 古代祭壇 / 誓いの剣'],['raider','17 ゴブリンレイダー'],['aftermath','18 戦いの後'],['fort','19 アーサー砦'],['prologueEnd','20 プロローグ終了']];
+ const entries=[['opening','01 エイダンの家'],['training','02 訓練 / フィオナ'],['sunset','03 夕暮れ'],['attack','04 リルド村襲撃'],['mother','05 母娘救出'],['fionaRescue','06 フィオナ救出'],['north','07 北の道'],['escape','08 川への脱出'],['forest','09 苔の森入口'],['moss1','10 森の穢れ 1'],['moss2','11 森の穢れ 2'],['moss3','12 森の穢れ 3'],['barrierBefore','13 結界解除前'],['barrierAfter','14 結界解除後'],['lou','15 ルーとの出会い'],['altar','16 古代祭壇 / 誓いの剣'],['raider','17 ゴブリンレイダー'],['aftermath','18 戦いの後'],['fort','19 ドゥンヴァル砦'],['prologueEnd','20 プロローグ終了']];
  const old=devJump;let sandbox=false;
  const save=saveGrowthData,load=loadGrowthData;
  saveGrowthData=function(){if(sandbox){notice('DEVジャンプ中は通常セーブを保護しています。ロードか再読み込みで解除できます。');return}return save()};
