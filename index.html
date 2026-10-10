@@ -258,7 +258,7 @@ function dressRoom(){
    $('#roomName').textContent='道具屋「若葉の袋」';
    $('#bed').style.display='none'; $('#fire').style.display='none';
    dec.innerHTML='<div class="counter"></div><div id="shopKeeper">店</div><div class="shopShelf" style="left:90px;top:100px">薬草・薬瓶</div><div class="shopShelf" style="left:760px;top:105px">旅道具</div><div class="shopShelf" style="left:780px;top:330px">木箱</div>';
-   setTimeout(()=>$('#shopKeeper').onclick=()=>{if(Math.hypot(ipx-499,ipy-325)<240)say('店主「いらっしゃい。旅に出るなら薬は忘れるなよ。」');else say('カウンターの前まで行って話しかけよう。')},0);
+   setTimeout(()=>$('#shopKeeper').onclick=()=>{if(Math.hypot(ipx-499,ipy-325)<240)say(window.LindDialogue?LindDialogue.line('merchant'):'店主「いらっしゃい。旅に出るなら薬は忘れるなよ。」');else say('カウンターの前まで行って話しかけよう。')},0);
  } else if(room==='elder'){
    $('#floorBadge').style.display='none';
    $('#roomName').textContent='長老の家 ― 風見の丘';
@@ -278,13 +278,14 @@ function dressInn(floor){
  dec.innerHTML=''; ['drawer','shelf','bed','pot','fire','table'].forEach(id=>$('#'+id).style.display='none');
  $('#roomName').textContent='宿屋「風見鶏」'; $('#floorBadge').style.display='block'; $('#floorBadge').textContent=floor+'階';
  if(floor===1){
-   dec.innerHTML='<div class="innCounter"></div><div id="innKeeper">宿</div>'+
+   dec.innerHTML='<div class="innCounter"></div><div id="innKeeper">宿</div><div id="innTraveler">旅</div>'+
    '<div class="innTable" style="left:130px;top:160px"></div><div class="innTable" style="left:360px;top:170px"></div><div class="innTable" style="left:610px;top:165px"></div>'+
    '<div class="innTable" style="left:210px;top:330px"></div><div class="innTable" style="left:610px;top:340px"></div>'+
    '<div class="stairs" id="stairsUp" style="left:820px;top:120px">2階へ ▲</div>';
    ipx=485;ipy=590;
    setTimeout(()=>{
-    $('#innKeeper').onclick=()=>say('宿屋の主人「いらっしゃい。食事かい？ 泊まりなら二階に部屋があるよ。」');
+    $('#innKeeper').onclick=()=>say(window.LindDialogue?LindDialogue.line('innkeeper'):'宿屋の主人「いらっしゃい。食事かい？ 泊まりなら二階に部屋があるよ。」');
+    const tv=$('#innTraveler');if(tv)tv.onclick=()=>needNear(tv,()=>say(LindDialogue.line('inn_traveler')));
     $('#stairsUp').onclick=()=>{if(near($('#stairsUp'),180)){dressInn(2)}else say('階段の近くまで行こう。')};
    },0);
  } else {

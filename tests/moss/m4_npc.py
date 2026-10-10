@@ -34,6 +34,14 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('#hillOld').click()"); h1=pg.evaluate("document.querySelector('#msg').textContent")
     pg.evaluate("document.querySelector('#hillOld').click()"); h2=pg.evaluate("document.querySelector('#msg').textContent")
     check('風がよく通る' in h1 and 'お母さん譲り' in h2,'hill villager 2 lines')
-    check(talk('farmer_male')==pg.evaluate("document.querySelector('#msg').textContent") ,'NPC without text leaves dialogue untouched')
+    check(talk('elder_man')==pg.evaluate("document.querySelector('#msg').textContent") ,'NPC without text leaves dialogue untouched')
+    for i,k in [('farmer_male','いい風が吹いている'),('caretaker','牛たち'),('young_man','木人'),('innkeeper','シチュー'),('inn_traveler','静かでいい所'),('merchant','傷薬'),('fisherman','邪魔するな')]:
+        check(k in talk(i),'village line: '+i)
+    # interiors: shop keeper / innkeeper / traveler through the real room UI
+    pg.evaluate("room='shop';ipx=499;ipy=325;document.querySelector('#inside').style.display='block';dressRoom();inCamera()"); pg.wait_for_timeout(200)
+    pg.evaluate("document.querySelector('#shopKeeper').click()"); check('傷薬は多め' in pg.evaluate("document.querySelector('#msg').textContent"),'shop keeper (room UI)')
+    pg.evaluate("room='inn';dressRoom();ipx=300;ipy=330;inCamera()"); pg.wait_for_timeout(200)
+    pg.evaluate("document.querySelector('#innKeeper').click()"); check('シチュー' in pg.evaluate("document.querySelector('#msg').textContent") or '近づいて' in pg.evaluate("document.querySelector('#msg').textContent"),'innkeeper click handled')
+    check(pg.evaluate("!!document.querySelector('#innTraveler')"),'inn traveler exists')
     print('errors',errs[:5]); b.close()
 sys.exit(1 if (fails or errs) else 0)
