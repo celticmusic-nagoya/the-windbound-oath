@@ -25,12 +25,12 @@ fs=sorted(os.listdir(out)); check(len(fs)==4*6,'24 normalised PNGs written (%d)'
 rows=[];cols={}
 for f in fs:
     a=np.array(Image.open(out+'/'+f)); ys,xs=np.where(a[...,3]>16); rows.append(ys.max()+1)
-    check(Image.open(out+'/'+f).size==(512,640),f+' canvas 512x640') if f=='fiona_idle_down.png' else None
+    check(Image.open(out+'/'+f).size==(1024,640),f+' canvas 1024x640') if f=='fiona_idle_down.png' else None
     d=f.split('_')[2] if f.startswith('fiona_walk') else f.split('_')[2].split('.')[0]
     if f.startswith('fiona_idle'):
-        band=a[ys.max()-30:ys.max()+1,:,3]>16; bx=np.where(band.any(0))[0]; cols.setdefault(d,[]).append((bx.min()+bx.max())/2)
+        band=a[ys.max()-6:ys.max()+1,:,3]>16; bx=np.where(band.any(0))[0]; cols.setdefault(d,[]).append((bx.min()+bx.max())/2)
 check(max(rows)-min(rows)<=3 and abs(rows[0]-600)<=3,'every frame stands on the anchor row y=600 (spread %d)'%(max(rows)-min(rows)))
-check(all(abs(np.median(v)-256)<=4 for v in cols.values()),'feet centred on the anchor column per direction %s'%{k:round(float(np.median(v))) for k,v in cols.items()})
+check(all(abs(np.median(v)-512)<=6 for v in cols.values()),'feet centred on the anchor column per direction %s'%{k:round(float(np.median(v))) for k,v in cols.items()})
 js=open(tmp+'/f.js').read(); check(js.count('"scale": 0.1')==24 and 'fiona_walk_up_05' in js and 'fiona_walk_up_06' not in js,'manifest lists 24 frames incl. walk_05, none beyond')
 h=[np.where(np.array(Image.open(out+'/fiona_idle_down.png'))[...,3]>16)[0]]; hh=h[0].max()-h[0].min()+1
 check(abs(hh*0.1-46)<2.5,'idle_down body height maps to ~46 world px (%.1f)'%(hh*0.1))

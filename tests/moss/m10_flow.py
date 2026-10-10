@@ -50,4 +50,11 @@ with sync_playwright() as p:
     check(moved>=3,'taps inside the training ground walk (%d/4)'%moved)
     tev("MossForest.teleportFeet(1877,860)"); t.wait_for_timeout(500); t.touchscreen.tap(265,615); t.wait_for_timeout(1200)
     check(tev("storyStage")==2 and tev("getComputedStyle(document.getElementById('battle')).display")=='block','tap on the training dummy opens the training battle')
+    # far tap on an NPC: walk first, talk only on arrival; tapping elsewhere cancels the pending talk
+    d=b.new_page(viewport={'width':1280,'height':720}); dv=d.evaluate; d.goto('http://localhost:8765/index.html'); d.wait_for_timeout(1500); dv("devJump('training')"); d.wait_for_timeout(2500); dv("closeDialogue()")
+    dv("MossForest.teleportFeet(1877,1100)"); d.wait_for_timeout(500); xy=dv("FieldCamera.worldToScreen(document.getElementById('forestWorld'),1952,940)")
+    d.mouse.click(xy['x'],xy['y']); d.wait_for_timeout(150); check(dv("document.getElementById('msg').style.display")!='block','far NPC tap: no instant dialogue')
+    d.wait_for_timeout(2500); check(dv("document.getElementById('msg').style.display")=='block','far NPC tap: dialogue after arriving')
+    dv("closeDialogue();MossForest.teleportFeet(1877,1100)"); d.wait_for_timeout(300); d.mouse.click(xy['x'],xy['y']); d.wait_for_timeout(200); d.mouse.click(1100,650); d.wait_for_timeout(3000)
+    check(dv("document.getElementById('msg').style.display")!='block','tapping elsewhere cancels the pending talk')
 print('FAILS',fails); sys.exit(1 if fails else 0)

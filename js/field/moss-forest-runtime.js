@@ -181,7 +181,7 @@
     const sp0=map.spawns.points[spawnId||map.spawns.default];
     if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
-    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
+    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
     if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
     if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
@@ -273,9 +273,11 @@
       const c=centerOf(sh),d=dist(wx,wy,c.x,c.y);
       if(d<bd){bd=d;best={z,c};}
     }
-    if(best){
-      if(dist(fx,fy,best.c.x,best.c.y)>260){toast('もう少し近づいて調べよう。');return true;}
-      fireEvent(best.z);return true;
+    if(best){   // walk there first, talk on arrival (a stray tap far away never interrupts the walk with a dialogue)
+      if(dist(fx,fy,best.c.x,best.c.y)<=90){fireEvent(best.z);return true;}
+      const dest=FieldNavigation.destination(best.c.x-FOOT.ax,best.c.y-FOOT.ay,S.forest.blocked);
+      if(!dest){toast('その場所へは進めない。');return true;}
+      S.target=dest;S.pending=best;return true;
     }
     return false;
   }
@@ -284,6 +286,7 @@
   function onPointer(e){
     if(!S.active||S.busy)return;
     if(e.target.closest('#msg,button,#forestLabel'))return;
+    S.pending=null;
     const w=FieldCamera.screenToWorld(el.world,e.clientX,e.clientY);
     if(interactAt(w.x,w.y))return;
     S.target=FieldNavigation.destination(w.x-FOOT.ax,w.y-FOOT.ay,S.forest.blocked);
@@ -292,6 +295,7 @@
   const DIRS={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
   function onKeyDown(e){
     if(!S.active||S.busy||!DIRS[e.key])return;
+    S.pending=null;
     S.keys.set(e.key,DIRS[e.key]);S.target=null;FieldNavigation.cancel();
   }
 
@@ -390,6 +394,8 @@
     if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
+    if(S.pending&&!S.target){const pd=S.pending;S.pending=null;   // arrived
+      if(dist(S.x+FOOT.ax,S.y+FOOT.ay,pd.c.x,pd.c.y)>260)toast('もう少し近づいて調べよう。');else fireEvent(pd.z);}
     render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
   }
   function streamFactor(){
@@ -436,7 +442,7 @@
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
-    teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.battleLatch=true;S.transitionLatch=true;},
-    goFeet(x,y){S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
+    teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
+    goFeet(x,y){S.pending=null;S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
     get target(){return S.target;},get status(){return FieldNavigation.status;}});
 })();
