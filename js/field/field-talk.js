@@ -7,13 +7,14 @@
   'use strict';
   const providers = new Map(), tables = new Map(), history = [];
   const seen = new Set(), cycle = {}, flags = {};
-  let questProvider = () => null, session = null;
+  let questProvider = id => (window.Quest ? Quest.state(id) : null), session = null;
   const msg = () => document.getElementById('msg');
 
   // ---------- context for conditions ----------
   const sealOpen = () => (window.PrologueProgress && PrologueProgress.count() >= 3) || (typeof storyStage === 'number' && storyStage >= 13);
+  const flagOf = n => Boolean(flags[n]) || Boolean(window.MossForestStory && MossForestStory.flagsNow()[n]);
   const ctx = () => ({
-    flag: n => Boolean(flags[n]) || Boolean(window.MossForestStory && MossForestStory.flagsNow()[n]),
+    flag: flagOf,
     stage: () => (typeof storyStage === 'number' ? storyStage : 0),
     sealOpen,
     treasure: id => Boolean(window.MossForest && MossForest.opened.includes(id)) || Boolean(window.Inventory && Inventory.serialize().claimed.includes(id)),
@@ -29,7 +30,10 @@
     for (const e of table.entries) {
       for (const p of TalkConditions.validate(e.when, e.id + '.when')) console.warn('[FieldTalk]', p);
     }
-    tables.set(table.npc, table.entries);
+    // Several files may contribute entries for one NPC: merge by entry id (later wins).
+    const merged = new Map((tables.get(table.npc) || []).map(e => [e.id, e]));
+    for (const e of table.entries) merged.set(e.id, e);
+    tables.set(table.npc, [...merged.values()]);
     return true;
   }
   function register(ids, lineFn) { for (const id of [].concat(ids)) providers.set(id, lineFn); }
@@ -56,7 +60,7 @@
     const m = SPEAKER.exec(String(p)); return m ? {speaker: m[1], text: m[2]} : {speaker: '', text: String(p)};
   }
   function pagesOf(conv) {
-    const raw = typeof conv === 'string' ? conv.split(SPLIT) : (conv.pages || []);
+    const raw = typeof conv === 'string' ? conv.split(SPLIT) : Array.isArray(conv) ? conv : (conv.pages || []);
     return raw.map(toPage);
   }
 
@@ -64,6 +68,14 @@
   function applyEffects(o, pages) {
     if (!o) return;
     if (o.set) for (const [k, v] of Object.entries(o.set)) if (/^[a-z0-9_]{1,40}$/i.test(k)) flags[k] = Boolean(v);
+    if (o.quest && window.Quest) {
+      const q = o.quest;
+      if (q.action === 'accept') Quest.accept(q.id);
+      else if (q.action === 'report') {
+        const got = Quest.report(q.id);
+        if (got && got.length && pages) pages.push({speaker: '', text: Inventory.describe(got) + ' を手に入れた。'});
+      }
+    }
     if (o.give && window.Inventory) {
       const got = Inventory.grant(o.give);
       if (got.length && pages) pages.push({speaker: '', text: Inventory.describe(got) + ' を手に入れた。'});
@@ -163,7 +175,7 @@
   }
   const setFlag = (k, v = true) => { if (/^[a-z0-9_]{1,40}$/i.test(k)) flags[k] = Boolean(v); };
 
-  if (window.TalkData) for (const t of TalkData.tables) loadTable(t);
-  window.FieldTalk = Object.freeze({register, loadTable, has, talk, pick, setFlag, setQuestProvider, serialize, load,
+  for (const src of [window.TalkData, window.TalkDataQuests]) if (src) for (const t of src.tables) loadTable(t);
+  window.FieldTalk = Object.freeze({flag: flagOf, seenEntry: id => seen.has(id), register, loadTable, has, talk, pick, setFlag, setQuestProvider, serialize, load,
     get active() { return Boolean(live()); }, get history() { return history.slice(); }});
 })();
