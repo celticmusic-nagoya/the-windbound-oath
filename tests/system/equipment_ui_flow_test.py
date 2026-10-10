@@ -27,9 +27,9 @@ with sync_playwright() as p:
     ev("closeDialogue();storyStage=3"); ev("document.querySelector('#hillExit').click()"); pg.wait_for_timeout(1500)
     t=[x for x in ev("MossForest.map.treasurePoints") if x['id']=='tr_c1_cairn'][0]
     def click_chest():
-        pg.evaluate("([x,y])=>MossForest.teleportFeet(x-60,y+40)",[t['x'],t['y']]); pg.wait_for_timeout(400)
+        pg.evaluate("([x,y])=>MossForest.teleportFeet(x-60,y+40)",[t['x'],t['y']]); pg.wait_for_timeout(800)
         pt=pg.evaluate("([x,y])=>{const r=document.querySelector('#forestWorld').getBoundingClientRect(),s=FieldCamera.scale;return [r.left+x*s,r.top+(y-14)*s]}",[t['x'],t['y']])
-        pg.mouse.click(pt[0],pt[1]); pg.wait_for_timeout(400)
+        pg.mouse.click(pt[0],pt[1]); pg.wait_for_timeout(600)
     ev("storyStage=3"); click_chest()
     check(ev("Inventory.count('iron_sword')")==0 and 'tr_c1_cairn' not in ev("MossForest.opened"),'stage 3: the cairn chest stays shut (and unclaimed)')
     ev("storyStage=15"); click_chest()
