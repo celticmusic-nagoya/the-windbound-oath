@@ -2,17 +2,6 @@
 (function () {
   'use strict';
   if(!window.WINDBOUND_DEV)return;
-  const routines={
-    farmer_male:{kind:'WORKER',speed:3,offsets:[[18,0],[0,0]],rests:[9,13]},
-    farmer_female:{kind:'WORKER',speed:2.6,offsets:[[-12,4],[0,0]],rests:[12,17]},
-    caretaker:{kind:'WORKER',speed:3.2,offsets:[[0,-12],[0,0]],rests:[11,19]},
-    young_man:{kind:'LOCAL_WALKER',speed:5,offsets:[[-18,8],[0,0]],rests:[7,11]},
-    young_woman:{kind:'LOCAL_WALKER',speed:4.3,offsets:[[18,8],[0,0]],rests:[10,14]},
-    merchant:{kind:'SHOP',speed:2,offsets:[[5,0],[0,0]],rests:[18,27]},
-    innkeeper:{kind:'SHOP',speed:2,offsets:[[-5,0],[0,0]],rests:[23,31]},
-    elder_man:{kind:'ELDERLY',speed:1.8,offsets:[[4,0],[0,0]],rests:[24,32]},
-    elder_woman:{kind:'ELDERLY',speed:1.6,offsets:[[-4,0],[0,0]],rests:[29,38]}
-  };
   let emmaMode='current';
   const emmaProfiles={
     natural:{kind:'EMMA',speed:1.4,offsets:[[12,-2],[0,0]],rests:[12,20],workDuration:4},
@@ -35,7 +24,7 @@
     a.life={...config,origin:{x:a.x,y:a.footY},index:0,rest:config.rests[0]+phase,
       elapsed:0,blocked:0,arrivals:0,workTime:0};a.element.dataset.routine=config.kind;
   }
-  function mount(actors) {actors.forEach((a,i)=>{if(routines[a.id]||a.routine)attach(a,a.id==='emma'&&emmaMode!=='current'?emmaProfiles[emmaMode]:routines[a.id]||a.routine,i*1.7);});}
+  function mount(actors) {actors.forEach((a,i)=>{if(a.routine)attach(a,a.id==='emma'&&emmaMode!=='current'?emmaProfiles[emmaMode]:a.routine,i*1.7);});}   // routines: lind-npc-registry.js
   function update(seconds) {
     const api=window.LindFieldNPCs;
     api.actors.filter(a=>a.life).forEach(a=>{

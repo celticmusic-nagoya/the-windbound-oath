@@ -159,7 +159,7 @@
     if (n && /^[1-9]$/.test(e.key) && +e.key <= n) { e.preventDefault(); e.stopImmediatePropagation(); choose(+e.key - 1); return; }
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'z') { e.preventDefault(); e.stopImmediatePropagation(); if (!n) advance(); }
   }, true);
-  window.addEventListener('lind-field-interaction', e => { const d = e.detail; if (d && d.id) talk(d.id, {source: 'review'}); });
+  window.addEventListener('lind-field-interaction', e => { const d = e.detail; if (d && d.id) talk(d.talk !== undefined ? d.talk : d.id, {source: 'review'}); });
 
   // ---------- save ----------
   function entryIds() { return new Set([...tables.values()].flat().map(e => e.id)); }

@@ -21,6 +21,7 @@ with sync_playwright() as p:
     # seal-open branch
     pg.evaluate("PrologueProgress.seed(3)"); 
     pg.evaluate("document.querySelector('#elderNpc').click()"); t=pg.evaluate("document.querySelector('#msg').textContent"); check('邪気が晴れ' in t,'elder open line: '+t)
+    pg.evaluate("FieldTalk.load(null)")   # draft quest offer (talk-data-quests.js) outranks the plain lines once she has been heard
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'emma'}}))")
     t=pg.evaluate("document.querySelector('#msg').textContent"); check('風がようやく' in t,'emma open line')
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'elder_man'}}))")
