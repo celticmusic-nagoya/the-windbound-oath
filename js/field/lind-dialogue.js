@@ -1,5 +1,5 @@
 /* Rilde Village NPC conversation lines (M5). Pure data + a small selector; no story/save hooks.
- * Triggered by the shared 'lind-field-interaction' event (DEV review interaction today). Emma lives in forest-warnings.js.
+ * Triggered through FieldTalk (js/field/field-talk.js). Emma lives in forest-warnings.js.
  * Branch: seal closed (peaceful / unrest) vs open (seal released or prologue cleared). Lines cycle per NPC and state. */
 (function () {
   'use strict';
@@ -28,6 +28,6 @@
     const list=(sealOpen()&&set.open)||set.closed,key=id+(list===set.closed?':c':':o');
     const i=(used[key]||0)%list.length;used[key]=i+1;return list[i];
   }
-  window.addEventListener('lind-field-interaction',e=>{const id=e.detail&&e.detail.id;if(NPC[id]&&typeof say==='function')say(line(id));});
+  if(window.FieldTalk)FieldTalk.register(Object.keys(NPC),line);
   window.LindDialogue=Object.freeze({line,NPC});
 })();

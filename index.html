@@ -258,14 +258,14 @@ function dressRoom(){
    $('#roomName').textContent='道具屋「若葉の袋」';
    $('#bed').style.display='none'; $('#fire').style.display='none';
    dec.innerHTML='<div class="counter"></div><div id="shopKeeper">店</div><div class="shopShelf" style="left:90px;top:100px">薬草・薬瓶</div><div class="shopShelf" style="left:760px;top:105px">旅道具</div><div class="shopShelf" style="left:780px;top:330px">木箱</div>';
-   setTimeout(()=>$('#shopKeeper').onclick=()=>{if(Math.hypot(ipx-499,ipy-325)<240)say(window.LindDialogue?LindDialogue.line('merchant'):'店主「いらっしゃい。旅に出るなら薬は忘れるなよ。」');else say('カウンターの前まで行って話しかけよう。')},0);
+   setTimeout(()=>$('#shopKeeper').onclick=()=>{if(Math.hypot(ipx-499,ipy-325)<240)FieldTalk.talk('merchant',{source:'room'});else say('カウンターの前まで行って話しかけよう。')},0);
  } else if(room==='elder'){
    $('#floorBadge').style.display='none';
    $('#roomName').textContent='長老の家 ― 風見の丘';
    $('#bed').style.display='none';
    dec.innerHTML='<div class="elderRug"></div><div class="runeTable">古い村の地図</div><div class="stone" style="left:130px;top:280px">ᚠ</div><div class="stone" style="left:820px;top:280px">ᚱ</div>';
    dec.insertAdjacentHTML('beforeend','<div id="elderNpc">長老</div>');
-   setTimeout(()=>{const n=$('#elderNpc');if(n)n.onclick=()=>needNear(n,()=>say(ForestWarnings.line('elder')))},0);
+   setTimeout(()=>{const n=$('#elderNpc');if(n)n.onclick=()=>needNear(n,()=>FieldTalk.talk('elder',{source:'room'}))},0);
  } else if(room==='inn'){
    dressInn(1);
  } else {
@@ -284,8 +284,8 @@ function dressInn(floor){
    '<div class="stairs" id="stairsUp" style="left:820px;top:120px">2階へ ▲</div>';
    ipx=485;ipy=590;
    setTimeout(()=>{
-    $('#innKeeper').onclick=()=>say(window.LindDialogue?LindDialogue.line('innkeeper'):'宿屋の主人「いらっしゃい。食事かい？ 泊まりなら二階に部屋があるよ。」');
-    const tv=$('#innTraveler');if(tv)tv.onclick=()=>needNear(tv,()=>say(LindDialogue.line('inn_traveler')));
+    $('#innKeeper').onclick=()=>FieldTalk.talk('innkeeper',{source:'room'});
+    const tv=$('#innTraveler');if(tv)tv.onclick=()=>needNear(tv,()=>FieldTalk.talk('inn_traveler',{source:'room'}));
     $('#stairsUp').onclick=()=>{if(near($('#stairsUp'),180)){dressInn(2)}else say('階段の近くまで行こう。')};
    },0);
  } else {
@@ -359,7 +359,7 @@ $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用�
 $('#hillExit').onclick=()=>{if(storyStage<3)say('この先は夕暮れの丘へ続いている。今は訓練場へ向かおう。');else if(storyStage===3){storyStage=4;startHillScene()}else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
 $('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
 $('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
-$('#hillOld').onclick=()=>say(window.LindDialogue?LindDialogue.line('hill_old'):'老人「この丘から見るリルド村が、わしは好きでな。」');
+$('#hillOld').onclick=()=>FieldTalk.talk('hill_old',{source:'village'});
 $('#kid2').onclick=()=>say('子供「つかまえてみろー！」');
 $('#kid3').onclick=()=>say('子供「待て待てー！」');
 $('#dog2').onclick=()=>say('犬「ワフッ！」');
@@ -1795,6 +1795,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/forest-loader.js"></script>
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
+<script src="js/field/field-talk.js"></script>
 <script src="js/field/forest-warnings.js"></script>
 <script src="js/field/lind-dialogue.js"></script>
 <script>MossForestStory.init();</script>

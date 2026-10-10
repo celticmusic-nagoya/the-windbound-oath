@@ -23,7 +23,6 @@
     const list=sealOpen()?set.open:set.closed,key=who+(sealOpen()?':open':':closed');
     const i=(used[key]||0)%list.length;used[key]=i+1;return list[i];
   }
-  // Emma has no formal conversation yet; the DEV review interaction is the only trigger today.
-  window.addEventListener('lind-field-interaction',e=>{if(e.detail&&e.detail.id==='emma'&&typeof say==='function')say(line('emma'));});
+  if(window.FieldTalk)FieldTalk.register(['emma','elder'],line);
   window.ForestWarnings=Object.freeze({line,LINES});
 })();
