@@ -7,6 +7,9 @@ from playwright.sync_api import sync_playwright
 ROOT=os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..')); os.chdir(ROOT)
 WAIT=['young_man','young_woman','elder_man','elder_woman','merchant','innkeeper','caretaker']
 EXTRA=['farmer_male']
+# Safety: the cleanup below runs git checkout/clean on these paths, which would destroy uncommitted art. Refuse to start on a dirty tree.
+_dirty=subprocess.run(['git','status','--porcelain','--','js/field/lind-content-bounds.js','img/field/lind/npc'],capture_output=True,text=True).stdout.strip()
+if _dirty: print('ABORT: uncommitted changes in NPC art/bounds - commit or stash first:\n'+_dirty); sys.exit(2)
 fails=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
