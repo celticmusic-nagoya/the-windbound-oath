@@ -14,6 +14,12 @@
     else consumables()[id] = (consumables()[id] || 0) + n;
     return true;
   }
+  // hand items over (quest turn-in). Returns true when the full amount was removed.
+  function take(id, n = 1) {
+    if (!def(id) || !(n > 0) || count(id) < n) return false;
+    if (isKey(id)) { key[id] -= n; if (key[id] <= 0) delete key[id]; } else consumables()[id] -= n;
+    return true;
+  }
   // rewards: {potion:2, gold:30, charm_windward:1} -> list of {id,name,n,kind} actually granted
   function grant(rewards) {
     const got = [];
@@ -51,5 +57,5 @@
     for (const id of Array.isArray(data.claimed) ? data.claimed : []) if (typeof id === 'string' && D.treasure[id]) claimed.add(id);
   }
   function reset() { load(null); }
-  window.Inventory = Object.freeze({count, add, grant, describe, list, openTreasure, claim, reconcile, serialize, load, reset, def});
+  window.Inventory = Object.freeze({count, add, take, grant, describe, list, openTreasure, claim, reconcile, serialize, load, reset, def});
 })();

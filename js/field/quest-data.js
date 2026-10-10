@@ -9,6 +9,19 @@ window.QuestData = Object.freeze({
       complete: {item: 'charm_windward'},
       reward: {ether: 1},
       objective: {active: '森の道で、エマの落とした護符を探す', complete: 'エマに護符を見せに行く'}
+    },
+    // 老人(男) ・ 農作業の女性 のクエスト。台詞は js/field/talk-data-quests.js
+    q_oldman_rune: {
+      name: '古びたルーンの記憶',
+      complete: {item: 'rune_shard_old'},
+      reward: {ether: 1},
+      objective: {active: '森で古いルーンの欠片を見つけ、老人に見せる', complete: '老人にルーン片を見せに行く'}
+    },
+    q_farmer_herb: {
+      name: '収穫をはばむ影',
+      complete: {item: 'herb_moss', min: 3},
+      reward: {potion: 2, gold: 30},
+      objective: {active: '薬草を3つ集めて、農作業の女性に届ける', complete: '農作業の女性に薬草を届ける'}
     }
   })
 });

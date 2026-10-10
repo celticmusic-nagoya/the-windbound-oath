@@ -24,7 +24,7 @@ with sync_playwright() as p:
     pg.evaluate("FieldTalk.load(null)")   # draft quest offer (talk-data-quests.js) outranks the plain lines once she has been heard
     pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'emma'}}))")
     t=pg.evaluate("document.querySelector('#msg').textContent"); check('風がようやく' in t,'emma open line')
-    pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'elder_man'}}))")
+    pg.evaluate("window.dispatchEvent(new CustomEvent('lind-field-interaction',{detail:{id:'nobody_here'}}))")
     check(pg.evaluate("document.querySelector('#msg').textContent")==t,'other NPC ids ignored')
     # village NPC lines (children / prayer / well / hill)
     pg.evaluate("PrologueProgress.seed(0)")
