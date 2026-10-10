@@ -9,11 +9,6 @@
  function sync(){
   forestGobWins=count();
   for(const id of ['attackMother','attackChild'])q('#'+id).style.display=defeated.has('attackGob1')?'none':'';
-  Object.entries(ids).forEach(([field,id])=>{const el=q('#'+field);if(el){el.hidden=defeated.has(id);el.style.display=el.hidden?'none':''}});
-  const seal=q('#louSeal');   // legacy forest DOM; absent once the legacy forest is removed
-  if(seal){seal.classList.toggle('corrupted',count()<3);seal.classList.toggle('open',count()>=3);
-   q('#louSearch').style.display= count()>=3&&!louFound?'block':'none';
-   q('#louSprite').style.display=louFound?'grid':'none';q('#windPath').style.display=louFound?'block':'none';}
   if(window.MossForestStory&&window.MossForest&&MossForest.map)MossForestStory.syncFlags();
  }
  function defeat(field){
@@ -33,16 +28,13 @@
   louFound=data.louFound===true&&count()===3;storyStage=Math.max(0,Math.min(15,Number(data.storyStage)||0));
   if(storyStage>=11&&count()<3)storyStage=10;
   attackStep=Math.max(0,Math.min(2,Number(data.attackStep)||0));northPhase=Math.max(0,Math.min(3,Number(data.northPhase)||0));forestStoneSeen=!!data.forestStoneSeen;
-  if(!MOSS_RT)for(const id of Object.keys(forestChests))forestChests[id]=!!data.forestChests?.[id];
   for(const id of Object.keys(subQuests))if(['locked','active','done'].includes(data.subQuests?.[id]?.state))Object.assign(subQuests[id],data.subQuests[id]);
   PrologueCombat.cancel();devResetScreens();document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','raiderFinishing','soloRescue');
   document.body.classList.toggle('villageAttack',storyStage>=5&&storyStage<=8);forestActive=false;
-  if(storyStage>=9&&storyStage<=12&&MOSS_RT){forestActive=true;q('#forestScene').style.display='block';MossForestStory.fromSave(data,{count:count(),louFound,storyStage});}
-  else if(storyStage>=9&&storyStage<=12){forestActive=true;q('#forestScene').style.display='block';fpx=Math.max(40,Math.min(1750,Number(data.position?.fpx)||330));fpy=Math.max(40,Math.min(1240,Number(data.position?.fpy)||940));ffx=fpx-48;ffy=fpy+18;forestCamera();}
+  if(storyStage>=9&&storyStage<=12){forestActive=true;q('#forestScene').style.display='block';MossForestStory.fromSave(data,{count:count(),louFound,storyStage});}
   else if(storyStage<=8){px=Number(data.position?.px)||420;py=Number(data.position?.py)||1160;camera();if(storyStage===0){room='home';q('#inside').style.display='block';dressRoom();inCamera()}}
   else if(storyStage===13)startRaiderAftermath();else if(storyStage===14)startFortFinale();else showPrologueEnd();
   sync();for(const field of ['attackGob1','attackGob2','northGob1','northGob2']){const el=q('#'+field);if(el){el.hidden=cleared(field);el.style.display=cleared(field)?'none':''}}
-  if(!MOSS_RT)Object.entries(forestChests).forEach(([id,open])=>q('#'+id).classList.toggle('open',open));
   currentObjective=storyStage>=9&&storyStage<=10?objective():String(data.currentObjective||currentObjective);renderJournal();return true;
  }
  function seed(n, preceding=[]){defeated=new Set([...Object.values(ids).slice(0,n),...preceding.filter(id=>['attackGob1','attackGob2','northGob1','northGob2'].includes(id))]);louFound=false;sync();for(const id of ['attackGob1','attackGob2','northGob1','northGob2']){const el=q('#'+id);el.hidden=cleared(id);el.style.display=el.hidden?'none':''}}

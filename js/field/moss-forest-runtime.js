@@ -20,9 +20,6 @@
     el={scene:$(options.scene||'#forestScene'),world:$(options.world||'#forestWorld'),player:$(options.player||'#forestPlayer'),
       fiona:$(options.fiona||'#forestFiona'),label:$(options.label||'#forestLabel'),toast:$(options.toast||'#forestToast'),fade:$(options.fade||'#forestFade')};
     hooks=options.hooks||{};
-    // Replace any legacy hand-placed forest content; only the actors stay.
-    for(const child of [...el.world.children])if(child!==el.player&&child!==el.fiona)child.remove();
-    el.world.classList.add('mossRuntime');
     el.scene.addEventListener('pointerdown',onPointer);
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     S.configured=true;

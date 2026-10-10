@@ -21,7 +21,7 @@
   document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','raiderFinishing','soloRescue','battleResultMode','villageAttack','northAssault','actionCinematic');
   document.querySelectorAll('.actionFocus,.actionTarget,.actionDim,.actionPose,.raiderKO,.taintedKO').forEach(el=>el.classList.remove('actionFocus','actionTarget','actionDim','actionPose','raiderKO','taintedKO'));
   for(const el of document.querySelectorAll('#attackBattle *,#raiderBattle *'))for(const animation of el.getAnimations())animation.cancel();
-  attackBattleBusy=false;rbBusy=false;forestActive=false;room='';target=itarget=ftarget=null;
+  attackBattleBusy=false;rbBusy=false;forestActive=false;room='';target=itarget=null;
   document.querySelector('#northEscape').style.display='none';document.querySelector('#escapeGob').style.display='none';document.querySelector('#escapeScene').style.filter='';document.querySelector('#forestScene').classList.remove('windRestored');
   for(const id of ['ag1','ag2','ag3','ag4'])document.querySelector('#'+id).style.opacity='';document.querySelector('#oathSword').style.filter='';
   setNormalCommandDrawer(false);setRaiderCommandDrawer(false);document.querySelector('#normalItems').classList.remove('isOpen');
@@ -30,24 +30,18 @@
   PrologueProgress.seed(n,pastVillage?['attackGob1','attackGob2',...(index>=8?['northGob1','northGob2']:[])]:key==='fionaRescue'?['attackGob1']:[]);
   PartyManager.support.joined=index>=18;
   attackStep=pastVillage?2:key==='fionaRescue'?1:0;northPhase=index>=8?3:key==='north'?1:0;forestStoneSeen=index>=9;louFound=index>=15;
-  for(const id of Object.keys(forestChests)){forestChests[id]=false;const c=document.querySelector('#'+id);if(c)c.classList.remove('open')}
-  if(MOSS_RT&&window.MossForest)MossForest.reset();
+  if(window.MossForest)MossForest.reset();
   PrologueProgress.sync();
   if(key==='mother'||key==='fionaRescue'){
    old('attack');closeDialogue();startAttackBattle(key==='mother'?'attackGob1':'attackGob2',100);
   }else if(key.startsWith('moss')||key.startsWith('barrier')){
-   if(MOSS_RT){
-    closeDialogue();forestStoneSeen=true;storyStage=key.startsWith('moss')?9:10;PrologueProgress.sync();
-    if(key.startsWith('moss')){const i=Number(key.at(-1)),pos=[[4740,5725],[5672,4750],[4215,4175]][i-1];
-     forestDevEnterA3(pos[0]-120,pos[1]).then(()=>startAttackBattle('forestGob'+i,100));}
-    else forestDevEnterA3(3910,3340).then(()=>{PrologueProgress.sync();setObj(PrologueProgress.objective());});
-   }else{
-   old('forest');closeDialogue();forestStoneSeen=true;PrologueProgress.sync();
-   if(key.startsWith('moss')){const i=Number(key.at(-1)),el=document.querySelector('#forestGob'+i);fpx=parseFloat(el.style.left)-80;fpy=parseFloat(el.style.top);startAttackBattle('forestGob'+i,100)}
-   else {storyStage=10;fpx=1430;fpy=610;forestCamera();setObj(PrologueProgress.objective())}}
+   closeDialogue();forestStoneSeen=true;storyStage=key.startsWith('moss')?9:10;PrologueProgress.sync();
+   if(key.startsWith('moss')){const i=Number(key.at(-1)),pos=[[4740,5725],[5672,4750],[4215,4175]][i-1];
+    forestDevEnterA3(pos[0]-120,pos[1]).then(()=>startAttackBattle('forestGob'+i,100));}
+   else forestDevEnterA3(3910,3340).then(()=>{PrologueProgress.sync();setObj(PrologueProgress.objective());});
   }else if(key==='lou'){
    old('lou');PrologueProgress.sync();
-   if(MOSS_RT)Promise.resolve(window.__devEnter).then(()=>startLouIntro());else startLouIntro();
+   Promise.resolve(window.__devEnter).then(()=>startLouIntro());
   }else old(key);
   if(key==='forest')PrologueProgress.sync();
   // Later destinations need the released forest and Lou, not only a scene index.

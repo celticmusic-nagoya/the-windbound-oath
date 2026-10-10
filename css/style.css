@@ -412,28 +412,14 @@ body.villageAttack #inside{display:none!important}
 
 /* moss forest playable scene */
 #forestScene{position:fixed;inset:0;z-index:170;display:none;overflow:hidden;background:#0b1510;touch-action:none}
-#forestWorld{position:absolute;width:1800px;height:1300px;background:
- radial-gradient(circle at 18% 28%,#314d36 0 5%,transparent 6%),
- radial-gradient(circle at 72% 60%,#243d2c 0 7%,transparent 8%),
- linear-gradient(#18271d,#101b15)}
-.fTree{position:absolute;width:100px;height:100px;border-radius:50%;background:#173822;border:9px solid #0d2416;box-shadow:0 25px 0 #30271c}
-.fRock{position:absolute;width:80px;height:55px;border-radius:45%;background:#59645b;border:6px solid #303a33}
 #forestPlayer,#forestFiona{position:absolute;width:42px;height:58px;border-radius:45% 45% 28% 28%;z-index:8;display:grid;place-items:center}
 #forestPlayer{background:#123d35;border:4px solid #c5a45b}
 #forestFiona{background:#e7dfc7;color:#17372f;border:4px solid #7f9d77}
-#ancientStone{position:absolute;left:1250px;top:350px;width:120px;height:145px;border-radius:48% 48% 12px 12px;background:#4b5750;border:8px solid #26332b;color:#9fd4bc;display:grid;place-items:center;font-size:42px;box-shadow:0 0 20px #5fa98a55;z-index:7}
 #forestLabel{position:fixed;left:14px;top:14px;z-index:12;padding:8px 12px;background:#0c1713dd;border:1px solid #8b7a50;color:#e9dfc7;border-radius:7px;font-size:13px}
 
 /* v0.22 — Moss Forest exploration */
-.fWall{position:absolute;background:#0b2114;border:10px solid #17331f;border-radius:45px;box-shadow:inset 0 0 25px #0008,0 18px 0 #201d16}
-.fChest{position:absolute;width:62px;height:48px;background:#72502d;border:5px solid #2a2018;border-radius:8px;color:#e8d59e;z-index:7;font-size:25px;display:grid;place-items:center;box-shadow:0 7px 0 #17130f}
-.fChest.open{background:#33291e;color:#7c715e;transform:translateY(5px)}
-.fGob{position:absolute;width:48px;height:62px;border-radius:45% 45% 28% 28%;background:#263729;border:4px solid #714b78;color:#d8c6dd;z-index:7;display:grid;place-items:center;font-size:12px;box-shadow:0 0 18px #754579}
-#louSearch{position:absolute;left:1515px;top:475px;width:105px;height:90px;border-radius:50%;background:radial-gradient(circle,#91dfe055 0 10%,transparent 60%);z-index:6;display:none}
-#louSprite{position:absolute;left:1540px;top:490px;width:38px;height:48px;border-radius:50%;background:#d8ffff;color:#16727c;border:3px solid #8de3e5;z-index:9;display:none;place-items:center;font-size:12px;box-shadow:0 0 25px #8ff}
-#windPath{position:absolute;left:1390px;top:430px;width:300px;height:170px;border:4px dashed #9de7dc88;border-radius:50%;transform:rotate(-18deg);z-index:5;display:none;box-shadow:0 0 30px #8bd9cf55 inset}
 #forestToast{position:fixed;left:50%;bottom:14%;transform:translateX(-50%);z-index:190;background:#0c1713ee;border:1px solid #c5a45b;color:#eee0c5;padding:10px 16px;border-radius:8px;display:none;max-width:82%;text-align:center}
-@media(max-width:700px){#forestLabel{font-size:11px}.fGob{width:42px;height:55px}.fChest{width:55px;height:43px}}
+@media(max-width:700px){#forestLabel{font-size:11px}}
 
 /* v0.23 — Ancient altar / Oathblade / Goblin Raider */
 #altarScene{position:fixed;inset:0;z-index:176;display:none;overflow:hidden;background:
@@ -505,9 +491,6 @@ body.villageAttack #inside{display:none!important}
 #normalActor{position:fixed;left:5%;bottom:27%;z-index:203;display:none;color:#d8c9a7;font-size:12px}
 #normalItems{position:fixed;left:8%;right:8%;bottom:7%;z-index:240;display:none;background:#0b1412f5;border:1px solid #c5a45b;border-radius:8px;padding:12px;color:#eee3cc}
 #normalItems button{margin:4px;padding:9px;background:#18251f;color:#eee3cc;border:1px solid #8c7b53;border-radius:5px}
-#louSeal{position:absolute;left:1360px;top:400px;width:350px;height:245px;border:8px solid #315547;border-radius:50%;z-index:8;background:radial-gradient(circle,#73b69b22,transparent 65%);box-shadow:0 0 35px #83c9aa88 inset;pointer-events:none}
-#louSeal::after{content:"ᚠ ᚢ ᚦ";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);color:#9ad5bd;font-size:25px;letter-spacing:8px}
-#louSeal.open{display:none}
 
 /* v0.25 — Prologue finale / Arthur's Fort */
 #fortScene{position:fixed;inset:0;z-index:178;display:none;overflow:hidden;background:

@@ -26,7 +26,7 @@ with sync_playwright() as p:
     pg.goto(URL); pg.wait_for_timeout(1200)
     # ---- 1. entry (new game flow from DEV jump 'forest' = stage 9)
     pg.evaluate("devJump('forest')"); wait_map('moss_forest_01_sunlit_path')
-    check(pg.evaluate("storyStage")==9,'stage 9 on entry'); check(pg.evaluate("MOSS_RT"),'new runtime active')
+    check(pg.evaluate("storyStage")==9,'stage 9 on entry'); check(pg.evaluate("typeof MossForest==='object'"),'Moss Forest runtime active')
     pg.wait_for_timeout(600); check('近付くなって' in pg.evaluate("document.querySelector('#msg').textContent"),'Fiona stage-9 line (elder/Emma warning wording)')
     pg.evaluate("closeDialogue()")
     # ---- 2. A1 -> A2 -> A3 by walking (click-to-move) through the exits

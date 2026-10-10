@@ -151,22 +151,7 @@
 <div id="returnScene"><div id="returnBackdrop"><div id="returnRoad"></div><div id="returnAidan"></div><div id="returnFiona"></div><div id="returnGoblin"></div><div id="returnFlash"></div></div><div id="returnText"></div><div id="returnHint">タップして進む</div></div>
 <div id="dangerBanner">風が、止まった。</div>
 <div id="escapeScene"><div id="escapeRiver"></div><div id="escapeBank"></div><div id="escapeA">A</div><div id="escapeF">F</div><div id="escapeGob">異形</div><div id="escapeText"></div><div id="escapeHint">タップして進む</div></div>
-<div id="forestScene"><div id="forestWorld">
-<div class="fTree" style="left:160px;top:170px"></div><div class="fTree" style="left:420px;top:90px"></div><div class="fTree" style="left:720px;top:230px"></div><div class="fTree" style="left:980px;top:120px"></div><div class="fTree" style="left:1460px;top:180px"></div>
-<div class="fTree" style="left:240px;top:760px"></div><div class="fTree" style="left:590px;top:900px"></div><div class="fTree" style="left:930px;top:790px"></div><div class="fTree" style="left:1510px;top:760px"></div>
-<div class="fRock" style="left:760px;top:580px"></div><div class="fRock" style="left:1120px;top:680px"></div>
-<div class="fWall" style="left:500px;top:360px;width:360px;height:115px"></div>
-<div class="fWall" style="left:260px;top:610px;width:420px;height:100px"></div>
-<div class="fWall" style="left:910px;top:470px;width:115px;height:360px"></div>
-<div class="fWall" style="left:1190px;top:810px;width:390px;height:105px"></div>
-<button class="fChest" id="fChest1" style="left:420px;top:520px">▣</button>
-<button class="fChest" id="fChest2" style="left:1080px;top:930px">▣</button>
-<button class="fChest" id="fChest3" style="left:1450px;top:260px">▣</button>
-<button class="fGob" id="forestGob1" style="left:690px;top:760px">異形</button>
-<button class="fGob" id="forestGob2" style="left:1110px;top:250px">異形</button>
-<button class="fGob" id="forestGob3" style="left:1370px;top:690px">異形</button>
-<div id="louSeal"></div><div id="windPath"></div><button aria-label="風の気配" id="louSearch"></button><div id="louSprite">ルー</div>
-<div id="ancientStone">ᚠ</div><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div><div id="forestFade"></div></div>
+<div id="forestScene"><div id="forestWorld"><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div><div id="forestFade"></div></div>
 <div id="louIntroScene"><div id="louIntroMoon"></div><div id="louIntroSpark"></div><div id="louIntroRing"></div><div id="louIntroLou">ルー</div><div id="louIntroText"></div></div>
 <div id="altarScene">
 <div id="altarRing"></div><div id="altarStone">ᚠ</div><div id="oathSword">†</div>
@@ -909,13 +894,12 @@ $('#escapeScene').onclick=()=>{
  }
 };
 
-const MOSS_RT=!/[?&]legacyForest=1/.test(location.search);
 const FIONA_FOREST_LINE='フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、あれほど近付くなって言っていた森……だよね……？」';
-// Facades so the story code is independent of which forest renderer is active (legacy path is removed in a later commit).
-function forestShow(){forestActive=true;if(MOSS_RT){MossForest.resume();MossForestStory.syncFlags();}else{$('#forestScene').style.display='block';forestCamera();}}
-function forestHideScene(){forestActive=false;if(MOSS_RT)MossForest.hide();else $('#forestScene').style.display='none';}
-function forestSealOpened(){if(MOSS_RT){MossForestStory.syncFlags();return}$('#louSeal').classList.add('open');$('#louSearch').style.display='block';}
-let fpx=330,fpy=940,ffx=285,ffy=955,ftarget=null,forestActive=false,forestStoneSeen=false;
+// Forest field control (Moss Forest runtime; see js/field/moss-forest-*.js).
+function forestShow(){forestActive=true;MossForest.resume();MossForestStory.syncFlags();}
+function forestHideScene(){forestActive=false;MossForest.hide();}
+function forestSealOpened(){MossForestStory.syncFlags();}
+let forestActive=false,forestStoneSeen=false;
 
 // ===== v0.26 PARTY / LEVEL FOUNDATION =====
 // Future-ready: 6 command members + Lou support + multiple squads.
@@ -1083,86 +1067,22 @@ $('#resultContinue').onclick=()=>{
  BattleActorState.end('normal');BattleActorState.end('raider');BattleActorState.end('normal','fiona');BattleActorState.end('normal','tainted_goblin');BattleActorState.end('raider','fiona');BattleActorState.end('raider','lou');BattleActorState.end('raider','goblin_raider');
 };
 
-let forestChests={fChest1:false,fChest2:false,fChest3:false},forestGobWins=0,louFound=false;
+let forestGobWins=0,louFound=false;
 let battleItems={potion:4,ether:2}; let normalFHP=90,normalFMP=30,normalActor='aidan';
-function forestBlocked(x,y){
- if(x<35||y<35||x>1720||y>1220)return true;
- const walls=[
-  [500,360,360,115],[260,610,420,100],[910,470,115,360],[1190,810,390,105]
- ];
- if(forestGobWins<3 && x>1340 && x<1735 && y>380 && y<680)return true;
- return walls.some(([wx,wy,ww,wh])=>x+34>wx&&x<wx+ww&&y+48>wy&&y<wy+wh);
-}
-function forestCamera(){
- if(MOSS_RT)return;
- const fw=$('#forestWorld');
- let x=Math.max(0,Math.min(1800-innerWidth,fpx-innerWidth/2));
- let y=Math.max(0,Math.min(1300-innerHeight,fpy-innerHeight/2));
- fw.style.transform=`translate(${-x}px,${-y}px)`;
- $('#forestPlayer').style.left=fpx+'px';$('#forestPlayer').style.top=fpy+'px';
- // Fiona follows with a soft trailing offset.
- ffx+=(fpx-48-ffx)*.08; ffy+=(fpy+18-ffy)*.08;
- $('#forestFiona').style.left=ffx+'px';$('#forestFiona').style.top=ffy+'px';
-}
-function forestLoop(){
- if(!MOSS_RT&&forestActive&&ftarget){
-   let dx=ftarget.x-fpx,dy=ftarget.y-fpy,d=Math.hypot(dx,dy);
-   if(d<5)ftarget=null;
-   else{
-     let nx=fpx+dx/d*3.6,ny=fpy+dy/d*3.6;
-     if(!forestBlocked(nx,ny)){fpx=nx;fpy=ny}else ftarget=null;
-   }
- }
- if(forestActive&&!MOSS_RT)forestCamera();
- requestAnimationFrame(forestLoop);
-}
-forestLoop();
 function enterMossForest(){
- storyStage=9;forestActive=true;ftarget=null;
- if(MOSS_RT){
-   $('#forestScene').style.display='block';
-   MossForestStory.enterFromStart().then(()=>{
-     questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
-     const g=window.PrologueCombat?.generation;
-     setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say(FIONA_FOREST_LINE)},350);
-   });
-   return;
- }
- fpx=330;fpy=940;ffx=285;ffy=955;
- $('#forestScene').style.display='block';forestCamera();
- questPop('SCENE：苔むした森');
- PrologueProgress.sync();setObj(PrologueProgress.objective());
- const entryGeneration=window.PrologueCombat?.generation;
- setTimeout(()=>{if(entryGeneration===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say(FIONA_FOREST_LINE)},350);
+ storyStage=9;forestActive=true;
+ $('#forestScene').style.display='block';
+ MossForestStory.enterFromStart().then(()=>{
+   questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
+   const g=window.PrologueCombat?.generation;
+   setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say(FIONA_FOREST_LINE)},350);
+ });
 }
 function forestDevEnterA3(fx,fy){forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterAt(MossForestStory.MAP_IDS.a3,fx-17,fy-42,null);}
 function forestToast(t){
  const n=$('#forestToast');n.textContent=t;n.style.display='block';
  clearTimeout(forestToast.t);forestToast.t=setTimeout(()=>n.style.display='none',2400);
 }
-const chestData={
- fChest1:'きずぐすり ×2 を手に入れた。',
- fChest2:'風よけの護符 ×1 を手に入れた。',
- fChest3:'古びたルーン片 ×1 を手に入れた。'
-};
-Object.keys(chestData).forEach(id=>{
- $('#'+id).onclick=e=>{
-  e.stopPropagation();
-  const el=$('#'+id),x=parseFloat(el.style.left),y=parseFloat(el.style.top);
-  if(Math.hypot(fpx-x,fpy-y)>190){forestToast('宝箱には、もう少し近づく必要がある。');return}
-  if(forestChests[id]){forestToast('宝箱は空だ。');return}
-  forestChests[id]=true;el.classList.add('open');el.textContent='□';forestToast(chestData[id]);
- };
-});
-['forestGob1','forestGob2','forestGob3'].forEach(id=>{
- const g=$('#'+id);
- g.onclick=e=>{
-  e.stopPropagation();
-  const x=parseFloat(g.style.left),y=parseFloat(g.style.top);
-  if(Math.hypot(fpx-x,fpy-y)>210){forestToast('異形のゴブリンがこちらを警戒している……。');return}
-  startAttackBattle(id,160);
- };
-});
 const louIntroLines=[
  '黒紫の穢れがほどけ、古代のルーンが淡い緑に灯った。止まっていた風が、木々を揺らす。',
  'フィオナ「魔物が、この結界を歪めていたんだね……。」',
@@ -1181,47 +1101,8 @@ $('#louIntroScene').onclick=()=>{
  louIntroIndex++;
  if(louIntroIndex<louIntroLines.length){$('#louIntroText').textContent=louIntroLines[louIntroIndex];return}
  $('#louIntroScene').style.display='none';louFound=true;
- if(!MOSS_RT){$('#louSearch').style.display='none';$('#louSprite').style.display='grid';$('#windPath').style.display='block';}
  storyStage=11;setObj('ルーが示した隠し風道を調べよう');forestShow();
 };
-$('#louSearch').onclick=e=>{
- e.stopPropagation();
- if(PrologueProgress.count()<3){forestToast('黒紫の穢れが古代ルーンを歪めている……。異常化ゴブリンを退けよう。');return}
- if(Math.hypot(fpx-1515,fpy-475)>230){forestToast('かすかな風の音がする……もう少し近くを探そう。');return}
- if(louFound){forestToast('隠された風道が淡く輝いている。');return}
- startLouIntro();
-};
-
-$('#windPath').onclick=e=>{
- e.stopPropagation();
- if(!louFound){forestToast('まだ道の形が見えない。');return}
- if(Math.hypot(fpx-1390,fpy-430)>320){forestToast('ルーが示した風道へ近づこう。');return}
- closeDialogue();forestActive=false;$('#forestScene').style.display='none';
- startAltarScene();
-};
-$('#louSprite').onclick=e=>{
- e.stopPropagation();
- if(forestGobWins<3 || !louFound){
-   forestToast('結界の向こうから風の気配を感じる。しかし、まだ声は届かない。');
-   return;
- }
- if(Math.hypot(fpx-1540,fpy-490)>230){forestToast('ルーが隠し道の方で手招きしている。');return}
- say('ルー「この先。普通に見ても道はないけど、風はちゃんと通ってるよ。」');
-};
-$('#forestScene').addEventListener('pointerdown',e=>{
- if(e.target.closest('#ancientStone,#louSprite,#windPath,#msg,button'))return;
- let r=$('#forestWorld').getBoundingClientRect();
- ftarget={x:e.clientX-r.left-20,y:e.clientY-r.top-28};
-});
-$('#ancientStone').onclick=e=>{
- e.stopPropagation();
- if(Math.hypot(fpx-1250,fpy-350)>250){toast('もう少し近づいて調べよう。');return}
- forestStoneSeen=true;storyStage=Math.max(storyStage,10);
- say('フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。');
- if(forestGobWins>=3){setObj('古代石の周囲で風の気配を探そう');$('#louSearch').style.display='block';}
- else setObj(PrologueProgress.objective());
-};
-
 const altarLines=[
  'ルー「ここだよ……。この先だけ、森の風がずっと止まってる。」',
  'フィオナが足を踏み入れると、地面に埋もれた古代ルーンが一つ、また一つと淡く灯り始めた。',
@@ -1597,14 +1478,12 @@ function devJump(key){
  }else if(key==='escape'){
    storyStage=8;northPhase=3;document.body.classList.add('villageAttack');startEscapeScene();
  }else if(key==='forest'){
-   storyStage=9;forestGobWins=0;louFound=false;forestStoneSeen=false;if(!MOSS_RT)$('#louSeal').classList.remove('open');enterMossForest();
+   storyStage=9;forestGobWins=0;louFound=false;forestStoneSeen=false;enterMossForest();
  }else if(key==='lou'){
    storyStage=10;forestGobWins=3;forestStoneSeen=true;louFound=false;forestActive=true;currentObjective='古代石の周囲で風の気配を探そう';
-   if(MOSS_RT){window.__devEnter=forestDevEnterA3(4300,3140);}
-   else{$('#louSeal').classList.add('open');fpx=1370;fpy=520;ffx=1320;ffy=535;
-   $('#forestScene').style.display='block';$('#louSearch').style.display='block';forestCamera();}
+   window.__devEnter=forestDevEnterA3(4300,3140);
  }else if(key==='altar'){
-   storyStage=12;louFound=true;$('#louSprite').style.display='grid';startAltarScene();
+   storyStage=12;louFound=true;startAltarScene();
   }else if(key==='raider'){
    storyStage=12;startRaiderBattle();
   }else if(key==='aftermath'){
@@ -1916,7 +1795,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
 <script src="js/field/forest-warnings.js"></script>
-<script>if(MOSS_RT){MossForestStory.init();}</script>
+<script>MossForestStory.init();</script>
 <script src="js/field/lind-content-bounds.js"></script>
 <script src="js/field/lind-assets.js"></script>
 <script src="js/field/lind-animals.js"></script>

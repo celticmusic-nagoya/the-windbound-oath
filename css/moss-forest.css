@@ -1,8 +1,8 @@
 /* Moss Forest runtime (M4): placeholder visuals until real assets (M5). */
-#forestWorld.mossRuntime{background:#0b1510;transform-origin:0 0;left:0;top:0}
+#forestWorld{position:absolute;left:0;top:0;background:#0b1510;transform-origin:0 0}
 #forestPlayer,#forestFiona{box-sizing:border-box}
-#forestWorld.mossRuntime #forestPlayer{width:34px;height:42px;border-width:3px;pointer-events:none}
-#forestWorld.mossRuntime #forestFiona{width:30px;height:40px;border-width:3px;pointer-events:none}
+#forestWorld #forestPlayer{width:34px;height:42px;border-width:3px;pointer-events:none}
+#forestWorld #forestFiona{width:30px;height:40px;border-width:3px;pointer-events:none}
 #forestFade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:300;transition:opacity .35s linear}
 .forest-treasure{position:absolute;background:#72502d;border:4px solid #2a2018;border-radius:7px;color:#e8d59e;font-size:20px;display:grid;place-items:center;box-shadow:0 6px 0 #17130f,0 0 14px #e8d59e55;pointer-events:none;box-sizing:border-box}
 .forest-treasure.open{background:#33291e;color:#7c715e;box-shadow:0 3px 0 #17130f;transform:translateY(4px)}
