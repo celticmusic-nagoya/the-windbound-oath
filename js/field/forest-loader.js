@@ -4,9 +4,9 @@
 (function () {
   'use strict';
   const FOOT={ax:17,ay:42};   // actor top-left = feet - (17,42)
-  const SIZE=[[/^tree_.*_L/,[96,140]],[/^tree_.*_M/,[70,104]],[/^tree_/,[60,90]],[/^rock_L/,[60,40]],[/^rock_M/,[44,28]],[/^rock_/,[30,20]],
+  const SIZE=[[/^tree_log/,[180,26]],[/^prop_bridge_wood/,[110,230]],[/^prop_root_arch/,[240,200]],[/^fx_/,[160,190]],[/^tree_.*_L/,[96,140]],[/^tree_.*_M/,[70,104]],[/^tree_/,[60,90]],[/^rock_L/,[60,40]],[/^rock_M/,[44,28]],[/^rock_/,[30,20]],
     [/^veg_shrub/,[40,30]],[/^prop_/,[40,36]],[/^anc_/,[44,56]]];
-  const COLOR=[[/^tree_/,'#2f6b34'],[/^rock_/,'#8b8b84'],[/^veg_shrub/,'#3f8a3a'],[/^prop_/,'#8a5a2b'],[/^anc_/,'#9aa3a8']];
+  const COLOR=[[/^tree_log/,'#7a5a34'],[/^prop_bridge/,'#c8955a'],[/^fx_/,'#cfe9f566'],[/^tree_/,'#2f6b34'],[/^rock_/,'#8b8b84'],[/^veg_shrub/,'#3f8a3a'],[/^prop_/,'#8a5a2b'],[/^anc_/,'#9aa3a8']];
   const pick=(table,a,d)=>{for(const [re,v] of table)if(re.test(a))return v;return d;};
   function entities(map,scatter){
     const list=map.props.map(p=>({...p,rule:'prop'}));

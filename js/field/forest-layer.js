@@ -18,7 +18,12 @@
         ctx.fillStyle=p.tint||'#fff';ctx.globalAlpha=.35;ctx.fill();ctx.globalAlpha=1;}
       for(const w of t.waters||[]){ctx.fillStyle=ctx.strokeStyle='#5b9fd6';ctx.lineCap=ctx.lineJoin='round';
         if(w.points){ctx.lineWidth=w.width||60;ctx.beginPath();w.points.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();}
-        else if(w.polygon){ctx.beginPath();w.polygon.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();}}
+        else if(w.polygon&&w.kind!=='fall'){ctx.beginPath();w.polygon.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();
+          if(w.core){ctx.fillStyle='#2f6f9f';ctx.beginPath();w.core.polygon.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();}}}
+      for(const c of t.cliffs||[])for(const r of c.segments||[]){
+        ctx.fillStyle=c.type==='face_visible'?'#5b4a3c':'#6f6a55';ctx.fillRect(r[0],r[1],r[2],r[3]);
+        ctx.fillStyle=c.type==='face_visible'?'#8a7660':'#8e8a6c';ctx.fillRect(r[0],r[1],r[2],c.type==='face_visible'?18:10);}
+      for(const w of t.waters||[])if(w.kind==='fall'){ctx.fillStyle='#cfe9f5';ctx.globalAlpha=.8;const q=w.polygon;ctx.fillRect(q[0][0],q[0][1],q[1][0]-q[0][0],q[2][1]-q[0][1]);ctx.globalAlpha=1;}
       for(const p of t.paths||[]){ctx.strokeStyle='#b08a5a';ctx.lineCap=ctx.lineJoin='round';ctx.lineWidth=p.width;
         ctx.beginPath();p.points.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();}
       ctx.restore();

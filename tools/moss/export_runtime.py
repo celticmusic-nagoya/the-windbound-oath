@@ -7,7 +7,7 @@ usage: export_runtime.py <design.json> <out.json>"""
 import json,sys,os,re
 sys.path.insert(0,os.path.dirname(__file__))
 import mf_lib as L
-LAYER=re.compile(r'^(gnd_|veg_grass|veg_flower|veg_fern|veg_reeds|veg_mush|deco_|litter_|fx_)')
+LAYER=re.compile(r'^(gnd_|veg_moss|veg_grass|veg_flower|veg_fern|veg_reeds|veg_mush|deco_|litter_|fx_)')
 def main(src,dst):
     m=json.load(open(src,encoding='utf-8'))
     c=m['collision']

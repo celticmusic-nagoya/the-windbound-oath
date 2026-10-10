@@ -1,6 +1,8 @@
 // Run: node tests/moss/scatter.test.js
-const S=require('../../js/field/forest-scatter.js'),m=require('../../data/maps/moss_forest_01_sunlit_path.json');
+const S=require('../../js/field/forest-scatter.js');
 let fail=0;const ok=(c,x)=>{console.log(c?'ok  ':'FAIL',x);if(!c)fail++;};
+for(const file of ['moss_forest_01_sunlit_path','moss_forest_02_mossy_ravine']){
+const m=require('../../data/maps/'+file+'.json');console.log('--',file);
 const a=S.generate(m),b=S.generate(m);
 ok(JSON.stringify(a)===JSON.stringify(b),`deterministic (${a.length} items)`);
 const want=m.scatter.reduce((n,s)=>n+s.count,0);ok(a.length>=want*.9,`placed ${a.length}/${want} (>=90%)`);
@@ -15,4 +17,5 @@ ok(a.every(e=>e.x>=0&&e.y>=0&&e.x<=m.world.width&&e.y<=m.world.height),'inside w
 const nodes=a.filter(e=>e.render==='node').length+m.props.length;
 const live=nodes*((1920+512)*(1080+512))/(m.world.width*m.world.height);
 ok(live<=m.culling.maxLiveNodes,`est live DOM nodes ${Math.round(live)} <= ${m.culling.maxLiveNodes}`);
+}
 process.exit(fail?1:0);

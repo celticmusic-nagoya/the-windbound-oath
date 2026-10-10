@@ -56,6 +56,8 @@ PRESET={
  'prop_lean_to':[[-70,-30,140,30]],'prop_campfire_cold':[[-14,-8,28,8]],
  'anc_boundary_stone':[[-22,-14,44,14]],'anc_standing_L':[[-24,-16,48,16]],'anc_rune_broken':[[-30,-14,60,14]],
  'anc_shrine_frag':[[-34,-20,68,20]],'anc_arch_broken':[[-110,-14,40,14],[70,-14,40,14]],
+ 'prop_root_arch':[[-130,-16,46,16],[84,-16,46,16]],'anc_stone_marker_old':[[-18,-14,36,14]],'prop_fence_broken':[[-60,-10,120,10]],
+ 'prop_bridge_post':[[-6,-6,12,6]],'tree_mossy_M':TREE_M,
  'veg_thorn_L':[[-22,-12,44,12]],'veg_thorn_M':[[-14,-8,28,8]],
 }
 def preset(asset):
