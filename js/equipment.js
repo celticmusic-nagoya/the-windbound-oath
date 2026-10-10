@@ -35,6 +35,8 @@
     delete w[slot]; I().add(prev, 1); if (slot === 'weapon') syncVariant(c);
     emit({id: c, slot, item: null, prev}); return {ok: true, prev};
   }
+  // how many of `id` the party owns: bag + every wearer (shops use it to avoid duplicate purchases)
+  const owned = id => I().count(id) + Object.values(state).reduce((n, w) => n + Object.values(w).filter(x => x === id).length, 0);
   const get = c => ({...worn(c)});
   function bonus(c) {
     const b = {};
@@ -68,5 +70,5 @@
     }
   }
   const reset = () => load(null);
-  window.EquipmentManager = Object.freeze({equip, unequip, get, bonus, delta, apply, serialize, load, reset, canEquip: (c, id, slot) => why(c, id, slot), def});
+  window.EquipmentManager = Object.freeze({equip, unequip, get, owned, bonus, delta, apply, serialize, load, reset, canEquip: (c, id, slot) => why(c, id, slot), def});
 })();

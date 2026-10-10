@@ -26,6 +26,13 @@ window.TalkDataQuests = Object.freeze({tables: [
      when: {quest: {id: 'q_emma_charm', state: 'reported'}},
      lines: ['エマ「その護符、大事にしておくれ。風のお守りだからねぇ。」']}
   ]},
+  {npc: 'merchant', entries: [
+    {id: 'merchant_shop', priority: 20, mode: 'cycle', when: {stage: [15, 99]},
+     lines: [{pages: ['道具屋の店主「おお、エイダン。今日は何にする？　薬も、旅の備えも揃っているよ。」'],
+              choice: {options: [
+                {label: '買い物をする', shop: 'rilde_general'},
+                {label: 'やめておく', reply: '道具屋の店主「また寄っておくれ。」'}]}}]}
+  ]},
   {npc: 'elder', entries: [
     {id: 'elder_shard_ask', priority: 50, mode: 'cycle',
      when: {all: [{item: 'rune_shard_old'}, {not: {flag: 'elder_saw_shard'}}]},

@@ -67,6 +67,7 @@
       if(storyStage===3||storyStage>=15){MossForest.lock(false);forestHideScene();return true;}
       MossForest.toast('今は、村へ戻る時ではない。');return true;
     }
+    if(/^tr_(f|r)\d/.test((t&&t.id)||'')){MossForest.toast('この先は、まだ道が続いていない。');return true;}   // fort / capital outer exits: world connection not built yet
     if(inPrologueForest()||storyStage<15){MossForest.toast('崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。');return true;}
     return false;
   }
@@ -78,6 +79,9 @@
   function enterCliff(){
     return MossForest.enter({map:CLIFF_ID,spawn:'from_lind',flags:flagsNow(),timeOfDay:storyStage===3?'dusk':'day'});
   }
+  // ドゥンヴァル砦 / 王都: foundation maps (tools/moss/build_town_maps.py). Not wired into the story yet - reachable via enterWorldMap() / DEV.
+  const WORLD_MAPS={fort:'fort_dunvall_01_courtyard',capital:'royal_capital_01_market'};
+  function enterMap(id,spawn){return MossForest.enter({map:WORLD_MAPS[id]||id,spawn,flags:flagsNow()});}
   FieldScene_hooks();
   function FieldScene_hooks(){
     // after the burning-village scene: back to the village for the attack (existing return scene)
@@ -120,5 +124,5 @@
     const f=flagsNow();for(const [k,v] of Object.entries(f))MossForest.setFlag(k,v);
     MossForest.syncSymbols();
   }
-  window.MossForestStory=Object.freeze({init,enterCliff,CLIFF_ID,enterFromStart,enterAt,fromSave,openedFromSave,syncFlags,flagsNow,MAP_IDS});
+  window.MossForestStory=Object.freeze({init,enterCliff,enterMap,WORLD_MAPS,CLIFF_ID,enterFromStart,enterAt,fromSave,openedFromSave,syncFlags,flagsNow,MAP_IDS});
 })();
