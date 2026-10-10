@@ -13,6 +13,8 @@ window.ItemData = Object.freeze({
   treasure: Object.freeze({
     tr_a1_hollow:{potion:2,herb_moss:1}, tr_a1_stream:{potion:1,herb_moss:1}, tr_a1_meadow:{gold:30}, tr_a1_ford_hidden:{ether:1,gold:20},
     tr_a2_overlook:{ether:1,charm_windward:1}, tr_a2_alcove:{potion:1,gold:20,herb_moss:1}, tr_a2_fern:{potion:1,herb_moss:1}, tr_a2_marker_side:{ether:1,gold:30},
-    tr_a3_shrine:{potion:1,ether:1,rune_shard_old:1}, tr_a3_hollowlog:{potion:2}, tr_a3_raider:{ether:1,gold:50}, tr_a3_sentinel:{potion:1,gold:40}
+    tr_a3_shrine:{potion:1,ether:1,rune_shard_old:1}, tr_a3_hollowlog:{potion:2}, tr_a3_raider:{ether:1,gold:50}, tr_a3_sentinel:{potion:1,gold:40},
+    // 風見の断崖 (cliff_moher_01_spiral_ascent): herb gathering spots + one chest
+    tr_c1_herb_slope_a:{herb_moss:1}, tr_c1_herb_slope_b:{herb_moss:1}, tr_c1_herb_ramp:{herb_moss:1}, tr_c1_herb_lip:{herb_moss:1}, tr_c1_cairn:{potion:1,gold:40}
   })
 });

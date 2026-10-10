@@ -4,10 +4,12 @@
 (function () {
   'use strict';
   const MAP_IDS={a1:'moss_forest_01_sunlit_path',a2:'moss_forest_02_mossy_ravine',a3:'moss_forest_03_ancient_grove'};
+  const CLIFF_ID='cliff_moher_01_spiral_ascent';   // 風見の断崖: not part of the A1-A3 prologue chain, so it stays out of MAP_IDS / fromSave
   const TEXTS={
     msg_a1_sign_lind:'『← 村』と彫られた古い木の標識。苔に覆われて、ほとんど読めない。',
     msg_a1_sign_fork:'道が二手に分かれている。片方は水音のする方へ、もう片方は森の奥へ続いているようだ。',
     msg_a1_camp_trace:'冷えきった焚き火の跡。誰かがここで夜を明かしたようだが、ずいぶん前のことらしい。',
+    msg_c1_sign:'『← リルド村　／　風見の断崖 →』と書かれた木の標識。海から吹き上げる風で、板がかたかた鳴っている。',
     msg_a3_rune_stone:'フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。'
   };
   const HOOK_TEXTS={a2_marker_crack_glint:'苔むした古い道標だ。割れ目の奥で、何かが一瞬きらりと光った。'};
@@ -20,7 +22,15 @@
     if(z.type==='locationCard'){
       const c=map.locationCard;if(c)questPop(c.regionJa+'　―　'+c.areaJa);return;
     }
+    if(z.hook==='cliff_time_cycle'){
+      if(storyStage>=15){const n=FieldTimeOfDay.cycle();say({day:'澄んだ空と、どこまでも広がる海。',dusk:'夕陽が海を染めている。胸の奥まで橙色になりそうだ。',night:'満天の星。波の音だけが、遠くで続いている。'}[n]);}
+      else say('見晴らしのよい、ベンチ代わりの岩だ。');
+      return;
+    }
     switch(z.eventId){
+      case 'prologue_sunset_hill':
+        if(storyStage===3)FieldScene.play('cliff_sunset_to_fire');   // data-driven: js/field/scene-data.js
+        return;
       case 'prologue_rune_stone':
         forestStoneSeen=true;storyStage=Math.max(storyStage,10);say(TEXTS.msg_a3_rune_stone);
         setObj(PrologueProgress.count()>=3?'古代石の周囲で風の気配を探そう':PrologueProgress.objective());return;
@@ -40,19 +50,33 @@
     if(z.hook&&HOOK_TEXTS[z.hook]){say(HOOK_TEXTS[z.hook]);return;}
   }
   function onTreasure(t){
-    const got=Inventory.openTreasure(t.id);
-    if(!got.length){MossForest.toast('箱の中は空っぽだった。');return;}
+    const got=Inventory.openTreasure(t.id),herb=t.kind==='herb';
+    if(!got.length){MossForest.toast(herb?'摘めそうな草は残っていない。':'箱の中は空っぽだった。');return;}
     const keys=got.filter(g=>g.kind==='key');
-    MossForest.toast(Inventory.describe(got)+' を手に入れた。'+(keys.length?'（大事なもの）':''));
+    MossForest.toast(Inventory.describe(got)+(herb?' を摘んだ。':' を手に入れた。')+(keys.length?'（大事なもの）':''));
   }
   function onSymbol(sy){startAttackBattle(sy.field,sy.hp||160);}
-  function onVillageExit(){
+  function onVillageExit(t){
+    if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
+      if(storyStage===3||storyStage>=15){MossForest.lock(false);forestHideScene();return true;}
+      MossForest.toast('今は、村へ戻る時ではない。');return true;
+    }
     if(inPrologueForest()||storyStage<15){MossForest.toast('崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。');return true;}
     return false;
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
       sealCorrupted:()=>PrologueProgress.count()<3,onEvent,onTreasure,onSymbol,onVillageExit}});
+  }
+  // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.
+  function enterCliff(){
+    return MossForest.enter({map:CLIFF_ID,spawn:'from_lind',flags:flagsNow(),timeOfDay:storyStage===3?'dusk':'day'});
+  }
+  FieldScene_hooks();
+  function FieldScene_hooks(){
+    // after the burning-village scene: back to the village for the attack (existing return scene)
+    const bind=()=>window.FieldScene&&FieldScene.hook('cliffRunHome',()=>{MossForest.lock(false);forestHideScene();MossForest.fade(0,0);startReturnScene();});
+    if(window.FieldScene)bind();else addEventListener('DOMContentLoaded',bind);
   }
   // Enter A1 at the cliff-fall spot (new game / DEV jump) or restore a saved position.
   function enterFromStart(){
@@ -90,5 +114,5 @@
     const f=flagsNow();for(const [k,v] of Object.entries(f))MossForest.setFlag(k,v);
     MossForest.syncSymbols();
   }
-  window.MossForestStory=Object.freeze({init,enterFromStart,enterAt,fromSave,openedFromSave,syncFlags,flagsNow,MAP_IDS});
+  window.MossForestStory=Object.freeze({init,enterCliff,CLIFF_ID,enterFromStart,enterAt,fromSave,openedFromSave,syncFlags,flagsNow,MAP_IDS});
 })();

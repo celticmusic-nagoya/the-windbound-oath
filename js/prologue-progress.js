@@ -34,6 +34,7 @@
   if(storyStage>=9&&storyStage<=12){forestActive=true;q('#forestScene').style.display='block';MossForestStory.fromSave(data,{count:count(),louFound,storyStage});}
   else if(storyStage<=8){px=Number(data.position?.px)||420;py=Number(data.position?.py)||1160;camera();if(storyStage===0){room='home';q('#inside').style.display='block';dressRoom();inCamera()}}
   else if(storyStage===13)startRaiderAftermath();else if(storyStage===14)startFortFinale();else showPrologueEnd();
+  if(!(storyStage>=9&&storyStage<=12)&&data.moss&&window.MossForest)MossForest.restoreState(data.moss);   // herbs/chests opened on 風見の断崖 etc.
   sync();for(const field of ['attackGob1','attackGob2','northGob1','northGob2']){const el=q('#'+field);if(el){el.hidden=cleared(field);el.style.display=cleared(field)?'none':''}}
   currentObjective=storyStage>=9&&storyStage<=10?objective():String(data.currentObjective||currentObjective);renderJournal();return true;
  }

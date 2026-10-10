@@ -60,7 +60,7 @@
 <div class="bridge" style="left:1435px;top:540px"></div>
 <div class="zoneLabel" style="left:1465px;top:500px">東の小橋</div>
 <div class="arch" style="left:900px;top:1390px"></div>
-<div class="sign" id="hillExit" style="left:920px;top:1460px">南門　夕暮れの丘 →</div>
+<div class="sign" id="hillExit" style="left:920px;top:1460px">南門　風見の断崖 →</div>
 <div class="npc kid walking" id="kid2" style="left:610px;top:620px">子</div>
 <div class="npc kid walking" id="kid3" style="left:660px;top:650px">子</div>
 <div class="npc dog walking" id="dog2" style="left:880px;top:690px">犬</div>
@@ -351,7 +351,11 @@ $('#well').onclick=()=>say('村の共同井戸だ。冷たい水の音が聞こ�
 $('#squareSign').onclick=()=>say('木の案内板だ。村の道が丁寧に描かれている。');
 $('#trainingSign').onclick=()=>say('剣の傷がいくつも残っている。ここで村の若者たちが訓練しているようだ。');
 $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用の木人だ。');
-$('#hillExit').onclick=()=>{if(storyStage<3)say('この先は夕暮れの丘へ続いている。今は訓練場へ向かおう。');else if(storyStage===3){storyStage=4;startHillScene()}else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
+$('#hillExit').onclick=()=>{if(storyStage<3)say('この先は風見の断崖へ続いている。今は訓練場へ向かおう。');else if(storyStage===3||storyStage>=15)enterCliff();else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
+function enterCliff(){
+ closeDialogue();forestActive=true;$('#forestScene').style.display='block';
+ MossForestStory.enterCliff().then(()=>{if(storyStage===3)setObj('崖の上のビューポイントへ向かおう')});
+}
 $('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
 $('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
 $('#hillOld').onclick=()=>FieldTalk.talk('hill_old',{source:'village'});
@@ -400,8 +404,8 @@ function updateSubQuest(id,state,objective,reward){
 }
 function mainQuestData(){
  if(storyStage<=2)return {title:'いつもの訓練',desc:'朝、自室で目を覚ましたエイダン。幼なじみのフィオナが訓練場で待っている。'};
- if(storyStage===3)return {title:'夕暮れの丘へ',desc:'訓練を終えた。フィオナと一緒に、村の南にある夕暮れの丘へ向かう。'};
- if(storyStage===4)return {title:'風が止んだ夜',desc:'夕暮れの丘で異変が起きた。フィオナと急いでリルド村へ戻る。'};
+ if(storyStage===3)return {title:'風見の断崖へ',desc:'訓練を終えた。フィオナと一緒に、村の南にある風見の断崖へ向かう。'};
+ if(storyStage===4)return {title:'風が止んだ夜',desc:'風見の断崖で異変が起きた。フィオナと急いでリルド村へ戻る。'};
  if(storyStage<=6)return {title:'炎の中のリルド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
  if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリルド村から逃げる。'};
  if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、長老やエマからたびたび近付くなと言われていた古い森へ迷い込んだ。分岐を探索し、森の奥を調べる。'};
@@ -473,8 +477,8 @@ function winTraining(){
  setTimeout(()=>{
   $('#battle').style.display='none'; storyStage=3;
   say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」');
-  setObj('フィオナと夕暮れの丘へ向かおう');
-  storyToast('夕暮れの丘への道が開いた');
+  setObj('フィオナと風見の断崖へ向かおう');
+  storyToast('風見の断崖への道が開いた');
  },1400);
 }
 
@@ -512,7 +516,7 @@ $('#cinema').onclick=()=>{
 const returnLines=[
  'エイダン「急ぐぞ、フィオナ！」',
  'フィオナ「うん！　村のみんなが心配……！」',
- '二人は夕暮れの丘を駆け下り、村へ続く道を走った。',
+ '二人は断崖の坂道を駆け下り、村へ続く道を走った。',
  '――そのとき、村の入口から悲鳴が響いた。',
  '村人「た、助けて！　魔物が……！」',
  'フィオナ「エイダン、あそこ！」',
@@ -1443,7 +1447,7 @@ document.querySelectorAll('.attackRubble,.attackSmoke,.attackFlame').forEach(el=
 const DEV_EVENTS=[
  ['opening','01　エイダンの家'],
  ['training','02　訓練場・フィオナ'],
- ['sunset','03　夕暮れの丘'],
+ ['sunset','03　風見の断崖'],
  ['attack','04　リルド村襲撃'],
  ['reunion','05　フィオナ再合流後'],
  ['north','06　王国騎士・北の退路'],
@@ -1473,7 +1477,7 @@ function devJump(key){
  }else if(key==='training'){
    storyStage=1;room='';px=1510;py=1010;target=null;currentObjective='訓練場でフィオナと話そう';camera();
  }else if(key==='sunset'){
-   storyStage=3;room='';px=430;py=1370;target=null;currentObjective='フィオナと夕暮れの丘へ向かおう';camera();
+   storyStage=3;room='';px=430;py=1370;target=null;currentObjective='フィオナと風見の断崖へ向かおう';camera();
  }else if(key==='attack'){
    storyStage=5;room='';px=420;py=1160;target=null;document.body.classList.add('villageAttack');currentObjective='炎上する村でフィオナを探そう';camera();
  }else if(key==='reunion'){
@@ -1797,6 +1801,8 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
 <script src="js/field/forest-loader.js"></script>
+<script src="js/field/field-timeofday.js"></script>
+<script src="js/field/field-vista.js"></script>
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
 <script src="js/data/item-data.js"></script>
@@ -1806,7 +1812,10 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/talk-conditions.js"></script>
 <script src="js/field/talk-data.js"></script>
 <script src="js/field/talk-data-quests.js"></script>
+<script src="js/field/talk-data-scenes.js"></script>
 <script src="js/field/field-talk.js"></script>
+<script src="js/field/scene-data.js"></script>
+<script src="js/field/field-scene.js"></script>
 <script>MossForestStory.init();</script>
 <script src="js/field/lind-content-bounds.js"></script>
 <script src="js/field/lind-assets.js"></script>
