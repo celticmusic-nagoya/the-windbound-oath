@@ -985,7 +985,8 @@ const PartyManager={
 let gold=0,resultCallback=null;
 function charStats(id){
  const b=CHARACTER_DB[id],m=PartyManager.members[id],n=Math.max(0,m.level-1);
- return {maxHp:b.maxHp+b.growth.hp*n,maxMp:b.maxMp+b.growth.mp*n,atk:b.atk+b.growth.atk*n,def:b.def+b.growth.def*n,mag:b.mag+b.growth.mag*n,spd:b.spd+b.growth.spd*n,cri:window.BattleCritical?.chance(id)??5};
+ const s={maxHp:b.maxHp+b.growth.hp*n,maxMp:b.maxMp+b.growth.mp*n,atk:b.atk+b.growth.atk*n,def:b.def+b.growth.def*n,mag:b.mag+b.growth.mag*n,spd:b.spd+b.growth.spd*n,cri:window.BattleCritical?.chance(id)??5};
+ return window.EquipmentManager?EquipmentManager.apply(id,s):s;
 }
 function showBattleResult(exp,goldGain,callback){
  const reports=PartyManager.addExp(exp);gold+=goldGain;resultCallback=callback||null;
@@ -1050,7 +1051,7 @@ function renderSystemTab(tab='status'){
 }
 function saveGrowthData(){
  if(document.body.classList.contains('battleMode')){notice('戦闘中はセーブできません。');return}
- const data={version:30,inventory:Inventory.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
+ const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
 function loadGrowthData(){
@@ -1060,7 +1061,7 @@ function loadGrowthData(){
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
-  Inventory.load(d.inventory);Quest.load(d.quests);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
+  Inventory.load(d.inventory);EquipmentManager.load(d.equipment);Quest.load(d.quests);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
   if(d.prologue)PrologueProgress.load(d.prologue);
   Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
   renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
@@ -1807,7 +1808,9 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
 <script src="js/data/item-data.js"></script>
+<script src="js/data/equipment-data.js"></script>
 <script src="js/inventory.js"></script>
+<script src="js/equipment.js"></script>
 <script src="js/field/quest-data.js"></script>
 <script src="js/quest.js"></script>
 <script src="js/field/talk-conditions.js"></script>

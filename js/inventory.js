@@ -3,21 +3,24 @@
  * claimed = chests whose reward has been fully granted; it makes the legacy補正 idempotent. */
 (function () {
   'use strict';
-  const D = window.ItemData, key = {}, claimed = new Set();
-  const def = id => D.items[id];
+  const D = window.ItemData, E = window.EquipmentData || {items: {}}, key = {}, gear = {}, claimed = new Set();
+  const def = id => D.items[id] || (E.items[id] && {...E.items[id], kind: 'equip'});
+  const isGear = id => Boolean(E.items[id]);
   const isKey = id => def(id) && def(id).kind === 'key';
   const consumables = () => (typeof battleItems !== 'undefined' ? battleItems : {});
-  function count(id) { return isKey(id) ? (key[id] || 0) : (consumables()[id] || 0); }
+  function count(id) { return isGear(id) ? (gear[id] || 0) : isKey(id) ? (key[id] || 0) : (consumables()[id] || 0); }
   function add(id, n = 1) {
     if (!def(id) || !(n > 0)) return false;
-    if (isKey(id)) key[id] = (key[id] || 0) + n;
+    if (isGear(id)) gear[id] = Math.min(99, (gear[id] || 0) + n);
+    else if (isKey(id)) key[id] = (key[id] || 0) + n;
     else consumables()[id] = (consumables()[id] || 0) + n;
     return true;
   }
   // hand items over (quest turn-in). Returns true when the full amount was removed.
   function take(id, n = 1) {
     if (!def(id) || !(n > 0) || count(id) < n) return false;
-    if (isKey(id)) { key[id] -= n; if (key[id] <= 0) delete key[id]; } else consumables()[id] -= n;
+    if (isGear(id)) { gear[id] -= n; if (gear[id] <= 0) delete gear[id]; }
+    else if (isKey(id)) { key[id] -= n; if (key[id] <= 0) delete key[id]; } else consumables()[id] -= n;
     return true;
   }
   // rewards: {potion:2, gold:30, charm_windward:1} -> list of {id,name,n,kind} actually granted
@@ -30,7 +33,7 @@
     return got;
   }
   const describe = got => got.map(g => g.kind === 'gold' ? g.n + 'G' : g.name + ' ×' + g.n).join('、');
-  function list(kind) { return Object.keys(D.items).filter(id => def(id).kind === kind && count(id) > 0).map(id => ({id, ...def(id), count: count(id)})); }
+  function list(kind) { return Object.keys({...D.items, ...E.items}).filter(id => def(id).kind === kind && count(id) > 0).map(id => ({id, ...def(id), count: count(id)})); }
   function claim(treasureId) { claimed.add(treasureId); }
   // Treasure opened in-game: grant everything once. Returns granted list ([] when already claimed / unknown).
   function openTreasure(treasureId) {
@@ -49,11 +52,12 @@
     }
     return added;
   }
-  function serialize() { return {key: {...key}, claimed: [...claimed]}; }
+  function serialize() { return {key: {...key}, gear: {...gear}, claimed: [...claimed]}; }
   function load(data) {
-    for (const k of Object.keys(key)) delete key[k]; claimed.clear();
+    for (const k of Object.keys(key)) delete key[k]; for (const k of Object.keys(gear)) delete gear[k]; claimed.clear();
     if (!data || typeof data !== 'object') return;
     for (const [id, n] of Object.entries(data.key || {})) if (isKey(id) && Number.isFinite(n) && n > 0) key[id] = Math.min(99, Math.floor(n));
+    for (const [id, n] of Object.entries(data.gear || {})) if (isGear(id) && Number.isFinite(n) && n > 0) gear[id] = Math.min(99, Math.floor(n));
     for (const id of Array.isArray(data.claimed) ? data.claimed : []) if (typeof id === 'string' && D.treasure[id]) claimed.add(id);
   }
   function reset() { load(null); }
