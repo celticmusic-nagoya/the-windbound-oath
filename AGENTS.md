@@ -193,7 +193,7 @@ Compact ~10-minute dungeon.
 
 ## 15. Prologue canonical route
 「風が止んだ夜」, roughly 15–25 minute vertical slice:
-Title → peaceful Rilde → Aidan house → training → Fiona → tutorials → wooden dummy → Fiona joins/heals → sunset hill → wind stops → village attack → Fiona reunion → burning village → 2 abnormal goblins → royal knights → north escape → river fall → Moss Forest → ancient stone/Fiona → goblins surround/Aidan loses weapon → Lou appears → altar → 誓いの剣 → Goblin Raider → aftermath/Lou joins → dawn → Arthur's Fort → PROLOGUE END.
+Title → peaceful Rilde → Aidan house → training → Fiona → tutorials → wooden dummy → Fiona joins/heals → sunset hill → wind stops → village attack → Fiona reunion → burning village → 2 abnormal goblins → royal knights → north escape → river fall → Moss Forest → ancient stone/Fiona → goblins surround/Aidan loses weapon → Lou appears → altar → 誓いの剣 → Goblin Raider → aftermath/Lou joins → dawn → Dunvar Fortress → PROLOGUE END.
 
 ## 16. Development-only tools
 Keep an obvious DEV gate.
