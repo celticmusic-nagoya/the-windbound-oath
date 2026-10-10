@@ -38,4 +38,17 @@ const cull=U.create({chunk:256,margin:1,maxLiveNodes:800,parent});
 for(let i=0;i<6000;i++)cull.add({id:'e'+i,x:rnd()*9600,y:rnd()*6000,w:20,h:20,create(){const n={remove(){nodes.delete(n);}};return n;}});
 let peak=0;for(let x=0;x<8000;x+=100){cull.update({x,y:2000,width:1920,height:1080});peak=Math.max(peak,nodes.size);}
 ok(peak>0&&peak<=800&&nodes.size===cull.stats.live,`culling keeps live nodes <=800 of 6000 @1920x1080 chunk256 (peak ${peak})`);
+// 6. frame-rate normalisation: equal wall-clock travel at 60/120/144 Hz (follow() steps scale with frameScale)
+{
+  N.configure({width:9600,height:6000,grid:32,maxNodes:40000});
+  const free=()=>false;const dist={};
+  for(const hz of [60,120,144,30]){
+    M.clock.set(60/hz);let x=100,y=100,tg={x:5000,y:100};N.cancel();
+    for(let f=0;f<hz*2;f++){const r=N.follow(x,y,tg,free);x=r.x;y=r.y;tg=r.target||tg;}   // 2 seconds
+    dist[hz]=x-100;
+  }
+  M.clock.set(1);
+  const ref=dist[60];ok(Object.values(dist).every(d=>Math.abs(d-ref)/ref<.02),'2 s travel equal across 30/60/120/144 Hz ('+Object.entries(dist).map(([k,v])=>k+':'+v.toFixed(0)).join(' ')+')');
+}
+
 process.exit(fail?1:0);

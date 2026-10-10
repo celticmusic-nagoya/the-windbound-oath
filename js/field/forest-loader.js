@@ -9,18 +9,19 @@
   const COLOR=[[/^tree_log/,'#7a5a34'],[/^prop_bridge/,'#c8955a'],[/^fx_/,'#cfe9f566'],[/^tree_/,'#2f6b34'],[/^rock_/,'#8b8b84'],[/^veg_shrub/,'#3f8a3a'],[/^prop_/,'#8a5a2b'],[/^anc_/,'#9aa3a8']];
   const pick=(table,a,d)=>{for(const [re,v] of table)if(re.test(a))return v;return d;};
   // ---- art manifest (img/field/moss/manifest.json): real assets override stand-ins; missing -> coloured placeholder ----
+  const ROOT=document.currentScript?new URL('../../',document.currentScript.src).href:'';   // dev/ pages resolve assets too
   const art={manifest:null,images:new Map(),ground:null,loading:null};
   function compile(rules){return (rules||[]).map(r=>({re:new RegExp(r.match),r}));}
   function resolve(list,asset){for(const {re,r} of list)if(re.test(asset))return r.file?r:null;return null;}
   function img(file){
     if(art.images.has(file))return art.images.get(file);
-    const im=new Image();im.decoding='async';im.src=art.manifest.base+file;art.images.set(file,im);return im;
+    const im=new Image();im.decoding='async';im.src=ROOT+art.manifest.base+file;art.images.set(file,im);return im;
   }
   async function loadAssets(){
     if(art.loading)return art.loading;
     art.loading=(async()=>{
       try{
-        const r=await fetch('img/field/moss/manifest.json');if(!r.ok)throw new Error('no manifest');
+        const r=await fetch(ROOT+'img/field/moss/manifest.json');if(!r.ok)throw new Error('no manifest');
         const m=await r.json();art.manifest=m;art.node=compile(m.node);art.layer=compile(m.layer);
         const files=new Set([m.ground.grass,m.ground.dirt,...[...m.node,...m.layer].filter(x=>x.file).map(x=>x.file)]);
         await Promise.all([...files].map(async f=>{const im=img(f);try{await im.decode();}catch(e){art.images.delete(f);}}));

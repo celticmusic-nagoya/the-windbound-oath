@@ -11,13 +11,22 @@
     msg_a3_rune_stone:'フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。'
   };
   const HOOK_TEXTS={a2_marker_crack_glint:'苔むした古い道標だ。割れ目の奥で、何かが一瞬きらりと光った。'};
-  // Rewards are text-only for now (legacy parity); items are decided later (see M4 report).
+  // Chest rewards are real inventory grants (battleItems / gold), applied once when the chest opens.
+  // The opened flag lives in save v2 moss.opened and battleItems/gold in the save root, so they stay consistent.
+  const ITEM_NAMES={potion:'きずぐすり',ether:'魔力の雫'};
   const TREASURE={
-    tr_a1_hollow:'きずぐすり ×2 を手に入れた。',
-    tr_a2_overlook:'風よけの護符 ×1 を手に入れた。',
-    tr_a3_shrine:'古びたルーン片 ×1 を手に入れた。'
+    tr_a1_hollow:{potion:2},tr_a1_stream:{potion:1},tr_a1_meadow:{gold:30},tr_a1_ford_hidden:{ether:1,gold:20},
+    tr_a2_overlook:{ether:1},tr_a2_alcove:{potion:1,gold:20},tr_a2_fern:{potion:1},tr_a2_marker_side:{ether:1,gold:30},
+    tr_a3_shrine:{potion:1,ether:1},tr_a3_hollowlog:{potion:2},tr_a3_raider:{ether:1,gold:50},tr_a3_sentinel:{potion:1,gold:40}
   };
-  const TREASURE_PLACEHOLDER='苔むした小箱の中に、乾いた薬草が少し入っていた。（報酬は仮）';
+  function grant(reward){
+    const parts=[];
+    for(const [k,n] of Object.entries(reward)){
+      if(k==='gold'){gold+=n;parts.push(n+'G');}
+      else if(ITEM_NAMES[k]){battleItems[k]=(battleItems[k]||0)+n;parts.push(ITEM_NAMES[k]+' ×'+n);}
+    }
+    return parts;
+  }
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
   function flagsNow(){
@@ -40,9 +49,17 @@
         closeDialogue();forestHideScene();startAltarScene();return;
     }
     if(z.textId&&TEXTS[z.textId]){say(TEXTS[z.textId]);return;}
+    if(z.hook==='camera_reveal_clearing'){
+      // Reaching the sanctuary clearing: look up at the great tree / hidden wind path before handing control back.
+      if(PrologueProgress.count()>=3)MossForest.pan(4390,2900,{ms:1300,hold:1100});return;
+    }
     if(z.hook&&HOOK_TEXTS[z.hook]){say(HOOK_TEXTS[z.hook]);return;}
   }
-  function onTreasure(t){MossForest.toast(TREASURE[t.id]||TREASURE_PLACEHOLDER);}
+  function onTreasure(t){
+    const r=TREASURE[t.id];
+    if(!r){MossForest.toast('箱の中は空っぽだった。');return;}
+    MossForest.toast(grant(r).join('、')+' を手に入れた。');
+  }
   function onSymbol(sy){startAttackBattle(sy.field,sy.hp||160);}
   function onVillageExit(){
     if(inPrologueForest()||storyStage<15){MossForest.toast('崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。');return true;}
