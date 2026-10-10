@@ -49,6 +49,10 @@
         closeDialogue();forestHideScene();startAltarScene();return;
     }
     if(z.textId&&TEXTS[z.textId]){say(TEXTS[z.textId]);return;}
+    if(z.hook==='camera_reveal_clearing'){
+      // Reaching the sanctuary clearing: look up at the great tree / hidden wind path before handing control back.
+      if(PrologueProgress.count()>=3)MossForest.pan(4390,2900,{ms:1300,hold:1100});return;
+    }
     if(z.hook&&HOOK_TEXTS[z.hook]){say(HOOK_TEXTS[z.hook]);return;}
   }
   function onTreasure(t){

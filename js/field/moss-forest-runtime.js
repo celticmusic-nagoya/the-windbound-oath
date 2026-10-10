@@ -63,6 +63,7 @@
 
   // ---------- map mount / unmount ----------
   function unmount(){
+    CAM.token++;CAM.focus=null;CAM.shakeUntil=0;
     if(S.forest)S.forest.destroy();
     for(const n of S.extra)n.remove();
     S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
@@ -232,14 +233,43 @@
   }
 
   // ---------- frame loop ----------
+  // Cinematic camera (shake / pan) is layered on top of FieldCamera: zoom and clamping are untouched.
+  const CAM={focus:null,shakeUntil:0,shakeMs:0,shakeAmp:0,token:0};
   function render(){
-    FieldCamera.render(el.world,el.scene,el.player,S.x,S.y);
+    const f=CAM.focus;
+    FieldCamera.render(el.world,el.scene,el.player,f?f.x-FOOT.ax:S.x,f?f.y-FOOT.ay:S.y);
+    el.player.style.left=S.x+'px';el.player.style.top=S.y+'px';
+    const now=performance.now();
+    if(now<CAM.shakeUntil){
+      const k=(CAM.shakeUntil-now)/CAM.shakeMs,a=CAM.shakeAmp*k*k,t=now/23;
+      el.world.style.transform='translate('+(Math.sin(t*1.7)*a).toFixed(2)+'px,'+(Math.cos(t*2.3)*a).toFixed(2)+'px) '+el.world.style.transform;
+    }
     const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;
     el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
     el.player.style.display=el.fiona.style.display='block';
     const sc=FieldCamera.scale,rc=el.world.getBoundingClientRect();
     S.forest.update({x:-rc.left/sc,y:-rc.top/sc,width:el.scene.clientWidth/sc,height:el.scene.clientHeight/sc});
+  }
+  function shake(ms=900,amp=7){CAM.shakeMs=ms;CAM.shakeAmp=amp;CAM.shakeUntil=performance.now()+ms;if(S.forest&&el.scene.style.display!=='none')render();}
+  // Pan the camera to a world point, hold, then glide back to the player. Input is locked meanwhile.
+  function pan(x,y,{ms=1200,hold=1000}={}){
+    if(S.busy||!S.forest)return Promise.resolve(false);
+    const token=++CAM.token,wasActive=S.active;S.busy=true;S.target=null;FieldNavigation.cancel();
+    const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,home=()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay});
+    return new Promise(done=>{
+      const leg=(from,to,dur,next)=>{
+        const t0=performance.now(),step=now=>{
+          if(token!==CAM.token){done(false);return;}
+          const u=Math.min(1,(now-t0)/dur),e=ease(u);
+          CAM.focus={x:from.x+(to.x-from.x)*e,y:from.y+(to.y-from.y)*e};
+          if(S.forest)render();
+          if(u<1)requestAnimationFrame(step);else next();
+        };requestAnimationFrame(step);
+      };
+      const finish=()=>{CAM.focus=null;if(token===CAM.token){S.busy=false;S.active=wasActive||S.active;if(S.forest)render();}done(true);};
+      leg(home(),{x,y},ms,()=>setTimeout(()=>{if(token!==CAM.token){done(false);return;}leg({x,y},home(),ms,finish);},hold));
+    });
   }
   function checkZones(){
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
@@ -289,7 +319,7 @@
   // ---------- flags / visibility / persistence ----------
   function setFlag(name,value){
     const was=Boolean(S.flags[name]);S.flags[name]=Boolean(value);
-    if(name==='moss_a3_seal_open'&&value&&!was&&S.sealNode){const n=S.sealNode;S.sealNode=null;n.classList.add('opening');setTimeout(()=>{n.remove();S.extra=S.extra.filter(x=>x!==n);},1000);}
+    if(name==='moss_a3_seal_open'&&value&&!was&&S.sealNode){const n=S.sealNode;S.sealNode=null;n.classList.add('opening');shake(1000,8);setTimeout(()=>{n.remove();S.extra=S.extra.filter(x=>x!==n);},1000);}
     if(name==='moss_a3_seal_open'&&!value&&S.map&&!S.sealNode&&S.mapId==='moss_forest_03_ancient_grove'){
       const b=S.map.collision.blockers.find(q=>q.id==='cb_a3_seal');if(b){const r=b.rects[0];S.sealNode=addNode('forest-seal corrupted',r[0]-8,r[1]-70,r[2]+16,r[3]+70,'ᚠ ᚢ ᚦ',r[1]+r[3]);}
     }
@@ -311,7 +341,7 @@
   }
   function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({shake,pan,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
