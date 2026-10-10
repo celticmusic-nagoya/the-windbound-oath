@@ -79,3 +79,11 @@ wind ON resume and reduced motion. No environmental source changes.
 
 Building front QA evidence is collected separately. Ground-contact metadata,
 facade depths and front props are used, never whole-image bounding boxes.
+
+Final durable building run:4viewports, all14buildings at1.00, representative5
+(shop/house02/barn/pigsty/training shed) at1.50/1.80/2.10:116cases total. Each
+checks4manual ground contacts,20keyboard approaches, front stops,3pointer door
+approaches, blocked props, behind-corner navigation, depth/overlay alignment,
+state/save restore and error listeners. No penetrations. Broad original runner
+also completed both PC viewports at all4scales, but was interrupted before its
+final combined JSON; it is not used as the durable complete-run claim.

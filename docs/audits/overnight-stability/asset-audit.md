@@ -60,3 +60,8 @@ All 17 scales in five viewport/DPR conditions are recorded (85 cases, 3825 frame
 rows). Required representative scales 1/1.5/1.8/2.1 are included. Compare rendering
 in an opt-in QA branch before deciding aesthetics. Do not import changes from the
 separate character-HD or Battle Motion prototype branches.
+
+Perceptual dHash screening (distance<=3/64, composed on the same green matte)
+finds10candidate pairs. These are mostly intentional Aidan walk/idle or Wind
+Stone state variants. This is not proof of duplicate art. Candidates recorded
+perfile in CSV and similarity-candidates.json; no files deleted.

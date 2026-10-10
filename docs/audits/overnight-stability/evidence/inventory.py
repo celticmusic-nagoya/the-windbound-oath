@@ -35,3 +35,27 @@ with (out/'asset-inventory.csv').open('w') as f:
  w=csv.DictWriter(f,fields,lineterminator='\n');w.writeheader();w.writerows(rows)
 result={'files':len(rows),'bytes':sum(r['bytes'] for r in rows),'decoded_rgba_bytes':sum(r.get('decoded_rgba_bytes',0) for r in rows),'category_counts':dict(collections.Counter(r['category'] for r in rows)),'missing_literal':missing,'dynamic_expressions':dynamic,'exact_duplicates':[v for v in dups.values() if len(v)>1],'non_raster_or_errors':errors,'legacy_references':{term:sum(len(re.findall(term,f.read_text())) for f in sources) for term in [r'battle/embedded',r'asset_\d+_',r'battle/support/lou']},'embedded_exists':(root/'img/battle/embedded').exists()}
 (out/'inventory-summary.json').write_text(json.dumps(result,ensure_ascii=False,indent=2));print(json.dumps({k:v for k,v in result.items() if k not in ['dynamic_expressions','exact_duplicates']},ensure_ascii=False))
+
+# Optional runtime evidence enriches provenance; registration is not visible use.
+runtime=set(json.loads((out/'runtime-references.json').read_text())) if (out/'runtime-references.json').exists() else set()
+pairs=[]
+for row in rows:
+ row['runtime_or_registry_seen']=row['path'] in runtime
+ row['reference_status']='runtime request or runtime registry' if row['path'] in runtime else 'literal metadata/reference; visible use not established' if row['references'] else 'unreferenced in audited source/runtime; retained'
+ row['visual_review']='contact sheet: no obvious baked matte at thumbnail scale'
+ if row.get('transparent_pct')==0:row['visual_review']='opaque terrain tile: intentional' if '/terrain/' in row['path'] else 'white/light background visually baked; no edits'
+ if 'reference_sheet' in row['path']:row['visual_review']='design reference composite, not production sprite'
+ if '/landmarks/' in row['path']:row['category']+=';LANDMARK'
+ im=Image.open(root/row['path']).convert('RGBA');bg=Image.new('RGBA',im.size,(76,94,91,255));bg.alpha_composite(im);v=np.asarray(bg.convert('L').resize((9,8)));bits=(v[:,:-1]>v[:,1:]).flatten();value=0
+ for bit in bits:value=(value<<1)|int(bit)
+ row['dhash64']=f'{value:016x}'
+for i,a in enumerate(rows):
+ for b in rows[i+1:]:
+  distance=(int(a['dhash64'],16)^int(b['dhash64'],16)).bit_count()
+  if distance<=3:pairs.append({'a':a['path'],'b':b['path'],'hash_distance':distance,'note':'visual-similarity screening only; state frames intentionally similar, not deletion advice'})
+for row in rows:row['duplicate_candidates']=';'.join(pair['b'] if pair['a']==row['path'] else pair['a'] for pair in pairs if row['path'] in [pair['a'],pair['b']])
+with (out/'asset-inventory.csv').open('w') as f:
+ w=csv.DictWriter(f,sorted(set().union(*(r.keys() for r in rows))),lineterminator='\n');w.writeheader();w.writerows(rows)
+(out/'similarity-candidates.json').write_text(json.dumps(pairs,indent=2))
+result.update(runtime_registry_or_requests=len(runtime),missing_runtime_or_registry=[x for x in runtime if not (root/x).is_file()],retained_unreferenced=[r['path'] for r in rows if r['reference_status'].startswith('unreferenced')],rgba=sum(r['mode']=='RGBA' for r in rows),rgb=sum(r['mode']=='RGB' for r in rows),perceptual_candidate_pairs=len(pairs),category_counts=dict(collections.Counter(r['category'] for r in rows)))
+(out/'inventory-summary.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))

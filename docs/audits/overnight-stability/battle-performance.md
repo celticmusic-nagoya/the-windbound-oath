@@ -128,5 +128,7 @@ unvisited deployment/physical devices are not certified. No Pages deploy occurre
 Expected QA-runner errors were investigated without modifying application code:
 missing copied front fixture was supplied and runner restarted; the Prayer runner
 initially referenced a closure variable, then used the public normalRune getter.
-Those failed attempts are not game exceptions. Only completed assertions are
+Those failed attempts are not game exceptions. The long all-view execution
+session was interrupted before final combined JSON; split viewport runners retain
+completion evidence and avoid claiming the incomplete mobile attempt as PASS. Only completed assertions are
 reported as passes. Every durable result is from this fresh-main branch.
