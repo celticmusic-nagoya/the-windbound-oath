@@ -27,7 +27,7 @@ with sync_playwright() as p:
     # equip
     r=ev("EquipmentManager.equip('aidan','wooden_sword')")
     s=ev("charStats('aidan')")
-    check(r['ok'] and s['atk']==base['atk']+1 and ev("Inventory.count('wooden_sword')")==0,'equip wooden sword: ATK +1, bag count -1')
+    check(r['ok'] and s['atk']==base['atk'] and ev("Inventory.count('wooden_sword')")==0,'equip wooden sword: no stat change (balance), bag count -1')
     check(s['def']==base['def'] and s['maxHp']==base['maxHp'],'other stats unchanged')
     check(ev("BattleMotion.info('aidan','attack')")['frames']==4 and ev("BattleMotion.hitDelay('aidan','attack')")==100,'weapon motionVariant "wooden" -> aidan:wooden motion (4 frames, hit at 100ms)')
     # swap

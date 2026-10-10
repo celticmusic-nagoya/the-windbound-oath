@@ -49,6 +49,12 @@
     }
     if(z.hook&&HOOK_TEXTS[z.hook]){say(HOOK_TEXTS[z.hook]);return;}
   }
+  // ItemData.treasureStage: chests that hold progression gear stay shut until the story is far enough (Raider/boss balance).
+  function canOpenTreasure(t){
+    const need=(window.ItemData&&ItemData.treasureStage||{})[t.id];
+    if(need&&storyStage<need){MossForest.toast('ふたは固く閉じていて、今は開かない。');return false;}
+    return true;
+  }
   function onTreasure(t){
     const got=Inventory.openTreasure(t.id),herb=t.kind==='herb';
     if(!got.length){MossForest.toast(herb?'摘めそうな草は残っていない。':'箱の中は空っぽだった。');return;}
@@ -66,7 +72,7 @@
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
-      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,onTreasure,onSymbol,onVillageExit}});
+      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.
   function enterCliff(){

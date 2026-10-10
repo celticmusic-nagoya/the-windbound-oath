@@ -206,6 +206,7 @@
   function openTreasure(t){
     const herb=t.kind==='herb';
     if(S.opened.has(t.id)){toast(herb?'ここの草は、もう摘んでしまった。':'宝箱は空だ。');return;}
+    if(hooks.canOpenTreasure&&hooks.canOpenTreasure(t)===false)return;   // story-gated chests stay closed (and unclaimed)
     S.opened.add(t.id);
     const n=S.treasureNodes.get(t.id);if(n){n.classList.add('open');n.textContent=herb?'':'□';skin(n);}
     if(hooks.onTreasure)hooks.onTreasure(t,S.map);
