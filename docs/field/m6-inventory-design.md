@@ -1,6 +1,9 @@
-# M6 ③ 宝箱報酬と所持品（特別アイテム）設計案
+# M6 ③ 宝箱報酬と所持品（特別アイテム）
 
-実装はしない。承認後に別ブランチで実装する前提の設計。
+**実装済み**（`work/moss-forest-m6-inventory-talk`）。決定事項：護符・ルーン片は効果なしの「大事なもの」。既存セーブには後乗せ付与（1回のみ）。
+実装の実体：`js/data/item-data.js`（アイテム定義＋宝箱報酬表）、`js/inventory.js`（`Inventory`）、システムメニュー `ITEMS` タブ、セーブ `version:30` の `inventory:{key,claimed}`。
+`claimed` = 報酬付与済みの宝箱ID。旧セーブは `claimed` 無し → 開封済みの宝箱について**大事なものだけ**を一度付与（消費アイテムは触らない）。
+テスト：`tests/moss/m6_inventory.py`。以下は設計時の記述。
 
 ## 現状（M5.5）
 - 所持品は `battleItems = {potion, ether}` と `gold` のみ（`index.html`）。セーブはルート直下に `battleItems` `gold`。

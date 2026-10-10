@@ -1,0 +1,20 @@
+// TalkConditions unit tests (pure). node tests/field/talk_conditions.test.js
+const T = require('../../js/field/talk-conditions.js');
+let fails = 0; const ok = (c, m) => { console.log((c ? 'ok   ' : 'FAIL ') + m); if (!c) fails++; };
+const mk = o => Object.assign({flag: () => false, stage: () => 0, sealOpen: () => false, treasure: () => false, item: () => 0, talked: () => false, quest: () => null}, o);
+ok(T.test(null, mk()) && T.test({}, mk()), 'empty / null condition is true');
+ok(T.test({sealOpen: true}, mk({sealOpen: () => true})) && !T.test({sealOpen: true}, mk()), 'sealOpen true/false');
+ok(T.test({sealOpen: false}, mk()) && !T.test({sealOpen: false}, mk({sealOpen: () => true})), 'sealOpen:false means closed');
+ok(T.test({flag: 'a'}, mk({flag: n => n === 'a'})) && !T.test({flag: 'b'}, mk({flag: n => n === 'a'})), 'flag');
+ok(T.test({stage: [3, 5]}, mk({stage: () => 4})) && !T.test({stage: [3, 5]}, mk({stage: () => 6})) && T.test({stage: {min: 3}}, mk({stage: () => 99})), 'stage range / open-ended');
+ok(T.test({item: 'x'}, mk({item: () => 1})) && !T.test({item: 'x'}, mk()) && T.test({item: 'x', min: 3}, mk({item: () => 3})) && !T.test({item: 'x', min: 3}, mk({item: () => 2})), 'item with min');
+ok(T.test({treasure: 'tr'}, mk({treasure: id => id === 'tr'})) && !T.test({treasure: 'zz'}, mk({treasure: id => id === 'tr'})), 'treasure opened');
+ok(T.test({talked: 'e1'}, mk({talked: id => id === 'e1'})) && !T.test({talked: 'e1'}, mk()), 'talked');
+ok(T.test({quest: {id: 'q', state: 'active'}}, mk({quest: () => 'active'})) && !T.test({quest: {id: 'q', state: 'done'}}, mk({quest: () => 'active'})), 'quest state');
+ok(T.test({all: [{flag: 'a'}, {sealOpen: true}]}, mk({flag: () => true, sealOpen: () => true})) && !T.test({all: [{flag: 'a'}, {sealOpen: true}]}, mk({flag: () => true})), 'all');
+ok(T.test({any: [{flag: 'a'}, {sealOpen: true}]}, mk({sealOpen: () => true})) && !T.test({any: [{flag: 'a'}, {sealOpen: true}]}, mk()), 'any');
+ok(T.test({not: {flag: 'a'}}, mk()) && !T.test({not: {flag: 'a'}}, mk({flag: () => true})), 'not');
+ok(T.test({flag: 'a', sealOpen: true}, mk({flag: () => true, sealOpen: () => true})) && !T.test({flag: 'a', sealOpen: true}, mk({flag: () => true})), 'keys in one object are ANDed');
+ok(!T.test({bogus: 1}, mk()) && !T.test([], mk()) && !T.test('x', mk()), 'unknown key / non-object is false (fails closed)');
+ok(T.validate({bogus: 1}).length === 1 && T.validate({all: [{nope: 1}]}).length === 1 && T.validate({flag: 'a'}).length === 0, 'validate reports unknown keys, including nested');
+process.exit(fails ? 1 : 0);
