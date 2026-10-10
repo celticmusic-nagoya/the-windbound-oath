@@ -98,7 +98,22 @@
     const value = window.LindFieldEnvironment.setWind(!window.LindFieldEnvironment.wind);
     wind.textContent = value ? '風ON' : '風OFF';
   };
-  controls.append(caption, jump, wind, close);
+  // Collapsible DEV panel: on phones the full panel covers ~40% of the screen, so it starts folded (header only).
+  const fold = document.createElement('button');
+  fold.id = 'lindReviewFold'; fold.type = 'button'; fold.setAttribute('aria-controls', 'lindReviewControls');
+  [caption, fold, close].forEach(el => el.classList.add('lind-keep'));
+  const small = () => window.innerWidth <= 700 || window.innerHeight <= 500;
+  let folded = small();
+  try { const v = sessionStorage.getItem('lindReviewFolded'); if (v !== null) folded = v === '1'; } catch (e) {}
+  function applyFold() {
+    controls.classList.toggle('collapsed', folded);
+    fold.textContent = folded ? 'DEV ▼' : 'DEV ▲';
+    fold.setAttribute('aria-expanded', String(!folded));
+    try { sessionStorage.setItem('lindReviewFolded', folded ? '1' : '0'); } catch (e) {}
+  }
+  fold.onclick = () => { folded = !folded; applyFold(); };
+  applyFold();
+  controls.append(caption, fold, close, jump, wind);
   document.body.append(controls);
   window.LindFieldTraining?.mount(layer, controls);
   window.LindFieldWindStone?.mount(layer, controls);

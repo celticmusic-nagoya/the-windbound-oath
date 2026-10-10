@@ -21,10 +21,10 @@ body.lindFieldReview #world > .bridge { visibility:hidden; }
 #lindInteractionNotice { flex-basis:100%; color:#f1e7c8; }
 #lindInteractionNotice[hidden] { display:none; }
 body.lindFieldReview #world > :not(#lindReviewLayer):not(#player):not(.bridge) { visibility:hidden; }
-body.lindFieldReview #game > :not(#world) { display:none!important; }
-body.lindFieldReview > :not(#game):not(#lindReviewControls):not(script):not(style) { display:none!important; }
+body.lindFieldReview #game > :not(#world):not(#msg) { display:none!important; }
+body.lindFieldReview > :not(#game):not(#lindReviewControls):not(#msg):not(script):not(style) { display:none!important; }
 body.lindFieldReview #world > .river, body.lindFieldReview #world > .bridge { z-index:1; }
-body.lindFieldReview #menuBtn, body.lindFieldReview #devBtn, body.lindFieldReview #msg,
+body.lindFieldReview #menuBtn, body.lindFieldReview #devBtn,
 body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { display:none!important; }
 #lindReviewControls { position:fixed; top:8px; left:8px; right:8px; z-index:99999;
  display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px;
@@ -76,3 +76,11 @@ body.lindFieldReview #mainQuestNotice, body.lindFieldReview #questNotice { displ
 .lind-bird-flying img { animation:lindBirdWing .18s ease-in-out infinite alternate; }
 @keyframes lindBirdWing { from { transform:rotate(-2deg); } to { transform:rotate(2deg); } }
 @media(prefers-reduced-motion:reduce) { .lind-bird-flying img { animation:none; } }
+
+/* Collapsible DEV panel (header only when folded); the NPC notice stays visible so conversations remain checkable */
+#lindReviewControls .lind-keep { flex:0 0 auto; }
+#lindReviewControls > span.lind-keep { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#lindReviewControls.collapsed { flex-wrap:nowrap; padding:4px 8px; }
+#lindReviewControls.collapsed > :not(.lind-keep):not(#lindNPCNotice):not(#lindInteractionNotice) { display:none!important; }
+#lindReviewControls.collapsed > #lindNPCNotice:not([hidden]), #lindReviewControls.collapsed > #lindInteractionNotice:not([hidden]) { display:block; position:fixed; left:8px; right:8px; top:52px; padding:4px 8px; background:rgba(17,37,29,.9); border-radius:4px; }
+#lindReviewControls #lindReviewFold { min-height:36px; min-width:64px; }
