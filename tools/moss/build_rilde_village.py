@@ -148,7 +148,7 @@ def outdoor(ruin):
     ws = LIND['windStone']; wx, wy = ws['x'] + ws['width'] / 2 + OX, ws['y'] + ws['height'] + OY
     R.prop('rv_wind_stone_off' if ruin else 'rv_wind_stone_normal', wx, wy, pid='b_wind_stone', tags=['landmark'])
     c = ws['collision']; R.solid(ws['x'] + c[0] + OX, ws['y'] + c[1] + OY, c[2], c[3], 'wind_stone')
-    R.interact('ev_wind_stone', wx, wy - 40, 90, hook='rilde_wind_stone', label='風の石')
+    R.interact('ev_wind_stone', wx, wy - 40, 60, hook='rilde_wind_stone', label='風の石')
     tree_ring(R, ruin)
     # animals in the pens (peaceful only)
     if not ruin:
@@ -156,9 +156,9 @@ def outdoor(ruin):
             R.prop('rv_animal_' + name.rstrip('2'), x + OX, y + OY, pid='an_' + name, tags=['animal'])
     # signs: the east road and the south trail
     R.prop('rv_lind_sign', 2140 + OX, 560 + OY, pid='sign_east', tags=['sign'])
-    R.interact('ev_sign_east', 2140 + OX, 540 + OY, 80, text='木の標識：『← リルド村　／　ドゥンヴァル砦 →』', label='標識')
+    R.interact('ev_sign_east', 2140 + OX, 540 + OY, 60, text='木の標識：『← リルド村　／　ドゥンヴァル砦 →』', label='標識')
     R.prop('rv_lind_sign', 700 + OX, 1540 + OY, pid='sign_south', tags=['sign'])
-    R.interact('ev_sign_south', 700 + OX, 1520 + OY, 80, text='木の標識：『← リルド村　／　風見の断崖 ↓』', label='標識')
+    R.interact('ev_sign_south', 700 + OX, 1520 + OY, 60, text='木の標識：『← リルド村　／　風見の断崖 ↓』', label='標識')
     # ---- doors
     for i, (room, sp, dx, label) in DOOR.items():
         x, y = DOORS[i]
@@ -187,8 +187,8 @@ def _blob(cx, cy, rx, ry, seed):
 
 PEACE_WALK = {   # registry id -> (path offsets, speed)
 }
-def npc_zone(R, nid, talk, label, x, y, r=78, **kw): return R.interact('ev_' + nid, x, y - 22, r, npc=talk, label=label, **kw)
-def place_npc(R, aid, nid, x, foot, talk, label, walk=None, speed=14, anim=False, fps=None, face=None, r=78):
+def npc_zone(R, nid, talk, label, x, y, r=46, **kw): return R.interact('ev_' + nid, x, y - 22, r, npc=talk, label=label, **kw)
+def place_npc(R, aid, nid, x, foot, talk, label, walk=None, speed=14, anim=False, fps=None, face=None, r=46):
     """Villager art `aid` standing/patrolling at visible feet (x, foot), talk table `talk`."""
     m = META['npc'][aid]; ix, iy = x - m['dx'], foot + m['dy']      # image anchor (bottom-centre of the full frame)
     if (walk or anim) and m['frames'] >= 2:
@@ -219,17 +219,17 @@ def people(R, ruin):
         x, y = at('fisherman'); place_npc(R, 'fisherman', 'fisherman', x, y, 'fisherman', '釣り人')
         # the hill elder (cliff trail) and the people of the legacy side quests
         place_npc(R, 'elder_man', 'hill_old', 780 + OX, 1500 + OY, 'hill_old', '風見の丘の老人')
-        R.interact('ev_fiona_wait', 1930, 885, 110, hook='rilde_fiona', label='フィオナ', requires={'flag': 'rilde_fiona_waiting', 'is': True})
-        R.interact('ev_training_dummy', 1780 + OX, 805 + OY, 80, hook='rilde_dummy', label='訓練用の木人')
-        R.interact('ev_trainsign', 1730 + OX, 700 + OY, 70, hook='rilde_text:trainingSign', label='看板')
-        R.interact('ev_well', 650 + OX, 760 + OY, 80, hook='rilde_text:well', label='井戸')
-        R.interact('ev_balloon_tree', 115 + OX, 330 + OY, 90, hook='rilde_balloon_tree', label='木')
+        R.interact('ev_fiona_wait', 1930, 885, 60, hook='rilde_fiona', label='フィオナ', requires={'flag': 'rilde_fiona_waiting', 'is': True})
+        R.interact('ev_training_dummy', 1780 + OX, 805 + OY, 55, hook='rilde_dummy', label='訓練用の木人')
+        R.interact('ev_trainsign', 1730 + OX, 700 + OY, 45, hook='rilde_text:trainingSign', label='看板')
+        R.interact('ev_well', 650 + OX, 760 + OY, 60, hook='rilde_text:well', label='井戸')
+        R.interact('ev_balloon_tree', 115 + OX, 330 + OY, 60, hook='rilde_balloon_tree', label='木')
         place_npc(R, 'young_woman', 'sq_catowner', 520 + OX, 1010 + OY, None, '女の子')
-        R.interact('ev_sq_catowner', 520 + OX, 990 + OY, 80, hook='rilde_catowner', label='猫を探す女の子')
+        R.interact('ev_sq_catowner', 520 + OX, 990 + OY, 60, hook='rilde_catowner', label='猫を探す女の子')
         R.prop('furn_cat_white', 1330 + OX, 1230 + OY, pid='p_cat', tags=['npc'])
         R.interact('ev_cat', 1330 + OX, 1210 + OY, 70, hook='rilde_cat', label='白い猫')
         place_npc(R, 'boy', 'sq_kid', 235 + OX, 345 + OY, None, '風船の子')
-        R.interact('ev_sq_kid', 235 + OX, 325 + OY, 80, hook='rilde_kid', label='風船の子')
+        R.interact('ev_sq_kid', 235 + OX, 325 + OY, 60, hook='rilde_kid', label='風船の子')
     else:
         # after the attack: a few survivors, no patrols; the king's soldiers hold the plaza
         place_npc(R, 'elder_man', 'rr_elder', 830 + OX, 905 + OY, 'rr_elder', '長老')
@@ -238,11 +238,11 @@ def people(R, ruin):
         place_npc(R, 'farmer_male', 'rr_farmer', 1160 + OX, 640 + OY, 'rr_farmer', '農夫')
         place_npc(R, 'boy', 'rr_boy', 940 + OX, 960 + OY, 'rr_boy', '男の子')
         R.props.append({'id': 'p_rr_knight', 'asset': 'npc_slot_soldier', 'x': 980 + OX, 'y': 700 + OY, 'tags': ['npc']})
-        R.interact('ev_rr_knight', 980 + OX, 680 + OY, 80, npc='rr_knight', label='王国の兵士')
+        R.interact('ev_rr_knight', 980 + OX, 680 + OY, 60, npc='rr_knight', label='王国の兵士')
         R.props.append({'id': 'p_rr_knight2', 'asset': 'npc_slot_guard', 'x': 560 + OX, 'y': 640 + OY, 'tags': ['npc']})
-        R.interact('ev_rr_knight2', 560 + OX, 620 + OY, 80, npc='rr_knight2', label='王国の兵士')
+        R.interact('ev_rr_knight2', 560 + OX, 620 + OY, 60, npc='rr_knight2', label='王国の兵士')
         R.interact('ev_trainsign', 1730 + OX, 700 + OY, 70, text='訓練場の看板は焦げて、半分に折れている。', label='看板')
-        R.interact('ev_well', 650 + OX, 760 + OY, 80, text='井戸の水は濁り、灰が浮いている。', label='井戸')
+        R.interact('ev_well', 650 + OX, 760 + OY, 60, text='井戸の水は濁り、灰が浮いている。', label='井戸')
 
 def ruin_dressing(R):
     """Rubble, burnt beams, ash and fire spots over the burnt village (all deterministic)."""
@@ -309,8 +309,8 @@ class Interior:
             if text: kw['text'] = text
             if hook: kw['hook'] = hook
             if npc: kw['npc'] = npc
-            R.interact(R.uid('ev_' + name), x, y - min(40, h * .4), r or max(50, FURN[name]['w'] * .5 if name in FURN else 60), label=label or name, **kw)
-    def person(s, aid, nid, x, foot, talk, label, text=None, r=78):
+            R.interact(R.uid('ev_' + name), x, y - min(40, h * .4), r or min(60, max(40, FURN[name]['w'] * .5 if name in FURN else 50)), label=label or name, **kw)
+    def person(s, aid, nid, x, foot, talk, label, text=None, r=46):
         place_npc(s.R, aid, nid, x, foot, talk, label, r=r)
         s.R.solid(x - 14, foot - 10, 28, 10, 'npc')
     def doc(s): return s.R.doc()
@@ -344,7 +344,7 @@ def rooms():
     # ---------------- 宿屋 1F ----------------
     I = Interior('rilde_in_inn_1f', '宿屋「風見鶏」 1階', 'Inn "Kazamidori" 1F', 1200, 800, exit_to='from_inn', floor='#a4835a', wall='#6e5a46'); R = I.R; R.spawn('from_stairs', 1000, 330, 'down')
     I.put('window_wall', 560, 178); I.put('window_wall', 900, 178); I.put('tapestry', 720, 190)
-    I.put('counter_inn', 300, 346); I.person('innkeeper', 'innkeeper', 300, 262, 'innkeeper', '宿屋の主人', r=150)
+    I.put('counter_inn', 300, 346); I.person('innkeeper', 'innkeeper', 300, 262, 'innkeeper', '宿屋の主人', r=70)
     I.put('shelf_pots', 120, 214, text='食器や保存食が並んでいる。', label='棚'); I.put('barrel', 440, 232); I.put('barrel', 490, 238)
     I.put('fireplace', 740, 216, text='大きな暖炉に火が入っている。旅人が足を休めている。', label='暖炉')
     I.put('stairs_up', 1040, 236); R.door('tr_inn_up', 990, 250, 110, 90, 'rilde_in_inn_2f', 'from_stairs', '2階へ', .25)
@@ -367,7 +367,7 @@ def rooms():
     I = Interior('rilde_in_shop', '道具屋「若葉の袋」', 'Item Shop "Wakaba no Fukuro"', 960, 720, exit_to='from_shop', floor='#a9895c', wall='#72604a')
     I.put('window_wall', 480, 178); I.put('herb_bundle', 300, 172); I.put('herb_bundle', 660, 172)
     I.put('shelf_goods', 130, 214, text='薬草と薬瓶が並んでいる。', label='薬棚'); I.put('shelf_goods', 830, 214, text='旅道具が整然と並んでいる。', label='旅道具の棚'); I.put('shelf_goods', 480, 214, text='干した薬草のいい匂いがする。', label='棚')
-    I.put('counter_shop', 480, 420); I.person('merchant', 'merchant', 480, 340, 'merchant', '道具屋の店主', r=150)
+    I.put('counter_shop', 480, 420); I.person('merchant', 'merchant', 480, 340, 'merchant', '道具屋の店主', r=70)
     I.put('rug_red', 480, 560); I.put('crate', 140, 560); I.put('sacks_pile', 210, 600); I.put('barrel', 820, 580); I.put('basket', 760, 620); I.put('plant_pot', 880, 400)
     out.append(I)
     # ---------------- 民家 ----------------

@@ -40,4 +40,14 @@ with sync_playwright() as p:
     check(ev("MossForest.mapId")=='rilde_village_01_ruin','round trip stays in ruin village')
     errs=[e for e in errs if 'favicon' not in e]
     check(not errs,'no console errors %s'%errs[:3])
+# touch regression (Android): taps inside the training ground must walk, and a tap on the dummy must start the training (not the boy's chatter)
+    c2=b.new_context(viewport={'width':450,'height':1000},has_touch=True,is_mobile=True,device_scale_factor=2); t=c2.new_page(); tev=t.evaluate
+    t.goto('http://localhost:8765/index.html'); t.wait_for_timeout(1500); tev("devJump('training')"); t.wait_for_timeout(2500)
+    moved=0
+    for xy in ((380,520),(120,470),(380,760),(150,640)):
+        f=tev("MossForest.feet"); t.touchscreen.tap(*xy); t.wait_for_timeout(1300); g=tev("MossForest.feet"); moved+= abs(g['x']-f['x'])+abs(g['y']-f['y'])>20
+        tev("closeDialogue()")
+    check(moved>=3,'taps inside the training ground walk (%d/4)'%moved)
+    tev("MossForest.teleportFeet(1877,860)"); t.wait_for_timeout(500); t.touchscreen.tap(265,615); t.wait_for_timeout(1200)
+    check(tev("storyStage")==2 and tev("getComputedStyle(document.getElementById('battle')).display")=='block','tap on the training dummy opens the training battle')
 print('FAILS',fails); sys.exit(1 if fails else 0)

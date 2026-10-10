@@ -266,12 +266,16 @@
         openTreasure(t);return true;
       }
     }
+    let best=null,bd=Infinity;   // overlapping zones: the one whose centre is nearest the tap wins (not the first in the list)
     for(const z of S.map.eventZones||[]){
       if(z.type!=='interact'||!reqOk(z))continue;
-      const sh=zoneShape(z);if(!sh||!inShape(sh,wx,wy,40))continue;
-      const c=centerOf(sh);
-      if(dist(fx,fy,c.x,c.y)>260){toast('もう少し近づいて調べよう。');return true;}
-      fireEvent(z);return true;
+      const sh=zoneShape(z);if(!sh||!inShape(sh,wx,wy,14))continue;   // tight: a tap that merely passes near a zone must still walk
+      const c=centerOf(sh),d=dist(wx,wy,c.x,c.y);
+      if(d<bd){bd=d;best={z,c};}
+    }
+    if(best){
+      if(dist(fx,fy,best.c.x,best.c.y)>260){toast('もう少し近づいて調べよう。');return true;}
+      fireEvent(best.z);return true;
     }
     return false;
   }

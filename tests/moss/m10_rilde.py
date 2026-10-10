@@ -47,7 +47,7 @@ with sync_playwright() as p:
         ev("(a)=>MossForestStory.enterMap(a,'default')",mid); pg.wait_for_timeout(700)
         z=[e for e in maps[mid]['eventZones'] if e['id']==zid][0]['shape']
         d=((pt[0]-z['cx'])**2+(pt[1]-z['cy'])**2)**.5
-        check(d<=z['r'] and not ev("([x,y])=>MossForest.blocked(x,y)",list(pt)),'%s reachable in front of the counter (d=%d r=%d)'%(zid,d,z['r']))
+        check(d<=240 and z['r']<=80 and not ev("([x,y])=>MossForest.blocked(x,y)",list(pt)),'%s reachable in front of the counter (d=%d r=%d)'%(zid,d,z['r']))
     check(not [t for m in maps.values() for t in m.get('transitions',[]) if 'trainshed' in t.get('toMap','')],'no training-hut interior warp')
     # state switch
     ev("storyStage=15"); ev("MossForestStory.enterMap('rilde_village','from_plaza')"); pg.wait_for_timeout(2200)
