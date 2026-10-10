@@ -35,17 +35,30 @@
  function activeAlly(b,id){return !(b==='normal'&&currentGoblin==='attackGob1'&&id==='fiona');}
  function name(e){if(e.type==='goblin_raider')return 'ゴブリンレイダー';return e.type==='goblin'?'ゴブリン':'異常化ゴブリン';}
  function targets(b){if(!rosters[b].length)return null;return rosters[b].map(e=>({id:e.id,name:name(e),node:e.node,hp:()=>e.hp}));}
- function sync(b){
-  rosters[b].forEach(e=>{
-   BattleActorState.sync(b,e.key);
-   const text=name(e)+' HP '+Math.max(0,e.hp)+' / '+e.maxHp;
-   if(b==='normal'&&!e.extra){q('#v2EnemyName').textContent=name(e);q('#v2GTxt').textContent=text;q('#v2GHP').style.width=Math.max(0,e.hp/e.maxHp*100)+'%'}
-   else if(e.extra)q('#'+e.unit+' .prologueEnemyHud').textContent=text;
-  });
+ function syncLogic(b){
   if(b==='raider')rbAdds=alive(b).filter(e=>e.extra).length;
   if(b==='normal')gghp=rosters.normal.reduce((n,e)=>n+Math.max(0,e.hp),0);
  }
- function damage(e,n,b){if(!e||e.hp<=0)return false;e.hp=Math.max(0,e.hp-n);BattleActorState.set(e.key,e.hp?'damage':'ko',{battle:b,duration:e.hp?520:undefined});v2Hit(e.unit);sync(b);return true;}
+ function sync(b){
+  syncLogic(b);
+  rosters[b].forEach(e=>{
+   if(!e.pend)e.shown=e.hp;   // a pending delayed hit keeps the bar at the pre-hit value until the blow frame
+   BattleActorState.sync(b,e.key);
+   const text=name(e)+' HP '+Math.max(0,e.shown)+' / '+e.maxHp;
+   if(b==='normal'&&!e.extra){q('#v2EnemyName').textContent=name(e);q('#v2GTxt').textContent=text;q('#v2GHP').style.width=Math.max(0,e.shown/e.maxHp*100)+'%'}
+   else if(e.extra)q('#'+e.unit+' .prologueEnemyHud').textContent=text;
+  });
+ }
+ // Hit sync: HP / KO / state are LOGIC and apply at once; only the presentation (hit pose, flash, HP bar, banner number, crit pop) may wait for the
+ // blow frame of a delivered attack motion (BattleMotion.hitDelay). No motion installed -> delay 0 -> identical to before.
+ function hitDelay(who,a){return !a||a.presented||!window.BattleMotion?0:Math.max(0,Math.min(600,BattleMotion.hitDelay(who,'attack')||0));}
+ function later(ms,fn){if(ms<=0){fn();return;}const g=generation;setTimeout(()=>{if(g===generation)fn();},ms);}
+ function damage(e,n,b,delay=0){
+  if(!e||e.hp<=0)return false;e.hp=Math.max(0,e.hp-n);syncLogic(b);
+  e.pend=(e.pend||0)+(delay>0?1:0);
+  later(delay,()=>{if(delay>0)e.pend=Math.max(0,(e.pend||1)-1);BattleActorState.set(e.key,e.hp?'damage':'ko',{battle:b,duration:e.hp?520:undefined});v2Hit(e.unit);sync(b);});
+  return true;
+ }
  function koAll(b){for(const e of rosters[b]){e.hp=0;BattleActorState.set(e.key,'ko',{battle:b})}sync(b);}
  function log(b,t,owned=false){BattlePresentation.log(()=>{if(b==='normal')showBattleBanner(t,1050);else showRaiderBattleLog(t)},owned)}
  function heroAction(b,a){
@@ -76,9 +89,9 @@
   if(a.kind==='windbloom'){if(normalFMP<8)return;normalFMP-=8;n=windbloomDamage(b,e)}
   else if(a.kind==='skill'){if(aatp<30)return;aatp-=30}else if(who==='aidan')aatp=Math.min(100,aatp+15);
   const hit=BattleCritical.resolve(a,n);
-  if(!a.presented&&hit.critical)BattleActorState.set(who,'attack',{battle:b,duration:(who==='aidan'?820:680)+100});else if(!a.presented)BattleActorState.action(who,'attack',{battle:b});damage(e,hit.damage,b);
-  log(b,(who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):(a.kind==='windbloom'?'フィオナの「風花の舞」！':'フィオナの攻撃！'))+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！',a.presented);
-  BattleCriticalPresentation.show(b,who,e,hit);return hit;
+  if(!a.presented&&hit.critical)BattleActorState.set(who,'attack',{battle:b,duration:(who==='aidan'?820:680)+100});else if(!a.presented)BattleActorState.action(who,'attack',{battle:b});const dl=hitDelay(who,a);damage(e,hit.damage,b,dl);hit.delay=dl;
+  later(dl,()=>{log(b,(who==='aidan'?(a.kind==='skill'?'一閃！':'エイダンの攻撃！'):(a.kind==='windbloom'?'フィオナの「風花の舞」！':'フィオナの攻撃！'))+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！',a.presented);
+  BattleCriticalPresentation.show(b,who,e,hit);});return hit;
  }
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  function canPresent(b,a){
@@ -102,7 +115,7 @@
   if(b==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);q('#normalItems').classList.remove('isOpen');
   for(const a of [...actions]){if(token!==generation)return;await situationalBanter(b,token);if(token!==generation)return;
    if(BattlePresentation.definition(a.kind)&&canPresent(b,a)){impact=rosters[b].find(e=>e.id===a.target)?.unit||(a.kind==='wind'?'raiderSprite':impact);if(!await BattlePresentation.action(b,a.kind,token))return;a.presented=true;}
-   if(token!==generation)return;const hit=heroAction(b,a);if(b==='normal')updateAttackBattle();else updateRaider();await situationalBanter(b,token);await sleep(hit?.critical?1000:900);if(token!==generation)return;if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
+   if(token!==generation)return;const hit=heroAction(b,a);later(hit?.delay||0,()=>{if(b==='normal')updateAttackBattle();else updateRaider();});await situationalBanter(b,token);await sleep(hit?.critical?1000:900);if(token!==generation)return;if(b==='normal'?!alive(b).length:rbBoss<=0){if(b==='normal')finishAttackBattle();else finishRaider();return}}
   if(token===generation)await enemyRound(b,statusStart);
  }
  function skillFor(e){
@@ -180,9 +193,9 @@
   if(a.kind==='windbloom'){if(rbFMP<8)return;rbFMP-=8;n=windbloomDamage('raider',e)}
   else if(who==='aidan'){if(a.kind==='skill'){if(rbTP<30)return;rbTP-=30;rbRune=Math.min(100,rbRune+14)}else{rbTP=Math.min(100,rbTP+15);rbRune=Math.min(100,rbRune+9)}}else rbRune=Math.min(100,rbRune+7);
   const hit=BattleCritical.resolve(a,n);
-  if(!a.presented&&hit.critical)BattleActorState.set(who,'attack',{battle:'raider',duration:(who==='aidan'?820:680)+100});else if(!a.presented)BattleActorState.action(who,'attack',{battle:'raider'});damage(e,hit.damage,'raider');
-  log('raider',(who==='aidan'?(a.kind==='skill'?'エイダンの「一閃」！':'エイダンの攻撃！'):(a.kind==='windbloom'?'フィオナの「風花の舞」！':'フィオナが杖で応戦！'))+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！',a.presented);
-  BattleCriticalPresentation.show('raider',who,e,hit);return hit;
+  if(!a.presented&&hit.critical)BattleActorState.set(who,'attack',{battle:'raider',duration:(who==='aidan'?820:680)+100});else if(!a.presented)BattleActorState.action(who,'attack',{battle:'raider'});const dl=hitDelay(who,a);damage(e,hit.damage,'raider',dl);hit.delay=dl;
+  later(dl,()=>{log('raider',(who==='aidan'?(a.kind==='skill'?'エイダンの「一閃」！':'エイダンの攻撃！'):(a.kind==='windbloom'?'フィオナの「風花の舞」！':'フィオナが杖で応戦！'))+(hit.critical?' 会心の一撃！':'')+' '+name(e)+'に'+hit.damage+'のダメージ！',a.presented);
+  BattleCriticalPresentation.show('raider',who,e,hit);});return hit;
  }
  async function supply(e){
   const token=generation;
