@@ -3536,3 +3536,10 @@ body.wbShake #attackBattle,body.wbShake #raiderBattle{animation:wbShake .18s lin
 body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
 @keyframes wbShake{0%,100%{translate:0 0}25%{translate:-5px 2px}50%{translate:5px -2px}75%{translate:-3px -1px}}
 @keyframes wbHeavyShake{0%,100%{translate:0 0}20%{translate:-9px 3px}40%{translate:8px -4px}60%{translate:-7px 2px}80%{translate:5px -2px}}
+
+/* FieldTalk: speaker plate + choices inside #msg (M6) */
+#msg .talkName{display:inline-block;margin:-4px 0 6px;padding:2px 12px;background:#1d2b2c;border:1px solid #c5a45b;border-radius:4px;color:#f0dfa6;font-size:13px;letter-spacing:.08em}
+#msg .talkText{white-space:pre-wrap}
+#msg .talkChoices{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#msg .talkChoices button{min-height:44px;min-width:96px;padding:6px 16px;background:#16282a;border:1px solid #c5a45b;border-radius:6px;color:#f4ecd0;font:inherit;cursor:pointer}
+#msg .talkChoices button:hover,#msg .talkChoices button:focus-visible{background:#2a4547;outline:none}

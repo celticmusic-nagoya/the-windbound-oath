@@ -1,6 +1,14 @@
-# M6 ④ FieldTalk の動的会話分岐 設計案
+# M6 ④ FieldTalk の動的会話分岐
 
-実装はしない。M5.5 の `FieldTalk`（`js/field/field-talk.js`）を土台にした拡張設計。
+**実装済み**（`work/moss-forest-m6-inventory-talk`）。
+- 条件評価：`js/field/talk-conditions.js`（純関数。`flag/stage/sealOpen/treasure/item/talked/quest` と `all/any/not`。未知キーは偽）。テスト：`tests/field/talk_conditions.test.js`。
+- 台詞データ：`js/field/talk-data.js`（従来の村人・長老・エマの台詞を移植。旧 `lind-dialogue.js` / `forest-warnings.js` は廃止）。
+- 表示：話者名プレート（`.talkName`）＋台詞。`話者「…」　話者2「…」` の文字列は話者ごとにページ分割。タップ/Enter/Spaceで進行。
+- 選択肢：`choice.options[{label,reply,set,give}]`。ボタン（44px以上）または数字キー1〜9。選択中は本文タップで進まない。
+- 効果：`set`（会話フラグ。セーブ対象）、`give`（`Inventory.grant`。入手を専用ページで表示）。
+- セーブ：`version:30` の `talk:{seen,cycle,flags}`。未知のエントリIDや不正値は読み込み時に捨てる。
+- クエスト連携は `FieldTalk.setQuestProvider(fn)` と `field-talk` / `field-talk-end` イベント（クエスト本体は未実装）。
+- テスト：`tests/moss/m6_talk.py`（プレート・ページ・選択肢・条件・once・効果・セーブ往復）。以下は設計時の記述。
 
 ## 現状
 - `FieldTalk.talk(id,{source})` が唯一の入口。提供元（`LindDialogue`, `ForestWarnings`）が `register(ids, lineFn)` で行を返す。
