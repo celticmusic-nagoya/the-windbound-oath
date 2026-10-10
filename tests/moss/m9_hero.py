@@ -8,7 +8,7 @@ def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
 fs=sorted(glob.glob('img/field/moss/real/fiona/*.png'))
-check(len(fs)==28,'28 Fiona frames (4 dirs x (idle + 6 walk)) %d'%len(fs))
+check(len(fs)==20,'20 Fiona frames (4 dirs x (idle + 4 walk)) %d'%len(fs))
 bad=[]
 for f in fs:
     im=Image.open(f); a=np.array(im)[...,3]
