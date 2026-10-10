@@ -57,8 +57,8 @@ with sync_playwright() as p:
     # existing NPCs keep working with a speaker plate (elder, seal branch)
     pg.evaluate("PrologueProgress.seed(0)"); pg.evaluate("FieldTalk.talk('elder')"); check(name()=='長老' and '輝きが弱まっておる' in msgtxt(),'elder closed branch with plate: %s / %s'%(name(),msgtxt()[:20]))
     pg.evaluate("PrologueProgress.seed(3)"); pg.evaluate("FieldTalk.talk('elder')"); check('邪気が晴れ' in msgtxt(),'elder seal-open branch')
-    pg.evaluate("PrologueProgress.seed(0)"); pg.evaluate("FieldTalk.talk('emma');FieldTalk.talk('emma')"); pg.evaluate("FieldTalk.talk('emma')")
-    check(name()=='フィオナ' and 'エマ' not in msgtxt(),'emma banter starts as フィオナ page'); pg.click('#msg'); check(name()=='エマ','banter continues as エマ page')
+    pg.evaluate("(t)=>FieldTalk.loadTable(t)",{"npc":"t_banter","entries":[{"id":"t_b1","priority":1,"when":{},"lines":["フィオナ「おばあちゃん、大丈夫だよ。」　エマ「ふふ、そう言ってすぐ無茶をするんだから。」"]}]})
+    pg.evaluate("FieldTalk.talk('t_banter')"); check(name()=='フィオナ' and 'エマ' not in msgtxt(),'two-speaker line starts as フィオナ page'); pg.click('#msg'); check(name()=='エマ','banter continues as エマ page')
     check(pg.evaluate("FieldTalk.talk('nobody')")==False,'unknown NPC returns false and leaves dialogue untouched')
     # real saveGrowthData / loadGrowthData round trip (no DEV sandbox): talk state + inventory ride in the root save
     pg.evaluate("document.querySelector('#menuOpen').click();renderSystemTab('save')")
