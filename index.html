@@ -358,7 +358,7 @@ $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用�
 $('#hillExit').onclick=()=>{if(storyStage<3)say('この先は夕暮れの丘へ続いている。今は訓練場へ向かおう。');else if(storyStage===3){storyStage=4;startHillScene()}else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
 $('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
 $('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
-$('#hillOld').onclick=()=>say('老人「この丘から見るリルド村が、わしは好きでな。」');
+$('#hillOld').onclick=()=>say(window.LindDialogue?LindDialogue.line('hill_old'):'老人「この丘から見るリルド村が、わしは好きでな。」');
 $('#kid2').onclick=()=>say('子供「つかまえてみろー！」');
 $('#kid3').onclick=()=>say('子供「待て待てー！」');
 $('#dog2').onclick=()=>say('犬「ワフッ！」');
@@ -1795,6 +1795,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/moss-forest-runtime.js"></script>
 <script src="js/field/moss-forest-story.js"></script>
 <script src="js/field/forest-warnings.js"></script>
+<script src="js/field/lind-dialogue.js"></script>
 <script>MossForestStory.init();</script>
 <script src="js/field/lind-content-bounds.js"></script>
 <script src="js/field/lind-assets.js"></script>
