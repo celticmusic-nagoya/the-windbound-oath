@@ -9,7 +9,8 @@
   const isOpen = id => { const s = shop(id); return Boolean(s) && stage() >= s.openFrom; };
   function stock(id) {
     const s = shop(id); if (!s || !isOpen(id)) return [];
-    return s.stock.filter(e => def(e.id) && stage() >= (e.minStage ?? s.openFrom)).map(e => ({...e, ...def(e.id), id: e.id, price: e.price, equip: Boolean(window.EquipmentData.items[e.id])}));
+    const gate = e => stage() >= (e.minStage ?? s.openFrom) && (!e.flag || Boolean(window.FieldTalk && FieldTalk.flag(e.flag))) && (!e.quest || (window.Quest && Quest.state(e.quest.id) === e.quest.state));
+    return s.stock.filter(e => def(e.id) && gate(e)).map(e => ({...e, ...def(e.id), id: e.id, price: e.price, equip: Boolean(window.EquipmentData.items[e.id])}));
   }
   function buy(shopId, itemId) {
     const e = stock(shopId).find(x => x.id === itemId);

@@ -22,6 +22,19 @@ window.QuestData = Object.freeze({
       complete: {item: 'herb_moss', min: 3},
       reward: {potion: 2, gold: 30},
       objective: {active: '薬草を3つ集めて、農作業の女性に届ける', complete: '農作業の女性に薬草を届ける'}
+    },
+    // 王都（仮シナリオ）
+    q_capital_comb: {
+      name: '王都の失くし物',
+      complete: {item: 'silver_comb'},
+      reward: {gold: 80, ether: 1},
+      objective: {active: '住宅街の老婦人の銀の櫛を、城前広場で探す', complete: '老婦人に銀の櫛を届ける'}
+    },
+    q_capital_delivery: {
+      name: '商業区の納品依頼',
+      complete: {item: 'potion', min: 3},
+      reward: {gold: 90, ether: 1},
+      objective: {active: 'きずぐすりを3つ、商業区の依頼掲示板へ納める', complete: '依頼掲示板できずぐすりを納品する'}
     }
   })
 });

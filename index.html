@@ -61,6 +61,7 @@
 <div class="bridge" style="left:1435px;top:540px"></div>
 <div class="zoneLabel" style="left:1465px;top:500px">東の小橋</div>
 <div class="arch" style="left:900px;top:1390px"></div>
+<div class="sign" id="roadExit" style="left:1950px;top:540px">東の街道　ドゥンヴァル砦 →</div>
 <div class="sign" id="hillExit" style="left:920px;top:1460px">南門　風見の断崖 →</div>
 <div class="npc kid walking" id="kid2" style="left:610px;top:620px">子</div>
 <div class="npc kid walking" id="kid3" style="left:660px;top:650px">子</div>
@@ -354,6 +355,11 @@ $('#trainingSign').onclick=()=>say('剣の傷がいくつも残っている。�
 $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用の木人だ。');
 $('#hillExit').onclick=()=>{if(storyStage<3)say('この先は風見の断崖へ続いている。今は訓練場へ向かおう。');else if(storyStage===3||storyStage>=15)enterCliff();else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
 // ドゥンヴァル砦('fort') / 王都('capital') の基礎マップへ入る（開発・確認用。物語には未接続）: enterWorldMap('fort')
+$('#roadExit').onclick=()=>{
+ if(storyStage<15)say('街道は東へ続いている。今はまだ、村を離れる時ではない。');
+ else if(!FieldTalk.flag('road_dunvall_open'))say('東へ続く街道だ。この先のことは、長老に聞いてみようか。');
+ else enterWorldMap('fort','from_road');
+};
 function enterWorldMap(id,spawn){closeDialogue();forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterMap(id,spawn);}
 function enterCliff(){
  closeDialogue();forestActive=true;$('#forestScene').style.display='block';
@@ -1831,6 +1837,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/talk-data.js"></script>
 <script src="js/field/talk-data-quests.js"></script>
 <script src="js/field/talk-data-scenes.js"></script>
+<script src="js/field/talk-data-capital.js"></script>
 <script src="js/field/field-talk.js"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>

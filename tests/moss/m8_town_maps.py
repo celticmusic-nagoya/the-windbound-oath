@@ -18,7 +18,7 @@ with sync_playwright() as p:
         ids=[t['id'] for t in m['transitions']]
         check(m['schemaVersion']==2 and m['id']==i and len(set(ids))==len(ids) and m['spawns']['default'] in m['spawns']['points'],'%s: schema/id/spawns'%i)
         for t in m['transitions']:
-            if t['toMap']!='TBD': check(t['toMap'] in maps and t['toSpawn'] in maps[t['toMap']]['spawns']['points'],'%s: %s -> %s:%s exists'%(i,t['id'],t['toMap'],t['toSpawn']))
+            if t['toMap'] not in ('TBD','lind_village'): check(t['toMap'] in maps and t['toSpawn'] in maps[t['toMap']]['spawns']['points'],'%s: %s -> %s:%s exists'%(i,t['id'],t['toMap'],t['toSpawn']))
         back=[t for t in m['transitions'] if t['toMap'] in maps]
         check(all(any(u['toMap']==i for u in maps[t['toMap']]['transitions']) for t in back),'%s: every link has a way back'%i)
     # runtime: load each, check collision + walk to every node
@@ -59,9 +59,15 @@ with sync_playwright() as p:
     # 'TBD' exits stay in place with a toast (no crash / no leaving the map)
     walk_to('tr_f3_to_wall','from_courtyard','fort_dunvall_03_keep','fort_dunvall_02_ramparts')
     walk_to('tr_f2_to_keep','from_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep')
-    walk_to('tr_f1_gate_out','from_road','fort_dunvall_01_courtyard','fort_dunvall_01_courtyard')
-    walk_to('tr_r1_west_gate','from_west_gate','royal_capital_01_market','royal_capital_01_market')
-    check(ev("document.querySelector('#forestToast,.forest-toast')?document.querySelector('#forestToast,.forest-toast').textContent:'?'") is not None,'TBD exit shows a notice')
+    walk_to('tr_f1_to_capital','from_road','fort_dunvall_01_courtyard','royal_capital_01_market')
+    walk_to('tr_r1_west_gate','from_west_gate','royal_capital_01_market','fort_dunvall_01_courtyard')
+    # castle gate is still unbuilt ('TBD'): stays in place with a notice
+    walk_to('tr_r2_castle_gate','from_market','royal_capital_02_castle_plaza','royal_capital_02_castle_plaza')
+    # south gate -> back to the village (story hook hides the forest scene)
+    ev("(a)=>MossForest.enter({map:a[0],spawn:a[1]})",['fort_dunvall_01_courtyard','from_keep']); pg.wait_for_timeout(1000)
+    t=[t for t in maps['fort_dunvall_01_courtyard']['transitions'] if t['id']=='tr_f1_to_village'][0]['rect']
+    ev("([x,y])=>MossForest.goFeet(x,y)",[t['x']+t['w']/2,t['y']+t['h']/2]); pg.wait_for_timeout(9000)
+    check(not ev("forestActive") and ev("getComputedStyle(document.querySelector('#forestScene')).display")=='none','south gate returns to the village')
     check(not errs,'0 console errors %s'%errs[:3])
     b.close()
 sys.exit(1 if fails else 0)

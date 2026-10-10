@@ -24,9 +24,13 @@ class Map:
     def door(s, tid, x, y, w, h, to_map, to_spawn, note=''):
         s.trans.append({'id': tid, 'rect': {'shape': 'rect', 'x': x, 'y': y, 'w': w, 'h': h}, 'toMap': to_map, 'toSpawn': to_spawn,
                         'fade': {'out': 0.35, 'in': 0.35}, 'enabled': True, 'note': note})
-    def npc(s, nid, label, x, y, role='npc'):   # NPC / shop / quest-giver slot: an interact zone; story hooks bind by eventId 'npc_<nid>'
-        s.nodes.append({'id': 'ev_' + nid, 'type': 'interact', 'eventId': 'npc_' + nid, 'shape': {'shape': 'circle', 'cx': x, 'cy': y, 'r': 90},
-                        'role': role, 'label': label, 'placeholder': True})
+    def npc(s, nid, label, x, y, role='npc', shop=None, rest=False):
+        """NPC / shop / quest-giver / bed slot. Click-only interact zone (no eventId, so walking past never fires it).
+        Story binds by fields: npc -> FieldTalk table id; shop -> ShopData id (opened directly); action:'rest' -> sleeping place."""
+        z = {'id': 'ev_' + nid, 'type': 'interact', 'npc': nid, 'shape': {'shape': 'circle', 'cx': x, 'cy': y, 'r': 90}, 'role': role, 'label': label}
+        if shop: z['shop'] = shop
+        if rest: z['action'] = 'rest'
+        s.nodes.append(z)
         s.props.append({'id': 'p_' + nid, 'asset': 'npc_slot_' + role, 'x': x, 'y': y, 'tags': ['npc_slot']})
     def chest(s, tid, x, y, tier='common', note=''):
         s.tre.append({'id': tid, 'x': x, 'y': y, 'tier': tier, 'route': None, 'hint': 'fx_treasure_glint', 'contents': None, 'note': note})
@@ -75,18 +79,19 @@ m.floor_rect(300, 260, 2600, 1900)                                   # courtyard
 m.floor_rect(1380, 2160, 440, 240, '#a79f8a')                        # road outside the gate
 m.wall(240, 200, 2720, 120)                                          # north wall
 m.wall(240, 200, 120, 1980)                                          # west wall
-m.wall(2840, 200, 120, 1980)                                         # east wall
+m.wall(2840, 200, 120, 900); m.wall(2840, 1300, 120, 880)           # east wall with a gate gap y 1100..1300
 m.wall(240, 2100, 1140, 120); m.wall(1820, 2100, 1140, 120)          # south wall with the gate gap x 1380..1820
 for (x, y) in ((200, 160), (2800, 160), (200, 2060), (2800, 2060)): m.wall(x, y, 200, 200, '#46414d', 'tower')   # 見張り塔
 m.wall(1200, 420, 800, 520, '#6a5f70', 'keep')                       # 主塔（door gap below: x 1500..1700 at y 940）
 m.floor_rect(1500, 940, 200, 80, '#c9b27a')
 m.wall(600, 1500, 400, 200, WOOD, 'barracks'); m.wall(2200, 1500, 400, 200, WOOD, 'stable')
-m.spawn('from_road', 1600, 2300, 'up'); m.spawn('from_ramparts', 480, 1100, 'right'); m.spawn('from_keep', 1600, 1080, 'down')
-m.door('tr_f1_gate_out', 1380, 2288, 440, 64, 'TBD', 'TBD', '門の外（街道）。ワールドマップ接続は未実装')
+m.spawn('from_road', 1600, 2300, 'up'); m.spawn('from_capital_road', 3050, 1200, 'left'); m.spawn('from_ramparts', 480, 1100, 'right'); m.spawn('from_keep', 1600, 1080, 'down')
+m.door('tr_f1_to_village', 1380, 2288, 440, 64, 'lind_village', 'from_fort', '南門 -> 街道 -> リルド村（story hook onVillageExit）')
+m.door('tr_f1_to_capital', 3040, 1100, 100, 200, 'royal_capital_01_market', 'from_fort_road', '東門 -> 王都への街道')
 m.door('tr_f1_to_ramparts', 360, 1000, 80, 220, 'fort_dunvall_02_ramparts', 'from_courtyard', '城壁への階段')
 m.door('tr_f1_to_keep', 1500, 960, 200, 60, 'fort_dunvall_03_keep', 'from_courtyard', '主塔の扉')
-m.npc('f1_captain', '砦の隊長', 1600, 1300, 'quest'); m.npc('f1_quartermaster', '補給係（武具屋）', 1000, 1800, 'shop'); m.npc('f1_gate_guard', '門番', 1250, 2050, 'npc')
-m.chest('tr_f1_barracks', 800, 1760, 'common', '兵舎の脇の箱（仮）')
+m.npc('f1_captain', '砦の隊長', 1600, 1300, 'quest'); m.npc('f1_quartermaster', '補給係（武具屋）', 1000, 1800, 'shop'); m.npc('f1_bed', '兵舎の仮眠所', 800, 1760, 'bed', rest=True); m.npc('f1_gate_guard', '門番', 1250, 2050, 'npc')
+m.chest('tr_f1_barracks', 640, 1760, 'common', '兵舎の脇の箱（仮）')
 maps.append(m)
 # 2) 城壁の上（ぐるりと一周する歩廊・見張り台）
 m = Map('fort_dunvall_02_ramparts', 'ドゥンヴァル砦　城壁', 'Dunvall Fort Ramparts', '城壁の上', 2800, 1600, '辺境', 'Marches', '#a8a294', '#4a6a8a')
@@ -109,7 +114,7 @@ m.wall(1000, 300, 400, 160, '#7a3b2b', 'dais')
 m.spawn('from_courtyard', 1200, 1400, 'up'); m.spawn('from_wall', 1820, 860, 'left')
 m.door('tr_f3_exit', 1000, 1560, 400, 60, 'fort_dunvall_01_courtyard', 'from_keep', '中庭へ出る')
 m.door('tr_f3_to_wall', 1980, 760, 120, 200, 'fort_dunvall_02_ramparts', 'from_keep', '城壁へ上がる階段')
-m.npc('f3_commander', '砦の司令官（大広間）', 1200, 560, 'quest'); m.npc('f3_armory', '武器庫番', 420, 900, 'shop'); m.chest('tr_f3_armory', 400, 400, 'uncommon', '武器庫の箱（仮）')
+m.npc('f3_commander', '砦の司令官（大広間）', 1200, 560, 'quest'); m.npc('f3_armory', '武器庫番', 420, 900, 'npc'); m.chest('tr_f3_armory', 400, 400, 'uncommon', '武器庫の箱（仮）')
 maps.append(m)
 
 # ---------------- 王都 ---------------------------------------------------------------------------------
@@ -120,12 +125,12 @@ m.floor_rect(2200, 200, 400, 2800, '#c7bda2')                        # 中央の
 stalls = [(500, 600), (900, 600), (500, 1200), (900, 1200), (3500, 600), (3900, 600), (3500, 1200), (3900, 1200)]
 for (x, y) in stalls: m.wall(x, y, 260, 160, '#b4553b', 'stall')
 for (x, y, w, h) in ((200, 1900, 1500, 800), (3100, 1900, 1500, 800)): m.wall(x, y, w, h, '#7d6f62', 'building')   # 商館
-m.spawn('from_west_gate', 360, 1500, 'right'); m.spawn('from_plaza', 4400, 1500, 'left'); m.spawn('from_residential', 2400, 2850, 'up')
-m.door('tr_r1_west_gate', 48, 1300, 64, 400, 'TBD', 'TBD', '王都の西門（外へ）。接続は未実装')
+m.spawn('from_west_gate', 360, 1500, 'right'); m.spawn('from_fort_road', 360, 1500, 'right'); m.spawn('from_plaza', 4400, 1500, 'left'); m.spawn('from_residential', 2400, 2850, 'up')
+m.door('tr_r1_west_gate', 48, 1300, 64, 400, 'fort_dunvall_01_courtyard', 'from_capital_road', '王都の西門 -> 街道 -> ドゥンヴァル砦')
 m.door('tr_r1_to_plaza', 4688, 1300, 64, 400, 'royal_capital_02_castle_plaza', 'from_market', '城前広場へ')
 m.door('tr_r1_to_residential', 2200, 3088, 400, 64, 'royal_capital_03_residential', 'from_market', '住宅街へ')
-m.npc('r1_general', '雑貨商（ショップ）', 700, 980, 'shop'); m.npc('r1_weapon', '武具商（ショップ）', 4000, 980, 'shop')
-m.npc('r1_board', '依頼掲示板', 2000, 1500, 'quest'); m.npc('r1_inn', '宿屋の呼び込み', 2800, 1500, 'npc')
+m.npc('r1_general', '雑貨商（ショップ）', 700, 980, 'shop', shop='royal_general'); m.npc('r1_weapon', '武具商（ショップ）', 4000, 980, 'shop', shop='royal_arms')
+m.npc('r1_board', '依頼掲示板', 2000, 1500, 'quest'); m.npc('r1_rumor', '噂好きの商人', 1900, 2250, 'npc'); m.npc('r1_child', '走り回る子ども', 3200, 1500, 'npc'); m.npc('r1_inn', '宿屋の呼び込み', 2800, 1500, 'npc')
 m.chest('tr_r1_alley', 380, 2800, 'common', '路地裏の箱（仮）')
 maps.append(m)
 # 2) 城前広場
@@ -138,7 +143,7 @@ m.spawn('from_market', 360, 1700, 'right'); m.spawn('from_residential', 2000, 33
 m.door('tr_r2_to_market', 48, 1500, 64, 400, 'royal_capital_01_market', 'from_plaza', '商業区へ')
 m.door('tr_r2_to_residential', 1800, 3488, 400, 64, 'royal_capital_03_residential', 'from_plaza', '住宅街へ')
 m.door('tr_r2_castle_gate', 1800, 1100, 400, 60, 'TBD', 'TBD', '王城の中へ。接続は未実装')
-m.npc('r2_guard', '城門の衛兵', 1650, 1300, 'npc'); m.npc('r2_herald', '触れ役', 2300, 2600, 'quest'); m.chest('tr_r2_garden', 3500, 3000, 'uncommon', '花壇の脇の箱（仮）')
+m.npc('r2_guard', '城門の衛兵', 1650, 1300, 'npc'); m.npc('r2_bard', '広場の吟遊詩人', 1500, 2400, 'npc'); m.npc('r2_herald', '触れ役', 2300, 2600, 'quest'); m.chest('tr_r2_garden', 3500, 3000, 'uncommon', '花壇の脇の箱（仮）')
 maps.append(m)
 # 3) 住宅街
 m = Map('royal_capital_03_residential', '王都　住宅街', 'Royal Capital Residential Quarter', '住宅街', 3600, 3200, '王都', 'Royal Capital', '#aaa28c', '#8a8f78')
@@ -146,11 +151,11 @@ m.floor_rect(200, 200, 3200, 2800, '#bdb29a')
 houses = [(400, 500), (1000, 500), (1600, 500), (2600, 500), (400, 1500), (1000, 1500), (2600, 1500), (400, 2400), (1000, 2400), (2600, 2400)]
 for i, (x, y) in enumerate(houses):
     m.wall(x, y, 420, 360, ROOF, 'house'); m.floor_rect(x + 160, y + 360, 100, 60, '#c9b27a')
-    m.zones.append({'id': 'ev_door_%02d' % i, 'type': 'interact', 'eventId': 'door_house_%02d' % i, 'shape': {'shape': 'circle', 'cx': x + 210, 'cy': y + 400, 'r': 70}, 'placeholder': True})
+    m.zones.append({'id': 'ev_door_%02d' % i, 'type': 'interact', 'textId': 'msg_house_locked', 'shape': {'shape': 'circle', 'cx': x + 210, 'cy': y + 400, 'r': 70}})
 m.spawn('from_market', 1700, 360, 'down'); m.spawn('from_plaza', 3300, 1500, 'left')
 m.door('tr_r3_to_market', 1500, 48, 600, 64, 'royal_capital_01_market', 'from_residential', '商業区へ')
 m.door('tr_r3_to_plaza', 3488, 1300, 64, 400, 'royal_capital_02_castle_plaza', 'from_residential', '城前広場へ')
-m.npc('r3_resident', '住民', 1800, 1500, 'npc'); m.npc('r3_elder_quest', '依頼人の老婦人', 1500, 2700, 'quest'); m.chest('tr_r3_backyard', 2400, 2900, 'common', '裏庭の箱（仮）')
+m.npc('r3_resident', '住民', 1800, 1500, 'npc'); m.npc('r3_cat_man', '猫に餌をやる男', 3250, 2050, 'npc'); m.npc('r3_elder_quest', '依頼人の老婦人', 1500, 2700, 'quest'); m.chest('tr_r3_backyard', 2400, 2900, 'common', '裏庭の箱（仮）')
 maps.append(m)
 
 # ---------------- validation ---------------------------------------------------------------------------
@@ -190,7 +195,7 @@ def validate(mp, doc):
         if not reach(x, y, 96): errs.append('node %s unreachable' % z['id'])
     # transition targets exist
     for t in mp.trans:
-        if t['toMap'] != 'TBD':
+        if t['toMap'] not in ('TBD', 'lind_village'):
             tgt = next((o for o in maps if o.id == t['toMap']), None)
             if not tgt: errs.append('%s -> unknown map %s' % (t['id'], t['toMap']))
             elif t['toSpawn'] not in tgt.spawns: errs.append('%s -> %s has no spawn %s' % (t['id'], t['toMap'], t['toSpawn']))

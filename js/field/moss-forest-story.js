@@ -12,6 +12,7 @@
     msg_c1_sign:'『← リルド村　／　風見の断崖 →』と書かれた木の標識。海から吹き上げる風で、板がかたかた鳴っている。',
     msg_a3_rune_stone:'フィオナ「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。'
   };
+  TEXTS.msg_house_locked='扉には鍵がかかっている。留守のようだ。';
   const HOOK_TEXTS={a2_marker_crack_glint:'苔むした古い道標だ。割れ目の奥で、何かが一瞬きらりと光った。'};
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
@@ -27,6 +28,10 @@
       else say('見晴らしのよい、ベンチ代わりの岩だ。');
       return;
     }
+    // ドゥンヴァル砦 / 王都 nodes (click-only): shop -> modal, rest -> sleeping place, npc -> FieldTalk table (js/field/talk-data-capital.js)
+    if(z.shop){if(!(window.Shop&&Shop.open(z.shop)))MossForest.toast('今は商売をしていないようだ。');return;}
+    if(z.action==='rest'){restAtBed();return;}
+    if(z.npc){if(!FieldTalk.talk(z.npc,{source:'forest'}))MossForest.toast('……。');return;}
     switch(z.eventId){
       case 'prologue_sunset_hill':
         if(storyStage===3)FieldScene.play('cliff_sunset_to_fire');   // data-driven: js/field/scene-data.js
@@ -55,6 +60,16 @@
     if(need&&storyStage<need){MossForest.toast('ふたは固く閉じていて、今は開かない。');return false;}
     return true;
   }
+  // 兵舎の仮眠所. HP/MP are not stored between battles in this build (each battle starts full), so this is the facility + hook:
+  // listeners of 'party-rest' restore whatever persistent state exists later.
+  function restAtBed(){
+    MossForest.lock(true);
+    MossForest.fade(1,700).then(()=>{
+      if(window.FieldTimeOfDay)FieldTimeOfDay.set('day',{instant:true});
+      window.dispatchEvent(new CustomEvent('party-rest'));
+      return new Promise(r=>setTimeout(r,500));
+    }).then(()=>MossForest.fade(0,700)).then(()=>{MossForest.lock(false);MossForest.toast('ぐっすり眠った。HPとMPが全回復した。');});
+  }
   function onTreasure(t){
     const got=Inventory.openTreasure(t.id),herb=t.kind==='herb';
     if(!got.length){MossForest.toast(herb?'摘めそうな草は残っていない。':'箱の中は空っぽだった。');return;}
@@ -67,6 +82,7 @@
       if(storyStage===3||storyStage>=15){MossForest.lock(false);forestHideScene();return true;}
       MossForest.toast('今は、村へ戻る時ではない。');return true;
     }
+    if(t&&t.id==='tr_f1_to_village'){MossForest.lock(false);forestHideScene();px=1900;py=560;target=null;camera();return true;}   // 砦の南門 -> 街道 -> 村の東の看板前
     if(/^tr_(f|r)\d/.test((t&&t.id)||'')){MossForest.toast('この先は、まだ道が続いていない。');return true;}   // fort / capital outer exits: world connection not built yet
     if(inPrologueForest()||storyStage<15){MossForest.toast('崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。');return true;}
     return false;
