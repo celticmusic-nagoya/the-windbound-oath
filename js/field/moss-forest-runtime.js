@@ -23,6 +23,7 @@
     el.scene.addEventListener('pointerdown',onPointer);
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     if(window.FieldTimeOfDay)FieldTimeOfDay.configure(el.scene);
+    if(window.FieldWeather)FieldWeather.configure(el.scene);   // fog/rain sit under the grade overlay
     if(window.FieldVista)FieldVista.configure(el.scene);   // above the grade overlay (created after it)
     S.configured=true;
   }
@@ -68,6 +69,7 @@
     CAM.token++;CAM.focus=null;CAM.shakeUntil=0;
     if(S.forest)S.forest.destroy();
     if(window.FieldVista)FieldVista.clear();
+    if(window.FieldWalkers)FieldWalkers.clear();
     for(const n of S.extra)n.remove();
     S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
     S.forest=null;S.map=null;S.inside.clear();S.zones={rest:null,ambience:null};
@@ -96,6 +98,7 @@
     S.map=map;S.mapId=map.id;
     FieldNavigation.configure({width:map.world.width,height:map.world.height,grid:32,maxNodes:40000});
     S.forest=ForestLoader.mount(map,el.world,{flags:S.flags});
+    if(window.FieldWalkers)FieldWalkers.mount(map,el.world);
     el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
     for(const t of map.treasurePoints||[]){
       if(t.hint==='none')continue;
@@ -151,7 +154,8 @@
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
     S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
-    if(window.FieldTimeOfDay)FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});   // maps without "timeOfDay" always read as day
+    if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
+    if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
     el.fade.style.opacity='1';
     await setFade(0,fadeMs(options.transition,'in'));
     S.busy=false;S.active=true;startLoop();

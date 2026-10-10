@@ -6,7 +6,7 @@
  *   sprite            'villagers' (img/field/lind/npc/villagers/<id>_idle.png) | 'emma' (img/field/lind/npc/emma/)
  *   talk              FieldTalk id (talk-data tables), or null while the NPC has no lines yet; the DEV review / room UI talk through FieldTalk.talk(talk)
  *   routine           walking routine {kind,speed,offsets,rests} (js/field/lind-village-life.js) or null
- *   motion            null | 'play' (LindChildren plaza chase) | 'fishing' (LindFisherman)
+ *   motion            null | 'play' (LindChildren plaza chase) | 'fishing' (LindFisherman) | 'swing' (LindSwordBoy: wooden-sword practice loop, frames <id>_attack_01..06)
  *   appears           TalkConditions condition (flags/stage/quest...) evaluated when the NPC list is built; null = always
  *   walk              expected walk frames: {frames:N} installed, {frames:null} waiting for delivery, {legacy:'<id>_walk'}
  *                     frames live next to the idle PNG as <id>_walk_01..NN.png (tools/lind/install_walk_frames.py)
@@ -23,10 +23,11 @@
     {id: 'elder_woman',   label: '村の老婆',     x: 790,  footY: 1060, height: 39, sprite: 'villagers', talk: 'elder_woman',   routine: R('ELDERLY', 1.6, [-4, 0], [0, 0], [29, 38]),  motion: null, appears: null, walk: {frames: 6}},
     {id: 'boy',           label: '男の子',       x: 600,  footY: 700,  height: 31, sprite: 'villagers', talk: 'boy',           routine: null, motion: 'play', appears: null, walk: {frames: 4}},
     {id: 'girl',          label: '女の子',       x: 850,  footY: 725,  height: 31, sprite: 'villagers', talk: 'girl',          routine: null, motion: 'play', appears: null, walk: {frames: 4}},
-    {id: 'merchant',      label: '道具屋の商人', x: 420,  footY: 690,  height: 45, sprite: 'villagers', talk: 'merchant',      routine: R('SHOP', 2, [5, 0], [0, 0], [18, 27]),        motion: null, appears: null, walk: {frames: null}},
+    {id: 'merchant',      label: '道具屋の商人', x: 420,  footY: 690,  height: 45, sprite: 'villagers', talk: 'merchant',      routine: R('SHOP', 2, [5, 0], [0, 0], [18, 27]),        motion: null, appears: null, walk: {frames: 6}},
     {id: 'innkeeper',     label: '宿屋の主人',   x: 850,  footY: 420,  height: 45, sprite: 'villagers', talk: 'innkeeper',     routine: R('SHOP', 2, [-5, 0], [0, 0], [23, 31]),       motion: null, appears: null, walk: {frames: 6}},
     {id: 'fisherman',     label: '釣り人',       x: 1447, footY: 1367, height: 46, sprite: 'villagers', talk: 'fisherman',     routine: null, motion: 'fishing', appears: null, walk: {frames: null}},
     {id: 'caretaker',     label: '家畜の世話係', x: 1350, footY: 1170, height: 45, sprite: 'villagers', talk: 'caretaker',     routine: R('WORKER', 3.2, [0, -12], [0, 0], [11, 19]),  motion: null, appears: null, walk: {frames: 6}},
+    {id: 'boy_swordsman', label: '少年剣士',   x: 1852, footY: 884, height: 46, sprite: 'villagers', talk: 'boy_swordsman', routine: null, motion: 'swing', facing: -1, appears: null, walk: {frames: null}},
     {id: 'emma',          label: 'エマ',         x: 820,  footY: 780,  height: 38, sprite: 'emma',      talk: 'emma',          routine: R('EMMA', 1.2, [4, -2], [0, 0], [24, 36]),     motion: null, appears: null, walk: {frames: 3}}
   ];
   const dirs = {villagers: 'img/field/lind/npc/villagers/', emma: 'img/field/lind/npc/emma/'};

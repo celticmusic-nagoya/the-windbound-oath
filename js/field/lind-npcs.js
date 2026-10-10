@@ -34,6 +34,13 @@
         const walk=document.createElement('img');walk.src=d.path.replace('_idle.png','_walk_0'+n+'.png');walk.alt=d.label;
         actor.frames[key]=walk;el.append(walk);actor.walkSeq.push(key);
       }
+      actor.attackSeq=[];
+      for(let n=1;n<=6;n++){
+        const key=d.id+'_attack_0'+n;if(!bounds[key])break;
+        const atk=document.createElement('img');atk.src=d.path.replace('_idle.png','_attack_0'+n+'.png');atk.alt=d.label;
+        actor.frames[key]=atk;el.append(atk);actor.attackSeq.push(key);
+      }
+      if(d.facing)actor.direction=d.facing;
       if(!actor.walkSeq.length&&bounds[d.id+'_walk']){
         const walk=document.createElement('img');walk.src=d.path.replace('_idle.png','_walk.png');walk.alt=d.label;
         actor.frames.walk=walk;el.append(walk);actor.walkSeq=['idle','walk'];
@@ -51,6 +58,7 @@
     });
     window.LindChildren?.mount(actors);
     window.LindVillageLife?.mount(actors);
+    window.LindSwordBoy?.mount(actors);
     actors.forEach(render);
   }
   function distance(a) {return Math.hypot(px+17-a.x,py+42-a.footY);}
@@ -86,10 +94,10 @@
     // Walk cadence: 4 frame changes/s while walking (the farmer's original), 6/s for running children.
     // The clock only advances while moving (see update), so a stride never restarts mid-step.
     const moving=a.state==='WALK'||a.state==='RUN'||a.state==='CHASE';
-    const state=moving&&a.walkSeq?.length?a.walkSeq[Math.floor((a.walkClock||0)*(a.state==='WALK'?WALK_FPS:RUN_FPS))%a.walkSeq.length]:'idle';
+    const state=a.state==='ATTACK'&&a.attackSeq?.length?a.attackSeq[Math.min(a.attackFrame||0,a.attackSeq.length-1)]:moving&&a.walkSeq?.length?a.walkSeq[Math.floor((a.walkClock||0)*(a.state==='WALK'?WALK_FPS:RUN_FPS))%a.walkSeq.length]:'idle';
     // New walk frames share the idle canvas and scale: geometry comes from the idle bounds so the body never
     // resizes between frames. Legacy farmer_male_walk keeps its own bounds.
-    const b=window.LindFieldContentBounds[state==='idle'||state.includes('_walk_')?(a.boundsId||a.id+'_idle'):a.id+'_'+state],scale=a.height/b[5];
+    const b=window.LindFieldContentBounds[state==='idle'||state.includes('_walk_')||state.includes('_attack_')?(a.boundsId||a.id+'_idle'):a.id+'_'+state],scale=a.height/b[5];
     a.width=b[4]*scale;a.y=a.footY-a.height;a.foot.x=a.x-9;a.foot.y=a.footY-8;
     Object.assign(a.element.style,{left:a.x-a.width/2+'px',top:a.y+'px',width:a.width+'px',height:a.height+'px',zIndex:String(Math.round(a.footY)),transformOrigin:'50% 100%',transform:a.direction<0?'scaleX(-1)':'none'});
     Object.entries(a.frames).forEach(([key,image])=>{image.hidden=key!==state;});
@@ -120,6 +128,8 @@
     window.LindChildren?.update(seconds);
     actors.filter(a=>a.play).forEach(render);
     window.LindVillageLife?.update(seconds);
+    window.LindSwordBoy?.update(seconds);
+    actors.filter(a=>a.swing).forEach(render);
     actors.filter(a=>a.life).forEach(render);
   }
   function setActive(value) {
