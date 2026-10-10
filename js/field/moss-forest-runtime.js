@@ -23,6 +23,7 @@
     el.scene.addEventListener('pointerdown',onPointer);
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     if(window.FieldTimeOfDay)FieldTimeOfDay.configure(el.scene);
+    if(window.FieldWeather)FieldWeather.configure(el.scene);   // fog/rain sit under the grade overlay
     if(window.FieldVista)FieldVista.configure(el.scene);   // above the grade overlay (created after it)
     S.configured=true;
   }
@@ -50,6 +51,31 @@
     const name='aidan_'+(spr.state==='WALK'?'walk_'+spr.dir+'_'+String(spr.phase+1).padStart(2,'0'):'idle_'+spr.dir);
     if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
     else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
+    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((now-spr.since)/200*Math.PI))*1.5).toFixed(2)+'px)':'';}   // soft step bob between the 4 painted frames
+  }
+  // ---- Fiona field sprite: 4 directions x (idle + 6-frame walk), tools/field/make_fiona.py -> js/field/fiona-field-assets.js ----
+  const fsp={frames:new Map(),visible:null,dir:'down',walking:false,since:0,moved:0,px:null,py:null,pt:0,ready:false};
+  function mountFionaSprite(){
+    const A=window.FionaFieldAssets;if(!A||!el.fiona||fsp.frames.size)return;
+    for(const [name,a] of Object.entries(A.frames)){
+      const im=new Image();im.className='fiona-field-frame';im.alt='';im.draggable=false;im.hidden=true;im.dataset.src=a.path;
+      Object.assign(im.style,{position:'absolute',width:a.width*a.scale+'px',height:a.height*a.scale+'px',left:FOOT.ax-a.anchor[0]*a.scale+'px',top:FOOT.ay-a.anchor[1]*a.scale+'px',pointerEvents:'none'});
+      el.fiona.appendChild(im);fsp.frames.set(name,im);
+    }
+    Promise.all([...fsp.frames.values()].map(im=>{im.src=im.dataset.src;return im.decode().catch(()=>{});})).then(()=>{fsp.ready=true;el.fiona.classList.add('fiona-sprite');skinFiona();});
+  }
+  function updateFiona(now){
+    if(!fsp.frames.size)return;
+    if(fsp.px!==null){
+      const dx=S.fx-fsp.px,dy=S.fy-fsp.py,dt=Math.max(1,now-fsp.pt),d=Math.hypot(dx,dy),v=d/dt*1000;
+      if(v>16&&d<60){const nx=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
+        if(!fsp.walking||fsp.dir!==nx){fsp.since=now;}fsp.dir=nx;fsp.walking=true;fsp.moved=now;}
+      else if(d>=60||now-fsp.moved>140){fsp.walking=false;if(Math.abs(S.x-48-S.fx)<3&&Math.abs(S.y+18-S.fy)<3){const px=S.x-S.fx,py=S.y-S.fy;fsp.dir=Math.abs(px)>Math.abs(py)?(px>0?'right':'left'):(py>0?'down':'up');}}
+    }
+    fsp.px=S.fx;fsp.py=S.fy;fsp.pt=now;
+    const name='fiona_'+(fsp.walking?'walk_'+fsp.dir+'_'+String(Math.floor((now-fsp.since)/105)%6+1).padStart(2,'0'):'idle_'+fsp.dir);
+    if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
+    else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }
   async function loadMap(id){
     if(cache.has(id))return cache.get(id);
@@ -68,6 +94,7 @@
     CAM.token++;CAM.focus=null;CAM.shakeUntil=0;
     if(S.forest)S.forest.destroy();
     if(window.FieldVista)FieldVista.clear();
+    if(window.FieldWalkers)FieldWalkers.clear();
     for(const n of S.extra)n.remove();
     S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
     S.forest=null;S.map=null;S.inside.clear();S.zones={rest:null,ambience:null};
@@ -89,6 +116,7 @@
     Object.assign(d.style,{left:(x+w/2-a.w/2)+'px',top:(y+h-a.h)+'px',width:a.w+'px',height:a.h+'px'});
   }
   function skinFiona(){
+    if(fsp.frames.size&&fsp.ready){el.fiona.classList.remove('art');el.fiona.style.backgroundImage='';el.fiona.style.transform='';return;}   // the animated sprite replaces the static entity art
     const a=ForestLoader.entityArt('fiona');if(!a){el.fiona.classList.remove('art');el.fiona.style.backgroundImage='';el.fiona.style.transform='';return;}
     el.fiona.classList.add('art');el.fiona.style.backgroundImage='url("'+a.src+'")';el.fiona.style.width=a.w+'px';el.fiona.style.height=a.h+'px';el.fiona.style.transform='translate('+(17-a.w/2)+'px,'+(42-a.h)+'px)';
   }
@@ -96,6 +124,7 @@
     S.map=map;S.mapId=map.id;
     FieldNavigation.configure({width:map.world.width,height:map.world.height,grid:32,maxNodes:40000});
     S.forest=ForestLoader.mount(map,el.world,{flags:S.flags});
+    if(window.FieldWalkers)FieldWalkers.mount(map,el.world);
     el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
     for(const t of map.treasurePoints||[]){
       if(t.hint==='none')continue;
@@ -138,6 +167,7 @@
     const id=options.map,spawnId=options.spawn;
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
+    mountFionaSprite();
     const map=await loadMap(id);
     skinFiona();
     if(options.flags)Object.assign(S.flags,options.flags);
@@ -151,7 +181,8 @@
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
     S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
     S.keys.clear();render();
-    if(window.FieldTimeOfDay)FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});   // maps without "timeOfDay" always read as day
+    if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
+    if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
     el.fade.style.opacity='1';
     await setFade(0,fadeMs(options.transition,'in'));
     S.busy=false;S.active=true;startLoop();
@@ -342,7 +373,7 @@
     if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
-    render();updateSprite(performance.now());checkZones();S.frames++;
+    render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
   }
   function streamFactor(){
     const st=S.map&&(S.map.terrain.waters||[]).find(w=>w.kind==='stream');

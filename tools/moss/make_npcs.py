@@ -3,7 +3,7 @@
 (1 art pixel = 2 world px = 4 image px, feet bottom-centre). Registered as manifest node rules for asset ids npc_slot_<look>
 (the map props that mark NPC slots, see tools/moss/build_town_maps.py). Replace any of them with hand-drawn art by editing manifest.json only.
 usage: python3 tools/moss/make_npcs.py"""
-import json, os, random, sys
+import json, os, random, sys, zlib
 sys.path.insert(0, os.path.dirname(__file__))
 from make_props import Art, INK, WOOD, STONE, MOSS, ROPE, S, K
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
@@ -11,14 +11,18 @@ OUT = os.path.join(ROOT, 'img/field/moss/props'); MAN = os.path.join(ROOT, 'img/
 SKIN = [(244, 208, 170, 255), (226, 178, 138, 255), (204, 150, 112, 255)]
 def shade(c, f): return tuple(max(0, min(255, int(v * f))) for v in c[:3]) + (255,)
 
-def chibi(look, W=56, H=84):
-    L = LOOKS[look]; a = Art(W, H, hash(look) % 997); cx = a.w // 2; bot = a.h - 2
+# 6-frame walk cycle: (lift of the left foot, lift of the right foot, body bob, arm swing) in art px; frame 0 = idle contact pose
+WALK = [(0, 0, 0, 0), (2, 0, 1, 1), (1, 0, 0, 0), (0, 0, 0, 0), (0, 2, 1, -1), (0, 1, 0, 0)]
+def chibi(look, W=56, H=84, step=None):
+    L = LOOKS[look]; a = Art(W, H, zlib.crc32(look.encode()) % 997); cx = a.w // 2; bot = a.h - 2
+    lL, lR, bob, arm = WALK[step] if step is not None else (0, 0, 0, 0)
     sc = L.get('scale', 1.0); hh = int(12 * sc); bh = int(10 * sc); lh = int(6 * sc)
     a.shadow(cx, bot + 1, int(8 * sc))
-    legs_top = bot - lh; body_top = legs_top - bh; head_top = body_top - hh + 2
+    legs_top = bot - lh - bob; body_top = legs_top - bh; head_top = body_top - hh + 2
     skin = L.get('skin', SKIN[0]); cloth = L['cloth']; trim = L.get('trim', shade(cloth, .7))
     # legs + boots
-    for dx in (-3, 2): a.rect(cx + dx, legs_top, cx + dx + 2, bot - 2, L.get('legs', shade(cloth, .6))); a.rect(cx + dx - 1, bot - 2, cx + dx + 3, bot, L.get('boots', (84, 58, 38, 255)))
+    for dx, lf in ((-3, lL), (2, lR)):
+        a.rect(cx + dx, legs_top, cx + dx + 2, bot - 2 - lf, L.get('legs', shade(cloth, .6))); a.rect(cx + dx - 1, bot - 2 - lf, cx + dx + 3, bot - lf, L.get('boots', (84, 58, 38, 255)))
     # body (trapezoid) + arms
     for y in range(body_top, legs_top + 1):
         t = (y - body_top) / max(1, legs_top - body_top); half = int(5 * sc + 2 * t * sc)
@@ -26,7 +30,7 @@ def chibi(look, W=56, H=84):
     a.rect(cx - int(5 * sc), legs_top - 2, cx + int(5 * sc), legs_top - 1, trim)           # belt
     if L.get('apron'): a.rect(cx - 3, body_top + 2, cx + 3, legs_top + 1, L['apron'])
     for sx in (-1, 1):                                                                 # arms
-        ax = cx + sx * int(6.5 * sc); a.rect(ax - 1, body_top + 1, ax, legs_top - 2, shade(cloth, .9)); a.rect(ax - 1, legs_top - 2, ax, legs_top - 1, skin)
+        ao = arm * sx * -1; ax = cx + sx * int(6.5 * sc); a.rect(ax - 1, body_top + 1 + ao, ax, legs_top - 2 + ao, shade(cloth, .9)); a.rect(ax - 1, legs_top - 2 + ao, ax, legs_top - 1 + ao, skin)
     # head
     for y in range(head_top, body_top + 1):
         t = (y - head_top) / max(1, body_top - head_top); half = int((6 - abs(t - .45) * 3) * sc)
@@ -101,7 +105,11 @@ def main():
     items['bed'] = (bed, 72, 52); items['board'] = (board, 80, 84)
     for look, (fn, w, h) in items.items():
         a = fn(); size = a.png(os.path.join(OUT, 'npc_%s.png' % look)); assert size == (w * K, h * K), (look, size)
-        rules.append({'match': '^npc_slot_%s$' % look, 'file': 'props/npc_%s.png' % look, 'w': w, 'h': h, 'gen': 'make_npcs'})
+        rule = {'match': '^npc_slot_%s$' % look, 'file': 'props/npc_%s.png' % look, 'w': w, 'h': h, 'gen': 'make_npcs'}
+        if look in LOOKS:   # 6-frame walk cycle next to the idle sprite: npc_<look>_walk_01..06.png (same canvas, feet bottom-centre)
+            for k in range(6): chibi(look, step=k).png(os.path.join(OUT, 'npc_%s_walk_%02d.png' % (look, k + 1)))
+            rule['walk'] = {'file': 'props/npc_%s_walk_{n}.png' % look, 'frames': 6}
+        rules.append(rule)
     m = json.load(open(MAN, encoding='utf-8'))
     m['node'] = [r for r in m['node'] if r.get('gen') != 'make_npcs']; m['node'][0:0] = rules
     open(MAN, 'w', encoding='utf-8').write(json.dumps(m, ensure_ascii=False, indent=1)); print('wrote %d sprites + manifest rules' % len(rules))

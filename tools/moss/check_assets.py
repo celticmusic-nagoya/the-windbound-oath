@@ -44,6 +44,7 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'data/maps/*.json'))):
     d = json.load(open(f, encoding='utf-8'))
     for k, rects in (d.get('collision', {}).get('presets') or {}).items(): presets.setdefault(k, []).append((os.path.basename(f), rects))
     for p in d.get('props', []): used['node'].add(p['asset'])
+    for w in d.get('walkers', []): used['node'].add('npc_slot_' + w['look'])   # FieldWalkers draw these (idle + 6 walk frames)
     for s in d.get('scatter', []):
         for a in s.get('pool', []): used['node' if s.get('render') == 'node' else 'layer'].add(a)
 

@@ -20,6 +20,21 @@ window.TalkData = Object.freeze({tables: [
   ]
  },
  {
+  "npc": "boy_swordsman",
+  "entries": [
+   {
+    "id": "boy_swordsman_closed",
+    "priority": 10,
+    "when": {},
+    "mode": "cycle",
+    "lines": [
+     "少年剣士「えいっ、やぁっ！　……あ、エイダン兄ちゃん！　見てた？　木剣でも百回振れば、いつかほんものの剣みたいになるんだって！」",
+     "少年剣士「兄ちゃんみたいに、父さんの剣を継げる騎士になるんだ。まだ素振りしかできないけどね。」"
+    ]
+   }
+  ]
+ },
+ {
   "npc": "girl",
   "entries": [
    {
