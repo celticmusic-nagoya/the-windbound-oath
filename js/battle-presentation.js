@@ -1,6 +1,6 @@
 // Awaited presentation boundaries. No timers here consume resources or advance turns.
 (() => {
- const durations=Object.freeze({SHORT:550,SPECIAL:1000});
+ const durations=Object.freeze({SHORT:1250,SPECIAL:2000});   // full-mode display time; setting 'SHORT' still caps at SHORT_CAP
  const definitions=Object.freeze({
   skill:{actor:'aidan',name:'一閃',type:'SHORT',state:'skill'},
   wind:{actor:'aidan',name:'風の一閃',type:'SPECIAL',state:'wind'},
@@ -9,6 +9,7 @@
   rune:{actor:'fiona',name:'風の祈り',type:'SHORT',state:'prayer'},
   blessing:{actor:'lou',name:'妖精の祝福',type:'SPECIAL',state:'rune'}
  });
+ const SHORT_CAP=550;
  let epoch=0,queue=Promise.resolve(),pending=new Set(),seen=new Set(),motionOwned=false,setting='FULL';
  const active=new Set();
  function valid(token){return token===PrologueCombat.generation;}
@@ -31,7 +32,7 @@
  async function showSkillCutin({actor,skill,type='SHORT',image,duration=durations[type]||550},token=PrologueCombat.generation){
   if(setting==='OFF')return valid(token);
   return run(async t=>{
-   const effectiveDuration=setting==='SHORT'?Math.min(duration,550):duration;
+   const effectiveDuration=setting==='SHORT'?Math.min(duration,SHORT_CAP):duration;
    const el=document.createElement('div');el.className='skillCutin '+(setting==='SHORT'?'SHORT':type);el.dataset.skill=skill;el.dataset.actor=actor;el.style.setProperty('--cutin-duration',effectiveDuration+'ms');
    const art=document.createElement('img');art.src=image;art.alt=actor+' — '+skill;
    const name=document.createElement('strong');name.textContent=skill;const rune=document.createElement('span');rune.className='cutinRune';rune.textContent='᚛ ᚃ ᚑ ᚐ ᚈ ᚓ ᚜';
@@ -60,7 +61,7 @@
   if(!valid(token)||['ko','victory'].includes(BattleActorState.get(battle,d.actor)))return false;
   BattleActorState.set(d.actor,d.state,{battle,duration:d.actor==='aidan'?1200:1100});
   if(d.actor==='aidan')WBActors[battle==='normal'?'normalAidan':'raiderAidan']();
-  else if(d.actor==='fiona')WBActors[battle==='normal'?'normalFionaMagic':'raiderFionaMagic']();
+  else if(d.actor==='fiona')WBActors[battle==='normal'?'normalFionaMagic':'raiderFionaMagic'](kind);
   windEffect(battle,d.actor);return run(t=>wait(d.actor==='aidan'?380:330,t),token);
  }
  function log(callback,owned){motionOwned=!!owned;try{return callback()}finally{motionOwned=false;}}

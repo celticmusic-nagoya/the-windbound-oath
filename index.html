@@ -758,7 +758,7 @@ function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
  if(attackBattleBusy||PrologueProgress.cleared(id))return;
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
- if(id.startsWith('forestGob')||id.startsWith('mossSlime')||id.startsWith('forestBat')||id.startsWith('leafyBoar'))forestHideScene();
+ if(id.startsWith('forestGob')||id.startsWith('mossSlime')||id.startsWith('forestBat')||id.startsWith('leafyBoar')||id.startsWith('fieldGob'))forestHideScene();
  document.body.classList.remove('raiderBattleMode');
  document.body.classList.add('battleMode','normalBattleMode');
  $('#attackBattle').style.display='block';
@@ -767,7 +767,7 @@ function startAttackBattle(id,hp){
  updateNormalCommands();
  updateNormalPartyHud();
  PrologueCombat.beginNormal(id);
- showBattleBanner(id.startsWith('mossSlime')?'モススライムが現れた！':id.startsWith('forestBat')?'フォレストバットが現れた！':id.startsWith('leafyBoar')?'リーフィボアが現れた！':id==='attackGob1'?atkT('banner','gob1'):atkT('banner','gob'),1000);
+ showBattleBanner(id.startsWith('mossSlime')?'モススライムが現れた！':id.startsWith('forestBat')?'フォレストバットが現れた！':id.startsWith('leafyBoar')?'リーフィボアが現れた！':id.startsWith('fieldGob')?'ゴブリンが現れた！':id==='attackGob1'?atkT('banner','gob1'):atkT('banner','gob'),1000);
  updateAttackBattle();
 }
 function updateAttackBattle(){
@@ -796,6 +796,7 @@ $('#nDevKill').onclick=()=>PrologueCombat.instantKill('normal');
 // Legacy normal-goblin buttons are hidden; all normal encounters use the party command row.
 $('#aatk').parentElement.style.display='none';
 
+const VICTORY_POSE_MS=2400;   // how long the victory pose is enjoyed before the result screen (was 900ms normal / 1800ms raider)
 function finishAttackBattle(){
  if(!PrologueCombat.claimVictory('normal'))return;
  const completion=PrologueCombat.generation;
@@ -806,14 +807,14 @@ function finishAttackBattle(){
  const gobBox=$('#bGob'),gobImg=gobBox&&gobBox.querySelector('img');
 
  if(gobBox) gobBox.classList.add('taintedKO');
- showBattleBanner('魔物を退けた。',900);
+ showBattleBanner('魔物を退けた。',VICTORY_POSE_MS);
  setTimeout(()=>{
    if(completion!==PrologueCombat.generation)return;
    const e=$('#'+defeated);if(e){e.hidden=true;e.style.display='none'}
-   if(defeated&&/^(mossSlime|forestBat|leafyBoar)\d$/.test(defeated)){   // random Moss Forest encounter: not a story battle (no progress record, no story flags)
+   if(defeated&&/^(mossSlime|forestBat|leafyBoar|fieldGob)\d$/.test(defeated)){   // random Moss Forest encounter: not a story battle (no progress record, no story flags)
      const n=Math.max(1,+defeated.slice(-1)||1);
      hideNormalPartyBattle();
-     const rw=defeated.startsWith('forestBat')?[10,4]:defeated.startsWith('leafyBoar')?[9,5]:[7,3];   // per enemy EXP/GOLD: slime 7/3, bat 10/4, boar 9/5
+     const rw=defeated.startsWith('forestBat')?[10,4]:defeated.startsWith('leafyBoar')?[9,5]:defeated.startsWith('fieldGob')?[12,6]:[7,3];   // per enemy EXP/GOLD: slime 7/3, bat 10/4, boar 9/5
      showBattleResult(rw[0]*n,rw[1]*n,()=>{
        $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
        if(gobBox)gobBox.classList.remove('taintedKO');
@@ -850,7 +851,7 @@ function finishAttackBattle(){
      hideNormalPartyBattle();attackStep=2;storyStage=6;$('#attackFiona').style.display='grid';atkObj('talk_fiona');atkNotice('found_fiona');
    }
    attackBattleBusy=false;
- },900);
+ },VICTORY_POSE_MS);
 }
 $('#attackFiona').onclick=()=>{
  if(storyStage<6)return;
@@ -1307,7 +1308,7 @@ function finishRaider(){
      document.body.classList.remove('battleMode','raiderBattleMode','raiderFinishing');
      if(sprite) sprite.classList.remove('raiderKO');
    });
- },1800);
+ },VICTORY_POSE_MS+600);
 }
 $('#rbDevKill').onclick=()=>PrologueCombat.instantKill('raider');
 $('#rbAtk').onclick=()=>choosePartyAct('atk');
@@ -1739,19 +1740,58 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
   }
   function vw(){return Math.max(document.documentElement.clientWidth||0,window.innerWidth||0)}
   function isPortrait(){return innerHeight>innerWidth}
+  /* Target-aware approach: melee actors dive to the selected enemy's actual position (contact range);
+     ranged/magic actors only step slightly forward and fire from there. Geometry is measured from the
+     visuals (never from the HUD-carrying unit) and falls back to the old fixed distances without a target. */
+  const VISUAL={v2AidanUnit:'bAidan2',v2FionaUnit:'bFiona2'};
+  function visualOf(id){return document.getElementById(VISUAL[id]||id);}
+  function enemyVisual(unit){
+    if(!unit)return null;
+    if(unit==='v2GobUnit')return document.getElementById('bGob');
+    const el=document.getElementById(unit);
+    return el&&(el.querySelector('.prologueSprite')||el);
+  }
+  function approach(id){
+    const prev=running.get(document.getElementById(id));if(prev)try{prev.cancel()}catch(e){}
+    const a=visualOf(id),t=enemyVisual(window.PrologueCombat?.impactTarget?.());
+    if(!a||!t||t===a)return null;
+    const ar=a.getBoundingClientRect(),tr=t.getBoundingClientRect();
+    if(!ar.width||!tr.width)return null;
+    const ax=ar.left+ar.width/2,tx=tr.left+tr.width/2,dir=tx>=ax?1:-1,gap=Math.abs(tx-ax);
+    const reach=(ar.width+tr.width)*.5*.62;
+    const clampY=innerHeight*.22;
+    return {dir,gap,reach,dx:dir*Math.max(0,gap-reach),dy:Math.max(-clampY,Math.min(clampY,(tr.bottom-ar.bottom)*.8))};
+  }
+  window.WBApproach=approach;
   function allyLunge(id, ranged){
-    const d=ranged ? (isPortrait()?Math.min(72,vw()*.13):Math.min(150,vw()*.10))
-                   : (isPortrait()?Math.min(210,vw()*.42):Math.min(760,vw()*.47));
+    let g=approach(id);
+    if(!g){
+      const d=ranged ? (isPortrait()?Math.min(72,vw()*.13):Math.min(150,vw()*.10))
+                     : (isPortrait()?Math.min(210,vw()*.42):Math.min(760,vw()*.47));
+      g={dir:1,dx:d*1.10,dy:-16,gap:d,reach:0};
+    }
+    const dir=g.dir;
+    if(ranged){
+      // small step forward (<=~18% of the way, capped), then fire from there
+      const step=dir*Math.max(18,Math.min(g.gap*.18,isPortrait()?Math.min(72,vw()*.13):Math.min(150,vw()*.10)));
+      move(id,[
+        {translate:'0 0',scale:'1',rotate:'0deg',offset:0},{translate:(-dir*10)+'px 4px',scale:'.97',rotate:(-dir)+'deg',offset:.15},
+        {translate:step+'px -10px',scale:'1.07',rotate:(2*dir)+'deg',offset:.47},
+        {translate:(step+dir*8)+'px -6px',scale:'1.09',rotate:dir+'deg',offset:.61},
+        {translate:'0 0',scale:'1',rotate:'0deg',offset:1}
+      ],680);
+      return;
+    }
     move(id,[
-      {translate:'0 0',scale:'1',rotate:'0deg',offset:0},{translate:(ranged?'-10px':'-28px')+' 4px',scale:'.97',rotate:(ranged?'-1deg':'-3deg'),offset:.15},
-      {translate:(d*1.10)+'px -16px',scale:(ranged?'1.07':'1.13'),rotate:(ranged?'2deg':'4deg'),offset:.47},
-      {translate:(d*1.16+24)+'px -6px',scale:(ranged?'1.09':'1.16'),rotate:(ranged?'1deg':'2deg'),offset:.61},
+      {translate:'0 0',scale:'1',rotate:'0deg',offset:0},{translate:(-dir*28)+'px 4px',scale:'.97',rotate:(-3*dir)+'deg',offset:.15},
+      {translate:g.dx+'px '+(g.dy-14)+'px',scale:'1.13',rotate:(4*dir)+'deg',offset:.47},
+      {translate:(g.dx+dir*22)+'px '+(g.dy-4)+'px',scale:'1.16',rotate:(2*dir)+'deg',offset:.61},
       {translate:'0 0',scale:'1',rotate:'0deg',offset:1}
-    ],ranged?680:820);
+    ],820);
   }
   function magic(id){
-    const d=isPortrait()?24:58;
-    move(id,[{translate:'0 0',scale:'1'},{translate:'-8px 3px',scale:'.98',offset:.18},{translate:(d*1.22)+'px -11px',scale:'1.08',offset:.48},{translate:(d*1.22)+'px -11px',scale:'1.08',offset:.66},{translate:'0 0',scale:'1'}],760);
+    const g=approach(id),dir=g?g.dir:1,d=g?dir*Math.max(14,Math.min(g.gap*.12,isPortrait()?32:70)):(isPortrait()?24:58);
+    move(id,[{translate:'0 0',scale:'1'},{translate:(-dir*8)+'px 3px',scale:'.98',offset:.18},{translate:(d*1.22)+'px -11px',scale:'1.08',offset:.48},{translate:(d*1.22)+'px -11px',scale:'1.08',offset:.66},{translate:'0 0',scale:'1'}],760);
   }
   function enemyLunge(id, heavy){
     const d=heavy ? (isPortrait()?Math.min(205,vw()*.39):Math.min(700,vw()*.43))
@@ -1806,17 +1846,30 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
   function shake(heavy=false,delay=0){const token=window.PrologueCombat?.generation;setTimeout(()=>{if(token!==window.PrologueCombat?.generation)return;const c=heavy?'wbHeavyShake':'wbShake';document.body.classList.remove(c);void document.body.offsetWidth;document.body.classList.add(c);setTimeout(()=>document.body.classList.remove(c),heavy?300:200)},delay)}
   function hit(id,heavy=false,delay=360){if(['v2GobUnit','raiderSprite'].includes(id))id=window.PrologueCombat?.impactTarget()||id;fx('wbSlash',id,delay);fx('wbBurst',id,delay+25);shake(heavy,delay+20)}
   function magic(id,delay=300){fx('wbMagic',id,delay);shake(false,delay+90)}
+  /* Fiona's ranged attack / windbloom: a bolt travels from her to the targeted enemy, then the impact lands. */
+  function bolt(fromId,toId,delay=170,travel=200,kind=''){
+    const token=window.PrologueCombat?.generation;
+    setTimeout(()=>{
+      if(token!==window.PrologueCombat?.generation)return;
+      const f=document.getElementById(fromId),t=document.getElementById(toId);if(!f||!t||typeof Element.prototype.animate!=='function')return;
+      const fr=f.getBoundingClientRect(),tr=t.getBoundingClientRect();
+      const x0=fr.left+fr.width*.78,y0=fr.top+fr.height*.42,x1=tr.left+tr.width*.5,y1=tr.top+tr.height*.5;
+      const e=document.createElement('div');e.className='wbFx wbBolt '+kind;layer().appendChild(e);
+      const a=e.animate([{left:x0+'px',top:y0+'px',opacity:.2,scale:'.5'},{opacity:1,scale:'1',offset:.2},{left:x1+'px',top:y1+'px',opacity:1,scale:'1.15'}],{duration:travel,easing:'cubic-bezier(.4,0,.8,.6)',fill:'forwards'});
+      a.onfinish=a.oncancel=()=>e.remove();setTimeout(()=>e.remove(),travel+300);
+    },delay);
+  }
 
   const old=window.WBActors||{};
   window.WBActors={
     ...old,
     normalAidan:()=>{old.normalAidan?.();hit('v2GobUnit',false,380)},
-    normalFionaAttack:()=>{old.normalFionaAttack?.();hit('v2GobUnit',false,330)},
-    normalFionaMagic:()=>{old.normalFionaMagic?.();magic('v2FionaUnit',260)},
+    normalFionaAttack:()=>{old.normalFionaAttack?.();bolt('v2FionaUnit',window.PrologueCombat?.impactTarget?.()||'v2GobUnit',170,190);hit('v2GobUnit',false,370)},
+    normalFionaMagic:kind=>{old.normalFionaMagic?.(kind);magic('v2FionaUnit',260);if(kind==='windbloom'){bolt('v2FionaUnit',window.PrologueCombat?.impactTarget?.()||'v2GobUnit',300,230,'wind');hit('v2GobUnit',false,540)}},
     normalEnemy:()=>{old.normalEnemy?.();hit('v2AidanUnit',false,370)},
     raiderAidan:()=>{old.raiderAidan?.();hit('raiderSprite',true,390)},
-    raiderFionaAttack:()=>{old.raiderFionaAttack?.();hit('raiderSprite',false,340)},
-    raiderFionaMagic:()=>{old.raiderFionaMagic?.();magic('rbFiona',260)},
+    raiderFionaAttack:()=>{old.raiderFionaAttack?.();bolt('rbFiona',window.PrologueCombat?.impactTarget?.()||'raiderSprite',170,190);hit('raiderSprite',false,370)},
+    raiderFionaMagic:kind=>{old.raiderFionaMagic?.(kind);magic('rbFiona',260);if(kind==='windbloom'){bolt('rbFiona',window.PrologueCombat?.impactTarget?.()||'raiderSprite',300,230,'wind');hit('raiderSprite',false,540)}},
     raiderEnemy:()=>{old.raiderEnemy?.();hit('rbAidan',true,430)}
   };
 
@@ -1834,10 +1887,10 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <link rel="stylesheet" href="css/battle-target.css">
 <script src="js/battle-target-selector.js"></script>
 <script src="js/battle-action-targets.js"></script>
-<link rel="stylesheet" href="css/prologue-combat.css?v=20261011v">
+<link rel="stylesheet" href="css/prologue-combat.css?v=20261012a">
 <script src="js/battle-status.js"></script>
 <script src="js/battle-critical.js"></script>
-<script src="js/prologue-combat.js?v=20261011v"></script>
+<script src="js/prologue-combat.js?v=20261012a"></script>
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
 <script src="js/prologue-dev.js?v=20261011g"></script>
@@ -1853,7 +1906,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/field-monsters.js?v=20261011v"></script>
 <script src="js/field/fiona-field-assets.js?v=20261011c"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261011t"></script>
-<script src="js/field/moss-forest-story.js?v=20261011v"></script>
+<script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js"></script>
@@ -1905,10 +1958,11 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <link rel="stylesheet" href="css/battle-polish.css">
 <link rel="stylesheet" href="css/equipment.css">
 <script src="js/battle-party-layout.js?v=20261011-mobile"></script>
-<link href="css/battle-presentation.css" rel="stylesheet"/>
+<link href="css/battle-presentation.css?v=20261012a" rel="stylesheet"/>
 <script src="js/battle-facing.js"></script>
-<script src="js/battle-presentation.js"></script>
+<script src="js/battle-presentation.js?v=20261012a"></script>
 <link rel="stylesheet" href="css/battle-idle-motion.css">
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
 <script src="js/battle-idle-motion.js?v=20261011v"></script>
+<script src="js/battle-lou-flight.js?v=20261012a"></script>
 </body></html>

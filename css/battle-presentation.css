@@ -17,3 +17,11 @@ body.battlePresentationBusy #normalBattleCmd,body.battlePresentationBusy #rbCmd,
 @media(orientation:portrait){.skillCutin img,.skillCutin.SPECIAL img{width:98vw;height:40vh}.skillCutin strong{left:5%;bottom:30%;font-size:24px}.cutinRune{top:26%}.battleBanter{top:14%;padding:10px 12px}}
 @media(orientation:landscape) and (max-height:520px){.skillCutin img,.skillCutin.SPECIAL img{height:55vh}.skillCutin strong{bottom:12%;font-size:24px}.battleBanter{top:7%;padding:8px 12px}.cutinRune{top:10%}#normalRuneReadout{top:8px}}
 @media(prefers-reduced-motion:reduce){.skillCutin img,.battleWindEffect{animation:none}}
+/* Fiona ranged bolt (orb travels to the targeted enemy) */
+.wbBolt{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fffbe4 0 28%,#bff0d8 52%,#6fcfb700 74%);box-shadow:0 0 18px #a9eeda,0 0 34px #6fcfb799;z-index:10030}
+.wbBolt.wind{width:34px;height:34px;background:radial-gradient(circle,#f4ffe8 0 24%,#b9e8a3 50%,#7dc46a00 76%);box-shadow:0 0 22px #bfe9a0,0 0 40px #8fd07a88}
+/* Lou: constant fairy float (idle + support); wander offsets are applied by js/battle-lou-flight.js on the unit itself */
+#rbLou>img{animation:louFloat 2.1s ease-in-out infinite}
+#rbLou>img.louNoFloat{animation:none}
+@keyframes louFloat{0%,100%{translate:0 3px}50%{translate:0 -9px}}
+@media(prefers-reduced-motion:reduce){#rbLou>img{animation:none}}

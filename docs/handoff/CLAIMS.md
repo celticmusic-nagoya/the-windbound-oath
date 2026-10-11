@@ -28,3 +28,4 @@ Claude / `work/forest-bat-symbol-encounter`（上記ブランチの上に積む�
 
 ## main反映記録
 - 2026-10-12 Claude: フィールドモンスター一式（スライム/ゴブリン型AI・フォレストバット・リーフィボア）をmainへ `--no-ff` merge。ロールバック: タグ `rollback/before-field-monsters-20261012`（= 57dc6ae）、または該当マージコミットを `git revert -m 1`。PLAYER QA待ち。
+- 2026-10-12 Claude: `work/battle-feel-and-monster-layout` — 戦闘演出（近接は選択敵位置へ飛び込み／フィオナは少し前進+魔弾／ルーの飛び回り+浮き沈み `js/battle-lou-flight.js`／カットイン `battle-presentation.js` durations 1250/2000ms・勝利ポーズ `VICTORY_POSE_MS=2400`）と、A1（スライム2・ボア2・ゴブリン2）／A2（スライム2・ボア2・バット2）配置、通常ゴブリンのフィールド戦闘接続（`fieldGobN`）。対象: index.html（WBActors v064/v066・finish）、js/battle-presentation.js、js/prologue-combat.js、js/field/moss-forest-story.js、css/battle-presentation.css、A1/A2 JSON、tests/moss/m16_battle_feel.py。

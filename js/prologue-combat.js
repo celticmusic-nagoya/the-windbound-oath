@@ -27,7 +27,7 @@
  }
  function beginNormal(id){
   generation++;window.BattlePresentation?.cancel();window.BattleFacing?.set('NORMAL');normalRune=0;roundNumber=1;BattleStatus.clear('normal');BattleTargetSelector.reset('normal');clean('normal');impact=null;
-  const types=/^mossSlime\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('moss_slime'):/^forestBat\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('forest_bat'):/^leafyBoar\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('leafy_boar'):id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
+  const types=/^mossSlime\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('moss_slime'):/^forestBat\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('forest_bat'):/^leafyBoar\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('leafy_boar'):/^fieldGob\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('goblin'):id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
   document.body.classList.toggle('slimeBattle',types[0]==='moss_slime');document.body.classList.toggle('batBattle',types[0]==='forest_bat');document.body.classList.toggle('boarBattle',types[0]==='leafy_boar');
   rosters.normal=types.map((t,i)=>makeEnemy('normal',t,i));
   document.body.classList.toggle('soloRescue',id==='attackGob1');
