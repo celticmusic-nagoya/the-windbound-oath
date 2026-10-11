@@ -98,20 +98,21 @@
   }
   window.BattleIdleMotion=Object.freeze({
     register({context,actor,selector,assets}){
-      if(!profiles.has(assets.type)||records.has(selector))return false;
-      records.set(selector,{context,actor,selector,assets,enabled:false,state:null,showing:false});return true;
+      if(!profiles.has(assets.type)||records.has(selector+'|'+actor))return false;
+      records.set(selector+'|'+actor,{context,actor,selector,assets,enabled:false,state:null,showing:false});return true;
     },
-    ready(selector){const r=records.get(selector);return r&&eligible(r)?preload(r.assets).promise.then(()=>cache.get(r.assets).ready):Promise.resolve(false);},
+    ready(selector){const r=[...records.values()].find(q=>q.selector===selector&&q.enabled);return r&&eligible(r)?preload(r.assets).promise.then(()=>cache.get(r.assets).ready):Promise.resolve(false);},
     defineType(name,sequenceFactory){if(profiles.has(name)||typeof sequenceFactory!=='function')return false;profiles.set(name,sequenceFactory);return true;},
-    begin(selector){const r=records.get(selector);if(r){r.enabled=true;hide(r);reset(r);refresh();}},
-    stop(selector){const r=records.get(selector);if(r){r.enabled=false;hide(r);refresh();}},
-    onState(selector,actor,state){const r=records.get(selector);if(!r||r.actor!==actor)return;const changed=r.state!==state;r.state=state;if(changed)hide(r);refresh();},
+    // Several actors can share a battle slot (the enemy slot holds goblin / slime / bat / boar art in turn): a record only runs while its own actor is painted there.
+    begin(selector,actor){for(const r of records.values())if(r.selector===selector){const mine=!actor||r.actor===actor;r.enabled=mine;if(!mine)r.state=null;hide(r);if(mine)reset(r);}refresh();},
+    stop(selector){for(const r of records.values())if(r.selector===selector){r.enabled=false;hide(r);}refresh();},
+    onState(selector,actor,state){for(const r of records.values()){if(r.selector!==selector)continue;if(r.actor!==actor){if(r.state!==null){r.state=null;hide(r);}continue;}const changed=r.state!==state;r.state=state;if(changed)hide(r);}refresh();},
     get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0}))};}
   });
   BattleIdleMotion.register({context:'normal',actor:'aidan',selector:'#bAidan2 img',assets:BATTLE_IDLE_ASSETS.aidan});
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});
   // Forest Bat (enemy): idle flap on whichever battle slot holds a bat (records only act while the slot's actor is 'forest_bat').
-  for(const selector of ['#bGob img','#normalEnemy1 .prologueSprite img','#normalEnemy2 .prologueSprite img'])BattleIdleMotion.register({context:'normal',actor:'forest_bat',selector,assets:BATTLE_IDLE_ASSETS.forest_bat});
+  for(const actor of ['forest_bat','leafy_boar'])for(const selector of ['#bGob img','#normalEnemy1 .prologueSprite img','#normalEnemy2 .prologueSprite img'])BattleIdleMotion.register({context:'normal',actor,selector,assets:BATTLE_IDLE_ASSETS[actor]});
   new MutationObserver(refresh).observe(document.body,{attributes:true,attributeFilter:['class']});
   document.addEventListener('visibilitychange',refresh);reduced.addEventListener('change',refresh);
 })();

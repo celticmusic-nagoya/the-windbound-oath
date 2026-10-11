@@ -1,7 +1,7 @@
 // Incremental encounter roster. Existing engine owns COMMAND, resources, motion and results.
 (() => {
  const q=s=>document.querySelector(s);
- const stats=Object.freeze({goblin:{hp:100,atk:12,def:10,spd:10,cri:0},tainted_goblin:{hp:190,atk:15,def:11.5,spd:11.5,cri:0},moss_slime:{hp:56,atk:9,def:6,spd:9,cri:0},forest_bat:{hp:48,atk:13,def:7,spd:16,cri:0,drain:.6}});
+ const stats=Object.freeze({goblin:{hp:100,atk:12,def:10,spd:10,cri:0},tainted_goblin:{hp:190,atk:15,def:11.5,spd:11.5,cri:0},moss_slime:{hp:56,atk:9,def:6,spd:9,cri:0},forest_bat:{hp:48,atk:13,def:7,spd:16,cri:0,drain:.6},leafy_boar:{hp:70,atk:15,def:9,spd:12,cri:0}});
  let generation=0,roundNumber=1,impact=null,callFlags=[false,false],enragePending=false,lastSupportRound=0,blessingUsed=false,normalRune=0,enrageFlow=null;
  const rosters={normal:[],raider:[]};
  const victories=new Map();
@@ -16,25 +16,26 @@
  }
  const alive=b=>rosters[b].filter(e=>e.hp>0);
  function clean(b){
-  rosters[b].forEach(e=>{if(e.type==='forest_bat')window.BattleIdleMotion?.stop(e.node+' img');BattleActorState.unregister(b,e.key);if(e.extra)q('#'+e.unit)?.remove()});rosters[b]=[];
+  rosters[b].forEach(e=>{if(idleEnemy(e.type))window.BattleIdleMotion?.stop(e.node+' img');BattleActorState.unregister(b,e.key);if(e.extra)q('#'+e.unit)?.remove()});rosters[b]=[];
  }
+ function idleEnemy(type){return Boolean(window.BATTLE_IDLE_ASSETS&&BATTLE_IDLE_ASSETS[type]&&type!=='aidan');}   // enemies with a delivered multi-frame idle (forest_bat, leafy_boar)
  function makeEnemy(b,type,i){
   const e={id:b+'_enemy_'+i,key:'enemy_'+i,type,...stats[type],maxHp:stats[type].hp,extra:i>0,unit:i===0?'v2GobUnit':'normalEnemy'+i,node:i===0?'#bGob':'#normalEnemy'+i+' .prologueSprite'};
   if(e.extra){const el=document.createElement('div');el.id=e.unit;el.className='prologueEnemy slot'+i;el.innerHTML='<div class="prologueEnemyHud"></div><div class="prologueSprite"><img></div>';q('#attackBattle').append(el)}
   q(e.node+' img').alt=name(e);
-  BattleActorState.register(b,e.key,type,e.node+' img',()=>[e.hp,e.maxHp]);if(type==='forest_bat')window.BattleIdleMotion?.begin(e.node+' img');return e;
+  BattleActorState.register(b,e.key,type,e.node+' img',()=>[e.hp,e.maxHp]);if(idleEnemy(type))window.BattleIdleMotion?.begin(e.node+' img',type);return e;
  }
  function beginNormal(id){
   generation++;window.BattlePresentation?.cancel();window.BattleFacing?.set('NORMAL');normalRune=0;roundNumber=1;BattleStatus.clear('normal');BattleTargetSelector.reset('normal');clean('normal');impact=null;
-  const types=/^mossSlime\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('moss_slime'):/^forestBat\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('forest_bat'):id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
-  document.body.classList.toggle('slimeBattle',types[0]==='moss_slime');document.body.classList.toggle('batBattle',types[0]==='forest_bat');
+  const types=/^mossSlime\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('moss_slime'):/^forestBat\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('forest_bat'):/^leafyBoar\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('leafy_boar'):id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
+  document.body.classList.toggle('slimeBattle',types[0]==='moss_slime');document.body.classList.toggle('batBattle',types[0]==='forest_bat');document.body.classList.toggle('boarBattle',types[0]==='leafy_boar');
   rosters.normal=types.map((t,i)=>makeEnemy('normal',t,i));
   document.body.classList.toggle('soloRescue',id==='attackGob1');
   sync('normal');window.BattlePartyLayout?.refresh('normal');window.BattlePresentation?.updateRune(normalRune);
   if(id==='attackGob2')window.BattlePresentation?.banter('tainted-first',['エイダン「こいつ……さっきの奴らと違う！」','フィオナ「この魔力……普通じゃない……！」'],'normal');
  }
  function activeAlly(b,id){return !(b==='normal'&&currentGoblin==='attackGob1'&&id==='fiona');}
- function name(e){if(e.type==='goblin_raider')return 'ゴブリンレイダー';if(e.type==='moss_slime')return 'モススライム';if(e.type==='forest_bat')return 'フォレストバット';return e.type==='goblin'?'ゴブリン':'異常化ゴブリン';}
+ function name(e){if(e.type==='goblin_raider')return 'ゴブリンレイダー';if(e.type==='moss_slime')return 'モススライム';if(e.type==='forest_bat')return 'フォレストバット';if(e.type==='leafy_boar')return 'リーフィボア';return e.type==='goblin'?'ゴブリン':'異常化ゴブリン';}
  function targets(b){if(!rosters[b].length)return null;return rosters[b].map(e=>({id:e.id,name:name(e),node:e.node,hp:()=>e.hp}));}
  function syncLogic(b){
   if(b==='raider')rbAdds=alive(b).filter(e=>e.extra).length;

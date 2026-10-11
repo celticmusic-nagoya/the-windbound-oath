@@ -23,3 +23,5 @@ STATUS: READY — 最新main 0914263上で再検証完了。作者承認に基�
 Claude / `work/moss-slime-symbol-encounter` / 基準main `57dc6ae`。
 対象: `js/field/field-monsters.js`（新規）、`moss-forest-runtime.js`（FieldMonsters接続・歩数エンカウント既定OFF）、`moss-forest-story.js`（onMonster）、`index.html`（script追加・撃破後resolve）、A1 JSON `monsters`（スライム2体）、`tests/moss/m15b_slime_symbol.py`。
 STATUS: PLAYER QA待ち。作者承認までmainへmergeしない。モススライム／ゴブリンの速度等は `MONSTER_TYPES` の1か所で調整可能。
+
+Claude / `work/forest-bat-symbol-encounter`（上記ブランチの上に積む）: フォレストバット（吸血・飛行シンボル、A2）。`work/leafy-boar-symbol-encounter`（さらにその上）: リーフィボア（突進シンボル、街道）。いずれもPLAYER QA待ち・main未merge。

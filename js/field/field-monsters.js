@@ -44,6 +44,18 @@
       respawn: 'reenter', battle: 'forest_bat',
       art: Object.freeze({dir: 'img/field/monsters/forest_bat/', file: 'forest_bat_idle_{n}.png', frames: 4, w: 320, h: 214, feet: 0, scale: .5, fps: 9, faces: 1, always: true, air: 34})
     }),
+    // Charger: spots you, snorts (alert), digs in (windup), then dashes in a STRAIGHT line locked at the end of the windup - sidestep it.  After the dash it
+    // is winded (recover), then walks home.  A wall ends the dash early.  Never chases on foot.
+    leafy_boar: Object.freeze({
+      name: 'リーフィボア', movement: 'charger',
+      speed: 0, wanderSpeed: 40, returnSpeed: 90, detect: 340, chaseMax: 0, touch: 52, leash: 700, lose: 0,
+      rushSpeed: 280, rushDist: 460, windup: .6, recover: 1.4,
+      wanderRadius: 120, rest: [1.5, 3.5],
+      alertTime: .45, engageDelay: .25, reaggro: 1.2, hop: 8,
+      respawn: 'reenter', battle: 'leafy_boar',
+      art: Object.freeze({dir: 'img/field/monsters/leafy_boar/', file: 'leafy_boar_{n}.png', frames: 11, w: 240, h: 160, feet: 6, scale: 1, fps: 7, faces: 1,
+        walk: [0, 1, 2, 3], poses: Object.freeze({alert: [4], engage: [4], windup: [5, 6], rush: [7, 8, 9], recover: [10]}), poseFps: Object.freeze({rush: 14, windup: 8})})
+    }),
     // Hostile and quick: notices from farther away, reacts faster, chases farther - but slower than the player, so distance / terrain shakes it off.
     goblin: Object.freeze({
       name: 'ゴブリン', movement: 'patrol',
@@ -87,8 +99,10 @@
     const a = m.t.art, w = a ? a.w * a.scale : 48, h = a ? a.h * a.scale : 62, pad = a ? a.feet * a.scale : 0;
     let src = '';
     if (a) {
-      const moving = m.moving && m.state !== 'engaged';
-      src = moving ? m.frames[Math.floor(m.clock * a.fps) % a.frames] : m.frames[0];
+      const pose = a.poses && a.poses[m.state], walk = a.walk || null, moving = m.moving && m.state !== 'engaged', fps = (a.poseFps && a.poseFps[m.state]) || a.fps;
+      if (pose) src = m.frames[pose[Math.floor(m.clock * fps) % pose.length]];
+      else if (moving) src = walk ? m.frames[walk[Math.floor(m.clock * fps) % walk.length]] : m.frames[Math.floor(m.clock * fps) % a.frames];
+      else src = m.frames[0];
       if (m.el.dataset.src !== src) { m.el.dataset.src = src; m.el.src = src; }
     }
     const lift = a && a.air ? a.air + Math.sin(m.clock * 3) * 4 : 0;   // flyers hover above their ground point
@@ -131,7 +145,21 @@
       if (mv < .05 || Math.hypot(m.goal[0] - m.x, m.goal[1] - m.y) < 2) { m.sub = 'rest'; m.moving = false; }
     } else if (st === 'alert') {
       m.moving = false; face(m, P.x); m.timer += sec;
-      if (m.timer >= t.alertTime) { if (dP <= t.detect * 1.3) { setState(m, 'chase'); m.chaseFrom = [m.x, m.y]; } else { setState(m, 'wander'); m.sub = 'rest'; } }
+      if (m.timer >= t.alertTime) {
+        if (dP > t.detect * 1.3) { setState(m, 'wander'); m.sub = 'rest'; }
+        else if (t.movement === 'charger') setState(m, 'windup');
+        else { setState(m, 'chase'); m.chaseFrom = [m.x, m.y]; }
+      }
+    } else if (st === 'windup') {   // charger: dig in facing the player; the dash direction is locked when the windup ends
+      m.moving = false; face(m, P.x); m.timer += sec; m.clock += sec;
+      if (m.timer >= t.windup) { const d = Math.hypot(P.x - m.x, P.y - m.y) || 1; m.vx = (P.x - m.x) / d; m.vy = (P.y - m.y) / d; m.rushFrom = [m.x, m.y]; setState(m, 'rush'); }
+    } else if (st === 'rush') {
+      const mv = moveToward(m, m.x + m.vx * 200, m.y + m.vy * 200, t.rushSpeed, sec); m.moving = true; m.clock += sec;
+      const done = Math.hypot(m.x - m.rushFrom[0], m.y - m.rushFrom[1]) >= t.rushDist || Math.hypot(m.x - m.home[0], m.y - m.home[1]) > t.leash;
+      if (done || mv < t.rushSpeed * sec * .3) setState(m, 'recover');   // arrived, or ran into a wall
+    } else if (st === 'recover') {
+      m.moving = false; m.timer += sec; m.clock += sec;
+      if (m.timer >= t.recover) { setState(m, 'return'); m.noAggro = now + t.reaggro * 1000; }
     } else if (st === 'chase') {
       const mv = moveToward(m, P.x, P.y, t.speed, sec); m.moving = mv > 0;
       m.stuck = mv < t.speed * sec * .25 ? m.stuck + sec : 0;
@@ -160,7 +188,7 @@
       if (m.state === 'gone') continue;
       const dP = Math.hypot(P.x - m.x, P.y - m.y);
       if (dP > ACTIVE_RANGE) {   // far off-screen: not simulated; one that was mid-chase/return is simply back at its post
-        if (m.state === 'chase' || m.state === 'return' || m.state === 'alert') { m.x = m.home[0]; m.y = m.home[1]; setState(m, 'wander'); m.sub = 'rest'; draw(m, true); }
+        if (m.state !== 'wander' && m.state !== 'engaged' && m.state !== 'engage') { m.x = m.home[0]; m.y = m.home[1]; setState(m, 'wander'); m.sub = 'rest'; draw(m, true); }
         continue;
       }
       think(m, Math.min(sec, .1), P, dP, now);

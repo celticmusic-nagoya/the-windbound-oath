@@ -7,7 +7,8 @@ window.BATTLE_ASSET_PATHS = Object.freeze({
   tainted_goblin: 'img/battle/enemies/tainted_goblin/',
   goblin_raider: 'img/battle/enemies/goblin_raider/',
   moss_slime: 'img/battle/enemies/moss_slime/',
-  forest_bat: 'img/battle/enemies/forest_bat/'
+  forest_bat: 'img/battle/enemies/forest_bat/',
+  leafy_boar: 'img/battle/enemies/leafy_boar/'
 });
 
 // Only filenames verified in the repository. This registry does not add actions.
@@ -53,6 +54,11 @@ const battleAssetFiles = {
   forest_bat: {
     idle: 'idle/forest_bat_idle_00.png', attack: 'idle/forest_bat_idle_00.png',
     damage: 'idle/forest_bat_idle_00.png', ko: 'idle/forest_bat_idle_00.png'
+  },
+  // Leafy Boar: stills cut from the delivered sheet (docs/art/redelivery_requests.md lists what is still provisional).
+  leafy_boar: {
+    idle: 'leafy_boar_battle_idle.png', attack: 'leafy_boar_attack.png',
+    damage: 'leafy_boar_damage.png', low_hp: 'leafy_boar_low_hp.png', ko: 'leafy_boar_ko.png'
   },
   goblin_raider: {
     idle: 'goblin_raider_battle_idle.png', attack: 'goblin_attack.png',
@@ -110,6 +116,10 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
   ])
 }),
   // Forest Bat idle flap: 4 frames. anchors = alpha centroid of each frame, so the body stays put while the wings beat.
+  leafy_boar: Object.freeze({
+    type:'breathe', width:480, height:400, anchor:Object.freeze([240,390]),
+    frames:Object.freeze([0,1,2,3].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.leafy_boar+'idle/leafy_boar_idle_0'+i+'.png',anchor:Object.freeze([240,390])})))
+  }),
   forest_bat: Object.freeze({
     type:'breathe', width:1536, height:1024, anchor:Object.freeze([784,497]),
     frames:Object.freeze([

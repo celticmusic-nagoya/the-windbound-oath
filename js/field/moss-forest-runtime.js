@@ -490,7 +490,7 @@
   function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
   window.MossForest=Object.freeze({actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
-    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
+    get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
