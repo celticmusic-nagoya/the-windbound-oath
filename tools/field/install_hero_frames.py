@@ -17,7 +17,7 @@ from PIL import Image
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 HEROES = {
     'fiona': dict(canvas=(1280, 832), anchor=(640, 790), scale=0.1, height=62, out='img/field/moss/real/fiona/', js='js/field/fiona-field-assets.js', walk=(4, 6)),
-    'aidan': dict(canvas=(1792, 1152), anchor=(896, 1100), scale=0.0625, height=64, out='img/field/characters/aidan/', js='js/field/aidan-field-assets.js', walk=(4, 6)),
+    'aidan': dict(canvas=(2048, 1280), anchor=(1024, 1230), scale=0.0625, height=69, xs=1.08, out='img/field/characters/aidan/', js='js/field/aidan-field-assets.js', walk=(4, 6)),
 }
 DIRS = ['down', 'left', 'right', 'up']
 def scan(src, hero):
@@ -77,12 +77,12 @@ def main():
     for name, a in arrs.items():
         d = name.split('_')[1] if name.startswith('walk') else name.split('_')[1]; d = name.split('_')[1] if name.startswith('idle') else name.split('_')[1]
         bx0, by0, bx1, by1 = bbox(a); crop = Image.fromarray(a[by0:by1, bx0:bx1])
-        nw, nh = max(1, round(crop.width * k)), max(1, round(crop.height * k)); crop = crop.resize((nw, nh), Image.LANCZOS if not dot else Image.BOX)
+        xs = cfg.get('xs', 1.0); nw, nh = max(1, round(crop.width * k * xs)), max(1, round(crop.height * k)); crop = crop.resize((nw, nh), Image.LANCZOS if not dot else Image.BOX)
         if dot:
             cell = max(1, round(dot / sc)); sw, sh = max(1, nw // cell), max(1, nh // cell)
             crop = crop.resize((sw, sh), Image.BOX).resize((sw * cell, sh * cell), Image.NEAREST); nw, nh = crop.size
         canvas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-        px = round(ax - (feet_x[d] - bx0) * k); py = ay - nh       # feet row (bottom of bbox) on the anchor row
+        px = round(ax - (feet_x[d] - bx0) * k * xs); py = ay - nh       # feet row (bottom of bbox) on the anchor row
         canvas.alpha_composite(crop, (max(px, 0), max(py, 0)))
         if px < 0 or py < 0 or px + nw > W: report.append('WARN %s: scaled art leaves the %dx%d canvas (%d,%d %dx%d) - some pixels cut' % (name, W, H, px, py, nw, nh))
         results[name] = canvas
