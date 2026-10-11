@@ -1,0 +1,24 @@
+ok   nobody wears anything at the start (old balance untouched)
+ok   no equipment -> stats identical
+ok   equipment can be added to the inventory
+ok   bag lists equipment (kind equip), separate from consumables/key items
+ok   consumable list unaffected
+ok   equip wooden sword: no stat change (balance), bag count -1
+ok   other stats unchanged
+ok   weapon motionVariant "wooden" -> aidan:wooden motion (4 frames, hit at 100ms)
+ok   swap: iron sword in, wooden sword back to the bag
+ok   iron variant has no frames -> falls back to base aidan motion (6 frames, hit 4)
+ok   accessory adds DEF+2 / maxHP+8, stacks with weapon
+ok   wearer restriction (equipBy) enforced
+ok   slot mismatch refused
+ok   cannot equip what is not in the bag (already worn)
+ok   unknown id refused
+ok   another member's stats are untouched
+ok   save: ids only, bag and slots both stored (save version unchanged)
+ok   after reset: base stats
+ok   load restores worn pieces and the bag without duplicating
+ok   load re-applies the weapon motion variant
+ok   unequip: stats, bag and motion go back
+ok   corrupt/invalid save entries are dropped, valid ones kept
+ok   older save (no equipment field) loads with nothing worn
+ok   0 console errors []

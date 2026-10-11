@@ -1,0 +1,13 @@
+ok   consumable chest still grants (potion 4 -> 6)
+ok   overlook chest -> 護符 x1 (+ ether) ['魔力の雫 ×1、風よけの護符 ×1', 1, 3]
+ok   second open grants nothing
+ok   shrine chest -> 古びたルーン片
+ok   ITEMS tab lists consumables and 大事なもの
+ok   save v30 carries key items + claimed {"key": {"herb_moss": 1, "charm_windward": 1, "rune_shard_old": 1}, "gear": {}, "claimed":
+ok   v30 save restores key items (no double grant) {'ch': 1, 'ru': 1, 'po': 7, 'et': 4}
+ok   legacy v29 save: 大事なもの granted once for already-opened chests {'ch': 1, 'ru': 1, 'po': 9, 'et': 5}
+ok   legacy補正 does not touch consumables (potion 9, ether 5)
+ok   reconcile is idempotent
+ok   legacy save without opened chests gets nothing {'ch': 0, 'ru': 0, 'po': 9, 'et': 5}
+ok   hostile inventory block is sanitised
+ok   0 console errors []

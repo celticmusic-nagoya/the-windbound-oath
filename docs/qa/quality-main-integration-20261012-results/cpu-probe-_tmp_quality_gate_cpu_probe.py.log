@@ -1,0 +1,6 @@
+CALIBRATE {'cpu_rate': 8, 'fps': 60}
+CALIBRATE {'cpu_rate': 12.0, 'fps': 21.653701178949607}
+CALIBRATE {'cpu_rate': 18.0, 'fps': 10.212097407698352}
+AT_30_SECONDS {"seconds": 30.04333838599996, "map": "road_dunvall_capital_01", "feet": {"x": 3334.4463067646097, "y": 1841.0818363390717}, "active": true, "busy": false, "battle": false, "enemy": null, "nav": "moving", "liam": true, "pass": true}
+ARRIVED {"seconds": 51.025611102002586, "map": "royal_capital_00_gate", "feet": {"x": 2200, "y": 3250}, "active": false, "busy": true, "battle": false, "enemy": null, "nav": "moving", "liam": true, "pass": true}
+PASS fixed 30-second wait rejects a legitimate capped-frame traversal; 90 seconds permits the same actual route

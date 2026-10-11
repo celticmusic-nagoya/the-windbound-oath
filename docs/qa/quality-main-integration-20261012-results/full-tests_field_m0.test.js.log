@@ -1,0 +1,12 @@
+ok   hash==brute-force (9514 blocked samples, 0 diffs)
+ok   compile rejects non-rect
+ok   compileMap rejects non-rect
+ok   seal blocks while closed
+ok   seal passes when open
+ok   multi-rect blocker
+ok   default bound 2160 kept
+ok   custom bound allows >2160
+ok   A* routes around wall on 9600x6000 (2251 frames, arrived)
+ok   configure() restores Lind defaults
+ok   culling keeps live nodes <=800 of 6000 @1920x1080 chunk256 (peak 660)
+ok   2 s travel equal across 30/60/120/144 Hz (30:600 60:600 120:600 144:600)

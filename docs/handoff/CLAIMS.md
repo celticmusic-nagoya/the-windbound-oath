@@ -1,5 +1,7 @@
 # ファイル担当・進捗索引
 
+> 2026-10-12 main反映記録（Codex・作者G承認）: 機能merge `390f74aea90e449a50846e93496abc5b7be99632`、直前main `c4c536aad49bfa6d94ffbf79b951767627ee10ea`、rollbackタグ `rollback/before-quality-foundation-20261012`。全52対象合格確認（初回待機1件は修正/再実行）、最新m6_quest単独10連続合格。PLAYER QA待ち。戻し方: `git revert -m 1 390f74aea90e449a50846e93496abc5b7be99632`。詳細: `docs/handoff/codex-quality-main-integration-20261012.md`。
+
 着手前にブランチと対象を追記する。別ブランチの記録もfetchして確認する。下記はCodex側の記録であり、Claudeの担当を予約しない。
 
 | 担当 | ブランチ | 対象 | 状態 |

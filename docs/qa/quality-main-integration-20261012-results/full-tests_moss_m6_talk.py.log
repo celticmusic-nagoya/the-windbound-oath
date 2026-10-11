@@ -1,0 +1,26 @@
+ok   speaker plate shows 案内人; page 1 only: 案内人「はじめまして。」
+ok   tap -> page 2 with speaker エイダン
+ok   tap on last page closes the dialogue
+ok   choice UI shows はい／いいえ ['はい', 'いいえ']
+ok   tapping the box does not skip a pending choice
+ok   choosing はい plays the reply: 案内人「ありがとう！　これを。」
+ok   effect give: potion +1 shown as a page
+ok   closes after reply
+ok   flag t_helped switches branch: 案内人「さっきは助かったよ。」
+ok   item condition (風よけの護符) selects the higher-priority line
+ok   Enter advances a page
+ok   Enter closes
+ok   second talk after reset -> choice entry
+ok   key 2 selects いいえ
+ok   いいえ sets nothing
+ok   serialize carries seen + flags {"seen": ["t_intro", "t_ask"], "cycle": {"t_ask": 1}, "flags": {"t_helped": true}}
+ok   restored state: still helped, once-entry not replayed
+ok   hostile talk save sanitised {"seen": ["t_intro"], "cycle": {}, "flags": {"ok_flag": true}}
+ok   elder closed branch with plate: 長老 / 長老「おお、エイダンか。……風の石碑の輝
+ok   elder seal-open branch
+ok   two-speaker line starts as フィオナ page
+ok   banter continues as エマ page
+ok   unknown NPC returns false and leaves dialogue untouched
+ok   saveGrowthData writes v30 with talk + inventory
+ok   loadGrowthData restores talk flags + key items
+ok   0 console errors []

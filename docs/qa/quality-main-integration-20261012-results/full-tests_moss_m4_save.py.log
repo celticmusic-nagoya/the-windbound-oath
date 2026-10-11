@@ -1,0 +1,16 @@
+ok   serialize v2 holds moss map/pos ({"map": "moss_forest_03_ancient_grove", "x": 4283, "y": 2958, "opened": [], "fired": []})
+ok   v2 no longer stores legacy forest fields
+ok   v2 restores exact map+position {'x': 4300, 'y': 3000}
+ok   v2 restores 3 defeats + open seal
+ok   v1 stage9 / 0 defeats -> A1 cliff-fall spawn
+ok   v1 stage9 / 1 defeat -> A3 entrance
+ok   v1 chests mapped to new treasure ids ['tr_a1_hollow', 'tr_a3_shrine']
+ok   v1 seal opened -> A3 south of seal, flag open
+ok   v1 Lou found -> sanctuary spot, lou_found flag
+ok   junk moss block falls back safely (moss_forest_03_ancient_grove)
+ok   junk opened list sanitized ['tr_a1_hollow']
+ok   seal closed but saved inside sanctuary -> moved to entrance (fy=6490)
+ok   unreachable/odd saved position falls back to spawn (feet {'x': 840, 'y': 6490})
+ok   village-stage v1 save loads, forest hidden
+ok   unknown version rejected
+errors []
