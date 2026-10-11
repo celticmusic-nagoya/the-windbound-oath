@@ -84,6 +84,6 @@ STATUS: READY — 最新main基準の検証完了。main未反映、作者の統
 
 戻し方:
 
-- **現在の検証ブランチだけを戻す場合**: `work/codex-quality-main-20261012` 上で `git revert -m 1 c5c3da2a1307c7336d9f8d609eb0bdb9576d1864`。Gを入れる前の `b75a805` に対する逆差分を新commitとして作る。
+- **現在はmain未反映**: mainを戻す操作は不要。`c5c3da2` は検証用mergeで、その後に資料commitもあるため、候補ブランチ上のこのmergeだけをrevertしてmainの復旧と扱わない。
 - **将来mainへ統合した後**: main上で `git revert -m 1 <そのmain統合merge SHA>` を行い、必要な回帰確認後に通常push。`c5c3da2` はmain統合SHAの代わりに使わない。上記予定タグは比較/復旧確認用の目印。`reset`・force pushで履歴を巻き戻さない。
 - Gだけを戻す逆差分は、すでにmainにある敵3種・Raider・納品モーションを削除しない。PLAYER QA不具合が見つかったら、再現条件・端末条件・どのmergeを戻すかを記録する。
