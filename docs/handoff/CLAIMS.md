@@ -17,3 +17,9 @@ Raiderブランチの既存index.html差分は、この新運用の受領前に�
 Codex / `work/codex-raider-mobile-integration` / 基準main `0914263`。
 対象: `8ac09e6` のCSS・BattlePartyLayout・テスト・QA資料、およびindexのCSS link／script cache queryだけ。作者がRaider修正を全承認済みのため、この限定index変更も統合する。Claudeのstory・field・納品motionは変更しない。
 STATUS: READY — 最新main 0914263上で再検証完了。作者承認に基づきmainへ通常pushする。
+
+## Claude: フィールド敵AI／シンボルエンカウント（PLAYER QA待ち）
+
+Claude / `work/moss-slime-symbol-encounter` / 基準main `57dc6ae`。
+対象: `js/field/field-monsters.js`（新規）、`moss-forest-runtime.js`（FieldMonsters接続・歩数エンカウント既定OFF）、`moss-forest-story.js`（onMonster）、`index.html`（script追加・撃破後resolve）、A1 JSON `monsters`（スライム2体）、`tests/moss/m15b_slime_symbol.py`。
+STATUS: PLAYER QA待ち。作者承認までmainへmergeしない。モススライム／ゴブリンの速度等は `MONSTER_TYPES` の1か所で調整可能。

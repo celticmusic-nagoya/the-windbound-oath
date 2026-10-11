@@ -816,6 +816,7 @@ function finishAttackBattle(){
      showBattleResult(7*n,3*n,()=>{
        $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
        if(gobBox)gobBox.classList.remove('taintedKO');
+       if(window.MossForest)MossForest.monsterResult(true);   // the field monster that started this fight is gone (until the map is entered again)
        forestShow();attackBattleBusy=false;
      });
      return;
@@ -1848,9 +1849,10 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/field-vista.js"></script>
 <script src="js/field/field-bgm.js"></script>
 <script src="js/field/field-walkers.js"></script>
+<script src="js/field/field-monsters.js?v=20261011t"></script>
 <script src="js/field/fiona-field-assets.js?v=20261011c"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261011s"></script>
-<script src="js/field/moss-forest-story.js?v=20261011s"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261011t"></script>
+<script src="js/field/moss-forest-story.js?v=20261011t"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js"></script>

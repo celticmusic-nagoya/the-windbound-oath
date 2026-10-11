@@ -34,23 +34,23 @@ with sync_playwright() as p:
     pg.wait_for_timeout(900)
     check(ev("!document.body.classList.contains('normalBattleMode')") and ev("forestActive"),'back in the forest after the result')
     check(not ev("PrologueProgress.cleared('mossSlime2')") and ev("PrologueProgress.count()")==0 and ev("storyStage")==9,'no story progress recorded; stage unchanged')
-    # 3) step encounters
+    # 3) the step-encounter mechanism stays (future fog / cave / event zones) but is OFF in normal exploration; the symbol monsters replaced it
     ev("Math.random=()=>0"); pg.wait_for_timeout(100)
     ev("MossForest.enter({map:'moss_forest_01_sunlit_path',spawn:'from_lind'})"); pg.wait_for_timeout(1500)
-    ev("MossForest.teleportFeet(1300,3400)"); pg.wait_for_timeout(4600)
-    ev("MossForest.goFeet(1500,3560)"); pg.wait_for_timeout(5500)
-    check(ev("document.body.classList.contains('normalBattleMode')") and ev("currentGoblin").startswith('mossSlime'),'walking in the damp hollow triggers a slime fight (%s)'%ev("currentGoblin"))
+    check(ev("MossForest.encounters()")==False,'step encounters are disabled by default')
+    ev("FieldMonsters.list.length&&FieldMonsters.clear()")  # keep the two A1 slimes out of the way of this legacy-mechanism check
+    ev("MossForest.teleportFeet(1100,3250)"); pg.wait_for_timeout(4600)
+    ev("MossForest.goFeet(1500,3250)"); pg.wait_for_timeout(5500)
+    check(not ev("document.body.classList.contains('normalBattleMode')"),'walking the hollow zone does NOT trigger a fight any more')
+    ev("MossForest.encounters(true)"); ev("MossForest.teleportFeet(1100,3250)"); pg.wait_for_timeout(4600); ev("MossForest.goFeet(1500,3250)"); pg.wait_for_timeout(5500)
+    check(ev("document.body.classList.contains('normalBattleMode')") and ev("currentGoblin").startswith('mossSlime'),'encounters(true) re-enables the legacy step mechanism (%s)'%ev("currentGoblin"))
     ev("PrologueCombat.instantKill('normal')"); pg.wait_for_timeout(2600)
     for i in range(8):
         if ev("getComputedStyle(document.querySelector('#battleResult')).display")=='none': break
         ev("(document.querySelector('#battleResult button')||document.querySelector('#battleResult')).click()"); pg.wait_for_timeout(500)
     pg.wait_for_timeout(900)
     check(ev("forestActive")and not ev("document.body.classList.contains('normalBattleMode')"),'returned to the forest')
-    # boar-only zone: nothing can be fielded -> inert; encounters(false) also silences
-    ev("MossForest.teleportFeet(6100,3200)"); pg.wait_for_timeout(4600); ev("MossForest.goFeet(6500,3300)"); pg.wait_for_timeout(5000)
-    check(not ev("document.body.classList.contains('normalBattleMode')"),'boar-only zone does not start a fight (no boar art yet)')
-    ev("MossForest.encounters(false)"); ev("MossForest.teleportFeet(1300,3400)"); pg.wait_for_timeout(4600); ev("MossForest.goFeet(1500,3560)"); pg.wait_for_timeout(5000)
-    check(not ev("document.body.classList.contains('normalBattleMode')"),'encounters(false) silences the zone')
+    ev("MossForest.encounters(false)")
     check(not errs,'0 console errors %s'%errs[:3])
     b.close()
 sys.exit(1 if fails else 0)

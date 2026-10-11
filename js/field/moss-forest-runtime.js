@@ -11,7 +11,7 @@
   const S={configured:false,active:false,busy:false,map:null,forest:null,mapId:null,x:0,y:0,fx:0,fy:0,target:null,
     flags:{moss_a3_seal_open:false,moss_a3_lou_found:false,moss_a3_lou_rescued:false},opened:new Set(),fired:new Set(),
     inside:new Set(),extra:[],symbols:[],sealNode:null,windNodes:[],louNode:null,treasureNodes:new Map(),
-    transitionLatch:true,battleLatch:false,keys:new Map(),frames:0,zones:{rest:null,ambience:null},loopId:0};
+    transitionLatch:true,battleLatch:false,slain:new Map(),keys:new Map(),frames:0,zones:{rest:null,ambience:null},loopId:0};
   let el={},hooks={};
   const dist=(a,b,c,d)=>Math.hypot(a-c,b-d);
   const $=s=>document.querySelector(s);
@@ -102,6 +102,7 @@
     if(S.forest)S.forest.destroy();
     if(window.FieldVista)FieldVista.clear();
     if(window.FieldWalkers)FieldWalkers.clear();
+    if(window.FieldMonsters)FieldMonsters.clear();
     for(const n of S.extra)n.remove();
     S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
     S.forest=null;S.map=null;S.inside.clear();S.zones={rest:null,ambience:null};
@@ -132,6 +133,12 @@
     FieldNavigation.configure({width:map.world.width,height:map.world.height,grid:32,maxNodes:40000});
     S.forest=ForestLoader.mount(map,el.world,{flags:S.flags});
     if(window.FieldWalkers)FieldWalkers.mount(map,el.world);
+    if(window.FieldMonsters){   // symbol encounters: enemies that live on the map (map.monsters); slain ones stay gone until the map is entered again
+      if(!S.slain.has(map.id))S.slain.set(map.id,new Set());
+      FieldMonsters.mount(map,el.world,{foot:FOOT,slain:S.slain.get(map.id),blocked:(ax,ay)=>S.forest.blocked(ax,ay),
+        advance:(ax,ay,dx,dy)=>FieldMovement.advance(ax,ay,dx,dy,S.forest.blocked,{bounds:S.map.world}),
+        player:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),canEngage:()=>S.active&&!S.busy&&!S.battleLatch&&Boolean(hooks.onMonster),engage:startMonsterBattle});
+    }
     el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
     for(const t of map.treasurePoints||[]){
       if(t.hint==='none')continue;
@@ -179,6 +186,7 @@
     skinFiona();
     if(options.flags)Object.assign(S.flags,options.flags);
     const first=!S.map;
+    S.slain.delete(id);   // entering a map (from another one, from the village, from a save) respawns its monsters; a battle return only resumes()
     if(!first)await setFade(1,fadeMs(options.transition,'out'));
     el.scene.style.display='block';
     {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
@@ -257,6 +265,13 @@
     if(!sy.alive||S.busy)return;
     S.target=null;FieldNavigation.cancel();S.active=false;
     if(hooks.onSymbol)hooks.onSymbol(sy);
+  }
+  // Touching a field monster uses the same hand-over as a symbol (hooks.onMonster -> startAttackBattle); returns false when no battle could start.
+  function startMonsterBattle(m){
+    if(S.busy||!S.active||!hooks.onMonster)return false;
+    S.battleLatch=true;
+    if(hooks.onMonster({id:m.id,type:m.type,battle:m.t.battle,group:m.group,map:S.mapId})===false)return false;
+    S.target=null;FieldNavigation.cancel();S.hold=null;S.active=false;return true;
   }
   function interactAt(wx,wy){
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
@@ -411,13 +426,14 @@
     if(S.pending&&!S.target){const pd=S.pending;S.pending=null;   // arrived
       if(dist(S.x+FOOT.ax,S.y+FOOT.ay,pd.c.x,pd.c.y)>260)toast('もう少し近づいて調べよう。');else fireEvent(pd.z);}
     stepEncounter(S.x-px0,S.y-py0);
+    if(window.FieldMonsters)FieldMonsters.update((FieldMovement.frameScale||1)/60);
     render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
   }
-  // ---------- step encounters (map.encounterZones with style:'step') ----------
+  // ---------- step encounters (map.encounterZones with style:'step') - DISABLED in normal play, mechanism kept for future use ----------
   // Walking inside a zone builds up distance; every ENC_STEP px there is a small chance (zone.rate) of a fight. Only enemies the story layer
   // can actually field (hooks.canEncounter) take part; zones with none are inert. Disabled while busy / right after a map change / during the cooldown.
   const ENC_STEP=96,ENC_RATE={rare:.03,low:.06,mid:.1,high:.16},ENC_COOLDOWN_MS=20000;
-  const enc={acc:0,until:0,off:false,visits:{}};
+  const enc={acc:0,until:0,off:true,visits:{}};   // OFF by default: normal exploration uses field monsters (symbol encounters). Kept for future fog / miasma / cave / event areas: MossForest.encounters(true)
   function stepEncounter(dx,dy){
     if(enc.off||!hooks.onEncounter||!S.map||!S.map.encounterZones)return;
     const d=Math.hypot(dx,dy);if(d<.2)return;
@@ -479,6 +495,7 @@
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
     teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
+    monsterResult(won){if(window.FieldMonsters)FieldMonsters.resolve(Boolean(won));},get monsters(){return window.FieldMonsters?FieldMonsters.list:[];},
     encounters(on){if(on===undefined)return !enc.off;enc.off=!on;return !enc.off;},
     forceEncounter(){const z=S.map&&(S.map.encounterZones||[]).find(z=>z.style==='step'&&(z.enemies||[]).some(e=>!hooks.canEncounter||hooks.canEncounter(e.id)));if(!z||!hooks.onEncounter)return false;const e=z.enemies.find(e=>!hooks.canEncounter||hooks.canEncounter(e.id));hooks.onEncounter({zone:z.id,enemy:e.id,count:1,map:S.mapId});return true;},
     goFeet(x,y){S.pending=null;S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
