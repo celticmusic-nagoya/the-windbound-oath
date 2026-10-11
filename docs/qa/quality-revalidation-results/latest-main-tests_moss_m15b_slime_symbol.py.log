@@ -1,0 +1,37 @@
+ok   A1 shows 2 moss slimes ['a1_slime_hollow', 'a1_slime_pond']
+ok   slime homes are on walkable ground
+ok   2 monster elements in the DOM
+ok   slime uses the 6-frame walk
+ok   random step encounters are off
+ok   slimes are not at the arrival point (2173)
+ok   wander: drifts around home (moved 58, max 45 from home)
+ok   wander: stays in wander while the player is far
+ok   in detect range: alert then chase ['wander', 'alert', 'chase']
+ok   chasing slime cycles all 6 walk frames (6)
+ok   slime chase speed ~45px/s (45)
+ok   after the player leaves: return -> wander ['wander', 'alert', 'chase', 'return', 'wander']
+ok   slime is back near home (50)
+ok   no battle while the player only approached and left
+ok   monster never stood inside a blocker
+ok   player outruns the slime (gap 684)
+ok   touching the slime starts the existing slime battle (mossSlime1)
+ok   battle started exactly once (no double fire) 1
+ok   back in the forest
+ok   defeated slime is gone, the other remains
+ok   forestShow() alone does not respawn it
+ok   story progress untouched
+ok   other map (A3) has no monsters
+ok   re-entering A1 from another map respawns both slimes
+ok   A3 story goblin symbols (forestGob1-3) are plain symbols: no field AI, still 3 alive
+ok   pond goblin chases from across the water ['wander', 'alert', 'chase', 'return', 'wander', 'alert', 'chase']
+ok   goblin goes around the deep water: never inside a blocker, no jumps (max step 7.5)
+ok   goblin: faster, wider detect, longer chase, quicker reaction than slime
+ok   goblin is slower than the player (escapable)
+ok   goblin detects at ~380 (slime would not): alert -> chase ['wander', 'alert', 'chase']
+ok   goblin chase speed ~150px/s (150)
+ok   goblin gives up and returns home ['wander', 'alert', 'chase', 'return', 'wander']
+ok   goblin is back at its post (79)
+ok   goblin/slime never inside a blocker
+ok   player can outrun the goblin (gap 1161)
+ok   goblin touch -> existing battle exactly once (2)
+ok   0 console errors []

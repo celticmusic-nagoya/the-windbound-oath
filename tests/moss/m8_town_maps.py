@@ -1,6 +1,6 @@
 # ドゥンヴァル砦 + 王都 foundation maps: load, collision, spawns, walking to every NPC node / chest / transition, transition chain, 'TBD' exits. needs http.server 8765
-import json, sys, glob
-from playwright.sync_api import sync_playwright
+import json, sys, glob, time
+from playwright.sync_api import sync_playwright, TimeoutError
 fails=[]; errs=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
@@ -45,9 +45,20 @@ with sync_playwright() as p:
         t=[t for t in maps[mapid]['transitions'] if t['id']==tid][0]['rect']
         cx,cy=t['x']+t['w']/2,t['y']+t['h']/2
         ev("([x,y])=>MossForest.goFeet(x,y)",[cx,cy]); 
-        try: pg.wait_for_function('(m)=>MossForest.mapId!==m',arg=mapid,timeout=30000)
-        except Exception: pass
+        # The road crosses >5,000 px. Under load the existing frame-time cap
+        # slows traversal (the valid gate took 51 s at ~10 fps), so 30 s is not
+        # a reliable deadline. Still require the actual transition and ready
+        # field; never teleport, bypass the gate, or suppress encounters.
+        started=time.monotonic()
+        wait_ms=90000 if expect!=mapid else 30000
+        try:
+            pg.wait_for_function('(m)=>MossForest.mapId!==m && MossForest.active && !MossForest.busy',arg=mapid,timeout=wait_ms)
+        except TimeoutError:
+            if expect!=mapid:
+                check(False,'transition readiness deadline: '+tid)
+                print('transition timeout',tid,ev("({map:MossForest.mapId,feet:MossForest.feet,active:MossForest.active,busy:MossForest.busy,target:MossForest.target,nav:FieldNavigation.status,battle:document.body.classList.contains('normalBattleMode'),liam:PartyManager.members.liam.joined,pass:FieldTalk.flag('capital_gate_passed')})"))
         pg.wait_for_timeout(300)
+        print('walk seconds',tid,round(time.monotonic()-started,2))
         check(ev("MossForest.mapId")==expect,'walk through %s: %s -> %s'%(tid,mapid,ev("MossForest.mapId")))
     walk_to('tr_f1_to_ramparts','from_road','fort_dunvall_01_courtyard','fort_dunvall_02_ramparts')
     walk_to('tr_f2_down','from_courtyard','fort_dunvall_02_ramparts','fort_dunvall_01_courtyard')

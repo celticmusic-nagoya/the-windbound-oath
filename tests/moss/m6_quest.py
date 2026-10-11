@@ -1,6 +1,6 @@
 # M6 quest + key-item conversations (draft scenario): states, choices, rewards, save. needs http.server 8765
 import sys, json
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 errs=[]; fails=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
@@ -8,7 +8,12 @@ def check(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
+    pg.goto('http://localhost:8765/index.html')
+    # Map/asset loading can delay the opening beyond a fixed sleep. Wait for
+    # the scheduled dialogue itself before resetting the quest fixture.
+    expect(pg.locator('#msg')).to_contain_text('今日はフィオナと訓練する約束だった。', timeout=30000)
+    pg.wait_for_function("MossForest.active && !MossForest.busy && MossForest.mapId === 'rilde_in_aidan'")
+    pg.evaluate('closeDialogue()')
     txt=lambda: pg.evaluate("document.querySelector('#msg').textContent")
     name=lambda: pg.evaluate("(document.querySelector('#msg .talkName')||{}).textContent||''")
     shown=lambda: pg.evaluate("getComputedStyle(document.querySelector('#msg')).display!=='none'")
@@ -17,11 +22,14 @@ with sync_playwright() as p:
     def reset():
         pg.evaluate("Quest.reset();FieldTalk.load(null);Inventory.reset();closeDialogue();PrologueProgress.seed(0)")
     def tap(n=1):
-        for _ in range(n): pg.click('#msg')
+        # The box centre can become a choice button as the layout expands.
+        # Advance via the stable text target, keeping real click handling.
+        for _ in range(n): pg.locator('#msg .talkText').click()
     reset()
     check(qs()=='unaccepted','quest starts unaccepted')
     talk('emma'); check('背負い込んで' in txt(),'first visit: normal warning line (no offer yet)'); tap()
     talk('emma'); check(name()=='エマ' and '護符' in txt(),'second visit: quest offer (after hearing a warning) %s'%txt()[:24]); tap()
+    expect(pg.locator('#msg .talkChoices button')).to_have_text(['探してみるよ','今は難しい'])
     check(pg.evaluate("[...document.querySelectorAll('#msg .talkChoices button')].map(b=>b.textContent)")==['探してみるよ','今は難しい'],'offer shows two choices')
     pg.click('#msg .talkChoices button[data-choice="1"]'); check('気が向いたら' in txt(),'decline reply'); tap()
     check(qs()=='unaccepted','declining leaves the quest unaccepted')
