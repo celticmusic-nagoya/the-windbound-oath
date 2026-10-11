@@ -8,7 +8,10 @@ def check(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
+    pg.goto('http://localhost:8765/index.html')
+    # The NEW GAME opening is scheduled after ~1.1 s. Let it finish before
+    # resetting the quest fixture; otherwise it replaces the reward dialogue.
+    pg.wait_for_timeout(2700); pg.evaluate('closeDialogue()')
     txt=lambda: pg.evaluate("document.querySelector('#msg').textContent")
     name=lambda: pg.evaluate("(document.querySelector('#msg .talkName')||{}).textContent||''")
     shown=lambda: pg.evaluate("getComputedStyle(document.querySelector('#msg')).display!=='none'")
