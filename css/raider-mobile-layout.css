@@ -1,0 +1,41 @@
+/* Mobile battlefield slots. Never own transform/keyframes or boss statistics.
+   Desktop boss dimensions remain in style.css. HUDs stay sibling viewport UI. */
+@media (orientation:portrait), (max-height:520px) {
+  body.raiderBattleMode #raiderBattle #rbAidan,
+  body.raiderBattleMode #raiderBattle #rbFiona,
+  body.raiderBattleMode #raiderBattle #rbLou {z-index:35}
+  body.raiderBattleMode #raiderBattle .raiderAdd {width:96px;height:112px}
+  body.raiderBattleMode #raiderBattle .raiderAdd .prologueSprite {width:72px;height:88px;left:12px}
+  body.raiderBattleMode #raiderBattle .raiderAdd .prologueEnemyHud {width:96px;box-sizing:border-box}
+}
+@media (orientation:portrait) {
+  /* Boss occupies the upper enemy tier; party and adds have distinct floor slots. */
+  body.raiderBattleMode #raiderBattle #raiderSprite {
+    width:min(94vw,560px)!important;height:min(37vh,460px)!important;
+    right:0!important;bottom:45%!important;
+  }
+  body.raiderBattleMode #raiderBattle #rbAidan,
+  body.raiderBattleMode #raiderBattle #rbFiona {bottom:10%!important}
+  body.raiderBattleMode #raiderBattle #rbLou {left:40%!important;bottom:43%!important}
+  body.raiderBattleMode #raiderBattle .raiderAdd {right:2%;bottom:28%;height:min(112px,14vh)}
+  body.raiderBattleMode #raiderBattle .raiderAdd.slot2 {right:2%;bottom:12%}
+}
+@media (orientation:portrait) {
+  body.raiderBattleMode #raiderBattle .raiderAdd .prologueSprite {height:min(88px,11vh)}
+}
+@media (orientation:landscape) and (max-height:520px) {
+  /* Legacy centered grid tracks can start above a short scrollable drawer. */
+  body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) {align-content:start!important}
+  /* Remove the legacy 440px minimum in chrome-constrained landscape only. */
+  body.raiderBattleMode #raiderBattle #raiderSprite {
+    width:min(44vw,720px)!important;height:72vh!important;
+    right:0!important;bottom:17%!important;
+  }
+  body.raiderBattleMode #raiderBattle #rbAidan,
+  body.raiderBattleMode #raiderBattle #rbFiona {bottom:14%!important}
+  body.raiderBattleMode #raiderBattle #rbLou {left:41%!important;bottom:48%!important;width:52px!important;height:66px!important}
+  body.raiderBattleMode #raiderBattle #rbEnemyHud {top:8px!important;right:3%!important}
+  body.raiderBattleMode #raiderBattle .raiderAdd {right:29%;bottom:3%;height:92px}
+  body.raiderBattleMode #raiderBattle .raiderAdd.slot2 {right:5%;bottom:3%}
+  body.raiderBattleMode #raiderBattle .raiderAdd .prologueSprite {height:68px}
+}
