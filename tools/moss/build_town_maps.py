@@ -24,6 +24,14 @@ class Map:
         s.rects.append((x, y, w, h, tag)); s.fills.append((color, (x, y, w, h), pattern))
     def solid(s, x, y, w, h, tag):   # collision only (art provided by a fill drawn elsewhere)
         s.rects.append((x, y, w, h, tag))
+    def prop(s, asset, x, y, tags=None, z=None):   # decorative sprite, feet at (x, y)
+        s.seq += 1; d = {'id': 'd_%s_%03d' % (asset.replace('town_', '').replace('furn_', '')[:10], s.seq), 'asset': asset, 'x': x, 'y': y, 'tags': tags or ['deco']}
+        if z is not None: d['z'] = z
+        s.props.append(d); return d
+    def deco(s, asset, x, y, sw=0, sh=0, tags=None):   # sprite + a small collision box at its feet (sw x sh, centred)
+        s.prop(asset, x, y, tags)
+        if sw: s.rects.append((x - sw // 2, y - sh, sw, sh, 'deco'))
+    def decal(s, asset, x, y): s.prop(asset, x, y, ['decal'], z=1)
     def floor_rect(s, x, y, w, h, color=None, pattern='flagstone'): s.fills.append((color or s.floor, (x, y, w, h), pattern))
     def spawn(s, name, x, y, facing='down'): s.spawns[name] = {'x': x, 'y': y, 'facing': facing}
     # NOTE: door rects sit INSIDE the 48px border blockers (never on the border itself), so walking into them is possible.
@@ -96,10 +104,28 @@ m.wall(240, 200, 2720, 120)                                          # north wal
 m.wall(240, 200, 120, 1980)                                          # west wall
 m.wall(2840, 200, 120, 900); m.wall(2840, 1300, 120, 880)           # east wall with a gate gap y 1100..1300
 m.wall(240, 2100, 1140, 120); m.wall(1820, 2100, 1140, 120)          # south wall with the gate gap x 1380..1820
-for (x, y) in ((200, 160), (2800, 160), (200, 2060), (2800, 2060)): m.wall(x, y, 200, 200, '#46414d', 'tower')   # 見張り塔
-m.wall(1200, 420, 800, 520, '#6a5f70', 'keep')                       # 主塔（door gap below: x 1500..1700 at y 940）
+for (x, y) in ((200, 160), (2800, 160), (200, 2060), (2800, 2060)): m.wall(x, y, 200, 200, '#46414d', 'tower'); m.prop('town_tower_round', x + 100, y + 214)   # 見張り塔
+m.solid(1200, 420, 800, 520, 'keep'); m.prop('town_keep_front', 1600, 948)                       # 主塔（door gap below: x 1500..1700 at y 940）
 m.floor_rect(1500, 940, 200, 80, '#c9b27a', 'planks')
-m.wall(600, 1500, 400, 200, WOOD, 'barracks', 'planks'); m.wall(2200, 1500, 400, 200, WOOD, 'stable', 'planks')
+for x in range(380, 2840, 200): m.prop('town_battlement', x + 100, 336)                         # 北壁の胸壁
+for x in range(1240, 2000, 200): m.prop('town_battlement', x + 100, 548)                        # 主塔の屋根の胸壁
+m.floor_rect(1440, 960, 320, 1100, '#b9ae92', 'cobble'); m.floor_rect(420, 1960, 2360, 100, '#b9ae92', 'cobble')   # 主塔の扉から正門までの石畳の道
+m.floor_rect(1440, 2000, 320, 120, '#b9ae92', 'cobble')
+m.prop('town_gate_arch', 1600, 2236); m.solid(1380, 2100, 70, 130, 'pier'); m.solid(1750, 2100, 70, 130, 'pier')      # 正門
+for x in (1340, 1860): m.deco('town_torch_post', x, 2250, 20, 14)
+for x in (1450, 1750): m.deco('town_banner_pole_red', x, 1040, 18, 14); m.prop('town_torch_post', x + (-50 if x < 1600 else 50), 1030)
+for y in (1250, 1550, 1850): m.deco('town_lamp_post', 1400, y, 14, 10); m.deco('town_lamp_post', 1800, y, 14, 10)
+m.deco('town_well', 900, 1050, 60, 28)
+m.prop('town_weapon_stand_out', 2300, 1150); m.rects.append((2250, 1120, 100, 30, 'deco'))
+m.deco('town_training_dummy', 2150, 1000, 24, 14); m.deco('town_training_dummy', 2450, 1000, 24, 14); m.deco('town_training_dummy', 2300, 880, 24, 14)
+m.deco('town_hay_stack', 2700, 1800, 120, 40); m.deco('town_hay_stack', 2120, 1780, 120, 40)
+m.deco('furn_crates_stack', 1130, 1760, 60, 30); m.deco('furn_barrel', 1200, 1800, 36, 24); m.deco('furn_barrel', 1000, 1880, 36, 24); m.deco('furn_crate', 1090, 1850, 44, 26)
+m.deco('furn_barrel', 700, 1780, 36, 24); m.deco('furn_crate', 480, 1780, 44, 26)
+m.deco('town_cart', 2400, 1980, 110, 30)
+for (x, y) in ((560, 2340), (880, 2350), (2260, 2350), (2620, 2340), (120, 1000), (120, 1500), (3080, 1700)): m.deco('town_tree_pine', x, y, 24, 14)
+for (x, y) in ((420, 520), (2780, 520), (460, 1900)): m.deco('town_bush_round', x, y, 40, 20)
+m.deco('town_tree_oak', 560, 640, 30, 18); m.deco('town_tree_oak', 2640, 700, 30, 18)
+m.solid(600, 1500, 400, 200, 'barracks'); m.prop('town_barracks', 800, 1706); m.solid(2200, 1500, 400, 200, 'stable'); m.prop('town_stable', 2400, 1706)
 m.spawn('from_road', 1600, 2300, 'up'); m.spawn('from_capital_road', 3050, 1200, 'left'); m.spawn('from_ramparts', 480, 1100, 'right'); m.spawn('from_keep', 1600, 1080, 'down')
 m.door('tr_f1_to_village', 1380, 2288, 440, 64, 'lind_village', 'from_fort', '南門 -> 街道 -> リルド村（story hook onVillageExit）')
 m.door('tr_f1_to_capital', 3040, 1100, 100, 200, 'royal_capital_01_market', 'from_fort_road', '東門 -> 王都への街道')
@@ -114,6 +140,10 @@ for c in (('#a8a294', (200, 200, 2400, 1200)),): m.floor_rect(*c[1], c[0])
 m.wall(440, 420, 1920, 760, '#6f8a4a', 'drop')                        # 中庭側へ落ちる（通行不可）
 for r in ((0, 0, 2800, 200), (0, 1400, 2800, 200), (2600, 200, 200, 1200), (0, 200, 200, 500), (0, 900, 200, 500)): m.solid(*r, 'void')   # outside the walkway = air
 m.floor_rect(200, 200, 320, 320, '#c9b27a'); m.floor_rect(2280, 200, 320, 320, '#c9b27a')   # 見張り台（歩ける）
+for x in range(200, 2600, 200): m.prop('town_battlement', x + 100, 330); m.prop('town_battlement', x + 100, 1230)      # 歩廊の内外の胸壁
+for x in (420, 1000, 1600, 2200): m.deco('town_torch_post', x, 1190, 18, 12)
+for x in (700, 1300, 1900): m.deco('town_banner_pole_red', x, 260, 18, 12)
+m.deco('furn_barrel', 360, 1100, 36, 24); m.deco('furn_crate', 440, 1120, 44, 26); m.deco('furn_weapon_rack', 2150, 1160, 70, 24); m.deco('furn_crates_stack', 1650, 1120, 60, 30)
 m.spawn('from_courtyard', 300, 800, 'right'); m.spawn('from_keep', 1400, 300, 'down')
 m.door('tr_f2_down', 150, 700, 80, 200, 'fort_dunvall_01_courtyard', 'from_ramparts', '中庭への階段')
 m.door('tr_f2_to_keep', 1300, 200, 300, 60, 'fort_dunvall_03_keep', 'from_wall', '主塔の上階への扉')
@@ -126,6 +156,12 @@ m.wall(200, 200, 2000, 100, DARK); m.wall(200, 1500, 800, 100, DARK); m.wall(140
 m.wall(200, 200, 100, 1400, DARK); m.wall(2100, 200, 100, 1400, DARK)
 for (x, y) in ((620, 640), (1700, 640), (620, 1040), (1700, 1040)): m.wall(x, y, 80, 80, '#6a6470', 'pillar')
 m.wall(1000, 300, 400, 160, '#7a3b2b', 'dais', 'planks')
+for x in (520, 1080, 1320, 1880): m.prop('furn_tapestry', x, 290, ['deco'])
+for (x, y) in ((620, 640), (1700, 640), (620, 1040), (1700, 1040)): m.prop('town_torch_post', x + 40, y + 10)
+m.deco('furn_chair', 1200, 420, 40, 20); m.decal('furn_rug_red', 1200, 700)
+m.deco('furn_weapon_rack', 420, 1240, 70, 24); m.deco('furn_weapon_rack', 520, 1240, 70, 24); m.deco('furn_crates_stack', 420, 560, 60, 30); m.deco('furn_barrel', 340, 640, 36, 24)
+m.deco('furn_map_table', 1750, 1300, 110, 40); m.deco('furn_fireplace', 2000, 300, 140, 30)
+for x in (700, 1700): m.deco('town_banner_pole_red', x, 1480, 18, 12)
 m.spawn('from_courtyard', 1200, 1400, 'up'); m.spawn('from_wall', 1820, 860, 'left')
 m.door('tr_f3_exit', 1000, 1560, 400, 60, 'fort_dunvall_01_courtyard', 'from_keep', '中庭へ出る')
 m.door('tr_f3_to_wall', 1980, 760, 120, 200, 'fort_dunvall_02_ramparts', 'from_keep', '城壁へ上がる階段')
@@ -138,8 +174,19 @@ m = Map('royal_capital_01_market', '王都　商業区', 'Royal Capital Market D
 m.floor_rect(200, 200, 4400, 2800)
 m.floor_rect(2200, 200, 400, 2800, '#c7bda2', 'cobble')                        # 中央の大通り
 stalls = [(500, 600), (900, 600), (500, 1200), (900, 1200), (3500, 600), (3900, 600), (3500, 1200), (3900, 1200)]
-for (x, y) in stalls: m.wall(x, y, 260, 160, '#b4553b', 'stall', 'roof')
-for (x, y, w, h) in ((200, 1900, 1500, 800), (3100, 1900, 1500, 800)): m.wall(x, y, w, h, '#7d6f62', 'building', 'brick')   # 商館
+for i, (x, y) in enumerate(stalls): m.solid(x, y + 20, 260, 140, 'stall'); m.prop('town_stall_' + ['red', 'blue', 'green'][i % 3], x + 130, y + 166)
+for (x, y, w, h) in ((200, 2320, 1500, 380), (3100, 2320, 1500, 380)):   # 商館（3軒並び）
+    m.solid(x, y, w, h, 'building')
+    for k in range(3): m.prop('town_house_town_' + 'abc'[(k + x // 1000) % 3], x + 250 + k * 500, y + h + 8)
+for y in range(320, 2900, 340): m.deco('town_lamp_post', 2150, y, 14, 10); m.deco('town_lamp_post', 2650, y, 14, 10)
+for y in (420, 1100, 1800): m.prop('town_banner_pole', 2260, y); m.prop('town_banner_pole', 2540, y)
+m.deco('town_fountain', 2400, 1560, 150, 40)
+m.deco('town_flowerbed', 1700, 780, 100, 26); m.deco('town_flowerbed', 3000, 780, 100, 26)
+m.deco('town_well', 1500, 1760, 70, 30); m.deco('town_cart', 3400, 1440, 120, 30); m.deco('town_cart', 1300, 1480, 120, 30)
+m.deco('town_bench_stone', 2050, 2100, 56, 18); m.deco('town_bench_stone', 2750, 2100, 56, 18)
+for (x, y) in ((340, 340), (4500, 340), (1700, 360), (3050, 360), (340, 1000)): m.deco('town_tree_oak', x, y, 28, 16)
+for (x, y) in ((1300, 800), (3300, 840)): m.deco('town_bush_round', x, y, 40, 20)
+m.deco('furn_crates_stack', 560, 1000, 60, 30); m.deco('furn_barrel', 1100, 1000, 36, 24); m.deco('furn_sacks_pile', 4300, 1000, 50, 26); m.deco('furn_barrel', 3700, 1000, 36, 24)
 m.spawn('from_west_gate', 360, 1500, 'right'); m.spawn('from_fort_road', 360, 1500, 'right'); m.spawn('from_plaza', 4400, 1500, 'left'); m.spawn('from_residential', 2400, 2850, 'up')
 m.door('tr_r1_west_gate', 48, 1300, 64, 400, 'fort_dunvall_01_courtyard', 'from_capital_road', '王都の西門 -> 街道 -> ドゥンヴァル砦')
 m.door('tr_r1_to_plaza', 4688, 1300, 64, 400, 'royal_capital_02_castle_plaza', 'from_market', '城前広場へ')
@@ -151,9 +198,18 @@ maps.append(m)
 # 2) 城前広場
 m = Map('royal_capital_02_castle_plaza', '王都　城前広場', 'Royal Capital Castle Plaza', '城前広場', 4000, 3600, '王都', 'Royal Capital', '#c4bba3', '#8a8f78')
 m.floor_rect(200, 200, 3600, 3200)
-m.wall(1000, 200, 2000, 900, '#6a5f70', 'castle'); m.floor_rect(1800, 1100, 400, 120, '#c9b27a')     # 城 + 城門前の階段
-m.wall(200, 200, 800, 700, '#7d6f62', 'building'); m.wall(3000, 200, 800, 700, '#7d6f62', 'building')
-m.wall(1850, 1900, 300, 300, '#6fa6b8', 'fountain', None)                  # 噴水
+m.solid(1000, 200, 2000, 900, 'castle'); m.prop('town_castle_front', 2000, 1106); m.floor_rect(1800, 1100, 400, 120, '#c9b27a')     # 城 + 城門前の階段
+m.floor_rect(1840, 1100, 320, 1100, '#cdbf9c', 'cobble')                                       # 城門から噴水への参道
+for y in range(1300, 2100, 200): m.deco('town_banner_pole', 1760, y, 18, 12); m.deco('town_banner_pole', 2240, y, 18, 12)
+for (x0, nm) in ((200, 0), (3000, 1)):   # 城の左右の家並み（2軒ずつ）
+    for k, (hx, hv) in enumerate(((x0 + 10, 'a'), (x0 + 390, 'b'))): m.solid(hx, 540, 420, 360, 'house'); m.prop('town_house_town_' + hv, hx + 210, 906)
+    for x in range(x0 + 40, x0 + 800, 160): m.deco('town_tree_pine', x, 400, 24, 14)
+m.solid(1850, 1900, 300, 300, 'fountain'); m.prop('town_fountain', 2000, 2192)                  # 噴水
+for (x, y) in ((1500, 1900), (2500, 1900), (1500, 2500), (2500, 2500)): m.deco('town_flowerbed', x, y, 100, 26)
+for (x, y) in ((1380, 2150), (2620, 2150)): m.deco('town_bench_stone', x, y, 56, 18)
+for y in (1400, 2000, 2600, 3200): m.deco('town_lamp_post', 1660, y, 14, 10); m.deco('town_lamp_post', 2340, y, 14, 10)
+for (x, y) in ((420, 1300), (420, 2900), (3580, 1300), (3580, 2900), (900, 3200), (3100, 3200)): m.deco('town_tree_oak', x, y, 28, 16)
+m.deco('town_hedge_long', 700, 2100, 170, 24); m.deco('town_hedge_long', 3300, 2100, 170, 24)
 m.spawn('from_market', 360, 1700, 'right'); m.spawn('from_residential', 2000, 3300, 'up'); m.spawn('from_castle', 2000, 1260, 'down')
 m.door('tr_r2_to_market', 48, 1500, 64, 400, 'royal_capital_01_market', 'from_plaza', '商業区へ')
 m.door('tr_r2_to_residential', 1800, 3488, 400, 64, 'royal_capital_03_residential', 'from_plaza', '住宅街へ')
@@ -165,8 +221,15 @@ m = Map('royal_capital_03_residential', '王都　住宅街', 'Royal Capital Res
 m.floor_rect(200, 200, 3200, 2800, '#bdb29a', 'cobble')
 houses = [(400, 500), (1000, 500), (1600, 500), (2600, 500), (400, 1500), (1000, 1500), (2600, 1500), (400, 2400), (1000, 2400), (2600, 2400)]
 for i, (x, y) in enumerate(houses):
-    m.wall(x, y, 420, 360, ROOF, 'house', 'roof'); m.floor_rect(x + 160, y + 360, 100, 60, '#c9b27a')
+    m.solid(x, y, 420, 360, 'house'); m.prop('town_house_town_' + 'abc'[i % 3], x + 210, y + 370); m.floor_rect(x + 160, y + 360, 100, 60, '#c9b27a')
     m.zones.append({'id': 'ev_door_%02d' % i, 'type': 'interact', 'textId': 'msg_house_locked', 'shape': {'shape': 'circle', 'cx': x + 210, 'cy': y + 400, 'r': 70}})
+m.deco('town_well', 1800, 1500, 70, 30)
+for (x, y) in ((1300, 1300), (2300, 1300), (1300, 1950), (2300, 1950)): m.deco('town_flowerbed', x, y, 100, 26)
+for (x, y) in ((1250, 2250), (2200, 2250), (1900, 960)): m.deco('town_tree_oak', x, y, 28, 16)
+for (x, y) in ((900, 1260), (2120, 1260), (1650, 2220)): m.deco('town_bush_round', x, y, 40, 20)
+for (x, y) in ((1500, 330), (1500, 1250), (1500, 2250), (2400, 1250), (3050, 1250)): m.deco('town_lamp_post', x, y, 14, 10)
+m.deco('town_bench_stone', 2000, 1800, 56, 18); m.deco('town_cart', 3000, 1000, 120, 30); m.deco('town_hedge_long', 3000, 2750, 170, 24)
+m.deco('furn_barrel', 3100, 2400, 36, 24); m.deco('furn_crate', 3180, 2430, 44, 26)
 m.spawn('from_market', 1700, 360, 'down'); m.spawn('from_plaza', 3300, 1500, 'left')
 m.door('tr_r3_to_market', 1500, 48, 600, 64, 'royal_capital_01_market', 'from_residential', '商業区へ')
 m.door('tr_r3_to_plaza', 3488, 1300, 64, 400, 'royal_capital_02_castle_plaza', 'from_residential', '城前広場へ')

@@ -28,3 +28,8 @@
 - `tools/moss/make_npcs.py`: 兵士/隊長/門番/商人/町人(男女)/老人/子ども/吟遊詩人/依頼人 + ベッド + 掲示板（2.5頭身・前向き1枚絵）。`npc_slot_<look>` として登録。
 - 石畳・レンガ・屋根瓦・板張りは `terrain.fills[].pattern`（`flagstone|brick|planks|roof|cobble`）で手続き描画（画像不要）。
 - 崖マップに立石の当たり判定プリセットを追加。`check_assets.py` は全マップを対象に art/collision 幅を検査（現在 警告0）。
+
+## 作り込み版（2026-10-11）
+- 6マップに仮ドット絵を配置: `python3 tools/moss/make_town_art.py`（塔・城門・胸壁・主塔・兵舎/厩・城・町家3種・露店3色・噴水・井戸・街灯・旗・木人・干し草・荷車・木/茂み/花壇/生垣）→ `python3 tools/moss/build_town_maps.py`。素材は `img/field/moss/town/`、マニフェスト規則 `^town_*`（gen:make_town_art）。
+- 装飾は `Map.prop` / `Map.deco`（足元に小さな当たり判定）で追加。差し替えは同名PNGを置くだけ。
+- 修正: `forest-loader.js` の画像読込が失敗すると永久に薄紫(#668)の四角プレースホルダーになっていた → 16枚ずつ読み込み＋失敗分を最大4回再試行。

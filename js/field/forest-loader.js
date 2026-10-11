@@ -24,7 +24,16 @@
         const r=await fetch(ROOT+'img/field/moss/manifest.json');if(!r.ok)throw new Error('no manifest');
         const m=await r.json();art.manifest=m;art.node=compile(m.node);art.layer=compile(m.layer);
         const files=new Set([m.ground.grass,m.ground.dirt,...[...m.node,...m.layer,...Object.values(m.entity||{})].filter(x=>x&&x.file).map(x=>x.file)]);
-        await Promise.all([...files].map(async f=>{const im=img(f);try{await im.decode();}catch(e){art.images.delete(f);}}));
+        // load in small batches and retry failures (a flaky mobile connection / a busy server must not leave permanent lavender placeholder squares)
+        let todo=[...files];
+        for(let attempt=0;attempt<4&&todo.length;attempt++){
+          const failed=[];
+          for(let i=0;i<todo.length;i+=16)await Promise.all(todo.slice(i,i+16).map(async f=>{
+            if(attempt>0)art.images.delete(f);
+            const im=img(f);try{await im.decode();}catch(e){art.images.delete(f);failed.push(f);}}));
+          todo=failed;if(todo.length)await new Promise(r=>setTimeout(r,250*(attempt+1)));
+        }
+        if(todo.length)console.warn('forest-loader: art failed to load after retries',todo);
         art.ground={grass:art.images.get(m.ground.grass)||null,dirt:art.images.get(m.ground.dirt)||null,tile:m.ground.tile||384};
       }catch(e){art.manifest=null;art.ground=null;}   // no art: everything falls back to placeholders
     })();
