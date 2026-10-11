@@ -19,6 +19,12 @@ window.TalkDataRilde = Object.freeze({tables: [
     {id: 'rr_boy_a', priority: 10, mode: 'cycle', lines: ['男の子「エイダン兄ちゃん！　フィオナ姉ちゃんと戻ってきてくれたんだ！」', '男の子「僕ね、泣かなかったよ。母さんの手を、ずっと離さなかったんだ。」']}]},
   {npc: 'rr_knight', entries: [
     {id: 'rr_knight_a', priority: 10, mode: 'cycle', lines: ['王国の兵士「ドゥンヴァル砦から救援に来た。怪我人は広場に集めてある。」', '王国の兵士「村の再建には人手がいる。……だが、まずは火を消すのが先だ。」']}]},
+  // ---- 街道の開通状況（出口 tr_v_to_fort と東の標識）。出口/標識のどちらも FieldTalk を通す
+  {npc: 'rr_road_early', entries: [{id: 'rr_road_early_1', priority: 10, mode: 'cycle', lines: ['街道は東へ続いている。今はまだ、村を離れる時ではない。']}]},
+  {npc: 'rr_road_ask', entries: [{id: 'rr_road_ask_1', priority: 10, mode: 'cycle', lines: ['東へ続く街道だ。この先のことは、長老に聞いてみようか。']}]},
+  {npc: 'rr_sign_east', entries: [
+    {id: 'rr_sign_open', priority: 20, mode: 'cycle', when: {flag: 'road_dunvall_open'}, lines: ['焦げた木の標識：『← リルド村　／　ドゥンヴァル砦 →』', '誰かが標識の根元に、新しい松明を立てかけていった。街道は砦まで続いている。']},
+    {id: 'rr_sign_closed', priority: 10, mode: 'cycle', lines: ['焦げた木の標識：『← リルド村　／　ドゥンヴァル砦 →』']}]},
   {npc: 'rr_knight2', entries: [
     {id: 'rr_knight2_a', priority: 10, mode: 'cycle', lines: ['王国の兵士「東の街道は、砦まで安全を確保している。夜は松明を目印にするといい。」']}]}
 ]});

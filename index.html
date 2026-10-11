@@ -356,8 +356,8 @@ $('#dummy1').onclick=$('#dummy2').onclick=()=>say('使い込まれた訓練用�
 $('#hillExit').onclick=()=>{if(storyStage<3)say('この先は風見の断崖へ続いている。今は訓練場へ向かおう。');else if(storyStage===3||storyStage>=15)enterCliff();else if(storyStage>=5)say('村へ戻ろう。何かがおかしい。')};
 // ドゥンヴァル砦('fort') / 王都('capital') の基礎マップへ入る（開発・確認用。物語には未接続）: enterWorldMap('fort')
 $('#roadExit').onclick=()=>{
- if(storyStage<15)say('街道は東へ続いている。今はまだ、村を離れる時ではない。');
- else if(!FieldTalk.flag('road_dunvall_open'))say('東へ続く街道だ。この先のことは、長老に聞いてみようか。');
+ if(storyStage<15)FieldTalk.talk('rr_road_early',{source:'room'});
+ else if(!FieldTalk.flag('road_dunvall_open'))FieldTalk.talk('rr_road_ask',{source:'room'});
  else enterWorldMap('fort','from_road');
 };
 function enterWorldMap(id,spawn){closeDialogue();forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterMap(id,spawn);}
@@ -571,6 +571,7 @@ $('#returnScene').onclick=()=>{
 };
 function enterBurningVillage(){
  storyStage=5;
+ TalkDataAttack.flags.forEach(f=>FieldTalk.setFlag(f,false));   // 襲撃フラグは毎回ここから
  world.classList.add('night');
  document.body.classList.add('villageAttack');
  // 襲撃開始後は平常時の屋内を利用不可にする。
@@ -604,23 +605,25 @@ function enterBurningVillage(){
  clearTimeout(enterBurningVillage.t);
  enterBurningVillage.t=setTimeout(()=>b.style.display='none',2400);
 
- say('エイダン「広場で合流する約束だ……フィオナ、無事でいてくれ。」');
+ atkTalk('atk_enter');
 }
 
+// 襲撃(stage 5-8)の会話は js/field/talk-data-attack.js（FieldTalk）。進行は下のコードが持つ。
+const atkTalk=id=>FieldTalk.talk(id,{source:'attack'});
 let attackStep=0, attackBattleBusy=false, aahp=100,aatp=0,gghp=220,agGuard=false,currentGoblin=null;
 function notice(t){const n=$('#rescueNotice');n.textContent=t;n.style.display='block';clearTimeout(notice.t);notice.t=setTimeout(()=>n.style.display='none',2200)}
 
 $('#attackOld').onclick=()=>{
  if(storyStage<5)return;
- say('老人「うぅ……広場の方へ、魔物が……。娘さんが、一人で追っていった……」');
+ atkTalk('atk_old');
 };
 $('#attackMother').onclick=()=>{
  if(storyStage<5)return;
- if(attackStep<1){say('母親「この子だけでも……！」');setTimeout(()=>{if(storyStage===5&&attackStep<1)startAttackBattle('attackGob1',100)},500)}else say('母親「本当にありがとう。娘と一緒に逃げます！」');
+ if(attackStep<1){atkTalk('atk_mother_before');setTimeout(()=>{if(storyStage===5&&attackStep<1)startAttackBattle('attackGob1',100)},500)}else atkTalk('atk_mother_after');
 };
 $('#attackChild').onclick=()=>{
  if(storyStage<5)return;
- say('子ども「お姉ちゃんが治してくれたの……それから、あっちへ走っていった……」');
+ atkTalk('atk_child');
 };
 
 $('#attackGob1').onclick=()=>{
@@ -629,7 +632,7 @@ $('#attackGob1').onclick=()=>{
 };
 $('#attackGob2').onclick=()=>{
  if(storyStage<5)return;
- if(attackStep<1){say('エイダン「先にあの母娘を助けないと！」');return}
+ if(attackStep<1){atkTalk('atk_gob2_wait');return}
  startAttackBattle('attackGob2',220);
 };
 
@@ -828,7 +831,7 @@ function finishAttackBattle(){
      hideNormalPartyBattle();notice('異常化ゴブリンを退けた');
    }else if(defeated==='attackGob1'){
      hideNormalPartyBattle();attackStep=Math.max(attackStep,1);setObj('村の広場へ向かい、フィオナを探そう');
-     notice('母娘は安全な道へ逃げていった');say('母親「ありがとう……！　さあ、逃げましょう！」　エイダン「広場へ……フィオナを探さないと。」');
+     notice('母娘は安全な道へ逃げていった');atkTalk('atk_rescued');
    }else{
      hideNormalPartyBattle();attackStep=2;storyStage=6;$('#attackFiona').style.display='grid';setObj('フィオナに話しかけよう');notice('フィオナを見つけた');
    }
@@ -838,7 +841,7 @@ function finishAttackBattle(){
 $('#attackFiona').onclick=()=>{
  if(storyStage<6)return;
  storyStage=7;
- say('フィオナ「エイダン……！ よかった。さっきの人たちは逃がせた。でも、この魔物たち……普通じゃない。」');
+ atkTalk('atk_fiona');
  setObj('フィオナとともに村の北側へ向かおう');
  notice('フィオナが再び同行した');
  const eventGeneration=PrologueCombat.generation;setTimeout(()=>{if(eventGeneration===PrologueCombat.generation&&storyStage===7)beginNorthAssault()},700);
@@ -858,10 +861,10 @@ $('#royalKnight').onclick=()=>{
  closeDialogue();
  if(northPhase===1){
    northPhase=2;
-   say('王国騎士「生存者か！　北門はもう保たない。川沿いの退路から森へ抜けろ！　我々がここを食い止める！」');
+   atkTalk('atk_knight_first');
    setObj('北の退路へ向かい、リルド村を脱出しよう');
  }else{
-   say('王国騎士「急げ！　この数は普通じゃない……黒いルーンに近づくな！」');
+   atkTalk('atk_knight_again');
  }
 };
 $('#northGob1').onclick=()=>{
@@ -881,27 +884,18 @@ $('#northEscape').onclick=()=>{
  startEscapeScene();
 };
 
-const escapeLines=[
- 'フィオナ「……行こう、エイダン。今は、生き残らないと。」',
- '二人は炎上する村を背に、川沿いの細い退路を走った。',
- '背後で角笛が鳴る。黒紫の光をまとった魔物たちが追ってくる。',
- 'エイダン「橋は――駄目だ。向こうにもいる！」',
- 'フィオナ「こっち！　川下に獣道があるはず！」',
- '地面が大きく揺れ、焼けた崖の縁が崩れた。',
- 'エイダン「フィオナ！」',
- '二人の足元が崩れ、そのまま暗い谷へ落ちていった――。'
-];
+const escapeLinesNow=()=>TalkDataAttack.escapeLines;   // 文言は js/field/talk-data-attack.js
 let escapeIndex=0;
 function startEscapeScene(){
- closeDialogue(); escapeIndex=0;
+ closeDialogue(); escapeIndex=0; FieldTalk.setFlag('atk_escaped',true);
  $('#escapeScene').style.display='block';
- $('#escapeText').textContent=escapeLines[0];
+ $('#escapeText').textContent=escapeLinesNow()[0];
  setObj('フィオナとともに村から脱出しよう');
 }
 $('#escapeScene').onclick=()=>{
  escapeIndex++;
- if(escapeIndex<escapeLines.length){
-   $('#escapeText').textContent=escapeLines[escapeIndex];
+ if(escapeIndex<escapeLinesNow().length){
+   $('#escapeText').textContent=escapeLinesNow()[escapeIndex];
    if(escapeIndex===2)$('#escapeGob').style.display='grid';
    if(escapeIndex===5){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
  }else{
@@ -1845,7 +1839,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/fiona-field-assets.js?v=20261011b"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261011e"></script>
 <script src="js/field/moss-forest-story.js?v=20261011i"></script>
-<script src="js/field/rilde-village.js"></script>
+<script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js"></script>
 <script src="js/inventory.js"></script>
@@ -1860,8 +1854,9 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/talk-data-quests.js"></script>
 <script src="js/field/talk-data-scenes.js"></script>
 <script src="js/field/talk-data-capital.js?v=20261011g"></script>
-<script src="js/field/talk-data-rilde.js"></script>
-<script src="js/field/field-talk.js?v=20261011g"></script>
+<script src="js/field/talk-data-rilde.js?v=20261011b"></script>
+<script src="js/field/talk-data-attack.js?v=20261011a"></script>
+<script src="js/field/field-talk.js?v=20261011h"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>
 <script src="js/field/field-scene.js"></script>

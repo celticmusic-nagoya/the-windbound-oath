@@ -37,7 +37,7 @@ def obj_rects(o):
 class Room:
     def __init__(s, mid, ja, en, w, h, bgm, tod='day', interior=False, base='#17110d', weather=None):
         s.id, s.ja, s.en, s.w, s.h, s.bgm, s.tod, s.interior = mid, ja, en, w, h, bgm, tod, interior
-        s.base = base; s.weather = weather
+        s.base = base; s.weather = weather; s.wind = .2
         s.rects = []; s.fills = []; s.spawns = {}; s.trans = []; s.zones = []; s.props = []; s.walkers = []; s.paths = []; s.waters = []; s.patches = []; s.vista = []; s.tre = []
         s.n = 0; s.notes = []
     def uid(s, p): s.n += 1; return '%s_%02d' % (p, s.n)
@@ -77,7 +77,7 @@ class Room:
              'props': s.props, 'walkers': s.walkers, 'scatter': [], 'effects': [],
              'collision': {'bounds': {'x': 0, 'y': 0, 'w': float(s.w), 'h': float(s.h)}, 'edgeBlockers': edges, 'blockers': blockers, 'presets': {}},
              'transitions': s.trans, 'encounterZones': [], 'treasurePoints': s.tre, 'eventZones': zones, 'cameraFocus': [],
-             'ambience': {'grade': {'id': 'rilde', 'tint': '#FFF2D0', 'tintStrength': .04, 'brightness': 1.02, 'saturation': 1.0}, 'shadow': {'dir': [.55, .83], 'alpha': .2}, 'wind': {'strength': .2, 'dirDeg': 60, 'gustPeriodSec': [6, 10], 'targets': {}}},
+             'ambience': {'grade': {'id': 'rilde', 'tint': '#FFF2D0', 'tintStrength': .04, 'brightness': 1.02, 'saturation': 1.0}, 'shadow': {'dir': [.55, .83], 'alpha': .2}, 'wind': {'strength': s.wind, 'dirDeg': 60, 'gustPeriodSec': [6, 10], 'targets': {}}},
              'particles': [], 'audio': {'bgm': {'id': s.bgm, 'fadeInSec': 1.5}, 'layers': [], 'hooks': []},
              'taint': {'baseLevel': 0, 'maxCoverageRatio': 0.0, 'palette': {'crack': '#120A1F', 'glow': '#8A4DFF'}, 'spots': []},
              'debug': {'showCollision': False, 'showPaths': False, 'showZones': False},
@@ -121,11 +121,18 @@ def tree_ring(room, ruin):
 def outdoor(ruin):
     R = Room('rilde_village_01_' + ('ruin' if ruin else 'peace'), 'リルド村' + ('（襲撃後）' if ruin else ''), 'Rilde Village' + (' (After the Attack)' if ruin else ''), W, H,
              'bgm_rilde_ruin' if ruin else 'bgm_rilde_day', 'ember' if ruin else 'day', base='#4d4a3c' if ruin else '#7d8a5a',
-             weather={'default': 'smoke', 'rules': []} if ruin else None)
+             weather={'default': 'smoke', 'rules': [{'when': {'flag': 'road_dunvall_open'}, 'set': 'mist', 'ms': 8000}]} if ruin else None)   # 煙: 長老が街道を示す(=復旧が動き出す)と薄れて霧になる
     # ---- terrain: roads, plaza, river
     lay = LIND['layout']
     for rt in lay['routes'] + lay['trails']:
         R.paths.append({'id': rt['id'], 'points': [[p[0] + OX, p[1] + OY] for p in rt['points']], 'width': rt['width']})
+    # door paths must reach both the door and the road: the legacy Lind routes stop short and left floating capsules / dead-end stubs on the grass
+    for pth in R.paths:
+        if pth['id'] == 'lind_inn': pth['points'] = [[975, 476], [975, 712]]
+        elif pth['id'] == 'village-north-south': pth['points'][0] = [830, 30]   # roads run off the map edge instead of ending in a floating round cap
+        elif pth['id'] == 'road-east': pth['points'][-1] = [2420, 695]
+        elif pth['id'] == 'village-west-east': pth['points'][0] = [30, 710]; pth['points'][-1] = [1478, 708]   # the round end cap must stop at the river bank (the bridge decal takes over)
+        elif pth['id'] == 'lind_aidan_house': pth['points'] = [[1345, 545], [1380, 590], [1380, 712]]
     R.paths.append({'id': 'road-east', 'points': [[1800 + OX, 595 + OY], [2260 + OX, 595 + OY]], 'width': 70})
     R.paths.append({'id': 'south-trail', 'points': [[730 + OX, 1350 + OY], [730 + OX, 1700 + OY]], 'width': 84})
     pl = lay['plaza']; R.fill('#948c7a' if ruin else '#b3ab96', pl['x'] + OX, pl['y'] + OY, pl['width'], pl['height'], 'cobble')
@@ -168,8 +175,10 @@ def outdoor(ruin):
         for name, (x, y) in {'cow': (1010, 1018), 'pig': (1170, 1018), 'chicken': (1330, 1030), 'chicken2': (1305, 1010)}.items():
             R.prop('rv_animal_' + name.rstrip('2'), x + OX, y + OY, pid='an_' + name, tags=['animal'])
     # signs: the east road and the south trail
+    if ruin: R.wind = .02   # 風が止まった(Bible 6/8): 草・看板・洗濯物は揺れない。水だけが流れる
     R.prop('rv_lind_sign', 2140 + OX, 560 + OY, pid='sign_east', tags=['sign'])
-    R.interact('ev_sign_east', 2140 + OX, 540 + OY, 60, text='木の標識：『← リルド村　／　ドゥンヴァル砦 →』', label='標識')
+    if ruin: R.interact('ev_sign_east', 2140 + OX, 540 + OY, 60, hook='rilde_sign_east', label='標識')          # 街道の開通状況で文言が変わる(FieldTalk: rr_sign_east)
+    else: R.interact('ev_sign_east', 2140 + OX, 540 + OY, 60, text='木の標識：『← リルド村　／　ドゥンヴァル砦 →』', label='標識')
     R.prop('rv_lind_sign', 700 + OX, 1540 + OY, pid='sign_south', tags=['sign'])
     R.interact('ev_sign_south', 700 + OX, 1520 + OY, 60, text='木の標識：『← リルド村　／　風見の断崖 ↓』', label='標識')
     # ---- doors

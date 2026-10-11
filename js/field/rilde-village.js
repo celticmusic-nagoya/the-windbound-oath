@@ -60,6 +60,7 @@
       case h === 'rilde_kid': return click(legacyNpc('kid'));
       case h === 'rilde_catowner': return click(legacyNpc('catowner'));
       case h === 'rilde_cat': return click(legacyNpc('cat'));
+      case h === 'rilde_sign_east': { if (!FieldTalk.talk('rr_sign_east', {source: 'forest'})) say('木の標識：『← リルド村　／　ドゥンヴァル砦 →』'); return true; }
       case h === 'rilde_wind_stone': {
         say(state() === 'ruin' ? '風の石は沈黙している。あの夜から、村に風が戻らない。' : 'エイダン「風の石だ。村の人たちは、風の見張りって呼んでる。」');
         return true;
@@ -102,8 +103,8 @@
       return true;
     }
     if (id === 'tr_v_to_fort') {
-      if (stage() < 15) toast('街道は東へ続いている。今はまだ、村を離れる時ではない。');
-      else if (!FieldTalk.flag('road_dunvall_open')) toast('東へ続く街道だ。この先のことは、長老に聞いてみようか。');
+      if (stage() < 15) FieldTalk.talk('rr_road_early', {source: 'forest'});
+      else if (!FieldTalk.flag('road_dunvall_open')) FieldTalk.talk('rr_road_ask', {source: 'forest'});
       else MossForestStory.enterMap('fort', 'from_road');
       return true;
     }
@@ -118,6 +119,11 @@
   function enterCliffFromVillage() {
     MossForestStory.enterCliff().then(() => { if (stage() === 3) setObj('崖の上のビューポイントへ向かおう'); });
   }
+  // 長老が街道を示したら(road_dunvall_open)、目的も次へ進める
+  window.addEventListener('field-talk-end', e => {
+    const d = e.detail || {};
+    if (d.entry === 'rr_elder_road' && typeof setObj === 'function') { setObj('東の街道から、ドゥンヴァル砦へ向かおう'); if (typeof popObjective === 'function') popObjective(); if (typeof renderJournal === 'function') renderJournal(); }
+  });
   window.RildeVillage = Object.freeze({enabled, state, resolve, hook, onEnter, fionaVisible, enter, startOpening, afterPrologue, exit, isRilde, isVillage,
     force(s) { forced = s === 'peace' || s === 'ruin' ? s : null; return state(); }, get legacy() { return LEGACY; }});
 })();
