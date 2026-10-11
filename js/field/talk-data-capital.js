@@ -62,5 +62,39 @@ window.TalkDataCapital = Object.freeze({tables: [
               choice: {options: [{label: '探してみる', reply: '老婦人「ありがとう、優しい方ね。お願いしますよ。」', quest: {id: 'q_capital_comb', action: 'accept'}},
                                  {label: '今は難しい', reply: '老婦人「そう……。気が向いたら、また声をかけてね。」'}]}}]},
     {id: 'r3e_thanks', priority: 30, mode: 'cycle', when: {quest: {id: 'q_capital_comb', state: 'reported'}},
-     lines: ['老婦人「あの櫛、毎朝つかっているのよ。ありがとうね。」']}]}
+     lines: ['老婦人「あの櫛、毎朝つかっているのよ。ありがとうね。」']}]},
+  // ---- 街道（砦〜王都）・丘の上からの王都一望（初回はカメラ演出つき）
+  {npc: 'road_overlook', entries: [
+    {id: 'road_overlook_first', priority: 50, mode: 'once',
+     lines: [{pages: ['エイダン「……あれが、王都か。」', 'フィオナ「大きい……。谷の向こうまで、街がずっと続いてる。」',
+                      'エイダン「村から出たことのなかった俺たちが、あんな場所へ行くんだな。」', 'フィオナ「うん。……行こう、エイダン。風はこっちに吹いてるよ。」'],
+              set: {road_overlook_seen: true}}]}]},
+  {npc: 'road_overlook_view', entries: [
+    {id: 'road_overlook_again', priority: 10, mode: 'cycle', lines: ['谷の向こうに、王都の城壁と塔が霞んで見える。道はここから、王都へ向かって下っていく。']}]},
+  {npc: 'rd_traveler', entries: [
+    {id: 'rd_trav_a', priority: 10, mode: 'cycle', lines: ['旅の商人「王都へ行くのかい？ この丘から見える景色は一見の価値ありだ。急がば回れ、ってね。」', '旅の商人「砦の酒場に、王都へ戻る連れを探してる若いのがいたよ。腕は立つらしい。」']}]},
+  {npc: 'rd_patrol', entries: [
+    {id: 'rd_patrol_a', priority: 10, mode: 'cycle', lines: ['巡回の兵士「この街道は砦の管轄だ。日が落ちる前に、丘を越えておくといい。」']}]},
+  // ---- ドゥンヴァル砦・酒場「錆びた角笛」 リアム加入イベント
+  {npc: 'liam', entries: [
+    {id: 'liam_intro', priority: 70, mode: 'once', when: {stage: [15, 99]},
+     lines: [{pages: ['酒場の隅で、赤いバンダナの青年が古びた地図を広げている。', 'リアム「……ん？ 見ない顔だな。その剣、ただの飾りじゃなさそうだ。」', 'エイダン「あなたは？」',
+                      'リアム「リアム。王都の遺跡調査団にいた——今はしがないトレジャーハンターさ。」',
+                      'リアム「王都へ戻る連れを探してたんだ。最近の街道は物騒でね。……どうだい、俺を連れていかないか？ 足と目には自信がある。」'],
+              choice: {options: [{label: '仲間に誘う', reply: ['リアム「決まりだな！ よろしく頼むぜ、エイダン。」', 'フィオナ「よろしくね、リアムさん。」', '（リアムが仲間に加わった！）'], set: {liam_joined: true}, join: 'liam'},
+                                 {label: 'また今度', reply: 'リアム「そうか。気が変わったら声をかけてくれ。ここで地図とにらめっこしてるよ。」'}]}}]},
+    {id: 'liam_ask', priority: 60, mode: 'cycle', when: {all: [{talked: 'liam_intro'}, {not: {flag: 'liam_joined'}}]},
+     lines: [{pages: ['リアム「お、考えは決まったかい？ 王都までの道案内なら任せてくれ。」'],
+              choice: {options: [{label: '仲間に誘う', reply: ['リアム「待ってたぜ！ 改めて、よろしくな。」', '（リアムが仲間に加わった！）'], set: {liam_joined: true}, join: 'liam'},
+                                 {label: 'まだ早い', reply: 'リアム「了解。いつでも声をかけてくれ。」'}]}}]},
+    {id: 'liam_after', priority: 20, mode: 'cycle', when: {flag: 'liam_joined'}, lines: ['リアム「さあ、行こうぜ。」']}]},
+  {npc: 'f4_barkeep', entries: [
+    {id: 'f4_bk_after', priority: 30, mode: 'cycle', when: {flag: 'liam_joined'}, lines: ['酒場の主人「あの兄ちゃん、やっと連れが見つかったか。道中、気をつけてな。」']},
+    {id: 'f4_bk_a', priority: 10, mode: 'cycle', lines: ['酒場の主人「ようこそ、錆びた角笛へ。……隅の席の兄ちゃんが、ずっと王都行きの連れを探してるよ。話してみちゃどうだい。」']}]},
+  {npc: 'f4_patron1', entries: [
+    {id: 'f4_p1_a', priority: 10, mode: 'cycle', lines: ['常連の男「砦の兵隊さんは気前がいい。ここで飲む麦酒は、辺境一だぞ。」']}]},
+  {npc: 'f4_patron2', entries: [
+    {id: 'f4_p2_a', priority: 10, mode: 'cycle', lines: ['旅の女「王都までは街道を東へ。丘の上から見る景色は、きっと忘れられないわ。」']}]},
+  {npc: 'f4_bard', entries: [
+    {id: 'f4_bard_a', priority: 10, mode: 'cycle', lines: ['吟遊詩人「風の石の歌を知ってるかい？ 古い辺境の唄さ。……ふふ、続きはまた今度。」']}]}
 ]});

@@ -76,6 +76,11 @@
         if (got && got.length && pages) pages.push({speaker: '', text: Inventory.describe(got) + ' を手に入れた。'});
       }
     }
+    if (o.join && typeof PartyManager !== 'undefined' && PartyManager.members[o.join]) {   // a companion joins the party (roster + active list; battles pick them up when their scenes exist)
+      PartyManager.join(o.join);
+      if (!PartyManager.active.includes(o.join) && PartyManager.active.length < (PartyManager.maxActive || 4)) PartyManager.active.push(o.join);
+      window.dispatchEvent(new CustomEvent('party-join', {detail: {id: o.join}}));
+    }
     if (o.take && window.Inventory) for (const [id, n] of Object.entries(o.take)) Inventory.take(id, n);
     if (o.give && window.Inventory) {
       const got = Inventory.grant(o.give);

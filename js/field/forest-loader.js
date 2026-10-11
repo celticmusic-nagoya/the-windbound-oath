@@ -62,8 +62,8 @@
   function entityArt(key){if(!art.manifest)return null;const r=art.manifest.entity&&art.manifest.entity[key];const im=r&&r.file&&art.images.get(r.file);return im?{src:im.src,w:r.w,h:r.h}:null;}
   function nodeArt(asset){if(!art.manifest)return null;const r=resolve(art.node,asset);return r?{im:img(r.file),w:r.w,h:r.h,file:r.file}:null;}   // lazy: the <img> starts loading when first created
   function layerArt(asset){if(!art.manifest)return null;const r=resolve(art.layer,asset);const im=r&&art.images.get(r.file);return im?{im,w:r.w,h:r.h}:null;}
-  function entities(map,scatter){
-    const list=map.props.map(p=>({...p,rule:'prop'}));
+  function entities(map,scatter,flags){
+    const list=map.props.filter(p=>!(p.hideIf&&flags&&flags[p.hideIf])).map(p=>({...p,rule:'prop'}));   // hideIf: a flag removes the prop (a recruited companion leaves the room)
     for(const e of scatter)if(e.render==='node')list.push(e);
     return list;
   }
@@ -79,7 +79,7 @@
   function mount(map,world,options={}) {
     const flags=options.flags||{};
     const t0=performance.now();
-    const all=ForestScatter.generate(map),ents=entities(map,all);
+    const all=ForestScatter.generate(map),ents=entities(map,all,flags);
     const layerItems=all.filter(e=>e.render==='layer');
     const solid=collision(map,ents,flags);
     world.style.width=map.world.width+'px';world.style.height=map.world.height+'px';world.style.position='relative';

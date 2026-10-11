@@ -17,7 +17,7 @@ WEATHER = {
 class Map:
     def __init__(s, mid, ja, en, area_ja, w, h, region_ja, region_en, floor, ground='#7d8a5a', bgm='bgm_town'):
         s.id, s.ja, s.en, s.area_ja, s.w, s.h = mid, ja, en, area_ja, w, h
-        s.region = (region_ja, region_en); s.rects = []; s.fills = []; s.spawns = {}; s.trans = []; s.nodes = []; s.tre = []; s.props = []; s.walkers = []; s.zones = []
+        s.region = (region_ja, region_en); s.rects = []; s.fills = []; s.spawns = {}; s.trans = []; s.nodes = []; s.tre = []; s.props = []; s.walkers = []; s.zones = []; s.paths = []
         s.floor = floor; s.ground = ground; s.bgm = bgm; s.seq = 0
     def nid(s, p): s.seq += 1; return '%s_%02d' % (p, s.seq)
     def wall(s, x, y, w, h, color='#5b5561', tag='wall', pattern='brick'):
@@ -40,7 +40,7 @@ class Map:
                         'fade': {'out': 0.35, 'in': 0.35}, 'enabled': True, 'note': note})
     LOOK = {'f1_captain': 'captain', 'f1_quartermaster': 'merchant', 'f1_gate_guard': 'guard', 'f1_bed': 'bed', 'f2_lookout': 'soldier', 'f3_commander': 'captain', 'f3_armory': 'soldier',
             'r1_general': 'merchant', 'r1_weapon': 'merchant', 'r1_board': 'board', 'r1_rumor': 'townsman', 'r1_child': 'child', 'r1_inn': 'townswoman',
-            'r2_guard': 'guard', 'r2_bard': 'bard', 'r2_herald': 'soldier', 'r3_resident': 'townswoman', 'r3_cat_man': 'elder', 'r3_elder_quest': 'questgiver'}
+            'r2_guard': 'guard', 'r2_bard': 'bard', 'r2_herald': 'soldier', 'r3_resident': 'townswoman', 'f4_liam': 'liam', 'f4_barkeep': 'barkeep', 'f4_patron1': 'townsman', 'f4_patron2': 'townswoman', 'f4_bard': 'bard', 'rd_traveler': 'merchant', 'rd_patrol': 'soldier', 'r3_cat_man': 'elder', 'r3_elder_quest': 'questgiver'}
     def npc(s, nid, label, x, y, role='npc', shop=None, rest=False, walk=None, speed=24):
         """NPC / shop / quest-giver / bed slot. Click-only interact zone (no eventId, so walking past never fires it).
         Story binds by fields: npc -> FieldTalk table id; shop -> ShopData id (opened directly); action:'rest' -> sleeping place."""
@@ -79,7 +79,7 @@ class Map:
                 'layers': ['GROUND', 'GROUND_DETAIL', 'LOWER_PROP', 'ACTOR', 'UPPER_FOLIAGE', 'FOREGROUND'],
                 'spawns': {'default': first, 'points': s.spawns},
                 'terrain': {'base': {'tiles': ['gnd_grass_sunny_01', 'gnd_grass_sunny_02'], 'surface': 'grass', 'seed': zlib.crc32(s.id.encode()) % 9000}, 'baseColor': s.ground,
-                            'patches': [], 'openAreas': [], 'paths': [], 'waters': [], 'cliffs': [],
+                            'patches': [], 'openAreas': [], 'paths': s.paths, 'waters': [], 'cliffs': [],
                             'fills': [dict({'id': 'fill_%d' % i, 'color': k[0], 'rects': r}, **({'pattern': k[1]} if k[1] else {})) for i, (k, r) in enumerate(order)]},
                 'props': s.props, 'walkers': s.walkers, 'scatter': [], 'effects': [],
                 'collision': {'bounds': {'x': 0, 'y': 0, 'w': float(s.w), 'h': float(s.h)}, 'edgeBlockers': edges, 'blockers': blockers, 'presets': {}},
@@ -124,13 +124,13 @@ m.deco('furn_barrel', 700, 1780, 36, 24); m.deco('furn_crate', 480, 1780, 44, 26
 m.deco('town_cart', 2400, 1980, 110, 30)
 for (x, y) in ((560, 2340), (880, 2350), (2260, 2350), (2620, 2340), (120, 1000), (120, 1500), (3080, 1700)): m.deco('town_tree_pine', x, y, 24, 14)
 for (x, y) in ((420, 520), (2780, 520), (460, 1900)): m.deco('town_bush_round', x, y, 40, 20)
-m.deco('town_tree_oak', 560, 640, 30, 18); m.deco('town_tree_oak', 2640, 700, 30, 18)
+m.deco('town_tree_oak', 2640, 700, 30, 18)
 m.solid(600, 1500, 400, 200, 'barracks'); m.prop('town_barracks', 800, 1706); m.solid(2200, 1500, 400, 200, 'stable'); m.prop('town_stable', 2400, 1706)
-m.spawn('from_road', 1600, 2300, 'up'); m.spawn('from_capital_road', 3050, 1200, 'left'); m.spawn('from_ramparts', 480, 1100, 'right'); m.spawn('from_keep', 1600, 1080, 'down')
+m.solid(480, 560, 460, 340, 'tavern'); m.prop('town_tavern_front', 710, 906); m.spawn('from_tavern', 710, 990, 'down'); m.spawn('from_road', 1600, 2300, 'up'); m.spawn('from_capital_road', 3050, 1200, 'left'); m.spawn('from_ramparts', 480, 1100, 'right'); m.spawn('from_keep', 1600, 1080, 'down')
 m.door('tr_f1_to_village', 1380, 2288, 440, 64, 'lind_village', 'from_fort', '南門 -> 街道 -> リルド村（story hook onVillageExit）')
-m.door('tr_f1_to_capital', 3040, 1100, 100, 200, 'royal_capital_01_market', 'from_fort_road', '東門 -> 王都への街道')
+m.door('tr_f1_to_capital', 3040, 1100, 100, 200, 'road_dunvall_capital_01', 'from_fort', '東門 -> 街道 -> 王都')
 m.door('tr_f1_to_ramparts', 360, 1000, 80, 220, 'fort_dunvall_02_ramparts', 'from_courtyard', '城壁への階段')
-m.door('tr_f1_to_keep', 1500, 960, 200, 60, 'fort_dunvall_03_keep', 'from_courtyard', '主塔の扉')
+m.door('tr_f1_to_keep', 1500, 960, 200, 60, 'fort_dunvall_03_keep', 'from_courtyard', '主塔の扉'); m.door('tr_f1_to_tavern', 650, 906, 120, 70, 'fort_in_tavern', 'from_courtyard', '酒場「錆びた角笛」の扉')
 m.npc('f1_captain', '砦の隊長', 1600, 1300, 'quest'); m.npc('f1_quartermaster', '補給係（武具屋）', 1000, 1800, 'shop'); m.npc('f1_bed', '兵舎の仮眠所', 800, 1760, 'bed', rest=True); m.npc('f1_gate_guard', '門番', 1250, 2050, 'npc', walk=[[0, -60], [0, 0]])
 m.chest('tr_f1_barracks', 640, 1760, 'common', '兵舎の脇の箱（仮）')
 maps.append(m)
@@ -188,7 +188,7 @@ for (x, y) in ((340, 340), (4500, 340), (1700, 360), (3050, 360), (340, 1000)): 
 for (x, y) in ((1300, 800), (3300, 840)): m.deco('town_bush_round', x, y, 40, 20)
 m.deco('furn_crates_stack', 560, 1000, 60, 30); m.deco('furn_barrel', 1100, 1000, 36, 24); m.deco('furn_sacks_pile', 4300, 1000, 50, 26); m.deco('furn_barrel', 3700, 1000, 36, 24)
 m.spawn('from_west_gate', 360, 1500, 'right'); m.spawn('from_fort_road', 360, 1500, 'right'); m.spawn('from_plaza', 4400, 1500, 'left'); m.spawn('from_residential', 2400, 2850, 'up')
-m.door('tr_r1_west_gate', 48, 1300, 64, 400, 'fort_dunvall_01_courtyard', 'from_capital_road', '王都の西門 -> 街道 -> ドゥンヴァル砦')
+m.door('tr_r1_west_gate', 48, 1300, 64, 400, 'road_dunvall_capital_01', 'from_capital', '王都の西門 -> 街道 -> ドゥンヴァル砦')
 m.door('tr_r1_to_plaza', 4688, 1300, 64, 400, 'royal_capital_02_castle_plaza', 'from_market', '城前広場へ')
 m.door('tr_r1_to_residential', 2200, 3088, 400, 64, 'royal_capital_03_residential', 'from_market', '住宅街へ')
 m.npc('r1_general', '雑貨商（ショップ）', 700, 980, 'shop', shop='royal_general'); m.npc('r1_weapon', '武具商（ショップ）', 4000, 980, 'shop', shop='royal_arms')
@@ -234,6 +234,64 @@ m.spawn('from_market', 1700, 360, 'down'); m.spawn('from_plaza', 3300, 1500, 'le
 m.door('tr_r3_to_market', 1500, 48, 600, 64, 'royal_capital_01_market', 'from_residential', '商業区へ')
 m.door('tr_r3_to_plaza', 3488, 1300, 64, 400, 'royal_capital_02_castle_plaza', 'from_residential', '城前広場へ')
 m.npc('r3_resident', '住民', 1800, 1500, 'npc', walk=[[70, 40], [0, 0]]); m.npc('r3_cat_man', '猫に餌をやる男', 3250, 2050, 'npc', walk=[[-50, 0], [0, 0]]); m.npc('r3_elder_quest', '依頼人の老婦人', 1500, 2700, 'quest'); m.chest('tr_r3_backyard', 2400, 2900, 'common', '裏庭の箱（仮）')
+maps.append(m)
+
+# ---------------- 街道（ドゥンヴァル砦 ↔ 王都）・砦の酒場 --------------------------------------------------
+import math, random
+# 1) 街道: 西（砦の東門）から東（王都の西門）へ。終盤の丘（高台）に着くと谷の向こうの王都が一望できる。
+m = Map('road_dunvall_capital_01', '街道　砦と王都のあいだ', 'Dunvall Road', '街道', 5600, 2600, '辺境', 'Marches', '#b7a888', '#7d9a58', 'bgm_town')
+ROAD = [(120, 1900), (900, 1850), (1500, 2000), (2200, 1900), (2800, 1500), (3300, 1250), (3560, 1000), (3800, 880), (4260, 900), (4700, 1400), (5100, 1750), (5480, 1800)]
+m.paths.append({'id': 'dunvall-road', 'points': [list(p) for p in ROAD], 'width': 150})
+def near_road(x, y, pad=150):
+    for (a, b) in zip(ROAD, ROAD[1:]):
+        ax, ay = a; bx, by = b; dx, dy = bx - ax, by - ay; L2 = dx * dx + dy * dy
+        t = max(0, min(1, ((x - ax) * dx + (y - ay) * dy) / L2)); px, py = ax + t * dx, ay + t * dy
+        if math.hypot(x - px, y - py) < pad: return True
+    return False
+rnd = random.Random(7)
+m.solid(48, 48, 3852, 512, 'forest'); m.solid(3900, 48, 1652, 640, 'valley')                      # 北の森 / 谷と川（王都は対岸）
+m.floor_rect(3900, 520, 1652, 170, '#4a86a6', None)                                                # 川
+m.floor_rect(3450, 700, 780, 340, '#93aa66', None)                                                 # 丘の頂（高台）
+m.solid(3640, 1030, 600, 44, 'cliff'); m.solid(4230, 700, 36, 150, 'cliff'); m.solid(4230, 950, 36, 90, 'cliff')   # 丘の崖（西側と東の出口は開いている）
+m.floor_rect(3640, 1030, 600, 44, '#7c7a6e', 'brick'); m.floor_rect(4230, 700, 36, 150, '#7c7a6e', 'brick'); m.floor_rect(4230, 950, 36, 90, '#7c7a6e', 'brick')
+m.solid(48, 2300, 5504, 252, 'forest')                                                              # 南の森
+m.prop('town_capital_far', 4750, 506, ['deco'], z=2)                                                # 対岸の王都（遠景）
+for x in range(60, 3880, 118):                                                                      # 北の森の木々（コリジョンは森ブロック）
+    for k, y in enumerate((300, 430, 540)): m.prop('town_tree_pine' if (x // 118 + k) % 2 else 'town_tree_oak', x + rnd.randint(-20, 20) + k * 40, y + rnd.randint(-14, 14))
+for x in range(60, 5500, 118):
+    for k, y in enumerate((2380, 2500)): m.prop('town_tree_pine' if (x // 118 + k) % 3 else 'town_tree_oak', x + rnd.randint(-20, 20) + k * 40, y + rnd.randint(-14, 14))
+for _ in range(90):                                                                                 # 道ばたの木・茂み
+    x, y = rnd.randint(120, 5400), rnd.randint(620, 2260)
+    if near_road(x, y, 190) or (3400 < x < 4300 and 650 < y < 1100) or m.__dict__.get('_dummy'): continue
+    if any(r[0] - 30 <= x <= r[0] + r[2] + 30 and r[1] - 30 <= y <= r[1] + r[3] + 30 for r in m.rects): continue
+    m.deco(rnd.choice(['town_tree_oak', 'town_tree_pine', 'town_bush_round', 'town_bush_round']), x, y, 28, 16)
+m.spawn('from_fort', 200, 1900, 'right'); m.spawn('from_capital', 5400, 1800, 'left'); m.spawn('overlook', 3800, 900, 'right')
+m.door('tr_rd_to_fort', 48, 1750, 64, 300, 'fort_dunvall_01_courtyard', 'from_capital_road', '街道の西端 -> ドゥンヴァル砦の東門')
+m.door('tr_rd_to_capital', 5488, 1650, 64, 300, 'royal_capital_01_market', 'from_fort_road', '街道の東端 -> 王都の西門')
+m.prop('prop_marker_signpost', 330, 1800); m.rects.append((312, 1786, 36, 14, 'sign')); m.prop('prop_marker_signpost', 5240, 1700); m.rects.append((5222, 1686, 36, 14, 'sign'))
+m.deco('prop_bench_view', 3960, 860, 70, 18); m.deco('town_lamp_post', 3560, 840, 14, 10); m.deco('town_banner_pole', 3700, 780, 18, 12); m.deco('town_banner_pole', 3980, 760, 18, 12)
+m.deco('town_cart', 1900, 1740, 120, 30); m.deco('town_hay_stack', 2500, 2050, 120, 40); m.deco('town_flowerbed', 4400, 1500, 100, 26)
+m.zones.append({'id': 'ev_overlook', 'type': 'trigger', 'hook': 'road_overlook', 'shape': {'shape': 'rect', 'x': 3700, 'y': 780, 'w': 320, 'h': 230}, 'once': True})
+m.zones.append({'id': 'ev_overlook_view', 'type': 'interact', 'hook': 'road_overlook_again', 'label': '谷の向こうの王都', 'shape': {'shape': 'circle', 'cx': 3960, 'cy': 830, 'r': 90}})
+m.npc('rd_traveler', '旅の商人', 2150, 1980, 'npc', walk=[[90, 0], [0, 0]]); m.npc('rd_patrol', '巡回の兵士', 800, 1780, 'npc')
+maps.append(m)
+# 2) 砦の酒場「錆びた角笛」: リアム加入イベント
+m = Map('fort_in_tavern', 'ドゥンヴァル砦　酒場「錆びた角笛」', 'Dunvall Fort Tavern', '酒場', 1400, 1000, '辺境', 'Marches', '#a98b5c', '#17110d', 'bgm_fort_interior')
+m.floor_rect(0, 0, 1400, 1000, '#17110d', None); m.floor_rect(48, 248, 1304, 704, '#a98b5c', 'planks'); m.wall(48, 48, 1304, 200, '#76654f', 'wall', 'planks')
+m.floor_rect(560, 880, 280, 72, '#b89a68', 'planks')
+m.spawn('from_courtyard', 700, 830, 'up')
+m.door('tr_in_tavern_exit', 630, 880, 140, 64, 'fort_dunvall_01_courtyard', 'from_tavern', '外へ出る')
+m.decal('furn_doormat', 700, 920); m.decal('furn_rug_red', 520, 640)
+m.deco('furn_fireplace', 330, 252, 140, 40); m.prop('furn_window_wall', 560, 252, ['deco']); m.prop('furn_tapestry', 820, 252, ['deco'])
+for x in (980, 1180): m.deco('furn_counter_inn', x, 470, 224, 56)                                    # カウンター
+for x in (1010, 1160): m.deco('furn_shelf_pots', x, 268, 90, 20)
+m.deco('furn_barrel', 1290, 330, 40, 24); m.deco('furn_barrel', 1290, 400, 40, 24); m.deco('furn_crates_stack', 100, 400, 60, 30)
+for (x, y) in ((420, 720), (780, 740), (640, 520)): m.deco('furn_table_round', x, y, 110, 40); m.deco('furn_stool', x - 80, y + 14, 28, 14); m.deco('furn_stool', x + 80, y + 14, 28, 14)
+m.deco('furn_table_small', 150, 560, 90, 36); m.deco('furn_chair', 150, 640, 36, 18); m.deco('furn_candle_stand', 230, 520, 24, 12)
+m.deco('furn_bench', 1100, 760, 110, 24); m.deco('furn_map_table', 1000, 640, 110, 40)
+m.npc('f4_liam', 'リアム', 170, 560, 'npc'); m.nodes[-1]['requires'] = {'flag': 'liam_joined', 'is': False}; m.props[-1]['hideIf'] = 'liam_joined'
+m.npc('f4_barkeep', '酒場の主人', 1090, 400, 'npc'); m.nodes[-1]['shape'].update(cy=478, r=110);   # counter in front: the zone reaches over it
+m.npc('f4_patron1', '常連の男', 480, 640, 'npc'); m.npc('f4_patron2', '旅の女', 860, 680, 'npc'); m.npc('f4_bard', '吟遊詩人', 300, 820, 'npc')
 maps.append(m)
 
 # ---------------- validation ---------------------------------------------------------------------------

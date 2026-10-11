@@ -33,3 +33,9 @@
 - 6マップに仮ドット絵を配置: `python3 tools/moss/make_town_art.py`（塔・城門・胸壁・主塔・兵舎/厩・城・町家3種・露店3色・噴水・井戸・街灯・旗・木人・干し草・荷車・木/茂み/花壇/生垣）→ `python3 tools/moss/build_town_maps.py`。素材は `img/field/moss/town/`、マニフェスト規則 `^town_*`（gen:make_town_art）。
 - 装飾は `Map.prop` / `Map.deco`（足元に小さな当たり判定）で追加。差し替えは同名PNGを置くだけ。
 - 修正: `forest-loader.js` の画像読込が失敗すると永久に薄紫(#668)の四角プレースホルダーになっていた → 16枚ずつ読み込み＋失敗分を最大4回再試行。
+
+## 街道・酒場・リアム加入（2026-10-11）
+- 街道 `road_dunvall_capital_01`（5600x2600）: 砦の東門 ↔ 王都の西門。終盤の丘（高台 x3450–4230,y700–1040）の頂に入ると `ev_overlook`（trigger, once）が発火 → 黒帯カットイン + カメラが谷の向こうの王都（`town_capital_far`、対岸）へ移動 → 会話 `road_overlook`（エイダン/フィオナ）→ カメラが戻る。以後はベンチ脇の `ev_overlook_view` から眺め直せる。他マップへ移動すると演出は自動で後始末される。
+- 酒場 `fort_in_tavern`（1400x1000、砦の中庭 西側の建物 `tr_f1_to_tavern`）: 主人・常連・旅の女・吟遊詩人・リアム。
+- リアム加入: 会話表 `liam`（`talk-data-capital.js`）。「仲間に誘う」で `{set:{liam_joined:true}, join:'liam'}` → FieldTalk の新効果 `join` が `PartyManager.join` + active へ追加し `party-join` を発火 → 酒場のリアムが消える（プロップ `hideIf:'liam_joined'`、ゾーン `requires`）。`liam_joined` は PartyManager の加入状態から導出されるのでセーブ/ロードに追従。戦闘シーンへの組み込みは未実装（戦闘は固定シーン）。
+- DEV: M7 街道 / M8 酒場。ツール: `tools/moss/make_town_art.py`（tavern_front/capital_far 追加）・`make_npcs.py`（liam/barkeep）・`build_town_maps.py`。テスト: `tests/moss/m11_road_tavern.py`。

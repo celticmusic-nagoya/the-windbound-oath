@@ -17,7 +17,7 @@
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
   function flagsNow(){
-    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5};
+    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5,liam_joined:typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined)};
   }
   function onEvent(z,map){
     if(z.type==='locationCard'){
@@ -31,6 +31,8 @@
       else say('見晴らしのよい、ベンチ代わりの岩だ。');
       return;
     }
+    if(z.hook==='road_overlook'){roadOverlook(true);return;}
+    if(z.hook==='road_overlook_again'){FieldTalk.talk('road_overlook_view',{source:'forest'});return;}
     // ドゥンヴァル砦 / 王都 nodes (click-only): shop -> modal, rest -> sleeping place, npc -> FieldTalk table (js/field/talk-data-capital.js)
     if(z.shop){if(!(window.Shop&&Shop.open(z.shop)))MossForest.toast('今は商売をしていないようだ。');return;}
     if(z.action==='rest'){restAtBed();return;}
@@ -57,6 +59,31 @@
     }
     if(z.hook&&HOOK_TEXTS[z.hook]){say(HOOK_TEXTS[z.hook]);return;}
   }
+  // 街道の丘: the first time the party reaches the overlook the camera glides out over the valley to the capital (cut-in bars + dialogue), then returns.
+  const CAPITAL_VIEW={x:4750,y:380};
+  function letterbox(on){
+    let b=document.getElementById('fieldLetterbox');
+    if(!b){b=document.createElement('div');b.id='fieldLetterbox';b.innerHTML='<i></i><i></i><b></b>';document.body.appendChild(b);}
+    b.classList.toggle('on',Boolean(on));
+    const t=b.querySelector('b');if(!on)t.textContent='';
+  }
+  let overlookDone=null;
+  function cancelOverlook(){if(overlookDone){removeEventListener('field-talk-end',overlookDone);overlookDone=null;}letterbox(false);}
+  function roadOverlook(first){
+    if(FieldTalk.flag('road_overlook_seen')&&first)return;
+    MossForest.lock(true);letterbox(true);
+    MossForest.focus(CAPITAL_VIEW.x,CAPITAL_VIEW.y,{ms:2800}).then(()=>{
+      const t=document.querySelector('#fieldLetterbox b');if(t)t.textContent='王　都';
+      const done=()=>{
+        removeEventListener('field-talk-end',done);overlookDone=null;
+        letterbox(false);
+        MossForest.release({ms:1800}).then(()=>{MossForest.lock(false);window.dispatchEvent(new CustomEvent('road-overlook-done'));});
+      };
+      overlookDone=done;addEventListener('field-talk-end',done);
+      if(!FieldTalk.talk('road_overlook',{source:'forest'}))done();
+    });
+  }
+  addEventListener('party-join',()=>{if(window.MossForest){MossForestStory.syncFlags();document.querySelectorAll('.forest-ent[data-asset="npc_slot_liam"]').forEach(n=>n.remove());}});
   // ItemData.treasureStage: chests that hold progression gear stay shut until the story is far enough (Raider/boss balance).
   function canOpenTreasure(t){
     const need=(window.ItemData&&ItemData.treasureStage||{})[t.id];
@@ -94,7 +121,7 @@
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
       sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,
-      resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(window.RildeVillage)RildeVillage.onEnter(m);}}});
+      resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(document.getElementById('fieldLetterbox'))cancelOverlook();if(window.RildeVillage)RildeVillage.onEnter(m);}}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.
   function enterCliff(){

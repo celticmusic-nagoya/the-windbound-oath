@@ -339,6 +339,42 @@ def keep_front():   # fort keep: tall brick block, crenellated top, two corner t
         a.rect(bx, 120, bx + 18, 190, RED[1]); a.rect(bx, 120, bx, 190, RED[2]); a.rect(bx + 18, 120, bx + 18, 190, RED[0]); a.rect(bx + 8, 140, bx + 10, 175, GOLD[2]); a.rect(bx + 3, 152, bx + 15, 154, GOLD[2])
     return done(a)
 
+@item(460, 400)
+def tavern_front():   # fort tavern: timber house with a hanging mug sign and a warm window glow (footprint 460x360)
+    a = townhouse(460, 400, [G(150, 84, 40), G(196, 118, 52), G(232, 156, 76)], [G(150, 112, 78), G(190, 148, 102), G(222, 184, 132)], 50, door_c=[G(88, 56, 36), G(120, 78, 48), G(150, 100, 62)])
+    W, H = a.w, a.h
+    a.rect(W // 2 + 12, H - 62, W // 2 + 13, H - 40, IRON[1]); a.rect(W // 2 + 12, H - 62, W // 2 + 30, H - 61, IRON[1])   # sign bracket
+    a.rect(W // 2 + 18, H - 60, W // 2 + 30, H - 46, WOOD[1]); a.rect(W // 2 + 18, H - 60, W // 2 + 30, H - 60, WOOD[2])
+    a.rect(W // 2 + 21, H - 56, W // 2 + 27, H - 50, GOLD[2]); a.rect(W // 2 + 27, H - 54, W // 2 + 28, H - 52, GOLD[1])
+    for wx in (int(W * .2), int(W * .68)): a.rect(wx + 1, int(H * .5) + 13, wx + 7, int(H * .5) + 21, G(255, 214, 120))   # lit windows
+    return done(a)
+@item(1000, 380)
+def capital_far():   # the capital seen from afar (hazy, blue-shifted): outer wall, roofs, towers, central castle with spires
+    a = new(1000, 380, 60); W, H = a.w, a.h
+    haze = lambda c: tuple(int(v * .62 + 150 * .38) if i < 3 else 255 for i, v in enumerate(c))
+    GR = [haze(c) for c in GRY]; RB = [haze(c) for c in ROOFB]; RR = [haze(c) for c in ROOFR]; SD = [haze(c) for c in SAND]
+    def tower(cx, top, w, base, col):
+        a.rect(cx - w, top, cx + w, base, GR[1]); a.rect(cx - w, top, cx - w, base, GR[2]); a.rect(cx + w, top, cx + w, base, GR[0])
+        for y in range(top - w - 2, top):
+            hw = (y - (top - w - 2)) * (w + 1) // (w + 2) + 1
+            a.rect(cx - hw, y, cx + hw, y, col[1] if y % 2 else col[0])
+    base = H - 6
+    for x in range(6, W - 20, 23):                                                           # houses behind the wall
+        h = 8 + (x * 7 % 9); col = [RR, RB][(x // 23) % 2]
+        a.rect(x, base - 20 - h, x + 14, base - 20, SD[1]); a.rect(x - 1, base - 20 - h - 4, x + 15, base - 20 - h, col[1])
+    a.rect(0, base - 20, W - 1, base, GR[1]); a.rect(0, base - 20, W - 1, base - 19, GR[2])   # outer wall
+    for i in range(0, W, 5): a.rect(i, base - 24, i + 2, base - 21, GR[1])
+    cx = W // 2
+    a.rect(cx - 46, base - 66, cx + 46, base - 20, GR[1]); a.rect(cx - 46, base - 66, cx + 46, base - 65, GR[2])
+    for i in range(cx - 46, cx + 46, 6): a.rect(i, base - 70, i + 3, base - 67, GR[1])
+    tower(cx - 46, base - 96, 7, base - 20, RB); tower(cx + 46, base - 96, 7, base - 20, RB); tower(cx, base - 122, 9, base - 40, RB)
+    tower(cx - 26, base - 74, 4, base - 50, RB); tower(cx + 26, base - 74, 4, base - 50, RB)
+    a.rect(cx, base - 158, cx, base - 134, IRON[1]); a.rect(cx + 1, base - 158, cx + 8, base - 152, haze(NAVY[1]))
+    for tx in (16, W - 16): tower(tx, base - 56, 6, base - 20, RB)
+    for x in range(cx - 38, cx + 39, 14): a.rect(x, base - 58, x + 1, base - 50, haze(G(24, 20, 30)))
+    a.rect(cx - 5, base - 34, cx + 5, base - 20, haze(G(60, 44, 34)))
+    return a
+
 def main():
     os.makedirs(OUT, exist_ok=True); rules = []; sheet = []
     for name, (fn, w, h) in ITEMS.items():

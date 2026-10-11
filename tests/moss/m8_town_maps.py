@@ -5,7 +5,7 @@ fails=[]; errs=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
-IDS=['fort_dunvall_01_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential']
+IDS=['fort_dunvall_01_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential','road_dunvall_capital_01','fort_in_tavern']
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
@@ -59,8 +59,12 @@ with sync_playwright() as p:
     # 'TBD' exits stay in place with a toast (no crash / no leaving the map)
     walk_to('tr_f3_to_wall','from_courtyard','fort_dunvall_03_keep','fort_dunvall_02_ramparts')
     walk_to('tr_f2_to_keep','from_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep')
-    walk_to('tr_f1_to_capital','from_road','fort_dunvall_01_courtyard','royal_capital_01_market')
-    walk_to('tr_r1_west_gate','from_west_gate','royal_capital_01_market','fort_dunvall_01_courtyard')
+    walk_to('tr_f1_to_capital','from_road','fort_dunvall_01_courtyard','road_dunvall_capital_01')
+    walk_to('tr_rd_to_capital','from_fort','road_dunvall_capital_01','royal_capital_01_market')
+    walk_to('tr_r1_west_gate','from_west_gate','royal_capital_01_market','road_dunvall_capital_01')
+    walk_to('tr_rd_to_fort','from_capital','road_dunvall_capital_01','fort_dunvall_01_courtyard')
+    walk_to('tr_f1_to_tavern','from_road','fort_dunvall_01_courtyard','fort_in_tavern')
+    walk_to('tr_in_tavern_exit','from_courtyard','fort_in_tavern','fort_dunvall_01_courtyard')
     # castle gate is still unbuilt ('TBD'): stays in place with a notice
     walk_to('tr_r2_castle_gate','from_market','royal_capital_02_castle_plaza','royal_capital_02_castle_plaza')
     # south gate -> back to the village (story hook hides the forest scene)
