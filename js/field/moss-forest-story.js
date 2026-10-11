@@ -120,6 +120,14 @@
     }
     return false;
   }
+  // Step encounters (Moss Forest zones): only moss slimes exist as fightable enemies so far (wild boars etc. are data-only).
+  function canEncounter(id){return id==='moss_slime';}
+  function onEncounter(e){
+    if(e.enemy!=='moss_slime'||typeof startAttackBattle!=='function'||attackBattleBusy)return;
+    const n=Math.max(1,Math.min(3,e.count|0));
+    MossForest.toast('草むらが揺れた……！');
+    setTimeout(()=>{if(MossForest.active&&!MossForest.busy)startAttackBattle('mossSlime'+n,56*n);},450);
+  }
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns
     if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
@@ -133,7 +141,7 @@
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
-      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,
+      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,onEncounter,canEncounter,
       resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(document.getElementById('fieldLetterbox'))cancelOverlook();if(window.RildeVillage)RildeVillage.onEnter(m);}}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.

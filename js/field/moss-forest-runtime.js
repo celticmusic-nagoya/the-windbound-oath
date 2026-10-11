@@ -187,7 +187,7 @@
     const sp0=map.spawns.points[spawnId||map.spawns.default];
     if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
-    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();
+    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
     S.keys.clear();render();
     if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
     if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
@@ -398,6 +398,7 @@
     if(!S.active||S.busy||!S.forest||el.scene.style.display==='none'){S.hold=null;return;}
     const bounds=S.map.world;
     if(S.forest.blocked(S.x,S.y))unstick(bounds);   // never leave the player embedded in a blocker (a spawn / warp / lock edge case): step to the nearest free spot
+    const px0=S.x,py0=S.y;
     let dx=0,dy=0;S.keys.forEach(d=>{dx+=d[0];dy+=d[1];});dx=Math.sign(dx);dy=Math.sign(dy);
     if(S.hold&&!(dx||dy)){const h=S.hold,now=performance.now();   // held pointer: re-aim at it (only when it has moved in the world, so the path is not re-planned every frame)
       if(now-h.t>=220&&now>=h.next){h.next=now+80;
@@ -409,7 +410,29 @@
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
     if(S.pending&&!S.target){const pd=S.pending;S.pending=null;   // arrived
       if(dist(S.x+FOOT.ax,S.y+FOOT.ay,pd.c.x,pd.c.y)>260)toast('もう少し近づいて調べよう。');else fireEvent(pd.z);}
+    stepEncounter(S.x-px0,S.y-py0);
     render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
+  }
+  // ---------- step encounters (map.encounterZones with style:'step') ----------
+  // Walking inside a zone builds up distance; every ENC_STEP px there is a small chance (zone.rate) of a fight. Only enemies the story layer
+  // can actually field (hooks.canEncounter) take part; zones with none are inert. Disabled while busy / right after a map change / during the cooldown.
+  const ENC_STEP=96,ENC_RATE={rare:.03,low:.06,mid:.1,high:.16},ENC_COOLDOWN_MS=20000;
+  const enc={acc:0,until:0,off:false,visits:{}};
+  function stepEncounter(dx,dy){
+    if(enc.off||!hooks.onEncounter||!S.map||!S.map.encounterZones)return;
+    const d=Math.hypot(dx,dy);if(d<.2)return;
+    const now=performance.now(),fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
+    const zone=S.map.encounterZones.find(z=>z.enabled!==false&&z.style==='step'&&!z.noEncounter&&ENC_RATE[z.rate]&&inShape(z.shape,fx,fy));
+    if(!zone){enc.acc=0;return;}
+    if(now<enc.until||S.battleLatch)return;
+    enc.acc+=d;if(enc.acc<ENC_STEP)return;enc.acc-=ENC_STEP;
+    if(Math.random()>=ENC_RATE[zone.rate])return;
+    const pool=(zone.enemies||[]).filter(e=>!hooks.canEncounter||hooks.canEncounter(e.id));if(!pool.length)return;
+    const key=S.mapId+':'+zone.id;if(zone.maxPerVisit&&(enc.visits[key]||0)>=zone.maxPerVisit)return;
+    let r=Math.random()*pool.reduce((n,e)=>n+(e.weight||1),0),pick=pool[0];for(const e of pool){r-=(e.weight||1);if(r<=0){pick=e;break;}}
+    const g=zone.groupSize||[1,1],count=g[0]+Math.floor(Math.random()*(g[1]-g[0]+1));
+    enc.visits[key]=(enc.visits[key]||0)+1;enc.acc=0;enc.until=now+ENC_COOLDOWN_MS;S.target=null;FieldNavigation.cancel();S.hold=null;
+    hooks.onEncounter({zone:zone.id,enemy:pick.id,count:Math.max(1,count),map:S.mapId});
   }
   function streamFactor(){
     const st=S.map&&(S.map.terrain.waters||[]).find(w=>w.kind==='stream');
@@ -456,6 +479,8 @@
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
     teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
+    encounters(on){if(on===undefined)return !enc.off;enc.off=!on;return !enc.off;},
+    forceEncounter(){const z=S.map&&(S.map.encounterZones||[]).find(z=>z.style==='step'&&(z.enemies||[]).some(e=>!hooks.canEncounter||hooks.canEncounter(e.id)));if(!z||!hooks.onEncounter)return false;const e=z.enemies.find(e=>!hooks.canEncounter||hooks.canEncounter(e.id));hooks.onEncounter({zone:z.id,enemy:e.id,count:1,map:S.mapId});return true;},
     goFeet(x,y){S.pending=null;S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
     get target(){return S.target;},get status(){return FieldNavigation.status;}});
 })();
