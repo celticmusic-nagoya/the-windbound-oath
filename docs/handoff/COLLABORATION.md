@@ -56,3 +56,13 @@ Claudeが作者承認の下でmainを更新するため、開始時SHAのまま�
 - `tr_rd_to_capital`: リアム未加入では王都の検問を通れない。
 - `moss-forest-runtime.js`: 長押し移動、onPointerのhold処理、hooks.onTransition。
 - 新歩行素材、Aidan attack/skillの納品済み戦闘モーション。
+
+## 6. PLAYER QAはmain反映後に実施（作者承認済みの運用）
+
+作者の方針: PLAYER QAを手軽に行うため、**戻せる状態を確保した上で、QA前でもmainへ直接pushしてよい**。
+- main更新前に、直前のmain SHAへロールバック用タグ `rollback/before-<機能名>-<日付>` を付けてpushする。
+- 機能単位で `git merge --no-ff`（マージコミット1つ）にし、`git revert -m 1 <merge>` 一発で戻せるようにする。履歴の書き換え・force pushは禁止のまま。
+- push前に関連テストと全回帰を実行する。原因不明の回帰失敗が残る場合は反映しない。
+- 反映後は報告に「ロールバック手順（タグ名・マージSHA）」を必ず含め、QA項目を列挙する。
+- ただし以下は従来どおり**事前に作者へ確認**: ゲーム基本システム・戦闘ルール・エンカウント方式の変更、ストーリー／stage進行、セーブ構造・互換性、操作方式の大幅変更、大規模マップ変更、正式採用アセットの置換、既存機能の削除。
+- 反映の記録は `CLAIMS.md` に追記する。

@@ -25,3 +25,6 @@ Claude / `work/moss-slime-symbol-encounter` / 基準main `57dc6ae`。
 STATUS: PLAYER QA待ち。作者承認までmainへmergeしない。モススライム／ゴブリンの速度等は `MONSTER_TYPES` の1か所で調整可能。
 
 Claude / `work/forest-bat-symbol-encounter`（上記ブランチの上に積む）: フォレストバット（吸血・飛行シンボル、A2）。`work/leafy-boar-symbol-encounter`（さらにその上）: リーフィボア（突進シンボル、街道）。いずれもPLAYER QA待ち・main未merge。
+
+## main反映記録
+- 2026-10-12 Claude: フィールドモンスター一式（スライム/ゴブリン型AI・フォレストバット・リーフィボア）をmainへ `--no-ff` merge。ロールバック: タグ `rollback/before-field-monsters-20261012`（= 57dc6ae）、または該当マージコミットを `git revert -m 1`。PLAYER QA待ち。
