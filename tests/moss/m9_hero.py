@@ -16,7 +16,7 @@ for f in fs:
     if im.mode!='RGBA' or im.size!=(1280,832) or a.min()!=0 or ys.max()>818 or ys.max()<775: bad.append(f)
 check(not bad,'every frame is 1280x832 RGBA with real transparency and feet at the anchor line %s'%bad[:2])
 walk=[np.array(Image.open(f))[...,3]>16 for f in fs if 'walk_down' in f]
-check(len({w.tobytes() for w in walk})==2 and len(walk)==4,'4 walk-down frames, 2 distinct poses (delivered art)')
+check(len({w.tobytes() for w in walk})>=3 and len(walk)==4,'4 walk-down frames, >=3 distinct poses (delivered art)')
 errs=[]
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
