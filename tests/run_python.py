@@ -17,4 +17,5 @@ if executable:
     BrowserType.launch = launch
 path = sys.argv[1]
 sys.argv = sys.argv[1:]
+sys.path.insert(0, os.path.dirname(os.path.abspath(path)))
 runpy.run_path(path, run_name='__main__')

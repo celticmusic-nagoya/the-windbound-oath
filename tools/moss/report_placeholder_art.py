@@ -38,6 +38,20 @@ def report():
             lines.append('| %s | `%s` | %s | `%s` | %s | %s |' %
                          (kind, asset, classification, rule.get('file', '-') if rule else '-', priority, ', '.join(sorted(maps))))
     lines += ['', '集計（node＋layerのasset ID単位）: ' + ', '.join('%s=%s' % item for item in counts.items()), '']
+    lines += ['## 手続き生成素材（追加の制作候補）', '',
+              '以下はcheckerではreal扱いですが、gen指定がある素材です。本番化の判断は作者の目視確認で行います。',
+              '承認画像へ置換する際は、生成ツールに上書きされないようgen指定も整理する必要があります。', '',
+              '| Kind | Rule | File | Generator | World size | Priority |',
+              '|---|---|---|---|---|---|']
+    for kind in ('node', 'layer'):
+        for rule in manifest.get(kind, []):
+            if not rule.get('gen'):
+                continue
+            priority = 'P1' if re.search('npc|house|gate|guild|inn_|castle|keep_', rule['match']) else 'P2'
+            lines.append('| %s | `%s` | `%s` | `%s` | %s × %s | %s |' %
+                         (kind, rule['match'], rule.get('file', '-'), rule['gen'],
+                          rule.get('w', '-'), rule.get('h', '-'), priority))
+    lines.append('')
     return '\n'.join(lines)
 
 
