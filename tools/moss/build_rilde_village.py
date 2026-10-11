@@ -10,6 +10,14 @@ ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 OUT = os.path.join(ROOT, 'data', 'maps'); MAN = os.path.join(ROOT, 'img/field/moss/manifest.json')
 LIND = json.loads(subprocess.check_output(['node', os.path.join(ROOT, 'tools/moss/export_lind_layout.js')]))
 META = json.load(open(os.path.join(ROOT, 'tools/moss/rilde_assets.json'), encoding='utf-8'))
+# villagers are drawn at hero scale (Aidan 64 / Fiona 62 world px); children and the swordsman boy smaller. target = visible body height in world px
+NPC_HEIGHT = {'farmer_male': 62, 'farmer_female': 60, 'young_man': 62, 'young_woman': 60, 'elder_man': 56, 'elder_woman': 52, 'merchant': 62, 'innkeeper': 62, 'fisherman': 62, 'caretaker': 62,
+              'boy': 44, 'girl': 44, 'emma': 46, 'boy_swordsman': 52}
+for _k, _h in NPC_HEIGHT.items():
+    _m = META['npc'].get(_k)
+    if _m:
+        _f = _h / _m['height']
+        for _a in ('w', 'h', 'dx', 'dy'): _m[_a] = round(_m[_a] * _f, 2)
 FURN = json.load(open(os.path.join(ROOT, 'tools/moss/rilde_furn.json'), encoding='utf-8'))
 OX = OY = 100                      # Lind review canvas (2200x1550) -> map: 100px margin all round (+ the 48px edge blockers)
 W, H = 2400, 1750
@@ -80,6 +88,7 @@ class Room:
         return d
 
 # ------------------------------------------------------------------------------------------------ outdoor village
+DUMMY2 = (2075, 905)   # feet of the training dummy that starts the training
 BUILD = ['lind_elder_house', 'lind_inn', 'lind_aidan_house', 'lind_item_shop', 'lind_house_01', 'lind_house_02', 'lind_house_03', 'lind_house_04', 'lind_barn', 'lind_storage', 'train_shed']
 DOOR = {   # logical room, spawn name, door dx from the building's centre, label
     'lind_aidan_house': ('rilde_in_aidan', 'from_aidan', 0, 'エイダンの家'), 'lind_elder_house': ('rilde_in_elder', 'from_elder', 0, '長老の家'), 'lind_inn': ('rilde_in_inn_1f', 'from_inn', 0, '宿屋「風見鶏」'),
@@ -142,6 +151,10 @@ def outdoor(ruin):
         if ruin and i in META['ruin'] and META['ruin'][i].get('wReal') and i in ('lind_tree_01', 'lind_orchard_apple'): pass
         R.prop(asset, cx, by, pid='b_' + i, tags=['building' if i in BUILD else 'prop'])
         for rc in obj_rects(o): R.solid(rc[0], rc[1], rc[2], rc[3], i)
+        if i == 'train_dummy':   # a second dummy, away from the swordsman boy: this is the one that starts the training (the first is scenery)
+            ddx, ddy = DUMMY2[0] - cx, DUMMY2[1] - by
+            R.prop(asset, DUMMY2[0], DUMMY2[1], pid='b_train_dummy_2', tags=['prop'])
+            for rc in obj_rects(o): R.solid(rc[0] + ddx, rc[1] + ddy, rc[2], rc[3], 'train_dummy_2')
         if i in DOOR:
             c = o['collision']; dx = DOOR[i][2]; dy = o['y'] + c[1] + c[3] + OY
             DOORS[i] = (cx + dx, dy)
@@ -187,7 +200,7 @@ def _blob(cx, cy, rx, ry, seed):
 
 PEACE_WALK = {   # registry id -> (path offsets, speed)
 }
-def npc_zone(R, nid, talk, label, x, y, r=46, **kw): return R.interact('ev_' + nid, x, y - 22, r, npc=talk, label=label, **kw)
+def npc_zone(R, nid, talk, label, x, y, r=46, **kw): return R.interact('ev_' + nid, x, y - 28, r, npc=talk, label=label, **kw)
 def place_npc(R, aid, nid, x, foot, talk, label, walk=None, speed=14, anim=False, fps=None, face=None, r=46):
     """Villager art `aid` standing/patrolling at visible feet (x, foot), talk table `talk`."""
     m = META['npc'][aid]; ix, iy = x - m['dx'], foot + m['dy']      # image anchor (bottom-centre of the full frame)
@@ -220,7 +233,8 @@ def people(R, ruin):
         # the hill elder (cliff trail) and the people of the legacy side quests
         place_npc(R, 'elder_man', 'hill_old', 780 + OX, 1500 + OY, 'hill_old', '風見の丘の老人')
         R.interact('ev_fiona_wait', 1930, 885, 60, hook='rilde_fiona', label='フィオナ', requires={'flag': 'rilde_fiona_waiting', 'is': True})
-        R.interact('ev_training_dummy', 1902, 935, 62, hook='rilde_dummy', label='訓練用の木人')   # on the dummy sprite (prop foot 1902,963)
+        R.interact('ev_training_dummy', DUMMY2[0], DUMMY2[1] - 30, 60, hook='rilde_dummy', label='訓練用の木人')   # the dummy away from the boy
+        R.interact('ev_training_dummy_old', 1902, 935, 52, text='使い込まれた木人だ。少年が毎日これに打ち込んでいる。向こうの木人で訓練を始めよう。', label='木人')
         R.interact('ev_trainsign', 1730 + OX, 700 + OY, 45, hook='rilde_text:trainingSign', label='看板')
         R.interact('ev_well', 650 + OX, 760 + OY, 60, hook='rilde_text:well', label='井戸')
         R.interact('ev_balloon_tree', 115 + OX, 330 + OY, 60, hook='rilde_balloon_tree', label='木')

@@ -44,11 +44,14 @@ with sync_playwright() as p:
     c2=b.new_context(viewport={'width':450,'height':1000},has_touch=True,is_mobile=True,device_scale_factor=2); t=c2.new_page(); tev=t.evaluate
     t.goto('http://localhost:8765/index.html'); t.wait_for_timeout(1500); tev("devJump('training')"); t.wait_for_timeout(2500)
     moved=0
-    for xy in ((380,520),(120,470),(380,760),(150,640)):
-        f=tev("MossForest.feet"); t.touchscreen.tap(*xy); t.wait_for_timeout(1300); g=tev("MossForest.feet"); moved+= abs(g['x']-f['x'])+abs(g['y']-f['y'])>20
+    for wx,wy in ((1960,1040),(1850,770),(2160,780),(1990,1000)):   # free ground away from every talk / training zone
+        f=tev("MossForest.feet"); q=tev("(a)=>FieldCamera.worldToScreen(document.getElementById('forestWorld'),a[0],a[1])",[wx,wy]); t.touchscreen.tap(q['x'],q['y']); t.wait_for_timeout(1300); g=tev("MossForest.feet"); moved+= abs(g['x']-f['x'])+abs(g['y']-f['y'])>20
         tev("closeDialogue()")
     check(moved>=3,'taps inside the training ground walk (%d/4)'%moved)
-    tev("MossForest.teleportFeet(1877,860)"); t.wait_for_timeout(500); t.touchscreen.tap(265,615); t.wait_for_timeout(1200)
+    tev("MossForest.teleportFeet(1877,860)"); t.wait_for_timeout(500)
+    old=tev("(()=>{const q=FieldCamera.worldToScreen(document.getElementById('forestWorld'),1902,935);return q})()"); t.touchscreen.tap(old['x'],old['y']); t.wait_for_timeout(800)
+    check(tev('storyStage')==1 and tev("getComputedStyle(document.getElementById('battle')).display")!='block','the dummy next to the boy is scenery (no training)'); tev('closeDialogue()')
+    q=tev("(()=>{const q=FieldCamera.worldToScreen(document.getElementById('forestWorld'),2075,875);return q})()"); t.touchscreen.tap(q['x'],q['y']); t.wait_for_timeout(1200)
     check(tev("storyStage")==2 and tev("getComputedStyle(document.getElementById('battle')).display")=='block','tap on the training dummy opens the training battle')
     check(tev("(()=>{const e=document.elementFromPoint(225,430);return !!(e&&e.closest('#battle'))})()"),'the training battle is actually on top of the field (not hidden behind it)')
     # far tap on an NPC: walk first, talk only on arrival; tapping elsewhere cancels the pending talk
