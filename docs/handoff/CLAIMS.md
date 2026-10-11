@@ -16,4 +16,4 @@ Raiderブランチの既存index.html差分は、この新運用の受領前に�
 
 Codex / `work/codex-raider-mobile-integration` / 基準main `0914263`。
 対象: `8ac09e6` のCSS・BattlePartyLayout・テスト・QA資料、およびindexのCSS link／script cache queryだけ。作者がRaider修正を全承認済みのため、この限定index変更も統合する。Claudeのstory・field・納品motionは変更しない。
-STATUS: WIP — 最新main上で再検証後に通常push。
+STATUS: READY — 最新main 0914263上で再検証完了。作者承認に基づきmainへ通常pushする。

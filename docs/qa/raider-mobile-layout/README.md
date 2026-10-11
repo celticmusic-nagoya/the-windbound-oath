@@ -44,3 +44,19 @@ PW_CHROMIUM_EXECUTABLE=/usr/bin/chromium python3 tests/battle/raider_mobile_layo
 
 Chromiumのviewport・touch emulationによる確認。Android実機での描画やbrowser chromeの変化は作者PLAYER QAが必要。
 画像・生成マップ・フィールド・Battle数式は無変更。main統合・本番Pages公開は未実施。
+
+## 作者承認後のmain統合（2026-10-11）
+
+最新main `09142636a86a9048b23acf5ed26b6e71633b42e1` を基準に
+`work/codex-raider-mobile-integration` へ変更を移植。indexの限定差分も作者が承認済み。
+元の共有ブランチは保持し、history rewrite / force pushは行わない。
+
+- 最新main上で6画面のviewportテスト: exit 0、404 / JS exception / console error 0。
+- 最新mainの既存 `tests/battle/hit_sync.py`: exit 0、FAILS 0。一時fixtureの素材はテストが復元し、img/のgit差分0。
+- fixture復元後に390×844の攻撃／一閃／防御／KO／Victoryを単独再確認。
+- check_assets: 0 error / 13既存warning。旧embedded・旧Lou・番号asset参照0。
+- フィールド・生成マップ・正式画像・BattleMotion実装の差分0。
+- 旧m4-e2e.logはe3565b6基準の前回結果。今回はフィールド変更がないため最新mainで再実行していない。
+
+今後、危険でなくClaudeの作業と干渉しない変更のmain pushは作者が包括承認済み。
+Pages設定は変更せず、既存のmain公開フローへ委ねる。
