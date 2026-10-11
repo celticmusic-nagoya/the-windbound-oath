@@ -42,7 +42,7 @@ git revert -m 1 390f74aea90e449a50846e93496abc5b7be99632
 git push origin main
 ```
 
-比較用タグは `rollback/before-quality-foundation-20261012`。Gだけを戻し、直前main `c4c536aad49bfa6d94ffbf79b951767627ee10ea` の戦闘演出・敵配置を維持する。タグを使ったreset/force pushはしない。反映記録は機能mergeに自己SHAを書き込む形にせず、既存CLAIMSの独立した先頭記録とこの別報告に置き、資料によるrevert競合を避ける。現時点の資料追加後treeでも逆mergeを非破壊に検証する。
+比較用タグは `rollback/before-quality-foundation-20261012`。Gだけを戻し、直前main `c4c536aad49bfa6d94ffbf79b951767627ee10ea` の戦闘演出・敵配置を維持する。タグを使ったreset/force pushはしない。反映記録は機能mergeに自己SHAを書き込む形にせず、既存CLAIMSの独立した先頭記録とこの別報告に置き、資料によるrevert競合を避ける。資料追加後treeの逆mergeを非破壊に検証済み。競合はなく、アプリ・tests・toolsは直前mainのtreeへ完全一致で戻ることを確認した。
 
 ## PLAYER QA
 
