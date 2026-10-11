@@ -5,7 +5,8 @@ window.BATTLE_ASSET_PATHS = Object.freeze({
   lou: 'img/battle/characters/lou/',
   goblin: 'img/battle/enemies/goblin/',
   tainted_goblin: 'img/battle/enemies/tainted_goblin/',
-  goblin_raider: 'img/battle/enemies/goblin_raider/'
+  goblin_raider: 'img/battle/enemies/goblin_raider/',
+  moss_slime: 'img/battle/enemies/moss_slime/'
 });
 
 // Only filenames verified in the repository. This registry does not add actions.
@@ -42,6 +43,10 @@ const battleAssetFiles = {
     idle: 'goblin_battle_idle.png', attack: 'goblin_attack.png',
     damage: 'goblin_damage.png', corruption: 'goblin_corruption_burst.png',
     ko: 'goblin_ko.png'
+  },
+  moss_slime: {
+    idle: 'moss_slime_battle_idle.png', attack: 'moss_slime_attack.png',
+    damage: 'moss_slime_damage.png', ko: 'moss_slime_ko.png'
   },
   goblin_raider: {
     idle: 'goblin_raider_battle_idle.png', attack: 'goblin_attack.png',

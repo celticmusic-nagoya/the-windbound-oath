@@ -15,3 +15,8 @@ body.soloRescue.normalBattleMode #v2FionaUnit,body.soloRescue.normalBattleMode #
 .corruptionSupply{position:fixed;height:5px;transform-origin:left center;z-index:10025;background:linear-gradient(90deg,#30193c,#aa70c7,#30193c);box-shadow:0 0 10px #b477c2;pointer-events:none}
 @media(orientation:portrait){.raiderAdd{right:8%;bottom:30%}.raiderAdd.slot2{right:3%;bottom:15%}}
 body:not(.developmentMode) #devBtn,body:not(.developmentMode) #devPanel,body:not(.developmentMode) .dev-only-command{display:none!important}
+
+/* Moss slimes: small, round monsters - no corruption aura, art scaled up inside the goblin-sized boxes (the PNG has wide transparent margins) */
+body.slimeBattle #bGob:after{display:none!important}
+body.slimeBattle #bGob img{transform:scale(1.55);transform-origin:50% 100%}
+body.slimeBattle #attackBattle .prologueSprite img{transform:scale(1.9);transform-origin:50% 100%}

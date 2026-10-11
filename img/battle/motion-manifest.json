@@ -34,6 +34,44 @@
         "hitFrame": 4,
         "hold": "last"
       }
+    },
+    "moss_slime": {
+      "attack": {
+        "dir": "../enemies/moss_slime/motion/",
+        "pattern": "moss_slime_attack_{n}.png",
+        "frames": 4,
+        "ms": [
+          110,
+          110,
+          150,
+          170
+        ],
+        "hitFrame": 3,
+        "hold": "last"
+      },
+      "damage": {
+        "dir": "../enemies/moss_slime/motion/",
+        "pattern": "moss_slime_damage_{n}.png",
+        "frames": 3,
+        "ms": [
+          90,
+          110,
+          160
+        ],
+        "hold": "last"
+      },
+      "ko": {
+        "dir": "../enemies/moss_slime/motion/",
+        "pattern": "moss_slime_ko_{n}.png",
+        "frames": 4,
+        "ms": [
+          110,
+          110,
+          130,
+          200
+        ],
+        "hold": "last"
+      }
     }
   }
 }
