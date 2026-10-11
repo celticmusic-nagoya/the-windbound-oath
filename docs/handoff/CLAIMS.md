@@ -28,3 +28,30 @@ Claude / `work/forest-bat-symbol-encounter`（上記ブランチの上に積む�
 
 ## main反映記録
 - 2026-10-12 Claude: フィールドモンスター一式（スライム/ゴブリン型AI・フォレストバット・リーフィボア）をmainへ `--no-ff` merge。ロールバック: タグ `rollback/before-field-monsters-20261012`（= 57dc6ae）、または該当マージコミットを `git revert -m 1`。PLAYER QA待ち。
+## 依頼G移植(Claude, 2026-10-11)
+
+Claude / `work/claude-port-quality-foundation` / 基準main `9b17d06`。
+対象: Codex `work/codex-quality-foundation` の3コミット(59d0ce4 dae453c e89a936)を cherry-pick(衝突なし)。`field-movement.js`(frameScale下限)、`tests/run_all.sh`、`tests/run_python.py`、m55_hz、m6_quest、素材棚卸し資料。
+共存確認: 長押し移動(`moss-forest-runtime.js` の hold / `hooks.onTransition`)は `FieldMovement.frameScale` を直接参照せず、`FieldNavigation.follow` を使うため変更なし。m14_hold_move と m55_hz が両方合格。Raider修正・納品戦闘モーションも維持。
+全回帰(`./tests/run_all.sh`, 最新main+移植): **47件中46件合格**。`tests/lind/walk_intake.py` は全件実行時のみ一度失敗(負荷時のタイミング依存)し、単独再実行で合格。m6_quest は合格(Codexの修正による)。
+STATUS: READY — 作者承認後に main へ。
+
+## Codex: 依頼G再検証・m6_quest安定化 (2026-10-12)
+
+Codex / `work/codex-quality-revalidation` / G基準 `65bf6d8`、main基準 `57dc6ae`。
+対象: `tests/moss/m6_quest.py`、必要な回帰テスト、`docs/handoff/CLAIMS.md`、専用検証報告・QA結果。
+STATUS: WIP — 最新mainとの統合候補をこのブランチで検証。mainへのmergeは作者承認後。
+Claude `work/moss-slime-symbol-encounter` (`f80019e`) → `work/forest-bat-symbol-encounter` (`3259741`) → `work/leafy-boar-symbol-encounter` (`8baa264`) は積み重ねたPLAYER QA待ちブランチ。既存field-monsters/runtime/story/indexの担当変更は行わず、Gとの共存だけを検証する。
+素材候補は別 `work/codex-art-redelivery-20261012` の `docs/art/` に保存予定。正式採用素材の置換・ゲームへの組み込みなし。
+
+共存実行検証用 `work/codex-quality-symbol-validation` を本検証ブランチから作成予定。`8baa264` を仮統合し、CLAIMSの追記を双方保持して解決する。ゲームコードは担当差分をそのまま保持し、長押し・速度・王都遷移ゲート・m6_quest・敵3種・Raiderの既存テストで確認する。main統合候補とは別ブランチで、PLAYER QA承認済みとは扱わない。
+
+2026-10-12 checkpoint: `f6f08bd` でm6_questのテスト側待機を安定化。修正前4回は今回すべて合格（申告の確率は今回未再現）、修正後10回連続合格。最新main+Gの全回帰は進行中。画像はHTTP429利用上限で0枚（専用報告参照）。王都出口IDは作者回答により未確定/TBD維持。Android実機は未接続・未測定、計測手順を保存（`docs/qa/android-symbol-performance-20261012.md`）。
+
+依頼Cの3出口のtoMap/toSpawnとJSON存在確認は `docs/handoff/codex-capital-exit-receivers-20261012.md`。取得済み全リモートrefで受け側JSON未作成を確認。TBD/nullを維持し、マップJSON作成後に接続する。
+
+2026-10-12更新: fetchでmain `b75a805`（敵3種merge済み、新運用第6節）を確認。`work/codex-quality-symbol-validation` は未作成のまま取り止め、最新mainから `work/codex-quality-main-20261012` を作成してGと本検証差分をmergeし、全回帰を再実行する。対象は本行の担当範囲・CLAIMSの双方追記解決・検証記録。旧mainの結果も保持。作者の依頼は統合可否の判断であり、この段階でmain更新・タグ作成・deployはしない。PLAYER QAはmain反映後という新ルールを最終報告に反映する。
+
+旧main `57dc6ae` + Gの全48対象を実行。初回45合格/依存不足3失敗、Pillow/NumPy追加後に3/3再実行合格。未説明の失敗なし。Raider・納品済みmotion・長押し・遷移ゲート・移動速度・クエストを確認。結果は `docs/qa/quality-revalidation-results/`。最新main `b75a805`候補の回帰へ継続。
+
+Codex / `work/codex-quality-main-20261012` / 基準main `b75a805`。G・m6_questテスト修正・報告を `work/codex-quality-revalidation` からmerge。唯一の競合である本ファイルはClaude/main反映記録とCodex追記を双方保持。STATUS: WIP — 全回帰実行中。敵3種はmain反映済みのため旧「未merge」の記録は過去状態。今後のPLAYER QAはCOLLABORATION第6節に従いmain反映後。今回のGは作者による統合可否判断待ちでmainは更新しない。
