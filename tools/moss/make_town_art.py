@@ -14,6 +14,8 @@ GRY = [G(84, 80, 92), G(122, 118, 128), G(164, 160, 164)]          # castle ston
 SAND = [G(150, 130, 100), G(188, 166, 128), G(220, 200, 160)]       # town plaster
 ROOFR = [G(120, 52, 40), G(164, 76, 52), G(204, 104, 66)]
 ROOFB = [G(48, 64, 104), G(72, 96, 144), G(108, 136, 184)]
+ROOFT = [G(28, 86, 92), G(46, 124, 126), G(92, 172, 164)]        # Caerdyn: deep blue-green roofs (Bible 11)
+STW = [G(172, 168, 164), G(212, 208, 198), G(240, 236, 226)]      # Caerdyn: white / pale grey stone
 ROOFG = [G(52, 88, 70), G(78, 124, 94), G(116, 164, 126)]
 LEAF = [G(38, 84, 46), G(62, 118, 58), G(104, 156, 74)]
 PINE = [G(28, 66, 52), G(44, 96, 66), G(76, 132, 84)]
@@ -107,12 +109,13 @@ def banner_pole():   # kingdom banner on a pole (navy + gold); `banner_pole_red`
     a.rect(17, 14, 21, 14, GOLD[2]); a.rect(19, 12, 19, 20, GOLD[2]); a.rect(17, 24, 21, 24, GOLD[1]); a.rect(14, 8, 24, 8, GOLD[1])
     return done(a)
 @item(52, 120)
-def banner_pole_red():
+def banner_pole_red():   # (name kept for the maps) Dunvar fortress banner: blue field with a gold band + chevron (Bible 10 / 55: blue-and-gold flags)
     a = new(52, 120, 8); shadow(a, 5)
     a.rect(12, 6, 13, 54, WOOD[1]); a.rect(12, 6, 12, 54, WOOD[2]); ell(a, 12, 5, 2, 2, GOLD[1])
-    a.rect(14, 8, 24, 36, RED[1]); a.rect(14, 8, 14, 36, RED[2]); a.rect(24, 8, 24, 36, RED[0])
-    for y in range(36, 41): a.rect(14 + (y - 36), y, 24 - (y - 36), y, RED[1])
-    a.rect(17, 16, 21, 16, GOLD[2]); a.rect(19, 14, 19, 24, GOLD[2]); a.rect(14, 8, 24, 8, GOLD[1])
+    a.rect(14, 8, 24, 36, NAVY[1]); a.rect(14, 8, 14, 36, NAVY[2]); a.rect(24, 8, 24, 36, NAVY[0])
+    for y in range(36, 41): a.rect(14 + (y - 36), y, 24 - (y - 36), y, NAVY[1])
+    a.rect(14, 10, 24, 11, GOLD[2]); a.rect(14, 12, 24, 12, GOLD[0])
+    for k in range(5): a.rect(15 + k, 18 + k, 15 + k, 19 + k, GOLD[2]); a.rect(23 - k, 18 + k, 23 - k, 19 + k, GOLD[2])
     return done(a)
 @item(96, 100)
 def well():
@@ -187,7 +190,7 @@ def tower_round():   # watch tower, art covers a 200x200 world footprint
         hw = 4 + (y - 8) * 2
         for x in range(60 - hw, 61 + hw): a.put(x, y, ROOFB[1] if (x + y) % 6 else ROOFB[0])
         a.put(60 - hw, y, ROOFB[2]); a.put(61 + hw, y, ROOFB[0])
-    a.rect(60, 0, 60, 8, IRON[1]); a.rect(61, 1, 66, 5, RED[1])
+    a.rect(60, 0, 60, 8, IRON[1]); a.rect(61, 1, 66, 5, NAVY[1])
     return done(a)
 @item(420, 220)
 def gate_arch():   # fort gate: two stone piers with an arch + portcullis seen open (art 420 wide, opening 220)
@@ -199,7 +202,7 @@ def gate_arch():   # fort gate: two stone piers with an arch + portcullis seen o
         for j in range(0, 36, 12): a.rect(i + j, 10, i + j + 6, 19, GRY[1]); a.rect(i + j, 10, i + j + 6, 10, GRY[2])
     for x in range(40, 170, 8): a.rect(x, 45, x, 62, IRON[1])
     a.rect(38, 45, 172, 46, IRON[0])
-    a.rect(14, 58, 19, 66, RED[1]); a.rect(190, 58, 195, 66, RED[1])
+    a.rect(14, 58, 19, 66, NAVY[1]); a.rect(190, 58, 195, 66, NAVY[1])
     return done(a)
 @item(120, 100)
 def weapon_stand_out():
@@ -229,12 +232,15 @@ def hedge_long():
     return done(a)
 
 # ---------------------------------------------------------------- houses / buildings (art footprint = collision rect; feet at the rect's bottom)
-def townhouse(w, h, roof, wall, seed, chimney=True, door_c=WOOD):
+def townhouse(w, h, roof, wall, seed, chimney=True, door_c=WOOD, stone=False):
     a = new(w, h, seed); shadow(a, w // 2 - 6); W, H = a.w, a.h; ry = int(H * .5)
     a.rect(2, ry, W - 3, H - 2, wall[1]); a.rect(2, ry, 4, H - 2, wall[2]); a.rect(W - 6, ry, W - 3, H - 2, wall[0])
-    for y in range(ry + 5, H - 2, 6):
-        for x in range(4, W - 6): a.put(x, y, wall[0]) if (x + y) % 3 == 0 else None
-    for x in range(6, W - 6, 14): a.rect(x, ry, x, H - 3, WOOD[0])   # timber frame
+    if stone:   # Caerdyn masonry: ashlar blocks, no timber frame
+        bricks(a, 4, ry + 8, W - 5, H - 6, wall, 6, 11); a.rect(2, ry + 7, W - 3, ry + 7, GOLD[1])
+    else:
+        for y in range(ry + 5, H - 2, 6):
+            for x in range(4, W - 6): a.put(x, y, wall[0]) if (x + y) % 3 == 0 else None
+        for x in range(6, W - 6, 14): a.rect(x, ry, x, H - 3, WOOD[0])   # timber frame
     a.rect(2, H - 5, W - 3, H - 2, STONE[1])
     for y in range(0, ry + 6):   # steep roof (trapezoid)
         t = y / (ry + 5); x0 = int(8 * (1 - t)) ; x1 = W - 1 - x0
@@ -246,14 +252,14 @@ def townhouse(w, h, roof, wall, seed, chimney=True, door_c=WOOD):
     if chimney: a.rect(int(W * .7), 2, int(W * .7) + 6, int(ry * .55), GRY[1]); a.rect(int(W * .7) - 1, 1, int(W * .7) + 7, 2, GRY[2])
     dx = W // 2 - 5; a.rect(dx, H - 26, dx + 10, H - 6, door_c[0]); a.rect(dx + 1, H - 25, dx + 9, H - 6, door_c[1]); a.put(dx + 8, H - 15, GOLD[2]); a.rect(dx - 1, H - 27, dx + 11, H - 27, STONE[2])
     for wx in (int(W * .2), int(W * .68)):
-        a.rect(wx, ry + 12, wx + 8, ry + 22, G(62, 48, 40)); a.rect(wx + 1, ry + 13, wx + 7, ry + 21, G(150, 200, 226)); a.rect(wx + 4, ry + 13, wx + 4, ry + 21, G(62, 48, 40)); a.rect(wx - 1, ry + 23, wx + 9, ry + 23, WOOD[1])
+        a.rect(wx, ry + 12, wx + 8, ry + 22, GOLD[0] if stone else G(62, 48, 40)); a.rect(wx + 1, ry + 13, wx + 7, ry + 21, G(150, 200, 226)); a.rect(wx + 4, ry + 13, wx + 4, ry + 21, G(62, 48, 40)); a.rect(wx - 1, ry + 23, wx + 9, ry + 23, WOOD[1])
     return done(a)
 @item(420, 400)
-def house_town_a(): return townhouse(420, 400, ROOFR, SAND, 30)
+def house_town_a(): return townhouse(420, 400, ROOFT, STW, 30, stone=True)
 @item(420, 400)
-def house_town_b(): return townhouse(420, 400, ROOFB, SAND, 31)
+def house_town_b(): return townhouse(420, 400, ROOFT, [G(190, 186, 178), G(226, 222, 212), G(246, 242, 232)], 31, stone=True, door_c=[G(40,60,70),G(60,90,100),G(90,126,136)])
 @item(420, 400)
-def house_town_c(): return townhouse(420, 400, ROOFG, [G(166, 150, 130), G(206, 190, 164), G(236, 224, 196)], 32, door_c=WOOD)
+def house_town_c(): return townhouse(420, 400, [G(40, 70, 104), G(60, 100, 140), G(96, 140, 178)], STW, 32, stone=True)
 @item(2000, 900)
 def castle_front():   # royal castle facade: curtain wall, two round corner towers, central gatehouse tower with spire (art covers the 2000x900 footprint)
     a = new(2000, 900, 34); W, H = a.w, a.h; cx = W // 2
@@ -280,11 +286,11 @@ def castle_front():   # royal castle facade: curtain wall, two round corner towe
         bricks(a, tx, 60, tx + 100, H - 4, GRY, 6, 11)
         for y in range(60, H - 4):
             a.put(tx + 1, y, GRY[2]); a.put(tx + 2, y, GRY[2]); a.put(tx + 99, y, GRY[0]); a.put(tx + 98, y, GRY[0]); a.put(tx + 97, y, GRY[0])
-        merlons(tx, tx + 100, 48); cone(tx + 50, 4, 48, 56, ROOFB); a.rect(tx + 50, 0, tx + 50, 5, IRON[1]); a.rect(tx + 51, 0, tx + 58, 4, NAVY[1])
+        merlons(tx, tx + 100, 48); cone(tx + 50, 4, 48, 56, ROOFT); a.rect(tx + 50, 0, tx + 50, 5, IRON[1]); a.rect(tx + 51, 0, tx + 58, 4, NAVY[1])
         windows(tx + 20, tx + 90, 130, 46); windows(tx + 20, tx + 90, 260, 46)
     # gatehouse
     bricks(a, cx - 130, 96, cx + 130, H - 6, GRY, 6, 11); merlons(cx - 130, cx + 130, 84)
-    bricks(a, cx - 90, 30, cx + 90, 84, GRY, 6, 11); merlons(cx - 90, cx + 90, 20); cone(cx, 0, 20, 98, ROOFB)
+    bricks(a, cx - 90, 30, cx + 90, 84, GRY, 6, 11); merlons(cx - 90, cx + 90, 20); cone(cx, 0, 20, 98, ROOFT)
     windows(cx - 50, cx + 60, 40, 60); windows(cx - 70, cx + 90, 150, 70)
     # royal banners
     for bx in (cx - 200, cx + 180):
@@ -336,7 +342,7 @@ def keep_front():   # fort keep: tall brick block, crenellated top, two corner t
     for x in range(cx - gw + 6, cx + gw - 2, 8): a.rect(x, H - 160, x, H - 4, WOOD[1])
     a.rect(cx - 1, H - 164, cx + 1, H - 4, IRON[0]); a.rect(cx - gw, H - 90, cx + gw, H - 88, IRON[1])
     for bx in (cx - 140, cx + 120):
-        a.rect(bx, 120, bx + 18, 190, RED[1]); a.rect(bx, 120, bx, 190, RED[2]); a.rect(bx + 18, 120, bx + 18, 190, RED[0]); a.rect(bx + 8, 140, bx + 10, 175, GOLD[2]); a.rect(bx + 3, 152, bx + 15, 154, GOLD[2])
+        a.rect(bx, 120, bx + 18, 190, NAVY[1]); a.rect(bx, 120, bx, 190, NAVY[2]); a.rect(bx + 18, 120, bx + 18, 190, NAVY[0]); a.rect(bx + 8, 140, bx + 10, 175, GOLD[2]); a.rect(bx + 3, 152, bx + 15, 154, GOLD[2])
     return done(a)
 
 @item(460, 400)
@@ -352,7 +358,7 @@ def tavern_front():   # fort tavern: timber house with a hanging mug sign and a 
 def capital_far():   # the capital seen from afar (hazy, blue-shifted): outer wall, roofs, towers, central castle with spires
     a = new(1000, 380, 60); W, H = a.w, a.h
     haze = lambda c: tuple(int(v * .62 + 150 * .38) if i < 3 else 255 for i, v in enumerate(c))
-    GR = [haze(c) for c in GRY]; RB = [haze(c) for c in ROOFB]; RR = [haze(c) for c in ROOFR]; SD = [haze(c) for c in SAND]
+    GR = [haze(c) for c in GRY]; RB = [haze(c) for c in ROOFT]; RR = [haze(c) for c in ROOFT]; SD = [haze(c) for c in SAND]
     def tower(cx, top, w, base, col):
         a.rect(cx - w, top, cx + w, base, GR[1]); a.rect(cx - w, top, cx - w, base, GR[2]); a.rect(cx + w, top, cx + w, base, GR[0])
         for y in range(top - w - 2, top):
@@ -373,6 +379,105 @@ def capital_far():   # the capital seen from afar (hazy, blue-shifted): outer wa
     for tx in (16, W - 16): tower(tx, base - 56, 6, base - 20, RB)
     for x in range(cx - 38, cx + 39, 14): a.rect(x, base - 58, x + 1, base - 50, haze(G(24, 20, 30)))
     a.rect(cx - 5, base - 34, cx + 5, base - 20, haze(G(60, 44, 34)))
+    return a
+
+# ---------------------------------------------------------------- Caerdyn additions (Bible 11-17) + Dunvar scenery (Bible 10 / 55)
+def tower_cap(a, tx, top, w, base):
+    bricks(a, tx, top, tx + w, base, GRY, 6, 11)
+    for y in range(top, base): a.put(tx + 1, y, GRY[2]); a.put(tx + w - 1, y, GRY[0]); a.put(tx + w - 2, y, GRY[0])
+    for i in range(tx, tx + w, 12): a.rect(i, top - 10, i + 6, top, GRY[1]); a.rect(i, top - 10, i + 6, top - 9, GRY[2])
+    mid = tx + w // 2
+    for y in range(top - 52, top - 10):
+        hw = 3 + (y - (top - 52)) * (w // 2 + 6) // 42
+        for x in range(mid - hw, mid + hw + 1): a.put(x, y, ROOFT[1] if (x + y) % 6 else ROOFT[0])
+        a.put(mid - hw, y, ROOFT[2]); a.put(mid + hw, y, ROOFT[0])
+    a.rect(mid, top - 64, mid, top - 50, IRON[1]); a.rect(mid + 1, top - 64, mid + 9, top - 57, NAVY[1]); a.rect(mid + 3, top - 62, mid + 7, top - 61, GOLD[2])
+    for wy in (top + 30, top + 90): a.rect(mid - 2, wy, mid + 2, wy + 14, G(24, 20, 30)); a.rect(mid - 3, wy - 1, mid + 3, wy - 1, GRY[2])
+@item(1800, 640)
+def caer_gate():   # 南大城門: white stone curtain wall, two teal-capped watch towers, gilded arch with open portcullis (footprint = bottom ~150px of the art)
+    a = new(1800, 640, 70); W, H = a.w, a.h; cx = W // 2; shadow(a, 380)
+    wall_top = H - 190
+    bricks(a, 0, wall_top, W - 1, H - 3, STW, 6, 11)
+    for i in range(0, W, 12): a.rect(i, wall_top - 10, i + 6, wall_top, STW[1]); a.rect(i, wall_top - 10, i + 6, wall_top - 9, STW[2])
+    a.rect(0, wall_top + 40, W - 1, wall_top + 41, GOLD[1])
+    tower_cap(a, 40, wall_top - 150, 110, H - 3); tower_cap(a, W - 150, wall_top - 150, 110, H - 3)
+    gw = 70
+    for y in range(wall_top - 70, wall_top + 30):
+        a.rect(cx - gw - 40, y, cx + gw + 40, y, STW[1] if (y // 6) % 2 else STW[0])
+    for i in range(cx - gw - 40, cx + gw + 40, 12): a.rect(i, wall_top - 80, i + 6, wall_top - 70, STW[1]); a.rect(i, wall_top - 80, i + 6, wall_top - 79, STW[2])
+    a.rect(cx - gw - 42, wall_top - 70, cx + gw + 42, wall_top - 68, GOLD[1])
+    a.rect(cx - gw - 8, H - 150, cx + gw + 8, H - 3, GOLD[1])
+    a.rect(cx - gw, H - 140, cx + gw, H - 3, G(30, 22, 18))
+    for y in range(H - 190, H - 140):
+        k = (H - 140 - y) * 3 // 5; a.rect(cx - gw + k - 8, y, cx + gw - k + 8, y, GOLD[1]); a.rect(cx - gw + k, y, cx + gw - k, y, G(30, 22, 18))
+    for x in range(cx - gw + 8, cx + gw, 14): a.rect(x, H - 185, x + 1, H - 100, IRON[1])
+    a.rect(cx - gw, H - 112, cx + gw, H - 111, IRON[0])
+    for bx in (cx - gw - 34, cx + gw + 16):
+        a.rect(bx, wall_top - 40, bx + 16, wall_top + 32, NAVY[1]); a.rect(bx, wall_top - 40, bx, wall_top + 32, NAVY[2]); a.rect(bx + 16, wall_top - 40, bx + 16, wall_top + 32, NAVY[0])
+        a.rect(bx + 7, wall_top - 28, bx + 9, wall_top + 4, GOLD[2]); a.rect(bx + 3, wall_top - 18, bx + 13, wall_top - 16, GOLD[2])
+    return done(a)
+@item(200, 150)
+def checkpoint():   # 検問所: stone booth with a striped barrier pole
+    a = new(200, 150, 71); shadow(a, 40)
+    bricks(a, 8, 26, 56, 70, STW, 5, 9); a.rect(4, 18, 60, 28, ROOFT[1]); a.rect(4, 18, 60, 19, ROOFT[2]); a.rect(4, 28, 60, 28, ROOFT[0])
+    a.rect(24, 40, 40, 56, G(24, 20, 30)); a.rect(24, 40, 40, 40, GOLD[1]); a.rect(30, 40, 34, 56, G(150, 200, 226))
+    a.rect(60, 54, 98, 57, WOOD[0])
+    for k in range(60, 98, 8): a.rect(k, 54, k + 3, 57, RED[1] if (k // 8) % 2 else STW[2])
+    a.rect(98, 46, 99, 70, WOOD[1]); a.rect(58, 50, 59, 70, WOOD[1])
+    return done(a)
+@item(360, 420)
+def guild_front():   # 冒険者ギルド兼大酒場 (footprint 360x360): stone, navy roof, gold board, hanging tankard
+    a = townhouse(360, 420, [G(36, 56, 100), G(56, 84, 140), G(92, 122, 178)], STW, 72, door_c=[G(88, 56, 36), G(120, 78, 48), G(150, 100, 62)], stone=True)
+    W, H = a.w, a.h
+    a.rect(W // 2 - 26, H - 52, W // 2 + 26, H - 40, WOOD[1]); a.rect(W // 2 - 26, H - 52, W // 2 + 26, H - 52, GOLD[2])
+    for x in range(W // 2 - 20, W // 2 + 21, 6): a.rect(x, H - 49, x + 2, H - 43, GOLD[2])
+    a.rect(W // 2 + 38, H - 70, W // 2 + 39, H - 48, IRON[1]); a.rect(W // 2 + 38, H - 70, W // 2 + 54, H - 69, IRON[1])
+    a.rect(W // 2 + 42, H - 66, W // 2 + 52, H - 54, WOOD[1]); a.rect(W // 2 + 44, H - 63, W // 2 + 50, H - 57, GOLD[2])
+    for wx in (int(W * .2), int(W * .68)): a.rect(wx + 1, int(H * .5) + 13, wx + 7, int(H * .5) + 21, G(255, 214, 120))
+    return done(a)
+@item(300, 400)
+def inn_front():   # 宿屋 (footprint 300x340): pale stone, teal roof, hanging bed sign, lit windows
+    a = townhouse(300, 400, ROOFT, STW, 73, stone=True, door_c=[G(90, 60, 40), G(124, 84, 54), G(156, 112, 72)])
+    W, H = a.w, a.h
+    a.rect(W // 2 + 22, H - 62, W // 2 + 23, H - 40, IRON[1]); a.rect(W // 2 + 22, H - 62, W // 2 + 40, H - 61, IRON[1])
+    a.rect(W // 2 + 26, H - 58, W // 2 + 38, H - 46, WOOD[1]); a.rect(W // 2 + 28, H - 54, W // 2 + 36, H - 50, G(236, 226, 200)); a.rect(W // 2 + 28, H - 56, W // 2 + 30, H - 54, RED[1])
+    for wx in (int(W * .2), int(W * .68)): a.rect(wx + 1, int(H * .5) + 13, wx + 7, int(H * .5) + 21, G(255, 214, 120))
+    return done(a)
+@item(120, 220)
+def monument():   # 建国記念碑: pale obelisk on a stepped base with a gold plaque and rune lines
+    a = new(120, 220, 74); shadow(a, 22)
+    for (x0, x1, y0) in ((10, 50, 88), (16, 44, 80), (22, 38, 72)): a.rect(x0, y0, x1, y0 + 8, STW[1]); a.rect(x0, y0, x1, y0, STW[2]); a.rect(x1 - 2, y0, x1, y0 + 8, STW[0])
+    for y in range(8, 72):
+        hw = 6 if y > 20 else 2 + (y - 8) // 3
+        a.rect(30 - hw, y, 30 + hw, y, STW[1]); a.put(30 - hw, y, STW[2]); a.put(30 + hw, y, STW[0])
+    a.rect(26, 38, 34, 54, GOLD[1]); a.rect(26, 38, 34, 38, GOLD[2]); a.rect(26, 54, 34, 54, GOLD[0])
+    for y in range(41, 52, 4): a.rect(28, y, 32, y, GOLD[0])
+    for y in range(20, 36, 5): a.rect(28, y, 29, y, G(120, 160, 170)); a.rect(31, y + 1, 32, y + 1, G(120, 160, 170))
+    ell(a, 30, 6, 3, 3, GOLD[2])
+    return done(a)
+@item(1600, 220)
+def fort_ridge():   # 山岳と滝: far blue-grey mountain ridge with a waterfall, seen over the fort wall (Bible 55)
+    import math
+    a = new(1600, 220, 75); W, H = a.w, a.h; r = random.Random(5)
+    base = H - 4; prof = []
+    for x in range(W):
+        h = 34 + 22 * (1 + math.sin(x / 61.0)) + 7 * (1 + math.sin(x / 23.0 + 1)) + (44 * (1 - abs(x - 360) / 70) if abs(x - 360) < 70 else 0)
+        prof.append(int(min(H - 6, h)))
+    for x in range(W):
+        top = base - prof[x]
+        for y in range(0, top): a.put(x, y, G(int(150 + 60 * y / H), int(190 + 36 * y / H), int(224 + 14 * y / H)))   # sky
+        for y in range(top, base + 1):
+            t = (y - top) / max(1, base - top)
+            col = G(int(84 - 26 * t), int(108 - 26 * t), int(122 - 22 * t))
+            if y - top < 4 and prof[x] > 90: col = G(236, 242, 248)
+            a.put(x, y, col)
+        if x % 7 == 0: a.put(x, top + 6, G(100, 120, 148))
+    fx = 360
+    for y in range(base - 100, base):
+        for dx in range(-3, 4):
+            if abs(dx) + ((y // 5) % 2) < 5: a.put(fx + dx, y, G(214, 234, 244) if (y + dx) % 4 else G(168, 208, 228))
+    ell(a, fx, base - 2, 14, 5, G(214, 234, 244))
+    for _ in range(40): a.put(r.randint(fx - 12, fx + 12), r.randint(base - 8, base), G(255, 255, 255))
     return a
 
 def main():

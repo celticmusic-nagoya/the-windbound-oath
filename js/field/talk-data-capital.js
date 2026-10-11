@@ -23,6 +23,41 @@ window.TalkDataCapital = Object.freeze({tables: [
   {npc: 'f3_armory', entries: [
     {id: 'f3_arm_a', priority: 10, mode: 'cycle', lines: ['武器庫番「ここの品は王国の物資だ。勝手には渡せんが……補給係に頼めば、手頃な品が手に入るはずだ。」']}]},
   {npc: 'f1_bed', entries: []},
+  // ---- 砦の酒場: 酔っ払いのドワーフ（匿名の先行登場。名前は出さない。王都のブラムの工房で再会する）
+  {npc: 'f4_dwarf', entries: [
+    {id: 'f4_dw_after', priority: 40, mode: 'cycle', when: {flag: 'liam_joined'},
+     lines: ['酔っ払いのドワーフ「旅ぃ？ そんなもん明日にしろ！ 生きてる奴が酒場に集まったんなら宴だ、宴！」', '酔っ払いのドワーフ「ま、行くってんなら止めやせん。……気をつけて行けよ、若造ども。」']},
+    {id: 'f4_dw_a', priority: 10, mode: 'cycle',
+     lines: ['酔っ払いのドワーフ「素材を仕入れに来ただけだったんだがなぁ……。ここの黒麦酒がうまいのが悪い！」',
+             {pages: ['酔っ払いのドワーフ「旅ぃ？ そんなもん明日にしろ！ 生きてる奴が酒場に集まったんなら宴だ、宴！」', 'エイダン「あの、黒紫の魔物を見たことは……」', '酔っ払いのドワーフ「…………黒紫、ねぇ。」', '（一瞬だけ、酔いの抜けた目をした気がした。傍らの荷物から、古い金属片が覗いている。）']}]}]},
+  // ---- 王都・南大城門と旅人街
+  {npc: 'g_gate_guard', entries: [
+    {id: 'g_gg_a', priority: 10, mode: 'cycle', lines: ['門番「ようこそ、王都カエルディンへ。……辺境の方は、最近物騒だと聞く。街道は無事だったか？」', '門番「北へ進めば商業地区、その先が中央広場だ。王城は高台に見えるだろう？」']}]},
+  {npc: 'g_merchant', entries: [
+    {id: 'g_mc_a', priority: 10, mode: 'cycle', lines: ['荷馬車の商人「検問が長くてね。だが王都の市場は、辺境の何倍も儲かるのさ。」']}]},
+  {npc: 'g_pilgrim', entries: [
+    {id: 'g_pg_a', priority: 10, mode: 'cycle', lines: ['巡礼者「大聖堂へお参りに来たのです。魔王を封じた英雄たちの姿が、今も祀られていると聞いて。」']}]},
+  {npc: 'g_adv', entries: [
+    {id: 'g_ad_a', priority: 10, mode: 'cycle', lines: ['駆け出しの冒険者「隣のギルドで依頼を受けたんだ。夜は大酒場になって、すごい賑わいだぜ。」']}]},
+  // ---- 冒険者ギルド兼大酒場
+  {npc: 'g_reception', entries: [
+    {id: 'g_rc_a', priority: 10, mode: 'cycle', lines: ['受付「ここは冒険者ギルドです。討伐、護衛、採取、遺跡調査、配達……依頼は掲示板に貼り出されています。」', '受付「2階は会議室、地下は倉庫です。いまは立ち入れませんが……。」']}]},
+  {npc: 'g_barkeep', entries: [
+    {id: 'g_bk_a', priority: 10, mode: 'cycle', lines: ['大酒場の主人「昼はおとなしいもんだが、夜になるとここは王都一の大騒ぎさ。また来な。」']}]},
+  {npc: 'g_patron1', entries: [
+    {id: 'g_p1_a', priority: 10, mode: 'cycle', lines: ['冒険者「遺跡調査の依頼は、いつも王立の連中が先に押さえちまうんだ。」']}]},
+  {npc: 'g_patron2', entries: [
+    {id: 'g_p2_a', priority: 10, mode: 'cycle', lines: ['酔った旅人「うぃ……宴ってのはいいもんだ。歌と、踊りと、酒があれば……。」']}]},
+  {npc: 'g_bard', entries: [
+    {id: 'g_bd_a', priority: 10, mode: 'cycle', lines: ['吟遊詩人「この王都は、昔の都の上に建っているんだって。足元に眠る歌も、いつか拾ってみたいね。」']}]},
+  {npc: 'g_upstairs', entries: [
+    {id: 'g_up_a', priority: 10, mode: 'cycle', lines: ['2階はギルドの会議室になっている。今は関係者以外、立ち入れないようだ。']}]},
+  // ---- 宿屋
+  {npc: 'r1_inn', entries: [
+    {id: 'r1i_a', priority: 10, mode: 'cycle', lines: ['宿屋の主人「ようこそ、旅人の灯へ。ベッドはご自由に。ぐっすり休めば、体力も魔力も元通りですよ。」']}]},
+  {npc: 'in_bed', entries: []},
+  {npc: 'in_guest', entries: [
+    {id: 'in_g_a', priority: 10, mode: 'cycle', lines: ['旅の客「王都の宿は、ギルドの隣が一番だ。依頼帰りにそのまま休めるからね。」']}]},
   // ---- 王都・商業区
   {npc: 'r1_board', entries: [
     {id: 'r1b_report', priority: 60, mode: 'once', when: {quest: {id: 'q_capital_delivery', state: 'complete'}},
@@ -79,7 +114,8 @@ window.TalkDataCapital = Object.freeze({tables: [
   {npc: 'liam', entries: [
     {id: 'liam_intro', priority: 70, mode: 'once', when: {stage: [15, 99]},
      lines: [{pages: ['酒場の隅で、赤いバンダナの青年が古びた地図を広げている。', 'リアム「……ん？ 見ない顔だな。その剣、ただの飾りじゃなさそうだ。」', 'エイダン「あなたは？」',
-                      'リアム「リアム。王都の遺跡調査団にいた——今はしがないトレジャーハンターさ。」',
+                      'リアム「リアム。つい最近まで、王国の遺跡調査員をやってた——今はしがないトレジャーハンターさ。」',
+                      'リアム「腰の短めの剣と、背中の弓。道中の面倒ごとなら、これで十分さ。」',
                       'リアム「王都へ戻る連れを探してたんだ。最近の街道は物騒でね。……どうだい、俺を連れていかないか？ 足と目には自信がある。」'],
               choice: {options: [{label: '仲間に誘う', reply: ['リアム「決まりだな！ よろしく頼むぜ、エイダン。」', 'フィオナ「よろしくね、リアムさん。」', '（リアムが仲間に加わった！）'], set: {liam_joined: true}, join: 'liam'},
                                  {label: 'また今度', reply: 'リアム「そうか。気が変わったら声をかけてくれ。ここで地図とにらめっこしてるよ。」'}]}}]},

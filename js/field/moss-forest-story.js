@@ -128,7 +128,7 @@
     return MossForest.enter({map:CLIFF_ID,spawn:'from_lind',flags:flagsNow(),timeOfDay:storyStage===3?'dusk':'day'});
   }
   // ドゥンヴァル砦 / 王都: foundation maps (tools/moss/build_town_maps.py). Not wired into the story yet - reachable via enterWorldMap() / DEV.
-  const WORLD_MAPS={fort:'fort_dunvall_01_courtyard',capital:'royal_capital_01_market',rilde:'rilde_village'};   // 'rilde_village' resolves to the peace / ruin map by story state (RildeVillage.resolve)
+  const WORLD_MAPS={fort:'fort_dunvall_01_courtyard',capital:'royal_capital_00_gate',rilde:'rilde_village'};   // 'rilde_village' resolves to the peace / ruin map by story state (RildeVillage.resolve)
   function enterMap(id,spawn){return MossForest.enter({map:WORLD_MAPS[id]||id,spawn,flags:flagsNow()});}
   FieldScene_hooks();
   function FieldScene_hooks(){

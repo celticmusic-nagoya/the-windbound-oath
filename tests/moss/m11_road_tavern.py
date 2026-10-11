@@ -31,7 +31,7 @@ with sync_playwright() as p:
     ev("MossForest.goFeet(5520,1800)")
     try: pg.wait_for_function("MossForest.mapId!=='road_dunvall_capital_01'",timeout=60000)
     except Exception: pass
-    check(ev("MossForest.mapId")=='royal_capital_01_market','road east end -> capital market')
+    check(ev("MossForest.mapId")=='royal_capital_00_gate','road east end -> capital south gate')
     # ---- tavern + Liam
     ev("(a)=>MossForest.enter({map:a[0],spawn:a[1]})",['fort_in_tavern','from_courtyard']); pg.wait_for_timeout(1500)
     check(ev("!!document.querySelector('.forest-ent[data-asset=\"npc_slot_liam\"]')"),'tavern: Liam is sitting in the corner')

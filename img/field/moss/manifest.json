@@ -8,152 +8,6 @@
  },
  "node": [
   {
-   "match": "^npc_slot_soldier$",
-   "file": "props/npc_soldier.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_soldier_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_captain$",
-   "file": "props/npc_captain.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_captain_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_merchant$",
-   "file": "props/npc_merchant.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_merchant_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_townsman$",
-   "file": "props/npc_townsman.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_townsman_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_townswoman$",
-   "file": "props/npc_townswoman.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_townswoman_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_elder$",
-   "file": "props/npc_elder.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_elder_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_child$",
-   "file": "props/npc_child.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_child_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_bard$",
-   "file": "props/npc_bard.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_bard_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_questgiver$",
-   "file": "props/npc_questgiver.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_questgiver_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_liam$",
-   "file": "props/npc_liam.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_liam_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_barkeep$",
-   "file": "props/npc_barkeep.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_barkeep_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_guard$",
-   "file": "props/npc_guard.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
-   "walk": {
-    "file": "props/npc_guard_walk_{n}.png",
-    "frames": 6
-   }
-  },
-  {
-   "match": "^npc_slot_bed$",
-   "file": "props/npc_bed.png",
-   "w": 72,
-   "h": 52,
-   "gen": "make_npcs"
-  },
-  {
-   "match": "^npc_slot_board$",
-   "file": "props/npc_board.png",
-   "w": 80,
-   "h": 84,
-   "gen": "make_npcs"
-  },
-  {
    "match": "^town_tree_oak$",
    "file": "town/tree_oak.png",
    "w": 120,
@@ -369,6 +223,205 @@
    "w": 1000,
    "h": 380,
    "gen": "make_town_art"
+  },
+  {
+   "match": "^town_caer_gate$",
+   "file": "town/caer_gate.png",
+   "w": 1800,
+   "h": 640,
+   "gen": "make_town_art"
+  },
+  {
+   "match": "^town_checkpoint$",
+   "file": "town/checkpoint.png",
+   "w": 200,
+   "h": 150,
+   "gen": "make_town_art"
+  },
+  {
+   "match": "^town_guild_front$",
+   "file": "town/guild_front.png",
+   "w": 360,
+   "h": 420,
+   "gen": "make_town_art"
+  },
+  {
+   "match": "^town_inn_front$",
+   "file": "town/inn_front.png",
+   "w": 300,
+   "h": 400,
+   "gen": "make_town_art"
+  },
+  {
+   "match": "^town_monument$",
+   "file": "town/monument.png",
+   "w": 120,
+   "h": 220,
+   "gen": "make_town_art"
+  },
+  {
+   "match": "^town_fort_ridge$",
+   "file": "town/fort_ridge.png",
+   "w": 1600,
+   "h": 220,
+   "gen": "make_town_art"
+  },
+  {
+   "match": "^npc_slot_soldier$",
+   "file": "props/npc_soldier.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_soldier_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_captain$",
+   "file": "props/npc_captain.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_captain_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_merchant$",
+   "file": "props/npc_merchant.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_merchant_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_townsman$",
+   "file": "props/npc_townsman.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_townsman_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_townswoman$",
+   "file": "props/npc_townswoman.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_townswoman_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_elder$",
+   "file": "props/npc_elder.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_elder_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_child$",
+   "file": "props/npc_child.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_child_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_bard$",
+   "file": "props/npc_bard.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_bard_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_questgiver$",
+   "file": "props/npc_questgiver.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_questgiver_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_liam$",
+   "file": "props/npc_liam.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_liam_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_dwarf_drunk$",
+   "file": "props/npc_dwarf_drunk.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_dwarf_drunk_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_barkeep$",
+   "file": "props/npc_barkeep.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_barkeep_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_guard$",
+   "file": "props/npc_guard.png",
+   "w": 56,
+   "h": 84,
+   "gen": "make_npcs",
+   "walk": {
+    "file": "props/npc_guard_walk_{n}.png",
+    "frames": 6
+   }
+  },
+  {
+   "match": "^npc_slot_bed$",
+   "file": "props/npc_bed.png",
+   "w": 72,
+   "h": 52,
+   "gen": "make_npcs"
+  },
+  {
+   "match": "^npc_slot_board$",
+   "file": "props/npc_board.png",
+   "w": 80,
+   "h": 84,
+   "gen": "make_npcs"
   },
   {
    "match": "^rv_cliff$",

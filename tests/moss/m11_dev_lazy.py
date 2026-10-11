@@ -4,7 +4,7 @@ fails=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
-MAPS=['road_dunvall_capital_01','fort_in_tavern','fort_dunvall_01_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential']
+MAPS=['road_dunvall_capital_01','fort_in_tavern','fort_dunvall_01_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential','royal_capital_00_gate','royal_in_guild','royal_in_inn']
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720}); errs=[]
     pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))

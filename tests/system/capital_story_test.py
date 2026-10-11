@@ -11,7 +11,7 @@ with sync_playwright() as p:
     pg.goto('http://localhost:8765/index.html?legacyVillage=1'); pg.wait_for_timeout(1200)
     ev=lambda s: pg.evaluate(s)
     ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();EquipmentManager.reset();MossForest.reset();gold=0;battleItems.potion=0;battleItems.ether=0")
-    maps={n:json.load(open('data/maps/%s.json'%n,encoding='utf-8')) for n in ['fort_dunvall_01_courtyard','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential']}
+    maps={n:json.load(open('data/maps/%s.json'%n,encoding='utf-8')) for n in ['fort_dunvall_01_courtyard','royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential','royal_in_guild']}
     def text(): return pg.inner_text('#msg')
     def tap_all(n=30):
         i=0
@@ -39,14 +39,14 @@ with sync_playwright() as p:
     click_node('fort_dunvall_01_courtyard','f1_bed'); pg.wait_for_timeout(2600); check(ev("document.querySelector('#forestToast,.forest-toast')&&document.querySelector('#forestToast,.forest-toast').textContent.includes('全回復')") or True,'barracks bed runs the rest sequence')
     check(not ev("MossForest.actor('aidan')===null"),'player is free to move after sleeping')
     # ---- capital
-    enter('royal_capital_01_market','from_west_gate')
+    enter('royal_capital_01_market','from_gate')
     click_node('royal_capital_01_market','r1_general'); check(pg.is_visible('#shopModal') and 'ether' in str(ev("Shop.stock('royal_general').map(x=>x.id)")),'general store shop opens')
     ev("Shop.close()")
     click_node('royal_capital_01_market','r1_weapon'); st=ev("Shop.stock('royal_arms').map(x=>x.id)")
     check(pg.is_visible('#shopModal') and 'knight_helm' in st and 'steel_sword' not in st,'arms shop opens with capital-only gear; steel sword is not stocked yet %s'%st)
     ev("Shop.close();closeDialogue()")
     # quest: delivery
-    click_node('royal_capital_01_market','r1_board'); check(pg.locator('.talkChoices button').count()==2,'board offers the delivery request')
+    enter('royal_in_guild','from_gate'); click_node('royal_in_guild','r1_board'); check(pg.locator('.talkChoices button').count()==2,'board offers the delivery request')
     pg.click('.talkChoices button >> nth=0'); pg.wait_for_timeout(200); ev("closeDialogue()")
     check(ev("Quest.state('q_capital_delivery')")=='active','delivery quest accepted')
     ev("battleItems.potion=3;FieldTalk.talk('r1_board',{source:'test'})"); tap_all()

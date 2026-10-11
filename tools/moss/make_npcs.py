@@ -59,6 +59,10 @@ def chibi(look, W=56, H=84, step=None):
     if L.get('goggles'):   # brass goggles pushed up on the forehead
         a.rect(cx - 6, head_top + 1, cx + 6, head_top + 2, (96, 72, 52, 255)); a.rect(cx - 5, head_top - 1, cx - 2, head_top + 2, (176, 140, 70, 255)); a.rect(cx + 2, head_top - 1, cx + 5, head_top + 2, (176, 140, 70, 255))
         a.rect(cx - 4, head_top, cx - 3, head_top + 1, (150, 214, 232, 255)); a.rect(cx + 3, head_top, cx + 4, head_top + 1, (150, 214, 232, 255))
+    if L.get('bandana'):   # red patterned bandana at the neck
+        a.rect(cx - 5, body_top - 1, cx + 5, body_top + 1, L['bandana']); a.rect(cx + 3, body_top + 2, cx + 5, body_top + 4, L['bandana'])
+        for bx in (cx - 3, cx, cx + 3): a.put(bx, body_top, (244, 226, 200, 255))
+    if L.get('nose'): a.put(cx, ey + 1, (226, 104, 96, 255)); a.put(cx - 1, ey + 1, (226, 104, 96, 255))
     if L.get('scarf'): a.rect(cx - 7, head_top - 1, cx + 7, head_top + 3, L['scarf']); a.rect(cx + 5, head_top + 3, cx + 8, head_top + 8, L['scarf'])
     if L.get('hat'): a.rect(cx - 8, head_top - 1, cx + 8, head_top, L['hat']); a.rect(cx - 5, head_top - 4, cx + 5, head_top - 2, L['hat'])
     if L.get('spear'):
@@ -81,7 +85,9 @@ LOOKS = {
     'child':      {'cloth': R(220, 170, 70), 'hair': R(70, 48, 34), 'scale': .72},
     'bard':       {'cloth': R(60, 120, 130), 'hat': R(176, 52, 48), 'hair': R(60, 44, 36), 'lute': True},
     'questgiver': {'cloth': R(150, 120, 170), 'scarf': R(230, 220, 200), 'longhair': True, 'hair': R(190, 190, 190), 'staff': True, 'mark': True, 'skin': SKIN[1]},
-    'liam':       {'cloth': R(70, 54, 48), 'trim': R(176, 140, 70), 'hair': R(150, 70, 40), 'scarf': R(176, 52, 44), 'goggles': True, 'bag': True, 'boots': R(52, 38, 30), 'skin': SKIN[0]},
+    # Liam (Bible 35): ash-blond / dusty gold, forehead showing, silky wolf-cut length, red patterned bandana, goggles, red/black dark leather + antique gold
+    'liam':       {'cloth': R(62, 44, 44), 'trim': R(184, 148, 74), 'hair': R(190, 166, 118), 'longhair': True, 'bandana': R(190, 48, 46), 'goggles': True, 'bag': True, 'boots': R(44, 34, 30), 'skin': SKIN[0]},
+    'dwarf_drunk': {'cloth': R(126, 84, 52), 'trim': R(184, 148, 74), 'hair': R(150, 84, 48), 'beard': R(160, 92, 52), 'skin': SKIN[1], 'scale': .82, 'nose': True, 'boots': R(60, 44, 32)},
     'barkeep':    {'cloth': R(140, 74, 58), 'apron': R(240, 232, 214), 'hair': R(120, 110, 100), 'beard': R(120, 100, 84), 'skin': SKIN[1], 'scale': 1.0},
     'guard':      {'cloth': R(70, 96, 150), 'trim': R(200, 170, 80), 'helmet': True, 'spear': True, 'skin': SKIN[2]},
 }
