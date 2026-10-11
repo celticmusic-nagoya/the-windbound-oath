@@ -130,9 +130,10 @@
   }
   // Field monsters (symbol encounters, FieldMonsters): the touched monster's `battle` picks the fight. Returns true when a battle started.
   function onMonster(m){
-    if(m.battle!=='moss_slime'||typeof startAttackBattle!=='function'||attackBattleBusy)return false;
+    if(!(m.battle==='moss_slime'||m.battle==='forest_bat')||typeof startAttackBattle!=='function'||attackBattleBusy)return false;
     const n=Math.max(1,Math.min(3,m.group|0||1));
-    startAttackBattle('mossSlime'+n,56*n);return true;
+    if(m.battle==='forest_bat')startAttackBattle('forestBat'+n,48*n);else startAttackBattle('mossSlime'+n,56*n);
+    return true;
   }
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns

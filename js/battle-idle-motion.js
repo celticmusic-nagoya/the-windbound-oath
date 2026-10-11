@@ -110,6 +110,8 @@
   });
   BattleIdleMotion.register({context:'normal',actor:'aidan',selector:'#bAidan2 img',assets:BATTLE_IDLE_ASSETS.aidan});
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});
+  // Forest Bat (enemy): idle flap on whichever battle slot holds a bat (records only act while the slot's actor is 'forest_bat').
+  for(const selector of ['#bGob img','#normalEnemy1 .prologueSprite img','#normalEnemy2 .prologueSprite img'])BattleIdleMotion.register({context:'normal',actor:'forest_bat',selector,assets:BATTLE_IDLE_ASSETS.forest_bat});
   new MutationObserver(refresh).observe(document.body,{attributes:true,attributeFilter:['class']});
   document.addEventListener('visibilitychange',refresh);reduced.addEventListener('change',refresh);
 })();

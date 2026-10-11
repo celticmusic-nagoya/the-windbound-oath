@@ -34,6 +34,16 @@
       respawn: 'reenter', battle: 'moss_slime',
       art: Object.freeze({dir: 'img/field/monsters/moss_slime/', file: 'moss_slime_walk_{n}.png', frames: 6, w: 260, h: 200, feet: 6, scale: .5, fps: 6, faces: 1})
     }),
+    // Vampiric flyer (battle: drains HP).  Hovers and keeps flapping; quicker than the slime, jumpier, and it tires of the chase sooner than a goblin.
+    // movement 'flyer' currently only changes the drawing (hover + constant flap); it still respects the map collision.
+    forest_bat: Object.freeze({
+      name: 'フォレストバット', movement: 'flyer',
+      speed: 120, wanderSpeed: 55, returnSpeed: 100, detect: 340, chaseMax: 520, touch: 50, leash: 700, lose: 560,
+      wanderRadius: 140, rest: [.6, 1.6],
+      alertTime: .35, engageDelay: .25, reaggro: 2, hop: 8,
+      respawn: 'reenter', battle: 'forest_bat',
+      art: Object.freeze({dir: 'img/field/monsters/forest_bat/', file: 'forest_bat_idle_{n}.png', frames: 4, w: 320, h: 214, feet: 0, scale: .5, fps: 9, faces: 1, always: true, air: 34})
+    }),
     // Hostile and quick: notices from farther away, reacts faster, chases farther - but slower than the player, so distance / terrain shakes it off.
     goblin: Object.freeze({
       name: 'ゴブリン', movement: 'patrol',
@@ -81,12 +91,13 @@
       src = moving ? m.frames[Math.floor(m.clock * a.fps) % a.frames] : m.frames[0];
       if (m.el.dataset.src !== src) { m.el.dataset.src = src; m.el.src = src; }
     }
+    const lift = a && a.air ? a.air + Math.sin(m.clock * 3) * 4 : 0;   // flyers hover above their ground point
     const hop = m.hopT > 0 ? -Math.abs(Math.sin(m.hopT * Math.PI)) * m.t.hop : 0;
     const flip = (a ? a.faces : 1) * m.dir < 0 ? -1 : 1;
-    const sig = Math.round(m.x) + ',' + Math.round(m.y) + ',' + Math.round(hop * 2) + ',' + flip + ',' + src;
+    const sig = Math.round(m.x) + ',' + Math.round(m.y) + ',' + Math.round(lift) + ',' + Math.round(hop * 2) + ',' + flip + ',' + src;
     if (!force && sig === m.shown) return; m.shown = sig;
     const s = m.el.style;
-    s.left = Math.round(m.x - w / 2) + 'px'; s.top = Math.round(m.y - h + pad) + 'px'; s.zIndex = String(Math.round(m.y));
+    s.left = Math.round(m.x - w / 2) + 'px'; s.top = Math.round(m.y - h + pad - lift) + 'px'; s.zIndex = String(Math.round(m.y));
     s.transform = 'translateY(' + hop.toFixed(1) + 'px)' + (flip < 0 ? ' scaleX(-1)' : '');
   }
   function face(m, tx) { if (Math.abs(tx - m.x) > .5) m.dir = tx > m.x ? 1 : -1; }
@@ -153,6 +164,7 @@
         continue;
       }
       think(m, Math.min(sec, .1), P, dP, now);
+      if (m.t.art && m.t.art.always && m.state !== 'engaged') { m.clock += Math.min(sec, .1); m.moving = true; }   // flyers never stop flapping
       draw(m);
     }
   }

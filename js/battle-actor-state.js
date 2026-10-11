@@ -11,6 +11,7 @@
     // Prepared adapter only; current encounters remain Tainted Goblins.
     'normal:goblin': { actor: 'goblin', image: '#bGob img', health: () => [gghp, null] },
     'normal:tainted_goblin': { actor: 'tainted_goblin', image: '#bGob img', health: () => [gghp, null] },
+    'normal:forest_bat': { actor: 'forest_bat', image: '#bGob img', health: () => [gghp, null] },
     'normal:moss_slime': { actor: 'moss_slime', image: '#bGob img', health: () => [gghp, null] },
     'raider:goblin_raider': { actor: 'goblin_raider', image: '#raiderSprite img', health: () => [rbBoss, null] }
   };

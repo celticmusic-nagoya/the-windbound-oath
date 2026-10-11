@@ -83,8 +83,8 @@ with sync_playwright() as p:
     check(ev("MossForest.monsters.map(m=>m.id)")==['a1_slime_pond'],'defeated slime is gone, the other remains')
     ev("forestShow()"); pg.wait_for_timeout(800); check(ev("MossForest.monsters.length")==1,'forestShow() alone does not respawn it')
     check(ev("PrologueProgress.count()")==0 and ev("storyStage")==9,'story progress untouched')
-    ev("MossForest.enter({map:'moss_forest_02_mossy_ravine',spawn:'from_area1'})"); pg.wait_for_timeout(2000)
-    check(ev("MossForest.monsters.length")==0,'other map has no monsters')
+    ev("MossForest.enter({map:'moss_forest_03_ancient_grove',spawn:'from_area2'})"); pg.wait_for_timeout(2000)
+    check(ev("MossForest.monsters.length")==0,'other map (A3) has no monsters')
     ev("MossForest.enter({map:'%s',spawn:'from_lind'})"%A1); pg.wait_for_timeout(2000)
     check(ev("MossForest.monsters.length")==2,'re-entering A1 from another map respawns both slimes')
     # ---- 8) A3 story goblins untouched
