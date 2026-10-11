@@ -26,12 +26,14 @@ with sync_playwright() as p:
     check(not ev("document.getElementById('fieldLetterbox').classList.contains('on')"),'overlook: bars removed afterwards')
     ev("MossForest.teleportFeet(3300,1250)"); pg.wait_for_timeout(300); ev("MossForest.teleportFeet(3800,900)"); pg.wait_for_timeout(800)
     check(not ev("document.getElementById('fieldLetterbox').classList.contains('on')"),'overlook: does not replay on re-entry')
-    # ---- road -> capital (east end) and back
+    # ---- road -> capital (east end) and back (the gate only opens for Liam's party: see m14_capital_gate.py)
+    ev("PartyManager.members.liam.joined=true;FieldTalk.setFlag('capital_gate_passed',true)")
     ev("(a)=>MossForest.enter({map:a[0],spawn:a[1]})",['road_dunvall_capital_01','from_fort']); pg.wait_for_timeout(1000)
     ev("MossForest.goFeet(5520,1800)")
     try: pg.wait_for_function("MossForest.mapId!=='road_dunvall_capital_01'",timeout=60000)
     except Exception: pass
     check(ev("MossForest.mapId")=='royal_capital_00_gate','road east end -> capital south gate')
+    ev("PartyManager.members.liam.joined=false")   # back to 'not recruited yet' for the tavern part
     # ---- tavern + Liam
     ev("(a)=>MossForest.enter({map:a[0],spawn:a[1]})",['fort_in_tavern','from_courtyard']); pg.wait_for_timeout(1500)
     check(ev("!!document.querySelector('.forest-ent[data-asset=\"npc_slot_liam\"]')"),'tavern: Liam is sitting in the corner')

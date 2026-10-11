@@ -279,7 +279,7 @@ m.deco('prop_bench_view', 3960, 860, 70, 18); m.deco('town_lamp_post', 3560, 840
 m.deco('town_cart', 1900, 1740, 120, 30); m.deco('town_hay_stack', 2500, 2050, 120, 40); m.deco('town_flowerbed', 4400, 1500, 100, 26)
 m.zones.append({'id': 'ev_overlook', 'type': 'trigger', 'hook': 'road_overlook', 'shape': {'shape': 'rect', 'x': 3700, 'y': 780, 'w': 320, 'h': 230}, 'once': True})
 m.zones.append({'id': 'ev_overlook_view', 'type': 'interact', 'hook': 'road_overlook_again', 'label': '谷の向こうの王都', 'shape': {'shape': 'circle', 'cx': 3960, 'cy': 830, 'r': 90}})
-m.npc('rd_traveler', '旅の商人', 2150, 1980, 'npc', walk=[[90, 0], [0, 0]]); m.npc('rd_patrol', '巡回の兵士', 800, 1780, 'npc')
+m.npc('rd_gate_guard', '王都の門衛', 5330, 1700, 'npc'); m.npc('rd_traveler', '旅の商人', 2150, 1980, 'npc', walk=[[90, 0], [0, 0]]); m.npc('rd_patrol', '巡回の兵士', 800, 1780, 'npc')
 maps.append(m)
 # 2) 砦の酒場「錆びた角笛」: リアム加入イベント
 m = Map('fort_in_tavern', 'ドゥンヴァル砦　酒場「錆びた角笛」', 'Dunvar Fortress Tavern', '酒場', 1400, 1000, 'ドゥンヴァル砦', 'DUNVAR FORTRESS', '#a98b5c', '#17110d', 'bgm_fort_interior')

@@ -217,6 +217,7 @@
       if(hooks.onVillageExit&&hooks.onVillageExit(t))return;   // hook returns true when it handled/blocked it
       return;
     }
+    if(hooks.onTransition&&hooks.onTransition(t))return;   // story gate: returns true when it blocked / took over the transition
     enter({map:t.toMap,spawn:t.toSpawn,transition:t});
   }
 

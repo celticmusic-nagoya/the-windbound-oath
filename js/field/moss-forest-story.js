@@ -108,6 +108,18 @@
     MossForest.toast(Inventory.describe(got)+(herb?' を摘んだ。':' を手に入れた。')+(keys.length?'（大事なもの）':''));
   }
   function onSymbol(sy){startAttackBattle(sy.field,sy.hp||160);}
+  function onTransition(t){
+    if(t&&t.id==='tr_rd_to_capital'){   // 街道東端 -> 王都: リアム(元・王国調査団)が仲間にいないと門前払い。初回は身元保証の会話の後に入城
+      const liam=typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined);
+      if(!liam){FieldTalk.talk('rd_gate_guard',{source:'forest'});return true;}
+      if(FieldTalk.flag('capital_gate_passed'))return false;
+      const done=e=>{if(!e.detail||e.detail.id!=='rd_gate_guard')return;removeEventListener('field-talk-end',done);MossForestStory.enterMap('capital','from_road');};
+      addEventListener('field-talk-end',done);
+      if(!FieldTalk.talk('rd_gate_guard',{source:'forest'})){removeEventListener('field-talk-end',done);return false;}
+      return true;
+    }
+    return false;
+  }
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns
     if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
@@ -121,7 +133,7 @@
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
-      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,
+      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,
       resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(document.getElementById('fieldLetterbox'))cancelOverlook();if(window.RildeVillage)RildeVillage.onEnter(m);}}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.

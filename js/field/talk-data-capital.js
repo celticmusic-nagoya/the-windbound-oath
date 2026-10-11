@@ -15,7 +15,7 @@ window.TalkDataCapital = Object.freeze({tables: [
     {id: 'f1_qm_a', priority: 10, mode: 'cycle', lines: [{pages: ['補給係「武具ならここだ。兵士向けの実用品ばかりだが、質は保証するぞ。」'],
        choice: {options: [{label: '買い物をする', shop: 'dunvall_arms'}, {label: 'やめておく', reply: '補給係「必要になったらまた来な。」'}]}}]}]},
   {npc: 'f1_gate_guard', entries: [
-    {id: 'f1_gate_a', priority: 10, mode: 'cycle', lines: ['門番「南の門はリルド村への街道、東の門は王都への街道だ。」', '門番「夜は松明の灯りを目印にするといい。」']}]},
+    {id: 'f1_gate_a', priority: 10, mode: 'cycle', lines: ['門番「南の門はリルド村への街道、東の門は王都への街道だ。」', '門番「ただし王都の大城門は、身元の分からぬ辺境の者は門前払いだ。誰か、身元を保証してくれる者を連れていくといい。」', '門番「夜は松明の灯りを目印にするといい。」']}]},
   {npc: 'f2_lookout', entries: [
     {id: 'f2_look_a', priority: 10, mode: 'cycle', lines: ['見張りの兵士「ここからは遠くまで見渡せる。……今日は、静かなものだ。」']}]},
   {npc: 'f3_commander', entries: [
@@ -110,6 +110,24 @@ window.TalkDataCapital = Object.freeze({tables: [
               set: {road_overlook_seen: true}}]}]},
   {npc: 'road_overlook_view', entries: [
     {id: 'road_overlook_again', priority: 10, mode: 'cycle', lines: ['谷の向こうに、王都の城壁と塔が霞んで見える。道はここから、王都へ向かって下っていく。']}]},
+  // ---- 街道東端: 王都への検問。リアム(元・王国調査団)が仲間にいれば通れる
+  {npc: 'rd_gate_guard', entries: [
+    {id: 'rd_gate_pass', priority: 60, mode: 'once', when: {all: [{flag: 'liam_joined'}, {not: {flag: 'capital_gate_passed'}}]},
+     lines: [{pages: ['門衛「止まれ。ここから先は王都カエルディン。身元の分からぬ者を通すわけには……ん？ お前は……」',
+                      'リアム「よう、久しぶりだな。まだ門番をやってたのか。」',
+                      '門衛「リアム！ 王国調査団の……生きていたのか。遺跡調査から戻らなかったと聞いていたぞ。」',
+                      'リアム「見ての通り、ぴんぴんしてるさ。こいつらは俺の連れだ。身元は、元・調査団の俺が保証する。」',
+                      '門衛「調査団の者の保証なら、疑う理由はない。……通れ。ようこそ、王都カエルディンへ。」',
+                      'リアム「助かる。さあ、行こうぜ。」'], set: {capital_gate_passed: true}}]},
+    {id: 'rd_gate_after', priority: 40, mode: 'cycle', when: {flag: 'capital_gate_passed'}, lines: ['門衛「調査団の連れなら話は早い。王都を楽しんでくれ。」']},
+    {id: 'rd_gate_refuse', priority: 10, mode: 'cycle',
+     lines: [{pages: ['門衛「止まれ。ここから先は王都カエルディン。身元の分からぬ辺境の者を、通すわけにはいかん。」',
+                      '門衛「近ごろは辺境から怪しい者が流れ込んでいる。王都の者か、身元を保証できる者はいないのか？」',
+                      'エイダン「待ってください。僕の父は、騎士なんです。リルドの辺境を守る騎士の……息子です。」',
+                      '門衛「騎士の息子？ 笑わせるな。騎士を名乗る辺境の小僧など、毎月のように来る。証になる物はあるのか？」',
+                      'エイダン「それは……。」',
+                      '門衛「ないなら話は終わりだ。身元を保証できる者を連れてこい。さあ、下がれ。」',
+                      'エイダン「（……取り合ってもらえない。砦の酒場で、王都へ戻る連れを探していた青年がいたな。）」']}]}]},
   {npc: 'rd_traveler', entries: [
     {id: 'rd_trav_a', priority: 10, mode: 'cycle', lines: ['旅の商人「王都へ行くのかい？ この丘から見える景色は一見の価値ありだ。急がば回れ、ってね。」', '旅の商人「砦の酒場に、王都へ戻る連れを探してる若いのがいたよ。腕は立つらしい。」']}]},
   {npc: 'rd_patrol', entries: [
@@ -118,7 +136,8 @@ window.TalkDataCapital = Object.freeze({tables: [
   {npc: 'liam', entries: [
     {id: 'liam_intro', priority: 70, mode: 'once', when: {stage: [15, 99]},
      lines: [{pages: ['酒場の隅で、赤いバンダナの青年が古びた地図を広げている。', 'リアム「……ん？ 見ない顔だな。その剣、ただの飾りじゃなさそうだ。」', 'エイダン「あなたは？」',
-                      'リアム「リアム。つい最近まで、王国の遺跡調査員をやってた——今はしがないトレジャーハンターさ。」',
+                      'リアム「リアム。つい最近まで、王国調査団で遺跡調査員をやってた——今はしがないトレジャーハンターさ。」',
+                      'リアム「調査団の元団員は、王都の門でも顔が利く。連れがいれば、検問も素通りさ。」',
                       'リアム「腰の短めの剣と、背中の弓。道中の面倒ごとなら、これで十分さ。」',
                       'リアム「王都へ戻る連れを探してたんだ。最近の街道は物騒でね。……どうだい、俺を連れていかないか？ 足と目には自信がある。」'],
               choice: {options: [{label: '仲間に誘う', reply: ['リアム「決まりだな！ よろしく頼むぜ、エイダン。」', 'フィオナ「よろしくね、リアムさん。」', '（リアムが仲間に加わった！）'], set: {liam_joined: true}, join: 'liam'},

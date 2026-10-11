@@ -68,6 +68,7 @@ with sync_playwright() as p:
     walk_to('tr_f3_to_wall','from_courtyard','fort_dunvall_03_keep','fort_dunvall_02_ramparts')
     walk_to('tr_f2_to_keep','from_courtyard','fort_dunvall_02_ramparts','fort_dunvall_03_keep')
     walk_to('tr_f1_to_capital','from_road','fort_dunvall_01_courtyard','road_dunvall_capital_01')
+    ev("PartyManager.members.liam.joined=true;FieldTalk.setFlag('capital_gate_passed',true)")   # the road gate only opens for Liam's party (tests/moss/m14_capital_gate.py)
     walk_to('tr_rd_to_capital','from_fort','road_dunvall_capital_01','royal_capital_00_gate')
     walk_to('tr_g_to_road','from_road','royal_capital_00_gate','road_dunvall_capital_01')
     walk_to('tr_rd_to_fort','from_capital','road_dunvall_capital_01','fort_dunvall_01_courtyard')
