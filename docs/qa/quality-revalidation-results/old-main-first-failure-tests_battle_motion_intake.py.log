@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/workspace/the-windbound-oath/tests/run_python.py", line 21, in <module>
+    runpy.run_path(path, run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "tests/battle/motion_intake.py", line 5, in <module>
+    from PIL import Image
+ModuleNotFoundError: No module named 'PIL'

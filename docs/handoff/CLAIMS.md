@@ -55,3 +55,11 @@ Claude `work/moss-slime-symbol-encounter` (`f80019e`) → `work/forest-bat-symbo
 旧main `57dc6ae` + Gの全48対象を実行。初回45合格/依存不足3失敗、Pillow/NumPy追加後に3/3再実行合格。未説明の失敗なし。Raider・納品済みmotion・長押し・遷移ゲート・移動速度・クエストを確認。結果は `docs/qa/quality-revalidation-results/`。最新main `b75a805`候補の回帰へ継続。
 
 Codex / `work/codex-quality-main-20261012` / 基準main `b75a805`。G・m6_questテスト修正・報告を `work/codex-quality-revalidation` からmerge。唯一の競合である本ファイルはClaude/main反映記録とCodex追記を双方保持。STATUS: WIP — 全回帰実行中。敵3種はmain反映済みのため旧「未merge」の記録は過去状態。今後のPLAYER QAはCOLLABORATION第6節に従いmain反映後。今回のGは作者による統合可否判断待ちでmainは更新しない。
+
+## Codex最終結果 (2026-10-12)
+
+`work/codex-quality-main-20261012` / 基準main `b75a805582f076c6a8ceb67fd1bf9d5c75769e53` / 検証用merge `c5c3da2`。STATUS: READY — 最新main+Gの全回帰 **51/51合格**、最新候補でm6_quest単独 **10回連続合格**。敵3枝とのcode競合なし（CLAIMS追記のみ双方保持）、長押し・onTransition・速度・Raider・納品済みmotion・ストーリー/クエスト/セーブを維持。最終fetchでもmainの更新なし。
+
+依頼Gは品質修正として新ルールの統合対象にできると判断。統合推奨は元の `65bf6d8` 単独でなく、m6安定化と最新mainを含む本候補。今回mainへmerge/pushは行っておらず、タグも未作成。作者の統合判断待ち。報告と戻し方は `docs/handoff/codex-quality-revalidation-20261012.md`、試験結果は `docs/qa/quality-revalidation-results/`。
+
+残項目: 画像API HTTP429利用上限で生成0枚。王都3出口の受け側JSONなし/TBD維持。Android実機未測定（計測手順・静的バット素材サイズを保存）。PLAYER QAはmain反映後に、敵の探知/追跡、ボア0.6秒予備動作/1.4秒硬直の回避、バット吸血60%、スマホ負荷、長押し/高Hz移動、Raider/motion、クエストを確認。ゲーム側の数値調整・素材置換なし。

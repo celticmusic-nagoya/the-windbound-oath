@@ -8,6 +8,8 @@
 未実装・要確認: 受け側マップJSONとspawnの実装・作者確認後にClaude側で接続。
 STATUS: BLOCKED — RECEIVER MAPS NOT CREATED
 
+最終再確認: 最新main `b75a805` と検証候補 `c5c3da2` でも受け側は未作成。main更新は敵3種と運用資料で、ボアブランチから新しい受け側マップJSONは追加されていない。3出口のTBDと `capital_exits.json` のnullは変わっていない。
+
 ## 報告表
 
 | 既存出口ID | 接続方向 | toMap（受け側map ID） | toSpawn（受け側spawn名） | マップJSONのブランチ上の存在 |
