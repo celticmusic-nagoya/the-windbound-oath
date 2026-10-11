@@ -33,3 +33,7 @@ Codex / `work/codex-quality-revalidation` / G基準 `65bf6d8`、main基準 `57dc
 STATUS: WIP — 最新mainとの統合候補をこのブランチで検証。mainへのmergeは作者承認後。
 Claude `work/moss-slime-symbol-encounter` (`f80019e`) → `work/forest-bat-symbol-encounter` (`3259741`) → `work/leafy-boar-symbol-encounter` (`8baa264`) は積み重ねたPLAYER QA待ちブランチ。既存field-monsters/runtime/story/indexの担当変更は行わず、Gとの共存だけを検証する。
 素材候補は別 `work/codex-art-redelivery-20261012` の `docs/art/` に保存予定。正式採用素材の置換・ゲームへの組み込みなし。
+
+共存実行検証用 `work/codex-quality-symbol-validation` を本検証ブランチから作成予定。`8baa264` を仮統合し、CLAIMSの追記を双方保持して解決する。ゲームコードは担当差分をそのまま保持し、長押し・速度・王都遷移ゲート・m6_quest・敵3種・Raiderの既存テストで確認する。main統合候補とは別ブランチで、PLAYER QA承認済みとは扱わない。
+
+2026-10-12 checkpoint: `f6f08bd` でm6_questのテスト側待機を安定化。修正前4回は今回すべて合格（申告の確率は今回未再現）、修正後10回連続合格。最新main+Gの全回帰は進行中。画像はHTTP429利用上限で0枚（専用報告参照）。王都出口IDは作者回答により未確定/TBD維持。Android実機は未接続・未測定、計測手順を保存（`docs/qa/android-symbol-performance-20261012.md`）。
