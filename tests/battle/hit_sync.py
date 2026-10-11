@@ -9,7 +9,8 @@ fails=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
-orig=open(MAN,'rb').read(); had=os.path.isdir(MOT); tmp=tempfile.mkdtemp()
+orig=open(MAN,'rb').read(); had=os.path.isdir(MOT); tmp=tempfile.mkdtemp(); bak=os.path.join(tempfile.mkdtemp(),'motion')
+if had: shutil.copytree(MOT,bak)   # the repo may ship real motion frames: put them back afterwards
 def battle(pg):
     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1200)
     pg.evaluate("PrologueProgress.seed(0);startAttackBattle('attackGob1',100)"); pg.wait_for_timeout(1500)
@@ -25,6 +26,7 @@ try:
     with sync_playwright() as p:
         b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
         pg.on('pageerror',lambda e:errs.append(str(e)))
+        pg.route('**/img/battle/motion-manifest.json',lambda r:r.fulfill(status=200,content_type='application/json',body='{"base":"img/battle/characters/","motions":{}}'))   # force 'nothing delivered' even when real motions ship
         w0,rows=battle(pg)
         check(rows[0][1]<100 and rows[0][2]!=w0 or rows[1][2]!=w0,'no motion installed: HP bar and logic change at once %s'%rows[:2])
         b.close()
@@ -46,8 +48,6 @@ try:
     check(not errs,'no page errors %s'%errs[:2])
 finally:
     open(MAN,'wb').write(orig)
-    if not had: shutil.rmtree(MOT,ignore_errors=True)
-    else:
-        for f in os.listdir(MOT):
-            if f.startswith('aidan_attack_') : pass
+    shutil.rmtree(MOT,ignore_errors=True)
+    if had: shutil.copytree(bak,MOT)
 print('\nFAILS',len(fails)); sys.exit(1 if fails else 0)

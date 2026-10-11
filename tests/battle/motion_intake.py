@@ -10,7 +10,8 @@ fails=[]
 def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
-orig=open(MAN,'rb').read(); had=os.path.isdir(MOT); tmp=tempfile.mkdtemp()
+orig=open(MAN,'rb').read(); had=os.path.isdir(MOT); tmp=tempfile.mkdtemp(); bak=os.path.join(tempfile.mkdtemp(),'motion')
+if had: shutil.copytree(MOT,bak)   # the repo may ship real motion frames: put them back afterwards
 try:
     idle=Image.open('img/battle/characters/aidan/aidan_attack.png').convert('RGBA')   # canvas differs per state: attack is 1312x1199
     for i in range(6):
@@ -40,9 +41,7 @@ try:
         check(not errs,'0 console errors %s'%errs[:2]); b.close()
 finally:
     open(MAN,'wb').write(orig)
-    if not had: shutil.rmtree(MOT,ignore_errors=True)
-    else:
-        for f in os.listdir(MOT):
-            if f.startswith('aidan_attack_') : os.remove(os.path.join(MOT,f))
+    shutil.rmtree(MOT,ignore_errors=True)
+    if had: shutil.copytree(bak,MOT)
     shutil.rmtree(tmp,ignore_errors=True)
 sys.exit(1 if fails else 0)

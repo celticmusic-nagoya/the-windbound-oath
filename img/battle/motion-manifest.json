@@ -1,5 +1,39 @@
 {
   "_note": "Battle multi-frame motions (see js/battle-motion.js). Empty = every pose stays a single still. Fill with tools/battle/install_motion_frames.py. Key: '<actor>' or '<actor>:<variant>' (e.g. 'aidan:wooden' = 少年剣士の木剣).",
   "base": "img/battle/characters/",
-  "motions": {}
+  "motions": {
+    "aidan": {
+      "attack": {
+        "dir": "aidan/motion/",
+        "pattern": "aidan_attack_{n}.png",
+        "frames": 6,
+        "ms": [
+          90,
+          90,
+          130,
+          70,
+          110,
+          230
+        ],
+        "hitFrame": 4,
+        "hold": "last"
+      },
+      "skill": {
+        "dir": "aidan/motion/",
+        "pattern": "aidan_skill_{n}.png",
+        "frames": 7,
+        "ms": [
+          110,
+          110,
+          120,
+          140,
+          90,
+          160,
+          250
+        ],
+        "hitFrame": 4,
+        "hold": "last"
+      }
+    }
+  }
 }
