@@ -39,3 +39,5 @@ Claude `work/moss-slime-symbol-encounter` (`f80019e`) → `work/forest-bat-symbo
 2026-10-12 checkpoint: `f6f08bd` でm6_questのテスト側待機を安定化。修正前4回は今回すべて合格（申告の確率は今回未再現）、修正後10回連続合格。最新main+Gの全回帰は進行中。画像はHTTP429利用上限で0枚（専用報告参照）。王都出口IDは作者回答により未確定/TBD維持。Android実機は未接続・未測定、計測手順を保存（`docs/qa/android-symbol-performance-20261012.md`）。
 
 依頼Cの3出口のtoMap/toSpawnとJSON存在確認は `docs/handoff/codex-capital-exit-receivers-20261012.md`。取得済み全リモートrefで受け側JSON未作成を確認。TBD/nullを維持し、マップJSON作成後に接続する。
+
+2026-10-12更新: fetchでmain `b75a805`（敵3種merge済み、新運用第6節）を確認。`work/codex-quality-symbol-validation` は未作成のまま取り止め、最新mainから `work/codex-quality-main-20261012` を作成してGと本検証差分をmergeし、全回帰を再実行する。対象は本行の担当範囲・CLAIMSの双方追記解決・検証記録。旧mainの結果も保持。作者の依頼は統合可否の判断であり、この段階でmain更新・タグ作成・deployはしない。PLAYER QAはmain反映後という新ルールを最終報告に反映する。
