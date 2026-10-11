@@ -1,0 +1,27 @@
+ok   validator rejects RGB frames and numbering gaps
+ok   caretaker: 4 frames [229, 402]
+ok   elder_man: 4 frames [256, 403]
+ok   elder_woman: 4 frames [220, 399]
+ok   farmer_male: 4 frames [714, 973]
+ok   innkeeper: 4 frames [272, 396]
+ok   young_man: 4 frames [183, 397]
+ok   young_woman: 4 frames [205, 400]
+bounds written for caretaker, elder_man, elder_woman, farmer_male, innkeeper, young_man, young_woman
+
+ok   install of 7 waiting NPCs + farmer_male succeeds
+ok   check_walk_frames: nothing waiting after intake
+ok   young_man: runtime built the 4-frame walk sequence ['young_man_walk_01', 'young_man_walk_02', 'young_man_walk_03', 'young_man_walk_04']
+ok   young_man: walking cycles through 5 frames ['young_man_idle.png', 'young_man_walk_01.png', 'young_man_walk_02.png', 'young_man_walk_03.png']
+ok   young_woman: runtime built the 4-frame walk sequence ['young_woman_walk_01', 'young_woman_walk_02', 'young_woman_walk_03', 'young_woman_walk_04']
+ok   young_woman: walking cycles through 5 frames ['young_woman_idle.png', 'young_woman_walk_01.png', 'young_woman_walk_02.png', 'young_woman_walk_03.png']
+ok   elder_man: runtime built the 4-frame walk sequence ['elder_man_walk_01', 'elder_man_walk_02', 'elder_man_walk_03', 'elder_man_walk_04']
+ok   elder_man: walking cycles through 5 frames ['elder_man_idle.png', 'elder_man_walk_01.png', 'elder_man_walk_02.png', 'elder_man_walk_03.png']
+ok   elder_woman: runtime built the 4-frame walk sequence ['elder_woman_walk_01', 'elder_woman_walk_02', 'elder_woman_walk_03', 'elder_woman_walk_04']
+ok   elder_woman: walking cycles through 5 frames ['elder_woman_idle.png', 'elder_woman_walk_01.png', 'elder_woman_walk_02.png', 'elder_woman_walk_03.png']
+ok   innkeeper: runtime built the 4-frame walk sequence ['innkeeper_walk_01', 'innkeeper_walk_02', 'innkeeper_walk_03', 'innkeeper_walk_04']
+ok   innkeeper: walking cycles through 5 frames ['innkeeper_idle.png', 'innkeeper_walk_01.png', 'innkeeper_walk_02.png', 'innkeeper_walk_03.png']
+ok   caretaker: runtime built the 4-frame walk sequence ['caretaker_walk_01', 'caretaker_walk_02', 'caretaker_walk_03', 'caretaker_walk_04']
+ok   caretaker: walking cycles through 5 frames ['caretaker_idle.png', 'caretaker_walk_01.png', 'caretaker_walk_02.png', 'caretaker_walk_03.png']
+ok   farmer_male: runtime built the 4-frame walk sequence ['farmer_male_walk_01', 'farmer_male_walk_02', 'farmer_male_walk_03', 'farmer_male_walk_04']
+ok   farmer_male: walking cycles through 4 frames ['farmer_male_walk_03.png', 'farmer_male_walk_04.png', 'farmer_male_walk_01.png', 'farmer_male_walk_02.png']
+ok   0 console errors []

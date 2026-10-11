@@ -1,0 +1,26 @@
+ok   5 battle stills load on one canvas [[480, 400]]
+ok   attack / damage / ko motions registered
+ok   11 field frames load
+ok   road has 2 leafy boars on walkable ground ['rd_boar_north', 'rd_boar_south']
+ok   boars are far from both road exits
+ok   found a prop-free column for the dash tests (x=2160)
+ok   alert -> windup -> rush; sidestepping the locked dash avoids the fight ['wander', 'alert', 'windup', 'rush', 'recover', 'return']
+ok   dash is a straight line (max deviation 0.0 px)
+ok   dash speed ~280px/s (280)
+ok   dash length <= ~460 (457)
+ok   after recovering it walks home and idles ['wander', 'alert', 'windup', 'rush', 'recover', 'return', 'wander']
+ok   several distinct poses were drawn
+ok   never inside a blocker
+ok   dash into the cliff stops early (['wander', 'alert', 'windup', 'rush', 'recover'], 115 px) and never enters it
+ok   rush contact starts the existing battle once (leafyBoar1, 1)
+ok   one leafy boar (70 HP) [['leafy_boar', 70, 70]]
+ok   enemy name shows リーフィボア
+ok   idle frames advance [0, 1, 2]
+ok   no bat idle canvas leaks into the boar battle
+ok   low-HP still is shown at <=30% HP
+ok   result: EXP +9, GOLD +5
+ok   back in the forest; the boar is gone
+ok   forestShow() does not respawn it
+ok   story progress untouched
+ok   re-entering the road respawns the defeated boar
+ok   0 console errors []

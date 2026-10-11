@@ -9,7 +9,9 @@
   // Consumers multiply per-frame steps by frameScale, so 60/120/144 Hz all move at the same px/s.
   let frameScale=1,lastNow=null;
   function tickClock(now) {
-    if(lastNow!==null)frameScale=Math.max(.1,Math.min(3,Math.min(now-lastNow,100)/(1000/60)));
+    // Preserve a positive scale for consumers' `|| 1` fallback without imposing
+    // a 600 Hz speed floor on uncapped browsers or duplicate rAF timestamps.
+    if(lastNow!==null)frameScale=Math.max(Number.EPSILON,Math.min(3,Math.min(now-lastNow,100)/(1000/60)));
     lastNow=now;
   }
   if(typeof requestAnimationFrame==='function'){const loop=now=>{tickClock(now);requestAnimationFrame(loop);};requestAnimationFrame(loop);}

@@ -12,20 +12,46 @@ def run(args):
         pg.evaluate("devJump('training')"); pg.wait_for_timeout(500)
         out['fps_v']=pg.evaluate("new Promise(r=>{let n=0;const t0=performance.now();const f=()=>{n++;performance.now()-t0<1000?requestAnimationFrame(f):r(n)};requestAnimationFrame(f)})")
         pg.evaluate("""(()=>{for(let y=200;y<1800;y+=20)for(let x=600;x<2400;x+=20){let ok=true;for(let d=0;d<=340&&ok;d+=10)if(blockedWorld(x-d,y))ok=false;if(ok){px=x;py=y;target=null;return}}})()"""); pg.wait_for_timeout(200)
-        x0=pg.evaluate("px"); pg.evaluate("target=FieldNavigation.destination(px-300,py,blockedWorld)"); pg.wait_for_timeout(1000)
+        # Measure before arrival: reaching a 300 px destination after 1 s would
+        # also pass if an uncapped browser moved much too quickly.
+        x0=pg.evaluate("px"); pg.evaluate("target=FieldNavigation.destination(px-300,py,blockedWorld)"); pg.wait_for_timeout(500)
         out['village']=abs(pg.evaluate("px")-x0)
         # forest
-        pg.evaluate("devJump('forest')"); pg.wait_for_function("MossForest.active",timeout=20000); pg.wait_for_timeout(800); pg.evaluate("closeDialogue()")
+        pg.evaluate("devJump('forest')"); pg.wait_for_function("MossForest.active&&!MossForest.busy",timeout=60000); pg.wait_for_timeout(800); pg.evaluate("closeDialogue()")
         f0=pg.evaluate("MossForest.feet"); pg.evaluate("MossForest.goFeet(%d,%d)"%(f0['x']+2000,f0['y']-200)); pg.wait_for_timeout(2000)
         f1=pg.evaluate("MossForest.feet"); out['forest']=((f1['x']-f0['x'])**2+(f1['y']-f0['y'])**2)**.5/2
+        # Held keyboard uses the same dt-normalised runtime as pointer movement.
+        corridor=pg.evaluate("""(()=>{
+          const map=MossForest.map,zones=[...map.eventZones,...map.transitions];
+          for(let y=600;y<map.world.height-600;y+=40)for(let x=600;x<map.world.width-1000;x+=40){
+            let clear=true;
+            for(let d=0;d<=380&&clear;d+=5){
+              if(MossForest.blocked(x+d,y))clear=false;
+              for(const zone of zones){const r=zone.shape||zone.rect;
+                if(r&&x+d>=r.x-100&&x+d<=r.x+r.w+100&&y>=r.y-100&&y<=r.y+r.h+100)clear=false;
+              }
+            }
+            if(clear)return [x,y];
+          }
+          return null;
+        })()""")
+        assert corridor, 'No clear keyboard test corridor'
+        pg.evaluate("([x,y])=>{MossForest.teleportFeet(x,y);closeDialogue()}",corridor)
+        k0=pg.evaluate("MossForest.feet")
+        pg.keyboard.down('ArrowRight'); pg.wait_for_timeout(1000); pg.keyboard.up('ArrowRight')
+        k1=pg.evaluate("MossForest.feet")
+        out['keyboard']=((k1['x']-k0['x'])**2+(k1['y']-k0['y'])**2)**.5
         out['fps_f']=pg.evaluate("new Promise(r=>{let n=0;const t0=performance.now();const f=()=>{n++;performance.now()-t0<1000?requestAnimationFrame(f):r(n)};requestAnimationFrame(f)})")
+        assert not errs, 'JavaScript exceptions: %s' % errs
         b.close()
     return out
 a=run([]); b=run(['--disable-frame-rate-limit','--disable-gpu-vsync'])
 print('default ',a); print('uncapped',b)
 vr=b['village']/max(a['village'],1); print('village ratio %.2f'%vr)
-assert 0.85<=vr<=1.15 and a['village']>200, 'village speed'
+assert 0.85<=vr<=1.15 and abs(a['village']-150)<30, 'village speed'
 ratio=b['forest']/a['forest']; print('forest speed ratio uncapped/default = %.2f (fps %s vs %s)'%(ratio,b['fps_f'],a['fps_f']))
-ok=0.85<=ratio<=1.15 and abs(a['forest']-300)<45
+kr=b['keyboard']/max(a['keyboard'],1)
+print('keyboard ratio %.2f, distances %s / %s'%(kr,a['keyboard'],b['keyboard']))
+ok=0.85<=ratio<=1.15 and abs(a['forest']-300)<45 and 0.85<=kr<=1.15 and a['keyboard']>200
 print('ok   ' if ok else 'FAIL ','forest px/s %.0f (default) vs %.0f (uncapped)'%(a['forest'],b['forest']))
 sys.exit(0 if ok else 1)
