@@ -25,3 +25,11 @@ Claude / `work/claude-port-quality-foundation` / 基準main `9b17d06`。
 共存確認: 長押し移動(`moss-forest-runtime.js` の hold / `hooks.onTransition`)は `FieldMovement.frameScale` を直接参照せず、`FieldNavigation.follow` を使うため変更なし。m14_hold_move と m55_hz が両方合格。Raider修正・納品戦闘モーションも維持。
 全回帰(`./tests/run_all.sh`, 最新main+移植): **47件中46件合格**。`tests/lind/walk_intake.py` は全件実行時のみ一度失敗(負荷時のタイミング依存)し、単独再実行で合格。m6_quest は合格(Codexの修正による)。
 STATUS: READY — 作者承認後に main へ。
+
+## Codex: 依頼G再検証・m6_quest安定化 (2026-10-12)
+
+Codex / `work/codex-quality-revalidation` / G基準 `65bf6d8`、main基準 `57dc6ae`。
+対象: `tests/moss/m6_quest.py`、必要な回帰テスト、`docs/handoff/CLAIMS.md`、専用検証報告・QA結果。
+STATUS: WIP — 最新mainとの統合候補をこのブランチで検証。mainへのmergeは作者承認後。
+Claude `work/moss-slime-symbol-encounter` (`f80019e`) → `work/forest-bat-symbol-encounter` (`3259741`) → `work/leafy-boar-symbol-encounter` (`8baa264`) は積み重ねたPLAYER QA待ちブランチ。既存field-monsters/runtime/story/indexの担当変更は行わず、Gとの共存だけを検証する。
+素材候補は別 `work/codex-art-redelivery-20261012` の `docs/art/` に保存予定。正式採用素材の置換・ゲームへの組み込みなし。
