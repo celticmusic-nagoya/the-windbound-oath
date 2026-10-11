@@ -43,7 +43,9 @@ STATUS: WIP — REGRESSION IN PROGRESS
 
 すべて `tests/run_all.sh` を使い、ポート8765はrunnerが起動・終了する。初回全回帰でPillow/NumPy不足により最初の3件が失敗したため、依存を追加して該当テストを再実行する。これらをアプリの不具合と数えないが、再実行前に合格とも扱わない。
 
-全回帰の確定値は完了後に記入する。
+旧main `57dc6ae` + G + `f6f08bd`：全48件実行、45件合格・3件はPillow/NumPy不足で失敗。依存追加後の3件再実行は3/3合格。全48対象に合格結果がある。初回の失敗結果も削除せず `docs/qa/quality-revalidation-results/old-main-full.tsv` と `old-main-dependency-retest.tsv` に保存。
+
+`quest-10-results.tsv` は10試行の終了コード。runnerは同じテスト名のログを上書きするため、`quest-10-last-run.log` は10回目のみのログであり全試行のtraceではない。最新main `b75a805` は途中で敵3種を統合したため、旧基準の合格だけで統合可能とは判定せず、最新main候補で再検証する。
 
 ## 別作業・PLAYER QA
 

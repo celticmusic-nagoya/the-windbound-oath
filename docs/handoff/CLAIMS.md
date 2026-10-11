@@ -41,3 +41,5 @@ Claude `work/moss-slime-symbol-encounter` (`f80019e`) → `work/forest-bat-symbo
 依頼Cの3出口のtoMap/toSpawnとJSON存在確認は `docs/handoff/codex-capital-exit-receivers-20261012.md`。取得済み全リモートrefで受け側JSON未作成を確認。TBD/nullを維持し、マップJSON作成後に接続する。
 
 2026-10-12更新: fetchでmain `b75a805`（敵3種merge済み、新運用第6節）を確認。`work/codex-quality-symbol-validation` は未作成のまま取り止め、最新mainから `work/codex-quality-main-20261012` を作成してGと本検証差分をmergeし、全回帰を再実行する。対象は本行の担当範囲・CLAIMSの双方追記解決・検証記録。旧mainの結果も保持。作者の依頼は統合可否の判断であり、この段階でmain更新・タグ作成・deployはしない。PLAYER QAはmain反映後という新ルールを最終報告に反映する。
+
+旧main `57dc6ae` + Gの全48対象を実行。初回45合格/依存不足3失敗、Pillow/NumPy追加後に3/3再実行合格。未説明の失敗なし。Raider・納品済みmotion・長押し・遷移ゲート・移動速度・クエストを確認。結果は `docs/qa/quality-revalidation-results/`。最新main `b75a805`候補の回帰へ継続。
