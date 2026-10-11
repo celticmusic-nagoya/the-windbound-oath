@@ -128,6 +128,13 @@
     MossForest.toast('草むらが揺れた……！');
     setTimeout(()=>{if(MossForest.active&&!MossForest.busy)startAttackBattle('mossSlime'+n,56*n);},450);
   }
+  // Field monsters (symbol encounters, FieldMonsters): the touched monster's `battle` picks the fight. Returns true when a battle started.
+  function onMonster(m){
+    const B={moss_slime:['mossSlime',56],forest_bat:['forestBat',48],leafy_boar:['leafyBoar',70]}[m.battle];   // battle kind -> startAttackBattle id prefix, HP per enemy
+    if(!B||typeof startAttackBattle!=='function'||attackBattleBusy)return false;
+    const n=Math.max(1,Math.min(3,m.group|0||1));
+    startAttackBattle(B[0]+n,B[1]*n);return true;
+  }
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns
     if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
@@ -141,7 +148,7 @@
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
-      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,onEncounter,canEncounter,
+      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,onEncounter,canEncounter,onMonster,
       resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(document.getElementById('fieldLetterbox'))cancelOverlook();if(window.RildeVillage)RildeVillage.onEnter(m);}}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.

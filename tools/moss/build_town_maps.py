@@ -17,7 +17,7 @@ WEATHER = {
 class Map:
     def __init__(s, mid, ja, en, area_ja, w, h, region_ja, region_en, floor, ground='#7d8a5a', bgm='bgm_town'):
         s.id, s.ja, s.en, s.area_ja, s.w, s.h = mid, ja, en, area_ja, w, h
-        s.region = (region_ja, region_en); s.rects = []; s.fills = []; s.spawns = {}; s.trans = []; s.nodes = []; s.tre = []; s.props = []; s.walkers = []; s.zones = []; s.paths = []
+        s.region = (region_ja, region_en); s.rects = []; s.fills = []; s.spawns = {}; s.trans = []; s.nodes = []; s.tre = []; s.props = []; s.walkers = []; s.monsters = []; s.zones = []; s.paths = []
         s.floor = floor; s.ground = ground; s.bgm = bgm; s.seq = 0; s.wind = 0.2; s.card_area = None
     def nid(s, p): s.seq += 1; return '%s_%02d' % (p, s.seq)
     def wall(s, x, y, w, h, color='#5b5561', tag='wall', pattern='brick'):
@@ -81,7 +81,7 @@ class Map:
                 'terrain': {'base': {'tiles': ['gnd_grass_sunny_01', 'gnd_grass_sunny_02'], 'surface': 'grass', 'seed': zlib.crc32(s.id.encode()) % 9000}, 'baseColor': s.ground,
                             'patches': [], 'openAreas': [], 'paths': s.paths, 'waters': [], 'cliffs': [],
                             'fills': [dict({'id': 'fill_%d' % i, 'color': k[0], 'rects': r}, **({'pattern': k[1]} if k[1] else {})) for i, (k, r) in enumerate(order)]},
-                'props': s.props, 'walkers': s.walkers, 'scatter': [], 'effects': [],
+                'props': s.props, 'walkers': s.walkers, **({'monsters': s.monsters} if s.monsters else {}), 'scatter': [], 'effects': [],
                 'collision': {'bounds': {'x': 0, 'y': 0, 'w': float(s.w), 'h': float(s.h)}, 'edgeBlockers': edges, 'blockers': blockers, 'presets': {}},
                 'transitions': s.trans, 'encounterZones': [], 'treasurePoints': s.tre, 'eventZones': zones, 'cameraFocus': [],
                 'ambience': {'grade': {'id': 'town_day', 'tint': '#FFF2D0', 'tintStrength': 0.04, 'brightness': 1.02, 'saturation': 1.0},
@@ -279,6 +279,7 @@ m.deco('prop_bench_view', 3960, 860, 70, 18); m.deco('town_lamp_post', 3560, 840
 m.deco('town_cart', 1900, 1740, 120, 30); m.deco('town_hay_stack', 2500, 2050, 120, 40); m.deco('town_flowerbed', 4400, 1500, 100, 26)
 m.zones.append({'id': 'ev_overlook', 'type': 'trigger', 'hook': 'road_overlook', 'shape': {'shape': 'rect', 'x': 3700, 'y': 780, 'w': 320, 'h': 230}, 'once': True})
 m.zones.append({'id': 'ev_overlook_view', 'type': 'interact', 'hook': 'road_overlook_again', 'label': '谷の向こうの王都', 'shape': {'shape': 'circle', 'cx': 3960, 'cy': 830, 'r': 90}})
+m.monsters += [{'id': 'rd_boar_north', 'type': 'leafy_boar', 'x': 1650, 'y': 1560}, {'id': 'rd_boar_south', 'type': 'leafy_boar', 'x': 3150, 'y': 2010}]   # field monsters (FieldMonsters): 街道ぞいの茂みに棲むリーフィボア。道そのものは塞がない
 m.npc('rd_gate_guard', '王都の門衛', 5330, 1700, 'npc'); m.npc('rd_traveler', '旅の商人', 2150, 1980, 'npc', walk=[[90, 0], [0, 0]]); m.npc('rd_patrol', '巡回の兵士', 800, 1780, 'npc')
 maps.append(m)
 # 2) 砦の酒場「錆びた角笛」: リアム加入イベント

@@ -19,9 +19,9 @@
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css">
 <link rel="stylesheet" href="css/field-collision-debug.css">
-<script src="js/assets.js?v=20261011s"></script>
+<script src="js/assets.js?v=20261011v"></script>
 <script src="js/battle-motion.js"></script>
-<script src="js/battle-actor-state.js?v=20261011s"></script>
+<script src="js/battle-actor-state.js?v=20261011v"></script>
 
 <style id="v0621-dev-command-style">
 .dev-only-command{border-color:#b88b45!important;color:#e6c987!important;background:rgba(70,38,12,.30)!important;font-size:.78rem!important}
@@ -758,7 +758,7 @@ function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
  if(attackBattleBusy||PrologueProgress.cleared(id))return;
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
- if(id.startsWith('forestGob')||id.startsWith('mossSlime'))forestHideScene();
+ if(id.startsWith('forestGob')||id.startsWith('mossSlime')||id.startsWith('forestBat')||id.startsWith('leafyBoar'))forestHideScene();
  document.body.classList.remove('raiderBattleMode');
  document.body.classList.add('battleMode','normalBattleMode');
  $('#attackBattle').style.display='block';
@@ -767,7 +767,7 @@ function startAttackBattle(id,hp){
  updateNormalCommands();
  updateNormalPartyHud();
  PrologueCombat.beginNormal(id);
- showBattleBanner(id.startsWith('mossSlime')?'モススライムが現れた！':id==='attackGob1'?atkT('banner','gob1'):atkT('banner','gob'),1000);
+ showBattleBanner(id.startsWith('mossSlime')?'モススライムが現れた！':id.startsWith('forestBat')?'フォレストバットが現れた！':id.startsWith('leafyBoar')?'リーフィボアが現れた！':id==='attackGob1'?atkT('banner','gob1'):atkT('banner','gob'),1000);
  updateAttackBattle();
 }
 function updateAttackBattle(){
@@ -810,12 +810,14 @@ function finishAttackBattle(){
  setTimeout(()=>{
    if(completion!==PrologueCombat.generation)return;
    const e=$('#'+defeated);if(e){e.hidden=true;e.style.display='none'}
-   if(defeated&&defeated.startsWith('mossSlime')){   // random Moss Forest encounter: not a story battle (no progress record, no story flags)
+   if(defeated&&/^(mossSlime|forestBat|leafyBoar)\d$/.test(defeated)){   // random Moss Forest encounter: not a story battle (no progress record, no story flags)
      const n=Math.max(1,+defeated.slice(-1)||1);
      hideNormalPartyBattle();
-     showBattleResult(7*n,3*n,()=>{
+     const rw=defeated.startsWith('forestBat')?[10,4]:defeated.startsWith('leafyBoar')?[9,5]:[7,3];   // per enemy EXP/GOLD: slime 7/3, bat 10/4, boar 9/5
+     showBattleResult(rw[0]*n,rw[1]*n,()=>{
        $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
        if(gobBox)gobBox.classList.remove('taintedKO');
+       if(window.MossForest)MossForest.monsterResult(true);   // the field monster that started this fight is gone (until the map is entered again)
        forestShow();attackBattleBusy=false;
      });
      return;
@@ -1832,10 +1834,10 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <link rel="stylesheet" href="css/battle-target.css">
 <script src="js/battle-target-selector.js"></script>
 <script src="js/battle-action-targets.js"></script>
-<link rel="stylesheet" href="css/prologue-combat.css?v=20261011s">
+<link rel="stylesheet" href="css/prologue-combat.css?v=20261011v">
 <script src="js/battle-status.js"></script>
 <script src="js/battle-critical.js"></script>
-<script src="js/prologue-combat.js?v=20261011s"></script>
+<script src="js/prologue-combat.js?v=20261011v"></script>
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
 <script src="js/prologue-dev.js?v=20261011g"></script>
@@ -1848,9 +1850,10 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/field-vista.js"></script>
 <script src="js/field/field-bgm.js"></script>
 <script src="js/field/field-walkers.js"></script>
+<script src="js/field/field-monsters.js?v=20261011v"></script>
 <script src="js/field/fiona-field-assets.js?v=20261011c"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261011s"></script>
-<script src="js/field/moss-forest-story.js?v=20261011s"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261011t"></script>
+<script src="js/field/moss-forest-story.js?v=20261011v"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js"></script>
@@ -1907,5 +1910,5 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/battle-presentation.js"></script>
 <link rel="stylesheet" href="css/battle-idle-motion.css">
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
-<script src="js/battle-idle-motion.js"></script>
+<script src="js/battle-idle-motion.js?v=20261011v"></script>
 </body></html>

@@ -72,6 +72,46 @@
         ],
         "hold": "last"
       }
+    },
+    "leafy_boar": {
+      "attack": {
+        "dir": "../enemies/leafy_boar/motion/",
+        "pattern": "leafy_boar_attack_{n}.png",
+        "frames": 4,
+        "ms": [
+          110,
+          110,
+          120,
+          200
+        ],
+        "hitFrame": 4,
+        "hold": "last"
+      },
+      "damage": {
+        "dir": "../enemies/leafy_boar/motion/",
+        "pattern": "leafy_boar_damage_{n}.png",
+        "frames": 4,
+        "ms": [
+          80,
+          90,
+          110,
+          160
+        ],
+        "hold": "last"
+      },
+      "ko": {
+        "dir": "../enemies/leafy_boar/motion/",
+        "pattern": "leafy_boar_ko_{n}.png",
+        "frames": 5,
+        "ms": [
+          110,
+          120,
+          140,
+          160,
+          260
+        ],
+        "hold": "last"
+      }
     }
   }
 }

@@ -18,5 +18,17 @@ body:not(.developmentMode) #devBtn,body:not(.developmentMode) #devPanel,body:not
 
 /* Moss slimes: small, round monsters - no corruption aura, art scaled up inside the goblin-sized boxes (the PNG has wide transparent margins) */
 body.slimeBattle #bGob:after{display:none!important}
-body.slimeBattle #bGob img{transform:scale(1.55);transform-origin:50% 100%}
+body.slimeBattle #bGob img{transform:scale(2.3);transform-origin:50% 100%}
 body.slimeBattle #attackBattle .prologueSprite img{transform:scale(1.9);transform-origin:50% 100%}
+
+/* Forest bats: wide-winged flyers drawn inside goblin-sized boxes (art has big transparent margins) - no corruption aura, enlarged; the idle canvas and the still img share the scale */
+body.batBattle #bGob:after{display:none!important}
+body.batBattle #bGob img,body.batBattle #bGob .battle-idle-canvas{transform:scale(2.15);transform-origin:50% 62%}
+body.batBattle #attackBattle .prologueSprite img,body.batBattle #attackBattle .prologueSprite .battle-idle-canvas{transform:scale(2.15);transform-origin:50% 62%}
+/* the enemy slot's img rule is !important (style.css): hide the still while the idle canvas is drawing the flap */
+body.normalBattleMode #bGob.battle-idle-active>img:first-of-type{visibility:hidden!important}
+
+/* Leafy boars: the sheet art is a squat quadruped - enlarged inside goblin-sized boxes, no corruption aura */
+body.boarBattle #bGob:after{display:none!important}
+body.boarBattle #bGob img,body.boarBattle #bGob .battle-idle-canvas{transform:scale(2.3);transform-origin:50% 100%}
+body.boarBattle #attackBattle .prologueSprite img,body.boarBattle #attackBattle .prologueSprite .battle-idle-canvas{transform:scale(2.3);transform-origin:50% 100%}
