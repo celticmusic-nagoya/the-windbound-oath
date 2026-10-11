@@ -27,5 +27,12 @@ STATUS: PLAYER QA待ち。作者承認までmainへmergeしない。モススラ
 Claude / `work/forest-bat-symbol-encounter`（上記ブランチの上に積む）: フォレストバット（吸血・飛行シンボル、A2）。`work/leafy-boar-symbol-encounter`（さらにその上）: リーフィボア（突進シンボル、街道）。いずれもPLAYER QA待ち・main未merge。
 
 ## main反映記録
+
+## Codex: 依頼G承認後の統合 (2026-10-12)
+
+作者が依頼Gを承認。Codex / `work/codex-quality-approved-20261012` / 基準main `c4c536aad49bfa6d94ffbf79b951767627ee10ea`。
+対象: 承認済み `work/codex-quality-main-20261012` (`8465915`) のG/m6_quest修正・CLAIMS/報告/QA結果。CLAIMSの競合は双方の記録を保持。新しい戦闘演出・A1/A2配置・納品素材はそのまま保持。
+STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollbackタグを直前mainへ付けて `--no-ff` でmainへ通常pushする。force pushなし。
+
 - 2026-10-12 Claude: フィールドモンスター一式（スライム/ゴブリン型AI・フォレストバット・リーフィボア）をmainへ `--no-ff` merge。ロールバック: タグ `rollback/before-field-monsters-20261012`（= 57dc6ae）、または該当マージコミットを `git revert -m 1`。PLAYER QA待ち。
 - 2026-10-12 Claude: `work/battle-feel-and-monster-layout` — 戦闘演出（近接は選択敵位置へ飛び込み／フィオナは少し前進+魔弾／ルーの飛び回り+浮き沈み `js/battle-lou-flight.js`／カットイン `battle-presentation.js` durations 1250/2000ms・勝利ポーズ `VICTORY_POSE_MS=2400`）と、A1（スライム2・ボア2・ゴブリン2）／A2（スライム2・ボア2・バット2）配置、通常ゴブリンのフィールド戦闘接続（`fieldGobN`）。対象: index.html（WBActors v064/v066・finish）、js/battle-presentation.js、js/prologue-combat.js、js/field/moss-forest-story.js、css/battle-presentation.css、A1/A2 JSON、tests/moss/m16_battle_feel.py。
