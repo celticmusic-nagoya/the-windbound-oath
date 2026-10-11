@@ -20,6 +20,7 @@
 | node | `anc_shrine_frag_02` | placeholder | `-` | P2 | moss_forest_03_ancient_grove |
 | node | `anc_stone_marker_old_01` | placeholder | `-` | P2 | moss_forest_02_mossy_ravine |
 | node | `fx_waterfall_01` | placeholder | `-` | P2 | moss_forest_02_mossy_ravine |
+| node | `npc_slot_npc` | placeholder | `-` | P1 | road_dunvall_capital_01 |
 | node | `prop_bridge_post_01` | placeholder | `-` | P1 | moss_forest_02_mossy_ravine |
 | node | `prop_bridge_wood_01` | placeholder | `-` | P1 | moss_forest_02_mossy_ravine |
 | node | `prop_campfire_cold_01` | placeholder | `-` | P2 | moss_forest_01_sunlit_path, moss_forest_03_ancient_grove |
@@ -109,7 +110,7 @@
 | layer | `veg_reeds_01` | placeholder | `-` | P2 | moss_forest_01_sunlit_path, moss_forest_02_mossy_ravine |
 | layer | `veg_reeds_02` | placeholder | `-` | P2 | moss_forest_01_sunlit_path, moss_forest_02_mossy_ravine |
 
-集計（node＋layerのasset ID単位）: standin=48, placeholder=51
+集計（node＋layerのasset ID単位）: standin=48, placeholder=52
 
 ## 手続き生成素材（追加の制作候補）
 
