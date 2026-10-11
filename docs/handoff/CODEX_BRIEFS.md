@@ -62,3 +62,13 @@
 ## 優先順位の提案
 1. 依頼G（基盤・短期）→ 2. 依頼A+B（リアムを戦力化）→ 3. 依頼C（地区マップ）→ 4. 依頼D（地下・モルウェン）→ 5. 依頼E/F/H（継続）。
 Claude 側は並行して: 台詞/フラグ/導線の接続、TBD 出口の接続、長老の本実装、襲撃の戦闘・目的の FieldTalk 化、バイブル整合の維持。
+
+---
+## 付録: 王都の未接続出口の接続手順（依頼C の受け側マップ確定後）
+出口は `tools/moss/capital_exits.json` で管理（今は全て null = TBD のまま）。
+| 出口ID | 場所 | 行き先（想定） | 戻りで使う spawn（既存） |
+|---|---|---|---|
+| `tr_r1_to_craft` | 市場の東端 | 職人地区（ブラムの工房側） | 市場 `from_craft` (4400,1500 左向き) |
+| `tr_r2_to_east` | 広場の東端 | 騎士団/大聖堂/魔法学術地区への分岐 | 広場 `from_east` (3640,1700 左向き) |
+| `tr_r2_castle_gate` | 広場北の王城門 | 王城（前庭/高台） | 広場 `from_castle` |
+手順: Codex が受け側マップID・spawn名を共有 → Claude が json の null を `{"toMap": "...", "toSpawn": "..."}` に置換 → `python3 tools/moss/build_town_maps.py`（接続先の `data/maps/<id>.json` と spawn の存在を検証、無ければ exit 1）。受け側マップ側の「戻りドア」は Codex が上記の既存 spawn へ `toMap/toSpawn` を張る。

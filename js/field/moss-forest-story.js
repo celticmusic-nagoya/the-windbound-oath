@@ -83,6 +83,7 @@
       if(!FieldTalk.talk('road_overlook',{source:'forest'}))done();
     });
   }
+  addEventListener('field-talk-end',e=>{const d=e.detail||{};if(d.entry==='f3_cmd_elder'){setObj('王都カエルディンへ向かい、騎士団へ報告しよう');if(typeof popObjective==='function')popObjective();if(typeof renderJournal==='function')renderJournal();}});
   addEventListener('party-join',()=>{if(window.MossForest){MossForestStory.syncFlags();document.querySelectorAll('.forest-ent[data-asset="npc_slot_liam"]').forEach(n=>n.remove());}});
   // ItemData.treasureStage: chests that hold progression gear stay shut until the story is far enough (Raider/boss balance).
   function canOpenTreasure(t){

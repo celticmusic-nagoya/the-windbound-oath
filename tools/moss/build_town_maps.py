@@ -190,7 +190,7 @@ m.deco('town_bench_stone', 2050, 2100, 56, 18); m.deco('town_bench_stone', 2750,
 for (x, y) in ((340, 340), (4500, 340), (1700, 360), (3050, 360), (340, 1000)): m.deco('town_tree_oak', x, y, 28, 16)
 for (x, y) in ((1300, 800), (3300, 840)): m.deco('town_bush_round', x, y, 40, 20)
 m.deco('furn_crates_stack', 560, 1000, 60, 30); m.deco('furn_barrel', 1100, 1000, 36, 24); m.deco('furn_sacks_pile', 4300, 1000, 50, 26); m.deco('furn_barrel', 3700, 1000, 36, 24)
-m.spawn('from_gate', 2400, 2850, 'up'); m.spawn('from_plaza', 2400, 360, 'down'); m.spawn('from_residential', 360, 1500, 'right')
+m.spawn('from_gate', 2400, 2850, 'up'); m.spawn('from_plaza', 2400, 360, 'down'); m.spawn('from_residential', 360, 1500, 'right'); m.spawn('from_craft', 4400, 1500, 'left')   # from_craft: 職人地区から戻る位置
 m.door('tr_r1_to_gate', 2200, 3088, 400, 64, 'royal_capital_00_gate', 'from_market', '南へ: 旅人街 -> 南大城門')
 m.door('tr_r1_to_plaza', 2200, 48, 400, 64, 'royal_capital_02_castle_plaza', 'from_market', '北へ: 中央広場（王城への軸）')
 m.door('tr_r1_to_residential', 48, 1300, 64, 400, 'royal_capital_03_residential', 'from_market', '西へ: 住宅地区')
@@ -215,7 +215,7 @@ for y in (1400, 2000, 2600, 3200): m.deco('town_lamp_post', 1660, y, 14, 10); m.
 for (x, y) in ((420, 1300), (420, 2900), (3580, 1300), (3580, 2900), (900, 3200), (3100, 3200)): m.deco('town_tree_oak', x, y, 28, 16)
 m.deco('town_monument', 1480, 1720, 36, 18); m.deco('town_monument', 2520, 1720, 36, 18)   # 建国記念碑（参道の両脇に）
 m.deco('town_hedge_long', 700, 2100, 170, 24); m.deco('town_hedge_long', 3300, 2100, 170, 24)
-m.spawn('from_market', 2000, 3300, 'up'); m.spawn('from_residential', 360, 1700, 'right'); m.spawn('from_castle', 2000, 1260, 'down')
+m.spawn('from_market', 2000, 3300, 'up'); m.spawn('from_residential', 360, 1700, 'right'); m.spawn('from_castle', 2000, 1260, 'down'); m.spawn('from_east', 3640, 1700, 'left')   # from_east: 騎士団/大聖堂/学術地区から戻る位置
 m.door('tr_r2_to_residential', 48, 1500, 64, 400, 'royal_capital_03_residential', 'from_plaza', '西へ: 住宅地区')
 m.door('tr_r2_to_market', 1800, 3488, 400, 64, 'royal_capital_01_market', 'from_plaza', '南へ: 商業・市場地区')
 m.door('tr_r2_to_east', 3888, 1500, 64, 400, 'TBD', 'TBD', '東へ: 騎士団地区・大聖堂地区・魔法学術地区（王立魔法研究院）。接続は未実装')
@@ -405,11 +405,30 @@ def validate(mp, doc):
         if not reach(x, y, 96): errs.append('node %s unreachable' % z['id'])
     # transition targets exist
     for t in mp.trans:
-        if t['toMap'] not in ('TBD', 'lind_village'):
+        if t['toMap'] not in ('TBD', 'lind_village') and not any(o.id == t['toMap'] for o in maps):
+            e = _disk_spawn(t['toMap'], t['toSpawn'])
+            if e: errs.append('%s -> %s' % (t['id'], e))
+        elif t['toMap'] not in ('TBD', 'lind_village'):
             tgt = next((o for o in maps if o.id == t['toMap']), None)
             if not tgt: errs.append('%s -> unknown map %s' % (t['id'], t['toMap']))
             elif t['toSpawn'] not in tgt.spawns: errs.append('%s -> %s has no spawn %s' % (t['id'], t['toMap'], t['toSpawn']))
     return errs, len(seen) * G * G / (W * H)
+
+# ---- 未接続出口の差し込み: tools/moss/capital_exits.json (null = TBD のまま)
+_EX = json.load(open(os.path.join(os.path.dirname(__file__), 'capital_exits.json'), encoding='utf-8'))
+def _disk_spawn(mid, sp):
+    f = os.path.join(OUT, mid + '.json')
+    if not os.path.exists(f): return 'map file data/maps/%s.json not found' % mid
+    if sp not in json.load(open(f, encoding='utf-8'))['spawns']['points']: return 'spawn %s not in %s' % (sp, mid)
+    return None
+_bad_exit = 0
+for mp in maps:
+    for t in mp.trans:
+        c = _EX.get(t['id'])
+        if t['toMap'] == 'TBD' and c:
+            err = _disk_spawn(c['toMap'], c['toSpawn'])
+            if err: print('capital_exits.json: %s -> %s' % (t['id'], err)); _bad_exit += 1
+            else: t['toMap'], t['toSpawn'] = c['toMap'], c['toSpawn']; t['note'] += '（capital_exits.json で接続済み）'
 
 bad = 0
 for mp in maps:
@@ -417,4 +436,4 @@ for mp in maps:
     json.dump(d, open(os.path.join(OUT, mp.id + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     print('%-34s %5dx%-5d walls=%-3d npc=%d chest=%d trans=%d walkable-reachable=%2.0f%% %s' % (mp.id, mp.w, mp.h, len(mp.rects), len([n for n in mp.nodes]), len(mp.tre), len(mp.trans), cov * 100, 'OK' if not errs else 'PROBLEMS'))
     for e in errs: print('   ', e); bad += 1
-sys.exit(1 if bad else 0)
+sys.exit(1 if (bad or _bad_exit) else 0)

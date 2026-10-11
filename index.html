@@ -598,9 +598,9 @@ function enterBurningVillage(){
  if(questBox) questBox.style.display='none';
 
  px=970; py=1330; target=null; camera();
- setObj('村の広場へ向かい、フィオナを探そう');
+ atkObj('find_fiona');
 
- let b=$('#dangerBanner');
+ let b=$('#dangerBanner');b.textContent=atkT('banner','danger');
  b.style.display='block';
  clearTimeout(enterBurningVillage.t);
  enterBurningVillage.t=setTimeout(()=>b.style.display='none',2400);
@@ -610,6 +610,8 @@ function enterBurningVillage(){
 
 // 襲撃(stage 5-8)の会話は js/field/talk-data-attack.js（FieldTalk）。進行は下のコードが持つ。
 const atkTalk=id=>FieldTalk.talk(id,{source:'attack'});
+const atkT=(g,k)=>TalkDataAttack.text[g][k];
+const atkObj=k=>setObj(atkT('obj',k)), atkNotice=k=>notice(atkT('notice',k));
 let attackStep=0, attackBattleBusy=false, aahp=100,aatp=0,gghp=220,agGuard=false,currentGoblin=null;
 function notice(t){const n=$('#rescueNotice');n.textContent=t;n.style.display='block';clearTimeout(notice.t);notice.t=setTimeout(()=>n.style.display='none',2200)}
 
@@ -765,7 +767,7 @@ function startAttackBattle(id,hp){
  updateNormalCommands();
  updateNormalPartyHud();
  PrologueCombat.beginNormal(id);
- showBattleBanner(id==='attackGob1'?'母親が娘を庇っている――ゴブリンを退けよう！':'魔物が立ちはだかった！',1000);
+ showBattleBanner(id==='attackGob1'?atkT('banner','gob1'):atkT('banner','gob'),1000);
  updateAttackBattle();
 }
 function updateAttackBattle(){
@@ -828,12 +830,12 @@ function finishAttackBattle(){
    $('#attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode');$('#normalItems').classList.remove('isOpen');
    if(gobBox)gobBox.classList.remove('taintedKO');
    if(defeated==='northGob1'||defeated==='northGob2'){
-     hideNormalPartyBattle();notice('異常化ゴブリンを退けた');
+     hideNormalPartyBattle();atkNotice('tainted_down');
    }else if(defeated==='attackGob1'){
-     hideNormalPartyBattle();attackStep=Math.max(attackStep,1);setObj('村の広場へ向かい、フィオナを探そう');
-     notice('母娘は安全な道へ逃げていった');atkTalk('atk_rescued');
+     hideNormalPartyBattle();attackStep=Math.max(attackStep,1);atkObj('find_fiona');
+     atkNotice('mother_saved');atkTalk('atk_rescued');
    }else{
-     hideNormalPartyBattle();attackStep=2;storyStage=6;$('#attackFiona').style.display='grid';setObj('フィオナに話しかけよう');notice('フィオナを見つけた');
+     hideNormalPartyBattle();attackStep=2;storyStage=6;$('#attackFiona').style.display='grid';atkObj('talk_fiona');atkNotice('found_fiona');
    }
    attackBattleBusy=false;
  },900);
@@ -842,8 +844,8 @@ $('#attackFiona').onclick=()=>{
  if(storyStage<6)return;
  storyStage=7;
  atkTalk('atk_fiona');
- setObj('フィオナとともに村の北側へ向かおう');
- notice('フィオナが再び同行した');
+ atkObj('go_north');
+ atkNotice('fiona_joined');
  const eventGeneration=PrologueCombat.generation;setTimeout(()=>{if(eventGeneration===PrologueCombat.generation&&storyStage===7)beginNorthAssault()},700);
 };
 
@@ -853,8 +855,8 @@ function beginNorthAssault(){
  northPhase=1;
  document.body.classList.add('northAssault');
  $('#northEscape').style.display='block';
- setObj('村の北側で王国騎士と合流しよう');
- questPop('MAIN OBJECTIVE：村の北側で王国騎士と合流しよう');
+ atkObj('meet_knight');
+ questPop(atkT('pop','meet_knight'));
 }
 $('#royalKnight').onclick=()=>{
  if(storyStage<7)return;
@@ -862,7 +864,7 @@ $('#royalKnight').onclick=()=>{
  if(northPhase===1){
    northPhase=2;
    atkTalk('atk_knight_first');
-   setObj('北の退路へ向かい、リルド村を脱出しよう');
+   atkObj('to_escape');
  }else{
    atkTalk('atk_knight_again');
  }
@@ -876,7 +878,7 @@ $('#northGob2').onclick=()=>{
  startAttackBattle('northGob2',180);
 };
 $('#northEscape').onclick=()=>{
- if(northPhase<2){notice('先に王国騎士と話そう');return}
+ if(northPhase<2){atkNotice('talk_knight_first');return}
  closeDialogue();
  northPhase=3; storyStage=8;
  document.body.classList.remove('northAssault');
@@ -890,7 +892,7 @@ function startEscapeScene(){
  closeDialogue(); escapeIndex=0; FieldTalk.setFlag('atk_escaped',true);
  $('#escapeScene').style.display='block';
  $('#escapeText').textContent=escapeLinesNow()[0];
- setObj('フィオナとともに村から脱出しよう');
+ atkObj('escape');
 }
 $('#escapeScene').onclick=()=>{
  escapeIndex++;
@@ -1838,7 +1840,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/fiona-field-assets.js?v=20261011b"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261011e"></script>
-<script src="js/field/moss-forest-story.js?v=20261011i"></script>
+<script src="js/field/moss-forest-story.js?v=20261011j"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js"></script>
@@ -1853,9 +1855,9 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/talk-data.js"></script>
 <script src="js/field/talk-data-quests.js"></script>
 <script src="js/field/talk-data-scenes.js"></script>
-<script src="js/field/talk-data-capital.js?v=20261011g"></script>
-<script src="js/field/talk-data-rilde.js?v=20261011b"></script>
-<script src="js/field/talk-data-attack.js?v=20261011a"></script>
+<script src="js/field/talk-data-capital.js?v=20261011h"></script>
+<script src="js/field/talk-data-rilde.js?v=20261011d"></script>
+<script src="js/field/talk-data-attack.js?v=20261011b"></script>
 <script src="js/field/field-talk.js?v=20261011h"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>

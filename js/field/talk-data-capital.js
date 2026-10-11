@@ -19,6 +19,10 @@ window.TalkDataCapital = Object.freeze({tables: [
   {npc: 'f2_lookout', entries: [
     {id: 'f2_look_a', priority: 10, mode: 'cycle', lines: ['見張りの兵士「ここからは遠くまで見渡せる。……今日は、静かなものだ。」']}]},
   {npc: 'f3_commander', entries: [
+    {id: 'f3_cmd_elder', priority: 45, mode: 'once', when: {all: [{flag: 'road_dunvall_open'}, {not: {flag: 'commander_met'}}]},
+     lines: [{pages: ['司令官「リルドの長老の使いか。……あの男から、話は聞いている。」', '司令官「森の黒紫の魔物、焼かれた村。辺境だけの事件で済むとは思えん。」',
+                      '司令官「王都カエルディンの騎士団へ、お前たちの目で見たものを報告してくれ。街道は東門を出て、まっすぐだ。」'], set: {commander_met: true}}]},
+    {id: 'f3_cmd_after', priority: 30, mode: 'cycle', when: {flag: 'commander_met'}, lines: ['司令官「王都は街道の先だ。南大城門をくぐれば、城がよく見える。……風の加護を。」']},
     {id: 'f3_cmd_a', priority: 10, mode: 'cycle', lines: ['司令官「よく来た、旅の剣士よ。砦はいつでも、志ある者を歓迎する。」']}]},
   {npc: 'f3_armory', entries: [
     {id: 'f3_arm_a', priority: 10, mode: 'cycle', lines: ['武器庫番「ここの品は王国の物資だ。勝手には渡せんが……補給係に頼めば、手頃な品が手に入るはずだ。」']}]},

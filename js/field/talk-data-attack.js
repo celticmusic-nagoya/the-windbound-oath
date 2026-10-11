@@ -13,7 +13,17 @@ const ATTACK_ESCAPE_LINES = Object.freeze([
   '二人の足元が崩れ、そのまま暗い谷へ落ちていった――。'
 ]);
 const _atk = (npc, lines, set) => ({npc, entries: [{id: npc + '_1', priority: 10, mode: 'cycle', when: {stage: [5, 8]}, lines: [set ? {pages: [].concat(lines), set} : lines]}]});
+// 目的 / 通知 / バナー / ポップ: 襲撃中に画面へ出る短い文言（キー参照: index.html の atkObj / atkNotice / atkBanner）
+const ATTACK_TEXT = Object.freeze({
+  obj: Object.freeze({find_fiona: '村の広場へ向かい、フィオナを探そう', talk_fiona: 'フィオナに話しかけよう', go_north: 'フィオナとともに村の北側へ向かおう',
+    meet_knight: '村の北側で王国騎士と合流しよう', to_escape: '北の退路へ向かい、リルド村を脱出しよう', escape: 'フィオナとともに村から脱出しよう'}),
+  notice: Object.freeze({mother_saved: '母娘は安全な道へ逃げていった', found_fiona: 'フィオナを見つけた', fiona_joined: 'フィオナが再び同行した', tainted_down: '異常化ゴブリンを退けた',
+    talk_knight_first: '先に王国騎士と話そう'}),
+  banner: Object.freeze({gob1: '母親が娘を庇っている――ゴブリンを退けよう！', gob: '魔物が立ちはだかった！', danger: '風が、止まった。'}),
+  pop: Object.freeze({meet_knight: 'MAIN OBJECTIVE：村の北側で王国騎士と合流しよう'})
+});
 window.TalkDataAttack = Object.freeze({
+  text: ATTACK_TEXT,
   escapeLines: ATTACK_ESCAPE_LINES,
   flags: Object.freeze(['atk_started', 'atk_rescued', 'atk_fiona_found', 'atk_knight_met', 'atk_escaped']),
   tables: [

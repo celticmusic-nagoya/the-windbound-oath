@@ -1,0 +1,6 @@
+{
+  "_doc": "王都の未接続出口(toMap:'TBD')の接続先。依頼C(Codex)の受け側マップID・spawn名が確定したら null を {toMap, toSpawn} に置き換え、`python3 tools/moss/build_town_maps.py` を実行する。接続先の data/maps/<toMap>.json と spawn の存在を検証し、無ければエラー(exit 1)。null のままなら TBD（「道が続いていない」トースト）を維持。",
+  "tr_r1_to_craft": null,
+  "tr_r2_to_east": null,
+  "tr_r2_castle_gate": null
+}
