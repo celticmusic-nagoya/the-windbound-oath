@@ -10,9 +10,12 @@
    const fiona=actor.id==='fiona',base=actor.baseSize|| (battle==='normal'?{width:portrait?(fiona?112:116):(fiona?96:100),height:portrait?150:126}:{width:fiona?108:112,height:140});
    const pc=!portrait&&!short&&innerWidth>=1024;
    const relative=(portrait?(fiona?1.15:1.17):short?(fiona?1.20:1.24):(fiona?1.30:1.32))*density*(pc?(battle==='normal'?1.17:1.07):1);
-   const width=base.width*relative,height=base.height*relative;
+   // Short Android viewports include browser chrome: reserve room for the HUD
+   // above the actor rather than letting a fixed 140px base push it offscreen.
+   const fit=battle==='raider'?(short?Math.min(1,innerHeight*.40/(base.height*relative)):portrait?Math.min(1,innerWidth*.31/(base.width*relative)):1):1;
+   const width=base.width*relative*fit,height=base.height*relative*fit;
    visual.style.setProperty('width',width+'px','important');visual.style.setProperty('height',height+'px','important');
-   const centers=portrait?[.22,.58]:battle==='normal'?(short?[.32,.49]:[.345,.478]):[.17,short?.35:.325];
+   const centers=portrait?(battle==='raider'?[.18,.51]:[.22,.58]):battle==='normal'?(short?[.32,.49]:[.345,.478]):[.17,short?.35:.325];
    const column=i%columns,row=Math.floor(i/columns),parentLeft=unit.offsetParent?.getBoundingClientRect().left||0;
    const unitWidth=battle==='normal'?unit.offsetWidth:width;
    let center=Math.max(innerWidth*centers[column],parentLeft+unitWidth/2+4);
