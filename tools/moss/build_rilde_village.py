@@ -220,7 +220,7 @@ def people(R, ruin):
         # the hill elder (cliff trail) and the people of the legacy side quests
         place_npc(R, 'elder_man', 'hill_old', 780 + OX, 1500 + OY, 'hill_old', '風見の丘の老人')
         R.interact('ev_fiona_wait', 1930, 885, 60, hook='rilde_fiona', label='フィオナ', requires={'flag': 'rilde_fiona_waiting', 'is': True})
-        R.interact('ev_training_dummy', 1780 + OX, 805 + OY, 55, hook='rilde_dummy', label='訓練用の木人')
+        R.interact('ev_training_dummy', 1902, 935, 62, hook='rilde_dummy', label='訓練用の木人')   # on the dummy sprite (prop foot 1902,963)
         R.interact('ev_trainsign', 1730 + OX, 700 + OY, 45, hook='rilde_text:trainingSign', label='看板')
         R.interact('ev_well', 650 + OX, 760 + OY, 60, hook='rilde_text:well', label='井戸')
         R.interact('ev_balloon_tree', 115 + OX, 330 + OY, 60, hook='rilde_balloon_tree', label='木')

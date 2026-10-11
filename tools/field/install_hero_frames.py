@@ -16,8 +16,8 @@ import numpy as np
 from PIL import Image
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 HEROES = {
-    'fiona': dict(canvas=(1024, 640), anchor=(512, 600), scale=0.1, height=54, out='img/field/moss/real/fiona/', js='js/field/fiona-field-assets.js', walk=(4, 6)),
-    'aidan': dict(canvas=(1536, 1024), anchor=(768, 960), scale=0.0625, height=54, out='img/field/characters/aidan/', js='js/field/aidan-field-assets.js', walk=(4, 6)),
+    'fiona': dict(canvas=(1280, 832), anchor=(640, 790), scale=0.1, height=62, out='img/field/moss/real/fiona/', js='js/field/fiona-field-assets.js', walk=(4, 6)),
+    'aidan': dict(canvas=(1792, 1152), anchor=(896, 1100), scale=0.0625, height=64, out='img/field/characters/aidan/', js='js/field/aidan-field-assets.js', walk=(4, 6)),
 }
 DIRS = ['down', 'left', 'right', 'up']
 def scan(src, hero):

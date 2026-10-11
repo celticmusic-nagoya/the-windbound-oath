@@ -13,8 +13,8 @@ bad=[]
 for f in fs:
     im=Image.open(f); a=np.array(im)[...,3]
     ys,xs=np.where(a>16)
-    if im.mode!='RGBA' or im.size!=(1024,640) or a.min()!=0 or ys.max()>628 or ys.max()<585: bad.append(f)
-check(not bad,'every frame is 1024x640 RGBA with real transparency and feet at the anchor line %s'%bad[:2])
+    if im.mode!='RGBA' or im.size!=(1280,832) or a.min()!=0 or ys.max()>818 or ys.max()<775: bad.append(f)
+check(not bad,'every frame is 1280x832 RGBA with real transparency and feet at the anchor line %s'%bad[:2])
 walk=[np.array(Image.open(f))[...,3]>16 for f in fs if 'walk_down' in f]
 check(len({w.tobytes() for w in walk})==2 and len(walk)==4,'4 walk-down frames, 2 distinct poses (delivered art)')
 errs=[]

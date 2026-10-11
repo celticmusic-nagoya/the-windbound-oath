@@ -50,6 +50,7 @@ with sync_playwright() as p:
     check(moved>=3,'taps inside the training ground walk (%d/4)'%moved)
     tev("MossForest.teleportFeet(1877,860)"); t.wait_for_timeout(500); t.touchscreen.tap(265,615); t.wait_for_timeout(1200)
     check(tev("storyStage")==2 and tev("getComputedStyle(document.getElementById('battle')).display")=='block','tap on the training dummy opens the training battle')
+    check(tev("(()=>{const e=document.elementFromPoint(225,430);return !!(e&&e.closest('#battle'))})()"),'the training battle is actually on top of the field (not hidden behind it)')
     # far tap on an NPC: walk first, talk only on arrival; tapping elsewhere cancels the pending talk
     d=b.new_page(viewport={'width':1280,'height':720}); dv=d.evaluate; d.goto('http://localhost:8765/index.html'); d.wait_for_timeout(1500); dv("devJump('training')"); d.wait_for_timeout(2500); dv("closeDialogue()")
     dv("MossForest.teleportFeet(1877,1100)"); d.wait_for_timeout(500); xy=dv("FieldCamera.worldToScreen(document.getElementById('forestWorld'),1952,940)")

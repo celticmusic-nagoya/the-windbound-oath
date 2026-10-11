@@ -9,7 +9,7 @@ def check(c,m):
     if not c: fails.append(m)
 tmp=tempfile.mkdtemp(prefix='hero_'); src=tmp+'/src'; os.makedirs(src); out=tmp+'/out'
 D=['down','left','right','up']
-def deliver(hero,n_walk,scale=1.0,jit=True,canvas=(1500,1000)):
+def deliver(hero,n_walk,scale=1.0,jit=True,canvas=(1900,1300)):
     import random; r=random.Random(3)
     for d in D:
         frames=[('idle_%s'%d,'img/field/moss/real/fiona/fiona_idle_%s.png'%d)]+[('walk_%s_%02d'%(d,i+1),'img/field/moss/real/fiona/fiona_walk_%s_%02d.png'%(d,(i%4)+1)) for i in range(n_walk)]
@@ -25,15 +25,15 @@ fs=sorted(os.listdir(out)); check(len(fs)==4*6,'24 normalised PNGs written (%d)'
 rows=[];cols={}
 for f in fs:
     a=np.array(Image.open(out+'/'+f)); ys,xs=np.where(a[...,3]>16); rows.append(ys.max()+1)
-    check(Image.open(out+'/'+f).size==(1024,640),f+' canvas 1024x640') if f=='fiona_idle_down.png' else None
+    check(Image.open(out+'/'+f).size==(1280,832),f+' canvas 1280x832') if f=='fiona_idle_down.png' else None
     d=f.split('_')[2] if f.startswith('fiona_walk') else f.split('_')[2].split('.')[0]
     if f.startswith('fiona_idle'):
         band=a[int(ys.max()-(ys.max()-ys.min())*.06):ys.max()+1,:,3]>16; bx=np.where(band.any(0))[0]; cols.setdefault(d,[]).append((bx.min()+bx.max())/2)
-check(max(rows)-min(rows)<=3 and abs(rows[0]-600)<=3,'every frame stands on the anchor row y=600 (spread %d)'%(max(rows)-min(rows)))
-check(all(abs(np.median(v)-512)<=6 for v in cols.values()),'feet centred on the anchor column per direction %s'%{k:round(float(np.median(v))) for k,v in cols.items()})
+check(max(rows)-min(rows)<=3 and abs(rows[0]-790)<=3,'every frame stands on the anchor row y=790 (spread %d)'%(max(rows)-min(rows)))
+check(all(abs(np.median(v)-640)<=8 for v in cols.values()),'feet centred on the anchor column per direction %s'%{k:round(float(np.median(v))) for k,v in cols.items()})
 js=open(tmp+'/f.js').read(); check(js.count('"scale": 0.1')==24 and 'fiona_walk_up_05' in js and 'fiona_walk_up_06' not in js,'manifest lists 24 frames incl. walk_05, none beyond')
 h=[np.where(np.array(Image.open(out+'/fiona_idle_down.png'))[...,3]>16)[0]]; hh=h[0].max()-h[0].min()+1
-check(abs(hh*0.1-54)<2.5,'idle_down body height maps to ~54 world px (%.1f)'%(hh*0.1))
+check(abs(hh*0.1-62)<2.5,'idle_down body height maps to ~62 world px (%.1f)'%(hh*0.1))
 # dot snap
 r=run('--hero','fiona','--out-dir',tmp+'/dot','--js-out',tmp+'/d.js','--dot','2'); check(r.returncode==0,'--dot 2 snapping runs')
 a=np.array(Image.open(tmp+'/dot/fiona_idle_down.png')); check(len({tuple(p) for p in a[::20,::20].reshape(-1,4)[:400]})>=1 and (a[0:20,0:20]==a[0,0]).all(),'dot-snapped art is blocky (20px cells = 2 world px)')
