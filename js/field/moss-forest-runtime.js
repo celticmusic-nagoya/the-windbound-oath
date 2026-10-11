@@ -21,6 +21,11 @@
       fiona:$(options.fiona||'#forestFiona'),label:$(options.label||'#forestLabel'),toast:$(options.toast||'#forestToast'),fade:$(options.fade||'#forestFade')};
     hooks=options.hooks||{};
     el.scene.addEventListener('pointerdown',onPointer);
+    // Hold-to-move: while a finger / button stays down the party keeps walking toward the pointer (re-aimed as it is dragged); letting go stops it. A short tap keeps the old tap-to-walk behaviour.
+    el.scene.style.touchAction='none';el.scene.addEventListener('contextmenu',e=>{if(S.hold)e.preventDefault();});
+    addEventListener('pointermove',e=>{if(S.hold&&e.pointerId===S.hold.id){S.hold.x=e.clientX;S.hold.y=e.clientY;}});
+    const endHold=e=>{const h=S.hold;if(!h||e.pointerId!==h.id)return;S.hold=null;if(h.long){S.target=null;S.pending=null;FieldNavigation.cancel();}};
+    addEventListener('pointerup',endHold);addEventListener('pointercancel',endHold);addEventListener('blur',()=>{S.hold=null;});
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     if(window.FieldTimeOfDay)FieldTimeOfDay.configure(el.scene);
     if(window.FieldWeather)FieldWeather.configure(el.scene);   // fog/rain sit under the grade overlay
@@ -293,6 +298,7 @@
     if(interactAt(w.x,w.y))return;
     S.target=FieldNavigation.destination(w.x-FOOT.ax,w.y-FOOT.ay,S.forest.blocked);
     if(!S.target)toast('その場所へは進めない。');
+    else if(e.isPrimary!==false&&(e.pointerType!=='mouse'||e.button===0))S.hold={id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now(),next:0,long:false,wx:w.x,wy:w.y};
   }
   const DIRS={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
   function onKeyDown(e){
@@ -389,10 +395,15 @@
   }
   function tick(){
     S.loopId=requestAnimationFrame(tick);
-    if(!S.active||S.busy||!S.forest||el.scene.style.display==='none')return;
+    if(!S.active||S.busy||!S.forest||el.scene.style.display==='none'){S.hold=null;return;}
     const bounds=S.map.world;
     if(S.forest.blocked(S.x,S.y))unstick(bounds);   // never leave the player embedded in a blocker (a spawn / warp / lock edge case): step to the nearest free spot
     let dx=0,dy=0;S.keys.forEach(d=>{dx+=d[0];dy+=d[1];});dx=Math.sign(dx);dy=Math.sign(dy);
+    if(S.hold&&!(dx||dy)){const h=S.hold,now=performance.now();   // held pointer: re-aim at it (only when it has moved in the world, so the path is not re-planned every frame)
+      if(now-h.t>=220&&now>=h.next){h.next=now+80;
+        const w=FieldCamera.screenToWorld(el.world,h.x,h.y);
+        if(!S.target||Math.hypot(w.x-h.wx,w.y-h.wy)>24){const d=FieldNavigation.destination(w.x-FOOT.ax,w.y-FOOT.ay,S.forest.blocked);h.wx=w.x;h.wy=w.y;if(d){S.target=d;S.pending=null;}h.long=true;}
+        else h.long=true;}}
     if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
