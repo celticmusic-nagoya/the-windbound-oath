@@ -73,3 +73,4 @@ Codex / `work/codex-quality-main-20261012` / 基準main `b75a805`。G・m6_quest
 対象: 承認済み `work/codex-quality-main-20261012` (`8465915`) のG/m6_quest修正・CLAIMS/報告/QA結果。CLAIMSの競合は双方の記録を保持。新しい戦闘演出・A1/A2配置・納品素材はそのまま保持。
 STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollbackタグを直前mainへ付けて `--no-ff` でmainへ通常pushする。force pushなし。
 
+全52本の初回は51合格・`tests/moss/m8_town_maps.py` の街道→王都待機が1件失敗。main未更新。担当追加: 同テストの待機・失敗時診断（assertion/ゲーム仕様は維持）。短い専用ゲート検証は合格し、長距離経路の固定30秒待機を負荷再現で診断中。原因を確認して該当回帰を再実行後に反映する。
