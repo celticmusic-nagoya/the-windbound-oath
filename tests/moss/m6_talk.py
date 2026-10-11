@@ -17,7 +17,7 @@ TABLE={"npc":"t_guide","entries":[
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
+    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')   # the opening line appears ~1.1s after load
     msgtxt=lambda: pg.evaluate("document.querySelector('#msg').textContent")
     name=lambda: pg.evaluate("(document.querySelector('#msg .talkName')||{}).textContent||''")
     shown=lambda: pg.evaluate("getComputedStyle(document.querySelector('#msg')).display!=='none'")

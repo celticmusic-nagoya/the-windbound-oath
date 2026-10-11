@@ -176,6 +176,7 @@
     const first=!S.map;
     if(!first)await setFade(1,fadeMs(options.transition,'out'));
     el.scene.style.display='block';
+    {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
     unmount();mount(map);
     let spot;
     const sp0=map.spawns.points[spawnId||map.spawns.default];

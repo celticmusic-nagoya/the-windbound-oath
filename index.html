@@ -1481,7 +1481,9 @@ const DEV_EVENTS=[
  ['fort','13　夜明け・ドゥンヴァル砦'],
  ['prologueEnd','14　PROLOGUE END'],
  ['rilde_ruin','15　リルド村・襲撃後（自由行動）'],
- ['fort_free','16　ドゥンヴァル砦・自由行動']
+ ['fort_free','16　ドゥンヴァル砦・自由行動'],
+ ['map:fort_dunvall_01_courtyard','M1　砦・中庭'],['map:fort_dunvall_02_ramparts','M2　砦・城壁'],['map:fort_dunvall_03_keep','M3　砦・主塔'],
+ ['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
 function devResetScreens(){
  closeDialogue();window.MossForest&&MossForest.hide();
@@ -1493,6 +1495,7 @@ function devResetScreens(){
 }
 function devJump(key){
  devResetScreens();
+ if(key.startsWith('map:')){if(storyStage<15){storyStage=15;currentObjective='プロローグクリア';}enterWorldMap(key.slice(4));renderJournal();popObjective();return;}
  if(key==='opening'&&window.RildeVillage&&RildeVillage.enabled()){RildeVillage.startOpening();return;}
  if(key==='training'&&window.RildeVillage&&RildeVillage.enabled()){storyStage=1;currentObjective='訓練場でフィオナと話そう';RildeVillage.enter('from_training');renderJournal();popObjective();return;}
  if(key==='sunset'&&window.RildeVillage&&RildeVillage.enabled()){storyStage=3;currentObjective='フィオナと風見の断崖へ向かおう';RildeVillage.enter('from_sunset');renderJournal();popObjective();return;}
@@ -1829,18 +1832,18 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/prologue-combat.js"></script>
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
-<script src="js/prologue-dev.js"></script>
+<script src="js/prologue-dev.js?v=20261011e"></script>
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
-<script src="js/field/forest-loader.js?v=20261011d"></script>
+<script src="js/field/forest-loader.js?v=20261011e"></script>
 <script src="js/field/field-timeofday.js"></script>
 <script src="js/field/field-weather.js"></script>
 <script src="js/field/field-vista.js"></script>
 <script src="js/field/field-bgm.js"></script>
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/fiona-field-assets.js?v=20261011b"></script>
-<script src="js/field/moss-forest-runtime.js"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261011e"></script>
 <script src="js/field/moss-forest-story.js"></script>
 <script src="js/field/rilde-village.js"></script>
 <script src="js/data/item-data.js"></script>

@@ -12,7 +12,7 @@ LIND = json.loads(subprocess.check_output(['node', os.path.join(ROOT, 'tools/mos
 META = json.load(open(os.path.join(ROOT, 'tools/moss/rilde_assets.json'), encoding='utf-8'))
 # villagers are drawn at hero scale (Aidan 64 / Fiona 62 world px); children and the swordsman boy smaller. target = visible body height in world px
 NPC_HEIGHT = {'farmer_male': 62, 'farmer_female': 60, 'young_man': 62, 'young_woman': 60, 'elder_man': 56, 'elder_woman': 52, 'merchant': 62, 'innkeeper': 62, 'fisherman': 62, 'caretaker': 62,
-              'boy': 44, 'girl': 44, 'emma': 46, 'boy_swordsman': 52}
+              'boy': 44, 'girl': 44, 'emma': 56, 'boy_swordsman': 52}
 for _k, _h in NPC_HEIGHT.items():
     _m = META['npc'].get(_k)
     if _m:

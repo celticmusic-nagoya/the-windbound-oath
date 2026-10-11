@@ -223,7 +223,7 @@ houses = [(400, 500), (1000, 500), (1600, 500), (2600, 500), (400, 1500), (1000,
 for i, (x, y) in enumerate(houses):
     m.solid(x, y, 420, 360, 'house'); m.prop('town_house_town_' + 'abc'[i % 3], x + 210, y + 370); m.floor_rect(x + 160, y + 360, 100, 60, '#c9b27a')
     m.zones.append({'id': 'ev_door_%02d' % i, 'type': 'interact', 'textId': 'msg_house_locked', 'shape': {'shape': 'circle', 'cx': x + 210, 'cy': y + 400, 'r': 70}})
-m.deco('town_well', 1800, 1500, 70, 30)
+m.deco('town_well', 1800, 1750, 70, 30)
 for (x, y) in ((1300, 1300), (2300, 1300), (1300, 1950), (2300, 1950)): m.deco('town_flowerbed', x, y, 100, 26)
 for (x, y) in ((1250, 2250), (2200, 2250), (1900, 960)): m.deco('town_tree_oak', x, y, 28, 16)
 for (x, y) in ((900, 1260), (2120, 1260), (1650, 2220)): m.deco('town_bush_round', x, y, 40, 20)
