@@ -11,13 +11,13 @@ Normalisation (so art of any size drops in and the character neither jumps nor d
   * --dot N: snap to an N-world-px dot grid (1 dot = 2px recommended) with nearest-neighbour, for pixel-art deliveries.
   * Validates RGBA + real transparency (>=15 % transparent pixels - not a baked backdrop), contiguous frames, equal walk counts, stray background corners.
 Output: <out-dir>/<hero>_*.png (default: the runtime folders) + the manifest js (default: js/field/<hero>-field-assets.js). Existing art is only overwritten without --dry-run."""
-import os, sys, re, json
+import os, sys, re, json, hashlib
 import numpy as np
 from PIL import Image
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 HEROES = {
-    'fiona': dict(canvas=(1024, 640), anchor=(512, 600), scale=0.1, height=46, out='img/field/moss/real/fiona/', js='js/field/fiona-field-assets.js', walk=(4, 6)),
-    'aidan': dict(canvas=(1280, 800), anchor=(640, 740), scale=0.0625, height=44, out='img/field/characters/aidan/', js='js/field/aidan-field-assets.js', walk=(4, 6)),
+    'fiona': dict(canvas=(1024, 640), anchor=(512, 600), scale=0.1, height=54, out='img/field/moss/real/fiona/', js='js/field/fiona-field-assets.js', walk=(4, 6)),
+    'aidan': dict(canvas=(1536, 1024), anchor=(768, 960), scale=0.0625, height=54, out='img/field/characters/aidan/', js='js/field/aidan-field-assets.js', walk=(4, 6)),
 }
 DIRS = ['down', 'left', 'right', 'up']
 def scan(src, hero):
@@ -89,7 +89,7 @@ def main():
     frames = {}
     for name, im in results.items():
         a = np.array(im); bx0, by0, bx1, by1 = bbox(a)
-        frames['%s_%s' % (hero, name)] = {'path': (opt('--path-prefix') or cfg['out']) + '%s_%s.png' % (hero, name), 'width': W, 'height': H, 'bounds': [bx0, by0, bx1 - bx0, by1 - by0], 'anchor': [ax, ay], 'scale': sc}
+        frames['%s_%s' % (hero, name)] = {'path': (opt('--path-prefix') or cfg['out']) + '%s_%s.png?v=%s' % (hero, name, hashlib.md5(im.tobytes()).hexdigest()[:8]), 'width': W, 'height': H, 'bounds': [bx0, by0, bx1 - bx0, by1 - by0], 'anchor': [ax, ay], 'scale': sc}
     print('ok   %s: %d frames (walk %d per direction), scale %.4f world px/src px -> canvas %.3f, dot=%s' % (hero, len(frames), len(counts['down']), k * sc, k, dot or 'off'))
     for r in report: print(r)
     if dry: print('dry run: nothing written'); return

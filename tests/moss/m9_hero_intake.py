@@ -9,10 +9,10 @@ def check(c,m):
     if not c: fails.append(m)
 tmp=tempfile.mkdtemp(prefix='hero_'); src=tmp+'/src'; os.makedirs(src); out=tmp+'/out'
 D=['down','left','right','up']
-def deliver(hero,n_walk,scale=1.7,jit=True,canvas=(1100,1300)):
+def deliver(hero,n_walk,scale=1.0,jit=True,canvas=(1500,1000)):
     import random; r=random.Random(3)
     for d in D:
-        frames=[('idle_%s'%d,'img/field/moss/real/fiona/fiona_idle_%s.png'%d)]+[('walk_%s_%02d'%(d,i+1),'img/field/moss/real/fiona/fiona_walk_%s_%02d.png'%(d,(i%6)+1)) for i in range(n_walk)]
+        frames=[('idle_%s'%d,'img/field/moss/real/fiona/fiona_idle_%s.png'%d)]+[('walk_%s_%02d'%(d,i+1),'img/field/moss/real/fiona/fiona_walk_%s_%02d.png'%(d,(i%4)+1)) for i in range(n_walk)]
         for name,p in frames:
             im=Image.open(p).convert('RGBA'); im=im.resize((int(im.width*scale),int(im.height*scale)),Image.LANCZOS)
             c=Image.new('RGBA',canvas,(0,0,0,0)); ox=(canvas[0]-im.width)//2+(r.randint(-40,40) if jit else 0); oy=canvas[1]-im.height-30+(r.randint(-25,25) if jit else 0)
@@ -33,7 +33,7 @@ check(max(rows)-min(rows)<=3 and abs(rows[0]-600)<=3,'every frame stands on the 
 check(all(abs(np.median(v)-512)<=6 for v in cols.values()),'feet centred on the anchor column per direction %s'%{k:round(float(np.median(v))) for k,v in cols.items()})
 js=open(tmp+'/f.js').read(); check(js.count('"scale": 0.1')==24 and 'fiona_walk_up_05' in js and 'fiona_walk_up_06' not in js,'manifest lists 24 frames incl. walk_05, none beyond')
 h=[np.where(np.array(Image.open(out+'/fiona_idle_down.png'))[...,3]>16)[0]]; hh=h[0].max()-h[0].min()+1
-check(abs(hh*0.1-46)<2.5,'idle_down body height maps to ~46 world px (%.1f)'%(hh*0.1))
+check(abs(hh*0.1-54)<2.5,'idle_down body height maps to ~54 world px (%.1f)'%(hh*0.1))
 # dot snap
 r=run('--hero','fiona','--out-dir',tmp+'/dot','--js-out',tmp+'/d.js','--dot','2'); check(r.returncode==0,'--dot 2 snapping runs')
 a=np.array(Image.open(tmp+'/dot/fiona_idle_down.png')); check(len({tuple(p) for p in a[::20,::20].reshape(-1,4)[:400]})>=1 and (a[0:20,0:20]==a[0,0]).all(),'dot-snapped art is blocky (20px cells = 2 world px)')
