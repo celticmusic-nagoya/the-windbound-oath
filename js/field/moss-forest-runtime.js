@@ -120,7 +120,7 @@
   }
   // Real art for runtime entities (manifest.entity). Bottom-centre anchored over the placeholder box; no art -> placeholder block.
   const SKIN_KEYS=[['forest-treasure',d=>d.classList.contains('open')?'chest_open':'chest_closed'],['forest-symbol',()=>'symbol'],
-    ['forest-seal',d=>d.classList.contains('corrupted')?'seal_corrupted':'seal'],['forest-lou',()=>'lou']];
+    ['forest-seal',d=>d.classList.contains('opening')?'seal_opening':d.classList.contains('corrupted')?'seal_corrupted':'seal'],['forest-lou',()=>'lou']];
   function skin(d){
     const rule=SKIN_KEYS.find(([c])=>d.classList.contains(c));if(!rule)return;
     const a=ForestLoader.entityArt(rule[1](d)),[x,y,w,h]=d.dataset.box.split(',').map(Number);
@@ -464,7 +464,7 @@
   // ---------- flags / visibility / persistence ----------
   function setFlag(name,value){
     const was=Boolean(S.flags[name]);S.flags[name]=Boolean(value);
-    if(name==='moss_a3_seal_open'&&value&&!was&&S.sealNode){const n=S.sealNode;S.sealNode=null;n.classList.add('opening');shake(1000,8);setTimeout(()=>{n.remove();S.extra=S.extra.filter(x=>x!==n);},1000);}
+    if(name==='moss_a3_seal_open'&&value&&!was&&S.sealNode){const n=S.sealNode;S.sealNode=null;n.classList.add('opening');skin(n);shake(1000,8);setTimeout(()=>{n.remove();S.extra=S.extra.filter(x=>x!==n);},1000);}
     if(name==='moss_a3_seal_open'&&!value&&S.map&&!S.sealNode&&S.mapId==='moss_forest_03_ancient_grove'){
       const b=S.map.collision.blockers.find(q=>q.id==='cb_a3_seal');if(b){const r=b.rects[0];S.sealNode=addNode('forest-seal corrupted',r[0]-8,r[1]-70,r[2]+16,r[3]+70,'ᚠ ᚢ ᚦ',r[1]+r[3]);}
     }
