@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Hero (Aidan / Fiona) field-art intake: take delivered hand-painted / AI-generated frames at ANY canvas size and normalise them
 to the runtime contract (one shared scale, feet on one anchor, one canvas), then regenerate the frame manifest.
-usage: install_hero_frames.py <src_dir> --hero fiona|aidan [--height-world N] [--dot N] [--out-dir DIR] [--js-out FILE] [--dry-run]
+usage: install_hero_frames.py <src_dir> --hero fiona|aidan [--height-world N] [--xs F] [--mixed-walk-counts] [--dot N] [--out-dir DIR] [--js-out FILE] [--dry-run]
 
 Source names (1 frame = 1 transparent RGBA PNG, 4 directions down/left/right/up):
     <hero>_idle_<dir>.png        <hero>_walk_<dir>_01.png .. _06.png   (4-6 walk frames per direction, contiguous, same count for every direction)
@@ -51,7 +51,7 @@ def main():
         n = counts[d]
         if n != list(range(1, len(n) + 1)): problems.append('walk %s: frames must be 01..NN without gaps, got %s' % (d, n))
         if not cfg['walk'][0] <= len(n) <= cfg['walk'][1]: problems.append('walk %s: %d frames (need %d-%d)' % (d, len(n), *cfg['walk']))
-    if len({len(counts[d]) for d in DIRS}) > 1: problems.append('every direction needs the same number of walk frames: %s' % {d: len(counts[d]) for d in DIRS})
+    if len({len(counts[d]) for d in DIRS}) > 1 and '--mixed-walk-counts' not in args: problems.append('every direction needs the same number of walk frames: %s' % {d: len(counts[d]) for d in DIRS})
     if problems: print('\n'.join('ERROR ' + p for p in problems)); sys.exit(1)
     imgs = {}
     for d in DIRS:
@@ -77,7 +77,7 @@ def main():
     for name, a in arrs.items():
         d = name.split('_')[1] if name.startswith('walk') else name.split('_')[1]; d = name.split('_')[1] if name.startswith('idle') else name.split('_')[1]
         bx0, by0, bx1, by1 = bbox(a); crop = Image.fromarray(a[by0:by1, bx0:bx1])
-        xs = cfg.get('xs', 1.0); nw, nh = max(1, round(crop.width * k * xs)), max(1, round(crop.height * k)); crop = crop.resize((nw, nh), Image.LANCZOS if not dot else Image.BOX)
+        xs = float(opt('--xs', cfg.get('xs', 1.0))); nw, nh = max(1, round(crop.width * k * xs)), max(1, round(crop.height * k)); crop = crop.resize((nw, nh), Image.LANCZOS if not dot else Image.BOX)
         if dot:
             cell = max(1, round(dot / sc)); sw, sh = max(1, nw // cell), max(1, nh // cell)
             crop = crop.resize((sw, sh), Image.BOX).resize((sw * cell, sh * cell), Image.NEAREST); nw, nh = crop.size
