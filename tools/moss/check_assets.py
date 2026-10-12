@@ -29,7 +29,7 @@ for k in ('grass', 'dirt'):
     im = png(man['ground'][k], 'ground.' + k)
     if im and im.width != im.height: err('ground.%s must be square, got %s' % (k, im.size))
 
-ENTITY_KEYS = ['chest_closed', 'chest_open', 'symbol', 'seal', 'seal_corrupted', 'lou', 'fiona']
+ENTITY_KEYS = ['chest_closed', 'chest_open', 'symbol', 'seal', 'seal_corrupted', 'seal_opening', 'lou', 'fiona']
 for k, r in (man.get('entity') or {}).items():
     if k not in ENTITY_KEYS: err('entity.%s unknown key (allowed: %s)' % (k, ', '.join(ENTITY_KEYS))); continue
     if not r.get('file'): continue

@@ -39,7 +39,7 @@ try:
             standin=pg.evaluate("document.querySelectorAll('#forestWorld img[src*=\"standin/tree\"]').length")
             check((a1>0)==expect_real,'%s: real oak sprites in A1 = %d (stand-in trees = %d)'%(tag,a1,standin))
             ent=pg.evaluate("({chest:document.querySelectorAll('.forest-treasure.art').length,fiona:document.querySelector('#forestFiona').classList.contains('art')||document.querySelector('#forestFiona').classList.contains('fiona-sprite'),fw:document.querySelector('#forestFiona').style.width})")
-            check((ent['chest']>0 and ent['fiona'])==expect_real,'%s: entity art on chests/Fiona = %s'%(tag,ent))
+            if expect_real: check(ent['chest']>0 and ent['fiona'],'%s: entity art on chests/Fiona = %s'%(tag,ent))   # the shipped manifest now carries real chest art, so the revert run only checks the oak stand-ins return
             if expect_real:
                 size=pg.evaluate("(()=>{const i=document.querySelector('#forestWorld img[src*=\"real_t/oak_test\"]');return [i.style.width||i.width,i.style.height||i.height]})()"); print('   sprite size',size)
             b.close()

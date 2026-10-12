@@ -47,7 +47,7 @@
     if(art.loading)return art.loading;
     art.loading=(async()=>{
       try{
-        const r=await fetch(ROOT+'img/field/moss/manifest.json');if(!r.ok)throw new Error('no manifest');
+        const r=await fetch(ROOT+'img/field/moss/manifest.json?v=20261012art');if(!r.ok)throw new Error('no manifest');
         const m=await r.json();art.manifest=m;art.node=compile(m.node);art.layer=compile(m.layer);
         // eager: ground textures, layer sprites (drawn into chunk canvases) and runtime entities. Node (prop) art is lazy: see prepare() / nodeArt().
         const files=new Set([m.ground.grass,m.ground.dirt,...[...m.layer,...Object.values(m.entity||{})].filter(x=>x&&x.file).map(x=>x.file)]);

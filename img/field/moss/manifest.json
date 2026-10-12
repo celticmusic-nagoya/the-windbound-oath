@@ -2,8 +2,8 @@
  "_note": "First matching rule wins. Real Moss Forest assets listed before the stand-in rules replace them; stand-ins are derived from Lind art by tools/moss/prepare_standins.py. 'w','h' are world px (bottom-center anchored on the entity position). 'entity' maps runtime objects (chest_closed, chest_open, symbol, seal, seal_corrupted, lou, fiona) to {file,w,h}; absent = coloured placeholder.",
  "base": "img/field/moss/",
  "ground": {
-  "grass": "standin/ground_grass.png",
-  "dirt": "standin/ground_dirt.png",
+  "grass": "art/ground_moss.png",
+  "dirt": "art/ground_mossdirt.png",
   "tile": 384
  },
  "node": [
@@ -1662,6 +1662,342 @@
    "gen": "rilde"
   },
   {
+   "match": "^anc_arch_broken_01$",
+   "file": "art/anc_arch_broken_01.png",
+   "w": 175.0,
+   "h": 140.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_standing_L_01$",
+   "file": "art/anc_standing_L_01.png",
+   "w": 77.5,
+   "h": 140.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_standing_L_02$",
+   "file": "art/anc_standing_L_02.png",
+   "w": 69.5,
+   "h": 140.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_standing_L_03$",
+   "file": "art/anc_standing_L_03.png",
+   "w": 58.0,
+   "h": 140.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_rune_broken_01$",
+   "file": "art/anc_rune_broken_01.png",
+   "w": 66.5,
+   "h": 120.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_rune_broken_02$",
+   "file": "art/anc_rune_broken_02.png",
+   "w": 60.5,
+   "h": 120.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_boundary_stone_01$",
+   "file": "art/anc_boundary_stone_01.png",
+   "w": 63.5,
+   "h": 78.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_boundary_stone_02$",
+   "file": "art/anc_boundary_stone_02.png",
+   "w": 61.0,
+   "h": 70.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_shrine_frag_01$",
+   "file": "art/anc_shrine_frag_01.png",
+   "w": 120.0,
+   "h": 100.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_shrine_frag_02$",
+   "file": "art/anc_shrine_frag_02.png",
+   "w": 82.0,
+   "h": 92.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_stone_marker_old_01$",
+   "file": "art/anc_stone_marker_old_01.png",
+   "w": 55.5,
+   "h": 108.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_rune_decal_01$",
+   "file": "art/anc_rune_decal_01.png",
+   "w": 150.0,
+   "h": 85.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_rune_decal_02$",
+   "file": "art/anc_rune_decal_02.png",
+   "w": 150.0,
+   "h": 83.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_rune_decal_03$",
+   "file": "art/anc_rune_decal_03.png",
+   "w": 150.0,
+   "h": 85.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^anc_rune_decal_04$",
+   "file": "art/anc_rune_decal_04.png",
+   "w": 150.0,
+   "h": 83.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_bridge_wood_01$",
+   "file": "art/prop_bridge_wood_01.png",
+   "w": 220.0,
+   "h": 82.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_bridge_post_01$",
+   "file": "art/prop_bridge_post_01.png",
+   "w": 47.0,
+   "h": 72.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^fx_waterfall_01$",
+   "file": "art/fx_waterfall_01.png",
+   "w": 170.0,
+   "h": 128.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_root_arch_01$",
+   "file": "art/prop_root_arch_01.png",
+   "w": 160.0,
+   "h": 78.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_root_steps_01$",
+   "file": "art/prop_root_steps_01.png",
+   "w": 120.0,
+   "h": 67.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_fence_broken_01$",
+   "file": "art/prop_fence_broken_01.png",
+   "w": 135.0,
+   "h": 40.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_marker_signpost_01$",
+   "file": "art/prop_marker_signpost_01.png",
+   "w": 51.5,
+   "h": 84.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_marker_fork_01$",
+   "file": "art/prop_marker_fork_01.png",
+   "w": 56.5,
+   "h": 84.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_post_boundary_wood_01$",
+   "file": "art/prop_post_boundary_wood_01.png",
+   "w": 41.5,
+   "h": 58.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_post_boundary_wood_02$",
+   "file": "art/prop_post_boundary_wood_02.png",
+   "w": 44.5,
+   "h": 58.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_campfire_cold_01$",
+   "file": "art/prop_campfire_cold_01.png",
+   "w": 64.0,
+   "h": 34.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_lean_to_01$",
+   "file": "art/prop_lean_to_01.png",
+   "w": 170.0,
+   "h": 79.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^prop_torn_banner_01$",
+   "file": "art/prop_torn_banner_01.png",
+   "w": 56.0,
+   "h": 100.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_fairy_flower_01$",
+   "file": "art/veg_fairy_flower_01.png",
+   "w": 34.0,
+   "h": 32.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_fairy_flower_02$",
+   "file": "art/veg_fairy_flower_02.png",
+   "w": 34.0,
+   "h": 36.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_fairy_flower_03$",
+   "file": "art/veg_fairy_flower_03.png",
+   "w": 38.0,
+   "h": 37.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_clump_01$",
+   "file": "art/veg_moss_clump_01.png",
+   "w": 56.0,
+   "h": 31.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_clump_02$",
+   "file": "art/veg_moss_clump_02.png",
+   "w": 60.0,
+   "h": 35.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_clump_03$",
+   "file": "art/veg_moss_clump_03.png",
+   "w": 58.0,
+   "h": 33.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_01$",
+   "file": "art/veg_moss_patch_01.png",
+   "w": 70.0,
+   "h": 37.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_02$",
+   "file": "art/veg_moss_patch_02.png",
+   "w": 70.0,
+   "h": 37.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_03$",
+   "file": "art/veg_moss_patch_03.png",
+   "w": 72.0,
+   "h": 36.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_04$",
+   "file": "art/veg_moss_patch_04.png",
+   "w": 64.0,
+   "h": 39.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_brown_01$",
+   "file": "art/veg_mushroom_brown_01.png",
+   "w": 30.0,
+   "h": 22.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_brown_02$",
+   "file": "art/veg_mushroom_brown_02.png",
+   "w": 28.0,
+   "h": 20.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_red_01$",
+   "file": "art/veg_mushroom_red_01.png",
+   "w": 30.0,
+   "h": 23.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_red_02$",
+   "file": "art/veg_mushroom_red_02.png",
+   "w": 28.0,
+   "h": 19.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_reeds_01$",
+   "file": "art/veg_reeds_01.png",
+   "w": 45.5,
+   "h": 58.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_reeds_02$",
+   "file": "art/veg_reeds_02.png",
+   "w": 44.0,
+   "h": 58.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_thorn_L_01$",
+   "file": "art/veg_thorn_L_01.png",
+   "w": 100.0,
+   "h": 73.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_thorn_L_02$",
+   "file": "art/veg_thorn_L_02.png",
+   "w": 96.0,
+   "h": 95.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^gnd_leaflitter_01$",
+   "file": "art/gnd_leaflitter_01.png",
+   "w": 84.0,
+   "h": 32.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^gnd_leaflitter_02$",
+   "file": "art/gnd_leaflitter_02.png",
+   "w": 84.0,
+   "h": 31.0,
+   "gen": "delivered_art"
+  },
+  {
    "match": "^prop_post_boundary_wood",
    "file": "props/prop_post_boundary_wood.png",
    "w": 22,
@@ -1773,6 +2109,146 @@
  ],
  "layer": [
   {
+   "match": "^veg_fairy_flower_01$",
+   "file": "art/veg_fairy_flower_01.png",
+   "w": 34.0,
+   "h": 32.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_fairy_flower_02$",
+   "file": "art/veg_fairy_flower_02.png",
+   "w": 34.0,
+   "h": 36.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_fairy_flower_03$",
+   "file": "art/veg_fairy_flower_03.png",
+   "w": 38.0,
+   "h": 37.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_clump_01$",
+   "file": "art/veg_moss_clump_01.png",
+   "w": 56.0,
+   "h": 31.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_clump_02$",
+   "file": "art/veg_moss_clump_02.png",
+   "w": 60.0,
+   "h": 35.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_clump_03$",
+   "file": "art/veg_moss_clump_03.png",
+   "w": 58.0,
+   "h": 33.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_01$",
+   "file": "art/veg_moss_patch_01.png",
+   "w": 70.0,
+   "h": 37.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_02$",
+   "file": "art/veg_moss_patch_02.png",
+   "w": 70.0,
+   "h": 37.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_03$",
+   "file": "art/veg_moss_patch_03.png",
+   "w": 72.0,
+   "h": 36.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_moss_patch_04$",
+   "file": "art/veg_moss_patch_04.png",
+   "w": 64.0,
+   "h": 39.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_brown_01$",
+   "file": "art/veg_mushroom_brown_01.png",
+   "w": 30.0,
+   "h": 22.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_brown_02$",
+   "file": "art/veg_mushroom_brown_02.png",
+   "w": 28.0,
+   "h": 20.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_red_01$",
+   "file": "art/veg_mushroom_red_01.png",
+   "w": 30.0,
+   "h": 23.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_mushroom_red_02$",
+   "file": "art/veg_mushroom_red_02.png",
+   "w": 28.0,
+   "h": 19.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_reeds_01$",
+   "file": "art/veg_reeds_01.png",
+   "w": 45.5,
+   "h": 58.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_reeds_02$",
+   "file": "art/veg_reeds_02.png",
+   "w": 44.0,
+   "h": 58.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_thorn_L_01$",
+   "file": "art/veg_thorn_L_01.png",
+   "w": 100.0,
+   "h": 73.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^veg_thorn_L_02$",
+   "file": "art/veg_thorn_L_02.png",
+   "w": 96.0,
+   "h": 95.5,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^gnd_leaflitter_01$",
+   "file": "art/gnd_leaflitter_01.png",
+   "w": 84.0,
+   "h": 32.0,
+   "gen": "delivered_art"
+  },
+  {
+   "match": "^gnd_leaflitter_02$",
+   "file": "art/gnd_leaflitter_02.png",
+   "w": 84.0,
+   "h": 31.0,
+   "gen": "delivered_art"
+  },
+  {
    "match": "^veg_grass_tuft",
    "file": "standin/grass.png",
    "w": 26,
@@ -1794,5 +2270,36 @@
    "standin": true
   }
  ],
- "entity": {}
+ "entity": {
+  "seal": {
+   "file": "art/a3_seal_closed.png",
+   "w": 170.0,
+   "h": 56.5
+  },
+  "seal_corrupted": {
+   "file": "art/a3_seal_corrupted.png",
+   "w": 170.0,
+   "h": 59.0
+  },
+  "seal_opening": {
+   "file": "art/a3_seal_opening.png",
+   "w": 170.0,
+   "h": 60.0
+  },
+  "chest_closed": {
+   "file": "art/treasure_chest_closed.png",
+   "w": 56.0,
+   "h": 43.0
+  },
+  "chest_open": {
+   "file": "art/treasure_chest_open.png",
+   "w": 56.0,
+   "h": 58.5
+  },
+  "symbol": {
+   "file": "art/moss_corruption_symbol.png",
+   "w": 84.0,
+   "h": 44.5
+  }
+ }
 }
