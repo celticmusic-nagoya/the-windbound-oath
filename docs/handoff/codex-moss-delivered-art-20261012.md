@@ -11,6 +11,12 @@ STATUS: WIP
 既存機能mergeの変更ファイル: `img/field/moss/art/` の68枚、manifest、`index.html` のcache query、`js/field/forest-loader.js`、`js/field/moss-forest-runtime.js` のopening画像適用、`tests/moss/m6_asset_swap.py`、`tools/moss/check_assets.py`、`tools/moss/install_delivered_art.py`、素材依頼資料。本検証の変更は未納品一覧とCLAIMS・この報告・QA記録だけ。
 追加・変更したID・フラグ: 本検証ではなし。
 
+## テスト（初回と調査）
+
+`tests/run_all.sh` がリポジトリ直下の `python3 -m http.server 8765` を起動/停止し、指定順に1本ずつ実行。sealを含む各プロセスの上限600秒。Playwright 1.62.0 / system Chromium 154、Python 3.12。初回8本は7合格、m15bの `player outruns the slime` が1失敗（gap43）。browserテストのconsole/pageerrorはすべて0、CLIのm9_hero_intakeはブラウザを使用せずFAILS0。
+
+納品前main `0372ef6` のm15bは単独合格（gap655）。納品後 `ce2b366` の同時撮影なし単独再実行は同じ項目で失敗（gap268）。未解決のまま成功扱いにはしない。AI/移動/navigation/A1マップは納品mergeで変更されておらず、外部診断スクリプトでdestinationの到達可否・移動量・fpsを調査中。テストの固定5秒待機を変更するかは原因確認後に判断する。
+
 ## 見た目
 
 外部 `/tmp/moss_visual_check.py` で指定9座標を撮影。リポジトリのtoolsや画像を変更せず、退避mainの同じ座標も比較。1280×720、PC Chromium。指定DEVページの結界自体はforest-dev.jsの色付きplaceholderで、本番の納品結界画像を検証できないため、index.htmlのMossForestで別途状態を撮影した。
@@ -28,6 +34,14 @@ STATUS: WIP
 | A1 道標 (1687,5690) | 地面に接地し、矢印を視認できる。明確な白縁なし。 |
 
 ゲーム画像の置換・向き/サイズの調整・地形変更は行っていない。スクリーンショットで確認できる範囲の指摘であり、全ピクセルの境界保証ではない。
+
+## 任意調査（修正なし）
+
+`ce2b366` 基準の `m14_hold_move.py` と `walk_a1.py` は実行時出力あり・合格・console/pageerror 0。Pythonをパイプ/ファイルへ出力すると通常のprintはバッファリングされる。`python3 -u tests/run_python.py <test>` で途中出力を確認できる。run_all.shもこの形で実行し、各結果はlogへ保存して完了時にtest名を出す。walk_a1は経路全体を単一evaluateで歩いてから各区間をprintするため、最初のstatsのあとしばらく無出力となる。なおwalk_a1はerrorsをprintするだけで非ゼロexitを設定していないため、終了codeだけで合否判定しない（今回は `errors []` を確認）。
+
+`m4_e2e.py` も今回合格。従来のタイムアウトは未再現。長距離歩行の各区間は最大120秒、map待機30秒、戦闘開始待機15秒で、どの待機が失敗したかの元logがないため原因の確定はできない。途中のシンボル戦・イベント停止・描画負荷は切り分け候補であり、今回の原因として断定しない。
+
+m8は前回Gで実遷移待機を90秒に修正済み。旧30秒の問題はCPU負荷下で正常歩行が51秒かかることを前回確認済み（G統合報告参照）。今回 `ce2b366` 基準で合格、街道→王都18.70秒。TBD王城出口の30秒待機は「遷移しない」確認の期待どおりであり、タイムアウト失敗ではない。
 
 ## PLAYER QA
 
