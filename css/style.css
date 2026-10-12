@@ -3540,7 +3540,6 @@ body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
 /* FieldTalk: speaker plate + choices inside #msg (M6) */
 #msg .talkName{display:inline-block;margin:-4px 0 6px;padding:2px 12px;background:#1d2b2c;border:1px solid #c5a45b;border-radius:4px;color:#f0dfa6;font-size:13px;letter-spacing:.08em}
 #msg .talkText{white-space:pre-wrap}
-@media (orientation:portrait) and (max-width:720px){#msg .talkText{font-size:12.5px;line-height:1.6}}
 #msg .talkChoices{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 #msg .talkChoices button{min-height:44px;min-width:96px;padding:6px 16px;background:#16282a;border:1px solid #c5a45b;border-radius:6px;color:#f4ecd0;font:inherit;cursor:pointer}
 #msg .talkChoices button:hover,#msg .talkChoices button:focus-visible{background:#2a4547;outline:none}
