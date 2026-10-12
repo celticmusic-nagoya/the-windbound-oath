@@ -1,0 +1,53 @@
+{
+  "source_head": "90f2917f3fbc10659d1f212490df4ff1ee298f06",
+  "main_base": "53180f3e9932c320f9929c9ef66eddb08eeb6fa7",
+  "port": 8783,
+  "timeout": 2,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "results": [
+    {
+      "test": "/tmp/runner-fixtures-25hs0mzy/pass.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.23,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "_tmp_runner-fixtures-25hs0mzy_pass.py.log",
+      "test_sha256_before": "5a01c1a2e8dbf8b332a5c2b8ed8aaefd2ccd152eb2a8626c507da1942b3037b0",
+      "test_sha256_after": "5a01c1a2e8dbf8b332a5c2b8ed8aaefd2ccd152eb2a8626c507da1942b3037b0",
+      "server_stopped": true
+    },
+    {
+      "test": "/tmp/runner-fixtures-25hs0mzy/zero_exit_fail.py",
+      "classification": "新規",
+      "exit_code": 0,
+      "seconds": 0.221,
+      "failure_lines": [],
+      "reported_fails": [
+        2
+      ],
+      "log": "_tmp_runner-fixtures-25hs0mzy_zero_exit_fail.py.log",
+      "test_sha256_before": "1df5670e0b6a1fdeb6cf85f95417eebdd1a6587ceac29824e906d9f2225648f5",
+      "test_sha256_after": "1df5670e0b6a1fdeb6cf85f95417eebdd1a6587ceac29824e906d9f2225648f5",
+      "server_stopped": true
+    },
+    {
+      "test": "/tmp/runner-fixtures-25hs0mzy/timeout.py",
+      "classification": "新規",
+      "exit_code": 124,
+      "seconds": 2.108,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "_tmp_runner-fixtures-25hs0mzy_timeout.py.log",
+      "test_sha256_before": "fb7f08c90f4813077a6764b43e0c521ecfef80e0dcbba6d0c119a3812f83b342",
+      "test_sha256_after": "fb7f08c90f4813077a6764b43e0c521ecfef80e0dcbba6d0c119a3812f83b342",
+      "server_stopped": true
+    }
+  ]
+}

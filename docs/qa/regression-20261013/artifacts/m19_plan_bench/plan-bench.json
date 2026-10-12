@@ -1,0 +1,2102 @@
+{
+  "metadata": {
+    "repo_sha": null,
+    "measured_at_utc": "2026-10-12T23:06:06.252273+00:00",
+    "benchmark_sha256": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29",
+    "source_hashes": {
+      "js/field/field-height.js": "867bf84794eae11b096357ac87eac3237f32856d512e04c07611dc5832f8baf3",
+      "js/field/field-navigation.js": "1ec6a6d60c6d9608e8baef9329352e17b2677e2b5dcb039e1975d53853d072b0",
+      "js/field/field-collision.js": "a1fd5980bc94bf8bec2903a9a2f31d8f9f7e9c91841a39489c803bc59c4781ec",
+      "data/maps/dev_height_proto.json": "f122bc2a93327b7dddd369b1c44dfad10f3eb3584236024d6a57bc2662d01ba9",
+      "data/maps/moss_forest_02_mossy_ravine.json": "101f649473506bd18c0baa00b178d10aa2f0b97cd3bb88388335a24560aaad46"
+    },
+    "chromium_version": "154.0.8037.57",
+    "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "repeats": 10,
+    "warmup_calls_per_route": 1,
+    "rates": [
+      1,
+      4
+    ],
+    "height_grid": 32,
+    "height_max_nodes": 60000,
+    "2d_grid": 32,
+    "2d_max_nodes": 40000,
+    "coordinates": "feet; APIs receive x-17,y-42",
+    "height_api": "MossForest.height instance of window.FieldHeight; public plan/setLevel/blockedAtLevel",
+    "2d_api": "FieldNavigation.destination + first follow (public APIs)",
+    "clock": "external performance.now around each public API call; includes recursive fallback",
+    "scope": "Chromium CPU emulation; not Android or input-to-render timing"
+  },
+  "results": [
+    {
+      "id": "height_near",
+      "route": "低地・近距離",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 1,
+      "start_feet": [
+        300,
+        1250,
+        0
+      ],
+      "goal_feet": [
+        500,
+        1250,
+        0
+      ],
+      "straight_distance_px": 200.0,
+      "summary": {
+        "wall_ms": {
+          "median": 0.09999999403953552,
+          "maximum": 0.20000000298023224,
+          "minimum": 0
+        },
+        "reported_ms": {
+          "median": 0.09999999403953552,
+          "maximum": 0.20000000298023224,
+          "minimum": 0
+        },
+        "expanded": {
+          "median": 0.0,
+          "maximum": 0,
+          "minimum": 0
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 0.10000000894069672,
+          "reported_ms": 0.10000000894069672,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 0.20000000298023224,
+          "reported_ms": 0.20000000298023224,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 0.10000000894069672,
+          "reported_ms": 0.10000000894069672,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        }
+      ]
+    },
+    {
+      "id": "height_bridge",
+      "route": "低地→橋の上",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 1,
+      "start_feet": [
+        300,
+        1250,
+        0
+      ],
+      "goal_feet": [
+        1560,
+        600,
+        1
+      ],
+      "straight_distance_px": 1417.7799547179386,
+      "summary": {
+        "wall_ms": {
+          "median": 11.5,
+          "maximum": 17,
+          "minimum": 10.800000011920929
+        },
+        "reported_ms": {
+          "median": 11.5,
+          "maximum": 16.899999991059303,
+          "minimum": 10.800000011920929
+        },
+        "expanded": {
+          "median": 1067.0,
+          "maximum": 1067,
+          "minimum": 1067
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 17,
+          "reported_ms": 16.899999991059303,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 15.5,
+          "reported_ms": 15.5,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 12.099999994039536,
+          "reported_ms": 12.099999994039536,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 12.600000008940697,
+          "reported_ms": 12.600000008940697,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 11.099999994039536,
+          "reported_ms": 11.099999994039536,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 11.399999991059303,
+          "reported_ms": 11.399999991059303,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 11.600000008940697,
+          "reported_ms": 11.600000008940697,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 11.199999988079071,
+          "reported_ms": 11.199999988079071,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 11,
+          "reported_ms": 11,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 10.800000011920929,
+          "reported_ms": 10.800000011920929,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        }
+      ]
+    },
+    {
+      "id": "height_plateau",
+      "route": "低地→高台",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 1,
+      "start_feet": [
+        300,
+        1250,
+        0
+      ],
+      "goal_feet": [
+        2000,
+        250,
+        1
+      ],
+      "straight_distance_px": 1972.308292331602,
+      "summary": {
+        "wall_ms": {
+          "median": 15.650000005960464,
+          "maximum": 18.099999994039536,
+          "minimum": 14.700000002980232
+        },
+        "reported_ms": {
+          "median": 15.650000005960464,
+          "maximum": 18,
+          "minimum": 14.700000002980232
+        },
+        "expanded": {
+          "median": 1484.0,
+          "maximum": 1484,
+          "minimum": 1484
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 17.900000005960464,
+          "reported_ms": 17.900000005960464,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 17.599999994039536,
+          "reported_ms": 17.599999994039536,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 18.099999994039536,
+          "reported_ms": 18,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 15.700000002980232,
+          "reported_ms": 15.700000002980232,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 14.700000002980232,
+          "reported_ms": 14.700000002980232,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 15.299999997019768,
+          "reported_ms": 15.299999997019768,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 15.600000008940697,
+          "reported_ms": 15.600000008940697,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 15.899999991059303,
+          "reported_ms": 15.899999991059303,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 14.700000002980232,
+          "reported_ms": 14.700000002980232,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 14.700000002980232,
+          "reported_ms": 14.700000002980232,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        }
+      ]
+    },
+    {
+      "id": "height_down",
+      "route": "高台→低地",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 1,
+      "start_feet": [
+        2000,
+        250,
+        1
+      ],
+      "goal_feet": [
+        300,
+        1250,
+        0
+      ],
+      "straight_distance_px": 1972.308292331602,
+      "summary": {
+        "wall_ms": {
+          "median": 13.25000000745058,
+          "maximum": 17.100000008940697,
+          "minimum": 12.899999991059303
+        },
+        "reported_ms": {
+          "median": 13.200000002980232,
+          "maximum": 17.100000008940697,
+          "minimum": 12.899999991059303
+        },
+        "expanded": {
+          "median": 1040.0,
+          "maximum": 1040,
+          "minimum": 1040
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 17.100000008940697,
+          "reported_ms": 17.100000008940697,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 16.200000002980232,
+          "reported_ms": 16.200000002980232,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 13.200000002980232,
+          "reported_ms": 13.200000002980232,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 13.200000002980232,
+          "reported_ms": 13.200000002980232,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 14.299999997019768,
+          "reported_ms": 14.299999997019768,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 13.099999994039536,
+          "reported_ms": 13.099999994039536,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 13.400000005960464,
+          "reported_ms": 13.400000005960464,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 12.899999991059303,
+          "reported_ms": 12.899999991059303,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 13.300000011920929,
+          "reported_ms": 13.200000002980232,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 13,
+          "reported_ms": 13,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        }
+      ]
+    },
+    {
+      "id": "height_under",
+      "route": "橋の下・横断",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 1,
+      "start_feet": [
+        1450,
+        900,
+        0
+      ],
+      "goal_feet": [
+        1700,
+        900,
+        0
+      ],
+      "straight_distance_px": 250.0,
+      "summary": {
+        "wall_ms": {
+          "median": 0.0,
+          "maximum": 0.10000000894069672,
+          "minimum": 0
+        },
+        "reported_ms": {
+          "median": 0.0,
+          "maximum": 0.10000000894069672,
+          "minimum": 0
+        },
+        "expanded": {
+          "median": 0.0,
+          "maximum": 0,
+          "minimum": 0
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 0.10000000894069672,
+          "reported_ms": 0.10000000894069672,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        }
+      ]
+    },
+    {
+      "id": "2d_near",
+      "route": "2D・近距離",
+      "map": "moss_forest_02_mossy_ravine",
+      "planner": "2d",
+      "cpu_rate": 1,
+      "start_feet": [
+        7600,
+        5625,
+        0
+      ],
+      "goal_feet": [
+        7580,
+        5425,
+        0
+      ],
+      "straight_distance_px": 200.9975124224178,
+      "summary": {
+        "wall_ms": {
+          "median": 0.04999999701976776,
+          "maximum": 0.20000000298023224,
+          "minimum": 0
+        },
+        "reported_ms": {
+          "median": 0.0,
+          "maximum": 0.10000000894069672,
+          "minimum": 0
+        },
+        "expanded": {
+          "median": 0.0,
+          "maximum": 0,
+          "minimum": 0
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 2,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 0.20000000298023224,
+          "reported_ms": 0.10000000894069672,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 3,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 4,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 5,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 0.10000000894069672,
+          "reported_ms": 0.10000000894069672,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 6,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 7,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 8,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 9,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 10,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 11,
+          "outcome": "moving"
+        }
+      ]
+    },
+    {
+      "id": "2d_mid",
+      "route": "2D・中距離",
+      "map": "moss_forest_02_mossy_ravine",
+      "planner": "2d",
+      "cpu_rate": 1,
+      "start_feet": [
+        8400,
+        6925,
+        0
+      ],
+      "goal_feet": [
+        7800,
+        5792,
+        0
+      ],
+      "straight_distance_px": 1282.0643509590304,
+      "summary": {
+        "wall_ms": {
+          "median": 4.350000001490116,
+          "maximum": 8.599999994039536,
+          "minimum": 2.7999999970197678
+        },
+        "reported_ms": {
+          "median": 3.0499999970197678,
+          "maximum": 4,
+          "minimum": 2.1000000089406967
+        },
+        "expanded": {
+          "median": 383.0,
+          "maximum": 383,
+          "minimum": 383
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 8.599999994039536,
+          "reported_ms": 2.7000000029802322,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 13,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 3.5,
+          "reported_ms": 2.5,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 14,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 2.7999999970197678,
+          "reported_ms": 2.1000000089406967,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 15,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 4.200000002980232,
+          "reported_ms": 3.1000000089406967,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 16,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 4.5,
+          "reported_ms": 3.2999999970197678,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 17,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 4.100000008940697,
+          "reported_ms": 3,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 18,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 4.799999997019768,
+          "reported_ms": 3.0999999940395355,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 19,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 4.5999999940395355,
+          "reported_ms": 3,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 20,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 4.100000008940697,
+          "reported_ms": 3.1000000089406967,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 21,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 4.5999999940395355,
+          "reported_ms": 4,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 22,
+          "outcome": "moving"
+        }
+      ]
+    },
+    {
+      "id": "2d_far",
+      "route": "2D・遠距離",
+      "map": "moss_forest_02_mossy_ravine",
+      "planner": "2d",
+      "cpu_rate": 1,
+      "start_feet": [
+        8200,
+        6125,
+        0
+      ],
+      "goal_feet": [
+        6845,
+        4667,
+        0
+      ],
+      "straight_distance_px": 1990.4243266198291,
+      "summary": {
+        "wall_ms": {
+          "median": 5.399999998509884,
+          "maximum": 6.5,
+          "minimum": 4.700000002980232
+        },
+        "reported_ms": {
+          "median": 3.6500000059604645,
+          "maximum": 5,
+          "minimum": 3.2000000029802322
+        },
+        "expanded": {
+          "median": 708.0,
+          "maximum": 708,
+          "minimum": 708
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 5.700000002980232,
+          "reported_ms": 4,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 24,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 4.9000000059604645,
+          "reported_ms": 3.4000000059604645,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 25,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 4.700000002980232,
+          "reported_ms": 3.2000000029802322,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 26,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 5.5999999940395355,
+          "reported_ms": 3.5,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 27,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 5.0999999940395355,
+          "reported_ms": 3.5999999940395355,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 28,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 6.5,
+          "reported_ms": 5,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 29,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 5.300000011920929,
+          "reported_ms": 3.7000000029802322,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 30,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 5.399999991059303,
+          "reported_ms": 3.8999999910593033,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 31,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 5.700000002980232,
+          "reported_ms": 3.6000000089406967,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 32,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 5.4000000059604645,
+          "reported_ms": 3.7999999970197678,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 33,
+          "outcome": "moving"
+        }
+      ]
+    },
+    {
+      "id": "height_near",
+      "route": "低地・近距離",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 4,
+      "start_feet": [
+        300,
+        1250,
+        0
+      ],
+      "goal_feet": [
+        500,
+        1250,
+        0
+      ],
+      "straight_distance_px": 200.0,
+      "summary": {
+        "wall_ms": {
+          "median": 0.0,
+          "maximum": 0.30000001192092896,
+          "minimum": 0
+        },
+        "reported_ms": {
+          "median": 0.0,
+          "maximum": 0.30000001192092896,
+          "minimum": 0
+        },
+        "expanded": {
+          "median": 0.0,
+          "maximum": 0,
+          "minimum": 0
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 0.30000001192092896,
+          "reported_ms": 0.30000001192092896,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 0.19999998807907104,
+          "reported_ms": 0.19999998807907104,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        }
+      ]
+    },
+    {
+      "id": "height_bridge",
+      "route": "低地→橋の上",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 4,
+      "start_feet": [
+        300,
+        1250,
+        0
+      ],
+      "goal_feet": [
+        1560,
+        600,
+        1
+      ],
+      "straight_distance_px": 1417.7799547179386,
+      "summary": {
+        "wall_ms": {
+          "median": 45.5,
+          "maximum": 56.1000000089407,
+          "minimum": 43.20000000298023
+        },
+        "reported_ms": {
+          "median": 45.5,
+          "maximum": 56.1000000089407,
+          "minimum": 43.20000000298023
+        },
+        "expanded": {
+          "median": 1067.0,
+          "maximum": 1067,
+          "minimum": 1067
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 56.1000000089407,
+          "reported_ms": 56.1000000089407,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 52.8999999910593,
+          "reported_ms": 52.79999999701977,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 44.1000000089407,
+          "reported_ms": 44.1000000089407,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 49.8999999910593,
+          "reported_ms": 49.8999999910593,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 44.70000000298023,
+          "reported_ms": 44.70000000298023,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 44.20000000298023,
+          "reported_ms": 44.20000000298023,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 43.20000000298023,
+          "reported_ms": 43.20000000298023,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 44.5,
+          "reported_ms": 44.5,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 46.29999999701977,
+          "reported_ms": 46.29999999701977,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 52.400000005960464,
+          "reported_ms": 52.400000005960464,
+          "expanded": 1067,
+          "success": true,
+          "path_vertices": 2,
+          "final_level": 1
+        }
+      ]
+    },
+    {
+      "id": "height_plateau",
+      "route": "低地→高台",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 4,
+      "start_feet": [
+        300,
+        1250,
+        0
+      ],
+      "goal_feet": [
+        2000,
+        250,
+        1
+      ],
+      "straight_distance_px": 1972.308292331602,
+      "summary": {
+        "wall_ms": {
+          "median": 74.79999999701977,
+          "maximum": 88.40000000596046,
+          "minimum": 66.40000000596046
+        },
+        "reported_ms": {
+          "median": 74.79999999701977,
+          "maximum": 88,
+          "minimum": 66.40000000596046
+        },
+        "expanded": {
+          "median": 1484.0,
+          "maximum": 1484,
+          "minimum": 1484
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 68.09999999403954,
+          "reported_ms": 68.09999999403954,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 74.5,
+          "reported_ms": 74.5,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 75.40000000596046,
+          "reported_ms": 75.40000000596046,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 75.09999999403954,
+          "reported_ms": 75.09999999403954,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 81.79999999701977,
+          "reported_ms": 81.79999999701977,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 88.40000000596046,
+          "reported_ms": 88,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 74.09999999403954,
+          "reported_ms": 74.09999999403954,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 66.40000000596046,
+          "reported_ms": 66.40000000596046,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 69.5,
+          "reported_ms": 69.5,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 79.70000000298023,
+          "reported_ms": 79.70000000298023,
+          "expanded": 1484,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 1
+        }
+      ]
+    },
+    {
+      "id": "height_down",
+      "route": "高台→低地",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 4,
+      "start_feet": [
+        2000,
+        250,
+        1
+      ],
+      "goal_feet": [
+        300,
+        1250,
+        0
+      ],
+      "straight_distance_px": 1972.308292331602,
+      "summary": {
+        "wall_ms": {
+          "median": 68.70000000298023,
+          "maximum": 74.40000000596046,
+          "minimum": 59.20000000298023
+        },
+        "reported_ms": {
+          "median": 68.64999999850988,
+          "maximum": 74.40000000596046,
+          "minimum": 59.20000000298023
+        },
+        "expanded": {
+          "median": 1040.0,
+          "maximum": 1040,
+          "minimum": 1040
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 69.79999999701977,
+          "reported_ms": 69.79999999701977,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 68,
+          "reported_ms": 68,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 64.20000000298023,
+          "reported_ms": 64.20000000298023,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 71,
+          "reported_ms": 71,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 74.40000000596046,
+          "reported_ms": 74.40000000596046,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 69.8999999910593,
+          "reported_ms": 69.8999999910593,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 63.8999999910593,
+          "reported_ms": 63.8999999910593,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 68.90000000596046,
+          "reported_ms": 68.79999999701977,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 68.5,
+          "reported_ms": 68.5,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 59.20000000298023,
+          "reported_ms": 59.20000000298023,
+          "expanded": 1040,
+          "success": true,
+          "path_vertices": 4,
+          "final_level": 0
+        }
+      ]
+    },
+    {
+      "id": "height_under",
+      "route": "橋の下・横断",
+      "map": "dev_height_proto",
+      "planner": "height",
+      "cpu_rate": 4,
+      "start_feet": [
+        1450,
+        900,
+        0
+      ],
+      "goal_feet": [
+        1700,
+        900,
+        0
+      ],
+      "straight_distance_px": 250.0,
+      "summary": {
+        "wall_ms": {
+          "median": 0.0,
+          "maximum": 0.6000000089406967,
+          "minimum": 0
+        },
+        "reported_ms": {
+          "median": 0.0,
+          "maximum": 0.6000000089406967,
+          "minimum": 0
+        },
+        "expanded": {
+          "median": 0.0,
+          "maximum": 0,
+          "minimum": 0
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 0.6000000089406967,
+          "reported_ms": 0.6000000089406967,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 0.10000000894069672,
+          "reported_ms": 0.10000000894069672,
+          "expanded": 0,
+          "success": true,
+          "path_vertices": 1,
+          "final_level": 0
+        }
+      ]
+    },
+    {
+      "id": "2d_near",
+      "route": "2D・近距離",
+      "map": "moss_forest_02_mossy_ravine",
+      "planner": "2d",
+      "cpu_rate": 4,
+      "start_feet": [
+        7600,
+        5625,
+        0
+      ],
+      "goal_feet": [
+        7580,
+        5425,
+        0
+      ],
+      "straight_distance_px": 200.9975124224178,
+      "summary": {
+        "wall_ms": {
+          "median": 0.0,
+          "maximum": 1,
+          "minimum": 0
+        },
+        "reported_ms": {
+          "median": 0.0,
+          "maximum": 1,
+          "minimum": 0
+        },
+        "expanded": {
+          "median": 0.0,
+          "maximum": 0,
+          "minimum": 0
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 35,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 36,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 1,
+          "reported_ms": 1,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 37,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 38,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 39,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 40,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 41,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 0.09999999403953552,
+          "reported_ms": 0.09999999403953552,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 42,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 43,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 0,
+          "reported_ms": 0,
+          "expanded": 0,
+          "success": true,
+          "planner_calls": 44,
+          "outcome": "moving"
+        }
+      ]
+    },
+    {
+      "id": "2d_mid",
+      "route": "2D・中距離",
+      "map": "moss_forest_02_mossy_ravine",
+      "planner": "2d",
+      "cpu_rate": 4,
+      "start_feet": [
+        8400,
+        6925,
+        0
+      ],
+      "goal_feet": [
+        7800,
+        5792,
+        0
+      ],
+      "straight_distance_px": 1282.0643509590304,
+      "summary": {
+        "wall_ms": {
+          "median": 12.24999999254942,
+          "maximum": 18.600000008940697,
+          "minimum": 10
+        },
+        "reported_ms": {
+          "median": 8.600000001490116,
+          "maximum": 13.900000005960464,
+          "minimum": 6.9000000059604645
+        },
+        "expanded": {
+          "median": 383.0,
+          "maximum": 383,
+          "minimum": 383
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 13.199999988079071,
+          "reported_ms": 10.199999988079071,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 46,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 17.5,
+          "reported_ms": 8.799999997019768,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 47,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 12.299999997019768,
+          "reported_ms": 8.400000005960464,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 48,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 10,
+          "reported_ms": 7.699999988079071,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 49,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 12.199999988079071,
+          "reported_ms": 9.399999991059303,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 50,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 10.5,
+          "reported_ms": 8.300000011920929,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 51,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 18.600000008940697,
+          "reported_ms": 13.900000005960464,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 52,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 14.899999991059303,
+          "reported_ms": 12.700000002980232,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 53,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 10.300000011920929,
+          "reported_ms": 6.9000000059604645,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 54,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 10.099999994039536,
+          "reported_ms": 8.199999988079071,
+          "expanded": 383,
+          "success": true,
+          "planner_calls": 55,
+          "outcome": "moving"
+        }
+      ]
+    },
+    {
+      "id": "2d_far",
+      "route": "2D・遠距離",
+      "map": "moss_forest_02_mossy_ravine",
+      "planner": "2d",
+      "cpu_rate": 4,
+      "start_feet": [
+        8200,
+        6125,
+        0
+      ],
+      "goal_feet": [
+        6845,
+        4667,
+        0
+      ],
+      "straight_distance_px": 1990.4243266198291,
+      "summary": {
+        "wall_ms": {
+          "median": 24.849999994039536,
+          "maximum": 31,
+          "minimum": 20.899999991059303
+        },
+        "reported_ms": {
+          "median": 17.100000001490116,
+          "maximum": 22.100000008940697,
+          "minimum": 14.399999991059303
+        },
+        "expanded": {
+          "median": 708.0,
+          "maximum": 708,
+          "minimum": 708
+        },
+        "successful": 10,
+        "trials": 10
+      },
+      "samples": [
+        {
+          "iteration": 1,
+          "wall_ms": 31,
+          "reported_ms": 18.600000008940697,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 57,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 2,
+          "wall_ms": 25.5,
+          "reported_ms": 17.599999994039536,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 58,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 3,
+          "wall_ms": 24.900000005960464,
+          "reported_ms": 18.100000008940697,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 59,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 4,
+          "wall_ms": 20.899999991059303,
+          "reported_ms": 14.399999991059303,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 60,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 5,
+          "wall_ms": 24.899999991059303,
+          "reported_ms": 15.600000008940697,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 61,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 6,
+          "wall_ms": 21.80000001192093,
+          "reported_ms": 14.900000005960464,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 62,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 7,
+          "wall_ms": 24,
+          "reported_ms": 16.30000001192093,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 63,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 8,
+          "wall_ms": 29.600000008940697,
+          "reported_ms": 22.100000008940697,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 64,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 9,
+          "wall_ms": 24.099999994039536,
+          "reported_ms": 17.299999997019768,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 65,
+          "outcome": "moving"
+        },
+        {
+          "iteration": 10,
+          "wall_ms": 24.799999997019768,
+          "reported_ms": 16.900000005960464,
+          "expanded": 708,
+          "success": true,
+          "planner_calls": 66,
+          "outcome": "moving"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -112,3 +112,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 追加承認checkpoint: ユーザーの「GitHubのClaude指示を取得して積極着手」をstatusへ記録しecfcb7aでpush。remote再取得・main058cfc8を確認。優先3の文面短縮案と新規QA画像/JSONを追加。3ページの案を実DOMだけでpreviewし縦3→2行・横1行、pageerror0、原altarLines/誓い不変を確認。index等未変更/未適用、全回帰/Android未実施。STATUS: READY（提案納品、採用は要判断）。
 
 Codex O着手: work/codex-regression-runner / main53180f3。新規全件runnerとQA結果表、statusのみ。元コード/テスト/素材未編集。STATUS WIP。
+
+Codex O納品: 全59=57合格/既存2/新規0/未実施0。各test server終了、test hash不変。negative fixture/arg転送/未コミットsource拒否の検証合格。ゲームコード未変更、main未merge。STATUS READY。

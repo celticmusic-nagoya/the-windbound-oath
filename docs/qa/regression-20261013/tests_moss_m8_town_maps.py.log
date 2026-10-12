@@ -1,0 +1,151 @@
+ok   fort_dunvall_01_courtyard: schema/id/spawns
+ok   fort_dunvall_01_courtyard: tr_f1_to_capital -> road_dunvall_capital_01:from_fort exists
+ok   fort_dunvall_01_courtyard: tr_f1_to_ramparts -> fort_dunvall_02_ramparts:from_courtyard exists
+ok   fort_dunvall_01_courtyard: tr_f1_to_keep -> fort_dunvall_03_keep:from_courtyard exists
+ok   fort_dunvall_01_courtyard: tr_f1_to_tavern -> fort_in_tavern:from_courtyard exists
+ok   fort_dunvall_01_courtyard: every link has a way back
+ok   fort_dunvall_02_ramparts: schema/id/spawns
+ok   fort_dunvall_02_ramparts: tr_f2_down -> fort_dunvall_01_courtyard:from_ramparts exists
+ok   fort_dunvall_02_ramparts: tr_f2_to_keep -> fort_dunvall_03_keep:from_wall exists
+ok   fort_dunvall_02_ramparts: every link has a way back
+ok   fort_dunvall_03_keep: schema/id/spawns
+ok   fort_dunvall_03_keep: tr_f3_exit -> fort_dunvall_01_courtyard:from_keep exists
+ok   fort_dunvall_03_keep: tr_f3_to_wall -> fort_dunvall_02_ramparts:from_keep exists
+ok   fort_dunvall_03_keep: every link has a way back
+ok   royal_capital_01_market: schema/id/spawns
+ok   royal_capital_01_market: tr_r1_to_gate -> royal_capital_00_gate:from_market exists
+ok   royal_capital_01_market: tr_r1_to_plaza -> royal_capital_02_castle_plaza:from_market exists
+ok   royal_capital_01_market: tr_r1_to_residential -> royal_capital_03_residential:from_market exists
+ok   royal_capital_01_market: every link has a way back
+ok   royal_capital_02_castle_plaza: schema/id/spawns
+ok   royal_capital_02_castle_plaza: tr_r2_to_residential -> royal_capital_03_residential:from_plaza exists
+ok   royal_capital_02_castle_plaza: tr_r2_to_market -> royal_capital_01_market:from_plaza exists
+ok   royal_capital_02_castle_plaza: every link has a way back
+ok   royal_capital_03_residential: schema/id/spawns
+ok   royal_capital_03_residential: tr_r3_to_market -> royal_capital_01_market:from_residential exists
+ok   royal_capital_03_residential: tr_r3_to_plaza -> royal_capital_02_castle_plaza:from_residential exists
+ok   royal_capital_03_residential: every link has a way back
+ok   royal_capital_00_gate: schema/id/spawns
+ok   royal_capital_00_gate: tr_g_to_road -> road_dunvall_capital_01:from_capital exists
+ok   royal_capital_00_gate: tr_g_to_market -> royal_capital_01_market:from_gate exists
+ok   royal_capital_00_gate: tr_g_to_guild -> royal_in_guild:from_gate exists
+ok   royal_capital_00_gate: tr_g_to_inn -> royal_in_inn:from_gate exists
+ok   royal_capital_00_gate: every link has a way back
+ok   royal_in_guild: schema/id/spawns
+ok   royal_in_guild: tr_gi_exit -> royal_capital_00_gate:from_guild exists
+ok   royal_in_guild: every link has a way back
+ok   royal_in_inn: schema/id/spawns
+ok   royal_in_inn: tr_ii_exit -> royal_capital_00_gate:from_inn exists
+ok   royal_in_inn: every link has a way back
+ok   road_dunvall_capital_01: schema/id/spawns
+ok   road_dunvall_capital_01: tr_rd_to_fort -> fort_dunvall_01_courtyard:from_capital_road exists
+ok   road_dunvall_capital_01: tr_rd_to_capital -> royal_capital_00_gate:from_road exists
+ok   road_dunvall_capital_01: every link has a way back
+ok   fort_in_tavern: schema/id/spawns
+ok   fort_in_tavern: tr_in_tavern_exit -> fort_dunvall_01_courtyard:from_tavern exists
+ok   fort_in_tavern: every link has a way back
+ok   fort_dunvall_01_courtyard: loads in the runtime
+ok   fort_dunvall_01_courtyard: default spawn is free
+ok   fort_dunvall_01_courtyard: world edge is blocked
+ok   fort_dunvall_01_courtyard: wall centre is blocked (wall)
+ok   fort_dunvall_01_courtyard: a walking route exists to every NPC slot and chest []
+ok   fort_dunvall_02_ramparts: loads in the runtime
+ok   fort_dunvall_02_ramparts: default spawn is free
+ok   fort_dunvall_02_ramparts: world edge is blocked
+ok   fort_dunvall_02_ramparts: wall centre is blocked (drop)
+ok   fort_dunvall_02_ramparts: a walking route exists to every NPC slot and chest []
+ok   fort_dunvall_03_keep: loads in the runtime
+ok   fort_dunvall_03_keep: default spawn is free
+ok   fort_dunvall_03_keep: world edge is blocked
+ok   fort_dunvall_03_keep: wall centre is blocked (wall)
+ok   fort_dunvall_03_keep: a walking route exists to every NPC slot and chest []
+ok   royal_capital_01_market: loads in the runtime
+ok   royal_capital_01_market: default spawn is free
+ok   royal_capital_01_market: world edge is blocked
+ok   royal_capital_01_market: wall centre is blocked (stall)
+ok   royal_capital_01_market: a walking route exists to every NPC slot and chest []
+ok   royal_capital_02_castle_plaza: loads in the runtime
+ok   royal_capital_02_castle_plaza: default spawn is free
+ok   royal_capital_02_castle_plaza: world edge is blocked
+ok   royal_capital_02_castle_plaza: wall centre is blocked (castle)
+ok   royal_capital_02_castle_plaza: a walking route exists to every NPC slot and chest []
+ok   royal_capital_03_residential: loads in the runtime
+ok   royal_capital_03_residential: default spawn is free
+ok   royal_capital_03_residential: world edge is blocked
+ok   royal_capital_03_residential: wall centre is blocked (house)
+ok   royal_capital_03_residential: a walking route exists to every NPC slot and chest []
+ok   royal_capital_00_gate: loads in the runtime
+ok   royal_capital_00_gate: default spawn is free
+ok   royal_capital_00_gate: world edge is blocked
+ok   royal_capital_00_gate: wall centre is blocked (wall)
+ok   royal_capital_00_gate: a walking route exists to every NPC slot and chest []
+ok   royal_in_guild: loads in the runtime
+ok   royal_in_guild: default spawn is free
+ok   royal_in_guild: world edge is blocked
+ok   royal_in_guild: wall centre is blocked (wall)
+ok   royal_in_guild: a walking route exists to every NPC slot and chest []
+ok   royal_in_inn: loads in the runtime
+ok   royal_in_inn: default spawn is free
+ok   royal_in_inn: world edge is blocked
+ok   royal_in_inn: wall centre is blocked (wall)
+ok   royal_in_inn: a walking route exists to every NPC slot and chest []
+ok   road_dunvall_capital_01: loads in the runtime
+ok   road_dunvall_capital_01: default spawn is free
+ok   road_dunvall_capital_01: world edge is blocked
+ok   road_dunvall_capital_01: wall centre is blocked (forest)
+ok   road_dunvall_capital_01: a walking route exists to every NPC slot and chest []
+ok   fort_in_tavern: loads in the runtime
+ok   fort_in_tavern: default spawn is free
+ok   fort_in_tavern: world edge is blocked
+ok   fort_in_tavern: wall centre is blocked (wall)
+ok   fort_in_tavern: a walking route exists to every NPC slot and chest []
+walk seconds tr_f1_to_ramparts 6.64
+ok   walk through tr_f1_to_ramparts: fort_dunvall_01_courtyard -> fort_dunvall_02_ramparts
+walk seconds tr_f2_down 1.31
+ok   walk through tr_f2_down: fort_dunvall_02_ramparts -> fort_dunvall_01_courtyard
+walk seconds tr_f1_to_keep 5.34
+ok   walk through tr_f1_to_keep: fort_dunvall_01_courtyard -> fort_dunvall_03_keep
+walk seconds tr_f3_exit 1.61
+ok   walk through tr_f3_exit: fort_dunvall_03_keep -> fort_dunvall_01_courtyard
+walk seconds tr_g_to_market 11.52
+ok   walk through tr_g_to_market: royal_capital_00_gate -> royal_capital_01_market
+walk seconds tr_g_to_guild 10.51
+ok   walk through tr_g_to_guild: royal_capital_00_gate -> royal_in_guild
+walk seconds tr_gi_exit 1.27
+ok   walk through tr_gi_exit: royal_in_guild -> royal_capital_00_gate
+walk seconds tr_g_to_inn 10.5
+ok   walk through tr_g_to_inn: royal_capital_00_gate -> royal_in_inn
+walk seconds tr_ii_exit 1.25
+ok   walk through tr_ii_exit: royal_in_inn -> royal_capital_00_gate
+walk seconds tr_r1_to_plaza 10.24
+ok   walk through tr_r1_to_plaza: royal_capital_01_market -> royal_capital_02_castle_plaza
+walk seconds tr_r2_to_residential 9.27
+ok   walk through tr_r2_to_residential: royal_capital_02_castle_plaza -> royal_capital_03_residential
+walk seconds tr_r3_to_market 11.74
+ok   walk through tr_r3_to_market: royal_capital_03_residential -> royal_capital_01_market
+walk seconds tr_r1_to_residential 9.95
+ok   walk through tr_r1_to_residential: royal_capital_01_market -> royal_capital_03_residential
+walk seconds tr_r2_to_market 9.13
+ok   walk through tr_r2_to_market: royal_capital_02_castle_plaza -> royal_capital_01_market
+walk seconds tr_r1_to_gate 10.19
+ok   walk through tr_r1_to_gate: royal_capital_01_market -> royal_capital_00_gate
+walk seconds tr_f3_to_wall 4.2
+ok   walk through tr_f3_to_wall: fort_dunvall_03_keep -> fort_dunvall_02_ramparts
+walk seconds tr_f2_to_keep 5.39
+ok   walk through tr_f2_to_keep: fort_dunvall_02_ramparts -> fort_dunvall_03_keep
+walk seconds tr_f1_to_capital 7.39
+ok   walk through tr_f1_to_capital: fort_dunvall_01_courtyard -> road_dunvall_capital_01
+walk seconds tr_rd_to_capital 18.69
+ok   walk through tr_rd_to_capital: road_dunvall_capital_01 -> royal_capital_00_gate
+walk seconds tr_g_to_road 1.29
+ok   walk through tr_g_to_road: royal_capital_00_gate -> road_dunvall_capital_01
+walk seconds tr_rd_to_fort 18.69
+ok   walk through tr_rd_to_fort: road_dunvall_capital_01 -> fort_dunvall_01_courtyard
+walk seconds tr_f1_to_tavern 6.33
+ok   walk through tr_f1_to_tavern: fort_dunvall_01_courtyard -> fort_in_tavern
+walk seconds tr_in_tavern_exit 1.23
+ok   walk through tr_in_tavern_exit: fort_in_tavern -> fort_dunvall_01_courtyard
+walk seconds tr_r2_castle_gate 30.31
+ok   walk through tr_r2_castle_gate: royal_capital_02_castle_plaza -> royal_capital_02_castle_plaza
+ok   south gate returns to the (Moss) Rilde village
+ok   0 console errors []

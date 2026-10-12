@@ -58,3 +58,5 @@ O着手: work/codex-regression-runner / main53180f3。Nはwork/codex-wind-dance-
 
 全59対象のうち20本完了。N納品済み2e9bb42。O runner WIP58df9f7をpush済み。分類: 合格=19, main既存=1, 新規=0。実行中の結果はdocs/qa/regression-20261013/results.json/md/tsv、実行コマンドはPATH=/workspace/.cloud-setup/venv/bin:$PATH PW_CHROMIUM_EXECUTABLE=/usr/bin/chromium bash tools/qa/run_all.sh --timeout 600。Oの全実行が終わるまでP/Qへ着手しない。利用制限で止める場合はrunnerのプロセス/サーバーが残っていないか確認し、残りを未実施として報告する。
 再開時: 同ファイルの実行済み/未実施を確認し、稼働中runnerがあれば二重起動しない。元コード/asset/testはsnapshot内で実行、元repo変更なし。
+
+O完了: 全59本実行=合格57/main既存2(m13,m4)/新規0/未実施0。source58df9f7、アプリはmain53180f3同一。FAILS-prefix/structured args/clean snapshot guardを追加しログ再判定、関係するbenchmark/Node/runner負例を再検証合格。最終版で全59を2度実行したとは扱わない。docs/handoff/regression-runner.mdとQA表参照。次はP、Q、R（対象branchの公開待ち）。未コミットcode/ユーザー変更/起動serverなし。
