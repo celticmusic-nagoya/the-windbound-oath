@@ -424,7 +424,7 @@ function mainQuestData(){
  if(storyStage===4)return {title:'風が止んだ夜',desc:'風見の断崖で異変が起きた。フィオナと急いでリルド村へ戻る。'};
  if(storyStage<=6)return {title:'炎の中のリルド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
  if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリルド村から逃げる。'};
- if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、長老やエマから「奥地には絶対に行くな」と言われていた古い森へ迷い込んだ。奥地から吹く嫌な風の正体を、分岐を探索しながら調べる。'};
+ if(storyStage===9)return {title:'苔むした森',desc:'村から逃れる途中、崖の崩落に巻き込まれた二人は、立ち入りを禁じられたモスの森に落ちた。崖の上へは戻れない。森の奥へ続く道は、古代の結界にふさがれている。冷たく重い風が流れてくる森で、異常化ゴブリン3体を討伐して結界を解き、道を切り開こう。'};
  if(storyStage===10)return {title:'風を返す古代石',desc:'フィオナに反応する古代石を発見した。異常化した魔物を退け、石の周囲に残る風の気配を探す。'};
  if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
  if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇で魔物に包囲された。古代石から現れた「誓いの剣」を手に取り、突破口を開く。'};
@@ -910,6 +910,7 @@ const escapeLinesNow=()=>TalkDataAttack.escapeLines;   // 文言は js/field/tal
 let escapeIndex=0;
 function startEscapeScene(){
  closeDialogue(); escapeIndex=0; FieldTalk.setFlag('atk_escaped',true);
+ $('#escapeGob').style.display='none';   // the pursuer shows up on the horn line (escapeIndex 4); the stylesheet default is visible
  $('#escapeScene').style.display='block';
  $('#escapeText').textContent=escapeLinesNow()[0];
  atkObj('escape');
@@ -918,15 +919,14 @@ $('#escapeScene').onclick=()=>{
  escapeIndex++;
  if(escapeIndex<escapeLinesNow().length){
    $('#escapeText').textContent=escapeLinesNow()[escapeIndex];
-   if(escapeIndex===2)$('#escapeGob').style.display='grid';
-   if(escapeIndex===5){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
+   if(escapeIndex===4)$('#escapeGob').style.display='grid';
+   if(escapeIndex===7){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
  }else{
    $('#escapeScene').style.display='none';
    enterMossForest();
  }
 };
 
-const FIONA_FOREST_LINE='フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、奥には絶対行くなって言っていた森……だよね……？」';
 // Forest field control (Moss Forest runtime; see js/field/moss-forest-*.js).
 function forestShow(){forestActive=true;MossForest.resume();MossForestStory.syncFlags();}
 function forestHideScene(){forestActive=false;MossForest.hide();}
@@ -1121,7 +1121,7 @@ function enterMossForest(){
  MossForestStory.enterFromStart().then(()=>{
    questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
    const g=window.PrologueCombat?.generation;
-   setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)say(FIONA_FOREST_LINE)},350);
+   setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)FieldTalk.talk('scene_forest_arrival',{source:'forest'})},350);
  });
 }
 function forestDevEnterA3(fx,fy){forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterAt(MossForestStory.MAP_IDS.a3,fx-17,fy-42,null);}
@@ -1168,6 +1168,8 @@ const altarLines=[
  '声なき声「……誓いを、もう一度。」',
  'エイダン「誓い……？」',
  '脳裏に燃えるリルド村がよぎる。守れなかった人々。手を伸ばしても届かなかったもの。',
+ '夕日の丘の景色がよみがえる。並んで見た夕焼け。「守れるくらいには強くなりたい」――あのときの自分の言葉が、胸に刺さる。',
+ 'エイダン「……強くなりたいなんて言って、村のみんなを守れなかった。」',
  'エイダン「……もう、目の前で誰かを失うのは嫌だ。」',
  'エイダンが柄を握る。封印が砕け、緑金の光とともに「誓いの剣」が目を覚ました。',
  'フィオナ「エイダン……その剣……。」',
@@ -1187,7 +1189,7 @@ $('#altarScene').onclick=()=>{
  if(altarIndex<altarLines.length){
    $('#altarText').textContent=altarLines[altarIndex];
    if(altarIndex===14)$('#oathSword').style.display='block';
-   if(altarIndex===19){
+   if(altarIndex===21){
      ['ag1','ag2','ag3','ag4'].forEach(id=>$('#'+id).style.opacity='.28');
      $('#oathSword').style.filter='drop-shadow(0 0 28px #e7ffd8)';
    }
@@ -1936,10 +1938,10 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/talk-conditions.js"></script>
 <script src="js/field/talk-data.js"></script>
 <script src="js/field/talk-data-quests.js"></script>
-<script src="js/field/talk-data-scenes.js"></script>
+<script src="js/field/talk-data-scenes.js?v=20261012a"></script>
 <script src="js/field/talk-data-capital.js?v=20261011i"></script>
 <script src="js/field/talk-data-rilde.js?v=20261011d"></script>
-<script src="js/field/talk-data-attack.js?v=20261011b"></script>
+<script src="js/field/talk-data-attack.js?v=20261012a"></script>
 <script src="js/field/field-talk.js?v=20261011h"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>
