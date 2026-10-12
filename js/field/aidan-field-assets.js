@@ -132,7 +132,39 @@
   "scale": 0.0625
  },
  "aidan_walk_left_03": {
-  "path": "img/field/characters/aidan/aidan_walk_left_03.png?v=f5763c3d",
+  "path": "img/field/characters/aidan/aidan_walk_left_03.png?v=d2722e16",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   766,
+   162,
+   772,
+   1068
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_left_04": {
+  "path": "img/field/characters/aidan/aidan_walk_left_04.png?v=093f6152",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   782,
+   162,
+   740,
+   1068
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_left_05": {
+  "path": "img/field/characters/aidan/aidan_walk_left_05.png?v=f5763c3d",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -147,8 +179,8 @@
   ],
   "scale": 0.0625
  },
- "aidan_walk_left_04": {
-  "path": "img/field/characters/aidan/aidan_walk_left_04.png?v=0544b56b",
+ "aidan_walk_left_06": {
+  "path": "img/field/characters/aidan/aidan_walk_left_06.png?v=0544b56b",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -212,7 +244,39 @@
   "scale": 0.0625
  },
  "aidan_walk_right_03": {
-  "path": "img/field/characters/aidan/aidan_walk_right_03.png?v=4853c76e",
+  "path": "img/field/characters/aidan/aidan_walk_right_03.png?v=4d0d48c1",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   534,
+   162,
+   787,
+   1068
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_right_04": {
+  "path": "img/field/characters/aidan/aidan_walk_right_04.png?v=30067b09",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   572,
+   162,
+   651,
+   1068
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_right_05": {
+  "path": "img/field/characters/aidan/aidan_walk_right_05.png?v=4853c76e",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -227,8 +291,8 @@
   ],
   "scale": 0.0625
  },
- "aidan_walk_right_04": {
-  "path": "img/field/characters/aidan/aidan_walk_right_04.png?v=64e2bcb6",
+ "aidan_walk_right_06": {
+  "path": "img/field/characters/aidan/aidan_walk_right_06.png?v=64e2bcb6",
   "width": 2048,
   "height": 1280,
   "bounds": [
