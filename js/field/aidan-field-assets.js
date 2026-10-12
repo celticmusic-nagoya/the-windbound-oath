@@ -4,13 +4,13 @@
   if (!window.WINDBOUND_DEV) return;
   const frames = {
  "aidan_idle_down": {
-  "path": "img/field/characters/aidan/aidan_idle_down.png?v=002b5f63",
+  "path": "img/field/characters/aidan/aidan_idle_down.png?v=123461fb",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   824,
+   599,
    158,
-   389,
+   745,
    1072
   ],
   "anchor": [
@@ -20,11 +20,11 @@
   "scale": 0.0625
  },
  "aidan_walk_down_01": {
-  "path": "img/field/characters/aidan/aidan_walk_down_01.png?v=689c4436",
+  "path": "img/field/characters/aidan/aidan_walk_down_01.png?v=4261aada",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   644,
+   603,
    158,
    736,
    1072
@@ -36,13 +36,13 @@
   "scale": 0.0625
  },
  "aidan_walk_down_02": {
-  "path": "img/field/characters/aidan/aidan_walk_down_02.png?v=f23b8d5a",
+  "path": "img/field/characters/aidan/aidan_walk_down_02.png?v=123461fb",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   768,
+   599,
    158,
-   504,
+   745,
    1072
   ],
   "anchor": [
@@ -52,11 +52,11 @@
   "scale": 0.0625
  },
  "aidan_walk_down_03": {
-  "path": "img/field/characters/aidan/aidan_walk_down_03.png?v=2f3a9f95",
+  "path": "img/field/characters/aidan/aidan_walk_down_03.png?v=071c8703",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   678,
+   638,
    158,
    683,
    1072
@@ -68,13 +68,13 @@
   "scale": 0.0625
  },
  "aidan_walk_down_04": {
-  "path": "img/field/characters/aidan/aidan_walk_down_04.png?v=f23b8d5a",
+  "path": "img/field/characters/aidan/aidan_walk_down_04.png?v=123461fb",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   768,
+   599,
    158,
-   504,
+   745,
    1072
   ],
   "anchor": [
