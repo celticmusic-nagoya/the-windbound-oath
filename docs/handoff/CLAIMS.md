@@ -88,3 +88,9 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 納品検証checkpoint: 指定8本の初回7合格/スライム逃走距離1失敗。納品前mainのスライムは合格、納品後単独再実行でも逃走距離が不足したため未解決として調査中。コンソールエラーは各browserテスト0。m14_hold_moveとwalk_a1は -u 実行で出力/合格を確認。素材やゲーム仕様の変更なし。mainへの資料統合は原因解決後。
 
 担当追加: `tests/moss/m15b_slime_symbol.py`。外部診断で徘徊座標由来の退避先がblocked-destination、goFeet=false、移動0のまま接触を再現。テスト側のみ、衝突なし/到達可能な退避地点と移動受付の明示確認へ修正する。距離/無接触のassertionを維持。ゲームAI/速度/衝突/素材は変更しない。最新mainの当たり判定/横歩行/文言変更を取り込んで指定8本を再検証する。
+
+最新main `35834dd` を取り込み。m15bは明確なblocked-destinationを修正したテスト入力で単独合格（5秒後gap693、console0）。修正commit `9dbb274`。元5秒/350px/接触0を維持し、追加assertionは退避経路/追跡/受付。現在指定8本を順番どおり再実行中。任意4本は旧基準ce2b366で合格。新mainのFiona台詞変更とm4旧期待値の不一致を発見し、作業3指定に従い期待値更新を作者へ確認中（まだ変更なし）。
+
+最終結果: `9dbb274` / 基準main `35834dd` で指定8本を順に実行、8/8合格・失敗0・browser console0。m15bの5秒後gap701。テスト入力の衝突問題を解決しゲーム変更なし。素材依頼一覧は未納品3点のみ。9座標の納品前後比較と結界4状態を保存。STATUS: READY — 退避branch作成後に資料/テスト修正をno-ffでmainへ統合。任意m4の新台詞期待値更新は未回答/未修正。
+
+最終mainは `499f781`（35834ddから追加シナリオ資料のみ）を取り込み、検証時のアプリ/tests treeと同一を確認。結界は画像3種と開放後node0を再撮影/console0。正面の石/紋様との重なりで違いが読みづらい点を追記。追加統合の退避先は `rollback/pre-moss-delivered-art-verification`（直前499f781）。素材退避branch `rollback/pre-moss-delivered-art`（0372ef6）は保持。mainへno-ff統合後PLAYER QA。
