@@ -57,6 +57,12 @@
     clear();
     const staticBlocked=blocked.staticBlocked||blocked;
     const p={x:Math.max(0,Math.min(bounds.width,x)),y:Math.max(0,Math.min(bounds.height,y))};
+    const H=blocked.height;   // height-level maps (field-height.js): the destination also carries the level it belongs to
+    if(H&&Number.isFinite(p.x)&&Number.isFinite(p.y)){
+      const level=H.pickLevel(p.x,p.y);
+      if(level<0){statistics.outcome='blocked-destination';return null;}
+      p.level=level;statistics.outcome='moving';return p;
+    }
     if(!Number.isFinite(p.x)||!Number.isFinite(p.y)||staticBlocked(p.x,p.y)){statistics.outcome='blocked-destination';return null;}
     statistics.outcome='moving';return p;
   }
@@ -80,13 +86,23 @@
       return {x,y,target};
     };
     const finish=(outcome,unreachable=false)=>{clear();statistics.outcome=outcome;return {x,y,target:null,unreachable};};
-    if(Math.hypot(target.x-x,target.y-y)<=FieldMovement.settings.arrivalRadius)return finish('arrived');
-    if(staticBlocked(x,y)||staticBlocked(target.x,target.y))return finish('blocked',true);
+    const H=blocked.height;
+    // Height maps plan over (cell, level) nodes; every other map keeps the existing 2D planner untouched.
+    const planFor=(from,to,blk)=>{
+      if(!H)return plan(from,to,blk);
+      const r=H.plan(from,to,{grid:baseGrid,maxNodes:60000,width:bounds.width,height:bounds.height});
+      statistics.expanded=r.expanded;statistics.milliseconds=r.ms;statistics.plans++;return r.path;
+    };
+    const targetBlocked=()=>H?H.blockedAtLevel(target.x,target.y,target.level||0):staticBlocked(target.x,target.y);
+    const here=()=>H?H.level:null;
+    const arrivedNow=()=>Math.hypot(target.x-x,target.y-y)<=FieldMovement.settings.arrivalRadius&&(!H||target.level==null||H.level===target.level);
+    if(arrivedNow())return finish('arrived');
+    if(staticBlocked(x,y)||targetBlocked())return finish('blocked',true);
     if(target!==current){
       clear();current=target;
       const occupied=dynamicBlocked?.(x,y)||dynamicBlocked?.(target.x,target.y);
-      path=occupied?null:plan({x,y},target,blocked);
-      if(!path)path=plan({x,y},target,staticBlocked);
+      path=occupied?null:planFor({x,y},target,blocked);
+      if(!path)path=planFor({x,y},target,staticBlocked);
       if(!path)return finish('no-route',true);
     }
     // A moving animal can overlap the stationary player's feet. Do not push the
@@ -105,10 +121,10 @@
     blockedFrames=progress<.1?blockedFrames+frameScale:0;
     if(blockedFrames>=12) {
       if(replans>=3)return finish('blocked',true);
-      replans++;blockedFrames=0;path=plan({x,y},target,staticBlocked);index=0;
+      replans++;blockedFrames=0;path=planFor({x,y},target,staticBlocked);index=0;
       if(!path)return finish('no-route',true);
     }
-    if(Math.hypot(target.x-x,target.y-y)<=FieldMovement.settings.arrivalRadius)return finish('arrived');
+    if(arrivedNow())return finish('arrived');
     return {x,y,target};
   }
   // Per-map configuration. configure() with no argument restores the Lind defaults.

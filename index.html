@@ -4,6 +4,7 @@
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
 <script src="js/field/field-movement.js?v=20261011-quality-g"></script>
 <script src="js/field/field-navigation.js"></script>
+<script src="js/field/field-height.js?v=20261012p1"></script>
 <script src="js/field/field-camera.js"></script>
 <script src="js/field/field-collision.js"></script>
 <script src="js/field/field-collision-debug.js"></script>
@@ -1539,7 +1540,7 @@ const DEV_EVENTS=[
  ['rilde_ruin','15　リルド村・襲撃後（自由行動）'],
  ['fort_free','16　ドゥンヴァル砦・自由行動'],
  ['map:fort_dunvall_01_courtyard','M1　砦・中庭'],['map:fort_dunvall_02_ramparts','M2　砦・城壁'],['map:fort_dunvall_03_keep','M3　砦・主塔'],
- ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
+ ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:dev_height_proto','DEV　高さプロトタイプ(2.5D)'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
 function devResetScreens(){
  closeDialogue();window.MossForest&&MossForest.hide();
@@ -1951,10 +1952,11 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
 <script src="js/prologue-dev.js?v=20261012c"></script>
+<script src="js/dev/perf-meter.js?v=20261012p1"></script>
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
-<script src="js/field/forest-loader.js?v=20261011e"></script>
+<script src="js/field/forest-loader.js?v=20261012p1"></script>
 <script src="js/field/field-timeofday.js"></script>
 <script src="js/field/field-weather.js"></script>
 <script src="js/field/field-vista.js"></script>
@@ -1962,7 +1964,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261012f"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261012p1"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>

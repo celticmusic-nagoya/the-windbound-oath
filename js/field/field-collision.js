@@ -38,13 +38,13 @@
         const k=key(i,j);let list=cells.get(k);if(!list){list=[];cells.set(k,list);}list.push(n);
       }
     });
-    return {cells,blocked(x,y) {
+    return {cells,blocked(x,y,level) {
       const fx=x+footprint.x,fy=y+footprint.y;
       const i0=Math.floor(fx/CELL),i1=Math.floor((fx+footprint.width)/CELL);
       const j0=Math.floor(fy/CELL),j1=Math.floor((fy+footprint.height)/CELL);
       for(let i=i0;i<=i1;i++)for(let j=j0;j<=j1;j++) {
         const list=cells.get(key(i,j));if(!list)continue;
-        for(const n of list){const shape=shapes[n];if(overlaps(shape,x,y)&&(!getEnabled||getEnabled(shape)))return true;}
+        for(const n of list){const shape=shapes[n];if(overlaps(shape,x,y)&&(!getEnabled||getEnabled(shape,level)))return true;}
       }
       return false;
     }};
@@ -64,13 +64,15 @@
         // Rects are world-space (feet basis): overlaps() tests them against the 22x10 foot box,
         // i.e. actor top-left = feet - (anchorX, anchorY).
         shapes.push(Object.freeze({type:'rect',x:r[0],y:r[1],width:r[2],height:r[3],id:b.id+':'+i,objectId:b.id,
-          category:b.tag||'prop',enabledWhen:b.enabledWhen||null}));
+          category:b.tag||'prop',enabledWhen:b.enabledWhen||null,levels:Array.isArray(b.levels)?b.levels:null}));
       });
     }
     Object.freeze(shapes);
-    const enabled=shape=>!shape.enabledWhen||Boolean(flags(shape.enabledWhen.flag))===Boolean(shape.enabledWhen.is);
+    // Optional `levels:[n,...]` on a blocker (field-height prototype): the blocker only applies at those height levels.
+    // No `levels` = applies at every level, and a caller that passes no level (every existing caller) is level 0.
+    const enabled=(shape,level)=>(!shape.enabledWhen||Boolean(flags(shape.enabledWhen.flag))===Boolean(shape.enabledWhen.is))&&(!shape.levels||shape.levels.includes(level||0));
     const index=buildIndex(shapes,enabled);
-    return Object.freeze({shapes,blocked(x,y){return index.blocked(x,y);}});
+    return Object.freeze({shapes,blocked(x,y,level){return index.blocked(x,y,level);}});
   }
   window.FieldCollision=Object.freeze({footprint,overlaps,compile,compileMap});
 })();

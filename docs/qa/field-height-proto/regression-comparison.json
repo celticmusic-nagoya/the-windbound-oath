@@ -1,0 +1,117 @@
+{
+  "prototype_source_sha": "528f46e",
+  "main_source_sha": "0d48324",
+  "timeout_seconds": 300,
+  "serial": true,
+  "port_wrapper": "/tmp/height_compare_run.py (only Page.goto port / Chromium executable override; test files unchanged)",
+  "results": [
+    {
+      "branch": "main",
+      "sha": "0d48324e49d3b21d764373126f98df82785df086",
+      "test": "tests/moss/m13_elder_attack_text.py",
+      "test_sha256": "e8f19b431b336cc508b462fd1be631498bc247315e56b4372e7da1219657843b",
+      "port": 8766,
+      "command": [
+        "/workspace/.cloud-setup/venv/bin/python3",
+        "-u",
+        "/tmp/height_compare_run.py",
+        "tests/moss/m13_elder_attack_text.py"
+      ],
+      "timeout_seconds": 300,
+      "elapsed_seconds": 5.484,
+      "exit_code": 1,
+      "status": "failed",
+      "log": "READONLY_PORT_WRAPPER goto http://localhost:8766/index.html\nFAIL peaceful elder cycles to the morning line\nok   commander before the road: plain welcome\nok   commander (after elder) sets commander_met\nok   objective: report to the capital knights\nok   elder acknowledges the commander\nok   attack objective keys present\nok   atkObj sets the objective text\nok   atkNotice shows the notice\nok   no page errors []\nFAILS ['peaceful elder cycles to the morning line']\n"
+    },
+    {
+      "branch": "main",
+      "sha": "0d48324e49d3b21d764373126f98df82785df086",
+      "test": "tests/moss/m4_e2e.py",
+      "test_sha256": "6e37e0b7fd6ce51b6f94cecddd88f930e6e3fbbd61ba5588c35bf43e03a205e8",
+      "port": 8766,
+      "command": [
+        "/workspace/.cloud-setup/venv/bin/python3",
+        "-u",
+        "/tmp/height_compare_run.py",
+        "tests/moss/m4_e2e.py"
+      ],
+      "timeout_seconds": 300,
+      "elapsed_seconds": 175.402,
+      "exit_code": 1,
+      "status": "failed",
+      "log": "READONLY_PORT_WRAPPER goto http://localhost:8766/index.html\nok   stage 9 on entry\nok   Moss Forest runtime active\nFAIL Fiona stage-9 line (elder/Emma warning wording)\nok   A1 path_main walked []\nok   A1 -> A2 transition\nok   A2 path_main walked []\nok   A2 -> A3 transition\nok   A3 seal closed + visual\nok   A3 path_main to the throat []\nok   closed seal blocks the route (fy=3400, no-route)\nok   symbol 0: battle started, forest paused\nok   symbol 0 defeated (count 1)\nok   symbol 1: battle started, forest paused\nok   symbol 1 defeated (count 2)\nok   symbol 2: battle started, forest paused\nok   symbol 2 defeated (count 3)\nok   3 symbols -> seal flag open\nok   seal visual removed\nok   stage >=10 after seal\nok   open seal: passes (3900,3250) (arrived)\nok   Lou intro auto-starts at the sanctuary\nok   Lou found, stage 11\nok   lou_found flag in runtime\nok   altar scene starts from the hidden wind path\nok   forest paused during altar scene\nok   A3 peak live nodes 202 <= 800\nerrors []\n"
+    },
+    {
+      "branch": "main",
+      "sha": "0d48324e49d3b21d764373126f98df82785df086",
+      "test": "tests/moss/m55_hz.py",
+      "test_sha256": "92784e407bb20348beefedc664ed0e30a9b57b5a48495418fc583ee8a3369653",
+      "port": 8766,
+      "command": [
+        "/workspace/.cloud-setup/venv/bin/python3",
+        "-u",
+        "/tmp/height_compare_run.py",
+        "tests/moss/m55_hz.py"
+      ],
+      "timeout_seconds": 300,
+      "elapsed_seconds": 21.456,
+      "exit_code": 0,
+      "status": "passed",
+      "log": "READONLY_PORT_WRAPPER goto http://localhost:8766/index.html\nREADONLY_PORT_WRAPPER goto http://localhost:8766/index.html\ndefault  {'fps_v': 61, 'village': 155.00999999999954, 'forest': 299.9783382202172, 'keyboard': 309.98999999999944, 'fps_f': 39}\nuncapped {'fps_v': 1747, 'village': 151.74000000000154, 'forest': 299.91827635433094, 'keyboard': 315.08999999999935, 'fps_f': 245}\nvillage ratio 0.98\nforest speed ratio uncapped/default = 1.00 (fps 245 vs 39)\nkeyboard ratio 1.02, distances 309.98999999999944 / 315.08999999999935\nok    forest px/s 300 (default) vs 300 (uncapped)\n"
+    },
+    {
+      "branch": "prototype",
+      "sha": "1594c69654be28170c41529fd145ec62203d0ebc",
+      "test": "tests/moss/m13_elder_attack_text.py",
+      "test_sha256": "e8f19b431b336cc508b462fd1be631498bc247315e56b4372e7da1219657843b",
+      "port": 8765,
+      "command": [
+        "/workspace/.cloud-setup/venv/bin/python3",
+        "-u",
+        "/tmp/height_compare_run.py",
+        "tests/moss/m13_elder_attack_text.py"
+      ],
+      "timeout_seconds": 300,
+      "elapsed_seconds": 5.386,
+      "exit_code": 1,
+      "status": "failed",
+      "log": "READONLY_PORT_WRAPPER goto http://localhost:8765/index.html\nFAIL peaceful elder cycles to the morning line\nok   commander before the road: plain welcome\nok   commander (after elder) sets commander_met\nok   objective: report to the capital knights\nok   elder acknowledges the commander\nok   attack objective keys present\nok   atkObj sets the objective text\nok   atkNotice shows the notice\nok   no page errors []\nFAILS ['peaceful elder cycles to the morning line']\n"
+    },
+    {
+      "branch": "prototype",
+      "sha": "1594c69654be28170c41529fd145ec62203d0ebc",
+      "test": "tests/moss/m4_e2e.py",
+      "test_sha256": "6e37e0b7fd6ce51b6f94cecddd88f930e6e3fbbd61ba5588c35bf43e03a205e8",
+      "port": 8765,
+      "command": [
+        "/workspace/.cloud-setup/venv/bin/python3",
+        "-u",
+        "/tmp/height_compare_run.py",
+        "tests/moss/m4_e2e.py"
+      ],
+      "timeout_seconds": 300,
+      "elapsed_seconds": 185.339,
+      "exit_code": 1,
+      "status": "failed",
+      "log": "READONLY_PORT_WRAPPER goto http://localhost:8765/index.html\nok   stage 9 on entry\nok   Moss Forest runtime active\nFAIL Fiona stage-9 line (elder/Emma warning wording)\nok   A1 path_main walked []\nok   A1 -> A2 transition\nok   A2 path_main walked []\nok   A2 -> A3 transition\nok   A3 seal closed + visual\nok   A3 path_main to the throat []\nok   closed seal blocks the route (fy=3400, no-route)\nok   symbol 0: battle started, forest paused\nok   symbol 0 defeated (count 1)\nok   symbol 1: battle started, forest paused\nok   symbol 1 defeated (count 2)\nok   symbol 2: battle started, forest paused\nok   symbol 2 defeated (count 3)\nok   3 symbols -> seal flag open\nok   seal visual removed\nok   stage >=10 after seal\nok   open seal: passes (3900,3250) (arrived)\nok   Lou intro auto-starts at the sanctuary\nok   Lou found, stage 11\nok   lou_found flag in runtime\nok   altar scene starts from the hidden wind path\nok   forest paused during altar scene\nok   A3 peak live nodes 202 <= 800\nerrors []\n"
+    },
+    {
+      "branch": "prototype",
+      "sha": "1594c69654be28170c41529fd145ec62203d0ebc",
+      "test": "tests/moss/m55_hz.py",
+      "test_sha256": "92784e407bb20348beefedc664ed0e30a9b57b5a48495418fc583ee8a3369653",
+      "port": 8765,
+      "command": [
+        "/workspace/.cloud-setup/venv/bin/python3",
+        "-u",
+        "/tmp/height_compare_run.py",
+        "tests/moss/m55_hz.py"
+      ],
+      "timeout_seconds": 300,
+      "elapsed_seconds": 21.187,
+      "exit_code": 0,
+      "status": "passed",
+      "log": "READONLY_PORT_WRAPPER goto http://localhost:8765/index.html\nREADONLY_PORT_WRAPPER goto http://localhost:8765/index.html\ndefault  {'fps_v': 61, 'village': 149.9999999999995, 'forest': 299.9781783314229, 'keyboard': 309.98999999999967, 'fps_f': 41}\nuncapped {'fps_v': 1516, 'village': 151.89000000000124, 'forest': 300.4282604898076, 'keyboard': 318.54000000000065, 'fps_f': 215}\nvillage ratio 1.01\nforest speed ratio uncapped/default = 1.00 (fps 215 vs 41)\nkeyboard ratio 1.03, distances 309.98999999999967 / 318.54000000000065\nok    forest px/s 300 (default) vs 300 (uncapped)\n"
+    }
+  ]
+}
