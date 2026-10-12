@@ -427,7 +427,7 @@ function mainQuestData(){
  if(storyStage===9)return {title:'苔むした森',desc:'村から逃れる途中、崖の崩落に巻き込まれた二人は、立ち入りを禁じられたモスの森に落ちた。崖の上へは戻れない。森の奥へ続く道は、古代の結界にふさがれている。冷たく重い風が流れてくる森で、異常化ゴブリン3体を討伐して結界を解き、道を切り開こう。'};
  if(storyStage===10)return {title:'風を返す古代石',desc:'フィオナに反応する古代石を発見した。異常化した魔物を退け、石の周囲に残る風の気配を探す。'};
  if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
- if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇で魔物に包囲された。古代石から現れた「誓いの剣」を手に取り、突破口を開く。'};
+ if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇でゴブリン・レイダーに襲われ、父の剣を折られた。古代石に応えた「誓いの剣」と契約し、反撃する。'};
  if(storyStage===13)return {title:'新しい仲間',desc:'ゴブリン・レイダーを退けた。静けさを取り戻した古代祭壇でルーと話し、これからの行き先を決める。'};
  if(storyStage===14)return {title:'夜明けの砦',desc:'ルーを新たな仲間に迎え、エイダンとフィオナは森を抜けてドゥンヴァル砦へ向かう。'};
  if(storyStage>=15)return {title:'風に結ばれた誓い',desc:'リルド村を失ったエイダンたちは王国の砦へ到着した。黒いルーンの異変を追う旅は、ここから始まる。'};
@@ -448,15 +448,29 @@ $('#fiona').onclick=()=>{
  }else if(storyStage===1) say('フィオナ「ほら、木人を調べて。私も後ろから見てるから。」');
  else if(storyStage>=2) say('フィオナ「さっきの光……何だったんだろう。」');
 };
-// 訓練開始: エイダンが稽古用の木剣を手に取る（能力補正なし・戦闘モーションの 'wooden' バリアントのみ）。1度だけ。
+// 提案: 新規起動時のみ父の剣を用意。ロードや訓練では配り直さない。
 function giveStarterSword(){
- if(Inventory.count('wooden_sword')||Object.values(EquipmentManager.get('aidan')).includes('wooden_sword'))return;
- if(Inventory.add('wooden_sword')&&!EquipmentManager.get('aidan').weapon)EquipmentManager.equip('aidan','wooden_sword');
- storyToast('エイダンは稽古用の木剣を手に取った');
+ if(EquipmentManager.owned('father_sword')||EquipmentManager.get('aidan').weapon)return;
+ if(Inventory.add('father_sword'))EquipmentManager.equip('aidan','father_sword');
 }
+// ---- 装備の物語連動: 父の剣 → (剣が折れ)誓いの剣と契約 → 武器は固定。装備システムはプロローグ終了(ドゥンヴァル砦)で解放。 ----
+let oathBound=false;
+const STARTER_GEAR=['leather_cap','leather_armor','bronze_ring'];   // 砦で支給される初期防具(補正は小さい。装備は解放後に自分で着ける)
+function syncEquipTab(){const b=document.querySelector('[data-stab="equip"]');if(b)b.hidden=!EquipmentManager.isUnlocked()}
+function grantStarterGear(announce){
+ if(EquipmentManager.isUnlocked())return false;
+ EquipmentManager.unlock();STARTER_GEAR.forEach(id=>{if(!EquipmentManager.owned(id))Inventory.add(id)});
+ syncEquipTab();if(announce)storyToast('装備システムが解放された(メニュー EQUIP)');return true;
+}
+function syncStoryEquipment(){
+ const cur=EquipmentManager.get('aidan').weapon||null,story=!cur||cur==='father_sword'||cur==='oath_sword'||cur==='wooden_sword';
+ if(story){const want=(storyStage>=13||(storyStage===12&&oathBound))?'oath_sword':'father_sword';if(cur!==want)EquipmentManager.setStoryWeapon('aidan',want)}
+ if(storyStage>=15)grantStarterGear(false);
+ syncEquipTab();
+}
+window.addEventListener('equipment-unlock',syncEquipTab);
 function startTraining(){
  if(storyStage!==1){say(storyStage===0?'先にフィオナと話そう。':'使い込まれた訓練用の木人だ。');return}
- giveStarterSword();
  storyStage=2; ahp=100;dhp=180;rune=0;atp=0;guarding=false;
  $('#battle').style.display='block'; updateBattle();
  $('#battleMsg').textContent='フィオナ「実戦のつもりでいこう。危なくなったら私が回復するね！」';
@@ -1034,6 +1048,7 @@ function showBattleResult(exp,goldGain,callback){
 
 const SAVE_KEY='windbound_oath_v028';
 function renderSystemTab(tab='status'){
+ if(tab==='equip'&&!EquipmentManager.isUnlocked())tab='status';
  document.querySelectorAll('[data-stab]').forEach(b=>b.classList.toggle('active',b.dataset.stab===tab));
  const body=$('#systemBody');
  if(tab==='status'){
@@ -1091,13 +1106,15 @@ function saveGrowthData(){
 }
 function loadGrowthData(){
  try{
-  const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(!d)throw 0;
+  const saved=JSON.parse(localStorage.getItem(SAVE_KEY));if(!saved)throw 0;
+  const d=EquipmentManager.migrateStarterSword(saved);
   Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
   Inventory.load(d.inventory);EquipmentManager.load(d.equipment);Quest.load(d.quests);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
   if(d.prologue)PrologueProgress.load(d.prologue);
+  syncStoryEquipment();
   Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
   renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
  }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>';return false}
@@ -1159,10 +1176,16 @@ const altarLines=[
  'ルー「……この風、悲しんでる。」',
  '突然、光が黒紫に濁る。四方の茂みから異常化ゴブリンが姿を現した。',
  'エイダン「下がって、二人とも！」',
- 'ゴブリンの一撃を受け止めた瞬間、エイダンの剣が弾かれ、祭壇脇の暗い裂け目へ落ちていく。',
+ 'エイダンは父から譲られた剣を抜き、飛びかかってきた小鬼を斬り払う。',
+ 'ルー「待って……！　奥から、もっと大きな気配が来る！」',
+ '小鬼たちの奥から、地面を震わせる角笛が鳴り響いた。巨大なゴブリン・レイダーが戦斧を引きずりながら姿を現す。',
+ 'エイダン「こいつが……村を襲った魔物の仲間か！」',
+ 'レイダーの戦斧が振り下ろされる。エイダンは父の剣で受け止めた――だが、乾いた音とともに刀身が折れた。',
+ 'エイダン「父さんの剣が……！」',
  'フィオナ「エイダン！」',
- 'エイダン「剣が……！」',
- 'ルー「待って！　別の声がする。あの石……エイダンを呼んでる！」',
+ '追撃の斧が迫る。ルー「させない！」　ルーが小さな羽をはばたかせ、まばゆい光でレイダーの目を眩ませる。',
+ 'フィオナ「風よ、お願い――！」　フィオナが祈るように舞うと、風の紋が足元に広がり、レイダーの巨体が一瞬だけ動きを止めた。',
+ 'ルー「今だよ、エイダン！　あの石……エイダンを呼んでる！」',
  '古代石の表面を、風を表すルーンが走る。鼓動のような低い音が森全体へ響いた。',
  '――風が集まり、石の中に一本の剣の輪郭が浮かび上がる。',
  '声なき声「……誓いを、もう一度。」',
@@ -1171,16 +1194,15 @@ const altarLines=[
  '夕日の丘の景色がよみがえる。並んで見た夕焼け。「守れるくらいには強くなりたい」――あのときの自分の言葉が、胸に刺さる。',
  'エイダン「……強くなりたいなんて言って、村のみんなを守れなかった。」',
  'エイダン「……もう、目の前で誰かを失うのは嫌だ。」',
- 'エイダンが柄を握る。封印が砕け、緑金の光とともに「誓いの剣」が目を覚ました。',
+ 'エイダンが柄を握る。折れた父の剣の欠片が風にほどけ、封印が砕け――緑金の光とともに「誓いの剣」が目を覚ました。',
+ 'エイダン「父さん……。この剣で、今度こそ守ってみせる。」',
  'フィオナ「エイダン……その剣……。」',
  'ルー「風が戻ってきた……！」',
- '周囲の小鬼たちが怯んだ、その瞬間――森の奥から地面を震わせる角笛が鳴り響く。',
- 'ルー「来る……！　あいつ、仲間たちを襲った魔物と同じ匂いがする！」',
- '小鬼たちの奥から、巨大なゴブリン・レイダーが戦斧を引きずりながら姿を現した。'
+ 'レイダーが風の拘束を振りほどき、怒りの咆哮を上げる。周囲の小鬼たちが怯むなか、エイダンは誓いの剣を構えた。'
 ]
 let altarIndex=0;
 function startAltarScene(){
- storyStage=12;altarIndex=0;$('#altarScene').style.display='block';
+ storyStage=12;oathBound=false;altarIndex=0;$('#altarScene').style.display='block';
  $('#oathSword').style.display='none';$('#altarText').textContent=altarLines[0];
  setObj('古代祭壇で包囲を突破しよう');
 }
@@ -1188,8 +1210,8 @@ $('#altarScene').onclick=()=>{
  altarIndex++;
  if(altarIndex<altarLines.length){
    $('#altarText').textContent=altarLines[altarIndex];
-   if(altarIndex===14)$('#oathSword').style.display='block';
-   if(altarIndex===21){
+   if(altarIndex===20)$('#oathSword').style.display='block';
+   if(altarIndex===27){oathBound=true;EquipmentManager.setStoryWeapon('aidan','oath_sword');
      ['ag1','ag2','ag3','ag4'].forEach(id=>$('#'+id).style.opacity='.28');
      $('#oathSword').style.filter='drop-shadow(0 0 28px #e7ffd8)';
    }
@@ -1422,6 +1444,8 @@ const fortLines=[
  'ルー「でも、あの黒いルーン……普通の魔物じゃなかった。風もずっと怯えてたよ。」',
  'エイダンは「誓いの剣」の柄を握る。村を守れなかった重さが、まだ手の中に残っていた。',
  '王国騎士「リルド村から来たのか！？　生存者だな。すぐ中へ。……王都にも異変を知らせる。」',
+ '王国騎士「その格好では冷えるだろう。砦の倉庫に余りがある。使ってくれ。」',
+ '騎士団の支給品として、革の帽子・革の鎧・銅の指輪を受け取った。　(装備システムが解放された)',
  '遠く、朝日に照らされた山の向こうで、一瞬だけ黒い裂け目のようなものが空に滲んだ。',
  '――これは、魔王の物語ではない。まだ誰も知らない“何か”と、風の誓いを巡る旅の始まりだった。'
 ];
@@ -1440,7 +1464,7 @@ function startFortFinale(){
 }
 $('#fortScene').onclick=()=>{
  fortIndex++;
- if(fortIndex<fortLines.length){$('#fortText').textContent=fortLines[fortIndex];}
+ if(fortIndex<fortLines.length){$('#fortText').textContent=fortLines[fortIndex];if(fortIndex===6)grantStarterGear(true);}
  else showPrologueEnd();
 };
 function showPrologueEnd(){
@@ -1689,7 +1713,8 @@ window.addEventListener('DOMContentLoaded',()=>{
  v54watchImage(document.querySelector('#raiderSprite img'),'goblin_raider');
 });
 const v54SA=startAttackBattle;startAttackBattle=function(id,hp){v54SA(id,hp);requestAnimationFrame(v54forceEnemyArt)};
-const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimationFrame(v54forceEnemyArt)};
+const v54SR=startRaiderBattle;startRaiderBattle=function(){if(storyStage<=12){oathBound=true;}syncStoryEquipment();v54SR();requestAnimationFrame(v54forceEnemyArt)};
+const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();return r};
 </script>
 
 <!-- v0.62: obsolete KO override removed; canonical finishRaider handles KO -->
@@ -1927,10 +1952,11 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
-<script src="js/data/equipment-data.js"></script>
+<script src="js/data/equipment-data.js?v=20261013eq"></script>
 <script src="js/inventory.js"></script>
-<script src="js/equipment.js"></script>
-<script src="js/equipment-ui.js"></script>
+<script src="js/equipment.js?v=20261013eq"></script>
+<script>giveStarterSword();syncEquipTab();</script>
+<script src="js/equipment-ui.js?v=20261013eq"></script>
 <script src="js/data/shop-data.js"></script>
 <script src="js/shop.js"></script>
 <script src="js/field/quest-data.js"></script>
@@ -1974,7 +2000,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/lind-character-rendering.js"></script>
 <script src="js/field/lind-crisp-renderer.js"></script>
 <link rel="stylesheet" href="css/battle-polish.css?v=20261012d">
-<link rel="stylesheet" href="css/equipment.css">
+<link rel="stylesheet" href="css/equipment.css?v=20261013eq">
 <script src="js/battle-party-layout.js?v=20261011-mobile"></script>
 <link href="css/battle-presentation.css?v=20261012a" rel="stylesheet"/>
 <script src="js/battle-facing.js"></script>

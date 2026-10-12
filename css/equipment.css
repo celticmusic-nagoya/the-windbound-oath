@@ -1,4 +1,5 @@
 /* EQUIP tab of the system menu (js/equipment-ui.js) */
+#systemTabs [data-stab][hidden],[data-stab][hidden]{display:none!important}
 #systemBody .eqPick,#systemBody .eqSlots{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
 #systemBody .eqSlots .eqSlot{flex:1 1 140px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-height:56px}
 #systemBody .eqSlot.active,#systemBody .eqPick button.active{border-color:#d7bd73;background:#26372f}

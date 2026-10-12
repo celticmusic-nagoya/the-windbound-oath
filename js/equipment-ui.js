@@ -14,8 +14,8 @@
     const ids = members(); if (!ids.length) { body.innerHTML = '<p><small>仲間がいません。</small></p>'; return; }
     if (!ids.includes(who)) who = ids[0];
     const worn = EquipmentManager.get(who), st = charStats(who);
-    const bag = Inventory.list('equip').filter(i => i.slot === slot);
-    const cur = worn[slot] || null;
+    const base = slot.startsWith('accessory') ? 'accessory' : slot, bag = Inventory.list('equip').filter(i => i.slot === base);
+    const cur = worn[slot] || null, fixed = !!(cur && EquipmentManager.def(cur).locked);
     const stat = Object.keys(LABEL).map(k => `<span>${LABEL[k]} <b data-stat="${k}">${st[k]}${k === 'cri' ? '%' : ''}</b></span>`).join('');
     let h = `<h3>EQUIPMENT</h3><div class="eqPick" role="tablist">${ids.map(id => `<button type="button" data-eq-char="${id}" class="${id === who ? 'active' : ''}">${esc(CHARACTER_DB[id].name)}</button>`).join('')}</div>
       <div class="stats eqStats">${stat}</div><div class="eqSlots">${E.slots.map(s => {
@@ -23,11 +23,12 @@
         return `<button type="button" data-eq-slot="${s}" class="eqSlot ${s === slot ? 'active' : ''}"><small>${E.slotNames[s]}</small><b>${it ? esc(it.name) : '— なし —'}</b>${it ? `<small>${modText(it.mods)}</small>` : ''}</button>`;
       }).join('')}</div>
       <h3>${E.slotNames[slot]}の候補</h3><div class="eqList">`;
-    if (cur) h += `<div class="eqRow"><div><b>${esc(EquipmentManager.def(cur).name)}</b>（装備中）<br><small>${esc(EquipmentManager.def(cur).desc)}</small></div><div class="eqDiff">${diff(EquipmentManager.delta(who, null, slot))}</div><button type="button" data-eq-off="${slot}">外す</button></div>`;
-    const ok = bag.filter(i => !EquipmentManager.canEquip(who, i.id, slot));
+    if (cur) h += `<div class="eqRow"><div><b>${esc(EquipmentManager.def(cur).name)}</b>（装備中）<br><small>${esc(EquipmentManager.def(cur).desc)}</small></div><div class="eqDiff">${diff(EquipmentManager.delta(who, null, slot))}</div>${fixed ? '<small>固定(外せない)</small>' : `<button type="button" data-eq-off="${slot}">外す</button>`}</div>`;
+    const ok = fixed ? [] : bag.filter(i => !EquipmentManager.canEquip(who, i.id, slot));
     h += ok.map(i => `<div class="eqRow"><div><b>${esc(i.name)}</b> ×${i.count}<br><small>${esc(i.desc)}</small><br><small>${modText(i.mods)}</small></div><div class="eqDiff">${diff(EquipmentManager.delta(who, i.id, slot))}</div><button type="button" data-eq-on="${i.id}">装備</button></div>`).join('');
-    if (!cur && !ok.length) h += '<p><small>装備できるものを持っていない。</small></p>';
-    const other = bag.length - ok.length; if (other) h += `<p><small>${other}個は${esc(CHARACTER_DB[who].name)}には装備できない。</small></p>`;
+    if (fixed) h += '<p><small>この武器は固定されている。鍛冶屋で特殊素材を使えば強化できる。</small></p>';
+    else if (!cur && !ok.length) h += '<p><small>装備できるものを持っていない。</small></p>';
+    const other = fixed ? 0 : bag.length - ok.length; if (other) h += `<p><small>${other}個は${esc(CHARACTER_DB[who].name)}には装備できない。</small></p>`;
     h += `</div><p class="eqMsg" role="status" aria-live="polite"><small>${esc(msg)}</small></p>`;
     body.innerHTML = h; msg = '';
     body.querySelectorAll('[data-eq-char]').forEach(b => b.onclick = () => { who = b.dataset.eqChar; render(body); focus(body, `[data-eq-char="${who}"]`); });

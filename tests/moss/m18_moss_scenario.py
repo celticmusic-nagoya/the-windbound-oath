@@ -58,19 +58,23 @@ with sync_playwright() as p:
     # ---- altar
     ev("closeDialogue();document.querySelector('#forestScene').style.display='none'")
     ev("startAltarScene()")
-    A=ev("altarLines");ck(len(A)==27,'altar has 27 lines (%d)'%len(A))
+    A=ev("altarLines");ck(len(A)==32,'altar has 32 lines (%d)'%len(A))
     oi=[i for i,l in enumerate(A) if l=='エイダン「……もう、目の前で誰かを失うのは嫌だ。」']
-    ck(oi==[20],'oath line unchanged, index 20 (%s)'%oi)
-    ck(A[18].startswith('夕日の丘') and A[19]=='エイダン「……強くなりたいなんて言って、村のみんなを守れなかった。」','recall + new Aidan line directly before the oath')
-    sw=None;glow=None
+    ck(oi==[26],'oath line unchanged, index 26 (%s)'%oi)
+    ck(A[24].startswith('夕日の丘') and A[25]=='エイダン「……強くなりたいなんて言って、村のみんなを守れなかった。」','recall + Aidan line directly before the oath')
+    bi=[i for i,l in enumerate(A) if '刀身が折れた' in l]
+    ck(bi==[13] and A[11].startswith('小鬼たちの奥から、地面を震わせる角笛') and A[16].startswith('追撃の斧') and A[17].startswith('フィオナ「風よ、お願い'),'order: Raider appears -> father sword breaks (13) -> Lou/Fiona stall (16-17) -> stone reacts')
+    sw=None;glow=None;wk=[]
     for i in range(1,len(A)):
         ev("document.querySelector('#altarScene').click()")
         sword=ev("getComputedStyle(document.querySelector('#oathSword')).display")
         op=ev("document.querySelector('#ag1').style.opacity")
+        wk.append((i,ev("EquipmentManager.get('aidan').weapon")))
         if sw is None and sword!='none': sw=i
         if glow is None and op=='0.28': glow=i
-        if i==21: break
-    ck(sw==14,'sword appears on line 14 (%s)'%sw)
-    ck(glow==21 and A[21].startswith('エイダンが柄を握る'),'grip/glow fires on the grip line (index %s)'%glow)
+        if i==27: break
+    ck(sw==20,'sword appears on line 20 (%s)'%sw)
+    ck(glow==27 and A[27].startswith('エイダンが柄を握る'),'grip/glow fires on the grip line (index %s)'%glow)
+    ck(all(w=='father_sword' for i,w in wk if i<27) and wk[-1][1]=='oath_sword','weapon: father sword until the contract line, then the oath sword')
     print(errs[:4])
 print('FAILS',len(fails))
