@@ -108,3 +108,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 `work/codex-standing-orders`、基準main058cfc8。本status初回作成、既存CLAIMS追記、新規height-contact-review-20261013.md/map-height-plan-20261013.mdのみ。優先1/2の調査と設計まで、実装はClaude。担当宣言はcodex-status.mdに記録。ゲーム/マップ/テスト/素材未編集・mainマージなし。STATUS: WIP。
 
 常設運用checkpoint: status初回2f4367aをpush。優先1の接触レベル設計/14テスト案と優先2の30JSON高さ計画を完成。最新mainでDEV map追加を確認、本編28はheight無し。敵移動のplayer-level依存、pending発火前commit、once/latch副作用前再確認、connector中間の面契約を要判断として共有。コード/マップ/テストは未変更、全30JSON parse/ID重複/DEVのみheight検査合格。STATUS: READY（資料納品、実装/動的回帰/Android未実施）。mainマージなし。本statusのmain反映はClaudeへ引継ぐ。
+
+追加承認checkpoint: ユーザーの「GitHubのClaude指示を取得して積極着手」をstatusへ記録しecfcb7aでpush。remote再取得・main058cfc8を確認。優先3の文面短縮案と新規QA画像/JSONを追加。3ページの案を実DOMだけでpreviewし縦3→2行・横1行、pageerror0、原altarLines/誓い不変を確認。index等未変更/未適用、全回帰/Android未実施。STATUS: READY（提案納品、採用は要判断）。
