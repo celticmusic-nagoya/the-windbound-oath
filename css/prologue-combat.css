@@ -23,8 +23,8 @@ body.slimeBattle #attackBattle .prologueSprite img{transform:scale(1.9);transfor
 
 /* Forest bats: wide-winged flyers drawn inside goblin-sized boxes (art has big transparent margins) - no corruption aura, enlarged; the idle canvas and the still img share the scale */
 body.batBattle #bGob:after{display:none!important}
-body.batBattle #bGob img,body.batBattle #bGob .battle-idle-canvas{transform:scale(2.15);transform-origin:50% 62%}
-body.batBattle #attackBattle .prologueSprite img,body.batBattle #attackBattle .prologueSprite .battle-idle-canvas{transform:scale(2.15);transform-origin:50% 62%}
+body.batBattle #bGob img,body.batBattle #bGob .battle-idle-canvas{transform:scale(.72);transform-origin:50% 62%}
+body.batBattle #attackBattle .prologueSprite img,body.batBattle #attackBattle .prologueSprite .battle-idle-canvas{transform:scale(.72);transform-origin:50% 62%}
 /* the enemy slot's img rule is !important (style.css): hide the still while the idle canvas is drawing the flap */
 body.normalBattleMode #bGob.battle-idle-active>img:first-of-type{visibility:hidden!important}
 
@@ -32,3 +32,19 @@ body.normalBattleMode #bGob.battle-idle-active>img:first-of-type{visibility:hidd
 body.boarBattle #bGob:after{display:none!important}
 body.boarBattle #bGob img,body.boarBattle #bGob .battle-idle-canvas{transform:scale(2.3);transform-origin:50% 100%}
 body.boarBattle #attackBattle .prologueSprite img,body.boarBattle #attackBattle .prologueSprite .battle-idle-canvas{transform:scale(2.3);transform-origin:50% 100%}
+
+/* Field monster fights: use depth like the raider battle (front / middle / back rows), and keep every HP plate small.
+   Scoped to body.monsterBattle (set in PrologueCombat.beginNormal); story goblin fights are untouched. */
+body.monsterBattle.normalBattleMode .v2NearHud{width:76px!important;max-width:76px!important;padding:2px 4px!important;border-radius:4px!important;line-height:1.15!important}
+body.monsterBattle.normalBattleMode .v2NearHud b{font-size:8px!important;margin:0 0 1px!important}
+body.monsterBattle.normalBattleMode .v2NearHud small{font-size:7px!important;margin-top:1px!important}
+body.monsterBattle.normalBattleMode .v2NearHud .v2Bars i{height:3px!important;margin:1px 0!important}
+body.monsterBattle.normalBattleMode .prologueEnemyHud{width:auto!important;white-space:nowrap;font-size:7px!important;padding:1px 4px!important;border-radius:4px!important;top:-12px!important;left:50%;translate:-50% 0}
+body.monsterBattle.normalBattleMode #v2GobUnit{right:5%!important;bottom:16%!important;z-index:26!important}
+body.monsterBattle.normalBattleMode .prologueEnemy.slot1{right:34%!important;bottom:27%!important;z-index:25;scale:.92;transform-origin:50% 100%}
+body.monsterBattle.normalBattleMode .prologueEnemy.slot2{right:20%!important;bottom:42%!important;z-index:24;scale:.84;transform-origin:50% 100%}
+@media(orientation:portrait){
+ body.monsterBattle.normalBattleMode #v2GobUnit{right:3%!important;bottom:30%!important}
+ body.monsterBattle.normalBattleMode .prologueEnemy.slot1{right:3%!important;bottom:54%!important}
+ body.monsterBattle.normalBattleMode .prologueEnemy.slot2{right:30%!important;bottom:70%!important}
+}
