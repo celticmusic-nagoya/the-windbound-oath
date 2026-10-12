@@ -94,3 +94,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 最終結果: `9dbb274` / 基準main `35834dd` で指定8本を順に実行、8/8合格・失敗0・browser console0。m15bの5秒後gap701。テスト入力の衝突問題を解決しゲーム変更なし。素材依頼一覧は未納品3点のみ。9座標の納品前後比較と結界4状態を保存。STATUS: READY — 退避branch作成後に資料/テスト修正をno-ffでmainへ統合。任意m4の新台詞期待値更新は未回答/未修正。
 
 最終mainは `499f781`（35834ddから追加シナリオ資料のみ）を取り込み、検証時のアプリ/tests treeと同一を確認。結界は画像3種と開放後node0を再撮影/console0。正面の石/紋様との重なりで違いが読みづらい点を追記。追加統合の退避先は `rollback/pre-moss-delivered-art-verification`（直前499f781）。素材退避branch `rollback/pre-moss-delivered-art`（0372ef6）は保持。mainへno-ff統合後PLAYER QA。
+
+2026-10-12 main反映記録: 機能merge件名 `Merge delivered moss art verification and pending asset list`。基準main499f781、指定8/8・console0。m15b入力修正と未納品一覧/証跡をno-ffで反映、PLAYER QA待ち。追加分の退避branch `rollback/pre-moss-delivered-art-verification` は499f781。素材本体の既存mergece2b366/退避0372ef6は保持。追加分だけは本mergeをrevert、素材全体は本merge→ce2b366の順でrevert。force pushなし。

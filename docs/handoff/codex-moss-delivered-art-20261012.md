@@ -4,7 +4,7 @@
 最終検証基準mainコミット: `35834dd96c049e9c1930b5f0fd18100c9cb91369`
 初回検証/座標撮影基準: `ce2b3663b031631c858f922ded8390a89ffd48cf`
 ブランチ: `work/codex-moss-delivered-art-verification`
-STATUS: READY — 指定8本合格、資料/テスト入力だけをmainへ統合予定。素材本体は既存mergeで反映済み。
+STATUS: READY — 指定8本合格。資料/テスト入力をno-ffでmainへ反映、PLAYER QA待ち。素材本体は既存mergeで反映済み。
 
 ## 統合済み状態
 
