@@ -60,3 +60,5 @@ main53180f3を取得し、status/常設/第2弾指示と履歴を確認。接触
 
 N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析5SE照合合格、MP/期限/対象self-test合格。固定攻撃列の比較であり実engine勝率未検証。ゲーム数値未適用。次はOの全件runner。
 作業中の追加方針（ユーザー事前承認）: 各成果物の完了時にremote指示をfetchし、現在作業が終わったら追加指示へ続けて着手する。現N→O→P→Qの順序を維持しRを後続、未完/新規は本statusへ登録する。
+
+P着手: work/codex-aidan-walk-acceptance / 最新main88ae6c0。Nはmain88ae6c0に統合済み、Oはwork/codex-regression-runner / 56f6050で全59（旧main531）納品済み。Rのfeat/height-contact-levels / 5c33f9fの公開とmain5e682e7の統合を確認、P→Q後にレビューする。新規tools/field/check_aidan_walk_assets.py、docs/art/aidan_walk_acceptance.md、template/ダミー検証記録を担当。素材未着・採用素材未変更。
