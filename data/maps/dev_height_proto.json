@@ -1,0 +1,801 @@
+{
+ "schemaVersion": 2,
+ "id": "dev_height_proto",
+ "region": "dev",
+ "areaIndex": 1,
+ "displayName": {
+  "ja": "DEV　高さプロトタイプ",
+  "en": "DEV Height Prototype"
+ },
+ "locationCard": {
+  "regionJa": "開発用",
+  "regionEn": "DEV",
+  "areaJa": "高さプロトタイプ",
+  "areaEn": "DEV Height Prototype",
+  "triggerZone": "ev_arrival"
+ },
+ "world": {
+  "width": 2400.0,
+  "height": 1600.0,
+  "tile": 8,
+  "unitScale": 2.5
+ },
+ "layers": [
+  "GROUND",
+  "GROUND_DETAIL",
+  "LOWER_PROP",
+  "ACTOR",
+  "UPPER_FOLIAGE",
+  "FOREGROUND"
+ ],
+ "spawns": {
+  "default": "start",
+  "points": {
+   "start": {
+    "x": 300,
+    "y": 1250,
+    "facing": "right"
+   },
+   "deck": {
+    "x": 1560,
+    "y": 600,
+    "facing": "down"
+   },
+   "plateau": {
+    "x": 2000,
+    "y": 250,
+    "facing": "down"
+   },
+   "under": {
+    "x": 1560,
+    "y": 900,
+    "facing": "right"
+   }
+  }
+ },
+ "terrain": {
+  "base": {
+   "tiles": [
+    "gnd_grass_sunny_01",
+    "gnd_grass_sunny_02"
+   ],
+   "surface": "grass",
+   "seed": 2516
+  },
+  "baseColor": "#7d9a58",
+  "patches": [],
+  "openAreas": [],
+  "paths": [],
+  "waters": [],
+  "cliffs": [],
+  "fills": []
+ },
+ "props": [],
+ "walkers": [],
+ "scatter": [],
+ "effects": [],
+ "collision": {
+  "bounds": {
+   "x": 0,
+   "y": 0,
+   "w": 2400.0,
+   "h": 1600.0
+  },
+  "edgeBlockers": [
+   {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 2400,
+    "h": 48
+   },
+   {
+    "shape": "rect",
+    "x": 0,
+    "y": 1552,
+    "w": 2400,
+    "h": 48
+   },
+   {
+    "shape": "rect",
+    "x": 0,
+    "y": 0,
+    "w": 48,
+    "h": 1600
+   },
+   {
+    "shape": "rect",
+    "x": 2352,
+    "y": 0,
+    "w": 48,
+    "h": 1600
+   }
+  ],
+  "blockers": [
+   {
+    "id": "cb_river",
+    "tag": "water_deep",
+    "shape": "rect",
+    "x": 0,
+    "y": 600,
+    "w": 2400,
+    "h": 120,
+    "levels": [
+     0
+    ]
+   },
+   {
+    "id": "cb_plateau_cliff",
+    "tag": "cliff",
+    "shape": "rect",
+    "x": 1750,
+    "y": 64,
+    "w": 500,
+    "h": 356,
+    "levels": [
+     0
+    ]
+   },
+   {
+    "id": "cb_pier_w",
+    "tag": "prop",
+    "shape": "rect",
+    "x": 1500,
+    "y": 940,
+    "w": 16,
+    "h": 20,
+    "levels": [
+     0
+    ]
+   },
+   {
+    "id": "cb_pier_e",
+    "tag": "prop",
+    "shape": "rect",
+    "x": 1604,
+    "y": 940,
+    "w": 16,
+    "h": 20,
+    "levels": [
+     0
+    ]
+   },
+   {
+    "id": "cb_tree",
+    "tag": "prop",
+    "shape": "rect",
+    "x": 2090,
+    "y": 458,
+    "w": 20,
+    "h": 14
+   }
+  ]
+ },
+ "transitions": [],
+ "encounterZones": [],
+ "treasurePoints": [],
+ "eventZones": [
+  {
+   "id": "ev_arrival",
+   "type": "locationCard",
+   "shape": {
+    "shape": "rect",
+    "x": 150,
+    "y": 1100,
+    "w": 300,
+    "h": 300
+   },
+   "once": true
+  }
+ ],
+ "cameraFocus": [],
+ "ambience": {
+  "grade": {
+   "id": "town_day",
+   "tint": "#FFF2D0",
+   "tintStrength": 0.0,
+   "brightness": 1.02,
+   "saturation": 1.0
+  },
+  "shadow": {
+   "dir": [
+    0.55,
+    0.83
+   ],
+   "alpha": 0.2
+  },
+  "wind": {
+   "strength": 0.2,
+   "dirDeg": 60,
+   "gustPeriodSec": [
+    6,
+    10
+   ],
+   "targets": {}
+  }
+ },
+ "particles": [],
+ "audio": {
+  "bgm": {
+   "id": "bgm_town",
+   "fadeInSec": 1.0
+  },
+  "layers": [],
+  "hooks": []
+ },
+ "taint": {
+  "baseLevel": 0,
+  "maxCoverageRatio": 0.0,
+  "palette": {
+   "crack": "#120A1F",
+   "glow": "#8A4DFF"
+  },
+  "spots": []
+ },
+ "debug": {
+  "showCollision": false,
+  "showPaths": false,
+  "showZones": false
+ },
+ "timeOfDay": {
+  "default": "day"
+ },
+ "story": {
+  "placeholder": true,
+  "note": "Phase 1 高さプロトタイプ専用(DEV)。本編のマップ・進行には接続しない"
+ },
+ "culling": {
+  "chunk": 256,
+  "margin": 1,
+  "maxLiveNodes": 800,
+  "viewportWorst": [
+   1920,
+   1080
+  ],
+  "scatterRender": "chunkLayer"
+ },
+ "height": {
+  "levelHeight": 56,
+  "levels": {
+   "1": {
+    "walk": [
+     [
+      1500,
+      480,
+      120,
+      640
+     ],
+     [
+      1750,
+      120,
+      500,
+      300
+     ]
+    ]
+   }
+  },
+  "connectors": [
+   {
+    "id": "ramp_bridge_n",
+    "rect": [
+     1500,
+     360,
+     120,
+     120
+    ],
+    "axis": "y",
+    "fromEnd": "min",
+    "from": 0,
+    "to": 1,
+    "zone": 0.22
+   },
+   {
+    "id": "ramp_bridge_s",
+    "rect": [
+     1500,
+     1120,
+     120,
+     120
+    ],
+    "axis": "y",
+    "fromEnd": "max",
+    "from": 0,
+    "to": 1,
+    "zone": 0.22
+   },
+   {
+    "id": "stairs_plateau",
+    "rect": [
+     1900,
+     420,
+     120,
+     120
+    ],
+    "axis": "y",
+    "fromEnd": "max",
+    "from": 0,
+    "to": 1,
+    "zone": 0.22
+   },
+   {
+    "id": "slope_plateau_w",
+    "rect": [
+     1630,
+     220,
+     120,
+     100
+    ],
+    "axis": "x",
+    "fromEnd": "min",
+    "from": 0,
+    "to": 1,
+    "zone": 0.22
+   }
+  ],
+  "overpasses": [
+   {
+    "id": "bridge_deck",
+    "level": 1,
+    "rect": [
+     1500,
+     480,
+     120,
+     640
+    ],
+    "z": 440,
+    "fade": "deck"
+   }
+  ],
+  "visuals": [
+   {
+    "id": "river",
+    "kind": "rect",
+    "rect": [
+     0,
+     600,
+     2400,
+     120
+    ],
+    "color": "#4d86bd",
+    "z": 1,
+    "label": "川 (level 0 通行不可)"
+   },
+   {
+    "id": "lbl_low",
+    "kind": "rect",
+    "rect": [
+     200,
+     1150,
+     260,
+     40
+    ],
+    "color": "rgba(0,0,0,0)",
+    "z": 4,
+    "label": "低地 level 0"
+   },
+   {
+    "id": "plateau_top",
+    "kind": "rect",
+    "rect": [
+     1750,
+     64,
+     500,
+     300
+    ],
+    "color": "#9fbf6a",
+    "z": 5
+   },
+   {
+    "id": "lbl_plateau",
+    "kind": "rect",
+    "rect": [
+     1900,
+     84,
+     200,
+     30
+    ],
+    "color": "rgba(0,0,0,0)",
+    "z": 7,
+    "label": "高台 level 1"
+   },
+   {
+    "id": "slope_w",
+    "kind": "poly",
+    "pts": [
+     [
+      1630,
+      220
+     ],
+     [
+      1750,
+      164
+     ],
+     [
+      1750,
+      264
+     ],
+     [
+      1630,
+      320
+     ]
+    ],
+    "color": "#d8b87a",
+    "z": 6,
+    "label": "坂"
+   },
+   {
+    "id": "stairs_s",
+    "kind": "poly",
+    "pts": [
+     [
+      1900,
+      364
+     ],
+     [
+      2020,
+      364
+     ],
+     [
+      2020,
+      540
+     ],
+     [
+      1900,
+      540
+     ]
+    ],
+    "color": "#b9b2a0",
+    "z": 7,
+    "stripes": 0
+   },
+   {
+    "id": "ramp_n",
+    "kind": "poly",
+    "pts": [
+     [
+      1500,
+      360
+     ],
+     [
+      1620,
+      360
+     ],
+     [
+      1620,
+      424
+     ],
+     [
+      1500,
+      424
+     ]
+    ],
+    "color": "#d8b87a",
+    "z": 6
+   },
+   {
+    "id": "ramp_s",
+    "kind": "poly",
+    "pts": [
+     [
+      1500,
+      1064
+     ],
+     [
+      1620,
+      1064
+     ],
+     [
+      1620,
+      1240
+     ],
+     [
+      1500,
+      1240
+     ]
+    ],
+    "color": "#d8b87a",
+    "z": 6
+   },
+   {
+    "id": "under_path",
+    "kind": "rect",
+    "rect": [
+     1380,
+     780,
+     360,
+     90
+    ],
+    "color": "#8a7650",
+    "z": 3,
+    "label": "橋の下 level 0",
+    "opacity": 0.8
+   },
+   {
+    "id": "cliff_face",
+    "kind": "rect",
+    "rect": [
+     1750,
+     364,
+     500,
+     56
+    ],
+    "color": "#6b5740",
+    "z": 420
+   },
+   {
+    "id": "deck_floor",
+    "kind": "rect",
+    "rect": [
+     1500,
+     424,
+     120,
+     640
+    ],
+    "color": "#c8955a",
+    "z": 440,
+    "fade": "deck",
+    "stripes": 90,
+    "label": "橋 level 1"
+   },
+   {
+    "id": "rail_w_480",
+    "kind": "rect",
+    "rect": [
+     1500,
+     402,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 560,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_480",
+    "kind": "rect",
+    "rect": [
+     1610,
+     402,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 560,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_560",
+    "kind": "rect",
+    "rect": [
+     1500,
+     482,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 640,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_560",
+    "kind": "rect",
+    "rect": [
+     1610,
+     482,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 640,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_640",
+    "kind": "rect",
+    "rect": [
+     1500,
+     562,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 720,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_640",
+    "kind": "rect",
+    "rect": [
+     1610,
+     562,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 720,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_720",
+    "kind": "rect",
+    "rect": [
+     1500,
+     642,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 800,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_720",
+    "kind": "rect",
+    "rect": [
+     1610,
+     642,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 800,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_800",
+    "kind": "rect",
+    "rect": [
+     1500,
+     722,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 880,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_800",
+    "kind": "rect",
+    "rect": [
+     1610,
+     722,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 880,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_880",
+    "kind": "rect",
+    "rect": [
+     1500,
+     802,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 960,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_880",
+    "kind": "rect",
+    "rect": [
+     1610,
+     802,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 960,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_960",
+    "kind": "rect",
+    "rect": [
+     1500,
+     882,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 1040,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_960",
+    "kind": "rect",
+    "rect": [
+     1610,
+     882,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 1040,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_w_1040",
+    "kind": "rect",
+    "rect": [
+     1500,
+     962,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 1120,
+    "fade": "deck"
+   },
+   {
+    "id": "rail_e_1040",
+    "kind": "rect",
+    "rect": [
+     1610,
+     962,
+     10,
+     102
+    ],
+    "color": "#7a4f27",
+    "z": 1120,
+    "fade": "deck"
+   },
+   {
+    "id": "pier_w",
+    "kind": "rect",
+    "rect": [
+     1500,
+     884,
+     16,
+     76
+    ],
+    "color": "#6d6a62",
+    "z": 960,
+    "fade": "deck"
+   },
+   {
+    "id": "pier_e",
+    "kind": "rect",
+    "rect": [
+     1604,
+     884,
+     16,
+     76
+    ],
+    "color": "#6d6a62",
+    "z": 960,
+    "fade": "deck"
+   },
+   {
+    "id": "tree_trunk",
+    "kind": "rect",
+    "rect": [
+     2092,
+     420,
+     16,
+     52
+    ],
+    "color": "#5b3b1d",
+    "z": 470
+   },
+   {
+    "id": "tree_canopy",
+    "kind": "rect",
+    "rect": [
+     2030,
+     320,
+     140,
+     120
+    ],
+    "color": "#2f7a35",
+    "z": 470,
+    "round": "50%"
+   }
+  ]
+ }
+}

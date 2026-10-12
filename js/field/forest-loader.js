@@ -82,6 +82,9 @@
     const all=ForestScatter.generate(map),ents=entities(map,all,flags);
     const layerItems=all.filter(e=>e.render==='layer');
     const solid=collision(map,ents,flags);
+    // Opt-in height levels (field-height.js). Maps without `height` keep the plain 2D predicate.
+    const height=map.height&&window.FieldHeight?FieldHeight.create(map.height,solid):null;
+    if(height)height.blocked.height=height;
     world.style.width=map.world.width+'px';world.style.height=map.world.height+'px';world.style.position='relative';
     const cull=FieldCulling.create({chunk:map.culling.chunk,margin:map.culling.margin,maxLiveNodes:map.culling.maxLiveNodes,parent:world});
     for(const e of ents){
@@ -96,8 +99,9 @@
         return d;}});}
     const layer=ForestLayer.create({map,parent:world,items:layerItems,chunk:512,margin:1,ground:art.manifest?art.ground:null,sprite:layerArt});
     const stats={entities:ents.length,layerItems:layerItems.length,rects:solid.shapes.length,buildMs:Math.round(performance.now()-t0)};
-    function destroy(){cull.clear();layer.destroy();world.querySelectorAll('.forest-ent,.forest-chunk').forEach(n=>n.remove());}
-    return {blocked:solid.blocked,solid,cull,layer,stats,flags,destroy,
+    if(height)height.mount(world);
+    function destroy(){if(height)height.destroy();cull.clear();layer.destroy();world.querySelectorAll('.forest-ent,.forest-chunk').forEach(n=>n.remove());}
+    return {blocked:height?height.blocked:solid.blocked,height,solid,cull,layer,stats,flags,destroy,
       update(view){layer.update(view);cull.update(view);},
       spawn(id){const s=map.spawns.points[id||map.spawns.default];return {x:s.x-FOOT.ax,y:s.y-FOOT.ay,facing:s.facing};}};
   }

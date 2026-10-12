@@ -196,11 +196,14 @@
     el.scene.style.display='block';
     {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
     unmount();mount(map);
+    if(S.forest.height&&Number.isFinite(options.level))S.forest.height.setLevel(options.level);   // before the spot check: a deck / plateau position is only free at its own level
     let spot;
     const sp0=map.spawns.points[spawnId||map.spawns.default];
     if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
-    S.x=spot.x;S.y=spot.y;spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
+    S.x=spot.x;S.y=spot.y;S.fl=0;S.trail=[];
+    if(S.forest.height){const h=S.forest.height;h.setLevel(Number.isFinite(options.level)?options.level:h.derive(S.x,S.y));h.commit(S.x,S.y);S.fl=h.level;}else{el.player.style.transform='';if(fsp.ready)el.fiona.style.transform='';}   // height maps (prototype): the level comes with the position; a position saved without one falls back to derive()
+    spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
     S.keys.clear();render();
     if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
     if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
@@ -340,12 +343,35 @@
       el.world.style.transform='translate('+(Math.sin(t*1.7)*a).toFixed(2)+'px,'+(Math.cos(t*2.3)*a).toFixed(2)+'px) '+el.world.style.transform;
     }
     if(window.FieldVista)FieldVista.sync(el.world.style.transform);
-    const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);if(!S.fionaHold){S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;}   // fionaHold: a scene (FieldChoreo) is placing her
+    const k=1-Math.pow(1-.08,FieldMovement.frameScale||1);if(!S.fionaHold){if(S.forest.height)followTrail(S.forest.height,k);else{S.fx+=(S.x-48-S.fx)*k;S.fy+=(S.y+18-S.fy)*k;}}   // fionaHold: a scene (FieldChoreo) is placing her
     el.fiona.style.left=S.fx+'px';el.fiona.style.top=S.fy+'px';
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
+    if(S.forest&&S.forest.height)heightDraw(S.forest.height);
     el.player.style.display='block';el.fiona.style.display=(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false)?'none':'block';   // follower hidden indoors / before she joins
     const sc=FieldCamera.scale,rc=el.world.getBoundingClientRect();
     S.forest.update({x:-rc.left/sc,y:-rc.top/sc,width:el.scene.clientWidth/sc,height:el.scene.clientHeight/sc});
+  }
+  // Height maps: lift the sprites to their level, order them against level-N floors (an actor under an overpass sits just below its floor,
+  // which is drawn faded there), and keep the follower on her own level. Everything else stays y-sorted by feet.
+  // Height maps: the follower walks the player's own breadcrumb trail (with its level) instead of cutting straight across, so she
+  // climbs stairs and crosses bridges instead of wading through the river or floating under the deck.
+  function followTrail(h,k){
+    const t=S.trail||(S.trail=[]),head=t[t.length-1];
+    if(!head||Math.hypot(S.x-head.x,S.y-head.y)>=6)t.push({x:S.x,y:S.y,l:h.level});
+    if(t.length>400)t.splice(0,t.length-400);
+    let need=56,i=t.length-1,px=S.x,py=S.y,tx=t[0].x,ty=t[0].y,tl=t[0].l;
+    for(;i>=0;i--){const d=Math.hypot(px-t[i].x,py-t[i].y);if(d>=need){const r=need/d;tx=px+(t[i].x-px)*r;ty=py+(t[i].y-py)*r;tl=t[i].l;break;}need-=d;px=t[i].x;py=t[i].y;tx=px;ty=py;tl=t[i].l;}
+    S.fx+=(tx-S.fx)*k;S.fy+=(ty-S.fy)*k;S.fl=tl;
+  }
+  function heightDraw(h){
+    const dz=(x,y,l,under)=>under?under.z-1:Math.round(y+FOOT.ay)+(l>0?1:0);
+    const uf=h.overpassOver(S.fx,S.fy,S.fl);
+    el.player.style.zIndex=String(dz(S.x,S.y,h.level,h.under));
+    el.fiona.style.zIndex=String(dz(S.fx,S.fy,S.fl,uf));
+    const lp=h.lift(S.x,S.y,h.level),lf=h.lift(S.fx,S.fy,S.fl);
+    el.player.style.transform=lp?'translateY('+(-lp).toFixed(1)+'px)':'';
+    el.fiona.style.transform=lf?'translateY('+(-lf).toFixed(1)+'px)':'';
+    const g=h.under||uf;h.fade('deck',Boolean(g));
   }
   function shake(ms=900,amp=7){CAM.shakeMs=ms;CAM.shakeAmp=amp;CAM.shakeUntil=performance.now()+ms;if(S.forest&&el.scene.style.display!=='none')render();}
   // Pan the camera to a world point, hold, then glide back to the player. Input is locked meanwhile.
@@ -430,6 +456,7 @@
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
     if(S.pending&&!S.target){const pd=S.pending;S.pending=null;   // arrived
       if(dist(S.x+FOOT.ax,S.y+FOOT.ay,pd.c.x,pd.c.y)>260)toast('もう少し近づいて調べよう。');else fireEvent(pd.z);}
+    if(S.forest.height)S.forest.height.commit(S.x,S.y);
     stepEncounter(S.x-px0,S.y-py0);
     if(window.FieldMonsters)FieldMonsters.update((FieldMovement.frameScale||1)/60);
     render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
@@ -518,6 +545,9 @@
     monsterResult(won){if(window.FieldMonsters)FieldMonsters.resolve(Boolean(won));},get monsters(){return window.FieldMonsters?FieldMonsters.list:[];},
     encounters(on){if(on===undefined)return !enc.off;enc.off=!on;return !enc.off;},
     forceEncounter(){const z=S.map&&(S.map.encounterZones||[]).find(z=>z.style==='step'&&(z.enemies||[]).some(e=>!hooks.canEncounter||hooks.canEncounter(e.id)));if(!z||!hooks.onEncounter)return false;const e=z.enemies.find(e=>!hooks.canEncounter||hooks.canEncounter(e.id));hooks.onEncounter({zone:z.id,enemy:e.id,count:1,map:S.mapId});return true;},
+    get level(){return S.forest&&S.forest.height?S.forest.height.level:0;},
+    heightState(){const h=S.forest&&S.forest.height;return h?{map:S.mapId,...h.serialize(S.x,S.y)}:null;},   // prototype only: the main save still stores map/x/y alone
+    get height(){return S.forest?S.forest.height:null;},
     goFeet(x,y){S.pending=null;S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
     get target(){return S.target;},get status(){return FieldNavigation.status;}});
 })();
