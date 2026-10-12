@@ -7,7 +7,7 @@
   const ID = 'wind_dance';
   const F = window.WINDBOUND_FEATURES = window.WINDBOUND_FEATURES || {windDanceCommand: false};
   try { if (/[?&]feature=windDanceCommand\b/.test(location.search)) F.windDanceCommand = true; } catch (e) {}
-  const member = () => window.PartyManager && PartyManager.members.fiona;
+  const member = () => (typeof PartyManager !== 'undefined' ? PartyManager.members.fiona : null);
   const learned = () => { const m = member(); return !!(m && m.learned && m.learned[ID]); };
   function learn() {
     const m = member(); if (!m || learned()) return false;
