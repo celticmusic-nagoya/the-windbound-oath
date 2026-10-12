@@ -38,6 +38,10 @@ with sync_playwright() as p:
         sv['members']['fiona'].pop('learned',None); pg.evaluate("s=>localStorage.setItem(SAVE_KEY,s)",json.dumps(sv))
         ev("delete PartyManager.members.fiona.learned;loadGrowthData()")
         ck(ev("WindDance.learned()")==(ev("storyStage")>=13),tag+'old save: learned iff past the altar stage (stage %s)'%ev("storyStage"))
+        # loading an EARLIER save in the same session must not keep the spell
+        early=json.loads(json.dumps(sv)); early['members']['fiona'].pop('learned',None); early['prologue']['storyStage']=5
+        pg.evaluate("s=>localStorage.setItem(SAVE_KEY,s)",json.dumps(early)); ev("WindDance.learn();loadGrowthData()")
+        ck(ev("WindDance.learned()")==False,tag+'loading an earlier save drops a later-learned spell (stage %s)'%ev("storyStage"))
         pg.close()
     b.close()
 print('errors',errs[:4]); print('FAILS',len(fails)); sys.exit(1 if (fails or errs) else 0)
