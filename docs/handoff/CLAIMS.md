@@ -80,3 +80,19 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 統合前最終結果: CPU負荷模擬で30秒時点の正常歩行継続・約51秒後の正常王都遷移を確認し、待機不足を再現。m8の実遷移待機を90秒/操作可能状態までとし、期限超過は明示的に失敗、診断を出す。ゲーム側変更なし。m8/王都加入ゲート/新戦闘演出の再実行3/3合格、最終m8再実行+最新候補のm6_quest単独10回で11/11合格。全52対象に合格結果が揃い、mainへの反映準備完了。ロールバックタグ予定名 `rollback/before-quality-foundation-20261012`、直前main `c4c536a`。
 
 - 2026-10-12 Claude: bat layout / DEV monster arena (`map:dev_monster_arena`, monsters x3, A1/A2 goblins, A3 bat/slime/boar) / Aidan+Fiona new walk art merged to main. Rollbacks: `rollback/before-bat-layout-20261012`, `rollback/before-new-walk-20261012`, `rollback/before-dev-arena-20261012`.
+
+## Codex: 納品モス素材の統合後検証 (2026-10-12)
+
+ブランチ: `work/codex-moss-delivered-art-verification`。基準main `ce2b366`（素材merge済み）。対象: `docs/field/moss-forest-asset-requests.md`、本CLAIMS、専用報告・QA記録。指定8テストを順次実行、外部スクリプトで9座標/結界4状態を確認。画像差し替え・ゲーム仕様変更なし。STATUS: WIP。既存merge `ce2b366` と退避branch `rollback/pre-moss-delivered-art` (`0372ef6`) を確認。
+
+納品検証checkpoint: 指定8本の初回7合格/スライム逃走距離1失敗。納品前mainのスライムは合格、納品後単独再実行でも逃走距離が不足したため未解決として調査中。コンソールエラーは各browserテスト0。m14_hold_moveとwalk_a1は -u 実行で出力/合格を確認。素材やゲーム仕様の変更なし。mainへの資料統合は原因解決後。
+
+担当追加: `tests/moss/m15b_slime_symbol.py`。外部診断で徘徊座標由来の退避先がblocked-destination、goFeet=false、移動0のまま接触を再現。テスト側のみ、衝突なし/到達可能な退避地点と移動受付の明示確認へ修正する。距離/無接触のassertionを維持。ゲームAI/速度/衝突/素材は変更しない。最新mainの当たり判定/横歩行/文言変更を取り込んで指定8本を再検証する。
+
+最新main `35834dd` を取り込み。m15bは明確なblocked-destinationを修正したテスト入力で単独合格（5秒後gap693、console0）。修正commit `9dbb274`。元5秒/350px/接触0を維持し、追加assertionは退避経路/追跡/受付。現在指定8本を順番どおり再実行中。任意4本は旧基準ce2b366で合格。新mainのFiona台詞変更とm4旧期待値の不一致を発見し、作業3指定に従い期待値更新を作者へ確認中（まだ変更なし）。
+
+最終結果: `9dbb274` / 基準main `35834dd` で指定8本を順に実行、8/8合格・失敗0・browser console0。m15bの5秒後gap701。テスト入力の衝突問題を解決しゲーム変更なし。素材依頼一覧は未納品3点のみ。9座標の納品前後比較と結界4状態を保存。STATUS: READY — 退避branch作成後に資料/テスト修正をno-ffでmainへ統合。任意m4の新台詞期待値更新は未回答/未修正。
+
+最終mainは `499f781`（35834ddから追加シナリオ資料のみ）を取り込み、検証時のアプリ/tests treeと同一を確認。結界は画像3種と開放後node0を再撮影/console0。正面の石/紋様との重なりで違いが読みづらい点を追記。追加統合の退避先は `rollback/pre-moss-delivered-art-verification`（直前499f781）。素材退避branch `rollback/pre-moss-delivered-art`（0372ef6）は保持。mainへno-ff統合後PLAYER QA。
+
+2026-10-12 main反映記録: 機能merge件名 `Merge delivered moss art verification and pending asset list`。基準main499f781、指定8/8・console0。m15b入力修正と未納品一覧/証跡をno-ffで反映、PLAYER QA待ち。追加分の退避branch `rollback/pre-moss-delivered-art-verification` は499f781。素材本体の既存mergece2b366/退避0372ef6は保持。追加分だけは本mergeをrevert、素材全体は本merge→ce2b366の順でrevert。force pushなし。
