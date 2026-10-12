@@ -80,3 +80,7 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 統合前最終結果: CPU負荷模擬で30秒時点の正常歩行継続・約51秒後の正常王都遷移を確認し、待機不足を再現。m8の実遷移待機を90秒/操作可能状態までとし、期限超過は明示的に失敗、診断を出す。ゲーム側変更なし。m8/王都加入ゲート/新戦闘演出の再実行3/3合格、最終m8再実行+最新候補のm6_quest単独10回で11/11合格。全52対象に合格結果が揃い、mainへの反映準備完了。ロールバックタグ予定名 `rollback/before-quality-foundation-20261012`、直前main `c4c536a`。
 
 - 2026-10-12 Claude: bat layout / DEV monster arena (`map:dev_monster_arena`, monsters x3, A1/A2 goblins, A3 bat/slime/boar) / Aidan+Fiona new walk art merged to main. Rollbacks: `rollback/before-bat-layout-20261012`, `rollback/before-new-walk-20261012`, `rollback/before-dev-arena-20261012`.
+
+## Codex: 納品モス素材の統合後検証 (2026-10-12)
+
+ブランチ: `work/codex-moss-delivered-art-verification`。基準main `ce2b366`（素材merge済み）。対象: `docs/field/moss-forest-asset-requests.md`、本CLAIMS、専用報告・QA記録。指定8テストを順次実行、外部スクリプトで9座標/結界4状態を確認。画像差し替え・ゲーム仕様変更なし。STATUS: WIP。既存merge `ce2b366` と退避branch `rollback/pre-moss-delivered-art` (`0372ef6`) を確認。
