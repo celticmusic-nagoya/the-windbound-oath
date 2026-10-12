@@ -1,0 +1,75 @@
+{
+  "source_commit": "be6af1f",
+  "checkout_head": "3c2ba4713eb58e04ebff46bab710477140d76073",
+  "port": 8783,
+  "tests": [
+    {
+      "test": "tests/system/equipment_test.py",
+      "sha256_before": "7dd8e79b9f8db8277dbbb6d427c27c5e714bb2c0683e418799fd5af212dcab8a",
+      "sha256_after": "7dd8e79b9f8db8277dbbb6d427c27c5e714bb2c0683e418799fd5af212dcab8a",
+      "exit_code": 0,
+      "seconds": 3.394,
+      "status": "PASS",
+      "reported_fails": [],
+      "failure_lines": [],
+      "server_alive_after": true,
+      "log": "tests_system_equipment_test.py.log"
+    },
+    {
+      "test": "tests/system/equipment_ui_flow_test.py",
+      "sha256_before": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "sha256_after": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "exit_code": 0,
+      "seconds": 8.601,
+      "status": "PASS",
+      "reported_fails": [],
+      "failure_lines": [],
+      "server_alive_after": true,
+      "log": "tests_system_equipment_ui_flow_test.py.log"
+    },
+    {
+      "test": "tests/moss/m18_moss_scenario.py",
+      "sha256_before": "10550bebb25e4a340a6bc42e503d8c602b7368db3064a8e15a9d20a37344b3b1",
+      "sha256_after": "10550bebb25e4a340a6bc42e503d8c602b7368db3064a8e15a9d20a37344b3b1",
+      "exit_code": 0,
+      "seconds": 14.03,
+      "status": "FAIL",
+      "reported_fails": [
+        1
+      ],
+      "failure_lines": [
+        "FAIL altar has 30 lines (37)"
+      ],
+      "server_alive_after": true,
+      "log": "tests_moss_m18_moss_scenario.py.log"
+    },
+    {
+      "test": "tests/moss/m20_sword_equipment.py",
+      "sha256_before": "f0a9215d8624e020f33f00a7a1d4d154c353c811f12cf5390d2a93e48a1c7de9",
+      "sha256_after": "f0a9215d8624e020f33f00a7a1d4d154c353c811f12cf5390d2a93e48a1c7de9",
+      "exit_code": 0,
+      "seconds": 8.875,
+      "status": "PASS",
+      "reported_fails": [
+        0
+      ],
+      "failure_lines": [],
+      "server_alive_after": true,
+      "log": "tests_moss_m20_sword_equipment.py.log"
+    },
+    {
+      "test": "tests/moss/m21_wind_dance.py",
+      "sha256_before": "6673ef432106536642f1710daeae925274250452e4792a2333cd8ea609ab9edf",
+      "sha256_after": "6673ef432106536642f1710daeae925274250452e4792a2333cd8ea609ab9edf",
+      "exit_code": 0,
+      "seconds": 6.048,
+      "status": "PASS",
+      "reported_fails": [
+        0
+      ],
+      "failure_lines": [],
+      "server_alive_after": true,
+      "log": "tests_moss_m21_wind_dance.py.log"
+    }
+  ]
+}

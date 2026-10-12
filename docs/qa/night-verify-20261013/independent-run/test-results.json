@@ -1,0 +1,25 @@
+{
+  "source_commit": "be6af1f",
+  "checkout_head": "3c2ba4713eb58e04ebff46bab710477140d76073",
+  "port": 8783,
+  "tests": [
+    {
+      "test": "tools/qa/night_verify_sword.py",
+      "sha256_before": "50a244a2fa06770d86cdbef600a87b64056d3b3d7060992f38265d382df05bde",
+      "sha256_after": "50a244a2fa06770d86cdbef600a87b64056d3b3d7060992f38265d382df05bde",
+      "exit_code": 1,
+      "seconds": 35.226,
+      "status": "FAIL",
+      "reported_fails": [
+        3
+      ],
+      "failure_lines": [
+        "FAIL late-save -> early legacy-save clears wind dance learned state",
+        "FAIL legacy Aidan iron_sword remains owned after story-weapon migration",
+        "FAIL legacy Aidan steel_sword remains owned after story-weapon migration"
+      ],
+      "server_alive_after": true,
+      "log": "tools_qa_night_verify_sword.py.log"
+    }
+  ]
+}

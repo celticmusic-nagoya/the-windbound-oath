@@ -106,3 +106,7 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 ## Codex 夜間K (2026-10-13)
 
 `work/codex-night-k` / 最新実装 `be6af1f`（風の舞lookup修正を取得）、main0d48324。新規 `tools/qa/run_night_tests.py`、`tools/qa/night_verify_sword.py`、docs/qa/night-verify-20261013.md と証跡、専用handoffのみ。既存ファイルは本CLAIMS追記以外未編集。自分の8783でサーバーを同一プロセス寿命管理、テストは順次実行。コード/マップ/既存テストの修正・mainマージなし。STATUS: WIP。
+
+夜間K完了: 基準be6af1f。指定5本=4合格/1不合格（m18の30期待/実37、FAILS1なのにexit0）。独立検証62中59合格/3不合格: 後半→序盤旧saveの風の舞習得残留、旧Aidan鉄剣/鋼剣の所持消失。修正なしで原因/再現fixtureをQAへ記録。祭壇全37×縦横、支給/EQUIP計94PNG、console0、8783サーバー全実行で生存/終了確認。横6ページで人物と文章箱重なり、縦3ページ3行。STATUS: READY（報告完成、対象はFAILあり・main未統合）。
+
+夜間成果の参照: I `work/codex-night-i` / b57b663（docs/handoff/wind-dance-proposal-20261013.md）、J `work/codex-night-j` / fcd5ab4（survey_maps.pyと29マップ表/JSON）、K 本ブランチ（docs/qa/night-verify-20261013.md）。各々feat/equipment-unlock-swordから作成し通常push。I/Jは03d053e、Kはbe6af1f。J対象mapsは両SHAで差分なし。mainには一切マージしていない。
