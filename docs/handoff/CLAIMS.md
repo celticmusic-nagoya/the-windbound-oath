@@ -106,3 +106,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 ## Codex 夜間I (2026-10-13)
 
 `work/codex-night-i` / 基準実装 `03d053e`、main `0d48324`。新規 `docs/handoff/wind-dance-proposal-20261013.md` の調査のみ。本CLAIMS以外の既存ファイル、ゲームコード、マップ、テストは編集しない。mainマージなし。STATUS: WIP。
+
+夜間I完了: 現03d053eの被ダメ/命中/回避未実装と最小導入点、3案・MP/ターンの期待値・名称表示を資料化。推奨15ポイント/3敵フェーズ/MP10/生存味方全体/非加算更新。現参考20%/3/10より控えめ。効果寿命snapshotのcast当日+3回問題、AGENTS召喚説明と実装の不一致も記録。STATUS: READY（調査、未採用）。
