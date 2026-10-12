@@ -1,6 +1,6 @@
 # Android 高さプロトタイプ性能計測
 
-STATUS: WIP — Android実機は未検証。
+STATUS: READY — 依頼A/B/Cの実装とPC受入確認を完了。Android実機は未検証。既存m19の境界期待値1件は基準branchでも再現。mainへはmergeしない。
 
 担当: Codex / `work/codex-height-tools` / 基準 `feat/field-height-prototype` (`2ddeaed`)。
 対象は新規 `tools/moss/check_levels.py`、`js/dev/perf-meter.js`、本手順書、任意の `tests/moss/run_all.sh` とindex.htmlのscriptタグ1行のみ。Claude編集中の高さ・衝突・移動・マップ生成・m19ファイルは読むだけ。本編マップ/セーブ/ストーリー/戦闘/採用素材を変更せず、mainにはmergeしない。
@@ -123,7 +123,9 @@ python3 tools/moss/check_levels.py /tmp/height-one-pixel-walk.json # exit1
 
 ### 統括側への確認事項
 
-m19の橋脚項目は、停止位置feet.x=1591で `x < 1590` が失敗。足元箱右端はx+11、橋脚はx=1604からなので、1591の右端1602は障害物の手前。実FieldHeightの判定もfeet1590/1591/1593はlevel0で非衝突、1594は衝突、同じXYのlevel1は非衝突だった。境界期待値の見直しが必要か統括側で確認する。編集禁止のm19/衝突/高さ本体は修正しない。
+m19の橋脚項目は、停止位置feet.x=1591で `x < 1590` が失敗。足元箱右端はx+11、橋脚はx=1604からなので、1591の右端1602は障害物の手前。実FieldHeightの判定もfeet1590/1591/1593はlevel0で非衝突、1594は衝突、同じXYのlevel1は非衝突だった。境界期待値の見直しが必要か統括側で確認する。編集禁止のm19/衝突/高さ本体は修正しない。変更前の2ddeaedを別worktree `/tmp/height-proto-baseline` で実行し、同じfeet.x=1591/FAILS1/pageerror0を再現。今回の追加による退行ではない。
+
+基準比較コマンド（workdir=/tmp/height-proto-baseline）: `PATH=/workspace/.cloud-setup/venv/bin:$PATH PW_CHROMIUM_EXECUTABLE=/usr/bin/chromium VIEWS=pc OUT=/tmp/height-baseline-m19-images TEST_RESULTS_DIR=/tmp/height-baseline-m19 bash tests/run_all.sh tests/moss/m19_height_proto.py` → exit1（上記1件）。
 
 同m19でlevel遷移、上下同一XY、階段/坂、橋と高台への往復、位置+level往復、通常2D map、24,000歩でblocked positions0/level leaks0は合格。個別の境界失敗を隠して「m19合格」とは報告しない。
 
