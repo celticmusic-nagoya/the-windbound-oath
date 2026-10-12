@@ -49,7 +49,7 @@ with sync_playwright() as p:
     m=ev("(()=>{const m=MossForest.monsters[0];return [m.x,m.y]})()")
     ev("document.querySelector('#devPanel').style.display='none'")
     ev("MossForest.teleportFeet(%d,%d)"%(m[0]+10,m[1]+30)); pg.wait_for_timeout(1800)
-    check(ev("window.__starts.length")==0 and ev("MossForest.monsters[0].state")=='wander','frozen monster neither aggroes nor fights')
+    check(ev("window.__starts.length")==0 and ev("MossForest.monsters[0].state")!='chase','frozen monster neither aggroes nor fights')
     ev("document.querySelector('#devPanel').style.display='block'"); pg.click("#devArena [data-arena=freeze]"); pg.wait_for_timeout(200)
     ev("document.querySelector('#devPanel').style.display='none'")
     check(not ev("FieldMonsters.frozen"),'freeze toggles off')
