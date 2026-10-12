@@ -62,3 +62,5 @@ N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析
 作業中の追加方針（ユーザー事前承認）: 各成果物の完了時にremote指示をfetchし、現在作業が終わったら追加指示へ続けて着手する。現N→O→P→Qの順序を維持しRを後続、未完/新規は本statusへ登録する。
 
 P着手: work/codex-aidan-walk-acceptance / 最新main88ae6c0。Nはmain88ae6c0に統合済み、Oはwork/codex-regression-runner / 56f6050で全59（旧main531）納品済み。Rのfeat/height-contact-levels / 5c33f9fの公開とmain5e682e7の統合を確認、P→Q後にレビューする。新規tools/field/check_aidan_walk_assets.py、docs/art/aidan_walk_acceptance.md、template/ダミー検証記録を担当。素材未着・採用素材未変更。
+
+P完了: 検品tool/template/checklistとダミーQAを作成。正常18コマ合格、7負例検出、alpha/footproxy/任意機械反転を検査。原シートは白背景、prepared RGBAを対象。実素材/剣の見た目/ゲーム組込は未実施、採用素材未変更。次はQ→R（R公開5c33f9fを取得済み）。
