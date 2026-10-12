@@ -93,7 +93,7 @@
     const box = msg(); if (!box) return;
     box.textContent = '';
     if (page.speaker) { const n = document.createElement('div'); n.className = 'talkName'; n.textContent = page.speaker; box.append(n); }
-    const t = document.createElement('div'); t.className = 'talkText'; t.textContent = page.text; box.append(t);
+    const t = document.createElement('div'); t.className = 'talkText'; t.textContent = page.text.replace(/　(?=[^\s「」　]{1,10}「)/g, '\n'); /* 複数話者の1ページは話者の前で改行 */ box.append(t);
     if (choices) {
       const w = document.createElement('div'); w.className = 'talkChoices'; w.setAttribute('role', 'group');
       choices.forEach((o, i) => {

@@ -3,7 +3,9 @@
  * 各 npc は1シーンにつき1テーブル（呼び出し側が状況で id を選ぶ）。立つフラグ: atk_started / atk_rescued / atk_fiona_found / atk_knight_met / atk_escaped
  * （enterBurningVillage で一旦すべて下ろす。DEV ジャンプ後の再生も同じ状態から始まる）。 escapeLines = 脱出シーン(#escapeScene)の文言。 */
 const ATTACK_ESCAPE_LINES = Object.freeze([
-  'フィオナ「……行こう、エイダン。今は、生き残らないと。」',
+  'エイダン「まだ村に、助けを待ってる人が……！」',
+  'フィオナ「エイダン……！　今は生き延びなきゃ。お願い……！」',
+  'フィオナ「……行こう、エイダン。」',
   '二人は炎上する村を背に、川沿いの細い退路を走った。',
   '背後で角笛が鳴る。黒紫の光をまとった魔物たちが追ってくる。',
   'エイダン「橋は――駄目だ。向こうにもいる！」',

@@ -18,7 +18,7 @@ with sync_playwright() as p:
         txt=ev("document.querySelector('#msg .talkText')&&document.querySelector('#msg .talkText').textContent")
         check(bool(txt) and ev("(f)=>FieldTalk.flag(f)",flag),'%s plays (%s) and sets %s'%(tid,(txt or '')[:12],flag))
     ev("closeDialogue()")
-    check(ev("escapeLinesNow().length===8&&escapeLinesNow()===TalkDataAttack.escapeLines"),'escape scene text comes from the data file')
+    check(ev("escapeLinesNow().length===10&&escapeLinesNow()===TalkDataAttack.escapeLines"),'escape scene text comes from the data file')
     # the real mother -> rescue path still works (attackStep gates which table plays)
     ev("storyStage=5;attackStep=0;closeDialogue();document.getElementById('attackMother').onclick()"); pg.wait_for_timeout(200)
     check('母親' in (ev("document.querySelector('#msg').textContent") or ''),'mother (before rescue) speaks through FieldTalk')
