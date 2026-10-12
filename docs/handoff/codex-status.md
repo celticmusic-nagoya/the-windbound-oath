@@ -1,6 +1,6 @@
 # Codex 作業状態 / 再開手順
 
-更新日: 2026-10-13（Asia/Tokyo）。基準main: `058cfc8`。現在ブランチ: `work/codex-standing-orders`。
+更新日: 2026-10-13（Asia/Tokyo）。基準main: `53180f3`。現在ブランチ: `work/codex-regression-runner`。
 常設指示: [codex-standing-orders.md](codex-standing-orders.md)。mainへの反映はClaude担当。
 
 ## 完了
@@ -53,3 +53,8 @@
 承認外は常設指示のまま（main更新、force push、非加算save、未決戦闘数値の確定、採用素材差替え、Android未実測の本編高さON等）。mainへの資料統合はClaude担当。この取得方針はCodexが稼働している時の運用であり、セッション停止中の常時監視を設定したものではない。
 
 O着手: work/codex-regression-runner / main53180f3。Nはwork/codex-wind-dance-sim / 2e9bb42で納品済み。新規tools/qa/run_all.sh、run_regressions.py、runner検証とdocs/qa結果表を担当。全59対象を直列/各test自前serverで実行し、FAIL行/exit/未実施を分類。既存testの一時asset変更や出力から元repoを保護するため、commitのgit archiveを作業用snapshotへ展開して実行する。P/Q/Rは後続。
+
+## O 実行中checkpoint
+
+全59対象のうち20本完了。N納品済み2e9bb42。O runner WIP58df9f7をpush済み。分類: 合格=19, main既存=1, 新規=0。実行中の結果はdocs/qa/regression-20261013/results.json/md/tsv、実行コマンドはPATH=/workspace/.cloud-setup/venv/bin:$PATH PW_CHROMIUM_EXECUTABLE=/usr/bin/chromium bash tools/qa/run_all.sh --timeout 600。Oの全実行が終わるまでP/Qへ着手しない。利用制限で止める場合はrunnerのプロセス/サーバーが残っていないか確認し、残りを未実施として報告する。
+再開時: 同ファイルの実行済み/未実施を確認し、稼働中runnerがあれば二重起動しない。元コード/asset/testはsnapshot内で実行、元repo変更なし。
