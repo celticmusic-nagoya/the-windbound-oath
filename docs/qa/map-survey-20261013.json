@@ -1,0 +1,3495 @@
+{
+  "source_sha": "66b2828cfb890c8a7fc258864b7a8a4e67d3d3c8",
+  "map_count": 29,
+  "grid_step": 32,
+  "limitations": [
+    "2D static survey: height/scatter-node collision and moving NPCs are not reproduced.",
+    "Grid failures are investigation candidates, not proofs of runtime unreachability.",
+    "Treasure approach uses a 100px survey radius, not an assertion of the game interaction radius.",
+    "Connections with no JSON may be runtime hooks; they require separate verification.",
+    "Enemy counts include JSON monsters and story symbols, but exclude DEV/runtime-created extras; zones are configuration, not active spawn counts."
+  ],
+  "maps": [
+    {
+      "id": "cliff_moher_01_spiral_ascent",
+      "display_name": "風見の断崖",
+      "file": "data/maps/cliff_moher_01_spiral_ascent.json",
+      "sha256": "c4a37443ef47c30504201ef42ab3e869ef0e703489af7b0287025eec17d796c9",
+      "width": 4800.0,
+      "height": 4800.0,
+      "terrain_total": 20,
+      "terrain_counts": {
+        "patches": 12,
+        "openAreas": 1,
+        "paths": 2,
+        "waters": 0,
+        "fills": 4,
+        "cliffs": 1
+      },
+      "props": 244,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 5,
+      "herbs": 4,
+      "event_zones": 4,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "崖/高台"
+      ],
+      "material_estimates": [
+        "崖正面・上端・角"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_lind",
+          "visited_cells": 5944,
+          "compiled_rects": 559,
+          "reached": 8,
+          "total": 8,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_lind",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "summit",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_c1_herb_slope_a",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_c1_herb_slope_b",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_c1_herb_ramp",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_c1_herb_lip",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_c1_cairn",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_c1_to_lind",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_c1_to_lind",
+          "toMap": "lind_village",
+          "toSpawn": "from_cliff",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "リルド村南門へ戻る。可否は story hook(onVillageExit)が判断"
+        }
+      ]
+    },
+    {
+      "id": "fort_dunvall_01_courtyard",
+      "display_name": "ドゥンヴァル砦　中庭",
+      "file": "data/maps/fort_dunvall_01_courtyard.json",
+      "sha256": "33b62306cc5435d7608e5ef792beb2f2ba67bd5eb4716b8234bd6e777b59f9de",
+      "width": 3200.0,
+      "height": 2400.0,
+      "terrain_total": 6,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 6
+      },
+      "props": 67,
+      "walkers": 1,
+      "npc_static_unique": 3,
+      "npc_static_ids": [
+        "p_f1_bed",
+        "p_f1_captain",
+        "p_f1_quartermaster"
+      ],
+      "npc_event_refs": [
+        "f1_bed",
+        "f1_captain",
+        "f1_gate_guard",
+        "f1_quartermaster"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 5,
+      "transitions_enabled": 5,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "階段/坂",
+        "城壁/主塔（IDからの候補）"
+      ],
+      "material_estimates": [
+        "階段/坂4方向・踊り場",
+        "石壁側面・階段・欄干"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_tavern",
+          "visited_cells": 5041,
+          "compiled_rects": 55,
+          "reached": 11,
+          "total": 11,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_tavern",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_road",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_capital_road",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_ramparts",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_keep",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_f1_barracks",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f1_to_village",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f1_to_capital",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f1_to_ramparts",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f1_to_keep",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f1_to_tavern",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_f1_to_village",
+          "toMap": "lind_village",
+          "toSpawn": "from_fort",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "南門 -> 街道 -> リルド村（story hook onVillageExit）"
+        },
+        {
+          "id": "tr_f1_to_capital",
+          "toMap": "road_dunvall_capital_01",
+          "toSpawn": "from_fort",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "東門 -> 街道 -> 王都"
+        },
+        {
+          "id": "tr_f1_to_ramparts",
+          "toMap": "fort_dunvall_02_ramparts",
+          "toSpawn": "from_courtyard",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "城壁への階段"
+        },
+        {
+          "id": "tr_f1_to_keep",
+          "toMap": "fort_dunvall_03_keep",
+          "toSpawn": "from_courtyard",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "主塔の扉"
+        },
+        {
+          "id": "tr_f1_to_tavern",
+          "toMap": "fort_in_tavern",
+          "toSpawn": "from_courtyard",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "酒場「錆びた角笛」の扉"
+        }
+      ]
+    },
+    {
+      "id": "fort_dunvall_02_ramparts",
+      "display_name": "ドゥンヴァル砦　城壁",
+      "file": "data/maps/fort_dunvall_02_ramparts.json",
+      "sha256": "5800fc71eb64349b526e1b5173629ea3b9f11bb2a9e6066ed523aeeb474c8110",
+      "width": 2800.0,
+      "height": 1600.0,
+      "terrain_total": 3,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 3
+      },
+      "props": 36,
+      "walkers": 1,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [
+        "f2_lookout"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 2,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "階段/坂",
+        "城壁/主塔（IDからの候補）"
+      ],
+      "material_estimates": [
+        "階段/坂4方向・踊り場",
+        "石壁側面・階段・欄干"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_courtyard",
+          "visited_cells": 1297,
+          "compiled_rects": 21,
+          "reached": 5,
+          "total": 5,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_courtyard",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_keep",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_f2_tower",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f2_down",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f2_to_keep",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_f2_down",
+          "toMap": "fort_dunvall_01_courtyard",
+          "toSpawn": "from_ramparts",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "中庭への階段"
+        },
+        {
+          "id": "tr_f2_to_keep",
+          "toMap": "fort_dunvall_03_keep",
+          "toSpawn": "from_wall",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "主塔の上階への扉"
+        }
+      ]
+    },
+    {
+      "id": "fort_dunvall_03_keep",
+      "display_name": "ドゥンヴァル砦　主塔",
+      "file": "data/maps/fort_dunvall_03_keep.json",
+      "sha256": "a18aa55d166418cf83ee6fcffd6ced23d4f04d0299a5a160d03924a0ce76da26",
+      "width": 2400.0,
+      "height": 1800.0,
+      "terrain_total": 5,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 5
+      },
+      "props": 20,
+      "walkers": 0,
+      "npc_static_unique": 2,
+      "npc_static_ids": [
+        "p_f3_armory",
+        "p_f3_commander"
+      ],
+      "npc_event_refs": [
+        "f3_armory",
+        "f3_commander"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 3,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "階段/坂",
+        "城壁/主塔（IDからの候補）"
+      ],
+      "material_estimates": [
+        "階段/坂4方向・踊り場",
+        "石壁側面・階段・欄干"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_courtyard",
+          "visited_cells": 3003,
+          "compiled_rects": 23,
+          "reached": 5,
+          "total": 5,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_courtyard",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_wall",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_f3_armory",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f3_exit",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_f3_to_wall",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_f3_exit",
+          "toMap": "fort_dunvall_01_courtyard",
+          "toSpawn": "from_keep",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "中庭へ出る"
+        },
+        {
+          "id": "tr_f3_to_wall",
+          "toMap": "fort_dunvall_02_ramparts",
+          "toSpawn": "from_keep",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "城壁へ上がる階段"
+        }
+      ]
+    },
+    {
+      "id": "fort_in_tavern",
+      "display_name": "ドゥンヴァル砦　酒場「錆びた角笛」",
+      "file": "data/maps/fort_in_tavern.json",
+      "sha256": "d82b2c30b213150e248d2991f05c422aa607566b559aea9d5c7de3a87cffc7b3",
+      "width": 1400.0,
+      "height": 1000.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 34,
+      "walkers": 0,
+      "npc_static_unique": 6,
+      "npc_static_ids": [
+        "p_f4_bard",
+        "p_f4_barkeep",
+        "p_f4_dwarf",
+        "p_f4_liam",
+        "p_f4_patron1",
+        "p_f4_patron2"
+      ],
+      "npc_event_refs": [
+        "f4_bard",
+        "f4_barkeep",
+        "f4_dwarf",
+        "f4_liam",
+        "f4_patron1",
+        "f4_patron2"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 7,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "城壁/主塔（IDからの候補）"
+      ],
+      "material_estimates": [
+        "石壁側面・階段・欄干"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_courtyard",
+          "visited_cells": 761,
+          "compiled_rects": 29,
+          "reached": 2,
+          "total": 2,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_courtyard",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_in_tavern_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_in_tavern_exit",
+          "toMap": "fort_dunvall_01_courtyard",
+          "toSpawn": "from_tavern",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "moss_forest_01_sunlit_path",
+      "display_name": "陽だまりの森道",
+      "file": "data/maps/moss_forest_01_sunlit_path.json",
+      "sha256": "9ac7a96c1cfa31d8debc6edeabaac919077d89da6d256dcc2488ee872576d3d1",
+      "width": 9600.0,
+      "height": 6000.0,
+      "terrain_total": 14,
+      "terrain_counts": {
+        "patches": 4,
+        "openAreas": 3,
+        "paths": 5,
+        "waters": 2
+      },
+      "props": 40,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 18,
+      "story_enemy_symbols": 0,
+      "monster_types": [
+        "goblin",
+        "leafy_boar",
+        "moss_slime"
+      ],
+      "encounter_zones": 6,
+      "encounter_zones_enabled": 6,
+      "enemy_types_in_zones": [
+        "goblin",
+        "moss_slime",
+        "wild_boar"
+      ],
+      "treasures": 5,
+      "herbs": 0,
+      "event_zones": 7,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_lind",
+          "visited_cells": 54312,
+          "compiled_rects": 67,
+          "reached": 10,
+          "total": 10,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_lind",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_area2",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_cliff_fall",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a1_hollow",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a1_stream",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a1_meadow",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a1_ford_hidden",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a1_wayside_late",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_lind",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_area2",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_to_lind",
+          "toMap": "lind_village",
+          "toSpawn": "from_moss_forest",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "Lind側spawn定義に合わせる(TODO)。プロローグ中(storyStage 9-14)は無効: 炎上した村へは戻れない"
+        },
+        {
+          "id": "tr_to_area2",
+          "toMap": "moss_forest_02_mossy_ravine",
+          "toSpawn": "from_area1",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "moss_forest_02_mossy_ravine",
+      "display_name": "苔むした渓谷",
+      "file": "data/maps/moss_forest_02_mossy_ravine.json",
+      "sha256": "101f649473506bd18c0baa00b178d10aa2f0b97cd3bb88388335a24560aaad46",
+      "width": 9600.0,
+      "height": 7200.0,
+      "terrain_total": 17,
+      "terrain_counts": {
+        "patches": 4,
+        "openAreas": 4,
+        "paths": 4,
+        "waters": 3,
+        "cliffs": 2
+      },
+      "props": 25,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 24,
+      "story_enemy_symbols": 0,
+      "monster_types": [
+        "forest_bat",
+        "goblin",
+        "leafy_boar",
+        "moss_slime"
+      ],
+      "encounter_zones": 7,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [
+        "forest_bat",
+        "goblin",
+        "moss_slime",
+        "tainted_moss_slime",
+        "thornling",
+        "wild_boar"
+      ],
+      "treasures": 5,
+      "herbs": 0,
+      "event_zones": 6,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "崖/高台",
+        "階段/坂",
+        "橋/桟橋",
+        "滝/低地",
+        "樹冠"
+      ],
+      "material_estimates": [
+        "崖正面・上端・角",
+        "階段/坂4方向・踊り場",
+        "床・側面・欄干・橋脚",
+        "滝・水際・低地の縁",
+        "上層樹冠・通行用根アーチ"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_area1",
+          "visited_cells": 61161,
+          "compiled_rects": 121,
+          "reached": 9,
+          "total": 9,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_area1",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_area3",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a2_overlook",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a2_alcove",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a2_fern",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a2_marker_side",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a2_ledge_late",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_area1",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_area3",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_to_area1",
+          "toMap": "moss_forest_01_sunlit_path",
+          "toSpawn": "from_area2",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": ""
+        },
+        {
+          "id": "tr_to_area3",
+          "toMap": "moss_forest_03_ancient_grove",
+          "toSpawn": "from_area2",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "moss_forest_03_ancient_grove",
+      "display_name": "古樹の聖域",
+      "file": "data/maps/moss_forest_03_ancient_grove.json",
+      "sha256": "e6ac00665c3effe129bebd7745e2e869c57914b45c8f73e7f54236573a265892",
+      "width": 8400.0,
+      "height": 6600.0,
+      "terrain_total": 12,
+      "terrain_counts": {
+        "patches": 3,
+        "openAreas": 2,
+        "paths": 6,
+        "waters": 1
+      },
+      "props": 151,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 9,
+      "story_enemy_symbols": 3,
+      "monster_types": [
+        "forest_bat",
+        "leafy_boar",
+        "moss_slime"
+      ],
+      "encounter_zones": 8,
+      "encounter_zones_enabled": 1,
+      "enemy_types_in_zones": [
+        "forest_bat",
+        "goblin_raider",
+        "tainted_goblin",
+        "tainted_moss_slime",
+        "tainted_thornling"
+      ],
+      "treasures": 4,
+      "herbs": 0,
+      "event_zones": 8,
+      "transitions": 2,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "崖/高台",
+        "樹冠"
+      ],
+      "material_estimates": [
+        "崖正面・上端・角",
+        "上層樹冠・通行用根アーチ"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {
+            "moss_a3_seal_open": false
+          },
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_area2",
+          "visited_cells": 50647,
+          "compiled_rects": 339,
+          "reached": 5,
+          "total": 8,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_area2",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "dev_sanctuary",
+              "reachable": false,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_shrine",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_hollowlog",
+              "reachable": false
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_raider",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_sentinel",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_area2",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_deep",
+              "reachable": false,
+              "enabled": false
+            }
+          ],
+          "unreached": [
+            {
+              "kind": "spawn",
+              "id": "dev_sanctuary",
+              "reachable": false,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_hollowlog",
+              "reachable": false
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_deep",
+              "reachable": false,
+              "enabled": false
+            }
+          ]
+        },
+        {
+          "status": "sampled_2d",
+          "flags": {
+            "moss_a3_seal_open": true
+          },
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_area2",
+          "visited_cells": 51961,
+          "compiled_rects": 338,
+          "reached": 7,
+          "total": 8,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_area2",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "dev_sanctuary",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_shrine",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_hollowlog",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_raider",
+              "reachable": true
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_a3_sentinel",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_area2",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_to_deep",
+              "reachable": false,
+              "enabled": false
+            }
+          ],
+          "unreached": [
+            {
+              "kind": "transition",
+              "id": "tr_to_deep",
+              "reachable": false,
+              "enabled": false
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_to_area2",
+          "toMap": "moss_forest_02_mossy_ravine",
+          "toSpawn": "from_area3",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": ""
+        },
+        {
+          "id": "tr_to_deep",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": false,
+          "status": "external_hook_or_missing",
+          "note": "future: blocked by roots"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_aidan",
+      "display_name": "エイダンの家",
+      "file": "data/maps/rilde_in_aidan.json",
+      "sha256": "9969fcc5e201661c940417360143996aa06c4a6128d725153c67ff97f7a262e1",
+      "width": 960.0,
+      "height": 720.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 17,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 7,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 386,
+          "compiled_rects": 18,
+          "reached": 4,
+          "total": 4,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_bed",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_aidan",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_barn",
+      "display_name": "納屋",
+      "file": "data/maps/rilde_in_barn.json",
+      "sha256": "73921b55ca552e15feb786d397b46047a7147640cfbc429f02d3e4abcd4e1cc8",
+      "width": 1000.0,
+      "height": 700.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 15,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 4,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 372,
+          "compiled_rects": 18,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_barn",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_elder",
+      "display_name": "長老の家 ― 風見の丘",
+      "file": "data/maps/rilde_in_elder.json",
+      "sha256": "377bf0ef1ead58291f99b03f6758007fcf0c79f0b109466b8580e159f3055e09",
+      "width": 960.0,
+      "height": 720.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 17,
+      "walkers": 0,
+      "npc_static_unique": 1,
+      "npc_static_ids": [
+        "p_elder"
+      ],
+      "npc_event_refs": [
+        "elder"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 8,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 384,
+          "compiled_rects": 17,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_elder",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_house_01",
+      "display_name": "村人の家",
+      "file": "data/maps/rilde_in_house_01.json",
+      "sha256": "dfb4e427f28d212a60428a2d660ffb4f8451f69e3cd3a96b1b4a839275723892",
+      "width": 860.0,
+      "height": 640.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 13,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 6,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 254,
+          "compiled_rects": 14,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_house_01",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_house_02",
+      "display_name": "村人の家",
+      "file": "data/maps/rilde_in_house_02.json",
+      "sha256": "db7924150a2b7a97eb9f27f962fca9c73a00cf91b07d380d57a9abb0e5f8c960",
+      "width": 860.0,
+      "height": 640.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 16,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 6,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "default_spawn_blocked",
+          "flags": {},
+          "spawn": "default",
+          "blocker": "cb_09"
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_house_02",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_house_03",
+      "display_name": "村人の家",
+      "file": "data/maps/rilde_in_house_03.json",
+      "sha256": "e686adf76a8c691bb1dc41eb2d598fc05dff81451b428a69d8793bc5a7bd9c5d",
+      "width": 860.0,
+      "height": 640.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 14,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 266,
+          "compiled_rects": 15,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_house_03",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_house_04",
+      "display_name": "村人の家",
+      "file": "data/maps/rilde_in_house_04.json",
+      "sha256": "1e5eb769253c36c10ddd806717687941ae861ad285439fb47d278b90d784e033",
+      "width": 860.0,
+      "height": 640.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 14,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 266,
+          "compiled_rects": 15,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_house_04",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_inn_1f",
+      "display_name": "宿屋「風見鶏」 1階",
+      "file": "data/maps/rilde_in_inn_1f.json",
+      "sha256": "ca357ad058d6594385c8efd6ae7874e626d7e9ab8b766e4fde2af65e16ae2b2d",
+      "width": 1200.0,
+      "height": 800.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 26,
+      "walkers": 0,
+      "npc_static_unique": 2,
+      "npc_static_ids": [
+        "p_inn_traveler",
+        "p_innkeeper"
+      ],
+      "npc_event_refs": [
+        "inn_traveler",
+        "innkeeper"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "階段/坂"
+      ],
+      "material_estimates": [
+        "階段/坂4方向・踊り場"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 520,
+          "compiled_rects": 25,
+          "reached": 5,
+          "total": 5,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_stairs",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_inn_up",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_inn",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        },
+        {
+          "id": "tr_inn_up",
+          "toMap": "rilde_in_inn_2f",
+          "toSpawn": "from_stairs",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "2階へ"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_inn_2f",
+      "display_name": "宿屋「風見鶏」 2階",
+      "file": "data/maps/rilde_in_inn_2f.json",
+      "sha256": "74641f1aac6fe7f28134043768c5c4d9eee438756335de73fba2275d1f27d4ba",
+      "width": 1100.0,
+      "height": 760.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 12,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 7,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "階段/坂"
+      ],
+      "material_estimates": [
+        "階段/坂4方向・踊り場"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 490,
+          "compiled_rects": 9,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_stairs",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_inn_down",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_inn_down",
+          "toMap": "rilde_in_inn_1f",
+          "toSpawn": "from_stairs",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "1階へ"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_shop",
+      "display_name": "道具屋「若葉の袋」",
+      "file": "data/maps/rilde_in_shop.json",
+      "sha256": "30cb0a87ab818c2c2e61b502cf6c4f3692ca72d8a99eeff888fbb93630fe0739",
+      "width": 960.0,
+      "height": 720.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 15,
+      "walkers": 0,
+      "npc_static_unique": 1,
+      "npc_static_ids": [
+        "p_merchant"
+      ],
+      "npc_event_refs": [
+        "merchant"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 383,
+          "compiled_rects": 15,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_shop",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_in_storage",
+      "display_name": "倉庫",
+      "file": "data/maps/rilde_in_storage.json",
+      "sha256": "71c8ae0a92613487689c48582bf29433a9069770ebe0212198786eabeb7722bf",
+      "width": 760.0,
+      "height": 600.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 10,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 206,
+          "compiled_rects": 14,
+          "reached": 3,
+          "total": 3,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_village",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_storage",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "外へ出る"
+        }
+      ]
+    },
+    {
+      "id": "rilde_village_01_peace",
+      "display_name": "リルド村",
+      "file": "data/maps/rilde_village_01_peace.json",
+      "sha256": "5c9b5407795c6e18cf0e655dfb234f02e644bcb2d364d6fb7181f1ea8049a39c",
+      "width": 2400.0,
+      "height": 1750.0,
+      "terrain_total": 16,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 13,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 3
+      },
+      "props": 115,
+      "walkers": 10,
+      "npc_static_unique": 6,
+      "npc_static_ids": [
+        "p_cat",
+        "p_farmer_male",
+        "p_fisherman",
+        "p_hill_old",
+        "p_sq_catowner",
+        "p_sq_kid"
+      ],
+      "npc_event_refs": [
+        "boy",
+        "boy_swordsman",
+        "caretaker",
+        "elder_man",
+        "elder_woman",
+        "emma",
+        "farmer_female",
+        "farmer_male",
+        "fisherman",
+        "girl",
+        "hill_old",
+        "young_man",
+        "young_woman"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 26,
+      "transitions": 12,
+      "transitions_enabled": 12,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "崖/高台",
+        "橋/桟橋"
+      ],
+      "material_estimates": [
+        "崖正面・上端・角",
+        "床・側面・欄干・橋脚"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 3223,
+          "compiled_rects": 117,
+          "reached": 28,
+          "total": 28,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_aidan",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_elder",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_inn",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_shop",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_01",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_02",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_03",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_04",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_barn",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_storage",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_cliff",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_fort",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_plaza",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_training",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_sunset",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_aidan_house",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_elder_house",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_inn",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_item_shop",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_house_01",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_house_02",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_house_03",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_house_04",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_barn",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_lind_storage",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_to_cliff",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_to_fort",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_v_lind_aidan_house",
+          "toMap": "rilde_in_aidan",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "エイダンの家"
+        },
+        {
+          "id": "tr_v_lind_elder_house",
+          "toMap": "rilde_in_elder",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "長老の家"
+        },
+        {
+          "id": "tr_v_lind_inn",
+          "toMap": "rilde_in_inn_1f",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "宿屋「風見鶏」"
+        },
+        {
+          "id": "tr_v_lind_item_shop",
+          "toMap": "rilde_in_shop",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "道具屋「若葉の袋」"
+        },
+        {
+          "id": "tr_v_lind_house_01",
+          "toMap": "rilde_in_house_01",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "村人の家"
+        },
+        {
+          "id": "tr_v_lind_house_02",
+          "toMap": "rilde_in_house_02",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "村人の家"
+        },
+        {
+          "id": "tr_v_lind_house_03",
+          "toMap": "rilde_in_house_03",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "村人の家"
+        },
+        {
+          "id": "tr_v_lind_house_04",
+          "toMap": "rilde_in_house_04",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "村人の家"
+        },
+        {
+          "id": "tr_v_lind_barn",
+          "toMap": "rilde_in_barn",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "納屋"
+        },
+        {
+          "id": "tr_v_lind_storage",
+          "toMap": "rilde_in_storage",
+          "toSpawn": "from_village",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "倉庫"
+        },
+        {
+          "id": "tr_v_to_cliff",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "南の小道 -> 風見の断崖（story hook onVillageExit）"
+        },
+        {
+          "id": "tr_v_to_fort",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "東の街道 -> ドゥンヴァル砦（story hook onVillageExit）"
+        }
+      ]
+    },
+    {
+      "id": "rilde_village_01_ruin",
+      "display_name": "リルド村（襲撃後）",
+      "file": "data/maps/rilde_village_01_ruin.json",
+      "sha256": "323538f747dafdaa573855e37bd6f72dd46679a7e50c73642ba39303028fda89",
+      "width": 2400.0,
+      "height": 1750.0,
+      "terrain_total": 25,
+      "terrain_counts": {
+        "patches": 9,
+        "openAreas": 0,
+        "paths": 13,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 3
+      },
+      "props": 164,
+      "walkers": 0,
+      "npc_static_unique": 7,
+      "npc_static_ids": [
+        "p_rr_boy",
+        "p_rr_elder",
+        "p_rr_farmer",
+        "p_rr_knight",
+        "p_rr_knight2",
+        "p_rr_oldwoman",
+        "p_rr_woman"
+      ],
+      "npc_event_refs": [
+        "rr_boy",
+        "rr_elder",
+        "rr_farmer",
+        "rr_knight",
+        "rr_knight2",
+        "rr_oldwoman",
+        "rr_woman"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 23,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "崖/高台",
+        "橋/桟橋"
+      ],
+      "material_estimates": [
+        "崖正面・上端・角",
+        "床・側面・欄干・橋脚"
+      ],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "default",
+          "visited_cells": 3160,
+          "compiled_rects": 151,
+          "reached": 18,
+          "total": 18,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_aidan",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_elder",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_inn",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_shop",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_01",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_02",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_03",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_house_04",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_barn",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_storage",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "default",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_cliff",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_fort",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_plaza",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_training",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_sunset",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_to_cliff",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_v_to_fort",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_v_to_cliff",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "南の小道 -> 風見の断崖（story hook onVillageExit）"
+        },
+        {
+          "id": "tr_v_to_fort",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "東の街道 -> ドゥンヴァル砦（story hook onVillageExit）"
+        }
+      ]
+    },
+    {
+      "id": "dev_monster_arena",
+      "display_name": "DEV　モンスター配置アリーナ",
+      "file": "data/maps/dev_monster_arena.json",
+      "sha256": "005ada3fc2fcb342eb501dde66329f28a2d6e8f323324e01787f2d52466dd9a4",
+      "width": 4800.0,
+      "height": 3200.0,
+      "terrain_total": 0,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 0
+      },
+      "props": 0,
+      "walkers": 0,
+      "npc_static_unique": 0,
+      "npc_static_ids": [],
+      "npc_event_refs": [],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 1,
+      "transitions": 0,
+      "transitions_enabled": 0,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "center",
+          "visited_cells": 14259,
+          "compiled_rects": 4,
+          "reached": 1,
+          "total": 1,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "center",
+              "reachable": true,
+              "blocked": null
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": []
+    },
+    {
+      "id": "road_dunvall_capital_01",
+      "display_name": "街道　砦と王都のあいだ",
+      "file": "data/maps/road_dunvall_capital_01.json",
+      "sha256": "4737121af6bb0fae8d597de727c8772e939c34df9387b2a9e3529633644c7764",
+      "width": 5600.0,
+      "height": 2600.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 1,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 3
+      },
+      "props": 268,
+      "walkers": 1,
+      "npc_static_unique": 2,
+      "npc_static_ids": [
+        "p_rd_gate_guard",
+        "p_rd_patrol"
+      ],
+      "npc_event_refs": [
+        "rd_gate_guard",
+        "rd_patrol",
+        "rd_traveler"
+      ],
+      "enemies_explicit": 6,
+      "story_enemy_symbols": 0,
+      "monster_types": [
+        "leafy_boar"
+      ],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 6,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_fort",
+          "visited_cells": 8940,
+          "compiled_rects": 82,
+          "reached": 5,
+          "total": 5,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_fort",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_capital",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "overlook",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_rd_to_fort",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_rd_to_capital",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_rd_to_fort",
+          "toMap": "fort_dunvall_01_courtyard",
+          "toSpawn": "from_capital_road",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "街道の西端 -> ドゥンヴァル砦の東門"
+        },
+        {
+          "id": "tr_rd_to_capital",
+          "toMap": "royal_capital_00_gate",
+          "toSpawn": "from_road",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "街道の東端 -> 王都の南大城門"
+        }
+      ]
+    },
+    {
+      "id": "royal_capital_00_gate",
+      "display_name": "王都カエルディン　南大城門・旅人街",
+      "file": "data/maps/royal_capital_00_gate.json",
+      "sha256": "e17c45fe2cf205d7301f84e4b8561db5cab514b06191734419951d68809d17e0",
+      "width": 4400.0,
+      "height": 3400.0,
+      "terrain_total": 5,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 5
+      },
+      "props": 68,
+      "walkers": 3,
+      "npc_static_unique": 1,
+      "npc_static_ids": [
+        "p_g_merchant"
+      ],
+      "npc_event_refs": [
+        "g_adv",
+        "g_gate_guard",
+        "g_merchant",
+        "g_pilgrim"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 4,
+      "transitions_enabled": 4,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_guild",
+          "visited_cells": 11608,
+          "compiled_rects": 53,
+          "reached": 10,
+          "total": 10,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_guild",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_inn",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_road",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_market",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_gate_inside",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_g_cart",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_g_to_road",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_g_to_market",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_g_to_guild",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_g_to_inn",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_g_to_road",
+          "toMap": "road_dunvall_capital_01",
+          "toSpawn": "from_capital",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "南大城門の外 -> 街道 -> ドゥンヴァル砦"
+        },
+        {
+          "id": "tr_g_to_market",
+          "toMap": "royal_capital_01_market",
+          "toSpawn": "from_gate",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "北へ: 商業・市場地区（王城への軸）"
+        },
+        {
+          "id": "tr_g_to_guild",
+          "toMap": "royal_in_guild",
+          "toSpawn": "from_gate",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "冒険者ギルド兼大酒場"
+        },
+        {
+          "id": "tr_g_to_inn",
+          "toMap": "royal_in_inn",
+          "toSpawn": "from_gate",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "宿屋"
+        }
+      ]
+    },
+    {
+      "id": "royal_capital_01_market",
+      "display_name": "王都　商業区",
+      "file": "data/maps/royal_capital_01_market.json",
+      "sha256": "41fafd2d6a5c8e626a5f5267cc9b51fa97db02c32df89284f751f408b1fb89de",
+      "width": 4800.0,
+      "height": 3200.0,
+      "terrain_total": 2,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 2
+      },
+      "props": 57,
+      "walkers": 2,
+      "npc_static_unique": 2,
+      "npc_static_ids": [
+        "p_r1_general",
+        "p_r1_weapon"
+      ],
+      "npc_event_refs": [
+        "r1_child",
+        "r1_general",
+        "r1_rumor",
+        "r1_weapon"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 5,
+      "transitions": 4,
+      "transitions_enabled": 4,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_gate",
+          "visited_cells": 12736,
+          "compiled_rects": 49,
+          "reached": 9,
+          "total": 9,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_gate",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_plaza",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_residential",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_craft",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_r1_alley",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r1_to_gate",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r1_to_plaza",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r1_to_residential",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r1_to_craft",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_r1_to_gate",
+          "toMap": "royal_capital_00_gate",
+          "toSpawn": "from_market",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "南へ: 旅人街 -> 南大城門"
+        },
+        {
+          "id": "tr_r1_to_plaza",
+          "toMap": "royal_capital_02_castle_plaza",
+          "toSpawn": "from_market",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "北へ: 中央広場（王城への軸）"
+        },
+        {
+          "id": "tr_r1_to_residential",
+          "toMap": "royal_capital_03_residential",
+          "toSpawn": "from_market",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "西へ: 住宅地区"
+        },
+        {
+          "id": "tr_r1_to_craft",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "東へ: 職人地区（ブラムの工房）。接続は未実装"
+        }
+      ]
+    },
+    {
+      "id": "royal_capital_02_castle_plaza",
+      "display_name": "王都　城前広場",
+      "file": "data/maps/royal_capital_02_castle_plaza.json",
+      "sha256": "60e77c3ec428cfbae0d472e9b402332f8d4323500ada29ec4629a767a8174cb4",
+      "width": 4000.0,
+      "height": 3600.0,
+      "terrain_total": 3,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 3
+      },
+      "props": 49,
+      "walkers": 2,
+      "npc_static_unique": 1,
+      "npc_static_ids": [
+        "p_r2_bard"
+      ],
+      "npc_event_refs": [
+        "r2_bard",
+        "r2_guard",
+        "r2_herald"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 4,
+      "transitions": 4,
+      "transitions_enabled": 4,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_market",
+          "visited_cells": 10890,
+          "compiled_rects": 52,
+          "reached": 9,
+          "total": 9,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_market",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_residential",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_castle",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_east",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_r2_garden",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r2_to_residential",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r2_to_market",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r2_to_east",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r2_castle_gate",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_r2_to_residential",
+          "toMap": "royal_capital_03_residential",
+          "toSpawn": "from_plaza",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "西へ: 住宅地区"
+        },
+        {
+          "id": "tr_r2_to_market",
+          "toMap": "royal_capital_01_market",
+          "toSpawn": "from_plaza",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "南へ: 商業・市場地区"
+        },
+        {
+          "id": "tr_r2_to_east",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "東へ: 騎士団地区・大聖堂地区・魔法学術地区（王立魔法研究院）。接続は未実装"
+        },
+        {
+          "id": "tr_r2_castle_gate",
+          "toMap": "TBD",
+          "toSpawn": "TBD",
+          "enabled": true,
+          "status": "external_hook_or_missing",
+          "note": "王城の中へ。接続は未実装"
+        }
+      ]
+    },
+    {
+      "id": "royal_capital_03_residential",
+      "display_name": "王都　住宅街",
+      "file": "data/maps/royal_capital_03_residential.json",
+      "sha256": "aad5438f23f1bafe32f60a04e1e37e479f8550ec9947305821d38e6c194ba2f4",
+      "width": 3600.0,
+      "height": 3200.0,
+      "terrain_total": 2,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 2
+      },
+      "props": 32,
+      "walkers": 2,
+      "npc_static_unique": 1,
+      "npc_static_ids": [
+        "p_r3_elder_quest"
+      ],
+      "npc_event_refs": [
+        "r3_cat_man",
+        "r3_elder_quest",
+        "r3_resident"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 1,
+      "herbs": 0,
+      "event_zones": 14,
+      "transitions": 2,
+      "transitions_enabled": 2,
+      "height_present": false,
+      "indoors": false,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_market",
+          "visited_cells": 8925,
+          "compiled_rects": 35,
+          "reached": 5,
+          "total": 5,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_market",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "spawn",
+              "id": "from_plaza",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "treasure_approach",
+              "id": "tr_r3_backyard",
+              "reachable": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r3_to_market",
+              "reachable": true,
+              "enabled": true
+            },
+            {
+              "kind": "transition",
+              "id": "tr_r3_to_plaza",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_r3_to_market",
+          "toMap": "royal_capital_01_market",
+          "toSpawn": "from_residential",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "東へ: 商業・市場地区"
+        },
+        {
+          "id": "tr_r3_to_plaza",
+          "toMap": "royal_capital_02_castle_plaza",
+          "toSpawn": "from_residential",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "城前広場へ"
+        }
+      ]
+    },
+    {
+      "id": "royal_in_guild",
+      "display_name": "冒険者ギルド兼大酒場",
+      "file": "data/maps/royal_in_guild.json",
+      "sha256": "91b2fe732dc4ab2b888c6d193e1dd1971c4678a6326e8058b70111d513a0f808",
+      "width": 1800.0,
+      "height": 1100.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 30,
+      "walkers": 0,
+      "npc_static_unique": 6,
+      "npc_static_ids": [
+        "p_g_bard",
+        "p_g_barkeep",
+        "p_g_patron1",
+        "p_g_patron2",
+        "p_g_reception",
+        "p_r1_board"
+      ],
+      "npc_event_refs": [
+        "g_bard",
+        "g_barkeep",
+        "g_patron1",
+        "g_patron2",
+        "g_reception",
+        "g_upstairs",
+        "r1_board"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 8,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_gate",
+          "visited_cells": 1192,
+          "compiled_rects": 24,
+          "reached": 2,
+          "total": 2,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_gate",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_gi_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_gi_exit",
+          "toMap": "royal_capital_00_gate",
+          "toSpawn": "from_guild",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "外（旅人街）へ出る"
+        }
+      ]
+    },
+    {
+      "id": "royal_in_inn",
+      "display_name": "宿屋「旅人の灯」",
+      "file": "data/maps/royal_in_inn.json",
+      "sha256": "622c9c62f59612d0df2c138e36337b883e9bfa6a0c5d344158b39ce3265316e1",
+      "width": 1400.0,
+      "height": 1000.0,
+      "terrain_total": 4,
+      "terrain_counts": {
+        "patches": 0,
+        "openAreas": 0,
+        "paths": 0,
+        "waters": 0,
+        "cliffs": 0,
+        "fills": 4
+      },
+      "props": 14,
+      "walkers": 0,
+      "npc_static_unique": 3,
+      "npc_static_ids": [
+        "p_in_bed",
+        "p_in_guest",
+        "p_r1_inn"
+      ],
+      "npc_event_refs": [
+        "in_bed",
+        "in_guest",
+        "r1_inn"
+      ],
+      "enemies_explicit": 0,
+      "story_enemy_symbols": 0,
+      "monster_types": [],
+      "encounter_zones": 0,
+      "encounter_zones_enabled": 0,
+      "enemy_types_in_zones": [],
+      "treasures": 0,
+      "herbs": 0,
+      "event_zones": 4,
+      "transitions": 1,
+      "transitions_enabled": 1,
+      "height_present": false,
+      "indoors": true,
+      "candidates": [
+        "明示的な候補なし"
+      ],
+      "material_estimates": [],
+      "reachability": [
+        {
+          "status": "sampled_2d",
+          "flags": {},
+          "grid_step": 32,
+          "segment_step": 8,
+          "start": "from_gate",
+          "visited_cells": 814,
+          "compiled_rects": 12,
+          "reached": 2,
+          "total": 2,
+          "targets": [
+            {
+              "kind": "spawn",
+              "id": "from_gate",
+              "reachable": true,
+              "blocked": null
+            },
+            {
+              "kind": "transition",
+              "id": "tr_ii_exit",
+              "reachable": true,
+              "enabled": true
+            }
+          ],
+          "unreached": []
+        }
+      ],
+      "connections": [
+        {
+          "id": "tr_ii_exit",
+          "toMap": "royal_capital_00_gate",
+          "toSpawn": "from_inn",
+          "enabled": true,
+          "status": "target_spawn_ok",
+          "note": "外（旅人街）へ出る"
+        }
+      ]
+    }
+  ]
+}

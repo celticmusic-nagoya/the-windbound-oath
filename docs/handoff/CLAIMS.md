@@ -106,3 +106,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 ## Codex 夜間J (2026-10-13)
 
 `work/codex-night-j` / 基準実装03d053e、main0d48324。新規 `tools/moss/survey_maps.py`、`docs/qa/map-survey-20261013.md` とJSON集計のみ。本CLAIMSで担当記録。29マップを読取、既存コード・チェッカー・マップJSONは編集しない。STATUS: WIP。mainマージなし。
+
+夜間J完了: 29マップ全件を優先順にMarkdown/JSON化。明示monsters57、story symbols3。32px静的足元到達/8px辺チェック、条件付き1px壁の外部fixture検証合格。A3結界の閉/開差と無効深部出口、村人の家02のspawnと椅子cb_09の重なりを報告、修正なし。STATUS: READY（静的調査）。
