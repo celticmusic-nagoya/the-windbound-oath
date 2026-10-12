@@ -8,7 +8,7 @@ def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
 fs=sorted(glob.glob('img/field/moss/real/fiona/*.png'))
-check(len(fs)==24,'24 Fiona frames (4 idle + walk 4,6,6,4) %d'%len(fs))
+check(len(fs)==32,'32 Fiona frames (4 idle + 4x4 walk + 2x6 profile) %d'%len(fs))
 bad=[]
 for f in fs:
     im=Image.open(f); a=np.array(im)[...,3]
@@ -24,14 +24,14 @@ with sync_playwright() as p:
     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
     ev=lambda s,*a: pg.evaluate(s,*a) if a else pg.evaluate(s)
     ev("devJump('forest')"); pg.wait_for_function("MossForest.active",timeout=20000); pg.wait_for_timeout(1500); ev("closeDialogue()")
-    check(ev("document.querySelectorAll('#forestFiona img').length")==24 and ev("document.querySelector('#forestFiona').classList.contains('fiona-sprite')"),'Fiona sprite mounted, placeholder box hidden')
+    check(ev("document.querySelectorAll('#forestFiona img').length")==32 and ev("document.querySelector('#forestFiona').classList.contains('fiona-sprite')"),'Fiona sprite mounted, placeholder box hidden')
     vis=lambda: ev("[...document.querySelectorAll('#forestFiona img')].filter(i=>!i.hidden).map(i=>i.src.split('/').pop())")
     check(vis()==['fiona_idle_down.png'] or 'idle' in str(vis()),'idle frame while standing %s'%vis())
     f0=ev("MossForest.feet"); ev("MossForest.goFeet(%d,%d)"%(f0['x']+500,f0['y']))
     seen=set()
     for _ in range(20): pg.wait_for_timeout(110); seen.update(vis())
-    walk=[s for s in seen if 'walk_right' in s]
-    check(len(walk)>=3,'Fiona cycles %d walk-right frames while following'%len(walk))
+    walk=[s for s in seen if 'side_right' in s]
+    check(len(walk)>=3,'Fiona cycles %d profile (side_right) frames while following'%len(walk))
     ev("MossForest.goFeet(%d,%d)"%(f0['x']+500,f0['y']+300))
     seen=set()
     for _ in range(14): pg.wait_for_timeout(110); seen.update(vis())

@@ -53,7 +53,7 @@ with sync_playwright() as p:
     pg.wait_for_timeout(2000)
     check(ev("currentGoblin")=='forestBat2' and ev("window.__starts")==1,'touching a bat starts the existing battle once (%s, starts=%d)'%(ev("currentGoblin"),ev("window.__starts")))
     en=ev("PrologueCombat.enemies.normal.map(e=>[e.type,e.hp,e.maxHp])")
-    check(en==[['forest_bat',48,48],['forest_bat',48,48]],'two forest bats (48 HP) %s'%en)
+    check(en==[['forest_bat',91,91],['forest_bat',91,91]],'two forest bats (91 HP) %s'%en)
     check('フォレストバット' in ev("document.querySelector('#v2EnemyName').textContent"),'enemy name shows フォレストバット')
     st=ev("BattleIdleMotion.status.actors.filter(a=>a.actor==='forest_bat').map(a=>a.showing)")
     check(st[:2]==[True,True],'idle flap canvases are showing for both bats %s'%st)
@@ -66,13 +66,13 @@ with sync_playwright() as p:
     a0=ev("aahp"); f0=ev("normalFHP"); ev("PrologueCombat.performEnemy('normal',PrologueCombat.enemies.normal[0],'attack')"); pg.wait_for_timeout(2600)
     dmg=(a0-ev("aahp"))+(f0-ev("normalFHP")); hp=ev("PrologueCombat.enemies.normal[0].hp")
     check(dmg>0 and hp-20==max(1,round(dmg*0.6)),'bat drained: dealt %d, healed %d (60%%)'%(dmg,hp-20))
-    ev("(()=>{PrologueCombat.enemies.normal[0].hp=47;PrologueCombat.sync('normal');})()")
+    ev("(()=>{PrologueCombat.enemies.normal[0].hp=90;PrologueCombat.sync('normal');})()")
     ev("PrologueCombat.performEnemy('normal',PrologueCombat.enemies.normal[0],'attack')"); pg.wait_for_timeout(2600)
-    check(ev("PrologueCombat.enemies.normal[0].hp")==48,'healing is capped at max HP')
+    check(ev("PrologueCombat.enemies.normal[0].hp")==91,'healing is capped at max HP')
     # ---- 6) win: rewards EXP+20 / GOLD+8, bats gone, no story progress, forestShow no respawn, re-entry respawn
     exp0=ev("PartyManager.members.aidan.exp"); gold0=ev("gold")
     ev("PrologueCombat.instantKill('normal')"); pg.wait_for_timeout(2600)
-    check('EXP +20' in ev("document.querySelector('#resultExp').textContent") and ev("gold")-gold0==8,'result: EXP +20, GOLD +8')
+    check('EXP +30' in ev("document.querySelector('#resultExp').textContent") and ev("gold")-gold0==12,'result: EXP +30, GOLD +12')
     for i in range(8):
         if ev("getComputedStyle(document.querySelector('#battleResult')).display")=='none': break
         ev("(document.querySelector('#battleResult button')||document.querySelector('#battleResult')).click()"); pg.wait_for_timeout(500)
