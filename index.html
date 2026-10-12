@@ -424,7 +424,7 @@ function mainQuestData(){
  if(storyStage===4)return {title:'風が止んだ夜',desc:'風見の断崖で異変が起きた。フィオナと急いでリルド村へ戻る。'};
  if(storyStage<=6)return {title:'炎の中のリルド',desc:'襲撃を受けた村でフィオナとはぐれた。村人を助けながら彼女を探す。'};
  if(storyStage===8)return {title:'村からの脱出',desc:'王国騎士が作った退路を使い、フィオナとともに炎上するリルド村から逃げる。'};
- if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、長老やエマからたびたび近付くなと言われていた古い森へ迷い込んだ。分岐を探索し、森の奥を調べる。'};
+ if(storyStage===9)return {title:'苔むした森',desc:'崩れた崖から落ち、長老やエマから「奥地には絶対に行くな」と言われていた古い森へ迷い込んだ。奥地から吹く嫌な風の正体を、分岐を探索しながら調べる。'};
  if(storyStage===10)return {title:'風を返す古代石',desc:'フィオナに反応する古代石を発見した。異常化した魔物を退け、石の周囲に残る風の気配を探す。'};
  if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
  if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇で魔物に包囲された。古代石から現れた「誓いの剣」を手に取り、突破口を開く。'};
@@ -926,7 +926,7 @@ $('#escapeScene').onclick=()=>{
  }
 };
 
-const FIONA_FOREST_LINE='フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、あれほど近付くなって言っていた森……だよね……？」';
+const FIONA_FOREST_LINE='フィオナ「……エイダン？　よかった……。ここ、長老さまやエマが、奥には絶対行くなって言っていた森……だよね……？」';
 // Forest field control (Moss Forest runtime; see js/field/moss-forest-*.js).
 function forestShow(){forestActive=true;MossForest.resume();MossForestStory.syncFlags();}
 function forestHideScene(){forestActive=false;MossForest.hide();}
