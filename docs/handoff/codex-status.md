@@ -51,3 +51,5 @@
 ユーザー決定: 「今後はGit hub内にClaudeからの作業指示があれば取得して積極的に取りかかることを事前承認します。」
 作業開始/再開/区切りにremote branchesをfetchし、最新mainとClaudeのhandoff/CLAIMS/status/関連branchのgit logを読む。未納品の依頼から優先順に着手し、担当を本statusに宣言する。調査/提案/テスト/work branchでの実装とpushは都度確認不要。既存納品とClaudeの修正/統合を区別し、重複作業を避ける。
 承認外は常設指示のまま（main更新、force push、非加算save、未決戦闘数値の確定、採用素材差替え、Android未実測の本編高さON等）。mainへの資料統合はClaude担当。この取得方針はCodexが稼働している時の運用であり、セッション停止中の常時監視を設定したものではない。
+
+O着手: work/codex-regression-runner / main53180f3。Nはwork/codex-wind-dance-sim / 2e9bb42で納品済み。新規tools/qa/run_all.sh、run_regressions.py、runner検証とdocs/qa結果表を担当。全59対象を直列/各test自前serverで実行し、FAIL行/exit/未実施を分類。既存testの一時asset変更や出力から元repoを保護するため、commitのgit archiveを作業用snapshotへ展開して実行する。P/Q/Rは後続。
