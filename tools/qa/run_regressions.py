@@ -92,6 +92,11 @@ def main():
     args=parser.parse_args()
     if args.self_test:self_test();return
     if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
+    # Snapshot contract: never silently test an older HEAD while application work is uncommitted.
+    dirty=subprocess.run(['git','diff','--quiet','HEAD','--'],cwd=ROOT).returncode
+    untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','-z'],cwd=ROOT).decode().split('\0')
+    if dirty or any(p and not p.startswith('docs/') for p in untracked):
+        raise SystemExit('Commit tracked work and non-doc new files to a WIP commit before snapshot testing (no push required).')
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     base=subprocess.check_output(['git','rev-parse','origin/main'],cwd=ROOT,text=True).strip()
