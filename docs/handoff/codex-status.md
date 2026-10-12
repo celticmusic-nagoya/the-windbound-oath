@@ -51,3 +51,12 @@
 ユーザー決定: 「今後はGit hub内にClaudeからの作業指示があれば取得して積極的に取りかかることを事前承認します。」
 作業開始/再開/区切りにremote branchesをfetchし、最新mainとClaudeのhandoff/CLAIMS/status/関連branchのgit logを読む。未納品の依頼から優先順に着手し、担当を本statusに宣言する。調査/提案/テスト/work branchでの実装とpushは都度確認不要。既存納品とClaudeの修正/統合を区別し、重複作業を避ける。
 承認外は常設指示のまま（main更新、force push、非加算save、未決戦闘数値の確定、採用素材差替え、Android未実測の本編高さON等）。mainへの資料統合はClaude担当。この取得方針はCodexが稼働している時の運用であり、セッション停止中の常時監視を設定したものではない。
+
+## 再開: N→O→P→Q / 追加R (2026-10-13)
+
+main53180f3を取得し、status/常設/第2弾指示と履歴を確認。接触レビュー/L相当/M相当はmain統合済みで再作業しない。
+現在: `work/codex-wind-dance-sim`、Nの新規tools/sim/wind_dance_sim.pyとdocs/handoff/wind-dance-sim.md/結果JSONを担当。O/P/Q/Rは未着手。N→O→P→Qの順で区切りpush。Rはfeat/height-contact-levelsの読取レビューのみでdocs/qa/height-contact-impl-review.mdへ指摘。開始時点ではremote R branchが未検出、後続fetchで確認する。
+ゲーム/マップ/未決戦闘数値/採用素材/mainは変更しない。新規ツール・テストとdocsの範囲。コミット署名はCodex。
+
+N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析5SE照合合格、MP/期限/対象self-test合格。固定攻撃列の比較であり実engine勝率未検証。ゲーム数値未適用。次はOの全件runner。
+作業中の追加方針（ユーザー事前承認）: 各成果物の完了時にremote指示をfetchし、現在作業が終わったら追加指示へ続けて着手する。現N→O→P→Qの順序を維持しRを後続、未完/新規は本statusへ登録する。
