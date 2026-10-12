@@ -1,0 +1,2938 @@
+{
+  "source_main": "e694817",
+  "rounds": 18,
+  "dance": {
+    "evasion_points": 15,
+    "duration_enemy_phases": 3,
+    "mp": 10,
+    "targets": "all alive allies",
+    "stacking": "refresh only"
+  },
+  "bolt_hit_probability_valid_living_target": 1.0,
+  "source_hashes": {
+    "js/prologue-combat.js": "2be84d2562a49e660d41fe89e7f9dbe3d9336284c08f411b95e8dbf8aab8248c",
+    "js/battle-critical.js": "3233a631033aeea12193a13f6e40a240dbf8bc1f6659c9e11dbdc5e96c54eb3a"
+  },
+  "policy": "all allies alive; dance when expired and affordable, else bolt; no heals; one Fiona action per phase; fixed trace unaffected by outgoing damage",
+  "unavailable": {
+    "battle_end_mp": "only fixed-horizon MP available",
+    "kill_turn": "no outgoing damage/HP feedback",
+    "win_rate": "no ally HP/KO/heal/target feedback"
+  },
+  "scenarios": {
+    "raider_moss_boss": {
+      "initial_mp_and_cap": 36,
+      "conditions": {
+        "no_dance": {
+          "casts": [],
+          "support_actions": 0,
+          "heal_actions": 0,
+          "bolt_actions": 18,
+          "period_end_mp": 36,
+          "recovered_mp": 0,
+          "covered_phases": [],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 4,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 7,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 10,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 13,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 36,
+              "mp_after": 36,
+              "recovery": 0,
+              "dance_active": false
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 594,
+          "fixed_trace_expected_saved": 0,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_no_recovery": {
+          "casts": [
+            1,
+            4,
+            7
+          ],
+          "support_actions": 3,
+          "heal_actions": 0,
+          "bolt_actions": 15,
+          "period_end_mp": 6,
+          "recovered_mp": 0,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 16,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 13,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": false
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 561.15,
+          "fixed_trace_expected_saved": 32.85,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_hit_2": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            18
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 0,
+          "recovered_mp": 24,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 28,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 28,
+              "mp_after": 30,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 22,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 24,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 16,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 18,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 18,
+              "mp_after": 8,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 12,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 12,
+              "mp_after": 2,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 2,
+              "mp_after": 4,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 6,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 8,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 18,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 520.8,
+          "fixed_trace_expected_saved": 73.2,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_execute_2": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            18
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 0,
+          "recovered_mp": 24,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 28,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 28,
+              "mp_after": 30,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 22,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 24,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 16,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 18,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 18,
+              "mp_after": 8,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 12,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 12,
+              "mp_after": 2,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 2,
+              "mp_after": 4,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 6,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 8,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 18,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 520.8,
+          "fixed_trace_expected_saved": 73.2,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_hit_3": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 12,
+          "recovered_mp": 36,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 29,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 29,
+              "mp_after": 32,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 32,
+              "mp_after": 22,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 25,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 25,
+              "mp_after": 28,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 28,
+              "mp_after": 18,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 21,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 21,
+              "mp_after": 24,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 17,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 17,
+              "mp_after": 20,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 20,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 13,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 13,
+              "mp_after": 16,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 16,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 9,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 9,
+              "mp_after": 12,
+              "recovery": 3,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 504.9,
+          "fixed_trace_expected_saved": 89.1,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_execute_3": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 12,
+          "recovered_mp": 36,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 29,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 29,
+              "mp_after": 32,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 32,
+              "mp_after": 22,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 25,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 25,
+              "mp_after": 28,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 28,
+              "mp_after": 18,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 21,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 21,
+              "mp_after": 24,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 17,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 17,
+              "mp_after": 20,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 20,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 13,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 13,
+              "mp_after": 16,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 16,
+              "mp_after": 6,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 9,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 9,
+              "mp_after": 12,
+              "recovery": 3,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 504.9,
+          "fixed_trace_expected_saved": 89.1,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_hit_4": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 24,
+          "recovered_mp": 48,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 30,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 34,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 34,
+              "mp_after": 24,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 24,
+              "mp_after": 28,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 28,
+              "mp_after": 32,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 32,
+              "mp_after": 22,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 26,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 30,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 24,
+              "mp_after": 28,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 28,
+              "mp_after": 18,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 22,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 26,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 20,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 504.9,
+          "fixed_trace_expected_saved": 89.1,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_execute_4": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 24,
+          "recovered_mp": 48,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 36,
+              "mp_after": 26,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 30,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 34,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 34,
+              "mp_after": 24,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 24,
+              "mp_after": 28,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 28,
+              "mp_after": 32,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 32,
+              "mp_after": 22,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 26,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 26,
+              "mp_after": 30,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 24,
+              "mp_after": 28,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 28,
+              "mp_after": 18,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 22,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 26,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 20,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 594,
+          "fixed_trace_expected_damage": 504.9,
+          "fixed_trace_expected_saved": 89.1,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        }
+      }
+    },
+    "forestGob3_nonboss_reference": {
+      "initial_mp_and_cap": 30,
+      "conditions": {
+        "no_dance": {
+          "casts": [],
+          "support_actions": 0,
+          "heal_actions": 0,
+          "bolt_actions": 18,
+          "period_end_mp": 30,
+          "recovered_mp": 0,
+          "covered_phases": [],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 4,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 7,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 10,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 13,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 30,
+              "mp_after": 30,
+              "recovery": 0,
+              "dance_active": false
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 324,
+          "fixed_trace_expected_saved": 0,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_no_recovery": {
+          "casts": [
+            1,
+            4,
+            7
+          ],
+          "support_actions": 3,
+          "heal_actions": 0,
+          "bolt_actions": 15,
+          "period_end_mp": 0,
+          "recovered_mp": 0,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 20,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 13,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": false
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 299.7,
+          "fixed_trace_expected_saved": 24.3,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_hit_2": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            15
+          ],
+          "support_actions": 5,
+          "heal_actions": 0,
+          "bolt_actions": 13,
+          "period_end_mp": 6,
+          "recovered_mp": 26,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            15,
+            16,
+            17
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 22,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 24,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 16,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 18,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 18,
+              "mp_after": 8,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 12,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 12,
+              "mp_after": 2,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 2,
+              "mp_after": 4,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 6,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 8,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 15,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 2,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 2,
+              "mp_after": 4,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 6,
+              "recovery": 2,
+              "dance_active": false
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 283.5,
+          "fixed_trace_expected_saved": 40.5,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_execute_2": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            15
+          ],
+          "support_actions": 5,
+          "heal_actions": 0,
+          "bolt_actions": 13,
+          "period_end_mp": 6,
+          "recovered_mp": 26,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            15,
+            16,
+            17
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 22,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 24,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 16,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 18,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 18,
+              "mp_after": 8,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 12,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 12,
+              "mp_after": 2,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 2,
+              "mp_after": 4,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 6,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "bolt",
+              "mp_before": 6,
+              "mp_after": 8,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 10,
+              "recovery": 2,
+              "dance_active": false
+            },
+            {
+              "phase": 15,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 2,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 2,
+              "mp_after": 4,
+              "recovery": 2,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 6,
+              "recovery": 2,
+              "dance_active": false
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 283.5,
+          "fixed_trace_expected_saved": 40.5,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_hit_3": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 6,
+          "recovered_mp": 36,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 23,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 23,
+              "mp_after": 26,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 19,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 19,
+              "mp_after": 22,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 22,
+              "mp_after": 12,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 12,
+              "mp_after": 15,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 15,
+              "mp_after": 18,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 18,
+              "mp_after": 8,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 11,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 11,
+              "mp_after": 14,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 14,
+              "mp_after": 4,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 7,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 7,
+              "mp_after": 10,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 3,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 3,
+              "mp_after": 6,
+              "recovery": 3,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 275.4,
+          "fixed_trace_expected_saved": 48.6,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_execute_3": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 6,
+          "recovered_mp": 36,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 23,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 23,
+              "mp_after": 26,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 19,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 19,
+              "mp_after": 22,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 22,
+              "mp_after": 12,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 12,
+              "mp_after": 15,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 15,
+              "mp_after": 18,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 18,
+              "mp_after": 8,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 8,
+              "mp_after": 11,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 11,
+              "mp_after": 14,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 14,
+              "mp_after": 4,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 4,
+              "mp_after": 7,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 7,
+              "mp_after": 10,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 10,
+              "mp_after": 0,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 0,
+              "mp_after": 3,
+              "recovery": 3,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 3,
+              "mp_after": 6,
+              "recovery": 3,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 275.4,
+          "fixed_trace_expected_saved": 48.6,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_hit_4": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 18,
+          "recovered_mp": 48,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 24,
+              "mp_after": 28,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 28,
+              "mp_after": 18,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 22,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 26,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 20,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 18,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 22,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 22,
+              "mp_after": 12,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 12,
+              "mp_after": 16,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 20,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 20,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 14,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 18,
+              "recovery": 4,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 275.4,
+          "fixed_trace_expected_saved": 48.6,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        },
+        "dance_execute_4": {
+          "casts": [
+            1,
+            4,
+            7,
+            10,
+            13,
+            16
+          ],
+          "support_actions": 6,
+          "heal_actions": 0,
+          "bolt_actions": 12,
+          "period_end_mp": 18,
+          "recovered_mp": 48,
+          "covered_phases": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "ledger": [
+            {
+              "phase": 1,
+              "action": "dance",
+              "mp_before": 30,
+              "mp_after": 20,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 2,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 3,
+              "action": "bolt",
+              "mp_before": 24,
+              "mp_after": 28,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 4,
+              "action": "dance",
+              "mp_before": 28,
+              "mp_after": 18,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 5,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 22,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 6,
+              "action": "bolt",
+              "mp_before": 22,
+              "mp_after": 26,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 7,
+              "action": "dance",
+              "mp_before": 26,
+              "mp_after": 16,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 8,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 20,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 9,
+              "action": "bolt",
+              "mp_before": 20,
+              "mp_after": 24,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 10,
+              "action": "dance",
+              "mp_before": 24,
+              "mp_after": 14,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 11,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 18,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 12,
+              "action": "bolt",
+              "mp_before": 18,
+              "mp_after": 22,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 13,
+              "action": "dance",
+              "mp_before": 22,
+              "mp_after": 12,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 14,
+              "action": "bolt",
+              "mp_before": 12,
+              "mp_after": 16,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 15,
+              "action": "bolt",
+              "mp_before": 16,
+              "mp_after": 20,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 16,
+              "action": "dance",
+              "mp_before": 20,
+              "mp_after": 10,
+              "recovery": 0,
+              "dance_active": true
+            },
+            {
+              "phase": 17,
+              "action": "bolt",
+              "mp_before": 10,
+              "mp_after": 14,
+              "recovery": 4,
+              "dance_active": true
+            },
+            {
+              "phase": 18,
+              "action": "bolt",
+              "mp_before": 14,
+              "mp_after": 18,
+              "recovery": 4,
+              "dance_active": true
+            }
+          ],
+          "fixed_trace_baseline_damage": 324,
+          "fixed_trace_expected_damage": 275.4,
+          "fixed_trace_expected_saved": 48.6,
+          "kill_turn": null,
+          "win_rate": null,
+          "battle_end_mp": null
+        }
+      }
+    }
+  }
+}

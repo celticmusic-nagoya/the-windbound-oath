@@ -110,6 +110,92 @@ def verify():
     print('PASS schedule/MP/expiry/no-effect/independent-hit analytic checks')
 
 
+
+def mana_schedule(rounds, initial_mp, enabled=True, recovery=0, condition='hit',
+                  valid_rounds=None, hit_rounds=None, maximum=None, heal_rounds=()):
+    """One Fiona action per phase; expired dance > requested heal > bolt.
+
+    All-alive fixed horizon, not a battle replay. Invalid selected targets execute
+    no attack, but the hypothetical execute-condition credits an attempted bolt:
+    that contract is a sensitivity fixture, NOT a claim about current engine.
+    """
+    if condition not in ('hit', 'execute'): raise ValueError(condition)
+    maximum = initial_mp if maximum is None else maximum
+    if not 0 <= initial_mp <= maximum: raise ValueError('invalid MP bounds')
+    mp = initial_mp; until = 0; ledger = []; casts = []; covered = []
+    for phase in range(1, rounds+1):
+        before = mp; gain = 0
+        if enabled and phase > until and mp >= 10:
+            action = 'dance'; mp -= 10; until = phase+2; casts.append(phase)
+        elif phase in heal_rounds and mp >= 8:
+            action = 'heal'; mp -= 8
+        else:
+            action = 'bolt'
+            valid = valid_rounds is None or phase in valid_rounds
+            hit = valid and (hit_rounds is None or phase in hit_rounds)
+            if recovery and (condition == 'execute' or hit):
+                gain = min(recovery, maximum-mp); mp += gain
+        active = enabled and phase <= until
+        if active: covered.append(phase)
+        ledger.append({'phase':phase, 'action':action, 'mp_before':before,
+                       'mp_after':mp, 'recovery':gain, 'dance_active':active})
+    return {'casts':casts, 'support_actions':len(casts),
+            'heal_actions':sum(x['action']=='heal' for x in ledger),
+            'bolt_actions':sum(x['action']=='bolt' for x in ledger),
+            'period_end_mp':mp, 'recovered_mp':sum(x['recovery'] for x in ledger),
+            'covered_phases':covered, 'ledger':ledger}
+
+
+def mana_verify():
+    assert mana_schedule(7,30)['casts']==[1,4,7]
+    r=mana_schedule(18,36,recovery=3)
+    assert r['casts']==[1,4,7,10,13,16] and r['period_end_mp']==12
+    assert all(0<=x['mp_after']<=36 for x in r['ledger'])
+    assert 36-10*r['support_actions']-8*r['heal_actions']+r['recovered_mp']==r['period_end_mp']
+    assert r['support_actions']+r['heal_actions']+r['bolt_actions']==18
+    assert mana_schedule(18,36,recovery=3,condition='execute')==r
+    assert mana_schedule(4,2,enabled=False,recovery=4)['period_end_mp']==2
+    assert mana_schedule(4,9,recovery=3,maximum=12)['casts']==[2]
+    assert mana_schedule(3,0,recovery=3,maximum=10,hit_rounds=set())['period_end_mp']==0
+    assert mana_schedule(3,0,recovery=3,condition='execute',maximum=10,hit_rounds=set())['period_end_mp']==9
+    assert mana_schedule(3,0,recovery=3,maximum=10,valid_rounds=set())['period_end_mp']==0
+    heal=mana_schedule(3,16,enabled=False,heal_rounds=(1,2,3))
+    assert heal['heal_actions']==2 and heal['bolt_actions']==1
+    print('PASS mana budget/cap/expiry/one-action/condition/heal fixture checks')
+
+
+def mana_results(rounds):
+    source=(ROOT/'js/prologue-combat.js').read_text()
+    if 'if(!e||e.hp<=0)' not in source or 'BattleCritical.resolve(a,n)' not in source:
+        raise RuntimeError('Review normal-attack execution contract')
+    output={'source_main':'e694817', 'rounds':rounds,
+            'dance':{'evasion_points':15,'duration_enemy_phases':3,'mp':10,
+                     'targets':'all alive allies','stacking':'refresh only'},
+            'bolt_hit_probability_valid_living_target':1.0,
+            'source_hashes':{f:hashlib.sha256((ROOT/f).read_bytes()).hexdigest()
+                             for f in ('js/prologue-combat.js','js/battle-critical.js')},
+            'policy':'all allies alive; dance when expired and affordable, else bolt; no heals; one Fiona action per phase; fixed trace unaffected by outgoing damage',
+            'unavailable':{'battle_end_mp':'only fixed-horizon MP available',
+                           'kill_turn':'no outgoing damage/HP feedback',
+                           'win_rate':'no ally HP/KO/heal/target feedback'},
+            'scenarios':{}}
+    for name, trace in traces(rounds).items():
+        budget=trace['mp_pool']; conditions={}
+        configs=[('no_dance',False,0,'hit'),('dance_no_recovery',True,0,'hit')]
+        configs += [(f'dance_{condition}_{gain}',True,gain,condition)
+                    for gain in (2,3,4) for condition in ('hit','execute')]
+        for key,enabled,gain,condition in configs:
+            r=mana_schedule(rounds,budget,enabled,gain,condition)
+            covered=set(r['covered_phases']); baseline=sum(x['damage'] for x in trace['hits'])
+            saved=sum(x['damage']*.15 for x in trace['hits'] if x['round'] in covered)
+            r.update({'fixed_trace_baseline_damage':baseline,
+                      'fixed_trace_expected_damage':round(baseline-saved,4),
+                      'fixed_trace_expected_saved':round(saved,4),
+                      'kill_turn':None,'win_rate':None,'battle_end_mp':None})
+            conditions[key]=r
+        output['scenarios'][name]={'initial_mp_and_cap':budget,'conditions':conditions}
+    return output
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--trials',type=int,default=20000)
@@ -117,9 +203,12 @@ def main():
     parser.add_argument('--seed',type=int,default=20261013)
     parser.add_argument('--json',action='store_true')
     parser.add_argument('--self-test',action='store_true')
+    parser.add_argument('--mana-json',action='store_true',help='fixed-policy mana ledger; no game changes')
     args=parser.parse_args()
-    if args.self_test: verify();return
+    if args.self_test: verify();mana_verify();return
     if args.trials<100 or not 1<=args.rounds<=100:parser.error('trials>=100 and rounds 1..100 required')
+    if args.mana_json:
+        print(json.dumps(mana_results(args.rounds),ensure_ascii=False,indent=2));return
     source=(ROOT/'js/prologue-combat.js').read_text()
     for fragment in ['const base=phase===3?48:42','rbBoss<=[820,500][i]','(phase===1?21:phase===2?27:32)+rbAdds*3']:
         if fragment not in source:raise RuntimeError('Source formula changed; review model: '+fragment)

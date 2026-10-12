@@ -62,3 +62,5 @@ N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析
 作業中の追加方針（ユーザー事前承認）: 各成果物の完了時にremote指示をfetchし、現在作業が終わったら追加指示へ続けて着手する。現N→O→P→Qの順序を維持しRを後続、未完/新規は本statusへ登録する。
 
 S着手: work/codex-wind-dance-sim2、main e694817。tools/sim/wind_dance_sim.pyと新規wind-dance-mana-sim.md/結果JSONを担当。確定風の舞15pt/3/MP10全体をモデルに使用、魔弾回復2/3/4と命中/実行条件を比較。ゲームコードは変更しない。R dda97df納品済み。
+
+S完了: MP台帳拡張とwind-dance-mana-sim.md/結果JSONを作成。engineは有効対象への暗黙100%命中で回復条件2案同値。暫定3で18フェーズcast3→6、撃破/勝率/戦闘終了MPは算出不可としてnull。自己テスト・JSON再現・既存N20k解析照合合格。ゲーム未編集、数値未適用。進行中なし、新規remote指示を最終fetchで確認する。再開は最新main/本status/branch履歴から。未コミット懸念なし。
