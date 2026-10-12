@@ -84,3 +84,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 ## Codex: 納品モス素材の統合後検証 (2026-10-12)
 
 ブランチ: `work/codex-moss-delivered-art-verification`。基準main `ce2b366`（素材merge済み）。対象: `docs/field/moss-forest-asset-requests.md`、本CLAIMS、専用報告・QA記録。指定8テストを順次実行、外部スクリプトで9座標/結界4状態を確認。画像差し替え・ゲーム仕様変更なし。STATUS: WIP。既存merge `ce2b366` と退避branch `rollback/pre-moss-delivered-art` (`0372ef6`) を確認。
+
+納品検証checkpoint: 指定8本の初回7合格/スライム逃走距離1失敗。納品前mainのスライムは合格、納品後単独再実行でも逃走距離が不足したため未解決として調査中。コンソールエラーは各browserテスト0。m14_hold_moveとwalk_a1は -u 実行で出力/合格を確認。素材やゲーム仕様の変更なし。mainへの資料統合は原因解決後。
