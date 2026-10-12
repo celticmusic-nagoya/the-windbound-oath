@@ -22,6 +22,6 @@ window.ItemData = Object.freeze({
     // ドゥンヴァル砦 / 王都（stage15以降にしか行けない）
     tr_f1_barracks:{potion:2}, tr_f2_tower:{ether:1,gold:60}, tr_f3_armory:{gold:80,cloth_tunic:1}, tr_r1_alley:{gold:50}, tr_r2_garden:{silver_comb:1}, tr_r3_backyard:{potion:1,gold:30},
     // 風見の断崖 (cliff_moher_01_spiral_ascent): herb gathering spots + one chest
-    tr_c1_herb_slope_a:{herb_moss:1}, tr_c1_herb_slope_b:{herb_moss:1}, tr_c1_herb_ramp:{herb_moss:1}, tr_c1_herb_lip:{herb_moss:1}, tr_c1_cairn:{potion:1,gold:40,iron_sword:1}
+    tr_c1_herb_slope_a:{herb_moss:1}, tr_c1_herb_slope_b:{herb_moss:1}, tr_c1_herb_ramp:{herb_moss:1}, tr_c1_herb_lip:{herb_moss:1}, tr_c1_cairn:{potion:1,gold:40,ether:1}
   })
 });

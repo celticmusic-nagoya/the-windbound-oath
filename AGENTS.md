@@ -193,7 +193,9 @@ Compact ~10-minute dungeon.
 
 ## 15. Prologue canonical route
 「風が止んだ夜」, roughly 15–25 minute vertical slice:
-Title → peaceful Rilde → Aidan house → training → Fiona → tutorials → wooden dummy → Fiona joins/heals → sunset hill → wind stops → village attack → Fiona reunion → burning village → 2 abnormal goblins → royal knights → north escape → river fall → Moss Forest → ancient stone/Fiona → goblins surround/Aidan loses weapon → Lou appears → altar → 誓いの剣 → Goblin Raider → aftermath/Lou joins → dawn → Dunvar Fortress → PROLOGUE END.
+Title → peaceful Rilde → Aidan house → training → Fiona → tutorials → wooden dummy → Fiona joins/heals → sunset hill → wind stops → village attack → Fiona reunion → burning village → 2 abnormal goblins → royal knights → north escape → river fall → Moss Forest → ancient stone/Fiona → Lou appears → altar (goblins surround → Goblin Raider appears → Aidan's father's sword is broken → Lou's support + Fiona's wind dance stall the Raider for a moment → the stone answers and Aidan binds 誓いの剣) → Goblin Raider battle → aftermath/Lou joins → dawn → Dunvar Fortress (starter gear issued, EQUIP menu unlocked) → PROLOGUE END.
+
+Weapon/equipment rules (2026-10-13): Aidan holds his father's sword (the knight commander's) from the start; the wooden sword is used only by the boy swordsman at the training ground. After the contract, Aidan's weapon is fixed to 誓いの剣 (cannot be unequipped/replaced; upgraded later at a smith with special materials). The equipment system is hidden until the prologue ends. Slots: weapon, head, body, accessory x2.
 
 ## 16. Development-only tools
 Keep an obvious DEV gate.

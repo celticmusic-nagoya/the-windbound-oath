@@ -53,8 +53,8 @@ with sync_playwright() as p:
     check(ev("Quest.state('q_capital_delivery')")=='reported' and ev("battleItems.potion")==0 and ev("gold")==90,'turn-in takes 3 potions, pays 90 G')
     ev("closeDialogue()")
     check('steel_sword' in ev("Shop.stock('royal_arms').map(x=>x.id)"),'after the request the arms shop stocks the steel sword')
-    ev("gold=1000;Shop.buy('royal_arms','steel_sword')"); ev("EquipmentManager.equip('aidan','steel_sword')")
-    base=ev("charStats('fiona')"); check(ev("charStats('aidan')")['atk']==ev("CHARACTER_DB.aidan.atk")+9,'steel sword equips: ATK +9')
+    ev("gold=1000;Shop.buy('royal_arms','steel_sword')"); ev("EquipmentManager.equip('liam','steel_sword')")
+    base=ev("charStats('fiona')"); check(ev("EquipmentManager.get('liam').weapon")=='steel_sword' and ev("EquipmentManager.bonus('liam').atk")==9,"steel sword equips on Liam: ATK +9 (Aidan's weapon is story-bound)")
     # quest: lost comb
     enter('royal_capital_03_residential','from_market')
     click_node('royal_capital_03_residential','r3_elder_quest'); tap_all()

@@ -1,0 +1,244 @@
+--- a/index.html
++++ b/index.html
+@@ -448,15 +448,13 @@
+  }else if(storyStage===1) say('フィオナ「ほら、木人を調べて。私も後ろから見てるから。」');
+  else if(storyStage>=2) say('フィオナ「さっきの光……何だったんだろう。」');
+ };
+-// 訓練開始: エイダンが稽古用の木剣を手に取る（能力補正なし・戦闘モーションの 'wooden' バリアントのみ）。1度だけ。
++// 提案: 新規起動時のみ父の剣を用意。ロードや訓練では配り直さない。
+ function giveStarterSword(){
+- if(Inventory.count('wooden_sword')||Object.values(EquipmentManager.get('aidan')).includes('wooden_sword'))return;
+- if(Inventory.add('wooden_sword')&&!EquipmentManager.get('aidan').weapon)EquipmentManager.equip('aidan','wooden_sword');
+- storyToast('エイダンは稽古用の木剣を手に取った');
++ if(EquipmentManager.owned('father_sword')||EquipmentManager.get('aidan').weapon)return;
++ if(Inventory.add('father_sword'))EquipmentManager.equip('aidan','father_sword');
+ }
+ function startTraining(){
+  if(storyStage!==1){say(storyStage===0?'先にフィオナと話そう。':'使い込まれた訓練用の木人だ。');return}
+- giveStarterSword();
+  storyStage=2; ahp=100;dhp=180;rune=0;atp=0;guarding=false;
+  $('#battle').style.display='block'; updateBattle();
+  $('#battleMsg').textContent='フィオナ「実戦のつもりでいこう。危なくなったら私が回復するね！」';
+@@ -1091,7 +1089,8 @@
+ }
+ function loadGrowthData(){
+  try{
+-  const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(!d)throw 0;
++  const saved=JSON.parse(localStorage.getItem(SAVE_KEY));if(!saved)throw 0;
++  const d=EquipmentManager.migrateStarterSword(saved);
+   Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
+   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
+   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
+@@ -1930,6 +1929,7 @@
+ <script src="js/data/equipment-data.js"></script>
+ <script src="js/inventory.js"></script>
+ <script src="js/equipment.js"></script>
++<script>giveStarterSword();</script>
+ <script src="js/equipment-ui.js"></script>
+ <script src="js/data/shop-data.js"></script>
+ <script src="js/shop.js"></script>
+--- a/js/data/equipment-data.js
++++ b/js/data/equipment-data.js
+@@ -4,13 +4,14 @@
+  * mods: additive stat bonuses on top of level stats - any of maxHp maxMp atk def mag spd cri
+  * motionVariant (weapons): key into img/battle/motion-manifest.json ('aidan:<variant>'); unknown/undelivered -> base motion / still
+  * equipBy: character ids allowed to wear it (omit = anyone)
+- * 木剣 has no stat bonus on purpose: the training sword is auto-equipped, and Raider / boss balance is protected.
+- * Starting equipment is EMPTY on purpose: nothing here changes existing battle balance until the player (or a story event) equips it. */
++ * 父の剣 has no stat bonus; existing Raider / boss balance is protected. 木剣 is NPC-only.
++ * Father sword uses the delivered base Aidan motion (no weapon variant). */
+ window.EquipmentData = Object.freeze({
+   slots: Object.freeze(['weapon', 'head', 'body', 'accessory']),
+   slotNames: Object.freeze({weapon: '武器', head: '頭', body: '胴', accessory: '装飾品'}),
+   items: Object.freeze({
+-    wooden_sword: {name: '木剣', slot: 'weapon', mods: {}, motionVariant: 'wooden', equipBy: ['aidan'], desc: '稽古用の木剣。軽くて、手に馴染む。（能力補正なし）'},
++    wooden_sword: {name: '木剣', slot: 'weapon', mods: {}, motionVariant: 'wooden', equipBy: [], desc: '稽古用の木剣。軽くて、手に馴染む。（能力補正なし）'},
++    father_sword: {name: '父の剣', slot: 'weapon', mods: {}, equipBy: ['aidan'], desc: '騎士団長の父から譲られた剣。（能力補正なし・名称とIDは提案）'},
+     iron_sword:   {name: '鉄の剣', slot: 'weapon', mods: {atk: 5}, motionVariant: 'iron', equipBy: ['aidan', 'liam'], desc: '村の鍛冶場で打たれた、飾り気のない鉄の剣。'},
+     leather_cap:  {name: '革の帽子', slot: 'head', mods: {def: 1}, desc: 'なめした革を縫い合わせた、丈夫な帽子。'},
+     cloth_tunic:  {name: '布のチュニック', slot: 'body', mods: {def: 1}, desc: '村の織り手が仕立てた、動きやすい布の上着。'},
+--- a/js/equipment.js
++++ b/js/equipment.js
+@@ -69,6 +69,24 @@
+       syncVariant(c);
+     }
+   }
++  // Proposal only: convert legacy starter identity without modifying the source save or its schema.
++  function migrateStarterSword(saved) {
++    const out = JSON.parse(JSON.stringify(saved));
++    const gear = out.inventory && out.inventory.gear;
++    if (gear && typeof gear === 'object' && !Array.isArray(gear)) {
++      const n = gear.wooden_sword;
++      if (Number.isInteger(n) && n > 0 && n <= 99) {
++        const existing = gear.father_sword === undefined ? 0 : gear.father_sword;
++        if (!Number.isInteger(existing) || existing < 0 || existing + n > 99)
++          throw new Error('Starter sword migration requires manual review: bag overflow/invalid count');
++        gear.father_sword = existing + n;
++        delete gear.wooden_sword;
++      }
++    }
++    const aidan = out.equipment && out.equipment.state && out.equipment.state.aidan;
++    if (aidan && aidan.weapon === 'wooden_sword') aidan.weapon = 'father_sword';
++    return out;
++  }
+   const reset = () => load(null);
+-  window.EquipmentManager = Object.freeze({equip, unequip, get, owned, bonus, delta, apply, serialize, load, reset, canEquip: (c, id, slot) => why(c, id, slot), def});
++  window.EquipmentManager = Object.freeze({migrateStarterSword, equip, unequip, get, owned, bonus, delta, apply, serialize, load, reset, canEquip: (c, id, slot) => why(c, id, slot), def});
+ })();
+--- a/tests/system/equipment_test.py
++++ b/tests/system/equipment_test.py
+@@ -1,4 +1,4 @@
+-# (404s are the fake wooden frames the stub manifest points at.)
++# Fake iron variant reuses existing attack frames.
+ # Equipment: equip/unequip <-> inventory bag, final stats, weapon motionVariant switching (BattleMotion), save round-trip. needs http.server 8765
+ import json, sys
+ from playwright.sync_api import sync_playwright
+@@ -6,60 +6,67 @@
+ def check(c,m):
+     print(('ok   ' if c else 'FAIL ')+m)
+     if not c: fails.append(m)
+-# a fake manifest: aidan base attack 6 frames + 'aidan:wooden' attack 6 frames with a different hit frame
++# Fake manifest: base attack 6 frames; iron variant 4 frames.
+ MAN={"base":"img/battle/characters/","motions":{
+   "aidan":{"attack":{"dir":"aidan/motion/","pattern":"aidan_attack_{n}.png","frames":6,"ms":80,"hitFrame":4}},
+-  "aidan:wooden":{"attack":{"dir":"aidan/motion/","pattern":"aidan_wooden_attack_{n}.png","frames":4,"ms":100,"hitFrame":2}}}}
++  "aidan:iron":{"attack":{"dir":"aidan/motion/","pattern":"aidan_attack_{n}.png","frames":4,"ms":100,"hitFrame":2}}}}
+ with sync_playwright() as p:
+     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
+     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and '404' not in m.text and errs.append(m.text))
+     pg.route('**/img/battle/motion-manifest.json',lambda r:r.fulfill(status=200,content_type='application/json',body=json.dumps(MAN)))
+     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1200)
+     ev=lambda s: pg.evaluate(s)
++    check(ev("EquipmentManager.get('aidan').weapon")=='father_sword' and ev("EquipmentManager.owned('father_sword')")==1,'fresh boot starts with one father sword')
+     ev("Inventory.reset();EquipmentManager.reset();localStorage.removeItem(SAVE_KEY)")
+     base=ev("charStats('aidan')"); fbase=ev("charStats('fiona')")
+     check(ev("Object.keys(EquipmentManager.get('aidan')).length")==0,'nobody wears anything at the start (old balance untouched)')
+     check(ev("EquipmentManager.apply('aidan',charStats('aidan'))")==base,'no equipment -> stats identical')
+     # bag
+-    check(ev("Inventory.add('wooden_sword')&&Inventory.add('iron_sword')&&Inventory.add('emma_charm')"),'equipment can be added to the inventory')
+-    check(ev("Inventory.count('wooden_sword')")==1 and [x['id'] for x in ev("Inventory.list('equip')")]==['wooden_sword','iron_sword','emma_charm'],'bag lists equipment (kind equip), separate from consumables/key items')
++    check(ev("Inventory.add('father_sword')&&Inventory.add('iron_sword')&&Inventory.add('emma_charm')"),'equipment can be added to the inventory')
++    check(ev("Inventory.count('father_sword')")==1 and [x['id'] for x in ev("Inventory.list('equip')")]==['father_sword','iron_sword','emma_charm'],'bag lists equipment (kind equip), separate from consumables/key items')
+     check(ev("Inventory.list('consumable').every(x=>x.kind==='consumable')"),'consumable list unaffected')
+     # equip
+-    r=ev("EquipmentManager.equip('aidan','wooden_sword')")
++    r=ev("EquipmentManager.equip('aidan','father_sword')")
+     s=ev("charStats('aidan')")
+-    check(r['ok'] and s['atk']==base['atk'] and ev("Inventory.count('wooden_sword')")==0,'equip wooden sword: no stat change (balance), bag count -1')
++    check(r['ok'] and s['atk']==base['atk'] and ev("Inventory.count('father_sword')")==0,'equip father sword: no stat change (balance), bag count -1')
+     check(s['def']==base['def'] and s['maxHp']==base['maxHp'],'other stats unchanged')
+-    check(ev("BattleMotion.info('aidan','attack')")['frames']==4 and ev("BattleMotion.hitDelay('aidan','attack')")==100,'weapon motionVariant "wooden" -> aidan:wooden motion (4 frames, hit at 100ms)')
++    check(ev("BattleMotion.info('aidan','attack')")['frames']==6 and ev("BattleMotion.hitDelay('aidan','attack')")==240,'father sword uses base motion (6 frames, hit at 240ms)')
+     # swap
+     r=ev("EquipmentManager.equip('aidan','iron_sword')"); s=ev("charStats('aidan')")
+-    check(r['ok'] and r['prev']=='wooden_sword' and s['atk']==base['atk']+5 and ev("Inventory.count('wooden_sword')")==1 and ev("Inventory.count('iron_sword')")==0,'swap: iron sword in, wooden sword back to the bag')
+-    check(ev("BattleMotion.info('aidan','attack')")['frames']==6,'iron variant has no frames -> falls back to base aidan motion (6 frames, hit 4)')
++    check(r['ok'] and r['prev']=='father_sword' and s['atk']==base['atk']+5 and ev("Inventory.count('father_sword')")==1 and ev("Inventory.count('iron_sword')")==0,'swap: iron sword in, father sword back to the bag')
++    check(ev("BattleMotion.info('aidan','attack')")['frames']==4,'iron test variant has four frames')
+     # accessory + max HP
+     ev("EquipmentManager.equip('aidan','emma_charm')"); s=ev("charStats('aidan')")
+     check(s['def']==base['def']+2 and s['maxHp']==base['maxHp']+8 and s['atk']==base['atk']+5,'accessory adds DEF+2 / maxHP+8, stacks with weapon')
+     # restrictions
+-    check(ev("EquipmentManager.equip('fiona','wooden_sword')")['reason']=='not_allowed','wearer restriction (equipBy) enforced')
+-    check(ev("EquipmentManager.equip('aidan','wooden_sword','head')")['reason']=='wrong_slot','slot mismatch refused')
++    check(ev("EquipmentManager.equip('fiona','father_sword')")['reason']=='not_allowed','wearer restriction (equipBy) enforced')
++    check(ev("EquipmentManager.equip('aidan','father_sword','head')")['reason']=='wrong_slot','slot mismatch refused')
+     check(ev("EquipmentManager.equip('aidan','iron_sword')")['reason']=='not_in_bag','cannot equip what is not in the bag (already worn)')
+     check(ev("EquipmentManager.equip('aidan','nonsense')")['reason']=='unknown_item','unknown id refused')
+     check(ev("charStats('fiona')")==fbase,"another member's stats are untouched")
+     # save / load
+     ev("renderSystemTab('save');saveGrowthData()"); sv=json.loads(ev("localStorage.getItem(SAVE_KEY)"))
+-    check(sv['version']==30 and sv['equipment']['state']['aidan']=={'weapon':'iron_sword','accessory':'emma_charm'} and sv['inventory']['gear'].get('wooden_sword')==1,'save: ids only, bag and slots both stored (save version unchanged)')
++    check(sv['version']==30 and sv['equipment']['state']['aidan']=={'weapon':'iron_sword','accessory':'emma_charm'} and sv['inventory']['gear'].get('father_sword')==1,'save: ids only, bag and slots both stored (save version unchanged)')
+     ev("EquipmentManager.reset();Inventory.reset()")
+     check(ev("charStats('aidan')")==base and ev("BattleMotion.info('aidan','attack')")['frames']==6,'after reset: base stats')
+     ev("loadGrowthData()"); s=ev("charStats('aidan')")
+-    check(s['atk']==base['atk']+5 and s['maxHp']==base['maxHp']+8 and ev("Inventory.count('wooden_sword')")==1 and ev("Inventory.count('iron_sword')")==0,'load restores worn pieces and the bag without duplicating')
+-    ev("EquipmentManager.unequip('aidan','weapon');EquipmentManager.equip('aidan','wooden_sword');renderSystemTab('save');saveGrowthData();EquipmentManager.reset();loadGrowthData()")
+-    check(ev("BattleMotion.info('aidan','attack')")['frames']==4,'load re-applies the weapon motion variant')
++    check(s['atk']==base['atk']+5 and s['maxHp']==base['maxHp']+8 and ev("Inventory.count('father_sword')")==1 and ev("Inventory.count('iron_sword')")==0,'load restores worn pieces and the bag without duplicating')
++    ev("EquipmentManager.unequip('aidan','weapon');EquipmentManager.equip('aidan','father_sword');renderSystemTab('save');saveGrowthData();EquipmentManager.reset();loadGrowthData()")
++    check(ev("BattleMotion.info('aidan','attack')")['frames']==6,'load restores father sword and base motion')
+     r=ev("EquipmentManager.unequip('aidan','weapon')")
+-    check(r['ok'] and ev("charStats('aidan')")['atk']==base['atk'] and ev("BattleMotion.info('aidan','attack')")['frames']==6 and ev("Inventory.count('wooden_sword')")==1,'unequip: stats, bag and motion go back')
++    check(r['ok'] and ev("charStats('aidan')")['atk']==base['atk'] and ev("BattleMotion.info('aidan','attack')")['frames']==6 and ev("Inventory.count('father_sword')")==1,'unequip: stats, bag and motion go back')
+     # robustness
+-    ev("EquipmentManager.load({v:1,state:{aidan:{weapon:'emma_charm',head:'iron_sword',body:'zzz'},fiona:{weapon:'wooden_sword',accessory:'emma_charm'},ghost:5}})")
++    ev("EquipmentManager.load({v:1,state:{aidan:{weapon:'emma_charm',head:'iron_sword',body:'zzz'},fiona:{weapon:'father_sword',accessory:'emma_charm'},ghost:5}})")
+     check(ev("EquipmentManager.get('aidan')")=={} and ev("EquipmentManager.get('fiona')")=={'accessory':'emma_charm'},'corrupt/invalid save entries are dropped, valid ones kept')
+     # old save without equipment
+     sv.pop('equipment'); ev("EquipmentManager.reset()"); pg.evaluate("s=>localStorage.setItem(SAVE_KEY,s)",json.dumps(sv)); ev("loadGrowthData()")
+     check(ev("Object.keys(EquipmentManager.get('aidan')).length")==0,'older save (no equipment field) loads with nothing worn')
++    legacy=json.loads(json.dumps(sv)); legacy['equipment']={'v':1,'state':{'aidan':{'weapon':'wooden_sword'}}}; legacy['inventory']['gear']={'wooden_sword':2,'iron_sword':1}
++    pg.evaluate("s=>localStorage.setItem(SAVE_KEY,s)",json.dumps(legacy)); ev("loadGrowthData()")
++    check(ev("EquipmentManager.get('aidan').weapon")=='father_sword' and ev("Inventory.count('father_sword')")==2 and ev("Inventory.count('wooden_sword')")==0,'legacy wooden slot and bag migrate without duplication')
++    check(json.loads(ev("localStorage.getItem(SAVE_KEY)"))==legacy,'loading never overwrites the original legacy save')
++    ev("renderSystemTab('save');saveGrowthData();loadGrowthData()")
++    check(ev("EquipmentManager.owned('father_sword')")==3 and json.loads(ev("localStorage.getItem(SAVE_KEY)"))['version']==30,'resave/reload is idempotent and remains v30')
+     ev("localStorage.removeItem(SAVE_KEY)")
+     check(not errs,'0 console errors %s'%errs[:3])
+     b.close()
+--- a/tests/system/equipment_ui_flow_test.py
++++ b/tests/system/equipment_ui_flow_test.py
+@@ -12,11 +12,12 @@
+     ev=lambda s: pg.evaluate(s)
+     ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();EquipmentManager.reset();MossForest.reset();localStorage.removeItem(SAVE_KEY)")
+     base=ev("charStats('aidan')")
+-    # --- training
++    # --- fresh-game initialization, then training (no grant here)
++    ev("giveStarterSword()")
+     ev("storyStage=1;startTraining()")
+-    check(ev("EquipmentManager.get('aidan').weapon")=='wooden_sword' and ev("Inventory.count('wooden_sword')")==0,'training start: Aidan takes up and wears the wooden sword (once)')
+-    check(ev("charStats('aidan')")==base,'wooden sword changes no stats (Raider/boss balance protected)')
+-    ev("storyStage=1;startTraining()"); check(ev("EquipmentManager.get('aidan').weapon")=='wooden_sword' and ev("Inventory.count('wooden_sword')")==0,'a second training start gives nothing more')
++    check(ev("EquipmentManager.get('aidan').weapon")=='father_sword' and ev("Inventory.count('father_sword')")==0,'training start: Aidan retains the father sword from initialization')
++    check(ev("charStats('aidan')")==base,'father sword changes no stats (Raider/boss balance protected)')
++    ev("storyStage=1;startTraining()"); check(ev("EquipmentManager.get('aidan').weapon")=='father_sword' and ev("Inventory.count('father_sword')")==0,'a second training start gives nothing more')
+     ev("$('#battle').style.display='none';storyStage=3")
+     # --- Emma reward
+     ev("Quest.accept('q_emma_charm');Inventory.add('charm_windward')")
+@@ -38,13 +39,13 @@
+     ev("MossForest.hide&&0;document.querySelector('#menuOpen').click()"); 
+     ev("renderSystemTab('equip')")
+     check(pg.locator('#systemBody [data-eq-char]').count()>=1 and pg.locator('#systemBody [data-eq-slot]').count()==4,'EQUIP tab: character picker + 4 slots')
+-    check('木剣' in pg.inner_text('#systemBody'),'weapon slot shows the worn wooden sword')
++    check('父の剣' in pg.inner_text('#systemBody'),'weapon slot shows the worn father sword')
+     pg.click('[data-eq-slot="weapon"]'); txt=pg.inner_text('#systemBody')
+     check('鉄の剣' in txt and 'ATK' in txt and '▲+5' in txt,'candidate list shows the iron sword with an ATK ▲+5 preview')
+     before=int(pg.inner_text('[data-stat="atk"]'))
+     pg.click('[data-eq-on="iron_sword"]')
+     after=int(pg.inner_text('[data-stat="atk"]'))
+-    check(after==before+5 and ev("EquipmentManager.get('aidan').weapon")=='iron_sword' and ev("Inventory.count('wooden_sword')")==1,'clicking 装備: ATK %d -> %d, wooden sword back in the bag'%(before,after))
++    check(after==before+5 and ev("EquipmentManager.get('aidan').weapon")=='iron_sword' and ev("Inventory.count('father_sword')")==1,'clicking 装備: ATK %d -> %d, father sword back in the bag'%(before,after))
+     pg.click('[data-eq-slot="accessory"]'); txt=pg.inner_text('#systemBody')
+     check('エマの護符' in txt and 'DEF' in txt and 'HP' in txt,'accessory candidates show DEF/HP preview')
+     # keyboard: focus the accessory slot, move with arrows, activate with Enter
+@@ -64,7 +65,7 @@
+     # --- save round-trip with worn gear
+     pg.set_viewport_size({'width':1280,'height':720})
+     ev("EquipmentManager.equip('aidan','emma_charm');renderSystemTab('save');saveGrowthData();EquipmentManager.reset();Inventory.reset();loadGrowthData()")
+-    check(ev("EquipmentManager.get('aidan').accessory")=='emma_charm' and ev("Inventory.count('wooden_sword')")==1,'save/load keeps worn gear and the bag')
++    check(ev("EquipmentManager.get('aidan').accessory")=='emma_charm' and ev("Inventory.count('father_sword')")==1,'save/load keeps worn gear and the bag')
+     check(not errs,'0 console errors %s'%errs[:3])
+     b.close()
+ sys.exit(1 if fails else 0)
+--- a/docs/system-equipment.md
++++ b/docs/system-equipment.md
+@@ -3,12 +3,14 @@
+ - データ: `js/data/equipment-data.js`（`EquipmentData`: slots weapon/head/body/accessory、items に name/slot/mods/motionVariant/equipBy）。消費アイテム・大事なもの（`ItemData`）とは別ファイル。
+ - 所持: `Inventory` が `gear` として保持（`count(id)`＝バッグ内のみ、`list('equip')`）。装備するとバッグ→スロットへ1個移動、外す／入れ替えで戻る。
+ - 管理: `js/equipment.js` `EquipmentManager`: `equip(char,id[,slot])` `unequip(char,slot)` `get` `bonus` `apply(char,baseStats)` `serialize/load/reset`、イベント `equipment-change`。
+-- 最終ステータス: `charStats()` が `EquipmentManager.apply` を通す（基本＋レベル成長＋装備加算）。**初期装備は空**で、従来のバランスは変わらない。
++- 最終ステータス: `charStats()` が `EquipmentManager.apply` を通す（基本＋レベル成長＋装備加算）。**提案: 初期装備は能力補正なしの父の剣**で、従来のバランスは変わらない。
+ - 武器の `motionVariant` → `BattleMotion.setVariant(char, variant)` 自動切替（`aidan:wooden` など。コマ未納品なら基本モーション／静止画へフォールバック）。
+-- セーブ: 既存 v30 に任意項目 `equipment:{v:1,state:{aidan:{weapon:'wooden_sword'}}}` と `inventory.gear` を追加（IDのみ。数値は保存しない）。旧セーブは装備なしで読める。不正ID・スロット不一致・装備不可キャラは読込時に破棄。
++- セーブ: 既存 v30 に任意項目 `equipment:{v:1,state:{aidan:{weapon:'father_sword'}}}` と `inventory.gear` を追加（IDのみ。数値は保存しない）。旧セーブは装備なしで読める。不正ID・スロット不一致・装備不可キャラは読込時に破棄。
+ - テスト: `python3 tests/system/equipment_test.py`
+ 
+ ## UI・入手（装備UI編）
+ - UI: システムメニューの **EQUIP タブ**（`js/equipment-ui.js` / `css/equipment.css`）。キャラ選択→4スロット→候補（前後比較 ▲緑/▼赤）→装備/外す。矢印キー・Tab・Enter、390px幅で崩れない。
+-- 入手: 訓練開始(`startTraining`)で木剣を自動装備（補正なし）／エマのクエスト報告で `emma_charm`／崖の石積みの宝箱 `tr_c1_cairn` に `iron_sword`（`ItemData.treasureStage` により stage 15 まで開かない）。
++- 入手: 起動時に父の剣を自動装備（補正なし）。訓練開始では配布しない／エマのクエスト報告で `emma_charm`／崖の石積みの宝箱 `tr_c1_cairn` に `iron_sword`（`ItemData.treasureStage` により stage 15 まで開かない）。
+ - テスト: `tests/system/equipment_ui_flow_test.py`
++
++提案の旧セーブ移行: エイダン装備の wooden_sword とバッグ内の木剣を father_sword へ置換。空装備・他武器・進行・セーブv30は維持。バッグ合算99超過はロードを中止し元データを保持。採用前に移行方針をレビューする。

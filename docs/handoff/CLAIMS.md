@@ -96,3 +96,9 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 最終mainは `499f781`（35834ddから追加シナリオ資料のみ）を取り込み、検証時のアプリ/tests treeと同一を確認。結界は画像3種と開放後node0を再撮影/console0。正面の石/紋様との重なりで違いが読みづらい点を追記。追加統合の退避先は `rollback/pre-moss-delivered-art-verification`（直前499f781）。素材退避branch `rollback/pre-moss-delivered-art`（0372ef6）は保持。mainへno-ff統合後PLAYER QA。
 
 2026-10-12 main反映記録: 機能merge件名 `Merge delivered moss art verification and pending asset list`。基準main499f781、指定8/8・console0。m15b入力修正と未納品一覧/証跡をno-ffで反映、PLAYER QA待ち。追加分の退避branch `rollback/pre-moss-delivered-art-verification` は499f781。素材本体の既存mergece2b366/退避0372ef6は保持。追加分だけは本mergeをrevert、素材全体は本merge→ce2b366の順でrevert。force pushなし。
+
+## Codex: 剣設定の影響調査・差分案 (2026-10-12)
+
+ブランチ `work/codex-sword-setting`、基準main `0d48324`、引継 `docs/codex-sword-handoff` (`1b3b248`)。担当は本CLAIMSと `docs/handoff/codex-sword-proposal-20261012.md`、同差分 `.patch`。Gは調査のみ、Hは未適用の差分案として提示。Claude所有のindex.htmlは直接編集せず差分で共有。高さ・採用素材・シナリオ・セーブ形式は変更しない。mainへマージしない。STATUS: WIP。
+
+剣設定checkpoint: G影響表とHの未適用patchを完成。対象6ファイルの案をリポジトリ外で展開し、装備テスト2/2合格・console0、旧木剣セーブ移行/原本維持/再保存冪等性/v30維持を確認。git apply --checkとNode移行検証合格。仮IDfather_sword、補正0、物語/高さ/採用素材/セーブ形式は変更なし。main 0d48324は維持。STATUS: READY（差分案のレビュー待ち、未適用・未統合）。
