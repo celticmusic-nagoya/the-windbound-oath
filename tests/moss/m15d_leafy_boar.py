@@ -72,7 +72,7 @@ with sync_playwright() as p:
         pg.wait_for_timeout(100)
     pg.wait_for_timeout(2000)
     check(ev("currentGoblin")=='leafyBoar1' and ev("window.__starts")==1,'rush contact starts the existing battle once (%s, %d)'%(ev("currentGoblin"),ev("window.__starts")))
-    en=ev("PrologueCombat.enemies.normal.map(e=>[e.type,e.hp,e.maxHp])"); check(en==[['leafy_boar',70,70]],'one leafy boar (70 HP) %s'%en)
+    en=ev("PrologueCombat.enemies.normal.map(e=>[e.type,e.hp,e.maxHp])"); check(en==[['leafy_boar',147,147]],'one leafy boar (147 HP) %s'%en)
     check('リーフィボア' in ev("document.querySelector('#v2EnemyName').textContent"),'enemy name shows リーフィボア')
     pg.wait_for_timeout(2500); fr=set()
     for i in range(30):
@@ -84,7 +84,7 @@ with sync_playwright() as p:
     # 6) win -> gone, forestShow no respawn, re-entry respawn
     gold0=ev("gold")
     ev("PrologueCombat.instantKill('normal')"); pg.wait_for_timeout(2600)
-    check('EXP +9' in ev("document.querySelector('#resultExp').textContent") and ev("gold")-gold0==5,'result: EXP +9, GOLD +5')
+    check('EXP +14' in ev("document.querySelector('#resultExp').textContent") and ev("gold")-gold0==8,'result: EXP +14, GOLD +8')
     for i in range(8):
         if ev("getComputedStyle(document.querySelector('#battleResult')).display")=='none': break
         ev("(document.querySelector('#battleResult button')||document.querySelector('#battleResult')).click()"); pg.wait_for_timeout(500)

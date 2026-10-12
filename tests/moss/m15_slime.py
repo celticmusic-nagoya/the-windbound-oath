@@ -20,13 +20,13 @@ with sync_playwright() as p:
     ev("startAttackBattle('mossSlime2',112)"); pg.wait_for_timeout(1800)
     check(ev("document.body.classList.contains('normalBattleMode')"),'battle screen opens')
     en=ev("PrologueCombat.enemies.normal.map(e=>[e.type,e.hp,e.maxHp])")
-    check(en==[['moss_slime',56,56],['moss_slime',56,56]],'two moss slimes (56 HP each) %s'%en)
+    check(en==[['moss_slime',106,106],['moss_slime',106,106]],'two moss slimes (106 HP each) %s'%en)
     check('モススライム' in ev("document.querySelector('#v2EnemyName').textContent"),'enemy name shows モススライム')
     check('moss_slime' in ev("document.querySelector('#bGob img').getAttribute('src')"),'first slot paints the slime art')
     check(ev("PrologueCombat.targets('normal').map(t=>t.name)")==['モススライム','モススライム'],'targets are named')
     ev("PrologueCombat.instantKill('normal')"); pg.wait_for_timeout(2600)
-    check(ev("getComputedStyle(document.querySelector('#battleResult')).display")!='none' and 'EXP +14' in ev("document.querySelector('#resultExp').textContent"),'result screen: EXP +14')
-    check(ev("gold")-gold0==6,'GOLD +6 granted')
+    check(ev("getComputedStyle(document.querySelector('#battleResult')).display")!='none' and 'EXP +22' in ev("document.querySelector('#resultExp').textContent"),'result screen: EXP +22')
+    check(ev("gold")-gold0==10,'GOLD +10 granted')
     ev("document.querySelector('#battleResult').click()"); 
     for i in range(6):
         if ev("getComputedStyle(document.querySelector('#battleResult')).display")=='none': break

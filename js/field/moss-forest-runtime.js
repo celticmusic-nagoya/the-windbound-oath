@@ -34,6 +34,7 @@
   }
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
   const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
+  const sideCount=(frames,dir)=>{let n=0;while(frames.has('fiona_side_'+dir+'_'+String(n+1).padStart(2,'0')))n++;return n||4;};
   const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
   function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}
   const spr={frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
@@ -77,11 +78,14 @@
     if(fsp.px!==null){
       const dx=S.fx-fsp.px,dy=S.fy-fsp.py,dt=Math.max(1,now-fsp.pt),d=Math.hypot(dx,dy),v=d/dt*1000;
       if(v>16&&d<60){const nx=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
+        fsp.side=(nx==='left'||nx==='right')&&Math.abs(dy)<=Math.abs(dx)*.35;   // true profile frames only for (near-)horizontal travel; diagonal travel keeps the 3/4 frames
         if(!fsp.walking||fsp.dir!==nx){fsp.since=now;fsp.dist=0;}fsp.dir=nx;fsp.walking=true;fsp.moved=now;fsp.dist=(fsp.dist||0)+d;}
       else if(d>=60||now-fsp.moved>140){fsp.walking=false;if(Math.abs(S.x-48-S.fx)<3&&Math.abs(S.y+18-S.fy)<3){const px=S.x-S.fx,py=S.y-S.fy;fsp.dir=Math.abs(px)>Math.abs(py)?(px>0?'right':'left'):(py>0?'down':'up');}}
     }
     fsp.px=S.fx;fsp.py=S.fy;fsp.pt=now;
-    const name='fiona_'+(fsp.walking?'walk_'+fsp.dir+'_'+String(Math.floor((fsp.dist||0)/(STRIDE_CYCLE/walkCount(fsp.frames,'fiona_',fsp.dir)))%walkCount(fsp.frames,'fiona_',fsp.dir)+1).padStart(2,'0'):'idle_'+fsp.dir);
+    const useSide=fsp.walking&&fsp.side&&fsp.frames.has('fiona_side_'+fsp.dir+'_01');
+    const nf=useSide?sideCount(fsp.frames,fsp.dir):walkCount(fsp.frames,'fiona_',fsp.dir);
+    const name=fsp.walking?(useSide?'fiona_side_':'fiona_walk_')+fsp.dir+'_'+String(Math.floor((fsp.dist||0)/(STRIDE_CYCLE/nf))%nf+1).padStart(2,'0'):'fiona_idle_'+fsp.dir;
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }

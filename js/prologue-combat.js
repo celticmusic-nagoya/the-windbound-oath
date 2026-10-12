@@ -19,8 +19,12 @@
   rosters[b].forEach(e=>{if(idleEnemy(e.type))window.BattleIdleMotion?.stop(e.node+' img');BattleActorState.unregister(b,e.key);if(e.extra)q('#'+e.unit)?.remove()});rosters[b]=[];
  }
  function idleEnemy(type){return Boolean(window.BATTLE_IDLE_ASSETS&&BATTLE_IDLE_ASSETS[type]&&type!=='aidan');}   // enemies with a delivered multi-frame idle (forest_bat, leafy_boar)
+ // Field-monster fights (slime / bat / boar / field goblin) are tougher than the base table; story fights (attackGob*, northGob*, ...) keep the base stats.
+ const FIELD_BUFF=Object.freeze({moss_slime:{hp:1.9,atk:1.5,def:1.25},forest_bat:{hp:1.9,atk:1.45,def:1.25},leafy_boar:{hp:2.1,atk:1.5,def:1.2},goblin:{hp:1.7,atk:1.4,def:1.15}});
+ let fieldFight=false;
  function makeEnemy(b,type,i){
-  const e={id:b+'_enemy_'+i,key:'enemy_'+i,type,...stats[type],maxHp:stats[type].hp,extra:i>0,unit:i===0?'v2GobUnit':'normalEnemy'+i,node:i===0?'#bGob':'#normalEnemy'+i+' .prologueSprite'};
+  const st={...stats[type]};if(fieldFight&&FIELD_BUFF[type]){const m=FIELD_BUFF[type];st.hp=Math.round(st.hp*m.hp);st.atk=Math.round(st.atk*m.atk);st.def=+(st.def*m.def).toFixed(1);}
+  const e={id:b+'_enemy_'+i,key:'enemy_'+i,type,...st,maxHp:st.hp,extra:i>0,unit:i===0?'v2GobUnit':'normalEnemy'+i,node:i===0?'#bGob':'#normalEnemy'+i+' .prologueSprite'};
   if(e.extra){const el=document.createElement('div');el.id=e.unit;el.className='prologueEnemy slot'+i;el.innerHTML='<div class="prologueEnemyHud"></div><div class="prologueSprite"><img></div>';q('#attackBattle').append(el)}
   q(e.node+' img').alt=name(e);
   BattleActorState.register(b,e.key,type,e.node+' img',()=>[e.hp,e.maxHp]);if(idleEnemy(type))window.BattleIdleMotion?.begin(e.node+' img',type);return e;
@@ -30,6 +34,7 @@
   const types=/^mossSlime\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('moss_slime'):/^forestBat\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('forest_bat'):/^leafyBoar\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('leafy_boar'):/^fieldGob\d$/.test(id)?Array(Math.max(1,Math.min(3,+id.slice(-1)))).fill('goblin'):id==='attackGob1'?['goblin','goblin']:['goblin','goblin','tainted_goblin'];
   document.body.classList.toggle('monsterBattle',['moss_slime','forest_bat','leafy_boar','goblin'].includes(types[0])&&id!=='attackGob1');   // field monster fights: compact HUD + depth layout
   document.body.classList.toggle('slimeBattle',types[0]==='moss_slime');document.body.classList.toggle('batBattle',types[0]==='forest_bat');document.body.classList.toggle('boarBattle',types[0]==='leafy_boar');
+  fieldFight=/^(mossSlime|forestBat|leafyBoar|fieldGob)\d$/.test(id);
   rosters.normal=types.map((t,i)=>makeEnemy('normal',t,i));
   document.body.classList.toggle('soloRescue',id==='attackGob1');
   sync('normal');window.BattlePartyLayout?.refresh('normal');window.BattlePresentation?.updateRune(normalRune);
