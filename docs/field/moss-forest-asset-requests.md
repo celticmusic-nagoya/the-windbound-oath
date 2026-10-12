@@ -1,5 +1,10 @@
 # Moss Forest — asset requests (ASSET GENERATION REQUIRED)
 
+> **Status 2026-10-12:** the ChatGPT deliveries (seals ×3, arch, stones A–F, FX sheet, A1/A2/A3 props, vegetation, decals, ground tiles) are installed
+> (`tools/moss/install_delivered_art.py`, 68 files under `img/field/moss/art/`). Sections A–D below are the ORIGINAL request list; only these are still missing:
+> `tree_ancient_great_01`, `tree_ancient_sentinel_01`, `tree_log_hollow_A3_01` (prompts: `docs/art/chatgpt_moss_asset_prompts.md` §1-2 / §1-8).
+
+
 Drop finished PNGs in `img/field/moss/` and add one rule **before** the stand-in rules in `img/field/moss/manifest.json` (`{"match":"^name","file":"name.png","w":..,"h":..}`; w/h = world px, bottom-centre anchored). No code change is needed.
 
 Rules: 1 frame = 1 transparent RGBA PNG; painterly hand-drawn chibi style matching the Lind field art; no text in images; Fiona has human ears and no wings; Lou is palm-sized (「ルー」); weapon is 誓いの剣 (never a dagger); the threat's true name is never shown.
