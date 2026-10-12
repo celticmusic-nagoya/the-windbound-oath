@@ -279,10 +279,16 @@ m.deco('prop_bench_view', 3960, 860, 70, 18); m.deco('town_lamp_post', 3560, 840
 m.deco('town_cart', 1900, 1740, 120, 30); m.deco('town_hay_stack', 2500, 2050, 120, 40); m.deco('town_flowerbed', 4400, 1500, 100, 26)
 m.zones.append({'id': 'ev_overlook', 'type': 'trigger', 'hook': 'road_overlook', 'shape': {'shape': 'rect', 'x': 3700, 'y': 780, 'w': 320, 'h': 230}, 'once': True})
 m.zones.append({'id': 'ev_overlook_view', 'type': 'interact', 'hook': 'road_overlook_again', 'label': '谷の向こうの王都', 'shape': {'shape': 'circle', 'cx': 3960, 'cy': 830, 'r': 90}})
-m.monsters += [{'id': 'rd_boar_north', 'type': 'leafy_boar', 'x': 1650, 'y': 1560}, {'id': 'rd_boar_south', 'type': 'leafy_boar', 'x': 3150, 'y': 2010}]   # field monsters (FieldMonsters): 街道ぞいの茂みに棲むリーフィボア。道そのものは塞がない
+m.monsters += [{'id': 'rd_boar_north', 'type': 'leafy_boar', 'x': 1650, 'y': 1560}, {'id': 'rd_boar_south', 'type': 'leafy_boar', 'x': 3150, 'y': 2010},
+                 {'id': 'rd_boar_03', 'type': 'leafy_boar', 'x': 5200, 'y': 800}, {'id': 'rd_boar_04', 'type': 'leafy_boar', 'x': 400, 'y': 700}, {'id': 'rd_boar_05', 'type': 'leafy_boar', 'x': 2700, 'y': 700}, {'id': 'rd_boar_06', 'type': 'leafy_boar', 'x': 4500, 'y': 2000}]   # field monsters (FieldMonsters): 街道ぞいの茂みに棲むリーフィボア。道そのものは塞がない
 m.npc('rd_gate_guard', '王都の門衛', 5330, 1700, 'npc'); m.npc('rd_traveler', '旅の商人', 2150, 1980, 'npc', walk=[[90, 0], [0, 0]]); m.npc('rd_patrol', '巡回の兵士', 800, 1780, 'npc')
 maps.append(m)
 # 2) 砦の酒場「錆びた角笛」: リアム加入イベント
+# DEV: モンスター配置アリーナ（開発専用の何もない広場。DEVパネルの「MONSTER ARENA」から種類・数を選んで配置する。物語には接続しない）
+m = Map('dev_monster_arena', 'DEV　モンスター配置アリーナ', 'DEV Monster Arena', 'アリーナ', 4800, 3200, '開発用', 'DEV', '#8a9a68', '#7d9a58', 'bgm_town')
+m.spawn('center', 2400, 1600)
+maps.append(m)
+
 m = Map('fort_in_tavern', 'ドゥンヴァル砦　酒場「錆びた角笛」', 'Dunvar Fortress Tavern', '酒場', 1400, 1000, 'ドゥンヴァル砦', 'DUNVAR FORTRESS', '#a98b5c', '#17110d', 'bgm_fort_interior')
 m.floor_rect(0, 0, 1400, 1000, '#17110d', None); m.floor_rect(48, 248, 1304, 704, '#a98b5c', 'planks'); m.wall(48, 48, 1304, 200, '#76654f', 'wall', 'planks')
 m.floor_rect(560, 880, 280, 72, '#b89a68', 'planks')

@@ -495,6 +495,21 @@
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
     teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
+    // DEV Monster Arena: place monsters around the player (ring, ~260-420px away, on free ground). type = MONSTER_TYPES key.
+    devSpawn(type,count=1,group=1){
+      if(!window.FieldMonsters||!FieldMonsters.MONSTER_TYPES[type]||!S.forest||!S.map)return 0;
+      const f={x:S.x+FOOT.ax,y:S.y+FOOT.ay};let placed=0,n=Math.max(1,Math.min(30,count|0||1));
+      for(let i=0;i<n;i++){
+        for(let tries=0;tries<24;tries++){
+          const a=(i/n)*Math.PI*2+tries*.7+Math.random()*.3,r=260+(i%3)*70+tries*18,x=f.x+Math.cos(a)*r,y=f.y+Math.sin(a)*r;
+          if(S.forest.blocked(x-FOOT.ax,y-FOOT.ay))continue;
+          if(FieldMonsters.add({type,x,y,group:Math.max(1,Math.min(3,group|0||1))})){placed++;break;}
+        }
+      }
+      return placed;
+    },
+    devClearMonsters(){if(window.FieldMonsters)FieldMonsters.removeAll();},
+    devFreezeMonsters(on){if(window.FieldMonsters)FieldMonsters.setFrozen(on);return window.FieldMonsters?FieldMonsters.frozen:false;},
     monsterResult(won){if(window.FieldMonsters)FieldMonsters.resolve(Boolean(won));},get monsters(){return window.FieldMonsters?FieldMonsters.list:[];},
     encounters(on){if(on===undefined)return !enc.off;enc.off=!on;return !enc.off;},
     forceEncounter(){const z=S.map&&(S.map.encounterZones||[]).find(z=>z.style==='step'&&(z.enemies||[]).some(e=>!hooks.canEncounter||hooks.canEncounter(e.id)));if(!z||!hooks.onEncounter)return false;const e=z.enemies.find(e=>!hooks.canEncounter||hooks.canEncounter(e.id));hooks.onEncounter({zone:z.id,enemy:e.id,count:1,map:S.mapId});return true;},

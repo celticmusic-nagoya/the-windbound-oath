@@ -171,7 +171,14 @@
 <div id="cinema"><div id="hillScene"><div id="windVeil"></div><div id="hillGround"></div><div id="hillAidan"></div><div id="hillFiona"></div></div><div id="cinemaText"></div><div id="cinemaHint">タップして進む</div></div>
 <button id="devBtn">DEV ▶</button>
 <div id="devPanel"><button id="devClose">×</button><h3>DEVELOPMENT / EVENT JUMP</h3>
-<p>動作確認用。選択したイベントの直前状態へ移動します。製品版では削除予定。</p><div id="devGrid"></div></div>
+<p>動作確認用。選択したイベントの直前状態へ移動します。製品版では削除予定。</p><div id="devArena"><h4>MONSTER ARENA（開発専用）</h4>
+<div class="devArenaRow"><button data-arena="go">アリーナへ移動</button><button data-arena="clear">全消去</button><button data-arena="freeze">AI停止: OFF</button></div>
+<div class="devArenaRow"><select id="devMonType"><option value="moss_slime">モススライム</option><option value="forest_bat">フォレストバット</option><option value="leafy_boar">リーフィーボア</option><option value="goblin">通常ゴブリン</option></select>
+<label>数 <select id="devMonCount"><option>1</option><option>3</option><option selected>6</option><option>10</option></select></label>
+<label>戦闘数 <select id="devMonGroup"><option>1</option><option>2</option><option>3</option></select></label>
+<button data-arena="place">プレイヤー周囲に配置</button><button data-arena="all">全種を1体ずつ配置</button></div>
+<small id="devArenaInfo">先に「アリーナへ移動」→ 種類と数を選んで配置。接触すると通常のシンボル戦闘になります。</small></div>
+<div id="devGrid"></div></div>
 <button id="menuBtn">☰ QUEST</button>
 <button id="fs">⛶ FULLSCREEN</button>
 <div id="questMenu">
@@ -1492,7 +1499,7 @@ const DEV_EVENTS=[
  ['rilde_ruin','15　リルド村・襲撃後（自由行動）'],
  ['fort_free','16　ドゥンヴァル砦・自由行動'],
  ['map:fort_dunvall_01_courtyard','M1　砦・中庭'],['map:fort_dunvall_02_ramparts','M2　砦・城壁'],['map:fort_dunvall_03_keep','M3　砦・主塔'],
- ['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
+ ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
 function devResetScreens(){
  closeDialogue();window.MossForest&&MossForest.hide();
@@ -1547,6 +1554,15 @@ function devJump(key){
 $('#devGrid').innerHTML=DEV_EVENTS.map(([k,n])=>`<button data-jump="${k}">${n}</button>`).join('');
 $('#devBtn').onclick=()=>{$('#devPanel').style.display='block'};
 $('#devClose').onclick=()=>{$('#devPanel').style.display='none'};
+$('#devArena').onclick=e=>{
+ const b=e.target.closest('[data-arena]');if(!b||!window.MossForest)return;const info=$('#devArenaInfo'),k=b.dataset.arena;
+ const count=+$('#devMonCount').value,group=+$('#devMonGroup').value,type=$('#devMonType').value;
+ if(k==='go'){devJump('map:dev_monster_arena');return;}
+ if(k==='clear'){MossForest.devClearMonsters();info.textContent='全消去しました。';}
+ else if(k==='freeze'){const on=MossForest.devFreezeMonsters(!(window.FieldMonsters&&FieldMonsters.frozen));b.textContent='AI停止: '+(on?'ON':'OFF');info.textContent=on?'モンスターのAIを停止中（動かず、近づいても戦闘になりません）。':'AIを再開しました。';}
+ else if(k==='place'){info.textContent=MossForest.devSpawn(type,count,group)+' 体を配置しました。（現在 '+MossForest.monsters.length+' 体）';}
+ else if(k==='all'){let n=0;for(const t of Object.keys(FieldMonsters.MONSTER_TYPES))n+=MossForest.devSpawn(t,1,group);info.textContent=n+' 体を配置しました。（現在 '+MossForest.monsters.length+' 体）';}
+};
 $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b.dataset.jump)};
 
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
@@ -1893,7 +1909,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/prologue-combat.js?v=20261012b"></script>
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
-<script src="js/prologue-dev.js?v=20261011g"></script>
+<script src="js/prologue-dev.js?v=20261012c"></script>
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
@@ -1903,9 +1919,9 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <script src="js/field/field-vista.js"></script>
 <script src="js/field/field-bgm.js"></script>
 <script src="js/field/field-walkers.js"></script>
-<script src="js/field/field-monsters.js?v=20261011v"></script>
+<script src="js/field/field-monsters.js?v=20261012c"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012w"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261011t"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261012c"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
@@ -1955,7 +1971,7 @@ const v54SR=startRaiderBattle;startRaiderBattle=function(){v54SR();requestAnimat
 <link rel="stylesheet" href="css/lind-character-rendering.css">
 <script src="js/field/lind-character-rendering.js"></script>
 <script src="js/field/lind-crisp-renderer.js"></script>
-<link rel="stylesheet" href="css/battle-polish.css">
+<link rel="stylesheet" href="css/battle-polish.css?v=20261012c">
 <link rel="stylesheet" href="css/equipment.css">
 <script src="js/battle-party-layout.js?v=20261011-mobile"></script>
 <link href="css/battle-presentation.css?v=20261012a" rel="stylesheet"/>
