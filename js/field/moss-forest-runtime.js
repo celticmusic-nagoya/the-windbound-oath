@@ -34,6 +34,7 @@
   }
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
   const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
+  const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
   function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}
   const spr={frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
   function mountPlayerSprite(){
@@ -50,15 +51,15 @@
     if(spr.px!==null){
       const dx=S.x-spr.px,dy=S.y-spr.py,d=Math.hypot(dx,dy);
       if(d>.01&&d<=23){const nx=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
-        if(spr.state!=='WALK'||spr.dir!==nx){spr.since=now;spr.phase=0;}spr.dir=nx;spr.state='WALK';spr.moved=now;}
+        if(spr.state!=='WALK'||spr.dir!==nx){spr.since=now;spr.phase=0;spr.dist=0;}spr.dir=nx;spr.state='WALK';spr.moved=now;spr.dist=(spr.dist||0)+d;}
       else if(d>23||now-spr.moved>110){spr.state='IDLE';spr.phase=0;}
-      if(spr.state==='WALK')spr.phase=Math.floor((now-spr.since)/(walkCount(spr.frames,'aidan_',spr.dir)>4?75:100))%walkCount(spr.frames,'aidan_',spr.dir);
+      if(spr.state==='WALK'){const n=walkCount(spr.frames,'aidan_',spr.dir);spr.phase=Math.floor((spr.dist||0)/(STRIDE_CYCLE/n))%n;}   // foot cadence follows the distance walked (no skating at any speed)
     }
     spr.px=S.x;spr.py=S.y;
     const name='aidan_'+(spr.state==='WALK'?'walk_'+spr.dir+'_'+String(spr.phase+1).padStart(2,'0'):'idle_'+spr.dir);
     if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
     else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
-    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((now-spr.since)/200*Math.PI))*1.5).toFixed(2)+'px)':'';}   // soft step bob between the 4 painted frames
+    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((spr.dist||0)/(STRIDE_CYCLE/2)*Math.PI))*1.5).toFixed(2)+'px)':'';}   // soft step bob between the 4 painted frames
   }
   // ---- Fiona field sprite: 4 directions x (idle + 6-frame walk), tools/field/make_fiona.py -> js/field/fiona-field-assets.js ----
   const fsp={frames:new Map(),visible:null,dir:'down',walking:false,since:0,moved:0,px:null,py:null,pt:0,ready:false};
@@ -76,11 +77,11 @@
     if(fsp.px!==null){
       const dx=S.fx-fsp.px,dy=S.fy-fsp.py,dt=Math.max(1,now-fsp.pt),d=Math.hypot(dx,dy),v=d/dt*1000;
       if(v>16&&d<60){const nx=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
-        if(!fsp.walking||fsp.dir!==nx){fsp.since=now;}fsp.dir=nx;fsp.walking=true;fsp.moved=now;}
+        if(!fsp.walking||fsp.dir!==nx){fsp.since=now;fsp.dist=0;}fsp.dir=nx;fsp.walking=true;fsp.moved=now;fsp.dist=(fsp.dist||0)+d;}
       else if(d>=60||now-fsp.moved>140){fsp.walking=false;if(Math.abs(S.x-48-S.fx)<3&&Math.abs(S.y+18-S.fy)<3){const px=S.x-S.fx,py=S.y-S.fy;fsp.dir=Math.abs(px)>Math.abs(py)?(px>0?'right':'left'):(py>0?'down':'up');}}
     }
     fsp.px=S.fx;fsp.py=S.fy;fsp.pt=now;
-    const name='fiona_'+(fsp.walking?'walk_'+fsp.dir+'_'+String(Math.floor((now-fsp.since)/105)%walkCount(fsp.frames,'fiona_',fsp.dir)+1).padStart(2,'0'):'idle_'+fsp.dir);
+    const name='fiona_'+(fsp.walking?'walk_'+fsp.dir+'_'+String(Math.floor((fsp.dist||0)/(STRIDE_CYCLE/walkCount(fsp.frames,'fiona_',fsp.dir)))%walkCount(fsp.frames,'fiona_',fsp.dir)+1).padStart(2,'0'):'idle_'+fsp.dir);
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }
