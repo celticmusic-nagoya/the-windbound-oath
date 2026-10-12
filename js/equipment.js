@@ -76,7 +76,10 @@
       if (!w || typeof w !== 'object') continue;
       for (const [slot0, id] of Object.entries(w)) {
         const slot = slot0 === 'accessory' ? 'accessory1' : slot0;   // saves from the one-socket era
-        if (typeof id === 'string' && E.slots.includes(slot) && !why(c, id, slot)) worn(c)[slot] = id;
+        if (typeof id !== 'string' || !E.slots.includes(slot)) continue;
+        const r = why(c, id, slot);
+        if (!r) worn(c)[slot] = id;
+        else if (r === 'not_allowed' && def(id)) I().add(id, 1);   // a piece the wearer may no longer use (Aidan's old iron/steel sword) goes back to the bag instead of vanishing
       }
       syncVariant(c);
     }

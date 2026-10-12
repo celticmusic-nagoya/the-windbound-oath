@@ -3551,3 +3551,8 @@ body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
 #fieldLetterbox.on i{height:13%}
 #fieldLetterbox b{position:absolute;left:0;right:0;top:15%;text-align:center;font-weight:normal;letter-spacing:.9em;font-size:clamp(16px,3.4vw,30px);color:#f4e6bd;text-shadow:0 2px 6px #000;opacity:0;transition:opacity 1.4s}
 #fieldLetterbox.on b:not(:empty){opacity:.95}
+/* altar scene on short landscape screens: keep the 2-line text box clear of Aidan / Fiona / the lower goblins */
+@media (max-height:480px) and (orientation:landscape){
+ #altarAidan,#altarFiona{bottom:30%}#altarLou{bottom:40%}#ag3,#ag4{bottom:32%}
+ #altarText{padding:8px 12px;bottom:2%;font-size:13px;line-height:1.45}
+}

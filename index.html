@@ -1113,6 +1113,7 @@ function loadGrowthData(){
  try{
   const saved=JSON.parse(localStorage.getItem(SAVE_KEY));if(!saved)throw 0;
   const d=EquipmentManager.migrateStarterSword(saved);
+  if(PartyManager.members.fiona&&!d.members?.fiona?.learned)delete PartyManager.members.fiona.learned;   // an older save must not inherit a spell learned later in this session (syncStoryEquipment restores it by stage)
   Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);

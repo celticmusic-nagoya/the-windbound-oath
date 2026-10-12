@@ -58,7 +58,7 @@ with sync_playwright() as p:
     # ---- altar
     ev("closeDialogue();document.querySelector('#forestScene').style.display='none'")
     ev("startAltarScene()")
-    A=ev("altarLines");ck(len(A)==30,'altar has 30 lines (%d)'%len(A))
+    A=ev("altarLines");ck(len(A)==37,'altar has 37 pages (%d)'%len(A))
     at=lambda k:[i for i,l in enumerate(A) if l.startswith(k)]
     oi=[i for i,l in enumerate(A) if l=='エイダン「……もう、目の前で誰かを失うのは嫌だ。」']
     ck(len(oi)==1,'oath line present once and unchanged (%s)'%oi)

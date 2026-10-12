@@ -80,6 +80,10 @@ with sync_playwright() as p:
     ev("storyStage=13;syncStoryEquipment()"); check(ev("EquipmentManager.get('aidan').weapon")=='oath_sword','after the Raider: oath sword')
     ev("storyStage=15;syncStoryEquipment()"); check(ev("EquipmentManager.isUnlocked()")==True and ev("Inventory.count('leather_cap')+Inventory.count('leather_armor')+Inventory.count('bronze_ring')")>=3,'after the prologue: gate open and starter gear granted once')
     n=ev("Inventory.count('leather_cap')"); ev("syncStoryEquipment()"); check(ev("Inventory.count('leather_cap')")==n,'starter gear is not granted twice')
+    # a save from the one-weapon-shop era: Aidan wore an iron sword -> it goes back to the bag, not into the void
+    ir=json.loads(json.dumps(sv)); ir['equipment']={'v':1,'state':{'aidan':{'weapon':'iron_sword'}}}; ir['inventory']['gear']={}
+    ev("storyStage=0;Inventory.reset()"); pg.evaluate("s=>localStorage.setItem(SAVE_KEY,s)",json.dumps(ir)); ev("loadGrowthData()")
+    check(ev("Inventory.count('iron_sword')")==1 and ev("EquipmentManager.get('aidan').weapon")=='father_sword','old save with Aidan wearing an iron sword: the sword returns to the bag, the story weapon is set')
     # legacy wooden sword save
     legacy=json.loads(json.dumps(sv)); legacy['equipment']={'v':1,'state':{'aidan':{'weapon':'wooden_sword'}}}; legacy['inventory']['gear']={'wooden_sword':2,'iron_sword':1}
     ev("storyStage=0"); pg.evaluate("s=>localStorage.setItem(SAVE_KEY,s)",json.dumps(legacy)); ev("loadGrowthData()")
