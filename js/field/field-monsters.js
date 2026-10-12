@@ -42,7 +42,7 @@
       wanderRadius: 140, rest: [.6, 1.6],
       alertTime: .35, engageDelay: .25, reaggro: 2, hop: 8,
       respawn: 'reenter', battle: 'forest_bat',
-      art: Object.freeze({dir: 'img/field/monsters/forest_bat/', file: 'forest_bat_idle_{n}.png', frames: 4, w: 320, h: 214, feet: 0, scale: .5, fps: 9, faces: 1, always: true, air: 34})
+      art: Object.freeze({dir: 'img/field/monsters/forest_bat/', file: 'forest_bat_idle_{n}.png', frames: 4, w: 320, h: 214, feet: 0, scale: .34, fps: 9, faces: 1, always: true, air: 24})
     }),
     // Charger: spots you, snorts (alert), digs in (windup), then dashes in a STRAIGHT line locked at the end of the windup - sidestep it.  After the dash it
     // is winded (recover), then walks home.  A wall ends the dash early.  Never chases on foot.

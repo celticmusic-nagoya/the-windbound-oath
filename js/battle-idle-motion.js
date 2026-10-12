@@ -90,7 +90,7 @@
       running=true;
       if(now-r.started>=r.steps[r.step].hold){
         r.step++;if(r.step>=r.steps.length){r.steps=profiles.get(r.assets.type)(r);r.step=0;}
-        r.from=r.frame;r.frame=r.steps[r.step].frame;r.started=now;r.transition=r.from!==r.frame;
+        r.from=r.frame;r.frame=r.steps[r.step].frame;r.started=now;r.transition=r.from!==r.frame&&r.actor!=='forest_bat';   // bat wing poses differ too much to crossfade (additive blend ghosts the wings): hard cut
       }
       draw(r,now);
     }
