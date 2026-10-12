@@ -112,3 +112,5 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 追加承認checkpoint: ユーザーの「GitHubのClaude指示を取得して積極着手」をstatusへ記録しecfcb7aでpush。remote再取得・main058cfc8を確認。優先3の文面短縮案と新規QA画像/JSONを追加。3ページの案を実DOMだけでpreviewし縦3→2行・横1行、pageerror0、原altarLines/誓い不変を確認。index等未変更/未適用、全回帰/Android未実施。STATUS: READY（提案納品、採用は要判断）。
 
 Codex N着手: work/codex-wind-dance-sim / main53180f3。status宣言の新規simと報告のみ。L/M/接触設計の再作業なし、ゲーム数値未適用。STATUS WIP。
+
+Codex Q: work/codex-q / main88ae6c0。上記statusの1部屋spawn小修正/生成元/新規回帰を担当。sy以外のmap再レイアウトなし。STATUS WIP。
