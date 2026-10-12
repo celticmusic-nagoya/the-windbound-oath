@@ -8,7 +8,7 @@ def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
 fs=sorted(glob.glob('img/field/moss/real/fiona/*.png'))
-check(len(fs)==26,'26 Fiona frames (4 idle + walk 6,6,6,4) %d'%len(fs))
+check(len(fs)==24,'24 Fiona frames (4 idle + walk 4,6,6,4) %d'%len(fs))
 bad=[]
 for f in fs:
     im=Image.open(f); a=np.array(im)[...,3]
@@ -16,7 +16,7 @@ for f in fs:
     if im.mode!='RGBA' or im.size!=(1280,832) or a.min()!=0 or ys.max()>818 or ys.max()<775: bad.append(f)
 check(not bad,'every frame is 1280x832 RGBA with real transparency and feet at the anchor line %s'%bad[:2])
 walk=[np.array(Image.open(f))[...,3]>16 for f in fs if 'walk_down' in f]
-check(len({w.tobytes() for w in walk})>=3 and len(walk)==6,'4 walk-down frames, >=3 distinct poses (delivered art)')
+check(len({w.tobytes() for w in walk})>=3 and len(walk)==4,'4 walk-down frames, >=3 distinct poses (delivered art)')
 errs=[]
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
@@ -24,7 +24,7 @@ with sync_playwright() as p:
     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
     ev=lambda s,*a: pg.evaluate(s,*a) if a else pg.evaluate(s)
     ev("devJump('forest')"); pg.wait_for_function("MossForest.active",timeout=20000); pg.wait_for_timeout(1500); ev("closeDialogue()")
-    check(ev("document.querySelectorAll('#forestFiona img').length")==26 and ev("document.querySelector('#forestFiona').classList.contains('fiona-sprite')"),'Fiona sprite mounted, placeholder box hidden')
+    check(ev("document.querySelectorAll('#forestFiona img').length")==24 and ev("document.querySelector('#forestFiona').classList.contains('fiona-sprite')"),'Fiona sprite mounted, placeholder box hidden')
     vis=lambda: ev("[...document.querySelectorAll('#forestFiona img')].filter(i=>!i.hidden).map(i=>i.src.split('/').pop())")
     check(vis()==['fiona_idle_down.png'] or 'idle' in str(vis()),'idle frame while standing %s'%vis())
     f0=ev("MossForest.feet"); ev("MossForest.goFeet(%d,%d)"%(f0['x']+500,f0['y']))

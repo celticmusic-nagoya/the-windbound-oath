@@ -28,3 +28,7 @@ body:not(.developmentMode) #devBuildIndicator{display:none!important}
 #devArena select,#devArena button{font-size:12px;padding:6px 8px;background:#16302a;color:#eee3cc;border:1px solid #c5a45b88;border-radius:5px}
 #devArena label{font-size:12px;color:#d9cfae}
 #devArena small{display:block;color:#bdb394;font-size:11px;margin-top:4px}
+/* Battle sprites carry their own drop-shadow: the transparent .battler box must not cast a rectangular halo, and Aidan's decorative glint streak is removed */
+body.normalBattleMode .v2Unit .battler,body.normalBattleMode #bAidan2,body.normalBattleMode #bFiona2,body.normalBattleMode #bGob{box-shadow:none!important}
+body.normalBattleMode #bAidan2:after{content:none!important;display:none!important}
+body.normalBattleMode #bFiona2:after{content:none!important;display:none!important}

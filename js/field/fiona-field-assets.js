@@ -1,13 +1,13 @@
 /* Fiona field frames (tools/field/install_hero_frames.py or make_fiona.py): 4 directions x (idle + walk). Same shape as AidanFieldAssets.frames. */
 window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
  "fiona_idle_down": {
-  "path": "img/field/moss/real/fiona/fiona_idle_down.png?v=8e0b6c35",
+  "path": "img/field/moss/real/fiona/fiona_idle_down.png?v=5dc58f6f",
   "width": 1280,
   "height": 832,
   "bounds": [
-   348,
+   396,
    140,
-   429,
+   462,
    650
   ],
   "anchor": [
@@ -17,14 +17,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_down_01": {
-  "path": "img/field/moss/real/fiona/fiona_walk_down_01.png?v=e439c057",
+  "path": "img/field/moss/real/fiona/fiona_walk_down_01.png?v=9cdbeb0a",
   "width": 1280,
   "height": 832,
   "bounds": [
-   348,
-   210,
-   350,
-   580
+   394,
+   106,
+   465,
+   684
   ],
   "anchor": [
    640,
@@ -33,13 +33,13 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_down_02": {
-  "path": "img/field/moss/real/fiona/fiona_walk_down_02.png?v=8e0b6c35",
+  "path": "img/field/moss/real/fiona/fiona_walk_down_02.png?v=5dc58f6f",
   "width": 1280,
   "height": 832,
   "bounds": [
-   348,
+   396,
    140,
-   429,
+   462,
    650
   ],
   "anchor": [
@@ -49,14 +49,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_down_03": {
-  "path": "img/field/moss/real/fiona/fiona_walk_down_03.png?v=a544c40d",
+  "path": "img/field/moss/real/fiona/fiona_walk_down_03.png?v=01b98746",
   "width": 1280,
   "height": 832,
   "bounds": [
-   348,
-   144,
-   404,
-   646
+   387,
+   119,
+   472,
+   671
   ],
   "anchor": [
    640,
@@ -65,46 +65,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_down_04": {
-  "path": "img/field/moss/real/fiona/fiona_walk_down_04.png?v=91e521fe",
+  "path": "img/field/moss/real/fiona/fiona_walk_down_04.png?v=a4ce3fee",
   "width": 1280,
   "height": 832,
   "bounds": [
-   348,
-   123,
-   387,
-   667
-  ],
-  "anchor": [
-   640,
-   790
-  ],
-  "scale": 0.1
- },
- "fiona_walk_down_05": {
-  "path": "img/field/moss/real/fiona/fiona_walk_down_05.png?v=af13869e",
-  "width": 1280,
-  "height": 832,
-  "bounds": [
-   348,
-   138,
-   412,
-   652
-  ],
-  "anchor": [
-   640,
-   790
-  ],
-  "scale": 0.1
- },
- "fiona_walk_down_06": {
-  "path": "img/field/moss/real/fiona/fiona_walk_down_06.png?v=3488c356",
-  "width": 1280,
-  "height": 832,
-  "bounds": [
-   348,
-   130,
-   375,
-   660
+   393,
+   117,
+   465,
+   673
   ],
   "anchor": [
    640,
@@ -113,7 +81,7 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_idle_left": {
-  "path": "img/field/moss/real/fiona/fiona_idle_left.png?v=13b04a08",
+  "path": "img/field/moss/real/fiona/fiona_idle_left.png?v=5082c3b4",
   "width": 1280,
   "height": 832,
   "bounds": [
@@ -129,7 +97,7 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_left_01": {
-  "path": "img/field/moss/real/fiona/fiona_walk_left_01.png?v=13b04a08",
+  "path": "img/field/moss/real/fiona/fiona_walk_left_01.png?v=5082c3b4",
   "width": 1280,
   "height": 832,
   "bounds": [
@@ -145,14 +113,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_left_02": {
-  "path": "img/field/moss/real/fiona/fiona_walk_left_02.png?v=35dd0321",
+  "path": "img/field/moss/real/fiona/fiona_walk_left_02.png?v=33d668a1",
   "width": 1280,
   "height": 832,
   "bounds": [
-   555,
-   188,
+   502,
+   187,
    331,
-   602
+   603
   ],
   "anchor": [
    640,
@@ -161,14 +129,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_left_03": {
-  "path": "img/field/moss/real/fiona/fiona_walk_left_03.png?v=586138bb",
+  "path": "img/field/moss/real/fiona/fiona_walk_left_03.png?v=9b067a4f",
   "width": 1280,
   "height": 832,
   "bounds": [
-   555,
-   201,
+   530,
+   202,
    304,
-   589
+   588
   ],
   "anchor": [
    640,
@@ -177,11 +145,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_left_04": {
-  "path": "img/field/moss/real/fiona/fiona_walk_left_04.png?v=a7b7971e",
+  "path": "img/field/moss/real/fiona/fiona_walk_left_04.png?v=0800ecb5",
   "width": 1280,
   "height": 832,
   "bounds": [
-   555,
+   489,
    186,
    333,
    604
@@ -193,11 +161,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_left_05": {
-  "path": "img/field/moss/real/fiona/fiona_walk_left_05.png?v=e010431d",
+  "path": "img/field/moss/real/fiona/fiona_walk_left_05.png?v=83055a32",
   "width": 1280,
   "height": 832,
   "bounds": [
-   555,
+   468,
    195,
    378,
    595
@@ -209,11 +177,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_left_06": {
-  "path": "img/field/moss/real/fiona/fiona_walk_left_06.png?v=3a1a3bc9",
+  "path": "img/field/moss/real/fiona/fiona_walk_left_06.png?v=0a35386e",
   "width": 1280,
   "height": 832,
   "bounds": [
-   555,
+   530,
    191,
    303,
    599
@@ -225,7 +193,7 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_idle_right": {
-  "path": "img/field/moss/real/fiona/fiona_idle_right.png?v=ed2c665c",
+  "path": "img/field/moss/real/fiona/fiona_idle_right.png?v=625aab9e",
   "width": 1280,
   "height": 832,
   "bounds": [
@@ -241,7 +209,7 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_right_01": {
-  "path": "img/field/moss/real/fiona/fiona_walk_right_01.png?v=ed2c665c",
+  "path": "img/field/moss/real/fiona/fiona_walk_right_01.png?v=625aab9e",
   "width": 1280,
   "height": 832,
   "bounds": [
@@ -257,14 +225,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_right_02": {
-  "path": "img/field/moss/real/fiona/fiona_walk_right_02.png?v=10de9400",
+  "path": "img/field/moss/real/fiona/fiona_walk_right_02.png?v=a438a831",
   "width": 1280,
   "height": 832,
   "bounds": [
-   461,
-   188,
+   448,
+   187,
    331,
-   602
+   603
   ],
   "anchor": [
    640,
@@ -273,14 +241,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_right_03": {
-  "path": "img/field/moss/real/fiona/fiona_walk_right_03.png?v=672e5c48",
+  "path": "img/field/moss/real/fiona/fiona_walk_right_03.png?v=82fec29f",
   "width": 1280,
   "height": 832,
   "bounds": [
-   461,
-   201,
+   447,
+   202,
    304,
-   589
+   588
   ],
   "anchor": [
    640,
@@ -289,11 +257,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_right_04": {
-  "path": "img/field/moss/real/fiona/fiona_walk_right_04.png?v=2c0dcff7",
+  "path": "img/field/moss/real/fiona/fiona_walk_right_04.png?v=31057ef0",
   "width": 1280,
   "height": 832,
   "bounds": [
-   461,
+   457,
    186,
    333,
    604
@@ -305,11 +273,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_right_05": {
-  "path": "img/field/moss/real/fiona/fiona_walk_right_05.png?v=1af34c21",
+  "path": "img/field/moss/real/fiona/fiona_walk_right_05.png?v=9c7b4493",
   "width": 1280,
   "height": 832,
   "bounds": [
-   461,
+   435,
    195,
    378,
    595
@@ -321,11 +289,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_right_06": {
-  "path": "img/field/moss/real/fiona/fiona_walk_right_06.png?v=1bf22c86",
+  "path": "img/field/moss/real/fiona/fiona_walk_right_06.png?v=b432389d",
   "width": 1280,
   "height": 832,
   "bounds": [
-   462,
+   446,
    191,
    303,
    599
@@ -337,11 +305,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_idle_up": {
-  "path": "img/field/moss/real/fiona/fiona_idle_up.png?v=339f4b2b",
+  "path": "img/field/moss/real/fiona/fiona_idle_up.png?v=01672507",
   "width": 1280,
   "height": 832,
   "bounds": [
-   440,
+   439,
    197,
    426,
    593
@@ -353,11 +321,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_up_01": {
-  "path": "img/field/moss/real/fiona/fiona_walk_up_01.png?v=339f4b2b",
+  "path": "img/field/moss/real/fiona/fiona_walk_up_01.png?v=01672507",
   "width": 1280,
   "height": 832,
   "bounds": [
-   440,
+   439,
    197,
    426,
    593
@@ -369,11 +337,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_up_02": {
-  "path": "img/field/moss/real/fiona/fiona_walk_up_02.png?v=6f8d46de",
+  "path": "img/field/moss/real/fiona/fiona_walk_up_02.png?v=47a58ef3",
   "width": 1280,
   "height": 832,
   "bounds": [
-   440,
+   456,
    227,
    391,
    563
@@ -385,11 +353,11 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_up_03": {
-  "path": "img/field/moss/real/fiona/fiona_walk_up_03.png?v=d34d6ac1",
+  "path": "img/field/moss/real/fiona/fiona_walk_up_03.png?v=1a9f4e05",
   "width": 1280,
   "height": 832,
   "bounds": [
-   440,
+   443,
    188,
    429,
    602
@@ -401,14 +369,14 @@ window.FionaFieldAssets = Object.freeze({frames: Object.freeze({
   "scale": 0.1
  },
  "fiona_walk_up_04": {
-  "path": "img/field/moss/real/fiona/fiona_walk_up_04.png?v=54c5145a",
+  "path": "img/field/moss/real/fiona/fiona_walk_up_04.png?v=f271247b",
   "width": 1280,
   "height": 832,
   "bounds": [
-   440,
-   190,
+   445,
+   189,
    426,
-   600
+   601
   ],
   "anchor": [
    640,
