@@ -202,7 +202,7 @@
     if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
     S.x=spot.x;S.y=spot.y;S.fl=0;S.trail=[];
-    if(S.forest.height){const h=S.forest.height;h.setLevel(Number.isFinite(options.level)?options.level:h.derive(S.x,S.y));h.commit(S.x,S.y);S.fl=h.level;}else{el.player.style.transform='';if(fsp.ready)el.fiona.style.transform='';}   // height maps (prototype): the level comes with the position; a position saved without one falls back to derive()
+    if(S.forest.height){const h=S.forest.height;{const spL=(map.spawns.points[spawnId||map.spawns.default]||{}).level;h.setLevel(Number.isFinite(options.level)?options.level:Number.isFinite(spL)&&options.x==null?spL:h.derive(S.x,S.y));}h.commit(S.x,S.y);S.fl=h.level;}else{el.player.style.transform='';if(fsp.ready)el.fiona.style.transform='';}   // height maps (prototype): the level comes with the position; a position saved without one falls back to derive()
     spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
     S.keys.clear();render();
     if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
@@ -256,13 +256,24 @@
     return null;
   }
 
+  // ---------- height-level contacts ----------
+  // Maps without a height spec never reach FieldHeight: lvOk is true and every contact behaves exactly as before.
+  // On height maps an entity belongs to `level` (default 0) or any of `levels`; it only reacts while the player stands on that level.
+  function lvOk(e){
+    const h=S.forest&&S.forest.height;if(!h||!e)return true;
+    const cur=h.level;
+    if(Array.isArray(e.levels))return e.levels.includes(cur);
+    return (Number.isFinite(e.level)?e.level:0)===cur;
+  }
   // ---------- actions ----------
   function fireEvent(z){
+    if(!lvOk(z))return;   // wrong level: consume nothing (no once-flag, no hook)
     if(z.once){if(S.fired.has(z.id))return;S.fired.add(z.id);}
     if(hooks.onEvent)hooks.onEvent(z,S.map);
   }
   function openTreasure(t){
     const herb=t.kind==='herb';
+    if(!lvOk(t))return;
     if(S.opened.has(t.id)){toast(herb?'ここの草は、もう摘んでしまった。':'宝箱は空だ。');return;}
     if(hooks.canOpenTreasure&&hooks.canOpenTreasure(t)===false)return;   // story-gated chests stay closed (and unclaimed)
     S.opened.add(t.id);
@@ -270,7 +281,7 @@
     if(hooks.onTreasure)hooks.onTreasure(t,S.map);
   }
   function startBattle(sy){
-    if(!sy.alive||S.busy)return;
+    if(!sy.alive||S.busy||!lvOk(sy))return;
     S.target=null;FieldNavigation.cancel();S.active=false;
     if(hooks.onSymbol)hooks.onSymbol(sy);
   }
@@ -284,13 +295,14 @@
   function interactAt(wx,wy){
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
     for(const sy of S.symbols){
-      if(!sy.alive)continue;
+      if(!sy.alive||!lvOk(sy))continue;
       if(dist(wx,wy,sy.x,sy.y-30)<=75){
         if(dist(fx,fy,sy.x,sy.y)>(sy.interactRadius||210)){toast('異形のゴブリンがこちらを警戒している……。');return true;}
         startBattle(sy);return true;
       }
     }
     for(const t of S.map.treasurePoints||[]){
+      if(!lvOk(t))continue;
       if(dist(wx,wy,t.x,t.y-18)<=55){
         if(dist(fx,fy,t.x,t.y)>190){toast(t.kind==='herb'?'草むらには、もう少し近づく必要がある。':'宝箱には、もう少し近づく必要がある。');return true;}
         openTreasure(t);return true;
@@ -298,7 +310,7 @@
     }
     let best=null,bd=Infinity;   // overlapping zones: the one whose centre is nearest the tap wins (not the first in the list)
     for(const z of S.map.eventZones||[]){
-      if(z.type!=='interact'||!reqOk(z))continue;
+      if(z.type!=='interact'||!reqOk(z)||!lvOk(z))continue;
       const sh=zoneShape(z);if(!sh||!inShape(sh,wx,wy,14))continue;   // tight: a tap that merely passes near a zone must still walk
       const c=centerOf(sh),d=dist(wx,wy,c.x,c.y);
       if(d<bd){bd=d;best={z,c};}
@@ -406,15 +418,15 @@
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
     for(const t of S.map.transitions||[]){
       if(!t.enabled)continue;
-      const inside=inShape(t.rect,fx,fy);
+      const inside=inShape(t.rect,fx,fy)&&lvOk(t);
       if(inside&&!S.transitionLatch){S.transitionLatch=true;S.inside.add(t.id);transitionTo(t);return;}
       if(!inside&&S.inside.has(t.id)){S.inside.delete(t.id);}
     }
-    if(![...S.map.transitions||[]].some(t=>t.enabled&&inShape(t.rect,fx,fy)))S.transitionLatch=false;
+    if(![...S.map.transitions||[]].some(t=>t.enabled&&inShape(t.rect,fx,fy)&&lvOk(t)))S.transitionLatch=false;
     for(const z of S.map.eventZones||[]){
       if(!reqOk(z))continue;
       const sh=z.shape;if(!sh)continue;
-      const inside=inShape(sh,fx,fy),was=S.inside.has(z.id);
+      const inside=inShape(sh,fx,fy)&&lvOk(z),was=S.inside.has(z.id);
       if(inside&&!was){
         S.inside.add(z.id);
         if(z.type==='rest')S.zones.rest=z.id;else if(z.type==='ambienceShift')S.zones.ambience=z.id;
@@ -426,7 +438,7 @@
     }
     let near=false;
     for(const sy of S.symbols){
-      if(!sy.alive)continue;
+      if(!sy.alive||!lvOk(sy))continue;
       if(dist(fx,fy,sy.x,sy.y)<=(sy.touchRadius||90)){near=true;if(!S.battleLatch){S.battleLatch=true;startBattle(sy);return;}}
     }
     if(!near)S.battleLatch=false;
