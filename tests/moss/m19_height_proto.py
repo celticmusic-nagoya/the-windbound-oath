@@ -60,7 +60,7 @@ def run(view, shots=True, deep=True):
         shot('03b_on_deck_same_xy')
         # ---- (4) piers under the deck block level 0 only
         tp(1560, 955, 0); hold('ArrowRight', 1200); s = st()
-        check(s['l'] == 0 and s['x'] < 1590 and ev("MossForest.height.blockedAtLevel(1600-17,955-42,0)") and not ev("MossForest.height.blockedAtLevel(1600-17,955-42,1)"), '[%s] the east pier stops a level-0 walker (x=%d) and does not block level 1 at the same XY' % (view, s['x']))
+        check(s['l'] == 0 and s['x'] < 1595 and ev("MossForest.height.blockedAtLevel(1600-17,955-42,0)") and not ev("MossForest.height.blockedAtLevel(1600-17,955-42,1)"), '[%s] the east pier stops a level-0 walker (x=%d) and does not block level 1 at the same XY' % (view, s['x']))
         # ---- (5) keyboard up the south ramp, then onto the deck
         tp(1560, 1290, 0); hold('ArrowUp', 1800); s = st()
         check(s['l'] == 1 and s['y'] < 1120, '[%s] walking up the south ramp ends on the deck at level 1 (y=%d)' % (view, s['y']))

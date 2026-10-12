@@ -82,8 +82,8 @@
       return ok[ok.length - 1];
     }
     // Level reached at the end of a straight segment, following the connector rules; -1 if blocked on the way.
-    function segment(a, la, b) {
-      const n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 2));
+    function segment(a, la, b, step = 2) {
+      const n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / step));
       let l = la;
       for (let i = 1; i <= n; i++) {
         const x = a.x + (b.x - a.x) * i / n, y = a.y + (b.y - a.y) * i / n;
@@ -94,7 +94,7 @@
     }
     // Level-aware A*: nodes are (grid cell, level). Smoothing keeps a vertex only if the same level chain is reproduced.
     function plan(start, goal, opts = {}) {
-      const grid = opts.grid || 16, maxNodes = opts.maxNodes || 60000, W = (opts.width || 2400), Hh = (opts.height || 1600);
+      const grid = opts.grid || 32, maxNodes = opts.maxNodes || 60000, W = (opts.width || 2400), Hh = (opts.height || 1600);
       const cols = Math.floor(W / grid) + 1, rows = Math.floor(Hh / grid) + 1, L = maxLevel + 1;
       const t0 = performance.now(), la = st.level, lg = goal.level == null ? 0 : goal.level;
       const pt = id => { const c = Math.floor(id / L); return { x: (c % cols) * grid, y: Math.floor(c / cols) * grid, l: id % L }; };
@@ -108,7 +108,7 @@
       const sx = Math.round(start.x / grid), sy = Math.round(start.y / grid);
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
         const cx = sx + dx, cy = sy + dy; if (cx < 0 || cy < 0 || cx >= cols || cy >= rows) continue;
-        const p = { x: cx * grid, y: cy * grid }, l = segment(start, la, p); if (l < 0) continue;
+        const p = { x: cx * grid, y: cy * grid }, l = segment(start, la, p, 4); if (l < 0) continue;
         const id = idOf(cx, cy, l), g = Math.hypot(p.x - start.x, p.y - start.y), n = { id, g, f: g + heur(p), parent: null };
         if (!nodes.has(id) || nodes.get(id).g > g) { nodes.set(id, n); push(n); }
       }
@@ -116,17 +116,17 @@
       while (heap.length && expanded < maxNodes) {
         const n = pop(); if (nodes.get(n.id) !== n || n.closed) continue; n.closed = true; expanded++;
         const p = pt(n.id);
-        if (heur(p) <= grid * 2 && segment(p, p.l, goal) === lg) { found = n; break; }
+        if (heur(p) <= grid * 2 && segment(p, p.l, goal, 4) === lg) { found = n; break; }
         const cx = Math.floor(n.id / L) % cols, cy = Math.floor(Math.floor(n.id / L) / cols);
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
           if (!dx && !dy) continue; const nx = cx + dx, ny = cy + dy; if (nx < 0 || ny < 0 || nx >= cols || ny >= rows) continue;
-          const q = { x: nx * grid, y: ny * grid }, l = segment(p, p.l, q); if (l < 0) continue;
+          const q = { x: nx * grid, y: ny * grid }, l = segment(p, p.l, q, 6); if (l < 0) continue;   // coarse 6px sampling while expanding; smoothing below re-checks at 2px
           const id = idOf(nx, ny, l), other = nodes.get(id), g = n.g + Math.hypot(dx, dy) * grid;
           if (other && (other.closed || other.g <= g)) continue;
           const nn = { id, g, f: g + heur(q), parent: n }; nodes.set(id, nn); push(nn);
         }
       }
-      if (!found) return { path: null, expanded, ms: performance.now() - t0 };
+      if (!found) return grid > 16 ? plan(start, goal, { ...opts, grid: grid / 2 }) : { path: null, expanded, ms: performance.now() - t0 };
       const raw = [{ x: goal.x, y: goal.y, l: lg }]; for (let n = found; n; n = n.parent) raw.unshift(pt(n.id));
       const out = []; let from = { x: start.x, y: start.y }, fl = la;
       for (let i = 0; i < raw.length;) {

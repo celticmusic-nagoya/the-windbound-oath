@@ -90,7 +90,7 @@
     // Height maps plan over (cell, level) nodes; every other map keeps the existing 2D planner untouched.
     const planFor=(from,to,blk)=>{
       if(!H)return plan(from,to,blk);
-      const r=H.plan(from,to,{grid:16,maxNodes:60000,width:bounds.width,height:bounds.height});
+      const r=H.plan(from,to,{grid:baseGrid,maxNodes:60000,width:bounds.width,height:bounds.height});
       statistics.expanded=r.expanded;statistics.milliseconds=r.ms;statistics.plans++;return r.path;
     };
     const targetBlocked=()=>H?H.blockedAtLevel(target.x,target.y,target.level||0):staticBlocked(target.x,target.y);
