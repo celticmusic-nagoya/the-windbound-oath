@@ -63,7 +63,9 @@
       wanderRadius: 160, rest: [1, 2.5],
       alertTime: .3, engageDelay: .25, reaggro: 2, hop: 6,
       respawn: 'reenter', battle: 'goblin',
-      art: null   // no field art yet -> the generic symbol placeholder is drawn
+      // Art = the BATTLE stills (idle / attack, same 1312x1199 canvas, shrunk 2x for the field); the walk is a procedural lean-and-bob (art.sway), the touch shows the attack pose.
+      art: Object.freeze({dir: 'img/field/monsters/goblin/', file: 'goblin_{n}.png', frames: 2, w: 72, h: 66, feet: 1, scale: 1, fps: 7, faces: 1,
+        walk: [0], poses: Object.freeze({alert: [0], engage: [1]}), sway: Object.freeze({deg: 5, bob: 3, fps: 3.4})})
     })
   });
   const ACTIVE_RANGE = 1600;   // monsters farther than this from the player are not simulated
@@ -120,11 +122,14 @@
     const lift = a && a.air ? a.air + Math.sin(m.clock * 3) * 4 : 0;   // flyers hover above their ground point
     const hop = m.hopT > 0 ? -Math.abs(Math.sin(m.hopT * Math.PI)) * m.t.hop : 0;
     const flip = (a ? a.faces : 1) * m.dir < 0 ? -1 : 1;
-    const sig = Math.round(m.x) + ',' + Math.round(m.y) + ',' + Math.round(lift) + ',' + Math.round(hop * 2) + ',' + flip + ',' + src;
+    let tilt = 0, bob = 0;   // procedural walk for single-still art: lean side to side and bob once per step
+    if (a && a.sway && m.moving && m.state !== 'engaged' && m.state !== 'engage') { const ph = m.clock * a.sway.fps * Math.PI * 2; tilt = Math.sin(ph) * a.sway.deg; bob = -Math.abs(Math.sin(ph)) * a.sway.bob; }
+    const sig = Math.round(m.x) + ',' + Math.round(m.y) + ',' + Math.round(lift) + ',' + Math.round(hop * 2) + ',' + flip + ',' + src + ',' + Math.round(tilt * 4) + ',' + Math.round(bob * 4);
     if (!force && sig === m.shown) return; m.shown = sig;
     const s = m.el.style;
     s.left = Math.round(m.x - w / 2) + 'px'; s.top = Math.round(m.y - h + pad - lift) + 'px'; s.zIndex = String(Math.round(m.y));
-    s.transform = 'translateY(' + hop.toFixed(1) + 'px)' + (flip < 0 ? ' scaleX(-1)' : '');
+    s.transformOrigin = '50% 100%';
+    s.transform = 'translateY(' + (hop + bob).toFixed(1) + 'px)' + (tilt ? ' rotate(' + tilt.toFixed(1) + 'deg)' : '') + (flip < 0 ? ' scaleX(-1)' : '');
   }
   function face(m, tx) { if (Math.abs(tx - m.x) > .5) m.dir = tx > m.x ? 1 : -1; }
   // One movement step toward (gx,gy) through the real collision; returns the distance actually travelled.
