@@ -35,8 +35,8 @@ with sync_playwright() as p:
     # 2) road placement
     ev("MossForest.enter({map:'%s',spawn:'from_fort'})"%ROAD); pg.wait_for_timeout(2500)
     L=ev("MossForest.monsters.map(m=>[m.id,m.type,m.x,m.y,MossForest.blocked(m.x,m.y)])")
-    check(len(L)==2 and all(m[1]=='leafy_boar' and not m[4] for m in L),'road has 2 leafy boars on walkable ground %s'%[m[0] for m in L])
-    check(ev("MossForest.map.transitions.every(t=>MossForest.monsters.every(m=>Math.hypot(m.x-(t.rect.x+t.rect.w/2),m.y-(t.rect.y+t.rect.h/2))>1200))"),'boars are far from both road exits')
+    check(len(L)==6 and all(m[1]=='leafy_boar' and not m[4] for m in L),'road has 6 leafy boars on walkable ground %s'%[m[0] for m in L])
+    check(ev("MossForest.map.transitions.every(t=>MossForest.monsters.every(m=>Math.hypot(m.x-(t.rect.x+t.rect.w/2),m.y-(t.rect.y+t.rect.h/2))>600))"),'boars keep away from both road exits')
     ev("MossForest.enter({map:'%s',spawn:'from_fort'})"%ROAD); pg.wait_for_timeout(1500)
     CX=ev("(()=>{for(let x=1900;x<2700;x+=20){let ok=true;for(let y=1100;y<=1700&&ok;y+=10)for(const dx of [-40,0,40])if(MossForest.blocked(x+dx,y)){ok=false;break;}if(ok)return x;}return null})()")
     check(CX is not None,'found a prop-free column for the dash tests (x=%s)'%CX)

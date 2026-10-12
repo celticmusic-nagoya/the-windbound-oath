@@ -70,23 +70,35 @@
   const STUCK_SECONDS = 1.2;   // a chaser that cannot make progress this long gives up
   const HOME_ARRIVE = 8;
 
-  let list = [], layer = null, ctx = null, clock = 0;
+  let list = [], layer = null, ctx = null, clock = 0, worldEl = null, frozen = false, devSeq = 0;
 
   function typeOf(def) { return Object.freeze({...(MONSTER_TYPES[def.type] || {}), ...def.tune}); }
+  function spawnRec(d) {
+    const t = typeOf(d);
+    const rec = {id: d.id, type: d.type, t, group: d.group || 1, x: d.x, y: d.y, home: [d.x, d.y], state: 'wander', sub: 'rest', wait: 1 + Math.random() * 2,
+      goal: null, dir: 1, clock: Math.random() * 3, timer: 0, noAggro: 0, chaseFrom: null, stuck: 0, el: null, frames: null, shown: ''};
+    rec.el = makeEl(rec); layer.appendChild(rec.el); list.push(rec); draw(rec, true);
+    return rec;
+  }
   function mount(map, world, context) {
     clear();
     const defs = (map && map.monsters) || [];
-    ctx = context || null;
+    ctx = context || null; worldEl = world || null; frozen = false;
     if (!defs.length || !ctx) return;
-    layer = document.createElement('div'); layer.className = 'forest-monsters'; world.appendChild(layer);
+    ensureLayer();
     for (const d of defs) {
       if (!MONSTER_TYPES[d.type] || (ctx.slain && ctx.slain.has(d.id))) continue;
-      const t = typeOf(d);
-      const rec = {id: d.id, type: d.type, t, group: d.group || 1, x: d.x, y: d.y, home: [d.x, d.y], state: 'wander', sub: 'rest', wait: 1 + Math.random() * 2,
-        goal: null, dir: 1, clock: Math.random() * 3, timer: 0, noAggro: 0, chaseFrom: null, stuck: 0, el: null, frames: null, shown: ''};
-      rec.el = makeEl(rec); layer.appendChild(rec.el); list.push(rec); draw(rec, true);
+      spawnRec(d);
     }
   }
+  function ensureLayer() { if (!layer && worldEl) { layer = document.createElement('div'); layer.className = 'forest-monsters'; worldEl.appendChild(layer); } return layer; }
+  // DEV: place one monster at runtime (DEV Monster Arena). Returns the record or null (no map mounted / unknown type).
+  function add(def) {
+    if (!ctx || !worldEl || !MONSTER_TYPES[def.type] || !ensureLayer()) return null;
+    return spawnRec({id: def.id || ('dev_' + def.type + '_' + (++devSeq)), type: def.type, x: def.x, y: def.y, group: def.group || 1, tune: def.tune});
+  }
+  function removeAll() { for (const m of list) m.el.remove(); list = []; }
+  function setFrozen(on) { frozen = Boolean(on); }
   function makeEl(m) {
     const a = m.t.art;
     if (!a) { const d = document.createElement('div'); d.className = 'forest-symbol forest-monster ph'; d.textContent = m.t.name; Object.assign(d.style, {position: 'absolute', width: '48px', height: '62px', pointerEvents: 'none'}); return d; }
@@ -182,7 +194,7 @@
     }
   }
   function update(sec) {
-    if (!list.length || !ctx) return;
+    if (!list.length || !ctx || frozen) return;
     const P = ctx.player(), now = performance.now(); clock += sec;
     for (const m of list) {
       if (m.state === 'gone') continue;
@@ -205,6 +217,6 @@
     }
     list = list.filter(m => m.state !== 'gone');
   }
-  function clear() { list = []; ctx = null; if (layer) { layer.remove(); layer = null; } }
-  window.FieldMonsters = Object.freeze({MONSTER_TYPES, mount, clear, update, resolve, get list() { return list; }});
+  function clear() { list = []; ctx = null; worldEl = null; if (layer) { layer.remove(); layer = null; } }
+  window.FieldMonsters = Object.freeze({MONSTER_TYPES, mount, clear, update, resolve, add, removeAll, setFrozen, get frozen() { return frozen; }, get list() { return list; }});
 })();

@@ -21,3 +21,10 @@ body.developmentMode #devPanel:not([style]),body.developmentMode #devPanel[style
 #devBuildIndicator{position:fixed;left:84px;top:94px;z-index:10100;pointer-events:none;font-size:10px;color:#d6c48e;letter-spacing:.03em;background:#0b171bcc;padding:2px 5px;border-radius:3px}
 body:not(.developmentMode) #devBuildIndicator{display:none!important}
 @media(orientation:landscape) and (max-height:520px){#devBuildIndicator{top:70px}}
+/* DEV Monster Arena panel */
+#devArena{border:1px solid #c5a45b66;border-radius:8px;padding:8px 10px;margin:8px 0 12px;background:#10201c}
+#devArena h4{margin:0 0 6px;font-size:13px;color:#e8cf94}
+#devArena .devArenaRow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:5px 0}
+#devArena select,#devArena button{font-size:12px;padding:6px 8px;background:#16302a;color:#eee3cc;border:1px solid #c5a45b88;border-radius:5px}
+#devArena label{font-size:12px;color:#d9cfae}
+#devArena small{display:block;color:#bdb394;font-size:11px;margin-top:4px}

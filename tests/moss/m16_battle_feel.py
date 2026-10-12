@@ -18,8 +18,8 @@ with sync_playwright() as p:
         c={}
         for t,bl in L: c[t]=c.get(t,0)+1
         return c,any(bl for _,bl in L)
-    c,bl=census('moss_forest_01_sunlit_path'); check(c=={'moss_slime':2,'leafy_boar':2,'goblin':2} and not bl,'A1: slime2 boar2 goblin2, none blocked %s'%c)
-    c,bl=census('moss_forest_02_mossy_ravine'); check(c=={'moss_slime':2,'leafy_boar':2,'forest_bat':2} and not bl,'A2: slime2 boar2 bat2, none blocked %s'%c)
+    c,bl=census('moss_forest_01_sunlit_path'); check(c=={'moss_slime':6,'leafy_boar':6,'goblin':6} and not bl,'A1: slime6 boar6 goblin6, none blocked %s'%c)
+    c,bl=census('moss_forest_02_mossy_ravine'); check(c=={'moss_slime':6,'leafy_boar':6,'forest_bat':6,'goblin':6} and not bl,'A2: slime6 boar6 bat6 goblin6, none blocked %s'%c)
     # --- goblin contact -> battle (fieldGob), reward id accepted
     ev("MossForest.enter({map:'moss_forest_01_sunlit_path'})"); pg.wait_for_timeout(1500)
     ev("MossForest.teleportFeet(MossForest.monsters.find(m=>m.type==='goblin').x+10,MossForest.monsters.find(m=>m.type==='goblin').y+60)"); pg.wait_for_timeout(2500)
