@@ -24,10 +24,10 @@ KNOWN={'tests/moss/m13_elder_attack_text.py':r'peaceful elder cycles to the morn
 
 def classification(path, code, output):
     fails=re.findall(r'^FAIL .*$',output,re.MULTILINE)
-    counts=[int(n) for n in re.findall(r'^FAILS\s+(\d+)\s*$',output,re.MULTILINE)]
+    counts=[int(n) for n in re.findall(r'^FAILS\s+(\d+)(?=\s|$)',output,re.MULTILINE)]
     bad=code!=0 or bool(fails) or any(counts)
     if not bad:return '合格',fails,counts
-    infrastructure=code in (124,125,126,127) or 'Traceback (most recent call last)' in output or 'PAGEERR' in output
+    infrastructure=code in (124,125,126,127) or 'Traceback (most recent call last)' in output or 'PAGEERR' in output or bool(re.search(r'(?:errors|errs|CONSOLE)\s+\[(?!\s*\])',output))
     known=KNOWN.get(path)
     if known and fails and all(re.search(known,line)for line in fails) and not infrastructure and (not counts or max(counts)==len(fails)):
         return 'main既存',fails,counts
@@ -74,7 +74,7 @@ def report(out,meta,rows):
 def self_test():
     assert classification('tests/x.py',0,'FAIL wrong\nFAILS 1\n')[0]=='新規'
     assert classification('tests/x.py',0,'FAILS 0\nok\n')[0]=='合格'
-    assert classification('tests/x.py',0,'FAILS 2\n')[0]=='新規'
+    assert classification('tests/x.py',0,'FAILS 2 hidden context\n')[0]=='新規'
     assert classification('tests/moss/m4_e2e.py',0,'FAIL Fiona stage-9 line (elder/Emma warning wording)\nFAILS 1\n')[0]=='main既存'
     assert classification('tests/moss/m4_e2e.py',124,'FAIL Fiona stage-9 line (elder/Emma warning wording)\n')[0]=='新規'
     assert classification('tests/moss/m13_elder_attack_text.py',0,'FAIL unrelated\n')[0]=='新規'
@@ -88,10 +88,10 @@ def main():
     parser.add_argument('--timeout',type=int,default=int(os.environ.get('TEST_TIMEOUT_SECONDS','900')))
     parser.add_argument('--out',type=Path,default=ROOT/'docs/qa/regression-20261013')
     parser.add_argument('--self-test',action='store_true')
-    parser.add_argument('--child');parser.add_argument('--root',type=Path);parser.add_argument('--extra',nargs='*',default=[])
+    parser.add_argument('--child');parser.add_argument('--root',type=Path);parser.add_argument('--extra-json',default='[]')
     args=parser.parse_args()
     if args.self_test:self_test();return
-    if args.child:child(args.root,args.child,args.port,args.extra);return
+    if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     base=subprocess.check_output(['git','rev-parse','origin/main'],cwd=ROOT,text=True).strip()
@@ -129,7 +129,7 @@ def main():
                             urllib.request.urlopen(f'http://127.0.0.1:{args.port}/index.html',timeout=.5).close();ready=True;break
                         except OSError:time.sleep(.1)
                     if not ready:raise RuntimeError('Owned server failed readiness')
-                    command=['node',path]if path.endswith('.test.js')else[sys.executable,'-u',str(Path(__file__).resolve()),'--child',path,'--root',str(snapshot),'--port',str(args.port),'--extra']+extra
+                    command=['node',path]if path.endswith('.test.js')else[sys.executable,'-u',str(Path(__file__).resolve()),'--child',path,'--root',str(snapshot),'--port',str(args.port),'--extra-json',json.dumps(extra)]
                     process=subprocess.Popen(command,cwd=snapshot,env=env,stdout=log,stderr=log,start_new_session=True)
                     try:code=process.wait(timeout=args.timeout)
                     except subprocess.TimeoutExpired:stop(process);code=124;log.write('\nTIMEOUT: test exceeded configured limit\n')
