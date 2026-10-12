@@ -63,7 +63,22 @@ with sync_playwright() as p:
     check(ev("window.__starts")==0 and not ev("document.body.classList.contains('normalBattleMode')"),'no battle while the player only approached and left')
     check(ev("window.__bad")==0,'monster never stood inside a blocker')
     # ---- 5) the player can outrun a chasing slime (walk away at normal pace)
-    put(round(h[0]-200),round(h[1])); pg.wait_for_timeout(1500); ev("MossForest.goFeet(%d,%d)"%(h[0]-700,h[1]-100)); pg.wait_for_timeout(5000)
+    # The earlier wander position is random; its x-700/y-100 destination
+    # can land inside scenery. Choose a clear straight retreat from the current
+    # slime position, then test the same normal movement and 5-second gap.
+    escape=ev("""(()=>{const m=MossForest.monsters.find(m=>m.id==='a1_slime_hollow');
+      for(let i=0;i<72;i++){const a=i*Math.PI/36,c=Math.cos(a),s=Math.sin(a);
+        const point=r=>[Math.round(m.x+r*c),Math.round(m.y+r*s)];let clear=true;
+        for(let r=200;r<=700;r+=4){const [x,y]=point(r);if(MossForest.blocked(x,y)){clear=false;break;}}
+        if(clear)return {start:point(200),goal:point(700)};
+      }return null;})()""")
+    check(escape is not None,'escape fixture has a clear 500px retreat')
+    if escape is None: raise RuntimeError('No walkable slime escape fixture')
+    print('   escape fixture',escape)
+    put(*escape['start']); pg.wait_for_timeout(1500)
+    check(ev("MossForest.monsters.find(m=>m.id==='a1_slime_hollow').state")== 'chase','slime is chasing before the escape walk')
+    check(ev("([x,y])=>MossForest.goFeet(x,y)",escape['goal']),'escape movement accepted')
+    pg.wait_for_timeout(5000)
     d=ev("window.__rec.filter(x=>x.id==='a1_slime_hollow').slice(-1)[0].d"); check(d>350 and ev("window.__starts")==0,'player outruns the slime (gap %.0f)'%d)
     # ---- 6) contact -> exactly one battle
     put(round(h[0]-40),round(h[1])); pg.wait_for_timeout(250)

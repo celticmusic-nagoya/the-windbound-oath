@@ -15,7 +15,7 @@ STATUS: WIP
 
 `tests/run_all.sh` がリポジトリ直下の `python3 -m http.server 8765` を起動/停止し、指定順に1本ずつ実行。sealを含む各プロセスの上限600秒。Playwright 1.62.0 / system Chromium 154、Python 3.12。初回8本は7合格、m15bの `player outruns the slime` が1失敗（gap43）。browserテストのconsole/pageerrorはすべて0、CLIのm9_hero_intakeはブラウザを使用せずFAILS0。
 
-納品前main `0372ef6` のm15bは単独合格（gap655）。納品後 `ce2b366` の同時撮影なし単独再実行は同じ項目で失敗（gap268）。未解決のまま成功扱いにはしない。AI/移動/navigation/A1マップは納品mergeで変更されておらず、外部診断スクリプトでdestinationの到達可否・移動量・fpsを調査中。テストの固定5秒待機を変更するかは原因確認後に判断する。
+納品前main `0372ef6` のm15bは単独合格（gap655）。納品後 `ce2b366` の同時撮影なし単独再実行は同じ項目で失敗（gap268）。未解決のまま成功扱いにはしない。AI/移動/navigation/A1マップは納品mergeで変更されておらず、外部診断で移動先が `blocked-destination`、goFeet=false、足元が変わらず接触戦闘を開始することを再現。15秒待っても移動しない。徘徊中に取ったランダム位置から計算した座標が障害物内だった。納品前後のA1マップ/移動/navigation/AIは完全同一で、素材mergeが衝突や速度を変えた失敗ではない。m15bのテスト入力だけ修正し、現在のスライム位置から衝突なしの500px直線退避を選択、追跡状態とgoFeet受付を明示確認。元の5秒待機・350px超/戦闘0のassertionを維持する。
 
 ## 見た目
 
