@@ -62,3 +62,8 @@ N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析
 作業中の追加方針（ユーザー事前承認）: 各成果物の完了時にremote指示をfetchし、現在作業が終わったら追加指示へ続けて着手する。現N→O→P→Qの順序を維持しRを後続、未完/新規は本statusへ登録する。
 
 R着手: work/codex-height-contact-impl-review / main88ae6c0。対象origin/feat/height-contact-levels / 5c33f9f（mainに同コード統合済み）。新規docs/qa/height-contact-impl-review.mdと読取検証logsのみ。コード/マップ/既存testsは変更しない。m22と高さ無し経路・field-monsters/walkers・pending/表示をレビュー。N/O/P/Qは納品済み(Q306ef3a)。
+
+
+R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/動く敵0の戦闘を再現。NPC goalのlevel欠落をAPIで確認、pending/walkers/試験fixture不足も指摘。コード未編集。docs/qa/height-contact-impl-review.mdと証跡を納品。
+今回の納品: N2e9bb42（Claudeがmain88ae6c0へ統合）、O56f6050（旧531対象57合格/既存2/新規0）、P21a0ee9（dummy検品、実素材未受領）、Q306ef3a（家02spawn限定修正、関連検証合格）、Rは本branchの最新commit参照。全件最終main回帰/Androidは未実施。
+区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
