@@ -102,3 +102,7 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 ブランチ `work/codex-sword-setting`、基準main `0d48324`、引継 `docs/codex-sword-handoff` (`1b3b248`)。担当は本CLAIMSと `docs/handoff/codex-sword-proposal-20261012.md`、同差分 `.patch`。Gは調査のみ、Hは未適用の差分案として提示。Claude所有のindex.htmlは直接編集せず差分で共有。高さ・採用素材・シナリオ・セーブ形式は変更しない。mainへマージしない。STATUS: WIP。
 
 剣設定checkpoint: G影響表とHの未適用patchを完成。対象6ファイルの案をリポジトリ外で展開し、装備テスト2/2合格・console0、旧木剣セーブ移行/原本維持/再保存冪等性/v30維持を確認。git apply --checkとNode移行検証合格。仮IDfather_sword、補正0、物語/高さ/採用素材/セーブ形式は変更なし。main 0d48324は維持。STATUS: READY（差分案のレビュー待ち、未適用・未統合）。
+
+## Codex 夜間J (2026-10-13)
+
+`work/codex-night-j` / 基準実装03d053e、main0d48324。新規 `tools/moss/survey_maps.py`、`docs/qa/map-survey-20261013.md` とJSON集計のみ。本CLAIMSで担当記録。29マップを読取、既存コード・チェッカー・マップJSONは編集しない。STATUS: WIP。mainマージなし。
