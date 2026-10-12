@@ -19,8 +19,10 @@ with sync_playwright() as p:
         ck(ev("document.querySelector('[data-stab=equip]').hidden")==True,'[%s] EQUIP tab hidden during the prologue'%view)
         # ---- altar
         ev("document.querySelector('#forestScene').style.display='none';startAltarScene()")
-        A=ev("altarLines"); shots={13:'01_sword_breaks',17:'02_wind_dance_stall',20:'03_stone_reacts',27:'04_contract'}
-        for i in range(1,28):
+        A=ev("altarLines"); at=lambda k:[i for i,l in enumerate(A) if l.startswith(k)][0]
+        shots={at('だが次の瞬間、乾いた音とともに'):'01_sword_breaks',at('風の舞――'):'02_wind_dance_stall',at('ルー「今だよ！'):'03_lou_support',at('古代石の表面を'):'04_stone_reacts',at('エイダンが柄を握る'):'05_contract'}
+        last=max(shots)
+        for i in range(1,last+1):
             ev("document.querySelector('#altarScene').click()")
             if i in shots:
                 pg.wait_for_timeout(150)
@@ -35,12 +37,12 @@ with sync_playwright() as p:
         gi=[i for i,l in enumerate(F) if '支給品' in l]; ck(gi==[6],'[%s] supply line index 6 (%s)'%(view,gi))
         for i in range(1,7): ev("document.querySelector('#fortScene').click()")
         ck(ev("EquipmentManager.isUnlocked()")==True and ev("Inventory.count('leather_cap')+Inventory.count('leather_armor')+Inventory.count('bronze_ring')")==3,'[%s] fort: gear granted, equipment unlocked'%view)
-        pg.screenshot(path='%s/%s_05_fort_supply.png'%(OUT,view))
+        pg.screenshot(path='%s/%s_06_fort_supply.png'%(OUT,view))
         ev("document.querySelector('#fortScene').style.display='none';storyStage=15")
         ev("document.querySelector('#menuOpen')&&document.querySelector('#menuOpen').click();renderSystemTab('equip')")
         ck(pg.locator('#systemBody [data-eq-slot]').count()==5,'[%s] EQUIP tab: 5 sockets'%view)
         ov=ev("(()=>{const m=document.querySelector('#systemMenu');return m?m.scrollWidth-m.clientWidth:0})()"); ck(ov<=1,'[%s] equip menu: no horizontal overflow (%s)'%(view,ov))
-        pg.screenshot(path='%s/%s_06_equip_menu.png'%(OUT,view))
+        pg.screenshot(path='%s/%s_07_equip_menu.png'%(OUT,view))
         # ---- save round trip
         ev("EquipmentManager.equip('aidan','leather_cap');renderSystemTab('save');saveGrowthData();EquipmentManager.reset();Inventory.reset();loadGrowthData()")
         ck(ev("EquipmentManager.get('aidan').weapon")=='oath_sword' and ev("EquipmentManager.get('aidan').head")=='leather_cap' and ev("EquipmentManager.isUnlocked()")==True,'[%s] save/load keeps oath sword, cap and unlock'%view)

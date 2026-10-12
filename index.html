@@ -141,7 +141,7 @@
 <div id="normalItems"></div>
 <button id="normalCommandToggle" type="button">COMMAND</button><div hidden="" id="normalBattleCmd"><button class="drawerClose" id="normalCommandClose" type="button">× 閉じる</button>
 <button id="nAtk">攻撃</button><button id="nSkill">一閃 TP30</button><button id="nDevKill" class="dev-only-command">DEV｜一撃撃破</button>
-<button id="nHeal">ヒール MP8</button><button id="nWindbloom">風花の舞 MP8</button><button id="nPrayer">風の祈り MP6</button>
+<button id="nHeal">ヒール MP8</button><button id="nWindDance" hidden>風の舞</button><button id="nWindbloom">風花の舞 MP8</button><button id="nPrayer">風の祈り MP6</button>
 <button id="nGuard">防御</button><button id="nItem">アイテム</button>
 </div>
 </div>
@@ -159,7 +159,7 @@
 <div id="rbParty"><div class="partyCard" id="cardA"><b>エイダン</b><div class="mini"><i id="pAHP"></i></div><span id="pAtext"></span></div><div class="partyCard" id="cardF"><b>フィオナ</b><div class="mini"><i id="pFHP"></i></div><span id="pFtext"></span></div></div><div id="rbTop"><div class="rbPanel" style="visibility:hidden"><b>エイダン</b><div class="rbBar"><div class="rbFill" id="rbAHP"></div></div><span id="rbAHPt"></span><div id="rbRune"><div class="rbRuneFill" id="rbRuneFill"></div></div><span id="rbRunet"></span></div>
 <div class="rbPanel"><b>ゴブリン・レイダー</b><div class="rbBar"><div class="rbFill" id="rbBHP"></div></div><span id="rbBHPt"></span><div id="rbPhase"></div></div></div>
 <div class="rbRaster" id="rbAidan"><img alt="エイダン" src="img/battle/characters/aidan/aidan_battle_idle.png"/></div><div class="rbNearHud rbNearA"><b>エイダン</b><div class="rbNearBars"><i><em id="rbNearAHP"></em></i><i class="tp"><em id="rbNearATP"></em></i></div><small id="rbNearATxt"></small></div><div class="rbRaster" id="rbFiona"><img alt="フィオナ" src="img/battle/characters/fiona/fiona_battle_idle.png"/></div><div class="rbNearHud rbNearF"><b>フィオナ</b><div class="rbNearBars"><i><em id="rbNearFHP"></em></i><i class="mp"><em id="rbNearFMP"></em></i></div><small id="rbNearFTxt"></small></div><div class="rbRaster louRaster" id="rbLou"><img alt="ルー" src="img/battle/characters/lou/lou_battle_idle.png"/><span class="louSupportTag">SUPPORT</span></div><div id="rbTurn"></div><div class="rbEnemyHud" id="rbEnemyHud"><b>ゴブリン・レイダー</b><div class="rbEnemyBar"><i id="rbEnemyHP"></i></div><small id="rbEnemyTxt">HP 1250</small></div><div class="rbRaster raiderRaster" id="raiderSprite"><img alt="ゴブリン・レイダー" src="img/battle/enemies/goblin_raider/goblin_raider_battle_idle.png"/></div><div class="battle-log-empty" id="rbMsg" aria-live="polite"></div>
-<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbDevKill" class="dev-only-command">DEV｜一撃撃破</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbWindbloom">風花の舞 MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
+<button id="rbCommandToggle" type="button">COMMAND</button><div hidden="" id="rbCmd"><button class="drawerClose" id="rbCommandClose" type="button">× 閉じる</button><button id="rbAtk">攻撃</button><button id="rbDevKill" class="dev-only-command">DEV｜一撃撃破</button><button id="rbSkill">一閃 TP30</button><button id="rbHeal">ヒール MP8</button><button id="rbWindDance" hidden>風の舞</button><button id="rbWindbloom">風花の舞 MP8</button><button id="rbRuneSkill">風の祈り MP6</button><button id="rbGuard">防御</button><button id="rbItem">アイテム</button><button id="rbWind">風の一閃</button></div>
 </div>
 <div id="aftermathScene"><div id="aftermathAltar"></div><div id="aftermathSword">†</div><div id="aftermathParty">A　F　✧</div><div id="aftermathText"></div></div><div id="fortScene"><div id="fortWall"></div><div id="fortGate"></div><div id="fortBanner">⚜</div><div id="fortParty">A　F　✧</div><div id="fortText"></div></div>
 <button id="menuOpen" type="button">☰ MENU</button>
@@ -463,6 +463,7 @@ function grantStarterGear(announce){
  syncEquipTab();if(announce)storyToast('装備システムが解放された(メニュー EQUIP)');return true;
 }
 function syncStoryEquipment(){
+ if(window.WindDance)WindDance.sync(storyStage);
  const cur=EquipmentManager.get('aidan').weapon||null,story=!cur||cur==='father_sword'||cur==='oath_sword'||cur==='wooden_sword';
  if(story){const want=(storyStage>=13||(storyStage===12&&oathBound))?'oath_sword':'father_sword';if(cur!==want)EquipmentManager.setStoryWeapon('aidan',want)}
  if(storyStage>=15)grantStarterGear(false);
@@ -738,11 +739,12 @@ function updateNormalPartyHud(){
 function updateNormalCommands(){
  setNormalCommandDrawer(false);
  const a=normalActor==='aidan';
- ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id).classList.remove('v2-visible'));
+ ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nWindDance','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id)?.classList.remove('v2-visible'));
  $('#nDevKill')?.classList.add('v2-visible');
  ['nAtk','nGuard','nItem'].forEach(id=>$('#'+id).classList.add('v2-visible'));
  if(a){$('#nSkill').classList.add('v2-visible')}
  else{['nHeal','nPrayer','nWindbloom'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
+ const nwd=$('#nWindDance');if(nwd){const v=!a&&window.WindDance&&WindDance.commandVisible();nwd.hidden=!v;nwd.classList.toggle('v2-visible',!!v)}
  $('#nWindbloom').disabled=normalFMP<8;$('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
 }
 function openNormalItems(){
@@ -810,6 +812,8 @@ $('#nAtk').onclick=()=>chooseNormalAct('atk');
 $('#nSkill').onclick=()=>chooseNormalAct('skill');
 $('#nHeal').onclick=()=>chooseNormalAct('heal');
 $('#nWindbloom').onclick=()=>chooseNormalAct('windbloom');
+$('#nWindDance').onclick=()=>showBattleBanner('風の舞は調整中です。',900);
+$('#rbWindDance').onclick=()=>showRaiderBattleLog('風の舞は調整中です。');
 $('#nPrayer').onclick=()=>chooseNormalAct('prayer');
 $('#nGuard').onclick=()=>chooseNormalAct('guard');
 $('#nItem').onclick=()=>openNormalItems();
@@ -1178,14 +1182,19 @@ const altarLines=[
  'エイダン「下がって、二人とも！」',
  'エイダンは父から譲られた剣を抜き、飛びかかってきた小鬼を斬り払う。',
  'ルー「待って……！　奥から、もっと大きな気配が来る！」',
- '小鬼たちの奥から、地面を震わせる角笛が鳴り響いた。巨大なゴブリン・レイダーが戦斧を引きずりながら姿を現す。',
- 'エイダン「こいつが……村を襲った魔物の仲間か！」',
- 'レイダーの戦斧が振り下ろされる。エイダンは父の剣で受け止めた――だが、乾いた音とともに刀身が折れた。',
+ '森の奥から、地面を震わせる角笛が鳴り響く。小鬼たちの奥から、巨大なゴブリン・レイダーが戦斧を引きずって現れた。',
+ 'レイダーが戦斧を振り上げ、一気に踏み込んでくる。',
+ 'エイダンは父の剣で奇襲を受け止め、歯を食いしばって辛うじて押し返した。',
+ 'だが次の瞬間、乾いた音とともに、父の剣の刀身が折れた。',
  'エイダン「父さんの剣が……！」',
- 'フィオナ「エイダン！」',
- '追撃の斧が迫る。ルー「させない！」　ルーが小さな羽をはばたかせ、まばゆい光でレイダーの目を眩ませる。',
- 'フィオナ「風よ、お願い――！」　フィオナが祈るように舞うと、風の紋が足元に広がり、レイダーの巨体が一瞬だけ動きを止めた。',
- 'ルー「今だよ、エイダン！　あの石……エイダンを呼んでる！」',
+ '二撃目が迫る。エイダンは折れた剣を構えたまま、動けない。',
+ 'フィオナ「だめ……やめて！」',
+ '祈るように伸ばしたフィオナの手のまわりで、風が渦を巻く。意図せず、彼女の体が舞うように動いた。',
+ 'フィオナ「えっ……？　私、いま何を……。」',
+ '風の舞――周囲の風が一瞬だけ大きく動き、レイダーの巨体をその場に縫い止めた。',
+ 'ルー「今だよ！　ルーが風を押さえてる！」',
+ 'ルーが小さな羽を震わせ、乱れた風の流れを古代石へと導く。',
+ 'ルー「エイダン、あの石……エイダンを呼んでる！」',
  '古代石の表面を、風を表すルーンが走る。鼓動のような低い音が森全体へ響いた。',
  '――風が集まり、石の中に一本の剣の輪郭が浮かび上がる。',
  '声なき声「……誓いを、もう一度。」',
@@ -1198,7 +1207,7 @@ const altarLines=[
  'エイダン「父さん……。この剣で、今度こそ守ってみせる。」',
  'フィオナ「エイダン……その剣……。」',
  'ルー「風が戻ってきた……！」',
- 'レイダーが風の拘束を振りほどき、怒りの咆哮を上げる。周囲の小鬼たちが怯むなか、エイダンは誓いの剣を構えた。'
+ 'レイダーが風の拘束を振りほどき、怒りの咆哮を上げる。エイダンは誓いの剣を構えた。'
 ]
 let altarIndex=0;
 function startAltarScene(){
@@ -1206,12 +1215,15 @@ function startAltarScene(){
  $('#oathSword').style.display='none';$('#altarText').textContent=altarLines[0];
  setObj('古代祭壇で包囲を突破しよう');
 }
+const altarAt=k=>altarLines.findIndex(l=>l.startsWith(k));
 $('#altarScene').onclick=()=>{
  altarIndex++;
  if(altarIndex<altarLines.length){
    $('#altarText').textContent=altarLines[altarIndex];
-   if(altarIndex===20)$('#oathSword').style.display='block';
-   if(altarIndex===27){oathBound=true;EquipmentManager.setStoryWeapon('aidan','oath_sword');
+   if(altarIndex===altarAt('だが次の瞬間、乾いた音とともに'))EquipmentManager.setStoryWeapon('aidan',null);   // 父の剣が折れる(誓いの剣と契約するまで素手)
+   if(altarIndex===altarAt('風の舞――'))WindDance.learn();   // フィオナの風の舞: 初回発動で習得(再発火しても何も起きない)
+   if(altarIndex===altarAt('――風が集まり、'))$('#oathSword').style.display='block';
+   if(altarIndex===altarAt('エイダンが柄を握る')){oathBound=true;EquipmentManager.setStoryWeapon('aidan','oath_sword');
      ['ag1','ag2','ag3','ag4'].forEach(id=>$('#'+id).style.opacity='.28');
      $('#oathSword').style.filter='drop-shadow(0 0 28px #e7ffd8)';
    }
@@ -1225,7 +1237,7 @@ let rbHP=120,rbTP=0,rbFHP=105,rbFMP=36,rbBoss=1250,rbRune=0,rbGuardA=false,rbGua
 function rbPhase(){return rbBoss>820?1:(rbBoss>400?2:3)}
 
 function syncRaiderCommandClasses(){
- const ids=['rbAtk','rbSkill','rbHeal','rbRuneSkill','rbWindbloom','rbGuard','rbItem','rbWind'];
+ const ids=['rbAtk','rbSkill','rbHeal','rbRuneSkill','rbWindbloom','rbWindDance','rbGuard','rbItem','rbWind'];
  ids.forEach(id=>$('#'+id)?.classList.remove('rb-visible'));
 
  // Command ownership is explicit. Never infer from display/disabled state.
@@ -1235,6 +1247,7 @@ function syncRaiderCommandClasses(){
    $('#rbWind')?.classList.add('rb-visible');
  }else{
    ['rbAtk','rbHeal','rbRuneSkill','rbWindbloom','rbGuard','rbItem'].forEach(id=>$('#'+id)?.classList.add('rb-visible'));
+   const rwd=$('#rbWindDance');if(rwd){const v=window.WindDance&&WindDance.commandVisible();rwd.hidden=!v;rwd.classList.toggle('rb-visible',!!v)}
  }
 
  $('#rbDevKill')?.classList.add('rb-visible');
@@ -1954,9 +1967,11 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
 <script src="js/inventory.js"></script>
+<script src="js/data/support-magic-data.js?v=20261013wd"></script>
 <script src="js/equipment.js?v=20261013eq"></script>
 <script>giveStarterSword();syncEquipTab();</script>
 <script src="js/equipment-ui.js?v=20261013eq"></script>
+<script src="js/support-magic.js?v=20261013wd"></script>
 <script src="js/data/shop-data.js"></script>
 <script src="js/shop.js"></script>
 <script src="js/field/quest-data.js"></script>

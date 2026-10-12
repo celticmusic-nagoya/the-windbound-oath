@@ -58,23 +58,27 @@ with sync_playwright() as p:
     # ---- altar
     ev("closeDialogue();document.querySelector('#forestScene').style.display='none'")
     ev("startAltarScene()")
-    A=ev("altarLines");ck(len(A)==32,'altar has 32 lines (%d)'%len(A))
+    A=ev("altarLines");ck(len(A)==30,'altar has 30 lines (%d)'%len(A))
+    at=lambda k:[i for i,l in enumerate(A) if l.startswith(k)]
     oi=[i for i,l in enumerate(A) if l=='エイダン「……もう、目の前で誰かを失うのは嫌だ。」']
-    ck(oi==[26],'oath line unchanged, index 26 (%s)'%oi)
-    ck(A[24].startswith('夕日の丘') and A[25]=='エイダン「……強くなりたいなんて言って、村のみんなを守れなかった。」','recall + Aidan line directly before the oath')
-    bi=[i for i,l in enumerate(A) if '刀身が折れた' in l]
-    ck(bi==[13] and A[11].startswith('小鬼たちの奥から、地面を震わせる角笛') and A[16].startswith('追撃の斧') and A[17].startswith('フィオナ「風よ、お願い'),'order: Raider appears -> father sword breaks (13) -> Lou/Fiona stall (16-17) -> stone reacts')
-    sw=None;glow=None;wk=[]
+    ck(len(oi)==1,'oath line present once and unchanged (%s)'%oi)
+    grip=at('エイダンが柄を握る'); brk=at('だが次の瞬間、乾いた音とともに'); dance=at('風の舞――'); horn=at('森の奥から、地面を震わせる角笛'); lou=at('ルー「今だよ！'); stone=at('古代石の表面を'); parry=at('エイダンは父の剣で奇襲')
+    ck(horn and parry and brk and dance and lou and stone and grip and horn[0]<parry[0]<brk[0]<dance[0]<lou[0]<stone[0]<oi[0]<grip[0],'order: Raider -> parry -> sword breaks -> Fiona wind dance -> Lou -> stone -> oath -> contract')
+    ck(grip[0]==oi[0]+1,'the contract comes right after the oath line')
+    ck(all(len(l)<=62 for l in A),'every page is short enough (max %d chars)'%max(len(l) for l in A))
+    ck(not any('裂け目' in l or '落ちて' in l for l in A),'old "sword falls into the rift" beat is gone')
+    sw=None;glow=None;wk=[];ld=[]
     for i in range(1,len(A)):
         ev("document.querySelector('#altarScene').click()")
         sword=ev("getComputedStyle(document.querySelector('#oathSword')).display")
         op=ev("document.querySelector('#ag1').style.opacity")
-        wk.append((i,ev("EquipmentManager.get('aidan').weapon")))
+        wk.append((i,ev("EquipmentManager.get('aidan').weapon"))); ld.append((i,ev("WindDance.learned()")))
         if sw is None and sword!='none': sw=i
         if glow is None and op=='0.28': glow=i
-        if i==27: break
-    ck(sw==20,'sword appears on line 20 (%s)'%sw)
-    ck(glow==27 and A[27].startswith('エイダンが柄を握る'),'grip/glow fires on the grip line (index %s)'%glow)
-    ck(all(w=='father_sword' for i,w in wk if i<27) and wk[-1][1]=='oath_sword','weapon: father sword until the contract line, then the oath sword')
+        if i==grip[0]: break
+    ck(sw==at('――風が集まり')[0],'sword appears on its line (%s)'%sw)
+    ck(glow==grip[0],'grip/glow fires on the grip line (index %s)'%glow)
+    ck(all(w=='father_sword' for i,w in wk if i<brk[0]) and all(w is None for i,w in wk if brk[0]<=i<grip[0]) and wk[-1][1]=='oath_sword','weapon: father sword -> broken (empty) -> oath sword at the contract')
+    ck(all((not l) for i,l in ld if i<dance[0]) and all(l for i,l in ld if i>=dance[0]),'Fiona learns the wind dance exactly on its first cast line')
     print(errs[:4])
 print('FAILS',len(fails))
