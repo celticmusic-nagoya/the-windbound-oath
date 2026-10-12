@@ -308,14 +308,15 @@ DECOR = {'tapestry', 'window_wall', 'door_wall', 'herb_bundle', 'rug_green', 'ru
 
 class Interior:
     """Builder for one furnished room."""
-    def __init__(s, mid, ja, en, w, h, bgm='bgm_rilde_home', floor='#a98b5c', wall='#76654f', exit_to=None, sx=None):
+    def __init__(s, mid, ja, en, w, h, bgm='bgm_rilde_home', floor='#a98b5c', wall='#76654f', exit_to=None, sx=None, sy=None):
         s.R = Room(mid, ja, en, w, h, bgm, 'day', True); R = s.R; s.w, s.h = w, h
         R.fill(base_ := '#17110d', 0, 0, w, h); R.fill(wall, 48, 48, w - 96, BW, 'planks'); R.solid(48, 48, w - 96, BW, 'wall')
         R.fill(floor, 48, 48 + BW, w - 96, h - 96 - BW, 'planks')
         R.fill('#3a2c20', 48, 48 + BW - 10, w - 96, 12)        # skirting shadow
         cx = w // 2
         sx = sx or cx
-        R.spawn('default', sx, h - 48 - 140, 'up'); R.spawn('from_village', sx, h - 48 - 140, 'up')
+        sy = h - 48 - 140 if sy is None else sy
+        R.spawn('default', sx, sy, 'up'); R.spawn('from_village', sx, sy, 'up')
         if exit_to:
             R.door('tr_exit', cx - 70, h - 48 - 74, 140, 62, 'rilde_village', exit_to, '外へ出る')
             R.prop('furn_doormat', cx, h - 48 - 28, z=1, tags=['decal'], pid='mat')
@@ -400,7 +401,7 @@ def rooms():
     I.put('rug_green', 430, 430); I.put('table_small', 430, 440, text='食べかけのパンが置かれている。', label='テーブル'); I.put('chair_back', 430, 506); I.put('stool', 350, 450)
     I.put('spinning_wheel', 740, 520, text='糸車だ。今も使われているようだ。', label='糸車'); I.put('barrel', 110, 520); I.put('jar', 160, 580)
     out.append(I)
-    I = Interior('rilde_in_house_02', '村人の家', "Villager's House", 860, 640, exit_to='from_house_02', floor='#a58a5e', wall='#6f5e4a')
+    I = Interior('rilde_in_house_02', '村人の家', "Villager's House", 860, 640, exit_to='from_house_02', floor='#a58a5e', wall='#6f5e4a', sy=472)  # clear the stool with the 22x10 foot box
     I.put('window_wall', 600, 178); I.put('tapestry', 230, 190); I.put('shelf_pots', 130, 214, text='調理道具や保存瓶が並んでいる。', label='棚'); I.put('cupboard', 340, 212, text='衣類がきれいに畳まれている。', label='タンス')
     I.put('fireplace', 560, 214, text='薪がぱちぱちと燃えている。', label='暖炉'); I.put('bed', 730, 296, text='きれいに整えられたベッドだ。', label='ベッド')
     I.put('table_round', 360, 450, text='木のテーブルだ。', label='テーブル'); I.put('chair', 360, 380); I.put('chair_back', 360, 536); I.put('stool', 280, 450); I.put('stool', 440, 450); I.put('rug_red', 360, 480)
