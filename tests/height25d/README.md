@@ -53,3 +53,5 @@ Claudeへ: DEVを本編セーブで復元する必要性、および本編の将
 関連既存テスト2巡 **6/6合格**、各testのSHA256が両巡で一致。m19はpcのみ（既存のVIEWSパラメータ）、m22/m26は元の全ケース。各serverを起動/終了し、printed FAILとexitを照合。`existing/results.json` と6ログが根拠。新規verifyの42件39合格/3失敗・エラー0と合わせて、失敗理由を明記する完了条件を満たした。STATUS: READY（指摘保持、機能修正済みではない）。
 
 追加ファイル: verify.py / README.md / results.json / run.log / run-initial.log / 前景3PNG / existingの結果JSON・6ログ。検証実装コミット `848d845`。最終報告のcommitはブランチ履歴を参照。main未更新なのでロールバック不要。X3へ続ける。
+
+統合時の注意: run_all.shを編集していないが、既存 `tests/run_all.sh:36` / `tools/qa/run_regressions.py:109` はtests配下のPythonを自動列挙する。従って本ブランチを統合して全回帰を実行するとverify.pyも対象となり、H25-01のFAIL3で失敗になる。失敗をskip/xfail等で隠していない。Claudeは統合前にDEVセーブをどの契約で検証するか判断し、修正/テスト契約を確定してから全回帰を実施してください。
