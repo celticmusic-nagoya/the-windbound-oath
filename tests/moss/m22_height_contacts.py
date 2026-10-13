@@ -42,6 +42,13 @@ with sync_playwright() as p:
         return ev("(()=>{const m=FieldMonsters.list[0];return m?{state:m.state,active:MossForest.active}:null})()")
     r = monster_run(1, 0); check(r and r['state'] not in ('engage', 'engaged', 'alert') and r['active'], 'monster on level 0 ignores a player on level 1 at the same XY (%s)' % r)
     r = monster_run(1, 1); check(r and (r['state'] in ('engage', 'engaged') or not r['active']), 'control: monster on the same level engages (%s)' % r)
+    # ---- walkers: pause only for a player on their own level
+    def walker_pauses(player_lv, walker_lv):
+        ev("MossForest.enter({map:'dev_height_proto',x:1543,y:858,level:%d})" % player_lv); pg.wait_for_timeout(1500)
+        return ev("""(()=>{const el=document.createElement('img');const r={id:'w',el,frames:['a','b','c'],w:20,h:40,pts:[[1560,900],[1760,900]],i:1,x:1560,y:900,dir:1,speed:26,anim:false,fps:7,lv:%d,rest:[0,0],wait:0,clock:0,state:'walk'};
+          FieldWalkers.list.push(r);FieldWalkers.update(.1);const idle=r.state==='idle';FieldWalkers.list.pop();return idle})()""" % walker_lv)
+    check(walker_pauses(1, 1) is True, 'walker pauses for a player on its own level')
+    check(walker_pauses(1, 0) is False, 'walker on another level does not pause (same XY)')
     # inert on a plain map
     ev("MossForest.enter({map:'moss_forest_01_sunlit_path'})"); pg.wait_for_timeout(2500)
     ev("document.querySelector('#msg')&&(document.querySelector('#msg').style.display='none')")
