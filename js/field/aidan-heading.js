@@ -3,6 +3,10 @@
  * Smoothed vector + hysteresis so a path jitter never flickers between sets. Presentation only - never touches movement. */
 (function () {
   'use strict';
+  // Art map for the diagonals (swap point for dedicated art). Up diagonals reuse the confirmed back-walk set unmirrored
+  // (the old 'ul' set never alternated feet). To restore dedicated art later: set ul -> {art:'ul', mirror:true}.
+  const ART = {dl: {art: 'dl', mirror: true}, ul: {art: 'up', mirror: false}};
+  function art(dir, flip) { const a = ART[dir]; return a ? {dir: a.art, flip: !!flip && a.mirror} : {dir, flip: !!flip}; }
   function create() {
     let vx = 0, vy = 0, mode = null;
     function classify(t) {                       // t: angle from horizontal in degrees (0 = sideways, 90 = straight up/down)
@@ -24,5 +28,5 @@
       idleDir(dir) { return dir === 'dl' ? 'down' : dir === 'ul' ? 'up' : dir; }
     };
   }
-  window.AidanHeading = Object.freeze({create});
+  window.AidanHeading = Object.freeze({create, art});
 })();
