@@ -69,6 +69,23 @@
  }
  function koAll(b){for(const e of rosters[b]){e.hp=0;BattleActorState.set(e.key,'ko',{battle:b})}sync(b);}
  function log(b,t,owned=false){BattlePresentation.log(()=>{if(b==='normal')showBattleBanner(t,1050);else showRaiderBattleLog(t)},owned)}
+ // ---- 風の舞 (Fiona, support): ally evasion +15pt for 3 enemy phases, MP10, refresh not stack. Learned + feature-gated by WindDance. ----
+ // BattleStatus.tick skips effects created during the round, so the cast round's own enemy phase is covered for free: remainingTurns = phases-1 gives 3 phases in total.
+ function castWindDance(b){
+  const W=window.WindDance;if(!W||!W.commandVisible())return false;
+  const mp=b==='normal'?normalFMP:rbFMP,cost=W.mp();if(mp<cost)return false;
+  if(b==='normal')normalFMP-=cost;else rbFMP-=cost;
+  const fx=W.effect();BattleActorState.action('fiona','heal',{battle:b});
+  for(const ally of BattleActionTargets.allies(b))if(ally.active!==false&&ally.hp()>0)BattleStatus.apply({battle:b,target:ally.id,type:'eva_up',magnitude:fx.amount,remainingTurns:fx.phases-1,source:'fiona'});
+  log(b,'フィオナの「風の舞」！ 味方全体の回避率が上がった！',true);return true;
+ }
+ // Provisional MP regain on Fiona's plain attack (the bolt). timing 'action' = when it is executed, 'hit' = only when it lands on a living target. Cap: the battle's MP max.
+ function boltMana(b,timing){
+  const n=window.WindDance?WindDance.boltMana(timing):0;if(!n)return;
+  if(b==='normal')normalFMP=Math.min(30,normalFMP+n);else rbFMP=Math.min(36,rbFMP+n);
+ }
+ // Incoming hit: true when the target sidesteps it (only possible while an eva_up effect is active; otherwise no roll at all).
+ function dodged(b,target){return BattleStatus.dodges(b,target);}
  function heroAction(b,a){
   if(b==='raider')return heroRaider(a);
   const who=a.who,hp=who==='aidan'?aahp:normalFHP;
@@ -84,13 +101,16 @@
    if(a.target==='aidan')aahp=Math.min(100,aahp+42);else normalFHP=Math.min(90,normalFHP+42);
    log(b,'フィオナの「ヒール」！ HP +42');return;
   }
+  if(a.kind==='winddance'){castWindDance(b);return}
   if(a.kind==='prayer'){
    if(normalFMP<6)return;normalFMP-=6;const gained=Math.min(28,100-normalRune);normalRune+=gained;BattlePresentation.updateRune(normalRune);
    log(b,'フィオナの「風の祈り」！ RUNE +'+gained,true);return;
   }
+  if(who==='fiona'&&a.kind==='atk')boltMana(b,'action');
   const e=rosters[b].find(e=>e.id===a.target);
   // Never auto-retarget a dead selected enemy; refund action resources instead.
   if(!e||e.hp<=0){log(b,'選んだ敵は倒れている。');return}
+  if(who==='fiona'&&a.kind==='atk')boltMana(b,'hit');
   impact=e.unit;
   let n=who==='aidan'?(a.kind==='skill'?55:34):20;
   n=BattleStatus.damage(b,who,e.id,Math.round(n*10/e.def));
@@ -145,6 +165,7 @@
   for(let i=0;i<hits;i++){
    if(token!==generation||!e.hp)return;
    if(!e.extra)WBActors.normalEnemy();else WBActors.enemyAt(e.unit);
+   if(dodged(b,target)){log(b,name(e)+(hits===2?'の《狂爪連撃》 '+(i+1)+'/2':'の攻撃')+'！ '+(target==='aidan'?'エイダン':'フィオナ')+'は身をかわした！');v2Float(target==='aidan'?'floatAidan':'floatFiona','回避');updateAttackBattle();await sleep(850);continue;}
    let n=BattleStatus.damage(b,e.id,target,Math.round(e.atk/2*(hits===2?.6:1)));
    if(target==='aidan'?normalGuardA:normalGuardF)n=Math.ceil(n/2);
    if(target==='aidan')aahp=Math.max(0,aahp-n);else normalFHP=Math.max(0,normalFHP-n);
@@ -191,6 +212,7 @@
    rbFMP-=8;rbRune=Math.min(100,rbRune+8);if(a.target==='aidan')rbHP=Math.min(120,rbHP+48);else rbFHP=Math.min(105,rbFHP+48);
    BattleActorState.action('fiona','heal',{battle:'raider'});log('raider','フィオナの「ヒール」！ HP +48');return;
   }
+  if(a.kind==='winddance'){castWindDance('raider');return}
   if(a.kind==='rune'){
    if(rbFMP<6)return;rbFMP-=6;const gained=Math.min(28,100-rbRune);rbRune+=gained;log('raider','フィオナの「風の祈り」！ RUNE +'+gained,true);return;
   }
@@ -199,7 +221,9 @@
    for(const e of alive('raider'))damage(e,e.extra?e.hp:BattleStatus.damage('raider',who,e.id,255),'raider');
    log('raider','誓いの剣――「風の一閃」！ 増援と破砕斬の構えを吹き飛ばした！',true);return;
   }
+  if(who==='fiona'&&a.kind==='atk')boltMana('raider','action');
   const e=rosters.raider.find(e=>e.id===a.target);if(!e||e.hp<=0){log('raider','選んだ敵は倒れている。');return}
+  if(who==='fiona'&&a.kind==='atk')boltMana('raider','hit');
   impact=e.unit;let n=who==='aidan'?(a.kind==='skill'?68:42):22;
   n=BattleStatus.damage('raider',who,e.id,Math.round(n*10/e.def));
   if(a.kind==='windbloom'){if(rbFMP<8)return;rbFMP-=8;n=windbloomDamage('raider',e)}
@@ -228,6 +252,7 @@
   const hits=skill==='frenzy'?2:1;
   for(let i=0;i<hits;i++){
    if(token!==generation||e.hp<=0||rbBoss<=0)return;WBActors.enemyAt(e.unit);
+   if(dodged('raider',target)){log('raider','異常化ゴブリン'+(hits===2?'の《狂爪連撃》 '+(i+1)+'/2':'の攻撃')+'！ '+(target==='aidan'?'エイダン':'フィオナ')+'は身をかわした！');updateRaider();await sleep(850);continue;}
    let n=BattleStatus.damage('raider',e.id,target,Math.round(e.atk/2*(hits===2?.6:1)));if(target==='aidan'?rbGuardA:rbGuardF)n=Math.ceil(n/2);
    if(target==='aidan')rbHP=Math.max(0,rbHP-n);else rbFHP=Math.max(0,rbFHP-n);BattleActorState.set(target,'damage',{battle:'raider',duration:360});log('raider','異常化ゴブリン'+(hits===2?'の《狂爪連撃》 '+(i+1)+'/2':'の攻撃')+'！ '+n+'ダメージ。');updateRaider();await sleep(850);
   }
@@ -241,12 +266,13 @@
   if(rbQueued){
    WBActors.raiderEnemy();const base=phase===3?48:42;
    let da=BattleStatus.damage('raider','raider_enemy_0','aidan',base),df=BattleStatus.damage('raider','raider_enemy_0','fiona',base-6);if(rbGuardA)da=Math.ceil(da/2);if(rbGuardF)df=Math.ceil(df/2);
-   rbHP=Math.max(0,rbHP-da);rbFHP=Math.max(0,rbFHP-df);rbQueued=false;BattleActorState.set('aidan','damage',{battle:'raider',duration:360});BattleActorState.set('fiona','damage',{battle:'raider',duration:360});log('raider','レイダーの「破砕斬」！ エイダン '+da+' / フィオナ '+df+' ダメージ！');
+   const dodgeA=dodged('raider','aidan'),dodgeF=dodged('raider','fiona');if(dodgeA)da=0;if(dodgeF)df=0;
+   rbHP=Math.max(0,rbHP-da);rbFHP=Math.max(0,rbFHP-df);rbQueued=false;if(!dodgeA)BattleActorState.set('aidan','damage',{battle:'raider',duration:360});if(!dodgeF)BattleActorState.set('fiona','damage',{battle:'raider',duration:360});log('raider','レイダーの「破砕斬」！ エイダン '+(dodgeA?'回避':da)+' / フィオナ '+(dodgeF?'回避':df)+(dodgeA&&dodgeF?'':' ダメージ！'));
   }else if(call>=0){callFlags[call]=true;spawn();log('raider','レイダーが角笛を吹いた！ 異常化ゴブリンが現れた。');}
   else if(rbRound%3===0||(phase===3&&rbRound%2===0)){rbQueued=true;log('raider','レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！');}
   else{
-   WBActors.raiderEnemy();const target=rbHP<=rbFHP?'aidan':'fiona';let n=BattleStatus.damage('raider','raider_enemy_0',target,(phase===1?21:phase===2?27:32)+rbAdds*3);if(target==='aidan'?rbGuardA:rbGuardF)n=Math.ceil(n/2);
-   if(target==='aidan')rbHP=Math.max(0,rbHP-n);else rbFHP=Math.max(0,rbFHP-n);BattleActorState.set(target,'damage',{battle:'raider',duration:360});log('raider','レイダーが'+(target==='aidan'?'エイダン':'フィオナ')+'を狙う！ '+n+'ダメージ。');
+   WBActors.raiderEnemy();const target=rbHP<=rbFHP?'aidan':'fiona';let n=BattleStatus.damage('raider','raider_enemy_0',target,(phase===1?21:phase===2?27:32)+rbAdds*3);if(target==='aidan'?rbGuardA:rbGuardF)n=Math.ceil(n/2);const dodgeN=dodged('raider',target);if(dodgeN)n=0;
+   if(target==='aidan')rbHP=Math.max(0,rbHP-n);else rbFHP=Math.max(0,rbFHP-n);if(!dodgeN)BattleActorState.set(target,'damage',{battle:'raider',duration:360});log('raider','レイダーが'+(target==='aidan'?'エイダン':'フィオナ')+'を狙う！ '+(dodgeN?'しかし身をかわした！':n+'ダメージ。'));
   }
   updateRaider();await sleep(950);if(call>=0&&callFlags[call])await BattlePresentation.banter('call-first',['ルー「あの紫のゴブリン……気をつけて！」'],'raider',token);await situationalBanter('raider',token);
   for(const e of alive('raider').filter(e=>e.extra)){if(token!==generation||rbBoss<=0)return;await addAction(e);}

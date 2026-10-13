@@ -14,7 +14,7 @@ with sync_playwright() as p:
         tag='[flag %s] '%('on' if flag else 'off')
         ev("PrologueProgress.seed(3);Inventory.reset();EquipmentManager.reset();localStorage.removeItem(SAVE_KEY);delete PartyManager.members.fiona.learned;giveStarterSword();syncEquipTab()")
         ck(ev("WindDance.learned()")==False and ev("WindDance.commandVisible()")==False,tag+'before the altar event: not learned, no command')
-        ck(ev("WindDance.data().effect.amount")is None and ev("WindDance.data().mp")is None,tag+'undecided numbers stay null (no balance change)')
+        ck(ev("WindDance.data().effect.amount")==0.15 and ev("WindDance.data().effect.phases")==3 and ev("WindDance.data().mp")==10 and ev("WindDance.data().effect.target")=='all_allies' and ev("WindDance.data().effect.stacking")=='refresh',tag+'decided numbers: +15pt / 3 phases / MP10 / all allies / refresh')
         ev("document.querySelector('#forestScene').style.display='none';startAltarScene()"); A=ev("altarLines"); d=[i for i,l in enumerate(A) if l.startswith('風の舞――')][0]
         for i in range(1,len(A)):
             ev("document.querySelector('#altarScene').click()")
