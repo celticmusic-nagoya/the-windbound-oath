@@ -76,3 +76,13 @@ R着手: work/codex-height-contact-impl-review / main88ae6c0。対象origin/feat
 R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/動く敵0の戦闘を再現。NPC goalのlevel欠落をAPIで確認、pending/walkers/試験fixture不足も指摘。コード未編集。docs/qa/height-contact-impl-review.mdと証跡を納品。
 今回の納品: N2e9bb42（Claudeがmain88ae6c0へ統合）、O56f6050（旧531対象57合格/既存2/新規0）、P21a0ee9（dummy検品、実素材未受領）、Q306ef3a（家02spawn限定修正、関連検証合格）、Rは本branchの最新commit参照。全件最終main回帰/Androidは未実施。
 区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
+
+## GG〜KK 再開 (2026-10-13)
+
+ブランチ: `work/codex-gg-kk`。基準main: `31a5f5e`。BB〜FFは `work/codex-bb-ff / 4329e58` に納品済み（FF75/75合格）、再作業しない。AAは `3979e54` に提案済み、頂上イベントlevel宣言の採用ゲートは未達。
+
+進行中: GG。未着手: HH / II / JJ / KK。担当: 新規 tests/input/kb_audit.py、tests/battle/lou_idle_real_flow.py、tools/field/make_lou_field_frames.py、GG〜KK各docs/qa報告/画像/ログ。JJでは tests/moss/m31_aidan_heading.py および調査で前置き不足が確認されたテストのみを担当する。共有CLAIMSと本statusに記録してから編集。
+
+GitHub上の進捗: 各項目の完了ごとに報告書・本statusを通常push。mainへはマージしない。js/css/index/採用素材は未編集。Android実機は接続なしのため未測定。実機の代替と表記しない。
+
+再開: このブランチの最新commit/本節を読み、完了項目を飛ばしてGG→HH→II→JJ→KK。元の作業ツリーはブランチを切り替えず、テストは直列・自身のサーバーを終了する。現時点の未コミット懸念なし。
