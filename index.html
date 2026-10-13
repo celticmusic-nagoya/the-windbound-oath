@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/style.css?v=20261012c">
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css?v=20261013lf">
+<link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
 <link rel="stylesheet" href="css/field-collision-debug.css">
 <script src="js/assets.js?v=20261013lou2"></script>
 <script src="js/battle-motion.js"></script>
@@ -253,7 +254,7 @@ addEventListener('blur',()=>fieldHeldDirections.clear());
 let ipx=485,ipy=575,itarget=null;
 let innFloor=1;
 function inCamera(){let rw=$('#roomWorld'),x=Math.max(0,Math.min(1000-innerWidth,ipx-innerWidth/2)),y=Math.max(0,Math.min(720-innerHeight,ipy-innerHeight/2));rw.style.transform=`translate(${-x}px,${-y}px)`;$('#inPlayer').style.left=ipx+'px';$('#inPlayer').style.top=ipy+'px'}
-function inMove(){if($('#inside').style.display==='block'&&itarget){let dx=itarget.x-ipx,dy=itarget.y-ipy,d=Math.hypot(dx,dy);if(d<5)itarget=null;else{ipx+=dx/d*3.5;ipy+=dy/d*3.5}}inCamera();requestAnimationFrame(inMove)}inMove();
+function inMove(){if($('#inside').style.display==='block'&&window.InputManager){const kv=InputManager.heldVector();if(kv){itarget=null;ipx=Math.max(16,Math.min(960,ipx+kv[0]*3.5));ipy=Math.max(40,Math.min(660,ipy+kv[1]*3.5));}}if($('#inside').style.display==='block'&&itarget){let dx=itarget.x-ipx,dy=itarget.y-ipy,d=Math.hypot(dx,dy);if(d<5)itarget=null;else{ipx+=dx/d*3.5;ipy+=dy/d*3.5}}inCamera();requestAnimationFrame(inMove)}inMove();
 function dressRoom(){
  const dec=$('#roomDecor');
  dec.innerHTML='';
@@ -738,7 +739,7 @@ function updateNormalPartyHud(){
  $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;updateV2BattleHud();
 }
 function updateNormalCommands(){
- setNormalCommandDrawer(false);
+ setNormalCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('normal')));
  const a=normalActor==='aidan';
  ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nWindDance','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id)?.classList.remove('v2-visible'));
  $('#nDevKill')?.classList.add('v2-visible');
@@ -1108,7 +1109,7 @@ function renderSystemTab(tab='status'){
 function saveGrowthData(){
  if(document.body.classList.contains('battleMode')){notice('戦闘中はセーブできません。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
- localStorage.setItem(SAVE_KEY,JSON.stringify(data));$('#saveMsg').innerHTML='<small>セーブしました。</small>';
+ localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
 function loadGrowthData(){
  try{
@@ -1264,7 +1265,7 @@ function updateRaider(){
  BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');BattleActorState.sync('raider','goblin_raider');
  const phaseEntered=BattleActorState.trackPhase('goblin_raider',rbPhase(),{battle:'raider'});
  if(phaseEntered&&rbPhase()===3)window.PrologueCombat?.enrageMoment();
- setRaiderCommandDrawer(false);
+ setRaiderCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('raider')));
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
  if($('#rbEnemyHP')){$('#rbEnemyHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbEnemyTxt').textContent=`HP ${Math.max(0,rbBoss)}`;}
@@ -1966,7 +1967,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261013lf"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261013kb"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/data/item-data.js"></script>
@@ -2030,4 +2031,5 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
 <script src="js/battle-idle-motion.js?v=20261013lou2"></script>
 <script src="js/battle-lou-flight.js?v=20261012a"></script>
+<script src="js/input-manager.js?v=20261013kb3"></script>
 </body></html>

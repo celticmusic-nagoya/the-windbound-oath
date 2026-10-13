@@ -14,7 +14,7 @@ with sync_playwright() as p:
     check(r=={'down':'down','up':'up','right':'right','left':'left','dr':'dlF','dl':'dl','ur':'ulF','ul':'ul','steep':'down','shallow':'right'},'heading classes %s'%r)
     jit=pg.evaluate("""(()=>{const h=AidanHeading.create();const seq=[];for(let i=0;i<40;i++){const r=h.step(i%2?2.6:2.4,2.5);seq.push(r.dir)}return new Set(seq.slice(5)).size})()""")
     check(jit==1,'jitter around 45deg does not flicker between sets (%s)'%jit)
-    pg.evaluate("devJump('forest')"); pg.wait_for_timeout(8000)
+    pg.evaluate("devJump('forest')"); pg.wait_for_timeout(8000); pg.evaluate("closeDialogue()")
     pg.evaluate("MossForest.encounters(false)")
     def walk(keys):
         seen=set()
