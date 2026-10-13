@@ -1,8 +1,8 @@
 # Codex 作業状態 / 再開手順
 
-更新日: 2026-10-13（Asia/Tokyo）。検証基準main: `31a5f5e`。現在ブランチ: `work/codex-gg-kk`。
+更新日: 2026-10-13（Asia/Tokyo）。検証基準main: `f0fe968`。現在ブランチ: `work/codex-ll-pp`。
 
-**最新状態: GG〜KK完了、進行中なし。** [納品一覧](codex-GG-KK-delivery-20261013.md)。GG2指摘/COMMAND仕様判断/実Android未測定を保留。以下の古いWIP記録は履歴であり、再開時はこの冒頭と末尾の最新節を優先する。
+**最新状態: LL進行中、MM/NN/OO/PP未着手。** GG〜KKはmain49c842fに統合済み（2指摘修正）、ルー縮小版f0fe968採用済み。 [納品一覧](codex-GG-KK-delivery-20261013.md)。GG2指摘/COMMAND仕様判断/実Android未測定を保留。以下の古いWIP記録は履歴であり、再開時はこの冒頭と末尾の最新節を優先する。
 常設指示: [codex-standing-orders.md](codex-standing-orders.md)。mainへの反映はClaude担当。
 
 ## 完了
@@ -108,3 +108,9 @@ KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画�
 全5項目を各区切りpush。納品一覧codex-GG-KK-delivery-20261013.md。HHの別環境向け一時候補自動生成版も37/37再合格し、表/ログ/画像を最終実行へ更新。GG40合格/2指摘、II9合格、JJ20連続+関連2合格、KK12計測完了。進行中なし、GG〜KK未着手なし。実機/全回帰は今回未実施。
 
 再開: git fetch --all、main/status/standing/新規briefsと本branchのgit logを確認し、完了GG〜KKは繰り返さない。未解決の採用/実機/2指摘は納品一覧を参照。main未マージ、force pushなし、保護対象差分0、元worktreeはwork/codex-wind-dance-sim2のcleanを維持。未コミット懸念なし（最終push時点）、自身のサーバー終了。Claudeが資料/branchをレビューして統合する。
+
+## LL〜PP 着手 / 担当宣言
+
+基準main f0fe968、work/codex-ll-pp。新規 tests/battle/ui_structure.py / tests/system/save_compat.py / tests/moss/m34_lou_story_gate.py / tests/moss/m35_all_maps_smoke.py / .github/workflows/regression.yml、および各docs/qa報告・ログ・画像・CI手順、必要な新規tests/tools支援だけを担当。LL→MM→NN→OO→PP、項目ごと通常push。
+
+js/css/index/採用素材/マップ/mainは変更しない。LLの仕様差はFAILにせず別一覧、MM/NN/OOの問題は再現手順つきで報告。PP権限contents:read、Actions実行/設定はユーザー側確認。元の作業ツリーは切替なし。テスト直列・サーバーは自前終了。再開は本節と最新git logから、完了済みGG〜KKを再作業しない。
