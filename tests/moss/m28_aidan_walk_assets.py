@@ -38,6 +38,7 @@ with server(8797) as base,sync_playwright() as p:
  pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
  pg.goto(base+'/index.html?dev=1');pg.wait_for_timeout(1800);pg.evaluate("closeDialogue();devJump('forest')");pg.wait_for_function("forestActive && MossForest.mapId==='moss_forest_01_sunlit_path'",timeout=15000);pg.wait_for_timeout(1500)
  pg.evaluate('MossForest.devFreezeMonsters(true);MossForest.encounters(false);closeDialogue()')
+ pg.wait_for_function("()=>{const n=document.querySelector('.forest-aidan:not([hidden])');return n&&n.complete&&n.naturalWidth>0}",timeout=20000)
  # Find a clear crossing with room for actual movement in every direction.
  origin=pg.evaluate("()=>{for(let y=1000;y<5000;y+=120)for(let x=1000;x<5000;x+=120)if([[x,y],[x+200,y],[x-200,y],[x,y+200],[x,y-200]].every(([a,b])=>!MossForest.blocked(a,b)))return [x,y];return null}")
  ck(bool(origin),'clear four-direction test crossing')
