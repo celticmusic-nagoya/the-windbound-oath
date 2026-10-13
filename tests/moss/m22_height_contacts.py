@@ -7,7 +7,7 @@ def check(c, m):
     if not c: fails.append(m)
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_context(viewport={'width': 844, 'height': 390}).new_page()
-    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.on('pageerror', lambda e: errs.append(str(e))); pg.on('console', lambda m: m.type == 'error' and '404' not in m.text and errs.append(m.text))
     pg.goto('http://localhost:%s/index.html?dev=1' % PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()'); ev = pg.evaluate
     ev("PrologueProgress.seed(0);Quest.reset();Inventory.reset();MossForest.reset();storyStage=15;enterMossForest()"); pg.wait_for_timeout(2500)
     ev("MossForest.enter({map:'dev_height_proto'})"); pg.wait_for_timeout(2500)
@@ -26,6 +26,22 @@ with sync_playwright() as p:
     ev("MossForest.teleportFeet(310,1250);MossForest.height.setLevel(0)"); pg.wait_for_timeout(600)
     f = fired(); print(f)
     check('z_l0' in f and 'z_def' in f, 'back on level 0 the level-0 and default zones fire (not consumed earlier)')
+    # ---- valid shared XY (walkable on level 0 AND level 1): destination level + moving monsters
+    ev("MossForest.enter({map:'dev_height_proto'})"); pg.wait_for_timeout(2500)
+    ev("document.querySelector('#msg')&&(document.querySelector('#msg').style.display='none')")
+    check(ev("!MossForest.height.blockedAtLevel(1543,858,0)&&!MossForest.height.blockedAtLevel(1543,858,1)"), 'fixture: (1560,900) is walkable on both levels')
+    d_any = ev("FieldNavigation.destination(1543,858,MossForest.forest.blocked)")
+    d_l0 = ev("FieldNavigation.destination(1543,858,MossForest.forest.blocked,0)")
+    d_l1 = ev("FieldNavigation.destination(1543,858,MossForest.forest.blocked,1)")
+    check(d_l0 and d_l0['level'] == 0 and d_l1 and d_l1['level'] == 1, 'destination honours an explicit target level (%s / %s; free tap -> %s)' % (d_l0 and d_l0['level'], d_l1 and d_l1['level'], d_any and d_any['level']))
+    def monster_run(player_lv, mon_lv):
+        ev("MossForest.enter({map:'dev_height_proto',x:1543,y:858,level:%d})" % player_lv); pg.wait_for_timeout(2000)
+        ev("document.querySelector('#msg')&&(document.querySelector('#msg').style.display='none')")
+        ev("FieldMonsters.removeAll()"); ev("FieldMonsters.add({type:'goblin',x:1560,y:900,level:%d})" % mon_lv)
+        pg.wait_for_timeout(1800)
+        return ev("(()=>{const m=FieldMonsters.list[0];return m?{state:m.state,active:MossForest.active}:null})()")
+    r = monster_run(1, 0); check(r and r['state'] not in ('engage', 'engaged', 'alert') and r['active'], 'monster on level 0 ignores a player on level 1 at the same XY (%s)' % r)
+    r = monster_run(1, 1); check(r and (r['state'] in ('engage', 'engaged') or not r['active']), 'control: monster on the same level engages (%s)' % r)
     # inert on a plain map
     ev("MossForest.enter({map:'moss_forest_01_sunlit_path'})"); pg.wait_for_timeout(2500)
     ev("document.querySelector('#msg')&&(document.querySelector('#msg').style.display='none')")
@@ -37,4 +53,4 @@ with sync_playwright() as p:
     check('z_plain_l1' in fired(), 'plain map: `level` is ignored, zone fires exactly as before')
     check(not errs, 'no page errors %s' % errs[:2])
     b.close()
-print('FAILS', len(fails))
+print('FAILS', len(fails)); import sys; sys.exit(1 if fails else 0)

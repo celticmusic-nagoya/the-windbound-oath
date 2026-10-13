@@ -75,7 +75,7 @@
   function typeOf(def) { return Object.freeze({...(MONSTER_TYPES[def.type] || {}), ...def.tune}); }
   function spawnRec(d) {
     const t = typeOf(d);
-    const rec = {id: d.id, type: d.type, t, group: d.group || 1, x: d.x, y: d.y, home: [d.x, d.y], state: 'wander', sub: 'rest', wait: 1 + Math.random() * 2,
+    const rec = {id: d.id, type: d.type, t, group: d.group || 1, lv: Number.isFinite(d.level) ? d.level : 0, x: d.x, y: d.y, home: [d.x, d.y], state: 'wander', sub: 'rest', wait: 1 + Math.random() * 2,
       goal: null, dir: 1, clock: Math.random() * 3, timer: 0, noAggro: 0, chaseFrom: null, stuck: 0, el: null, frames: null, shown: ''};
     rec.el = makeEl(rec); layer.appendChild(rec.el); list.push(rec); draw(rec, true);
     return rec;
@@ -95,7 +95,7 @@
   // DEV: place one monster at runtime (DEV Monster Arena). Returns the record or null (no map mounted / unknown type).
   function add(def) {
     if (!ctx || !worldEl || !MONSTER_TYPES[def.type] || !ensureLayer()) return null;
-    return spawnRec({id: def.id || ('dev_' + def.type + '_' + (++devSeq)), type: def.type, x: def.x, y: def.y, group: def.group || 1, tune: def.tune});
+    return spawnRec({id: def.id || ('dev_' + def.type + '_' + (++devSeq)), type: def.type, x: def.x, y: def.y, group: def.group || 1, level: def.level, tune: def.tune});
   }
   function removeAll() { for (const m of list) m.el.remove(); list = []; }
   function setFrozen(on) { frozen = Boolean(on); }
@@ -131,14 +131,14 @@
   function moveToward(m, gx, gy, speed, sec) {
     const dx = gx - m.x, dy = gy - m.y, d = Math.hypot(dx, dy); if (d < .5) return 0;
     const step = Math.min(d, speed * sec), ax = m.x - ctx.foot.ax, ay = m.y - ctx.foot.ay;
-    const r = ctx.advance(ax, ay, dx / d * step, dy / d * step);
+    const r = ctx.advance(ax, ay, dx / d * step, dy / d * step, m.lv);
     const nx = r.x + ctx.foot.ax, ny = r.y + ctx.foot.ay, moved = Math.hypot(nx - m.x, ny - m.y);
     m.x = nx; m.y = ny; face(m, gx); m.clock += sec; return moved;
   }
   function pickWanderGoal(m) {
     for (let i = 0; i < 8; i++) {
       const a = Math.random() * Math.PI * 2, r = (.3 + Math.random() * .7) * m.t.wanderRadius, x = m.home[0] + Math.cos(a) * r, y = m.home[1] + Math.sin(a) * r;
-      if (!ctx.blocked(x - ctx.foot.ax, y - ctx.foot.ay)) return [x, y];
+      if (!ctx.blocked(x - ctx.foot.ax, y - ctx.foot.ay, m.lv)) return [x, y];
     }
     return null;
   }
@@ -185,7 +185,7 @@
     } else if (st === 'engage') {
       m.moving = false; face(m, P.x); m.timer += sec;
       if (m.timer >= t.engageDelay) {
-        if (ctx.canEngage() && ctx.engage(m)) { m.state = 'engaged'; m.timer = 0; }
+        if (!m.offLevel && ctx.canEngage() && ctx.engage(m)) { m.state = 'engaged'; m.timer = 0; }
         else { setState(m, 'return'); m.noAggro = now + t.reaggro * 1000; }
       }
     } else if (st === 'engaged') {
@@ -203,7 +203,9 @@
         if (m.state !== 'wander' && m.state !== 'engaged' && m.state !== 'engage') { m.x = m.home[0]; m.y = m.home[1]; setState(m, 'wander'); m.sub = 'rest'; draw(m, true); }
         continue;
       }
-      think(m, Math.min(sec, .1), P, dP, now);
+      // Height maps: a monster only notices / touches / engages the player on its own level (it keeps its own level for movement too).
+      const pl = ctx.level ? ctx.level() : null; m.offLevel = pl != null && pl !== m.lv;
+      think(m, Math.min(sec, .1), P, m.offLevel ? Infinity : dP, now);
       if (m.t.art && m.t.art.always && m.state !== 'engaged') { m.clock += Math.min(sec, .1); m.moving = true; }   // flyers never stop flapping
       draw(m);
     }

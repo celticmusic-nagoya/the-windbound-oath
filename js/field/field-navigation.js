@@ -53,13 +53,14 @@
       smooth.push(result[j]);from=result[j];i=j+1;}
     return smooth;
   }
-  function destination(x,y,blocked) {
+  function destination(x,y,blocked,wantLevel) {
     clear();
     const staticBlocked=blocked.staticBlocked||blocked;
     const p={x:Math.max(0,Math.min(bounds.width,x)),y:Math.max(0,Math.min(bounds.height,y))};
     const H=blocked.height;   // height-level maps (field-height.js): the destination also carries the level it belongs to
     if(H&&Number.isFinite(p.x)&&Number.isFinite(p.y)){
-      const level=H.pickLevel(p.x,p.y);
+      // an explicit target level (a tapped NPC / chest of that level) wins when that level is walkable there; otherwise the topmost walkable one
+      const level=Number.isFinite(wantLevel)&&H.blockedAtLevel&&!H.blockedAtLevel(p.x,p.y,wantLevel)?wantLevel:H.pickLevel(p.x,p.y);
       if(level<0){statistics.outcome='blocked-destination';return null;}
       p.level=level;statistics.outcome='moving';return p;
     }
