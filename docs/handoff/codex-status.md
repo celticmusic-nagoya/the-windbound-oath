@@ -64,3 +64,6 @@ N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析
 Q着手: work/codex-q / main88ae6c0。P=work/codex-aidan-walk-acceptance/21a0ee9完了（実素材未着）。Qは新規tests/field/house02_spawn.test.js、tools/moss/build_rilde_village.pyの家02だけのsy override、生成物data/maps/rilde_in_house_02.json、docs/qa/rilde-house02-spawn.mdを担当。ユーザーのQ小規模安全修正許可を適用し、入口Y452→472、arrival zoneだけ追随。家具/他map/素材/物語/高さ変更なし。変更前後testを行う。
 
 Q完了: 家02のspawnY452→472を生成元/生成物で小修正、arrival zone追随のみ。旧足元とstoolの重なりを新規Node回帰で再現→修正後合格。その他室/家具/衝突/出口不変。実入室/村への歩行/関連m10合格console0。補助FAILS[]判定は直して再確認。docs/qa/rilde-house02-spawn.md参照。次はR、コード修正せず指摘のみ。
+S着手: work/codex-wind-dance-sim2、main e694817。tools/sim/wind_dance_sim.pyと新規wind-dance-mana-sim.md/結果JSONを担当。確定風の舞15pt/3/MP10全体をモデルに使用、魔弾回復2/3/4と命中/実行条件を比較。ゲームコードは変更しない。R dda97df納品済み。
+
+S完了: MP台帳拡張とwind-dance-mana-sim.md/結果JSONを作成。engineは有効対象への暗黙100%命中で回復条件2案同値。暫定3で18フェーズcast3→6、撃破/勝率/戦闘終了MPは算出不可としてnull。自己テスト・JSON再現・既存N20k解析照合合格。ゲーム未編集、数値未適用。進行中なし、新規remote指示を最終fetchで確認する。再開は最新main/本status/branch履歴から。未コミット懸念なし。

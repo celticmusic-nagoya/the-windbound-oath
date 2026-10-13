@@ -114,3 +114,6 @@ STATUS: WIP — 最新mainとの統合後に全52本を再検証し、rollback�
 Codex N着手: work/codex-wind-dance-sim / main53180f3。status宣言の新規simと報告のみ。L/M/接触設計の再作業なし、ゲーム数値未適用。STATUS WIP。
 
 Codex Q: work/codex-q / main88ae6c0。上記statusの1部屋spawn小修正/生成元/新規回帰を担当。sy以外のmap再レイアウトなし。STATUS WIP。
+Codex S担当: work/codex-wind-dance-sim2、既存sim拡張/新規mana比較資料のみ。main e694817、ゲーム未編集。STATUS WIP。
+
+Codex S完了: MP回復2/3/4台帳と4条件比較、命中式なし/有効対象100%を出典付き報告。自己テスト/再現/N互換合格、実勝率は未算出。ゲーム未変更。STATUS READY。
