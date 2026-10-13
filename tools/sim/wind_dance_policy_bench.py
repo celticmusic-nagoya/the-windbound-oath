@@ -34,7 +34,7 @@ def run(page,base,battle,policy,regen,eva,cost,seed):
   else:raise RuntimeError('round timeout')
   trace.append({'turn':turn,'acts':acts})
   if page.evaluate('!!__bench.terminal'):outcome='defeat_rewind';break
-  if page.evaluate('b=>!PrologueCombat.enemies[b].some(e=>e.hp>0)',battle):outcome='victory';break
+  if page.evaluate("b=>b==='raider'?rbBoss<=0:!PrologueCombat.enemies[b].some(e=>e.hp>0)",battle):outcome='victory';break
  q=page.evaluate('__bench');mp=page.evaluate('b=>b==="normal"?normalFMP:rbFMP',battle)
  return dict(battle=battle,policy=policy,regen=regen,evasion_points=eva,cost=cost,seed=seed,outcome=outcome,rounds=len(trace),damage=q['damage'],dodges=q['dodges'],recoveries=q['normal_recoveries'],end_mp=q['terminal']['mp']if q['terminal']else mp,clean_victory=outcome=='victory'and q['normal_recoveries']==0,trace=trace)
 def main():

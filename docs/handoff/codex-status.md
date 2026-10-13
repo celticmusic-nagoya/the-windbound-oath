@@ -84,3 +84,4 @@ DD進行: production engineの4方針（攻撃/回復/舞/混合）、MP回復0/
 DD更新: 画像デコード負荷が大きいため計測を中断し、数値benchだけブラウザPNG応答を1px化（ファイルは不変）、DOM readyで開始、checkpoint再開を追加。元画像smokeとのoutcome/rounds/被害/dodge/MP/clean victoryは2戦闘とも完全一致、console0。以後は1728戦のcheckpointから再開。描画性能はこのbenchから評価しない。
 EE準備checkpoint: 新規m30/validate_height_schema.pyと設計メモを作成、まだ未実行・未検証。DDが実行中のためbrowser test並列実行はしない。m30は実hero winddance→enemyRoundのHP差/evade srcを検査、private dodgedを直接呼ばない。height validatorはschema/実spawn到達/旧saveの複数floor候補を出力。DD完了後にself-test/schema/m30を直列で実行して修正、結果docsを納品する。main f88fbbfの素材変更をFFで再検査予定。元worktreeのbranch変更なし。
 BB期待値追随準備: main f88fbbfは24直進/idle+dl/ul12=36枚。m28は追加diag完全集合だけを許可し、直進の新素材と旧斜め素材の分離を記録。新mainの合否はFFで実検証、現時点では未実施。DD実行中、EE testは未実行。
+DD再開checkpoint: 一時exec接続エラーから復旧。レイダー勝利は増援残存を問わずrbBoss<=0なのでbench判定を合わせた。保存済みレイダーは全件defeat_rewindで再分類不要、途中JSONから継続。EE/FF自動直列driverは一旦停止し、DD新PIDで再開する。利用制限の状態は観測できず、接続エラーを利用制限と扱わない。
