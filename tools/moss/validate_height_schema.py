@@ -17,7 +17,9 @@ def validate(m,s):
  for e in s.get('overpasses',[]):
   if not known(e.get('level')):err('overpass unknown/noninteger level '+str(e.get('id')))
  groups={'spawns':list(m.get('spawns',{}).get('points',{}).values())}
- for k in ['transitions','eventZones','treasurePoints','symbols','monsters','walkers']:groups[k]=m.get(k,[])
+ for k in ['transitions','eventZones','treasurePoints','symbols','monsters','walkers','props','npcs']:groups[k]=m.get(k,[])
+ for k in ['blockers','edgeBlockers']:groups['collision.'+k]=m.get('collision',{}).get(k,[])
+ groups['height.visuals']=s.get('visuals',[])
  for group,entries in groups.items():
   for i,e in enumerate(entries):
    if group=='spawns' and any(type(e.get(axis))not in(int,float)or not math.isfinite(e[axis])for axis in('x','y')):err(f'spawns/{e.get("id",i)} invalid coordinates')
@@ -43,6 +45,9 @@ def self_test():
   assert validate(m,s),f'invalid level accepted: {n!r}'
  for n in [0,1]:m['spawns']['points']['x']['level']=n;assert not validate(m,s)
  print('ok   negative/float/bool/string/unknown spawn levels rejected; 0/1 accepted')
+ m['collision']={'blockers':[{'id':'bad_ref','levels':[99]}]};assert validate(m,s),'unknown collider level accepted'
+ m['collision']={'edgeBlockers':[{'id':'bad_type','levels':['1']}]};assert validate(m,s),'string edge-blocker level accepted'
+ print('ok   collision and edge blocker level references/types rejected')
  fixture={'id':'height_schema_fixture','world':{'width':320,'height':320},'spawns':{'default':'entry','points':{'entry':{'x':40,'y':80,'level':0},'upper':{'x':240,'y':240,'level':1}}}}
  floor={'levelHeight':56,'levels':{'1':{'walk':[[200,200,80,80]]}},'connectors':[]}
  def physical():
