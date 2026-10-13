@@ -68,14 +68,14 @@
   "scale": 0.0625
  },
  "aidan_walk_dl_01": {
-  "path": "img/field/characters/aidan/aidan_walk_dl_01.png?v=a36b3aca",
+  "path": "img/field/characters/aidan/aidan_walk_dl_01.png?v=c8b97d09",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   844,
-   126,
-   541,
-   1104
+   831,
+   122,
+   598,
+   1107
   ],
   "anchor": [
    1024,
@@ -84,14 +84,14 @@
   "scale": 0.0625
  },
  "aidan_walk_dl_02": {
-  "path": "img/field/characters/aidan/aidan_walk_dl_02.png?v=7801e109",
+  "path": "img/field/characters/aidan/aidan_walk_dl_02.png?v=87c239f3",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   869,
-   127,
-   558,
-   1103
+   788,
+   123,
+   661,
+   1106
   ],
   "anchor": [
    1024,
@@ -100,14 +100,14 @@
   "scale": 0.0625
  },
  "aidan_walk_dl_03": {
-  "path": "img/field/characters/aidan/aidan_walk_dl_03.png?v=13236b25",
+  "path": "img/field/characters/aidan/aidan_walk_dl_03.png?v=39e276e4",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   888,
-   126,
-   547,
-   1104
+   840,
+   128,
+   597,
+   1101
   ],
   "anchor": [
    1024,
@@ -116,14 +116,14 @@
   "scale": 0.0625
  },
  "aidan_walk_dl_04": {
-  "path": "img/field/characters/aidan/aidan_walk_dl_04.png?v=02c95047",
+  "path": "img/field/characters/aidan/aidan_walk_dl_04.png?v=6c80ebd0",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   876,
-   126,
-   514,
-   1104
+   841,
+   129,
+   612,
+   1100
   ],
   "anchor": [
    1024,
@@ -132,14 +132,14 @@
   "scale": 0.0625
  },
  "aidan_walk_dl_05": {
-  "path": "img/field/characters/aidan/aidan_walk_dl_05.png?v=13a830e6",
+  "path": "img/field/characters/aidan/aidan_walk_dl_05.png?v=d6d28209",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   887,
-   126,
-   540,
-   1104
+   775,
+   113,
+   679,
+   1116
   ],
   "anchor": [
    1024,
@@ -148,14 +148,110 @@
   "scale": 0.0625
  },
  "aidan_walk_dl_06": {
-  "path": "img/field/characters/aidan/aidan_walk_dl_06.png?v=2e4fb7f3",
+  "path": "img/field/characters/aidan/aidan_walk_dl_06.png?v=b7460dd4",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   888,
-   126,
-   537,
-   1104
+   748,
+   108,
+   697,
+   1121
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_dl_07": {
+  "path": "img/field/characters/aidan/aidan_walk_dl_07.png?v=b8ace7dd",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   821,
+   140,
+   620,
+   1089
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_dl_08": {
+  "path": "img/field/characters/aidan/aidan_walk_dl_08.png?v=7e254314",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   788,
+   132,
+   675,
+   1097
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_dl_09": {
+  "path": "img/field/characters/aidan/aidan_walk_dl_09.png?v=9b8c7075",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   813,
+   136,
+   635,
+   1093
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_dl_10": {
+  "path": "img/field/characters/aidan/aidan_walk_dl_10.png?v=e4d82d55",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   751,
+   110,
+   714,
+   1119
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_dl_11": {
+  "path": "img/field/characters/aidan/aidan_walk_dl_11.png?v=9ad0b063",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   777,
+   134,
+   687,
+   1095
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_dl_12": {
+  "path": "img/field/characters/aidan/aidan_walk_dl_12.png?v=af251b7e",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   805,
+   141,
+   627,
+   1088
   ],
   "anchor": [
    1024,
