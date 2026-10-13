@@ -54,6 +54,7 @@ with sync_playwright() as p:
     ev("Math.random=()=>0"); h0=ev("[aahp,normalFHP]")
     rnd(pg,[{'who':'fiona','kind':'guard'}]); h1=ev("[aahp,normalFHP]"); ck(h0==h1,'dodge roll succeeds -> no HP lost during phase 2 %s %s'%(h0,h1))
     ck(st(pg)[0]['remainingTurns']==1,'phase 2 ticked (remaining 1)')
+    ck(ev("document.querySelector('#bAidan2 img, #bFiona2 img')!==null"),'party sprites present while dodging (evade pose is a still swap; no errors)')
     rnd(pg,[{'who':'fiona','kind':'guard'}]); h2=ev("[aahp,normalFHP]"); ck(h1==h2,'dodge roll succeeds -> no HP lost during phase 3')
     ck(st(pg)==[],'effect gone after the 3rd phase')
     rnd(pg,[{'who':'fiona','kind':'guard'}]); rnd(pg,[{'who':'fiona','kind':'guard'}]); h3=ev("[aahp,normalFHP]"); ck(h3!=h2,'after expiry the enemy hits again %s -> %s'%(h2,h3))
