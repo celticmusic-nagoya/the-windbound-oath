@@ -120,6 +120,16 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
     type:'breathe', width:480, height:400, anchor:Object.freeze([240,390]),
     frames:Object.freeze([0,1,2,3].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.leafy_boar+'idle/leafy_boar_idle_0'+i+'.png',anchor:Object.freeze([240,390])})))
   }),
+  // Lou (support fairy, raider battle): 6-frame floating idle, fixed 6 FPS loop. Frame anchors = torso centroid so the body stays put while hair / wings move.
+  lou: Object.freeze({
+    type:'loop', fps:6, crossfade:false, width:442, height:724, anchor:Object.freeze([219.4,419.6]),
+    frames:Object.freeze([Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_00.png',anchor:Object.freeze([221.1,420.1])}),
+      Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_01.png',anchor:Object.freeze([223.5,416.9])}),
+      Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_02.png',anchor:Object.freeze([224.2,419.5])}),
+      Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_03.png',anchor:Object.freeze([211.1,418.5])}),
+      Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_04.png',anchor:Object.freeze([218.5,420.9])}),
+      Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_05.png',anchor:Object.freeze([217.8,421.4])})])
+  }),
   forest_bat: Object.freeze({
     type:'breathe', width:1536, height:1024, anchor:Object.freeze([784,497]),
     frames:Object.freeze([

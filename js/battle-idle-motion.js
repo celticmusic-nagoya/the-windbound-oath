@@ -17,6 +17,8 @@
     }
     return steps;
   });
+  // Fixed-rate sequential loop (Lou): assets.fps frames per second, 1->2->...->N->1.
+  profiles.set('loop',r=>{const hold=1000/(r.assets.fps||6);return r.assets.frames.map((_,i)=>({frame:i,hold}));});
   function currentContext(){return document.body.classList.contains('raiderBattleMode')?'raider':document.body.classList.contains('normalBattleMode')?'normal':null;}
   function eligible(r){return r.enabled&&r.state==='idle'&&r.context===currentContext();}
   function paused(){return document.hidden||document.body.classList.contains('battlePresentationBusy')||document.body.classList.contains('dialogueOpen')||document.body.classList.contains('actionCinematic');}
@@ -90,7 +92,7 @@
       running=true;
       if(now-r.started>=r.steps[r.step].hold){
         r.step++;if(r.step>=r.steps.length){r.steps=profiles.get(r.assets.type)(r);r.step=0;}
-        r.from=r.frame;r.frame=r.steps[r.step].frame;r.started=now;r.transition=r.from!==r.frame&&r.actor!=='forest_bat';   // bat wing poses differ too much to crossfade (additive blend ghosts the wings): hard cut
+        r.from=r.frame;r.frame=r.steps[r.step].frame;r.started=now;r.transition=r.from!==r.frame&&r.actor!=='forest_bat'&&r.assets.crossfade!==false;   // bat wing poses differ too much to crossfade (additive blend ghosts the wings): hard cut
       }
       draw(r,now);
     }
@@ -113,6 +115,8 @@
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});
   // Forest Bat (enemy): idle flap on whichever battle slot holds a bat (records only act while the slot's actor is 'forest_bat').
   for(const actor of ['forest_bat','leafy_boar'])for(const selector of ['#bGob img','#normalEnemy1 .prologueSprite img','#normalEnemy2 .prologueSprite img'])BattleIdleMotion.register({context:'normal',actor,selector,assets:BATTLE_IDLE_ASSETS[actor]});
+  // Lou (raider battle only): floating idle loop on the party slot.
+  BattleIdleMotion.register({context:'raider',actor:'lou',selector:'#rbLou img',assets:BATTLE_IDLE_ASSETS.lou});
   new MutationObserver(refresh).observe(document.body,{attributes:true,attributeFilter:['class']});
   document.addEventListener('visibilitychange',refresh);reduced.addEventListener('change',refresh);
 })();
