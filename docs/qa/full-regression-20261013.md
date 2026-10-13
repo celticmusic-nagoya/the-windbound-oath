@@ -17,3 +17,7 @@
 Claudeのaltar短縮/walker/static lift mergeを受け、新規独立source `43b749f50b27f5c95fa1374efae58b4cac22bde8` （230a29c + unchanged O runner）から全63本を再実行。**61合格 / main既存2 / 新規0 / 未実施0**。前後SHA不変・owned server終了を全63件で確認。m24もFAILS0/console0、縦横の上階宝箱tapが合格。
 
 最新runの全件表/JSON/生ログ: [full-regression-latest-20261013/results.md](full-regression-latest-20261013/results.md)。160bead結果は比較として保持。branch work/codex-v-latest のsourceはpush済み。基準をテスト中に変更していない。旧台詞2件はWの提案へ。Androidは未測定。
+
+## 全件後のmain更新を差分検証
+
+main d153d06へ進み、台詞2件の修正・heightSpecs overlay・level保存・回避ポーズが追加された。別snapshotでm13/m4/m22/m23/m26を直列実行し5/5合格（[結果表](latest-delta-20261013/results.md)）。台詞2件は現mainでは解消。これはd153d06全件回帰ではなく、230a29c全件結果と後追い検証を分けた記録。

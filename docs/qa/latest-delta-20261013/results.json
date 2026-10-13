@@ -1,0 +1,79 @@
+{
+  "source_head": "d153d06584accf494794dcb466409fc0c715ea24",
+  "main_base": "d153d06584accf494794dcb466409fc0c715ea24",
+  "port": 8793,
+  "timeout": 600,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "results": [
+    {
+      "test": "tests/moss/m13_elder_attack_text.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 6.673,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m13_elder_attack_text.py.log",
+      "test_sha256_before": "a3d829e771a206a6e6692c4e7ee8e465069925e551e2f597596012805bf9d165",
+      "test_sha256_after": "a3d829e771a206a6e6692c4e7ee8e465069925e551e2f597596012805bf9d165",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m4_e2e.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 168.37,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m4_e2e.py.log",
+      "test_sha256_before": "760ee4a02df3c3fd40505886ea0e50b18b2abd42107c03d359983cdba7d78f53",
+      "test_sha256_after": "760ee4a02df3c3fd40505886ea0e50b18b2abd42107c03d359983cdba7d78f53",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m22_height_contacts.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 35.035,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m22_height_contacts.py.log",
+      "test_sha256_before": "48a3e71cadd12f874e6ffbac881974e06c0c369c56064c3c774a58d47d0a9421",
+      "test_sha256_after": "48a3e71cadd12f874e6ffbac881974e06c0c369c56064c3c774a58d47d0a9421",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m23_wind_dance_battle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 59.739,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m23_wind_dance_battle.py.log",
+      "test_sha256_before": "0d7a3227476bf63caee6668f80d108b9c2317fb3b6480b2d7e1c3494d703c3a2",
+      "test_sha256_after": "0d7a3227476bf63caee6668f80d108b9c2317fb3b6480b2d7e1c3494d703c3a2",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m26_height_spec_overlay.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 16.432,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m26_height_spec_overlay.py.log",
+      "test_sha256_before": "a3a82eec05cb3046cd4b90915af92b888ba8aebecd365da1dec548d9ddce1d4d",
+      "test_sha256_after": "a3a82eec05cb3046cd4b90915af92b888ba8aebecd365da1dec548d9ddce1d4d",
+      "server_stopped": true
+    }
+  ]
+}
