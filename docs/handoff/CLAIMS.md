@@ -125,3 +125,5 @@ Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現�
 Codex T〜Z: work/codex-tz、元worktree固定、独立cloneでtests/tools/docs担当（指定各成果物）。main49660b7、T納品b5a39cb、U実行中。js/マップ未編集。STATUS WIP。
 
 Codex V完了: 160bead全62=60合格/既存2/新規0。Wはstale-tests-fix.patchと説明/提案検証のみ担当、ゲーム/元testsは変更しない。STATUS WIP（W以降）。
+
+Codex T〜Z納品: work/codex-tz。V230全63=61合格/旧2（現d153差分5本で解消）。Xはmeter検証/手順納品、height GUI入口は提案のみでBLOCKED。Y前後/ Z全30map100spawn合格。js/map本体未編集。次AA。

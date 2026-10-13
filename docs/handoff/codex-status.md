@@ -91,3 +91,5 @@ V最新版完了: main230a29c全63=61合格/既存2/新規0/未実施0、Uも全
 W完了: Claude8155fddの採用済み差分を参考patchとして保存、再適用不要。main d153d06でm13/m4/m22/m23/m26の5/5合格、旧2失敗解消。V全件は230a29c、d153全件とは区別。X着手: android-perf-protocol.md/既存meter UI確認だけ。Y→Z、追加AA受領（Z後着手）。js/マップ未編集。
 X納品: android-perf-protocol.md、PC機能確認（縦横表示/実60秒JSON/clipboard同値/console0）。Android未測定。js/prologue-dev.jsがDEV一覧を再生成しheight proto項目が無いため、スマホ単独の高さ起動はBLOCKED。X指示の新規実装は提案のみを守り、導線追加案を記載。ゲーム未編集。Y着手: m25_walkers_level.py/報告、Z後AA。
 Y完了: m25新規、旧160の高さ8失敗→d153で0、height無し互換は両方合格、console0。表示lift/全homeリンク監査は別途。Z着手: tools/qa/check_spawn_feet.py/監査表のみ、実FieldCollisionを使用、マップ修正なし。Z後AA。
+
+Z完了: main d153d06の本編28+DEV2/100spawn/102条件、実FootCollision22x10+FieldHeightで全合格、旧家02負例selftest合格。map変更/修正案不要。T〜Z納品済み、XのみAndroid未測定/GUI起動導線BLOCKED。次は新規AA（heightSpec draft/lint/実歩行、ゲーム/map本体未編集）。
