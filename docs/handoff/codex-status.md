@@ -92,3 +92,4 @@ EE完了: m30の実hero winddance→通常A/F攻撃/破砕斬の8経路、HP差�
 FF進行: 開始時最新main169f197にm28/m29/m30を追加したwork/codex-ff-sourceのcommitをgit archive固定。75本、port8801、timeout600、各test server自前/直列。source branch push済み、実行中にbranch切替しない。最終結果はまだ未確定。
 EE追加チェック準備: validatorのself-testに「足元はclearだが接続無しの上階spawnは到達不可／階段を追加すると到達可」という実FieldHeight負/正例を追加。未実行（FF browser回帰中なので並列で回さない）。FF終了後にself-testだけ直列実行して結果追記。EE本検査/m30の既存合格は維持、FF基準169f197とmap/height-spec/FieldHeight/Collision差分0を確認済み。
 EE範囲補完準備: height level参照はactor/eventだけでなくcollision.blockers/edgeBlockersにも存在するため、props/npcs/visualsと合わせて検査対象へ追加。未知collider floor/文字列edge floorの負例も追加。未実行、FF後にself-test＋schema全件を直列実行して検証する。js/map/素材未変更、FF archiveとbrowser testに影響なし。
+EE入力網羅の補完: matching mapのないheight-spec JSONも全件読み、missing mapを失敗として報告するよう追加（黙ってskipしない）。heightの非object型も拒否し、空objectは検査対象へ含める。FF後のschema/self-testで検証予定。

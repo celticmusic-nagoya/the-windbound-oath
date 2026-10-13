@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 def validate(m,s):
  issues=[]
+ if not isinstance(s,dict):return ['height spec must be an object']
  def err(msg):issues.append(msg)
  def integer(n):return type(n)is int and n>=0
  levels=s.get('levels',{});known=lambda n:integer(n)and(n==0 or str(n)in levels)
@@ -60,15 +61,19 @@ def self_test():
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path);p.add_argument('--self-test',action='store_true');a=p.parse_args()
  if a.self_test:self_test();return
- data=[];rows=[]
+ data=[];rows=[];matched_specs=set()
  for f in sorted((ROOT/'data/maps').glob('*.json')):
   m=json.loads(f.read_text());specs=[]
-  if m.get('height'):specs.append((str(f.relative_to(ROOT)),m['height']))
+  if 'height'in m and m['height']is not None:specs.append((str(f.relative_to(ROOT)),m['height']))
   overlay=ROOT/'data/height-specs'/f.name
-  if overlay.exists():specs.append((str(overlay.relative_to(ROOT)),json.loads(overlay.read_text())))
+  if overlay.exists():
+   matched_specs.add(overlay)
+   specs.append((str(overlay.relative_to(ROOT)),json.loads(overlay.read_text())))
   for file,s in specs:
    issues=validate(m,s);rows.append({'file':file,'map':m['id'],'errors':issues})
    if not issues:data.append({'file':file,'map':m,'spec':s})
+ for f in sorted((ROOT/'data/height-specs').glob('*.json')):
+  if f not in matched_specs:rows.append({'file':str(f.relative_to(ROOT)),'map':f.stem,'errors':['no matching map JSON']+validate({},json.loads(f.read_text()))})
  actual=json.loads(subprocess.check_output(['node','-e',JS,str(ROOT)],input=json.dumps(data),text=True,timeout=180))
  j={'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'schema':rows,'engine':actual,'ambiguity_scope':'all upper walk rectangles; five clear candidate points per rectangle, not exhaustive continuous-world enumeration'}
  if a.out:a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(j,ensure_ascii=False,indent=2)+'\n')
