@@ -42,7 +42,8 @@ with server(8822) as base, sync_playwright() as p:
     s=walk(['ArrowDown']); check(s=={'down'},'straight down uses walk_down %s'%s)
     s=walk(['ArrowUp']); check(s=={'up'},'straight up uses walk_up %s'%s)
     s=walk(['ArrowRight','ArrowDown']); check('dlF' in s and 'down' not in s,'down-right uses mirrored 3/4 %s'%s)
-    s=walk(['ArrowLeft','ArrowUp']); check('ul' in s and 'up' not in s,'up-left uses 3/4 back %s'%s)
+    s=walk(['ArrowLeft','ArrowUp']); check(s=={'up'},'up-left reuses the back-walk art unmirrored (plan D) %s'%s)
+    s=walk(['ArrowRight','ArrowUp']); check(s=={'up'},'up-right reuses the back-walk art unmirrored (plan D) %s'%s)
     s=walk(['ArrowRight']); check(s<={'right'},'sideways uses walk_right %s'%s)
     pg.keyboard.down('ArrowLeft'); pg.keyboard.down('ArrowDown'); idx=[]
     for i in range(80):
