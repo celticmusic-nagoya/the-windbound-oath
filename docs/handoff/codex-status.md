@@ -76,3 +76,5 @@ R着手: work/codex-height-contact-impl-review / main88ae6c0。対象origin/feat
 R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/動く敵0の戦闘を再現。NPC goalのlevel欠落をAPIで確認、pending/walkers/試験fixture不足も指摘。コード未編集。docs/qa/height-contact-impl-review.mdと証跡を納品。
 今回の納品: N2e9bb42（Claudeがmain88ae6c0へ統合）、O56f6050（旧531対象57合格/既存2/新規0）、P21a0ee9（dummy検品、実素材未受領）、Q306ef3a（家02spawn限定修正、関連検証合格）、Rは本branchの最新commit参照。全件最終main回帰/Androidは未実施。
 区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
+
+BB〜FF着手: work/codex-bb-ff / main3208079、独立clone固定。AA3979e54はdraft/検査納品、overlay-only会話gateは未達（map level宣言待ち）。担当: tests/moss/m28_aidan_walk_assets.py、m29_leafy_boar_assets.py、m30_raider_dodge.py、新規tools/sim風の舞policy、tools/moss/validate_height_schema.py、BB/CC/DD/EE/FF各docsと証跡。BB→CC→DD→EE→FF順、tests直列、js/採用素材/mainは触らない。AA draft branchは自動統合しない。

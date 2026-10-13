@@ -121,3 +121,5 @@ Codex P: work/codex-aidan-walk-acceptance / main88ae6c0。新規検品tool/docs/
 Codex R: work/codex-height-contact-impl-review、対象5c33f9f。指摘doc/検証のみ、コード未編集。STATUS WIP。
 
 Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現、NPC goal level欠落と追加試験を指摘。コード未変更。STATUS READY。最新main e694817の新規Sを後続予定。
+
+- Codex BB〜FF: work/codex-bb-ff、main3208079基準。新規m28/m29/m30・policy sim・height schema toolと各docs/証跡を担当。js/素材/map本体/main未編集。AA3979e54は未採用draft（会話gate level宣言待ち）。
