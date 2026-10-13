@@ -126,3 +126,5 @@ OO完了: all-maps-smoke-20261013.md / m35 / 120条件結果/logを納品。30ma
 PP checkpoint: regression.yml / requirements-ci.txt作成。contents:readのみ、PR/main pushは高速7本、夜間/手動fullは全件。公式actionlint1.7.7をchecksum検証して取得しYAML合格、FAIL検出self-test合格。最新maindeadf3dの上斜め歩行変更とm31更新を確認。work branchへ通常mergeで作者差分を取り込んでCI高速セットを実行予定。LL/MM/NN/OOの測定基準f0fe968は各報告で維持・区別する。
 
 最終検証checkpoint: PP高速7本は最新maindeadf3dを取り込んだ4532bc7で7/7合格。LLのタイマーで消えたログだけにならないよう既存log APIで表示中の測定を追加し再検証する。NN/OOも最新field描画差分で追試。4診断testのJSONには導入基準f0fe968と実行source_headを分離して記録し、CIではGITHUB_SHAを使う。ゲームコードはorigin/mainと同一。
+
+最終MM判定修正: プリミティブ根でtrueを返すことだけは指示以上のreject要件なので、指定の「例外なし・安全な既定値」を検査する。旧結果10件は保存し、最新maindeadf3dでMMを再実行して最終件数を報告する。LLは70状態に補強しFAILS0、NN2・OO動的120合格/未解決11は追試でも同じ。PPローカル高速7本は7/7合格、実Actions未実行。

@@ -49,7 +49,7 @@ with server(8832) as base,sync_playwright() as p:
   d=copy.deepcopy(canonical);fn(d);bad.append((name,d,False))
  for name,d,raw in bad:
   fresh();result,state=load(d,raw);fixtures[name]=dict(data=d,raw=raw);problems=[]
-  if name in ['broken-json','null','number-root','array-root'] and result is not False:problems.append('non-object/invalid root accepted')
+  if name in ['broken-json','null','number-root','array-root'] and (state['member']['level']!=default['member']['level'] or state['gold']!=default['gold'] or state['battleItems']!=default['battleItems'] or state['support']['joined'] is not False):problems.append('invalid root did not retain safe defaults')
   if not isinstance(state['member'].get('level'),(int,float)) or isinstance(state['member'].get('level'),bool) or not 1<=state['member']['level']<=50:problems.append('invalid member level retained')
   if not isinstance(state['gold'],(int,float)) or state['gold']<0:problems.append('invalid/negative gold retained')
   if not isinstance(state['battleItems'].get('potion'),int) or state['battleItems']['potion']<0:problems.append('invalid item count retained')

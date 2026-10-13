@@ -1,0 +1,1103 @@
+{
+  "base": "f0fe968",
+  "rows": [
+    {
+      "name": "v26 loads",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "v26 keeps growth/gold/items",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v26 Lou flag preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v26 missing fields default",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v26 original not overwritten by load",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v26 -> v30 roundtrip equals normalized save",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v27 loads",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "v27 keeps growth/gold/items",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v27 Lou flag preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v27 missing fields default",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v27 original not overwritten by load",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v27 -> v30 roundtrip equals normalized save",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v28 loads",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "v28 keeps growth/gold/items",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v28 Lou flag preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v28 missing fields default",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v28 original not overwritten by load",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v28 -> v30 roundtrip equals normalized save",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v29 loads",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "v29 keeps growth/gold/items",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v29 Lou flag preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v29 legacy forestChests reconciles charm",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v29 original not overwritten by load",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v29 -> v30 roundtrip equals normalized save",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v30 loads",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "v30 keeps growth/gold/items",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v30 Lou flag preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v30 equipment/quests/talk preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v30 plain-map position preserved",
+      "ok": true,
+      "detail": [
+        {
+          "map": "moss_forest_01_sunlit_path",
+          "x": 2003,
+          "y": 5002,
+          "opened": [],
+          "fired": []
+        },
+        {
+          "map": "moss_forest_01_sunlit_path",
+          "x": 2003,
+          "y": 5002,
+          "opened": [],
+          "fired": []
+        }
+      ]
+    },
+    {
+      "name": "v30 original not overwritten by load",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v30 -> v30 roundtrip equals normalized save",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "v30 wooden/single-accessory migration",
+      "ok": true,
+      "detail": {
+        "stage": 9,
+        "gold": 321,
+        "battleItems": {
+          "potion": 7,
+          "ether": 2
+        },
+        "member": {
+          "joined": true,
+          "level": 4,
+          "exp": 17
+        },
+        "active": [
+          "aidan",
+          "fiona"
+        ],
+        "reserve": [],
+        "support": {
+          "id": "lou",
+          "joined": false,
+          "fairyBlessing": 1
+        },
+        "equipment": {
+          "v": 1,
+          "state": {
+            "aidan": {
+              "weapon": "father_sword",
+              "head": "leather_cap",
+              "accessory1": "emma_charm"
+            }
+          }
+        },
+        "inventory": {
+          "key": {},
+          "gear": {
+            "father_sword": 2
+          },
+          "claimed": []
+        },
+        "quests": {
+          "q_emma_charm": "active"
+        },
+        "talk": {
+          "seen": [
+            "scene_forest_arrival_1"
+          ],
+          "cycle": {
+            "scene_forest_arrival_1": 1
+          },
+          "flags": {
+            "mm_marker": true
+          }
+        },
+        "moss": {
+          "map": "moss_forest_01_sunlit_path",
+          "x": 2003,
+          "y": 5002,
+          "opened": [],
+          "fired": []
+        }
+      }
+    },
+    {
+      "name": "malformed broken-json",
+      "ok": true,
+      "detail": {
+        "result": false,
+        "problems": [],
+        "state": {
+          "stage": 0,
+          "gold": 0,
+          "battleItems": {
+            "potion": 4,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 1,
+            "exp": 0
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {},
+          "talk": {
+            "seen": [],
+            "cycle": {},
+            "flags": {}
+          },
+          "moss": {
+            "map": "rilde_in_aidan",
+            "x": 233,
+            "y": 288,
+            "opened": [],
+            "fired": [
+              "ev_arrival"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed null",
+      "ok": true,
+      "detail": {
+        "result": false,
+        "problems": [],
+        "state": {
+          "stage": 0,
+          "gold": 0,
+          "battleItems": {
+            "potion": 4,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 1,
+            "exp": 0
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {},
+          "talk": {
+            "seen": [],
+            "cycle": {},
+            "flags": {}
+          },
+          "moss": {
+            "map": "rilde_in_aidan",
+            "x": 233,
+            "y": 288,
+            "opened": [],
+            "fired": [
+              "ev_arrival"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed number-root",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "non-object/invalid root accepted"
+        ],
+        "state": {
+          "stage": 0,
+          "gold": 0,
+          "battleItems": {
+            "potion": 4,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 1,
+            "exp": 0
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {},
+          "talk": {
+            "seen": [],
+            "cycle": {},
+            "flags": {}
+          },
+          "moss": {
+            "map": "rilde_in_aidan",
+            "x": 233,
+            "y": 288,
+            "opened": [],
+            "fired": [
+              "ev_arrival"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed array-root",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "non-object/invalid root accepted"
+        ],
+        "state": {
+          "stage": 0,
+          "gold": 0,
+          "battleItems": {
+            "potion": 4,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 1,
+            "exp": 0
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {},
+          "talk": {
+            "seen": [],
+            "cycle": {},
+            "flags": {}
+          },
+          "moss": {
+            "map": "rilde_in_aidan",
+            "x": 233,
+            "y": 288,
+            "opened": [],
+            "fired": [
+              "ev_arrival"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed unknown-keys",
+      "ok": true,
+      "detail": {
+        "result": true,
+        "problems": [],
+        "state": {
+          "stage": 9,
+          "gold": 321,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 4,
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed bad-level",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "invalid member level retained"
+        ],
+        "state": {
+          "stage": 9,
+          "gold": 321,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": "bad",
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed numeric-level",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "invalid member level retained"
+        ],
+        "state": {
+          "stage": 9,
+          "gold": 321,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": "4",
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed negative-gold",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "invalid/negative gold retained"
+        ],
+        "state": {
+          "stage": 9,
+          "gold": -4,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 4,
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed bad-potion",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "invalid item count retained"
+        ],
+        "state": {
+          "stage": 9,
+          "gold": 321,
+          "battleItems": {
+            "potion": "many",
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 4,
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed bad-support",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "non-boolean joined retained"
+        ],
+        "state": {
+          "stage": 9,
+          "gold": 321,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 4,
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": "false",
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed unknown-active",
+      "ok": false,
+      "detail": {
+        "result": true,
+        "problems": [
+          "unknown active member retained"
+        ],
+        "state": {
+          "stage": 9,
+          "gold": 321,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 4,
+            "exp": 17
+          },
+          "active": [
+            "ghost"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "malformed bad-gold",
+      "ok": true,
+      "detail": {
+        "result": true,
+        "problems": [],
+        "state": {
+          "stage": 9,
+          "gold": 0,
+          "battleItems": {
+            "potion": 7,
+            "ether": 2
+          },
+          "member": {
+            "joined": true,
+            "level": 4,
+            "exp": 17
+          },
+          "active": [
+            "aidan",
+            "fiona"
+          ],
+          "reserve": [],
+          "support": {
+            "id": "lou",
+            "joined": false,
+            "fairyBlessing": 1
+          },
+          "equipment": {
+            "v": 1,
+            "state": {
+              "aidan": {
+                "weapon": "father_sword",
+                "head": "leather_cap"
+              }
+            }
+          },
+          "inventory": {
+            "key": {},
+            "gear": {},
+            "claimed": []
+          },
+          "quests": {
+            "q_emma_charm": "active"
+          },
+          "talk": {
+            "seen": [
+              "scene_forest_arrival_1"
+            ],
+            "cycle": {
+              "scene_forest_arrival_1": 1
+            },
+            "flags": {
+              "mm_marker": true
+            }
+          },
+          "moss": {
+            "map": "moss_forest_01_sunlit_path",
+            "x": 2003,
+            "y": 5002,
+            "opened": [],
+            "fired": []
+          }
+        }
+      }
+    },
+    {
+      "name": "missing fields warm-load defaults",
+      "ok": false,
+      "detail": {
+        "stage": 9,
+        "gold": 321,
+        "battleItems": {
+          "potion": 7,
+          "ether": 2
+        },
+        "member": {
+          "joined": true,
+          "level": 4,
+          "exp": 17
+        },
+        "active": [
+          "aidan",
+          "fiona"
+        ],
+        "reserve": [],
+        "support": {
+          "id": "lou",
+          "joined": true,
+          "fairyBlessing": 1
+        },
+        "equipment": {
+          "v": 1,
+          "state": {
+            "aidan": {
+              "weapon": "father_sword"
+            }
+          }
+        },
+        "inventory": {
+          "key": {},
+          "gear": {},
+          "claimed": []
+        },
+        "quests": {},
+        "talk": {
+          "seen": [],
+          "cycle": {},
+          "flags": {}
+        },
+        "moss": {
+          "map": "moss_forest_01_sunlit_path",
+          "x": 2003,
+          "y": 5002,
+          "opened": [],
+          "fired": []
+        }
+      }
+    },
+    {
+      "name": "DEV height map/level roundtrip",
+      "ok": false,
+      "detail": {
+        "saved": {
+          "map": "dev_height_proto",
+          "x": 1543,
+          "y": 558,
+          "opened": [],
+          "fired": [
+            "ev_arrival"
+          ],
+          "level": 1
+        },
+        "loaded": {
+          "map": "moss_forest_01_sunlit_path",
+          "x": 2003,
+          "y": 5002,
+          "opened": [],
+          "fired": [
+            "ev_arrival"
+          ]
+        }
+      }
+    },
+    {
+      "name": "uncaught page errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}
