@@ -118,3 +118,13 @@ COMMAND/アイテムパネル自体のviewport外突出0、主要hero矩形の�
 Claudeへ: 横アイテムの40→44px候補の採否と既知HUD/Lou対応を判断してください。モバイルCOMMAND初期折りたたみの決定は維持。採用素材/ゲームコードを変更していない。mainへマージ/PR作成なし。統合はClaude担当、main未更新なのでロールバック不要。STATUS: READY（監査完了、全指摘修正済みという意味ではない）。
 
 追加ファイル: 本MD + `docs/reports/mobile-visual-audit-20261014/*.png`38枚。commitは本ブランチ履歴とチャット納品表を参照。
+
+## 夜間3タスクの納品索引
+
+全てorigin/main aba3d8dから独立したブランチ。最終fetchでもmain同SHA、元作業ツリーはwork/codex-wind-dance-sim2のcleanを維持。自分の8842〜8846サーバーは停止済み。ゲーム/素材/data差分0、main/force push/PRなし。
+
+- X1完了: `work/codex-night-20261014-x1` / `391b87a`。map-25d-survey-20261014.md/.csv、30マップ30行照合合格。
+- X2完了（指摘保持）: `work/codex-night-20261014-x2`、READMEの最新commit参照。42件39合格/DEVセーブ復元3失敗、関連既存6/6合格。ゲーム差分なし。FAIL3は既存runnerにも自動検出されるため、無条件のgreen suiteとして統合しない。
+- X3完了: 撮影成果コミット `834f52a`、本MD/38PNG。36条件エラー0、横スクロール/実アイテムクリック2/2合格。Android/全回帰は未実施。
+
+指示の新規ファイル限定に従い、既存codex-status.md/CLAIMS.mdは編集せず、各成果物の担当宣言/checkpointをpushして共有した。進行中/未着手の夜間タスクなし。Claudeは各ブランチの内容・判断事項を確認して統合する。本タスク指示どおりここで停止する。
