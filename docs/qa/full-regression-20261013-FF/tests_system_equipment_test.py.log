@@ -1,0 +1,42 @@
+ok   fresh boot starts with one father sword
+ok   EQUIP tab is hidden until the prologue is over
+ok   nobody wears anything at the start (old balance untouched)
+ok   no equipment -> stats identical
+ok   five sockets: weapon / head / body / accessory x2
+ok   equipment can be added to the inventory
+ok   bag lists equipment (kind equip), separate from consumables/key items
+ok   consumable list unaffected
+ok   equip father sword: no stat change (balance), bag count -1
+ok   other stats unchanged
+ok   father sword uses base motion (6 frames, hit at 240ms)
+ok   Aidan cannot wear shop swords (weapon is story-bound)
+ok   (placeholder)
+ok   Liam: iron sword adds ATK+5
+ok   (liam motion untouched)
+ok   two accessories fit the two sockets
+ok   both accessories add up (DEF+2, maxHP+13)
+ok   a third accessory replaces the chosen socket and returns the old one to the bag
+ok   head slot works
+ok   wearer restriction (equipBy) enforced
+ok   slot mismatch refused
+ok   unknown id refused
+ok   another member's stats are untouched
+ok   oath sword replaces the broken father sword (nothing returns to the bag)
+ok   oath sword cannot be unequipped
+ok   oath sword cannot be replaced
+ok   oath sword: no balance change yet (upgrades come from the smith later)
+ok   save: ids only, slots stored (save version unchanged)
+ok   after reset: base stats
+ok   load restores worn pieces
+ok   corrupt entries dropped; the old single accessory slot maps to accessory1
+ok   reset closes the gate
+ok   unlock opens the EQUIP tab and is saved
+ok   unlock survives a save/load
+ok   before the altar: father sword
+ok   after the Raider: oath sword
+ok   after the prologue: gate open and starter gear granted once
+ok   starter gear is not granted twice
+ok   old save with Aidan wearing an iron sword: the sword returns to the bag, the story weapon is set
+ok   legacy wooden slot migrates to the father sword
+ok   loading never overwrites the original legacy save
+ok   0 console errors []

@@ -1,0 +1,81 @@
+127.0.0.1 - - [13/Oct/2026 08:25:54] "GET /index.html HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 40210)
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 1326, in finish_request
+    self.RequestHandlerClass(request, client_address, self,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 676, in __init__
+    super().__init__(*args, **kwargs)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 766, in __init__
+    self.handle()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 440, in handle
+    self.handle_one_request()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 428, in handle_one_request
+    method()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 683, in do_GET
+    self.copyfile(f, self.wfile)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 882, in copyfile
+    shutil.copyfileobj(source, outputfile)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 204, in copyfileobj
+    fdst_write(buf)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 845, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /dev/moss-forest.html?map=../data/maps/moss_forest_02_mossy_ravine.json HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/field-movement.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/field-collision.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/field-camera.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/field-navigation.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/field-culling.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/forest-scatter.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/forest-layer.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/forest-loader.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /js/field/forest-dev.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/manifest.json?v=20261012art HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_fairy_flower_03.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_clump_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/ground_moss.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_fairy_flower_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_fairy_flower_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/ground_mossdirt.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/lind/props/lind_sign.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_clump_03.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_patch_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_clump_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_patch_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_mushroom_brown_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_patch_03.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_mushroom_brown_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_moss_patch_04.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_mushroom_red_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_mushroom_red_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_reeds_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_reeds_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_thorn_L_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/veg_thorn_L_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/gnd_leaflitter_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/gnd_leaflitter_02.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/standin/flower.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/a3_seal_closed.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/a3_seal_corrupted.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/a3_seal_opening.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/standin/grass.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/treasure_chest_closed.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/treasure_chest_open.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/moss_corruption_symbol.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /data/maps/moss_forest_02_mossy_ravine.json HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/prop_bridge_post_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/prop_root_arch_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/prop_fence_broken_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/prop_bridge_wood_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/standin/rock_large.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/prop_root_steps_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/fx_waterfall_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/anc_stone_marker_old_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/art/anc_standing_L_01.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/standin/rock_small.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/standin/bush.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/Oct/2026 08:25:55] "GET /img/field/moss/standin/tree.png HTTP/1.1" 200 -

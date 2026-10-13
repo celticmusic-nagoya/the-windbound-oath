@@ -20,3 +20,5 @@
 ## 要判断
 
 同じXYに下層と上層が存在すれば、levelなしでは元の意図を復元できない。highest deriveは地上を橋面へ変更する場合がある。自動移行を採用せず、領域ごとの作者判断/安全spawnへの誘導案を別レビューする。runtimeのfinite検査だけでは負/小数/未定義floorを防げないため、schema検査に加えload側の防御をClaudeへ提案する。コード/セーブ構造は変更していない。AA cliff draftは別branchで未採用なのでこのmain監査には含まない。heightの本編有効化とAndroid実機確認は未実施。旧XYの事前受入がfalseなら実restoreはspawnへ退避するため、derive→commitは座標を保持できた場合の参考値である。
+
+FF後の追加検査も合格: collision/edge blocker/props/npcs/visualsのfloor参照、orphan spec、非object heightを含めたvalidatorでschema FAILS0。negative self-testは型/未知floorに加え、実FieldHeightで孤立上階spawnを拒否し、階段接続後を許可する正例を確認。FF main169f197とmap/height-spec/FieldCollision/FieldHeightの差分0。schema/物理処理は同じ基準である。
