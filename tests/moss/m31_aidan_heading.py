@@ -41,16 +41,11 @@ with server(8822) as base, sync_playwright() as p:
         idle(); return seen
     s=walk(['ArrowDown']); check(s=={'down'},'straight down uses walk_down %s'%s)
     s=walk(['ArrowUp']); check(s=={'up'},'straight up uses walk_up %s'%s)
-    s=walk(['ArrowRight','ArrowDown']); check('dlF' in s and 'down' not in s,'down-right uses mirrored 3/4 %s'%s)
+    s=walk(['ArrowRight','ArrowDown']); check(s=={'down'},'down-right reuses the front-walk art unmirrored %s'%s)
+    s=walk(['ArrowLeft','ArrowDown']); check(s=={'down'},'down-left reuses the front-walk art unmirrored %s'%s)
     s=walk(['ArrowLeft','ArrowUp']); check(s=={'up'},'up-left reuses the back-walk art unmirrored (plan D) %s'%s)
     s=walk(['ArrowRight','ArrowUp']); check(s=={'up'},'up-right reuses the back-walk art unmirrored (plan D) %s'%s)
     s=walk(['ArrowRight']); check(s<={'right'},'sideways uses walk_right %s'%s)
-    pg.keyboard.down('ArrowLeft'); pg.keyboard.down('ArrowDown'); idx=[]
-    for i in range(80):
-        pg.wait_for_timeout(40); n=pg.evaluate("(()=>{const i=[...document.querySelectorAll('.forest-aidan')].find(i=>!i.hidden);const m=i&&i.dataset.src.match(/walk_dl_(\\d+)/);return m?+m[1]:null})()")
-        if n and (not idx or idx[-1]!=n): idx.append(n)
-    pg.keyboard.up('ArrowLeft'); pg.keyboard.up('ArrowDown')
-    check(len(set(idx))>=10 and max(idx)==12,'down-left diagonal cycles the 12-frame walk %s'%idx)
     check(not errs,'no console errors %s'%errs[:3])
     b.close()
 print('FAILS %d'%len(fails)); sys.exit(1 if fails else 0)

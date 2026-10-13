@@ -4,8 +4,8 @@
 (function () {
   'use strict';
   // Art map for the diagonals (swap point for dedicated art). Up diagonals reuse the confirmed back-walk set unmirrored
-  // (the old 'ul' set never alternated feet). To restore dedicated art later: set ul -> {art:'ul', mirror:true}.
-  const ART = {dl: {art: 'dl', mirror: true}, ul: {art: 'up', mirror: false}};
+  // (the old 'ul' set never alternated feet). Down diagonals likewise reuse the front-walk set (the 12-frame 'dl' set is kept as spare art). To restore dedicated art: ul -> {art:'ul', mirror:true}, dl -> {art:'dl', mirror:true}.
+  const ART = {dl: {art: 'down', mirror: false}, ul: {art: 'up', mirror: false}};
   function art(dir, flip) { const a = ART[dir]; return a ? {dir: a.art, flip: !!flip && a.mirror} : {dir, flip: !!flip}; }
   function create() {
     let vx = 0, vy = 0, mode = null;
