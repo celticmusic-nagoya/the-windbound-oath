@@ -18,7 +18,7 @@ def check(ok,name,detail=None):
 METER="""secs=>new Promise(resolve=>{let last=performance.now(),end=last+secs*1000,dt=[];function f(now){dt.push(now-last);last=now;if(now<end)requestAnimationFrame(f);else{dt.shift();dt.sort((a,b)=>a-b);resolve({n:dt.length,mean:dt.reduce((a,b)=>a+b,0)/dt.length,p99:dt[Math.floor(dt.length*.99)]})}}requestAnimationFrame(f)})"""
 GEOM="""(()=>{let l=document.querySelector('#forestLou'),f=document.querySelector('#forestFiona'),a=document.querySelector('#forestPlayer'),im=[...l.querySelectorAll('img')].find(i=>!i.hidden);return {visible:getComputedStyle(l).display!=='none',left:parseFloat(l.style.left),top:parseFloat(l.style.top),lift:l.style.transform,fionaLift:f.style.transform,frame:[...l.querySelectorAll('img')].indexOf(im),rect:im?JSON.parse(JSON.stringify(im.getBoundingClientRect())):null,a:JSON.parse(JSON.stringify(a.getBoundingClientRect())),f:JSON.parse(JSON.stringify(f.getBoundingClientRect()))}})()"""
 with server(8812) as base,sync_playwright() as p:
-    b=p.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE','/usr/bin/chromium'))
+    b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
     for view,dims in [('pc',(1280,720)),('portrait',(390,844)),('landscape',(844,390))]:
         for variant in ['original','proposal','hidden']:
             context=b.new_context(viewport={'width':dims[0],'height':dims[1]},is_mobile=view!='pc',has_touch=view!='pc')

@@ -9,11 +9,11 @@ rows=[];errors=[]
 def check(ok,name,detail=None):
     rows.append(dict(name=name,ok=bool(ok),detail=detail));print(('ok   ' if ok else 'FAIL ')+name,detail if detail is not None else '')
 with server(8811) as base,sync_playwright() as p:
-    b=p.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE','/usr/bin/chromium'))
+    b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
     pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errors.append(str(e)))
     def fresh(legacy=False):
-        pg.goto(base+'/index.html'+('?legacyVillage=1' if legacy else ''));pg.wait_for_function('window.InputManager && window.Shop');pg.wait_for_timeout(1300);pg.evaluate('closeDialogue()')
+        pg.goto(base+'/index.html'+('?legacyVillage=1' if legacy else ''));pg.wait_for_function('window.InputManager && window.Shop');pg.wait_for_timeout(2600);pg.evaluate('closeDialogue()')
     def state():return pg.evaluate('InputManager.state()')
     def repeats(key):
         pg.keyboard.down(key)
@@ -63,7 +63,7 @@ with server(8811) as base,sync_playwright() as p:
             if not pg.locator('#'+sid).is_visible():raise RuntimeError('scene not visible')
             pg.evaluate('(id)=>{window.qaClicks=0;document.getElementById(id).addEventListener("click",()=>qaClicks++)}',sid)
             repeats('Enter');pg.wait_for_timeout(150)
-            check(pg.evaluate('qaClicks')==1,sid+' held Enter dispatches exactly once',state())
+            check(pg.evaluate('qaClicks')==1,sid+' held Enter dispatches exactly once',[state(),pg.evaluate('qaClicks')])
             pg.screenshot(path=str(OUT/(sid+'.png')))
         except Exception as e:rows.append(dict(name=sid+' scene',ok=None,detail=str(e).splitlines()[0]))
     # Save must use non-sandbox start; count actual persistent writes, not just button clicks.

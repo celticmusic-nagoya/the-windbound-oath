@@ -10,8 +10,10 @@
   const isField = t => t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable);
   const shown = el => { if (!el) return false; const c = getComputedStyle(el); if (c.display === 'none' || c.visibility === 'hidden') return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
   const SCENES = ['#cinema', '#returnScene', '#escapeScene', '#louIntroScene', '#altarScene', '#aftermathScene', '#fortScene', '#prologueEnd'];
+  function topScene() { let best = null, bz = -Infinity; for (const s of SCENES) { const e = $(s); if (!shown(e)) continue; const z = +getComputedStyle(e).zIndex || 0; if (z >= bz) { bz = z; best = e; } } return best; }
   const MENUS = ['#shopModal', '#systemMenu', '#questMenu'];
   const g = name => { try { return (0, eval)('typeof ' + name + '!=="undefined"?' + name + ':undefined'); } catch (e) { return undefined; } };
+  let lastConfirm = -1e9;
   let kb = false;                       // the last input was a key (focus rings / auto focus only then)
   let face = [0, 1];                    // last arrow direction (old-world interaction facing)
   const hold = { normal: false, raider: false };   // COMMAND was collapsed by hand: stay collapsed until the next turn
@@ -33,7 +35,7 @@
     if (inBattle()) {
       const res = $('#battleResult');
       if (shown(res)) return { name: 'RESULT', root: res };
-      for (const s of SCENES) { const e = $(s); if (shown(e)) return { name: 'SCENE', root: e }; }
+      { const e = topScene(); if (e) return { name: 'SCENE', root: e }; }
       const m = mode();
       if (animating()) return { name: 'BATTLE_ANIMATION' };
       if (itemsOpen()) return { name: 'BATTLE_SUBMENU', root: $('#normalItems') };
@@ -41,7 +43,7 @@
       return { name: 'BATTLE_ANIMATION' };
     }
     const msg = $('#msg'); if (shown(msg) && msg.textContent.trim()) return { name: 'DIALOGUE', root: msg };
-    for (const s of SCENES) { const e = $(s); if (shown(e)) return { name: 'SCENE', root: e }; }
+    { const e = topScene(); if (e) return { name: 'SCENE', root: e }; }
     return { name: 'FIELD' };
   }
 
@@ -114,7 +116,7 @@
   // ---- field interaction ----
   function oldWorldInteract() {
     const inside = shown($('#inside')), pl = $(inside ? '#inPlayer' : '#player'); if (!pl) return false;
-    const [px, py] = centre(pl), sel = inside ? '#inside .furn,#inside .door,#inside .npc' : '#world .npc,#world .fisher,#world .door';
+    const [px, py] = centre(pl), sel = inside ? '#inside .furn,#inside .door,#inside .npc,#innKeeper,#innTraveler' : '#world .npc,#world .fisher,#world .door';
     let best = null, bs = Infinity;
     for (const el of document.querySelectorAll(sel)) {
       if (!shown(el)) continue; const [x, y] = centre(el), dx = x - px, dy = y - py, d = Math.hypot(dx, dy); if (d > 190) continue;
@@ -127,6 +129,7 @@
     const k = e.key;
     if (k === 'Enter' || k === ' ' || k === 'e' || k === 'E') {
       if (e.repeat) { e.preventDefault(); return; }
+      if (shown($('#inside'))) { e.preventDefault(); oldWorldInteract(); return; }
       if (window.MossForest && MossForest.active && !MossForest.busy) { e.preventDefault(); MossForest.interactNearest(); return; }
       if (g('forestActive')) return;
       e.preventDefault(); oldWorldInteract(); return;
@@ -152,6 +155,10 @@
     if (isField(e.target)) return;
     kb = true; document.body.classList.add('kbNav');
     const st = state(), k = e.key;
+    // two separate confirm presses inside one frame are one intent (no double page / double action); a human double tap is always slower
+    if ((k === 'Enter' || k === ' ') && st.name !== 'FIELD' && !st.own && st.name !== 'BATTLE_TARGET') {
+      const now = performance.now(); if (now - lastConfirm < 60) { e.preventDefault(); e.stopImmediatePropagation(); return; } lastConfirm = now;
+    }
     switch (st.name) {
       case 'REVIEW': case 'BATTLE_TARGET': return;
       case 'DIALOGUE':

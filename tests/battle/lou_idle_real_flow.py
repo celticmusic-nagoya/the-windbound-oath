@@ -9,7 +9,7 @@ rows=[];runs=[];errors=[]
 def check(ok,name,detail=None):
     rows.append(dict(name=name,ok=bool(ok),detail=detail));print(('ok   ' if ok else 'FAIL ')+name,detail or '')
 with server(8813) as base,sync_playwright() as p:
-    b=p.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE','/usr/bin/chromium'))
+    b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
     for reduced in ['no-preference','reduce']:
         ctx=b.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True,reduced_motion=reduced)
         pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto(base+'/index.html');pg.wait_for_function('window.BattleIdleMotion');pg.wait_for_timeout(1400)

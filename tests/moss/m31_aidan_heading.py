@@ -9,7 +9,7 @@ def check(c,m):
     print(('ok   ' if c else 'FAIL ')+m)
     if not c: fails.append(m)
 with server(8822) as base, sync_playwright() as p:
-    b=p.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE','/usr/bin/chromium')); pg=b.new_page(viewport={'width':1280,'height':720})
+    b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None)); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
     pg.goto(base+'/index.html'); pg.wait_for_function('window.AidanHeading && window.MossForest && MossForest.active && !MossForest.busy',timeout=30000)
     r=pg.evaluate("""(()=>{const run=(dx,dy,n=10)=>{const h=AidanHeading.create();let r;for(let i=0;i<n;i++)r=h.step(dx,dy);return r.dir+(r.flip?'F':'')};

@@ -8,7 +8,7 @@ def check(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append(str(e)))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1200); pg.evaluate("closeDialogue()")
+    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate("closeDialogue()")
     st=lambda: pg.evaluate("InputManager.state()")
     # indoor room walking
     pg.evaluate("document.querySelector('#forestScene').style.display='none';document.querySelector('#inside').style.display='block';ipx=400;ipy=400")

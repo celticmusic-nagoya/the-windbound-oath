@@ -79,8 +79,8 @@
     },
     {
       "name": "legacy inn keeper is keyboard-reachable",
-      "ok": false,
-      "detail": 0
+      "ok": true,
+      "detail": 1
     },
     {
       "name": "#inside .furn Enter clicks nearest object",
@@ -100,42 +100,66 @@
     {
       "name": "cinema held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "returnScene held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "escapeScene held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "louIntroScene held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "altarScene held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "aftermathScene held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "fortScene held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "prologueEnd held Enter dispatches exactly once",
       "ok": true,
-      "detail": "SCENE"
+      "detail": [
+        "SCENE",
+        1
+      ]
     },
     {
       "name": "held Enter saves exactly once",
@@ -146,16 +170,16 @@
       "name": "blur key release leaves no movement",
       "ok": true,
       "detail": [
-        2053,
-        2053
+        2038,
+        2038
       ]
     },
     {
       "name": "menu key release leaves no movement",
       "ok": true,
       "detail": [
-        2058,
-        2058
+        2048,
+        2048
       ]
     },
     {
@@ -176,8 +200,8 @@
     },
     {
       "name": "same-frame non-repeat Enter scene advances once",
-      "ok": false,
-      "detail": 2
+      "ok": true,
+      "detail": 1
     },
     {
       "name": "scene Space prevents browser default scrolling",

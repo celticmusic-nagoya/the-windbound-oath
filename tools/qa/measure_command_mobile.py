@@ -23,7 +23,7 @@ MEASURE="""({kind,open})=>{
 }"""
 rows=[];errors=[]
 with server(8814) as base,sync_playwright() as p:
- b=p.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE','/usr/bin/chromium'))
+ b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
  for view,(w,h) in [('portrait',(390,844)),('landscape',(844,390)),('small',(360,640))]:
   for kind in ['normal','raider']:
    ctx=b.new_context(viewport={'width':w,'height':h},is_mobile=True,has_touch=True);pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto(base+'/index.html');pg.wait_for_function('window.InputManager && window.BattleIdleMotion');pg.wait_for_timeout(1300)
