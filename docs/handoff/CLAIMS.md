@@ -125,3 +125,5 @@ Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現�
 ## Codex GG〜KK 担当宣言 (2026-10-13)
 
 `work/codex-gg-kk` / main31a5f5e。status末尾のtests/tools/docsを担当。GG→HH→II→JJ→KK、各区切りpush。ゲームコード/css/index/採用素材/mainは変更しない。詳細と結果は各docs/qa報告およびcodex-statusで共有。STATUS WIP。
+
+Codex GG〜KK完了: work/codex-gg-kk、納品一覧docs/handoff/codex-GG-KK-delivery-20261013.md。GG2指摘、HH/II合格、JJ20連続合格、KK12計測と推奨。tests/tools/docsのみ、main/ゲーム/採用素材未編集。STATUS READY（Claudeレビュー/仕様判断・実機待ち）。

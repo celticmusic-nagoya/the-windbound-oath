@@ -1,6 +1,8 @@
 # Codex 作業状態 / 再開手順
 
-更新日: 2026-10-13（Asia/Tokyo）。基準main: `058cfc8`。現在ブランチ: `work/codex-standing-orders`。
+更新日: 2026-10-13（Asia/Tokyo）。検証基準main: `31a5f5e`。現在ブランチ: `work/codex-gg-kk`。
+
+**最新状態: GG〜KK完了、進行中なし。** [納品一覧](codex-GG-KK-delivery-20261013.md)。GG2指摘/COMMAND仕様判断/実Android未測定を保留。以下の古いWIP記録は履歴であり、再開時はこの冒頭と末尾の最新節を優先する。
 常設指示: [codex-standing-orders.md](codex-standing-orders.md)。mainへの反映はClaude担当。
 
 ## 完了
@@ -100,3 +102,9 @@ JJ追加checkpoint: 中間版の初期マップready誤認をTRACEで特定し�
 JJ完了: m31修正後20回連続合格/FAILS0/console0。m32・m6_inventory各1回も合格、22/22。元の間欠失敗は修正前3回未再現のため単一原因とは断定しない。状態待機・map ID/画像decode条件・会話前置きを補強し、69Python/7Node走査表を納品。test-stability-20261013.md/全ログ参照。次KK進行中、新規measure_command_mobile.py/3画面×2戦闘×開閉の12画像/数値提案を担当。
 
 KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画像とalpha面積JSONを納品。縦レイダーも味方ほぼ100%にpanelが重なるため、折りたたみ+44px以上の常設COMMANDを推奨（未適用）。初期表示で末尾が切れる条件と現COMMAND高さ34pxを記録。最終判断はユーザー。GG〜KKの成果は揃った。最終検証としてHH testの一時候補自動生成（別環境で/tmpがなくても実行可能）を確認中、その後納品一覧/statusを確定する。
+
+## GG〜KK 最終checkpoint
+
+全5項目を各区切りpush。納品一覧codex-GG-KK-delivery-20261013.md。HHの別環境向け一時候補自動生成版も37/37再合格し、表/ログ/画像を最終実行へ更新。GG40合格/2指摘、II9合格、JJ20連続+関連2合格、KK12計測完了。進行中なし、GG〜KK未着手なし。実機/全回帰は今回未実施。
+
+再開: git fetch --all、main/status/standing/新規briefsと本branchのgit logを確認し、完了GG〜KKは繰り返さない。未解決の採用/実機/2指摘は納品一覧を参照。main未マージ、force pushなし、保護対象差分0、元worktreeはwork/codex-wind-dance-sim2のcleanを維持。未コミット懸念なし（最終push時点）、自身のサーバー終了。Claudeが資料/branchをレビューして統合する。

@@ -24,15 +24,15 @@ rootのforestLouは幅/高さ0の配置用要素であり、Playwrightのis_visi
 
 | 表示 | 素材 | decode median ms | mean frame ms | p99 ms | 移動距離px |
 |---|---|---:|---:|---:|---:|
-| pc | original | 29.00 | 28.04 | 50.00 | 910.0 |
-| pc | proposal | 14.90 | 30.47 | 66.70 | 905.0 |
-| pc | hidden | 26.40 | 26.55 | 50.00 | 910.0 |
-| portrait | original | 26.50 | 16.67 | 16.80 | 904.9 |
-| portrait | proposal | 14.00 | 16.67 | 16.80 | 905.0 |
+| pc | original | 35.50 | 28.46 | 49.90 | 915.0 |
+| pc | proposal | 18.10 | 27.67 | 50.00 | 909.9 |
+| pc | hidden | 29.10 | 25.35 | 50.00 | 915.0 |
+| portrait | original | 47.90 | 16.67 | 16.80 | 905.0 |
+| portrait | proposal | 15.70 | 16.67 | 16.80 | 904.9 |
 | portrait | hidden | 36.40 | 16.76 | 16.80 | 905.0 |
-| landscape | original | 27.10 | 16.67 | 16.80 | 904.9 |
-| landscape | proposal | 15.60 | 16.67 | 16.80 | 910.0 |
-| landscape | hidden | 30.50 | 16.67 | 16.80 | 910.0 |
+| landscape | original | 32.30 | 16.67 | 16.80 | 910.0 |
+| landscape | proposal | 15.00 | 16.85 | 33.30 | 905.0 |
+| landscape | hidden | 27.20 | 16.67 | 16.80 | 905.0 |
 
 hidden条件も元画像はロードされるため、描画非表示の比較であり「画像未ロード」のメモリ削減比較ではない。移動は実キーを使用し、変位を記録。停止した区間/衝突は数値の制約として扱う。Android性能は未測定。
 
@@ -43,3 +43,5 @@ PC・縦・横の追従と高さスクショは [証跡](lou-field-20261013/) �
 縮小版は読込量を約96%削減する候補。52px表示の縮小版の見た目をPLAYER QAしてから採用判断する。採用素材の差替えはClaude担当。
 
 変更: tests/moss/m33_lou_field_review.py、tools/field/make_lou_field_frames.py、本報告/証跡。再実行は `python tests/moss/m33_lou_field_review.py`（既定では一時候補を自動生成して終了時削除、LOU_PROPOSAL指定時だけ既存候補を使用）。自身の8812サーバーを終了。次II。main未統合、将来の戻し方は `git revert -m 1 <merge>`。
+
+最終検証: 候補ファイルが事前に無い環境を想定し、tempfile内で6コマを自動生成する版を再実行。37/37合格、FAILS0、pageerror0。一時候補は終了時削除。表/JSON/画像/ログはこの最終実行へ更新した。
