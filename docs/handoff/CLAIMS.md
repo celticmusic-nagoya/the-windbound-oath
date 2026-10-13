@@ -118,3 +118,6 @@ Codex S担当: work/codex-wind-dance-sim2、既存sim拡張/新規mana比較資�
 
 Codex S完了: MP回復2/3/4台帳と4条件比較、命中式なし/有効対象100%を出典付き報告。自己テスト/再現/N互換合格、実勝率は未算出。ゲーム未変更。STATUS READY。
 Codex P: work/codex-aidan-walk-acceptance / main88ae6c0。新規検品tool/docs/template/ダミー検証のみ。STATUS WIP。O旧main531全59完了、R公開確認。
+Codex R: work/codex-height-contact-impl-review、対象5c33f9f。指摘doc/検証のみ、コード未編集。STATUS WIP。
+
+Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現、NPC goal level欠落と追加試験を指摘。コード未変更。STATUS READY。最新main e694817の新規Sを後続予定。

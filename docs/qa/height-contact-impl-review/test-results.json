@@ -1,0 +1,29 @@
+[
+  {
+    "case": "m22_before",
+    "exit_code": 0,
+    "fail_lines": [
+      "FAIL level 1 does NOT consume the level-0 / default-level zones"
+    ],
+    "fails": [
+      "1"
+    ],
+    "baseline_runtime_override": true
+  },
+  {
+    "case": "m22_after",
+    "exit_code": 0,
+    "fail_lines": [],
+    "fails": [
+      "0"
+    ],
+    "baseline_runtime_override": false
+  },
+  {
+    "case": "moving_monster",
+    "exit_code": 0,
+    "fail_lines": [],
+    "fails": [],
+    "baseline_runtime_override": false
+  }
+]

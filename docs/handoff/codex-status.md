@@ -70,3 +70,9 @@ S完了: MP台帳拡張とwind-dance-mana-sim.md/結果JSONを作成。engineは
 P着手: work/codex-aidan-walk-acceptance / 最新main88ae6c0。Nはmain88ae6c0に統合済み、Oはwork/codex-regression-runner / 56f6050で全59（旧main531）納品済み。Rのfeat/height-contact-levels / 5c33f9fの公開とmain5e682e7の統合を確認、P→Q後にレビューする。新規tools/field/check_aidan_walk_assets.py、docs/art/aidan_walk_acceptance.md、template/ダミー検証記録を担当。素材未着・採用素材未変更。
 
 P完了: 検品tool/template/checklistとダミーQAを作成。正常18コマ合格、7負例検出、alpha/footproxy/任意機械反転を検査。原シートは白背景、prepared RGBAを対象。実素材/剣の見た目/ゲーム組込は未実施、採用素材未変更。次はQ→R（R公開5c33f9fを取得済み）。
+R着手: work/codex-height-contact-impl-review / main88ae6c0。対象origin/feat/height-contact-levels / 5c33f9f（mainに同コード統合済み）。新規docs/qa/height-contact-impl-review.mdと読取検証logsのみ。コード/マップ/既存testsは変更しない。m22と高さ無し経路・field-monsters/walkers・pending/表示をレビュー。N/O/P/Qは納品済み(Q306ef3a)。
+
+
+R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/動く敵0の戦闘を再現。NPC goalのlevel欠落をAPIで確認、pending/walkers/試験fixture不足も指摘。コード未編集。docs/qa/height-contact-impl-review.mdと証跡を納品。
+今回の納品: N2e9bb42（Claudeがmain88ae6c0へ統合）、O56f6050（旧531対象57合格/既存2/新規0）、P21a0ee9（dummy検品、実素材未受領）、Q306ef3a（家02spawn限定修正、関連検証合格）、Rは本branchの最新commit参照。全件最終main回帰/Androidは未実施。
+区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
