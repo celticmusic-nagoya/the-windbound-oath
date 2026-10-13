@@ -78,3 +78,5 @@ R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/�
 区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
 
 AA着手: work/codex-height-spec-draft / main7abb9f3。T〜Zはwork/codex-tz/0e2dfd3へ納品（詳細は同branch status）。担当: 新規tools/field/lint_height_spec.py・height_spec_engine.js、data/height-specs/cliff_moher_01_spiral_ascent.json、docs/qa/cliff-height-entity-levels.md・overlay draft報告、tests/moss/m27_cliff_height_overlay.py/証跡。既存map本体/js/採用素材を触らず、heightSpecs opt-in DEVのみ。入口0→中腹1→頂上2、物語gateは未宣言level0で止まる可能性を実検証する。元worktree固定、独立cloneで作業。Android未測定、本編ONはしない。
+
+AA進行: 実FieldCollision/FieldHeight lintと断崖0→1→2draftを実装。lint FAILS0、上階entityの省略level警告を記録。実歩行はoverlay/宣言案fixtureとも入口→頂上を確認済み。会話tapのfixture座標を修正して夕日gateを再検証中。BB〜FF新指示main3208079を取得、AA後に順次実施。未決entity宣言はdocs提案のみ、map/js/素材/main未変更。
