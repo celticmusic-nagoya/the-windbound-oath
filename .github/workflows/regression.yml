@@ -1,0 +1,71 @@
+name: Regression
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 16 * * *' # 01:00 JST, daily
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Regression scope
+        type: choice
+        options: [smoke, full]
+        default: smoke
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      REGRESSION_SUITE: ${{ github.event_name == 'schedule' && 'full' || github.event_name == 'workflow_dispatch' && inputs.suite == 'full' && 'full' || 'smoke' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # runner records origin/main; PR merge checkout needs it too
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/requirements-ci.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser-test dependencies
+        run: |
+          python -m pip install -r .github/requirements-ci.txt
+          python -m playwright install --with-deps chromium
+      - name: Regression (serial, isolated snapshot)
+        shell: bash
+        run: |
+          results="$RUNNER_TEMP/windbound-regression"
+          mkdir -p "$results" /tmp/aw /tmp/claude-0
+          if [[ "$REGRESSION_SUITE" == full ]]; then
+            bash tools/qa/run_all.sh --out "$results" --port 8765 --timeout 900
+          else
+            bash tools/qa/run_all.sh --out "$results" --port 8765 --timeout 180 \
+              tests/field/m0.test.js \
+              tests/field/frame_clock.test.js \
+              tests/field/talk_conditions.test.js \
+              tests/input/kb_field.py \
+              tests/input/kb_menu.py \
+              tests/moss/m31_aidan_heading.py \
+              tests/moss/m32_lou_follower.py
+          fi
+      - name: Upload regression logs and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/windbound-regression
+          if-no-files-found: warn
+          retention-days: 14
