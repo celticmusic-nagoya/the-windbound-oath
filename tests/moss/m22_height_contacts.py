@@ -49,6 +49,8 @@ with sync_playwright() as p:
           FieldWalkers.list.push(r);FieldWalkers.update(.1);const idle=r.state==='idle';FieldWalkers.list.pop();return idle})()""" % walker_lv)
     check(walker_pauses(1, 1) is True, 'walker pauses for a player on its own level')
     check(walker_pauses(1, 0) is False, 'walker on another level does not pause (same XY)')
+    ev("MossForest.enter({map:'dev_height_proto',x:1543,y:858,level:1})"); pg.wait_for_timeout(1500)
+    check(ev("MossForest.snapshot().level")==1, 'snapshot carries the level on a height map (additive field)')
     # inert on a plain map
     ev("MossForest.enter({map:'moss_forest_01_sunlit_path'})"); pg.wait_for_timeout(2500)
     ev("document.querySelector('#msg')&&(document.querySelector('#msg').style.display='none')")
@@ -58,6 +60,7 @@ with sync_playwright() as p:
     ev("MossForest.teleportFeet(%d,%d)" % (pt['x'], pt['y'] + 400)); pg.wait_for_timeout(300)
     ev("MossForest.teleportFeet(%d,%d)" % (pt['x'], pt['y'])); pg.wait_for_timeout(600)
     check('z_plain_l1' in fired(), 'plain map: `level` is ignored, zone fires exactly as before')
+    check('level' not in ev("MossForest.snapshot()"), 'plain map: snapshot has no level key (saves unchanged)')
     check(not errs, 'no page errors %s' % errs[:2])
     b.close()
 print('FAILS', len(fails)); import sys; sys.exit(1 if fails else 0)
