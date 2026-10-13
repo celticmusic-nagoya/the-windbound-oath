@@ -30,7 +30,7 @@ for(let mask=0;mask<2**flags.length;mask++){const state=Object.fromEntries(flags
  for(const [name,p]of Object.entries(sp)){const x=p.x-B.anchorX,y=p.y-B.anchorY,l=p.level??h.derive(x,y);checks.push({name,kind:'spawn_clear',ok:!h.blockedAtLevel(x,y,l),level:l,flags:state});if(start){const sx=start.x-B.anchorX,sy=start.y-B.anchorY;h.setLevel(start.level??h.derive(sx,sy));const plan=h.plan({x:sx,y:sy},{x,y,level:l},{width:m.world.width,height:m.world.height,maxNodes:100000});checks.push({name,kind:'spawn_reachable',ok:!!plan.path,level:l,flags:state})}}
  for(const [level,v]of Object.entries(s.levels||{}))if(Number(level)>0)for(const [i,r]of v.walk.entries()){
   const candidates=[[r[0]+r[2]/2,r[1]+r[3]/2],...[.2,.8].flatMap(a=>[.2,.8].map(b=>[r[0]+r[2]*a,r[1]+r[3]*b]))];const examples=[];
-  for(const [fx,fy]of candidates){const x=fx-B.anchorX,y=fy-B.anchorY,ls=[0,...Object.keys(s.levels).map(Number).filter(n=>n>0)].filter(l=>!h.blockedAtLevel(x,y,l));if(ls.length>1)examples.push({actor_xy:[x,y],feet:[fx,fy],valid_levels:ls,legacy_derive:h.derive(x,y)})}
+  for(const [fx,fy]of candidates){const x=fx-B.anchorX,y=fy-B.anchorY,ls=[0,...Object.keys(s.levels).map(Number).filter(n=>n>0)].filter(l=>!h.blockedAtLevel(x,y,l));if(ls.length>1){h.setLevel(0);const accepted=!h.blocked(x,y),derived=h.derive(x,y);h.setLevel(derived);const effective=h.commit(x,y);examples.push({actor_xy:[x,y],feet:[fx,fy],valid_levels:ls,legacy_precheck_accepts_xy:accepted,legacy_derive:derived,legacy_after_commit:effective})}}
   if(examples.length)ambiguities.push({level:Number(level),rect_index:i,rect:r,flags:state,examples});
  }
 }out.push({map:m.id,file,checks,ambiguities})}console.log(JSON.stringify(out));
