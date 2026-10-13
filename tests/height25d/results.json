@@ -1,0 +1,470 @@
+{
+  "source_head": "aba3d8d",
+  "checks": [
+    {
+      "name": "1280x720 cliff front blocks direct climb",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 430.0300000000009,
+        "l": 0,
+        "z": 430,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "1280x720 cliff edge prevents ordinary fall",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 419.9899999999998,
+        "l": 1,
+        "z": 421,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "1280x720 stairs reach level1",
+      "pass_": true,
+      "data": {
+        "x": 1960,
+        "y": 130.0300000000004,
+        "l": 1,
+        "z": 131,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "1280x720 slope reaches level1",
+      "pass_": true,
+      "data": {
+        "x": 2044.9799999999996,
+        "y": 270,
+        "l": 1,
+        "z": 271,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "1280x720 bridge same XY supports two levels",
+      "pass_": true,
+      "data": {
+        "low": {
+          "x": 1560,
+          "y": 900,
+          "l": 0,
+          "z": 439,
+          "map": "dev_height_proto"
+        },
+        "up": {
+          "x": 1560,
+          "y": 900,
+          "l": 1,
+          "z": 901,
+          "map": "dev_height_proto"
+        }
+      }
+    },
+    {
+      "name": "1280x720 bridge z-order and underside fade",
+      "pass_": true,
+      "data": {
+        "floor": 440,
+        "opacity": "0.42"
+      }
+    },
+    {
+      "name": "1280x720 foreground canopy occludes upper actor",
+      "pass_": true,
+      "data": {
+        "actor": {
+          "x": 2100,
+          "y": 395,
+          "l": 1,
+          "z": 396,
+          "map": "dev_height_proto"
+        },
+        "canopy": 470
+      }
+    },
+    {
+      "name": "1280x720 runtime snapshot restore retains ambiguous level0",
+      "pass_": true,
+      "data": {
+        "x": 1560,
+        "y": 900,
+        "l": 0,
+        "z": 439,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "1280x720 real save writes v30 + level0",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "1280x720 actual save/load restores DEV map/level",
+      "pass_": false,
+      "data": {
+        "x": 2020,
+        "y": 5043.6,
+        "l": 0,
+        "z": 5044,
+        "map": "moss_forest_01_sunlit_path"
+      }
+    },
+    {
+      "name": "390x844 cliff front blocks direct climb",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 430.000000000001,
+        "l": 0,
+        "z": 430,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "390x844 cliff edge prevents ordinary fall",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 419.9899999999998,
+        "l": 1,
+        "z": 421,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "390x844 stairs reach level1",
+      "pass_": true,
+      "data": {
+        "x": 1960,
+        "y": 130.00000000000009,
+        "l": 1,
+        "z": 131,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "390x844 slope reaches level1",
+      "pass_": true,
+      "data": {
+        "x": 2040,
+        "y": 270,
+        "l": 1,
+        "z": 271,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "390x844 bridge same XY supports two levels",
+      "pass_": true,
+      "data": {
+        "low": {
+          "x": 1560,
+          "y": 900,
+          "l": 0,
+          "z": 439,
+          "map": "dev_height_proto"
+        },
+        "up": {
+          "x": 1560,
+          "y": 900,
+          "l": 1,
+          "z": 901,
+          "map": "dev_height_proto"
+        }
+      }
+    },
+    {
+      "name": "390x844 bridge z-order and underside fade",
+      "pass_": true,
+      "data": {
+        "floor": 440,
+        "opacity": "0.42"
+      }
+    },
+    {
+      "name": "390x844 foreground canopy occludes upper actor",
+      "pass_": true,
+      "data": {
+        "actor": {
+          "x": 2100,
+          "y": 395,
+          "l": 1,
+          "z": 396,
+          "map": "dev_height_proto"
+        },
+        "canopy": 470
+      }
+    },
+    {
+      "name": "390x844 runtime snapshot restore retains ambiguous level0",
+      "pass_": true,
+      "data": {
+        "x": 1560,
+        "y": 900,
+        "l": 0,
+        "z": 439,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "390x844 real save writes v30 + level0",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "390x844 actual save/load restores DEV map/level",
+      "pass_": false,
+      "data": {
+        "x": 2020,
+        "y": 5043.6,
+        "l": 0,
+        "z": 5044,
+        "map": "moss_forest_01_sunlit_path"
+      }
+    },
+    {
+      "name": "844x390 cliff front blocks direct climb",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 431.640000000001,
+        "l": 0,
+        "z": 432,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "844x390 cliff edge prevents ordinary fall",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 418.3599999999996,
+        "l": 1,
+        "z": 419,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "844x390 stairs reach level1",
+      "pass_": true,
+      "data": {
+        "x": 1960,
+        "y": 130.06000000000037,
+        "l": 1,
+        "z": 131,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "844x390 slope reaches level1",
+      "pass_": true,
+      "data": {
+        "x": 2039.97,
+        "y": 270,
+        "l": 1,
+        "z": 271,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "844x390 bridge same XY supports two levels",
+      "pass_": true,
+      "data": {
+        "low": {
+          "x": 1560,
+          "y": 900,
+          "l": 0,
+          "z": 439,
+          "map": "dev_height_proto"
+        },
+        "up": {
+          "x": 1560,
+          "y": 900,
+          "l": 1,
+          "z": 901,
+          "map": "dev_height_proto"
+        }
+      }
+    },
+    {
+      "name": "844x390 bridge z-order and underside fade",
+      "pass_": true,
+      "data": {
+        "floor": 440,
+        "opacity": "0.42"
+      }
+    },
+    {
+      "name": "844x390 foreground canopy occludes upper actor",
+      "pass_": true,
+      "data": {
+        "actor": {
+          "x": 2100,
+          "y": 395,
+          "l": 1,
+          "z": 396,
+          "map": "dev_height_proto"
+        },
+        "canopy": 470
+      }
+    },
+    {
+      "name": "844x390 runtime snapshot restore retains ambiguous level0",
+      "pass_": true,
+      "data": {
+        "x": 1560,
+        "y": 900,
+        "l": 0,
+        "z": 439,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "844x390 real save writes v30 + level0",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "844x390 actual save/load restores DEV map/level",
+      "pass_": false,
+      "data": {
+        "x": 2020,
+        "y": 5043.6,
+        "l": 0,
+        "z": 5044,
+        "map": "moss_forest_01_sunlit_path"
+      }
+    },
+    {
+      "name": "fixture stairs reaches level2",
+      "pass_": true,
+      "data": {
+        "x": 1960,
+        "y": 130.0300000000026,
+        "l": 2,
+        "z": 131,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "fixture runtime snapshot retains level2",
+      "pass_": true,
+      "data": {
+        "x": 1960,
+        "y": 130,
+        "l": 2,
+        "z": 131,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "fixture level2 cliff prevents fall",
+      "pass_": true,
+      "data": {
+        "x": 1800,
+        "y": 419.9899999999998,
+        "l": 2,
+        "z": 421,
+        "map": "dev_height_proto"
+      }
+    },
+    {
+      "name": "plain rilde_in_aidan no height",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "plain rilde_in_aidan keyboard movement / original transition",
+      "pass_": true,
+      "data": {
+        "before": {
+          "x": 480,
+          "y": 570,
+          "l": 0,
+          "z": 570,
+          "map": "rilde_in_aidan"
+        },
+        "after": {
+          "x": 1345,
+          "y": 602,
+          "l": 0,
+          "z": 602,
+          "map": "rilde_village_01_ruin"
+        }
+      }
+    },
+    {
+      "name": "plain rilde_in_barn no height",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "plain rilde_in_barn keyboard movement / original transition",
+      "pass_": true,
+      "data": {
+        "before": {
+          "x": 500,
+          "y": 550,
+          "l": 0,
+          "z": 550,
+          "map": "rilde_in_barn"
+        },
+        "after": {
+          "x": 1195,
+          "y": 964,
+          "l": 0,
+          "z": 964,
+          "map": "rilde_village_01_ruin"
+        }
+      }
+    },
+    {
+      "name": "plain moss_forest_01_sunlit_path no height",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "plain moss_forest_01_sunlit_path keyboard movement / original transition",
+      "pass_": true,
+      "data": {
+        "before": {
+          "x": 7700,
+          "y": 180,
+          "l": 0,
+          "z": 180,
+          "map": "moss_forest_01_sunlit_path"
+        },
+        "after": {
+          "x": 8396.5,
+          "y": 6900.9,
+          "l": 0,
+          "z": 6901,
+          "map": "moss_forest_02_mossy_ravine"
+        }
+      }
+    },
+    {
+      "name": "three plain maps never instantiate FieldHeight",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "old height-free save reads map/level default/chest",
+      "pass_": true,
+      "data": null
+    },
+    {
+      "name": "no console/page errors",
+      "pass_": true,
+      "data": []
+    }
+  ],
+  "errors": [],
+  "fixture_level2": true,
+  "hardware": "cloud Chromium, not Android"
+}
