@@ -40,6 +40,6 @@ hidden条件も元画像はロードされるため、描画非表示の比較�
 
 PC・縦・横の追従と高さスクショは [証跡](lou-field-20261013/) に保存。高さ1ではFionaと同じ-56px lift。背後2.4倍という計算はFionaが演出で前へ動く場合はルーを更に前方へ置く。通常追従では空中22pxを確保するが、狭い位置/演出時はキャラの輪郭が重なり得る。独立したLouの演出位置指定やオフセット制限は作者判断、変更していない。画面外や一瞬のチラつきを全経路で否定するテストではない。
 
-縮小版は読込量を約96%削減する候補。現状の53〜120px相当の見た目をPLAYER QAしてから採用判断する。採用素材の差替えはClaude担当。
+縮小版は読込量を約96%削減する候補。52px表示の縮小版の見た目をPLAYER QAしてから採用判断する。採用素材の差替えはClaude担当。
 
-変更: tests/moss/m33_lou_field_review.py、tools/field/make_lou_field_frames.py、本報告/証跡。再実行はproposal生成後 `python tests/moss/m33_lou_field_review.py`。自身の8812サーバーを終了。次II。main未統合、将来の戻し方は `git revert -m 1 <merge>`。
+変更: tests/moss/m33_lou_field_review.py、tools/field/make_lou_field_frames.py、本報告/証跡。再実行は `python tests/moss/m33_lou_field_review.py`（既定では一時候補を自動生成して終了時削除、LOU_PROPOSAL指定時だけ既存候補を使用）。自身の8812サーバーを終了。次II。main未統合、将来の戻し方は `git revert -m 1 <merge>`。

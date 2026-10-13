@@ -98,3 +98,5 @@ JJ進行checkpoint: m31修正前3/3・m32修正前1/1・m6_inventory修正前1/1
 JJ追加checkpoint: 中間版の初期マップready誤認をTRACEで特定し、A1 map IDを条件に追加。修正後20連続は最初からやり直し中（旧失敗ログを保管）。test-stability-20261013.mdに原因/走査判断を共有。KKでは新規 tools/qa/measure_command_mobile.py を担当し、alpha pixel/パネル重なりと44pxの判断資料だけを作る。
 
 JJ完了: m31修正後20回連続合格/FAILS0/console0。m32・m6_inventory各1回も合格、22/22。元の間欠失敗は修正前3回未再現のため単一原因とは断定しない。状態待機・map ID/画像decode条件・会話前置きを補強し、69Python/7Node走査表を納品。test-stability-20261013.md/全ログ参照。次KK進行中、新規measure_command_mobile.py/3画面×2戦闘×開閉の12画像/数値提案を担当。
+
+KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画像とalpha面積JSONを納品。縦レイダーも味方ほぼ100%にpanelが重なるため、折りたたみ+44px以上の常設COMMANDを推奨（未適用）。初期表示で末尾が切れる条件と現COMMAND高さ34pxを記録。最終判断はユーザー。GG〜KKの成果は揃った。最終検証としてHH testの一時候補自動生成（別環境で/tmpがなくても実行可能）を確認中、その後納品一覧/statusを確定する。

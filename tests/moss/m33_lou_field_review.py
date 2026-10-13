@@ -1,11 +1,18 @@
 """Lou follower review with original / proposal image routing; no asset adoption."""
-import json,os,sys
+import json,os,sys,subprocess,tempfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'tools/qa'))
 from browser_support import server
 from playwright.sync_api import sync_playwright
 OUT=Path('docs/qa/lou-field-20261013');OUT.mkdir(parents=True,exist_ok=True)
-PROPOSAL=Path(os.getenv('LOU_PROPOSAL','/tmp/lou-field-proposal'));rows=[];measurements=[];errors=[]
+_proposal_tmp=None
+if os.getenv('LOU_PROPOSAL'):
+    PROPOSAL=Path(os.environ['LOU_PROPOSAL'])
+else:
+    _proposal_tmp=tempfile.TemporaryDirectory(prefix='codex-lou-proposal-')
+    PROPOSAL=Path(_proposal_tmp.name)
+    subprocess.run([sys.executable,str(Path(__file__).resolve().parents[2]/'tools/field/make_lou_field_frames.py'),'--output',str(PROPOSAL)],check=True)
+rows=[];measurements=[];errors=[]
 def check(ok,name,detail=None):
     rows.append(dict(name=name,ok=bool(ok),detail=detail));print(('ok   ' if ok else 'FAIL ')+name,detail or '')
 METER="""secs=>new Promise(resolve=>{let last=performance.now(),end=last+secs*1000,dt=[];function f(now){dt.push(now-last);last=now;if(now<end)requestAnimationFrame(f);else{dt.shift();dt.sort((a,b)=>a-b);resolve({n:dt.length,mean:dt.reduce((a,b)=>a+b,0)/dt.length,p99:dt[Math.floor(dt.length*.99)]})}}requestAnimationFrame(f)})"""
@@ -47,4 +54,5 @@ with server(8812) as base,sync_playwright() as p:
             context.close()
     check(not errors,'page errors',errors);b.close()
 (OUT/'results.json').write_text(json.dumps(dict(base='31a5f5e',rows=rows,measurements=measurements,errors=errors,note='Cloud Chromium only; decode includes local HTTP load; proposal routed in browser only'),ensure_ascii=False,indent=2))
+if _proposal_tmp:_proposal_tmp.cleanup()
 n=sum(not r['ok'] for r in rows);print('FAILS',n);sys.exit(bool(n))
