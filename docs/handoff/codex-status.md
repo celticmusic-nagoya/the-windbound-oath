@@ -78,3 +78,4 @@ R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/�
 区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
 
 BB〜FF着手: work/codex-bb-ff / main3208079、独立clone固定。AA3979e54はdraft/検査納品、overlay-only会話gateは未達（map level宣言待ち）。担当: tests/moss/m28_aidan_walk_assets.py、m29_leafy_boar_assets.py、m30_raider_dodge.py、新規tools/sim風の舞policy、tools/moss/validate_height_schema.py、BB/CC/DD/EE/FF各docsと証跡。BB→CC→DD→EE→FF順、tests直列、js/採用素材/mainは触らない。AA draft branchは自動統合しない。
+BB完了: m28 FAILS0/console0、実24枚と4方向goFeet表示検査合格。前後斜め向きは既知警告、bbox幅比up.913/down.731。docs/qa/aidan-walk-acceptance-20261013.md参照。次CCのボア検品/KO観測、DD/EE/FF未着手。
