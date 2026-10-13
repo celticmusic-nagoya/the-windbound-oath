@@ -86,3 +86,4 @@ EE準備checkpoint: 新規m30/validate_height_schema.pyと設計メモを作成�
 BB期待値追随準備: main f88fbbfは24直進/idle+dl/ul12=36枚。m28は追加diag完全集合だけを許可し、直進の新素材と旧斜め素材の分離を記録。新mainの合否はFFで実検証、現時点では未実施。DD実行中、EE testは未実行。
 DD再開checkpoint: 一時exec接続エラーから復旧。レイダー勝利は増援残存を問わずrbBoss<=0なのでbench判定を合わせた。保存済みレイダーは全件defeat_rewindで再分類不要、途中JSONから継続。EE/FF自動直列driverは一旦停止し、DD新PIDで再開する。利用制限の状態は観測できず、接続エラーを利用制限と扱わない。
 DD途中証跡checkpoint: 140条件以上をdocs/qa/wind-dance-policy-inprogress-20261013.jsonへ保全（complete=false、最終結果ではない）。engine/index/data hash付き、基準game main3208079。再開時このJSONを/tmp/dd-full.jsonへコピーして--seeds8で継続可能。ブラウザ計測と別cloneのFF sourceはbranch切替をしない。DD完了後→EE self-test/schema/m30→FF latest main+3新規testの直列構成。EE未検証、FF未実施。
+DD効率化: 攻撃/回復方針は風の舞を一度も使わず、回避値/舞MPを変えても実行数式に影響しない。保存済み88control群のoutcome/turns/被害/dodge/MP/traceが同一と確認。以後同seed/MP回復の未使用support値違いはreused_from付きで明示再利用、1728条件別recordと実走数を分ける。独立試行を増やした扱いはしない。舞/混合の全条件は引き続き実走。数学/ゲームコード変更なし。

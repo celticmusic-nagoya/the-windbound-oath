@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """DD: production engine, browser-only parameter fixtures, serial seeded policies."""
-import argparse,base64,itertools,json,os,subprocess,sys,time
+import argparse,base64,copy,itertools,json,os,subprocess,sys,time
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT))
@@ -49,6 +49,12 @@ def main():
   for i,c in enumerate(combos):
    for seed in range(20261013,20261013+args.seeds):
     if (*c,seed)in done:continue
+    if c[1] in ('attack','heal'):
+     controls=[r for r in rows if(r['battle'],r['policy'],r['regen'],r['seed'])==(c[0],c[1],c[2],seed) and 'reused_from'not in r]
+     keys=('outcome','rounds','damage','dodges','recoveries','end_mp','clean_victory','trace')
+     if controls and all(all(r[k]==controls[0][k]for k in keys)for r in controls):
+      src=controls[0];assert not any(a['kind']=='winddance'for t in src['trace']for a in t['acts'])
+      row=copy.deepcopy(src);row['evasion_points']=c[3];row['cost']=c[4];row['reused_from']={'evasion_points':src['evasion_points'],'cost':src['cost'],'reason':'policy never casts winddance; support amount/cost have no executed math path'};rows.append(row);continue
     pg=b.new_page();pg.route('**/*.png*',lambda r:r.fulfill(status=200,content_type='image/png',body=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==')));pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('console',lambda m:errors.append(m.text)if m.type=='error'else None)
     rows.append(run(pg,base,*c,seed));pg.close()
    print(i+1,len(combos),c,rows[-1]['outcome'],flush=True)
