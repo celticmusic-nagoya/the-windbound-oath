@@ -1,0 +1,430 @@
+{
+  "base": "f0fe968",
+  "rows": [
+    {
+      "name": "new game before rescue hidden",
+      "ok": true,
+      "detail": {
+        "stage": 0,
+        "joined": false,
+        "map": "rilde_in_aidan",
+        "interior": true,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "new-game",
+        "visible": false
+      }
+    },
+    {
+      "name": "forest arrival before rescue hidden",
+      "ok": true,
+      "detail": {
+        "stage": 9,
+        "joined": false,
+        "map": "moss_forest_01_sunlit_path",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "forest-entry",
+        "visible": false
+      }
+    },
+    {
+      "name": "corruption 1 does not recruit Lou",
+      "ok": true,
+      "detail": {
+        "stage": 9,
+        "joined": false,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "corruption-1",
+        "visible": false
+      }
+    },
+    {
+      "name": "corruption 2 does not recruit Lou",
+      "ok": true,
+      "detail": {
+        "stage": 9,
+        "joined": false,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "corruption-2",
+        "visible": false
+      }
+    },
+    {
+      "name": "corruption 3 does not recruit Lou",
+      "ok": true,
+      "detail": {
+        "stage": 9,
+        "joined": false,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "corruption-3",
+        "visible": false
+      }
+    },
+    {
+      "name": "meeting Lou does not yet recruit field support",
+      "ok": true,
+      "detail": {
+        "stage": 11,
+        "joined": false,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "lou-intro-ended",
+        "visible": false
+      }
+    },
+    {
+      "name": "altar and Raider not yet joined",
+      "ok": true,
+      "detail": {
+        "stage": 12,
+        "joined": false,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": true,
+        "active": false,
+        "classes": "developmentMode battleMode raiderBattleMode",
+        "label": "raider",
+        "visible": false
+      }
+    },
+    {
+      "name": "join waits for aftermath completion",
+      "ok": true,
+      "detail": {
+        "stage": 13,
+        "joined": false,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": false,
+        "active": false,
+        "classes": "developmentMode",
+        "label": "aftermath-start",
+        "visible": false
+      }
+    },
+    {
+      "name": "aftermath commits join exactly at stage14",
+      "ok": true,
+      "detail": {
+        "stage": 14,
+        "joined": true,
+        "map": "moss_forest_03_ancient_grove",
+        "interior": false,
+        "battle": false,
+        "active": false,
+        "classes": "developmentMode",
+        "label": "join-committed",
+        "visible": false
+      }
+    },
+    {
+      "name": "post-story outdoor follower visible",
+      "ok": true,
+      "detail": {
+        "stage": 15,
+        "joined": true,
+        "map": "fort_dunvall_01_courtyard",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "free-roam",
+        "visible": true
+      }
+    },
+    {
+      "name": "post-story load and public field reentry visible",
+      "ok": true,
+      "detail": {
+        "stage": 15,
+        "joined": true,
+        "map": "fort_dunvall_01_courtyard",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "loaded-free-roam",
+        "visible": true
+      }
+    },
+    {
+      "name": "interior suppresses joined follower",
+      "ok": true,
+      "detail": {
+        "stage": 15,
+        "joined": true,
+        "map": "rilde_in_house_01",
+        "interior": true,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode",
+        "label": "interior",
+        "visible": false
+      }
+    },
+    {
+      "name": "normal battle hides field follower",
+      "ok": true,
+      "detail": {
+        "stage": 15,
+        "joined": true,
+        "map": "road_dunvall_capital_01",
+        "interior": false,
+        "battle": true,
+        "active": false,
+        "classes": "developmentMode battleMode normalBattleMode monsterBattle",
+        "label": "normal-battle",
+        "visible": false
+      }
+    },
+    {
+      "name": "battle return shows joined follower",
+      "ok": true,
+      "detail": {
+        "stage": 15,
+        "joined": true,
+        "map": "road_dunvall_capital_01",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode monsterBattle",
+        "label": "normal-return",
+        "visible": true
+      }
+    },
+    {
+      "name": "missing support early save must not inherit recruited Lou",
+      "ok": false,
+      "detail": {
+        "stage": 9,
+        "joined": true,
+        "map": "moss_forest_01_sunlit_path",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode monsterBattle",
+        "label": "missing-support-early-load",
+        "visible": true
+      }
+    },
+    {
+      "name": "string false joined must not display before rescue",
+      "ok": false,
+      "detail": {
+        "stage": 9,
+        "joined": "false",
+        "map": "moss_forest_01_sunlit_path",
+        "interior": false,
+        "battle": false,
+        "active": true,
+        "classes": "developmentMode monsterBattle",
+        "label": "string-false-early-load",
+        "visible": true
+      }
+    },
+    {
+      "name": "page errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "timeline": [
+    {
+      "stage": 0,
+      "joined": false,
+      "map": "rilde_in_aidan",
+      "interior": true,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "new-game",
+      "visible": false
+    },
+    {
+      "stage": 9,
+      "joined": false,
+      "map": "moss_forest_01_sunlit_path",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "forest-entry",
+      "visible": false
+    },
+    {
+      "stage": 9,
+      "joined": false,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "corruption-1",
+      "visible": false
+    },
+    {
+      "stage": 9,
+      "joined": false,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "corruption-2",
+      "visible": false
+    },
+    {
+      "stage": 9,
+      "joined": false,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "corruption-3",
+      "visible": false
+    },
+    {
+      "stage": 11,
+      "joined": false,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "lou-intro-ended",
+      "visible": false
+    },
+    {
+      "stage": 12,
+      "joined": false,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": true,
+      "active": false,
+      "classes": "developmentMode battleMode raiderBattleMode",
+      "label": "raider",
+      "visible": false
+    },
+    {
+      "stage": 13,
+      "joined": false,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": false,
+      "active": false,
+      "classes": "developmentMode",
+      "label": "aftermath-start",
+      "visible": false
+    },
+    {
+      "stage": 14,
+      "joined": true,
+      "map": "moss_forest_03_ancient_grove",
+      "interior": false,
+      "battle": false,
+      "active": false,
+      "classes": "developmentMode",
+      "label": "join-committed",
+      "visible": false
+    },
+    {
+      "stage": 15,
+      "joined": true,
+      "map": "fort_dunvall_01_courtyard",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "free-roam",
+      "visible": true
+    },
+    {
+      "stage": 15,
+      "joined": true,
+      "map": "fort_dunvall_01_courtyard",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "loaded-free-roam",
+      "visible": true
+    },
+    {
+      "stage": 15,
+      "joined": true,
+      "map": "rilde_in_house_01",
+      "interior": true,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode",
+      "label": "interior",
+      "visible": false
+    },
+    {
+      "stage": 15,
+      "joined": true,
+      "map": "road_dunvall_capital_01",
+      "interior": false,
+      "battle": true,
+      "active": false,
+      "classes": "developmentMode battleMode normalBattleMode monsterBattle",
+      "label": "normal-battle",
+      "visible": false
+    },
+    {
+      "stage": 15,
+      "joined": true,
+      "map": "road_dunvall_capital_01",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode monsterBattle",
+      "label": "normal-return",
+      "visible": true
+    },
+    {
+      "stage": 9,
+      "joined": true,
+      "map": "moss_forest_01_sunlit_path",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode monsterBattle",
+      "label": "missing-support-early-load",
+      "visible": true
+    },
+    {
+      "stage": 9,
+      "joined": "false",
+      "map": "moss_forest_01_sunlit_path",
+      "interior": false,
+      "battle": false,
+      "active": true,
+      "classes": "developmentMode monsterBattle",
+      "label": "string-false-early-load",
+      "visible": true
+    }
+  ],
+  "errors": [],
+  "note": "No devJump. Public progression calls, direct corruption victory registration, battle instantKill to exercise real finish callbacks; not full movement/combat playthrough."
+}

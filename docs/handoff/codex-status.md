@@ -118,3 +118,5 @@ js/css/index/採用素材/マップ/mainは変更しない。LLの仕様差はFA
 LL完了: battle-ui-structure-20261013.md / ui_structure.py / 40画像/60状態JSONを納品。10シナリオFAILS0/pageerror0、重なり30・実busy中UI可視30を仕様差として別記（60個の独立bugという意味ではない）。PC味方は左半分、1280→1920でbox拡大なし。次MM進行中、NN/OO/PP未着手。
 
 MM完了: save-compat-20261013.md / save_compat.py / fixture・結果JSON・ログを納品。47検査中10失敗を保持、uncaught error0。v28〜30履歴形状と26/27合成probeを区別。型不正/欠落warm-load/DEV位置levelfallbackを報告、ゲーム未修正。次NN進行中、OO/PP未着手。
+
+NN完了: lou-story-gate-20261013.md / m34 / 時系列と3画像を納品。17検査・失敗2、pageerror0。DEVジャンプなしの通常story関数経路は救出前非表示。欠落supportのwarm-loadと文字列falseのstage9表示を再現。次OO全30map×4条件を進行、PP未着手。
