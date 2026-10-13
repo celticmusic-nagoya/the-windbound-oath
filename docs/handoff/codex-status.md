@@ -114,3 +114,5 @@ KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画�
 基準main f0fe968、work/codex-ll-pp。新規 tests/battle/ui_structure.py / tests/system/save_compat.py / tests/moss/m34_lou_story_gate.py / tests/moss/m35_all_maps_smoke.py / .github/workflows/regression.yml、および各docs/qa報告・ログ・画像・CI手順、必要な新規tests/tools支援だけを担当。LL→MM→NN→OO→PP、項目ごと通常push。
 
 js/css/index/採用素材/マップ/mainは変更しない。LLの仕様差はFAILにせず別一覧、MM/NN/OOの問題は再現手順つきで報告。PP権限contents:read、Actions実行/設定はユーザー側確認。元の作業ツリーは切替なし。テスト直列・サーバーは自前終了。再開は本節と最新git logから、完了済みGG〜KKを再作業しない。
+
+LL完了: battle-ui-structure-20261013.md / ui_structure.py / 40画像/60状態JSONを納品。10シナリオFAILS0/pageerror0、重なり30・実busy中UI可視30を仕様差として別記（60個の独立bugという意味ではない）。PC味方は左半分、1280→1920でbox拡大なし。次MM進行中、NN/OO/PP未着手。
