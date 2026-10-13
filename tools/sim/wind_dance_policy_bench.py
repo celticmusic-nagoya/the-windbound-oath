@@ -9,7 +9,7 @@ from tools.sim.engine_wind_dance_bench import INIT
 DATA=(ROOT/'js/data/support-magic-data.js').read_text()
 def run(page,base,battle,policy,regen,eva,cost,seed):
  fixture=DATA.replace('amount: 0.15','amount: '+str(eva/100)).replace('mp: 10','mp: '+str(cost)).replace('amount: 3, provisional','amount: '+str(regen)+', provisional')
- page.route('**/js/data/support-magic-data.js',lambda r:r.fulfill(status=200,content_type='application/javascript',body=fixture))
+ page.route('**/js/data/support-magic-data.js*',lambda r:r.fulfill(status=200,content_type='application/javascript',body=fixture))
  page.goto(base+'/index.html?dev=1&feature=windDanceCommand&boltMana=hit');page.wait_for_function('window.PrologueCombat && window.WindDance')
  assert page.evaluate('([r,e,c])=>SupportMagicData.fiona_bolt_mana.amount===r&&SupportMagicData.wind_dance.effect.amount===e/100&&SupportMagicData.wind_dance.mp===c',[regen,eva,cost]), 'parameter fixture was not applied'
  page.evaluate('closeDialogue();PrologueProgress.seed(3);WindDance.learn();BattleCutinManager.setMode("OFF")');page.clock.install();page.evaluate(INIT,seed)
