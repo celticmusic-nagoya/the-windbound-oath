@@ -1,7 +1,8 @@
 // Small, turn-scoped modifiers. Same effect refreshes instead of stacking.
 (() => {
  const effects=new Map();let revision=0;
- const types=new Set(['atk_up','atk_down','def_up']);
+ const types=new Set(['atk_up','atk_down','def_up','eva_up']);
+ const EVA_CAP=0.5;   // evasion is additive points on a 0% base (enemy attacks have no hit roll otherwise); never above 50%
  const key=(battle,target)=>battle+':'+target;
  function list(battle,target){return [...(effects.get(key(battle,target))?.values()||[])].map(x=>({...x}));}
  function apply({battle,target,type,magnitude,remainingTurns=3,source}){
@@ -10,6 +11,9 @@
   effects.get(k).set(type,{type,magnitude,remainingTurns,source,target,revision:++revision});render(battle);return true;
  }
  function multiplier(battle,target,stat){return list(battle,target).filter(e=>e.type.startsWith(stat+'_')).reduce((n,e)=>n*(e.type.endsWith('down')?1-e.magnitude:1+e.magnitude),1);}
+ // eva_up: same type refreshes (no stacking). evasion() is the summed magnitude, capped; dodges() rolls once per incoming hit. Without an eva_up effect it is 0 and never rolls.
+ function evasion(battle,target){return Math.min(EVA_CAP,list(battle,target).filter(e=>e.type==='eva_up').reduce((n,e)=>n+e.magnitude,0));}
+ function dodges(battle,target,rand=Math.random){const p=evasion(battle,target);return p>0&&rand()<p;}
  function damage(battle,source,target,base){return Math.max(1,Math.round(base*multiplier(battle,source,'atk')/multiplier(battle,target,'def')));}
  function snapshot(battle){return [...effects.entries()].filter(([k])=>k.startsWith(battle+':')).flatMap(([k,v])=>[...v].map(([t,e])=>[k,t,e.revision]));}
  function tick(battle,start=snapshot(battle)){for(const[k,t,r]of start){const e=effects.get(k)?.get(t);if(e?.revision===r&&--e.remainingTurns<=0)effects.get(k).delete(t)}render(battle);}
@@ -17,7 +21,7 @@
  function render(battle){for(const id of ['aidan','fiona']){
   const host=document.querySelector(battle==='normal'?(id==='aidan'?'#hudAidan':'#hudFiona'):(id==='aidan'?'.rbNearA':'.rbNearF'))||document.querySelector(battle==='raider'?(id==='aidan'?'#rbAidan':'#rbFiona'):null);
   if(!host)continue;let el=host.querySelector('.battleStatuses');if(!el){el=document.createElement('small');el.className='battleStatuses';host.append(el)}
-  const labels={atk_up:'ATK↑',atk_down:'ATK↓',def_up:'DEF↑'};
+  const labels={atk_up:'ATK↑',atk_down:'ATK↓',def_up:'DEF↑',eva_up:'回避↑'};
   const current=list(battle,id),attack=current.filter(e=>e.type.startsWith('atk_'));
   // Display the net ATK effect when UP and DOWN coexist; retain both records.
   const shown=attack.length>1?[{type:multiplier(battle,id,'atk')>=1?'atk_up':'atk_down',remainingTurns:Math.min(...attack.map(e=>e.remainingTurns))},...current.filter(e=>!e.type.startsWith('atk_'))]:current;
@@ -25,5 +29,5 @@
   el.title=current.map(e=>labels[e.type]+' '+Math.round(e.magnitude*100)+'% / '+e.remainingTurns+'ターン').join('、');
   el.setAttribute('aria-label',el.title);
  }}
- window.BattleStatus=Object.freeze({apply,list,multiplier,damage,snapshot,tick,clear,render});
+ window.BattleStatus=Object.freeze({apply,list,multiplier,evasion,dodges,EVA_CAP,damage,snapshot,tick,clear,render});
 })();

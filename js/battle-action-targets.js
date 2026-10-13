@@ -6,7 +6,7 @@
   {id:'fiona',name:'フィオナ',node:r?'#rbFiona':'#bFiona2',hp:()=>r?rbFHP:normalFHP,active:window.PrologueCombat?.activeAlly(battle,'fiona')!==false}
  ];}
  function enemies(battle){return window.PrologueCombat?.targets(battle)||[{id:'enemy',name:battle==='raider'?'ゴブリンレイダー':'異常化ゴブリン',node:battle==='raider'?'#raiderSprite':'#bGob',hp:()=>battle==='raider'?rbBoss:gghp}];}
- function type(kind){return ['atk','skill','windbloom'].includes(kind)?'enemy_single':kind==='wind'?'enemy_all':kind==='heal'?'ally_single':['prayer','rune'].includes(kind)?'none':'self';}
+ function type(kind){return ['atk','skill','windbloom'].includes(kind)?'enemy_single':kind==='wind'?'enemy_all':kind==='heal'?'ally_single':['prayer','rune','winddance'].includes(kind)?'none':'self';}
  function request(battle,kind,actor,submit,item){
   const t=item==='potion'?'ally_single':item==='ether'?'ally_single':type(kind);
   if(battle==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);
