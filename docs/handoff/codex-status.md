@@ -95,3 +95,4 @@ EE範囲補完準備: height level参照はactor/eventだけでなくcollision.b
 EE入力網羅の補完: matching mapのないheight-spec JSONも全件読み、missing mapを失敗として報告するよう追加（黙ってskipしない）。heightの非object型も拒否し、空objectは検査対象へ含める。FF後のschema/self-testで検証予定。
 FF完了: main169f197+新規m28/m29/m30のsource fb2bfff、全75合格/main既存0/新規0/未実施0。全test source hash不変、全server停止。docs/qa/full-regression-20261013-FF.md/全logsへ納品。最新36枚Aidan/boarKO/raider dodgeも再合格。height validatorの追加型/ref/orphan/接続無し負例・階段有り正例もFF後直列で合格、schema FAILS0。
 完了: AA検査/draft/提案（overlay-only物語gateはentity level宣言待ちの未達）、BB/CC/DD/EE/FF検証。進行中なし、未着手の新remote指示は最終fetchで確認。main/js/素材/map本体未編集、戦闘数値未採用、Android未測定。元worktree branch固定、各cloneも実行中にbranch切替なし。未コミット懸念なし（本checkpoint後）。再開はlatest main/本status/git logから、AA gateはdocs提案をClaudeがレビューしてから統合、rollback/revertはmain統合担当者が行う。
+最終fetch確認: main169f197（FF基準と同一）、BB〜FF後の新codex briefなし。docs/handoff/codex-BB-FF-delivery-20261013.mdに§4形式の変更/結果/PLAYER QA/branch/戻し方を集約。全authorized検証完了、進行中なし、未コミット懸念なし（最終commit後）。AA採用gateはClaudeのlevel宣言対応待ちとして保持。
