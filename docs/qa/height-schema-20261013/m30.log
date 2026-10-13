@@ -1,0 +1,46 @@
+ok   normal_aidan real hero action applies wind dance
+ok   normal_aidan enemy phase completes
+ok   normal_aidan forced outcomes=False HP loss [21, 0]
+ok   normal_aidan aidan evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_damage.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}]
+OBSERVED {"kind": "normal_aidan", "dodge": false, "hp_loss": [21, 0], "poses": [{"who": "aidan", "src": "img/battle/characters/aidan/aidan_damage.png"}, {"who": "aidan", "src": "img/battle/characters/aidan/aidan_battle_idle.png"}]}
+ok   normal_aidan real hero action applies wind dance
+ok   normal_aidan enemy phase completes
+ok   normal_aidan forced outcomes=True HP loss [0, 0]
+ok   normal_aidan aidan evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_evade.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}]
+OBSERVED {"kind": "normal_aidan", "dodge": true, "hp_loss": [0, 0], "poses": [{"who": "aidan", "src": "img/battle/characters/aidan/aidan_evade.png"}, {"who": "aidan", "src": "img/battle/characters/aidan/aidan_battle_idle.png"}]}
+ok   normal_fiona real hero action applies wind dance
+ok   normal_fiona enemy phase completes
+ok   normal_fiona forced outcomes=False HP loss [0, 21]
+ok   normal_fiona fiona evade asset matches rolled outcome [{'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+OBSERVED {"kind": "normal_fiona", "dodge": false, "hp_loss": [0, 21], "poses": [{"who": "fiona", "src": "img/battle/characters/fiona/fiona_damage.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_battle_idle.png"}]}
+ok   normal_fiona real hero action applies wind dance
+ok   normal_fiona enemy phase completes
+ok   normal_fiona forced outcomes=True HP loss [0, 0]
+ok   normal_fiona fiona evade asset matches rolled outcome [{'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_evade.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+OBSERVED {"kind": "normal_fiona", "dodge": true, "hp_loss": [0, 0], "poses": [{"who": "fiona", "src": "img/battle/characters/fiona/fiona_evade.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_battle_idle.png"}]}
+ok   smash real hero action applies wind dance
+ok   smash enemy phase completes
+ok   smash forced outcomes=(False, False) HP loss [42, 36]
+ok   smash aidan evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_damage.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+ok   smash fiona evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_damage.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+OBSERVED {"kind": "smash", "dodge": [false, false], "hp_loss": [42, 36], "poses": [{"who": "aidan", "src": "img/battle/characters/aidan/aidan_damage.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_damage.png"}, {"who": "aidan", "src": "img/battle/characters/aidan/aidan_battle_idle.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_battle_idle.png"}]}
+ok   smash real hero action applies wind dance
+ok   smash enemy phase completes
+ok   smash forced outcomes=(True, True) HP loss [0, 0]
+ok   smash aidan evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_evade.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_evade.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+ok   smash fiona evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_evade.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_evade.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+OBSERVED {"kind": "smash", "dodge": [true, true], "hp_loss": [0, 0], "poses": [{"who": "aidan", "src": "img/battle/characters/aidan/aidan_evade.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_evade.png"}, {"who": "aidan", "src": "img/battle/characters/aidan/aidan_battle_idle.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_battle_idle.png"}]}
+ok   smash real hero action applies wind dance
+ok   smash enemy phase completes
+ok   smash forced outcomes=(False, True) HP loss [42, 0]
+ok   smash aidan evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_evade.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+ok   smash fiona evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_evade.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}]
+OBSERVED {"kind": "smash", "dodge": [false, true], "hp_loss": [42, 0], "poses": [{"who": "aidan", "src": "img/battle/characters/aidan/aidan_damage.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_evade.png"}, {"who": "aidan", "src": "img/battle/characters/aidan/aidan_battle_idle.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_battle_idle.png"}]}
+ok   smash real hero action applies wind dance
+ok   smash enemy phase completes
+ok   smash forced outcomes=(True, False) HP loss [0, 36]
+ok   smash aidan evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_evade.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}]
+ok   smash fiona evade asset matches rolled outcome [{'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_evade.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_damage.png'}, {'who': 'fiona', 'src': 'img/battle/characters/fiona/fiona_battle_idle.png'}, {'who': 'aidan', 'src': 'img/battle/characters/aidan/aidan_battle_idle.png'}]
+OBSERVED {"kind": "smash", "dodge": [true, false], "hp_loss": [0, 36], "poses": [{"who": "aidan", "src": "img/battle/characters/aidan/aidan_evade.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_damage.png"}, {"who": "fiona", "src": "img/battle/characters/fiona/fiona_battle_idle.png"}, {"who": "aidan", "src": "img/battle/characters/aidan/aidan_battle_idle.png"}]}
+ok   no console/page errors []
+FAILS 0

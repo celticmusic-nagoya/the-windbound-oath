@@ -1,0 +1,185 @@
+{
+  "source_commit": "1bd753a83fbf438aac664605b482a00835659348",
+  "schema": [
+    {
+      "file": "data/maps/dev_height_proto.json",
+      "map": "dev_height_proto",
+      "errors": []
+    }
+  ],
+  "engine": [
+    {
+      "map": "dev_height_proto",
+      "file": "data/maps/dev_height_proto.json",
+      "checks": [
+        {
+          "name": "start",
+          "kind": "spawn_clear",
+          "legacy_derive": 0,
+          "legacy_after_commit": 0,
+          "legacy_accepts_xy": true,
+          "feet": [
+            300,
+            1250
+          ],
+          "actor_xy": [
+            283,
+            1208
+          ],
+          "ok": true,
+          "level": 0,
+          "flags": {}
+        },
+        {
+          "name": "start",
+          "kind": "spawn_reachable",
+          "ok": true,
+          "level": 0,
+          "flags": {}
+        },
+        {
+          "name": "deck",
+          "kind": "spawn_clear",
+          "legacy_derive": 1,
+          "legacy_after_commit": 1,
+          "legacy_accepts_xy": true,
+          "feet": [
+            1560,
+            600
+          ],
+          "actor_xy": [
+            1543,
+            558
+          ],
+          "ok": true,
+          "level": 1,
+          "flags": {}
+        },
+        {
+          "name": "deck",
+          "kind": "spawn_reachable",
+          "ok": true,
+          "level": 1,
+          "flags": {}
+        },
+        {
+          "name": "plateau",
+          "kind": "spawn_clear",
+          "legacy_derive": 1,
+          "legacy_after_commit": 1,
+          "legacy_accepts_xy": false,
+          "feet": [
+            2000,
+            250
+          ],
+          "actor_xy": [
+            1983,
+            208
+          ],
+          "ok": true,
+          "level": 1,
+          "flags": {}
+        },
+        {
+          "name": "plateau",
+          "kind": "spawn_reachable",
+          "ok": true,
+          "level": 1,
+          "flags": {}
+        },
+        {
+          "name": "under",
+          "kind": "spawn_clear",
+          "legacy_derive": 1,
+          "legacy_after_commit": 1,
+          "legacy_accepts_xy": true,
+          "feet": [
+            1560,
+            900
+          ],
+          "actor_xy": [
+            1543,
+            858
+          ],
+          "ok": true,
+          "level": 1,
+          "flags": {}
+        },
+        {
+          "name": "under",
+          "kind": "spawn_reachable",
+          "ok": true,
+          "level": 1,
+          "flags": {}
+        }
+      ],
+      "ambiguities": [
+        {
+          "level": 1,
+          "rect_index": 0,
+          "rect": [
+            1500,
+            480,
+            120,
+            640
+          ],
+          "flags": {},
+          "examples": [
+            {
+              "actor_xy": [
+                1543,
+                758
+              ],
+              "feet": [
+                1560,
+                800
+              ],
+              "valid_levels": [
+                0,
+                1
+              ],
+              "legacy_precheck_accepts_xy": true,
+              "legacy_derive": 1,
+              "legacy_after_commit": 1
+            },
+            {
+              "actor_xy": [
+                1507,
+                950
+              ],
+              "feet": [
+                1524,
+                992
+              ],
+              "valid_levels": [
+                0,
+                1
+              ],
+              "legacy_precheck_accepts_xy": true,
+              "legacy_derive": 1,
+              "legacy_after_commit": 1
+            },
+            {
+              "actor_xy": [
+                1579,
+                950
+              ],
+              "feet": [
+                1596,
+                992
+              ],
+              "valid_levels": [
+                0,
+                1
+              ],
+              "legacy_precheck_accepts_xy": true,
+              "legacy_derive": 1,
+              "legacy_after_commit": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ambiguity_scope": "all upper walk rectangles; five clear candidate points per rectangle, not exhaustive continuous-world enumeration"
+}
