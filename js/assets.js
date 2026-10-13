@@ -122,7 +122,7 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
   }),
   // Lou (support fairy, raider battle): 6-frame floating idle, fixed 6 FPS loop. Frame anchors = torso centroid so the body stays put while hair / wings move.
   lou: Object.freeze({
-    type:'loop', fps:6, crossfade:false, width:442, height:724, anchor:Object.freeze([219.4,419.6]),
+    type:'loop', fps:6, crossfade:false, ignoreReduced:true, width:442, height:724, anchor:Object.freeze([219.4,419.6]),
     frames:Object.freeze([Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_00.png',anchor:Object.freeze([221.1,420.1])}),
       Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_01.png',anchor:Object.freeze([223.5,416.9])}),
       Object.freeze({path:BATTLE_ASSET_PATHS.lou+'idle/lou_idle_02.png',anchor:Object.freeze([224.2,419.5])}),
