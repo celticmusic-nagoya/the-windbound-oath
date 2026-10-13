@@ -265,6 +265,17 @@ m = {
     'story': {'prologue': {'stages': [3], 'followers': [{'id': 'fiona', 'lag': 0.08, 'dx': -48, 'dy': 18, 'placeholder': True}]}},
     'culling': {'chunk': 256, 'margin': 1, 'maxLiveNodes': 800, 'viewportWorst': [1920, 1080], 'scatterRender': 'chunkLayer'}}
 
+# Entity floors for the opt-in height spec (data/height-specs/<id>.json). A map without a height spec ignores `level`/`levels`.
+LEVELS = {'tr_c1_to_lind': 0, 'ev_c1_arrival': 0, 'ev_c1_sign': 0, 'ev_c1_summit': 2, 'ev_c1_view_bench': 2,
+          'tr_c1_herb_slope_a': 0, 'tr_c1_herb_slope_b': 1, 'tr_c1_herb_ramp': [1, 2], 'tr_c1_herb_lip': 2, 'tr_c1_cairn': 2}
+for _k in ('transitions', 'treasurePoints', 'eventZones'):
+    for _e in m.get(_k, []):
+        if _e.get('id') in LEVELS:
+            _v = LEVELS[_e['id']]
+            if isinstance(_v, list): _e['levels'] = _v
+            else: _e['level'] = _v
+m['spawns']['points']['from_lind']['level'] = 0
+m['spawns']['points']['summit']['level'] = 2
 with open(OUT, 'w') as f: json.dump(m, f, ensure_ascii=False, separators=(',', ':'))
 
 # ---------- validation ------------------------------------------------------------------------------------------

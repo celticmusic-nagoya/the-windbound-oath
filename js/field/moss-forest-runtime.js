@@ -117,14 +117,32 @@
     if(f!==lou.frame){if(lou.imgs[lou.frame])lou.imgs[lou.frame].hidden=true;lou.imgs[f].hidden=false;lou.frame=f;}
     lou.imgs.forEach(im=>{im.style.bottom=hover+'px';});
   }
-  const heightSpecsOn=()=>{try{return Boolean(window.WINDBOUND_FEATURES&&WINDBOUND_FEATURES.heightSpecs)||/[?&]feature=heightSpecs\b/.test(location.search);}catch(e){return false;}};
+  // 2.5D test mode (developer switch, no player-facing setting): ?height25d=1 turns it on and remembers it on this browser, ?height25d=0 turns it off again.
+  // ?feature=heightSpecs and WINDBOUND_FEATURES.heightSpecs still work as before. Off by default: normal play never fetches or applies a spec.
+  const heightSpecsOn=()=>{
+    try{
+      if(window.WINDBOUND_FEATURES&&WINDBOUND_FEATURES.heightSpecs)return true;
+      if(/[?&]feature=heightSpecs\b/.test(location.search))return true;
+      const q=/[?&]height25d=(\w+)/.exec(location.search),off=q&&/^(0|off|false)$/.test(q[1]);
+      try{
+        if(q){if(off)localStorage.removeItem('wb_height25d');else localStorage.setItem('wb_height25d','1');}
+        return localStorage.getItem('wb_height25d')==='1';
+      }catch(e){return Boolean(q)&&!off;}   // storage blocked: the URL alone decides
+    }catch(e){return false;}
+  };
+  function heightBadge(){
+    if(document.getElementById('height25dBadge'))return;
+    const b=document.createElement('div');b.id='height25dBadge';b.textContent='2.5D TEST';
+    b.style.cssText='position:fixed;left:6px;bottom:6px;z-index:99999;font:700 10px/1 system-ui,sans-serif;color:#fff;background:rgba(0,90,160,.72);padding:3px 6px;border-radius:4px;pointer-events:none;letter-spacing:.05em';
+    document.body.appendChild(b);
+  }
   async function loadMap(id){
     if(cache.has(id))return cache.get(id);
     await ForestLoader.loadAssets();
     const map=await ForestLoader.load(MAP_BASE+id+'.json');
     // DEV opt-in (?feature=heightSpecs): a height spec kept OUTSIDE the shipped map (data/height-specs/<id>.json) is laid over a map that has none, so a candidate
     // can be tried (also on a phone) without touching the map data. Off by default: normal play never fetches or applies a spec.
-    if(heightSpecsOn()&&!map.height){try{const r=await fetch('data/height-specs/'+id+'.json',{cache:'no-store'});if(r.ok){const spec=await r.json();if(spec&&spec.levels)map.height=spec;}}catch(e){}}
+    if(heightSpecsOn()&&!map.height){try{const r=await fetch('data/height-specs/'+id+'.json',{cache:'no-store'});if(r.ok){const spec=await r.json();if(spec&&spec.levels){map.height=spec;heightBadge();}}}catch(e){}}
     cache.set(id,map);return map;
   }
   const fadeMs=(t,dflt)=>Math.round(((t&&t.fade&&t.fade[dflt])??.35)*1000);
