@@ -121,3 +121,5 @@ Codex P: work/codex-aidan-walk-acceptance / main88ae6c0。新規検品tool/docs/
 Codex R: work/codex-height-contact-impl-review、対象5c33f9f。指摘doc/検証のみ、コード未編集。STATUS WIP。
 
 Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現、NPC goal level欠落と追加試験を指摘。コード未変更。STATUS READY。最新main e694817の新規Sを後続予定。
+
+Codex AA担当: work/codex-height-spec-draft / main7abb9f3。新規lint/engine helper/断崖overlay JSON/level提案doc/m27/証跡のみ。map本体/js/素材未編集、DEV opt-in。T〜Zはwork/codex-tz/0e2dfd3納品、X高さGUI入口は提案待ち。STATUS WIP。
