@@ -112,10 +112,12 @@
     S.extra=[];S.symbols=[];S.sealNode=null;S.windNodes=[];S.louNode=null;S.treasureNodes.clear();
     S.forest=null;S.map=null;S.inside.clear();S.zones={rest:null,ambience:null};
   }
-  function addNode(cls,x,y,w,h,label,z){
+  // visual rise (px) of a static object standing at feet (fx,fy) on `level` (height maps only; 0 elsewhere). Logic stays at the feet; only the picture and the tap target rise.
+  function staticLift(fx,fy,level){const h=S.forest&&S.forest.height;return h&&level>0?h.lift(fx-FOOT.ax,fy-FOOT.ay,level):0;}
+  function addNode(cls,x,y,w,h,label,z,lift=0){
     const d=document.createElement('div');d.className=cls;if(label)d.textContent=label;
     Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',zIndex:String(Math.round(z??y+h))});
-    d.dataset.box=[x,y,w,h].join(',');
+    d.dataset.box=[x,y,w,h].join(',');if(lift)d.style.translate='0 '+(-lift)+'px';
     el.world.appendChild(d);S.extra.push(d);skin(d);return d;
   }
   // Real art for runtime entities (manifest.entity). Bottom-centre anchored over the placeholder box; no art -> placeholder block.
@@ -151,13 +153,13 @@
     for(const t of map.treasurePoints||[]){
       if(t.hint==='none')continue;
       const herb=t.kind==='herb',done=S.opened.has(t.id);   // herb = gathering spot (草むら), same Inventory/treasure plumbing as a chest
-      const n=herb?addNode('forest-herb'+(done?' open':''),t.x-20,t.y-26,40,28,done?'':'✿',t.y):addNode('forest-treasure'+(done?' open':''),t.x-24,t.y-36,48,36,done?'□':'▣',t.y);S.treasureNodes.set(t.id,n);
+      const n=herb?addNode('forest-herb'+(done?' open':''),t.x-20,t.y-26,40,28,done?'':'✿',t.y,staticLift(t.x,t.y,t.level)):addNode('forest-treasure'+(done?' open':''),t.x-24,t.y-36,48,36,done?'□':'▣',t.y,staticLift(t.x,t.y,t.level));S.treasureNodes.set(t.id,n);
     }
     const prologue=map.story&&map.story.prologue;
     if(prologue){
       for(const sy of prologue.symbols||[]){
         const rec={...sy,node:null,alive:!(hooks.isCleared&&hooks.isCleared(sy.field))};
-        if(rec.alive)rec.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y);
+        if(rec.alive)rec.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y,staticLift(sy.x,sy.y,sy.level));
         S.symbols.push(rec);
       }
       const sealB=(map.collision.blockers||[]).find(b=>b.id===(prologue.seal&&prologue.seal.blocker));
@@ -306,14 +308,14 @@
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
     for(const sy of S.symbols){
       if(!sy.alive||!lvOk(sy))continue;
-      if(dist(wx,wy,sy.x,sy.y-30)<=75){
+      if(dist(wx,wy,sy.x,sy.y-30-staticLift(sy.x,sy.y,sy.level))<=75){
         if(dist(fx,fy,sy.x,sy.y)>(sy.interactRadius||210)){toast('異形のゴブリンがこちらを警戒している……。');return true;}
         startBattle(sy);return true;
       }
     }
     for(const t of S.map.treasurePoints||[]){
       if(!lvOk(t))continue;
-      if(dist(wx,wy,t.x,t.y-18)<=55){
+      if(dist(wx,wy,t.x,t.y-18-staticLift(t.x,t.y,t.level))<=55){
         if(dist(fx,fy,t.x,t.y)>190){toast(t.kind==='herb'?'草むらには、もう少し近づく必要がある。':'宝箱には、もう少し近づく必要がある。');return true;}
         openTreasure(t);return true;
       }
@@ -522,7 +524,7 @@
   function syncSymbols(){
     for(const sy of S.symbols){const alive=!(hooks.isCleared&&hooks.isCleared(sy.field));
       if(sy.alive&&!alive){sy.alive=false;if(sy.node){sy.node.remove();S.extra=S.extra.filter(x=>x!==sy.node);sy.node=null;}}
-      else if(!sy.alive&&alive){sy.alive=true;sy.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y);}}
+      else if(!sy.alive&&alive){sy.alive=true;sy.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y,staticLift(sy.x,sy.y,sy.level));}}
     if(S.sealNode&&hooks.sealCorrupted){S.sealNode.classList.toggle('corrupted',hooks.sealCorrupted());skin(S.sealNode);}
   }
   // Choreography adapters (see js/field/field-choreo.js). Aidan: moving S.x/S.y drives his walk animation by itself.

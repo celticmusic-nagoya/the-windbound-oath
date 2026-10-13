@@ -1,0 +1,1406 @@
+{
+  "source_commit": "0f07f18565ac35c74559803d7163b35ac8c6f742",
+  "timing": "Playwright clock virtual time; cutins OFF via supported setting; damage sampled every5ms",
+  "results": [
+    {
+      "battle": "normal",
+      "condition": "off",
+      "seed": 20261013,
+      "outcome": "victory",
+      "rounds": 4,
+      "kill_round": 4,
+      "end_mp": 30,
+      "support_actions_submitted": 0,
+      "bolt_actions_submitted": 4,
+      "support_actions_executed": 0,
+      "bolt_hits_executed": 3,
+      "damage_sampled": 27,
+      "dodges_from_logs": 0,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリンが現れた！",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンに45のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "魔物を退けた。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "atk",
+          "mp": 30,
+          "hp": [
+            91,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 123
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 30,
+          "hp": [
+            82,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 61
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 30,
+          "hp": [
+            73,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 14
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "atk",
+          "mp": 30,
+          "hp": [
+            73,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 0
+            }
+          ],
+          "terminal": null
+        }
+      ]
+    },
+    {
+      "battle": "normal",
+      "condition": "dance",
+      "seed": 20261013,
+      "outcome": "victory",
+      "rounds": 5,
+      "kill_round": 5,
+      "end_mp": 10,
+      "support_actions_submitted": 2,
+      "bolt_actions_submitted": 3,
+      "support_actions_executed": 2,
+      "bolt_hits_executed": 2,
+      "damage_sampled": 36,
+      "dodges_from_logs": 0,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリンが現れた！",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンに45のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "魔物を退けた。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "winddance",
+          "mp": 20,
+          "hp": [
+            91,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 140
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 20,
+          "hp": [
+            82,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 78
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 20,
+          "hp": [
+            73,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 31
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "winddance",
+          "mp": 10,
+          "hp": [
+            64,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 1
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 10,
+          "hp": [
+            64,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 0
+            }
+          ],
+          "terminal": null
+        }
+      ]
+    },
+    {
+      "battle": "normal",
+      "condition": "hit",
+      "seed": 20261013,
+      "outcome": "victory",
+      "rounds": 5,
+      "kill_round": 5,
+      "end_mp": 16,
+      "support_actions_submitted": 2,
+      "bolt_actions_submitted": 3,
+      "support_actions_executed": 2,
+      "bolt_hits_executed": 2,
+      "damage_sampled": 36,
+      "dodges_from_logs": 0,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリンが現れた！",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンに45のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "魔物を退けた。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "winddance",
+          "mp": 20,
+          "hp": [
+            91,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 140
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 23,
+          "hp": [
+            82,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 78
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 26,
+          "hp": [
+            73,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 31
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "winddance",
+          "mp": 16,
+          "hp": [
+            64,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 1
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 16,
+          "hp": [
+            64,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 0
+            }
+          ],
+          "terminal": null
+        }
+      ]
+    },
+    {
+      "battle": "normal",
+      "condition": "action",
+      "seed": 20261013,
+      "outcome": "victory",
+      "rounds": 5,
+      "kill_round": 5,
+      "end_mp": 16,
+      "support_actions_submitted": 2,
+      "bolt_actions_submitted": 3,
+      "support_actions_executed": 2,
+      "bolt_hits_executed": 2,
+      "damage_sampled": 36,
+      "dodges_from_logs": 0,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリンが現れた！",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンに45のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの攻撃！ ゴブリンに17のダメージ！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "ゴブリンの攻撃！ 9ダメージ。",
+        "エイダンの攻撃！ ゴブリンに30のダメージ！",
+        "魔物を退けた。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "winddance",
+          "mp": 20,
+          "hp": [
+            91,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 140
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 23,
+          "hp": [
+            82,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 78
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 26,
+          "hp": [
+            73,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 31
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "winddance",
+          "mp": 16,
+          "hp": [
+            64,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 1
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 16,
+          "hp": [
+            64,
+            90
+          ],
+          "enemy": [
+            {
+              "id": "normal_enemy_0",
+              "hp": 0
+            }
+          ],
+          "terminal": null
+        }
+      ]
+    },
+    {
+      "battle": "raider",
+      "condition": "off",
+      "seed": 20261013,
+      "outcome": "defeat_rewind",
+      "rounds": 7,
+      "kill_round": null,
+      "end_mp": 36,
+      "support_actions_submitted": 0,
+      "bolt_actions_submitted": 7,
+      "support_actions_executed": 0,
+      "bolt_hits_executed": 7,
+      "damage_sampled": 196,
+      "dodges_from_logs": 0,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "ルーの《風の加護》！ DEF +15%（3ターン）",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーの「破砕斬」！ エイダン 37 / フィオナ 31 ダメージ！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーがフィオナを狙う！ 18ダメージ。",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ 会心の一撃！ ゴブリンレイダーに33のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 36 ダメージ！",
+        "パーティーが崩れた……。ルーの風が時間を巻き戻す。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            120,
+            84
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1186
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1101
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1037
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            83,
+            32
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 973
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 909
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 6,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 834
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 7,
+          "fiona_action": "atk",
+          "mp": 36,
+          "hp": [
+            53,
+            0
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 770
+            }
+          ],
+          "terminal": {
+            "hp": [
+              53,
+              0
+            ],
+            "mp": 36,
+            "round": 7,
+            "boss": 770,
+            "outcome": "defeat_rewind"
+          }
+        }
+      ]
+    },
+    {
+      "battle": "raider",
+      "condition": "dance",
+      "seed": 20261013,
+      "outcome": "defeat_rewind",
+      "rounds": 11,
+      "kill_round": null,
+      "end_mp": 6,
+      "support_actions_submitted": 3,
+      "bolt_actions_submitted": 8,
+      "support_actions_executed": 3,
+      "bolt_hits_executed": 8,
+      "damage_sampled": 262,
+      "dodges_from_logs": 1,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "ルーの《風の加護》！ DEF +15%（3ターン）",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 37 / フィオナ 31 ダメージ！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ 会心の一撃！ ゴブリンレイダーに33のダメージ！",
+        "レイダーがフィオナを狙う！ 18ダメージ。",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 回避 ダメージ！",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが角笛を吹いた！ 異常化ゴブリンが現れた。",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 異常化ゴブリンに19のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "異常化ゴブリンの《穢れの供給》！ レイダーの傷が塞がる！ HP +100",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 異常化ゴブリンに19のダメージ！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 36 ダメージ！",
+        "異常化ゴブリンの《腐蝕の波動》！ 攻撃力が低下した！",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 異常化ゴブリンに15のダメージ！",
+        "レイダーがフィオナを狙う！ 24ダメージ。",
+        "異常化ゴブリンの《狂爪連撃》 1/2！ 5ダメージ。",
+        "異常化ゴブリンの《狂爪連撃》 2/2！ 5ダメージ。",
+        "パーティーが崩れた……。ルーの風が時間を巻き戻す。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "winddance",
+          "mp": 26,
+          "hp": [
+            120,
+            84
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1208
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 26,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1123
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 26,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1059
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "winddance",
+          "mp": 16,
+          "hp": [
+            83,
+            32
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1017
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 16,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 942
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 6,
+          "fiona_action": "atk",
+          "mp": 16,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 878
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 7,
+          "fiona_action": "winddance",
+          "mp": 6,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 836
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 8,
+          "fiona_action": "atk",
+          "mp": 6,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 751
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 190
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 9,
+          "fiona_action": "atk",
+          "mp": 6,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 134
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 10,
+          "fiona_action": "atk",
+          "mp": 6,
+          "hp": [
+            35,
+            14
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 78
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 11,
+          "fiona_action": "atk",
+          "mp": 6,
+          "hp": [
+            35,
+            0
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 26
+            }
+          ],
+          "terminal": {
+            "hp": [
+              35,
+              0
+            ],
+            "mp": 6,
+            "round": 11,
+            "boss": 851,
+            "outcome": "defeat_rewind"
+          }
+        }
+      ]
+    },
+    {
+      "battle": "raider",
+      "condition": "hit",
+      "seed": 20261013,
+      "outcome": "defeat_rewind",
+      "rounds": 11,
+      "kill_round": null,
+      "end_mp": 17,
+      "support_actions_submitted": 4,
+      "bolt_actions_submitted": 7,
+      "support_actions_executed": 4,
+      "bolt_hits_executed": 7,
+      "damage_sampled": 262,
+      "dodges_from_logs": 1,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "ルーの《風の加護》！ DEF +15%（3ターン）",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 37 / フィオナ 31 ダメージ！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ 会心の一撃！ ゴブリンレイダーに33のダメージ！",
+        "レイダーがフィオナを狙う！ 18ダメージ。",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 回避 ダメージ！",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが角笛を吹いた！ 異常化ゴブリンが現れた。",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 異常化ゴブリンに19のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "異常化ゴブリンの《穢れの供給》！ レイダーの傷が塞がる！ HP +100",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 36 ダメージ！",
+        "異常化ゴブリンの《腐蝕の波動》！ 攻撃力が低下した！",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 会心の一撃！ 異常化ゴブリンに23のダメージ！",
+        "レイダーがフィオナを狙う！ 24ダメージ。",
+        "異常化ゴブリンの《狂爪連撃》 1/2！ 5ダメージ。",
+        "異常化ゴブリンの《狂爪連撃》 2/2！ 5ダメージ。",
+        "パーティーが崩れた……。ルーの風が時間を巻き戻す。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "winddance",
+          "mp": 26,
+          "hp": [
+            120,
+            84
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1208
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 29,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1123
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 32,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1059
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "winddance",
+          "mp": 22,
+          "hp": [
+            83,
+            32
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1017
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 25,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 942
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 6,
+          "fiona_action": "atk",
+          "mp": 28,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 878
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 7,
+          "fiona_action": "winddance",
+          "mp": 18,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 836
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 8,
+          "fiona_action": "atk",
+          "mp": 21,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 751
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 190
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 9,
+          "fiona_action": "atk",
+          "mp": 24,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 134
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 10,
+          "fiona_action": "winddance",
+          "mp": 14,
+          "hp": [
+            35,
+            14
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 97
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 11,
+          "fiona_action": "atk",
+          "mp": 17,
+          "hp": [
+            35,
+            0
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 37
+            }
+          ],
+          "terminal": {
+            "hp": [
+              35,
+              0
+            ],
+            "mp": 17,
+            "round": 11,
+            "boss": 851,
+            "outcome": "defeat_rewind"
+          }
+        }
+      ]
+    },
+    {
+      "battle": "raider",
+      "condition": "action",
+      "seed": 20261013,
+      "outcome": "defeat_rewind",
+      "rounds": 11,
+      "kill_round": null,
+      "end_mp": 17,
+      "support_actions_submitted": 4,
+      "bolt_actions_submitted": 7,
+      "support_actions_executed": 4,
+      "bolt_hits_executed": 7,
+      "damage_sampled": 262,
+      "dodges_from_logs": 1,
+      "normal_recoveries": 0,
+      "logs": [
+        "ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーがフィオナを狙う！ 21ダメージ。",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "ルーの《風の加護》！ DEF +15%（3ターン）",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 37 / フィオナ 31 ダメージ！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ 会心の一撃！ ゴブリンレイダーに33のダメージ！",
+        "レイダーがフィオナを狙う！ 18ダメージ。",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "エイダンの攻撃！ ゴブリンレイダーに42のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 回避 ダメージ！",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ 会心の一撃！ ゴブリンレイダーに63のダメージ！",
+        "フィオナが杖で応戦！ ゴブリンレイダーに22のダメージ！",
+        "レイダーが角笛を吹いた！ 異常化ゴブリンが現れた。",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 異常化ゴブリンに19のダメージ！",
+        "レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！",
+        "異常化ゴブリンの《穢れの供給》！ レイダーの傷が塞がる！ HP +100",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナの「風の舞」！ 味方全体の回避率が上がった！",
+        "レイダーの「破砕斬」！ エイダン 42 / フィオナ 36 ダメージ！",
+        "異常化ゴブリンの《腐蝕の波動》！ 攻撃力が低下した！",
+        "ルーの《妖精の癒し》！ HP +12",
+        "エイダンの攻撃！ 異常化ゴブリンに37のダメージ！",
+        "フィオナが杖で応戦！ 会心の一撃！ 異常化ゴブリンに23のダメージ！",
+        "レイダーがフィオナを狙う！ 24ダメージ。",
+        "異常化ゴブリンの《狂爪連撃》 1/2！ 5ダメージ。",
+        "異常化ゴブリンの《狂爪連撃》 2/2！ 5ダメージ。",
+        "パーティーが崩れた……。ルーの風が時間を巻き戻す。"
+      ],
+      "round_trace": [
+        {
+          "turn": 1,
+          "fiona_action": "winddance",
+          "mp": 26,
+          "hp": [
+            120,
+            84
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1208
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 2,
+          "fiona_action": "atk",
+          "mp": 29,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1123
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 3,
+          "fiona_action": "atk",
+          "mp": 32,
+          "hp": [
+            120,
+            63
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1059
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 4,
+          "fiona_action": "winddance",
+          "mp": 22,
+          "hp": [
+            83,
+            32
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 1017
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 5,
+          "fiona_action": "atk",
+          "mp": 25,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 942
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 6,
+          "fiona_action": "atk",
+          "mp": 28,
+          "hp": [
+            95,
+            26
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 878
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 7,
+          "fiona_action": "winddance",
+          "mp": 18,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 836
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 8,
+          "fiona_action": "atk",
+          "mp": 21,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 751
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 190
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 9,
+          "fiona_action": "atk",
+          "mp": 24,
+          "hp": [
+            65,
+            38
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 134
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 10,
+          "fiona_action": "winddance",
+          "mp": 14,
+          "hp": [
+            35,
+            14
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 97
+            }
+          ],
+          "terminal": null
+        },
+        {
+          "turn": 11,
+          "fiona_action": "atk",
+          "mp": 17,
+          "hp": [
+            35,
+            0
+          ],
+          "enemy": [
+            {
+              "id": "raider_enemy_0",
+              "hp": 851
+            },
+            {
+              "id": "raider_enemy_1",
+              "hp": 37
+            }
+          ],
+          "terminal": {
+            "hp": [
+              35,
+              0
+            ],
+            "mp": 17,
+            "round": 11,
+            "boss": 851,
+            "outcome": "defeat_rewind"
+          }
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
