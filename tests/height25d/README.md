@@ -44,6 +44,12 @@ level2は現DEVの実データには無い。Playwright routeでDEVのJSONレス
 
 ## 結果・限界
 
-最終結果はresults.json / run.logに記録。関連既存m19(pc)/m22/m26を2巡直列で照合、ファイルhash不変・結果同一を確認する。m24/全回帰/Android実機は未実施。既存ファイルは一切変更しないため「変更前後」は同じmainの関連回帰2巡の比較。新規テストの追加に伴うゲーム差分はゼロ。
+最終結果: **42項目39合格/3失敗（H25-01のみ）、console/pageerror0**。results.json / run.logに記録。関連既存m19(pc)/m22/m26を2巡直列で照合、ファイルhash不変・結果同一を確認する。m24/全回帰/Android実機は未実施。既存ファイルは一切変更しないため「変更前後」は同じmainの関連回帰2巡の比較。新規テストの追加に伴うゲーム差分はゼロ。
 
 Claudeへ: DEVを本編セーブで復元する必要性、および本編の将来level保存契約の判断をお願いします。高さの本編有効化/実機性能はこのタスクの範囲外。mainへマージしない。
+
+## 完了checkpoint
+
+関連既存テスト2巡 **6/6合格**、各testのSHA256が両巡で一致。m19はpcのみ（既存のVIEWSパラメータ）、m22/m26は元の全ケース。各serverを起動/終了し、printed FAILとexitを照合。`existing/results.json` と6ログが根拠。新規verifyの42件39合格/3失敗・エラー0と合わせて、失敗理由を明記する完了条件を満たした。STATUS: READY（指摘保持、機能修正済みではない）。
+
+追加ファイル: verify.py / README.md / results.json / run.log / run-initial.log / 前景3PNG / existingの結果JSON・6ログ。検証実装コミット `848d845`。最終報告のcommitはブランチ履歴を参照。main未更新なのでロールバック不要。X3へ続ける。
