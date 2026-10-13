@@ -26,7 +26,7 @@ with server(8800) as base,sync_playwright() as p:
     pg.clock.fast_forward(100)
     if pg.evaluate('__enemyDone'):break
    ck(pg.evaluate('__enemyDone'),kind+' enemy phase completes')
-   after=pg.evaluate('[rbHP,rbFHP]');expected=[42,36]if kind=='smash'else([21,0]if kind=='normal_aidan'else[0,21]);loss=[hp[i]-after[i]for i in range(2)];ck(loss==([0 if dodge[i] else expected[i] for i in range(2)] if kind=='smash' else ([0,0]if dodge else expected)),kind+(' dodge'if dodge else' hit')+' HP loss '+str(loss))
+   after=pg.evaluate('[rbHP,rbFHP]');expected=[42,36]if kind=='smash'else([21,0]if kind=='normal_aidan'else[0,21]);loss=[hp[i]-after[i]for i in range(2)];ck(loss==([0 if dodge[i] else expected[i] for i in range(2)] if kind=='smash' else ([0,0]if dodge else expected)),kind+' forced outcomes='+str(dodge)+' HP loss '+str(loss))
    poses=pg.evaluate('__poses');targets=['aidan','fiona']if kind=='smash'else[kind.split('_')[1]]
    for who in targets:
     wanted=dodge[['aidan','fiona'].index(who)] if kind=='smash' else dodge
