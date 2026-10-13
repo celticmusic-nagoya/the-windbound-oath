@@ -1,0 +1,9 @@
+ok   heading classes {'down': 'down', 'up': 'up', 'right': 'right', 'left': 'left', 'dr': 'dlF', 'dl': 'dl', 'ur': 'ulF', 'ul': 'ul', 'steep': 'down', 'shallow': 'right'}
+ok   jitter around 45deg does not flicker between sets (1)
+ok   straight down uses walk_down {'down'}
+ok   straight up uses walk_up {'up'}
+FAIL down-right uses mirrored 3/4 {'right', 'down', 'dlF'}
+FAIL up-left uses 3/4 back {'left', 'up', 'ul'}
+ok   sideways uses walk_right {'right'}
+ok   no console errors []
+FAILS 2

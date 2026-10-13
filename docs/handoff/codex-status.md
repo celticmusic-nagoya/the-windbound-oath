@@ -1,6 +1,8 @@
 # Codex 作業状態 / 再開手順
 
-更新日: 2026-10-13（Asia/Tokyo）。基準main: `058cfc8`。現在ブランチ: `work/codex-standing-orders`。
+更新日: 2026-10-13（Asia/Tokyo）。検証基準main: `31a5f5e`。現在ブランチ: `work/codex-gg-kk`。
+
+**最新状態: GG〜KK完了、進行中なし。** [納品一覧](codex-GG-KK-delivery-20261013.md)。GG2指摘/COMMAND仕様判断/実Android未測定を保留。以下の古いWIP記録は履歴であり、再開時はこの冒頭と末尾の最新節を優先する。
 常設指示: [codex-standing-orders.md](codex-standing-orders.md)。mainへの反映はClaude担当。
 
 ## 完了
@@ -76,3 +78,33 @@ R着手: work/codex-height-contact-impl-review / main88ae6c0。対象origin/feat
 R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/動く敵0の戦闘を再現。NPC goalのlevel欠落をAPIで確認、pending/walkers/試験fixture不足も指摘。コード未編集。docs/qa/height-contact-impl-review.mdと証跡を納品。
 今回の納品: N2e9bb42（Claudeがmain88ae6c0へ統合）、O56f6050（旧531対象57合格/既存2/新規0）、P21a0ee9（dummy検品、実素材未受領）、Q306ef3a（家02spawn限定修正、関連検証合格）、Rは本branchの最新commit参照。全件最終main回帰/Androidは未実施。
 区切りfetchでmain e694817と新規依頼Sを検出。Rをpush後に指示を読み、専用branchで着手。未コミット懸念なし。
+
+## GG〜KK 再開 (2026-10-13)
+
+ブランチ: `work/codex-gg-kk`。基準main: `31a5f5e`。BB〜FFは `work/codex-bb-ff / 4329e58` に納品済み（FF75/75合格）、再作業しない。AAは `3979e54` に提案済み、頂上イベントlevel宣言の採用ゲートは未達。
+
+進行中: GG。未着手: HH / II / JJ / KK。担当: 新規 tests/input/kb_audit.py、tests/battle/lou_idle_real_flow.py、tools/field/make_lou_field_frames.py、GG〜KK各docs/qa報告/画像/ログ。JJでは tests/moss/m31_aidan_heading.py および調査で前置き不足が確認されたテストのみを担当する。共有CLAIMSと本statusに記録してから編集。
+
+GitHub上の進捗: 各項目の完了ごとに報告書・本statusを通常push。mainへはマージしない。js/css/index/採用素材は未編集。Android実機は接続なしのため未測定。実機の代替と表記しない。
+
+再開: このブランチの最新commit/本節を読み、完了項目を飛ばしてGG→HH→II→JJ→KK。元の作業ツリーはブランチを切り替えず、テストは直列・自身のサーバーを終了する。現時点の未コミット懸念なし。
+
+GG完了: keyboard-audit-20261013.md / kb_audit.py / JSON・ログ・10画像を納品。旧宿屋店主Enter対象外と同一フレーム非repeat二重進行の2件を報告（後者は合成イベント、要判断）。FAILS2を保持、未実施0/pageerror0。GGの他項目合格。次HH: 新規 tests/moss/m33_lou_field_review.py と縮小proposal tool/報告/画像を担当。II/JJ/KK未着手。未コミット懸念なし、ゲーム未編集。
+
+HH完了: lou-field-review-20261013.md、m33、新規縮小tool/6画像/計測JSONを納品。37/37合格、save復元/戦闘復帰/liftも合格。6PNG2,303,132→93,723bytes（提案のみ/tmp、未採用）。Android未測定。次IIを進行中、JJ/KK未着手。
+
+II完了: lou-idle-real-flow-20261013.md / 新規test / 250ms全時系列 / 2画像を納品。祭壇の最後から自然に戦闘開始し初回入力〜敵ターン〜被弾を確認、reduce両条件9/9合格。実Androidでの停止は未再現/未測定。次JJ: m31安定化・20連続、全testの会話前置きを調査。必要に応じm32等testsのみ担当。KK未着手。
+
+JJ進行checkpoint: m31修正前3/3・m32修正前1/1・m6_inventory修正前1/1合格（この小標本で元の間欠失敗は未再現）。m31の固定待機を描画IDLE相当+位置/コマ安定の状態待機へ置換し、修正後20連続を直列実行中。m6_inventoryとm32の会話前置きを補強。全Pythonテストを静的走査し補助関数/DEV harness/間接closeを区別。ゲームは未編集。KK未着手。再開はafter.jsonの完了数を確認し、途切れたら20連続は最初から実行。
+
+JJ追加checkpoint: 中間版の初期マップready誤認をTRACEで特定し、A1 map IDを条件に追加。修正後20連続は最初からやり直し中（旧失敗ログを保管）。test-stability-20261013.mdに原因/走査判断を共有。KKでは新規 tools/qa/measure_command_mobile.py を担当し、alpha pixel/パネル重なりと44pxの判断資料だけを作る。
+
+JJ完了: m31修正後20回連続合格/FAILS0/console0。m32・m6_inventory各1回も合格、22/22。元の間欠失敗は修正前3回未再現のため単一原因とは断定しない。状態待機・map ID/画像decode条件・会話前置きを補強し、69Python/7Node走査表を納品。test-stability-20261013.md/全ログ参照。次KK進行中、新規measure_command_mobile.py/3画面×2戦闘×開閉の12画像/数値提案を担当。
+
+KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画像とalpha面積JSONを納品。縦レイダーも味方ほぼ100%にpanelが重なるため、折りたたみ+44px以上の常設COMMANDを推奨（未適用）。初期表示で末尾が切れる条件と現COMMAND高さ34pxを記録。最終判断はユーザー。GG〜KKの成果は揃った。最終検証としてHH testの一時候補自動生成（別環境で/tmpがなくても実行可能）を確認中、その後納品一覧/statusを確定する。
+
+## GG〜KK 最終checkpoint
+
+全5項目を各区切りpush。納品一覧codex-GG-KK-delivery-20261013.md。HHの別環境向け一時候補自動生成版も37/37再合格し、表/ログ/画像を最終実行へ更新。GG40合格/2指摘、II9合格、JJ20連続+関連2合格、KK12計測完了。進行中なし、GG〜KK未着手なし。実機/全回帰は今回未実施。
+
+再開: git fetch --all、main/status/standing/新規briefsと本branchのgit logを確認し、完了GG〜KKは繰り返さない。未解決の採用/実機/2指摘は納品一覧を参照。main未マージ、force pushなし、保護対象差分0、元worktreeはwork/codex-wind-dance-sim2のcleanを維持。未コミット懸念なし（最終push時点）、自身のサーバー終了。Claudeが資料/branchをレビューして統合する。

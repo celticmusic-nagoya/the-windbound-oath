@@ -9,7 +9,7 @@ with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1000)
-    pg.evaluate("devJump('forest')"); pg.wait_for_function("MossForest.active",timeout=20000); pg.wait_for_timeout(500)
+    pg.evaluate("devJump('forest')"); pg.wait_for_function("MossForest.active",timeout=20000); pg.wait_for_timeout(500); pg.evaluate("closeDialogue()")
     # A1 hollow via real click path
     t=pg.evaluate("MossForest.map.treasurePoints.find(t=>t.id==='tr_a1_hollow')")
     pg.evaluate("MossForest.teleportFeet(%d,%d)"%(t['x'],t['y']+30)); pg.wait_for_timeout(200); pg.evaluate("MossForest.goFeet(%d,%d)"%(t['x'],t['y']+8)); pg.wait_for_timeout(2500)
