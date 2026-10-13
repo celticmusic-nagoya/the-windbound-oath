@@ -120,3 +120,5 @@ LL完了: battle-ui-structure-20261013.md / ui_structure.py / 40画像/60状態J
 MM完了: save-compat-20261013.md / save_compat.py / fixture・結果JSON・ログを納品。47検査中10失敗を保持、uncaught error0。v28〜30履歴形状と26/27合成probeを区別。型不正/欠落warm-load/DEV位置levelfallbackを報告、ゲーム未修正。次NN進行中、OO/PP未着手。
 
 NN完了: lou-story-gate-20261013.md / m34 / 時系列と3画像を納品。17検査・失敗2、pageerror0。DEVジャンプなしの通常story関数経路は救出前非表示。欠落supportのwarm-loadと文字列falseのstage9表示を再現。次OO全30map×4条件を進行、PP未着手。
+
+OO完了: all-maps-smoke-20261013.md / m35 / 120条件結果/logを納品。30map×4動的120/120合格、console/pageerror0、default spawn自由/追従300px以内。遷移先JSON不存在11（TBD8/hook旧virtual3）を別記してFAILS11保持。実際の出口歩行とは区別。次PP: .github/workflows/regression.ymlとrequirements-ci.txt、CI検証手順/ログを担当。
