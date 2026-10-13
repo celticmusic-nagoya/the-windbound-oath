@@ -12,7 +12,10 @@ def ck(c,m):
 js="global.window={WINDBOUND_DEV:true};require(process.argv[1]);console.log(JSON.stringify(window.AidanFieldAssets.frames))"
 frames=json.loads(subprocess.check_output(['node','-e',js,str(ROOT/'js/field/aidan-field-assets.js')],text=True))
 paths={ROOT/v['path'].split('?')[0] for v in frames.values()};actual=set((ROOT/'img/field/characters/aidan').glob('*.png'))
-ck(len(frames)==24 and paths==actual,'manifest contains exactly 24 files, no orphan PNGs')
+diagonal={k for k in frames if k.startswith(('aidan_walk_dl_','aidan_walk_ul_'))}
+expected_diagonal={f'aidan_walk_{d}_{n:02}' for d in ('dl','ul') for n in range(1,7)}
+ck(diagonal in (set(),expected_diagonal),'optional delivered diagonal set is exactly dl/ul6 each')
+ck(len(frames)==24+len(diagonal) and paths==actual,'manifest contains24 cardinal plus declared diagonals, no orphan PNGs')
 for name,v in frames.items():
  p=ROOT/v['path'].split('?')[0]
  if not p.exists():ck(False,name+' exists');continue
@@ -29,7 +32,7 @@ for d,n in [('up',6),('down',6),('left',4),('right',4)]:
  idle=next((v for v in metrics if v['name']=='aidan_idle_'+d),None)
  widths=[v['width'] for v in metrics if v['name'].startswith('aidan_walk_'+d+'_')]
  if d in ('up','down') and idle and widths:
-  ratio=sum(widths)/len(widths)/idle['width'];warnings.append({'direction':d,'mean_walk_width_to_idle':round(ratio,3),'known_visual_issue':'delivered walk is three-quarter view; width proxy cannot classify face/body orientation'})
+  ratio=sum(widths)/len(widths)/idle['width'];warnings.append({'direction':d,'mean_walk_width_to_idle':round(ratio,3),'known_visual_issue':('original24-frame delivery uses three-quarter view' if not diagonal else 'straight up/down delivery present; diagonal3/4 frames are separate'),'limitation':'width proxy cannot classify face/body orientation'})
 with server(8797) as base,sync_playwright() as p:
  b=p.chromium.launch(executable_path=os.environ.get('PW_CHROMIUM_EXECUTABLE') or None);pg=b.new_page(viewport={'width':844,'height':390})
  pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
