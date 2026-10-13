@@ -91,6 +91,31 @@
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }
+  // ---- Lou field follower (provisional): the battle idle loop (BATTLE_IDLE_ASSETS.lou, 6 frames @ 6 FPS) floating behind Fiona once she has joined ----
+  const lou={el:null,imgs:[],frame:-1,x:0,y:0,map:null};
+  function mountLou(){
+    const A=window.BATTLE_IDLE_ASSETS&&BATTLE_IDLE_ASSETS.lou;if(lou.el||!A||!el.world)return;
+    const d=document.createElement('div');d.id='forestLou';d.setAttribute('aria-hidden','true');
+    lou.imgs=A.frames.map(f=>{const im=new Image();im.className='lou-field-frame';im.alt='';im.draggable=false;im.hidden=true;im.src=f.path;d.appendChild(im);return im;});
+    el.world.appendChild(d);lou.el=d;
+  }
+  const louJoined=()=>typeof PartyManager!=='undefined'&&Boolean(PartyManager.support&&PartyManager.support.joined);
+  function updateLou(now){
+    mountLou();if(!lou.el)return;
+    const show=louJoined()&&!(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false);
+    lou.el.style.display=show?'block':'none';if(!show)return;
+    const tx=S.x+(S.fx-S.x)*2.4,ty=S.y+(S.fy-S.y)*2.4;
+    if(lou.map!==S.map){lou.map=S.map;lou.x=tx;lou.y=ty;}
+    const k=1-Math.pow(1-.06,FieldMovement.frameScale||1);lou.x+=(tx-lou.x)*k;lou.y+=(ty-lou.y)*k;
+    const hover=22+Math.sin(now/520)*3;
+    lou.el.style.left=(lou.x+FOOT.ax)+'px';lou.el.style.top=(lou.y+FOOT.ay)+'px';
+    lou.el.style.zIndex=String(Math.round(lou.y+FOOT.ay)+1);
+    const lift=el.fiona.style.transform&&/translateY\(([-\d.]+)px\)/.exec(el.fiona.style.transform);
+    lou.el.style.transform=lift?'translateY('+lift[1]+'px)':'';
+    const f=Math.floor(now/(1000/(BATTLE_IDLE_ASSETS.lou.fps||6)))%lou.imgs.length;
+    if(f!==lou.frame){if(lou.imgs[lou.frame])lou.imgs[lou.frame].hidden=true;lou.imgs[f].hidden=false;lou.frame=f;}
+    lou.imgs.forEach(im=>{im.style.bottom=hover+'px';});
+  }
   const heightSpecsOn=()=>{try{return Boolean(window.WINDBOUND_FEATURES&&WINDBOUND_FEATURES.heightSpecs)||/[?&]feature=heightSpecs\b/.test(location.search);}catch(e){return false;}};
   async function loadMap(id){
     if(cache.has(id))return cache.get(id);
@@ -490,7 +515,7 @@
       if(dist(S.x+FOOT.ax,S.y+FOOT.ay,pd.c.x,pd.c.y)>260)toast('もう少し近づいて調べよう。');else fireEvent(pd.z);}
     stepEncounter(S.x-px0,S.y-py0);
     if(window.FieldMonsters)FieldMonsters.update((FieldMovement.frameScale||1)/60);
-    render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
+    render();updateSprite(performance.now());updateFiona(performance.now());updateLou(performance.now());checkZones();S.frames++;
   }
   // ---------- step encounters (map.encounterZones with style:'step') - DISABLED in normal play, mechanism kept for future use ----------
   // Walking inside a zone builds up distance; every ENC_STEP px there is a small chance (zone.rate) of a fight. Only enemies the story layer

@@ -93,3 +93,6 @@
 
 /* Fiona animated field sprite: the frames are positioned from her feet anchor; the placeholder box becomes invisible */
 #forestWorld #forestFiona.fiona-sprite{background:transparent;border:0;box-shadow:none;color:transparent;font-size:0;overflow:visible}
+
+#forestWorld #forestLou{position:absolute;width:0;height:0;pointer-events:none}
+#forestLou .lou-field-frame{position:absolute;left:0;height:52px;width:auto;transform:translateX(-50%);pointer-events:none;user-select:none}

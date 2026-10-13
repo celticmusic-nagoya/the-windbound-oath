@@ -21,6 +21,7 @@
   profiles.set('loop',r=>{const hold=1000/(r.assets.fps||6);return r.assets.frames.map((_,i)=>({frame:i,hold}));});
   function currentContext(){return document.body.classList.contains('raiderBattleMode')?'raider':document.body.classList.contains('normalBattleMode')?'normal':null;}
   function eligible(r){return r.enabled&&r.state==='idle'&&r.context===currentContext();}
+  function still(r){return reduced.matches&&r.assets.ignoreReduced!==true;}
   function paused(){return document.hidden||document.body.classList.contains('battlePresentationBusy')||document.body.classList.contains('dialogueOpen')||document.body.classList.contains('actionCinematic');}
   function reset(r,now=performance.now()){
     r.cycles=0;r.specialAfter=Math.floor(range(3,6));r.steps=profiles.get(r.assets.type)(r);
@@ -53,7 +54,7 @@
   }
   function draw(r,now,force=false){
     if(!r.ctx||!r.entry?.ready||!r.width)return;
-    const mix=reduced.matches?1:Math.min(1,(now-r.started)/220);
+    const mix=still(r)?1:Math.min(1,(now-r.started)/220);
     if(!force&&!r.transition&&r.lastDraw===r.frame)return;
     const ctx=r.ctx;ctx.setTransform(r.densityX,0,0,r.densityY,0,0);ctx.clearRect(0,0,r.width,r.height);
     const paint=(index,opacity)=>{
@@ -75,8 +76,8 @@
       r.entry=preload(r.assets);if(!r.entry.ready)continue;
       mount(r);if(!r.canvas)continue;
       if(!r.showing){reset(r,now);measure(r);r.canvas.hidden=false;r.host.classList.add('battle-idle-active');r.showing=true;draw(r,now,true);}
-      if(paused()||reduced.matches){
-        if(reduced.matches&&r.frame!==0){reset(r,now);draw(r,now,true);}
+      if(paused()||still(r)){
+        if(still(r)&&r.frame!==0){reset(r,now);draw(r,now,true);}
         // Finish a crossfade once, then freeze the pose while dialogue/cut-in owns presentation.
         if(r.transition){r.transition=false;draw(r,now,true);}
         r.wasPaused=true;
@@ -88,7 +89,7 @@
   function tick(now){
     raf=null;let running=false;
     for(const r of records.values()){
-      if(!eligible(r)||!r.showing||paused()||reduced.matches)continue;
+      if(!eligible(r)||!r.showing||paused()||still(r))continue;
       running=true;
       if(now-r.started>=r.steps[r.step].hold){
         r.step++;if(r.step>=r.steps.length){r.steps=profiles.get(r.assets.type)(r);r.step=0;}
