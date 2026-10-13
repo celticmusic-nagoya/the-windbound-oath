@@ -90,3 +90,5 @@ GitHub上の進捗: 各項目の完了ごとに報告書・本statusを通常pus
 GG完了: keyboard-audit-20261013.md / kb_audit.py / JSON・ログ・10画像を納品。旧宿屋店主Enter対象外と同一フレーム非repeat二重進行の2件を報告（後者は合成イベント、要判断）。FAILS2を保持、未実施0/pageerror0。GGの他項目合格。次HH: 新規 tests/moss/m33_lou_field_review.py と縮小proposal tool/報告/画像を担当。II/JJ/KK未着手。未コミット懸念なし、ゲーム未編集。
 
 HH完了: lou-field-review-20261013.md、m33、新規縮小tool/6画像/計測JSONを納品。37/37合格、save復元/戦闘復帰/liftも合格。6PNG2,303,132→93,723bytes（提案のみ/tmp、未採用）。Android未測定。次IIを進行中、JJ/KK未着手。
+
+II完了: lou-idle-real-flow-20261013.md / 新規test / 250ms全時系列 / 2画像を納品。祭壇の最後から自然に戦闘開始し初回入力〜敵ターン〜被弾を確認、reduce両条件9/9合格。実Androidでの停止は未再現/未測定。次JJ: m31安定化・20連続、全testの会話前置きを調査。必要に応じm32等testsのみ担当。KK未着手。
