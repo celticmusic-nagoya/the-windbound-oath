@@ -1,0 +1,4 @@
+EE検証設計（DDの完了後に実行）
+- PrologueCombat.dodgedは公開APIではなくprivate関数。実enemyRoundを経由してBattleStatus.dodgesのrollを固定する。
+- 各シナリオでheroRaiderが実際にwinddanceを唱えた後、通常攻撃A/Fとsmashの各対象の回避/命中を確認する。Math.randomを変更するのはBattleStatus呼出しのstackだけ。HP差とevade画像src両方を検査。
+- height schemaはbool/文字列/負/小数のlevelを拒否し、0または存在する整数levelだけを参照可能とする。実FieldCollision/Heightで指定spawnの足元と入口からの到達を確認。旧saveはactor x/y基準とfeet基準を混同しない。highest deriveと複数floor候補を記録。
