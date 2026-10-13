@@ -67,3 +67,6 @@ Q完了: 家02のspawnY452→472を生成元/生成物で小修正、arrival zon
 S着手: work/codex-wind-dance-sim2、main e694817。tools/sim/wind_dance_sim.pyと新規wind-dance-mana-sim.md/結果JSONを担当。確定風の舞15pt/3/MP10全体をモデルに使用、魔弾回復2/3/4と命中/実行条件を比較。ゲームコードは変更しない。R dda97df納品済み。
 
 S完了: MP台帳拡張とwind-dance-mana-sim.md/結果JSONを作成。engineは有効対象への暗黙100%命中で回復条件2案同値。暫定3で18フェーズcast3→6、撃破/勝率/戦闘終了MPは算出不可としてnull。自己テスト・JSON再現・既存N20k解析照合合格。ゲーム未編集、数値未適用。進行中なし、新規remote指示を最終fetchで確認する。再開は最新main/本status/branch履歴から。未コミット懸念なし。
+P着手: work/codex-aidan-walk-acceptance / 最新main88ae6c0。Nはmain88ae6c0に統合済み、Oはwork/codex-regression-runner / 56f6050で全59（旧main531）納品済み。Rのfeat/height-contact-levels / 5c33f9fの公開とmain5e682e7の統合を確認、P→Q後にレビューする。新規tools/field/check_aidan_walk_assets.py、docs/art/aidan_walk_acceptance.md、template/ダミー検証記録を担当。素材未着・採用素材未変更。
+
+P完了: 検品tool/template/checklistとダミーQAを作成。正常18コマ合格、7負例検出、alpha/footproxy/任意機械反転を検査。原シートは白背景、prepared RGBAを対象。実素材/剣の見た目/ゲーム組込は未実施、採用素材未変更。次はQ→R（R公開5c33f9fを取得済み）。
