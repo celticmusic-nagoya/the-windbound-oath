@@ -140,8 +140,11 @@
     if(window.FieldWalkers)FieldWalkers.mount(map,el.world);
     if(window.FieldMonsters){   // symbol encounters: enemies that live on the map (map.monsters); slain ones stay gone until the map is entered again
       if(!S.slain.has(map.id))S.slain.set(map.id,new Set());
-      FieldMonsters.mount(map,el.world,{foot:FOOT,slain:S.slain.get(map.id),blocked:(ax,ay)=>S.forest.blocked(ax,ay),
-        advance:(ax,ay,dx,dy)=>FieldMovement.advance(ax,ay,dx,dy,S.forest.blocked,{bounds:S.map.world}),
+      FieldMonsters.mount(map,el.world,{foot:FOOT,slain:S.slain.get(map.id),
+        // height maps: every monster keeps its own level (m.lv) for collision; the player's shared level is never borrowed
+        blocked:(ax,ay,lv)=>S.forest.height&&Number.isFinite(lv)?S.forest.height.blockedAtLevel(ax,ay,lv):S.forest.blocked(ax,ay),
+        advance:(ax,ay,dx,dy,lv)=>FieldMovement.advance(ax,ay,dx,dy,S.forest.height&&Number.isFinite(lv)?((x,y)=>S.forest.height.blockedAtLevel(x,y,lv)):S.forest.blocked,{bounds:S.map.world}),
+        level:()=>S.forest.height?S.forest.height.level:null,
         player:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),canEngage:()=>S.active&&!S.busy&&!S.battleLatch&&Boolean(hooks.onMonster),engage:startMonsterBattle});
     }
     el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
@@ -265,6 +268,12 @@
     if(Array.isArray(e.levels))return e.levels.includes(cur);
     return (Number.isFinite(e.level)?e.level:0)===cur;
   }
+  // level a tap on `e` should walk to (height maps only): its own level, or the current one when it spans several
+  function targetLevel(e){
+    const h=S.forest&&S.forest.height;if(!h)return undefined;
+    if(Array.isArray(e.levels))return e.levels.includes(h.level)?h.level:e.levels[0];
+    return Number.isFinite(e.level)?e.level:0;
+  }
   // ---------- actions ----------
   function fireEvent(z){
     if(!lvOk(z))return;   // wrong level: consume nothing (no once-flag, no hook)
@@ -288,6 +297,7 @@
   // Touching a field monster uses the same hand-over as a symbol (hooks.onMonster -> startAttackBattle); returns false when no battle could start.
   function startMonsterBattle(m){
     if(S.busy||!S.active||!hooks.onMonster)return false;
+    if(S.forest&&S.forest.height&&Number.isFinite(m.lv)&&m.lv!==S.forest.height.level)return false;   // wrong level at the very last moment: no battle, nothing consumed
     S.battleLatch=true;
     if(hooks.onMonster({id:m.id,type:m.type,battle:m.t.battle,group:m.group,map:S.mapId})===false)return false;
     S.target=null;FieldNavigation.cancel();S.hold=null;S.active=false;return true;
@@ -317,7 +327,7 @@
     }
     if(best){   // walk there first, talk on arrival (a stray tap far away never interrupts the walk with a dialogue)
       if(dist(fx,fy,best.c.x,best.c.y)<=90){fireEvent(best.z);return true;}
-      const dest=FieldNavigation.destination(best.c.x-FOOT.ax,best.c.y-FOOT.ay,S.forest.blocked);
+      const dest=FieldNavigation.destination(best.c.x-FOOT.ax,best.c.y-FOOT.ay,S.forest.blocked,targetLevel(best.z));
       if(!dest){toast('その場所へは進めない。');return true;}
       S.target=dest;S.pending=best;return true;
     }
@@ -466,9 +476,9 @@
     if(dx||dy){const n=Math.hypot(dx,dy),step=FieldMovement.settings.pointerStep*(FieldMovement.frameScale||1)*streamFactor();
       const r=FieldMovement.advance(S.x,S.y,dx/n*step,dy/n*step,S.forest.blocked,{bounds});S.x=r.x;S.y=r.y;}
     else if(S.target){const r=FieldNavigation.follow(S.x,S.y,S.target,S.forest.blocked);S.x=r.x;S.y=r.y;S.target=r.target;}
+    if(S.forest.height)S.forest.height.commit(S.x,S.y);   // settle the level first: the arrival check below must see the level the player really stands on
     if(S.pending&&!S.target){const pd=S.pending;S.pending=null;   // arrived
       if(dist(S.x+FOOT.ax,S.y+FOOT.ay,pd.c.x,pd.c.y)>260)toast('もう少し近づいて調べよう。');else fireEvent(pd.z);}
-    if(S.forest.height)S.forest.height.commit(S.x,S.y);
     stepEncounter(S.x-px0,S.y-py0);
     if(window.FieldMonsters)FieldMonsters.update((FieldMovement.frameScale||1)/60);
     render();updateSprite(performance.now());updateFiona(performance.now());checkZones();S.frames++;
