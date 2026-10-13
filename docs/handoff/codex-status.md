@@ -116,3 +116,5 @@ KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画�
 js/css/index/採用素材/マップ/mainは変更しない。LLの仕様差はFAILにせず別一覧、MM/NN/OOの問題は再現手順つきで報告。PP権限contents:read、Actions実行/設定はユーザー側確認。元の作業ツリーは切替なし。テスト直列・サーバーは自前終了。再開は本節と最新git logから、完了済みGG〜KKを再作業しない。
 
 LL完了: battle-ui-structure-20261013.md / ui_structure.py / 40画像/60状態JSONを納品。10シナリオFAILS0/pageerror0、重なり30・実busy中UI可視30を仕様差として別記（60個の独立bugという意味ではない）。PC味方は左半分、1280→1920でbox拡大なし。次MM進行中、NN/OO/PP未着手。
+
+MM完了: save-compat-20261013.md / save_compat.py / fixture・結果JSON・ログを納品。47検査中10失敗を保持、uncaught error0。v28〜30履歴形状と26/27合成probeを区別。型不正/欠落warm-load/DEV位置levelfallbackを報告、ゲーム未修正。次NN進行中、OO/PP未着手。
