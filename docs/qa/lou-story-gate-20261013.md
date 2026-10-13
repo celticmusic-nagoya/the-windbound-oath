@@ -1,6 +1,6 @@
 # NN ルー合流とfield表示の整合性
 
-基準mainf0fe968 / work/codex-ll-pp。m34_lou_story_gate.pyと本報告/JSON/3画像/ログのみ。
+初回mainf0fe968 / 追試maindeadf3d（source f9136bf） / work/codex-ll-pp。m34_lou_story_gate.pyと本報告/JSON/3画像/ログのみ。
 
 17検査: 合格15 / 失敗2 / 未実施0、pageerror0。通常のpublic story経路では救出前のfield followerを認めず。欠落/型不正loadでstage9に表示する2経路を再現しFAILS2/exit1を保持。
 
@@ -51,3 +51,5 @@ DEVジャンプは一切使わず、新規→enterMossForest→3corruptionの実
 提案: load前のboolean/既知ID検証、欠落時の初期値と既存状態を混同しない復元、stageとjoinedの整合性検査。進行を持たないv28のjoin済みsaveは何を復元するか作者判断を必要とする。単純なstage>=13強制をゲームコードに入れていない。
 
 Android実機未測定。修正はClaude担当。次OO、main未統合、将来の戻し方git revert -m 1 <merge>。
+
+最新field描画でも17検査/15合格/2失敗・pageerror0。画像/JSON/logを追試へ更新。

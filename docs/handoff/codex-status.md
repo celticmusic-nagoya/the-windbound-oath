@@ -1,8 +1,8 @@
 # Codex 作業状態 / 再開手順
 
-更新日: 2026-10-13（Asia/Tokyo）。検証基準main: `f0fe968`。現在ブランチ: `work/codex-ll-pp`。
+更新日: 2026-10-13（Asia/Tokyo）。検証基準main: 初回 `f0fe968` / 最終 `deadf3d`。現在ブランチ: `work/codex-ll-pp`。
 
-**最新状態: LL進行中、MM/NN/OO/PP未着手。** GG〜KKはmain49c842fに統合済み（2指摘修正）、ルー縮小版f0fe968採用済み。 [納品一覧](codex-GG-KK-delivery-20261013.md)。GG2指摘/COMMAND仕様判断/実Android未測定を保留。以下の古いWIP記録は履歴であり、再開時はこの冒頭と末尾の最新節を優先する。
+**最新状態: LL〜PP完了、進行中なし。** [納品一覧](codex-LL-PP-delivery-20261013.md)。MM8/NN2/OO遷移11は未解決、LLは仕様差、PP実Actions/Android未実施。以下の古いWIPは履歴で、再開時は冒頭/末尾の最新節を優先する。
 常設指示: [codex-standing-orders.md](codex-standing-orders.md)。mainへの反映はClaude担当。
 
 ## 完了
@@ -128,3 +128,9 @@ PP checkpoint: regression.yml / requirements-ci.txt作成。contents:readのみ�
 最終検証checkpoint: PP高速7本は最新maindeadf3dを取り込んだ4532bc7で7/7合格。LLのタイマーで消えたログだけにならないよう既存log APIで表示中の測定を追加し再検証する。NN/OOも最新field描画差分で追試。4診断testのJSONには導入基準f0fe968と実行source_headを分離して記録し、CIではGITHUB_SHAを使う。ゲームコードはorigin/mainと同一。
 
 最終MM判定修正: プリミティブ根でtrueを返すことだけは指示以上のreject要件なので、指定の「例外なし・安全な既定値」を検査する。旧結果10件は保存し、最新maindeadf3dでMMを再実行して最終件数を報告する。LLは70状態に補強しFAILS0、NN2・OO動的120合格/未解決11は追試でも同じ。PPローカル高速7本は7/7合格、実Actions未実行。
+
+## LL〜PP 最終checkpoint
+
+納品一覧codex-LL-PP-delivery-20261013.md。最新maindeadf3dを作者差分のまま取り込み、LL70状態/NN17/OO120は追試、MM47も判定を適正化して再実行。MM39合格8失敗、NN15合格2失敗、OO動的120合格/遷移不存在11、LL仕様差84、PP高速7/7合格。実Actions/Android/全79回帰は未実施。
+
+進行中なし、LL〜PP未着手なし。再開はgit fetch --all→status/standing/main/新brief→git logを確認し、完了の再作業はしない。未解決/次の提案は納品一覧参照。ゲーム/採用素材にCodex独自差分0、main未更新、force pushなし、元worktreeのbranchは維持。最終push時の未コミット懸念なし、自身のserver全終了。

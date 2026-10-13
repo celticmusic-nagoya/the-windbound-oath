@@ -1,10 +1,10 @@
 # MM セーブ互換性 / 不正データ耐性
 
-基準mainf0fe968 / work/codex-ll-pp。新規tests/system/save_compat.pyと本報告/fixtures/results/logのみ。ゲーム/セーブ形式は変更しない。
+初回mainf0fe968 / 最終追試maindeadf3d（source e12431a） / work/codex-ll-pp。新規tests/system/save_compat.pyと本報告/fixtures/results/logのみ。ゲーム/セーブ形式は変更しない。
 
 ## 結果
 
-47検査: 合格37 / 失敗10 / 未実施0、uncaught pageerror0。失敗は新規発見として保持（FAILS10/exit1）。仕様の確認が必要なDEV保存ケースを含み、全てを製品の重大bugとは扱わない。
+47検査: 合格39 / 失敗8 / 未実施0、uncaught pageerror0。失敗は新規発見として保持（FAILS8/exit1）。仕様の確認が必要なDEV保存ケースを含み、全てを製品の重大bugとは扱わない。
 
 ## fixtureの根拠
 
@@ -23,8 +23,6 @@ v26〜30の読み込み・成長/所持品保持・欠落inventory/装備/quest/
 
 | ケース | 実測 | 優先度/提案 |
 |---|---|---|
-| malformed number-root | non-object/invalid root accepted | loader前の型/ID検証・既定値/復元方針を検討 |
-| malformed array-root | non-object/invalid root accepted | loader前の型/ID検証・既定値/復元方針を検討 |
 | malformed bad-level | invalid member level retained | loader前の型/ID検証・既定値/復元方針を検討 |
 | malformed numeric-level | invalid member level retained | loader前の型/ID検証・既定値/復元方針を検討 |
 | malformed negative-gold | invalid/negative gold retained | loader前の型/ID検証・既定値/復元方針を検討 |
@@ -34,7 +32,7 @@ v26〜30の読み込み・成長/所持品保持・欠落inventory/装備/quest/
 | missing fields warm-load defaults | 現状stateが期待と不一致（JSON参照） | loader前の型/ID検証・既定値/復元方針を検討 |
 | DEV height map/level roundtrip | 現状stateが期待と不一致（JSON参照） | loader前の型/ID検証・既定値/復元方針を検討 |
 
-原JSON破損/nullはfalseを返して例外なし。根がnumber/arrayでもtrueを返す場合がある。member level文字列、負のgold、potion文字列、joined文字列、存在しないactive IDはlive stateへ保持される。joined='false'はBoolean変換ではtrueとなり、NNで救出前表示へつながる。
+原JSON破損/nullはfalseを返して例外なし。根がnumber/arrayでtrueを返しても、新規状態の安全な既定値が保たれるケースは合格とした（戻り値falseは指示された要件ではない）。member level文字列、負のgold、potion文字列、joined文字列、存在しないactive IDはlive stateへ保持される。joined='false'はBoolean変換ではtrueとなり、NNで救出前表示へつながる。
 
 同じページでsupport=true/level4を読み込んだ後、support/membersのない旧形状をロードすると、その前の値が残る。ロード失敗時は全データを消すのではなく、検証済み状態を保持/安全な既定値を補う方針と、部分適用を避ける準備段階の検証を提案する（未実装）。
 
@@ -43,3 +41,5 @@ DEV height map/level保存はMossForestStory.fromSaveがA1〜A3だけを有効ma
 再現: fixtures.jsonの該当dataをSAVE_KEYへ入れloadGrowthData。結果JSONのstateと照合。再実行 `python tests/system/save_compat.py`（自身の8832 server終了）。合成26/27は別記したため「確認済み過去実save5世代」とは報告しない。
 
 変更ファイル/詳細証跡は [save-compat-20261013](save-compat-20261013/) 。Android実機未測定。次NNでLou表示との因果を確認。main未統合、戻し方（将来統合後）git revert -m 1 <merge>。
+
+最終判定は「例外なし・既定値」で、初回で戻り値だけを理由に失敗にした2件を訂正。初回47/10は*-initial-f0に保管、最新mainで47/8を再確認。8件の不正状態/DEV保存制限は未修正。

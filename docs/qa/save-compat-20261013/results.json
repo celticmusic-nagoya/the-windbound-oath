@@ -1,5 +1,6 @@
 {
-  "base": "f0fe968",
+  "introduced_base": "f0fe968",
+  "source_head": "e12431a8aed5c0da0bc2598920d92140bac28c90",
   "rows": [
     {
       "name": "v26 loads",
@@ -356,12 +357,10 @@
     },
     {
       "name": "malformed number-root",
-      "ok": false,
+      "ok": true,
       "detail": {
         "result": true,
-        "problems": [
-          "non-object/invalid root accepted"
-        ],
+        "problems": [],
         "state": {
           "stage": 0,
           "gold": 0,
@@ -417,12 +416,10 @@
     },
     {
       "name": "malformed array-root",
-      "ok": false,
+      "ok": true,
       "detail": {
         "result": true,
-        "problems": [
-          "non-object/invalid root accepted"
-        ],
+        "problems": [],
         "state": {
           "stage": 0,
           "gold": 0,

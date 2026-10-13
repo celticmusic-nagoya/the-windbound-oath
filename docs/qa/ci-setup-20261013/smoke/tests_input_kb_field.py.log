@@ -1,0 +1,17 @@
+ok   start: the opening message is a keyboard dialogue
+ok   start: Enter closes the opening message
+ok   start: the hero walks with the arrow keys alone [233, 288] -> [413, 288]
+ok   Enter next to an NPC starts the conversation (state DIALOGUE)
+ok   the hero stays put while talking
+ok   Enter walks the conversation to its end (1 presses)
+ok   back to field control after the conversation
+ok   a choice list shows up while advancing with Enter
+ok   arrow keys move the choice highlight (0 -> 1)
+ok   Enter confirms the choice once (held key does not run on)
+ok   the shop is a keyboard menu (MENU)
+ok   Esc closes the shop
+ok   Enter opens the chest (potion 4 -> 6)
+ok   a second Enter grants nothing more
+ok   mouse click on the field still works (no exception, field active)
+ok   no errors []
+FAILS 0

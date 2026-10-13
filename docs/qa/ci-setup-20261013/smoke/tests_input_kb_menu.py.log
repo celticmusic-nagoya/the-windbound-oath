@@ -1,0 +1,25 @@
+ok   M opens the main menu
+ok   M closes it
+ok   Esc closes it
+ok   arrow keys do not move the hero behind an open menu
+ok   Tab puts the focus on the tab row (status)
+ok   Right moves along the tabs
+ok   Left wraps
+ok   Enter opens the SAVE tab
+ok   Tab jumps from the tab row to the content (doSave)
+ok   Enter on セーブ saves
+ok   focus stays on セーブ after saving
+ok   Right moves to ロード (now enabled)
+ok   Enter on ロード loads the save (gold=777)
+ok   EQUIP tab is reachable once unlocked
+ok   Enter opens EQUIP
+ok   arrow keys reach the head slot ['aidan', 'weapon', 'head']
+slots ['weapon', 'head', 'body', 'accessory1', 'accessory2'] focus head
+ok   head candidates listed after Enter
+ok   arrow keys reach a candidate button
+ok   Enter equips the selected gear
+ok   Esc closes the menu from inside EQUIP
+ok   mouse: MENU button still opens the menu
+ok   mouse: close button works
+ok   no errors []
+FAILS 0
