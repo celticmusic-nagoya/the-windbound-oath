@@ -1,0 +1,44 @@
+ok   moss 01: thick fog while stage 9
+ok   weather overlay sits just under the time-of-day grade
+ok   fog occludes the sun (0.68)
+ok   moss maps opt into the canopy layers
+ok   seal released -> mist
+ok   Raider defeated (stage 12) -> clear sky
+ok   sun beams return when the fog lifts (0.06 -> 0.60)
+ok   poll lifts the fog gradually after the story change (fog 0.70, still easing)
+ok   fog fully gone after the transition
+ok   moss 02: rain
+ok   rain streaks are drawn (11477 px)
+ok   rain stops after the story step
+ok   FieldWeather.set storm / unknown preset rejected
+ok   courtyard: clear, no canopy layers
+ok   ramparts: mist
+ok   dapple light: day 0.55, night 0.00
+ok   leaf-sway / moss / dapple / beam layers exist and sway
+ok   capital residential: rain while the errand is open
+ok   capital residential: clears once the errand is complete (complete)
+ok   fort_dunvall_01_courtyard: walker w_f1_gate_guard path is free ground
+ok   fort_dunvall_01_courtyard: 1 walker(s) mounted
+ok   fort_dunvall_02_ramparts: walker w_f2_lookout path is free ground
+ok   fort_dunvall_02_ramparts: 1 walker(s) mounted
+ok   fort_dunvall_03_keep: 0 walker(s) mounted
+ok   royal_capital_01_market: walker w_r1_rumor path is free ground
+ok   royal_capital_01_market: walker w_r1_child path is free ground
+ok   royal_capital_01_market: 2 walker(s) mounted
+ok   royal_capital_02_castle_plaza: walker w_r2_guard path is free ground
+ok   royal_capital_02_castle_plaza: walker w_r2_herald path is free ground
+ok   royal_capital_02_castle_plaza: 2 walker(s) mounted
+ok   royal_capital_03_residential: walker w_r3_resident path is free ground
+ok   royal_capital_03_residential: walker w_r3_cat_man path is free ground
+ok   royal_capital_03_residential: 2 walker(s) mounted
+ok   walkers cycle through walk frames (12 distinct)
+ok   walkers actually move away from home
+ok   walker routes are free ground (runtime)
+ok   merchant: 6 walk frames installed
+ok   registry: merchant walk {frames:6}
+ok   少年剣士: 6 attack frames, faces the dummy {'atk': 6, 'dir': -1, 'x': 1852, 'y': 884}
+ok   少年剣士 loops idle <-> swing through 6 attack frames
+ok   at least one full swing completed
+ok   0 console errors []
+
+FAILS 0

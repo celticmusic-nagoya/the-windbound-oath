@@ -83,3 +83,5 @@ T完了: 正規engine8条件/固定seed、通常全勝・Raider全巻き戻し�
 U完了: m24/helperと前後証跡。49660b7の5失敗→160beadの2失敗（上階宝箱の縦横視覚tapのみ）。動く敵/ground NPC goal/遅延中階変更は修正後合格。コード/マップ未編集、失敗exit1。次V、最新mainの独立snapshotで全回帰。元worktreeは保持。
 T追加検証: main160bead（battleエンジン不変）で8件再実行、結果配列が完全一致。seeded再現性合格、repeat JSON保存。
 V進行中: main160bead + 変更無しO runnerをcommitした独立work/codex-v-source。port8791/timeout600、git archive固定snapshot、全件直列。出力docs/qa/full-regression-20261013/、/tmp/v-full.log。テスト中にsource branch/ファイルを変更しない。新規失敗を即時報告し切り分ける。W〜Z未着手（出典調査は待機中に可）。停止時はrunner完了/中断状況とresults.jsonの未実施数を確認して再開。
+
+V完了: main160bead/source313b25a全62本、60合格/main既存2/新規0/未実施0、exit1。全test SHA不変・server終了。docs/qa/full-regression-20261013.mdと全証跡。W着手: stale-tests-fix.patch/説明/未適用の2test案を担当、元tests/js不変。次X→Y→Z。

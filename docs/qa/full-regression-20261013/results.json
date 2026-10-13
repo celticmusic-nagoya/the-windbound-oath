@@ -1,0 +1,781 @@
+{
+  "source_head": "313b25ac33578162024a3f2d323d33de9e027cb0",
+  "main_base": "160bead16e237b414199973851d73b859552396c",
+  "port": 8791,
+  "timeout": 600,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "results": [
+    {
+      "test": "tests/battle/hero_motion_plan.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.433,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_battle_hero_motion_plan.py.log",
+      "test_sha256_before": "0df7db131b5e3772246e2bd00c40aea5616b13d7ccc8799fe3ad9b8f7d5edad1",
+      "test_sha256_after": "0df7db131b5e3772246e2bd00c40aea5616b13d7ccc8799fe3ad9b8f7d5edad1",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/battle/hit_sync.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 12.473,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_battle_hit_sync.py.log",
+      "test_sha256_before": "3c57112ce50dd9aa13e676f8fec9c11ab944ad6b77c0da02af30d84c32fce6f2",
+      "test_sha256_after": "3c57112ce50dd9aa13e676f8fec9c11ab944ad6b77c0da02af30d84c32fce6f2",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/battle/motion_intake.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 7.687,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_battle_motion_intake.py.log",
+      "test_sha256_before": "2e796742474c96edd8e2255c3cd023cbe61f453ae338d1140d10e85f75c37566",
+      "test_sha256_after": "2e796742474c96edd8e2255c3cd023cbe61f453ae338d1140d10e85f75c37566",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/battle/raider_mobile_layout.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 63.329,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_battle_raider_mobile_layout.py.log",
+      "test_sha256_before": "e00711b7b651b5cbc23f5dce15e8a975ea128a347bd998462c35c1b4b70850f8",
+      "test_sha256_after": "e00711b7b651b5cbc23f5dce15e8a975ea128a347bd998462c35c1b4b70850f8",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/field/fisherman.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.17,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_field_fisherman.test.js.log",
+      "test_sha256_before": "d3bc2ba56cec61df9eb91d19b0d86691507d9e8e27654cd31ee490edcaa8f424",
+      "test_sha256_after": "d3bc2ba56cec61df9eb91d19b0d86691507d9e8e27654cd31ee490edcaa8f424",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/field/frame_clock.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.171,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_field_frame_clock.test.js.log",
+      "test_sha256_before": "e49825094bb120a8193ab196a51941b8ae4065d07a6cc9b3821298bc2c092528",
+      "test_sha256_after": "e49825094bb120a8193ab196a51941b8ae4065d07a6cc9b3821298bc2c092528",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/field/house02_spawn.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.174,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_field_house02_spawn.test.js.log",
+      "test_sha256_before": "4c21355316026c95944a294841c3ba7002ffa17baf31187370666787784d2761",
+      "test_sha256_after": "4c21355316026c95944a294841c3ba7002ffa17baf31187370666787784d2761",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/field/m0.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 1.073,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_field_m0.test.js.log",
+      "test_sha256_before": "334e8e118423c86d90d8b9ca0c3caa6d65c76ad801aefbce386dd65142a84a03",
+      "test_sha256_after": "334e8e118423c86d90d8b9ca0c3caa6d65c76ad801aefbce386dd65142a84a03",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/field/npc_registry.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.17,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_field_npc_registry.test.js.log",
+      "test_sha256_before": "5fbcf16a1e636f41c96cfe7d5b1375507cc30f2e623b712a6475dd971c4e201e",
+      "test_sha256_after": "5fbcf16a1e636f41c96cfe7d5b1375507cc30f2e623b712a6475dd971c4e201e",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/field/talk_conditions.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.138,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_field_talk_conditions.test.js.log",
+      "test_sha256_before": "95a9110dddbc1f3055ac3191f1d9d85376f500e9a761bd9e5b3841e55dc75a3a",
+      "test_sha256_after": "95a9110dddbc1f3055ac3191f1d9d85376f500e9a761bd9e5b3841e55dc75a3a",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/lind/walk_intake.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 18.74,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_lind_walk_intake.py.log",
+      "test_sha256_before": "e4c4dc5ac70893d26d31d3b52cd2a4089c5cec3b122d13e86f096e0d82f534d5",
+      "test_sha256_after": "e4c4dc5ac70893d26d31d3b52cd2a4089c5cec3b122d13e86f096e0d82f534d5",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m10_flow.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 64.114,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m10_flow.py.log",
+      "test_sha256_before": "aa6bc25d2114cb0c78f284764a19b34c68f99ba5aaa12d9d46a9b6ef7cbc45f4",
+      "test_sha256_after": "aa6bc25d2114cb0c78f284764a19b34c68f99ba5aaa12d9d46a9b6ef7cbc45f4",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m10_rilde.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 38.052,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m10_rilde.py.log",
+      "test_sha256_before": "7c1948ef06e97c1b29a834b543413d833e9d00654e4c59503ef98453e2f9821a",
+      "test_sha256_after": "7c1948ef06e97c1b29a834b543413d833e9d00654e4c59503ef98453e2f9821a",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m11_dev_lazy.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 33.387,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m11_dev_lazy.py.log",
+      "test_sha256_before": "1231ed7621230adc148e1ec1c45688f6d2260ba4ec18ec5639d6d84132a582b4",
+      "test_sha256_after": "1231ed7621230adc148e1ec1c45688f6d2260ba4ec18ec5639d6d84132a582b4",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m11_road_tavern.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 43.182,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m11_road_tavern.py.log",
+      "test_sha256_before": "fb94bcdeb15b74f7ebeefec2a1f493327c22fdd5218685f71b9435f80ba0bdb8",
+      "test_sha256_after": "fb94bcdeb15b74f7ebeefec2a1f493327c22fdd5218685f71b9435f80ba0bdb8",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m12_attack_ruin.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 15.216,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m12_attack_ruin.py.log",
+      "test_sha256_before": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "test_sha256_after": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m13_elder_attack_text.py",
+      "classification": "main既存",
+      "exit_code": 1,
+      "seconds": 5.297,
+      "failure_lines": [
+        "FAIL peaceful elder cycles to the morning line"
+      ],
+      "reported_fails": [],
+      "log": "tests_moss_m13_elder_attack_text.py.log",
+      "test_sha256_before": "e8f19b431b336cc508b462fd1be631498bc247315e56b4372e7da1219657843b",
+      "test_sha256_after": "e8f19b431b336cc508b462fd1be631498bc247315e56b4372e7da1219657843b",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m14_capital_gate.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 30.826,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m14_capital_gate.py.log",
+      "test_sha256_before": "2eef110c4d169416f1d444d82b2966436b27445b0d896d5a880b483da1f5f6ee",
+      "test_sha256_after": "2eef110c4d169416f1d444d82b2966436b27445b0d896d5a880b483da1f5f6ee",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m14_hold_move.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 13.616,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m14_hold_move.py.log",
+      "test_sha256_before": "b1877078c0cb0d49448d65599f544844141e6bd18692f424543a36532659205f",
+      "test_sha256_after": "b1877078c0cb0d49448d65599f544844141e6bd18692f424543a36532659205f",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m15_slime.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 39.219,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m15_slime.py.log",
+      "test_sha256_before": "1437996d8717c7ff5692fcf64c3b0205cc1a7b1c7c918c4425aca37a0f11aff2",
+      "test_sha256_after": "1437996d8717c7ff5692fcf64c3b0205cc1a7b1c7c918c4425aca37a0f11aff2",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m15b_slime_symbol.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 101.22,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m15b_slime_symbol.py.log",
+      "test_sha256_before": "60632f803b69fc1d5d656d6759caa21f2e2d7b341c162a6ed603d7cb8856a2d5",
+      "test_sha256_after": "60632f803b69fc1d5d656d6759caa21f2e2d7b341c162a6ed603d7cb8856a2d5",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m15c_forest_bat.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 58.422,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m15c_forest_bat.py.log",
+      "test_sha256_before": "20b895abd54c5df76ae132bafaffc3c19f42b8f4a20d6d1041ac8b1302486905",
+      "test_sha256_after": "20b895abd54c5df76ae132bafaffc3c19f42b8f4a20d6d1041ac8b1302486905",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m15d_leafy_boar.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 70.103,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m15d_leafy_boar.py.log",
+      "test_sha256_before": "d97abf3713e291208d2d80b6778f25f9a342d86032f7ec2a27602f8eeea13cd2",
+      "test_sha256_after": "d97abf3713e291208d2d80b6778f25f9a342d86032f7ec2a27602f8eeea13cd2",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m16_battle_feel.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 37.976,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m16_battle_feel.py.log",
+      "test_sha256_before": "c67efe4ab910d5699c13d69a070806b08fbb74b541371fed102f1c049f1ae1c7",
+      "test_sha256_after": "c67efe4ab910d5699c13d69a070806b08fbb74b541371fed102f1c049f1ae1c7",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m17_dev_arena.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 26.418,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m17_dev_arena.py.log",
+      "test_sha256_before": "27c9100064c5624250e92ce1acfe8c540c9beac9126acd56a1236b4d5b441db6",
+      "test_sha256_after": "27c9100064c5624250e92ce1acfe8c540c9beac9126acd56a1236b4d5b441db6",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m18_moss_scenario.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 13.916,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m18_moss_scenario.py.log",
+      "test_sha256_before": "eadc37e4c867d2c328dc4001a36f22f70a44d3ad7305a2d37550f1aeb722e5a5",
+      "test_sha256_after": "eadc37e4c867d2c328dc4001a36f22f70a44d3ad7305a2d37550f1aeb722e5a5",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m19_height_proto.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 265.515,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m19_height_proto.py.log",
+      "test_sha256_before": "800b4230e3435d3a12f34a8c83e45555b670d8fe9622ba671726d6f007fcab4b",
+      "test_sha256_after": "800b4230e3435d3a12f34a8c83e45555b670d8fe9622ba671726d6f007fcab4b",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m19_perf.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 88.386,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m19_perf.py.log",
+      "test_sha256_before": "68552bcd831e082c705516444c2b95138e9cb5eb0ffb26e692b22882fd37cfb3",
+      "test_sha256_after": "68552bcd831e082c705516444c2b95138e9cb5eb0ffb26e692b22882fd37cfb3",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m19_plan_bench.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 10.103,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m19_plan_bench.py.log",
+      "test_sha256_before": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29",
+      "test_sha256_after": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m20_sword_equipment.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 8.249,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m20_sword_equipment.py.log",
+      "test_sha256_before": "f0a9215d8624e020f33f00a7a1d4d154c353c811f12cf5390d2a93e48a1c7de9",
+      "test_sha256_after": "f0a9215d8624e020f33f00a7a1d4d154c353c811f12cf5390d2a93e48a1c7de9",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m21_wind_dance.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 5.645,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m21_wind_dance.py.log",
+      "test_sha256_before": "fe611811ac0a8ac460649d85ead26548a98595771782d0cecf4df70d57570baa",
+      "test_sha256_after": "fe611811ac0a8ac460649d85ead26548a98595771782d0cecf4df70d57570baa",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m22_height_contacts.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 28.127,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m22_height_contacts.py.log",
+      "test_sha256_before": "904afeeadbfc6e739e101f910e0108c1ca58552729df505e34acfbade9b8f89a",
+      "test_sha256_after": "904afeeadbfc6e739e101f910e0108c1ca58552729df505e34acfbade9b8f89a",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m23_wind_dance_battle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 60.037,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m23_wind_dance_battle.py.log",
+      "test_sha256_before": "0d6efbcfc291e1b1f72c3bc8fc37df3672c2aec80d09231944f1fb3a0efd635e",
+      "test_sha256_after": "0d6efbcfc291e1b1f72c3bc8fc37df3672c2aec80d09231944f1fb3a0efd635e",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m4_devjump.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 30.174,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m4_devjump.py.log",
+      "test_sha256_before": "1b6d01da1d6cd48e3fd3e85d4340d2c9b738bf4926317d4052557b72eb12e153",
+      "test_sha256_after": "1b6d01da1d6cd48e3fd3e85d4340d2c9b738bf4926317d4052557b72eb12e153",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m4_e2e.py",
+      "classification": "main既存",
+      "exit_code": 1,
+      "seconds": 160.659,
+      "failure_lines": [
+        "FAIL Fiona stage-9 line (elder/Emma warning wording)"
+      ],
+      "reported_fails": [],
+      "log": "tests_moss_m4_e2e.py.log",
+      "test_sha256_before": "6e37e0b7fd6ce51b6f94cecddd88f930e6e3fbbd61ba5588c35bf43e03a205e8",
+      "test_sha256_after": "6e37e0b7fd6ce51b6f94cecddd88f930e6e3fbbd61ba5588c35bf43e03a205e8",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m4_npc.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 3.903,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m4_npc.py.log",
+      "test_sha256_before": "4142c1a5327ced65ac5d9214e9c732a39c568729e9bd5bda9c09f49ad2ab4064",
+      "test_sha256_after": "4142c1a5327ced65ac5d9214e9c732a39c568729e9bd5bda9c09f49ad2ab4064",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m4_save.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 13.792,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m4_save.py.log",
+      "test_sha256_before": "615c93084b0176b8ecf8bc670e9e9d50bdf444566f03032938ba8c4626adde46",
+      "test_sha256_after": "615c93084b0176b8ecf8bc670e9e9d50bdf444566f03032938ba8c4626adde46",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m55_chest.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 15.154,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m55_chest.py.log",
+      "test_sha256_before": "838ca9b3cea23d032bde3829f395ccc2d333048922cd58c79fa5554e08e12527",
+      "test_sha256_after": "838ca9b3cea23d032bde3829f395ccc2d333048922cd58c79fa5554e08e12527",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m55_cine.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 12.197,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m55_cine.py.log",
+      "test_sha256_before": "fe9a63b9560bcffa934158481629b022578ad70124f6441652f67f0c9ee30a10",
+      "test_sha256_after": "fe9a63b9560bcffa934158481629b022578ad70124f6441652f67f0c9ee30a10",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m55_hz.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 21.01,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m55_hz.py.log",
+      "test_sha256_before": "92784e407bb20348beefedc664ed0e30a9b57b5a48495418fc583ee8a3369653",
+      "test_sha256_after": "92784e407bb20348beefedc664ed0e30a9b57b5a48495418fc583ee8a3369653",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m55_mobile.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 12.582,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m55_mobile.py.log",
+      "test_sha256_before": "ac023d4a17a8b1ab17e7db931be6f924b28309e379e8f654cecabb143a5ed8cc",
+      "test_sha256_after": "ac023d4a17a8b1ab17e7db931be6f924b28309e379e8f654cecabb143a5ed8cc",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m6_asset_swap.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 9.54,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_asset_swap.py.log",
+      "test_sha256_before": "64513fc0ed9243e6699d18a82f6293e9ab37d7ddf495e73565fb846258cd5423",
+      "test_sha256_after": "64513fc0ed9243e6699d18a82f6293e9ab37d7ddf495e73565fb846258cd5423",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m6_devui.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 10.332,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_devui.py.log",
+      "test_sha256_before": "9c583f4b399475e436d3564b41e4cc86f8f36bbffb19a06e632f6c8b72d50258",
+      "test_sha256_after": "9c583f4b399475e436d3564b41e4cc86f8f36bbffb19a06e632f6c8b72d50258",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m6_inventory.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 11.297,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_inventory.py.log",
+      "test_sha256_before": "5a026acdf51261ae59f8bf38bf6ad919faa720de9e0be3f0e023079d3da0a09f",
+      "test_sha256_after": "5a026acdf51261ae59f8bf38bf6ad919faa720de9e0be3f0e023079d3da0a09f",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m6_quest.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 4.449,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_quest.py.log",
+      "test_sha256_before": "2254dd5cc74f779a5367d066c7cbb548849801020aabe3879bfb6177654880b5",
+      "test_sha256_after": "2254dd5cc74f779a5367d066c7cbb548849801020aabe3879bfb6177654880b5",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m6_scenario.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 5.794,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_scenario.py.log",
+      "test_sha256_before": "91d74d5200a605bae9133dd43102611fcfa23c23bb71a69e3c2905d4b192b1c8",
+      "test_sha256_after": "91d74d5200a605bae9133dd43102611fcfa23c23bb71a69e3c2905d4b192b1c8",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m6_talk.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 4.846,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_talk.py.log",
+      "test_sha256_before": "7366e84f2ee7fb73ba53f06b024057fad6178acbbec30dbef5d1470afa8d6451",
+      "test_sha256_after": "7366e84f2ee7fb73ba53f06b024057fad6178acbbec30dbef5d1470afa8d6451",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m7_choreo.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 17.095,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m7_choreo.py.log",
+      "test_sha256_before": "d7baa90829421d7a791f8b11ecb84c22e12121c6ff37e4811d10a55a781e3be8",
+      "test_sha256_after": "d7baa90829421d7a791f8b11ecb84c22e12121c6ff37e4811d10a55a781e3be8",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m7_cliff.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 34.885,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m7_cliff.py.log",
+      "test_sha256_before": "ce64ba1f931e4b0c91314ab6f57a9511d5cca6f1cb73acde5634b2bfdfc1a60f",
+      "test_sha256_after": "ce64ba1f931e4b0c91314ab6f57a9511d5cca6f1cb73acde5634b2bfdfc1a60f",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m7_prop_swap.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 13.742,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m7_prop_swap.py.log",
+      "test_sha256_before": "08d3a661f18298f20defbea024e13c704e460987fb7195e81343c481c1f2680a",
+      "test_sha256_after": "08d3a661f18298f20defbea024e13c704e460987fb7195e81343c481c1f2680a",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m8_town_maps.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 285.101,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m8_town_maps.py.log",
+      "test_sha256_before": "3695cd533145e44a622c8ad52d3afe4e6143b213f280d5fe8c8d89ee73757145",
+      "test_sha256_after": "3695cd533145e44a622c8ad52d3afe4e6143b213f280d5fe8c8d89ee73757145",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m9_env.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 65.883,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m9_env.py.log",
+      "test_sha256_before": "8734c29da6de5aa3a40937fa2c5e6b0b5810f056aae88d35fd49a073e65b7141",
+      "test_sha256_after": "8734c29da6de5aa3a40937fa2c5e6b0b5810f056aae88d35fd49a073e65b7141",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m9_hero.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 12.481,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m9_hero.py.log",
+      "test_sha256_before": "bf3751bad5919d21b67666745adcd3f3853625f0ef3d966b4131160d34160108",
+      "test_sha256_after": "bf3751bad5919d21b67666745adcd3f3853625f0ef3d966b4131160d34160108",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m9_hero_intake.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 29.72,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m9_hero_intake.py.log",
+      "test_sha256_before": "d59010556e176165cd883e64072c3bb31156bcda71426341fdf9ec7d99698067",
+      "test_sha256_after": "d59010556e176165cd883e64072c3bb31156bcda71426341fdf9ec7d99698067",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/scatter.test.js",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.772,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_scatter.test.js.log",
+      "test_sha256_before": "ffc16cd4ebd90879afc405d58a1c14cf1de85451b196fe32880b7d8af899a777",
+      "test_sha256_after": "ffc16cd4ebd90879afc405d58a1c14cf1de85451b196fe32880b7d8af899a777",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/seal_a3.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 201.881,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_seal_a3.py.log",
+      "test_sha256_before": "53b63a7bf35ff500c4a8ee3f76140d446040d48b4ff7ce04fba54eb04f2d634b",
+      "test_sha256_after": "53b63a7bf35ff500c4a8ee3f76140d446040d48b4ff7ce04fba54eb04f2d634b",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/walk_a1.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 39.408,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_walk_a1.py.log",
+      "test_sha256_before": "d1c8e90413be4075704b3a18ad334cdd8f49f6220ff217838e9a93778e08b925",
+      "test_sha256_after": "d1c8e90413be4075704b3a18ad334cdd8f49f6220ff217838e9a93778e08b925",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/walk_map.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 72.021,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_walk_map.py.log",
+      "test_sha256_before": "184da63352d10525483c6166667d850a013608da06022e815631bdbec2b4e748",
+      "test_sha256_after": "184da63352d10525483c6166667d850a013608da06022e815631bdbec2b4e748",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/capital_story_test.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 32.401,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_capital_story_test.py.log",
+      "test_sha256_before": "a283cc4f4114fa6daea7eadae647576e94c775892a6113121f94fcab413b9498",
+      "test_sha256_after": "a283cc4f4114fa6daea7eadae647576e94c775892a6113121f94fcab413b9498",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/equipment_test.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 2.982,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_equipment_test.py.log",
+      "test_sha256_before": "da10e214cf76cad258da6dfefcac519a280f5ecfd37295843c7716e82045a2e5",
+      "test_sha256_after": "da10e214cf76cad258da6dfefcac519a280f5ecfd37295843c7716e82045a2e5",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/equipment_ui_flow_test.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 8.305,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_equipment_ui_flow_test.py.log",
+      "test_sha256_before": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "test_sha256_after": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/shop_flow_test.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 11.89,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_shop_flow_test.py.log",
+      "test_sha256_before": "c7eaf34a9b6231d746551555ec57012d2e88b4272a418fd8ce42ba340d07c22d",
+      "test_sha256_after": "c7eaf34a9b6231d746551555ec57012d2e88b4272a418fd8ce42ba340d07c22d",
+      "server_stopped": true
+    }
+  ]
+}

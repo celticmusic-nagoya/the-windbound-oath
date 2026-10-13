@@ -1,0 +1,86 @@
+ok   [pc] dev_height_proto loads with a height spec
+ok   [pc] spawns at level 0 on the low ground
+ok   [pc] tap on the bridge deck -> routed over the ramp, arrives at level 1 ({'x': 1560, 'y': 600, 'l': 1, 'z': 601, 'under': False})
+ok   [pc] on the deck the player is drawn above the deck floor (z 601 > 440)
+ok   [pc] deck is not faded while nobody is under it
+ok   [pc] pushing sideways on the deck stays on the deck (x=1608, level 1)
+ok   [pc] the other side too (x=1511)
+ok   [pc] under the bridge at level 0: drawn below the deck floor (z 439 < 440)
+ok   [pc] the deck fades while the player is under it
+ok   [pc] same XY (1560,900) restored at level 1 is the deck, not the underpass
+ok   [pc] the east pier stops a level-0 walker (x=1591) and does not block level 1 at the same XY
+ok   [pc] walking up the south ramp ends on the deck at level 1 (y=745)
+ok   [pc] and walking back down returns to level 0 (y=1524)
+ok   [pc] the cliff front is a wall at level 0 (y=430)
+ok   [pc] the plateau front edge does not let you fall (y=418)
+ok   [pc] the plateau east edge too (x=2238)
+ok   [pc] stairs: level 1 once the top is reached (y=130)
+ok   [pc] mid-stairs the sprite is lifted partway (23.3 px of 56)
+ok   [pc] slope: walking east up the slope reaches the plateau at level 1 (x=2040)
+ok   [pc] tap on the plateau from the low ground -> via stairs/slope, level 1 ({'x': 1999.6404311004574, 'y': 250.09659712986004, 'l': 1, 'z': 251, 'under': False})
+ok   [pc] navigation reports arrived
+ok   [pc] a plateau actor near the front edge is drawn behind the foreground tree canopy (z 396 < 470)
+ok   [pc] and back down to the start at level 0 ({'x': 300.00000000000006, 'y': 1250, 'l': 0, 'z': 1250, 'under': False})
+ok   [pc] tapping the river is refused
+ok   [pc] 24000 random-walk steps over 6 starts: 0 blocked positions, 0 level leaks ({'bad': 0, 'steps': 24000, 'leaks': 0})
+ok   [pc] position+level round-trips: {"map": "dev_height_proto", "x": 1543, "y": 858, "level": 1}
+ok   [pc] derive() fallback: deck XY -> 1, low ground -> 0 (ambiguous XY needs the saved level)
+ok   [pc] a normal map has no height state and no sprite lift
+ok   [portrait] dev_height_proto loads with a height spec
+ok   [portrait] spawns at level 0 on the low ground
+ok   [portrait] tap on the bridge deck -> routed over the ramp, arrives at level 1 ({'x': 1560, 'y': 600, 'l': 1, 'z': 601, 'under': False})
+ok   [portrait] on the deck the player is drawn above the deck floor (z 601 > 440)
+ok   [portrait] deck is not faded while nobody is under it
+ok   [portrait] pushing sideways on the deck stays on the deck (x=1608, level 1)
+ok   [portrait] the other side too (x=1511)
+ok   [portrait] under the bridge at level 0: drawn below the deck floor (z 439 < 440)
+ok   [portrait] the deck fades while the player is under it
+ok   [portrait] same XY (1560,900) restored at level 1 is the deck, not the underpass
+ok   [portrait] the east pier stops a level-0 walker (x=1591) and does not block level 1 at the same XY
+ok   [portrait] walking up the south ramp ends on the deck at level 1 (y=750)
+ok   [portrait] and walking back down returns to level 0 (y=1535)
+ok   [portrait] the cliff front is a wall at level 0 (y=430)
+ok   [portrait] the plateau front edge does not let you fall (y=419)
+ok   [portrait] the plateau east edge too (x=2238)
+ok   [portrait] stairs: level 1 once the top is reached (y=130)
+ok   [portrait] mid-stairs the sprite is lifted partway (23.3 px of 56)
+ok   [portrait] slope: walking east up the slope reaches the plateau at level 1 (x=2044)
+ok   [portrait] tap on the plateau from the low ground -> via stairs/slope, level 1 ({'x': 2000, 'y': 249.99999999999997, 'l': 1, 'z': 251, 'under': False})
+ok   [portrait] navigation reports arrived
+ok   [portrait] a plateau actor near the front edge is drawn behind the foreground tree canopy (z 396 < 470)
+ok   [portrait] and back down to the start at level 0 ({'x': 300, 'y': 1250, 'l': 0, 'z': 1250, 'under': False})
+ok   [portrait] tapping the river is refused
+ok   [portrait] 24000 random-walk steps over 6 starts: 0 blocked positions, 0 level leaks ({'bad': 0, 'steps': 24000, 'leaks': 0})
+ok   [portrait] position+level round-trips: {"map": "dev_height_proto", "x": 1543, "y": 858, "level": 1}
+ok   [portrait] derive() fallback: deck XY -> 1, low ground -> 0 (ambiguous XY needs the saved level)
+ok   [portrait] a normal map has no height state and no sprite lift
+ok   [landscape] dev_height_proto loads with a height spec
+ok   [landscape] spawns at level 0 on the low ground
+ok   [landscape] tap on the bridge deck -> routed over the ramp, arrives at level 1 ({'x': 1560, 'y': 600, 'l': 1, 'z': 601, 'under': False})
+ok   [landscape] on the deck the player is drawn above the deck floor (z 601 > 440)
+ok   [landscape] deck is not faded while nobody is under it
+ok   [landscape] pushing sideways on the deck stays on the deck (x=1608, level 1)
+ok   [landscape] the other side too (x=1511)
+ok   [landscape] under the bridge at level 0: drawn below the deck floor (z 439 < 440)
+ok   [landscape] the deck fades while the player is under it
+ok   [landscape] same XY (1560,900) restored at level 1 is the deck, not the underpass
+ok   [landscape] the east pier stops a level-0 walker (x=1591) and does not block level 1 at the same XY
+ok   [landscape] walking up the south ramp ends on the deck at level 1 (y=744)
+ok   [landscape] and walking back down returns to level 0 (y=1529)
+ok   [landscape] the cliff front is a wall at level 0 (y=430)
+ok   [landscape] the plateau front edge does not let you fall (y=419)
+ok   [landscape] the plateau east edge too (x=2238)
+ok   [landscape] stairs: level 1 once the top is reached (y=130)
+ok   [landscape] mid-stairs the sprite is lifted partway (23.3 px of 56)
+ok   [landscape] slope: walking east up the slope reaches the plateau at level 1 (x=2039)
+ok   [landscape] tap on the plateau from the low ground -> via stairs/slope, level 1 ({'x': 2000, 'y': 250, 'l': 1, 'z': 251, 'under': False})
+ok   [landscape] navigation reports arrived
+ok   [landscape] a plateau actor near the front edge is drawn behind the foreground tree canopy (z 396 < 470)
+ok   [landscape] and back down to the start at level 0 ({'x': 300.00000000000006, 'y': 1249.9999999999998, 'l': 0, 'z': 1250, 'under': False})
+ok   [landscape] tapping the river is refused
+ok   [landscape] 24000 random-walk steps over 6 starts: 0 blocked positions, 0 level leaks ({'bad': 0, 'steps': 24000, 'leaks': 0})
+ok   [landscape] position+level round-trips: {"map": "dev_height_proto", "x": 1543, "y": 858, "level": 1}
+ok   [landscape] derive() fallback: deck XY -> 1, low ground -> 0 (ambiguous XY needs the saved level)
+ok   [landscape] a normal map has no height state and no sprite lift
+ok   no page errors []
+FAILS 0 []
