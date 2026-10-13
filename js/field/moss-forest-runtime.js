@@ -89,10 +89,15 @@
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }
+  const heightSpecsOn=()=>{try{return Boolean(window.WINDBOUND_FEATURES&&WINDBOUND_FEATURES.heightSpecs)||/[?&]feature=heightSpecs\b/.test(location.search);}catch(e){return false;}};
   async function loadMap(id){
     if(cache.has(id))return cache.get(id);
     await ForestLoader.loadAssets();
-    const map=await ForestLoader.load(MAP_BASE+id+'.json');cache.set(id,map);return map;
+    const map=await ForestLoader.load(MAP_BASE+id+'.json');
+    // DEV opt-in (?feature=heightSpecs): a height spec kept OUTSIDE the shipped map (data/height-specs/<id>.json) is laid over a map that has none, so a candidate
+    // can be tried (also on a phone) without touching the map data. Off by default: normal play never fetches or applies a spec.
+    if(heightSpecsOn()&&!map.height){try{const r=await fetch('data/height-specs/'+id+'.json',{cache:'no-store'});if(r.ok){const spec=await r.json();if(spec&&spec.levels)map.height=spec;}}catch(e){}}
+    cache.set(id,map);return map;
   }
   const fadeMs=(t,dflt)=>Math.round(((t&&t.fade&&t.fade[dflt])??.35)*1000);
   function setFade(opacity,ms){
