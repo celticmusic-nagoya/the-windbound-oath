@@ -15,7 +15,7 @@ with sync_playwright() as p:
             if ev("getComputedStyle(document.querySelector('#msg')).display")=='none': break
             pg.click('#msg'); pg.wait_for_timeout(150)
     ev("FieldTalk.load(null);storyStage=1")
-    ev("for(let i=0;i<3;i++){FieldTalk.talk('elder')}"); check('風が少し重い' in ev("document.querySelector('#msg').textContent"),'peaceful elder cycles to the morning line'); ev("closeDialogue()")
+    ev("for(let i=0;i<4;i++){FieldTalk.talk('elder')}"); check('風が少し重い' in ev("document.querySelector('#msg').textContent"),'peaceful elder cycles to the morning line'); ev("closeDialogue()")
     ev("FieldTalk.load(null);storyStage=15")
     talk_all('f3_commander'); check(not ev("FieldTalk.flag('commander_met')"),'commander before the road: plain welcome')
     ev("FieldTalk.setFlag('road_dunvall_open',true)"); talk_all('f3_commander')
