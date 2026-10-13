@@ -368,6 +368,23 @@
     return false;
   }
 
+  // Keyboard interaction: the best symbol / chest / interact-zone near the feet. Nearer wins; targets in front of the hero beat those behind. true when something was triggered.
+  function faceVec(){const d=spr.dir,fl=spr.flip?1:-1;return ({left:[-1,0],right:[1,0],up:[0,-1],down:[0,1],dl:[fl,1],ul:[fl,-1]})[d]||[0,1];}
+  function interactNearest(){
+    if(!S.active||S.busy||!S.map||!S.forest)return false;
+    const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay,[ux,uy]=faceVec(),ul=Math.hypot(ux,uy)||1;
+    const cands=[];
+    const add=(x,y,range,run)=>{const d=dist(fx,fy,x,y);if(d>range)return;const c=d<1?1:((x-fx)*ux+(y-fy)*uy)/(d*ul);if(c<-.25&&d>56)return;cands.push({score:d*(1.7-.7*c),run});};
+    for(const sy of S.symbols){if(sy.alive&&lvOk(sy))add(sy.x,sy.y,sy.interactRadius||210,()=>startBattle(sy));}
+    for(const t of S.map.treasurePoints||[]){if(lvOk(t))add(t.x,t.y,150,()=>openTreasure(t));}
+    for(const z of S.map.eventZones||[]){
+      if(z.type!=='interact'||!reqOk(z)||!lvOk(z))continue;
+      const sh=zoneShape(z);if(!sh)continue;const c=centerOf(sh);
+      if(inShape(sh,fx,fy,30))cands.push({score:0,run:()=>fireEvent(z)});else add(c.x,c.y,110,()=>fireEvent(z));
+    }
+    if(!cands.length)return false;
+    cands.sort((a,b)=>a.score-b.score);S.target=null;S.pending=null;FieldNavigation.cancel();S.keys.clear();cands[0].run();return true;
+  }
   // ---------- input ----------
   function onPointer(e){
     if(!S.active||S.busy)return;
@@ -577,7 +594,7 @@
   }
   function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

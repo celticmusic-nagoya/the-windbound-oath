@@ -101,7 +101,7 @@
         b.addEventListener('click', e => { e.stopPropagation(); choose(i); });
         w.append(b);
       });
-      box.append(w);
+      box.append(w); kbIdx = 0; mark();
     }
     box.style.display = 'block'; document.body.classList.add('dialogueOpen');
   }
@@ -161,11 +161,25 @@
     box.addEventListener('click', e => { if (!live() || e.target.closest('.talkChoices')) return; e.stopImmediatePropagation(); advance(); }, true);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attachTap); else attachTap();
+  // Keyboard: Enter / Space / Z advance (one press = one page: key repeat is ignored); with choices on screen Up/Down/Left/Right move the highlight, Enter / Space confirm, 1-9 pick directly.
+  let kbIdx = 0;
+  const choiceButtons = () => [...(msg() ? msg().querySelectorAll('.talkChoices button') : [])];
+  const mark = () => choiceButtons().forEach((b, i) => b.classList.toggle('kbf', i === kbIdx));
   window.addEventListener('keydown', e => {
     if (!live()) return;
-    const n = session.choice ? session.choice.options.length : 0;
-    if (n && /^[1-9]$/.test(e.key) && +e.key <= n) { e.preventDefault(); e.stopImmediatePropagation(); choose(+e.key - 1); return; }
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'z') { e.preventDefault(); e.stopImmediatePropagation(); if (!n) advance(); }
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    const btns = choiceButtons(), n = btns.length;
+    if (n && /^[1-9]$/.test(e.key) && +e.key <= n) { e.preventDefault(); e.stopImmediatePropagation(); if (!e.repeat) choose(+e.key - 1); return; }
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {   // the conversation owns the arrows (the hero must not walk away)
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (n) { kbIdx = (kbIdx + (e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : n - 1)) % n; mark(); }
+      return;
+    }
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'z') {
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (e.repeat) return;
+      if (n) choose(Math.min(kbIdx, n - 1)); else advance();
+    }
   }, true);
   window.addEventListener('lind-field-interaction', e => { const d = e.detail; if (d && d.id) talk(d.talk !== undefined ? d.talk : d.id, {source: 'review'}); });
 

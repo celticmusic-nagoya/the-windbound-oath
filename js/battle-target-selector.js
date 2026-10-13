@@ -52,16 +52,19 @@
     const last=memory.get(battle),index=candidates.findIndex(x=>x.id===last);
     const next=[...candidates.slice(index+1),...candidates.slice(0,index+1)].find(x=>eligible(x,type));
     pending={type,battle,candidates:valid,onConfirm,onCancel,selected:valid.some(x=>x.id===last)?last:(next||valid[0]).id};
+    // Keyboard flow: nothing to choose -> no panel. All-target actions and a single valid target confirm at once (same result as tapping the only target).
+    if(type.endsWith('_all')||valid.length===1){const id=pending.selected;if(!confirm(id))cancel();return true;}
     panel.querySelector('span').textContent=label+' / TARGET';panel.hidden=false;draw();return true;
   }
   addEventListener('keydown',e=>{
     if(!pending||window.BattlePresentation?.busy)return;
-    if(!['ArrowLeft','ArrowRight','Enter',' ','Escape'].includes(e.key))return;
+    if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' ','Escape'].includes(e.key))return;
     e.preventDefault();e.stopImmediatePropagation();
+    if(e.repeat&&(e.key==='Enter'||e.key===' '||e.key==='Escape'))return;   // one press = one action
     if(e.key==='Escape')return cancel();
     if(e.key==='Enter'||e.key===' ')return confirm(pending.selected);
-    const a=pending.candidates,i=a.findIndex(x=>x.id===pending.selected);
-    pending.selected=a[(i+(e.key==='ArrowRight'?1:a.length-1))%a.length].id;draw();
+    const a=pending.candidates,i=a.findIndex(x=>x.id===pending.selected),fwd=e.key==='ArrowRight'||e.key==='ArrowDown';
+    pending.selected=a[(i+(fwd?1:a.length-1))%a.length].id;draw();
   },true);
   addEventListener('resize',draw);
   window.BattleTargetSelector=Object.freeze({open,cancel,confirm,refresh:draw,get active(){return !!pending},get selected(){return pending?.selected},reset(battle){cancel();memory.delete(battle)}});

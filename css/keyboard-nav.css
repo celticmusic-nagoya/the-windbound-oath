@@ -1,0 +1,3 @@
+/* Keyboard navigation: a clear focus ring on whatever the keyboard has selected (only while the keyboard is in use, so touch / mouse look unchanged). */
+body.kbNav button:focus,body.kbNav [role="button"]:focus,.talkChoices button.kbf{outline:3px solid #ffd978!important;outline-offset:2px!important;box-shadow:0 0 0 5px rgba(255,217,120,.28)!important;position:relative;z-index:1}
+body.kbNav [data-stab]:focus,body.kbNav .journalTabs button:focus{filter:brightness(1.18)}
