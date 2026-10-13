@@ -29,6 +29,12 @@
    try{return await job(token)}finally{active.delete(lock);if(!active.size)document.body.classList.remove('battlePresentationBusy');}
   });queue=result.catch(()=>false);return result;
  }
+ // Input hold that starts at once (not queued behind banter): shares the presentation lock, so cancel() / a new battle releases it. Used by BattleOpening.
+ function hold(ms,token=PrologueCombat.generation){
+  const lock={};active.add(lock);document.body.classList.add('battlePresentationBusy');
+  const release=()=>{active.delete(lock);if(!active.size)document.body.classList.remove('battlePresentationBusy');};
+  return wait(ms,token).then(r=>{release();return r;},e=>{release();throw e;});
+ }
  async function showSkillCutin({actor,skill,type='SHORT',image,duration=durations[type]||550},token=PrologueCombat.generation){
   if(setting==='OFF')return valid(token);
   return run(async t=>{
@@ -70,5 +76,5 @@
  const readout=document.createElement('small');readout.id='normalRuneReadout';document.querySelector('#attackBattle').append(readout);
  window.BattleCutinManager=Object.freeze({showSkillCutin,setMode(value){if(!['FULL','SHORT','OFF'].includes(value))return false;setting=value;return true;},get mode(){return setting},durations});
  window.BattleBanter=Object.freeze({show:banter,get seen(){return [...seen]}});
- window.BattlePresentation=Object.freeze({action,banter,cancel,wait,valid,definition,log,get busy(){return active.size>0},get motionOwned(){return motionOwned},updateRune(value){readout.textContent='RUNE '+value+' / 100'}});
+ window.BattlePresentation=Object.freeze({action,banter,cancel,wait,hold,valid,definition,log,get busy(){return active.size>0},get motionOwned(){return motionOwned},updateRune(value){readout.textContent='RUNE '+value+' / 100'}});
 })();

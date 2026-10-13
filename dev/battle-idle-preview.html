@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>戦闘待機モーション プレビュー</title>
+<style>
+:root{--bg:#171b1a;--panel:#232a28;--ink:#ece6d4;--mute:#9aa59f;--acc:#d8b45f;--w:158px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:12px 16px 40px}h1{font-size:17px;margin:8px 0}h2{font-size:14px;margin:18px 0 6px;color:var(--acc)}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}.panel{background:var(--panel);border-radius:8px;padding:10px}
+.pair{display:flex;gap:6px;align-items:flex-end}.stage{display:grid;place-items:center;gap:6px}
+/* the real battle sprite box (css/style.css): 158x198 at desktop, object-fit:contain, bottom aligned */
+.box{position:relative;width:var(--w);aspect-ratio:158/198;background:#2c3a44;outline:1px dashed #556}.box.light{background:#e8e4d8}
+.box img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;display:block}.box img.mir{transform:scaleX(-1)}
+.box .base{position:absolute;left:0;right:0;bottom:0;border-top:1px solid #f55;pointer-events:none}
+.box .mid{position:absolute;top:0;bottom:0;left:50%;border-left:1px dotted #8896;pointer-events:none}
+.cap{font-size:12px;color:var(--mute);text-align:center}.cap.l{text-align:left}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+button{background:#33403b;color:var(--ink);border:1px solid #55645d;border-radius:6px;padding:8px 12px;font:inherit;min-height:40px}button.on{background:var(--acc);color:#222}
+input[type=range]{width:180px}input.ms{width:52px;background:#1a201e;color:var(--ink);border:1px solid #55645d;border-radius:4px;padding:2px 4px;text-align:right}
+.strip{display:flex;gap:4px;overflow-x:auto;padding:6px 0}.strip button{padding:2px;min-height:0;width:56px;flex:0 0 auto}.strip img{width:100%;display:block}.strip .sel{outline:2px solid var(--acc)}
+table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #445;padding:2px 6px;text-align:right}th{text-align:left}td.hot{background:#4a3f1c}
+@media(max-width:560px){:root{--w:128px}}
+</style></head><body><main>
+<h1>戦闘待機モーション 開発用プレビュー(エイダン抜刀/待機・フィオナ待機・ルー)</h1>
+<p class="cap l">戦闘画面と同じ表示枠(158:198 / object-fit:contain / 下揃え)で再生します。赤線=足元、点線=枠の中心。フィオナは戦闘と同じく左右反転で表示。各コマの時間(ms)は下の表で変更できます(待機の既定値=本番設定)。</p>
+
+<div class="ctl"><button id="go">▶ 3人同時: 開始演出 → 待機ループ</button><button id="stop">■ 停止</button><button id="bg">背景切替</button><button id="zoom">拡大: x1</button>
+<label>速度 <input id="spd" type="range" min="0.25" max="2" step="0.05" value="1"> <b id="spdv">1.00x</b></label></div>
+
+<h2>① 3人同時表示(エイダン 抜刀→待機 / フィオナ 構え→待機 / ルー 待機)</h2>
+<div class="row"><div class="panel"><div class="pair">
+ <div class="stage"><div class="box" id="bA"><img id="iA" alt="aidan"><div class="base"></div><div class="mid"></div></div><div class="cap" id="cA"></div></div>
+ <div class="stage"><div class="box" id="bF"><img id="iF" class="mir" alt="fiona"><div class="base"></div><div class="mid"></div></div><div class="cap" id="cF"></div></div>
+ <div class="stage"><div class="box" id="bL"><img id="iL" alt="lou"><div class="base"></div><div class="mid"></div></div><div class="cap" id="cL"></div></div>
+</div></div></div>
+
+<h2>② エイダン抜刀(単独・1回)と 抜刀6コマ目 → 待機1コマ目の接続</h2>
+<div class="row"><div class="panel"><div class="pair">
+ <div class="stage"><div class="box"><img id="iD" alt="draw"><div class="base"></div><div class="mid"></div></div><div class="cap" id="cD"></div></div>
+ <div class="stage"><div class="box"><img id="iD6" alt="d6"><div class="base"></div><div class="mid"></div></div><div class="cap">抜刀6(静止)</div></div>
+ <div class="stage"><div class="box"><img id="iI1" alt="i1"><div class="base"></div><div class="mid"></div></div><div class="cap">待機1(静止)</div></div>
+</div></div></div>
+<div class="ctl"><button id="playD">▶ 抜刀のみ</button><button id="playDI">▶ 抜刀 → 待機(連続)</button><button id="swap">6↔待機1 交互(250ms)</button></div>
+
+<h2>③ 6コマ待機ループ(コマごとの時間を編集できます)</h2>
+<div class="row"><div class="panel"><div class="pair">
+ <div class="stage"><div class="box"><img id="lA" alt="aidan idle"><div class="base"></div><div class="mid"></div></div><div class="cap" id="lcA"></div></div>
+ <div class="stage"><div class="box"><img id="lF" class="mir" alt="fiona idle"><div class="base"></div><div class="mid"></div></div><div class="cap" id="lcF"></div></div>
+</div></div>
+<div class="panel"><table id="tbl"></table><p class="cap l">5コマ目(ハイライト)= エイダン:構え直し(短め) / フィオナ:魔力を練り集める(長め)</p></div></div>
+<div class="ctl"><button id="loopI">▶ 待機ループ再生</button><button id="step">コマ送り ▶</button></div>
+<div class="strip" id="sA"></div><div class="strip" id="sF"></div>
+<p class="cap l" id="status"></p>
+</main>
+<script>
+(function(){
+ const P={aidan_draw:'../img/battle/characters/aidan/motion/aidan_draw_',aidan_idle:'../img/battle/characters/aidan/idle_v2/aidan_idle_',
+  fiona_ready:'../img/battle/characters/fiona/motion/fiona_ready_',fiona_idle:'../img/battle/characters/fiona/idle/fiona_idle_',lou_idle:'../img/battle/characters/lou/idle/lou_idle_'};
+ const pad=(i,w=2)=>String(i).padStart(w,'0'),$=id=>document.getElementById(id);
+ const ms={aidan_draw:[100,90,110,90,90,120],fiona_ready:[140,130,150,130,160,170],aidan_idle:[220,180,220,160,110,260],fiona_idle:[260,220,240,180,300,260],lou_idle:Array(6).fill(1000/6)};
+ const url=(k,i)=>P[k]+(k==='lou_idle'?pad(i,2):pad(i+1))+'.png';   // lou files are 0-based (lou_idle_00..05)
+ const timers=new Set();let gen=0,zoom=1,idx={aidan:0,fiona:0};
+ const spd=()=>+$('spd').value,later=(f,t,g)=>{const h=setTimeout(()=>{timers.delete(h);if(g===gen)f();},t/spd());timers.add(h);};
+ function stopAll(){gen++;timers.forEach(clearTimeout);timers.clear();}
+ // play sequence k once at element id; done() called after the last frame's duration
+ function once(k,img,cap,g,done){let i=0;(function s(){$(img).src=url(k,i);if(cap)$(cap).textContent=k+' '+(i+1)+'/6 · '+ms[k][i]+'ms';const w=ms[k][i];if(i<5){i++;later(s,w,g);}else later(()=>done&&done(),w,g);})();}
+ function loop(k,img,cap,g,hl){let i=0;(function s(){$(img).src=url(k,i);if(cap)$(cap).textContent=k+' '+(i+1)+'/6 · '+ms[k][i]+'ms';if(hl)hl(k,i);const w=ms[k][i];i=(i+1)%6;later(s,w,g);})();}
+ $('go').onclick=()=>{stopAll();const g=gen;$('status').textContent='開始演出(抜刀 / 構え)→ 待機ループ。ルーは待機のみ。';
+  once('aidan_draw','iA','cA',g,()=>loop('aidan_idle','iA','cA',g));
+  once('fiona_ready','iF','cF',g,()=>loop('fiona_idle','iF','cF',g));
+  loop('lou_idle','iL','cL',g);};
+ $('stop').onclick=stopAll;
+ $('playD').onclick=()=>{stopAll();once('aidan_draw','iD','cD',gen);};
+ $('playDI').onclick=()=>{stopAll();const g=gen;once('aidan_draw','iD','cD',g,()=>loop('aidan_idle','iD','cD',g));};
+ $('swap').onclick=()=>{stopAll();const g=gen;let f=false;(function s(){$('iD').src=url(f?'aidan_idle':'aidan_draw',f?0:5);$('cD').textContent=f?'待機1':'抜刀6';f=!f;later(s,250,g);})();};
+ $('iD6').src=url('aidan_draw',5);$('iI1').src=url('aidan_idle',0);$('iD').src=url('aidan_draw',0);$('iA').src=url('aidan_idle',0);$('iF').src=url('fiona_idle',0);$('iL').src=url('lou_idle',0);$('lA').src=url('aidan_idle',0);$('lF').src=url('fiona_idle',0);
+ // idle table + loops
+ function build(){const row=(lab,k)=>'<tr><th>'+lab+' ms</th>'+ms[k].map((m,i)=>'<td'+(i===4?' class="hot"':'')+'><input class="ms" data-k="'+k+'" data-i="'+i+'" type="number" min="40" step="10" value="'+m+'"></td>').join('')+'</tr>';
+  $('tbl').innerHTML='<tr><th>コマ</th>'+[1,2,3,4,5,6].map(i=>'<th'+(i===5?' class="hot"':'')+'>'+i+'</th>').join('')+'</tr>'+row('エイダン待機','aidan_idle')+row('フィオナ待機','fiona_idle');
+  document.querySelectorAll('input.ms').forEach(e=>e.oninput=()=>{ms[e.dataset.k][+e.dataset.i]=Math.max(40,+e.value||40);});
+  for(const [id,k] of [['sA','aidan_idle'],['sF','fiona_idle']]){const st=$(id);st.textContent='';for(let i=0;i<6;i++){const b=document.createElement('button'),im=new Image();im.src=url(k,i);b.append(im);b.onclick=()=>{stopAll();$(k==='aidan_idle'?'lA':'lF').src=url(k,i);$(k==='aidan_idle'?'lcA':'lcF').textContent=k+' '+(i+1)+'/6';};st.append(b);}}}
+ build();
+ const sum=a=>a.reduce((x,y)=>x+y,0);
+ $('loopI').onclick=()=>{stopAll();const g=gen;loop('aidan_idle','lA','lcA',g);loop('fiona_idle','lF','lcF',g);$('status').textContent='1周 エイダン '+sum(ms.aidan_idle)+'ms / フィオナ '+sum(ms.fiona_idle)+'ms';};
+ $('step').onclick=()=>{stopAll();idx.aidan=(idx.aidan+1)%6;$('lA').src=url('aidan_idle',idx.aidan);$('lF').src=url('fiona_idle',idx.aidan);$('lcA').textContent='frame '+(idx.aidan+1)+'/6';$('lcF').textContent='frame '+(idx.aidan+1)+'/6';};
+ $('bg').onclick=()=>document.querySelectorAll('.box').forEach(b=>b.classList.toggle('light'));
+ $('zoom').onclick=()=>{zoom=zoom===1?2:zoom===2?3:1;document.documentElement.style.setProperty('--w',(158*zoom)+'px');$('zoom').textContent='拡大: x'+zoom;};
+ $('spd').oninput=()=>{$('spdv').textContent=spd().toFixed(2)+'x';};
+ fetch('../img/battle/motion-manifest.json').then(r=>r.json()).then(m=>{ms.aidan_draw=m.motions.aidan.draw.ms;ms.fiona_ready=m.motions.fiona.ready.ms;}).catch(()=>{});
+})();
+</script></body></html>
