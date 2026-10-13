@@ -23,5 +23,7 @@ body.battlePresentationBusy #normalBattleCmd,body.battlePresentationBusy #rbCmd,
 /* Lou: constant fairy float (idle + support); wander offsets are applied by js/battle-lou-flight.js on the unit itself */
 #rbLou>img{animation:louFloat 2.1s ease-in-out infinite}
 #rbLou>img.louNoFloat{animation:none}
+#rbLou>.battle-idle-canvas{animation:louFloat 2.1s ease-in-out infinite}   /* the 6-frame idle canvas keeps the same gentle hover as the still */
+#rbLou>img.louNoFloat~.battle-idle-canvas{animation:none}
 @keyframes louFloat{0%,100%{translate:0 3px}50%{translate:0 -9px}}
-@media(prefers-reduced-motion:reduce){#rbLou>img{animation:none}}
+@media(prefers-reduced-motion:reduce){#rbLou>img,#rbLou>.battle-idle-canvas{animation:none}}
