@@ -91,12 +91,12 @@
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }
-  // ---- Lou field follower (provisional): the battle idle loop (BATTLE_IDLE_ASSETS.lou, 6 frames @ 6 FPS) floating behind Fiona once she has joined ----
+  // ---- Lou field follower (provisional): the battle idle loop (6 frames @ 6 FPS; 73x120 field-size copies of the battle idle frames in img/field/characters/lou/) floating behind Fiona once she has joined ----
   const lou={el:null,imgs:[],frame:-1,x:0,y:0,map:null};
   function mountLou(){
     const A=window.BATTLE_IDLE_ASSETS&&BATTLE_IDLE_ASSETS.lou;if(lou.el||!A||!el.world)return;
     const d=document.createElement('div');d.id='forestLou';d.setAttribute('aria-hidden','true');
-    lou.imgs=A.frames.map(f=>{const im=new Image();im.className='lou-field-frame';im.alt='';im.draggable=false;im.hidden=true;im.src=f.path;d.appendChild(im);return im;});
+    lou.imgs=A.frames.map(f=>{const im=new Image();im.className='lou-field-frame';im.alt='';im.draggable=false;im.hidden=true;im.src='img/field/characters/lou/'+f.path.split('/').pop()+'?v=20261013s';d.appendChild(im);return im;});
     el.world.appendChild(d);lou.el=d;
   }
   const louJoined=()=>typeof PartyManager!=='undefined'&&Boolean(PartyManager.support&&PartyManager.support.joined);
