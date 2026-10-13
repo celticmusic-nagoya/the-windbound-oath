@@ -58,7 +58,7 @@ def main():
     pg=b.new_page();pg.route('**/*.png*',lambda r:r.fulfill(status=200,content_type='image/png',body=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==')));pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('console',lambda m:errors.append(m.text)if m.type=='error'else None)
     rows.append(run(pg,base,*c,seed));pg.close()
    print(i+1,len(combos),c,rows[-1]['outcome'],flush=True)
-   args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps({'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'fixture':'only browser response SupportMagicData; production engine source unchanged','results':rows,'errors':errors,'complete':i+1==len(combos)},ensure_ascii=False))
+   args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps({'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'fixture':'numeric SupportMagicData browser response; PNG responses1px; production code and adopted files unchanged','results':rows,'errors':errors,'complete':i+1==len(combos)},ensure_ascii=False))
   b.close()
  print('FAILS',len(errors));raise SystemExit(bool(errors))
 if __name__=='__main__':main()
