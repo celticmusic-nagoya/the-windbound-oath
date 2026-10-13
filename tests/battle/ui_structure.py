@@ -33,6 +33,7 @@ with server(8831) as base,sync_playwright() as p:
     if cmd:pg.evaluate(cmd)
     pg.wait_for_timeout(200);s=pg.evaluate(SNAP,kind);record(view,kind,phase,s);pg.screenshot(path=str(OUT/(view+'-'+kind+'-'+phase+'.png')))
    pg.evaluate("document.querySelector('#normalItems').classList.remove('isOpen');document.querySelector('#normalItems').style.display='none';"+('setNormalCommandDrawer' if kind=='normal' else 'setRaiderCommandDrawer')+'(true)')
+   pg.evaluate(("showBattleBanner" if kind=='normal' else "showRaiderBattleLog")+"('行動を選択。',2500)");pg.wait_for_timeout(100);record(view,kind,'active-log',pg.evaluate(SNAP,kind));pg.screenshot(path=str(OUT/(view+'-'+kind+'-active-log.png')))
    # Real engine round: skill -> defend -> enemy turn. No synthetic damage/cinematic.
    pg.evaluate("""kind=>{if(kind==='normal')aatp=60;else rbTP=60;window.qaTrace=[];window.qaInterval=setInterval(()=>qaTrace.push({t:performance.now(),classes:document.body.className}),25);window.qaDone=false;const target=PrologueCombat.targets(kind)[0].id;void PrologueCombat.round(kind,[{who:'aidan',kind:'skill',target},{who:'fiona',kind:'guard',target:'fiona'}]).finally(()=>qaDone=true)}""",kind)
    pg.wait_for_function("document.body.classList.contains('battlePresentationBusy') || document.body.classList.contains('actionCinematic')",timeout=10000);s=pg.evaluate(SNAP,kind);record(view,kind,'real-busy',s);pg.screenshot(path=str(OUT/(view+'-'+kind+'-busy.png')))
@@ -45,4 +46,4 @@ with server(8831) as base,sync_playwright() as p:
    pg.evaluate("document.body.classList.add('actionCinematic')");record(view,kind,'css-actionCinematic-probe',pg.evaluate(SNAP,kind));pg.evaluate("document.body.classList.remove('actionCinematic')")
    print('ok   measured',view,kind,flush=True);ctx.close()
  b.close()
-(OUT/'results.json').write_text(json.dumps(dict(base='f0fe968',rows=rows,specDifferences=findings,errors=errors),ensure_ascii=False,indent=2));print('SPEC_DIFFS',len(findings));print('FAILS',int(bool(errors)));sys.exit(bool(errors))
+(OUT/'results.json').write_text(json.dumps(dict(introduced_base='f0fe968',source_head=os.getenv('QA_SOURCE_HEAD',os.getenv('GITHUB_SHA')),rows=rows,specDifferences=findings,errors=errors),ensure_ascii=False,indent=2));print('SPEC_DIFFS',len(findings));print('FAILS',int(bool(errors)));sys.exit(bool(errors))

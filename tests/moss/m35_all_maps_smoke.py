@@ -33,7 +33,7 @@ with server(8834) as base,sync_playwright() as p:
    except Exception as e:
     load_ms=(time.monotonic()-started)*1000;problems.append('exception: '+str(e).splitlines()[0])
    row=dict(**current,loadMs=round(load_ms,2),ok=not problems,problems=problems,state=state,events=events[start_events:]);rows.append(row);print(('ok   ' if row['ok'] else 'FAIL ')+m['id']+' '+str(joined)+' '+tod+' '+str(round(load_ms))+'ms '+str(problems),flush=True)
-   (OUT/'results.json').write_text(json.dumps(dict(base='f0fe968',maps=len(maps),rows=rows,transitions=transitions,events=events,note='Default spawns only, desktop viewport, AI frozen, optional heightSpecs OFF; loads share browser cache'),ensure_ascii=False,indent=2))
+   (OUT/'results.json').write_text(json.dumps(dict(introduced_base='f0fe968',source_head=os.getenv('QA_SOURCE_HEAD',os.getenv('GITHUB_SHA')),maps=len(maps),rows=rows,transitions=transitions,events=events,note='Default spawns only, desktop viewport, AI frozen, optional heightSpecs OFF; loads share browser cache'),ensure_ascii=False,indent=2))
    if any(x.startswith('exception:') for x in problems):fresh()
  b.close()
 unresolved=[t for t in transitions if not t['exists']];n=sum(not r['ok'] for r in rows)+len(unresolved)
