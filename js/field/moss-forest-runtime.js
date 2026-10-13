@@ -36,6 +36,7 @@
   const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
   const sideCount=(frames,dir)=>{let n=0;while(frames.has('fiona_side_'+dir+'_'+String(n+1).padStart(2,'0')))n++;return n||4;};
   const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
+  function artOf(dir,flip){return window.AidanHeading&&AidanHeading.art?AidanHeading.art(dir,flip):{dir,flip:!!flip};}
   function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up|dl|ul)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}
   const FALLBACK_HEAD={step:(dx,dy)=>({dir:Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'),flip:false}),reset(){},idleDir:d=>d};
   const spr={head:null,flip:false,frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
@@ -56,13 +57,13 @@
       if(d>.01&&d<=23){const hd=spr.head.step(dx,dy),nx=hd.dir;spr.flip=hd.flip;   // side / straight up-down / diagonal (3/4 art, mirrored for right) - see aidan-heading.js
         if(spr.state!=='WALK'||spr.dir!==nx){spr.since=now;spr.phase=0;spr.dist=0;}spr.dir=nx;spr.state='WALK';spr.straight=false;spr.moved=now;spr.dist=(spr.dist||0)+d;}
       else if(d>23||now-spr.moved>110){if(spr.state==='WALK')spr.straight=spr.dir==='down'||spr.dir==='up';spr.state='IDLE';spr.phase=0;spr.head.reset();spr.dir=spr.head.idleDir(spr.dir);spr.flip=false;}
-      if(spr.state==='WALK'){const n=walkCount(spr.frames,'aidan_',spr.dir);spr.phase=Math.floor((spr.dist||0)/(STRIDE_CYCLE/n))%n;}   // foot cadence follows the distance walked (no skating at any speed)
+      if(spr.state==='WALK'){const n=walkCount(spr.frames,'aidan_',artOf(spr.dir,spr.flip).dir);spr.phase=Math.floor((spr.dist||0)/(STRIDE_CYCLE/n))%n;}   // foot cadence follows the distance walked (no skating at any speed)
     }
     spr.px=S.x;spr.py=S.y;
-    const name='aidan_'+(spr.state==='WALK'?'walk_'+spr.dir+'_'+String(spr.phase+1).padStart(2,'0'):(spr.straight&&(spr.dir==='down'||spr.dir==='up')?'walk_'+spr.dir+'_01':'idle_'+spr.dir));   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
+    const ART=artOf(spr.dir,spr.flip),name='aidan_'+(spr.state==='WALK'?'walk_'+ART.dir+'_'+String(spr.phase+1).padStart(2,'0'):(spr.straight&&(spr.dir==='down'||spr.dir==='up')?'walk_'+spr.dir+'_01':'idle_'+spr.dir));   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
     if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
     else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
-    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((spr.dist||0)/(STRIDE_CYCLE/2)*Math.PI))*1.5).toFixed(2)+'px)':'')+(spr.state==='WALK'&&spr.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames
+    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((spr.dist||0)/(STRIDE_CYCLE/2)*Math.PI))*1.5).toFixed(2)+'px)':'')+(spr.state==='WALK'&&ART.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames
   }
   // ---- Fiona field sprite: 4 directions x (idle + 6-frame walk), tools/field/make_fiona.py -> js/field/fiona-field-assets.js ----
   const fsp={frames:new Map(),visible:null,dir:'down',walking:false,since:0,moved:0,px:null,py:null,pt:0,ready:false};
