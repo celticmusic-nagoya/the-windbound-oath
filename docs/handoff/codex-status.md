@@ -92,3 +92,5 @@ GG完了: keyboard-audit-20261013.md / kb_audit.py / JSON・ログ・10画像を
 HH完了: lou-field-review-20261013.md、m33、新規縮小tool/6画像/計測JSONを納品。37/37合格、save復元/戦闘復帰/liftも合格。6PNG2,303,132→93,723bytes（提案のみ/tmp、未採用）。Android未測定。次IIを進行中、JJ/KK未着手。
 
 II完了: lou-idle-real-flow-20261013.md / 新規test / 250ms全時系列 / 2画像を納品。祭壇の最後から自然に戦闘開始し初回入力〜敵ターン〜被弾を確認、reduce両条件9/9合格。実Androidでの停止は未再現/未測定。次JJ: m31安定化・20連続、全testの会話前置きを調査。必要に応じm32等testsのみ担当。KK未着手。
+
+JJ進行checkpoint: m31修正前3/3・m32修正前1/1・m6_inventory修正前1/1合格（この小標本で元の間欠失敗は未再現）。m31の固定待機を描画IDLE相当+位置/コマ安定の状態待機へ置換し、修正後20連続を直列実行中。m6_inventoryとm32の会話前置きを補強。全Pythonテストを静的走査し補助関数/DEV harness/間接closeを区別。ゲームは未編集。KK未着手。再開はafter.jsonの完了数を確認し、途切れたら20連続は最初から実行。

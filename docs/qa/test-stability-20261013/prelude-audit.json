@@ -1,0 +1,1551 @@
+{
+  "note": "Static candidates, not execution order/proof. Helper definitions must be reviewed; indirect DEV reset is not guaranteed close.",
+  "files": 69,
+  "rows": [
+    {
+      "test": "tests/battle/hero_motion_plan.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/battle/hit_sync.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/battle/lou_idle_loop.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/battle/lou_idle_real_flow.py",
+      "dialogue": [
+        {
+          "line": 17,
+          "text": "pg.evaluate(\"closeDialogue();devJump('altar');window.qaPhase='altar';window.qaTimeline=[];window.qaTrace=setInterval(()=>qaTimeline.push({ms:performance.now(),phase:qaPhase,classes:document.body.className,hidden:document.hidden,state:InputManager.state(),idle:BattleIdleMotion.status,canvas:document.querySelector('#rbLou canvas')?.dataset.frame,hp:[rbHP,rbFHP],round:rbRound}),250)\")",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/battle/motion_intake.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/battle/raider_mobile_layout.py",
+      "dialogue": [
+        {
+          "line": 19,
+          "text": "pg.goto('http://localhost:8765/index.html');pg.wait_for_timeout(2800);pg.evaluate('closeDialogue();startRaiderBattle();PrologueCombat.spawn();PrologueCombat.spawn();hideRaiderBattleLog()');pg.wait_for_timeout(300)",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/input/kb_audit.py",
+      "dialogue": [
+        {
+          "line": 16,
+          "text": "pg.goto(base+'/index.html'+('?legacyVillage=1' if legacy else ''));pg.wait_for_function('window.InputManager && window.Shop');pg.wait_for_timeout(1300);pg.evaluate('closeDialogue()')",
+          "helper": [
+            "fresh"
+          ]
+        },
+        {
+          "line": 30,
+          "text": "pg.evaluate('(id)=>{closeDialogue();storyStage=15;gold=1000;Shop.open(id)}',sid)",
+          "helper": []
+        },
+        {
+          "line": 45,
+          "text": "fresh(legacy=True);pg.evaluate(\"room='inn';dressRoom();ipx=400;ipy=300;inCamera();closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 48,
+          "text": "pg.keyboard.press('Enter');check(pg.evaluate('qaKeeperClicks')==1,'legacy inn keeper is keyboard-reachable',pg.evaluate('qaKeeperClicks'))",
+          "helper": []
+        },
+        {
+          "line": 56,
+          "text": "pg.keyboard.press('Enter');check(pg.evaluate('qaClicks')==1,selector+' Enter clicks nearest object',pg.evaluate('qaClicks'))",
+          "helper": []
+        },
+        {
+          "line": 62,
+          "text": "pg.evaluate('devResetScreens();closeDialogue();'+entry);pg.wait_for_timeout(400)",
+          "helper": []
+        },
+        {
+          "line": 72,
+          "text": "fresh();pg.evaluate(\"devJump('forest')\");pg.wait_for_function('MossForest.active',timeout=30000);pg.evaluate('closeDialogue();MossForest.encounters(false);FieldMonsters.setFrozen(true)')",
+          "helper": []
+        },
+        {
+          "line": 82,
+          "text": "pg.evaluate(\"devJump('forest')\");pg.wait_for_function('MossForest.active',timeout=30000);pg.evaluate('closeDialogue();MossForest.encounters(false);FieldMonsters.setFrozen(true)')",
+          "helper": []
+        },
+        {
+          "line": 83,
+          "text": "fresh();pg.evaluate(\"devResetScreens();closeDialogue();startAltarScene();window.qaKeys=[];window.addEventListener('keydown',e=>qaKeys.push({key:e.key,prevented:e.defaultPrevented}));window.qaClickBurst=0;document.querySelector('#altarScene').addEventListener('click',()=>qaClickBurst++);window.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));window.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));\")",
+          "helper": []
+        },
+        {
+          "line": 87,
+          "text": "fresh();pg.evaluate(\"devJump('forest')\");pg.wait_for_function('MossForest.active',timeout=30000);pg.evaluate(\"closeDialogue();FieldMonsters.removeAll();MossForest.enter({map:'moss_forest_02_mossy_ravine'});window.qaTransitionState=InputManager.state()\")",
+          "helper": []
+        },
+        {
+          "line": 90,
+          "text": "pg.evaluate(\"closeDialogue();MossForest.encounters(false);FieldMonsters.removeAll();const t=MossForest.map.treasurePoints[0];window.qaChest=t;MossForest.teleportFeet(t.x,t.y+30)\");pg.wait_for_timeout(250)",
+          "helper": []
+        },
+        {
+          "line": 95,
+          "text": "pg.evaluate(\"closeDialogue();startAttackBattle('fieldGob1',100);window.qaBannerState=InputManager.state()\")",
+          "helper": []
+        },
+        {
+          "line": 105,
+          "text": "m=context.new_page();m.goto(base+'/index.html');m.wait_for_function('window.InputManager');m.wait_for_timeout(1400);m.evaluate(\"closeDialogue();devJump('forest')\");m.wait_for_function('MossForest.active',timeout=30000);m.evaluate(\"closeDialogue();FieldMonsters.removeAll();startAttackBattle('fieldGob1',100)\");m.wait_for_function(\"InputManager.state()==='BATTLE_COMMAND'\",timeout=30000);m.wait_for_timeout(400)",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 19,
+          "text": "pg.keyboard.down(key)",
+          "helper": [
+            "repeats"
+          ]
+        },
+        {
+          "line": 20,
+          "text": "for _ in range(8):pg.keyboard.down(key)",
+          "helper": [
+            "repeats"
+          ]
+        },
+        {
+          "line": 74,
+          "text": "pg.keyboard.down('ArrowRight');pg.wait_for_timeout(180)",
+          "helper": []
+        },
+        {
+          "line": 88,
+          "text": "pg.evaluate('window.qaFadeBefore=FieldTalk.active');pg.keyboard.down('Enter');pg.keyboard.up('Enter');fade_after=pg.evaluate('FieldTalk.active');pg.wait_for_function(\"MossForest.mapId==='moss_forest_02_mossy_ravine' && !MossForest.busy\",timeout=30000)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/input/kb_battle.py",
+      "dialogue": [
+        {
+          "line": 10,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(500); pg.evaluate(\"closeDialogue()\")",
+          "helper": [
+            "boot"
+          ]
+        },
+        {
+          "line": 45,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300); pg.keyboard.press('ArrowRight'); pg.keyboard.press('Enter')",
+          "helper": []
+        },
+        {
+          "line": 52,
+          "text": "pg.evaluate(\"document.querySelector('#nWindbloom').focus()\"); pg.keyboard.press('Enter'); pg.wait_for_timeout(400)",
+          "helper": []
+        },
+        {
+          "line": 54,
+          "text": "pg.keyboard.press('Enter'); settle(pg,4000)",
+          "helper": []
+        },
+        {
+          "line": 64,
+          "text": "pg.evaluate(\"document.querySelector('#nItem').focus()\"); pg.keyboard.press('Enter'); pg.wait_for_timeout(500)",
+          "helper": []
+        },
+        {
+          "line": 68,
+          "text": "pg.evaluate(\"document.querySelector('#nItem').focus()\"); pg.keyboard.press('Enter'); pg.wait_for_timeout(500)",
+          "helper": []
+        },
+        {
+          "line": 69,
+          "text": "p0=pg.evaluate(\"battleItems.potion\"); pg.wait_for_timeout(300); check(pg.evaluate(\"document.activeElement.dataset.ni\")=='potion','focus lands on the first item'); pg.keyboard.press('Enter'); pg.wait_for_timeout(500)",
+          "helper": []
+        },
+        {
+          "line": 70,
+          "text": "if pg.evaluate(\"BattleTargetSelector.active\"): pg.keyboard.press('Enter')",
+          "helper": []
+        },
+        {
+          "line": 78,
+          "text": "pg.keyboard.press('ArrowDown'); pg.keyboard.press('Enter'); pg.wait_for_timeout(600)",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 33,
+          "text": "pg.keyboard.down('Enter')",
+          "helper": []
+        },
+        {
+          "line": 34,
+          "text": "for _ in range(5): pg.keyboard.down('Enter')",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/input/kb_field.py",
+      "dialogue": [
+        {
+          "line": 15,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300)",
+          "helper": []
+        },
+        {
+          "line": 20,
+          "text": "pg.evaluate(\"devJump('fort_free')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(1500); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 24,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(500)",
+          "helper": []
+        },
+        {
+          "line": 32,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(180); n+=1",
+          "helper": []
+        },
+        {
+          "line": 39,
+          "text": "pg.keyboard.press('ArrowUp'); pg.wait_for_timeout(200); pg.keyboard.press('Enter'); pg.wait_for_timeout(500)",
+          "helper": []
+        },
+        {
+          "line": 43,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(250)",
+          "helper": []
+        },
+        {
+          "line": 61,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(250)",
+          "helper": []
+        },
+        {
+          "line": 62,
+          "text": "pg.evaluate(\"document.querySelector('#msg')&&closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 64,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(800); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 67,
+          "text": "pg.keyboard.press('ArrowUp'); pg.keyboard.press('Enter'); pg.wait_for_timeout(1500)",
+          "helper": []
+        },
+        {
+          "line": 69,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(700)",
+          "helper": []
+        },
+        {
+          "line": 73,
+          "text": "pg.evaluate(\"document.querySelector('#msg')&&closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 17,
+          "text": "x0=pos(); pg.keyboard.down('ArrowRight'); pg.wait_for_timeout(600); pg.keyboard.up('ArrowRight')",
+          "helper": []
+        },
+        {
+          "line": 26,
+          "text": "x1=pg.evaluate(\"MossForest.snapshot().x\"); pg.keyboard.down('ArrowLeft'); pg.wait_for_timeout(500); pg.keyboard.up('ArrowLeft')",
+          "helper": []
+        },
+        {
+          "line": 50,
+          "text": "pg.keyboard.press('ArrowUp'); pg.keyboard.down('Enter')",
+          "helper": []
+        },
+        {
+          "line": 51,
+          "text": "for _ in range(4): pg.keyboard.down('Enter')",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/input/kb_menu.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.wait_for_timeout(1200); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 29,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300); check(pg.evaluate(\"!!document.querySelector('#doSave')\"),'Enter opens the SAVE tab')",
+          "helper": []
+        },
+        {
+          "line": 32,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300)",
+          "helper": []
+        },
+        {
+          "line": 37,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(600)",
+          "helper": []
+        },
+        {
+          "line": 41,
+          "text": "pg.evaluate(\"devJump('map:dev_monster_arena')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(700); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 49,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(400)",
+          "helper": []
+        },
+        {
+          "line": 59,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300)",
+          "helper": []
+        },
+        {
+          "line": 66,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300)",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 21,
+          "text": "x0=pg.evaluate(\"[MossForest.active?MossForest.snapshot().x:px,px]\"); pg.keyboard.down('ArrowRight'); pg.wait_for_timeout(500); pg.keyboard.up('ArrowRight')",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/input/kb_raider.py",
+      "dialogue": [
+        {
+          "line": 17,
+          "text": "a0=pg.evaluate(\"rbActor\"); pg.keyboard.press('Enter'); pg.wait_for_timeout(500)",
+          "helper": []
+        },
+        {
+          "line": 22,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(300); pg.keyboard.press('Enter')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/input/kb_scene.py",
+      "dialogue": [
+        {
+          "line": 11,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1200); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 22,
+          "text": "t0=txt(); pg.keyboard.press('Enter'); pg.wait_for_timeout(250); t1=txt()",
+          "helper": []
+        },
+        {
+          "line": 34,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(600); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 41,
+          "text": "pg.keyboard.press('Enter'); pg.wait_for_timeout(1500)",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 15,
+          "text": "pg.keyboard.down('ArrowRight'); pg.wait_for_timeout(500); pg.keyboard.up('ArrowRight')",
+          "helper": []
+        },
+        {
+          "line": 24,
+          "text": "pg.keyboard.down('Enter')",
+          "helper": []
+        },
+        {
+          "line": 25,
+          "text": "for _ in range(6): pg.keyboard.down('Enter')",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/lind/walk_intake.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m10_flow.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "ev(\"RildeVillage.startOpening()\"); pg.wait_for_timeout(2000); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 14,
+          "text": "ev(\"RildeVillage.hook({hook:'rilde_fiona'},MossForest)\"); pg.wait_for_timeout(300); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 21,
+          "text": "ev(\"closeDialogue()\"); pg.wait_for_timeout(1500)",
+          "helper": []
+        },
+        {
+          "line": 49,
+          "text": "tev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 53,
+          "text": "check(tev('storyStage')==1 and tev(\"getComputedStyle(document.getElementById('battle')).display\")!='block','the dummy next to the boy is scenery (no training)'); tev('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 58,
+          "text": "d=b.new_page(viewport={'width':1280,'height':720}); dv=d.evaluate; d.goto('http://localhost:8765/index.html'); d.wait_for_timeout(1500); dv(\"devJump('training')\"); d.wait_for_timeout(2500); dv(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 62,
+          "text": "dv(\"closeDialogue();MossForest.teleportFeet(1877,1100)\"); d.wait_for_timeout(300); d.mouse.click(xy['x'],xy['y']); d.wait_for_timeout(200); d.mouse.click(1100,650); d.wait_for_timeout(3000)",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 23,
+          "text": "x0=ev(\"MossForest.feet.x\"); ev(\"MossForest.goFeet(MossForest.feet.x+120,MossForest.feet.y)\"); pg.wait_for_timeout(1800)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m10_rilde.py",
+      "dialogue": [
+        {
+          "line": 27,
+          "text": "ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 36,
+          "text": "ev(\"closeDialogue()\"); ev(\"RildeVillage.hook({hook:'rilde_fiona'},MossForest)\"); pg.wait_for_timeout(400)",
+          "helper": []
+        },
+        {
+          "line": 37,
+          "text": "check(ev('storyStage')==1,'talking to Fiona -> stage 1'); ev('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 40,
+          "text": "ev('storyStage=1'); ev('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m11_dev_lazy.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m11_road_tavern.py",
+      "dialogue": [
+        {
+          "line": 10,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 32,
+          "text": "ev(\"MossForest.goFeet(5520,1800)\")",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m12_attack_ruin.py",
+      "dialogue": [
+        {
+          "line": 10,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 17,
+          "text": "ev(\"closeDialogue()\"); ev(\"(i)=>FieldTalk.talk(i)\",tid); pg.wait_for_timeout(100)",
+          "helper": []
+        },
+        {
+          "line": 20,
+          "text": "ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 23,
+          "text": "ev(\"storyStage=5;attackStep=0;closeDialogue();document.getElementById('attackMother').onclick()\"); pg.wait_for_timeout(200)",
+          "helper": []
+        },
+        {
+          "line": 25,
+          "text": "ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 44,
+          "text": "ev(\"FieldTalk.load(null);storyStage=15\"); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 47,
+          "text": "ev(\"closeDialogue();FieldTalk.setFlag('road_dunvall_open',true);FieldTalk.talk('rr_sign_east')\"); pg.wait_for_timeout(100)",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m13_elder_attack_text.py",
+      "dialogue": [
+        {
+          "line": 10,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2600); pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 18,
+          "text": "ev(\"for(let i=0;i<4;i++){FieldTalk.talk('elder')}\"); check('風が少し重い' in ev(\"document.querySelector('#msg').textContent\"),'peaceful elder cycles to the morning line'); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 24,
+          "text": "ev(\"FieldTalk.talk('rr_elder')\"); check('砦の司令官' in ev(\"document.querySelector('#msg').textContent\"),'elder acknowledges the commander'); ev(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m14_capital_gate.py",
+      "dialogue": [
+        {
+          "line": 13,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 18,
+          "text": "ev(\"([x,y])=>MossForest.goFeet(x,y)\",[cx,cy])",
+          "helper": [
+            "to_gate"
+          ]
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m14_hold_move.py",
+      "dialogue": [
+        {
+          "line": 11,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 19,
+          "text": "pg.dispatch_event('#forestScene','pointerdown',{'clientX':x,'clientY':y,'pointerId':7,'pointerType':'touch','isPrimary':True,'button':0,'bubbles':True})",
+          "helper": [
+            "down"
+          ]
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m15_slime.py",
+      "dialogue": [
+        {
+          "line": 11,
+          "text": "pg.goto('http://localhost:%s/index.html'%PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 43,
+          "text": "ev(\"MossForest.goFeet(1500,3250)\"); pg.wait_for_timeout(5500)",
+          "helper": []
+        },
+        {
+          "line": 45,
+          "text": "ev(\"MossForest.encounters(true)\"); ev(\"MossForest.teleportFeet(1100,3250)\"); pg.wait_for_timeout(4600); ev(\"MossForest.goFeet(1500,3250)\"); pg.wait_for_timeout(5500)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m15b_slime_symbol.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.goto('http://localhost:%s/index.html'%PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 80,
+          "text": "check(ev(\"([x,y])=>MossForest.goFeet(x,y)\",escape['goal']),'escape movement accepted')",
+          "helper": []
+        },
+        {
+          "line": 129,
+          "text": "put(3000-300,5400); pg.wait_for_timeout(800); ev(\"MossForest.goFeet(1800,5500)\"); pg.wait_for_timeout(8000)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m15c_forest_bat.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.goto('http://localhost:%s/index.html'%PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m15d_leafy_boar.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.goto('http://localhost:%s/index.html'%PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 67,
+          "text": "ev(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m16_battle_feel.py",
+      "dialogue": [
+        {
+          "line": 11,
+          "text": "pg.goto('http://localhost:%s/index.html'%PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m17_dev_arena.py",
+      "dialogue": [
+        {
+          "line": 15,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1'%PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m18_moss_scenario.py",
+      "dialogue": [
+        {
+          "line": 10,
+          "text": "pg.goto('http://localhost:8765/index.html?dev=1');pg.wait_for_timeout(2500);pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 49,
+          "text": "ev(\"closeDialogue()\");ev(\"MossForest.teleportFeet(1400,5800)\");pg.wait_for_timeout(300)",
+          "helper": []
+        },
+        {
+          "line": 59,
+          "text": "ev(\"closeDialogue();document.querySelector('#forestScene').style.display='none'\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 50,
+          "text": "ev(\"MossForest.goFeet(1400,5985)\")",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m19_height_proto.py",
+      "dialogue": [
+        {
+          "line": 19,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1' % PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')",
+          "helper": [
+            "run"
+          ]
+        }
+      ],
+      "movement": [
+        {
+          "line": 27,
+          "text": "pg.keyboard.down(key); pg.wait_for_timeout(ms); pg.keyboard.up(key); pg.wait_for_timeout(120)",
+          "helper": [
+            "run",
+            "hold"
+          ]
+        },
+        {
+          "line": 31,
+          "text": "ok = ev(\"MossForest.goFeet(%d,%d)\" % (fx, fy))",
+          "helper": [
+            "run",
+            "tap_to"
+          ]
+        },
+        {
+          "line": 94,
+          "text": "check(ev(\"MossForest.goFeet(1000,660)\") is False, '[%s] tapping the river is refused' % view)",
+          "helper": [
+            "run"
+          ]
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m19_perf.py",
+      "dialogue": [
+        {
+          "line": 19,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1' % PORT); pg.wait_for_timeout(2500); ev('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 26,
+          "text": "ev(\"MossForest.goFeet(%d,%d)\" % path[0]); pg.wait_for_timeout(300)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m19_plan_bench.py",
+      "dialogue": [
+        {
+          "line": 120,
+          "text": "page.evaluate('closeDialogue()')",
+          "helper": [
+            "main"
+          ]
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m20_sword_equipment.py",
+      "dialogue": [
+        {
+          "line": 16,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1'%PORT); pg.wait_for_timeout(1800); ev('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m21_wind_dance.py",
+      "dialogue": [
+        {
+          "line": 13,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1%s'%(PORT,'&feature=windDanceCommand' if flag else '')); pg.wait_for_timeout(1500); ev('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m22_height_contacts.py",
+      "dialogue": [
+        {
+          "line": 11,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1' % PORT); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()'); ev = pg.evaluate",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m23_wind_dance_battle.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1%s'%(PORT,q)); pg.wait_for_timeout(1500); pg.evaluate('closeDialogue()'); return pg",
+          "helper": [
+            "fresh"
+          ]
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m24_height_contacts_e2e.py",
+      "dialogue": [
+        {
+          "line": 36,
+          "text": "page.evaluate(\"\"\"closeDialogue();devResetScreens();storyStage=15;window.__calls={event:0,treasure:0,story:0,moving:0,exit:0};",
+          "helper": [
+            "fresh"
+          ]
+        }
+      ],
+      "movement": [
+        {
+          "line": 65,
+          "text": "assert pg.evaluate('MossForest.goFeet(1560,900)')",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m26_height_spec_overlay.py",
+      "dialogue": [
+        {
+          "line": 17,
+          "text": "pg.goto('http://localhost:%s/index.html?dev=1%s'%(PORT,'&feature=heightSpecs' if flag else '')); pg.wait_for_timeout(1500); ev=pg.evaluate; ev('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m31_aidan_heading.py",
+      "dialogue": [
+        {
+          "line": 20,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function('MossForest.active && !MossForest.busy',timeout=30000); pg.wait_for_timeout(600); pg.evaluate(\"closeDialogue()\"); pg.wait_for_function(\"[...document.querySelectorAll('.forest-aidan')].every(i=>i.complete&&i.naturalWidth>0)\",timeout=30000)",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 33,
+          "text": "for k in keys: pg.keyboard.down(k)",
+          "helper": [
+            "walk"
+          ]
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m32_lou_follower.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.evaluate(\"devJump('map:dev_monster_arena')\"); pg.wait_for_function('MossForest.active && !MossForest.busy',timeout=30000); pg.wait_for_timeout(600); pg.evaluate('closeDialogue()')",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 23,
+          "text": "pg.keyboard.down('ArrowRight'); pg.wait_for_timeout(1200); pg.keyboard.up('ArrowRight'); pg.wait_for_timeout(800)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m33_lou_field_review.py",
+      "dialogue": [
+        {
+          "line": 21,
+          "text": "pg.evaluate(\"closeDialogue();storyStage=15;enterMossForest()\");pg.wait_for_function('MossForest.active',timeout=30000);pg.evaluate('closeDialogue();MossForest.encounters(false);FieldMonsters.removeAll();PartyManager.support.joined=false');pg.wait_for_timeout(250)",
+          "helper": []
+        },
+        {
+          "line": 33,
+          "text": "pg.evaluate(\"MossForest.enter({map:'dev_height_proto',spawn:'deck',level:1})\");pg.wait_for_function(\"MossForest.active && MossForest.mapId==='dev_height_proto'\",timeout=30000);pg.evaluate('closeDialogue();FieldMonsters.removeAll()');pg.wait_for_timeout(1000);g=pg.evaluate(GEOM)",
+          "helper": []
+        },
+        {
+          "line": 39,
+          "text": "pg.evaluate(\"closeDialogue();renderSystemTab('save');saveGrowthData();PartyManager.support.joined=false;loadGrowthData()\");pg.wait_for_timeout(1000)",
+          "helper": []
+        },
+        {
+          "line": 41,
+          "text": "pg.evaluate(\"MossForest.enter({map:'moss_forest_02_mossy_ravine'})\");pg.wait_for_function(\"MossForest.active && MossForest.mapId==='moss_forest_02_mossy_ravine'\",timeout=30000);pg.evaluate(\"closeDialogue();FieldMonsters.removeAll();PartyManager.support.joined=\"+('false' if variant=='hidden' else 'true'));pg.wait_for_timeout(700);pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 45,
+          "text": "pg.evaluate('closeDialogue()');startFeet=pg.evaluate('MossForest.feet');pg.keyboard.down('ArrowRight');perf=pg.evaluate(METER,3);pg.keyboard.up('ArrowRight');endFeet=pg.evaluate('MossForest.feet');perf['displacement']=((endFeet['x']-startFeet['x'])**2+(endFeet['y']-startFeet['y'])**2)**.5",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 45,
+          "text": "pg.evaluate('closeDialogue()');startFeet=pg.evaluate('MossForest.feet');pg.keyboard.down('ArrowRight');perf=pg.evaluate(METER,3);pg.keyboard.up('ArrowRight');endFeet=pg.evaluate('MossForest.feet');perf['displacement']=((endFeet['x']-startFeet['x'])**2+(endFeet['y']-startFeet['y'])**2)**.5",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m4_devjump.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m4_e2e.py",
+      "dialogue": [
+        {
+          "line": 31,
+          "text": "pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 39,
+          "text": "pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 46,
+          "text": "pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 59,
+          "text": "pg.evaluate(\"closeDialogue()\"); pg.evaluate(\"([x,y])=>MossForest.teleportFeet(x,y)\",[3900,3400])",
+          "helper": []
+        },
+        {
+          "line": 66,
+          "text": "pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 10,
+          "text": "const m0=MossForest.mapId;if(!MossForest.goFeet(x,y))return {ok:false,why:'unreachable'};const t0=performance.now();",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m4_npc.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m4_save.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m55_chest.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(600); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 16,
+          "text": "pg.evaluate(\"MossForest.goFeet(%d,%d)\"%(t['x'],t['y']+8)); pg.wait_for_timeout(2500)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m55_cine.py",
+      "dialogue": [
+        {
+          "line": 13,
+          "text": "pg.evaluate(\"PrologueProgress.seed(2,[]);MossForestStory.enterAt('moss_forest_03_ancient_grove',3900,3330,{opened:[],fired:[]})\"); pg.wait_for_function(\"MossForest.active&&MossForest.mapId.includes('03')\",timeout=20000); pg.wait_for_timeout(800); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m55_hz.py",
+      "dialogue": [
+        {
+          "line": 20,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active&&!MossForest.busy\",timeout=60000); pg.wait_for_timeout(800); pg.evaluate(\"closeDialogue()\")",
+          "helper": [
+            "run"
+          ]
+        },
+        {
+          "line": 39,
+          "text": "pg.evaluate(\"([x,y])=>{MossForest.teleportFeet(x,y);closeDialogue()}\",corridor)",
+          "helper": [
+            "run"
+          ]
+        }
+      ],
+      "movement": [
+        {
+          "line": 21,
+          "text": "f0=pg.evaluate(\"MossForest.feet\"); pg.evaluate(\"MossForest.goFeet(%d,%d)\"%(f0['x']+2000,f0['y']-200)); pg.wait_for_timeout(2000)",
+          "helper": [
+            "run"
+          ]
+        },
+        {
+          "line": 41,
+          "text": "pg.keyboard.down('ArrowRight'); pg.wait_for_timeout(1000); pg.keyboard.up('ArrowRight')",
+          "helper": [
+            "run"
+          ]
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m55_mobile.py",
+      "dialogue": [
+        {
+          "line": 14,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(900); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m6_asset_swap.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m6_devui.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m6_inventory.py",
+      "dialogue": [
+        {
+          "line": 12,
+          "text": "pg.evaluate(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(500); pg.evaluate(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 15,
+          "text": "pg.evaluate(\"MossForest.teleportFeet(%d,%d)\"%(t['x'],t['y']+30)); pg.wait_for_timeout(200); pg.evaluate(\"MossForest.goFeet(%d,%d)\"%(t['x'],t['y']+8)); pg.wait_for_timeout(2500)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m6_quest.py",
+      "dialogue": [
+        {
+          "line": 16,
+          "text": "pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 23,
+          "text": "pg.evaluate(\"Quest.reset();FieldTalk.load(null);Inventory.reset();closeDialogue();PrologueProgress.seed(0)\")",
+          "helper": [
+            "reset"
+          ]
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m6_scenario.py",
+      "dialogue": [
+        {
+          "line": 11,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2600); pg.evaluate('closeDialogue()')",
+          "helper": []
+        },
+        {
+          "line": 17,
+          "text": "def reset(): pg.evaluate(\"Quest.reset();FieldTalk.load(null);Inventory.reset();closeDialogue();PrologueProgress.seed(0)\")",
+          "helper": [
+            "reset"
+          ]
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m6_talk.py",
+      "dialogue": [
+        {
+          "line": 20,
+          "text": "pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(2500); pg.evaluate('closeDialogue()')   # the opening line appears ~1.1s after load",
+          "helper": []
+        },
+        {
+          "line": 45,
+          "text": "pg.evaluate(\"FieldTalk.load(null);Inventory.reset()\"); pg.evaluate(\"FieldTalk.talk('t_guide')\"); pg.keyboard.press('Enter'); check(name()=='エイダン','Enter advances a page'); pg.keyboard.press('Enter'); check(not shown(),'Enter closes')",
+          "helper": []
+        },
+        {
+          "line": 47,
+          "text": "pg.keyboard.press('2'); check('また今度' in msgtxt(),'key 2 selects いいえ'); pg.keyboard.press('Enter')",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m7_choreo.py",
+      "dialogue": [],
+      "movement": [
+        {
+          "line": 61,
+          "text": "ev(\"MossForest.goFeet(2400,1700)\"); pg.wait_for_timeout(2500)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m7_cliff.py",
+      "dialogue": [
+        {
+          "line": 16,
+          "text": "ev(\"storyStage=3;closeDialogue()\"); pg.evaluate(\"document.querySelector('#hillExit').click()\"); pg.wait_for_timeout(1500)",
+          "helper": []
+        },
+        {
+          "line": 65,
+          "text": "ev(\"closeDialogue();forestActive=true;document.querySelector('#forestScene').style.display='block'\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 20,
+          "text": "check(ev(\"MossForest.goFeet(2400,1500)\"),'a route exists from the entrance to the summit meadow (spiral + ramp)')",
+          "helper": []
+        },
+        {
+          "line": 76,
+          "text": "ev(\"MossForest.teleportFeet(160,3658)\"); pg.wait_for_timeout(200); ev(\"MossForest.goFeet(10,3658)\"); pg.wait_for_timeout(2500)",
+          "helper": []
+        },
+        {
+          "line": 79,
+          "text": "ev(\"MossForest.teleportFeet(160,3658)\"); pg.wait_for_timeout(200); ev(\"MossForest.goFeet(10,3658)\"); pg.wait_for_timeout(2500)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m7_prop_swap.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/m8_town_maps.py",
+      "dialogue": [],
+      "movement": [
+        {
+          "line": 39,
+          "text": "sh=z['shape']; ok=ev(\"([x,y])=>{const a=MossForest.goFeet(x,y+40);return a}\",[sh['cx'],sh['cy']])",
+          "helper": []
+        },
+        {
+          "line": 47,
+          "text": "ev(\"([x,y])=>MossForest.goFeet(x,y)\",[cx,cy]);",
+          "helper": [
+            "walk_to"
+          ]
+        },
+        {
+          "line": 93,
+          "text": "ev(\"([x,y])=>MossForest.goFeet(x,y)\",[t['x']+t['w']/2,t['y']+t['h']/2]); pg.wait_for_timeout(9000)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m9_env.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m9_hero.py",
+      "dialogue": [
+        {
+          "line": 26,
+          "text": "ev(\"devJump('forest')\"); pg.wait_for_function(\"MossForest.active\",timeout=20000); pg.wait_for_timeout(1500); ev(\"closeDialogue()\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 30,
+          "text": "f0=ev(\"MossForest.feet\"); ev(\"MossForest.goFeet(%d,%d)\"%(f0['x']+500,f0['y']))",
+          "helper": []
+        },
+        {
+          "line": 35,
+          "text": "ev(\"MossForest.goFeet(%d,%d)\"%(f0['x']+500,f0['y']+300))",
+          "helper": []
+        },
+        {
+          "line": 41,
+          "text": "ev(\"MossForest.goFeet(%d,%d)\"%(f0['x']+900,f0['y']+300)); pg.wait_for_timeout(500)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": true
+    },
+    {
+      "test": "tests/moss/m9_hero_intake.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/seal_a3.py",
+      "dialogue": [],
+      "movement": [
+        {
+          "line": 9,
+          "text": "GO=\"\"\"async ([x,y])=>{const sleep=ms=>new Promise(r=>setTimeout(r,ms));ForestDev.goFeet(x,y);",
+          "helper": []
+        },
+        {
+          "line": 36,
+          "text": "tp(3910,3300); pg.evaluate(\"ForestDev.goFeet(3910,3200)\"); pg.wait_for_timeout(1500)",
+          "helper": []
+        },
+        {
+          "line": 58,
+          "text": "pg.evaluate(\"ForestDev.setFlag('moss_a3_seal_open',false)\"); tp(3910,3300); pg.evaluate(\"ForestDev.goFeet(3910,3200)\"); pg.wait_for_timeout(1500)",
+          "helper": []
+        }
+      ],
+      "devHarness": true,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/walk_a1.py",
+      "dialogue": [],
+      "movement": [
+        {
+          "line": 15,
+          "text": "ForestDev.goFeet(x,y+0); if(!ForestDev.target){out.push(['unreachable',x,y]);continue;}",
+          "helper": []
+        }
+      ],
+      "devHarness": true,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/moss/walk_map.py",
+      "dialogue": [],
+      "movement": [
+        {
+          "line": 17,
+          "text": "res=pg.evaluate(\"\"\"async ([x,y])=>{const sleep=ms=>new Promise(r=>setTimeout(r,ms));ForestDev.goFeet(x,y);",
+          "helper": []
+        }
+      ],
+      "devHarness": true,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/run_python.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/system/capital_story_test.py",
+      "dialogue": [
+        {
+          "line": 28,
+          "text": "ev(\"storyStage=3;closeDialogue()\"); ev(\"document.querySelector('#roadExit').click()\"); check(not ev(\"forestActive\") and '離れる時ではない' in text(),'stage 3: the east road sign refuses')",
+          "helper": []
+        },
+        {
+          "line": 29,
+          "text": "ev(\"storyStage=15;closeDialogue()\"); ev(\"document.querySelector('#roadExit').click()\"); check(not ev(\"forestActive\") and '長老' in text(),'stage 15 without the elder\\'s word: still closed, hints at the elder')",
+          "helper": []
+        },
+        {
+          "line": 30,
+          "text": "ev(\"closeDialogue()\"); ev(\"FieldTalk.talk('elder',{source:'test'})\"); tap_all(); check(ev(\"FieldTalk.flag('road_dunvall_open')\"),'talking to the elder opens the road (flag)')",
+          "helper": []
+        },
+        {
+          "line": 31,
+          "text": "ev(\"closeDialogue()\"); ev(\"document.querySelector('#roadExit').click()\"); pg.wait_for_timeout(1800)",
+          "helper": []
+        },
+        {
+          "line": 35,
+          "text": "tap_all(); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 47,
+          "text": "ev(\"Shop.close();closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 50,
+          "text": "pg.click('.talkChoices button >> nth=0'); pg.wait_for_timeout(200); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 54,
+          "text": "ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 61,
+          "text": "pg.click('.talkChoices button >> nth=0'); pg.wait_for_timeout(200); ev(\"closeDialogue()\")",
+          "helper": []
+        },
+        {
+          "line": 70,
+          "text": "ev(\"closeDialogue();FieldTalk.talk('r3_elder_quest',{source:'test'})\"); tap_all()",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/system/equipment_test.py",
+      "dialogue": [],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/system/equipment_ui_flow_test.py",
+      "dialogue": [
+        {
+          "line": 28,
+          "text": "ev(\"closeDialogue();storyStage=3\"); ev(\"document.querySelector('#hillExit').click()\"); pg.wait_for_timeout(1500)",
+          "helper": []
+        },
+        {
+          "line": 59,
+          "text": "pg.focus('[data-eq-on=\"emma_charm\"]'); pg.keyboard.press('Enter'); pg.wait_for_timeout(100)",
+          "helper": []
+        }
+      ],
+      "movement": [],
+      "devHarness": false,
+      "indirectClose": false
+    },
+    {
+      "test": "tests/system/shop_flow_test.py",
+      "dialogue": [
+        {
+          "line": 17,
+          "text": "ev(\"closeDialogue();FieldTalk.talk('merchant',{source:'test'})\"); check('冒険の準備' in pg.inner_text('#msg') and pg.locator('.talkChoices').count()==0,'stage 3: merchant only chats (no shop choice)')",
+          "helper": []
+        },
+        {
+          "line": 18,
+          "text": "ev(\"closeDialogue();FieldTalk.load(null)\")",
+          "helper": []
+        },
+        {
+          "line": 20,
+          "text": "ev(\"storyStage=15;closeDialogue()\"); ev(\"FieldTalk.talk('merchant',{source:'test'})\")",
+          "helper": []
+        }
+      ],
+      "movement": [
+        {
+          "line": 58,
+          "text": "check(not pg.evaluate(\"([x,y])=>MossForest.blocked(x,y)\",[t['x'],t['y']+30]) and pg.evaluate(\"([x,y])=>MossForest.goFeet(x,y+30)\",[t['x'],t['y']]),'%s: chest ground is free and a route exists'%tid)",
+          "helper": []
+        }
+      ],
+      "devHarness": false,
+      "indirectClose": false
+    }
+  ]
+}
