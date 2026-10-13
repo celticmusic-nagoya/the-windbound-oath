@@ -1,0 +1,288 @@
+{
+  "base": "31a5f5e",
+  "rows": [
+    {
+      "name": "Q opens journal",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "journal Tab stays within menu",
+      "ok": true,
+      "detail": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "rilde_general held Enter purchases exactly once",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "rilde_general held Space purchases exactly once",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "rilde_general Tab remains in shop",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "rilde_general Escape closes shop",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "dunvall_arms held Enter purchases exactly once",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "dunvall_arms held Space purchases exactly once",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "dunvall_arms Tab remains in shop",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "dunvall_arms Escape closes shop",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "input typing does not trigger shortcuts",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "textarea typing does not trigger shortcuts",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "legacy inn keeper is keyboard-reachable",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "#inside .furn Enter clicks nearest object",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "#world .door Enter clicks nearest object",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "#world .npc Enter clicks nearest object",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "cinema held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "returnScene held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "escapeScene held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "louIntroScene held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "altarScene held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "aftermathScene held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "fortScene held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "prologueEnd held Enter dispatches exactly once",
+      "ok": true,
+      "detail": [
+        "SCENE",
+        1
+      ]
+    },
+    {
+      "name": "held Enter saves exactly once",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "blur key release leaves no movement",
+      "ok": true,
+      "detail": [
+        2038,
+        2038
+      ]
+    },
+    {
+      "name": "menu key release leaves no movement",
+      "ok": true,
+      "detail": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "scene key release leaves no movement",
+      "ok": true,
+      "detail": [
+        2003,
+        2003
+      ]
+    },
+    {
+      "name": "battle key release leaves no movement",
+      "ok": true,
+      "detail": [
+        2003,
+        2003
+      ]
+    },
+    {
+      "name": "same-frame non-repeat Enter scene advances once",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "scene Space prevents browser default scrolling",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "confirm during map fade does not start encounter/dialogue",
+      "ok": true,
+      "detail": "FIELD"
+    },
+    {
+      "name": "held Enter opens exactly one chest",
+      "ok": true,
+      "detail": [
+        {
+          "p": 4,
+          "e": 2,
+          "g": 0,
+          "opened": 0
+        },
+        {
+          "p": 4,
+          "e": 3,
+          "g": 0,
+          "opened": 1
+        }
+      ]
+    },
+    {
+      "name": "battle Tab stays within COMMAND",
+      "ok": true,
+      "detail": "BATTLE_COMMAND"
+    },
+    {
+      "name": "held Enter battle confirmation queues at most one action",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "held Enter queues one item action",
+      "ok": true,
+      "detail": [
+        {
+          "who": "aidan",
+          "kind": "item",
+          "item": "potion",
+          "target": "aidan"
+        }
+      ]
+    },
+    {
+      "name": "held Enter consumes one potion",
+      "ok": true,
+      "detail": 4
+    },
+    {
+      "name": "(390, 844) touch COMMAND starts collapsed",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) tap opens COMMAND",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) touch COMMAND starts collapsed",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) tap opens COMMAND",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "page errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}
