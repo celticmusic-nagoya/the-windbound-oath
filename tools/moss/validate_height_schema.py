@@ -43,6 +43,15 @@ def self_test():
   assert validate(m,s),f'invalid level accepted: {n!r}'
  for n in [0,1]:m['spawns']['points']['x']['level']=n;assert not validate(m,s)
  print('ok   negative/float/bool/string/unknown spawn levels rejected; 0/1 accepted')
+ fixture={'id':'height_schema_fixture','world':{'width':320,'height':320},'spawns':{'default':'entry','points':{'entry':{'x':40,'y':80,'level':0},'upper':{'x':240,'y':240,'level':1}}}}
+ floor={'levelHeight':56,'levels':{'1':{'walk':[[200,200,80,80]]}},'connectors':[]}
+ def physical():
+  result=json.loads(subprocess.check_output(['node','-e',JS,str(ROOT)],input=json.dumps([{'map':fixture,'spec':floor,'file':'self-test fixture'}]),text=True,timeout=30))[0]
+  return next(c for c in result['checks']if c['name']=='upper'and c['kind']=='spawn_reachable')['ok']
+ assert not physical(),'isolated upper spawn incorrectly reachable'
+ floor['connectors']=[{'id':'stairs','rect':[140,220,100,60],'axis':'x','fromEnd':'min','from':0,'to':1}]
+ assert physical(),'connected upper spawn incorrectly unreachable'
+ print('ok   actual engine rejects isolated upper spawn and accepts connected stairs')
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path);p.add_argument('--self-test',action='store_true');a=p.parse_args()
  if a.self_test:self_test();return
