@@ -13,4 +13,5 @@ for p in sorted((ROOT/'tests').rglob('*.py')):
             if re.search(token,line):out.append(dict(line=i,text=line.strip(),helper=[name for lo,hi,name in scopes if lo<=i<=hi]))
         return out
     rows.append(dict(test=str(p.relative_to(ROOT)),dialogue=evidence(r'closeDialogue|keyboard.press\([\"\']Enter'),movement=evidence(r'keyboard.down|\.goFeet\(|pointerdown|mouse.down'),devHarness='dev/moss-forest.html' in s,indirectClose='enterWorldMap(' in s or 'devJump(' in s))
-print(json.dumps(dict(note='Static candidates, not execution order/proof. Helper definitions must be reviewed; indirect DEV reset is not guaranteed close.',files=len(rows),rows=rows),ensure_ascii=False,indent=2))
+jsrows=[dict(test=str(p.relative_to(ROOT)),browserPreludeCandidates=[dict(line=i,text=l.strip()) for i,l in enumerate(p.read_text().splitlines(),1) if re.search(r'KeyboardEvent|keyboard\.|closeDialogue|page\.goto|pg\.goto',l)]) for p in sorted((ROOT/'tests').rglob('*.js'))]
+print(json.dumps(dict(javascript=jsrows,note='Static candidates, not execution order/proof. Helper definitions must be reviewed; indirect DEV reset is not guaranteed close.',files=len(rows),rows=rows),ensure_ascii=False,indent=2))

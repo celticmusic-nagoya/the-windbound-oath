@@ -94,3 +94,5 @@ HH完了: lou-field-review-20261013.md、m33、新規縮小tool/6画像/計測JS
 II完了: lou-idle-real-flow-20261013.md / 新規test / 250ms全時系列 / 2画像を納品。祭壇の最後から自然に戦闘開始し初回入力〜敵ターン〜被弾を確認、reduce両条件9/9合格。実Androidでの停止は未再現/未測定。次JJ: m31安定化・20連続、全testの会話前置きを調査。必要に応じm32等testsのみ担当。KK未着手。
 
 JJ進行checkpoint: m31修正前3/3・m32修正前1/1・m6_inventory修正前1/1合格（この小標本で元の間欠失敗は未再現）。m31の固定待機を描画IDLE相当+位置/コマ安定の状態待機へ置換し、修正後20連続を直列実行中。m6_inventoryとm32の会話前置きを補強。全Pythonテストを静的走査し補助関数/DEV harness/間接closeを区別。ゲームは未編集。KK未着手。再開はafter.jsonの完了数を確認し、途切れたら20連続は最初から実行。
+
+JJ追加checkpoint: 中間版の初期マップready誤認をTRACEで特定し、A1 map IDを条件に追加。修正後20連続は最初からやり直し中（旧失敗ログを保管）。test-stability-20261013.mdに原因/走査判断を共有。KKでは新規 tools/qa/measure_command_mobile.py を担当し、alpha pixel/パネル重なりと44pxの判断資料だけを作る。

@@ -11,13 +11,13 @@ def check(c,m):
 with server(8822) as base, sync_playwright() as p:
     b=p.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE','/usr/bin/chromium')); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto(base+'/index.html'); pg.wait_for_function('window.AidanHeading && window.MossForest')
+    pg.goto(base+'/index.html'); pg.wait_for_function('window.AidanHeading && window.MossForest && MossForest.active && !MossForest.busy',timeout=30000)
     r=pg.evaluate("""(()=>{const run=(dx,dy,n=10)=>{const h=AidanHeading.create();let r;for(let i=0;i<n;i++)r=h.step(dx,dy);return r.dir+(r.flip?'F':'')};
       return {down:run(0,2),up:run(0,-2),right:run(2,0),left:run(-2,0),dr:run(2,2),dl:run(-2,2),ur:run(2,-2),ul:run(-2,-2),steep:run(.5,2),shallow:run(2,.5)}})()""")
     check(r=={'down':'down','up':'up','right':'right','left':'left','dr':'dlF','dl':'dl','ur':'ulF','ul':'ul','steep':'down','shallow':'right'},'heading classes %s'%r)
     jit=pg.evaluate("""(()=>{const h=AidanHeading.create();const seq=[];for(let i=0;i<40;i++){const r=h.step(i%2?2.6:2.4,2.5);seq.push(r.dir)}return new Set(seq.slice(5)).size})()""")
     check(jit==1,'jitter around 45deg does not flicker between sets (%s)'%jit)
-    pg.evaluate("devJump('forest')"); pg.wait_for_function('MossForest.active && !MossForest.busy',timeout=30000); pg.wait_for_timeout(600); pg.evaluate("closeDialogue()"); pg.wait_for_function("[...document.querySelectorAll('.forest-aidan')].every(i=>i.complete&&i.naturalWidth>0)",timeout=30000)
+    pg.evaluate("devJump('forest')"); pg.wait_for_function("MossForest.active && !MossForest.busy && MossForest.mapId==='moss_forest_01_sunlit_path'",timeout=30000); pg.wait_for_timeout(600); pg.evaluate("closeDialogue()"); pg.wait_for_function("[...document.querySelectorAll('.forest-aidan')].every(i=>i.complete&&i.naturalWidth>0)",timeout=30000)
     pg.evaluate("MossForest.encounters(false)")
     # Runtime spr.state is private. IDLE has no bob/mirror transform; require that
     # renderer condition AND unchanged feet/frame across >=160ms (runtime settles at110ms).
