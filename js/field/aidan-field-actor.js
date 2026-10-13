@@ -6,7 +6,7 @@
   const assets = window.AidanFieldAssets;
   const images = new Map();
   let active = false, enabled = true, player = null, button = null, raf = null;
-  let previous = null, direction = 'down', state = 'IDLE', phase = 0;
+  let previous = null, flip = false, straight = false, head = window.AidanHeading ? AidanHeading.create() : null, direction = 'down', state = 'IDLE', phase = 0;
   let walkingSince = 0, lastMoved = 0, visible = null, loaded = false, loading = null;
   function mount(root, controls) {
     player = root;
@@ -30,11 +30,12 @@
     controls.insertBefore(display, document.getElementById('lindWindToggle')); apply();
   }
   function render() {
-    const name = 'aidan_'+(state==='WALK'?'walk_'+direction+'_'+String(phase+1).padStart(2,'0'):'idle_'+direction);
+    const name = 'aidan_'+(state==='WALK'?'walk_'+direction+'_'+String(phase+1).padStart(2,'0'):(straight&&(direction==='down'||direction==='up')?'walk_'+direction+'_01':'idle_'+direction));
     if (visible !== name) {
       if (visible) images.get(visible).hidden = true;
       images.get(name).hidden = !(active && enabled && loaded); visible = name;
     } else images.get(name).hidden = !(active && enabled && loaded);
+    images.get(name).style.transform = state==='WALK' && flip ? 'scaleX(-1)' : '';
     player.dataset.fieldState = state; player.dataset.fieldDirection = direction;
     player.dataset.fieldFrame = name;
   }
@@ -51,11 +52,11 @@
     // Focus/review jumps are not movement animation. Only real small steps
     // choose facing; blocked movement naturally settles into matching IDLE.
     if (distance>.01 && distance<=23) {
-      const next = Math.abs(dx)>=Math.abs(dy) ? (dx>0?'right':'left') : (dy>0?'down':'up');
+      let next; if (head) {const h=head.step(dx,dy); next=h.dir; flip=h.flip;} else next = Math.abs(dx)>=Math.abs(dy) ? (dx>0?'right':'left') : (dy>0?'down':'up');
       if (state!=='WALK' || direction!==next) {walkingSince=now;phase=0;}
-      direction=next; state='WALK'; lastMoved=now;
-    } else if (distance>23 || now-lastMoved>110) {state='IDLE';phase=0;}
-    if (state==='WALK') phase=Math.floor((now-walkingSince)/100)%4;
+      direction=next; state='WALK'; straight=false; lastMoved=now;
+    } else if (distance>23 || now-lastMoved>110) {if(state==='WALK')straight=direction==='down'||direction==='up';state='IDLE';phase=0;flip=false;if(head){head.reset();direction=head.idleDir(direction);}}
+    if (state==='WALK') {let n=0; while (images.has('aidan_walk_'+direction+'_'+String(n+1).padStart(2,'0'))) n++; phase=Math.floor((now-walkingSince)/100)%(n||4);}
     previous={x:px,y:py}; render(); raf=requestAnimationFrame(update);
   }
   function setActive(value) {
