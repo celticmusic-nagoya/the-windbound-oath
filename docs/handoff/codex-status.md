@@ -85,3 +85,4 @@ T追加検証: main160bead（battleエンジン不変）で8件再実行、結�
 V進行中: main160bead + 変更無しO runnerをcommitした独立work/codex-v-source。port8791/timeout600、git archive固定snapshot、全件直列。出力docs/qa/full-regression-20261013/、/tmp/v-full.log。テスト中にsource branch/ファイルを変更しない。新規失敗を即時報告し切り分ける。W〜Z未着手（出典調査は待機中に可）。停止時はrunner完了/中断状況とresults.jsonの未実施数を確認して再開。
 
 V完了: main160bead/source313b25a全62本、60合格/main既存2/新規0/未実施0、exit1。全test SHA不変・server終了。docs/qa/full-regression-20261013.mdと全証跡。W着手: stale-tests-fix.patch/説明/未適用の2test案を担当、元tests/js不変。次X→Y→Z。
+V追加再実行: 区切りfetchでmain230a29c（altar短縮/walker階層/static lift）が入り、m24もmainに追加された。160beadの全62結果は保存済み。work/codex-v-latestで230a29c+変更無しO runnerを固定し全63本を直列で再実行。/tmp/v-latest.log、docs/qa/full-regression-latest-20261013/。Wは担当宣言/出典確認まで、V再実行後にpatchを作る。元worktree/各source branchをテスト中に切り替えない。
