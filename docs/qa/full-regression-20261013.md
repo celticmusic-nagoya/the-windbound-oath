@@ -11,3 +11,9 @@
 変更: 本報告、full-regression-20261013/証跡、status/CLAIMS。O runnerは56f6050版を変更せず利用（source branch313b25aへ保存/push済み）。ゲーム/マップ/既存tests未変更。STATUS READY。
 
 次: Wで台詞2件の未適用patchと検証を提示。main統合はClaude、Codexのmain更新なしでロールバック不要。
+
+## 新main230a29cでの全件再実行
+
+Claudeのaltar短縮/walker/static lift mergeを受け、新規独立source `43b749f50b27f5c95fa1374efae58b4cac22bde8` （230a29c + unchanged O runner）から全63本を再実行。**61合格 / main既存2 / 新規0 / 未実施0**。前後SHA不変・owned server終了を全63件で確認。m24もFAILS0/console0、縦横の上階宝箱tapが合格。
+
+最新runの全件表/JSON/生ログ: [full-regression-latest-20261013/results.md](full-regression-latest-20261013/results.md)。160bead結果は比較として保持。branch work/codex-v-latest のsourceはpush済み。基準をテスト中に変更していない。旧台詞2件はWの提案へ。Androidは未測定。

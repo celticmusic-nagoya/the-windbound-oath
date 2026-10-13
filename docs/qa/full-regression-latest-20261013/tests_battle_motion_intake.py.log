@@ -1,0 +1,12 @@
+ok   wrong canvas size is rejected
+ok   dry-run validates and writes nothing
+ok   install: warn  aidan attack 04: visible pixels touch the canvas edge (cropped?)
+ok   over-long total warns against the 820 ms budget
+ok   runtime picked the manifest up
+ok   info: {'frames': 6, 'totalMs': 640, 'hitFrame': 4, 'hitAtMs': 300}
+ok   frames play in order ['1', '2', '3', '4', '5', '6']
+ok   hit event on frame 4 at ~300 ms: [{'actor': 'aidan', 'state': 'attack', 'frame': 4, 'at': 302}]
+ok   returns to the idle still after the state duration
+ok   a state without frames keeps the still image
+ok   unknown variant falls back to the base motion
+ok   0 console errors []
