@@ -80,3 +80,4 @@ R完了: m22合格、height無しm14/m55/m6の3/3合格。実browserでplayer1/�
 T〜Z着手: work/codex-tz / main49660b7。元worktreeはwork/codex-wind-dance-sim2のまま保持。独立clone /workspace/codex-tzで作業し、テスト期間にbranch/ソース変更を行わない。担当: 指定T bench/報告、U m24、V全回帰証跡、W未適用patch、X protocol、Y m25、Z spawn監査。js/マップ/採用素材は未編集。T→U→V→W→X→Y→Z、区切りpush。
 
 T完了: 正規engine8条件/固定seed、通常全勝・Raider全巻き戻し。実cast/魔弾命中/入力回数を分離、console0。tools/sim/engine_wind_dance_bench.pyと報告/JSONを納品。未決数値/ゲームコード未編集。次U。
+U完了: m24/helperと前後証跡。49660b7の5失敗→160beadの2失敗（上階宝箱の縦横視覚tapのみ）。動く敵/ground NPC goal/遅延中階変更は修正後合格。コード/マップ未編集、失敗exit1。次V、最新mainの独立snapshotで全回帰。元worktreeは保持。
