@@ -1,0 +1,105 @@
+{
+  "checks": [
+    {
+      "check": "height=True: two real walkers mounted",
+      "pass": true
+    },
+    {
+      "check": "height=True player=0 walker=0: same plane pauses",
+      "pass": true
+    },
+    {
+      "check": "height=True walker=0: declared level retained",
+      "pass": true
+    },
+    {
+      "check": "height=True player=0 walker=1: other plane continues",
+      "pass": true
+    },
+    {
+      "check": "height=True walker=1: declared level retained",
+      "pass": true
+    },
+    {
+      "check": "height=True player=0: home-zone hook only on eligible plane, once",
+      "pass": true
+    },
+    {
+      "check": "height=True: selected home matches walker plane and original home",
+      "pass": true
+    },
+    {
+      "check": "height=True player=1 walker=0: other plane continues",
+      "pass": true
+    },
+    {
+      "check": "height=True walker=0: declared level retained",
+      "pass": true
+    },
+    {
+      "check": "height=True player=1 walker=1: same plane pauses",
+      "pass": true
+    },
+    {
+      "check": "height=True walker=1: declared level retained",
+      "pass": true
+    },
+    {
+      "check": "height=True player=1: home-zone hook only on eligible plane, once",
+      "pass": true
+    },
+    {
+      "check": "height=True: selected home matches walker plane and original home",
+      "pass": true
+    },
+    {
+      "check": "height=True: both walk away from player (positive control)",
+      "pass": true
+    },
+    {
+      "check": "height=False: two real walkers mounted",
+      "pass": true
+    },
+    {
+      "check": "height=False player=0 walker=0: same plane pauses",
+      "pass": true
+    },
+    {
+      "check": "height=False player=0 walker=1: same plane pauses",
+      "pass": true
+    },
+    {
+      "check": "height=False player=0: home-zone hook only on eligible plane, once",
+      "pass": true
+    },
+    {
+      "check": "height=False: selected home matches walker plane and original home",
+      "pass": true
+    },
+    {
+      "check": "height=False player=1 walker=0: same plane pauses",
+      "pass": true
+    },
+    {
+      "check": "height=False player=1 walker=1: same plane pauses",
+      "pass": true
+    },
+    {
+      "check": "height=False player=1: home-zone hook only on eligible plane, once",
+      "pass": true
+    },
+    {
+      "check": "height=False: selected home matches walker plane and original home",
+      "pass": true
+    },
+    {
+      "check": "height=False: both walk away from player (positive control)",
+      "pass": true
+    },
+    {
+      "check": "console/page errors0 []",
+      "pass": true
+    }
+  ],
+  "errors": []
+}
