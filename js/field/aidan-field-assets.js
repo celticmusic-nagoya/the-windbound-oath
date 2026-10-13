@@ -4,13 +4,13 @@
   if (!window.WINDBOUND_DEV) return;
   const frames = {
  "aidan_idle_down": {
-  "path": "img/field/characters/aidan/aidan_idle_down.png?v=0af6b2e7",
+  "path": "img/field/characters/aidan/aidan_idle_down.png?v=17a2157e",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   733,
+   550,
    126,
-   738,
+   830,
    1104
   ],
   "anchor": [
