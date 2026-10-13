@@ -60,7 +60,7 @@
       if(spr.state==='WALK'){const n=walkCount(spr.frames,'aidan_',artOf(spr.dir,spr.flip).dir);spr.phase=Math.floor((spr.dist||0)/(STRIDE_CYCLE/n))%n;}   // foot cadence follows the distance walked (no skating at any speed)
     }
     spr.px=S.x;spr.py=S.y;
-    const ART=artOf(spr.dir,spr.flip),name='aidan_'+(spr.state==='WALK'?'walk_'+ART.dir+'_'+String(spr.phase+1).padStart(2,'0'):(spr.straight&&(spr.dir==='down'||spr.dir==='up')?'walk_'+spr.dir+'_01':'idle_'+spr.dir));   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
+    const ART=artOf(spr.dir,spr.flip),name='aidan_'+(spr.state==='WALK'?'walk_'+ART.dir+'_'+String(spr.phase+1).padStart(2,'0'):(spr.straight&&spr.dir==='up'?'walk_up_01':'idle_'+spr.dir));   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
     if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
     else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
     if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((spr.dist||0)/(STRIDE_CYCLE/2)*Math.PI))*1.5).toFixed(2)+'px)':'')+(spr.state==='WALK'&&ART.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames

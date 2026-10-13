@@ -31,7 +31,7 @@
   }
   function render() {
     const art = window.AidanHeading&&AidanHeading.art ? AidanHeading.art(direction,flip) : {dir:direction,flip};
-    const name = 'aidan_'+(state==='WALK'?'walk_'+art.dir+'_'+String(phase+1).padStart(2,'0'):(straight&&(direction==='down'||direction==='up')?'walk_'+direction+'_01':'idle_'+direction));
+    const name = 'aidan_'+(state==='WALK'?'walk_'+art.dir+'_'+String(phase+1).padStart(2,'0'):(straight&&direction==='up'?'walk_'+direction+'_01':'idle_'+direction));
     if (visible !== name) {
       if (visible) images.get(visible).hidden = true;
       images.get(name).hidden = !(active && enabled && loaded); visible = name;
