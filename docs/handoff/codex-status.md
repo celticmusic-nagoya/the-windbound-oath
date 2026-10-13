@@ -89,3 +89,4 @@ V追加再実行: 区切りfetchでmain230a29c（altar短縮/walker階層/static
 
 V最新版完了: main230a29c全63=61合格/既存2/新規0/未実施0、Uも全合格。全SHA不変/server終了確認。W着手（巡回3→4、到着page1/7を確認する未適用patchのみ）。利用枠の解除状態は読めないが、現在作業可能。
 W完了: Claude8155fddの採用済み差分を参考patchとして保存、再適用不要。main d153d06でm13/m4/m22/m23/m26の5/5合格、旧2失敗解消。V全件は230a29c、d153全件とは区別。X着手: android-perf-protocol.md/既存meter UI確認だけ。Y→Z、追加AA受領（Z後着手）。js/マップ未編集。
+X納品: android-perf-protocol.md、PC機能確認（縦横表示/実60秒JSON/clipboard同値/console0）。Android未測定。js/prologue-dev.jsがDEV一覧を再生成しheight proto項目が無いため、スマホ単独の高さ起動はBLOCKED。X指示の新規実装は提案のみを守り、導線追加案を記載。ゲーム未編集。Y着手: m25_walkers_level.py/報告、Z後AA。
