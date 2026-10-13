@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """DD: production engine, browser-only parameter fixtures, serial seeded policies."""
-import argparse,itertools,json,os,subprocess,sys,time
+import argparse,base64,itertools,json,os,subprocess,sys,time
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT))
@@ -10,7 +10,7 @@ DATA=(ROOT/'js/data/support-magic-data.js').read_text()
 def run(page,base,battle,policy,regen,eva,cost,seed):
  fixture=DATA.replace('amount: 0.15','amount: '+str(eva/100)).replace('mp: 10','mp: '+str(cost)).replace('amount: 3, provisional','amount: '+str(regen)+', provisional')
  page.route('**/js/data/support-magic-data.js*',lambda r:r.fulfill(status=200,content_type='application/javascript',body=fixture))
- page.goto(base+'/index.html?dev=1&feature=windDanceCommand&boltMana=hit');page.wait_for_function('window.PrologueCombat && window.WindDance')
+ page.goto(base+'/index.html?dev=1&feature=windDanceCommand&boltMana=hit',wait_until='domcontentloaded');page.wait_for_function('window.PrologueCombat && window.WindDance')
  assert page.evaluate('([r,e,c])=>SupportMagicData.fiona_bolt_mana.amount===r&&SupportMagicData.wind_dance.effect.amount===e/100&&SupportMagicData.wind_dance.mp===c',[regen,eva,cost]), 'parameter fixture was not applied'
  page.evaluate('closeDialogue();PrologueProgress.seed(3);WindDance.learn();BattleCutinManager.setMode("OFF")');page.clock.install();page.evaluate(INIT,seed)
  page.evaluate("b=>{window.__benchBattle=b;if(b==='normal')startAttackBattle('fieldGob1',100);else startRaiderBattle()}",battle);page.clock.fast_forward(2000)
@@ -39,13 +39,17 @@ def run(page,base,battle,policy,regen,eva,cost,seed):
  return dict(battle=battle,policy=policy,regen=regen,evasion_points=eva,cost=cost,seed=seed,outcome=outcome,rounds=len(trace),damage=q['damage'],dodges=q['dodges'],recoveries=q['normal_recoveries'],end_mp=q['terminal']['mp']if q['terminal']else mp,clean_victory=outcome=='victory'and q['normal_recoveries']==0,trace=trace)
 def main():
  a=argparse.ArgumentParser(description=__doc__);a.add_argument('--seeds',type=int,default=8);a.add_argument('--out',type=Path,required=True);a.add_argument('--smoke',action='store_true');args=a.parse_args();rows=[];errors=[]
+ if args.out.exists():
+  prev=json.loads(args.out.read_text());rows=prev['results'];errors=prev['errors']
+ done={(r['battle'],r['policy'],r['regen'],r['evasion_points'],r['cost'],r['seed'])for r in rows}
  combos=list(itertools.product(('normal','raider'),('attack','heal','dance','mixed'),(0,3,4),(10,15,20),(8,10,12)))
  if args.smoke:combos=[('normal','mixed',3,15,10),('raider','mixed',3,15,10)]
  with server(8799) as base,sync_playwright() as p:
   b=p.chromium.launch(executable_path=os.environ.get('PW_CHROMIUM_EXECUTABLE')or None)
   for i,c in enumerate(combos):
    for seed in range(20261013,20261013+args.seeds):
-    pg=b.new_page();pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('console',lambda m:errors.append(m.text)if m.type=='error'else None)
+    if (*c,seed)in done:continue
+    pg=b.new_page();pg.route('**/*.png*',lambda r:r.fulfill(status=200,content_type='image/png',body=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==')));pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('console',lambda m:errors.append(m.text)if m.type=='error'else None)
     rows.append(run(pg,base,*c,seed));pg.close()
    print(i+1,len(combos),c,rows[-1]['outcome'],flush=True)
    args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps({'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'fixture':'only browser response SupportMagicData; production engine source unchanged','results':rows,'errors':errors,'complete':i+1==len(combos)},ensure_ascii=False))
