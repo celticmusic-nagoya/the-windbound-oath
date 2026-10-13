@@ -18,7 +18,8 @@
     return steps;
   });
   // Fixed-rate sequential loop (Lou): assets.fps frames per second, 1->2->...->N->1.
-  profiles.set('loop',r=>{const hold=1000/(r.assets.fps||6);return r.assets.frames.map((_,i)=>({frame:i,hold}));});
+  // assets.ms (optional) gives each frame its own duration in ms; otherwise assets.fps is used.
+  profiles.set('loop',r=>{const base=1000/(r.assets.fps||6),ms=r.assets.ms;return r.assets.frames.map((_,i)=>({frame:i,hold:ms&&ms[i]>0?ms[i]:base}));});
   function currentContext(){return document.body.classList.contains('raiderBattleMode')?'raider':document.body.classList.contains('normalBattleMode')?'normal':null;}
   function eligible(r){return r.enabled&&r.state==='idle'&&r.context===currentContext();}
   function still(r){return reduced.matches&&r.assets.ignoreReduced!==true;}
@@ -114,6 +115,9 @@
   });
   BattleIdleMotion.register({context:'normal',actor:'aidan',selector:'#bAidan2 img',assets:BATTLE_IDLE_ASSETS.aidan});
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});
+  // Fiona: 6-frame idle loop (normal and raider battles).
+  BattleIdleMotion.register({context:'normal',actor:'fiona',selector:'#bFiona2 img',assets:BATTLE_IDLE_ASSETS.fiona});
+  BattleIdleMotion.register({context:'raider',actor:'fiona',selector:'#rbFiona img',assets:BATTLE_IDLE_ASSETS.fiona});
   // Forest Bat (enemy): idle flap on whichever battle slot holds a bat (records only act while the slot's actor is 'forest_bat').
   for(const actor of ['forest_bat','leafy_boar'])for(const selector of ['#bGob img','#normalEnemy1 .prologueSprite img','#normalEnemy2 .prologueSprite img'])BattleIdleMotion.register({context:'normal',actor,selector,assets:BATTLE_IDLE_ASSETS[actor]});
   // Lou (raider battle only): floating idle loop on the party slot.

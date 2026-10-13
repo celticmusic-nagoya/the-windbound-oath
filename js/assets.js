@@ -15,7 +15,7 @@ window.BATTLE_ASSET_PATHS = Object.freeze({
 const battleAssetFiles = {
   aidan: {
     idle: 'aidan_battle_idle.png', entry: 'aidan_battle_entry.png',
-    attack: 'aidan_attack.png', skill: 'aidan_skill.png', wind: 'aidan_skill_wind_slash.png',
+    attack: 'aidan_attack.png', draw: 'motion/aidan_draw_06.png', skill: 'aidan_skill.png', wind: 'aidan_skill_wind_slash.png',
     charge: 'aidan_skill_charge.png', awaken: 'aidan_oath_awaken.png',
     evade: 'aidan_evade.png', guard: 'aidan_guard.png',
     damage: 'aidan_damage.png', low_hp: 'aidan_low_hp.png',
@@ -23,7 +23,7 @@ const battleAssetFiles = {
   },
   fiona: {
     idle: 'fiona_battle_idle.png', entry: 'fiona_battle_entry.png',
-    attack: 'fiona_attack.png', skill: 'fiona_skill_windbloom.png',
+    attack: 'fiona_attack.png', ready: 'motion/fiona_ready_06.png', skill: 'fiona_skill_windbloom.png',
     charge: 'fiona_skill_charge.png', heal: 'fiona_skill_heal.png',
     prayer: 'fiona_skill_wind_prayer.png', awaken: 'fiona_oath_awaken.png',
     evade: 'fiona_evade.png', guard: 'fiona_guard.png',
@@ -106,7 +106,14 @@ window.BATTLE_CUTINS = Object.freeze({
 });
 
 // Aidan idle prototype: audited source pixels and boot anchors; PNGs remain untouched.
-window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
+window.BATTLE_IDLE_ASSETS = Object.freeze({
+  // Aidan idle (delivered 2026-10-13): 6-frame loop with per-frame durations. Frame 5 is the intentional "re-grip the sword" beat (short). All frames share one feet anchor.
+  aidan: Object.freeze({
+    type:'loop', crossfade:false, ms:Object.freeze([220,180,220,160,110,260]), width:760, height:502, anchor:Object.freeze([391.4,497]),
+    frames:Object.freeze([1,2,3,4,5,6].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle_v2/aidan_idle_0'+i+'.png',anchor:Object.freeze([391.4,497])})))
+  }),
+  // Previous confirmed 4-frame breathing idle, kept as a backup (not registered).
+  aidan_breathe_v1: Object.freeze({
   type:'breathe', width:1536, height:1024, anchor:Object.freeze([888.5,1014]),
   frames:Object.freeze([
     Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_00.png',anchor:Object.freeze([889.75,1014])}),
@@ -115,6 +122,12 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({aidan: Object.freeze({
     Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_03.png',anchor:Object.freeze([891.75,1011])})
   ])
 }),
+  // Fiona idle (delivered 2026-10-13): 6-frame loop. Frame 5 (green glow) is intentional "gathering mana" and is held longest.
+  fiona: Object.freeze({
+    type:'loop', crossfade:false, ms:Object.freeze([260,220,240,180,300,260]), width:1034, height:678, anchor:Object.freeze([561.7,671]),
+    frames:Object.freeze([1,2,3,4,5,6].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.fiona+'idle/fiona_idle_0'+i+'.png',anchor:Object.freeze([561.7,671])})))
+  }),
+
   // Forest Bat idle flap: 4 frames. anchors = alpha centroid of each frame, so the body stays put while the wings beat.
   leafy_boar: Object.freeze({
     type:'breathe', width:480, height:400, anchor:Object.freeze([240,390]),

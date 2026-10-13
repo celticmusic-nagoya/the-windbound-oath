@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>戦闘開始モーション プレビュー</title>
+<style>
+:root{--bg:#171b1a;--panel:#232a28;--ink:#ece6d4;--mute:#9aa59f;--acc:#d8b45f;--w:158px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:12px 16px 40px}h1{font-size:17px;margin:8px 0}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.panel{background:var(--panel);border-radius:8px;padding:10px}
+.pair{display:flex;gap:6px;align-items:flex-end}
+.stage{display:grid;place-items:center;gap:6px}
+/* the real battle sprite box (css/style.css): 158x198 at desktop, object-fit:contain, bottom aligned */
+.box{position:relative;width:var(--w);aspect-ratio:158/198;background:#2c3a44;outline:1px dashed #556}
+.box.light{background:#e8e4d8}
+.box img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;display:block}
+.box img.mir{transform:scaleX(-1)}  /* Fiona faces right in battle (BattleFacing mirrors her art) */
+.box .base{position:absolute;left:0;right:0;bottom:0;border-top:1px solid #f55;pointer-events:none}
+.box .mid{position:absolute;top:0;bottom:0;left:50%;border-left:1px dotted #8896;pointer-events:none}
+.cap{font-size:12px;color:var(--mute);text-align:center}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+button{background:#33403b;color:var(--ink);border:1px solid #55645d;border-radius:6px;padding:8px 12px;font:inherit;min-height:40px}
+button.on{background:var(--acc);color:#222}
+input[type=range]{width:180px}
+.strip{display:flex;gap:4px;overflow-x:auto;padding:6px 0}
+.strip button{padding:2px;min-height:0;width:56px;flex:0 0 auto}.strip img{width:100%;display:block}.strip .sel{outline:2px solid var(--acc)}
+table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #445;padding:2px 6px;text-align:right}
+@media(max-width:560px){:root{--w:128px}}
+</style></head><body><main>
+<h1>戦闘開始モーション 開発用プレビュー(エイダン draw / フィオナ ready)</h1>
+<p class="cap" style="text-align:left">戦闘画面と同じ表示枠(158:198 / object-fit:contain / 下揃え)で、2人を同時に再生します。赤線=足元、点線=枠の中心。再生後は戦闘待機(エイダン=待機アニメ1コマ目の代表 / フィオナ=静止画)へ切り替えて見せます。</p>
+<div class="row">
+ <div class="panel"><div class="pair">
+  <div class="stage"><div class="box" id="boxA"><img id="imgA" alt="aidan"><div class="base"></div><div class="mid"></div></div><div class="cap" id="capA">aidan draw</div></div>
+  <div class="stage"><div class="box" id="boxF"><img id="imgF" class="mir" alt="fiona"><div class="base"></div><div class="mid"></div></div><div class="cap" id="capF">fiona ready</div></div>
+ </div></div>
+ <div class="panel"><div class="pair">
+  <div class="stage"><div class="box"><img src="../img/battle/characters/aidan/idle_v2/aidan_idle_01.png" alt="aidan idle"><div class="base"></div><div class="mid"></div></div><div class="cap">エイダン待機(1コマ目)</div></div>
+  <div class="stage"><div class="box"><img class="mir" src="../img/battle/characters/fiona/idle/fiona_idle_01.png" alt="fiona idle"><div class="base"></div><div class="mid"></div></div><div class="cap">フィオナ待機(1コマ目)</div></div>
+ </div></div>
+ <div class="panel"><div class="pair">
+  <div class="stage"><div class="box"><img src="../img/battle/characters/aidan/motion/aidan_attack_01.png" alt="aidan attack"><div class="base"></div></div><div class="cap">エイダン通常攻撃01</div></div>
+  <div class="stage"><div class="box"><img class="mir" src="../img/battle/characters/fiona/fiona_attack.png" alt="fiona attack"><div class="base"></div></div><div class="cap">フィオナ通常攻撃</div></div>
+ </div></div>
+</div>
+<div class="ctl">
+ <button id="play">▶ 同時再生(1回)</button><button id="loop">ループ: OFF</button><button id="prev">◀ コマ戻し</button><button id="next">コマ送り ▶</button><button id="rest">待機へ切替</button><button id="bg">背景切替</button><button id="zoom">拡大: x1</button>
+</div>
+<div class="ctl"><label>再生速度 <input id="spd" type="range" min="0.25" max="2" step="0.05" value="1"> <b id="spdv">1.00x</b></label><span class="cap" id="tot"></span></div>
+<div class="strip" id="stripA"></div><div class="strip" id="stripF"></div>
+<div class="panel"><table id="tbl"></table></div>
+<p class="cap" style="text-align:left" id="status"></p>
+</main>
+<script>
+(function(){
+ const A='../img/battle/characters/aidan/motion/aidan_draw_',F='../img/battle/characters/fiona/motion/fiona_ready_';
+ let msA=[100,90,110,90,90,120],msF=[140,130,150,130,160,170],n=6,cur=0,tA=null,tF=null,loop=false,playing=false,zoom=1;
+ const $=id=>document.getElementById(id),pad=i=>String(i).padStart(2,'0');
+ function show(i){cur=(i+n)%n;$('imgA').src=A+pad(cur+1)+'.png';$('imgF').src=F+pad(cur+1)+'.png';$('capA').textContent='draw '+(cur+1)+'/6 · '+msA[Math.min(cur,5)]+'ms';$('capF').textContent='ready '+(cur+1)+'/6 · '+msF[Math.min(cur,5)]+'ms';
+  for(const id of ['stripA','stripF'])[...$(id).children].forEach((b,k)=>b.classList.toggle('sel',k===cur));}
+ function rest(){stop();$('imgA').src='../img/battle/characters/aidan/idle_v2/aidan_idle_01.png';$('imgF').src='../img/battle/characters/fiona/idle/fiona_idle_01.png';$('capA').textContent='待機';$('capF').textContent='待機(1コマ目)';}
+ function stop(){clearTimeout(tA);clearTimeout(tF);tA=tF=null;playing=false;$('play').textContent='▶ 同時再生(1回)';$('play').classList.remove('on');}
+ function run(){const s=+$('spd').value;let iA=0,iF=0,doneA=false,doneF=false;
+  const fin=()=>{if(!(doneA&&doneF))return;if(loop){setTimeout(()=>playing&&start(),200/s);}else{$('status').textContent='再生完了 → 戦闘待機へ移行します。';setTimeout(()=>{if(playing)rest();},400/s);}};
+  const stepA=()=>{$('imgA').src=A+pad(iA+1)+'.png';$('capA').textContent='draw '+(iA+1)+'/6';if(iA<5){const w=msA[iA++]/s;tA=setTimeout(stepA,w);}else{tA=setTimeout(()=>{doneA=true;fin();},msA[5]/s);}};
+  const stepF=()=>{$('imgF').src=F+pad(iF+1)+'.png';$('capF').textContent='ready '+(iF+1)+'/6';if(iF<5){const w=msF[iF++]/s;tF=setTimeout(stepF,w);}else{tF=setTimeout(()=>{doneF=true;fin();},msF[5]/s);}};
+  stepA();stepF();}
+ function start(){stop();playing=true;$('play').textContent='■ 停止';$('play').classList.add('on');$('status').textContent='';run();}
+ $('play').onclick=()=>playing?stop():start();
+ $('loop').onclick=()=>{loop=!loop;$('loop').textContent='ループ: '+(loop?'ON':'OFF');$('loop').classList.toggle('on',loop);};
+ $('prev').onclick=()=>{stop();show(cur-1);};$('next').onclick=()=>{stop();show(cur+1);};$('rest').onclick=rest;
+ $('bg').onclick=()=>document.querySelectorAll('.box').forEach(b=>b.classList.toggle('light'));
+ $('zoom').onclick=()=>{zoom=zoom===1?2:zoom===2?3:1;document.documentElement.style.setProperty('--w',(158*zoom)+'px');$('zoom').textContent='拡大: x'+zoom;};
+ $('spd').oninput=()=>{$('spdv').textContent=(+$('spd').value).toFixed(2)+'x';};
+ function build(){for(const [id,P] of [['stripA',A],['stripF',F]]){const st=$(id);st.textContent='';for(let i=0;i<n;i++){const b=document.createElement('button');const im=new Image();im.src=P+pad(i+1)+'.png';b.append(im);b.onclick=()=>{stop();show(i);};st.append(b);}}
+  const sum=a=>a.reduce((x,y)=>x+y,0);$('tot').textContent='合計 エイダン'+sum(msA)+'ms / フィオナ'+sum(msF)+'ms(入力ロックは長い方=フィオナ。速度1.00x)';
+  $('tbl').innerHTML='<tr><th>コマ</th>'+msA.map((m,i)=>'<th>'+(i+1)+'</th>').join('')+'</tr><tr><th>エイダン ms</th>'+msA.map(m=>'<td>'+m+'</td>').join('')+'</tr><tr><th>フィオナ ms</th>'+msF.map(m=>'<td>'+m+'</td>').join('')+'</tr>';show(0);}
+ fetch('../img/battle/motion-manifest.json').then(r=>r.json()).then(m=>{const a=m.motions.aidan.draw,f=m.motions.fiona.ready;msA=a.ms;msF=f.ms;n=a.frames;build();}).catch(build);
+})();
+</script></body></html>
