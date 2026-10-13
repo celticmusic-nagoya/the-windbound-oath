@@ -60,3 +60,7 @@ main53180f3を取得し、status/常設/第2弾指示と履歴を確認。接触
 
 N完了: 再現sim/結果JSON/報告を作成。20,000試行・18条件で解析5SE照合合格、MP/期限/対象self-test合格。固定攻撃列の比較であり実engine勝率未検証。ゲーム数値未適用。次はOの全件runner。
 作業中の追加方針（ユーザー事前承認）: 各成果物の完了時にremote指示をfetchし、現在作業が終わったら追加指示へ続けて着手する。現N→O→P→Qの順序を維持しRを後続、未完/新規は本statusへ登録する。
+
+Q着手: work/codex-q / main88ae6c0。P=work/codex-aidan-walk-acceptance/21a0ee9完了（実素材未着）。Qは新規tests/field/house02_spawn.test.js、tools/moss/build_rilde_village.pyの家02だけのsy override、生成物data/maps/rilde_in_house_02.json、docs/qa/rilde-house02-spawn.mdを担当。ユーザーのQ小規模安全修正許可を適用し、入口Y452→472、arrival zoneだけ追随。家具/他map/素材/物語/高さ変更なし。変更前後testを行う。
+
+Q完了: 家02のspawnY452→472を生成元/生成物で小修正、arrival zone追随のみ。旧足元とstoolの重なりを新規Node回帰で再現→修正後合格。その他室/家具/衝突/出口不変。実入室/村への歩行/関連m10合格console0。補助FAILS[]判定は直して再確認。docs/qa/rilde-house02-spawn.md参照。次はR、コード修正せず指摘のみ。
