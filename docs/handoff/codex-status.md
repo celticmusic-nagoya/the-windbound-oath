@@ -81,3 +81,5 @@ T〜Z着手: work/codex-tz / main49660b7。元worktreeはwork/codex-wind-dance-s
 
 T完了: 正規engine8条件/固定seed、通常全勝・Raider全巻き戻し。実cast/魔弾命中/入力回数を分離、console0。tools/sim/engine_wind_dance_bench.pyと報告/JSONを納品。未決数値/ゲームコード未編集。次U。
 U完了: m24/helperと前後証跡。49660b7の5失敗→160beadの2失敗（上階宝箱の縦横視覚tapのみ）。動く敵/ground NPC goal/遅延中階変更は修正後合格。コード/マップ未編集、失敗exit1。次V、最新mainの独立snapshotで全回帰。元worktreeは保持。
+T追加検証: main160bead（battleエンジン不変）で8件再実行、結果配列が完全一致。seeded再現性合格、repeat JSON保存。
+V進行中: main160bead + 変更無しO runnerをcommitした独立work/codex-v-source。port8791/timeout600、git archive固定snapshot、全件直列。出力docs/qa/full-regression-20261013/、/tmp/v-full.log。テスト中にsource branch/ファイルを変更しない。新規失敗を即時報告し切り分ける。W〜Z未着手（出典調査は待機中に可）。停止時はrunner完了/中断状況とresults.jsonの未実施数を確認して再開。
