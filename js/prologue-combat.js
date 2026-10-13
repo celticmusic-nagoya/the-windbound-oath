@@ -85,7 +85,7 @@
   if(b==='normal')normalFMP=Math.min(30,normalFMP+n);else rbFMP=Math.min(36,rbFMP+n);
  }
  // Incoming hit: true when the target sidesteps it (only possible while an eva_up effect is active; otherwise no roll at all).
- function dodged(b,target){return BattleStatus.dodges(b,target);}
+ function dodged(b,target){if(!BattleStatus.dodges(b,target))return false;BattleActorState.set(target,'evade',{battle:b,duration:500});return true;}   // evade pose (aidan_evade / fiona_evade) when the asset is installed
  function heroAction(b,a){
   if(b==='raider')return heroRaider(a);
   const who=a.who,hp=who==='aidan'?aahp:normalFHP;
