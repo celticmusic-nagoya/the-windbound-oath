@@ -119,6 +119,7 @@
 <div class="panel"><b id="enemyName">異常化ゴブリン</b><div class="hpbar"><div class="hpfill" id="ggHP"></div></div><span id="ggHPtxt"></span></div></div>
 <div id="attackRune">黒紫のルーンが脈動している……</div>
 <div class="v2BattleStage" id="battleField">
+<div id="battleBg" aria-hidden="true"></div>
 <div class="v2Unit ally aidanUnit" id="v2AidanUnit">
 <div class="v2Float" id="floatAidan"></div>
 <div class="v2NearHud" id="hudAidan"><b>エイダン</b><div class="v2Bars"><i class="hp"><em id="v2AHP"></em></i><i class="tp"><em id="v2ATP"></em></i></div><small id="v2ATxt"></small></div>
@@ -788,6 +789,7 @@ function startAttackBattle(id,hp){
  document.body.classList.remove('raiderBattleMode');
  document.body.classList.add('battleMode','normalBattleMode');
  $('#attackBattle').style.display='block';
+ window.BattleBackground?.applyForEnemy(id);
  BattleActorState.begin('normal');
  showNormalPartyBattle();BattleActorState.begin('normal','fiona');
  updateNormalCommands();
@@ -2029,6 +2031,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <link href="css/battle-presentation.css?v=20261013lou" rel="stylesheet"/>
 <script src="js/battle-facing.js"></script>
 <script src="js/battle-presentation.js?v=20261013op"></script>
+<script src="js/battle-background.js?v=20261014bg"></script>
 <script src="js/battle-opening.js?v=20261013op"></script>
 <link rel="stylesheet" href="css/battle-idle-motion.css">
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">

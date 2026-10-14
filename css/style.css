@@ -3556,3 +3556,8 @@ body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
  #altarAidan,#altarFiona{bottom:30%}#altarLou{bottom:40%}#ag3,#ag4{bottom:32%}
  #altarText{padding:8px 12px;bottom:2%;font-size:13px;line-height:1.45}
 }
+
+/* BG-01 battle background: one layer inside the battlefield, behind all units; stage gradient is the fallback */
+#battleBg{display:none;position:absolute;inset:0 -4% -14% -4%;z-index:0;pointer-events:none;background:center/cover no-repeat}
+#attackBattle[data-bg] #battleBg{display:block}
+body.normalBattleMode #attackBattle[data-bg]>.v2BattleStage{background:none!important}
