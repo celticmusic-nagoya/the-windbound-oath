@@ -1,0 +1,75 @@
+name: "AI development task"
+description: "Claude / Codex / ChatGPT shared task with scoped acceptance and handoff"
+title: "[AI TASK] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read `AGENTS.md`, `docs/handoff/codex-standing-orders.md`, and `docs/handoff/AI_HANDOFF_PROTOCOL.md`. This issue does not grant new permissions to merge, deploy, or change canonical game design.
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Owner
+      description: Who should perform the next step?
+      options:
+        - Claude
+        - Codex
+        - ChatGPT
+        - User decision
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: One concrete task and affected areas/files
+      placeholder: "Implement approved KO dissolve for normal goblin; exclude game balance changes."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable outcomes and regression expectations
+      placeholder: "- [ ] KO motion plays once\n- [ ] Actor stays hidden after KO\n- [ ] Existing victory flow unchanged"
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints and excluded changes
+      placeholder: "No story, combat numbers, save schema, canonical asset replacement or direct main changes."
+    validations:
+      required: true
+  - type: input
+    id: base_sha
+    attributes:
+      label: Base SHA
+      description: Full immutable commit SHA; if not known yet, write pending and assign lookup
+      placeholder: "pending — determine before coding"
+    validations:
+      required: true
+  - type: input
+    id: pr_artifact
+    attributes:
+      label: PR / artifact links
+      placeholder: "none yet"
+  - type: textarea
+    id: qa
+    attributes:
+      label: QA evidence
+      description: PASS / FAIL / NOT_RUN / BASELINE_FAIL; include environment and links
+      placeholder: "NOT_RUN — not started"
+  - type: textarea
+    id: next
+    attributes:
+      label: Next actor and action
+      placeholder: "Claude — inspect current main and open feature branch"
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision needed
+      placeholder: "none"
