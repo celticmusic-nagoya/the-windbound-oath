@@ -67,7 +67,7 @@ jobs:
           case "$EVENT" in
             workflow_dispatch) tier="$INPUT_TIER" ;;
             schedule) tier=battle ;;
-            push) case "$REF" in ci-measure/*) tier="${REF#ci-measure/}" ;; *) tier=p0 ;; esac ;;
+            push) case "$REF" in ci-measure/*) tier="${REF##*[/-]}" ;; *) tier=p0 ;; esac ;;   # ci-measure/<tier> or ci-measure/<label>-<tier>
             *) tier=p0 ;;
           esac
           case "$tier" in static|p0|battle|full) ;; *) echo "unknown tier '$tier'"; exit 1 ;; esac
