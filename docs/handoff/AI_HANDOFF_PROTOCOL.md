@@ -26,9 +26,12 @@ Each task issue should include:
 - `PR / Artifact`: link(s) to code, tests and reports
 - `QA`: PASS / FAIL / NOT_RUN / BASELINE_FAIL, with environment and exact command
 - `Next actor`: who acts next and what to do
+- `Approval status`: not requested / pending / scoped-work approved / integration approved / rejected or withdrawn
+- `Approver and approval evidence`: who approved, exact scope, and an immutable link to the decision (or `none`)
+- `Permitted operations`: exact authorized read/write/PR/merge/deploy operations; unspecified operations are not authorized
 - `Decision needed`: explicit user choice or `none`
 
-Do not duplicate large documents into comments. Link versioned files and use immutable commit SHA URLs where practical.
+`Decision needed: none` only means no question is pending; it **does not** mean implementation, merge, or deployment was approved. A status label or reviewer recommendation never expands permitted operations. Do not duplicate large documents into comments. Link versioned files and use immutable commit SHA URLs where practical.
 
 ## 4. Compact handoff comment
 Post this to the task issue or PR after every completed handoff:
