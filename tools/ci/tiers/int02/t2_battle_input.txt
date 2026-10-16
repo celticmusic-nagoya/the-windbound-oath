@@ -1,0 +1,23 @@
+# T2 (nightly / pre-merge, rest of battle + input). Bypass entries = tests that start battles directly (Loading assumed immediate).
+tests/battle/bg01_background.py
+tests/battle/ui_command_positive.py BYPASS=1
+tests/input/kb_audit.py BYPASS=1
+tests/battle/raider_mobile_layout.py BYPASS=1
+tests/moss/m16_battle_feel.py BYPASS=1
+tests/battle/idle_decode_recovery.py BYPASS=1
+tests/battle/motion_done.py BYPASS=1
+tests/battle/opening_lock_safety.py BYPASS=1
+tests/battle/battle_opening.py BYPASS=1
+tests/battle/battle_idle6.py BYPASS=1
+tests/battle/aidan_draw.py BYPASS=1
+tests/battle/lou_idle_real_flow.py BYPASS=1
+tests/battle/hit_sync.py BYPASS=1
+tests/battle/motion_intake.py BYPASS=1
+tests/battle/lou_idle_loop.py BYPASS=1
+tests/moss/m4_e2e.py
+tests/moss/m10_flow.py
+tests/moss/m12_attack_ruin.py
+tests/moss/m15_slime.py
+tests/moss/m15b_slime_symbol.py BYPASS=1
+tests/moss/m15c_forest_bat.py BYPASS=1
+tests/moss/m15d_leafy_boar.py BYPASS=1

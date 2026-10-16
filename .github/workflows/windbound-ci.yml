@@ -1,0 +1,260 @@
+# AUT-01 CI (isolated branch ci/aut01-actions-claude). NOT merged to main. Public repo => standard GitHub-hosted runners (free); kept small:
+# path filters, one concurrent run per ref, bounded jobs/budgets, T0 gates the browser jobs. CI is a self-check aid, NOT a substitute for Codex independent review.
+# Profiles (tools/ci/PROFILE): main = tests existing on main; int02 = INT-02 + P0-D candidate. A listed test that does not exist FAILS the run (exit 4); nothing is skipped as a pass.
+# NOTE: workflow_dispatch only works for workflows present on the default branch. On this isolated branch, push to  ci-measure/<tier>  (static|p0|battle|full)  selects the tier.
+name: windbound-ci
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'js/**'
+      - 'css/**'
+      - 'data/**'
+      - 'tests/**'
+      - 'tools/**'
+      - '.github/workflows/windbound-ci.yml'
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'index.html'
+      - 'js/**'
+      - 'css/**'
+      - 'data/**'
+      - 'tests/**'
+      - 'tools/**'
+      - '.github/workflows/windbound-ci.yml'
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: 'static | p0 | battle | full'
+        default: p0
+        type: choice
+        options:
+          - static
+          - p0
+          - battle
+          - full
+  schedule:
+    - cron: '17 18 * * 0'
+permissions:
+  contents: read
+concurrency:
+  group: windbound-ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+env:
+  PYTHONUNBUFFERED: '1'
+  PW_NO_TTY: '1'
+jobs:
+  plan:
+    name: plan (profile / tier)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      profile: ${{ steps.p.outputs.profile }}
+      tier: ${{ steps.p.outputs.tier }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - id: p
+        env:
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.ref_name }}
+          INPUT_TIER: ${{ inputs.tier }}
+        run: |
+          profile=$(tr -d '[:space:]' < tools/ci/PROFILE)
+          case "$EVENT" in
+            workflow_dispatch) tier="$INPUT_TIER" ;;
+            schedule) tier=battle ;;
+            push) case "$REF" in ci-measure/*) tier="${REF#ci-measure/}" ;; *) tier=p0 ;; esac ;;
+            *) tier=p0 ;;
+          esac
+          case "$tier" in static|p0|battle|full) ;; *) echo "unknown tier '$tier'"; exit 1 ;; esac
+          [ -d "tools/ci/tiers/$profile" ] || { echo "unknown profile '$profile'"; exit 1; }
+          echo "profile=$profile" >> "$GITHUB_OUTPUT"; echo "tier=$tier" >> "$GITHUB_OUTPUT"
+          echo "profile=$profile tier=$tier event=$EVENT ref=$REF" | tee -a "$GITHUB_STEP_SUMMARY"
+  static:
+    name: T0 static (no browser)
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/ci/requirements-ci.txt
+      - run: pip install -r tools/ci/requirements-ci.txt
+      - run: python3 tools/ci/check_refs.py
+      - name: node + static python tests
+        run: python3 tools/ci/run_tier.py tools/ci/tiers/${{ needs.plan.outputs.profile }}/t0_static.txt --out ci-results --budget 420
+      - name: summary
+        if: always()
+        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-static-logs
+          path: ci-results
+          retention-days: 7
+          if-no-files-found: ignore
+  p0:
+    name: T1a P0 gate
+    needs: [plan, static]
+    if: contains(fromJSON('["p0","battle","full"]'), needs.plan.outputs.tier)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/ci/requirements-ci.txt
+      - run: pip install -r tools/ci/requirements-ci.txt
+      - name: Playwright Chromium (cached by version)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-1.56.0-chromium-${{ runner.os }}
+      - run: python -m playwright install chromium && python -m playwright install-deps chromium
+      - name: run T1a
+        run: python3 tools/ci/run_tier.py tools/ci/tiers/${{ needs.plan.outputs.profile }}/t1a_p0_gate.txt --out ci-results --budget 2400 --rerun-failed
+      - name: summary
+        if: always()
+        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-t1a-logs
+          path: ci-results
+            docs/qa
+          retention-days: 7
+          if-no-files-found: ignore
+  loading_ui:
+    name: T1b Loading/UI (int02 profile only)
+    needs: [plan, static]
+    if: needs.plan.outputs.profile == 'int02' && contains(fromJSON('["p0","battle","full"]'), needs.plan.outputs.tier)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/ci/requirements-ci.txt
+      - run: pip install -r tools/ci/requirements-ci.txt
+      - name: Playwright Chromium (cached by version)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-1.56.0-chromium-${{ runner.os }}
+      - run: python -m playwright install chromium && python -m playwright install-deps chromium
+      - name: run T1b
+        run: python3 tools/ci/run_tier.py tools/ci/tiers/int02/t1b_loading_ui.txt --out ci-results --budget 2400 --rerun-failed
+      - name: summary
+        if: always()
+        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-t1b-logs
+          path: ci-results
+          retention-days: 7
+          if-no-files-found: ignore
+  battle:
+    name: T2 battle/input
+    needs: [plan, static]
+    if: contains(fromJSON('["battle","full"]'), needs.plan.outputs.tier)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/ci/requirements-ci.txt
+      - run: pip install -r tools/ci/requirements-ci.txt
+      - name: Playwright Chromium (cached by version)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-1.56.0-chromium-${{ runner.os }}
+      - run: python -m playwright install chromium && python -m playwright install-deps chromium
+      - name: run T2
+        run: python3 tools/ci/run_tier.py tools/ci/tiers/${{ needs.plan.outputs.profile }}/t2_battle_input.txt --out ci-results --budget 3600 --rerun-failed
+      - name: summary
+        if: always()
+        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-t2-logs
+          path: ci-results
+          retention-days: 7
+          if-no-files-found: ignore
+  full:
+    name: T3 full shard ${{ matrix.shard }}/4
+    needs: [plan, static]
+    if: needs.plan.outputs.tier == 'full'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/ci/requirements-ci.txt
+      - run: pip install -r tools/ci/requirements-ci.txt
+      - name: Playwright Chromium (cached by version)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-1.56.0-chromium-${{ runner.os }}
+      - run: python -m playwright install chromium && python -m playwright install-deps chromium
+      - name: integrity preflight + snapshot (git work tree, protected paths clean)
+        run: |
+          python3 tools/ci/source_guard.py preflight --root .
+          python3 tools/ci/source_guard.py snapshot --root . --out "$RUNNER_TEMP/before.json" --exclude 'tools/ci/__pycache__/*' 'ci-results/*' 'test-results/*'
+      - name: run shard
+        run: >
+          python3 tools/ci/run_tier.py ALL
+          --exclude-tiers tools/ci/tiers/${{ needs.plan.outputs.profile }}/t0_static.txt tools/ci/tiers/${{ needs.plan.outputs.profile }}/t1a_p0_gate.txt tools/ci/tiers/${{ needs.plan.outputs.profile }}/t1b_loading_ui.txt tools/ci/tiers/${{ needs.plan.outputs.profile }}/t2_battle_input.txt
+          --shard ${{ matrix.shard }}/4 --out ci-results --budget 5400
+      - name: integrity verify (reported separately from pass/fail; test-written docs/qa outputs are listed, not hidden)
+        if: always()
+        run: python3 tools/ci/source_guard.py verify --root . --manifest "$RUNNER_TEMP/before.json" --exclude 'tools/ci/__pycache__/*' 'ci-results/*' 'test-results/*' | tee -a "$GITHUB_STEP_SUMMARY" || true
+      - name: summary
+        if: always()
+        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-t3-${{ matrix.shard }}-logs
+          path: ci-results
+          retention-days: 7
+          if-no-files-found: ignore

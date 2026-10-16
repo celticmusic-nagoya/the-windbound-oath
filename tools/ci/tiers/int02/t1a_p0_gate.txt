@@ -1,0 +1,15 @@
+# T1a (int02 profile, INT-02 + P0-D candidate). Tests absent from the checked-out tree FAIL the run (exit 4) - never skipped.
+tests/battle/input_field_p0.py
+tests/battle/int02_routes_real_adapter.py
+tests/battle/ui_command_safety.py
+tests/battle/ui_command_negative_controls.py
+tests/battle/int02_p0_reentry.py
+tests/battle/int02_p0_start_failure.py MODE=enabled
+tests/battle/int02_p0_start_failure.py MODE=bypass
+tests/battle/int02_p0_start_failure.py MODE=absent
+tests/battle/int02_p0_stale.py MODE=enabled
+tests/battle/int02_p0_stale.py MODE=bypass
+tests/input/kb_battle.py
+tests/input/kb_raider.py
+# A2 (approved contract change, test expectation NOT yet rewritten): FAILS by design until the Codex-reviewed rewrite. A known failure is a failure, never a pass.
+tests/battle/battle_admission_adapter.py
