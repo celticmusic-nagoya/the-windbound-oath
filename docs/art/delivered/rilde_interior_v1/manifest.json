@@ -1,0 +1,114 @@
+{
+  "version": "1.0-draft",
+  "purpose": "Reusable Rilde interior architectural assets",
+  "reference_map": "data/maps/rilde_in_aidan.json",
+  "world_size": [
+    960,
+    720
+  ],
+  "tile": 8,
+  "status": "Art prototype; requires in-game scale and seam QA before integration",
+  "note": "Preview is not a collision-safe replacement for the existing map. Keep original collision/event data unchanged.",
+  "files": [
+    {
+      "path": "floors/floor_wood_variant.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_min": 255,
+      "alpha_max": 255
+    },
+    {
+      "path": "floors/floor_wood_base.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_min": 255,
+      "alpha_max": 255
+    },
+    {
+      "path": "architecture/window_wood.png",
+      "size": [
+        128,
+        144
+      ],
+      "mode": "RGBA",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "architecture/threshold_wood.png",
+      "size": [
+        192,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "architecture/doorway_south.png",
+      "size": [
+        192,
+        176
+      ],
+      "mode": "RGBA",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "architecture/pillar_wood.png",
+      "size": [
+        48,
+        176
+      ],
+      "mode": "RGBA",
+      "alpha_min": 0,
+      "alpha_max": 255
+    },
+    {
+      "path": "previews/aidan_house_layout.png",
+      "size": [
+        960,
+        720
+      ],
+      "mode": "RGBA",
+      "alpha_min": 255,
+      "alpha_max": 255
+    },
+    {
+      "path": "walls/wall_stone_base.png",
+      "size": [
+        256,
+        160
+      ],
+      "mode": "RGBA",
+      "alpha_min": 255,
+      "alpha_max": 255
+    },
+    {
+      "path": "walls/wall_corner.png",
+      "size": [
+        64,
+        160
+      ],
+      "mode": "RGBA",
+      "alpha_min": 255,
+      "alpha_max": 255
+    },
+    {
+      "path": "walls/wall_timber_base.png",
+      "size": [
+        256,
+        160
+      ],
+      "mode": "RGBA",
+      "alpha_min": 255,
+      "alpha_max": 255
+    }
+  ]
+}
