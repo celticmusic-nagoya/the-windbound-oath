@@ -53,7 +53,7 @@ table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #445;paddin
 <script>
 (function(){
  const A='../img/battle/characters/aidan/motion/aidan_draw_',F='../img/battle/characters/fiona/motion/fiona_ready_';
- let msA=[100,90,110,90,90,120],msF=[140,130,150,130,160,170],n=6,cur=0,tA=null,tF=null,loop=false,playing=false,zoom=1;
+ let msA=[175,160,190,160,160,205],msF=[190,175,205,175,215,235],n=6,cur=0,tA=null,tF=null,loop=false,playing=false,zoom=1;
  const $=id=>document.getElementById(id),pad=i=>String(i).padStart(2,'0');
  function show(i){cur=(i+n)%n;$('imgA').src=A+pad(cur+1)+'.png';$('imgF').src=F+pad(cur+1)+'.png';$('capA').textContent='draw '+(cur+1)+'/6 · '+msA[Math.min(cur,5)]+'ms';$('capF').textContent='ready '+(cur+1)+'/6 · '+msF[Math.min(cur,5)]+'ms';
   for(const id of ['stripA','stripF'])[...$(id).children].forEach((b,k)=>b.classList.toggle('sel',k===cur));}

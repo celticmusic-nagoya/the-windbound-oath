@@ -94,8 +94,8 @@ with server(8811) as base,sync_playwright() as p:
     check(after['opened']==before['opened']+1,'held Enter opens exactly one chest',[before,after])
     pg.evaluate("closeDialogue();startAttackBattle('fieldGob1',100);window.qaBannerState=InputManager.state()")
     pg.wait_for_function("InputManager.state()!=='BATTLE_ANIMATION'",timeout=10000)   # the battle-start draw/ready opening locks input by design; wait for COMMAND
-    pg.keyboard.press('Tab');pg.wait_for_timeout(250);check(pg.evaluate("document.querySelector('#normalBattleCmd').contains(document.activeElement)"),'battle Tab stays within COMMAND',pg.evaluate('qaBannerState'))
-    pg.locator('#nAtk').focus();repeats('Enter');pg.wait_for_timeout(100)
+    pg.keyboard.press('Tab');pg.wait_for_timeout(250);check(pg.evaluate("document.activeElement.id==='normalCommandToggle'"),'battle Tab focuses collapsed COMMAND',pg.evaluate('qaBannerState'))
+    pg.keyboard.press('ArrowDown');pg.locator('#nAtk').focus();repeats('Enter');pg.wait_for_timeout(100)
     check(pg.evaluate('normalActs.length')<=1,'held Enter battle confirmation queues at most one action',pg.evaluate('normalActs.length'))
     pg.evaluate('BattleTargetSelector.cancel();PrologueCombat.cancel();attackBattleBusy=false;normalActor="aidan";normalActs=[];battleItems.potion=5;openNormalItems()')
     pg.locator('[data-ni="potion"]').focus();repeats('Enter');pg.wait_for_timeout(100)

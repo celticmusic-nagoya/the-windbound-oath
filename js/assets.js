@@ -109,7 +109,7 @@ window.BATTLE_CUTINS = Object.freeze({
 window.BATTLE_IDLE_ASSETS = Object.freeze({
   // Aidan idle (delivered 2026-10-13): 6-frame loop with per-frame durations. Frame 5 is the intentional "re-grip the sword" beat (short). All frames share one feet anchor.
   aidan: Object.freeze({
-    type:'loop', crossfade:false, ms:Object.freeze([220,180,220,160,110,260]), width:760, height:502, anchor:Object.freeze([391.4,497]),
+    type:'loop', crossfade:false, ms:Object.freeze([400,320,400,290,200,460]), width:760, height:502, anchor:Object.freeze([391.4,497]),
     frames:Object.freeze([1,2,3,4,5,6].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle_v2/aidan_idle_0'+i+'.png',anchor:Object.freeze([391.4,497])})))
   }),
   // Previous confirmed 4-frame breathing idle, kept as a backup (not registered).
@@ -124,7 +124,7 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({
 }),
   // Fiona idle (delivered 2026-10-13): 6-frame loop. Frame 5 (green glow) is intentional "gathering mana" and is held longest.
   fiona: Object.freeze({
-    type:'loop', crossfade:false, ms:Object.freeze([260,220,240,180,300,260]), width:1034, height:678, anchor:Object.freeze([561.7,671]),
+    type:'loop', crossfade:false, ms:Object.freeze([390,330,360,270,450,390]), width:1034, height:678, anchor:Object.freeze([561.7,671]),
     frames:Object.freeze([1,2,3,4,5,6].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.fiona+'idle/fiona_idle_0'+i+'.png',anchor:Object.freeze([561.7,671])})))
   }),
 

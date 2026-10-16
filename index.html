@@ -2,6 +2,7 @@
 <html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"/>
 <title>THE WINDBOUND OATH v0.64</title>
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
+<script src="js/battle-loading.js?v=20261016p0"></script><!-- first: its keydown guard must run before any other key listener -->
 <script src="js/field/field-movement.js?v=20261011-quality-g"></script>
 <script src="js/field/field-navigation.js"></script>
 <script src="js/field/field-height.js?v=20261012p1"></script>
@@ -16,14 +17,14 @@
 
 <meta name="build-version" content="Phase 2.5.2">
 
-<link rel="stylesheet" href="css/style.css?v=20261012c">
+<link rel="stylesheet" href="css/style.css?v=20261015int02">
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css?v=20261013lf">
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
 <link rel="stylesheet" href="css/field-collision-debug.css">
-<script src="js/assets.js?v=20261013id6"></script>
-<script src="js/battle-motion.js"></script>
-<script src="js/battle-actor-state.js?v=20261013op"></script>
+<script src="js/assets.js?v=20261014mt"></script>
+<script src="js/battle-motion.js?v=20261015bn"></script>
+<script src="js/battle-actor-state.js?v=20261014mc"></script>
 
 <style id="v0621-dev-command-style">
 .dev-only-command{border-color:#b88b45!important;color:#e6c987!important;background:rgba(70,38,12,.30)!important;font-size:.78rem!important}
@@ -109,13 +110,13 @@
 <div id="battle">
 <div id="battleTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aHP"></div></div><span id="aHPtxt"></span><div class="tpbar"><div class="tpfill" id="aTP"></div></div><span class="tptext" id="aTPtxt"></span></div>
 <div class="panel"><b>訓練用木人</b><div class="hpbar"><div class="hpfill" id="dHP"></div></div><span id="dHPtxt"></span></div></div>
-<div id="battleField"><div class="battler" id="bAidan">エイダン</div><div class="battler" id="bFiona">フィオナ</div><div class="battler" id="bDummy">木人</div></div>
+<div id="trainingBattleField"><div class="battler" id="bAidan">エイダン</div><div class="battler" id="bFiona">フィオナ</div><div class="battler" id="bDummy">木人</div></div>
 <div class="panel" id="battleMsg">訓練開始！</div>
 <div id="battleCmd"><button id="atk">攻撃</button><button id="skill">一閃　TP30</button><button id="guard">防御</button></div>
 </div>
 <div id="rescueNotice"></div>
 <div id="attackBattle">
-<div id="battleTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aaHP"></div></div><span id="aaHPtxt"></span><div class="tpbar"><div class="tpfill" id="aaTP"></div></div><span class="tptext" id="aaTPtxt"></span></div>
+<div id="normalLegacyTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aaHP"></div></div><span id="aaHPtxt"></span><div class="tpbar"><div class="tpfill" id="aaTP"></div></div><span class="tptext" id="aaTPtxt"></span></div>
 <div class="panel"><b id="enemyName">異常化ゴブリン</b><div class="hpbar"><div class="hpfill" id="ggHP"></div></div><span id="ggHPtxt"></span></div></div>
 <div id="attackRune">黒紫のルーンが脈動している……</div>
 <div class="v2BattleStage" id="battleField">
@@ -137,7 +138,7 @@
 </div>
 </div>
 <div class="panel battle-log-empty" id="battleMsg2" aria-live="polite"></div>
-<div id="battleCmd" style="z-index:2"><button id="aatk">攻撃</button><button id="askill">一閃　TP30</button><button id="aguard">防御</button></div>
+<div id="normalLegacyCmd" style="z-index:2"><button id="aatk">攻撃</button><button id="askill">一閃　TP30</button><button id="aguard">防御</button></div>
 <div id="normalPartyHud"><div class="partyCard" id="nCardA"><b>エイダン</b><div class="mini"><i id="nAHP"></i></div><span id="nATxt"></span></div><div class="partyCard" id="nCardF"><b>フィオナ</b><div class="mini"><i id="nFHP"></i></div><span id="nFTxt"></span></div></div>
 <div id="normalFiona">F</div>
 <div id="normalActor"></div>
@@ -740,7 +741,7 @@ function updateNormalPartyHud(){
  $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;updateV2BattleHud();
 }
 function updateNormalCommands(){
- setNormalCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('normal')));
+ window.BattleUIState?.sync('normal');
  const a=normalActor==='aidan';
  ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nWindDance','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id)?.classList.remove('v2-visible'));
  $('#nDevKill')?.classList.add('v2-visible');
@@ -751,15 +752,17 @@ function updateNormalCommands(){
  if($('#nWindDance'))$('#nWindDance').disabled=normalFMP<(window.WindDance?WindDance.mp():10);$('#nWindbloom').disabled=normalFMP<8;$('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
 }
 function openNormalItems(){
+ if(!window.BattleCommandGate?.canInteract('normal'))return false;
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${normalActor==='aidan'?'エイダン':'フィオナ'}</b><br>
  <button data-ni="potion">きずぐすり ×${battleItems.potion}</button>
  <button data-ni="ether">魔力の雫 ×${battleItems.ether}</button>
- <button data-ni="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';setNormalCommandDrawer(false);
+ <button data-ni="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';if(window.BattleUIState)BattleUIState.items('normal');else setNormalCommandDrawer(false);
 }
 let normalActs=[],normalGuardA=false,normalGuardF=false;
 $('#normalItems').onclick=e=>{
  const b=e.target.closest('[data-ni]');if(!b)return;e.stopPropagation();
- const k=b.dataset.ni;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
+ if(!window.BattleCommandGate?.canInteract('normal'))return;
+ const k=b.dataset.ni;if(k==='close'){if(window.BattleUIState)BattleUIState.backItems('normal');else{$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none'}return}
  if(k==='potion'&&!battleItems.potion){showBattleBanner('きずぐすりを持っていない。',800);return}
  if(k==='ether'&&!battleItems.ether){showBattleBanner('魔力の雫を持っていない。',800);return}
  BattleActionTargets.item('normal',k);
@@ -771,19 +774,21 @@ function advanceNormalActor(){
    attackBattleBusy=true;resolveNormalRound();
  }
 }
-function chooseNormalAct(kind,target){
- if(window.BattlePresentation?.busy||attackBattleBusy||BattleTargetSelector.active)return;
+function chooseNormalAct(kind,target,receipt){
+ const gate=window.BattleCommandGate;receipt ||= gate?.issue('normal');
+ if(!receipt||!gate.valid(receipt,'normal')||BattleTargetSelector.active)return false;
  if(normalActor==='aidan'&&kind==='skill'&&aatp<30){showBattleBanner('TPが足りない。一閃にはTP30が必要だ。',900);return}
  if(normalActor==='fiona'&&['heal','windbloom'].includes(kind)&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
  if(normalActor==='fiona'&&kind==='prayer'&&normalFMP<6){showBattleBanner('MPが足りない。',800);return}
  if(normalActor==='fiona'&&kind==='winddance'&&(!window.WindDance?.commandVisible()||normalFMP<WindDance.mp())){showBattleBanner('MPが足りない。',800);return}
- if(kind==='guard')BattleActorState.set(normalActor,'guard',{battle:'normal'});
- if(target===undefined){BattleActionTargets.request('normal',kind,normalActor,t=>chooseNormalAct(kind,t));return}
- normalActs.push({who:normalActor,kind,target});advanceNormalActor();
+ if(target===undefined)return BattleActionTargets.request('normal',kind,normalActor,t=>chooseNormalAct(kind,t,receipt),undefined,receipt);
+ return gate.commit(receipt,{who:normalActor,kind,target});
 }
 function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
  if(attackBattleBusy||PrologueProgress.cleared(id))return;
+ if(window.BattleLoading?.gate('normal',id,()=>startAttackBattle(id,hp)))return;   // BL-01: 戦闘準備中… (resumes this function once the assets are ready)
+ const admDone=window.BattleAdmissionAdapter?.enter('normal');   // INT-02-P0: start boundary (the last statement of this function reports "started")
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
  if(id.startsWith('forestGob')||id.startsWith('mossSlime')||id.startsWith('forestBat')||id.startsWith('leafyBoar')||id.startsWith('fieldGob'))forestHideScene();
  document.body.classList.remove('raiderBattleMode');
@@ -798,6 +803,7 @@ function startAttackBattle(id,hp){
  window.BattleOpening?.play('normal');
  showBattleBanner(id.startsWith('mossSlime')?'モススライムが現れた！':id.startsWith('forestBat')?'フォレストバットが現れた！':id.startsWith('leafyBoar')?'リーフィボアが現れた！':id.startsWith('fieldGob')?'ゴブリンが現れた！':id==='attackGob1'?atkT('banner','gob1'):atkT('banner','gob'),1000);
  updateAttackBattle();
+ admDone?.();
 }
 function updateAttackBattle(){
  updateNormalCommands();updateNormalPartyHud();
@@ -1268,7 +1274,7 @@ function updateRaider(){
  BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');BattleActorState.sync('raider','goblin_raider');
  const phaseEntered=BattleActorState.trackPhase('goblin_raider',rbPhase(),{battle:'raider'});
  if(phaseEntered&&rbPhase()===3)window.PrologueCombat?.enrageMoment();
- setRaiderCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('raider')));
+ window.BattleUIState?.sync('raider');
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
  if($('#rbEnemyHP')){$('#rbEnemyHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbEnemyTxt').textContent=`HP ${Math.max(0,rbBoss)}`;}
@@ -1293,6 +1299,8 @@ function updateRaider(){
  $('#rbTurn').textContent=`ROUND ${rbRound} / ${rbActor==='aidan'?'エイダン':'フィオナ'}のコマンド`;
 }
 function startRaiderBattle(){
+ if(window.BattleLoading?.gate('raider','raider',()=>startRaiderBattle()))return;   // BL-01
+ const admDone=window.BattleAdmissionAdapter?.enter('raider');   // INT-02-P0
  hideBattleBanner();hideRaiderBattleLog();
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
  $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
@@ -1301,35 +1309,36 @@ function startRaiderBattle(){
  window.BattleOpening?.play('raider');
  showRaiderBattleLog('ゴブリン・レイダーが戦斧を構えた！　エイダンとフィオナで迎え撃つ。');
  updateRaider();
+ admDone?.();
 }
-function choosePartyAct(kind,target){
- if(window.BattlePresentation?.busy||rbBusy||BattleTargetSelector.active)return;
- if(target===undefined&&kind!=='item'){BattleActionTargets.request('raider',kind,rbActor,t=>choosePartyAct(kind,t));return}
+function choosePartyAct(kind,target,receipt){
+ const gate=window.BattleCommandGate;receipt ||= gate?.issue('raider');
+ if(!receipt||!gate.valid(receipt,'raider')||BattleTargetSelector.active)return false;
+ if(target===undefined&&kind!=='item')return BattleActionTargets.request('raider',kind,rbActor,t=>choosePartyAct(kind,t,receipt),undefined,receipt);
  if(rbActor==='aidan'){
    if(kind==='item'){openRaiderItems();return}
    if(kind==='skill'&&rbTP<30){showRaiderBattleLog('TPが足りない。');return}
    if(kind==='wind'&&rbRune<100)return;
-   if(kind==='guard')BattleActorState.set('aidan','guard',{battle:'raider'});
-   rbActs.push({who:'aidan',kind,target});rbActor='fiona';
-   showRaiderBattleLog('フィオナの行動を選択。');updateRaider();return;
+   return gate.commit(receipt,{who:'aidan',kind,target});
  }
  if(kind==='item'){openRaiderItems();return}
  if(['heal','windbloom'].includes(kind)&&rbFMP<8){showRaiderBattleLog('MPが足りない。');return}
  if(kind==='rune'&&rbFMP<6){showRaiderBattleLog('MPが足りない。');return}
  if(kind==='winddance'&&(!window.WindDance?.commandVisible()||rbFMP<WindDance.mp())){showRaiderBattleLog('MPが足りない。');return}
- if(kind==='guard')BattleActorState.set('fiona','guard',{battle:'raider'});
- rbActs.push({who:'fiona',kind,target});rbBusy=true;resolvePartyRound();
+ return gate.commit(receipt,{who:'fiona',kind,target});
 }
 
 function openRaiderItems(){
+ if(!window.BattleCommandGate?.canInteract('raider'))return false;
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${rbActor==='aidan'?'エイダン':'フィオナ'}</b><br>
  <button data-ri="potion">きずぐすり ×${battleItems.potion}</button>
  <button data-ri="ether">魔力の雫 ×${battleItems.ether}</button>
- <button data-ri="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';setRaiderCommandDrawer(false);
+ <button data-ri="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';if(window.BattleUIState)BattleUIState.items('raider');else setRaiderCommandDrawer(false);
 }
 $('#normalItems').addEventListener('click',e=>{
  const b=e.target.closest('[data-ri]');if(!b)return;e.stopPropagation();
- let k=b.dataset.ri;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
+ if(!window.BattleCommandGate?.canInteract('raider'))return;
+ let k=b.dataset.ri;if(k==='close'){if(window.BattleUIState)BattleUIState.backItems('raider');else{$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none'}return}
  if(k==='potion'&&!battleItems.potion){showRaiderBattleLog('きずぐすりを持っていない。');return}
  if(k==='ether'&&!battleItems.ether){showRaiderBattleLog('魔力の雫を持っていない。');return}
  BattleActionTargets.item('raider',k);
@@ -1377,6 +1386,7 @@ $('#rbWind').onclick=()=>choosePartyAct('wind');
 
 // v0.37 compact command drawers
 function setNormalCommandDrawer(open){
+ if(window.BattleUIState)return BattleUIState.commands('normal',open);
  const panel=$('#normalBattleCmd'), toggle=$('#normalCommandToggle');
  if(!panel||!toggle)return;
  panel.hidden=!open;
@@ -1388,6 +1398,7 @@ function setNormalCommandDrawer(open){
  toggle.style.setProperty('display',open?'none':'flex','important');
 }
 function setRaiderCommandDrawer(open){
+ if(window.BattleUIState)return BattleUIState.commands('raider',open);
  const panel=$('#rbCmd'), toggle=$('#rbCommandToggle');
  if(!panel||!toggle)return;
  panel.hidden=!open;
@@ -1657,7 +1668,8 @@ document.addEventListener('contextmenu',e=>e.preventDefault());document.addEvent
   function ownBattleOverlays(){
     ['battleMsg2','rbMsg','normalItems'].forEach(function(id){
       var el=document.getElementById(id);
-      if(el && el.parentElement!==document.body) document.body.appendChild(el);
+      if(el && window.BattleUIRegions) BattleUIRegions.placeOverlay(id,el);
+      else if(el && el.parentElement!==document.body) document.body.appendChild(el);
     });
     ['battleMsg2','rbMsg'].forEach(function(id){
       var el=document.getElementById(id); if(!el)return;
@@ -1950,8 +1962,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 
 <script src="js/game.js"></script>
 <link rel="stylesheet" href="css/battle-target.css">
-<script src="js/battle-target-selector.js"></script>
-<script src="js/battle-action-targets.js?v=20261013wd3"></script>
+<script src="js/battle-command-gate.js"></script>
+<script src="js/battle-target-selector.js?v=20261015int02"></script>
+<script src="js/battle-action-targets.js?v=20261015int02"></script>
 <link rel="stylesheet" href="css/prologue-combat.css?v=20261012b">
 <script src="js/battle-status.js?v=20261013wd3"></script>
 <script src="js/battle-critical.js"></script>
@@ -2027,15 +2040,21 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/lind-crisp-renderer.js"></script>
 <link rel="stylesheet" href="css/battle-polish.css?v=20261012d">
 <link rel="stylesheet" href="css/equipment.css?v=20261013eq">
-<script src="js/battle-party-layout.js?v=20261011-mobile"></script>
+<script src="js/battle-party-layout.js?v=20261015int02"></script>
 <link href="css/battle-presentation.css?v=20261013lou" rel="stylesheet"/>
 <script src="js/battle-facing.js"></script>
-<script src="js/battle-presentation.js?v=20261013op"></script>
+<script src="js/battle-presentation.js?v=20261015bn"></script>
 <script src="js/battle-background.js?v=20261014bg"></script>
-<script src="js/battle-opening.js?v=20261013op"></script>
+<script src="js/battle-opening.js?v=20261015bn"></script>
 <link rel="stylesheet" href="css/battle-idle-motion.css">
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
-<script src="js/battle-idle-motion.js?v=20261013id6"></script>
+<script src="js/battle-idle-motion.js?v=20261015bm"></script>
 <script src="js/battle-lou-flight.js?v=20261012a"></script>
-<script src="js/input-manager.js?v=20261013kb4"></script>
+<script src="js/input-manager.js?v=20261015int02"></script>
+<link rel="stylesheet" href="css/battle-ui-regions.css?v=20261015int02">
+<script src="js/battle-ui-regions.js?v=20261015int02"></script>
+<link rel="stylesheet" href="css/battle-ui-state.css?v=20261015int02">
+<script src="js/battle-ui-state.js?v=20261015int02"></script>
+<script src="js/battle-ui-responsive.js?v=20261015int02"></script>
+<script src="js/battle-admission-adapter.js?v=20261016p0d"></script><!-- INT-02: after the gate and every UI script, before any battle can start -->
 </body></html>

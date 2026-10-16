@@ -5,6 +5,7 @@
 // Battle target selection owns its own keys (js/battle-target-selector.js), field conversations theirs (js/field/field-talk.js); the manager only stays out of their way.
 (function () {
   'use strict';
+  if(window.InputManager)return;
   const $ = s => document.querySelector(s);
   const NAV = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
   const isField = t => t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable);
@@ -25,9 +26,16 @@
   const drawerOpen = m => { const d = drawer(m); return Boolean(d && !d.hidden && shown(d)); };
   const setDrawer = (m, open) => { try { m === 'raider' ? g('setRaiderCommandDrawer')(open) : g('setNormalCommandDrawer')(open); } catch (e) { } };
   const itemsOpen = () => { const b = $('#normalItems'); return Boolean(b && b.classList.contains('isOpen') && shown(b)); };
-  const animating = () => Boolean((window.BattlePresentation && BattlePresentation.busy) || document.body.classList.contains('battlePresentationBusy') || document.body.classList.contains('actionCinematic') || g('attackBattleBusy') || g('rbBusy'));
+  const animating = () => Boolean((window.BattlePresentation && BattlePresentation.busy) || document.body.classList.contains('battlePresentationBusy') || document.body.classList.contains('actionCinematic') || (mode()==='normal'?g('attackBattleBusy'):mode()==='raider'?g('rbBusy'):false));
 
   function state() {
+    const admission=window.BattleCommandGate?.snapshot();
+    // A missing battle adapter denies battle commands, not field movement.
+    // Real Loading freezes input even before battleMode is installed.
+    if(window.BattleLoading?.frozen)return {name:'BATTLE_ANIMATION'};
+    const result=$('#battleResult');
+    if(shown(result))return {name:'RESULT',root:result};
+    if((inBattle()||mode())&&admission&&(['loading','prepared','opening-pending','opening','unbound'].includes(admission.phase)||['admission-context','admission-error','bridge-required','start-not-complete'].includes(admission.reason)))return {name:'BATTLE_ANIMATION'};
     if (window.LindFieldReview && LindFieldReview.active) return { name: 'REVIEW' };
     if (window.BattleTargetSelector && BattleTargetSelector.active) return { name: 'BATTLE_TARGET' };
     for (const s of MENUS) { const e = $(s); if (shown(e)) return { name: 'MENU', root: e, id: s }; }
@@ -105,7 +113,8 @@
   function commandKey(e, st) {
     const m = st.mode, k = e.key;
     if (!st.root) {                                   // collapsed: any navigation / confirm key brings it back
-      if (NAV.includes(k) || k === 'Enter' || k === ' ') { hold[m] = false; setDrawer(m, true); requestAnimationFrame(() => { const d = drawer(m); if (d) focusFirst(d); }); }
+      if (NAV.includes(k) || k === 'Enter' || k === ' ') { hold[m] = false; setDrawer(m, true); const d = drawer(m); if (d) focusFirst(d); }
+      if (k === 'Tab') $(m==='raider'?'#rbCommandToggle':'#normalCommandToggle')?.focus({preventScroll:true});
       return;
     }
     if (k === 'Escape') { hold[m] = true; setDrawer(m, false); return; }
@@ -142,19 +151,40 @@
 
   // Held arrows for the indoor room (it has no key movement of its own): index.html's inMove() asks for the vector each frame.
   const held = new Set();
+  // Keys owned by RESULT must be released before the field can see them again.
+  const resultHeld = new Set();
+  const fieldKeys = new Set([...NAV, 'w', 'W', 'a', 'A', 's', 'S', 'd', 'D']);
+  function quarantineResultKeys() {
+    held.forEach(k=>resultHeld.add(k)); held.clear();
+    const outdoor=g('fieldHeldDirections');
+    if(outdoor){outdoor.forEach((_,k)=>resultHeld.add(k));outdoor.clear();}
+  }
   const DIRV = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
   function heldVector() {
-    if (!held.size || state().name !== 'FIELD') return null;
+    const st=state();
+    if(st.name==='RESULT'){quarantineResultKeys();return null;}
+    if (!held.size || st.name !== 'FIELD') return null;
     let x = 0, y = 0; held.forEach(k => { x += DIRV[k][0]; y += DIRV[k][1]; }); const l = Math.hypot(x, y); return l ? [x / l, y / l] : null;
   }
-  addEventListener('keyup', e => held.delete(e.key), true);
-  addEventListener('blur', () => held.clear());
+  addEventListener('keyup', e => {
+    held.delete(e.key);
+    if(resultHeld.delete(e.key)){e.preventDefault();e.stopImmediatePropagation();}
+  }, true);
+  addEventListener('blur', () => {held.clear();resultHeld.clear();});
 
   function onKey(e) {
     if (e.ctrlKey || e.altKey || e.metaKey) return;
     if (isField(e.target)) return;
     kb = true; document.body.classList.add('kbNav');
     const st = state(), k = e.key;
+    if(resultHeld.has(k)){e.preventDefault();e.stopImmediatePropagation();return;}
+    if(st.name==='RESULT'){
+      quarantineResultKeys();
+      if(fieldKeys.has(k)||k==='Enter'||k===' '){
+        resultHeld.add(k);
+        if(fieldKeys.has(k)){e.preventDefault();e.stopImmediatePropagation();return;}
+      }
+    }
     // two separate confirm presses inside one frame are one intent (no double page / double action); a human double tap is always slower
     if ((k === 'Enter' || k === ' ') && st.name !== 'FIELD' && !st.own && st.name !== 'BATTLE_TARGET') {
       const now = performance.now(); if (now - lastConfirm < 60) { e.preventDefault(); e.stopImmediatePropagation(); return; } lastConfirm = now;
@@ -189,18 +219,11 @@
   addEventListener('keydown', onKey, true);
   // Space / Enter on a focused button would click it natively on keyup / keydown as well: the capture handler above already consumed those keys where it matters.
   addEventListener('keyup', e => { if (e.key === ' ' && !isField(e.target) && state().name !== 'FIELD') e.preventDefault(); }, true);
-  addEventListener('pointerdown', () => { kb = false; document.body.classList.remove('kbNav'); }, true);
+  addEventListener('pointerdown', () => { if(state().name==='RESULT')quarantineResultKeys(); kb = false; document.body.classList.remove('kbNav'); }, true);
 
-  // ---- COMMAND: expanded from the start of every turn on PC; folding it by hand sticks until the next turn ----
-  function autoOpen(m) { hold[m] = false; return pcLike() && !animating(); }
-  for (const [id, m] of [['#normalCommandClose', 'normal'], ['#rbCommandClose', 'raider']]) document.addEventListener('click', e => { if (e.target.closest(id)) hold[m] = true; }, true);
-  setInterval(() => {
-    const m = mode(); if (!m || !inBattle()) return;
-    const st = state();
-    if (st.name === 'BATTLE_COMMAND' && !st.root && pcLike() && !hold[m] && !document.body.classList.contains('dialogueOpen')) setDrawer(m, true);
-    const s2 = state();
-    if (kb && s2.root && s2.name !== 'FIELD' && !s2.root.contains(document.activeElement)) focusFirst(s2.root);
-  }, 160);
+  // UI-02 owns input views. Focus repair never changes drawer state.
+  function autoOpen(m) { return window.BattleUIState?.snapshot(m).status==='commands'; }
+  document.addEventListener('focusin',()=>{const st=state();if(kb&&st.root&&!st.root.contains(document.activeElement))focusFirst(st.root);});
   setInterval(() => {   // keyboard users always have a focused control in an open menu
     if (!kb) return; const st = state();
     if (st.name === 'MENU' && !st.root.contains(document.activeElement)) { const t = tabArea(st.root); (t.find(x => /on|active/.test(x.className) || x.getAttribute('aria-selected') === 'true') || focusFirst(st.root) || t[0])?.focus?.({ preventScroll: true }); }

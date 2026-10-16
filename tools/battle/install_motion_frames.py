@@ -16,8 +16,8 @@ ASSETS = open(os.path.join(ROOT, 'js/assets.js'), encoding='utf-8').read()
 STATES = 'draw ready attack skill wind damage guard charge heal prayer blessing rune call corruption enrage evade item victory ko'.split()
 def budget(actor, state):
     if state in ('skill', 'wind', 'rune', 'prayer'): return 1200 if actor == 'aidan' else 1100
-    if state == 'draw': return 600   # Aidan one-shot sword draw (battle opening), 6 frames
-    if state == 'ready': return 900  # Fiona one-shot staff-ready (battle opening), 6 frames
+    if state == 'draw': return 1050  # Aidan one-shot sword draw (battle opening), 6 frames
+    if state == 'ready': return 1200 # Fiona one-shot staff-ready (battle opening), 6 frames
     if actor == 'aidan': return 820
     return 680 if state == 'attack' else 760
 def still_path(actor, state=None):

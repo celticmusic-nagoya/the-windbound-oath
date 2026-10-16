@@ -28,7 +28,7 @@ with server(8817) as base,sync_playwright() as p:
             check(s['bg'] is None and s['disp']=='none' and s['stageBg']!='none','%s %s: no BG-01, existing stage gradient kept'%(n,eid))
         pg.evaluate("document.getElementById('attackBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode')")
         pg.evaluate('startRaiderBattle()');pg.wait_for_timeout(800)
-        check(pg.evaluate("document.getElementById('attackBattle').dataset.bg||null") is None and pg.evaluate("getComputedStyle(document.getElementById('raiderBattle')).display")=='block','%s: boss battle has no BG-01'%n)
+        check(pg.evaluate("document.getElementById('attackBattle').dataset.bg||null") is None and pg.evaluate("getComputedStyle(document.getElementById('raiderBattle')).display")=='grid','%s: boss battle has no BG-01'%n)
         check(not errs,'%s: no page errors'%n,errs);pg.close()
     # load failure -> fallback
     pg=b.new_page(viewport={'width':1280,'height':720});errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
