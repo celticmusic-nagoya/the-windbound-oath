@@ -3561,3 +3561,12 @@ body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
 #battleBg{display:none;position:absolute;inset:0 -4% -14% -4%;z-index:0;pointer-events:none;background:center/cover no-repeat}
 #attackBattle[data-bg] #battleBg{display:block}
 body.normalBattleMode #attackBattle[data-bg]>.v2BattleStage{background:none!important}
+
+/* BG-02/BG-03 + foreground overlays. The foreground sits above the units but is CLIPPED to the lower band (--battle-fg-top): at the default unit positions the uncut BG-02 foreground (trunk/ferns) hid Aidan completely (measured), so only the ground-level band overlays the feet. The foreground uses the SAME box and cover rule as its main layer (position comes from the same registry value), so no screen ratio can shift one against the other. Never intercepts input. */
+#battleFg{display:none;position:absolute;inset:0 -4% -14% -4%;z-index:var(--battle-fg-z,27);pointer-events:none;background:center/cover no-repeat;clip-path:inset(var(--battle-fg-top,72%) 0 0 0)}
+#attackBattle[data-bg] #battleFg{display:block}
+#rbBg,#rbFg{display:none;position:absolute;inset:0;pointer-events:none;background:center/cover no-repeat}
+#rbFg{clip-path:inset(var(--battle-fg-top,72%) 0 0 0)}
+#raiderBattle[data-bg] #rbBg,#raiderBattle[data-bg] #rbFg{display:block}
+#rbBg{z-index:0}
+#rbFg{z-index:var(--battle-fg-z,27)}
