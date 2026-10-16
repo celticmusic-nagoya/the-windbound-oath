@@ -94,7 +94,9 @@ jobs:
         run: python3 tools/ci/run_tier.py tools/ci/tiers/${{ needs.plan.outputs.profile }}/t0_static.txt --out ci-results --budget 420
       - name: summary
         if: always()
-        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+        run: |
+          cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          python3 tools/ci/annotate.py ci-results "${{ github.job }}" || true
       - name: upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -129,7 +131,9 @@ jobs:
         run: python3 tools/ci/run_tier.py tools/ci/tiers/${{ needs.plan.outputs.profile }}/t1a_p0_gate.txt --out ci-results --budget 2400 --rerun-failed
       - name: summary
         if: always()
-        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+        run: |
+          cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          python3 tools/ci/annotate.py ci-results "${{ github.job }}" || true
       - name: upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -165,7 +169,9 @@ jobs:
         run: python3 tools/ci/run_tier.py tools/ci/tiers/int02/t1b_loading_ui.txt --out ci-results --budget 2400 --rerun-failed
       - name: summary
         if: always()
-        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+        run: |
+          cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          python3 tools/ci/annotate.py ci-results "${{ github.job }}" || true
       - name: upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -200,7 +206,9 @@ jobs:
         run: python3 tools/ci/run_tier.py tools/ci/tiers/${{ needs.plan.outputs.profile }}/t2_battle_input.txt --out ci-results --budget 3600 --rerun-failed
       - name: summary
         if: always()
-        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+        run: |
+          cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          python3 tools/ci/annotate.py ci-results "${{ github.job }}" || true
       - name: upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -249,7 +257,9 @@ jobs:
         run: python3 tools/ci/source_guard.py verify --root . --manifest "$RUNNER_TEMP/before.json" --exclude 'tools/ci/__pycache__/*' 'ci-results/*' 'test-results/*' | tee -a "$GITHUB_STEP_SUMMARY" || true
       - name: summary
         if: always()
-        run: cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+        run: |
+          cat ci-results/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          python3 tools/ci/annotate.py ci-results "${{ github.job }}" || true
       - name: upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
