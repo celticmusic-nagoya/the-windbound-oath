@@ -28,14 +28,49 @@
     r.cycles=0;r.specialAfter=Math.floor(range(3,6));r.steps=profiles.get(r.assets.type)(r);
     r.step=0;r.frame=0;r.from=0;r.started=now;r.lastDraw=-1;r.transition=false;
   }
-  function preload(assets){
-    if(cache.has(assets))return cache.get(assets);
-    const entry={images:[],ready:false};cache.set(assets,entry);
-    entry.promise=Promise.all(assets.frames.map(async frame=>{
-      const image=new Image();image.src=frame.path;await image.decode();return image;
-    })).then(images=>{entry.images=images;entry.ready=true;refresh();}).catch(()=>{entry.failed=true;});
+  // ---- Frame loading with bounded recovery -------------------------------------------------------------------------------------------
+  // Image.decode() can reject with EncodingError although the bytes are complete and valid (diagnosed 2026-10-15: img.complete, naturalWidth set,
+  // no network failure, and a fresh <Image> of the same URL decodes in 5-20 ms): queued async decodes, typically behind the page's bulk preloads,
+  // are rejected together shortly after load. The old code cached that rejection for good, so the actor never got a canvas. Now:
+  //  - a failed frame is never cached: only successfully decoded frames are kept, the rest are re-requested with a FRESH <Image>;
+  //  - concurrent requests for one URL share a single in-flight promise (dropped on failure so the retry really re-requests);
+  //  - retries are bounded (LOAD_TRIES attempts, backoff LOAD_BACKOFF) and only continue while a battle that uses the asset is active;
+  //  - after the bounds are used up the entry is marked failed (no loop, no throw); the next battle start (begin) re-arms it once more.
+  const LOAD_TRIES=4,LOAD_BACKOFF=Object.freeze([200,500,1200]),inflight=new Map();
+  const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  function loadFrame(path){
+    if(inflight.has(path))return inflight.get(path);
+    const image=new Image(),job=(async()=>{image.src=path;await image.decode();return image;})();
+    inflight.set(path,job);
+    job.then(()=>{},()=>{if(inflight.get(path)===job)inflight.delete(path);});   // a rejection is never shared with later requests
+    return job;
+  }
+  const wanted=new Map();   // assets -> number of BattleLoading.prepare() calls still waiting for them (keeps the bounded retries alive before a battle has begun)
+  const inUse=assets=>(wanted.get(assets)||0)>0||[...records.values()].some(r=>r.assets===assets&&r.enabled);
+  function startLoad(entry,assets){
+    const run=++entry.run;entry.failed=false;entry.attempts=0;
+    entry.promise=(async()=>{
+      for(;;){
+        entry.attempts++;
+        const settled=await Promise.allSettled(assets.frames.map((frame,i)=>entry.images[i]?entry.images[i]:loadFrame(frame.path)));
+        if(entry.run!==run)return;                        // superseded by a newer load of this asset
+        settled.forEach((result,i)=>{if(result.status==='fulfilled')entry.images[i]=result.value;});
+        if(assets.frames.every((_,i)=>entry.images[i])){entry.ready=true;refresh();return;}
+        if(entry.attempts>=LOAD_TRIES||!inUse(assets)){entry.failed=true;console.warn('BattleIdleMotion: idle frames not decoded after',entry.attempts,'attempt(s):',assets.frames.map((f,i)=>entry.images[i]?null:f.path).filter(Boolean).join(', '));return;}
+        await sleep(LOAD_BACKOFF[Math.min(entry.attempts-1,LOAD_BACKOFF.length-1)]);
+        if(entry.run!==run)return;
+        if(!inUse(assets)){entry.failed=true;return;}   // the battle ended while waiting: no further request
+      }
+    })();
     return entry;
   }
+  function preload(assets){
+    if(cache.has(assets))return cache.get(assets);
+    const entry={images:[],ready:false,failed:false,attempts:0,run:0};cache.set(assets,entry);
+    return startLoad(entry,assets);
+  }
+  // A new battle gives an asset whose loading was given up another bounded set of attempts (never while a load is still running).
+  function rearm(assets){const entry=cache.get(assets);if(entry&&entry.failed&&!entry.ready)startLoad(entry,assets);}
   function mount(r){
     if(r.canvas)return;
     r.image=document.querySelector(r.selector);r.host=r.image?.parentElement;if(!r.host)return;
@@ -100,7 +135,22 @@
     }
     if(running)raf=requestAnimationFrame(tick);else refresh();
   }
+  // BL-01: decode a set before the battle begins. Shares the same cache entry / in-flight requests / bounded retries as begin(); never rejects.
+  async function prepare(assets){
+    if(!assets||!assets.frames)return {ready:true,failed:[]};
+    wanted.set(assets,(wanted.get(assets)||0)+1);
+    try{
+      let entry=cache.get(assets),joined=false;
+      if(!entry)entry=preload(assets);else if(entry.failed&&!entry.ready)startLoad(entry,assets);else if(!entry.ready)joined=true;
+      while(!entry.ready&&!entry.failed)await entry.promise;
+      // The cache entry (decoded frames, in-flight requests) is shared; the verdict is per caller: one that only joined a load started earlier (by a cancelled /
+      // timed-out Loading) and sees it give up gets a fresh bounded load of its own instead of inheriting the failure.
+      if(!entry.ready&&joined){if(entry.failed)startLoad(entry,assets);while(!entry.ready&&!entry.failed)await entry.promise;}
+      return {ready:entry.ready,failed:entry.ready?[]:assets.frames.map((f,i)=>entry.images[i]?null:f.path).filter(Boolean),attempts:entry.attempts};
+    }finally{const n=(wanted.get(assets)||1)-1;if(n>0)wanted.set(assets,n);else wanted.delete(assets);}
+  }
   window.BattleIdleMotion=Object.freeze({
+    prepare,
     register({context,actor,selector,assets}){
       if(!profiles.has(assets.type)||records.has(selector+'|'+actor))return false;
       records.set(selector+'|'+actor,{context,actor,selector,assets,enabled:false,state:null,showing:false});return true;
@@ -108,10 +158,10 @@
     ready(selector){const r=[...records.values()].find(q=>q.selector===selector&&q.enabled);return r&&eligible(r)?preload(r.assets).promise.then(()=>cache.get(r.assets).ready):Promise.resolve(false);},
     defineType(name,sequenceFactory){if(profiles.has(name)||typeof sequenceFactory!=='function')return false;profiles.set(name,sequenceFactory);return true;},
     // Several actors can share a battle slot (the enemy slot holds goblin / slime / bat / boar art in turn): a record only runs while its own actor is painted there.
-    begin(selector,actor){for(const r of records.values())if(r.selector===selector){const mine=!actor||r.actor===actor;r.enabled=mine;if(!mine)r.state=null;hide(r);if(mine)reset(r);}refresh();},
+    begin(selector,actor){for(const r of records.values())if(r.selector===selector){const mine=!actor||r.actor===actor;r.enabled=mine;if(!mine)r.state=null;hide(r);if(mine){reset(r);rearm(r.assets);}}refresh();},
     stop(selector){for(const r of records.values())if(r.selector===selector){r.enabled=false;hide(r);}refresh();},
     onState(selector,actor,state){for(const r of records.values()){if(r.selector!==selector)continue;if(r.actor!==actor){if(r.state!==null){r.state=null;hide(r);}continue;}const changed=r.state!==state;r.state=state;if(changed)hide(r);}refresh();},
-    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0}))};}
+    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0,loadAttempts:r.entry?.attempts??cache.get(r.assets)?.attempts??0,loadFailed:Boolean((r.entry||cache.get(r.assets))?.failed)}))};}
   });
   BattleIdleMotion.register({context:'normal',actor:'aidan',selector:'#bAidan2 img',assets:BATTLE_IDLE_ASSETS.aidan});
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});

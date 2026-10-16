@@ -18,7 +18,7 @@ with server(8813) as base,sync_playwright() as p:
         n=pg.evaluate('altarLines.length')
         for _ in range(n):pg.locator('#altarScene').click();pg.wait_for_timeout(35)
         pg.wait_for_function("document.body.classList.contains('raiderBattleMode')",timeout=30000);pg.evaluate("qaPhase='initial-idle'")
-        pg.wait_for_function("BattleIdleMotion.status.actors.some(a=>a.actor==='lou' && a.showing)",timeout=20000);pg.wait_for_timeout(3000)
+        pg.wait_for_function("BattleIdleMotion.status.actors.some(a=>a.actor==='lou' && a.showing)",timeout=20000);pg.wait_for_timeout(3600)   # idle loops are paused while the battle-opening input lock runs (~1.37 s); keep ~2.2 s of running loop in the window
         check(pg.evaluate('oathBound && storyStage===12'),'altar contract then original battle start / '+reduced)
         seq=pg.evaluate("qaTimeline.filter(x=>x.phase==='initial-idle').map(x=>x.canvas)")
         check(len(set(x for x in seq if x is not None))>=5,'initial Lou loop advances / '+reduced,seq)

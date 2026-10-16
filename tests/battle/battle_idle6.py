@@ -31,7 +31,7 @@ def disp_h(im):
     a=np.array(im)[...,3];ys,xs=np.where(a>16);return (ys.max()-ys.min())*min(158/im.width,198/im.height)
 r=disp_h(sets['aidan draw'][5])/disp_h(sets['aidan idle'][0]);check(abs(r-1)<=0.03,'aidan draw6 / idle1 display body height within 3%',round(r,3))
 js=(ROOT/'js/assets.js').read_text()
-check('ms:Object.freeze([220,180,220,160,110,260])' in js and 'ms:Object.freeze([260,220,240,180,300,260])' in js,'assets.js durations as specified')
+check('ms:Object.freeze([400,320,400,290,200,460])' in js and 'ms:Object.freeze([390,330,360,270,450,390])' in js,'assets.js durations as specified')
 check((ROOT/'img/battle/characters/aidan/idle/aidan_idle_00.png').exists() and 'aidan_breathe_v1' in js,'previous 4-frame idle kept as backup')
 with server(8816) as base,sync_playwright() as p:
     b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
@@ -44,8 +44,8 @@ with server(8816) as base,sync_playwright() as p:
         pg.evaluate(start);pg.wait_for_timeout(2600)   # opening (draw/ready) finished
         res=pg.evaluate("""async(ctx)=>{const seen={aidan:[],fiona:[]},t0=performance.now();
           await new Promise(res=>{const tick=t=>{for(const a of BattleIdleMotion.status.actors)if(a.context===ctx&&seen[a.actor]&&a.showing){const s=seen[a.actor];if(!s.length||s[s.length-1].f!==a.frame)s.push({f:a.frame,t:t-t0})}
-            if(t-t0<3600)requestAnimationFrame(tick);else res()};requestAnimationFrame(tick)});return seen}""",ctx)
-        for who,want in (('aidan',[220,180,220,160,110,260]),('fiona',[260,220,240,180,300,260])):
+            if(t-t0<5200)requestAnimationFrame(tick);else res()};requestAnimationFrame(tick)});return seen}""",ctx)
+        for who,want in (('aidan',[400,320,400,290,200,460]),('fiona',[390,330,360,270,450,390])):
             s=res[who];order=[x['f'] for x in s];ok=len(s)>=7 and all(order[i+1]==(order[i]+1)%6 for i in range(len(order)-1))
             check(ok,'%s %s: frames cycle 1..6 in order'%(ctx,who),order[:8])
             durs=[round(s[i+1]['t']-s[i]['t']) for i in range(1,len(s)-1)];exp=[want[x['f']] for x in s[1:-1]]   # first sample is a partial frame

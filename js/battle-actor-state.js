@@ -32,9 +32,12 @@
     const image = document.querySelector(battle.image);
     const source = BATTLE_ASSETS[battle.actor][state];
     // Delivered multi-frame motion (img/battle/motion-manifest.json) plays instead of the still; none installed -> still as before.
-    if (!(window.BattleMotion && BattleMotion.start(image, battle.actor, state)) && image && image.getAttribute('src') !== source) image.src = source;
+    const run = window.BattleMotion ? BattleMotion.start(image, battle.actor, state) : null;
+    battle.run = run || null;
+    if (!run && image && image.getAttribute('src') !== source) image.src = source;
     window.BattleFacing?.paint(image, battle.actor, state);
     window.BattleIdleMotion?.onState(battle.image, battle.actor, state);
+    return battle.run;
   }
   function resting(battle) {
     const [hp, maxHp] = battle.health();
@@ -65,15 +68,21 @@
     }
     const sequence = invalidate(battle);
     if (state === 'guard') battle.guard = true;
-    paint(battle, state);
+    const run = paint(battle, state);
     if (duration && temporary.has(state)) {
-      battle.timer = setTimeout(() => {
-        if (battle.sequence !== sequence) return;
+      const resume = () => {
+        if (battle.sequence !== sequence) return;   // interrupted / KO / battle end / new battle: this timer's turn is over
         sync(context, actor);
         if (battle.sequence !== sequence || ['ko', 'victory'].includes(battle.state)) return;
         battle.timer = null;
         if (next) return set(actor, next, { battle: context, duration: nextDuration });
         paint(battle, resting(battle));
+      };
+      // Rest needs BOTH: the requested duration elapsed (this single timer) AND this pose's motion played out (run.done).
+      // A run that was stopped without a sequence change (nobody does today) still resumes, so a pose can never stick.
+      battle.timer = setTimeout(() => {
+        if (battle.sequence !== sequence) return;
+        if (run && !run.finished) run.done.then(resume); else resume();
       }, duration);
     }
     return true;
@@ -110,6 +119,7 @@
     },
     end(context, actor = 'aidan') { const battle = lookup(context, actor); invalidate(battle); window.BattleIdleMotion?.stop(battle.image); },
     get(context, actor = 'aidan') { return lookup(context, actor)?.state; },
+    motion(context, actor = 'aidan') { return lookup(context, actor)?.run || null; },   // the live BattleMotion run (run.done) or null for a still
     trackPhase(actor, phase, { battle: context } = {}) {
       const battle = lookup(context, actor);
       if (!battle) return false;

@@ -1,5 +1,6 @@
 // Shared manual targeting. Actions own resources; this module never consumes them.
 (() => {
+  if(window.BattleTargetSelector)return;
   const types = new Set(['enemy_single','enemy_all','ally_single','ally_all','ally_ko_single','self','none']);
   const memory = new Map();
   let pending = null;
@@ -43,7 +44,7 @@
     });
   }
   function open({type,battle='normal',candidates=[],actor,onConfirm,onCancel,label='対象を選択'}){
-    if(pending||window.BattlePresentation?.busy)return false;
+    if(pending||!window.BattleCommandGate?.canInteract(battle))return false;
     if(!types.has(type))return false;
     if(type==='none'){onConfirm(null);return true;}
     const valid=candidates.filter(x=>eligible(x,type));
@@ -51,13 +52,13 @@
     if(!valid.length)return false;
     const last=memory.get(battle),index=candidates.findIndex(x=>x.id===last);
     const next=[...candidates.slice(index+1),...candidates.slice(0,index+1)].find(x=>eligible(x,type));
-    pending={type,battle,candidates:valid,onConfirm,onCancel,selected:valid.some(x=>x.id===last)?last:(next||valid[0]).id};
+    pending={admissionKey:BattleCommandGate.snapshot(battle).key,type,battle,candidates:valid,onConfirm,onCancel,selected:valid.some(x=>x.id===last)?last:(next||valid[0]).id};
     // Keyboard flow: nothing to choose -> no panel. All-target actions and a single valid target confirm at once (same result as tapping the only target).
     if(type.endsWith('_all')||valid.length===1){const id=pending.selected;if(!confirm(id))cancel();return true;}
     panel.querySelector('span').textContent=label+' / TARGET';panel.hidden=false;draw();return true;
   }
   addEventListener('keydown',e=>{
-    if(!pending||window.BattlePresentation?.busy)return;
+    if(!pending||!window.BattleCommandGate?.canInteract(pending.battle))return;
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' ','Escape'].includes(e.key))return;
     e.preventDefault();e.stopImmediatePropagation();
     if(e.repeat&&(e.key==='Enter'||e.key===' '||e.key==='Escape'))return;   // one press = one action

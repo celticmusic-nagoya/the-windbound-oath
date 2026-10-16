@@ -11,7 +11,7 @@ with sync_playwright() as p:
     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(900)
     pg.evaluate("devJump('raider')"); pg.wait_for_timeout(5000)
     st=lambda: pg.evaluate("InputManager.state()")
-    check(pg.evaluate("getComputedStyle(document.querySelector('#rbCmd')).display")=='grid' and st()=='BATTLE_COMMAND','boss battle: COMMAND expanded from the start')
+    check(pg.evaluate("getComputedStyle(document.querySelector('#rbCmd')).display")=='none' and st()=='BATTLE_COMMAND','boss battle: COMMAND starts collapsed')
     ids=pg.evaluate("[...document.querySelectorAll('#rbCmd button')].filter(b=>b.offsetParent).map(b=>b.id)"); print(ids)
     pg.keyboard.press('ArrowDown'); f=pg.evaluate("document.activeElement.id"); check(f not in ('','rbCommandClose'),'Down selects a command (%s)'%f)
     a0=pg.evaluate("rbActor"); pg.keyboard.press('Enter'); pg.wait_for_timeout(500)
