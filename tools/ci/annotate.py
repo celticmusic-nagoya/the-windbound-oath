@@ -10,6 +10,6 @@ except Exception as e:
 c = {}
 for x in rows: c[x.get('verdict') or x.get('status')] = c.get(x.get('verdict') or x.get('status'), 0) + 1
 lines = ['%s %s' % (', '.join('%s=%d' % kv for kv in sorted(c.items())), 'total=%d' % len(rows))]
-for x in rows: lines.append('%s | %s | %ss | %s' % (x.get('test'), x.get('verdict'), x.get('seconds', '?'), ' ; '.join(x.get('fail_lines') or [])[:140]))
+for x in rows: lines.append('%s | %s | %ss | %s' % (x.get('test'), x.get('verdict'), x.get('seconds', '?'), ' ; '.join(x.get('fail_lines') or [])[:140] + ((' || RERUN(diagnostic only): %s %ss' % (x['rerun']['verdict'], x['rerun']['seconds'])) if x.get('rerun') else '')))
 msg = '%0A'.join(l.replace('%', '%25').replace('\r', '').replace('\n', ' ') for l in lines)[:60000]
 print('::notice title=%s::%s' % (title, msg))
