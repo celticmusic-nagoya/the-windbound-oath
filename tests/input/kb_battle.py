@@ -1,4 +1,4 @@
-# PC keyboard in battle: COMMAND expanded at start, arrows / Enter / Esc, target auto-select, multi target, magic, items, no double execution, mouse still works. Needs http.server on 8765.
+# PC keyboard in battle: COMMAND collapsed at start, arrows / Enter / Esc, target auto-select, multi target, magic, items, no double execution, mouse still works. Needs http.server on 8765.
 import sys
 from playwright.sync_api import sync_playwright
 fails=[];errs=[]
@@ -26,7 +26,7 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
     # --- multiple enemies ---
     boot(pg,'forestGob1')
-    check(drawer(pg)=='grid' and st(pg)=='BATTLE_COMMAND','COMMAND is expanded from the start of the battle (PC)')
+    check(drawer(pg)=='none' and st(pg)=='BATTLE_COMMAND','COMMAND starts collapsed on PC')
     pg.keyboard.press('ArrowDown'); check(foc(pg)=='nAtk','Down selects the first command (攻撃) %s'%foc(pg))
     pg.keyboard.press('ArrowDown'); pg.keyboard.press('ArrowUp'); check(foc(pg)=='nAtk','Up/Down move the selection')
     # key-hold must not auto-confirm the target: Enter pressed + repeated
@@ -79,7 +79,7 @@ with sync_playwright() as p:
     check(not pg.evaluate("BattleTargetSelector.active") and pg.evaluate("normalActor")=='fiona','single enemy: attack auto-selects the only target')
     pg.close(); pg=b.new_page(viewport={'width':1280,'height':720}); pg.on('pageerror',lambda e:errs.append(str(e)))
     boot(pg,'forestGob1')
-    pg.click('#nAtk'); pg.wait_for_timeout(500)
+    pg.click('#normalCommandToggle');pg.click('#nAtk'); pg.wait_for_timeout(500)
     check(pg.evaluate("BattleTargetSelector.active")==True,'mouse: clicking 攻撃 still opens target selection')
     box=pg.evaluate("(()=>{const e=document.querySelector('.battle-target,[data-target]');if(!e)return null;const r=e.getBoundingClientRect();return [r.x+r.width/2,r.y+r.height/2]})()")
     if box: pg.mouse.click(box[0],box[1]); settle(pg); check(pg.evaluate("normalActor")=='fiona','mouse: clicking a target executes the attack')

@@ -65,16 +65,16 @@ linear-gradient(18deg,#55744d,#6e8756 55%,#4f704d);transition:filter .3s}
 #fiona{position:absolute;width:36px;height:46px;border-radius:48% 48% 28% 28%;background:#e8dfc8;border:3px solid #78936b;box-shadow:0 4px 8px #0006;z-index:9;display:grid;place-items:center;color:#25402d;font-weight:bold;cursor:pointer}
 #storyFlag{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:58;background:#101820e8;border:1px solid #c5a45b;padding:7px 12px;border-radius:18px;font-size:12px;display:none}
 #battle{position:fixed;inset:0;z-index:185;background:linear-gradient(#1a2820,#344c34 55%,#24291f);display:none;color:#f2eee3}
-#battleTop{position:absolute;left:4%;right:4%;top:4%;display:flex;justify-content:space-between;gap:10px}
+:is(#battleTop,#normalLegacyTop){position:absolute;left:4%;right:4%;top:4%;display:flex;justify-content:space-between;gap:10px}
 .panel{background:#101820e8;border:1px solid #c5a45b;border-radius:7px;padding:10px 14px}
-#battleField{position:absolute;left:5%;right:5%;top:22%;bottom:27%;border-bottom:4px solid #627257}
+:is(#battleField,#trainingBattleField){position:absolute;left:5%;right:5%;top:22%;bottom:27%;border-bottom:4px solid #627257}
 .battler{position:absolute;bottom:15%;width:82px;height:120px;border-radius:45% 45% 22% 22%;display:grid;place-items:center;font-weight:bold;box-shadow:0 8px 15px #0007}
 #bAidan{left:12%;background:#17372f;border:4px solid #c5a45b}
 #bFiona{left:27%;background:#e5ddc7;color:#27422f;border:4px solid #86a278}
 #bDummy{right:15%;background:#765236;border:5px solid #3e2c1f}
 #battleMsg{position:absolute;left:4%;right:4%;bottom:15%;min-height:62px}
-#battleCmd{position:absolute;left:4%;right:4%;bottom:4%;display:flex;gap:8px;flex-wrap:wrap}
-#battleCmd button{flex:1;min-width:80px;padding:12px;background:#13241e;color:#f1e6ca;border:1px solid #c5a45b;border-radius:6px;font-family:inherit}
+:is(#battleCmd,#normalLegacyCmd){position:absolute;left:4%;right:4%;bottom:4%;display:flex;gap:8px;flex-wrap:wrap}
+:is(#battleCmd,#normalLegacyCmd) button{flex:1;min-width:80px;padding:12px;background:#13241e;color:#f1e6ca;border:1px solid #c5a45b;border-radius:6px;font-family:inherit}
 .hpbar{height:9px;background:#3b2424;border:1px solid #bea96e;margin-top:5px;width:150px}.hpfill{height:100%;background:#829a6f}
 .runeGlow{animation:runePulse 1s ease-in-out 2}@keyframes runePulse{50%{filter:drop-shadow(0 0 16px #b9e6a4);transform:scale(1.08)}}
 
@@ -222,38 +222,38 @@ button.tpLocked{opacity:.42;filter:grayscale(.55);cursor:not-allowed}
   }
 
   /* Battle status panels stack vertically enough to fit the full enemy HP bar. */
-  #battleTop{
+  :is(#battleTop,#normalLegacyTop){
     left:4%!important;right:4%!important;top:3%!important;
     gap:7px!important;
   }
-  #battleTop .panel{
+  :is(#battleTop,#normalLegacyTop) .panel{
     min-width:0!important;
     width:calc(50% - 4px)!important;
     box-sizing:border-box!important;
     padding:8px 9px!important;
     overflow:hidden!important;
   }
-  #battleTop .panel b{font-size:14px!important;white-space:nowrap}
-  #battleTop .hpbar,
-  #battleTop .tpbar{
+  :is(#battleTop,#normalLegacyTop) .panel b{font-size:14px!important;white-space:nowrap}
+  :is(#battleTop,#normalLegacyTop) .hpbar,
+  :is(#battleTop,#normalLegacyTop) .tpbar{
     width:100%!important;
     max-width:100%!important;
     box-sizing:border-box!important;
   }
-  #battleTop .panel span{font-size:12px!important}
-  #battleTop .tptext{font-size:10px!important}
+  :is(#battleTop,#normalLegacyTop) .panel span{font-size:12px!important}
+  :is(#battleTop,#normalLegacyTop) .tptext{font-size:10px!important}
 
-  #battleField{top:22%!important;bottom:30%!important}
+  :is(#battleField,#trainingBattleField){top:22%!important;bottom:30%!important}
   #battleMsg,#battleMsg2{
     left:4%!important;right:4%!important;
     bottom:16%!important;
     font-size:13px!important;line-height:1.45!important;
   }
-  #battleCmd{
+  :is(#battleCmd,#normalLegacyCmd){
     left:4%!important;right:4%!important;bottom:3%!important;
     gap:6px!important;
   }
-  #battleCmd button{
+  :is(#battleCmd,#normalLegacyCmd) button{
     min-width:0!important;padding:10px 5px!important;font-size:13px!important;
   }
 }
@@ -867,7 +867,7 @@ body:not(.normalBattleMode):not(.raiderBattleMode) #menuOpen{display:block!impor
    ========================================================= */
 body.normalBattleMode #normalPartyHud,
 body.normalBattleMode #normalFiona,
-body.normalBattleMode #attackBattle > #battleTop,
+body.normalBattleMode #attackBattle > :is(#battleTop,#normalLegacyTop),
 body.normalBattleMode #attackRune{display:none!important}
 
 body.normalBattleMode #attackBattle{
@@ -2179,7 +2179,7 @@ body.raiderBattleMode #rbItems.isOpen button{
 body.battleMode{overflow:hidden}
 body.normalBattleMode #attackBattle,body.raiderBattleMode #raiderBattle{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:0!important;overflow:hidden!important;background:radial-gradient(circle at 50% 45%,#123426 0,#061b13 52%,#03110c 100%)!important;z-index:700!important}
 /* Retire legacy battle chrome. */
-body.normalBattleMode #attackBattle>#battleTop,body.normalBattleMode #attackBattle>#attackRune,body.normalBattleMode #attackBattle>#battleCmd,body.normalBattleMode #attackBattle>#normalPartyHud,body.normalBattleMode #attackBattle>#normalFiona,body.raiderBattleMode #raiderBattle>#rbParty,body.raiderBattleMode #raiderBattle>#rbTop{display:none!important}
+body.normalBattleMode #attackBattle>:is(#battleTop,#normalLegacyTop),body.normalBattleMode #attackBattle>#attackRune,body.normalBattleMode #attackBattle>:is(#battleCmd,#normalLegacyCmd),body.normalBattleMode #attackBattle>#normalPartyHud,body.normalBattleMode #attackBattle>#normalFiona,body.raiderBattleMode #raiderBattle>#rbParty,body.raiderBattleMode #raiderBattle>#rbTop{display:none!important}
 /* Stage */
 body.normalBattleMode #attackBattle>.v2BattleStage{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;overflow:hidden!important;background:linear-gradient(to bottom,transparent 0 62%,rgba(18,43,28,.65) 62% 100%)!important}
 body.normalBattleMode .v2Unit{position:absolute!important;top:auto!important;bottom:18%!important;width:clamp(110px,17vw,190px)!important;height:clamp(180px,34vh,300px)!important;transform:none!important}
@@ -2651,7 +2651,7 @@ body.normalBattleMode #bGob:after{z-index:-1!important}
 #raiderBattle #raiderSprite{overflow:visible!important;aspect-ratio:123/92!important;height:auto!important;}
 #raiderBattle #raiderSprite img{width:100%!important;height:auto!important;background:transparent!important;}
 
-body.actionCinematic #battleTop,body.actionCinematic #normalPartyHud,body.actionCinematic #normalActor,body.actionCinematic #normalCommandToggle,body.actionCinematic #normalBattleCmd,body.actionCinematic #normalItems,body.actionCinematic #battleMsg2,body.actionCinematic #attackRune,body.actionCinematic #rbHud,body.actionCinematic #rbTurn,body.actionCinematic #rbCommandToggle,body.actionCinematic #rbCmd,body.actionCinematic #rbMsg,body.actionCinematic #rbRune,body.actionCinematic .v2NearHud,body.actionCinematic .rbNearHud{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}body.actionCinematic .actionFocus{z-index:90!important;filter:drop-shadow(0 18px 28px #000a);animation:v053focus .62s cubic-bezier(.2,.8,.2,1) both}body.actionCinematic .actionTarget{animation:v053hit .34s ease both}body.actionCinematic .actionDim{opacity:.3!important;filter:saturate(.6) brightness(.65)!important}@keyframes v053focus{0%,100%{transform:translate(0) scale(1)}48%{transform:translate(var(--action-x,24px),-8px) scale(1.12)}}@keyframes v053hit{0%,100%{transform:translateX(0)}35%{transform:translateX(-10px)}65%{transform:translateX(8px)}}#raiderSprite.actionPose{width:min(46vw,430px)!important;height:min(62vh,500px)!important;right:5%!important;bottom:7%!important;z-index:95!important}#raiderSprite.actionPose img{width:100%!important;height:100%!important;object-fit:contain!important}@media(orientation:portrait){#raiderSprite.actionPose{width:min(76vw,430px)!important;height:min(48vh,500px)!important;right:-3%!important;bottom:29%!important}}
+body.actionCinematic :is(#battleTop,#normalLegacyTop),body.actionCinematic #normalPartyHud,body.actionCinematic #normalActor,body.actionCinematic #normalCommandToggle,body.actionCinematic #normalBattleCmd,body.actionCinematic #normalItems,body.actionCinematic #battleMsg2,body.actionCinematic #attackRune,body.actionCinematic #rbHud,body.actionCinematic #rbTurn,body.actionCinematic #rbCommandToggle,body.actionCinematic #rbCmd,body.actionCinematic #rbMsg,body.actionCinematic #rbRune,body.actionCinematic .v2NearHud,body.actionCinematic .rbNearHud{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}body.actionCinematic .actionFocus{z-index:90!important;filter:drop-shadow(0 18px 28px #000a);animation:v053focus .62s cubic-bezier(.2,.8,.2,1) both}body.actionCinematic .actionTarget{animation:v053hit .34s ease both}body.actionCinematic .actionDim{opacity:.3!important;filter:saturate(.6) brightness(.65)!important}@keyframes v053focus{0%,100%{transform:translate(0) scale(1)}48%{transform:translate(var(--action-x,24px),-8px) scale(1.12)}}@keyframes v053hit{0%,100%{transform:translateX(0)}35%{transform:translateX(-10px)}65%{transform:translateX(8px)}}#raiderSprite.actionPose{width:min(46vw,430px)!important;height:min(62vh,500px)!important;right:5%!important;bottom:7%!important;z-index:95!important}#raiderSprite.actionPose img{width:100%!important;height:100%!important;object-fit:contain!important}@media(orientation:portrait){#raiderSprite.actionPose{width:min(76vw,430px)!important;height:min(48vh,500px)!important;right:-3%!important;bottom:29%!important}}
 
 /* v0.54: explicit stage ownership. Keep actors and enemies inside the battlefield. */
 body.normalBattleMode #attackBattle .v2BattleStage,
@@ -2800,9 +2800,9 @@ body.battleMode #rbMsg.is-visible:not(.battle-log-empty){
   opacity:1!important;
 }
 /* Legacy battle panels must never leak through the rebuilt battlefield. */
-body.normalBattleMode #attackBattle > #battleTop,
+body.normalBattleMode #attackBattle > :is(#battleTop,#normalLegacyTop),
 body.normalBattleMode #attackBattle > #attackRune,
-body.normalBattleMode #attackBattle > #battleCmd,
+body.normalBattleMode #attackBattle > :is(#battleCmd,#normalLegacyCmd),
 body.normalBattleMode #attackBattle > #normalPartyHud,
 body.normalBattleMode #attackBattle > #normalFiona,
 body.raiderBattleMode #raiderBattle > #rbTop,

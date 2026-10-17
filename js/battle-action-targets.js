@@ -9,8 +9,12 @@
  function type(kind){return ['atk','skill','windbloom'].includes(kind)?'enemy_single':kind==='wind'?'enemy_all':kind==='heal'?'ally_single':['prayer','rune','winddance'].includes(kind)?'none':'self';}
  function request(battle,kind,actor,submit,item){
   const t=item==='potion'?'ally_single':item==='ether'?'ally_single':type(kind);
-  if(battle==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);
-  return BattleTargetSelector.open({type:t,battle,actor,candidates:t.startsWith('enemy')?enemies(battle):allies(battle).filter(x=>item!=='ether'||x.id==='fiona'),label:item?'アイテムの対象を選択':'行動の対象を選択',onConfirm:submit,onCancel:()=>{if(battle==='normal')setNormalCommandDrawer(true);else setRaiderCommandDrawer(true)}});
+  const ui=window.BattleUIState,tx=ui?.beginTargets(battle);
+  if(ui&&!tx)return false;
+  if(!ui){if(battle==='normal')setNormalCommandDrawer(false);else setRaiderCommandDrawer(false);}
+  const opened=BattleTargetSelector.open({type:t,battle,actor,candidates:t.startsWith('enemy')?enemies(battle):allies(battle).filter(x=>item!=='ether'||x.id==='fiona'),label:item?'アイテムの対象を選択':'行動の対象を選択',onConfirm:value=>{if(ui)ui.confirmTargets(battle,tx,submit,value);else submit(value)},onCancel:()=>{if(ui)ui.cancelTargets(battle,tx);else if(battle==='normal')setNormalCommandDrawer(true);else setRaiderCommandDrawer(true)}});
+  if(ui){if(!opened)ui.cancelTargets(battle,tx);else ui.sync(battle);}
+  return opened;
  }
  function item(battle,k){
   if(window.BattlePresentation?.busy||(battle==='normal'?attackBattleBusy:rbBusy)||BattleTargetSelector.active)return;

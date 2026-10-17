@@ -16,7 +16,7 @@
 
 <meta name="build-version" content="Phase 2.5.2">
 
-<link rel="stylesheet" href="css/style.css?v=20261012c">
+<link rel="stylesheet" href="css/style.css?v=20261017ui-integration02">
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css?v=20261013lf">
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
@@ -109,13 +109,13 @@
 <div id="battle">
 <div id="battleTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aHP"></div></div><span id="aHPtxt"></span><div class="tpbar"><div class="tpfill" id="aTP"></div></div><span class="tptext" id="aTPtxt"></span></div>
 <div class="panel"><b>訓練用木人</b><div class="hpbar"><div class="hpfill" id="dHP"></div></div><span id="dHPtxt"></span></div></div>
-<div id="battleField"><div class="battler" id="bAidan">エイダン</div><div class="battler" id="bFiona">フィオナ</div><div class="battler" id="bDummy">木人</div></div>
+<div id="trainingBattleField"><div class="battler" id="bAidan">エイダン</div><div class="battler" id="bFiona">フィオナ</div><div class="battler" id="bDummy">木人</div></div>
 <div class="panel" id="battleMsg">訓練開始！</div>
 <div id="battleCmd"><button id="atk">攻撃</button><button id="skill">一閃　TP30</button><button id="guard">防御</button></div>
 </div>
 <div id="rescueNotice"></div>
 <div id="attackBattle">
-<div id="battleTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aaHP"></div></div><span id="aaHPtxt"></span><div class="tpbar"><div class="tpfill" id="aaTP"></div></div><span class="tptext" id="aaTPtxt"></span></div>
+<div id="normalLegacyTop"><div class="panel"><b>エイダン</b><div class="hpbar"><div class="hpfill" id="aaHP"></div></div><span id="aaHPtxt"></span><div class="tpbar"><div class="tpfill" id="aaTP"></div></div><span class="tptext" id="aaTPtxt"></span></div>
 <div class="panel"><b id="enemyName">異常化ゴブリン</b><div class="hpbar"><div class="hpfill" id="ggHP"></div></div><span id="ggHPtxt"></span></div></div>
 <div id="attackRune">黒紫のルーンが脈動している……</div>
 <div class="v2BattleStage" id="battleField">
@@ -137,7 +137,7 @@
 </div>
 </div>
 <div class="panel battle-log-empty" id="battleMsg2" aria-live="polite"></div>
-<div id="battleCmd" style="z-index:2"><button id="aatk">攻撃</button><button id="askill">一閃　TP30</button><button id="aguard">防御</button></div>
+<div id="normalLegacyCmd" style="z-index:2"><button id="aatk">攻撃</button><button id="askill">一閃　TP30</button><button id="aguard">防御</button></div>
 <div id="normalPartyHud"><div class="partyCard" id="nCardA"><b>エイダン</b><div class="mini"><i id="nAHP"></i></div><span id="nATxt"></span></div><div class="partyCard" id="nCardF"><b>フィオナ</b><div class="mini"><i id="nFHP"></i></div><span id="nFTxt"></span></div></div>
 <div id="normalFiona">F</div>
 <div id="normalActor"></div>
@@ -740,7 +740,7 @@ function updateNormalPartyHud(){
  $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;updateV2BattleHud();
 }
 function updateNormalCommands(){
- setNormalCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('normal')));
+ window.BattleUIState?.sync('normal');
  const a=normalActor==='aidan';
  ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nWindDance','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id)?.classList.remove('v2-visible'));
  $('#nDevKill')?.classList.add('v2-visible');
@@ -754,12 +754,12 @@ function openNormalItems(){
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${normalActor==='aidan'?'エイダン':'フィオナ'}</b><br>
  <button data-ni="potion">きずぐすり ×${battleItems.potion}</button>
  <button data-ni="ether">魔力の雫 ×${battleItems.ether}</button>
- <button data-ni="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';setNormalCommandDrawer(false);
+ <button data-ni="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';if(window.BattleUIState)BattleUIState.items('normal');else setNormalCommandDrawer(false);
 }
 let normalActs=[],normalGuardA=false,normalGuardF=false;
 $('#normalItems').onclick=e=>{
  const b=e.target.closest('[data-ni]');if(!b)return;e.stopPropagation();
- const k=b.dataset.ni;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
+ const k=b.dataset.ni;if(k==='close'){if(window.BattleUIState)BattleUIState.backItems('normal');else{$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none'}return}
  if(k==='potion'&&!battleItems.potion){showBattleBanner('きずぐすりを持っていない。',800);return}
  if(k==='ether'&&!battleItems.ether){showBattleBanner('魔力の雫を持っていない。',800);return}
  BattleActionTargets.item('normal',k);
@@ -1268,7 +1268,7 @@ function updateRaider(){
  BattleActorState.sync('raider');BattleActorState.sync('raider','fiona');BattleActorState.sync('raider','lou');BattleActorState.sync('raider','goblin_raider');
  const phaseEntered=BattleActorState.trackPhase('goblin_raider',rbPhase(),{battle:'raider'});
  if(phaseEntered&&rbPhase()===3)window.PrologueCombat?.enrageMoment();
- setRaiderCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('raider')));
+ window.BattleUIState?.sync('raider');
  $('#rbAHP').style.width=Math.max(0,rbHP/1.2)+'%';$('#rbAHPt').textContent=`HP ${Math.max(0,rbHP)} / 120`;
  $('#rbBHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbBHPt').textContent=`HP ${Math.max(0,rbBoss)} / 1250`;
  if($('#rbEnemyHP')){$('#rbEnemyHP').style.width=Math.max(0,rbBoss/12.5)+'%';$('#rbEnemyTxt').textContent=`HP ${Math.max(0,rbBoss)}`;}
@@ -1325,11 +1325,11 @@ function openRaiderItems(){
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${rbActor==='aidan'?'エイダン':'フィオナ'}</b><br>
  <button data-ri="potion">きずぐすり ×${battleItems.potion}</button>
  <button data-ri="ether">魔力の雫 ×${battleItems.ether}</button>
- <button data-ri="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';setRaiderCommandDrawer(false);
+ <button data-ri="close">戻る</button>`;box.classList.add('isOpen');box.style.display='grid';if(window.BattleUIState)BattleUIState.items('raider');else setRaiderCommandDrawer(false);
 }
 $('#normalItems').addEventListener('click',e=>{
  const b=e.target.closest('[data-ri]');if(!b)return;e.stopPropagation();
- let k=b.dataset.ri;if(k==='close'){$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none';return}
+ let k=b.dataset.ri;if(k==='close'){if(window.BattleUIState)BattleUIState.backItems('raider');else{$('#normalItems').classList.remove('isOpen');$('#normalItems').style.display='none'}return}
  if(k==='potion'&&!battleItems.potion){showRaiderBattleLog('きずぐすりを持っていない。');return}
  if(k==='ether'&&!battleItems.ether){showRaiderBattleLog('魔力の雫を持っていない。');return}
  BattleActionTargets.item('raider',k);
@@ -1377,6 +1377,7 @@ $('#rbWind').onclick=()=>choosePartyAct('wind');
 
 // v0.37 compact command drawers
 function setNormalCommandDrawer(open){
+ if(window.BattleUIState)return BattleUIState.commands('normal',open);
  const panel=$('#normalBattleCmd'), toggle=$('#normalCommandToggle');
  if(!panel||!toggle)return;
  panel.hidden=!open;
@@ -1388,6 +1389,7 @@ function setNormalCommandDrawer(open){
  toggle.style.setProperty('display',open?'none':'flex','important');
 }
 function setRaiderCommandDrawer(open){
+ if(window.BattleUIState)return BattleUIState.commands('raider',open);
  const panel=$('#rbCmd'), toggle=$('#rbCommandToggle');
  if(!panel||!toggle)return;
  panel.hidden=!open;
@@ -1657,7 +1659,8 @@ document.addEventListener('contextmenu',e=>e.preventDefault());document.addEvent
   function ownBattleOverlays(){
     ['battleMsg2','rbMsg','normalItems'].forEach(function(id){
       var el=document.getElementById(id);
-      if(el && el.parentElement!==document.body) document.body.appendChild(el);
+      if(el && window.BattleUIRegions) BattleUIRegions.placeOverlay(id,el);
+      else if(el && el.parentElement!==document.body) document.body.appendChild(el);
     });
     ['battleMsg2','rbMsg'].forEach(function(id){
       var el=document.getElementById(id); if(!el)return;
@@ -1951,7 +1954,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/game.js"></script>
 <link rel="stylesheet" href="css/battle-target.css">
 <script src="js/battle-target-selector.js"></script>
-<script src="js/battle-action-targets.js?v=20261013wd3"></script>
+<script src="js/battle-action-targets.js?v=20261017ui-integration02"></script>
 <link rel="stylesheet" href="css/prologue-combat.css?v=20261012b">
 <script src="js/battle-status.js?v=20261013wd3"></script>
 <script src="js/battle-critical.js"></script>
@@ -2027,7 +2030,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/lind-crisp-renderer.js"></script>
 <link rel="stylesheet" href="css/battle-polish.css?v=20261012d">
 <link rel="stylesheet" href="css/equipment.css?v=20261013eq">
-<script src="js/battle-party-layout.js?v=20261011-mobile"></script>
+<script src="js/battle-party-layout.js?v=20261017ui-integration02"></script>
 <link href="css/battle-presentation.css?v=20261013lou" rel="stylesheet"/>
 <script src="js/battle-facing.js"></script>
 <script src="js/battle-presentation.js?v=20261013op"></script>
@@ -2037,5 +2040,10 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
 <script src="js/battle-idle-motion.js?v=20261013id6"></script>
 <script src="js/battle-lou-flight.js?v=20261012a"></script>
-<script src="js/input-manager.js?v=20261013kb4"></script>
+<script src="js/input-manager.js?v=20261017ui-integration02"></script>
+<link rel="stylesheet" href="css/battle-ui-regions.css?v=20261017ui-integration02">
+<script src="js/battle-ui-regions.js?v=20261017ui-integration02"></script>
+<link rel="stylesheet" href="css/battle-ui-state.css?v=20261017ui-integration02">
+<script src="js/battle-ui-state.js?v=20261017ui-integration02"></script>
+<script src="js/battle-ui-responsive.js?v=20261017ui-integration02"></script>
 </body></html>

@@ -1,0 +1,21 @@
+ok   COMMAND starts collapsed on PC
+ok   Down selects the first command (攻撃) nAtk
+ok   Up/Down move the selection
+ok   held Enter opens target selection once and does not confirm it (no repeat execution)
+ok   arrow keys move the target among several enemies ['normal_enemy_0', 'normal_enemy_1', 'normal_enemy_2']
+ok   Esc backs out of target selection to COMMAND
+ok   focus returns to the command that was open (nAtk)
+ok   Enter confirms the target and the action runs once (turn passed to Fiona)
+ok   Fiona has the magic command ['normalCommandClose', 'nAtk', 'nDevKill', 'nHeal', 'nWindbloom', 'nPrayer', 'nGuard', 'nItem']
+ok   magic opens target selection
+ok   magic executed with the keyboard (BATTLE_ANIMATION)
+ok   Esc folds COMMAND
+ok   a key brings COMMAND back
+ok   item list is the BATTLE_SUBMENU state BATTLE_SUBMENU
+ok   Esc returns from the item list
+ok   focus lands on the first item
+ok   an item is chosen and its target picked by keyboard (turn passes on, item resolves with the round)
+ok   single enemy: attack auto-selects the only target
+ok   mouse: clicking 攻撃 still opens target selection
+ok   no errors []
+FAILS 0

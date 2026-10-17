@@ -25,7 +25,7 @@
   const drawerOpen = m => { const d = drawer(m); return Boolean(d && !d.hidden && shown(d)); };
   const setDrawer = (m, open) => { try { m === 'raider' ? g('setRaiderCommandDrawer')(open) : g('setNormalCommandDrawer')(open); } catch (e) { } };
   const itemsOpen = () => { const b = $('#normalItems'); return Boolean(b && b.classList.contains('isOpen') && shown(b)); };
-  const animating = () => Boolean((window.BattlePresentation && BattlePresentation.busy) || document.body.classList.contains('battlePresentationBusy') || document.body.classList.contains('actionCinematic') || g('attackBattleBusy') || g('rbBusy'));
+  const animating = () => Boolean((window.BattlePresentation && BattlePresentation.busy) || document.body.classList.contains('battlePresentationBusy') || document.body.classList.contains('actionCinematic') || (mode()==='normal'?g('attackBattleBusy'):mode()==='raider'?g('rbBusy'):false));
 
   function state() {
     if (window.LindFieldReview && LindFieldReview.active) return { name: 'REVIEW' };
@@ -105,7 +105,8 @@
   function commandKey(e, st) {
     const m = st.mode, k = e.key;
     if (!st.root) {                                   // collapsed: any navigation / confirm key brings it back
-      if (NAV.includes(k) || k === 'Enter' || k === ' ') { hold[m] = false; setDrawer(m, true); requestAnimationFrame(() => { const d = drawer(m); if (d) focusFirst(d); }); }
+      if (NAV.includes(k) || k === 'Enter' || k === ' ') { hold[m] = false; setDrawer(m, true); const d = drawer(m); if (d) focusFirst(d); }
+      if (k === 'Tab') $(m==='raider'?'#rbCommandToggle':'#normalCommandToggle')?.focus({preventScroll:true});
       return;
     }
     if (k === 'Escape') { hold[m] = true; setDrawer(m, false); return; }
@@ -191,16 +192,9 @@
   addEventListener('keyup', e => { if (e.key === ' ' && !isField(e.target) && state().name !== 'FIELD') e.preventDefault(); }, true);
   addEventListener('pointerdown', () => { kb = false; document.body.classList.remove('kbNav'); }, true);
 
-  // ---- COMMAND: expanded from the start of every turn on PC; folding it by hand sticks until the next turn ----
-  function autoOpen(m) { hold[m] = false; return pcLike() && !animating(); }
-  for (const [id, m] of [['#normalCommandClose', 'normal'], ['#rbCommandClose', 'raider']]) document.addEventListener('click', e => { if (e.target.closest(id)) hold[m] = true; }, true);
-  setInterval(() => {
-    const m = mode(); if (!m || !inBattle()) return;
-    const st = state();
-    if (st.name === 'BATTLE_COMMAND' && !st.root && pcLike() && !hold[m] && !document.body.classList.contains('dialogueOpen')) setDrawer(m, true);
-    const s2 = state();
-    if (kb && s2.root && s2.name !== 'FIELD' && !s2.root.contains(document.activeElement)) focusFirst(s2.root);
-  }, 160);
+  // UI-02 owns input views. Focus repair never changes drawer state.
+  function autoOpen(m) { return window.BattleUIState?.snapshot(m).status==='commands'; }
+  document.addEventListener('focusin',()=>{const st=state();if(kb&&st.root&&!st.root.contains(document.activeElement))focusFirst(st.root);});
   setInterval(() => {   // keyboard users always have a focused control in an open menu
     if (!kb) return; const st = state();
     if (st.name === 'MENU' && !st.root.contains(document.activeElement)) { const t = tabArea(st.root); (t.find(x => /on|active/.test(x.className) || x.getAttribute('aria-selected') === 'true') || focusFirst(st.root) || t[0])?.focus?.({ preventScroll: true }); }

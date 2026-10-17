@@ -127,3 +127,8 @@ Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現�
 `work/codex-gg-kk` / main31a5f5e。status末尾のtests/tools/docsを担当。GG→HH→II→JJ→KK、各区切りpush。ゲームコード/css/index/採用素材/mainは変更しない。詳細と結果は各docs/qa報告およびcodex-statusで共有。STATUS WIP。
 
 Codex GG〜KK完了: work/codex-gg-kk、納品一覧docs/handoff/codex-GG-KK-delivery-20261013.md。GG2指摘、HH/II合格、JJ20連続合格、KK12計測と推奨。tests/tools/docsのみ、main/ゲーム/採用素材未編集。STATUS READY（Claudeレビュー/仕様判断・実機待ち）。
+
+## BATTLE-UI-INTEGRATION-02 (2026-10-17)
+Codex: work/codex-battle-ui-integration-02 / main746cd1553fadfb06a872805a40585ee7c5b5f30d。UI領域・状態・responsive、入力/対象UIの接続と関連テストのみ。main/PR/公開設定/素材/戦闘ロジック/モーション/Loadingは変更しない。旧UI-03と測定ブランチを照合して必要部分を移植。既存作業環境は保持。STATUS WIP。
+
+BATTLE-UI-INTEGRATION-02 checkpoint: UI01 38/UI02 206/UI03 794項目＋関連8本合格。詳細と証跡はdocs/qa/battle-ui-integration-02-20261017/。main/PR/公開操作なし、Claude独立QA待ち。STATUS READY_FOR_CLAUDE。

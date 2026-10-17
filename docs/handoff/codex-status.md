@@ -108,3 +108,6 @@ KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画�
 全5項目を各区切りpush。納品一覧codex-GG-KK-delivery-20261013.md。HHの別環境向け一時候補自動生成版も37/37再合格し、表/ログ/画像を最終実行へ更新。GG40合格/2指摘、II9合格、JJ20連続+関連2合格、KK12計測完了。進行中なし、GG〜KK未着手なし。実機/全回帰は今回未実施。
 
 再開: git fetch --all、main/status/standing/新規briefsと本branchのgit logを確認し、完了GG〜KKは繰り返さない。未解決の採用/実機/2指摘は納品一覧を参照。main未マージ、force pushなし、保護対象差分0、元worktreeはwork/codex-wind-dance-sim2のcleanを維持。未コミット懸念なし（最終push時点）、自身のサーバー終了。Claudeが資料/branchをレビューして統合する。
+
+## BATTLE-UI-INTEGRATION-02 (2026-10-17)
+work/codex-battle-ui-integration-02 / main746cd15。UI領域・5状態・縦横responsiveを選択移植。UI01 38、UI02 206、UI03 794項目と関連8本合格。main/PR/公開設定/モーション/Loading/戦闘計算/KO消滅/4枠は未変更。docs/qa/battle-ui-integration-02-20261017/REPORT.md参照。Full/Android実機は未実施、Claude固定SHA独立QAと公開方法/統合承認待ち。STATUS READY_FOR_CLAUDE。

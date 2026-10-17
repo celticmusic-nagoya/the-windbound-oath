@@ -39,7 +39,7 @@
     else {el.style.removeProperty('width');el.style.removeProperty('height');}
    });
   }
-  BattleTargetSelector.refresh();return result;
+  window.BattleUIResponsive?.layout(battle);BattleTargetSelector.refresh();return result;
  }
  addEventListener('resize',()=>{if(document.body.classList.contains('normalBattleMode'))refresh('normal');else if(document.body.classList.contains('raiderBattleMode'))refresh('raider')});
  window.BattlePartyLayout=Object.freeze({arrange,refresh});
