@@ -1,0 +1,44 @@
+ok   Q opens journal 
+ok   journal Tab stays within menu [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
+ok   rilde_general held Enter purchases exactly once 
+ok   rilde_general held Space purchases exactly once 
+ok   rilde_general Tab remains in shop 
+ok   rilde_general Escape closes shop 
+ok   dunvall_arms held Enter purchases exactly once 
+ok   dunvall_arms held Space purchases exactly once 
+ok   dunvall_arms Tab remains in shop 
+ok   dunvall_arms Escape closes shop 
+ok   input typing does not trigger shortcuts 
+ok   textarea typing does not trigger shortcuts 
+ok   legacy inn keeper is keyboard-reachable 1
+ok   #inside .furn Enter clicks nearest object 1
+ok   #world .door Enter clicks nearest object 1
+ok   #world .npc Enter clicks nearest object 1
+ok   cinema held Enter dispatches exactly once ['SCENE', 1]
+ok   returnScene held Enter dispatches exactly once ['SCENE', 1]
+ok   escapeScene held Enter dispatches exactly once ['SCENE', 1]
+ok   louIntroScene held Enter dispatches exactly once ['SCENE', 1]
+ok   altarScene held Enter dispatches exactly once ['SCENE', 1]
+ok   aftermathScene held Enter dispatches exactly once ['SCENE', 1]
+ok   fortScene held Enter dispatches exactly once ['SCENE', 1]
+ok   prologueEnd held Enter dispatches exactly once ['SCENE', 1]
+ok   held Enter saves exactly once 1
+ok   blur key release leaves no movement [2033, 2033]
+ok   menu key release leaves no movement [2048, 2048]
+ok   scene key release leaves no movement [2003, 2003]
+ok   battle key release leaves no movement [2003, 2003]
+ok   same-frame non-repeat Enter scene advances once 1
+ok   scene Space prevents browser default scrolling 
+ok   confirm during map fade does not start encounter/dialogue FIELD
+ok   held Enter opens exactly one chest [{'p': 4, 'e': 2, 'g': 0, 'opened': 0}, {'p': 4, 'e': 3, 'g': 0, 'opened': 1}]
+ok   battle Tab focuses collapsed COMMAND BATTLE_ANIMATION
+ok   held Enter battle confirmation queues at most one action 1
+ok   held Enter queues one item action [{'who': 'aidan', 'kind': 'item', 'item': 'potion', 'target': 'aidan'}]
+ok   held Enter consumes one potion 4
+ok   (390, 844) touch COMMAND starts collapsed 
+ok   (390, 844) tap opens COMMAND 
+ok   (844, 390) touch COMMAND starts collapsed 
+ok   (844, 390) tap opens COMMAND 
+ok   page errors []
+UNTESTED 0
+FAILS 0

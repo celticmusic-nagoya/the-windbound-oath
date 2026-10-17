@@ -1,0 +1,35 @@
+ok   implemented image == untouched original 
+ok   pc attackGob1: BG-01 applied 
+ok   pc attackGob2: BG-01 applied 
+ok   pc northGob1: BG-01 applied 
+ok   pc northGob2: BG-01 applied 
+ok   pc: layer is first child, z0, covers stage, no pointer events, stage gradient off {'bg': 'BG-01', 'disp': 'block', 'img': 'url("img/battle/backgrounds/bg_BG-01_main.png")', 'z': '0', 'first': True, 'covers': True, 'stageBg': 'none', 'ptr': 'none'}
+ok   pc mossSlime1: no BG-01, existing stage gradient kept 
+ok   pc forestBat1: no BG-01, existing stage gradient kept 
+ok   pc fieldGob1: no BG-01, existing stage gradient kept 
+ok   pc: boss battle has no BG-01 
+ok   pc: no page errors []
+ok   land attackGob1: BG-01 applied 
+ok   land attackGob2: BG-01 applied 
+ok   land northGob1: BG-01 applied 
+ok   land northGob2: BG-01 applied 
+ok   land: layer is first child, z0, covers stage, no pointer events, stage gradient off {'bg': 'BG-01', 'disp': 'block', 'img': 'url("img/battle/backgrounds/bg_BG-01_main.png")', 'z': '0', 'first': True, 'covers': True, 'stageBg': 'none', 'ptr': 'none'}
+ok   land mossSlime1: no BG-01, existing stage gradient kept 
+ok   land forestBat1: no BG-01, existing stage gradient kept 
+ok   land fieldGob1: no BG-01, existing stage gradient kept 
+ok   land: boss battle has no BG-01 
+ok   land: no page errors []
+ok   port attackGob1: BG-01 applied 
+ok   port attackGob2: BG-01 applied 
+ok   port northGob1: BG-01 applied 
+ok   port northGob2: BG-01 applied 
+ok   port: layer is first child, z0, covers stage, no pointer events, stage gradient off {'bg': 'BG-01', 'disp': 'block', 'img': 'url("img/battle/backgrounds/bg_BG-01_main.png")', 'z': '0', 'first': True, 'covers': True, 'stageBg': 'none', 'ptr': 'none'}
+ok   port mossSlime1: no BG-01, existing stage gradient kept 
+ok   port forestBat1: no BG-01, existing stage gradient kept 
+ok   port fieldGob1: no BG-01, existing stage gradient kept 
+ok   port: boss battle has no BG-01 
+ok   port: no page errors []
+ok   image load failure: falls back to existing stage gradient {'bg': None, 'disp': 'none', 'img': '', 'z': '0', 'first': True, 'covers': False, 'stageBg': 'linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 62%, rgba(18, 43, 28, 0.65) 62%, rgba(18, 43, 28, 0.65) 100%)', 'ptr': 'none'}
+ok   image load failure: battle still runs 
+ok   image load failure: no uncaught errors []
+ALL OK

@@ -132,3 +132,8 @@ Codex GG〜KK完了: work/codex-gg-kk、納品一覧docs/handoff/codex-GG-KK-del
 Codex: work/codex-battle-ui-integration-02 / main746cd1553fadfb06a872805a40585ee7c5b5f30d。UI領域・状態・responsive、入力/対象UIの接続と関連テストのみ。main/PR/公開設定/素材/戦闘ロジック/モーション/Loadingは変更しない。旧UI-03と測定ブランチを照合して必要部分を移植。既存作業環境は保持。STATUS WIP。
 
 BATTLE-UI-INTEGRATION-02 checkpoint: UI01 38/UI02 206/UI03 794項目＋関連8本合格。詳細と証跡はdocs/qa/battle-ui-integration-02-20261017/。main/PR/公開操作なし、Claude独立QA待ち。STATUS READY_FOR_CLAUDE。
+
+## BATTLE-UI-INTEGRATION-03 (2026-10-17)
+Codex: work/codex-battle-ui-integration-02、基準fd5a8576a5e18dfc1e5ea903cdf7d210f3d2be13。css/battle-polish.cssのDEVボタン表示条件、indexのCSS cache-bust、専用tap検証とQA証跡を担当。戦闘計算/素材/モーション/既存P2証跡/main/PR/公開設定は変更しない。STATUS WIP。
+
+BATTLE-UI-INTEGRATION-03 checkpoint: DEV overlay P1解消。新規336/UI01 38/UI02 206/UI03 794項目PASS、関連8本PASS6/FAIL2。開始motionは候補7項目FAIL・基準fd5でも10項目FAIL。待機は候補1項目FAIL・基準PASS、原因未確定で新規回帰除外未了。P2原画像を保持。docs/qa/battle-ui-integration-03-20261017/REPORT.md参照。Full/Android実機/公開/PR/main統合は未実施。STATUS CONDITIONAL（独立再QA・待機FAIL切り分け待ち）。

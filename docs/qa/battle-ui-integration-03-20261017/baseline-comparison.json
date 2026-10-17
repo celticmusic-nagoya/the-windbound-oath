@@ -1,0 +1,38 @@
+{
+  "baseline": "fd5a8576a5e18dfc1e5ea903cdf7d210f3d2be13",
+  "method": "Exact baseline HTML and battle-polish.css served via isolated HTTP overlay; every other product file is unchanged from baseline, no source switching/writing; same original test files and assertions",
+  "overlaid_sha256": {
+    "/index.html": "f9197266ffc3d65802573c02850604f7bfe5991189a892801538bfa6955f2c9a",
+    "/css/battle-polish.css": "b118fccebe4b8cea65ba8c7415ef7abf99c9997de01e58f3ced3befceb131fde"
+  },
+  "candidate_changed_product_paths": [
+    "css/battle-polish.css",
+    "index.html"
+  ],
+  "tests": [
+    {
+      "test": "tests/battle/battle_opening.py",
+      "exit": 1,
+      "seconds": 78.8,
+      "failure_lines": [
+        "FAIL (1280, 720) normal: both play frames 1..6 once, in order ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])",
+        "FAIL (1280, 720) normal: frame timing (aidan last frame ~480ms, fiona ~760ms) (561, 807)",
+        "FAIL (1280, 720) raider: both play frames 1..6 once, in order ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])",
+        "FAIL (1280, 720) raider: frame timing (aidan last frame ~480ms, fiona ~760ms) (578, 753)",
+        "FAIL (844, 390) normal: both play frames 1..6 once, in order ([1, 2, 3, 4], [1, 2, 3, 4, 5, 6])",
+        "FAIL (844, 390) normal: frame timing (aidan last frame ~480ms, fiona ~760ms) (567, 1156)",
+        "FAIL (844, 390) normal: input lock ~ longer motion (880ms) then released (1069, False)",
+        "FAIL (844, 390) raider: both play frames 1..6 once, in order ([1, 2], [1, 2, 3])",
+        "FAIL (844, 390) raider: frame timing (aidan last frame ~480ms, fiona ~760ms) (565, 1152)",
+        "FAIL (844, 390) raider: input lock ~ longer motion (880ms) then released (1124, False)",
+        "FAILS 10"
+      ]
+    },
+    {
+      "test": "tests/battle/battle_idle6.py",
+      "exit": 0,
+      "seconds": 25.56,
+      "failure_lines": []
+    }
+  ]
+}

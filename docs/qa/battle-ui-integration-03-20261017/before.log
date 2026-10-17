@@ -1,0 +1,115 @@
+ok 360x800/normal DEV visible before battle
+ok 360x800/normal field DEV panel opens
+ok 360x800/normal native flight/idle motion active
+ok 360x800/normal/collapsed expected UI state
+FAIL 360x800/normal/collapsed DEV is hidden
+ok 360x800/normal/collapsed real pointerdown reaches intended control [{"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}]
+ok 360x800/normal/commands expected UI state
+FAIL 360x800/normal/commands DEV is hidden
+ok 360x800/normal/commands real pointerdown reaches intended control [{"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}]
+ok 360x800/normal/items expected UI state
+FAIL 360x800/normal/items DEV is hidden
+ok 360x800/normal/items real pointerdown reaches intended control [{"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}]
+ok 360x800/normal/targets expected UI state
+FAIL 360x800/normal/targets DEV is hidden
+ok 360x800/normal/targets real pointerdown reaches intended control [{"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}]
+ok 360x800/normal tap cancel returns items
+ok 360x800/normal tap return restores commands
+FAIL 360x800/normal DEV hidden after rotation
+FAIL 360x800/normal/rotation real pointerdown reaches intended control [{"ok": false, "target": "devBtn", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}]
+FAIL 360x800/normal DEV stays hidden through RESULT
+ok 360x800/normal/result real pointerdown reaches intended control [{"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}]
+ok 360x800/normal DEV visibility restored on native battle exit
+ok 360x800/normal restored DEV panel accepts tap
+ok 360x800/normal DEV OFF remains hidden after battle
+ok 360x800/normal DEV ON restores existing field rule
+FAIL 360x800/normal repeated battle keeps DEV hidden
+ok 360x800/normal DEV cancel/reset restores field rule
+ok 360x800/normal no page errors []
+ok 360x800/raider DEV visible before battle
+ok 360x800/raider field DEV panel opens
+ok 360x800/raider native flight/idle motion active
+ok 360x800/raider/collapsed expected UI state
+FAIL 360x800/raider/collapsed DEV is hidden
+ok 360x800/raider/collapsed real pointerdown reaches intended control [{"ok": true, "target": "rbCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "rbCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "rbCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "rbCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "rbCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "rbCommandToggle", "type": "pointerdown"}]
+ok 360x800/raider/commands expected UI state
+FAIL 360x800/raider/commands DEV is hidden
+ok 360x800/raider/commands real pointerdown reaches intended control [{"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}]
+ok 360x800/raider/items expected UI state
+FAIL 360x800/raider/items DEV is hidden
+ok 360x800/raider/items real pointerdown reaches intended control [{"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}]
+ok 360x800/raider/targets expected UI state
+FAIL 360x800/raider/targets DEV is hidden
+ok 360x800/raider/targets real pointerdown reaches intended control [{"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}]
+ok 360x800/raider tap cancel returns items
+ok 360x800/raider tap return restores commands
+FAIL 360x800/raider DEV hidden after rotation
+FAIL 360x800/raider/rotation real pointerdown reaches intended control [{"ok": false, "target": "devBtn", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}, {"ok": true, "target": "rbCommandClose", "type": "pointerdown"}]
+FAIL 360x800/raider DEV stays hidden through RESULT
+ok 360x800/raider/result real pointerdown reaches intended control [{"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}]
+ok 360x800/raider DEV visibility restored on native battle exit
+ok 360x800/raider restored DEV panel accepts tap
+ok 360x800/raider DEV OFF remains hidden after battle
+ok 360x800/raider DEV ON restores existing field rule
+FAIL 360x800/raider repeated battle keeps DEV hidden
+ok 360x800/raider DEV cancel/reset restores field rule
+ok 360x800/raider no page errors []
+ok 390x844/normal DEV visible before battle
+ok 390x844/normal field DEV panel opens
+ok 390x844/normal native flight/idle motion active
+ok 390x844/normal/collapsed expected UI state
+FAIL 390x844/normal/collapsed DEV is hidden
+ok 390x844/normal/collapsed real pointerdown reaches intended control [{"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}, {"ok": true, "target": "normalCommandToggle", "type": "pointerdown"}]
+ok 390x844/normal/commands expected UI state
+FAIL 390x844/normal/commands DEV is hidden
+ok 390x844/normal/commands real pointerdown reaches intended control [{"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}]
+ok 390x844/normal/items expected UI state
+FAIL 390x844/normal/items DEV is hidden
+ok 390x844/normal/items real pointerdown reaches intended control [{"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}]
+ok 390x844/normal/targets expected UI state
+FAIL 390x844/normal/targets DEV is hidden
+ok 390x844/normal/targets real pointerdown reaches intended control [{"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}, {"ok": true, "target": "BUTTON", "type": "pointerdown"}]
+ok 390x844/normal tap cancel returns items
+ok 390x844/normal tap return restores commands
+FAIL 390x844/normal DEV hidden after rotation
+FAIL 390x844/normal/rotation real pointerdown reaches intended control [{"ok": false, "target": "devBtn", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}, {"ok": true, "target": "normalCommandClose", "type": "pointerdown"}]
+FAIL 390x844/normal DEV stays hidden through RESULT
+ok 390x844/normal/result real pointerdown reaches intended control [{"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}, {"ok": true, "target": "resultContinue", "type": "pointerdown"}]
+ok 390x844/normal DEV visibility restored on native battle exit
+ok 390x844/normal restored DEV panel accepts tap
+ok 390x844/normal DEV OFF remains hidden after battle
+ok 390x844/normal DEV ON restores existing field rule
+FAIL 390x844/normal repeated battle keeps DEV hidden
+ok 390x844/normal DEV cancel/reset restores field rule
+ok 390x844/normal no page errors []
+Traceback (most recent call last):
+  File "/workspace/battle-ui-integration-03/tests/run_python.py", line 21, in <module>
+    runpy.run_path(path, run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "tests/battle/ui_dev_overlay.py", line 26, in <module>
+    pg.goto(base+'/index.html?dev=1');pg.wait_for_function('window.BattleUIState&&BattleMotion.loaded');pg.wait_for_timeout(1200)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/playwright/sync_api/_generated.py", line 9875, in goto
+    self._sync(
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/playwright/_impl/_sync_base.py", line 113, in _sync
+    self._dispatcher_fiber.switch()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/playwright/sync_api/_context_manager.py", line 56, in greenlet_main
+    self._loop.run_until_complete(self._connection.run_as_sync())
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 678, in run_until_complete
+    self.run_forever()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 645, in run_forever
+    self._run_once()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 1961, in _run_once
+    event_list = self._selector.select(timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/selectors.py", line 468, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Task was destroyed but it is pending!
+task: <Task cancelling name='Task-376' coro=<Page.goto() running at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/playwright/_impl/_page.py:560> wait_for=<Future finished result=None> cb=[SyncBase._sync.<locals>.<lambda>() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/playwright/_impl/_sync_base.py:111]>

@@ -1,5 +1,6 @@
-/* DEV controls intentionally sit above combat/results only in development mode. */
-body.developmentMode #devBtn{display:block!important;z-index:10100;top:84px;bottom:auto}
+/* The floating DEV entry belongs to the field; battle QA uses the in-command tools. */
+body.developmentMode:not(.battleMode) #devBtn{display:block!important;z-index:10100;top:84px;bottom:auto}
+body.battleMode #devBtn{display:none!important}
 body.developmentMode #devPanel{z-index:10110}
 body.developmentMode.normalBattleMode #devPanel,body.developmentMode.raiderBattleMode #devPanel{display:block!important}
 /* Inline visibility owns the panel; legacy battle rules must not hide an opened panel. */
