@@ -36,7 +36,7 @@ CSSは現在のbody状態だけを見るため新たなイベント/タイマー
 
 390×844・ボス・COMMAND展開・初期scroll位置の「風の一閃」の一部見切れは未修正。元の`docs/qa/battle-ui-integration-02-20261017/390x844-raider-commands.png`を基準fd5a857とバイト照合して保持。p2-original-sha256.jsonに元SHAと再現条件を記録。今回の同サイズの新画像も別フォルダで保存。実機判断待ち。
 
-A2/U-08/P0-D CONDITIONALは従前どおり。今回関連8本で既知FAILを観測していないが、Loading/Gate/P0全件回帰やFullは実施していない。Android実機はNOT_RUN。今回は独立QA後のP1修正であり、今回commitへのClaude再レビューは別途必要。
+A2/U-08/P0-D CONDITIONALは従前どおり。A2/U-08固有のLoading/Gate契約は今回の関連8本では検証しておらず、これらの解消は主張しない。今回観測したモーションFAILは上記のとおり別に記録した。Loading/Gate/P0全件回帰やFullも実施していない。Android実機はNOT_RUN。今回は独立QA後のP1修正であり、今回commitへのClaude再レビューは別途必要。
 
 P1のタップ遮断は解消したが、総合QAはCONDITIONAL。開始モーションは基準でも同種FAILを再現（候補7項目・基準10項目）。待機は候補1項目FAIL・基準1回PASSのため、タイミング変動が疑われても新規回帰を除外できず原因未確定とする。再試行で合格扱いにはしない。AndroidでP1の操作確認は可能だが、総合受入/完了判断はこの待機FAILの切り分けとClaude再QA待ち。公開検証URLは未発行、公開設定変更なし、既存サイト上書きなし。公開先の別承認も必要。既存のP2は実機確認で判断する。
 
