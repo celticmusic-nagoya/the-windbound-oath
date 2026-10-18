@@ -56,12 +56,22 @@
   // ---------- pages ----------
   const SPLIT = /　(?=[^\s「」　]{1,10}「)/, SPEAKER = /^([^\s「」　]{1,10})(「[\s\S]*)$/;
   function toPage(p) {
-    if (p && typeof p === 'object') return {speaker: p.speaker || '', text: p.text || ''};
+    if (p && typeof p === 'object') {   // optional portrait: char (TalkPortrait id, null = hide) + face (expression id)
+      const o = {speaker: p.speaker || '', text: p.text || ''};
+      if (p.char !== undefined) o.char = p.char; if (p.face !== undefined) o.face = p.face; return o;
+    }
     const m = SPEAKER.exec(String(p)); return m ? {speaker: m[1], text: m[2]} : {speaker: '', text: String(p)};
   }
   function pagesOf(conv) {
     const raw = typeof conv === 'string' ? conv.split(SPLIT) : Array.isArray(conv) ? conv : (conv.pages || []);
-    return raw.map(toPage);
+    const dc = conv && typeof conv === 'object' && !Array.isArray(conv) ? conv : null;   // conversation-level char/face = defaults; a page without `char` keeps the previous page's character (null = hidden), `face` is per page
+    let char = dc ? dc.char : undefined;
+    return raw.map(toPage).map((pg, i) => {
+      if (pg.char !== undefined) char = pg.char;
+      else if (char !== undefined) pg = {...pg, char};
+      if (i === 0 && pg.face === undefined && dc && dc.face !== undefined && pg.char !== undefined) pg = {...pg, face: dc.face};   // conversation `face` = the first page's expression
+      return pg;
+    });
   }
 
   // ---------- effects ----------
@@ -104,6 +114,7 @@
       box.append(w); kbIdx = 0; mark();
     }
     box.style.display = 'block'; document.body.classList.add('dialogueOpen');
+    if (window.TalkPortrait && (page.char !== undefined || page.face !== undefined)) TalkPortrait.page(page);
   }
   const live = () => session && msg() && msg().style.display !== 'none' && msg().querySelector('.talkText');
   function show() {
@@ -112,6 +123,7 @@
   }
   function finish() {
     const s = session; session = null; if (!s) return;
+    if (window.TalkPortrait) TalkPortrait.hide();
     if (typeof closeDialogue === 'function') closeDialogue();
     window.dispatchEvent(new CustomEvent('field-talk-end', {detail: {id: s.id, entry: s.entryId}}));
   }
@@ -137,6 +149,7 @@
     const choice = conv.choice && Array.isArray(conv.choice.options) && conv.choice.options.length ? conv.choice : null;
     applyEffects(conv, pages);
     session = {id, entryId: entry && entry.id, pages, i: 0, choice};
+    if (window.TalkPortrait) { TalkPortrait.hide(); for (const pg of pages) if (pg.char) TalkPortrait.preload(pg.char, pg.face); }
     show(); return true;
   }
 
@@ -148,7 +161,7 @@
       if (!run(id, entry, conv)) return false;
       seen.add(entry.id);
     } else if (providers.has(id) && typeof say === 'function') {
-      const text = providers.get(id)(id); if (!text) return false; session = null; say(text);
+      const text = providers.get(id)(id); if (!text) return false; session = null; if (window.TalkPortrait) TalkPortrait.hide(); say(text);
     } else return false;
     history.push({id, source, at: Date.now()}); if (history.length > 20) history.shift();
     window.dispatchEvent(new CustomEvent('field-talk', {detail: {id, source, entry: entry && entry.id}}));
