@@ -21,6 +21,8 @@
 <link rel="stylesheet" href="css/moss-forest.css?v=20261013lf">
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
 <link rel="stylesheet" href="css/field-collision-debug.css">
+<link rel="stylesheet" href="css/title-screen.css?v=20261019t1">
+<script src="js/title-screen.js?v=20261019t1"></script>
 <script src="js/assets.js?v=20261013id6"></script>
 <script src="js/battle-motion.js"></script>
 <script src="js/battle-actor-state.js?v=20261013op"></script>
@@ -30,6 +32,19 @@
 .dev-only-command::before{content:"⚙ ";opacity:.8}
 </style>
 </head><body>
+<section id="title-screen" data-phase="01" aria-label="THE WINDBOUND OATH タイトル">
+<div class="title-background" aria-hidden="true"></div><div class="ts-shade" aria-hidden="true"></div>
+<section class="title-content">
+<h1><img class="title-logo" src="img/title/title_logo_v3.png" width="2048" height="728" alt="THE WINDBOUND OATH — Mionn na Gaoithe" decoding="async" draggable="false"></h1>
+<nav class="title-menu" aria-label="Title menu">
+<button type="button" class="ts-btn" data-title-action="new-game">NEW GAME</button>
+<button type="button" class="ts-btn" data-title-action="continue" disabled>CONTINUE<small>保存地点への復帰は未対応</small></button>
+<button type="button" class="ts-btn" data-title-action="options">OPTIONS</button>
+<button type="button" class="ts-btn" data-title-action="gallery" disabled>GALLERY<small>未実装</small></button>
+</nav>
+</section>
+<div class="title-confirm" role="alertdialog" aria-modal="true" aria-labelledby="tsConfirmMsg" hidden><div class="title-dialog"><p id="tsConfirmMsg">セーブデータがあります。はじめから始めますか？<br>新しいゲームでセーブすると、既存のデータは上書きされます。</p><div class="ts-row"><button type="button" class="ts-btn" data-title-action="confirm-cancel">キャンセル</button><button type="button" class="ts-btn" data-title-action="confirm-ok">はじめから始める</button></div></div></div>
+</section>
 <div id="game"><div id="world">
 <div class="road" style="left:80px;top:560px;width:1600px;height:150px"></div><div class="road" style="left:680px;top:100px;width:150px;height:1000px"></div>
 <div class="river" style="left:1450px;top:0;width:180px;height:1250px"></div>
@@ -1616,7 +1631,8 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
 (function startAtHome(){
  if(!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
-   const go=()=>{if(window.RildeVillage&&RildeVillage.enabled())RildeVillage.startOpening();};
+   const begin=()=>{if(window.RildeVillage&&RildeVillage.enabled())RildeVillage.startOpening();};
+   const go=()=>{if(window.TitleScreen)TitleScreen.begin(begin);else begin();};   // TITLE-01: the opening starts after NEW GAME (or at once with ?title=0)
    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
    return;
  }
