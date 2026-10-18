@@ -13,6 +13,25 @@
     inside:new Set(),extra:[],symbols:[],sealNode:null,windNodes:[],louNode:null,treasureNodes:new Map(),
     transitionLatch:true,battleLatch:false,slain:new Map(),keys:new Map(),frames:0,zones:{rest:null,ambience:null},loopId:0};
   let el={},hooks={};
+  // Request identity and field-control ownership are separate: an external lock/hide
+  // revokes both, and an old request must never release a newer controller's state.
+  let requestSerial=0,mapRequest=null,controlEpoch=0,inputOwner=null;
+  const current=r=>mapRequest===r&&r.phase!=='cancelled';
+  const ownsInput=r=>inputOwner===r&&r.controlEpoch===controlEpoch;
+  function recoverBeforeCommit(r){
+    const old=r.previous;
+    if(r.commitStarted||old.recoverable===false||!old.map||S.map!==old.map||S.forest!==old.forest||S.mapId!==old.mapId||S.x!==old.x||S.y!==old.y)return false;
+    S.active=old.active;S.busy=old.busy;
+    el.fade.style.transitionDuration=old.fadeDuration;el.fade.style.opacity=old.fade;
+    return true;
+  }
+  function revokeMapRequest(){
+    if(mapRequest&&current(mapRequest)&&ownsInput(mapRequest))recoverBeforeCommit(mapRequest);
+    if(mapRequest)mapRequest.phase='cancelled';
+    inputOwner=null;controlEpoch++;
+  }
+  function mapRequestStatus(){const r=mapRequest;return r?{id:r.id,phase:r.phase,map:r.map,commitStarted:r.commitStarted,commitComplete:r.commitComplete,error:r.error||null,ownsInput:ownsInput(r)}:null;}
+  function isMapRequest(id){return !!mapRequest&&mapRequest.id===id&&mapRequest.phase==='ready';}
   const dist=(a,b,c,d)=>Math.hypot(a-c,b-d);
   const $=s=>document.querySelector(s);
 
@@ -136,13 +155,13 @@
     b.style.cssText='position:fixed;left:6px;bottom:6px;z-index:99999;font:700 10px/1 system-ui,sans-serif;color:#fff;background:rgba(0,90,160,.72);padding:3px 6px;border-radius:4px;pointer-events:none;letter-spacing:.05em';
     document.body.appendChild(b);
   }
-  async function loadMap(id){
+  async function loadMap(id,valid=()=>true){
     if(cache.has(id))return cache.get(id);
     await ForestLoader.loadAssets();
     const map=await ForestLoader.load(MAP_BASE+id+'.json');
     // DEV opt-in (?feature=heightSpecs): a height spec kept OUTSIDE the shipped map (data/height-specs/<id>.json) is laid over a map that has none, so a candidate
     // can be tried (also on a phone) without touching the map data. Off by default: normal play never fetches or applies a spec.
-    if(heightSpecsOn()&&!map.height){try{const r=await fetch('data/height-specs/'+id+'.json',{cache:'no-store'});if(r.ok){const spec=await r.json();if(spec&&spec.levels){map.height=spec;heightBadge();}}}catch(e){}}
+    if(heightSpecsOn()&&!map.height){try{const r=await fetch('data/height-specs/'+id+'.json',{cache:'no-store'});if(r.ok){const spec=await r.json();if(spec&&spec.levels){map.height=spec;if(valid())heightBadge();}}}catch(e){}}
     cache.set(id,map);return map;
   }
   const fadeMs=(t,dflt)=>Math.round(((t&&t.fade&&t.fade[dflt])??.35)*1000);
@@ -239,36 +258,77 @@
   // ---------- transitions between maps ----------
   async function enter(options){
     if(!S.configured)throw new Error('MossForest not configured');
-    const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;   // logical ids (e.g. 'rilde_village' = peace/ruin by story state) resolve here
-    S.busy=true;S.active=false;
-    if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
-    mountFionaSprite();
-    const map=await loadMap(id);
-    skinFiona();
-    if(options.flags)Object.assign(S.flags,options.flags);
-    const first=!S.map;
-    S.slain.delete(id);   // entering a map (from another one, from the village, from a save) respawns its monsters; a battle return only resumes()
-    if(!first)await setFade(1,fadeMs(options.transition,'out'));
-    el.scene.style.display='block';
-    {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
-    unmount();mount(map);
-    if(S.forest.height&&Number.isFinite(options.level))S.forest.height.setLevel(options.level);   // before the spot check: a deck / plateau position is only free at its own level
-    let spot;
-    const sp0=map.spawns.points[spawnId||map.spawns.default];
-    if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
-    else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
-    S.x=spot.x;S.y=spot.y;S.fl=0;S.trail=[];
-    if(S.forest.height){const h=S.forest.height;{const spL=(map.spawns.points[spawnId||map.spawns.default]||{}).level;h.setLevel(Number.isFinite(options.level)?options.level:Number.isFinite(spL)&&options.x==null?spL:h.derive(S.x,S.y));}h.commit(S.x,S.y);S.fl=h.level;}else{el.player.style.transform='';if(fsp.ready)el.fiona.style.transform='';}   // height maps (prototype): the level comes with the position; a position saved without one falls back to derive()
-    spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
-    S.keys.clear();render();
-    if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
-    if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
-    el.fade.style.opacity='1';
-    playBgm();
-    await setFade(0,fadeMs(options.transition,'in'));
-    S.busy=false;S.active=true;startLoop();
-    if(hooks.onEnter)hooks.onEnter(map,spawnId);
-    return map;
+    const prior=mapRequest;
+    // Transfer the original recovery point only while no destructive commit occurred.
+    const previous=prior&&current(prior)&&ownsInput(prior)&&!prior.commitStarted?prior.previous:
+      {recoverable:!(prior&&current(prior)&&ownsInput(prior)&&prior.commitStarted),map:S.map,forest:S.forest,mapId:S.mapId,x:S.x,y:S.y,active:S.active,busy:S.busy,
+       fade:el.fade.style.opacity,fadeDuration:el.fade.style.transitionDuration};
+    if(prior)prior.phase='cancelled';
+    const r={id:++requestSerial,controlEpoch,map:options.map,phase:'loading',commitStarted:false,commitComplete:false,previous};
+    if(el.toast.dataset.mapError){el.toast.style.removeProperty('z-index');delete el.toast.dataset.mapError;}
+    mapRequest=r;inputOwner=r;S.busy=true;S.active=false;
+    // Existing camera jobs must not draw an old map while its successor loads.
+    CAM.token++;CAM.focus=null;
+    try{
+      const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;
+      r.map=id;
+      if(!spr.frames.size)mountPlayerSprite();
+      mountFionaSprite();
+      const map=await loadMap(id,()=>current(r)&&ownsInput(r));
+      if(!current(r)||!ownsInput(r))return null;
+      const sp0=map.spawns.points[spawnId||map.spawns.default];
+      if(!sp0||!Number.isFinite(sp0.x)||!Number.isFinite(sp0.y))throw new Error('Invalid map spawn: '+id);
+      r.phase='fading-out';
+      if(S.map)await setFade(1,fadeMs(options.transition,'out'));
+      if(!current(r)||!ownsInput(r))return null;
+      r.phase='preparing';
+      await ForestLoader.prepare(map,{x:options.x??sp0.x,y:options.y??sp0.y},{isCurrent:()=>mapRequest===r&&r.phase!=='failed'&&(ownsInput(r)||(r.commitComplete&&S.map===map))});
+      if(!current(r)||!ownsInput(r))return null;
+      // Destructive commit begins here. No await until map/position/render agree.
+      r.phase='committing';r.commitStarted=true;
+      skinFiona();
+      if(options.flags)Object.assign(S.flags,options.flags);
+      S.slain.delete(id);
+      el.scene.style.display='block';
+      unmount();
+      if(!current(r)||!ownsInput(r))return null;
+      mount(map);
+      if(!current(r)||!ownsInput(r))return null;
+      if(S.forest.height&&Number.isFinite(options.level))S.forest.height.setLevel(options.level);
+      let spot;
+      if(options.x!=null&&Number.isFinite(options.x)&&Number.isFinite(options.y)&&options.x>=0&&options.y>=0&&options.x<map.world.width&&options.y<map.world.height&&!S.forest.blocked(options.x,options.y)&&(!options.verifyReachable||reachable(sp0.x-FOOT.ax,sp0.y-FOOT.ay,options.x,options.y))){spot={x:options.x,y:options.y};}
+      else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
+      S.x=spot.x;S.y=spot.y;S.fl=0;S.trail=[];
+      if(S.forest.height){const h=S.forest.height;{const spL=sp0.level;h.setLevel(Number.isFinite(options.level)?options.level:Number.isFinite(spL)&&options.x==null?spL:h.derive(S.x,S.y));}h.commit(S.x,S.y);S.fl=h.level;}else{el.player.style.transform='';if(fsp.ready)el.fiona.style.transform='';}
+      spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
+      if(!current(r)||!ownsInput(r))return null;
+      S.keys.clear();render();
+      if(!current(r)||!ownsInput(r))return null;
+      if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);if(!current(r)||!ownsInput(r))return null;FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
+      if(!current(r)||!ownsInput(r))return null;
+      if(window.FieldWeather)FieldWeather.configureMap(map);
+      if(!current(r)||!ownsInput(r))return null;
+      el.fade.style.opacity='1';playBgm();
+      if(!current(r)||!ownsInput(r))return null;
+      r.commitComplete=true;r.phase='fading-in';
+      await setFade(0,fadeMs(options.transition,'in'));
+      if(!current(r)||!ownsInput(r))return null;
+      r.phase='notifying';
+      if(hooks.onEnter)hooks.onEnter(map,spawnId);
+      if(!current(r)||!ownsInput(r))return null;
+      S.busy=false;S.active=true;startLoop();
+      r.phase='ready';inputOwner=null;
+      return map;
+    }catch(error){
+      if(!current(r)||!ownsInput(r))return null;
+      r.phase='failed';r.error=String(error);
+      if(!recoverBeforeCommit(r)){S.active=false;S.busy=true;}
+      inputOwner=null;
+      // Reuse the forest toast, bringing just this error above the existing fade.
+      try{el.toast.dataset.mapError=String(r.id);el.toast.style.zIndex='301';toast('マップ読込に失敗しました。'+(r.commitStarted?'安全のため操作を停止しました。':'もう一度お試しください。'));}catch(e){console.warn('map error notice failed',e);}
+      console.warn('map request failed',r.id,r.error);
+      return null;
+    }
   }
   function playBgm(){if(!window.FieldBgm)return;const b=S.map&&S.map.audio&&S.map.audio.bgm;FieldBgm.play(b&&b.id);}
   // Coarse 32px flood fill from the area entrance with the live collision (used to validate restored positions).
@@ -344,7 +404,7 @@
   }
   function startBattle(sy){
     if(!sy.alive||S.busy||!lvOk(sy))return;
-    S.target=null;FieldNavigation.cancel();S.active=false;
+    revokeMapRequest();S.target=null;FieldNavigation.cancel();S.active=false;
     if(hooks.onSymbol)hooks.onSymbol(sy);
   }
   // Touching a field monster uses the same hand-over as a symbol (hooks.onMonster -> startAttackBattle); returns false when no battle could start.
@@ -469,6 +529,7 @@
   // Pan the camera to a world point, hold, then glide back to the player. Input is locked meanwhile.
   function pan(x,y,{ms=1200,hold=1000}={}){
     if(S.busy||!S.forest)return Promise.resolve(false);
+    revokeMapRequest();
     const token=++CAM.token,wasActive=S.active;S.busy=true;S.target=null;FieldNavigation.cancel();
     const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,home=()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay});
     return new Promise(done=>{
@@ -604,16 +665,16 @@
     return null;
   }
   function show(){el.scene.style.display='block';}
-  function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
-  function resume(){show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
+  function hide(){revokeMapRequest();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
+  function resume(){revokeMapRequest();show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
   function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired]};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
   function restoreState(snap){
     S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);
     S.fired=new Set(Array.isArray(snap&&snap.fired)?snap.fired.filter(x=>typeof x==='string'):[]);
   }
-  function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
+  function reset(){revokeMapRequest();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){if(!on&&inputOwner)return;revokeMapRequest();S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,cancelMapRequest:revokeMapRequest,isMapRequest,get mapRequest(){return mapRequestStatus();},setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

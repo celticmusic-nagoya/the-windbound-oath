@@ -33,15 +33,17 @@
   // streams in the background nearest-first (small batches, idle gaps) so a map change costs a few images, not the whole manifest.
   const warm=new Set();
   async function prepare(map,at,opt={}){
-    if(!art.manifest)return;
+    const valid=opt.isCurrent||(()=>true);
+    if(!art.manifest||!valid())return;
+    const token=prepare.token=(prepare.token||0)+1;
     const R=opt.radius||1100,cx=at&&at.x||0,cy=at&&at.y||0,seen=new Map();
     for(const p of map.props||[]){const r=resolve(art.node,p.asset);if(!r)continue;const d=Math.hypot(p.x-cx,p.y-cy);if(!seen.has(r.file)||seen.get(r.file)>d)seen.set(r.file,d);}
     const files=[...seen.entries()].sort((a,b)=>a[1]-b[1]),near=files.filter(([,d])=>d<=R).map(([f])=>f),far=files.filter(([,d])=>d>R).map(([f])=>f).filter(f=>!warm.has(f));
     const wait=decodeAll(near.slice(0,60),12,3);
     await Promise.race([wait,new Promise(r=>setTimeout(r,opt.timeout||3500))]);   // never block the map on a slow network
+    if(!valid()||prepare.token!==token)return;
     near.forEach(f=>warm.add(f));
-    const token=prepare.token=(prepare.token||0)+1;
-    (async()=>{for(let i=0;i<far.length&&prepare.token===token;i+=4){await decodeAll(far.slice(i,i+4),4,2);far.slice(i,i+4).forEach(f=>warm.add(f));await new Promise(r=>setTimeout(r,90));}})();
+    (async()=>{for(let i=0;i<far.length&&prepare.token===token&&valid();i+=4){await decodeAll(far.slice(i,i+4),4,2);far.slice(i,i+4).forEach(f=>warm.add(f));await new Promise(r=>setTimeout(r,90));}})();
   }
   async function loadAssets(){
     if(art.loading)return art.loading;

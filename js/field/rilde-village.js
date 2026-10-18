@@ -84,9 +84,11 @@
   function startOpening() {
     storyStage = 0; currentObjective = '家を出て、訓練場のフィオナに会いに行こう'; renderJournal();
     show();
-    return MossForestStory.enterMap('rilde_in_aidan', 'from_bed').then(() => {
+    const pending=MossForestStory.enterMap('rilde_in_aidan','from_bed'),request=MossForest.mapRequest.id;
+    return pending.then(map => {
+      if(!map||!MossForest.isMapRequest(request))return null;
       popObjective();
-      setTimeout(() => { if (stage() === 0 && MossForest.mapId === 'rilde_in_aidan') say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'); }, 350);
+      setTimeout(() => { if (MossForest.isMapRequest(request) && stage() === 0 && MossForest.mapId === 'rilde_in_aidan') say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'); }, 350);
     });
   }
   function afterPrologue() {   // stage 15: free roam. The party stands in the fort's keep; the village (now ruined) and the road are open.
@@ -117,7 +119,8 @@
     return false;
   }
   function enterCliffFromVillage() {
-    MossForestStory.enterCliff().then(() => { if (stage() === 3) setObj('崖の上のビューポイントへ向かおう'); });
+    const pending=MossForestStory.enterCliff(),request=MossForest.mapRequest.id;
+    pending.then(map => { if (map && MossForest.isMapRequest(request) && stage() === 3) setObj('崖の上のビューポイントへ向かおう'); });
   }
   // 長老が街道を示したら(road_dunvall_open)、目的も次へ進める
   window.addEventListener('field-talk-end', e => {

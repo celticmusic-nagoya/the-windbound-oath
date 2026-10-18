@@ -373,7 +373,8 @@ $('#roadExit').onclick=()=>{
 function enterWorldMap(id,spawn){closeDialogue();forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterMap(id,spawn);}
 function enterCliff(){
  closeDialogue();forestActive=true;$('#forestScene').style.display='block';
- MossForestStory.enterCliff().then(()=>{if(storyStage===3)setObj('崖の上のビューポイントへ向かおう')});
+ const pending=MossForestStory.enterCliff(),request=MossForest.mapRequest.id;
+ pending.then(map=>{if(map&&MossForest.isMapRequest(request)&&storyStage===3)setObj('崖の上のビューポイントへ向かおう')});
 }
 $('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
 $('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
@@ -784,6 +785,7 @@ function chooseNormalAct(kind,target){
 function startAttackBattle(id,hp){
  closeDialogue();hideBattleBanner();hideRaiderBattleLog();
  if(attackBattleBusy||PrologueProgress.cleared(id))return;
+ window.MossForest?.cancelMapRequest();
  currentGoblin=id;gghp=hp;aahp=100;aatp=0;agGuard=false;attackBattleBusy=false;
  if(id.startsWith('forestGob')||id.startsWith('mossSlime')||id.startsWith('forestBat')||id.startsWith('leafyBoar')||id.startsWith('fieldGob'))forestHideScene();
  document.body.classList.remove('raiderBattleMode');
@@ -1146,10 +1148,12 @@ let battleItems={potion:4,ether:2}; let normalFHP=90,normalFMP=30,normalActor='a
 function enterMossForest(){
  storyStage=9;forestActive=true;
  $('#forestScene').style.display='block';
- MossForestStory.enterFromStart().then(()=>{
+ const pending=MossForestStory.enterFromStart(),request=MossForest.mapRequest.id;
+ pending.then(map=>{
+   if(!map||!MossForest.isMapRequest(request))return;
    questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
    const g=window.PrologueCombat?.generation;
-   setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)FieldTalk.talk('scene_forest_arrival',{source:'forest'})},350);
+   setTimeout(()=>{if(MossForest.isMapRequest(request)&&g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)FieldTalk.talk('scene_forest_arrival',{source:'forest'})},350);
  });
 }
 function forestDevEnterA3(fx,fy){forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterAt(MossForestStory.MAP_IDS.a3,fx-17,fy-42,null);}
@@ -1293,6 +1297,7 @@ function updateRaider(){
  $('#rbTurn').textContent=`ROUND ${rbRound} / ${rbActor==='aidan'?'エイダン':'フィオナ'}のコマンド`;
 }
 function startRaiderBattle(){
+ window.MossForest?.cancelMapRequest();
  hideBattleBanner();hideRaiderBattleLog();
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
  $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
@@ -1473,6 +1478,7 @@ const fortLines=[
 ];
 let fortIndex=0;
 function startFortFinale(){
+ window.MossForest?.cancelMapRequest();
  document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode');
  // Destination-first transition: never expose the base field between story scenes.
  $('#fortScene').style.display='block';
@@ -1490,6 +1496,7 @@ $('#fortScene').onclick=()=>{
  else showPrologueEnd();
 };
 function showPrologueEnd(){
+ window.MossForest?.cancelMapRequest();
  $('#fortScene').style.display='none';storyStage=15;currentObjective='プロローグクリア';renderJournal();
  $('#prologueEnd').style.display='grid';
 }
@@ -1958,12 +1965,12 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/prologue-combat.js?v=20261013wd4"></script>
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js"></script>
-<script src="js/prologue-dev.js?v=20261012c"></script>
+<script src="js/prologue-dev.js?v=20261017lc03p1"></script>
 <script src="js/dev/perf-meter.js?v=20261012p1"></script>
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
-<script src="js/field/forest-loader.js?v=20261012p1"></script>
+<script src="js/field/forest-loader.js?v=20261017lc03p1"></script>
 <script src="js/field/field-timeofday.js"></script>
 <script src="js/field/field-weather.js"></script>
 <script src="js/field/field-vista.js"></script>
@@ -1971,9 +1978,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261014h25"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261017lc03p1"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
-<script src="js/field/rilde-village.js?v=20261011b"></script>
+<script src="js/field/rilde-village.js?v=20261017lc03p1"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
 <script src="js/inventory.js"></script>
