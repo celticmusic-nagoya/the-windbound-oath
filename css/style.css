@@ -3563,11 +3563,13 @@ body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
 body.normalBattleMode #attackBattle[data-bg]>.v2BattleStage{background:none!important}
 
 /* TalkPortrait: conversation portrait above #msg (js/field/talk-portrait.js) */
-#talkPortrait{position:fixed;z-index:180;pointer-events:none;user-select:none;-webkit-user-select:none;overflow:hidden;
-  bottom:var(--tpBottom,22vh);right:2%;aspect-ratio:var(--tpAspect,1/1);height:min(52vh,560px,var(--tpAvail,52vh));max-width:46vw;display:none}
+#talkPortrait{--tpH:min(52vh,560px,var(--tpAvail,52vh));--tpMaxW:46vw;position:fixed;z-index:180;pointer-events:none;user-select:none;-webkit-user-select:none;overflow:hidden;
+  bottom:var(--tpBottom,22vh);right:2%;display:none;
+  /* P2 (F-L-04): the frame follows the crop's aspect ratio (width from the height budget, clamped by --tpMaxW, height from aspect-ratio): no empty band under the image */
+  width:min(calc(var(--tpH) * var(--tpRatio,1)),var(--tpMaxW));height:auto;aspect-ratio:var(--tpAspect,1/1)}
 #talkPortrait[data-side="left"]{right:auto;left:2%}
 #talkPortrait img{position:absolute;max-width:none;height:auto;pointer-events:none;-webkit-user-drag:none}
 body.dialogueOpen:not(.battleMode) #talkPortrait:not([hidden]){display:block}
 body.battleMode #talkPortrait{display:none!important}
-@media (orientation:portrait) and (max-width:720px){#talkPortrait{height:min(34vh,var(--tpAvail,34vh));max-width:70vw;right:0}}
-@media (orientation:landscape) and (max-height:520px){#talkPortrait{height:min(60vh,var(--tpAvail,60vh));max-width:36vw}}
+@media (orientation:portrait) and (max-width:720px){#talkPortrait{--tpH:min(34vh,var(--tpAvail,34vh));--tpMaxW:70vw;right:0}}
+@media (orientation:landscape) and (max-height:520px){#talkPortrait{--tpH:min(60vh,var(--tpAvail,60vh));--tpMaxW:36vw}}
