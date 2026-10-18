@@ -174,7 +174,7 @@
     return MossForest.enter({map:mapId,x,y,flags:flagsNow()});
   }
   // Restore from a save. v2 carries data.moss; v1 (legacy 1800x1300 forest) is migrated by story progress.
-  function fromSave(data,ctx){
+  function fromSave(data,ctx,restoreToken){
     const A=MAP_IDS,moss=data&&data.moss;
     const valid=moss&&Object.values(A).includes(moss.map)&&Number.isFinite(moss.x)&&Number.isFinite(moss.y);
     let mapId,spawn=null,pos=null,state=moss||{};
@@ -189,7 +189,7 @@
       else{mapId=A.a1;spawn='from_cliff_fall';}
     }
     MossForest.reset();MossForest.restoreState(state);
-    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true});
+    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true,restoreToken});
   }
   // Opened-chest ids recorded in a save (v2 moss.opened, or v1 forestChests mapped to the new ids).
   function openedFromSave(data){

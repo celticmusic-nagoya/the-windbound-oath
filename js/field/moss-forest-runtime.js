@@ -17,8 +17,9 @@
   // revokes both, and an old request must never release a newer controller's state.
   let requestSerial=0,mapRequest=null,controlEpoch=0,inputOwner=null;
   // Separate from request/control ownership: cancellation or external unlock cannot
-  // certify a partially committed map. Only a complete successful enter clears it.
-  let unsafeCommit=false;
+  // certify a partially committed map. Recovery requires a verified enter,
+  // committed cancellation, or owned LOAD completion.
+  let unsafeCommit=false,restoreBlocked=false,restoreSerial=0,restoreOwner=null;
   const current=r=>mapRequest===r&&r.phase!=='cancelled';
   const ownsInput=r=>inputOwner===r&&r.controlEpoch===controlEpoch;
   function recoverBeforeCommit(r){
@@ -28,10 +29,69 @@
     el.fade.style.transitionDuration=old.fadeDuration;el.fade.style.opacity=old.fade;
     return true;
   }
-  function revokeMapRequest(){
-    if(mapRequest&&current(mapRequest)&&ownsInput(mapRequest))recoverBeforeCommit(mapRequest);
-    if(mapRequest)mapRequest.phase='cancelled';
+  // A certificate records the actual mounted map/position/render, not just a phase bit.
+  function committed(r){
+    const c=r&&r.commit;
+    return !!c&&r.commitComplete&&S.map===c.map&&S.forest===c.forest&&S.mapId===c.id&&S.map.id===c.id&&r.map===c.id&&
+      S.x===c.x&&S.y===c.y&&Number.isFinite(S.x)&&Number.isFinite(S.y)&&
+      S.x>=0&&S.y>=0&&S.x<c.width&&S.y<c.height&&!!S.map.world&&S.map.world.width===c.width&&S.map.world.height===c.height&&
+      el.world.style.width===c.worldWidth&&el.world.style.height===c.worldHeight&&
+      el.player.style.left===c.left&&el.player.style.top===c.top;
+  }
+  function notifyEntry(r){
+    if(r.notified)return;
+    r.phase='notifying';r.notified=true;
+    if(hooks.onEnter)hooks.onEnter(r.commit.map,r.spawn);
+  }
+  function revokeMapRequest(certify=true){
+    const r=mapRequest;
+    if(r&&current(r)&&ownsInput(r)){
+      if(certify&&!restoreOwner&&r.phase==='fading-in'&&committed(r)){
+        try{
+          notifyEntry(r);
+          if(current(r)&&ownsInput(r)&&committed(r)){
+            unsafeCommit=false;restoreBlocked=false;S.active=true;S.busy=false;
+            el.fade.style.transitionDuration='0ms';el.fade.style.opacity='0';startLoop();
+          }
+        }catch(error){r.phase='failed';r.error=String(error);unsafeCommit=true;S.active=false;S.busy=true;el.toast.dataset.mapError=String(r.id);el.toast.style.zIndex='301';toast('マップ読込に失敗しました。安全のため操作を停止しました。');}
+      }else recoverBeforeCommit(r);
+    }
+    // A synchronous onEnter may have installed a different request/owner.
+    if(mapRequest!==r)return;
+    if(r)r.phase='cancelled';
     inputOwner=null;controlEpoch++;
+  }
+  function beginRestore(){
+    revokeMapRequest(false);
+    const token=Object.freeze({id:++restoreSerial});
+    restoreOwner={token,request:null};restoreBlocked=true;unsafeCommit=true;
+    S.active=false;S.busy=true;S.target=null;S.keys.clear();FieldNavigation.cancel();
+    return token;
+  }
+  function failRestore(token){
+    if(!restoreOwner||restoreOwner.token!==token||restoreOwner.failed)return false;
+    revokeMapRequest(false);unsafeCommit=true;restoreBlocked=true;S.active=false;S.busy=true;
+    restoreOwner.failed=true;return true;
+  }
+  function finishRestore(token,verify,kind){
+    const owner=restoreOwner;
+    if(!owner||owner.token!==token||owner.failed)return false;
+    if(kind!=='forest'&&kind!=='legacy')return false;
+    if((kind==='forest')!==!!owner.request)return false;
+    if(typeof verify!=='function'||verify()!==true||restoreOwner!==owner)return false;
+    if(owner.request){
+      const r=owner.request;
+      if(mapRequest!==r||r.phase!=='ready'||!committed(r))return false;
+    }else{
+      // The existing legacy LOAD route is kept. Retire the failed forest rather
+      // than serializing its mapId with old coordinates behind the restored view.
+      if(S.map)unmount();
+      if(verify()!==true||restoreOwner!==owner)return false;
+      S.mapId=null;S.x=S.y=S.fx=S.fy=0;S.target=S.pending=null;
+    }
+    unsafeCommit=false;restoreBlocked=false;restoreOwner=null;
+    S.busy=false;S.active=!!owner.request;
+    if(S.active)startLoop();return true;
   }
   function mapRequestStatus(){const r=mapRequest;return r?{id:r.id,phase:r.phase,map:r.map,commitStarted:r.commitStarted,commitComplete:r.commitComplete,error:r.error||null,ownsInput:ownsInput(r)}:null;}
   function isMapRequest(id){return !!mapRequest&&mapRequest.id===id&&mapRequest.phase==='ready';}
@@ -261,6 +321,9 @@
   // ---------- transitions between maps ----------
   async function enter(options){
     if(!S.configured)throw new Error('MossForest not configured');
+    const restoring=options.restoreToken&&restoreOwner&&restoreOwner.token===options.restoreToken?restoreOwner:null;
+    if(options.restoreToken&&!restoring)return null;
+    if(!restoring)restoreOwner=null;
     const prior=mapRequest;
     // Transfer the original recovery point only while no destructive commit occurred.
     const previous=prior&&current(prior)&&ownsInput(prior)&&!prior.commitStarted?prior.previous:
@@ -269,7 +332,7 @@
     if(prior)prior.phase='cancelled';
     const r={id:++requestSerial,controlEpoch,map:options.map,phase:'loading',commitStarted:false,commitComplete:false,previous};
     if(el.toast.dataset.mapError){el.toast.style.removeProperty('z-index');delete el.toast.dataset.mapError;}
-    mapRequest=r;inputOwner=r;S.busy=true;S.active=false;
+    mapRequest=r;inputOwner=r;if(restoring)restoring.request=r;S.busy=true;S.active=false;
     // Existing camera jobs must not draw an old map while its successor loads.
     CAM.token++;CAM.focus=null;
     try{
@@ -313,13 +376,14 @@
       if(!current(r)||!ownsInput(r))return null;
       el.fade.style.opacity='1';playBgm();
       if(!current(r)||!ownsInput(r))return null;
-      r.commitComplete=true;r.phase='fading-in';
+      r.commitComplete=true;r.spawn=spawnId;r.commit={map:S.map,forest:S.forest,id:S.mapId,x:S.x,y:S.y,width:map.world.width,height:map.world.height,worldWidth:el.world.style.width,worldHeight:el.world.style.height,left:el.player.style.left,top:el.player.style.top};r.phase='fading-in';
       await setFade(0,fadeMs(options.transition,'in'));
       if(!current(r)||!ownsInput(r))return null;
-      r.phase='notifying';
-      if(hooks.onEnter)hooks.onEnter(map,spawnId);
+      if(!committed(r))throw Error('Map commit changed before ready');
+      notifyEntry(r);
       if(!current(r)||!ownsInput(r))return null;
-      S.busy=false;S.active=true;startLoop();unsafeCommit=false;
+      if(!committed(r))throw Error('Map commit changed during notification');
+      if(!restoring){S.busy=false;S.active=true;startLoop();unsafeCommit=false;restoreBlocked=false;}
       r.phase='ready';inputOwner=null;
       return map;
     }catch(error){
@@ -680,8 +744,8 @@
   }
   function reset(){revokeMapRequest();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=unsafeCommit;}
 
-  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){if(unsafeCommit){if(on)revokeMapRequest();S.active=false;S.busy=true;return;}if(!on&&inputOwner)return;revokeMapRequest();S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,cancelMapRequest:revokeMapRequest,isMapRequest,get mapRequest(){return mapRequestStatus();},setFlag,syncSymbols,snapshot,restoreState,reset,toast,
-    get canSave(){return !unsafeCommit&&!inputOwner;},get unsafeCommit(){return unsafeCommit;},
+  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){if(unsafeCommit){if(on)revokeMapRequest();if(unsafeCommit){S.active=false;S.busy=true;return;}}if(!on&&inputOwner)return;revokeMapRequest();S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,cancelMapRequest:revokeMapRequest,isMapRequest,get mapRequest(){return mapRequestStatus();},setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+    beginRestore,finishRestore,failRestore,get restoreBlocked(){return restoreBlocked;},get canSave(){return !unsafeCommit&&!inputOwner&&!restoreBlocked;},get unsafeCommit(){return unsafeCommit;},
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

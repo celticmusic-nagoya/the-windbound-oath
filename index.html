@@ -225,6 +225,7 @@ function blockedWorld(x,y){
  return inRiver && !onBridge;
 }
 function move(){
+ if(window.MossForest?.restoreBlocked){target=null;requestAnimationFrame(move);return}
  if(target){
   const moved=FieldNavigation.follow(px,py,target,blockedWorld);
   px=moved.x;py=moved.y;target=moved.target;
@@ -234,13 +235,13 @@ function move(){
  requestAnimationFrame(move);
 }
 move();
-$('#game').addEventListener('pointerdown',e=>{if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;const point=FieldCamera.screenToWorld(world,e.clientX,e.clientY);
+$('#game').addEventListener('pointerdown',e=>{if(window.MossForest?.restoreBlocked)return;if(e.target.closest('.npc,.fisher,.door,button,#inside'))return;const point=FieldCamera.screenToWorld(world,e.clientX,e.clientY);
  target=FieldNavigation.destination(point.x-FieldMovement.settings.anchorX,point.y-FieldMovement.settings.anchorY,blockedWorld);
  if(!target)toast('その場所へは進めない。');
 });
 const fieldHeldDirections=new Map();
 addEventListener('keydown',e=>{
- if(forestActive)return;
+ if(forestActive||window.MossForest?.restoreBlocked)return;
  const directions={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};
  const direction=directions[e.key];if(!direction)return;
  fieldHeldDirections.set(e.key,direction);
@@ -255,7 +256,7 @@ addEventListener('blur',()=>fieldHeldDirections.clear());
 let ipx=485,ipy=575,itarget=null;
 let innFloor=1;
 function inCamera(){let rw=$('#roomWorld'),x=Math.max(0,Math.min(1000-innerWidth,ipx-innerWidth/2)),y=Math.max(0,Math.min(720-innerHeight,ipy-innerHeight/2));rw.style.transform=`translate(${-x}px,${-y}px)`;$('#inPlayer').style.left=ipx+'px';$('#inPlayer').style.top=ipy+'px'}
-function inMove(){if($('#inside').style.display==='block'&&window.InputManager){const kv=InputManager.heldVector();if(kv){itarget=null;ipx=Math.max(16,Math.min(960,ipx+kv[0]*3.5));ipy=Math.max(40,Math.min(660,ipy+kv[1]*3.5));}}if($('#inside').style.display==='block'&&itarget){let dx=itarget.x-ipx,dy=itarget.y-ipy,d=Math.hypot(dx,dy);if(d<5)itarget=null;else{ipx+=dx/d*3.5;ipy+=dy/d*3.5}}inCamera();requestAnimationFrame(inMove)}inMove();
+function inMove(){if(window.MossForest?.restoreBlocked){itarget=null;requestAnimationFrame(inMove);return}if($('#inside').style.display==='block'&&window.InputManager){const kv=InputManager.heldVector();if(kv){itarget=null;ipx=Math.max(16,Math.min(960,ipx+kv[0]*3.5));ipy=Math.max(40,Math.min(660,ipy+kv[1]*3.5));}}if($('#inside').style.display==='block'&&itarget){let dx=itarget.x-ipx,dy=itarget.y-ipy,d=Math.hypot(dx,dy);if(d<5)itarget=null;else{ipx+=dx/d*3.5;ipy+=dy/d*3.5}}inCamera();requestAnimationFrame(inMove)}inMove();
 function dressRoom(){
  const dec=$('#roomDecor');
  dec.innerHTML='';
@@ -1118,20 +1119,30 @@ function saveGrowthData(){
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
 function loadGrowthData(){
+ let restoration;
  try{
   const saved=JSON.parse(localStorage.getItem(SAVE_KEY));if(!saved)throw 0;
   const d=EquipmentManager.migrateStarterSword(saved);
+  if(d.prologue||window.MossForest?.unsafeCommit)restoration={token:MossForest.beginRestore()};
   if(PartyManager.members.fiona&&!d.members?.fiona?.learned)delete PartyManager.members.fiona.learned;   // an older save must not inherit a spell learned later in this session (syncStoryEquipment restores it by stage)
   Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
   Inventory.load(d.inventory);EquipmentManager.load(d.equipment);Quest.load(d.quests);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
-  if(d.prologue)PrologueProgress.load(d.prologue);
+  if(d.prologue&&!PrologueProgress.load(d.prologue,restoration))throw Error('Invalid prologue save');
   syncStoryEquipment();
   Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
-  renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
- }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>';return false}
+  renderSystemTab('status');
+  const complete=()=>{
+   if(restoration&&!MossForest.finishRestore(restoration.token,restoration.verify,restoration.kind)){
+    if(MossForest.failRestore(restoration.token))notice('ロードを完了できませんでした。安全のため操作を停止しました。');return false;
+   }
+   notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
+  };
+  if(restoration?.pending){restoration.pending.then(map=>{if(map)complete();else if(MossForest.failRestore(restoration.token))notice('ロードを完了できませんでした。安全のため操作を停止しました。')}).catch(()=>{if(MossForest.failRestore(restoration.token))notice('ロードを完了できませんでした。安全のため操作を停止しました。')});return true}
+  return complete();
+ }catch(e){if(restoration&&!MossForest.failRestore(restoration.token))return false;notice('ロードできませんでした。');if($('#saveMsg'))$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>';return false}
 }
 function eraseGrowthData(){localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
 $('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
@@ -1965,7 +1976,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/battle-critical.js"></script>
 <script src="js/prologue-combat.js?v=20261013wd4"></script>
 <script src="js/battle-critical-presentation.js"></script>
-<script src="js/prologue-progress.js"></script>
+<script src="js/prologue-progress.js?v=20261018lc03p12"></script>
 <script src="js/prologue-dev.js?v=20261017lc03p1"></script>
 <script src="js/dev/perf-meter.js?v=20261012p1"></script>
 <script src="js/field/field-culling.js"></script>
@@ -1979,8 +1990,8 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261018lc03p11"></script>
-<script src="js/field/moss-forest-story.js?v=20261012a"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261018lc03p12"></script>
+<script src="js/field/moss-forest-story.js?v=20261018lc03p12"></script>
 <script src="js/field/rilde-village.js?v=20261017lc03p1"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
