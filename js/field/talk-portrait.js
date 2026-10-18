@@ -25,15 +25,26 @@
   const FACE_IDS = {normal: '01', smile: '02', angry: '03', sad: '04', surprised: '05', worried: '06', determined: '07', relieved: '08'};
   const CHARS = {
     fiona: {name: 'フィオナ', dir: 'fiona', prefix: 'fiona', crop: {x: 130, y: 45, w: 840, h: 840}, side: 'right'},   // source 1024x1536
-    lou: {name: 'ルー', dir: 'lou', prefix: 'lou', crop: {x: 0, y: 0, w: 1312, h: 1199}, side: 'right'}                // source 1312x1199
+    lou: {name: 'ルー', dir: 'lou', prefix: 'lou', crop: {x: 0, y: 0, w: 1312, h: 1199}, side: 'right'},               // source 1312x1199
+    // Emma (ASSET-EMMA-01): her own expression ids. `faces` = ids a conversation may name; `ready` = ids that have an image today (others fall back to normal
+    // without a request). expression01..04 stay unready until the face composites are approved (see docs/portraits/EMMA.md).
+    emma: {name: 'エマ', dir: 'emma', prefix: 'emma', crop: {x: 90, y: 0, w: 880, h: 880}, side: 'right',
+           faces: ['normal', 'expression01', 'expression02', 'expression03', 'expression04'], ready: ['normal']}   // source 1024x1536
   };
-  const SRC = {fiona: {w: 1024, h: 1536}, lou: {w: 1312, h: 1199}};   // source png sizes (crop is in these px)
+  const SRC = {fiona: {w: 1024, h: 1536}, lou: {w: 1312, h: 1199}, emma: {w: 1024, h: 1536}};   // source png sizes (crop is in these px)
   const DIRECT = '__direct', BAD_MS = 15000;
   const imgs = new Map();   // url -> Promise<HTMLImageElement|null> (a decoded <img>, shared: only one portrait is on screen at a time)
   const bad = new Map();    // url -> time of the last failure (not retried for BAD_MS: no request storm while someone taps through)
   let box = null, owner = null, gen = 0, want = null /* character the owner asked for last */, cur = null /* what is on screen */, obs = null;
 
-  const faceOf = f => (FACES.includes(f) ? f : (/^0[1-8]$/.test(String(f)) ? FACES[+f - 1] : 'normal'));
+  // expression id -> an id this character can show. Without a character: the shared 8-face set. With one: its own `faces` list (default: the shared set);
+  // an unknown id is `normal`; an id without an image yet (not in `ready`) is `normal` too, so no request is made for a file that does not exist.
+  const faceOf = (f, c) => {
+    const ch = c && CHARS[c], list = (ch && ch.faces) || FACES;
+    let id = list.includes(f) ? f : (!(ch && ch.faces) && /^0[1-8]$/.test(String(f)) ? FACES[+f - 1] : 'normal');
+    if (ch && ch.ready && !ch.ready.includes(id)) id = 'normal';
+    return id;
+  };
   const url = (c, f) => BASE + CHARS[c].dir + '/' + CHARS[c].prefix + '_' + f + '.png';
   // resolves a decoded <img> or null — never rejects, never touches the display
   function load(u) {
@@ -48,7 +59,7 @@
     }).then(im => { if (!im) { imgs.delete(u); bad.set(u, Date.now()); } return im; });
     imgs.set(u, p); return p;
   }
-  function preload(c, f) { if (CHARS[c]) void load(url(c, faceOf(f))); }
+  function preload(c, f) { if (CHARS[c]) void load(url(c, faceOf(f, c))); }
   // face -> {face, im}; falls back to normal, then null. Pure with respect to the display: a stale caller just throws the result away.
   async function resolve(c, face) {
     let im = await load(url(c, face)); if (im) return {face, im};
@@ -81,7 +92,7 @@
     if (!c || !CHARS[c] || !ensure()) { hideVisual(); return Promise.resolve(false); }
     want = c;
     if (cur && cur.char !== c) hideVisual();   // another character: the old one goes first, the new one appears when it is ready
-    const face = faceOf(f);
+    const face = faceOf(f, c);
     return resolve(c, face).then(r => {
       if (my !== gen) return false;            // superseded / ended / revoked while loading: change nothing
       if (!r) { hideVisual(); return false; }

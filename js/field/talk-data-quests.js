@@ -7,24 +7,24 @@ window.TalkDataQuests = Object.freeze({tables: [
     // found the charm before being asked: she recognises it and the quest closes in one conversation
     {id: 'emma_q_found_early', priority: 62, mode: 'once',
      when: {all: [{quest: {id: 'q_emma_charm', state: 'unaccepted'}}, {item: 'charm_windward'}]},
-     lines: [{pages: ['エマ「おや、エイダン。それは……わたしの編んだ護符じゃないか！」', 'エマ「森の道で落としたきり、あきらめていたんだよ。ありがとうねぇ。」', 'エマ「これは持っておいき。きっとまた、お前を守ってくれるよ。」'],
+     lines: [{char: 'emma', face: 'normal', pages: ['エマ「おや、エイダン。それは……わたしの編んだ護符じゃないか！」', 'エマ「森の道で落としたきり、あきらめていたんだよ。ありがとうねぇ。」', 'エマ「これは持っておいき。きっとまた、お前を守ってくれるよ。」'],
               quest: {id: 'q_emma_charm', action: 'report'}}]},
     {id: 'emma_q_report', priority: 60, mode: 'once',
      when: {quest: {id: 'q_emma_charm', state: 'complete'}},
-     lines: [{pages: ['エマ「おや、それは……！　わたしの護符じゃないか。」', 'エマ「ほんとうにありがとうよ、エイダン。これは持っておいき。きっとまた、お前を守ってくれるよ。」'],
+     lines: [{char: 'emma', face: 'normal', pages: ['エマ「おや、それは……！　わたしの護符じゃないか。」', 'エマ「ほんとうにありがとうよ、エイダン。これは持っておいき。きっとまた、お前を守ってくれるよ。」'],
               quest: {id: 'q_emma_charm', action: 'report'}}]},
     {id: 'emma_q_active', priority: 50, mode: 'cycle',
      when: {quest: {id: 'q_emma_charm', state: 'active'}},
-     lines: ['エマ「護符は見つかったかい？　森の道の、見晴らしのよいあたりで落とした気がするんだけどねぇ。」']},
+     lines: [{char: 'emma', face: 'normal', pages: ['エマ「護符は見つかったかい？　森の道の、見晴らしのよいあたりで落とした気がするんだけどねぇ。」']}]},
     {id: 'emma_q_offer', priority: 45, mode: 'cycle',
      when: {all: [{quest: {id: 'q_emma_charm', state: 'unaccepted'}}, {any: [{talked: 'emma_closed'}, {talked: 'emma_open'}]}]},
-     lines: [{pages: ['エマ「そういえばエイダン。昔わたしが編んだ風よけの護符を、森の道で落としてしまってねぇ。」', 'エマ「もし見つけたら、届けてくれないかい？」'],
+     lines: [{char: 'emma', face: 'normal', pages: ['エマ「そういえばエイダン。昔わたしが編んだ風よけの護符を、森の道で落としてしまってねぇ。」', 'エマ「もし見つけたら、届けてくれないかい？」'],
               choice: {options: [
                 {label: '探してみるよ', reply: 'エマ「ありがとうねぇ。無理はしないでおくれよ。」', quest: {id: 'q_emma_charm', action: 'accept'}},
                 {label: '今は難しい', reply: 'エマ「いいんだよ、気が向いたらでね。」'}]}}]},
     {id: 'emma_q_thanks', priority: 30, mode: 'once',
      when: {quest: {id: 'q_emma_charm', state: 'reported'}},
-     lines: ['エマ「その護符、大事にしておくれ。風のお守りだからねぇ。」']}
+     lines: [{char: 'emma', face: 'normal', pages: ['エマ「その護符、大事にしておくれ。風のお守りだからねぇ。」']}]}
   ]},
   {npc: 'merchant', entries: [
     {id: 'merchant_shop', priority: 20, mode: 'cycle', when: {stage: [15, 99]},
