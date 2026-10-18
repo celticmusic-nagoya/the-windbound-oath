@@ -154,12 +154,16 @@ def main():
             f = os.path.join(d, pat % k)
             if os.path.exists(f): frames.append(f)
         os.makedirs(os.path.join(OUT, 'npc'), exist_ok=True)
-        im0.resize((round(ww * K), round(hh * K)), Image.LANCZOS).save(os.path.join(OUT, 'npc', n['id'] + '_idle.png'))
+        # ASSET-EMMA-01: the boy swordsman's official 6-frame art lives in img/field/moss/rilde/npc/ (see docs/art/boy_swordsman_official.md).
+        # While the OFFICIAL marker exists this tool must not overwrite it with the old placeholder frames; metadata is still computed as before.
+        official = n['id'] == 'boy_swordsman' and os.path.exists(os.path.join(OUT, 'npc', 'boy_swordsman.OFFICIAL'))
+        if not official: im0.resize((round(ww * K), round(hh * K)), Image.LANCZOS).save(os.path.join(OUT, 'npc', n['id'] + '_idle.png'))
         cnt = 0
         for k, f in enumerate(frames, 1):
             im = Image.open(f).convert('RGBA')
             if im.size != (W, H): continue                                  # only canvases that match the idle (no legacy sheets)
-            im.resize((round(ww * K), round(hh * K)), Image.LANCZOS).save(os.path.join(OUT, 'npc', '%s_f%02d.png' % (n['id'], k))); cnt += 1
+            if not official: im.resize((round(ww * K), round(hh * K)), Image.LANCZOS).save(os.path.join(OUT, 'npc', '%s_f%02d.png' % (n['id'], k)))
+            cnt += 1
         meta['npc'][n['id']] = {'idle': 'rilde/npc/%s_idle.png' % n['id'], 'frames': cnt, 'frame': 'rilde/npc/%s_f{n}.png' % n['id'], 'w': round(ww, 2), 'h': round(hh, 2),
                                 'dx': round(((l + r) / 2 - W / 2) * s, 2), 'dy': round((H - b) * s, 2), 'talk': n['talk'], 'label': n['label'], 'foot': n['footY'], 'x': n['x'], 'height': n['height']}
     json.dump(meta, open(os.path.join(ROOT, 'tools/moss/rilde_assets.json'), 'w'), ensure_ascii=False, indent=1)
