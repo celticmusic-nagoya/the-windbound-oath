@@ -45,8 +45,8 @@
      if(!Number.isFinite(px)||!Number.isFinite(py)||px!==expected.x||py!==expected.y||px<0||py<0||px>=world.offsetWidth||py>=world.offsetHeight||pl.style.left!==cssPx(px)||pl.style.top!==cssPx(py))return false;
      return storyStage===0?room==='home'&&q('#inside').style.display==='block'&&Number.isFinite(ipx)&&Number.isFinite(ipy)&&ipx===expected.ix&&ipy===expected.iy&&ipx>=0&&ipx<1000&&ipy>=0&&ipy<720&&q('#inPlayer').style.left===cssPx(ipx)&&q('#inPlayer').style.top===cssPx(ipy):q('#inside').style.display==='none';
     }
-    const scene={13:'#aftermathScene',14:'#fortScene',15:'#prologueEnd'}[storyStage];
-    return !!scene&&q(scene).style.display==='block';
+    const scene={13:['#aftermathScene','block'],14:['#fortScene','block'],15:['#prologueEnd','grid']}[storyStage];
+    return !!scene&&q(scene[0]).style.display===scene[1];
    };
   }
   sync();for(const field of ['attackGob1','attackGob2','northGob1','northGob2']){const el=q('#'+field);if(el){el.hidden=cleared(field);el.style.display=cleared(field)?'none':''}}
