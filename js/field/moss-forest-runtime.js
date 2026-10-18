@@ -16,6 +16,9 @@
   // Request identity and field-control ownership are separate: an external lock/hide
   // revokes both, and an old request must never release a newer controller's state.
   let requestSerial=0,mapRequest=null,controlEpoch=0,inputOwner=null;
+  // Separate from request/control ownership: cancellation or external unlock cannot
+  // certify a partially committed map. Only a complete successful enter clears it.
+  let unsafeCommit=false;
   const current=r=>mapRequest===r&&r.phase!=='cancelled';
   const ownsInput=r=>inputOwner===r&&r.controlEpoch===controlEpoch;
   function recoverBeforeCommit(r){
@@ -285,7 +288,7 @@
       await ForestLoader.prepare(map,{x:options.x??sp0.x,y:options.y??sp0.y},{isCurrent:()=>mapRequest===r&&r.phase!=='failed'&&(ownsInput(r)||(r.commitComplete&&S.map===map))});
       if(!current(r)||!ownsInput(r))return null;
       // Destructive commit begins here. No await until map/position/render agree.
-      r.phase='committing';r.commitStarted=true;
+      r.phase='committing';r.commitStarted=true;unsafeCommit=true;
       skinFiona();
       if(options.flags)Object.assign(S.flags,options.flags);
       S.slain.delete(id);
@@ -316,7 +319,7 @@
       r.phase='notifying';
       if(hooks.onEnter)hooks.onEnter(map,spawnId);
       if(!current(r)||!ownsInput(r))return null;
-      S.busy=false;S.active=true;startLoop();
+      S.busy=false;S.active=true;startLoop();unsafeCommit=false;
       r.phase='ready';inputOwner=null;
       return map;
     }catch(error){
@@ -658,28 +661,32 @@
   }
   // Choreography adapters (see js/field/field-choreo.js). Aidan: moving S.x/S.y drives his walk animation by itself.
   // Fiona: set() takes her off the follow-the-player easing until release().
+  // onEnter may synchronously place Fiona after a complete commit; failed or
+  // cancelled requests never own this narrow placement window.
+  function canPlaceActor(){return !unsafeCommit||!!(mapRequest&&current(mapRequest)&&ownsInput(mapRequest)&&mapRequest.commitComplete&&mapRequest.phase==='notifying');}
   function actor(id){
-    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
-    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
+    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){if(!canPlaceActor())return;S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
+    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){if(!canPlaceActor())return;S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
       pose(state,dir){el.fiona.dataset.pose=state;el.fiona.dataset.dir=dir;},release(){S.fionaHold=false;delete el.fiona.dataset.pose;}};
     return null;
   }
   function show(){el.scene.style.display='block';}
   function hide(){revokeMapRequest();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
-  function resume(){revokeMapRequest();show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
+  function resume(){revokeMapRequest();if(unsafeCommit){S.active=false;S.busy=true;return;}show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
   function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired]};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
   function restoreState(snap){
     S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);
     S.fired=new Set(Array.isArray(snap&&snap.fired)?snap.fired.filter(x=>typeof x==='string'):[]);
   }
-  function reset(){revokeMapRequest();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
+  function reset(){revokeMapRequest();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=unsafeCommit;}
 
-  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){if(!on&&inputOwner)return;revokeMapRequest();S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,cancelMapRequest:revokeMapRequest,isMapRequest,get mapRequest(){return mapRequestStatus();},setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){if(unsafeCommit){if(on)revokeMapRequest();S.active=false;S.busy=true;return;}if(!on&&inputOwner)return;revokeMapRequest();S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,cancelMapRequest:revokeMapRequest,isMapRequest,get mapRequest(){return mapRequestStatus();},setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+    get canSave(){return !unsafeCommit&&!inputOwner;},get unsafeCommit(){return unsafeCommit;},
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
-    teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
+    teleportFeet(x,y){if(unsafeCommit)return false;S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
     // DEV Monster Arena: place monsters around the player (ring, ~260-420px away, on free ground). type = MONSTER_TYPES key.
     devSpawn(type,count=1,group=1){
       if(!window.FieldMonsters||!FieldMonsters.MONSTER_TYPES[type]||!S.forest||!S.map)return 0;
@@ -701,6 +708,6 @@
     get level(){return S.forest&&S.forest.height?S.forest.height.level:0;},
     heightState(){const h=S.forest&&S.forest.height;return h?{map:S.mapId,...h.serialize(S.x,S.y)}:null;},   // prototype only: the main save still stores map/x/y alone
     get height(){return S.forest?S.forest.height:null;},
-    goFeet(x,y){S.pending=null;S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
+    goFeet(x,y){if(unsafeCommit)return false;S.pending=null;S.target=FieldNavigation.destination(x-FOOT.ax,y-FOOT.ay,S.forest.blocked);return Boolean(S.target);},
     get target(){return S.target;},get status(){return FieldNavigation.status;}});
 })();

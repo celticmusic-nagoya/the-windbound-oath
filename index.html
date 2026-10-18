@@ -1112,6 +1112,7 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
+ if(window.MossForest&&!MossForest.canSave){notice('マップが確定していないためセーブできません。');return}
  if(document.body.classList.contains('battleMode')){notice('戦闘中はセーブできません。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
@@ -1978,7 +1979,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261017lc03p1"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261018lc03p11"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261017lc03p1"></script>
 <script src="js/data/item-data.js"></script>
