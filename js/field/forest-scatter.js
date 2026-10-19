@@ -28,7 +28,7 @@
   // Avoid predicate from the map: path_core[:+N] | water[:+N] | blockers | open:* | open:<id>
   function avoider(map,rules,presetRects){
     const paths=map.terrain.paths,waters=map.terrain.waters,opens=map.terrain.openAreas||[];
-    const blockers=[];for(const b of map.collision.blockers)for(const r of b.rects)blockers.push({x:r[0],y:r[1],w:r[2],h:r[3]});
+    const blockers=[];for(const b of map.collision.blockers){if(b.scatterIgnore)continue;for(const r of b.rects)blockers.push({x:r[0],y:r[1],w:r[2],h:r[3]});}   // scatterIgnore: decor blockers added later must not re-roll the deterministic scatter
     const solid=presetRects||[];
     const parsed=rules.map(s=>{const [k,v]=s.split(':');return {k,v,m:v&&v[0]==='+'?Number(v.slice(1)):0};});
     return (x,y)=>{for(const a of parsed){
