@@ -239,7 +239,7 @@
    "qa_status": "PASS",
    "android_status": "UNVERIFIED",
    "issue": "Lou KO",
-   "notes": "original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest; implemented as lou ko 6f (img/battle/characters/lou/motion/lou_ko_NN.png, manifest lou/ko). Lou has no HP in battle logic, so it plays only via BattleActorState/arena; 気絶 is a separate state (proposal)"
+   "notes": "original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest; implemented as lou ko 6f (img/battle/characters/lou/motion/lou_ko_NN.png, manifest lou/ko). Lou has no HP in battle logic, so it plays only via BattleActorState/arena today. Confirmed use (2026-10-16 spec, restated 2026-10-19): provisional display of the Lou-only 気絶 (KO-substitute state, docs/battle/lou-faint/); the in-game faint logic is NOT implemented yet (docs/battle/lou-faint-implementation-audit-20261019.md). The general-purpose stun proposal is SUPERSEDED"
   },
   {
    "asset_id": "orig:aidan_hit_new",
@@ -542,7 +542,7 @@
  ],
  "motion_gaps": [
   "fiona: skill(windbloom)/guard/evade/prayer/item/victory/awaken/low_hp = still only or undelivered",
-  "lou: charge→heal/rune/evade/victory/low_hp = still only or undelivered; ko = delivered, held (気絶 spec)",
+  "lou: charge→heal/rune/evade/victory/low_hp = still only or undelivered; ko = delivered and implemented (6f); in-game trigger = Lou-only 気絶 (confirmed spec), not implemented yet",
   "aidan: victory/guard/evade/item = still only",
   "goblin / tainted_goblin: damage/low_hp/guard motions = still only or undelivered",
   "goblin_raider: idle/attack/damage/enrage/roar sheets delivered (branch only, uncut, approved) = Phase 5; powered_attack / ko_dissolve candidates pending adoption"
