@@ -31,6 +31,11 @@ with server(8833) as base, sync_playwright() as p:
             check(not miss['out'], 'every manifest frame file exists (%d)' % miss['n'], miss['out'][:3])
             check(not pg.evaluate("BattleMotion.has('lou','ko')"), 'Lou KO stays unregistered (held for the faint spec)')
         pg.evaluate("PrologueProgress.seed(0);startRaiderBattle()"); pg.wait_for_timeout(300)
+        # Test setup only: a stray intro dialogue can re-open right after closeDialogue() (also on pre-Phase-3 main, ~25%); close it, never touch the busy/cinematic guards.
+        for _ in range(40):
+            if pg.evaluate("document.body.classList.contains('dialogueOpen')"): pg.evaluate("closeDialogue()")
+            if pg.evaluate("!document.body.classList.contains('battlePresentationBusy')&&!document.body.classList.contains('dialogueOpen')&&!document.body.classList.contains('actionCinematic')"): break
+            pg.wait_for_timeout(500)
         pg.wait_for_function("!document.body.classList.contains('battlePresentationBusy')&&!document.body.classList.contains('dialogueOpen')&&!document.body.classList.contains('actionCinematic')", timeout=20000)
         pg.wait_for_timeout(800)
         for a, st in [('aidan', 'damage'), ('fiona', 'damage'), ('fiona', 'attack'), ('fiona', 'heal'), ('fiona', 'winddance')]:
