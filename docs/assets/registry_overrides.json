@@ -528,6 +528,16 @@
     "issue": "#17",
     "notes_append": "TITLE-01 new title screen; Codex QA pending"
    }
+  },
+  {
+   "match": "^img/field/lind/animals/(cow|pig|chicken|sheep|goat)_(idle|walk)\\.png$",
+   "set": {
+    "implementation_status": "IMPLEMENTED",
+    "runtime_reference": [
+     "js/field/lind-animals.js"
+    ],
+    "notes_append": "referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
+   }
   }
  ],
  "motion_gaps": [
