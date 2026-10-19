@@ -18,7 +18,7 @@ const battleAssetFiles = {
     attack: 'aidan_attack.png', draw: 'motion/aidan_draw_06.png', skill: 'aidan_skill.png', wind: 'aidan_skill_wind_slash.png',
     charge: 'aidan_skill_charge.png', awaken: 'aidan_oath_awaken.png',
     evade: 'aidan_evade.png', guard: 'aidan_guard.png',
-    damage: 'aidan_damage.png', low_hp: 'aidan_low_hp.png',
+    damage: 'aidan_damage.png', low_hp: 'motion/aidan_low_hp_06.png',
     item: 'aidan_item.png', ko: 'aidan_ko.png', victory: 'aidan_victory.png'
   },
   fiona: {
@@ -28,7 +28,7 @@ const battleAssetFiles = {
     prayer: 'fiona_skill_wind_prayer.png', awaken: 'fiona_oath_awaken.png',
     evade: 'fiona_evade.png', guard: 'fiona_guard.png',
     damage: 'fiona_damage.png', low_hp: 'fiona_low_hp.png',
-    item: 'fiona_item.png', ko: 'fiona_ko.png', victory: 'fiona_victory.png'
+    winddance: 'motion/fiona_winddance_06.png', item: 'fiona_item.png', ko: 'fiona_ko.png', victory: 'fiona_victory.png'
   },
   lou: {
     idle: 'lou_battle_idle.png', entry: 'lou_battle_entry.png',

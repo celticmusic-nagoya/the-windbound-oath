@@ -1,7 +1,7 @@
 // Artwork only: battle calculations and DOM motion remain in the battle engine.
 (() => {
-  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer', 'skill', 'wind', 'rune', 'evade', 'draw', 'ready']);
-  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer', 'skill', 'wind', 'rune', 'evade', 'draw', 'ready']);
+  const states = new Set(['idle', 'attack', 'damage', 'guard', 'low_hp', 'ko', 'victory', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer', 'skill', 'wind', 'rune', 'evade', 'draw', 'ready', 'winddance']);
+  const temporary = new Set(['attack', 'damage', 'charge', 'heal', 'blessing', 'call', 'corruption', 'enrage', 'prayer', 'skill', 'wind', 'rune', 'evade', 'draw', 'ready', 'winddance']);
   const battles = {
     normal: { actor: 'aidan', image: '#bAidan2 img', health: () => [aahp, 100] },
     raider: { actor: 'aidan', image: '#rbAidan img', health: () => [rbHP, 120] },
@@ -28,9 +28,13 @@
     return ++battle.sequence;
   }
   function paint(battle, state) {
-    battle.state = state;
     const image = document.querySelector(battle.image);
     const source = BATTLE_ASSETS[battle.actor][state];
+    // Low HP with a delivered motion plays once on entry, then holds its last frame (no endless re-trigger on sync()).
+    const lowHpMotion = state === 'low_hp' && window.BattleMotion && BattleMotion.has(battle.actor, 'low_hp');
+    if (lowHpMotion && battle.state === 'low_hp') return;
+    battle.state = state;
+    if (state === 'idle' || state === 'ko' || state === 'victory') battle.lowHpShown = false;
     // Delivered multi-frame motion (img/battle/motion-manifest.json) plays instead of the still; none installed -> still as before.
     if (!(window.BattleMotion && BattleMotion.start(image, battle.actor, state)) && image && image.getAttribute('src') !== source) image.src = source;
     window.BattleFacing?.paint(image, battle.actor, state);
@@ -64,6 +68,8 @@
       state = resting(battle);
     }
     const sequence = invalidate(battle);
+    // A delivered motion is never cut short by the generic pose budget.
+    if (duration && temporary.has(state) && window.BattleMotion && BattleMotion.has(actor, state)) duration = Math.max(duration, BattleMotion.info(actor, state).totalMs);
     if (state === 'guard') battle.guard = true;
     paint(battle, state);
     if (duration && temporary.has(state)) {
@@ -94,6 +100,7 @@
       invalidate(battle);
       battle.guard = false;
       battle.phase = null;
+      battle.lowHpShown = false;
       paint(battle, resting(battle));
     },
     endGuard(context, actor = 'aidan') {
