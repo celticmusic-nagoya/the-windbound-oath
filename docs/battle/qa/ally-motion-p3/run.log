@@ -1,0 +1,68 @@
+ok   pc aidan: visible, image loaded, inside the viewport {'src': 'aidan/aidan_battle_idle.png', 'ok': True, 'w': 158, 'h': 198, 'inView': True, 'vis': True, 'frame': '6', 'cframe': '1'}
+ok   pc aidan: idle after the opening 
+ok   pc aidan: idle loop advances frames ["('6', '0')", "('6', '1')", "('6', '2')", "('6', '3')", "('6', '5')"]
+ok   pc fiona: visible, image loaded, inside the viewport {'src': 'fiona/fiona_battle_idle.png', 'ok': True, 'w': 150, 'h': 195, 'inView': True, 'vis': True, 'frame': '6', 'cframe': '1'}
+ok   pc fiona: idle after the opening 
+ok   pc fiona: idle loop advances frames ["('6', '0')", "('6', '1')", "('6', '2')", "('6', '3')", "('6', '4')", "('6', '5')"]
+ok   pc lou: visible, image loaded, inside the viewport {'src': 'lou/lou_battle_idle.png', 'ok': True, 'w': 72, 'h': 92, 'inView': True, 'vis': True, 'frame': None, 'cframe': '4'}
+ok   pc lou: idle after the opening 
+ok   pc lou: idle loop advances frames ["(None, '0')", "(None, '1')", "(None, '2')", "(None, '3')", "(None, '4')", "(None, '5')"]
+ok   pc aidan attack: plays (state attack, img motion/aidan_attack_03.png) then returns to idle ('idle', 'aidan/aidan_battle_idle.png')
+ok   pc aidan skill: plays (state skill, img motion/aidan_skill_03.png) then returns to idle ('idle', 'aidan/aidan_battle_idle.png')
+ok   pc fiona attack: plays (state attack, img fiona/fiona_attack.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   pc fiona heal: plays (state charge, img fiona/fiona_skill_charge.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   pc fiona skill: plays (state skill, img fiona/fiona_skill_windbloom.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   pc lou heal: plays (state heal, img lou/lou_support_heal.png) then returns to idle ('idle', 'lou/lou_battle_idle.png')
+ok   pc lou blessing: plays (state blessing, img lou/lou_support_blessing.png) then returns to idle ('idle', 'lou/lou_battle_idle.png')
+ok   pc aidan: damage then back to idle 
+ok   pc aidan: guard held then released to idle 
+ok   pc fiona: damage then back to idle 
+ok   pc fiona: guard held then released to idle 
+ok   pc: victory pose is not replaced by an action 
+ok   pc: no page errors []
+ok   portrait aidan: visible, image loaded, inside the viewport {'src': 'aidan/aidan_battle_idle.png', 'ok': True, 'w': 121, 'h': 151, 'inView': True, 'vis': True, 'frame': '6', 'cframe': '1'}
+ok   portrait aidan: idle after the opening 
+ok   portrait aidan: idle loop advances frames ["('6', '0')", "('6', '1')", "('6', '2')", "('6', '3')", "('6', '4')", "('6', '5')"]
+ok   portrait fiona: visible, image loaded, inside the viewport {'src': 'fiona/fiona_battle_idle.png', 'ok': True, 'w': 121, 'h': 157, 'inView': True, 'vis': True, 'frame': '6', 'cframe': '0'}
+ok   portrait fiona: idle after the opening 
+ok   portrait fiona: idle loop advances frames ["('6', '0')", "('6', '1')", "('6', '2')", "('6', '3')", "('6', '4')", "('6', '5')"]
+ok   portrait lou: visible, image loaded, inside the viewport {'src': 'lou/lou_battle_idle.png', 'ok': True, 'w': 72, 'h': 92, 'inView': True, 'vis': True, 'frame': None, 'cframe': '4'}
+ok   portrait lou: idle after the opening 
+ok   portrait lou: idle loop advances frames ["(None, '0')", "(None, '1')", "(None, '2')", "(None, '3')", "(None, '4')", "(None, '5')"]
+ok   portrait aidan attack: plays (state attack, img motion/aidan_attack_03.png) then returns to idle ('idle', 'aidan/aidan_battle_idle.png')
+ok   portrait aidan skill: plays (state skill, img motion/aidan_skill_03.png) then returns to idle ('idle', 'aidan/aidan_battle_idle.png')
+ok   portrait fiona attack: plays (state attack, img fiona/fiona_attack.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   portrait fiona heal: plays (state charge, img fiona/fiona_skill_charge.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   portrait fiona skill: plays (state skill, img fiona/fiona_skill_windbloom.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   portrait lou heal: plays (state heal, img lou/lou_support_heal.png) then returns to idle ('idle', 'lou/lou_battle_idle.png')
+ok   portrait lou blessing: plays (state blessing, img lou/lou_support_blessing.png) then returns to idle ('idle', 'lou/lou_battle_idle.png')
+ok   portrait aidan: damage then back to idle 
+ok   portrait aidan: guard held then released to idle 
+ok   portrait fiona: damage then back to idle 
+ok   portrait fiona: guard held then released to idle 
+ok   portrait: victory pose is not replaced by an action 
+ok   portrait: no page errors []
+ok   landscape aidan: visible, image loaded, inside the viewport {'src': 'aidan/aidan_battle_idle.png', 'ok': True, 'w': 125, 'h': 156, 'inView': True, 'vis': True, 'frame': '6', 'cframe': '1'}
+ok   landscape aidan: idle after the opening 
+ok   landscape aidan: idle loop advances frames ["('6', '0')", "('6', '1')", "('6', '2')", "('6', '3')", "('6', '4')", "('6', '5')"]
+ok   landscape fiona: visible, image loaded, inside the viewport {'src': 'fiona/fiona_battle_idle.png', 'ok': True, 'w': 120, 'h': 156, 'inView': True, 'vis': True, 'frame': '6', 'cframe': '1'}
+ok   landscape fiona: idle after the opening 
+ok   landscape fiona: idle loop advances frames ["('6', '0')", "('6', '1')", "('6', '2')", "('6', '3')", "('6', '4')", "('6', '5')"]
+ok   landscape lou: visible, image loaded, inside the viewport {'src': 'lou/lou_battle_idle.png', 'ok': True, 'w': 52, 'h': 66, 'inView': True, 'vis': True, 'frame': None, 'cframe': '4'}
+ok   landscape lou: idle after the opening 
+ok   landscape lou: idle loop advances frames ["(None, '0')", "(None, '1')", "(None, '2')", "(None, '3')", "(None, '4')", "(None, '5')"]
+ok   landscape aidan attack: plays (state attack, img motion/aidan_attack_03.png) then returns to idle ('idle', 'aidan/aidan_battle_idle.png')
+ok   landscape aidan skill: plays (state skill, img motion/aidan_skill_03.png) then returns to idle ('idle', 'aidan/aidan_battle_idle.png')
+ok   landscape fiona attack: plays (state attack, img fiona/fiona_attack.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   landscape fiona heal: plays (state charge, img fiona/fiona_skill_charge.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   landscape fiona skill: plays (state skill, img fiona/fiona_skill_windbloom.png) then returns to idle ('idle', 'fiona/fiona_battle_idle.png')
+ok   landscape lou heal: plays (state heal, img lou/lou_support_heal.png) then returns to idle ('idle', 'lou/lou_battle_idle.png')
+ok   landscape lou blessing: plays (state blessing, img lou/lou_support_blessing.png) then returns to idle ('idle', 'lou/lou_battle_idle.png')
+ok   landscape aidan: damage then back to idle 
+ok   landscape aidan: guard held then released to idle 
+ok   landscape fiona: damage then back to idle 
+ok   landscape fiona: guard held then released to idle 
+ok   landscape: victory pose is not replaced by an action 
+ok   landscape: no page errors []
+ok   WindDance gate (commandVisible) still present {'has': True, 'type': 'function'}
+FAILS 0
