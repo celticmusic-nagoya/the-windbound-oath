@@ -88,7 +88,7 @@
     return pending.then(map => {
       if(!map||!MossForest.isMapRequest(request))return null;
       popObjective();
-      setTimeout(() => { if (MossForest.isMapRequest(request) && stage() === 0 && MossForest.mapId === 'rilde_in_aidan') say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'); }, 350);
+      setTimeout(() => { if (MossForest.isMapRequest(request) && stage() === 0 && MossForest.mapId === 'rilde_in_aidan' && !(window.FieldTalk && FieldTalk.active)) say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'); }, 350);
     });
   }
   function afterPrologue() {   // stage 15: free roam. The party stands in the fort's keep; the village (now ruined) and the road are open.
