@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **951**
+- total: **956**
 - approved_implemented: **66**
 - approved_not_implemented: **1**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
-- approval_unknown: **879**
-- on_main: **772**
-- implemented_on_main: **602**
+- approval_unknown: **884**
+- on_main: **777**
+- implemented_on_main: **607**
 - unreferenced_on_main: **170**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -29,7 +29,7 @@
 | branch:feat_bg02_bg03_prep_claude:img_battle_backgrounds_bg_bg_03_main_png | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/bg02-bg03-prep-claude (not merged to main) |
 | file:img_battle_backgrounds_bg_bg_01_main | UNKNOWN | UNKNOWN | 1 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/battle-background.js / existing asset on main; adoption record not re-verified |
 
-## battle（124）
+## battle（129）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -149,6 +149,11 @@
 | seq:img_battle_characters_lou_motion_lou_damage | lou | damage | 6 | 786x524 | APPROVED | IMPLEMENTED | MAIN | PASS | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified; cut 1:1 from the original sheets  |
 | seq:img_battle_enemies_forest_bat_idle_forest_bat_idle | forest_bat | idle | 4 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js, js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_enemies_goblin_goblin_ko_dissolve | goblin | dissolve | 6 | 770x392 | APPROVED | IMPLEMENTED | MAIN | PASS | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified; KO dissolve (hold hide); Claude-s |
+| seq:img_battle_enemies_goblin_raider_motion_goblin_raider_attack | goblin_raider | attack | 6 | 661x604 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified |
+| seq:img_battle_enemies_goblin_raider_motion_goblin_raider_call | goblin_raider | call | 6 | 589x538 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
+| seq:img_battle_enemies_goblin_raider_motion_goblin_raider_damage | goblin_raider | damage | 6 | 736x673 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified |
+| seq:img_battle_enemies_goblin_raider_motion_goblin_raider_enrage | goblin_raider | enrage | 6 | 663x606 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
+| seq:img_battle_enemies_goblin_raider_motion_goblin_raider_idle | goblin_raider | idle | 6 | 584x534 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified |
 | seq:img_battle_enemies_leafy_boar_idle_leafy_boar_idle | leafy_boar | idle | 4 | 480x400 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | NO | js/assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_enemies_leafy_boar_motion_leafy_boar_attack | leafy_boar | attack | 4 | 480x400 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_enemies_leafy_boar_motion_leafy_boar_damage | leafy_boar | damage | 4 | 480x400 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |

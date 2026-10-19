@@ -38,15 +38,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 951,
+  "total": 956,
   "approved_implemented": 66,
   "approved_not_implemented": 1,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
-  "approval_unknown": 879,
-  "on_main": 772,
-  "implemented_on_main": 602,
+  "approval_unknown": 884,
+  "on_main": 777,
+  "implemented_on_main": 607,
   "unreferenced_on_main": 170
  },
  "motion_gaps": [
@@ -24949,6 +24949,218 @@
     "070e6729660b5bb41487ba922da1cc2725f1c9f65deab5ce36644ead01b715e2",
     "0ef9f23df2d5b3fd9251036c4bfd177f0e9e9c072fa1f32716a68211f7284122",
     "ada456ebc6781eb7dfdbe573d496a860facd9ca233ff50d3dc40fdeb04b4b99a"
+   ]
+  },
+  {
+   "asset_id": "seq:img_battle_enemies_goblin_raider_motion_goblin_raider_attack",
+   "name": "goblin_raider_attack (frames)",
+   "category": "battle",
+   "character": "goblin_raider",
+   "motion": "attack",
+   "delivery_date": "2026-10-19",
+   "source_path": "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_01.png",
+   "source_branch": "main",
+   "source_commit": "2f96e1ac36a9f97cf2b477d6aaf573e8d47070cb",
+   "source_sha256": "see frames_sha256",
+   "width": 661,
+   "height": 604,
+   "frame_count": 6,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/battle/motion-manifest.json"
+   ],
+   "arena_available": "YES",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified",
+   "frames": [
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_01.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_02.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_03.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_04.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_05.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_attack_06.png"
+   ],
+   "frames_sha256": [
+    "28fc5137eecfc26fe38ac659e2450d5fcf3c64d49bcd1c811a565063523cacc9",
+    "5e4fd0423317cfeb10e7f654528b0bbb480ccb5be6e0e16a564dd7c9de7c84d8",
+    "7e25c74b67dfe7f75d7ff8fd80bfb2c24f912845ac6077cd64f253a937c11fc9",
+    "38686683239bf3550ecfd851fe8ed5c9bd9055a0414d217aff8bf5f5f0b84d38",
+    "3ba9954d0f2cd9d1312fe8748506ba2c50cbf6a3aa827d5b141e32d49179a51c",
+    "ede782180c014ed9a1e6d90c9c77c483bb85f411c78aedb192142d9f742a97e7"
+   ]
+  },
+  {
+   "asset_id": "seq:img_battle_enemies_goblin_raider_motion_goblin_raider_call",
+   "name": "goblin_raider_call (frames)",
+   "category": "battle",
+   "character": "goblin_raider",
+   "motion": "call",
+   "delivery_date": "2026-10-19",
+   "source_path": "img/battle/enemies/goblin_raider/motion/goblin_raider_call_01.png",
+   "source_branch": "main",
+   "source_commit": "2f96e1ac36a9f97cf2b477d6aaf573e8d47070cb",
+   "source_sha256": "see frames_sha256",
+   "width": 589,
+   "height": 538,
+   "frame_count": 6,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/battle/motion-manifest.json",
+    "js/assets.js"
+   ],
+   "arena_available": "YES",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified",
+   "frames": [
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_call_01.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_call_02.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_call_03.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_call_04.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_call_05.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_call_06.png"
+   ],
+   "frames_sha256": [
+    "90f0032a19051a4a22f1cd48eb7ec96471206fdcd41cb7301d19d76bf1bdedf4",
+    "b23bce7f9367ce87e0059714486021584823f57ef81d08d9a64f3e94360cc1bd",
+    "4bea8f45cfb0dd61808fe1a1452aa0764462c19e4b05c046fd44dc29c28fdd56",
+    "bc2ad5c0ae20fc76bcd7055c733e25a1414a816db9cb3b7296c8a73b34d60579",
+    "fcdea0a2a06c0367ffc9c15cc99ea47ca0d943c06f6df67142600d2ad365096c",
+    "587f94f75936c3e1f1f752f3a8ae98d6add9e2888e341763bf96c18c4f3f8312"
+   ]
+  },
+  {
+   "asset_id": "seq:img_battle_enemies_goblin_raider_motion_goblin_raider_damage",
+   "name": "goblin_raider_damage (frames)",
+   "category": "battle",
+   "character": "goblin_raider",
+   "motion": "damage",
+   "delivery_date": "2026-10-19",
+   "source_path": "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_01.png",
+   "source_branch": "main",
+   "source_commit": "2f96e1ac36a9f97cf2b477d6aaf573e8d47070cb",
+   "source_sha256": "see frames_sha256",
+   "width": 736,
+   "height": 673,
+   "frame_count": 6,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/battle/motion-manifest.json"
+   ],
+   "arena_available": "YES",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified",
+   "frames": [
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_01.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_02.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_03.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_04.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_05.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_damage_06.png"
+   ],
+   "frames_sha256": [
+    "62f5a34ed200d3453f438065c28eff5b01faa453533238ddc0c0391aaa9163ae",
+    "4ad639c7ada553ded39afe998de3776f7b5e09da2816e66ef90841b7e9ddda27",
+    "e1b71b21db47260e927633d25112d4b6677bec84062c114ce2d7428e8fa6106a",
+    "2a4468d420782f0b1d986476feda3b29f77e27511ba315602089e6aed3dfa233",
+    "1c60d064610c6c46d86bdfaad61a2aa33831b6bd40fc942d9c549f0ea9415dfb",
+    "db70bbd383def0b1bab42c88a5f7d0ec96ba0117117cb7fb50d5b53ad2e4d9a6"
+   ]
+  },
+  {
+   "asset_id": "seq:img_battle_enemies_goblin_raider_motion_goblin_raider_enrage",
+   "name": "goblin_raider_enrage (frames)",
+   "category": "battle",
+   "character": "goblin_raider",
+   "motion": "enrage",
+   "delivery_date": "2026-10-19",
+   "source_path": "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_01.png",
+   "source_branch": "main",
+   "source_commit": "2f96e1ac36a9f97cf2b477d6aaf573e8d47070cb",
+   "source_sha256": "see frames_sha256",
+   "width": 663,
+   "height": 606,
+   "frame_count": 6,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/battle/motion-manifest.json",
+    "js/assets.js"
+   ],
+   "arena_available": "YES",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified",
+   "frames": [
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_01.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_02.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_03.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_04.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_05.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_06.png"
+   ],
+   "frames_sha256": [
+    "0e998282e4a736f2c8054ed91993c154b5a131ba16ba01b8e889de5a1e467a8f",
+    "b136c8572e10b4ffe2ad5dcee90b8e6c00cafe913fb2c32d6e2ea0c84a927a81",
+    "085bbe6ab2d590c61dac6626172f6b0d7896264c207fafe56019c83ffc3c818d",
+    "b28320a7d5cf3ddc8c48210eed77e6d331b519e29833d1b842d9c57f8cd41a6c",
+    "2b41c621a7b7aa7f78ce4318a39850bb697f1b62f8c65efd8372f0436bf9425c",
+    "ee9f4dfa8cfe26d8081077e22d22321cb7f78ccc7d64acd51276a97143b3402e"
+   ]
+  },
+  {
+   "asset_id": "seq:img_battle_enemies_goblin_raider_motion_goblin_raider_idle",
+   "name": "goblin_raider_idle (frames)",
+   "category": "battle",
+   "character": "goblin_raider",
+   "motion": "idle",
+   "delivery_date": "2026-10-19",
+   "source_path": "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_01.png",
+   "source_branch": "main",
+   "source_commit": "2f96e1ac36a9f97cf2b477d6aaf573e8d47070cb",
+   "source_sha256": "see frames_sha256",
+   "width": 584,
+   "height": 534,
+   "frame_count": 6,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/battle/motion-manifest.json"
+   ],
+   "arena_available": "YES",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified",
+   "frames": [
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_01.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_02.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_03.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_04.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_05.png",
+    "img/battle/enemies/goblin_raider/motion/goblin_raider_idle_06.png"
+   ],
+   "frames_sha256": [
+    "804a362c5ea51ccf5d2e32f2e3bdeb5d5b34d8d740768c2ad47a49e1b9dc5cb8",
+    "bf9f3eb823ed24c8b57d4f7a31da9963faee6ee2a2c39aedcf70096e85ca507f",
+    "558bb08b5f98e757d07f8b7afcbff3ea49310960cceb74d354c1a73698ed8d72",
+    "2b1cbc466a60da527dc8bb6bebf815fcf35d83580c55a5038cef246b1cf1f0f6",
+    "b736610df33c24f76cb9f0897233aad341729da18b2d63745fc480f48727c9bd",
+    "d2db31b6883eff28a7107da840fca01cdc21dc0d022dab214e48bac150ab750e"
    ]
   },
   {
