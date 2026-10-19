@@ -1,0 +1,44 @@
+# Asset registry audit
+
+registry snapshot: 2026-10-19 ／ assets 951 ／ errors **0**
+
+## Errors
+
+なし
+
+## 採用済み・未実装（P0）6
+
+- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_hit_reaction_6f_png` goblin_raider damage
+- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_idle_reference_6f_png` goblin_raider idle
+- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_normal_attack_6f_png` goblin_raider attack
+- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_rage_6f_png` goblin_raider enrage
+- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_roar_revised_6f_png` goblin_raider call
+- `orig:lou_new_ko` lou ko
+
+## 納品済み・未統合（ブランチ/原本のみ）179
+
+- assets/goblin-raider-ko-from-dissolve-f1: 7
+- assets/rilde-interior-v1: 14
+- assets/staging: 4
+- feat/aidan-side-walk-v4: 59
+- feat/bg02-bg03-prep-claude: 5
+- feat/fiona-lou-portraits: 16
+- feat/goblin-field-art: 2
+- feature/asset-emma-01: 24
+- feature/title-01-new-title-screen: 2
+- fix/fiona-lou-p2-startup-race-qa: 16
+- fix/fiona-lou-portrait-lifecycle-p2: 16
+- handoff-repo:handoff/party-motion-originals-claude-20261019: 14
+
+## main上の参照なし画像 170（情報。原本保管/将来用の可能性があり自動削除しない）
+
+- img/battle/characters/aidan: 3
+- img/battle/characters/fiona: 1
+- img/battle/characters/lou: 1
+- img/field/lind/animals: 4
+- img/field/monsters/leafy_boar: 11
+- img/field/moss/art: 12
+- img/field/moss/props: 78
+- img/field/moss/rilde/npc: 57
+- img/field/moss/standin: 2
+- img/field/moss/town: 1
