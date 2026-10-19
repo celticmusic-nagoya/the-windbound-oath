@@ -1,7 +1,7 @@
 # THE WINDBOUND OATH — 引き継ぎ書（2026-10-11 時点 / main `f83ab09`）
 
 対象読者: 並行開発する Codex / 次のセッションの Claude / 作者。
-正典: **`docs/story/WORLD_STORY_BIBLE_v1.1.txt`**（世界観・外見・導線の source of truth。衝突したらバイブル優先）。
+正典: **公式統合設定資料集 v5.0**（2026-10-19, SHA-256 `e6f7331b867a7307017c7abb30bae7b6317363a33e5f9d831b80d34f0e51bf49`。全文は非公開の引継ぎリポジトリで管理。`AGENTS.md` §0 と `docs/lore/README.md` を参照。読めない場合は推測で補わず、ユーザーに確認する）。旧 `docs/story/WORLD_STORY_BIBLE_v1.1.txt` は旧版（履歴参照のみ・正典ではない）。設定確定と実装済みは別物で、実装は現行 main で確認する。
 本書は「いま何がどこまで出来ていて、どう作られていて、次に何が要るか」をまとめる。作業依頼は `docs/handoff/CODEX_BRIEFS.md`。
 
 ---
