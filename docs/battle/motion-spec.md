@@ -21,3 +21,10 @@ motions: { "<actor>[:<variant>]": { "<state>": { dir, pattern:"{n}", frames, ms:
 
 ## 検証
 `python3 tests/battle/motion_intake.py` — 仮コマを作成→設置→順序/ヒットイベント(4コマ目≒300ms)/idle復帰/静止画・variantフォールバックを確認し、manifestと仮ファイルを自分で元に戻す。
+
+## 敵KO消滅（`hold:"hide"`）
+- `hold:"hide"` = 最終コマを `ms` 分表示したあと、スプライトを非表示（`visibility:hidden !important`）にし、`battle-motion-end {actor,state,gone:true}` を1回発火する。
+- 非表示は **その後のどの paint / start / stop でも解除**される（復帰・次戦闘開始・シーン破棄で「消えたまま」「古いタイマー」が残らない）。`stop()` は保留中のタイマーを必ず破棄する。
+- 現在の使用: `goblin.ko` / `tainted_goblin.ko`（`goblin_ko_dissolve_01..06.png`、6コマ 110/120/140/160/200/320 ms = 1050ms）。他の敵（slime/boar）は従来どおり `hold:"last"`。
+- 順序: HP0 → KO状態（`BattleActorState`: KO後は他stateへ置換不可＝再行動なし）→ 消滅コマ再生 → 非表示 → Victory（`VICTORY_POSE_MS` 2400ms 後に舞台撤収。消滅は約1.05sで完了）。ダメージ計算・難易度は不変。
+- 検証: `python3 tests/battle/goblin_ko_dissolve.py`（PC/スマホ縦横、部分KO→最終KO、KO×Victory競合、stop/復帰、通常ゴブリン）。
