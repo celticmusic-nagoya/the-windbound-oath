@@ -3564,4 +3564,5 @@ body.normalBattleMode #attackBattle[data-bg]>.v2BattleStage{background:none!impo
 
 /* Lou-only faint badge (no turn/probability info) */
 #rbLou .louFaintTag{display:none}
-body.raiderBattleMode #rbLou.louFainted .louFaintTag{display:block;position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);font-size:11px;font-weight:700;line-height:1;padding:3px 6px;border-radius:8px;background:rgba(20,20,40,.82);color:#ffe9a8;white-space:nowrap;pointer-events:none;z-index:6}
+body.raiderBattleMode #rbLou.louFainted .louSupportTag{display:none!important}
+body.raiderBattleMode #rbLou.louFainted .louFaintTag{display:block;position:absolute;left:50%;bottom:-13px;transform:translateX(-42%);font-size:10px;font-weight:700;line-height:1;padding:2px 4px;border-radius:8px;background:rgba(20,20,40,.82);color:#ffe9a8;white-space:nowrap;pointer-events:none;z-index:6}

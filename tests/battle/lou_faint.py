@@ -34,6 +34,7 @@ with server(8851) as base, sync_playwright() as p:
     pg = b.new_page(viewport={'width': 1280, 'height': 720}); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
     pg.goto(base + '/index.html?dev=1'); pg.wait_for_function('window.BattleOpening&&BattleMotion.loaded&&window.PrologueCombat&&window.BattleLouFaint'); pg.wait_for_timeout(1200); pg.evaluate("closeDialogue()")
+    pg.evaluate("window.__log=[];const o=window.showRaiderBattleLog;window.showRaiderBattleLog=function(t){__log.push(t);return o.apply(this,arguments)}")
     # T1 / T1b: boundary 0.329 faints, 0.33 does not
     fresh(pg, [0.33]); smash_round(pg); s = pg.evaluate(st)
     check(not s['f'] and s['s'] != 'ko' and s['d'] == 1, 'T1b draw 0.33 -> no faint (one draw)', s)
@@ -51,7 +52,7 @@ with server(8851) as base, sync_playwright() as p:
     check(s['f'] and s['d'] == d0, 'T4 repeat smash while fainted = no RNG draw, still fainted', s)
     # T6: final blessing deferred while fainted
     pg.evaluate("PrologueCombat.enrageMoment()"); pg.wait_for_timeout(300)
-    check(pg.evaluate("PrologueCombat.enragePending===true")  and pg.evaluate("BattleLouFaint.fainted"), 'T6 enrageMoment while fainted -> pending only')
+    check(pg.evaluate("PrologueCombat.enragePending===false")  and pg.evaluate("BattleLouFaint.fainted")  and not pg.evaluate("window.__log.some(t=>/妖精の祝福/.test(t))"), 'T6 enrageMoment while fainted -> pending only (enragePending false, no blessing)')
     # Recovery timing. Fresh battle, faint on round R, then rounds R+1 (count1), R+2 (50% draw), R+3 (forced).
     for tag, draw, expect_at_r2 in [('0.49', 0.49, True), ('0.5', 0.5, False)]:
         fresh(pg, [0.1, draw, 0.9]); smash_round(pg)   # faint at end of round R (no increment)
@@ -75,7 +76,7 @@ with server(8851) as base, sync_playwright() as p:
             check((not s3['f']) and s3['d'] == s2['d'], 'T5 R+3: guaranteed recovery without a draw', s3)
         check(pg.evaluate("BattleActorState.get('raider','lou')") != 'ko', 'recovered Lou returns to resting pose')
     # T6b: pending blessing resumes after wake
-    fresh(pg, [0.1, 0.1]); smash_round(pg); pg.evaluate("PrologueCombat.enrageMoment()")
+    fresh(pg, [0.1, 0.1]); pg.evaluate("__log.length=0"); smash_round(pg); pg.evaluate("PrologueCombat.enrageMoment()")
     for _ in range(3):
         if not pg.evaluate("BattleLouFaint.fainted"): break
         pg.evaluate("rbHP=120;rbFHP=105;rbQueued=false;rbRound=1;window.__done=false;rbEnemyParty().then(()=>window.__done=true)")
@@ -84,7 +85,8 @@ with server(8851) as base, sync_playwright() as p:
             if pg.evaluate("window.__done"): break
             pg.wait_for_timeout(400)
         settle(pg)
-    check(not pg.evaluate("BattleLouFaint.fainted") and pg.evaluate("PrologueCombat.enragePending===false"), 'T7 pending blessing ran after Lou woke (once)')
+    lg = pg.evaluate("__log.filter(t=>/目を覚ました|妖精の祝福/.test(t))")
+    check(not pg.evaluate("BattleLouFaint.fainted") and pg.evaluate("PrologueCombat.enragePending===false") and [('目' in t) for t in lg] == [True, False] and sum('妖精の祝福' in t for t in lg) == 1, 'T7 wake log -> final blessing exactly once, in that order', lg)
     # T10: victory while fainted
     fresh(pg, [0.1]); smash_round(pg)
     check(pg.evaluate("BattleActorState.set('lou','victory',{battle:'raider'})") and pg.evaluate("BattleActorState.get('raider','lou')") == 'victory' and not pg.evaluate("BattleActorState.fainted('raider','lou')"), 'T10 victory pose outranks faint (atomic)')

@@ -309,19 +309,22 @@
   return true;
  }
  async function finalBlessing(){
+  try{return await finalBlessingFlow()}finally{enragePending=false}
+ }
+ async function finalBlessingFlow(){
   if(blessingUsed||rbBoss<=0)return false;
   if(window.BattleLouFaint?.fainted){blessingDeferred=true;return false}
   blessingUsed=true;const token=generation;
   await BattlePresentation.banter('enrage-cooperation',['ルー「大丈夫、ルーもいるよ！　みんなに、風の祝福を！」'],'raider',token);
   if(token!==generation||rbBoss<=0)return false;
-  if(window.BattleLouFaint?.fainted){blessingUsed=false;blessingDeferred=true;return false}
-  if(!await BattlePresentation.action('raider','blessing',token)||token!==generation||rbBoss<=0){if(token===generation&&rbBoss>0&&window.BattleLouFaint?.fainted){blessingUsed=false;blessingDeferred=true}return false}
+  if(!await BattlePresentation.action('raider','blessing',token)||token!==generation||rbBoss<=0)return false;
   enragePending=false;lastSupportRound=rbRound;buffParty('atk_up');buffParty('def_up');
   log('raider','ルーの《妖精の祝福》！ ATK / DEF +15%（3ターン）');updateRaider();return true;
  }
  function enrageMoment(){
-  if(blessingUsed||enragePending)return;enragePending=true;
-  if(window.BattleLouFaint?.fainted){blessingDeferred=true;return} // resumes once Lou wakes
+  if(blessingUsed||enragePending)return;
+  if(window.BattleLouFaint?.fainted){blessingDeferred=true;return} // pending only: resumes once Lou wakes (blessingUsed/enragePending/enrageFlow untouched)
+  enragePending=true;
   const flow=finalBlessing();enrageFlow=flow;flow.finally(()=>{if(enrageFlow===flow)enrageFlow=null;});
  }
 

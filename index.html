@@ -1345,7 +1345,7 @@ function finishRaider(){
  const completion=PrologueCombat.generation;
  if($('#raiderBattle').style.display==='none'||!PrologueCombat.claimVictory('raider'))return;
  BattleActorState.set('goblin_raider','ko',{battle:'raider'});
- BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});BattleActorState.set('lou','victory',{battle:'raider'});
+ BattleActorState.set('aidan','victory',{battle:'raider'});BattleActorState.set('fiona','victory',{battle:'raider'});window.BattleLouFaint?.reset();BattleActorState.set('lou','victory',{battle:'raider'});
  PrologueCombat.koAll('raider');rbBusy=true;rbBoss=0;updateRaider();
  const sprite=$('#raiderSprite'), img=sprite&&sprite.querySelector('img');
  setRaiderCommandDrawer(false);
