@@ -68,7 +68,13 @@
     let total = 0, hitAt = null; for (let i = 0; i < d.frames; i++) { if (d.hitFrame === i + 1) hitAt = total; total += msOf(d, i); }
     return {frames: d.frames, totalMs: total, hitFrame: d.hitFrame || null, hitAtMs: hitAt};
   }
-  window.BattleMotion = Object.freeze({load, start, stop, has: (a, s) => Boolean(def(a, s)), info,
+  // Read-only description of a registered motion (the SAME definition start() plays): used by the DEV motion test (arena). No playback side effects.
+  function frames(actor, state) {
+    const d = def(actor, state); if (!d) return null;
+    const urls = [], ms = []; for (let i = 0; i < d.frames; i++) { urls.push(src(d, i + 1)); ms.push(msOf(d, i)); }
+    return {urls, ms, hitFrame: d.hitFrame || null, hold: d.hold || 'last'};
+  }
+  window.BattleMotion = Object.freeze({load, start, stop, has: (a, s) => Boolean(def(a, s)), info, frames, states: a => (man && man.motions && man.motions[a]) ? Object.keys(man.motions[a]) : [],
     hitDelay(actor, state) { const i = info(actor, state); return i && i.hitAtMs != null ? i.hitAtMs : 0; },   // ms from pose start to the blow: for display-only delays of flash / number pop
     setVariant(actor, v) { if (v) variants[actor] = v; else delete variants[actor]; }, onHit(fn) { hitFns.add(fn); return () => hitFns.delete(fn); },
     get loaded() { return Boolean(man); }});

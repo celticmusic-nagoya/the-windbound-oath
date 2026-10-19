@@ -13,7 +13,7 @@ import numpy as np
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 MAN = os.path.join(ROOT, 'img/battle/motion-manifest.json')
 ASSETS = open(os.path.join(ROOT, 'js/assets.js'), encoding='utf-8').read()
-STATES = 'draw ready attack skill wind damage guard charge heal prayer blessing rune call corruption enrage evade item victory ko'.split()
+STATES = 'draw ready attack skill wind damage guard charge heal prayer blessing rune call corruption enrage evade item victory ko low_hp winddance'.split()
 def budget(actor, state):
     if state in ('skill', 'wind', 'rune', 'prayer'): return 1200 if actor == 'aidan' else 1100
     if state == 'draw': return 600   # Aidan one-shot sword draw (battle opening), 6 frames
