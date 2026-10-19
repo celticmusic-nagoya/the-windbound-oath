@@ -190,7 +190,7 @@
  }
 
  function beginRaider(){
-  generation++;window.BattlePresentation?.cancel();window.BattleFacing?.set('NORMAL');enrageFlow=null;impact=null;callFlags=[false,false];enragePending=false;lastSupportRound=0;blessingUsed=false;BattleStatus.clear('raider');BattleTargetSelector.reset('raider');clean('raider');
+  generation++;window.BattlePresentation?.cancel();window.BattleFacing?.set('NORMAL');enrageFlow=null;impact=null;callFlags=[false,false];enragePending=false;blessingDeferred=false;window.BattleLouFaint?.reset();lastSupportRound=0;blessingUsed=false;BattleStatus.clear('raider');BattleTargetSelector.reset('raider');clean('raider');
   const boss={id:'raider_enemy_0',key:'goblin_raider',type:'goblin_raider',maxHp:1250,def:10,cri:0,extra:false,unit:'raiderSprite',node:'#raiderSprite',get hp(){return rbBoss},set hp(n){rbBoss=n}};
   rosters.raider=[boss];BattleActorState.register('raider',boss.key,boss.type,'#raiderSprite img',()=>[rbBoss,1250]);sync('raider');window.BattlePartyLayout?.refresh('raider');
  }
@@ -268,6 +268,7 @@
    let da=BattleStatus.damage('raider','raider_enemy_0','aidan',base),df=BattleStatus.damage('raider','raider_enemy_0','fiona',base-6);if(rbGuardA)da=Math.ceil(da/2);if(rbGuardF)df=Math.ceil(df/2);
    const dodgeA=dodged('raider','aidan'),dodgeF=dodged('raider','fiona');if(dodgeA)da=0;if(dodgeF)df=0;
    rbHP=Math.max(0,rbHP-da);rbFHP=Math.max(0,rbFHP-df);rbQueued=false;if(!dodgeA)BattleActorState.set('aidan','damage',{battle:'raider',duration:360});if(!dodgeF)BattleActorState.set('fiona','damage',{battle:'raider',duration:360});log('raider','レイダーの「破砕斬」！ エイダン '+(dodgeA?'回避':da)+' / フィオナ '+(dodgeF?'回避':df)+(dodgeA&&dodgeF?'':' ダメージ！'));
+   if(window.BattleLouFaint?.judge()){BattleActorState.faint('raider','lou');log('raider','ルーが風に煽られて気を失ってしまった……！');}
   }else if(call>=0){callFlags[call]=true;spawn();log('raider','レイダーが角笛を吹いた！ 異常化ゴブリンが現れた。');}
   else if(rbRound%3===0||(phase===3&&rbRound%2===0)){rbQueued=true;log('raider','レイダーが巨大な戦斧を振りかぶった――次のラウンド、「破砕斬」が来る！');}
   else{
@@ -280,13 +281,24 @@
   support();await situationalBanter('raider',token);if(token!==generation||rbBoss<=0)return;
   rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');BattleStatus.tick('raider',statusStart);
   if(rbHP<=0||rbFHP<=0){log('raider','パーティーが崩れた……。ルーの風が時間を巻き戻す。');BattleActorState.action('lou','blessing',{battle:'raider'});setTimeout(()=>{if(token===generation)startRaiderBattle()},1200);return}
+  if(!await louRoundEnd(token))return;
   rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;updateRaider();
  }
 
 
+ let blessingDeferred=false;
+ async function louRoundEnd(token){
+  const ev=window.BattleLouFaint?.advance();
+  if(ev==='wake'){
+   BattleActorState.wake('raider','lou');log('raider','ルーが目を覚ました！');updateRaider();
+   if(blessingDeferred&&!blessingUsed){blessingDeferred=false;await finalBlessing()}
+  }
+  return token===generation&&rbBoss>0;
+ }
  function buffParty(type){for(const ally of BattleActionTargets.allies('raider'))if(ally.active!==false&&ally.hp()>0)BattleStatus.apply({battle:'raider',target:ally.id,type,magnitude:.15,remainingTurns:3,source:'lou'});}
  function support(force){
   if(rbBoss<=0||BattleActorState.get('raider','lou')==='victory')return false;
+  if(window.BattleLouFaint?.fainted)return false; // fainted: no support, lastSupportRound untouched
   if(force==='blessing')return finalBlessing();
   if(rbRound-lastSupportRound<2)return false;
   const danger=rbHP>0&&rbHP<42||rbFHP>0&&rbFHP<38;
@@ -297,15 +309,19 @@
   return true;
  }
  async function finalBlessing(){
-  if(blessingUsed||rbBoss<=0)return false;blessingUsed=true;const token=generation;
+  if(blessingUsed||rbBoss<=0)return false;
+  if(window.BattleLouFaint?.fainted){blessingDeferred=true;return false}
+  blessingUsed=true;const token=generation;
   await BattlePresentation.banter('enrage-cooperation',['ルー「大丈夫、ルーもいるよ！　みんなに、風の祝福を！」'],'raider',token);
   if(token!==generation||rbBoss<=0)return false;
-  if(!await BattlePresentation.action('raider','blessing',token)||token!==generation||rbBoss<=0)return false;
+  if(window.BattleLouFaint?.fainted){blessingUsed=false;blessingDeferred=true;return false}
+  if(!await BattlePresentation.action('raider','blessing',token)||token!==generation||rbBoss<=0){if(token===generation&&rbBoss>0&&window.BattleLouFaint?.fainted){blessingUsed=false;blessingDeferred=true}return false}
   enragePending=false;lastSupportRound=rbRound;buffParty('atk_up');buffParty('def_up');
   log('raider','ルーの《妖精の祝福》！ ATK / DEF +15%（3ターン）');updateRaider();return true;
  }
  function enrageMoment(){
   if(blessingUsed||enragePending)return;enragePending=true;
+  if(window.BattleLouFaint?.fainted){blessingDeferred=true;return} // resumes once Lou wakes
   const flow=finalBlessing();enrageFlow=flow;flow.finally(()=>{if(enrageFlow===flow)enrageFlow=null;});
  }
 

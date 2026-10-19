@@ -42,6 +42,7 @@
   }
   function resting(battle) {
     const [hp, maxHp] = battle.health();
+    if (battle.fainted) return 'ko'; // Lou-only faint: KO-substitute display (no HP resource).
     if (hp === null) return 'idle'; // Support actors have no invented HP resource.
     return hp <= 0 ? 'ko' : battle.guard ? 'guard' : BATTLE_ASSETS[battle.actor].low_hp && hp <= maxHp * .30 ? 'low_hp' : 'idle';
   }
@@ -62,7 +63,10 @@
     if (!battle || !BATTLE_ASSETS[battle.actor]?.[state]) return false;
     sync(context, actor);
     // KO outranks victory; neither can be replaced by a temporary pose.
-    if (battle.state === 'ko' || (battle.state === 'victory' && state !== 'ko')) return false;
+    // Fainted Lou may still take the victory pose (victory outranks faint): clear the flag atomically.
+    const faintedLou = battle.fainted === true && state === 'victory';
+    if ((battle.state === 'ko' && !faintedLou) || (battle.state === 'victory' && state !== 'ko')) return false;
+    if (faintedLou) battle.fainted = false;
     if (state === 'idle' || state === 'low_hp') {
       if (temporary.has(battle.state) || battle.state === 'guard') return false;
       state = resting(battle);
@@ -99,6 +103,7 @@
       window.BattleIdleMotion?.begin(battle.image);
       invalidate(battle);
       battle.guard = false;
+      battle.fainted = false;
       battle.phase = null;
       battle.lowHpShown = false;
       paint(battle, resting(battle));
@@ -115,6 +120,18 @@
         paint(battle, resting(battle));
       }
     },
+    // Lou-only faint: show the existing KO motion without HP; wake() restores the resting pose.
+    faint(context, actor = 'lou') {
+      const battle = lookup(context, actor);
+      if (!battle || actor !== 'lou' || battle.state === 'victory') return false;
+      invalidate(battle); battle.fainted = true; paint(battle, 'ko'); return true;
+    },
+    wake(context, actor = 'lou') {
+      const battle = lookup(context, actor);
+      if (!battle || actor !== 'lou' || !battle.fainted) return false;
+      invalidate(battle); battle.fainted = false; battle.guard = false; paint(battle, resting(battle)); return true;
+    },
+    fainted(context, actor = 'lou') { return lookup(context, actor)?.fainted === true; },
     end(context, actor = 'aidan') { const battle = lookup(context, actor); invalidate(battle); window.BattleIdleMotion?.stop(battle.image); },
     get(context, actor = 'aidan') { return lookup(context, actor)?.state; },
     trackPhase(actor, phase, { battle: context } = {}) {
