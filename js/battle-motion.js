@@ -11,6 +11,7 @@
  *   - hitFrame  1-based frame on which the impact lands. Emits  'battle-motion-hit'  {actor,state,frame,at}  - presentation
  *               hooks (hit flash, shake, number pop) can bind to it. Damage maths is NOT moved: balance stays as it is.
  *   - hold      'last' (default): stay on the final frame until the state returns to rest.
+ *               'hide': after the final frame's ms the sprite is hidden (visibility, !important) and 'battle-motion-end' {actor,state,gone} fires; any later paint/stop restores it (KO dissolve).
  *   - variant   e.g. 'wooden' (少年剣士の木剣): BattleMotion.setVariant('aidan','wooden'); falls back to the base actor's motion.
  * API: load(url) · start(img, actor, state) · stop(img) · has(actor,state) · info(actor,state) · setVariant(actor,v) · onHit(fn) */
 (function () {
@@ -36,7 +37,10 @@
       return true;
     } catch (e) { man = null; return false; }   // no manifest = no motion: stills as before
   }
-  function stop(img) { const r = runs.get(img); if (r) { clearTimeout(r.timer); runs.delete(img); } }
+  function stop(img) {
+    const r = runs.get(img); if (r) { clearTimeout(r.timer); runs.delete(img); }
+    if (img && img.dataset && img.dataset.motionGone) { img.style.removeProperty('visibility'); delete img.dataset.motionGone; }   // hold:'hide' is undone by ANY later paint/start/stop (revive, next battle, scene teardown)
+  }
   function start(img, actor, state) {
     stop(img);
     const d = def(actor, state); if (!img || !d || !(d.frames > 1)) return null;
@@ -48,6 +52,13 @@
       if (n === (d.hitFrame || 0)) { const detail = {actor, state, frame: n, at: Math.round(performance.now() - run.t0)}; for (const f of hitFns) { try { f(detail); } catch (e) {} } dispatchEvent(new CustomEvent('battle-motion-hit', {detail})); }
       if (run.i < d.frames - 1) { const wait = msOf(d, run.i); run.i++; run.timer = setTimeout(show, wait); }
       else if (d.hold === 'first') { run.timer = setTimeout(() => { if (runs.get(img) === run) { img.src = src(d, 1); runs.delete(img); } }, msOf(d, run.i)); }
+      else if (d.hold === 'hide') {   // vanish: after the final frame's time the sprite is hidden (KO dissolve); stays registered so stop()/the next start() restores it
+        run.timer = setTimeout(() => {
+          if (runs.get(img) !== run) return;
+          img.style.setProperty('visibility', 'hidden', 'important'); img.dataset.motionGone = '1'; run.timer = null;
+          try { dispatchEvent(new CustomEvent('battle-motion-end', {detail: {actor, state, gone: true, at: Math.round(performance.now() - run.t0)}})); } catch (e) {}
+        }, msOf(d, run.i));
+      }
       else run.timer = null;
     };
     show(); return run;
