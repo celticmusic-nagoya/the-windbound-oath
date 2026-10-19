@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 from playwright.sync_api import sync_playwright
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'); NPC = os.path.join(ROOT, 'img/field/moss/rilde/npc')
-MAIN = '746cd1553fadfb06a872805a40585ee7c5b5f30d'
+MAIN = "746cd1553fadfb06a872805a40585ee7c5b5f30d"
 fails = []; errs = []
 def check(c, m):
     print(('ok   ' if c else 'FAIL ') + m, flush=True)
@@ -21,8 +21,13 @@ feet = []
 for a in A[:6]:
     ys, xs = np.nonzero(a > 200); fy = ys.max(); low = xs[ys > fy - 22]; feet.append((fy, (low.min() + low.max()) / 2))
 check(max(f[0] for f in feet) - min(f[0] for f in feet) <= 2 and max(f[1] for f in feet) - min(f[1] for f in feet) <= 3, 'RILD-004 foot anchor identical in all 6 frames (+-3 px at 2x): %s' % [(int(f[0]), round(f[1], 1)) for f in feet])
-# wind effect (frames 3,4) really present and complete: translucent pixels exist and none at the border
-check(((A[2] > 8) & (A[2] < 200)).sum() > 1500 and ((A[3] > 8) & (A[3] < 200)).sum() > 1500, 'RILD-005 wind effect kept as translucent alpha in frames 3 and 4')
+# official design: blond hair (top rows of frame 1 are golden: R>150 and R-B>60), no background glow left (partial-alpha pixels are a thin edge only)
+F1 = np.array(ims[0]); ys, xs = np.nonzero(F1[:, :, 3] > 200); top = F1[ys.min():ys.min() + 18][F1[ys.min():ys.min() + 18, :, 3] > 200][:, :3].astype(int)
+check(top[:, 0].mean() > 150 and (top[:, 0] - top[:, 2]).mean() > 60, 'ASSET-001 frame 1 hair is blond/golden (official design): mean RGB %s' % top.mean(0).round().tolist())
+check(all(((a > 8) & (a < 100)).mean() < ((a >= 100).mean() * 0.15) for a in A[:6]), 'ASSET-001 no soft background glow: faint-alpha pixels are < 15%% of the figure area')
+check(open(os.path.join(NPC, 'boy_swordsman_idle.png'), 'rb').read() == open(os.path.join(NPC, 'boy_swordsman_f01.png'), 'rb').read(), 'RILD-003 idle = f01 (Ready stance)')
+# body height ~ the old placeholder (91 px of 128 -> 182 px of 256): head-to-boots of frame 1 within 175..200
+check(175 <= (ys.max() - ys.min()) <= 200, 'RILD-006 figure height keeps the old on-screen size (%d px of 256; old 182)' % (ys.max() - ys.min()))
 # ---- only the swordsman's files changed (RILD-009) ----
 d = subprocess.run(['git', '-C', ROOT, 'diff', '--name-only', MAIN, '--', 'img/field/moss/rilde/npc', 'data', 'img/field/moss/manifest.json', 'js', 'tools/moss/rilde_assets.json'], capture_output=True, text=True).stdout.split()
 names = sorted(x for x in d)
