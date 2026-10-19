@@ -1,5 +1,5 @@
-# ASSET-EMMA-01: Emma's conversation portrait (normal only; expression01..04 are NOT registered yet -> fallback). needs a static server on $PORT (default 8765).
-# Uses Emma's REAL conversation data (talk-data.js / talk-data-quests.js). EMMA-002/003/004 (expression display / no jump / return) are NOT_RUN for the expression images: they do not exist yet.
+# ASSET-EMMA-01: Emma's conversation portrait: master (normal) + 7 face-only composites (shared 8 face ids). needs a static server on $PORT (default 8765).
+# Uses Emma's REAL conversation data (talk-data.js / talk-data-quests.js) plus a scratch table that cycles all 8 faces (EMMA-002 display, EMMA-003 no jump, EMMA-004 return to normal).
 import os, sys, json, hashlib
 from playwright.sync_api import sync_playwright
 PORT = os.environ.get('PORT', '8765'); URL = 'http://localhost:%s/index.html' % PORT
@@ -32,17 +32,17 @@ with sync_playwright() as p:
     # ---- registry / ids (EMMA-006 + id rules) ----
     ctx, pg = boot(b)
     r = pg.evaluate("""()=>({chars:TalkPortrait.chars(),faces:TalkPortrait.FACES,f1:TalkPortrait.faceOf('smile'),f2:TalkPortrait.faceOf('relieved','lou'),f3:TalkPortrait.faceOf('07','fiona'),
-       e1:TalkPortrait.faceOf('expression01','emma'),e4:TalkPortrait.faceOf('expression04','emma'),e5:TalkPortrait.faceOf('expression05','emma'),eS:TalkPortrait.faceOf('smile','emma'),eD:TalkPortrait.faceOf('03','emma'),eN:TalkPortrait.faceOf('normal','emma'),eU:TalkPortrait.faceOf(undefined,'emma')})""")
+       e1:TalkPortrait.faceOf('expression01','emma'),e5:TalkPortrait.faceOf('surprised','emma'),eS:TalkPortrait.faceOf('smile','emma'),eD:TalkPortrait.faceOf('03','emma'),eN:TalkPortrait.faceOf('normal','emma'),eU:TalkPortrait.faceOf(undefined,'emma'),eX:TalkPortrait.faceOf('nonsense','emma')})""")
     check(r['faces'] == ['normal','smile','angry','sad','surprised','worried','determined','relieved'], 'EMMA-006 Fiona/Lou 8-expression set unchanged')
     check(r['chars'] == ['fiona','lou','emma'] and r['f1'] == 'smile' and r['f2'] == 'relieved' and r['f3'] == 'determined', 'EMMA-006 Fiona/Lou face resolution unchanged %s' % r)
-    check(r['e5'] == 'normal' and r['eS'] == 'normal' and r['eD'] == 'normal' and r['eN'] == 'normal' and r['eU'] == 'normal', 'EMMA-002 invalid / foreign ids fall back to normal for Emma %s' % r)
-    check(r['e1'] == 'normal' and r['e4'] == 'normal', 'EMMA-002 expression01..04 have no image yet -> normal (NOT registered; expression display = NOT_RUN)')
+    check(r['eS'] == 'smile' and r['e5'] == 'surprised' and r['eD'] == 'angry' and r['eN'] == 'normal' and r['eU'] == 'normal', 'EMMA-002 Emma uses the shared 8 ids (name or 01-08) %s' % r)
+    check(r['e1'] == 'normal' and r['eX'] == 'normal', 'EMMA-002 unknown ids (expression01, nonsense) fall back to normal for Emma')
     # ---- EMMA-001 normal portrait on the real conversation ----
     reqs = []; pg.on('request', lambda q: reqs.append(q.url))
     pg.evaluate("FieldTalk.talk('emma')"); s = wait_cur(pg, 'emma/normal')
     check(s['vis'] and s['cur'] == 'emma/normal' and s['src'] == 'emma_normal.png', 'EMMA-001 Emma conversation shows emma_normal %s' % {k: s[k] for k in ('vis','cur','src')})
     check(s['nw'] == 1024 and s['nh'] == 1536, 'EMMA-001 full 1024x1536 image decoded (aspect kept by the crop frame)')
-    check(not [u for u in reqs if 'emma_expression' in u], 'EMMA-002 no request for a non-existent expression image')
+    check(not [u for u in reqs if 'emma_expression' in u], 'EMMA-002 no request for a legacy expression0N image name')
     ctx.close()
     # ---- EMMA-005 conversation progress, ALL real Emma lines (cloned unchanged into scratch tables): the portrait follows the speaker plate page by page ----
     ctx, pg = boot(b)
@@ -78,6 +78,20 @@ with sync_playwright() as p:
     check('ありがとうねぇ' in s['txt'] and s['cur'] == 'emma/normal', 'EMMA-005 choice reply plays with Emma still shown')
     check(pg.evaluate("Quest.list().some(q=>q.id==='q_emma_charm'&&q.state==='active')"), 'EMMA-005 quest effect unchanged (q_emma_charm active)')
     ctx.close()
+    # ---- EMMA-002/003/004: all 8 faces on the real portrait pipeline ----
+    FACE8 = ['normal','smile','angry','sad','surprised','worried','determined','relieved']
+    ctx, pg = boot(b)
+    pg.evaluate("FieldTalk.loadTable(%s)" % json.dumps({"npc": "emma_faces", "entries": [{"id": "emma_faces_e", "priority": 5, "when": {}, "mode": "cycle", "lines": [{"char": "emma", "face": "normal", "pages": [{"speaker": "エマ", "text": "「" + f + "」", "face": f} for f in FACE8] + [{"speaker": "エマ", "text": "「もどる」", "face": "normal"}]}]}]}))
+    pg.evaluate("FieldTalk.talk('emma_faces')"); seen = []
+    for i, f in enumerate(FACE8 + ['normal']):
+        s = wait_cur(pg, 'emma/' + f); seen.append((f, s['cur'], s['src'], s['box'], s['nw'], s['nh']))
+        pg.click('#msg'); pg.wait_for_timeout(300)
+    check([x[1] for x in seen] == ['emma/' + f for f in FACE8 + ['normal']] and [x[2] for x in seen] == ['emma_' + f + '.png' for f in FACE8 + ['normal']], 'EMMA-002 each page shows the matching file (id <-> file): %s' % [x[2] for x in seen])
+    check(all((x[4], x[5]) == (1024, 1536) for x in seen), 'EMMA-003 every face decodes at 1024x1536 (same canvas -> no scaling between faces)')
+    boxes = [tuple(round(v, 1) for v in x[3]) for x in seen]
+    check(len(set(boxes)) == 1, 'EMMA-003 the portrait frame is identical for all faces (no jump/resize): %s' % set(boxes))
+    check(seen[0][2] == seen[-1][2] == 'emma_normal.png', 'EMMA-004 returns to the normal master after the cycle')
+    ctx.close()
     # ---- load failure must not stop the conversation ----
     ctx, pg = boot(b, route=lambda r: r.abort()); pg.evaluate("FieldTalk.talk('emma')"); pg.wait_for_timeout(900); s = st(pg)
     check(not s['vis'] and 'エマ' in pg.evaluate("document.querySelector('#msg').textContent"), 'EMMA-005 image load failure: no portrait, dialogue still shown')
@@ -106,6 +120,19 @@ with sync_playwright() as p:
     im = Image.open(io.BytesIO(d)); a = im.split()[3]
     check(im.size == (1024, 1536) and im.mode == 'RGBA' and a.getextrema() == (0, 254), 'ASSET-001 emma_normal.png: 1024x1536 RGBA with the original alpha (0..254)')
     check(hashlib.sha256(d).hexdigest() == 'f4dfd09d08e3bd333743f677afbe84e4e1771b295863e92a96a3b4c0904114b2', 'ASSET-001 emma_normal.png byte-identical to the supplied master (sha256 f4dfd09d...)')
+    import numpy as np, cv2
+    M = np.array(im); al = M[:, :, 3]
+    oval = np.zeros(al.shape, np.uint8); cv2.ellipse(oval, (600, 335), (215, 230), -15, 0, 360, 1, -1)
+    inner = np.zeros(al.shape, np.uint8); cv2.ellipse(inner, (600, 335), (150, 165), -15, 0, 360, 1, -1)
+    for f in FACE8[1:]:
+        e = Image.open(os.path.join(ROOT, 'img/portraits/emma/emma_%s.png' % f)); E = np.array(e)
+        outside = oval == 0
+        check(e.size == (1024, 1536) and e.mode == 'RGBA', 'ASSET-001 emma_%s.png 1024x1536 RGBA' % f)
+        check((E[:, :, 3] == al).all(), 'ASSET-001 emma_%s.png alpha channel identical to the master (silhouette fixed)' % f)
+        visible = outside & (al > 0)
+        check((E[:, :, :3][visible] == M[:, :, :3][visible]).all(), 'ASSET-001 emma_%s.png: every opaque pixel outside the face oval is byte-identical to the master (head, hair, body, costume fixed)' % f)
+        d = np.abs(E[:, :, :3].astype(int) - M[:, :, :3].astype(int)).sum(2)
+        check((d[inner > 0] > 12).mean() > 0.2, 'ASSET-001 emma_%s.png: the face region really differs from the master (%.0f%% of pixels)' % (f, 100 * (d[inner > 0] > 12).mean()))
     check(not [e for e in errs if 'PAGEERR' in e], 'ASSET-002 no page errors: %s' % errs[:3])
     b.close()
 print('FAILS', len(fails)); sys.exit(1 if fails else 0)

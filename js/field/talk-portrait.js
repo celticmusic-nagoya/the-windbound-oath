@@ -26,10 +26,8 @@
   const CHARS = {
     fiona: {name: 'フィオナ', dir: 'fiona', prefix: 'fiona', crop: {x: 130, y: 45, w: 840, h: 840}, side: 'right'},   // source 1024x1536
     lou: {name: 'ルー', dir: 'lou', prefix: 'lou', crop: {x: 0, y: 0, w: 1312, h: 1199}, side: 'right'},               // source 1312x1199
-    // Emma (ASSET-EMMA-01): her own expression ids. `faces` = ids a conversation may name; `ready` = ids that have an image today (others fall back to normal
-    // without a request). expression01..04 stay unready until the face composites are approved (see docs/portraits/EMMA.md).
-    emma: {name: 'エマ', dir: 'emma', prefix: 'emma', crop: {x: 90, y: 0, w: 880, h: 880}, side: 'right',
-           faces: ['normal', 'expression01', 'expression02', 'expression03', 'expression04'], ready: ['normal']}   // source 1024x1536
+    // Emma (ASSET-EMMA-01): the shared 8 face ids; every face is a face-only composite on her master portrait (same 1024x1536 canvas, see docs/portraits/EMMA.md).
+    emma: {name: 'エマ', dir: 'emma', prefix: 'emma', crop: {x: 90, y: 0, w: 880, h: 880}, side: 'right'}   // source 1024x1536
   };
   const SRC = {fiona: {w: 1024, h: 1536}, lou: {w: 1312, h: 1199}, emma: {w: 1024, h: 1536}};   // source png sizes (crop is in these px)
   const DIRECT = '__direct', BAD_MS = 15000;
