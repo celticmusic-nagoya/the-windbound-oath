@@ -39,8 +39,8 @@
  },
  "summary": {
   "total": 951,
-  "approved_implemented": 61,
-  "approved_not_implemented": 6,
+  "approved_implemented": 66,
+  "approved_not_implemented": 1,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
@@ -72,14 +72,14 @@
    "height": 724,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "BRANCH_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "Phase 5",
-   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet, uncut 3x2 six-frame sheet; Phase 5 target (not implemented yet)"
+   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet; cut to 6 frames and implemented in Phase 5 (img/battle/enemies/goblin_raider/motion/goblin_raider_damage_NN.png, manifest goblin_raider/damage; original sheet stays on its branch, copy in handoff assets-originals)"
   },
   {
    "asset_id": "branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_idle_reference_6f_png",
@@ -96,14 +96,14 @@
    "height": 1024,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "BRANCH_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "Phase 5",
-   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet, uncut 3x2 six-frame sheet; Phase 5 target (not implemented yet)"
+   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet; cut to 6 frames and implemented in Phase 5 (img/battle/enemies/goblin_raider/motion/goblin_raider_idle_NN.png, manifest goblin_raider/idle; original sheet stays on its branch, copy in handoff assets-originals)"
   },
   {
    "asset_id": "branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_ko_dissolve_candidate_6f_png",
@@ -144,14 +144,14 @@
    "height": 887,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "BRANCH_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "Phase 5",
-   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet, uncut 3x2 six-frame sheet; Phase 5 target (not implemented yet)"
+   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet; cut to 6 frames and implemented in Phase 5 (img/battle/enemies/goblin_raider/motion/goblin_raider_attack_NN.png, manifest goblin_raider/attack; original sheet stays on its branch, copy in handoff assets-originals)"
   },
   {
    "asset_id": "branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_powered_attack_candidate_6f_png",
@@ -192,14 +192,14 @@
    "height": 887,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "BRANCH_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "Phase 5",
-   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet, uncut 3x2 six-frame sheet; Phase 5 target (not implemented yet)"
+   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet; cut to 6 frames and implemented in Phase 5 (img/battle/enemies/goblin_raider/motion/goblin_raider_enrage_NN.png, manifest goblin_raider/enrage; original sheet stays on its branch, copy in handoff assets-originals)"
   },
   {
    "asset_id": "branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_roar_revised_6f_png",
@@ -216,14 +216,14 @@
    "height": 1024,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "BRANCH_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "Phase 5",
-   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet, uncut 3x2 six-frame sheet; Phase 5 target (not implemented yet)"
+   "notes": "exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopted sheet; cut to 6 frames and implemented in Phase 5 (img/battle/enemies/goblin_raider/motion/goblin_raider_call_NN.png, manifest goblin_raider/call; original sheet stays on its branch, copy in handoff assets-originals)"
   },
   {
    "asset_id": "branch:assets_rilde_interior_v1:docs_art_delivered_bg02_forest_bg_bg_02_fore_png",
@@ -5576,6 +5576,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/battle/motion-manifest.json",
     "js/assets.js"
    ],
    "arena_available": "YES",
@@ -5602,6 +5603,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/battle/motion-manifest.json",
     "js/assets.js"
    ],
    "arena_available": "YES",

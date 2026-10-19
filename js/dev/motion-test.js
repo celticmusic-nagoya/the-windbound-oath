@@ -164,7 +164,7 @@
   function renderInfo() {
     const d = S.cur, r = S.row; if (!d || !r) return;
     const n = d.urls.length, ms = d.ms.map(x => Math.round(x / S.speed));
-    $('[data-mt=info]').innerHTML = `<b>${esc(r.label)}</b> — <span class="mtBadge ${r.status}">${LABEL[r.status]}</span> ${S.phase ? '／' + esc(S.phase) : ''}<br>コマ <b data-mt="cf">${S.idx + 1}</b> / <b data-mt="ct">${n}</b>　表示 <b data-mt="cms">${ms[S.idx]}</b>ms　合計 ${ms.reduce((a, b) => a + b, 0)}ms${d.hitFrame ? '　当たり:' + d.hitFrame + 'コマ' : ''}${d.hold === 'hide' ? '　（最終コマ後に消滅）' : ''}<br>${S.footSpread != null ? '足元の画面上ずれ(最大): ' + S.footSpread + 'px　' : ''}出典: ${esc(d.source)}`;
+    $('[data-mt=info]').innerHTML = `<b>${esc(r.label)}</b> — <span class="mtBadge ${r.status}">${LABEL[r.status]}</span> ${S.phase ? '／' + esc(S.phase) : ''}<br>コマ <b data-mt="cf">${S.idx + 1}</b> / <b data-mt="ct">${n}</b>　表示 <b data-mt="cms">${ms[S.idx]}</b>ms　合計 ${ms.reduce((a, b) => a + b, 0)}ms${d.hitFrame ? '　当たり:' + d.hitFrame + 'コマ' : ''}${d.scale && d.scale !== 1 ? '　実機の表示倍率 ×' + d.scale + '（静止画と見かけの大きさを合わせる補正。ここでは未適用）' : ''}${d.hold === 'hide' ? '　（最終コマ後に消滅）' : ''}<br>${S.footSpread != null ? '足元の画面上ずれ(最大): ' + S.footSpread + 'px　' : ''}出典: ${esc(d.source)}`;
     $('[data-mt=frames]').innerHTML = d.urls.map((u, i) => `<span class="${i === S.idx ? 'cur' : ''}">${i + 1}:${ms[i]}ms</span>`).join('');
     $('[data-mt=warn]').textContent = S.warn.join(' / ');
   }
