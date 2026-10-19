@@ -16,7 +16,7 @@ check(all(all(k in a for k in need) for a in A), 'every asset carries all regist
 check(all(a['android_status'] == 'UNVERIFIED' for a in A), 'no asset is claimed Android-verified')
 check(not any(a['integration_status'] == 'MAIN' and a['source_branch'] not in ('main',) and a['asset_id'].startswith('branch:') for a in A), 'branch-only assets are never labelled MAIN')
 p0 = [a for a in A if a['approval_status'] == 'APPROVED' and a['implementation_status'] == 'NOT_IMPLEMENTED']
-check(any(a['asset_id'] == 'orig:lou_new_ko' for a in p0) and not any(a['character'] == 'goblin_raider' for a in p0), 'approved-but-unimplemented extraction finds Lou KO (Raider adopted sheets are IMPLEMENTED since Phase 5)', len(p0))
+check(not any(a['character'] in ('goblin_raider',) or a['asset_id'] == 'orig:lou_new_ko' for a in p0), 'Raider adopted sheets (Phase 5) and Lou KO are IMPLEMENTED, not in the approved-but-unimplemented list', len(p0))
 rs = [a for a in A if a['character'] == 'goblin_raider' and a['approval_status'] == 'APPROVED']
 check(len(rs) == 5 and all(a['implementation_status'] == 'IMPLEMENTED' for a in rs) and all(a['implementation_status'] == 'NOT_IMPLEMENTED' for a in A if a['character'] == 'goblin_raider' and a['approval_status'] == 'PENDING'), 'Raider: 5 adopted sheets IMPLEMENTED, 2 candidates stay PENDING / NOT_IMPLEMENTED')
 check(not any(a['approval_status'] == 'APPROVED' for a in A if 'candidate' in a['source_path']), 'candidate sheets are never APPROVED automatically')

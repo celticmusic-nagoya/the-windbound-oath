@@ -1,6 +1,6 @@
 """Phase 3: the multi-frame ally motions registered in img/battle/motion-manifest.json really play in the Raider battle at PC / phone portrait / phone landscape.
 Checks: every frame file loads; damage / fiona winddance / attack / heal / lou blessing advance through >=2 frames then return to idle;
-Aidan low_hp plays once and holds (no re-trigger on sync); KO plays and stays; the Fiona/Lou KO of Lou is NOT registered (held)."""
+Aidan low_hp plays once and holds (no re-trigger on sync); KO plays and stays; Lou KO is registered (separate phase)."""
 import os, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools/qa'))
@@ -29,7 +29,7 @@ with server(8833) as base, sync_playwright() as p:
             miss = pg.evaluate("""async()=>{const m=await (await fetch('img/battle/motion-manifest.json')).json();const out=[];let n=0;
               for(const [k,st] of Object.entries(m.motions))for(const [s,d] of Object.entries(st))for(let i=1;i<=d.frames;i++){const u=m.base+d.dir+d.pattern.replace('{n}',String(i).padStart(2,'0'));n++;const r=await fetch(u);if(!r.ok)out.push(u)}return {n,out}}""")
             check(not miss['out'], 'every manifest frame file exists (%d)' % miss['n'], miss['out'][:3])
-            check(not pg.evaluate("BattleMotion.has('lou','ko')"), 'Lou KO stays unregistered (held for the faint spec)')
+            check(pg.evaluate("BattleMotion.has('lou','ko')"), 'Lou KO (lou_new_ko, adopted) is registered since the Lou-KO phase')
         pg.evaluate("PrologueProgress.seed(0);startRaiderBattle()"); pg.wait_for_timeout(300)
         # Test setup only: a stray intro dialogue can re-open right after closeDialogue() (also on pre-Phase-3 main, ~25%); close it, never touch the busy/cinematic guards.
         for _ in range(40):

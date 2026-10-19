@@ -50,13 +50,13 @@ with server(8837) as base, sync_playwright() as p:
             return [r['status'] for r in rows if r['slot'] == slot and (state is None or r['state'] == state) and (label is None or r['label'] == label)]
         exp = [('aidan', 'start', 'draw', 'impl'), ('aidan', 'idle', 'idle', 'impl'), ('aidan', 'attack', 'attack', 'impl'), ('aidan', 'skill', 'skill', 'impl'), ('aidan', 'damage', 'damage', 'impl'), ('aidan', 'low_hp', 'low_hp', 'impl'), ('aidan', 'ko', 'ko', 'impl'), ('aidan', 'victory', 'victory', 'still'), ('aidan', 'ko_dissolve', None, 'none'), ('aidan', 'support', 'item', 'still'),
                ('fiona', 'start', 'ready', 'impl'), ('fiona', 'idle', 'idle', 'impl'), ('fiona', 'attack', 'attack', 'impl'), ('fiona', 'skill', 'winddance', 'impl'), ('fiona', 'skill', 'skill', 'still'), ('fiona', 'support', 'heal', 'impl'), ('fiona', 'damage', 'damage', 'impl'), ('fiona', 'low_hp', 'low_hp', 'still'), ('fiona', 'ko', 'ko', 'impl'),
-               ('lou', 'idle', 'idle', 'impl'), ('lou', 'damage', 'damage', 'impl'), ('lou', 'support', 'blessing', 'impl'), ('lou', 'support', 'heal', 'still'), ('lou', 'ko', 'ko', 'still'), ('lou', 'attack', None, 'none'),
+               ('lou', 'idle', 'idle', 'impl'), ('lou', 'damage', 'damage', 'impl'), ('lou', 'support', 'blessing', 'impl'), ('lou', 'support', 'heal', 'still'), ('lou', 'ko', 'ko', 'impl'), ('lou', 'attack', None, 'none'),
                ('goblin', 'idle', 'idle', 'still'), ('goblin', 'ko', 'ko', 'impl'), ('goblin', 'ko_dissolve', 'ko', 'impl'), ('goblin', 'damage', 'damage', 'still'),
                ('tainted_goblin', 'ko_dissolve', 'ko', 'impl'), ('tainted_goblin', 'attack', 'attack', 'still'),
                ('goblin_raider', 'idle', 'idle', 'impl'), ('goblin_raider', 'attack', 'attack', 'impl'), ('goblin_raider', 'skill', 'call', 'impl'), ('goblin_raider', 'skill', 'enrage', 'impl'), ('goblin_raider', 'damage', 'damage', 'impl'), ('goblin_raider', 'ko', 'ko', 'still'), ('goblin_raider', 'ko_dissolve', None, 'pending')]
         bad = [(c, sl, stt, e, st(c, sl, stt)) for c, sl, stt, e in exp if e not in st(c, sl, stt)]
         check(not bad, 'status table (%d expectations)' % len(exp), bad[:4])
-        check('delivered' in st('lou', 'ko') and 'delivered' not in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'ko_dissolve'), 'delivered / pending-adoption material listed but never shown as implemented')
+        check('delivered' not in st('lou', 'ko') and 'delivered' not in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'ko_dissolve'), 'delivered / pending-adoption material listed but never shown as implemented')
         check(all(pg.evaluate("MotionTest.select('%s','%s',%s)" % (c, sl, json.dumps(stt))) is not None for c, sl, stt, e in exp if e in ('impl', 'still')), 'every implemented / still row can be selected (all 6 characters)')
         # ---- controls on aidan attack
         pg.evaluate("MotionTest.select('aidan','attack','attack');MotionTest.control.returnIdle(false)"); pg.wait_for_timeout(100)

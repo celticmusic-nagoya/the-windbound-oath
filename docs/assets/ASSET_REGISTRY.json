@@ -39,8 +39,8 @@
  },
  "summary": {
   "total": 956,
-  "approved_implemented": 66,
-  "approved_not_implemented": 1,
+  "approved_implemented": 67,
+  "approved_not_implemented": 0,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
@@ -24090,14 +24090,14 @@
    "height": 887,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "SOURCE_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
-   "qa_status": "NOT_RUN",
+   "qa_status": "PASS",
    "android_status": "UNVERIFIED",
-   "issue": "Phase 3",
-   "notes": "original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest"
+   "issue": "Lou KO",
+   "notes": "original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest; implemented as lou ko 6f (img/battle/characters/lou/motion/lou_ko_NN.png, manifest lou/ko). Lou has no HP in battle logic, so it plays only via BattleActorState/arena; 気絶 is a separate state (proposal)"
   },
   {
    "asset_id": "seq:img_battle_characters_aidan_idle_aidan_idle",

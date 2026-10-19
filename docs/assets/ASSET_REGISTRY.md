@@ -6,8 +6,8 @@
 ## 集計（2026-10-19）
 
 - total: **956**
-- approved_implemented: **66**
-- approved_not_implemented: **1**
+- approved_implemented: **67**
+- approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
@@ -128,7 +128,7 @@
 | orig:fiona_winddance_new | fiona | winddance | 6 | 1536x1024 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | YES | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
 | orig:lou_damage | lou | damage | 6 | 1536x1024 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | YES | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
 | orig:lou_magic | lou | blessing | 6 | 1536x1024 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | YES | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
-| orig:lou_new_ko | lou | ko | 6 | 1774x887 | APPROVED | NOT_IMPLEMENTED | SOURCE_ONLY | NOT_RUN | NO | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
+| orig:lou_new_ko | lou | ko | 6 | 1774x887 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | NO | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
 | seq:img_battle_characters_aidan_idle_aidan_idle | aidan | idle | 4 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js, js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_characters_aidan_idle_v2_aidan_idle | aidan | idle | 6 | 760x502 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js, js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified; adopted earlier (motion-manifest  |
 | seq:img_battle_characters_aidan_motion_aidan_attack | aidan | attack | 6 | 1312x1199 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified; adopted earlier (motion-manifest  |
