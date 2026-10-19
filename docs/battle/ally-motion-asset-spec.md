@@ -12,7 +12,7 @@
 | fiona | attack / damage / heal / ko | 多コマ実装済み（Phase 3） | 10/16 納品 |
 | fiona | winddance | 多コマ実装済み（Phase 3） | 10/17 改訂版。5コマ目の渦は不変。習得ゲート不変 |
 | lou | damage / blessing(=lou_magic) | 多コマ実装済み（Phase 3） | 10/16 納品 |
-| lou | ko | 多コマ実装済み（Lou-KO フェーズ） | `lou_new_ko`（10/16納品・採用）。ルーはHPを持たず本編ではKOしない。「気絶」は別状態（仕様案: docs/battle/faint-state-proposal.md） |
+| lou | ko | 多コマ実装済み（Lou-KO フェーズ） | `lou_new_ko`（10/16納品・採用）。ルー専用の「気絶」（KO代替状態）の暫定表示に使う確定仕様は docs/battle/lou-faint/README.md（ゲーム内ロジックは未実装: docs/battle/lou-faint-implementation-audit-20261019.md）。一般stun案は SUPERSEDED |
 | fiona | skill(windbloom) / guard / evade / prayer / item / victory / awaken | 静止画のみ・未納品 | 下記P1〜P3 |
 | lou | charge→heal / rune / evade / victory / low_hp | 静止画のみ・未納品 | 下記P1〜P3 |
 
