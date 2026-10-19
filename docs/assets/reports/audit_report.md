@@ -24,15 +24,11 @@ registry snapshot: 2026-10-19 ／ assets 957 ／ errors **0**
 - fix/fiona-lou-portrait-lifecycle-p2: 16
 - handoff-repo:handoff/party-motion-originals-claude-20261019: 14
 
-## main上の参照なし画像 170（情報。原本保管/将来用の可能性があり自動削除しない）
+## main上の参照なし画像 20（情報。原本保管/将来用の可能性があり自動削除しない）
 
 - img/battle/characters/aidan: 3
 - img/battle/characters/fiona: 1
 - img/battle/characters/lou: 1
-- img/field/lind/animals: 4
-- img/field/monsters/leafy_boar: 11
 - img/field/moss/art: 12
-- img/field/moss/props: 78
-- img/field/moss/rilde/npc: 57
 - img/field/moss/standin: 2
 - img/field/moss/town: 1

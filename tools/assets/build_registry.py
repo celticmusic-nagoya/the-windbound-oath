@@ -82,6 +82,9 @@ def build():
         p0 = paths[0]; im = Image.open(ROOT / p0)
         keys = [Path(p0).name] if not seqprefix else [Path(seqprefix).name]
         if not seqprefix: keys.append(Path(p0).stem) if len(Path(p0).stem) > 8 else None
+        # frame files addressed by a template (manifest walk.file 'x_f{n}.png', 'x_{n}.png'): also match the templated name
+        tk = re.sub(r'\d+(\.\w+)$', r'{n}\1', Path(p0).name)
+        if tk != Path(p0).name: keys.append(tk)
         refs = reference(keys)
         # manifests referencing a sequence by pattern ("<prefix>_{n}.png")
         e = {'asset_id': aid, 'name': name, 'category': category(p0), 'character': character(p0), 'motion': motion(p0),

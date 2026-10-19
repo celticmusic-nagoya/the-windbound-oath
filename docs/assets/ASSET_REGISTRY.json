@@ -46,8 +46,8 @@
   "source_missing": 0,
   "approval_unknown": 885,
   "on_main": 778,
-  "implemented_on_main": 608,
-  "unreferenced_on_main": 170
+  "implemented_on_main": 758,
+  "unreferenced_on_main": 20
  },
  "motion_gaps": [
   "fiona: skill(windbloom)/guard/evade/prayer/item/victory/awaken/low_hp = still only or undelivered",
@@ -6133,13 +6133,13 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
-    "js/field/lind-content-bounds.js"
+    "js/field/lind-animals.js"
    ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
   },
   {
    "asset_id": "file:img_field_lind_animals_chicken_walk",
@@ -6159,13 +6159,13 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
-    "js/field/lind-content-bounds.js"
+    "js/field/lind-animals.js"
    ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
   },
   {
    "asset_id": "file:img_field_lind_animals_cow_idle",
@@ -6182,14 +6182,16 @@
    "height": 1024,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/lind-animals.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
   },
   {
    "asset_id": "file:img_field_lind_animals_cow_walk",
@@ -6206,14 +6208,16 @@
    "height": 1024,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/lind-animals.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
   },
   {
    "asset_id": "file:img_field_lind_animals_pig_idle",
@@ -6230,14 +6234,16 @@
    "height": 1024,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/lind-animals.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
   },
   {
    "asset_id": "file:img_field_lind_animals_pig_walk",
@@ -6254,14 +6260,16 @@
    "height": 1024,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/lind-animals.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
   },
   {
    "asset_id": "file:img_field_lind_buildings_lind_aidan_house",
@@ -9114,6 +9122,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/moss/manifest.json",
     "js/field/lind-content-bounds.js"
    ],
    "arena_available": "N/A",
@@ -9140,6 +9149,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/moss/manifest.json",
     "js/field/lind-content-bounds.js"
    ],
    "arena_available": "N/A",
@@ -9166,6 +9176,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/moss/manifest.json",
     "js/field/lind-content-bounds.js"
    ],
    "arena_available": "N/A",
@@ -9192,6 +9203,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/moss/manifest.json",
     "js/field/lind-content-bounds.js"
    ],
    "arena_available": "N/A",
@@ -9218,6 +9230,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/moss/manifest.json",
     "js/field/lind-content-bounds.js"
    ],
    "arena_available": "N/A",
@@ -9244,6 +9257,7 @@
    "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/moss/manifest.json",
     "js/field/lind-content-bounds.js"
    ],
    "arena_available": "N/A",
@@ -10471,14 +10485,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_02",
@@ -10495,14 +10511,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_03",
@@ -10519,14 +10537,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_04",
@@ -10543,14 +10563,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_05",
@@ -10567,14 +10589,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_06",
@@ -10591,14 +10615,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_07",
@@ -10615,14 +10641,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_08",
@@ -10639,14 +10667,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_09",
@@ -10663,14 +10693,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_10",
@@ -10687,14 +10719,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_monsters_leafy_boar_leafy_boar_11",
@@ -10711,14 +10745,16 @@
    "height": 160,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_art_a3_seal_closed",
@@ -13180,14 +13216,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_bard_walk_02",
@@ -13204,14 +13242,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_bard_walk_03",
@@ -13228,14 +13268,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_bard_walk_04",
@@ -13252,14 +13294,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_bard_walk_05",
@@ -13276,14 +13320,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_bard_walk_06",
@@ -13300,14 +13346,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_barkeep",
@@ -13350,14 +13398,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_barkeep_walk_02",
@@ -13374,14 +13424,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_barkeep_walk_03",
@@ -13398,14 +13450,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_barkeep_walk_04",
@@ -13422,14 +13476,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_barkeep_walk_05",
@@ -13446,14 +13502,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_barkeep_walk_06",
@@ -13470,14 +13528,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_bed",
@@ -13572,14 +13632,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_captain_walk_02",
@@ -13596,14 +13658,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_captain_walk_03",
@@ -13620,14 +13684,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_captain_walk_04",
@@ -13644,14 +13710,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_captain_walk_05",
@@ -13668,14 +13736,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_captain_walk_06",
@@ -13692,14 +13762,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_child",
@@ -13742,14 +13814,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_child_walk_02",
@@ -13766,14 +13840,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_child_walk_03",
@@ -13790,14 +13866,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_child_walk_04",
@@ -13814,14 +13892,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_child_walk_05",
@@ -13838,14 +13918,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_child_walk_06",
@@ -13862,14 +13944,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_dwarf_drunk",
@@ -13912,14 +13996,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_dwarf_drunk_walk_02",
@@ -13936,14 +14022,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_dwarf_drunk_walk_03",
@@ -13960,14 +14048,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_dwarf_drunk_walk_04",
@@ -13984,14 +14074,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_dwarf_drunk_walk_05",
@@ -14008,14 +14100,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_dwarf_drunk_walk_06",
@@ -14032,14 +14126,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_elder",
@@ -14085,14 +14181,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_elder_walk_02",
@@ -14109,14 +14207,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_elder_walk_03",
@@ -14133,14 +14233,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_elder_walk_04",
@@ -14157,14 +14259,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_elder_walk_05",
@@ -14181,14 +14285,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_elder_walk_06",
@@ -14205,14 +14311,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_guard",
@@ -14255,14 +14363,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_guard_walk_02",
@@ -14279,14 +14389,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_guard_walk_03",
@@ -14303,14 +14415,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_guard_walk_04",
@@ -14327,14 +14441,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_guard_walk_05",
@@ -14351,14 +14467,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_guard_walk_06",
@@ -14375,14 +14493,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_liam",
@@ -14425,14 +14545,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_liam_walk_02",
@@ -14449,14 +14571,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_liam_walk_03",
@@ -14473,14 +14597,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_liam_walk_04",
@@ -14497,14 +14623,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_liam_walk_05",
@@ -14521,14 +14649,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_liam_walk_06",
@@ -14545,14 +14675,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_merchant",
@@ -14596,14 +14728,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_merchant_walk_02",
@@ -14620,14 +14754,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_merchant_walk_03",
@@ -14644,14 +14780,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_merchant_walk_04",
@@ -14668,14 +14806,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_merchant_walk_05",
@@ -14692,14 +14832,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_merchant_walk_06",
@@ -14716,14 +14858,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_questgiver",
@@ -14766,14 +14910,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_questgiver_walk_02",
@@ -14790,14 +14936,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_questgiver_walk_03",
@@ -14814,14 +14962,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_questgiver_walk_04",
@@ -14838,14 +14988,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_questgiver_walk_05",
@@ -14862,14 +15014,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_questgiver_walk_06",
@@ -14886,14 +15040,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier",
@@ -14936,14 +15092,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_02",
@@ -14960,14 +15118,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_03",
@@ -14984,14 +15144,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_04",
@@ -15008,14 +15170,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_05",
@@ -15032,14 +15196,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_06",
@@ -15056,14 +15222,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman",
@@ -15106,14 +15274,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman_walk_02",
@@ -15130,14 +15300,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman_walk_03",
@@ -15154,14 +15326,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman_walk_04",
@@ -15178,14 +15352,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman_walk_05",
@@ -15202,14 +15378,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman_walk_06",
@@ -15226,14 +15404,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townswoman",
@@ -15276,14 +15456,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townswoman_walk_02",
@@ -15300,14 +15482,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townswoman_walk_03",
@@ -15324,14 +15508,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townswoman_walk_04",
@@ -15348,14 +15534,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townswoman_walk_05",
@@ -15372,14 +15560,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townswoman_walk_06",
@@ -15396,14 +15586,16 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_props_prop_bench_view",
@@ -19689,14 +19881,16 @@
    "height": 79,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_f02",
@@ -19713,14 +19907,16 @@
    "height": 79,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_f03",
@@ -19737,14 +19933,16 @@
    "height": 79,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_f04",
@@ -19761,14 +19959,16 @@
    "height": 79,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_idle",
@@ -19821,7 +20021,7 @@
    "qa_status": "CONDITIONAL",
    "android_status": "UNVERIFIED",
    "issue": "#18",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
+   "notes": "existing asset on main; adoption record not re-verified; official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_swordsman_f02",
@@ -19848,7 +20048,7 @@
    "qa_status": "CONDITIONAL",
    "android_status": "UNVERIFIED",
    "issue": "#18",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
+   "notes": "existing asset on main; adoption record not re-verified; official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_swordsman_f03",
@@ -19875,7 +20075,7 @@
    "qa_status": "CONDITIONAL",
    "android_status": "UNVERIFIED",
    "issue": "#18",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
+   "notes": "existing asset on main; adoption record not re-verified; official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_swordsman_f04",
@@ -19902,7 +20102,7 @@
    "qa_status": "CONDITIONAL",
    "android_status": "UNVERIFIED",
    "issue": "#18",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
+   "notes": "existing asset on main; adoption record not re-verified; official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_swordsman_f05",
@@ -19929,7 +20129,7 @@
    "qa_status": "CONDITIONAL",
    "android_status": "UNVERIFIED",
    "issue": "#18",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
+   "notes": "existing asset on main; adoption record not re-verified; official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_swordsman_f06",
@@ -19956,7 +20156,7 @@
    "qa_status": "CONDITIONAL",
    "android_status": "UNVERIFIED",
    "issue": "#18",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
+   "notes": "existing asset on main; adoption record not re-verified; official blond 10-year-old, 288x256 RGBA 6 frames, idle=f01; impl SHA 8084c9d456305619585e827102b0504c5a4c63a3, main merge 7b124ab9d0a20ed94786633c50292373654487c3 (PR #22); Codex QA CONDITIONAL (SHA 64a104d9ed78a5981a7bd06794daf8df91de9f67), m9 first run 41/42 FAIL (not reproduced by Claude: 6/6 + 3/3 PASS); CI unconfirmed; Android UNVERIFIED"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_boy_swordsman_idle",
@@ -20000,14 +20200,16 @@
    "height": 116,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_caretaker_f02",
@@ -20024,14 +20226,16 @@
    "height": 116,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_caretaker_f03",
@@ -20048,14 +20252,16 @@
    "height": 116,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_caretaker_f04",
@@ -20072,14 +20278,16 @@
    "height": 116,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_caretaker_f05",
@@ -20096,14 +20304,16 @@
    "height": 116,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_caretaker_f06",
@@ -20120,14 +20330,16 @@
    "height": 116,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_caretaker_idle",
@@ -20171,14 +20383,16 @@
    "height": 108,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_man_f02",
@@ -20195,14 +20409,16 @@
    "height": 108,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_man_f03",
@@ -20219,14 +20435,16 @@
    "height": 108,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_man_f04",
@@ -20243,14 +20461,16 @@
    "height": 108,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_man_f05",
@@ -20267,14 +20487,16 @@
    "height": 108,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_man_f06",
@@ -20291,14 +20513,16 @@
    "height": 108,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_man_idle",
@@ -20342,14 +20566,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_woman_f02",
@@ -20366,14 +20592,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_woman_f03",
@@ -20390,14 +20618,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_woman_f04",
@@ -20414,14 +20644,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_woman_f05",
@@ -20438,14 +20670,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_woman_f06",
@@ -20462,14 +20696,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_elder_woman_idle",
@@ -20513,14 +20749,16 @@
    "height": 88,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_emma_f02",
@@ -20537,14 +20775,16 @@
    "height": 88,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_emma_f03",
@@ -20561,14 +20801,16 @@
    "height": 88,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_emma_idle",
@@ -20612,14 +20854,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_farmer_female_f02",
@@ -20636,14 +20880,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_farmer_female_f03",
@@ -20660,14 +20906,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_farmer_female_f04",
@@ -20684,14 +20932,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_farmer_female_idle",
@@ -20790,14 +21040,16 @@
    "height": 75,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_girl_f02",
@@ -20814,14 +21066,16 @@
    "height": 75,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_girl_f03",
@@ -20838,14 +21092,16 @@
    "height": 75,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_girl_f04",
@@ -20862,14 +21118,16 @@
    "height": 75,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_girl_idle",
@@ -20913,14 +21171,16 @@
    "height": 118,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_innkeeper_f02",
@@ -20937,14 +21197,16 @@
    "height": 118,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_innkeeper_f03",
@@ -20961,14 +21223,16 @@
    "height": 118,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_innkeeper_f04",
@@ -20985,14 +21249,16 @@
    "height": 118,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_innkeeper_f05",
@@ -21009,14 +21275,16 @@
    "height": 118,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_innkeeper_f06",
@@ -21033,14 +21301,16 @@
    "height": 118,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_innkeeper_idle",
@@ -21084,14 +21354,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_merchant_f02",
@@ -21108,14 +21380,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_merchant_f03",
@@ -21132,14 +21406,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_merchant_f04",
@@ -21156,14 +21432,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_merchant_f05",
@@ -21180,14 +21458,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_merchant_f06",
@@ -21204,14 +21484,16 @@
    "height": 102,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_merchant_idle",
@@ -21255,14 +21537,16 @@
    "height": 121,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_man_f02",
@@ -21279,14 +21563,16 @@
    "height": 121,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_man_f03",
@@ -21303,14 +21589,16 @@
    "height": 121,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_man_f04",
@@ -21327,14 +21615,16 @@
    "height": 121,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_man_f05",
@@ -21351,14 +21641,16 @@
    "height": 121,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_man_f06",
@@ -21375,14 +21667,16 @@
    "height": 121,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_man_idle",
@@ -21426,14 +21720,16 @@
    "height": 114,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_woman_f02",
@@ -21450,14 +21746,16 @@
    "height": 114,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_woman_f03",
@@ -21474,14 +21772,16 @@
    "height": 114,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_woman_f04",
@@ -21498,14 +21798,16 @@
    "height": 114,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_woman_f05",
@@ -21522,14 +21824,16 @@
    "height": 114,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_woman_f06",
@@ -21546,14 +21850,16 @@
    "height": 114,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [],
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+   "notes": "existing asset on main; adoption record not re-verified"
   },
   {
    "asset_id": "file:img_field_moss_rilde_npc_young_woman_idle",
