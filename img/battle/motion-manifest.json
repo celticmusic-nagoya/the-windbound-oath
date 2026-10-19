@@ -47,6 +47,48 @@
           120
         ],
         "hold": "last"
+      },
+      "damage": {
+        "dir": "aidan/motion/",
+        "pattern": "aidan_damage_{n}.png",
+        "frames": 6,
+        "ms": [
+          60,
+          80,
+          110,
+          150,
+          140,
+          110
+        ],
+        "hold": "last"
+      },
+      "low_hp": {
+        "dir": "aidan/motion/",
+        "pattern": "aidan_low_hp_{n}.png",
+        "frames": 6,
+        "ms": [
+          150,
+          160,
+          160,
+          160,
+          170,
+          220
+        ],
+        "hold": "last"
+      },
+      "ko": {
+        "dir": "aidan/motion/",
+        "pattern": "aidan_ko_{n}.png",
+        "frames": 6,
+        "ms": [
+          100,
+          110,
+          120,
+          130,
+          160,
+          300
+        ],
+        "hold": "last"
       }
     },
     "moss_slime": {
@@ -142,6 +184,76 @@
           170
         ],
         "hold": "last"
+      },
+      "attack": {
+        "dir": "fiona/motion/",
+        "pattern": "fiona_attack_{n}.png",
+        "frames": 6,
+        "ms": [
+          70,
+          80,
+          100,
+          110,
+          120,
+          140
+        ],
+        "hold": "last"
+      },
+      "damage": {
+        "dir": "fiona/motion/",
+        "pattern": "fiona_damage_{n}.png",
+        "frames": 6,
+        "ms": [
+          60,
+          80,
+          110,
+          150,
+          140,
+          110
+        ],
+        "hold": "last"
+      },
+      "heal": {
+        "dir": "fiona/motion/",
+        "pattern": "fiona_heal_{n}.png",
+        "frames": 6,
+        "ms": [
+          80,
+          90,
+          100,
+          110,
+          120,
+          140
+        ],
+        "hold": "last"
+      },
+      "ko": {
+        "dir": "fiona/motion/",
+        "pattern": "fiona_ko_{n}.png",
+        "frames": 6,
+        "ms": [
+          100,
+          110,
+          120,
+          130,
+          160,
+          300
+        ],
+        "hold": "last"
+      },
+      "winddance": {
+        "dir": "fiona/motion/",
+        "pattern": "fiona_winddance_{n}.png",
+        "frames": 6,
+        "ms": [
+          130,
+          130,
+          150,
+          150,
+          150,
+          200
+        ],
+        "hold": "last"
       }
     },
     "goblin": {
@@ -174,6 +286,36 @@
           320
         ],
         "hold": "hide"
+      }
+    },
+    "lou": {
+      "damage": {
+        "dir": "lou/motion/",
+        "pattern": "lou_damage_{n}.png",
+        "frames": 6,
+        "ms": [
+          60,
+          80,
+          110,
+          150,
+          140,
+          110
+        ],
+        "hold": "last"
+      },
+      "blessing": {
+        "dir": "lou/motion/",
+        "pattern": "lou_blessing_{n}.png",
+        "frames": 6,
+        "ms": [
+          100,
+          110,
+          130,
+          150,
+          170,
+          200
+        ],
+        "hold": "last"
       }
     }
   }

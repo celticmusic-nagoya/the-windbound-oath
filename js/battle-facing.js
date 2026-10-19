@@ -3,7 +3,7 @@
  const modes=new Set(['NORMAL','PREEMPTIVE','BACK_ATTACK']);let mode='NORMAL';
  // Audited native artwork: enemies look right; Fiona's ordinary poses look left.
  // Frontal prayer/support/terminal illustrations have no directional override.
- const frontal=new Set(['prayer','charge','heal','rune','blessing','ko','victory']);
+ const frontal=new Set(['prayer','charge','heal','rune','blessing','ko','victory','winddance']);
  function paint(image,actor,state){
   if(!image)return;
   const ally=['aidan','fiona'].includes(actor),neutral=actor==='lou'||frontal.has(state);

@@ -75,7 +75,7 @@
   const W=window.WindDance;if(!W||!W.commandVisible())return false;
   const mp=b==='normal'?normalFMP:rbFMP,cost=W.mp();if(mp<cost)return false;
   if(b==='normal')normalFMP-=cost;else rbFMP-=cost;
-  const fx=W.effect();BattleActorState.action('fiona','heal',{battle:b});
+  const fx=W.effect();BattleActorState.action('fiona','winddance',{battle:b});
   for(const ally of BattleActionTargets.allies(b))if(ally.active!==false&&ally.hp()>0)BattleStatus.apply({battle:b,target:ally.id,type:'eva_up',magnitude:fx.amount,remainingTurns:fx.phases-1,source:'fiona'});
   log(b,'フィオナの「風の舞」！ 味方全体の回避率が上がった！',true);return true;
  }
