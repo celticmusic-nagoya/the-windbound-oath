@@ -26,16 +26,9 @@
     {"id": "tainted_goblin", "label": "異常化ゴブリン", "actor": "tainted_goblin", "side": "enemy",
      "states": {"idle": ["idle"], "attack": ["attack"], "skill": ["corruption"], "damage": ["damage"], "ko": ["ko"], "ko_dissolve": ["ko"]}},
     {"id": "goblin_raider", "label": "ゴブリン・レイダー", "actor": "goblin_raider", "side": "enemy",
-     "states": {"idle": ["idle"], "attack": ["attack"], "skill": ["call", "enrage"], "ko": ["ko"]},
+     "states": {"idle": ["idle"], "attack": ["attack"], "skill": ["call", "enrage"], "damage": ["damage"], "ko": ["ko"]},
      "extra": {
-       "idle": [{"label": "idle_reference_6f", "status": "delivered", "note": "納品済み・未実装。ブランチ assets/goblin-raider-ko-from-dissolve-f1 の docs/art/delivered/goblin_raider_motion_6f_20261016/（main未収録・未切り出し）"}],
-       "attack": [
-         {"label": "normal_attack_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"},
-         {"label": "powered_attack_candidate_6f", "status": "pending", "note": "正式採用待ち（候補素材。採用されるまで実装しない）"}],
-       "skill": [
-         {"label": "rage_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"},
-         {"label": "roar_revised_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"}],
-       "damage": [{"label": "hit_reaction_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"}],
+       "attack": [{"label": "powered_attack_candidate_6f", "status": "pending", "note": "正式採用待ち（候補素材。採用されるまで実装しない）"}],
        "ko_dissolve": [{"label": "ko_dissolve_candidate_6f", "status": "pending", "note": "正式採用待ち（候補素材。採用されるまで実装しない）"}]}}
   ]
 }

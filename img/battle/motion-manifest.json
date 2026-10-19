@@ -317,6 +317,109 @@
         ],
         "hold": "last"
       }
+    },
+    "goblin_raider": {
+      "attack": {
+        "dir": "../enemies/goblin_raider/motion/",
+        "pattern": "goblin_raider_attack_{n}.png",
+        "frames": 6,
+        "ms": [
+          90,
+          90,
+          110,
+          110,
+          120,
+          160
+        ],
+        "scale": 1.37,
+        "hold": "last",
+        "hitFrame": 3,
+        "aspect": 1.0944,
+        "bbox": [
+          0.0998,
+          0.9985
+        ]
+      },
+      "damage": {
+        "dir": "../enemies/goblin_raider/motion/",
+        "pattern": "goblin_raider_damage_{n}.png",
+        "frames": 6,
+        "ms": [
+          70,
+          70,
+          90,
+          100,
+          110,
+          140
+        ],
+        "scale": 1.88,
+        "hold": "last",
+        "aspect": 1.0936,
+        "bbox": [
+          0.2283,
+          0.9321
+        ]
+      },
+      "enrage": {
+        "dir": "../enemies/goblin_raider/motion/",
+        "pattern": "goblin_raider_enrage_{n}.png",
+        "frames": 6,
+        "ms": [
+          110,
+          110,
+          120,
+          130,
+          140,
+          170
+        ],
+        "scale": 1.35,
+        "hold": "last",
+        "aspect": 1.0941,
+        "bbox": [
+          0.1282,
+          0.9985
+        ]
+      },
+      "call": {
+        "dir": "../enemies/goblin_raider/motion/",
+        "pattern": "goblin_raider_call_{n}.png",
+        "frames": 6,
+        "ms": [
+          110,
+          110,
+          120,
+          130,
+          140,
+          170
+        ],
+        "scale": 1.05,
+        "hold": "last",
+        "aspect": 1.0948,
+        "bbox": [
+          0.0747,
+          0.9474
+        ]
+      },
+      "idle": {
+        "dir": "../enemies/goblin_raider/motion/",
+        "pattern": "goblin_raider_idle_{n}.png",
+        "frames": 6,
+        "ms": [
+          170,
+          170,
+          170,
+          170,
+          170,
+          170
+        ],
+        "scale": 1.19,
+        "hold": "loop",
+        "aspect": 1.0936,
+        "bbox": [
+          0.1147,
+          0.9572
+        ]
+      }
     }
   }
 }

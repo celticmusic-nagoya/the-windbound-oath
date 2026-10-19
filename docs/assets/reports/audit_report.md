@@ -6,13 +6,8 @@ registry snapshot: 2026-10-19 ／ assets 951 ／ errors **0**
 
 なし
 
-## 採用済み・未実装（P0）6
+## 採用済み・未実装（P0）1
 
-- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_hit_reaction_6f_png` goblin_raider damage
-- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_idle_reference_6f_png` goblin_raider idle
-- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_normal_attack_6f_png` goblin_raider attack
-- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_rage_6f_png` goblin_raider enrage
-- `branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_roar_revised_6f_png` goblin_raider call
 - `orig:lou_new_ko` lou ko
 
 ## 納品済み・未統合（ブランチ/原本のみ）179

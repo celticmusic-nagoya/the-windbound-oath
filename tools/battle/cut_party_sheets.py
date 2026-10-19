@@ -2,7 +2,7 @@
 """Cut a delivered 3x2 six-frame sheet (original untouched) into six game frames <actor>_<state>_NN.png (left-top -> right-bottom).
 Pixels are copied 1:1 (no resample, no recolour); every frame is placed on ONE common canvas per state: aligned on the main body's foot row and body centre,
 then padded with transparent pixels to a 3:2 aspect (the battle <img> is object-fit:contain, so apparent size follows the aspect).
-usage: cut_party_sheets.py <sheet.png> <actor> <state> [--out DIR]   -> prints a JSON record (sizes, per-frame offsets, SHA-256)"""
+usage: cut_party_sheets.py <sheet.png> <actor> <state> [--out DIR] [--aspect W/H as float, default 1.5]   -> prints a JSON record (sizes, per-frame offsets, SHA-256)"""
 import sys, os, json, hashlib
 import numpy as np
 from PIL import Image
@@ -11,7 +11,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 def seam(sig, lo, hi, axis, rng):
     a, b = rng; prof = sig[a:b, :].sum(axis=0) if axis == 0 else sig[:, a:b].sum(axis=1)
     k = int(np.argmin(prof[lo:hi])); return lo + k, int(prof[lo + k])
-def cut(path, actor, state, out):
+def cut(path, actor, state, out, aspect=1.5):
     im = Image.open(path).convert('RGBA'); a = np.array(im); al = a[..., 3]; H, W = al.shape; cols, rows = 3, 2
     cw, ch = W / cols, H / rows; sig = al >= 30; win = int(min(cw, ch) * .12)
     hy, hcost = seam(sig, int(ch) - win, int(ch) + win, 1, (0, W)); cost = [hcost]; boxes = []
@@ -30,8 +30,8 @@ def cut(path, actor, state, out):
         parts.append((np.where(m[..., None], a, 0).astype(np.uint8), bb, foot, cx))
     L = max(cx - bb[0] for _, bb, _, cx in parts); R = max(bb[2] - cx for _, bb, _, cx in parts); T = max(f - bb[1] for _, bb, f, _ in parts); B = max(bb[3] - f for _, bb, f, _ in parts)
     CW, CH = L + R, T + B
-    if CW / CH < 1.5: CW2, CH2 = int(round(CH * 1.5)), CH
-    else: CW2, CH2 = CW, int(round(CW / 1.5))
+    if CW / CH < aspect: CW2, CH2 = int(round(CH * aspect)), CH
+    else: CW2, CH2 = CW, int(round(CW / aspect))
     padx, pady = (CW2 - CW) // 2, CH2 - CH
     rec = {'sheet': os.path.basename(path), 'sheet_sha256': hashlib.sha256(open(path, 'rb').read()).hexdigest(), 'sheet_size': [W, H], 'seam_alpha_px_cut': cost, 'canvas': [CW2, CH2], 'frames': []}
     os.makedirs(out, exist_ok=True)
@@ -45,4 +45,5 @@ def cut(path, actor, state, out):
     return rec
 if __name__ == '__main__':
     p, actor, state = sys.argv[1:4]; out = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else os.path.join(ROOT, 'img/battle/characters', actor, 'motion')
-    print(json.dumps(cut(p, actor, state, out), indent=1))
+    aspect = float(sys.argv[sys.argv.index('--aspect') + 1]) if '--aspect' in sys.argv else 1.5   # match the state's still canvas (raider still 1312x1199 = 1.0942) so object-fit:contain behaves the same
+    print(json.dumps(cut(p, actor, state, out, aspect), indent=1))

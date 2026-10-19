@@ -27,3 +27,7 @@ body.battlePresentationBusy #normalBattleCmd,body.battlePresentationBusy #rbCmd,
 #rbLou>img.louNoFloat~.battle-idle-canvas{animation:none}
 @keyframes louFloat{0%,100%{translate:0 3px}50%{translate:0 -9px}}
 @media(prefers-reduced-motion:reduce){#rbLou>img,#rbLou>.battle-idle-canvas{animation:none}}
+
+/* Phase 5: BattleMotion per-state scale (delivered frames are tighter-cropped than the legacy stills). Uses the independent `scale` property so it composes with the
+   layout transforms in style.css (which are !important) and with BattleFacing's mirror (`--battle-facing`). */
+img[data-motion-scale]{scale:calc(var(--battle-facing,1) * var(--motion-scale,1)) var(--motion-scale,1)}

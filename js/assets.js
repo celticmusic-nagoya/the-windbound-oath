@@ -63,6 +63,7 @@ const battleAssetFiles = {
   goblin_raider: {
     idle: 'goblin_raider_battle_idle.png', attack: 'goblin_attack.png',
     call: 'goblin_raider_call.png', enrage: 'goblin_raider_enrage.png',
+    damage: 'goblin_raider_battle_idle.png',   // no damage still exists: the 6-frame damage motion (manifest) plays over this idle fallback
     ko: 'goblin_raider_ko.png'
   }
 };

@@ -6,8 +6,8 @@
 ## 集計（2026-10-19）
 
 - total: **951**
-- approved_implemented: **61**
-- approved_not_implemented: **6**
+- approved_implemented: **66**
+- approved_not_implemented: **1**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
@@ -33,13 +33,13 @@
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_hit_reaction_6f_png | goblin_raider | damage | 6 | 2172x724 | APPROVED | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
-| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_idle_reference_6f_png | goblin_raider | idle | 6 | 1536x1024 | APPROVED | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
+| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_hit_reaction_6f_png | goblin_raider | damage | 6 | 2172x724 | APPROVED | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
+| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_idle_reference_6f_png | goblin_raider | idle | 6 | 1536x1024 | APPROVED | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
 | branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_ko_dissolve_candidate_6f_png | goblin_raider | ko_dissolve | 6 | 1536x1024 | PENDING | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); candi |
-| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_normal_attack_6f_png | goblin_raider | attack | 6 | 1774x887 | APPROVED | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
+| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_normal_attack_6f_png | goblin_raider | attack | 6 | 1774x887 | APPROVED | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
 | branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_powered_attack_candidate_6f_png | goblin_raider | attack | 6 | 1774x887 | PENDING | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); candi |
-| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_rage_6f_png | goblin_raider | enrage | 6 | 1774x887 | APPROVED | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
-| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_roar_revised_6f_png | goblin_raider | call | 6 | 1536x1024 | APPROVED | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
+| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_rage_6f_png | goblin_raider | enrage | 6 | 1774x887 | APPROVED | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
+| branch:assets_goblin_raider_ko_from_dissolve_f1:docs_art_delivered_goblin_raider_motion_6f_20261016_roar_revised_6f_png | goblin_raider | call | 6 | 1536x1024 | APPROVED | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch assets/goblin-raider-ko-from-dissolve-f1 (not merged to main); adopt |
 | file:img_battle_characters_aidan_aidan_attack | aidan | attack | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_characters_aidan_aidan_battle_entry | aidan | entry | 1 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_characters_aidan_aidan_battle_idle | aidan | idle | 1 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | index.html, js/assets.js / existing asset on main; adoption record not re-verified |
@@ -98,8 +98,8 @@
 | file:img_battle_enemies_goblin_goblin_ko | goblin | ko | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_raider_goblin_attack | goblin_raider | attack | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_raider_goblin_raider_battle_idle | goblin_raider | idle | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | index.html, js/assets.js / existing asset on main; adoption record not re-verified |
-| file:img_battle_enemies_goblin_raider_goblin_raider_call | goblin_raider | call | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
-| file:img_battle_enemies_goblin_raider_goblin_raider_enrage | goblin_raider | enrage | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
+| file:img_battle_enemies_goblin_raider_goblin_raider_call | goblin_raider | call | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
+| file:img_battle_enemies_goblin_raider_goblin_raider_enrage | goblin_raider | enrage | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_raider_goblin_raider_ko | goblin_raider | ko | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_leafy_boar_leafy_boar_attack | leafy_boar | attack | 1 | 480x400 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_leafy_boar_leafy_boar_battle_idle | leafy_boar | idle | 1 | 480x400 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |

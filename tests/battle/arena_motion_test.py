@@ -53,10 +53,10 @@ with server(8837) as base, sync_playwright() as p:
                ('lou', 'idle', 'idle', 'impl'), ('lou', 'damage', 'damage', 'impl'), ('lou', 'support', 'blessing', 'impl'), ('lou', 'support', 'heal', 'still'), ('lou', 'ko', 'ko', 'still'), ('lou', 'attack', None, 'none'),
                ('goblin', 'idle', 'idle', 'still'), ('goblin', 'ko', 'ko', 'impl'), ('goblin', 'ko_dissolve', 'ko', 'impl'), ('goblin', 'damage', 'damage', 'still'),
                ('tainted_goblin', 'ko_dissolve', 'ko', 'impl'), ('tainted_goblin', 'attack', 'attack', 'still'),
-               ('goblin_raider', 'idle', 'idle', 'still'), ('goblin_raider', 'attack', 'attack', 'still'), ('goblin_raider', 'ko', 'ko', 'still'), ('goblin_raider', 'ko_dissolve', None, 'pending')]
+               ('goblin_raider', 'idle', 'idle', 'impl'), ('goblin_raider', 'attack', 'attack', 'impl'), ('goblin_raider', 'skill', 'call', 'impl'), ('goblin_raider', 'skill', 'enrage', 'impl'), ('goblin_raider', 'damage', 'damage', 'impl'), ('goblin_raider', 'ko', 'ko', 'still'), ('goblin_raider', 'ko_dissolve', None, 'pending')]
         bad = [(c, sl, stt, e, st(c, sl, stt)) for c, sl, stt, e in exp if e not in st(c, sl, stt)]
         check(not bad, 'status table (%d expectations)' % len(exp), bad[:4])
-        check('delivered' in st('lou', 'ko') and 'delivered' in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'attack') and 'delivered' in st('goblin_raider', 'damage'), 'delivered / pending-adoption material listed but never shown as implemented')
+        check('delivered' in st('lou', 'ko') and 'delivered' not in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'attack') and 'pending' in st('goblin_raider', 'ko_dissolve'), 'delivered / pending-adoption material listed but never shown as implemented')
         check(all(pg.evaluate("MotionTest.select('%s','%s',%s)" % (c, sl, json.dumps(stt))) is not None for c, sl, stt, e in exp if e in ('impl', 'still')), 'every implemented / still row can be selected (all 6 characters)')
         # ---- controls on aidan attack
         pg.evaluate("MotionTest.select('aidan','attack','attack');MotionTest.control.returnIdle(false)"); pg.wait_for_timeout(100)
