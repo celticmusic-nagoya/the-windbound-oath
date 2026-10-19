@@ -107,7 +107,7 @@
     const keys=got.filter(g=>g.kind==='key');
     MossForest.toast(Inventory.describe(got)+(herb?' を摘んだ。':' を手に入れた。')+(keys.length?'（大事なもの）':''));
   }
-  function onSymbol(sy){startAttackBattle(sy.field,sy.hp||160);}
+  function onSymbol(sy){window.BattleBackground?.noteArea(MossForest.mapId,sy.field);startAttackBattle(sy.field,sy.hp||160);}
   function onTransition(t){
     if(t&&t.id==='tr_rd_to_capital'){   // 街道東端 -> 王都: リアム(元・王国調査団)が仲間にいないと門前払い。初回は身元保証の会話の後に入城
       const liam=typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined);
@@ -126,14 +126,14 @@
     if(e.enemy!=='moss_slime'||typeof startAttackBattle!=='function'||attackBattleBusy)return;
     const n=Math.max(1,Math.min(3,e.count|0));
     MossForest.toast('草むらが揺れた……！');
-    setTimeout(()=>{if(MossForest.active&&!MossForest.busy)startAttackBattle('mossSlime'+n,56*n);},450);
+    setTimeout(()=>{if(MossForest.active&&!MossForest.busy){window.BattleBackground?.noteArea(MossForest.mapId,'mossSlime'+n);startAttackBattle('mossSlime'+n,56*n);}},450);
   }
   // Field monsters (symbol encounters, FieldMonsters): the touched monster's `battle` picks the fight. Returns true when a battle started.
   function onMonster(m){
     const B={moss_slime:['mossSlime',56],forest_bat:['forestBat',48],leafy_boar:['leafyBoar',70],goblin:['fieldGob',100]}[m.battle];   // battle kind -> startAttackBattle id prefix, HP per enemy
     if(!B||typeof startAttackBattle!=='function'||attackBattleBusy)return false;
     const n=Math.max(1,Math.min(3,m.group|0||1));
-    startAttackBattle(B[0]+n,B[1]*n);return true;
+    window.BattleBackground?.noteArea(m.map,B[0]+n);startAttackBattle(B[0]+n,B[1]*n);return true;
   }
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns

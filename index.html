@@ -1295,7 +1295,7 @@ function updateRaider(){
 function startRaiderBattle(){
  hideBattleBanner();hideRaiderBattleLog();
  rbHP=120;rbTP=0;rbFHP=105;rbFMP=36;rbBoss=1250;rbRune=25;rbGuardA=false;rbGuardF=false;rbBusy=false;rbQueued=false;rbAdds=0;rbRound=1;rbActor='aidan';rbActs=[];
- $('#raiderBattle').style.display='block';document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
+ $('#raiderBattle').style.display='block';window.BattleBackground?.applyRaider();document.body.classList.remove('normalBattleMode');document.body.classList.add('battleMode','raiderBattleMode');setTimeout(syncRaiderCommandClasses,0);
  BattleActorState.begin('raider');BattleActorState.begin('raider','fiona');BattleActorState.begin('raider','lou');BattleActorState.begin('raider','goblin_raider');
  PrologueCombat.beginRaider();
  window.BattleOpening?.play('raider');
@@ -1357,7 +1357,7 @@ function finishRaider(){
    if(completion!==PrologueCombat.generation)return;
    showBattleResult(120,45,()=>{
      startRaiderAftermath();
-     $('#raiderBattle').style.display='none';
+     $('#raiderBattle').style.display='none';window.BattleBackground?.clearRaider();
      document.body.classList.remove('battleMode','raiderBattleMode','raiderFinishing');
      if(sprite) sprite.classList.remove('raiderKO');
    });
