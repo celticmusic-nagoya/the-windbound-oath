@@ -545,6 +545,7 @@
   "lou: charge→heal/rune/evade/victory/low_hp = still only or undelivered; ko = delivered and implemented (6f); in-game trigger = Lou-only 気絶 (confirmed spec), not implemented yet",
   "aidan: victory/guard/evade/item = still only",
   "goblin / tainted_goblin: damage/low_hp/guard motions = still only or undelivered",
-  "goblin_raider: idle/attack/damage/enrage/roar sheets delivered (branch only, uncut, approved) = Phase 5; powered_attack / ko_dissolve candidates pending adoption"
+  "goblin_raider: attack/damage/enrage/call/idle implemented (Phase 5, 6f each); powered_attack / ko_dissolve candidates pending adoption (not implemented)",
+  "faint: ルー専用気絶 (lou_faint, adopted 2026-10-16) = KO-substitute state; display uses lou ko 6f; in-game logic NOT implemented. 一般気絶 (general_stun) = FUTURE CANDIDATE only (not adopted; no assets; docs/battle/faint-*.md SUPERSEDED)"
  ]
 }
