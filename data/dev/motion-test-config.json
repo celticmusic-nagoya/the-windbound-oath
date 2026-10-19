@@ -1,0 +1,41 @@
+{
+  "_note": "ARENA-MOTION-01 config. To add a character, append an entry (actor = key in BATTLE_ASSETS / motion-manifest). Motions registered in img/battle/motion-manifest.json appear automatically (statuses are computed from BattleMotion / BATTLE_ASSETS / BATTLE_IDLE_ASSETS, not declared here). 'extra' only records delivered-but-unusable / pending-adoption material so it is never shown as implemented.",
+  "slots": [
+    {"id": "start", "label": "戦闘開始"},
+    {"id": "idle", "label": "待機"},
+    {"id": "attack", "label": "通常攻撃"},
+    {"id": "skill", "label": "スキル・魔法"},
+    {"id": "support", "label": "回復・支援"},
+    {"id": "damage", "label": "被弾"},
+    {"id": "low_hp", "label": "瀕死"},
+    {"id": "ko", "label": "KO"},
+    {"id": "ko_dissolve", "label": "KO消滅"},
+    {"id": "victory", "label": "勝利"}
+  ],
+  "characters": [
+    {"id": "aidan", "label": "エイダン", "actor": "aidan", "side": "ally",
+     "states": {"start": ["draw", "entry"], "idle": ["idle"], "attack": ["attack"], "skill": ["skill", "wind", "charge"], "support": ["item"], "damage": ["damage", "guard", "evade"], "low_hp": ["low_hp"], "ko": ["ko"], "victory": ["victory"]}},
+    {"id": "fiona", "label": "フィオナ", "actor": "fiona", "side": "ally",
+     "states": {"start": ["ready", "entry"], "idle": ["idle"], "attack": ["attack"], "skill": ["skill", "winddance", "prayer"], "support": ["charge", "heal"], "damage": ["damage", "guard", "evade"], "low_hp": ["low_hp"], "ko": ["ko"], "victory": ["victory"]}},
+    {"id": "lou", "label": "ルー", "actor": "lou", "side": "ally",
+     "states": {"start": ["entry"], "idle": ["idle"], "skill": ["rune"], "support": ["charge", "heal", "blessing"], "damage": ["damage", "evade"], "low_hp": ["low_hp"], "ko": ["ko"], "victory": ["victory"]},
+     "notes": {"attack": "ルーには通常攻撃がない（仕様）"},
+     "extra": {"ko": [{"label": "lou_new_ko（納品済み）", "status": "delivered", "note": "「気絶」仕様確定待ちのため保留。docs/art/delivered 納品物（ZIP 2026-10-16）、未登録。"}]}},
+    {"id": "goblin", "label": "通常ゴブリン", "actor": "goblin", "side": "enemy",
+     "states": {"idle": ["idle"], "attack": ["attack"], "skill": ["call"], "damage": ["damage"], "ko": ["ko"], "ko_dissolve": ["ko"]}},
+    {"id": "tainted_goblin", "label": "異常化ゴブリン", "actor": "tainted_goblin", "side": "enemy",
+     "states": {"idle": ["idle"], "attack": ["attack"], "skill": ["corruption"], "damage": ["damage"], "ko": ["ko"], "ko_dissolve": ["ko"]}},
+    {"id": "goblin_raider", "label": "ゴブリン・レイダー", "actor": "goblin_raider", "side": "enemy",
+     "states": {"idle": ["idle"], "attack": ["attack"], "skill": ["call", "enrage"], "ko": ["ko"]},
+     "extra": {
+       "idle": [{"label": "idle_reference_6f", "status": "delivered", "note": "納品済み・未実装。ブランチ assets/goblin-raider-ko-from-dissolve-f1 の docs/art/delivered/goblin_raider_motion_6f_20261016/（main未収録・未切り出し）"}],
+       "attack": [
+         {"label": "normal_attack_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"},
+         {"label": "powered_attack_candidate_6f", "status": "pending", "note": "正式採用待ち（候補素材。採用されるまで実装しない）"}],
+       "skill": [
+         {"label": "rage_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"},
+         {"label": "roar_revised_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"}],
+       "damage": [{"label": "hit_reaction_6f", "status": "delivered", "note": "納品済み・未実装（同ブランチ。未切り出し）"}],
+       "ko_dissolve": [{"label": "ko_dissolve_candidate_6f", "status": "pending", "note": "正式採用待ち（候補素材。採用されるまで実装しない）"}]}}
+  ]
+}

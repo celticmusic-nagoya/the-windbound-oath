@@ -1,0 +1,48 @@
+/* ARENA-MOTION-01: DEV motion test (arena). Independent overlay; never touches battle DOM or game state. */
+#motionTest{position:fixed;inset:0;z-index:100000;display:none;flex-direction:column;background:#0d1a17;color:#eee3cc;font:13px/1.45 system-ui,sans-serif}
+#motionTest.open{display:flex}
+#motionTest button,#motionTest select{font:inherit;color:#eee3cc;background:#16302a;border:1px solid #c5a45b88;border-radius:6px;padding:6px 9px;min-height:36px;cursor:pointer}
+#motionTest button:disabled{opacity:.4;cursor:default}
+#motionTest button.on,#motionTest .mtChip.on,#motionTest .mtRow.on{background:#3b5a2f;border-color:#e8cf94}
+#motionTest .mtHead{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:6px 10px;border-bottom:1px solid #c5a45b55}
+#motionTest .mtHead h3{margin:0;font-size:14px;color:#e8cf94;flex:1}
+#motionTest .mtHead small{color:#bdb394}
+#motionTest .mtBody{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,430px)}
+#motionTest .mtStageWrap{position:relative;min-height:0;min-width:0;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#24402f,#101d19)}
+#motionTest .mtStage{position:absolute;inset:6px}
+#motionTest .mtImg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:scaleX(var(--battle-facing,1))}
+#motionTest .mtImg.mtGone{visibility:hidden}
+#motionTest .mtFoot{position:absolute;left:0;right:0;height:0;border-top:1px dashed #ff6b6b;pointer-events:none;display:none}
+#motionTest .mtFoot.on{display:block}
+#motionTest .mtFoot span{position:absolute;right:4px;top:-16px;font-size:10px;color:#ff9a9a}
+#motionTest .mtBadgeGone{position:absolute;left:8px;top:8px;background:#000a;padding:3px 8px;border-radius:5px;font-size:12px;display:none}
+#motionTest .mtBadgeGone.on{display:block}
+#motionTest .mtPanel{overflow:auto;padding:8px 10px;border-left:1px solid #c5a45b55;min-width:0}
+#motionTest h4{margin:10px 0 4px;font-size:12px;color:#e8cf94}
+#motionTest .mtChips{display:flex;flex-wrap:wrap;gap:6px}
+#motionTest .mtSlot{margin:6px 0 2px;color:#bdb394;font-size:11px}
+#motionTest .mtRow{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;margin:2px 0}
+#motionTest .mtBadge{flex:0 0 auto;font-size:10.5px;padding:2px 6px;border-radius:9px;border:1px solid #fff4}
+#motionTest .mtBadge.impl{background:#2e6b3a}
+#motionTest .mtBadge.still{background:#5b5b2a}
+#motionTest .mtBadge.delivered{background:#2f4f7a}
+#motionTest .mtBadge.pending{background:#7a4f2f}
+#motionTest .mtBadge.none{background:#4a2a2a}
+#motionTest .mtCtlBox{position:sticky;top:-8px;z-index:2;background:#0d1a17;padding:6px 0 4px;margin-top:-8px;border-bottom:1px solid #c5a45b44}
+#motionTest .mtCtl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}
+#motionTest .mtInfo{font-size:12px;color:#d9cfae;margin-top:6px;word-break:break-all}
+#motionTest .mtWarn{color:#ff9a9a}
+#motionTest .mtFrames{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+#motionTest .mtFrames span{font-size:11px;padding:2px 5px;border:1px solid #c5a45b55;border-radius:4px}
+#motionTest .mtFrames span.cur{background:#3b5a2f;border-color:#e8cf94}
+@media (max-width:760px) and (orientation:portrait){
+ #motionTest .mtBody{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(150px,36%) minmax(0,1fr)}
+ #motionTest .mtPanel{border-left:0;border-top:1px solid #c5a45b55}
+}
+@media (orientation:landscape) and (max-height:560px){
+ #motionTest .mtBody{grid-template-columns:minmax(0,46%) minmax(0,1fr)}
+ #motionTest .mtHead{padding:3px 8px}
+ #motionTest .mtPanel{padding:4px 8px}
+ #motionTest button,#motionTest select{min-height:30px;padding:3px 7px}
+ #motionTest .mtCtlBox{top:-4px;margin-top:-4px}
+}

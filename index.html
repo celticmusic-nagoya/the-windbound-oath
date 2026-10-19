@@ -175,7 +175,7 @@
 <button id="devBtn">DEV ▶</button>
 <div id="devPanel"><button id="devClose">×</button><h3>DEVELOPMENT / EVENT JUMP</h3>
 <p>動作確認用。選択したイベントの直前状態へ移動します。製品版では削除予定。</p><div id="devArena"><h4>MONSTER ARENA（開発専用）</h4>
-<div class="devArenaRow"><button data-arena="go">アリーナへ移動</button><button data-arena="clear">全消去</button><button data-arena="freeze">AI停止: OFF</button></div>
+<div class="devArenaRow"><button data-arena="motion" id="devMotionTest">モーションテスト</button><button data-arena="go">アリーナへ移動</button><button data-arena="clear">全消去</button><button data-arena="freeze">AI停止: OFF</button></div>
 <div class="devArenaRow"><select id="devMonType"><option value="moss_slime">モススライム</option><option value="forest_bat">フォレストバット</option><option value="leafy_boar">リーフィーボア</option><option value="goblin">通常ゴブリン</option></select>
 <label>数 <select id="devMonCount"><option>1</option><option>3</option><option selected>6</option><option>10</option></select></label>
 <label>戦闘数 <select id="devMonGroup"><option>1</option><option>2</option><option>3</option></select></label>
@@ -1603,7 +1603,7 @@ $('#devGrid').innerHTML=DEV_EVENTS.map(([k,n])=>`<button data-jump="${k}">${n}</
 $('#devBtn').onclick=()=>{$('#devPanel').style.display='block'};
 $('#devClose').onclick=()=>{$('#devPanel').style.display='none'};
 $('#devArena').onclick=e=>{
- const b=e.target.closest('[data-arena]');if(!b||!window.MossForest)return;const info=$('#devArenaInfo'),k=b.dataset.arena;
+ const b=e.target.closest('[data-arena]');if(b&&b.dataset.arena==='motion'){window.MotionTest&&MotionTest.open();return;}if(!b||!window.MossForest)return;const info=$('#devArenaInfo'),k=b.dataset.arena;
  const count=+$('#devMonCount').value,group=+$('#devMonGroup').value,type=$('#devMonType').value;
  if(k==='go'){devJump('map:dev_monster_arena');return;}
  if(k==='clear'){MossForest.devClearMonsters();info.textContent='全消去しました。';}
@@ -1960,6 +1960,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/prologue-progress.js"></script>
 <script src="js/prologue-dev.js?v=20261012c"></script>
 <script src="js/dev/perf-meter.js?v=20261012p1"></script>
+<script src="js/dev/motion-test.js?v=20261019am1"></script>
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
@@ -2026,6 +2027,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/lind-character-rendering.js"></script>
 <script src="js/field/lind-crisp-renderer.js"></script>
 <link rel="stylesheet" href="css/battle-polish.css?v=20261012d">
+<link rel="stylesheet" href="css/motion-test.css?v=20261019am1">
 <link rel="stylesheet" href="css/equipment.css?v=20261013eq">
 <script src="js/battle-party-layout.js?v=20261011-mobile"></script>
 <link href="css/battle-presentation.css?v=20261013lou" rel="stylesheet"/>
