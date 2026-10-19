@@ -3,6 +3,7 @@
 形式: `日付 | 素材 | 事象 | SHA / PR / Issue`。新しい行は上に追記。
 
 - 2026-10-19 | Phase 5 ゴブリン・レイダー | 採用5シート（attack/damage/enrage/call/idle 各6コマ）を切り出し・実装（表示倍率補正・idleループ）。候補2種（powered_attack / ko_dissolve）は未実装のまま PENDING | main 6a99f2bd70bc32ccd111f05effed2ebdb1ac0bd5 / PR #28 / handoff phase5-raider-20261019.md
+- 2026-10-19 | Lou KO | lou_new_ko（10/16納品・採用）を6コマで実装（lou/ko, hold last）。ルーはHPを持たず本編ではKOしない。「気絶」は別状態として仕様案 docs/battle/faint-state-proposal.md（承認待ち・未実装） | main 記録は PR 後 / handoff lou-ko-20261019.md
 - 2026-10-19 | 台帳初期構築 | ASSET-REGISTRY-01 Step 1〜3（台帳・バックログ・監査ツール） | 本PR
 - 2026-10-19 | 少年剣士10歳版（公式6コマ 288×256） | 台帳登録。Codex再QA CONDITIONAL (64a104d9…)、main統合済み | 実装 8084c9d4… / main 7b124ab9… / PR #22 / #18
 - 2026-10-19 | モスの森追加素材20種 | 派生PNG採用・manifest登録・A1/A2/A3配置・main統合 | main 8c61b328842f7cedaf1af5334dee6cecde1eb680 / PR #26

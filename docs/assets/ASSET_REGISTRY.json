@@ -38,15 +38,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 956,
-  "approved_implemented": 66,
-  "approved_not_implemented": 1,
+  "total": 957,
+  "approved_implemented": 67,
+  "approved_not_implemented": 0,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
-  "approval_unknown": 884,
-  "on_main": 777,
-  "implemented_on_main": 607,
+  "approval_unknown": 885,
+  "on_main": 778,
+  "implemented_on_main": 608,
   "unreferenced_on_main": 170
  },
  "motion_gaps": [
@@ -24090,14 +24090,14 @@
    "height": 887,
    "frame_count": 6,
    "approval_status": "APPROVED",
-   "implementation_status": "NOT_IMPLEMENTED",
+   "implementation_status": "IMPLEMENTED",
    "integration_status": "SOURCE_ONLY",
    "runtime_reference": [],
    "arena_available": "NO",
-   "qa_status": "NOT_RUN",
+   "qa_status": "PASS",
    "android_status": "UNVERIFIED",
-   "issue": "Phase 3",
-   "notes": "original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest"
+   "issue": "Lou KO",
+   "notes": "original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest; implemented as lou ko 6f (img/battle/characters/lou/motion/lou_ko_NN.png, manifest lou/ko). Lou has no HP in battle logic, so it plays only via BattleActorState/arena; 気絶 is a separate state (proposal)"
   },
   {
    "asset_id": "seq:img_battle_characters_aidan_idle_aidan_idle",
@@ -24868,6 +24868,49 @@
     "e0f980a43c06a5a6865e30a3a230507988a7d5de3d969574563d1fc09325bf18",
     "7b67657733a262daf2436f34ed856c092e361ee31e7491cbb7e1af90116ff125",
     "43c576b276713f7f162b443e5822ea5ae825afcd1bbef0a22c0d827da82d8421"
+   ]
+  },
+  {
+   "asset_id": "seq:img_battle_characters_lou_motion_lou_ko",
+   "name": "lou_ko (frames)",
+   "category": "battle",
+   "character": "lou",
+   "motion": "ko",
+   "delivery_date": "2026-10-19",
+   "source_path": "img/battle/characters/lou/motion/lou_ko_01.png",
+   "source_branch": "main",
+   "source_commit": "54e9df1a71553cd8f163b02d5c3487ebbcee8491",
+   "source_sha256": "see frames_sha256",
+   "width": 790,
+   "height": 527,
+   "frame_count": 6,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/battle/motion-manifest.json",
+    "js/assets.js"
+   ],
+   "arena_available": "YES",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified",
+   "frames": [
+    "img/battle/characters/lou/motion/lou_ko_01.png",
+    "img/battle/characters/lou/motion/lou_ko_02.png",
+    "img/battle/characters/lou/motion/lou_ko_03.png",
+    "img/battle/characters/lou/motion/lou_ko_04.png",
+    "img/battle/characters/lou/motion/lou_ko_05.png",
+    "img/battle/characters/lou/motion/lou_ko_06.png"
+   ],
+   "frames_sha256": [
+    "545f2a72df1e0a19f008deb82617bbed06474c41b4d4125e8fa6336da5de7160",
+    "a36b1a7f7a2fd5f8f4b60d45e0b3543ed618394c15817036f14adf3d5ae0998c",
+    "361b03641178e12dacc8daac5a63ddfefa25e5dd6963447f944494ebf8cf7dab",
+    "bef7f8ad71f23b849379db4a7c9f5fe4ecef3d194a039b751a5ca5057bd550e8",
+    "453c6769812ef5770fe4283a3409622d81e84ad0b6165fa7e0cb8e2f87024346",
+    "714a410447d2ae66c416f5165ea628a187a85b1d1605e15b9907c399c0cf2a3a"
    ]
   },
   {

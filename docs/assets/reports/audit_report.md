@@ -1,14 +1,13 @@
 # Asset registry audit
 
-registry snapshot: 2026-10-19 ／ assets 956 ／ errors **0**
+registry snapshot: 2026-10-19 ／ assets 957 ／ errors **0**
 
 ## Errors
 
 なし
 
-## 採用済み・未実装（P0）1
+## 採用済み・未実装（P0）0
 
-- `orig:lou_new_ko` lou ko
 
 ## 納品済み・未統合（ブランチ/原本のみ）179
 

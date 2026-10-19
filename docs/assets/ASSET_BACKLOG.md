@@ -3,9 +3,8 @@
 > 自動抽出（`build_registry.py`）。優先度: P0 採用済み・納品済み・未実装 / P1 採用済み・実装済み・未マージ / P2 納品済み・採用判断待ち / P3 仕様不一致・修正待ち / P4 原本未発見・未納品。
 > 採用状態が UNKNOWN のものは自動では P0〜P4 に入れない（採用判断が必要 → 下の「採用状態 UNKNOWN（ブランチのみ）」）。
 
-## P0（1）
+## P0（0）
 
-- `orig:lou_new_ko` lou / ko / assets-originals/party_motion_20261016/lou_new_ko.png — 採用 APPROVED・実装 NOT_IMPLEMENTED・統合 SOURCE_ONLY｜original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-handoff); ZIP aidan_fiona_lou_new_asset.zip SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0 (10/16 items); adopted but held: tied to the unconfirmed faint (気絶) spec; deliberately NOT registered in motion-manifest
 
 ## P1（5）
 

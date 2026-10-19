@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **956**
-- approved_implemented: **66**
-- approved_not_implemented: **1**
+- total: **957**
+- approved_implemented: **67**
+- approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
-- approval_unknown: **884**
-- on_main: **777**
-- implemented_on_main: **607**
+- approval_unknown: **885**
+- on_main: **778**
+- implemented_on_main: **608**
 - unreferenced_on_main: **170**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -29,7 +29,7 @@
 | branch:feat_bg02_bg03_prep_claude:img_battle_backgrounds_bg_bg_03_main_png | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/bg02-bg03-prep-claude (not merged to main) |
 | file:img_battle_backgrounds_bg_bg_01_main | UNKNOWN | UNKNOWN | 1 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/battle-background.js / existing asset on main; adoption record not re-verified |
 
-## battle（129）
+## battle（130）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -128,7 +128,7 @@
 | orig:fiona_winddance_new | fiona | winddance | 6 | 1536x1024 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | YES | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
 | orig:lou_damage | lou | damage | 6 | 1536x1024 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | YES | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
 | orig:lou_magic | lou | blessing | 6 | 1536x1024 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | YES | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
-| orig:lou_new_ko | lou | ko | 6 | 1774x887 | APPROVED | NOT_IMPLEMENTED | SOURCE_ONLY | NOT_RUN | NO | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
+| orig:lou_new_ko | lou | ko | 6 | 1774x887 | APPROVED | IMPLEMENTED | SOURCE_ONLY | PASS | NO | - / original sheet in handoff repo (https://github.com/celticmusic-nagoya/the-windbound-oath-h |
 | seq:img_battle_characters_aidan_idle_aidan_idle | aidan | idle | 4 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js, js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_characters_aidan_idle_v2_aidan_idle | aidan | idle | 6 | 760x502 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js, js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified; adopted earlier (motion-manifest  |
 | seq:img_battle_characters_aidan_motion_aidan_attack | aidan | attack | 6 | 1312x1199 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified; adopted earlier (motion-manifest  |
@@ -147,6 +147,7 @@
 | seq:img_battle_characters_lou_idle_lou_idle | lou | idle | 6 | 442x724 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_characters_lou_motion_lou_blessing | lou | blessing | 6 | 816x544 | APPROVED | IMPLEMENTED | MAIN | PASS | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified; cut 1:1 from the original sheets  |
 | seq:img_battle_characters_lou_motion_lou_damage | lou | damage | 6 | 786x524 | APPROVED | IMPLEMENTED | MAIN | PASS | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified; cut 1:1 from the original sheets  |
+| seq:img_battle_characters_lou_motion_lou_ko | lou | ko | 6 | 790x527 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_enemies_forest_bat_idle_forest_bat_idle | forest_bat | idle | 4 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js, js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
 | seq:img_battle_enemies_goblin_goblin_ko_dissolve | goblin | dissolve | 6 | 770x392 | APPROVED | IMPLEMENTED | MAIN | PASS | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified; KO dissolve (hold hide); Claude-s |
 | seq:img_battle_enemies_goblin_raider_motion_goblin_raider_attack | goblin_raider | attack | 6 | 661x604 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json / existing asset on main; adoption record not re-verified |
