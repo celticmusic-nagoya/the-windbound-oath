@@ -4,7 +4,10 @@ from PIL import Image
 import numpy as np
 from playwright.sync_api import sync_playwright
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'); NPC = os.path.join(ROOT, 'img/field/moss/rilde/npc')
-MAIN = "746cd1553fadfb06a872805a40585ee7c5b5f30d"
+MAIN = "746cd1553fadfb06a872805a40585ee7c5b5f30d"   # baseline: main immediately BEFORE the official swordsman (PR #22 parent). Fixed SHA, never the moving local/remote main.
+# The commit that carries the swordsman change (PR #22 feature tip). RILD-009/006 are "this change touches only the swordsman's files": they compare MAIN..INTEGRATED,
+# not MAIN..HEAD (HEAD also contains every later, unrelated change). Anything that changes the swordsman AFTER adoption is caught by the HEAD guard below.
+INTEGRATED = "8084c9d456305619585e827102b0504c5a4c63a3"
 fails = []; errs = []
 def check(c, m):
     print(('ok   ' if c else 'FAIL ') + m, flush=True)
@@ -29,10 +32,13 @@ check(open(os.path.join(NPC, 'boy_swordsman_idle.png'), 'rb').read() == open(os.
 # body height ~ the old placeholder (91 px of 128 -> 182 px of 256): head-to-boots of frame 1 within 175..200
 check(175 <= (ys.max() - ys.min()) <= 200, 'RILD-006 figure height keeps the old on-screen size (%d px of 256; old 182)' % (ys.max() - ys.min()))
 # ---- only the swordsman's files changed (RILD-009) ----
-d = subprocess.run(['git', '-C', ROOT, 'diff', '--name-only', MAIN, '--', 'img/field/moss/rilde/npc', 'data', 'img/field/moss/manifest.json', 'js', 'tools/moss/rilde_assets.json'], capture_output=True, text=True).stdout.split()
+d = subprocess.run(['git', '-C', ROOT, 'diff', '--name-only', MAIN, INTEGRATED, '--', 'img/field/moss/rilde/npc', 'data', 'img/field/moss/manifest.json', 'js', 'tools/moss/rilde_assets.json'], capture_output=True, text=True).stdout.split()
 names = sorted(x for x in d)
-check(all('boy_swordsman' in x for x in names) and len(names) >= 7, 'RILD-009 only boy_swordsman files differ from main under rilde/npc, data/, manifest, js/: %s' % names)
-check(subprocess.run(['git', '-C', ROOT, 'diff', '--quiet', MAIN, '--', 'data/maps', 'img/field/moss/manifest.json', 'tools/moss/rilde_assets.json']).returncode == 0, 'RILD-006 map JSON / manifest / NPC definition byte-identical to main (position, event zone, collision, size, fps untouched)')
+check(all('boy_swordsman' in x for x in names) and len(names) >= 7, 'RILD-009 only boy_swordsman files differ (MAIN..INTEGRATED) under rilde/npc, data/, manifest, js/: %s' % names)
+# HEAD guard (new): the swordsman's 7 official files + OFFICIAL marker are still byte-identical to the adopted commit (nobody replaced them after adoption)
+hd = subprocess.run(['git', '-C', ROOT, 'diff', '--name-only', INTEGRATED, '--', 'img/field/moss/rilde/npc/boy_swordsman_f01.png', 'img/field/moss/rilde/npc/boy_swordsman_f02.png', 'img/field/moss/rilde/npc/boy_swordsman_f03.png', 'img/field/moss/rilde/npc/boy_swordsman_f04.png', 'img/field/moss/rilde/npc/boy_swordsman_f05.png', 'img/field/moss/rilde/npc/boy_swordsman_f06.png', 'img/field/moss/rilde/npc/boy_swordsman_idle.png', 'img/field/moss/rilde/npc/boy_swordsman.OFFICIAL'], capture_output=True, text=True).stdout.split()
+check(not hd, 'RILD-009b swordsman official files at HEAD are byte-identical to the adopted commit %s: %s' % (INTEGRATED[:8], hd))
+check(subprocess.run(['git', '-C', ROOT, 'diff', '--quiet', MAIN, INTEGRATED, '--', 'data/maps', 'img/field/moss/manifest.json', 'tools/moss/rilde_assets.json']).returncode == 0, 'RILD-006 map JSON / manifest / NPC definition byte-identical to main (position, event zone, collision, size, fps untouched)')
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1280, 'height': 720})
     pg.on('pageerror', lambda e: errs.append('PAGEERR ' + str(e))); pg.on('console', lambda m: m.type == 'error' and errs.append(m.text))
