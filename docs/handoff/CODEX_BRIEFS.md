@@ -1,6 +1,6 @@
 # Codex 向け作業指示書（並行開発用）
 
-前提: まず `docs/handoff/HANDOFF.md` と `docs/story/WORLD_STORY_BIBLE_v1.1.txt` を読むこと。報告は日本語・簡潔に。
+前提: まず `docs/handoff/HANDOFF.md` と `AGENTS.md` §0 / `docs/lore/README.md`（公式設定資料集 v5.0 の所在と参照ルール）を読むこと。v5.0 全文は非公開の引継ぎリポジトリ管理で、読めない場合は推測で補わない。旧 `docs/story/WORLD_STORY_BIBLE_v1.1.txt` は旧版（履歴参照のみ・正典ではない）。報告は日本語・簡潔に。
 
 ## 0. 衝突を避ける分担（ファイル所有）
 | 領域 | 主担当 | 備考 |

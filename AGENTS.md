@@ -1,5 +1,15 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+## 0. Official lore master (canon reference)
+- The canon for world, story, characters and dialogue is 「THE WINDBOUND OATH 公式統合設定資料集 v5.0」(2026-10-19), SHA-256 `e6f7331b867a7307017c7abb30bae7b6317363a33e5f9d831b80d34f0e51bf49`. The full text is **not stored in this public repository**; it is kept in the private handoff repository (`celticmusic-nagoya/the-windbound-oath-handoff`, `reference/lore/`). Access must be granted by the user. See `docs/lore/README.md`.
+- If you cannot read it, **do not reconstruct or guess it**: report `LORE_INACCESSIBLE` (what you tried and the error), ask the user to grant read access (how: `docs/lore/README.md`), and leave lore-dependent details unchanged.
+- Priority: later explicit user adoption > formal addenda (`CANON_ADDENDUM.md`, private) > v5.0 latest addenda > the rest of v5.0 > archived older versions (history only) > proposals. Do not read the original alone: the addenda and status table are in the same private directory. Keep the labels 確定 / 脚本採用案 / 未決定 / 撤回 / 要コード照合 exactly; never promote candidates or undecided items to 確定 without the user.
+- 設定確定 is not 実装済み: verify implementation with current main code, Git history and tests. Do not promote numbers found in code to official settings, and do not change existing scenario, dialogue, character design or balance on the strength of the lore text alone.
+- Adopted changes are managed as addenda in the private repository, never by editing the original.
+- Do not make copies of the full lore text (one master, kept private). Refer to it by version and section instead. Early-game dialogue and NPC lines may only use what the characters know at that point. Spoilers in development docs are tolerated before release (2026-10-20 policy), but credentials, keys, tokens and personal data must never be committed.
+- Open item kept as-is: the timing of Fiona's 風の舞 acquisition is 要確認 (current code gate: story stage 13).
+- Superseded: `docs/story/WORLD_STORY_BIBLE_v1.1.txt` (history only; not canon).
+
 ## 1. Mission
 You are implementing an existing original 2D browser JRPG, not redesigning it from scratch.
 Preserve confirmed behavior unless the user explicitly requests a change. Prefer root-cause fixes and maintainable systems over layers of CSS/JS patches.
