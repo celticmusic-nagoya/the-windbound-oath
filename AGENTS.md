@@ -6,7 +6,7 @@
 - Priority: later explicit user adoption > v5.0 latest addenda > the rest of v5.0 > archived older versions (history only) > proposals. Keep the labels 確定 / 脚本採用案 / 未決定 / 撤回 / 要コード照合 exactly; never promote candidates or undecided items to 確定 without the user.
 - 設定確定 is not 実装済み: verify implementation with current main code, Git history and tests. Do not promote numbers found in code to official settings, and do not change existing scenario, dialogue, character design or balance on the strength of the lore text alone.
 - Adopted changes are managed as addenda in the private repository, never by editing the original.
-- Never copy late-game or secret lore into early-game dialogue, NPC lines, public docs, QA reports, issues, PRs or promotional text.
+- Do not make copies of the full lore text (one master, kept private). Refer to it by version and section instead. Early-game dialogue and NPC lines may only use what the characters know at that point. Spoilers in development docs are tolerated before release (2026-10-20 policy), but credentials, keys, tokens and personal data must never be committed.
 - Open item kept as-is: the timing of Fiona's 風の舞 acquisition is 要確認 (current code gate: story stage 13).
 - Superseded: `docs/story/WORLD_STORY_BIBLE_v1.1.txt` (history only; not canon).
 
