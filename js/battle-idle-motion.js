@@ -20,6 +20,8 @@
   // Fixed-rate sequential loop (Lou): assets.fps frames per second, 1->2->...->N->1.
   // assets.ms (optional) gives each frame its own duration in ms; otherwise assets.fps is used.
   profiles.set('loop',r=>{const base=1000/(r.assets.fps||6),ms=r.assets.ms;return r.assets.frames.map((_,i)=>({frame:i,hold:ms&&ms[i]>0?ms[i]:base}));});
+  // Layered idle (Fiona v3): one MASTER still + breathing transform + eye-region blink overlays. No frame steps; r.blink holds the cosmetic blink schedule.
+  profiles.set('layered',r=>{const b=r.assets.layered.blink;r.blink={start:-1e9,next:range(b.minGap,b.maxGap)/1000,state:0};return [{frame:0,hold:1e12}];});
   function currentContext(){return document.body.classList.contains('raiderBattleMode')?'raider':document.body.classList.contains('normalBattleMode')?'normal':null;}
   function eligible(r){return r.enabled&&r.state==='idle'&&r.context===currentContext();}
   function still(r){return reduced.matches&&r.assets.ignoreReduced!==true;}
@@ -31,6 +33,15 @@
   function preload(assets){
     if(cache.has(assets))return cache.get(assets);
     const entry={images:[],ready:false};cache.set(assets,entry);
+    if(assets.layered){
+      const L=assets.layered,load=async path=>{const image=new Image();image.src=path;await image.decode();return image;};
+      entry.promise=(async()=>{
+        const master=await load(L.master),eyes={};
+        for(const [id,e] of Object.entries(L.eyes))eyes[id]=await Promise.all(e.files.map(load));
+        entry.layers={master,eyes};entry.comp=document.createElement('canvas');entry.comp.width=L.size[0];entry.comp.height=L.size[1];entry.compState=-1;entry.images=[master];entry.ready=true;refresh();
+      })().catch(()=>{entry.failed=true;});
+      return entry;
+    }
     entry.promise=Promise.all(assets.frames.map(async frame=>{
       const image=new Image();image.src=frame.path;await image.decode();return image;
     })).then(images=>{entry.images=images;entry.ready=true;refresh();}).catch(()=>{entry.failed=true;});
@@ -53,8 +64,36 @@
     const style=getComputedStyle(r.image);r.canvas.style.filter=style.filter;r.canvas.style.imageRendering=style.imageRendering;
     r.fit=Math.min(width/r.assets.width,height/r.assets.height);r.lastDraw=-1;
   }
+  // MASTER + eye overlays at master resolution, redrawn only when the blink state changes. State 0 = untouched MASTER (overlay layers never drawn).
+  function compose(entry,assets,state){
+    if(entry.compState===state)return entry.comp;
+    const L=assets.layered,c=entry.comp.getContext('2d');c.clearRect(0,0,L.size[0],L.size[1]);c.drawImage(entry.layers.master,0,0);
+    if(state>0)for(const [id,e] of Object.entries(L.eyes))c.drawImage(entry.layers.eyes[id][state-1],e.box[0],e.box[1]);
+    entry.compState=state;return entry.comp;
+  }
+  function drawLayered(r,now){
+    const L=r.assets.layered,B=L.breath,k=r.blink,t=still(r)?0:(now-r.started)/1000;
+    if(t>0&&t>=k.next&&t-k.start>=blinkMs(L)/1000){k.start=t;k.next=t+range(L.blink.minGap,L.blink.maxGap)/1000;}
+    let state=0,ms=(t-k.start)*1000;
+    if(ms>=0)for(const [st,d] of L.blink.seq){if(ms<d){state=st;break;}ms-=d;}
+    k.state=state;
+    const ph=(t%B.cycle)/B.cycle,wave=(1-Math.cos(ph*2*Math.PI))/2;
+    k.phase=ph;k.wave=wave;
+    const ctx=r.ctx,s=r.fit,a=B.amp,W=L.size[0],H=L.size[1],ox=B.origin[0]*W,oy=B.origin[1]*H;
+    ctx.setTransform(r.densityX,0,0,r.densityY,0,0);ctx.clearRect(0,0,r.width,r.height);ctx.globalAlpha=1;
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+    // virtual 1034x678 frame (bottom-centre in the slot) -> anchor -> master px; the breathing transform is applied to the master + eye layers together
+    ctx.translate((r.width-r.assets.width*s)/2,r.height-r.assets.height*s);ctx.scale(s,s);ctx.translate(r.assets.anchor[0],r.assets.anchor[1]);
+    ctx.scale(L.scale,L.scale);ctx.translate(-L.foot[0],-L.foot[1]);
+    ctx.translate(ox,oy-wave*B.ty*a*H);ctx.scale(1+wave*B.sx*a,1+wave*B.sy*a);ctx.translate(-ox,-oy);
+    ctx.drawImage(compose(r.entry,r.assets,state),0,0);
+    ctx.setTransform(1,0,0,1,0,0);
+    r.lastDraw=r.frame;r.canvas.dataset.frame='0';window.BattleFacing?.paint(r.canvas,r.actor,'idle');
+  }
+  function blinkMs(L){return L.blink.seq.reduce((n,x)=>n+x[1],0);}
   function draw(r,now,force=false){
     if(!r.ctx||!r.entry?.ready||!r.width)return;
+    if(r.assets.layered)return drawLayered(r,now);
     const mix=still(r)?1:Math.min(1,(now-r.started)/220);
     if(!force&&!r.transition&&r.lastDraw===r.frame)return;
     const ctx=r.ctx;ctx.setTransform(r.densityX,0,0,r.densityY,0,0);ctx.clearRect(0,0,r.width,r.height);
@@ -111,7 +150,9 @@
     begin(selector,actor){for(const r of records.values())if(r.selector===selector){const mine=!actor||r.actor===actor;r.enabled=mine;if(!mine)r.state=null;hide(r);if(mine)reset(r);}refresh();},
     stop(selector){for(const r of records.values())if(r.selector===selector){r.enabled=false;hide(r);}refresh();},
     onState(selector,actor,state){for(const r of records.values()){if(r.selector!==selector)continue;if(r.actor!==actor){if(r.state!==null){r.state=null;hide(r);}continue;}const changed=r.state!==state;r.state=state;if(changed)hide(r);}refresh();},
-    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0}))};}
+    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0,layer:r.assets.layered&&r.blink?{eye:r.blink.state,phase:r.blink.phase,wave:r.blink.wave}:null}))};},
+    // Test/QA helper: the full-resolution composite of a layered actor in a given eye state (0 = MASTER). Read-only copy.
+    layeredFrame(actor,state){const r=[...records.values()].find(q=>q.actor===actor&&q.assets.layered);if(!r)return null;const e=preload(r.assets);if(!e.ready)return null;const c=document.createElement('canvas'),L=r.assets.layered;c.width=L.size[0];c.height=L.size[1];const ctx=c.getContext('2d');ctx.drawImage(compose(e,r.assets,state),0,0);return c;}
   });
   BattleIdleMotion.register({context:'normal',actor:'aidan',selector:'#bAidan2 img',assets:BATTLE_IDLE_ASSETS.aidan});
   BattleIdleMotion.register({context:'raider',actor:'aidan',selector:'#rbAidan img',assets:BATTLE_IDLE_ASSETS.aidan});

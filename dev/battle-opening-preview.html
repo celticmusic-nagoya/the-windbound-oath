@@ -35,7 +35,7 @@ table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #445;paddin
  </div></div>
  <div class="panel"><div class="pair">
   <div class="stage"><div class="box"><img src="../img/battle/characters/aidan/idle_v2/aidan_idle_01.png" alt="aidan idle"><div class="base"></div><div class="mid"></div></div><div class="cap">エイダン待機(1コマ目)</div></div>
-  <div class="stage"><div class="box"><img class="mir" src="../img/battle/characters/fiona/idle/fiona_idle_01.png" alt="fiona idle"><div class="base"></div><div class="mid"></div></div><div class="cap">フィオナ待機(1コマ目)</div></div>
+  <div class="stage"><div class="box"><img class="mir" src="../img/battle/characters/fiona/idle_v3/fiona_idle_master.png" alt="fiona idle"><div class="base"></div><div class="mid"></div></div><div class="cap">フィオナ待機(1コマ目)</div></div>
  </div></div>
  <div class="panel"><div class="pair">
   <div class="stage"><div class="box"><img src="../img/battle/characters/aidan/motion/aidan_attack_01.png" alt="aidan attack"><div class="base"></div></div><div class="cap">エイダン通常攻撃01</div></div>
@@ -57,7 +57,7 @@ table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #445;paddin
  const $=id=>document.getElementById(id),pad=i=>String(i).padStart(2,'0');
  function show(i){cur=(i+n)%n;$('imgA').src=A+pad(cur+1)+'.png';$('imgF').src=F+pad(cur+1)+'.png';$('capA').textContent='draw '+(cur+1)+'/6 · '+msA[Math.min(cur,5)]+'ms';$('capF').textContent='ready '+(cur+1)+'/6 · '+msF[Math.min(cur,5)]+'ms';
   for(const id of ['stripA','stripF'])[...$(id).children].forEach((b,k)=>b.classList.toggle('sel',k===cur));}
- function rest(){stop();$('imgA').src='../img/battle/characters/aidan/idle_v2/aidan_idle_01.png';$('imgF').src='../img/battle/characters/fiona/idle/fiona_idle_01.png';$('capA').textContent='待機';$('capF').textContent='待機(1コマ目)';}
+ function rest(){stop();$('imgA').src='../img/battle/characters/aidan/idle_v2/aidan_idle_01.png';$('imgF').src='../img/battle/characters/fiona/idle_v3/fiona_idle_master.png';$('capA').textContent='待機';$('capF').textContent='待機(1コマ目)';}
  function stop(){clearTimeout(tA);clearTimeout(tF);tA=tF=null;playing=false;$('play').textContent='▶ 同時再生(1回)';$('play').classList.remove('on');}
  function run(){const s=+$('spd').value;let iA=0,iF=0,doneA=false,doneF=false;
   const fin=()=>{if(!(doneA&&doneF))return;if(loop){setTimeout(()=>playing&&start(),200/s);}else{$('status').textContent='再生完了 → 戦闘待機へ移行します。';setTimeout(()=>{if(playing)rest();},400/s);}};

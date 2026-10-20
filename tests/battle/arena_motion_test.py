@@ -49,7 +49,7 @@ with server(8837) as base, sync_playwright() as p:
             rows = pg.evaluate("MotionTest.rows('%s')" % c)
             return [r['status'] for r in rows if r['slot'] == slot and (state is None or r['state'] == state) and (label is None or r['label'] == label)]
         exp = [('aidan', 'start', 'draw', 'impl'), ('aidan', 'idle', 'idle', 'impl'), ('aidan', 'attack', 'attack', 'impl'), ('aidan', 'skill', 'skill', 'impl'), ('aidan', 'damage', 'damage', 'impl'), ('aidan', 'low_hp', 'low_hp', 'impl'), ('aidan', 'ko', 'ko', 'impl'), ('aidan', 'victory', 'victory', 'still'), ('aidan', 'ko_dissolve', None, 'none'), ('aidan', 'support', 'item', 'still'),
-               ('fiona', 'start', 'ready', 'impl'), ('fiona', 'idle', 'idle', 'impl'), ('fiona', 'attack', 'attack', 'impl'), ('fiona', 'skill', 'winddance', 'impl'), ('fiona', 'skill', 'skill', 'still'), ('fiona', 'support', 'heal', 'impl'), ('fiona', 'damage', 'damage', 'impl'), ('fiona', 'low_hp', 'low_hp', 'still'), ('fiona', 'ko', 'ko', 'impl'),
+               ('fiona', 'start', 'ready', 'impl'), ('fiona', 'idle', 'idle', 'still'), ('fiona', 'attack', 'attack', 'impl'), ('fiona', 'skill', 'winddance', 'impl'), ('fiona', 'skill', 'skill', 'still'), ('fiona', 'support', 'heal', 'impl'), ('fiona', 'damage', 'damage', 'impl'), ('fiona', 'low_hp', 'low_hp', 'still'), ('fiona', 'ko', 'ko', 'impl'),
                ('lou', 'idle', 'idle', 'impl'), ('lou', 'damage', 'damage', 'impl'), ('lou', 'support', 'blessing', 'impl'), ('lou', 'support', 'heal', 'still'), ('lou', 'ko', 'ko', 'impl'), ('lou', 'attack', None, 'none'),
                ('goblin', 'idle', 'idle', 'still'), ('goblin', 'ko', 'ko', 'impl'), ('goblin', 'ko_dissolve', 'ko', 'impl'), ('goblin', 'damage', 'damage', 'still'),
                ('tainted_goblin', 'ko_dissolve', 'ko', 'impl'), ('tainted_goblin', 'attack', 'attack', 'still'),
@@ -84,7 +84,7 @@ with server(8837) as base, sync_playwright() as p:
         for ch, slot, state in [('aidan', 'start', 'draw'), ('fiona', 'start', 'ready'), ('aidan', 'attack', 'attack'), ('fiona', 'attack', 'attack'), ('aidan', 'damage', 'damage'), ('fiona', 'damage', 'damage'), ('lou', 'damage', 'damage')]:
             pg.evaluate("MotionTest.select('%s','%s','%s')" % (ch, slot, state)); pg.evaluate("MotionTest.control.returnIdle(true);MotionTest.control.restart()")
             pg.wait_for_function("MotionTest.snapshot().curSlot==='idle'", timeout=4000); pg.wait_for_timeout(500); s = pg.evaluate(SNAP)
-            check(s['curSlot'] == 'idle' and s['loop'] and s['playing'] and s['total'] >= 2, '%s %s -> idle loop' % (ch, state), (s['phase'], s['idx']))
+            check(s['curSlot'] == 'idle' and (ch == 'fiona' or (s['loop'] and s['playing'] and s['total'] >= 2)), '%s %s -> idle loop' % (ch, state), (s['phase'], s['idx']))
         # ---- KO: plays once and stops; dissolve hides
         pg.evaluate("MotionTest.select('aidan','ko','ko')"); pg.wait_for_function("!MotionTest.snapshot().playing", timeout=4000); k = pg.evaluate(SNAP)
         check(k['idx'] == 5 and not k['gone'] and k['curSlot'] == 'ko', 'aidan KO plays once and stops on the last frame', k)

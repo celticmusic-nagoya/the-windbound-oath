@@ -123,10 +123,21 @@ window.BATTLE_IDLE_ASSETS = Object.freeze({
     Object.freeze({path:BATTLE_ASSET_PATHS.aidan+'idle/aidan_idle_03.png',anchor:Object.freeze([891.75,1011])})
   ])
 }),
-  // Fiona idle (delivered 2026-10-13): 6-frame loop. Frame 5 (green glow) is intentional "gathering mana" and is held longest.
+  // Fiona idle (v3, approved 2026-10-21): the official MASTER standing art (img/battle/characters/fiona/idle_v3/fiona_idle_master.png, never modified) with the
+  // adopted 4 s breathing (slight whole-figure stretch, applied to master + eye layers together) and a MASTER-derived blink (eye-region overlays only).
+  // width/height/anchor describe the virtual frame the old 6-frame idle used, so the figure keeps its apparent size and foot position in every battle slot:
+  // `scale` maps master px -> virtual px, `foot` is the master pixel that lands on `anchor`. Overlay patches are drawn at `box` (master px); open eyes = no overlay = exactly the MASTER.
   fiona: Object.freeze({
-    type:'loop', crossfade:false, ms:Object.freeze([260,220,240,180,300,260]), width:1034, height:678, anchor:Object.freeze([561.7,671]),
-    frames:Object.freeze([1,2,3,4,5,6].map(i=>Object.freeze({path:BATTLE_ASSET_PATHS.fiona+'idle/fiona_idle_0'+i+'.png',anchor:Object.freeze([561.7,671])})))
+    type:'layered', width:1034, height:678, anchor:Object.freeze([561.7,671]),
+    layered:Object.freeze({
+      master:BATTLE_ASSET_PATHS.fiona+'idle_v3/fiona_idle_master.png', size:Object.freeze([1024,1536]), scale:0.4421, foot:Object.freeze([505.3,1513.5]),
+      breath:Object.freeze({cycle:4, amp:0.35, origin:Object.freeze([0.51,0.72]), ty:0.0023, sx:0.0015, sy:0.006}),
+      blink:Object.freeze({minGap:3000, maxGap:6000, seq:Object.freeze([[1,30],[2,30],[3,35],[4,70],[3,35],[2,30],[1,30]])}),
+      eyes:Object.freeze({
+        L:Object.freeze({box:Object.freeze([458,251,512,296]), files:Object.freeze([1,2,3,4].map(i=>BATTLE_ASSET_PATHS.fiona+'idle_v3/eyes/overlay_L_s'+i+'.png'))}),
+        R:Object.freeze({box:Object.freeze([511,223,577,269]), files:Object.freeze([1,2,3,4].map(i=>BATTLE_ASSET_PATHS.fiona+'idle_v3/eyes/overlay_R_s'+i+'.png'))})
+      })
+    })
   }),
 
   // Forest Bat idle flap: 4 frames. anchors = alpha centroid of each frame, so the body stays put while the wings beat.

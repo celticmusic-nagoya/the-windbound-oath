@@ -54,10 +54,10 @@ table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #445;paddin
 <script>
 (function(){
  const P={aidan_draw:'../img/battle/characters/aidan/motion/aidan_draw_',aidan_idle:'../img/battle/characters/aidan/idle_v2/aidan_idle_',
-  fiona_ready:'../img/battle/characters/fiona/motion/fiona_ready_',fiona_idle:'../img/battle/characters/fiona/idle/fiona_idle_',lou_idle:'../img/battle/characters/lou/idle/lou_idle_'};
+  fiona_ready:'../img/battle/characters/fiona/motion/fiona_ready_',fiona_idle:'../img/battle/characters/fiona/idle_v3/fiona_idle_master.png',lou_idle:'../img/battle/characters/lou/idle/lou_idle_'};
  const pad=(i,w=2)=>String(i).padStart(w,'0'),$=id=>document.getElementById(id);
  const ms={aidan_draw:[100,90,110,90,90,120],fiona_ready:[140,130,150,130,160,170],aidan_idle:[220,180,220,160,110,260],fiona_idle:[260,220,240,180,300,260],lou_idle:Array(6).fill(1000/6)};
- const url=(k,i)=>P[k]+(k==='lou_idle'?pad(i,2):pad(i+1))+'.png';   // lou files are 0-based (lou_idle_00..05)
+ const url=(k,i)=>k==='fiona_idle'?'../img/battle/characters/fiona/idle_v3/fiona_idle_master.png':P[k]+(k==='lou_idle'?pad(i,2):pad(i+1))+'.png';   // Fiona idle = v3 layered MASTER (static still here; the live breathing/blink runs in battle)   // lou files are 0-based (lou_idle_00..05)
  const timers=new Set();let gen=0,zoom=1,idx={aidan:0,fiona:0};
  const spd=()=>+$('spd').value,later=(f,t,g)=>{const h=setTimeout(()=>{timers.delete(h);if(g===gen)f();},t/spd());timers.add(h);};
  function stopAll(){gen++;timers.forEach(clearTimeout);timers.clear();}

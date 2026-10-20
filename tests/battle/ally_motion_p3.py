@@ -27,7 +27,11 @@ with server(8832) as base, sync_playwright() as p:
             check(pg.evaluate("BattleActorState.get('raider','%s')" % a) == 'idle', '%s %s: idle after the opening' % (tag, a))
             seen = set()
             for _ in range(14):
-                s = pg.evaluate(box, a); seen.add((s['frame'], s['cframe'])); pg.wait_for_timeout(120)
+                s = pg.evaluate(box, a)
+                if a == 'fiona':   # v3 layered idle: one MASTER + eye overlays; liveness = breath phase advances (see fiona_idle_v3.py)
+                    ph = pg.evaluate("(()=>{const r=BattleIdleMotion.status.actors.find(q=>q.actor==='fiona'&&q.layer);return r?Math.round(r.layer.phase*1000):null})()"); seen.add(('breath', ph))
+                else: seen.add((s['frame'], s['cframe']))
+                pg.wait_for_timeout(120)
             check(len(seen) >= 2, '%s %s: idle loop advances frames' % (tag, a), sorted(map(str, seen))[:6])
         # actions: each returns to idle by itself
         acts = [('aidan', 'attack'), ('aidan', 'skill'), ('fiona', 'attack'), ('fiona', 'heal'), ('fiona', 'skill')]
