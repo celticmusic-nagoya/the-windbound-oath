@@ -30,7 +30,7 @@ Each task issue should include:
 - `PR / Artifact`: link(s) to code, tests and reports
 - `QA`: PASS / FAIL / NOT_RUN / BASELINE_FAIL, with environment and exact command
 - `Next actor`: who acts next and what to do
-- `Approval status`: not requested / pending / scoped-work approved / integration approved / rejected or withdrawn
+- `Approval status`: not requested / pending / scoped-work approved / integration approved (individually, or via the standing pre-approval in §5-6 when its conditions are met) / rejected or withdrawn
 - `Approver and approval evidence`: who approved, exact scope, and an immutable link to the decision (or `none`)
 - `Permitted operations`: exact authorized read/write/PR/merge/deploy operations; unspecified operations are not authorized
 - `Decision needed`: explicit user choice or `none`
