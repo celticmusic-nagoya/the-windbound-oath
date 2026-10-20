@@ -2,6 +2,8 @@
 
 作者指示による運用。チャットだけに決定を残さず、GitHub上の資料とブランチを進捗共有のsource of truthとする。従来の担当規則と相違する場合は本指示を優先。
 
+> 2026-10-20 更新: 本書 §1・§6 の main 更新に関する包括承認は**維持**する。そのうえで `AI_HANDOFF_PROTOCOL.md` §5-6 の安全条件（正典・確定仕様の不変、独立QA、直前のHEAD・差分・競合確認、事後報告、停止条件）を追加する。
+
 ## 1. 作業開始とcheckpoint
 
 - 最新remote mainを取得し、基準SHAとworktreeを確認。Codexは `work/codex-<topic>` を使用する。

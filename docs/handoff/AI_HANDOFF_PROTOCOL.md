@@ -10,12 +10,14 @@ This protocol **supplements, and does not replace**, `AGENTS.md`, `docs/handoff/
 
 GitHub files and comments **do not automatically launch** browser-based Claude, Codex or ChatGPT. A human or a separately authorized runner must initiate the next agent until a tested trigger integration exists.
 
-Canon/lore: the official lore master is private; its index and reference rules are in `docs/lore/README.md` (see also `AGENTS.md` §0). If you cannot access it, report "inaccessible" and do not guess lore.
+Canon/lore: the official lore master is private; its index and reference rules are in `docs/lore/README.md` (see also `AGENTS.md` §0). If you cannot read it, do not guess lore: report `LORE_INACCESSIBLE` (what you tried and the error).
+
+Canon adoption and implementation are separate decisions. A canon item being adopted (設定確定) does **not** mean it is implemented or approved for code; implementation needs its own approved task, and the result is checked against the canon (要コード照合).
 
 ## 2. Responsibility
 - **ChatGPT — director:** clarify scope, track decisions and priorities, review QA evidence and request user decisions. Do not imply background monitoring or automatic execution without a configured mechanism.
-- **Claude — implementer/integrator:** implement approved work in feature branches, run tests, open/update PRs, address review findings; follow existing main integration restrictions.
-- **Codex — independent reviewer:** inspect exact PR/head SHA, reproduce relevant tests, identify regressions and post a verdict. Review should be independent from implementation evidence. May also implement independently when the user has approved it (scope per `codex-standing-orders.md`).
+- **Claude (Claude Code) — implementer / fixer / integrator:** implement approved work in feature branches, run tests, open/update PRs, address review findings, prepare integration (fixed head SHA, residual-diff check, rollback ref) and merge in-scope PRs under §5-6.
+- **Codex — independent reviewer:** inspect exact PR/head SHA, reproduce relevant tests, identify regressions and post a verdict. Review should be independent from implementation evidence. May also implement independently within the user-approved scope (`codex-standing-orders.md` §1) and merge in-scope PRs under §5-6. Work is reviewed by an agent that did not write it. (scope per `codex-standing-orders.md`).
 - **User — product authority:** approve creative/spec changes, critical risks, destructive operations, and any changes to merge/deploy permissions.
 
 ## 3. One issue per scoped task
@@ -62,13 +64,13 @@ DECISION_NEEDED: none | <question for user>
 3. Claude posts `READY_FOR_CODEX` with PR and SHA.
 4. Codex independently reviews that exact SHA; posts `CHANGES_REQUESTED`, `BLOCKED_DECISION` or `READY_TO_MERGE`.
 5. Claude addresses findings; any new commit invalidates the prior SHA-specific review; request a fresh review.
-6. Existing integration authority decides merge after required checks and rollback preparation. Never silently merge to main.
+6. **Merging to `main` is pre-approved (user decision 2026-10-20) for Claude and Codex, per PR, when ALL of these hold:** (a) canon and user-confirmed specs are not changed; (b) the change is within the user-approved development scope; (c) required tests and an independent QA (by an agent other than the author) are done and PASS; (d) there is no serious unresolved issue or unexpected regression; (e) immediately before merging, the head SHA equals the QA'd SHA and the diff and conflict state are re-checked, with a rollback ref prepared; (f) after merging, the result and the new main SHA are reported. Otherwise stop and consult the user (§7). Never silently merge outside these conditions.
 7. Close issue only after integration evidence, regression status and remaining QA gaps are documented.
 
 No agent should assert that another agent has been triggered or completed work without actual evidence.
 
 ## 6. Safety and quality gates
-- Never force push or directly modify `main`; use scoped branches and PRs.
+- Never force push or rewrite history. Changes reach `main` through scoped branches and PRs under §5-6 (direct pushes only where `COLLABORATION.md` §6 already allows them).
 - Preserve battle balance, story, canonical artwork, save compatibility and confirmed UI without explicit authorization.
 - P0/P1 unresolved or new severe regression => `BLOCKED_DECISION` / HOLD; do not label READY.
 - Keep Lou faint v5 HOLD and P0-D CONDITIONAL unless superseded by documented evidence and approval.
@@ -78,7 +80,7 @@ No agent should assert that another agent has been triggered or completed work w
 - Before any authorized integration, capture current main SHA, prepare a verifiable rollback ref, check exact PR diff and tests. No destructive branch deletion/history rewriting.
 
 ## 7. Decision escalation
-Request user decision for changes to gameplay numbers/difficulty, story, final asset adoption/replacement, save-breaking changes, major UX direction, unresolved critical regression, publication/security settings, auto-merge enablement, or destructive operations. For routine in-scope implementation and review, proceed within the existing standing authorization.
+Request user decision for changes to gameplay numbers/difficulty, story, final asset adoption/replacement, save-breaking changes, major UX direction, unresolved critical regression, publication/security settings, auto-merge enablement, or destructive operations. Also stop and consult the user when: canon or game spec must change; QA returns FAIL, a serious CONDITIONAL or BLOCKED; an unexpected conflict or regression appears; data loss or save-compatibility is a concern; GitHub Pages settings, repository visibility or migration to a new repository would change. For routine in-scope implementation, review and merge under §5-6, proceed within the existing standing authorization.
 
 ## 8. Future automation (not yet enabled)
 GitHub Actions can run checks and publish artifacts, but launching Claude/Codex browser sessions requires a separately configured and authorized integration. Before enabling: verify provider support, least-privilege tokens, cost limits, idempotency, retry bounds, branch protection, and safe stop behavior.
