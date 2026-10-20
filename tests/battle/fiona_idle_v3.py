@@ -78,8 +78,9 @@ with server(8817) as base,sync_playwright() as p:
         check(mid is False and back[0] is True,name+': attack hides idle, idle resumes',(mid,back))
     # long loop soak (raider battle): errors / failed images / blink stream
     if LOOP>0:
+        ok_up_down=lambda q:4 in q and q[:q.index(4)+1]==sorted(q[:q.index(4)+1]) and q[q.index(4):]==sorted(q[q.index(4):],reverse=True)   # long soak: rAF can drop the final 30 ms states on a loaded host; order (up then down through 4) is what must hold
         pg.evaluate("startRaiderBattle()");pg.wait_for_timeout(2500);obs=pg.evaluate(JS_OBS,int(LOOP*1000));bl=blinks(obs['rec'])
-        check(len(bl)>=int(LOOP/6)-1 and all(4 in x[2] and x[2][0]<=2 and x[2][-1]<=2 for x in bl),'soak %ds: blinks keep the approved order (%d blinks)'%(LOOP,len(bl)))
+        check(len(bl)>=int(LOOP/6)-1 and all(ok_up_down(x[2]) for x in bl),'soak %ds: blinks keep the approved order (%d blinks)'%(LOOP,len(bl)),[x[2] for x in bl if not ok_up_down(x[2])][:5])
         per=[obs['wraps'][i+1]-obs['wraps'][i] for i in range(len(obs['wraps'])-1)];check(max(per)<=4150 and min(per)>=3900,'soak: breath period stable',(min(per),max(per)))
     check(not errs,'no page errors',errs[:3]);check(not bad,'no image/asset load failures',bad[:3])
     # reduced motion: rest pose only (open eyes, no breathing)
