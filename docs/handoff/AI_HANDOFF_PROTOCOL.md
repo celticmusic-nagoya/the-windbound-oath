@@ -10,10 +10,12 @@ This protocol **supplements, and does not replace**, `AGENTS.md`, `docs/handoff/
 
 GitHub files and comments **do not automatically launch** browser-based Claude, Codex or ChatGPT. A human or a separately authorized runner must initiate the next agent until a tested trigger integration exists.
 
+Canon/lore: the official lore master is private; its index and reference rules are in `docs/lore/README.md` (see also `AGENTS.md` §0). If you cannot access it, report "inaccessible" and do not guess lore.
+
 ## 2. Responsibility
 - **ChatGPT — director:** clarify scope, track decisions and priorities, review QA evidence and request user decisions. Do not imply background monitoring or automatic execution without a configured mechanism.
 - **Claude — implementer/integrator:** implement approved work in feature branches, run tests, open/update PRs, address review findings; follow existing main integration restrictions.
-- **Codex — independent reviewer:** inspect exact PR/head SHA, reproduce relevant tests, identify regressions and post a verdict. Review should be independent from implementation evidence.
+- **Codex — independent reviewer:** inspect exact PR/head SHA, reproduce relevant tests, identify regressions and post a verdict. Review should be independent from implementation evidence. May also implement independently when the user has approved it (scope per `codex-standing-orders.md`).
 - **User — product authority:** approve creative/spec changes, critical risks, destructive operations, and any changes to merge/deploy permissions.
 
 ## 3. One issue per scoped task
@@ -39,9 +41,14 @@ Post this to the task issue or PR after every completed handoff:
 ```text
 STATUS: READY_FOR_CODEX | CHANGES_REQUESTED | READY_FOR_CLAUDE | BLOCKED_DECISION | READY_TO_MERGE | DONE
 OWNER: Claude | Codex | ChatGPT
-SHA: <full commit SHA>
+ISSUE: <issue URL or #number>
+BRANCH: <branch name>
+SHA: <full commit SHA (head)>
 PR: <URL or none>
+FILES: <changed files / areas>
+PURPOSE: <one line: why this change>
 TESTS: PASS <count>; FAIL <count>; NOT_RUN <count>; BASELINE_FAIL <count>; evidence <link>
+REMAINING: none | <open items>
 BLOCKERS: none | <precise blocker>
 NEXT: <actor> — <one concrete action>
 DECISION_NEEDED: none | <question for user>
