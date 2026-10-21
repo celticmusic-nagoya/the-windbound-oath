@@ -22,11 +22,17 @@ START={'raider':'startRaiderBattle()','normal':'document.body.classList.remove("
 SEL={'raider':'#rbFiona','normal':'#bFiona2'}
 ACT="BattleIdleMotion.status.actors.find(q=>q.actor==='fiona'&&q.context===%r)"
 def begin(pg,name):
-    pg.evaluate("document.body.classList.remove('dialogueOpen')")
-    pg.evaluate(START[name]);pg.wait_for_timeout(1500)
-    pg.wait_for_function("BattleIdleMotion.status.actors.some(q=>q.actor==='fiona'&&q.context===%r&&q.showing&&q.layer)"%name,timeout=30000)
-    pg.evaluate("typeof closeDialogue==='function'&&closeDialogue()")
-    pg.wait_for_function("!['battlePresentationBusy','dialogueOpen','actionCinematic'].some(c=>document.body.classList.contains(c))",timeout=30000);pg.wait_for_timeout(800)
+    for attempt in range(2):
+        pg.evaluate("document.body.classList.remove('dialogueOpen')")
+        pg.evaluate(START[name]);pg.wait_for_timeout(1500)
+        try:
+            pg.wait_for_function("BattleIdleMotion.status.actors.some(q=>q.actor==='fiona'&&q.context===%r&&q.showing&&q.layer)"%name,timeout=20000)
+            pg.evaluate("typeof closeDialogue==='function'&&closeDialogue()")
+            pg.wait_for_function("!['battlePresentationBusy','dialogueOpen','actionCinematic'].some(c=>document.body.classList.contains(c))",timeout=20000);break
+        except Exception as ex:   # battle start is harness setup, not the thing under test: record the state, then start again once
+            print('SETUP-STALL (%s attempt %d):'%(name,attempt),pg.evaluate("({cls:document.body.className,actors:BattleIdleMotion.status.actors.filter(q=>q.actor==='fiona').map(q=>[q.context,q.state,q.enabled,q.showing,'failed',q.failed,'ready',q.ready])})"))
+            if attempt:raise
+    pg.wait_for_timeout(800)
 def probe(pg,label):
     cases=S.probe_cases()
     # blink start 0, controlled clock t = ms/1000 (cases are (ms_since_start, expected)); the sweep entries use start k+0.5 s offsets via the same helper
@@ -104,7 +110,7 @@ MUTANTS=[
  ('one eye off (R uses the previous state)',{'battle-idle-motion.js':[('const si=state-1;','const si=id===\'R\'?Math.max(0,state-2):state-1;')]},'blink'),
  ('blink gap 1-2 s',{'assets.js':[('minGap:3000, maxGap:6000','minGap:1000, maxGap:2000')]},'blink'),
  ('breath cycle 3 s',{'assets.js':[('cycle:4, amp:0.35','cycle:3, amp:0.35')]},'blink'),
- ('reduced-motion fix reverted (FIV3-01)',{'battle-idle-motion.js':[('(r.frame!==0||(r.assets.layered&&!r.stillDone))','r.frame!==0')]},'reduced'),
+ ('reduced-motion fix reverted (FIV3-01)',{'battle-idle-motion.js':[('(r.frame!==0||(r.assets.layered&&!r.atRest))','r.frame!==0')]},'reduced'),
 ]
 with server(8818) as base,sync_playwright() as p:
     b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))

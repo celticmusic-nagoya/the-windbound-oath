@@ -47,7 +47,7 @@ def analyze(tr,ctx):
         need=min(DUR[q] for q in miss)
         win=[t for t in ts if st-0.1<=t<=st+0.36]
         mg=max([(win[i+1]-win[i])*1000 for i in range(len(win)-1)] or [0])
-        if mg<=need:unjustified+=1
+        if mg<=need:unjustified+=1;m.setdefault('unjustified_detail',[]).append({'start':st,'seen':seen,'max_gap_ms':round(mg,1),'need_ms':need,'draws':[(round((t-st)*1000,1)) for t in win]})
     m['blinks_unsampled_without_a_stall']=unjustified
     if unjustified:fails.append('%d blink(s) lack states although the page drew continuously (renderer skipped states)'%unjustified)
     # a blink whose sampled order is not a legal sub-sequence of the spec is a FAIL (not just missing states)

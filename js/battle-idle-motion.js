@@ -28,18 +28,20 @@
   function paused(){return document.hidden||document.body.classList.contains('battlePresentationBusy')||document.body.classList.contains('dialogueOpen')||document.body.classList.contains('actionCinematic');}
   function reset(r,now=performance.now()){
     r.cycles=0;r.specialAfter=Math.floor(range(3,6));r.steps=profiles.get(r.assets.type)(r);
-    r.step=0;r.frame=0;r.from=0;r.started=now;r.lastDraw=-1;r.transition=false;
+    r.step=0;r.frame=0;r.from=0;r.started=now;r.lastDraw=-1;r.transition=false;r.atRest=false;
   }
   function preload(assets){
     if(cache.has(assets))return cache.get(assets);
     const entry={images:[],ready:false};cache.set(assets,entry);
     if(assets.layered){
       const L=assets.layered,load=async path=>{const image=new Image();image.src=path;await image.decode();return image;};
-      entry.promise=(async()=>{
+      const build=async()=>{
         const master=await load(L.master),eyes={};
         for(const [id,e] of Object.entries(L.eyes))eyes[id]=await Promise.all(e.files.map(load));
         entry.layers={master,eyes};entry.comp=document.createElement('canvas');entry.comp.width=L.size[0];entry.comp.height=L.size[1];entry.compState=-1;entry.images=[master];entry.ready=true;refresh();
-      })().catch(()=>{entry.failed=true;});
+      };
+      // One retry for a transient decode/network hiccup; the cause is kept for QA (status.actors[].error). Persistent failure keeps the previous still, as before.
+      entry.promise=(async()=>{try{await build();}catch(e1){entry.error=String(e1);await new Promise(r=>setTimeout(r,400));try{await build();entry.error+=' (recovered)';}catch(e2){entry.error=String(e2);entry.failed=true;}}})();
       return entry;
     }
     entry.promise=Promise.all(assets.frames.map(async frame=>{
@@ -83,9 +85,9 @@
   }
   let trace=null;   // QA: when an array, every real layered draw is appended (clock, blink start, eye state, overlays actually drawn, breath)
   function drawLayered(r,now){
-    const L=r.assets.layered,B=L.breath,k=r.blink,t=still(r)?0:(now-r.started)/1000;
+    const L=r.assets.layered,B=L.breath,k=r.blink,t=still(r)?0:Math.max(0,(now-r.started)/1000);
     const {state,ph,wave}=layeredPose(L,k,t);
-    k.state=state;k.phase=ph;k.wave=wave;
+    k.state=state;k.phase=ph;k.wave=wave;r.atRest=still(r);
     const ctx=r.ctx,s=r.fit,a=B.amp,W=L.size[0],H=L.size[1],ox=B.origin[0]*W,oy=B.origin[1]*H;
     ctx.setTransform(r.densityX,0,0,r.densityY,0,0);ctx.clearRect(0,0,r.width,r.height);ctx.globalAlpha=1;
     ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
@@ -125,13 +127,13 @@
       mount(r);if(!r.canvas)continue;
       if(!r.showing){reset(r,now);measure(r);r.canvas.hidden=false;r.host.classList.add('battle-idle-active');r.showing=true;draw(r,now,true);}
       if(paused()||still(r)){
-        // Reduced motion switched ON mid-animation: snap to the rest pose once. Layered idle keeps r.frame at 0 for its whole life, so it needs its own one-shot flag
-        // (otherwise a closed-eye state / breathing transform of the moment stays frozen on screen).
-        if(still(r)&&(r.frame!==0||(r.assets.layered&&!r.stillDone))){reset(r,now);draw(r,now,true);r.stillDone=true;}
+        // Reduced motion switched ON mid-animation: snap to the rest pose. Layered idle keeps r.frame at 0 for its whole life, so the pose that was LAST DRAWN decides (r.atRest, set by drawLayered itself;
+        // an edge flag set elsewhere goes stale when 'change' events coalesce during rapid toggling).
+        if(still(r)&&(r.frame!==0||(r.assets.layered&&!r.atRest))){reset(r,now);draw(r,now,true);}
         // Finish a crossfade once, then freeze the pose while dialogue/cut-in owns presentation.
         if(r.transition){r.transition=false;draw(r,now,true);}
         r.wasPaused=true;
-      }else {r.stillDone=false;if(r.wasPaused){reset(r,now);draw(r,now,true);r.wasPaused=false;}running=true;}
+      }else {if(r.wasPaused){reset(r,now);draw(r,now,true);r.wasPaused=false;}running=true;}
     }
     if(running&&raf===null)raf=requestAnimationFrame(tick);
     if(!running&&raf!==null){cancelAnimationFrame(raf);raf=null;}
@@ -160,7 +162,7 @@
     begin(selector,actor){for(const r of records.values())if(r.selector===selector){const mine=!actor||r.actor===actor;r.enabled=mine;if(!mine)r.state=null;hide(r);if(mine)reset(r);}refresh();},
     stop(selector){for(const r of records.values())if(r.selector===selector){r.enabled=false;hide(r);}refresh();},
     onState(selector,actor,state){for(const r of records.values()){if(r.selector!==selector)continue;if(r.actor!==actor){if(r.state!==null){r.state=null;hide(r);}continue;}const changed=r.state!==state;r.state=state;if(changed)hide(r);}refresh();},
-    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0,layer:r.assets.layered&&r.blink?{eye:r.blink.state,phase:r.blink.phase,wave:r.blink.wave}:null}))};},
+    get status(){return {scheduled:raf!==null,reducedMotion:reduced.matches,cacheCount:cache.size,actors:[...records.values()].map(r=>({context:r.context,actor:r.actor,state:r.state,enabled:r.enabled,showing:r.showing,frame:r.frame,transition:r.transition,fit:r.fit,canvasCount:r.canvas?1:0,failed:Boolean(r.entry?.failed),error:r.entry?.error||null,ready:Boolean(r.entry?.ready),layer:r.assets.layered&&r.blink?{eye:r.blink.state,phase:r.blink.phase,wave:r.blink.wave}:null}))};},
     // Test/QA helpers (read-only w.r.t. the game): trace of real draws, and the real pose function with a controlled clock.
     traceStart(){trace=[];},traceStop(){const t=trace||[];trace=null;return t;},
     probeLayered(actor,blinkStart,t){const r=[...records.values()].find(q=>q.actor===actor&&q.assets.layered);if(!r)return null;return layeredPose(r.assets.layered,{start:blinkStart,next:1e9},t);},
