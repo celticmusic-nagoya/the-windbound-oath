@@ -36,13 +36,18 @@ with sync_playwright() as p:
         ev("(s)=>{storyStage=s;document.querySelectorAll('.overlay,.scene').forEach(()=>0);RildeVillage.enter('from_training')}",stage); pg.wait_for_function("MossForest.active&&MossForest.mapId.startsWith('rilde_village_01_')",timeout=20000); settle(2000)
     def where(): return ev("MossForest.mapId")
     def tp(x,y): ev("(a)=>MossForest.teleportFeet(a[0],a[1])",[x,y]); settle()
-    def walk(x,y,key,ms=1600):
-        # No blind retry: the opening scene's dialogue (opened at page load) blocks movement, so it is closed and the precondition is asserted instead.
+    def walk(x,y,key,goal,hold=900,timeout=15000):
+        # No blind retry. The opening scene's dialogue (opened at page load) blocks movement, so it is closed and the precondition is asserted.
+        # The key is held until the real goal is reached (or the deadline), not for a fixed time: a slow machine / loaded CI only needs longer, a wrong
+        # destination still fails the assertions that follow (the goal is only 'reached the exit rect / the map changed', never 'assume success').
         ev("closeDialogue()"); ev("(a)=>MossForest.teleportFeet(a[0],a[1])",[x,y]); settle(700)
         check(not ev("document.body.classList.contains('dialogueOpen')") and ev("MossForest.active&&!MossForest.busy"),'walk precondition: no dialogue open, forest active (%s)'%key)
-        pg.keyboard.down(key); pg.wait_for_timeout(ms); pg.keyboard.up(key); settle(1500)
-    def north(): walk(830,230,'ArrowUp')        # village: up the north road to the exit rect under the edge wall
-    def south(): walk(1400,5760,'ArrowDown',2000)   # A1: down onto tr_to_lind
+        m0=ev("MossForest.mapId"); pg.keyboard.down(key)
+        try: pg.wait_for_function("(a)=>MossForest.mapId!==a[0]||(%s)"%goal,arg=[m0],timeout=timeout)
+        except Exception: print('NOTE walk deadline: goal not reached (%s, map %s, feet %s)'%(key,ev("MossForest.mapId"),ev("MossForest.feet")))
+        pg.wait_for_timeout(hold); pg.keyboard.up(key); settle(1500)
+    def north(): walk(830,230,'ArrowUp',"MossForest.feet.y<=104")        # village: up the north road to the exit rect under the edge wall
+    def south(): walk(1400,5760,'ArrowDown',"MossForest.feet.y>=5945")   # A1: down onto tr_to_lind
     def in_exit():
         f=ev("MossForest.feet"); return 770<=f['x']<=890 and 48<=f['y']<=108
     def toasts(): return ev("document.querySelector('#forestToast')?document.querySelector('#forestToast').textContent:''")
