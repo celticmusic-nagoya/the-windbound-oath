@@ -113,6 +113,7 @@ def tree_ring(room, ruin):
         if x > 1500 + OX - 120 and x < 1630 + OX + 120: continue    # river corridor
         out.append((x, y))
     for i, (x, y) in enumerate(out):
+        if abs(x - (730 + OX)) < 70 and y < 260: continue         # north road (F-E2): the tree ring must not plug the exit to the Sunlit Path; ids of the other trees stay as they were
         a = 'rv_burnt_tree' if ruin else 'rv_lind_tree_01'
         room.prop(a, x, y, pid='tree_%02d' % i, tags=['tree'])
         c = t['collision']
@@ -192,9 +193,11 @@ def outdoor(ruin):
         R.spawn(sp, x, y + 84)
     # ---- exits
     R.door('tr_v_to_cliff', 730 + OX - 90, H - 48 - 100, 180, 60, 'TBD', 'TBD', '南の小道 -> 風見の断崖（story hook onVillageExit）')
+    R.door('tr_v_to_moss', 730 + OX - 60, 48, 120, 60, 'TBD', 'TBD', '北の道 -> 陽だまりの森道（story hook onVillageExit）')
     R.door('tr_v_to_fort', W - 48 - 80, 595 + OY - 90, 70, 180, 'TBD', 'TBD', '東の街道 -> ドゥンヴァル砦（story hook onVillageExit）')
     # ---- spawns
     R.spawn('default', 1245 + OX, 560 + OY, 'down')
+    R.spawn('from_moss_forest', 730 + OX, 190, 'down')
     R.spawn('from_cliff', 730 + OX, H - 48 - 150, 'up'); R.spawn('from_fort', W - 48 - 140, 595 + OY, 'left')
     R.spawn('from_plaza', 920 + OX, 760 + OY); R.spawn('from_training', 1777 + OX, 760 + OY); R.spawn('from_sunset', 730 + OX, 1450 + OY, 'up')
     # ---- NPCs / people
