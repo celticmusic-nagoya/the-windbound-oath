@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aidan idle v1 preview</title>
+<style>html,body{margin:0;height:100%;background:#263e34;color:#cde;font:12px sans-serif}#w{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center}canvas{max-width:100%;max-height:100%}#i{position:fixed;left:6px;top:4px;opacity:.7}</style>
+<div id="w"><canvas id="c" width="656" height="600" style="width:min(100vw,calc(100vh*1312/1199));height:auto"></canvas></div><div id="i">Aidan idle v1 (candidate, not in game)</div>
+<script src="aidan-idle-v1.js"></script>
+<script>
+const q=new URLSearchParams(location.search);
+AidanIdleV1.create(document.getElementById('c'),{base:'../../../img/battle/characters/aidan/idle_v1/',preserve:true}).then(p=>{window.P=p;if(!q.has('manual'))p.start();window.ready=true}).catch(e=>{window.err=String(e);document.getElementById('i').textContent=window.err});
+</script>
