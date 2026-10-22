@@ -1,6 +1,6 @@
 # AI Handoff Protocol v1 — THE WINDBOUND OATH
 
-Status: PROPOSED (PR review required)  
+Status: ACTIVE (user decision 2026-10-20; applied after independent QA)  
 Tracking: https://github.com/celticmusic-nagoya/the-windbound-oath/issues/5
 
 ## 1. Purpose and source of truth
