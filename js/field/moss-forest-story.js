@@ -17,7 +17,7 @@
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
   function flagsNow(){
-    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5,liam_joined:typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined)};
+    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5,prologue_village_open:storyStage>=1&&storyStage<=3,liam_joined:typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined)};
   }
   function onEvent(z,map){
     if(z.type==='locationCard'){
@@ -135,6 +135,8 @@
     const n=Math.max(1,Math.min(3,m.group|0||1));
     startAttackBattle(B[0]+n,B[1]*n);return true;
   }
+  // Peaceful Sunlit Path (A1 before the attack, storyStage 0-8): no ordinary goblins -- they belong to the forest after the fall (stage 9+). Slimes / boars stay.
+  function monsterAllowed(d,mapId){return !(d&&d.type==='goblin'&&mapId===MAP_IDS.a1&&storyStage<=8);}
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns
     if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
@@ -148,7 +150,7 @@
   }
   function init(){
     MossForest.configure({hooks:{toast:t=>forestToast(t),isCleared:f=>PrologueProgress.cleared(f),
-      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,onEncounter,canEncounter,onMonster,
+      sealCorrupted:()=>PrologueProgress.count()<3,onEvent,canOpenTreasure,onTreasure,onSymbol,onVillageExit,onTransition,onEncounter,canEncounter,onMonster,monsterAllowed,
       resolveMap:id=>window.RildeVillage?RildeVillage.resolve(id):id,fionaVisible:m=>window.RildeVillage?RildeVillage.fionaVisible(m):true,onEnter:m=>{if(document.getElementById('fieldLetterbox'))cancelOverlook();if(window.RildeVillage)RildeVillage.onEnter(m);}}});
   }
   // 風見の断崖. Story stage 3 is the sunset (the scene at the summit); afterwards it is a free-roam day map.

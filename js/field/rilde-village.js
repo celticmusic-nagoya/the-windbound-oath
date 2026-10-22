@@ -93,6 +93,7 @@
     storyStage = 15; const pe = $id('prologueEnd'); if (pe) pe.style.display = 'none';
     return enterWorldMap('fort', 'from_keep');
   }
+  const peacefulTrip = () => stage() >= 1 && stage() <= 3 && !attacked();
   // exits that carry story rules (hooks.onVillageExit): returns true when handled
   function exit(t) {
     const id = (t && t.id) || '';
@@ -109,6 +110,18 @@
       return true;
     }
     if (!enabled()) return false;
+    // 陽だまりの道(A1) <-> village north road (F-E2). Peaceful side trip only: open from stage 1 (= after Fiona joined: #fiona click, stage 0 -> 1) through stage 3.
+    // Stage 4-14 (cliff sunset / attack / prologue forest) and 15+ (post-prologue; not decided yet) stay closed. The attack's fall goes to A2 (not built here).
+    if (id === 'tr_v_to_moss') {
+      if (peacefulTrip()) MossForestStory.enterMap(MossForestStory.MAP_IDS.a1, 'from_lind');
+      else toast(stage() === 0 ? 'まずは訓練場のフィオナに会いに行こう。' : '今は、北の道へ向かう時ではない。');
+      return true;
+    }
+    if (id === 'tr_to_lind') {
+      if (peacefulTrip()) enter('from_moss_forest');
+      else toast('崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。');
+      return true;
+    }
     if (id === 'tr_c1_to_lind') {   // 風見の断崖 -> village south trail
       if (stage() === 3 || stage() >= 15) enter('from_cliff'); else toast('今は、村へ戻る時ではない。');
       return true;

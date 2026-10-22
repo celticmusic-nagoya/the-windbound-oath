@@ -88,6 +88,7 @@
     ensureLayer();
     for (const d of defs) {
       if (!MONSTER_TYPES[d.type] || (ctx.slain && ctx.slain.has(d.id))) continue;
+      if (ctx.allow && !ctx.allow(d)) continue;   // story gate (hooks.monsterAllowed): e.g. no ordinary goblins in the peaceful Sunlit Path
       spawnRec(d);
     }
   }
