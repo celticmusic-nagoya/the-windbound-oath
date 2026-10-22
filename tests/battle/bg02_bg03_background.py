@@ -1,5 +1,5 @@
 """BG-02/BG-03 battle backgrounds (prep, index.html not connected): asset audit, area-first selection, layer geometry (main+foreground share one box/rule), input never blocked,
-no residue, load-failure fallback, boss layers via BattleBackground.applyRaider (the startRaiderBattle call is wired in index.html at integration time),
+no residue, load-failure fallback, boss layers via BattleBackground.applyRaider (startRaiderBattle calls it since the 10/19 conditional adoption),
 foreground does not cover faces / HP / HUD (alpha sampled through the real cover mapping) at PC / tablet / phone-landscape / phone-portrait."""
 import sys, json
 from pathlib import Path
@@ -93,8 +93,9 @@ with server(8885) as base, sync_playwright() as p:
         # boss: raider untouched by default, BG-03 layers on demand
         reset(pg); pg.evaluate('startRaiderBattle()'); pg.wait_for_timeout(900)
         r0 = pg.evaluate("({bg:document.getElementById('raiderBattle').dataset.bg||null,rb:!!document.getElementById('rbBg'),disp:getComputedStyle(document.getElementById('raiderBattle')).display})")
-        check(r0['bg'] is None and r0['disp'] == 'block' and not r0['rb'], f'{n}: boss battle without applyRaider is unchanged (no layers, no data-bg)', r0)
-        pg.evaluate('BattleBackground.applyRaider()'); pg.wait_for_timeout(300)
+        # Adopted 10/19: startRaiderBattle() now calls BattleBackground.applyRaider() (index.html), so BG-03 layers are present without a manual call.
+        check(r0['bg'] == 'BG-03' and r0['disp'] == 'block' and r0['rb'], f'{n}: boss battle applies BG-03 layers via the startRaiderBattle wiring', r0)
+        pg.evaluate('BattleBackground.applyRaider()'); pg.wait_for_timeout(300)   # idempotent: calling again must not duplicate layers
         pg.wait_for_function("InputManager.state()!=='BATTLE_ANIMATION'", timeout=20000); pg.wait_for_timeout(1500)
         RG = "()=>{const o=[];for(let x=5;x<innerWidth;x+=37)for(let y=5;y<innerHeight;y+=37){const q=document.elementFromPoint(x,y);o.push(q?(q.id||q.className||q.tagName):'-')}return o}"
         r = pg.evaluate("""()=>{const e=document.getElementById('raiderBattle'),b=document.getElementById('rbBg'),f=document.getElementById('rbFg'),cs=x=>getComputedStyle(x),rc=x=>{const q=x.getBoundingClientRect();return [q.left,q.top,q.width,q.height].map(Math.round)};
