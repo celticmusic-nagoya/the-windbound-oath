@@ -67,3 +67,20 @@ MODE=on  SECONDS=320 STRESS=0 OUT=a.json python3 -I tools/qa/fiona_v3_stall_prob
 MODE=alt PHASE_S=40 CYCLES=2 STRESS=4 OUT=e.json python3 -I tools/qa/fiona_v3_stall_probe.py
 TRIALS=8 VP=pc STRESS=2 THROTTLE=4 OUT=heal.json python3 -I tools/qa/ally_heal_ready_probe.py
 ```
+
+## 7. 回帰結果(テスト対象のコード SHA `09bca93c6e0bd108716055c8d00b0c3484ae07fe`、当環境、直列実行)
+このコミットより後の変更は本ファイルと証跡ファイルのみ(docs だけ。`git diff 09bca93 HEAD --stat` で確認できる)。既存 QA 原本(旧 `docs/battle/qa/fiona-v3-load/` など)は変更していない。
+
+| 項目 | 結果 |
+|---|---|
+| `fiona_v3_trace_qa.py`(純 Python。S1〜S5 新旧比較、P1〜P5 ポーズ所有、ATTR 判定、既存の時計リセット・窓端) | 36 ok / FAILS [] |
+| `fiona_idle_v3.py`(短縮、通常戦 fixture = `attackGob2` + 可視性) | 44 ok / FAILS [] |
+| `fiona_idle_v3.py` + `FIONA_LOOP_SECONDS=320`(`soak_320s_evidence_code-09bca93.json`) | 48 ok / FAILS []、18369 描画、clock_resets 0、最大描画間隔 83.3ms、停止(>500ms)0、72 blink 中 69 完全 |
+| `fiona_idle_v3_strict.py`(実系) | 45 ok / FAILS [] |
+| `fiona_idle_v3_strict.py`(負例) | 7/7 検出 / FAILS [] |
+| `arena_motion_test.py` | 44 ok / FAILS 0 |
+| `battle_idle6.py` | 26 ok(2 回とも) |
+| `ally_motion_p3.py` | 67 ok(3 回とも)。ただし負荷下では 16 回中 4 回の未準備を `ally_heal_ready_probe.py` で再現できており、**3 回 PASS は「不安定さが解消した」証拠ではない**(第 5 節) |
+
+注: 同 soak の独立時計の記録に、T と R で各 1 回の 200ms 超の空白がある(Worker は無し)。描画ログには 500ms 超の空白も 83.3ms 超の間隔もなく、`traceStop()` の大きな戻り値を受け取るための終了時の評価と重なるため、観測窓内の停止ではないと判断した(個別ログで再確認していない)。
+`strict` 負例ログの `BrokenPipeError` は、テストが文脈を閉じたときに静的サーバ(`http.server`)が出す既知の接続中断で、判定とは無関係。

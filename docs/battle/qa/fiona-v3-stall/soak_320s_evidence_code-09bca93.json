@@ -1,0 +1,145 @@
+{
+ "loop_s": 320.0,
+ "metrics": {
+  "draws": 18369,
+  "clock_resets": 0,
+  "max_draw_gap_ms": 83.3,
+  "gaps_over_100ms": 0,
+  "blinks": 72,
+  "blinks_fully_sampled": 69,
+  "blinks_with_unsampled_states": 3,
+  "stall_threshold_ms": 500.0,
+  "stalls": [],
+  "paused_holes": [],
+  "max_stall_ms": 0,
+  "max_paused_hole_ms": 0,
+  "blinks_truncated_by_window": 0,
+  "blinks_unsampled_without_a_stall": 0,
+  "blinks_unsampled_inside_a_stall": 1,
+  "blink_gaps_s": [
+   3.05,
+   4.8,
+   5.35,
+   4.916,
+   4.283,
+   3.117,
+   4.233,
+   3.983,
+   4.117,
+   4.516,
+   3.75,
+   5.583
+  ],
+  "wall_s": 322.7,
+  "long_tasks": 4,
+  "longest_task_ms": 183,
+  "class_or_visibility_events": 0
+ },
+ "verdict_failures": [],
+ "long_tasks": [
+  [
+   152,
+   151
+  ],
+  [
+   469,
+   183
+  ],
+  [
+   25592,
+   61
+  ],
+  [
+   43671,
+   57
+  ]
+ ],
+ "events": [],
+ "trace_head": [
+  {
+   "ctx": "raider",
+   "t": 1.6361000000000931,
+   "start": -1000000000,
+   "state": 0,
+   "drawn": "",
+   "wave": 0.9205147855253399,
+   "ph": 0.4090250000000233,
+   "still": false,
+   "now": 46242
+  },
+  {
+   "ctx": "raider",
+   "t": 1.6528000000000902,
+   "start": -1000000000,
+   "state": 0,
+   "drawn": "",
+   "wave": 0.9274649893775133,
+   "ph": 0.41320000000002255,
+   "still": false,
+   "now": 46258.7
+  },
+  {
+   "ctx": "raider",
+   "t": 1.6695000000000946,
+   "start": -1000000000,
+   "state": 0,
+   "drawn": "",
+   "wave": 0.9341210571211321,
+   "ph": 0.41737500000002364,
+   "still": false,
+   "now": 46275.4
+  },
+  {
+   "ctx": "raider",
+   "t": 1.6862000000000916,
+   "start": -1000000000,
+   "state": 0,
+   "drawn": "",
+   "wave": 0.9404784087556921,
+   "ph": 0.4215500000000229,
+   "still": false,
+   "now": 46292.1
+  },
+  {
+   "ctx": "raider",
+   "t": 1.7028000000000902,
+   "start": -1000000000,
+   "state": 0,
+   "drawn": "",
+   "wave": 0.9464973271333361,
+   "ph": 0.42570000000002256,
+   "still": false,
+   "now": 46308.7
+  }
+ ],
+ "holes": {
+  "W": [],
+  "T": [
+   [
+    1792651686404.7,
+    1792651687212.7998
+   ]
+  ],
+  "R": [
+   [
+    1792651686414.2,
+    1792651687207.7998
+   ]
+  ],
+  "to": 1792651320166.9
+ },
+ "stall_attribution": null,
+ "host": {
+  "nproc": 2,
+  "loadavg_before": [
+   2.234375,
+   2.79931640625,
+   3.6220703125
+  ],
+  "loadavg_after": [
+   2.154296875,
+   2.0185546875,
+   3.00146484375
+  ]
+ }
+}
