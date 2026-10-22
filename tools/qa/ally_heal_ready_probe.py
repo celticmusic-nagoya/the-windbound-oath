@@ -2,13 +2,16 @@
 For each action it records, on the PAGE clock, the order of: action call -> <img src> attribute set -> resource request/response (Resource Timing; was it already fetched by BattleMotion's preload?)
 -> the img 'load' event -> img.decode() settled -> first requestAnimationFrame after load, and the exact state of the +250 ms sample the test takes (img.complete, naturalWidth, src).
 Trials use the test's own preamble (fresh page, startRaiderBattle, opening presentation finished, +1.5 s) so the numbers are for the same timing the test has.
-Env: TRIALS (8), VP (pc|portrait|landscape), THROTTLE (CDP CPU factor), STRESS (busy-loop processes), ACTIONS ("fiona:heal,lou:heal"), OUT."""
+Env: PRELOAD (0|1: in-page A/B of a battle-start preload of the single stills - Image()+decode(); NO game file is changed), TRIALS (8), VP (pc|portrait|landscape), THROTTLE (CDP CPU factor), STRESS (busy-loop processes), ACTIONS ("fiona:heal,lou:heal"), OUT."""
 import os,sys,json,subprocess
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from browser_support import server
 from playwright.sync_api import sync_playwright
 TRIALS=int(os.getenv('TRIALS','8'));VPN=os.getenv('VP','pc');THR=float(os.getenv('THROTTLE','1'));STRESS=int(os.getenv('STRESS','0'))
+PRE=int(os.getenv('PRELOAD','0'))
+PRELOAD_JS="""async()=>{const base='img/battle/characters/';const u=['fiona/fiona_skill_charge.png','fiona/fiona_skill_heal.png','lou/lou_support_charge.png','lou/lou_support_heal.png'];const lt=[];try{new PerformanceObserver(l=>l.getEntries().forEach(e=>lt.push(Math.round(e.duration)))).observe({entryTypes:['longtask']})}catch(e){}
+ const T=performance.now();const keep=window.__pre=[];await Promise.all(u.map(async f=>{const i=new Image();keep.push(i);i.src=base+f;try{await i.decode()}catch(e){}}));return {ms:Math.round(performance.now()-T),ok:keep.map(i=>i.complete&&i.naturalWidth>0),longtasks:lt}}"""
 ACTS=[tuple(x.split(':')) for x in os.getenv('ACTIONS','fiona:heal,lou:heal').split(',')]
 VP={'pc':(1280,720),'portrait':(390,844),'landscape':(844,390)}[VPN]
 PROBE="""async(a)=>{const [actor,state]=a;const sel={aidan:'#rbAidan',fiona:'#rbFiona',lou:'#rbLou'}[actor];const e=document.querySelector(sel);const img=e&&e.querySelector('img');if(!img)return {err:'no img'};
@@ -33,6 +36,8 @@ def main():
                 if THR>1:ctx.new_cdp_session(pg).send('Emulation.setCPUThrottlingRate',{'rate':THR})
                 pg.evaluate("PrologueProgress.seed(0);startRaiderBattle()");pg.wait_for_timeout(300)
                 pg.wait_for_function("!document.body.classList.contains('battlePresentationBusy')&&!document.body.classList.contains('dialogueOpen')&&!document.body.classList.contains('actionCinematic')",timeout=30000);pg.wait_for_timeout(1500)
+                pre=pg.evaluate(PRELOAD_JS) if PRE else None
+                if pre:rows.append({'trial':k,'preload':pre})
                 for a in ACTS:
                     if a[0]=='lou' and not pg.evaluate("!!document.querySelector('#rbLou img')&&getComputedStyle(document.querySelector('#rbLou')).visibility!=='hidden'"):rows.append({'trial':k,'actor':a[0],'state':a[1],'skipped':'lou not in party'});continue
                     r=pg.evaluate(PROBE,list(a));r['trial']=k;rows.append(r)
@@ -41,6 +46,7 @@ def main():
     finally:
         [s.kill() for s in stress]
     summ={}
+    pl=[r['preload'] for r in rows if 'preload' in r]
     for r in rows:
         if 'mid' not in r:continue
         s=summ.setdefault('%s:%s'%(r['actor'],r['state']),{'n':0,'mid_not_ready':0,'not_ready_resource_not_yet_fetched':0,'not_ready_fetched_but_pending':0,'src_to_load_ms':[],'decode_ms':[]})
@@ -51,7 +57,7 @@ def main():
             else:s['not_ready_fetched_but_pending']+=1
         if r['srcs'] and r['loads']:s['src_to_load_ms'].append(round(r['loads'][-1][0]-r['srcs'][0][0],1))
         if 'decode_ms' in r:s['decode_ms'].append(r['decode_ms'])
-    res={'viewport':VPN,'throttle':THR,'stress':STRESS,'trials':TRIALS,'summary':summ,'rows':rows}
+    res={'preload':PRE,'preload_cost':{'ms':[x['ms'] for x in pl],'all_ok':all(all(x['ok']) for x in pl),'longtasks':[x['longtasks'] for x in pl]} if pl else None,'viewport':VPN,'throttle':THR,'stress':STRESS,'trials':TRIALS,'summary':summ,'rows':rows}
     if os.getenv('OUT'):Path(os.getenv('OUT')).write_text(json.dumps(res,indent=1))
     print(json.dumps({k:v for k,v in res.items() if k!='rows'},indent=1))
 main()

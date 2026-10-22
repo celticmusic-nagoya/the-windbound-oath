@@ -134,15 +134,30 @@ def analyze(tr,ctx,require_no_resets=False,events=None):
     if any(v<3.0-1e-9 or v>6.0+slack+1e-9 for v in g):fails.append('blink gap outside 3-6 s (+draw latency)')
     return fails,m
 
-def classify_incident(layers):
-    """layers: set of independent clocks that showed a hole during one stall incident. W = Worker heartbeat (not blocked by the main thread), T = main-thread setTimeout chain,
-    R = requestAnimationFrame chain, D = the idle renderer's own draw log. Returns the attribution sentence used in reports (it names where the stop is, not why)."""
-    L=set(layers)
-    if L>={'W','T','R'}:return 'process-level freeze (worker heartbeat stopped too): host/CPU starvation or VM pause, not the page'
-    if 'T' in L and 'W' not in L:return 'main thread blocked or timers throttled while the worker kept beating'
-    if L=={'R'} or L=={'R','D'}:return 'rAF delivery stopped while main-thread timers and worker kept running (frame production)'
-    if L=={'D'}:return 'idle renderer did not draw although rAF/timers/worker ran (paused()/eligible/exception)'
-    return 'mixed: '+''.join(sorted(L))
+def classify_incident(layers,cov=None):
+    """layers: set of independent clocks that showed a hole overlapping one stall. W = Worker heartbeat (not blocked by the main thread), T = main-thread setTimeout chain, R = requestAnimationFrame chain,
+    D = the idle renderer's own draw log. cov: optional {'W':fraction,'T':..,'R':..} of the stall covered by that clock's holes (stall_coverage()).
+    The sentence names WHICH LAYERS were silent, never WHY: a layer list cannot separate a blocked renderer from a starved host (a Worker that is merely slowed overlaps a stall without proving it was running normally,
+    and one that beat now and then does not prove the process was alive the whole time). The cause stays 'undetermined' until a host counter inside the stall window (host_sampler.window_summary) says otherwise."""
+    L=set(layers);c=cov or {}
+    w=' (worker hole covers %d%% of the stall)'%round(100*(c['W']['frac'] if isinstance(c['W'],dict) else c['W'])) if 'W' in c else ''
+    if L>={'W','T','R'}:return 'common delay: worker, main timers, rAF and draw log all overlap the stall'+w+'; cause undetermined (host/CPU starvation, VM pause or a blocked renderer process are all still possible)'
+    if 'T' in L and 'W' not in L:return 'main-thread delay: timers and rAF overlap the stall, worker does not; cause undetermined (long task, descheduled main thread, GC, ...)'
+    if L=={'R'} or L=={'R','D'}:return 'frame-delivery delay: only rAF and the draw log overlap the stall; main timers and worker ran; cause undetermined'
+    if L=={'D'}:return 'draw-log-only: the idle renderer did not draw although rAF/timers/worker ran (paused()/eligible/exception); cause undetermined'
+    return 'mixed: '+''.join(sorted(L))+w+'; cause undetermined'
+def stall_coverage(start_ep,end_ep,layer_gaps):
+    """For each independent clock: how much of [start_ep,end_ep] its holes cover (union, ms and fraction) and its longest single hole - the numbers that the one-line layer label hides."""
+    g=max(end_ep-start_ep,1e-9);out={}
+    for k,v in layer_gaps.items():
+        iv=sorted((max(a,start_ep),min(b,end_ep)) for a,b in v if b>start_ep and a<end_ep);u=0.0;cur=None
+        for a,b in iv:
+            if cur is None:cur=[a,b]
+            elif a<=cur[1]:cur[1]=max(cur[1],b)
+            else:u+=cur[1]-cur[0];cur=[a,b]
+        if cur:u+=cur[1]-cur[0]
+        out[k]={'cov_ms':round(u,1),'frac':round(u/g,3),'max_hole_ms':round(max([b-a for a,b in v if b>start_ep and a<end_ep] or [0]),1),'holes':len(iv)}
+    return out
 def stall_layers(start_ep,end_ep,layer_gaps,slack=300.0):
     """layer_gaps: {'W':[(gap_start_ep,gap_end_ep)],'T':[...],'R':[...]} epoch-ms holes of the independent clocks. Returns the set of layers whose hole overlaps [start_ep,end_ep]."""
     out={'D'}

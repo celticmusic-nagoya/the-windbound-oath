@@ -1,0 +1,948 @@
+{
+ "preload": 0,
+ "preload_cost": null,
+ "viewport": "portrait",
+ "throttle": 4.0,
+ "stress": 2,
+ "trials": 6,
+ "summary": {
+  "fiona:heal": {
+   "n": 6,
+   "mid_not_ready": 0,
+   "not_ready_resource_not_yet_fetched": 0,
+   "not_ready_fetched_but_pending": 0,
+   "src_to_load_ms": [
+    923.0,
+    964.6,
+    902.4,
+    957.6,
+    1012.4,
+    922.9
+   ],
+   "decode_ms": []
+  },
+  "lou:heal": {
+   "n": 6,
+   "mid_not_ready": 3,
+   "not_ready_resource_not_yet_fetched": 3,
+   "not_ready_fetched_but_pending": 0,
+   "src_to_load_ms": [
+    820.6,
+    1111.7,
+    1004.1,
+    817.1,
+    1135.4,
+    1048.1
+   ],
+   "decode_ms": [
+    270.7,
+    226.8,
+    361.3,
+    211.3,
+    705.4
+   ]
+  }
+ },
+ "rows": [
+  {
+   "actor": "fiona",
+   "state": "heal",
+   "t": {
+    "action_returned": 3.4,
+    "raf_after_load": 177.2
+   },
+   "srcs": [
+    [
+     3.6,
+     "fiona/fiona_skill_charge.png"
+    ],
+    [
+     264.3,
+     "motion/fiona_heal_01.png"
+    ],
+    [
+     347.9,
+     "motion/fiona_heal_02.png"
+    ],
+    [
+     438.9,
+     "motion/fiona_heal_03.png"
+    ],
+    [
+     541.2,
+     "motion/fiona_heal_04.png"
+    ],
+    [
+     656.3,
+     "motion/fiona_heal_05.png"
+    ],
+    [
+     788.9,
+     "motion/fiona_heal_06.png"
+    ],
+    [
+     924.6,
+     "fiona/fiona_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     138,
+     "fiona/fiona_skill_charge.png",
+     1536
+    ],
+    [
+     264.5,
+     "motion/fiona_heal_01.png",
+     862
+    ],
+    [
+     348,
+     "motion/fiona_heal_02.png",
+     862
+    ],
+    [
+     439,
+     "motion/fiona_heal_03.png",
+     862
+    ],
+    [
+     541.3,
+     "motion/fiona_heal_04.png",
+     862
+    ],
+    [
+     656.6,
+     "motion/fiona_heal_05.png",
+     862
+    ],
+    [
+     789,
+     "motion/fiona_heal_06.png",
+     862
+    ],
+    [
+     926.6,
+     "fiona/fiona_battle_idle.png",
+     1536
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 254.3,
+    "complete": true,
+    "nw": 1536,
+    "src": "fiona/fiona_skill_charge.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1536,
+    "state": "idle"
+   },
+   "trial": 0
+  },
+  {
+   "actor": "lou",
+   "state": "heal",
+   "t": {
+    "action_returned": 1.9,
+    "raf_after_load": 120.2
+   },
+   "srcs": [
+    [
+     2,
+     "lou/lou_support_charge.png"
+    ],
+    [
+     156.9,
+     "lou/lou_support_heal.png"
+    ],
+    [
+     822.4,
+     "lou/lou_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     114,
+     "lou/lou_support_charge.png",
+     1536
+    ],
+    [
+     271.8,
+     "lou/lou_support_heal.png",
+     1536
+    ],
+    [
+     822.6,
+     "lou/lou_battle_idle.png",
+     1312
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 271.6,
+    "complete": true,
+    "nw": 1536,
+    "src": "lou/lou_support_heal.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_ms": 270.7,
+   "end": {
+    "complete": true,
+    "nw": 1312,
+    "state": "idle"
+   },
+   "trial": 0
+  },
+  {
+   "actor": "fiona",
+   "state": "heal",
+   "t": {
+    "action_returned": 21.5,
+    "raf_after_load": 255.1
+   },
+   "srcs": [
+    [
+     22.7,
+     "fiona/fiona_skill_charge.png"
+    ],
+    [
+     294.1,
+     "motion/fiona_heal_01.png"
+    ],
+    [
+     376.1,
+     "motion/fiona_heal_02.png"
+    ],
+    [
+     466.3,
+     "motion/fiona_heal_03.png"
+    ],
+    [
+     580.3,
+     "motion/fiona_heal_04.png"
+    ],
+    [
+     696.8,
+     "motion/fiona_heal_05.png"
+    ],
+    [
+     825.1,
+     "motion/fiona_heal_06.png"
+    ],
+    [
+     951.6,
+     "fiona/fiona_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     157.2,
+     "fiona/fiona_skill_charge.png",
+     1536
+    ],
+    [
+     294.3,
+     "motion/fiona_heal_01.png",
+     862
+    ],
+    [
+     376.2,
+     "motion/fiona_heal_02.png",
+     862
+    ],
+    [
+     466.3,
+     "motion/fiona_heal_03.png",
+     862
+    ],
+    [
+     580.4,
+     "motion/fiona_heal_04.png",
+     862
+    ],
+    [
+     696.8,
+     "motion/fiona_heal_05.png",
+     862
+    ],
+    [
+     826,
+     "motion/fiona_heal_06.png",
+     862
+    ],
+    [
+     987.3,
+     "fiona/fiona_battle_idle.png",
+     1536
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 277,
+    "complete": true,
+    "nw": 1536,
+    "src": "fiona/fiona_skill_charge.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1536,
+    "state": "idle"
+   },
+   "trial": 1
+  },
+  {
+   "actor": "lou",
+   "state": "heal",
+   "t": {
+    "action_returned": 0.4,
+    "raf_after_load": 427.7
+   },
+   "srcs": [
+    [
+     0.4,
+     "lou/lou_support_charge.png"
+    ],
+    [
+     164.7,
+     "lou/lou_support_heal.png"
+    ],
+    [
+     942.6,
+     "lou/lou_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     305.2,
+     "lou/lou_support_heal.png",
+     1536
+    ],
+    [
+     1112.1,
+     "lou/lou_battle_idle.png",
+     1312
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 250.6,
+    "complete": false,
+    "nw": 1536,
+    "src": "lou/lou_support_heal.png",
+    "okTest": false
+   },
+   "resource": null,
+   "decode_ms": 226.8,
+   "end": {
+    "complete": true,
+    "nw": 1312,
+    "state": "idle"
+   },
+   "trial": 1
+  },
+  {
+   "actor": "fiona",
+   "state": "heal",
+   "t": {
+    "action_returned": 0.5,
+    "raf_after_load": 665.8
+   },
+   "srcs": [
+    [
+     0.5,
+     "fiona/fiona_skill_charge.png"
+    ],
+    [
+     261.1,
+     "motion/fiona_heal_01.png"
+    ],
+    [
+     341.7,
+     "motion/fiona_heal_02.png"
+    ],
+    [
+     432,
+     "motion/fiona_heal_03.png"
+    ],
+    [
+     533.5,
+     "motion/fiona_heal_04.png"
+    ],
+    [
+     643.9,
+     "motion/fiona_heal_05.png"
+    ],
+    [
+     768.4,
+     "motion/fiona_heal_06.png"
+    ],
+    [
+     902.6,
+     "fiona/fiona_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     225.4,
+     "fiona/fiona_skill_charge.png",
+     1536
+    ],
+    [
+     261.2,
+     "motion/fiona_heal_01.png",
+     862
+    ],
+    [
+     341.8,
+     "motion/fiona_heal_02.png",
+     862
+    ],
+    [
+     432.1,
+     "motion/fiona_heal_03.png",
+     862
+    ],
+    [
+     533.6,
+     "motion/fiona_heal_04.png",
+     862
+    ],
+    [
+     644,
+     "motion/fiona_heal_05.png",
+     862
+    ],
+    [
+     768.5,
+     "motion/fiona_heal_06.png",
+     862
+    ],
+    [
+     902.9,
+     "fiona/fiona_battle_idle.png",
+     1536
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 251,
+    "complete": true,
+    "nw": 1536,
+    "src": "fiona/fiona_skill_charge.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1536,
+    "state": "idle"
+   },
+   "trial": 2
+  },
+  {
+   "actor": "lou",
+   "state": "heal",
+   "t": {
+    "action_returned": 0.3,
+    "raf_after_load": 88.1
+   },
+   "srcs": [
+    [
+     0.3,
+     "lou/lou_support_charge.png"
+    ],
+    [
+     140.8,
+     "lou/lou_support_heal.png"
+    ],
+    [
+     809.7,
+     "lou/lou_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     73.6,
+     "lou/lou_support_charge.png",
+     1536
+    ],
+    [
+     313.1,
+     "lou/lou_support_heal.png",
+     1536
+    ],
+    [
+     1004.4,
+     "lou/lou_battle_idle.png",
+     1312
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 319.7,
+    "complete": true,
+    "nw": 1536,
+    "src": "lou/lou_support_heal.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_ms": 361.3,
+   "end": {
+    "complete": true,
+    "nw": 1312,
+    "state": "idle"
+   },
+   "trial": 2
+  },
+  {
+   "actor": "fiona",
+   "state": "heal",
+   "t": {
+    "action_returned": 0.5,
+    "raf_after_load": 419
+   },
+   "srcs": [
+    [
+     0.7,
+     "fiona/fiona_skill_charge.png"
+    ],
+    [
+     315.8,
+     "motion/fiona_heal_01.png"
+    ],
+    [
+     422.2,
+     "motion/fiona_heal_02.png"
+    ],
+    [
+     515.1,
+     "motion/fiona_heal_03.png"
+    ],
+    [
+     626.7,
+     "motion/fiona_heal_04.png"
+    ],
+    [
+     729.1,
+     "motion/fiona_heal_05.png"
+    ],
+    [
+     850.1,
+     "motion/fiona_heal_06.png"
+    ],
+    [
+     958.1,
+     "fiona/fiona_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     343.9,
+     "motion/fiona_heal_01.png",
+     862
+    ],
+    [
+     422.2,
+     "motion/fiona_heal_02.png",
+     862
+    ],
+    [
+     515.3,
+     "motion/fiona_heal_03.png",
+     862
+    ],
+    [
+     627.6,
+     "motion/fiona_heal_04.png",
+     862
+    ],
+    [
+     729.2,
+     "motion/fiona_heal_05.png",
+     862
+    ],
+    [
+     850.2,
+     "motion/fiona_heal_06.png",
+     862
+    ],
+    [
+     958.3,
+     "fiona/fiona_battle_idle.png",
+     1536
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 309.7,
+    "complete": true,
+    "nw": 1536,
+    "src": "fiona/fiona_skill_charge.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1536,
+    "state": "idle"
+   },
+   "trial": 3
+  },
+  {
+   "actor": "lou",
+   "state": "heal",
+   "t": {
+    "action_returned": 11,
+    "raf_after_load": 396.2
+   },
+   "srcs": [
+    [
+     11.2,
+     "lou/lou_support_charge.png"
+    ],
+    [
+     152.5,
+     "lou/lou_support_heal.png"
+    ],
+    [
+     828,
+     "lou/lou_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     307.3,
+     "lou/lou_support_heal.png",
+     1536
+    ],
+    [
+     828.3,
+     "lou/lou_battle_idle.png",
+     1312
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 299.6,
+    "complete": true,
+    "nw": 1536,
+    "src": "lou/lou_support_heal.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_ms": 211.3,
+   "end": {
+    "complete": true,
+    "nw": 1312,
+    "state": "idle"
+   },
+   "trial": 3
+  },
+  {
+   "actor": "fiona",
+   "state": "heal",
+   "t": {
+    "action_returned": 15.4,
+    "raf_after_load": 447.3
+   },
+   "srcs": [
+    [
+     15.7,
+     "fiona/fiona_skill_charge.png"
+    ],
+    [
+     346.1,
+     "motion/fiona_heal_01.png"
+    ],
+    [
+     427.6,
+     "motion/fiona_heal_02.png"
+    ],
+    [
+     519.6,
+     "motion/fiona_heal_03.png"
+    ],
+    [
+     662.4,
+     "motion/fiona_heal_04.png"
+    ],
+    [
+     775.6,
+     "motion/fiona_heal_05.png"
+    ],
+    [
+     899.1,
+     "motion/fiona_heal_06.png"
+    ],
+    [
+     991.9,
+     "fiona/fiona_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     393.3,
+     "motion/fiona_heal_01.png",
+     862
+    ],
+    [
+     427.7,
+     "motion/fiona_heal_02.png",
+     862
+    ],
+    [
+     519.7,
+     "motion/fiona_heal_03.png",
+     862
+    ],
+    [
+     662.5,
+     "motion/fiona_heal_04.png",
+     862
+    ],
+    [
+     775.7,
+     "motion/fiona_heal_05.png",
+     862
+    ],
+    [
+     910.4,
+     "motion/fiona_heal_06.png",
+     862
+    ],
+    [
+     1028.1,
+     "fiona/fiona_battle_idle.png",
+     1536
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 335.7,
+    "complete": true,
+    "nw": 1536,
+    "src": "fiona/fiona_skill_charge.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1536,
+    "state": "idle"
+   },
+   "trial": 4
+  },
+  {
+   "actor": "lou",
+   "state": "heal",
+   "t": {
+    "action_returned": 0.2,
+    "raf_after_load": 559.2
+   },
+   "srcs": [
+    [
+     0.2,
+     "lou/lou_support_charge.png"
+    ],
+    [
+     177.5,
+     "lou/lou_support_heal.png"
+    ],
+    [
+     964.9,
+     "lou/lou_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     358.3,
+     "lou/lou_support_heal.png",
+     1536
+    ],
+    [
+     1135.6,
+     "lou/lou_battle_idle.png",
+     1312
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 256.9,
+    "complete": false,
+    "nw": 1536,
+    "src": "lou/lou_support_heal.png",
+    "okTest": false
+   },
+   "resource": null,
+   "decode_ms": 705.4,
+   "end": {
+    "complete": true,
+    "nw": 1312,
+    "state": "idle"
+   },
+   "trial": 4
+  },
+  {
+   "actor": "fiona",
+   "state": "heal",
+   "t": {
+    "action_returned": 0.5,
+    "raf_after_load": 258.7
+   },
+   "srcs": [
+    [
+     0.6,
+     "fiona/fiona_skill_charge.png"
+    ],
+    [
+     281,
+     "motion/fiona_heal_01.png"
+    ],
+    [
+     394.4,
+     "motion/fiona_heal_02.png"
+    ],
+    [
+     487.9,
+     "motion/fiona_heal_03.png"
+    ],
+    [
+     587.1,
+     "motion/fiona_heal_04.png"
+    ],
+    [
+     712.7,
+     "motion/fiona_heal_05.png"
+    ],
+    [
+     839.4,
+     "motion/fiona_heal_06.png"
+    ],
+    [
+     923.2,
+     "fiona/fiona_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     224.8,
+     "fiona/fiona_skill_charge.png",
+     1536
+    ],
+    [
+     281.1,
+     "motion/fiona_heal_01.png",
+     862
+    ],
+    [
+     394.6,
+     "motion/fiona_heal_02.png",
+     862
+    ],
+    [
+     488,
+     "motion/fiona_heal_03.png",
+     862
+    ],
+    [
+     587.2,
+     "motion/fiona_heal_04.png",
+     862
+    ],
+    [
+     714.9,
+     "motion/fiona_heal_05.png",
+     862
+    ],
+    [
+     839.5,
+     "motion/fiona_heal_06.png",
+     862
+    ],
+    [
+     923.5,
+     "fiona/fiona_battle_idle.png",
+     1536
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 280.5,
+    "complete": true,
+    "nw": 1536,
+    "src": "fiona/fiona_skill_charge.png",
+    "okTest": true
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1536,
+    "state": "idle"
+   },
+   "trial": 5
+  },
+  {
+   "actor": "lou",
+   "state": "heal",
+   "t": {
+    "action_returned": 1.5,
+    "raf_after_load": 735.2
+   },
+   "srcs": [
+    [
+     1.5,
+     "lou/lou_support_charge.png"
+    ],
+    [
+     146.9,
+     "lou/lou_support_heal.png"
+    ],
+    [
+     817,
+     "lou/lou_battle_idle.png"
+    ]
+   ],
+   "loads": [
+    [
+     396.6,
+     "lou/lou_support_heal.png",
+     1536
+    ],
+    [
+     1049.6,
+     "lou/lou_battle_idle.png",
+     1312
+    ]
+   ],
+   "ok": true,
+   "mid": {
+    "t": 253.1,
+    "complete": false,
+    "nw": 1536,
+    "src": "lou/lou_support_heal.png",
+    "okTest": false
+   },
+   "resource": null,
+   "decode_err": "EncodingError: The source image cannot be decoded.",
+   "end": {
+    "complete": true,
+    "nw": 1312,
+    "state": "idle"
+   },
+   "trial": 5
+  }
+ ]
+}

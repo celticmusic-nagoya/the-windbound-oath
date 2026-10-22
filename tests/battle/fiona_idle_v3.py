@@ -104,7 +104,8 @@ with server(8817) as base,sync_playwright() as p:
               let lt=EP();const tm=()=>{const n=EP();if(n-lt>200)H.T.push([lt,n]);lt=n;setTimeout(tm,25)};setTimeout(tm,25);
               let lr=EP();const rf=()=>{const n=EP();if(n-lr>200)H.R.push([lr,n]);lr=n;requestAnimationFrame(rf)};requestAnimationFrame(rf)}""")
         host0=(os.getloadavg(),os.cpu_count())
-        t0=time.time();pg.wait_for_timeout(int(LOOP*1000));tr=pg.evaluate("BattleIdleMotion.traceStop()");extra=pg.evaluate("({lt:window.__lt,ev:window.__ev.slice(0,400)})");wall=time.time()-t0
+        import host_sampler as HS;hsm=HS.HostSampler(0.25).start()   # diagnostic only: cgroup throttle / PSI / steal / context switches on the page's epoch-ms axis (FIONA_HOST_SAMPLER=0 not needed: every source is optional)
+        t0=time.time();pg.wait_for_timeout(int(LOOP*1000));tr=pg.evaluate("BattleIdleMotion.traceStop()");hrows=hsm.stop();extra=pg.evaluate("({lt:window.__lt,ev:window.__ev.slice(0,400)})");wall=time.time()-t0
         holes=None
         if os.getenv('FIONA_STALL_CLOCKS','1')!='0':
             pg.evaluate("window.__wk.postMessage(0)");pg.wait_for_function("window.__wkh!==undefined",timeout=30000)
@@ -121,14 +122,16 @@ with server(8817) as base,sync_playwright() as p:
             for st in m['stalls']:
                 e0=holes['to']+st['at_now_ms'] if holes else None   # at_now_ms = page time of the last draw BEFORE the hole; the hole is [at_now_ms, at_now_ms+gap]
                 if holes:
-                    L=S.stall_layers(e0,e0+st['gap_ms'],{k:holes[k] for k in ('W','T','R')});att.append({**st,'layers':''.join(sorted(L)),'attribution':S.classify_incident(L)})
+                    LG={k:holes[k] for k in ('W','T','R')};L=S.stall_layers(e0,e0+st['gap_ms'],LG);cv=S.stall_coverage(e0,e0+st['gap_ms'],LG)
+                    lts=[x for x in extra['lt'] if x[0]+holes['to']<e0+st['gap_ms'] and x[0]+holes['to']+x[1]>e0]   # page-ms longtasks overlapping the hole
+                    att.append({**st,'layers':''.join(sorted(L)),'coverage':cv,'longtasks_overlapping':{'n':len(lts),'max_ms':max([x[1] for x in lts] or [0])},'host_window':HS.window_summary(hrows,e0,e0+st['gap_ms']),'attribution':S.classify_incident(L,cv)})
                 else:att.append({**st,'attribution':'independent clocks switched off'})
             m['stall_attribution']=att
-            for a_ in att:print('STALL %.0f ms at page-time %d ms: %s [%s]'%(a_['gap_ms'],a_['at_now_ms'],a_['attribution'],a_.get('layers','')),flush=True)
+            for a_ in att:print('STALL %.0f ms at page-time %d ms: %s [%s] cov W/T/R=%s longtask>=%dms host=%s'%(a_['gap_ms'],a_['at_now_ms'],a_['attribution'],a_.get('layers',''),'/'.join('%d%%'%round(100*a_['coverage'][k]['frac']) for k in 'WTR') if a_.get('coverage') else '-',a_.get('longtasks_overlapping',{}).get('max_ms',0),{k:v for k,v in (a_.get('host_window') or {}).items() if k in ('max_sampler_wake_delay_ms','d_throttled_usec','d_invol_ctxt','d_psi_cpu_some_us','d_steal_ticks')}),flush=True)
             print('host: nproc=%d loadavg_before=%s loadavg_after=%s longest_longtask_ms=%d'%(host0[1],tuple(round(x,2) for x in host0[0]),tuple(round(x,2) for x in os.getloadavg()),m['longest_task_ms']),flush=True)
         sv=S.classify_soak(tr,'raider',extra['ev'])
         check(m['clock_resets']==0 and sv['verdict']=='PASS','soak: animation clock never reset (resets==0; %s)'%sv['verdict'],(m['clock_resets'],sv['verdict'],len(extra['ev'])))
-        if os.getenv('FIONA_EVIDENCE'):Path(os.getenv('FIONA_EVIDENCE')).write_text(json.dumps({'loop_s':LOOP,'metrics':m,'verdict_failures':f,'long_tasks':extra['lt'][:200],'events':extra['ev'],'trace_head':tr[:5],'holes':holes,'stall_attribution':m.get('stall_attribution'),'host':{'nproc':host0[1],'loadavg_before':host0[0],'loadavg_after':os.getloadavg()}},indent=1))
+        if os.getenv('FIONA_EVIDENCE'):Path(os.getenv('FIONA_EVIDENCE')).write_text(json.dumps({'loop_s':LOOP,'metrics':m,'verdict_failures':f,'long_tasks':extra['lt'],'host_samples':hrows,'events':extra['ev'],'trace_head':tr[:5],'holes':holes,'stall_attribution':m.get('stall_attribution'),'host':{'nproc':host0[1],'loadavg_before':host0[0],'loadavg_after':os.getloadavg()}},indent=1))
     check(not errs,'no page errors',errs[:3]);check(not bad,'no image/asset load failures',bad[:3])
     # reduced motion: rest pose only (open eyes, no breathing)
     c2=b.new_context(viewport={'width':1280,'height':720},reduced_motion='reduce');p2=c2.new_page();p2.goto(base+'/index.html');p2.wait_for_function('window.BattleIdleMotion&&window.BattleActorState');p2.wait_for_timeout(1500);p2.evaluate("closeDialogue()");p2.evaluate("startRaiderBattle()");p2.wait_for_timeout(2500)
