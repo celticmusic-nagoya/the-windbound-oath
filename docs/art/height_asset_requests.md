@@ -1,6 +1,6 @@
 # 高さPhase 2 素材依頼・下書き
 
-STATUS: DRAFT — Phase 1承認後に発注する。画像生成・採用・コード組み込みはまだ行わない。
+STATUS: DRAFT。**仕様は `docs/art/height_phase2_render_spec.md` v2（承認済み）が優先**（坂 n/s の枠・欄干の支柱・橋の端柱などが本書の記述と異なる。本書は設計承認後に更新予定）。先行3素材の最終プロンプトは `docs/art/height_phase2_first3_brief.md`。画像生成・採用・コード組み込みはまだ行わない。
 基準: `feat/field-height-prototype` / `528f46e`。新規高さ素材だけを対象とし、採用済みキャラクター/既存納品アセットを変更・置換しない。
 
 ## 座標・寸法・アンカー
