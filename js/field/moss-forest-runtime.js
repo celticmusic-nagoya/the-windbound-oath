@@ -198,7 +198,7 @@
         blocked:(ax,ay,lv)=>S.forest.height&&Number.isFinite(lv)?S.forest.height.blockedAtLevel(ax,ay,lv):S.forest.blocked(ax,ay),
         advance:(ax,ay,dx,dy,lv)=>FieldMovement.advance(ax,ay,dx,dy,S.forest.height&&Number.isFinite(lv)?((x,y)=>S.forest.height.blockedAtLevel(x,y,lv)):S.forest.blocked,{bounds:S.map.world}),
         level:()=>S.forest.height?S.forest.height.level:null,
-        player:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),canEngage:()=>S.active&&!S.busy&&!S.battleLatch&&Boolean(hooks.onMonster),engage:startMonsterBattle});
+        player:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),canEngage:()=>S.active&&!S.busy&&!S.battleLatch&&Boolean(hooks.onMonster),allow:d=>!hooks.monsterAllowed||hooks.monsterAllowed(d,map.id)!==false,engage:startMonsterBattle});
     }
     el.label.textContent=(map.displayName&&map.displayName.ja)||'苔むした森';
     for(const t of map.treasurePoints||[]){

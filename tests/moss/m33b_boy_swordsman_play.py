@@ -42,7 +42,7 @@ with sync_playwright() as p:
     f0 = pg.evaluate("MossForest.feet"); b0 = pg.evaluate(BOX)
     pg.keyboard.down('ArrowRight')
     for _ in range(60):
-        if pg.evaluate("MossForest.feet.x") >= 1905: break
+        if pg.evaluate("MossForest.feet.x") - f0['x'] > 30: break   # hold the key until the move really exceeds the 30px asserted below (was a fixed 1905 = only 25px, racing the assert)
         pg.wait_for_timeout(20)
     pg.keyboard.up('ArrowRight'); pg.wait_for_timeout(300)
     f1 = pg.evaluate("MossForest.feet"); b1 = pg.evaluate(BOX)
