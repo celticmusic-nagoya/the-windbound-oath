@@ -45,7 +45,7 @@ with server(8832) as base, sync_playwright() as p:
         for a in ('aidan', 'fiona'):
             # Clock-anchored (in-page) timeline instead of two cross-process wall-clock samples: the Python<->browser round trips can be delayed by a loaded host
             # (Codex QA FIV3-04: a 30 s goto stall preceded the single failure), which made 'state at +200 ms / +900 ms' depend on the host, not on the game.
-            # Pass = the state machine goes damage -> idle, damage lasts 360 ms (+ timer latency), measured by the page's own clock; a sampler stall > 150 ms is UNVERIFIED and re-run (max 3), never silently passed.
+            # Pass = the state machine goes damage -> idle. The requested duration is 360 ms, but a delivered motion is never cut short (js/battle-actor-state.js:72, duration = Math.max(duration, BattleMotion.info(actor,state).totalMs)), so while the damage manifest ships (total 650 ms) the state lasts max(360, 650) = 650 ms (+ timer latency), measured by the page's own clock (Codex FIV3 P3 wording fix; the 200 < t_idle <= 900 window and the product are unchanged); a sampler stall > 150 ms is UNVERIFIED and re-run (max 3), never silently passed.
             tl = None
             for attempt in range(3):
                 tl = pg.evaluate("(a)=>new Promise(res=>{const tl=[];let last=null,lastT=performance.now(),maxGap=0;const t0=performance.now();BattleActorState.set(a,'damage',{battle:'raider',duration:360});"
@@ -54,7 +54,7 @@ with server(8832) as base, sync_playwright() as p:
                 if tl['maxGap'] <= 150: break
                 print('UNVERIFIED sample (host stall %d ms in the page), re-running %s %s' % (tl['maxGap'], tag, a), flush=True)
             seq = [x[1] for x in tl['tl']]; t_idle = next((x[0] for x in tl['tl'] if x[1] == 'idle'), None)
-            check(tl['maxGap'] <= 150 and seq == ['damage', 'idle'] and t_idle is not None and 200 < t_idle <= 900, '%s %s: damage then back to idle (damage ~360 ms by the page clock)' % (tag, a), tl)
+            check(tl['maxGap'] <= 150 and seq == ['damage', 'idle'] and t_idle is not None and 200 < t_idle <= 900, '%s %s: damage then back to idle (damage = max(360 ms, motion total 650 ms) by the page clock)' % (tag, a), tl)
             pg.evaluate("BattleActorState.set('%s','guard',{battle:'raider'})" % a); g = pg.evaluate("BattleActorState.get('raider','%s')" % a)
             pg.evaluate("BattleActorState.endGuard('raider','%s')" % a); pg.wait_for_timeout(200)
             check(g == 'guard' and pg.evaluate("BattleActorState.get('raider','%s')" % a) == 'idle', '%s %s: guard held then released to idle' % (tag, a))

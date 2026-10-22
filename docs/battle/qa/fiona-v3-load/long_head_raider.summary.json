@@ -1,0 +1,122 @@
+{
+ "runtime": "head",
+ "variant": "none",
+ "ctx": "raider",
+ "phase_s": 60.0,
+ "cycles": 2,
+ "errors": [],
+ "phases": {
+  "ON0": {
+   "raf_gap_ms": {
+    "n": 3124,
+    "max": 250,
+    "p99": 83.3,
+    "p50": 16.7,
+    "over100": 12,
+    "over1000": 0
+   },
+   "timer_late_ms": {
+    "n": 1172,
+    "max": 152.5,
+    "p99": 26,
+    "p50": 0.2,
+    "over100": 3,
+    "over1000": 0
+   },
+   "longtasks": {
+    "n": 1,
+    "max_ms": 63,
+    "sum_ms": 63
+   },
+   "drawImage_big": {
+    "n": 3224,
+    "mean_ms": 0.099,
+    "max_ms": 6.5
+   }
+  },
+  "OFF0": {
+   "raf_gap_ms": {
+    "n": 3255,
+    "max": 366.7,
+    "p99": 66.7,
+    "p50": 16.7,
+    "over100": 6,
+    "over1000": 0
+   },
+   "timer_late_ms": {
+    "n": 1187,
+    "max": 90.5,
+    "p99": 19.6,
+    "p50": 0.2,
+    "over100": 0,
+    "over1000": 0
+   },
+   "longtasks": {
+    "n": 2,
+    "max_ms": 54,
+    "sum_ms": 104
+   },
+   "drawImage_big": {
+    "n": 0,
+    "mean_ms": 0,
+    "max_ms": 0
+   }
+  },
+  "ON1": {
+   "raf_gap_ms": {
+    "n": 3534,
+    "max": 83.4,
+    "p99": 33.4,
+    "p50": 16.7,
+    "over100": 0,
+    "over1000": 0
+   },
+   "timer_late_ms": {
+    "n": 1202,
+    "max": 19.9,
+    "p99": 4.4,
+    "p50": 0.2,
+    "over100": 0,
+    "over1000": 0
+   },
+   "longtasks": {
+    "n": 0,
+    "max_ms": 0,
+    "sum_ms": 0
+   },
+   "drawImage_big": {
+    "n": 3631,
+    "mean_ms": 0.093,
+    "max_ms": 6.6
+   }
+  },
+  "OFF1": {
+   "raf_gap_ms": {
+    "n": 3572,
+    "max": 66.6,
+    "p99": 33.3,
+    "p50": 16.7,
+    "over100": 0,
+    "over1000": 0
+   },
+   "timer_late_ms": {
+    "n": 1204,
+    "max": 24.6,
+    "p99": 3.4,
+    "p50": 0.2,
+    "over100": 0,
+    "over1000": 0
+   },
+   "longtasks": {
+    "n": 0,
+    "max_ms": 0,
+    "sum_ms": 0
+   },
+   "drawImage_big": {
+    "n": 0,
+    "mean_ms": 0,
+    "max_ms": 0
+   }
+  }
+ }
+}

@@ -39,6 +39,10 @@ JS_FRAME="""async()=>{const mp=await (async()=>{const i=new Image();i.src='img/b
 JS_OBS="""async(ms)=>{const rec=[];let t0=performance.now(),last=null,lastPh=null,wraps=[];await new Promise(res=>{const tick=t=>{const a=BattleIdleMotion.status.actors.find(q=>q.actor==='fiona'&&q.showing);if(a&&a.layer){const L=a.layer;if(last!==L.eye){rec.push([Math.round(t-t0),L.eye]);last=L.eye}
  if(lastPh!==null&&L.phase<lastPh-0.5)wraps.push(Math.round(t-t0));lastPh=L.phase}
  if(t-t0<ms)requestAnimationFrame(tick);else res()};requestAnimationFrame(tick)});return {rec,wraps}}"""
+JS_VISIBLE="""()=>{const u=document.querySelector(%s),c=u&&u.querySelector('canvas.battle-idle-canvas');if(!u||!c)return null;
+ const vis=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();let hid=false;for(let n=e;n&&n!==document.documentElement;n=n.parentElement){const q=getComputedStyle(n);if(q.display==='none'||q.visibility==='hidden'||+q.opacity===0)hid=true}
+  return {visible:!hid&&!e.hidden&&r.width>8&&r.height>8&&r.right>0&&r.bottom>0&&r.left<innerWidth&&r.top<innerHeight,display:s.display,visibility:s.visibility,opacity:s.opacity,w:Math.round(r.width),h:Math.round(r.height)}};
+ return {soloRescue:document.body.classList.contains('soloRescue'),unit:vis(u),canvas:vis(c)}}"""
 def blinks(rec):
     out=[];i=0
     while i<len(rec):
@@ -54,10 +58,15 @@ with server(8817) as base,sync_playwright() as p:
     ctx=b.new_context(viewport={'width':1280,'height':720});pg=ctx.new_page();errs=[];bad=[]
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:bad.append(r.url) if r.status>=400 else None);pg.on('requestfailed',lambda r:bad.append(r.url) if 'ABORTED' not in str(r.failure) else None)   # aborted = request superseded by a scene switch
     pg.goto(base+'/index.html');pg.wait_for_function('window.BattleIdleMotion&&window.BattleActorState');pg.wait_for_timeout(1500);pg.evaluate("closeDialogue()");pg.wait_for_timeout(300)
-    for name,start in (('raider','startRaiderBattle()'),('normal','document.body.classList.remove("soloRescue");startAttackBattle("attackGob1",100)')):
+    # 'normal' = attackGob2: a regular normal battle in which Fiona really fights. attackGob1 is the solo rescue (PrologueCombat.beginNormal re-adds body.soloRescue and css/prologue-combat.css hides #v2FionaUnit by design),
+    # so it can never show that Fiona's idle is visible on screen (Codex FIV3-RQ-03).
+    for name,start in (('raider','startRaiderBattle()'),('normal','startAttackBattle("attackGob2",100)')):
         pg.evaluate(start);pg.wait_for_timeout(1500);pg.wait_for_function("BattleIdleMotion.status.actors.some(q=>q.actor==='fiona'&&q.context===%r&&q.showing&&q.layer)"%name,timeout=20000);pg.evaluate("typeof closeDialogue==='function'&&closeDialogue()");pg.wait_for_function("!['battlePresentationBusy','dialogueOpen','actionCinematic'].some(c=>document.body.classList.contains(c))",timeout=20000);pg.wait_for_timeout(800)
         a=pg.evaluate("BattleIdleMotion.status.actors.find(q=>q.actor==='fiona'&&q.context===%r)"%name)
         check(a['showing'] and a['layer'] is not None,name+': Fiona v3 layered idle is running',a)
+        # renderer state alone (showing / canvas pixels) does not prove the player can SEE her: assert the real on-screen visibility of her unit and of the idle canvas
+        v=pg.evaluate(JS_VISIBLE%("'#v2FionaUnit'" if name=='normal' else "'#rbFiona'"))
+        check(v is not None and not v['soloRescue'] and v['unit']['visible'] and v['canvas']['visible'],name+': Fiona unit and idle canvas are visible on screen (not a solo-rescue fight)',v)
         if name=='raider':
             fr=pg.evaluate(JS_FRAME)
             check(fr['0']['outside']==0 and fr['0']['changed']==0 and fr['0']['alphaMax']==0,'open eyes (state 0) composite == MASTER pixel-exact',fr['0'])
@@ -86,13 +95,16 @@ with server(8817) as base,sync_playwright() as p:
         pg.evaluate("""()=>{window.__lt=[];window.__ev=[];try{new PerformanceObserver(l=>l.getEntries().forEach(e=>window.__lt.push([Math.round(e.startTime),Math.round(e.duration)]))).observe({type:'longtask',buffered:true})}catch(e){}
           new MutationObserver(()=>window.__ev.push([Math.round(performance.now()),document.body.className])).observe(document.body,{attributes:true,attributeFilter:['class']});
           document.addEventListener('visibilitychange',()=>window.__ev.push([Math.round(performance.now()),'hidden='+document.hidden]));BattleIdleMotion.traceStart()}""")
-        t0=time.time();pg.wait_for_timeout(int(LOOP*1000));tr=pg.evaluate("BattleIdleMotion.traceStop()");extra=pg.evaluate("({lt:window.__lt,ev:window.__ev.slice(0,40)})");wall=time.time()-t0
-        f,m=S.analyze(tr,'raider');m['wall_s']=round(wall,1);m['long_tasks']=len(extra['lt']);m['longest_task_ms']=max([x[1] for x in extra['lt']] or [0]);m['class_or_visibility_events']=len(extra['ev'])
+        t0=time.time();pg.wait_for_timeout(int(LOOP*1000));tr=pg.evaluate("BattleIdleMotion.traceStop()");extra=pg.evaluate("({lt:window.__lt,ev:window.__ev.slice(0,400)})");wall=time.time()-t0
+        f,m=S.analyze(tr,'raider',require_no_resets=True);m['wall_s']=round(wall,1);m['long_tasks']=len(extra['lt']);m['longest_task_ms']=max([x[1] for x in extra['lt']] or [0]);m['class_or_visibility_events']=len(extra['ev'])
         draws=[x for x in tr if x['ctx']=='raider'];ph=[x['ph'] for x in draws];wraps=[draws[i]['t'] for i in range(1,len(draws)) if ph[i]<ph[i-1]-0.5];per=[wraps[i+1]-wraps[i] for i in range(len(wraps)-1)]
         check(not f,'soak %ds: every real draw conforms to the approved spec (state, L/R overlays, breath, clock)'%LOOP,(f,m))
         check(len(m.get('blink_gaps_s',[]))>=0 and m['blinks']>=int(LOOP/6.3)-1,'soak: blink count plausible for 3-6 s gaps (%d blinks, %d fully sampled)'%(m['blinks'],m['blinks_fully_sampled']))
         check(len(per)>=int(LOOP/4)-3 and all(abs(x-4.0)<=m['max_draw_gap_ms']/1000+1e-6 for x in per),'soak: breath period = 4 s on the animation clock within one draw interval (%d periods; phase==spec at every draw to 1e-9 is checked above)'%len(per),[round(x,6) for x in per[:3]])
-        check(m['clock_resets']==0 or all(e[1].find('dialogueOpen')>=0 or 'hidden' in e[1] or 'Busy' in e[1] or 'actionCinematic' in e[1] for e in extra['ev']),'soak: animation clock never reset without a pause/visibility event (no drift)',(m['clock_resets'],extra['ev'][:4]))
+        # Codex FIV3-RQ-01: the old predicate (resets==0 OR every logged event looks like a pause) accepted an unannounced reset whenever the event list was empty or stale. This soak has no intended pause,
+        # so the animation clock must not reset AT ALL. A run in which a genuine pause->resume owns the reset is NOT_RUN_PAUSED (re-observe), never PASS; an unowned reset is FAIL.
+        sv=S.classify_soak(tr,'raider',extra['ev'])
+        check(m['clock_resets']==0 and sv['verdict']=='PASS','soak: animation clock never reset (resets==0; %s)'%sv['verdict'],(m['clock_resets'],sv['verdict'],len(extra['ev'])))
         if os.getenv('FIONA_EVIDENCE'):Path(os.getenv('FIONA_EVIDENCE')).write_text(json.dumps({'loop_s':LOOP,'metrics':m,'verdict_failures':f,'long_tasks':extra['lt'][:200],'events':extra['ev'],'trace_head':tr[:5],'draw_gap_hist':None},indent=1))
     check(not errs,'no page errors',errs[:3]);check(not bad,'no image/asset load failures',bad[:3])
     # reduced motion: rest pose only (open eyes, no breathing)

@@ -18,7 +18,15 @@ fails=[]
 def check(ok,name,detail=''):
     print(('ok   ' if ok else 'FAIL ')+name,detail if detail!='' else '')
     if not ok:fails.append(name)
-START={'raider':'startRaiderBattle()','normal':'document.body.classList.remove("soloRescue");startAttackBattle("attackGob1",100)'}
+# 'normal' = attackGob2, a regular normal battle in which Fiona really fights. attackGob1 is the solo rescue: PrologueCombat.beginNormal re-adds body.soloRescue and css/prologue-combat.css hides #v2FionaUnit
+# by design, so a renderer that is 'showing' there is invisible on screen (Codex FIV3-RQ-03).
+START={'raider':'startRaiderBattle()','normal':'startAttackBattle("attackGob2",100)'}
+UNIT={'raider':'#rbFiona','normal':'#v2FionaUnit'}
+VIS_JS="""u=>{const x=document.querySelector(u),c=x&&x.querySelector('canvas.battle-idle-canvas');if(!x||!c)return null;
+ const vis=e=>{const r=e.getBoundingClientRect();let hid=false;for(let n=e;n&&n!==document.documentElement;n=n.parentElement){const q=getComputedStyle(n);if(q.display==='none'||q.visibility==='hidden'||+q.opacity===0)hid=true}
+  return !hid&&!e.hidden&&r.width>8&&r.height>8&&r.right>0&&r.bottom>0&&r.left<innerWidth&&r.top<innerHeight};
+ return {soloRescue:document.body.classList.contains('soloRescue'),unit:vis(x),canvas:vis(c)}}"""
+VIS_DONE=set()
 SEL={'raider':'#rbFiona','normal':'#bFiona2'}
 ACT="BattleIdleMotion.status.actors.find(q=>q.actor==='fiona'&&q.context===%r)"
 def begin(pg,name):
@@ -33,6 +41,9 @@ def begin(pg,name):
             print('SETUP-STALL (%s attempt %d):'%(name,attempt),pg.evaluate("({cls:document.body.className,actors:BattleIdleMotion.status.actors.filter(q=>q.actor==='fiona').map(q=>[q.context,q.state,q.enabled,q.showing,'failed',q.failed,'ready',q.ready])})"))
             if attempt:raise
     pg.wait_for_timeout(800)
+    if name not in VIS_DONE:
+        VIS_DONE.add(name);v=pg.evaluate(VIS_JS,UNIT[name])
+        check(v is not None and not v['soloRescue'] and v['unit'] and v['canvas'],'fixture %s: Fiona unit and idle canvas are visible on screen (not a solo-rescue fight)'%name,v)
 def probe(pg,label):
     cases=S.probe_cases()
     # blink start 0, controlled clock t = ms/1000 (cases are (ms_since_start, expected)); the sweep entries use start k+0.5 s offsets via the same helper

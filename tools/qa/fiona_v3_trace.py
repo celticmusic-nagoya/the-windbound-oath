@@ -12,8 +12,42 @@ def spec_state(ms):
 def spec_drawn(state):return '' if state==0 else 'L:%d,R:%d'%(state,state)
 def spec_wave(t):
     ph=(t%CYCLE)/CYCLE;return ph,(1-math.cos(ph*2*math.pi))/2
-def analyze(tr,ctx):
-    """tr: list of draw records from BattleIdleMotion.traceStop(). Returns (failures, metrics). Every real draw is compared with the spec at its OWN clock value."""
+PAUSE_CLASSES=('battlePresentationBusy','dialogueOpen','actionCinematic')   # body classes under which BattleIdleMotion.paused() is true (js/battle-idle-motion.js)
+def reset_points(tr,ctx):
+    """Every animation-clock reset in the real draw log: consecutive draws whose (now/1000 - t) offset changed. Returns [{i,now_prev,now,t_prev,t}]."""
+    d=[x for x in tr if x['ctx']==ctx and not x['still']];out=[]
+    for i in range(1,len(d)):
+        if abs((d[i]['now']/1000-d[i]['t'])-(d[i-1]['now']/1000-d[i-1]['t']))>1e-6:out.append({'i':i,'now_prev':d[i-1]['now'],'now':d[i]['now'],'t_prev':d[i-1]['t'],'t':d[i]['t']})
+    return out
+def pause_intervals(events,t_end=float('inf')):
+    """events: [[performance.now ms, label]] where label is either a body className snapshot or 'hidden=true|false'. Returns [(start,end)] of the intervals during which the idle renderer is paused
+    (a pause class on <body>, or the page hidden). An interval that never ends inside the log has end=inf (the renderer is still paused, so it cannot own a later reset)."""
+    cls=False;hid=False;iv=[];cur=None
+    for ms,lab in sorted(events,key=lambda e:e[0]):
+        if lab.startswith('hidden='):hid=lab=='hidden=true'
+        else:cls=any(c in lab.split() for c in PAUSE_CLASSES)
+        p=cls or hid
+        if p and cur is None:cur=ms
+        if not p and cur is not None:iv.append((cur,ms));cur=None
+    if cur is not None:iv.append((cur,float('inf')))
+    return iv
+def reset_owner(r,iv,tol=50.0):
+    """A reset is owned only by a pause that (a) overlaps the silent gap between the draw before and the draw after the reset and (b) has ENDED by the time of that draw
+    (the renderer resets on resume). A stale pause from earlier, or one still open, owns nothing."""
+    for s,e in iv:
+        if s<=r['now']+tol and e>=r['now_prev']-tol and e<=r['now']+tol:return (s,e)
+    return None
+def classify_soak(tr,ctx,events):
+    """Verdict for a soak that is meant to run WITHOUT any intended pause: PASS only with zero resets. Resets that a genuine pause->resume owns make the observation NOT_RUN_PAUSED
+    (a paused run is never an unconditional PASS - re-observe the segment); any unowned reset is FAIL."""
+    rs=reset_points(tr,ctx)
+    if not rs:return {'verdict':'PASS','resets':0,'unowned':[],'owned':[]}
+    iv=pause_intervals(events);owned=[];unowned=[]
+    for r in rs:(owned if reset_owner(r,iv) else unowned).append(r)
+    return {'verdict':'FAIL' if unowned else 'NOT_RUN_PAUSED','resets':len(rs),'unowned':unowned,'owned':owned}
+def analyze(tr,ctx,require_no_resets=False):
+    """tr: list of draw records from BattleIdleMotion.traceStop(). Returns (failures, metrics). Every real draw is compared with the spec at its OWN clock value.
+    require_no_resets: for a stable soak with no intended pause, ANY animation-clock reset is a failure (it is counted either way as m['clock_resets'])."""
     d=[x for x in tr if x['ctx']==ctx and not x['still']];fails=[];m={'draws':len(d)}
     bad_state=[x for x in d if x['state']!=(spec_state((x['t']-x['start'])*1000) if x['start']>-1e8 else 0)]
     if bad_state:fails.append('draw state != spec at its own clock (%d draws, e.g. %s)'%(len(bad_state),{k:bad_state[0][k] for k in ('t','start','state')}))
@@ -23,6 +57,7 @@ def analyze(tr,ctx):
     if bad_br:fails.append('breath phase/wave != 4 s cos cycle (%d draws)'%len(bad_br))
     # animation clock must track wall clock (no drift): now/1000 - t constant between resets
     off=[x['now']/1000-x['t'] for x in d];jumps=sum(1 for i in range(1,len(off)) if abs(off[i]-off[i-1])>1e-6);m['clock_resets']=jumps
+    if require_no_resets and jumps:fails.append('animation clock reset %d time(s) in a stable soak (no intended pause)'%jumps)
     gaps=[(d[i+1]['now']-d[i]['now']) for i in range(len(d)-1)];m['max_draw_gap_ms']=round(max(gaps),1) if gaps else None;m['gaps_over_100ms']=sum(1 for g in gaps if g>100)
     # blinks: group by start
     groups={}
@@ -38,7 +73,11 @@ def analyze(tr,ctx):
     m['blinks']=len(groups);m['blinks_fully_sampled']=full;m['blinks_with_unsampled_states']=len(partial)
     # a state may be missing from the real draw log only if the page did not draw for longer than that state lasts (host stall); otherwise the renderer skipped it
     DUR={1:30,2:30,3:35,4:70};ts=[x['t'] for x in d];unjustified=0
+    # A blink that starts before the first traced draw or ends after the last one is cut by the OBSERVATION WINDOW, not by the renderer: its missing states were never in the log.
+    # Only blinks that lie completely inside the window are held to 'every state appears unless the page stalled' (a truncated blink still has to be a legal sub-sequence, checked below).
+    t_lo,t_hi=(min(ts),max(ts)) if ts else (0,0);m['blinks_truncated_by_window']=sum(1 for st in groups if st<t_lo-1e-9 or st+BLINK_MS/1000>t_hi+1e-9)
     for st,xs in groups.items():
+        if st<t_lo-1e-9 or st+BLINK_MS/1000>t_hi+1e-9:continue
         seen=[]
         for x in xs:
             if not seen or seen[-1]!=x['state']:seen.append(x['state'])
