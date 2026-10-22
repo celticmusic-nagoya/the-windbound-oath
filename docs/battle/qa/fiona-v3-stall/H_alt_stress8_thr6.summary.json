@@ -1,0 +1,263 @@
+{
+ "summary": {
+  "mode": "alt",
+  "seconds": 320.0,
+  "stress": 8,
+  "throttle": 6.0,
+  "variant": "none",
+  "runtime": "head",
+  "ctx": "raider",
+  "stall_threshold_ms": 400.0,
+  "nproc": 2,
+  "errors": [],
+  "phases": [
+   {
+    "tag": "ON0",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 30.0
+   },
+   {
+    "tag": "OFF0",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 30.0
+   },
+   {
+    "tag": "ON1",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 30.0
+   },
+   {
+    "tag": "OFF1",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 30.0
+   }
+  ],
+  "overall": {
+   "worker_beat": {
+    "n": 5050,
+    "max_ms": 124.7,
+    "over100": 2
+   },
+   "raf": {
+    "n": 3461,
+    "max_ms": 449.5,
+    "over100": 252
+   },
+   "timer25": {
+    "n": 3703,
+    "max_ms": 257.5,
+    "over100": 30
+   },
+   "draws": 1416,
+   "draw_gap_max_ms": 31330.8,
+   "longtasks": 71,
+   "longest_task_ms": 109
+  },
+  "by_phase": {
+   "OFF0": {
+    "raf": {
+     "n": 1191,
+     "max_ms": 378.2,
+     "over100": 40
+    },
+    "timer25": {
+     "n": 996,
+     "max_ms": 102.2,
+     "over100": 1
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "OFF1": {
+    "raf": {
+     "n": 868,
+     "max_ms": 396.8,
+     "over100": 68
+    },
+    "timer25": {
+     "n": 967,
+     "max_ms": 257.5,
+     "over100": 3
+    },
+    "longtasks": 7,
+    "longest_task_ms": 85
+   },
+   "ON0": {
+    "raf": {
+     "n": 756,
+     "max_ms": 272.3,
+     "over100": 70
+    },
+    "timer25": {
+     "n": 827,
+     "max_ms": 215.6,
+     "over100": 12
+    },
+    "longtasks": 35,
+    "longest_task_ms": 100
+   },
+   "ON1": {
+    "raf": {
+     "n": 641,
+     "max_ms": 449.5,
+     "over100": 74
+    },
+    "timer25": {
+     "n": 911,
+     "max_ms": 160.8,
+     "over100": 14
+    },
+    "longtasks": 29,
+    "longest_task_ms": 109
+   },
+   "init": {
+    "raf": {
+     "n": 5,
+     "max_ms": 32.9,
+     "over100": 0
+    },
+    "timer25": {
+     "n": 2,
+     "max_ms": 61,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   }
+  },
+  "host": {
+   "max_wall_gap_s": 1.34,
+   "max_steal_pct": 4.69,
+   "max_iowait_pct": 0.0,
+   "max_load1": 11.32763671875
+  },
+  "incidents": [
+   {
+    "start_s": 69.16,
+    "dur_ms": 474,
+    "stalled_layers": "DR",
+    "phases": [
+     "ON1"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [
+     [
+      69.69,
+      60
+     ],
+     [
+      69.75,
+      55
+     ]
+    ],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [],
+    "host_in_window": [
+     {
+      "dt": 1.001,
+      "load1": 9.904296875,
+      "steal_pct": 0.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.48 avg60=86.25 avg300=79.37 total=1117097897"
+     },
+     {
+      "dt": 1.0,
+      "load1": 9.904296875,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.03 avg60=86.57 avg300=79.48 total=1118048372"
+     },
+     {
+      "dt": 1.004,
+      "load1": 9.904296875,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.03 avg60=86.57 avg300=79.48 total=1119049424"
+     },
+     {
+      "dt": 1.021,
+      "load1": 9.904296875,
+      "steal_pct": 0.98,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.02 avg60=86.94 avg300=79.61 total=1120041624"
+     },
+     {
+      "dt": 1.023,
+      "load1": 10.392578125,
+      "steal_pct": 1.47,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.02 avg60=86.94 avg300=79.61 total=1121048617"
+     }
+    ]
+   },
+   {
+    "start_s": 94.76,
+    "dur_ms": 435,
+    "stalled_layers": "R",
+    "phases": [
+     "ON1"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [
+     [
+      94.73,
+      65
+     ],
+     [
+      95.41,
+      56
+     ]
+    ],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [],
+    "host_in_window": [
+     {
+      "dt": 1.34,
+      "load1": 10.78125,
+      "steal_pct": 1.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.71 avg60=90.49 avg300=80.98 total=1142463459"
+     },
+     {
+      "dt": 1.003,
+      "load1": 10.78125,
+      "steal_pct": 2.51,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.76 avg60=90.77 avg300=81.10 total=1143456070"
+     },
+     {
+      "dt": 1.119,
+      "load1": 10.78125,
+      "steal_pct": 0.89,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.76 avg60=90.77 avg300=81.10 total=1144568687"
+     },
+     {
+      "dt": 1.001,
+      "load1": 11.0390625,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.80 avg60=91.04 avg300=81.22 total=1145564982"
+     },
+     {
+      "dt": 1.007,
+      "load1": 11.0390625,
+      "steal_pct": 1.99,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=98.80 avg60=91.04 avg300=81.22 total=1146561762"
+     }
+    ]
+   }
+  ]
+ },
+ "host_max": {
+  "max_wall_gap_s": 1.34,
+  "max_steal_pct": 4.69,
+  "max_iowait_pct": 0.0,
+  "max_load1": 11.32763671875
+ }
+}

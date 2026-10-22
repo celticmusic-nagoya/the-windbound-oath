@@ -82,4 +82,66 @@ f3,m3=run2(blink_trace(9.0,15.0,12.0,skip=2))
 check(m3['blinks_truncated_by_window']==0 and any('lack states' in x or 'state' in x for x in f3),'complete in-window blink with a never-drawn state and continuous draws is still DETECTED',f3)
 # complete, correct blink in the window: clean
 f4,m4=run2(blink_trace(9.0,15.0,12.0));check(not [x for x in f4 if 'lack states' in x] and m4['blinks_fully_sampled']==1,'complete correct blink: no failure, fully sampled',(f4,m4['blinks_fully_sampled']))
+# ---- P2 (Codex FIV3 FAIL): a render STALL and a skipped blink STATE are different events ----------------------------------------------------------------------------------
+# OLD analyzer = the one at the previously submitted SHA 320ba8c (read from git when available) so the before/after difference is shown by this very file.
+import subprocess,types
+def old_analyzer():
+    try:
+        src=subprocess.run(['git','show','320ba8ca7c480f77e69a6e48faf8238772c1567c:tools/qa/fiona_v3_trace.py'],cwd=Path(__file__).resolve().parents[2],capture_output=True,check=True).stdout.decode()
+    except Exception:return None
+    mod=types.ModuleType('fiona_v3_trace_old');exec(compile(src,'fiona_v3_trace_old','exec'),mod.__dict__);return mod
+OLD=old_analyzer()
+def gen(spans,start,skip_clock=None):
+    """spans: [(t_from,t_to)] of 16 ms draws on a clock that follows the wall clock (now=1000+t*1000); the gaps between spans are STALLS (nothing drawn, wall and clock both move on).
+    skip_clock=(t_at,jump): from draw time t_at the animation clock runs `jump` seconds ahead of the wall clock (draws stay 16 ms apart on the wall)."""
+    out=[]
+    for a,b in spans:
+        t=a
+        while t<=b+1e-12:
+            tt=t+(skip_clock[1] if skip_clock and t>=skip_clock[0] else 0)
+            st=S.spec_state((tt-start)*1000) if tt>=start else 0;ph,wave=S.spec_wave(tt)
+            out.append({'ctx':'raider','t':tt,'start':start,'state':st,'drawn':S.spec_drawn(st),'wave':wave,'ph':ph,'still':False,'now':1000+t*1000});t+=0.016
+    return out
+def lack(f):return [x for x in f if 'lack states' in x]
+def stallf(f):return [x for x in f if x.startswith('render stall')]
+# S1: the blink at t=12.000 starts, one draw shows state 1, then the page stops drawing for 7.9 s (Codex's case) and resumes with a consistent clock
+trS1=gen([(9.0,12.010),(19.9,25.0)],12.0)
+fo,mo=OLD.analyze(trS1,'raider') if OLD else (None,None);fn,mn=S.analyze(trS1,'raider')
+if OLD:check(bool(lack(fo)),'S1 OLD analyzer calls the 7.9 s stall a skipped blink state (the defect)',lack(fo))
+check(not lack(fn) and len(stallf(fn))==1 and mn['stalls'] and abs(mn['max_stall_ms']-7890)<40,'S1 NEW analyzer: no state-skip claim; one separate render-stall failure of ~7.9 s',(fn,mn['stalls']))
+check(mn['blinks_unsampled_inside_a_stall']==1 and mn['blinks_unsampled_without_a_stall']==0,'S1 the unsampled blink is attributed to the stall, not to the renderer',(mn['blinks_unsampled_inside_a_stall'],mn['blinks_unsampled_without_a_stall']))
+# S2: a clean stall in a quiet period (no blink anywhere near) is a stall failure and nothing else
+trS2=gen([(9.0,10.0),(17.9,22.0)],12.0)
+fn2,mn2=S.analyze(trS2,'raider')
+check(len(stallf(fn2))==1 and not lack(fn2) and mn2['clock_resets']==0,'S2 stall alone: exactly one stall failure, no skip claim, no clock reset',(fn2,mn2['clock_resets']))
+# S3: a SHORT hole (150 ms, jank) in the middle of a blink is not a stall failure and not a skip (behaviour kept from before)
+trS3=gen([(9.0,12.040),(12.19,15.0)],12.0);fn3,mn3=S.analyze(trS3,'raider')
+check(not stallf(fn3) and not lack(fn3) and mn3['blinks_unsampled_inside_a_stall']==1,'S3 150 ms hole inside a blink: no stall failure, no skip, attributed to the hole',(fn3,mn3['blinks_unsampled_inside_a_stall']))
+# S4: the animation clock jumps 0.1 s ahead in mid-blink while draws stay 16 ms apart on the wall = a REAL skipped state. The OLD analyzer measured the gap on the animation clock (looks like a 100 ms hole) and MISSED it.
+trS4=gen([(9.0,15.0)],12.0,skip_clock=(12.02,0.1));fo4,mo4=OLD.analyze(trS4,'raider') if OLD else (None,None);fn4,mn4=S.analyze(trS4,'raider')
+if OLD:check(not lack(fo4),'S4 OLD analyzer MISSES a clock jump over blink states with continuous wall draws (the weaker rule)',lack(fo4))
+check(bool(lack(fn4)) and not stallf(fn4),'S4 NEW analyzer DETECTS it as a skipped state (and not as a stall)',fn4)
+# S5: the earlier strict cases still behave identically on the new analyzer (never-drawn state with continuous draws; window-edge blinks; clean blink)
+check(any('state' in x for x in S.analyze(blink_trace(9.0,15.0,12.0,skip=2),'raider')[0]),'S5 never-drawn state with continuous draws is still detected')
+check(not lack(S.analyze(blink_trace(9.0,15.0,12.0),'raider')[0]) and not stallf(S.analyze(blink_trace(9.0,15.0,12.0),'raider')[0]),'S5 clean continuous blink: no failure of either kind')
+# ---- a hole that the game itself explains (renderer paused: dialogue / presentation / hidden page) is an interrupted observation, not a stall; an unexplained one is a stall ------------------
+trP=gen([(9.0,12.010),(19.9,25.0)],12.0)   # hole = page time 13010..20900 ms
+evP=[[13000,'raiderBattleMode dialogueOpen'],[20850,'raiderBattleMode']]
+fP,mP=S.analyze(trP,'raider',require_no_resets=True,events=evP);vP=S.classify_soak(trP,'raider',evP)
+check(not stallf(fP) and len(mP['paused_holes'])==1 and vP['verdict']=='NOT_RUN_PAUSED','P1 7.9 s hole fully owned by a dialogue pause: no stall failure, verdict NOT_RUN_PAUSED (never PASS)',(fP,vP['verdict'],mP['paused_holes']))
+fQ,mQ=S.analyze(trP,'raider',require_no_resets=True,events=[]);vQ=S.classify_soak(trP,'raider',[])
+check(len(stallf(fQ))==1 and vQ['verdict']=='FAIL','P2 the same hole with no pause event is an unexplained stall: FAIL',(fQ,vQ['verdict']))
+fR,mR=S.analyze(trP,'raider',events=[[15000,'raiderBattleMode dialogueOpen'],[15200,'raiderBattleMode']]);vR=S.classify_soak(trP,'raider',[[15000,'raiderBattleMode dialogueOpen'],[15200,'raiderBattleMode']])
+check(len(stallf(fR))==1 and vR['verdict']=='FAIL','P3 a 200 ms pause somewhere inside a 7.9 s hole does not own the hole: stall',(fR,vR['verdict']))
+evH=[[13000,'hidden=true'],[20850,'hidden=false']];vH2=S.classify_soak(trP,'raider',evH)
+check(vH2['verdict']=='NOT_RUN_PAUSED','P4 hole owned by a hidden page -> NOT_RUN_PAUSED',vH2['verdict'])
+evO=[[13000,'raiderBattleMode dialogueOpen']];fO,mO=S.analyze(trP,'raider',events=evO)
+check(len(stallf(fO))==1,'P5 a pause that is still open when drawing resumes does not own the hole (drawing during a pause explains nothing)',(fO,))
+# ---- stall attribution: which independent clock stopped together with the draw log -----------------------------------------------------------------------------------
+H=(1000.0,8900.0)
+check(S.classify_incident(S.stall_layers(1000,8900,{'W':[H],'T':[H],'R':[H]})).startswith('process-level freeze'),'ATTR all four clocks stopped -> process-level freeze (not the page)')
+check(S.classify_incident(S.stall_layers(1000,8900,{'W':[],'T':[H],'R':[H]})).startswith('main thread blocked'),'ATTR worker alive, main timers + rAF stopped -> main thread blocked')
+check(S.classify_incident(S.stall_layers(1000,8900,{'W':[],'T':[],'R':[H]})).startswith('rAF delivery stopped'),'ATTR only rAF stopped -> frame delivery')
+check(S.classify_incident(S.stall_layers(1000,8900,{'W':[],'T':[],'R':[]})).startswith('idle renderer did not draw'),'ATTR nothing but the draw log stopped -> the idle renderer itself')
+check(S.classify_incident(S.stall_layers(1000,8900,{'W':[],'T':[],'R':[(20000.0,21000.0)]})).startswith('idle renderer did not draw'),'ATTR a hole of another clock elsewhere in time is not blamed')
 print('FAILS',fails);sys.exit(1 if fails else 0)

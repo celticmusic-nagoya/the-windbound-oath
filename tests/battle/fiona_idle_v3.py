@@ -95,17 +95,40 @@ with server(8817) as base,sync_playwright() as p:
         pg.evaluate("""()=>{window.__lt=[];window.__ev=[];try{new PerformanceObserver(l=>l.getEntries().forEach(e=>window.__lt.push([Math.round(e.startTime),Math.round(e.duration)]))).observe({type:'longtask',buffered:true})}catch(e){}
           new MutationObserver(()=>window.__ev.push([Math.round(performance.now()),document.body.className])).observe(document.body,{attributes:true,attributeFilter:['class']});
           document.addEventListener('visibilitychange',()=>window.__ev.push([Math.round(performance.now()),'hidden='+document.hidden]));BattleIdleMotion.traceStart()}""")
+        # Stall attribution (Codex FIV3 FAIL: ~7.9 s draw stop): three INDEPENDENT clocks record only their holes (>200 ms), so that if the renderer ever stops drawing the report says which layer stopped:
+        # W = dedicated Worker heartbeat (unaffected by a busy main thread), T = main-thread setTimeout chain, R = requestAnimationFrame chain. FIONA_STALL_CLOCKS=0 switches them off.
+        if os.getenv('FIONA_STALL_CLOCKS','1')!='0':
+            pg.evaluate("""()=>{const EP=()=>performance.timeOrigin+performance.now();const H=window.__holes={W:[],T:[],R:[]};
+              const src='const h=[];let l=performance.timeOrigin+performance.now();setInterval(()=>{const n=performance.timeOrigin+performance.now();if(n-l>200)h.push([l,n]);l=n},25);onmessage=()=>postMessage(h)';
+              const w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));window.__wk=w;w.onmessage=e=>{window.__wkh=e.data};
+              let lt=EP();const tm=()=>{const n=EP();if(n-lt>200)H.T.push([lt,n]);lt=n;setTimeout(tm,25)};setTimeout(tm,25);
+              let lr=EP();const rf=()=>{const n=EP();if(n-lr>200)H.R.push([lr,n]);lr=n;requestAnimationFrame(rf)};requestAnimationFrame(rf)}""")
+        host0=(os.getloadavg(),os.cpu_count())
         t0=time.time();pg.wait_for_timeout(int(LOOP*1000));tr=pg.evaluate("BattleIdleMotion.traceStop()");extra=pg.evaluate("({lt:window.__lt,ev:window.__ev.slice(0,400)})");wall=time.time()-t0
-        f,m=S.analyze(tr,'raider',require_no_resets=True);m['wall_s']=round(wall,1);m['long_tasks']=len(extra['lt']);m['longest_task_ms']=max([x[1] for x in extra['lt']] or [0]);m['class_or_visibility_events']=len(extra['ev'])
+        holes=None
+        if os.getenv('FIONA_STALL_CLOCKS','1')!='0':
+            pg.evaluate("window.__wk.postMessage(0)");pg.wait_for_function("window.__wkh!==undefined",timeout=30000)
+            holes=pg.evaluate("({W:window.__wkh,T:window.__holes.T,R:window.__holes.R,to:performance.timeOrigin})")
+        f,m=S.analyze(tr,'raider',require_no_resets=True,events=extra['ev']);m['wall_s']=round(wall,1);m['long_tasks']=len(extra['lt']);m['longest_task_ms']=max([x[1] for x in extra['lt']] or [0]);m['class_or_visibility_events']=len(extra['ev'])
         draws=[x for x in tr if x['ctx']=='raider'];ph=[x['ph'] for x in draws];wraps=[draws[i]['t'] for i in range(1,len(draws)) if ph[i]<ph[i-1]-0.5];per=[wraps[i+1]-wraps[i] for i in range(len(wraps)-1)]
         check(not f,'soak %ds: every real draw conforms to the approved spec (state, L/R overlays, breath, clock)'%LOOP,(f,m))
         check(len(m.get('blink_gaps_s',[]))>=0 and m['blinks']>=int(LOOP/6.3)-1,'soak: blink count plausible for 3-6 s gaps (%d blinks, %d fully sampled)'%(m['blinks'],m['blinks_fully_sampled']))
         check(len(per)>=int(LOOP/4)-3 and all(abs(x-4.0)<=m['max_draw_gap_ms']/1000+1e-6 for x in per),'soak: breath period = 4 s on the animation clock within one draw interval (%d periods; phase==spec at every draw to 1e-9 is checked above)'%len(per),[round(x,6) for x in per[:3]])
         # Codex FIV3-RQ-01: the old predicate (resets==0 OR every logged event looks like a pause) accepted an unannounced reset whenever the event list was empty or stale. This soak has no intended pause,
         # so the animation clock must not reset AT ALL. A run in which a genuine pause->resume owns the reset is NOT_RUN_PAUSED (re-observe), never PASS; an unowned reset is FAIL.
+        if m.get('stalls'):
+            att=[]
+            for st in m['stalls']:
+                e0=holes['to']+st['at_now_ms'] if holes else None   # at_now_ms = page time of the last draw BEFORE the hole; the hole is [at_now_ms, at_now_ms+gap]
+                if holes:
+                    L=S.stall_layers(e0,e0+st['gap_ms'],{k:holes[k] for k in ('W','T','R')});att.append({**st,'layers':''.join(sorted(L)),'attribution':S.classify_incident(L)})
+                else:att.append({**st,'attribution':'independent clocks switched off'})
+            m['stall_attribution']=att
+            for a_ in att:print('STALL %.0f ms at page-time %d ms: %s [%s]'%(a_['gap_ms'],a_['at_now_ms'],a_['attribution'],a_.get('layers','')),flush=True)
+            print('host: nproc=%d loadavg_before=%s loadavg_after=%s longest_longtask_ms=%d'%(host0[1],tuple(round(x,2) for x in host0[0]),tuple(round(x,2) for x in os.getloadavg()),m['longest_task_ms']),flush=True)
         sv=S.classify_soak(tr,'raider',extra['ev'])
         check(m['clock_resets']==0 and sv['verdict']=='PASS','soak: animation clock never reset (resets==0; %s)'%sv['verdict'],(m['clock_resets'],sv['verdict'],len(extra['ev'])))
-        if os.getenv('FIONA_EVIDENCE'):Path(os.getenv('FIONA_EVIDENCE')).write_text(json.dumps({'loop_s':LOOP,'metrics':m,'verdict_failures':f,'long_tasks':extra['lt'][:200],'events':extra['ev'],'trace_head':tr[:5],'draw_gap_hist':None},indent=1))
+        if os.getenv('FIONA_EVIDENCE'):Path(os.getenv('FIONA_EVIDENCE')).write_text(json.dumps({'loop_s':LOOP,'metrics':m,'verdict_failures':f,'long_tasks':extra['lt'][:200],'events':extra['ev'],'trace_head':tr[:5],'holes':holes,'stall_attribution':m.get('stall_attribution'),'host':{'nproc':host0[1],'loadavg_before':host0[0],'loadavg_after':os.getloadavg()}},indent=1))
     check(not errs,'no page errors',errs[:3]);check(not bad,'no image/asset load failures',bad[:3])
     # reduced motion: rest pose only (open eyes, no breathing)
     c2=b.new_context(viewport={'width':1280,'height':720},reduced_motion='reduce');p2=c2.new_page();p2.goto(base+'/index.html');p2.wait_for_function('window.BattleIdleMotion&&window.BattleActorState');p2.wait_for_timeout(1500);p2.evaluate("closeDialogue()");p2.evaluate("startRaiderBattle()");p2.wait_for_timeout(2500)

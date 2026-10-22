@@ -1,0 +1,350 @@
+{
+ "summary": {
+  "mode": "alt",
+  "seconds": 320.0,
+  "stress": 2,
+  "throttle": 4.0,
+  "variant": "none",
+  "runtime": "head",
+  "ctx": "raider",
+  "stall_threshold_ms": 400.0,
+  "nproc": 2,
+  "errors": [],
+  "phases": [
+   {
+    "tag": "ON0",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 40.0
+   },
+   {
+    "tag": "OFF0",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 40.0
+   },
+   {
+    "tag": "ON1",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 40.0
+   },
+   {
+    "tag": "OFF1",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 40.0
+   }
+  ],
+  "overall": {
+   "worker_beat": {
+    "n": 6626,
+    "max_ms": 59.4,
+    "over100": 0
+   },
+   "raf": {
+    "n": 4644,
+    "max_ms": 463.8,
+    "over100": 334
+   },
+   "timer25": {
+    "n": 5495,
+    "max_ms": 168.1,
+    "over100": 8
+   },
+   "draws": 1559,
+   "draw_gap_max_ms": 41453.8,
+   "longtasks": 20,
+   "longest_task_ms": 119
+  },
+  "by_phase": {
+   "OFF0": {
+    "raf": {
+     "n": 1461,
+     "max_ms": 463.8,
+     "over100": 66
+    },
+    "timer25": {
+     "n": 1401,
+     "max_ms": 111.9,
+     "over100": 1
+    },
+    "longtasks": 1,
+    "longest_task_ms": 57
+   },
+   "OFF1": {
+    "raf": {
+     "n": 1629,
+     "max_ms": 375.2,
+     "over100": 52
+    },
+    "timer25": {
+     "n": 1402,
+     "max_ms": 87.1,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "ON0": {
+    "raf": {
+     "n": 572,
+     "max_ms": 420.9,
+     "over100": 127
+    },
+    "timer25": {
+     "n": 1348,
+     "max_ms": 168.1,
+     "over100": 4
+    },
+    "longtasks": 11,
+    "longest_task_ms": 119
+   },
+   "ON1": {
+    "raf": {
+     "n": 980,
+     "max_ms": 453.3,
+     "over100": 89
+    },
+    "timer25": {
+     "n": 1343,
+     "max_ms": 120,
+     "over100": 3
+    },
+    "longtasks": 8,
+    "longest_task_ms": 77
+   },
+   "init": {
+    "raf": {
+     "n": 2,
+     "max_ms": 31.3,
+     "over100": 0
+    },
+    "timer25": {
+     "n": 1,
+     "max_ms": 28.6,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   }
+  },
+  "host": {
+   "max_wall_gap_s": 1.136,
+   "max_steal_pct": 3.98,
+   "max_iowait_pct": 0.0,
+   "max_load1": 5.97900390625
+  },
+  "incidents": [
+   {
+    "start_s": 13.44,
+    "dur_ms": 411,
+    "stalled_layers": "DR",
+    "phases": [
+     "ON0"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [],
+    "host_in_window": [
+     {
+      "dt": 1.0,
+      "load1": 5.59326171875,
+      "steal_pct": 1.01,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=83.94 avg60=85.28 avg300=76.79 total=903960549"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.59326171875,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=86.66 avg60=85.73 avg300=76.94 total=904954388"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.59326171875,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=86.66 avg60=85.73 avg300=76.94 total=905949419"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.59326171875,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=88.90 avg60=86.16 avg300=77.09 total=906943443"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.59326171875,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=88.90 avg60=86.16 avg300=77.09 total=907930482"
+     }
+    ]
+   },
+   {
+    "start_s": 34.29,
+    "dur_ms": 434,
+    "stalled_layers": "DR",
+    "phases": [
+     "ON0"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [
+     -698052,
+     -33384
+    ],
+    "host_in_window": [
+     {
+      "dt": 1.004,
+      "load1": 5.423828125,
+      "steal_pct": 1.99,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=91.84 avg60=87.76 avg300=77.95 total=923068042"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.423828125,
+      "steal_pct": 1.01,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=92.59 avg60=88.03 avg300=78.07 total=924019588"
+     },
+     {
+      "dt": 1.004,
+      "load1": 5.423828125,
+      "steal_pct": 2.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=92.59 avg60=88.03 avg300=78.07 total=925007218"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.423828125,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=93.21 avg60=88.29 avg300=78.19 total=926000806"
+     },
+     {
+      "dt": 1.001,
+      "load1": 5.423828125,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=93.21 avg60=88.29 avg300=78.19 total=926994170"
+     }
+    ]
+   },
+   {
+    "start_s": 49.93,
+    "dur_ms": 464,
+    "stalled_layers": "R",
+    "phases": [
+     "OFF0"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [
+     -154581
+    ],
+    "host_in_window": [
+     {
+      "dt": 1.002,
+      "load1": 5.20068359375,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=87.30 avg60=88.08 avg300=78.57 total=937437428"
+     },
+     {
+      "dt": 1.001,
+      "load1": 5.20068359375,
+      "steal_pct": 0.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=87.42 avg60=88.08 avg300=78.64 total=938426625"
+     },
+     {
+      "dt": 1.001,
+      "load1": 5.20068359375,
+      "steal_pct": 1.49,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=87.42 avg60=88.08 avg300=78.64 total=939416293"
+     },
+     {
+      "dt": 1.008,
+      "load1": 5.20068359375,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=89.34 avg60=88.40 avg300=78.77 total=940339075"
+     },
+     {
+      "dt": 1.042,
+      "load1": 5.1044921875,
+      "steal_pct": 1.44,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=89.34 avg60=88.40 avg300=78.77 total=941189503"
+     }
+    ]
+   },
+   {
+    "start_s": 98.97,
+    "dur_ms": 469,
+    "stalled_layers": "DR",
+    "phases": [
+     "ON1"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [
+     -760484
+    ],
+    "host_in_window": [
+     {
+      "dt": 1.003,
+      "load1": 5.45068359375,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=89.66 avg60=86.93 avg300=79.60 total=979014921"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.45068359375,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=90.08 avg60=87.10 avg300=79.69 total=980011231"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.45068359375,
+      "steal_pct": 2.49,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=90.08 avg60=87.10 avg300=79.69 total=981005476"
+     },
+     {
+      "dt": 1.001,
+      "load1": 5.45068359375,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=91.70 avg60=87.49 avg300=79.82 total=982001026"
+     },
+     {
+      "dt": 1.0,
+      "load1": 5.45068359375,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=91.70 avg60=87.49 avg300=79.82 total=982995518"
+     }
+    ]
+   }
+  ]
+ },
+ "host_max": {
+  "max_wall_gap_s": 1.136,
+  "max_steal_pct": 3.98,
+  "max_iowait_pct": 0.0,
+  "max_load1": 5.97900390625
+ }
+}

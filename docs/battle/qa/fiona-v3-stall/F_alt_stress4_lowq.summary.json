@@ -1,0 +1,210 @@
+{
+ "summary": {
+  "mode": "alt",
+  "seconds": 320.0,
+  "stress": 4,
+  "throttle": 1.0,
+  "variant": "low_quality",
+  "runtime": "head",
+  "ctx": "raider",
+  "stall_threshold_ms": 400.0,
+  "nproc": 2,
+  "errors": [],
+  "phases": [
+   {
+    "tag": "ON0",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 40.0
+   },
+   {
+    "tag": "OFF0",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 40.0
+   },
+   {
+    "tag": "ON1",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 40.0
+   },
+   {
+    "tag": "OFF1",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 40.0
+   }
+  ],
+  "overall": {
+   "worker_beat": {
+    "n": 6542,
+    "max_ms": 148.1,
+    "over100": 3
+   },
+   "raf": {
+    "n": 8479,
+    "max_ms": 572.3,
+    "over100": 45
+   },
+   "timer25": {
+    "n": 6374,
+    "max_ms": 118.6,
+    "over100": 1
+   },
+   "draws": 4063,
+   "draw_gap_max_ms": 40994.7,
+   "longtasks": 0,
+   "longest_task_ms": 0
+  },
+  "by_phase": {
+   "OFF0": {
+    "raf": {
+     "n": 2171,
+     "max_ms": 572.3,
+     "over100": 8
+    },
+    "timer25": {
+     "n": 1591,
+     "max_ms": 46.8,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "OFF1": {
+    "raf": {
+     "n": 2249,
+     "max_ms": 200.9,
+     "over100": 4
+    },
+    "timer25": {
+     "n": 1607,
+     "max_ms": 34.3,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "ON0": {
+    "raf": {
+     "n": 1894,
+     "max_ms": 508.6,
+     "over100": 29
+    },
+    "timer25": {
+     "n": 1589,
+     "max_ms": 118.6,
+     "over100": 1
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "ON1": {
+    "raf": {
+     "n": 2163,
+     "max_ms": 127.9,
+     "over100": 4
+    },
+    "timer25": {
+     "n": 1586,
+     "max_ms": 45.3,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "init": {
+    "raf": {
+     "n": 2,
+     "max_ms": 23,
+     "over100": 0
+    },
+    "timer25": {
+     "n": 1,
+     "max_ms": 25.3,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   }
+  },
+  "host": {
+   "max_wall_gap_s": 1.211,
+   "max_steal_pct": 11.41,
+   "max_iowait_pct": 0.0,
+   "max_load1": 6.17236328125
+  },
+  "incidents": [
+   {
+    "start_s": 40.52,
+    "dur_ms": 41661,
+    "stalled_layers": "DR",
+    "phases": [
+     "OFF0",
+     "ON0"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [
+     -748768,
+     -180572,
+     -617888,
+     -50844,
+     -648208
+    ],
+    "host_in_window": [
+     {
+      "dt": 1.009,
+      "load1": 6.00634765625,
+      "steal_pct": 1.98,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=89.36 avg60=87.70 avg300=69.81 total=768857350"
+     },
+     {
+      "dt": 1.0,
+      "load1": 6.00634765625,
+      "steal_pct": 2.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=89.11 avg60=87.71 avg300=69.93 total=769730666"
+     },
+     {
+      "dt": 1.0,
+      "load1": 6.00634765625,
+      "steal_pct": 1.01,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=89.11 avg60=87.71 avg300=69.93 total=770582690"
+     },
+     {
+      "dt": 1.0,
+      "load1": 6.00634765625,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=88.73 avg60=87.69 avg300=70.05 total=771475534"
+     },
+     {
+      "dt": 1.0,
+      "load1": 6.00537109375,
+      "steal_pct": 0.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=88.73 avg60=87.69 avg300=70.05 total=772312883"
+     },
+     {
+      "dt": 1.0,
+      "load1": 6.00537109375,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=88.23 avg60=87.63 avg300=70.16 total=773203096"
+     }
+    ]
+   }
+  ]
+ },
+ "host_max": {
+  "max_wall_gap_s": 1.211,
+  "max_steal_pct": 11.41,
+  "max_iowait_pct": 0.0,
+  "max_load1": 6.17236328125
+ }
+}

@@ -1,0 +1,198 @@
+{
+ "summary": {
+  "mode": "alt",
+  "seconds": 320.0,
+  "stress": 4,
+  "throttle": 1.0,
+  "variant": "none",
+  "runtime": "head",
+  "ctx": "raider",
+  "stall_threshold_ms": 400.0,
+  "nproc": 2,
+  "errors": [],
+  "phases": [
+   {
+    "tag": "ON0",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 40.0
+   },
+   {
+    "tag": "OFF0",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 40.0
+   },
+   {
+    "tag": "ON1",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 40.0
+   },
+   {
+    "tag": "OFF1",
+    "on": false,
+    "showing_at_start": false,
+    "seconds": 40.0
+   }
+  ],
+  "overall": {
+   "worker_beat": {
+    "n": 6542,
+    "max_ms": 100.4,
+    "over100": 1
+   },
+   "raf": {
+    "n": 8354,
+    "max_ms": 451,
+    "over100": 73
+   },
+   "timer25": {
+    "n": 6372,
+    "max_ms": 88.4,
+    "over100": 0
+   },
+   "draws": 3988,
+   "draw_gap_max_ms": 40958.0,
+   "longtasks": 0,
+   "longest_task_ms": 0
+  },
+  "by_phase": {
+   "OFF0": {
+    "raf": {
+     "n": 2182,
+     "max_ms": 195.7,
+     "over100": 10
+    },
+    "timer25": {
+     "n": 1595,
+     "max_ms": 45.8,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "OFF1": {
+    "raf": {
+     "n": 2186,
+     "max_ms": 248.6,
+     "over100": 10
+    },
+    "timer25": {
+     "n": 1603,
+     "max_ms": 50.9,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "ON0": {
+    "raf": {
+     "n": 1837,
+     "max_ms": 451,
+     "over100": 43
+    },
+    "timer25": {
+     "n": 1591,
+     "max_ms": 88.4,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "ON1": {
+    "raf": {
+     "n": 2148,
+     "max_ms": 228.2,
+     "over100": 10
+    },
+    "timer25": {
+     "n": 1582,
+     "max_ms": 46.2,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "init": {
+    "raf": {
+     "n": 1,
+     "max_ms": 19.5,
+     "over100": 0
+    },
+    "timer25": {
+     "n": 1,
+     "max_ms": 25.6,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   }
+  },
+  "host": {
+   "max_wall_gap_s": 1.043,
+   "max_steal_pct": 8.08,
+   "max_iowait_pct": 0.0,
+   "max_load1": 5.86181640625
+  },
+  "incidents": [
+   {
+    "start_s": 21.69,
+    "dur_ms": 461,
+    "stalled_layers": "DR",
+    "phases": [
+     "ON0"
+    ],
+    "verdict": "rAF delivery stopped while main-thread timers and worker kept running (frame production)",
+    "longtasks_in_window": [],
+    "events_in_window": [],
+    "heap_drops_bytes_in_window": [
+     -248524
+    ],
+    "host_in_window": [
+     {
+      "dt": 1.0,
+      "load1": 4.59814453125,
+      "steal_pct": 1.49,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=85.25 avg60=54.93 avg300=51.12 total=590674632"
+     },
+     {
+      "dt": 1.0,
+      "load1": 4.59814453125,
+      "steal_pct": 1.5,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=85.57 avg60=55.98 avg300=51.37 total=591551608"
+     },
+     {
+      "dt": 1.001,
+      "load1": 4.71044921875,
+      "steal_pct": 1.99,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=85.57 avg60=55.98 avg300=51.37 total=592452920"
+     },
+     {
+      "dt": 1.004,
+      "load1": 4.71044921875,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=85.83 avg60=57.00 avg300=51.61 total=593299932"
+     },
+     {
+      "dt": 1.004,
+      "load1": 4.71044921875,
+      "steal_pct": 1.0,
+      "iowait_pct": 0.0,
+      "psi": "some avg10=85.83 avg60=57.00 avg300=51.61 total=594239722"
+     }
+    ]
+   }
+  ]
+ },
+ "host_max": {
+  "max_wall_gap_s": 1.043,
+  "max_steal_pct": 8.08,
+  "max_iowait_pct": 0.0,
+  "max_load1": 5.86181640625
+ }
+}

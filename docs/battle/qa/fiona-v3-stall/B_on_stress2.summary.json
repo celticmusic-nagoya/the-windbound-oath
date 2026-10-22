@@ -1,0 +1,71 @@
+{
+ "summary": {
+  "mode": "on",
+  "seconds": 320.0,
+  "stress": 2,
+  "throttle": 1.0,
+  "runtime": "head",
+  "ctx": "raider",
+  "stall_threshold_ms": 400.0,
+  "nproc": 2,
+  "errors": [],
+  "phases": [
+   {
+    "tag": "ON",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 320.0
+   }
+  ],
+  "overall": {
+   "worker_beat": {
+    "n": 12850,
+    "max_ms": 96.7,
+    "over100": 0
+   },
+   "raf": {
+    "n": 13924,
+    "max_ms": 341.4,
+    "over100": 305
+   },
+   "timer25": {
+    "n": 12333,
+    "max_ms": 68.6,
+    "over100": 0
+   },
+   "draws": 13925,
+   "draw_gap_max_ms": 333.3,
+   "longtasks": 1,
+   "longest_task_ms": 66
+  },
+  "by_phase": {
+   "ON": {
+    "raf": {
+     "n": 13924,
+     "max_ms": 341.4,
+     "over100": 305
+    },
+    "timer25": {
+     "n": 12333,
+     "max_ms": 68.6,
+     "over100": 0
+    },
+    "longtasks": 1,
+    "longest_task_ms": 66
+   }
+  },
+  "host": {
+   "max_wall_gap_s": 1.195,
+   "max_steal_pct": 3.48,
+   "max_iowait_pct": 0.5,
+   "max_load1": 4.56494140625
+  },
+  "incidents": []
+ },
+ "host_max": {
+  "max_wall_gap_s": 1.195,
+  "max_steal_pct": 3.48,
+  "max_iowait_pct": 0.5,
+  "max_load1": 4.56494140625
+ }
+}

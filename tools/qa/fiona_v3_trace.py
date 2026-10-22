@@ -37,15 +37,27 @@ def reset_owner(r,iv,tol=50.0):
     for s,e in iv:
         if s<=r['now']+tol and e>=r['now_prev']-tol and e<=r['now']+tol:return (s,e)
     return None
+STALL_MS=500.0
+def draw_holes(tr,ctx,events=None,stall_ms=STALL_MS,tol=600.0):
+    """Holes (> stall_ms on the wall clock) between consecutive real draws, split into (unowned, owned). A hole is OWNED when the renderer was legitimately paused for it (a pause class on <body> or the page hidden,
+    pause_intervals()) for all of it but a resume/pause latency of `tol` ms in total; an owned hole is an interrupted observation (NOT_RUN_PAUSED), an unowned one is a STALL (host/page stopped without a reason the game gave)."""
+    d=[x for x in tr if x['ctx']==ctx and not x['still']];iv=pause_intervals(events or []);un=[];ow=[]
+    for i in range(len(d)-1):
+        a,b=d[i]['now'],d[i+1]['now'];g=b-a
+        if g<=stall_ms:continue
+        cov=sum(max(0.0,min(b,e)-max(a,s_)) for s_,e in iv if e<=b+100.0)   # the pause must have ENDED by the time drawing resumed; drawing again while a pause is still open explains nothing
+        h={'at_now_ms':round(a),'gap_ms':round(g,1),'paused_ms':round(cov)}
+        (ow if cov>=g-tol else un).append(h)
+    return un,ow
 def classify_soak(tr,ctx,events):
     """Verdict for a soak that is meant to run WITHOUT any intended pause: PASS only with zero resets. Resets that a genuine pause->resume owns make the observation NOT_RUN_PAUSED
     (a paused run is never an unconditional PASS - re-observe the segment); any unowned reset is FAIL."""
-    rs=reset_points(tr,ctx)
-    if not rs:return {'verdict':'PASS','resets':0,'unowned':[],'owned':[]}
+    rs=reset_points(tr,ctx);un_h,ow_h=draw_holes(tr,ctx,events)
+    if not rs:return {'verdict':'FAIL' if un_h else ('NOT_RUN_PAUSED' if ow_h else 'PASS'),'resets':0,'unowned':[],'owned':[],'stalls':un_h,'paused_holes':ow_h}
     iv=pause_intervals(events);owned=[];unowned=[]
     for r in rs:(owned if reset_owner(r,iv) else unowned).append(r)
-    return {'verdict':'FAIL' if unowned else 'NOT_RUN_PAUSED','resets':len(rs),'unowned':unowned,'owned':owned}
-def analyze(tr,ctx,require_no_resets=False):
+    return {'verdict':'FAIL' if (unowned or un_h) else 'NOT_RUN_PAUSED','resets':len(rs),'unowned':unowned,'owned':owned,'stalls':un_h,'paused_holes':ow_h}
+def analyze(tr,ctx,require_no_resets=False,events=None):
     """tr: list of draw records from BattleIdleMotion.traceStop(). Returns (failures, metrics). Every real draw is compared with the spec at its OWN clock value.
     require_no_resets: for a stable soak with no intended pause, ANY animation-clock reset is a failure (it is counted either way as m['clock_resets'])."""
     d=[x for x in tr if x['ctx']==ctx and not x['still']];fails=[];m={'draws':len(d)}
@@ -71,23 +83,38 @@ def analyze(tr,ctx,require_no_resets=False):
         if seen==[1,2,3,4,3,2,1]:full+=1
         else:partial.append(seen)
     m['blinks']=len(groups);m['blinks_fully_sampled']=full;m['blinks_with_unsampled_states']=len(partial)
-    # a state may be missing from the real draw log only if the page did not draw for longer than that state lasts (host stall); otherwise the renderer skipped it
-    DUR={1:30,2:30,3:35,4:70};ts=[x['t'] for x in d];unjustified=0
+    # Two DIFFERENT events are kept apart here (Codex FIV3 FAIL, P2):
+    #  (1) RENDER STALL = a long hole between consecutive real draws on the WALL clock (host/page stopped, whatever the cause). It is reported on its own (m['stalls']) and fails the soak as a stall.
+    #  (2) STATE SKIP = the renderer's animation clock jumped over a blink state although draws kept coming. Every one of the 7 slots of a complete blink is checked (not only states that never appear). A slot without any draw is a SKIP only if the two draws that bracket that
+    #      state's time slot (on the animation clock) are no more than the slot's duration apart on the wall clock; if they are further apart, the slot lay inside a hole (a stall), which is event (1), not a skip.
+    # The previous rule looked only at draws inside [start-0.1, start+0.36] and therefore saw NO gap (0) whenever the hole swallowed the window, calling a stall a 'skipped state'.
+    DUR={1:30,2:30,3:35,4:70};ts=[x['t'] for x in d]
+    m['stall_threshold_ms']=STALL_MS
+    un_h,ow_h=draw_holes(tr,ctx,events);m['stalls']=un_h;m['paused_holes']=ow_h
+    m['max_stall_ms']=max([h['gap_ms'] for h in un_h] or [0]);m['max_paused_hole_ms']=max([h['gap_ms'] for h in ow_h] or [0])
+    if un_h:fails.append('render stall: %d hole(s) of >%d ms between consecutive real draws (max %.0f ms) not explained by a pause - a host/page stop, NOT a skipped blink state'%(len(un_h),STALL_MS,m['max_stall_ms']))
     # A blink that starts before the first traced draw or ends after the last one is cut by the OBSERVATION WINDOW, not by the renderer: its missing states were never in the log.
-    # Only blinks that lie completely inside the window are held to 'every state appears unless the page stalled' (a truncated blink still has to be a legal sub-sequence, checked below).
     t_lo,t_hi=(min(ts),max(ts)) if ts else (0,0);m['blinks_truncated_by_window']=sum(1 for st in groups if st<t_lo-1e-9 or st+BLINK_MS/1000>t_hi+1e-9)
+    unjustified=0;slot_in_hole=0;by_t=sorted(d,key=lambda x:x['t'])
+    import bisect
+    tt=[x['t'] for x in by_t]
     for st,xs in groups.items():
         if st<t_lo-1e-9 or st+BLINK_MS/1000>t_hi+1e-9:continue
         seen=[]
         for x in xs:
             if not seen or seen[-1]!=x['state']:seen.append(x['state'])
         if seen==[1,2,3,4,3,2,1]:continue
-        miss=[q for q in (1,2,3,4) if q not in seen] or [1]
-        need=min(DUR[q] for q in miss)
-        win=[t for t in ts if st-0.1<=t<=st+0.36]
-        mg=max([(win[i+1]-win[i])*1000 for i in range(len(win)-1)] or [0])
-        if mg<=need:unjustified+=1;m.setdefault('unjustified_detail',[]).append({'start':st,'seen':seen,'max_gap_ms':round(mg,1),'need_ms':need,'draws':[(round((t-st)*1000,1)) for t in win]})
-    m['blinks_unsampled_without_a_stall']=unjustified
+        off=0.0;skipped=[];hole=[]
+        for q,dur in SEQ:
+            a_,b_=st+off/1000,st+(off+dur)/1000;off+=dur
+            i=bisect.bisect_left(tt,a_);j=bisect.bisect_left(tt,b_)
+            if j>i:continue   # a draw lies inside this slot, so it would have shown the state (a wrong state is caught by the per-draw spec check above)
+            if i==0 or j>=len(by_t):continue   # no bracketing draw on one side: window edge, not evidence of anything
+            gap=by_t[j]['now']-by_t[i-1]['now']   # wall-clock distance between the draws that bracket the slot
+            (skipped if gap<dur-0.5 else hole).append({'state':q,'slot_ms':dur,'bracket_wall_gap_ms':round(gap,1)})
+        if skipped:unjustified+=1;m.setdefault('unjustified_detail',[]).append({'start':st,'seen':seen,'skipped':skipped})
+        if hole:slot_in_hole+=1
+    m['blinks_unsampled_without_a_stall']=unjustified;m['blinks_unsampled_inside_a_stall']=slot_in_hole
     if unjustified:fails.append('%d blink(s) lack states although the page drew continuously (renderer skipped states)'%unjustified)
     # a blink whose sampled order is not a legal sub-sequence of the spec is a FAIL (not just missing states)
     for seen in partial:
@@ -102,6 +129,22 @@ def analyze(tr,ctx,require_no_resets=False):
     slack=(m['max_draw_gap_ms'] or 0)/1000
     if any(v<3.0-1e-9 or v>6.0+slack+1e-9 for v in g):fails.append('blink gap outside 3-6 s (+draw latency)')
     return fails,m
+
+def classify_incident(layers):
+    """layers: set of independent clocks that showed a hole during one stall incident. W = Worker heartbeat (not blocked by the main thread), T = main-thread setTimeout chain,
+    R = requestAnimationFrame chain, D = the idle renderer's own draw log. Returns the attribution sentence used in reports (it names where the stop is, not why)."""
+    L=set(layers)
+    if L>={'W','T','R'}:return 'process-level freeze (worker heartbeat stopped too): host/CPU starvation or VM pause, not the page'
+    if 'T' in L and 'W' not in L:return 'main thread blocked or timers throttled while the worker kept beating'
+    if L=={'R'} or L=={'R','D'}:return 'rAF delivery stopped while main-thread timers and worker kept running (frame production)'
+    if L=={'D'}:return 'idle renderer did not draw although rAF/timers/worker ran (paused()/eligible/exception)'
+    return 'mixed: '+''.join(sorted(L))
+def stall_layers(start_ep,end_ep,layer_gaps,slack=300.0):
+    """layer_gaps: {'W':[(gap_start_ep,gap_end_ep)],'T':[...],'R':[...]} epoch-ms holes of the independent clocks. Returns the set of layers whose hole overlaps [start_ep,end_ep]."""
+    out={'D'}
+    for k,v in layer_gaps.items():
+        if any(a<=end_ep+slack and b>=start_ep-slack for a,b in v):out.add(k)
+    return out
 def probe_cases():
     """(blink_start, t_seconds, expected_state) around every approved boundary, with a controlled clock (0.01 ms around boundaries for float safety)."""
     out=[];edges=[0];

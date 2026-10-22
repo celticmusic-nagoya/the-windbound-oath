@@ -1,0 +1,85 @@
+{
+ "summary": {
+  "mode": "on",
+  "seconds": 320.0,
+  "stress": 0,
+  "throttle": 1.0,
+  "runtime": "head",
+  "ctx": "raider",
+  "stall_threshold_ms": 400.0,
+  "nproc": 2,
+  "errors": [],
+  "phases": [
+   {
+    "tag": "ON",
+    "on": true,
+    "showing_at_start": true,
+    "seconds": 320.0
+   }
+  ],
+  "overall": {
+   "worker_beat": {
+    "n": 12855,
+    "max_ms": 61.5,
+    "over100": 0
+   },
+   "raf": {
+    "n": 18474,
+    "max_ms": 150.4,
+    "over100": 1
+   },
+   "timer25": {
+    "n": 12523,
+    "max_ms": 66.4,
+    "over100": 0
+   },
+   "draws": 18475,
+   "draw_gap_max_ms": 99.9,
+   "longtasks": 0,
+   "longest_task_ms": 0
+  },
+  "by_phase": {
+   "ON": {
+    "raf": {
+     "n": 18473,
+     "max_ms": 150.4,
+     "over100": 1
+    },
+    "timer25": {
+     "n": 12523,
+     "max_ms": 66.4,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   },
+   "init": {
+    "raf": {
+     "n": 1,
+     "max_ms": 2.6,
+     "over100": 0
+    },
+    "timer25": {
+     "n": 0,
+     "max_ms": null,
+     "over100": 0
+    },
+    "longtasks": 0,
+    "longest_task_ms": 0
+   }
+  },
+  "host": {
+   "max_wall_gap_s": 1.167,
+   "max_steal_pct": 8.96,
+   "max_iowait_pct": 4.02,
+   "max_load1": 1.9052734375
+  },
+  "incidents": []
+ },
+ "host_max": {
+  "max_wall_gap_s": 1.167,
+  "max_steal_pct": 8.96,
+  "max_iowait_pct": 4.02,
+  "max_load1": 1.9052734375
+ }
+}
