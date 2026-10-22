@@ -1,0 +1,63 @@
+# THE WINDBOUND OATH — AI COLLABORATION GUIDE
+
+Status: **PROPOSED — Claude-reviewed revision of the ChatGPT draft (2026-10-22 JST). Not author-approved.** A supplementary guide: it is **not** a new permission grant and does not revoke or widen any permission. The canonical rules are `docs/handoff/AI_HANDOFF_PROTOCOL.md` (ACTIVE, user decision 2026-10-20; PR #43), `docs/handoff/COLLABORATION.md`, `docs/handoff/codex-standing-orders.md` and `AGENTS.md`. Where this guide and those files differ, **those files win**. Tags are defined in `PROJECT_MASTER.md` §0.
+
+## 1. Roles
+| Actor | Primary role | Boundaries | Source |
+|---|---|---|---|
+| User (author, repository owner) | Product authority | Canon, gameplay numbers, story, art adoption, scope, destructive operations, changes to merge/deploy permissions | Protocol §2, §7 |
+| ChatGPT | Director and review coordinator | Clarify scope, track decisions, review QA evidence, ask the user for decisions. Never claim background monitoring, tests or automation that did not happen | Protocol §2 |
+| Claude Code | Implementer, fixer, integrator | Implement approved work on isolated branches, run tests, open and update PRs, prepare integration (fixed head SHA, residual-diff check, rollback ref), merge in-scope PRs under §3. Large changes to the main code, 2.5D work, rollback management | Protocol §2; standing orders §6 |
+| Codex | Independent reviewer | Test the **exact fixed SHA**; post PASS / CONDITIONAL / FAIL / BLOCKED with evidence. May also implement independently within the user-approved scope and merge in-scope PRs under §3. Work is reviewed by an agent that did not write it | Protocol §2; standing orders §1–2, §6 |
+
+All tags in this section are `CONFIRMED`. Notes:
+- **GitHub login is not identity.** Codex runs and comments under the owner's GitHub account, so a comment's login does not show which agent wrote it. State the owner in the handoff block (§5) and use the commit trailer (`Co-Authored-By: Codex <noreply@openai.com>` for Codex, the Claude trailer for Claude). "Independent" means a different agent from the author of the change, not a different login.
+- No AI starts automatically from a GitHub comment. A human or a separately authorized runner must start the next agent; `READY_FOR_CODEX` is a request, not proof that Codex began (Protocol §1, §4).
+- Do not assert that another agent was triggered or finished without evidence (Protocol §5).
+
+## 2. Before beginning and while working
+1. Fetch the latest remote `main`; record the exact SHA, the worktree state, the current branch and any uncommitted changes. Protect uncommitted changes and backups; never discard them.
+2. Read `AGENTS.md`, `docs/handoff/AI_HANDOFF_PROTOCOL.md`, `COLLABORATION.md`, `CLAIMS.md`, the relevant design documents and, for lore, the private files (`LORE_INACCESSIBLE` if they cannot be read). `DEVELOPMENT_STATUS.md` is a snapshot only.
+3. Record the branch, the files you will touch and the status in `docs/handoff/CLAIMS.md`, and read other branches' claims (`COLLABORATION.md` §1). Do not write into files another agent has claimed.
+4. One scoped task per Issue: Owner, Scope, Acceptance, Constraints, Base SHA, PR/Artifact, QA, Next actor, Approval status and evidence, Permitted operations, Decision needed (Protocol §3). `Decision needed: none` means no question is pending, **not** that anything was approved. Unspecified operations are not authorized.
+5. Commit checkpoints to a work or feature branch (`work/codex-<topic>` for Codex) and push them. Mark unfinished work WIP. Never force push or rewrite shared history.
+6. File ownership (`COLLABORATION.md` §2): `index.html` and the Claude-owned story/field/talk files are Claude's; ask through a `docs/handoff/` request rather than editing another agent's files. `data/maps/*.json` are generated files: do not hand-edit them.
+
+## 3. Permissions in force, and how far they reach
+| Operation | Rule | Tag | Source |
+|---|---|---|---|
+| Merge a PR into `main` | Pre-approved for Claude **and** Codex, per PR, only if **all** hold: (a) canon and user-confirmed specs unchanged; (b) inside the user-approved scope; (c) required tests pass and an independent QA of this exact head SHA by an agent other than the author is PASS; (d) no serious unresolved issue or unexpected regression; (e) immediately before merging the head SHA equals the QA'd SHA and the diff and conflict state were re-checked, with a rollback ref prepared; (f) the result and the new `main` SHA are reported afterwards | `CONFIRMED` (user decision 2026-10-20) | Protocol §5-6; `COLLABORATION.md` §5 |
+| Direct push to `main` | Only in the exact cases `COLLABORATION.md` §1 (last bullet) and §6 already allow (rollback tag first, one `--no-ff` merge per feature, tests run, reported with the rollback procedure). Not to be read more widely. Items §6 lists as needing the author's prior confirmation (battle rules, story/stage progress, save structure, large map changes, replacing adopted assets, removing features) still do | `CONFIRMED` | Protocol §6; `COLLABORATION.md` §6 |
+| What Codex may do without asking | Investigation, proposals, asset specs, adding and running tests, implementing on `work/codex-*`, documentation. **Not**: direct commits to `main`, force push, non-additive save changes, fixing undecided battle numbers, replacing adopted assets, enabling height on main maps before real-device Android verification | `CONFIRMED` | standing orders §1 |
+| Per-PR exception by the author | Allowed only when the author explicitly approves a specific PR. Example: PR #42, 2026-10-22, merged while the independent QA verdict stayed CONDITIONAL; the PR comment states it does not change the general rule | `CONFIRMED` for that PR only | PR #42 comment of 2026-10-22 03:50Z |
+| Phase 1 main cleanup (2026-10-22) | Prohibited for that initiative: direct change or merge to `main`, branch deletion, discarding uncommitted changes, unapproved game-spec change, unauthorized change of a QA verdict. The user decides whether to integrate after the independent QA results are in | `CONFIRMED` as a user instruction given in a session. **No immutable link was found**; the author may point to a record | user instruction 2026-10-22 |
+| Branch deletion | Not authorized: Protocol §6 says "No destructive branch deletion/history rewriting", and Phase 1 forbids it. Issue #13 (2026-10-18) records an intent to auto-approve cleanup, but the v2 protocol that was meant to implement it (PR #14) was closed unmerged on 2026-10-22 because it changes authority and needs manual approval | not authorized; whether the Issue #13 comment still stands is `UNKNOWN` | Protocol §6; Issue #13; PR #14 |
+| Needs a user decision | Gameplay numbers or difficulty, story, final asset adoption or replacement, save-breaking changes, major UX direction, an unresolved critical regression, publication or security settings, enabling auto-merge, destructive operations, and any case where canon or a confirmed spec must change | `CONFIRMED` | Protocol §7 |
+
+Also never allowed: history rewrite, a public release, and replacing an adopted asset without the matching approval (Protocol §6).
+
+## 4. QA, verdicts and merge gates
+**Two different vocabularies — keep them apart.**
+- **QA verdict** for an exact head SHA: `PASS`, `CONDITIONAL`, `FAIL`, `BLOCKED` (Protocol §5-6).
+- **Test result** for each check: `PASS`, `FAIL`, `NOT_RUN`, `BASELINE_FAIL` (Protocol §3, §6). `NOT_RUN` is never a pass. A real-device Android check that was not performed is `NOT_RUN`; desktop or emulation is not reported as physical verification.
+- Handoff `STATUS:` labels (§5) are a third thing: `READY_TO_MERGE` is a recommendation, not merge authority.
+
+**Verdict handling** (Protocol §5-6, summarised): PASS → may merge if the other conditions hold. CONDITIONAL → never treated as PASS; resolve each condition or record evidence that it is non-blocking, re-confirm what the condition required (a new independent QA if the head changed), and consult the user if it cannot be resolved in scope. FAIL → no merge; fix and obtain a new independent QA PASS on the new head. BLOCKED → no merge until unblocked. An unexplained severe regression is HOLD.
+
+**Rules that apply on top**
+1. The implementation, the independent QA and the merge must refer to the same exact head SHA. **Any new commit invalidates a SHA-specific review** (Protocol §5.5). `PROPOSED`: allow a follow-up commit that touches only documentation or evidence files without a full re-run, if the QA agent verifies the exact diff and says so. This relaxation is not in force and needs the author's approval. Until then, a submission that adds evidence files after the tested commit must name both SHAs and the diff between them.
+2. The author of a change cannot give its independent QA. Do not change, soften or relabel another agent's verdict, and do not rewrite original QA files. A user-ordered exception is recorded next to the unchanged verdict (see PR #42).
+3. Tests run **serially**. Some tests print `FAIL` but exit with 0, so judge by the output (`^FAIL `, `FAILS` greater than 0), not by the exit code. Record the environment, the commands and the exact SHA. Record `BASELINE_FAIL` separately from new failures. (standing orders §3. The known-failure list there, `m13_elder_attack_text` and `m4_e2e`, is dated 2026-10-13: its current accuracy is `UNKNOWN`.)
+4. `PROPOSED` as a general rule, and followed for Fiona idle v3 by the user's 2026-10-22 instruction: evidence from a different environment or a different SHA does not erase an earlier verdict. A PASS in one environment does not cancel a FAIL in another; report both with their SHAs.
+5. "CI" evidence: `main` has no branch protection and no required status checks, and the repository holds no test workflow (only an issue template under `.github/`). The only check-runs seen on the `main` HEAD are `build`, `deploy` and `report-build-status` (github-actions, success, apparently the GitHub Pages deployment); they do not run the game tests. Earlier QA recorded empty check-runs on PRs. Never report "CI PASS" for the game tests.
+6. Immediately before an authorized integration: re-fetch `main`; verify head and base; inspect the full diff and conflicts; create the rollback reference (`rollback/before-<feature>-<date>`); after merging, record the merge SHA and the new `main` HEAD. Merge `main` into the branch and re-run the relevant tests rather than merging from a stale base (`COLLABORATION.md` §5); do not force push.
+
+## 5. Handoff format
+The canonical compact comment is `docs/handoff/AI_HANDOFF_PROTOCOL.md` §4 (STATUS, OWNER, ISSUE, BRANCH, SHA, PR, FILES, PURPOSE, TESTS, REMAINING, BLOCKERS, NEXT, DECISION_NEEDED). `STATUS` is one of `READY_FOR_CODEX | CHANGES_REQUESTED | READY_FOR_CLAUDE | BLOCKED_DECISION | READY_TO_MERGE | DONE`. Use that block unchanged.
+`PROPOSED` additions, useful but not required: `BASE MAIN SHA`, a separate line each for canon / implementation / merge-approval status, `ROLLBACK REFERENCE`, and `TESTED CODE SHA` when it differs from the head. The per-deliverable report in `COLLABORATION.md` §4 and `codex-standing-orders.md` §4 still applies.
+
+## 6. Current special safeguards (as of 2026-10-22; details and SHAs in `DEVELOPMENT_STATUS.md`)
+- **Fiona idle v3**: independently observed FAIL at `320ba8ca…`; the diagnostic branch is waiting for Codex's independent retest. No merge on a Claude-only result.
+- **BG adoption**: keep `backup/bg-adopt-be030c4-20261022` and `backup/bg-adopt-uncommitted-20261022`.
+- **Height Phase 2**: PR #44 merged documentation only. It is not permission to implement pieces, enable maps or adopt assets.
+- **Branch cleanup**: the A–F classification is an inventory, never a deletion authorization. Keep rollback, QA, Codex, asset and unique-commit branches until audited.
