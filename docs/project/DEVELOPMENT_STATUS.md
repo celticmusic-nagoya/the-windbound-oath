@@ -1,13 +1,14 @@
 # THE WINDBOUND OATH — DEVELOPMENT STATUS
 
-Status: **PROPOSED — Claude-reviewed revision of the ChatGPT draft.**
+Status: **ADOPTED as a supplementary reference document** (the author adopted the three `docs/project/` documents and approved merging PR #45; merge commit `e8ecb5dceea3513bbc22028dcff9365b6718d20c`, 2026-10-22; Codex independent QA PASS on the merged head `8c7d45a7…`). The adoption is of the document as a reference; it does not make any item inside it approved: the per-item tags (`PROPOSED`, `UNKNOWN`, QA verdicts such as FAIL / CONDITIONAL / BLOCKED, 'not approved') keep their meaning below. This file is a dated snapshot and never overrides `AGENTS.md`, the handoff protocol or the lore.
 **Snapshot only. As of 2026-10-22 (JST); the main-state figures were checked against GitHub that day, the Fiona rows were updated after Codex's PR #45 review (2026-10-22 ~17:30 JST).** Refresh from GitHub before any decision. This file is not an automatic source of truth and authorizes no merge, deletion or implementation. Tags are defined in `PROJECT_MASTER.md` §0; QA vocabulary in `AI_COLLABORATION.md` §4.
 
 ## 1. Verified main
 | Item | Value |
 |---|---|
 | Game repository | `celticmusic-nagoya/the-windbound-oath` |
-| `main` HEAD | `081111ed848a54e4c0b70894a1c41205cf6642f3` — merge of PR #44 (2026-10-22 05:32:55Z, merged through the owner's account) |
+| `main` HEAD **at the time of the original check (historical snapshot, before PR #45; no longer current)** | `081111ed848a54e4c0b70894a1c41205cf6642f3` — merge of PR #44 (2026-10-22 05:32:55Z, merged through the owner's account) |
+| `main` HEAD **after PR #45 was merged (as of 2026-10-22 JST; still fetch `main` again before use)** | `e8ecb5dceea3513bbc22028dcff9365b6718d20c` — merge of PR #45 (these documents; docs only). `081111ed…` is the pre-merge parent and the rollback reference `rollback/before-pr45-docs-project-20261022`; it is not the current `main` |
 | Open PRs | 0 at `main` HEAD `081111ed`. PR #45 (these three documents) was merged afterwards as `e8ecb5dceea3513bbc22028dcff9365b6718d20c` (docs only; rollback branch `rollback/before-pr45-docs-project-20261022` = `081111ed…`) |
 | Open Issues | #5, #7–#13, #15–#21, #37 |
 | Branches | 267 at the first count; 269 on re-check (2026-10-22, includes this PR's branch and the Fiona FIX3 branch). Counts are volatile; exclusion rules were not applied |
