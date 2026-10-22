@@ -137,6 +137,22 @@ evH=[[13000,'hidden=true'],[20850,'hidden=false']];vH2=S.classify_soak(trP,'raid
 check(vH2['verdict']=='NOT_RUN_PAUSED','P4 hole owned by a hidden page -> NOT_RUN_PAUSED',vH2['verdict'])
 evO=[[13000,'raiderBattleMode dialogueOpen']];fO,mO=S.analyze(trP,'raider',events=evO)
 check(len(stallf(fO))==1,'P5 a pause that is still open when drawing resumes does not own the hole (drawing during a pause explains nothing)',(fO,))
+# ---- P2 (FIX3): ownership needs EXPLICIT pause evidence. A flat 600 ms allowance used to own any 500-600 ms hole with no pause at all -> NOT_RUN_PAUSED ------------------------------
+trH=gen([(9.0,12.0),(12.55,16.0)],12.0)   # 550 ms hole = page time 13000..13550 ms, no pause of any kind
+for nm,ev in (('no events []',[]),('events None',None),('unrelated pause elsewhere',[[30000,'raiderBattleMode dialogueOpen'],[30500,'raiderBattleMode']])):
+    fH,mH=S.analyze(trH,'raider',events=ev);vH=S.classify_soak(trH,'raider',ev)
+    check(len(stallf(fH))==1 and vH['verdict']=='FAIL' and not vH['paused_holes'] and vH['stalls'][0]['pause_evidence']=='none','P6 550 ms hole, %s: unowned stall -> FAIL, never NOT_RUN_PAUSED or PASS'%nm,(fH,vH['verdict']))
+for gap_ms in (501,520,599,600,601):
+    tr_=gen([(9.0,12.0),(12.0+gap_ms/1000.0+0.016,16.0)],12.0);v_=S.classify_soak(tr_,'raider',[])
+    check(v_['verdict']=='FAIL' and len(v_['stalls'])==1,'P7 %d ms unpaused hole is a stall (boundary sweep)'%gap_ms,v_['verdict'])
+check(not S.classify_soak(gen([(9.0,12.0),(12.48,16.0)],12.0),'raider',[])['stalls'],'P7 a 500 ms gap is NOT over the stall threshold (> 500 ms): kept as before')
+evF=[[13000,'raiderBattleMode dialogueOpen'],[13560,'raiderBattleMode']];vF=S.classify_soak(trH,'raider',evF)
+check(vF['verdict']=='NOT_RUN_PAUSED' and vF['paused_holes'][0]['pause_evidence']=='full','P8 the same 550 ms hole fully covered by an ended pause -> NOT_RUN_PAUSED (explicit evidence)',vF)
+evG=[[13000,'raiderBattleMode dialogueOpen'],[13100,'raiderBattleMode']];vG=S.classify_soak(trH,'raider',evG)
+check(vG['verdict']=='FAIL' and vG['stalls'][0]['pause_evidence']=='partial','P9 a 100 ms pause inside a 550 ms hole explains only part of it -> FAIL (partial evidence)',vG)
+evI=[[13010,'raiderBattleMode dialogueOpen'],[20450,'raiderBattleMode']];vI=S.classify_soak(trP,'raider',evI)
+check(vI['verdict']=='NOT_RUN_PAUSED','P10 long hole with pause covering all but a ~0.5 s resume latency is still owned (existing tolerance kept for long holes)',vI['verdict'])
+check(S.classify_soak(gen([(9.0,16.0)],12.0),'raider',None)['verdict']=='PASS','P11 no hole, no events: PASS is unchanged')
 # ---- stall attribution: which independent clock stopped together with the draw log -----------------------------------------------------------------------------------
 H=(1000.0,8900.0)
 check(S.classify_incident(S.stall_layers(1000,8900,{'W':[H],'T':[H],'R':[H]})).startswith('process-level freeze'),'ATTR all four clocks stopped -> process-level freeze (not the page)')

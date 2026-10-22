@@ -46,8 +46,12 @@ def draw_holes(tr,ctx,events=None,stall_ms=STALL_MS,tol=600.0):
         a,b=d[i]['now'],d[i+1]['now'];g=b-a
         if g<=stall_ms:continue
         cov=sum(max(0.0,min(b,e)-max(a,s_)) for s_,e in iv if e<=b+100.0)   # the pause must have ENDED by the time drawing resumed; drawing again while a pause is still open explains nothing
-        h={'at_now_ms':round(a),'gap_ms':round(g,1),'paused_ms':round(cov)}
-        (ow if cov>=g-tol else un).append(h)
+        # OWNERSHIP NEEDS EXPLICIT PAUSE EVIDENCE: some pause time must actually overlap the hole (cov>0) AND the part left unexplained must be small relative to the hole.
+        # The allowance is min(tol, g/2): a flat 600 ms allowance let a 500-600 ms hole with ZERO pause evidence count as "paused" (NOT_RUN_PAUSED). No evidence / unknown pause state = a stall of unknown cause, never paused.
+        allow=min(tol,g/2.0)
+        owned=cov>0 and cov>=g-allow
+        h={'at_now_ms':round(a),'gap_ms':round(g,1),'paused_ms':round(cov),'pause_evidence':'none' if cov<=0 else ('full' if owned else 'partial')}
+        (ow if owned else un).append(h)
     return un,ow
 def classify_soak(tr,ctx,events):
     """Verdict for a soak that is meant to run WITHOUT any intended pause: PASS only with zero resets. Resets that a genuine pause->resume owns make the observation NOT_RUN_PAUSED
