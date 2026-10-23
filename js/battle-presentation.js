@@ -30,10 +30,22 @@
   });queue=result.catch(()=>false);return result;
  }
  // Input hold that starts at once (not queued behind banter): shares the presentation lock, so cancel() / a new battle releases it. Used by BattleOpening.
- function hold(ms,token=PrologueCombat.generation){
+ // With `until` (a promise), the lock lasts until BOTH ms has elapsed and `until` has settled - never shorter than ms - and is released
+ // unconditionally after ms+HOLD_CAP_MS so a lost completion can never lock input for good.
+ const HOLD_CAP_MS=2000;
+ function hold(ms,token=PrologueCombat.generation,until=null){
   const lock={};active.add(lock);document.body.classList.add('battlePresentationBusy');
   const release=()=>{active.delete(lock);if(!active.size)document.body.classList.remove('battlePresentationBusy');};
-  return wait(ms,token).then(r=>{release();return r;},e=>{release();throw e;});
+  if(!until)return wait(ms,token).then(r=>{release();return r;},e=>{release();throw e;});
+  return new Promise(resolve=>{
+   let done=false,minOk=false,untilOk=false,timer,cap;
+   const finish=result=>{if(done)return;done=true;clearTimeout(timer);clearTimeout(cap);pending.delete(finish);release();resolve(result&&valid(token));};
+   pending.add(finish);
+   timer=setTimeout(()=>{minOk=true;if(untilOk)finish(true);},ms);
+   cap=setTimeout(()=>finish(true),ms+HOLD_CAP_MS);
+   const settled=()=>{untilOk=true;if(minOk)finish(true);};
+   Promise.resolve(until).then(settled,settled);
+  });
  }
  async function showSkillCutin({actor,skill,type='SHORT',image,duration=durations[type]||550},token=PrologueCombat.generation){
   if(setting==='OFF')return valid(token);
