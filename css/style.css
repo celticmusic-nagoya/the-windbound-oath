@@ -3561,3 +3561,7 @@ body.wbHeavyShake #raiderBattle{animation:wbHeavyShake .28s linear}
 #battleBg{display:none;position:absolute;inset:0 -4% -14% -4%;z-index:0;pointer-events:none;background:center/cover no-repeat}
 #attackBattle[data-bg] #battleBg{display:block}
 body.normalBattleMode #attackBattle[data-bg]>.v2BattleStage{background:none!important}
+
+/* Persistent recovery status remains usable even when a field failed to mount. */
+#loadStatus{position:fixed;left:12px;right:12px;bottom:12px;z-index:100200;padding:12px;background:#14251f;color:#fff;border:1px solid #bbab70;border-radius:8px;font:14px/1.5 system-ui,sans-serif}
+#loadStatus[hidden]{display:none}#retryLoad{margin-left:8px;padding:8px 16px}
