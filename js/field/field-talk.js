@@ -90,6 +90,7 @@
 
   // ---------- presentation in #msg ----------
   function render(page, choices) {
+    window.LoadCoordinator?.noteDialogue();
     const box = msg(); if (!box) return;
     box.textContent = '';
     if (page.speaker) { const n = document.createElement('div'); n.className = 'talkName'; n.textContent = page.speaker; box.append(n); }

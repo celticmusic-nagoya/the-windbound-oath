@@ -208,16 +208,18 @@
 </div></div>
 </div>
 <div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" data-loading-action="retry" type="button" hidden>再試行</button></div>
-<script src="js/load-coordinator.js?v=20261025input"></script>
+<script src="js/load-coordinator.js?v=20261025startup"></script>
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
 function say(t){
+ window.LoadCoordinator?.noteDialogue();
  msg.textContent=t;
  msg.style.display='block';
  document.body.classList.add('dialogueOpen');
 }
 function closeDialogue(){
+ window.LoadCoordinator?.noteDialogue();
  msg.style.display='none';
  msg.textContent='';
  document.body.classList.remove('dialogueOpen');
@@ -1579,7 +1581,9 @@ const DEV_EVENTS=[
  ['map:fort_dunvall_01_courtyard','M1　砦・中庭'],['map:fort_dunvall_02_ramparts','M2　砦・城壁'],['map:fort_dunvall_03_keep','M3　砦・主塔'],
  ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:dev_height_proto','DEV　高さプロトタイプ(2.5D)'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
-function devResetScreens(){
+function devResetScreens(ownerToken){
+ if(ownerToken===undefined)window.LoadCoordinator?.supersede();
+ else LoadCoordinator.assertCurrent(ownerToken);
  window.BattleLoading?.cancel();window.TrainingCheckpoint?.cancel();window.MossForest?.cancelPendingEnter();
  closeDialogue();window.MossForest&&MossForest.hide();
  ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','aftermathScene','fortScene','prologueEnd','battle','attackBattle','questMenu'].forEach(id=>{
@@ -1599,7 +1603,8 @@ function devJump(key){
  if(key==='opening'){
    storyStage=0;room='home';ipx=190;ipy=500;itarget=null;$('#inside').style.display='block';dressRoom();inCamera();
    currentObjective='家を出て、訓練場のフィオナに会いに行こう';
-   setTimeout(()=>{if(storyStage===0&&room==='home')say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。')},120);
+   const token=LoadCoordinator.generation,revision=LoadCoordinator.dialogueRevision;
+   setTimeout(()=>{if(LoadCoordinator.current(token)&&revision===LoadCoordinator.dialogueRevision&&storyStage===0&&room==='home'&&!window.FieldTalk?.active)say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。')},120);
  }else if(key==='training'){
    storyStage=1;room='';px=1510;py=1010;target=null;currentObjective='訓練場でフィオナと話そう';camera();
  }else if(key==='sunset'){
@@ -1647,7 +1652,8 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
 (function startAtHome(){
  if(!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
-   const go=()=>{if(window.RildeVillage&&RildeVillage.enabled())LoadCoordinator.boot(token=>RildeVillage.startOpening(token));};
+   const scheduled=LoadCoordinator.generation;
+   const go=()=>{if(scheduled!==LoadCoordinator.generation)return;if(window.RildeVillage&&RildeVillage.enabled())LoadCoordinator.boot(token=>RildeVillage.startOpening(token));};
    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
    return;
  }
@@ -1655,8 +1661,9 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
  room='home'; ipx=190; ipy=500; itarget=null;
  $('#inside').style.display='block';dressRoom();inCamera();
  currentObjective='家を出て、訓練場のフィオナに会いに行こう';renderJournal();
+ const revision=LoadCoordinator.dialogueRevision;
  await new Promise(resolve=>setTimeout(resolve,450));LoadCoordinator.assertCurrent(token);
- if(storyStage===0&&room==='home'){popObjective();say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');}
+ if(revision===LoadCoordinator.dialogueRevision&&!window.FieldTalk?.active&&storyStage===0&&room==='home'){popObjective();say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');}
  });
 })();
 
@@ -1986,7 +1993,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/battle-critical.js"></script>
 <script src="js/prologue-combat.js?v=20261013wd4"></script>
 <script src="js/battle-critical-presentation.js"></script>
-<script src="js/prologue-progress.js"></script>
+<script src="js/prologue-progress.js?v=20261025startup"></script>
 <script src="js/prologue-dev.js?v=20261012c"></script>
 <script src="js/dev/perf-meter.js?v=20261012p1"></script>
 <script src="js/dev/motion-test.js?v=20261019am1"></script>
@@ -2003,7 +2010,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261025input"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
-<script src="js/field/rilde-village.js?v=20261011b"></script>
+<script src="js/field/rilde-village.js?v=20261025startup"></script>
 <script src="js/training-checkpoint.js"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
@@ -2024,7 +2031,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/talk-data-capital.js?v=20261011i"></script>
 <script src="js/field/talk-data-rilde.js?v=20261011d"></script>
 <script src="js/field/talk-data-attack.js?v=20261012a"></script>
-<script src="js/field/field-talk.js?v=20261012i"></script>
+<script src="js/field/field-talk.js?v=20261025startup"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>
 <script src="js/field/field-scene.js"></script>
