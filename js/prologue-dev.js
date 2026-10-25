@@ -37,11 +37,11 @@
   }else if(key.startsWith('moss')||key.startsWith('barrier')){
    closeDialogue();forestStoneSeen=true;storyStage=key.startsWith('moss')?9:10;PrologueProgress.sync();
    if(key.startsWith('moss')){const i=Number(key.at(-1)),pos=[[4740,5725],[5672,4750],[4215,4175]][i-1];
-    forestDevEnterA3(pos[0]-120,pos[1]).then(()=>startAttackBattle('forestGob'+i,100));}
-   else forestDevEnterA3(3910,3340).then(()=>{PrologueProgress.sync();setObj(PrologueProgress.objective());});
+    forestDevEnterA3(pos[0]-120,pos[1]).then(()=>startAttackBattle('forestGob'+i,100)).catch(()=>{});}
+   else forestDevEnterA3(3910,3340).then(()=>{PrologueProgress.sync();setObj(PrologueProgress.objective());}).catch(()=>{});
   }else if(key==='lou'){
    old('lou');PrologueProgress.sync();
-   Promise.resolve(window.__devEnter).then(()=>startLouIntro());
+   Promise.resolve(window.__devEnter).then(()=>startLouIntro()).catch(()=>{});
   }else old(key);
   if(key==='forest')PrologueProgress.sync();
   // Later destinations need the released forest and Lou, not only a scene index.

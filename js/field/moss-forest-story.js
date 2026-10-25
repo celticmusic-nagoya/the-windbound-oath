@@ -17,7 +17,7 @@
   const inPrologueForest=()=>storyStage>=9&&storyStage<=12;
 
   function flagsNow(){
-    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5,prologue_village_open:storyStage>=1&&storyStage<=3,liam_joined:typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined)};
+    return {moss_a3_seal_open:PrologueProgress.count()>=3,moss_a3_lou_found:Boolean(louFound),moss_a3_lou_rescued:storyStage>=13,moss_prologue_entry:storyStage>=9,rilde_fiona_waiting:storyStage===0,rilde_ruined:storyStage>=5,prologue_village_open:storyStage>=1&&storyStage<=3,liam_joined:typeof PartyManager!=='undefined'&&Boolean(PartyManager.members.liam&&PartyManager.members.liam.joined)};
   }
   function onEvent(z,map){
     if(z.type==='locationCard'){
@@ -136,7 +136,7 @@
     startAttackBattle(B[0]+n,B[1]*n);return true;
   }
   // Peaceful Sunlit Path (A1 before the attack, storyStage 0-8): no ordinary goblins -- they belong to the forest after the fall (stage 9+). Slimes / boars stay.
-  function monsterAllowed(d,mapId){return !(d&&d.type==='goblin'&&mapId===MAP_IDS.a1&&storyStage<=8);}
+  function monsterAllowed(d,mapId){return !(d&&d.type==='goblin'&&mapId===MAP_IDS.a1&&storyStage<=8&&!MossForest.flags.moss_prologue_entry);}
   function onVillageExit(t){
     if(window.RildeVillage&&RildeVillage.exit(t))return true;   // Rilde Village exits + (unless ?legacyVillage=1) the cliff / fort returns
     if(t&&t.id==='tr_c1_to_lind'){   // 風見の断崖 -> village south gate
@@ -167,9 +167,8 @@
     if(window.FieldScene)bind();else addEventListener('DOMContentLoaded',bind);
   }
   // Enter A1 at the cliff-fall spot (new game / DEV jump) or restore a saved position.
-  function enterFromStart(){
-    MossForest.reset();
-    return MossForest.enter({map:MAP_IDS.a1,spawn:'from_cliff_fall',flags:flagsNow()});
+  function enterFromStart(options={}){
+    return MossForest.enter({...options,resetState:true,map:MAP_IDS.a1,spawn:'from_cliff_fall',flags:{...flagsNow(),moss_prologue_entry:true}});
   }
   function enterAt(mapId,x,y,state){
     MossForest.restoreState(state);

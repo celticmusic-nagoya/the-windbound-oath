@@ -375,7 +375,7 @@ $('#roadExit').onclick=()=>{
 function enterWorldMap(id,spawn){closeDialogue();forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterMap(id,spawn);}
 function enterCliff(){
  closeDialogue();forestActive=true;$('#forestScene').style.display='block';
- MossForestStory.enterCliff().then(()=>{if(storyStage===3)setObj('崖の上のビューポイントへ向かおう')});
+ MossForestStory.enterCliff().then(()=>{if(storyStage===3)setObj('崖の上のビューポイントへ向かおう')}).catch(()=>{});
 }
 $('#farmer').onclick=()=>say('農夫「今年は麦の育ちがいい。風の恵みだな。」');
 $('#woman').onclick=()=>say('村人「フィオナなら訓練場の方へ行くのを見たわよ。」');
@@ -1114,7 +1114,7 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
- if(!LoadCoordinator.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
+ if(!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
@@ -1142,7 +1142,7 @@ async function loadGrowthData(){
   },()=>loadGrowthData());
  }catch(e){const text=e.message?.includes('元のセーブ')?e.message:'ロードできませんでした。';const m=$('#saveMsg');if(m)m.textContent=text;notice(text);return false}
 }
-function eraseGrowthData(){if(!LoadCoordinator.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
+function eraseGrowthData(){if(!LoadCoordinator.canSave||!MossForest.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
 $('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
 $('#systemClose').onclick=()=>$('#systemMenu').style.display='none';
 document.addEventListener('fullscreenchange',()=>{if($('#systemMenu').style.display==='block'&&document.querySelector('[data-stab="settings"].active'))renderSystemTab('settings')});
@@ -1156,13 +1156,14 @@ $('#resultContinue').onclick=()=>{
 let forestGobWins=0,louFound=false;
 let battleItems={potion:4,ether:2}; let normalFHP=90,normalFMP=30,normalActor='aidan';
 function enterMossForest(){
- storyStage=9;forestActive=true;
+ forestActive=true;
  $('#forestScene').style.display='block';
- MossForestStory.enterFromStart().then(()=>{
-   questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
+ MossForestStory.enterFromStart({onRetry:enterMossForest}).then(map=>{
+   if(MossForest.entering||MossForest.mapId!==map.id)return;
+   storyStage=9;questPop('SCENE：苔むした森');PrologueProgress.sync();setObj(PrologueProgress.objective());
    const g=window.PrologueCombat?.generation;
    setTimeout(()=>{if(g===window.PrologueCombat?.generation&&forestActive&&storyStage===9)FieldTalk.talk('scene_forest_arrival',{source:'forest'})},350);
- });
+ }).catch(()=>{});
 }
 function forestDevEnterA3(fx,fy){forestActive=true;$('#forestScene').style.display='block';return MossForestStory.enterAt(MossForestStory.MAP_IDS.a3,fx-17,fy-42,null);}
 function forestToast(t){
@@ -1995,7 +1996,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261014h25"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261025s2"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/training-checkpoint.js"></script>
