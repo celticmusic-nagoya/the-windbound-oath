@@ -96,3 +96,7 @@
 
 #forestWorld #forestLou{position:absolute;width:0;height:0;pointer-events:none}
 #forestLou .lou-field-frame{position:absolute;left:0;height:52px;width:auto;transform:translateX(-50%);pointer-events:none;user-select:none}
+
+/* S2 navigation failure: explicit retry also works when no field could be mounted. */
+#fieldEntryError{position:fixed;left:12px;right:12px;bottom:12px;z-index:100190;padding:12px;background:#14251f;color:#fff;border:1px solid #bbab70;border-radius:8px;font:14px/1.5 system-ui,sans-serif}
+#fieldEntryError[hidden]{display:none}#fieldEntryError button{margin-left:8px;padding:8px 16px}

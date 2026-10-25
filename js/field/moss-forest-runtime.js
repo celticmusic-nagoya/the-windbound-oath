@@ -12,7 +12,8 @@
     flags:{moss_a3_seal_open:false,moss_a3_lou_found:false,moss_a3_lou_rescued:false},opened:new Set(),fired:new Set(),
     inside:new Set(),extra:[],symbols:[],sealNode:null,windNodes:[],louNode:null,treasureNodes:new Map(),
     transitionLatch:true,battleLatch:false,slain:new Map(),keys:new Map(),frames:0,zones:{rest:null,ambience:null},loopId:0};
-  let el={},hooks={},enterGeneration=0,enterCount=0;
+  let el={},hooks={},enterGeneration=0,enterCount=0,entry=null,externalLock=false,recoveryRequired=false;
+  let entryErrorPanel=null;
   const dist=(a,b,c,d)=>Math.hypot(a-c,b-d);
   const $=s=>document.querySelector(s);
 
@@ -237,24 +238,91 @@
   }
 
   // ---------- transitions between maps ----------
-  async function enter(options){
-    const request=++enterGeneration;enterCount++;
-    const ensure=()=>{if(request!==enterGeneration)throw Error('Cancelled map entry');window.LoadCoordinator?.assertCurrent(options.loadToken);};
-    ensure();
+  const ENTRY_FIELDS=['x','y','fx','fy','fl','fionaHold','transitionLatch','battleLatch','trail'];
+  function entrySnapshot(){
+    const fields={};for(const key of ENTRY_FIELDS)fields[key]=Array.isArray(S[key])?S[key].map(x=>({...x})):S[key];
+    return {map:S.map,mapId:S.mapId,fields,active:S.active,flags:{...S.flags},
+      opened:new Set(S.opened),fired:new Set(S.fired),inside:new Set(S.inside),
+      slain:new Map([...S.slain].map(([id,set])=>[id,new Set(set)])),
+      level:S.forest?.height?.level,camera:{...CAM},timeOfDay:window.FieldTimeOfDay?.current,weather:window.FieldWeather?.current,enc:{...enc,visits:{...enc.visits}},
+      scene:el.scene.style.display,fade:el.fade.style.opacity};
+  }
+  function restoreEntryData(previous,destructive){
+    for(const key of Object.keys(S.flags))delete S.flags[key];Object.assign(S.flags,previous.flags);
+    if(destructive)S.slain=new Map([...previous.slain].map(([id,set])=>[id,new Set(set)]));
+    S.opened=new Set(previous.opened);S.fired=new Set(previous.fired);
+  }
+  function restoreEntryFields(previous){
+    for(const [key,value] of Object.entries(previous.fields))S[key]=Array.isArray(value)?value.map(x=>({...x})):value;
+  }
+  function restoreEntry(previous,destructive){
+    if(destructive)unmount();
+    restoreEntryData(previous,destructive);
+    if(destructive&&previous.map)mount(previous.map);
+    S.mapId=previous.mapId;restoreEntryFields(previous);S.inside=new Set(previous.inside);
+    Object.assign(enc,previous.enc,{visits:{...previous.enc.visits}});
+    S.target=null;S.pending=null;S.hold=null;S.keys.clear();FieldNavigation.cancel();
+    if(S.forest?.height&&Number.isFinite(previous.level))S.forest.height.setLevel(previous.level);
+    el.scene.style.display=previous.scene;el.fade.style.transitionDuration='0ms';el.fade.style.opacity=previous.fade||'0';
+    S.active=Boolean(previous.active&&S.forest);S.busy=externalLock;
+    if(destructive&&previous.map){
+      if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(previous.map);FieldTimeOfDay.set(previous.timeOfDay||'day',{instant:true});}
+      if(window.FieldWeather){FieldWeather.configureMap(previous.map);if(previous.weather)FieldWeather.set(previous.weather,{instant:true});}
+      playBgm();
+    }
+    if(destructive){CAM.focus=previous.camera.focus;CAM.shakeUntil=0;}
+    if(S.forest){render();restoreEntryFields(previous);startLoop();}
+  }
+  function clearEntryError(){if(entryErrorPanel)entryErrorPanel.hidden=true;}
+  function showEntryError(options,request){
+    if(!entryErrorPanel){
+      entryErrorPanel=document.createElement('div');entryErrorPanel.id='fieldEntryError';entryErrorPanel.setAttribute('role','status');
+      const text=document.createElement('span');text.textContent='移動できませんでした。記録は保持されています。';
+      const button=document.createElement('button');button.type='button';button.textContent='再試行';entryErrorPanel.append(text,button);document.body.append(entryErrorPanel);
+    }
+    entryErrorPanel.hidden=false;
+    entryErrorPanel.querySelector('button').onclick=()=>{
+      if(request!==enterGeneration||entry)return;
+      const retry=options.loadToken!==undefined?()=>window.LoadCoordinator?.retry():options.onRetry||(()=>enter(options));
+      Promise.resolve().then(retry).catch(()=>{}); // UI terminal boundary; enter() still rejects for all callers.
+    };
+  }
+  function cancelPendingEnter(){
+    enterGeneration++;const pending=entry;entry=null;clearEntryError();
+    if(!pending)return;
+    try{restoreEntry(pending.previous,pending.destructive);recoveryRequired=!pending.previous.map;}
+    catch(e){recoveryRequired=true;S.active=false;S.busy=true;}
+  }
+  function enter(options){
+    const task=performEnter(options);
+    // Fire-and-forget navigation has an error UI. Return the original rejected Promise so await/.then never sees success.
+    task.catch(()=>{});return task;
+  }
+  async function performEnter(options){
     if(!S.configured)throw new Error('MossForest not configured');
+    const pending=entry,previous=pending?pending.previous:entrySnapshot();
+    const request=++enterGeneration;enterCount++;
+    const owns=()=>request===enterGeneration&&(options.loadToken===undefined||!window.LoadCoordinator||LoadCoordinator.current(options.loadToken));
+    const ensure=()=>{if(!owns())throw Error('Cancelled map entry');};
+    const transaction={previous,destructive:Boolean(pending?.destructive),committed:false};entry=transaction;clearEntryError();
+    try{
+      ensure();
     const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;   // logical ids (e.g. 'rilde_village' = peace/ruin by story state) resolve here
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     mountFionaSprite();
     const map=await loadMap(id);ensure();
-    skinFiona();
-    if(options.flags)Object.assign(S.flags,options.flags);
-    const first=!S.map;
-    S.slain.delete(id);   // entering a map (from another one, from the village, from a save) respawns its monsters; a battle return only resumes()
+    const first=!previous.map;
+    {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
+    ensure();
     if(!first)await setFade(1,fadeMs(options.transition,'out'));ensure();
     el.scene.style.display='block';
-    {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
-    ensure();unmount();mount(map);
+    transaction.destructive=true;
+    unmount();restoreEntryData(previous,true);
+    if(options.resetState){S.opened.clear();S.fired.clear();}
+    if(options.flags)Object.assign(S.flags,options.flags);
+    S.slain.delete(id);
+    mount(map);skinFiona();
     if(S.forest.height&&Number.isFinite(options.level))S.forest.height.setLevel(options.level);   // before the spot check: a deck / plateau position is only free at its own level
     let spot;
     const sp0=map.spawns.points[spawnId||map.spawns.default];
@@ -269,9 +337,22 @@
     el.fade.style.opacity='1';
     playBgm();
     await setFade(0,fadeMs(options.transition,'in'));ensure();
-    S.busy=false;S.active=true;startLoop();
+    transaction.committed=true;entry=null;recoveryRequired=false;clearEntryError();
+    S.busy=externalLock;S.active=true;startLoop();
     if(hooks.onEnter)hooks.onEnter(map,spawnId);
-    return map;
+    ensure();
+      return map;
+    }catch(error){
+      if(owns()){
+        entry=null;
+        if(!transaction.committed){
+          try{restoreEntry(previous,transaction.destructive);recoveryRequired=!previous.map;}
+          catch(rollbackError){recoveryRequired=true;S.active=false;S.busy=true;}
+        }else{recoveryRequired=true;S.active=false;S.busy=true;}
+        showEntryError(options,request);
+      }
+      throw error;
+    }
   }
   function playBgm(){if(!window.FieldBgm)return;const b=S.map&&S.map.audio&&S.map.audio.bgm;FieldBgm.play(b&&b.id);}
   // Coarse 32px flood fill from the area entrance with the live collision (used to validate restored positions).
@@ -292,7 +373,7 @@
     return false;
   }
   function transitionTo(t){
-    if(S.busy)return;
+    if(S.busy||entry||recoveryRequired)return;
     if(t.toMap==='lind_village'||t.toMap==='TBD'){
       if(hooks.onVillageExit&&hooks.onVillageExit(t))return;   // hook returns true when it handled/blocked it
       return;
@@ -607,17 +688,17 @@
     return null;
   }
   function show(){el.scene.style.display='block';}
-  function hide(){S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
-  function resume(){show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
+  function hide(){cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
+  function resume(){if(entry||recoveryRequired)return false;show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
   function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired]};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
   function restoreState(snap){
     S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);
     S.fired=new Set(Array.isArray(snap&&snap.fired)?snap.fired.filter(x=>typeof x==='string'):[]);
   }
-  function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
+  function reset(){cancelPendingEnter();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({cancelPendingEnter(){enterGeneration++},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
-    get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
+  window.MossForest=Object.freeze({cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+    get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy||Boolean(entry)||recoveryRequired;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},

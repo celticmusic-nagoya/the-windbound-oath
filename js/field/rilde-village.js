@@ -125,7 +125,7 @@
     return false;
   }
   function enterCliffFromVillage() {
-    MossForestStory.enterCliff().then(() => { if (stage() === 3) setObj('崖の上のビューポイントへ向かおう'); });
+    MossForestStory.enterCliff().then(() => { if (stage() === 3) setObj('崖の上のビューポイントへ向かおう'); }).catch(()=>{});
   }
   // 長老が街道を示したら(road_dunvall_open)、目的も次へ進める
   window.addEventListener('field-talk-end', e => {
