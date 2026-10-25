@@ -1,0 +1,7 @@
+const vm=require('node:vm'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+async function probe(mode){
+ const manifest={base:'',ground:{grass:'grass.png',dirt:'dirt.png'},node:[{match:'^prop_',file:'prop.png',w:32,h:32}],layer:[],entity:{}};
+ class Image{constructor(){this.complete=false;this.naturalWidth=0}decode(){if(this.src.endsWith('prop.png')&&mode==='timeout')return new Promise(()=>{});if(this.src.endsWith('prop.png')&&mode==='failed')return Promise.reject(Error('decode'));this.complete=true;this.naturalWidth=32;return Promise.resolve()}}
+ const c={console,URL,Image,document:{currentScript:{src:'http://test/js/field/forest-loader.js'}},setTimeout,clearTimeout,fetch:async()=>({ok:true,json:async()=>manifest})};c.window=c;vm.createContext(c);vm.runInContext(fs.readFileSync(path.join(__dirname,'../js/field/forest-loader.js'),'utf8'),c);await c.ForestLoader.loadAssets();return c.ForestLoader.prepare({props:[{asset:'prop_tree',x:100,y:100}]},{x:100,y:100},{timeout:mode==='failed'?2000:10});
+}
+(async()=>{for(const mode of ['ready','failed','timeout']){const r=await probe(mode);assert.equal(r.status,mode==='ready'?'ready':'fallback');assert.equal(r.optional[0].status,mode);assert.equal(r.optional[0].decoded,mode==='ready');assert.equal(r.required.length,0);console.log('PASS map optional prop '+mode+' explicitly reported; placeholder policy retained');}})().catch(e=>{console.error(e);process.exitCode=1});

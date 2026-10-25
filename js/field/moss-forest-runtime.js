@@ -288,6 +288,7 @@
     };
   }
   function cancelPendingEnter(){
+    window.LoadingView?.close('map:'+enterGeneration);
     enterGeneration++;const pending=entry;entry=null;clearEntryError();
     if(!pending)return;
     try{restoreEntry(pending.previous,pending.destructive);recoveryRequired=!pending.previous.map;}
@@ -300,11 +301,13 @@
   }
   async function performEnter(options){
     if(!S.configured)throw new Error('MossForest not configured');
+    window.BattleLoading?.cancel();
     const pending=entry,previous=pending?pending.previous:entrySnapshot();
     const request=++enterGeneration;enterCount++;
     const owns=()=>request===enterGeneration&&(options.loadToken===undefined||!window.LoadCoordinator||LoadCoordinator.current(options.loadToken));
     const ensure=()=>{if(!owns())throw Error('Cancelled map entry');};
     const transaction={previous,destructive:Boolean(pending?.destructive),committed:false};entry=transaction;clearEntryError();
+    window.LoadingView?.open('map:'+request,'移動先を準備しています。');
     try{
       ensure();
     const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;   // logical ids (e.g. 'rilde_village' = peace/ruin by story state) resolve here
@@ -338,11 +341,13 @@
     playBgm();
     await setFade(0,fadeMs(options.transition,'in'));ensure();
     transaction.committed=true;entry=null;recoveryRequired=false;clearEntryError();
+    window.LoadingView?.close('map:'+request);
     S.busy=externalLock;S.active=true;startLoop();
     if(hooks.onEnter)hooks.onEnter(map,spawnId);
     ensure();
       return map;
     }catch(error){
+      window.LoadingView?.close('map:'+request);
       if(owns()){
         entry=null;
         if(!transaction.committed){

@@ -22,7 +22,10 @@
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
 <link rel="stylesheet" href="css/field-collision-debug.css">
 <script src="js/assets.js?v=20261013id6"></script>
-<script src="js/battle-motion.js?v=20261023i50"></script>
+<link rel="stylesheet" href="css/loading.css">
+<script src="js/loading-assets.js?v=20261025loading"></script>
+<script src="js/loading-view.js?v=20261025loading"></script>
+<script src="js/battle-motion.js?v=20261025loading"></script>
 <script src="js/battle-actor-state.js?v=20261023i50"></script>
 
 <style id="v0621-dev-command-style">
@@ -1114,7 +1117,7 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
- if(!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
+ if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
@@ -1128,7 +1131,7 @@ async function loadGrowthData(){
   return await LoadCoordinator.run(async token=>{
   if(checkpoint.restoreVillage)await TrainingCheckpoint.validate(d.prologue);
   LoadCoordinator.assertCurrent(token);
-  TrainingCheckpoint.cancel();MossForest.cancelPendingEnter();PrologueCombat.cancel();
+  window.BattleLoading?.cancel();TrainingCheckpoint.cancel();MossForest.cancelPendingEnter();PrologueCombat.cancel();
   if(PartyManager.members.fiona&&!d.members?.fiona?.learned)delete PartyManager.members.fiona.learned;   // an older save must not inherit a spell learned later in this session (syncStoryEquipment restores it by stage)
   Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
@@ -1142,7 +1145,7 @@ async function loadGrowthData(){
   },()=>loadGrowthData());
  }catch(e){const text=e.message?.includes('元のセーブ')?e.message:'ロードできませんでした。';const m=$('#saveMsg');if(m)m.textContent=text;notice(text);return false}
 }
-function eraseGrowthData(){if(!LoadCoordinator.canSave||!MossForest.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
+function eraseGrowthData(){if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
 $('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
 $('#systemClose').onclick=()=>$('#systemMenu').style.display='none';
 document.addEventListener('fullscreenchange',()=>{if($('#systemMenu').style.display==='block'&&document.querySelector('[data-stab="settings"].active'))renderSystemTab('settings')});
@@ -1392,7 +1395,7 @@ $('#rbWind').onclick=()=>choosePartyAct('wind');
 // Shared COMMAND lock: pointer, keyboard and action submission use the same gate.
 function battleCommandLocked(battle){
  const classes=document.body.classList;
- return Boolean(window.BattlePresentation?.busy||classes.contains('battlePresentationBusy')||classes.contains('actionCinematic')||(battle==='raider'?rbBusy:attackBattleBusy));
+ return Boolean(window.BattleLoading?.busy||window.BattlePresentation?.busy||classes.contains('battlePresentationBusy')||classes.contains('actionCinematic')||(battle==='raider'?rbBusy:attackBattleBusy));
 }
 function syncBattleCommandLocks(){
  for(const [battle,panelId,toggleId] of [['normal','normalBattleCmd','normalCommandToggle'],['raider','rbCmd','rbCommandToggle']]){
@@ -1575,7 +1578,7 @@ const DEV_EVENTS=[
  ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:dev_height_proto','DEV　高さプロトタイプ(2.5D)'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
 function devResetScreens(){
- window.TrainingCheckpoint?.cancel();window.MossForest?.cancelPendingEnter();
+ window.BattleLoading?.cancel();window.TrainingCheckpoint?.cancel();window.MossForest?.cancelPendingEnter();
  closeDialogue();window.MossForest&&MossForest.hide();
  ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','aftermathScene','fortScene','prologueEnd','battle','attackBattle','questMenu'].forEach(id=>{
    const e=$('#'+id);if(e)e.style.display='none';
@@ -1988,7 +1991,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
-<script src="js/field/forest-loader.js?v=20261012p1"></script>
+<script src="js/field/forest-loader.js?v=20261025loading"></script>
 <script src="js/field/field-timeofday.js"></script>
 <script src="js/field/field-weather.js"></script>
 <script src="js/field/field-vista.js"></script>
@@ -1996,7 +1999,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261025s2"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261025loading"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/training-checkpoint.js"></script>
@@ -2062,7 +2065,8 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/battle-opening.js?v=20261023i50"></script>
 <link rel="stylesheet" href="css/battle-idle-motion.css">
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
-<script src="js/battle-idle-motion.js?v=20261013id6"></script>
+<script src="js/battle-idle-motion.js?v=20261025loading"></script>
 <script src="js/battle-lou-flight.js?v=20261012a"></script>
 <script src="js/input-manager.js?v=20261013kb4"></script>
+<script src="js/battle-loading.js?v=20261025loading"></script>
 </body></html>
