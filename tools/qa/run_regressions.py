@@ -60,8 +60,8 @@ def child(root, path, port, extra):
         if gameplay:
             self.wait_for_function("!window.LoadCoordinator||LoadCoordinator.phase==='READY'")
             # Old gameplay fixtures assume the normal opening has already been offered.
-            # Observe that event, not a fixed sleep; explicit TITLE tests never enter here.
-            self.wait_for_function("!window.LoadCoordinator||!window.RildeVillage?.enabled()||storyStage!==0||MossForest.mapId!=='rilde_in_aidan'||!MossForest.active||LoadCoordinator.dialogueRevision>0")
+            # Observe the displayed event (closeDialogue also increments the revision), not a fixed sleep; explicit TITLE tests never enter here.
+            self.wait_for_function("!window.LoadCoordinator||!window.RildeVillage?.enabled()||storyStage!==0||MossForest.mapId!=='rilde_in_aidan'||!MossForest.active||document.body.classList.contains('dialogueOpen')")
         return response
     BrowserType.launch=browser_launch;Page.goto=page_goto
     os.chdir(root);sys.argv=[str(root/path)]+extra;sys.path.insert(0,str((root/path).parent))
