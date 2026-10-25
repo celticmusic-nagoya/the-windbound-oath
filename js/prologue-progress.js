@@ -47,7 +47,7 @@
  // Keep chest/event state, but do not save a hidden field as a free-roam checkpoint.
  function serialize(){
   const moss=window.MossForest?MossForest.snapshot():null;
-  if(moss&&storyStage===15&&!MossForest.active)moss.map=null;
+  if(moss&&!MossForest.active){moss.map=null;moss.x=0;moss.y=0;delete moss.level;}
   return {version:2,legacyEvents:eventSnapshot(),defeated:[...defeated],corruptionCount:count(),barrierOpen:count()===3,louFound,storyStage,attackStep,northPhase,forestStoneSeen,moss,position:{px,py},currentObjective,subQuests:JSON.parse(JSON.stringify(subQuests))};
  }
  function plan(data,trainingRetry=false){
