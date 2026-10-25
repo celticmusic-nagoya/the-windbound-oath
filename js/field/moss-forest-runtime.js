@@ -245,7 +245,7 @@
     return {map:S.map,mapId:S.mapId,fields,active:S.active,flags:{...S.flags},
       opened:new Set(S.opened),fired:new Set(S.fired),inside:new Set(S.inside),
       slain:new Map([...S.slain].map(([id,set])=>[id,new Set(set)])),
-      level:S.forest?.height?.level,camera:{...CAM},timeOfDay:window.FieldTimeOfDay?.current,weather:window.FieldWeather?.current,enc:{...enc,visits:{...enc.visits}},
+      spriteFacing:{dir:spr.dir,flip:spr.flip},level:S.forest?.height?.level,camera:{...CAM},timeOfDay:window.FieldTimeOfDay?.current,weather:window.FieldWeather?.current,enc:{...enc,visits:{...enc.visits}},
       scene:el.scene.style.display,fade:el.fade.style.opacity};
   }
   function restoreEntryData(previous,destructive){
@@ -272,6 +272,7 @@
       playBgm();
     }
     if(destructive){CAM.focus=previous.camera.focus;CAM.shakeUntil=0;}
+    if(previous.spriteFacing)Object.assign(spr,previous.spriteFacing);
     if(S.forest){render();restoreEntryFields(previous);startLoop();}
   }
   function clearEntryError(){if(entryErrorPanel)entryErrorPanel.hidden=true;}
@@ -335,6 +336,7 @@
     else{spot={x:sp0.x-FOOT.ax,y:sp0.y-FOOT.ay};}
     S.x=spot.x;S.y=spot.y;S.fl=0;S.trail=[];
     if(S.forest.height){const h=S.forest.height;{const spL=(map.spawns.points[spawnId||map.spawns.default]||{}).level;h.setLevel(Number.isFinite(options.level)?options.level:Number.isFinite(spL)&&options.x==null?spL:h.derive(S.x,S.y));}h.commit(S.x,S.y);S.fl=h.level;}else{el.player.style.transform='';if(fsp.ready)el.fiona.style.transform='';}   // height maps (prototype): the level comes with the position; a position saved without one falls back to derive()
+    if(options.facing&&['up','down','left','right','dl','ul'].includes(options.facing.dir)){spr.dir=options.facing.dir;spr.flip=Boolean(options.facing.flip);spr.state='IDLE';}
     spr.px=null;S.target=null;S.pending=null;S.fionaHold=false;S.fx=S.x-48;S.fy=S.y+18;S.transitionLatch=true;S.battleLatch=true;S.inside.clear();enc.acc=0;enc.until=performance.now()+4000;enc.visits={};
     S.keys.clear();render();
     if(window.FieldTimeOfDay){FieldTimeOfDay.configureMap(map);FieldTimeOfDay.set(options.timeOfDay||(map.timeOfDay&&map.timeOfDay.default)||'day',{instant:true});}
@@ -697,7 +699,7 @@
   function show(){el.scene.style.display='block';}
   function hide(){cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
   function resume(){if(entry||recoveryRequired)return false;show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
-  function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired]};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
+  function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired],facing:{dir:spr.dir,flip:Boolean(spr.flip)}};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
   function restoreState(snap){
     S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);
     S.fired=new Set(Array.isArray(snap&&snap.fired)?snap.fired.filter(x=>typeof x==='string'):[]);

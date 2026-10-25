@@ -24,8 +24,12 @@
 <script src="js/assets.js?v=20261013id6"></script>
 <link rel="stylesheet" href="css/loading.css">
 <script src="js/loading-assets.js?v=20261025loading"></script>
-<script src="js/loading-input.js?v=20261025input"></script>
+<script src="js/loading-input.js?v=20261025continue"></script>
 <script src="js/loading-view.js?v=20261025input"></script>
+<script>
+// Reserve cold-start title input before any gameplay handlers are registered.
+{const q=new URLSearchParams(location.search);if(q.get('title')!=='0'&&q.get('legacyVillage')!=='1'){LoadingInput.lock('title');document.documentElement.classList.add('title-on');}}
+</script>
 <script src="js/battle-motion.js?v=20261025loading"></script>
 <script src="js/battle-actor-state.js?v=20261023i50"></script>
 
@@ -208,7 +212,7 @@
 </div></div>
 </div>
 <div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" data-loading-action="retry" type="button" hidden>再試行</button></div>
-<script src="js/load-coordinator.js?v=20261025startup"></script>
+<script src="js/load-coordinator.js?v=20261025continue"></script>
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
@@ -604,9 +608,7 @@ $('#returnScene').onclick=()=>{
    enterBurningVillage();
  }
 };
-function enterBurningVillage(){
- storyStage=5;
- TalkDataAttack.flags.forEach(f=>FieldTalk.setFlag(f,false));   // 襲撃フラグは毎回ここから
+function showBurningVillageVisuals(){
  world.classList.add('night');
  document.body.classList.add('villageAttack');
  // 襲撃開始後は平常時の屋内を利用不可にする。
@@ -632,6 +634,11 @@ function enterBurningVillage(){
  const questBox=document.querySelector('#questBox');
  if(questBox) questBox.style.display='none';
 
+}
+function enterBurningVillage(){
+ storyStage=5;
+ TalkDataAttack.flags.forEach(f=>FieldTalk.setFlag(f,false));   // 襲撃フラグは毎回ここから
+ showBurningVillageVisuals();
  px=970; py=1330; target=null; camera();
  atkObj('find_fiona');
 
@@ -1125,14 +1132,18 @@ function saveGrowthData(){
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
-async function loadGrowthData(){
- try{
-  if(!LoadCoordinator.mayLoad()){LoadCoordinator.explainGuard();return false}
-  const raw=localStorage.getItem(SAVE_KEY),saved=JSON.parse(raw);if(!saved)throw 0;
-  const checkpoint=TrainingCheckpoint.prepare(saved,raw);
-  const d=EquipmentManager.migrateStarterSword(checkpoint.data);
-  const route=d.prologue?PrologueProgress.plan(d.prologue,checkpoint.restoreVillage):null;
-  return await LoadCoordinator.run(async token=>{
+function restoreContinueLegacy(p){
+ room=null;$('#inside').style.display='none';
+ if(p.storyStage===4){startReturnScene();return;}
+ if(p.storyStage>=5&&p.storyStage<=8){
+  showBurningVillageVisuals();$('#attackFiona').style.display=p.storyStage>=6?'grid':'none';
+  document.body.classList.toggle('northAssault',p.storyStage===7);
+  $('#northEscape').style.display=p.storyStage===7?'block':'none';
+  if(p.storyStage===7&&northPhase===0)northPhase=1;
+  if(p.storyStage===8)startEscapeScene();
+ }
+}
+async function applyGrowthData(d,route,checkpoint,token){
   if(checkpoint.restoreVillage)await TrainingCheckpoint.validate(d.prologue);
   LoadCoordinator.assertCurrent(token);
   window.BattleLoading?.cancel();TrainingCheckpoint.cancel();MossForest.cancelPendingEnter();PrologueCombat.cancel();
@@ -1143,9 +1154,25 @@ async function loadGrowthData(){
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
   Inventory.load(d.inventory);EquipmentManager.load(d.equipment);Quest.load(d.quests);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
   if(d.prologue)await PrologueProgress.load(d.prologue,route,token);
+  LoadCoordinator.assertCurrent(token);
   syncStoryEquipment();
   Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
+}
+async function loadGrowthData(){
+ try{
+  if(!LoadCoordinator.mayLoad()){LoadCoordinator.explainGuard();return false}
+  const raw=localStorage.getItem(SAVE_KEY),saved=JSON.parse(raw);if(!saved)throw 0;
+  const checkpoint=TrainingCheckpoint.prepare(saved,raw);
+  const d=EquipmentManager.migrateStarterSword(checkpoint.data);
+  const route=d.prologue?PrologueProgress.plan(d.prologue,checkpoint.restoreVillage):null;
+  return await LoadCoordinator.run(async token=>{
+  const previousFlags=typeof flags==='object'?{...flags}:null,previousEvents=PrologueProgress.eventSnapshot();
+  const undoFlags=()=>{if(previousFlags&&LoadCoordinator.current(token)){for(const k of Object.keys(flags))delete flags[k];Object.assign(flags,previousFlags);PrologueProgress.restoreEventSnapshot(previousEvents,token);}};
+  const unwatch=LoadCoordinator.onInvalidate(undoFlags);
+  try{
+  await applyGrowthData(d,route,checkpoint,token);
   renderSystemTab('status');notice(checkpoint.retry?'訓練前の状態に復帰しました。木人を調べて再挑戦してください。':d.prologue?'冒険の記録をロードしました':'成長データをロードしました');
+  }catch(e){undoFlags();throw e;}finally{unwatch();}
   },()=>loadGrowthData());
  }catch(e){const text=e.message?.includes('元のセーブ')?e.message:'ロードできませんでした。';const m=$('#saveMsg');if(m)m.textContent=text;notice(text);return false}
 }
@@ -1582,7 +1609,7 @@ const DEV_EVENTS=[
  ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:dev_height_proto','DEV　高さプロトタイプ(2.5D)'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
 function devResetScreens(ownerToken){
- if(ownerToken===undefined)window.LoadCoordinator?.supersede();
+ if(ownerToken===undefined){window.LoadCoordinator?.supersede();window.TitleScreen?.dismiss();window.LoadingInput?.release('title');document.documentElement?.classList.remove('title-on');}
  else LoadCoordinator.assertCurrent(ownerToken);
  window.BattleLoading?.cancel();window.TrainingCheckpoint?.cancel();window.MossForest?.cancelPendingEnter();
  closeDialogue();window.MossForest&&MossForest.hide();
@@ -1653,7 +1680,8 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
 (function startAtHome(){
  if(!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
    const scheduled=LoadCoordinator.generation;
-   const go=()=>{if(scheduled!==LoadCoordinator.generation)return;if(window.RildeVillage&&RildeVillage.enabled())LoadCoordinator.boot(token=>RildeVillage.startOpening(token));};
+   const launch=()=>{if(window.RildeVillage&&RildeVillage.enabled())return LoadCoordinator.boot(token=>RildeVillage.startOpening(token));};
+   const go=()=>{if(scheduled!==LoadCoordinator.generation)return;if(window.TitleScreen)TitleScreen.begin(launch);else return launch();};
    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
    return;
  }
@@ -1993,7 +2021,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/battle-critical.js"></script>
 <script src="js/prologue-combat.js?v=20261013wd4"></script>
 <script src="js/battle-critical-presentation.js"></script>
-<script src="js/prologue-progress.js?v=20261025startup"></script>
+<script src="js/prologue-progress.js?v=20261025continue"></script>
 <script src="js/prologue-dev.js?v=20261012c"></script>
 <script src="js/dev/perf-meter.js?v=20261012p1"></script>
 <script src="js/dev/motion-test.js?v=20261019am1"></script>
@@ -2008,9 +2036,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261025input"></script>
-<script src="js/field/moss-forest-story.js?v=20261012a"></script>
-<script src="js/field/rilde-village.js?v=20261025startup"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261025continue"></script>
+<script src="js/field/moss-forest-story.js?v=20261025continue"></script>
+<script src="js/field/rilde-village.js?v=20261025continue"></script>
 <script src="js/training-checkpoint.js"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
@@ -2078,4 +2106,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/battle-lou-flight.js?v=20261012a"></script>
 <script src="js/input-manager.js?v=20261025input"></script>
 <script src="js/battle-loading.js?v=20261025input"></script>
+<script src="js/save-continue.js?v=20261025continue"></script>
+<script src="js/title-screen.js?v=20261025continue"></script>
+<link rel="stylesheet" href="css/title-screen.css?v=20261025continue">
 </body></html>

@@ -1,0 +1,10 @@
+/* TITLE-01 layout direction: responsive centered menu, Celtic dark green / antique gold, no required artwork. */
+#title-screen{position:fixed;inset:0;z-index:11000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));background:radial-gradient(ellipse at top,#284639,#0a1915);color:#eee1bd;text-align:center;font-family:Georgia,serif}
+#title-screen[hidden]{display:none}
+#title-screen h1{font-size:clamp(25px,5vw,52px);max-width:90vw;margin:0;letter-spacing:.06em}
+#title-screen button{min-height:48px;width:min(80vw,300px);border:1px solid #b79b58;background:#183028;color:#eee1bd;font:inherit;padding:.7rem}
+#title-screen button:disabled{opacity:.45}
+html.title-on #devBtn,html.title-on #devPanel,html.title-on #devBuildIndicator{display:none!important}
+@media(max-height:500px){#title-screen{gap:.4rem}#title-screen p{margin:.3rem}}
+
+html.title-on body>:not(#title-screen):not(#loadingStatus):not(script):not(link){visibility:hidden}
