@@ -304,6 +304,7 @@
   }
   async function performEnter(options){
     if(!S.configured)throw new Error('MossForest not configured');
+    const sceneCleanup=window.FieldScene?.cancel(),motionCleanup=window.FieldChoreo?.cancelAll();
     window.BattleLoading?.cancel();
     const pending=entry,previous=pending?pending.previous:entrySnapshot();
     const request=++enterGeneration;enterCount++;
@@ -317,6 +318,7 @@
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     mountFionaSprite();
+    await sceneCleanup;await motionCleanup;ensure();
     const map=await loadMap(id);ensure();
     const first=!previous.map;
     {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
@@ -692,13 +694,14 @@
   // Choreography adapters (see js/field/field-choreo.js). Aidan: moving S.x/S.y drives his walk animation by itself.
   // Fiona: set() takes her off the follow-the-player easing until release().
   function actor(id){
-    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
-    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
-      pose(state,dir){el.fiona.dataset.pose=state;el.fiona.dataset.dir=dir;},release(){S.fionaHold=false;delete el.fiona.dataset.pose;}};
+    const owner=enterGeneration;const current=()=>owner===enterGeneration;
+    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){if(!current())return;S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
+    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){if(!current())return;S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
+      pose(state,dir){if(!current())return;el.fiona.dataset.pose=state;el.fiona.dataset.dir=dir;},release(){if(!current())return;S.fionaHold=false;delete el.fiona.dataset.pose;}};
     return null;
   }
   function show(){el.scene.style.display='block';}
-  function hide(){cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
+  function hide(){window.FieldScene?.cancel();window.FieldChoreo?.cancelAll();cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
   function resume(){if(entry||recoveryRequired)return false;show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
   function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired],facing:{dir:spr.dir,flip:Boolean(spr.flip)}};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
   function restoreState(snap){

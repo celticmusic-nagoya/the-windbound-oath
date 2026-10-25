@@ -10,7 +10,7 @@
  * `blocked(x,y)` (optional): stops the mover at its last free point, so choreography can never push an actor through a wall. */
 (function () {
   'use strict';
-  let epoch = 0;
+  let epoch = 0;const active=new Set();
   const ease = {linear: u => u, inOut: u => (u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2), out: u => 1 - (1 - u) * (1 - u)};
   const dirOf = (dx, dy) => (Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 'right' : 'left') : (dy >= 0 ? 'down' : 'up'));
   function glide(actor, to, {ms, speed, ease: e = 'inOut', blocked, face} = {}) {
@@ -18,17 +18,18 @@
     const dur = ms ?? (speed ? len / speed * 1000 : 800), fn = ease[e] || ease.inOut, dir = dirOf(dx, dy);
     if (len < .5) { actor.pose && actor.pose('idle', face || dir); return Promise.resolve(true); }
     return new Promise(resolve => {
-      let last = from, t0 = null;
-      const finish = (ok, at) => { actor.pose && actor.pose('idle', face || dir); resolve(ok); };
+      let last = from, t0 = null, raf=0,done=false;
+      const finish = (ok, at) => { if(done)return;done=true;cancelAnimationFrame(raf);active.delete(finish);actor.pose && actor.pose('idle', face || dir); resolve(ok); };
+      active.add(finish);
       const step = now => {
-        if (token !== epoch) { actor.pose && actor.pose('idle', dir); resolve(false); return; }
+        if (token !== epoch) { finish(false); return; }
         if (t0 === null) { t0 = now; actor.pose && actor.pose('walk', dir); }
         const u = Math.min(1, (now - t0) / dur), k = fn(u), x = from.x + dx * k, y = from.y + dy * k;
         if (blocked && blocked(x, y)) { finish(false, last); return; }   // never through a wall
         actor.set(x, y); last = {x, y};
-        if (u < 1) requestAnimationFrame(step); else finish(true, last);
+        if (u < 1) raf=requestAnimationFrame(step); else finish(true, last);
       };
-      requestAnimationFrame(step);
+      raf=requestAnimationFrame(step);
     });
   }
   const moveTo = glide;
@@ -41,5 +42,5 @@
       tb > .5 ? glide(b, {x: pb.x - ux * tb, y: pb.y - uy * tb}, {ms, ease: e, blocked, face: dirOf(-dx, -dy)}) : Promise.resolve((b.pose && b.pose('idle', dirOf(-dx, -dy)), true)));
   }
   const all = (...ps) => Promise.all(ps).then(r => r.every(Boolean));
-  window.FieldChoreo = Object.freeze({moveTo, approach, all, cancelAll() { epoch++; }, ease});
+  window.FieldChoreo = Object.freeze({moveTo, approach, all, cancelAll() { epoch++;for(const finish of [...active])finish(false);return Promise.resolve(); }, ease});
 })();
