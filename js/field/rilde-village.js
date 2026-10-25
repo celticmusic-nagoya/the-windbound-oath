@@ -78,6 +78,7 @@
   async function startOpening(token) {
     if(token===undefined)return LoadCoordinator.boot(t=>startOpening(t));
     LoadCoordinator.assertCurrent(token);
+    PrologueProgress.resetLegacyEvents();
     storyStage = 0; currentObjective = '家を出て、訓練場のフィオナに会いに行こう'; renderJournal();
     show();
     const pending=MossForestStory.enterMap('rilde_in_aidan','from_bed',{loadToken:token}),request=MossForest.enterCount;

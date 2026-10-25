@@ -7,7 +7,7 @@
  const stop=e=>{e.preventDefault();e.stopImmediatePropagation();handled.add(e);return true;};
  function control(target){
   const button=target?.closest?.('button[data-loading-action]');
-  const root=button?.closest?.('#loadingStatus,#fieldEntryError,#loadStatus');
+  const root=button?.closest?.('#loadingStatus,#fieldEntryError,#loadStatus,#title-screen');
   return root&&!root.hidden&&!button.hidden&&!button.disabled?button:null;
  }
  function handle(e){
@@ -20,7 +20,7 @@
     quarantined.add(key);
     // Consume native key activation too: Enter/Space can only click once, never again on keyup.
     if(action&&!repeated&&(e.key==='Enter'||e.key===' ')){stop(e);action.click();return true;}
-    if(action&&!repeated&&e.key==='Tab'){action.focus?.({preventScroll:true});return stop(e);}
+    if(action&&!repeated&&e.key==='Tab'){const root=action.closest('#loadingStatus,#fieldEntryError,#loadStatus,#title-screen'),buttons=[...(root?.querySelectorAll('button[data-loading-action]')||[])].filter(b=>!b.disabled&&!b.hidden);const i=buttons.indexOf(action);(buttons[(i+(e.shiftKey?-1:1)+buttons.length)%buttons.length]||action).focus?.({preventScroll:true});return stop(e);}
     return stop(e);
    }
    return false;

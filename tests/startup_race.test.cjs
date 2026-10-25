@@ -34,7 +34,8 @@ async function pendingLoad(){
  return {e,raw,saved,delayed,task};
 }
 let n=0;async function test(name,fn){if(process.env.STARTUP_TEST_FILTER&&!name.includes(process.env.STARTUP_TEST_FILTER))return;await fn();console.log('PASS',name);n++;}
-(async()=>{
+if(require.main!==module)module.exports={setup,loadSave,extractDevBlock};
+else (async()=>{
  await test('NEW GAME commits initial map, opens narration, close restores normal dialogue state',async()=>{const e=setup();assert.equal(await e.complete(e.c.RildeVillage.startOpening()),true);assert.equal(e.M.mapId,'rilde_in_aidan');assert.equal(e.c.LoadCoordinator.phase,'READY');await e.advance(350);assert.ok(e.c.msg.textContent.includes('朝の風'));e.c.closeDialogue();assert.equal(e.c.document.body.classList.contains('dialogueOpen'),false);assert.equal(e.M.active,true)});
  await test('real FieldTalk begun during narration delay is never overwritten and last-page tap closes it',async()=>{const e=setup();await e.complete(e.c.RildeVillage.startOpening());assert.equal(e.c.FieldTalk.talk('other'),true);await e.advance(350);assert.equal(e.c.FieldTalk.active,true);assert.ok(e.c.msg.textContent.includes('別の会話'));e.c.msg.listeners.click({target:{closest:()=>false},stopImmediatePropagation(){}});assert.equal(e.c.FieldTalk.active,false);assert.equal(e.c.msg.style.display,'none')});
  await test('a newer conversation that already ended also cancels old narration',async()=>{const e=setup();await e.complete(e.c.RildeVillage.startOpening());e.c.FieldTalk.talk('other');e.c.msg.listeners.click({target:{closest:()=>false},stopImmediatePropagation(){}});await e.advance(350);assert.equal(e.c.msg.textContent,'');assert.equal(e.c.FieldTalk.active,false)});

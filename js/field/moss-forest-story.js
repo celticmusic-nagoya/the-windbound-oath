@@ -211,7 +211,7 @@
       else{mapId=A.a1;spawn='from_cliff_fall';}
     }
     MossForest.reset();MossForest.restoreState(state);
-    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true,loadToken:token});
+    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),facing:moss?.facing,verifyReachable:true,loadToken:token});
   }
   // Opened-chest ids recorded in a save (v2 moss.opened, or v1 forestChests mapped to the new ids).
   function openedFromSave(data){
