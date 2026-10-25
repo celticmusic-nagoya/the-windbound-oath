@@ -27,6 +27,7 @@
     addEventListener('pointermove',e=>{if(S.hold&&e.pointerId===S.hold.id){S.hold.x=e.clientX;S.hold.y=e.clientY;}});
     const endHold=e=>{const h=S.hold;if(!h||e.pointerId!==h.id)return;S.hold=null;if(h.long){S.target=null;S.pending=null;FieldNavigation.cancel();}};
     addEventListener('pointerup',endHold);addEventListener('pointercancel',endHold);addEventListener('blur',()=>{S.hold=null;});
+    addEventListener('loading-input-lock',()=>{S.keys.clear();S.target=null;S.pending=null;S.hold=null;FieldNavigation.cancel();});
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     if(window.FieldTimeOfDay)FieldTimeOfDay.configure(el.scene);
     if(window.FieldWeather)FieldWeather.configure(el.scene);   // fog/rain sit under the grade overlay
@@ -278,11 +279,12 @@
     if(!entryErrorPanel){
       entryErrorPanel=document.createElement('div');entryErrorPanel.id='fieldEntryError';entryErrorPanel.setAttribute('role','status');
       const text=document.createElement('span');text.textContent='移動できませんでした。記録は保持されています。';
-      const button=document.createElement('button');button.type='button';button.textContent='再試行';entryErrorPanel.append(text,button);document.body.append(entryErrorPanel);
+      const button=document.createElement('button');button.type='button';button.textContent='再試行';button.setAttribute('data-loading-action','retry');entryErrorPanel.append(text,button);document.body.append(entryErrorPanel);
     }
-    entryErrorPanel.hidden=false;
+    entryErrorPanel.hidden=false;entryErrorPanel.querySelector('button').disabled=false;
     entryErrorPanel.querySelector('button').onclick=()=>{
-      if(request!==enterGeneration||entry)return;
+      if(request!==enterGeneration||entry||entryErrorPanel.querySelector('button').disabled)return;
+      entryErrorPanel.querySelector('button').disabled=true;
       const retry=options.loadToken!==undefined?()=>window.LoadCoordinator?.retry():options.onRetry||(()=>enter(options));
       Promise.resolve().then(retry).catch(()=>{}); // UI terminal boundary; enter() still rejects for all callers.
     };

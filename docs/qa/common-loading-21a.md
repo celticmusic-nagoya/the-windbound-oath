@@ -1,4 +1,6 @@
-# DIRECTIVE-21A — common Loading / Issue #60
+# DIRECTIVE-21A — common Loading / Issue #60 (historical QA)
+
+Integration note: subsequent window-capture input probe FAILED before merge. The 21A head was not merged. See `common-loading-21b.md` for the fix and latest acceptance evidence.
 
 Base: `dcc36c6725286e89f43b424c8b87165bf59c6bbf` (PR #59 S2 retained).
 Design reference only: PR #47, `7307c48b8a457aba6aafd1dfb43a304734d5d718`. PR #47 is unchanged.
@@ -35,4 +37,4 @@ New tests execute real image/motion/loading modules and the actual normal/Raider
 - Real GitHub Pages/mobile-network latency and decoded-image memory use remain unmeasured. Existing caches still have no LRU eviction. Loading is bounded per image/manifest (10 seconds); readiness waiting intentionally adds first-entry latency.
 - Optional action animations beyond idle/opening retain existing behavior; this change does not certify every later battle action image, Fiona long-soak behavior or performance.
 
-All executed mandatory alternative QA passed. Both known Loading P1 contracts are addressed; no new P0/P1 found in this scope. Automatic integration is authorized by DIRECTIVE-21A plus v1.3 environment fallback. Browser/device verification remains a post-merge task, never relabeled PASS.
+The table above records the earlier PASS results only. A later InputManager window-capture probe detected input leakage and blocked integration. Automatic integration is authorized by DIRECTIVE-21A plus v1.3 environment fallback. Browser/device verification remains a post-merge task, never relabeled PASS.

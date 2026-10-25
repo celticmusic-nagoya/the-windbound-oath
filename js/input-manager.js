@@ -28,6 +28,7 @@
   const animating = () => Boolean((window.BattlePresentation && BattlePresentation.busy) || document.body.classList.contains('battlePresentationBusy') || document.body.classList.contains('actionCinematic') || g('attackBattleBusy') || g('rbBusy'));
 
   function state() {
+    if(window.LoadingInput?.busy)return {name:'LOADING'};
     if (window.LindFieldReview && LindFieldReview.active) return { name: 'REVIEW' };
     if (window.BattleTargetSelector && BattleTargetSelector.active) return { name: 'BATTLE_TARGET' };
     for (const s of MENUS) { const e = $(s); if (shown(e)) return { name: 'MENU', root: e, id: s }; }
@@ -150,7 +151,10 @@
   addEventListener('keyup', e => held.delete(e.key), true);
   addEventListener('blur', () => held.clear());
 
+  addEventListener('loading-input-lock',()=>held.clear());
+
   function onKey(e) {
+    if(window.LoadingInput?.handle(e))return;
     if (e.ctrlKey || e.altKey || e.metaKey) return;
     if (isField(e.target)) return;
     kb = true; document.body.classList.add('kbNav');

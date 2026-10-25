@@ -59,8 +59,5 @@
  function cancel(){generation++;pending=null;phase='IDLE';hide();}
  startAttackBattle=(...args)=>start('normal',args);
  startRaiderBattle=(...args)=>start('raider',args);
- for(const type of ['pointerdown','click','keydown'])document.addEventListener(type,e=>{
-  if(phase!=='IDLE'&&!e.target.closest?.('#loadingStatus')){e.preventDefault();e.stopImmediatePropagation();}
- },true);
  window.BattleLoading=Object.freeze({prepare,retry,cancel,get phase(){return phase},get busy(){return phase!=='IDLE'},get canSave(){return phase==='IDLE'}});
 })();

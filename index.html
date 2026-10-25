@@ -24,7 +24,8 @@
 <script src="js/assets.js?v=20261013id6"></script>
 <link rel="stylesheet" href="css/loading.css">
 <script src="js/loading-assets.js?v=20261025loading"></script>
-<script src="js/loading-view.js?v=20261025loading"></script>
+<script src="js/loading-input.js?v=20261025input"></script>
+<script src="js/loading-view.js?v=20261025input"></script>
 <script src="js/battle-motion.js?v=20261025loading"></script>
 <script src="js/battle-actor-state.js?v=20261023i50"></script>
 
@@ -206,8 +207,8 @@
 <button class="furn exit" id="leave">🚪 外へ</button>
 </div></div>
 </div>
-<div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" type="button" hidden>再試行</button></div>
-<script src="js/load-coordinator.js"></script>
+<div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" data-loading-action="retry" type="button" hidden>再試行</button></div>
+<script src="js/load-coordinator.js?v=20261025input"></script>
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
@@ -259,6 +260,7 @@ addEventListener('keyup',e=>fieldHeldDirections.delete(e.key));
 addEventListener('blur',()=>fieldHeldDirections.clear());
 let ipx=485,ipy=575,itarget=null;
 let innFloor=1;
+addEventListener('loading-input-lock',()=>{fieldHeldDirections.clear();target=null;itarget=null;FieldNavigation.cancel();});
 function inCamera(){let rw=$('#roomWorld'),x=Math.max(0,Math.min(1000-innerWidth,ipx-innerWidth/2)),y=Math.max(0,Math.min(720-innerHeight,ipy-innerHeight/2));rw.style.transform=`translate(${-x}px,${-y}px)`;$('#inPlayer').style.left=ipx+'px';$('#inPlayer').style.top=ipy+'px'}
 function inMove(){if($('#inside').style.display==='block'&&window.InputManager){const kv=InputManager.heldVector();if(kv){itarget=null;ipx=Math.max(16,Math.min(960,ipx+kv[0]*3.5));ipy=Math.max(40,Math.min(660,ipy+kv[1]*3.5));}}if($('#inside').style.display==='block'&&itarget){let dx=itarget.x-ipx,dy=itarget.y-ipy,d=Math.hypot(dx,dy);if(d<5)itarget=null;else{ipx+=dx/d*3.5;ipy+=dy/d*3.5}}inCamera();requestAnimationFrame(inMove)}inMove();
 function dressRoom(){
@@ -1999,7 +2001,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js"></script>
 <script src="js/field/field-monsters.js?v=20261012d"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261025loading"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261025input"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
 <script src="js/training-checkpoint.js"></script>
@@ -2067,6 +2069,6 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <link rel="stylesheet" href="css/raider-mobile-layout.css?v=20261011">
 <script src="js/battle-idle-motion.js?v=20261025loading"></script>
 <script src="js/battle-lou-flight.js?v=20261012a"></script>
-<script src="js/input-manager.js?v=20261013kb4"></script>
-<script src="js/battle-loading.js?v=20261025loading"></script>
+<script src="js/input-manager.js?v=20261025input"></script>
+<script src="js/battle-loading.js?v=20261025input"></script>
 </body></html>
