@@ -18,6 +18,7 @@
  *               rendered at least once; false if the run is stopped/replaced first; true at once when there is nothing to wait for. */
 (function () {
   'use strict';
+  let manifestReady = Promise.resolve(false), manifestGeneration=0;
   let man = null; const variants = {}, runs = new Map(), hitFns = new Set(), cache = new Map();
   const key = (actor, state) => {
     const m = man && man.motions; if (!m) return null;
@@ -29,15 +30,28 @@
   const src = (d, n) => man.base + d.dir + d.pattern.replace('{n}', String(n).padStart(2, '0'));
   const msOf = (d, i) => Array.isArray(d.ms) ? d.ms[i] ?? d.ms[d.ms.length - 1] : d.ms;
   function preload(d) {
-    for (let n = 1; n <= d.frames; n++) { const u = src(d, n); if (!cache.has(u)) { const im = new Image(); im.decoding = 'async'; im.src = u; cache.set(u, im); im.decode().catch(() => {}); } }
+    for (let n = 1; n <= d.frames; n++) {
+      const u = src(d, n);
+      if(window.LoadingAssets){LoadingAssets.image(u).then(r=>{if(r.status==='ready')cache.set(u,r.image);});}
+      else if(!cache.has(u)){const im=new Image();im.decoding='async';im.src=u;cache.set(u,im);im.decode().catch(()=>{});}
+    }
   }
-  async function load(url) {
+  function load(url) {
+    const token=++manifestGeneration;
+    manifestReady=loadManifest(url,token);return manifestReady;
+  }
+  async function loadManifest(url,token) {
+    let timer;
+    const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('manifest timeout')),10000);});
     try {
+      const m=await Promise.race([(async()=>{
       const r = await fetch(url); if (!r.ok) throw new Error(r.status);
       const m = await r.json(); if (!m || typeof m.base !== 'string' || typeof m.motions !== 'object') throw new Error('bad manifest');
+      return m;})(),timeout]);
+      if(token!==manifestGeneration)return false;
       man = m; for (const a of Object.values(m.motions)) for (const d of Object.values(a)) if (d && d.frames > 1) preload(d);
       return true;
-    } catch (e) { man = null; return false; }   // no manifest = no motion: stills as before
+    } catch (e) { if(token===manifestGeneration)man = null; return false; } finally {clearTimeout(timer);}   // no manifest = no motion: stills as before
   }
   // A scaled figure is nudged sideways just enough to stay inside the battle screen (manifest `bbox` = widest horizontal extent over all frames, `aspect` = frame w/h).
   // Pure presentation: `translate` is an independent CSS property, cleared by stop().
@@ -129,6 +143,7 @@
   window.BattleMotion = Object.freeze({load, start, stop, whenDone, has: (a, s) => Boolean(def(a, s)), info, frames, states: a => (man && man.motions && man.motions[a]) ? Object.keys(man.motions[a]) : [],
     hitDelay(actor, state) { const i = info(actor, state); return i && i.hitAtMs != null ? i.hitAtMs : 0; },   // ms from pose start to the blow: for display-only delays of flash / number pop
     setVariant(actor, v) { if (v) variants[actor] = v; else delete variants[actor]; }, onHit(fn) { hitFns.add(fn); return () => hitFns.delete(fn); },
+    get manifestReady() { return manifestReady; },
     get loaded() { return Boolean(man); }});
   if (typeof document !== 'undefined') load(new URL('../img/battle/motion-manifest.json', document.currentScript ? document.currentScript.src : location.href).href);
 })();

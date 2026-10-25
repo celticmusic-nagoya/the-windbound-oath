@@ -32,6 +32,7 @@
     if(cache.has(assets))return cache.get(assets);
     const entry={images:[],ready:false};cache.set(assets,entry);
     entry.promise=Promise.all(assets.frames.map(async frame=>{
+      if(window.LoadingAssets){const result=await LoadingAssets.image(frame.path);if(result.status!=='ready')throw Error('Idle decode failed');return result.image;}
       const image=new Image();image.src=frame.path;await image.decode();return image;
     })).then(images=>{entry.images=images;entry.ready=true;refresh();}).catch(()=>{entry.failed=true;});
     return entry;

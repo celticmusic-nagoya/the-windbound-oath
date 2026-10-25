@@ -27,6 +27,7 @@
     addEventListener('pointermove',e=>{if(S.hold&&e.pointerId===S.hold.id){S.hold.x=e.clientX;S.hold.y=e.clientY;}});
     const endHold=e=>{const h=S.hold;if(!h||e.pointerId!==h.id)return;S.hold=null;if(h.long){S.target=null;S.pending=null;FieldNavigation.cancel();}};
     addEventListener('pointerup',endHold);addEventListener('pointercancel',endHold);addEventListener('blur',()=>{S.hold=null;});
+    addEventListener('loading-input-lock',()=>{S.keys.clear();S.target=null;S.pending=null;S.hold=null;FieldNavigation.cancel();});
     addEventListener('keydown',onKeyDown);addEventListener('keyup',e=>S.keys.delete(e.key));addEventListener('blur',()=>S.keys.clear());
     if(window.FieldTimeOfDay)FieldTimeOfDay.configure(el.scene);
     if(window.FieldWeather)FieldWeather.configure(el.scene);   // fog/rain sit under the grade overlay
@@ -278,16 +279,18 @@
     if(!entryErrorPanel){
       entryErrorPanel=document.createElement('div');entryErrorPanel.id='fieldEntryError';entryErrorPanel.setAttribute('role','status');
       const text=document.createElement('span');text.textContent='移動できませんでした。記録は保持されています。';
-      const button=document.createElement('button');button.type='button';button.textContent='再試行';entryErrorPanel.append(text,button);document.body.append(entryErrorPanel);
+      const button=document.createElement('button');button.type='button';button.textContent='再試行';button.setAttribute('data-loading-action','retry');entryErrorPanel.append(text,button);document.body.append(entryErrorPanel);
     }
-    entryErrorPanel.hidden=false;
+    entryErrorPanel.hidden=false;entryErrorPanel.querySelector('button').disabled=false;
     entryErrorPanel.querySelector('button').onclick=()=>{
-      if(request!==enterGeneration||entry)return;
+      if(request!==enterGeneration||entry||entryErrorPanel.querySelector('button').disabled)return;
+      entryErrorPanel.querySelector('button').disabled=true;
       const retry=options.loadToken!==undefined?()=>window.LoadCoordinator?.retry():options.onRetry||(()=>enter(options));
       Promise.resolve().then(retry).catch(()=>{}); // UI terminal boundary; enter() still rejects for all callers.
     };
   }
   function cancelPendingEnter(){
+    window.LoadingView?.close('map:'+enterGeneration);
     enterGeneration++;const pending=entry;entry=null;clearEntryError();
     if(!pending)return;
     try{restoreEntry(pending.previous,pending.destructive);recoveryRequired=!pending.previous.map;}
@@ -300,11 +303,13 @@
   }
   async function performEnter(options){
     if(!S.configured)throw new Error('MossForest not configured');
+    window.BattleLoading?.cancel();
     const pending=entry,previous=pending?pending.previous:entrySnapshot();
     const request=++enterGeneration;enterCount++;
     const owns=()=>request===enterGeneration&&(options.loadToken===undefined||!window.LoadCoordinator||LoadCoordinator.current(options.loadToken));
     const ensure=()=>{if(!owns())throw Error('Cancelled map entry');};
     const transaction={previous,destructive:Boolean(pending?.destructive),committed:false};entry=transaction;clearEntryError();
+    window.LoadingView?.open('map:'+request,'移動先を準備しています。');
     try{
       ensure();
     const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;   // logical ids (e.g. 'rilde_village' = peace/ruin by story state) resolve here
@@ -338,11 +343,13 @@
     playBgm();
     await setFade(0,fadeMs(options.transition,'in'));ensure();
     transaction.committed=true;entry=null;recoveryRequired=false;clearEntryError();
+    window.LoadingView?.close('map:'+request);
     S.busy=externalLock;S.active=true;startLoop();
     if(hooks.onEnter)hooks.onEnter(map,spawnId);
     ensure();
       return map;
     }catch(error){
+      window.LoadingView?.close('map:'+request);
       if(owns()){
         entry=null;
         if(!transaction.committed){

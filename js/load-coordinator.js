@@ -33,6 +33,6 @@
  function retry(){if(phase==='FAILED'&&retryAction)return retryAction();return Promise.resolve(false);}
  function explainGuard(){message(!initialized?'起動が完了していないためロードできません。開始後にもう一度操作してください。':'記録を復帰中のためロードできません。',phase==='FAILED');}
  node('retryLoad')?.addEventListener('click',retry);
- for(const type of ['pointerdown','keydown'])document.addEventListener(type,e=>{if((phase==='LOADING'||phase==='FAILED')&&!e.target.closest?.('#loadStatus,#systemMenu,#menuOpen')){e.preventDefault();e.stopImmediatePropagation();}},true);
+ for(const type of ['pointerdown','keydown'])document.addEventListener(type,e=>{if((phase==='LOADING'||phase==='FAILED')&&!window.LoadingInput?.allowedTarget(e.target)&&!e.target.closest?.('#loadStatus,#systemMenu,#menuOpen')){e.preventDefault();e.stopImmediatePropagation();}},true);
  window.LoadCoordinator=Object.freeze({boot,run,retry,mayLoad,explainGuard,current,assertCurrent,get phase(){return phase},get generation(){return generation},get canSave(){return phase==='READY'}});
 })();

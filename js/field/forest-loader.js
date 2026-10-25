@@ -10,7 +10,7 @@
   const pick=(table,a,d)=>{for(const [re,v] of table)if(re.test(a))return v;return d;};
   // ---- art manifest (img/field/moss/manifest.json): real assets override stand-ins; missing -> coloured placeholder ----
   const ROOT=document.currentScript?new URL('../../',document.currentScript.src).href:'';   // dev/ pages resolve assets too
-  const art={manifest:null,images:new Map(),ground:null,loading:null};
+  const art={manifest:null,images:new Map(),decoded:new Set(),ground:null,loading:null};
   function compile(rules){return (rules||[]).map(r=>({re:new RegExp(r.match),r}));}
   function resolve(list,asset){for(const {re,r} of list)if(re.test(asset))return r.file?r:null;return null;}
   function img(file){
@@ -19,12 +19,12 @@
   }
   // load in small batches and retry failures (a flaky mobile connection / a busy server must not leave permanent lavender placeholder squares)
   async function decodeAll(list,batch=16,tries=4){
-    let todo=list.filter(f=>!(art.images.get(f)&&art.images.get(f).complete&&art.images.get(f).naturalWidth));
+    let todo=list.filter(f=>!art.decoded.has(f));
     for(let attempt=0;attempt<tries&&todo.length;attempt++){
       const failed=[];
       for(let i=0;i<todo.length;i+=batch)await Promise.all(todo.slice(i,i+batch).map(async f=>{
         if(attempt>0)art.images.delete(f);
-        const im=img(f);try{await im.decode();}catch(e){art.images.delete(f);failed.push(f);}}));
+        const im=img(f);try{await im.decode();art.decoded.add(f);}catch(e){art.images.delete(f);art.decoded.delete(f);failed.push(f);}}));
       todo=failed;if(todo.length&&attempt<tries-1)await new Promise(r=>setTimeout(r,250*(attempt+1)));
     }
     return todo;
@@ -33,15 +33,19 @@
   // streams in the background nearest-first (small batches, idle gaps) so a map change costs a few images, not the whole manifest.
   const warm=new Set();
   async function prepare(map,at,opt={}){
-    if(!art.manifest)return;
+    if(!art.manifest)return {status:'fallback',required:[],optional:[],reason:'no-manifest'};
     const R=opt.radius||1100,cx=at&&at.x||0,cy=at&&at.y||0,seen=new Map();
     for(const p of map.props||[]){const r=resolve(art.node,p.asset);if(!r)continue;const d=Math.hypot(p.x-cx,p.y-cy);if(!seen.has(r.file)||seen.get(r.file)>d)seen.set(r.file,d);}
     const files=[...seen.entries()].sort((a,b)=>a[1]-b[1]),near=files.filter(([,d])=>d<=R).map(([f])=>f),far=files.filter(([,d])=>d>R).map(([f])=>f).filter(f=>!warm.has(f));
     const wait=decodeAll(near.slice(0,60),12,3);
-    await Promise.race([wait,new Promise(r=>setTimeout(r,opt.timeout||3500))]);   // never block the map on a slow network
-    near.forEach(f=>warm.add(f));
+    let timer;
+    const outcome=await Promise.race([wait.then(failed=>({failed})),new Promise(r=>{timer=setTimeout(()=>r({timeout:true}),opt.timeout||3500);})]);clearTimeout(timer);   // never block the map on a slow network
+    const optional=near.map(file=>{const im=art.images.get(file);const decoded=Boolean(im&&art.decoded.has(file));return {file,status:decoded?'ready':outcome.timeout?'timeout':'failed',decoded};});
+    optional.filter(r=>r.decoded).forEach(r=>warm.add(r.file));
     const token=prepare.token=(prepare.token||0)+1;
-    (async()=>{for(let i=0;i<far.length&&prepare.token===token;i+=4){await decodeAll(far.slice(i,i+4),4,2);far.slice(i,i+4).forEach(f=>warm.add(f));await new Promise(r=>setTimeout(r,90));}})();
+    (async()=>{for(let i=0;i<far.length&&prepare.token===token;i+=4){const batch=far.slice(i,i+4),failed=await decodeAll(batch,4,2);batch.filter(f=>!failed.includes(f)).forEach(f=>warm.add(f));await new Promise(r=>setTimeout(r,90));}})();
+    // Prop art has the existing coloured-placeholder fallback; map JSON/collision stay mandatory in S2.
+    return {status:optional.every(r=>r.decoded)?'ready':'fallback',required:[],optional};
   }
   async function loadAssets(){
     if(art.loading)return art.loading;
