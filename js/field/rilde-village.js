@@ -38,13 +38,7 @@
       case h === 'rilde_dummy': {
         if (stage() !== 1) { say(stage() === 0 ? '先にフィオナと話そう。' : '使い込まれた訓練用の木人だ。'); return true; }
         startTraining();                                         // opens the existing training battle overlay; stage 2 -> 3 when it ends
-        MossForest.lock(true); let idle = 0;                     // the training battle is an overlay: freeze the field until it is over
-        const t = setInterval(() => {
-          const bt = $id('battle'), hidden = !bt || bt.style.display === 'none';
-          idle = hidden ? idle + 1 : 0;
-          if (stage() >= 3) { clearInterval(t); setTimeout(() => MossForest.lock(false), 1600); }
-          else if (idle > 4) { clearInterval(t); MossForest.lock(false); }
-        }, 400);
+        TrainingCheckpoint.watchField();                       // cancelled with the training session on load/reset
         return true;
       }
       case h === 'rilde_drawer': {
@@ -81,13 +75,14 @@
   // ---- scene routing ----
   function show() { closeDialogue(); forestActive = true; const s = $id('forestScene'); if (s) s.style.display = 'block'; const ins = $id('inside'); if (ins) ins.style.display = 'none'; }
   function enter(spawn, opt = {}) { show(); return MossForestStory.enterMap(opt.map || 'rilde_village', spawn); }
-  function startOpening() {
+  async function startOpening(token) {
     storyStage = 0; currentObjective = '家を出て、訓練場のフィオナに会いに行こう'; renderJournal();
     show();
-    return MossForestStory.enterMap('rilde_in_aidan', 'from_bed').then(() => {
-      popObjective();
-      setTimeout(() => { if (stage() === 0 && MossForest.mapId === 'rilde_in_aidan') say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。'); }, 350);
-    });
+    await MossForestStory.enterMap('rilde_in_aidan', 'from_bed',{loadToken:token});
+    LoadCoordinator.assertCurrent(token);popObjective();
+    await new Promise(resolve=>setTimeout(resolve,350));
+    LoadCoordinator.assertCurrent(token);
+    if(stage()===0&&MossForest.mapId==='rilde_in_aidan')say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');
   }
   function afterPrologue() {   // stage 15: free roam. The party stands in the fort's keep; the village (now ruined) and the road are open.
     storyStage = 15; const pe = $id('prologueEnd'); if (pe) pe.style.display = 'none';

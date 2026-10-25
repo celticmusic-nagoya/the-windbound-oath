@@ -203,6 +203,8 @@
 <button class="furn exit" id="leave">🚪 外へ</button>
 </div></div>
 </div>
+<div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" type="button" hidden>再試行</button></div>
+<script src="js/load-coordinator.js"></script>
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
@@ -475,6 +477,7 @@ function syncStoryEquipment(){
 window.addEventListener('equipment-unlock',syncEquipTab);
 function startTraining(){
  if(storyStage!==1){say(storyStage===0?'先にフィオナと話そう。':'使い込まれた訓練用の木人だ。');return}
+ TrainingCheckpoint.cancel();
  storyStage=2; ahp=100;dhp=180;rune=0;atp=0;guarding=false;
  $('#battle').style.display='block'; updateBattle();
  $('#battleMsg').textContent='フィオナ「実戦のつもりでいこう。危なくなったら私が回復するね！」';
@@ -491,7 +494,7 @@ function enemyTurn(){
  let dmg=guarding?6:13; guarding=false; ahp-=dmg;
  $('#battleMsg').textContent=`木人の反撃！ エイダンに${dmg}ダメージ。`;
  if(ahp<=55){
-  setTimeout(()=>{ahp=Math.min(100,ahp+38);updateBattle();$('#bFiona').classList.add('runeGlow');$('#battleMsg').textContent='フィオナ「癒やしの手！」 HPが38回復した。淡い生命のルーンが一瞬だけ輝いた……';setTimeout(()=>$('#bFiona').classList.remove('runeGlow'),1800);battleBusy=false},650)
+  TrainingCheckpoint.later(()=>{ahp=Math.min(100,ahp+38);updateBattle();$('#bFiona').classList.add('runeGlow');$('#battleMsg').textContent='フィオナ「癒やしの手！」 HPが38回復した。淡い生命のルーンが一瞬だけ輝いた……';TrainingCheckpoint.later(()=>$('#bFiona').classList.remove('runeGlow'),1800);battleBusy=false},650)
  }else battleBusy=false;
  updateBattle();
 }
@@ -502,7 +505,7 @@ function act(type){
  if(type==='guard'){
    guarding=true; atp=Math.min(100,atp+10); rune=Math.min(100,rune+15);
    $('#battleMsg').textContent='エイダンは身構えた。次のダメージを軽減。TP +10';
-   updateBattle(); setTimeout(enemyTurn,650); return
+   updateBattle(); TrainingCheckpoint.later(enemyTurn,650); return
  }
  let dmg=type==='skill'?42:28;
  if(type==='skill') atp-=30; else atp=Math.min(100,atp+15);
@@ -510,12 +513,12 @@ function act(type){
  $('#battleMsg').textContent=type==='skill'
    ?`エイダン「一閃！」 木人に${dmg}ダメージ！ TP -30`
    :`エイダンの攻撃！ 木人に${dmg}ダメージ！ TP +15`;
- updateBattle(); setTimeout(enemyTurn,650);
+ updateBattle(); TrainingCheckpoint.later(enemyTurn,650);
 }
 $('#atk').onclick=()=>act('atk'); $('#skill').onclick=()=>act('skill'); $('#guard').onclick=()=>act('guard');
 function winTraining(){
  updateBattle(); $('#battleMsg').textContent='訓練終了！ エイダン EXP +20　RUNE +10';
- setTimeout(()=>{
+ TrainingCheckpoint.later(()=>{
   $('#battle').style.display='none'; storyStage=3;
   say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」');
   setObj('フィオナと風見の断崖へ向かおう');
@@ -1110,27 +1113,35 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
- if(document.body.classList.contains('battleMode')){notice('戦闘中はセーブできません。');return}
+ if(!LoadCoordinator.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}$('#saveMsg').innerHTML='<small>セーブしました。</small>';
 }
-function loadGrowthData(){
+async function loadGrowthData(){
  try{
-  const saved=JSON.parse(localStorage.getItem(SAVE_KEY));if(!saved)throw 0;
-  const d=EquipmentManager.migrateStarterSword(saved);
+  if(!LoadCoordinator.mayLoad()){LoadCoordinator.explainGuard();return false}
+  const raw=localStorage.getItem(SAVE_KEY),saved=JSON.parse(raw);if(!saved)throw 0;
+  const checkpoint=TrainingCheckpoint.prepare(saved,raw);
+  const d=EquipmentManager.migrateStarterSword(checkpoint.data);
+  const route=d.prologue?PrologueProgress.plan(d.prologue,checkpoint.restoreVillage):null;
+  return await LoadCoordinator.run(async token=>{
+  if(checkpoint.restoreVillage)await TrainingCheckpoint.validate(d.prologue);
+  LoadCoordinator.assertCurrent(token);
+  TrainingCheckpoint.cancel();MossForest.cancelPendingEnter();PrologueCombat.cancel();
   if(PartyManager.members.fiona&&!d.members?.fiona?.learned)delete PartyManager.members.fiona.learned;   // an older save must not inherit a spell learned later in this session (syncStoryEquipment restores it by stage)
   Object.keys(PartyManager.members).forEach(id=>{if(d.members?.[id])Object.assign(PartyManager.members[id],d.members[id])});
   PartyManager.active=Array.isArray(d.active)?d.active:['aidan','fiona'];PartyManager.reserve=Array.isArray(d.reserve)?d.reserve:[];
   if(d.squads)PartyManager.squads=d.squads;if(d.support)Object.assign(PartyManager.support,d.support);
   gold=Number(d.gold)||0;if(d.battleItems)Object.assign(battleItems,d.battleItems);
   Inventory.load(d.inventory);EquipmentManager.load(d.equipment);Quest.load(d.quests);if(window.FieldTalk&&FieldTalk.load)FieldTalk.load(d.talk);
-  if(d.prologue)PrologueProgress.load(d.prologue);
+  if(d.prologue)await PrologueProgress.load(d.prologue,route,token);
   syncStoryEquipment();
   Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
-  renderSystemTab('status');notice(d.prologue?'冒険の記録をロードしました':'成長データをロードしました');return true;
- }catch(e){$('#saveMsg').innerHTML='<small>ロードできませんでした。</small>';return false}
+  renderSystemTab('status');notice(checkpoint.retry?'訓練前の状態に復帰しました。木人を調べて再挑戦してください。':d.prologue?'冒険の記録をロードしました':'成長データをロードしました');
+  },()=>loadGrowthData());
+ }catch(e){const text=e.message?.includes('元のセーブ')?e.message:'ロードできませんでした。';const m=$('#saveMsg');if(m)m.textContent=text;notice(text);return false}
 }
-function eraseGrowthData(){localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
+function eraseGrowthData(){if(!LoadCoordinator.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
 $('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
 $('#systemClose').onclick=()=>$('#systemMenu').style.display='none';
 document.addEventListener('fullscreenchange',()=>{if($('#systemMenu').style.display==='block'&&document.querySelector('[data-stab="settings"].active'))renderSystemTab('settings')});
@@ -1550,6 +1561,7 @@ const DEV_EVENTS=[
  ['map:dev_monster_arena','DEV　モンスター配置アリーナ'],['map:dev_height_proto','DEV　高さプロトタイプ(2.5D)'],['map:royal_capital_00_gate','M4a　王都・南大城門'],['map:royal_in_guild','M4b　王都・ギルド'],['map:royal_in_inn','M4c　王都・宿屋'],['map:royal_capital_01_market','M4　王都・商業区'],['map:royal_capital_02_castle_plaza','M5　王都・城前広場'],['map:royal_capital_03_residential','M6　王都・住宅街']
 ];
 function devResetScreens(){
+ window.TrainingCheckpoint?.cancel();window.MossForest?.cancelPendingEnter();
  closeDialogue();window.MossForest&&MossForest.hide();
  ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','aftermathScene','fortScene','prologueEnd','battle','attackBattle','questMenu'].forEach(id=>{
    const e=$('#'+id);if(e)e.style.display='none';
@@ -1616,19 +1628,17 @@ $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
 (function startAtHome(){
  if(!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
-   const go=()=>{if(window.RildeVillage&&RildeVillage.enabled())RildeVillage.startOpening();};
+   const go=()=>{if(window.RildeVillage&&RildeVillage.enabled())LoadCoordinator.boot(token=>RildeVillage.startOpening(token));};
    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
    return;
  }
+ LoadCoordinator.boot(async token=>{
  room='home'; ipx=190; ipy=500; itarget=null;
- $('#inside').style.display='block'; dressRoom(); inCamera();
- currentObjective='家を出て、訓練場のフィオナに会いに行こう';
- renderJournal();
- setTimeout(()=>{
-   if(storyStage!==0||room!=='home')return;
-   popObjective();
-   say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');
- },450);
+ $('#inside').style.display='block';dressRoom();inCamera();
+ currentObjective='家を出て、訓練場のフィオナに会いに行こう';renderJournal();
+ await new Promise(resolve=>setTimeout(resolve,450));LoadCoordinator.assertCurrent(token);
+ if(storyStage===0&&room==='home'){popObjective();say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');}
+ });
 })();
 
 document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('selectstart',e=>e.preventDefault());camera();
@@ -1975,6 +1985,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/moss-forest-runtime.js?v=20261014h25"></script>
 <script src="js/field/moss-forest-story.js?v=20261012a"></script>
 <script src="js/field/rilde-village.js?v=20261011b"></script>
+<script src="js/training-checkpoint.js"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
 <script src="js/inventory.js"></script>

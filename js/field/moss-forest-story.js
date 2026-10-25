@@ -159,7 +159,7 @@
   }
   // ドゥンヴァル砦 / 王都: foundation maps (tools/moss/build_town_maps.py). Not wired into the story yet - reachable via enterWorldMap() / DEV.
   const WORLD_MAPS={fort:'fort_dunvall_01_courtyard',capital:'royal_capital_00_gate',rilde:'rilde_village'};   // 'rilde_village' resolves to the peace / ruin map by story state (RildeVillage.resolve)
-  function enterMap(id,spawn){return MossForest.enter({map:WORLD_MAPS[id]||id,spawn,flags:flagsNow()});}
+  function enterMap(id,spawn,options={}){return MossForest.enter({...options,map:WORLD_MAPS[id]||id,spawn,flags:flagsNow()});}
   FieldScene_hooks();
   function FieldScene_hooks(){
     // after the burning-village scene: back to the village for the attack (existing return scene)
@@ -175,10 +175,31 @@
     MossForest.restoreState(state);
     return MossForest.enter({map:mapId,x,y,flags:flagsNow()});
   }
+  // Only v2 saves from the map-based opening bypass the legacy stage 0-8 route.
+  // Keep the scripted attack scenes, legacyVillage mode and v1 migration unchanged.
+  const EARLY_SAVE_MAPS=new Set([
+    'rilde_village_01_peace','rilde_in_aidan','rilde_in_elder','rilde_in_barn',
+    'rilde_in_house_01','rilde_in_house_02','rilde_in_house_03','rilde_in_house_04',
+    'rilde_in_inn_1f','rilde_in_inn_2f','rilde_in_storage','rilde_in_shop',CLIFF_ID,MAP_IDS.a1
+  ]);
+  function canRestoreEarlyMap(data,candidateStage=storyStage){
+    const moss=data&&data.moss;
+    return Boolean(data&&data.version===2&&candidateStage<=3&&window.RildeVillage&&RildeVillage.enabled()&&moss&&EARLY_SAVE_MAPS.has(moss.map)&&Number.isFinite(moss.x)&&Number.isFinite(moss.y));
+  }
+  const FREE_ROAM_SAVE_MAPS=new Set([
+    'rilde_village_01_ruin',CLIFF_ID,'fort_dunvall_01_courtyard','fort_dunvall_02_ramparts',
+    'fort_dunvall_03_keep','fort_in_tavern','road_dunvall_capital_01','royal_capital_00_gate',
+    'royal_capital_01_market','royal_capital_02_castle_plaza','royal_capital_03_residential',
+    'royal_in_guild','royal_in_inn'
+  ]);
+  function canRestoreFreeRoamMap(data,candidateStage=storyStage){
+    const moss=data&&data.moss;
+    return Boolean(data&&data.version===2&&candidateStage===15&&window.RildeVillage&&RildeVillage.enabled()&&moss&&FREE_ROAM_SAVE_MAPS.has(moss.map)&&Number.isFinite(moss.x)&&Number.isFinite(moss.y));
+  }
   // Restore from a save. v2 carries data.moss; v1 (legacy 1800x1300 forest) is migrated by story progress.
-  function fromSave(data,ctx){
+  function fromSave(data,ctx,token){
     const A=MAP_IDS,moss=data&&data.moss;
-    const valid=moss&&Object.values(A).includes(moss.map)&&Number.isFinite(moss.x)&&Number.isFinite(moss.y);
+    const valid=canRestoreEarlyMap(data)||canRestoreFreeRoamMap(data)||(moss&&Object.values(A).includes(moss.map)&&Number.isFinite(moss.x)&&Number.isFinite(moss.y));
     let mapId,spawn=null,pos=null,state=moss||{};
     if(valid){mapId=moss.map;pos=[moss.x,moss.y];}
     else{
@@ -191,7 +212,7 @@
       else{mapId=A.a1;spawn='from_cliff_fall';}
     }
     MossForest.reset();MossForest.restoreState(state);
-    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true});
+    return MossForest.enter({map:mapId,spawn:spawn||undefined,x:pos?pos[0]:undefined,y:pos?pos[1]:undefined,flags:flagsNow(),verifyReachable:true,loadToken:token});
   }
   // Opened-chest ids recorded in a save (v2 moss.opened, or v1 forestChests mapped to the new ids).
   function openedFromSave(data){
@@ -202,5 +223,5 @@
     const f=flagsNow();for(const [k,v] of Object.entries(f))MossForest.setFlag(k,v);
     MossForest.syncSymbols();
   }
-  window.MossForestStory=Object.freeze({init,enterCliff,enterMap,WORLD_MAPS,CLIFF_ID,enterFromStart,enterAt,fromSave,openedFromSave,syncFlags,flagsNow,MAP_IDS});
+  window.MossForestStory=Object.freeze({init,enterCliff,enterMap,WORLD_MAPS,CLIFF_ID,enterFromStart,enterAt,fromSave,canRestoreEarlyMap,canRestoreFreeRoamMap,openedFromSave,syncFlags,flagsNow,MAP_IDS});
 })();

@@ -12,7 +12,7 @@
     flags:{moss_a3_seal_open:false,moss_a3_lou_found:false,moss_a3_lou_rescued:false},opened:new Set(),fired:new Set(),
     inside:new Set(),extra:[],symbols:[],sealNode:null,windNodes:[],louNode:null,treasureNodes:new Map(),
     transitionLatch:true,battleLatch:false,slain:new Map(),keys:new Map(),frames:0,zones:{rest:null,ambience:null},loopId:0};
-  let el={},hooks={};
+  let el={},hooks={},enterGeneration=0,enterCount=0;
   const dist=(a,b,c,d)=>Math.hypot(a-c,b-d);
   const $=s=>document.querySelector(s);
 
@@ -238,20 +238,23 @@
 
   // ---------- transitions between maps ----------
   async function enter(options){
+    const request=++enterGeneration;enterCount++;
+    const ensure=()=>{if(request!==enterGeneration)throw Error('Cancelled map entry');window.LoadCoordinator?.assertCurrent(options.loadToken);};
+    ensure();
     if(!S.configured)throw new Error('MossForest not configured');
     const id=(hooks.resolveMap&&hooks.resolveMap(options.map))||options.map,spawnId=options.spawn;   // logical ids (e.g. 'rilde_village' = peace/ruin by story state) resolve here
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     mountFionaSprite();
-    const map=await loadMap(id);
+    const map=await loadMap(id);ensure();
     skinFiona();
     if(options.flags)Object.assign(S.flags,options.flags);
     const first=!S.map;
     S.slain.delete(id);   // entering a map (from another one, from the village, from a save) respawns its monsters; a battle return only resumes()
-    if(!first)await setFade(1,fadeMs(options.transition,'out'));
+    if(!first)await setFade(1,fadeMs(options.transition,'out'));ensure();
     el.scene.style.display='block';
     {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
-    unmount();mount(map);
+    ensure();unmount();mount(map);
     if(S.forest.height&&Number.isFinite(options.level))S.forest.height.setLevel(options.level);   // before the spot check: a deck / plateau position is only free at its own level
     let spot;
     const sp0=map.spawns.points[spawnId||map.spawns.default];
@@ -265,7 +268,7 @@
     if(window.FieldWeather)FieldWeather.configureMap(map);   // maps without "timeOfDay" always read as day
     el.fade.style.opacity='1';
     playBgm();
-    await setFade(0,fadeMs(options.transition,'in'));
+    await setFade(0,fadeMs(options.transition,'in'));ensure();
     S.busy=false;S.active=true;startLoop();
     if(hooks.onEnter)hooks.onEnter(map,spawnId);
     return map;
@@ -613,7 +616,7 @@
   }
   function reset(){S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({cancelPendingEnter(){enterGeneration++},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){S.busy=Boolean(on);if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
