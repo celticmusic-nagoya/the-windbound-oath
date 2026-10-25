@@ -22,11 +22,13 @@ man=json.load(open(ROOT/'img/battle/motion-manifest.json'))['motions']
 check(man['aidan']['draw']['frames']==6 and sum(man['aidan']['draw']['ms'])==600,'manifest aidan draw 6f/600ms');check(man['fiona']['ready']['frames']==6 and sum(man['fiona']['ready']['ms'])<=900,'manifest fiona ready 6f/<=900ms',sum(man['fiona']['ready']['ms']))
 check(man['aidan']['attack']['frames']==6 and man['aidan']['skill']['frames']==7,'attack/skill manifests untouched')
 OPENING_MS=max(sum(man[a][state]['ms']) if isinstance(man[a][state]['ms'],list) else man[a][state]['frames']*man[a][state]['ms'] for a,state in [('aidan','draw'),('fiona','ready')])
-START={'normal':"startAttackBattle('attackGob1',100)",'raider':"startRaiderBattle();PrologueCombat.spawn&&0"}
+START={'normal':"startAttackBattle('attackGob1',100)",'raider':"startRaiderBattle()"}
 IMG={'normal':{'aidan':'#bAidan2 img','fiona':'#bFiona2 img'},'raider':{'aidan':'#rbAidan img','fiona':'#rbFiona img'}}
-JS_TRACE="""([ctx,sel])=>{window.__traceCleanup?.();const cleanup=[];window.__traceCleanup=()=>{cleanup.forEach(f=>f());clearInterval(window.__iv)};window.__tr={ev:[],seq:{aidan:[],fiona:[]},busy:[],start:null,end:null,rest:null,frameReady:false,longTasks:[]};const t0=performance.now();
- const ready=()=>!(BattlePresentation.busy||(ctx==='normal'?attackBattleBusy:rbBusy)||BattleTargetSelector.active);
- const onOpening=e=>{__tr.start=performance.now();__tr.ev.push({t:__tr.start-t0,d:e.detail})};addEventListener('battle-opening',onOpening);cleanup.push(()=>removeEventListener('battle-opening',onOpening));
+JS_TRACE="""([ctx,sel])=>{window.__traceCleanup?.();const cleanup=[];window.__traceCleanup=()=>{cleanup.forEach(f=>f());clearInterval(window.__iv)};window.__tr={ev:[],seq:{aidan:[],fiona:[]},busy:[],start:null,end:null,lockedAtStart:null,rest:null,frameReady:false,longTasks:[]};const t0=performance.now();
+ // Acceptance = the game's own shared COMMAND gate (Issue #51) plus the rendered panel actually accepting input.
+ const ready=()=>{const panel=document.querySelector(ctx==='normal'?'#normalBattleCmd':'#rbCmd');return !battleCommandLocked(ctx)&&!BattleTargetSelector.active&&Boolean(panel)&&!panel.inert};
+ // The opening event is dispatched synchronously right after BattlePresentation.hold() engaged the lock (js/battle-opening.js).
+ const onOpening=e=>{if(__tr.start===null){__tr.start=performance.now();__tr.lockedAtStart=document.body.classList.contains('battlePresentationBusy')}__tr.ev.push({t:performance.now()-t0,d:e.detail})};addEventListener('battle-opening',onOpening);cleanup.push(()=>removeEventListener('battle-opening',onOpening));
  const lockObserver=new MutationObserver(()=>{if(__tr.start!==null&&__tr.end===null&&!document.body.classList.contains('battlePresentationBusy')){
    __tr.end=performance.now();__tr.rest=[BattleActorState.get(ctx),BattleActorState.get(ctx,'fiona')];
    requestAnimationFrame(()=>{__tr.frameReady=ready()});
@@ -40,6 +42,8 @@ def lock_verdict(trace, expected, retry_used=False):
     start,end=trace.get('start'),trace.get('end')
     if type(start) not in (int,float) or type(end) not in (int,float) or not math.isfinite(start) or not math.isfinite(end) or end<start:
         return 'FAIL','missing/invalid direct timestamps'
+    if trace.get('lockedAtStart') is not True:
+        return 'FAIL','input lock not engaged when the opening started'
     duration=end-start
     if duration<expected-2:
         return 'FAIL',f'early release {duration:.2f} < {expected-2:.2f}ms'
@@ -53,15 +57,37 @@ def lock_verdict(trace, expected, retry_used=False):
 if '--self-test' in sys.argv:
     # Classifier controls are unit evidence, distinct from the browser fault injections below.
     expected=OPENING_MS
-    def sample(duration,**kw):return dict(start=100,end=100+duration,rest=['idle','idle'],frameReady=True,longTasks=[],**kw)
+    def sample(duration,**kw):return dict(start=100,end=100+duration,lockedAtStart=True,rest=['idle','idle'],frameReady=True,longTasks=[],**kw)
     cases=[('normal',sample(880),False,'PASS'),('lower inclusive',sample(878),False,'PASS'),('early 600',sample(600),False,'FAIL'),('late 5000',sample(5000),False,'FAIL'),('300ms workload within budget',sample(1180),False,'PASS'),('missing',{},False,'FAIL'),('no release',dict(start=0,end=None),False,'FAIL'),('NaN timestamp',dict(start=0,end=float('nan')),False,'FAIL')]
     slow=sample(1500);slow['longTasks']=[{'start':200,'duration':300}]
     cases.extend([('evidenced late retry',slow,False,'RETRY'),('late retry exhausted',slow,True,'FAIL')])
-    for field,value in [('rest',['draw','idle']),('frameReady',False)]:
+    for field,value in [('rest',['draw','idle']),('frameReady',False),('lockedAtStart',False),('lockedAtStart',None)]:
         row=sample(880);row[field]=value;cases.append((field,row,False,'FAIL'))
     for name,row,retry,want in cases:
         got=lock_verdict(row,expected,retry)[0];assert got==want,(name,got,want);print('PASS classifier',name)
     print('classifier unit checks only; browser controls NOT_RUN');sys.exit(0)
+
+# Battle entry is an async Loading transaction (#60) and index.html opens on the title (#21), so the harness skips the title with
+# ?title=0, waits for boot readiness, and keys every check to the measured opening/lock events instead of a fixed delay after START.
+GAME='/index.html?title=0'
+READY='window.BattleOpening&&window.BattleMotion&&window.PrologueCombat&&window.LoadCoordinator&&LoadCoordinator.canSave'
+def open_game(page,url,motion=True):
+    page.goto(url+GAME);page.wait_for_function(READY+('&&BattleMotion.loaded' if motion else ''));page.wait_for_timeout(1800);page.evaluate('closeDialogue()')
+def begin(page,ctx):
+    # Returns True only if the existing entry adapter committed the battle.
+    return page.evaluate('Promise.resolve(%s)'%START[ctx]) is True
+def wait_opening(page,timeout=8000):
+    try:page.wait_for_function('__tr.start!==null',timeout=timeout);return True
+    except Exception:return False
+def at_opening(page,ms):
+    # Resolve ms after the measured opening start (setTimeout from that origin; never earlier).
+    page.evaluate("ms=>new Promise(r=>setTimeout(r,Math.max(0,__tr.start+ms-performance.now())))",ms)
+def wait_release(page,expected):
+    try:page.wait_for_function('__tr.end!==null',timeout=expected+2000+3000)
+    except Exception:pass
+    page.wait_for_timeout(120)   # let the post-release rAF acceptance probe run
+def exit_battle(page,ctx):
+    page.evaluate("ctx=>{PrologueCombat.cancel();document.querySelector(ctx==='normal'?'#attackBattle':'#raiderBattle').style.display='none';document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode')}",ctx)
 
 with server(8815) as base,sync_playwright() as p:
     b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
@@ -70,23 +96,32 @@ with server(8815) as base,sync_playwright() as p:
     for vp in [(1280,720),(390,844),(844,390)]*repeats:
       for ctx in ('normal','raider'):
         pg=b.new_page(viewport={'width':vp[0],'height':vp[1]});errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
-        pg.goto(base+'/index.html');pg.wait_for_function('window.BattleOpening&&BattleMotion.loaded&&window.PrologueCombat');pg.wait_for_timeout(1800);pg.evaluate("closeDialogue()")
-        pg.evaluate(JS_TRACE,[ctx,IMG[ctx]]);pg.evaluate("PrologueProgress&&PrologueProgress.seed&&PrologueProgress.seed(0)");pg.evaluate(START[ctx]);pg.wait_for_timeout(450)
-        mid=pg.evaluate("[BattlePresentation.busy,BattleActorState.get(%r),BattleActorState.get(%r,'fiona')]"%(ctx,ctx))
-        check(mid[0] is True and mid[1]=='draw' and mid[2]=='ready','%s %s: opening running, input locked at 450ms'%(vp,ctx),mid)
-        pg.wait_for_timeout(1100);r=pg.evaluate("clearInterval(__iv)||({trace:__tr,ev:__tr.ev,seq:__tr.seq,busy:__tr.busy,a:BattleActorState.get(%r),f:BattleActorState.get(%r,'fiona'),again:BattleOpening.play(%r),busyNow:BattlePresentation.busy,srcF:document.querySelector(%r).getAttribute('src')})"%(ctx,ctx,ctx,IMG[ctx]['fiona']))
+        open_game(pg,base)
+        pg.evaluate(JS_TRACE,[ctx,IMG[ctx]]);pg.evaluate("PrologueProgress&&PrologueProgress.seed&&PrologueProgress.seed(0)")
+        committed=begin(pg,ctx);opened=committed and wait_opening(pg)
+        check(committed and opened,'%s %s: battle committed and opening measured'%(vp,ctx),(committed,opened))
+        if not opened:
+            # Measurement impossible is a FAIL, never a skipped PASS.
+            check(False,'%s %s: directly measured input lock'%(vp,ctx),'measurement impossible: no opening event');pg.close();continue
+        at_opening(pg,450)
+        mid=pg.evaluate("[BattlePresentation.busy,BattleActorState.get(%r),BattleActorState.get(%r,'fiona'),battleCommandLocked(%r)]"%(ctx,ctx,ctx))
+        check(mid[0] is True and mid[1]=='draw' and mid[2]=='ready' and mid[3] is True,'%s %s: opening running, input locked 450ms after it starts'%(vp,ctx),mid)
+        wait_release(pg,OPENING_MS);r=pg.evaluate("clearInterval(__iv)||({trace:__tr,ev:__tr.ev,seq:__tr.seq,busy:__tr.busy,a:BattleActorState.get(%r),f:BattleActorState.get(%r,'fiona'),again:BattleOpening.play(%r),busyNow:BattlePresentation.busy,srcF:document.querySelector(%r).getAttribute('src')})"%(ctx,ctx,ctx,IMG[ctx]['fiona']))
         check(len(r['ev'])==1 and set(r['ev'][0]['d']['actors'])=={'aidan','fiona'},'%s %s: exactly one opening event, both actors'%(vp,ctx),r['ev'])
         sa=[s['f'] for s in r['seq']['aidan']];sf=[s['f'] for s in r['seq']['fiona']]
         check(sa==[1,2,3,4,5,6] and sf==[1,2,3,4,5,6],'%s %s: both play frames 1..6 once, in order'%(vp,ctx),(sa,sf))
-        lastA=r['seq']['aidan'][-1]['t']-r['seq']['aidan'][0]['t'];lastF=r['seq']['fiona'][-1]['t']-r['seq']['fiona'][0]['t']
-        check(430<=lastA<=560 and 640<=lastF<=800,'%s %s: frame timing (aidan last frame ~480ms, fiona ~760ms)'%(vp,ctx),(lastA,lastF))
+        lastA=(r['seq']['aidan'][-1]['t']-r['seq']['aidan'][0]['t']) if r['seq']['aidan'] else None;lastF=(r['seq']['fiona'][-1]['t']-r['seq']['fiona'][0]['t']) if r['seq']['fiona'] else None
+        check(lastA is not None and lastF is not None and 430<=lastA<=560 and 640<=lastF<=800,'%s %s: frame timing (aidan last frame ~480ms, fiona ~760ms)'%(vp,ctx),(lastA,lastF))
         expected=OPENING_MS
         verdict,detail=lock_verdict(r['trace'],expected)
         if verdict=='RETRY':
-            # One fresh battle only for an evidenced long task, never for early release or missing data.
-            pg.evaluate(JS_TRACE,[ctx,IMG[ctx]]);pg.evaluate(START[ctx]);pg.wait_for_timeout(expected+1600)
-            retry_trace=pg.evaluate('clearInterval(__iv)||__tr');verdict,detail=lock_verdict(retry_trace,expected,True)
-        check(verdict=='PASS' and not r['busyNow'],'%s %s: directly measured input lock'%(vp,ctx),detail)
+            # One fresh battle on a fresh page only for an evidenced long task, never for early release or missing data.
+            rp=b.new_page(viewport={'width':vp[0],'height':vp[1]});open_game(rp,base);rp.evaluate(JS_TRACE,[ctx,IMG[ctx]])
+            if begin(rp,ctx) and wait_opening(rp):wait_release(rp,expected)
+            retry_trace=rp.evaluate('clearInterval(__iv)||__tr');verdict,detail=lock_verdict(retry_trace,expected,True);detail='retry: '+detail;rp.close()
+        # Diagnostic only (Issue #52): the old first/last 30ms-poll span, reported next to the direct value and never used to decide.
+        polled=[t for t,busy,_cls in r['busy'] if busy];poll_ms=(polled[-1]-polled[0]) if polled else 0
+        check(verdict=='PASS' and not r['busyNow'],'%s %s: directly measured input lock'%(vp,ctx),'%s; poll diagnostic %.1fms'%(detail,poll_ms))
         check(r['a']=='idle' and r['f']=='idle' and r['again'] is False and r['srcF'].split('/')[-1].startswith('fiona_battle_idle'),'%s %s: both back at rest (Aidan idle, Fiona still), no double play'%(vp,ctx),(r['a'],r['f'],r['again'],r['srcF']))
         idle=pg.evaluate("BattleIdleMotion.status.actors.some(a=>a.actor==='aidan'&&a.context===%r&&a.state==='idle')"%ctx);check(idle,'%s %s: Aidan idle motion resumes'%(vp,ctx))
         # attack / skill must not trigger an opening
@@ -96,29 +131,42 @@ with server(8815) as base,sync_playwright() as p:
     # Measurement controls: actual game page, temporary hold override/workload, no source writes.
     expected=OPENING_MS
     for name,duration,workload,wanted in [('early600',600,0,'FAIL'),('late5000',5000,0,'FAIL'),('workload300',None,300,'PASS')]:
-        pg=b.new_page(viewport={'width':1280,'height':720});pg.goto(base+'/index.html');pg.wait_for_function('window.BattleOpening&&BattleMotion.loaded&&window.PrologueCombat');pg.wait_for_timeout(1800);pg.evaluate('closeDialogue()')
+        pg=b.new_page(viewport={'width':1280,'height':720});open_game(pg,base)
         pg.evaluate(JS_TRACE,['normal',IMG['normal']])
         if duration is not None:
             pg.evaluate("ms=>{const original=BattlePresentation;window.BattlePresentation={...original,get busy(){return original.busy},hold:(_ms,token)=>original.hold(ms,token)}}",duration)
-        pg.evaluate(START['normal']+";"+("{const until=performance.now()+300;while(performance.now()<until){}}" if workload else ''))
-        pg.wait_for_timeout((duration or expected)+1700)
+        if workload:
+            # Main-thread work immediately after the lock engages (inside the opening dispatch), not before the Loading gate.
+            pg.evaluate("ms=>addEventListener('battle-opening',()=>{const until=performance.now()+ms;while(performance.now()<until){}},{once:true})",workload)
+        if begin(pg,'normal') and wait_opening(pg):
+            pg.wait_for_function('__tr.end!==null',timeout=(duration or expected)+5000);pg.wait_for_timeout(120)
         trace=pg.evaluate('clearInterval(__iv)||__tr');verdict,detail=lock_verdict(trace,expected,True)
         reason_ok=detail.startswith('early release') if name=='early600' else detail.startswith('late release') if name=='late5000' else verdict=='PASS'
         check(verdict==wanted and reason_ok,'measurement control '+name,(verdict,detail));pg.close()
     # ---- interruption: cancelling mid-opening releases the lock at once; a restart opens once more
-    pg=b.new_page(viewport={'width':1280,'height':720});errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.goto(base+'/index.html');pg.wait_for_function('window.BattleOpening&&BattleMotion.loaded');pg.wait_for_timeout(1800);pg.evaluate("closeDialogue();startRaiderBattle()");pg.wait_for_timeout(250)
-    pg.evaluate("PrologueCombat.cancel()");pg.wait_for_timeout(60)
-    check(pg.evaluate("BattlePresentation.busy")is False and not pg.evaluate("document.body.classList.contains('battlePresentationBusy')"),'interrupt: cancel releases the input lock at once')
+    pg=b.new_page(viewport={'width':1280,'height':720});errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));open_game(pg,base)
+    pg.evaluate(JS_TRACE,['raider',IMG['raider']]);ok=begin(pg,'raider') and wait_opening(pg);at_opening(pg,250)
+    mid=pg.evaluate("BattlePresentation.busy");pg.evaluate("PrologueCombat.cancel()");pg.wait_for_timeout(60)
+    check(ok and mid is True and pg.evaluate("BattlePresentation.busy")is False and not pg.evaluate("document.body.classList.contains('battlePresentationBusy')"),'interrupt: cancel mid-opening releases the input lock at once',(ok,mid))
     pg.wait_for_timeout(1200);check(pg.evaluate("[BattleActorState.get('raider'),BattleActorState.get('raider','fiona')]")==['idle','idle'],'interrupt: actors still return to rest')
-    pg.evaluate("startRaiderBattle()");pg.wait_for_timeout(400);check(pg.evaluate("BattlePresentation.busy")is True,'restart: a new battle start opens again (lock on)');pg.wait_for_timeout(1100)
-    check(pg.evaluate("BattlePresentation.busy")is False,'restart: lock released after the opening');check(not errs,'interrupt/restart: no console errors',errs[:2]);pg.close()
+    exit_battle(pg,'raider');pg.evaluate(JS_TRACE,['raider',IMG['raider']]);ok=begin(pg,'raider') and wait_opening(pg)
+    check(ok and pg.evaluate("__tr.lockedAtStart")is True and len(pg.evaluate("__tr.ev"))==1,'restart: a new battle start opens once more (lock on)',ok)
+    wait_release(pg,OPENING_MS);verdict,detail=lock_verdict(pg.evaluate('clearInterval(__iv)||__tr'),OPENING_MS,True)
+    check(verdict=='PASS' and pg.evaluate("BattlePresentation.busy")is False,'restart: lock released after the opening',detail);check(not errs,'interrupt/restart: no console errors',errs[:2]);pg.close()
     # ---- image load failure: Fiona frames blocked -> opening still ends, lock released, rest pose back
+    # Required opening frames are part of the battle-entry Loading transaction since #60: a failed frame refuses the battle with retry.
     ctxf=b.new_context(viewport={'width':1280,'height':720});ctxf.route('**/fiona_ready_0*.png',lambda r:r.abort());pg=ctxf.new_page();errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
-    pg.goto(base+'/index.html');pg.wait_for_function('window.BattleOpening&&BattleMotion.loaded');pg.wait_for_timeout(1800);pg.evaluate("closeDialogue();startRaiderBattle()");pg.wait_for_timeout(1500)
-    check(pg.evaluate("BattlePresentation.busy")is False and pg.evaluate("[BattleActorState.get('raider'),BattleActorState.get('raider','fiona')]")==['idle','idle'],'load failure: lock released and both at rest');check(not errs,'load failure: no uncaught errors',errs[:2]);pg.close()
+    open_game(pg,base);committed=begin(pg,'raider');pg.wait_for_timeout(300)
+    st=pg.evaluate("[BattleLoading.phase,document.body.classList.contains('battleMode'),BattlePresentation.busy,document.body.classList.contains('battlePresentationBusy')]")
+    check(committed is False and st==['FAILED',False,False,False],'load failure (opening frames): battle refused for retry, no opening lock left',(committed,st));check(not errs,'load failure: no uncaught errors',errs[:2]);ctxf.close()
+    # The motion manifest is optional: its failure keeps the still-only battle with no opening and no input lock.
+    ctxm=b.new_context(viewport={'width':1280,'height':720});ctxm.route('**/motion-manifest.json',lambda r:r.abort());pg=ctxm.new_page();errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    open_game(pg,base,motion=False);pg.evaluate(JS_TRACE,['raider',IMG['raider']]);committed=begin(pg,'raider');pg.wait_for_timeout(300)
+    st=pg.evaluate("[__tr.ev.length,BattlePresentation.busy,battleCommandLocked('raider'),BattleActorState.get('raider'),BattleActorState.get('raider','fiona')]")
+    check(committed is True and st==[0,False,False,'idle','idle'],'manifest failure: still-only battle, no opening, input accepted',(committed,st));check(not errs,'manifest failure: no uncaught errors',errs[:2]);pg.evaluate('clearInterval(__iv)');ctxm.close()
     # ---- battle exit during the opening does not leave the lock
-    pg=b.new_page(viewport={'width':1280,'height':720});pg.goto(base+'/index.html');pg.wait_for_function('window.BattleOpening&&BattleMotion.loaded');pg.wait_for_timeout(1800);pg.evaluate("closeDialogue();startRaiderBattle()");pg.wait_for_timeout(200)
-    pg.evaluate("document.querySelector('#raiderBattle').style.display='none';document.body.classList.remove('battleMode','raiderBattleMode');PrologueCombat.cancel()");pg.wait_for_timeout(100)
-    check(pg.evaluate("BattlePresentation.busy")is False,'battle exit mid-opening: no lock left');pg.close()
+    pg=b.new_page(viewport={'width':1280,'height':720});open_game(pg,base);pg.evaluate(JS_TRACE,['raider',IMG['raider']]);ok=begin(pg,'raider') and wait_opening(pg);at_opening(pg,200)
+    mid=pg.evaluate("BattlePresentation.busy");exit_battle(pg,'raider');pg.wait_for_timeout(100)
+    check(ok and mid is True and pg.evaluate("BattlePresentation.busy")is False and not pg.evaluate("document.body.classList.contains('battlePresentationBusy')"),'battle exit mid-opening: no lock left',(ok,mid));pg.evaluate('clearInterval(__iv)');pg.close()
     b.close()
 print('FAILS %d'%len(fails));sys.exit(1 if fails else 0)
