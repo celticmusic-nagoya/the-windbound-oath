@@ -44,6 +44,8 @@
    if(combatGeneration!==window.PrologueCombat?.generation){cancel();return false;}
    // Keep the overlay/input lock through synchronous combat initialization.
    originals[request.kind](...request.args);
+   await LoadingView.settle('battle');
+   if(token!==generation||pending!==request)return false;
    pending=null;phase='IDLE';hide();return true;
   }catch(error){
    if(token===generation&&pending===request){phase='FAILED';view(true);}

@@ -40,5 +40,11 @@ function resave(e){const q=e.c.$;e.c.$=s=>s==='#doSave'?null:q(s);e.c.saveGrowth
   const record=resave(e);assert.equal(record.prologue.moss.map,e.M.mapId);
   assert.equal(await e.complete(e.c.loadGrowthData()),true);assert.equal(e.c.storyStage,stage);
  });
+ await test('actual SAVE outside menu keeps data and does not require feedback DOM',async()=>{
+  const e=await ready();put(e,save());assert.equal(await e.complete(e.c.loadGrowthData()),true);
+  const q=e.c.$;e.c.$=s=>['#doSave','#saveMsg'].includes(s)?null:q(s);
+  assert.doesNotThrow(()=>e.c.saveGrowthData());const record=JSON.parse(e.c.localStorage.getItem('slot'));
+  assert.equal(record.prologue.moss.map,'rilde_in_aidan');assert.equal(record.version,30);
+ });
  console.log(`${passed} PASS; actual SAVE/LOAD; simulated DOM/network`);
 })().catch(e=>{console.error('FAIL',e.stack);process.exitCode=1});

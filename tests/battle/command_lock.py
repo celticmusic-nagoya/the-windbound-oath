@@ -31,7 +31,8 @@ with server(8891) as base, sync_playwright() as pw:
                 p.evaluate(f'{setter}(false)')
                 rect = p.locator(toggle).bounding_box()
                 assert rect, toggle
-                p.evaluate(f'{setter}({str(opened).lower()});window.__lock=BattlePresentation.hold(10000)')
+                # A bare assignment returns the hold Promise and evaluate() waits until it unlocks.
+                p.evaluate(f'()=>{{{setter}({str(opened).lower()});window.__lock=BattlePresentation.hold(10000);}}')
                 p.wait_for_function('(s)=>document.querySelector(s).disabled', arg=toggle)
                 before = p.evaluate(actor)
                 x, y = rect['x']+rect['width']/2, rect['y']+rect['height']/2

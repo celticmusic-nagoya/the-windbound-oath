@@ -324,7 +324,7 @@
     if(!first)await setFade(1,fadeMs(options.transition,'out'));ensure();
     el.scene.style.display='block';
     transaction.destructive=true;
-    unmount();restoreEntryData(previous,true);
+    await unmount();ensure();restoreEntryData(previous,true);
     if(options.resetState){S.opened.clear();S.fired.clear();}
     if(options.flags)Object.assign(S.flags,options.flags);
     S.slain.delete(id);
@@ -344,6 +344,7 @@
     el.fade.style.opacity='1';
     playBgm();
     await setFade(0,fadeMs(options.transition,'in'));ensure();
+    await window.LoadingView?.settle('map:'+request);ensure();
     transaction.committed=true;entry=null;recoveryRequired=false;clearEntryError();
     window.LoadingView?.close('map:'+request);
     S.busy=externalLock;S.active=true;startLoop();
