@@ -106,5 +106,6 @@
       spawn(id){const s=map.spawns.points[id||map.spawns.default];return {x:s.x-FOOT.ax,y:s.y-FOOT.ay,facing:s.facing};}};
   }
   async function load(url){const r=await fetch(url);if(!r.ok)throw new Error('map load failed: '+url);return r.json();}
-  window.ForestLoader=Object.freeze({load,loadAssets,prepare,entityArt,mount,FOOT,get art(){return art;}});
+  function collisionModel(map,flags={}){return collision(map,entities(map,ForestScatter.generate(map),flags),flags);}
+  window.ForestLoader=Object.freeze({collisionModel,load,loadAssets,prepare,entityArt,mount,FOOT,get art(){return art;}});
 })();
