@@ -754,6 +754,7 @@ function updateNormalCommands(){
  if($('#nWindDance'))$('#nWindDance').disabled=normalFMP<(window.WindDance?WindDance.mp():10);$('#nWindbloom').disabled=normalFMP<8;$('#nSkill').disabled=aatp<30;$('#nHeal').disabled=normalFMP<8;$('#nPrayer').disabled=normalFMP<6;
 }
 function openNormalItems(){
+ if(battleCommandLocked('normal'))return;
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${normalActor==='aidan'?'エイダン':'フィオナ'}</b><br>
  <button data-ni="potion">きずぐすり ×${battleItems.potion}</button>
  <button data-ni="ether">魔力の雫 ×${battleItems.ether}</button>
@@ -775,7 +776,7 @@ function advanceNormalActor(){
  }
 }
 function chooseNormalAct(kind,target){
- if(window.BattlePresentation?.busy||attackBattleBusy||BattleTargetSelector.active)return;
+ if(battleCommandLocked('normal')||BattleTargetSelector.active)return;
  if(normalActor==='aidan'&&kind==='skill'&&aatp<30){showBattleBanner('TPが足りない。一閃にはTP30が必要だ。',900);return}
  if(normalActor==='fiona'&&['heal','windbloom'].includes(kind)&&normalFMP<8){showBattleBanner('MPが足りない。',800);return}
  if(normalActor==='fiona'&&kind==='prayer'&&normalFMP<6){showBattleBanner('MPが足りない。',800);return}
@@ -1314,7 +1315,7 @@ function startRaiderBattle(){
  updateRaider();
 }
 function choosePartyAct(kind,target){
- if(window.BattlePresentation?.busy||rbBusy||BattleTargetSelector.active)return;
+ if(battleCommandLocked('raider')||BattleTargetSelector.active)return;
  if(target===undefined&&kind!=='item'){BattleActionTargets.request('raider',kind,rbActor,t=>choosePartyAct(kind,t));return}
  if(rbActor==='aidan'){
    if(kind==='item'){openRaiderItems();return}
@@ -1333,6 +1334,7 @@ function choosePartyAct(kind,target){
 }
 
 function openRaiderItems(){
+ if(battleCommandLocked('raider'))return;
  const box=$('#normalItems');box.innerHTML=`<b>ITEM / ${rbActor==='aidan'?'エイダン':'フィオナ'}</b><br>
  <button data-ri="potion">きずぐすり ×${battleItems.potion}</button>
  <button data-ri="ether">魔力の雫 ×${battleItems.ether}</button>
@@ -1386,35 +1388,46 @@ $('#rbWind').onclick=()=>choosePartyAct('wind');
 
 
 
-// v0.37 compact command drawers
-function setNormalCommandDrawer(open){
- const panel=$('#normalBattleCmd'), toggle=$('#normalCommandToggle');
- if(!panel||!toggle)return;
- panel.hidden=!open;
- toggle.hidden=!!open;
+// Shared COMMAND lock: pointer, keyboard and action submission use the same gate.
+function battleCommandLocked(battle){
+ const classes=document.body.classList;
+ return Boolean(window.BattlePresentation?.busy||classes.contains('battlePresentationBusy')||classes.contains('actionCinematic')||(battle==='raider'?rbBusy:attackBattleBusy));
+}
+function syncBattleCommandLocks(){
+ for(const [battle,panelId,toggleId] of [['normal','normalBattleCmd','normalCommandToggle'],['raider','rbCmd','rbCommandToggle']]){
+   const locked=battleCommandLocked(battle),panel=$('#'+panelId),toggle=$('#'+toggleId);
+   if(toggle){toggle.disabled=locked;toggle.setAttribute('aria-disabled',String(locked));}
+   if(panel){
+     panel.inert=locked;
+     // Legacy child rules force visibility:visible; hiding the whole drawer also hides those children.
+     panel.style.setProperty('display',locked||panel.hidden?'none':'grid','important');
+   }
+ }
+ const items=$('#normalItems');if(items)items.inert=battleCommandLocked(document.body.classList.contains('raiderBattleMode')?'raider':'normal');
+}
+function setBattleCommandDrawer(battle,open){
+ const panel=$(battle==='raider'?'#rbCmd':'#normalBattleCmd'),toggle=$(battle==='raider'?'#rbCommandToggle':'#normalCommandToggle');
+ if(!panel||!toggle)return false;
+ syncBattleCommandLocks();
+ if(open&&battleCommandLocked(battle))return false;
+ panel.hidden=!open;toggle.hidden=!!open;
  panel.classList.toggle('expanded',!!open);
  panel.style.setProperty('display',open?'grid':'none','important');
- panel.style.setProperty('visibility',open?'visible':'hidden','important');
- panel.style.setProperty('pointer-events',open?'auto':'none','important');
+ // Visibility and hit-testing belong to CSS so presentation locks can override an open drawer.
+ panel.style.removeProperty('visibility');panel.style.removeProperty('pointer-events');
  toggle.style.setProperty('display',open?'none':'flex','important');
+ return true;
 }
-function setRaiderCommandDrawer(open){
- const panel=$('#rbCmd'), toggle=$('#rbCommandToggle');
- if(!panel||!toggle)return;
- panel.hidden=!open;
- toggle.hidden=!!open;
- panel.classList.toggle('expanded',!!open);
- panel.style.setProperty('display',open?'grid':'none','important');
- panel.style.setProperty('visibility',open?'visible':'hidden','important');
- panel.style.setProperty('pointer-events',open?'auto':'none','important');
- toggle.style.setProperty('display',open?'none':'flex','important');
-}
+function setNormalCommandDrawer(open){return setBattleCommandDrawer('normal',open);}
+function setRaiderCommandDrawer(open){return setBattleCommandDrawer('raider',open);}
 setNormalCommandDrawer(false);
 setRaiderCommandDrawer(false);
-$('#normalCommandToggle').onclick=()=>{ if(!attackBattleBusy)setNormalCommandDrawer(true); };
-$('#rbCommandToggle').onclick=()=>{ if(!rbBusy)setRaiderCommandDrawer(true); };
+$('#normalCommandToggle').onclick=()=>setNormalCommandDrawer(true);
+$('#rbCommandToggle').onclick=()=>setRaiderCommandDrawer(true);
 $('#normalCommandClose').onclick=()=>setNormalCommandDrawer(false);
 $('#rbCommandClose').onclick=()=>setRaiderCommandDrawer(false);
+// Class changes are delivered before the next paint, including hold(), cancel() and cinematics.
+new MutationObserver(syncBattleCommandLocks).observe(document.body,{attributes:true,attributeFilter:['class']});
 
 const aftermathLines=[
  '静寂が戻った。砕けた黒紫のルーンが、風にほどけるように消えていく。',
@@ -2041,7 +2054,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <link rel="stylesheet" href="css/motion-test.css?v=20261019am1">
 <link rel="stylesheet" href="css/equipment.css?v=20261013eq">
 <script src="js/battle-party-layout.js?v=20261011-mobile"></script>
-<link href="css/battle-presentation.css?v=20261013lou" rel="stylesheet"/>
+<link href="css/battle-presentation.css?v=20261025i51" rel="stylesheet"/>
 <script src="js/battle-facing.js"></script>
 <script src="js/battle-presentation.js?v=20261023i50"></script>
 <script src="js/battle-background.js?v=20261014bg"></script>
