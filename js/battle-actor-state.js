@@ -22,11 +22,21 @@
   function lookup(context, actor = 'aidan') {
     return battles[actor === 'aidan' ? context : context + ':' + actor];
   }
+  // A temporary pose's onDone (set() option) is always called exactly once: true when it returned to rest normally,
+  // false when it was replaced, cancelled or ended (KO, new battle, battle end) first. Nothing waits forever on it.
+  function finish(battle, ok) {
+    const done = battle.pendingDone;
+    battle.pendingDone = null;
+    if (done) { try { done(ok); } catch (e) { } }
+  }
   function invalidate(battle) {
     clearTimeout(battle.timer);
     battle.timer = null;
+    finish(battle, false);
     return ++battle.sequence;
   }
+  // set({waitMotion}): longest extra wait for the delivered motion to finish before the rest pose is forced (e.g. a hidden tab with no rAF).
+  const MOTION_WAIT_CAP = 1000;
   function paint(battle, state) {
     const image = document.querySelector(battle.image);
     const source = BATTLE_ASSETS[battle.actor][state];
@@ -55,7 +65,10 @@
       paint(battle, resting(battle));
     }
   }
-  function set(actor, state, { battle: context, duration, next, nextDuration } = {}) {
+  // waitMotion: return to rest only after the delivered motion reports completion (BattleMotion.whenDone: every frame shown,
+  // the final one for its full time and at least one rendered frame); the duration timer still sets the earliest moment.
+  // onDone(ok): called once when this pose ends (see finish). Both options are opt-in; without them behaviour is unchanged.
+  function set(actor, state, { battle: context, duration, next, nextDuration, waitMotion = false, onDone = null } = {}) {
     if (!states.has(state)) return false;
     context ||= document.body.classList.contains('raiderBattleMode') ? 'raider' : 'normal';
     const battle = lookup(context, actor);
@@ -73,15 +86,27 @@
     if (state === 'guard') battle.guard = true;
     paint(battle, state);
     if (duration && temporary.has(state)) {
-      battle.timer = setTimeout(() => {
+      if (onDone) battle.pendingDone = onDone;
+      const settle = () => {
         if (battle.sequence !== sequence) return;
         sync(context, actor);
-        if (battle.sequence !== sequence || ['ko', 'victory'].includes(battle.state)) return;
+        if (battle.sequence !== sequence) return;
+        if (['ko', 'victory'].includes(battle.state)) { finish(battle, false); return; }
         battle.timer = null;
-        if (next) return set(actor, next, { battle: context, duration: nextDuration });
+        const done = battle.pendingDone; battle.pendingDone = null;
+        if (next) { const r = set(actor, next, { battle: context, duration: nextDuration }); if (done) done(true); return r; }
         paint(battle, resting(battle));
+        if (done) { try { done(true); } catch (e) { } }
+      };
+      battle.timer = setTimeout(() => {
+        if (battle.sequence !== sequence) return;
+        if (!waitMotion || !(window.BattleMotion && BattleMotion.whenDone)) return settle();
+        let went = false;
+        const go = () => { if (went) return; went = true; if (battle.sequence !== sequence) return; clearTimeout(battle.timer); battle.timer = null; settle(); };
+        battle.timer = setTimeout(go, MOTION_WAIT_CAP);   // safety: never hold the pose forever
+        BattleMotion.whenDone(document.querySelector(battle.image)).then(go, go);
       }, duration);
-    }
+    } else if (onDone) { try { onDone(true); } catch (e) { } }   // not a timed pose: nothing to wait for
     return true;
   }
   window.BattleActorState = Object.freeze({
