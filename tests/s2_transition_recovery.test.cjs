@@ -32,10 +32,12 @@ function environment(){
  async function rejected(p){let error;try{await complete(p)}catch(e){error=e}assert.ok(error,'operation must reject');return error}
  const M=c.MossForest;
  function errorPanel(){return body.children.find(n=>n.id==='fieldEntryError')}
- return {c,M,node,load,complete,rejected,faults,worlds,mounts,events,loads,map,errorPanel,flush,async boot(){await complete(M.enter({map:'old',x:100,y:200,flags:{stable:true}}))}};
+ async function advance(ms){const end=now+ms;for(let i=0;i<1000;i++){await flush();const next=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;timers.delete(next[0]);now=next[1].at;next[1].fn()}now=end;await flush()}
+ return {advance,c,M,node,load,complete,rejected,faults,worlds,mounts,events,loads,map,errorPanel,flush,async boot(){await complete(M.enter({map:'old',x:100,y:200,flags:{stable:true}}))}};
 }
 async function test(name,fn){if(process.env.S2_TEST_FILTER&&!name.includes(process.env.S2_TEST_FILTER))return;await fn();results.push({name,status:'PASS'});console.log('PASS',name)}
-(async()=>{
+if(require.main!==module)module.exports={environment,deferred,flush};
+else (async()=>{
  await test('normal transition commits once and resolves the map',async()=>{const e=environment();await e.boot();const map=await e.complete(e.M.enter({map:'new',x:300,y:400,flags:{next:true}}));assert.equal(map.id,'new');assert.equal(e.M.mapId,'new');assert.equal(e.M.feet.x,317);assert.equal(e.M.feet.y,442);assert.equal(e.M.busy,false);assert.equal(e.M.canSave,true);assert.equal(e.mounts.filter(x=>x==='new').length,1)});
  await test('fetch failure rejects; previous map, controls, flags and success callbacks are protected',async()=>{const e=environment();await e.boot();const original=e.M.forest;let advanced=0;e.faults.load.set('bad',Error('503'));await e.rejected(e.M.enter({map:'bad',flags:{stable:false}}).then(()=>advanced++));assert.equal(advanced,0);assert.equal(e.M.mapId,'old');assert.equal(e.M.forest,original);assert.equal(e.M.active,true);assert.equal(e.M.busy,false);assert.equal(e.M.flags.stable,true);e.M.setFlag('stable',false);assert.equal(original.flags.stable,false);assert.equal(e.M.canSave,true)});
  await test('prepare failure preserves treasure/event/slain state before commit',async()=>{const e=environment();await e.boot();e.M.restoreState({opened:['chest'],fired:['event']});e.c.FieldMonsters.last.slain.add('dead');e.faults.prepare=async()=>{throw Error('prepare')};await e.rejected(e.M.enter({map:'old',flags:{stable:false},resetState:true}));assert.deepEqual(Array.from(e.M.opened),['chest']);assert.deepEqual(Array.from(e.M.snapshot().fired),['event']);assert.equal(e.c.FieldMonsters.last.slain.has('dead'),true);assert.equal(e.M.flags.stable,true)});

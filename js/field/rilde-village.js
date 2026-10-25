@@ -76,13 +76,20 @@
   function show() { closeDialogue(); forestActive = true; const s = $id('forestScene'); if (s) s.style.display = 'block'; const ins = $id('inside'); if (ins) ins.style.display = 'none'; }
   function enter(spawn, opt = {}) { show(); return MossForestStory.enterMap(opt.map || 'rilde_village', spawn); }
   async function startOpening(token) {
+    if(token===undefined)return LoadCoordinator.boot(t=>startOpening(t));
+    LoadCoordinator.assertCurrent(token);
     storyStage = 0; currentObjective = '家を出て、訓練場のフィオナに会いに行こう'; renderJournal();
     show();
-    await MossForestStory.enterMap('rilde_in_aidan', 'from_bed',{loadToken:token});
-    LoadCoordinator.assertCurrent(token);popObjective();
-    await new Promise(resolve=>setTimeout(resolve,350));
-    LoadCoordinator.assertCurrent(token);
-    if(stage()===0&&MossForest.mapId==='rilde_in_aidan')say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');
+    const pending=MossForestStory.enterMap('rilde_in_aidan','from_bed',{loadToken:token}),request=MossForest.enterCount;
+    await pending;LoadCoordinator.assertCurrent(token);
+    if(request!==MossForest.enterCount)return;
+    popObjective();
+    const revision=LoadCoordinator.dialogueRevision;
+    // Optional narration never owns readiness or overwrites newer dialogue, even if that dialogue has already closed.
+    setTimeout(()=>{
+      if(!LoadCoordinator.current(token)||request!==MossForest.enterCount||revision!==LoadCoordinator.dialogueRevision)return;
+      if(stage()===0&&MossForest.mapId==='rilde_in_aidan'&&MossForest.active&&!MossForest.entering&&!window.FieldTalk?.active&&!document.body.classList.contains('dialogueOpen'))say('朝の風が窓を揺らしている。今日はフィオナと訓練する約束だった。');
+    },350);
   }
   function afterPrologue() {   // stage 15: free roam. The party stands in the fort's keep; the village (now ruined) and the road are open.
     storyStage = 15; const pe = $id('prologueEnd'); if (pe) pe.style.display = 'none';

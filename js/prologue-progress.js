@@ -39,12 +39,13 @@
  }
  async function load(data,route=plan(data),token){
   if(!data||(data.version!==1&&data.version!==2))return false;
+  LoadCoordinator.assertCurrent(token);
   defeated=new Set(Array.isArray(data.defeated)?data.defeated.filter(x=>typeof x==='string'&&([...Object.values(ids),'attackGob1','attackGob2','northGob1','northGob2'].includes(x))):[]);
   louFound=data.louFound===true&&count()===3;storyStage=route.stage;
   if(storyStage>=11&&count()<3)storyStage=10;
   attackStep=Math.max(0,Math.min(2,Number(data.attackStep)||0));northPhase=Math.max(0,Math.min(3,Number(data.northPhase)||0));forestStoneSeen=!!data.forestStoneSeen;
   for(const id of Object.keys(subQuests))if(['locked','active','done'].includes(data.subQuests?.[id]?.state))Object.assign(subQuests[id],data.subQuests[id]);
-  PrologueCombat.cancel();devResetScreens();document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','raiderFinishing','soloRescue');
+  PrologueCombat.cancel();devResetScreens(token);document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','raiderFinishing','soloRescue');
   document.body.classList.toggle('villageAttack',storyStage>=5&&storyStage<=8);forestActive=false;
   const handlesField=route.kind==='TRAINING_RETRY'||route.kind==='FIELD_MAP';
   switch(route.kind){
