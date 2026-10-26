@@ -1,12 +1,12 @@
 """Aidan / Fiona 6-frame idle loops: asset sanity, per-frame durations, draw6->idle1 continuity, registration in normal+raider battles, state hand-off."""
-import os,sys,re
+import os,sys,re,json
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'tools/qa'))
 from browser_support import server
 from playwright.sync_api import sync_playwright
 import numpy as np
 from PIL import Image
-ROOT=Path(__file__).resolve().parents[2];fails=[]
+ROOT=Path(__file__).resolve().parents[2];fails=[];timing=[]
 def check(ok,name,detail=''):
     print(('ok   ' if ok else 'FAIL ')+name,detail)
     if not ok:fails.append(name)
@@ -47,9 +47,16 @@ with server(8816) as base,sync_playwright() as p:
         check(pg.evaluate(start) is True,ctx+': battle entry committed')
         pg.wait_for_function("InputManager.state()==='BATTLE_COMMAND'")
         pg.wait_for_function("ctx=>{const actors=BattleIdleMotion.status.actors.filter(a=>a.context===ctx&&['aidan','fiona'].includes(a.actor));return actors.length===2&&actors.every(a=>a.showing)}",arg=ctx)
-        res=pg.evaluate("""async(ctx)=>{const seen={aidan:[],fiona:[]},t0=performance.now();
-          await new Promise(res=>{const tick=t=>{for(const a of BattleIdleMotion.status.actors)if(a.context===ctx&&seen[a.actor]&&a.showing){const s=seen[a.actor];if(!s.length||s[s.length-1].f!==a.frame)s.push({f:a.frame,t:t-t0})}
-            if(t-t0<3600)requestAnimationFrame(tick);else res()};requestAnimationFrame(tick)});return seen}""",ctx)
+        # Pre-decode does not warm every canvas texture. Observe every delivered frame first.
+        warm=pg.evaluate("""async ctx=>{const seen={aidan:new Set(),fiona:new Set()},t0=performance.now();
+          return await new Promise(resolve=>{const tick=t=>{for(const a of BattleIdleMotion.status.actors)if(a.context===ctx&&seen[a.actor]&&a.showing)seen[a.actor].add(a.frame);
+            if(Object.values(seen).every(s=>s.size===6)||t-t0>20000)resolve(Object.fromEntries(Object.entries(seen).map(([k,v])=>[k,[...v]])));else requestAnimationFrame(tick)};requestAnimationFrame(tick)})}""",ctx)
+        check(all(sorted(v)==list(range(6)) for v in warm.values()),ctx+': all six idle canvas frames rendered before duration sampling',warm)
+        res=pg.evaluate("""async(ctx)=>{const seen={aidan:[],fiona:[]},gaps=[],t0=performance.now();let last=t0;
+          await new Promise(res=>{const tick=t=>{gaps.push(t-last);last=t;for(const a of BattleIdleMotion.status.actors)if(a.context===ctx&&seen[a.actor]&&a.showing){const s=seen[a.actor];if(!s.length||s[s.length-1].f!==a.frame)s.push({f:a.frame,t:t-t0})}
+            if(t-t0<3600)requestAnimationFrame(tick);else res()};requestAnimationFrame(tick)});return {seen,gaps}}""",ctx)
+        timing.append({'context':ctx,'samples':res});res=res['seen']
+        if os.environ.get('QA_OUT'):(Path(os.environ['QA_OUT'])/'idle-timing.json').write_text(json.dumps(timing,indent=2))
         for who,want in (('aidan',[220,180,220,160,110,260]),('fiona',[260,220,240,180,300,260])):
             s=res[who];order=[x['f'] for x in s];ok=len(s)>=7 and all(order[i+1]==(order[i]+1)%6 for i in range(len(order)-1))
             check(ok,'%s %s: frames cycle 1..6 in order'%(ctx,who),order[:8])
