@@ -56,13 +56,13 @@ with sync_playwright() as p:
     reset(); pg.evaluate("Quest.accept('q_emma_charm')"); pg.evaluate("document.querySelector('#menuOpen').click();renderSystemTab('save')")
     pg.evaluate("document.querySelector('#doSave').click()"); raw=pg.evaluate("JSON.parse(localStorage.getItem(SAVE_KEY))")
     check(raw['quests']=={'q_emma_charm':'active'},'save carries quests %s'%raw['quests'])
-    pg.evaluate("Quest.reset()"); pg.evaluate("loadGrowthData()"); check(qs()=='active','load restores the quest state')
-    pg.evaluate("(d)=>{localStorage.setItem(SAVE_KEY,JSON.stringify(d));Quest.reset();loadGrowthData()}",{**raw,'quests':{'q_emma_charm':'weird','nope':'active'}})
+    pg.evaluate("Quest.reset()"); check(pg.evaluate("loadGrowthData()") is True,'normal quest LOAD commits'); check(qs()=='active','load restores the quest state')
+    check(pg.evaluate("async(d)=>{localStorage.setItem(SAVE_KEY,JSON.stringify(d));Quest.reset();return await loadGrowthData()}",{**raw,'quests':{'q_emma_charm':'weird','nope':'active'}}) is True,'invalid quest fields normalize via committed LOAD')
     check(qs()=='unaccepted','hostile quest block ignored'); pg.evaluate("localStorage.removeItem(SAVE_KEY)")
     # old save without quests block
-    pg.evaluate("(d)=>{delete d.quests;localStorage.setItem(SAVE_KEY,JSON.stringify(d));Quest.accept('q_emma_charm');loadGrowthData()}",raw); check(qs()=='unaccepted','save without quests block loads as unaccepted')
+    check(pg.evaluate("async(d)=>{delete d.quests;localStorage.setItem(SAVE_KEY,JSON.stringify(d));Quest.accept('q_emma_charm');return await loadGrowthData()}",raw) is True,'legacy missing-quests LOAD commits'); check(qs()=='unaccepted','save without quests block loads as unaccepted')
     # elder + rune shard
-    reset(); pg.evaluate("document.querySelector('#systemClose')&&document.querySelector('#systemClose').click()")
+    pg.evaluate("document.querySelector('#systemClose')&&document.querySelector('#systemClose').click()"); pg.wait_for_function("InputManager.state()!=='MENU'"); reset()
     talk('elder'); check('輝きが弱まっておる' in txt(),'elder without the shard: normal lines still work (tables merged)'); tap()
     pg.evaluate("Inventory.openTreasure('tr_a3_shrine')")
     talk('elder'); check(name()=='長老' and '見せてくれんか' in txt(),'elder asks about the 古びたルーン片'); 

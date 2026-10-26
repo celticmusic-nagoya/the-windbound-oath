@@ -42,7 +42,7 @@ with sync_playwright() as p:
     while ev("FieldTalk.active") and n<40: pg.click('#msg'); pg.wait_for_timeout(100); n+=1
     check(not ev("FieldTalk.active"),'conversation ran to its end (%d clicks)'%n)
     # ---- real game: cliff map, MossForest.actor adapters
-    ev("storyStage=3;MossForest.reset()"); pg.evaluate("document.querySelector('#hillExit').click()"); pg.wait_for_timeout(1500)
+    ev("storyStage=3;MossForest.reset()"); pg.evaluate("document.querySelector('#hillExit').click()"); pg.wait_for_function("MossForest.mapId==='cliff_moher_01_spiral_ascent'&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy",timeout=20000)
     ev("MossForest.teleportFeet(2400,1500)"); pg.wait_for_timeout(300)
     d0=ev("(()=>{const a=MossForest.actor('aidan').get(),f=MossForest.actor('fiona').get();return Math.hypot(a.x-f.x,a.y-f.y)})()")
     r=ev("""(async()=>{const A=MossForest.actor('aidan'),F=MossForest.actor('fiona');F.set(F.get().x-60,F.get().y);

@@ -45,7 +45,7 @@
       r.x += dx / d * step; r.y += dy / d * step; if (Math.abs(dx) > .3) r.dir = dx > 0 ? 1 : -1; r.clock += sec; r.state = 'walk'; draw(r);
     }
   }
-  function tick(now) { update(Math.min(.1, (now - last) / 1000)); last = now; raf = requestAnimationFrame(tick); }
+  function tick(now) { update(Math.max(0, Math.min(.1, (now - last) / 1000))); last = now; raf = requestAnimationFrame(tick); }
   function clear() { cancelAnimationFrame(raf); raf = 0; list = []; if (layer) { layer.remove(); layer = null; } }
   window.FieldWalkers = Object.freeze({mount, clear, update, get list() { return list; }});
 })();

@@ -116,6 +116,7 @@
     if (typeof closeDialogue === 'function') closeDialogue();
     window.dispatchEvent(new CustomEvent('field-talk-end', {detail: {id: s.id, entry: s.entryId}}));
   }
+  function cancel(id){if(id!==undefined&&session?.id!==id)return;session=null;if(typeof closeDialogue==='function')closeDialogue();}
   function advance() {
     const s = session; if (!s) return;
     if (s.i < s.pages.length - 1) { s.i++; show(); return; }
@@ -199,6 +200,6 @@
   const setFlag = (k, v = true) => { if (/^[a-z0-9_]{1,40}$/i.test(k)) flags[k] = Boolean(v); };
 
   for (const src of [window.TalkData, window.TalkDataQuests, window.TalkDataScenes, window.TalkDataCapital, window.TalkDataRilde, window.TalkDataAttack]) if (src) for (const t of src.tables) loadTable(t);
-  window.FieldTalk = Object.freeze({flag: flagOf, seenEntry: id => seen.has(id), register, loadTable, has, talk, pick, setFlag, setQuestProvider, serialize, load,
+  window.FieldTalk = Object.freeze({flag: flagOf, seenEntry: id => seen.has(id), register, loadTable, has, talk, pick, setFlag, setQuestProvider, serialize, load, cancel,
     get active() { return Boolean(live()); }, get history() { return history.slice(); }});
 })();

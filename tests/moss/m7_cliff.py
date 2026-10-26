@@ -13,7 +13,7 @@ with sync_playwright() as p:
     ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();MossForest.reset()")
     # ---- gating from the village sign
     ev("storyStage=2"); pg.evaluate("document.querySelector('#hillExit').click()"); check(not ev("forestActive"),'stage 2: sign does not open the cliff')
-    ev("storyStage=3;closeDialogue()"); pg.evaluate("document.querySelector('#hillExit').click()"); pg.wait_for_timeout(1500)
+    ev("storyStage=3;closeDialogue()"); pg.evaluate("document.querySelector('#hillExit').click()"); pg.wait_for_function("MossForest.mapId==='cliff_moher_01_spiral_ascent'&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy",timeout=20000)
     check(ev("MossForest.mapId")=='cliff_moher_01_spiral_ascent' and ev("forestActive"),'stage 3: sign enters the cliff map')
     check(ev("FieldTimeOfDay.current")=='dusk','story entry is at dusk')
     m=ev("MossForest.map"); check(m['world']['width']==4800 and len(m['vista'])==1,'map loaded with vista')

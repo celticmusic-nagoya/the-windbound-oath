@@ -15,11 +15,22 @@ import tarfile
 import tempfile
 import time
 import urllib.request
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 ROOT=Path(__file__).resolve().parents[2]
 KNOWN={'tests/moss/m13_elder_attack_text.py':r'peaceful elder cycles to the morning line',
        'tests/moss/m4_e2e.py':r'Fiona stage-9 line \(elder/Emma warning wording\)'}
+
+def gameplay_boot_url(url, enabled=False):
+    """Opt-in gameplay fixture, preserving explicit TITLE tests and non-game pages."""
+    parts=urlsplit(url)
+    if not enabled or parts.hostname not in ('localhost','127.0.0.1') or not parts.path.endswith('/index.html'):
+        return url,False
+    query=parse_qsl(parts.query,keep_blank_values=True)
+    title=dict(query).get('title')
+    if title is not None and title!='0':return url,False
+    if title is None:query.append(('title','0'))
+    return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode(query),parts.fragment)),True
 
 
 def classification(path, code, output):
@@ -44,7 +55,14 @@ def child(root, path, port, extra):
         parts=urlsplit(url)
         if parts.hostname in ('localhost','127.0.0.1') and parts.port==8765:
             url=urlunsplit((parts.scheme,'127.0.0.1:'+str(port),parts.path,parts.query,parts.fragment))
-        return goto(self,url,*a,**kw)
+        url,gameplay=gameplay_boot_url(url,os.environ.get('QA_GAMEPLAY_BOOT')=='1')
+        response=goto(self,url,*a,**kw)
+        if gameplay:
+            self.wait_for_function("!window.LoadCoordinator||LoadCoordinator.phase==='READY'")
+            # Old gameplay fixtures assume the normal opening has already been offered.
+            # Observe the displayed event (closeDialogue also increments the revision), not a fixed sleep; explicit TITLE tests never enter here.
+            self.wait_for_function("!window.LoadCoordinator||!window.RildeVillage?.enabled()||storyStage!==0||MossForest.mapId!=='rilde_in_aidan'||!MossForest.active||document.body.classList.contains('dialogueOpen')")
+        return response
     BrowserType.launch=browser_launch;Page.goto=page_goto
     os.chdir(root);sys.argv=[str(root/path)]+extra;sys.path.insert(0,str((root/path).parent))
     runpy.run_path(str(root/path),run_name='__main__')
@@ -72,6 +90,15 @@ def report(out,meta,rows):
 
 
 def self_test():
+    url='http://localhost:8765/index.html?dev=1#field'
+    assert gameplay_boot_url(url)==(url,False)
+    assert gameplay_boot_url(url,True)==('http://localhost:8765/index.html?dev=1&title=0#field',True)
+    title='http://localhost:8765/index.html?title=1'
+    assert gameplay_boot_url(title,True)==(title,False)
+    preview='http://localhost:8765/battle-motion-test.html'
+    assert gameplay_boot_url(preview,True)==(preview,False)
+    external='https://example.com/index.html'
+    assert gameplay_boot_url(external,True)==(external,False)
     assert classification('tests/x.py',0,'FAIL wrong\nFAILS 1\n')[0]=='新規'
     assert classification('tests/x.py',0,'FAILS 0\nok\n')[0]=='合格'
     assert classification('tests/x.py',0,'FAILS 2 hidden context\n')[0]=='新規'
@@ -88,6 +115,7 @@ def main():
     parser.add_argument('--timeout',type=int,default=int(os.environ.get('TEST_TIMEOUT_SECONDS','900')))
     parser.add_argument('--out',type=Path,default=ROOT/'docs/qa/regression-20261013')
     parser.add_argument('--self-test',action='store_true')
+    parser.add_argument('--gameplay-ready',action='store_true',help='explicit legacy gameplay fixture: title=0 and boot readiness; does not bypass TITLE tests')
     parser.add_argument('--child');parser.add_argument('--root',type=Path);parser.add_argument('--extra-json',default='[]')
     args=parser.parse_args()
     if args.self_test:self_test();return
@@ -100,7 +128,7 @@ def main():
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     base=subprocess.check_output(['git','rev-parse','origin/main'],cwd=ROOT,text=True).strip()
-    metadata={'source_head':head,'main_base':base,'port':args.port,'timeout':args.timeout,'known_failures':KNOWN,'snapshot_mode':'git archive committed HEAD'}
+    metadata={'source_head':head,'main_base':base,'port':args.port,'timeout':args.timeout,'known_failures':KNOWN,'snapshot_mode':'git archive committed HEAD','gameplay_ready':args.gameplay_ready}
     with tempfile.TemporaryDirectory(prefix='codex-regression-') as temporary:
         snapshot=Path(temporary)/'repo';snapshot.mkdir()
         archive=Path(temporary)/'source.tar'
@@ -118,7 +146,7 @@ def main():
             extra=[]
             if path=='tests/moss/walk_map.py':extra=['moss_forest_02_mossy_ravine.json']
             if path=='tests/moss/m19_plan_bench.py':extra=['--out',str(artifacts)]
-            env=dict(os.environ,PORT=str(args.port),OUT=str(artifacts/'perf.json')if path=='tests/moss/m19_perf.py'else str(artifacts))
+            env=dict(os.environ,PORT=str(args.port),OUT=str(artifacts/'perf.json')if path=='tests/moss/m19_perf.py'else str(artifacts),QA_GAMEPLAY_BOOT='1' if args.gameplay_ready else '0')
             before=hashlib.sha256((snapshot/path).read_bytes()).hexdigest()
             started=time.monotonic();server=None;process=None;code=125
             print(f'[{i+1}/{len(paths)}] RUN {path}',flush=True)

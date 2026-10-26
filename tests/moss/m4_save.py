@@ -15,7 +15,8 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
     pg.goto(URL); pg.wait_for_timeout(1000)
     def load(data,wrap=True):
-        pg.evaluate("(d)=>{localStorage.setItem(SAVE_KEY,JSON.stringify({version:29,prologue:d}));return loadGrowthData()}",data)
+        loaded=pg.evaluate("(d)=>{localStorage.setItem(SAVE_KEY,JSON.stringify({version:29,prologue:d}));return loadGrowthData()}",data)
+        check(loaded is True,'LOAD transaction completed successfully')
         pg.wait_for_function("MossForest.busy===false",timeout=20000); pg.wait_for_timeout(700)
         return pg.evaluate("({ok:true,map:MossForest.mapId,feet:MossForest.feet,active:MossForest.active,opened:MossForest.opened,count:PrologueProgress.count(),stage:storyStage,flags:MossForest.flags,dom:document.querySelectorAll('#forestScene *').length})")
     ids=['moss_corruption_01','moss_corruption_02','moss_corruption_03']
@@ -45,6 +46,7 @@ with sync_playwright() as p:
     r2=pg.evaluate("(d)=>{localStorage.setItem(SAVE_KEY,JSON.stringify({version:29,prologue:d}));return loadGrowthData()}",v1(storyStage=3)); pg.wait_for_timeout(500)
     check(r2==True and pg.evaluate("document.querySelector('#forestScene').style.display")=='none','village-stage v1 save loads, forest hidden')
     # --- version rejection
-    check(pg.evaluate("PrologueProgress.load({version:99})")==False,'unknown version rejected')
+    rejected=pg.evaluate("""async()=>{const before=JSON.stringify(PrologueProgress.serialize()),raw=localStorage.getItem(SAVE_KEY);let error='';try{await PrologueProgress.load({version:99})}catch(e){error=e.message}return {error,unchanged:before===JSON.stringify(PrologueProgress.serialize()),saveKept:raw===localStorage.getItem(SAVE_KEY)}}""")
+    check(rejected['error']=='Unsupported progress' and rejected['unchanged'] and rejected['saveKept'],'unknown version rejected without state or SAVE mutation')
     print('errors',errs[:6]); b.close()
 sys.exit(1 if (fails or errs) else 0)

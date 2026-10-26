@@ -71,6 +71,7 @@
      const m=data.prologue.moss;
      if(m&&(!MossForest.active||MossForest.mapId!==m.map||Math.abs(MossForest.feet.x-(m.x+17))>1||Math.abs(MossForest.feet.y-(m.y+42))>1))throw Error('保存地点を安全に復帰できませんでした。');
     }else if(data.prologue.storyStage>=4&&data.prologue.storyStage<=8)restoreContinueLegacy(data.prologue);
+    await LoadingView.settle('continue:'+owner);LoadCoordinator.assertCurrent(owner);
     unsubscribe();active=null;LoadingView.close('continue:'+owner);
    }catch(e){if(LoadCoordinator.current(owner))restore();throw e;}
   });

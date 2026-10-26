@@ -13,9 +13,9 @@ def menu(p):p.locator('#menuOpen').click();p.locator('[data-stab="save"]').click
 with sync_playwright() as pw:
  b=pw.chromium.launch(executable_path='/usr/bin/chromium')
  for battle in ['normal','raider']:
-  c,p=new(b);p.evaluate("b=>{if(b==='normal'){storyStage=6;startAttackBattle('attackGob2',100)}else{storyStage=12;startRaiderBattle()}}",battle);p.wait_for_function('!BattlePresentation.busy')
+  c,p=new(b);committed=p.evaluate("async b=>{if(b==='normal'){storyStage=6;return await startAttackBattle('attackGob2',100)}else{storyStage=12;return await startRaiderBattle()}}",battle);assert committed is True,'battle entry must commit';p.wait_for_function("b=>!battleCommandLocked(b)",arg=battle)
   for _ in range(2):
-   p.wait_for_function('!BattlePresentation.busy&&!BattleTargetSelector.active');p.evaluate("b=>b==='normal'?chooseNormalAct('guard'):choosePartyAct('guard')",battle)
+   p.wait_for_function("b=>!battleCommandLocked(b)&&!BattleTargetSelector.active",arg=battle);p.evaluate("b=>b==='normal'?chooseNormalAct('guard'):choosePartyAct('guard')",battle)
   p.wait_for_function("b=>b==='normal'?!attackBattleBusy&&PrologueCombat.roundNumber>=2:!rbBusy&&rbRound>=2",arg=battle,timeout=45000)
   ck(battle+'_complete_round',p.evaluate("b=>b==='normal'?aahp>0&&normalFHP>0:rbHP>0&&rbFHP>0",battle));p.screenshot(path=str(O/(battle+'-round.png')));c.close()
  # Stage3 fixture derives only the already-saved stage flag, not a claim of normal reach.

@@ -22,16 +22,26 @@ with server(8891) as base, sync_playwright() as pw:
             context = b.new_context(viewport={'width':width,'height':height}, has_touch=touch, is_mobile=touch)
             p = context.new_page(); p.on('pageerror', lambda e: errors.append(str(e)))
             p.goto(base + '/index.html'); p.wait_for_function("LoadCoordinator.phase==='READY'")
-            p.evaluate("closeDialogue();storyStage=6;PrologueProgress.seed(0);startAttackBattle('attackGob2',100)" if mode=='normal' else "closeDialogue();storyStage=12;startRaiderBattle()")
-            p.wait_for_function('!BattlePresentation.busy'); p.evaluate('closeDialogue()')
+            committed=p.evaluate("async mode=>{closeDialogue();if(mode==='normal'){storyStage=6;PrologueProgress.seed(0);return await startAttackBattle('attackGob2',100)}storyStage=12;return await startRaiderBattle()}",mode)
+            ck(f'{label}/{mode}: entry committed',committed is True)
+            p.wait_for_function('m=>!battleCommandLocked(m)',arg=mode);p.evaluate('closeDialogue()')
             toggle, panel, action = ('#normalCommandToggle','#normalBattleCmd','#nAtk') if mode=='normal' else ('#rbCommandToggle','#rbCmd','#rbAtk')
             setter = 'setNormalCommandDrawer' if mode=='normal' else 'setRaiderCommandDrawer'
             actor = 'normalActor' if mode=='normal' else 'rbActor'
+            if label=='pc':
+                # A programmatic close is deliberately reopened by InputManager's PC poll.
+                p.evaluate(f'{setter}(false)');p.wait_for_function('(s)=>!document.querySelector(s).hidden',arg=panel)
+                ck(f'{label}/{mode}: PC default auto-open observed',p.locator(panel).is_visible())
+                # Use the actual close control to set the sticky manual-fold policy.
+                p.locator('#normalCommandClose' if mode=='normal' else '#rbCommandClose').click()
+                p.locator(toggle).wait_for(state='visible')
             for opened in [False, True]:
-                p.evaluate(f'{setter}(false)')
+                # Same manual-fold contract as the Claude rescue patch, on every iteration.
+                p.evaluate("c=>document.querySelector(c).click()", '#normalCommandClose' if mode=='normal' else '#rbCommandClose')
                 rect = p.locator(toggle).bounding_box()
                 assert rect, toggle
-                p.evaluate(f'{setter}({str(opened).lower()});window.__lock=BattlePresentation.hold(10000)')
+                # A bare assignment returns the hold Promise and evaluate() waits until it unlocks.
+                p.evaluate(f'()=>{{{setter}({str(opened).lower()});window.__lock=BattlePresentation.hold(10000);}}')
                 p.wait_for_function('(s)=>document.querySelector(s).disabled', arg=toggle)
                 before = p.evaluate(actor)
                 x, y = rect['x']+rect['width']/2, rect['y']+rect['height']/2

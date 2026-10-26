@@ -103,10 +103,13 @@
     el.world.appendChild(d);lou.el=d;
   }
   const louJoined=()=>typeof PartyManager!=='undefined'&&Boolean(PartyManager.support&&PartyManager.support.joined);
-  function updateLou(now){
-    mountLou();if(!lou.el)return;
+  function syncLouVisibility(){
+    mountLou();if(!lou.el)return false;
     const show=louJoined()&&!(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false);
-    lou.el.style.display=show?'block':'none';if(!show)return;
+    lou.el.style.display=show?'block':'none';return show;
+  }
+  function updateLou(now){
+    if(!syncLouVisibility())return;
     const tx=S.x+(S.fx-S.x)*2.4,ty=S.y+(S.fy-S.y)*2.4;
     if(lou.map!==S.map){lou.map=S.map;lou.x=tx;lou.y=ty;}
     const k=1-Math.pow(1-.06,FieldMovement.frameScale||1);lou.x+=(tx-lou.x)*k;lou.y+=(ty-lou.y)*k;
@@ -304,6 +307,7 @@
   }
   async function performEnter(options){
     if(!S.configured)throw new Error('MossForest not configured');
+    const sceneCleanup=window.FieldScene?.cancel(),motionCleanup=window.FieldChoreo?.cancelAll();
     window.BattleLoading?.cancel();
     const pending=entry,previous=pending?pending.previous:entrySnapshot();
     const request=++enterGeneration;enterCount++;
@@ -317,6 +321,7 @@
     S.busy=true;S.active=false;
     if(!spr.frames.size)mountPlayerSprite();   // AidanFieldAssets loads after this module
     mountFionaSprite();
+    await sceneCleanup;await motionCleanup;ensure();
     const map=await loadMap(id);ensure();
     const first=!previous.map;
     {const sp1=map.spawns.points[spawnId||map.spawns.default]||{};await ForestLoader.prepare(map,{x:options.x??sp1.x,y:options.y??sp1.y});}   // first screen's art now, the rest streams in
@@ -324,7 +329,7 @@
     if(!first)await setFade(1,fadeMs(options.transition,'out'));ensure();
     el.scene.style.display='block';
     transaction.destructive=true;
-    unmount();restoreEntryData(previous,true);
+    await unmount();ensure();restoreEntryData(previous,true);
     if(options.resetState){S.opened.clear();S.fired.clear();}
     if(options.flags)Object.assign(S.flags,options.flags);
     S.slain.delete(id);
@@ -344,6 +349,7 @@
     el.fade.style.opacity='1';
     playBgm();
     await setFade(0,fadeMs(options.transition,'in'));ensure();
+    await window.LoadingView?.settle('map:'+request);ensure();
     transaction.committed=true;entry=null;recoveryRequired=false;clearEntryError();
     window.LoadingView?.close('map:'+request);
     S.busy=externalLock;S.active=true;startLoop();
@@ -533,6 +539,7 @@
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
     if(S.forest&&S.forest.height)heightDraw(S.forest.height);
     el.player.style.display='block';el.fiona.style.display=(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false)?'none':'block';   // follower hidden indoors / before she joins
+    syncLouVisibility(); // Commit follower visibility before Loading settles, even while gameplay is locked.
     const sc=FieldCamera.scale,rc=el.world.getBoundingClientRect();
     S.forest.update({x:-rc.left/sc,y:-rc.top/sc,width:el.scene.clientWidth/sc,height:el.scene.clientHeight/sc});
   }
@@ -691,13 +698,14 @@
   // Choreography adapters (see js/field/field-choreo.js). Aidan: moving S.x/S.y drives his walk animation by itself.
   // Fiona: set() takes her off the follow-the-player easing until release().
   function actor(id){
-    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
-    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
-      pose(state,dir){el.fiona.dataset.pose=state;el.fiona.dataset.dir=dir;},release(){S.fionaHold=false;delete el.fiona.dataset.pose;}};
+    const owner=enterGeneration;const current=()=>owner===enterGeneration;
+    if(id==='aidan')return {id,get:()=>({x:S.x+FOOT.ax,y:S.y+FOOT.ay}),set(x,y){if(!current())return;S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;if(S.forest)render();}};
+    if(id==='fiona')return {id,get:()=>({x:S.fx+FOOT.ax,y:S.fy+FOOT.ay}),set(x,y){if(!current())return;S.fionaHold=true;S.fx=x-FOOT.ax;S.fy=y-FOOT.ay;if(S.forest)render();},
+      pose(state,dir){if(!current())return;el.fiona.dataset.pose=state;el.fiona.dataset.dir=dir;},release(){if(!current())return;S.fionaHold=false;delete el.fiona.dataset.pose;}};
     return null;
   }
   function show(){el.scene.style.display='block';}
-  function hide(){cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
+  function hide(){window.FieldScene?.cancel();window.FieldChoreo?.cancelAll();cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
   function resume(){if(entry||recoveryRequired)return false;show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
   function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired],facing:{dir:spr.dir,flip:Boolean(spr.flip)}};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
   function restoreState(snap){

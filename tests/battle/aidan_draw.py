@@ -33,14 +33,18 @@ with server(8814) as base,sync_playwright() as p:
         pg.evaluate("closeDialogue();devJump('raider')");pg.wait_for_timeout(2200)
         for ctxname,sel in (('raider','#rbAidan img'),('normal','#bAidan2 img')):
             r=pg.evaluate("""async([ctx,sel])=>{const im=document.querySelector(sel),seen=[],t0=performance.now();
-              const mo=new MutationObserver(()=>{const f=+im.dataset.motionFrame;if(f&&seen[seen.length-1]?.f!==f)seen.push({f,t:Math.round(performance.now()-t0),src:im.getAttribute('src')})});mo.observe(im,{attributes:true,attributeFilter:['src','data-motion-frame']});
-              const ok=BattleActorState.set('aidan','draw',{battle:ctx,duration:600});const mid=BattleActorState.get(ctx);
-              await new Promise(r=>setTimeout(r,430));const at430=BattleActorState.get(ctx);
-              await new Promise(r=>setTimeout(r,700));mo.disconnect();return {ok,mid,at430,end:BattleActorState.get(ctx),seen,src:im.getAttribute('src')}}""",[ctxname,sel])
+              const mo=new MutationObserver(()=>{const f=+im.dataset.motionFrame;if(f&&seen[seen.length-1]?.f!==f)seen.push({f,t:performance.now()-t0,src:im.getAttribute('src')})});mo.observe(im,{attributes:true,attributeFilter:['src','data-motion-frame']});
+              // Same delivered-motion contract as BattleOpening (Issue50/PR53), not the opt-out generic pose budget.
+              let finish;const completed=new Promise(resolve=>finish=resolve);
+              const ok=BattleActorState.set('aidan','draw',{battle:ctx,duration:600,waitMotion:true,onDone:finish});const mid=BattleActorState.get(ctx);
+              if(!ok)throw Error('draw pose refused');
+              let timer;const doneOk=await Promise.race([completed,new Promise((_,reject)=>timer=setTimeout(()=>reject(Error('draw completion timed out')),10000))]);clearTimeout(timer);
+              const doneAt=performance.now()-t0;mo.disconnect();return {ok,mid,doneOk,doneAt,end:BattleActorState.get(ctx),seen,src:im.getAttribute('src')}}""",[ctxname,sel])
             order=[s['f'] for s in r['seen']]
             check(r['ok'] and r['mid']=='draw' and order==[1,2,3,4,5,6],'%s %s: draw plays frames 1..6 once in order'%(vp,ctxname),order)
             ts=[s['t'] for s in r['seen']];last=ts[-1] if ts else 0
-            check(450<=last<=620 and r['at430']=='draw' and r['end']=='idle','%s %s: last frame at ~480ms, held, then returns to idle'%(vp,ctxname),(ts,r['at430'],r['end']))
+            # Allow2ms for asynchronous MutationObserver/clock precision, while requiring the full120ms hold.
+            check(r['doneOk'] is True and r['doneAt']>=sum(d['ms']) and r['doneAt']-last>=d['ms'][-1]-2 and r['end']=='idle','%s %s: all frames delivered, full final hold, then idle'%(vp,ctxname),(ts,r['doneAt'],r['end']))
             check(r['seen'] and r['seen'][-1]['f']==6,'%s %s: no loop / no 7th frame'%(vp,ctxname))
         # attack / skill still use their own art after a draw; a draw never runs from them
         r=pg.evaluate("""async()=>{const out={};for(const st of ['attack','skill']){BattleActorState.set('aidan',st,{battle:'raider',duration:820});await new Promise(r=>setTimeout(r,60));out[st]=document.querySelector('#rbAidan img').getAttribute('src').split('/').pop().split('?')[0];await new Promise(r=>setTimeout(r,1300));}return out}""")

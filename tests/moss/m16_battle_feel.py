@@ -54,8 +54,10 @@ with sync_playwright() as p:
     ev("PrologueCombat.targets('normal');finishAttackBattle()"); pg.wait_for_timeout(3600)
     r=ev("window.__res"); check(r is not None and r>=2200,'result screen appears after the extended victory pose (%.0f ms)'%(r or -1))
     # --- Lou
-    ev("MossForest.reset();storyStage=9"); 
-    ev("startRaiderBattle()"); pg.wait_for_timeout(1500)
+    pg.locator('#resultContinue').click();pg.wait_for_function("!document.body.classList.contains('battleMode')&&!MossForest.entering")
+    ev("MossForest.reset();storyStage=12")
+    check(ev("startRaiderBattle()") is True,'Lou encounter entry committed after previous result closes')
+    pg.wait_for_function("InputManager.state()==='BATTLE_COMMAND'")
     check(ev("BattleLouFlight.running"),'Lou flight active in raider battle')
     offs=set()
     for _ in range(10):

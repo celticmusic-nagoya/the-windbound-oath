@@ -26,12 +26,12 @@ with sync_playwright() as p:
         pg.evaluate("(a)=>MossForest.enter({map:a[0],spawn:a[1]})",[mp,spawn]); pg.wait_for_timeout(1300)
     # ---- gate from the village
     ev("storyStage=3;closeDialogue()"); ev("document.querySelector('#roadExit').click()"); check(not ev("forestActive") and '離れる時ではない' in text(),'stage 3: the east road sign refuses')
-    ev("storyStage=15;closeDialogue()"); ev("document.querySelector('#roadExit').click()"); check(not ev("forestActive") and '長老' in text(),'stage 15 without the elder\'s word: still closed, hints at the elder')
+    ev("PrologueProgress.seed(3);louFound=true;forestStoneSeen=true;storyStage=15;closeDialogue()"); ev("document.querySelector('#roadExit').click()"); check(not ev("forestActive") and '長老' in text(),'stage 15 without the elder\'s word: still closed, hints at the elder')
     ev("closeDialogue()"); ev("FieldTalk.talk('elder',{source:'test'})"); tap_all(); check(ev("FieldTalk.flag('road_dunvall_open')"),'talking to the elder opens the road (flag)')
-    ev("closeDialogue()"); ev("document.querySelector('#roadExit').click()"); pg.wait_for_timeout(1800)
+    ev("closeDialogue()"); ev("document.querySelector('#roadExit').click()"); pg.wait_for_function("MossForest.mapId==='fort_dunvall_01_courtyard'&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy",timeout=20000)
     check(ev("forestActive") and ev("MossForest.mapId")=='fort_dunvall_01_courtyard','road sign now leads into the fort courtyard')
     # ---- fort
-    click_node('fort_dunvall_01_courtyard','f1_captain'); check(ev("FieldTalk.active") and '砦' in text(),'click the captain: conversation')
+    click_node('fort_dunvall_01_courtyard','f1_captain'); pg.wait_for_function('FieldTalk.active',timeout=10000); check(ev("FieldTalk.active") and '砦' in text(),'click the captain: conversation')
     tap_all(); ev("closeDialogue()")
     click_node('fort_dunvall_01_courtyard','f1_quartermaster'); check(pg.locator('.talkChoices button').count()==2,'quartermaster offers 買い物をする')
     pg.click('.talkChoices button >> nth=0'); pg.wait_for_timeout(300); check(pg.is_visible('#shopModal') and pg.locator('[data-shop-buy]').count()==4,'fort supply shop opens (4 wares)')
@@ -73,7 +73,10 @@ with sync_playwright() as p:
     # house doors are click-only (no fire on walking past)
     check(all('eventId' not in z for z in maps['royal_capital_03_residential']['eventZones'] if z['id'].startswith('ev_door')),'house doors have no eventId (never fire while walking)')
     # save keeps flags / quests
-    ev("renderSystemTab('save');saveGrowthData();Quest.reset();FieldTalk.load(null);loadGrowthData()")
+    ev("closeDialogue();renderSystemTab('save');saveGrowthData()");saved=ev("localStorage.getItem(SAVE_KEY)");check(saved is not None,'capital SAVE is written')
+    check(ev("PrologueProgress.plan(PrologueProgress.serialize()).stage")==15,'capital stage15 progress needs no clamping')
+    ev("Quest.reset();FieldTalk.load(null)");check(ev("loadGrowthData()") is True,'capital LOAD commits')
+    check(ev("storyStage")==15 and ev("MossForest.mapId")=='royal_capital_02_castle_plaza' and ev("localStorage.getItem(SAVE_KEY)")==saved,'capital LOAD keeps stage15, destination and original SAVE bytes')
     check(ev("Quest.state('q_capital_comb')")=='reported' and ev("FieldTalk.flag('road_dunvall_open')"),'save/load keeps the quests and the road flag')
     check(not errs,'0 console errors %s'%errs[:3])
     b.close()
