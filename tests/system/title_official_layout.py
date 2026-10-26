@@ -24,10 +24,11 @@ for name in ('aidan-portrait.png', 'logo.png'):
     a = np.array(Image.open(ROOT / 'img/title' / name).convert('RGBA'))[..., 3]
     check(a.min() == 0 and (a == 0).mean() > .2, name + ': real alpha transparency (not a baked checkerboard)')
 VIEWPORTS = [('pc-1920x1080', 1920, 1080, False), ('pc-1280x720', 1280, 720, False), ('tablet-landscape-1024x768', 1024, 768, True), ('tablet-portrait-768x1024', 768, 1024, True),
+             ('android-portrait-360x800', 360, 800, True), ('android-portrait-412x915', 412, 915, True), ('tall-portrait-360x780', 360, 780, True), ('small-portrait-320x568', 320, 568, True), ('tablet-portrait-820x1180', 820, 1180, True),
              ('phone-portrait-390x844', 390, 844, True), ('phone-portrait-360x640', 360, 640, True), ('phone-landscape-844x390', 844, 390, True), ('phone-landscape-667x375', 667, 375, True), ('ultrawide-2560x1080', 2560, 1080, False)]
 GEO = """()=>{const box=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none')return null;const b=e.getBoundingClientRect();return {x:b.left,y:b.top,w:b.width,h:b.height}};
  const q=s=>document.querySelector('#title-screen '+s),hero=q('.title-hero'),logo=q('.title-logo img');
- return {vw:innerWidth,vh:innerHeight,hero:box(hero),logo:box(logo),buttons:[...document.querySelectorAll('#title-screen .title-menu button')].map(b=>({t:b.textContent,...box(b)})),
+ return {vw:innerWidth,vh:innerHeight,hero:box(hero),logo:box(logo),msg:(()=>{const m=q('.title-message');if(!m)return null;const r=document.createRange();r.selectNodeContents(m);const b=r.getBoundingClientRect();return b.width?{x:b.left,y:b.top,w:b.width,h:b.height}:null})(),buttons:[...document.querySelectorAll('#title-screen .title-menu button')].map(b=>({t:b.textContent,...box(b)})),
   ratio:{hero:hero&&box(hero)?box(hero).w/box(hero).h:null,logo:box(logo)?box(logo).w/box(logo).h:null},
   bg:(getComputedStyle(q('.title-backdrop')).backgroundImage.match(/background-(landscape|portrait)/)||[])[1],
   imgs:[...document.querySelectorAll('#title-screen img')].map(i=>i.complete&&i.naturalWidth>0),
@@ -49,12 +50,20 @@ def layout(pg, name, landscape):
     g = pg.evaluate(GEO)
     check(all(g['imgs']), f'{name}: art layers loaded')
     check(g['bg'] == ('landscape' if landscape else 'portrait'), f'{name}: {"landscape" if landscape else "portrait"} background', g['bg'])
-    check((g['hero'] is not None) == landscape, f'{name}: Aidan layer only in landscape', g['hero'])
+    # TITLE-05: Aidan is shown in both orientations, bottom-left, feet on the bottom edge, head below the logo.
+    h = g['hero']
+    check(h is not None and h['x'] >= 0 and abs(h['y'] + h['h'] - g['vh']) < 1.5 and h['y'] >= (g['logo']['y'] + g['logo']['h'] if not landscape else -1) and h['x'] + h['w'] / 2 < g['vw'] / 2, f'{name}: Aidan bottom-left, uncropped, below the logo', h)
+    if not landscape:
+        # TITLE-05B: phones target 35-40% of the height (small phones may shrink for safety); tablets ~46%.
+        share = h['h'] / g['vh']
+        if g['vw'] < 600: check(.35 <= share <= .41 or (g['vw'] < 360 and share >= .24), f'{name}: portrait Aidan 35-40% of the height', round(share, 3))
+        else: check(share >= .40, f'{name}: tablet portrait Aidan size', round(share, 3))
+    check(pg.evaluate("[...document.querySelectorAll('#title-screen .title-menu button')].every(b=>{const r=b.getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===b})"), f'{name}: buttons receive taps (not covered by art layers)')
     if g['hero']: check(abs(g['ratio']['hero'] - 1024 / 1536) < .005, f'{name}: Aidan aspect ratio kept', g['ratio'])
     check(abs(g['ratio']['logo'] - 2048 / 728) < .01, f'{name}: logo aspect ratio kept', g['ratio'])
     check(inside(g['logo'], g) and all(inside(b, g) for b in g['buttons']), f'{name}: logo and buttons fully inside the viewport', g)
     check(not any(overlap(g['logo'], b) for b in g['buttons']) and not overlap(*g['buttons'][:2]), f'{name}: logo and buttons do not overlap', g)
-    check(all(hero_pixels(g, r) == 0 for r in [g['logo']] + g['buttons']), f'{name}: no UI over Aidan', [hero_pixels(g, r) for r in [g['logo']] + g['buttons']])
+    check(all(hero_pixels(g, r) == 0 for r in [g['logo'], g['msg']] + g['buttons']), f'{name}: no UI (logo, buttons, status text) over Aidan', [hero_pixels(g, r) for r in [g['logo'], g['msg']] + g['buttons']])
     check([b['t'] for b in g['buttons']] == ['NEW GAME', 'CONTINUE'] and all(b['h'] >= 44 for b in g['buttons']) and g['baked'] and not g['extra'], f'{name}: real NEW GAME / CONTINUE buttons only, touch-size, OPTIONS/GALLERY absent', g['buttons'])
     if OUT: pg.screenshot(path=str(OUT / (name + '.png')))
     return g
@@ -65,6 +74,11 @@ with server(8817) as base, sync_playwright() as p:
     for name, w, h, touch in VIEWPORTS:
         c = b.new_context(viewport={'width': w, 'height': h}, has_touch=touch, is_mobile=touch); pg = c.new_page(); pg.on('pageerror', lambda e: errors.append(str(e)))
         pg.goto(url); pg.wait_for_selector('#title-screen', state='visible'); layout(pg, name, w > h); c.close()
+    # status text present (an unreadable SAVE gives the longest title message): it must not cover Aidan either
+    for name, w, h in [('status-portrait-320x568', 320, 568), ('status-portrait-360x800', 360, 800), ('status-portrait-390x844', 390, 844), ('status-portrait-412x915', 412, 915), ('status-landscape-844x390', 844, 390)]:
+        c = b.new_context(viewport={'width': w, 'height': h}, has_touch=True, is_mobile=True); c.add_init_script("try{localStorage.setItem('windbound_oath_v028','{}')}catch(e){}")
+        pg = c.new_page(); pg.on('pageerror', lambda e: errors.append(str(e))); pg.goto(url); pg.wait_for_selector('#title-screen', state='visible')
+        g = layout(pg, name, w > h); check(g['msg'] is not None and inside(g['msg'], g), f'{name}: status text shown inside the viewport', g['msg']); c.close()
     # rotation on the same page: portrait -> landscape -> portrait relayouts without reload
     c = b.new_context(viewport={'width': 390, 'height': 844}, has_touch=True, is_mobile=True); pg = c.new_page(); pg.on('pageerror', lambda e: errors.append(str(e)))
     pg.goto(url); pg.wait_for_selector('#title-screen', state='visible'); layout(pg, 'rotate-0-portrait', False)
@@ -88,13 +102,42 @@ with server(8817) as base, sync_playwright() as p:
     pg.get_by_role('button', name='CONTINUE', exact=True).click(); pg.wait_for_function("LoadCoordinator.phase==='READY'&&!TitleScreen.active()&&!LoadingInput.busy", timeout=20000)
     m = json.loads(raw)['prologue']['moss']
     check(pg.evaluate("[MossForest.mapId,MossForest.feet.x,MossForest.feet.y]") == [m['map'], m['x'] + 17, m['y'] + 42] and pg.evaluate('localStorage.getItem(SAVE_KEY)') == raw, 'CONTINUE: saved map/position restored, SAVE bytes unchanged')
-    # NEW GAME with an existing SAVE: confirmation inside the menu column; cancel keeps the title and SAVE
-    pg.goto(url); pg.wait_for_selector('#title-screen', state='visible'); pg.get_by_role('button', name='NEW GAME', exact=True).click()
-    check(pg.locator('#title-screen .title-menu [data-confirm-new]').count() == 1 and pg.evaluate("getComputedStyle(document.querySelector('[data-loading-action=cancel-new]')).display")!='none', 'existing SAVE: NEW GAME confirmation shown in the menu')
-    pg.locator('[data-loading-action="cancel-new"]').click(); check(pg.evaluate('TitleScreen.active()') and pg.evaluate('localStorage.getItem(SAVE_KEY)') == raw, 'confirmation cancel keeps title and SAVE')
-    # keyboard: Tab cycles only enabled title buttons; Enter activates the focused one
+    # NEW GAME with an existing SAVE (TITLE-05B): modal confirmation dialog; the menu never grows extra buttons
+    pg.goto(url); pg.wait_for_selector('#title-screen', state='visible')
+    check(pg.locator('#title-screen button:visible').all_inner_texts() == ['NEW GAME', 'CONTINUE'], 'normal title shows only NEW GAME and CONTINUE')
+    pg.get_by_role('button', name='NEW GAME', exact=True).click()
+    dlg = pg.get_by_role('alertdialog')
+    check(dlg.is_visible() and dlg.get_attribute('aria-modal') == 'true' and '新しく始めますか？ セーブデータは削除されません。' in dlg.inner_text()
+          and dlg.get_by_role('button').all_inner_texts() == ['はじめる', 'キャンセル'] and pg.locator('#title-screen .title-menu button').count() == 2, 'existing SAVE: modal dialog with はじめる / キャンセル, menu unchanged')
+    check(pg.evaluate("[...document.querySelectorAll('#title-screen .title-menu button')].every(b=>b.disabled)") and pg.evaluate("document.activeElement.textContent") == 'キャンセル', 'dialog: background buttons disabled, focus moved into the dialog')
+    hit = pg.evaluate("(()=>{const r=document.querySelector('[data-loading-action=new-game]').getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2).closest('.title-confirm')!==null})()")
+    pg.mouse.click(*pg.evaluate("(()=>{const r=document.querySelector('[data-loading-action=continue]').getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2]})()"))
+    check(hit and pg.evaluate('TitleScreen.active()') and dlg.is_visible(), 'dialog: taps on the background menu are blocked by the overlay')
+    tabs = []
+    for _ in range(4): pg.keyboard.press('Tab'); tabs.append(pg.evaluate('document.activeElement.textContent'))
+    check(set(tabs) == {'はじめる', 'キャンセル'}, 'dialog: Tab focus stays inside the dialog', tabs)
+    pg.set_viewport_size({'width': 390, 'height': 844}); pg.wait_for_timeout(150)
+    check(all(inside(r, {'vw': 390, 'vh': 844}) for r in pg.evaluate("[...document.querySelectorAll('.title-confirm p,.title-confirm button')].map(e=>{const b=e.getBoundingClientRect();return {x:b.left,y:b.top,w:b.width,h:b.height}})")), 'dialog: stays inside the viewport after rotation')
+    pg.set_viewport_size({'width': 1280, 'height': 720})
+    pg.get_by_role('button', name='キャンセル', exact=True).click()
+    check(pg.locator('.title-confirm').count() == 0 and pg.evaluate("document.activeElement.textContent") == 'NEW GAME' and pg.evaluate('TitleScreen.active()') and pg.evaluate('localStorage.getItem(SAVE_KEY)') == raw
+          and pg.locator('#title-screen button:visible').all_inner_texts() == ['NEW GAME', 'CONTINUE'] and not pg.evaluate("document.querySelector('[data-loading-action=continue]').disabled"), 'cancel: back to the two buttons, focus on NEW GAME, SAVE untouched')
+    # keyboard: Tab cycles only enabled title buttons; Enter on NEW GAME opens the dialog again
     pg.keyboard.press('Tab'); f1 = pg.evaluate('document.activeElement.textContent'); pg.keyboard.press('Tab'); f2 = pg.evaluate('document.activeElement.textContent')
-    check({f1, f2} == {'NEW GAME', 'CONTINUE'}, 'keyboard Tab moves between NEW GAME and CONTINUE', (f1, f2)); c.close()
+    check({f1, f2} == {'NEW GAME', 'CONTINUE'}, 'keyboard Tab moves between NEW GAME and CONTINUE', (f1, f2))
+    pg.evaluate("document.querySelector('[data-loading-action=new-game]').focus()"); pg.keyboard.press('Enter'); check(pg.get_by_role('alertdialog').is_visible(), 'keyboard Enter on NEW GAME opens the dialog')
+    # はじめる: repeated activation starts exactly one new game; the SAVE is not erased
+    gen0 = pg.evaluate('LoadCoordinator.generation'); enter0 = pg.evaluate('MossForest.enterCount')
+    pg.evaluate("(()=>{const y=document.querySelector('[data-loading-action=confirm-new]');y.click();y.click();y.click()})()")
+    pg.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&!TitleScreen.active()", timeout=20000)
+    pg.wait_for_timeout(600)
+    check(pg.evaluate('LoadCoordinator.generation') - gen0 == 1 and pg.evaluate('MossForest.enterCount') - enter0 == 1 and pg.evaluate("MossForest.mapId") == 'rilde_in_aidan' and pg.evaluate('localStorage.getItem(SAVE_KEY)') == raw, 'はじめる: one new game start despite repeated presses, SAVE kept')
+    c.close()
+    # no SAVE: NEW GAME starts at once without any dialog (also checked above); here assert no dialog was created
+    c = b.new_context(viewport={'width': 390, 'height': 844}, has_touch=True, is_mobile=True); pg = c.new_page()
+    pg.goto(url); pg.wait_for_selector('#title-screen', state='visible'); pg.get_by_role('button', name='NEW GAME', exact=True).tap()
+    pg.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active", timeout=20000)
+    check(pg.locator('.title-confirm').count() == 0 and not pg.evaluate('TitleScreen.active()'), 'no SAVE (touch): NEW GAME starts directly, no dialog'); c.close()
     # logo failure: text fallback, buttons still usable
     c = b.new_context(viewport={'width': 1280, 'height': 720}); c.route('**/img/title/logo.png', lambda r: r.abort()); pg = c.new_page()
     pg.goto(url); pg.wait_for_selector('#title-screen', state='visible'); pg.wait_for_function("document.querySelector('#title-screen .title-logo').classList.contains('title-logo-failed')")
