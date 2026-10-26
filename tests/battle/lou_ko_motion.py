@@ -1,12 +1,12 @@
 """Lou KO (lou_new_ko, formally adopted 10/16): 6 frames registered as lou/ko, plays once and holds the last frame in the Raider battle at PC / portrait / landscape.
 Lou has no HP in the battle logic, so nothing in a normal battle may put her into KO; the motion only plays when ko is requested (DEV / future trigger).
 Checks: 6 frame files; manifest def; KO plays >=6 distinct frames then holds 06; sync() does not restart or revive it; a normal battle round never sets Lou to ko; no 気絶/stun state or status type is introduced."""
-import os, sys
+import os, sys, json
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools/qa'))
 from browser_support import server
 from playwright.sync_api import sync_playwright
-fails = []
+fails = []; sampling=[]
 def check(ok, name, d=''):
     print(('ok   ' if ok else 'FAIL ') + name, d, flush=True)
     if not ok: fails.append(name)
@@ -22,7 +22,7 @@ with server(8839) as base, sync_playwright() as p:
             check(r['n'] == 6 and not r['bad'] and r['hold'] == 'last', 'lou ko: 6 frame files, hold last', r)
             check(not pg.evaluate("BattleMotion.has('lou','stun')||BattleMotion.has('lou','faint')||BattleMotion.has('aidan','stun')"), 'no 気絶/stun motion state is registered (separate spec pending)')
             check(pg.evaluate("window.BattleStatus ? !BattleStatus.apply({battle:'raider',target:'lou',type:'stun',magnitude:0,remainingTurns:1,source:'x'}) : true"), 'BattleStatus still rejects a stun type (no logic change)')
-        pg.evaluate("PrologueProgress.seed(0);startRaiderBattle()"); pg.wait_for_timeout(300)
+        check(pg.evaluate("PrologueProgress.seed(0);startRaiderBattle()") is True,tag+': entry committed');pg.wait_for_function("!battleCommandLocked('raider')")
         for _ in range(40):
             if pg.evaluate("document.body.classList.contains('dialogueOpen')"): pg.evaluate("closeDialogue()")
             if pg.evaluate("!document.body.classList.contains('battlePresentationBusy')&&!document.body.classList.contains('dialogueOpen')&&!document.body.classList.contains('actionCinematic')"): break
@@ -33,13 +33,20 @@ with server(8839) as base, sync_playwright() as p:
         pg.evaluate("rbHP=0;rbFHP=0;BattleActorState.sync('raider','lou')"); pg.wait_for_timeout(200)
         check(pg.evaluate("BattleActorState.get('raider','lou')") != 'ko', '%s Lou does not KO when Aidan/Fiona HP hit 0 (logic unchanged)' % tag)
         pg.evaluate("rbHP=120;rbFHP=105")
+        # Capture actual src mutations inside the browser; Python/transport polling can miss a short frame.
+        pg.evaluate("""()=>{window.__koFrames=[];const img=document.querySelector('#rbLou img');const add=s=>{const f=s?.split('/').pop();if(f?.includes('_ko_')&&__koFrames.at(-1)!==f)__koFrames.push(f)};
+          window.__koObserver=new MutationObserver(records=>{for(const record of records)add(record.oldValue);add(img.getAttribute('src'))});
+          __koObserver.observe(img,{attributes:true,attributeFilter:['src'],attributeOldValue:true});}""")
         ok = pg.evaluate("BattleActorState.set('lou','ko',{battle:'raider'})"); s = []
         for _ in range(45):
             f = pg.evaluate(cur)
             if not s or s[-1] != f: s.append(f)
             pg.wait_for_timeout(40)
-        ko = [x for x in s if x and '_ko_' in x]
-        check(ok and len(set(ko)) == 6 and ko[-1].endswith('06.png') and pg.evaluate("BattleActorState.get('raider','lou')") == 'ko', '%s lou ko: plays 6 frames then holds 06' % tag, ko)
+        pg.wait_for_function("document.querySelector('#rbLou img').src.endsWith('lou_ko_06.png')",timeout=10000)
+        ko=pg.evaluate("()=>{__koObserver.disconnect();return __koFrames}");polled=[x for x in s if x and '_ko_' in x]
+        sampling.append({'viewport':tag,'native_mutations':ko,'python_polled':polled});print('INFO '+tag+' KO sampling '+json.dumps(sampling[-1]),flush=True)
+        if os.environ.get('QA_OUT'):(Path(os.environ['QA_OUT'])/'ko-sampling.json').write_text(json.dumps(sampling,indent=2))
+        check(ok and ko == ['lou_ko_%02d.png'%i for i in range(1,7)] and pg.evaluate("BattleActorState.get('raider','lou')") == 'ko', '%s lou ko: plays 6 frames then holds 06' % tag, ko)
         pg.evaluate("BattleActorState.sync('raider','lou')"); pg.wait_for_timeout(500)
         check(pg.evaluate(cur) == 'lou_ko_06.png', '%s sync() keeps the final frame (no restart)' % tag)
         check(not errs, '%s no page errors' % tag, errs[:2]); check(not [u for u in bad if 'lou' in u], '%s no 4xx for lou assets' % tag, bad[:2])
