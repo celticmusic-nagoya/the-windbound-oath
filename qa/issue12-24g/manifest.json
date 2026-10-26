@@ -1,5 +1,5 @@
 {
-  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "source_commit": "1a19e179bb6240b59b411aa9769632792ba6760a",
   "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
   "inventory_ref": "d77d910ead09d3ecee0901f139d8fb71f77c041b",
   "inventory_sha256": "b3d0f9d5cbd0b19d8a496ffa95a88d7e26cba0b63ca23598d0f9240d0e7637d1",
@@ -438,7 +438,7 @@
       "before_24g_sha256": "c7eaf34a9b6231d746551555ec57012d2e88b4272a418fd8ce42ba340d07c22d"
     }
   ],
-  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "main_base_commit": "1a19e179bb6240b59b411aa9769632792ba6760a",
   "directive": "24H v2",
   "probe_shards": 2,
   "gameplay_ready": true,
@@ -492,5 +492,19 @@
   },
   "focus_rounds": 3,
   "claude_evidence_commit": "b18f0c6c7b7902701fc2b899abb0fbe1f7ef3082",
-  "environment_comparison": "Real Chromium on public runner. Lou visibility committed before Loading release; cliff choreography waits for committed map. Assertions preserved."
+  "environment_comparison": "Real Chromium on public runner. Lou visibility committed before Loading release; cliff choreography waits for committed map. Assertions preserved.",
+  "premerge_tree": "571bbc4d24bef801e9583a6c54efca1e0cca8737",
+  "premerge_full86": {
+    "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+    "evidence_commit": "557af2ed0a1091aa9f4cfd0e7bbe559da5037624",
+    "run": 40280589478,
+    "counts": {
+      "PASS": 85,
+      "FAIL": 0,
+      "SKIP": 1,
+      "TIMEOUT": 0,
+      "NOT_RUN": 0
+    },
+    "reuse_basis": "exact Git tree identity; Full86 was run on PR head, not on merge SHA"
+  }
 }
