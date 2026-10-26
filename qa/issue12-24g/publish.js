@@ -1,0 +1,15 @@
+module.exports = async ({github,context,core}) => {
+ const fs=require('fs'),path=require('path'),crypto=require('crypto');const run=process.env.GITHUB_RUN_ID,attempt=process.env.GITHUB_RUN_ATTEMPT;
+ const prefix=`reports/Issue-12/DIRECTIVE-24L/public-run-${run}-attempt-${attempt}`,m=JSON.parse(fs.readFileSync('qa/issue12-24g/manifest.json','utf8'));let summary;
+ try{summary=JSON.parse(fs.readFileSync('summary/SUMMARY.json','utf8'));}catch(e){summary={status:'BLOCKED',reason:'aggregate missing',target_commit:m.source_commit};fs.mkdirSync('summary',{recursive:true});}
+ const main=await github.rest.repos.getBranch({owner:'celticmusic-nagoya',repo:'the-windbound-oath',branch:'main'});summary.main_at_publication=main.data.commit.sha;summary.main_base_commit=m.main_base_commit;summary.workflow_run=`https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${run}`;
+ if(main.data.commit.sha!==m.main_base_commit){summary.status='BLOCKED';summary.main_changed=true;}
+ fs.writeFileSync('summary/SUMMARY.json',JSON.stringify(summary,null,2)+'\n');
+ const files=[];function walk(dir,base){if(!fs.existsSync(dir))return;for(const e of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,e.name),rel=path.join(base,e.name);if(e.isDirectory())walk(p,rel);else if(/\.(json|log|txt|md|sha256)$/.test(e.name))files.push([rel,fs.readFileSync(p)]);}}
+ walk('combined','full-shards');walk('core-combined','core-shards');walk('focus-combined','focus-shards');walk('node-combined','node-core');walk('summary','summary');for(const n of ['manifest.json','full-inventory.json','policy.py'])files.push(['inputs/'+n,fs.readFileSync('qa/issue12-24g/'+n)]);
+ files.push(['MANIFEST.sha256',Buffer.from(files.map(([n,b])=>crypto.createHash('sha256').update(b).digest('hex')+'  '+n+'\n').join(''))]);
+ const parent=process.env.CONTROL_SHA,base=await github.rest.git.getCommit({...context.repo,commit_sha:parent});let tree=base.data.tree.sha,batch=[],size=0;
+ async function flush(){if(!batch.length)return;const r=await github.rest.git.createTree({...context.repo,base_tree:tree,tree:batch});tree=r.data.sha;batch=[];size=0;}
+ for(const [name,b] of files){const content=b.toString('utf8');if(!Buffer.from(content).equals(b))throw Error('Non-UTF8 log '+name);const e={path:prefix+'/'+name,mode:'100644',type:'blob',content};const n=Buffer.byteLength(JSON.stringify(e));if(size+n>900000)await flush();batch.push(e);size+=n;}await flush();
+ const c=await github.rest.git.createCommit({...context.repo,message:`qa: Issue 12 24L ${summary.status}, run ${run}`,tree,parents:[parent]});const branch=`evidence/issue12-24l-public-${run}-${attempt}`;await github.rest.git.createRef({...context.repo,ref:'refs/heads/'+branch,sha:c.data.sha});core.info('EVIDENCE_COMMIT='+c.data.sha);core.info('EVIDENCE_PATH='+prefix);core.info('STATUS='+summary.status);await core.summary.addHeading('Issue12 24L').addRaw(`Status: ${summary.status}\n\nhttps://github.com/${context.repo.owner}/${context.repo.repo}/tree/${c.data.sha}/${prefix}`).write();if(!['PASS','CONDITIONAL_PASS'].includes(summary.status))core.setFailed('QA '+summary.status);
+};

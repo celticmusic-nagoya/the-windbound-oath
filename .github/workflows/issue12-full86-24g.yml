@@ -1,0 +1,213 @@
+name: Issue12 24L public runner environment comparison
+on:
+  push:
+    branches: ['qa/issue12-full86-public-24l']
+permissions:
+  contents: read
+jobs:
+  core-node:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: 2436dc928622bbf5e364c2798aafaf8c526bada1
+          path: game
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Mandatory actual-code automatic audits and regressions
+        run: |
+          python -m pip install playwright==1.55.0 pillow==11.3.0 numpy==2.2.6
+          mkdir -p node-out
+          git -C game rev-parse HEAD > node-out/source.txt
+          python qa/issue12-24g/selftest.py > node-out/harness-controls.log
+          python qa/issue12-24g/automatic.py game node-out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: issue12-core-node
+          path: node-out/
+          retention-days: 30
+  core-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: 2436dc928622bbf5e364c2798aafaf8c526bada1
+          path: game
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser
+        run: |
+          python -m pip install playwright==1.55.0 pillow==11.3.0 numpy==2.2.6
+          python -m playwright install --with-deps chromium
+          chrome=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          sudo ln -sf "$chrome" /usr/bin/chromium
+          echo "PW_CHROMIUM_EXECUTABLE=$chrome" >> "$GITHUB_ENV"
+          echo "CHROMIUM_PATH=$chrome" >> "$GITHUB_ENV"
+          git -C game worktree add --detach ../baseline e8ecb5dceea3513bbc22028dcff9365b6718d20c
+      - name: Mandatory real-browser SAVE and lifecycle probes
+        run: python -u qa/issue12-24g/run.py --source game --baseline baseline --out core-out --shard ${{ matrix.shard }} --probe
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: issue12-core-browser-${{ matrix.shard }}
+          path: core-out/
+          if-no-files-found: warn
+          retention-days: 30
+  focus-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: 2436dc928622bbf5e364c2798aafaf8c526bada1
+          path: game
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser
+        run: |
+          python -m pip install playwright==1.55.0 pillow==11.3.0 numpy==2.2.6
+          python -m playwright install --with-deps chromium
+          chrome=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          sudo ln -sf "$chrome" /usr/bin/chromium
+          echo "PW_CHROMIUM_EXECUTABLE=$chrome" >> "$GITHUB_ENV"
+          echo "CHROMIUM_PATH=$chrome" >> "$GITHUB_ENV"
+          git -C game worktree add --detach ../baseline e8ecb5dceea3513bbc22028dcff9365b6718d20c
+      - name: Original eight and five follow-ups, each three real-browser runs
+        run: python -u qa/issue12-24g/repeat.py --source game --baseline baseline --out focus-out --shard ${{ matrix.shard }} --focus
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: issue12-focus-browser-${{ matrix.shard }}
+          path: focus-out/
+          if-no-files-found: warn
+          retention-days: 30
+  full86:
+    needs: [core-node, core-browser, focus-browser]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: 2436dc928622bbf5e364c2798aafaf8c526bada1
+          path: game
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium
+        run: |
+          python -m pip install playwright==1.55.0 pillow==11.3.0 numpy==2.2.6
+          python -m playwright install --with-deps chromium
+          chrome=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          sudo ln -sf "$chrome" /usr/bin/chromium
+          echo "PW_CHROMIUM_EXECUTABLE=$chrome" >> "$GITHUB_ENV"
+          echo "CHROMIUM_PATH=$chrome" >> "$GITHUB_ENV"
+          git -C game worktree add --detach ../baseline e8ecb5dceea3513bbc22028dcff9365b6718d20c
+      - name: Full86 with opt-in gameplay startup fixture
+        run: python -u qa/issue12-24g/run.py --source game --baseline baseline --out out --shard ${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: issue12-full86-shard-${{ matrix.shard }}
+          path: out/
+          if-no-files-found: warn
+          retention-days: 30
+  aggregate:
+    if: always()
+    needs: [core-node, core-browser, focus-browser, full86]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: issue12-full86-shard-*
+          path: combined
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          pattern: issue12-core-browser-*
+          path: core-combined
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: issue12-core-node
+          path: node-combined
+      - uses: actions/download-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          pattern: issue12-focus-browser-*
+          path: focus-combined
+          merge-multiple: true
+      - name: Aggregate core gates and Full86
+        if: always()
+        env:
+          CORE_NODE_STATUS: ${{ needs.core-node.result }}
+        run: python qa/issue12-24g/aggregate.py combined summary
+      - name: Batch-publish text evidence (no per-file rate burst)
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          CONTROL_SHA: ${{ github.sha }}
+        with:
+          script: |
+            const publish = require(process.env.GITHUB_WORKSPACE + '/qa/issue12-24g/publish.js');
+            await publish({github, context, core});
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: issue12-full86-summary
+          path: summary/
+          retention-days: 30
