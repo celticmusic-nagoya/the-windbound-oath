@@ -224,6 +224,7 @@
         S.sealNode.classList.toggle('corrupted',!(hooks.sealCorrupted&&hooks.sealCorrupted()===false));
       }
     }
+    syncSealFx();
     if(window.FieldVista)FieldVista.mount(map.vista);
     refreshWind();
     S.zones={rest:null,ambience:null};
@@ -683,10 +684,12 @@
   // ---------- flags / visibility / persistence ----------
   function setFlag(name,value){
     const was=Boolean(S.flags[name]);S.flags[name]=Boolean(value);
+    if(was!==S.flags[name]&&S.forest&&S.forest.effects)S.forest.effects.refresh(name);   // map effects with when:{flag} (MOSS-02)
     if(name==='moss_a3_seal_open'&&value&&!was&&S.sealNode){const n=S.sealNode;S.sealNode=null;n.classList.add('opening');skin(n);shake(1000,8);setTimeout(()=>{n.remove();S.extra=S.extra.filter(x=>x!==n);},1000);}
     if(name==='moss_a3_seal_open'&&!value&&S.map&&!S.sealNode&&S.mapId==='moss_forest_03_ancient_grove'){
       const b=S.map.collision.blockers.find(q=>q.id==='cb_a3_seal');if(b){const r=b.rects[0];S.sealNode=addNode('forest-seal corrupted',r[0]-8,r[1]-70,r[2]+16,r[3]+70,'ᚠ ᚢ ᚦ',r[1]+r[3]);}
     }
+    if(name==='moss_a3_seal_open')syncSealFx();
     if(name==='moss_a3_lou_found')refreshWind();
   }
   function syncSymbols(){
@@ -694,7 +697,10 @@
       if(sy.alive&&!alive){sy.alive=false;if(sy.node){sy.node.remove();S.extra=S.extra.filter(x=>x!==sy.node);sy.node=null;}}
       else if(!sy.alive&&alive){sy.alive=true;sy.node=addNode('forest-symbol',sy.x-24,sy.y-62,48,62,'異形',sy.y,staticLift(sy.x,sy.y,sy.level));}}
     if(S.sealNode&&hooks.sealCorrupted){S.sealNode.classList.toggle('corrupted',hooks.sealCorrupted());skin(S.sealNode);}
+    syncSealFx();
   }
+  // The seal fx follows the seal's corrupted look (purple while the corruption symbols remain).
+  function syncSealFx(){if(el.world)el.world.classList.toggle('forest-seal-corrupted',Boolean(S.sealNode&&S.sealNode.classList.contains('corrupted')));}
   // Choreography adapters (see js/field/field-choreo.js). Aidan: moving S.x/S.y drives his walk animation by itself.
   // Fiona: set() takes her off the follow-the-player easing until release().
   function actor(id){

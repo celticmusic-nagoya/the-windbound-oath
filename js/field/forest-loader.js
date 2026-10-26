@@ -101,11 +101,13 @@
           d.src=sp.im.src;}
         else Object.assign(d.style,{background:pick(COLOR,e.asset,'#668'),borderRadius:/^tree_|^veg_/.test(e.asset)?'50% 50% 20% 20%':'4px',opacity:'.92'});
         return d;}});}
+    // Map effects (light / seal fx / glows) share the same culling, so off-screen effects have no DOM node (MOSS-02).
+    const effects=window.ForestEffects?ForestEffects.create({map,cull,flags:()=>flags,base:ROOT+(art.manifest?art.manifest.base:'img/field/moss/')}):null;
     const layer=ForestLayer.create({map,parent:world,items:layerItems,chunk:512,margin:1,ground:art.manifest?art.ground:null,sprite:layerArt});
     const stats={entities:ents.length,layerItems:layerItems.length,rects:solid.shapes.length,buildMs:Math.round(performance.now()-t0)};
     if(height)height.mount(world);
-    function destroy(){if(height)height.destroy();cull.clear();layer.destroy();world.querySelectorAll('.forest-ent,.forest-chunk').forEach(n=>n.remove());}
-    return {blocked:height?height.blocked:solid.blocked,height,solid,cull,layer,stats,flags,destroy,
+    function destroy(){if(height)height.destroy();cull.clear();layer.destroy();world.querySelectorAll('.forest-ent,.forest-chunk,.forest-fx').forEach(n=>n.remove());}
+    return {blocked:height?height.blocked:solid.blocked,height,solid,cull,layer,stats,flags,destroy,effects,
       update(view){layer.update(view);cull.update(view);},
       spawn(id){const s=map.spawns.points[id||map.spawns.default];return {x:s.x-FOOT.ax,y:s.y-FOOT.ay,facing:s.facing};}};
   }
