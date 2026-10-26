@@ -62,7 +62,7 @@ with sync_playwright() as p:
     # old save without quests block
     check(pg.evaluate("async(d)=>{delete d.quests;localStorage.setItem(SAVE_KEY,JSON.stringify(d));Quest.accept('q_emma_charm');return await loadGrowthData()}",raw) is True,'legacy missing-quests LOAD commits'); check(qs()=='unaccepted','save without quests block loads as unaccepted')
     # elder + rune shard
-    reset(); pg.evaluate("document.querySelector('#systemClose')&&document.querySelector('#systemClose').click()")
+    pg.evaluate("document.querySelector('#systemClose')&&document.querySelector('#systemClose').click()"); pg.wait_for_function("InputManager.state()!=='MENU'"); reset()
     talk('elder'); check('輝きが弱まっておる' in txt(),'elder without the shard: normal lines still work (tables merged)'); tap()
     pg.evaluate("Inventory.openTreasure('tr_a3_shrine')")
     talk('elder'); check(name()=='長老' and '見せてくれんか' in txt(),'elder asks about the 古びたルーン片'); 

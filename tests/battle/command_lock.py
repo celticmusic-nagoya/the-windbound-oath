@@ -36,7 +36,8 @@ with server(8891) as base, sync_playwright() as pw:
                 p.locator('#normalCommandClose' if mode=='normal' else '#rbCommandClose').click()
                 p.locator(toggle).wait_for(state='visible')
             for opened in [False, True]:
-                p.evaluate(f'{setter}(false)')
+                # Same manual-fold contract as the Claude rescue patch, on every iteration.
+                p.evaluate("c=>document.querySelector(c).click()", '#normalCommandClose' if mode=='normal' else '#rbCommandClose')
                 rect = p.locator(toggle).bounding_box()
                 assert rect, toggle
                 # A bare assignment returns the hold Promise and evaluate() waits until it unlocks.
