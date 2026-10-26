@@ -1,0 +1,22 @@
+ok   fiona: 24 frames (walk 5 per direction), scale 0.0954 world px/src px -> canvas 0.954, dot=off
+wrote 24 PNGs -> /tmp/hero_mxluec8p/out and /tmp/hero_mxluec8p/f.js
+ 
+ok   5-walk-frame delivery with jitter and a 1100x1300 canvas is accepted
+ok   24 normalised PNGs written (24)
+ok   fiona_idle_down.png canvas 1280x832
+ok   every frame stands on the anchor row y=790 (spread 0)
+ok   feet centred on the anchor column per direction {'down': 639, 'left': 639, 'right': 640, 'up': 640}
+ok   manifest lists 24 frames incl. walk_05, none beyond
+ok   idle_down body height maps to ~62 world px (62.0)
+ok   --dot 2 snapping runs
+ok   dot-snapped art is blocky (20px cells = 2 world px)
+ok   aidan: 24 frames (walk 5 per direction), scale 0.1062 world px/src px -> canvas 1.698, dot=off
+wrote 24 PNGs -> /tmp/hero_mxluec8p/aidan and /tmp/hero_mxluec8p/a.js
+ 
+ok   aidan intake writes AidanFieldAssets manifest
+ok   missing direction rejected
+ok   unequal walk counts rejected
+ok   opaque backdrop rejected
+ok   repo art untouched by the dry runs
+
+FAILS 0

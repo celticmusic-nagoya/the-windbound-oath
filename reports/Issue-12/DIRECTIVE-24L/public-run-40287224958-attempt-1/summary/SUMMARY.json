@@ -1,0 +1,315 @@
+{
+  "directive": "24L_POSTMERGE",
+  "scope": "actual-main automatic37 and six real-browser core regressions; Full86 not rerun",
+  "status": "PASS",
+  "target_commit": "1a19e179bb6240b59b411aa9769632792ba6760a",
+  "main_base_commit": "1a19e179bb6240b59b411aa9769632792ba6760a",
+  "expected_tree": "571bbc4d24bef801e9583a6c54efca1e0cca8737",
+  "reused_full86": {
+    "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+    "evidence_commit": "557af2ed0a1091aa9f4cfd0e7bbe559da5037624",
+    "run": 40280589478,
+    "counts": {
+      "PASS": 85,
+      "FAIL": 0,
+      "SKIP": 1,
+      "TIMEOUT": 0,
+      "NOT_RUN": 0
+    },
+    "reuse_basis": "exact Git tree identity; Full86 was run on PR head, not on merge SHA"
+  },
+  "core_results": [
+    {
+      "name": "tests/issue54_ending.py",
+      "started_at": "2026-10-26T07:41:41.758354+00:00",
+      "status": "PASS",
+      "test_sha256": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "exit_code": 0,
+      "test_sha256_after": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:41:51.287685+00:00",
+      "seconds": 9.529,
+      "log": "tests_issue54_ending.py.log"
+    },
+    {
+      "name": "tests/issue54_regression.py",
+      "started_at": "2026-10-26T07:41:51.288157+00:00",
+      "status": "PASS",
+      "test_sha256": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "exit_code": 0,
+      "test_sha256_after": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:44:03.023209+00:00",
+      "seconds": 131.735,
+      "log": "tests_issue54_regression.py.log"
+    },
+    {
+      "name": "tests/system/save_continue_lifecycle.py",
+      "started_at": "2026-10-26T07:44:03.023769+00:00",
+      "status": "PASS",
+      "test_sha256": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "exit_code": 0,
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:44:24.078002+00:00",
+      "seconds": 21.054,
+      "log": "tests_system_save_continue_lifecycle.py.log"
+    },
+    {
+      "name": "tests/moss/m4_save.py",
+      "started_at": "2026-10-26T07:41:43.507475+00:00",
+      "status": "PASS",
+      "test_sha256": "90a4c8036ef2c972674bcb8d9b38d1d5b7562882961810c219210b1360a1b847",
+      "exit_code": 0,
+      "test_sha256_after": "90a4c8036ef2c972674bcb8d9b38d1d5b7562882961810c219210b1360a1b847",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:42:04.371589+00:00",
+      "seconds": 20.864,
+      "log": "tests_moss_m4_save.py.log"
+    },
+    {
+      "name": "tests/issue54_additional.py",
+      "started_at": "2026-10-26T07:42:04.372249+00:00",
+      "status": "PASS",
+      "test_sha256": "58774e436e77bdb7350cebb72f99321ecc7f0383c91055f10a41eada2fa3cfdf",
+      "exit_code": 0,
+      "test_sha256_after": "58774e436e77bdb7350cebb72f99321ecc7f0383c91055f10a41eada2fa3cfdf",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:42:33.861697+00:00",
+      "seconds": 29.489,
+      "log": "tests_issue54_additional.py.log"
+    },
+    {
+      "name": "tests/battle/command_lock.py",
+      "started_at": "2026-10-26T07:42:33.862454+00:00",
+      "status": "PASS",
+      "test_sha256": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "exit_code": 0,
+      "test_sha256_after": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:43:02.255064+00:00",
+      "seconds": 28.393,
+      "log": "tests_battle_command_lock.py.log"
+    }
+  ],
+  "automatic_commands": 37,
+  "core_counts": {
+    "PASS": 6
+  },
+  "integrity_errors": [],
+  "ended_at": "2026-10-26T07:44:51.521324+00:00",
+  "main_at_publication": "1a19e179bb6240b59b411aa9769632792ba6760a",
+  "workflow_run": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/40287224958"
+}

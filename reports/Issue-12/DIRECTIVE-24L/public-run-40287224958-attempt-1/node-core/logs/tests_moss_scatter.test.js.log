@@ -1,0 +1,28 @@
+-- moss_forest_01_sunlit_path
+ok   deterministic (5951 items)
+ok   placed 5951/6108 (>=90%)
+note sc_flowers_meadow 128/140 (region saturated at minDist 36)
+note sc_ferns_shade 35/110 (region saturated at minDist 48)
+note sc_border_trees 180/250 (region saturated at minDist 150)
+ok   rules with path_core avoid never place on a path core
+ok   minDist respected (0.1px rounding tolerance)
+ok   inside world
+ok   est live DOM nodes 75 <= 800
+-- moss_forest_02_mossy_ravine
+ok   deterministic (8957 items)
+ok   placed 8957/9070 (>=90%)
+note sc_ferns_hollow 151/260 (region saturated at minDist 34)
+note sc_flowers_marker 86/90 (region saturated at minDist 36)
+ok   rules with path_core avoid never place on a path core
+ok   minDist respected (0.1px rounding tolerance)
+ok   inside world
+ok   est live DOM nodes 79 <= 800
+-- moss_forest_03_ancient_grove
+ok   deterministic (3636 items)
+ok   placed 3636/3810 (>=90%)
+note sc_border_trees 191/360 (region saturated at minDist 150)
+note sc_fairy_flowers 25/30 (region saturated at minDist 60)
+ok   rules with path_core avoid never place on a path core
+ok   minDist respected (0.1px rounding tolerance)
+ok   inside world
+ok   est live DOM nodes 52 <= 800

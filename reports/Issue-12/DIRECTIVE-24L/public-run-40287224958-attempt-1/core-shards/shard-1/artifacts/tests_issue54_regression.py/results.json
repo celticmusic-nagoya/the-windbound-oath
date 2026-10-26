@@ -1,0 +1,603 @@
+[
+  {
+    "name": "startup_load_guard",
+    "status": "PASS",
+    "detail": {
+      "result": false,
+      "rawUnchanged": true,
+      "stage": 0
+    }
+  },
+  {
+    "name": "new_game_initial_map",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_play_reaches_stage1",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "training_UI_save_refused_original_kept",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "pending_training_action_cancelled",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "v2_single_restore_exact_position_0",
+    "status": "PASS",
+    "detail": {
+      "phase": "READY",
+      "stage": 1,
+      "map": "rilde_village_01_peace",
+      "feet": {
+        "x": 2075,
+        "y": 875
+      },
+      "active": true,
+      "busy": false,
+      "enterCount": 2,
+      "battle": "none",
+      "end": "none",
+      "inventory": {
+        "key": {},
+        "gear": {},
+        "claimed": []
+      },
+      "equipment": {
+        "v": 1,
+        "state": {
+          "aidan": {
+            "weapon": "father_sword"
+          }
+        }
+      },
+      "progress": {
+        "version": 2,
+        "legacyEvents": {
+          "v": 1,
+          "drawer": true,
+          "pot": true,
+          "balloon": false,
+          "balloonDone": false,
+          "cat": false,
+          "catFound": false,
+          "catDone": false,
+          "unknown": [
+            "drawer",
+            "pot"
+          ]
+        },
+        "defeated": [],
+        "corruptionCount": 0,
+        "barrierOpen": false,
+        "louFound": false,
+        "storyStage": 1,
+        "attackStep": 0,
+        "northPhase": 0,
+        "forestStoneSeen": false,
+        "moss": {
+          "map": "rilde_village_01_peace",
+          "x": 2058,
+          "y": 833,
+          "opened": [],
+          "fired": [
+            "ev_arrival"
+          ],
+          "facing": {
+            "dir": "down",
+            "flip": false
+          }
+        },
+        "position": {
+          "px": 270,
+          "py": 610
+        },
+        "currentObjective": "訓練用の木人を調べよう",
+        "subQuests": {
+          "balloon": {
+            "title": "風に飛ばされた風船",
+            "state": "locked",
+            "objective": "",
+            "reward": "きずぐすり×2"
+          },
+          "cat": {
+            "title": "迷子の猫",
+            "state": "locked",
+            "objective": "",
+            "reward": "毒消し×2"
+          }
+        }
+      },
+      "members": {
+        "aidan": {
+          "joined": true,
+          "level": 1,
+          "exp": 0
+        },
+        "fiona": {
+          "joined": true,
+          "level": 1,
+          "exp": 0
+        },
+        "liam": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "morwen": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dwarf": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dancer": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        }
+      },
+      "gold": 0,
+      "battleItems": {
+        "potion": 4,
+        "ether": 2
+      },
+      "ahp": 100,
+      "battleBusy": false
+    }
+  },
+  {
+    "name": "original_save_and_assets_kept_0",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_retry_reaches_stage3_0",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "v2_single_restore_exact_position_1",
+    "status": "PASS",
+    "detail": {
+      "phase": "READY",
+      "stage": 1,
+      "map": "rilde_village_01_peace",
+      "feet": {
+        "x": 2075,
+        "y": 875
+      },
+      "active": true,
+      "busy": false,
+      "enterCount": 2,
+      "battle": "none",
+      "end": "none",
+      "inventory": {
+        "key": {},
+        "gear": {},
+        "claimed": []
+      },
+      "equipment": {
+        "v": 1,
+        "state": {
+          "aidan": {
+            "weapon": "father_sword"
+          }
+        }
+      },
+      "progress": {
+        "version": 2,
+        "legacyEvents": {
+          "v": 1,
+          "drawer": true,
+          "pot": true,
+          "balloon": false,
+          "balloonDone": false,
+          "cat": false,
+          "catFound": false,
+          "catDone": false,
+          "unknown": [
+            "drawer",
+            "pot"
+          ]
+        },
+        "defeated": [],
+        "corruptionCount": 0,
+        "barrierOpen": false,
+        "louFound": false,
+        "storyStage": 1,
+        "attackStep": 0,
+        "northPhase": 0,
+        "forestStoneSeen": false,
+        "moss": {
+          "map": "rilde_village_01_peace",
+          "x": 2058,
+          "y": 833,
+          "opened": [],
+          "fired": [
+            "ev_arrival"
+          ],
+          "facing": {
+            "dir": "down",
+            "flip": false
+          }
+        },
+        "position": {
+          "px": 270,
+          "py": 610
+        },
+        "currentObjective": "訓練用の木人を調べよう",
+        "subQuests": {
+          "balloon": {
+            "title": "風に飛ばされた風船",
+            "state": "locked",
+            "objective": "",
+            "reward": "きずぐすり×2"
+          },
+          "cat": {
+            "title": "迷子の猫",
+            "state": "locked",
+            "objective": "",
+            "reward": "毒消し×2"
+          }
+        }
+      },
+      "members": {
+        "aidan": {
+          "joined": true,
+          "level": 1,
+          "exp": 0
+        },
+        "fiona": {
+          "joined": true,
+          "level": 1,
+          "exp": 0
+        },
+        "liam": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "morwen": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dwarf": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dancer": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        }
+      },
+      "gold": 0,
+      "battleItems": {
+        "potion": 4,
+        "ether": 2
+      },
+      "ahp": 100,
+      "battleBusy": false
+    }
+  },
+  {
+    "name": "original_save_and_assets_kept_1",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_retry_reaches_stage3_1",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "v2_single_restore_exact_position_2",
+    "status": "PASS",
+    "detail": {
+      "phase": "READY",
+      "stage": 1,
+      "map": "rilde_village_01_peace",
+      "feet": {
+        "x": 2075,
+        "y": 875
+      },
+      "active": true,
+      "busy": false,
+      "enterCount": 2,
+      "battle": "none",
+      "end": "none",
+      "inventory": {
+        "key": {},
+        "gear": {},
+        "claimed": []
+      },
+      "equipment": {
+        "v": 1,
+        "state": {
+          "aidan": {
+            "weapon": "father_sword"
+          }
+        }
+      },
+      "progress": {
+        "version": 2,
+        "legacyEvents": {
+          "v": 1,
+          "drawer": true,
+          "pot": true,
+          "balloon": false,
+          "balloonDone": false,
+          "cat": false,
+          "catFound": false,
+          "catDone": false,
+          "unknown": [
+            "drawer",
+            "pot"
+          ]
+        },
+        "defeated": [],
+        "corruptionCount": 0,
+        "barrierOpen": false,
+        "louFound": false,
+        "storyStage": 1,
+        "attackStep": 0,
+        "northPhase": 0,
+        "forestStoneSeen": false,
+        "moss": {
+          "map": "rilde_village_01_peace",
+          "x": 2058,
+          "y": 833,
+          "opened": [],
+          "fired": [
+            "ev_arrival"
+          ],
+          "facing": {
+            "dir": "down",
+            "flip": false
+          }
+        },
+        "position": {
+          "px": 270,
+          "py": 610
+        },
+        "currentObjective": "訓練用の木人を調べよう",
+        "subQuests": {
+          "balloon": {
+            "title": "風に飛ばされた風船",
+            "state": "locked",
+            "objective": "",
+            "reward": "きずぐすり×2"
+          },
+          "cat": {
+            "title": "迷子の猫",
+            "state": "locked",
+            "objective": "",
+            "reward": "毒消し×2"
+          }
+        }
+      },
+      "members": {
+        "aidan": {
+          "joined": true,
+          "level": 1,
+          "exp": 0
+        },
+        "fiona": {
+          "joined": true,
+          "level": 1,
+          "exp": 0
+        },
+        "liam": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "morwen": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dwarf": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dancer": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        }
+      },
+      "gold": 0,
+      "battleItems": {
+        "potion": 4,
+        "ether": 2
+      },
+      "ahp": 100,
+      "battleBusy": false
+    }
+  },
+  {
+    "name": "original_save_and_assets_kept_2",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_retry_reaches_stage3_2",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "restore_route_exclusion",
+    "status": "PASS",
+    "detail": {
+      "retry": {
+        "kind": "TRAINING_RETRY",
+        "stage": 1
+      },
+      "early": true,
+      "normal": {
+        "kind": "FIELD_MAP",
+        "stage": 1
+      }
+    }
+  },
+  {
+    "name": "invalid_map_refused_original_kept",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "invalid_coordinate_refused_original_kept",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "inconsistent_flags_refused_original_kept",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "v1_stage2_refused_original_kept",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "map_restore_failure_latched",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "failed_restore_blocks_save_and_erase",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "explicit_retry_single_restore",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "obsolete_request_held",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "obsolete_async_response_cannot_overwrite",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage0_position_0",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage15_position_0",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage15_reload_0",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage0_position_1",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage15_position_1",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage15_reload_1",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage0_position_2",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage15_position_2",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "KI004_stage15_reload_2",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_entry_committed",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_battle_save_refusal",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "normal_battle_command_works",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "raider_entry_committed",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "raider_battle_save_refusal",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "raider_battle_command_works",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "mobile_stage2_load_touch",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "mobile_normal_save_load_touch",
+    "status": "PASS",
+    "detail": null
+  },
+  {
+    "name": "mobile_training_MENU_existing_constraint_recorded",
+    "status": "PASS",
+    "detail": {
+      "expected_existing_overlay_interception": true,
+      "ordinary_MENU_reached": false
+    }
+  },
+  {
+    "name": "no_page_or_console_errors",
+    "status": "PASS",
+    "detail": {
+      "pageerrors": [],
+      "console_errors": []
+    }
+  }
+]

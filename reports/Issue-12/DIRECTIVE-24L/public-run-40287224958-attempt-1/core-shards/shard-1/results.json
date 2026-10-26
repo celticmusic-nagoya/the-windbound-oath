@@ -1,0 +1,195 @@
+{
+  "source_commit": "1a19e179bb6240b59b411aa9769632792ba6760a",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "1a19e179bb6240b59b411aa9769632792ba6760a",
+  "started_at": "2026-10-26T07:41:41.756484+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40287224958",
+  "run_attempt": "1",
+  "shard": 1,
+  "manifest_sha256": "a50f6714c8214fa39fd7121de90eefb9a1aa62372b83f1cd48b09eab7642d94e",
+  "mode": "core",
+  "main_base_commit": "1a19e179bb6240b59b411aa9769632792ba6760a",
+  "expected_names": [
+    "tests/issue54_ending.py",
+    "tests/issue54_regression.py",
+    "tests/system/save_continue_lifecycle.py"
+  ],
+  "results": [
+    {
+      "name": "tests/issue54_ending.py",
+      "started_at": "2026-10-26T07:41:41.758354+00:00",
+      "status": "PASS",
+      "test_sha256": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "exit_code": 0,
+      "test_sha256_after": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:41:51.287685+00:00",
+      "seconds": 9.529,
+      "log": "tests_issue54_ending.py.log"
+    },
+    {
+      "name": "tests/issue54_regression.py",
+      "started_at": "2026-10-26T07:41:51.288157+00:00",
+      "status": "PASS",
+      "test_sha256": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "exit_code": 0,
+      "test_sha256_after": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:44:03.023209+00:00",
+      "seconds": 131.735,
+      "log": "tests_issue54_regression.py.log"
+    },
+    {
+      "name": "tests/system/save_continue_lifecycle.py",
+      "started_at": "2026-10-26T07:44:03.023769+00:00",
+      "status": "PASS",
+      "test_sha256": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "exit_code": 0,
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=1",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:44:24.078002+00:00",
+      "seconds": 21.054,
+      "log": "tests_system_save_continue_lifecycle.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 3
+  },
+  "ended_at": "2026-10-26T07:44:24.078510+00:00",
+  "main_at_finish": "1a19e179bb6240b59b411aa9769632792ba6760a"
+}

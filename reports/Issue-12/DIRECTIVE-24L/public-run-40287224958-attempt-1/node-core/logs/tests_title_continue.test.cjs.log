@@ -1,0 +1,8 @@
+PASS cold title with no SAVE disables CONTINUE and does not start NEW GAME until chosen
+PASS title CONTINUE restores cold SAVE without invoking the NEW GAME callback
+PASS malformed SAVE shows a title error, remains read-only and cannot trigger CONTINUE
+PASS restore failure returns to visible title, re-enables recovery and protects source bytes
+PASS pending CONTINUE disables title controls; explicit NEW GAME supersedes old reply safely
+PASS NEW GAME confirmation cancellation leaves the original SAVE and title intact
+PASS title keyboard Tab moves between enabled NEW GAME and CONTINUE using the common input policy
+7 PASS; actual title/controller, simulated DOM; browser NOT_RUN

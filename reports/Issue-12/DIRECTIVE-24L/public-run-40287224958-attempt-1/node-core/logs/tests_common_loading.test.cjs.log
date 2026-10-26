@@ -1,0 +1,18 @@
+PASS required fetch and decode are separate; ready only after decode
+PASS normal starts exactly once after required decode; opening follows real combat entry
+PASS normal required fetch failure blocks combat and explicit retry succeeds
+PASS normal required decode failure blocks combat and explicit retry succeeds
+PASS raider starts exactly once after required decode; opening follows real combat entry
+PASS raider required fetch failure blocks combat and explicit retry succeeds
+PASS raider required decode failure blocks combat and explicit retry succeeds
+PASS missing required opening frame blocks battle
+PASS optional manifest failure uses verified stills and no unready motion
+PASS late cancelled response cannot start or hide a newer retry/transaction
+PASS combat generation invalidation rejects stale completion
+PASS timeout is explicit, does not become ready after late decode
+PASS map entry exclusion and capture input guard cover pointer/tap/keyboard
+PASS all registered still/idle and opening fixture paths exist on disk
+PASS failure protects actual SAVE and DELETE entry functions
+PASS shared map/battle view ignores stale close ownership
+PASS actual installed manifest normal and Raider required plan has real repository files
+17 PASS; actual modules, simulated DOM/network. Browser rendering NOT_RUN.

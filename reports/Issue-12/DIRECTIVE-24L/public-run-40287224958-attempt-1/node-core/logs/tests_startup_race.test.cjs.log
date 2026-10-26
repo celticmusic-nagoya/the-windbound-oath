@@ -1,0 +1,21 @@
+PASS NEW GAME commits initial map, opens narration, close restores normal dialogue state
+PASS real FieldTalk begun during narration delay is never overwritten and last-page tap closes it
+PASS a newer conversation that already ended also cancels old narration
+PASS plain say dialogue has priority over startup narration
+PASS real devJump invalidates old boot fetch and coordinator owner, latest destination wins
+PASS new boot supersedes older boot without stale map/dialogue/FAILED state
+PASS LOAD during boot is rejected without touching original save bytes
+PASS normal LOAD invalidates an already scheduled startup narration and preserves save/flags
+PASS late initial fetch cannot overwrite a DEV destination followed by actual LOAD
+PASS pagehide/reload invalidates old realm; fresh realm starts independently
+PASS startup failure stays protected, explicit retry succeeds; stale token cannot start events
+PASS fixture extraction is exact, argument-independent and rejects missing declarations
+PASS LOAD internal reset preserves the current token; stale internal reset is rejected before mutations
+PASS NEW GAME during LOAD supersedes the pending LOAD and discards its late map response
+PASS second LOAD while LOADING is rejected; the latest accepted owner alone commits
+PASS goto via actual DEV navigation during LOAD wins over an out-of-order LOAD response
+PASS reload during LOAD invalidates old owner; a new realm is unaffected by the late reply
+PASS failed LOAD preserves source bytes and stable map flags; explicit retry recovers safely
+PASS actual DOMContentLoaded boot path commits NEW GAME without a test-only ready gate
+PASS DEV destination before DOMContentLoaded cancels the scheduled initial boot
+20 PASS; real product code, simulated DOM/network/timers; browser NOT_RUN

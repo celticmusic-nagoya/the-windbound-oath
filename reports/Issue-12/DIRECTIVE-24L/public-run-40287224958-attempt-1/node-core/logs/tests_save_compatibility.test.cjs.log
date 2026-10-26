@@ -1,0 +1,35 @@
+PASS legacy v1 stage0 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage1 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage3 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage4 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage5 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage6 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage7 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v1 stage8 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage0 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage1 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage3 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage4 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage5 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage6 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage7 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS legacy v2 stage8 LOAD/SAVE/LOAD normalizes hidden map and keeps history
+PASS active field stage0 exact map/coordinates/events roundtrip
+PASS active field stage1 exact map/coordinates/events roundtrip
+PASS active field stage3 exact map/coordinates/events roundtrip
+PASS active field stage9 exact map/coordinates/events roundtrip
+PASS active field stage10 exact map/coordinates/events roundtrip
+PASS active field stage11 exact map/coordinates/events roundtrip
+PASS active field stage12 exact map/coordinates/events roundtrip
+PASS active field stage15 exact map/coordinates/events roundtrip
+PASS inactive snapshot drops only destination/position/height, never mutates runtime history
+PASS forest fallback v1 stage9 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v1 stage10 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v1 stage11 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v1 stage12 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v2 stage9 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v2 stage10 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v2 stage11 null/legacy coordinates restores safe map and chest history
+PASS forest fallback v2 stage12 null/legacy coordinates restores safe map and chest history
+PASS actual SAVE outside menu keeps data and does not require feedback DOM
+34 PASS; actual SAVE/LOAD; simulated DOM/network

@@ -1,0 +1,7 @@
+PASS cancelled choreography and stale actor adapters cannot overwrite new map coordinates/pose
+PASS old wait/continuation cannot change stage/events and cleanup releases old lock
+PASS old completion cannot clear or overwrite a new scene
+PASS transition failure restores playable old map without resurrecting cancelled scene
+PASS cancelled pan cannot relock the new scene after a late camera response
+PASS input is locked before cleanup await and new construction waits for cleanup completion
+PASS normal scene progress and hook behavior retained
