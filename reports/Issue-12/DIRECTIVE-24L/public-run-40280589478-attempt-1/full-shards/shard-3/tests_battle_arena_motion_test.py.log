@@ -1,0 +1,45 @@
+ok   pc: existing arena buttons kept + motion test button ['motion', 'go', 'clear', 'freeze', 'place', 'all']
+ok   pc: stage and panel do not overlap; controls on screen; no horizontal overflow {'st': {'l': 0, 't': 49, 'r': 850, 'b': 720}, 'pn': {'l': 850, 't': 49, 'r': 1280, 'b': 720}, 'ctl': {'l': 861, 't': 49, 'r': 1270, 'b': 270.109375}, 'vw': 1280, 'vh': 720, 'sw': 1280}
+ok   pc: tap selects character + motion (aidan attack, 6f impl) {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 1, 'total': 6, 'playing': True, 'loop': False, 'speed': 1, 'phase': '', 'gone': False, 'footSpread': 4.4, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   status table (38 expectations) []
+ok   delivered / pending-adoption material listed but never shown as implemented 
+ok   every implemented / still row can be selected (all 6 characters) 
+ok   pause holds the frame (2, 2)
+ok   step forward / back by one frame (2, 3, 2)
+ok   frame number / total / per-frame ms displayed from the manifest (['3', '6', '130'], [90, 90, 130, 70, 110, 230])
+ok   restart plays from the first frame {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 0, 'total': 6, 'playing': True, 'loop': False, 'speed': 1, 'phase': '', 'gone': False, 'footSpread': 4.4, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   one-shot ends holding the last frame (loop OFF, return OFF) {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 5, 'total': 6, 'playing': False, 'loop': False, 'speed': 1, 'phase': '最終コマ保持で停止', 'gone': False, 'footSpread': 4.4, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   stop returns to frame 1 {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 0, 'total': 6, 'playing': False, 'loop': False, 'speed': 1, 'phase': '停止', 'gone': False, 'footSpread': 4.4, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   loop ON keeps playing past the last frame {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 2, 'total': 6, 'playing': True, 'loop': True, 'speed': 1, 'phase': '停止', 'gone': False, 'footSpread': 4.4, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   speed 0.5x / 1x / 2x change the playback time (1.45, 0.74, 0.38)
+ok   aidan draw -> idle loop ('待機へ復帰（ループ）', 2)
+ok   fiona ready -> idle loop ('待機へ復帰（ループ）', 2)
+ok   aidan attack -> idle loop ('待機へ復帰（ループ）', 2)
+ok   fiona attack -> idle loop ('待機へ復帰（ループ）', 2)
+ok   aidan damage -> idle loop ('待機へ復帰（ループ）', 2)
+ok   fiona damage -> idle loop ('待機へ復帰（ループ）', 2)
+ok   lou damage -> idle loop ('待機へ復帰（ループ）', 3)
+ok   aidan KO plays once and stops on the last frame {'char': 'aidan', 'slot': 'ko', 'state': 'ko', 'status': 'impl', 'idx': 5, 'total': 6, 'playing': False, 'loop': False, 'speed': 1, 'phase': '最終コマ保持で停止', 'gone': False, 'footSpread': 5.3, 'warn': [], 'kind': 'frames', 'curSlot': 'ko', 'curState': 'aidan_ko_01.png', 'hold': 'last', 'ms': [100, 110, 120, 130, 160, 300]}
+ok   goblin KO dissolve: sprite hidden after the last frame ('消滅（非表示）で停止', 'hidden')
+ok   restart revives the dissolved sprite 
+ok   aidan idle: foot position stays within 12px on screen across frames 1.1
+ok   fiona idle: foot position stays within 12px on screen across frames 0
+ok   lou idle: foot position stays within 12px on screen across frames 6.4
+ok   aidan attack: foot position stays within 12px on screen across frames 4.4
+ok   fiona damage: foot position stays within 12px on screen across frames 4.9
+ok   load failure is reported ['画像読み込み失敗: fiona_damage_03.png（静止画へフォールバック）']
+ok   fallback to the still was applied and an image stays on screen ('1', 'img/battle/characters/fiona/motion/fiona_damage_06.png')
+ok   no save data / localStorage / HP / TP / flag change while testing 
+ok   Esc closes and returns to the arena panel 
+ok   pc: no page errors / 4xx ([], [])
+ok   portrait: existing arena buttons kept + motion test button ['motion', 'go', 'clear', 'freeze', 'place', 'all']
+ok   portrait: stage and panel do not overlap; controls on screen; no horizontal overflow {'st': {'l': 0, 't': 53.59375, 'r': 390, 'b': 338.125}, 'pn': {'l': 0, 't': 338.125, 'r': 390, 'b': 844}, 'ctl': {'l': 10, 't': 339.125, 'r': 380, 'b': 586.171875}, 'vw': 390, 'vh': 844, 'sw': 390}
+ok   portrait: tap selects character + motion (aidan attack, 6f impl) {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 1, 'total': 6, 'playing': True, 'loop': False, 'speed': 1, 'phase': '', 'gone': False, 'footSpread': 1.8, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   portrait: no page errors / 4xx ([], [])
+ok   portrait: Esc closes 
+ok   landscape: existing arena buttons kept + motion test button ['motion', 'go', 'clear', 'freeze', 'place', 'all']
+ok   landscape: stage and panel do not overlap; controls on screen; no horizontal overflow {'st': {'l': 0, 't': 37, 'r': 388.234375, 'b': 390}, 'pn': {'l': 388.234375, 't': 37, 'r': 844, 'b': 390}, 'ctl': {'l': 397.234375, 't': 37, 'r': 836, 'b': 240.109375}, 'vw': 844, 'vh': 390, 'sw': 844}
+ok   landscape: tap selects character + motion (aidan attack, 6f impl) {'char': 'aidan', 'slot': 'attack', 'state': 'attack', 'status': 'impl', 'idx': 1, 'total': 6, 'playing': True, 'loop': False, 'speed': 1, 'phase': '', 'gone': False, 'footSpread': 2.3, 'warn': [], 'kind': 'frames', 'curSlot': 'attack', 'curState': 'aidan_attack_01.png', 'hold': 'last', 'ms': [90, 90, 130, 70, 110, 230]}
+ok   landscape: no page errors / 4xx ([], [])
+ok   landscape: Esc closes 
+FAILS 0

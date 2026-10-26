@@ -1,0 +1,162 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:38:27.643199+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 1,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "focus",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/bg01_background.py",
+    "tests/moss/m16_battle_feel.py",
+    "tests/moss/m10_flow.py",
+    "tests/moss/m22_height_contacts.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/bg01_background.py",
+      "started_at": "2026-10-26T06:38:27.645025+00:00",
+      "status": "PASS",
+      "test_sha256": "e3caffc4a7fc419f1c0733ce0b7214da966b709f7947b2d679232ccc0a8f4811",
+      "exit_code": 0,
+      "test_sha256_after": "e3caffc4a7fc419f1c0733ce0b7214da966b709f7947b2d679232ccc0a8f4811",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:39:02.270120+00:00",
+      "seconds": 34.625,
+      "log": "tests_battle_bg01_background.py.log"
+    },
+    {
+      "name": "tests/moss/m16_battle_feel.py",
+      "started_at": "2026-10-26T06:39:02.270648+00:00",
+      "status": "PASS",
+      "test_sha256": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "exit_code": 0,
+      "test_sha256_after": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:39:42.297156+00:00",
+      "seconds": 40.027,
+      "log": "tests_moss_m16_battle_feel.py.log"
+    },
+    {
+      "name": "tests/moss/m10_flow.py",
+      "started_at": "2026-10-26T06:39:42.297696+00:00",
+      "status": "PASS",
+      "test_sha256": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "exit_code": 0,
+      "test_sha256_after": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:40:51.192758+00:00",
+      "seconds": 68.895,
+      "log": "tests_moss_m10_flow.py.log"
+    },
+    {
+      "name": "tests/moss/m22_height_contacts.py",
+      "started_at": "2026-10-26T06:40:51.193327+00:00",
+      "status": "PASS",
+      "test_sha256": "a1405f6e5b7401cf380a9bc9aff19dec4d11d78a207c2cb27f87f44fafd192b8",
+      "exit_code": 0,
+      "test_sha256_after": "a1405f6e5b7401cf380a9bc9aff19dec4d11d78a207c2cb27f87f44fafd192b8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:41:28.798068+00:00",
+      "seconds": 37.605,
+      "log": "tests_moss_m22_height_contacts.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 4
+  },
+  "ended_at": "2026-10-26T06:41:28.798580+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

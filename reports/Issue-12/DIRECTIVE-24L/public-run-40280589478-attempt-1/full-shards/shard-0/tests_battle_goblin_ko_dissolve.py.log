@@ -1,0 +1,80 @@
+ok   goblin manifest: 6 frames, hold hide 1050
+ok   goblin frames share one canvas, transparent surround (770, 392)
+ok   goblin frames all carry visible content 
+ok   tainted_goblin manifest: 6 frames, hold hide 1050
+ok   tainted_goblin frames share one canvas, transparent surround (650, 459)
+ok   tainted_goblin frames all carry visible content 
+ok   other enemies / other states untouched (slime, boar ko = hold last; goblin has ko only) 
+ok   (1280, 720) natural: enemy visible and idle before the blow idle
+ok   (1280, 720) natural: a KO enemy cannot be put back into an action state (no re-action while dissolving) 
+ok   (1280, 720) natural: mid-dissolve still visible [1, 2, 3, 4]
+ok   (1280, 720) natural: dissolve plays frames 1..6 in order, exactly once [1, 2, 3, 4, 5, 6]
+ok   (1280, 720) natural: after the last frame the dead enemy sprite is hidden (1 of 2), one end event each [{'t': 1071, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1067}}]
+ok   (1280, 720) natural: dissolve duration ~1050 ms (from manifest ms) 1068
+ok   (1280, 720) natural: the battle stage is still up when the dissolve ends 
+ok   (1280, 720) natural: after the first KO the other goblin is still visible and the battle continues [True, False]
+ok   (1280, 720) natural: second goblin dissolved and hidden before the Victory teardown [True, True]
+ok   (1280, 720) natural: Victory flow then tears the stage down as before (after the dissolve) 
+ok   (1280, 720) natural: Victory did not cut the dissolve (all 6 frames were shown) 6
+ok   (1280, 720) natural: no page errors []
+ok   (1280, 720) race: enemy visible and idle before the blow idle
+ok   (1280, 720) race: a KO enemy cannot be put back into an action state (no re-action while dissolving) 
+ok   (1280, 720) race: mid-dissolve still visible [1, 2, 3, 4]
+ok   (1280, 720) race: dissolve plays frames 1..6 in order, exactly once [1, 2, 3, 4, 5, 6]
+ok   (1280, 720) race: after the last frame the dead enemy sprite is hidden (2 of 2), one end event each [{'t': 1055, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1052}}, {'t': 1055, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1052}}]
+ok   (1280, 720) race: dissolve duration ~1050 ms (from manifest ms) 1051
+ok   (1280, 720) race: the battle stage is still up when the dissolve ends 
+ok   (1280, 720) race: Victory flow then tears the stage down as before (after the dissolve) 
+ok   (1280, 720) race: Victory did not cut the dissolve (all 6 frames were shown) 6
+ok   (1280, 720) race: no page errors []
+ok   (390, 844) natural: enemy visible and idle before the blow idle
+ok   (390, 844) natural: a KO enemy cannot be put back into an action state (no re-action while dissolving) 
+ok   (390, 844) natural: mid-dissolve still visible [1, 2, 3, 4]
+ok   (390, 844) natural: dissolve plays frames 1..6 in order, exactly once [1, 2, 3, 4, 5, 6]
+ok   (390, 844) natural: after the last frame the dead enemy sprite is hidden (1 of 2), one end event each [{'t': 1054, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1051}}]
+ok   (390, 844) natural: dissolve duration ~1050 ms (from manifest ms) 1050
+ok   (390, 844) natural: the battle stage is still up when the dissolve ends 
+ok   (390, 844) natural: after the first KO the other goblin is still visible and the battle continues [True, False]
+ok   (390, 844) natural: second goblin dissolved and hidden before the Victory teardown [True, True]
+ok   (390, 844) natural: Victory flow then tears the stage down as before (after the dissolve) 
+ok   (390, 844) natural: Victory did not cut the dissolve (all 6 frames were shown) 6
+ok   (390, 844) natural: no page errors []
+ok   (390, 844) race: enemy visible and idle before the blow idle
+ok   (390, 844) race: a KO enemy cannot be put back into an action state (no re-action while dissolving) 
+ok   (390, 844) race: mid-dissolve still visible [1, 2, 3, 4]
+ok   (390, 844) race: dissolve plays frames 1..6 in order, exactly once [1, 2, 3, 4, 5, 6]
+ok   (390, 844) race: after the last frame the dead enemy sprite is hidden (2 of 2), one end event each [{'t': 1054, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1051}}, {'t': 1055, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1052}}]
+ok   (390, 844) race: dissolve duration ~1050 ms (from manifest ms) 1050
+ok   (390, 844) race: the battle stage is still up when the dissolve ends 
+ok   (390, 844) race: Victory flow then tears the stage down as before (after the dissolve) 
+ok   (390, 844) race: Victory did not cut the dissolve (all 6 frames were shown) 6
+ok   (390, 844) race: no page errors []
+ok   (844, 390) natural: enemy visible and idle before the blow idle
+ok   (844, 390) natural: a KO enemy cannot be put back into an action state (no re-action while dissolving) 
+ok   (844, 390) natural: mid-dissolve still visible [1, 2, 3, 4]
+ok   (844, 390) natural: dissolve plays frames 1..6 in order, exactly once [1, 2, 3, 4, 5, 6]
+ok   (844, 390) natural: after the last frame the dead enemy sprite is hidden (1 of 2), one end event each [{'t': 1055, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1052}}]
+ok   (844, 390) natural: dissolve duration ~1050 ms (from manifest ms) 1051
+ok   (844, 390) natural: the battle stage is still up when the dissolve ends 
+ok   (844, 390) natural: after the first KO the other goblin is still visible and the battle continues [True, False]
+ok   (844, 390) natural: second goblin dissolved and hidden before the Victory teardown [True, True]
+ok   (844, 390) natural: Victory flow then tears the stage down as before (after the dissolve) 
+ok   (844, 390) natural: Victory did not cut the dissolve (all 6 frames were shown) 6
+ok   (844, 390) natural: no page errors []
+ok   (844, 390) race: enemy visible and idle before the blow idle
+ok   (844, 390) race: a KO enemy cannot be put back into an action state (no re-action while dissolving) 
+ok   (844, 390) race: mid-dissolve still visible [1, 2, 3, 4]
+ok   (844, 390) race: dissolve plays frames 1..6 in order, exactly once [1, 2, 3, 4, 5, 6]
+ok   (844, 390) race: after the last frame the dead enemy sprite is hidden (2 of 2), one end event each [{'t': 1053, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1051}}, {'t': 1054, 'd': {'actor': 'goblin', 'state': 'ko', 'gone': True, 'at': 1051}}]
+ok   (844, 390) race: dissolve duration ~1050 ms (from manifest ms) 1050
+ok   (844, 390) race: the battle stage is still up when the dissolve ends 
+ok   (844, 390) race: Victory flow then tears the stage down as before (after the dissolve) 
+ok   (844, 390) race: Victory did not cut the dissolve (all 6 frames were shown) 6
+ok   (844, 390) race: no page errors []
+ok   stop() mid-dissolve leaves no stale timer: nothing hidden, no end event later 
+ok   dissolve to completion hides the sprite 
+ok   next battle begin(): the hidden sprite is restored to idle (no resurrection bug, no stuck hidden) idle
+ok   no page errors (restore flow) []
+ok   plain goblin: frames 1..6 then hidden {'s': [1, 2, 3, 4, 5, 6], 'vis': 'hidden', 'src': 'goblin/goblin_ko_dissolve_06.png'}
+ok   plain goblin: no page errors []
+FAILS 0

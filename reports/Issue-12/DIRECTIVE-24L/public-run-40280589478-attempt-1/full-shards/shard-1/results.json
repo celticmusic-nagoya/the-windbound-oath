@@ -1,0 +1,501 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:54:05.266325+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 1,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "full",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/ally_motion_p3.py",
+    "tests/battle/hit_sync.py",
+    "tests/input/kb_battle.py",
+    "tests/issue54_regression.py",
+    "tests/moss/m13_elder_attack_text.py",
+    "tests/moss/m17_dev_arena.py",
+    "tests/moss/m23_wind_dance_battle.py",
+    "tests/moss/m33_lou_field_review.py",
+    "tests/moss/m55_hz.py",
+    "tests/moss/m7_choreo.py",
+    "tests/moss/walk_map.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/ally_motion_p3.py",
+      "started_at": "2026-10-26T06:54:05.267961+00:00",
+      "status": "PASS",
+      "test_sha256": "7666f733a6dee09f72f0e05fc8c24dfc3ad6aa360f3fdbec3a7010b5c85b4497",
+      "exit_code": 0,
+      "test_sha256_after": "7666f733a6dee09f72f0e05fc8c24dfc3ad6aa360f3fdbec3a7010b5c85b4497",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:55:44.137313+00:00",
+      "seconds": 98.869,
+      "log": "tests_battle_ally_motion_p3.py.log"
+    },
+    {
+      "name": "tests/battle/hit_sync.py",
+      "started_at": "2026-10-26T06:55:44.138201+00:00",
+      "status": "PASS",
+      "test_sha256": "3c57112ce50dd9aa13e676f8fec9c11ab944ad6b77c0da02af30d84c32fce6f2",
+      "exit_code": 0,
+      "test_sha256_after": "3c57112ce50dd9aa13e676f8fec9c11ab944ad6b77c0da02af30d84c32fce6f2",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          },
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:56:03.642725+00:00",
+      "seconds": 19.505,
+      "log": "tests_battle_hit_sync.py.log"
+    },
+    {
+      "name": "tests/input/kb_battle.py",
+      "started_at": "2026-10-26T06:56:03.643372+00:00",
+      "status": "PASS",
+      "test_sha256": "0e3dbec55dfa598ec50618da52beb43cc88c566dde979c01799e7e9e8c065f6b",
+      "exit_code": 0,
+      "test_sha256_after": "0e3dbec55dfa598ec50618da52beb43cc88c566dde979c01799e7e9e8c065f6b",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          },
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:56:49.414005+00:00",
+      "seconds": 45.771,
+      "log": "tests_input_kb_battle.py.log"
+    },
+    {
+      "name": "tests/issue54_regression.py",
+      "started_at": "2026-10-26T06:56:49.414686+00:00",
+      "status": "PASS",
+      "test_sha256": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "exit_code": 0,
+      "test_sha256_after": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:58:58.155445+00:00",
+      "seconds": 128.741,
+      "log": "tests_issue54_regression.py.log"
+    },
+    {
+      "name": "tests/moss/m13_elder_attack_text.py",
+      "started_at": "2026-10-26T06:58:58.156328+00:00",
+      "status": "PASS",
+      "test_sha256": "a3d829e771a206a6e6692c4e7ee8e465069925e551e2f597596012805bf9d165",
+      "exit_code": 0,
+      "test_sha256_after": "a3d829e771a206a6e6692c4e7ee8e465069925e551e2f597596012805bf9d165",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:59:06.938535+00:00",
+      "seconds": 8.782,
+      "log": "tests_moss_m13_elder_attack_text.py.log"
+    },
+    {
+      "name": "tests/moss/m17_dev_arena.py",
+      "started_at": "2026-10-26T06:59:06.939260+00:00",
+      "status": "PASS",
+      "test_sha256": "27c9100064c5624250e92ce1acfe8c540c9beac9126acd56a1236b4d5b441db6",
+      "exit_code": 0,
+      "test_sha256_after": "27c9100064c5624250e92ce1acfe8c540c9beac9126acd56a1236b4d5b441db6",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:59:36.681759+00:00",
+      "seconds": 29.742,
+      "log": "tests_moss_m17_dev_arena.py.log"
+    },
+    {
+      "name": "tests/moss/m23_wind_dance_battle.py",
+      "started_at": "2026-10-26T06:59:36.682537+00:00",
+      "status": "PASS",
+      "test_sha256": "0d7a3227476bf63caee6668f80d108b9c2317fb3b6480b2d7e1c3494d703c3a2",
+      "exit_code": 0,
+      "test_sha256_after": "0d7a3227476bf63caee6668f80d108b9c2317fb3b6480b2d7e1c3494d703c3a2",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&feature=windDanceCommand&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&boltMana=hit&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&boltMana=action&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:00:47.575527+00:00",
+      "seconds": 70.893,
+      "log": "tests_moss_m23_wind_dance_battle.py.log"
+    },
+    {
+      "name": "tests/moss/m33_lou_field_review.py",
+      "started_at": "2026-10-26T07:00:47.576341+00:00",
+      "status": "PASS",
+      "test_sha256": "0131f0618f83d1e1cc875ef26c5e11a56a32de6bda8cf1f389c65bdae2a16a8d",
+      "exit_code": 0,
+      "test_sha256_after": "0131f0618f83d1e1cc875ef26c5e11a56a32de6bda8cf1f389c65bdae2a16a8d",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:03:00.088411+00:00",
+      "seconds": 132.512,
+      "log": "tests_moss_m33_lou_field_review.py.log"
+    },
+    {
+      "name": "tests/moss/m55_hz.py",
+      "started_at": "2026-10-26T07:03:00.089353+00:00",
+      "status": "PASS",
+      "test_sha256": "98e7f03d57f2fac462fde061a83aac11c62a9ad54c634e557e33e34080417f41",
+      "exit_code": 0,
+      "test_sha256_after": "98e7f03d57f2fac462fde061a83aac11c62a9ad54c634e557e33e34080417f41",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          },
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:03:27.387741+00:00",
+      "seconds": 27.298,
+      "log": "tests_moss_m55_hz.py.log"
+    },
+    {
+      "name": "tests/moss/m7_choreo.py",
+      "started_at": "2026-10-26T07:03:27.388594+00:00",
+      "status": "PASS",
+      "test_sha256": "5bf993803cae07c5da00561203c6f99fd6423b8b3a3d0508caa2a3293f53088d",
+      "exit_code": 0,
+      "test_sha256_after": "5bf993803cae07c5da00561203c6f99fd6423b8b3a3d0508caa2a3293f53088d",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:03:46.793776+00:00",
+      "seconds": 19.405,
+      "log": "tests_moss_m7_choreo.py.log"
+    },
+    {
+      "name": "tests/moss/walk_map.py",
+      "started_at": "2026-10-26T07:03:46.794811+00:00",
+      "status": "PASS",
+      "test_sha256": "184da63352d10525483c6166667d850a013608da06022e815631bdbec2b4e748",
+      "exit_code": 0,
+      "test_sha256_after": "184da63352d10525483c6166667d850a013608da06022e815631bdbec2b4e748",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/dev/moss-forest.html?map=../data/maps/moss_forest_02_mossy_ravine.json",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:05:00.352738+00:00",
+      "seconds": 73.558,
+      "log": "tests_moss_walk_map.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 11
+  },
+  "ended_at": "2026-10-26T07:05:00.353589+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

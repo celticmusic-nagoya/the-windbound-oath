@@ -1,0 +1,19 @@
+ok   approach finishes in the requested time (805 ms)
+ok   feet end 60.0 px apart (gap 60)
+ok   share .5: both cover the same distance
+ok   poses: walk while moving, idle facing each other on arrival ['walk:right', 'idle:right']
+ok   pose only changes on state change (no per-frame spam)
+ok   share 1: only the first actor moves
+ok   moveTo by speed (200px @400px/s ~500ms), ends facing the requested direction
+ok   blocked: stops at the last free point (x=139) and reports false
+ok   cancelAll stops the actors and returns them to idle
+ok   conversation starts right after the approach
+ok   conversation ran to its end (8 clicks)
+ok   cliff: Aidan/Fiona approach in time (904 ms)
+ok   cliff: feet 44.0 px apart (gap 44)
+ok   cliff: Fiona ends in idle pose (dir right)
+ok   fionaHold: Fiona stays where the scene put her (no follow easing)
+ok   release(): Fiona follows Aidan again
+ok   scene step: approach completes, then the conversation opens
+ok   scene finished
+ok   0 console errors []

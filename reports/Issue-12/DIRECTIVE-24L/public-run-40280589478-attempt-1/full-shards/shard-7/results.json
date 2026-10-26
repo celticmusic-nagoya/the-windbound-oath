@@ -1,0 +1,356 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:53:48.139949+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 7,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "full",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/command_lock.py",
+    "tests/battle/raider_motion_p5.py",
+    "tests/issue54_ending.py",
+    "tests/moss/m11_road_tavern.py",
+    "tests/moss/m15d_leafy_boar.py",
+    "tests/moss/m21_wind_dance.py",
+    "tests/moss/m32_lou_follower.py",
+    "tests/moss/m55_chest.py",
+    "tests/moss/m6_scenario.py",
+    "tests/moss/seal_a3.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/command_lock.py",
+      "started_at": "2026-10-26T06:53:48.141888+00:00",
+      "status": "PASS",
+      "test_sha256": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "exit_code": 0,
+      "test_sha256_after": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:54:26.201191+00:00",
+      "seconds": 38.059,
+      "log": "tests_battle_command_lock.py.log"
+    },
+    {
+      "name": "tests/battle/raider_motion_p5.py",
+      "started_at": "2026-10-26T06:54:26.201770+00:00",
+      "status": "PASS",
+      "test_sha256": "f224436c391ced8d5be3895970eaf7172cfa2f9c8e83b65479d1cbfb168daa2a",
+      "exit_code": 0,
+      "test_sha256_after": "f224436c391ced8d5be3895970eaf7172cfa2f9c8e83b65479d1cbfb168daa2a",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:55:17.549410+00:00",
+      "seconds": 51.348,
+      "log": "tests_battle_raider_motion_p5.py.log"
+    },
+    {
+      "name": "tests/issue54_ending.py",
+      "started_at": "2026-10-26T06:55:17.549993+00:00",
+      "status": "PASS",
+      "test_sha256": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "exit_code": 0,
+      "test_sha256_after": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:55:24.816413+00:00",
+      "seconds": 7.266,
+      "log": "tests_issue54_ending.py.log"
+    },
+    {
+      "name": "tests/moss/m11_road_tavern.py",
+      "started_at": "2026-10-26T06:55:24.817019+00:00",
+      "status": "PASS",
+      "test_sha256": "fb94bcdeb15b74f7ebeefec2a1f493327c22fdd5218685f71b9435f80ba0bdb8",
+      "exit_code": 0,
+      "test_sha256_after": "fb94bcdeb15b74f7ebeefec2a1f493327c22fdd5218685f71b9435f80ba0bdb8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:56:12.024324+00:00",
+      "seconds": 47.207,
+      "log": "tests_moss_m11_road_tavern.py.log"
+    },
+    {
+      "name": "tests/moss/m15d_leafy_boar.py",
+      "started_at": "2026-10-26T06:56:12.024930+00:00",
+      "status": "PASS",
+      "test_sha256": "d97abf3713e291208d2d80b6778f25f9a342d86032f7ec2a27602f8eeea13cd2",
+      "exit_code": 0,
+      "test_sha256_after": "d97abf3713e291208d2d80b6778f25f9a342d86032f7ec2a27602f8eeea13cd2",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:57:26.225872+00:00",
+      "seconds": 74.201,
+      "log": "tests_moss_m15d_leafy_boar.py.log"
+    },
+    {
+      "name": "tests/moss/m21_wind_dance.py",
+      "started_at": "2026-10-26T06:57:26.226548+00:00",
+      "status": "PASS",
+      "test_sha256": "fe611811ac0a8ac460649d85ead26548a98595771782d0cecf4df70d57570baa",
+      "exit_code": 0,
+      "test_sha256_after": "fe611811ac0a8ac460649d85ead26548a98595771782d0cecf4df70d57570baa",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&feature=windDanceCommand&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:57:38.863183+00:00",
+      "seconds": 12.637,
+      "log": "tests_moss_m21_wind_dance.py.log"
+    },
+    {
+      "name": "tests/moss/m32_lou_follower.py",
+      "started_at": "2026-10-26T06:57:38.863917+00:00",
+      "status": "PASS",
+      "test_sha256": "2c27633999e285a7a0244775e825d420f44ac0d17cb655ca9a9e109e6440e611",
+      "exit_code": 0,
+      "test_sha256_after": "2c27633999e285a7a0244775e825d420f44ac0d17cb655ca9a9e109e6440e611",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:57:50.982522+00:00",
+      "seconds": 12.119,
+      "log": "tests_moss_m32_lou_follower.py.log"
+    },
+    {
+      "name": "tests/moss/m55_chest.py",
+      "started_at": "2026-10-26T06:57:50.983207+00:00",
+      "status": "PASS",
+      "test_sha256": "838ca9b3cea23d032bde3829f395ccc2d333048922cd58c79fa5554e08e12527",
+      "exit_code": 0,
+      "test_sha256_after": "838ca9b3cea23d032bde3829f395ccc2d333048922cd58c79fa5554e08e12527",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:58:09.921607+00:00",
+      "seconds": 18.938,
+      "log": "tests_moss_m55_chest.py.log"
+    },
+    {
+      "name": "tests/moss/m6_scenario.py",
+      "started_at": "2026-10-26T06:58:09.922387+00:00",
+      "status": "PASS",
+      "test_sha256": "91d74d5200a605bae9133dd43102611fcfa23c23bb71a69e3c2905d4b192b1c8",
+      "exit_code": 0,
+      "test_sha256_after": "91d74d5200a605bae9133dd43102611fcfa23c23bb71a69e3c2905d4b192b1c8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:58:18.868754+00:00",
+      "seconds": 8.946,
+      "log": "tests_moss_m6_scenario.py.log"
+    },
+    {
+      "name": "tests/moss/seal_a3.py",
+      "started_at": "2026-10-26T06:58:18.869533+00:00",
+      "status": "PASS",
+      "test_sha256": "53b63a7bf35ff500c4a8ee3f76140d446040d48b4ff7ce04fba54eb04f2d634b",
+      "exit_code": 0,
+      "test_sha256_after": "53b63a7bf35ff500c4a8ee3f76140d446040d48b4ff7ce04fba54eb04f2d634b",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/dev/moss-forest.html?map=../data/maps/moss_forest_03_ancient_grove.json",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/moss-forest.html?map=../data/maps/moss_forest_03_ancient_grove.json",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:01:42.364531+00:00",
+      "seconds": 203.495,
+      "log": "tests_moss_seal_a3.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 10
+  },
+  "ended_at": "2026-10-26T07:01:42.365183+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

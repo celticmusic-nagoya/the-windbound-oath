@@ -1,0 +1,28 @@
+ok   lou ko: 6 frame files, hold last {'n': 6, 'bad': [], 'hold': 'last', 'ms': [100, 110, 120, 130, 160, 300]}
+ok   no 気絶/stun motion state is registered (separate spec pending) 
+ok   BattleStatus still rejects a stun type (no logic change) 
+ok   pc: entry committed 
+ok   pc Lou is not KO in a fresh battle (no HP) 
+ok   pc Lou does not KO when Aidan/Fiona HP hit 0 (logic unchanged) 
+INFO pc KO sampling {"viewport": "pc", "native_mutations": ["lou_ko_01.png", "lou_ko_02.png", "lou_ko_03.png", "lou_ko_04.png", "lou_ko_05.png", "lou_ko_06.png"], "python_polled": ["lou_ko_01.png", "lou_ko_02.png", "lou_ko_03.png", "lou_ko_04.png", "lou_ko_05.png", "lou_ko_06.png"]}
+ok   pc lou ko: plays 6 frames then holds 06 ['lou_ko_01.png', 'lou_ko_02.png', 'lou_ko_03.png', 'lou_ko_04.png', 'lou_ko_05.png', 'lou_ko_06.png']
+ok   pc sync() keeps the final frame (no restart) 
+ok   pc no page errors []
+ok   pc no 4xx for lou assets []
+ok   portrait: entry committed 
+ok   portrait Lou is not KO in a fresh battle (no HP) 
+ok   portrait Lou does not KO when Aidan/Fiona HP hit 0 (logic unchanged) 
+INFO portrait KO sampling {"viewport": "portrait", "native_mutations": ["lou_ko_01.png", "lou_ko_02.png", "lou_ko_03.png", "lou_ko_04.png", "lou_ko_05.png", "lou_ko_06.png"], "python_polled": ["lou_ko_01.png", "lou_ko_02.png", "lou_ko_03.png", "lou_ko_04.png", "lou_ko_05.png", "lou_ko_06.png"]}
+ok   portrait lou ko: plays 6 frames then holds 06 ['lou_ko_01.png', 'lou_ko_02.png', 'lou_ko_03.png', 'lou_ko_04.png', 'lou_ko_05.png', 'lou_ko_06.png']
+ok   portrait sync() keeps the final frame (no restart) 
+ok   portrait no page errors []
+ok   portrait no 4xx for lou assets []
+ok   landscape: entry committed 
+ok   landscape Lou is not KO in a fresh battle (no HP) 
+ok   landscape Lou does not KO when Aidan/Fiona HP hit 0 (logic unchanged) 
+INFO landscape KO sampling {"viewport": "landscape", "native_mutations": ["lou_ko_01.png", "lou_ko_02.png", "lou_ko_03.png", "lou_ko_04.png", "lou_ko_05.png", "lou_ko_06.png"], "python_polled": ["lou_ko_01.png", "lou_ko_02.png", "lou_ko_03.png", "lou_ko_04.png", "lou_ko_05.png", "lou_ko_06.png"]}
+ok   landscape lou ko: plays 6 frames then holds 06 ['lou_ko_01.png', 'lou_ko_02.png', 'lou_ko_03.png', 'lou_ko_04.png', 'lou_ko_05.png', 'lou_ko_06.png']
+ok   landscape sync() keeps the final frame (no restart) 
+ok   landscape no page errors []
+ok   landscape no 4xx for lou assets []
+FAILS 0

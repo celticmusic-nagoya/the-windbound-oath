@@ -1,0 +1,83 @@
+ok   aidan: 6 frames share one canvas (708, 560)
+ok   aidan: foot line unified [554, 554, 555, 555, 555, 554]
+ok   aidan: nothing touches the canvas edge 
+ok   fiona: 6 frames share one canvas (946, 644)
+ok   fiona: foot line unified [640, 641, 640, 641, 641, 640]
+ok   fiona: nothing touches the canvas edge 
+ok   manifest aidan draw 6f/600ms 
+ok   manifest fiona ready 6f/<=900ms 880
+ok   attack/skill manifests untouched 
+ok   (1280, 720) normal: battle committed and opening measured (True, True)
+ok   (1280, 720) normal: opening running, input locked 450ms after it starts [True, 'draw', 'ready', True]
+ok   (1280, 720) normal: exactly one opening event, both actors [{'t': 137.39999999999418, 'd': {'context': 'normal', 'actors': ['aidan', 'fiona'], 'ms': 880}}]
+ok   (1280, 720) normal: both play frames 1..6 once, in order ([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+ok   (1280, 720) normal: frame timing (aidan last frame ~480ms, fiona ~760ms) (482.80000000001746, 712.2000000000116)
+ok   (1280, 720) normal: directly measured input lock direct lock 884.10ms (T=880); poll diagnostic 874.1ms
+ok   (1280, 720) normal: both back at rest (Aidan idle, Fiona still), no double play ('idle', 'idle', False, 'img/battle/characters/fiona/fiona_battle_idle.png')
+ok   (1280, 720) normal: Aidan idle motion resumes 
+ok   (1280, 720) normal: attack/skill never replay the opening 
+ok   (1280, 720) normal: no console errors []
+ok   (1280, 720) raider: battle committed and opening measured (True, True)
+ok   (1280, 720) raider: opening running, input locked 450ms after it starts [True, 'draw', 'ready', True]
+ok   (1280, 720) raider: exactly one opening event, both actors [{'t': 289.70000000001164, 'd': {'context': 'raider', 'actors': ['aidan', 'fiona'], 'ms': 880}}]
+ok   (1280, 720) raider: both play frames 1..6 once, in order ([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+ok   (1280, 720) raider: frame timing (aidan last frame ~480ms, fiona ~760ms) (478.29999999998836, 707.7999999999884)
+ok   (1280, 720) raider: directly measured input lock direct lock 882.10ms (T=880); poll diagnostic 868.8ms
+ok   (1280, 720) raider: both back at rest (Aidan idle, Fiona still), no double play ('idle', 'idle', False, 'img/battle/characters/fiona/fiona_battle_idle.png')
+ok   (1280, 720) raider: Aidan idle motion resumes 
+ok   (1280, 720) raider: attack/skill never replay the opening 
+ok   (1280, 720) raider: no console errors []
+ok   (390, 844) normal: battle committed and opening measured (True, True)
+ok   (390, 844) normal: opening running, input locked 450ms after it starts [True, 'draw', 'ready', True]
+ok   (390, 844) normal: exactly one opening event, both actors [{'t': 131.19999999998254, 'd': {'context': 'normal', 'actors': ['aidan', 'fiona'], 'ms': 880}}]
+ok   (390, 844) normal: both play frames 1..6 once, in order ([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+ok   (390, 844) normal: frame timing (aidan last frame ~480ms, fiona ~760ms) (479.79999999998836, 718.5)
+ok   (390, 844) normal: directly measured input lock direct lock 890.60ms (T=880); poll diagnostic 875.9ms
+ok   (390, 844) normal: both back at rest (Aidan idle, Fiona still), no double play ('idle', 'idle', False, 'img/battle/characters/fiona/fiona_battle_idle.png')
+ok   (390, 844) normal: Aidan idle motion resumes 
+ok   (390, 844) normal: attack/skill never replay the opening 
+ok   (390, 844) normal: no console errors []
+ok   (390, 844) raider: battle committed and opening measured (True, True)
+ok   (390, 844) raider: opening running, input locked 450ms after it starts [True, 'draw', 'ready', True]
+ok   (390, 844) raider: exactly one opening event, both actors [{'t': 228.10000000000582, 'd': {'context': 'raider', 'actors': ['aidan', 'fiona'], 'ms': 880}}]
+ok   (390, 844) raider: both play frames 1..6 once, in order ([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+ok   (390, 844) raider: frame timing (aidan last frame ~480ms, fiona ~760ms) (479.6000000000058, 709.0)
+ok   (390, 844) raider: directly measured input lock direct lock 883.70ms (T=880); poll diagnostic 866.1ms
+ok   (390, 844) raider: both back at rest (Aidan idle, Fiona still), no double play ('idle', 'idle', False, 'img/battle/characters/fiona/fiona_battle_idle.png')
+ok   (390, 844) raider: Aidan idle motion resumes 
+ok   (390, 844) raider: attack/skill never replay the opening 
+ok   (390, 844) raider: no console errors []
+ok   (844, 390) normal: battle committed and opening measured (True, True)
+ok   (844, 390) normal: opening running, input locked 450ms after it starts [True, 'draw', 'ready', True]
+ok   (844, 390) normal: exactly one opening event, both actors [{'t': 122.69999999998254, 'd': {'context': 'normal', 'actors': ['aidan', 'fiona'], 'ms': 880}}]
+ok   (844, 390) normal: both play frames 1..6 once, in order ([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+ok   (844, 390) normal: frame timing (aidan last frame ~480ms, fiona ~760ms) (479.79999999998836, 717.5999999999767)
+ok   (844, 390) normal: directly measured input lock direct lock 889.40ms (T=880); poll diagnostic 856.3ms
+ok   (844, 390) normal: both back at rest (Aidan idle, Fiona still), no double play ('idle', 'idle', False, 'img/battle/characters/fiona/fiona_battle_idle.png')
+ok   (844, 390) normal: Aidan idle motion resumes 
+ok   (844, 390) normal: attack/skill never replay the opening 
+ok   (844, 390) normal: no console errors []
+ok   (844, 390) raider: battle committed and opening measured (True, True)
+ok   (844, 390) raider: opening running, input locked 450ms after it starts [True, 'draw', 'ready', True]
+ok   (844, 390) raider: exactly one opening event, both actors [{'t': 239.10000000000582, 'd': {'context': 'raider', 'actors': ['aidan', 'fiona'], 'ms': 880}}]
+ok   (844, 390) raider: both play frames 1..6 once, in order ([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
+ok   (844, 390) raider: frame timing (aidan last frame ~480ms, fiona ~760ms) (478.8999999999942, 708.8999999999942)
+ok   (844, 390) raider: directly measured input lock direct lock 883.00ms (T=880); poll diagnostic 860.3ms
+ok   (844, 390) raider: both back at rest (Aidan idle, Fiona still), no double play ('idle', 'idle', False, 'img/battle/characters/fiona/fiona_battle_idle.png')
+ok   (844, 390) raider: Aidan idle motion resumes 
+ok   (844, 390) raider: attack/skill never replay the opening 
+ok   (844, 390) raider: no console errors []
+ok   measurement control early600 ('FAIL', 'early release 600.20 < 878.00ms')
+ok   measurement control late5000 ('FAIL', 'late release 5006.60ms; long-task evidence=False')
+ok   measurement control workload300 ('PASS', 'direct lock 1061.10ms (T=880)')
+ok   interrupt: cancel mid-opening releases the input lock at once (True, True)
+ok   interrupt: actors still return to rest 
+ok   restart: a new battle start opens once more (lock on) True
+ok   restart: lock released after the opening direct lock 885.50ms (T=880)
+ok   interrupt/restart: no console errors []
+ok   load failure (opening frames): battle refused for retry, no opening lock left (False, ['FAILED', False, False, False])
+ok   load failure: no uncaught errors []
+ok   manifest failure: still-only battle, no opening, input accepted (True, [0, False, False, 'idle', 'idle'])
+ok   manifest failure: no uncaught errors []
+ok   battle exit mid-opening: no lock left (True, True)
+FAILS 0

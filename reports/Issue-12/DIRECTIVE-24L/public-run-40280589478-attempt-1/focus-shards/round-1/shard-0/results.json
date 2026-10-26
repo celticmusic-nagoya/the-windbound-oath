@@ -1,0 +1,238 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:35:35.047999+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 0,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "focus",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/battle_idle6.py",
+    "tests/input/kb_audit.py",
+    "tests/moss/m55_hz.py",
+    "tests/system/capital_story_test.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/battle_idle6.py",
+      "started_at": "2026-10-26T06:35:35.049652+00:00",
+      "status": "PASS",
+      "test_sha256": "9a9135fc3f2969be4fd7e5ec39f21520f62b685bc139d775a0738006f82db282",
+      "exit_code": 0,
+      "test_sha256_after": "9a9135fc3f2969be4fd7e5ec39f21520f62b685bc139d775a0738006f82db282",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/battle-idle-preview.html",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:36:03.709532+00:00",
+      "seconds": 28.66,
+      "log": "tests_battle_battle_idle6.py.log"
+    },
+    {
+      "name": "tests/input/kb_audit.py",
+      "started_at": "2026-10-26T06:36:03.710051+00:00",
+      "status": "PASS",
+      "test_sha256": "8aa0652c6c4ae9fdafd74ff9bb0ceade047bff3fd3a2d64026c43b6c15e7a357",
+      "exit_code": 0,
+      "test_sha256_after": "8aa0652c6c4ae9fdafd74ff9bb0ceade047bff3fd3a2d64026c43b6c15e7a357",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:38:00.555445+00:00",
+      "seconds": 116.845,
+      "log": "tests_input_kb_audit.py.log"
+    },
+    {
+      "name": "tests/moss/m55_hz.py",
+      "started_at": "2026-10-26T06:38:00.556051+00:00",
+      "status": "PASS",
+      "test_sha256": "98e7f03d57f2fac462fde061a83aac11c62a9ad54c634e557e33e34080417f41",
+      "exit_code": 0,
+      "test_sha256_after": "98e7f03d57f2fac462fde061a83aac11c62a9ad54c634e557e33e34080417f41",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          },
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:38:26.217497+00:00",
+      "seconds": 25.661,
+      "log": "tests_moss_m55_hz.py.log"
+    },
+    {
+      "name": "tests/system/capital_story_test.py",
+      "started_at": "2026-10-26T06:38:26.218187+00:00",
+      "status": "PASS",
+      "test_sha256": "2cdce66de37a22b87a46fae0f5939ebf4d820ba17652415cdade7b126836fdb0",
+      "exit_code": 0,
+      "test_sha256_after": "2cdce66de37a22b87a46fae0f5939ebf4d820ba17652415cdade7b126836fdb0",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:38:59.412239+00:00",
+      "seconds": 33.194,
+      "log": "tests_system_capital_story_test.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 4
+  },
+  "ended_at": "2026-10-26T06:38:59.412805+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

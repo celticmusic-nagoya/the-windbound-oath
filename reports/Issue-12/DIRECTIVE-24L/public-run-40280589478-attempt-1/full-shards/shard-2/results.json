@@ -1,0 +1,474 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:53:50.302029+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 2,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "full",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/ally_motion_p3_frames.py",
+    "tests/battle/lou_idle_loop.py",
+    "tests/input/kb_field.py",
+    "tests/lind/walk_intake.py",
+    "tests/moss/m14_capital_gate.py",
+    "tests/moss/m18_moss_scenario.py",
+    "tests/moss/m24_height_contacts_e2e.py",
+    "tests/moss/m33b_boy_swordsman_play.py",
+    "tests/moss/m55_mobile.py",
+    "tests/moss/m7_cliff.py",
+    "tests/system/capital_story_test.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/ally_motion_p3_frames.py",
+      "started_at": "2026-10-26T06:53:50.303917+00:00",
+      "status": "PASS",
+      "test_sha256": "d11f984068e190ba863ce932ea976c1d7a19e276d2ad521a1748998ce4c115ad",
+      "exit_code": 0,
+      "test_sha256_after": "d11f984068e190ba863ce932ea976c1d7a19e276d2ad521a1748998ce4c115ad",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:55:04.435914+00:00",
+      "seconds": 74.132,
+      "log": "tests_battle_ally_motion_p3_frames.py.log"
+    },
+    {
+      "name": "tests/battle/lou_idle_loop.py",
+      "started_at": "2026-10-26T06:55:04.436455+00:00",
+      "status": "PASS",
+      "test_sha256": "2adbf82d500c9fbeb0ce95126373801c246821d0df660f83db7ef5b038f46fa7",
+      "exit_code": 0,
+      "test_sha256_after": "2adbf82d500c9fbeb0ce95126373801c246821d0df660f83db7ef5b038f46fa7",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:55:52.305467+00:00",
+      "seconds": 47.869,
+      "log": "tests_battle_lou_idle_loop.py.log"
+    },
+    {
+      "name": "tests/input/kb_field.py",
+      "started_at": "2026-10-26T06:55:52.306000+00:00",
+      "status": "PASS",
+      "test_sha256": "1439bb5b12091252334288f6bbe35d65999a34becf2cd9f06bbb9fbc9b314e1f",
+      "exit_code": 0,
+      "test_sha256_after": "1439bb5b12091252334288f6bbe35d65999a34becf2cd9f06bbb9fbc9b314e1f",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:56:09.865589+00:00",
+      "seconds": 17.56,
+      "log": "tests_input_kb_field.py.log"
+    },
+    {
+      "name": "tests/lind/walk_intake.py",
+      "started_at": "2026-10-26T06:56:09.866163+00:00",
+      "status": "PASS",
+      "test_sha256": "e4c4dc5ac70893d26d31d3b52cd2a4089c5cec3b122d13e86f096e0d82f534d5",
+      "exit_code": 0,
+      "test_sha256_after": "e4c4dc5ac70893d26d31d3b52cd2a4089c5cec3b122d13e86f096e0d82f534d5",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:56:32.735279+00:00",
+      "seconds": 22.869,
+      "log": "tests_lind_walk_intake.py.log"
+    },
+    {
+      "name": "tests/moss/m14_capital_gate.py",
+      "started_at": "2026-10-26T06:56:32.735908+00:00",
+      "status": "PASS",
+      "test_sha256": "2eef110c4d169416f1d444d82b2966436b27445b0d896d5a880b483da1f5f6ee",
+      "exit_code": 0,
+      "test_sha256_after": "2eef110c4d169416f1d444d82b2966436b27445b0d896d5a880b483da1f5f6ee",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:57:07.420292+00:00",
+      "seconds": 34.684,
+      "log": "tests_moss_m14_capital_gate.py.log"
+    },
+    {
+      "name": "tests/moss/m18_moss_scenario.py",
+      "started_at": "2026-10-26T06:57:07.421159+00:00",
+      "status": "PASS",
+      "test_sha256": "eadc37e4c867d2c328dc4001a36f22f70a44d3ad7305a2d37550f1aeb722e5a5",
+      "exit_code": 0,
+      "test_sha256_after": "eadc37e4c867d2c328dc4001a36f22f70a44d3ad7305a2d37550f1aeb722e5a5",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:57:25.378242+00:00",
+      "seconds": 17.957,
+      "log": "tests_moss_m18_moss_scenario.py.log"
+    },
+    {
+      "name": "tests/moss/m24_height_contacts_e2e.py",
+      "started_at": "2026-10-26T06:57:25.378891+00:00",
+      "status": "SKIP",
+      "test_sha256": "59f23c1de551db5b36c04d831a2996b3eb6e46459681e4a948ef2a45113c5f6f",
+      "exit_code": 0,
+      "test_sha256_after": "59f23c1de551db5b36c04d831a2996b3eb6e46459681e4a948ef2a45113c5f6f",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [
+        "SKIP: rest/ambience external effects have no hooks; active zone ids checked instead"
+      ],
+      "limitation_evidence": {
+        "all_current_checks_pass": true,
+        "checked": [
+          "npc: other level no hook/reward/zone",
+          "npc: own level exactly one hook/reward/zone",
+          "npc: once consumed exactly once",
+          "chest: other level no hook/reward/zone",
+          "chest: own level exactly one hook/reward/zone",
+          "chest: one claimed id",
+          "herb: other level no hook/reward/zone",
+          "herb: own level exactly one hook/reward/zone",
+          "herb: one claimed id",
+          "trigger: other level no hook/reward/zone",
+          "trigger: own level exactly one hook/reward/zone",
+          "trigger: once consumed exactly once",
+          "story: other level no hook/reward/zone",
+          "story: own level exactly one hook/reward/zone",
+          "moving: other level no hook/reward/zone",
+          "moving: own level exactly one hook/reward/zone",
+          "exit: other level no hook/reward/zone",
+          "exit: own level exactly one hook/reward/zone",
+          "rest: other level no hook/reward/zone",
+          "rest: own level exactly one hook/reward/zone",
+          "rest: exact implemented active zone id",
+          "rest: changing level clears zone",
+          "rest: reentry restores zone",
+          "ambience: other level no hook/reward/zone",
+          "ambience: own level exactly one hook/reward/zone",
+          "ambience: exact implemented active zone id",
+          "ambience: changing level clears zone",
+          "ambience: reentry restores zone",
+          "ground NPC tap retains target level0 (outside bridge)",
+          "engagement delay + level change cancels battle hook",
+          "390x844: upper object tap at lifted visual location",
+          "844x390: upper object tap at lifted visual location",
+          "no console/page errors []"
+        ],
+        "errors": [],
+        "scope": "No shipped external rest/ambience effect hooks. Runtime level-specific zone contract is tested. Raw SKIP retained."
+      },
+      "ended_at": "2026-10-26T06:59:08.736085+00:00",
+      "seconds": 103.357,
+      "log": "tests_moss_m24_height_contacts_e2e.py.log"
+    },
+    {
+      "name": "tests/moss/m33b_boy_swordsman_play.py",
+      "started_at": "2026-10-26T06:59:08.736830+00:00",
+      "status": "PASS",
+      "test_sha256": "a6cec9f722a50dcfa440d0bca0289f91e6a1bc608a4eaed446a33cae263bf613",
+      "exit_code": 0,
+      "test_sha256_after": "a6cec9f722a50dcfa440d0bca0289f91e6a1bc608a4eaed446a33cae263bf613",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:00:10.479668+00:00",
+      "seconds": 61.743,
+      "log": "tests_moss_m33b_boy_swordsman_play.py.log"
+    },
+    {
+      "name": "tests/moss/m55_mobile.py",
+      "started_at": "2026-10-26T07:00:10.480586+00:00",
+      "status": "PASS",
+      "test_sha256": "ac023d4a17a8b1ab17e7db931be6f924b28309e379e8f654cecabb143a5ed8cc",
+      "exit_code": 0,
+      "test_sha256_after": "ac023d4a17a8b1ab17e7db931be6f924b28309e379e8f654cecabb143a5ed8cc",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:00:30.121021+00:00",
+      "seconds": 19.64,
+      "log": "tests_moss_m55_mobile.py.log"
+    },
+    {
+      "name": "tests/moss/m7_cliff.py",
+      "started_at": "2026-10-26T07:00:30.121871+00:00",
+      "status": "PASS",
+      "test_sha256": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "exit_code": 0,
+      "test_sha256_after": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:01:07.310939+00:00",
+      "seconds": 37.189,
+      "log": "tests_moss_m7_cliff.py.log"
+    },
+    {
+      "name": "tests/system/capital_story_test.py",
+      "started_at": "2026-10-26T07:01:07.311814+00:00",
+      "status": "PASS",
+      "test_sha256": "2cdce66de37a22b87a46fae0f5939ebf4d820ba17652415cdade7b126836fdb0",
+      "exit_code": 0,
+      "test_sha256_after": "2cdce66de37a22b87a46fae0f5939ebf4d820ba17652415cdade7b126836fdb0",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:01:41.408365+00:00",
+      "seconds": 34.097,
+      "log": "tests_system_capital_story_test.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 10,
+    "SKIP": 1
+  },
+  "ended_at": "2026-10-26T07:01:41.409134+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

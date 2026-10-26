@@ -1,0 +1,71 @@
+ok   rilde_village_01_peace: tr_v_to_moss rect(770,48,120,60) routed via story hook
+ok   rilde_village_01_peace: spawn from_moss_forest (830,190,down)
+ok   rilde_village_01_peace: top edge blocker stays closed (exit rect sits right under it; the player cannot leave the map)
+ok   rilde_village_01_peace: no prop (tree) plugs the north road []
+ok   rilde_village_01_peace: no collision blocker in the north road corridor []
+ok   rilde_village_01_ruin: tr_v_to_moss rect(770,48,120,60) routed via story hook
+ok   rilde_village_01_ruin: spawn from_moss_forest (830,190,down)
+ok   rilde_village_01_ruin: top edge blocker stays closed (exit rect sits right under it; the player cannot leave the map)
+ok   rilde_village_01_ruin: no prop (tree) plugs the north road []
+ok   rilde_village_01_ruin: no collision blocker in the north road corridor []
+ok   peace/ruin spawn name sets identical
+ok   A1 keeps from_lind spawn and tr_to_lind
+ok   A1 weather: clear for stage 0-8 is the first rule
+ok   A1 treasure ids untouched ['tr_a1_ford_hidden', 'tr_a1_hollow', 'tr_a1_meadow', 'tr_a1_stream', 'tr_a1_wayside_late']
+ok   stage 0 village is peace
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 0: player reached the exit rect ({'x': 830, 'y': 58.37999999999953})
+ok   stage 0: north exit does NOT lead to A1 (map rilde_village_01_peace)
+ok   stage 0: a hint toast tells the player to meet Fiona
+ok   Fiona join (#fiona) moves storyStage 0 -> 1 (this is the opening condition)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   round 1: village -> A1 (map moss_forest_01_sunlit_path)
+ok   round 1: arrives at A1 from_lind ({'x': 1429.3, 'y': 5672.9})
+ok   peaceful A1 has monsters but no goblins (12: ['a1_boar_03', 'a1_boar_04', 'a1_boar_05', 'a1_boar_06', 'a1_boar_glade', 'a1_boar_ridge', 'a1_slime_03', 'a1_slime_04'])
+ok   peaceful A1 weather is clear (clear)
+ok   stage stays 1 in A1
+ok   walk precondition: no dialogue open, forest active (ArrowDown)
+ok   round 1: A1 -> village (map rilde_village_01_peace)
+ok   round 1: arrives at village from_moss_forest ({'x': 830, 'y': 190})
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   round 2: village -> A1 (map moss_forest_01_sunlit_path)
+ok   round 2: arrives at A1 from_lind ({'x': 1429.3, 'y': 5672.9})
+ok   walk precondition: no dialogue open, forest active (ArrowDown)
+ok   round 2: A1 -> village (map rilde_village_01_peace)
+ok   round 2: arrives at village from_moss_forest ({'x': 830, 'y': 190})
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   round 3: village -> A1 (map moss_forest_01_sunlit_path)
+ok   round 3: arrives at A1 from_lind ({'x': 1429.3, 'y': 5672.9})
+ok   walk precondition: no dialogue open, forest active (ArrowDown)
+ok   round 3: A1 -> village (map rilde_village_01_peace)
+ok   round 3: arrives at village from_moss_forest ({'x': 830, 'y': 190})
+ok   repeated round trips leave fired/opened/stage identical (no duplicate event firing) ('["ev_arrival","ev_a1_arrival"]', '[]')
+ok   treasures opened unchanged by round trips
+ok   fired ids have no duplicates ['ev_arrival', 'ev_a1_arrival']
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 3: still open
+ok   walk precondition: no dialogue open, forest active (ArrowDown)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 4 (cliff sunset): reached exit, closed
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 5: ruin village, reached exit rect, closed (map rilde_village_01_ruin)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 6: ruin village, reached exit rect, closed (map rilde_village_01_ruin)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 7: ruin village, reached exit rect, closed (map rilde_village_01_ruin)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 8: ruin village, reached exit rect, closed (map rilde_village_01_ruin)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+ok   stage 15: reached exit, peaceful route stays closed (open decision, see report)
+ok   walk precondition: no dialogue open, forest active (ArrowDown)
+ok   stage 9: A1 tr_to_lind blocked (stays in A1)
+ok   stage 9: A1 goblins still present (prologue behaviour unchanged)
+ok   walk precondition: no dialogue open, forest active (ArrowDown)
+ok   stage 12: A1 tr_to_lind blocked (stays in A1)
+ok   stage 12: A1 goblins still present (prologue behaviour unchanged)
+ok   walk precondition: no dialogue open, forest active (ArrowUp)
+save/load probe: map=moss_forest_01_sunlit_path active=True forestScene=block stage=1 moss={"map": "moss_forest_01_sunlit_path", "x": 1412, "y": 5631, "opened": [], "fired
+ok   after the A1-position save is loaded: stage kept (1) and the legacy DOM world is shown (block)
+ok   after load: opened treasures and save format v2 intact
+ok   A1 save at stage 1 restores to A1
+errors []

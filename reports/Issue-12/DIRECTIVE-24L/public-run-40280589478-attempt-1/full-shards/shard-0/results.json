@@ -1,0 +1,482 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:53:58.972018+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 0,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "full",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/aidan_draw.py",
+    "tests/battle/goblin_ko_dissolve.py",
+    "tests/input/kb_audit.py",
+    "tests/issue54_mobile_baseline.py",
+    "tests/moss/m12_attack_ruin.py",
+    "tests/moss/m16_battle_feel.py",
+    "tests/moss/m22_height_contacts.py",
+    "tests/moss/m33_boy_swordsman.py",
+    "tests/moss/m55_cine.py",
+    "tests/moss/m6_talk.py",
+    "tests/moss/walk_a1.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/aidan_draw.py",
+      "started_at": "2026-10-26T06:53:58.973854+00:00",
+      "status": "PASS",
+      "test_sha256": "84a055f707ee3f77816043badccd8aa832aea233a9311b47c94f98bf69fac4fa",
+      "exit_code": 0,
+      "test_sha256_after": "84a055f707ee3f77816043badccd8aa832aea233a9311b47c94f98bf69fac4fa",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/battle-opening-preview.html",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/battle-opening-preview.html",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:54:46.913309+00:00",
+      "seconds": 47.939,
+      "log": "tests_battle_aidan_draw.py.log"
+    },
+    {
+      "name": "tests/battle/goblin_ko_dissolve.py",
+      "started_at": "2026-10-26T06:54:46.913818+00:00",
+      "status": "PASS",
+      "test_sha256": "1d12abe4beb6b00a7d032ff6657d29b59880ac42d03533a2daaf9e4501518018",
+      "exit_code": 0,
+      "test_sha256_after": "1d12abe4beb6b00a7d032ff6657d29b59880ac42d03533a2daaf9e4501518018",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:56:25.339927+00:00",
+      "seconds": 98.426,
+      "log": "tests_battle_goblin_ko_dissolve.py.log"
+    },
+    {
+      "name": "tests/input/kb_audit.py",
+      "started_at": "2026-10-26T06:56:25.340495+00:00",
+      "status": "PASS",
+      "test_sha256": "8aa0652c6c4ae9fdafd74ff9bb0ceade047bff3fd3a2d64026c43b6c15e7a357",
+      "exit_code": 0,
+      "test_sha256_after": "8aa0652c6c4ae9fdafd74ff9bb0ceade047bff3fd3a2d64026c43b6c15e7a357",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:58:25.168663+00:00",
+      "seconds": 119.828,
+      "log": "tests_input_kb_audit.py.log"
+    },
+    {
+      "name": "tests/issue54_mobile_baseline.py",
+      "started_at": "2026-10-26T06:58:25.169359+00:00",
+      "status": "PASS",
+      "test_sha256": "9643dc952aaab976660465d6fddbf52709107565e468c0343151727fbd341455",
+      "exit_code": 0,
+      "test_sha256_after": "9643dc952aaab976660465d6fddbf52709107565e468c0343151727fbd341455",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8766/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:58:36.434270+00:00",
+      "seconds": 11.265,
+      "log": "tests_issue54_mobile_baseline.py.log"
+    },
+    {
+      "name": "tests/moss/m12_attack_ruin.py",
+      "started_at": "2026-10-26T06:58:36.434926+00:00",
+      "status": "PASS",
+      "test_sha256": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "exit_code": 0,
+      "test_sha256_after": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:58:54.880137+00:00",
+      "seconds": 18.445,
+      "log": "tests_moss_m12_attack_ruin.py.log"
+    },
+    {
+      "name": "tests/moss/m16_battle_feel.py",
+      "started_at": "2026-10-26T06:58:54.880811+00:00",
+      "status": "PASS",
+      "test_sha256": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "exit_code": 0,
+      "test_sha256_after": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:59:36.633151+00:00",
+      "seconds": 41.752,
+      "log": "tests_moss_m16_battle_feel.py.log"
+    },
+    {
+      "name": "tests/moss/m22_height_contacts.py",
+      "started_at": "2026-10-26T06:59:36.633876+00:00",
+      "status": "PASS",
+      "test_sha256": "a1405f6e5b7401cf380a9bc9aff19dec4d11d78a207c2cb27f87f44fafd192b8",
+      "exit_code": 0,
+      "test_sha256_after": "a1405f6e5b7401cf380a9bc9aff19dec4d11d78a207c2cb27f87f44fafd192b8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:00:15.342841+00:00",
+      "seconds": 38.709,
+      "log": "tests_moss_m22_height_contacts.py.log"
+    },
+    {
+      "name": "tests/moss/m33_boy_swordsman.py",
+      "started_at": "2026-10-26T07:00:15.343602+00:00",
+      "status": "PASS",
+      "test_sha256": "0df083a7c57326b528c705baf49c4ac8ff47e116c483f8e318e8a8c5c4a2fe86",
+      "exit_code": 0,
+      "isolated_git_history": true,
+      "test_sha256_after": "0df083a7c57326b528c705baf49c4ac8ff47e116c483f8e318e8a8c5c4a2fe86",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:00:41.898116+00:00",
+      "seconds": 26.555,
+      "log": "tests_moss_m33_boy_swordsman.py.log"
+    },
+    {
+      "name": "tests/moss/m55_cine.py",
+      "started_at": "2026-10-26T07:00:41.898870+00:00",
+      "status": "PASS",
+      "test_sha256": "fe9a63b9560bcffa934158481629b022578ad70124f6441652f67f0c9ee30a10",
+      "exit_code": 0,
+      "test_sha256_after": "fe9a63b9560bcffa934158481629b022578ad70124f6441652f67f0c9ee30a10",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:00:57.598824+00:00",
+      "seconds": 15.7,
+      "log": "tests_moss_m55_cine.py.log"
+    },
+    {
+      "name": "tests/moss/m6_talk.py",
+      "started_at": "2026-10-26T07:00:57.599681+00:00",
+      "status": "PASS",
+      "test_sha256": "7366e84f2ee7fb73ba53f06b024057fad6178acbbec30dbef5d1470afa8d6451",
+      "exit_code": 0,
+      "test_sha256_after": "7366e84f2ee7fb73ba53f06b024057fad6178acbbec30dbef5d1470afa8d6451",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:01:05.827270+00:00",
+      "seconds": 8.228,
+      "log": "tests_moss_m6_talk.py.log"
+    },
+    {
+      "name": "tests/moss/walk_a1.py",
+      "started_at": "2026-10-26T07:01:05.828135+00:00",
+      "status": "PASS",
+      "test_sha256": "d1c8e90413be4075704b3a18ad334cdd8f49f6220ff217838e9a93778e08b925",
+      "exit_code": 0,
+      "test_sha256_after": "d1c8e90413be4075704b3a18ad334cdd8f49f6220ff217838e9a93778e08b925",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/dev/moss-forest.html",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T07:01:46.395658+00:00",
+      "seconds": 40.568,
+      "log": "tests_moss_walk_a1.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 11
+  },
+  "ended_at": "2026-10-26T07:01:46.396459+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

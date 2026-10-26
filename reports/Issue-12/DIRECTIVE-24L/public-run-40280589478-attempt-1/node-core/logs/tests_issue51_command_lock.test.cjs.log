@@ -1,0 +1,15 @@
+PASS normal closed drawer rejects pointer/keyboard/programmatic open during hold
+PASS normal unlock is immediately usable without a polling timer
+PASS normal open drawer and descendants disappear during hold and resume afterwards
+PASS normal busy/action-cinematic guards agree with drawer gate
+PASS raider closed drawer rejects pointer/keyboard/programmatic open during hold
+PASS raider unlock is immediately usable without a polling timer
+PASS raider open drawer and descendants disappear during hold and resume afterwards
+PASS raider busy/action-cinematic guards agree with drawer gate
+PASS normal Loading locks COMMAND until readiness or explicit cancellation
+PASS raider Loading locks COMMAND until readiness or explicit cancellation
+PASS normal action submission rejected throughout presentation lock
+PASS raider action submission rejected throughout presentation lock
+PASS lock styling does not depend on viewport orientation
+PASS keyboard layer consumes confirmation/navigation during animation
+14 PASS; simulated DOM only, not browser rendering

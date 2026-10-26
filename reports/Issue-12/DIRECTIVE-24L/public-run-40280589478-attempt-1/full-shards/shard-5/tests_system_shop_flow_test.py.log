@@ -1,0 +1,35 @@
+ok   before stage 15 the shop sells nothing
+ok   stage 3: merchant only chats (no shop choice)
+ok   stage 15: merchant offers 買い物をする / やめておく
+ok   shop modal opens with 6 wares
+ok   with 0 G every ware is disabled
+ok   price list {'potion': 20, 'ether': 45, 'leather_cap': 60, 'cloth_tunic': 50, 'bronze_ring': 90, 'leather_armor': 220}
+ok   with 100 G: armor (220) stays disabled, cheaper wares enabled
+ok   buy leather cap: 100 -> 40 G, in bag, button now 購入済み
+ok   cannot buy the same piece twice, no gold lost
+ok   not enough gold refused
+ok   consumables are bought into battleItems too (20 G)
+ok   Escape closes the shop
+ok   bought pieces equip into head / body / accessory
+ok   DEF +1 +3, MaxHP +5 applied (17/125)
+ok   swapping body armour returns the leather armour to the bag; ownership counts bag + worn
+ok   a worn/bagged piece counts as owned in the shop
+ok   stage15 playable map commits
+ok   stage15 progress is valid without compatibility clamping
+ok   valid shop scene produces SAVE
+ok   saved stage15 contains consistent progress and destination
+ok   shop LOAD commits
+ok   save/load keeps shop purchases
+ok   LOAD preserves original shop SAVE bytes
+ok   stage15 LOAD preserves progress, acquisition history and coordinates without stage10 clamping
+ok   tr_a1_wayside_late holds bronze_ring, gated to stage 15
+ok   tr_a1_wayside_late placed in moss_forest_01_sunlit_path
+ok   tr_a2_ledge_late holds leather_armor, gated to stage 15
+ok   tr_a2_ledge_late placed in moss_forest_02_mossy_ravine
+ok   tr_a1_wayside_late: chest ground is free and a route exists
+ok   tr_a1_wayside_late: shut before stage 15
+ok   tr_a1_wayside_late: opens at stage 15 and gives bronze_ring
+ok   tr_a2_ledge_late: chest ground is free and a route exists
+ok   tr_a2_ledge_late: shut before stage 15
+ok   tr_a2_ledge_late: opens at stage 15 and gives leather_armor
+ok   0 console errors []

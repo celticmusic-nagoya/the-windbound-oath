@@ -1,0 +1,212 @@
+{
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:45:49.514009+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40280589478",
+  "run_attempt": "1",
+  "shard": 2,
+  "manifest_sha256": "b92ae54f7f8978bd6987f14b457f4beaedcd4c77896ba98f3cf1574b21932dc7",
+  "mode": "focus",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/command_lock.py",
+    "tests/moss/m6_quest.py",
+    "tests/battle/aidan_draw.py",
+    "tests/moss/m33_lou_field_review.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/command_lock.py",
+      "started_at": "2026-10-26T06:45:49.515423+00:00",
+      "status": "PASS",
+      "test_sha256": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "exit_code": 0,
+      "test_sha256_after": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:46:17.628911+00:00",
+      "seconds": 28.113,
+      "log": "tests_battle_command_lock.py.log"
+    },
+    {
+      "name": "tests/moss/m6_quest.py",
+      "started_at": "2026-10-26T06:46:17.629431+00:00",
+      "status": "PASS",
+      "test_sha256": "c951a50189bd956d625496ff7050ed055f1ad9bd7f5fa1bedf84ac73ef49cd57",
+      "exit_code": 0,
+      "test_sha256_after": "c951a50189bd956d625496ff7050ed055f1ad9bd7f5fa1bedf84ac73ef49cd57",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:46:23.866289+00:00",
+      "seconds": 6.237,
+      "log": "tests_moss_m6_quest.py.log"
+    },
+    {
+      "name": "tests/battle/aidan_draw.py",
+      "started_at": "2026-10-26T06:46:23.866775+00:00",
+      "status": "PASS",
+      "test_sha256": "84a055f707ee3f77816043badccd8aa832aea233a9311b47c94f98bf69fac4fa",
+      "exit_code": 0,
+      "test_sha256_after": "84a055f707ee3f77816043badccd8aa832aea233a9311b47c94f98bf69fac4fa",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/battle-opening-preview.html",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/battle-opening-preview.html",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:47:04.595149+00:00",
+      "seconds": 40.728,
+      "log": "tests_battle_aidan_draw.py.log"
+    },
+    {
+      "name": "tests/moss/m33_lou_field_review.py",
+      "started_at": "2026-10-26T06:47:04.595681+00:00",
+      "status": "PASS",
+      "test_sha256": "0131f0618f83d1e1cc875ef26c5e11a56a32de6bda8cf1f389c65bdae2a16a8d",
+      "exit_code": 0,
+      "test_sha256_after": "0131f0618f83d1e1cc875ef26c5e11a56a32de6bda8cf1f389c65bdae2a16a8d",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?feature=heightSpecs&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:49:10.371856+00:00",
+      "seconds": 125.776,
+      "log": "tests_moss_m33_lou_field_review.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 4
+  },
+  "ended_at": "2026-10-26T06:49:10.372360+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}
