@@ -16,6 +16,7 @@
     b.classList.toggle('fx-on', p === 'in' || p === 'hold');
     b.classList.toggle('fx-hold', p === 'hold');
     b.dataset.fx = p;
+    try { dispatchEvent(new CustomEvent('altar-fx-phase', {detail: p})); } catch (e) {}   // EventCG starts the contract CG on 'out'
   }
   function prepare() {
     const b = box(); if (!b) return;

@@ -433,6 +433,28 @@ body.villageAttack #inside{display:none!important}
 #altarArtBase{opacity:0;transition:opacity .6s ease-out}#altarArtBase.ready{opacity:1}
 #altarContractFx{opacity:0;transition:opacity 1.4s ease-in}
 #altarArt.fx-on #altarContractFx.ready{opacity:1;transition:opacity .9s ease-out}
+/* Issue #70 event CGs (js/event-cg.js): one item per CG so neighbouring CGs crossfade. The CG area ends above the text box
+ (--cg-bottom, measured); the text box stays on top. Landscape: whole image (contain). Portrait: a 62svh cover box with a per-CG focus. */
+#altarText,#louIntroText{z-index:3}
+.event-cg{position:absolute;inset:0;z-index:2;pointer-events:none;--cg-bottom:0px}
+.event-cg-item{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility 0s linear .4s;background:#05080a}
+.event-cg-item.on{opacity:1;visibility:visible;transition:opacity .45s ease-out,visibility 0s}
+.event-cg-back{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32}
+.event-cg-frame{position:absolute;left:0;right:0;top:0;bottom:var(--cg-bottom);display:flex;align-items:center;justify-content:center}
+.event-cg-img{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.event-cg-flash{position:absolute;inset:0;background:#fff;opacity:0}
+.event-cg-impact.on{transition:opacity .18s ease-out,visibility 0s}
+.event-cg-impact.on .event-cg-flash{animation:event-cg-flash .45s ease-out}
+@keyframes event-cg-flash{from{opacity:.75}to{opacity:0}}
+.event-cg-soft.on{transition:opacity .6s ease-out,visibility 0s}
+.event-cg-climax{transition:opacity 1s ease,visibility 0s linear 1s}
+.event-cg-climax.on{transition:opacity 1.4s ease-in-out,visibility 0s}
+@media (orientation:portrait){
+ .event-cg-frame{bottom:auto;top:max(0px,calc((100% - var(--cg-bottom) - min(100% - var(--cg-bottom),62vh)) / 2));height:min(calc(100% - var(--cg-bottom)),62vh);
+  top:max(0px,calc((100% - var(--cg-bottom) - min(100% - var(--cg-bottom),62svh)) / 2));height:min(calc(100% - var(--cg-bottom)),62svh)}
+ .event-cg-img{object-fit:cover;object-position:var(--cg-focus,50%) 50%}
+}
+@media (prefers-reduced-motion:reduce){.event-cg-impact.on .event-cg-flash{animation:none}}
 #oathSword{position:absolute;left:50%;top:39%;transform:translate(-50%,-50%) rotate(12deg);font-size:66px;display:none;filter:drop-shadow(0 0 14px #d9f4d2)}
 .altarGob{position:absolute;width:50px;height:64px;border-radius:45% 45% 28% 28%;background:#27382a;border:4px solid #704677;color:#dbcce0;display:grid;place-items:center}
 #ag1{left:20%;top:32%}#ag2{right:20%;top:32%}#ag3{left:26%;bottom:25%}#ag4{right:26%;bottom:25%}

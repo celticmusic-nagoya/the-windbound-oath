@@ -16,7 +16,7 @@
 
 <meta name="build-version" content="Phase 2.5.2">
 
-<link rel="stylesheet" href="css/style.css?v=20261026i70">
+<link rel="stylesheet" href="css/style.css?v=20261027i70">
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css?v=20261013lf">
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
@@ -213,7 +213,8 @@
 </div>
 <div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" data-loading-action="retry" type="button" hidden>再試行</button></div>
 <script src="js/load-coordinator.js?v=20261025continue"></script>
-<script src="js/altar-art.js?v=20261026i70"></script>
+<script src="js/altar-art.js?v=20261027i70"></script>
+<script src="js/event-cg.js?v=20261027i70"></script>
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
@@ -1217,12 +1218,12 @@ const louIntroLines=[
 let louIntroIndex=0;
 function startLouIntro(){
  if(PrologueProgress.count()<3)return;
- forestHideScene();louIntroIndex=0;$('#louIntroScene').style.display='block';$('#louIntroText').textContent=louIntroLines[0];
+ forestHideScene();louIntroIndex=0;$('#louIntroScene').style.display='block';$('#louIntroText').textContent=louIntroLines[0];EventCG.start('louIntro');
 }
 $('#louIntroScene').onclick=()=>{
  louIntroIndex++;
- if(louIntroIndex<louIntroLines.length){$('#louIntroText').textContent=louIntroLines[louIntroIndex];return}
- $('#louIntroScene').style.display='none';louFound=true;
+ if(louIntroIndex<louIntroLines.length){$('#louIntroText').textContent=louIntroLines[louIntroIndex];EventCG.update('louIntro',louIntroIndex);return}
+ EventCG.end('louIntro');$('#louIntroScene').style.display='none';louFound=true;
  storyStage=11;setObj('ルーが示した隠し風道を調べよう');forestShow();
 };
 const altarLines=[
@@ -1267,14 +1268,14 @@ const altarLines=[
 let altarIndex=0;
 function startAltarScene(){
  storyStage=12;oathBound=false;altarIndex=0;AltarArt.reset();AltarArt.prepare();$('#altarScene').style.display='block';
- $('#oathSword').style.display='none';$('#altarText').textContent=altarLines[0];
+ $('#oathSword').style.display='none';$('#altarText').textContent=altarLines[0];EventCG.start('altar');
  setObj('古代祭壇で包囲を突破しよう');
 }
 const altarAt=k=>altarLines.findIndex(l=>l.startsWith(k));
 $('#altarScene').onclick=()=>{
  altarIndex++;
  if(altarIndex<altarLines.length){
-   $('#altarText').textContent=altarLines[altarIndex];
+   $('#altarText').textContent=altarLines[altarIndex];EventCG.update('altar',altarIndex);
    if(altarIndex===altarAt('だが次の瞬間、乾いた音とともに'))EquipmentManager.setStoryWeapon('aidan',null);   // 父の剣が折れる(誓いの剣と契約するまで素手)
    if(altarIndex===altarAt('風の舞――'))WindDance.learn();   // フィオナの風の舞: 初回発動で習得(再発火しても何も起きない)
    if(altarIndex===altarAt('――風が集まり、'))$('#oathSword').style.display='block';
@@ -1283,7 +1284,7 @@ $('#altarScene').onclick=()=>{
      $('#oathSword').style.filter='drop-shadow(0 0 28px #e7ffd8)';
    }
  }else{
-   AltarArt.reset();$('#altarScene').style.display='none';startRaiderBattle();
+   AltarArt.reset();EventCG.end('altar');$('#altarScene').style.display='none';startRaiderBattle();
  }
 };
 

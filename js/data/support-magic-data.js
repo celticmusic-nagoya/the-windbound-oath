@@ -1,8 +1,9 @@
 /* Support-magic master (pure data). 風の舞 = Fiona's first support spell: it is first cast by instinct in the Moss Forest altar scene
  * (a story stall of the Goblin Raider), after which it can be used in normal battles.
- * DECIDED by the author (2026-10-13, "standard" plan): caster Fiona, all allies, evasion +15 points (NOT damage reduction), 3 enemy phases
+ * PROVISIONAL numbers (user, 2026-10-27: adopted provisionally, NOT the final balance; adjust here): caster Fiona, all allies,
+ * evasion +15 points (NOT damage reduction), 3 enemy phases
  * (the phase of the cast included), MP10, no stacking (recasting refreshes the duration). Learned at the altar event, unusable before.
- * The command stays behind WINDBOUND_FEATURES.windDanceCommand (off by default) until the balance pass is approved.
+ * The battle command is shown once learned (WINDBOUND_FEATURES.windDanceCommand, on by default since 2026-10-27; ?windDance=off disables it).
  * fiona_bolt_mana = PROVISIONAL (amount 3 / hit-vs-action timing under comparison); default mode 'off'. Modes: 'hit' (MP on a landed bolt) | 'action' (MP when the attack is executed). */
 window.SupportMagicData = Object.freeze({
   wind_dance: Object.freeze({

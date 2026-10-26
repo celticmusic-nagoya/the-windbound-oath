@@ -4,6 +4,7 @@
 - the scenario lines, the contract result (oathBound / oath sword) and the raider hand-off are unchanged
 - the whole altar box (incl. the light beam) stays inside the screen in portrait and landscape
 - the FX changes no screen pixel outside its own non-transparent footprint (no haze / rectangle on the real scene)
+Runs with ?eventCg=0 so the pixel check isolates the FX (event CGs, incl. CG4 after the FX, are covered by m36_event_cg.py).
 Screenshots and timing go to QA_OUT when set (outside the checkout)."""
 import hashlib, json, os, sys, time
 from pathlib import Path
@@ -40,7 +41,7 @@ with server(8819) as base, sync_playwright() as p:
         errors = []
         ctx = b.new_context(viewport={'width': w, 'height': h}, is_mobile=w < h or h < 500, has_touch=True)
         pg = ctx.new_page(); pg.on('pageerror', lambda e: errors.append(str(e)))
-        pg.goto(base + '/index.html?title=0'); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(600); pg.evaluate('closeDialogue()')
+        pg.goto(base + '/index.html?title=0&eventCg=0'); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(600); pg.evaluate('closeDialogue()')
         check(pg.evaluate("!document.querySelector('#altarArtBase').getAttribute('src')"), f'[{view}] altar art is not fetched before the scene')
         pg.evaluate("PrologueProgress.seed(3);giveStarterSword();devResetScreens();closeDialogue();startAltarScene()")
         pg.wait_for_function("document.querySelector('#altarArtBase').classList.contains('ready')&&document.querySelector('#altarContractFx').classList.contains('ready')", timeout=15000)
@@ -105,7 +106,7 @@ with server(8819) as base, sync_playwright() as p:
         check(not errors, f'[{view}] no page errors', errors[:3]); ctx.close()
     # a quick replay never shows a stale FX
     ctx = b.new_context(viewport={'width': 1280, 'height': 720}); pg = ctx.new_page()
-    pg.goto(base + '/index.html?title=0'); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(500); pg.evaluate('closeDialogue()')
+    pg.goto(base + '/index.html?title=0&eventCg=0'); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(500); pg.evaluate('closeDialogue()')
     pg.evaluate("PrologueProgress.seed(3);giveStarterSword();devResetScreens();closeDialogue();startAltarScene();AltarArt.contract()"); pg.wait_for_timeout(300)
     pg.evaluate("startAltarScene()"); pg.wait_for_timeout(1200)
     check(pg.evaluate("AltarArt.phase") == 'idle' and pg.evaluate(FXOP) == 0, 'restarting the scene clears a running FX')
