@@ -165,9 +165,11 @@ with server(8820) as base, sync_playwright() as p:
     for _ in range(14): pg.evaluate("document.querySelector('#altarScene').click()")
     pg.wait_for_timeout(1200)
     check(on(pg, 'altar') == ['altar_cg01'] and pg.evaluate(DBG, 'altar')['shown'] == {'altar_cg01': 1}, 'after load: altar replays, CG1 shown once at line 14')
-    # saving during the altar scene is refused (forest paused) -> no mid-scene save
-    pg.evaluate("localStorage.removeItem(SAVE_KEY)"); pg.evaluate("saveGrowthData()")
-    check(pg.evaluate("localStorage.getItem(SAVE_KEY)") is None, 'no save is written during the altar scene')
+    # the menu (and so SAVE) cannot be reached during the altar scene: the scene covers the MENU button and swallows M
+    # (saveGrowthData() itself does not refuse here when called directly - pre-existing, not reachable by the player)
+    pg.keyboard.press('m'); pg.wait_for_timeout(300)
+    covered = pg.evaluate("(()=>{const r=document.querySelector('#menuOpen').getBoundingClientRect();const e=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return !e||e.id!=='menuOpen'})()")
+    check(covered and pg.evaluate("getComputedStyle(document.querySelector('#systemMenu')).display") == 'none', 'altar scene: MENU button covered and M key does not open the menu (no mid-scene save via UI)')
     check(not errs, 'save/continue: no page errors', errs[:3]); ctx.close()
     # ---- rapid input: 37 clicks without waiting, and fast advance after the grip
     ctx, pg, errs = boot(b, 390, 844, touch=True)
