@@ -92,8 +92,8 @@ with server(8811) as base,sync_playwright() as p:
     repeats('Enter');pg.wait_for_timeout(800)
     after=pg.evaluate("({p:battleItems.potion,e:battleItems.ether,g:gold,opened:MossForest.opened.length})")
     check(after['opened']==before['opened']+1,'held Enter opens exactly one chest',[before,after])
-    pg.evaluate("closeDialogue();startAttackBattle('fieldGob1',100);window.qaBannerState=InputManager.state()")
-    pg.wait_for_function("InputManager.state()!=='BATTLE_ANIMATION'",timeout=10000)   # the battle-start draw/ready opening locks input by design; wait for COMMAND
+    pg.evaluate("()=>{closeDialogue();window.qaEntry=startAttackBattle('fieldGob1',100);window.qaBannerState=InputManager.state()}");check(pg.evaluate('qaEntry') is True,'battle entry commits')
+    pg.wait_for_function("InputManager.state()==='BATTLE_COMMAND'",timeout=30000)   # the battle-start draw/ready opening locks input by design; wait for COMMAND
     pg.keyboard.press('Tab');pg.wait_for_timeout(250);check(pg.evaluate("document.querySelector('#normalBattleCmd').contains(document.activeElement)"),'battle Tab stays within COMMAND',pg.evaluate('qaBannerState'))
     pg.locator('#nAtk').focus();repeats('Enter');pg.wait_for_timeout(100)
     check(pg.evaluate('normalActs.length')<=1,'held Enter battle confirmation queues at most one action',pg.evaluate('normalActs.length'))

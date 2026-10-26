@@ -41,7 +41,12 @@ with server(8816) as base,sync_playwright() as p:
     reg=pg.evaluate("BattleIdleMotion.status.actors.filter(a=>a.actor==='fiona'||a.actor==='aidan').map(a=>a.context+':'+a.actor)")
     check({'normal:fiona','raider:fiona','normal:aidan','raider:aidan'}<=set(reg),'idle loops registered for both actors in both battles',reg)
     for ctx,start,sel in (('normal','startAttackBattle("attackGob1",100)',{'aidan':'#bAidan2','fiona':'#bFiona2'}),('raider','startRaiderBattle()',{'aidan':'#rbAidan','fiona':'#rbFiona'})):
-        pg.evaluate(start);pg.wait_for_timeout(2600)   # opening (draw/ready) finished
+        if ctx=='raider':
+            # Each encounter starts from a fresh page; nested battle entry is forbidden.
+            pg.close();pg=b.new_page(viewport={'width':1280,'height':720});pg.on('pageerror',lambda e:errs.append(str(e)));pg.goto(base+'/index.html');pg.evaluate('closeDialogue()')
+        check(pg.evaluate(start) is True,ctx+': battle entry committed')
+        pg.wait_for_function("InputManager.state()==='BATTLE_COMMAND'")
+        pg.wait_for_function("ctx=>{const actors=BattleIdleMotion.status.actors.filter(a=>a.context===ctx&&['aidan','fiona'].includes(a.actor));return actors.length===2&&actors.every(a=>a.showing)}",arg=ctx)
         res=pg.evaluate("""async(ctx)=>{const seen={aidan:[],fiona:[]},t0=performance.now();
           await new Promise(res=>{const tick=t=>{for(const a of BattleIdleMotion.status.actors)if(a.context===ctx&&seen[a.actor]&&a.showing){const s=seen[a.actor];if(!s.length||s[s.length-1].f!==a.frame)s.push({f:a.frame,t:t-t0})}
             if(t-t0<3600)requestAnimationFrame(tick);else res()};requestAnimationFrame(tick)});return seen}""",ctx)

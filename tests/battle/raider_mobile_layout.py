@@ -16,7 +16,7 @@ with sync_playwright() as p:
  for w,h in [(360,640),(390,844),(844,390),(844,260),(1280,720),(1920,1080)]:
   ctx=b.new_context(viewport={'width':w,'height':h},has_touch=True,device_scale_factor=2)
   pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)));pg.on('response',lambda r:http_errors.append(r.url) if r.status>=400 else None);pg.on('console',lambda m:console_errors.append(m.text) if m.type=='error' else None)
-  pg.goto('http://localhost:8765/index.html');pg.wait_for_timeout(2800);pg.evaluate('closeDialogue();startRaiderBattle();PrologueCombat.spawn();PrologueCombat.spawn();hideRaiderBattleLog()');pg.wait_for_timeout(300)
+  pg.goto('http://localhost:8765/index.html');pg.wait_for_timeout(2800);pg.evaluate('closeDialogue()');check(pg.evaluate('startRaiderBattle()') is True,f'{w}x{h} entry committed');pg.wait_for_function("InputManager.state()==='BATTLE_COMMAND'");pg.evaluate('PrologueCombat.spawn();PrologueCombat.spawn();hideRaiderBattleLog()');pg.locator('#raiderAdd2').wait_for(state='visible')
   r=boxes(pg);mobile=w<h or h<=520
   check(pg.evaluate('rbBoss===1250 && rbPhase()===1'),f'{w}x{h} boss HP/phase baseline')
   if mobile:

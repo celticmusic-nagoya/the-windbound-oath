@@ -10,14 +10,14 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
     pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1200)
     ev=lambda s: pg.evaluate(s)
-    ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();EquipmentManager.reset();MossForest.reset();localStorage.removeItem(SAVE_KEY);gold=0")
+    ev("PrologueProgress.seed(0);Quest.reset();FieldTalk.load(null);Inventory.reset();EquipmentManager.reset();MossForest.reset();forestHideScene();localStorage.removeItem(SAVE_KEY);gold=0")
     base=ev("charStats('aidan')")
     # gate: before stage 15 the shop is closed and the merchant keeps chatting
     ev("storyStage=3"); check(not ev("Shop.isOpen('rilde_general')") and ev("Shop.buy('rilde_general','leather_cap')")['reason']=='closed','before stage 15 the shop sells nothing')
     ev("closeDialogue();FieldTalk.talk('merchant',{source:'test'})"); check('冒険の準備' in pg.inner_text('#msg') and pg.locator('.talkChoices').count()==0,'stage 3: merchant only chats (no shop choice)')
     ev("closeDialogue();FieldTalk.load(null)")
     # stage 15: talk -> choice -> shop modal
-    ev("storyStage=15;closeDialogue()"); ev("FieldTalk.talk('merchant',{source:'test'})")
+    ev("PrologueProgress.seed(3);storyStage=15;closeDialogue()"); ev("FieldTalk.talk('merchant',{source:'test'})")
     labels=pg.locator('.talkChoices button').all_inner_texts(); check(labels==['買い物をする','やめておく'],'stage 15: merchant offers 買い物をする / やめておく')
     pg.click('.talkChoices button >> nth=0'); pg.wait_for_timeout(200)
     check(pg.is_visible('#shopModal') and pg.locator('[data-shop-buy]').count()==6,'shop modal opens with 6 wares')
@@ -41,10 +41,15 @@ with sync_playwright() as p:
     check(r['prev']=='leather_armor' and s['def']==base['def']+2 and ev("EquipmentManager.owned('leather_armor')")==1,'swapping body armour returns the leather armour to the bag; ownership counts bag + worn')
     check(ev("Shop.buy('rilde_general','leather_armor')")['reason']=='owned','a worn/bagged piece counts as owned in the shop')
     # save keeps it
-    ev("renderSystemTab('save');saveGrowthData();EquipmentManager.reset();Inventory.reset();gold=0;loadGrowthData()")
-    check(ev("EquipmentManager.get('aidan').head")=='leather_cap' and ev("gold")==ev("gold") and ev("EquipmentManager.owned('leather_armor')")==1,'save/load keeps shop purchases')
+    expected_gold=ev("gold")
+    ev("renderSystemTab('save');saveGrowthData()");saved=ev("localStorage.getItem(SAVE_KEY)")
+    check(saved is not None,'valid shop scene produces SAVE')
+    ev("EquipmentManager.reset();Inventory.reset();gold=0")
+    check(ev("loadGrowthData()") is True,'shop LOAD commits')
+    check(ev("EquipmentManager.get('aidan').head")=='leather_cap' and ev("gold")==expected_gold and ev("EquipmentManager.owned('leather_armor')")==1,'save/load keeps shop purchases')
+    check(ev("localStorage.getItem(SAVE_KEY)")==saved,'LOAD preserves original shop SAVE bytes')
     # gated armor chests (forest) stay shut before stage 15
-    ev("storyStage=15;EquipmentManager.reset();Inventory.reset()")
+    ev("devResetScreens();forestHideScene();storyStage=15;EquipmentManager.reset();Inventory.reset()")
     for tid,item in (('tr_a1_wayside_late','bronze_ring'),('tr_a2_ledge_late','leather_armor')):
         check(ev("ItemData.treasureStage['%s']"%tid)==15 and ev("ItemData.treasure['%s']"%tid)=={item:1},'%s holds %s, gated to stage 15'%(tid,item))
         for mp in ('moss_forest_01_sunlit_path','moss_forest_02_mossy_ravine'):

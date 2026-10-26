@@ -70,6 +70,10 @@ with server() as base, sync_playwright() as p:
         ck(count(pg,kind)==1,kind+': own level exactly one hook/reward/zone')
         if kind in ('chest','herb'):ck(pg.evaluate('MossForest.opened.length')==1,kind+': one claimed id')
         if kind in ('npc','trigger'):ck(pg.evaluate('MossForest.snapshot().fired.length')==1,kind+': once consumed exactly once')
+        if kind in ('rest','ambience'):
+            ck(pg.evaluate('k=>MossForest.zones[k]',kind)=='test_'+kind,kind+': exact implemented active zone id')
+            pose(pg,1);ck(count(pg,kind)==0,kind+': changing level clears zone')
+            pose(pg,0);ck(count(pg,kind)==1,kind+': reentry restores zone')
         pg.close()
     # Ground outside the overpass -> select ground NPC under bridge.
     pg=fresh(b,base,'npc');pose(pg,0,x=1400)
