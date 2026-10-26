@@ -1,0 +1,393 @@
+{
+  "source_commit": "d7f7e682fe542a75d1048e1932dace9c3df4cc0b",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:05:58.300880+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40276667353",
+  "run_attempt": "1",
+  "shard": 4,
+  "manifest_sha256": "a19278fa0e6d820d601c0c8b572b13405a01b12a5c202f655903f0ec0108706c",
+  "mode": "full",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/battle_idle6.py",
+    "tests/battle/lou_ko_motion.py",
+    "tests/input/kb_raider.py",
+    "tests/moss/m10_flow.py",
+    "tests/moss/m15_slime.py",
+    "tests/moss/m19_perf.py",
+    "tests/moss/m27_cliff_height_overlay.py",
+    "tests/moss/m4_e2e.py",
+    "tests/moss/m6_devui.py",
+    "tests/moss/m8_town_maps.py",
+    "tests/system/equipment_ui_flow_test.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/battle_idle6.py",
+      "started_at": "2026-10-26T06:05:58.302762+00:00",
+      "status": "PASS",
+      "test_sha256": "9a9135fc3f2969be4fd7e5ec39f21520f62b685bc139d775a0738006f82db282",
+      "exit_code": 0,
+      "test_sha256_after": "9a9135fc3f2969be4fd7e5ec39f21520f62b685bc139d775a0738006f82db282",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/dev/battle-idle-preview.html",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:06:27.510642+00:00",
+      "seconds": 29.208,
+      "log": "tests_battle_battle_idle6.py.log"
+    },
+    {
+      "name": "tests/battle/lou_ko_motion.py",
+      "started_at": "2026-10-26T06:06:27.511156+00:00",
+      "status": "PASS",
+      "test_sha256": "9cdf6a461bd28a148d9c72cb1572ce35a478d7025760995d45e0c94c58842427",
+      "exit_code": 0,
+      "test_sha256_after": "9cdf6a461bd28a148d9c72cb1572ce35a478d7025760995d45e0c94c58842427",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:06:56.027581+00:00",
+      "seconds": 28.516,
+      "log": "tests_battle_lou_ko_motion.py.log"
+    },
+    {
+      "name": "tests/input/kb_raider.py",
+      "started_at": "2026-10-26T06:06:56.028103+00:00",
+      "status": "PASS",
+      "test_sha256": "630e227eb559a7666f078f7a969d1cd281f7f7b9a7e782a5d7d95a29269ebdee",
+      "exit_code": 0,
+      "test_sha256_after": "630e227eb559a7666f078f7a969d1cd281f7f7b9a7e782a5d7d95a29269ebdee",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:07:08.441793+00:00",
+      "seconds": 12.414,
+      "log": "tests_input_kb_raider.py.log"
+    },
+    {
+      "name": "tests/moss/m10_flow.py",
+      "started_at": "2026-10-26T06:07:08.442372+00:00",
+      "status": "PASS",
+      "test_sha256": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "exit_code": 0,
+      "test_sha256_after": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:08:22.830526+00:00",
+      "seconds": 74.388,
+      "log": "tests_moss_m10_flow.py.log"
+    },
+    {
+      "name": "tests/moss/m15_slime.py",
+      "started_at": "2026-10-26T06:08:22.831124+00:00",
+      "status": "PASS",
+      "test_sha256": "1437996d8717c7ff5692fcf64c3b0205cc1a7b1c7c918c4425aca37a0f11aff2",
+      "exit_code": 0,
+      "test_sha256_after": "1437996d8717c7ff5692fcf64c3b0205cc1a7b1c7c918c4425aca37a0f11aff2",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:09:05.505020+00:00",
+      "seconds": 42.674,
+      "log": "tests_moss_m15_slime.py.log"
+    },
+    {
+      "name": "tests/moss/m19_perf.py",
+      "started_at": "2026-10-26T06:09:05.505652+00:00",
+      "status": "PASS",
+      "test_sha256": "68552bcd831e082c705516444c2b95138e9cb5eb0ffb26e692b22882fd37cfb3",
+      "exit_code": 0,
+      "test_sha256_after": "68552bcd831e082c705516444c2b95138e9cb5eb0ffb26e692b22882fd37cfb3",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:10:42.296323+00:00",
+      "seconds": 96.791,
+      "log": "tests_moss_m19_perf.py.log"
+    },
+    {
+      "name": "tests/moss/m27_cliff_height_overlay.py",
+      "started_at": "2026-10-26T06:10:42.297046+00:00",
+      "status": "PASS",
+      "test_sha256": "36a57ec13fb7fbb430d5c10812921d538667b69ace9e6a2cb469cc932c69cb98",
+      "exit_code": 0,
+      "test_sha256_after": "36a57ec13fb7fbb430d5c10812921d538667b69ace9e6a2cb469cc932c69cb98",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&feature=heightSpecs&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&feature=heightSpecs&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:12:23.649937+00:00",
+      "seconds": 101.353,
+      "log": "tests_moss_m27_cliff_height_overlay.py.log"
+    },
+    {
+      "name": "tests/moss/m4_e2e.py",
+      "started_at": "2026-10-26T06:12:23.650635+00:00",
+      "status": "PASS",
+      "test_sha256": "760ee4a02df3c3fd40505886ea0e50b18b2abd42107c03d359983cdba7d78f53",
+      "exit_code": 0,
+      "test_sha256_after": "760ee4a02df3c3fd40505886ea0e50b18b2abd42107c03d359983cdba7d78f53",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:15:00.744770+00:00",
+      "seconds": 157.094,
+      "log": "tests_moss_m4_e2e.py.log"
+    },
+    {
+      "name": "tests/moss/m6_devui.py",
+      "started_at": "2026-10-26T06:15:00.745475+00:00",
+      "status": "PASS",
+      "test_sha256": "9c583f4b399475e436d3564b41e4cc86f8f36bbffb19a06e632f6c8b72d50258",
+      "exit_code": 0,
+      "test_sha256_after": "9c583f4b399475e436d3564b41e4cc86f8f36bbffb19a06e632f6c8b72d50258",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:15:20.301391+00:00",
+      "seconds": 19.556,
+      "log": "tests_moss_m6_devui.py.log"
+    },
+    {
+      "name": "tests/moss/m8_town_maps.py",
+      "started_at": "2026-10-26T06:15:20.302156+00:00",
+      "status": "PASS",
+      "test_sha256": "3695cd533145e44a622c8ad52d3afe4e6143b213f280d5fe8c8d89ee73757145",
+      "exit_code": 0,
+      "test_sha256_after": "3695cd533145e44a622c8ad52d3afe4e6143b213f280d5fe8c8d89ee73757145",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:20:11.337322+00:00",
+      "seconds": 291.035,
+      "log": "tests_moss_m8_town_maps.py.log"
+    },
+    {
+      "name": "tests/system/equipment_ui_flow_test.py",
+      "started_at": "2026-10-26T06:20:11.338202+00:00",
+      "status": "PASS",
+      "test_sha256": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "exit_code": 0,
+      "test_sha256_after": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:20:23.908155+00:00",
+      "seconds": 12.57,
+      "log": "tests_system_equipment_ui_flow_test.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 11
+  },
+  "ended_at": "2026-10-26T06:20:23.908845+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

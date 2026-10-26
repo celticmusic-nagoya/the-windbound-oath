@@ -1,0 +1,135 @@
+{
+  "phase": "READY",
+  "stage": 15,
+  "map": "fort_dunvall_01_courtyard",
+  "feet": {
+    "x": 1735,
+    "y": 1080
+  },
+  "active": true,
+  "busy": false,
+  "enterCount": 3,
+  "battle": "none",
+  "end": "none",
+  "inventory": {
+    "key": {},
+    "gear": {
+      "leather_cap": 1,
+      "leather_armor": 1,
+      "bronze_ring": 1
+    },
+    "claimed": []
+  },
+  "equipment": {
+    "v": 1,
+    "state": {
+      "aidan": {
+        "weapon": "oath_sword"
+      }
+    },
+    "unlocked": true
+  },
+  "progress": {
+    "version": 2,
+    "legacyEvents": {
+      "v": 1,
+      "drawer": true,
+      "pot": true,
+      "balloon": false,
+      "balloonDone": false,
+      "cat": false,
+      "catFound": false,
+      "catDone": false,
+      "unknown": [
+        "drawer",
+        "pot"
+      ]
+    },
+    "defeated": [
+      "moss_corruption_01",
+      "moss_corruption_02",
+      "moss_corruption_03"
+    ],
+    "corruptionCount": 3,
+    "barrierOpen": true,
+    "louFound": true,
+    "storyStage": 15,
+    "attackStep": 0,
+    "northPhase": 0,
+    "forestStoneSeen": false,
+    "moss": {
+      "map": "fort_dunvall_01_courtyard",
+      "x": 1718,
+      "y": 1038,
+      "opened": [],
+      "fired": [
+        "ev_arrival"
+      ],
+      "facing": {
+        "dir": "right",
+        "flip": false
+      }
+    },
+    "position": {
+      "px": 270,
+      "py": 610
+    },
+    "currentObjective": "家を出て、訓練場のフィオナに会いに行こう",
+    "subQuests": {
+      "balloon": {
+        "title": "風に飛ばされた風船",
+        "state": "locked",
+        "objective": "",
+        "reward": "きずぐすり×2"
+      },
+      "cat": {
+        "title": "迷子の猫",
+        "state": "locked",
+        "objective": "",
+        "reward": "毒消し×2"
+      }
+    }
+  },
+  "members": {
+    "aidan": {
+      "joined": true,
+      "level": 1,
+      "exp": 0
+    },
+    "fiona": {
+      "joined": true,
+      "level": 1,
+      "exp": 0,
+      "learned": {
+        "wind_dance": true
+      }
+    },
+    "liam": {
+      "joined": false,
+      "level": 1,
+      "exp": 0
+    },
+    "morwen": {
+      "joined": false,
+      "level": 1,
+      "exp": 0
+    },
+    "dwarf": {
+      "joined": false,
+      "level": 1,
+      "exp": 0
+    },
+    "dancer": {
+      "joined": false,
+      "level": 1,
+      "exp": 0
+    }
+  },
+  "gold": 0,
+  "battleItems": {
+    "potion": 4,
+    "ether": 2
+  },
+  "ahp": 100,
+  "battleBusy": false
+}

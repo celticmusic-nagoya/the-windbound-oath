@@ -1,0 +1,63 @@
+ok   all 30 raider frame files exist []
+ok   only the 5 adopted raider states are registered (candidates PENDING) ['attack', 'damage', 'enrage', 'call', 'idle']
+ok   pc idle loop plays (6 distinct frames) ['goblin_raider_idle_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png', 'goblin_raider_idle_03.png', 'goblin_raider_idle_04.png', 'goblin_raider_idle_05.png', 'goblin_raider_idle_06.png', 'goblin_raider_idle_01.png']
+ok   pc attack apparent body size = 100% of the still (applied scale 1.37 of 1.37) 
+ok   pc attack: plays 6 distinct frames then idle ['goblin_raider_attack_01.png', 'goblin_raider_attack_02.png', 'goblin_raider_attack_03.png', 'goblin_raider_attack_04.png', 'goblin_raider_attack_05.png', 'goblin_raider_attack_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   pc attack: scale applied while playing (1.37) 
+ok   pc attack: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 616, 'R': 1276, 'T': 157, 'lim': {'l': 0, 'r': 1280, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   pc damage apparent body size = 100% of the still (applied scale 1.88 of 1.88) 
+ok   pc damage: plays 6 distinct frames then idle ['goblin_raider_damage_01.png', 'goblin_raider_damage_02.png', 'goblin_raider_damage_03.png', 'goblin_raider_damage_04.png', 'goblin_raider_damage_05.png', 'goblin_raider_damage_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   pc damage: scale applied while playing (1.88) 
+ok   pc damage: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 567, 'R': 1275, 'T': 204, 'lim': {'l': 0, 'r': 1280, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   pc enrage apparent body size = 100% of the still (applied scale 1.35 of 1.35) 
+ok   pc enrage: plays 6 distinct frames then idle ['goblin_raider_enrage_01.png', 'goblin_raider_enrage_02.png', 'goblin_raider_enrage_03.png', 'goblin_raider_enrage_04.png', 'goblin_raider_enrage_05.png', 'goblin_raider_enrage_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   pc enrage: scale applied while playing (1.35) 
+ok   pc enrage: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 647, 'R': 1276, 'T': 191, 'lim': {'l': 0, 'r': 1280, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   pc call apparent body size = 99% of the still (applied scale 1.05 of 1.05) 
+ok   pc call: plays 6 distinct frames then idle ['goblin_raider_call_01.png', 'goblin_raider_call_02.png', 'goblin_raider_call_03.png', 'goblin_raider_call_04.png', 'goblin_raider_call_05.png', 'goblin_raider_call_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   pc call: scale applied while playing (1.05) 
+ok   pc call: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 784, 'R': 1275, 'T': 194, 'lim': {'l': 0, 'r': 1280, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   pc KO still shows the legacy still, unscaled {'src': 'goblin_raider_ko.png', 'scale': None, 'st': 'ko'}
+ok   pc no page errors []
+ok   pc no 4xx for raider assets []
+ok   portrait idle loop plays (6 distinct frames) ['goblin_raider_idle_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png', 'goblin_raider_idle_03.png', 'goblin_raider_idle_04.png', 'goblin_raider_idle_05.png', 'goblin_raider_idle_06.png', 'goblin_raider_idle_01.png']
+ok   portrait attack apparent body size = 92% of the still (applied scale 1.26 of 1.37) portrait may be capped to fit the screen
+ok   portrait attack: plays 6 distinct frames then idle ['goblin_raider_attack_01.png', 'goblin_raider_attack_02.png', 'goblin_raider_attack_03.png', 'goblin_raider_attack_04.png', 'goblin_raider_attack_05.png', 'goblin_raider_attack_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   portrait attack: scale applied while playing (1.37) 
+ok   portrait attack: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 2, 'R': 387, 'T': 145, 'lim': {'l': 0, 'r': 390, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   portrait damage apparent body size = 86% of the still (applied scale 1.61 of 1.88) portrait may be capped to fit the screen
+ok   portrait damage: plays 6 distinct frames then idle ['goblin_raider_damage_01.png', 'goblin_raider_damage_02.png', 'goblin_raider_damage_03.png', 'goblin_raider_damage_04.png', 'goblin_raider_damage_05.png', 'goblin_raider_damage_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   portrait damage: scale applied while playing (1.88) 
+ok   portrait damage: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 2, 'R': 386, 'T': 192, 'lim': {'l': 0, 'r': 390, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   portrait enrage apparent body size = 96% of the still (applied scale 1.30 of 1.35) portrait may be capped to fit the screen
+ok   portrait enrage: plays 6 distinct frames then idle ['goblin_raider_enrage_01.png', 'goblin_raider_enrage_02.png', 'goblin_raider_enrage_03.png', 'goblin_raider_enrage_04.png', 'goblin_raider_enrage_05.png', 'goblin_raider_enrage_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   portrait enrage: scale applied while playing (1.35) 
+ok   portrait enrage: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 3, 'R': 387, 'T': 150, 'lim': {'l': 0, 'r': 390, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   portrait call apparent body size = 99% of the still (applied scale 1.05 of 1.05) 
+ok   portrait call: plays 6 distinct frames then idle ['goblin_raider_call_01.png', 'goblin_raider_call_02.png', 'goblin_raider_call_03.png', 'goblin_raider_call_04.png', 'goblin_raider_call_05.png', 'goblin_raider_call_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   portrait call: scale applied while playing (1.05) 
+ok   portrait call: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 54, 'R': 366, 'T': 139, 'lim': {'l': 0, 'r': 390, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   portrait KO still shows the legacy still, unscaled {'src': 'goblin_raider_ko.png', 'scale': None, 'st': 'ko'}
+ok   portrait no page errors []
+ok   portrait no 4xx for raider assets []
+ok   landscape idle loop plays (6 distinct frames) ['goblin_raider_idle_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png', 'goblin_raider_idle_03.png', 'goblin_raider_idle_04.png', 'goblin_raider_idle_05.png', 'goblin_raider_idle_06.png', 'goblin_raider_idle_01.png']
+ok   landscape attack apparent body size = 100% of the still (applied scale 1.37 of 1.37) 
+ok   landscape attack: plays 6 distinct frames then idle ['goblin_raider_attack_01.png', 'goblin_raider_attack_02.png', 'goblin_raider_attack_03.png', 'goblin_raider_attack_04.png', 'goblin_raider_attack_05.png', 'goblin_raider_attack_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   landscape attack: scale applied while playing (1.37) 
+ok   landscape attack: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 463, 'R': 841, 'T': 10, 'lim': {'l': 0, 'r': 844, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   landscape damage apparent body size = 100% of the still (applied scale 1.88 of 1.88) 
+ok   landscape damage: plays 6 distinct frames then idle ['goblin_raider_damage_01.png', 'goblin_raider_damage_02.png', 'goblin_raider_damage_03.png', 'goblin_raider_damage_04.png', 'goblin_raider_damage_05.png', 'goblin_raider_damage_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   landscape damage: scale applied while playing (1.88) 
+ok   landscape damage: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 435, 'R': 840, 'T': 37, 'lim': {'l': 0, 'r': 844, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   landscape enrage apparent body size = 100% of the still (applied scale 1.35 of 1.35) 
+ok   landscape enrage: plays 6 distinct frames then idle ['goblin_raider_enrage_01.png', 'goblin_raider_enrage_02.png', 'goblin_raider_enrage_03.png', 'goblin_raider_enrage_04.png', 'goblin_raider_enrage_05.png', 'goblin_raider_enrage_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   landscape enrage: scale applied while playing (1.35) 
+ok   landscape enrage: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 481, 'R': 841, 'T': 29, 'lim': {'l': 0, 'r': 844, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   landscape call apparent body size = 99% of the still (applied scale 1.05 of 1.05) 
+ok   landscape call: plays 6 distinct frames then idle ['goblin_raider_call_01.png', 'goblin_raider_call_02.png', 'goblin_raider_call_03.png', 'goblin_raider_call_04.png', 'goblin_raider_call_05.png', 'goblin_raider_call_06.png', 'goblin_raider_idle_01.png', 'goblin_raider_idle_02.png']
+ok   landscape call: scale applied while playing (1.05) 
+ok   landscape call: figure (all 6 frames) stays inside the viewport / clipping ancestors {'L': 521, 'R': 802, 'T': 31, 'lim': {'l': 0, 'r': 844, 't': 0}, 'clipBy': ['raiderBattle', 'game']}
+ok   landscape KO still shows the legacy still, unscaled {'src': 'goblin_raider_ko.png', 'scale': None, 'st': 'ko'}
+ok   landscape no page errors []
+ok   landscape no 4xx for raider assets []
+FAILS 0

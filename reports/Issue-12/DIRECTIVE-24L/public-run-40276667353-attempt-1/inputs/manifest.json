@@ -1,0 +1,494 @@
+{
+  "source_commit": "d7f7e682fe542a75d1048e1932dace9c3df4cc0b",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "inventory_ref": "d77d910ead09d3ecee0901f139d8fb71f77c041b",
+  "inventory_sha256": "b3d0f9d5cbd0b19d8a496ffa95a88d7e26cba0b63ca23598d0f9240d0e7637d1",
+  "count": 86,
+  "shards": 8,
+  "timeout_seconds": 900,
+  "tests": [
+    {
+      "name": "tests/battle/aidan_draw.py",
+      "sha256": "84a055f707ee3f77816043badccd8aa832aea233a9311b47c94f98bf69fac4fa",
+      "before_24g_sha256": "59ae00b5fe78e4c362c34f6b97acfedf71989d6c2c4b1f46556d383a58fcab5a"
+    },
+    {
+      "name": "tests/battle/ally_motion_p3.py",
+      "sha256": "7666f733a6dee09f72f0e05fc8c24dfc3ad6aa360f3fdbec3a7010b5c85b4497",
+      "before_24g_sha256": "7666f733a6dee09f72f0e05fc8c24dfc3ad6aa360f3fdbec3a7010b5c85b4497"
+    },
+    {
+      "name": "tests/battle/ally_motion_p3_frames.py",
+      "sha256": "d11f984068e190ba863ce932ea976c1d7a19e276d2ad521a1748998ce4c115ad",
+      "before_24g_sha256": "886a9c4a26f1720fce190cb798a5e2e221f306151d56cef5f812a35b5e0df5b1"
+    },
+    {
+      "name": "tests/battle/arena_motion_test.py",
+      "sha256": "19dcb7eb0b45c35edf142e0e03499108fe9b52546dcad202ee56a3643b56c849",
+      "before_24g_sha256": "19dcb7eb0b45c35edf142e0e03499108fe9b52546dcad202ee56a3643b56c849"
+    },
+    {
+      "name": "tests/battle/battle_idle6.py",
+      "sha256": "9a9135fc3f2969be4fd7e5ec39f21520f62b685bc139d775a0738006f82db282",
+      "before_24g_sha256": "a37c822e44d985294a01c79c4b3ba63b5ca238c7bf1f3f93e79caec878f6142c"
+    },
+    {
+      "name": "tests/battle/battle_opening.py",
+      "sha256": "d1af932db402f3f3d7cb95145718c3bb7f743b60c9eb08caea0a49b91557275b",
+      "before_24g_sha256": "d1af932db402f3f3d7cb95145718c3bb7f743b60c9eb08caea0a49b91557275b"
+    },
+    {
+      "name": "tests/battle/bg01_background.py",
+      "sha256": "e3caffc4a7fc419f1c0733ce0b7214da966b709f7947b2d679232ccc0a8f4811",
+      "before_24g_sha256": "e583969c0a510ea0d6a3b31027e591345a1110fd0d20693127182ad2b9d9247e"
+    },
+    {
+      "name": "tests/battle/command_lock.py",
+      "sha256": "8a47b53c2117aa1c27ab23bf0fe8eb1abc7d2f67d5e95e9643c58cd0693cf6f8",
+      "before_24g_sha256": "01ccc45421ffb36c87e7f15c535cd361e2c3a998e466dd1f6ddd20b6ce231b8a"
+    },
+    {
+      "name": "tests/battle/goblin_ko_dissolve.py",
+      "sha256": "1d12abe4beb6b00a7d032ff6657d29b59880ac42d03533a2daaf9e4501518018",
+      "before_24g_sha256": "1d12abe4beb6b00a7d032ff6657d29b59880ac42d03533a2daaf9e4501518018"
+    },
+    {
+      "name": "tests/battle/hit_sync.py",
+      "sha256": "3c57112ce50dd9aa13e676f8fec9c11ab944ad6b77c0da02af30d84c32fce6f2",
+      "before_24g_sha256": "3c57112ce50dd9aa13e676f8fec9c11ab944ad6b77c0da02af30d84c32fce6f2"
+    },
+    {
+      "name": "tests/battle/lou_idle_loop.py",
+      "sha256": "2adbf82d500c9fbeb0ce95126373801c246821d0df660f83db7ef5b038f46fa7",
+      "before_24g_sha256": "2adbf82d500c9fbeb0ce95126373801c246821d0df660f83db7ef5b038f46fa7"
+    },
+    {
+      "name": "tests/battle/lou_idle_real_flow.py",
+      "sha256": "ebe6cb6f9e5d46aa68e1e916799fb2f5c27e6bd98ef3bb96864f54c1324c2942",
+      "before_24g_sha256": "ebe6cb6f9e5d46aa68e1e916799fb2f5c27e6bd98ef3bb96864f54c1324c2942"
+    },
+    {
+      "name": "tests/battle/lou_ko_motion.py",
+      "sha256": "9cdf6a461bd28a148d9c72cb1572ce35a478d7025760995d45e0c94c58842427",
+      "before_24g_sha256": "10ab164762249e72027fe42c5e74d3b66d6786f845414f6bd35b8f98b383b7ec"
+    },
+    {
+      "name": "tests/battle/motion_intake.py",
+      "sha256": "2e796742474c96edd8e2255c3cd023cbe61f453ae338d1140d10e85f75c37566",
+      "before_24g_sha256": "2e796742474c96edd8e2255c3cd023cbe61f453ae338d1140d10e85f75c37566"
+    },
+    {
+      "name": "tests/battle/raider_mobile_layout.py",
+      "sha256": "3fd112018f25ba1973525b192cb30b711e5cfebdc4404f3f7a595e98a91e8d8a",
+      "before_24g_sha256": "e00711b7b651b5cbc23f5dce15e8a975ea128a347bd998462c35c1b4b70850f8"
+    },
+    {
+      "name": "tests/battle/raider_motion_p5.py",
+      "sha256": "f224436c391ced8d5be3895970eaf7172cfa2f9c8e83b65479d1cbfb168daa2a",
+      "before_24g_sha256": "f224436c391ced8d5be3895970eaf7172cfa2f9c8e83b65479d1cbfb168daa2a"
+    },
+    {
+      "name": "tests/input/kb_audit.py",
+      "sha256": "8aa0652c6c4ae9fdafd74ff9bb0ceade047bff3fd3a2d64026c43b6c15e7a357",
+      "before_24g_sha256": "a4235be913da1aaae94e2e3d5aa4147092345a40e2114fecf8802f433f1a75eb"
+    },
+    {
+      "name": "tests/input/kb_battle.py",
+      "sha256": "0e3dbec55dfa598ec50618da52beb43cc88c566dde979c01799e7e9e8c065f6b",
+      "before_24g_sha256": "0e3dbec55dfa598ec50618da52beb43cc88c566dde979c01799e7e9e8c065f6b"
+    },
+    {
+      "name": "tests/input/kb_field.py",
+      "sha256": "1439bb5b12091252334288f6bbe35d65999a34becf2cd9f06bbb9fbc9b314e1f",
+      "before_24g_sha256": "1439bb5b12091252334288f6bbe35d65999a34becf2cd9f06bbb9fbc9b314e1f"
+    },
+    {
+      "name": "tests/input/kb_menu.py",
+      "sha256": "0a5d6441a87e299ec96736156c05e12ea634af6c2b26e4565f464a6af704029c",
+      "before_24g_sha256": "0a5d6441a87e299ec96736156c05e12ea634af6c2b26e4565f464a6af704029c"
+    },
+    {
+      "name": "tests/input/kb_raider.py",
+      "sha256": "630e227eb559a7666f078f7a969d1cd281f7f7b9a7e782a5d7d95a29269ebdee",
+      "before_24g_sha256": "630e227eb559a7666f078f7a969d1cd281f7f7b9a7e782a5d7d95a29269ebdee"
+    },
+    {
+      "name": "tests/input/kb_scene.py",
+      "sha256": "6c9d079c685837ee662c695d8d4dc5f9e52ac49c3ca34ede5d251dd1a3c41cbd",
+      "before_24g_sha256": "6c9d079c685837ee662c695d8d4dc5f9e52ac49c3ca34ede5d251dd1a3c41cbd"
+    },
+    {
+      "name": "tests/issue54_additional.py",
+      "sha256": "58774e436e77bdb7350cebb72f99321ecc7f0383c91055f10a41eada2fa3cfdf",
+      "before_24g_sha256": "1c0b7b917a190f607332d63c2b4bc119e623714da484f8c200dc8f5bdd1b34b4"
+    },
+    {
+      "name": "tests/issue54_ending.py",
+      "sha256": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa",
+      "before_24g_sha256": "fd9ec96a4d31e5a1fe1c8749778f60593eca7311ba1aec1792a4b9c7072841aa"
+    },
+    {
+      "name": "tests/issue54_mobile_baseline.py",
+      "sha256": "9643dc952aaab976660465d6fddbf52709107565e468c0343151727fbd341455",
+      "before_24g_sha256": "9643dc952aaab976660465d6fddbf52709107565e468c0343151727fbd341455"
+    },
+    {
+      "name": "tests/issue54_regression.py",
+      "sha256": "8fe413f50905ade07c0cb0e297832cfeed819463f4f428cd1c1baf42b87ff8ef",
+      "before_24g_sha256": "9e9c4cd93b7360c0b600b5c1d11aed89a54f9fb11928053618c37e2397d81e5e"
+    },
+    {
+      "name": "tests/lind/walk_intake.py",
+      "sha256": "e4c4dc5ac70893d26d31d3b52cd2a4089c5cec3b122d13e86f096e0d82f534d5",
+      "before_24g_sha256": "e4c4dc5ac70893d26d31d3b52cd2a4089c5cec3b122d13e86f096e0d82f534d5"
+    },
+    {
+      "name": "tests/moss/fe2_village_sunlit_roundtrip.py",
+      "sha256": "cb773ae05d72fa7259198eea91e2baf9dfe309f238e791249b89658cf53c682c",
+      "before_24g_sha256": "cb773ae05d72fa7259198eea91e2baf9dfe309f238e791249b89658cf53c682c"
+    },
+    {
+      "name": "tests/moss/m10_flow.py",
+      "sha256": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "before_24g_sha256": "aa6bc25d2114cb0c78f284764a19b34c68f99ba5aaa12d9d46a9b6ef7cbc45f4"
+    },
+    {
+      "name": "tests/moss/m10_rilde.py",
+      "sha256": "7c1948ef06e97c1b29a834b543413d833e9d00654e4c59503ef98453e2f9821a",
+      "before_24g_sha256": "7c1948ef06e97c1b29a834b543413d833e9d00654e4c59503ef98453e2f9821a"
+    },
+    {
+      "name": "tests/moss/m11_dev_lazy.py",
+      "sha256": "1231ed7621230adc148e1ec1c45688f6d2260ba4ec18ec5639d6d84132a582b4",
+      "before_24g_sha256": "1231ed7621230adc148e1ec1c45688f6d2260ba4ec18ec5639d6d84132a582b4"
+    },
+    {
+      "name": "tests/moss/m11_road_tavern.py",
+      "sha256": "fb94bcdeb15b74f7ebeefec2a1f493327c22fdd5218685f71b9435f80ba0bdb8",
+      "before_24g_sha256": "fb94bcdeb15b74f7ebeefec2a1f493327c22fdd5218685f71b9435f80ba0bdb8"
+    },
+    {
+      "name": "tests/moss/m12_attack_ruin.py",
+      "sha256": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "before_24g_sha256": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5"
+    },
+    {
+      "name": "tests/moss/m13_elder_attack_text.py",
+      "sha256": "a3d829e771a206a6e6692c4e7ee8e465069925e551e2f597596012805bf9d165",
+      "before_24g_sha256": "a3d829e771a206a6e6692c4e7ee8e465069925e551e2f597596012805bf9d165"
+    },
+    {
+      "name": "tests/moss/m14_capital_gate.py",
+      "sha256": "2eef110c4d169416f1d444d82b2966436b27445b0d896d5a880b483da1f5f6ee",
+      "before_24g_sha256": "2eef110c4d169416f1d444d82b2966436b27445b0d896d5a880b483da1f5f6ee"
+    },
+    {
+      "name": "tests/moss/m14_hold_move.py",
+      "sha256": "b1877078c0cb0d49448d65599f544844141e6bd18692f424543a36532659205f",
+      "before_24g_sha256": "b1877078c0cb0d49448d65599f544844141e6bd18692f424543a36532659205f"
+    },
+    {
+      "name": "tests/moss/m15_slime.py",
+      "sha256": "1437996d8717c7ff5692fcf64c3b0205cc1a7b1c7c918c4425aca37a0f11aff2",
+      "before_24g_sha256": "1437996d8717c7ff5692fcf64c3b0205cc1a7b1c7c918c4425aca37a0f11aff2"
+    },
+    {
+      "name": "tests/moss/m15b_slime_symbol.py",
+      "sha256": "60632f803b69fc1d5d656d6759caa21f2e2d7b341c162a6ed603d7cb8856a2d5",
+      "before_24g_sha256": "60632f803b69fc1d5d656d6759caa21f2e2d7b341c162a6ed603d7cb8856a2d5"
+    },
+    {
+      "name": "tests/moss/m15c_forest_bat.py",
+      "sha256": "20b895abd54c5df76ae132bafaffc3c19f42b8f4a20d6d1041ac8b1302486905",
+      "before_24g_sha256": "20b895abd54c5df76ae132bafaffc3c19f42b8f4a20d6d1041ac8b1302486905"
+    },
+    {
+      "name": "tests/moss/m15d_leafy_boar.py",
+      "sha256": "d97abf3713e291208d2d80b6778f25f9a342d86032f7ec2a27602f8eeea13cd2",
+      "before_24g_sha256": "d97abf3713e291208d2d80b6778f25f9a342d86032f7ec2a27602f8eeea13cd2"
+    },
+    {
+      "name": "tests/moss/m16_battle_feel.py",
+      "sha256": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "before_24g_sha256": "c67efe4ab910d5699c13d69a070806b08fbb74b541371fed102f1c049f1ae1c7"
+    },
+    {
+      "name": "tests/moss/m17_dev_arena.py",
+      "sha256": "27c9100064c5624250e92ce1acfe8c540c9beac9126acd56a1236b4d5b441db6",
+      "before_24g_sha256": "27c9100064c5624250e92ce1acfe8c540c9beac9126acd56a1236b4d5b441db6"
+    },
+    {
+      "name": "tests/moss/m18_moss_scenario.py",
+      "sha256": "eadc37e4c867d2c328dc4001a36f22f70a44d3ad7305a2d37550f1aeb722e5a5",
+      "before_24g_sha256": "eadc37e4c867d2c328dc4001a36f22f70a44d3ad7305a2d37550f1aeb722e5a5"
+    },
+    {
+      "name": "tests/moss/m19_height_proto.py",
+      "sha256": "800b4230e3435d3a12f34a8c83e45555b670d8fe9622ba671726d6f007fcab4b",
+      "before_24g_sha256": "800b4230e3435d3a12f34a8c83e45555b670d8fe9622ba671726d6f007fcab4b"
+    },
+    {
+      "name": "tests/moss/m19_perf.py",
+      "sha256": "68552bcd831e082c705516444c2b95138e9cb5eb0ffb26e692b22882fd37cfb3",
+      "before_24g_sha256": "68552bcd831e082c705516444c2b95138e9cb5eb0ffb26e692b22882fd37cfb3"
+    },
+    {
+      "name": "tests/moss/m19_plan_bench.py",
+      "sha256": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29",
+      "before_24g_sha256": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29"
+    },
+    {
+      "name": "tests/moss/m20_sword_equipment.py",
+      "sha256": "f0a9215d8624e020f33f00a7a1d4d154c353c811f12cf5390d2a93e48a1c7de9",
+      "before_24g_sha256": "f0a9215d8624e020f33f00a7a1d4d154c353c811f12cf5390d2a93e48a1c7de9"
+    },
+    {
+      "name": "tests/moss/m21_wind_dance.py",
+      "sha256": "fe611811ac0a8ac460649d85ead26548a98595771782d0cecf4df70d57570baa",
+      "before_24g_sha256": "fe611811ac0a8ac460649d85ead26548a98595771782d0cecf4df70d57570baa"
+    },
+    {
+      "name": "tests/moss/m22_height_contacts.py",
+      "sha256": "a1405f6e5b7401cf380a9bc9aff19dec4d11d78a207c2cb27f87f44fafd192b8",
+      "before_24g_sha256": "48a3e71cadd12f874e6ffbac881974e06c0c369c56064c3c774a58d47d0a9421"
+    },
+    {
+      "name": "tests/moss/m23_wind_dance_battle.py",
+      "sha256": "0d7a3227476bf63caee6668f80d108b9c2317fb3b6480b2d7e1c3494d703c3a2",
+      "before_24g_sha256": "0d7a3227476bf63caee6668f80d108b9c2317fb3b6480b2d7e1c3494d703c3a2"
+    },
+    {
+      "name": "tests/moss/m24_height_contacts_e2e.py",
+      "sha256": "59f23c1de551db5b36c04d831a2996b3eb6e46459681e4a948ef2a45113c5f6f",
+      "before_24g_sha256": "9791c9acbfe5491942d8b682c69a0d3a6a8088e584ebbe3dcee5f115b6887b4e"
+    },
+    {
+      "name": "tests/moss/m26_height_spec_overlay.py",
+      "sha256": "a3a82eec05cb3046cd4b90915af92b888ba8aebecd365da1dec548d9ddce1d4d",
+      "before_24g_sha256": "a3a82eec05cb3046cd4b90915af92b888ba8aebecd365da1dec548d9ddce1d4d"
+    },
+    {
+      "name": "tests/moss/m27_cliff_height_overlay.py",
+      "sha256": "36a57ec13fb7fbb430d5c10812921d538667b69ace9e6a2cb469cc932c69cb98",
+      "before_24g_sha256": "36a57ec13fb7fbb430d5c10812921d538667b69ace9e6a2cb469cc932c69cb98"
+    },
+    {
+      "name": "tests/moss/m28_height25d_toggle.py",
+      "sha256": "e5bd02a51cb5e16ab998cf786f17242548c67d09da2f214b755f6013c0844bcc",
+      "before_24g_sha256": "e5bd02a51cb5e16ab998cf786f17242548c67d09da2f214b755f6013c0844bcc"
+    },
+    {
+      "name": "tests/moss/m31_aidan_heading.py",
+      "sha256": "537b39623c32c4adf8ed7bee7af1fd358c1c4873b261e4074d8cb79ed070107b",
+      "before_24g_sha256": "537b39623c32c4adf8ed7bee7af1fd358c1c4873b261e4074d8cb79ed070107b"
+    },
+    {
+      "name": "tests/moss/m32_lou_follower.py",
+      "sha256": "2c27633999e285a7a0244775e825d420f44ac0d17cb655ca9a9e109e6440e611",
+      "before_24g_sha256": "2c27633999e285a7a0244775e825d420f44ac0d17cb655ca9a9e109e6440e611"
+    },
+    {
+      "name": "tests/moss/m33_boy_swordsman.py",
+      "sha256": "0df083a7c57326b528c705baf49c4ac8ff47e116c483f8e318e8a8c5c4a2fe86",
+      "before_24g_sha256": "0df083a7c57326b528c705baf49c4ac8ff47e116c483f8e318e8a8c5c4a2fe86"
+    },
+    {
+      "name": "tests/moss/m33_lou_field_review.py",
+      "sha256": "0131f0618f83d1e1cc875ef26c5e11a56a32de6bda8cf1f389c65bdae2a16a8d",
+      "before_24g_sha256": "0131f0618f83d1e1cc875ef26c5e11a56a32de6bda8cf1f389c65bdae2a16a8d"
+    },
+    {
+      "name": "tests/moss/m33b_boy_swordsman_play.py",
+      "sha256": "a6cec9f722a50dcfa440d0bca0289f91e6a1bc608a4eaed446a33cae263bf613",
+      "before_24g_sha256": "a6cec9f722a50dcfa440d0bca0289f91e6a1bc608a4eaed446a33cae263bf613"
+    },
+    {
+      "name": "tests/moss/m4_devjump.py",
+      "sha256": "1b6d01da1d6cd48e3fd3e85d4340d2c9b738bf4926317d4052557b72eb12e153",
+      "before_24g_sha256": "1b6d01da1d6cd48e3fd3e85d4340d2c9b738bf4926317d4052557b72eb12e153"
+    },
+    {
+      "name": "tests/moss/m4_e2e.py",
+      "sha256": "760ee4a02df3c3fd40505886ea0e50b18b2abd42107c03d359983cdba7d78f53",
+      "before_24g_sha256": "760ee4a02df3c3fd40505886ea0e50b18b2abd42107c03d359983cdba7d78f53"
+    },
+    {
+      "name": "tests/moss/m4_npc.py",
+      "sha256": "4142c1a5327ced65ac5d9214e9c732a39c568729e9bd5bda9c09f49ad2ab4064",
+      "before_24g_sha256": "4142c1a5327ced65ac5d9214e9c732a39c568729e9bd5bda9c09f49ad2ab4064"
+    },
+    {
+      "name": "tests/moss/m4_save.py",
+      "sha256": "90a4c8036ef2c972674bcb8d9b38d1d5b7562882961810c219210b1360a1b847",
+      "before_24g_sha256": "615c93084b0176b8ecf8bc670e9e9d50bdf444566f03032938ba8c4626adde46"
+    },
+    {
+      "name": "tests/moss/m55_chest.py",
+      "sha256": "838ca9b3cea23d032bde3829f395ccc2d333048922cd58c79fa5554e08e12527",
+      "before_24g_sha256": "838ca9b3cea23d032bde3829f395ccc2d333048922cd58c79fa5554e08e12527"
+    },
+    {
+      "name": "tests/moss/m55_cine.py",
+      "sha256": "fe9a63b9560bcffa934158481629b022578ad70124f6441652f67f0c9ee30a10",
+      "before_24g_sha256": "fe9a63b9560bcffa934158481629b022578ad70124f6441652f67f0c9ee30a10"
+    },
+    {
+      "name": "tests/moss/m55_hz.py",
+      "sha256": "98e7f03d57f2fac462fde061a83aac11c62a9ad54c634e557e33e34080417f41",
+      "before_24g_sha256": "92784e407bb20348beefedc664ed0e30a9b57b5a48495418fc583ee8a3369653"
+    },
+    {
+      "name": "tests/moss/m55_mobile.py",
+      "sha256": "ac023d4a17a8b1ab17e7db931be6f924b28309e379e8f654cecabb143a5ed8cc",
+      "before_24g_sha256": "ac023d4a17a8b1ab17e7db931be6f924b28309e379e8f654cecabb143a5ed8cc"
+    },
+    {
+      "name": "tests/moss/m6_asset_swap.py",
+      "sha256": "64513fc0ed9243e6699d18a82f6293e9ab37d7ddf495e73565fb846258cd5423",
+      "before_24g_sha256": "64513fc0ed9243e6699d18a82f6293e9ab37d7ddf495e73565fb846258cd5423"
+    },
+    {
+      "name": "tests/moss/m6_devui.py",
+      "sha256": "9c583f4b399475e436d3564b41e4cc86f8f36bbffb19a06e632f6c8b72d50258",
+      "before_24g_sha256": "9c583f4b399475e436d3564b41e4cc86f8f36bbffb19a06e632f6c8b72d50258"
+    },
+    {
+      "name": "tests/moss/m6_inventory.py",
+      "sha256": "1edc914b6480730debe1c624816eaa9ded672b1455534e188047ae9b3bba0ff4",
+      "before_24g_sha256": "1edc914b6480730debe1c624816eaa9ded672b1455534e188047ae9b3bba0ff4"
+    },
+    {
+      "name": "tests/moss/m6_quest.py",
+      "sha256": "c951a50189bd956d625496ff7050ed055f1ad9bd7f5fa1bedf84ac73ef49cd57",
+      "before_24g_sha256": "2254dd5cc74f779a5367d066c7cbb548849801020aabe3879bfb6177654880b5"
+    },
+    {
+      "name": "tests/moss/m6_scenario.py",
+      "sha256": "91d74d5200a605bae9133dd43102611fcfa23c23bb71a69e3c2905d4b192b1c8",
+      "before_24g_sha256": "91d74d5200a605bae9133dd43102611fcfa23c23bb71a69e3c2905d4b192b1c8"
+    },
+    {
+      "name": "tests/moss/m6_talk.py",
+      "sha256": "7366e84f2ee7fb73ba53f06b024057fad6178acbbec30dbef5d1470afa8d6451",
+      "before_24g_sha256": "7366e84f2ee7fb73ba53f06b024057fad6178acbbec30dbef5d1470afa8d6451"
+    },
+    {
+      "name": "tests/moss/m7_choreo.py",
+      "sha256": "d7baa90829421d7a791f8b11ecb84c22e12121c6ff37e4811d10a55a781e3be8",
+      "before_24g_sha256": "d7baa90829421d7a791f8b11ecb84c22e12121c6ff37e4811d10a55a781e3be8"
+    },
+    {
+      "name": "tests/moss/m7_cliff.py",
+      "sha256": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "before_24g_sha256": "ce64ba1f931e4b0c91314ab6f57a9511d5cca6f1cb73acde5634b2bfdfc1a60f"
+    },
+    {
+      "name": "tests/moss/m7_prop_swap.py",
+      "sha256": "08d3a661f18298f20defbea024e13c704e460987fb7195e81343c481c1f2680a",
+      "before_24g_sha256": "08d3a661f18298f20defbea024e13c704e460987fb7195e81343c481c1f2680a"
+    },
+    {
+      "name": "tests/moss/m8_town_maps.py",
+      "sha256": "3695cd533145e44a622c8ad52d3afe4e6143b213f280d5fe8c8d89ee73757145",
+      "before_24g_sha256": "3695cd533145e44a622c8ad52d3afe4e6143b213f280d5fe8c8d89ee73757145"
+    },
+    {
+      "name": "tests/moss/m9_env.py",
+      "sha256": "8734c29da6de5aa3a40937fa2c5e6b0b5810f056aae88d35fd49a073e65b7141",
+      "before_24g_sha256": "8734c29da6de5aa3a40937fa2c5e6b0b5810f056aae88d35fd49a073e65b7141"
+    },
+    {
+      "name": "tests/moss/m9_hero.py",
+      "sha256": "bf3751bad5919d21b67666745adcd3f3853625f0ef3d966b4131160d34160108",
+      "before_24g_sha256": "bf3751bad5919d21b67666745adcd3f3853625f0ef3d966b4131160d34160108"
+    },
+    {
+      "name": "tests/moss/seal_a3.py",
+      "sha256": "53b63a7bf35ff500c4a8ee3f76140d446040d48b4ff7ce04fba54eb04f2d634b",
+      "before_24g_sha256": "53b63a7bf35ff500c4a8ee3f76140d446040d48b4ff7ce04fba54eb04f2d634b"
+    },
+    {
+      "name": "tests/moss/walk_a1.py",
+      "sha256": "d1c8e90413be4075704b3a18ad334cdd8f49f6220ff217838e9a93778e08b925",
+      "before_24g_sha256": "d1c8e90413be4075704b3a18ad334cdd8f49f6220ff217838e9a93778e08b925"
+    },
+    {
+      "name": "tests/moss/walk_map.py",
+      "sha256": "184da63352d10525483c6166667d850a013608da06022e815631bdbec2b4e748",
+      "before_24g_sha256": "184da63352d10525483c6166667d850a013608da06022e815631bdbec2b4e748"
+    },
+    {
+      "name": "tests/system/capital_story_test.py",
+      "sha256": "2cdce66de37a22b87a46fae0f5939ebf4d820ba17652415cdade7b126836fdb0",
+      "before_24g_sha256": "a283cc4f4114fa6daea7eadae647576e94c775892a6113121f94fcab413b9498"
+    },
+    {
+      "name": "tests/system/equipment_test.py",
+      "sha256": "da10e214cf76cad258da6dfefcac519a280f5ecfd37295843c7716e82045a2e5",
+      "before_24g_sha256": "da10e214cf76cad258da6dfefcac519a280f5ecfd37295843c7716e82045a2e5"
+    },
+    {
+      "name": "tests/system/equipment_ui_flow_test.py",
+      "sha256": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471",
+      "before_24g_sha256": "ef0dcac3d3971abd7eba41251324c08cba2fabeff17ce87d7262ddb63775a471"
+    },
+    {
+      "name": "tests/system/shop_flow_test.py",
+      "sha256": "c6464ab613e796199b6271186e8a9ce75d6969eca196e6d8d952576a55a89dd9",
+      "before_24g_sha256": "c7eaf34a9b6231d746551555ec57012d2e88b4272a418fd8ce42ba340d07c22d"
+    }
+  ],
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "directive": "24H v2",
+  "probe_shards": 2,
+  "gameplay_ready": true,
+  "extra_core_tests": [
+    {
+      "name": "tests/system/save_continue_lifecycle.py",
+      "sha256": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf"
+    }
+  ],
+  "probe_tests": [
+    "tests/moss/m4_save.py",
+    "tests/issue54_ending.py",
+    "tests/issue54_additional.py",
+    "tests/issue54_regression.py",
+    "tests/battle/command_lock.py",
+    "tests/system/save_continue_lifecycle.py"
+  ],
+  "focus_tests": [
+    "tests/battle/battle_idle6.py",
+    "tests/battle/bg01_background.py",
+    "tests/battle/command_lock.py",
+    "tests/battle/raider_mobile_layout.py",
+    "tests/input/kb_audit.py",
+    "tests/moss/m16_battle_feel.py",
+    "tests/moss/m6_quest.py",
+    "tests/system/shop_flow_test.py",
+    "tests/moss/m55_hz.py",
+    "tests/moss/m10_flow.py",
+    "tests/battle/aidan_draw.py",
+    "tests/moss/m7_cliff.py",
+    "tests/system/capital_story_test.py",
+    "tests/moss/m22_height_contacts.py"
+  ],
+  "focus_shards": 4,
+  "non_major_limitations": [
+    {
+      "name": "tests/moss/m24_height_contacts_e2e.py",
+      "status": "SKIP",
+      "warning": false,
+      "reason": "external rest/ambience effects have no shipped hooks; actual implemented level/zone transition checks must all PASS",
+      "authority": "DIRECTIVE-24K step 5: demonstrably non-major remaining coverage permits CONDITIONAL PASS; SKIP remains explicit"
+    }
+  ],
+  "environment_warning_policy": {
+    "case": "tests/battle/battle_idle6.py",
+    "raw_status": "FAIL retained",
+    "required": "all non-timing assertions PASS, native RAF metadata, every late interval at next available browser scheduling opportunity; core has no exceptions",
+    "original_bound_ms": 45
+  },
+  "focus_rounds": 3,
+  "claude_evidence_commit": "b18f0c6c7b7902701fc2b899abb0fbe1f7ef3082",
+  "environment_comparison": "Same game/runtime code as2436dc928622bbf5e364c2798aafaf8c526bada1; only m22 fixture moved outside zones before registration; assertions unchanged. Public runner CPU capacity recorded."
+}

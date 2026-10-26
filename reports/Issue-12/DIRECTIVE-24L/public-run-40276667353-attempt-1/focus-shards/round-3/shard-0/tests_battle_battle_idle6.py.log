@@ -1,0 +1,40 @@
+ok   aidan idle: 6 frames, one canvas (760, 502)
+ok   aidan idle: feet baseline unified [496, 497, 496, 497, 496, 496]
+ok   aidan idle: nothing touches canvas edge 
+ok   aidan idle: RGB zeroed under alpha 0 
+ok   aidan idle: no faint halo (fiona soft glow/hair exempt) [666, 732, 696, 746, 569, 693]
+ok   aidan idle: feet centre stable [391.6, 391.4, 391.2, 391.2, 391.0, 391.7]
+ok   fiona idle: 6 frames, one canvas (1034, 678)
+ok   fiona idle: feet baseline unified [671, 671, 671, 671, 671, 671]
+ok   fiona idle: nothing touches canvas edge 
+ok   fiona idle: RGB zeroed under alpha 0 
+ok   fiona idle: no faint halo (fiona soft glow/hair exempt) [5504, 4301, 6147, 6531, 8122, 4262]
+ok   fiona idle: feet centre stable [561.8, 561.7, 561.6, 561.4, 561.8, 562.1]
+ok   aidan draw: 6 frames, one canvas (708, 560)
+ok   aidan draw: feet baseline unified [554, 554, 555, 555, 555, 554]
+ok   aidan draw: nothing touches canvas edge 
+ok   aidan draw: RGB zeroed under alpha 0 
+ok   aidan draw: no faint halo (fiona soft glow/hair exempt) [426, 574, 683, 484, 527, 703]
+ok   aidan draw: feet centre stable [356.8, 356.4, 357.0, 356.7, 356.4, 356.5]
+ok   fiona frame5 green magic preserved [1628, 1484, 2065, 2073, 7495, 1549]
+ok   aidan draw6 / idle1 display body height within 3% 1.013
+ok   assets.js durations as specified 
+ok   previous 4-frame idle kept as backup 
+ok   idle loops registered for both actors in both battles ['normal:aidan', 'raider:aidan', 'normal:fiona', 'raider:fiona']
+ok   normal: battle entry committed 
+ok   normal: all six idle canvas frames rendered before duration sampling {'aidan': [0, 1, 2, 3, 4, 5], 'fiona': [0, 1, 2, 3, 4, 5]}
+ok   normal aidan: frames cycle 1..6 in order [0, 1, 2, 3, 4, 5, 0, 1]
+ok   normal aidan: per-frame durations match (±45ms) [(183, 180), (233, 220), (167, 160), (117, 110), (267, 260), (233, 220), (183, 180)]
+ok   normal fiona: frames cycle 1..6 in order [5, 0, 1, 2, 3, 4, 5, 0]
+ok   normal fiona: per-frame durations match (±45ms) [(267, 260), (233, 220), (250, 240), (183, 180), (300, 300), (267, 260), (267, 260)]
+ok   normal: attack hides idle canvas and idle resumes after (False, True)
+ok   raider: battle entry committed 
+ok   raider: all six idle canvas frames rendered before duration sampling {'aidan': [0, 1, 2, 3, 4, 5], 'fiona': [0, 1, 2, 3, 4, 5]}
+ok   raider aidan: frames cycle 1..6 in order [0, 1, 2, 3, 4, 5, 0, 1]
+ok   raider aidan: per-frame durations match (±45ms) [(183, 180), (233, 220), (167, 160), (117, 110), (267, 260), (233, 220), (183, 180)]
+ok   raider fiona: frames cycle 1..6 in order [5, 0, 1, 2, 3, 4, 5, 0]
+ok   raider fiona: per-frame durations match (±45ms) [(267, 260), (233, 220), (250, 240), (217, 180), (300, 300), (267, 260), (267, 260)]
+ok   raider: attack hides idle canvas and idle resumes after (False, True)
+ok   no page errors []
+ok   dev preview page: all images load []
+FAILS []

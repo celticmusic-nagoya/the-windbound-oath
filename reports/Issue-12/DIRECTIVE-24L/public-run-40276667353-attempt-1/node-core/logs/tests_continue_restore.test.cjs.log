@@ -1,0 +1,38 @@
+PASS no save disables CONTINUE; valid current save enables it without mutation
+PASS cold CONTINUE restores field coordinates, facing, flags and once-only events; source bytes unchanged
+PASS legacy early stage 0 uses explicit safe checkpoint, never guessed legacy coordinates
+PASS legacy early stage 1 uses explicit safe checkpoint, never guessed legacy coordinates
+PASS legacy early stage 3 uses explicit safe checkpoint, never guessed legacy coordinates
+PASS story stage 4 restores its defined legacy/atomic scene checkpoint
+PASS story stage 5 restores its defined legacy/atomic scene checkpoint
+PASS story stage 6 restores its defined legacy/atomic scene checkpoint
+PASS story stage 7 restores its defined legacy/atomic scene checkpoint
+PASS story stage 8 restores its defined legacy/atomic scene checkpoint
+PASS current stage2 checkpoint uses actual validated retry; v1 stage2 stays read-only refused
+PASS forest checkpoint restores through existing shared runtime
+PASS invalid/incomplete save is refused safely: {broken
+PASS invalid/incomplete save is refused safely: {}
+PASS invalid/incomplete save is refused safely: {"version":99}
+PASS invalid/incomplete save is refused safely: {"version":30,"prologue":{"ver
+PASS duplicate CONTINUE is rejected while actual map promise is pending
+PASS NEW GAME supersedes CONTINUE, rolls back provisional model and rejects the late response
+PASS failure rolls model and map back to title, keeps SAVE bytes, and allows explicit retry
+PASS real SAVE preserves consumed one-time Rilde events across cold CONTINUE
+PASS new SAVE drawer explicit false restores exactly and executes at most once
+PASS new SAVE drawer explicit true restores exactly and executes at most once
+PASS new SAVE pot explicit false restores exactly and executes at most once
+PASS new SAVE pot explicit true restores exactly and executes at most once
+PASS actual drawer acquisition then SAVE/cold CONTINUE never replays its event
+PASS actual pot acquisition then SAVE/cold CONTINUE never replays its event
+PASS old missing history blocks only drawer/pot, preserves inventory/progress/source and does not fabricate quest completion
+PASS new explicit false survives actual SAVE and incomplete event profile is refused without mutation
+PASS NEW GAME resets acquisition restrictions to genuinely unclaimed state
+PASS failed CONTINUE and normal LOAD never partially commit acquisition flags
+PASS current new-village stage 1 retains its recorded coordinates
+PASS current new-village stage 3 retains its recorded coordinates
+PASS unknown map and invalid acquisition boolean are read-only refused
+PASS legitimate old free-roam SAVE retains actual inventory and progression
+PASS only proven old subquest states restore completion, while new flags preserve partial quest state
+PASS explicitly saving an old unknown history preserves restriction provenance without inventing collection
+PASS malformed party, item or map-event records are refused before mutation
+37 PASS; actual restore modules; simulated DOM/network; browser NOT_RUN

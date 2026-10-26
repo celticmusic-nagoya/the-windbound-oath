@@ -1,0 +1,131 @@
+{
+  "source_commit": "d7f7e682fe542a75d1048e1932dace9c3df4cc0b",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T05:58:58.154019+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40276667353",
+  "run_attempt": "1",
+  "shard": 3,
+  "manifest_sha256": "a19278fa0e6d820d601c0c8b572b13405a01b12a5c202f655903f0ec0108706c",
+  "mode": "focus",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/raider_mobile_layout.py",
+    "tests/system/shop_flow_test.py",
+    "tests/moss/m7_cliff.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/raider_mobile_layout.py",
+      "started_at": "2026-10-26T05:58:58.155738+00:00",
+      "status": "PASS",
+      "test_sha256": "3fd112018f25ba1973525b192cb30b711e5cfebdc4404f3f7a595e98a91e8d8a",
+      "exit_code": 0,
+      "test_sha256_after": "3fd112018f25ba1973525b192cb30b711e5cfebdc4404f3f7a595e98a91e8d8a",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:00:14.117635+00:00",
+      "seconds": 75.962,
+      "log": "tests_battle_raider_mobile_layout.py.log"
+    },
+    {
+      "name": "tests/system/shop_flow_test.py",
+      "started_at": "2026-10-26T06:00:14.118147+00:00",
+      "status": "PASS",
+      "test_sha256": "c6464ab613e796199b6271186e8a9ce75d6969eca196e6d8d952576a55a89dd9",
+      "exit_code": 0,
+      "test_sha256_after": "c6464ab613e796199b6271186e8a9ce75d6969eca196e6d8d952576a55a89dd9",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:00:28.899406+00:00",
+      "seconds": 14.781,
+      "log": "tests_system_shop_flow_test.py.log"
+    },
+    {
+      "name": "tests/moss/m7_cliff.py",
+      "started_at": "2026-10-26T06:00:28.899941+00:00",
+      "status": "PASS",
+      "test_sha256": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "exit_code": 0,
+      "test_sha256_after": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:01:04.171465+00:00",
+      "seconds": 35.272,
+      "log": "tests_moss_m7_cliff.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 3
+  },
+  "ended_at": "2026-10-26T06:01:04.171940+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}

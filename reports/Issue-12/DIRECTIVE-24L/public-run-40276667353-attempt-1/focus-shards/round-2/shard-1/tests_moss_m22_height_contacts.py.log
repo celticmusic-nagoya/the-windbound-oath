@@ -1,0 +1,18 @@
+ok   height map loaded
+['ev_arrival', 'z_both', 'z_l1']
+ok   level 1 fires the level-1 zone and the [0,1] zone
+ok   level 1 does NOT consume the level-0 / default-level zones
+['ev_arrival', 'z_both', 'z_def', 'z_l0', 'z_l1']
+ok   back on level 0 the level-0 and default zones fire (not consumed earlier)
+ok   fixture: (1560,900) is walkable on both levels
+ok   destination honours an explicit target level (0 / 1; free tap -> 1)
+ok   monster on level 0 ignores a player on level 1 at the same XY ({'state': 'wander', 'active': True})
+ok   control: monster on the same level engages ({'state': 'engaged', 'active': False})
+ok   walker pauses for a player on its own level
+ok   walker on another level does not pause (same XY)
+ok   snapshot carries the level on a height map (additive field)
+ok   plain map has no height spec
+ok   plain map: `level` is ignored, zone fires exactly as before
+ok   plain map: snapshot has no level key (saves unchanged)
+ok   no page errors []
+FAILS 0

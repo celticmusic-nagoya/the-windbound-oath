@@ -1,0 +1,25 @@
+ok   battle bat art loads (idle frame aliases for attack/damage/ko) [[1536, 1024]]
+ok   4 idle frames registered
+ok   bat is faster / notices from farther than a slime
+ok   A2 has 6 forest bats on walkable ground ['a2_bat_south_wall_w', 'a2_bat_south_wall_e', 'a2_bat_03', 'a2_bat_04', 'a2_bat_05', 'a2_bat_06']
+ok   6 bats mounted among the 24 A2 monsters (6 each of slime/boar/bat/goblin)
+ok   bat flaps through all 4 frames even while wandering (4)
+ok   bat notices at ~320: alert -> chase ['wander', 'alert', 'chase']
+ok   bat chase speed ~120px/s (118)
+ok   after the player escapes: return -> wander ['wander', 'alert', 'chase', 'return', 'wander']
+ok   never inside a blocker, no battle without contact
+ok   touching a bat starts the existing battle once (forestBat2, starts=1)
+ok   two forest bats (91 HP) [['forest_bat', 91, 91], ['forest_bat', 91, 91]]
+ok   enemy name shows フォレストバット
+ok   idle flap canvases are showing for both bats [True, True, False]
+ok   idle frames advance [0, 1, 2]
+ok   bat drained: dealt 10, healed 6 (60%)
+ok   healing is capped at max HP
+ok   result: EXP +30, GOLD +12
+ok   back in the forest; defeated bat symbol is gone, the other 5 remain
+ok   forestShow() does not respawn it
+ok   story progress untouched
+ok   A3 story goblin symbols untouched
+ok   re-entering A2 respawns all 6 bats
+ok   afterwards a slime battle in the same slot shows no bat art
+ok   0 console errors []

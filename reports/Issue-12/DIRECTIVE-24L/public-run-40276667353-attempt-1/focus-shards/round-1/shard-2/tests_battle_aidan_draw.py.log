@@ -1,0 +1,47 @@
+ok   6 frames share one canvas (708, 560)
+ok   foot line unified (max drift <=3px) [554, 554, 555, 555, 555, 554]
+ok   no frame touches the canvas edge (sword / cloak not cut) 
+ok   no faint halo pixels left (alpha 1..5) [426, 574, 683, 484, 527, 703]
+ok   feet centre stable across frames (<=30 src px) [354, 356, 368, 372, 353, 346]
+ok   manifest: 6 frames / 600ms / hold last / no hit event {'dir': 'aidan/motion/', 'pattern': 'aidan_draw_{n}.png', 'frames': 6, 'ms': [100, 90, 110, 90, 90, 120], 'hold': 'last'}
+ok   attack/skill manifest entries untouched 
+ok   (1280, 720) raider: draw plays frames 1..6 once in order [1, 2, 3, 4, 5, 6]
+ok   (1280, 720) raider: all frames delivered, full final hold, then idle ([0.5, 100.80000000001746, 191, 301.30000000001746, 391.6000000000058, 481.9000000000233], 602.8000000000175, 'idle')
+ok   (1280, 720) raider: no loop / no 7th frame 
+ok   (1280, 720) normal: draw plays frames 1..6 once in order [1, 2, 3, 4, 5, 6]
+ok   (1280, 720) normal: all frames delivered, full final hold, then idle ([0.39999999999417923, 100.69999999998254, 191.10000000000582, 301.3999999999942, 391.69999999998254, 482], 602.2999999999884, 'idle')
+ok   (1280, 720) normal: no loop / no 7th frame 
+ok   (1280, 720) attack / skill keep their own art, no draw {'attack': 'aidan_attack_01.png', 'skill': 'aidan_skill_01.png'}
+ok   (1280, 720) idle motion resumes after the draw 
+ok   (1280, 720) no console errors []
+ok   (390, 844) raider: draw plays frames 1..6 once in order [1, 2, 3, 4, 5, 6]
+ok   (390, 844) raider: all frames delivered, full final hold, then idle ([0.6000000000058208, 100.79999999998836, 191.10000000000582, 301.29999999998836, 391.6000000000058, 481.8999999999942], 602.6000000000058, 'idle')
+ok   (390, 844) raider: no loop / no 7th frame 
+ok   (390, 844) normal: draw plays frames 1..6 once in order [1, 2, 3, 4, 5, 6]
+ok   (390, 844) normal: all frames delivered, full final hold, then idle ([0.39999999999417923, 100.60000000000582, 190.79999999998836, 301, 391.29999999998836, 481.6000000000058], 601.8999999999942, 'idle')
+ok   (390, 844) normal: no loop / no 7th frame 
+ok   (390, 844) attack / skill keep their own art, no draw {'attack': 'aidan_attack_01.png', 'skill': 'aidan_skill_01.png'}
+ok   (390, 844) idle motion resumes after the draw 
+ok   (390, 844) no console errors []
+ok   (844, 390) raider: draw plays frames 1..6 once in order [1, 2, 3, 4, 5, 6]
+ok   (844, 390) raider: all frames delivered, full final hold, then idle ([0.5, 100.70000000001164, 191.30000000001746, 301.5, 391.80000000001746, 482], 602.8999999999942, 'idle')
+ok   (844, 390) raider: no loop / no 7th frame 
+ok   (844, 390) normal: draw plays frames 1..6 once in order [1, 2, 3, 4, 5, 6]
+ok   (844, 390) normal: all frames delivered, full final hold, then idle ([0.29999999998835847, 101.09999999997672, 191.39999999999418, 301.5999999999767, 391.79999999998836, 482.0999999999767], 602.5, 'idle')
+ok   (844, 390) normal: no loop / no 7th frame 
+ok   (844, 390) attack / skill keep their own art, no draw {'attack': 'aidan_attack_01.png', 'skill': 'aidan_skill_01.png'}
+ok   (844, 390) idle motion resumes after the draw 
+ok   (844, 390) no console errors []
+ok   (1100, 640) preview: 6+6 frame buttons 
+ok   (1100, 640) preview: frame step moves both draw 3/6 · 110ms
+ok   (1100, 640) preview: speed 2.0x plays Fiona in ~half of 760ms 380
+ok   (1100, 640) preview: switches to rest after the motion 待機
+ok   (1100, 640) preview: no horizontal overflow 
+ok   (1100, 640) preview: no errors []
+ok   (390, 844) preview: 6+6 frame buttons 
+ok   (390, 844) preview: frame step moves both draw 3/6 · 110ms
+ok   (390, 844) preview: speed 2.0x plays Fiona in ~half of 760ms 380
+ok   (390, 844) preview: switches to rest after the motion 待機
+ok   (390, 844) preview: no horizontal overflow 
+ok   (390, 844) preview: no errors []
+FAILS 0

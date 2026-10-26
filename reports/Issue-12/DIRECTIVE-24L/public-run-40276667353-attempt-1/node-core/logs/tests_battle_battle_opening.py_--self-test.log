@@ -1,0 +1,24 @@
+ok   aidan: 6 frames share one canvas (708, 560)
+ok   aidan: foot line unified [554, 554, 555, 555, 555, 554]
+ok   aidan: nothing touches the canvas edge 
+ok   fiona: 6 frames share one canvas (946, 644)
+ok   fiona: foot line unified [640, 641, 640, 641, 641, 640]
+ok   fiona: nothing touches the canvas edge 
+ok   manifest aidan draw 6f/600ms 
+ok   manifest fiona ready 6f/<=900ms 880
+ok   attack/skill manifests untouched 
+PASS classifier normal
+PASS classifier lower inclusive
+PASS classifier early 600
+PASS classifier late 5000
+PASS classifier 300ms workload within budget
+PASS classifier missing
+PASS classifier no release
+PASS classifier NaN timestamp
+PASS classifier evidenced late retry
+PASS classifier late retry exhausted
+PASS classifier rest
+PASS classifier frameReady
+PASS classifier lockedAtStart
+PASS classifier lockedAtStart
+classifier unit checks only; browser controls NOT_RUN

@@ -1,0 +1,26 @@
+ok   escape has 10 lines
+背後で角笛が鳴る。黒紫の光をまとった魔物たちが追ってくる。 | 地面が大きく揺れ、焼けた崖の縁が崩れた。
+ok   escape goblin appears on line 5 (角笛), not before (['none', 'none', 'none', 'none', 'grid', 'grid'])
+ok   line index 4 is the horn line
+ok   line index 7 is the cliff-collapse line
+ok   dark flash fires exactly on the collapse line (['none', 'none', 'none', 'none', 'none', 'none', 'brightness(0', 'none', 'none'])
+ok   after escape: stage 9 in A1
+['冷たい土と、苔の匂い。見上げても、崩れた崖の上は暗くて見えない。', 'フィオナ「……エイダン？\u3000よかった、無事だったんだね……。」', 'エイダン「ああ……。フィオナは？」\nフィオナ「うん……大丈夫。」', '……風が木々を揺らす。しばらく、二人とも黙ったままだった。', 'エイダン「……村のみんなは、無事だろうか。」', 'フィオナ「……きっと、騎士さまたちが守ってくれてる。……そう、信じよう。」', 'フィオナ「ここ……モスの森、だよね。村では小さい頃から、奥には絶対行くなって言われてきた……。」', 'エイダン「崖の上へは戻れそうにない。……先へ進める道を探そう。」', 'フィオナ「……この風、冷たくて重い。あの夜、風が止まったときに、少し似てる……。」', 'エイダン「……村の異変と、この森の風。何かつながっているのかもしれない。道を探しながら、手がかりも調べよう。」']
+ok   arrival conversation shows 10 pages
+ok   arrival first/last page
+ok   dialogue closes after the last page (none)
+ok   journal stage 9 text + objective 0/3 (MAIN QUEST / 進行中苔むした森村から逃れる途中、)
+exit walk: [['', '', 'moss_forest_01_sunlit_path', 5835, 'moving'], ['', '', 'moss_forest_01_sunlit_path', 5865, 'moving'], ['', '', 'moss_forest_01_sunlit_path', 5895, 'moving'], ['', '', 'moss_forest_01_sunlit_path', 5935, 'moving'], ['崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。', 'block', 'moss_forest_01_sunlit_path', 5960, 'moving'], ['崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。', 'block', 'moss_forest_01_sunlit_path', 5985, 'arrived'], ['崖の上へ戻る道は、もうない。先へ進むしかなさそうだ。', 'none', 'moss_forest_01_sunlit_path', 5985, 'arrived']]
+ok   A1 village-side exit: message shown, map unchanged
+ok   altar has 37 pages (37)
+ok   oath line present once and unchanged ([31])
+ok   order: Raider -> parry -> sword breaks -> Fiona wind dance -> Lou -> stone -> oath -> contract
+ok   the contract comes right after the oath line
+ok   every page is short enough (max 49 chars)
+ok   old "sword falls into the rift" beat is gone
+ok   sword appears on its line (25)
+ok   grip/glow fires on the grip line (index 32)
+ok   weapon: father sword -> broken (empty) -> oath sword at the contract
+ok   Fiona learns the wind dance exactly on its first cast line
+[]
+FAILS 0

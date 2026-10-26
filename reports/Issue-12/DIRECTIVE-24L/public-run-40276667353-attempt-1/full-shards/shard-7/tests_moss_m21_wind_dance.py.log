@@ -1,0 +1,26 @@
+ok   [flag off] before the altar event: not learned, no command
+ok   [flag off] decided numbers: +15pt / 3 phases / MP10 / all allies / refresh
+ok   [flag off] one page before the first cast: still not learned
+ok   [flag off] learned on the first-cast page
+ok   [flag off] learn toast only with the feature on ()
+ok   [flag off] second learn() is a no-op (no double fire)
+ok   [flag off] command visible only with the feature flag
+ok   [flag off] command buttons exist (hidden by default)
+ok   [flag off] save keeps it inside members (format v30 unchanged)
+ok   [flag off] load restores the learned state
+ok   [flag off] old save: learned iff past the altar stage (stage 15)
+ok   [flag off] loading an earlier save drops a later-learned spell (stage 5)
+ok   [flag on] before the altar event: not learned, no command
+ok   [flag on] decided numbers: +15pt / 3 phases / MP10 / all allies / refresh
+ok   [flag on] one page before the first cast: still not learned
+ok   [flag on] learned on the first-cast page
+ok   [flag on] learn toast only with the feature on (フィオナは「風の舞」を覚えた)
+ok   [flag on] second learn() is a no-op (no double fire)
+ok   [flag on] command visible only with the feature flag
+ok   [flag on] command buttons exist (hidden by default)
+ok   [flag on] save keeps it inside members (format v30 unchanged)
+ok   [flag on] load restores the learned state
+ok   [flag on] old save: learned iff past the altar stage (stage 15)
+ok   [flag on] loading an earlier save drops a later-learned spell (stage 5)
+errors []
+FAILS 0

@@ -1,0 +1,423 @@
+{
+  "source_commit": "d7f7e682fe542a75d1048e1932dace9c3df4cc0b",
+  "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
+  "main_at_start": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "started_at": "2026-10-26T06:06:30.856954+00:00",
+  "logical_cpus": 4,
+  "runner_os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "run_id": "40276667353",
+  "run_attempt": "1",
+  "shard": 5,
+  "manifest_sha256": "a19278fa0e6d820d601c0c8b572b13405a01b12a5c202f655903f0ec0108706c",
+  "mode": "full",
+  "main_base_commit": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc",
+  "expected_names": [
+    "tests/battle/battle_opening.py",
+    "tests/battle/motion_intake.py",
+    "tests/input/kb_scene.py",
+    "tests/moss/m10_rilde.py",
+    "tests/moss/m15b_slime_symbol.py",
+    "tests/moss/m19_plan_bench.py",
+    "tests/moss/m28_height25d_toggle.py",
+    "tests/moss/m4_npc.py",
+    "tests/moss/m6_inventory.py",
+    "tests/moss/m9_env.py",
+    "tests/system/shop_flow_test.py"
+  ],
+  "results": [
+    {
+      "name": "tests/battle/battle_opening.py",
+      "started_at": "2026-10-26T06:06:30.858643+00:00",
+      "status": "PASS",
+      "test_sha256": "d1af932db402f3f3d7cb95145718c3bb7f743b60c9eb08caea0a49b91557275b",
+      "exit_code": 0,
+      "test_sha256_after": "d1af932db402f3f3d7cb95145718c3bb7f743b60c9eb08caea0a49b91557275b",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:07:58.617062+00:00",
+      "seconds": 87.758,
+      "log": "tests_battle_battle_opening.py.log"
+    },
+    {
+      "name": "tests/battle/motion_intake.py",
+      "started_at": "2026-10-26T06:07:58.617617+00:00",
+      "status": "PASS",
+      "test_sha256": "2e796742474c96edd8e2255c3cd023cbe61f453ae338d1140d10e85f75c37566",
+      "exit_code": 0,
+      "test_sha256_after": "2e796742474c96edd8e2255c3cd023cbe61f453ae338d1140d10e85f75c37566",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:08:08.343306+00:00",
+      "seconds": 9.726,
+      "log": "tests_battle_motion_intake.py.log"
+    },
+    {
+      "name": "tests/input/kb_scene.py",
+      "started_at": "2026-10-26T06:08:08.343875+00:00",
+      "status": "PASS",
+      "test_sha256": "6c9d079c685837ee662c695d8d4dc5f9e52ac49c3ca34ede5d251dd1a3c41cbd",
+      "exit_code": 0,
+      "test_sha256_after": "6c9d079c685837ee662c695d8d4dc5f9e52ac49c3ca34ede5d251dd1a3c41cbd",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:08:26.224756+00:00",
+      "seconds": 17.881,
+      "log": "tests_input_kb_scene.py.log"
+    },
+    {
+      "name": "tests/moss/m10_rilde.py",
+      "started_at": "2026-10-26T06:08:26.225355+00:00",
+      "status": "PASS",
+      "test_sha256": "7c1948ef06e97c1b29a834b543413d833e9d00654e4c59503ef98453e2f9821a",
+      "exit_code": 0,
+      "test_sha256_after": "7c1948ef06e97c1b29a834b543413d833e9d00654e4c59503ef98453e2f9821a",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?legacyVillage=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:09:07.678841+00:00",
+      "seconds": 41.453,
+      "log": "tests_moss_m10_rilde.py.log"
+    },
+    {
+      "name": "tests/moss/m15b_slime_symbol.py",
+      "started_at": "2026-10-26T06:09:07.679441+00:00",
+      "status": "PASS",
+      "test_sha256": "60632f803b69fc1d5d656d6759caa21f2e2d7b341c162a6ed603d7cb8856a2d5",
+      "exit_code": 0,
+      "test_sha256_after": "60632f803b69fc1d5d656d6759caa21f2e2d7b341c162a6ed603d7cb8856a2d5",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:10:50.544057+00:00",
+      "seconds": 102.865,
+      "log": "tests_moss_m15b_slime_symbol.py.log"
+    },
+    {
+      "name": "tests/moss/m19_plan_bench.py",
+      "started_at": "2026-10-26T06:10:50.544688+00:00",
+      "status": "PASS",
+      "test_sha256": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29",
+      "exit_code": 0,
+      "test_sha256_after": "8472b93947e3ce63d97aab8dd27966a4caebf9a6e33920344666c2addc84cd29",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:11:02.549463+00:00",
+      "seconds": 12.005,
+      "log": "tests_moss_m19_plan_bench.py.log"
+    },
+    {
+      "name": "tests/moss/m28_height25d_toggle.py",
+      "started_at": "2026-10-26T06:11:02.550120+00:00",
+      "status": "PASS",
+      "test_sha256": "e5bd02a51cb5e16ab998cf786f17242548c67d09da2f214b755f6013c0844bcc",
+      "exit_code": 0,
+      "test_sha256_after": "e5bd02a51cb5e16ab998cf786f17242548c67d09da2f214b755f6013c0844bcc",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&height25d=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&height25d=0&title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?dev=1&legacyVillage=1&height25d=1&title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:11:36.995891+00:00",
+      "seconds": 34.446,
+      "log": "tests_moss_m28_height25d_toggle.py.log"
+    },
+    {
+      "name": "tests/moss/m4_npc.py",
+      "started_at": "2026-10-26T06:11:36.996608+00:00",
+      "status": "PASS",
+      "test_sha256": "4142c1a5327ced65ac5d9214e9c732a39c568729e9bd5bda9c09f49ad2ab4064",
+      "exit_code": 0,
+      "test_sha256_after": "4142c1a5327ced65ac5d9214e9c732a39c568729e9bd5bda9c09f49ad2ab4064",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:11:42.764489+00:00",
+      "seconds": 5.768,
+      "log": "tests_moss_m4_npc.py.log"
+    },
+    {
+      "name": "tests/moss/m6_inventory.py",
+      "started_at": "2026-10-26T06:11:42.765266+00:00",
+      "status": "PASS",
+      "test_sha256": "1edc914b6480730debe1c624816eaa9ded672b1455534e188047ae9b3bba0ff4",
+      "exit_code": 0,
+      "test_sha256_after": "1edc914b6480730debe1c624816eaa9ded672b1455534e188047ae9b3bba0ff4",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:11:57.000326+00:00",
+      "seconds": 14.235,
+      "log": "tests_moss_m6_inventory.py.log"
+    },
+    {
+      "name": "tests/moss/m9_env.py",
+      "started_at": "2026-10-26T06:11:57.001062+00:00",
+      "status": "PASS",
+      "test_sha256": "8734c29da6de5aa3a40937fa2c5e6b0b5810f056aae88d35fd49a073e65b7141",
+      "exit_code": 0,
+      "test_sha256_after": "8734c29da6de5aa3a40937fa2c5e6b0b5810f056aae88d35fd49a073e65b7141",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          },
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:13:07.741191+00:00",
+      "seconds": 70.74,
+      "log": "tests_moss_m9_env.py.log"
+    },
+    {
+      "name": "tests/system/shop_flow_test.py",
+      "started_at": "2026-10-26T06:13:07.741965+00:00",
+      "status": "PASS",
+      "test_sha256": "c6464ab613e796199b6271186e8a9ce75d6969eca196e6d8d952576a55a89dd9",
+      "exit_code": 0,
+      "test_sha256_after": "c6464ab613e796199b6271186e8a9ce75d6969eca196e6d8d952576a55a89dd9",
+      "browser_evidence": {
+        "browsers": [
+          {
+            "type": "chromium",
+            "version": "140.0.7339.16"
+          }
+        ],
+        "navigations": [
+          {
+            "url": "http://127.0.0.1:8765/index.html?title=0",
+            "status": 200
+          }
+        ]
+      },
+      "failure_lines": [],
+      "reported_fails": [],
+      "skip_lines": [],
+      "ended_at": "2026-10-26T06:13:23.225185+00:00",
+      "seconds": 15.483,
+      "log": "tests_system_shop_flow_test.py.log"
+    }
+  ],
+  "counts": {
+    "PASS": 11
+  },
+  "ended_at": "2026-10-26T06:13:23.225866+00:00",
+  "main_at_finish": "df46a0035d13902a7c45cbf8d8936bbf5e3ddcdc"
+}
