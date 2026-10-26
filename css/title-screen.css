@@ -38,14 +38,23 @@
  #title-screen button{min-height:44px;padding:.45rem 1rem;width:min(100%,260px);font-size:15px}
 }
 
-/* Portrait (phones / tablets held upright): dedicated background, no Aidan layer, logo top and menu bottom. */
+/* Portrait (phones / tablets held upright): dedicated background, logo top, menu bottom.
+   TITLE-05: Aidan (same approved PNG) stands bottom-left looking out over the distant capital; the menu column
+   moves to the bottom-right beside him. His size is the smaller of a height share and the width left of the menu,
+   so small phones shrink him instead of overlapping the logo, buttons or message. */
 @media (orientation:portrait){
- #title-screen{justify-content:space-between;padding:calc(max(20px,5svh) + var(--safe-t)) calc(16px + var(--safe-r)) calc(max(20px,6svh) + var(--safe-b)) calc(16px + var(--safe-l))}
+ #title-screen{
+  --p-menu-w:clamp(168px,calc(48vw - 16px),300px);
+  --hero-h:min(46vh,calc((100vw - var(--safe-l) - var(--safe-r) - 1.5vw - var(--p-menu-w) - 40px) * 1.5));
+  --hero-h:min(46svh,calc((100vw - var(--safe-l) - var(--safe-r) - 1.5vw - var(--p-menu-w) - 40px) * 1.5));
+  justify-content:space-between;padding:calc(max(20px,5svh) + var(--safe-t)) calc(16px + var(--safe-r)) calc(max(20px,6svh) + var(--safe-b)) calc(16px + var(--safe-l))}
  #title-screen .title-backdrop{background:url(../img/title/background-portrait.png) 50% 50%/cover no-repeat,radial-gradient(ellipse at top,#284639,#0a1915)}
  #title-screen .title-backdrop::after{background:linear-gradient(180deg,rgba(6,18,14,.22) 0%,transparent 28%,transparent 58%,rgba(6,18,14,.45) 100%)}
- #title-screen .title-hero{display:none}
+ #title-screen .title-hero{left:calc(var(--safe-l) + 1.5vw);bottom:0;height:var(--hero-h)}
  #title-screen .title-logo{width:min(100%,720px,30svh * 2.81)}
- #title-screen .title-menu{margin-top:auto}
+ #title-screen .title-menu{margin-top:auto;align-self:flex-end;width:var(--p-menu-w)}
+ #title-screen .title-menu button{width:100%}
+ #title-screen .title-message{align-self:flex-end;width:var(--p-menu-w);max-width:none}
 }
 
 html.title-on #devBtn,html.title-on #devPanel,html.title-on #devBuildIndicator{display:none!important}

@@ -24,6 +24,7 @@ for name in ('aidan-portrait.png', 'logo.png'):
     a = np.array(Image.open(ROOT / 'img/title' / name).convert('RGBA'))[..., 3]
     check(a.min() == 0 and (a == 0).mean() > .2, name + ': real alpha transparency (not a baked checkerboard)')
 VIEWPORTS = [('pc-1920x1080', 1920, 1080, False), ('pc-1280x720', 1280, 720, False), ('tablet-landscape-1024x768', 1024, 768, True), ('tablet-portrait-768x1024', 768, 1024, True),
+             ('android-portrait-360x800', 360, 800, True), ('android-portrait-412x915', 412, 915, True), ('tall-portrait-360x780', 360, 780, True), ('small-portrait-320x568', 320, 568, True), ('tablet-portrait-820x1180', 820, 1180, True),
              ('phone-portrait-390x844', 390, 844, True), ('phone-portrait-360x640', 360, 640, True), ('phone-landscape-844x390', 844, 390, True), ('phone-landscape-667x375', 667, 375, True), ('ultrawide-2560x1080', 2560, 1080, False)]
 GEO = """()=>{const box=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none')return null;const b=e.getBoundingClientRect();return {x:b.left,y:b.top,w:b.width,h:b.height}};
  const q=s=>document.querySelector('#title-screen '+s),hero=q('.title-hero'),logo=q('.title-logo img');
@@ -49,7 +50,11 @@ def layout(pg, name, landscape):
     g = pg.evaluate(GEO)
     check(all(g['imgs']), f'{name}: art layers loaded')
     check(g['bg'] == ('landscape' if landscape else 'portrait'), f'{name}: {"landscape" if landscape else "portrait"} background', g['bg'])
-    check((g['hero'] is not None) == landscape, f'{name}: Aidan layer only in landscape', g['hero'])
+    # TITLE-05: Aidan is shown in both orientations, bottom-left, feet on the bottom edge, head below the logo.
+    h = g['hero']
+    check(h is not None and h['x'] >= 0 and abs(h['y'] + h['h'] - g['vh']) < 1.5 and h['y'] >= (g['logo']['y'] + g['logo']['h'] if not landscape else -1) and h['x'] + h['w'] / 2 < g['vw'] / 2, f'{name}: Aidan bottom-left, uncropped, below the logo', h)
+    if not landscape: check(h['h'] >= .24 * g['vh'], f'{name}: portrait Aidan keeps a readable size', h)
+    check(pg.evaluate("[...document.querySelectorAll('#title-screen .title-menu button')].every(b=>{const r=b.getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===b})"), f'{name}: buttons receive taps (not covered by art layers)')
     if g['hero']: check(abs(g['ratio']['hero'] - 1024 / 1536) < .005, f'{name}: Aidan aspect ratio kept', g['ratio'])
     check(abs(g['ratio']['logo'] - 2048 / 728) < .01, f'{name}: logo aspect ratio kept', g['ratio'])
     check(inside(g['logo'], g) and all(inside(b, g) for b in g['buttons']), f'{name}: logo and buttons fully inside the viewport', g)
