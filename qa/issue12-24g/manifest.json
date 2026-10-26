@@ -1,5 +1,5 @@
 {
-  "source_commit": "2436dc928622bbf5e364c2798aafaf8c526bada1",
+  "source_commit": "d7f7e682fe542a75d1048e1932dace9c3df4cc0b",
   "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
   "inventory_ref": "d77d910ead09d3ecee0901f139d8fb71f77c041b",
   "inventory_sha256": "b3d0f9d5cbd0b19d8a496ffa95a88d7e26cba0b63ca23598d0f9240d0e7637d1",
@@ -249,7 +249,7 @@
     },
     {
       "name": "tests/moss/m22_height_contacts.py",
-      "sha256": "48a3e71cadd12f874e6ffbac881974e06c0c369c56064c3c774a58d47d0a9421",
+      "sha256": "a1405f6e5b7401cf380a9bc9aff19dec4d11d78a207c2cb27f87f44fafd192b8",
       "before_24g_sha256": "48a3e71cadd12f874e6ffbac881974e06c0c369c56064c3c774a58d47d0a9421"
     },
     {
@@ -469,7 +469,8 @@
     "tests/moss/m10_flow.py",
     "tests/battle/aidan_draw.py",
     "tests/moss/m7_cliff.py",
-    "tests/system/capital_story_test.py"
+    "tests/system/capital_story_test.py",
+    "tests/moss/m22_height_contacts.py"
   ],
   "focus_shards": 4,
   "non_major_limitations": [
@@ -489,5 +490,5 @@
   },
   "focus_rounds": 3,
   "claude_evidence_commit": "b18f0c6c7b7902701fc2b899abb0fbe1f7ef3082",
-  "environment_comparison": "Public repository standard runner; exact same product/test SHA and assertions as private run40273213432"
+  "environment_comparison": "Same game/runtime code as2436dc928622bbf5e364c2798aafaf8c526bada1; only m22 fixture moved outside zones before registration; assertions unchanged. Public runner CPU capacity recorded."
 }
