@@ -51,7 +51,7 @@ with sync_playwright() as p:
     tev("MossForest.teleportFeet(1877,860)"); t.wait_for_timeout(500)
     old=tev("(()=>{const q=FieldCamera.worldToScreen(document.getElementById('forestWorld'),1902,935);return q})()"); t.touchscreen.tap(old['x'],old['y']); t.wait_for_timeout(800)
     check(tev('storyStage')==1 and tev("getComputedStyle(document.getElementById('battle')).display")!='block','the dummy next to the boy is scenery (no training)'); tev('closeDialogue()')
-    q=tev("(()=>{const q=FieldCamera.worldToScreen(document.getElementById('forestWorld'),2075,875);return q})()"); t.touchscreen.tap(q['x'],q['y']); t.wait_for_timeout(1200)
+    q=tev("(()=>{const q=FieldCamera.worldToScreen(document.getElementById('forestWorld'),2075,875);return q})()"); t.touchscreen.tap(q['x'],q['y']); t.wait_for_function("storyStage===2&&getComputedStyle(document.getElementById('battle')).display==='block'&&!LoadingInput.busy",timeout=15000)
     check(tev("storyStage")==2 and tev("getComputedStyle(document.getElementById('battle')).display")=='block','tap on the training dummy opens the training battle')
     check(tev("(()=>{const e=document.elementFromPoint(225,430);return !!(e&&e.closest('#battle'))})()"),'the training battle is actually on top of the field (not hidden behind it)')
     # far tap on an NPC: walk first, talk only on arrival; tapping elsewhere cancels the pending talk
