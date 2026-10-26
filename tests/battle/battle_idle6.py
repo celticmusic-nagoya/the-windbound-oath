@@ -73,4 +73,6 @@ with server(8816) as base,sync_playwright() as p:
     pg2=b.new_page(viewport={'width':1280,'height':720});pg2.goto(base+'/dev/battle-idle-preview.html');pg2.wait_for_timeout(800)
     ok=pg2.evaluate("[...document.images].filter(i=>i.id&&(!i.complete||i.naturalWidth===0)).map(i=>i.id+':'+i.src)")
     check(ok==[],'dev preview page: all images load',ok);b.close()
+if os.environ.get('QA_OUT'):
+    (Path(os.environ['QA_OUT'])/'idle-timing.json').write_text(json.dumps({'clock':'native RAF','tolerance_ms':45,'completed':True,'records':timing,'failure_names':fails,'page_errors':errs},indent=2))
 print('FAILS',fails);sys.exit(1 if fails else 0)
