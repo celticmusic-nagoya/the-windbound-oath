@@ -538,6 +538,15 @@
     ],
     "notes_append": "referenced at runtime via 'img/field/lind/animals/'+id+'_'+state+'.png' (js/field/lind-animals.js); static name search cannot see it"
    }
+  },
+  {
+   "match": "^img/title/(background-landscape|background-portrait|aidan-portrait|logo)\\.png$",
+   "set": {
+    "category": "title",
+    "approval_status": "APPROVED",
+    "issue": "TITLE-04",
+    "notes_append": "official title art package windbound_title_assets_v1 (2026-10-26), bytes unchanged; background/Aidan/logo layers in js/title-screen.js + css/title-screen.css"
+   }
   }
  ],
  "motion_gaps": [
