@@ -21,7 +21,7 @@ def run(args):
         # Observe the actual public clock consumed by the runtime, without setting or mocking it.
         pg.evaluate("""()=>{window.qaHz={};qaHz.start=()=>{qaHz.sample={scale:0,frames:0,maxGap:0,start:performance.now()};let last=performance.now();const tick=t=>{qaHz.sample.scale+=FieldMovement.frameScale;qaHz.sample.frames++;qaHz.sample.maxGap=Math.max(qaHz.sample.maxGap,t-last);last=t;qaHz.raf=requestAnimationFrame(tick)};qaHz.raf=requestAnimationFrame(tick)};qaHz.stop=()=>{cancelAnimationFrame(qaHz.raf);return {...qaHz.sample,end:performance.now()}};}""")
         f0=pg.evaluate("MossForest.feet"); pg.evaluate("MossForest.goFeet(%d,%d);qaHz.start()"%(f0['x']+2000,f0['y']-200)); pg.wait_for_timeout(2000)
-        clock=pg.evaluate("qaHz.stop()"); f1=pg.evaluate("MossForest.feet"); distance=((f1['x']-f0['x'])**2+(f1['y']-f0['y'])**2)**.5
+        clock=pg.evaluate("()=>({...qaHz.stop(),feet:MossForest.feet})"); f1=clock['feet']; distance=((f1['x']-f0['x'])**2+(f1['y']-f0['y'])**2)**.5
         assert clock['frames']>0 and clock['scale']>0,'No actual forest clock samples'
         out['forest_wall_px_s']=distance/((clock['end']-clock['start'])/1000);out['forest_clock']=clock;out['forest']=distance/(clock['scale']/60)
         # Held keyboard uses the same dt-normalised runtime as pointer movement.
