@@ -16,7 +16,7 @@
 
 <meta name="build-version" content="Phase 2.5.2">
 
-<link rel="stylesheet" href="css/style.css?v=20261012c">
+<link rel="stylesheet" href="css/style.css?v=20261026i70">
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css?v=20261013lf">
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
@@ -162,7 +162,7 @@
 <div id="forestScene"><div id="forestWorld"><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div><div id="forestFade"></div></div>
 <div id="louIntroScene"><div id="louIntroMoon"></div><div id="louIntroSpark"></div><div id="louIntroRing"></div><div id="louIntroLou">ルー</div><div id="louIntroText"></div></div>
 <div id="altarScene">
-<div id="altarRing"></div><div id="altarStone">ᚠ</div><div id="oathSword">†</div>
+<div id="altarArt" aria-hidden="true" data-fx="idle"><img id="altarArtBase" data-src="assets/images/environments/moss_ancient_altar_idle_v1.png" alt="" draggable="false" decoding="async"><img id="altarContractFx" data-src="assets/images/effects/moss_ancient_altar_contract_fx_v1.png" alt="" draggable="false" decoding="async"></div><div id="oathSword">†</div>
 <div class="altarGob" id="ag1">異形</div><div class="altarGob" id="ag2">異形</div><div class="altarGob" id="ag3">異形</div><div class="altarGob" id="ag4">異形</div>
 <div id="altarAidan">A</div><div id="altarFiona">F</div><div id="altarLou">ルー</div>
 <div id="altarText"></div></div>
@@ -213,6 +213,7 @@
 </div>
 <div id="loadStatus" role="status" hidden><span id="loadStatusText"></span> <button id="retryLoad" data-loading-action="retry" type="button" hidden>再試行</button></div>
 <script src="js/load-coordinator.js?v=20261025continue"></script>
+<script src="js/altar-art.js?v=20261026i70"></script>
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
@@ -1265,7 +1266,7 @@ const altarLines=[
 ]
 let altarIndex=0;
 function startAltarScene(){
- storyStage=12;oathBound=false;altarIndex=0;$('#altarScene').style.display='block';
+ storyStage=12;oathBound=false;altarIndex=0;AltarArt.reset();AltarArt.prepare();$('#altarScene').style.display='block';
  $('#oathSword').style.display='none';$('#altarText').textContent=altarLines[0];
  setObj('古代祭壇で包囲を突破しよう');
 }
@@ -1277,12 +1278,12 @@ $('#altarScene').onclick=()=>{
    if(altarIndex===altarAt('だが次の瞬間、乾いた音とともに'))EquipmentManager.setStoryWeapon('aidan',null);   // 父の剣が折れる(誓いの剣と契約するまで素手)
    if(altarIndex===altarAt('風の舞――'))WindDance.learn();   // フィオナの風の舞: 初回発動で習得(再発火しても何も起きない)
    if(altarIndex===altarAt('――風が集まり、'))$('#oathSword').style.display='block';
-   if(altarIndex===altarAt('エイダンが柄を握る')){oathBound=true;EquipmentManager.setStoryWeapon('aidan','oath_sword');
+   if(altarIndex===altarAt('エイダンが柄を握る')){oathBound=true;EquipmentManager.setStoryWeapon('aidan','oath_sword');AltarArt.contract();
      ['ag1','ag2','ag3','ag4'].forEach(id=>$('#'+id).style.opacity='.28');
      $('#oathSword').style.filter='drop-shadow(0 0 28px #e7ffd8)';
    }
  }else{
-   $('#altarScene').style.display='none';startRaiderBattle();
+   AltarArt.reset();$('#altarScene').style.display='none';startRaiderBattle();
  }
 };
 
