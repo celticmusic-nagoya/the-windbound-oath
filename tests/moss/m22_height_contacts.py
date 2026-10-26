@@ -14,7 +14,7 @@ with sync_playwright() as p:
     ev("document.querySelector('#msg')&&(document.querySelector('#msg').style.display='none')")
     check(ev("!!MossForest.height"), 'height map loaded')
     # zones occupy the same XY; one belongs to level 0, one to level 1, one declares levels [0,1]
-    ev("""(()=>{const m=MossForest.map;const sh={shape:'rect',x:280,y:1230,w:60,h:40};
+    ev("""(()=>{MossForest.teleportFeet(100,1250);const m=MossForest.map;const sh={shape:'rect',x:280,y:1230,w:60,h:40};
       m.eventZones.push({id:'z_l0',type:'trigger',shape:sh,once:true,level:0},{id:'z_l1',type:'trigger',shape:sh,once:true,level:1},{id:'z_both',type:'trigger',shape:sh,once:true,levels:[0,1]},{id:'z_def',type:'trigger',shape:sh,once:true});})()""")
     def fired(): return sorted(ev("MossForest.fired||[]")) if False else sorted(ev("(()=>{const s=MossForest.snapshot();return s.fired})()"))
     # stand inside on level 1 first (wrong level for z_l0 / z_def)
