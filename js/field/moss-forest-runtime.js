@@ -103,10 +103,13 @@
     el.world.appendChild(d);lou.el=d;
   }
   const louJoined=()=>typeof PartyManager!=='undefined'&&Boolean(PartyManager.support&&PartyManager.support.joined);
-  function updateLou(now){
-    mountLou();if(!lou.el)return;
+  function syncLouVisibility(){
+    mountLou();if(!lou.el)return false;
     const show=louJoined()&&!(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false);
-    lou.el.style.display=show?'block':'none';if(!show)return;
+    lou.el.style.display=show?'block':'none';return show;
+  }
+  function updateLou(now){
+    if(!syncLouVisibility())return;
     const tx=S.x+(S.fx-S.x)*2.4,ty=S.y+(S.fy-S.y)*2.4;
     if(lou.map!==S.map){lou.map=S.map;lou.x=tx;lou.y=ty;}
     const k=1-Math.pow(1-.06,FieldMovement.frameScale||1);lou.x+=(tx-lou.x)*k;lou.y+=(ty-lou.y)*k;
@@ -536,6 +539,7 @@
     el.player.style.zIndex=String(Math.round(S.y+FOOT.ay));el.fiona.style.zIndex=String(Math.round(S.fy+FOOT.ay));
     if(S.forest&&S.forest.height)heightDraw(S.forest.height);
     el.player.style.display='block';el.fiona.style.display=(hooks.fionaVisible&&hooks.fionaVisible(S.map)===false)?'none':'block';   // follower hidden indoors / before she joins
+    syncLouVisibility(); // Commit follower visibility before Loading settles, even while gameplay is locked.
     const sc=FieldCamera.scale,rc=el.world.getBoundingClientRect();
     S.forest.update({x:-rc.left/sc,y:-rc.top/sc,width:el.scene.clientWidth/sc,height:el.scene.clientHeight/sc});
   }
