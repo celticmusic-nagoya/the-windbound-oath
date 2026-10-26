@@ -1,5 +1,5 @@
 {
-  "source_commit": "d7f7e682fe542a75d1048e1932dace9c3df4cc0b",
+  "source_commit": "7feb7ea04bc1c20fa3bc16dc75d867e561d90a73",
   "baseline_commit": "e8ecb5dceea3513bbc22028dcff9365b6718d20c",
   "inventory_ref": "d77d910ead09d3ecee0901f139d8fb71f77c041b",
   "inventory_sha256": "b3d0f9d5cbd0b19d8a496ffa95a88d7e26cba0b63ca23598d0f9240d0e7637d1",
@@ -374,7 +374,7 @@
     },
     {
       "name": "tests/moss/m7_choreo.py",
-      "sha256": "d7baa90829421d7a791f8b11ecb84c22e12121c6ff37e4811d10a55a781e3be8",
+      "sha256": "5bf993803cae07c5da00561203c6f99fd6423b8b3a3d0508caa2a3293f53088d",
       "before_24g_sha256": "d7baa90829421d7a791f8b11ecb84c22e12121c6ff37e4811d10a55a781e3be8"
     },
     {
@@ -470,7 +470,9 @@
     "tests/battle/aidan_draw.py",
     "tests/moss/m7_cliff.py",
     "tests/system/capital_story_test.py",
-    "tests/moss/m22_height_contacts.py"
+    "tests/moss/m22_height_contacts.py",
+    "tests/moss/m33_lou_field_review.py",
+    "tests/moss/m7_choreo.py"
   ],
   "focus_shards": 4,
   "non_major_limitations": [
@@ -490,5 +492,5 @@
   },
   "focus_rounds": 3,
   "claude_evidence_commit": "b18f0c6c7b7902701fc2b899abb0fbe1f7ef3082",
-  "environment_comparison": "Same game/runtime code as2436dc928622bbf5e364c2798aafaf8c526bada1; only m22 fixture moved outside zones before registration; assertions unchanged. Public runner CPU capacity recorded."
+  "environment_comparison": "Real Chromium on public runner. Lou visibility committed before Loading release; cliff choreography waits for committed map. Assertions preserved."
 }

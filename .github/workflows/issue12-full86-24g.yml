@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: celticmusic-nagoya/the-windbound-oath
-          ref: d7f7e682fe542a75d1048e1932dace9c3df4cc0b
+          ref: 7feb7ea04bc1c20fa3bc16dc75d867e561d90a73
           path: game
           fetch-depth: 0
           persist-credentials: false
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: celticmusic-nagoya/the-windbound-oath
-          ref: d7f7e682fe542a75d1048e1932dace9c3df4cc0b
+          ref: 7feb7ea04bc1c20fa3bc16dc75d867e561d90a73
           path: game
           fetch-depth: 0
           persist-credentials: false
@@ -87,7 +87,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: celticmusic-nagoya/the-windbound-oath
-          ref: d7f7e682fe542a75d1048e1932dace9c3df4cc0b
+          ref: 7feb7ea04bc1c20fa3bc16dc75d867e561d90a73
           path: game
           fetch-depth: 0
           persist-credentials: false
@@ -103,7 +103,7 @@ jobs:
           echo "PW_CHROMIUM_EXECUTABLE=$chrome" >> "$GITHUB_ENV"
           echo "CHROMIUM_PATH=$chrome" >> "$GITHUB_ENV"
           git -C game worktree add --detach ../baseline e8ecb5dceea3513bbc22028dcff9365b6718d20c
-      - name: Original eight and six follow-ups, each three real-browser runs
+      - name: Original eight and eight follow-ups, each three real-browser runs
         run: python -u qa/issue12-24g/repeat.py --source game --baseline baseline --out focus-out --shard ${{ matrix.shard }} --focus
       - uses: actions/upload-artifact@v4
         if: always()
@@ -129,7 +129,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: celticmusic-nagoya/the-windbound-oath
-          ref: d7f7e682fe542a75d1048e1932dace9c3df4cc0b
+          ref: 7feb7ea04bc1c20fa3bc16dc75d867e561d90a73
           path: game
           fetch-depth: 0
           persist-credentials: false
