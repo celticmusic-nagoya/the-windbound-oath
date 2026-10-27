@@ -31,7 +31,7 @@ VIEWPORTS = [('pc-1920x1080', 1920, 1080, False), ('pc-1280x720', 1280, 720, Fal
              ('phone-portrait-390x844', 390, 844, True), ('phone-portrait-360x640', 360, 640, True), ('phone-landscape-844x390', 844, 390, True), ('phone-landscape-667x375', 667, 375, True), ('ultrawide-2560x1080', 2560, 1080, False)]
 GEO = """()=>{const box=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none')return null;const b=e.getBoundingClientRect();return {x:b.left,y:b.top,w:b.width,h:b.height}};
  const q=s=>document.querySelector('#title-screen '+s),hero=q('.title-hero'),logo=q('.title-logo img');
- return {vw:innerWidth,vh:innerHeight,hero:box(hero),logo:box(logo),msg:(()=>{const m=q('.title-message');if(!m)return null;const r=document.createRange();r.selectNodeContents(m);const b=r.getBoundingClientRect();return b.width?{x:b.left,y:b.top,w:b.width,h:b.height}:null})(),buttons:[...document.querySelectorAll('#title-screen .title-menu button')].map(b=>({t:b.textContent,...box(b)})),
+ return {vw:innerWidth,vh:innerHeight,hero:box(hero),fg:box(q('.title-foreground')),logo:box(logo),msg:(()=>{const m=q('.title-message');if(!m)return null;const r=document.createRange();r.selectNodeContents(m);const b=r.getBoundingClientRect();return b.width?{x:b.left,y:b.top,w:b.width,h:b.height}:null})(),buttons:[...document.querySelectorAll('#title-screen .title-menu button')].map(b=>({t:b.textContent,...box(b)})),
   ratio:{hero:hero&&box(hero)?box(hero).w/box(hero).h:null,logo:box(logo)?box(logo).w/box(logo).h:null},
   bg:(getComputedStyle(q('.title-backdrop')).backgroundImage.match(/background-(landscape|portrait)/)||[])[1],
   imgs:[...document.querySelectorAll('#title-screen img')].map(i=>i.complete&&i.naturalWidth>0),
@@ -73,6 +73,11 @@ def layout(pg, name, landscape):
     check(not any(overlap(g['logo'], b) for b in g['buttons']) and not overlap(*g['buttons'][:2]), f'{name}: logo and buttons do not overlap', g)
     check(all(hero_pixels(g, r) == 0 for r in [g['logo'], g['msg']] + g['buttons']), f'{name}: no UI (logo, buttons, status text) over Aidan', [hero_pixels(g, r) for r in [g['logo'], g['msg']] + g['buttons']])
     check([b['t'] for b in g['buttons']] == ['NEW GAME', 'CONTINUE'] and all(b['h'] >= 44 for b in g['buttons']) and g['baked'] and not g['extra'], f'{name}: real NEW GAME / CONTINUE buttons only, touch-size, OPTIONS/GALLERY absent', g['buttons'])
+    # Title foreground (meadow PNG, 2026-10-27): spans both boot soles (back view v2: x 556-1084 of 1152 px) and stays off the logo / buttons.
+    f, hb = g['fg'], g['hero_box']
+    check(f is not None and hb is not None and f['x'] <= hb['x'] + hb['w'] * 556 / HERO_W and f['x'] + f['w'] >= hb['x'] + hb['w'] * 1084 / HERO_W and f['y'] <= hb['y'] + hb['h'] * 1460 / 1536,
+          f'{name}: meadow foreground under both boots', (f, hb))
+    check(not any(overlap(f, r) for r in [g['logo']] + g['buttons']), f'{name}: meadow foreground off the logo and buttons', f)
     if OUT: pg.screenshot(path=str(OUT / (name + '.png')))
     return g
 with server(8817) as base, sync_playwright() as p:
