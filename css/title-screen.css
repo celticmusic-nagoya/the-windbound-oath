@@ -24,7 +24,7 @@
    size and position are unchanged (layout still uses --hero-w = the 2:3 figure frame). */
 #title-screen .title-hero{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;height:var(--hero-h);width:auto;max-width:none;margin-left:calc(var(--hero-h) * -64 / 1536);filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
 /* Transparent foreground vegetation overlaps the boots, without changing approved hero/background art. */
-#title-screen .title-foreground{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;width:var(--hero-w);height:calc(var(--hero-h) * .16);background:url(../img/title/foreground-grass.svg) center bottom/100% 100% no-repeat;opacity:.92}
+#title-screen .title-foreground{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;width:var(--hero-w);height:calc(var(--hero-h) * .16);background:url(../img/title/foreground-meadow.png?v=20261027meadow1) center bottom/contain no-repeat;opacity:.92}
 #title-screen .title-logo{margin:0;line-height:0;width:min(100%,40vh * 2.81);width:min(100%,40svh * 2.81)}
 #title-screen .title-logo img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.45))}
 #title-screen .title-logo-text{display:none;line-height:1.2;font-size:clamp(25px,5vw,52px);letter-spacing:.06em;text-shadow:0 2px 8px #000}
