@@ -54,8 +54,8 @@ with sync_playwright() as p:
           const im=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=R.imageUrl('aidan',f)});
           const ref=document.createElement('canvas');ref.width=k.w;ref.height=k.h;const rc=ref.getContext('2d');rc.drawImage(im,k.x,k.y,k.w,k.h,0,0,k.w,k.h);
           const a=cv.getContext('2d').getImageData(0,0,k.w,k.h).data,b=rc.getImageData(0,0,k.w,k.h).data;let d=0;for(let i=0;i<a.length;i++)if(a[i]!==b[i])d++;
-          return {w:cv.width,h:cv.height,diff:d,eye:TalkPortrait.status.eye}}""", f)
-        check(res['w'] == 700 and res['h'] == 700 and res['diff'] == 0 and res['eye'] == 0, '%s: canvas = 700x700 source-resolution crop, open eyes identical to the adopted image (diff %d)' % (f, res['diff']))
+          return {w:cv.width,h:cv.height,kw:k.w,kh:k.h,diff:d,eye:TalkPortrait.status.eye}}""", f)
+        check(res['w'] == res['kw'] and res['h'] == res['kh'] and res['diff'] == 0 and res['eye'] == 0, '%s: canvas = registry crop at source resolution (%dx%d), open eyes identical to the adopted image (diff %d)' % (f, res['w'], res['h'], res['diff']))
     for f in FACES:
         pg.evaluate("(f)=>TalkPortrait.show('aidan',f)", f); wait()
         res = pg.evaluate("""(f)=>{const R=PortraitRegistry,k=R.get('aidan').crop,W=k.w,H=k.h,boxes=Object.values(R.blinkOf('aidan',f).eyes).map(e=>[e.box[0]-k.x,e.box[1]-k.y,e.box[2]-k.x,e.box[3]-k.y]);

@@ -188,7 +188,8 @@ with sync_playwright() as p:
             check(b_[0] >= -1 and b_[2] <= g['iw'] + 1 and b_[1] >= -1 and b_[3] <= g['ih'] + 1, 'C1 %s/%s: frame inside the viewport %s' % (name, ch, [round(x) for x in b_]))
             check(b_[3] <= g['msgTop'] + 6, 'C2 %s/%s: frame never overlaps the dialogue text box (bottom %d <= msg top %d)' % (name, ch, b_[3], g['msgTop']))
             check(g['pe'] == 'none' and b_[5] >= min(g['ih'] * 0.2, 150), 'C3 %s/%s: pointer-events none, reasonable height %d' % (name, ch, b_[5]))
-            check(abs(b_[4] / b_[5] - 1) < 0.015 and abs(g['img'][0] - b_[4]) <= 1 and abs(g['img'][1] - b_[5]) <= 1, 'D1 %s/%s: frame keeps the crop aspect (%.3f) and the canvas fills it exactly' % (name, ch, b_[4] / b_[5]))
+            ar = pg.evaluate("(c)=>{const k=PortraitRegistry.get(c).crop;return k.w/k.h}", ch)
+            check(abs(b_[4] / b_[5] / ar - 1) < 0.015 and abs(g['img'][0] - b_[4]) <= 1 and abs(g['img'][1] - b_[5]) <= 1, 'D1 %s/%s: frame keeps the registry crop aspect (%.3f, crop %.3f) and the canvas fills it exactly' % (name, ch, b_[4] / b_[5], ar))
             pg.evaluate("closeDialogue()")
         gl, gf = res['test2'], res['aidan']
         gaps[name] = (gl['msgTop'] - gl['box'][3], gf['msgTop'] - gf['box'][3])
