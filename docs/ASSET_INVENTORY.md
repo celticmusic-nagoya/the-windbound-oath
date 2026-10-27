@@ -23,6 +23,7 @@
 | アセット名 | 正式採用ファイル名 | 用途 | 格納先 | 状態 | 原本 SHA-256 | 備考 |
 |---|---|---|---|---|---|---|
 | タイトル前景・草花と岩（エイダンの足元） | `foreground-meadow.png` | タイトル画面でエイダンの両足の下に敷く透過前景。旧 `img/title/foreground-grass.svg` の表示を置き換え（SVG ファイルは削除せず残置・参照なし） | `img/title/foreground-meadow.png` | **ユーザー提供・採用（2026-10-27、PR #76 で main 統合）／`css/title-screen.css` の `.title-foreground` で参照／Android実機確認待ち** | `cfcc624adbfa8c29994f9c3fd81f41d606dfa623325bedbcca5b3743e554c9f1` | 2014×781 RGBA PNG、1,403,346 bytes。草花・岩のみ（遺跡・樹木なし）。アルファ最大 254。無加工（再生成・トリミング・圧縮なし）。表示位置・大きさは CSS のみで調整（2026-10-27、両足の接地） |
+| タイトル前景・縦画面用（草と小花） | `foreground-meadow-portrait.png` | 縦画面のタイトルでエイダンの両足の下に敷く透過前景（横画面・PC は `foreground-meadow.png` のまま） | `img/title/foreground-meadow-portrait.png` | **ユーザー承認の派生素材（2026-10-27、DIRECTIVE-17E 案①）／`css/title-screen.css` の縦画面ルールで参照／Android実機確認待ち** | `05b5b3e19e9606801c9cc19ede94e465ee625a19a3ee85f321ff4fe8ec10811c` | 540×200 RGBA PNG。`foreground-meadow.png`（`cfcc624a…`、不変）から `tools/assets/make_title_foreground_portrait.py` で生成：岩のない草と小花の層（x20–560, y330–530）、縦画面背景の足元に合わせた色調、上縁のみ軽いぼかし、左右と上のアルファグラデーション。`--check` で再現性を確認 |
 
 ## キャラクター（会話立ち絵）
 

@@ -62,16 +62,13 @@
  #title-screen .title-backdrop{background:url(../img/title/background-portrait.png) 50% 50%/cover no-repeat,radial-gradient(ellipse at top,#284639,#0a1915)}
  #title-screen .title-backdrop::after{background:linear-gradient(180deg,rgba(6,18,14,.22) 0%,transparent 28%,transparent 58%,rgba(6,18,14,.45) 100%)}
  #title-screen .title-hero{left:calc(var(--safe-l) + 1.5vw);bottom:0;height:var(--hero-h)}
- /* Portrait (Android QA 2026-10-27: the sharp, sunlit meadow strip read as a pedestal on the soft stone-path backdrop):
-    the same PNG sits lower and slightly wider, its left / right / top edges are feathered by a mask so no edge or horizon line shows,
-    it is toned to the darker foot of the portrait backdrop, and a soft contact shadow under the boots grounds him. Landscape untouched. */
- #title-screen .title-foreground{--fg-x:calc(var(--hero-h) * .13);left:calc(var(--safe-l) + 1.5vw + var(--fg-x));bottom:calc(var(--hero-h) * -.045);
-  width:calc(var(--hero-h) * .7);height:calc(var(--hero-h) * .7 * 781 / 2014);
-  background:url(../img/title/foreground-meadow.png?v=20261027meadow1) center bottom/100% 100% no-repeat,
-   radial-gradient(ellipse 36% 24% at 52% 56%,rgba(6,14,10,.6),rgba(6,14,10,0) 100%);
-  -webkit-mask-image:radial-gradient(ellipse 50% 74% at 50% 100%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%);
-  mask-image:radial-gradient(ellipse 50% 74% at 50% 100%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%);
-  filter:brightness(.8) saturate(.88);opacity:1}
+ /* Portrait (DIRECTIVE-17E, approved option 1): a portrait-only derivative of the meadow (img/title/foreground-meadow-portrait.png, built by
+    tools/assets/make_title_foreground_portrait.py from the unchanged foreground-meadow.png): the rock-free grass / small-flower layer, graded to
+    the foot of the portrait backdrop, soft-focus top fringe and alpha-ramped ends, so the boots stand in grass rather than on a mound.
+    Its lower half runs off the screen; no CSS darkening, mask or shadow. Landscape / PC keep foreground-meadow.png as before. */
+ #title-screen .title-foreground{--fg-x:calc(var(--hero-h) * .07);left:calc(var(--safe-l) + 1.5vw + var(--fg-x));bottom:calc(var(--hero-h) * -.12);
+  width:calc(var(--hero-h) * .8);height:calc(var(--hero-h) * .8 * 200 / 540);
+  background:url(../img/title/foreground-meadow-portrait.png?v=20261027p1) center bottom/100% 100% no-repeat;opacity:1}
  #title-screen .title-logo{width:min(100%,720px,30svh * 2.81)}
  #title-screen .title-menu{margin-top:auto;align-self:flex-end;width:var(--p-menu-w)}
  #title-screen .title-menu button{width:100%;padding-left:.5rem;padding-right:.5rem}
