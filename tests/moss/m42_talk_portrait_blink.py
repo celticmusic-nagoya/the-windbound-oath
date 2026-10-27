@@ -47,10 +47,14 @@ with sync_playwright() as p:
     # every face blinks (forced blink on each page)
     pg.evaluate("FieldTalk.talk('b_faces')"); pg.wait_for_timeout(600); ok = []
     for i, f in enumerate(FACES):
-        pg.evaluate("window.__eye=[]"); pg.evaluate("TalkPortrait.blinkNow()"); pg.wait_for_timeout(400)
+        # wait for the forced blink to finish (back to open) instead of a fixed 400 ms: under CPU load the 260 ms blink can run late
+        pg.evaluate("window.__eye=[]"); pg.evaluate("TalkPortrait.blinkNow()")
+        try: pg.wait_for_function("window.__eye.length>=8&&window.__eye[window.__eye.length-1][1]===0", timeout=2000)
+        except Exception: pass
+        pg.wait_for_timeout(50)
         tr = pg.evaluate("window.__eye"); ok.append((f, [s for _, s, _ in tr], {x for _, _, x in tr}))
         if i < len(FACES) - 1: pg.click('#msg'); pg.wait_for_timeout(600)
-    check(all(st == [1, 2, 3, 4, 3, 2, 1, 0] and fs == {f} for f, st, fs in ok), '1g each of the six faces blinks with its own overlays: %s' % [(f, st[:4], sorted(fs)) for f, st, fs in ok])
+    check(all(st == [1, 2, 3, 4, 3, 2, 1, 0] and fs == {f} for f, st, fs in ok), '1g each of the six faces blinks with its own overlays: %s' % [(f, st, sorted(fs)) for f, st, fs in ok])
     pg.evaluate("closeDialogue()"); pg.wait_for_timeout(300)
     # 2 mid-blink expression change: the blink stops, the new face appears open, no old overlay is drawn on it, one timer
     pg.evaluate("FieldTalk.talk('b_faces')"); pg.wait_for_timeout(600)
