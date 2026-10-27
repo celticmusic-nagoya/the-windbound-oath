@@ -100,3 +100,24 @@
 /* S2 navigation failure: explicit retry also works when no field could be mounted. */
 #fieldEntryError{position:fixed;left:12px;right:12px;bottom:12px;z-index:100190;padding:12px;background:#14251f;color:#fff;border:1px solid #bbab70;border-radius:8px;font:14px/1.5 system-ui,sans-serif}
 #fieldEntryError[hidden]{display:none}#fieldEntryError button{margin-left:8px;padding:8px 16px}
+
+/* MOSS-02: map effect layer (js/field/forest-effects.js). Light and glows are CSS gradients; the seal uses the delivered
+   fx_seal frames. Plain alpha (no blend modes: they made the whole world re-blend every frame). Only opacity/transform animate; nodes exist only while their chunk is near the viewport (FieldCulling). */
+.forest-fx{position:absolute;pointer-events:none;opacity:var(--fx-alpha,1)}
+.forest-fx[hidden]{display:none}
+.forest-fx.fx-pulse{animation:forest-fx-pulse var(--fx-period,8s) ease-in-out infinite}
+@keyframes forest-fx-pulse{0%,100%{opacity:var(--fx-alpha,1)}50%{opacity:calc(var(--fx-alpha,1) - var(--fx-amp,.05))}}
+.forest-fx-shaft{transform-origin:50% 100%;transform:rotate(var(--fx-tilt,-15deg));
+ background:radial-gradient(ellipse 42% 50% at 50% 55%,rgba(255,245,214,.95) 0%,rgba(255,240,200,.6) 45%,rgba(255,234,186,0) 100%)}
+.forest-fx-spring{border-radius:50%;background:radial-gradient(ellipse at 50% 50%,rgba(185,245,255,1) 0%,rgba(130,215,245,.55) 42%,rgba(90,190,230,0) 72%)}
+.forest-fx-rune{border-radius:50%;background:radial-gradient(ellipse at 50% 55%,rgba(170,240,255,1) 0%,rgba(120,205,255,.5) 45%,rgba(90,180,255,0) 72%)}
+.forest-fx-fairy{border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(225,255,255,.95) 0%,rgba(150,240,245,.5) 30%,rgba(120,220,240,0) 70%)}
+.forest-fx-seal img{position:absolute;left:0;bottom:0;width:100%;height:auto;opacity:0;animation:forest-fx-frame .72s steps(1,end) infinite}
+@keyframes forest-fx-frame{0%{opacity:1}25%,100%{opacity:0}}
+#forestWorld.forest-seal-corrupted .forest-fx-seal{filter:hue-rotate(52deg) saturate(1.25)}
+.forest-fx-seal.fx-ending{transition:opacity 1s ease-out,transform 1s ease-out;opacity:0;transform:scale(1.25)}
+.forest-fx-seal.fx-ending img{animation-duration:.36s}
+@media (prefers-reduced-motion:reduce){
+ .forest-fx.fx-pulse{animation:none}
+ .forest-fx-seal img{animation:none;opacity:0}.forest-fx-seal img:first-child{opacity:1}
+}
