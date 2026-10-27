@@ -9,14 +9,15 @@
  *   so the light settles into the CG. If the player has already advanced past line 35 by then, it is not shown.
  * - Images are used unmodified (no resampling to disk). A CG that has not loaded, or failed to load, is simply not shown:
  *   the event never waits for it. Images are fetched when their scene starts and released when it ends.
- * - Layout: landscape shows the whole CG (contain) above the text box; portrait uses a taller cover box with a per-CG focus so
- *   faces / the broken sword / Lou / the oath sword stay visible. A dimmed copy of the same image fills the margins.
+ * - Layout (DIRECTIVE-17E): landscape shows the whole CG as large as the screen allows (3:2 kept, the text box overlays its lower edge);
+ *   portrait uses a tall cover box with a per-CG focus so faces / the broken sword / Lou / the oath sword stay visible. Margins are a dark
+ *   gradient (no enlarged copy of the CG) and the CG edges are feathered. While a CG is on, body.eventCgOn hides the DEV button.
  * - ?eventCg=0 turns the layer off (comparison / rollback). */
 (function () {
   'use strict';
   const BASE = 'assets/images/events/';
   const CG = {
-    lou_first: {file: 'moss_lou_first_meeting_cg_v1.png', focus: 60, kind: 'soft'},
+    lou_first: {file: 'moss_lou_first_meeting_cg_v1.png', focus: 65, kind: 'soft'},
     altar_cg01: {file: 'moss_altar_cg01_father_sword_break_v1.png', focus: 40, kind: 'impact'},
     altar_cg02: {file: 'moss_altar_cg02_wind_dance_first_v1.png', focus: 42, kind: 'normal'},
     altar_cg03: {file: 'moss_altar_cg03_lou_stall_v1.png', focus: 47, kind: 'normal'},
@@ -57,11 +58,11 @@
     const d = CG[cg], el = document.createElement('div');
     el.className = 'event-cg-item event-cg-' + d.kind; el.dataset.cg = cg;
     el.style.setProperty('--cg-focus', d.focus + '%');
-    const back = document.createElement('img'), img = document.createElement('img'), frame = document.createElement('div'), flash = document.createElement('div');
-    back.className = 'event-cg-back'; img.className = 'event-cg-img'; frame.className = 'event-cg-frame'; flash.className = 'event-cg-flash';
-    for (const im of [back, img]) { im.alt = ''; im.draggable = false; im.decoding = 'async'; }
-    frame.append(img); el.append(back, frame, flash); root.append(el);
-    const rec = st.items[cg] = {el, img, back, status: 'idle'};
+    const img = document.createElement('img'), frame = document.createElement('div'), flash = document.createElement('div');
+    img.className = 'event-cg-img'; frame.className = 'event-cg-frame'; flash.className = 'event-cg-flash';
+    img.alt = ''; img.draggable = false; img.decoding = 'async';
+    frame.append(img); el.append(frame, flash); root.append(el);
+    const rec = st.items[cg] = {el, img, status: 'idle'};
     img.addEventListener('load', () => { rec.status = 'ready'; apply(key); });
     img.addEventListener('error', () => { rec.status = 'failed'; el.dataset.failed = '1'; apply(key); });
     return rec;
@@ -69,7 +70,7 @@
   function load(key, cg) {
     const rec = item(key, cg); if (!rec || rec.status !== 'idle') return;
     rec.status = 'loading'; const src = BASE + CG[cg].file;
-    rec.img.src = src; rec.back.src = src;
+    rec.img.src = src;
   }
   function fit(key) {
     // the CG area ends just above the scene's text box (whatever its current height)
@@ -88,7 +89,10 @@
       if (want && !rec.el.classList.contains('on')) { rec.el.classList.add('on'); st.shown[c.cg] = (st.shown[c.cg] || 0) + 1; }
       else if (!want && rec.el.classList.contains('on')) rec.el.classList.remove('on');
     }
+    mark();
   }
+  // body.eventCgOn while any CG is on screen (CSS hides the DEV button / build label; the dev tools themselves are untouched)
+  function mark() { document.body.classList.toggle('eventCgOn', Boolean(document.querySelector('.event-cg-item.on'))); }
   function start(key) {
     if (disabled || !SCENES[key]) return;
     end(key);
@@ -101,7 +105,7 @@
   function end(key) {
     const st = state[key]; if (!st) return;
     const root = layer(key); if (root) root.replaceChildren();
-    delete state[key];
+    delete state[key]; mark();
   }
   function trigger(key, what) {
     const st = state[key]; if (!st) return;

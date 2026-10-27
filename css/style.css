@@ -433,15 +433,20 @@ body.villageAttack #inside{display:none!important}
 #altarArtBase{opacity:0;transition:opacity .6s ease-out}#altarArtBase.ready{opacity:1}
 #altarContractFx{opacity:0;transition:opacity 1.4s ease-in}
 #altarArt.fx-on #altarContractFx.ready{opacity:1;transition:opacity .9s ease-out}
-/* Issue #70 event CGs (js/event-cg.js): one item per CG so neighbouring CGs crossfade. The CG area ends above the text box
- (--cg-bottom, measured); the text box stays on top. Landscape: whole image (contain). Portrait: a 62svh cover box with a per-CG focus. */
+/* Issue #70 event CGs (js/event-cg.js): one item per CG so neighbouring CGs crossfade; the text box stays on top.
+ DIRECTIVE-17E (Android QA): no enlarged copy of the CG behind it; the CG keeps its 3:2 ratio, sits on a dark gradient, and its edges are
+ feathered (mask) so no hard horizontal / vertical line shows. Landscape: as large as the screen allows (full height, or full width when
+ the screen is narrower than 3:2), the text box overlays its lower edge. Portrait: a tall cover box (person / key action kept by a per-CG
+ focus) above the text box. The DEV button / build label are hidden while a CG is on screen (body.eventCgOn). */
 #altarText,#louIntroText{z-index:3}
 .event-cg{position:absolute;inset:0;z-index:2;pointer-events:none;--cg-bottom:0px}
-.event-cg-item{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility 0s linear .4s;background:#05080a}
+.event-cg-item{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility 0s linear .4s;
+ background:radial-gradient(ellipse 75% 70% at 50% 45%,#121c17 0%,#080d0b 60%,#030504 100%)}
 .event-cg-item.on{opacity:1;visibility:visible;transition:opacity .45s ease-out,visibility 0s}
-.event-cg-back{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32}
-.event-cg-frame{position:absolute;left:0;right:0;top:0;bottom:var(--cg-bottom);display:flex;align-items:center;justify-content:center}
-.event-cg-img{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.event-cg-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100%,150vh);width:min(100%,150svh);aspect-ratio:3/2;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);
+ -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);mask-composite:intersect}
+.event-cg-img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%;user-select:none;-webkit-user-drag:none}
 .event-cg-flash{position:absolute;inset:0;background:#fff;opacity:0}
 .event-cg-impact.on{transition:opacity .18s ease-out,visibility 0s}
 .event-cg-impact.on .event-cg-flash{animation:event-cg-flash .45s ease-out}
@@ -450,10 +455,14 @@ body.villageAttack #inside{display:none!important}
 .event-cg-climax{transition:opacity 1s ease,visibility 0s linear 1s}
 .event-cg-climax.on{transition:opacity 1.4s ease-in-out,visibility 0s}
 @media (orientation:portrait){
- .event-cg-frame{bottom:auto;top:max(0px,calc((100% - var(--cg-bottom) - min(100% - var(--cg-bottom),62vh)) / 2));height:min(calc(100% - var(--cg-bottom)),62vh);
-  top:max(0px,calc((100% - var(--cg-bottom) - min(100% - var(--cg-bottom),62svh)) / 2));height:min(calc(100% - var(--cg-bottom)),62svh)}
- .event-cg-img{object-fit:cover;object-position:var(--cg-focus,50%) 50%}
+ .event-cg-frame{left:0;right:0;width:auto;aspect-ratio:auto;transform:none;
+  top:max(0px,calc((100% - var(--cg-bottom) - min(100% - var(--cg-bottom),74vh)) / 2));height:min(calc(100% - var(--cg-bottom)),74vh);
+  top:max(0px,calc((100% - var(--cg-bottom) - min(100% - var(--cg-bottom),74svh)) / 2));height:min(calc(100% - var(--cg-bottom)),74svh);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 91%,transparent 100%);-webkit-mask-composite:source-over;
+  mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask-composite:add}
+ .event-cg-img{object-position:var(--cg-focus,50%) 50%}
 }
+html body.eventCgOn #devBtn,html body.eventCgOn #devPanel,html body.eventCgOn #devBuildIndicator{display:none!important}
 @media (prefers-reduced-motion:reduce){.event-cg-impact.on .event-cg-flash{animation:none}}
 #oathSword{position:absolute;left:50%;top:39%;transform:translate(-50%,-50%) rotate(12deg);font-size:66px;display:none;filter:drop-shadow(0 0 14px #d9f4d2)}
 .altarGob{position:absolute;width:50px;height:64px;border-radius:45% 45% 28% 28%;background:#27382a;border:4px solid #704677;color:#dbcce0;display:grid;place-items:center}
