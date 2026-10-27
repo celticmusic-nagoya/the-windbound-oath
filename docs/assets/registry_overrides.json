@@ -540,12 +540,21 @@
    }
   },
   {
-   "match": "^img/title/(background-landscape|background-portrait|aidan-portrait|logo)\\.png$",
+   "match": "^img/title/(background-landscape|background-portrait|logo)\\.png$",
    "set": {
     "category": "title",
     "approval_status": "APPROVED",
     "issue": "TITLE-04",
     "notes_append": "official title art package windbound_title_assets_v1 (2026-10-26), bytes unchanged; background/Aidan/logo layers in js/title-screen.js + css/title-screen.css"
+   }
+  },
+  {
+   "match": "^img/title/aidan-portrait\\.png$",
+   "set": {
+    "category": "title",
+    "approval_status": "REVISION_REQUIRED",
+    "issue": "TITLE-04",
+    "notes_append": "official title art package windbound_title_assets_v1 (2026-10-26), bytes unchanged. superseded on the title screen by the approved Aidan back view v2 (assets/images/characters/aidan_back_v2.png, 2026-10-27); kept unchanged, no longer referenced"
    }
   }
  ],
