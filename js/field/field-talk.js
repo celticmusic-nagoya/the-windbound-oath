@@ -7,6 +7,7 @@
   'use strict';
   const providers = new Map(), tables = new Map(), history = [];
   const seen = new Set(), cycle = {}, flags = {};
+  let ownerSeq = 0;   // portrait owner ids: one per conversation run
   let questProvider = id => (window.Quest ? Quest.state(id) : null), session = null;
   const msg = () => document.getElementById('msg');
 
@@ -56,12 +57,23 @@
   // ---------- pages ----------
   const SPLIT = /　(?=[^\s「」　]{1,10}「)/, SPEAKER = /^([^\s「」　]{1,10})(「[\s\S]*)$/;
   function toPage(p) {
-    if (p && typeof p === 'object') return {speaker: p.speaker || '', text: p.text || ''};
+    if (p && typeof p === 'object') {   // optional portrait: char (TalkPortrait id, null = hide) + face (expression id)
+      const o = {speaker: p.speaker || '', text: p.text || ''};
+      if (p.char !== undefined) o.char = p.char; if (p.face !== undefined) o.face = p.face; if (p.side !== undefined) o.side = p.side; return o;
+    }
     const m = SPEAKER.exec(String(p)); return m ? {speaker: m[1], text: m[2]} : {speaker: '', text: String(p)};
   }
   function pagesOf(conv) {
     const raw = typeof conv === 'string' ? conv.split(SPLIT) : Array.isArray(conv) ? conv : (conv.pages || []);
-    return raw.map(toPage);
+    const dc = conv && typeof conv === 'object' && !Array.isArray(conv) ? conv : null;   // conversation-level char/face = defaults; a page without `char` keeps the previous page's character (null = hidden), `face` is per page
+    let char = dc ? dc.char : undefined; const side = dc ? dc.side : undefined;   // `side` (left/right): page value, else the conversation's, else the character registry's
+    return raw.map(toPage).map((pg, i) => {
+      if (pg.char !== undefined) char = pg.char;
+      else if (char !== undefined) pg = {...pg, char};
+      if (i === 0 && pg.face === undefined && dc && dc.face !== undefined && pg.char !== undefined) pg = {...pg, face: dc.face};   // conversation `face` = the first page's expression
+      if (pg.side === undefined && side !== undefined && pg.char) pg = {...pg, side};
+      return pg;
+    });
   }
 
   // ---------- effects ----------
@@ -105,6 +117,7 @@
       box.append(w); kbIdx = 0; mark();
     }
     box.style.display = 'block'; document.body.classList.add('dialogueOpen');
+    if (window.TalkPortrait && session && (page.char !== undefined || page.face !== undefined || page.side !== undefined)) TalkPortrait.page(page, session.owner);   // only the conversation that owns the portrait may change it
   }
   const live = () => session && msg() && msg().style.display !== 'none' && msg().querySelector('.talkText');
   function show() {
@@ -113,10 +126,11 @@
   }
   function finish() {
     const s = session; session = null; if (!s) return;
+    if (window.TalkPortrait) TalkPortrait.close(s.owner);   // release the portrait only: no story event is fired here (field-talk-end below is the normal one)
     if (typeof closeDialogue === 'function') closeDialogue();
     window.dispatchEvent(new CustomEvent('field-talk-end', {detail: {id: s.id, entry: s.entryId}}));
   }
-  function cancel(id){if(id!==undefined&&session?.id!==id)return;session=null;if(typeof closeDialogue==='function')closeDialogue();}
+  function cancel(id){if(id!==undefined&&session?.id!==id)return;const s=session;session=null;if(s&&window.TalkPortrait)TalkPortrait.close(s.owner);if(typeof closeDialogue==='function')closeDialogue();}   // portrait released with the cancelled conversation
   function advance() {
     const s = session; if (!s) return;
     if (s.i < s.pages.length - 1) { s.i++; show(); return; }
@@ -138,7 +152,8 @@
     const pages = pagesOf(conv); if (!pages.length) return false;
     const choice = conv.choice && Array.isArray(conv.choice.options) && conv.choice.options.length ? conv.choice : null;
     applyEffects(conv, pages);
-    session = {id, entryId: entry && entry.id, pages, i: 0, choice};
+    session = {id, entryId: entry && entry.id, pages, i: 0, choice, owner: 'talk' + (++ownerSeq)};
+    if (window.TalkPortrait) { TalkPortrait.open(session.owner); for (const pg of pages) if (pg.char) TalkPortrait.preload(pg.char, pg.face); }   // a new conversation takes the portrait over (a previous one's is revoked)
     show(); return true;
   }
 
@@ -150,7 +165,7 @@
       if (!run(id, entry, conv)) return false;
       seen.add(entry.id);
     } else if (providers.has(id) && typeof say === 'function') {
-      const text = providers.get(id)(id); if (!text) return false; session = null; say(text);
+      const text = providers.get(id)(id); if (!text) return false; session = null; if (window.TalkPortrait) TalkPortrait.revoke(); say(text);
     } else return false;
     history.push({id, source, at: Date.now()}); if (history.length > 20) history.shift();
     window.dispatchEvent(new CustomEvent('field-talk', {detail: {id, source, entry: entry && entry.id}}));
@@ -190,7 +205,7 @@
   function serialize() { return {seen: [...seen], cycle: {...cycle}, flags: {...flags}}; }
   function load(data) {
     seen.clear(); for (const k of Object.keys(cycle)) delete cycle[k]; for (const k of Object.keys(flags)) delete flags[k];
-    session = null;
+    session = null; if (window.TalkPortrait) TalkPortrait.revoke();   // a restored game never shows the previous conversation's portrait
     if (!data || typeof data !== 'object') return;
     const known = entryIds();
     for (const id of Array.isArray(data.seen) ? data.seen.slice(0, 1000) : []) if (typeof id === 'string' && known.has(id)) seen.add(id);
