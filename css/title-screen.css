@@ -8,7 +8,9 @@
  --hero-w:calc(var(--hero-h) * 2 / 3);
  position:fixed;inset:0;z-index:11000;overflow:hidden;isolation:isolate;
  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2.2vh,22px);
- padding:calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(16px + var(--safe-b)) calc(16px + var(--safe-l) + var(--hero-w));
+ /* left padding = Aidan's actual right edge (safe area + his 1.5vw offset + figure width) + 16px gap. The previous value omitted the 1.5vw
+    offset (up to ~13px of overlap at 1920px), harmless with the old art; the v2 figure is opaque there, so the gap is now exact. */
+ padding:calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(16px + var(--safe-b)) calc(16px + var(--safe-l) + max(0px,1.5vw) + var(--hero-w));
  background:radial-gradient(ellipse at top,#284639,#0a1915);color:#f3e6c2;text-align:center;font-family:Georgia,'Times New Roman',serif;
  -webkit-user-select:none;user-select:none
 }
