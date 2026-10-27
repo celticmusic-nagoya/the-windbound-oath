@@ -31,8 +31,8 @@ for key, pair in ADOPTED.items():
         f = ROOT / 'img/events' / delivery['file']
         with Image.open(f) as im:
             im.load()
-            check(im.format == 'JPEG' and im.size == (delivery['width'], delivery['height']) and
-                  im.width * (9 if orientation == 'landscape' else 16) == im.height * (16 if orientation == 'landscape' else 9) and
+            check(im.format == 'PNG' and im.size == (delivery['width'], delivery['height']) and
+                  abs(im.width / im.height / (16/9 if orientation == 'landscape' else 9/16) - 1) < .001 and
                   hashlib.sha256(f.read_bytes()).hexdigest() == delivery['sha256'], f'{key} {orientation}: adopted delivery bytes / dimensions / ratio')
 EXPECT_ALTAR = {**{i: 'altar_cg01' for i in (14, 15, 16)}, **{i: 'altar_cg02' for i in (18, 19, 20)},
                 **{i: 'altar_cg03' for i in (21, 22, 23)}, **{i: 'altar_cg04' for i in (32, 33, 34, 35)}}
@@ -45,7 +45,7 @@ def boot(b, w, h, query='', touch=False, block=False):
     ctx = b.new_context(viewport={'width': w, 'height': h}, is_mobile=touch, has_touch=touch)
     pg = ctx.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    if block: pg.route('**/img/events/*.jpg', lambda r: r.abort())
+    if block: pg.route('**/img/events/*.png', lambda r: r.abort())
     pg.goto(base + '/index.html?title=0' + query); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(700); pg.evaluate('closeDialogue()')
     return ctx, pg, errs
 

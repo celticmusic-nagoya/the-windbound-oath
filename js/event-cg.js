@@ -17,11 +17,11 @@
   'use strict';
   const BASE = 'img/events/';
   const CG = {
-    lou_first: {landscape: 'cg01_rue_encounter_landscape_16x9.jpg', portrait: 'cg01_rue_encounter_portrait_9x16.jpg', kind: 'soft'},
-    altar_cg01: {landscape: 'cg02_fathers_sword_break_landscape_16x9.jpg', portrait: 'cg02_fathers_sword_break_portrait_9x16.jpg', kind: 'impact'},
-    altar_cg02: {landscape: 'cg03_fiona_wind_dance_landscape_16x9.jpg', portrait: 'cg03_fiona_wind_dance_portrait_9x16.jpg', kind: 'normal'},
-    altar_cg03: {landscape: 'cg04_rue_intervention_landscape_16x9.jpg', portrait: 'cg04_rue_intervention_portrait_9x16.jpg', kind: 'normal'},
-    altar_cg04: {landscape: 'cg05_oath_sword_contract_landscape_16x9.jpg', portrait: 'cg05_oath_sword_contract_portrait_9x16.jpg', kind: 'climax'}
+    lou_first: {landscape: 'cg01_rue_encounter_landscape_16x9.png', portrait: 'cg01_rue_encounter_portrait_9x16.png', kind: 'soft'},
+    altar_cg01: {landscape: 'cg02_fathers_sword_break_landscape_16x9.png', portrait: 'cg02_fathers_sword_break_portrait_9x16.png', kind: 'impact'},
+    altar_cg02: {landscape: 'cg03_fiona_wind_dance_landscape_16x9.png', portrait: 'cg03_fiona_wind_dance_portrait_9x16.png', kind: 'normal'},
+    altar_cg03: {landscape: 'cg04_rue_intervention_landscape_16x9.png', portrait: 'cg04_rue_intervention_portrait_9x16.png', kind: 'normal'},
+    altar_cg04: {landscape: 'cg05_oath_sword_contract_landscape_16x9.png', portrait: 'cg05_oath_sword_contract_portrait_9x16.png', kind: 'climax'}
   };
   const SCENES = {
     louIntro: {scene: 'louIntroScene', text: 'louIntroText', lines: () => (typeof louIntroLines !== 'undefined' ? louIntroLines : []), cues: [
