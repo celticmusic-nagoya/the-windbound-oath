@@ -21,7 +21,8 @@
    // TITLE-04: approved art as independent layers (background / Aidan / logo). All controls stay real HTML buttons; no text or buttons are baked into images.
    root=document.createElement('section');root.id='title-screen';root.setAttribute('aria-label','タイトル');
    const backdrop=document.createElement('div');backdrop.className='title-layer title-backdrop';backdrop.setAttribute('aria-hidden','true');
-   const hero=document.createElement('img');hero.className='title-layer title-hero';hero.src='img/title/aidan-portrait.png';hero.alt='';hero.setAttribute('aria-hidden','true');hero.setAttribute('decoding','async');hero.setAttribute('draggable','false');
+   const hero=document.createElement('img');hero.className='title-layer title-hero';hero.src='assets/images/characters/aidan_back_v2.png';hero.alt='';hero.setAttribute('aria-hidden','true');hero.setAttribute('decoding','async');hero.setAttribute('draggable','false');
+   const foreground=document.createElement('div');foreground.className='title-layer title-foreground';foreground.setAttribute('aria-hidden','true');
    const title=document.createElement('h1');title.className='title-logo';
    const logo=document.createElement('img');logo.src='img/title/logo.png';logo.alt='THE WINDBOUND OATH — Mionn na Gaoithe';logo.setAttribute('decoding','async');logo.setAttribute('draggable','false');
    // If the logo image cannot load, the plain-text title remains (layout and buttons are unaffected).
@@ -32,7 +33,7 @@
    newButton=document.createElement('button');newButton.textContent='NEW GAME';newButton.setAttribute('data-loading-action','new-game');newButton.onclick=()=>newGame();
    continueButton=document.createElement('button');continueButton.textContent='CONTINUE';continueButton.setAttribute('data-loading-action','continue');continueButton.onclick=()=>SaveContinue.start();
    menu.append(newButton,continueButton);
-   message=document.createElement('p');message.className='title-message';message.setAttribute('role','status');root.append(backdrop,hero,title,menu,message);document.body.append(root);
+   message=document.createElement('p');message.className='title-message';message.setAttribute('role','status');root.append(backdrop,hero,foreground,title,menu,message);document.body.append(root);
   }
   refresh();newButton.focus?.({preventScroll:true});
  }

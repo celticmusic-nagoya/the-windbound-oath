@@ -19,10 +19,13 @@ SHA = {'background-landscape.png': '4d89ff88c67e54ec4676132c7fdfe2331265a69dcb91
 import hashlib
 for name, digest in SHA.items():
     check(hashlib.sha256((ROOT / 'img/title' / name).read_bytes()).hexdigest() == digest, 'asset bytes unchanged: ' + name)
-alpha = np.array(Image.open(ROOT / 'img/title/aidan-portrait.png').convert('RGBA'))[..., 3] > 32
-for name in ('aidan-portrait.png', 'logo.png'):
-    a = np.array(Image.open(ROOT / 'img/title' / name).convert('RGBA'))[..., 3]
-    check(a.min() == 0 and (a == 0).mean() > .2, name + ': real alpha transparency (not a baked checkerboard)')
+# Title hero since 2026-10-27: approved Aidan back view v2 (1152x1536 = the previous 1024x1536 figure frame + 64px transparent margin each side).
+HERO = ROOT / 'assets/images/characters/aidan_back_v2.png'; HERO_W, HERO_PAD = 1152, 64
+check(hashlib.sha256(HERO.read_bytes()).hexdigest() == '763648ab515a07d48100fa8991286374ce60761a08466cc71bbfbcc1894a9160', 'asset bytes unchanged: aidan_back_v2.png')
+alpha = np.array(Image.open(HERO).convert('RGBA'))[..., 3] > 32
+for path in (HERO, ROOT / 'img/title/logo.png'):
+    a = np.array(Image.open(path).convert('RGBA'))[..., 3]
+    check(a.min() == 0 and (a == 0).mean() > .2, path.name + ': real alpha transparency (not a baked checkerboard)')
 VIEWPORTS = [('pc-1920x1080', 1920, 1080, False), ('pc-1280x720', 1280, 720, False), ('tablet-landscape-1024x768', 1024, 768, True), ('tablet-portrait-768x1024', 768, 1024, True),
              ('android-portrait-360x800', 360, 800, True), ('android-portrait-412x915', 412, 915, True), ('tall-portrait-360x780', 360, 780, True), ('small-portrait-320x568', 320, 568, True), ('tablet-portrait-820x1180', 820, 1180, True),
              ('phone-portrait-390x844', 390, 844, True), ('phone-portrait-360x640', 360, 640, True), ('phone-landscape-844x390', 844, 390, True), ('phone-landscape-667x375', 667, 375, True), ('ultrawide-2560x1080', 2560, 1080, False)]
@@ -37,9 +40,12 @@ GEO = """()=>{const box=e=>{if(!e||e.hidden||getComputedStyle(e).display==='none
   pad:getComputedStyle(document.getElementById('title-screen')).paddingTop}}"""
 def inside(r, g): return r is None or (r['x'] >= -0.5 and r['y'] >= -0.5 and r['x'] + r['w'] <= g['vw'] + .5 and r['y'] + r['h'] <= g['vh'] + .5)
 def overlap(a, b): return bool(a and b and not (a['x'] + a['w'] <= b['x'] or b['x'] + b['w'] <= a['x'] or a['y'] + a['h'] <= b['y'] or b['y'] + b['h'] <= a['y']))
+def frame(b):
+    # the 2:3 figure frame inside the hero image (drops the transparent side margins)
+    return b and {'x': b['x'] + b['w'] * HERO_PAD / HERO_W, 'y': b['y'], 'w': b['w'] * (HERO_W - 2 * HERO_PAD) / HERO_W, 'h': b['h']}
 def hero_pixels(g, r):
     # Opaque Aidan pixels covered by a UI rectangle (bounding boxes alone include transparent margins).
-    h = g['hero']
+    h = g['hero_box']
     if not h or not r: return 0
     x0, x1, y0, y1 = max(r['x'], h['x']), min(r['x'] + r['w'], h['x'] + h['w']), max(r['y'], h['y']), min(r['y'] + r['h'], h['y'] + h['h'])
     if x1 <= x0 or y1 <= y0: return 0
@@ -48,6 +54,8 @@ def hero_pixels(g, r):
 def layout(pg, name, landscape):
     pg.wait_for_function("[...document.querySelectorAll('#title-screen img')].every(i=>i.complete)"); pg.wait_for_timeout(150)
     g = pg.evaluate(GEO)
+    g['hero_box'] = g['hero']; g['hero'] = frame(g['hero'])
+    if g['hero']: g['ratio']['hero'] = g['hero']['w'] / g['hero']['h']; g['ratio']['hero_img'] = g['hero_box']['w'] / g['hero_box']['h']
     check(all(g['imgs']), f'{name}: art layers loaded')
     check(g['bg'] == ('landscape' if landscape else 'portrait'), f'{name}: {"landscape" if landscape else "portrait"} background', g['bg'])
     # TITLE-05: Aidan is shown in both orientations, bottom-left, feet on the bottom edge, head below the logo.
@@ -59,7 +67,7 @@ def layout(pg, name, landscape):
         if g['vw'] < 600: check(.35 <= share <= .41 or (g['vw'] < 360 and share >= .24), f'{name}: portrait Aidan 35-40% of the height', round(share, 3))
         else: check(share >= .40, f'{name}: tablet portrait Aidan size', round(share, 3))
     check(pg.evaluate("[...document.querySelectorAll('#title-screen .title-menu button')].every(b=>{const r=b.getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)===b})"), f'{name}: buttons receive taps (not covered by art layers)')
-    if g['hero']: check(abs(g['ratio']['hero'] - 1024 / 1536) < .005, f'{name}: Aidan aspect ratio kept', g['ratio'])
+    if g['hero']: check(abs(g['ratio']['hero_img'] - HERO_W / 1536) < .005 and abs(g['ratio']['hero'] - 1024 / 1536) < .005, f'{name}: Aidan aspect ratio kept', g['ratio'])
     check(abs(g['ratio']['logo'] - 2048 / 728) < .01, f'{name}: logo aspect ratio kept', g['ratio'])
     check(inside(g['logo'], g) and all(inside(b, g) for b in g['buttons']), f'{name}: logo and buttons fully inside the viewport', g)
     check(not any(overlap(g['logo'], b) for b in g['buttons']) and not overlap(*g['buttons'][:2]), f'{name}: logo and buttons do not overlap', g)

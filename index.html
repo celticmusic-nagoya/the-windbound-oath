@@ -177,6 +177,7 @@
 <div id="systemMenu"><div class="sysPanel"><div class="tabs">
 <button data-stab="status">STATUS</button><button data-stab="skill">SKILL</button>
 <button data-stab="party">PARTY</button><button data-stab="items">ITEMS</button><button data-stab="equip">EQUIP</button><button data-stab="quest">QUEST</button><button data-stab="save">SAVE</button><button data-stab="settings">SETTINGS</button>
+<button id="returnToTitle" type="button">タイトルへ戻る</button>
 <button id="systemClose">閉じる</button></div><div id="systemBody"></div></div></div>
 <div id="battleResult"><div class="resultPanel"><h2>VICTORY</h2><div class="reward"><span id="resultExp"></span><span id="resultGold"></span></div><div id="resultGrowth"></div><button id="resultContinue" type="button">次へ</button></div></div><div id="prologueEnd"><div><div>THE WINDBOUND OATH</div><h1>PROLOGUE END</h1><h2>Mionn na Gaoithe</h2><p>失った故郷。残された仲間。<br/>そして、風だけが知っていた真実。</p><button id="endReturn">タイトルへ戻る</button></div></div>
 <div id="cinema"><div id="hillScene"><div id="windVeil"></div><div id="hillGround"></div><div id="hillAidan"></div><div id="hillFiona"></div></div><div id="cinemaText"></div><div id="cinemaHint">タップして進む</div></div>
@@ -1179,6 +1180,13 @@ async function loadGrowthData(){
 function eraseGrowthData(){if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
 $('#menuOpen').onclick=()=>{$('#systemMenu').style.display='block';renderSystemTab('status')};
 $('#systemClose').onclick=()=>$('#systemMenu').style.display='none';
+$('#returnToTitle').onclick=()=>{
+ if(!window.confirm('タイトルへ戻りますか？\nセーブしていない進行状況は失われます。'))return;
+ // A clean reload resets scene/battle timers and input handlers without touching saved data.
+ const url=new URL(window.location.href);
+ url.searchParams.delete('title');url.searchParams.delete('legacyVillage');
+ url.hash='';window.location.assign(url.href);
+};
 document.addEventListener('fullscreenchange',()=>{if($('#systemMenu').style.display==='block'&&document.querySelector('[data-stab="settings"].active'))renderSystemTab('settings')});
 document.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>renderSystemTab(b.dataset.stab));
 
@@ -2110,6 +2118,6 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/input-manager.js?v=20261025input"></script>
 <script src="js/battle-loading.js?v=20261025input"></script>
 <script src="js/save-continue.js?v=20261025continue"></script>
-<script src="js/title-screen.js?v=20261026title05b"></script>
-<link rel="stylesheet" href="css/title-screen.css?v=20261026title05b">
+<script src="js/title-screen.js?v=20261027aidanv2"></script>
+<link rel="stylesheet" href="css/title-screen.css?v=20261027aidanv2">
 </body></html>

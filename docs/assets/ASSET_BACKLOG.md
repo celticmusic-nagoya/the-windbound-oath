@@ -25,8 +25,9 @@
 ## P4（0）
 
 
-## 置換済み（改訂版が採用され本件は未使用・原本保管）（3）
+## 置換済み（改訂版が採用され本件は未使用・原本保管）（4）
 
+- `file:img_title_aidan_portrait` img/title/aidan-portrait.png
 - `orig:aidan_hplow` assets-originals/party_motion_20261016/aidan_hplow.png
 - `orig:aidan_ko` assets-originals/party_motion_20261016/aidan_ko.png
 - `orig:fiona_danceofthewind` assets-originals/party_motion_20261016/fiona_danceofthewind.png
@@ -44,7 +45,7 @@
 - `fix/fiona-lou-p2-startup-race-qa`: 16 ファイル（例 `img/portraits/fiona/fiona_angry.png`）
 - `fix/fiona-lou-portrait-lifecycle-p2`: 16 ファイル（例 `img/portraits/fiona/fiona_angry.png`）
 
-## main上で参照が見つからない画像（20）— 原本保管/将来用の可能性があり自動削除しない
+## main上で参照が見つからない画像（21）— 原本保管/将来用の可能性があり自動削除しない
 
 - `img/battle/characters/aidan`: 3 件
 - `img/battle/characters/fiona`: 1 件
@@ -52,6 +53,7 @@
 - `img/field/moss/art`: 12 件
 - `img/field/moss/standin`: 2 件
 - `img/field/moss/town`: 1 件
+- `img/title`: 1 件
 
 ## 未実装モーション（戦闘）
 
