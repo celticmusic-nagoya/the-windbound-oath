@@ -1,13 +1,16 @@
 /* WindDance: learn state + visibility gate for Fiona's 風の舞 (data: js/data/support-magic-data.js).
  * State lives in PartyManager.members.fiona.learned = {wind_dance:true}; members are saved wholesale, so the save format is unchanged
  * and old saves simply lack the key (sync(storyStage) restores it for saves past the altar event).
- * The battle command is gated by WINDBOUND_FEATURES.windDanceCommand (off until the numbers are approved; ?feature=windDanceCommand turns it on for testing). */
+ * The battle command appears only after the spell is learned (first cast in the altar scene). Approved by the user on 2026-10-27:
+ * WINDBOUND_FEATURES.windDanceCommand is now ON by default; ?windDance=off turns it off (comparison / rollback).
+ * The numbers (js/data/support-magic-data.js) are PROVISIONAL, not the final balance. */
 (function () {
   'use strict';
   const ID = 'wind_dance';
-  const F = window.WINDBOUND_FEATURES = window.WINDBOUND_FEATURES || {windDanceCommand: false, boltMana: 'off'};
+  const F = window.WINDBOUND_FEATURES = window.WINDBOUND_FEATURES || {windDanceCommand: true, boltMana: 'off'};
   if (!F.boltMana) F.boltMana = 'off';   // 'off' | 'hit' | 'action'  (provisional MP regain on Fiona's bolt; ?boltMana=hit|action turns it on for testing)
   try { if (/[?&]feature=windDanceCommand\b/.test(location.search)) F.windDanceCommand = true; } catch (e) {}
+  try { if (/[?&]windDance=(0|off|false)\b/.test(location.search)) F.windDanceCommand = false; } catch (e) {}
   try { const m = /[?&]boltMana=(hit|action)\b/.exec(location.search); if (m) F.boltMana = m[1]; } catch (e) {}
   const member = () => (typeof PartyManager !== 'undefined' ? PartyManager.members.fiona : null);
   const learned = () => { const m = member(); return !!(m && m.learned && m.learned[ID]); };

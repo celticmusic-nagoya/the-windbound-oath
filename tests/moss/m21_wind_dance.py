@@ -1,4 +1,5 @@
-# Fiona's 風の舞: gate (not usable before the altar event), learned at the first cast, save/load, old-save sync, no double fire, command visibility behind the feature flag.
+# Fiona's 風の舞: gate (not usable before the altar event), learned at the first cast, save/load, old-save sync, no double fire.
+# The command is ON by default since 2026-10-27 (user approval); 'flag off' = ?windDance=off (rollback switch).
 import os, sys, json
 from playwright.sync_api import sync_playwright
 PORT=os.environ.get('PORT','8765'); fails=[]; errs=[]
@@ -10,11 +11,11 @@ with sync_playwright() as p:
     for flag in (False,True):
         pg=b.new_page(viewport={'width':844,'height':390}); ev=pg.evaluate
         pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and '404' not in m.text and errs.append(m.text))
-        pg.goto('http://localhost:%s/index.html?dev=1%s'%(PORT,'&feature=windDanceCommand' if flag else '')); pg.wait_for_timeout(1500); ev('closeDialogue()')
+        pg.goto('http://localhost:%s/index.html?dev=1%s'%(PORT,'' if flag else '&windDance=off')); pg.wait_for_timeout(1500); ev('closeDialogue()')
         tag='[flag %s] '%('on' if flag else 'off')
         ev("PrologueProgress.seed(3);Inventory.reset();EquipmentManager.reset();localStorage.removeItem(SAVE_KEY);delete PartyManager.members.fiona.learned;giveStarterSword();syncEquipTab()")
         ck(ev("WindDance.learned()")==False and ev("WindDance.commandVisible()")==False,tag+'before the altar event: not learned, no command')
-        ck(ev("WindDance.data().effect.amount")==0.15 and ev("WindDance.data().effect.phases")==3 and ev("WindDance.data().mp")==10 and ev("WindDance.data().effect.target")=='all_allies' and ev("WindDance.data().effect.stacking")=='refresh',tag+'decided numbers: +15pt / 3 phases / MP10 / all allies / refresh')
+        ck(ev("WindDance.data().effect.amount")==0.15 and ev("WindDance.data().effect.phases")==3 and ev("WindDance.data().mp")==10 and ev("WindDance.data().effect.target")=='all_allies' and ev("WindDance.data().effect.stacking")=='refresh',tag+'provisional numbers: +15pt / 3 phases / MP10 / all allies / refresh')
         ev("document.querySelector('#forestScene').style.display='none';startAltarScene()"); A=ev("altarLines"); d=[i for i,l in enumerate(A) if l.startswith('風の舞――')][0]
         for i in range(1,len(A)):
             ev("document.querySelector('#altarScene').click()")

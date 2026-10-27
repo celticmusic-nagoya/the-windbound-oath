@@ -12,7 +12,20 @@
   #panel button[aria-pressed="true"]{background:#bbab70;color:#14251f}
   #status{position:fixed;left:8px;bottom:8px;font:12px ui-monospace,monospace;z-index:500;background:#0008;padding:4px 8px;border-radius:6px}
   #msg{position:fixed;left:4%;right:4%;bottom:4%;min-height:84px;background:#0c1712e6;border:1px solid #bbab70;border-radius:10px;padding:12px 16px;display:block}
+  /* phone landscape (short screens): the panel folds behind a small QA button (top-right, safe area) so it never hides the portrait.
+     Closed by default; the button opens / closes it. Portrait phones and PCs keep the panel as it was (the button is hidden there). */
+  #qaToggle{display:none;position:fixed;top:calc(6px + env(safe-area-inset-top));right:calc(6px + env(safe-area-inset-right));z-index:600;min-width:48px;min-height:40px;
+    font:600 13px/1 system-ui,sans-serif;border-radius:8px;border:1px solid #bbab70;background:#14251fe6;color:#fff;cursor:pointer}
+  #qaToggle[aria-expanded="true"]{background:#bbab70;color:#14251f}
+  @media (orientation:landscape) and (max-height:600px){
+    #qaToggle{display:block}
+    #panel{display:none;left:auto;right:calc(6px + env(safe-area-inset-right));top:calc(52px + env(safe-area-inset-top));width:min(360px,calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+      max-height:calc(100vh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto;box-sizing:border-box;background:#000c}
+    body.qaOpen #panel{display:flex}
+    #panel button{min-height:40px}
+  }
 </style></head><body class="dialogueOpen">
+<button id="qaToggle" type="button" aria-controls="panel" aria-expanded="false">QA</button>
 <div id="panel"></div>
 <div id="msg"><div class="talkName">エイダン</div><div class="talkText" id="line">「プレビュー」</div></div>
 <div id="status"></div>
@@ -28,6 +41,7 @@
   for(const f of R.get('aidan').faces)btn(label[f],()=>{face=f;show();},'face').setAttribute('aria-pressed',f==='normal');
   btn('左（既定）',()=>{side=null;show();},'side').setAttribute('aria-pressed','true'); btn('右',()=>{side='right';show();},'side');
   btn('今すぐ瞬き',()=>TalkPortrait.blinkNow()); btn('隠す',()=>TalkPortrait.hide()); btn('再表示',show);
+  const qa=document.getElementById('qaToggle');qa.onclick=()=>{const open=!document.body.classList.contains('qaOpen');document.body.classList.toggle('qaOpen',open);qa.setAttribute('aria-expanded',String(open));};
   setInterval(()=>{const s=TalkPortrait.status;document.getElementById('status').textContent=`${s.char||'-'} / ${s.face||'-'} / side ${s.side||'-'} / eye ${s.eye} / timers ${s.blink?s.blink.timers:0} / reduced ${s.reduced}`;},100);
   show();
 </script>
