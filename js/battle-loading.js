@@ -58,8 +58,11 @@
   return execute({kind,args});
  }
  function retry(){return phase==='FAILED'&&pending?execute(pending):Promise.resolve(false);}
+ // Raider party wipe: Lou rewinds time and the SAME battle restarts in place. start() refuses while battleMode is on (a new entry must not
+ // open over a live battle), so the rematch re-runs the committed Raider initializer directly; its art is already loaded by this battle.
+ function rematch(){if(phase!=='IDLE'||!document.body.classList.contains('raiderBattleMode'))return false;originals.raider();return true;}
  function cancel(){generation++;pending=null;phase='IDLE';hide();}
  startAttackBattle=(...args)=>start('normal',args);
  startRaiderBattle=(...args)=>start('raider',args);
- window.BattleLoading=Object.freeze({prepare,retry,cancel,get phase(){return phase},get busy(){return phase!=='IDLE'},get canSave(){return phase==='IDLE'}});
+ window.BattleLoading=Object.freeze({prepare,retry,rematch,cancel,get phase(){return phase},get busy(){return phase!=='IDLE'},get canSave(){return phase==='IDLE'}});
 })();
