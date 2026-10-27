@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **963**
-- approved_implemented: **72**
+- total: **973**
+- approved_implemented: **82**
 - approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
 - approval_unknown: **885**
-- on_main: **784**
-- implemented_on_main: **767**
+- on_main: **794**
+- implemented_on_main: **777**
 - unreferenced_on_main: **17**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -225,6 +225,21 @@
 | branch:feat_aidan_side_walk_v4:docs_art_delivered_aidan_side_v4_side_right_s3_png | aidan | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
 | branch:feat_aidan_side_walk_v4:docs_art_delivered_aidan_side_v4_side_right_s4_png | aidan | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
 | branch:feat_aidan_side_walk_v4:docs_art_delivered_aidan_side_v4_source_right_and_diagonal_sheet_jpg | aidan | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
+
+## event_cg（10）
+
+| asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| file:img_events_cg01_rue_encounter_landscape_16x9 | UNKNOWN | UNKNOWN | 1 | 1280x720 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg01_rue_encounter_portrait_9x16 | UNKNOWN | UNKNOWN | 1 | 720x1280 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg02_fathers_sword_break_landscape_16x9 | UNKNOWN | UNKNOWN | 1 | 1280x720 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg02_fathers_sword_break_portrait_9x16 | UNKNOWN | UNKNOWN | 1 | 720x1280 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg03_fiona_wind_dance_landscape_16x9 | fiona | wind | 1 | 1280x720 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg03_fiona_wind_dance_portrait_9x16 | fiona | wind | 1 | 720x1280 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg04_rue_intervention_landscape_16x9 | UNKNOWN | UNKNOWN | 1 | 1280x720 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg04_rue_intervention_portrait_9x16 | UNKNOWN | UNKNOWN | 1 | 720x1280 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg05_oath_sword_contract_landscape_16x9 | UNKNOWN | UNKNOWN | 1 | 1280x720 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
+| file:img_events_cg05_oath_sword_contract_portrait_9x16 | UNKNOWN | UNKNOWN | 1 | 720x1280 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/events/adopted-cg.json, js/event-cg.js / existing asset on main; adoption record not re-verified |
 
 ## field（384）
 
