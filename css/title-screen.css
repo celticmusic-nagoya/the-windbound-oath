@@ -23,6 +23,8 @@
    previous title art, with 64px of transparent margin on each side. The negative margin cancels the left margin, so his on-screen
    size and position are unchanged (layout still uses --hero-w = the 2:3 figure frame). */
 #title-screen .title-hero{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;height:var(--hero-h);width:auto;max-width:none;margin-left:calc(var(--hero-h) * -64 / 1536);filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
+/* Transparent foreground vegetation overlaps the boots, without changing approved hero/background art. */
+#title-screen .title-foreground{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;width:var(--hero-w);height:calc(var(--hero-h) * .16);background:url(../img/title/foreground-grass.svg) center bottom/100% 100% no-repeat;opacity:.92}
 #title-screen .title-logo{margin:0;line-height:0;width:min(100%,40vh * 2.81);width:min(100%,40svh * 2.81)}
 #title-screen .title-logo img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.45))}
 #title-screen .title-logo-text{display:none;line-height:1.2;font-size:clamp(25px,5vw,52px);letter-spacing:.06em;text-shadow:0 2px 8px #000}
@@ -58,6 +60,7 @@
  #title-screen .title-backdrop{background:url(../img/title/background-portrait.png) 50% 50%/cover no-repeat,radial-gradient(ellipse at top,#284639,#0a1915)}
  #title-screen .title-backdrop::after{background:linear-gradient(180deg,rgba(6,18,14,.22) 0%,transparent 28%,transparent 58%,rgba(6,18,14,.45) 100%)}
  #title-screen .title-hero{left:calc(var(--safe-l) + 1.5vw);bottom:0;height:var(--hero-h)}
+ #title-screen .title-foreground{left:calc(var(--safe-l) + 1.5vw);height:calc(var(--hero-h) * .18)}
  #title-screen .title-logo{width:min(100%,720px,30svh * 2.81)}
  #title-screen .title-menu{margin-top:auto;align-self:flex-end;width:var(--p-menu-w)}
  #title-screen .title-menu button{width:100%;padding-left:.5rem;padding-right:.5rem}
