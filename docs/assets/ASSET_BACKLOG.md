@@ -25,8 +25,9 @@
 ## P4（0）
 
 
-## 置換済み（改訂版が採用され本件は未使用・原本保管）（3）
+## 置換済み（改訂版が採用され本件は未使用・原本保管）（4）
 
+- `file:img_title_aidan_portrait` img/title/aidan-portrait.png
 - `orig:aidan_hplow` assets-originals/party_motion_20261016/aidan_hplow.png
 - `orig:aidan_ko` assets-originals/party_motion_20261016/aidan_ko.png
 - `orig:fiona_danceofthewind` assets-originals/party_motion_20261016/fiona_danceofthewind.png

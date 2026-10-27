@@ -1017,7 +1017,7 @@
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| file:img_title_aidan_portrait | aidan | UNKNOWN | 1 | 1024x1536 | SUPERSEDED | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_title_aidan_portrait | aidan | UNKNOWN | 1 | 1024x1536 | REVISION_REQUIRED | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
 | file:img_title_background_landscape | UNKNOWN | UNKNOWN | 1 | 1672x941 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified; official title art package windbo |
 | file:img_title_background_portrait | UNKNOWN | UNKNOWN | 1 | 941x1672 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified; official title art package windbo |
 | file:img_title_logo | UNKNOWN | UNKNOWN | 1 | 2048x728 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/title-screen.js / existing asset on main; adoption record not re-verified; official title art package windbo |
