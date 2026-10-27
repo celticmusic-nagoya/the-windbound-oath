@@ -66,7 +66,11 @@
     let loaded = 0;
     for (const im of [img, portrait]) {
       im.addEventListener('load', () => {
-        if (++loaded === 2 && rec.status !== 'failed') { rec.status = 'ready'; apply(key); }
+        if (++loaded === 2 && rec.status !== 'failed') {
+          Promise.all([img.decode(), portrait.decode()]).then(() => {
+            if (rec.status !== 'failed') { rec.status = 'ready'; apply(key); }
+          }).catch(() => { rec.status = 'failed'; el.dataset.failed = '1'; apply(key); });
+        }
       });
       im.addEventListener('error', () => { rec.status = 'failed'; el.dataset.failed = '1'; apply(key); });
     }

@@ -3,7 +3,7 @@ Real flow: A3 sanctuary -> Lou intro (zone) -> altar (trigger zone) -> raider ba
   louIntroLines 3-5 lou_first | altarLines 14-16 cg01, 18-20 cg02, 21-23 cg03, 32-35 cg04 (cg04 starts with the FX fade-out).
 Also: each CG once, scenario/flags unchanged, touch + keyboard, rapid clicks, load failure, ?eventCg=0, save/continue, raider
 oath sword at the raider battle, 風の舞 unusable before / usable after learning (normal + raider battle),
-CG framing on 9 viewports. Screenshots / timings go to QA_OUT when set (outside the checkout)."""
+CG framing on 10 viewports. Screenshots / timings go to QA_OUT when set (outside the checkout)."""
 import hashlib, json, os, sys, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools/qa'))
@@ -45,6 +45,7 @@ def boot(b, w, h, query='', touch=False, block=False):
     ctx = b.new_context(viewport={'width': w, 'height': h}, is_mobile=touch, has_touch=touch)
     pg = ctx.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.on('response', lambda response: errs.append('CG HTTP '+str(response.status)+' '+response.url) if '/img/events/' in response.url and response.status>=400 else None)
     if block: pg.route('**/img/events/*.png', lambda r: r.abort())
     pg.goto(base + '/index.html?title=0' + query); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(700); pg.evaluate('closeDialogue()')
     return ctx, pg, errs
@@ -233,10 +234,10 @@ with server(8820) as base, sync_playwright() as p:
     ctx.close()
     ctx, pg, errs = boot(b, 844, 390, query='&windDance=off')
     pg.evaluate("WindDance.learn()"); check(pg.evaluate("WindDance.commandVisible()") is False, '?windDance=off rollback switch hides the command'); ctx.close()
-    # ---- framing on 9 viewports: CG area above the text box, inside the screen, focus regions visible
+    # ---- framing on 10 viewports: CG area above the text box, inside the screen, focus regions visible
     NEED = {'lou_first': (.40, .78), 'altar_cg01': (.28, .50), 'altar_cg02': (.38, .52), 'altar_cg03': (.28, .60), 'altar_cg04': (.40, .66)}
     VIEWS = {'portrait_320x568': (320, 568), 'portrait_360x800': (360, 800), 'portrait_390x844': (390, 844), 'portrait_412x915': (412, 915),
-             'tablet_768x1024': (768, 1024), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1920x1080': (1920, 1080)}
+             'tablet_768x1024': (768, 1024), 'landscape_667x375': (667, 375), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1920x1080': (1920, 1080)}
     GEOM = """k=>{const e=document.querySelector('.event-cg-item.on');if(!e)return null;const f=e.querySelector('.event-cg-frame').getBoundingClientRect(),
       i=[...e.querySelectorAll('.event-cg-img')].find(im=>getComputedStyle(im).display!=='none'),t=document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').getBoundingClientRect(),cs=getComputedStyle(i);
       return {f:[f.left,f.top,f.right,f.bottom],text_top:t.top,vw:innerWidth,vh:innerHeight,fit:cs.objectFit,pos:cs.objectPosition,nw:i.naturalWidth,nh:i.naturalHeight,
