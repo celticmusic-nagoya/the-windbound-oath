@@ -12,6 +12,12 @@
 |---|---|---|---|---|---|---|
 | エイダン後ろ姿 v2（タイトル画面） | `aidan_back_v2.png` | タイトル画面のエイダン（縦・横画面共通の主役レイヤー）。物語上の誓いの剣の入手時期（モスの森の祭壇での契約後）とは無関係な象徴的ビジュアル | `assets/images/characters/aidan_back_v2.png` | **ユーザー正式採用済み（2026-10-27）／main統合承認済み（PR #72、2026-10-27）／タイトル画面で参照（`js/title-screen.js`）** | `763648ab515a07d48100fa8991286374ce60761a08466cc71bbfbcc1894a9160` | 1152×1536 RGBA PNG、1,926,965 bytes、完全透過（アルファ0の画素のRGB=0、つながった塊は1つ）、左右に透明余白64px。受領元画像（SHA-256 `85caaedc…f91a`）→ 透過仕上げ v1（`e9173ea7…1178`）→ v2（柄頭・鍔を正式設定画に合わせ、柄を鞘の直線軸にそろえた）。原本・v1・品質レポートは handoff リポジトリ `reports/ASSETS/AIDAN-BACK-20261027/`。旧タイトル画像 `img/title/aidan-portrait.png`（SHA-256 `0dd61691…74a6`）は削除せず保管、タイトルからの参照のみ v2 へ切替（台帳上は置換済み：既存ルールどおり approval_status `REVISION_REQUIRED`＋備考 `superseded`、`ASSET_BACKLOG.md` の「置換済み」に掲載）。Android実機での表示確認待ち。 |
 
+## タイトル画面（前景）
+
+| アセット名 | 正式採用ファイル名 | 用途 | 格納先 | 状態 | 原本 SHA-256 | 備考 |
+|---|---|---|---|---|---|---|
+| タイトル前景・草花と岩（エイダンの足元） | `foreground-meadow.png` | タイトル画面でエイダンの両足の下に敷く透過前景。旧 `img/title/foreground-grass.svg` の表示を置き換え（SVG ファイルは削除せず残置・参照なし） | `img/title/foreground-meadow.png` | **ユーザー提供・採用（2026-10-27、PR #76 で main 統合）／`css/title-screen.css` の `.title-foreground` で参照／Android実機確認待ち** | `cfcc624adbfa8c29994f9c3fd81f41d606dfa623325bedbcca5b3743e554c9f1` | 2014×781 RGBA PNG、1,403,346 bytes。草花・岩のみ（遺跡・樹木なし）。アルファ最大 254。無加工（再生成・トリミング・圧縮なし）。表示位置・大きさは CSS のみで調整（2026-10-27、両足の接地） |
+
 ## キャラクター（会話立ち絵）
 
 会話立ち絵の正式な置き場所は `assets/images/characters/portraits/{characterId}/`、参照先は `js/field/portrait-registry.js` で一元管理する。既存ブランチの `img/portraits/`（フィオナ・ルー・エマ）は移植元であり正式参照先ではない（未採用の表情を含むため、Phase 4 で表情ごとに採用判断）。

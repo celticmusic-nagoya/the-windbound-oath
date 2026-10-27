@@ -6,12 +6,12 @@
 ## 集計（2026-10-19）
 
 - total: **962**
-- approved_implemented: **70**
+- approved_implemented: **71**
 - approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
-- approval_unknown: **886**
+- approval_unknown: **885**
 - on_main: **783**
 - implemented_on_main: **766**
 - unreferenced_on_main: **17**
@@ -1013,20 +1013,20 @@
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_surprised_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_worried_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
 
-## title（4）
+## title（5）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | file:img_title_aidan_portrait | aidan | UNKNOWN | 1 | 1024x1536 | REVISION_REQUIRED | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
 | file:img_title_background_landscape | UNKNOWN | UNKNOWN | 1 | 1672x941 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified; official title art package windbo |
 | file:img_title_background_portrait | UNKNOWN | UNKNOWN | 1 | 941x1672 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified; official title art package windbo |
+| file:img_title_foreground_meadow | UNKNOWN | UNKNOWN | 1 | 2014x781 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified; user-supplied transparent meadow  |
 | file:img_title_logo | UNKNOWN | UNKNOWN | 1 | 2048x728 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/title-screen.js / existing asset on main; adoption record not re-verified; official title art package windbo |
 
-## ui（3）
+## ui（2）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | branch:feature_title_01_new_title_screen:img_title_phase01_background_png | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feature/title-01-new-title-screen (not merged to main); TITLE-01 new |
 | branch:feature_title_01_new_title_screen:img_title_title_logo_v3_png | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feature/title-01-new-title-screen (not merged to main); TITLE-01 new |
-| file:img_title_foreground_meadow | UNKNOWN | UNKNOWN | 1 | 2014x781 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified |
 
