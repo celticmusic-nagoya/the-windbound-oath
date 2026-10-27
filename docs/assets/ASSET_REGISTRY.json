@@ -39,15 +39,15 @@
  },
  "summary": {
   "total": 961,
-  "approved_implemented": 71,
+  "approved_implemented": 70,
   "approved_not_implemented": 0,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
   "approval_unknown": 885,
   "on_main": 782,
-  "implemented_on_main": 762,
-  "unreferenced_on_main": 20
+  "implemented_on_main": 761,
+  "unreferenced_on_main": 21
  },
  "motion_gaps": [
   "fiona: skill(windbloom)/guard/evade/prayer/item/victory/awaken/low_hp = still only or undelivered",
@@ -24088,17 +24088,15 @@
    "width": 1024,
    "height": 1536,
    "frame_count": 1,
-   "approval_status": "APPROVED",
-   "implementation_status": "IMPLEMENTED",
+   "approval_status": "SUPERSEDED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "js/title-screen.js"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "TITLE-04",
-   "notes": "existing asset on main; adoption record not re-verified; official title art package windbound_title_assets_v1 (2026-10-26), bytes unchanged; background/Aidan/logo layers in js/title-screen.js + css/title-screen.css"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted); official title art package windbound_title_assets_v1 (2026-10-26), bytes unchanged. superseded on the title screen by the approved Aidan back view v2 (assets/images/characters/aidan_back_v2.png, 2026-10-27); kept unchanged, no longer referenced"
   },
   {
    "asset_id": "file:img_title_background_landscape",
