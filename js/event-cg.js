@@ -9,19 +9,19 @@
  *   so the light settles into the CG. If the player has already advanced past line 35 by then, it is not shown.
  * - Images are used unmodified (no resampling to disk). A CG that has not loaded, or failed to load, is simply not shown:
  *   the event never waits for it. Images are fetched when their scene starts and released when it ends.
- * - Layout (DIRECTIVE-17E): landscape shows the whole CG as large as the screen allows (3:2 kept, the text box overlays its lower edge);
- *   portrait uses a tall cover box with a per-CG focus so faces / the broken sword / Lou / the oath sword stay visible. Margins are a dark
- *   gradient (no enlarged copy of the CG) and the CG edges are feathered. While a CG is on, body.eventCgOn hides the DEV button.
+ * - User-adopted landscape 16:9 / portrait 9:16 deliveries are kept byte-for-byte. Both variants load before a CG is shown;
+ *   orientation switches only CSS visibility, so rotation never waits for a new request or retains the previous orientation.
+ *   The complete image is contained above dialogue on a dark feathered background. DEV hiding is unchanged.
  * - ?eventCg=0 turns the layer off (comparison / rollback). */
 (function () {
   'use strict';
-  const BASE = 'assets/images/events/';
+  const BASE = 'img/events/';
   const CG = {
-    lou_first: {file: 'moss_lou_first_meeting_cg_v1.png', focus: 65, kind: 'soft'},
-    altar_cg01: {file: 'moss_altar_cg01_father_sword_break_v1.png', focus: 40, kind: 'impact'},
-    altar_cg02: {file: 'moss_altar_cg02_wind_dance_first_v1.png', focus: 42, kind: 'normal'},
-    altar_cg03: {file: 'moss_altar_cg03_lou_stall_v1.png', focus: 47, kind: 'normal'},
-    altar_cg04: {file: 'moss_altar_cg04_oath_contract_v1.png', focus: 48, kind: 'climax'}
+    lou_first: {landscape: 'cg01_rue_encounter_landscape_16x9.jpg', portrait: 'cg01_rue_encounter_portrait_9x16.jpg', kind: 'soft'},
+    altar_cg01: {landscape: 'cg02_fathers_sword_break_landscape_16x9.jpg', portrait: 'cg02_fathers_sword_break_portrait_9x16.jpg', kind: 'impact'},
+    altar_cg02: {landscape: 'cg03_fiona_wind_dance_landscape_16x9.jpg', portrait: 'cg03_fiona_wind_dance_portrait_9x16.jpg', kind: 'normal'},
+    altar_cg03: {landscape: 'cg04_rue_intervention_landscape_16x9.jpg', portrait: 'cg04_rue_intervention_portrait_9x16.jpg', kind: 'normal'},
+    altar_cg04: {landscape: 'cg05_oath_sword_contract_landscape_16x9.jpg', portrait: 'cg05_oath_sword_contract_portrait_9x16.jpg', kind: 'climax'}
   };
   const SCENES = {
     louIntro: {scene: 'louIntroScene', text: 'louIntroText', lines: () => (typeof louIntroLines !== 'undefined' ? louIntroLines : []), cues: [
@@ -34,7 +34,7 @@
   };
   let disabled = false;
   try { disabled = /[?&]eventCg=(0|off|false)\b/.test(location.search); } catch (e) {}
-  const state = {};   // sceneKey -> {index, armed:Set, items:{cg:{root,img,back,status}}, shown:{cg:count}}
+  const state = {};   // sceneKey -> {index, armed:Set, items:{cg:{el,img,portrait,status}}, shown:{cg:count}}
   const at = (lines, prefix) => lines.findIndex(l => l.startsWith(prefix));
   function ranges(key) {
     const s = SCENES[key], L = s.lines();
@@ -57,20 +57,25 @@
     if (st.items[cg]) return st.items[cg];
     const d = CG[cg], el = document.createElement('div');
     el.className = 'event-cg-item event-cg-' + d.kind; el.dataset.cg = cg;
-    el.style.setProperty('--cg-focus', d.focus + '%');
-    const img = document.createElement('img'), frame = document.createElement('div'), flash = document.createElement('div');
-    img.className = 'event-cg-img'; frame.className = 'event-cg-frame'; flash.className = 'event-cg-flash';
-    img.alt = ''; img.draggable = false; img.decoding = 'async';
-    frame.append(img); el.append(frame, flash); root.append(el);
-    const rec = st.items[cg] = {el, img, status: 'idle'};
-    img.addEventListener('load', () => { rec.status = 'ready'; apply(key); });
-    img.addEventListener('error', () => { rec.status = 'failed'; el.dataset.failed = '1'; apply(key); });
+    const img = document.createElement('img'), portrait = document.createElement('img'), frame = document.createElement('div'), flash = document.createElement('div');
+    img.className = 'event-cg-img event-cg-landscape'; portrait.className = 'event-cg-img event-cg-portrait';
+    frame.className = 'event-cg-frame'; flash.className = 'event-cg-flash';
+    for (const im of [img, portrait]) { im.alt = ''; im.draggable = false; im.decoding = 'async'; }
+    frame.append(img, portrait); el.append(frame, flash); root.append(el);
+    const rec = st.items[cg] = {el, img, portrait, status: 'idle'};
+    let loaded = 0;
+    for (const im of [img, portrait]) {
+      im.addEventListener('load', () => {
+        if (++loaded === 2 && rec.status !== 'failed') { rec.status = 'ready'; apply(key); }
+      });
+      im.addEventListener('error', () => { rec.status = 'failed'; el.dataset.failed = '1'; apply(key); });
+    }
     return rec;
   }
   function load(key, cg) {
     const rec = item(key, cg); if (!rec || rec.status !== 'idle') return;
-    rec.status = 'loading'; const src = BASE + CG[cg].file;
-    rec.img.src = src;
+    rec.status = 'loading';
+    rec.img.src = BASE + CG[cg].landscape; rec.portrait.src = BASE + CG[cg].portrait;
   }
   function fit(key) {
     // the CG area ends just above the scene's text box (whatever its current height)

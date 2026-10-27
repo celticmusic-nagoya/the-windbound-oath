@@ -23,6 +23,17 @@ SHA = {'moss_lou_first_meeting_cg_v1.png': '960ac2335348195e68cf06094228cbdf272f
        'moss_altar_cg04_oath_contract_v1.png': '0e8963dc3afe3c192d71bb761c609fccfe7273a98a00c91ac27c23ee0a68d92a'}
 for f, h in SHA.items():
     check(hashlib.sha256((ROOT / EV / f).read_bytes()).hexdigest() == h, 'official CG unmodified: ' + f)
+# New adopted files must match the delivery ledger exactly; old PNG hashes above remain regression-checked.
+ADOPTED = json.loads((ROOT / 'img/events/adopted-cg.json').read_text())['scenes']
+from PIL import Image
+for key, pair in ADOPTED.items():
+    for orientation, delivery in pair.items():
+        f = ROOT / 'img/events' / delivery['file']
+        with Image.open(f) as im:
+            im.load()
+            check(im.format == 'JPEG' and im.size == (delivery['width'], delivery['height']) and
+                  im.width * (9 if orientation == 'landscape' else 16) == im.height * (16 if orientation == 'landscape' else 9) and
+                  hashlib.sha256(f.read_bytes()).hexdigest() == delivery['sha256'], f'{key} {orientation}: adopted delivery bytes / dimensions / ratio')
 EXPECT_ALTAR = {**{i: 'altar_cg01' for i in (14, 15, 16)}, **{i: 'altar_cg02' for i in (18, 19, 20)},
                 **{i: 'altar_cg03' for i in (21, 22, 23)}, **{i: 'altar_cg04' for i in (32, 33, 34, 35)}}
 EXPECT_LOU = {3: 'lou_first', 4: 'lou_first', 5: 'lou_first'}
@@ -34,7 +45,7 @@ def boot(b, w, h, query='', touch=False, block=False):
     ctx = b.new_context(viewport={'width': w, 'height': h}, is_mobile=touch, has_touch=touch)
     pg = ctx.new_page(); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    if block: pg.route('**/assets/images/events/*.png', lambda r: r.abort())
+    if block: pg.route('**/img/events/*.jpg', lambda r: r.abort())
     pg.goto(base + '/index.html?title=0' + query); pg.wait_for_function("LoadCoordinator.phase==='READY'"); pg.wait_for_timeout(700); pg.evaluate('closeDialogue()')
     return ctx, pg, errs
 
@@ -227,9 +238,9 @@ with server(8820) as base, sync_playwright() as p:
     VIEWS = {'portrait_320x568': (320, 568), 'portrait_360x800': (360, 800), 'portrait_390x844': (390, 844), 'portrait_412x915': (412, 915),
              'tablet_768x1024': (768, 1024), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1920x1080': (1920, 1080)}
     GEOM = """k=>{const e=document.querySelector('.event-cg-item.on');if(!e)return null;const f=e.querySelector('.event-cg-frame').getBoundingClientRect(),
-      i=e.querySelector('.event-cg-img'),t=document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').getBoundingClientRect(),cs=getComputedStyle(i);
+      i=[...e.querySelectorAll('.event-cg-img')].find(im=>getComputedStyle(im).display!=='none'),t=document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').getBoundingClientRect(),cs=getComputedStyle(i);
       return {f:[f.left,f.top,f.right,f.bottom],text_top:t.top,vw:innerWidth,vh:innerHeight,fit:cs.objectFit,pos:cs.objectPosition,nw:i.naturalWidth,nh:i.naturalHeight,
-       backs:e.querySelectorAll('img').length,mask:getComputedStyle(e.querySelector('.event-cg-frame')).maskImage||getComputedStyle(e.querySelector('.event-cg-frame')).webkitMaskImage||'none',
+       src:i.getAttribute('src'),visible:e.querySelectorAll('img').length&&[...e.querySelectorAll('img')].filter(im=>getComputedStyle(im).display!=='none').length,backs:e.querySelectorAll('img').length,mask:getComputedStyle(e.querySelector('.event-cg-frame')).maskImage||getComputedStyle(e.querySelector('.event-cg-frame')).webkitMaskImage||'none',
        dev:['devBtn','devBuildIndicator'].map(id=>{const d=document.getElementById(id);return !!d&&getComputedStyle(d).display!=='none'})}}"""
     import io
     from PIL import Image
@@ -271,9 +282,11 @@ with server(8820) as base, sync_playwright() as p:
             fw, fh = fr - fl, fb - ft
             if w < h:   # portrait: the CG box ends above the text box
                 inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and fb <= g['text_top'] + 1
-            else:       # landscape (DIRECTIVE-17E): whole 3:2 CG, as large as the screen allows; the text box may overlay its lower edge
-                inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and abs(fw / fh - 1.5) < .01 and fh >= min(g['vh'], g['vw'] / 1.5) - 1.5
-            check(g['backs'] == 1 and 'gradient' in g['mask'] and not any(g['dev']), f'[{view}] {key}: single CG image (no enlarged copy behind), feathered edges, DEV button hidden',
+            else:       # Complete landscape delivery above dialogue; no hidden sword / hands under text.
+                inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['text_top'] + 1
+            expected = ADOPTED[key]['portrait' if w < h else 'landscape']
+            check(g['src'] == 'img/events/' + expected['file'] and (g['nw'],g['nh']) == (expected['width'],expected['height']) and g['fit']=='contain' and abs(fw/fh - g['nw']/g['nh']) < .01, f'[{view}] {key}: correct orientation, complete image, no distortion', g)
+            check(g['backs'] == 2 and g['visible'] == 1 and 'gradient' in g['mask'] and not any(g['dev']), f'[{view}] {key}: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden',
                   {'imgs': g['backs'], 'mask': g['mask'][:60], 'dev': g['dev']})
             v = seams(shots[key], g)
             check(v.get('margin', 0) < 40 and v.get('step', 0) < 18, f'[{view}] {key}: screenshot - dark margins, no hard edge line at the CG border', {k: round(x, 1) for k, x in v.items()})
@@ -286,23 +299,29 @@ with server(8820) as base, sync_playwright() as p:
                   {'frame': [round(v) for v in g['f']], 'text_top': round(g['text_top']), 'fit': g['fit'], 'visible_x': [round(v, 3) for v in rng]})
             if w < h: check(fh >= .38 * h, f'[{view}] {key}: portrait CG not shrunk (frame {round(fh)} px of {h})')
         check(not errs, f'[{view}] no page errors', errs[:3]); ctx.close()
-    # ---- rotation while a CG is on, then the scene ends: DEV button back, CG layer gone (DIRECTIVE-17E)
-    ctx, pg, errs = boot(b, 390, 844, touch=True)
-    pg.evaluate("PrologueProgress.seed(3);giveStarterSword();devResetScreens();closeDialogue();startAltarScene()")
-    pg.wait_for_function("EventCG.debug('altar').status.altar_cg01==='ready'", timeout=30000)
-    for _ in range(14): pg.evaluate("document.querySelector('#altarScene').click()")
-    pg.wait_for_timeout(700)
-    for vw, vh in ((844, 390), (390, 844), (915, 412)):
-        pg.set_viewport_size({'width': vw, 'height': vh}); pg.wait_for_timeout(500); g = pg.evaluate(GEOM, 'altar')
-        ok = g and g['f'][0] >= -.5 and g['f'][2] <= vw + .5 and g['f'][3] <= vh + .5 and (vw > vh or g['f'][3] <= g['text_top'] + 1) and not any(g['dev'])
-        check(ok, f'rotation to {vw}x{vh} mid-CG: CG re-laid out inside the screen, DEV hidden', g and [round(v) for v in g['f']])
-    for _ in range(40): pg.evaluate("document.querySelector('#altarScene').style.display==='block'&&document.querySelector('#altarScene').click()")
-    pg.wait_for_timeout(800)
-    check(not pg.evaluate("document.body.classList.contains('eventCgOn')") and pg.evaluate("document.querySelectorAll('.event-cg-item').length") == 0,
-          'scene end: eventCgOn cleared, CG layer released')
-    check(pg.evaluate("(()=>{const d=document.getElementById('devBtn');return !d||getComputedStyle(d).display!=='none'||!document.body.classList.contains('developmentMode')})()") or pg.evaluate("document.body.classList.contains('raiderBattleMode')"),
-          'DEV button no longer hidden by the CG rule after the scene (battle rules may still hide it)')
-    check(not errs, 'rotation run: no page errors', errs[:3]); ctx.close()
+    # Rotate every CG while it is active. Both decoded deliveries remain attached: no request, blank or stale variant on rotation.
+    for key in ADOPTED:
+        ctx, pg, errs = boot(b, 390, 844, touch=True)
+        scene = 'louIntro' if key == 'lou_first' else 'altar'
+        pg.evaluate("k=>{PrologueProgress.seed(3);giveStarterSword();devResetScreens();closeDialogue();if(k==='louIntro')startLouIntro();else startAltarScene()}", scene)
+        pg.wait_for_function("([s,k])=>EventCG.debug(s).status[k]==='ready'", arg=[scene,key])
+        target = {'lou_first':3,'altar_cg01':14,'altar_cg02':18,'altar_cg03':21,'altar_cg04':32}[key]
+        for _ in range(target): pg.evaluate("s=>document.getElementById(s+'Scene').click()", scene)
+        pg.wait_for_timeout(5200 if key == 'altar_cg04' else 700)
+        requests=[]; pg.on('request',lambda req: requests.append(req.url) if '/img/events/' in req.url else None)
+        for vw,vh in ((844,390),(390,844),(915,412),(360,640)):
+            pg.set_viewport_size({'width':vw,'height':vh})
+            # No network/decode wait: after one frame the already loaded orientation must be visible.
+            pg.evaluate("()=>new Promise(r=>requestAnimationFrame(()=>r()))")
+            g=pg.evaluate(GEOM,scene); orientation='portrait' if vw < vh else 'landscape'
+            check(g and g['visible']==1 and g['src']=='img/events/'+ADOPTED[key][orientation]['file'] and g['nw']>0 and not any(g['dev']) and g['f'][3]<=g['text_top']+1,
+                  f'{key}: rotation {vw}x{vh} immediately shows correct full CG above text, DEV hidden',g)
+        check(not requests,f'{key}: rotation needs no new image request',requests)
+        for _ in range(40): pg.evaluate("s=>{const e=document.getElementById(s+'Scene');if(e.style.display==='block')e.click()}",scene)
+        pg.wait_for_timeout(800)
+        check(not pg.evaluate("document.body.classList.contains('eventCgOn')") and pg.evaluate("document.querySelectorAll('.event-cg-item').length")==0,
+              f'{key}: scene end clears CG marker and releases both images')
+        check(not errs,f'{key}: rotation no page errors',errs[:3]);ctx.close()
     b.close()
 if OUT: (OUT / 'cg4_fx_timing.json').write_text(json.dumps(timing, indent=1, ensure_ascii=False))
 print('FAILS', len(fails)); sys.exit(1 if fails else 0)
