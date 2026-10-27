@@ -38,15 +38,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 962,
-  "approved_implemented": 71,
+  "total": 963,
+  "approved_implemented": 72,
   "approved_not_implemented": 0,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
   "approval_unknown": 885,
-  "on_main": 783,
-  "implemented_on_main": 766,
+  "on_main": 784,
+  "implemented_on_main": 767,
   "unreferenced_on_main": 17
  },
  "motion_gaps": [
@@ -24183,6 +24183,32 @@
    "android_status": "UNVERIFIED",
    "issue": "TITLE-FG (PR #76)",
    "notes": "existing asset on main; adoption record not re-verified; user-supplied transparent meadow (grass/flowers/rocks only, no ruins or trees), adopted 2026-10-27 by PR #76, bytes unchanged; replaces img/title/foreground-grass.svg (kept, no longer referenced) as the title foreground under Aidan's boots (css/title-screen.css .title-foreground)"
+  },
+  {
+   "asset_id": "file:img_title_foreground_meadow_portrait",
+   "name": "foreground-meadow-portrait.png",
+   "category": "title",
+   "character": "UNKNOWN",
+   "motion": "UNKNOWN",
+   "delivery_date": "2026-10-27",
+   "source_path": "img/title/foreground-meadow-portrait.png",
+   "source_branch": "main",
+   "source_commit": "5bc05fb8db3a21e06d4b24d4d83bcd72f5c5f5a4",
+   "source_sha256": "05b5b3e19e9606801c9cc19ede94e465ee625a19a3ee85f321ff4fe8ec10811c",
+   "width": 540,
+   "height": 200,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "css/title-screen.css"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "DIRECTIVE-17E (option 1)",
+   "notes": "existing asset on main; adoption record not re-verified; portrait-only derivative of img/title/foreground-meadow.png (source unchanged), built by tools/assets/make_title_foreground_portrait.py: rock-free grass / small-flower layer, graded to the portrait backdrop foot, soft top fringe, alpha-ramped ends; derivation approved by the user 2026-10-27"
   },
   {
    "asset_id": "file:img_title_logo",
