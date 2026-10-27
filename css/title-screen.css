@@ -24,7 +24,9 @@
    size and position are unchanged (layout still uses --hero-w = the 2:3 figure frame). */
 #title-screen .title-hero{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;height:var(--hero-h);width:auto;max-width:none;margin-left:calc(var(--hero-h) * -64 / 1536);filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
 /* Transparent foreground vegetation overlaps the boots, without changing approved hero/background art. */
-#title-screen .title-foreground{left:calc(var(--safe-l) + max(0px,1.5vw));bottom:0;width:var(--hero-w);height:calc(var(--hero-h) * .16);background:url(../img/title/foreground-meadow.png?v=20261027meadow1) center bottom/contain no-repeat;opacity:.92}
+/* Meadow under both boots (the PNG is unchanged): its box follows the hero height, centred under the feet (back view v2: soles at about
+   0.31-0.67 of the hero height from the hero's left edge), keeping the PNG's 2014x781 ratio; the bottom soil edge runs just past the screen. */
+#title-screen .title-foreground{--fg-x:calc(var(--hero-h) * .17);left:calc(var(--safe-l) + max(0px,1.5vw) + var(--fg-x));bottom:calc(var(--hero-h) * -.035);width:calc(var(--hero-h) * .58);height:calc(var(--hero-h) * .58 * 781 / 2014);background:url(../img/title/foreground-meadow.png?v=20261027meadow1) center bottom/100% 100% no-repeat;opacity:.92}
 #title-screen .title-logo{margin:0;line-height:0;width:min(100%,40vh * 2.81);width:min(100%,40svh * 2.81)}
 #title-screen .title-logo img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.45))}
 #title-screen .title-logo-text{display:none;line-height:1.2;font-size:clamp(25px,5vw,52px);letter-spacing:.06em;text-shadow:0 2px 8px #000}
@@ -60,7 +62,7 @@
  #title-screen .title-backdrop{background:url(../img/title/background-portrait.png) 50% 50%/cover no-repeat,radial-gradient(ellipse at top,#284639,#0a1915)}
  #title-screen .title-backdrop::after{background:linear-gradient(180deg,rgba(6,18,14,.22) 0%,transparent 28%,transparent 58%,rgba(6,18,14,.45) 100%)}
  #title-screen .title-hero{left:calc(var(--safe-l) + 1.5vw);bottom:0;height:var(--hero-h)}
- #title-screen .title-foreground{left:calc(var(--safe-l) + 1.5vw);height:calc(var(--hero-h) * .18)}
+ #title-screen .title-foreground{left:calc(var(--safe-l) + 1.5vw + var(--fg-x))}
  #title-screen .title-logo{width:min(100%,720px,30svh * 2.81)}
  #title-screen .title-menu{margin-top:auto;align-self:flex-end;width:var(--p-menu-w)}
  #title-screen .title-menu button{width:100%;padding-left:.5rem;padding-right:.5rem}
