@@ -5,16 +5,16 @@
 
 ## 集計（2026-10-19）
 
-- total: **961**
+- total: **962**
 - approved_implemented: **70**
 - approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
-- approval_unknown: **885**
-- on_main: **782**
-- implemented_on_main: **761**
-- unreferenced_on_main: **21**
+- approval_unknown: **886**
+- on_main: **783**
+- implemented_on_main: **766**
+- unreferenced_on_main: **17**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
 
@@ -321,10 +321,10 @@
 | file:img_field_moss_art_fern_cluster_01 | UNKNOWN | UNKNOWN | 1 | 140x173 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | data/maps/moss_forest_01_sunlit_path.json, data/maps/moss_forest_02_mossy_ravine.json / existing asset on main; adoption record not re-verified; quality-adjusted derivative (alph |
 | file:img_field_moss_art_fern_cluster_02 | UNKNOWN | UNKNOWN | 1 | 220x154 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | data/maps/moss_forest_01_sunlit_path.json, data/maps/moss_forest_02_mossy_ravine.json / existing asset on main; adoption record not re-verified; quality-adjusted derivative (alph |
 | file:img_field_moss_art_fern_cluster_03 | UNKNOWN | UNKNOWN | 1 | 180x180 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | data/maps/moss_forest_01_sunlit_path.json, data/maps/moss_forest_02_mossy_ravine.json / existing asset on main; adoption record not re-verified; quality-adjusted derivative (alph |
-| file:img_field_moss_art_fx_seal_01 | UNKNOWN | UNKNOWN | 1 | 180x128 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
-| file:img_field_moss_art_fx_seal_02 | UNKNOWN | UNKNOWN | 1 | 180x179 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
-| file:img_field_moss_art_fx_seal_03 | UNKNOWN | UNKNOWN | 1 | 180x157 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
-| file:img_field_moss_art_fx_seal_04 | UNKNOWN | UNKNOWN | 1 | 180x123 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_art_fx_seal_01 | UNKNOWN | UNKNOWN | 1 | 180x128 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/forest-effects.js / existing asset on main; adoption record not re-verified |
+| file:img_field_moss_art_fx_seal_02 | UNKNOWN | UNKNOWN | 1 | 180x179 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/forest-effects.js / existing asset on main; adoption record not re-verified |
+| file:img_field_moss_art_fx_seal_03 | UNKNOWN | UNKNOWN | 1 | 180x157 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/forest-effects.js / existing asset on main; adoption record not re-verified |
+| file:img_field_moss_art_fx_seal_04 | UNKNOWN | UNKNOWN | 1 | 180x123 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/forest-effects.js / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_art_fx_treasure_glint_01 | UNKNOWN | UNKNOWN | 1 | 80x101 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
 | file:img_field_moss_art_fx_treasure_glint_02 | UNKNOWN | UNKNOWN | 1 | 80x86 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
 | file:img_field_moss_art_fx_treasure_glint_03 | UNKNOWN | UNKNOWN | 1 | 80x95 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
@@ -1022,10 +1022,11 @@
 | file:img_title_background_portrait | UNKNOWN | UNKNOWN | 1 | 941x1672 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified; official title art package windbo |
 | file:img_title_logo | UNKNOWN | UNKNOWN | 1 | 2048x728 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/title-screen.js / existing asset on main; adoption record not re-verified; official title art package windbo |
 
-## ui（2）
+## ui（3）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | branch:feature_title_01_new_title_screen:img_title_phase01_background_png | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feature/title-01-new-title-screen (not merged to main); TITLE-01 new |
 | branch:feature_title_01_new_title_screen:img_title_title_logo_v3_png | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feature/title-01-new-title-screen (not merged to main); TITLE-01 new |
+| file:img_title_foreground_meadow | UNKNOWN | UNKNOWN | 1 | 2014x781 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | css/title-screen.css / existing asset on main; adoption record not re-verified |
 
