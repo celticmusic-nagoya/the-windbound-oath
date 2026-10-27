@@ -48,6 +48,9 @@ with sync_playwright() as p:
     pg.evaluate("FieldTalk.talk('b_faces')"); pg.wait_for_timeout(600); ok = []
     for i, f in enumerate(FACES):
         # wait for the forced blink to finish (back to open) instead of a fixed 400 ms: under CPU load the 260 ms blink can run late
+        # and only after this page's face is on screen with its overlays loaded (the first load can exceed 600 ms under load)
+        try: pg.wait_for_function("(f)=>{const s=TalkPortrait.status;return s.visible&&s.face===f&&s.blinkReady&&s.blink&&s.blink.timers===1}", arg=f, timeout=5000)
+        except Exception: pass
         pg.evaluate("window.__eye=[]"); pg.evaluate("TalkPortrait.blinkNow()")
         try: pg.wait_for_function("window.__eye.length>=8&&window.__eye[window.__eye.length-1][1]===0", timeout=2000)
         except Exception: pass
