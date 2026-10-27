@@ -1,4 +1,4 @@
-# 風の舞 in battle (decided numbers: +15pt evasion, all allies, 3 enemy phases, MP10, refresh) and the provisional bolt MP regain (off/hit/action).
+# 風の舞 in battle (PROVISIONAL numbers, command on by default since 2026-10-27: +15pt evasion, all allies, 3 enemy phases, MP10, refresh) and the provisional bolt MP regain (off/hit/action).
 import os, sys
 from playwright.sync_api import sync_playwright
 PORT=os.environ.get('PORT','8765'); fails=[]; errs=[]
@@ -21,7 +21,7 @@ with sync_playwright() as p:
         pg.evaluate("a=>{PrologueCombat.round('normal',a)}",acts); pg.wait_for_timeout(300); return idle(pg)
     def st(pg,who='aidan'): return pg.evaluate("w=>BattleStatus.list('normal',w).filter(e=>e.type==='eva_up')",who)
     # ---- flag off: the command does not exist and the engine ignores it
-    pg=fresh(); battle(pg); ev=pg.evaluate
+    pg=fresh('&windDance=off'); battle(pg); ev=pg.evaluate
     ev("WindDance.learn()")
     ck(ev("WindDance.commandVisible()")==False,'flag off: command not visible even after learning')
     ev("normalFMP=30"); ok=rnd(pg,[{'who':'fiona','kind':'winddance'}])

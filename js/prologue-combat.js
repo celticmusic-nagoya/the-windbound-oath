@@ -69,7 +69,7 @@
  }
  function koAll(b){for(const e of rosters[b]){e.hp=0;BattleActorState.set(e.key,'ko',{battle:b})}sync(b);}
  function log(b,t,owned=false){BattlePresentation.log(()=>{if(b==='normal')showBattleBanner(t,1050);else showRaiderBattleLog(t)},owned)}
- // ---- 風の舞 (Fiona, support): ally evasion +15pt for 3 enemy phases, MP10, refresh not stack. Learned + feature-gated by WindDance. ----
+ // ---- 風の舞 (Fiona, support): ally evasion +15pt for 3 enemy phases, MP10, refresh not stack (PROVISIONAL numbers, see support-magic-data.js). Usable once learned (WindDance). ----
  // BattleStatus.tick skips effects created during the round, so the cast round's own enemy phase is covered for free: remainingTurns = phases-1 gives 3 phases in total.
  function castWindDance(b){
   const W=window.WindDance;if(!W||!W.commandVisible())return false;
