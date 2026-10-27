@@ -38,15 +38,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 961,
-  "approved_implemented": 70,
+  "total": 962,
+  "approved_implemented": 71,
   "approved_not_implemented": 0,
   "delivered_not_merged": 179,
   "pending_adoption": 2,
   "source_missing": 0,
   "approval_unknown": 885,
-  "on_main": 782,
-  "implemented_on_main": 761,
+  "on_main": 783,
+  "implemented_on_main": 762,
   "unreferenced_on_main": 21
  },
  "motion_gaps": [
@@ -24149,6 +24149,32 @@
    "android_status": "UNVERIFIED",
    "issue": "TITLE-04",
    "notes": "existing asset on main; adoption record not re-verified; official title art package windbound_title_assets_v1 (2026-10-26), bytes unchanged; background/Aidan/logo layers in js/title-screen.js + css/title-screen.css"
+  },
+  {
+   "asset_id": "file:img_title_foreground_meadow",
+   "name": "foreground-meadow.png",
+   "category": "title",
+   "character": "UNKNOWN",
+   "motion": "UNKNOWN",
+   "delivery_date": "2026-10-27",
+   "source_path": "img/title/foreground-meadow.png",
+   "source_branch": "main",
+   "source_commit": "4c913b499475b1eaeccf9887f0a32e061ca2e602",
+   "source_sha256": "cfcc624adbfa8c29994f9c3fd81f41d606dfa623325bedbcca5b3743e554c9f1",
+   "width": 2014,
+   "height": 781,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "css/title-screen.css"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "TITLE-FG (PR #76)",
+   "notes": "existing asset on main; adoption record not re-verified; user-supplied transparent meadow (grass/flowers/rocks only, no ruins or trees), adopted 2026-10-27 by PR #76, bytes unchanged; replaces img/title/foreground-grass.svg (kept, no longer referenced) as the title foreground under Aidan's boots (css/title-screen.css .title-foreground)"
   },
   {
    "asset_id": "file:img_title_logo",
