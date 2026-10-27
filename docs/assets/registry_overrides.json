@@ -574,6 +574,14 @@
     "issue": "TITLE-FG (PR #76)",
     "notes_append": "user-supplied transparent meadow (grass/flowers/rocks only, no ruins or trees), adopted 2026-10-27 by PR #76, bytes unchanged; replaces img/title/foreground-grass.svg (kept, no longer referenced) as the title foreground under Aidan's boots (css/title-screen.css .title-foreground)"
    }
+  },
+  {
+   "match": "^img/events/cg0[1-5]_",
+   "set": {
+    "approval_status": "APPROVED",
+    "category": "event_cg",
+    "notes_append": "User formally adopted landscape/portrait CG pairs; delivered PNG bytes preserved. See img/events/adopted-cg.json for delivery mapping and SHA256. Android physical QA pending."
+   }
   }
  ],
  "motion_gaps": [
