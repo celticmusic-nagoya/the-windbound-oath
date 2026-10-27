@@ -228,13 +228,33 @@ with server(8820) as base, sync_playwright() as p:
              'tablet_768x1024': (768, 1024), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1920x1080': (1920, 1080)}
     GEOM = """k=>{const e=document.querySelector('.event-cg-item.on');if(!e)return null;const f=e.querySelector('.event-cg-frame').getBoundingClientRect(),
       i=e.querySelector('.event-cg-img'),t=document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').getBoundingClientRect(),cs=getComputedStyle(i);
-      return {f:[f.left,f.top,f.right,f.bottom],text_top:t.top,vw:innerWidth,vh:innerHeight,fit:cs.objectFit,pos:cs.objectPosition,nw:i.naturalWidth,nh:i.naturalHeight}}"""
+      return {f:[f.left,f.top,f.right,f.bottom],text_top:t.top,vw:innerWidth,vh:innerHeight,fit:cs.objectFit,pos:cs.objectPosition,nw:i.naturalWidth,nh:i.naturalHeight,
+       backs:e.querySelectorAll('img').length,mask:getComputedStyle(e.querySelector('.event-cg-frame')).maskImage||getComputedStyle(e.querySelector('.event-cg-frame')).webkitMaskImage||'none',
+       dev:['devBtn','devBuildIndicator'].map(id=>{const d=document.getElementById(id);return !!d&&getComputedStyle(d).display!=='none'})}}"""
+    import io
+    from PIL import Image
+    def seams(png, g):
+        """visual check on the real screenshot: margins are dark (no copy of the CG behind it) and no hard step at the CG edges"""
+        im = Image.open(io.BytesIO(png)).convert('L'); sx = im.width / g['vw']; sy = im.height / g['vh']
+        fl, ft, fr, fb = [round(v) for v in g['f']]; top_txt = g['text_top']; res = {}
+        def col(x, y0, y1):
+            x = max(0, min(im.width - 1, int(x * sx))); vals = [im.getpixel((x, int(y * sy))) for y in range(int(y0), int(y1), 3)]; return sum(vals) / max(1, len(vals))
+        def row(y, x0, x1):
+            y = max(0, min(im.height - 1, int(y * sy))); vals = [im.getpixel((int(x * sx), y)) for x in range(int(x0), int(x1), 3)]; return sum(vals) / max(1, len(vals))
+        y0, y1 = max(ft, 0) + 4, min(fb, top_txt) - 4
+        if fl > 8:   # side margins (landscape)
+            res['margin'] = max(col(fl / 2, y0, y1), col((fr + g['vw']) / 2, y0, y1))
+            res['step'] = max(abs(col(fl + 1, y0, y1) - col(fl - 2, y0, y1)), abs(col(fr - 2, y0, y1) - col(fr + 1, y0, y1)))
+        if ft > 8:   # top / bottom margins (portrait)
+            res['margin'] = max(res.get('margin', 0), row(ft / 2, 4, g['vw'] - 4))
+            res['step'] = max(res.get('step', 0), abs(row(ft + 1, 4, g['vw'] - 4) - row(ft - 2, 4, g['vw'] - 4)))
+        return res
     for view, (w, h) in VIEWS.items():
         ctx, pg, errs = boot(b, w, h, touch=w < h or h < 500)
         pg.evaluate("PrologueProgress.seed(3);giveStarterSword();devResetScreens();closeDialogue();startLouIntro()")
         pg.wait_for_function("EventCG.debug('louIntro').status.lou_first==='ready'", timeout=30000)
         for _ in range(3): pg.evaluate("document.querySelector('#louIntroScene').click()")
-        pg.wait_for_timeout(900); geo = {'lou_first': pg.evaluate(GEOM, 'louIntro')}
+        pg.wait_for_timeout(900); geo = {'lou_first': pg.evaluate(GEOM, 'louIntro')}; shots = {'lou_first': pg.screenshot()}
         if OUT: pg.screenshot(path=str(OUT / f'{view}_lou.png'))
         for _ in range(5): pg.evaluate("document.querySelector('#louIntroScene').style.display==='block'&&document.querySelector('#louIntroScene').click()")
         pg.evaluate("devResetScreens();closeDialogue();startAltarScene()")
@@ -243,22 +263,46 @@ with server(8820) as base, sync_playwright() as p:
         for target, key in ((14, 'altar_cg01'), (18, 'altar_cg02'), (21, 'altar_cg03'), (32, 'altar_cg04')):
             while idx < target: pg.evaluate("document.querySelector('#altarScene').click()"); idx += 1
             pg.wait_for_timeout(5200 if key == 'altar_cg04' else 900)
-            geo[key] = pg.evaluate(GEOM, 'altar')
+            geo[key] = pg.evaluate(GEOM, 'altar'); shots[key] = pg.screenshot()
             if OUT: pg.screenshot(path=str(OUT / f'{view}_{key}.png'))
         for key, g in geo.items():
             if not g: check(False, f'[{view}] {key} visible'); continue
             fl, ft, fr, fb = g['f']
-            inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and fb <= g['text_top'] + 1
             fw, fh = fr - fl, fb - ft
+            if w < h:   # portrait: the CG box ends above the text box
+                inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and fb <= g['text_top'] + 1
+            else:       # landscape (DIRECTIVE-17E): whole 3:2 CG, as large as the screen allows; the text box may overlay its lower edge
+                inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and abs(fw / fh - 1.5) < .01 and fh >= min(g['vh'], g['vw'] / 1.5) - 1.5
+            check(g['backs'] == 1 and 'gradient' in g['mask'] and not any(g['dev']), f'[{view}] {key}: single CG image (no enlarged copy behind), feathered edges, DEV button hidden',
+                  {'imgs': g['backs'], 'mask': g['mask'][:60], 'dev': g['dev']})
+            v = seams(shots[key], g)
+            check(v.get('margin', 0) < 40 and v.get('step', 0) < 18, f'[{view}] {key}: screenshot - dark margins, no hard edge line at the CG border', {k: round(x, 1) for k, x in v.items()})
             if g['fit'] == 'cover':
                 vis = min(1, fw / (g['nw'] * fh / g['nh'])); focus = float(g['pos'].split('%')[0]) / 100; x0 = focus * (1 - vis); rng = (x0, x0 + vis)
             else:
                 rng = (0, 1)
             need = NEED[key]
-            check(inside and rng[0] <= need[0] + 1e-6 and rng[1] >= need[1] - 1e-6, f'[{view}] {key}: inside the screen, above the text, key region visible',
+            check(inside and rng[0] <= need[0] + 1e-6 and rng[1] >= need[1] - 1e-6, f'[{view}] {key}: inside the screen, as large as allowed (portrait: above the text), key region visible',
                   {'frame': [round(v) for v in g['f']], 'text_top': round(g['text_top']), 'fit': g['fit'], 'visible_x': [round(v, 3) for v in rng]})
             if w < h: check(fh >= .38 * h, f'[{view}] {key}: portrait CG not shrunk (frame {round(fh)} px of {h})')
         check(not errs, f'[{view}] no page errors', errs[:3]); ctx.close()
+    # ---- rotation while a CG is on, then the scene ends: DEV button back, CG layer gone (DIRECTIVE-17E)
+    ctx, pg, errs = boot(b, 390, 844, touch=True)
+    pg.evaluate("PrologueProgress.seed(3);giveStarterSword();devResetScreens();closeDialogue();startAltarScene()")
+    pg.wait_for_function("EventCG.debug('altar').status.altar_cg01==='ready'", timeout=30000)
+    for _ in range(14): pg.evaluate("document.querySelector('#altarScene').click()")
+    pg.wait_for_timeout(700)
+    for vw, vh in ((844, 390), (390, 844), (915, 412)):
+        pg.set_viewport_size({'width': vw, 'height': vh}); pg.wait_for_timeout(500); g = pg.evaluate(GEOM, 'altar')
+        ok = g and g['f'][0] >= -.5 and g['f'][2] <= vw + .5 and g['f'][3] <= vh + .5 and (vw > vh or g['f'][3] <= g['text_top'] + 1) and not any(g['dev'])
+        check(ok, f'rotation to {vw}x{vh} mid-CG: CG re-laid out inside the screen, DEV hidden', g and [round(v) for v in g['f']])
+    for _ in range(40): pg.evaluate("document.querySelector('#altarScene').style.display==='block'&&document.querySelector('#altarScene').click()")
+    pg.wait_for_timeout(800)
+    check(not pg.evaluate("document.body.classList.contains('eventCgOn')") and pg.evaluate("document.querySelectorAll('.event-cg-item').length") == 0,
+          'scene end: eventCgOn cleared, CG layer released')
+    check(pg.evaluate("(()=>{const d=document.getElementById('devBtn');return !d||getComputedStyle(d).display!=='none'||!document.body.classList.contains('developmentMode')})()") or pg.evaluate("document.body.classList.contains('raiderBattleMode')"),
+          'DEV button no longer hidden by the CG rule after the scene (battle rules may still hide it)')
+    check(not errs, 'rotation run: no page errors', errs[:3]); ctx.close()
     b.close()
 if OUT: (OUT / 'cg4_fx_timing.json').write_text(json.dumps(timing, indent=1, ensure_ascii=False))
 print('FAILS', len(fails)); sys.exit(1 if fails else 0)
