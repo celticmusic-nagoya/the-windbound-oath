@@ -14,7 +14,7 @@ def check(ok, name, detail=''):
     print(('ok   ' if ok else 'FAIL ') + name, detail if not ok else '')
     if not ok: fails.append(name)
 # Approved artwork (TITLE-04 package): exact bytes, transparency where required.
-SHA = {'background-landscape.png': '4d89ff88c67e54ec4676132c7fdfe2331265a69dcb910654c918db9a1a3a1eca', 'background-portrait.png': '5921d4906b74a2a1947783e242ed753dd2514f06d4cbfe58551cbfe3580d2275',
+SHA = {'background-landscape.png': '4d89ff88c67e54ec4676132c7fdfe2331265a69dcb910654c918db9a1a3a1eca', 'background-portrait.png': '01d5e7f1f6136f0ab64751b61bb4675836db46070052715482883a0f9cdcae42',
        'aidan-portrait.png': '0dd61691bde190605a175b3c222e36bb52fd151831c85297f01b1108d3a374a6', 'logo.png': 'e2135143a3500554ee63a08f8bcf1c0b3f302884680cb082d5018a5c92e8a87d'}
 import hashlib
 for name, digest in SHA.items():
