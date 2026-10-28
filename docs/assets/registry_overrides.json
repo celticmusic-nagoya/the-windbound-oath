@@ -582,6 +582,13 @@
     "category": "event_cg",
     "notes_append": "User formally adopted landscape/portrait CG pairs; delivered PNG bytes preserved. See img/events/adopted-cg.json for delivery mapping and SHA256. Android physical QA pending."
    }
+  },
+  {
+   "match": "^img/title/(background-portrait|黄金の夕映えと城下町の谷間)\\.png$",
+   "set": {
+    "approval_status": "APPROVED",
+    "notes_append": "DIRECTIVE-17F-R: user-adopted original uploaded on main a48c84c; byte-identical portrait replacement. Original PNG retained, Android physical QA pending."
+   }
   }
  ],
  "motion_gaps": [

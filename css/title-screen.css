@@ -59,8 +59,8 @@
   --hero-h:min(var(--hero-share),calc((100vw - var(--safe-l) - var(--safe-r) - 1.5vw - 164px) * 1.5));
   --p-menu-w:min(300px,calc(100vw - var(--safe-l) - var(--safe-r) - 1.5vw - var(--hero-w) - 36px));
   justify-content:space-between;padding:calc(max(20px,5svh) + var(--safe-t)) calc(16px + var(--safe-r)) calc(max(20px,6svh) + var(--safe-b)) calc(16px + var(--safe-l))}
- #title-screen .title-backdrop{background:url(../img/title/background-portrait.png) 50% 50%/cover no-repeat,radial-gradient(ellipse at top,#284639,#0a1915)}
- #title-screen .title-backdrop::after{background:linear-gradient(180deg,rgba(6,18,14,.22) 0%,transparent 28%,transparent 58%,rgba(6,18,14,.45) 100%)}
+ #title-screen .title-backdrop{background:url(../img/title/background-portrait.png?v=20261028final) 50% 50%/cover no-repeat,radial-gradient(ellipse at top,#284639,#0a1915)}
+ #title-screen .title-backdrop::after{background:linear-gradient(180deg,rgba(6,18,14,.22) 0%,transparent 28%,transparent 58%,rgba(6,18,14,.26) 100%)}
  #title-screen .title-hero{left:calc(var(--safe-l) + 1.5vw);bottom:0;height:var(--hero-h)}
  /* Portrait (DIRECTIVE-17E, approved option 1): a portrait-only derivative of the meadow (img/title/foreground-meadow-portrait.png, built by
     tools/assets/make_title_foreground_portrait.py from the unchanged foreground-meadow.png): the rock-free grass / small-flower layer, graded to
