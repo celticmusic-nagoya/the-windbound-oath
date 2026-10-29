@@ -150,7 +150,9 @@
     // DEV controls affect only the dedicated DEV owner; production conversations cannot use them.
     devControl(mode, state = 0) {
       if (!window.WINDBOUND_DEV || owner !== DEV_OWNER || !cur || !['auto','manual','loop','stop','frame'].includes(mode)) return false;
-      stopBlink(); devMode = mode; draw(mode === 'frame' ? Math.max(0, Math.min(4, Number(state) || 0)) : 0);
+      stopBlink();
+      if ((mode === 'manual' || mode === 'loop') && (reduced.matches || document.hidden)) { devMode = 'stop'; draw(0); return false; }
+      devMode = mode; draw(mode === 'frame' ? Math.max(0, Math.min(4, Number(state) || 0)) : 0);
       if (mode !== 'frame' && mode !== 'stop') { startBlink(); if (mode === 'manual') return this.blinkNow(); }
       return true;
     },

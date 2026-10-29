@@ -21,7 +21,7 @@
     if (!active()) return;
     if (P.owner !== OWNER || document.body.classList.contains('battleMode') || window.FieldTalk?.active || window.FieldScene?.running) { close(); return; }
     const s = P.status, wait = s.blink?.nextAt ? Math.max(0, (s.blink.nextAt - Date.now()) / 1000).toFixed(1) + '秒' : '-';
-    status.textContent = `${s.char || char} / ${s.face || face}\n瞬き素材: ${s.blinkReady ? 'READY' : s.visible ? 'MISSING' : 'LOADING'}\nタイマー: ${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（自動・連続再生は停止）' : 'OFF'} / hidden: ${document.hidden}\nモード: ${mode}`;
+    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${s.blinkReady ? 'READY' : s.visible ? 'MISSING' : 'LOADING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
     const errors = P.diagnostics;
     q('#devPortraitErrors').textContent = errors.map(e => `${e.url}: ${e.reason}`).join('\n');
   }
@@ -41,7 +41,7 @@
     for (const f of R.get(id).faces) button(faces, f, () => { face = f; void show(); });
     void show();
   }
-  function control(next, state) { mode = next; P.devControl(next, state); update(); }
+  function control(next, state) { mode = P.devControl(next, state) ? next : 'stop'; update(); }
   function build() {
     root = document.createElement('dialog'); root.id = 'devPortraitStage'; root.setAttribute('aria-label', '立ち絵・モーションテスト');
     panel = document.createElement('section'); panel.id = 'devPortraitControls'; root.append(panel);
@@ -57,7 +57,7 @@
     button(actions, '停止・開眼', () => control('stop'), 'devPortraitStop');
     const frames = document.createElement('div'); frames.id = 'devPortraitFrames'; panel.append(frames);
     for (let i = 0; i <= 4; i++) button(frames, `フレーム ${i}`, () => control('frame', i));
-    status = document.createElement('pre'); status.id = 'devPortraitStatus'; panel.append(status);
+    status = document.createElement('pre'); status.id = 'devPortraitStatus'; panel.insertBefore(status, chars);
     const errors = document.createElement('pre'); errors.id = 'devPortraitErrors'; panel.append(errors);
     const toggle = button(root, '操作パネル', () => { root.classList.toggle('folded'); toggle.setAttribute('aria-expanded', String(!root.classList.contains('folded'))); }, 'devPortraitToggle');
     toggle.setAttribute('aria-controls', panel.id);
@@ -67,7 +67,7 @@
     document.body.append(root);
   }
   function open() {
-    if (!window.WINDBOUND_DEV || window.FieldTalk?.active || window.FieldScene?.running || document.body.classList.contains('battleMode') || document.body.classList.contains('dialogueOpen') || window.LoadingInput?.busy) return false;
+    if (!window.WINDBOUND_DEV || window.FieldTalk?.active || window.FieldScene?.running || document.body.classList.contains('battleMode') || document.body.classList.contains('dialogueOpen') || window.LoadingInput?.busy) { hint.textContent = '会話・イベント・読み込みが終わってから開いてください。'; return false; }
     if (!root) build();
     chars.textContent = '';
     const ids = [...new Set([...R.ids(), 'aidan', 'fiona', 'lou', 'emma'])];
@@ -93,6 +93,7 @@
   window.LoadCoordinator?.onInvalidate(close);
   window.addEventListener('field-talk', close);
   const entry = button(document.getElementById('devPanel'), '立ち絵・モーションテスト', open, 'devPortraitTest');
+  const hint = document.createElement('p'); entry.after(hint);
   entry.className = 'dev-only-command';
   window.DevPortraitTest = Object.freeze({open, close, get active() { return active(); }, get timers() { return timer === null ? 0 : 1; }});
 })();
