@@ -15,11 +15,11 @@ window.TalkDataScenes = Object.freeze({tables: [
     {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{pages: [
       'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',
       '果てのない海が、橙色にとけていく。断崖の草原を、風がやわらかく撫でていった。',
-      'エイダン「訓練のあとに、こんな坂道を登らされるとは思わなかったけどな。」',
-      'フィオナ「ふふ。エイダン、昔からすぐそういうこと言う。」',
+      {speaker: 'エイダン', text: '「訓練のあとに、こんな坂道を登らされるとは思わなかったけどな。」', char: 'aidan', face: 'smile', side: 'left'},
+      {speaker: 'フィオナ', text: '「ふふ。エイダン、昔からすぐそういうこと言う。」', char: null},
       'フィオナ「ねえ。エイダンは……王都へ行ったら、お父さんみたいな騎士になるの？」',
-      'エイダン「まだ分からない。でも――守れるくらいには強くなりたい。」',
-      'フィオナ「そっか。」',
+      {speaker: 'エイダン', text: '「まだ分からない。でも――守れるくらいには強くなりたい。」', char: 'aidan', face: 'normal', side: 'left'},
+      {speaker: 'フィオナ', text: '「そっか。」', char: null},
       '夕陽が、水平線の向こうへゆっくりと沈んでいく。']}]}]},
   {npc: 'scene_cliff_night', entries: [
     {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{pages: [
