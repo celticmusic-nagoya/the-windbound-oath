@@ -234,14 +234,14 @@ with server(8820) as base, sync_playwright() as p:
     ctx.close()
     ctx, pg, errs = boot(b, 844, 390, query='&windDance=off')
     pg.evaluate("WindDance.learn()"); check(pg.evaluate("WindDance.commandVisible()") is False, '?windDance=off rollback switch hides the command'); ctx.close()
-    # ---- framing on 10 viewports: CG area above the text box, inside the screen, focus regions visible
+    # ---- framing on 11 viewports: full CG inside screen, portrait above dialogue
     NEED = {'lou_first': (.40, .78), 'altar_cg01': (.28, .50), 'altar_cg02': (.38, .52), 'altar_cg03': (.28, .60), 'altar_cg04': (.40, .66)}
     VIEWS = {'portrait_320x568': (320, 568), 'portrait_360x800': (360, 800), 'portrait_390x844': (390, 844), 'portrait_412x915': (412, 915),
              'tablet_768x1024': (768, 1024), 'landscape_667x375': (667, 375), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1366x768': (1366, 768), 'landscape_1920x1080': (1920, 1080)}
     GEOM = """k=>{const e=document.querySelector('.event-cg-item.on');if(!e)return null;const f=e.querySelector('.event-cg-frame').getBoundingClientRect(),
       i=[...e.querySelectorAll('.event-cg-img')].find(im=>getComputedStyle(im).display!=='none'),t=document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').getBoundingClientRect(),cs=getComputedStyle(i);
       return {f:[f.left,f.top,f.right,f.bottom],text_top:t.top,vw:innerWidth,vh:innerHeight,fit:cs.objectFit,pos:cs.objectPosition,nw:i.naturalWidth,nh:i.naturalHeight,
-       src:i.getAttribute('src'),visible:e.querySelectorAll('img').length&&[...e.querySelectorAll('img')].filter(im=>getComputedStyle(im).display!=='none').length,backs:e.querySelectorAll('img').length,mask:getComputedStyle(e.querySelector('.event-cg-frame')).maskImage||getComputedStyle(e.querySelector('.event-cg-frame')).webkitMaskImage||'none',
+       text_front:(()=>{const x=t.left+t.width/2,y=t.top+t.height/2,hit=document.elementFromPoint(x,y);return !!hit&&document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').contains(hit)})(),text_fits:document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').scrollHeight<=t.height+1,src:i.getAttribute('src'),visible:e.querySelectorAll('img').length&&[...e.querySelectorAll('img')].filter(im=>getComputedStyle(im).display!=='none').length,backs:e.querySelectorAll('img').length,mask:getComputedStyle(e.querySelector('.event-cg-frame')).maskImage||getComputedStyle(e.querySelector('.event-cg-frame')).webkitMaskImage||'none',
        dev:['devBtn','devBuildIndicator'].map(id=>{const d=document.getElementById(id);return !!d&&getComputedStyle(d).display!=='none'})}}"""
     import io
     from PIL import Image
@@ -280,6 +280,7 @@ with server(8820) as base, sync_playwright() as p:
         for key, g in geo.items():
             if not g: check(False, f'[{view}] {key} visible'); continue
             fl, ft, fr, fb = g['f']
+            check(g['text_front'] and g['text_fits'], f'[{view}] {key}: dialogue frontmost without overflow', g)
             fw, fh = fr - fl, fb - ft
             if w < h:   # portrait: the CG box ends above the text box
                 inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and fb <= g['text_top'] + 1
