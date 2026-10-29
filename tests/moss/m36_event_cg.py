@@ -237,7 +237,7 @@ with server(8820) as base, sync_playwright() as p:
     # ---- framing on 10 viewports: CG area above the text box, inside the screen, focus regions visible
     NEED = {'lou_first': (.40, .78), 'altar_cg01': (.28, .50), 'altar_cg02': (.38, .52), 'altar_cg03': (.28, .60), 'altar_cg04': (.40, .66)}
     VIEWS = {'portrait_320x568': (320, 568), 'portrait_360x800': (360, 800), 'portrait_390x844': (390, 844), 'portrait_412x915': (412, 915),
-             'tablet_768x1024': (768, 1024), 'landscape_667x375': (667, 375), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1920x1080': (1920, 1080)}
+             'tablet_768x1024': (768, 1024), 'landscape_667x375': (667, 375), 'landscape_844x390': (844, 390), 'landscape_915x412': (915, 412), 'landscape_1280x720': (1280, 720), 'landscape_1366x768': (1366, 768), 'landscape_1920x1080': (1920, 1080)}
     GEOM = """k=>{const e=document.querySelector('.event-cg-item.on');if(!e)return null;const f=e.querySelector('.event-cg-frame').getBoundingClientRect(),
       i=[...e.querySelectorAll('.event-cg-img')].find(im=>getComputedStyle(im).display!=='none'),t=document.querySelector(k==='louIntro'?'#louIntroText':'#altarText').getBoundingClientRect(),cs=getComputedStyle(i);
       return {f:[f.left,f.top,f.right,f.bottom],text_top:t.top,vw:innerWidth,vh:innerHeight,fit:cs.objectFit,pos:cs.objectPosition,nw:i.naturalWidth,nh:i.naturalHeight,
@@ -283,8 +283,9 @@ with server(8820) as base, sync_playwright() as p:
             fw, fh = fr - fl, fb - ft
             if w < h:   # portrait: the CG box ends above the text box
                 inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5 and fb <= g['text_top'] + 1
-            else:       # Complete landscape delivery above dialogue; no hidden sword / hands under text.
-                inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['text_top'] + 1
+            else:       # Full landscape delivery may extend behind the frontmost dialogue.
+                inside = fl >= -.5 and ft >= -.5 and fr <= g['vw'] + .5 and fb <= g['vh'] + .5
+                check(abs(fw - min(w, h * 16 / 9)) < 1, f'[{view}] {key}: maximum contained landscape width', fw)
             expected = ADOPTED[key]['portrait' if w < h else 'landscape']
             check(g['src'] == 'img/events/' + expected['file'] and (g['nw'],g['nh']) == (expected['width'],expected['height']) and g['fit']=='contain' and abs(fw/fh - g['nw']/g['nh']) < .01, f'[{view}] {key}: correct orientation, complete image, no distortion', g)
             check(g['backs'] == 2 and g['visible'] == 1 and 'gradient' in g['mask'] and not any(g['dev']), f'[{view}] {key}: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden',
@@ -315,8 +316,8 @@ with server(8820) as base, sync_playwright() as p:
             # No network/decode wait: after one frame the already loaded orientation must be visible.
             pg.evaluate("()=>new Promise(r=>requestAnimationFrame(()=>r()))")
             g=pg.evaluate(GEOM,scene); orientation='portrait' if vw < vh else 'landscape'
-            check(g and g['visible']==1 and g['src']=='img/events/'+ADOPTED[key][orientation]['file'] and g['nw']>0 and not any(g['dev']) and g['f'][3]<=g['text_top']+1,
-                  f'{key}: rotation {vw}x{vh} immediately shows correct full CG above text, DEV hidden',g)
+            check(g and g['visible']==1 and g['src']=='img/events/'+ADOPTED[key][orientation]['file'] and g['nw']>0 and not any(g['dev']) and g['f'][3]<=(g['text_top']+1 if vw < vh else vh+.5),
+                  f'{key}: rotation {vw}x{vh} immediately shows correct full CG (portrait above text), DEV hidden',g)
         check(not requests,f'{key}: rotation needs no new image request',requests)
         for _ in range(40): pg.evaluate("s=>{const e=document.getElementById(s+'Scene');if(e.style.display==='block')e.click()}",scene)
         pg.wait_for_timeout(800)

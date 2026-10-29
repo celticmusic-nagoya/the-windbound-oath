@@ -440,8 +440,8 @@ body.villageAttack #inside{display:none!important}
 .event-cg-item{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility 0s linear .4s;
  background:radial-gradient(ellipse 75% 70% at 50% 45%,#121c17 0%,#080d0b 60%,#030504 100%)}
 .event-cg-item.on{opacity:1;visibility:visible;transition:opacity .45s ease-out,visibility 0s}
-.event-cg-frame{position:absolute;left:50%;top:calc((100% - var(--cg-bottom)) / 2);transform:translate(-50%,-50%);
- width:min(100%,calc((100vh - var(--cg-bottom)) * 16 / 9));width:min(100%,calc((100svh - var(--cg-bottom)) * 16 / 9));aspect-ratio:16/9;
+.event-cg-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(100%,calc(100vh * 16 / 9));width:min(100%,calc(100svh * 16 / 9));aspect-ratio:16/9;
  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%),linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);
  -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%),linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);mask-composite:intersect}
 .event-cg-img{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
@@ -454,7 +454,7 @@ body.villageAttack #inside{display:none!important}
 .event-cg-climax{transition:opacity 1s ease,visibility 0s linear 1s}
 .event-cg-climax.on{transition:opacity 1.4s ease-in-out,visibility 0s}
 @media (orientation:portrait){
- .event-cg-frame{width:min(100%,calc((100vh - var(--cg-bottom)) * 9 / 16));width:min(100%,calc((100svh - var(--cg-bottom)) * 9 / 16));aspect-ratio:9/16}
+ .event-cg-frame{top:calc((100% - var(--cg-bottom)) / 2);width:min(100%,calc((100vh - var(--cg-bottom)) * 9 / 16));width:min(100%,calc((100svh - var(--cg-bottom)) * 9 / 16));aspect-ratio:9/16}
  .event-cg-landscape{display:none}.event-cg-portrait{display:block}
 }
 html body.eventCgOn #devBtn,html body.eventCgOn #devPanel,html body.eventCgOn #devBuildIndicator{display:none!important}
