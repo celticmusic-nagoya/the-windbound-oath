@@ -71,7 +71,7 @@
   function startBlink() {
     if (!canBlink() || cur.ctl) return;
     const me = cur;
-    me.ctl = PB.create({seq: me.blink.seq, gap: owner === DEV_OWNER && devMode === 'loop' ? [400, 400] : me.blink.gap, onState: s => { if (cur === me) { draw(s); if (owner === DEV_OWNER && devMode === 'manual' && s === 0) queueMicrotask(() => { if (cur === me && devMode === 'manual') stopBlink(); }); } }});
+    me.ctl = PB.create({seq: me.blink.seq, gap: owner === DEV_OWNER && devMode === 'loop' ? [400, 400] : me.blink.gap, onState: s => { if (cur === me) { draw(s); if (owner === DEV_OWNER && devMode === 'manual' && s === 0) queueMicrotask(() => { if (cur === me && devMode === 'manual') { devMode = 'stop'; stopBlink(); } }); } }});
     me.ctl.start();
   }
   function hideVisual() { stopBlink(); cur = null; if (box) { box.hidden = true; box.removeAttribute('data-char'); box.removeAttribute('data-face'); box.removeAttribute('data-eye'); } }
@@ -136,8 +136,8 @@
   }
   if (typeof window !== 'undefined') {
     window.addEventListener('resize', () => { layout(); valid(); }); window.addEventListener('orientationchange', layout);
-    document.addEventListener('visibilitychange', () => { if (document.hidden) { stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); });
-    const onMotion = () => { if (reduced.matches) { stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); };
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { if (owner === DEV_OWNER && (devMode === 'manual' || devMode === 'loop')) devMode = 'stop'; stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); });
+    const onMotion = () => { if (reduced.matches) { if (owner === DEV_OWNER && (devMode === 'manual' || devMode === 'loop')) devMode = 'stop'; stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); };
     if (reduced.addEventListener) reduced.addEventListener('change', onMotion); else if (reduced.addListener) reduced.addListener(onMotion);
   }
   window.TalkPortrait = Object.freeze({
@@ -152,7 +152,7 @@
       if (!window.WINDBOUND_DEV || owner !== DEV_OWNER || !cur || !['auto','manual','loop','stop','frame'].includes(mode)) return false;
       stopBlink();
       if ((mode === 'manual' || mode === 'loop') && (reduced.matches || document.hidden)) { devMode = 'stop'; draw(0); return false; }
-      devMode = mode; draw(mode === 'frame' ? Math.max(0, Math.min(4, Number(state) || 0)) : 0);
+      devMode = mode; draw(mode === 'frame' ? Math.max(0, Math.min(4, Math.trunc(Number(state)) || 0)) : 0);
       if (mode !== 'frame' && mode !== 'stop') { startBlink(); if (mode === 'manual') return this.blinkNow(); }
       return true;
     },

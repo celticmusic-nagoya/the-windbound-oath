@@ -634,7 +634,7 @@
   }
   function tick(){
     S.loopId=requestAnimationFrame(tick);
-    if(!S.active||S.busy||!S.forest||el.scene.style.display==='none'){S.hold=null;return;}
+    if(document.body.classList.contains('devPortraitOpen')||!S.active||S.busy||!S.forest||el.scene.style.display==='none'){S.hold=null;return;}
     const bounds=S.map.world;
     if(S.forest.blocked(S.x,S.y))unstick(bounds);   // never leave the player embedded in a blocker (a spawn / warp / lock edge case): step to the nearest free spot
     const px0=S.x,py0=S.y;

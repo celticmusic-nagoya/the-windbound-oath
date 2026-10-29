@@ -3,7 +3,7 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const R = PortraitRegistry, P = TalkPortrait, OWNER = '__devPortrait';
-  let root, panel, status, faces, chars, timer = null, seq = 0, char, face = 'normal', side = 'left', mode = 'stop';
+  let root, panel, status, faces, chars, timer = null, seq = 0, char, face = 'normal', side = 'left', mode = 'stop', pending = false;
   const q = s => root.querySelector(s);
   function button(parent, text, fn, id) {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = text;
@@ -20,16 +20,18 @@
   function update() {
     if (!active()) return;
     if (P.owner !== OWNER || document.body.classList.contains('battleMode') || window.FieldTalk?.active || window.FieldScene?.running) { close(); return; }
-    const s = P.status, wait = s.blink?.nextAt ? Math.max(0, (s.blink.nextAt - Date.now()) / 1000).toFixed(1) + '秒' : '-';
-    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${s.blinkReady ? 'READY' : s.visible ? 'MISSING' : 'LOADING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
+    const s = P.status; if (mode === 'manual' && !s.blink) mode = 'stop';
+    const wait = s.blink?.nextAt ? Math.max(0, (s.blink.nextAt - Date.now()) / 1000).toFixed(1) + '秒' : '-';
+    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${s.blinkReady ? 'READY' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
     const errors = P.diagnostics;
     q('#devPortraitErrors').textContent = errors.map(e => `${e.url}: ${e.reason}`).join('\n');
   }
   async function show() {
     const mine = ++seq;
-    mode = 'stop';
+    mode = 'stop'; pending = true;
     await P.show(char, face, OWNER, side);
     if (mine !== seq || !active() || P.owner !== OWNER) return;
+    pending = false;
     if (P.element) root.append(P.element); // native modal top layer: use the actual production canvas, not a copy
     P.devControl('stop');
     root.dataset.side = side;
@@ -63,7 +65,7 @@
     toggle.setAttribute('aria-controls', panel.id);
     button(root, '閉じる', close, 'devPortraitClose');
     root.addEventListener('cancel', e => { e.preventDefault(); close(); });
-    root.addEventListener('close', () => { if (document.body.classList.contains('devPortraitOpen')) close(); });
+    root.addEventListener('close', () => { if (!root.open && document.body.classList.contains('devPortraitOpen')) close(); });
     document.body.append(root);
   }
   function open() {
