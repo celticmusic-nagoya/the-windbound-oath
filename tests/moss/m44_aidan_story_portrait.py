@@ -1,7 +1,8 @@
 """DIRECTIVE-18B: production bench interaction -> sunset dialogue, no injected talk table.
 The existing cliff regression covers the full sunset/night/fire progression.
 """
-import os, json, hashlib
+import os, json, hashlib, base64, io
+from PIL import Image, ImageChops
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -17,6 +18,26 @@ asset_root = ROOT / 'assets/images/characters/portraits/aidan'
 ledger = (asset_root / 'SHA256SUMS').read_text().splitlines()
 pngs = [line.split(maxsplit=1) for line in ledger if line.strip()]
 check(len(pngs) == 54 and all(hashlib.sha256((asset_root / f.lstrip('*')).read_bytes()).hexdigest() == digest for digest, f in pngs), '54 adopted PNG hashes unchanged')
+
+def natural_pixels(pg, face):
+    pg.evaluate("""()=>{const e=document.querySelector('#talkPortrait'),c=e.querySelector('canvas');window.eyeFrames=[{state:0,png:c.toDataURL()}];window.eyeObserver=new MutationObserver(()=>eyeFrames.push({state:+e.dataset.eye,png:c.toDataURL()}));eyeObserver.observe(e,{attributes:true,attributeFilter:['data-eye']})}""")
+    pg.wait_for_function("eyeFrames.filter(x=>x.state===0).length>=4", timeout=24000)
+    frames=pg.evaluate('eyeFrames');pg.evaluate('eyeObserver.disconnect()')
+    source=Image.open(asset_root/f'aidan_{face}.png').convert('RGBA')
+    correct=True; changed=True
+    for item in frames:
+        actual=Image.open(io.BytesIO(base64.b64decode(item['png'].split(',')[1]))).convert('RGB')
+        expected=source.copy()
+        if item['state']:
+            for eye,xy in [('L',(570,268)),('R',(672,314))]:
+                expected.alpha_composite(Image.open(asset_root/'blink'/f"{face}_{eye}_s{item['state']}.png").convert('RGBA'),xy)
+        expected=expected.crop((190,0,990,760)).convert('RGB')
+        for box in [(380,268,464,320),(482,314,526,350)]:
+            correct &= ImageChops.difference(actual.crop(box),expected.crop(box)).getbbox() is None
+            original=source.crop((box[0]+190,box[1],box[2]+190,box[3])).convert('RGB')
+            changed &= (ImageChops.difference(actual.crop(box),original).getbbox() is not None)==bool(item['state'])
+        if OUT and item['state'] in (0,2,4):actual.save(OUT/f'story_{face}_actual_eye{item["state"]}.png')
+    check(correct and changed and [f['state'] for f in frames[1:25]]==[1,2,3,4,3,2,1,0]*3, face+': three natural blinks, BOTH eye pixels match adopted open/half/closed frames')
 
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -42,12 +63,7 @@ with sync_playwright() as p:
     check(pg.locator('#msg .talkName').inner_text() == 'エイダン' and '訓練のあとに' in pg.locator('#msg .talkText').inner_text(), 'Aidan appears on his original first sunset line')
     s = pg.evaluate('TalkPortrait.status')
     check(s['char']=='aidan' and s['side']=='left' and s['blink']['timers']==1 and 2900 <= s['blink']['nextAt']-pg.evaluate('Date.now()') <= 6000, 'adopted smile with one natural 3–6 second blink timer', s)
-    pg.evaluate("window.eyes=[];new MutationObserver(()=>{const e=document.querySelector('#talkPortrait');window.eyes.push([performance.now(),+e.dataset.eye])}).observe(document.querySelector('#talkPortrait'),{attributes:true,attributeFilter:['data-eye']})")
-    pg.wait_for_function("window.eyes.some(x=>x[1]===4)", timeout=7000)
-    if OUT: pg.screenshot(path=str(OUT/'story_natural_blink.png'))
-    pg.wait_for_function("window.eyes.length>=8&&TalkPortrait.status.eye===0")
-    trace = pg.evaluate('window.eyes')
-    check([x[1] for x in trace[:8]]==[1,2,3,4,3,2,1,0] and 230 <= trace[7][0]-trace[0][0] <= 400, 'real story natural blink completes its ~260ms sequence', trace)
+    natural_pixels(pg, 'smile')
     for w,h in [(390,844),(360,800),(412,915),(844,390),(915,412),(1920,1080)]:
         pg.set_viewport_size({'width':w,'height':h});pg.wait_for_timeout(250)
         g=pg.evaluate("""()=>{const e=document.querySelector('#talkPortrait'),r=e.getBoundingClientRect(),m=document.querySelector('#msg'),t=m.getBoundingClientRect();return {visible:TalkPortrait.status.visible,left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height,textTop:t.top,pointer:getComputedStyle(e).pointerEvents,textFits:m.scrollHeight<=t.height+1,crop:[e.querySelector('canvas').width,e.querySelector('canvas').height]}}""")
@@ -59,6 +75,7 @@ with sync_playwright() as p:
     pg.locator('#msg').tap();pg.locator('#msg').tap()
     pg.wait_for_function("TalkPortrait.status.visible&&TalkPortrait.status.face==='normal'&&TalkPortrait.status.blinkReady")
     check('守れるくらいには強くなりたい' in pg.locator('#msg .talkText').inner_text(), 'second original Aidan line uses normal expression')
+    natural_pixels(pg, 'normal')
     if OUT: pg.screenshot(path=str(OUT/'story_normal.png'))
     pg.locator('#msg').tap();pg.locator('#msg').tap();pg.locator('#msg').tap()
     pg.wait_for_timeout(300)

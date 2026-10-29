@@ -1,0 +1,16 @@
+/* Dedicated DEV modal; the portrait itself uses the unchanged production crop and layout. */
+#devPortraitStage{position:fixed;inset:0;margin:0;padding:0;width:100vw;height:100svh;max-width:none;max-height:none;border:0;background:#10201ce6;color:#f4e8cb;box-sizing:border-box}
+#devPortraitStage::backdrop{background:#07120be0}
+#devPortraitControls{position:absolute;top:56px;right:12px;width:min(360px,44vw);max-height:calc(100svh - 68px);overflow:auto;background:#091510ed;border:1px solid #bba76a;border-radius:8px;padding:10px;box-sizing:border-box}
+#devPortraitStage[data-side="right"] #devPortraitControls{right:auto;left:12px}
+#devPortraitStage button{min-height:40px;padding:6px 9px;margin:3px;border:1px solid #ac985f;border-radius:6px;background:#203a2e;color:#fff;font:13px/1.4 system-ui;touch-action:manipulation}
+#devPortraitStage button:disabled{opacity:.45}
+#devPortraitStage h3{font-size:15px;margin:0 0 6px}
+#devPortraitStage pre{font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+#devPortraitToggle,#devPortraitClose{position:absolute;top:max(5px,env(safe-area-inset-top));right:82px}
+#devPortraitClose{right:8px}
+#devPortraitStage[data-side="right"] #devPortraitToggle{left:8px;right:auto}
+#devPortraitStage[data-side="right"] #devPortraitClose{left:122px;right:auto}
+#devPortraitStage.folded #devPortraitControls{display:none}
+body.devPortraitOpen #talkPortrait:not([hidden]){display:block}
+@media(orientation:portrait){#devPortraitControls{top:52px;left:8px!important;right:8px!important;width:auto;max-height:40svh}}

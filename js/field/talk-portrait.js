@@ -21,7 +21,8 @@
   const DIRECT = '__direct', BAD_MS = 15000;
   // story scenes that own the whole screen (event CGs are drawn inside them): a portrait never stays over them
   const SCENE_IDS = ['louIntroScene', 'altarScene'];
-  const imgs = new Map(), bad = new Map();
+  const imgs = new Map(), bad = new Map(), errors = new Map();
+  const DEV_OWNER = '__devPortrait'; let devMode = 'auto';
   let box = null, cv = null, owner = null, gen = 0, want = null, cur = null, obs = null;
   const reduced = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : {matches: false, addEventListener() {}};
 
@@ -32,7 +33,7 @@
     const p = new Promise(res => {
       const im = new Image(); im.decoding = 'async';
       im.onload = () => (im.decode ? im.decode().then(() => res(im), () => res(im)) : res(im));
-      im.onerror = () => res(null); im.src = u;
+      im.onerror = () => { errors.set(u, '画像取得または復号に失敗'); res(null); }; im.src = u;
     }).then(im => { if (!im) { imgs.delete(u); bad.set(u, Date.now()); } return im; });
     imgs.set(u, p); return p;
   }
@@ -66,11 +67,11 @@
     cur.state = state; box.dataset.eye = String(state);
   }
   function stopBlink() { if (cur && cur.ctl) { cur.ctl.stop(); cur.ctl = null; } }
-  function canBlink() { return cur && cur.blink && !reduced.matches && !(typeof document !== 'undefined' && document.hidden) && box && !box.hidden; }
+  function canBlink() { return (owner !== DEV_OWNER || devMode !== 'stop' && devMode !== 'frame') && cur && cur.blink && !reduced.matches && !(typeof document !== 'undefined' && document.hidden) && box && !box.hidden; }
   function startBlink() {
     if (!canBlink() || cur.ctl) return;
     const me = cur;
-    me.ctl = PB.create({seq: me.blink.seq, gap: me.blink.gap, onState: s => { if (cur === me) draw(s); }});
+    me.ctl = PB.create({seq: me.blink.seq, gap: owner === DEV_OWNER && devMode === 'loop' ? [400, 400] : me.blink.gap, onState: s => { if (cur === me) { draw(s); if (owner === DEV_OWNER && devMode === 'manual' && s === 0) queueMicrotask(() => { if (cur === me && devMode === 'manual') { devMode = 'stop'; stopBlink(); } }); } }});
     me.ctl.start();
   }
   function hideVisual() { stopBlink(); cur = null; if (box) { box.hidden = true; box.removeAttribute('data-char'); box.removeAttribute('data-face'); box.removeAttribute('data-eye'); } }
@@ -82,8 +83,8 @@
   }
 
   // ---------- ownership ----------
-  function revoke() { owner = null; want = null; gen++; hideVisual(); }
-  function open(o) { if (!o) return; owner = o; want = null; gen++; hideVisual(); watch(); }
+  function revoke() { devMode = 'auto'; owner = null; want = null; gen++; hideVisual(); }
+  function open(o) { if (!o) return; owner = o; devMode = o === DEV_OWNER ? 'stop' : 'auto'; want = null; gen++; hideVisual(); watch(); }
   function close(o) { if (o && o === owner) revoke(); }
   const mine = o => (o === undefined ? (owner === null ? (owner = DIRECT) : owner) : o) === owner;
 
@@ -118,6 +119,10 @@
   const sceneOpen = () => SCENE_IDS.some(id => { const e = document.getElementById(id); return e && getComputedStyle(e).display !== 'none'; }) || Boolean(window.EventCG && window.EventCG.active);
   function valid() {
     if (owner === null || owner === DIRECT) return;
+    if (owner === DEV_OWNER && window.WINDBOUND_DEV && document.body.classList.contains('devPortraitOpen')) {
+      if (document.body.classList.contains('battleMode') || window.FieldTalk?.active || sceneOpen()) revoke();
+      return;
+    }
     const m = document.getElementById('msg'), b = document.body;
     const ok = b.classList.contains('dialogueOpen') && !b.classList.contains('battleMode') && m && getComputedStyle(m).display !== 'none' && m.querySelector('.talkText') && !sceneOpen();
     if (!ok) revoke();
@@ -131,8 +136,8 @@
   }
   if (typeof window !== 'undefined') {
     window.addEventListener('resize', () => { layout(); valid(); }); window.addEventListener('orientationchange', layout);
-    document.addEventListener('visibilitychange', () => { if (document.hidden) { stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); });
-    const onMotion = () => { if (reduced.matches) { stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); };
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { if (owner === DEV_OWNER && (devMode === 'manual' || devMode === 'loop')) devMode = 'stop'; stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); });
+    const onMotion = () => { if (reduced.matches) { if (owner === DEV_OWNER && (devMode === 'manual' || devMode === 'loop')) devMode = 'stop'; stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); };
     if (reduced.addEventListener) reduced.addEventListener('change', onMotion); else if (reduced.addListener) reduced.addListener(onMotion);
   }
   window.TalkPortrait = Object.freeze({
@@ -142,6 +147,16 @@
     // QA / dev (read-only w.r.t. the game): blink state, and a blink on demand
     get status() { return {char: cur && cur.char, face: cur && cur.face, side: box && box.dataset.side || null, visible: Boolean(box && !box.hidden), eye: cur ? cur.state : 0, blinkReady: Boolean(cur && cur.blink), blink: cur && cur.ctl ? cur.ctl.status : null, gen, reduced: reduced.matches}; },
     blinkNow() { if (canBlink()) { startBlink(); cur.ctl.blinkNow(); return true; } return false; },
+    // DEV controls affect only the dedicated DEV owner; production conversations cannot use them.
+    devControl(mode, state = 0) {
+      if (!window.WINDBOUND_DEV || owner !== DEV_OWNER || !cur || !['auto','manual','loop','stop','frame'].includes(mode)) return false;
+      stopBlink();
+      if ((mode === 'manual' || mode === 'loop') && (reduced.matches || document.hidden)) { devMode = 'stop'; draw(0); return false; }
+      devMode = mode; draw(mode === 'frame' ? Math.max(0, Math.min(4, Math.trunc(Number(state)) || 0)) : 0);
+      if (mode !== 'frame' && mode !== 'stop') { startBlink(); if (mode === 'manual') return this.blinkNow(); }
+      return true;
+    },
+    get diagnostics() { return [...errors].map(([url, reason]) => ({url, reason})); },
     // QA: a read-only copy of what the renderer draws for eye state `s` (0 = open) for the portrait on screen (same code path as draw())
     frame(s) {
       if (!cur || !cv) return null; const keep = cur.state, c = document.createElement('canvas'); draw(s); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0); draw(keep); return c;
