@@ -130,7 +130,7 @@
     if (typeof closeDialogue === 'function') closeDialogue();
     window.dispatchEvent(new CustomEvent('field-talk-end', {detail: {id: s.id, entry: s.entryId}}));
   }
-  function cancel(id){if(id!==undefined&&session?.id!==id)return;const s=session;session=null;if(s&&window.TalkPortrait)TalkPortrait.close(s.owner);if(typeof closeDialogue==='function')closeDialogue();}   // portrait released with the cancelled conversation
+  function cancel(id){if(id!==undefined&&session?.id!==id)return;const s=session;session=null;if(window.TalkPortrait){if(s)TalkPortrait.close(s.owner);else TalkPortrait.revoke();}if(typeof closeDialogue==='function')closeDialogue();}   // portrait released with the cancelled conversation
   function advance() {
     const s = session; if (!s) return;
     if (s.i < s.pages.length - 1) { s.i++; show(); return; }

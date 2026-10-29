@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **973**
-- approved_implemented: **82**
+- total: **976**
+- approved_implemented: **85**
 - approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
 - approval_unknown: **885**
-- on_main: **794**
-- implemented_on_main: **777**
+- on_main: **797**
+- implemented_on_main: **780**
 - unreferenced_on_main: **17**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -951,7 +951,7 @@
 | file:img_field_moss_rilde_npc_young_woman_f06 | rilde | UNKNOWN | 1 | 92x114 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_rilde_npc_young_woman_idle | rilde | idle | 1 | 92x114 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json, js/field/lind-content-bounds.js / existing asset on main; adoption record not re-verified |
 
-## portrait（72）
+## portrait（75）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -1027,6 +1027,9 @@
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_smile_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_surprised_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_worried_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
+| portrait:emma:normal:19b | emma | UNKNOWN | 1 | 1024x1536 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/emma |
+| portrait:fiona:normal:19b | fiona | UNKNOWN | 1 | 1024x1536 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/fion |
+| portrait:lou:normal:19b | lou | UNKNOWN | 1 | 1312x1199 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/lou/ |
 
 ## title（6）
 

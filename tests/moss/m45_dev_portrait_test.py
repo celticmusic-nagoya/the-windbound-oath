@@ -16,7 +16,7 @@ with sync_playwright() as p:
     pg.locator('#devBtn').tap();pg.locator('#devPortraitTest').tap()
     pg.wait_for_function("TalkPortrait.status.visible&&TalkPortrait.status.blinkReady")
     check(pg.evaluate('DevPortraitTest.active'), 'DEV menu opens portrait lab')
-    check(pg.locator('#devPortraitChars button:disabled').count()==3, 'Fiona/Lou/Emma show unimplemented and disabled')
+    check(pg.locator('#devPortraitChars button:disabled').count()==0, 'all four formally registered characters are enabled')
     for face in ['normal','smile','angry','worried','sad','surprised']:
         pg.locator('#devPortraitFaces button',has_text=face).tap();pg.wait_for_function("f=>TalkPortrait.status.face===f&&TalkPortrait.status.blinkReady",arg=face)
         frames=[]

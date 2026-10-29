@@ -22,7 +22,7 @@
     if (P.owner !== OWNER || document.body.classList.contains('battleMode') || window.FieldTalk?.active || window.FieldScene?.running) { close(); return; }
     const s = P.status; if (mode === 'manual' && !s.blink) mode = 'stop';
     const wait = s.blink?.nextAt ? Math.max(0, (s.blink.nextAt - Date.now()) / 1000).toFixed(1) + '秒' : '-';
-    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${s.blinkReady ? 'READY' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
+    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${!R.blinkOf(char,face) ? '未実装・静止画' : s.blinkReady ? 'READY' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
     const errors = P.diagnostics;
     q('#devPortraitErrors').textContent = errors.map(e => `${e.url}: ${e.reason}`).join('\n');
   }
@@ -34,6 +34,9 @@
     pending = false;
     if (P.element) root.append(P.element); // native modal top layer: use the actual production canvas, not a copy
     P.devControl('stop');
+    const still=!R.blinkOf(char,face);
+    for (const id of ['devPortraitBlink','devPortraitAuto','devPortraitLoop']) q('#'+id).disabled=still;
+    q('#devPortraitFrames').querySelectorAll('button').forEach((b,i)=>b.disabled=still&&i>0);
     root.dataset.side = side;
     P.layout(); update();
   }
@@ -69,7 +72,7 @@
     document.body.append(root);
   }
   function open() {
-    if (!window.WINDBOUND_DEV || window.FieldTalk?.active || window.FieldScene?.running || document.body.classList.contains('battleMode') || document.body.classList.contains('dialogueOpen') || window.LoadingInput?.busy) { hint.textContent = '会話・イベント・読み込みが終わってから開いてください。'; return false; }
+    if (!window.WINDBOUND_DEV || P.owner && P.owner !== OWNER || window.FieldTalk?.active || window.FieldScene?.running || document.body.classList.contains('battleMode') || document.body.classList.contains('dialogueOpen') || window.LoadingInput?.busy) { hint.textContent = '会話・イベント・読み込みが終わってから開いてください。'; return false; }
     if (!root) build();
     chars.textContent = '';
     const ids = [...new Set([...R.ids(), 'aidan', 'fiona', 'lou', 'emma'])];

@@ -6,8 +6,8 @@ window.TalkDataScenes = Object.freeze({tables: [
   {npc: 'cliff_bench', entries: [
     {id: 'cliff_bench_ask', priority: 20, when: {stage: [3, 3]}, mode: 'cycle', lines: [{pages: [
       '頂上の草地に、古びたベンチがひとつ。ちょうど、夕日の正面だ。',
-      'フィオナ「ねえ、エイダン。少し座っていかない？　……夕日、見ていこうよ。」',
-      'ここに座って、夕日を眺めますか？'],
+      {speaker:'フィオナ',text:'「ねえ、エイダン。少し座っていかない？　……夕日、見ていこうよ。」',char:'fiona',face:'normal',side:'right'},
+      {speaker:'',text:'ここに座って、夕日を眺めますか？',char:null}],
       choice: {options: [
         {label: 'はい', set: {cliff_bench_sat: true}, scene: 'cliff_sunset_to_fire'},
         {label: 'いいえ', reply: ['フィオナ「そっか。……気が向いたら、いつでも声をかけてね。」', 'もう少し、あたりを見ていよう。']}]}}]}]},
