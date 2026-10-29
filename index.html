@@ -16,7 +16,7 @@
 
 <meta name="build-version" content="Phase 2.5.2">
 
-<link rel="stylesheet" href="css/style.css?v=20261029cg-wide">
+<link rel="stylesheet" href="css/style.css?v=20261029phase4normal">
 <link rel="stylesheet" href="css/lind-field-review.css">
 <link rel="stylesheet" href="css/moss-forest.css?v=20261026moss02">
 <link rel="stylesheet" href="css/keyboard-nav.css?v=20261013kb">
@@ -1501,18 +1501,26 @@ const aftermathLines=[
  '三人は夜明けを待ち、まず王国軍のドゥンヴァル砦を目指すことにした。'
 ]
 let aftermathIndex=0;
+const aftermathPortraitOwner='aftermathTalk';
+const aftermathPortraitPages=Object.fromEntries([6,8,9,10,12,14,15,18,21].map(i=>[i,{char:'lou',face:'normal',side:'right'}]));
+function showAftermathPage(){
+ $('#aftermathText').textContent=aftermathLines[aftermathIndex];
+ window.TalkPortrait?.page(aftermathPortraitPages[aftermathIndex]||{char:null},aftermathPortraitOwner);
+}
 function startRaiderAftermath(){
  storyStage=13;aftermathIndex=0;forestActive=false;
  currentObjective='ルーと話し、これからの行き先を決めよう';renderJournal();
  $('#aftermathScene').style.display='block';
- $('#aftermathText').textContent=aftermathLines[0];
+ window.TalkPortrait?.open(aftermathPortraitOwner,{scene:$('#aftermathScene'),anchor:$('#aftermathText')});
+ showAftermathPage();
  questPop('ゴブリン・レイダーを討伐した');
 }
 $('#aftermathScene').onclick=()=>{
  aftermathIndex++;
  if(aftermathIndex<aftermathLines.length){
-   $('#aftermathText').textContent=aftermathLines[aftermathIndex];
+   showAftermathPage();
  }else{
+   window.TalkPortrait?.close(aftermathPortraitOwner);
    PartyManager.support.joined=true;
    storyStage=14;
    // Keep the aftermath layer visible as a transition cover.
@@ -2064,18 +2072,18 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/quest-data.js"></script>
 <script src="js/quest.js"></script>
 <script src="js/field/talk-conditions.js"></script>
-<script src="js/field/talk-data.js"></script>
+<script src="js/field/talk-data.js?v=20261029phase4normal"></script>
 <script src="js/field/talk-data-quests.js"></script>
-<script src="js/field/talk-data-scenes.js?v=20261029aidan18b"></script>
+<script src="js/field/talk-data-scenes.js?v=20261029phase4normal"></script>
 <script src="js/field/talk-data-capital.js?v=20261011i"></script>
 <script src="js/field/talk-data-rilde.js?v=20261011d"></script>
 <script src="js/field/talk-data-attack.js?v=20261012a"></script>
-<script src="js/field/portrait-registry.js?v=20261027tp1"></script>
+<script src="js/field/portrait-registry.js?v=20261029phase4normal"></script>
 <script src="js/field/portrait-blink.js?v=20261027tp1"></script>
-<script src="js/field/talk-portrait.js?v=20261029dev18d"></script>
+<script src="js/field/talk-portrait.js?v=20261029phase4normal"></script>
 <link rel="stylesheet" href="css/dev-portrait-test.css?v=20261029dev18d">
-<script src="js/dev/portrait-test.js?v=20261029dev18d"></script>
-<script src="js/field/field-talk.js?v=20261027tp1"></script>
+<script src="js/dev/portrait-test.js?v=20261029phase4normal"></script>
+<script src="js/field/field-talk.js?v=20261029phase4normal"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>
 <script src="js/field/field-scene.js"></script>

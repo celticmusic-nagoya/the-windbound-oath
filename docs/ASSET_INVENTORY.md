@@ -39,6 +39,16 @@
 | エイダン会話立ち絵・驚き（`surprised`） | `aidan_surprised.png` | 会話立ち絵（FieldTalk の `char:'aidan', face:'surprised'`） | `assets/images/characters/portraits/aidan/aidan_surprised.png` | **ユーザー正式採用済み（2026-10-27）／作業ブランチ `feature/talk-portrait-common` に格納（Draft PR、main未マージ）／会話立ち絵レジストリ `js/field/portrait-registry.js` から参照** | `50f7b7f2628d2aa3bed57d697bf823c702feb1199d9a8db8977c4d1b30f94182` | 1024×1536 RGBA PNG、無加工。原本 handoff `handoff/aidan-expressions-claude-20261027` の `reports/ASSETS/AIDAN-EXPR-20261027/v2/``aidan_expr_surprised_candidate_v1.png`（ファイル名のみ表情IDに変更）。顔以外の画素・アルファは通常と同一。 |
 | エイダン会話立ち絵・瞬き重ね画像 Phase 2 Rev2 | `blink/<表情ID>_{L,R}_s{1..4}.png`（48枚） | 会話立ち絵の瞬き（閉じ度30/60/85/100%、260ms、3〜6秒間隔、左右同期） | `assets/images/characters/portraits/aidan/blink/` | **ユーザー正式採用済み（2026-10-27）／作業ブランチ `feature/talk-portrait-common` に格納（Draft PR、main未マージ）／会話立ち絵レジストリ `js/field/portrait-registry.js` から参照** | 48枚と表情6枚の個別値は `assets/images/characters/portraits/aidan/SHA256SUMS`（同ファイルの SHA-256 `55d8677373cd2c2ea13a9ccf999fa0c3afe183fc66e8c8b916430087cab5674b`） | 目元だけの RGBA パッチ（変化した画素のみ不透明）、貼り付け位置は L `[570,268,654,320]`・R `[672,314,716,350]`（6表情共通、元画像の座標）。原本 handoff `handoff/talk-portrait-blink-claude-20261027` の `reports/TALK-PORTRAIT-BLINK-20261027/phase2-aidan-rev2/`（採用記録 `ADOPTED.md`、`MANIFEST_ADOPTED.sha256` とバイト一致）。前版 `phase2-aidan/`・`phase2-aidan-rev1/` は不採用。無断で再生成・改変しない。 |
 
+## Phase4 normal-only adoption (DIRECTIVE-19B, 2026-10-29)
+
+採用者：ユーザー。下記normal3枚のみ正式採用。その他21表情は未承認、瞬きは未実装（静止画）。[新しい承認記録](portraits/PHASE4_ADOPTED_NORMALS.md)・[過去の19A監査](portraits/PHASE4_ADOPTION_AUDIT.md)。
+
+| キャラ | 正式格納先 | SHA-256 | 解像度 | 状態 |
+|---|---|---|---|---|
+| フィオナ | `assets/images/characters/portraits/fiona/fiona_normal.png` | `89efd67352ac7f03882242d2363a2a2c8762bc0489e447a7d6089745a227094a` | 1024×1536 | APPROVED / normalのみ / 無加工 / 瞬き未実装 |
+| ルー | `assets/images/characters/portraits/lou/lou_normal.png` | `c2cc6d70614b18c685ef773e27bf4f50a7ed2947cb6e6b9367a5ba9e32e59e8f` | 1312×1199 | APPROVED / normalのみ / 無加工 / 瞬き未実装 |
+| エマ | `assets/images/characters/portraits/emma/emma_normal.png` | `f4dfd09d08e3bd333743f677afbe84e4e1771b295863e92a96a3b4c0904114b2` | 1024×1536 | APPROVED / normalのみ / 無加工 / 瞬き未実装 |
+
 ## 登録・検証手順
 
 1. 元画像 `moss_ancient_altar_idle_v1.png` を**加工せず**所定パスへ格納する。

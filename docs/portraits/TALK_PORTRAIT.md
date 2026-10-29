@@ -125,3 +125,9 @@ PortraitRegistry.define('aidan', {
 `TalkPortrait.devControl(mode, state)` はDEV有効かつ専用所有者 `__devPortrait` のときだけ使える。通常会話の瞬き間隔や描画は変更しない。
 
 本編への初接続は風見の断崖・頂上ベンチの夕日会話（DIRECTIVE-18B）。18Cではsmile/normal各3回の自然な瞬きで、両目の実canvas画素が開眼/半目/閉眼の正式素材合成と一致することを確認した。通常設定で描画不具合は再現せず、端末固有の原因は未確定。[診断と目元比較](../qa/DIRECTIVE-18C.md)。
+
+## Phase4通常3枚 (DIRECTIVE-19B)
+
+2026-10-29、ユーザーがフィオナ・ルー・エマのnormal3枚をSHA指定で正式採用。登録はnormalのみ・blinkなし。他21表情は未承認。[承認・原本照合・本編接続](PHASE4_ADOPTED_NORMALS.md)。DEVでは3人とも選択でき、「未実装・静止画」と表示し、瞬き操作は無効。
+
+既存の専用会話欄では `TalkPortrait.open(owner,{scene,anchor})` を使い、同じcanvasをanchor直上に置ける。sceneはanchorを含む要素。page/closeと世代管理はFieldTalkと共通。scene非表示、CG・戦闘、LOAD、FieldTalk.cancel()で解放する。通常のFieldTalk.open(owner)の挙動は維持。

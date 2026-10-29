@@ -3608,3 +3608,6 @@ body.dialogueOpen:not(.battleMode) #talkPortrait:not([hidden]){display:block}
 body.battleMode #talkPortrait{display:none!important}
 @media (orientation:portrait) and (max-width:720px){#talkPortrait{--tpH:min(34vh,var(--tpAvail,34vh));--tpMaxW:70vw;right:0}#talkPortrait[data-side="left"]{left:0}}
 @media (orientation:landscape) and (max-height:520px){#talkPortrait{--tpH:min(60vh,var(--tpAvail,60vh));--tpMaxW:36vw}}
+
+/* Common portrait above an existing non-FieldTalk scene dialogue anchor (19B). */
+#talkPortrait[data-scene-owned]:not([hidden]){display:block;z-index:207}

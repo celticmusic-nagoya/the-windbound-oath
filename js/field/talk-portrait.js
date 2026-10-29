@@ -23,6 +23,7 @@
   const SCENE_IDS = ['louIntroScene', 'altarScene'];
   const imgs = new Map(), bad = new Map(), errors = new Map();
   const DEV_OWNER = '__devPortrait'; let devMode = 'auto';
+  let view = null;
   let box = null, cv = null, owner = null, gen = 0, want = null, cur = null, obs = null;
   const reduced = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : {matches: false, addEventListener() {}};
 
@@ -74,17 +75,17 @@
     me.ctl = PB.create({seq: me.blink.seq, gap: owner === DEV_OWNER && devMode === 'loop' ? [400, 400] : me.blink.gap, onState: s => { if (cur === me) { draw(s); if (owner === DEV_OWNER && devMode === 'manual' && s === 0) queueMicrotask(() => { if (cur === me && devMode === 'manual') { devMode = 'stop'; stopBlink(); } }); } }});
     me.ctl.start();
   }
-  function hideVisual() { stopBlink(); cur = null; if (box) { box.hidden = true; box.removeAttribute('data-char'); box.removeAttribute('data-face'); box.removeAttribute('data-eye'); } }
+  function hideVisual() { stopBlink(); cur = null; if (box) { box.hidden = true; box.removeAttribute('data-char'); box.removeAttribute('data-face'); box.removeAttribute('data-eye'); box.removeAttribute('data-scene-owned'); } }
   function layout() {
     if (!box || box.hidden) return;
-    const m = document.getElementById('msg'), top = m && m.style.display !== 'none' ? m.getBoundingClientRect().top : innerHeight * 0.9;
+    const m = view ? view.anchor : document.getElementById('msg'), top = m && getComputedStyle(m).display !== 'none' ? m.getBoundingClientRect().top : innerHeight * 0.9;
     box.style.setProperty('--tpBottom', Math.max(0, innerHeight - top + 4) + 'px');
     box.style.setProperty('--tpAvail', Math.max(80, top - 8) + 'px');
   }
 
   // ---------- ownership ----------
-  function revoke() { devMode = 'auto'; owner = null; want = null; gen++; hideVisual(); }
-  function open(o) { if (!o) return; owner = o; devMode = o === DEV_OWNER ? 'stop' : 'auto'; want = null; gen++; hideVisual(); watch(); }
+  function revoke() { view = null; devMode = 'auto'; owner = null; want = null; gen++; hideVisual(); }
+  function open(o, target = null) { if (!o) return; view = target?.scene instanceof HTMLElement && target?.anchor instanceof HTMLElement && target.scene.contains(target.anchor) ? target : null; owner = o; devMode = o === DEV_OWNER ? 'stop' : 'auto'; want = null; gen++; hideVisual(); watch(); if (view && obs) obs.observe(view.scene, {attributes:true,attributeFilter:['style','class']}); }
   function close(o) { if (o && o === owner) revoke(); }
   const mine = o => (o === undefined ? (owner === null ? (owner = DIRECT) : owner) : o) === owner;
 
@@ -102,6 +103,7 @@
       if (!r) { hideVisual(); return false; }
       const k = R.get(c).crop;
       cur = {char: c, face: r.face, im: r.im, blink: r.face === face ? bl : null, state: 0, ctl: null};
+      if (view) box.dataset.sceneOwned = 'true';
       box.dataset.char = c; box.dataset.face = r.face; box.dataset.side = R.sideOf(c, side);
       box.style.setProperty('--tpAspect', k.w + '/' + k.h); box.style.setProperty('--tpRatio', String(k.w / k.h));
       draw(0); box.hidden = false; layout(); startBlink(); return true;
@@ -123,6 +125,10 @@
       if (document.body.classList.contains('battleMode') || window.FieldTalk?.active || sceneOpen()) revoke();
       return;
     }
+    if (view) {
+      if (!view.scene.isConnected || !view.anchor.isConnected || getComputedStyle(view.scene).display === 'none' || document.body.classList.contains('battleMode') || sceneOpen()) revoke();
+      return;
+    }
     const m = document.getElementById('msg'), b = document.body;
     const ok = b.classList.contains('dialogueOpen') && !b.classList.contains('battleMode') && m && getComputedStyle(m).display !== 'none' && m.querySelector('.talkText') && !sceneOpen();
     if (!ok) revoke();
@@ -140,6 +146,7 @@
     const onMotion = () => { if (reduced.matches) { if (owner === DEV_OWNER && (devMode === 'manual' || devMode === 'loop')) devMode = 'stop'; stopBlink(); if (cur && cur.state) draw(0); } else startBlink(); };
     if (reduced.addEventListener) reduced.addEventListener('change', onMotion); else if (reduced.addListener) reduced.addListener(onMotion);
   }
+  window.LoadCoordinator?.onInvalidate(revoke);
   window.TalkPortrait = Object.freeze({
     FACES: R.FACES, chars: R.ids, has: R.has, faceOf: R.faceOf, url: R.imageUrl, preload, show, hide: revoke, page, layout, open, close, revoke,
     get current() { return cur ? {char: cur.char, face: cur.face, side: box && box.dataset.side} : null; },

@@ -68,7 +68,12 @@
     blink: {seq: BLINK_V3.seq, gap: BLINK_V3.gap, faces: ['normal', 'smile', 'angry', 'worried', 'sad', 'surprised'],
       file: (f, eye, s) => 'blink/' + f + '_' + eye + '_s' + s + '.png', eyes: {L: [570, 268, 654, 320], R: [672, 314, 716, 350]}}
   });
-  // Fiona / Lou / Emma: added in Phase 4 after each expression is approved (their branch assets are NOT adopted automatically).
+  // DIRECTIVE-19B: user adopted these exact normal PNGs on2026-10-29. Other21 faces and blink overlays are NOT adopted.
+  for (const [id, name, src, crop] of [
+    ['fiona', 'フィオナ', {w:1024,h:1536}, {x:130,y:45,w:840,h:840}],
+    ['lou', 'ルー', {w:1312,h:1199}, {x:0,y:0,w:1312,h:1199}],
+    ['emma', 'エマ', {w:1024,h:1536}, {x:90,y:0,w:880,h:880}]
+  ]) define(id, {name, src, crop, base:'assets/images/characters/portraits/'+id+'/', file:f=>id+'_'+f+'.png', side:'right', faces:['normal']});
 
   window.PortraitRegistry = Object.freeze({FACES, SIDES, FALLBACK_SIDE, BLINK_V3, define, get, has: id => chars.has(id), ids: () => [...chars.keys()],
     faceOf, imageUrl, blinkOf, sideOf, setRoot: r => { ROOT = typeof r === 'string' ? r : ''; }, get root() { return ROOT; }});
