@@ -78,15 +78,17 @@
   ]) {
     const provisionalFaces = FACES.filter(f => f !== 'normal' && !(id === 'lou' && ['smile','relieved'].includes(f)));
     const eyes = {
-      fiona: {L:[513,302,561,344], R:[586,259,652,303]},
-      lou: {L:[683,357,762,426], R:[795,399,856,466]},
+      fiona: {L:[508,298,568,353], R:[582,252,660,312]},
+      lou: {L:[678,354,769,436], R:[790,397,865,474]},
       emma: {L:[504,318,562,381], R:[629,267,683,325]}
     }[id];
+    //20E: user-approved curved eyelids for Fiona/Lou; Emma20C passed physical QA and stays unchanged.
+    const revision = id === 'emma' ? 'provisional-20c' : 'provisional-20e';
     define(id, {name, src, crop, base:'assets/images/characters/portraits/'+id+'/',
-      file:f=>(f === 'normal' ? '' : 'provisional-20c/expressions/')+id+'_'+f+'.png', side:'right',
+      file:f=>(f === 'normal' ? '' : revision+'/expressions/')+id+'_'+f+'.png', side:'right',
       faces:['normal', ...provisionalFaces], provisionalFaces, provisionalBlink:true,
       blink:{seq:BLINK_V3.seq,gap:BLINK_V3.gap,faces:['normal'],eyes,
-        file:(f,eye,s)=>'provisional-20c/blink/'+f+'_'+eye+'_s'+s+'.png'}});
+        file:(f,eye,s)=>revision+'/blink/'+f+'_'+eye+'_s'+s+'.png'}});
   }
 
   window.PortraitRegistry = Object.freeze({FACES, SIDES, FALLBACK_SIDE, BLINK_V3, define, get, has: id => chars.has(id), ids: () => [...chars.keys()],

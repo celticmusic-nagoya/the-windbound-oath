@@ -135,3 +135,7 @@ PortraitRegistry.define('aidan', {
 ### DIRECTIVE-20D provisional Android QA
 
 The19 revised20C expressions and24normalblink overlays are now provisionally authorized; see [scope/usage](PHASE4_PROVISIONAL_20C.md) and [per-PNG SHA ledger](PHASE4_PROVISIONAL_20C.json). `PortraitRegistry.get(id).provisionalFaces` and `.provisionalBlink` expose adoption scope for DEV labels. Normal file/crop is unchanged, all expressions reuse that crop; `blink.faces` includes only normal. Fiona8/Lou6/Emma8 faces, Lou smile/relieved excluded. Registration does not mean formal asset adoption.
+
+### Android eyelid correction (20E)
+
+Fiona/Lou use versioned `provisional-20e/` eye-only assets: normalblink16PNG and12expression variants, with the user-approved curved lid shape. Normal images/crops and shared renderer/timing are unchanged. Emma retains20C paths/geometry and all approved-for-QA PNG bytes; user declared its Android result PASS. See [provenance/protection ledger](PHASE4_EYELID_REVISION_20E.json). New derived art remains Android-QA provisional, not formal adoption.
