@@ -145,3 +145,5 @@ Codex / `codex/21a-formal-portraits` / base `bdf6a6dd50a26183daa181342d1fa546f58
 
 ## DIRECTIVE-21C (2026-10-30)
 Codex / `codex/21c-expression-blink` / base `60f6b393abbbe3de975fa2924e118b2f49df9b87`. User provisionally authorized120 exact21B PNGs for15expression blinks (5each Fiona/Lou/Emma), source handoff883624694e73a0839fc0db684ca76067765e7338. Scope registry/cache+asset/ledger/tests only; shared timing/drawing/story/save unchanged. Formal21A46PNG and Aidan/CG protected. Fiona/Emma smile+relieved remain still; Lou smile/relieved excluded. STATUS: WIP.
+
+21C QA checkpoint:15/15faces and120/120PNG, static4/4, formal46+Aidan/CG64 unchanged.9unique regressionfiles +6Node cases PASS; source/actualcanvas/restore/gap/reducedmotion/lifecycle/battle/save checks PASS. Runtime tested2b36c48; later docs/evidence only. New120 remainPROVISIONAL_ANDROID_QA. Known surprised firststep/LouRlowerpoints documented for userAndroid. docs/qa/DIRECTIVE-21C.md; PR93. Exact-final-head independent QA pending before normalmerge. STATUS: READY_FOR_REVIEW.
