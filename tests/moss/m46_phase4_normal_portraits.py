@@ -18,21 +18,51 @@ with sync_playwright() as p:
         ctx=b.new_context(viewport={'width':390,'height':844},has_touch=True)
         pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)))
         pg.goto('http://localhost:%s/index.html?title=0'%os.environ.get('PORT','8765'));pg.wait_for_function("LoadCoordinator.phase==='READY'");pg.wait_for_timeout(300);pg.evaluate('closeDialogue()');return ctx,pg
-    def wait_char(pg,c):pg.wait_for_function("c=>TalkPortrait.status.visible&&TalkPortrait.status.char===c",arg=c)
+    def wait_char(pg,c):pg.wait_for_function("c=>TalkPortrait.status.visible&&TalkPortrait.status.char===c&&TalkPortrait.status.blinkReady",arg=c)
     def world_tap(pg,x,y):
         pt=pg.evaluate("([x,y])=>{const r=document.querySelector('#forestWorld').getBoundingClientRect(),s=FieldCamera.scale;return[r.left+x*s,r.top+y*s]}",[x,y]);pg.touchscreen.tap(*pt)
+    def natural_pixels(pg,c):
+        # Sample the actual production canvas, including both eyes, for THREE unscripted cycles.
+        pg.evaluate("""()=>{const e=document.querySelector('#talkPortrait'),cv=e.querySelector('canvas');window.naturalFrames=[{state:0,t:Date.now(),png:cv.toDataURL()}];window.naturalObserver=new MutationObserver(()=>naturalFrames.push({state:+e.dataset.eye,t:Date.now(),png:cv.toDataURL()}));naturalObserver.observe(e,{attributes:true,attributeFilter:['data-eye']})}""")
+        pg.wait_for_function("naturalFrames.filter(f=>f.state===0).length>=4",timeout=25000)
+        pg.evaluate('naturalObserver.disconnect()')
+        frames=pg.evaluate('naturalFrames')
+        ok=pg.evaluate("""async frames=>{
+          const c=PortraitRegistry.get(TalkPortrait.status.char),b=PortraitRegistry.blinkOf(c.id,'normal'),k=c.crop;
+          const load=u=>new Promise((r,j)=>{const im=new Image();im.onload=()=>r(im);im.onerror=j;im.src=u});
+          const base=await load(PortraitRegistry.imageUrl(c.id,'normal')),overlays={};
+          for(const [eye,e] of Object.entries(b.eyes)) overlays[eye]=await Promise.all(e.urls.map(load));
+          const cv=document.createElement('canvas');cv.width=k.w;cv.height=k.h;const cx=cv.getContext('2d');
+          const diffs=[];
+          for(const f of frames){cx.clearRect(0,0,k.w,k.h);cx.drawImage(base,k.x,k.y,k.w,k.h,0,0,k.w,k.h);
+            if(f.state)for(const [eye,e]of Object.entries(b.eyes))cx.drawImage(overlays[eye][f.state-1],e.box[0]-k.x,e.box[1]-k.y);
+            if(cv.toDataURL()!==f.png)return false;
+            if(f.state) for(const e of Object.values(b.eyes)){const a=e.box;const pix=cx.getImageData(a[0]-k.x,a[1]-k.y,a[2]-a[0],a[3]-a[1]).data;
+              const temp=document.createElement('canvas');temp.width=a[2]-a[0];temp.height=a[3]-a[1];const tx=temp.getContext('2d');tx.drawImage(base,a[0],a[1],temp.width,temp.height,0,0,temp.width,temp.height);const orig=tx.getImageData(0,0,temp.width,temp.height).data;
+              if(!pix.some((v,i)=>v!==orig[i]))return false;}
+          }return true;
+        }""",frames)
+        states=[f['state'] for f in frames[1:25]]
+        gaps=[frames[i]['t']-frames[i-1]['t'] for i in range(1,len(frames)) if frames[i]['state']==1 and frames[i-1]['state']==0]
+        check(ok and states==[1,2,3,4,3,2,1,0]*3 and all(2900<=g<=6200 for g in gaps[1:]),c+': THREE natural 3–6s blinks match actual full canvas/source overlays; BOTH eye pixels change',{'states':states,'gaps':gaps})
+        if OUT:
+            import base64,json
+            (OUT/f'{c}_natural_frames.json').write_text(json.dumps([{'state':f['state'],'t':f['t']} for f in frames]))
+            for state in [0,2,4]:
+                f=next(x for x in frames if x['state']==state)
+                (OUT/f'{c}_normal_actual_{state}.png').write_bytes(base64.b64decode(f['png'].split(',')[1]))
     def layouts(pg,c,anchor):
         for w,h in [(390,844),(360,800),(412,915),(844,390),(915,412),(1920,1080)]:
             pg.set_viewport_size({'width':w,'height':h});pg.wait_for_timeout(120)
             g=pg.evaluate("""s=>{const e=document.querySelector('#talkPortrait'),r=e.getBoundingClientRect(),m=document.querySelector(s),t=m.getBoundingClientRect(),hit=document.elementFromPoint(t.left+t.width/2,t.top+t.height/2);return {inside:r.left>=-1&&r.top>=-1&&r.right<=innerWidth+1&&r.bottom<=t.top,pointer:getComputedStyle(e).pointerEvents,textVisible:hit===m||m.contains(hit),state:TalkPortrait.status}}""",anchor)
-            check(g['inside'] and g['pointer']=='none' and g['textVisible'] and g['state']['blink'] is None and not g['state']['blinkReady'],f'{c} {w}x{h}: visible still portrait above actual dialogue, no timer',g)
+            check(g['inside'] and g['pointer']=='none' and g['textVisible'] and g['state']['blinkReady'] and g['state']['blink'] is not None,f'{c} {w}x{h}: visible normal portrait above actual dialogue, natural blink ready',g)
             if OUT:pg.screenshot(path=str(OUT/f'phase4_{c}_{w}x{h}.png'))
     # Actual Emma NPC interaction on the ordinary peaceful village map, no injected talk data.
     ctx,pg=boot();pg.evaluate("MossForestStory.enterMap('rilde_village','from_aidan')")
     pg.wait_for_function("MossForest.mapId==='rilde_village_01_peace'&&!MossForest.busy&&!LoadingInput.busy")
     pg.evaluate('MossForest.teleportFeet(920,900)');pg.wait_for_timeout(500);world_tap(pg,920,852);wait_char(pg,'emma')
     check(pg.evaluate("FieldTalk.history.at(-1).id==='emma'") and 'おや、エイダンかい' in pg.locator('#msg').inner_text(),'Emma first real NPC dialogue uses adopted normal')
-    layouts(pg,'emma','#msg');pg.locator('#msg').tap();pg.wait_for_timeout(100)
+    natural_pixels(pg,'emma');layouts(pg,'emma','#msg');pg.locator('#msg').tap();pg.wait_for_timeout(100)
     check(not pg.evaluate('TalkPortrait.status.visible'),'Emma normal conversation end clears portrait');ctx.close()
     # Actual bench question: Fiona, then narration/choices clears it (no story change on decline).
     ctx,pg=boot();pg.evaluate("storyStage=3;document.querySelector('#hillExit').click()")
@@ -40,7 +70,7 @@ with sync_playwright() as p:
     pg.evaluate('MossForest.teleportFeet(2400,1040)');pg.wait_for_timeout(1200);world_tap(pg,2400,960)
     pg.wait_for_function('FieldTalk.active');pg.locator('#msg').tap();wait_char(pg,'fiona')
     check('夕日、見ていこうよ' in pg.locator('#msg').inner_text(),'Fiona actual bench question uses adopted normal')
-    layouts(pg,'fiona','#msg');pg.locator('#msg').tap();pg.wait_for_timeout(100)
+    natural_pixels(pg,'fiona');layouts(pg,'fiona','#msg');pg.locator('#msg').tap();pg.wait_for_timeout(100)
     check(not pg.evaluate('TalkPortrait.status.visible'),'Fiona narration/choice page hides portrait')
     pg.locator('.talkChoices button').nth(1).tap()
     while pg.evaluate('FieldTalk.active'):pg.locator('#msg').tap()
@@ -54,7 +84,7 @@ with sync_playwright() as p:
     for i in range(6):pg.locator('#aftermathScene').tap()
     wait_char(pg,'lou');check(pg.locator('#aftermathText').inner_text()==lines[6],'Lou portrait reached through actual battle result and original aftermath line')
     check(not pg.evaluate('DevPortraitTest.open()'),'DEV cannot steal scene-owned story portrait')
-    layouts(pg,'lou','#aftermathText')
+    natural_pixels(pg,'lou');layouts(pg,'lou','#aftermathText')
     for i in range(6,len(lines)):
         if i in lou_pages:wait_char(pg,'lou')
         else:pg.wait_for_timeout(30);check(not pg.evaluate('TalkPortrait.status.visible'),'aftermath non-Lou page hides portrait '+str(i))
@@ -68,16 +98,16 @@ with sync_playwright() as p:
         wait_char(pg,'lou');pg.evaluate(action);pg.wait_for_timeout(250)
         check(not pg.evaluate('TalkPortrait.status.visible') and pg.evaluate('TalkPortrait.status.blink') is None,'Lou lifecycle '+action)
     ctx.close()
-    # Registry-driven DEV: one face, explicit still label, no unapproved asset or blink requests.
+    # Registry-driven DEV: provisionally authorized faces and normal blink; excluded Lou faces never requested.
     ctx,pg=boot();requests=[];pg.on('request',lambda r:requests.append(r.url) if '/portraits/' in r.url else None)
     pg.locator('#devBtn').tap();pg.locator('#devPortraitTest').tap();pg.wait_for_function('TalkPortrait.status.visible')
     for c in SHA:
         pg.locator('[data-char='+c+']').tap();wait_char(pg,c)
-        check(pg.locator('#devPortraitFaces button').all_inner_texts()==['normal'] and '未実装・静止画' in pg.locator('#devPortraitStatus').inner_text() and pg.locator('#devPortraitBlink').is_disabled(),c+': DEV normal only, still label, motion disabled')
+        check(pg.locator('#devPortraitFaces button').count()==(6 if c=='lou' else 8) and 'QA候補' in pg.locator('#devPortraitStatus').inner_text() and not pg.locator('#devPortraitBlink').is_disabled(),c+': DEV approved normal plus provisional faces, QA label, normal blink enabled')
         for side in ['Left','Right']:
             pg.locator('#devPortrait'+side).tap();wait_char(pg,c)
     pg.locator('#devPortraitClose').tap();pg.wait_for_timeout(100)
     check(not pg.evaluate('TalkPortrait.status.visible') and pg.evaluate('DevPortraitTest.timers===0'),'DEV exit releases all portraits and timers')
-    check(all('/'+c+'/' not in u or u.split('?')[0].endswith(c+'_normal.png') for u in requests for c in SHA),'no unapproved expressions or nonexistent blink assets requested',requests)
+    check(not any('/lou/' in u and any(f in u for f in ['lou_smile','lou_relieved']) for u in requests),'excluded Lou expressions never requested',requests)
     check(not errors,'no page errors',errors);ctx.close();b.close()
 print('FAILS',len(fails));raise SystemExit(1 if fails else 0)

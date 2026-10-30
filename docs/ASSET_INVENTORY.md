@@ -58,3 +58,7 @@
 5. 画像が実際にGitHubへ格納されたことを確認できるまでは「格納待ち」と記録する。
 
 ※ 契約発動FXは Issue #70 で品質検査に合格し、2026-10-26 にユーザーが正式採用した。mainへのマージはユーザーの承認後に行う。WIP原本は `assets/images/effects/wip/` に置き、正式採用を意味しない。
+
+## DIRECTIVE-20D (2026-10-30): Phase4 revised20C provisional Android QA
+
+Exactly43 PNGs (19 expressions,24 normal-eye overlays) are **PROVISIONAL_ANDROID_QA**, not formally adopted. Source commit `b8517c2cf74445362ce1a557cf7c4ecd280d94fe`; immutable paths/hashes/quality concerns in [the ledger](portraits/PHASE4_PROVISIONAL_20C.json), [usage and adoption scope](portraits/PHASE4_PROVISIONAL_20C.md). Adopted normal3/Aidan54 remain unchanged. Lou smile/relieved excluded. Android physical judgment pending.

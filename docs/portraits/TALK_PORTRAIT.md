@@ -131,3 +131,7 @@ PortraitRegistry.define('aidan', {
 2026-10-29、ユーザーがフィオナ・ルー・エマのnormal3枚をSHA指定で正式採用。登録はnormalのみ・blinkなし。他21表情は未承認。[承認・原本照合・本編接続](PHASE4_ADOPTED_NORMALS.md)。DEVでは3人とも選択でき、「未実装・静止画」と表示し、瞬き操作は無効。
 
 既存の専用会話欄では `TalkPortrait.open(owner,{scene,anchor})` を使い、同じcanvasをanchor直上に置ける。sceneはanchorを含む要素。page/closeと世代管理はFieldTalkと共通。scene非表示、CG・戦闘、LOAD、FieldTalk.cancel()で解放する。通常のFieldTalk.open(owner)の挙動は維持。
+
+### DIRECTIVE-20D provisional Android QA
+
+The19 revised20C expressions and24normalblink overlays are now provisionally authorized; see [scope/usage](PHASE4_PROVISIONAL_20C.md) and [per-PNG SHA ledger](PHASE4_PROVISIONAL_20C.json). `PortraitRegistry.get(id).provisionalFaces` and `.provisionalBlink` expose adoption scope for DEV labels. Normal file/crop is unchanged, all expressions reuse that crop; `blink.faces` includes only normal. Fiona8/Lou6/Emma8 faces, Lou smile/relieved excluded. Registration does not mean formal asset adoption.

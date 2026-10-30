@@ -22,7 +22,7 @@
     if (P.owner !== OWNER || document.body.classList.contains('battleMode') || window.FieldTalk?.active || window.FieldScene?.running) { close(); return; }
     const s = P.status; if (mode === 'manual' && !s.blink) mode = 'stop';
     const wait = s.blink?.nextAt ? Math.max(0, (s.blink.nextAt - Date.now()) / 1000).toFixed(1) + '秒' : '-';
-    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${!R.blinkOf(char,face) ? '未実装・静止画' : s.blinkReady ? 'READY' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
+    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${!R.blinkOf(char,face) ? '未実装・静止画' : s.blinkReady ? 'READY' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}${R.get(char)?.provisionalFaces.includes(face) || R.get(char)?.provisionalBlink && face === 'normal' ? ' / QA候補（PROVISIONAL_ANDROID_QA）' : ''}`;
     const errors = P.diagnostics;
     q('#devPortraitErrors').textContent = errors.map(e => `${e.url}: ${e.reason}`).join('\n');
   }
@@ -43,7 +43,10 @@
   function select(id) {
     if (!R.has(id)) return;
     char = id; face = R.get(id).faces[0]; faces.textContent = '';
-    for (const f of R.get(id).faces) button(faces, f, () => { face = f; void show(); });
+    for (const f of R.get(id).faces) {
+      const b = button(faces, f + (R.get(id).provisionalFaces.includes(f) ? '（QA候補）' : ''), () => { face = f; void show(); });
+      b.dataset.face = f;
+    }
     void show();
   }
   function control(next, state) { mode = P.devControl(next, state) ? next : 'stop'; update(); }
