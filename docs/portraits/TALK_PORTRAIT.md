@@ -139,3 +139,7 @@ The19 revised20C expressions and24normalblink overlays are now provisionally aut
 ### Android eyelid correction (20E)
 
 Fiona/Lou use versioned `provisional-20e/` eye-only assets: normalblink16PNG and12expression variants, with the user-approved curved lid shape. Normal images/crops and shared renderer/timing are unchanged. Emma retains20C paths/geometry and all approved-for-QA PNG bytes; user declared its Android result PASS. See [provenance/protection ledger](PHASE4_EYELID_REVISION_20E.json). New derived art remains Android-QA provisional, not formal adoption.
+
+### DIRECTIVE-21A formal adoption
+
+Phase4 current46runtimePNG are now **APPROVED** after user Android QA all4items PASS: Fiona8/Lou6/Emma8 expressions(including normal3) +normalblink24. Exactly the bytes resolved by the PR91 registry are adopted. See [the current formal record/lock](PHASE4_FORMAL_ADOPTION_21A.md). Historical provisional ledgers, path names and DEV QA labels remain unchanged; they record history/UI behavior and are not the authoritative current adoption state. No images or display code changed in21A.

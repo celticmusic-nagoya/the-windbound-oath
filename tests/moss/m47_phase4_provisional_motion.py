@@ -11,7 +11,7 @@ def check(ok,name,detail=None):
     if not ok:fails.append(name)
 ledger=json.loads((ROOT/'docs/portraits/PHASE4_PROVISIONAL_20C.json').read_text());A=ledger['assets']
 check(len(A)==43 and sum(a['kind']=='expression' for a in A)==19 and sum(a['kind']=='blink' for a in A)==24,'exact19 expression +24blink ledger')
-check(all(a['adoption_status']=='PROVISIONAL_ANDROID_QA' and a['source_commit']=='b8517c2cf74445362ce1a557cf7c4ecd280d94fe' and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in A),'all43 revised20C SHA/provisional status/source commit exact')
+check(all(a['adoption_status']=='PROVISIONAL_ANDROID_QA' and a['source_commit']=='b8517c2cf74445362ce1a557cf7c4ecd280d94fe' and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in A),'historical20C snapshot:43 SHA/original provisional status/source commit exact')
 for c in ['fiona','lou','emma']:
     normal=Image.open(ROOT/f'assets/images/characters/portraits/{c}/{c}_normal.png').convert('RGBA')
     check(all(Image.open(ROOT/a['file']).size==normal.size and ImageChops.difference(Image.open(ROOT/a['file']).getchannel('A'),normal.getchannel('A')).getbbox() is None for a in A if a['character']==c and a['kind']=='expression'),c+': revised expressions share normal dimensions/alpha; no geometric shift')
