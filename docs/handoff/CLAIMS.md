@@ -135,3 +135,5 @@ Codex / `codex/20d-phase4-android-qa` / base `642e70184dfad8f1aa2bcd8dd4a4ce46b8
 
 ## DIRECTIVE-20E eyelid correction (2026-10-30)
 Codex / `codex/20e-eyelid-review` / baseline main `fac97543d19f85e85e8de38679162877e4577cf0`. User requested Fiona/Lou eyelid correction for BOTH blink and static expressions and approved the image-generated shape sheet (“素晴らしいです！バッチリです！”). Emma Android QA accepted; exclude all Emma PNGs. Scope: versioned eye-only asset build, registry/cache/ledger and pixel/geometry/lifecycle tests. Formal normal3/Aidan54/CG10 and story/save remain unchanged. STATUS: WIP.
+
+20E technical QA complete: finaled76f33 runtime/assets/tests,12regression files PASS,6Node cases PASS; mask/alpha/110PNG protection PASS. Two branch-only visual defects fixed before landing and covered by pixel regressions. docs/qa/EYELID_CORRECTION_20E.md. New derived art remains Android-QA provisional; Emma user physicalQA PASS, unchanged. Exact final-head independent review pending before PR91 merge. Remote rollback codex/rollback-20e-fac9754 readback verified. STATUS: READY_FOR_REVIEW.

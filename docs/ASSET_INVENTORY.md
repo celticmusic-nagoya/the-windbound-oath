@@ -62,3 +62,7 @@
 ## DIRECTIVE-20D (2026-10-30): Phase4 revised20C provisional Android QA
 
 Exactly43 PNGs (19 expressions,24 normal-eye overlays) are **PROVISIONAL_ANDROID_QA**, not formally adopted. Source commit `b8517c2cf74445362ce1a557cf7c4ecd280d94fe`; immutable paths/hashes/quality concerns in [the ledger](portraits/PHASE4_PROVISIONAL_20C.json), [usage and adoption scope](portraits/PHASE4_PROVISIONAL_20C.md). Adopted normal3/Aidan54 remain unchanged. Lou smile/relieved excluded. Android physical judgment pending.
+
+## Eyelid correction after Android feedback (20E,2026-10-30)
+
+User requested Fiona/Lou eyelid correction for blinking AND static expressions and approved the natural-curve reference.16blink overlays +12expression versions now live under `provisional-20e/`; old20C PNGs remain unchanged as history. New derived assets stay **PROVISIONAL_ANDROID_QA**. Emma was declared Android QA PASS and its15candidate PNGs, normal, geometry and paths are unchanged. Formal normal3/Aidan54/CG10 are preserved. [Source/sha/mask ledger](portraits/PHASE4_EYELID_REVISION_20E.json), [user feedback](qa/PHASE4_ANDROID_FEEDBACK_20261030.md).

@@ -28,4 +28,4 @@ User clarified: **両方** (blink and expression images). Image-generation edit 
 
 User approved this shape reference: 「素晴らしいです！バッチリです！」. The approval covers the eyelid correction direction for both blinking and expressions; new derived runtime assets remain Android-QA provisional.
 
-STATUS: IMPLEMENTATION_IN_PROGRESS — versioned blink16PNG plus12 registered Fiona/Lou expressions; Emma excluded. Production patches preserve the prior expression exactly outside explicit per-eye masks and preserve its full alpha. The composite sheet is never used as a game portrait.
+STATUS: IMPLEMENTED — technical QA12files PASS; corrected derived assets await Android recheck. Versioned blink16PNG plus12 registered Fiona/Lou expressions; Emma excluded. Production patches preserve the prior expression exactly outside explicit per-eye masks and preserve its full alpha. The composite sheet is never used as a game portrait.
