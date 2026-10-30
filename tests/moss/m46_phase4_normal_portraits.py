@@ -26,8 +26,9 @@ with sync_playwright() as p:
         pg.evaluate("""()=>{const e=document.querySelector('#talkPortrait'),cv=e.querySelector('canvas');window.naturalFrames=[{state:0,t:Date.now(),png:cv.toDataURL()}];window.naturalObserver=new MutationObserver(()=>naturalFrames.push({state:+e.dataset.eye,t:Date.now(),png:cv.toDataURL()}));naturalObserver.observe(e,{attributes:true,attributeFilter:['data-eye']})}""")
         pg.wait_for_function("naturalFrames.filter(f=>f.state===0).length>=4",timeout=25000)
         pg.evaluate('naturalObserver.disconnect()')
-        frames=pg.evaluate('naturalFrames')
-        ok=pg.evaluate("""async frames=>{
+        frames=pg.evaluate('naturalFrames.map(({state,t})=>({state,t}))')
+        ok=pg.evaluate("""async ()=>{
+          const frames=window.naturalFrames;
           const c=PortraitRegistry.get(TalkPortrait.status.char),b=PortraitRegistry.blinkOf(c.id,'normal'),k=c.crop;
           const load=u=>new Promise((r,j)=>{const im=new Image();im.onload=()=>r(im);im.onerror=j;im.src=u});
           const base=await load(PortraitRegistry.imageUrl(c.id,'normal')),overlays={};
@@ -41,7 +42,7 @@ with sync_playwright() as p:
               const temp=document.createElement('canvas');temp.width=a[2]-a[0];temp.height=a[3]-a[1];const tx=temp.getContext('2d');tx.drawImage(base,a[0],a[1],temp.width,temp.height,0,0,temp.width,temp.height);const orig=tx.getImageData(0,0,temp.width,temp.height).data;
               if(!pix.some((v,i)=>v!==orig[i]))return false;}
           }return true;
-        }""",frames)
+        }""")
         states=[f['state'] for f in frames[1:25]]
         gaps=[frames[i]['t']-frames[i-1]['t'] for i in range(1,len(frames)) if frames[i]['state']==1 and frames[i-1]['state']==0]
         check(ok and states==[1,2,3,4,3,2,1,0]*3 and all(2900<=g<=6200 for g in gaps[1:]),c+': THREE natural 3–6s blinks match actual full canvas/source overlays; BOTH eye pixels change',{'states':states,'gaps':gaps})
@@ -49,7 +50,7 @@ with sync_playwright() as p:
             import base64,json
             (OUT/f'{c}_natural_frames.json').write_text(json.dumps([{'state':f['state'],'t':f['t']} for f in frames]))
             for state in [0,2,4]:
-                f=next(x for x in frames if x['state']==state)
+                f=pg.evaluate('state=>naturalFrames.find(f=>f.state===state)',state)
                 (OUT/f'{c}_normal_actual_{state}.png').write_bytes(base64.b64decode(f['png'].split(',')[1]))
     def layouts(pg,c,anchor):
         for w,h in [(390,844),(360,800),(412,915),(844,390),(915,412),(1920,1080)]:
