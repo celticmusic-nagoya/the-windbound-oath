@@ -36,7 +36,7 @@ with sync_playwright() as p:
             pg.locator('#devPortraitFaces [data-face='+f+']').tap();ready(c,f)
             g=pg.locator('#talkPortrait').bounding_box();geometries.append(g);images.append(pg.evaluate(pix))
             check(('QA候補' in pg.locator('#devPortraitFaces [data-face='+f+']').inner_text())==(f!='normal'),c+' '+f+': provisional expression label, formal normal preserved')
-            if f!='normal':check('未実装・静止画' in pg.locator('#devPortraitStatus').inner_text() and pg.locator('#devPortraitBlink').is_disabled() and pg.evaluate('TalkPortrait.status.blink===null'),c+' '+f+': no nonexistent expression blink')
+            if f in ['smile','relieved']:check('未実装・静止画' in pg.locator('#devPortraitStatus').inner_text() and pg.locator('#devPortraitBlink').is_disabled() and pg.evaluate('TalkPortrait.status.blink===null'),c+' '+f+': no nonexistent expression blink')
             if OUT:pg.screenshot(path=str(OUT/f'20d_{c}_{f}.png'))
         check(all(g==geometries[0] for g in geometries) and len(set(images))==len(expected),c+': every actual expression differs; exact same screen position/size')
         pg.locator('#devPortraitFaces [data-face=normal]').tap();ready(c);pg.wait_for_function('TalkPortrait.status.blinkReady')

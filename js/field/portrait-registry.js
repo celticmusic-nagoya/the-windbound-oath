@@ -87,8 +87,9 @@
     define(id, {name, src, crop, base:'assets/images/characters/portraits/'+id+'/',
       file:f=>(f === 'normal' ? '' : revision+'/expressions/')+id+'_'+f+'.png', side:'right',
       faces:['normal', ...provisionalFaces], provisionalFaces, provisionalBlink:true,
-      blink:{seq:BLINK_V3.seq,gap:BLINK_V3.gap,faces:['normal'],eyes,
-        file:(f,eye,s)=>revision+'/blink/'+f+'_'+eye+'_s'+s+'.png'}});
+      blink:{seq:BLINK_V3.seq,gap:BLINK_V3.gap,faces:['normal','angry','sad','surprised','worried','determined'],eyes,
+        //21C: newexpression overlays are provisional; formal normalblink files stay untouched.
+        file:(f,eye,s)=>(f==='normal'?revision+'/blink/':'provisional-21b/blink/')+f+'_'+eye+'_s'+s+'.png'}});
   }
 
   window.PortraitRegistry = Object.freeze({FACES, SIDES, FALLBACK_SIDE, BLINK_V3, define, get, has: id => chars.has(id), ids: () => [...chars.keys()],

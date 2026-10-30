@@ -1,6 +1,6 @@
 # Asset registry audit
 
-registry snapshot: 2026-10-19 ／ assets 1047 ／ errors **0**
+registry snapshot: 2026-10-19 ／ assets 1167 ／ errors **0**
 
 ## Errors
 

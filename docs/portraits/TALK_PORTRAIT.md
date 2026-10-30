@@ -143,3 +143,7 @@ Fiona/Lou use versioned `provisional-20e/` eye-only assets: normalblink16PNG and
 ### DIRECTIVE-21A formal adoption
 
 Phase4 current46runtimePNG are now **APPROVED** after user Android QA all4items PASS: Fiona8/Lou6/Emma8 expressions(including normal3) +normalblink24. Exactly the bytes resolved by the PR91 registry are adopted. See [the current formal record/lock](PHASE4_FORMAL_ADOPTION_21A.md). Historical provisional ledgers, path names and DEV QA labels remain unchanged; they record history/UI behavior and are not the authoritative current adoption state. No images or display code changed in21A.
+
+### DIRECTIVE-21C expression blink extension
+
+The5faces angry/sad/surprised/worried/determined now have provisional blink overlays for all3 Phase4 characters. Source bytes and boxes: [21C ledger](PHASE4_EXPRESSION_BLINK_21C.json). Normal overlays remain formally adopted21A files. Fiona/Emma smile+relieved stay still; Lou smile+relieved remain unregistered. Shared renderer/timing unchanged. New120files are provisional, not a change to the formal21A image lock.
