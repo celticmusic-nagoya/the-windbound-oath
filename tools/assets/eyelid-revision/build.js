@@ -25,6 +25,10 @@ async function buildEyeRevision(input) {
       const upper=Math.min(top-tip,closed-8),bottom=Math.max(low+3,closed+7);
       const fx=smooth(Math.min(x-x0,x1-1-x)/4),fy=smooth(Math.min(y-upper,bottom-y)/3);
       const pi=((y-y0)*bw+x-x0);mask[pi]=fx*fy*(1-protectedPixels[pi*4+3]/255);
+      // Remove only the two independently located OLD lash tips, not the nearby eyebrow arc.
+      for(const[a,b,c,d]of E.erase_lash_islands||[]){const i=(y*w+x)*4;
+        if(x>=a&&x<c&&y>=b&&y<d&&N.data[i+1]<210&&D.data[i]>200&&D.data[i+1]>125&&D.data[i+1]>N.data[i+1]+10)mask[pi]=1;
+      }
    }
    masks[eye]=mask;
  }
@@ -44,7 +48,8 @@ async function buildEyeRevision(input) {
         else if(y>=newT&&y<=newB){
           // Move original lash texture toward the approved donor curve, never rotate/scale the character.
           const sy=T+(y-newT)/thin;v=read(N.data,x,sy,ch);
-        } else if(y<newT||y>lower)v=D.data[i+ch];
+        } else if(y<newT)v=read(D.data,x,Math.min(y,C-7),ch);
+        else if(y>lower)v=read(D.data,x,Math.max(y,C+7),ch);
         else v=N.data[i+ch];
         out[i+ch]=Math.round(lerp(N.data[i+ch],v,weight));
       }

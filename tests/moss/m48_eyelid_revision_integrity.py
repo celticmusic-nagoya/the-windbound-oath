@@ -26,4 +26,12 @@ for c in ['fiona','lou']:
    check(all(allowed[i] or nb[4*i:4*i+4]==ob[4*i:4*i+4] for i in range(len(allowed))),c+' '+a['expression']+': every RGBA pixel outside eye masks EXACT')
   else:
    e=Path(a['file']).stem.split('_')[1];E=cfg['eyes'][e];box=E['box'];check(new.size==(box[2]-box[0],box[3]-box[1]) and set(new.getchannel('A').tobytes())<={0,255},c+' '+Path(a['file']).stem+': binary overlay alpha/source-sized coordinates')
+# Visual defects caught by independent review: no future closed-lash stripe in the partial frame,
+# and no old upper-lash spikes above Lou's closed eyes. These checks fail on the first20E build.
+f=Image.open(ROOT/'assets/images/characters/portraits/fiona/provisional-20e/blink/normal_L_s3.png').convert('RGBA')
+check(all(f.getpixel((x-508,y-298))[1]>150 for x,y in [(534,339),(537,339)]),'Fiona partial frame has skin instead of a second closed-lash contour')
+normal=Image.open(ROOT/'assets/images/characters/portraits/lou/lou_normal.png').convert('RGBA')
+for state in range(1,5):
+ im=Image.open(ROOT/f'assets/images/characters/portraits/lou/provisional-20e/blink/normal_L_s{state}.png').convert('RGBA')
+ check(all(im.getpixel((x-678,y-354))[3]==255 and im.getpixel((x-678,y-354))[1]>normal.getpixel((x,y))[1]+25 for x,y in [(716,362),(731,360),(722,358),(733,371),(716,371)]),f'Lou frame{state}: old upper-lash spikes removed inside narrow masks')
 print('FAILS',len(fails));raise SystemExit(1 if fails else 0)
