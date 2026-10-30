@@ -66,3 +66,9 @@ Exactly43 PNGs (19 expressions,24 normal-eye overlays) are **PROVISIONAL_ANDROID
 ## Eyelid correction after Android feedback (20E,2026-10-30)
 
 User requested Fiona/Lou eyelid correction for blinking AND static expressions and approved the natural-curve reference.16blink overlays +12expression versions now live under `provisional-20e/`; old20C PNGs remain unchanged as history. New derived assets stay **PROVISIONAL_ANDROID_QA**. Emma was declared Android QA PASS and its15candidate PNGs, normal, geometry and paths are unchanged. Formal normal3/Aidan54/CG10 are preserved. [Source/sha/mask ledger](portraits/PHASE4_EYELID_REVISION_20E.json), [user feedback](qa/PHASE4_ANDROID_FEEDBACK_20261030.md).
+
+## DIRECTIVE-21A (2026-10-30): Phase4正式採用
+
+ユーザーAndroid実機QA全4項目PASSを根拠に、PR91マージ `bdf6a6dd50a26183daa181342d1fa546f5873418` で実際に公開・使用した22表情PNG(normal3を含む)＋24normal瞬きPNG、計46枚を正式採用。既存normal3の採用を維持し、現行43候補をAPPROVEDへ昇格。Fiona/Lou20E・Emma20Cを正とし、旧Fiona/Lou20C候補やLou smile/relievedは含めない。PNG/runtime/表示logicは無変更。
+
+正式台帳：[PHASE4_FORMAL_ADOPTION_21A](portraits/PHASE4_FORMAL_ADOPTION_21A.md)、[46枚の固定SHA](portraits/PHASE4_ADOPTED_SHA256SUMS)。過去の暫定採用資料は当時の履歴として保持し、本決定で対象パスのみ上書きする。回帰m49は全46枚＋Aidan54/CG10のSHAと実登録先・未採用ステータスを保護。

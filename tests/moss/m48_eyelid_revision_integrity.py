@@ -7,7 +7,7 @@ def check(ok,name):
  print(('ok   ' if ok else 'FAIL ')+name,flush=True)
  if not ok:fails.append(name)
 check(len(ledger['assets'])==28 and sum(a['kind']=='blink' for a in ledger['assets'])==16,'exact16 blink overlays +12 expression revisions')
-check(all(hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] and a['adoption_status']=='PROVISIONAL_ANDROID_QA' for a in ledger['assets']),'all28 revision SHA/status exact')
+check(all(hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] and a['adoption_status']=='PROVISIONAL_ANDROID_QA' for a in ledger['assets']),'historical20E snapshot:28 SHA/original provisional status exact')
 check(len(ledger['protected_assets'])==110 and all(hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in ledger['protected_assets']),'all110 existing PNGs unchanged incl67 adopted+43previous candidates; Emma excluded')
 for c in ['fiona','lou']:
  cfg=json.loads((ROOT/f'tools/assets/eyelid-revision/{c}.json').read_text());folder=ROOT/f'assets/images/characters/portraits/{c}';size=Image.open(folder/f'{c}_normal.png').size
