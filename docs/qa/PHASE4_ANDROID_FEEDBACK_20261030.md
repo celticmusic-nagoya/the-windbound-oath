@@ -26,4 +26,6 @@ Preserve face tilt and original eye corners. Align the closing lines naturally w
 
 User clarified: **両方** (blink and expression images). Image-generation edit produced a review sheet of Fiona/Lou open→half→closed eyes, preserving the intended face tilt and illustrating coherent eyelid curves. This is an ART-DIRECTION REFERENCE, not pixel-compatible game assets; do not register this composite sheet or replace the approved normal PNGs with generated faces. Candidate reference: `docs/portraits/review/eyelid-shape-reference-20261030.png`.
 
-STATUS: VISUAL_REFERENCE_READY — blink16PNG plus the affected registered Fiona/Lou expressions are in scope; Emma excluded. Runtime assets are unchanged. The reference shape must be resolved before deriving source-coordinate production patches; the sheet itself does not satisfy immutable-normal/mask/coordinate QA.
+User approved this shape reference: 「素晴らしいです！バッチリです！」. The approval covers the eyelid correction direction for both blinking and expressions; new derived runtime assets remain Android-QA provisional.
+
+STATUS: IMPLEMENTATION_IN_PROGRESS — versioned blink16PNG plus12 registered Fiona/Lou expressions; Emma excluded. Production patches preserve the prior expression exactly outside explicit per-eye masks and preserve its full alpha. The composite sheet is never used as a game portrait.
