@@ -140,3 +140,5 @@ Codex / `codex/20e-eyelid-review` / baseline main `fac97543d19f85e85e8de38679162
 
 ## DIRECTIVE-21A (2026-10-30)
 Codex / `codex/21a-formal-portraits` / base `bdf6a6dd50a26183daa181342d1fa546f5873418`. User confirmed PR91 Android QA all4items PASS and explicitly adopted runtime bytes:22expressions(incl3normal)+24normalblinkPNG. Scope ONLY ledgers/docs/protection tests; no PNG, runtime JS/CSS/index, story/save/display changes. Old superseded/unapproved materials stay unadopted. STATUS: WIP.
+
+21A QA checkpoint:46formally adopted runtime PNGs confirmed againstPR91;43promotions+3normal confirmations only.5scoped regression files PASS,6directNode cases PASS, registryaudit0errors; no PNG/runtime/display/story/save edits. Canonical lock and100excluded-status snapshot in PHASE4_FORMAL_ADOPTION_21A. docs/qa/DIRECTIVE-21A.md. Final-head independent review pending. Remote rollback codex/rollback-21a-bdf6a6d verified. STATUS: READY_FOR_REVIEW.
