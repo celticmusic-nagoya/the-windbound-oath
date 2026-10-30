@@ -36,6 +36,7 @@
       file: def.blink.file, eyes: def.blink.eyes || null, eyesByFace: def.blink.eyesByFace || null
     }) : null;
     chars.set(id, Object.freeze({id, name: def.name || id, src: Object.freeze({...def.src}), base: def.base, file: def.file, crop: Object.freeze({...def.crop}),
+      provisionalFaces: Object.freeze((def.provisionalFaces || []).filter(f => faces.includes(f))), provisionalBlink: Boolean(def.provisionalBlink),
       side: SIDES.includes(def.side) ? def.side : FALLBACK_SIDE, faces, blink: b}));
   }
   const get = id => chars.get(id) || null;
@@ -68,12 +69,25 @@
     blink: {seq: BLINK_V3.seq, gap: BLINK_V3.gap, faces: ['normal', 'smile', 'angry', 'worried', 'sad', 'surprised'],
       file: (f, eye, s) => 'blink/' + f + '_' + eye + '_s' + s + '.png', eyes: {L: [570, 268, 654, 320], R: [672, 314, 716, 350]}}
   });
-  // DIRECTIVE-19B: user adopted these exact normal PNGs on2026-10-29. Other21 faces and blink overlays are NOT adopted.
+  // DIRECTIVE-19B normal PNGs remain formally adopted and unchanged.
+  // DIRECTIVE-20D: revised20C expressions + normal blink are PROVISIONAL_ANDROID_QA only (2026-10-30).
   for (const [id, name, src, crop] of [
     ['fiona', 'フィオナ', {w:1024,h:1536}, {x:130,y:45,w:840,h:840}],
     ['lou', 'ルー', {w:1312,h:1199}, {x:0,y:0,w:1312,h:1199}],
     ['emma', 'エマ', {w:1024,h:1536}, {x:90,y:0,w:880,h:880}]
-  ]) define(id, {name, src, crop, base:'assets/images/characters/portraits/'+id+'/', file:f=>id+'_'+f+'.png', side:'right', faces:['normal']});
+  ]) {
+    const provisionalFaces = FACES.filter(f => f !== 'normal' && !(id === 'lou' && ['smile','relieved'].includes(f)));
+    const eyes = {
+      fiona: {L:[513,302,561,344], R:[586,259,652,303]},
+      lou: {L:[683,357,762,426], R:[795,399,856,466]},
+      emma: {L:[504,318,562,381], R:[629,267,683,325]}
+    }[id];
+    define(id, {name, src, crop, base:'assets/images/characters/portraits/'+id+'/',
+      file:f=>(f === 'normal' ? '' : 'provisional-20c/expressions/')+id+'_'+f+'.png', side:'right',
+      faces:['normal', ...provisionalFaces], provisionalFaces, provisionalBlink:true,
+      blink:{seq:BLINK_V3.seq,gap:BLINK_V3.gap,faces:['normal'],eyes,
+        file:(f,eye,s)=>'provisional-20c/blink/'+f+'_'+eye+'_s'+s+'.png'}});
+  }
 
   window.PortraitRegistry = Object.freeze({FACES, SIDES, FALLBACK_SIDE, BLINK_V3, define, get, has: id => chars.has(id), ids: () => [...chars.keys()],
     faceOf, imageUrl, blinkOf, sideOf, setRoot: r => { ROOT = typeof r === 'string' ? r : ''; }, get root() { return ROOT; }});

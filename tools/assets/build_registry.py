@@ -11,7 +11,7 @@ from pathlib import Path
 from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]; DOCS = ROOT / 'docs/assets'
 IMG_EXT = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
-APPROVAL = ['APPROVED', 'PENDING', 'REJECTED', 'REVISION_REQUIRED', 'UNKNOWN']
+APPROVAL = ['PROVISIONAL_ANDROID_QA', 'APPROVED', 'PENDING', 'REJECTED', 'REVISION_REQUIRED', 'UNKNOWN']
 IMPL = ['IMPLEMENTED', 'PARTIAL', 'REGISTERED_ONLY', 'NOT_IMPLEMENTED', 'UNKNOWN']
 INTEG = ['MAIN', 'BRANCH_ONLY', 'SOURCE_ONLY', 'MISSING', 'UNKNOWN']
 QA = ['PASS', 'FAIL', 'CONDITIONAL', 'NOT_RUN', 'UNVERIFIED']

@@ -127,3 +127,8 @@ Codex R完了: m22/高さ無し3本合格、跨階moving monster戦闘を再現�
 `work/codex-gg-kk` / main31a5f5e。status末尾のtests/tools/docsを担当。GG→HH→II→JJ→KK、各区切りpush。ゲームコード/css/index/採用素材/mainは変更しない。詳細と結果は各docs/qa報告およびcodex-statusで共有。STATUS WIP。
 
 Codex GG〜KK完了: work/codex-gg-kk、納品一覧docs/handoff/codex-GG-KK-delivery-20261013.md。GG2指摘、HH/II合格、JJ20連続合格、KK12計測と推奨。tests/tools/docsのみ、main/ゲーム/採用素材未編集。STATUS READY（Claudeレビュー/仕様判断・実機待ち）。
+
+## DIRECTIVE-20D (2026-10-30)
+Codex / `codex/20d-phase4-android-qa` / base `642e70184dfad8f1aa2bcd8dd4a4ce46b85c6440`. User explicitly authorized provisional Android-QA integration of exactly43 revised20C PNGs (19expressions,24normal blink), registry/DEV/test/asset records and cache keys; no story or approved-normal changes. STATUS: WIP. `work/codex-*` ref cannot be created because existing local `refs/heads/work` occupies its namespace; preserve that ref and use dedicated codex branch.
+
+20D QA checkpoint:43 revised20C PNGs remain PROVISIONAL_ANDROID_QA, normal3/Aidan54/CG10 unchanged.11 browser regression files +6 Node cases PASS; real production normal3 each THREE naturalblinkcycles verified against fullcanvas pixels. Source/rendering scope unchanged; final independent-head QA pending before merge. Evidence: docs/qa/DIRECTIVE-20D.md. STATUS: READY_FOR_REVIEW.

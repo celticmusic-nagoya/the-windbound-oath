@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **976**
+- total: **1019**
 - approved_implemented: **85**
 - approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
 - approval_unknown: **885**
-- on_main: **797**
-- implemented_on_main: **780**
+- on_main: **840**
+- implemented_on_main: **823**
 - unreferenced_on_main: **17**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -951,7 +951,7 @@
 | file:img_field_moss_rilde_npc_young_woman_f06 | rilde | UNKNOWN | 1 | 92x114 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_rilde_npc_young_woman_idle | rilde | idle | 1 | 92x114 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json, js/field/lind-content-bounds.js / existing asset on main; adoption record not re-verified |
 
-## portrait（75）
+## portrait（118）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -1027,6 +1027,49 @@
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_smile_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_surprised_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
 | branch:fix_fiona_lou_portrait_lifecycle_p2:img_portraits_lou_lou_worried_png | lou | UNKNOWN | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | CONDITIONAL | NO | - / exists only on branch fix/fiona-lou-portrait-lifecycle-p2 (not merged to main); P2 portrai |
+| portrait:20c:emma:emma_angry | emma | expression_angry | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:emma_determined | emma | expression_determined | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:emma_relieved | emma | expression_relieved | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:emma_sad | emma | expression_sad | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:emma_smile | emma | expression_smile | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:emma_surprised | emma | expression_surprised | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:emma_worried | emma | expression_worried | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_L_s1 | emma | blink_normal | 1 | 58x63 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_L_s2 | emma | blink_normal | 1 | 58x63 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_L_s3 | emma | blink_normal | 1 | 58x63 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_L_s4 | emma | blink_normal | 1 | 58x63 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_R_s1 | emma | blink_normal | 1 | 54x58 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_R_s2 | emma | blink_normal | 1 | 54x58 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_R_s3 | emma | blink_normal | 1 | 54x58 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:emma:normal_R_s4 | emma | blink_normal | 1 | 54x58 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_angry | fiona | expression_angry | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_determined | fiona | expression_determined | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_relieved | fiona | expression_relieved | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_sad | fiona | expression_sad | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_smile | fiona | expression_smile | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_surprised | fiona | expression_surprised | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:fiona_worried | fiona | expression_worried | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_L_s1 | fiona | blink_normal | 1 | 48x42 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_L_s2 | fiona | blink_normal | 1 | 48x42 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_L_s3 | fiona | blink_normal | 1 | 48x42 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_L_s4 | fiona | blink_normal | 1 | 48x42 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_R_s1 | fiona | blink_normal | 1 | 66x44 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_R_s2 | fiona | blink_normal | 1 | 66x44 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_R_s3 | fiona | blink_normal | 1 | 66x44 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:fiona:normal_R_s4 | fiona | blink_normal | 1 | 66x44 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:lou_angry | lou | expression_angry | 1 | 1312x1199 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:lou_determined | lou | expression_determined | 1 | 1312x1199 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:lou_sad | lou | expression_sad | 1 | 1312x1199 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:lou_surprised | lou | expression_surprised | 1 | 1312x1199 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:lou_worried | lou | expression_worried | 1 | 1312x1199 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_L_s1 | lou | blink_normal | 1 | 79x69 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_L_s2 | lou | blink_normal | 1 | 79x69 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_L_s3 | lou | blink_normal | 1 | 79x69 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_L_s4 | lou | blink_normal | 1 | 79x69 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_R_s1 | lou | blink_normal | 1 | 61x67 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_R_s2 | lou | blink_normal | 1 | 61x67 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_R_s3 | lou | blink_normal | 1 | 61x67 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
+| portrait:20c:lou:normal_R_s4 | lou | blink_normal | 1 | 61x67 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User provisionally authorized for Android QA; NOT formal adoption. Original source: report |
 | portrait:emma:normal:19b | emma | UNKNOWN | 1 | 1024x1536 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/emma |
 | portrait:fiona:normal:19b | fiona | UNKNOWN | 1 | 1024x1536 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/fion |
 | portrait:lou:normal:19b | lou | UNKNOWN | 1 | 1312x1199 | APPROVED | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/lou/ |
