@@ -60,7 +60,7 @@ with sync_playwright() as p:
         pg.evaluate("window.changes=[];window.devObserver?.disconnect();window.devObserver=new MutationObserver(()=>changes.push(document.querySelector('#talkPortrait canvas').toDataURL()));devObserver.observe(document.querySelector('#talkPortrait'),{attributes:true,attributeFilter:['data-eye']})")
         for control,count,timeout in [('Blink',8,2500),('Auto',8,7500),('Loop',24,5000)]:
             pg.evaluate('changes=[]');pg.locator('#devPortrait'+control).tap();pg.wait_for_function('n=>changes.length>=n',arg=count,timeout=timeout)
-            check(len(set(pg.evaluate('changes')))==5,c+': '+control+' changes displayed pixels through five frames')
+            check(pg.evaluate('new Set(changes).size')==5,c+': '+control+' changes displayed pixels through five frames')
         pg.locator('#devPortraitStop').tap();check(pg.evaluate(pix)==frames[0] and pg.evaluate('TalkPortrait.status.blink===null'),c+': stop opens exact original pixels and clears timer')
         for w,h in [(390,844),(360,800),(412,915),(844,390),(915,412),(1920,1080)]:
             pg.set_viewport_size({'width':w,'height':h});pg.wait_for_timeout(100)
