@@ -13,7 +13,7 @@ L=json.loads((ROOT/'docs/portraits/PHASE4_EXPRESSION_BLINK_21C.json').read_text(
 check(len(A)==120 and len({a['file'] for a in A})==120,'exact120 distinct PNGs')
 check(all(a['adoption_status']=='PROVISIONAL_ANDROID_QA' and a['source_commit']=='883624694e73a0839fc0db684ca76067765e7338' and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in A),'all120 exactsource SHA and provisional status; no silent regeneration')
 registry=json.loads((ROOT/'docs/assets/ASSET_REGISTRY.json').read_text())['assets'];newpaths={a['file']:a for a in A};registered={a['source_path']:a for a in registry if a['source_path'] in newpaths}
-check(set(registered)==set(newpaths) and all(a['approval_status']=='PROVISIONAL_ANDROID_QA' and a['source_sha256']==newpaths[f]['sha256'] for f,a in registered.items()),'central registry registers exactly120newcandidate files, no formal promotion')
+check(set(registered)==set(newpaths) and all(a['approval_status']=='APPROVED' and a['source_sha256']==newpaths[f]['sha256'] for f,a in registered.items()),'central registry has exactly120source files, formally adopted by22A')
 check(hashlib.sha256((ROOT/'docs/portraits/PHASE4_ADOPTED_SHA256SUMS').read_bytes()).hexdigest()==L['formal_lock_sha256'],'21A formal lock remains unchanged')
 check(len(L['source_parent_assets'])==43 and all(a['file'] in formal and a['sha256']==formal[a['file']]['sha256'] and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in L['source_parent_assets']),'19parent expressions +24normalblink match formal21A bytes')
 for c in ['fiona','lou','emma']:

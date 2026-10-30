@@ -25,7 +25,11 @@ for c,revision in [('fiona','provisional-20e'),('lou','provisional-20e'),('emma'
 reg=json.loads((ROOT/'docs/assets/ASSET_REGISTRY.json').read_text())['assets'];byfile={a['source_path']:a for a in reg if a['source_path'] in locked}
 check(set(byfile)==set(locked) and all(a['approval_status']=='APPROVED' and a['qa_status']=='PASS' and a['android_status']=='PASS' and a['source_sha256']==locked[f] for f,a in byfile.items()),'central ledger and actual46 files agree: APPROVED, QA/Android PASS and exactSHA')
 formal={a['source_path'] for a in reg if a['category']=='portrait' and a['character'] in expected and a['approval_status']=='APPROVED'}
-check(formal==set(locked),'no other Fiona/Lou/Emma portrait material accidentally promoted')
+#22A explicitly adopts the additional120 PR93 blink files; keep21A's original46-file lock intact.
+supplement=(ROOT/'docs/portraits/PHASE4_EXPRESSION_BLINK_ADOPTED_SHA256SUMS').read_bytes()
+check(hashlib.sha256(supplement).hexdigest()=='c4297d808ac988cc3ce013aa50da9f87ed291a69f934dc5a810c3bf29bd172bf','22A formal supplement is the exact pinned PR93 blink manifest')
+extra={line.split(maxsplit=1)[1] for line in supplement.decode().splitlines()}
+check(len(extra)==120 and formal==set(locked)|extra,'only21A46 plus explicitly22A-adopted120 files are formal; no accidental promotion')
 byid={a['asset_id']:a for a in reg}
 check(all(byid[a['asset_id']]['approval_status']==a['approval_status'] for a in ledger['nonadopted_portrait_statuses']),'every excluded/superseded portrait approval status preserved')
 protected=ledger['other_protected_pngs'];other=''.join(a['sha256']+'  '+a['file']+'\n' for a in sorted(protected,key=lambda a:a['file']))
