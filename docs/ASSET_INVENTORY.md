@@ -72,3 +72,7 @@ User requested Fiona/Lou eyelid correction for blinking AND static expressions a
 ユーザーAndroid実機QA全4項目PASSを根拠に、PR91マージ `bdf6a6dd50a26183daa181342d1fa546f5873418` で実際に公開・使用した22表情PNG(normal3を含む)＋24normal瞬きPNG、計46枚を正式採用。既存normal3の採用を維持し、現行43候補をAPPROVEDへ昇格。Fiona/Lou20E・Emma20Cを正とし、旧Fiona/Lou20C候補やLou smile/relievedは含めない。PNG/runtime/表示logicは無変更。
 
 正式台帳：[PHASE4_FORMAL_ADOPTION_21A](portraits/PHASE4_FORMAL_ADOPTION_21A.md)、[46枚の固定SHA](portraits/PHASE4_ADOPTED_SHA256SUMS)。過去の暫定採用資料は当時の履歴として保持し、本決定で対象パスのみ上書きする。回帰m49は全46枚＋Aidan54/CG10のSHAと実登録先・未採用ステータスを保護。
+
+## DIRECTIVE-21C (2026-10-30):15表情瞬き・暫定Android QA
+
+Fiona/Lou/Emmaのangry/sad/surprised/worried/determined用120PNGを **PROVISIONAL_ANDROID_QA** として追加。source handoff21B @883624694e73a0839fc0db684ca76067765e7338、全SHAと親43素材SHAは正式21A台帳に一致。正式46PNG・エイダン/CGは無変更。静止4表情とLou未採用2表情は変更しない。残存課題・出典：[21C台帳](portraits/PHASE4_EXPRESSION_BLINK_21C.md)。最終Android判断はユーザー待ち。
