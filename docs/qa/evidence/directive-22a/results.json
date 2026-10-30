@@ -1,0 +1,68 @@
+{
+  "source_head": "af1fa09eea686785de596619580726ca83603270",
+  "main_base": "72c83eef1e3fef1c474a51f84e98f1bb3b3fbe45",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "results": [
+    {
+      "test": "tests/moss/m51_blink_formal_adoption_22a.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.55,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m51_blink_formal_adoption_22a.py.log",
+      "test_sha256_before": "cb188b208bd4412cb55c36ec2a7f35ac5ab5d6887ecfc1ccaa679a663151acea",
+      "test_sha256_after": "cb188b208bd4412cb55c36ec2a7f35ac5ab5d6887ecfc1ccaa679a663151acea",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m49_phase4_formal_adoption.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.57,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m49_phase4_formal_adoption.py.log",
+      "test_sha256_before": "73238c4ce44a5f5a031ac6db3b2f282a88fe7caed49c9fc856e2d93bdbfc86af",
+      "test_sha256_after": "73238c4ce44a5f5a031ac6db3b2f282a88fe7caed49c9fc856e2d93bdbfc86af",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m50_expression_blink_21c.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 129.035,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m50_expression_blink_21c.py.log",
+      "test_sha256_before": "e37944a5c9969029692e994e288535932aeb829509a1b4a3133a6a0010998909",
+      "test_sha256_after": "e37944a5c9969029692e994e288535932aeb829509a1b4a3133a6a0010998909",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/save_continue_lifecycle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 25.045,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_save_continue_lifecycle.py.log",
+      "test_sha256_before": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "server_stopped": true
+    }
+  ]
+}

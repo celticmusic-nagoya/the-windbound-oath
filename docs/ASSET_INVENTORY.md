@@ -76,3 +76,9 @@ User requested Fiona/Lou eyelid correction for blinking AND static expressions a
 ## DIRECTIVE-21C (2026-10-30):15表情瞬き・暫定Android QA
 
 Fiona/Lou/Emmaのangry/sad/surprised/worried/determined用120PNGを **PROVISIONAL_ANDROID_QA** として追加。source handoff21B @883624694e73a0839fc0db684ca76067765e7338、全SHAと親43素材SHAは正式21A台帳に一致。正式46PNG・エイダン/CGは無変更。静止4表情とLou未採用2表情は変更しない。残存課題・出典：[21C台帳](portraits/PHASE4_EXPRESSION_BLINK_21C.md)。最終Android判断はユーザー待ち。
+
+## DIRECTIVE-22A (2026-10-30):120表情瞬き正式採用
+
+ユーザーAndroid実機QAで全キャラクターの瞬き合格、PR93の120PNGを正式採用。実公開runtime merge72c83eeからSHAを固定し、120件をAPPROVED/QA・AndroidPASSへ昇格。既存21A46PNG・Aid54/CG10は無変更。Phase4は22表情＋144瞬き＝166正式PNG。[22A正式台帳](portraits/PHASE4_EXPRESSION_BLINK_FORMAL_22A.md)。
+
+フィオナ5枚修正版の受領は別工程。現handoff5fa3532はピンク線を消したが茶色の二重眉が残るためQA差戻し・未統合。原本・144瞬きPNGは変更せず、[Claude向けレビュー](handoff/DIRECTIVE-22A_FIONA_CHANGES_REQUESTED.md)を正とする。
