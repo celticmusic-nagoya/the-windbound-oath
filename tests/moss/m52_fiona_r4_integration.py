@@ -11,11 +11,12 @@ L=json.loads((ROOT/'docs/portraits/PHASE4_FIONA_22BR4.json').read_text());A=L['a
 check(hashlib.sha256(manifest).hexdigest()==L['manifest_sha256']=='afde3b64e9f396e1efc4df99547e086f40b15dec05eb71c2e9f9d8a2dc9baa60','pinned exact29file source manifest (R4 3,R3 2,R2 24)')
 locked={f:h for h,f in [line.split(maxsplit=1) for line in manifest.decode().splitlines()]}
 check(len(locked)==29 and len({a['file'] for a in A})==29 and {a['file']:a['sha256'] for a in A}==locked,'candidate ledger exact pinned29path/SHA set; no independent ledger rebaselining')
-check(len(A)==29 and all(a['adoption_status']=='PROVISIONAL_ANDROID_QA' and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in A),'all29candidate SHA exact; NOT formally adopted')
+check(len(A)==29 and all(a['adoption_status']=='APPROVED' and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in A),'all29 PR95 SHA exact; formally adopted23A')
+check(L['status']=='APPROVED' and L['formal_adoption_directive']=='DIRECTIVE-23A' and L['formal_source_pr']==95 and L['formal_source_commit']=='8179a1100f6b33b3cbad70ea9b1d127e620323c5' and L['android_qa_items_passed']==5 and L['adoption_basis']=='ユーザーPR95 Android実機QA全5項目PASS — DIRECTIVE-23A (2026-10-31)' and L['prior_adoption_status']=='PROVISIONAL_ANDROID_QA','formal adoption exactPR95source/user5item AndroidPASS; historical status retained')
 rev={'R4':('0849e3fff948c5f27e57549bba5e638c42269423',3),'R3':('1bbcaa28e2a7f8785b85dfb9df64a6e3b152689c',2),'R2':('e91228b328bf382399d3bcbcf55ce4520ec058d8',24)}
 check(all(sum(a['revision']==v for a in A)==n and all(a['source_commit']==sha for a in A if a['revision']==v) for v,(sha,n) in rev.items()),'R4/R3/R2 exactsource commits/counts; no mixed older candidates')
 reg={a['source_path']:a for a in json.loads((ROOT/'docs/assets/ASSET_REGISTRY.json').read_text())['assets']}
-check(all(reg[a['file']]['approval_status']=='PROVISIONAL_ANDROID_QA' and reg[a['file']]['android_status']=='NOT_RUN' and reg[a['file']]['source_sha256']==a['sha256'] for a in A),'central candidateledger exactSHA/provisional/AndroidNOT_RUN')
+check(all(reg[a['file']]['approval_status']=='APPROVED' and reg[a['file']]['android_status']=='PASS' and reg[a['file']]['qa_status']=='PASS' and reg[a['file']]['adoption_basis']==L['adoption_basis'] and reg[a['file']]['source_sha256']==a['sha256'] for a in A),'central formalledger exactSHA/APPROVED/AndroidPASS')
 script="const fs=require('node:fs'),vm=require('node:vm'),c={window:{}};vm.runInNewContext(fs.readFileSync('js/field/portrait-registry.js','utf8'),c);const r=c.window.PortraitRegistry;console.log(JSON.stringify(Object.fromEntries(r.get('fiona').faces.map(f=>[f,{base:r.imageUrl('fiona',f),blink:r.blinkOf('fiona',f)}]))));"
 routes=json.loads(subprocess.check_output(['node','-e',script],cwd=ROOT))
 for a in A:

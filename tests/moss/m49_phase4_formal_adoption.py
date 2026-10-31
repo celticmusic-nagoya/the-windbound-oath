@@ -21,7 +21,7 @@ actual=json.loads(subprocess.check_output(['node','-e',script],cwd=ROOT))
 expected={'fiona':['normal','smile','angry','sad','surprised','worried','determined','relieved'],'lou':['normal','angry','sad','surprised','worried','determined'],'emma':['normal','smile','angry','sad','surprised','worried','determined','relieved']}
 candidate=json.loads((ROOT/'docs/portraits/PHASE4_FIONA_22BR4.json').read_text())
 replacements={a['replaces_runtime']:a['file'] for a in candidate['assets'] if a['revision']!='R2'}
-check({f for a in actual for f in a['files']}=={replacements.get(f,f) for f in locked} and all(a['faces']==expected[a['id']] and a['normalPresent'] for a in actual),'runtime46 routes match original locks with explicit22B-R4 provisional5 substitutions; formal original hashes still protected')
+check({f for a in actual for f in a['files']}=={replacements.get(f,f) for f in locked} and all(a['faces']==expected[a['id']] and a['normalPresent'] for a in actual),'runtime46 routes match original locks with explicit23A formal5 substitutions; formal original hashes still protected')
 for c,revision in [('fiona','provisional-20e'),('lou','provisional-20e'),('emma','provisional-20c')]:
  check(all('/'+revision+'/' in a['file'] for a in ledger['assets'] if a['character']==c and not(a['kind']=='expression' and a['expression']=='normal')),c+': exactly the QA-passed live revision; no old handoff substitution')
 reg=json.loads((ROOT/'docs/assets/ASSET_REGISTRY.json').read_text())['assets'];byfile={a['source_path']:a for a in reg if a['source_path'] in locked}
@@ -31,7 +31,10 @@ formal={a['source_path'] for a in reg if a['category']=='portrait' and a['charac
 supplement=(ROOT/'docs/portraits/PHASE4_EXPRESSION_BLINK_ADOPTED_SHA256SUMS').read_bytes()
 check(hashlib.sha256(supplement).hexdigest()=='c4297d808ac988cc3ce013aa50da9f87ed291a69f934dc5a810c3bf29bd172bf','22A formal supplement is the exact pinned PR93 blink manifest')
 extra={line.split(maxsplit=1)[1] for line in supplement.decode().splitlines()}
-check(len(extra)==120 and formal==set(locked)|extra,'only21A46 plus explicitly22A-adopted120 files are formal; no accidental promotion')
+fiona_manifest=(ROOT/'docs/portraits/PHASE4_FIONA_22BR4_SHA256SUMS').read_bytes()
+check(hashlib.sha256(fiona_manifest).hexdigest()=='afde3b64e9f396e1efc4df99547e086f40b15dec05eb71c2e9f9d8a2dc9baa60','23A formal29 supplement exact immutable PR95 SHA manifest')
+fiona={line.split(maxsplit=1)[1] for line in fiona_manifest.decode().splitlines()}
+check(len(extra)==120 and len(fiona)==29 and formal==set(locked)|extra|fiona,'only21A46 +22A120 +23A29 formal files; no unapproved promotion')
 byid={a['asset_id']:a for a in reg}
 check(all(byid[a['asset_id']]['approval_status']==a['approval_status'] for a in ledger['nonadopted_portrait_statuses']),'every excluded/superseded portrait approval status preserved')
 protected=ledger['other_protected_pngs'];other=''.join(a['sha256']+'  '+a['file']+'\n' for a in sorted(protected,key=lambda a:a['file']))
