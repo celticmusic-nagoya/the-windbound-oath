@@ -71,7 +71,7 @@ with sync_playwright() as p:
         check(pg.evaluate("document.querySelectorAll('.event-cg-item.on').length===0"), f'{w}x{h}: no event CG overlap')
         if OUT: pg.screenshot(path=str(OUT/f'story_smile_{w}x{h}.png'))
     pg.locator('#msg').tap();pg.wait_for_timeout(100)
-    check(not pg.evaluate('TalkPortrait.status.visible') and pg.evaluate('TalkPortrait.status.blink') is None, 'Fiona page hides Aidan and stops timer')
+    check(pg.evaluate("TalkPortrait.status.visible&&TalkPortrait.status.char==='fiona'&&TalkPortrait.status.face==='smile'&&TalkPortrait.status.blink===null&&!TalkPortrait.status.blinkReady"), 'Fiona warmth page replaces Aidan with adopted static smile (24A)')
     pg.locator('#msg').tap();pg.locator('#msg').tap()
     pg.wait_for_function("TalkPortrait.status.visible&&TalkPortrait.status.face==='normal'&&TalkPortrait.status.blinkReady")
     check('守れるくらいには強くなりたい' in pg.locator('#msg .talkText').inner_text(), 'second original Aidan line uses normal expression')

@@ -4,15 +4,15 @@
 window.TalkDataScenes = Object.freeze({tables: [
   // 風見の断崖のベンチ (stage 3): sit? yes -> flag cliff_bench_sat + the sunset scene (main story advances) / no -> nothing changes, ask again any time
   {npc: 'cliff_bench', entries: [
-    {id: 'cliff_bench_ask', priority: 20, when: {stage: [3, 3]}, mode: 'cycle', lines: [{pages: [
+    {id: 'cliff_bench_ask', priority: 20, when: {stage: [3, 3]}, mode: 'cycle', lines: [{portraits:[{"char":null},{"char":"fiona","face":"normal","side":"right"},{"char":null}],pages: [
       '頂上の草地に、古びたベンチがひとつ。ちょうど、夕日の正面だ。',
       {speaker:'フィオナ',text:'「ねえ、エイダン。少し座っていかない？　……夕日、見ていこうよ。」',char:'fiona',face:'normal',side:'right'},
       {speaker:'',text:'ここに座って、夕日を眺めますか？',char:null}],
       choice: {options: [
         {label: 'はい', set: {cliff_bench_sat: true}, scene: 'cliff_sunset_to_fire'},
-        {label: 'いいえ', reply: ['フィオナ「そっか。……気が向いたら、いつでも声をかけてね。」', 'もう少し、あたりを見ていよう。']}]}}]}]},
+        {label: 'いいえ', reply: {pages:['フィオナ「そっか。……気が向いたら、いつでも声をかけてね。」', 'もう少し、あたりを見ていよう。'],portraits:[{"char":"fiona","face":"normal","side":"right"},{"char":null}]}}]}}]}]},
   {npc: 'scene_cliff_sunset', entries: [
-    {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{pages: [
+    {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{portraits:[{"char":"fiona","face":"smile","side":"right"},{"char":null},{"char":"aidan","face":"smile","side":"left"},{"char":"fiona","face":"smile","side":"right"},{"char":"fiona","face":"normal","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"normal","side":"right"},{"char":null}],pages: [
       'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',
       '果てのない海が、橙色にとけていく。断崖の草原を、風がやわらかく撫でていった。',
       {speaker: 'エイダン', text: '「訓練のあとに、こんな坂道を登らされるとは思わなかったけどな。」', char: 'aidan', face: 'smile', side: 'left'},
@@ -22,7 +22,7 @@ window.TalkDataScenes = Object.freeze({tables: [
       {speaker: 'フィオナ', text: '「そっか。」', char: null},
       '夕陽が、水平線の向こうへゆっくりと沈んでいく。']}]}]},
   {npc: 'scene_cliff_night', entries: [
-    {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{pages: [
+    {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{portraits:[{"char":null},{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":null},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":"aidan","face":"surprised","side":"left"},{"char":"fiona","face":"worried","side":"right"}],pages: [
       'いつのまにか、空は深い群青に変わっていた。',
       'フィオナ「見て、エイダン。星……こんなにたくさん。」',
       'エイダン「ああ。村の灯りが遠いと、こんなに見えるんだな。」',
@@ -35,7 +35,7 @@ window.TalkDataScenes = Object.freeze({tables: [
       'フィオナ「村のほうが……なんだか、騒がしい。」']}]}]},
   // 崖崩れ → モスの森(A1)に落ちた直後(storyStage 9): index.html enterMossForest が FieldTalk.talk('scene_forest_arrival') で再生する(10ページ)
   {npc: 'scene_forest_arrival', entries: [
-    {id: 'scene_forest_arrival_1', priority: 1, mode: 'cycle', lines: [{pages: [
+    {id: 'scene_forest_arrival_1', priority: 1, mode: 'cycle', lines: [{portraits:[{"char":null},{"char":"fiona","face":"relieved","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"worried","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":"fiona","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"}],pages: [
       '冷たい土と、苔の匂い。見上げても、崩れた崖の上は暗くて見えない。',
       'フィオナ「……エイダン？　よかった、無事だったんだね……。」',
       {speaker: '', text: 'エイダン「ああ……。フィオナは？」　フィオナ「うん……大丈夫。」'},
@@ -47,7 +47,7 @@ window.TalkDataScenes = Object.freeze({tables: [
       'フィオナ「……この風、冷たくて重い。あの夜、風が止まったときに、少し似てる……。」',
       'エイダン「……村の異変と、この森の風。何かつながっているのかもしれない。道を探しながら、手がかりも調べよう。」']}]}]},
   {npc: 'scene_cliff_fire', entries: [
-    {id: 'scene_cliff_fire_1', priority: 1, mode: 'cycle', lines: [{pages: [
+    {id: 'scene_cliff_fire_1', priority: 1, mode: 'cycle', lines: [{portraits:[{"char":"aidan","face":"surprised","side":"left"},{"char":null},{"char":"fiona","face":"surprised","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"}],pages: [
       'エイダン「あれは……村が――！」',
       '遠く、リルド村の方角から黒煙が立ちのぼり、赤い炎が夜空を焦がしている。',
       'フィオナ「うそ……みんなが……！」',

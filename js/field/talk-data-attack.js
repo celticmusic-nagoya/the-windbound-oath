@@ -14,7 +14,8 @@ const ATTACK_ESCAPE_LINES = Object.freeze([
   'エイダン「フィオナ！」',
   '二人の足元が崩れ、そのまま暗い谷へ落ちていった――。'
 ]);
-const _atk = (npc, lines, set) => ({npc, entries: [{id: npc + '_1', priority: 10, mode: 'cycle', when: {stage: [5, 8]}, lines: [set ? {pages: [].concat(lines), set} : lines]}]});
+const ATTACK_ESCAPE_PORTRAITS = Object.freeze([{"char":"aidan","face":"worried","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":"fiona","face":"determined","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"surprised","side":"left"},{"char":"fiona","face":"determined","side":"right"},{"char":null},{"char":"aidan","face":"surprised","side":"left"},{"char":null}]);
+const _atk = (npc, lines, set, portraits) => ({npc, entries: [{id: npc + '_1', priority: 10, mode: 'cycle', when: {stage: [5, 8]}, lines: [set || portraits ? {pages: [].concat(lines), ...(set ? {set} : {}), ...(portraits ? {portraits} : {})} : lines]}]});
 // 目的 / 通知 / バナー / ポップ: 襲撃中に画面へ出る短い文言（キー参照: index.html の atkObj / atkNotice / atkBanner）
 const ATTACK_TEXT = Object.freeze({
   obj: Object.freeze({find_fiona: '村の広場へ向かい、フィオナを探そう', talk_fiona: 'フィオナに話しかけよう', go_north: 'フィオナとともに村の北側へ向かおう',
@@ -27,18 +28,19 @@ const ATTACK_TEXT = Object.freeze({
 window.TalkDataAttack = Object.freeze({
   text: ATTACK_TEXT,
   escapeLines: ATTACK_ESCAPE_LINES,
+  escapePortraits: ATTACK_ESCAPE_PORTRAITS,
   flags: Object.freeze(['atk_started', 'atk_rescued', 'atk_fiona_found', 'atk_knight_met', 'atk_escaped']),
   tables: [
-    _atk('atk_enter', ['エイダン「広場で合流する約束だ……フィオナ、無事でいてくれ。」'], {atk_started: true}),
+    _atk('atk_enter', ['エイダン「広場で合流する約束だ……フィオナ、無事でいてくれ。」'], {atk_started: true},[{"char":"aidan","face":"worried","side":"left"}]),
     _atk('atk_old', ['老人「うぅ……広場の方へ、魔物が……。娘さんが、一人で追っていった……」']),
     _atk('atk_mother_before', ['母親「この子だけでも……！」']),
     _atk('atk_mother_after', ['母親「本当にありがとう。娘と一緒に逃げます！」']),
     _atk('atk_child', ['子ども「お姉ちゃんが治してくれたの……それから、あっちへ走っていった……」']),
-    _atk('atk_gob2_wait', ['エイダン「先にあの母娘を助けないと！」']),
-    _atk('atk_rescued', ['母親「ありがとう……！　さあ、逃げましょう！」', 'エイダン「広場へ……フィオナを探さないと。」'], {atk_rescued: true}),
-    _atk('atk_fiona', ['フィオナ「エイダン……！ よかった。さっきの人たちは逃がせた。でも、この魔物たち……普通じゃない。」'], {atk_fiona_found: true}),
+    _atk('atk_gob2_wait', ['エイダン「先にあの母娘を助けないと！」'],undefined,[{"char":"aidan","face":"normal","side":"left"}]),
+    _atk('atk_rescued', ['母親「ありがとう……！　さあ、逃げましょう！」', 'エイダン「広場へ……フィオナを探さないと。」'], {atk_rescued: true},[{"char":null},{"char":"aidan","face":"worried","side":"left"}]),
+    _atk('atk_fiona', ['フィオナ「エイダン……！ よかった。さっきの人たちは逃がせた。でも、この魔物たち……普通じゃない。」'], {atk_fiona_found: true},[{"char":"fiona","face":"worried","side":"right"}]),
     _atk('atk_knight_first', ['王国騎士「生存者か！　北門はもう保たない。川沿いの退路から森へ抜けろ！　我々がここを食い止める！」'], {atk_knight_met: true}),
     _atk('atk_knight_again', ['王国騎士「急げ！　この数は普通じゃない……黒いルーンに近づくな！」']),
-    {npc: 'scene_escape', entries: [{id: 'scene_escape_1', priority: 1, mode: 'cycle', lines: [{pages: ATTACK_ESCAPE_LINES.slice(), set: {atk_escaped: true}}]}]}
+    {npc: 'scene_escape', entries: [{id: 'scene_escape_1', priority: 1, mode: 'cycle', lines: [{portraits:ATTACK_ESCAPE_PORTRAITS,pages: ATTACK_ESCAPE_LINES.slice(), set: {atk_escaped: true}}]}]}
   ]
 });
