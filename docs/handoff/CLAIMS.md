@@ -160,3 +160,5 @@ Codex / codex/22b-r4-fiona / base c4c5d22047ba5c9cdeef84b49a9c742356295ce2. Auth
 
 ## DIRECTIVE-23A (2026-10-31)
 Codex / codex/23a-fiona-adoption / base8179a1100f6b33b3cbad70ea9b1d127e620323c5(PR95). User AndroidQA all5PASS explicitlyadopts exactR4static3/R3static2/R2blink24. Scope only29adoptionledger/canonicalregistry/protectiontests/Phase4closeoutdocs. All259PNG bytes, runtime URLs, renderer/timing, story/save/battle unchanged. PR94adoption120 alreadydone. work/codex namespace blocked by existingworkref (preserve). STATUS: WIP.
+
+23A QA checkpoint: exactPR95 29PNG officiallyAPPROVED after userAndroid5PASS; old230+new29=259PNG immutable; allruntime/image diff0. Serial5regressionfiles+Node6PASS, registryaudit0errors, only29canonicalrecords promoted. Phase4COMPLETE/FionaCLOSED; intentionalLou2hold/static4 maintained. docs/qa/DIRECTIVE-23A.md; PR96; final-head independentreviewpending; rollbackremote8179a11 verified. STATUS: READY_FOR_REVIEW.

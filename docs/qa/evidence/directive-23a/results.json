@@ -1,0 +1,82 @@
+{
+  "source_head": "40db07be25dd0c37881306c85da920c00054a4a5",
+  "main_base": "8179a1100f6b33b3cbad70ea9b1d127e620323c5",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "results": [
+    {
+      "test": "tests/moss/m49_phase4_formal_adoption.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.379,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m49_phase4_formal_adoption.py.log",
+      "test_sha256_before": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "test_sha256_after": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m51_blink_formal_adoption_22a.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.421,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m51_blink_formal_adoption_22a.py.log",
+      "test_sha256_before": "10569913944cdda42699141e6de671e1be597867eb9e120a53c43af6827ec6fa",
+      "test_sha256_after": "10569913944cdda42699141e6de671e1be597867eb9e120a53c43af6827ec6fa",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m52_fiona_r4_integration.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 32.885,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m52_fiona_r4_integration.py.log",
+      "test_sha256_before": "d7fab545600402fb860119490a330ab7051a6303a3f9e57304568c9025d77a5e",
+      "test_sha256_after": "d7fab545600402fb860119490a330ab7051a6303a3f9e57304568c9025d77a5e",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m50_expression_blink_21c.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 121.706,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m50_expression_blink_21c.py.log",
+      "test_sha256_before": "e37944a5c9969029692e994e288535932aeb829509a1b4a3133a6a0010998909",
+      "test_sha256_after": "e37944a5c9969029692e994e288535932aeb829509a1b4a3133a6a0010998909",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/save_continue_lifecycle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 26.034,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_save_continue_lifecycle.py.log",
+      "test_sha256_before": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "server_stopped": true
+    }
+  ]
+}
