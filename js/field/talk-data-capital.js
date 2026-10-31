@@ -33,7 +33,7 @@ window.TalkDataCapital = Object.freeze({tables: [
      lines: ['酔っ払いのドワーフ「旅ぃ？ そんなもん明日にしろ！ 生きてる奴が酒場に集まったんなら宴だ、宴！」', '酔っ払いのドワーフ「ま、行くってんなら止めやせん。……気をつけて行けよ、若造ども。」']},
     {id: 'f4_dw_a', priority: 10, mode: 'cycle',
      lines: ['酔っ払いのドワーフ「素材を仕入れに来ただけだったんだがなぁ……。ここの黒麦酒がうまいのが悪い！」',
-             {pages: ['酔っ払いのドワーフ「旅ぃ？ そんなもん明日にしろ！ 生きてる奴が酒場に集まったんなら宴だ、宴！」', 'エイダン「あの、黒紫の魔物を見たことは……」', '酔っ払いのドワーフ「…………黒紫、ねぇ。」', '（一瞬だけ、酔いの抜けた目をした気がした。傍らの荷物から、古い金属片が覗いている。）']}]}]},
+             {portraits:[{"char":null},{"char":"aidan","face":"normal","side":"left"},{"char":null},{"char":null}],pages: ['酔っ払いのドワーフ「旅ぃ？ そんなもん明日にしろ！ 生きてる奴が酒場に集まったんなら宴だ、宴！」', 'エイダン「あの、黒紫の魔物を見たことは……」', '酔っ払いのドワーフ「…………黒紫、ねぇ。」', '（一瞬だけ、酔いの抜けた目をした気がした。傍らの荷物から、古い金属片が覗いている。）']}]}]},
   // ---- 王都・南大城門と旅人街
   {npc: 'g_gate_guard', entries: [
     {id: 'g_gg_a', priority: 10, mode: 'cycle', lines: ['門番「ようこそ、王都カエルディンへ。……辺境の方は、最近物騒だと聞く。街道は無事だったか？」', '門番「北へ進めば商業地区、その先が中央広場だ。王城は高台に見えるだろう？」']}]},
@@ -105,7 +105,7 @@ window.TalkDataCapital = Object.freeze({tables: [
   // ---- 街道（砦〜王都）・丘の上からの王都一望（初回はカメラ演出つき）
   {npc: 'road_overlook', entries: [
     {id: 'road_overlook_first', priority: 50, mode: 'once',
-     lines: [{pages: ['エイダン「……あれが、王都か。」', 'フィオナ「大きい……。谷の向こうまで、街がずっと続いてる。」',
+     lines: [{portraits:[{"char":"aidan","face":"surprised","side":"left"},{"char":"fiona","face":"surprised","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"determined","side":"right"}],pages: ['エイダン「……あれが、王都か。」', 'フィオナ「大きい……。谷の向こうまで、街がずっと続いてる。」',
                       'エイダン「村から出たことのなかった俺たちが、あんな場所へ行くんだな。」', 'フィオナ「うん。……行こう、エイダン。風はこっちに吹いてるよ。」'],
               set: {road_overlook_seen: true}}]}]},
   {npc: 'road_overlook_view', entries: [
@@ -121,7 +121,7 @@ window.TalkDataCapital = Object.freeze({tables: [
                       'リアム「助かる。さあ、行こうぜ。」'], set: {capital_gate_passed: true}}]},
     {id: 'rd_gate_after', priority: 40, mode: 'cycle', when: {flag: 'capital_gate_passed'}, lines: ['門衛「調査団の連れなら話は早い。王都を楽しんでくれ。」']},
     {id: 'rd_gate_refuse', priority: 10, mode: 'cycle',
-     lines: [{pages: ['門衛「止まれ。ここから先は王都カエルディン。身元の分からぬ辺境の者を、通すわけにはいかん。」',
+     lines: [{portraits:[{"char":null},{"char":null},{"char":"aidan","face":"normal","side":"left"},{"char":null},{"char":"aidan","face":"worried","side":"left"},{"char":null},{"char":"aidan","face":"worried","side":"left"}],pages: ['門衛「止まれ。ここから先は王都カエルディン。身元の分からぬ辺境の者を、通すわけにはいかん。」',
                       '門衛「近ごろは辺境から怪しい者が流れ込んでいる。王都の者か、身元を保証できる者はいないのか？」',
                       'エイダン「待ってください。僕の父は、騎士なんです。リルドの辺境を守る騎士の……息子です。」',
                       '門衛「騎士の息子？ 笑わせるな。騎士を名乗る辺境の小僧など、毎月のように来る。証になる物はあるのか？」',
@@ -135,12 +135,12 @@ window.TalkDataCapital = Object.freeze({tables: [
   // ---- ドゥンヴァル砦・酒場「錆びた角笛」 リアム加入イベント
   {npc: 'liam', entries: [
     {id: 'liam_intro', priority: 70, mode: 'once', when: {stage: [15, 99]},
-     lines: [{pages: ['酒場の隅で、赤いバンダナの青年が古びた地図を広げている。', 'リアム「……ん？ 見ない顔だな。その剣、ただの飾りじゃなさそうだ。」', 'エイダン「あなたは？」',
+     lines: [{portraits:[{"char":null},{"char":null},{"char":"aidan","face":"normal","side":"left"},{"char":null},{"char":null},{"char":null},{"char":null}],pages: ['酒場の隅で、赤いバンダナの青年が古びた地図を広げている。', 'リアム「……ん？ 見ない顔だな。その剣、ただの飾りじゃなさそうだ。」', 'エイダン「あなたは？」',
                       'リアム「リアム。つい最近まで、王国調査団で遺跡調査員をやってた——今はしがないトレジャーハンターさ。」',
                       'リアム「調査団の元団員は、王都の門でも顔が利く。連れがいれば、検問も素通りさ。」',
                       'リアム「腰の短めの剣と、背中の弓。道中の面倒ごとなら、これで十分さ。」',
                       'リアム「王都へ戻る連れを探してたんだ。最近の街道は物騒でね。……どうだい、俺を連れていかないか？ 足と目には自信がある。」'],
-              choice: {options: [{label: '仲間に誘う', reply: ['リアム「決まりだな！ よろしく頼むぜ、エイダン。」', 'フィオナ「よろしくね、リアムさん。」', '（リアムが仲間に加わった！）'], set: {liam_joined: true}, join: 'liam'},
+              choice: {options: [{label: '仲間に誘う', reply: {pages:['リアム「決まりだな！ よろしく頼むぜ、エイダン。」', 'フィオナ「よろしくね、リアムさん。」', '（リアムが仲間に加わった！）'],portraits:[{"char":null},{"char":"fiona","face":"smile","side":"right"},{"char":null}]}, set: {liam_joined: true}, join: 'liam'},
                                  {label: 'また今度', reply: 'リアム「そうか。気が変わったら声をかけてくれ。ここで地図とにらめっこしてるよ。」'}]}}]},
     {id: 'liam_ask', priority: 60, mode: 'cycle', when: {all: [{talked: 'liam_intro'}, {not: {flag: 'liam_joined'}}]},
      lines: [{pages: ['リアム「お、考えは決まったかい？ 王都までの道案内なら任せてくれ。」'],

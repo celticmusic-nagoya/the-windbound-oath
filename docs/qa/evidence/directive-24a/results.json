@@ -1,0 +1,162 @@
+{
+  "result": "PASS",
+  "unique_regression_files": 10,
+  "node_cases": 6,
+  "physical_android": "NOT_RUN",
+  "tested_runtime_head": "50efeba",
+  "notes": "Later commits only refine tests. m53final7010bb5covers all runtime paths after legacy span/windstone additions; remaining unchanged portrait/fieldtalk/render components testedf8c1219; cliff/attack/quest/save repeated50efeba. Retired failed runs are excluded.",
+  "results": [
+    {
+      "test": "tests/moss/m44_aidan_story_portrait.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 55.088,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m44_aidan_story_portrait.py.log",
+      "test_sha256_before": "2d0677ba3c16599daed5cd9c4057696a2c6cf3e4fd5869e0708fb23cb95ad356",
+      "test_sha256_after": "2d0677ba3c16599daed5cd9c4057696a2c6cf3e4fd5869e0708fb23cb95ad356",
+      "server_stopped": true,
+      "source_head": "f8c1219e1de66fa95a8ac08c4cbd620c8f7d1ec8",
+      "raw_log_directory": "qa"
+    },
+    {
+      "test": "tests/moss/m46_phase4_normal_portraits.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 84.249,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m46_phase4_normal_portraits.py.log",
+      "test_sha256_before": "40d3700c6d82860ddd85144f46f99d24b35faa7950609b3f5e86da26da1ac380",
+      "test_sha256_after": "40d3700c6d82860ddd85144f46f99d24b35faa7950609b3f5e86da26da1ac380",
+      "server_stopped": true,
+      "source_head": "f8c1219e1de66fa95a8ac08c4cbd620c8f7d1ec8",
+      "raw_log_directory": "qa"
+    },
+    {
+      "test": "tests/moss/m7_cliff.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 36.806,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m7_cliff.py.log",
+      "test_sha256_before": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "test_sha256_after": "6570c0a51fce1c685a23cd8b1cfeb57c277edf49cb1a18be0f4c5a3d73bc5c71",
+      "server_stopped": true,
+      "source_head": "50efeba975878e20e87f165dddff5153896af8a0",
+      "raw_log_directory": "qa-rerun"
+    },
+    {
+      "test": "tests/moss/m12_attack_ruin.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 18.458,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m12_attack_ruin.py.log",
+      "test_sha256_before": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "test_sha256_after": "a282cb5724e2427dbd5d461ee7acf0598493eb8f5228317391f2cd72219235e5",
+      "server_stopped": true,
+      "source_head": "50efeba975878e20e87f165dddff5153896af8a0",
+      "raw_log_directory": "qa-rerun"
+    },
+    {
+      "test": "tests/moss/m6_quest.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 7.327,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m6_quest.py.log",
+      "test_sha256_before": "c951a50189bd956d625496ff7050ed055f1ad9bd7f5fa1bedf84ac73ef49cd57",
+      "test_sha256_after": "c951a50189bd956d625496ff7050ed055f1ad9bd7f5fa1bedf84ac73ef49cd57",
+      "server_stopped": true,
+      "source_head": "50efeba975878e20e87f165dddff5153896af8a0",
+      "raw_log_directory": "qa-rerun"
+    },
+    {
+      "test": "tests/system/save_continue_lifecycle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 25.533,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_save_continue_lifecycle.py.log",
+      "test_sha256_before": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "server_stopped": true,
+      "source_head": "50efeba975878e20e87f165dddff5153896af8a0",
+      "raw_log_directory": "qa-rerun"
+    },
+    {
+      "test": "tests/moss/m49_phase4_formal_adoption.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.571,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m49_phase4_formal_adoption.py.log",
+      "test_sha256_before": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "test_sha256_after": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "server_stopped": true,
+      "source_head": "f8c1219e1de66fa95a8ac08c4cbd620c8f7d1ec8",
+      "raw_log_directory": "qa"
+    },
+    {
+      "test": "tests/moss/m51_blink_formal_adoption_22a.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.42,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m51_blink_formal_adoption_22a.py.log",
+      "test_sha256_before": "10569913944cdda42699141e6de671e1be597867eb9e120a53c43af6827ec6fa",
+      "test_sha256_after": "10569913944cdda42699141e6de671e1be597867eb9e120a53c43af6827ec6fa",
+      "server_stopped": true,
+      "source_head": "f8c1219e1de66fa95a8ac08c4cbd620c8f7d1ec8",
+      "raw_log_directory": "qa"
+    },
+    {
+      "test": "tests/moss/m52_fiona_r4_integration.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 34.491,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m52_fiona_r4_integration.py.log",
+      "test_sha256_before": "d7fab545600402fb860119490a330ab7051a6303a3f9e57304568c9025d77a5e",
+      "test_sha256_after": "d7fab545600402fb860119490a330ab7051a6303a3f9e57304568c9025d77a5e",
+      "server_stopped": true,
+      "source_head": "f8c1219e1de66fa95a8ac08c4cbd620c8f7d1ec8",
+      "raw_log_directory": "qa"
+    },
+    {
+      "test": "tests/moss/m53_story_expression_assignment.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 61.278,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m53_story_expression_assignment.py.log",
+      "test_sha256_before": "592b931ae411a6efbb8ece33d7be413c9128e9e280f9367a6e6353f4e52bd904",
+      "test_sha256_after": "592b931ae411a6efbb8ece33d7be413c9128e9e280f9367a6e6353f4e52bd904",
+      "server_stopped": true,
+      "source_head": "7010bb5332a9ea4ff613416990aa40799afee991",
+      "raw_log_directory": "qa-verified"
+    }
+  ]
+}

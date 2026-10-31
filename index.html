@@ -219,13 +219,16 @@
 <script>
 const $=s=>document.querySelector(s),world=$('#world'),pl=$('#player'),msg=$('#msg');
 let px=270,py=610,target=null,room='home',flags={balloon:false,balloonDone:false,cat:false,catFound:false,catDone:false,drawer:false,pot:false};
-function say(t){
+function say(t, portrait){
  window.LoadCoordinator?.noteDialogue();
  msg.textContent=t;
  msg.style.display='block';
  document.body.classList.add('dialogueOpen');
+ if(portrait&&window.TalkPortrait){const text=document.createElement('span');text.className='talkText';text.textContent=t;msg.replaceChildren(text);TalkPortrait.open('legacySay');TalkPortrait.preload(portrait.char,portrait.face);TalkPortrait.page(portrait,'legacySay');}
+ else window.TalkPortrait?.close('legacySay');
 }
 function closeDialogue(){
+ window.TalkPortrait?.close('legacySay');
  window.LoadCoordinator?.noteDialogue();
  msg.style.display='none';
  msg.textContent='';
@@ -461,11 +464,11 @@ function renderJournal(){
 $('#fiona').onclick=()=>{
  if(storyStage===0){
   storyStage=1;
-  say('フィオナ「遅いよ、エイダン。今日は木人相手の訓練でしょ？」');
+  say('フィオナ「遅いよ、エイダン。今日は木人相手の訓練でしょ？」',{"char":"fiona","face":"normal","side":"right"});
   setObj('訓練用の木人を調べよう');
   storyToast('フィオナが同行した');
- }else if(storyStage===1) say('フィオナ「ほら、木人を調べて。私も後ろから見てるから。」');
- else if(storyStage>=2) say('フィオナ「さっきの光……何だったんだろう。」');
+ }else if(storyStage===1) say('フィオナ「ほら、木人を調べて。私も後ろから見てるから。」',{"char":"fiona","face":"normal","side":"right"});
+ else if(storyStage>=2) say('フィオナ「さっきの光……何だったんだろう。」',{"char":"fiona","face":"surprised","side":"right"});
 };
 // 提案: 新規起動時のみ父の剣を用意。ロードや訓練では配り直さない。
 function giveStarterSword(){
@@ -534,12 +537,18 @@ function winTraining(){
  updateBattle(); $('#battleMsg').textContent='訓練終了！ エイダン EXP +20　RUNE +10';
  TrainingCheckpoint.later(()=>{
   $('#battle').style.display='none'; storyStage=3;
-  say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」');
+  say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」',{"char":"fiona","face":"surprised","side":"right"});
   setObj('フィオナと風見の断崖へ向かおう');
   storyToast('風見の断崖への道が開いた');
  },1400);
 }
 
+// Presentation-only bridge: these scenes already own text/advance/progression. Metadata never changes those controls.
+function storyPortraitPage(sceneId, textId, pages, index){
+ const tp=window.TalkPortrait;if(!tp)return;const owner='story:'+sceneId;
+ if(tp.owner!==owner){tp.open(owner,{scene:$('#'+sceneId),anchor:$('#'+textId)});for(const p of pages)if(p.char)tp.preload(p.char,p.face);}
+ tp.page(pages[index]||{char:null},owner);
+}
 const hillLines=[
  'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',
  'エイダン「訓練の後にここまで歩かされるとは思わなかったけどな。」',
@@ -556,18 +565,19 @@ const hillLines=[
  '遠く、リルド村の方角で赤い光が揺れた。',
  'エイダン「村が――！」'
 ];
+const hillPortraitPages=[{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"smile","side":"left"},{"char":"fiona","face":"smile","side":"right"},{"char":null},{"char":"fiona","face":"normal","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"normal","side":"right"},{"char":null},{"char":"fiona","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"surprised","side":"left"}];
 let hillIndex=0;
 function startHillScene(){
- hillIndex=0; $('#cinema').style.display='block'; $('#cinemaText').textContent=hillLines[0];
+ hillIndex=0; $('#cinema').style.display='block'; $('#cinemaText').textContent=hillLines[0];storyPortraitPage('cinema','cinemaText',hillPortraitPages,0);
 }
 $('#cinema').onclick=()=>{
  hillIndex++;
  if(hillIndex<hillLines.length){
-  $('#cinemaText').textContent=hillLines[hillIndex];
+  $('#cinemaText').textContent=hillLines[hillIndex];storyPortraitPage('cinema','cinemaText',hillPortraitPages,hillIndex);
   if(hillIndex===10){$('#windVeil').style.animation='none';$('#windVeil').style.opacity='0';}
   if(hillIndex===12){$('#hillScene').style.background='radial-gradient(circle at 25% 58%,#c64e2e 0 3%,transparent 18%),linear-gradient(#18212a 0 45%,#493329 46% 56%,#1e2b21 57% 100%)';}
  }else{
-  $('#cinema').style.display='none'; startReturnScene();
+  window.TalkPortrait?.close('story:cinema');$('#cinema').style.display='none'; startReturnScene();
  }
 };
 
@@ -591,23 +601,24 @@ const returnLines=[
  '返事はない。村の奥から、さらに悲鳴が聞こえた。',
  'エイダン「……先に広場へ。約束した場所にいるはずだ。」'
 ];
+const returnPortraitPages=[{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":null},{"char":null},{"char":"fiona","face":"surprised","side":"right"},{"char":null},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"worried","side":"left"},{"char":null},{"char":"aidan","face":"worried","side":"left"},{"char":null},{"char":"aidan","face":"normal","side":"left"}];
 let returnIndex=0;
 function startReturnScene(){
  returnIndex=0;
  $('#returnScene').style.display='block';
- $('#returnText').textContent=returnLines[0];
+ $('#returnText').textContent=returnLines[0];storyPortraitPage('returnScene','returnText',returnPortraitPages,0);
 }
 $('#returnScene').onclick=()=>{
  returnIndex++;
  if(returnIndex<returnLines.length){
-   $('#returnText').textContent=returnLines[returnIndex];
+   $('#returnText').textContent=returnLines[returnIndex];storyPortraitPage('returnScene','returnText',returnPortraitPages,returnIndex);
    if(returnIndex===6) $('#returnGoblin').style.display='block';
    if(returnIndex===12){
      const rs=$('#returnScene'); rs.classList.remove('flash'); void rs.offsetWidth; rs.classList.add('flash');
      $('#returnFiona').style.opacity='.15';
    }
  }else{
-   $('#returnScene').style.display='none';
+   window.TalkPortrait?.close('story:returnScene');$('#returnScene').style.display='none';
    enterBurningVillage();
  }
 };
@@ -957,17 +968,17 @@ function startEscapeScene(){
  closeDialogue(); escapeIndex=0; FieldTalk.setFlag('atk_escaped',true);
  $('#escapeGob').style.display='none';   // the pursuer shows up on the horn line (escapeIndex 4); the stylesheet default is visible
  $('#escapeScene').style.display='block';
- $('#escapeText').textContent=escapeLinesNow()[0];
+ $('#escapeText').textContent=escapeLinesNow()[0];storyPortraitPage('escapeScene','escapeText',TalkDataAttack.escapePortraits,0);
  atkObj('escape');
 }
 $('#escapeScene').onclick=()=>{
  escapeIndex++;
  if(escapeIndex<escapeLinesNow().length){
-   $('#escapeText').textContent=escapeLinesNow()[escapeIndex];
+   $('#escapeText').textContent=escapeLinesNow()[escapeIndex];storyPortraitPage('escapeScene','escapeText',TalkDataAttack.escapePortraits,escapeIndex);
    if(escapeIndex===4)$('#escapeGob').style.display='grid';
    if(escapeIndex===7){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
  }else{
-   $('#escapeScene').style.display='none';
+   window.TalkPortrait?.close('story:escapeScene');$('#escapeScene').style.display='none';
    enterMossForest();
  }
 };
@@ -1502,7 +1513,7 @@ const aftermathLines=[
 ]
 let aftermathIndex=0;
 const aftermathPortraitOwner='aftermathTalk';
-const aftermathPortraitPages=Object.fromEntries([6,8,9,10,12,14,15,18,21].map(i=>[i,{char:'lou',face:'normal',side:'right'}]));
+const aftermathPortraitPages=[{"char":null},{"char":"fiona","face":"surprised","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"sad","side":"left"},{"char":"fiona","face":"determined","side":"right"},{"char":"lou","face":"sad","side":"right"},{"char":"fiona","face":"worried","side":"right"},{"char":"lou","face":"sad","side":"right"},{"char":"lou","face":"sad","side":"right"},{"char":"lou","face":"worried","side":"right"},{"char":"fiona","face":"sad","side":"right"},{"char":"lou","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"lou","face":"worried","side":"right"},{"char":"lou","face":"determined","side":"right"},{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"lou","face":"surprised","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":null},{"char":"lou","face":"normal","side":"right"},{"char":null},{"char":null}];
 function showAftermathPage(){
  $('#aftermathText').textContent=aftermathLines[aftermathIndex];
  window.TalkPortrait?.page(aftermathPortraitPages[aftermathIndex]||{char:null},aftermathPortraitOwner);
@@ -1548,13 +1559,14 @@ const fortLines=[
  '遠く、朝日に照らされた山の向こうで、一瞬だけ黒い裂け目のようなものが空に滲んだ。',
  '――これは、魔王の物語ではない。まだ誰も知らない“何か”と、風の誓いを巡る旅の始まりだった。'
 ];
+const fortPortraitPages=[{"char":null},{"char":"fiona","face":"relieved","side":"right"},{"char":"lou","face":"worried","side":"right"},{"char":null},{"char":null},{"char":null},{"char":null},{"char":null},{"char":null}];
 let fortIndex=0;
 function startFortFinale(){
  document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode');
  // Destination-first transition: never expose the base field between story scenes.
  $('#fortScene').style.display='block';
  storyStage=14;fortIndex=0;currentObjective='ドゥンヴァル砦で王国騎士と合流しよう';renderJournal();
- $('#fortText').textContent=fortLines[0];
+ $('#fortText').textContent=fortLines[0];storyPortraitPage('fortScene','fortText',fortPortraitPages,0);
  // Hide only transient story layers after the fort is already visible.
  ['inside','forestScene','escapeScene','louIntroScene','altarScene','raiderBattle','battle','attackBattle'].forEach(id=>{
    const el=$('#'+id);if(el)el.style.display='none';
@@ -1563,11 +1575,11 @@ function startFortFinale(){
 }
 $('#fortScene').onclick=()=>{
  fortIndex++;
- if(fortIndex<fortLines.length){$('#fortText').textContent=fortLines[fortIndex];if(fortIndex===6)grantStarterGear(true);}
+ if(fortIndex<fortLines.length){$('#fortText').textContent=fortLines[fortIndex];storyPortraitPage('fortScene','fortText',fortPortraitPages,fortIndex);if(fortIndex===6)grantStarterGear(true);}
  else showPrologueEnd();
 };
 function showPrologueEnd(){
- $('#fortScene').style.display='none';storyStage=15;currentObjective='プロローグクリア';renderJournal();
+ window.TalkPortrait?.close('story:fortScene');$('#fortScene').style.display='none';storyStage=15;currentObjective='プロローグクリア';renderJournal();
  $('#prologueEnd').style.display='grid';
 }
 $('#endReturn').onclick=e=>{
@@ -2057,7 +2069,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261029dev18d"></script>
 <script src="js/field/moss-forest-story.js?v=20261025continue"></script>
-<script src="js/field/rilde-village.js?v=20261025continue"></script>
+<script src="js/field/rilde-village.js?v=20261031phase5expressions"></script>
 <script src="js/training-checkpoint.js"></script>
 <script src="js/data/item-data.js"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
@@ -2072,18 +2084,18 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/quest-data.js"></script>
 <script src="js/quest.js"></script>
 <script src="js/field/talk-conditions.js"></script>
-<script src="js/field/talk-data.js?v=20261029phase4normal"></script>
-<script src="js/field/talk-data-quests.js"></script>
-<script src="js/field/talk-data-scenes.js?v=20261029phase4normal"></script>
-<script src="js/field/talk-data-capital.js?v=20261011i"></script>
+<script src="js/field/talk-data.js?v=20261031phase5expressions"></script>
+<script src="js/field/talk-data-quests.js?v=20261031phase5expressions"></script>
+<script src="js/field/talk-data-scenes.js?v=20261031phase5expressions"></script>
+<script src="js/field/talk-data-capital.js?v=20261031phase5expressions"></script>
 <script src="js/field/talk-data-rilde.js?v=20261011d"></script>
-<script src="js/field/talk-data-attack.js?v=20261012a"></script>
+<script src="js/field/talk-data-attack.js?v=20261031phase5expressions"></script>
 <script src="js/field/portrait-registry.js?v=20261031fiona22br4"></script>
 <script src="js/field/portrait-blink.js?v=20261027tp1"></script>
 <script src="js/field/talk-portrait.js?v=20261029phase4normal"></script>
 <link rel="stylesheet" href="css/dev-portrait-test.css?v=20261029dev18d">
 <script src="js/dev/portrait-test.js?v=20261030phase4qa"></script>
-<script src="js/field/field-talk.js?v=20261029phase4normal"></script>
+<script src="js/field/field-talk.js?v=20261031phase5expressions"></script>
 <script src="js/field/scene-data.js"></script>
 <script src="js/field/field-choreo.js"></script>
 <script src="js/field/field-scene.js"></script>

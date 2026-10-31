@@ -1,0 +1,2090 @@
+{
+  "directive": "DIRECTIVE-24A",
+  "base_main": "2b2daa0c602bc4b8fe86a8b5df08a4469e33df0a",
+  "behavior_sha256": "4d9c203b00d45ac245a369350b8fe910bf4e2a1164e5cb492aa82bf7b1c10114",
+  "counting": "表示経路別の延べページ数。共有escape台詞・legacyhillの別表示経路を個別計上。",
+  "audited_pages": 388,
+  "fieldtalk_pages": 262,
+  "cinematic_pages": 119,
+  "training_pages": 4,
+  "inspection_pages": 3,
+  "target_pages": 115,
+  "assignment_changes": {
+    "retained": 5,
+    "added": 102,
+    "updated": 8
+  },
+  "excluded_pages": 25,
+  "unhandled": [],
+  "per_character": {
+    "aidan": {
+      "named_speaker_pages": 50,
+      "portrait_pages_before": 2,
+      "portrait_pages_after": 41,
+      "faces": {
+        "smile": 2,
+        "normal": 21,
+        "surprised": 8,
+        "worried": 9,
+        "sad": 1
+      }
+    },
+    "fiona": {
+      "named_speaker_pages": 54,
+      "portrait_pages_before": 1,
+      "portrait_pages_after": 48,
+      "faces": {
+        "normal": 9,
+        "surprised": 7,
+        "smile": 8,
+        "worried": 15,
+        "relieved": 2,
+        "determined": 6,
+        "sad": 1
+      }
+    },
+    "lou": {
+      "named_speaker_pages": 19,
+      "portrait_pages_before": 9,
+      "portrait_pages_after": 10,
+      "faces": {
+        "sad": 3,
+        "worried": 4,
+        "determined": 1,
+        "surprised": 1,
+        "normal": 1
+      }
+    },
+    "emma": {
+      "named_speaker_pages": 16,
+      "portrait_pages_before": 1,
+      "portrait_pages_after": 16,
+      "faces": {
+        "normal": 3,
+        "worried": 3,
+        "smile": 6,
+        "relieved": 2,
+        "surprised": 2
+      }
+    }
+  },
+  "assignments": [
+    {
+      "key": "emma_closed/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「おや、エイダンかい。……その顔、また何か背負い込んでないかい？　冒険に出るのはお前たちの自由だけどねぇ、無茶をして怪我だけはして帰ってくるんじゃないよ。フィオナも心配するんだからね。」",
+      "char": "emma",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": "emma",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "retained",
+      "reason": "家族として無茶を気遣い、安心させる返答には親しみを返す。既存normal指定は維持。"
+    },
+    {
+      "key": "emma_closed/1",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「最近、モスの森のあたりも空気が重苦しいねぇ……。昔から、あそこは妙な言い伝えがある場所なんだ。あまり奥地の方へは絶対に近付くんじゃないよ。森の入り口あたりなら、まあ、気をつけて行けば大丈夫だろうけどねぇ。……ねえエイダン、お前はいつだって誰かを守ろうとするけれどねぇ、自分が傷つくことばかり考えちゃダメだよ。」",
+      "char": "emma",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "家族として無茶を気遣い、安心させる返答には親しみを返す。既存normal指定は維持。"
+    },
+    {
+      "key": "emma_closed/2",
+      "page": 0,
+      "speaker": "フィオナ",
+      "text": "「おばあちゃん、私たちなら大丈夫だよ。ちゃんと気をつけるから。」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "家族として無茶を気遣い、安心させる返答には親しみを返す。既存normal指定は維持。"
+    },
+    {
+      "key": "emma_closed/2",
+      "page": 1,
+      "speaker": "エマ",
+      "text": "「ふふ、そう言ってすぐ無茶をするんだから。はい、これを持っていきな。私が縫い直したお守りさ。……気をつけてお行き、ふたりとも。」",
+      "char": "emma",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "家族として無茶を気遣い、安心させる返答には親しみを返す。既存normal指定は維持。"
+    },
+    {
+      "key": "emma_open/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「やれやれ、村を吹き抜ける風がようやくいつも通りに戻ったようだねぇ。……お前たちが頑張ってくれたおかげかい？　ありがとうねぇ。ほら、こうして穏やかな風を感じながら針仕事ができるだけで、おばあちゃんは十分幸せさね。」",
+      "char": "emma",
+      "face": "relieved",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "村に戻った平穏への安堵と、幼なじみへの穏やかなからかい。"
+    },
+    {
+      "key": "emma_open/1",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「見てごらん、フィオナ。またエイダンが難しい顔をしてるよ。……まったく、ふたりともいつまでも子供だと思っていたのにねぇ。おいおいエイダン、そんなに真っ赤になって。お似合いのふたりだと言っただけじゃないか。ふふっ。」",
+      "char": "emma",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "村に戻った平穏への安堵と、幼なじみへの穏やかなからかい。"
+    },
+    {
+      "key": "emma_open/1",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「もう、おばあちゃん！　からかわないでよ……！」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "村に戻った平穏への安堵と、幼なじみへの穏やかなからかい。"
+    },
+    {
+      "key": "emma_q_found_early/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「おや、エイダン。それは……わたしの編んだ護符じゃないか！」",
+      "char": "emma",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_found_early/0",
+      "page": 1,
+      "speaker": "エマ",
+      "text": "「森の道で落としたきり、あきらめていたんだよ。ありがとうねぇ。」",
+      "char": "emma",
+      "face": "relieved",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_found_early/0",
+      "page": 2,
+      "speaker": "エマ",
+      "text": "「これは持っておいき。きっとまた、お前を守ってくれるよ。」",
+      "char": "emma",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_report/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「おや、それは……！　わたしの護符じゃないか。」",
+      "char": "emma",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_report/0",
+      "page": 1,
+      "speaker": "エマ",
+      "text": "「ほんとうにありがとうよ、エイダン。これは持っておいき。きっとまた、お前を守ってくれるよ。」",
+      "char": "emma",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_active/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「護符は見つかったかい？　森の道の、見晴らしのよいあたりで落とした気がするんだけどねぇ。」",
+      "char": "emma",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_offer/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「そういえばエイダン。昔わたしが編んだ風よけの護符を、森の道で落としてしまってねぇ。」",
+      "char": "emma",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_offer/0",
+      "page": 1,
+      "speaker": "エマ",
+      "text": "「もし見つけたら、届けてくれないかい？」",
+      "char": "emma",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_offer/0/reply0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「ありがとうねぇ。無理はしないでおくれよ。」",
+      "char": "emma",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_offer/0/reply1",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「いいんだよ、気が向いたらでね。」",
+      "char": "emma",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "emma_q_thanks/0",
+      "page": 0,
+      "speaker": "エマ",
+      "text": "「その護符、大事にしておくれ。風のお守りだからねぇ。」",
+      "char": "emma",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "護符の発見に驚き、感謝と安堵へ。依頼時は気掛かりを穏やかに示す。"
+    },
+    {
+      "key": "cliff_bench_ask/0",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「ねえ、エイダン。少し座っていかない？　……夕日、見ていこうよ。」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": "fiona",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "retained",
+      "reason": "既存normalを尊重した誘い・辞退への穏やかな応答。"
+    },
+    {
+      "key": "cliff_bench_ask/0/reply1",
+      "page": 0,
+      "speaker": "フィオナ",
+      "text": "「そっか。……気が向いたら、いつでも声をかけてね。」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "既存normalを尊重した誘い・辞退への穏やかな応答。"
+    },
+    {
+      "key": "scene_cliff_sunset_1/0",
+      "page": 0,
+      "speaker": "フィオナ",
+      "text": "「間に合ったね。ここから見る夕日は、やっぱりきれい。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "親しい軽口から将来の真面目な問いへ。既存エイダンsmile/normal維持。"
+    },
+    {
+      "key": "scene_cliff_sunset_1/0",
+      "page": 2,
+      "speaker": "エイダン",
+      "text": "「訓練のあとに、こんな坂道を登らされるとは思わなかったけどな。」",
+      "char": "aidan",
+      "face": "smile",
+      "side": "left",
+      "previous": {
+        "char": "aidan",
+        "face": "smile",
+        "side": "left"
+      },
+      "change": "retained",
+      "reason": "親しい軽口から将来の真面目な問いへ。既存エイダンsmile/normal維持。"
+    },
+    {
+      "key": "scene_cliff_sunset_1/0",
+      "page": 3,
+      "speaker": "フィオナ",
+      "text": "「ふふ。エイダン、昔からすぐそういうこと言う。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "親しい軽口から将来の真面目な問いへ。既存エイダンsmile/normal維持。"
+    },
+    {
+      "key": "scene_cliff_sunset_1/0",
+      "page": 4,
+      "speaker": "フィオナ",
+      "text": "「ねえ。エイダンは……王都へ行ったら、お父さんみたいな騎士になるの？」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "親しい軽口から将来の真面目な問いへ。既存エイダンsmile/normal維持。"
+    },
+    {
+      "key": "scene_cliff_sunset_1/0",
+      "page": 5,
+      "speaker": "エイダン",
+      "text": "「まだ分からない。でも――守れるくらいには強くなりたい。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": "aidan",
+        "face": "normal",
+        "side": "left"
+      },
+      "change": "retained",
+      "reason": "親しい軽口から将来の真面目な問いへ。既存エイダンsmile/normal維持。"
+    },
+    {
+      "key": "scene_cliff_sunset_1/0",
+      "page": 6,
+      "speaker": "フィオナ",
+      "text": "「そっか。」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "親しい軽口から将来の真面目な問いへ。既存エイダンsmile/normal維持。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「見て、エイダン。星……こんなにたくさん。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 2,
+      "speaker": "エイダン",
+      "text": "「ああ。村の灯りが遠いと、こんなに見えるんだな。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 3,
+      "speaker": "フィオナ",
+      "text": "「わたしね、ここで星を見るのが好きなの。……誰かと一緒に見るのは、初めて。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 4,
+      "speaker": "エイダン",
+      "text": "「……そうか。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 6,
+      "speaker": "フィオナ",
+      "text": "「……あれ。風が……止まってる。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 8,
+      "speaker": "エイダン",
+      "text": "「鐘……？　こんな時間に？」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_cliff_night_1/0",
+      "page": 9,
+      "speaker": "フィオナ",
+      "text": "「村のほうが……なんだか、騒がしい。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "星空を共有する喜びから、風の停止・鐘への不安へ段階的に切替。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「……エイダン？　よかった、無事だったんだね……。」",
+      "char": "fiona",
+      "face": "relieved",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 4,
+      "speaker": "エイダン",
+      "text": "「……村のみんなは、無事だろうか。」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 5,
+      "speaker": "フィオナ",
+      "text": "「……きっと、騎士さまたちが守ってくれてる。……そう、信じよう。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 6,
+      "speaker": "フィオナ",
+      "text": "「ここ……モスの森、だよね。村では小さい頃から、奥には絶対行くなって言われてきた……。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 7,
+      "speaker": "エイダン",
+      "text": "「崖の上へは戻れそうにない。……先へ進める道を探そう。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 8,
+      "speaker": "フィオナ",
+      "text": "「……この風、冷たくて重い。あの夜、風が止まったときに、少し似てる……。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 9,
+      "speaker": "エイダン",
+      "text": "「……村の異変と、この森の風。何かつながっているのかもしれない。道を探しながら、手がかりも調べよう。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "再会の安堵から故郷への心配、前進する落ち着きへ。"
+    },
+    {
+      "key": "scene_cliff_fire_1/0",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「あれは……村が――！」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "炎上発見の驚き、救援に向かう覚悟と心配。"
+    },
+    {
+      "key": "scene_cliff_fire_1/0",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「うそ……みんなが……！」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "炎上発見の驚き、救援に向かう覚悟と心配。"
+    },
+    {
+      "key": "scene_cliff_fire_1/0",
+      "page": 3,
+      "speaker": "エイダン",
+      "text": "「急ぐぞ、フィオナ！　走れるか！」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "炎上発見の驚き、救援に向かう覚悟と心配。"
+    },
+    {
+      "key": "scene_cliff_fire_1/0",
+      "page": 4,
+      "speaker": "フィオナ",
+      "text": "「うん！　……お願い、間に合って……！」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "炎上発見の驚き、救援に向かう覚悟と心配。"
+    },
+    {
+      "key": "f4_dw_a/1",
+      "page": 1,
+      "speaker": "エイダン",
+      "text": "「あの、黒紫の魔物を見たことは……」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初対面の丁寧な情報収集。"
+    },
+    {
+      "key": "road_overlook_first/0",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「……あれが、王都か。」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初めて見る王都への驚きから旅を続ける決意へ。"
+    },
+    {
+      "key": "road_overlook_first/0",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「大きい……。谷の向こうまで、街がずっと続いてる。」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初めて見る王都への驚きから旅を続ける決意へ。"
+    },
+    {
+      "key": "road_overlook_first/0",
+      "page": 2,
+      "speaker": "エイダン",
+      "text": "「村から出たことのなかった俺たちが、あんな場所へ行くんだな。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初めて見る王都への驚きから旅を続ける決意へ。"
+    },
+    {
+      "key": "road_overlook_first/0",
+      "page": 3,
+      "speaker": "フィオナ",
+      "text": "「うん。……行こう、エイダン。風はこっちに吹いてるよ。」",
+      "char": "fiona",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初めて見る王都への驚きから旅を続ける決意へ。"
+    },
+    {
+      "key": "rd_gate_refuse/0",
+      "page": 2,
+      "speaker": "エイダン",
+      "text": "「待ってください。僕の父は、騎士なんです。リルドの辺境を守る騎士の……息子です。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "礼儀を守った説明から拒絶に戸惑う不安へ。"
+    },
+    {
+      "key": "rd_gate_refuse/0",
+      "page": 4,
+      "speaker": "エイダン",
+      "text": "「それは……。」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "礼儀を守った説明から拒絶に戸惑う不安へ。"
+    },
+    {
+      "key": "rd_gate_refuse/0",
+      "page": 6,
+      "speaker": "エイダン",
+      "text": "「（……取り合ってもらえない。砦の酒場で、王都へ戻る連れを探していた青年がいたな。）」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "礼儀を守った説明から拒絶に戸惑う不安へ。"
+    },
+    {
+      "key": "liam_intro/0",
+      "page": 2,
+      "speaker": "エイダン",
+      "text": "「あなたは？」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初対面への落ち着いた問いと、新たな同行者への歓迎。"
+    },
+    {
+      "key": "liam_intro/0/reply0",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「よろしくね、リアムさん。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "初対面への落ち着いた問いと、新たな同行者への歓迎。"
+    },
+    {
+      "key": "atk_enter_1/0",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「広場で合流する約束だ……フィオナ、無事でいてくれ。」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助と再会を急ぐ不安を維持し、過剰な怒りに置き換えない。"
+    },
+    {
+      "key": "atk_gob2_wait_1/0",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「先にあの母娘を助けないと！」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助と再会を急ぐ不安を維持し、過剰な怒りに置き換えない。"
+    },
+    {
+      "key": "atk_rescued_1/0",
+      "page": 1,
+      "speaker": "エイダン",
+      "text": "「広場へ……フィオナを探さないと。」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助と再会を急ぐ不安を維持し、過剰な怒りに置き換えない。"
+    },
+    {
+      "key": "atk_fiona_1/0",
+      "page": 0,
+      "speaker": "フィオナ",
+      "text": "「エイダン……！ よかった。さっきの人たちは逃がせた。でも、この魔物たち……普通じゃない。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助と再会を急ぐ不安を維持し、過剰な怒りに置き換えない。"
+    },
+    {
+      "key": "scene_escape_1/0",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「まだ村に、助けを待ってる人が……！」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生存のための覚悟・道が塞がれた驚き。"
+    },
+    {
+      "key": "scene_escape_1/0",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「エイダン……！　今は生き延びなきゃ。お願い……！」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生存のための覚悟・道が塞がれた驚き。"
+    },
+    {
+      "key": "scene_escape_1/0",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「……行こう、エイダン。」",
+      "char": "fiona",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生存のための覚悟・道が塞がれた驚き。"
+    },
+    {
+      "key": "scene_escape_1/0",
+      "page": 5,
+      "speaker": "エイダン",
+      "text": "「橋は――駄目だ。向こうにもいる！」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生存のための覚悟・道が塞がれた驚き。"
+    },
+    {
+      "key": "scene_escape_1/0",
+      "page": 6,
+      "speaker": "フィオナ",
+      "text": "「こっち！　川下に獣道があるはず！」",
+      "char": "fiona",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生存のための覚悟・道が塞がれた驚き。"
+    },
+    {
+      "key": "scene_escape_1/0",
+      "page": 8,
+      "speaker": "エイダン",
+      "text": "「フィオナ！」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生存のための覚悟・道が塞がれた驚き。"
+    },
+    {
+      "key": "hillLines",
+      "page": 0,
+      "speaker": "フィオナ",
+      "text": "「間に合ったね。ここから見る夕日は、やっぱりきれい。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 1,
+      "speaker": "エイダン",
+      "text": "「訓練の後にここまで歩かされるとは思わなかったけどな。」",
+      "char": "aidan",
+      "face": "smile",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「ふふ。エイダン、昔からすぐそういうこと言う。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 4,
+      "speaker": "フィオナ",
+      "text": "「ねえ。エイダンは……王都へ行ったら、お父さんみたいな騎士になるの？」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 5,
+      "speaker": "エイダン",
+      "text": "「まだ分からない。でも――守れるくらいには強くなりたい。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 6,
+      "speaker": "フィオナ",
+      "text": "「そっか。」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 8,
+      "speaker": "フィオナ",
+      "text": "「……エイダン。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 9,
+      "speaker": "エイダン",
+      "text": "「どうした？」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 10,
+      "speaker": "フィオナ",
+      "text": "「風が……止まってる。」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "hillLines",
+      "page": 13,
+      "speaker": "エイダン",
+      "text": "「村が――！」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "夕日での親しさと将来の問いから、風の停止への心配へ。"
+    },
+    {
+      "key": "returnLines",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「急ぐぞ、フィオナ！」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「うん！　村のみんなが心配……！」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 5,
+      "speaker": "フィオナ",
+      "text": "「エイダン、あそこ！」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 7,
+      "speaker": "エイダン",
+      "text": "「俺が引きつける！　フィオナはその人を安全な場所へ！」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 8,
+      "speaker": "フィオナ",
+      "text": "「でも、エイダン一人じゃ――」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 9,
+      "speaker": "エイダン",
+      "text": "「大丈夫だ。あとで村の広場で合流しよう！」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 10,
+      "speaker": "フィオナ",
+      "text": "「……分かった。絶対、無茶しないで！」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 13,
+      "speaker": "エイダン",
+      "text": "「くっ……！」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 15,
+      "speaker": "エイダン",
+      "text": "「フィオナ！　……返事をしろ！」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "returnLines",
+      "page": 17,
+      "speaker": "エイダン",
+      "text": "「……先に広場へ。約束した場所にいるはずだ。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "救助を決断し、同行者を失いかける不安を連続させる。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「……終わった、の？」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 4,
+      "speaker": "エイダン",
+      "text": "「……村を、守れなかった。」",
+      "char": "aidan",
+      "face": "sad",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 5,
+      "speaker": "フィオナ",
+      "text": "「うん。でも、生き残った人たちもいる。私たちまでここで止まったら、本当に何も残らなくなる。」",
+      "char": "fiona",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 6,
+      "speaker": "ルー",
+      "text": "「……ルーもね。守れなかったんだ。」",
+      "char": "lou",
+      "face": "sad",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 7,
+      "speaker": "フィオナ",
+      "text": "「ルー……？」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 8,
+      "speaker": "ルー",
+      "text": "「ここには妖精がたくさんいたの。みんなで風の歌を聞いて、花の蜜を集めて……ずっと一緒だった。」",
+      "char": "lou",
+      "face": "sad",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 9,
+      "speaker": "ルー",
+      "text": "「でも黒い魔物が来た夜、仲間が襲われた。ルーの目の前で……動かなくなった子もいた。」",
+      "char": "lou",
+      "face": "sad",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 10,
+      "speaker": "ルー",
+      "text": "「みんな逃げたから、誰が無事なのか分からないの。森の外へ逃げられた子も、きっといると思う。」",
+      "char": "lou",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 11,
+      "speaker": "フィオナ",
+      "text": "「だから、ずっと一人で探していたのね。」",
+      "char": "fiona",
+      "face": "sad",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 12,
+      "speaker": "ルー",
+      "text": "「うん……。この森だけじゃ見つけられない。風の声も、遠くへ続いてる。」",
+      "char": "lou",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 13,
+      "speaker": "エイダン",
+      "text": "「俺たちは、村を襲った魔物と黒いルーンの正体を追うつもりだ。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 14,
+      "speaker": "ルー",
+      "text": "「だったら……ルーも一緒に行っていい？」",
+      "char": "lou",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 15,
+      "speaker": "ルー",
+      "text": "「仲間を探したい。逃げ延びた子がいるなら、ちゃんと見つけたい。それに……あの黒いものが何なのか知りたい。」",
+      "char": "lou",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 16,
+      "speaker": "フィオナ",
+      "text": "「もちろん。一緒に探そう。」",
+      "char": "fiona",
+      "face": "smile",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 17,
+      "speaker": "エイダン",
+      "text": "「俺たちも探す。ルーの仲間も、この異変の答えも。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 18,
+      "speaker": "ルー",
+      "text": "「……ほんと？」",
+      "char": "lou",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "updated",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 19,
+      "speaker": "エイダン",
+      "text": "「ああ。よろしく、ルー。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 21,
+      "speaker": "ルー",
+      "text": "「うん！　よろしくね、エイダン、フィオナ！」",
+      "char": "lou",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": "lou",
+        "face": "normal",
+        "side": "right"
+      },
+      "change": "retained",
+      "reason": "喪失の悲しみを受け止め、仲間探しの決意へ。ルー最終挨拶は未採用smileを使わずnormal。"
+    },
+    {
+      "key": "fortLines",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「……着いた。ここなら、少しは休めるかな。」",
+      "char": "fiona",
+      "face": "relieved",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "避難先に着いた安堵と、黒いルーンへの心配。"
+    },
+    {
+      "key": "fortLines",
+      "page": 2,
+      "speaker": "ルー",
+      "text": "「でも、あの黒いルーン……普通の魔物じゃなかった。風もずっと怯えてたよ。」",
+      "char": "lou",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "避難先に着いた安堵と、黒いルーンへの心配。"
+    },
+    {
+      "key": "escapeLines",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「まだ村に、助けを待ってる人が……！」",
+      "char": "aidan",
+      "face": "worried",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生き延びる決意と橋・崖の予想外の危険。"
+    },
+    {
+      "key": "escapeLines",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「エイダン……！　今は生き延びなきゃ。お願い……！」",
+      "char": "fiona",
+      "face": "worried",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生き延びる決意と橋・崖の予想外の危険。"
+    },
+    {
+      "key": "escapeLines",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「……行こう、エイダン。」",
+      "char": "fiona",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生き延びる決意と橋・崖の予想外の危険。"
+    },
+    {
+      "key": "escapeLines",
+      "page": 5,
+      "speaker": "エイダン",
+      "text": "「橋は――駄目だ。向こうにもいる！」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生き延びる決意と橋・崖の予想外の危険。"
+    },
+    {
+      "key": "escapeLines",
+      "page": 6,
+      "speaker": "フィオナ",
+      "text": "「こっち！　川下に獣道があるはず！」",
+      "char": "fiona",
+      "face": "determined",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生き延びる決意と橋・崖の予想外の危険。"
+    },
+    {
+      "key": "escapeLines",
+      "page": 8,
+      "speaker": "エイダン",
+      "text": "「フィオナ！」",
+      "char": "aidan",
+      "face": "surprised",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "生き延びる決意と橋・崖の予想外の危険。"
+    },
+    {
+      "key": "trainingSay",
+      "page": 0,
+      "speaker": "フィオナ",
+      "text": "「遅いよ、エイダン。今日は木人相手の訓練でしょ？」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "訓練への通常の声掛け、回復時の未知の光への驚き。"
+    },
+    {
+      "key": "trainingSay",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「ほら、木人を調べて。私も後ろから見てるから。」",
+      "char": "fiona",
+      "face": "normal",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "訓練への通常の声掛け、回復時の未知の光への驚き。"
+    },
+    {
+      "key": "trainingSay",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「さっきの光……何だったんだろう。」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "訓練への通常の声掛け、回復時の未知の光への驚き。"
+    },
+    {
+      "key": "trainingSay",
+      "page": 3,
+      "speaker": "フィオナ",
+      "text": "「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」",
+      "char": "fiona",
+      "face": "surprised",
+      "side": "right",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "訓練への通常の声掛け、回復時の未知の光への驚き。"
+    },
+    {
+      "key": "fieldInspection",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「風の石だ。村の人たちは、風の見張りって呼んでる。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "村の風の石について落ち着いて説明する。"
+    }
+  ],
+  "exclusions": [
+    {
+      "key": "scene_forest_arrival_1/0",
+      "page": 2,
+      "speaker": "",
+      "text": "エイダン「ああ……。フィオナは？」　フィオナ「うん……大丈夫。」",
+      "reason": "同一ページの複数話者・台詞と地の文の混在。ページ分割を変えず非表示を維持"
+    },
+    {
+      "key": "louIntroLines",
+      "page": 1,
+      "speaker": "フィオナ",
+      "text": "「魔物が、この結界を歪めていたんだね……。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "louIntroLines",
+      "page": 3,
+      "speaker": "ルー",
+      "text": "「あなたたちが……あいつらを倒してくれたの？　ルー、ずっと出られなかったんだ……。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "louIntroLines",
+      "page": 4,
+      "speaker": "エイダン",
+      "text": "「もう大丈夫。君の名前は？」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "louIntroLines",
+      "page": 5,
+      "speaker": "ルー",
+      "text": "「ルーだよ。……ありがとう！　でも、奥の祭壇にはまだ嫌な風がいるの。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 0,
+      "speaker": "ルー",
+      "text": "「ここだよ……。この先だけ、森の風がずっと止まってる。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「私に反応してる……？　リルド村の石と同じ光……。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 3,
+      "speaker": "エイダン",
+      "text": "「ルー。この場所は昔からこうだったのか？」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 4,
+      "speaker": "ルー",
+      "text": "「ううん。前はただの古い石だった。でも魔物が来た夜から、奥で誰かが呼んでるみたいになったの。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 6,
+      "speaker": "ルー",
+      "text": "「……この風、悲しんでる。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 8,
+      "speaker": "エイダン",
+      "text": "「下がって、二人とも！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 10,
+      "speaker": "ルー",
+      "text": "「待って……！　奥から、もっと大きな気配が来る！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 15,
+      "speaker": "エイダン",
+      "text": "「父さんの剣が……！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 17,
+      "speaker": "フィオナ",
+      "text": "「だめ……やめて！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 19,
+      "speaker": "フィオナ",
+      "text": "「えっ……？　私、いま何を……。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 21,
+      "speaker": "ルー",
+      "text": "「今だよ！　ルーが風を押さえてる！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 23,
+      "speaker": "ルー",
+      "text": "「エイダン、あの石……エイダンを呼んでる！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 27,
+      "speaker": "エイダン",
+      "text": "「誓い……？」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 30,
+      "speaker": "エイダン",
+      "text": "「……強くなりたいなんて言って、村のみんなを守れなかった。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 31,
+      "speaker": "エイダン",
+      "text": "「……もう、目の前で誰かを失うのは嫌だ。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 33,
+      "speaker": "エイダン",
+      "text": "「父さん……。この剣で、今度こそ守ってみせる。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 34,
+      "speaker": "フィオナ",
+      "text": "「エイダン……その剣……。」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "altarLines",
+      "page": 35,
+      "speaker": "ルー",
+      "text": "「風が戻ってきた……！」",
+      "reason": "CG場面全体は既存の排他仕様で立ち絵非表示を維持"
+    },
+    {
+      "key": "aftermathLines",
+      "page": 2,
+      "speaker": "エイダン",
+      "text": "「たぶん。」　握った「誓いの剣」から、さっきまでの光がゆっくり消えていった。",
+      "reason": "同一ページの複数話者・台詞と地の文の混在。ページ分割を変えず非表示を維持"
+    },
+    {
+      "key": "fieldInspection",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。",
+      "reason": "同一ページの複数話者・台詞と地の文の混在。ページ分割を変えず非表示を維持"
+    }
+  ]
+}

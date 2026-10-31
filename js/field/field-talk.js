@@ -68,6 +68,9 @@
     const dc = conv && typeof conv === 'object' && !Array.isArray(conv) ? conv : null;   // conversation-level char/face = defaults; a page without `char` keeps the previous page's character (null = hidden), `face` is per page
     let char = dc ? dc.char : undefined; const side = dc ? dc.side : undefined;   // `side` (left/right): page value, else the conversation's, else the character registry's
     return raw.map(toPage).map((pg, i) => {
+      // Explicit presentation metadata for shared text arrays; text/effects cannot be overridden.
+      const portrait = dc && dc.portraits && dc.portraits[i];
+      for (const key of ['char', 'face', 'side']) if (portrait && portrait[key] !== undefined) pg = {...pg, [key]: portrait[key]};
       if (pg.char !== undefined) char = pg.char;
       else if (char !== undefined) pg = {...pg, char};
       if (i === 0 && pg.face === undefined && dc && dc.face !== undefined && pg.char !== undefined) pg = {...pg, face: dc.face};   // conversation `face` = the first page's expression

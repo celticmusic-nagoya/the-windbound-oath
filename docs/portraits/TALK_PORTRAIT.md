@@ -155,3 +155,7 @@ PR93's120expression blink PNGs are now formallyAPPROVED after user Android QA ac
 ## Current status — DIRECTIVE-23A (2026-10-31)
 
 Phase4 COMPLETE; Fiona double-brow repair CLOSED after user PR95 Android all5itemsPASS. R4static3/R3static2/R2blink24 are now formal exactPR95bytes, supplementing prior21A/22A locks. Total259protectedPNG including Aidan/CG; no runtime or image changes. [Current completion/adoption audit](PHASE4_COMPLETION_23A.md). Earlier normal-only/unregistered/provisional sections document earlier phases, not current registration. Fiona8/Lou6/Emma8; normal3+15expression blinks; closedeye4faces intentionally static; Lou smile/relieved still excluded. Phase5 dialogue-expression assignments remain separate scope.
+
+## Phase5 explicit page metadata (DIRECTIVE-24A)
+
+Existing conversations may set `portraits:[{char,face,side}, {char:null}, ...]` beside `pages`. Indexes correspond exactly to the original rendered pages. FieldTalk copies only these three presentation fields; speaker/text, page count, choices/effects/conditions stay unchanged. Narration, unsupported speakers and intentionally mixed pages explicitly hide the portrait. Existing page/conversation metadata still works; explicit per-page metadata wins. This supports the escape scene's shared string array without rewriting its words or pagination. Legacy `say(text, portrait)` and scene-owned text sinks only forward explicitly authored metadata to existing TalkPortrait ownership/anchors; no speaker inference or new renderer is added.

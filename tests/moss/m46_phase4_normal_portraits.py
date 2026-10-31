@@ -29,9 +29,9 @@ with sync_playwright() as p:
         frames=pg.evaluate('naturalFrames.map(({state,t})=>({state,t}))')
         ok=pg.evaluate("""async ()=>{
           const frames=window.naturalFrames;
-          const c=PortraitRegistry.get(TalkPortrait.status.char),b=PortraitRegistry.blinkOf(c.id,'normal'),k=c.crop;
+          const c=PortraitRegistry.get(TalkPortrait.status.char),b=PortraitRegistry.blinkOf(c.id,TalkPortrait.status.face),k=c.crop;
           const load=u=>new Promise((r,j)=>{const im=new Image();im.onload=()=>r(im);im.onerror=j;im.src=u});
-          const base=await load(PortraitRegistry.imageUrl(c.id,'normal')),overlays={};
+          const base=await load(PortraitRegistry.imageUrl(c.id,TalkPortrait.status.face)),overlays={};
           for(const [eye,e] of Object.entries(b.eyes)) overlays[eye]=await Promise.all(e.urls.map(load));
           const cv=document.createElement('canvas');cv.width=k.w;cv.height=k.h;const cx=cv.getContext('2d');
           const diffs=[];
@@ -81,14 +81,15 @@ with sync_playwright() as p:
     pg.wait_for_function("document.querySelector('#raiderBattle').style.display==='block'&&!rbBusy&&!battleCommandLocked('raider')",timeout=30000)
     pg.evaluate("PrologueCombat.instantKill('raider')");pg.wait_for_function("getComputedStyle(document.querySelector('#battleResult')).display!=='none'",timeout=30000)
     pg.locator('#resultContinue').tap();pg.wait_for_function("document.querySelector('#aftermathScene').style.display==='block'")
-    lines=pg.evaluate('aftermathLines');lou_pages={6,8,9,10,12,14,15,18,21}
+    lines=pg.evaluate('aftermathLines');portrait_pages=pg.evaluate('aftermathPortraitPages');lou_pages={6,8,9,10,12,14,15,18,21}
     for i in range(6):pg.locator('#aftermathScene').tap()
     wait_char(pg,'lou');check(pg.locator('#aftermathText').inner_text()==lines[6],'Lou portrait reached through actual battle result and original aftermath line')
     check(not pg.evaluate('DevPortraitTest.open()'),'DEV cannot steal scene-owned story portrait')
     natural_pixels(pg,'lou');layouts(pg,'lou','#aftermathText')
     for i in range(6,len(lines)):
-        if i in lou_pages:wait_char(pg,'lou')
-        else:pg.wait_for_timeout(30);check(not pg.evaluate('TalkPortrait.status.visible'),'aftermath non-Lou page hides portrait '+str(i))
+        expected=portrait_pages[i]
+        if expected.get('char'):pg.wait_for_function("e=>TalkPortrait.status.visible&&TalkPortrait.status.char===e.char&&TalkPortrait.status.face===e.face",arg=expected)
+        else:pg.wait_for_timeout(30);check(not pg.evaluate('TalkPortrait.status.visible'),'aftermath narration/mixed page hides portrait '+str(i))
         check(pg.locator('#aftermathText').inner_text()==lines[i] and pg.evaluate("document.querySelectorAll('.event-cg-item.on').length===0"),'aftermath text/order and no CG '+str(i))
         pg.locator('#aftermathScene').tap()
     pg.wait_for_timeout(800)
