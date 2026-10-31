@@ -18,7 +18,7 @@ for name in ['PHASE4_FORMAL_ADOPTION_21A.json','PHASE4_EXPRESSION_BLINK_FORMAL_2
  l=json.loads((ROOT/'docs/portraits'/name).read_text());check(all(hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in l['assets']+l.get('other_protected_pngs',[])),'protected official PNG SHA '+name)
 PIX=r'''async()=>{const s=TalkPortrait.status,r=PortraitRegistry,c=r.get(s.char),k=c.crop,b=r.blinkOf(s.char,s.face);const got=document.querySelector('#talkPortrait canvas').getContext('2d').getImageData(0,0,k.w,k.h).data;const load=u=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=u});const cv=document.createElement('canvas');cv.width=k.w;cv.height=k.h;const x=cv.getContext('2d');x.drawImage(await load(r.imageUrl(s.char,s.face)),k.x,k.y,k.w,k.h,0,0,k.w,k.h);if(s.eye&&b)for(const e of Object.values(b.eyes))x.drawImage(await load(e.urls[s.eye-1]),e.box[0]-k.x,e.box[1]-k.y);const want=x.getImageData(0,0,k.w,k.h).data;return got.every((v,i)=>v===want[i])}'''
 with sync_playwright() as p:
- b=p.chromium.launch();ctx=b.new_context(viewport={'width':390,'height':844},has_touch=True);pg=ctx.new_page();errors=[];pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto('http://localhost:%s/index.html?title=0'%os.environ.get('PORT','8765'));pg.wait_for_function("LoadCoordinator.phase==='READY'");pg.evaluate('closeDialogue()')
+ b=p.chromium.launch();ctx=b.new_context(viewport={'width':390,'height':844},has_touch=True);pg=ctx.new_page();errors=[];pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto('http://localhost:%s/index.html?title=0'%os.environ.get('PORT','8765'));pg.wait_for_function("LoadCoordinator.phase==='READY'");pg.evaluate('closeDialogue()');captures=set()
  def status(e,label,anchor='#msg'):
   if not e.get('char'):
    pg.wait_for_timeout(35);check(pg.evaluate('!TalkPortrait.status.visible&&TalkPortrait.status.blink===null'),label+': no sticky portrait on narration/other speaker');return
@@ -26,11 +26,14 @@ with sync_playwright() as p:
   pg.wait_for_timeout(35);check(pg.evaluate(PIX),label+': real canvas exact approved expression/eye pixels')
   g=pg.evaluate("""anchor=>{const a=document.querySelector('#talkPortrait').getBoundingClientRect(),z=document.querySelector(anchor).getBoundingClientRect(),s=TalkPortrait.status;return{inside:a.left>=-1&&a.top>=-1&&a.right<=innerWidth+1&&a.bottom<=z.top+1,input:getComputedStyle(document.querySelector('#talkPortrait')).pointerEvents==='none',one:!s.blink||s.blink.timers===1}}""",anchor)
   check(g['inside'] and g['input'] and g['one'],label+': above text, inside viewport, input unobstructed, one timer',g)
+  capture=(e['char'],pg.viewport_size['width'])
+  if e['face']!='normal' and capture not in captures:
+   captures.add(capture);pg.screenshot(path=str(OUT/f"24a_{e['char']}_{e['face']}_{capture[1]}.png"))
   if e['char'] in ['fiona','emma'] and e['face'] in ['smile','relieved']:check(pg.evaluate('!TalkPortrait.status.blinkReady&&TalkPortrait.status.blink===null'),label+': closed-eye expression stays static')
  def setup(key,index):
   stage=6 if key.startswith('atk_') else 15 if key=='liam_intro' else 3
   q={'emma_q_found_early':'unaccepted','emma_q_report':'complete','emma_q_active':'active','emma_q_offer':'unaccepted','emma_q_thanks':'reported'}.get(key,'__blocked__');seen=['emma_closed'] if key=='emma_q_offer' else []
-  pg.evaluate("""a=>{FieldTalk.cancel();devResetScreens();closeDialogue();Quest.reset();Inventory.reset();PrologueProgress.seed(a.open?3:0);storyStage=a.stage;FieldTalk.load({seen:a.seen,cycle:{[a.key]:a.index},flags:{}});FieldTalk.setQuestProvider(()=>a.quest);if(a.key==='emma_q_found_early')Inventory.add('charm_windward');}""",dict(key=key,index=index,stage=stage,quest=q,seen=seen,open=key=='emma_open'))
+  pg.evaluate("""a=>{FieldTalk.cancel();devResetScreens();closeDialogue();Quest.reset();Inventory.reset();PrologueProgress.seed(a.open?3:0);storyStage=a.stage;FieldTalk.load({seen:a.seen,cycle:{[a.key]:a.index},flags:{}});FieldTalk.setQuestProvider(()=>a.quest);PartyManager.members.liam.joined=false;if(a.key==='emma_q_found_early')Inventory.add('charm_windward');}""",dict(key=key,index=index,stage=stage,quest=q,seen=seen,open=key=='emma_open'))
  def inspect_pages(c):
   for i,e in enumerate(c['pages']):
    check(pg.locator('#msg .talkText').text_content()==re.sub(r'　(?=[^\s「」　]{1,10}「)', '\n', e['text']),c['key']+'/'+str(i)+': original text/page order')
