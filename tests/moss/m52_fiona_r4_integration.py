@@ -61,9 +61,7 @@ with sync_playwright() as p:
   captures=[]
   for state in range(5):
    pg.locator('#devPortraitFrames button').nth(state).tap();check(pg.evaluate('inspectEye().ok'),f+': actual eye pixels state'+str(state))
-   png=pg.locator('#talkPortrait canvas').evaluate("e=>e.toDataURL()");im=Image.open(io.BytesIO(base64.b64decode(png.split(',')[1]))).convert('RGBA');base=Image.open(ROOT/routes[f]['base']).convert('RGBA');expected=base.copy()
-   if state:
-    for e in routes[f]['blink']['eyes'].values():expected.alpha_composite(Image.open(ROOT/e['urls'][state-1]).convert('RGBA'),dest=tuple(e['box'][:2]))
+   png=pg.locator('#talkPortrait canvas').evaluate("e=>e.toDataURL()");im=Image.open(io.BytesIO(base64.b64decode(png.split(',')[1]))).convert('RGBA')
    # Compare decoded pixels using browser canvas on both sides. Raw Pillow RGBA preserves invisible RGB and uses different alpha rounding.
    rendered=pg.evaluate(r"""async()=>{const s=TalkPortrait.status,r=PortraitRegistry,c=r.get(s.char),k=c.crop,b=r.blinkOf(s.char,s.face);const load=u=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=u});const v=document.createElement('canvas');v.width=k.w;v.height=k.h;const x=v.getContext('2d');x.drawImage(await load(r.imageUrl(s.char,s.face)),k.x,k.y,k.w,k.h,0,0,k.w,k.h);if(s.eye)for(const e of Object.values(b.eyes))x.drawImage(await load(e.urls[s.eye-1]),e.box[0]-k.x,e.box[1]-k.y);const actual=document.querySelector('#talkPortrait canvas').getContext('2d').getImageData(0,0,k.w,k.h).data,want=x.getImageData(0,0,k.w,k.h).data;return actual.every((a,i)=>a===want[i]);}""")
    check(rendered,f+': full canvas exact correctedbase+R2 state'+str(state)+' (no old brow restoration)')
