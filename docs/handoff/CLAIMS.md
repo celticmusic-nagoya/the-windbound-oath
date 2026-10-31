@@ -165,3 +165,5 @@ Codex / codex/23a-fiona-adoption / base8179a1100f6b33b3cbad70ea9b1d127e620323c5(
 
 ## DIRECTIVE-24A (2026-10-31)
 Codex / codex/24a-story-expressions / base2b2daa0c602bc4b8fe86a8b5df08a4469e33df0a. Scope manual emotion metadata for4approvedcharacters across existingFieldTalk and legacyordinary/cinematicdialogue. No text/pagecount/order/conditions/flags/save/image changes. Existing say/cinematic sinks need onlyexplicitoptionalmetadata→existingTalkPortrait API; no autoparser/newrenderer. CG/battle UI/mixedspeaker pages preserve no portrait. Current259PNG/registry protected. work/codexnamespace blocked byexistingworkref(preserve). STATUS: WIP.
+
+24A technicalQA complete:388display-path pages/115targets added102 changed8 retained5; intentionalCG22+mixed3 excluded, eligibleunhandled0.10unique regressionfiles+Node6PASS;259formalPNG/runtimepaths/draw/timing unchanged; text/control baselineinvariantsPASS. docs/qa/DIRECTIVE-24A.md / PR97. Finalexacthead independentQA and rollbackreadback required beforemerge. STATUS: READY_FOR_REVIEW.
