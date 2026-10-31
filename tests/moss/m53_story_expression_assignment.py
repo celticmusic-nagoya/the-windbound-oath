@@ -47,6 +47,8 @@ with sync_playwright() as p:
  # Actual registered tables, never preview/test-injected tables. Seed only ordinary quest/stage state to select each real entry.
  cases=[c for c in S['conversations'] if any(p.get('char') for p in c['pages'])]
  for width,height in [(390,844),(844,390)]:
+  if width!=390:
+   ctx.close();ctx=b.new_context(viewport={'width':width,'height':height},has_touch=True);pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto('http://localhost:%s/index.html?title=0'%os.environ.get('PORT','8765'));pg.wait_for_function("LoadCoordinator.phase==='READY'");pg.evaluate('closeDialogue()')  # isolate completed prologue's world layers/toasts between orientations
   pg.set_viewport_size({'width':width,'height':height})
   for c in cases:
    basekey=c['key'].split('/reply')[0];entry,index=basekey.rsplit('/',1);setup(entry,int(index));check(pg.evaluate('id=>FieldTalk.pick(id)?.id',c['npc'])==entry,c['key']+': actual production condition selects original entry')
