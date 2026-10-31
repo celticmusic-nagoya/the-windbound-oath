@@ -21,7 +21,7 @@ actual=json.loads(subprocess.check_output(['node','-e',script],cwd=ROOT))
 expected={'fiona':['normal','smile','angry','sad','surprised','worried','determined','relieved'],'lou':['normal','angry','sad','surprised','worried','determined'],'emma':['normal','smile','angry','sad','surprised','worried','determined','relieved']}
 candidate=json.loads((ROOT/'docs/portraits/PHASE4_FIONA_22BR4.json').read_text())
 replacements={a['replaces_runtime']:a['file'] for a in candidate['assets'] if a['revision']!='R2'}
-check({f for a in actual for f in a['files']}=={replacements.get(f,f) for f in locked} and all(a['faces']==expected[a['id']] and a['normalPresent'] for a in actual),'actual runtime URLs/faces match46 locked files, no Lou smile/relieved, formal normal blink remains present (additional21C blink tested separately)')
+check({f for a in actual for f in a['files']}=={replacements.get(f,f) for f in locked} and all(a['faces']==expected[a['id']] and a['normalPresent'] for a in actual),'runtime46 routes match original locks with explicit22B-R4 provisional5 substitutions; formal original hashes still protected')
 for c,revision in [('fiona','provisional-20e'),('lou','provisional-20e'),('emma','provisional-20c')]:
  check(all('/'+revision+'/' in a['file'] for a in ledger['assets'] if a['character']==c and not(a['kind']=='expression' and a['expression']=='normal')),c+': exactly the QA-passed live revision; no old handoff substitution')
 reg=json.loads((ROOT/'docs/assets/ASSET_REGISTRY.json').read_text())['assets'];byfile={a['source_path']:a for a in reg if a['source_path'] in locked}
