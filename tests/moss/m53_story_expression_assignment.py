@@ -73,7 +73,9 @@ with sync_playwright() as p:
     status(e,key+'/'+str(i),anchor)
     if i<len(expected_pages)-1:pg.locator('#'+scene).tap()
    pg.locator('#'+scene).tap();pg.wait_for_timeout(100)
-   if key=='aftermathLines':check(pg.evaluate('storyStage===14&&PartyManager.support.joined'),'real aftermath end keeps stage/support join')
+   if key=='aftermathLines':
+    check(pg.evaluate('storyStage===14&&PartyManager.support.joined'),'real aftermath end keeps stage/support join')
+    pg.wait_for_function("document.querySelector('#fortScene').style.display==='block'&&document.querySelector('#aftermathScene').style.display==='none'",timeout=5000)  # await the original650ms destination-first handoff before starting another fixture
    if key=='fortLines':check(pg.evaluate('storyStage===15&&!TalkPortrait.status.visible'),'fort completion keeps original progression and cleanup')
   pg.screenshot(path=str(OUT/f'24a_finished_{width}x{height}.png'))
  # Real first target dialogue with manual blink verifies actual canvas changes and clears on takeover/LOAD/battle/CG.
