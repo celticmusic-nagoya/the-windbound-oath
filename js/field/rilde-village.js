@@ -56,7 +56,7 @@
       case h === 'rilde_cat': return click(legacyNpc('cat'));
       case h === 'rilde_sign_east': { if (!FieldTalk.talk('rr_sign_east', {source: 'forest'})) say('木の標識：『← リルド村　／　ドゥンヴァル砦 →』'); return true; }
       case h === 'rilde_wind_stone': {
-        say(state() === 'ruin' ? '風の石は沈黙している。あの夜から、村に風が戻らない。' : 'エイダン「風の石だ。村の人たちは、風の見張りって呼んでる。」');
+        say(state() === 'ruin' ? '風の石は沈黙している。あの夜から、村に風が戻らない。' : 'エイダン「風の石だ。村の人たちは、風の見張りって呼んでる。」', state() === 'ruin' ? null : {char:'aidan',face:'normal',side:'left'});
         return true;
       }
     }

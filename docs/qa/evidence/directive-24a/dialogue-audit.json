@@ -1,35 +1,36 @@
 {
   "directive": "DIRECTIVE-24A",
   "base_main": "2b2daa0c602bc4b8fe86a8b5df08a4469e33df0a",
-  "behavior_sha256": "ce4047fc01e0afdcac29dcd031c19a1d2cde502bd42b24e006a38545950d2519",
+  "behavior_sha256": "4d9c203b00d45ac245a369350b8fe910bf4e2a1164e5cb492aa82bf7b1c10114",
   "counting": "表示経路別の延べページ数。共有escape台詞・legacyhillの別表示経路を個別計上。",
-  "audited_pages": 385,
+  "audited_pages": 388,
   "fieldtalk_pages": 262,
   "cinematic_pages": 119,
   "training_pages": 4,
-  "target_pages": 114,
+  "inspection_pages": 3,
+  "target_pages": 115,
   "assignment_changes": {
     "retained": 5,
-    "added": 101,
+    "added": 102,
     "updated": 8
   },
-  "excluded_pages": 24,
+  "excluded_pages": 25,
   "unhandled": [],
   "per_character": {
     "aidan": {
-      "named_speaker_pages": 49,
+      "named_speaker_pages": 50,
       "portrait_pages_before": 2,
-      "portrait_pages_after": 40,
+      "portrait_pages_after": 41,
       "faces": {
         "smile": 2,
-        "normal": 20,
+        "normal": 21,
         "surprised": 8,
         "worried": 9,
         "sad": 1
       }
     },
     "fiona": {
-      "named_speaker_pages": 53,
+      "named_speaker_pages": 54,
       "portrait_pages_before": 1,
       "portrait_pages_after": 48,
       "faces": {
@@ -1891,6 +1892,22 @@
       },
       "change": "added",
       "reason": "訓練への通常の声掛け、回復時の未知の光への驚き。"
+    },
+    {
+      "key": "fieldInspection",
+      "page": 0,
+      "speaker": "エイダン",
+      "text": "「風の石だ。村の人たちは、風の見張りって呼んでる。」",
+      "char": "aidan",
+      "face": "normal",
+      "side": "left",
+      "previous": {
+        "char": null,
+        "face": null,
+        "side": null
+      },
+      "change": "added",
+      "reason": "村の風の石について落ち着いて説明する。"
     }
   ],
   "exclusions": [
@@ -2060,6 +2077,13 @@
       "page": 2,
       "speaker": "エイダン",
       "text": "「たぶん。」　握った「誓いの剣」から、さっきまでの光がゆっくり消えていった。",
+      "reason": "同一ページの複数話者・台詞と地の文の混在。ページ分割を変えず非表示を維持"
+    },
+    {
+      "key": "fieldInspection",
+      "page": 2,
+      "speaker": "フィオナ",
+      "text": "「この石……光ってる。私が近づいたから……？」　古代のルーンが、かすかに風の音を返した。",
       "reason": "同一ページの複数話者・台詞と地の文の混在。ページ分割を変えず非表示を維持"
     }
   ]

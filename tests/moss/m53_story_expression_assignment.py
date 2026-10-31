@@ -7,13 +7,13 @@ def check(ok,label,detail=None):
  print(('ok   ' if ok else 'FAIL ')+label,'' if ok else detail,flush=True)
  if not ok:fails.append(label)
 S=json.loads(subprocess.check_output(['node','tools/qa/story_expression_snapshot.cjs'],cwd=ROOT));A=json.loads((ROOT/'docs/qa/evidence/directive-24a/dialogue-audit.json').read_text());names={'エイダン':'aidan','フィオナ':'fiona','ルー':'lou','エマ':'emma'}
-check(S['behavior_sha256']==A['behavior_sha256']=='ce4047fc01e0afdcac29dcd031c19a1d2cde502bd42b24e006a38545950d2519','all original words/page counts/order/choices/conditions/flags/rewards equal main')
+check(S['behavior_sha256']==A['behavior_sha256']=='4d9c203b00d45ac245a369350b8fe910bf4e2a1164e5cb492aa82bf7b1c10114','all original words/page counts/order/choices/conditions/flags/rewards equal main')
 check(S['index_logic_sha256']=='49479618b91079b9fcb423125f9938f1d7a793d17ef62959b125718fb3013bd5','all index HTML/control logic unchanged except explicit presentation bridge/metadata/cache')
-allpages=[dict(key=c['key'],page=i,**p) for c in S['conversations'] for i,p in enumerate(c['pages'])]+S['cinematic']+S['training'];actual={(p['key'],p['page']):p for p in allpages if p.get('char')};expected={(p['key'],p['page']):p for p in A['assignments']}
-check(len(allpages)==385 and len(actual)==len(expected)==114 and set(actual)==set(expected),'385 audited display-path pages;114 authored targets, no missing target')
+allpages=[dict(key=c['key'],page=i,**p) for c in S['conversations'] for i,p in enumerate(c['pages'])]+S['cinematic']+S['training']+S['inspection'];actual={(p['key'],p['page']):p for p in allpages if p.get('char')};expected={(p['key'],p['page']):p for p in A['assignments']}
+check(len(allpages)==388 and len(actual)==len(expected)==115 and set(actual)==set(expected),'388 audited display-path pages;115 authored targets, no missing target')
 check(all(all(actual[k].get(f)==p[f] for f in ['speaker','text','char','face','side']) for k,p in expected.items()),'manual audited face mapping exactly equals production data')
 check(all(names[p['speaker']]==p['char'] and (p['char']!='lou' or p['face'] not in ['smile','relieved']) for p in actual.values()),'correct speaker/character; excluded Lou faces never assigned')
-check(len(A['exclusions'])==24 and not A['unhandled'] and all(not next(p for p in allpages if (p['key'],p['page'])==(e['key'],e['page'])).get('char') for e in A['exclusions']),'CG22 and mixed2 intentionally hidden; eligible unhandled0')
+check(len(A['exclusions'])==25 and not A['unhandled'] and all(not next(p for p in allpages if (p['key'],p['page'])==(e['key'],e['page'])).get('char') for e in A['exclusions']),'CG22 and mixed3 intentionally hidden; eligible unhandled0')
 for name in ['PHASE4_FORMAL_ADOPTION_21A.json','PHASE4_EXPRESSION_BLINK_FORMAL_22A.json','PHASE4_FIONA_22BR4.json']:
  l=json.loads((ROOT/'docs/portraits'/name).read_text());check(all(hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in l['assets']+l.get('other_protected_pngs',[])),'protected official PNG SHA '+name)
 PIX=r'''async()=>{const s=TalkPortrait.status,r=PortraitRegistry,c=r.get(s.char),k=c.crop,b=r.blinkOf(s.char,s.face);const got=document.querySelector('#talkPortrait canvas').getContext('2d').getImageData(0,0,k.w,k.h).data;const load=u=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=u});const cv=document.createElement('canvas');cv.width=k.w;cv.height=k.h;const x=cv.getContext('2d');x.drawImage(await load(r.imageUrl(s.char,s.face)),k.x,k.y,k.w,k.h,0,0,k.w,k.h);if(s.eye&&b)for(const e of Object.values(b.eyes))x.drawImage(await load(e.urls[s.eye-1]),e.box[0]-k.x,e.box[1]-k.y);const want=x.getImageData(0,0,k.w,k.h).data;return got.every((v,i)=>v===want[i])}'''
@@ -59,6 +59,8 @@ with sync_playwright() as p:
   pg.evaluate("closeDialogue();document.querySelector('#fiona').onclick()");status(S['training'][1],'training stage1')
   pg.evaluate("closeDialogue();startTraining();winTraining()");pg.wait_for_function('storyStage===3',timeout=5000);status(S['training'][3],'training real victory')
   pg.evaluate("closeDialogue();document.querySelector('#fiona').onclick()");status(S['training'][2],'training stage>=2')
+  pg.evaluate("FieldTalk.cancel();devResetScreens();closeDialogue();RildeVillage.force('peace');RildeVillage.hook({hook:'rilde_wind_stone'},null)");status(S['inspection'][0],'actual peaceful wind-stone inspection')
+  pg.evaluate("closeDialogue();RildeVillage.force('ruin');RildeVillage.hook({hook:'rilde_wind_stone'},null)");status(S['inspection'][1],'actual ruin wind-stone narration');pg.evaluate('RildeVillage.force(null)')
   # Actual owning scene click handlers; text and page-order unchanged.
   for key,scene,anchor,start,index in [('hillLines','cinema','#cinemaText','startHillScene()','hillIndex'),('returnLines','returnScene','#returnText','startReturnScene()','returnIndex'),('escapeLines','escapeScene','#escapeText','startEscapeScene()','escapeIndex'),('aftermathLines','aftermathScene','#aftermathText','startRaiderAftermath()','aftermathIndex'),('fortLines','fortScene','#fortText','startFortFinale()','fortIndex')]:
    pg.evaluate('FieldTalk.cancel();devResetScreens();closeDialogue();'+start)

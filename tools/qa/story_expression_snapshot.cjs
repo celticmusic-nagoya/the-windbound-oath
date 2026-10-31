@@ -28,7 +28,11 @@ function snapshot(read=fs.readFileSync.bind(fs)){const context={window:{}};vm.cr
  for(const n of ['hillLines','returnLines','louIntroLines','altarLines','aftermathLines','fortLines']){const m=html.match(new RegExp('const '+n+'=([\\s\\S]*?\\n\\]);?'));if(!m)throw Error(n);arrays[n]=vm.runInNewContext('('+m[1]+')');const mn=n==='aftermathLines'?'aftermathPortraitPages':n.replace('Lines','PortraitPages');const mm=html.match(new RegExp('const '+mn+'=([^;\\n]+);'));metadata[n]=mm?vm.runInNewContext('('+mm[1]+')'):[];arrays[n].forEach((text,i)=>cinematic.push({key:n,page:i,...parse(text),...(metadata[n][i]||{char:null})}))}
  arrays.escapeLines=[...context.window.TalkDataAttack.escapeLines];metadata.escapeLines=context.window.TalkDataAttack.escapePortraits||[];arrays.escapeLines.forEach((text,i)=>cinematic.push({key:'escapeLines',page:i,...parse(text),...(metadata.escapeLines[i]||{char:null})}));
  const training=[];for(const m of html.matchAll(/say\(('フィオナ「[^'\n]+')(?:,(\{[^\n]+?\}))?\)/g)){const text=vm.runInNewContext(m[1]);training.push({key:'trainingSay',page:training.length,...parse(text),...(m[2]?JSON.parse(m[2]):{char:null})})}
- const behavior={tables:normalized,attackText:context.window.TalkDataAttack.text,attackFlags:context.window.TalkDataAttack.flags,arrays,training:training.map(({speaker,text})=>({speaker,text}))};
+ const village=read('js/field/rilde-village.js','utf8'),forest=read('js/field/moss-forest-story.js','utf8');
+ const stone=village.match(/say\(state\(\) === 'ruin' \? ('[^'\n]+') : ('[^'\n]+')/),rune=forest.match(/msg_a3_rune_stone:('[^'\n]+')/);
+ const inspectText=[vm.runInNewContext(stone[2]),vm.runInNewContext(stone[1]),vm.runInNewContext(rune[1])];
+ const inspection=inspectText.map((text,i)=>({key:'fieldInspection',page:i,...parse(text),...(i===0&&village.includes("state() === 'ruin' ? null : {char:'aidan',face:'normal',side:'left'}")?{char:'aidan',face:'normal',side:'left'}:{char:null})}));
+ const behavior={tables:normalized,attackText:context.window.TalkDataAttack.text,attackFlags:context.window.TalkDataAttack.flags,arrays,inspection:inspectText,training:training.map(({speaker,text})=>({speaker,text}))};
  const index_logic_sha256=crypto.createHash('sha256').update(indexLogic(html)).digest('hex');
- return{index_logic_sha256,behavior_sha256:crypto.createHash('sha256').update(stable(behavior)).digest('hex'),behavior,conversations,cinematic,training,metadata};}
+ return{index_logic_sha256,behavior_sha256:crypto.createHash('sha256').update(stable(behavior)).digest('hex'),behavior,conversations,cinematic,training,inspection,metadata};}
 if(require.main===module){const s=snapshot();console.log(JSON.stringify(s))}else module.exports={snapshot,FILES,NAMES,parse,pages,stable,indexLogic};
