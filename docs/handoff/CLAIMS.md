@@ -152,3 +152,6 @@ Codex / `codex/21c-expression-blink` / base `60f6b393abbbe3de975fa2924e118b2f49d
 Codex / `codex/22a-blink-adoption` / base `72c83eef1e3fef1c474a51f84e98f1bb3b3fbe45`. User formally adopts PR93 exact120blinkPNG after all-character Androidblink PASS; ledger/SHA guard update may land first. Also read-only audit Fiona8 faces for doubled brows; image fixes assigned toClaude, only new version files permitted, all144blinkPNG unchanged. No repair handoff22A branch found atstart. Scope docs/asset registry/protectiontests and audit evidence; no PNG/runtime changes toapprovedmaterials. STATUS: WIP.
 
 22A formal adoption QA: serial4files PASS, directNode6PASS, all120PR93SHA match, prior110protectedPNG unchanged. Claude5candidate images FAIL(actual brown-brow duplication remains); excluded, rework request recorded. Formal-only PR94 independently landable; docs/qa/DIRECTIVE-22A.md. STATUS: READY_FOR_REVIEW.
+
+## DIRECTIVE-22B-R4 (2026-10-31)
+Codex / codex/22b-r4-fiona / base c4c5d22047ba5c9cdeef84b49a9c742356295ce2. Authorized R4 angry/sad/worried3 +R3smile/relieved2 +R2blink24 versioned provisionalintegration; old120formaladoptionalreadyPR94, no repeat. Scope registry/cache/new29PNG/provisionalledger/tests. All230formalPNG+story/save/render/timing untouched. work/codex namespace unavailable due existingwork ref; preserve it. STATUS: WIP.
