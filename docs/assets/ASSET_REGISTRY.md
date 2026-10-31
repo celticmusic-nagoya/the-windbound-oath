@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **1167**
+- total: **1196**
 - approved_implemented: **248**
 - approved_not_implemented: **0**
 - delivered_not_merged: **179**
 - pending_adoption: **2**
 - source_missing: **0**
 - approval_unknown: **885**
-- on_main: **988**
-- implemented_on_main: **943**
+- on_main: **1017**
+- implemented_on_main: **972**
 - unreferenced_on_main: **45**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -951,7 +951,7 @@
 | file:img_field_moss_rilde_npc_young_woman_f06 | rilde | UNKNOWN | 1 | 92x114 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_rilde_npc_young_woman_idle | rilde | idle | 1 | 92x114 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json, js/field/lind-content-bounds.js / existing asset on main; adoption record not re-verified |
 
-## portrait（266）
+## portrait（295）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -1218,6 +1218,35 @@
 | portrait:21b:lou:worried_R_s2 | lou | blink_worried | 1 | 75x77 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User authorized temporary Android QA, NOT formal adoption. Byte-identical21B overlay. Pare |
 | portrait:21b:lou:worried_R_s3 | lou | blink_worried | 1 | 75x77 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User authorized temporary Android QA, NOT formal adoption. Byte-identical21B overlay. Pare |
 | portrait:21b:lou:worried_R_s4 | lou | blink_worried | 1 | 75x77 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User authorized temporary Android QA, NOT formal adoption. Byte-identical21B overlay. Pare |
+| portrait:22br4:fiona:angry_L_s1 | fiona | blink_angry | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_L_s2 | fiona | blink_angry | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_L_s3 | fiona | blink_angry | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_L_s4 | fiona | blink_angry | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_R_s1 | fiona | blink_angry | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_R_s2 | fiona | blink_angry | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_R_s3 | fiona | blink_angry | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:angry_R_s4 | fiona | blink_angry | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:fiona_angry | fiona | expression_angry | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:fiona_relieved | fiona | expression_relieved | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:fiona_sad | fiona | expression_sad | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:fiona_smile | fiona | expression_smile | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:fiona_worried | fiona | expression_worried | 1 | 1024x1536 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_L_s1 | fiona | blink_sad | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_L_s2 | fiona | blink_sad | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_L_s3 | fiona | blink_sad | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_L_s4 | fiona | blink_sad | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_R_s1 | fiona | blink_sad | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_R_s2 | fiona | blink_sad | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_R_s3 | fiona | blink_sad | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:sad_R_s4 | fiona | blink_sad | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_L_s1 | fiona | blink_worried | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_L_s2 | fiona | blink_worried | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_L_s3 | fiona | blink_worried | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_L_s4 | fiona | blink_worried | 1 | 60x55 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_R_s1 | fiona | blink_worried | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_R_s2 | fiona | blink_worried | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_R_s3 | fiona | blink_worried | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
+| portrait:22br4:fiona:worried_R_s4 | fiona | blink_worried | 1 | 78x60 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User-authorized Android-QA candidate. Separate versioned bytes; original formal PNG remain |
 | portrait:emma:normal:19b | emma | UNKNOWN | 1 | 1024x1536 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/emma |
 | portrait:fiona:normal:19b | fiona | UNKNOWN | 1 | 1024x1536 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/fion |
 | portrait:lou:normal:19b | lou | UNKNOWN | 1 | 1312x1199 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/portrait-registry.js / User explicitly adopted normal only on2026-10-29; byte-identical source img/portraits/lou/ |
