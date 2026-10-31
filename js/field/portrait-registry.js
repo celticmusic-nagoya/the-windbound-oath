@@ -85,11 +85,12 @@
     //20E: user-approved curved eyelids for Fiona/Lou; Emma20C passed physical QA and stays unchanged.
     const revision = id === 'emma' ? 'provisional-20c' : 'provisional-20e';
     define(id, {name, src, crop, base:'assets/images/characters/portraits/'+id+'/',
-      file:f=>(f === 'normal' ? '' : revision+'/expressions/')+id+'_'+f+'.png', side:'right',
+      //22B-R4: versioned Android-QA static revisions; approved originals remain protected.
+      file:f=>(f === 'normal' ? '' : id==='fiona'&&['angry','sad','worried'].includes(f) ? 'provisional-22a-r4/expressions/' : id==='fiona'&&['smile','relieved'].includes(f) ? 'provisional-22a-r3/expressions/' : revision+'/expressions/')+id+'_'+f+'.png', side:'right',
       faces:['normal', ...provisionalFaces], provisionalFaces, provisionalBlink:true,
       blink:{seq:BLINK_V3.seq,gap:BLINK_V3.gap,faces:['normal','angry','sad','surprised','worried','determined'],eyes,
-        //21C: newexpression overlays are provisional; formal normalblink files stay untouched.
-        file:(f,eye,s)=>(f==='normal'?revision+'/blink/':'provisional-21b/blink/')+f+'_'+eye+'_s'+s+'.png'}});
+        //22B-R4: Fiona three-face R2 overlays are provisional; all adopted normal/21B PNG stay untouched.
+        file:(f,eye,s)=>(f==='normal'?revision+'/blink/':id==='fiona'&&['angry','sad','worried'].includes(f)?'provisional-22a-r2/blink/':'provisional-21b/blink/')+f+'_'+eye+'_s'+s+'.png'}});
   }
 
   window.PortraitRegistry = Object.freeze({FACES, SIDES, FALLBACK_SIDE, BLINK_V3, define, get, has: id => chars.has(id), ids: () => [...chars.keys()],
