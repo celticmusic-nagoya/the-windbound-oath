@@ -224,7 +224,7 @@ function say(t, portrait){
  msg.textContent=t;
  msg.style.display='block';
  document.body.classList.add('dialogueOpen');
- if(portrait&&window.TalkPortrait){TalkPortrait.open('legacySay');TalkPortrait.preload(portrait.char,portrait.face);TalkPortrait.page(portrait,'legacySay');}
+ if(portrait&&window.TalkPortrait){const text=document.createElement('span');text.className='talkText';text.textContent=t;msg.replaceChildren(text);TalkPortrait.open('legacySay');TalkPortrait.preload(portrait.char,portrait.face);TalkPortrait.page(portrait,'legacySay');}
  else window.TalkPortrait?.close('legacySay');
 }
 function closeDialogue(){

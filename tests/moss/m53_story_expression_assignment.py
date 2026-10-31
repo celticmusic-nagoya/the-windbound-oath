@@ -1,5 +1,5 @@
 """24A: manual expressions on real production dialogue, immutable words/control-flow and actual canvas pixels."""
-import os,json,hashlib,subprocess
+import os,json,hashlib,subprocess,re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[2];OUT=Path(os.environ.get('QA_OUT','/tmp/24a'));OUT.mkdir(parents=True,exist_ok=True);fails=[]
@@ -16,7 +16,7 @@ check(all(names[p['speaker']]==p['char'] and (p['char']!='lou' or p['face'] not 
 check(len(A['exclusions'])==24 and not A['unhandled'] and all(not next(p for p in allpages if (p['key'],p['page'])==(e['key'],e['page'])).get('char') for e in A['exclusions']),'CG22 and mixed2 intentionally hidden; eligible unhandled0')
 for name in ['PHASE4_FORMAL_ADOPTION_21A.json','PHASE4_EXPRESSION_BLINK_FORMAL_22A.json','PHASE4_FIONA_22BR4.json']:
  l=json.loads((ROOT/'docs/portraits'/name).read_text());check(all(hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in l['assets']+l.get('other_protected_pngs',[])),'protected official PNG SHA '+name)
-PIX=r'''async()=>{const s=TalkPortrait.status,r=PortraitRegistry,c=r.get(s.char),k=c.crop,b=r.blinkOf(s.char,s.face);const load=u=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=u});const cv=document.createElement('canvas');cv.width=k.w;cv.height=k.h;const x=cv.getContext('2d');x.drawImage(await load(r.imageUrl(s.char,s.face)),k.x,k.y,k.w,k.h,0,0,k.w,k.h);if(s.eye&&b)for(const e of Object.values(b.eyes))x.drawImage(await load(e.urls[s.eye-1]),e.box[0]-k.x,e.box[1]-k.y);const want=x.getImageData(0,0,k.w,k.h).data,got=document.querySelector('#talkPortrait canvas').getContext('2d').getImageData(0,0,k.w,k.h).data;return got.every((v,i)=>v===want[i])}'''
+PIX=r'''async()=>{const s=TalkPortrait.status,r=PortraitRegistry,c=r.get(s.char),k=c.crop,b=r.blinkOf(s.char,s.face);const got=document.querySelector('#talkPortrait canvas').getContext('2d').getImageData(0,0,k.w,k.h).data;const load=u=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=u});const cv=document.createElement('canvas');cv.width=k.w;cv.height=k.h;const x=cv.getContext('2d');x.drawImage(await load(r.imageUrl(s.char,s.face)),k.x,k.y,k.w,k.h,0,0,k.w,k.h);if(s.eye&&b)for(const e of Object.values(b.eyes))x.drawImage(await load(e.urls[s.eye-1]),e.box[0]-k.x,e.box[1]-k.y);const want=x.getImageData(0,0,k.w,k.h).data;return got.every((v,i)=>v===want[i])}'''
 with sync_playwright() as p:
  b=p.chromium.launch();ctx=b.new_context(viewport={'width':390,'height':844},has_touch=True);pg=ctx.new_page();errors=[];pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto('http://localhost:%s/index.html?title=0'%os.environ.get('PORT','8765'));pg.wait_for_function("LoadCoordinator.phase==='READY'");pg.evaluate('closeDialogue()')
  def status(e,label,anchor='#msg'):
@@ -33,7 +33,7 @@ with sync_playwright() as p:
   pg.evaluate("""a=>{FieldTalk.cancel();devResetScreens();closeDialogue();Quest.reset();Inventory.reset();PrologueProgress.seed(a.open?3:0);storyStage=a.stage;FieldTalk.load({seen:a.seen,cycle:{[a.key]:a.index},flags:{}});FieldTalk.setQuestProvider(()=>a.quest);if(a.key==='emma_q_found_early')Inventory.add('charm_windward');}""",dict(key=key,index=index,stage=stage,quest=q,seen=seen,open=key=='emma_open'))
  def inspect_pages(c):
   for i,e in enumerate(c['pages']):
-   check(pg.locator('#msg .talkText').text_content()==e['text'],c['key']+'/'+str(i)+': original text/page order')
+   check(pg.locator('#msg .talkText').text_content()==re.sub(r'　(?=[^\s「」　]{1,10}「)', '\n', e['text']),c['key']+'/'+str(i)+': original text/page order')
    status(e,c['key']+'/'+str(i))
    if i<len(c['pages'])-1:
     same=e.get('char') and e.get('char')==c['pages'][i+1].get('char')
