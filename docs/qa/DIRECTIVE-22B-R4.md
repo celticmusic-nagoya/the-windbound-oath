@@ -17,3 +17,5 @@ Test infrastructure history: initial restricted loopback bind exited125 before t
 ## Final verification
 
 Final machine result and independent exact-head review recorded with PR. Browser QA serial only. Physical Android final visual acceptance pending; no claim of physical-device execution.
+
+Final technical QA: **11 unique regression files PASS** (10serial runner files +m48direct), **Node6/6PASS**, registryaudit0errors. No uncollected test countedPASS. Latestm52 with pinned29ledger set ran at9bcbf1e, runtime/assets same as earlier regression snapshot. [Machine results](evidence/directive-22br4/results.json).
