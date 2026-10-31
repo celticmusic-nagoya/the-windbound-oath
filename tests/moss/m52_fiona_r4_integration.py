@@ -9,6 +9,8 @@ def check(ok,label,detail=None):
  if not ok:fails.append(label)
 L=json.loads((ROOT/'docs/portraits/PHASE4_FIONA_22BR4.json').read_text());A=L['assets'];manifest=(ROOT/L['manifest']).read_bytes()
 check(hashlib.sha256(manifest).hexdigest()==L['manifest_sha256']=='afde3b64e9f396e1efc4df99547e086f40b15dec05eb71c2e9f9d8a2dc9baa60','pinned exact29file source manifest (R4 3,R3 2,R2 24)')
+locked={f:h for h,f in [line.split(maxsplit=1) for line in manifest.decode().splitlines()]}
+check(len(locked)==29 and len({a['file'] for a in A})==29 and {a['file']:a['sha256'] for a in A}==locked,'candidate ledger exact pinned29path/SHA set; no independent ledger rebaselining')
 check(len(A)==29 and all(a['adoption_status']=='PROVISIONAL_ANDROID_QA' and hashlib.sha256((ROOT/a['file']).read_bytes()).hexdigest()==a['sha256'] for a in A),'all29candidate SHA exact; NOT formally adopted')
 rev={'R4':('0849e3fff948c5f27e57549bba5e638c42269423',3),'R3':('1bbcaa28e2a7f8785b85dfb9df64a6e3b152689c',2),'R2':('e91228b328bf382399d3bcbcf55ce4520ec058d8',24)}
 check(all(sum(a['revision']==v for a in A)==n and all(a['source_commit']==sha for a in A if a['revision']==v) for v,(sha,n) in rev.items()),'R4/R3/R2 exactsource commits/counts; no mixed older candidates')
