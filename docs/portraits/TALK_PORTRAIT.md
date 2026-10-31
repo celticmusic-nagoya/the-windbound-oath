@@ -151,3 +151,7 @@ The5faces angry/sad/surprised/worried/determined now have provisional blink over
 ### DIRECTIVE-22A expression blink formal adoption
 
 PR93's120expression blink PNGs are now formallyAPPROVED after user Android QA acceptance. [Pinned22Arecord/120SHA](PHASE4_EXPRESSION_BLINK_FORMAL_22A.md) supplements the unchanged21A46file lock; all144normal/expression blink originals stay immutable. No timing/draw changes. Fiona brow repair candidates remain a separate provisional QA workflow; current5fa3532 delivery is CHANGES_REQUESTED and not registered.
+
+## Current status — DIRECTIVE-23A (2026-10-31)
+
+Phase4 COMPLETE; Fiona double-brow repair CLOSED after user PR95 Android all5itemsPASS. R4static3/R3static2/R2blink24 are now formal exactPR95bytes, supplementing prior21A/22A locks. Total259protectedPNG including Aidan/CG; no runtime or image changes. [Current completion/adoption audit](PHASE4_COMPLETION_23A.md). Earlier normal-only/unregistered/provisional sections document earlier phases, not current registration. Fiona8/Lou6/Emma8; normal3+15expression blinks; closedeye4faces intentionally static; Lou smile/relieved still excluded. Phase5 dialogue-expression assignments remain separate scope.
