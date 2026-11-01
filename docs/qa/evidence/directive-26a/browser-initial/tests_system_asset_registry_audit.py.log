@@ -1,0 +1,14 @@
+FAIL registry is up to date with the repository 
+FAIL audit_registry: no errors rrors, 0 approved-not-implemented, 179 unmerged, 45 unreferenced
+ERROR REGISTRY STALE (regenerate with tools/assets/build_registry.py): ['ASSET_REGISTRY.json', 'ASSET_REGISTRY.md', 'ASSET_BACKLOG.md']
+ok   check_asset_refs: manifests / assets.js / maps resolve refs: 0 errors
+ok   no duplicate asset ids 
+ok   every asset carries all registry fields 
+ok   Android history matches formal ledgers; undocumented assets remain UNVERIFIED []
+ok   branch-only assets are never labelled MAIN 
+ok   Raider adopted sheets (Phase 5) and Lou KO are IMPLEMENTED, not in the approved-but-unimplemented list 0
+ok   Raider: 5 adopted sheets IMPLEMENTED, 2 candidates stay PENDING / NOT_IMPLEMENTED 
+ok   candidate sheets are never APPROVED automatically 
+ok   negative control: duplicate id is detected 
+ok   negative control: missing MAIN file is detected 
+FAILS 2

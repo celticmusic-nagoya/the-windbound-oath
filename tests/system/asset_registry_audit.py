@@ -2,6 +2,8 @@
 import json, subprocess, sys, shutil, tempfile
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]; fails = []
+sys.path.insert(0, str(ROOT / 'tests/helpers'))
+from asset_android_history import android_history_errors
 def check(ok, name, d=''):
     print(('ok   ' if ok else 'FAIL ') + name, d); 
     if not ok: fails.append(name)
@@ -13,7 +15,8 @@ reg = json.load(open(ROOT / 'docs/assets/ASSET_REGISTRY.json', encoding='utf-8')
 check(len({a['asset_id'] for a in A}) == len(A), 'no duplicate asset ids')
 need = ['asset_id','name','category','character','motion','delivery_date','source_path','source_branch','source_commit','source_sha256','width','height','frame_count','approval_status','implementation_status','integration_status','runtime_reference','arena_available','qa_status','android_status','issue','notes']
 check(all(all(k in a for k in need) for a in A), 'every asset carries all registry fields')
-check(all(a['android_status'] == 'UNVERIFIED' for a in A), 'no asset is claimed Android-verified')
+android_errors = android_history_errors(A, ROOT)
+check(not android_errors, 'Android history matches formal ledgers; undocumented assets remain UNVERIFIED', android_errors[:3])
 check(not any(a['integration_status'] == 'MAIN' and a['source_branch'] not in ('main',) and a['asset_id'].startswith('branch:') for a in A), 'branch-only assets are never labelled MAIN')
 p0 = [a for a in A if a['approval_status'] == 'APPROVED' and a['implementation_status'] == 'NOT_IMPLEMENTED']
 check(not any(a['character'] in ('goblin_raider',) or a['asset_id'] == 'orig:lou_new_ko' for a in p0), 'Raider adopted sheets (Phase 5) and Lou KO are IMPLEMENTED, not in the approved-but-unimplemented list', len(p0))

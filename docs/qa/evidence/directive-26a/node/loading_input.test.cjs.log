@@ -1,0 +1,38 @@
+PASS normal consumes "Enter" before underlying handlers
+PASS normal consumes " " before underlying handlers
+PASS normal consumes "Escape" before underlying handlers
+PASS normal consumes "ArrowUp" before underlying handlers
+PASS normal consumes "ArrowDown" before underlying handlers
+PASS normal consumes "ArrowLeft" before underlying handlers
+PASS normal consumes "ArrowRight" before underlying handlers
+PASS raider consumes "Enter" before underlying handlers
+PASS raider consumes " " before underlying handlers
+PASS raider consumes "Escape" before underlying handlers
+PASS raider consumes "ArrowUp" before underlying handlers
+PASS raider consumes "ArrowDown" before underlying handlers
+PASS raider consumes "ArrowLeft" before underlying handlers
+PASS raider consumes "ArrowRight" before underlying handlers
+PASS map consumes "Enter" before underlying handlers
+PASS map consumes " " before underlying handlers
+PASS map consumes "Escape" before underlying handlers
+PASS map consumes "ArrowUp" before underlying handlers
+PASS map consumes "ArrowDown" before underlying handlers
+PASS map consumes "ArrowLeft" before underlying handlers
+PASS map consumes "ArrowRight" before underlying handlers
+PASS InputManager itself protects Loading even when registered before the common capture listener
+PASS window/document capture and target/bubble order: blocked event reaches none of the game listeners
+PASS mouse pointerdown/click cannot activate the background during Loading
+PASS touch pointerdown/click cannot activate the background during Loading
+PASS retry "Enter" activates once, repeats and keyup cannot replay
+PASS retry " " activates once, repeats and keyup cannot replay
+PASS mouse explicit retry works after a blocked gesture and only once
+PASS touch explicit retry works after a blocked gesture and only once
+PASS held Enter crossing Loading completion is quarantined until release; fresh input works
+PASS already held direction is cleared and cannot resume movement after unlock until key release
+PASS Space retry that completes synchronously cannot click again on keyup or leak into field
+PASS pointer held across Loading cannot replay a delayed click after completion
+PASS stale owner close cannot unlock a newer map Loading
+PASS disabled recovery action is never allowed, Tab stays on the permitted recovery control
+PASS map failure recovery control remains keyboard usable after Loading view closes
+PASS keyboard retry remains usable after a blocked touch gesture
+37 PASS; real modules, simulated event phases; browser NOT_RUN

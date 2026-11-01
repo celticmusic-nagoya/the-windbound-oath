@@ -1,0 +1,38 @@
+STATE 25a_normal_house {"stage": 0, "map": "rilde_in_aidan", "feet": {"x": 250, "y": 330}, "loading": "READY", "objective": "家を出て、訓練場のフィオナに会いに行こう"}
+ok   NEW GAME starts at house stage0
+ok   route accepted (480, 629)
+ok   route accepted (1880, 940)
+ok   route arrived (1880, 940)
+STATE 25a_normal_fiona {"stage": 1, "map": "rilde_village_01_peace", "feet": {"x": 1878.6528081786134, "y": 937.4855916163135}, "loading": "READY", "objective": "訓練用の木人を調べよう"}
+ok   route accepted (2030, 935)
+ok   route arrived (2030, 935)
+STATE 25a_normal_training_won {"stage": 3, "map": "rilde_village_01_peace", "feet": {"x": 2028.6325833785174, "y": 935.0224572339232}, "loading": "READY", "objective": "フィオナと風見の断崖へ向かおう"}
+ok   actual training UI wins without DEV
+ok   route accepted (830, 1630)
+STATE 25a_normal_cliff_entry {"stage": 3, "map": "cliff_moher_01_spiral_ascent", "feet": {"x": 150, "y": 3658.3778132003163}, "loading": "READY", "objective": "崖の上のビューポイントへ向かおう"}
+ok   route accepted (2400, 1500)
+ok   route arrived (2400, 1500)
+ok   route accepted (2400, 1040)
+ok   route arrived (2400, 1040)
+ok   normal route reaches village attack
+STATE 25a_normal_attack {"stage": 5, "map": "cliff_moher_01_spiral_ascent", "feet": {"x": 2384, "y": 1022}, "loading": "READY", "objective": "村の広場へ向かい、フィオナを探そう"}
+STATE 25a_seeded_capital {"stage": 15, "map": "royal_capital_02_castle_plaza", "feet": {"x": 2000, "y": 3300}, "loading": "READY", "objective": "家を出て、訓練場のフィオナに会いに行こう"}
+ok   joined reserve receives full13 EXP
+ok   seeded capital SAVE writes a record
+ok   seeded capital/party cold CONTINUE restores
+ok   cold CONTINUE retains Liam full EXP
+ok   rotation retains map and input (390, 844)
+ok   rotation retains map and input (844, 390)
+ok   rotation retains map and input (1920, 1080)
+FAIL rilde_drawer grants advertised reward
+FAIL rilde_pot grants advertised reward
+FAIL balloon completion grants advertised2 potions
+FAIL cat completion grants advertised2 antidotes
+ok   fort final pages show existing PROLOGUE END
+ok   END returns to live fort free roam
+ok   normal current low-HP recovery restores commands
+ok   Raider current defeat rule restarts encounter
+ok   no unhandled page errors
+ok   no HTTP failure observed in probe
+ok   no console errors observed in probe
+FAILS 4
