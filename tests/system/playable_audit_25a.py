@@ -16,12 +16,16 @@ def ck(name,ok,detail=None):
  persist()
 with sync_playwright() as pw:
  b=pw.chromium.launch(); report['conditions']['version']=b.version
- def page(w=390,h=844):
+ def page(w=390,h=844,new=True,saved=None):
   c=b.new_context(viewport={'width':w,'height':h},is_mobile=w<1000,has_touch=w<1000);p=c.new_page()
+  if saved:c.add_init_script('localStorage.setItem('+json.dumps(saved[0])+','+json.dumps(saved[1])+')')
   p.on('pageerror',lambda e:report['errors'].append(str(e)))
   p.on('console',lambda m:report['console_errors'].append(m.text) if m.type=='error' else None)
   p.on('response',lambda r:report['http_errors'].append({'url':r.url,'status':r.status}) if r.status>=400 else None)
-  p.goto('http://localhost:8765/index.html?title=1');p.get_by_role('button',name='NEW GAME',exact=True).click();p.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')")
+  p.goto('http://localhost:'+os.environ.get('PORT','8765')+'/index.html?title=1')
+  if new:
+   p.get_by_role('button',name='NEW GAME',exact=True).click();p.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')")
+  else:p.wait_for_function("SaveContinue.phase==='TITLE'")
   return c,p
  c,p=page(); ev=p.evaluate
  def snap(label):
@@ -73,9 +77,9 @@ with sync_playwright() as pw:
  ev("PrologueProgress.seed(3);storyStage=15;louFound=true;forestStoneSeen=true;syncStoryEquipment();closeDialogue();FieldTalk.setFlag('road_dunvall_open',true);PartyManager.join('liam');FieldTalk.setFlag('liam_joined',true);forestActive=true;document.querySelector('#forestScene').style.display='block';MossForest.enter({map:'royal_capital_02_castle_plaza',spawn:'from_market'})")
  p.wait_for_function("MossForest.mapId==='royal_capital_02_castle_plaza'&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy")
  report['seeded_party']=ev('({active:PartyManager.active,members:PartyManager.members})');snap('25a_seeded_capital')
- report['seeded_exp']=ev("(()=>{const before=JSON.parse(JSON.stringify(PartyManager.members));PartyManager.addExp(13);return {before,after:JSON.parse(JSON.stringify(PartyManager.members))}})()");ck('joined reserve receives full13 EXP',report['seeded_exp']['after']['liam']['exp']-report['seeded_exp']['before']['liam']['exp']==13);ev('saveGrowthData()');raw=ev('localStorage.getItem(SAVE_KEY)');ck('seeded capital SAVE writes a record',bool(raw));c.close()
+ report['seeded_exp']=ev("(()=>{const before=JSON.parse(JSON.stringify(PartyManager.members));PartyManager.addExp(13);return {before,after:JSON.parse(JSON.stringify(PartyManager.members))}})()");ck('joined reserve receives full13 EXP',report['seeded_exp']['after']['liam']['exp']-report['seeded_exp']['before']['liam']['exp']==13);ev('saveGrowthData()');save_key=ev('SAVE_KEY');raw=ev('localStorage.getItem(SAVE_KEY)');ck('seeded capital SAVE writes a record',bool(raw));c.close()
  # New browser context loads the exact serialized bytes; no SAVE_KEY guessing or migration.
- c,p=page();ev=p.evaluate;dismiss();ev('([k,v])=>localStorage.setItem(k,v)',[p.evaluate('SAVE_KEY'),raw]);restored=ev('SaveContinue.start()');p.wait_for_function("LoadCoordinator.phase==='READY'&&!LoadingInput.busy");report['seeded_cold_restore']={'ok':restored,'map':ev('MossForest.mapId'),'party':ev('({active:PartyManager.active,reserve:PartyManager.reserve,members:PartyManager.members})')};ck('seeded capital/party LOAD restores',restored and ev("MossForest.mapId==='royal_capital_02_castle_plaza'&&PartyManager.members.liam.joined"))
+ c,p=page(new=False,saved=(save_key,raw));ev=p.evaluate;p.get_by_role('button',name='CONTINUE',exact=True).click();p.wait_for_function("LoadCoordinator.phase==='READY'&&!LoadingInput.busy");restored=ev("SaveContinue.phase==='READY'");report['seeded_cold_restore']={'ok':restored,'map':ev('MossForest.mapId'),'party':ev('({active:PartyManager.active,reserve:PartyManager.reserve,members:PartyManager.members})')};ck('seeded capital/party cold CONTINUE restores',restored and ev("MossForest.mapId==='royal_capital_02_castle_plaza'&&PartyManager.members.liam.joined"));ck('cold CONTINUE retains Liam full EXP',ev('PartyManager.members.liam.exp')==report['seeded_exp']['after']['liam']['exp'])
  for w,h in [(390,844),(844,390),(1920,1080)]:
   p.set_viewport_size({'width':w,'height':h});p.wait_for_timeout(300);ck('rotation retains map and input '+str((w,h)),ev("MossForest.active&&!LoadingInput.busy&&MossForest.mapId==='royal_capital_02_castle_plaza'"))
  c.close()
@@ -85,7 +89,7 @@ with sync_playwright() as pw:
  for hook,item,amount in [('rilde_drawer','potion',1),('rilde_pot','gold',3)]:
   before=ev("id=>id==='gold'?gold:Inventory.count(id)",item);ev("h=>RildeVillage.hook({hook:h},MossForest.map)",hook);after=ev("id=>id==='gold'?gold:Inventory.count(id)",item);rewards[hook]={'before':before,'after':after,'expected_delta':amount,'message':p.locator('#msg').inner_text()};ck(hook+' grants advertised reward',after-before==amount,rewards[hook]);dismiss()
  before=ev("Inventory.count('potion')");ev("RildeVillage.hook({hook:'rilde_kid'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_balloon_tree'},MossForest.map)");after=ev("Inventory.count('potion')");rewards['balloon']={'before':before,'after':after,'expected_delta':2,'message':p.locator('#msg').inner_text(),'done':ev('flags.balloonDone')};ck('balloon completion grants advertised2 potions',after-before==2,rewards['balloon']);dismiss()
- ev("RildeVillage.hook({hook:'rilde_catowner'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_cat'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_catowner'},MossForest.map)");rewards['cat']=ev("({done:flags.catDone,itemId:Object.keys(ItemData.items).find(k=>ItemData.items[k].name==='毒消し')||null,items:Inventory.serialize(),consumables:{...battleItems},message:document.querySelector('#msg').textContent})");ck('cat completion grants advertised antidote item',bool(rewards['cat']['itemId']) and ev("id=>Inventory.count(id)>=2",rewards['cat']['itemId']),rewards['cat']);dismiss();c.close()
+ cat_before=ev("(()=>{const id=Object.keys(ItemData.items).find(k=>ItemData.items[k].name==='毒消し');return {itemId:id||null,count:id?Inventory.count(id):null}})()");ev("RildeVillage.hook({hook:'rilde_catowner'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_cat'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_catowner'},MossForest.map)");rewards['cat']=ev("({done:flags.catDone,itemId:Object.keys(ItemData.items).find(k=>ItemData.items[k].name==='毒消し')||null,items:Inventory.serialize(),consumables:{...battleItems},message:document.querySelector('#msg').textContent})");rewards['cat']['before']=cat_before;rewards['cat']['after_count']=ev("id=>id?Inventory.count(id):null",rewards['cat']['itemId']);ck('cat completion grants advertised2 antidotes',bool(rewards['cat']['itemId']) and rewards['cat']['after_count']-cat_before['count']==2,rewards['cat']);dismiss();c.close()
  # Complete the existing fort final pages and END button, isolated seeded fixture.
  c,p=page();ev=p.evaluate;dismiss();ev('PrologueProgress.seed(3);storyStage=13;startFortFinale()')
  for _ in range(14):
