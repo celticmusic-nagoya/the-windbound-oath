@@ -5,6 +5,7 @@ window.ItemData = Object.freeze({
   items: Object.freeze({
     potion:        {name:'きずぐすり', kind:'consumable', desc:'傷口に塗る薬草の軟膏。HPを回復する。'},
     ether:         {name:'魔力の雫',   kind:'consumable', desc:'飲むと魔力が静かに満ちる青い雫。MPを回復する。'},
+    antidote:      {name:'毒消し', kind:'consumable', desc:'現在は使用できない。'},
     charm_windward:{name:'風よけの護符', kind:'key',      desc:'旅人の無事を祈って編まれた、小さな護符。風に揺れると澄んだ音がする。'},
     herb_moss:     {name:'薬草', kind:'key', desc:'森の近くに生える、傷みを和らげる草。畑の土を整えるのにも使われる。'},
     silver_comb:   {name: '銀の櫛', kind: 'key', desc: '細かな花の彫りが入った銀の櫛。誰かの大切な持ち物らしい。'},

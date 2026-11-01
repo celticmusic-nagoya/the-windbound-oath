@@ -342,10 +342,10 @@ function near(el,range=150){let r=el.getBoundingClientRect(),p=$('#inPlayer').ge
 function needNear(el,fn){if(!near(el)){say('もう少し近づいて調べよう。');return}fn()}
 $('#leave').onclick=()=>needNear($('#leave'),()=>{$('#inside').style.display='none';$('#floorBadge').style.display='none';target=null});
 
-$('#drawer').onclick=()=>needNear($('#drawer'),()=>{if(room==='home'&&!flags.drawer){flags.drawer=true;say('タンスを調べた。きずぐすりを1個見つけた！')}else say('衣類がきれいに畳まれている。')});
+$('#drawer').onclick=()=>needNear($('#drawer'),()=>{if(room==='home'&&!flags.drawer){Inventory.grant({potion:1});flags.drawer=true;say('タンスを調べた。きずぐすりを1個見つけた！')}else say('衣類がきれいに畳まれている。')});
 $('#shelf').onclick=()=>needNear($('#shelf'),()=>say(room==='home'?'父さんの古い剣術書だ。難しい言葉が並んでいる。':room==='elder'?'古びた書物だ。風とルーンについて記されているが、読めない箇所が多い。':'アルヴェリアの昔話が並んでいる。'));
 $('#bed').onclick=()=>needNear($('#bed'),()=>say(room==='home'?'使い慣れたベッドだ。今はまだ休む時間じゃない。':'ふかふかのベッドだ。'));
-$('#pot').onclick=()=>needNear($('#pot'),()=>{if(!flags.pot){flags.pot=true;say('壺の中を調べた。3Gを見つけた！')}else say('壺の中は空だ。')});
+$('#pot').onclick=()=>needNear($('#pot'),()=>{if(!flags.pot){Inventory.grant({gold:3});flags.pot=true;say('壺の中を調べた。3Gを見つけた！')}else say('壺の中は空だ。')});
 $('#fire').onclick=()=>needNear($('#fire'),()=>say('薪がぱちぱちと燃えている。'));
 $('#table').onclick=()=>needNear($('#table'),()=>say(room==='elder'?'古い村の地図だ。村の北には、風を示す奇妙な紋様が刻まれている。':'木のテーブルだ。家族で食事をした跡が残っている。'));
 document.querySelectorAll('.npc').forEach(n=>n.onclick=()=>{let id=n.dataset.npc;
@@ -356,7 +356,7 @@ document.querySelectorAll('.npc').forEach(n=>n.onclick=()=>{let id=n.dataset.npc
  if(id==='shop')say('道具屋「旅支度なら任せな。薬草も毒消しもあるぞ。」');
  if(id==='catowner'){
    if(!flags.cat){flags.cat=true;updateSubQuest('cat','active','迷子の猫を探そう');say('女の子「ミルがいなくなっちゃったの。白い猫を見なかった？」')}
-   else if(flags.catFound&&!flags.catDone){flags.catDone=true;updateSubQuest('cat','done','迷子の猫','毒消し×2');say('女の子「ミルを見つけてくれたの！？ありがとう！」 毒消し×2をもらった。')}
+   else if(flags.catFound&&!flags.catDone){Inventory.grant({antidote:2});flags.catDone=true;updateSubQuest('cat','done','迷子の猫','毒消し×2');say('女の子「ミルを見つけてくれたの！？ありがとう！」 毒消し×2をもらった。')}
    else if(!flags.catDone)say('女の子「川の方へ行ったのかな……」');
    else say('女の子「ミル、ちゃんと帰ってきたよ。ありがとう！」')
  }
@@ -365,7 +365,7 @@ document.querySelectorAll('.npc').forEach(n=>n.onclick=()=>{let id=n.dataset.npc
    else say('猫「ニャー」')
  }
 });
-$('#balloonTree').onclick=()=>{if(flags.balloon&&!flags.balloonDone){flags.balloonDone=true;$('#balloonTree span').style.display='none';updateSubQuest('balloon','done','風に飛ばされた風船','きずぐすり×2');say('風船を取った！ 子供からきずぐすり×2をもらった。')}else say('大きな木だ。葉が風に揺れている。')};
+$('#balloonTree').onclick=()=>{if(flags.balloon&&!flags.balloonDone){Inventory.grant({potion:2});flags.balloonDone=true;$('#balloonTree span').style.display='none';updateSubQuest('balloon','done','風に飛ばされた風船','きずぐすり×2');say('風船を取った！ 子供からきずぐすり×2をもらった。')}else say('大きな木だ。葉が風に揺れている。')};
 msg.addEventListener('click',()=>{closeDialogue()});
 $('#fs').onclick=()=>document.documentElement.requestFullscreen?.();
 $('#menuBtn').onclick=()=>{renderJournal();$('#questMenu').style.display='block'};
@@ -1171,6 +1171,8 @@ async function applyGrowthData(d,route,checkpoint,token){
   LoadCoordinator.assertCurrent(token);
   syncStoryEquipment();
   Inventory.reconcile(MossForestStory.openedFromSave(d.prologue));   // saves from before key items: grant 大事なもの of already-opened chests once
+  // Missing optional item keys in an older SAVE mean zero, not the current session's stock.
+  if(!Object.prototype.hasOwnProperty.call(d.battleItems||{},'antidote'))delete battleItems.antidote;
 }
 async function loadGrowthData(){
  try{
@@ -2069,9 +2071,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261029dev18d"></script>
 <script src="js/field/moss-forest-story.js?v=20261025continue"></script>
-<script src="js/field/rilde-village.js?v=20261031phase5expressions"></script>
+<script src="js/field/rilde-village.js?v=20261101rewards26b"></script>
 <script src="js/training-checkpoint.js"></script>
-<script src="js/data/item-data.js"></script>
+<script src="js/data/item-data.js?v=20261101rewards26b"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
 <script src="js/inventory.js"></script>
 <script src="js/data/support-magic-data.js?v=20261013wd3"></script>
