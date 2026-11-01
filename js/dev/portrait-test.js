@@ -3,6 +3,20 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const R = PortraitRegistry, P = TalkPortrait, OWNER = '__devPortrait';
+  // DEV display snapshot of the formal21A/22A/23A ledgers. QA verifies every resolved file/SHA.
+  // Match actual registered URLs/overlays so aliases of approved art remain usable, unknown art fails closed.
+  const formalFaces = {aidan:['normal','smile','angry','worried','sad','surprised'],
+    fiona:['normal','smile','angry','sad','surprised','worried','determined','relieved'],
+    lou:['normal','angry','sad','surprised','worried','determined'],
+    emma:['normal','smile','angry','sad','surprised','worried','determined','relieved']};
+  const faceNames = {normal:'通常',smile:'微笑み',angry:'怒り',sad:'悲しみ',surprised:'驚き',worried:'心配',determined:'決意',relieved:'安堵'};
+  const approved = new Map();
+  for (const [id, list] of Object.entries(formalFaces)) for (const f of list)
+    approved.set(R.imageUrl(id,f), {face:f, blink:JSON.stringify(R.blinkOf(id,f))});
+  const isFormal = (id,f) => { const a=approved.get(R.imageUrl(id,f));return Boolean(a&&a.face===f&&a.blink===JSON.stringify(R.blinkOf(id,f))); };
+  const selectable = id => (R.get(id)?.faces || []).filter(f=>isFormal(id,f));
+  const faceLabel = f => `${faceNames[f] || f} (${f})`;
+
   let root, panel, status, faces, chars, timer = null, seq = 0, char, face = 'normal', side = 'left', mode = 'stop', pending = false;
   const q = s => root.querySelector(s);
   function button(parent, text, fn, id) {
@@ -22,7 +36,7 @@
     if (P.owner !== OWNER || document.body.classList.contains('battleMode') || window.FieldTalk?.active || window.FieldScene?.running) { close(); return; }
     const s = P.status; if (mode === 'manual' && !s.blink) mode = 'stop';
     const wait = s.blink?.nextAt ? Math.max(0, (s.blink.nextAt - Date.now()) / 1000).toFixed(1) + '秒' : '-';
-    status.textContent = `${s.char || char} / ${s.face || face} / 素材: ${!R.blinkOf(char,face) ? '未実装・静止画' : s.blinkReady ? 'READY' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}${R.get(char)?.provisionalFaces.includes(face) || R.get(char)?.provisionalBlink && face === 'normal' ? ' / QA候補（PROVISIONAL_ANDROID_QA）' : ''}`;
+    status.textContent = `${R.get(char)?.name || char} (${s.char || char}) / ${faceLabel(s.face || face)} / 正式採用\n素材: ${!R.blinkOf(char,face) ? '静止表示（仕様）' : s.blinkReady ? 'READY（瞬き対応）' : pending ? 'LOADING' : 'MISSING'}\n${s.blink?.timers ? 'RUNNING' : 'STOPPED'} / 目: ${s.eye} / 次回: ${wait}\nreduced-motion: ${s.reduced ? 'ON（再生停止）' : 'OFF'} / hidden: ${document.hidden} / ${mode}`;
     const errors = P.diagnostics;
     q('#devPortraitErrors').textContent = errors.map(e => `${e.url}: ${e.reason}`).join('\n');
   }
@@ -41,10 +55,10 @@
     P.layout(); update();
   }
   function select(id) {
-    if (!R.has(id)) return;
-    char = id; face = R.get(id).faces[0]; faces.textContent = '';
-    for (const f of R.get(id).faces) {
-      const b = button(faces, f + (R.get(id).provisionalFaces.includes(f) ? '（QA候補）' : ''), () => { face = f; void show(); });
+    if (!selectable(id).length) return;
+    char = id; face = selectable(id)[0]; faces.textContent = '';
+    for (const f of selectable(id)) {
+      const b = button(faces, faceLabel(f) + '・正式採用・' + (R.blinkOf(id,f) ? '瞬き対応' : '静止表示'), () => { face = f; void show(); });
       b.dataset.face = f;
     }
     void show();
@@ -81,8 +95,8 @@
     const ids = [...new Set([...R.ids(), 'aidan', 'fiona', 'lou', 'emma'])];
     const names = {aidan: 'エイダン', fiona: 'フィオナ', lou: 'ルー', emma: 'エマ'};
     for (const id of ids) {
-      const b = button(chars, (R.get(id)?.name || names[id] || id) + (R.has(id) ? '' : '（未実装）'), () => select(id));
-      b.disabled = !R.has(id); b.dataset.char = id;
+      const b = button(chars, (R.get(id)?.name || names[id] || id) + (selectable(id).length ? '' : R.has(id) ? '（未採用）' : '（未実装）'), () => select(id));
+      b.disabled = !selectable(id).length; b.dataset.char = id;
     }
     document.getElementById('devPanel').style.display = 'none';
     window.dispatchEvent(new Event('loading-input-lock')); // cancel held walking/navigation without changing game state or input policy

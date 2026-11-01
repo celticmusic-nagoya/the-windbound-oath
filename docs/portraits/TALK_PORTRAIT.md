@@ -1,4 +1,6 @@
-# 会話立ち絵・表情・瞬き 共通システム（Phase 3）
+# 会話立ち絵・表情・瞬き 共通システム
+
+> 現行状態：Phase 4・Phase 5A COMPLETE。本編115ページ、ユーザーAndroid QA5/5PASS。[正式採用と現在のDEV操作](DEV_PORTRAIT_GUIDE.md)。日付付きの過去節は履歴です。
 
 会話（FieldTalk）中に、キャラクターの立ち絵を表示し、表情を切り替え、自然な間隔で瞬きさせる共通の仕組み。キャラクターごとの専用コードは持たない。新しいキャラクターは、レジストリへの登録 1 件と画像だけで追加できる。
 
@@ -44,7 +46,7 @@ PortraitRegistry.define('aidan', {
 
 - 共通の語彙は `normal smile angry sad surprised worried determined relieved`（`01`〜`08` も可）。
 - 各キャラクターの `faces` にない ID、未知の ID、読み込めない画像は `normal` で表示する。`normal` も読めない場合は立ち絵なしで、会話は止まらない。
-- エイダンは `normal smile angry worried(困り顔) sad(伏し目) surprised`。
+- エイダンは `normal(通常) smile(微笑み) angry(怒り) worried(心配) sad(悲しみ) surprised(驚き)`。
 
 ### 表示位置の決め方（優先順）
 
@@ -105,15 +107,15 @@ PortraitRegistry.define('aidan', {
 4. `portrait-registry.js` に `define()` を 1 件追加する。瞬き素材がまだなければ `blink` を書かない。
 5. テスト m40〜m42 を流す。
 
-## 未対応（Phase 4 以降）
+## 現行状態と別工程
 
-- フィオナ・ルー・エマの登録：表情ごとの採用判断の後。
-- 複数の立ち絵の同時表示、話していない人物を暗くする表示。
-- 実際のシナリオへの表情の割り当て（Phase 5）。
+Phase 4とPhase 5Aは完了。本編115ページへ表情を接続済み、ユーザーAndroid実機QA5/5PASS。フィオナ眉修正はCLOSED。[現行DEV案内・正式台帳](DEV_PORTRAIT_GUIDE.md)を正本として参照する。
+
+- 複数の立ち絵の同時表示、話していない人物を暗くする表示は別工程（未実装）。
 
 ## ゲーム内DEV検証（DIRECTIVE-18C / 18D）
 
-ゲーム開始後、会話を閉じて `DEV ▶` → `立ち絵・モーションテスト`。正式登録済みのキャラクター・表情だけを選べる。未登録のフィオナ・ルー・エマは「未実装」で無効。
+ゲーム開始後、会話を閉じて `DEV ▶` → `立ち絵・モーションテスト`。正式採用済みのエイダン6・フィオナ8・ルー6・エマ8表情を選べる。「正式採用」「瞬き対応／静止表示」を区別し、未確認の素材参照は選択肢に混ぜない。ルーsmile/relievedは対象外。
 
 - `今すぐ瞬き` は既存の `blinkNow()` で1回再生し開眼で停止。`自動瞬き` は通常の3〜6秒間隔。`連続テスト` はDEV専用の短い間隔。
 - `停止・開眼` でタイマーを解除。`フレーム 0〜4` は実際の本編canvasに開眼〜閉眼を静止表示する。
@@ -125,6 +127,10 @@ PortraitRegistry.define('aidan', {
 `TalkPortrait.devControl(mode, state)` はDEV有効かつ専用所有者 `__devPortrait` のときだけ使える。通常会話の瞬き間隔や描画は変更しない。
 
 本編への初接続は風見の断崖・頂上ベンチの夕日会話（DIRECTIVE-18B）。18Cではsmile/normal各3回の自然な瞬きで、両目の実canvas画素が開眼/半目/閉眼の正式素材合成と一致することを確認した。通常設定で描画不具合は再現せず、端末固有の原因は未確定。[診断と目元比較](../qa/DIRECTIVE-18C.md)。
+
+## 実装・採用の履歴（以下は各時点の記録）
+
+以下のnormal-only・暫定採用・未対応などの記述は当時の履歴。現在の利用方法・採用状態は[現行案内](DEV_PORTRAIT_GUIDE.md)を参照する。元の採用経緯は変更しない。
 
 ## Phase4通常3枚 (DIRECTIVE-19B)
 

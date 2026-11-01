@@ -55,7 +55,7 @@ with sync_playwright() as p:
   if pg.locator('#devPortraitStage').evaluate("e=>e.classList.contains('folded')"):pg.locator('#devPortraitToggle').tap()
  for f in ['angry','sad','worried','smile','relieved']:
   unfold();pg.locator('#devPortraitFaces [data-face='+f+']').tap();ready(f,f not in ['smile','relieved']);pg.wait_for_timeout(80)
-  check('QA候補' in pg.locator('#devPortraitFaces [data-face='+f+']').inner_text(),f+': visible QA candidate label')
+  check('正式採用' in pg.locator('#devPortraitFaces [data-face='+f+']').inner_text() and 'QA候補' not in pg.locator('#devPortraitFaces [data-face='+f+']').inner_text(),f+': current formal label matches23A ledger')
   if f in ['smile','relieved']:
    check(pg.locator('#devPortraitBlink').is_disabled() and pg.evaluate('TalkPortrait.status.blink===null&&!TalkPortrait.status.blinkReady'),f+': static in actual DEV')
    pg.screenshot(path=str(OUT/f'22br4_{f}_portrait.png'));continue

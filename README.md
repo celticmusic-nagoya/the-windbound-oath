@@ -3,6 +3,12 @@
 
 Original Celtic-flavored browser JRPG / portfolio project.
 
+## Current portraits / DEV
+
+Phase 4 and Phase 5A are COMPLETE. Approved portraits for Aidan/Fiona/Lou/Emma are connected to115production dialogue pages; user Android QA5/5PASS. Fiona brow repair is CLOSED.259formal PNGs remain SHA-protected.
+
+Game → DEV ▶ → 立ち絵・モーションテスト:28approved expressions,24blinking/4intentionally static. [Current DEV guide and authoritative adoption records](docs/portraits/DEV_PORTRAIT_GUIDE.md). Older QA/handoff documents preserve their historical status; Lou smile/relieved remain unadopted.
+
 ## Development stack
 - HTML
 - CSS
