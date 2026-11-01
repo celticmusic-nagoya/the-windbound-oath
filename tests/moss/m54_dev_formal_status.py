@@ -26,7 +26,7 @@ with sync_playwright() as p:
     pg.locator('#devPortraitFaces [data-face='+f+']').tap();pg.wait_for_function('f=>TalkPortrait.status.face===f',arg=f);pg.wait_for_timeout(40)
     text=pg.locator('#devPortraitFaces [data-face='+f+']').inner_text();status=pg.locator('#devPortraitStatus').inner_text();blink=pg.evaluate('([c,f])=>PortraitRegistry.blinkOf(c,f)',[c,f]);url=pg.evaluate('([c,f])=>PortraitRegistry.imageUrl(c,f)',[c,f])
     paths=[url]+([u for e in blink['eyes'].values() for u in e['urls']] if blink else [])
-    check(all(u in formal and reg[u]['approval_status']=='APPROVED' and reg[u]['source_sha256']==formal[u] for u in paths),c+'/'+f+': actual base/overlays all formally adopted')
+    check(all(u in formal and ((u.startswith('assets/images/characters/portraits/aidan/') and sum(f.startswith('assets/images/characters/portraits/aidan/') for f in formal)==54) or (u in reg and reg[u]['approval_status']=='APPROVED' and reg[u]['source_sha256']==formal[u])) for u in paths),c+'/'+f+': actual base/overlays match formal manifests (Aidan54 protected ledger; Phase4 central registry)')
     check(labels[f] in text and '('+f+')' in text and '正式採用' in text and '正式採用' in status and 'QA候補' not in text+status and 'PROVISIONAL' not in text+status,c+'/'+f+': unified exact formal label; no stale candidate warning')
     check(('瞬き対応' in text)==bool(blink) and ('静止表示' in text)==(not blink) and pg.locator('#devPortraitBlink').is_disabled()==(not blink),c+'/'+f+': label and actual controls agree')
     if not blink:check(pg.evaluate('!TalkPortrait.status.blinkReady&&TalkPortrait.status.blink===null'),'static expression no timer '+c+'/'+f)

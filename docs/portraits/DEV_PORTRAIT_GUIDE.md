@@ -15,7 +15,7 @@
 
 保護対象259PNG＝保存済みPhase4正式195＋エイダン54＋イベントCG10。実際に選ばれる会話画像は220PNG（Phase4現行166＋エイダン54）。差し替え前の正式原本も保存・SHA保護します。`provisional-*`という履歴フォルダ名は変更しません。
 
-採用の正本：[21A正式台帳](PHASE4_FORMAL_ADOPTION_21A.json)、[22A瞬き120枚](PHASE4_EXPRESSION_BLINK_FORMAL_22A.json)、[23Aフィオナ29枚](PHASE4_FIONA_22BR4.json)、[総合台帳](../assets/ASSET_REGISTRY.json)。DEVの表示用スナップショットは回帰テストでこの正式集合・実参照・SHAと照合し、採用判断を独自に追加しません。正式画像への登録別名は利用できますが、未確認の画像参照は選択対象外です。新たな正式素材の登録時は、同じPRで表示スナップショットと台帳照合テストも更新します。
+採用の正本：[21A正式台帳](PHASE4_FORMAL_ADOPTION_21A.json)、[22A瞬き120枚](PHASE4_EXPRESSION_BLINK_FORMAL_22A.json)、[23Aフィオナ29枚](PHASE4_FIONA_22BR4.json)、[総合台帳](../assets/ASSET_REGISTRY.json)。DEVの表示用スナップショットは回帰テストでこの正式集合・実参照・SHAと照合し、採用判断を独自に追加しません。正式画像・瞬き参照が一致する登録別名は利用できますが、未確認の画像参照は選択対象外です。新たな正式素材の登録時は、同じPRで表示スナップショットと台帳照合テストも更新します。
 
 ## 操作
 
