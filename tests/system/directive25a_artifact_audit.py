@@ -25,4 +25,6 @@ ck(all(x['status']!='COMPLETE' or not x.get('test') or (bytest[x['test']]['exit_
 ck(all(x['status']=='BLOCKED' for x in a if x['id'] in ['U04','T07']),'physical Android / long-run hardware results not invented')
 ck('ルーsmile/relieved' in (R/'docs/planning/ASSET_GAP_LIST.md').read_text() and '未採用' in (R/'docs/planning/ASSET_GAP_LIST.md').read_text(),'excluded Lou expressions remain unadopted')
 summary=json.loads((E/'summary.json').read_text());ck(summary['counts']==m['counts'] and summary['audit_items']==m['total'] and summary['product_qa']=='FAIL' and summary['overall']=='PARTIAL','summary preserves partial product findings and baseline FAIL')
+priorities=collections.Counter(s.split('|')[2].strip() for s in (R/'docs/planning/PHASE6_BACKLOG.md').read_text().splitlines() if s.startswith('| P6-'));ck(all(priorities.get(k,0)==v for k,v in summary['priorities'].items()),'backlog severity totals agree with real issue rows')
+ck('20 PASS;' in (E/'node/startup-adapter-diagnostic.log').read_text() and '37 PASS;' in (E/'node/continue-adapter-diagnostic.log').read_text(),'diagnostic case counts are real collected output')
 print('FAILS',len(fails));raise SystemExit(bool(fails))
