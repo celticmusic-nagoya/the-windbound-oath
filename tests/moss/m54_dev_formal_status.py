@@ -20,7 +20,7 @@ with sync_playwright() as p:
  for width,height in [(390,844),(360,800),(844,390),(915,412)]:
   pg.set_viewport_size({'width':width,'height':height})
   for c,expected in faces.items():
-   unfold();pg.locator('[data-char='+c+']').tap();pg.wait_for_function('c=>TalkPortrait.status.char===c&&TalkPortrait.status.visible',arg=c)
+   unfold();pg.locator('#devPortraitChars [data-char='+c+']').tap();pg.wait_for_function('c=>TalkPortrait.status.char===c&&TalkPortrait.status.visible',arg=c)
    check(pg.locator('#devPortraitFaces button').evaluate_all('(bs)=>bs.map(b=>b.dataset.face)')==expected,c+': selectable face list equals formal ledger')
    for f in expected:
     pg.locator('#devPortraitFaces [data-face='+f+']').tap();pg.wait_for_function('f=>TalkPortrait.status.face===f',arg=f);pg.wait_for_timeout(40)
@@ -37,8 +37,8 @@ with sync_playwright() as p:
  check(pg.evaluate('JSON.stringify({talk:FieldTalk.serialize(),stage:storyStage,storage:{...localStorage}})')==saved,'DEV labels/selection leave story and save unchanged')
  # Existing generic discovery of aliases of approved art remains functional; unknown image references cannot masquerade as adopted.
  pg.evaluate("PortraitRegistry.define('approved_alias',{...PortraitRegistry.get('aidan'),name:'Approved alias'});PortraitRegistry.define('unapproved_fixture',{...PortraitRegistry.get('lou'),name:'Unapproved fixture',base:'unapproved-fixture/'})")
- pg.evaluate('DevPortraitTest.open()');check(pg.locator('[data-char=unapproved_fixture]').is_disabled(),'unapproved registered image sources excluded')
- pg.locator('[data-char=approved_alias]').tap();pg.wait_for_function("TalkPortrait.status.char==='approved_alias'");check('正式採用' in pg.locator('#devPortraitStatus').inner_text(),'generic approved-image alias remains selectable')
+ pg.evaluate('DevPortraitTest.open()');check(pg.locator('#devPortraitChars [data-char=unapproved_fixture]').is_disabled(),'unapproved registered image sources excluded')
+ pg.locator('#devPortraitChars [data-char=approved_alias]').tap();pg.wait_for_function("TalkPortrait.status.char==='approved_alias'");check('正式採用' in pg.locator('#devPortraitStatus').inner_text(),'generic approved-image alias remains selectable')
  pg.locator('#devPortraitClose').tap()
  # Existing Aidan preview uses the same Japanese terms/adoption status.
  pg.goto('http://localhost:%s/dev/talk-portrait-preview.html'%os.environ.get('PORT','8765'));pg.wait_for_function("TalkPortrait.status.visible");text=pg.locator('#panel').inner_text();check('心配 (worried)・正式採用' in text and '悲しみ (sad)・正式採用' in text,'preview nomenclature matches DEV')
