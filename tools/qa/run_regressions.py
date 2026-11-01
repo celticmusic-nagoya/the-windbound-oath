@@ -116,6 +116,7 @@ def main():
     parser.add_argument('--out',type=Path,default=ROOT/'docs/qa/regression-20261013')
     parser.add_argument('--self-test',action='store_true')
     parser.add_argument('--gameplay-ready',action='store_true',help='explicit legacy gameplay fixture: title=0 and boot readiness; does not bypass TITLE tests')
+    parser.add_argument('--git-history',action='store_true',help='give the isolated snapshot its committed index/history for provenance audits; source remotes/config are not copied')
     parser.add_argument('--child');parser.add_argument('--root',type=Path);parser.add_argument('--extra-json',default='[]')
     args=parser.parse_args()
     if args.self_test:self_test();return
@@ -128,12 +129,21 @@ def main():
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     base=subprocess.check_output(['git','rev-parse','origin/main'],cwd=ROOT,text=True).strip()
-    metadata={'source_head':head,'main_base':base,'port':args.port,'timeout':args.timeout,'known_failures':KNOWN,'snapshot_mode':'git archive committed HEAD','gameplay_ready':args.gameplay_ready}
+    metadata={'source_head':head,'main_base':base,'port':args.port,'timeout':args.timeout,'known_failures':KNOWN,'snapshot_mode':'git archive committed HEAD','gameplay_ready':args.gameplay_ready,'git_history':args.git_history}
     with tempfile.TemporaryDirectory(prefix='codex-regression-') as temporary:
         snapshot=Path(temporary)/'repo';snapshot.mkdir()
         archive=Path(temporary)/'source.tar'
         subprocess.run(['git','archive','--format=tar','--output',str(archive),head],cwd=ROOT,check=True)
         with tarfile.open(archive)as tar:tar.extractall(snapshot,filter='data')
+        if args.git_history:
+            # Independent index/ref; read existing immutable objects without copying credentials,
+            # remotes, hooks, source index or worktree changes into the fixture.
+            objects=subprocess.check_output(['git','rev-parse','--path-format=absolute','--git-path','objects'],cwd=ROOT,text=True).strip()
+            subprocess.run(['git','init','--quiet',str(snapshot)],check=True)
+            (snapshot/'.git/objects/info/alternates').write_text(objects+'\n')
+            subprocess.run(['git','symbolic-ref','HEAD','refs/heads/qa-snapshot'],cwd=snapshot,check=True)
+            subprocess.run(['git','update-ref','refs/heads/qa-snapshot',head],cwd=snapshot,check=True)
+            subprocess.run(['git','read-tree',head],cwd=snapshot,check=True)
         paths=args.tests or sorted(str(p.relative_to(snapshot))for p in (snapshot/'tests').rglob('*')if p.suffix=='.py' or p.name.endswith('.test.js'))
         paths=[p for p in paths if p!='tests/run_python.py' and '__pycache__'not in p]
         if not paths:raise SystemExit('No tests discovered')
