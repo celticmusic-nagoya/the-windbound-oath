@@ -1,6 +1,7 @@
 // Contract tests prepared before implementation. Real save modules and state machines; only DOM/network/renderers adapted.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {setup}=require('./startup_race.test.cjs'),{deferred,flush}=require('./s2_transition_recovery.test.cjs');
+const {portraitBlock}=require('./helpers/product-block.cjs');
 const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const fixture=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/issue54-stage15.json'),'utf8'));
 function env(){
@@ -12,6 +13,8 @@ function env(){
  const equipStart=html.indexOf('const STARTER_GEAR='),equipEnd=html.indexOf("window.addEventListener('equipment-unlock'",equipStart);assert.ok(equipStart>=0&&equipEnd>equipStart);vm.runInContext(html.slice(equipStart,equipEnd),c);
  const a=html.indexOf('function saveGrowthData()'),b=html.indexOf("$('#menuOpen').onclick",a);vm.runInContext(html.slice(a,b),c);
  c.world=e.node('#world');e.load('js/field/talk-data-attack.js');
+ const portrait=portraitBlock(html);vm.runInContext(portrait,c);
+ assert.ok(portrait.includes(c.storyPortraitPage.toString()),'fixture must execute exact product storyPortraitPage');
  let aScene=html.indexOf('const returnLines='),bScene=html.indexOf('// 襲撃(stage',aScene);assert.ok(aScene>=0&&bScene>aScene);vm.runInContext(html.slice(aScene,bScene),c);
  const aliases=html.indexOf('const atkTalk=');vm.runInContext(html.slice(aliases,html.indexOf('let attackStep=',aliases)),c);
  aScene=html.indexOf('const escapeLinesNow=');bScene=html.indexOf('// Forest field control',aScene);vm.runInContext(html.slice(aScene,bScene),c);

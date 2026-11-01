@@ -1,6 +1,7 @@
 // Real coordinator, RildeVillage, S2 runtime, FieldTalk, HTML say/dev/LOAD. Network/rendering adapters only.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {environment,deferred,flush}=require('./s2_transition_recovery.test.cjs');
+const {dialogueBlock}=require('./helpers/product-block.cjs');
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 function extractDevBlock(source){
  const start=/^function devResetScreens\s*\(/m.exec(source);
@@ -15,7 +16,8 @@ function setup(){
  const e=environment(),c=e.c;c.URLSearchParams=URLSearchParams;c.flags={};c.$=e.node;c.popObjective=()=>{};c.msg=e.node('#msg');
  Object.defineProperty(c.msg,'textContent',{configurable:true,get(){return this._text||this.children.map(n=>n.textContent).join('')},set(v){this._text=v;this.children=[]}});
  c.msg.querySelector=function(s){return this.children.find(n=>s[0]==='.'?n.className===s.slice(1):n.tagName===s.toUpperCase())||null;};
- vm.runInContext(html.slice(html.indexOf('function say(t)'),html.indexOf('function camera()')),c);
+ const dialogue=dialogueBlock(html);vm.runInContext(dialogue,c);
+ for(const name of ['say','closeDialogue'])assert.ok(dialogue.includes(c[name].toString()),'fixture must execute exact product '+name);
  e.load('js/load-coordinator.js');e.load('js/prologue-progress.js');e.load('js/field/moss-forest-story.js');e.load('js/field/rilde-village.js');e.load('js/field/talk-conditions.js');e.load('js/field/field-talk.js');
  c.FieldTalk.loadTable({npc:'other',entries:[{id:'other1',when:{},lines:[['別の会話']]}]});
  const m=e.map('rilde_in_aidan');m.spawns.points.from_bed=m.spawns.points.start;e.worlds.set('rilde_in_aidan',m);
