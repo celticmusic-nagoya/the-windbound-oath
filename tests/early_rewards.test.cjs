@@ -32,5 +32,17 @@ function legacy(e,id){const line=html.split('\n').find(s=>s.startsWith("$('#"+id
  await test('NEW GAME starts new optional stock at zero without touching existing SAVE',async()=>{
   const e=await ready(),raw=put(e,save());e.c.battleItems.antidote=2;await e.complete(e.c.RildeVillage.startOpening());assert.equal(e.c.Inventory.count('antidote'),0);assert.equal(e.c.flags.catDone,false);assert.equal(e.c.localStorage.getItem('slot'),raw);
  });
+ for(const battle of ['normal','raider'])await test(battle+': held antidote cannot consume, act or apply an effect; potion/ether unchanged',async()=>{
+  const e=await ready(),c=e.c;c.battleItems.antidote=2;c.PrologueCombat.activeAlly=()=>true;
+  Object.assign(c,{aahp:40,normalFHP:30,normalFMP:5,normalActor:'aidan',normalActs:[],rbHP:40,rbFHP:30,rbFMP:5,rbActor:'aidan',rbActs:[]});
+  c.BattleTargetSelector={active:false,open(){throw Error('held item must not select a target')}};
+  c.advanceNormalActor=c.resolvePartyRound=()=>{throw Error('held item must not advance a turn')};
+  e.load('js/battle-action-targets.js');
+  const state=()=>JSON.stringify([c.battleItems,c.aahp,c.normalFHP,c.normalFMP,c.normalActor,c.normalActs,c.rbHP,c.rbFHP,c.rbFMP,c.rbActor,c.rbActs]);
+  const before=state(),action={who:'aidan',kind:'item',item:'antidote',target:'fiona'};
+  assert.equal(c.BattleActionTargets.item(battle,'antidote'),false);assert.equal(c.BattleActionTargets.applyItem(battle,action),false);assert.equal(action.used,undefined);assert.equal(state(),before);
+  assert.equal(c.BattleActionTargets.applyItem(battle,{item:'potion',target:'aidan'}),true);assert.equal(battle==='normal'?c.aahp:c.rbHP,85);
+  assert.equal(c.BattleActionTargets.applyItem(battle,{item:'ether',target:'fiona'}),true);assert.equal(battle==='normal'?c.normalFMP:c.rbFMP,17);assert.equal(c.Inventory.count('antidote'),2);
+ });
  console.log(n+' PASS; real reward and SAVE logic; browser NOT_RUN');
 })().catch(e=>{console.error('FAIL',e.stack);process.exitCode=1});

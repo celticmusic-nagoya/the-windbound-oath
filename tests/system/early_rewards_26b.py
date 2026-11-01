@@ -12,13 +12,16 @@ def undo(text,before,after):
  assert text.count(before)==1,'approved delta missing/ambiguous: '+before
  return text.replace(before,after,1)
 h=(ROOT/'index.html').read_text()
-for before,after in [('Inventory.grant({potion:1});flags.drawer=true;','flags.drawer=true;'),('Inventory.grant({gold:3});flags.pot=true;','flags.pot=true;'),('Inventory.grant({antidote:2});flags.catDone=true;','flags.catDone=true;'),('Inventory.grant({potion:2});flags.balloonDone=true;','flags.balloonDone=true;'),("  // Missing optional item keys in an older SAVE mean zero, not the current session's stock.\n  if(!Object.prototype.hasOwnProperty.call(d.battleItems||{},'antidote'))delete battleItems.antidote;\n",''),('js/field/rilde-village.js?v=20261101rewards26b','js/field/rilde-village.js?v=20261031phase5expressions'),('js/data/item-data.js?v=20261101rewards26b','js/data/item-data.js')]:h=undo(h,before,after)
+for before,after in [('Inventory.grant({potion:1});flags.drawer=true;','flags.drawer=true;'),('Inventory.grant({gold:3});flags.pot=true;','flags.pot=true;'),('Inventory.grant({antidote:2});flags.catDone=true;','flags.catDone=true;'),('Inventory.grant({potion:2});flags.balloonDone=true;','flags.balloonDone=true;'),("  // Missing optional item keys in an older SAVE mean zero, not the current session's stock.\n  if(!Object.prototype.hasOwnProperty.call(d.battleItems||{},'antidote'))delete battleItems.antidote;\n",''),('js/field/rilde-village.js?v=20261101rewards26b','js/field/rilde-village.js?v=20261031phase5expressions'),('js/data/item-data.js?v=20261101rewards26b','js/data/item-data.js'),('js/battle-action-targets.js?v=20261101rewards26b','js/battle-action-targets.js?v=20261013wd3')]:h=undo(h,before,after)
 ck(h==original('index.html'),'exact index delta: only4grants/missing-item default/cache; every original word/condition unchanged')
 r=(ROOT/'js/field/rilde-village.js').read_text()
 for before,after in [('Inventory.grant({potion:1}); flags.drawer = true;','flags.drawer = true;'),('Inventory.grant({gold:3}); flags.pot = true;','flags.pot = true;'),("    if (typeof battleItems !== 'undefined') delete battleItems.antidote;\n",'')]:r=undo(r,before,after)
 ck(r==original('js/field/rilde-village.js'),'exact field delta: only2grants/new optional stock reset')
 d=undo((ROOT/'js/data/item-data.js').read_text(),"    antidote:      {name:'毒消し', kind:'consumable', desc:'現在は使用できない。'},\n",'');ck(d==original('js/data/item-data.js'),'only antidote holding definition added; existing item/treasure data immutable')
-changes=subprocess.check_output(['git','diff','--name-only',BASE,'HEAD','--','index.html','js','css','data','img','assets','dev'],cwd=ROOT,text=True).splitlines();ck(set(changes)=={'index.html','js/data/item-data.js','js/field/rilde-village.js'},'all other production/portrait/battle/save-schema files unchanged',changes)
+battle=(ROOT/'js/battle-action-targets.js').read_text()
+for line in ["  if(k==='antidote')return false; // Holding-only reward; no approved use effect.\n","  if(a.item==='antidote')return false;\n"]:battle=undo(battle,line,'')
+ck(battle==original('js/battle-action-targets.js'),'only holding-only antidote rejection added; all battle resources/effects unchanged')
+changes=subprocess.check_output(['git','diff','--name-only',BASE,'HEAD','--','index.html','js','css','data','img','assets','dev'],cwd=ROOT,text=True).splitlines();ck(set(changes)=={'index.html','js/data/item-data.js','js/field/rilde-village.js','js/battle-action-targets.js'},'all other production/portrait/battle/save-schema files unchanged',changes)
 stock_js="({potion:Inventory.count('potion'),gold,antidote:Inventory.count('antidote')})"
 flags_js='PrologueProgress.eventSnapshot()'
 with sync_playwright() as pw:

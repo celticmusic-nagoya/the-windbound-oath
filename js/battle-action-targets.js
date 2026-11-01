@@ -13,6 +13,7 @@
   return BattleTargetSelector.open({type:t,battle,actor,candidates:t.startsWith('enemy')?enemies(battle):allies(battle).filter(x=>item!=='ether'||x.id==='fiona'),label:item?'アイテムの対象を選択':'行動の対象を選択',onConfirm:submit,onCancel:()=>{if(battle==='normal')setNormalCommandDrawer(true);else setRaiderCommandDrawer(true)}});
  }
  function item(battle,k){
+  if(k==='antidote')return false; // Holding-only reward; no approved use effect.
   if(window.BattlePresentation?.busy||(battle==='normal'?attackBattleBusy:rbBusy)||BattleTargetSelector.active)return;
   if(!battleItems[k])return;
   const actor=battle==='normal'?normalActor:rbActor;
@@ -25,6 +26,7 @@
   },k);
  }
  function applyItem(battle,a){
+  if(a.item==='antidote')return false;
   const r=battle==='raider',ally=allies(battle).find(x=>x.id===a.target);
   if(a.used||!ally||ally.active===false||ally.hp()<=0||!battleItems[a.item])return false;
   a.used=true;battleItems[a.item]--;
