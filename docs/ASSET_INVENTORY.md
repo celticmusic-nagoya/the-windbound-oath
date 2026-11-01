@@ -6,6 +6,8 @@ Phase 4・Phase 5A COMPLETE。PR95フィオナ修正版29枚は23Aで正式採�
 
 この台帳は `docs/ASSET_GENERATION_RULES.md` に従って管理する。**デザイン正式採用**と**リポジトリ格納・実機統合検証**は別の状態として記録する。未登録のファイルを登録済みと扱わない。
 
+## 採用・統合の履歴（以下は各PR時点の記録）
+
 | アセット名 | 正式採用ファイル名 | 用途 | 予定リポジトリ格納先 | 状態 | 原本 SHA-256 | 備考 |
 |---|---|---|---|---|---|---|
 | モスの森A3 古代祭壇・通常状態 v1 | `moss_ancient_altar_idle_v1.png` | 古樹の聖域の祭壇本体（契約発動エフェクトなし） | `assets/images/environments/moss_ancient_altar_idle_v1.png` | **デザイン正式採用済み／リポジトリ格納済み（Issue #70 Draft PR #71、main未マージ）／祭壇シーン `#altarScene` で使用（A3フィールドには未配置）／Android実機検証待ち** | `86334929fa35673aec62a29818d7850e4694106893c12f6b6fa37b97028d1855` | 元画像 1536×1024 RGBA PNG、3,273,807 bytes。無加工で格納し SHA-256 一致を確認。参照: `index.html` `#altarArtBase`（祭壇シーン開始時に読み込み、`js/altar-art.js`）。A3フィールド配置は MOSS-02 との整合確認後の別工程。 |

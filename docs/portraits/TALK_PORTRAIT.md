@@ -1,5 +1,7 @@
 # 会話立ち絵・表情・瞬き 共通システム
 
+> 現行状態：Phase 4・Phase 5A COMPLETE。本編115ページ、ユーザーAndroid QA5/5PASS。[正式採用と現在のDEV操作](DEV_PORTRAIT_GUIDE.md)。日付付きの過去節は履歴です。
+
 会話（FieldTalk）中に、キャラクターの立ち絵を表示し、表情を切り替え、自然な間隔で瞬きさせる共通の仕組み。キャラクターごとの専用コードは持たない。新しいキャラクターは、レジストリへの登録 1 件と画像だけで追加できる。
 
 - **移植元：** `feature/asset-emma-01` @ `f4456a82`（`talk-portrait.js`、`field-talk.js` の立ち絵接続部、TalkPortrait の CSS、テスト m30・m31）。
