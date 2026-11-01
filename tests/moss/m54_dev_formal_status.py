@@ -37,7 +37,7 @@ with sync_playwright() as p:
  check(pg.evaluate('JSON.stringify({talk:FieldTalk.serialize(),stage:storyStage,storage:{...localStorage}})')==saved,'DEV labels/selection leave story and save unchanged')
  # Existing generic discovery of aliases of approved art remains functional; unknown image references cannot masquerade as adopted.
  pg.evaluate("PortraitRegistry.define('approved_alias',{...PortraitRegistry.get('aidan'),name:'Approved alias'});PortraitRegistry.define('unapproved_fixture',{...PortraitRegistry.get('lou'),name:'Unapproved fixture',base:'unapproved-fixture/'})")
- pg.evaluate('DevPortraitTest.open()');check(pg.locator('#devPortraitChars [data-char=unapproved_fixture]').is_disabled(),'unapproved registered image sources excluded')
+ pg.evaluate('DevPortraitTest.open()');unfold();check(pg.locator('#devPortraitChars [data-char=unapproved_fixture]').is_disabled(),'unapproved registered image sources excluded')
  pg.locator('#devPortraitChars [data-char=approved_alias]').tap();pg.wait_for_function("TalkPortrait.status.char==='approved_alias'");check('正式採用' in pg.locator('#devPortraitStatus').inner_text(),'generic approved-image alias remains selectable')
  pg.locator('#devPortraitClose').tap()
  # Existing Aidan preview uses the same Japanese terms/adoption status.
