@@ -105,7 +105,7 @@ with sync_playwright() as p:
     pg.locator('#devBtn').tap();pg.locator('#devPortraitTest').tap();pg.wait_for_function('TalkPortrait.status.visible')
     for c in SHA:
         pg.locator('[data-char='+c+']').tap();wait_char(pg,c)
-        check(pg.locator('#devPortraitFaces button').count()==(6 if c=='lou' else 8) and 'QA候補' in pg.locator('#devPortraitStatus').inner_text() and not pg.locator('#devPortraitBlink').is_disabled(),c+': DEV approved normal plus provisional faces, QA label, normal blink enabled')
+        check(pg.locator('#devPortraitFaces button').count()==(6 if c=='lou' else 8) and '正式採用' in pg.locator('#devPortraitStatus').inner_text() and not pg.locator('#devPortraitBlink').is_disabled(),c+': DEV formal expressions and normal blink enabled')
         for side in ['Left','Right']:
             pg.locator('#devPortrait'+side).tap();wait_char(pg,c)
     pg.locator('#devPortraitClose').tap();pg.wait_for_timeout(100)

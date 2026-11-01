@@ -1,5 +1,9 @@
 # THE WINDBOUND OATH — Asset Inventory / 正式採用アセット台帳
 
+## 現在の会話立ち絵（24B更新）
+
+Phase 4・Phase 5A COMPLETE。PR95フィオナ修正版29枚は23Aで正式採用、二重眉案件CLOSED。PR97本編115ページはユーザーAndroid実機QA5/5PASS。保存済み正式259PNGを保護し、ルーsmile/relievedは未採用維持。[現行DEV案内・正式台帳一覧](portraits/DEV_PORTRAIT_GUIDE.md)。以下の各日付・PR段階の数値／暫定採用／差戻し状況は当時の履歴として読む。
+
 この台帳は `docs/ASSET_GENERATION_RULES.md` に従って管理する。**デザイン正式採用**と**リポジトリ格納・実機統合検証**は別の状態として記録する。未登録のファイルを登録済みと扱わない。
 
 | アセット名 | 正式採用ファイル名 | 用途 | 予定リポジトリ格納先 | 状態 | 原本 SHA-256 | 備考 |
@@ -27,7 +31,7 @@
 
 ## キャラクター（会話立ち絵）
 
-会話立ち絵の正式な置き場所は `assets/images/characters/portraits/{characterId}/`、参照先は `js/field/portrait-registry.js` で一元管理する。既存ブランチの `img/portraits/`（フィオナ・ルー・エマ）は移植元であり正式参照先ではない（未採用の表情を含むため、Phase 4 で表情ごとに採用判断）。
+会話立ち絵の正式な置き場所は `assets/images/characters/portraits/{characterId}/`、参照先は `js/field/portrait-registry.js` で一元管理する。既存ブランチの `img/portraits/`（フィオナ・ルー・エマ）は移植元であり正式参照先ではない（未採用の表情も含む原本保管先。現行採用集合は上記正式台帳で確認する）。
 
 | アセット名 | 正式採用ファイル名 | 用途 | 予定リポジトリ格納先 | 状態 | 原本 SHA-256 | 備考 |
 |---|---|---|---|---|---|---|
