@@ -18,6 +18,7 @@ elif fault == 'wrong-verified-sha':
     next(a for a in data['assets'] if a['android_status'] == 'PASS')['source_sha256'] = '0' * 64
 else:
     raise ValueError('unknown asset fault')
+print('INJECTED ' + fault, file=sys.stderr)
 original_open = builtins.open
 def patched_open(file, *args, **kwargs):
     if isinstance(file, (str, Path)) and Path(file).resolve() == registry:

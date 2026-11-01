@@ -14,6 +14,7 @@ fs.readFileSync=function(name,...args){
  const source=read.call(this,name,...args);
  if(typeof name==='string'&&path.resolve(name)===path.join(root,file)){
   assert.equal(typeof source,'string');assert.ok(source.includes(before),'fault injection target missing');
+  process.stderr.write('INJECTED '+fault+'\n');
   return source.replace(before,after);
  }
  return source;
