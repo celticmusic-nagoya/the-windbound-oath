@@ -1,0 +1,21 @@
+PASS normal transition commits once and resolves the map
+PASS fetch failure rejects; previous map, controls, flags and success callbacks are protected
+PASS prepare failure preserves treasure/event/slain state before commit
+PASS mount failure rebuilds the previous world and deep-copied slain state
+PASS render failure restores positions, height level and playable state
+PASS rollback failure protects SAVE/DELETE and cannot be bypassed with lock/resume
+PASS first-entry failure has a retry UI and later success clears save protection
+PASS retry after a rejected request succeeds without treating failure as success
+PASS external input lock remains owned across success and failure
+PASS out-of-order response cannot mount over the newest request
+PASS newest failure rolls back to stable original, not an in-flight candidate
+PASS hide/reset cancel old requests without late remount or stale error UI
+PASS post-commit hook exception never rolls the world back and blocks unsafe saves
+PASS real PrologueProgress and story routes restore KI-004 stage 0 and 15
+PASS real checkpoint validates v2 retry, preserves its source, and rejects v1
+PASS a superseding failure during fade-in rebuilds the stable world, never mixes map and forest
+PASS a superseding success inherits only the last committed event flags
+PASS real forest-arrival caller advances stage/objective only after successful retry
+PASS real LOAD/coordinator rejects failed field restoration, protects original bytes and retries
+PASS follower visibility commits before Loading release even while gameplay is locked
+20 PASS; simulated adapters, not browser rendering

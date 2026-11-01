@@ -1,0 +1,743 @@
+{
+  "checks": [
+    {
+      "name": "exact index delta: only4grants/missing-item default/cache; every original word/condition unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact field delta: only2grants/new optional stock reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "only antidote holding definition added; existing item/treasure data immutable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "only holding-only antidote rejection added; all battle resources/effects unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all other production/portrait/battle/save-schema files unchanged",
+      "pass": true,
+      "detail": [
+        "index.html",
+        "js/battle-action-targets.js",
+        "js/data/item-data.js",
+        "js/field/rilde-village.js"
+      ]
+    },
+    {
+      "name": "(390, 844) initial stock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) no reward before acceptance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) R01 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 4,
+          "gold": 0,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(390, 844) R01 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) old/new house entry share the same once flag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) R02 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(390, 844) R02 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) old/new house entry share the same once flag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) R03 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(390, 844) R03 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) R04 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 2
+        },
+        "expected": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 2
+        }
+      }
+    },
+    {
+      "name": "(390, 844) R04 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) item UI lists held antidote without use/effect",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) existing v30 dictionary/flags store reward",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) in-game LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) exact stock/flags restored without rewriting SAVE",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(390, 844) cold title CONTINUE restores stock/once flags exactly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(390, 844) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(390, 844) explicit-done LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) explicit-done no compensation or completed-flag reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 4,
+        "gold": 0,
+        "antidote": 0
+      }
+    },
+    {
+      "name": "(390, 844) old SAVE bytes remain unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) old-missing-history LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) old-missing-history no compensation or completed-flag reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 4,
+        "gold": 0,
+        "antidote": 0
+      }
+    },
+    {
+      "name": "(390, 844) old SAVE bytes remain unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) same-tab NEW GAME succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(390, 844) new optional stock resets; existing SAVE untouched",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) initial stock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) no reward before acceptance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) R01 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 4,
+          "gold": 0,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(844, 390) R01 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) old/new house entry share the same once flag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) R02 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(844, 390) R02 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) old/new house entry share the same once flag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) R03 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(844, 390) R03 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) R04 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 2
+        },
+        "expected": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 2
+        }
+      }
+    },
+    {
+      "name": "(844, 390) R04 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) item UI lists held antidote without use/effect",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) existing v30 dictionary/flags store reward",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) in-game LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) exact stock/flags restored without rewriting SAVE",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(844, 390) cold title CONTINUE restores stock/once flags exactly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(844, 390) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(844, 390) explicit-done LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) explicit-done no compensation or completed-flag reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 4,
+        "gold": 0,
+        "antidote": 0
+      }
+    },
+    {
+      "name": "(844, 390) old SAVE bytes remain unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) old-missing-history LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) old-missing-history no compensation or completed-flag reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 4,
+        "gold": 0,
+        "antidote": 0
+      }
+    },
+    {
+      "name": "(844, 390) old SAVE bytes remain unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) same-tab NEW GAME succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(844, 390) new optional stock resets; existing SAVE untouched",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) initial stock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) no reward before acceptance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) R01 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 4,
+          "gold": 0,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(1920, 1080) R01 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) old/new house entry share the same once flag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) R02 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 5,
+          "gold": 0,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(1920, 1080) R02 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) old/new house entry share the same once flag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) R03 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 5,
+          "gold": 3,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        },
+        "expected": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        }
+      }
+    },
+    {
+      "name": "(1920, 1080) R03 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) R04 exact reward delta and own flag",
+      "pass": true,
+      "detail": {
+        "before": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 0
+        },
+        "after": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 2
+        },
+        "expected": {
+          "potion": 7,
+          "gold": 3,
+          "antidote": 2
+        }
+      }
+    },
+    {
+      "name": "(1920, 1080) R04 repeat delta0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) item UI lists held antidote without use/effect",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) existing v30 dictionary/flags store reward",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) in-game LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) exact stock/flags restored without rewriting SAVE",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(1920, 1080) cold title CONTINUE restores stock/once flags exactly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(1920, 1080) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 7,
+        "gold": 3,
+        "antidote": 2
+      }
+    },
+    {
+      "name": "(1920, 1080) explicit-done LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) explicit-done no compensation or completed-flag reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 4,
+        "gold": 0,
+        "antidote": 0
+      }
+    },
+    {
+      "name": "(1920, 1080) old SAVE bytes remain unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) old-missing-history LOAD succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) old-missing-history no compensation or completed-flag reset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) completed event revisit grants nothing",
+      "pass": true,
+      "detail": {
+        "potion": 4,
+        "gold": 0,
+        "antidote": 0
+      }
+    },
+    {
+      "name": "(1920, 1080) old SAVE bytes remain unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) same-tab NEW GAME succeeds",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "(1920, 1080) new optional stock resets; existing SAVE untouched",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no browser errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "fails": []
+}

@@ -1,0 +1,602 @@
+{
+  "conditions": {
+    "browser": "Chromium headless",
+    "hardware": "cloud container; NOT Android hardware",
+    "normal_route": "title NEW GAME, actual walk/pathfinder and rendered controls; no seed/teleport/DEV kill",
+    "version": "154.0.8037.57"
+  },
+  "checks": [
+    {
+      "name": "NEW GAME starts at house stage0",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route accepted (480, 629)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route accepted (1880, 940)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route arrived (1880, 940)",
+      "pass": true,
+      "detail": {
+        "feet": {
+          "x": 1880,
+          "y": 940
+        },
+        "outcome": "arrived"
+      }
+    },
+    {
+      "name": "route accepted (2030, 935)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route arrived (2030, 935)",
+      "pass": true,
+      "detail": {
+        "feet": {
+          "x": 2029.9167360468734,
+          "y": 935.0027754651042
+        },
+        "outcome": "arrived"
+      }
+    },
+    {
+      "name": "actual training UI wins without DEV",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route accepted (830, 1630)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route accepted (2400, 1500)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route arrived (2400, 1500)",
+      "pass": true,
+      "detail": {
+        "feet": {
+          "x": 2400.04928001517,
+          "y": 1501.0984896211114
+        },
+        "outcome": "arrived"
+      }
+    },
+    {
+      "name": "route accepted (2400, 1040)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "route arrived (2400, 1040)",
+      "pass": true,
+      "detail": {
+        "feet": {
+          "x": 2400.000118470383,
+          "y": 1041.1084922481946
+        },
+        "outcome": "arrived"
+      }
+    },
+    {
+      "name": "normal route reaches village attack",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "joined reserve receives full13 EXP",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "seeded capital SAVE writes a record",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "seeded capital/party cold CONTINUE restores",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "cold CONTINUE retains Liam full EXP",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rotation retains map and input (390, 844)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rotation retains map and input (844, 390)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rotation retains map and input (1920, 1080)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "rilde_drawer grants advertised reward",
+      "pass": true,
+      "detail": {
+        "before": 4,
+        "after": 5,
+        "expected_delta": 1,
+        "message": "タンスを調べた。きずぐすりを1個見つけた！"
+      }
+    },
+    {
+      "name": "rilde_pot grants advertised reward",
+      "pass": true,
+      "detail": {
+        "before": 0,
+        "after": 3,
+        "expected_delta": 3,
+        "message": "壺の中を調べた。3Gを見つけた！"
+      }
+    },
+    {
+      "name": "balloon completion grants advertised2 potions",
+      "pass": true,
+      "detail": {
+        "before": 5,
+        "after": 7,
+        "expected_delta": 2,
+        "message": "風船を取った！ 子供からきずぐすり×2をもらった。",
+        "done": true
+      }
+    },
+    {
+      "name": "cat completion grants advertised2 antidotes",
+      "pass": true,
+      "detail": {
+        "done": true,
+        "itemId": "antidote",
+        "items": {
+          "key": {},
+          "gear": {},
+          "claimed": []
+        },
+        "consumables": {
+          "potion": 7,
+          "ether": 2,
+          "antidote": 2
+        },
+        "message": "女の子「ミルを見つけてくれたの！？ありがとう！」 毒消し×2をもらった。",
+        "before": {
+          "itemId": "antidote",
+          "count": 0
+        },
+        "after_count": 2
+      }
+    },
+    {
+      "name": "fort final pages show existing PROLOGUE END",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "END returns to live fort free roam",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "normal current low-HP recovery restores commands",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Raider current defeat rule restarts encounter",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no unhandled page errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "no HTTP failure observed in probe",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "no console errors observed in probe",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "http_errors": [],
+  "console_errors": [],
+  "route": [
+    {
+      "label": "25a_normal_house",
+      "stage": 0,
+      "map": "rilde_in_aidan",
+      "feet": {
+        "x": 250,
+        "y": 330
+      },
+      "loading": "READY",
+      "objective": "家を出て、訓練場のフィオナに会いに行こう"
+    },
+    {
+      "label": "25a_normal_fiona",
+      "stage": 1,
+      "map": "rilde_village_01_peace",
+      "feet": {
+        "x": 1880,
+        "y": 940
+      },
+      "loading": "READY",
+      "objective": "訓練用の木人を調べよう"
+    },
+    {
+      "label": "25a_normal_training_won",
+      "stage": 3,
+      "map": "rilde_village_01_peace",
+      "feet": {
+        "x": 2029.9167360468734,
+        "y": 935.0027754651042
+      },
+      "loading": "READY",
+      "objective": "フィオナと風見の断崖へ向かおう"
+    },
+    {
+      "label": "25a_normal_cliff_entry",
+      "stage": 3,
+      "map": "cliff_moher_01_spiral_ascent",
+      "feet": {
+        "x": 150,
+        "y": 3658.3778132003163
+      },
+      "loading": "READY",
+      "objective": "崖の上のビューポイントへ向かおう"
+    },
+    {
+      "label": "25a_normal_attack",
+      "stage": 5,
+      "map": "cliff_moher_01_spiral_ascent",
+      "feet": {
+        "x": 2384,
+        "y": 1022
+      },
+      "loading": "READY",
+      "objective": "村の広場へ向かい、フィオナを探そう"
+    },
+    {
+      "label": "25a_seeded_capital",
+      "stage": 15,
+      "map": "royal_capital_02_castle_plaza",
+      "feet": {
+        "x": 2000,
+        "y": 3300
+      },
+      "loading": "READY",
+      "objective": "家を出て、訓練場のフィオナに会いに行こう"
+    }
+  ],
+  "training": [
+    {
+      "before": {
+        "hp": 100,
+        "tp": 0,
+        "enemy": 180
+      },
+      "button": "#atk",
+      "after": {
+        "hp": 87,
+        "tp": 15,
+        "enemy": 152
+      }
+    },
+    {
+      "before": {
+        "hp": 87,
+        "tp": 15,
+        "enemy": 152
+      },
+      "button": "#atk",
+      "after": {
+        "hp": 74,
+        "tp": 30,
+        "enemy": 124
+      }
+    },
+    {
+      "before": {
+        "hp": 74,
+        "tp": 30,
+        "enemy": 124
+      },
+      "button": "#skill",
+      "after": {
+        "hp": 61,
+        "tp": 0,
+        "enemy": 82
+      }
+    },
+    {
+      "before": {
+        "hp": 61,
+        "tp": 0,
+        "enemy": 82
+      },
+      "button": "#atk",
+      "after": {
+        "hp": 48,
+        "tp": 15,
+        "enemy": 54
+      }
+    },
+    {
+      "before": {
+        "hp": 86,
+        "tp": 15,
+        "enemy": 54
+      },
+      "button": "#atk",
+      "after": {
+        "hp": 73,
+        "tp": 30,
+        "enemy": 26
+      }
+    },
+    {
+      "before": {
+        "hp": 73,
+        "tp": 30,
+        "enemy": 26
+      },
+      "button": "#skill",
+      "after": {
+        "hp": 73,
+        "tp": 0,
+        "enemy": -16
+      }
+    }
+  ],
+  "normal_route_endpoint": {
+    "label": "25a_normal_attack",
+    "stage": 5,
+    "map": "cliff_moher_01_spiral_ascent",
+    "feet": {
+      "x": 2384,
+      "y": 1022
+    },
+    "loading": "READY",
+    "objective": "村の広場へ向かい、フィオナを探そう"
+  },
+  "seeded_party": {
+    "active": [
+      "aidan",
+      "fiona"
+    ],
+    "members": {
+      "aidan": {
+        "joined": true,
+        "level": 1,
+        "exp": 0
+      },
+      "fiona": {
+        "joined": true,
+        "level": 1,
+        "exp": 0,
+        "learned": {
+          "wind_dance": true
+        }
+      },
+      "liam": {
+        "joined": true,
+        "level": 1,
+        "exp": 0
+      },
+      "morwen": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      },
+      "dwarf": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      },
+      "dancer": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      }
+    }
+  },
+  "seeded_exp": {
+    "before": {
+      "aidan": {
+        "joined": true,
+        "level": 1,
+        "exp": 0
+      },
+      "fiona": {
+        "joined": true,
+        "level": 1,
+        "exp": 0,
+        "learned": {
+          "wind_dance": true
+        }
+      },
+      "liam": {
+        "joined": true,
+        "level": 1,
+        "exp": 0
+      },
+      "morwen": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      },
+      "dwarf": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      },
+      "dancer": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      }
+    },
+    "after": {
+      "aidan": {
+        "joined": true,
+        "level": 1,
+        "exp": 13
+      },
+      "fiona": {
+        "joined": true,
+        "level": 1,
+        "exp": 13,
+        "learned": {
+          "wind_dance": true
+        }
+      },
+      "liam": {
+        "joined": true,
+        "level": 1,
+        "exp": 13
+      },
+      "morwen": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      },
+      "dwarf": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      },
+      "dancer": {
+        "joined": false,
+        "level": 1,
+        "exp": 0
+      }
+    }
+  },
+  "seeded_cold_restore": {
+    "ok": true,
+    "map": "royal_capital_02_castle_plaza",
+    "party": {
+      "active": [
+        "aidan",
+        "fiona"
+      ],
+      "reserve": [],
+      "members": {
+        "aidan": {
+          "joined": true,
+          "level": 1,
+          "exp": 13
+        },
+        "fiona": {
+          "joined": true,
+          "level": 1,
+          "exp": 13,
+          "learned": {
+            "wind_dance": true
+          }
+        },
+        "liam": {
+          "joined": true,
+          "level": 1,
+          "exp": 13
+        },
+        "morwen": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dwarf": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        },
+        "dancer": {
+          "joined": false,
+          "level": 1,
+          "exp": 0
+        }
+      }
+    }
+  },
+  "seeded_rewards": {
+    "rilde_drawer": {
+      "before": 4,
+      "after": 5,
+      "expected_delta": 1,
+      "message": "タンスを調べた。きずぐすりを1個見つけた！"
+    },
+    "rilde_pot": {
+      "before": 0,
+      "after": 3,
+      "expected_delta": 3,
+      "message": "壺の中を調べた。3Gを見つけた！"
+    },
+    "balloon": {
+      "before": 5,
+      "after": 7,
+      "expected_delta": 2,
+      "message": "風船を取った！ 子供からきずぐすり×2をもらった。",
+      "done": true
+    },
+    "cat": {
+      "done": true,
+      "itemId": "antidote",
+      "items": {
+        "key": {},
+        "gear": {},
+        "claimed": []
+      },
+      "consumables": {
+        "potion": 7,
+        "ether": 2,
+        "antidote": 2
+      },
+      "message": "女の子「ミルを見つけてくれたの！？ありがとう！」 毒消し×2をもらった。",
+      "before": {
+        "itemId": "antidote",
+        "count": 0
+      },
+      "after_count": 2
+    }
+  },
+  "seeded_end_free_roam": {
+    "stage": 15,
+    "map": "fort_dunvall_01_courtyard"
+  },
+  "seeded_normal_defeat": {
+    "aidan": 35,
+    "fiona": 32,
+    "busy": false
+  },
+  "seeded_raider_rematch": {
+    "aidan": 120,
+    "fiona": 105,
+    "boss": 1250,
+    "busy": false
+  },
+  "fails": []
+}

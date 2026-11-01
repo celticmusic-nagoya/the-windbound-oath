@@ -1,0 +1,14 @@
+PASS drawer old/new entry share one flag, legacy first=false
+PASS drawer old/new entry share one flag, legacy first=true
+PASS pot old/new entry share one flag, legacy first=false
+PASS pot old/new entry share one flag, legacy first=true
+PASS cold CONTINUE restores optional antidote exactly: undefined
+PASS cold CONTINUE restores optional antidote exactly: 0
+PASS cold CONTINUE restores optional antidote exactly: 2
+PASS successful in-game old LOAD removes only absent new stock and never compensates
+PASS failed old LOAD keeps current antidote and source SAVE
+PASS superseded old LOAD cannot clear antidote when its late response arrives
+PASS NEW GAME starts new optional stock at zero without touching existing SAVE
+PASS normal: held antidote cannot consume, act or apply an effect; potion/ether unchanged
+PASS raider: held antidote cannot consume, act or apply an effect; potion/ether unchanged
+13 PASS; real reward and SAVE logic; browser NOT_RUN

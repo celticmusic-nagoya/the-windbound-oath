@@ -27,7 +27,7 @@ function legacy(e,id){const line=html.split('\n').find(s=>s.startsWith("$('#"+id
   assert.equal(await e.complete(e.c.loadGrowthData()),false);assert.equal(e.c.Inventory.count('antidote'),2);assert.equal(e.c.localStorage.getItem('slot'),raw);
  });
  await test('superseded old LOAD cannot clear antidote when its late response arrives',async()=>{
-  const e=await ready(),gate=deferred(),raw=put(e,save());e.c.battleItems.antidote=2;e.faults.prepare=()=>gate.promise;const task=e.c.loadGrowthData();await flush();assert.equal(e.c.LoadCoordinator.phase,'LOADING');e.c.LoadCoordinator.supersede();gate.resolve();assert.equal(await e.complete(task),false);assert.equal(e.c.Inventory.count('antidote'),2);assert.equal(e.c.localStorage.getItem('slot'),raw);
+  const e=await ready(),gate=deferred(),raw=put(e,save());e.c.battleItems.antidote=2;let prepared=false;e.faults.prepare=()=>{prepared=true;return gate.promise};const task=e.c.loadGrowthData();await flush();assert.equal(prepared,true,'fixture must hold actual map preparation');assert.equal(e.c.LoadCoordinator.phase,'LOADING');e.c.LoadCoordinator.supersede();gate.resolve();assert.equal(await e.complete(task),false);assert.equal(e.c.Inventory.count('antidote'),2);assert.equal(e.c.localStorage.getItem('slot'),raw);
  });
  await test('NEW GAME starts new optional stock at zero without touching existing SAVE',async()=>{
   const e=await ready(),raw=put(e,save());e.c.battleItems.antidote=2;await e.complete(e.c.RildeVillage.startOpening());assert.equal(e.c.Inventory.count('antidote'),0);assert.equal(e.c.flags.catDone,false);assert.equal(e.c.localStorage.getItem('slot'),raw);

@@ -185,3 +185,5 @@ Codex / codex/26a-qa-fixture-repair / base2f5312efdfd4f5ad48439dd5bca17bb0b801bf
 
 ## DIRECTIVE-26B (2026-11-01)
 Codex / codex/26b-early-rewards / basead4a3d679987a540fc0248c9b5bfd0e8c43a15a3. User26B explicitly authorizes reward handlers/index integration and minimalitem data, tests/docs. Scope R01drawer potion1/R02pot gold3/R03balloon potion2/R04cat antidote2. ReuseInventory.grant +existingflags/SAVEv30; antidote is held in existingconsumable dictionary withno effect/use-command addition. PreserveoldSAVEflags/no compensation, formal259PNG/portrait/storywords/choices/balance/format/history. work/codexnamespace blocked byexistingworkref(preserve). STATUS: WIP.
+
+26B checkpoint: R01-04実給付/重複/再訪/SAVE/coldCONTINUE/旧SAVE無補償PASS。保持専用antidoteは既存dict/v30、旧key欠落と新規開始だけ0へ、未承認効果を防ぐitem/applyItem2行guard＋cache3追加。prod4filesのみ、他1452runtime/259PNG/過去証拠不変。Node14原版＋新規13cases、故障8/8、回帰13種類(16実行)、rewardbrowser96checksPASS。詳報D26B、P6-REWARD-01COMPLETE、次26C。独立exacthead/rollback/protectednormalmerge待ち。STATUS: READY_FOR_REVIEW.
