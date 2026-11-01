@@ -55,6 +55,9 @@ with sync_playwright() as pw:
   while ev('FieldScene.running') and time.monotonic()<end:
    if p.locator('#msg').is_visible():p.locator('#msg').click()
    p.wait_for_timeout(220)
+  for _ in range(24):
+   if not p.locator('#returnScene').is_visible():break
+   p.locator('#returnScene').click();p.wait_for_timeout(120)
   ck('normal route reaches village attack',ev('storyStage>=5'));snap('25a_normal_attack');report['normal_route_endpoint']=report['route'][-1]
  except Exception as e:
   report['normal_route_exception']=str(e);snap('25a_normal_stopped');ck('normal opening route completed to attack',False,str(e))
