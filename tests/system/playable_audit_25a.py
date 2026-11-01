@@ -67,7 +67,7 @@ with sync_playwright() as pw:
  finally:c.close()
  # Seeded diagnostics are deliberately isolated from the continuous route above.
  c,p=page(844,390);ev=p.evaluate;dismiss()
- ev("PrologueProgress.seed(3);storyStage=15;louFound=true;forestStoneSeen=true;closeDialogue();FieldTalk.setFlag('road_dunvall_open',true);PartyManager.join('liam');FieldTalk.setFlag('liam_joined',true);forestActive=true;document.querySelector('#forestScene').style.display='block';MossForest.enter({map:'royal_capital_02_castle_plaza',spawn:'from_market'})")
+ ev("PrologueProgress.seed(3);storyStage=15;louFound=true;forestStoneSeen=true;syncStoryEquipment();closeDialogue();FieldTalk.setFlag('road_dunvall_open',true);PartyManager.join('liam');FieldTalk.setFlag('liam_joined',true);forestActive=true;document.querySelector('#forestScene').style.display='block';MossForest.enter({map:'royal_capital_02_castle_plaza',spawn:'from_market'})")
  p.wait_for_function("MossForest.mapId==='royal_capital_02_castle_plaza'&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy")
  report['seeded_party']=ev('({active:PartyManager.active,members:PartyManager.members})');snap('25a_seeded_capital')
  report['seeded_exp']=ev("(()=>{const before=JSON.parse(JSON.stringify(PartyManager.members));PartyManager.addExp(13);return {before,after:JSON.parse(JSON.stringify(PartyManager.members))}})()");ck('joined reserve receives full13 EXP',report['seeded_exp']['after']['liam']['exp']-report['seeded_exp']['before']['liam']['exp']==13);ev('saveGrowthData()');raw=ev('localStorage.getItem(SAVE_KEY)');ck('seeded capital SAVE writes a record',bool(raw));c.close()
