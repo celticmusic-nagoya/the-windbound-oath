@@ -180,3 +180,5 @@ Codex / codex/25a-playable-audit / base5ab60c5db833821744d73080f91ffcd559ebf0a4.
 
 ## DIRECTIVE-26A (2026-11-01)
 Codex / codex/26a-qa-fixture-repair / base2f5312efdfd4f5ad48439dd5bca17bb0b801bffc. P6-QA-01 only: startup_race/continue_restore extraction, asset_registry_audit Android-history assertions, negative controls, QA evidence/docs. Product1456files/formal259PNG/rewards/dialogue/save/battle/render/blink/registry untouched. Preserve25A productFAIL and4rewardcases. Existingworkref preventswork/codexnamespace; preserve it. STATUS: WIP.
+
+26A checkpoint: Nodeoriginal14/14PASS(startup20/continue37)、assetoriginalPASS、8faults→originalchildexit1検出＋strictcontractPASS。Archive履歴不足freshnessFAILは保持し、opt-in独立Gitmetadatafixtureで鮮度assert維持のままPASSへ。最新回帰8PASS/製品probe報酬4FAIL維持。1456runtime/259formalPNG不変。docs/qa/DIRECTIVE-26A.md、P6-QA-01COMPLETE、次26B。Independentexacthead/rollback/protectednormalmerge stillrequired. STATUS: READY_FOR_REVIEW.
