@@ -1,0 +1,459 @@
+ok   official CG unmodified: moss_lou_first_meeting_cg_v1.png 
+ok   official CG unmodified: moss_altar_cg01_father_sword_break_v1.png 
+ok   official CG unmodified: moss_altar_cg02_wind_dance_first_v1.png 
+ok   official CG unmodified: moss_altar_cg03_lou_stall_v1.png 
+ok   official CG unmodified: moss_altar_cg04_oath_contract_v1.png 
+ok   lou_first landscape: adopted delivery bytes / dimensions / ratio 
+ok   lou_first portrait: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg01 landscape: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg01 portrait: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg02 landscape: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg02 portrait: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg03 landscape: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg03 portrait: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg04 landscape: adopted delivery bytes / dimensions / ratio 
+ok   altar_cg04 portrait: adopted delivery bytes / dimensions / ratio 
+ok   Lou CG cue = louIntroLines 3-5 
+ok   altar CG cues = 14-16 / 18-20 / 21-23 / 32-35 
+ok   altar script unchanged in length, no "sword falls into the rift" beat 
+ok   [portrait_touch_390x844] Lou intro starts from its A3 zone 
+ok   [portrait_touch_390x844] Lou CG on lines 3-5 only 
+ok   [portrait_touch_390x844] Lou CG shown exactly once 
+ok   [portrait_touch_390x844] Lou intro result unchanged (louFound, stage 11, flag) 
+ok   [portrait_touch_390x844] Lou CG released when the scene ends 
+ok   [portrait_touch_390x844] altar scene starts from its A3 trigger, forest paused 
+ok   [portrait_touch_390x844] father sword held until the break line 
+ok   [portrait_touch_390x844] father sword broken on line 14 (unarmed until the contract) 
+ok   [portrait_touch_390x844] 風の舞 not learned before its first cast 
+ok   [portrait_touch_390x844] 風の舞 learned on its first cast (line 20) 
+ok   [portrait_touch_390x844] no contract / FX before the grip line 
+ok   [portrait_touch_390x844] altar CGs on 14-16 / 18-20 / 21-23 / 32-35 only 
+ok   [portrait_touch_390x844] each altar CG shown exactly once 
+ok   [portrait_touch_390x844] CG4 starts with the FX fade-out (~3.5 s after the grip) 
+ok   [portrait_touch_390x844] CG4 fades in (no hard cut) and stays 
+ok   [portrait_touch_390x844] CG4 not shown while the FX rises/holds 
+ok   [portrait_touch_390x844] contract result unchanged 
+ok   [portrait_touch_390x844] scene end: CGs released, FX reset 
+ok   [portrait_touch_390x844] raider battle starts with the oath sword 
+ok   [portrait_touch_390x844] raider battle: 風の舞 command shown for Fiona after learning 
+ok   [portrait_touch_390x844] raider battle: 風の舞 costs MP10 and gives +15pt evasion 
+ok   [portrait_touch_390x844] victory -> aftermath (stage 13) 
+ok   [portrait_touch_390x844] no page errors 
+ok   [landscape_key_1280x720] Lou intro starts from its A3 zone 
+ok   [landscape_key_1280x720] Lou CG on lines 3-5 only 
+ok   [landscape_key_1280x720] Lou CG shown exactly once 
+ok   [landscape_key_1280x720] Lou intro result unchanged (louFound, stage 11, flag) 
+ok   [landscape_key_1280x720] Lou CG released when the scene ends 
+ok   [landscape_key_1280x720] altar scene starts from its A3 trigger, forest paused 
+ok   [landscape_key_1280x720] father sword held until the break line 
+ok   [landscape_key_1280x720] father sword broken on line 14 (unarmed until the contract) 
+ok   [landscape_key_1280x720] 風の舞 not learned before its first cast 
+ok   [landscape_key_1280x720] 風の舞 learned on its first cast (line 20) 
+ok   [landscape_key_1280x720] no contract / FX before the grip line 
+ok   [landscape_key_1280x720] altar CGs on 14-16 / 18-20 / 21-23 / 32-35 only 
+ok   [landscape_key_1280x720] each altar CG shown exactly once 
+ok   [landscape_key_1280x720] CG4 starts with the FX fade-out (~3.5 s after the grip) 
+ok   [landscape_key_1280x720] CG4 fades in (no hard cut) and stays 
+ok   [landscape_key_1280x720] CG4 not shown while the FX rises/holds 
+ok   [landscape_key_1280x720] contract result unchanged 
+ok   [landscape_key_1280x720] scene end: CGs released, FX reset 
+ok   [landscape_key_1280x720] raider battle starts with the oath sword 
+ok   [landscape_key_1280x720] raider battle: 風の舞 command shown for Fiona after learning 
+ok   [landscape_key_1280x720] raider battle: 風の舞 costs MP10 and gives +15pt evasion 
+ok   [landscape_key_1280x720] victory -> aftermath (stage 13) 
+ok   [landscape_key_1280x720] no page errors 
+ok   save after the Lou intro (A3 field, stage 11) works 
+ok   load at stage 11: Lou found, 風の舞 not yet learned 
+ok   after load: altar replays, CG1 shown once at line 14 
+ok   altar scene: MENU button covered and M key does not open the menu (no mid-scene save via UI) 
+ok   save/continue: no page errors 
+ok   rapid 37 clicks: scene ends cleanly, no CG left, FX reset, oath sword equipped 
+ok   rapid clicks: a late FX fade-out does not bring back CG4 
+ok   fast advance to line 33: CG4 waits for the FX fade-out 
+ok   fast advance to line 33: CG4 appears with the FX fade-out 
+ok   skip to line 36 before the fade-out: CG4 not shown, FX completes and resets 
+ok   replay starts clean (no stale CG) 
+ok   rapid input: no page errors 
+ok   CG load failure: no CG, event completes, raider battle starts 
+ok   load failure: no page errors 
+ok   ?eventCg=0: no CG layer 
+ok   normal battle before learning: 風の舞 hidden 
+ok   normal battle after learning: 風の舞 shown (default build) 
+ok   ?windDance=off rollback switch hides the command 
+ok   [portrait_320x568] lou_first: dialogue frontmost without overflow 
+ok   [portrait_320x568] lou_first: correct orientation, complete image, no distortion 
+ok   [portrait_320x568] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_320x568] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_320x568] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_320x568] lou_first: portrait CG not shrunk (frame 416 px of 568) 
+ok   [portrait_320x568] altar_cg01: dialogue frontmost without overflow 
+ok   [portrait_320x568] altar_cg01: correct orientation, complete image, no distortion 
+ok   [portrait_320x568] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_320x568] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_320x568] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_320x568] altar_cg01: portrait CG not shrunk (frame 466 px of 568) 
+ok   [portrait_320x568] altar_cg02: dialogue frontmost without overflow 
+ok   [portrait_320x568] altar_cg02: correct orientation, complete image, no distortion 
+ok   [portrait_320x568] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_320x568] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_320x568] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_320x568] altar_cg02: portrait CG not shrunk (frame 445 px of 568) 
+ok   [portrait_320x568] altar_cg03: dialogue frontmost without overflow 
+ok   [portrait_320x568] altar_cg03: correct orientation, complete image, no distortion 
+ok   [portrait_320x568] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_320x568] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_320x568] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_320x568] altar_cg03: portrait CG not shrunk (frame 466 px of 568) 
+ok   [portrait_320x568] altar_cg04: dialogue frontmost without overflow 
+ok   [portrait_320x568] altar_cg04: correct orientation, complete image, no distortion 
+ok   [portrait_320x568] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_320x568] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_320x568] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_320x568] altar_cg04: portrait CG not shrunk (frame 445 px of 568) 
+ok   [portrait_320x568] no page errors 
+ok   [portrait_360x800] lou_first: dialogue frontmost without overflow 
+ok   [portrait_360x800] lou_first: correct orientation, complete image, no distortion 
+ok   [portrait_360x800] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_360x800] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_360x800] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_360x800] lou_first: portrait CG not shrunk (frame 636 px of 800) 
+ok   [portrait_360x800] altar_cg01: dialogue frontmost without overflow 
+ok   [portrait_360x800] altar_cg01: correct orientation, complete image, no distortion 
+ok   [portrait_360x800] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_360x800] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_360x800] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_360x800] altar_cg01: portrait CG not shrunk (frame 640 px of 800) 
+ok   [portrait_360x800] altar_cg02: dialogue frontmost without overflow 
+ok   [portrait_360x800] altar_cg02: correct orientation, complete image, no distortion 
+ok   [portrait_360x800] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_360x800] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_360x800] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_360x800] altar_cg02: portrait CG not shrunk (frame 640 px of 800) 
+ok   [portrait_360x800] altar_cg03: dialogue frontmost without overflow 
+ok   [portrait_360x800] altar_cg03: correct orientation, complete image, no distortion 
+ok   [portrait_360x800] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_360x800] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_360x800] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_360x800] altar_cg03: portrait CG not shrunk (frame 640 px of 800) 
+ok   [portrait_360x800] altar_cg04: dialogue frontmost without overflow 
+ok   [portrait_360x800] altar_cg04: correct orientation, complete image, no distortion 
+ok   [portrait_360x800] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_360x800] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_360x800] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_360x800] altar_cg04: portrait CG not shrunk (frame 640 px of 800) 
+ok   [portrait_360x800] no page errors 
+ok   [portrait_390x844] lou_first: dialogue frontmost without overflow 
+ok   [portrait_390x844] lou_first: correct orientation, complete image, no distortion 
+ok   [portrait_390x844] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_390x844] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_390x844] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_390x844] lou_first: portrait CG not shrunk (frame 678 px of 844) 
+ok   [portrait_390x844] altar_cg01: dialogue frontmost without overflow 
+ok   [portrait_390x844] altar_cg01: correct orientation, complete image, no distortion 
+ok   [portrait_390x844] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_390x844] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_390x844] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_390x844] altar_cg01: portrait CG not shrunk (frame 693 px of 844) 
+ok   [portrait_390x844] altar_cg02: dialogue frontmost without overflow 
+ok   [portrait_390x844] altar_cg02: correct orientation, complete image, no distortion 
+ok   [portrait_390x844] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_390x844] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_390x844] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_390x844] altar_cg02: portrait CG not shrunk (frame 693 px of 844) 
+ok   [portrait_390x844] altar_cg03: dialogue frontmost without overflow 
+ok   [portrait_390x844] altar_cg03: correct orientation, complete image, no distortion 
+ok   [portrait_390x844] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_390x844] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_390x844] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_390x844] altar_cg03: portrait CG not shrunk (frame 693 px of 844) 
+ok   [portrait_390x844] altar_cg04: dialogue frontmost without overflow 
+ok   [portrait_390x844] altar_cg04: correct orientation, complete image, no distortion 
+ok   [portrait_390x844] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_390x844] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_390x844] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_390x844] altar_cg04: portrait CG not shrunk (frame 693 px of 844) 
+ok   [portrait_390x844] no page errors 
+ok   [portrait_412x915] lou_first: dialogue frontmost without overflow 
+ok   [portrait_412x915] lou_first: correct orientation, complete image, no distortion 
+ok   [portrait_412x915] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_412x915] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_412x915] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_412x915] lou_first: portrait CG not shrunk (frame 732 px of 915) 
+ok   [portrait_412x915] altar_cg01: dialogue frontmost without overflow 
+ok   [portrait_412x915] altar_cg01: correct orientation, complete image, no distortion 
+ok   [portrait_412x915] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_412x915] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_412x915] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_412x915] altar_cg01: portrait CG not shrunk (frame 732 px of 915) 
+ok   [portrait_412x915] altar_cg02: dialogue frontmost without overflow 
+ok   [portrait_412x915] altar_cg02: correct orientation, complete image, no distortion 
+ok   [portrait_412x915] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_412x915] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_412x915] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_412x915] altar_cg02: portrait CG not shrunk (frame 732 px of 915) 
+ok   [portrait_412x915] altar_cg03: dialogue frontmost without overflow 
+ok   [portrait_412x915] altar_cg03: correct orientation, complete image, no distortion 
+ok   [portrait_412x915] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_412x915] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_412x915] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_412x915] altar_cg03: portrait CG not shrunk (frame 732 px of 915) 
+ok   [portrait_412x915] altar_cg04: dialogue frontmost without overflow 
+ok   [portrait_412x915] altar_cg04: correct orientation, complete image, no distortion 
+ok   [portrait_412x915] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [portrait_412x915] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [portrait_412x915] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [portrait_412x915] altar_cg04: portrait CG not shrunk (frame 732 px of 915) 
+ok   [portrait_412x915] no page errors 
+ok   [tablet_768x1024] lou_first: dialogue frontmost without overflow 
+ok   [tablet_768x1024] lou_first: correct orientation, complete image, no distortion 
+ok   [tablet_768x1024] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [tablet_768x1024] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [tablet_768x1024] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [tablet_768x1024] lou_first: portrait CG not shrunk (frame 877 px of 1024) 
+ok   [tablet_768x1024] altar_cg01: dialogue frontmost without overflow 
+ok   [tablet_768x1024] altar_cg01: correct orientation, complete image, no distortion 
+ok   [tablet_768x1024] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [tablet_768x1024] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [tablet_768x1024] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [tablet_768x1024] altar_cg01: portrait CG not shrunk (frame 918 px of 1024) 
+ok   [tablet_768x1024] altar_cg02: dialogue frontmost without overflow 
+ok   [tablet_768x1024] altar_cg02: correct orientation, complete image, no distortion 
+ok   [tablet_768x1024] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [tablet_768x1024] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [tablet_768x1024] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [tablet_768x1024] altar_cg02: portrait CG not shrunk (frame 891 px of 1024) 
+ok   [tablet_768x1024] altar_cg03: dialogue frontmost without overflow 
+ok   [tablet_768x1024] altar_cg03: correct orientation, complete image, no distortion 
+ok   [tablet_768x1024] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [tablet_768x1024] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [tablet_768x1024] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [tablet_768x1024] altar_cg03: portrait CG not shrunk (frame 918 px of 1024) 
+ok   [tablet_768x1024] altar_cg04: dialogue frontmost without overflow 
+ok   [tablet_768x1024] altar_cg04: correct orientation, complete image, no distortion 
+ok   [tablet_768x1024] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [tablet_768x1024] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [tablet_768x1024] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [tablet_768x1024] altar_cg04: portrait CG not shrunk (frame 891 px of 1024) 
+ok   [tablet_768x1024] no page errors 
+ok   [landscape_667x375] lou_first: dialogue frontmost without overflow 
+ok   [landscape_667x375] lou_first: maximum contained landscape width 
+ok   [landscape_667x375] lou_first: correct orientation, complete image, no distortion 
+ok   [landscape_667x375] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_667x375] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_667x375] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_667x375] altar_cg01: dialogue frontmost without overflow 
+ok   [landscape_667x375] altar_cg01: maximum contained landscape width 
+ok   [landscape_667x375] altar_cg01: correct orientation, complete image, no distortion 
+ok   [landscape_667x375] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_667x375] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_667x375] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_667x375] altar_cg02: dialogue frontmost without overflow 
+ok   [landscape_667x375] altar_cg02: maximum contained landscape width 
+ok   [landscape_667x375] altar_cg02: correct orientation, complete image, no distortion 
+ok   [landscape_667x375] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_667x375] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_667x375] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_667x375] altar_cg03: dialogue frontmost without overflow 
+ok   [landscape_667x375] altar_cg03: maximum contained landscape width 
+ok   [landscape_667x375] altar_cg03: correct orientation, complete image, no distortion 
+ok   [landscape_667x375] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_667x375] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_667x375] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_667x375] altar_cg04: dialogue frontmost without overflow 
+ok   [landscape_667x375] altar_cg04: maximum contained landscape width 
+ok   [landscape_667x375] altar_cg04: correct orientation, complete image, no distortion 
+ok   [landscape_667x375] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_667x375] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_667x375] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_667x375] no page errors 
+ok   [landscape_844x390] lou_first: dialogue frontmost without overflow 
+ok   [landscape_844x390] lou_first: maximum contained landscape width 
+ok   [landscape_844x390] lou_first: correct orientation, complete image, no distortion 
+ok   [landscape_844x390] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_844x390] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_844x390] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_844x390] altar_cg01: dialogue frontmost without overflow 
+ok   [landscape_844x390] altar_cg01: maximum contained landscape width 
+ok   [landscape_844x390] altar_cg01: correct orientation, complete image, no distortion 
+ok   [landscape_844x390] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_844x390] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_844x390] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_844x390] altar_cg02: dialogue frontmost without overflow 
+ok   [landscape_844x390] altar_cg02: maximum contained landscape width 
+ok   [landscape_844x390] altar_cg02: correct orientation, complete image, no distortion 
+ok   [landscape_844x390] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_844x390] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_844x390] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_844x390] altar_cg03: dialogue frontmost without overflow 
+ok   [landscape_844x390] altar_cg03: maximum contained landscape width 
+ok   [landscape_844x390] altar_cg03: correct orientation, complete image, no distortion 
+ok   [landscape_844x390] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_844x390] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_844x390] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_844x390] altar_cg04: dialogue frontmost without overflow 
+ok   [landscape_844x390] altar_cg04: maximum contained landscape width 
+ok   [landscape_844x390] altar_cg04: correct orientation, complete image, no distortion 
+ok   [landscape_844x390] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_844x390] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_844x390] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_844x390] no page errors 
+ok   [landscape_915x412] lou_first: dialogue frontmost without overflow 
+ok   [landscape_915x412] lou_first: maximum contained landscape width 
+ok   [landscape_915x412] lou_first: correct orientation, complete image, no distortion 
+ok   [landscape_915x412] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_915x412] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_915x412] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_915x412] altar_cg01: dialogue frontmost without overflow 
+ok   [landscape_915x412] altar_cg01: maximum contained landscape width 
+ok   [landscape_915x412] altar_cg01: correct orientation, complete image, no distortion 
+ok   [landscape_915x412] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_915x412] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_915x412] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_915x412] altar_cg02: dialogue frontmost without overflow 
+ok   [landscape_915x412] altar_cg02: maximum contained landscape width 
+ok   [landscape_915x412] altar_cg02: correct orientation, complete image, no distortion 
+ok   [landscape_915x412] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_915x412] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_915x412] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_915x412] altar_cg03: dialogue frontmost without overflow 
+ok   [landscape_915x412] altar_cg03: maximum contained landscape width 
+ok   [landscape_915x412] altar_cg03: correct orientation, complete image, no distortion 
+ok   [landscape_915x412] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_915x412] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_915x412] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_915x412] altar_cg04: dialogue frontmost without overflow 
+ok   [landscape_915x412] altar_cg04: maximum contained landscape width 
+ok   [landscape_915x412] altar_cg04: correct orientation, complete image, no distortion 
+ok   [landscape_915x412] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_915x412] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_915x412] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_915x412] no page errors 
+ok   [landscape_1280x720] lou_first: dialogue frontmost without overflow 
+ok   [landscape_1280x720] lou_first: maximum contained landscape width 
+ok   [landscape_1280x720] lou_first: correct orientation, complete image, no distortion 
+ok   [landscape_1280x720] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1280x720] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1280x720] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1280x720] altar_cg01: dialogue frontmost without overflow 
+ok   [landscape_1280x720] altar_cg01: maximum contained landscape width 
+ok   [landscape_1280x720] altar_cg01: correct orientation, complete image, no distortion 
+ok   [landscape_1280x720] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1280x720] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1280x720] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1280x720] altar_cg02: dialogue frontmost without overflow 
+ok   [landscape_1280x720] altar_cg02: maximum contained landscape width 
+ok   [landscape_1280x720] altar_cg02: correct orientation, complete image, no distortion 
+ok   [landscape_1280x720] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1280x720] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1280x720] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1280x720] altar_cg03: dialogue frontmost without overflow 
+ok   [landscape_1280x720] altar_cg03: maximum contained landscape width 
+ok   [landscape_1280x720] altar_cg03: correct orientation, complete image, no distortion 
+ok   [landscape_1280x720] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1280x720] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1280x720] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1280x720] altar_cg04: dialogue frontmost without overflow 
+ok   [landscape_1280x720] altar_cg04: maximum contained landscape width 
+ok   [landscape_1280x720] altar_cg04: correct orientation, complete image, no distortion 
+ok   [landscape_1280x720] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1280x720] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1280x720] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1280x720] no page errors 
+ok   [landscape_1366x768] lou_first: dialogue frontmost without overflow 
+ok   [landscape_1366x768] lou_first: maximum contained landscape width 
+ok   [landscape_1366x768] lou_first: correct orientation, complete image, no distortion 
+ok   [landscape_1366x768] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1366x768] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1366x768] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1366x768] altar_cg01: dialogue frontmost without overflow 
+ok   [landscape_1366x768] altar_cg01: maximum contained landscape width 
+ok   [landscape_1366x768] altar_cg01: correct orientation, complete image, no distortion 
+ok   [landscape_1366x768] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1366x768] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1366x768] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1366x768] altar_cg02: dialogue frontmost without overflow 
+ok   [landscape_1366x768] altar_cg02: maximum contained landscape width 
+ok   [landscape_1366x768] altar_cg02: correct orientation, complete image, no distortion 
+ok   [landscape_1366x768] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1366x768] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1366x768] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1366x768] altar_cg03: dialogue frontmost without overflow 
+ok   [landscape_1366x768] altar_cg03: maximum contained landscape width 
+ok   [landscape_1366x768] altar_cg03: correct orientation, complete image, no distortion 
+ok   [landscape_1366x768] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1366x768] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1366x768] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1366x768] altar_cg04: dialogue frontmost without overflow 
+ok   [landscape_1366x768] altar_cg04: maximum contained landscape width 
+ok   [landscape_1366x768] altar_cg04: correct orientation, complete image, no distortion 
+ok   [landscape_1366x768] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1366x768] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1366x768] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1366x768] no page errors 
+ok   [landscape_1920x1080] lou_first: dialogue frontmost without overflow 
+ok   [landscape_1920x1080] lou_first: maximum contained landscape width 
+ok   [landscape_1920x1080] lou_first: correct orientation, complete image, no distortion 
+ok   [landscape_1920x1080] lou_first: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1920x1080] lou_first: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1920x1080] lou_first: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1920x1080] altar_cg01: dialogue frontmost without overflow 
+ok   [landscape_1920x1080] altar_cg01: maximum contained landscape width 
+ok   [landscape_1920x1080] altar_cg01: correct orientation, complete image, no distortion 
+ok   [landscape_1920x1080] altar_cg01: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1920x1080] altar_cg01: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1920x1080] altar_cg01: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1920x1080] altar_cg02: dialogue frontmost without overflow 
+ok   [landscape_1920x1080] altar_cg02: maximum contained landscape width 
+ok   [landscape_1920x1080] altar_cg02: correct orientation, complete image, no distortion 
+ok   [landscape_1920x1080] altar_cg02: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1920x1080] altar_cg02: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1920x1080] altar_cg02: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1920x1080] altar_cg03: dialogue frontmost without overflow 
+ok   [landscape_1920x1080] altar_cg03: maximum contained landscape width 
+ok   [landscape_1920x1080] altar_cg03: correct orientation, complete image, no distortion 
+ok   [landscape_1920x1080] altar_cg03: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1920x1080] altar_cg03: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1920x1080] altar_cg03: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1920x1080] altar_cg04: dialogue frontmost without overflow 
+ok   [landscape_1920x1080] altar_cg04: maximum contained landscape width 
+ok   [landscape_1920x1080] altar_cg04: correct orientation, complete image, no distortion 
+ok   [landscape_1920x1080] altar_cg04: one visible orientation (no enlarged copy behind), feathered edges, DEV button hidden 
+ok   [landscape_1920x1080] altar_cg04: screenshot - dark margins, no hard edge line at the CG border 
+ok   [landscape_1920x1080] altar_cg04: inside the screen, as large as allowed (portrait: above the text), key region visible 
+ok   [landscape_1920x1080] no page errors 
+ok   lou_first: rotation 844x390 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   lou_first: rotation 390x844 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   lou_first: rotation 915x412 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   lou_first: rotation 360x640 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   lou_first: rotation needs no new image request 
+ok   lou_first: scene end clears CG marker and releases both images 
+ok   lou_first: rotation no page errors 
+ok   altar_cg01: rotation 844x390 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg01: rotation 390x844 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg01: rotation 915x412 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg01: rotation 360x640 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg01: rotation needs no new image request 
+ok   altar_cg01: scene end clears CG marker and releases both images 
+ok   altar_cg01: rotation no page errors 
+ok   altar_cg02: rotation 844x390 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg02: rotation 390x844 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg02: rotation 915x412 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg02: rotation 360x640 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg02: rotation needs no new image request 
+ok   altar_cg02: scene end clears CG marker and releases both images 
+ok   altar_cg02: rotation no page errors 
+ok   altar_cg03: rotation 844x390 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg03: rotation 390x844 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg03: rotation 915x412 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg03: rotation 360x640 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg03: rotation needs no new image request 
+ok   altar_cg03: scene end clears CG marker and releases both images 
+ok   altar_cg03: rotation no page errors 
+ok   altar_cg04: rotation 844x390 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg04: rotation 390x844 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg04: rotation 915x412 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg04: rotation 360x640 immediately shows correct full CG (portrait above text), DEV hidden 
+ok   altar_cg04: rotation needs no new image request 
+ok   altar_cg04: scene end clears CG marker and releases both images 
+ok   altar_cg04: rotation no page errors 
+FAILS 0

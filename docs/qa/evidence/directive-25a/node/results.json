@@ -1,0 +1,108 @@
+[
+  {
+    "test": "tests/common_loading.test.cjs",
+    "exit_code": 0,
+    "seconds": 1.4,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/continue_restore.test.cjs",
+    "exit_code": 1,
+    "seconds": 0.395,
+    "counts": {},
+    "failure_lines": [
+      "FAIL AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+    ]
+  },
+  {
+    "test": "tests/issue51_command_lock.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.053,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/issue54_coordinator.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.055,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/load_input_ownership.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.044,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/loading_input.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.099,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/loading_lifecycle.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.041,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/loading_map_readiness.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.823,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/portrait_blink.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.123,
+    "counts": {
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    "failure_lines": []
+  },
+  {
+    "test": "tests/s2_transition_recovery.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.125,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/save_compatibility.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.528,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/scene_lifecycle_ownership.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.076,
+    "counts": {},
+    "failure_lines": []
+  },
+  {
+    "test": "tests/startup_race.test.cjs",
+    "exit_code": 1,
+    "seconds": 0.055,
+    "counts": {},
+    "failure_lines": [
+      "FAIL AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:"
+    ]
+  },
+  {
+    "test": "tests/title_continue.test.cjs",
+    "exit_code": 0,
+    "seconds": 0.114,
+    "counts": {},
+    "failure_lines": []
+  }
+]

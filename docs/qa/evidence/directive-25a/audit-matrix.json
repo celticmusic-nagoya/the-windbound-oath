@@ -1,0 +1,871 @@
+{
+  "base": "5ab60c5db833821744d73080f91ffcd559ebf0a4",
+  "counts": {
+    "COMPLETE": 43,
+    "PARTIAL": 10,
+    "MISSING": 1,
+    "BUG": 5,
+    "BLOCKED": 2
+  },
+  "total": 61,
+  "items": [
+    {
+      "id": "S01",
+      "target": "タイトル／NEW GAME",
+      "reproduction": "fresh contextでtitle表示→NEW GAME",
+      "expected": "正式背景と全menu、家で操作開始",
+      "actual": "14viewportのタイトル配置とtitle遷移。通常経路は別probe",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_system_title_official_layout.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/system/title_official_layout.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S02",
+      "target": "SAVE／CONTINUE／旧データ保全",
+      "reproduction": "cold title→CONTINUE、LOAD競合・失敗・再試行",
+      "expected": "正しいmap/flag、古いSAVE不破壊、入力所有権復帰",
+      "actual": "実ブラウザでcold title、save bytes、LOAD世代を検証。全story stage総当りではない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_system_save_continue_lifecycle.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/system/save_continue_lifecycle.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S03",
+      "target": "ニューゲーム→実装終点の連続通常プレイ",
+      "reproduction": "DEV/teleport/kill/HP・flag代入なしで開始→訓練→断崖→襲撃→森→砦→リアム→王都",
+      "expected": "全区間を同じSAVEで到達",
+      "actual": "追加probeで実測した始端と、既存state-seeded分割回帰を区別。全経路の連続達成証拠なし。通常実測endpoint={\"label\": \"25a_normal_attack\", \"stage\": 5, \"map\": \"cliff_moher_01_spiral_ascent\", \"feet\": {\"x\": 2384, \"y\": 1022}, \"loading\": \"READY\", \"objective\": \"村の広場へ向かい、フィオナを探そう\"}; exception=None",
+      "status": "PARTIAL",
+      "evidence": [
+        "probe/playable-probe.json",
+        "browser/tests_moss_m4_e2e.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "S04",
+      "target": "フィオナ会話・訓練・訓練後移動",
+      "reproduction": "新規opening→Fiona hook→木人UIで攻撃/一閃→field移動",
+      "expected": "stage0→1→2→3、訓練終了後移動可",
+      "actual": "hookを用いる分割検証。物理tapと実歩行は追加probe参照",
+      "status": "COMPLETE",
+      "evidence": [
+        "probe/tests_moss_m10_flow.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m10_flow.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S05",
+      "target": "断崖ベンチの選択・夕日→襲撃",
+      "reproduction": "stage3断崖、bench→いいえ→再度はい→sceneを進める",
+      "expected": "拒否は不進行、承諾でsceneと襲撃へ",
+      "actual": "scene・時間帯・flag・操作復帰。高所までの歩行は追加probeと区別",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m7_cliff.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m7_cliff.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S06",
+      "target": "襲撃後の村・建物制限",
+      "reproduction": "peace/ruinへ状態設定、出入口/天候/NPC/表示を確認",
+      "expected": "炎上村で平和時建物へ入れない、layout連続性",
+      "actual": "map/出入口の分割回帰。一部旧assertは無条件真のため台詞細部を保証しない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m12_attack_ruin.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m12_attack_ruin.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S07",
+      "target": "襲撃の救助・再会・北側2戦・王国騎士・河川脱出",
+      "reproduction": "indexのattackイベント、normal勝利後分岐、escapeSceneを追跡",
+      "expected": "救助→Fiona再会→戦闘→逃走→森stage9",
+      "actual": "コードに分岐あり、今回の全legacyイベントを通常操作で一続きには実行していない",
+      "status": "PARTIAL",
+      "evidence": [
+        "source-findings.md",
+        "browser/tests_moss_m12_attack_ruin.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "S08",
+      "target": "森到着・古代石・封印条件",
+      "reproduction": "stage9 entry、3体未達／達成の状態を用意",
+      "expected": "未達で封印/進行阻止、達成で解放",
+      "actual": "到着台詞・石・3勝条件のstate-seeded回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m18_moss_scenario.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m18_moss_scenario.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S09",
+      "target": "A1→A2→A3・3symbol勝利・ルー入口",
+      "reproduction": "DEV forest開始、path_main歩行、各symbol接触、DEV撃破",
+      "expected": "正常遷移、勝利count3で封印解除、ルーsceneとaltar開始",
+      "actual": "既存テストは経路始点teleport/DEV撃破あり。通常難度や全NG連続とは異なる",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m4_e2e.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m4_e2e.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S10",
+      "target": "ルー初対面・父の剣破損・風の舞・加勢・誓い契約CG",
+      "reproduction": "A3条件設定→scene進行／早送り／回転／LOAD",
+      "expected": "5scene10正式PNG、CG時portrait非表示、契約・武器固定",
+      "actual": "全CGのタイミング・full-art配置・fade・回転・skip/loadを検証",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m36_event_cg.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m36_event_cg.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S11",
+      "target": "父の剣→誓いの剣・装備解禁",
+      "reproduction": "開始、契約、砦後の状態を切替",
+      "expected": "父の剣維持、契約後固定、砦で装備解禁",
+      "actual": "物語連動の装備回帰。台詞・装備仕様は変更なし",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m20_sword_equipment.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m20_sword_equipment.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S12",
+      "target": "レイダー勝利→余韻・ルー加入",
+      "reproduction": "祭壇→実battle表示→DEV撃破→result→afterScene",
+      "expected": "stage13、CG終了、正しいFieldへ復帰",
+      "actual": "勝利handoffを確認。通常戦略でboss1250を倒す計測ではない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m36_event_cg.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m36_event_cg.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S13",
+      "target": "砦・PROLOGUE END・自由探索",
+      "reproduction": "砦sceneの支給pageまで進行、終了handlerとafterPrologueを追跡",
+      "expected": "stage15と装備解禁・父の剣再取得なし",
+      "actual": "隔離seeded fixtureで砦全page→PROLOGUE END→endReturn実button→操作可能なfort mapを実測。NGから連続到達の証拠ではない。",
+      "status": "COMPLETE",
+      "evidence": [
+        "probe/playable-probe.json",
+        "browser/tests_moss_m20_sword_equipment.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "S14",
+      "target": "リアム加入・断る分岐・退場",
+      "reproduction": "stage15 tavernの実会話→また今度→仲間に誘う",
+      "expected": "断ると不加入、再勧誘で加入、再入室でも再配置なし",
+      "actual": "実登録会話のchoice/roster/active/field退場を確認。進行条件はfixtureで設定",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m11_road_tavern.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m11_road_tavern.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S15",
+      "target": "街道検問・リアム保証・王都入口",
+      "reproduction": "Liamなし/ありで街道東端へ歩行、会話を進め再訪",
+      "expected": "不在拒否→身元保証→pass flag→再訪通行",
+      "actual": "実際のmap遷移とflag、再訪時dialogueなし。騎士の字句assertは無条件真につき保証外",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m14_capital_gate.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m14_capital_gate.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S16",
+      "target": "王都2依頼・売店・装備・保存",
+      "reproduction": "guild delivery、住宅comb受注→庭宝箱→報告、SAVE/LOAD",
+      "expected": "依頼state/報酬/消費/flag保持",
+      "actual": "2任意クエストのfixture分割回帰。宿舎回復assertは無条件真につき別課題",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_system_capital_story_test.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/system/capital_story_test.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S17",
+      "target": "現在の実装終点",
+      "reproduction": "全map/transition/FieldTalk tableを走査し王都回帰と照合",
+      "expected": "到達可能領域と次の未接続境界を区別",
+      "actual": "プロローグstage15を越えて砦酒場、街道、王都門・市場・広場・住宅・宿/ギルド。次のchapter本編進行は未接続",
+      "status": "COMPLETE",
+      "evidence": [
+        "static-inventory.json",
+        "browser/tests_system_capital_story_test.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "S18",
+      "target": "次区間の王都3出口・森深部",
+      "reproduction": "toMap:TBDと特殊hook有無、runtimeの通知guardを追跡",
+      "expected": "未実装出口は現在mapに留まり、進行不能と誤認させない",
+      "actual": "職人地区、東地区、王城内、森深部は未接続。村TBD出口はhook接続済みで同列に数えない",
+      "status": "MISSING",
+      "evidence": [
+        "static-inventory.json",
+        "source-findings.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "S19",
+      "target": "エマのお守り依頼／選択分岐",
+      "reproduction": "q_emma_charmの受注/中断/収集/報告/SAVEを検証",
+      "expected": "既存choice、依頼state、key-itemとreward維持",
+      "actual": "実登録tableとitemsによるサブクエスト回帰。本文・条件不変",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m6_quest.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m6_quest.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S24",
+      "target": "平和村の風船・迷子猫依頼",
+      "reproduction": "rilde_village hook→既存NPC/木/猫handlerとlegacyflags/rewardを追跡",
+      "expected": "受注→回収→報告、報酬重複なし",
+      "actual": "本番hook実測: {\"balloon\": {\"before\": 4, \"after\": 4, \"expected_delta\": 2, \"message\": \"風船を取った！ 子供からきずぐすり×2をもらった。\", \"done\": true}, \"cat\": {\"done\": true, \"itemId\": null, \"items\": {\"key\": {}, \"gear\": {}, \"claimed\": []}, \"consumables\": {\"potion\": 4, \"ether\": 2}, \"message\": \"女の子「ミルを見つけてくれたの！？ありがとう！」 毒消し×2をもらった。\", \"before\": {\"itemId\": null, \"count\": null}, \"after_count\": null}}。通常の地面tap経路から独立した本番hook診断。",
+      "status": "BUG",
+      "evidence": [
+        "probe/playable-probe.json",
+        "source-findings.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "S20",
+      "target": "老人／農婦の依頼・報酬重複防止",
+      "reproduction": "decline→accept→active→収集→報告→再会話",
+      "expected": "消費・報酬は1回、依頼state正しい",
+      "actual": "登録tableで複数choice/flag/rewardを検証",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m6_scenario.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m6_scenario.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S21",
+      "target": "本編立ち絵・表情115ページ",
+      "reproduction": "実会話table/本編handlerをAndroid縦横で進行",
+      "expected": "char/face/side一致、本文・分岐・保存不変",
+      "actual": "115pages（Aidan41/Fiona48/Lou10/Emma16）、CG22/混合3除外方針維持",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m53_story_expression_assignment.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m53_story_expression_assignment.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S22",
+      "target": "DEV表情28種・瞬き・静止4種",
+      "reproduction": "DEVで全正式faceを順に表示、静止control確認",
+      "expected": "正式ラベル/refs一致、Lou未採用2種混入なし",
+      "actual": "全28face、24blink/4static、四viewport。歴史上provisional path名を採用状態と誤認しない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m54_dev_formal_status.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m54_dev_formal_status.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "S23",
+      "target": "瞬き実画素・reduced-motion・後片付け",
+      "reproduction": "手動/自動/loop/frame、reduce、LOAD、終了・battle開始",
+      "expected": "canvas実画素更新、静止尊重、timer/owner解除",
+      "actual": "状態値だけでなくcanvas描画、timer、revokeと実URL失敗を検証",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m45_dev_portrait_test.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m45_dev_portrait_test.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M01",
+      "target": "平和村/室内の境界・出入口・interact",
+      "reproduction": "複数室内/村を分割ロード、扉/当たり判定/actorを確認",
+      "expected": "scene内で歩行し出入口へ遷移",
+      "actual": "リルドmapの分割回帰。全walkable pixelの網羅ではない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m10_rilde.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m10_rilde.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M02",
+      "target": "砦/街道/王都map遷移・未実装出口guard",
+      "reproduction": "各mapへ入りtransitionへ歩く、TBDにも進む",
+      "expected": "接続先一致、TBDは通知で留まる",
+      "actual": "砦・王都map群の分割回帰。出入口camera配置を確認",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m8_town_maps.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m8_town_maps.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M03",
+      "target": "tap/hold移動・停止",
+      "reproduction": "pointerdown/hold/upとUI操作を行う",
+      "expected": "押下中移動、解除で止まる、UI操作と競合しない",
+      "actual": "ブラウザpointer回帰。実機タッチdigitizer特性は未確認",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m14_hold_move.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m14_hold_move.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M04",
+      "target": "8方向・歩行アニメ・camera",
+      "reproduction": "8方向に歩行しheading/clip/sourceを確認",
+      "expected": "正常向き、frame更新、停止pose",
+      "actual": "field描画とheading回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m31_aidan_heading.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m31_aidan_heading.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M05",
+      "target": "ルー登場後の追従・退場",
+      "reproduction": "加入前後、map切替、追従状態を検証",
+      "expected": "非加入時不表示、加入後適切な位置、遷移時cleanup",
+      "actual": "Lou SUPPORT/field follower回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m32_lou_follower.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m32_lou_follower.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M06",
+      "target": "Android縦横tap移動・横scroll",
+      "reproduction": "390×844/844×390で地面tap",
+      "expected": "実際にfeetが動き、page横scrollなし",
+      "actual": "headless Chromium touch emulation。実機PASSとはしない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m55_mobile.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m55_mobile.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "M07",
+      "target": "全30データmapの全壁／全境界網羅",
+      "reproduction": "map一覧・collisionsと既存テスト対象を比較",
+      "expected": "全28productionmap＋2DEVの全境界の実歩行",
+      "actual": "代表境界・長距離pathは検証。全collision edge/全pixelの歩行網羅は未整備",
+      "status": "PARTIAL",
+      "evidence": [
+        "static-inventory.json",
+        "browser/tests_moss_m4_e2e.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "B01",
+      "target": "雑魚開始・ターン・勝利・報酬・field復帰",
+      "reproduction": "field接触、command、result、再入場",
+      "expected": "敵数・成長・報酬・復帰正常",
+      "actual": "slime通常回帰。敵HPや死亡をfixture操作するケースを含む",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m15_slime.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m15_slime.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "B02",
+      "target": "バットAI・吸血・接触・再生成",
+      "reproduction": "field AI追跡、接触→複数敵、吸血→撃破",
+      "expected": "状態遷移と吸血、idle、field復帰",
+      "actual": "固定条件の敵AI／接触回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m15c_forest_bat.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m15c_forest_bat.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "B03",
+      "target": "ボアAI・戦闘・突進",
+      "reproduction": "field接触と戦闘／AI記録",
+      "expected": "壁や範囲に不正移動せず、戦闘・復帰",
+      "actual": "固定条件のAI／battle回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m15d_leafy_boar.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m15d_leafy_boar.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "B04",
+      "target": "戦闘演出・アクション・勝利表示",
+      "reproduction": "近接/魔法/ルー浮遊/勝利延長を観測",
+      "expected": "近接lunge、遠隔小移動、正しいresult期間",
+      "actual": "画像・battle演出回帰。バランスの実プレイ計測ではない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m16_battle_feel.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m16_battle_feel.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "B05",
+      "target": "風の舞・MP/TP/RUNE・学習gate",
+      "reproduction": "学習前/後、normal/Raider、対象/MP条件",
+      "expected": "未学習使用不可、学習後効果と消費が一致",
+      "actual": "実actionとresource変化を検証。仕様数値を無断調整しない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m23_wind_dance_battle.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m23_wind_dance_battle.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "B06",
+      "target": "Raider敗北→再戦→勝利",
+      "reproduction": "PC/縦画面でHP1注入→実round→再戦を2回→勝利",
+      "expected": "HP/MP/TP/boss/round再初期化、操作復帰、古いturnなし",
+      "actual": "state-seeded低HP故障条件の実roundテスト。初見難度ではない",
+      "status": "COMPLETE",
+      "evidence": [
+        "probe/tests_battle_raider_wipe_rematch.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/battle/raider_wipe_rematch.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "B07",
+      "target": "通常戦闘の低HP復帰",
+      "reproduction": "追加probeでseeded normal HP1→enemyRound",
+      "expected": "現行コードの態勢立直しでHP35/32以上とcommand再開",
+      "actual": "probeの実測を参照。一般的なGAME OVER仕様を勝手に期待しない",
+      "status": "COMPLETE",
+      "evidence": [
+        "probe/playable-probe.json",
+        "source-findings.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "B08",
+      "target": "戦闘balanceの通し実測",
+      "reproduction": "現行LV/装備を保持し通常戦略で各敵を倒して時間/消耗を測る",
+      "expected": "難度評価を測定条件・試行数と共に提示",
+      "actual": "訓練action履歴は追加probe。レイダー等の通常戦略の所要ターン分布・初見再戦率は未測定",
+      "status": "PARTIAL",
+      "evidence": [
+        "probe/playable-probe.json",
+        "source-findings.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "B09",
+      "target": "3人目／4active＋2reserve戦闘",
+      "reproduction": "PartyManager／BattleActionTargets／HUD／turn制御を比較",
+      "expected": "確定方針の4人＋2reserve＋Lou SUPPORTへ伸長可能",
+      "actual": "Liam加入/成長/装備あり。現battle target/turn/HUDはAidan/Fiona中心、編成UIは未実装と明記",
+      "status": "PARTIAL",
+      "evidence": [
+        "source-findings.md",
+        "probe/playable-probe.json"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "B10",
+      "target": "加入者EXP・王都SAVE/LOAD",
+      "reproduction": "追加probeで加入済Liam reserveに13EXP、capitalで保存→新contextLOAD",
+      "expected": "reserve100%EXP、joined/map保持",
+      "actual": "seeded観測値をprobeに保存。加入実会話はS14で別検証",
+      "status": "COMPLETE",
+      "evidence": [
+        "probe/playable-probe.json"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "U01",
+      "target": "店UI・買物・所持金・保存",
+      "reproduction": "shopを開き購入／不足金／SAVE",
+      "expected": "stockと価格、inventory/金額が一致",
+      "actual": "実shop flow回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_system_shop_flow_test.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/system/shop_flow_test.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "U02",
+      "target": "装備UI・ロック・SAVE",
+      "reproduction": "装備menu、装備/解除/所持とLOAD",
+      "expected": "物語weapon lockとstats保存を維持",
+      "actual": "UI操作の回帰",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_system_equipment_ui_flow_test.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/system/equipment_ui_flow_test.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "U03",
+      "target": "ボタン押しやすさ・文字・回転",
+      "reproduction": "title/portrait/CGの画面寸法と選択controlをブラウザ検査",
+      "expected": "390×844/844×390等で文字と操作を妨げない",
+      "actual": "幾何/実描画/代表スクリーンショットを確認。全battle/menu controlの最小tap面積網羅は未実施",
+      "status": "PARTIAL",
+      "evidence": [
+        "browser/tests_system_title_official_layout.py.log",
+        "browser/tests_moss_m54_dev_formal_status.py.log",
+        "visual-review.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "U04",
+      "target": "Android端末のOS中断/復帰・実機通しプレイ",
+      "reproduction": "端末でbackground/foreground、回転、cold起動、touchと全経路",
+      "expected": "OS復帰後も操作/SAVE/音が整合",
+      "actual": "この作業はheadlessのみ。過去Phase4/5Android合格は保持するが総合端末QAへ転用しない",
+      "status": "BLOCKED",
+      "evidence": [
+        "environment.json"
+      ],
+      "android": "ユーザー実機確認が必要。ADB/実機なし",
+      "test": null
+    },
+    {
+      "id": "A01",
+      "target": "正式採用259PNG不変",
+      "reproduction": "21A46＋22A120＋23A29＋Aidan54＋CG10のSHA照合",
+      "expected": "全259ファイルが固定SHAと一致",
+      "actual": "259/259 exact bytes、原本・active参照・歴史的置換済みを保全",
+      "status": "COMPLETE",
+      "evidence": [
+        "static-inventory.json",
+        "browser/tests_moss_m49_phase4_formal_adoption.py.log",
+        "browser/tests_moss_m51_blink_formal_adoption_22a.py.log"
+      ],
+      "android": "不要（byte照合）。過去Android採用根拠維持",
+      "test": null
+    },
+    {
+      "id": "A02",
+      "target": "素材台帳・map/manifest参照",
+      "reproduction": "build_registry --check、audit_registry、check_asset_refs",
+      "expected": "現行台帳鮮度・参照実在",
+      "actual": "1196 records、audit0errors、refs0errors。Android実績の正本は台帳",
+      "status": "COMPLETE",
+      "evidence": [
+        "registry-build.log",
+        "registry-audit.log",
+        "asset-refs.log"
+      ],
+      "android": "不要（参照/byte）。描画は別項",
+      "test": null
+    },
+    {
+      "id": "A03",
+      "target": "画像の仮素材・未使用・未承認区分",
+      "reproduction": "中央台帳のapproval/integration/runtime_referenceを分類",
+      "expected": "UNKNOWN/branch原本を欠損と誤認しない",
+      "actual": "885UNKNOWN、179delivered_not_merged、45unreferenced、2pending。指標重複あり、current portrait暫定0",
+      "status": "COMPLETE",
+      "evidence": [
+        "static-inventory.json",
+        "source-findings.md"
+      ],
+      "android": "採用判断を新たに行わない",
+      "test": null
+    },
+    {
+      "id": "A04",
+      "target": "field BGM対応範囲",
+      "reproduction": "map audio.bgm.idとFieldBgm.profilesを照合",
+      "expected": "宣言地域のBGM方針が実装される",
+      "actual": "宣言9ID、生成profile3（リルドday/home/ruin）。他6IDは非対応時stop。録音mp3参照切れではない",
+      "status": "PARTIAL",
+      "evidence": [
+        "static-inventory.json",
+        "source-findings.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "A05",
+      "target": "戦闘motion・次地域アセット",
+      "reproduction": "manifest/台帳/現行fallbackを照合",
+      "expected": "現在の画面はfallback可能、今後必要素材を仕様化",
+      "actual": "不足／検討10単位をsizeTBD・透明要否・priority・代替付きで定義。新規制作なし",
+      "status": "PARTIAL",
+      "evidence": [
+        "source-findings.md"
+      ],
+      "android": "新規採用が必要なら別途ユーザー判断",
+      "test": null
+    },
+    {
+      "id": "T01",
+      "target": "console/Promise/HTTPエラー",
+      "reproduction": "各browser testのerror listener、追加probeのresponse/pageerror/console収集",
+      "expected": "実行対象で未処理例外・HTTP失敗なし",
+      "actual": "回収ログとprobeの観測範囲のみ。未通過全コンテンツへゼロエラーを一般化しない",
+      "status": "COMPLETE",
+      "evidence": [
+        "probe/playable-probe.json"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "T02",
+      "target": "timer/owner/連打/LOAD世代",
+      "reproduction": "Node所有権回帰＋m45＋save lifecycle＋CG rapid入力",
+      "expected": "古いcallbackや入力が次sceneを汚染しない",
+      "actual": "検証済ケースは回帰で確認。全timerの長時間leak定量検査は別項",
+      "status": "COMPLETE",
+      "evidence": [
+        "node/results.json",
+        "browser/tests_moss_m45_dev_portrait_test.py.log",
+        "browser/tests_system_save_continue_lifecycle.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "T03",
+      "target": "旧Node fixture2件",
+      "reproduction": "node tests/startup_race.test.cjs、continue_restore.test.cjsを原版で実行",
+      "expected": "現行product関数をVM抽出し全case実行",
+      "actual": "原版2FAIL。say(t)固定文字列とstoryPortraitPage未取込。ディスク無変更の診断adapterのみ20/37PASS",
+      "status": "BUG",
+      "evidence": [
+        "node/results.json",
+        "node/startup_race.test.cjs.log",
+        "node/continue_restore.test.cjs.log",
+        "node/fixture_preload.cjs",
+        "node/startup-adapter-diagnostic.log",
+        "node/continue-adapter-diagnostic.log"
+      ],
+      "android": "不要（Node）。製品SAVE破損と混同しない",
+      "test": null
+    },
+    {
+      "id": "T04",
+      "target": "素材回帰の旧Android assert",
+      "reproduction": "python tests/system/asset_registry_audit.py",
+      "expected": "台帳の実際のAndroid採用実績を尊重",
+      "actual": "原版FAIL1: 全record UNVERIFIEDを要求し、正式AndroidPASS記録と矛盾。監査tool本体は0error",
+      "status": "BUG",
+      "evidence": [
+        "asset-regression.log",
+        "registry-audit.log"
+      ],
+      "android": "不要（テスト基盤）",
+      "test": null
+    },
+    {
+      "id": "T05",
+      "target": "無条件真assertの検出力",
+      "reproduction": "capital_story_test宿舎回復等のor Trueを走査",
+      "expected": "実測条件を満たさない場合にFAILできる",
+      "actual": "宿舎回復/騎士台詞/一部看板等は無条件真で検証が成立しない。直前waitが実検証するcheck(True)とは区別",
+      "status": "BUG",
+      "evidence": [
+        "source-findings.md"
+      ],
+      "android": "回復など別途実機確認要",
+      "test": null
+    },
+    {
+      "id": "T06",
+      "target": "cloud frame-time／node／heapの基準測定",
+      "reproduction": "1366×768/390×844/844×390、2map、移動中各8秒",
+      "expected": "測定条件と実値を記録、実機性能と区別",
+      "actual": "headless reference。FPS閾値assertなしの計測であり性能合格判定ではない",
+      "status": "COMPLETE",
+      "evidence": [
+        "browser/tests_moss_m19_perf.py.log"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": "tests/moss/m19_perf.py",
+      "run_result": "合格"
+    },
+    {
+      "id": "T07",
+      "target": "長時間memory／実機性能",
+      "reproduction": "実機と長時間反復でheap/timer/thermal/frame-timeを観測",
+      "expected": "端末上の劣化/復帰を定量化",
+      "actual": "cloud短時間のheap sampleのみ。長時間leak/実機thermal性能は検証不能",
+      "status": "BLOCKED",
+      "evidence": [
+        "environment.json",
+        "performance.json"
+      ],
+      "android": "端末remote debuggingと時間を確保して検証",
+      "test": null
+    },
+    {
+      "id": "T08",
+      "target": "テストcover範囲",
+      "reproduction": "今回のrun結果とtestsソースを照合",
+      "expected": "seeded／通常／static／実機を区分し未検証を明示",
+      "actual": "各rowに再現/期待/実測/判定/証拠/端末要否を記録。原版FAIL3本と未達通常経路を保持",
+      "status": "PARTIAL",
+      "evidence": [
+        "browser/results.json",
+        "node/results.json",
+        "coverage-notes.md"
+      ],
+      "android": "実機は別件",
+      "test": null
+    },
+    {
+      "id": "T09",
+      "target": "現在のPages公開構成（基準main）",
+      "reproduction": "基準mainのPages buildを確認しindex/CSS/JS/259PNG等299件をGETしてSHA比較",
+      "expected": "HTTPS配信と基準mainが同じ実ファイル",
+      "actual": "PR98基準mainのbuild/299ファイル一致。今回監査PRの公開はマージ後に別回収し最終報告する",
+      "status": "COMPLETE",
+      "evidence": [
+        "pages-verification.json"
+      ],
+      "android": "端末キャッシュ確認は実機側",
+      "test": null
+    },
+    {
+      "id": "S25",
+      "target": "家のdrawer/pot取得メッセージと実給付",
+      "reproduction": "隔離fresh contextで本番RildeVillage interact hookを実行、Inventory/goldの前後差",
+      "expected": "タンスpotion+1、壺gold+3、受取flagと実数が一致",
+      "actual": "本番hook実測: {\"rilde_drawer\": {\"before\": 4, \"after\": 4, \"expected_delta\": 1, \"message\": \"タンスを調べた。きずぐすりを1個見つけた！\"}, \"rilde_pot\": {\"before\": 0, \"after\": 0, \"expected_delta\": 3, \"message\": \"壺の中を調べた。3Gを見つけた！\"}}",
+      "status": "BUG",
+      "evidence": [
+        "probe/playable-probe.json",
+        "source-findings.md"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    },
+    {
+      "id": "M08",
+      "target": "本編襲撃fieldの正式pixel素材接続",
+      "reproduction": "通常NGのstage5 captureをpeace/ruin mapとsourceのlegacy切替と比較",
+      "expected": "同じ村として背景/actorを自然に表示",
+      "actual": "stage5〜8は明示的legacy sceneを使用し、文字/CSS図形NPCが残る。正式ruin-map自体の欠損とは区別",
+      "status": "PARTIAL",
+      "evidence": [
+        "source-findings.md",
+        "visual-review.md",
+        "screenshots/25a_normal_attack.png"
+      ],
+      "android": "実機未実施。操作・可読性は端末確認要",
+      "test": null
+    }
+  ]
+}

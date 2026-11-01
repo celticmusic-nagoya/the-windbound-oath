@@ -1,0 +1,39 @@
+[
+  {
+    "command": [
+      "python",
+      "tools/assets/build_registry.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 5.026,
+    "log": "registry-build.log"
+  },
+  {
+    "command": [
+      "python",
+      "tools/assets/audit_registry.py"
+    ],
+    "exit_code": 0,
+    "seconds": 2.958,
+    "log": "registry-audit.log"
+  },
+  {
+    "command": [
+      "python",
+      "tools/assets/check_asset_refs.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.103,
+    "log": "asset-refs.log"
+  },
+  {
+    "command": [
+      "python",
+      "tests/system/asset_registry_audit.py"
+    ],
+    "exit_code": 1,
+    "seconds": 6.593,
+    "log": "asset-regression.log"
+  }
+]
