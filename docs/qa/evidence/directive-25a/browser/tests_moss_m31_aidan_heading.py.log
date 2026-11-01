@@ -1,0 +1,11 @@
+ok   heading classes {'down': 'down', 'up': 'up', 'right': 'right', 'left': 'left', 'dr': 'dlF', 'dl': 'dl', 'ur': 'ulF', 'ul': 'ul', 'steep': 'down', 'shallow': 'right'}
+ok   jitter around 45deg does not flicker between sets (1)
+ok   straight down uses walk_down {'down'}
+ok   straight up uses walk_up {'up'}
+ok   down-right reuses the front-walk art unmirrored {'down'}
+ok   down-left reuses the front-walk art unmirrored {'down'}
+ok   up-left reuses the back-walk art unmirrored (plan D) {'up'}
+ok   up-right reuses the back-walk art unmirrored (plan D) {'up'}
+ok   sideways uses walk_right {'right'}
+ok   no console errors []
+FAILS 0

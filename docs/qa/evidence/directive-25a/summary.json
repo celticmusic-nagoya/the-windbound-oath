@@ -1,0 +1,47 @@
+{
+  "base": "5ab60c5db833821744d73080f91ffcd559ebf0a4",
+  "overall": "PARTIAL",
+  "audit_items": 61,
+  "counts": {
+    "COMPLETE": 43,
+    "PARTIAL": 10,
+    "MISSING": 1,
+    "BUG": 5,
+    "BLOCKED": 2
+  },
+  "priorities": {
+    "P0": 0,
+    "P1": 4,
+    "P2": 8,
+    "P3": 2
+  },
+  "asset_gap_units": 10,
+  "protected_pngs": 259,
+  "protected_sha": "PASS",
+  "browser": {
+    "pass": 35,
+    "fail": 1,
+    "total": 36,
+    "source_heads": [
+      "e70942ea6876f8f7409bf9040abedbd85d929f1e",
+      "535ed142b21975b3bfb68eed4dedb529fc13bebd"
+    ]
+  },
+  "node_original": {
+    "pass": 12,
+    "fail": 2,
+    "total": 14
+  },
+  "asset_original": {
+    "pass": 0,
+    "fail": 1
+  },
+  "node_adapter_diagnostic_cases": {
+    "startup": 20,
+    "continue": 37,
+    "note": "diagnostic only; not original tests"
+  },
+  "product_qa": "FAIL",
+  "android_hardware": "NOT_RUN",
+  "audit_artifact_qa": "see artifact-audit.log; independent exact-head report required before merge"
+}

@@ -1,0 +1,7 @@
+FAIL AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(e.c.msg.textContent.includes('朝の風'))
+
+    at /workspace/the-windbound-oath/tests/startup_race.test.cjs:39:311
+    at async test (/workspace/the-windbound-oath/tests/startup_race.test.cjs:36:129)
+    at async /workspace/the-windbound-oath/tests/startup_race.test.cjs:39:2

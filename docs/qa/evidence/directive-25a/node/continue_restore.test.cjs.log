@@ -1,0 +1,12 @@
+PASS no save disables CONTINUE; valid current save enables it without mutation
+PASS cold CONTINUE restores field coordinates, facing, flags and once-only events; source bytes unchanged
+PASS legacy early stage 0 uses explicit safe checkpoint, never guessed legacy coordinates
+PASS legacy early stage 1 uses explicit safe checkpoint, never guessed legacy coordinates
+PASS legacy early stage 3 uses explicit safe checkpoint, never guessed legacy coordinates
+FAIL AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+false !== true
+
+    at /workspace/the-windbound-oath/tests/continue_restore.test.cjs:32:189
+    at async test (/workspace/the-windbound-oath/tests/continue_restore.test.cjs:26:131)
+    at async /workspace/the-windbound-oath/tests/continue_restore.test.cjs:32:33

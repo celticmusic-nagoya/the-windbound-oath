@@ -1,0 +1,4454 @@
+{
+  "base": "5ab60c5db833821744d73080f91ffcd559ebf0a4",
+  "map_count": 30,
+  "maps": [
+    {
+      "id": "cliff_moher_01_spiral_ascent",
+      "world": {
+        "width": 4800.0,
+        "height": 4800.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_c1_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_c1_sign",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_c1_summit",
+          "hook": null,
+          "eventId": "prologue_sunset_hill"
+        },
+        {
+          "id": "ev_c1_view_bench",
+          "hook": "cliff_time_cycle",
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_c1_herb_slope_a",
+        "tr_c1_herb_slope_b",
+        "tr_c1_herb_ramp",
+        "tr_c1_herb_lip",
+        "tr_c1_cairn"
+      ]
+    },
+    {
+      "id": "dev_height_proto",
+      "world": {
+        "width": 2400.0,
+        "height": 1600.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "dev_monster_arena",
+      "world": {
+        "width": 4800.0,
+        "height": 3200.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "fort_dunvall_01_courtyard",
+      "world": {
+        "width": 3200.0,
+        "height": 2400.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f1_captain",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f1_quartermaster",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f1_bed",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f1_gate_guard",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_f1_barracks"
+      ]
+    },
+    {
+      "id": "fort_dunvall_02_ramparts",
+      "world": {
+        "width": 2800.0,
+        "height": 1600.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f2_lookout",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_f2_tower"
+      ]
+    },
+    {
+      "id": "fort_dunvall_03_keep",
+      "world": {
+        "width": 2400.0,
+        "height": 1800.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f3_commander",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f3_armory",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_f3_armory"
+      ]
+    },
+    {
+      "id": "fort_in_tavern",
+      "world": {
+        "width": 1400.0,
+        "height": 1000.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f4_liam",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f4_barkeep",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f4_dwarf",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f4_patron1",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f4_patron2",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_f4_bard",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "moss_forest_01_sunlit_path",
+      "world": {
+        "width": 9600.0,
+        "height": 6000.0,
+        "tile": 32,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_a1_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a1_sign_lind",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a1_sign_fork",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a1_camp_trace",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a1_rest_clearing",
+          "hook": "future_rest",
+          "eventId": null
+        },
+        {
+          "id": "ev_a1_rest_ford",
+          "hook": "future_rest",
+          "eventId": null
+        },
+        {
+          "id": "ev_a1_ambience_shift",
+          "hook": "a1_exit_grade",
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_a1_hollow",
+        "tr_a1_stream",
+        "tr_a1_meadow",
+        "tr_a1_ford_hidden",
+        "tr_a1_wayside_late"
+      ]
+    },
+    {
+      "id": "moss_forest_02_mossy_ravine",
+      "world": {
+        "width": 9600.0,
+        "height": 7200.0,
+        "tile": 32,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_a2_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a2_rest_ramp",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a2_rest_bridge",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a2_rest_marker",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a2_old_marker",
+          "hook": "a2_marker_crack_glint",
+          "eventId": null
+        },
+        {
+          "id": "ev_a2_ambience_marker",
+          "hook": "a2_marker_birds_thin",
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_a2_overlook",
+        "tr_a2_alcove",
+        "tr_a2_fern",
+        "tr_a2_marker_side",
+        "tr_a2_ledge_late"
+      ]
+    },
+    {
+      "id": "moss_forest_03_ancient_grove",
+      "world": {
+        "width": 8400.0,
+        "height": 6600.0,
+        "tile": 32,
+        "coordBasis": "feet",
+        "unitScale": 2.5,
+        "compound": {
+          "translation": [
+            2340.0,
+            1950.0
+          ],
+          "note": "sanctuary compound is rigid: design coords + translation, not scaled"
+        }
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_a3_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_a3_threshold",
+          "hook": "a3_threshold_birds_off",
+          "eventId": null
+        },
+        {
+          "id": "ev_a3_rune_stone",
+          "hook": null,
+          "eventId": "prologue_rune_stone"
+        },
+        {
+          "id": "ev_a3_rest_sentinel",
+          "hook": "future_rest",
+          "eventId": null
+        },
+        {
+          "id": "ev_a3_clearing_reveal",
+          "hook": "camera_reveal_clearing",
+          "eventId": null
+        },
+        {
+          "id": "ev_a3_lou_intro",
+          "hook": null,
+          "eventId": "prologue_lou_intro"
+        },
+        {
+          "id": "ev_a3_altar_trigger",
+          "hook": null,
+          "eventId": "prologue_altar_scene"
+        },
+        {
+          "id": "ev_a3_rest_spring",
+          "hook": "future_rest",
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_a3_shrine",
+        "tr_a3_hollowlog",
+        "tr_a3_raider",
+        "tr_a3_sentinel"
+      ]
+    },
+    {
+      "id": "rilde_in_aidan",
+      "world": {
+        "width": 960.0,
+        "height": 720.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bed_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_cupboard_06",
+          "hook": "rilde_drawer",
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_books_10",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_table_round_13",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_jar_19",
+          "hook": "rilde_pot",
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_barn",
+      "world": {
+        "width": 1000.0,
+        "height": 700.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_tool_rack_03",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_tool_rack_05",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_crates_stack_12",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_elder",
+      "world": {
+        "width": 960.0,
+        "height": 720.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rune_pillar_05",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rune_pillar_07",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_books_09",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_books_11",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_13",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_map_table_16",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_elder",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_house_01",
+      "world": {
+        "width": 860.0,
+        "height": 640.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bed_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bed_small_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_table_small_11",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_spinning_wheel_15",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_house_02",
+      "world": {
+        "width": 860.0,
+        "height": 640.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_pots_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_cupboard_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bed_10",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_table_round_12",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_house_03",
+      "world": {
+        "width": 860.0,
+        "height": 640.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bed_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_books_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_table_small_10",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_house_04",
+      "world": {
+        "width": 860.0,
+        "height": 640.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_cupboard_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bed_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_table_long_10",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_inn_1f",
+      "world": {
+        "width": 1200.0,
+        "height": 800.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_innkeeper",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_pots_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fireplace_10",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_inn_traveler",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_inn_2f",
+      "world": {
+        "width": 1100.0,
+        "height": 760.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_wall_02",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_wall_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_wall_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_wall_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_wall_10",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_bench_15",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_shop",
+      "world": {
+        "width": 960.0,
+        "height": 720.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_goods_05",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_goods_07",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_goods_09",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_merchant",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_in_storage",
+      "world": {
+        "width": 760.0,
+        "height": 600.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_goods_02",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_shelf_pots_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_crates_stack_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_jar_12",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_village_01_peace",
+      "world": {
+        "width": 2400.0,
+        "height": 1750.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_wind_stone",
+          "hook": "rilde_wind_stone",
+          "eventId": null
+        },
+        {
+          "id": "ev_sign_east",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_sign_south",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_farmer_male",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_farmer_female",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_young_man",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_young_woman",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_elder_man",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_elder_woman",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_caretaker",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_emma",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_boy",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_girl",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_boy_swordsman",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fisherman",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_hill_old",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_fiona_wait",
+          "hook": "rilde_fiona",
+          "eventId": null
+        },
+        {
+          "id": "ev_training_dummy",
+          "hook": "rilde_dummy",
+          "eventId": null
+        },
+        {
+          "id": "ev_training_dummy_old",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_trainsign",
+          "hook": "rilde_text:trainingSign",
+          "eventId": null
+        },
+        {
+          "id": "ev_well",
+          "hook": "rilde_text:well",
+          "eventId": null
+        },
+        {
+          "id": "ev_balloon_tree",
+          "hook": "rilde_balloon_tree",
+          "eventId": null
+        },
+        {
+          "id": "ev_sq_catowner",
+          "hook": "rilde_catowner",
+          "eventId": null
+        },
+        {
+          "id": "ev_cat",
+          "hook": "rilde_cat",
+          "eventId": null
+        },
+        {
+          "id": "ev_sq_kid",
+          "hook": "rilde_kid",
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "rilde_village_01_ruin",
+      "world": {
+        "width": 2400.0,
+        "height": 1750.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_wind_stone",
+          "hook": "rilde_wind_stone",
+          "eventId": null
+        },
+        {
+          "id": "ev_sign_east",
+          "hook": "rilde_sign_east",
+          "eventId": null
+        },
+        {
+          "id": "ev_sign_south",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_aidan_house",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_elder_house",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_inn",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_item_shop",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_house_01",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_house_02",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_house_03",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_house_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_barn",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_lind_storage",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_elder",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_oldwoman",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_woman",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_farmer",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_boy",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_knight",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rr_knight2",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_trainsign",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_well",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "road_dunvall_capital_01",
+      "world": {
+        "width": 5600.0,
+        "height": 2600.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rd_gate_guard",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rd_traveler",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_rd_patrol",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_overlook",
+          "hook": "road_overlook",
+          "eventId": null
+        },
+        {
+          "id": "ev_overlook_view",
+          "hook": "road_overlook_again",
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "royal_capital_00_gate",
+      "world": {
+        "width": 4400.0,
+        "height": 3400.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_gate_guard",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_merchant",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_pilgrim",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_adv",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_g_cart"
+      ]
+    },
+    {
+      "id": "royal_capital_01_market",
+      "world": {
+        "width": 4800.0,
+        "height": 3200.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r1_general",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r1_weapon",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r1_rumor",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r1_child",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_r1_alley"
+      ]
+    },
+    {
+      "id": "royal_capital_02_castle_plaza",
+      "world": {
+        "width": 4000.0,
+        "height": 3600.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r2_guard",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r2_bard",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r2_herald",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_r2_garden"
+      ]
+    },
+    {
+      "id": "royal_capital_03_residential",
+      "world": {
+        "width": 3600.0,
+        "height": 3200.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r3_resident",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r3_cat_man",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r3_elder_quest",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_00",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_01",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_02",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_03",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_04",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_05",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_06",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_07",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_08",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_door_09",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": [
+        "tr_r3_backyard"
+      ]
+    },
+    {
+      "id": "royal_in_guild",
+      "world": {
+        "width": 1800.0,
+        "height": 1100.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r1_board",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_reception",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_barkeep",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_patron1",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_patron2",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_g_bard",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_upstairs",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    },
+    {
+      "id": "royal_in_inn",
+      "world": {
+        "width": 1400.0,
+        "height": 1000.0,
+        "tile": 8,
+        "unitScale": 2.5
+      },
+      "spawns": [
+        "default",
+        "points"
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_r1_inn",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_in_bed",
+          "hook": null,
+          "eventId": null
+        },
+        {
+          "id": "ev_in_guest",
+          "hook": null,
+          "eventId": null
+        }
+      ],
+      "treasures": []
+    }
+  ],
+  "transitions": [
+    {
+      "from": "cliff_moher_01_spiral_ascent",
+      "id": "tr_c1_to_lind",
+      "rect": {
+        "shape": "rect",
+        "x": 0.0,
+        "y": 3548.3778132003163,
+        "w": 64.0,
+        "h": 220.0
+      },
+      "toMap": "lind_village",
+      "toSpawn": "from_cliff",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "リルド村南門へ戻る。可否は story hook(onVillageExit)が判断",
+      "level": 0
+    },
+    {
+      "from": "fort_dunvall_01_courtyard",
+      "id": "tr_f1_to_village",
+      "rect": {
+        "shape": "rect",
+        "x": 1380,
+        "y": 2288,
+        "w": 440,
+        "h": 64
+      },
+      "toMap": "lind_village",
+      "toSpawn": "from_fort",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "南門 -> 街道 -> リルド村（story hook onVillageExit）"
+    },
+    {
+      "from": "fort_dunvall_01_courtyard",
+      "id": "tr_f1_to_capital",
+      "rect": {
+        "shape": "rect",
+        "x": 3040,
+        "y": 1100,
+        "w": 100,
+        "h": 200
+      },
+      "toMap": "road_dunvall_capital_01",
+      "toSpawn": "from_fort",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "東門 -> 街道 -> 王都"
+    },
+    {
+      "from": "fort_dunvall_01_courtyard",
+      "id": "tr_f1_to_ramparts",
+      "rect": {
+        "shape": "rect",
+        "x": 360,
+        "y": 1000,
+        "w": 80,
+        "h": 220
+      },
+      "toMap": "fort_dunvall_02_ramparts",
+      "toSpawn": "from_courtyard",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "城壁への階段"
+    },
+    {
+      "from": "fort_dunvall_01_courtyard",
+      "id": "tr_f1_to_keep",
+      "rect": {
+        "shape": "rect",
+        "x": 1500,
+        "y": 960,
+        "w": 200,
+        "h": 60
+      },
+      "toMap": "fort_dunvall_03_keep",
+      "toSpawn": "from_courtyard",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "主塔の扉"
+    },
+    {
+      "from": "fort_dunvall_01_courtyard",
+      "id": "tr_f1_to_tavern",
+      "rect": {
+        "shape": "rect",
+        "x": 650,
+        "y": 906,
+        "w": 120,
+        "h": 70
+      },
+      "toMap": "fort_in_tavern",
+      "toSpawn": "from_courtyard",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "酒場「錆びた角笛」の扉"
+    },
+    {
+      "from": "fort_dunvall_02_ramparts",
+      "id": "tr_f2_down",
+      "rect": {
+        "shape": "rect",
+        "x": 150,
+        "y": 700,
+        "w": 80,
+        "h": 200
+      },
+      "toMap": "fort_dunvall_01_courtyard",
+      "toSpawn": "from_ramparts",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "中庭への階段"
+    },
+    {
+      "from": "fort_dunvall_02_ramparts",
+      "id": "tr_f2_to_keep",
+      "rect": {
+        "shape": "rect",
+        "x": 1300,
+        "y": 200,
+        "w": 300,
+        "h": 60
+      },
+      "toMap": "fort_dunvall_03_keep",
+      "toSpawn": "from_wall",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "主塔の上階への扉"
+    },
+    {
+      "from": "fort_dunvall_03_keep",
+      "id": "tr_f3_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 1000,
+        "y": 1560,
+        "w": 400,
+        "h": 60
+      },
+      "toMap": "fort_dunvall_01_courtyard",
+      "toSpawn": "from_keep",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "中庭へ出る"
+    },
+    {
+      "from": "fort_dunvall_03_keep",
+      "id": "tr_f3_to_wall",
+      "rect": {
+        "shape": "rect",
+        "x": 1980,
+        "y": 760,
+        "w": 120,
+        "h": 200
+      },
+      "toMap": "fort_dunvall_02_ramparts",
+      "toSpawn": "from_keep",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "城壁へ上がる階段"
+    },
+    {
+      "from": "fort_in_tavern",
+      "id": "tr_in_tavern_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 630,
+        "y": 880,
+        "w": 140,
+        "h": 64
+      },
+      "toMap": "fort_dunvall_01_courtyard",
+      "toSpawn": "from_tavern",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "moss_forest_01_sunlit_path",
+      "id": "tr_to_lind",
+      "rect": {
+        "shape": "rect",
+        "x": 1250.0,
+        "y": 5940.0,
+        "w": 300,
+        "h": 60
+      },
+      "toMap": "lind_village",
+      "toSpawn": "from_moss_forest",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "リルド村 北の道(tr_v_to_moss)へ戻る。遷移は hooks.onVillageExit -> RildeVillage.exit が処理(spawn from_moss_forest)。通れるのは平時(storyStage 1-3)のみ。stage 0と襲撃後〜プロローグ中(4-14)は封鎖。stage 15以降も現状は封鎖のまま(開放するかは未決定。stage gateは変更しない)。`requires` は現行ランタイムでは評価されない(参考値)",
+      "requires": {
+        "flag": "prologue_village_open",
+        "is": true
+      }
+    },
+    {
+      "from": "moss_forest_01_sunlit_path",
+      "id": "tr_to_area2",
+      "rect": {
+        "shape": "rect",
+        "x": 7580.0,
+        "y": 0,
+        "w": 240,
+        "h": 64
+      },
+      "toMap": "moss_forest_02_mossy_ravine",
+      "toSpawn": "from_area1",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true
+    },
+    {
+      "from": "moss_forest_02_mossy_ravine",
+      "id": "tr_to_area1",
+      "rect": {
+        "shape": "rect",
+        "x": 8240.0,
+        "y": 7140.0,
+        "w": 320,
+        "h": 60
+      },
+      "toMap": "moss_forest_01_sunlit_path",
+      "toSpawn": "from_area2",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true
+    },
+    {
+      "from": "moss_forest_02_mossy_ravine",
+      "id": "tr_to_area3",
+      "rect": {
+        "shape": "rect",
+        "x": 1470.0,
+        "y": 0,
+        "w": 260,
+        "h": 64
+      },
+      "toMap": "moss_forest_03_ancient_grove",
+      "toSpawn": "from_area2",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true
+    },
+    {
+      "from": "moss_forest_03_ancient_grove",
+      "id": "tr_to_area2",
+      "rect": {
+        "shape": "rect",
+        "x": 710,
+        "y": 6536.0,
+        "w": 260,
+        "h": 64
+      },
+      "toMap": "moss_forest_02_mossy_ravine",
+      "toSpawn": "from_area3",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true
+    },
+    {
+      "from": "moss_forest_03_ancient_grove",
+      "id": "tr_to_deep",
+      "rect": {
+        "shape": "rect",
+        "x": 4290,
+        "y": 0,
+        "w": 300,
+        "h": 64
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": false,
+      "note": "future: blocked by roots"
+    },
+    {
+      "from": "rilde_in_aidan",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 410,
+        "y": 598,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_aidan",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_barn",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 430,
+        "y": 578,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_barn",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_elder",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 410,
+        "y": 598,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_elder",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_house_01",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 360,
+        "y": 518,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_house_01",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_house_02",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 360,
+        "y": 518,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_house_02",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_house_03",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 360,
+        "y": 518,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_house_03",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_house_04",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 360,
+        "y": 518,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_house_04",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_inn_1f",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 530,
+        "y": 678,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_inn",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_inn_1f",
+      "id": "tr_inn_up",
+      "rect": {
+        "shape": "rect",
+        "x": 990,
+        "y": 250,
+        "w": 110,
+        "h": 90
+      },
+      "toMap": "rilde_in_inn_2f",
+      "toSpawn": "from_stairs",
+      "fade": {
+        "out": 0.25,
+        "in": 0.25
+      },
+      "enabled": true,
+      "note": "2階へ"
+    },
+    {
+      "from": "rilde_in_inn_2f",
+      "id": "tr_inn_down",
+      "rect": {
+        "shape": "rect",
+        "x": 60,
+        "y": 262,
+        "w": 110,
+        "h": 80
+      },
+      "toMap": "rilde_in_inn_1f",
+      "toSpawn": "from_stairs",
+      "fade": {
+        "out": 0.25,
+        "in": 0.25
+      },
+      "enabled": true,
+      "note": "1階へ"
+    },
+    {
+      "from": "rilde_in_shop",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 410,
+        "y": 598,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_shop",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_in_storage",
+      "id": "tr_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 310,
+        "y": 478,
+        "w": 140,
+        "h": 62
+      },
+      "toMap": "rilde_village",
+      "toSpawn": "from_storage",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外へ出る"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_aidan_house",
+      "rect": {
+        "shape": "rect",
+        "x": 1301.0,
+        "y": 514,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_aidan",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "エイダンの家"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_elder_house",
+      "rect": {
+        "shape": "rect",
+        "x": 566.0,
+        "y": 441,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_elder",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "長老の家"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_inn",
+      "rect": {
+        "shape": "rect",
+        "x": 931.0,
+        "y": 443,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_inn_1f",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "宿屋「風見鶏」"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_item_shop",
+      "rect": {
+        "shape": "rect",
+        "x": 351.0,
+        "y": 759,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_shop",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "道具屋「若葉の袋」"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_house_01",
+      "rect": {
+        "shape": "rect",
+        "x": 331.0,
+        "y": 1094,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_house_01",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "村人の家"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_house_02",
+      "rect": {
+        "shape": "rect",
+        "x": 641.0,
+        "y": 1272,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_house_02",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "村人の家"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_house_03",
+      "rect": {
+        "shape": "rect",
+        "x": 301.0,
+        "y": 1439,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_house_03",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "村人の家"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_house_04",
+      "rect": {
+        "shape": "rect",
+        "x": 621.0,
+        "y": 1028,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_house_04",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "村人の家"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_barn",
+      "rect": {
+        "shape": "rect",
+        "x": 1151.0,
+        "y": 876,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_barn",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "納屋"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_lind_storage",
+      "rect": {
+        "shape": "rect",
+        "x": 1371.0,
+        "y": 881,
+        "w": 88,
+        "h": 56
+      },
+      "toMap": "rilde_in_storage",
+      "toSpawn": "from_village",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "倉庫"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_to_cliff",
+      "rect": {
+        "shape": "rect",
+        "x": 740,
+        "y": 1602,
+        "w": 180,
+        "h": 60
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "南の小道 -> 風見の断崖（story hook onVillageExit）"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_to_moss",
+      "rect": {
+        "shape": "rect",
+        "x": 770,
+        "y": 48,
+        "w": 120,
+        "h": 60
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "北の道 -> 陽だまりの森道（story hook onVillageExit）"
+    },
+    {
+      "from": "rilde_village_01_peace",
+      "id": "tr_v_to_fort",
+      "rect": {
+        "shape": "rect",
+        "x": 2272,
+        "y": 605,
+        "w": 70,
+        "h": 180
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "東の街道 -> ドゥンヴァル砦（story hook onVillageExit）"
+    },
+    {
+      "from": "rilde_village_01_ruin",
+      "id": "tr_v_to_cliff",
+      "rect": {
+        "shape": "rect",
+        "x": 740,
+        "y": 1602,
+        "w": 180,
+        "h": 60
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "南の小道 -> 風見の断崖（story hook onVillageExit）"
+    },
+    {
+      "from": "rilde_village_01_ruin",
+      "id": "tr_v_to_moss",
+      "rect": {
+        "shape": "rect",
+        "x": 770,
+        "y": 48,
+        "w": 120,
+        "h": 60
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "北の道 -> 陽だまりの森道（story hook onVillageExit）"
+    },
+    {
+      "from": "rilde_village_01_ruin",
+      "id": "tr_v_to_fort",
+      "rect": {
+        "shape": "rect",
+        "x": 2272,
+        "y": 605,
+        "w": 70,
+        "h": 180
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "東の街道 -> ドゥンヴァル砦（story hook onVillageExit）"
+    },
+    {
+      "from": "road_dunvall_capital_01",
+      "id": "tr_rd_to_fort",
+      "rect": {
+        "shape": "rect",
+        "x": 48,
+        "y": 1750,
+        "w": 64,
+        "h": 300
+      },
+      "toMap": "fort_dunvall_01_courtyard",
+      "toSpawn": "from_capital_road",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "街道の西端 -> ドゥンヴァル砦の東門"
+    },
+    {
+      "from": "road_dunvall_capital_01",
+      "id": "tr_rd_to_capital",
+      "rect": {
+        "shape": "rect",
+        "x": 5488,
+        "y": 1650,
+        "w": 64,
+        "h": 300
+      },
+      "toMap": "royal_capital_00_gate",
+      "toSpawn": "from_road",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "街道の東端 -> 王都の南大城門"
+    },
+    {
+      "from": "royal_capital_00_gate",
+      "id": "tr_g_to_road",
+      "rect": {
+        "shape": "rect",
+        "x": 1840,
+        "y": 3288,
+        "w": 520,
+        "h": 64
+      },
+      "toMap": "road_dunvall_capital_01",
+      "toSpawn": "from_capital",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "南大城門の外 -> 街道 -> ドゥンヴァル砦"
+    },
+    {
+      "from": "royal_capital_00_gate",
+      "id": "tr_g_to_market",
+      "rect": {
+        "shape": "rect",
+        "x": 1840,
+        "y": 48,
+        "w": 520,
+        "h": 64
+      },
+      "toMap": "royal_capital_01_market",
+      "toSpawn": "from_gate",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "北へ: 商業・市場地区（王城への軸）"
+    },
+    {
+      "from": "royal_capital_00_gate",
+      "id": "tr_g_to_guild",
+      "rect": {
+        "shape": "rect",
+        "x": 840,
+        "y": 1000,
+        "w": 120,
+        "h": 60
+      },
+      "toMap": "royal_in_guild",
+      "toSpawn": "from_gate",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "冒険者ギルド兼大酒場"
+    },
+    {
+      "from": "royal_capital_00_gate",
+      "id": "tr_g_to_inn",
+      "rect": {
+        "shape": "rect",
+        "x": 3440,
+        "y": 1000,
+        "w": 120,
+        "h": 60
+      },
+      "toMap": "royal_in_inn",
+      "toSpawn": "from_gate",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "宿屋"
+    },
+    {
+      "from": "royal_capital_01_market",
+      "id": "tr_r1_to_gate",
+      "rect": {
+        "shape": "rect",
+        "x": 2200,
+        "y": 3088,
+        "w": 400,
+        "h": 64
+      },
+      "toMap": "royal_capital_00_gate",
+      "toSpawn": "from_market",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "南へ: 旅人街 -> 南大城門"
+    },
+    {
+      "from": "royal_capital_01_market",
+      "id": "tr_r1_to_plaza",
+      "rect": {
+        "shape": "rect",
+        "x": 2200,
+        "y": 48,
+        "w": 400,
+        "h": 64
+      },
+      "toMap": "royal_capital_02_castle_plaza",
+      "toSpawn": "from_market",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "北へ: 中央広場（王城への軸）"
+    },
+    {
+      "from": "royal_capital_01_market",
+      "id": "tr_r1_to_residential",
+      "rect": {
+        "shape": "rect",
+        "x": 48,
+        "y": 1300,
+        "w": 64,
+        "h": 400
+      },
+      "toMap": "royal_capital_03_residential",
+      "toSpawn": "from_market",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "西へ: 住宅地区"
+    },
+    {
+      "from": "royal_capital_01_market",
+      "id": "tr_r1_to_craft",
+      "rect": {
+        "shape": "rect",
+        "x": 4688,
+        "y": 1300,
+        "w": 64,
+        "h": 400
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "東へ: 職人地区（ブラムの工房）。接続は未実装"
+    },
+    {
+      "from": "royal_capital_02_castle_plaza",
+      "id": "tr_r2_to_residential",
+      "rect": {
+        "shape": "rect",
+        "x": 48,
+        "y": 1500,
+        "w": 64,
+        "h": 400
+      },
+      "toMap": "royal_capital_03_residential",
+      "toSpawn": "from_plaza",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "西へ: 住宅地区"
+    },
+    {
+      "from": "royal_capital_02_castle_plaza",
+      "id": "tr_r2_to_market",
+      "rect": {
+        "shape": "rect",
+        "x": 1800,
+        "y": 3488,
+        "w": 400,
+        "h": 64
+      },
+      "toMap": "royal_capital_01_market",
+      "toSpawn": "from_plaza",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "南へ: 商業・市場地区"
+    },
+    {
+      "from": "royal_capital_02_castle_plaza",
+      "id": "tr_r2_to_east",
+      "rect": {
+        "shape": "rect",
+        "x": 3888,
+        "y": 1500,
+        "w": 64,
+        "h": 400
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "東へ: 騎士団地区・大聖堂地区・魔法学術地区（王立魔法研究院）。接続は未実装"
+    },
+    {
+      "from": "royal_capital_02_castle_plaza",
+      "id": "tr_r2_castle_gate",
+      "rect": {
+        "shape": "rect",
+        "x": 1800,
+        "y": 1100,
+        "w": 400,
+        "h": 60
+      },
+      "toMap": "TBD",
+      "toSpawn": "TBD",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "王城の中へ。接続は未実装"
+    },
+    {
+      "from": "royal_capital_03_residential",
+      "id": "tr_r3_to_market",
+      "rect": {
+        "shape": "rect",
+        "x": 48,
+        "y": 1000,
+        "w": 64,
+        "h": 400
+      },
+      "toMap": "royal_capital_01_market",
+      "toSpawn": "from_residential",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "東へ: 商業・市場地区"
+    },
+    {
+      "from": "royal_capital_03_residential",
+      "id": "tr_r3_to_plaza",
+      "rect": {
+        "shape": "rect",
+        "x": 3488,
+        "y": 1300,
+        "w": 64,
+        "h": 400
+      },
+      "toMap": "royal_capital_02_castle_plaza",
+      "toSpawn": "from_residential",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "城前広場へ"
+    },
+    {
+      "from": "royal_in_guild",
+      "id": "tr_gi_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 780,
+        "y": 980,
+        "w": 240,
+        "h": 64
+      },
+      "toMap": "royal_capital_00_gate",
+      "toSpawn": "from_guild",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外（旅人街）へ出る"
+    },
+    {
+      "from": "royal_in_inn",
+      "id": "tr_ii_exit",
+      "rect": {
+        "shape": "rect",
+        "x": 630,
+        "y": 880,
+        "w": 140,
+        "h": 64
+      },
+      "toMap": "royal_capital_00_gate",
+      "toSpawn": "from_inn",
+      "fade": {
+        "out": 0.35,
+        "in": 0.35
+      },
+      "enabled": true,
+      "note": "外（旅人街）へ出る"
+    }
+  ],
+  "audio": [
+    {
+      "map": "cliff_moher_01_spiral_ascent",
+      "audio": {
+        "bgm": {
+          "id": "bgm_cliff_windward",
+          "fadeInSec": 1.5
+        },
+        "layers": [
+          {
+            "id": "amb_sea_surf",
+            "volume": 0.5
+          },
+          {
+            "id": "amb_wind_soft",
+            "volume": 0.4
+          }
+        ],
+        "hooks": []
+      }
+    },
+    {
+      "map": "dev_height_proto",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "dev_monster_arena",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "fort_dunvall_01_courtyard",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "fort_dunvall_02_ramparts",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "fort_dunvall_03_keep",
+      "audio": {
+        "bgm": {
+          "id": "bgm_fort_interior",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "fort_in_tavern",
+      "audio": {
+        "bgm": {
+          "id": "bgm_fort_interior",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "moss_forest_01_sunlit_path",
+      "audio": {
+        "bgm": {
+          "id": "bgm_moss_forest_a1",
+          "fadeInSec": 1.5
+        },
+        "layers": [
+          {
+            "id": "amb_birds_day",
+            "volume": 0.6
+          },
+          {
+            "id": "amb_wind_soft",
+            "volume": 0.3
+          }
+        ],
+        "hooks": [
+          {
+            "zone": "ev_a1_ambience_shift",
+            "action": "fadeLayer",
+            "layer": "amb_birds_day",
+            "to": 0.4,
+            "sec": 4
+          }
+        ]
+      }
+    },
+    {
+      "map": "moss_forest_02_mossy_ravine",
+      "audio": {
+        "bgm": {
+          "id": "bgm_moss_forest_a2",
+          "fadeInSec": 1.5
+        },
+        "layers": [
+          {
+            "id": "amb_stream_mid",
+            "volume": 0.5
+          },
+          {
+            "id": "amb_wind_soft",
+            "volume": 0.3
+          },
+          {
+            "id": "amb_birds_day",
+            "volume": 0.35
+          }
+        ],
+        "hooks": [
+          {
+            "zone": "ev_a2_ambience_marker",
+            "action": "fadeLayer",
+            "layer": "amb_birds_day",
+            "to": 0.05,
+            "sec": 3
+          }
+        ]
+      }
+    },
+    {
+      "map": "moss_forest_03_ancient_grove",
+      "audio": {
+        "bgm": {
+          "id": "bgm_moss_forest_a3",
+          "fadeInSec": 2.0
+        },
+        "layers": [
+          {
+            "id": "amb_wind_low",
+            "volume": 0.35
+          },
+          {
+            "id": "amb_birds_day",
+            "volume": 0.25
+          }
+        ],
+        "hooks": [
+          {
+            "zone": "ev_a3_threshold",
+            "action": "fadeLayer",
+            "layer": "amb_birds_day",
+            "to": 0.0,
+            "sec": 3
+          }
+        ]
+      }
+    },
+    {
+      "map": "rilde_in_aidan",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_barn",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_elder",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_house_01",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_house_02",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_house_03",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_house_04",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_inn_1f",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_inn_2f",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_shop",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_in_storage",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_home",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_village_01_peace",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_day",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "rilde_village_01_ruin",
+      "audio": {
+        "bgm": {
+          "id": "bgm_rilde_ruin",
+          "fadeInSec": 1.5
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "road_dunvall_capital_01",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "royal_capital_00_gate",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "royal_capital_01_market",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "royal_capital_02_castle_plaza",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "royal_capital_03_residential",
+      "audio": {
+        "bgm": {
+          "id": "bgm_town",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "royal_in_guild",
+      "audio": {
+        "bgm": {
+          "id": "bgm_fort_interior",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    },
+    {
+      "map": "royal_in_inn",
+      "audio": {
+        "bgm": {
+          "id": "bgm_fort_interior",
+          "fadeInSec": 1.0
+        },
+        "layers": [],
+        "hooks": []
+      }
+    }
+  ],
+  "registry_summary": {
+    "total": 1196,
+    "approved_implemented": 277,
+    "approved_not_implemented": 0,
+    "delivered_not_merged": 179,
+    "pending_adoption": 2,
+    "source_missing": 0,
+    "approval_unknown": 885,
+    "on_main": 1017,
+    "implemented_on_main": 972,
+    "unreferenced_on_main": 45
+  },
+  "protected_pngs": [
+    {
+      "file": "assets/images/characters/portraits/aidan/aidan_angry.png",
+      "expected": "6152d05b31a357aea6a091107c4e011f1bb55c914e4ede6eac8bdc281138af35",
+      "actual": "6152d05b31a357aea6a091107c4e011f1bb55c914e4ede6eac8bdc281138af35"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/aidan_normal.png",
+      "expected": "c2036b46c91a3a47ffeec43b5b5ebb0035e8b347f82ee6338ab23d6062dfce53",
+      "actual": "c2036b46c91a3a47ffeec43b5b5ebb0035e8b347f82ee6338ab23d6062dfce53"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/aidan_sad.png",
+      "expected": "c53e564c73e8b97d5a4268a642b5fda0c2c8c5b60db236c49ea4ca3e33d2873d",
+      "actual": "c53e564c73e8b97d5a4268a642b5fda0c2c8c5b60db236c49ea4ca3e33d2873d"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/aidan_smile.png",
+      "expected": "8cb95b14db8e2508d5b0b5ae95d0657f19fccacdca7019ce21fcabe6bc4e69cf",
+      "actual": "8cb95b14db8e2508d5b0b5ae95d0657f19fccacdca7019ce21fcabe6bc4e69cf"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/aidan_surprised.png",
+      "expected": "50f7b7f2628d2aa3bed57d697bf823c702feb1199d9a8db8977c4d1b30f94182",
+      "actual": "50f7b7f2628d2aa3bed57d697bf823c702feb1199d9a8db8977c4d1b30f94182"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/aidan_worried.png",
+      "expected": "0d3d63643ff90dbb28b1a1e5beeacc0a205ed1aa462c14231158c72c29e939d4",
+      "actual": "0d3d63643ff90dbb28b1a1e5beeacc0a205ed1aa462c14231158c72c29e939d4"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_L_s1.png",
+      "expected": "8f99bac9a0aa11c37828181085da01ce6d8820e45959c2454d8f2eb1f16799cd",
+      "actual": "8f99bac9a0aa11c37828181085da01ce6d8820e45959c2454d8f2eb1f16799cd"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_L_s2.png",
+      "expected": "d0823e82bef5461c52af8077b626770b57330c403acafee881eaa2ff55d3129b",
+      "actual": "d0823e82bef5461c52af8077b626770b57330c403acafee881eaa2ff55d3129b"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_L_s3.png",
+      "expected": "de5d8a533632fcac3d7e9b48cc2187c7e668d9611dffd210356f9e45029a9f32",
+      "actual": "de5d8a533632fcac3d7e9b48cc2187c7e668d9611dffd210356f9e45029a9f32"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_L_s4.png",
+      "expected": "609bcf8dea0a7cb6315da93c76d474cc56bb86f0ad7739a0d969570016acb5a3",
+      "actual": "609bcf8dea0a7cb6315da93c76d474cc56bb86f0ad7739a0d969570016acb5a3"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_R_s1.png",
+      "expected": "f2ddcf46eaa63b775331e813fe7d6847c4c9b09b00b564d15e75819bab6114be",
+      "actual": "f2ddcf46eaa63b775331e813fe7d6847c4c9b09b00b564d15e75819bab6114be"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_R_s2.png",
+      "expected": "78667d49ef4b90b0de75050d10b87e3ae2abe5acb8e0e52a47765594bf8a7ade",
+      "actual": "78667d49ef4b90b0de75050d10b87e3ae2abe5acb8e0e52a47765594bf8a7ade"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_R_s3.png",
+      "expected": "436552f75d73b795fe5cf854c15b3017a30490cff251d87cf67d27dc2ed8fef2",
+      "actual": "436552f75d73b795fe5cf854c15b3017a30490cff251d87cf67d27dc2ed8fef2"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/angry_R_s4.png",
+      "expected": "d5857ea059e416e44981bf290ed2cbb1b4f6a1108ef21b772f2ab4f155daba47",
+      "actual": "d5857ea059e416e44981bf290ed2cbb1b4f6a1108ef21b772f2ab4f155daba47"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_L_s1.png",
+      "expected": "fc57b26972d21be773b01db77ea912b0d4584a99ea8f057ce730972681f2587f",
+      "actual": "fc57b26972d21be773b01db77ea912b0d4584a99ea8f057ce730972681f2587f"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_L_s2.png",
+      "expected": "a360de8f13d9766eb29779ecd28f4d748d649b34a0612170146ba65d81483890",
+      "actual": "a360de8f13d9766eb29779ecd28f4d748d649b34a0612170146ba65d81483890"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_L_s3.png",
+      "expected": "66ef6880878f0d67a8c8c24b62b9c38e060c0fe0338caa9b69140d5b3a11ab17",
+      "actual": "66ef6880878f0d67a8c8c24b62b9c38e060c0fe0338caa9b69140d5b3a11ab17"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_L_s4.png",
+      "expected": "ef75561029dbde11de8d4345009595811b5e4d3fca4a879a52d5ae39c23b7c45",
+      "actual": "ef75561029dbde11de8d4345009595811b5e4d3fca4a879a52d5ae39c23b7c45"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_R_s1.png",
+      "expected": "49694fe0f6e0b87e12262ae347808448daf89247e2bd3204d11584fb9ff5dbf1",
+      "actual": "49694fe0f6e0b87e12262ae347808448daf89247e2bd3204d11584fb9ff5dbf1"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_R_s2.png",
+      "expected": "12a066b855258798cecf3484253e22b30d9e10bd76946afe415a4c22cc14e5d5",
+      "actual": "12a066b855258798cecf3484253e22b30d9e10bd76946afe415a4c22cc14e5d5"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_R_s3.png",
+      "expected": "7f325216a573057c9fb9ab06aa9333821b1dfe5cd12491cc9c3f27e509ce638b",
+      "actual": "7f325216a573057c9fb9ab06aa9333821b1dfe5cd12491cc9c3f27e509ce638b"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/normal_R_s4.png",
+      "expected": "520cbb836bcaa3f6e0bade52db15e9b6184737893235d0ec7be29d82a894ce23",
+      "actual": "520cbb836bcaa3f6e0bade52db15e9b6184737893235d0ec7be29d82a894ce23"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_L_s1.png",
+      "expected": "8cd8b085cd1b236f912fdaf9aed8672b742049344e6b00bd626cf648ce37bc9d",
+      "actual": "8cd8b085cd1b236f912fdaf9aed8672b742049344e6b00bd626cf648ce37bc9d"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_L_s2.png",
+      "expected": "3f696125e80ecde8cd8efb1fc7d97cc006fe059b79f63ce959b0be9aed70e9df",
+      "actual": "3f696125e80ecde8cd8efb1fc7d97cc006fe059b79f63ce959b0be9aed70e9df"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_L_s3.png",
+      "expected": "3e0d9d68c1395269ef44e29d2e85b376baf7014f5610abd81fa0e7605cef4af5",
+      "actual": "3e0d9d68c1395269ef44e29d2e85b376baf7014f5610abd81fa0e7605cef4af5"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_L_s4.png",
+      "expected": "c3a4711652a4f03b33d234cd36507d7bfeb947dcf90c4d0e981634299528f155",
+      "actual": "c3a4711652a4f03b33d234cd36507d7bfeb947dcf90c4d0e981634299528f155"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_R_s1.png",
+      "expected": "9547c0df3b9429c6395eb1f0ad21d43d478ec88f4e33e3dd7bd73aa47fe1c23e",
+      "actual": "9547c0df3b9429c6395eb1f0ad21d43d478ec88f4e33e3dd7bd73aa47fe1c23e"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_R_s2.png",
+      "expected": "6bb44d6042a54c09e66a041d817718239c1ad985580003adb99c030d4cba987f",
+      "actual": "6bb44d6042a54c09e66a041d817718239c1ad985580003adb99c030d4cba987f"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_R_s3.png",
+      "expected": "997ae6bd9cca94168332f4ba883fdb1a90b4fee5de0ef98833998f861c799bb2",
+      "actual": "997ae6bd9cca94168332f4ba883fdb1a90b4fee5de0ef98833998f861c799bb2"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/sad_R_s4.png",
+      "expected": "18d72c17c654975d21ec4e87326273c81c039c2e954a60ec21adb9138930d037",
+      "actual": "18d72c17c654975d21ec4e87326273c81c039c2e954a60ec21adb9138930d037"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_L_s1.png",
+      "expected": "44a5e935a274a9dd57d598c9ff6a2799028d84bd8417995d88e4556694b36fa9",
+      "actual": "44a5e935a274a9dd57d598c9ff6a2799028d84bd8417995d88e4556694b36fa9"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_L_s2.png",
+      "expected": "7323f883027900024d710d5313a2a53133e13d96c347bddc64b32ecbf4b13dfc",
+      "actual": "7323f883027900024d710d5313a2a53133e13d96c347bddc64b32ecbf4b13dfc"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_L_s3.png",
+      "expected": "f00db0b450c2b9bdf28701673f51cf77e2d24f8301b3d277aa099d2e593a80f1",
+      "actual": "f00db0b450c2b9bdf28701673f51cf77e2d24f8301b3d277aa099d2e593a80f1"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_L_s4.png",
+      "expected": "736643d0f95f0acff1258b4434b3907e83db1b4de914bdb815d9234973e2d1ea",
+      "actual": "736643d0f95f0acff1258b4434b3907e83db1b4de914bdb815d9234973e2d1ea"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_R_s1.png",
+      "expected": "58486c0f78c9db7c04857ab7b46bc7b74c10190e3df9da0de3eac2ba99ccc612",
+      "actual": "58486c0f78c9db7c04857ab7b46bc7b74c10190e3df9da0de3eac2ba99ccc612"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_R_s2.png",
+      "expected": "5681df222849a5c70c4cc4fe5c86192e1dc6c42581be3c4662b305533d8dd13e",
+      "actual": "5681df222849a5c70c4cc4fe5c86192e1dc6c42581be3c4662b305533d8dd13e"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_R_s3.png",
+      "expected": "7d66992c6d900d3f9aba312cff673a6019e4608c276bcf1d66146dd1a2f13ef0",
+      "actual": "7d66992c6d900d3f9aba312cff673a6019e4608c276bcf1d66146dd1a2f13ef0"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/smile_R_s4.png",
+      "expected": "e596ce1d2cfe7a8b2bb70b13e1a1a22493fce441c161f71cfac6c723c4dd8ca7",
+      "actual": "e596ce1d2cfe7a8b2bb70b13e1a1a22493fce441c161f71cfac6c723c4dd8ca7"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_L_s1.png",
+      "expected": "1b54bf03a283dcc15cf8da532727d65d83ed13e36ad0595f660bb2ad7936002b",
+      "actual": "1b54bf03a283dcc15cf8da532727d65d83ed13e36ad0595f660bb2ad7936002b"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_L_s2.png",
+      "expected": "a8de94966c2363092765899f20ebff9f31618595e99ac3c2986b039e45b86e3c",
+      "actual": "a8de94966c2363092765899f20ebff9f31618595e99ac3c2986b039e45b86e3c"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_L_s3.png",
+      "expected": "c680314675f5f7933960daf0bfbe3a5a85141e759c3e30ffe14a75ff036d41dc",
+      "actual": "c680314675f5f7933960daf0bfbe3a5a85141e759c3e30ffe14a75ff036d41dc"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_L_s4.png",
+      "expected": "c4ebdd4efcfddf21d03f1762b049c55c2d4b98f5ae8aef9b9c6a73354afe4b94",
+      "actual": "c4ebdd4efcfddf21d03f1762b049c55c2d4b98f5ae8aef9b9c6a73354afe4b94"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_R_s1.png",
+      "expected": "fe95e628f3aef428216cd5df6500f20c0f6eb8fe17e6f52a24d9f346cf0f199b",
+      "actual": "fe95e628f3aef428216cd5df6500f20c0f6eb8fe17e6f52a24d9f346cf0f199b"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_R_s2.png",
+      "expected": "734846f182fc788b78e25d48a2efeb8f1f140a5dd8d409de85e4a718a3441f8b",
+      "actual": "734846f182fc788b78e25d48a2efeb8f1f140a5dd8d409de85e4a718a3441f8b"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_R_s3.png",
+      "expected": "b0844a72553ba5ca7bd0c77df801080e1e5772cde3a7b02e591f74a3532c3635",
+      "actual": "b0844a72553ba5ca7bd0c77df801080e1e5772cde3a7b02e591f74a3532c3635"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/surprised_R_s4.png",
+      "expected": "1a965c282c9749205d58035bb7ca91289d47875e821762f1ae9b4c6326d8b4ba",
+      "actual": "1a965c282c9749205d58035bb7ca91289d47875e821762f1ae9b4c6326d8b4ba"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_L_s1.png",
+      "expected": "478d241e63dc3a6d63a83013f20dc9da298ce04677e65051cfab4fbe5d4d85b3",
+      "actual": "478d241e63dc3a6d63a83013f20dc9da298ce04677e65051cfab4fbe5d4d85b3"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_L_s2.png",
+      "expected": "e456111be6fb3b1726eb848fbc5997fbf3d1d420702f0b32a1f029a0c5898291",
+      "actual": "e456111be6fb3b1726eb848fbc5997fbf3d1d420702f0b32a1f029a0c5898291"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_L_s3.png",
+      "expected": "f92bae6f3b20ca82b0e357c63e09bad765179ac2741904ad78c63b9c9cf7f569",
+      "actual": "f92bae6f3b20ca82b0e357c63e09bad765179ac2741904ad78c63b9c9cf7f569"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_L_s4.png",
+      "expected": "17dd8f3169f3bf4513ec194e991356a118e22291d1a90f0bd962453a77d6d739",
+      "actual": "17dd8f3169f3bf4513ec194e991356a118e22291d1a90f0bd962453a77d6d739"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_R_s1.png",
+      "expected": "d7d9d8e0b0c9f307f3a4995496b5a44449ff638ca3ae6a9127c556717a2095d6",
+      "actual": "d7d9d8e0b0c9f307f3a4995496b5a44449ff638ca3ae6a9127c556717a2095d6"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_R_s2.png",
+      "expected": "f9955dbba3ce64289cad093cd9b175bba423e6a516f07564f73db7fedfcf9311",
+      "actual": "f9955dbba3ce64289cad093cd9b175bba423e6a516f07564f73db7fedfcf9311"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_R_s3.png",
+      "expected": "a9067faa1944084383f13d1e58cbac781c802f80a6608d95b6916d02d1f8681b",
+      "actual": "a9067faa1944084383f13d1e58cbac781c802f80a6608d95b6916d02d1f8681b"
+    },
+    {
+      "file": "assets/images/characters/portraits/aidan/blink/worried_R_s4.png",
+      "expected": "f5859f0e78b3494231900a92808bf5442797aa145ce755bb18751806df801824",
+      "actual": "f5859f0e78b3494231900a92808bf5442797aa145ce755bb18751806df801824"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/emma_normal.png",
+      "expected": "f4dfd09d08e3bd333743f677afbe84e4e1771b295863e92a96a3b4c0904114b2",
+      "actual": "f4dfd09d08e3bd333743f677afbe84e4e1771b295863e92a96a3b4c0904114b2"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_L_s1.png",
+      "expected": "6ed55797bb9795fa817a992f3e02cecaeedb1f97ceb840a939f584c3b97a24da",
+      "actual": "6ed55797bb9795fa817a992f3e02cecaeedb1f97ceb840a939f584c3b97a24da"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_L_s2.png",
+      "expected": "8ccb64ed9dccd6d1ca11ebb36bf712a3bd9368e94ebbc3a904da9782afb130be",
+      "actual": "8ccb64ed9dccd6d1ca11ebb36bf712a3bd9368e94ebbc3a904da9782afb130be"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_L_s3.png",
+      "expected": "f48ed0f342f68d84705d92b42194cf3f9cb466eccf21a02ee7e2a89993418c5f",
+      "actual": "f48ed0f342f68d84705d92b42194cf3f9cb466eccf21a02ee7e2a89993418c5f"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_L_s4.png",
+      "expected": "66ad5c10244c9f1b89646cbe8a66142d3ae9301d362355933342ef131ac1629e",
+      "actual": "66ad5c10244c9f1b89646cbe8a66142d3ae9301d362355933342ef131ac1629e"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_R_s1.png",
+      "expected": "ac9b9c19698fe6d07f4b43db40e632bae72b775ad19049b1c18cd1934079a165",
+      "actual": "ac9b9c19698fe6d07f4b43db40e632bae72b775ad19049b1c18cd1934079a165"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_R_s2.png",
+      "expected": "4783176765e0ebb0cfb12a680385d40351d25e247f5cf3b95fc4f136e301a20b",
+      "actual": "4783176765e0ebb0cfb12a680385d40351d25e247f5cf3b95fc4f136e301a20b"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_R_s3.png",
+      "expected": "6b05504ffae0dfee105e75417ef55e200da9cf211f262d16daf01b05b9bdc65f",
+      "actual": "6b05504ffae0dfee105e75417ef55e200da9cf211f262d16daf01b05b9bdc65f"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/blink/normal_R_s4.png",
+      "expected": "f264247f4b48c0b694a37600cfecf761d6dfee67c6f3fe44603754686fa8303a",
+      "actual": "f264247f4b48c0b694a37600cfecf761d6dfee67c6f3fe44603754686fa8303a"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_angry.png",
+      "expected": "0fcd3ce49b7c024a13c012771d807fbc859922e7ce2ae40b80d7680dd98fdcbb",
+      "actual": "0fcd3ce49b7c024a13c012771d807fbc859922e7ce2ae40b80d7680dd98fdcbb"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_determined.png",
+      "expected": "376553851a487a9a209f44b31c48728cf5a271bd5d66dd48a099336380199b9e",
+      "actual": "376553851a487a9a209f44b31c48728cf5a271bd5d66dd48a099336380199b9e"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_relieved.png",
+      "expected": "7c1d93d9c4859200f24c8d72eb247e161268943583244d241c10f2c7150279ef",
+      "actual": "7c1d93d9c4859200f24c8d72eb247e161268943583244d241c10f2c7150279ef"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_sad.png",
+      "expected": "c8f26a1698bbc17b9803939af9eca16ea10fcc594c8ef19a8e49291620d60b19",
+      "actual": "c8f26a1698bbc17b9803939af9eca16ea10fcc594c8ef19a8e49291620d60b19"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_smile.png",
+      "expected": "ebfc5228c12da93a5866efc3a2404c584e37e502841549216a01596c7c13f118",
+      "actual": "ebfc5228c12da93a5866efc3a2404c584e37e502841549216a01596c7c13f118"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_surprised.png",
+      "expected": "ff389f3465a2a11e3c7317578b43964eb173f4b914440453bae64955e2ceb8e6",
+      "actual": "ff389f3465a2a11e3c7317578b43964eb173f4b914440453bae64955e2ceb8e6"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-20c/expressions/emma_worried.png",
+      "expected": "1d02b77c814dc03770ffff0e29ab2839c01fdd377d2b4ef1868a8573d162ee8a",
+      "actual": "1d02b77c814dc03770ffff0e29ab2839c01fdd377d2b4ef1868a8573d162ee8a"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_L_s1.png",
+      "expected": "4fa40557a481dc66ea5d2b8e5f3a04419944180ca58d2aa60342d61d04675802",
+      "actual": "4fa40557a481dc66ea5d2b8e5f3a04419944180ca58d2aa60342d61d04675802"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_L_s2.png",
+      "expected": "628fc6a6713ab5d00206e041e3177eeaa32f3db7635155a5cacd295a7d10a9fd",
+      "actual": "628fc6a6713ab5d00206e041e3177eeaa32f3db7635155a5cacd295a7d10a9fd"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_L_s3.png",
+      "expected": "71cdf3f3e01734e94cba0e8cc25669449d905c0ed94155bccea64a12eb9b5a9a",
+      "actual": "71cdf3f3e01734e94cba0e8cc25669449d905c0ed94155bccea64a12eb9b5a9a"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_L_s4.png",
+      "expected": "f2079a19d47211e7e7f49e96a9bc9f470ad379ec37807a14e1d030cdd3f953e2",
+      "actual": "f2079a19d47211e7e7f49e96a9bc9f470ad379ec37807a14e1d030cdd3f953e2"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_R_s1.png",
+      "expected": "88b6950305ef56dd2fac604c7be87fefb2ad88a8cd017025fe7edbcd8accd221",
+      "actual": "88b6950305ef56dd2fac604c7be87fefb2ad88a8cd017025fe7edbcd8accd221"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_R_s2.png",
+      "expected": "bd88d19f5c5290c77e81b6c08cab5dc029123abc3645e7e13d94be1a686a10b0",
+      "actual": "bd88d19f5c5290c77e81b6c08cab5dc029123abc3645e7e13d94be1a686a10b0"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_R_s3.png",
+      "expected": "5d31d4d7e640537d855ca852a421fbef923450b9ec7445b3b148b77b1fef949b",
+      "actual": "5d31d4d7e640537d855ca852a421fbef923450b9ec7445b3b148b77b1fef949b"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/angry_R_s4.png",
+      "expected": "d83edfecdfc5eb7ebdbf478ca829e6f55ca622f4035a6b8bb9d60eaa88b4ad51",
+      "actual": "d83edfecdfc5eb7ebdbf478ca829e6f55ca622f4035a6b8bb9d60eaa88b4ad51"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_L_s1.png",
+      "expected": "3eb3b9005884ad0de1458f001bd849ff6324897b2631939fdb70dc14beb79179",
+      "actual": "3eb3b9005884ad0de1458f001bd849ff6324897b2631939fdb70dc14beb79179"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_L_s2.png",
+      "expected": "a8e778001725ae6fccce3d165482e5b80e3546abcaded086c0041b3d45746308",
+      "actual": "a8e778001725ae6fccce3d165482e5b80e3546abcaded086c0041b3d45746308"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_L_s3.png",
+      "expected": "041d471db138b9340f1bd40e38ad92561150eded518d15acf1fbe0968d9a1a88",
+      "actual": "041d471db138b9340f1bd40e38ad92561150eded518d15acf1fbe0968d9a1a88"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_L_s4.png",
+      "expected": "3c49e767202c9ff5b30f7b5b05834377c325456e365b14fbbb64f1b592c5a5ae",
+      "actual": "3c49e767202c9ff5b30f7b5b05834377c325456e365b14fbbb64f1b592c5a5ae"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_R_s1.png",
+      "expected": "e9b1454a41e5e5b2e173ffaf7090dfe98a0573367d0f2377d9712645c25319f4",
+      "actual": "e9b1454a41e5e5b2e173ffaf7090dfe98a0573367d0f2377d9712645c25319f4"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_R_s2.png",
+      "expected": "e9aa821ba9056a6252851d7240a6afc5d3065393bf441b4cd090017526b9ba02",
+      "actual": "e9aa821ba9056a6252851d7240a6afc5d3065393bf441b4cd090017526b9ba02"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_R_s3.png",
+      "expected": "12b1b9f779eb9c3d3b9bdc81197b2fc4ac769976736841ce09743312d039888d",
+      "actual": "12b1b9f779eb9c3d3b9bdc81197b2fc4ac769976736841ce09743312d039888d"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/determined_R_s4.png",
+      "expected": "c6d4ff2773c58d0041bbc7490e4b72283e1bcbdb30c31b05112564d0faabc97c",
+      "actual": "c6d4ff2773c58d0041bbc7490e4b72283e1bcbdb30c31b05112564d0faabc97c"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_L_s1.png",
+      "expected": "0f03a258c92986df60b60950185dd7af8ae621f35122eaf4d233f4a00b154eaf",
+      "actual": "0f03a258c92986df60b60950185dd7af8ae621f35122eaf4d233f4a00b154eaf"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_L_s2.png",
+      "expected": "fde3c4f257f7c9a8c5e8998a835e95a34b452e175cea49b8aea7fcd43f98246f",
+      "actual": "fde3c4f257f7c9a8c5e8998a835e95a34b452e175cea49b8aea7fcd43f98246f"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_L_s3.png",
+      "expected": "9e4fd6e8b9e0d71c8b7f1fe9b14fbe5523ea53de586e6977b79a5622a66ed41c",
+      "actual": "9e4fd6e8b9e0d71c8b7f1fe9b14fbe5523ea53de586e6977b79a5622a66ed41c"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_L_s4.png",
+      "expected": "4812e42ac26ccecaf6b27c59da1db62e7f41c8a65d9e353494e9b795bb04b5fa",
+      "actual": "4812e42ac26ccecaf6b27c59da1db62e7f41c8a65d9e353494e9b795bb04b5fa"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_R_s1.png",
+      "expected": "aef5803f3a85a426aecdf0fc939b027524998d1b414cbf628430e6134b4f4416",
+      "actual": "aef5803f3a85a426aecdf0fc939b027524998d1b414cbf628430e6134b4f4416"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_R_s2.png",
+      "expected": "d615a33477ab06b08ab2c42565faa566ffa5de296bb51d3ce93a89427a33379c",
+      "actual": "d615a33477ab06b08ab2c42565faa566ffa5de296bb51d3ce93a89427a33379c"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_R_s3.png",
+      "expected": "e606b78fc3ee72448a276b442c49911730ee48687a537de423cff21be6442406",
+      "actual": "e606b78fc3ee72448a276b442c49911730ee48687a537de423cff21be6442406"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/sad_R_s4.png",
+      "expected": "ebd6a24c665b8dfccba8ee9db9eb086e927fbf3bed04187e609295847712d200",
+      "actual": "ebd6a24c665b8dfccba8ee9db9eb086e927fbf3bed04187e609295847712d200"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_L_s1.png",
+      "expected": "14b73759525746d1f065b011c614639e2032a68627e36dbce30fd0cd63c9f2fc",
+      "actual": "14b73759525746d1f065b011c614639e2032a68627e36dbce30fd0cd63c9f2fc"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_L_s2.png",
+      "expected": "d43fec1b2058ce9511ed965989ff548ebfd33cdd9fc6601a7d56e6a61576d100",
+      "actual": "d43fec1b2058ce9511ed965989ff548ebfd33cdd9fc6601a7d56e6a61576d100"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_L_s3.png",
+      "expected": "6be8444aa045c0f13e9ecb8384e37ed046f6c9b1db691e1b6fe52a4ec6357af8",
+      "actual": "6be8444aa045c0f13e9ecb8384e37ed046f6c9b1db691e1b6fe52a4ec6357af8"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_L_s4.png",
+      "expected": "d1c775267cfe3c75f4de2092d7a02711cda812146a08a4f434a6522998c70fe6",
+      "actual": "d1c775267cfe3c75f4de2092d7a02711cda812146a08a4f434a6522998c70fe6"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_R_s1.png",
+      "expected": "8088cd4d030d6b9e2b786ebeb54a32fe68c2a678a3c74e2c4f76440fa9d8a204",
+      "actual": "8088cd4d030d6b9e2b786ebeb54a32fe68c2a678a3c74e2c4f76440fa9d8a204"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_R_s2.png",
+      "expected": "2b98a8161471de00016fa4080f9cbbd216a337a96001eedaf4bf94d073c9ea77",
+      "actual": "2b98a8161471de00016fa4080f9cbbd216a337a96001eedaf4bf94d073c9ea77"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_R_s3.png",
+      "expected": "d57a3c3a38c3d65b7ddcfc6f95effdbe384ea58c9e7d9598b5725880a49e38cb",
+      "actual": "d57a3c3a38c3d65b7ddcfc6f95effdbe384ea58c9e7d9598b5725880a49e38cb"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/surprised_R_s4.png",
+      "expected": "7e47257ca470d5710651c5d91243d5d45ef5f930ba0216920c7b72005a47b316",
+      "actual": "7e47257ca470d5710651c5d91243d5d45ef5f930ba0216920c7b72005a47b316"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_L_s1.png",
+      "expected": "489d604a666f7d01b89411a8ba6e13eb078600f0da6bc2b4cbb23f4bba6608cc",
+      "actual": "489d604a666f7d01b89411a8ba6e13eb078600f0da6bc2b4cbb23f4bba6608cc"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_L_s2.png",
+      "expected": "c2fab03952e531e18d986190fc3923242c12c0c62417443c2dd5390b4182d3db",
+      "actual": "c2fab03952e531e18d986190fc3923242c12c0c62417443c2dd5390b4182d3db"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_L_s3.png",
+      "expected": "689c6faca1f8d189e42ea0ca11a71c6f12cfdb90c68b2710e9b68a6d2f712e5b",
+      "actual": "689c6faca1f8d189e42ea0ca11a71c6f12cfdb90c68b2710e9b68a6d2f712e5b"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_L_s4.png",
+      "expected": "7858f072aa219567fde866c460dd4ead238cf978f5b7569cd36125f644bea7a6",
+      "actual": "7858f072aa219567fde866c460dd4ead238cf978f5b7569cd36125f644bea7a6"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_R_s1.png",
+      "expected": "0ecfbd9ef46dca205fc6ddb7d26501fd1a192d9c4fa20915bc40ca7c2de1e0aa",
+      "actual": "0ecfbd9ef46dca205fc6ddb7d26501fd1a192d9c4fa20915bc40ca7c2de1e0aa"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_R_s2.png",
+      "expected": "ce20b3956f88ee5499a89df14e22a0b7c05d13bedb199c80d44614abb586390a",
+      "actual": "ce20b3956f88ee5499a89df14e22a0b7c05d13bedb199c80d44614abb586390a"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_R_s3.png",
+      "expected": "fec06d08f816f36336d31c478fa9cee9ecbd198528659c23be196b33169494d3",
+      "actual": "fec06d08f816f36336d31c478fa9cee9ecbd198528659c23be196b33169494d3"
+    },
+    {
+      "file": "assets/images/characters/portraits/emma/provisional-21b/blink/worried_R_s4.png",
+      "expected": "97239b408f3dcfb3308d1a9d8f032db02ff65a66f60812cec1075bc22755e2e4",
+      "actual": "97239b408f3dcfb3308d1a9d8f032db02ff65a66f60812cec1075bc22755e2e4"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/fiona_normal.png",
+      "expected": "89efd67352ac7f03882242d2363a2a2c8762bc0489e447a7d6089745a227094a",
+      "actual": "89efd67352ac7f03882242d2363a2a2c8762bc0489e447a7d6089745a227094a"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_L_s1.png",
+      "expected": "b85827162d0dc71d5cdfbd9cb2a4e7e5df320ce15cb4d5d727aa0235402deb40",
+      "actual": "b85827162d0dc71d5cdfbd9cb2a4e7e5df320ce15cb4d5d727aa0235402deb40"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_L_s2.png",
+      "expected": "ec69c70da337b8db423cf85d25c15a4c2e92e9233ef3fcda064eb7f5647d50bf",
+      "actual": "ec69c70da337b8db423cf85d25c15a4c2e92e9233ef3fcda064eb7f5647d50bf"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_L_s3.png",
+      "expected": "996efa88024a28b5cd6ac4d461956ae838ce4d8afbdb6c0e063a72c2d9ce6f05",
+      "actual": "996efa88024a28b5cd6ac4d461956ae838ce4d8afbdb6c0e063a72c2d9ce6f05"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_L_s4.png",
+      "expected": "12a3d7cfd44d38d3ac1e7a34b7c03f9d4e0dfefe674e156e8fce76739557c262",
+      "actual": "12a3d7cfd44d38d3ac1e7a34b7c03f9d4e0dfefe674e156e8fce76739557c262"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_R_s1.png",
+      "expected": "c08ae073001aee09b76706adf19bacbcb4e6200ee2d0e5da6df881a24ef1d43f",
+      "actual": "c08ae073001aee09b76706adf19bacbcb4e6200ee2d0e5da6df881a24ef1d43f"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_R_s2.png",
+      "expected": "44c64f4c9040066a5852309078dc32c444eb9ff4da0810c1c1c88d98fbceec5d",
+      "actual": "44c64f4c9040066a5852309078dc32c444eb9ff4da0810c1c1c88d98fbceec5d"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_R_s3.png",
+      "expected": "c148b57d4e4711891ef45eb5aad595e0b15a9130a41567d348ced3c82bfca3a4",
+      "actual": "c148b57d4e4711891ef45eb5aad595e0b15a9130a41567d348ced3c82bfca3a4"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/blink/normal_R_s4.png",
+      "expected": "c043364b9eb55c3d2b319aa698b391f647547e198a9410cc36829b300ea325cb",
+      "actual": "c043364b9eb55c3d2b319aa698b391f647547e198a9410cc36829b300ea325cb"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_angry.png",
+      "expected": "e364ae1125b53a41e8330ac1a6d6af01e2f032a45fae609303a3c9e6668e526c",
+      "actual": "e364ae1125b53a41e8330ac1a6d6af01e2f032a45fae609303a3c9e6668e526c"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_determined.png",
+      "expected": "38883e8d075f06a540dc4ee9279febbc4e3935838500b421ae59f6e9f0170f2b",
+      "actual": "38883e8d075f06a540dc4ee9279febbc4e3935838500b421ae59f6e9f0170f2b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_relieved.png",
+      "expected": "790768b552156347996fd368eb121320ed8310292cb2c603b25b1f813e66c569",
+      "actual": "790768b552156347996fd368eb121320ed8310292cb2c603b25b1f813e66c569"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_sad.png",
+      "expected": "bbc5bbb41463f414bb113d407ce29ac2400841eacca924f2df7c8b902eb30b47",
+      "actual": "bbc5bbb41463f414bb113d407ce29ac2400841eacca924f2df7c8b902eb30b47"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_smile.png",
+      "expected": "383f2db3b47d381551f5132f0cc214092fc188b4cc187e9d28ae112bfd5775af",
+      "actual": "383f2db3b47d381551f5132f0cc214092fc188b4cc187e9d28ae112bfd5775af"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_surprised.png",
+      "expected": "90e0b36c16eb7d8ff02cfc7ce48d1650f14b84da40af6affa43e71c523b9beb7",
+      "actual": "90e0b36c16eb7d8ff02cfc7ce48d1650f14b84da40af6affa43e71c523b9beb7"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-20e/expressions/fiona_worried.png",
+      "expected": "4ff6aadd049a959d70a476aab8df6a962a54ee4d05b1c81029fd9dd0266d21cc",
+      "actual": "4ff6aadd049a959d70a476aab8df6a962a54ee4d05b1c81029fd9dd0266d21cc"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_L_s1.png",
+      "expected": "a9e0edc41defcafc107fbd6cf36a6053a5c58fb9a5a25aca28d0ce223bcb413b",
+      "actual": "a9e0edc41defcafc107fbd6cf36a6053a5c58fb9a5a25aca28d0ce223bcb413b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_L_s2.png",
+      "expected": "840fb7dbd80b7b00853b220e973a06dbd31c15fab309ba0db2b6a6a96361b135",
+      "actual": "840fb7dbd80b7b00853b220e973a06dbd31c15fab309ba0db2b6a6a96361b135"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_L_s3.png",
+      "expected": "898f59b2986260e7ea1bbe1dd86ed348a3ff583ffbd533e1ae4bc4a8712ed032",
+      "actual": "898f59b2986260e7ea1bbe1dd86ed348a3ff583ffbd533e1ae4bc4a8712ed032"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_L_s4.png",
+      "expected": "4fd059a3f80546ef457d413943add62c8d307ee9f79b75fae7ec6d32878a6ac0",
+      "actual": "4fd059a3f80546ef457d413943add62c8d307ee9f79b75fae7ec6d32878a6ac0"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_R_s1.png",
+      "expected": "59c65d4723c9cce5ae315ba5ae0a96abbf2554b0c840a73527a019f6c5fb9e20",
+      "actual": "59c65d4723c9cce5ae315ba5ae0a96abbf2554b0c840a73527a019f6c5fb9e20"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_R_s2.png",
+      "expected": "b57ba9004c4184ff1b87f25d5367d6fd4988c6e35e89a474ecdeb1cab050033f",
+      "actual": "b57ba9004c4184ff1b87f25d5367d6fd4988c6e35e89a474ecdeb1cab050033f"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_R_s3.png",
+      "expected": "5c495abc90979e7aa4fc879084f9fa9fc15e2f4a319bb066d9dd6a4bd2c098de",
+      "actual": "5c495abc90979e7aa4fc879084f9fa9fc15e2f4a319bb066d9dd6a4bd2c098de"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/angry_R_s4.png",
+      "expected": "e252f74d8e0a382a25190b5d0f159555cf17576b5bc53d4aff45233d551e2c2d",
+      "actual": "e252f74d8e0a382a25190b5d0f159555cf17576b5bc53d4aff45233d551e2c2d"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_L_s1.png",
+      "expected": "9d3ffb2b3c3d102af8a7789f02b86c469a888abb39649f724290528c95f5078a",
+      "actual": "9d3ffb2b3c3d102af8a7789f02b86c469a888abb39649f724290528c95f5078a"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_L_s2.png",
+      "expected": "ae6e500d1b6a7f95f583224eb493630e48e4585fc91fadf39750a24b2cf7aef8",
+      "actual": "ae6e500d1b6a7f95f583224eb493630e48e4585fc91fadf39750a24b2cf7aef8"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_L_s3.png",
+      "expected": "b8e13420cdc066450bff5d77705f43c6b43f068fd9281d1001b030e55e1028ee",
+      "actual": "b8e13420cdc066450bff5d77705f43c6b43f068fd9281d1001b030e55e1028ee"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_L_s4.png",
+      "expected": "5943e0a23b2311e4905a4fc39f649455771dd6dc459a070b2a2205830436a27a",
+      "actual": "5943e0a23b2311e4905a4fc39f649455771dd6dc459a070b2a2205830436a27a"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_R_s1.png",
+      "expected": "b795097b545ee3da88ad6e5431e6d6e85b8e6ea5ff5c61fea4c2a6ff0ac2402e",
+      "actual": "b795097b545ee3da88ad6e5431e6d6e85b8e6ea5ff5c61fea4c2a6ff0ac2402e"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_R_s2.png",
+      "expected": "fd0db78ef9147c82bb9606b8e5b9fb077183af9f99bb28a2d085fd5b554574a5",
+      "actual": "fd0db78ef9147c82bb9606b8e5b9fb077183af9f99bb28a2d085fd5b554574a5"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_R_s3.png",
+      "expected": "73ed3dd9280cbd71093b929ec40c699d4b04e7cbb59157cee9c9836f1f9f362c",
+      "actual": "73ed3dd9280cbd71093b929ec40c699d4b04e7cbb59157cee9c9836f1f9f362c"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/determined_R_s4.png",
+      "expected": "254e16f1ebb68608fb3f54e7b32dedbdf966445bdf085cb58fb47b4aad4b88ba",
+      "actual": "254e16f1ebb68608fb3f54e7b32dedbdf966445bdf085cb58fb47b4aad4b88ba"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_L_s1.png",
+      "expected": "ea21591264f20734e1513aabba9b0539658a878838c5ad752f8036f6869512e7",
+      "actual": "ea21591264f20734e1513aabba9b0539658a878838c5ad752f8036f6869512e7"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_L_s2.png",
+      "expected": "222c3a81d9707328196381972c89ca839e1a159ff82695fb6fe4cbccf2fa0272",
+      "actual": "222c3a81d9707328196381972c89ca839e1a159ff82695fb6fe4cbccf2fa0272"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_L_s3.png",
+      "expected": "4cfef96c95c032ebb0ef01ddeadb404704ba8460e8ea88b990aeb65113712a8b",
+      "actual": "4cfef96c95c032ebb0ef01ddeadb404704ba8460e8ea88b990aeb65113712a8b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_L_s4.png",
+      "expected": "d662332672de39ded22124bd3ab737f31200c3496ea61e5ee4f20b1091257860",
+      "actual": "d662332672de39ded22124bd3ab737f31200c3496ea61e5ee4f20b1091257860"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_R_s1.png",
+      "expected": "274ecbb85fb07858b04ed719988574bc79f8df26b9cdc981662f7f7fd6b2868b",
+      "actual": "274ecbb85fb07858b04ed719988574bc79f8df26b9cdc981662f7f7fd6b2868b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_R_s2.png",
+      "expected": "e6504f058cb89265264137c26c68e5f73aad70d97d1f0eeb1c01c2a6d53a7d3f",
+      "actual": "e6504f058cb89265264137c26c68e5f73aad70d97d1f0eeb1c01c2a6d53a7d3f"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_R_s3.png",
+      "expected": "2f5438e0e82186d6627cb8ec7fc01500ad88777354159d63e093f895ce6d573b",
+      "actual": "2f5438e0e82186d6627cb8ec7fc01500ad88777354159d63e093f895ce6d573b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/sad_R_s4.png",
+      "expected": "be562650968178797e61c9ee2331ce5a8bfa190f86f7b0c280b16c4a3216640b",
+      "actual": "be562650968178797e61c9ee2331ce5a8bfa190f86f7b0c280b16c4a3216640b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_L_s1.png",
+      "expected": "399f3932167b0d4bb3050fbc6b82caa80eeb877656d57382176d829db98c0a70",
+      "actual": "399f3932167b0d4bb3050fbc6b82caa80eeb877656d57382176d829db98c0a70"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_L_s2.png",
+      "expected": "d4abf4cd301291544dbe328778e5e2848c63cedf1c414f0d682997101ec0d3f3",
+      "actual": "d4abf4cd301291544dbe328778e5e2848c63cedf1c414f0d682997101ec0d3f3"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_L_s3.png",
+      "expected": "dfdc52aecc06e0f5c77e9dd56c276d75cafedfa302ba6eef954237b4e08d9cc2",
+      "actual": "dfdc52aecc06e0f5c77e9dd56c276d75cafedfa302ba6eef954237b4e08d9cc2"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_L_s4.png",
+      "expected": "375cd52e7be5901de16053edbe4a1684e3e07e1d35f0494043f8c9ab5d3ce526",
+      "actual": "375cd52e7be5901de16053edbe4a1684e3e07e1d35f0494043f8c9ab5d3ce526"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_R_s1.png",
+      "expected": "7a46dcddb9eaa7589a8b69ab9727fbf0980dc5a76d0f25fc330c2c2399d18100",
+      "actual": "7a46dcddb9eaa7589a8b69ab9727fbf0980dc5a76d0f25fc330c2c2399d18100"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_R_s2.png",
+      "expected": "684486e6634d3932ce4bf059aab5fee30d3c0dc5cc77d7e0cef1f0c44bb4d22a",
+      "actual": "684486e6634d3932ce4bf059aab5fee30d3c0dc5cc77d7e0cef1f0c44bb4d22a"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_R_s3.png",
+      "expected": "015aa378084064fcce012ee23ffb1368dad75db28ce049dcc8276f47aac122b1",
+      "actual": "015aa378084064fcce012ee23ffb1368dad75db28ce049dcc8276f47aac122b1"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/surprised_R_s4.png",
+      "expected": "c847053b5761a830a28583c2c0f76f42f0b939bc8c397ba09e3a5a5d23b6ae8e",
+      "actual": "c847053b5761a830a28583c2c0f76f42f0b939bc8c397ba09e3a5a5d23b6ae8e"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_L_s1.png",
+      "expected": "4e6d67f9d19e7d7018e49da00cb67554f4a5c92e1dbdef782d8b93160c2a0ef7",
+      "actual": "4e6d67f9d19e7d7018e49da00cb67554f4a5c92e1dbdef782d8b93160c2a0ef7"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_L_s2.png",
+      "expected": "8b012efab60a4dfe87c30e841002c575d87ba920ef2cbbb062d7b04b57f2f362",
+      "actual": "8b012efab60a4dfe87c30e841002c575d87ba920ef2cbbb062d7b04b57f2f362"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_L_s3.png",
+      "expected": "b63ffad250e55975a241ca84b45b34a6fc52f4d15c88d174e7d09a2881ede34f",
+      "actual": "b63ffad250e55975a241ca84b45b34a6fc52f4d15c88d174e7d09a2881ede34f"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_L_s4.png",
+      "expected": "890bd0d992ce72b3aead08b841ba0bb7e395418b1567e7ffc6c5c2bd4a111d19",
+      "actual": "890bd0d992ce72b3aead08b841ba0bb7e395418b1567e7ffc6c5c2bd4a111d19"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_R_s1.png",
+      "expected": "ed62df512879f36b71d01331d71f8913ca33cc8776292c321cfceb92f7c7fd5b",
+      "actual": "ed62df512879f36b71d01331d71f8913ca33cc8776292c321cfceb92f7c7fd5b"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_R_s2.png",
+      "expected": "ed225df9641ca810ad7377e0c83d0b1f66db2c32a2f3716ad287357ab31d3f64",
+      "actual": "ed225df9641ca810ad7377e0c83d0b1f66db2c32a2f3716ad287357ab31d3f64"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_R_s3.png",
+      "expected": "6a33e96283f79618dfbf2a5f1d9ba3adc18b5a5023cd64658c2cf454ba07a2d1",
+      "actual": "6a33e96283f79618dfbf2a5f1d9ba3adc18b5a5023cd64658c2cf454ba07a2d1"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-21b/blink/worried_R_s4.png",
+      "expected": "629822e7093ab4f82b79cd52a3abe8b973b511bb55d5e1f1e60aede7df096bca",
+      "actual": "629822e7093ab4f82b79cd52a3abe8b973b511bb55d5e1f1e60aede7df096bca"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_L_s1.png",
+      "expected": "065d1de5cfc3a6d4eaf663720322bc721e5afeab645fc32bd6a3e4521ed0fc46",
+      "actual": "065d1de5cfc3a6d4eaf663720322bc721e5afeab645fc32bd6a3e4521ed0fc46"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_L_s2.png",
+      "expected": "a84753a323019e416e672b9a1700cfc26b76fd954c525c187293d87e4c79e068",
+      "actual": "a84753a323019e416e672b9a1700cfc26b76fd954c525c187293d87e4c79e068"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_L_s3.png",
+      "expected": "64054c25ccde3220b5610c5b4bb5d2bfa2d38828d4dfe2d08031b47641ff0cdd",
+      "actual": "64054c25ccde3220b5610c5b4bb5d2bfa2d38828d4dfe2d08031b47641ff0cdd"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_L_s4.png",
+      "expected": "48be5c7b606569ab7bfae79e5a95d7019540b81cb707931beff502c19ef4a114",
+      "actual": "48be5c7b606569ab7bfae79e5a95d7019540b81cb707931beff502c19ef4a114"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_R_s1.png",
+      "expected": "b6a8dfe01c36c54cc5b4315d2d6727bf768cfa73a99f63cdc802c47140d82b06",
+      "actual": "b6a8dfe01c36c54cc5b4315d2d6727bf768cfa73a99f63cdc802c47140d82b06"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_R_s2.png",
+      "expected": "c64af03c2daa4b6e8aa9d0174a5cedce41606157eb46f8b797b3952a825ae820",
+      "actual": "c64af03c2daa4b6e8aa9d0174a5cedce41606157eb46f8b797b3952a825ae820"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_R_s3.png",
+      "expected": "911e2923018a9b59a68098effc6abeb93657a518e211c84180564495bbc885fd",
+      "actual": "911e2923018a9b59a68098effc6abeb93657a518e211c84180564495bbc885fd"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/angry_R_s4.png",
+      "expected": "a1de62f9d377c81e02ab7ae1ec98e48f2de1663bed2abfd9b169f3404911e358",
+      "actual": "a1de62f9d377c81e02ab7ae1ec98e48f2de1663bed2abfd9b169f3404911e358"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_L_s1.png",
+      "expected": "a5be38dbb52d2e2c86a758724b735207d7800b8910c2f2c8b8eabb0ea73e0ba4",
+      "actual": "a5be38dbb52d2e2c86a758724b735207d7800b8910c2f2c8b8eabb0ea73e0ba4"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_L_s2.png",
+      "expected": "c53eb23c44e1f49c2b46f4a5381a89349a107185d03e5670d472c78c30067eff",
+      "actual": "c53eb23c44e1f49c2b46f4a5381a89349a107185d03e5670d472c78c30067eff"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_L_s3.png",
+      "expected": "350c0204baeb342eae2d5f7d13600e151f1f9bc088c2b0e4f30d57d2b999cd02",
+      "actual": "350c0204baeb342eae2d5f7d13600e151f1f9bc088c2b0e4f30d57d2b999cd02"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_L_s4.png",
+      "expected": "920b3c6fe4251a0a86043630060bec10e695b8d9e35bbd2a06fe78ac5d197cd7",
+      "actual": "920b3c6fe4251a0a86043630060bec10e695b8d9e35bbd2a06fe78ac5d197cd7"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_R_s1.png",
+      "expected": "c56e61ece2998e537b72e178ce6d088e85d5b4194821ffd6d4ecb1ca97c4bb69",
+      "actual": "c56e61ece2998e537b72e178ce6d088e85d5b4194821ffd6d4ecb1ca97c4bb69"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_R_s2.png",
+      "expected": "d01b82b14fc067c528fdaf11e59cd2f425f93d3729a2fa95f7ca3d1ff5de1f7f",
+      "actual": "d01b82b14fc067c528fdaf11e59cd2f425f93d3729a2fa95f7ca3d1ff5de1f7f"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_R_s3.png",
+      "expected": "247cfe505563509baa38096fbd5b8923337e10147147d6c4120e781f68368751",
+      "actual": "247cfe505563509baa38096fbd5b8923337e10147147d6c4120e781f68368751"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/sad_R_s4.png",
+      "expected": "477ff7cac7ad95fe72da6d5378d6106e614e218d4a17599389169624f1d5e8d3",
+      "actual": "477ff7cac7ad95fe72da6d5378d6106e614e218d4a17599389169624f1d5e8d3"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_L_s1.png",
+      "expected": "8ec6fc6a8408ae3bf8bf28c349f26d83c412449da59775bdcbb079797c0d6b6f",
+      "actual": "8ec6fc6a8408ae3bf8bf28c349f26d83c412449da59775bdcbb079797c0d6b6f"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_L_s2.png",
+      "expected": "b9069086f98d6f2afe3acd97d81c20c2f6f5900d058b17eb5abefba455118d7c",
+      "actual": "b9069086f98d6f2afe3acd97d81c20c2f6f5900d058b17eb5abefba455118d7c"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_L_s3.png",
+      "expected": "8967fd798ab6f61ac9c8824214ebba9b78b4c96e9c0cd82117aa7eb0963f1cb9",
+      "actual": "8967fd798ab6f61ac9c8824214ebba9b78b4c96e9c0cd82117aa7eb0963f1cb9"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_L_s4.png",
+      "expected": "34a55cbaca29fe2fc24f6364b952e16f0d58edd82d34676de790d2011fc038c3",
+      "actual": "34a55cbaca29fe2fc24f6364b952e16f0d58edd82d34676de790d2011fc038c3"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_R_s1.png",
+      "expected": "1c15082ce09dae70754734657e76aae99811204bf6afca57827cc401ac481e07",
+      "actual": "1c15082ce09dae70754734657e76aae99811204bf6afca57827cc401ac481e07"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_R_s2.png",
+      "expected": "3558a96e6ca200fd0bd5b5932d26629b8cd3ab65c7c4ed0b30fe77d9d16909bc",
+      "actual": "3558a96e6ca200fd0bd5b5932d26629b8cd3ab65c7c4ed0b30fe77d9d16909bc"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_R_s3.png",
+      "expected": "2b0ff1839031dc999032cda4f0f58d13917e55ff5f1871a30dc052a2fad9558a",
+      "actual": "2b0ff1839031dc999032cda4f0f58d13917e55ff5f1871a30dc052a2fad9558a"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r2/blink/worried_R_s4.png",
+      "expected": "13b85100a3944feaea98faee1a0c173fb0c8c81c9e5ba8377b84a9cd57a3b6de",
+      "actual": "13b85100a3944feaea98faee1a0c173fb0c8c81c9e5ba8377b84a9cd57a3b6de"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r3/expressions/fiona_relieved.png",
+      "expected": "33fde2fc20b8dc84cdd43e23844b675fbc4b62ad15e12b3a91bde3728d2817a5",
+      "actual": "33fde2fc20b8dc84cdd43e23844b675fbc4b62ad15e12b3a91bde3728d2817a5"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r3/expressions/fiona_smile.png",
+      "expected": "dfacb85100ca46ed69166884c27b413324ff3ff62fc50cc7a37fcb4d95debc20",
+      "actual": "dfacb85100ca46ed69166884c27b413324ff3ff62fc50cc7a37fcb4d95debc20"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r4/expressions/fiona_angry.png",
+      "expected": "3b99c3f3ede35f7c19eaedfbb00ff4cd8e15d86d6147ab1febbf252a59da89b4",
+      "actual": "3b99c3f3ede35f7c19eaedfbb00ff4cd8e15d86d6147ab1febbf252a59da89b4"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r4/expressions/fiona_sad.png",
+      "expected": "ebedb8abb5ed961e1ce6ba234f2340d7d1e58a3369f3dc7b1006db6a0337d809",
+      "actual": "ebedb8abb5ed961e1ce6ba234f2340d7d1e58a3369f3dc7b1006db6a0337d809"
+    },
+    {
+      "file": "assets/images/characters/portraits/fiona/provisional-22a-r4/expressions/fiona_worried.png",
+      "expected": "7041909f897f3a0a65674045c1ee077b7d39ecdd33c433d3dc1dc065cb162ac8",
+      "actual": "7041909f897f3a0a65674045c1ee077b7d39ecdd33c433d3dc1dc065cb162ac8"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/lou_normal.png",
+      "expected": "c2cc6d70614b18c685ef773e27bf4f50a7ed2947cb6e6b9367a5ba9e32e59e8f",
+      "actual": "c2cc6d70614b18c685ef773e27bf4f50a7ed2947cb6e6b9367a5ba9e32e59e8f"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_L_s1.png",
+      "expected": "5793595a244726ffaa7eebe4549fe0962a920fe7879bf337bd1e54af65b2e769",
+      "actual": "5793595a244726ffaa7eebe4549fe0962a920fe7879bf337bd1e54af65b2e769"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_L_s2.png",
+      "expected": "221850052faea0921046a45ca952e24b0445d3cf201f547e1d4f4bab06672cc4",
+      "actual": "221850052faea0921046a45ca952e24b0445d3cf201f547e1d4f4bab06672cc4"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_L_s3.png",
+      "expected": "51301d5d6ff3897bcaa971b8ef069495dceb470b8843dd4c78700bcb7d024837",
+      "actual": "51301d5d6ff3897bcaa971b8ef069495dceb470b8843dd4c78700bcb7d024837"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_L_s4.png",
+      "expected": "2a7461c161e16e2254f170d1df16a6ea3eccc87e2e287b6ba756f961bb09d6e1",
+      "actual": "2a7461c161e16e2254f170d1df16a6ea3eccc87e2e287b6ba756f961bb09d6e1"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_R_s1.png",
+      "expected": "e64e8adad146962cd8c6e7cf52f383dfb459ced7b51b55fd9b692515647d537d",
+      "actual": "e64e8adad146962cd8c6e7cf52f383dfb459ced7b51b55fd9b692515647d537d"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_R_s2.png",
+      "expected": "39133e0dae14d496ea04379757ade4803d4199c080f8a5260e9d984e2131a8b1",
+      "actual": "39133e0dae14d496ea04379757ade4803d4199c080f8a5260e9d984e2131a8b1"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_R_s3.png",
+      "expected": "4d415ed5b766ce96b86e58131125594a2ed75c7de3d617475274091c8568f415",
+      "actual": "4d415ed5b766ce96b86e58131125594a2ed75c7de3d617475274091c8568f415"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/blink/normal_R_s4.png",
+      "expected": "9538b68f31cbb866d2f4eb16a00e1a6b820a55f25c5708f178728a956c5ec017",
+      "actual": "9538b68f31cbb866d2f4eb16a00e1a6b820a55f25c5708f178728a956c5ec017"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/expressions/lou_angry.png",
+      "expected": "3958b4e43b12d4c858f8ed52fe4c8778aad67f850735316f646005ea04997ef0",
+      "actual": "3958b4e43b12d4c858f8ed52fe4c8778aad67f850735316f646005ea04997ef0"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/expressions/lou_determined.png",
+      "expected": "d1a07412b0ebd09457862ecd25aa5d9f21fb46372a256d0b75a0638a630b0166",
+      "actual": "d1a07412b0ebd09457862ecd25aa5d9f21fb46372a256d0b75a0638a630b0166"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/expressions/lou_sad.png",
+      "expected": "ec4eb9df306b684f3c8186ee87a456d383ec5163c3deba2d94a7428fbb6943f2",
+      "actual": "ec4eb9df306b684f3c8186ee87a456d383ec5163c3deba2d94a7428fbb6943f2"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/expressions/lou_surprised.png",
+      "expected": "f4b188c936ce231c12dc9e6c88072336b3fb0b38aeafdcaacf392ec8b3263378",
+      "actual": "f4b188c936ce231c12dc9e6c88072336b3fb0b38aeafdcaacf392ec8b3263378"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-20e/expressions/lou_worried.png",
+      "expected": "f75c3b70a688e3c6d5966e50e3bfdb62787b2b04514feb6b94c4b5688af1d60a",
+      "actual": "f75c3b70a688e3c6d5966e50e3bfdb62787b2b04514feb6b94c4b5688af1d60a"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_L_s1.png",
+      "expected": "98db4773ba402df65c9d2e04848baedc6ac01339ec7353faf12c0f9490225c70",
+      "actual": "98db4773ba402df65c9d2e04848baedc6ac01339ec7353faf12c0f9490225c70"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_L_s2.png",
+      "expected": "0427268938071b4d66ff1a1091e08e943400acea82ace9d5ef7428df941114ba",
+      "actual": "0427268938071b4d66ff1a1091e08e943400acea82ace9d5ef7428df941114ba"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_L_s3.png",
+      "expected": "0ea4121f520f1f0a6407d3f4f8b6ca87508453f264dbc03ec311209fc11e5cfa",
+      "actual": "0ea4121f520f1f0a6407d3f4f8b6ca87508453f264dbc03ec311209fc11e5cfa"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_L_s4.png",
+      "expected": "4dca4676a423b3235e3c9f00e8a38f8171a6c9528538247cd9e530987eb516ab",
+      "actual": "4dca4676a423b3235e3c9f00e8a38f8171a6c9528538247cd9e530987eb516ab"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_R_s1.png",
+      "expected": "b6527d2ca9c8acec784366ace525f58c4cb78a2e891776292040da4a4c9d063f",
+      "actual": "b6527d2ca9c8acec784366ace525f58c4cb78a2e891776292040da4a4c9d063f"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_R_s2.png",
+      "expected": "c4ddbdf909a82d9501e5d94352d57cf17ddcc29df60eb6c22f142cdfdf5980ed",
+      "actual": "c4ddbdf909a82d9501e5d94352d57cf17ddcc29df60eb6c22f142cdfdf5980ed"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_R_s3.png",
+      "expected": "957865fbba5ee9d23bed2d7fade66ab9035d52fa22c4f4d97fb394f11249f58f",
+      "actual": "957865fbba5ee9d23bed2d7fade66ab9035d52fa22c4f4d97fb394f11249f58f"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/angry_R_s4.png",
+      "expected": "5913b838df5d0ef2f398049ccf4d76f9e48a67bd83d74a92eb282206707c7eae",
+      "actual": "5913b838df5d0ef2f398049ccf4d76f9e48a67bd83d74a92eb282206707c7eae"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_L_s1.png",
+      "expected": "ce87d8329d3dea2a29d88e7eddae6e2b166289cba1e7531761ef6f6405a304ea",
+      "actual": "ce87d8329d3dea2a29d88e7eddae6e2b166289cba1e7531761ef6f6405a304ea"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_L_s2.png",
+      "expected": "aa6e58ca41dd3015e7027a860010e3e2afc9e6a716e3f80517a0b6009c22ef42",
+      "actual": "aa6e58ca41dd3015e7027a860010e3e2afc9e6a716e3f80517a0b6009c22ef42"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_L_s3.png",
+      "expected": "167fae9d724be8620ab6680123eb1c87b609d7bb4b2e85a9194fe18810469efc",
+      "actual": "167fae9d724be8620ab6680123eb1c87b609d7bb4b2e85a9194fe18810469efc"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_L_s4.png",
+      "expected": "ac01720337a840c227ad8576f6731a2425b046805ecb6f73e101abaec671ed55",
+      "actual": "ac01720337a840c227ad8576f6731a2425b046805ecb6f73e101abaec671ed55"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_R_s1.png",
+      "expected": "fc9e65f2ddf34d42b99da8b8d5a90dfa0bf692f466730cc93aae8ecc64f557ec",
+      "actual": "fc9e65f2ddf34d42b99da8b8d5a90dfa0bf692f466730cc93aae8ecc64f557ec"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_R_s2.png",
+      "expected": "9a8edd2a7edbf13ae9d935d930cc173669258ecea219dc71097a0f18194240b6",
+      "actual": "9a8edd2a7edbf13ae9d935d930cc173669258ecea219dc71097a0f18194240b6"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_R_s3.png",
+      "expected": "fcf74e3b3f9a8e5540f7175da2e5b6fe37db7a8d8114803c14f8538a66e9a544",
+      "actual": "fcf74e3b3f9a8e5540f7175da2e5b6fe37db7a8d8114803c14f8538a66e9a544"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/determined_R_s4.png",
+      "expected": "8561047979b395942b7572e6a4e1965b6c6229c1de85503e74ad0d51a2361462",
+      "actual": "8561047979b395942b7572e6a4e1965b6c6229c1de85503e74ad0d51a2361462"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_L_s1.png",
+      "expected": "01f01b7ca75a4c1ab1877c5ea3d66ce5cd445348e4691638f5eafe4f47c668db",
+      "actual": "01f01b7ca75a4c1ab1877c5ea3d66ce5cd445348e4691638f5eafe4f47c668db"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_L_s2.png",
+      "expected": "c5346d31a16acced973ba2b871f36ed89035338d8418d10891e668b2d4b7a422",
+      "actual": "c5346d31a16acced973ba2b871f36ed89035338d8418d10891e668b2d4b7a422"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_L_s3.png",
+      "expected": "167fae9d724be8620ab6680123eb1c87b609d7bb4b2e85a9194fe18810469efc",
+      "actual": "167fae9d724be8620ab6680123eb1c87b609d7bb4b2e85a9194fe18810469efc"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_L_s4.png",
+      "expected": "ac01720337a840c227ad8576f6731a2425b046805ecb6f73e101abaec671ed55",
+      "actual": "ac01720337a840c227ad8576f6731a2425b046805ecb6f73e101abaec671ed55"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_R_s1.png",
+      "expected": "fc9e65f2ddf34d42b99da8b8d5a90dfa0bf692f466730cc93aae8ecc64f557ec",
+      "actual": "fc9e65f2ddf34d42b99da8b8d5a90dfa0bf692f466730cc93aae8ecc64f557ec"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_R_s2.png",
+      "expected": "9a8edd2a7edbf13ae9d935d930cc173669258ecea219dc71097a0f18194240b6",
+      "actual": "9a8edd2a7edbf13ae9d935d930cc173669258ecea219dc71097a0f18194240b6"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_R_s3.png",
+      "expected": "fcf74e3b3f9a8e5540f7175da2e5b6fe37db7a8d8114803c14f8538a66e9a544",
+      "actual": "fcf74e3b3f9a8e5540f7175da2e5b6fe37db7a8d8114803c14f8538a66e9a544"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/sad_R_s4.png",
+      "expected": "8561047979b395942b7572e6a4e1965b6c6229c1de85503e74ad0d51a2361462",
+      "actual": "8561047979b395942b7572e6a4e1965b6c6229c1de85503e74ad0d51a2361462"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_L_s1.png",
+      "expected": "0dada02a479b51d082d6e7cf4c7b0ff536d548d31baa2574d8e7238c45cc9786",
+      "actual": "0dada02a479b51d082d6e7cf4c7b0ff536d548d31baa2574d8e7238c45cc9786"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_L_s2.png",
+      "expected": "362a60dc46cf95132d468ef3491fb92ec6cbdcb99ea0fa2dd044845d4bf38afb",
+      "actual": "362a60dc46cf95132d468ef3491fb92ec6cbdcb99ea0fa2dd044845d4bf38afb"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_L_s3.png",
+      "expected": "3f6545e3b24806ea2f0f2d479a0b1ec934eee8e1d75ae8223489a885feaef333",
+      "actual": "3f6545e3b24806ea2f0f2d479a0b1ec934eee8e1d75ae8223489a885feaef333"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_L_s4.png",
+      "expected": "35e239fd1237f8dea6df6c3965210b8b1480d64156df89cf84c61dd5ca97cad8",
+      "actual": "35e239fd1237f8dea6df6c3965210b8b1480d64156df89cf84c61dd5ca97cad8"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_R_s1.png",
+      "expected": "007783cd6cc5cb9d6e11d4b105d577eede950bc87607d884f026981c844c838e",
+      "actual": "007783cd6cc5cb9d6e11d4b105d577eede950bc87607d884f026981c844c838e"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_R_s2.png",
+      "expected": "6c534ed6d7aadb71492c9e4472634c81df327582db2cc7d4bfc62d5a82e6831f",
+      "actual": "6c534ed6d7aadb71492c9e4472634c81df327582db2cc7d4bfc62d5a82e6831f"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_R_s3.png",
+      "expected": "c5ffbf25d334ff57abfa693375b9d5ebe5ee0b262400bdd5b47f8484fb62d207",
+      "actual": "c5ffbf25d334ff57abfa693375b9d5ebe5ee0b262400bdd5b47f8484fb62d207"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/surprised_R_s4.png",
+      "expected": "667e13d7ff2cc368dea0e26cc1412cebbf6aa43e03223d48e3ef18338445bb6c",
+      "actual": "667e13d7ff2cc368dea0e26cc1412cebbf6aa43e03223d48e3ef18338445bb6c"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_L_s1.png",
+      "expected": "ce87d8329d3dea2a29d88e7eddae6e2b166289cba1e7531761ef6f6405a304ea",
+      "actual": "ce87d8329d3dea2a29d88e7eddae6e2b166289cba1e7531761ef6f6405a304ea"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_L_s2.png",
+      "expected": "aa6e58ca41dd3015e7027a860010e3e2afc9e6a716e3f80517a0b6009c22ef42",
+      "actual": "aa6e58ca41dd3015e7027a860010e3e2afc9e6a716e3f80517a0b6009c22ef42"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_L_s3.png",
+      "expected": "167fae9d724be8620ab6680123eb1c87b609d7bb4b2e85a9194fe18810469efc",
+      "actual": "167fae9d724be8620ab6680123eb1c87b609d7bb4b2e85a9194fe18810469efc"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_L_s4.png",
+      "expected": "ac01720337a840c227ad8576f6731a2425b046805ecb6f73e101abaec671ed55",
+      "actual": "ac01720337a840c227ad8576f6731a2425b046805ecb6f73e101abaec671ed55"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_R_s1.png",
+      "expected": "fc9e65f2ddf34d42b99da8b8d5a90dfa0bf692f466730cc93aae8ecc64f557ec",
+      "actual": "fc9e65f2ddf34d42b99da8b8d5a90dfa0bf692f466730cc93aae8ecc64f557ec"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_R_s2.png",
+      "expected": "9a8edd2a7edbf13ae9d935d930cc173669258ecea219dc71097a0f18194240b6",
+      "actual": "9a8edd2a7edbf13ae9d935d930cc173669258ecea219dc71097a0f18194240b6"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_R_s3.png",
+      "expected": "fcf74e3b3f9a8e5540f7175da2e5b6fe37db7a8d8114803c14f8538a66e9a544",
+      "actual": "fcf74e3b3f9a8e5540f7175da2e5b6fe37db7a8d8114803c14f8538a66e9a544"
+    },
+    {
+      "file": "assets/images/characters/portraits/lou/provisional-21b/blink/worried_R_s4.png",
+      "expected": "8561047979b395942b7572e6a4e1965b6c6229c1de85503e74ad0d51a2361462",
+      "actual": "8561047979b395942b7572e6a4e1965b6c6229c1de85503e74ad0d51a2361462"
+    },
+    {
+      "file": "img/events/cg01_rue_encounter_landscape_16x9.png",
+      "expected": "becb8dacda43cbf7fa31a7a30cc8cc60ad08e8126cb1555da8c222b9c354a63d",
+      "actual": "becb8dacda43cbf7fa31a7a30cc8cc60ad08e8126cb1555da8c222b9c354a63d"
+    },
+    {
+      "file": "img/events/cg01_rue_encounter_portrait_9x16.png",
+      "expected": "60d4054c633d92ce01ca56c77cb6dda742ef3e83b14f1f03be246941b58748b2",
+      "actual": "60d4054c633d92ce01ca56c77cb6dda742ef3e83b14f1f03be246941b58748b2"
+    },
+    {
+      "file": "img/events/cg02_fathers_sword_break_landscape_16x9.png",
+      "expected": "0d06307140ae0cca2bb9aeb014e72a705161bf51ce7cf1fd676da87e11239e70",
+      "actual": "0d06307140ae0cca2bb9aeb014e72a705161bf51ce7cf1fd676da87e11239e70"
+    },
+    {
+      "file": "img/events/cg02_fathers_sword_break_portrait_9x16.png",
+      "expected": "9e89dba7ad80f821931394286ef0acb68dceff296a05445f00515d6f59cb9aeb",
+      "actual": "9e89dba7ad80f821931394286ef0acb68dceff296a05445f00515d6f59cb9aeb"
+    },
+    {
+      "file": "img/events/cg03_fiona_wind_dance_landscape_16x9.png",
+      "expected": "378bc551a2da6f190f6589ba5dc40586aa43c42ce6f83f5cd89dbc73bcff8249",
+      "actual": "378bc551a2da6f190f6589ba5dc40586aa43c42ce6f83f5cd89dbc73bcff8249"
+    },
+    {
+      "file": "img/events/cg03_fiona_wind_dance_portrait_9x16.png",
+      "expected": "3cd29724d8c36a25afc40d2cd7fc1cc2a3d45824b41de1ceabfa5725d55187a8",
+      "actual": "3cd29724d8c36a25afc40d2cd7fc1cc2a3d45824b41de1ceabfa5725d55187a8"
+    },
+    {
+      "file": "img/events/cg04_rue_intervention_landscape_16x9.png",
+      "expected": "210f002332e1040f668a90635aabc7de6fe65c21dee9201e4bbe0ea400ab56b5",
+      "actual": "210f002332e1040f668a90635aabc7de6fe65c21dee9201e4bbe0ea400ab56b5"
+    },
+    {
+      "file": "img/events/cg04_rue_intervention_portrait_9x16.png",
+      "expected": "7f3f7bcc9d41050df6f6734f41dfd5d432b058aae42c3173f923a0de3e9943ac",
+      "actual": "7f3f7bcc9d41050df6f6734f41dfd5d432b058aae42c3173f923a0de3e9943ac"
+    },
+    {
+      "file": "img/events/cg05_oath_sword_contract_landscape_16x9.png",
+      "expected": "f496069efcde96a0c2dadff513f11ba9013598d1424f4bdfb77ba78f18ca1a0e",
+      "actual": "f496069efcde96a0c2dadff513f11ba9013598d1424f4bdfb77ba78f18ca1a0e"
+    },
+    {
+      "file": "img/events/cg05_oath_sword_contract_portrait_9x16.png",
+      "expected": "a8f8de42135de9d709e8cd6248eeefb79e9971b896219b458c3e33884eb0dda0",
+      "actual": "a8f8de42135de9d709e8cd6248eeefb79e9971b896219b458c3e33884eb0dda0"
+    }
+  ],
+  "protected_count": 259,
+  "protected_pass": true,
+  "runtime_files": 1456,
+  "runtime_manifest_sha256": "429afe58311f7fb8d983c90e68cda6bdfc7ca7500b857477593aa4efbdb8b5ef",
+  "fixture_diagnostics": {
+    "baseline": "12 suites PASS / 2 suites FAIL",
+    "in_memory_adapter_only": "startup20 / continue37 PASS; original files unchanged"
+  }
+}

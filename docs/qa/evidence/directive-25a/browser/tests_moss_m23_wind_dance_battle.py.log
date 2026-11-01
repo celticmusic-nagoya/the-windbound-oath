@@ -1,0 +1,31 @@
+ok   flag off: command not visible even after learning
+ok   flag off: a forced winddance action costs nothing and applies nothing
+ok   no eva_up effect: evasion 0, never rolls
+ok   no eva_up effect: no random number is consumed
+ok   bolt MP regain defaults to off (MP unchanged)
+ok   flag on but not learned: unusable
+ok   not learned: forced action does nothing
+ok   learned + flag: command shown in Fiona's row
+ok   MP9: command disabled (cost 10)
+ok   cast round finished (via the command button path)
+ok   MP10 spent (30 -> 20)
+ok   all allies get +15pt evasion [{'type': 'eva_up', 'magnitude': 0.15, 'remainingTurns': 2, 'source': 'fiona', 'target': 'aidan', 'revision': 1}]
+ok   after the cast round 2 phases remain (the cast round's own enemy phase was covered) -> 3 in total (remaining 2)
+ok   recast refreshes duration, does not stack (evasion 0.15)
+ok   dodge roll succeeds -> no HP lost during phase 2 [73, 90] [73, 90]
+ok   phase 2 ticked (remaining 1)
+ok   party sprites present while dodging (evade pose is a still swap; no errors)
+ok   dodge roll succeeds -> no HP lost during phase 3
+ok   effect gone after the 3rd phase
+ok   after expiry the enemy hits again [73, 90] -> [55, 90]
+ok   evasion is capped at 50%
+ok   [hit] bolt on a living target: MP +3 (got 13)
+ok   [hit] bolt with no valid target: MP +0 (got 10)
+ok   [hit] capped at max MP 30
+ok   [hit] Aidan's attack gives no MP
+ok   [action] bolt on a living target: MP +3 (got 13)
+ok   [action] bolt with no valid target: MP +3 (got 13)
+ok   [action] capped at max MP 30
+ok   [action] Aidan's attack gives no MP
+ok   no page errors []
+FAILS 0

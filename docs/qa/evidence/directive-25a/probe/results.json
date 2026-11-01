@@ -1,0 +1,59 @@
+{
+  "source_head": "535ed142b21975b3bfb68eed4dedb529fc13bebd",
+  "main_base": "5ab60c5db833821744d73080f91ffcd559ebf0a4",
+  "port": 8765,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "results": [
+    {
+      "test": "tests/system/playable_audit_25a.py",
+      "classification": "新規",
+      "exit_code": 1,
+      "seconds": 114.835,
+      "failure_lines": [
+        "FAIL rilde_drawer grants advertised reward",
+        "FAIL rilde_pot grants advertised reward",
+        "FAIL balloon completion grants advertised2 potions",
+        "FAIL cat completion grants advertised2 antidotes"
+      ],
+      "reported_fails": [
+        4
+      ],
+      "log": "tests_system_playable_audit_25a.py.log",
+      "test_sha256_before": "9d48b5fedd89606cf1014223d9edcaea00b8b9b7304e134d9115eb98d75bd875",
+      "test_sha256_after": "9d48b5fedd89606cf1014223d9edcaea00b8b9b7304e134d9115eb98d75bd875",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m10_flow.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 75.082,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m10_flow.py.log",
+      "test_sha256_before": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "test_sha256_after": "35b12615b310cc2d00e8b720d68abe41991ec9bc096ee107250fb4e5478c8b07",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/battle/raider_wipe_rematch.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 70.691,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_battle_raider_wipe_rematch.py.log",
+      "test_sha256_before": "dcb612efd031254e8c80b5e2a55b1d5f1b2f808fb29e680e0bf322b9fa6503dd",
+      "test_sha256_after": "dcb612efd031254e8c80b5e2a55b1d5f1b2f808fb29e680e0bf322b9fa6503dd",
+      "server_stopped": true
+    }
+  ]
+}

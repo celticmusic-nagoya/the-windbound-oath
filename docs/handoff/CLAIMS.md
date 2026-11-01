@@ -175,3 +175,5 @@ Codex / codex/24b-dev-status / base2c78799ca172f9c87ba71886b8f9bf574d7f470f. Use
 
 ## DIRECTIVE-25A (2026-11-01)
 Codex / codex/25a-playable-audit / base5ab60c5db833821744d73080f91ffcd559ebf0a4. Audit/evidence/minimal audit-onlytests/planning only. No game/asset/adoption/save/balance changes, even ifP0found; document and separate nexttask. Scope actualnewgame→implementedendpoint, maps/combat/mobile/assets/performance/coverage, distinguishCOMPLETE/PARTIAL/MISSING/BUG/BLOCKED. Protect259PNG and completedPhase4/5A/5B; previoushumanAndroidPASS not generalizedtonewaudit. work/codexnamespace blocked byexistingworkref(preserve). STATUS: WIP.
+
+25A audit checkpoint: 61items43COMPLETE/10PARTIAL/1MISSING/5BUG/2BLOCKED; actualearlyrewards4casesFAIL documented, no productfix. Browser35PASS/1FAIL; originalNode12PASS/2FAIL, assettest1FAIL retained; artifactintegrity20checksPASS;259formalPNG/runtime1456files unchanged. docs/qa/DIRECTIVE-25A.md and Phase6backlog/assetgaps are reviewtarget. User25Aaudit-onlyscope permits findings→nexttask separation. Independentexact-headreview/rollback/readback/protectednormalmerge still required. STATUS: READY_FOR_REVIEW.
