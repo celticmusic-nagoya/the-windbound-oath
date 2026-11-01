@@ -76,6 +76,19 @@ with sync_playwright() as pw:
  for w,h in [(390,844),(844,390),(1920,1080)]:
   p.set_viewport_size({'width':w,'height':h});p.wait_for_timeout(300);ck('rotation retains map and input '+str((w,h)),ev("MossForest.active&&!LoadingInput.busy&&MossForest.mapId==='royal_capital_02_castle_plaza'"))
  c.close()
+ # Audit existing production interact hooks in a fresh context; not normal-route evidence.
+ c,p=page();ev=p.evaluate;dismiss()
+ rewards={};report['seeded_rewards']=rewards
+ for hook,item,amount in [('rilde_drawer','potion',1),('rilde_pot','gold',3)]:
+  before=ev("id=>id==='gold'?gold:Inventory.count(id)",item);ev("h=>RildeVillage.hook({hook:h},MossForest.map)",hook);after=ev("id=>id==='gold'?gold:Inventory.count(id)",item);rewards[hook]={'before':before,'after':after,'expected_delta':amount,'message':p.locator('#msg').inner_text()};ck(hook+' grants advertised reward',after-before==amount,rewards[hook]);dismiss()
+ before=ev("Inventory.count('potion')");ev("RildeVillage.hook({hook:'rilde_kid'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_balloon_tree'},MossForest.map)");after=ev("Inventory.count('potion')");rewards['balloon']={'before':before,'after':after,'expected_delta':2,'message':p.locator('#msg').inner_text(),'done':ev('flags.balloonDone')};ck('balloon completion grants advertised2 potions',after-before==2,rewards['balloon']);dismiss()
+ ev("RildeVillage.hook({hook:'rilde_catowner'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_cat'},MossForest.map)");dismiss();ev("RildeVillage.hook({hook:'rilde_catowner'},MossForest.map)");rewards['cat']=ev("({done:flags.catDone,itemId:Object.keys(ItemData.items).find(k=>ItemData.items[k].name==='毒消し')||null,items:Inventory.serialize(),consumables:{...battleItems},message:document.querySelector('#msg').textContent})");ck('cat completion grants advertised antidote item',bool(rewards['cat']['itemId']) and ev("id=>Inventory.count(id)>=2",rewards['cat']['itemId']),rewards['cat']);dismiss();c.close()
+ # Complete the existing fort final pages and END button, isolated seeded fixture.
+ c,p=page();ev=p.evaluate;dismiss();ev('PrologueProgress.seed(3);storyStage=13;startFortFinale()')
+ for _ in range(14):
+  if not p.locator('#fortScene').is_visible():break
+  p.locator('#fortScene').click();p.wait_for_timeout(100)
+ ck('fort final pages show existing PROLOGUE END',ev('storyStage===15') and p.locator('#prologueEnd').is_visible());p.locator('#endReturn').click();p.wait_for_function("storyStage===15&&MossForest.mapId.startsWith('fort_dunvall')&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy");report['seeded_end_free_roam']=ev('({stage:storyStage,map:MossForest.mapId})');ck('END returns to live fort free roam',ev('MossForest.active'));c.close()
  # Low-HP injection tests documented current recovery rules, not balanced normal play.
  c,p=page(844,390);ev=p.evaluate;dismiss();ev("storyStage=9;startAttackBattle('mossSlime1',100)");p.wait_for_function("!battleCommandLocked('normal')",timeout=20000)
  ev('aahp=1;normalFHP=1');ev("PrologueCombat.enemyRound('normal')");report['seeded_normal_defeat']=ev('({aidan:aahp,fiona:normalFHP,busy:attackBattleBusy})');ck('normal current low-HP recovery restores commands',ev('aahp>=35&&normalFHP>=32&&!attackBattleBusy'));c.close()
