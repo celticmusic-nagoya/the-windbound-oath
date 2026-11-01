@@ -5,7 +5,7 @@ Run serially via tools/qa/run_all.sh; artifacts go to external QA_OUT.
 import json, os, time, traceback
 from pathlib import Path
 from playwright.sync_api import sync_playwright
-OUT=Path(os.environ['QA_OUT']); OUT.mkdir(parents=True,exist_ok=True)
+OUT=Path(os.environ['QA_OUT']).resolve(); assert not OUT.is_relative_to(Path(__file__).resolve().parents[2]); OUT.mkdir(parents=True,exist_ok=True)
 report={'conditions':{'browser':'Chromium headless','hardware':'cloud container; NOT Android hardware','normal_route':'title NEW GAME, actual walk/pathfinder and rendered controls; no seed/teleport/DEV kill'},'checks':[],'errors':[],'http_errors':[],'console_errors':[],'route':[]}
 fails=[]
 def ck(name,ok,detail=None):
@@ -29,6 +29,9 @@ with sync_playwright() as pw:
   old=ev('MossForest.mapId');accepted=ev('([x,y])=>MossForest.goFeet(x,y)',[x,y]);ck('route accepted '+str((x,y)),accepted)
   if not accepted:raise AssertionError('unreachable path target')
   p.wait_for_function("m=>MossForest.mapId!==m||(!MossForest.target&&!MossForest.busy)",arg=old,timeout=timeout)
+  if not expected:
+   state=ev('({feet:MossForest.feet,outcome:MossForest.status.outcome})');distance=((state['feet']['x']-x)**2+(state['feet']['y']-y)**2)**.5;ck('route arrived '+str((x,y)),distance<30,state)
+   if distance>=30:raise AssertionError('walk stopped before destination: '+str(state))
   if expected:p.wait_for_function("m=>MossForest.mapId===m&&MossForest.active&&!MossForest.busy&&!LoadingInput.busy",arg=expected,timeout=30000)
  def worldtap(x,y):
   pt=ev("([x,y])=>{let r=document.querySelector('#forestWorld').getBoundingClientRect(),s=FieldCamera.scale;return [r.left+x*s,r.top+y*s]}",[x,y]);p.touchscreen.tap(*pt);p.wait_for_timeout(300)
