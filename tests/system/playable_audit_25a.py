@@ -8,9 +8,12 @@ from playwright.sync_api import sync_playwright
 OUT=Path(os.environ['QA_OUT']).resolve(); assert not OUT.is_relative_to(Path(__file__).resolve().parents[2]); OUT.mkdir(parents=True,exist_ok=True)
 report={'conditions':{'browser':'Chromium headless','hardware':'cloud container; NOT Android hardware','normal_route':'title NEW GAME, actual walk/pathfinder and rendered controls; no seed/teleport/DEV kill'},'checks':[],'errors':[],'http_errors':[],'console_errors':[],'route':[]}
 fails=[]
+def persist():
+ (OUT/'playable-probe.json').write_text(json.dumps({**report,'fails':fails},ensure_ascii=False,indent=2)+'\n')
 def ck(name,ok,detail=None):
  report['checks'].append({'name':name,'pass':bool(ok),'detail':detail}); print(('ok   ' if ok else 'FAIL ')+name,flush=True)
  if not ok:fails.append(name)
+ persist()
 with sync_playwright() as pw:
  b=pw.chromium.launch(); report['conditions']['version']=b.version
  def page(w=390,h=844):
@@ -22,7 +25,7 @@ with sync_playwright() as pw:
   return c,p
  c,p=page(); ev=p.evaluate
  def snap(label):
-  state=ev("({stage:storyStage,map:MossForest.mapId,feet:MossForest.feet,loading:LoadCoordinator.phase,objective:currentObjective})");report['route'].append({'label':label,**state});p.screenshot(path=str(OUT/(label+'.png')));print('STATE',label,json.dumps(state,ensure_ascii=False),flush=True)
+  state=ev("({stage:storyStage,map:MossForest.mapId,feet:MossForest.feet,loading:LoadCoordinator.phase,objective:currentObjective})");report['route'].append({'label':label,**state});p.screenshot(path=str(OUT/(label+'.png')));print('STATE',label,json.dumps(state,ensure_ascii=False),flush=True);persist()
  def dismiss():
   if p.locator('#msg').is_visible():p.locator('#msg').click();p.wait_for_timeout(100)
  def walk(x,y,expected=None,timeout=120000):
