@@ -46,7 +46,7 @@ PortraitRegistry.define('aidan', {
 
 - 共通の語彙は `normal smile angry sad surprised worried determined relieved`（`01`〜`08` も可）。
 - 各キャラクターの `faces` にない ID、未知の ID、読み込めない画像は `normal` で表示する。`normal` も読めない場合は立ち絵なしで、会話は止まらない。
-- エイダンは `normal smile angry worried(困り顔) sad(伏し目) surprised`。
+- エイダンは `normal(通常) smile(微笑み) angry(怒り) worried(心配) sad(悲しみ) surprised(驚き)`。
 
 ### 表示位置の決め方（優先順）
 

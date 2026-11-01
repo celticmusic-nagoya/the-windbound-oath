@@ -170,3 +170,5 @@ Codex / codex/24a-story-expressions / base2b2daa0c602bc4b8fe86a8b5df08a4469e33df
 
 ## DIRECTIVE-24B (2026-10-31)
 Codex / codex/24b-dev-status / base2c78799ca172f9c87ba71886b8f9bf574d7f470f. User confirms24AAndroid5/5PASS, Phase4/5ACOMPLETE. Scope DEV/previewlabels, minimalDEVlayout ifneeded, currentREADME/guide only +tests. Formal259PNG, registryURLs/historicalflags, renderer/blink,115storyassignments/conditions/save/battle/CG untouched. Historicalhandoff/QA/provenance preserved. work/codexnamespace blocked byexistingworkref(preserve). STATUS: WIP.
+
+24B QA checkpoint: DEV6displayitems corrected,3currentdocsupdated+1guideadded, datedhistory preserved.9unique regressionfiles+Node6PASS;259PNG/registry/render/blink/115storydata unchanged; all28formal/24blink/4static labels matchactualrefs. docs/qa/DIRECTIVE-24B.md, PR98. Phase5BimplementationCOMPLETE; finalheadindependentreview/rollbackremote verification pendingbeforemerge. STATUS: READY_FOR_REVIEW.
