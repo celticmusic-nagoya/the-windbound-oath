@@ -42,11 +42,11 @@
         return true;
       }
       case h === 'rilde_drawer': {
-        if (!flags.drawer) { flags.drawer = true; say('タンスを調べた。きずぐすりを1個見つけた！'); } else say('衣類がきれいに畳まれている。');
+        if (!flags.drawer) { Inventory.grant({potion:1}); flags.drawer = true; say('タンスを調べた。きずぐすりを1個見つけた！'); } else say('衣類がきれいに畳まれている。');
         return true;
       }
       case h === 'rilde_pot': {
-        if (!flags.pot) { flags.pot = true; say('壺の中を調べた。3Gを見つけた！'); } else say('壺の中は空だ。');
+        if (!flags.pot) { Inventory.grant({gold:3}); flags.pot = true; say('壺の中を調べた。3Gを見つけた！'); } else say('壺の中は空だ。');
         return true;
       }
       case h.startsWith('rilde_text:'): return click($id(h.slice(11)));
@@ -79,6 +79,7 @@
     if(token===undefined)return LoadCoordinator.boot(t=>startOpening(t));
     LoadCoordinator.assertCurrent(token);
     PrologueProgress.resetLegacyEvents();
+    if (typeof battleItems !== 'undefined') delete battleItems.antidote;
     storyStage = 0; currentObjective = '家を出て、訓練場のフィオナに会いに行こう'; renderJournal();
     show();
     const pending=MossForestStory.enterMap('rilde_in_aidan','from_bed',{loadToken:token}),request=MossForest.enterCount;

@@ -1,0 +1,3 @@
+PASS LOAD input ownership, nested completion, duplicate LOAD and release
+PASS failed LOAD remains protected; explicit retry recovers
+PASS stale LOAD cannot release new boot owner

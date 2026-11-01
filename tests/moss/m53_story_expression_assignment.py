@@ -8,7 +8,7 @@ def check(ok,label,detail=None):
  if not ok:fails.append(label)
 S=json.loads(subprocess.check_output(['node','tools/qa/story_expression_snapshot.cjs'],cwd=ROOT));A=json.loads((ROOT/'docs/qa/evidence/directive-24a/dialogue-audit.json').read_text());names={'エイダン':'aidan','フィオナ':'fiona','ルー':'lou','エマ':'emma'}
 check(S['behavior_sha256']==A['behavior_sha256']=='4d9c203b00d45ac245a369350b8fe910bf4e2a1164e5cb492aa82bf7b1c10114','all original words/page counts/order/choices/conditions/flags/rewards equal main')
-check(S['index_logic_sha256']=='49479618b91079b9fcb423125f9938f1d7a793d17ef62959b125718fb3013bd5','all index HTML/control logic unchanged except explicit presentation bridge/metadata/cache')
+check(S['index_logic_sha256']=='c6fa5ff607f98c0e64ebdad8a1185cff0ca52e4ade61b6db7ddda1835f513640','index logic matches approved26B reward-only baseline; exact source delta guarded by early_rewards_26b')
 allpages=[dict(key=c['key'],page=i,**p) for c in S['conversations'] for i,p in enumerate(c['pages'])]+S['cinematic']+S['training']+S['inspection'];actual={(p['key'],p['page']):p for p in allpages if p.get('char')};expected={(p['key'],p['page']):p for p in A['assignments']}
 check(len(allpages)==388 and len(actual)==len(expected)==115 and set(actual)==set(expected),'388 audited display-path pages;115 authored targets, no missing target')
 check(all(all(actual[k].get(f)==p[f] for f in ['speaker','text','char','face','side']) for k,p in expected.items()),'manual audited face mapping exactly equals production data')

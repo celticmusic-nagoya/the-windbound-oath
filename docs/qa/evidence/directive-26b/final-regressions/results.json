@@ -1,0 +1,55 @@
+{
+  "source_head": "1af0b66eb0851d89d06aa321eb113506ffaddfdf",
+  "main_base": "ad4a3d679987a540fc0248c9b5bfd0e8c43a15a3",
+  "port": 8765,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "git_history": true,
+  "results": [
+    {
+      "test": "tests/system/early_rewards_26b.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 44.196,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_system_early_rewards_26b.py.log",
+      "test_sha256_before": "5de18253c66ba2dc4a7d88694f6b1b3f8b7b08210c6aac65537b39ece70d11e9",
+      "test_sha256_after": "5de18253c66ba2dc4a7d88694f6b1b3f8b7b08210c6aac65537b39ece70d11e9",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m16_battle_feel.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 41.408,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m16_battle_feel.py.log",
+      "test_sha256_before": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "test_sha256_after": "d95eb315b9083cdf65885ba7f71fd5a916d90ae9ddec87109ad77fbea13be8c7",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m53_story_expression_assignment.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 62.324,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m53_story_expression_assignment.py.log",
+      "test_sha256_before": "f4569f0ed956b6fde57576fffec5f33242564092732e64a1548a907cabf6230d",
+      "test_sha256_after": "f4569f0ed956b6fde57576fffec5f33242564092732e64a1548a907cabf6230d",
+      "server_stopped": true
+    }
+  ]
+}

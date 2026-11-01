@@ -1,0 +1,74 @@
+[
+  {
+    "case": "strict-extraction-contract",
+    "exit_code": 0,
+    "expected_exit": 0,
+    "marker": "strict extraction contract PASS",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "missing-say",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "fixture: dialogue declaration not found",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "missing-dialogue-end",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "fixture: dialogue end not found",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "missing-portrait",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "fixture: story portrait declaration not found",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "stale-narration",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "\u671d\u306e\u98a8\u304c\u7a93\u3092\u63fa\u3089\u3057\u3066\u3044\u308b",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "broken-restore",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "false !== true",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "lost-android-pass",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "Android history mismatch",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "forged-android-pass",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "undocumented Android claim",
+    "injection_seen": true,
+    "pass": true
+  },
+  {
+    "case": "wrong-verified-sha",
+    "exit_code": 1,
+    "expected_exit": 1,
+    "marker": "Android history mismatch",
+    "injection_seen": true,
+    "pass": true
+  }
+]

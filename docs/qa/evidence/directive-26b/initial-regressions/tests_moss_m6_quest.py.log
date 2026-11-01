@@ -1,0 +1,35 @@
+ok   quest starts unaccepted
+ok   first visit: normal warning line (no offer yet)
+ok   second visit: quest offer (after hearing a warning) エマ「そういえばエイダン。昔わたしが編んだ風よけ
+ok   offer shows two choices
+ok   decline reply
+ok   declining leaves the quest unaccepted
+ok   offer is repeated after declining
+ok   accepting makes it active
+ok   active: hint line エマ「護符は見つかったかい？　森の道の、
+ok   QUEST tab shows it as 進行中 with objective
+ok   owning the charm makes it complete (derived)
+ok   QUEST tab shows 達成
+ok   report conversation
+ok   reward page shown and granted (ether +1)
+ok   reported; the 護符 stays in 大事なもの
+ok   thanks line (once)
+ok   afterwards back to normal Emma lines: エマ「最近、モスの森のあたりも空気が
+ok   found early: Emma recognises the charm
+ok   found early closes the quest in one conversation + reward
+ok   save carries quests {'q_emma_charm': 'active'}
+ok   normal quest LOAD commits
+ok   load restores the quest state
+ok   invalid quest fields normalize via committed LOAD
+ok   hostile quest block ignored
+ok   legacy missing-quests LOAD commits
+ok   save without quests block loads as unaccepted
+ok   elder without the shard: normal lines still work (tables merged)
+ok   elder asks about the 古びたルーン片
+ok   見せない
+ok   asks again after refusing
+ok   見せる reply
+ok   second reply page
+ok   flag elder_saw_shard set (saved with talk state)
+ok   afterwards: elder remembers
+ok   0 console errors []
