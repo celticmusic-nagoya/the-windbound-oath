@@ -93,3 +93,17 @@ for #107 `7fd4b68` and #112 `964b2a5` are now recorded separately in evidence.
 Both PASS their implemented isolated visual/runtime scope; #112 actual default72
 and original m31 PASS. The earlier50/72/90 comparison is historical immutable-source
 evidence, not a claimed new50 matrix. #112 main integration remains Claude-owned.
+
+## Final integration candidate
+
+Both upstream changes are now in main: soldier #107 via #123 (`d6153ba`),
+Aidan #112 via #124 (`22efe877fbbfef5c5ec3445109b32bff70575da3`).
+Their production images/registry are imported unchanged. The known runtime/cache
+merge overlap was reconciled only after the external integration completed:
+production Aidan side stride72 / DEV query50/72/90 remain verbatim, and both real
+sprite and inspector use that same value. Fiona/front/back remain90.
+No PNG/asset-ledger diff vs latest main; formal259 remain unchanged.
+
+Intermediate tester `600fd78` independent UI96checks across3views and an actual
+moving NPC freeze/resume plus LOAD/battle cleanup PASS; evidence retained as
+intermediate, not final-head acceptance. Final integrated-head verification pending.

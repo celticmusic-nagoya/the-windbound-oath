@@ -30,3 +30,7 @@ No adopted PNG is changed by the tester.
 
 Physical Android visual acceptance remains the director's task. Codex does not
 claim that pushing this handoff starts a Claude session or completes its integration.
+
+Integration update: upstream #107 via #123 and #112 via #124 are merged in main22efe87.
+Codex imported them after their integration completed, preserved default72 / query
+overrides and connected the shared runtime adapter. Final integrated tester QA pending.
