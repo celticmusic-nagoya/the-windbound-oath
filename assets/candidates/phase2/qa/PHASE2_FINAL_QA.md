@@ -41,7 +41,7 @@ Numeric: all 4 PASS (size, RGBA, binary alpha, transparent RGB 0, grounding). Vi
 |---|---|
 | table_small | PASS — gap between legs clean |
 | chair_back | PASS — grey line removed |
-| jar | FAIL (minor) — white background inside both handle holes (98 px). Fixed copy: `delivery3_fix/furn_h01_jar.png` (holes made transparent, nothing else changed). Fixed copy PASS |
+| jar | FAIL (minor) — white background inside both handle holes (107 px cleared). Fixed copy: `delivery3_fix/furn_h01_jar.png` (holes made transparent, nothing else changed). Fixed copy PASS |
 | stool | FAIL — new seat is flat drawn ellipses with a green cushion layered over the old clipped seat (double seat, style mismatch). Use `claude_repair/furn_h01_stool.png` (PASS) or request a redraw |
 
 Final selection: `selection.json`. In-game render with the selection (`qa/final/render_d3select_*`, PC / Android landscape / portrait emulation): 13/13 loaded, 0 page errors, grounding and scale OK.
