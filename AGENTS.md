@@ -93,15 +93,13 @@ Russet/red patterned bandana, goggles, agile dark leather equipment.
 Long dark hair, violet eyes, modest academy/gothic witch styling, black/navy/purple + antique gold.
 Highest MAG; Resonance system 0–3.
 
-### Future dwarf
-Blacksmith/tank. High DEF, provoke, cover, iron wall, shield bash/BREAK.
-Joining can unlock forging/equipment upgrades.
-Name/design not finalized.
+### Bram / ブラム
+Confirmed dwarf blacksmith and shield-oriented tank. First appears anonymously in Dunvar Fortress tavern, later joins after the royal-capital supply-transport incident, before the underground historical archive. His workshop is BRAM'S FORGE. Primary equipment is a large rune shield; one-handed warhammer is secondary. Rune: Earth.
+Exact combat multipliers and costs remain undecided.
 
-### Future dancer
-Buff/debuff/action-order specialist.
-Distinctive proposed mechanic: DANCE CHAIN.
-Name/design not finalized.
+### Selena / セレナ
+Confirmed human dancer, approximately 24, formerly of the traveling troupe 風渡りの一座. Appears dancing at the royal-capital anniversary festival without joining; later joins voluntarily during the journey. Dance is a buff/debuff/action-order specialty, with DANCE CHAIN as a documented design direction. Rune: Water. Her ancient dance site is not the royal underground historical archive.
+Exact skill values, joining location and ancient ritual-site layout remain undecided.
 
 ## 6. Battle presentation — confirmed baseline
 - Allies on left facing right; enemies on right facing left.
