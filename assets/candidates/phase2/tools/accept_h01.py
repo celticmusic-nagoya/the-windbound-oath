@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage
 
-H01 = pathlib.Path(__file__).resolve().parents[1]; SPEC = json.loads((H01 / 'spec/h01_asset_spec.json').read_text())
+H01 = pathlib.Path(__file__).resolve().parents[1]; SPEC = json.loads((next(p for p in (H01 / 'spec/h01_asset_spec.json', pathlib.Path(__file__).resolve().parent / 'h01_asset_spec.json') if p.exists())).read_text())
 
 
 def check(path, w, h, kind):

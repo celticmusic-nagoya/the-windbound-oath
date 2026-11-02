@@ -8,7 +8,7 @@ import json, pathlib, shutil, sys
 from PIL import Image, ImageDraw, ImageFont
 from playwright.sync_api import sync_playwright
 
-H01 = pathlib.Path(__file__).resolve().parents[1]; R = pathlib.Path.cwd(); SPEC = json.loads((H01 / 'spec/h01_asset_spec.json').read_text())
+H01 = pathlib.Path(__file__).resolve().parents[1]; R = pathlib.Path.cwd(); SPEC = json.loads((next(p for p in (H01 / 'spec/h01_asset_spec.json', pathlib.Path(__file__).resolve().parent / 'h01_asset_spec.json') if p.exists())).read_text())
 F = ImageFont.truetype('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc', 15)
 VP = {'pc': (1280, 720), 'land': (915, 412), 'port': (412, 915)}
 SERVE = '_h01_serve/'   # temporary, deleted at the end; never committed

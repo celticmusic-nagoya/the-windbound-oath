@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw
 from scipy import ndimage
 
 H01 = pathlib.Path(__file__).resolve().parents[1]
-SPEC = {it['new_asset_id']: it for it in json.loads((H01 / 'spec/h01_asset_spec.json').read_text())['items']}
+SPEC = {it['new_asset_id']: it for it in json.loads((next(p for p in (H01 / 'spec/h01_asset_spec.json', pathlib.Path(__file__).resolve().parent / 'h01_asset_spec.json') if p.exists())).read_text())['items']}
 # max content box [x0, y0, x1, y1] (px, exclusive) = alpha bbox of the current art (measure_fit); its size bounds the new art
 FIT = {"furn_h01_doormat": [4, 8, 164, 64], "furn_h01_window_wall": [0, 4, 128, 148], "furn_h01_tapestry": [0, 0, 144, 196], "furn_h01_fireplace": [4, 4, 300, 272], "furn_h01_bed": [4, 4, 244, 184], "furn_h01_bed_small": [8, 8, 216, 168], "furn_h01_rug_green": [4, 4, 400, 240], "furn_h01_table_small": [8, 12, 184, 144], "furn_h01_chair_back": [8, 12, 76, 112], "furn_h01_stool": [0, 0, 64, 72], "furn_h01_spinning_wheel": [8, 24, 120, 156], "furn_h01_barrel": [8, 4, 92, 124], "furn_h01_jar": [0, 8, 80, 104]}
 

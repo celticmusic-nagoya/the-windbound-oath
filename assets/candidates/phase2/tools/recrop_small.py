@@ -26,5 +26,7 @@ def cut(sheet, key, out, tol_chroma=16, min_val=150, enclosed_min=25):
     p = pathlib.Path(out) / f'{key}.png'; Image.fromarray(a.astype(np.uint8), 'RGBA').save(p)
     return dict(key=key, removed_bg=int(bg.sum()), kept=int(keep.sum()))
 
+PARAMS = {'chair_back': dict(tol_chroma=20, min_val=100, enclosed_min=15)}  # removes the grey gap line under the seat
+
 if __name__ == '__main__':
-    for k in BOX: print(json.dumps(cut(sys.argv[1], k, sys.argv[2])))
+    for k in BOX: print(json.dumps(cut(sys.argv[1], k, sys.argv[2], **PARAMS.get(k, {}))))

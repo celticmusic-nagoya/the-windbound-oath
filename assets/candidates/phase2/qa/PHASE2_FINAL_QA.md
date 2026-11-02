@@ -31,3 +31,6 @@ Repairs: table — white panel between legs removed; stool — seat no longer cl
 - Rug content height 193/240 and spinning wheel 112×112 are proportion-preserving; widen only if the director asks.
 - Small items come from a ~60–190 px reference infographic: edges are softer than the Delivery 2 redraws. Replace with Delivery 3 when uploaded.
 - Formal adoption, manifest/map wiring and main merge need explicit director approval.
+
+## Cleanup (AGENTS.md §21 lifecycle)
+Removed as superseded: `qa/delivery2/render_delivery2_{pc,land,port,pc_zoom2x}.png` (showed Delivery 1 small items, replaced by `qa/final/`), `qa/delivery2/accept.json` (covered by `qa/final/accept.json`), `qa/final/render_phase2final_pc.png` (duplicate of `_pc_zoom2x`). Added `source/ref_sheet_delivery1.png` so `claude_repair/` is reproducible. No candidate PNG changed; QA unaffected.
