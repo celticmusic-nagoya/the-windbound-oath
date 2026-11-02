@@ -17,6 +17,7 @@
  */
 (function () {
   'use strict';
+  const Walk = window.FieldWalkMotion;
   const MONSTER_TYPES = Object.freeze({
     // Weak, slow, easy to avoid: slow to notice, short chase, gives up quickly.  "A creature that wanders over because it is curious."
     moss_slime: Object.freeze({
@@ -124,16 +125,16 @@
       if (a.directions) {
         const bank = moving ? a.directions[m.facing] : a.idle;
         if (moving && !m.animMoving) m.travel = 0;
-        const phase = moving ? m.travel / a.stride * bank.length : m.animTime * fps;
-        src = m.frames[bank[Math.floor(phase) % bank.length]];
+        const phase = moving ? Walk.phaseDistance(m.travel, bank.length, a.stride) : Walk.phaseTime(m.animTime, bank.length, fps);
+        src = m.frames[bank[phase]];
         m.animMoving = moving;
       }
-      else if (pose) src = m.frames[pose[Math.floor(m.clock * fps) % pose.length]];
-      else if (moving) src = walk ? m.frames[walk[Math.floor(m.clock * fps) % walk.length]] : m.frames[Math.floor(m.clock * fps) % a.frames];
+      else if (pose) src = m.frames[pose[Walk.phaseTime(m.clock, pose.length, fps)]];
+      else if (moving) src = walk ? m.frames[walk[Walk.phaseTime(m.clock, walk.length, fps)]] : m.frames[Walk.phaseTime(m.clock, a.frames, fps)];
       else src = m.frames[0];
       if (m.el.dataset.src !== src) { m.el.dataset.src = src; m.el.src = src; }
     }
-    const lift = a && a.air ? a.air + Math.sin(m.clock * 3) * 4 : 0;   // flyers hover above their ground point
+    const lift = a ? Walk.air(a, m.clock) : 0;   // flyers hover above their ground point
     const hop = m.hopT > 0 ? -Math.abs(Math.sin(m.hopT * Math.PI)) * m.t.hop : 0;
     const flip = a && a.directions ? 1 : ((a ? a.faces : 1) * m.dir < 0 ? -1 : 1);
     const sig = Math.round(m.x) + ',' + Math.round(m.y) + ',' + Math.round(lift) + ',' + Math.round(hop * 2) + ',' + flip + ',' + src;
