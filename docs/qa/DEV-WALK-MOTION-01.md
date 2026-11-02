@@ -82,3 +82,14 @@ rollback-ref readback must be checked before any normal authorized main merge.
    With reduced-motion enabled, automatic loops must stay disabled; stepping must work.
 6. After Claude integrates #107/#112, confirm soldier six-frame cycle and Aidan side
    cycle at the actual production cadence. Formal visual adoption remains the director's.
+
+## Latest-main integration checkpoint
+
+Main advanced externally to `d6153ba026a51623b4aa9451ba5c71f2f4f1ef4b`
+(soldier #107 via #123). Merged into tester as `7bd63fbde664aade3d18c840b5eb30ba5900c2ea`.
+No JS/CSS/index/test changed in this upstream merge. Node17/17 and registry freshness
+PASS again. No tester img/assets diff vs new main. Independent newer-head reports
+for #107 `7fd4b68` and #112 `964b2a5` are now recorded separately in evidence.
+Both PASS their implemented isolated visual/runtime scope; #112 actual default72
+and original m31 PASS. The earlier50/72/90 comparison is historical immutable-source
+evidence, not a claimed new50 matrix. #112 main integration remains Claude-owned.
