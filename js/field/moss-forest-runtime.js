@@ -36,6 +36,12 @@
   }
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
   const Walk=window.FieldWalkMotion;
+  const STRIDE_CYCLE=Walk.STRIDE;
+  // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~22 world px stride (~45 per two-step cycle), so the side sets use their own
+  // cycle length; front/back (6 frames) and Fiona keep STRIDE_CYCLE. DEV builds accept ?aidanSideStride=<n> for A/B comparison.
+  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 72;})();   // ART-08F: initial value 72 (no-slide value is ~50, but at ~300 world/s it animates ~36 fps); DEV ?aidanSideStride=50|72|90 for QA
+  const aidanStride=dir=>(dir==='left'||dir==='right')?AIDAN_SIDE_STRIDE:STRIDE_CYCLE;
+
   function artOf(dir,flip){return window.AidanHeading&&AidanHeading.art?AidanHeading.art(dir,flip):{dir,flip:!!flip};}
   const FALLBACK_HEAD={step:(dx,dy)=>({dir:Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'),flip:false}),reset(){},idleDir:d=>d};
   const spr={head:null,flip:false,frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
@@ -717,7 +723,7 @@
   }
   function reset(){cancelPendingEnter();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({walkStride(actor,dir){return Walk.STRIDE;},cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({walkStride(actor,dir){return actor==='aidan'?aidanStride(dir):Walk.STRIDE;},cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy||Boolean(entry)||recoveryRequired;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

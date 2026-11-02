@@ -2,6 +2,7 @@
 
 形式: `日付 | 素材 | 事象 | SHA / PR / Issue`。新しい行は上に追記。
 
+- 2026-11-02 | エイダン横向き歩行6コマ（右・左） | ユーザー採用（ART-08E：採用4コマの奥の脚に影0.66、05/06は02/03の役割入れ替え）。img/field/characters/aidan/side6/ に追加し横歩きを6コマ化、左右の歩行周期72（DEVで50/72/90切替）。旧4コマは保持、正面・背面・待機は変更なし | DIRECTIVE-ART-08F / PR #112 / docs/qa/DIRECTIVE-ART-08E.md
 - 2026-11-02 | 王国一般兵士 歩行6コマ | ユーザー採用（ART-06R、採用idleの脚パーツ差分）を実装。7fps・表示47.6×71.4 world、旧npc_soldier_walk_*.pngはrollback用に保持 | img/field/moss/props/npc_soldier_walk_v2_01〜06.png / DIRECTIVE-ART-07A / docs/qa/DIRECTIVE-ART-07A.md
 - 2026-11-02 | 王国一般兵士 正面idle | ユーザー採用（ChatGPT制作）をα正規化のみで実装。表示47.6×71.4 world（村人と同じ高さ）、歩行6コマは旧素材のまま（暫定） | img/field/moss/props/npc_soldier_idle_v2.png SHA bd2c994e… / DIRECTIVE-ART-05D / docs/qa/DIRECTIVE-ART-05D.md
 - 2026-10-19 | Phase 5 ゴブリン・レイダー | 採用5シート（attack/damage/enrage/call/idle 各6コマ）を切り出し・実装（表示倍率補正・idleループ）。候補2種（powered_attack / ko_dissolve）は未実装のまま PENDING | main 6a99f2bd70bc32ccd111f05effed2ebdb1ac0bd5 / PR #28 / handoff phase5-raider-20261019.md
