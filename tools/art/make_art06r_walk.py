@@ -21,10 +21,18 @@ R = pathlib.Path(__file__).resolve().parents[2]
 SRC = R / 'img/field/moss/props/npc_soldier_idle_v2.png'
 OUT = R / 'docs/art/candidates/art-06r'
 W, H = 112, 168
-LIFT = 9        # trailing-leg lift in px (≈3.8 world)
-SQUASH = .93    # trailing-leg vertical scale (farther from the camera)
-DARK = .82      # trailing-leg value (in shade, behind the body)
-SINK = 1        # upper-body sink on contact frames
+# Pose table: (lift px, vertical scale, value) per leg; L = image-left leg (character's right), R = image-right leg (left).
+# The cycle is a continuous arc for each foot: planted 0 -> trailing 4 (heel off, behind) -> passing 7 (swinging) -> reaching 3
+# (coming forward, almost down) -> planted 0. Contact frames sink the body 1 px. Only downward bob (the idle plume touches y=0).
+PLANT = (0, 1.0, 1.0); TRAIL = (4, .95, .86); PASS = (7, .93, .90); REACH = (3, .98, .97)
+POSES = {
+    'walk_01': dict(L=PLANT, R=TRAIL, sink=1),   # right foot (image left) forward & planted, left foot trailing
+    'walk_02': dict(L=PLANT, R=PASS, sink=0),    # weight on the right foot, left foot passing
+    'walk_03': dict(L=PLANT, R=REACH, sink=0),   # left foot reaching forward
+    'walk_04': dict(L=TRAIL, R=PLANT, sink=1),   # left foot (image right) forward & planted, right foot trailing
+    'walk_05': dict(L=PASS, R=PLANT, sink=0),
+    'walk_06': dict(L=REACH, R=PLANT, sink=0),
+}
 
 
 def mask_poly(pts):
@@ -53,17 +61,19 @@ def shift(p, dy):
     return o
 
 
-def trailing(p):
-    """Lift + slight vertical squash (anchored at the leg top) + shade. Nearest-neighbour only, alpha kept."""
+def leg(p, lift, squash, dark):
+    """Lift + slight vertical squash (anchored at the leg top) + shade. Nearest-neighbour only, alpha kept.
+    lift=0, squash=1, dark=1 returns the idle leg untouched (planted foot)."""
+    if lift == 0 and squash == 1 and dark == 1: return p.copy()
     ys, xs = np.nonzero(p[..., 3]); top, bot = ys.min(), ys.max()
     crop = Image.fromarray(p[top:bot + 1])
-    nh = max(1, round(crop.height * SQUASH)); crop = crop.resize((crop.width, nh), Image.NEAREST)
-    c = np.array(crop).astype(float); c[..., :3] *= DARK; c = c.astype(np.uint8)
+    nh = max(1, round(crop.height * squash)); crop = crop.resize((crop.width, nh), Image.NEAREST)
+    c = np.array(crop).astype(float); c[..., :3] *= dark; c = c.astype(np.uint8)
     c[c[..., 3] < 64] = 0   # squashing breaks the faint AA rim into loose specks: keep only the leg's solid pixels
     lab, n = ndimage.label(c[..., 3] > 0)   # and no loose fragments: keep only the main body of the leg
     if n > 1:
         sizes = ndimage.sum(np.ones_like(lab), lab, range(1, n + 1)); keep = 1 + int(np.argmax(sizes)); c[(lab != keep) & (lab > 0)] = 0
-    o = np.zeros_like(p); y0 = top + (bot + 1 - top - nh) - LIFT   # keep the foot below the hem: bottom rises by LIFT + squash
+    o = np.zeros_like(p); y0 = top + (bot + 1 - top - nh) - lift   # the foot bottom rises by `lift`; the squash is taken from the hidden top
     o[y0:y0 + nh, :] = c; return o
 
 
@@ -73,7 +83,7 @@ def over(dst, src):
     return out.astype(np.uint8)
 
 
-def frame(a, forward):
+def body_layer(a):
     body = a.copy(); legs = LEG_L | LEG_R; body[legs] = 0
     # faint anti-alias dust (alpha < 64) hugging the legs was hidden behind them in the idle; once a leg moves it would show
     # as grey specks, so it leaves with the legs (only near-transparent pixels within 2 px; nothing opaque is touched)
@@ -84,13 +94,17 @@ def frame(a, forward):
     op = body[..., 3] >= 64; nb = np.zeros_like(op)
     nb[1:] |= op[:-1]; nb[:-1] |= op[1:]; nb[:, 1:] |= op[:, :-1]; nb[:, :-1] |= op[:, 1:]
     body[near & (body[..., 3] > 0) & ~nb] = 0   # orphan pixels left where a leg was cut out (no 4-neighbour in the body layer)
-    lp, rp = part(a, LEG_L), part(a, LEG_R)
-    fwd, back = (lp, rp) if forward == 'L' else (rp, lp)
+    return body
+
+
+def frame(a, key):
+    """key = name in POSES. The leg drawn first is the farther one (higher lift); the body is always in front of both legs."""
+    P = POSES[key]; body = body_layer(a); lp, rp = part(a, LEG_L), part(a, LEG_R)
+    L = leg(lp, *P['L']); Rr = leg(rp, *P['R'])
+    order = [L, Rr] if P['L'][0] >= P['R'][0] else [Rr, L]
     canvas = np.zeros_like(a)
-    canvas = over(canvas, trailing(back))     # farthest first
-    canvas = over(canvas, fwd)                # planted leg on the ground line
-    canvas = over(canvas, shift(body, SINK))  # body (tunic hem, capes, spear, shield) in front of the legs
-    return canvas, body, lp, rp
+    for layer in order: canvas = over(canvas, layer)
+    return over(canvas, shift(body, P['sink'])), body, lp, rp
 
 
 def stats(arr):
@@ -103,13 +117,14 @@ def stats(arr):
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True); a = load(); info = {}
-    f01, body, lp, rp = frame(a, 'L'); f04, *_ = frame(a, 'R')
-    for name, arr in (('soldier_walk_01_candidate.png', f01), ('soldier_walk_04_candidate.png', f04)):
-        Image.fromarray(arr, 'RGBA').save(OUT / name); info[name] = dict(sha256=hashlib.sha256((OUT / name).read_bytes()).hexdigest(), **stats(arr))
+    frames = {}
+    for key in POSES:
+        arr, body, lp, rp = frame(a, key); frames[key] = arr; name = f'soldier_{key}_candidate.png'
+        Image.fromarray(arr, 'RGBA').save(OUT / name); info[name] = dict(sha256=hashlib.sha256((OUT / name).read_bytes()).hexdigest(), pose=POSES[key], **stats(arr))
     info['idle'] = dict(sha256=hashlib.sha256(SRC.read_bytes()).hexdigest(), **stats(a))
-    # upper body identity check: everything outside the two leg masks must equal the idle shifted by SINK (where not covered)
-    sb = shift(np.where((LEG_L | LEG_R)[..., None], 0, a), SINK)   # (dust pixels are alpha<64, so the alpha==255 check below is unaffected)
-    for name, arr in (('walk_01', f01), ('walk_04', f04)):
+    # upper body identity check: everything outside the two leg masks must equal the idle shifted by the pose sink (where not covered)
+    for name, arr in frames.items():
+        sb = shift(np.where((LEG_L | LEG_R)[..., None], 0, a), POSES[name]['sink'])   # dust pixels are alpha<64: the alpha==255 check is unaffected
         m = sb[..., 3] == 255
         info[name + '_upper_body_pixels_identical'] = bool((arr[m] == sb[m]).all())
     # parts sheet (visual aid)
@@ -120,7 +135,7 @@ def main():
         B = Image.new('RGBA', (W, H), (255, 0, 255, 255)); B.alpha_composite(Image.fromarray(arr, 'RGBA')); x = 16 + i * (W * K + 16)
         S.paste(B.resize((W * K, H * K), Image.NEAREST).convert('RGB'), (x, 32)); d.text((x, 8), t, fill=(240, 228, 190), font=F)
     S.save(OUT / 'parts_split_x3.png')
-    (OUT / 'qa.json').write_text(json.dumps(dict(method='part offset of the adopted idle', lift_px=LIFT, squash=SQUASH, dark=DARK, sink_px=SINK, **info), ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    (OUT / 'qa.json').write_text(json.dumps(dict(method='part offset of the adopted idle', fps=7, **info), ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     print(json.dumps(info, ensure_ascii=False, indent=0)[:1200])
 
 
