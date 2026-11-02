@@ -293,3 +293,12 @@ This section applies to ChatGPT, Claude, Codex and other agents when working on 
 ### Scope and rollout
 - This file is versioned in the feature branch. Other sessions must open the same branch to inherit this revision.
 - Propagating these instructions to `main` or other branches requires separate director authorization and an approved change process; this directive does not authorize a `main` update.
+
+## 🤖 AI Token & Workflow Policy (トークン効率・タスクパケット方式)
+1. **タスクパケット方式の徹底:** ワーカー（Claude/Codex）への指示および報告は、挨拶や長文説明を排した極小のメタ情報と指示のみで行う。
+2. **トークン極小化:** 挨拶、前置き、過度な解説、まとめの文章（「お疲れ様です」「何か質問は〜」等）は一切禁止。
+3. **差分ベースのやり取り:** コード全体の送受信を禁止し、変更対象のファイルパスと該当スニペット（または git diff）のみを扱う。
+4. **回答フォーマットの固定:**
+   ■ 診断・修正理由（1〜2行で簡潔に）
+   - [理由]
+   ■ 修正コード（該当部分のみ）
