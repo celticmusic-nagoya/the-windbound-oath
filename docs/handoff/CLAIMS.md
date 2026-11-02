@@ -195,3 +195,5 @@ Goblin20 QA checkpoint: new20PNGs/5rows are PENDING, BRANCH_ONLY; officialrefere
 
 ## DEV-WALK-MOTION-01
 Codex / feature/dev-walk-motion-01 / base88edef93760257df85059b8ff6d5964495ff7afe. User explicitly authorizes DEV shared walk test implementation/QA/PR/conditional mainmerge. Scope DEV modal/css, shared production frame-selection policy, minimal runtime callsites/cache URLs, tests/evidence. Actual PNG/registry adoption/story/battle/save untouched. GOBLIN-20F-FIX01 artwork is separate; tester publishes first, physicalAndroid userQA then fix revalidation. STATUS: WIP.
+
+WALK-QA-02 checkpoint: latest base b85c3db (up/down FIX01 retained); common tester ally2/enemy4/NPC25, idle/missing-direction/background controls. Node17filesPASS, actualUI1185frames/3viewsPASS, regressions11/11PASS, formal259SHA and img/assets diff0. PR122 Draft; independent finalhead QA/rollback/normalmerge pending. PR107/112 integration owned byClaude; freshhead review requested, historical reviews not substituted. PhysicalAndroid NOT_RUN. STATUS: READY_FOR_REVIEW.

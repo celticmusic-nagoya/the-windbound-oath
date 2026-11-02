@@ -46,8 +46,13 @@ pause loops; manual stepping remains available. No game state or localStorage wr
 - Node direct original suite: 17/17 PASS, including 8 walk policy tests.
 - Formal portrait hashes: 259/259 unchanged. No img/assets diff vs base.
 - Registry generator: `python tools/assets/build_registry.py --check` PASS.
-- Expanded actual-UI matrix: running; no final PASS declared here.
-- Required regression rerun / independent exact-head QA: pending.
+- Expanded actual-UI matrix: PASS, 395 frame slots per viewport / 1,185 total; all three viewports. Console, pageerror, HTTP errors and failed requests: zero.
+- Required regression rerun: 11/11 PASS (SAVE/CONTINUE, m31, m9, goblin actual pixels/contact battle, town maps, Rilde, DEV arena, portrait DEV, battle motion, asset registry, goblin assets). Independent exact-head browser QA: pending.
+
+The final regression batch recorded 10 PASS and an asset-freshness failure because
+the archive omitted `--git-history`. The unchanged original asset test passed
+when rerun with committed history. Both raw results are retained; the first batch
+is not represented as an unconditional 11/11 PASS. No fixture/assertion was relaxed.
 
 Historical failed attempts are retained in evidence: initial reduced-motion async
 fixture wait, then stale queued native-dialog close closing a newly reopened dialog.
