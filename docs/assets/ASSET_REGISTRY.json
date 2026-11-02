@@ -39,16 +39,16 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 1204,
-  "approved_implemented": 279,
+  "total": 1210,
+  "approved_implemented": 285,
   "approved_not_implemented": 0,
   "delivered_not_merged": 184,
   "pending_adoption": 7,
   "source_missing": 0,
   "approval_unknown": 886,
-  "on_main": 1020,
+  "on_main": 1026,
   "implemented_on_main": 973,
-  "unreferenced_on_main": 47
+  "unreferenced_on_main": 53
  },
  "motion_gaps": [
   "fiona: skill(windbloom)/guard/evade/prayer/item/victory/awaken/low_hp = still only or undelivered",
@@ -15400,16 +15400,14 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "img/field/moss/manifest.json"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_02",
@@ -15426,16 +15424,14 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "img/field/moss/manifest.json"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_03",
@@ -15452,16 +15448,14 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "img/field/moss/manifest.json"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_04",
@@ -15478,16 +15472,14 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "img/field/moss/manifest.json"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_05",
@@ -15504,16 +15496,14 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "img/field/moss/manifest.json"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
   },
   {
    "asset_id": "file:img_field_moss_props_npc_soldier_walk_06",
@@ -15530,16 +15520,176 @@
    "height": 168,
    "frame_count": 1,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "NOT_IMPLEMENTED",
    "integration_status": "MAIN",
-   "runtime_reference": [
-    "img/field/moss/manifest.json"
-   ],
+   "runtime_reference": [],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified"
+   "notes": "existing asset on main; adoption record not re-verified; no runtime reference found (may be original storage / future use - not deleted)"
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_walk_v2_01",
+   "name": "npc_soldier_walk_v2_01.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "walk",
+   "delivery_date": "UNKNOWN",
+   "source_path": "img/field/moss/props/npc_soldier_walk_v2_01.png",
+   "source_branch": "main",
+   "source_commit": "UNKNOWN",
+   "source_sha256": "aa1ff6534dc4a22024c213e70e2088648d9ab5f902458f021ad727616ad65676",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json",
+    "js/field/field-walkers.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_walk_v2_02",
+   "name": "npc_soldier_walk_v2_02.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "walk",
+   "delivery_date": "UNKNOWN",
+   "source_path": "img/field/moss/props/npc_soldier_walk_v2_02.png",
+   "source_branch": "main",
+   "source_commit": "UNKNOWN",
+   "source_sha256": "2ff7ac9895c9fa6314d5a846fe87020e4f6f01dd713446cc88f3effc2fa9c0f0",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json",
+    "js/field/field-walkers.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_walk_v2_03",
+   "name": "npc_soldier_walk_v2_03.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "walk",
+   "delivery_date": "UNKNOWN",
+   "source_path": "img/field/moss/props/npc_soldier_walk_v2_03.png",
+   "source_branch": "main",
+   "source_commit": "UNKNOWN",
+   "source_sha256": "d3d76d711de9cb444804a76d112875f3d08c394e5a66940040cf20420eb6b5f9",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json",
+    "js/field/field-walkers.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_walk_v2_04",
+   "name": "npc_soldier_walk_v2_04.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "walk",
+   "delivery_date": "UNKNOWN",
+   "source_path": "img/field/moss/props/npc_soldier_walk_v2_04.png",
+   "source_branch": "main",
+   "source_commit": "UNKNOWN",
+   "source_sha256": "96b06b3dadb9197e7b4faca2741593da1bf53a1c3b79589d6f82493319e9fef2",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json",
+    "js/field/field-walkers.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_walk_v2_05",
+   "name": "npc_soldier_walk_v2_05.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "walk",
+   "delivery_date": "UNKNOWN",
+   "source_path": "img/field/moss/props/npc_soldier_walk_v2_05.png",
+   "source_branch": "main",
+   "source_commit": "UNKNOWN",
+   "source_sha256": "0ed92836f648e4d2a02fefbca3b32771d9e3ef1604eb35638a3e20c52a159801",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json",
+    "js/field/field-walkers.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_walk_v2_06",
+   "name": "npc_soldier_walk_v2_06.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "walk",
+   "delivery_date": "UNKNOWN",
+   "source_path": "img/field/moss/props/npc_soldier_walk_v2_06.png",
+   "source_branch": "main",
+   "source_commit": "UNKNOWN",
+   "source_sha256": "6840d1d022dbac29803c7203101a9108deb9fa416e30bf0c4a4a01c601f3a9fc",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json",
+    "js/field/field-walkers.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
   },
   {
    "asset_id": "file:img_field_moss_props_npc_townsman",

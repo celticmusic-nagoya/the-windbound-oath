@@ -5,16 +5,16 @@
 
 ## 集計（2026-10-19）
 
-- total: **1204**
-- approved_implemented: **279**
+- total: **1210**
+- approved_implemented: **285**
 - approved_not_implemented: **0**
 - delivered_not_merged: **184**
 - pending_adoption: **7**
 - source_missing: **0**
 - approval_unknown: **886**
-- on_main: **1020**
+- on_main: **1026**
 - implemented_on_main: **973**
-- unreferenced_on_main: **47**
+- unreferenced_on_main: **53**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
 
@@ -693,7 +693,7 @@
 | seq:img_field_monsters_goblin_goblin_walk_up | goblin | walk | 4 | 320x320 | PENDING | IMPLEMENTED | BRANCH_ONLY | PASS | UNKNOWN | js/field/field-monsters.js / User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally a |
 | seq:img_field_monsters_moss_slime_moss_slime_walk | moss_slime | walk | 6 | 260x200 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
 
-## npc（261）
+## npc（267）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -861,12 +861,18 @@
 | file:img_field_moss_props_npc_questgiver_walk_06 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_soldier | UNKNOWN | UNKNOWN | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_soldier_idle_v2 | UNKNOWN | idle | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
-| file:img_field_moss_props_npc_soldier_walk_01 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
-| file:img_field_moss_props_npc_soldier_walk_02 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
-| file:img_field_moss_props_npc_soldier_walk_03 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
-| file:img_field_moss_props_npc_soldier_walk_04 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
-| file:img_field_moss_props_npc_soldier_walk_05 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
-| file:img_field_moss_props_npc_soldier_walk_06 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
+| file:img_field_moss_props_npc_soldier_walk_01 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_props_npc_soldier_walk_02 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_props_npc_soldier_walk_03 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_props_npc_soldier_walk_04 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_props_npc_soldier_walk_05 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_props_npc_soldier_walk_06 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / existing asset on main; adoption record not re-verified; no runtime reference found (may b |
+| file:img_field_moss_props_npc_soldier_walk_v2_01 | UNKNOWN | walk | 1 | 112x168 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/moss/manifest.json, js/field/field-walkers.js / Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted |
+| file:img_field_moss_props_npc_soldier_walk_v2_02 | UNKNOWN | walk | 1 | 112x168 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/moss/manifest.json, js/field/field-walkers.js / Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted |
+| file:img_field_moss_props_npc_soldier_walk_v2_03 | UNKNOWN | walk | 1 | 112x168 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/moss/manifest.json, js/field/field-walkers.js / Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted |
+| file:img_field_moss_props_npc_soldier_walk_v2_04 | UNKNOWN | walk | 1 | 112x168 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/moss/manifest.json, js/field/field-walkers.js / Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted |
+| file:img_field_moss_props_npc_soldier_walk_v2_05 | UNKNOWN | walk | 1 | 112x168 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/moss/manifest.json, js/field/field-walkers.js / Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted |
+| file:img_field_moss_props_npc_soldier_walk_v2_06 | UNKNOWN | walk | 1 | 112x168 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/moss/manifest.json, js/field/field-walkers.js / Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted |
 | file:img_field_moss_props_npc_townsman | UNKNOWN | UNKNOWN | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_townsman_walk_01 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_townsman_walk_02 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |

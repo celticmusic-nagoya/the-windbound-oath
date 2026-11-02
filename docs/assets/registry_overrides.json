@@ -7524,6 +7524,19 @@
     "runtime_reference": [],
     "notes": "Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rollback."
    }
+  },
+  {
+   "match": "^img/field/moss/props/npc_soldier_walk_v2_",
+   "set": {
+    "approval_status": "APPROVED",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "runtime_reference": [
+     "img/field/moss/manifest.json",
+     "js/field/field-walkers.js"
+    ],
+    "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+   }
   }
  ],
  "motion_gaps": [
