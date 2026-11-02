@@ -15,7 +15,7 @@ Date: 2026-11-02. Branch `feature/phase2-furniture-assets`. No change to main, m
 | table, stool, jar, chair | `claude_repair/` | **Claude repair** re-cropped from the Delivery 1 `reference_sheet.png` (`tools/recrop_small.py`). These are NOT the Delivery 3 final files. |
 | doormat, barrel | `delivery1/` | Delivery 1 output, unchanged |
 
-Delivery 3 PNGs were never received by Claude (no ZIP in the chat, none on GitHub). `delivery3/` is left empty; the validator prefers `delivery3/` automatically once it exists.
+Delivery 3 received 2026-11-02 21:29 and registered byte-identical in `delivery3/` (commit 1384410).
 
 ## Results
 | check | result |
@@ -34,3 +34,15 @@ Repairs: table — white panel between legs removed; stool — seat no longer cl
 
 ## Cleanup (AGENTS.md §21 lifecycle)
 Removed as superseded: `qa/delivery2/render_delivery2_{pc,land,port,pc_zoom2x}.png` (showed Delivery 1 small items, replaced by `qa/final/`), `qa/delivery2/accept.json` (covered by `qa/final/accept.json`), `qa/final/render_phase2final_pc.png` (duplicate of `_pc_zoom2x`). Added `source/ref_sheet_delivery1.png` so `claude_repair/` is reproducible. No candidate PNG changed; QA unaffected.
+
+## Delivery 3 QA (2026-11-02)
+Numeric: all 4 PASS (size, RGBA, binary alpha, transparent RGB 0, grounding). Visual 300% (`qa/final/delivery3_x3_magenta_delivered_vs_selected.png`, top = delivered, bottom = selected):
+| item | result |
+|---|---|
+| table_small | PASS — gap between legs clean |
+| chair_back | PASS — grey line removed |
+| jar | FAIL (minor) — white background inside both handle holes (98 px). Fixed copy: `delivery3_fix/furn_h01_jar.png` (holes made transparent, nothing else changed). Fixed copy PASS |
+| stool | FAIL — new seat is flat drawn ellipses with a green cushion layered over the old clipped seat (double seat, style mismatch). Use `claude_repair/furn_h01_stool.png` (PASS) or request a redraw |
+
+Final selection: `selection.json`. In-game render with the selection (`qa/final/render_d3select_*`, PC / Android landscape / portrait emulation): 13/13 loaded, 0 page errors, grounding and scale OK.
+Cleanup: `qa/final/render_phase2final_*` replaced by `render_d3select_*`. `claude_repair/` table/jar/chair kept as provenance (superseded, listed in selection.json `rejected`); remove on director confirmation.

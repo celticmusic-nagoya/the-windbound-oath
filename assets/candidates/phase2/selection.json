@@ -1,0 +1,26 @@
+{
+  "status": "adoption_candidates_pending_director_approval",
+  "note": "One file per asset recommended for formal adoption after Claude QA. Not adopted; no manifest/map wiring.",
+  "selection": {
+    "furn_h01_fireplace": "fireplace/furn_h01_fireplace.png",
+    "furn_h01_fireplace_body": "fireplace/furn_h01_fireplace_body.png",
+    "furn_h01_fireplace_fire": "fireplace/furn_h01_fireplace_fire.png",
+    "furn_h01_bed": "new_drawings/furn_h01_bed.png",
+    "furn_h01_bed_small": "new_drawings/furn_h01_bed_small.png",
+    "furn_h01_rug_green": "new_drawings/furn_h01_rug_green.png",
+    "furn_h01_window_wall": "new_drawings/furn_h01_window_wall.png",
+    "furn_h01_tapestry": "new_drawings/furn_h01_tapestry.png",
+    "furn_h01_spinning_wheel": "new_drawings/furn_h01_spinning_wheel.png",
+    "furn_h01_table_small": "delivery3/furn_h01_table_small.png",
+    "furn_h01_chair_back": "delivery3/furn_h01_chair_back.png",
+    "furn_h01_jar": "delivery3_fix/furn_h01_jar.png",
+    "furn_h01_stool": "claude_repair/furn_h01_stool.png",
+    "furn_h01_doormat": "delivery1/furn_h01_doormat.png",
+    "furn_h01_barrel": "delivery1/furn_h01_barrel.png"
+  },
+  "rejected": {
+    "delivery3/furn_h01_stool.png": "seat redrawn as flat vector ellipses with green cushion over the old clipped seat (double seat, style mismatch)",
+    "delivery3/furn_h01_jar.png": "white background left inside both handle holes (fixed copy in delivery3_fix/)",
+    "claude_repair/furn_h01_table_small.png, jar, chair_back": "superseded by Delivery 3"
+  }
+}

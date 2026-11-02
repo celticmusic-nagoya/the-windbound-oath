@@ -53,8 +53,11 @@ for asset in PLAN["assets"]:
 # Repairs: prefer the director's Delivery 3 files when registered, else Claude's documented repair of Delivery 1.
 for asset in PLAN.get("repairs", []):
     name = asset["filename"]
-    path = next((ROOT / d / name for d in ("delivery3", "claude_repair") if (ROOT / d / name).is_file()), ROOT / "delivery3" / name)
-    check(path, asset["width"], asset["height"])
+    found = [ROOT / d / name for d in ("delivery3", "delivery3_fix", "claude_repair") if (ROOT / d / name).is_file()]
+    if not found:
+        errors.append(f"MISSING: no candidate for {name} in delivery3/, delivery3_fix/ or claude_repair/")
+    for path in found:  # every registered candidate must pass, whichever is selected
+        check(path, asset["width"], asset["height"])
 
 # Delivery 1 PASS items kept as-is.
 for asset in PLAN.get("preserve_pass", []):
