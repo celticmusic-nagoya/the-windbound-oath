@@ -16,8 +16,9 @@ if dup: err.append('duplicate asset_id: %s' % dup[:5])
 for a in A:
     for f in E:
         if a.get(f) not in E[f]: err.append('%s: invalid %s=%r' % (a['asset_id'], f, a.get(f)))
-    if a['integration_status'] == 'MAIN':
-        paths = a.get('frames') or [a['source_path']]
+    paths = a.get('frames') or [a['source_path']]
+    local_branch = a['integration_status'] == 'BRANCH_ONLY' and all((ROOT / p).is_file() for p in paths)
+    if a['integration_status'] == 'MAIN' or local_branch:
         for i, p in enumerate(paths):
             fp = ROOT / p
             if not fp.is_file(): err.append('%s: MAIN but file missing: %s' % (a['asset_id'], p)); continue
@@ -36,7 +37,12 @@ for a in A:
 files = [l for l in subprocess.run(['git', 'ls-files', 'img'], cwd=ROOT, capture_output=True, text=True).stdout.splitlines() if l.lower().endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif'))]
 cov = set()
 for a in A:
-    if a['integration_status'] == 'MAIN': cov.update(a.get('frames') or [a['source_path']])
+    paths = a.get('frames') or [a['source_path']]
+    if a['integration_status'] == 'MAIN': cov.update(paths)
+    # Candidate files committed on this checkout are registered too; do not
+    # falsely label a feature-branch delivery MAIN just to satisfy coverage.
+    elif a['integration_status'] == 'BRANCH_ONLY' and all((ROOT / p).is_file() for p in paths):
+        cov.update(paths)
 unreg = sorted(set(files) - cov)
 if unreg: err.append('%d image(s) on main are not in the registry (run tools/assets/build_registry.py): %s' % (len(unreg), unreg[:3]))
 fresh = None
