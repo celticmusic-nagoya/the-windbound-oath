@@ -107,3 +107,11 @@ No PNG/asset-ledger diff vs latest main; formal259 remain unchanged.
 Intermediate tester `600fd78` independent UI96checks across3views and an actual
 moving NPC freeze/resume plus LOAD/battle cleanup PASS; evidence retained as
 intermediate, not final-head acceptance. Final integrated-head verification pending.
+
+Integrated Node rerun initially recorded10/17 PASS:7 fixtures loaded the real Moss
+runtime without its shared module and threw at initialization. Added one actual
+`walk-motion.js` load before runtime in the existing shared S2 fixture, matching
+index order. No stub, skip, fallback or assertion relaxation. All17 original files
+then PASS. Both failed and passing logs retained. Integrated asset audit original
+PASS/FAILS0; formal259 SHA PASS and img/assets diff0 vs22efe87. Browser final-head
+result is still pending collection.
