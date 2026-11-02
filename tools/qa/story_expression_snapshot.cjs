@@ -9,6 +9,7 @@ function pages(c){const dc=c&&typeof c==='object'&&!Array.isArray(c)?c:null;let 
 function normalize(c){const o=typeof c==='object'&&!Array.isArray(c)?{...c}:{};for(const k of ['char','face','side','portraits'])delete o[k];o.pages=rawPages(c).map(parse);if(o.choice)o.choice={...o.choice,options:o.choice.options.map(v=>({...v,...(v.reply?{reply:normalize(v.reply)}:{})}))};return o}
 function stable(o){return JSON.stringify(o,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v)}
 function indexLogic(html){return html
+ .replace(/\n<!-- BUG-STARTUP-01:[\s\S]*?-->\n<style id="title-startup-cover">[^<]*<\/style>/,'')   // startup CSS cover only (no logic/dialogue)
  .replace(/function say\(t, portrait\)/,'function say(t)')
  .replace(/\n if\(portrait&&window\.TalkPortrait\)\{[^\n]+\}\n else window\.TalkPortrait\?\.close\('legacySay'\);/,'')
  .replace(/\n window\.TalkPortrait\?\.close\('legacySay'\);/,'')

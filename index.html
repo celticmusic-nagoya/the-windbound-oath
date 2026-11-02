@@ -30,6 +30,9 @@
 // Reserve cold-start title input before any gameplay handlers are registered.
 {const q=new URLSearchParams(location.search);if(q.get('title')!=='0'&&q.get('legacyVillage')!=='1'){LoadingInput.lock('title');document.documentElement.classList.add('title-on');}}
 </script>
+<!-- BUG-STARTUP-01: the title cover must apply from the first paint. css/title-screen.css is linked at the end of <body>, so on a slow
+     connection (Android Chrome) the body (old village field) painted before that rule arrived. Same rule, moved up; nothing else changes. -->
+<style id="title-startup-cover">html.title-on body>:not(#title-screen):not(#loadingStatus):not(script):not(link){visibility:hidden}</style>
 <script src="js/battle-motion.js?v=20261025loading"></script>
 <script src="js/battle-actor-state.js?v=20261023i50"></script>
 
