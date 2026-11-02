@@ -294,3 +294,11 @@ This section applies to ChatGPT, Claude, Codex and other agents when working on 
 ### Scope and rollout
 - This file is versioned in the feature branch. Other sessions must open the same branch to inherit this revision.
 - Propagating these instructions to `main` or other branches requires separate director authorization and an approved change process; this directive does not authorize a `main` update.
+
+
+### Repository cleanliness and lifecycle (2026-11-02 director directive)
+- Remove explicitly rejected, obsolete or confirmed-FAIL candidate assets promptly from the active working branch after verifying their status and dependencies. Do not delete assets merely because QA is pending, a historical report mentions FAIL, or they are still needed for reproducible QA; retain minimal provenance in version history and QA reports.
+- Never commit temporary ZIPs, throwaway archives, caches, scratch screenshots, local debugging images, generated previews, or transient test outputs. Deliver durable source assets, scripts, manifests and useful review evidence through direct GitHub commits on the assigned feature branch only.
+- Review candidate directories for redundant versions, temporary files and superseded FAIL assets before reporting completion. Check tracked files and references before deletion; do not remove approved production assets or canon.
+- After a feature branch has been merged into main and the merge is verified, promptly delete that merged branch, subject to repository permissions and absence of outstanding work. Never delete an unmerged or still-active branch.
+- Record any cleanup changes with paths, reason, commit SHA and QA impact; preserve necessary auditability through Git history.
