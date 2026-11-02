@@ -131,7 +131,7 @@
       else if (control.dataset.guide === 'center') q('.walkCenter').hidden = !control.checked;
     });
     root.addEventListener('cancel', e => { e.preventDefault(); close(); });
-    root.addEventListener('close', close);
+    root.addEventListener('close', () => { if (!root.open) close(); });
     q('img').addEventListener('error', () => { if (active()) { pause(); S.ready = false; q('[data-walk=error]').textContent = 'フレーム画像を表示できません。'; info(); } });
     new ResizeObserver(layout).observe(q('.walkStage'));
   }
