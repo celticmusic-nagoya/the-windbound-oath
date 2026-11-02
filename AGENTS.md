@@ -264,3 +264,32 @@ The goal is a polished original indie JRPG portfolio piece, not a school HTML ex
 Visual identity: ancient Celtic stone tablet × parchment × deep green × antique gold; high-detail anime/painterly battle art; polished pixel-art field; cinematic but readable effects.
 Theme: 「守れなかった者たちが、今度こそ誰かを守る」
 Tagline: 「失った故郷。残された仲間。そして、風だけが知っていた真実。」
+
+## 21. Agent workflow — GitHub-first, branch-only (2026-11-02 director directive)
+This section applies to ChatGPT, Claude, Codex and other agents when working on this repository. Preserve all existing canon, gameplay, visual, and QA requirements above. If a prior workflow instruction conflicts with this section about candidate-branch commits, this later director directive takes precedence **only for nonproduction working branches**.
+
+### Artifact delivery
+- Deliver work through commits to the designated `feature/*` branch and purpose-specific directories, not chat ZIPs, binary attachments, or text archives.
+- For Phase 2 furniture use `feature/phase2-furniture-assets` and `assets/candidates/phase2/`. Keep original drawings, candidate PNGs, source references, scripts, manifests, and QA evidence clearly separated.
+- Report actual branch, full commit SHA, changed paths, test results and remaining blockers concisely. Never claim a push, binary upload, test, or QA result unless verified.
+- If the available agent connector cannot upload binary files, report the specific blocker. Do not silently substitute chat ZIP distribution or pretend the file was committed.
+
+### Preapproved working-branch actions
+- Agents may independently create/revise candidate PNG assets, scripts, manifests, QA data, in-scope bug fixes, refactors and small layout adjustments **on the assigned working branch**, and commit/push them without asking for each change.
+- Inspect active code and scope first; keep changes minimal and reversible. Test relevant desktop and mobile views. Do not overwrite other agents' recent work or approved assets without verification.
+- Candidate branch commit permission is not formal asset adoption, production deployment or merge authorization.
+
+### Protected changes requiring explicit director approval
+- Never directly modify or commit to `main`; never merge to `main` without explicit authorization.
+- Do not alter production map files (including `data/maps/rilde_in_house_01.json`), deployed production assets, or already-approved shared assets without separate explicit authorization, even on a feature branch.
+- Do not make fundamental destructive changes to approved lore, worldbuilding, design direction, or gameplay without director approval.
+- Formal adoption and production application require human director review and approval after QA. A Claude PASS or automated PASS is necessary evidence, **not by itself adoption authorization**, unless the director expressly delegates that specific adoption decision.
+
+### Communication
+- Start implementation immediately when requirements are clear. Avoid greetings, repetitive policy recitations, and approval questions for preapproved actions.
+- Use concise evidence-based reports. Explicitly distinguish self-QA, Claude QA, Codex independent QA, emulated mobile layouts and actual Android device checks.
+- Do not imply autonomous background work or cross-session memory: agents must read this file at the start of each repository session.
+
+### Scope and rollout
+- This file is versioned in the feature branch. Other sessions must open the same branch to inherit this revision.
+- Propagating these instructions to `main` or other branches requires separate director authorization and an approved change process; this directive does not authorize a `main` update.
