@@ -537,9 +537,12 @@ function winTraining(){
  updateBattle(); $('#battleMsg').textContent='訓練終了！ エイダン EXP +20　RUNE +10';
  TrainingCheckpoint.later(()=>{
   $('#battle').style.display='none'; storyStage=3;
-  say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」',{"char":"fiona","face":"surprised","side":"right"});
-  setObj('フィオナと風見の断崖へ向かおう');
-  storyToast('風見の断崖への道が開いた');
+  const next=()=>{
+   say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」',{"char":"fiona","face":"surprised","side":"right"});
+   setObj('フィオナと風見の断崖へ向かおう');
+   storyToast('風見の断崖への道が開いた');
+  };
+  if(!window.RildeVillage?.afterTraining(next))next();   // SCENARIO-PROLOGUE-02 エマの差し入れ (once), then the existing line
  },1400);
 }
 

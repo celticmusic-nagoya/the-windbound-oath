@@ -8,7 +8,7 @@ def check(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1280,'height':720})
     pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e))); pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
-    pg.goto('http://localhost:8765/index.html'); pg.wait_for_timeout(1500); ev=pg.evaluate
+    pg.goto('http://localhost:8765/index.html?title=0'); pg.wait_for_timeout(1500); ev=pg.evaluate
     ev("RildeVillage.startOpening()"); pg.wait_for_timeout(2000); ev("closeDialogue()")
     ev("MossForestStory.enterMap('rilde_village','from_aidan')"); pg.wait_for_timeout(1800)
     ev("RildeVillage.hook({hook:'rilde_fiona'},MossForest)"); pg.wait_for_timeout(300); ev("closeDialogue()")
@@ -17,6 +17,9 @@ with sync_playwright() as p:
         if ev("storyStage")>=3: break
         pg.evaluate("(()=>{const s=document.getElementById('skill'),a=document.getElementById('atk');(s&&!s.disabled?s:a).click()})()"); pg.wait_for_timeout(900)
     pg.wait_for_timeout(2500)
+    for i in range(40):   # TASK-PROLOGUE-02: the one-time エマの差し入れ scene plays right after the win
+        if ev("FieldScene.running!=='emma_snack'"): break
+        pg.click('#msg'); pg.wait_for_timeout(80)
     check(ev("storyStage")==3,'training won -> stage 3')
     ev("closeDialogue()"); pg.wait_for_timeout(1500)
     # field must be unlocked again after the overlay
@@ -43,6 +46,7 @@ with sync_playwright() as p:
 # touch regression (Android): taps inside the training ground must walk, and a tap on the dummy must start the training (not the boy's chatter)
     c2=b.new_context(viewport={'width':450,'height':1000},has_touch=True,is_mobile=True,device_scale_factor=2); t=c2.new_page(); tev=t.evaluate
     t.goto('http://localhost:8765/index.html'); t.wait_for_timeout(1500); tev("devJump('training')"); t.wait_for_timeout(2500)
+    t.wait_for_function("MossForest.active&&!MossForest.busy&&(()=>{const p=FieldCamera.worldToScreen(document.getElementById('forestWorld'),1960,1040);return p&&Number.isFinite(p.x)})()",timeout=15000)   # map ready (removes a NaN-coordinate timing flake)
     moved=0
     for wx,wy in ((1960,1040),(1850,770),(2160,780),(1990,1000)):   # free ground away from every talk / training zone
         f=tev("MossForest.feet"); q=tev("(a)=>FieldCamera.worldToScreen(document.getElementById('forestWorld'),a[0],a[1])",[wx,wy]); t.touchscreen.tap(q['x'],q['y']); t.wait_for_timeout(1300); g=tev("MossForest.feet"); moved+= abs(g['x']-f['x'])+abs(g['y']-f['y'])>20
@@ -56,7 +60,8 @@ with sync_playwright() as p:
     check(tev("(()=>{const e=document.elementFromPoint(225,430);return !!(e&&e.closest('#battle'))})()"),'the training battle is actually on top of the field (not hidden behind it)')
     # far tap on an NPC: walk first, talk only on arrival; tapping elsewhere cancels the pending talk
     d=b.new_page(viewport={'width':1280,'height':720}); dv=d.evaluate; d.goto('http://localhost:8765/index.html'); d.wait_for_timeout(1500); dv("devJump('training')"); d.wait_for_timeout(2500); dv("closeDialogue()")
-    dv("MossForest.teleportFeet(1877,1100)"); d.wait_for_timeout(500); xy=dv("FieldCamera.worldToScreen(document.getElementById('forestWorld'),1952,940)")
+    d.wait_for_function("MossForest.active&&!MossForest.busy",timeout=15000); dv("MossForest.teleportFeet(1877,1100)"); d.wait_for_timeout(500)
+    d.wait_for_function("(()=>{const p=FieldCamera.worldToScreen(document.getElementById('forestWorld'),1952,940);return p&&Number.isFinite(p.x)&&Number.isFinite(p.y)})()",timeout=10000); xy=dv("FieldCamera.worldToScreen(document.getElementById('forestWorld'),1952,940)")
     d.mouse.click(xy['x'],xy['y']); d.wait_for_timeout(150); check(dv("document.getElementById('msg').style.display")!='block','far NPC tap: no instant dialogue')
     d.wait_for_timeout(2500); check(dv("document.getElementById('msg').style.display")=='block','far NPC tap: dialogue after arriving')
     dv("closeDialogue();MossForest.teleportFeet(1877,1100)"); d.wait_for_timeout(300); d.mouse.click(xy['x'],xy['y']); d.wait_for_timeout(200); d.mouse.click(1100,650); d.wait_for_timeout(3000)
