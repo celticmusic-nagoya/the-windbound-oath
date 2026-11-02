@@ -7503,6 +7503,19 @@
    "set": {
     "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): front-view walk cycle replaced by the director-delivered 4 frames (delivered bytes kept in assets/candidates/goblin-field-20f/fix01-down-delivered/); still a candidate, not adopted."
    }
+  },
+  {
+   "match": "^img/field/moss/props/npc_soldier_walk_v2_",
+   "set": {
+    "approval_status": "APPROVED",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "runtime_reference": [
+     "img/field/moss/manifest.json",
+     "js/field/field-walkers.js"
+    ],
+    "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
+   }
   }
  ],
  "motion_gaps": [
