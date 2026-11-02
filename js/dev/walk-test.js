@@ -3,7 +3,7 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', speed: 1, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
@@ -18,7 +18,7 @@
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
     q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
-    q('[data-walk=play]').disabled = !S.ready || reduced.matches;
+    q('[data-walk=play]').disabled = !S.ready || S.def.frames.length < 2 || reduced.matches;
   }
   function render() {
     if (!S.def || !S.ready || !active()) return;
@@ -51,7 +51,7 @@
     S.raf = requestAnimationFrame(tick);
   }
   function play() {
-    if (!active() || !S.ready || reduced.matches) return;
+    if (!active() || !S.ready || S.def.frames.length < 2 || reduced.matches) return;
     pause(); S.playing = true; root.dataset.playing = 'true';
     q('[data-walk=play]').setAttribute('aria-pressed', 'true');
     S.raf = requestAnimationFrame(tick);
@@ -69,24 +69,28 @@
     return images.get(url);
   }
   async function select() {
-    pause(); S.ready = false; S.time = 0; S.index = 0;
+    pause(); S.ready = false; S.loaded = false; S.time = 0; S.index = 0;
     const generation = ++S.generation;
-    S.def = W.resolve(S.group, S.actor, S.direction);
-    q('img').hidden = true; q('[data-walk=error]').textContent = '';
-    root.dataset.actor = S.actor; root.dataset.direction = S.direction;
-    for (const b of root.querySelectorAll('[data-direction]')) b.setAttribute('aria-pressed', String(b.dataset.direction === S.direction));
+    S.def = W.resolve(S.group, S.actor, S.direction, S.state);
+    q('img').hidden = true; q('img').removeAttribute('src'); q('[data-walk=play]').disabled = true; q('[data-walk=error]').textContent = '';
+    root.dataset.actor = S.actor; root.dataset.direction = S.direction; root.dataset.state = S.state;
+    for (const b of root.querySelectorAll('[data-direction]')) {
+      b.setAttribute('aria-pressed', String(S.state === 'walk' && b.dataset.direction === S.direction));
+      b.textContent = ({up:'上',down:'下',left:'左',right:'右'})[b.dataset.direction] + (W.resolve(S.group,S.actor,b.dataset.direction,'walk') ? '' : '：未実装');
+    }
+    q('[data-walk=idle]').setAttribute('aria-pressed', String(S.state === 'idle'));
     for (const b of root.querySelectorAll('[data-walk=prev],[data-walk=next]')) b.disabled = true;
-    if (!S.def) { q('[data-walk=error]').textContent = '実ゲームの歩行設定がありません。'; return; }
+    if (!S.def) { S.loaded = true; q('[data-walk=count]').textContent = '0 / 0'; q('[data-walk=source]').textContent = ''; q('[data-walk=policy]').textContent = ''; q('[data-walk=error]').textContent = '未実装：この方向・状態の素材はありません。'; return; }
     info();
     try {
       await Promise.all(S.def.frames.map(f => preload(f.url)));
       if (!active() || generation !== S.generation) return;
-      S.ready = true;
+      S.ready = true; S.loaded = true;
       for (const b of root.querySelectorAll('[data-walk=prev],[data-walk=next]')) b.disabled = false;
       layout();
     } catch (error) {
       if (!active() || generation !== S.generation) return;
-      q('[data-walk=error]').textContent = error.message; info();
+      S.loaded = true; q('[data-walk=error]').textContent = error.message; info();
     }
   }
   function characters() {
@@ -95,8 +99,13 @@
     if (![...select.options].some(o => o.value === S.actor)) S.actor = select.options[0]?.value;
     select.value = S.actor;
   }
+  function background(value) {
+    const stage = q('.walkStage'); stage.classList.toggle('checker', value === 'checker');
+    stage.style.backgroundColor = ({light:'#fff',green:'#276f48',dark:'#101812',checker:'#243329'})[value];
+    q('[data-guide=checker]').checked = value === 'checker'; q('[data-walk=background]').value = value;
+  }
   function close() {
-    pause(); ++S.generation; S.ready = false; images.clear();
+    pause(); ++S.generation; S.ready = false; S.loaded = false; images.clear();
     if (root) { q('img').hidden = true; q('img').removeAttribute('src'); if (root.open) root.close(); }
     document.body.classList.remove('devWalkOpen');
   }
@@ -104,18 +113,20 @@
     root = document.createElement('dialog'); root.id = 'walkMotionTest'; root.setAttribute('aria-label', '歩行モーションテスト');
     root.innerHTML = `<header><h3>歩行モーションテスト</h3><button type="button" data-walk="fold" aria-expanded="true">操作パネル</button><button type="button" data-walk="close">閉じる</button></header>
 <div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div></div>
-<section class="walkPanel"><label>敵・味方<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
-<div class="walkRow"><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
+<section class="walkPanel"><label>分類<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option><option value="npc">NPC</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
+<div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
 <label>再生速度<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
+<label>背景<select data-walk="background"><option value="checker">チェッカーボード</option><option value="dark">暗色</option><option value="light">白</option><option value="green">緑</option></select></label>
 <output data-walk="count" aria-label="現在のコマ / 総コマ数"></output><div class="walkRow"><label><input type="checkbox" data-guide="checker" checked>チェッカーボード</label><label><input type="checkbox" data-guide="ground" checked>接地線</label><label><input type="checkbox" data-guide="center" checked>中心線</label></div>
 <p data-walk="policy"></p><p data-walk="source"></p><p data-walk="error" role="status"></p></section></div>`;
     document.body.append(root);
     root.addEventListener('click', e => {
       const button = e.target.closest('button'); if (!button) return;
-      if (button.dataset.direction) { S.direction = button.dataset.direction; void select(); return; }
+      if (button.dataset.direction) { S.direction = button.dataset.direction; S.state = 'walk'; void select(); return; }
       const action = button.dataset.walk;
-      if (action === 'close') close();
+      if (action === 'idle') { S.state = 'idle'; void select(); }
+      else if (action === 'close') close();
       else if (action === 'play') play();
       else if (action === 'pause') pause();
       else if (action === 'next' || action === 'prev') step(action === 'next' ? 1 : -1);
@@ -126,7 +137,8 @@
       if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
       else if (control.dataset.walk === 'actor') { S.actor = control.value; void select(); }
       else if (control.dataset.walk === 'speed') { S.speed = Number(control.value); }
-      else if (control.dataset.guide === 'checker') q('.walkStage').classList.toggle('checker', control.checked);
+      else if (control.dataset.walk === 'background') background(control.value);
+      else if (control.dataset.guide === 'checker') background(control.checked ? 'checker' : 'dark');
       else if (control.dataset.guide === 'ground') q('.walkGround').hidden = !control.checked;
       else if (control.dataset.guide === 'center') q('.walkCenter').hidden = !control.checked;
     });
@@ -166,5 +178,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, time: S.time}; }});
 })();

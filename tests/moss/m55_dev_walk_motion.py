@@ -23,6 +23,8 @@ with server(8801) as base, sync_playwright() as pw:
         ctx = browser.new_context(viewport={'width':width,'height':height}, has_touch=True)
         p = ctx.new_page(); p.on('pageerror',lambda e:errors.append(str(e)))
         p.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
+        p.on('response',lambda r: errors.append(f'HTTP {r.status} {r.url}') if r.status>=400 else None)
+        p.on('requestfailed',lambda r:errors.append(f'REQUEST {r.url}: {r.failure}'))
         p.goto(base+'/index.html?title=1')
         p.get_by_role('button',name='NEW GAME',exact=True).click()
         p.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')")
@@ -36,28 +38,34 @@ with server(8801) as base, sync_playwright() as pw:
         ck(label+' actual DEV entry opens',p.locator('#walkMotionTest').is_visible())
         q = lambda s:p.locator('#walkMotionTest '+s)
         def ready(group=None, actor=None, direction=None):
-            p.wait_for_function("a=>{const s=DevWalkTest.snapshot();return s.ready&&(!a[0]||s.group===a[0])&&(!a[1]||s.actor===a[1])&&(!a[2]||s.direction===a[2])}",arg=[group,actor,direction])
+            p.wait_for_function("a=>{const s=DevWalkTest.snapshot();return s.loaded&&(!a[0]||s.group===a[0])&&(!a[1]||s.actor===a[1])&&(!a[2]||s.direction===a[2])}",arg=[group,actor,direction])
         total = 0
-        for group in ['ally','enemy']:
+        for group in ['ally','enemy','npc']:
             q('[data-walk=group]').select_option(group); ready(group=group)
             actors = p.evaluate("g=>FieldWalkMotion.catalog(g).map(a=>a.id)",group)
             ck(label+' '+group+' selector matches game catalog',q('[data-walk=actor] option').count()==len(actors))
             for actor in actors:
                 q('[data-walk=actor]').select_option(actor); ready(group,actor)
-                for direction in ['down','up','left','right']:
-                    q('[data-direction='+direction+']').tap(); ready(group,actor,direction)
-                    frames = p.evaluate("a=>FieldWalkMotion.resolve(...a).frames.map(f=>({url:f.url,width:f.width,height:f.height}))",[group,actor,direction])
+                for direction in ['idle','down','up','left','right']:
+                    q('[data-walk=idle]' if direction=='idle' else '[data-direction='+direction+']').tap(); ready(group,actor,None if direction=='idle' else direction)
+                    frames = p.evaluate("a=>FieldWalkMotion.resolve(...a)?.frames.map(f=>({url:f.url,width:f.width,height:f.height,native:f.native}))??null",[group,actor,'down' if direction=='idle' else direction,'idle' if direction=='idle' else 'walk'])
+                    if frames is None:
+                        ck(f'{label}/{actor}/{direction} missing without substitute',q('[data-walk=error]').inner_text().startswith('未実装') and q('[data-walk=count]').inner_text()=='0 / 0' and q('img').is_hidden() and q('img').get_attribute('src') is None and q('[data-walk=play]').is_disabled() and not p.evaluate(SNAP)['timer'])
+                        continue
                     seen = set()
                     for index, frame in enumerate(frames):
-                        p.wait_for_function("f=>{const e=document.querySelector('#walkMotionTest img');return e.complete&&e.naturalWidth===f.width&&e.currentSrc===new URL(f.url,location.href).href}",arg=frame)
+                        p.wait_for_function("f=>{const e=document.querySelector('#walkMotionTest img');return e.complete&&(f.native===false?e.naturalWidth>0:e.naturalWidth===f.width)&&e.currentSrc===new URL(f.url,location.href).href}",arg=frame)
                         s = p.evaluate(SNAP); ck(f'{label}/{actor}/{direction}/{index+1} source/count',s['index']==index and s['total']==len(frames) and q('[data-walk=count]').inner_text()==f'{index+1} / {len(frames)}')
                         px = p.evaluate(PIXELS); seen.add(px['hash']); ck(f'{label}/{actor}/{direction}/{index+1} actual alpha',px['min']==0 and px['max']>0)
                         inside = p.evaluate("()=>{const r=document.querySelector('#walkMotionTest img').getBoundingClientRect(),a=document.querySelector('#walkMotionTest .walkStage').getBoundingClientRect();return r.left>=a.left-1&&r.top>=a.top-1&&r.right<=a.right+1&&r.bottom<=a.bottom+1}")
                         ck(f'{label}/{actor}/{direction}/{index+1} image inside stage',inside)
                         q('[data-walk=next]').tap()
-                    ck(f'{label}/{actor}/{direction} pixels change and loop wraps',len(seen)>1 and p.evaluate(SNAP)['index']==0)
+                    ck(f'{label}/{actor}/{direction} pixels change and loop wraps',(len(frames)==1 or len(seen)>1) and p.evaluate(SNAP)['index']==0)
                     q('[data-walk=prev]').tap(); ck(f'{label}/{actor}/{direction} backwards wrap',p.evaluate(SNAP)['index']==len(frames)-1)
                     total += len(frames)
+        for bg in ['light','green','dark','checker']:
+            q('[data-walk=background]').select_option(bg)
+            ck(label+' background '+bg, q('[data-guide=checker]').is_checked()==(bg=='checker'))
         # Clock rate, actual loop, pause, optional guides and rotation.
         q('[data-walk=group]').select_option('ally'); ready(group='ally')
         q('[data-walk=actor]').select_option('aidan'); ready(actor='aidan')
