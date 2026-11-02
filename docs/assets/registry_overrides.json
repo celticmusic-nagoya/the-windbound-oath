@@ -7475,6 +7475,34 @@
     "formal_source_pr": 95,
     "formal_source_commit": "8179a1100f6b33b3cbad70ea9b1d127e620323c5"
    }
+  },
+  {
+   "match": "^img/field/monsters/goblin/goblin_(idle|walk_(down|right|up|left))_",
+   "set": {
+    "approval_status": "PENDING",
+    "implementation_status": "IMPLEMENTED",
+    "integration_status": "BRANCH_ONLY",
+    "source_branch": "feature/goblin-field-20f",
+    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+    "runtime_reference": [
+     "js/field/field-monsters.js"
+    ],
+    "android_status": "UNVERIFIED",
+    "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN.",
+    "qa_status": "PASS"
+   }
+  },
+  {
+   "match": "^img/field/monsters/goblin/goblin_walk_up_",
+   "set": {
+    "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): back-view head volume restored by tools/art/fix_goblin20_up_head.py (hood cap from walk_down_01, mirrored, layered under the original pixels); still a candidate, not adopted."
+   }
+  },
+  {
+   "match": "^img/field/monsters/goblin/goblin_walk_down_",
+   "set": {
+    "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): front-view walk cycle replaced by the director-delivered 4 frames (delivered bytes kept in assets/candidates/goblin-field-20f/fix01-down-delivered/); still a candidate, not adopted."
+   }
   }
  ],
  "motion_gaps": [

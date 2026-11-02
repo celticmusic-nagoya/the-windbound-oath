@@ -30,7 +30,7 @@
   MossForest.lock(true);fieldLocked=true;let idle=0;
   const poll=()=>{
    const hidden=q('#battle').style.display==='none';idle=hidden?idle+1:0;
-   if(storyStage>=3){later(()=>{MossForest.lock(false);fieldLocked=false},1600);return}
+   if(storyStage>=3){later(()=>{if(!window.FieldScene?.running)MossForest.lock(false);fieldLocked=false},1600);return}   // a post-training scene owns the lock
    if(idle>4){MossForest.lock(false);fieldLocked=false;return}
    later(poll,400);
   };

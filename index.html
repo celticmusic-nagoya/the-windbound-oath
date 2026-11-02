@@ -30,6 +30,9 @@
 // Reserve cold-start title input before any gameplay handlers are registered.
 {const q=new URLSearchParams(location.search);if(q.get('title')!=='0'&&q.get('legacyVillage')!=='1'){LoadingInput.lock('title');document.documentElement.classList.add('title-on');}}
 </script>
+<!-- BUG-STARTUP-01: the title cover must apply from the first paint. css/title-screen.css is linked at the end of <body>, so on a slow
+     connection (Android Chrome) the body (old village field) painted before that rule arrived. Same rule, moved up; nothing else changes. -->
+<style id="title-startup-cover">html.title-on body>:not(#title-screen):not(#loadingStatus):not(script):not(link){visibility:hidden}</style>
 <script src="js/battle-motion.js?v=20261025loading"></script>
 <script src="js/battle-actor-state.js?v=20261023i50"></script>
 
@@ -537,9 +540,12 @@ function winTraining(){
  updateBattle(); $('#battleMsg').textContent='訓練終了！ エイダン EXP +20　RUNE +10';
  TrainingCheckpoint.later(()=>{
   $('#battle').style.display='none'; storyStage=3;
-  say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」',{"char":"fiona","face":"surprised","side":"right"});
-  setObj('フィオナと風見の断崖へ向かおう');
-  storyToast('風見の断崖への道が開いた');
+  const next=()=>{
+   say('フィオナ「お疲れさま。……ねえ、さっき治したとき、一瞬だけ変な光が見えなかった？」',{"char":"fiona","face":"surprised","side":"right"});
+   setObj('フィオナと風見の断崖へ向かおう');
+   storyToast('風見の断崖への道が開いた');
+  };
+  if(!window.RildeVillage?.afterTraining(next))next();   // SCENARIO-PROLOGUE-02 エマの差し入れ (once), then the existing line
  },1400);
 }
 
@@ -2067,7 +2073,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-vista.js"></script>
 <script src="js/field/field-bgm.js"></script>
 <script src="js/field/field-walkers.js"></script>
-<script src="js/field/field-monsters.js?v=20261012d"></script>
+<script src="js/field/field-monsters.js?v=20261102goblin20"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
 <script src="js/field/moss-forest-runtime.js?v=20261102art08f"></script>
 <script src="js/field/moss-forest-story.js?v=20261025continue"></script>

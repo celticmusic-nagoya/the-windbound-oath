@@ -136,11 +136,22 @@
   function enterCliffFromVillage() {
     MossForestStory.enterCliff().then(() => { if (stage() === 3) setObj('崖の上のビューポイントへ向かおう'); }).catch(()=>{});
   }
+  // SCENARIO-PROLOGUE-02: after the training dummy is beaten (stage 3) play 'emma_snack' once, then `next` (the existing
+  // post-training line / objective). Returns false when the scene does not apply (legacy village, already seen) so the caller runs `next` itself.
+  function afterTraining(next) {
+    if (!enabled() || !window.FieldScene || FieldScene.running || stage() !== 3 || FieldTalk.flag('emma_snack_done')) return false;
+    const token = window.LoadCoordinator ? LoadCoordinator.generation : undefined;
+    FieldScene.play('emma_snack').then(ok => {
+      if (token !== undefined && !LoadCoordinator.current(token)) return;   // a load / reset replaced the session: nothing else to do
+      next();
+    });
+    return true;
+  }
   // 長老が街道を示したら(road_dunvall_open)、目的も次へ進める
   window.addEventListener('field-talk-end', e => {
     const d = e.detail || {};
     if (d.entry === 'rr_elder_road' && typeof setObj === 'function') { setObj('東の街道から、ドゥンヴァル砦へ向かおう'); if (typeof popObjective === 'function') popObjective(); if (typeof renderJournal === 'function') renderJournal(); }
   });
-  window.RildeVillage = Object.freeze({enabled, state, resolve, hook, onEnter, fionaVisible, enter, startOpening, afterPrologue, exit, isRilde, isVillage,
+  window.RildeVillage = Object.freeze({enabled, state, resolve, hook, onEnter, fionaVisible, enter, startOpening, afterPrologue, afterTraining, exit, isRilde, isVillage,
     force(s) { forced = s === 'peace' || s === 'ruin' ? s : null; return state(); }, get legacy() { return LEGACY; }});
 })();

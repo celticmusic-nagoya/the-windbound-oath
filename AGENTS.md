@@ -264,3 +264,49 @@ The goal is a polished original indie JRPG portfolio piece, not a school HTML ex
 Visual identity: ancient Celtic stone tablet × parchment × deep green × antique gold; high-detail anime/painterly battle art; polished pixel-art field; cinematic but readable effects.
 Theme: 「守れなかった者たちが、今度こそ誰かを守る」
 Tagline: 「失った故郷。残された仲間。そして、風だけが知っていた真実。」
+
+## 21. Agent workflow — GitHub-first, branch-only (2026-11-02 director directive)
+This section applies to ChatGPT, Claude, Codex and other agents when working on this repository. Preserve all existing canon, gameplay, visual, and QA requirements above. If a prior workflow instruction conflicts with this section about candidate-branch commits, this later director directive takes precedence **only for nonproduction working branches**.
+
+### Artifact delivery
+- Deliver work through commits to the designated `feature/*` branch and purpose-specific directories, not chat ZIPs, binary attachments, or text archives.
+- For Phase 2 furniture use `feature/phase2-furniture-assets` and `assets/candidates/phase2/`. Keep original drawings, candidate PNGs, source references, scripts, manifests, and QA evidence clearly separated.
+- Report actual branch, full commit SHA, changed paths, test results and remaining blockers concisely. Never claim a push, binary upload, test, or QA result unless verified.
+- If the available agent connector cannot upload binary files, report the specific blocker. Do not silently substitute chat ZIP distribution or pretend the file was committed.
+
+### Preapproved working-branch actions
+- Agents may independently create/revise candidate PNG assets, scripts, manifests, QA data, in-scope bug fixes, refactors and small layout adjustments **on the assigned working branch**, and commit/push them without asking for each change.
+- Inspect active code and scope first; keep changes minimal and reversible. Test relevant desktop and mobile views. Do not overwrite other agents' recent work or approved assets without verification.
+- Candidate branch commit permission is not formal asset adoption, production deployment or merge authorization.
+
+### Protected changes requiring explicit director approval
+- Never directly modify or commit to `main`; never merge to `main` without explicit authorization.
+- Do not alter production map files (including `data/maps/rilde_in_house_01.json`), deployed production assets, or already-approved shared assets without separate explicit authorization, even on a feature branch.
+- Do not make fundamental destructive changes to approved lore, worldbuilding, design direction, or gameplay without director approval.
+- Formal adoption and production application require human director review and approval after QA. A Claude PASS or automated PASS is necessary evidence, **not by itself adoption authorization**, unless the director expressly delegates that specific adoption decision.
+
+### Communication
+- Start implementation immediately when requirements are clear. Avoid greetings, repetitive policy recitations, and approval questions for preapproved actions.
+- Use concise evidence-based reports. Explicitly distinguish self-QA, Claude QA, Codex independent QA, emulated mobile layouts and actual Android device checks.
+- Do not imply autonomous background work or cross-session memory: agents must read this file at the start of each repository session.
+
+### Scope and rollout
+- This file is versioned in the feature branch. Other sessions must open the same branch to inherit this revision.
+- Propagating these instructions to `main` or other branches requires separate director authorization and an approved change process; this directive does not authorize a `main` update.
+
+## 🤖 AI Token & Workflow Policy (トークン効率・タスクパケット方式)
+1. **タスクパケット方式の徹底:** ワーカー（Claude/Codex）への指示および報告は、挨拶や長文説明を排した極小のメタ情報と指示のみで行う。
+2. **トークン極小化:** 挨拶、前置き、過度な解説、まとめの文章（「お疲れ様です」「何か質問は〜」等）は一切禁止。
+3. **差分ベースのやり取り:** コード全体の送受信を禁止し、変更対象のファイルパスと該当スニペット（または git diff）のみを扱う。
+4. **回答フォーマットの固定:**
+   ■ 診断・修正理由（1〜2行で簡潔に）
+   - [理由]
+   ■ 修正コード（該当部分のみ）
+
+## 自律リトライ原則（Self-Retry Policy）— ソフトリミット版（2026-11-03 ディレクター承認）
+- 対象：全ワーカー（Claude/Codex等）およびディレクター補佐（ChatGPT）。アセット制作・コード実装・検証などでエラーや品質未達が発生した場合、報告のみで直ちに停止せず、原因分析・修正・再検証を自律的に行い、採用水準の成果物を目指す。
+- **内部リトライのソフトリミットは原則最大3回。** 同一問題に対する初回試行後の再試行を数え、各回で原因・修正・検証結果を確認する。無意味な同一操作の反復は禁止。
+- 3回のリトライでも解決しない場合は、無理に継続せず、発生している問題の具体内容・試した対処・残る障害・次の選択肢を簡潔に報告し、人間の判断を仰ぐ。未達の成果をPASSや完了と偽らない。
+- **仕様判断不能・承認必須事項・権限不足・安全上の問題がある場合は、リトライ回数にかかわらず直ちに停止し、必要事項のみピンポイントで質問する。**
+- 既存の承認範囲・正式採用素材／確定シナリオの保護・main変更／マージの個別承認・FAST-TRACK方針を厳守する。リトライは権限拡張や作業範囲の無断変更を認めない。
+- 今後のClaude/Codex向け全タスクパケットおよびChatGPTによる実作業に本原則を適用する。

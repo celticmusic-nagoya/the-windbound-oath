@@ -7,10 +7,10 @@ def check(ok,label,detail=None):
  print(('ok   ' if ok else 'FAIL ')+label,'' if ok else detail,flush=True)
  if not ok:fails.append(label)
 S=json.loads(subprocess.check_output(['node','tools/qa/story_expression_snapshot.cjs'],cwd=ROOT));A=json.loads((ROOT/'docs/qa/evidence/directive-24a/dialogue-audit.json').read_text());names={'エイダン':'aidan','フィオナ':'fiona','ルー':'lou','エマ':'emma'}
-check(S['behavior_sha256']==A['behavior_sha256']=='4d9c203b00d45ac245a369350b8fe910bf4e2a1164e5cb492aa82bf7b1c10114','all original words/page counts/order/choices/conditions/flags/rewards equal main')
-check(S['index_logic_sha256']=='c6fa5ff607f98c0e64ebdad8a1185cff0ca52e4ade61b6db7ddda1835f513640','index logic matches approved26B reward-only baseline; exact source delta guarded by early_rewards_26b')
+check(S['behavior_sha256']==A['behavior_sha256']=='0c071350076ea360e868a81914f9ed85fd9907c56f30ec88a88d2cd4d5ef0e54','all original words/page counts/order/choices/conditions/flags/rewards equal main (+TASK-PROLOGUE-02 scene_emma_snack, director-approved)')
+check(S['index_logic_sha256']=='fc6f1c32392f2d528ccf076c61f8f5f07e180cdae489690e4a9cb9b4b8d4c942','index logic matches approved26B reward-only baseline + TASK-PROLOGUE-02 winTraining next() wrapper; exact source delta guarded by early_rewards_26b')
 allpages=[dict(key=c['key'],page=i,**p) for c in S['conversations'] for i,p in enumerate(c['pages'])]+S['cinematic']+S['training']+S['inspection'];actual={(p['key'],p['page']):p for p in allpages if p.get('char')};expected={(p['key'],p['page']):p for p in A['assignments']}
-check(len(allpages)==388 and len(actual)==len(expected)==115 and set(actual)==set(expected),'388 audited display-path pages;115 authored targets, no missing target')
+check(len(allpages)==415 and len(actual)==len(expected)==138 and set(actual)==set(expected),'415 audited display-path pages;138 authored targets, no missing target')
 check(all(all(actual[k].get(f)==p[f] for f in ['speaker','text','char','face','side']) for k,p in expected.items()),'manual audited face mapping exactly equals production data')
 check(all(names[p['speaker']]==p['char'] and (p['char']!='lou' or p['face'] not in ['smile','relieved']) for p in actual.values()),'correct speaker/character; excluded Lou faces never assigned')
 check(len(A['exclusions'])==25 and not A['unhandled'] and all(not next(p for p in allpages if (p['key'],p['page'])==(e['key'],e['page'])).get('char') for e in A['exclusions']),'CG22 and mixed3 intentionally hidden; eligible unhandled0')
@@ -62,7 +62,12 @@ with sync_playwright() as p:
   pg.evaluate("devResetScreens();closeDialogue();storyStage=0;document.querySelector('#fiona').onclick()")
   status(S['training'][0],'training stage0');check(pg.evaluate('storyStage===1'),'original training first-talk stage remains1')
   pg.evaluate("closeDialogue();document.querySelector('#fiona').onclick()");status(S['training'][1],'training stage1')
-  pg.evaluate("closeDialogue();startTraining();winTraining()");pg.wait_for_function('storyStage===3',timeout=5000);status(S['training'][3],'training real victory')
+  pg.evaluate("closeDialogue();startTraining();winTraining()");pg.wait_for_function('storyStage===3',timeout=5000)
+  # TASK-PROLOGUE-02: the one-time エマの差し入れ scene plays first (its pages are audited above as scene_emma_snack_1/0), then the original line.
+  for _ in range(40):
+   if pg.evaluate("FieldScene.running!=='emma_snack'"):break
+   pg.locator('#msg').tap();pg.wait_for_timeout(60)
+  status(S['training'][3],'training real victory')
   pg.evaluate("closeDialogue();document.querySelector('#fiona').onclick()");status(S['training'][2],'training stage>=2')
   pg.evaluate("FieldTalk.cancel();devResetScreens();closeDialogue();RildeVillage.force('peace');RildeVillage.hook({hook:'rilde_wind_stone'},null)");status(S['inspection'][0],'actual peaceful wind-stone inspection')
   pg.evaluate("closeDialogue();RildeVillage.force('ruin');RildeVillage.hook({hook:'rilde_wind_stone'},null)");status(S['inspection'][1],'actual ruin wind-stone narration');pg.evaluate('RildeVillage.force(null)')
