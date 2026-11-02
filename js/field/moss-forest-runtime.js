@@ -38,9 +38,9 @@
   const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
   const sideCount=(frames,dir)=>{let n=0;while(frames.has('fiona_side_'+dir+'_'+String(n+1).padStart(2,'0')))n++;return n||4;};
   const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
-  // DIRECTIVE-ART-08B (test): Aidan's side art paints a ~25 world px stride (51 per two-step cycle), so the side sets use their own
+  // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~25 world px stride (~50 per two-step cycle), so the side sets use their own
   // cycle length; front/back (6 frames) and Fiona keep STRIDE_CYCLE. DEV builds accept ?aidanSideStride=<n> for A/B comparison.
-  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 52;})();
+  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 50;})();   // ART-08E: 6-frame side set, painted stride ~25 world -> ~50 per two-step cycle
   const aidanStride=dir=>(dir==='left'||dir==='right')?AIDAN_SIDE_STRIDE:STRIDE_CYCLE;
   function artOf(dir,flip){return window.AidanHeading&&AidanHeading.art?AidanHeading.art(dir,flip):{dir,flip:!!flip};}
   function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up|dl|ul)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}

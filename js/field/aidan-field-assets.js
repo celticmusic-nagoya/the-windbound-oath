@@ -1,4 +1,5 @@
-/* Aidan standalone field assets (tools/field/install_hero_frames.py): one shared scale + feet anchor. Explicit foot registration; no battle paths. */
+/* DIRECTIVE-ART-08E (trial): side walk = 6 frames per side from img/field/characters/aidan/side6/ (far leg shaded; 05/06 derived), the adopted 4-frame files stay untouched.
+ * Aidan standalone field assets (tools/field/install_hero_frames.py): one shared scale + feet anchor. Explicit foot registration; no battle paths. */
 (function () {
   "use strict";
   if (!window.WINDBOUND_DEV) return;
@@ -356,7 +357,7 @@
   "scale": 0.0625
  },
  "aidan_walk_left_01": {
-  "path": "img/field/characters/aidan/aidan_walk_left_01.png?v=d453729e",
+  "path": "img/field/characters/aidan/side6/aidan_walk_left_01.png?v=63525c12",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -372,7 +373,7 @@
   "scale": 0.0625
  },
  "aidan_walk_left_02": {
-  "path": "img/field/characters/aidan/aidan_walk_left_02.png?v=336ee5e8",
+  "path": "img/field/characters/aidan/side6/aidan_walk_left_02.png?v=6454e74f",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -388,7 +389,7 @@
   "scale": 0.0625
  },
  "aidan_walk_left_03": {
-  "path": "img/field/characters/aidan/aidan_walk_left_03.png?v=9fae61f0",
+  "path": "img/field/characters/aidan/side6/aidan_walk_left_03.png?v=eed9e79c",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -404,7 +405,7 @@
   "scale": 0.0625
  },
  "aidan_walk_left_04": {
-  "path": "img/field/characters/aidan/aidan_walk_left_04.png?v=852f9183",
+  "path": "img/field/characters/aidan/side6/aidan_walk_left_04.png?v=ce55f5fb",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -420,7 +421,7 @@
   "scale": 0.0625
  },
  "aidan_walk_right_01": {
-  "path": "img/field/characters/aidan/aidan_walk_right_01.png?v=239a2e0c",
+  "path": "img/field/characters/aidan/side6/aidan_walk_right_01.png?v=d1174c5a",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -436,7 +437,7 @@
   "scale": 0.0625
  },
  "aidan_walk_right_02": {
-  "path": "img/field/characters/aidan/aidan_walk_right_02.png?v=c0474f60",
+  "path": "img/field/characters/aidan/side6/aidan_walk_right_02.png?v=e7c09397",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -452,7 +453,7 @@
   "scale": 0.0625
  },
  "aidan_walk_right_03": {
-  "path": "img/field/characters/aidan/aidan_walk_right_03.png?v=6e275fa0",
+  "path": "img/field/characters/aidan/side6/aidan_walk_right_03.png?v=24d6018a",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -468,7 +469,7 @@
   "scale": 0.0625
  },
  "aidan_walk_right_04": {
-  "path": "img/field/characters/aidan/aidan_walk_right_04.png?v=4b795b21",
+  "path": "img/field/characters/aidan/side6/aidan_walk_right_04.png?v=b8a12608",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -667,6 +668,70 @@
    621,
    126,
    887,
+   1104
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_right_05": {
+  "path": "img/field/characters/aidan/side6/aidan_walk_right_05.png?v=18528930",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   773,
+   126,
+   553,
+   1103
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_right_06": {
+  "path": "img/field/characters/aidan/side6/aidan_walk_right_06.png?v=611f935a",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   763,
+   126,
+   531,
+   1104
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_left_05": {
+  "path": "img/field/characters/aidan/side6/aidan_walk_left_05.png?v=65ccbf57",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   893,
+   126,
+   512,
+   1104
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
+ },
+ "aidan_walk_left_06": {
+  "path": "img/field/characters/aidan/side6/aidan_walk_left_06.png?v=ab4c47d6",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   866,
+   126,
+   557,
    1104
   ],
   "anchor": [
