@@ -1,6 +1,6 @@
 # Asset registry audit
 
-registry snapshot: 2026-10-19 ／ assets 1208 ／ errors **0**
+registry snapshot: 2026-10-19 ／ assets 1210 ／ errors **0**
 
 ## Errors
 
@@ -25,7 +25,7 @@ registry snapshot: 2026-10-19 ／ assets 1208 ／ errors **0**
 - fix/fiona-lou-portrait-lifecycle-p2: 16
 - handoff-repo:handoff/party-motion-originals-claude-20261019: 14
 
-## main上の参照なし画像 51（情報。原本保管/将来用の可能性があり自動削除しない）
+## main上の参照なし画像 53（情報。原本保管/将来用の可能性があり自動削除しない）
 
 - assets/images/characters/portraits/fiona/provisional-20c/blink: 8
 - assets/images/characters/portraits/fiona/provisional-20c/expressions: 7
@@ -34,6 +34,7 @@ registry snapshot: 2026-10-19 ／ assets 1208 ／ errors **0**
 - img/battle/characters/aidan: 3
 - img/battle/characters/fiona: 1
 - img/battle/characters/lou: 1
+- img/field/characters/aidan: 2
 - img/field/moss/art: 8
 - img/field/moss/props: 6
 - img/field/moss/standin: 2
