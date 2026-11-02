@@ -63,7 +63,14 @@
       wanderRadius: 160, rest: [1, 2.5],
       alertTime: .3, engageDelay: .25, reaggro: 2, hop: 6,
       respawn: 'reenter', battle: 'goblin',
-      art: null   // no field art yet -> the generic symbol placeholder is drawn
+      // Branch-only candidate: reference-aligned 4 idle + 4 frames per direction.
+      art: Object.freeze({dir: 'img/field/monsters/goblin/', frames: 20,
+        files: Object.freeze(['idle', 'walk_down', 'walk_right', 'walk_up', 'walk_left'].flatMap(p =>
+          [1, 2, 3, 4].map(n => 'goblin_' + p + '_' + String(n).padStart(2, '0') + '.png'))),
+        w: 320, h: 320, feet: 32, scale: .25, fps: 3, stride: 48,
+        idle: Object.freeze([0, 1, 2, 3]),
+        directions: Object.freeze({down: [4, 5, 6, 7], right: [8, 9, 10, 11],
+          up: [12, 13, 14, 15], left: [16, 17, 18, 19]})})
     })
   });
   const ACTIVE_RANGE = 1600;   // monsters farther than this from the player are not simulated
@@ -76,7 +83,8 @@
   function spawnRec(d) {
     const t = typeOf(d);
     const rec = {id: d.id, type: d.type, t, group: d.group || 1, lv: Number.isFinite(d.level) ? d.level : 0, x: d.x, y: d.y, home: [d.x, d.y], state: 'wander', sub: 'rest', wait: 1 + Math.random() * 2,
-      goal: null, dir: 1, clock: Math.random() * 3, timer: 0, noAggro: 0, chaseFrom: null, stuck: 0, el: null, frames: null, shown: ''};
+      goal: null, dir: 1, clock: Math.random() * 3, timer: 0, noAggro: 0, chaseFrom: null, stuck: 0, el: null, frames: null, shown: '',
+      facing: 'down', travel: 0, animTime: 0, animMoving: false};
     rec.el = makeEl(rec); layer.appendChild(rec.el); list.push(rec); draw(rec, true);
     return rec;
   }
@@ -103,7 +111,7 @@
   function makeEl(m) {
     const a = m.t.art;
     if (!a) { const d = document.createElement('div'); d.className = 'forest-symbol forest-monster ph'; d.textContent = m.t.name; Object.assign(d.style, {position: 'absolute', width: '48px', height: '62px', pointerEvents: 'none'}); return d; }
-    m.frames = []; for (let n = 1; n <= a.frames; n++) { const f = a.dir + a.file.replace('{n}', String(n).padStart(2, '0')); m.frames.push(f); const i = new Image(); i.src = f; }
+    m.frames = []; for (let n = 1; n <= a.frames; n++) { const f = a.dir + (a.files ? a.files[n - 1] : a.file.replace('{n}', String(n).padStart(2, '0'))); m.frames.push(f); const i = new Image(); i.src = f; }
     const e = document.createElement('img'); e.className = 'forest-monster'; e.draggable = false; e.alt = '';
     Object.assign(e.style, {position: 'absolute', width: a.w * a.scale + 'px', height: a.h * a.scale + 'px', pointerEvents: 'none'});
     return e;
@@ -113,14 +121,21 @@
     let src = '';
     if (a) {
       const pose = a.poses && a.poses[m.state], walk = a.walk || null, moving = m.moving && m.state !== 'engaged', fps = (a.poseFps && a.poseFps[m.state]) || a.fps;
-      if (pose) src = m.frames[pose[Math.floor(m.clock * fps) % pose.length]];
+      if (a.directions) {
+        const bank = moving ? a.directions[m.facing] : a.idle;
+        if (moving && !m.animMoving) m.travel = 0;
+        const phase = moving ? m.travel / a.stride * bank.length : m.animTime * fps;
+        src = m.frames[bank[Math.floor(phase) % bank.length]];
+        m.animMoving = moving;
+      }
+      else if (pose) src = m.frames[pose[Math.floor(m.clock * fps) % pose.length]];
       else if (moving) src = walk ? m.frames[walk[Math.floor(m.clock * fps) % walk.length]] : m.frames[Math.floor(m.clock * fps) % a.frames];
       else src = m.frames[0];
       if (m.el.dataset.src !== src) { m.el.dataset.src = src; m.el.src = src; }
     }
     const lift = a && a.air ? a.air + Math.sin(m.clock * 3) * 4 : 0;   // flyers hover above their ground point
     const hop = m.hopT > 0 ? -Math.abs(Math.sin(m.hopT * Math.PI)) * m.t.hop : 0;
-    const flip = (a ? a.faces : 1) * m.dir < 0 ? -1 : 1;
+    const flip = a && a.directions ? 1 : ((a ? a.faces : 1) * m.dir < 0 ? -1 : 1);
     const sig = Math.round(m.x) + ',' + Math.round(m.y) + ',' + Math.round(lift) + ',' + Math.round(hop * 2) + ',' + flip + ',' + src;
     if (!force && sig === m.shown) return; m.shown = sig;
     const s = m.el.style;
@@ -134,6 +149,11 @@
     const step = Math.min(d, speed * sec), ax = m.x - ctx.foot.ax, ay = m.y - ctx.foot.ay;
     const r = ctx.advance(ax, ay, dx / d * step, dy / d * step, m.lv);
     const nx = r.x + ctx.foot.ax, ny = r.y + ctx.foot.ay, moved = Math.hypot(nx - m.x, ny - m.y);
+    if (m.t.art && m.t.art.directions && moved > .01) {
+      const heading = Math.abs(nx - m.x) >= Math.abs(ny - m.y) ? (nx > m.x ? 'right' : 'left') : (ny > m.y ? 'down' : 'up');
+      if (heading !== m.facing) m.travel = 0;
+      m.facing = heading; m.travel += moved;
+    }
     m.x = nx; m.y = ny; face(m, gx); m.clock += sec; return moved;
   }
   function pickWanderGoal(m) {
@@ -206,6 +226,7 @@
       }
       // Height maps: a monster only notices / touches / engages the player on its own level (it keeps its own level for movement too).
       const pl = ctx.level ? ctx.level() : null; m.offLevel = pl != null && pl !== m.lv;
+      if (m.t.art && m.t.art.directions) m.animTime += Math.min(sec, .1);
       think(m, Math.min(sec, .1), P, m.offLevel ? Infinity : dP, now);
       if (m.t.art && m.t.art.always && m.state !== 'engaged') { m.clock += Math.min(sec, .1); m.moving = true; }   // flyers never stop flapping
       draw(m);

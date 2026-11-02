@@ -1,6 +1,6 @@
 # Asset registry audit
 
-registry snapshot: 2026-10-19 ／ assets 1196 ／ errors **0**
+registry snapshot: 2026-10-19 ／ assets 1202 ／ errors **0**
 
 ## Errors
 
@@ -9,7 +9,7 @@ registry snapshot: 2026-10-19 ／ assets 1196 ／ errors **0**
 ## 採用済み・未実装（P0）0
 
 
-## 納品済み・未統合（ブランチ/原本のみ）179
+## 納品済み・未統合（ブランチ/原本のみ）184
 
 - assets/goblin-raider-ko-from-dissolve-f1: 7
 - assets/rilde-interior-v1: 14
@@ -19,6 +19,7 @@ registry snapshot: 2026-10-19 ／ assets 1196 ／ errors **0**
 - feat/fiona-lou-portraits: 16
 - feat/goblin-field-art: 2
 - feature/asset-emma-01: 24
+- feature/goblin-field-20f: 5
 - feature/title-01-new-title-screen: 2
 - fix/fiona-lou-p2-startup-race-qa: 16
 - fix/fiona-lou-portrait-lifecycle-p2: 16
