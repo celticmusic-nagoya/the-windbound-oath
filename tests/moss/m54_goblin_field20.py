@@ -75,10 +75,13 @@ with server(8799) as base, sync_playwright() as pw:
         before = page.evaluate('FieldMonsters.list[0].animTime')
         page.wait_for_timeout(300)
         assert before == page.evaluate('FieldMonsters.list[0].animTime')
-        page.evaluate('FieldMonsters.setFrozen(false);FieldMonsters.clear()')
+        page.evaluate("FieldMonsters.setFrozen(false);FieldMonsters.removeAll();const p=MossForest.feet;FieldMonsters.add({id:'qa-contact',type:'goblin',x:p.x+1,y:p.y+1})")
+        page.wait_for_function("document.body.classList.contains('normalBattleMode')", timeout=10000)
+        assert page.evaluate("FieldMonsters.list[0].type==='goblin'&&FieldMonsters.list[0].state==='engaged'")
+        page.evaluate('FieldMonsters.clear()')
         assert page.evaluate('FieldMonsters.list.length') == 0
-        results.append({'viewport': label, 'frames': sorted(seen_all), 'actual_opaque_pixel_hashes': 'PASS', 'freeze_clear': 'PASS'})
-        print('ok  ', label, '20 actual frames/pixels, unclipped, freeze/clear')
+        results.append({'viewport': label, 'frames': sorted(seen_all), 'actual_opaque_pixel_hashes': 'PASS', 'freeze_clear': 'PASS', 'default_goblin_contact_battle': 'PASS'})
+        print('ok  ', label, '20 actual frames/pixels, unclipped, freeze/clear, default contact battle')
         context.close()
     browser.close()
 assert not errors, errors

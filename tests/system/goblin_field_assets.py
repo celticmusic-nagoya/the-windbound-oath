@@ -22,8 +22,10 @@ for frame in manifest['frames']:
     assert 0 < box[0] < box[2] < 320 and 0 < box[1] < box[3] < 320
 assert hashlib.sha256((ROOT / manifest['reference']).read_bytes()).hexdigest() == manifest['reference_sha256']
 reg = json.loads((ROOT / 'docs/assets/ASSET_REGISTRY.json').read_text())
-groups = [a for a in reg['assets'] if a['source_path'].startswith('img/field/monsters/goblin/goblin_')]
+candidate_paths = {f['path'] for f in manifest['frames']}
+groups = [a for a in reg['assets'] if a['source_path'] in candidate_paths]
 assert len(groups) == 5 and sum(a['frame_count'] for a in groups) == 20
+assert {p for a in groups for p in a['frames']} == candidate_paths
 assert all(a['approval_status'] == 'PENDING' and a['integration_status'] == 'BRANCH_ONLY' and a['android_status'] == 'UNVERIFIED' for a in groups)
 with tempfile.TemporaryDirectory(prefix='goblin-audit-') as temp:
     dst = Path(temp)
