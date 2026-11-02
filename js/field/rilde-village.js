@@ -139,11 +139,10 @@
   // SCENARIO-PROLOGUE-02: after the training dummy is beaten (stage 3) play 'emma_snack' once, then `next` (the existing
   // post-training line / objective). Returns false when the scene does not apply (legacy village, already seen) so the caller runs `next` itself.
   function afterTraining(next) {
-    if (!enabled() || !window.FieldScene || stage() !== 3 || FieldTalk.flag('emma_snack_done')) return false;
+    if (!enabled() || !window.FieldScene || FieldScene.running || stage() !== 3 || FieldTalk.flag('emma_snack_done')) return false;
     const token = window.LoadCoordinator ? LoadCoordinator.generation : undefined;
     FieldScene.play('emma_snack').then(ok => {
       if (token !== undefined && !LoadCoordinator.current(token)) return;   // a load / reset replaced the session: nothing else to do
-      if (!ok && FieldScene.running) return;
       next();
     });
     return true;

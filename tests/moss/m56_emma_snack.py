@@ -74,10 +74,32 @@ with sync_playwright() as p:
     ev("dhp=0;enemyTurn();TrainingCheckpoint.cancel()"); pg.wait_for_timeout(2500)
     check(ev('FieldScene.running') is None and ev('__snackEnds') == 0 and ev("FieldTalk.flag('emma_snack_done')") is False, 'interrupted training: no event, no flag')
     check(ev('storyStage') == 2, 'interrupted training: stage not advanced')
-    # legacy village host: no scene, existing line only
+    # load during the scene: the session is replaced -> no next(), no flag, field unlocked; SAVE refused mid-scene
+    pg.close(); pg = b.new_page(viewport={'width': 1280, 'height': 720}); ev = pg.evaluate
+    pg.on('pageerror', lambda e: errs.append('PAGEERR5 ' + str(e)))
+    pg.goto('http://localhost:8765/index.html?title=0'); pg.wait_for_timeout(1800); ev("localStorage.removeItem(SAVE_KEY)")
+    ev("RildeVillage.startOpening()"); pg.wait_for_timeout(2500); ev("closeDialogue()")
+    ev("MossForestStory.enterMap('rilde_village','from_aidan')"); pg.wait_for_timeout(1800); ev("closeDialogue()")
+    ev("RildeVillage.hook({hook:'rilde_fiona'},MossForest)"); pg.wait_for_timeout(400); ev("closeDialogue()"); pg.wait_for_timeout(600)
+    ev("saveGrowthData()")   # a stage-1 save to load back into
+    check(ev("JSON.parse(localStorage.getItem(SAVE_KEY)||'{}').prologue?.storyStage") == 1, 'load case: stage-1 save written')
+    ev("RildeVillage.hook({hook:'rilde_dummy'},MossForest)"); pg.wait_for_timeout(600)
+    ev("dhp=0;enemyTurn()"); pg.wait_for_timeout(2200)
+    check(ev('FieldScene.running') == 'emma_snack', 'load case: scene running')
+    before = ev("localStorage.getItem(SAVE_KEY)"); ev("saveGrowthData()")
+    check(ev("localStorage.getItem(SAVE_KEY)") == before, 'SAVE is refused while the scene runs')
+    ev("loadGrowthData()"); pg.wait_for_timeout(3500)
+    check(ev('FieldScene.running') is None and ev("FieldTalk.flag('emma_snack_done')") is False and ev('storyStage') == 1, 'load during scene: cancelled, no flag, stage from the save')
+    check('一瞬だけ変な光' not in (ev("document.getElementById('msg').textContent") or ''), 'load during scene: the post-training line is not run')
+    a0 = ev("MossForest.actor('aidan').get().x"); pg.keyboard.down('ArrowLeft'); pg.wait_for_timeout(500); pg.keyboard.up('ArrowLeft')
+    check(abs(ev("MossForest.actor('aidan').get().x") - a0) > 10, 'load during scene: field unlocked')
+    # legacy village host at stage 3: no scene (enabled() guard), caller runs the existing line
     pg2 = b.new_page(); pg2.on('pageerror', lambda e: errs.append('PAGEERR4 ' + str(e)))
     pg2.goto('http://localhost:8765/index.html?legacyVillage=1'); pg2.wait_for_timeout(1200)
-    check(pg2.evaluate("RildeVillage.afterTraining(()=>{})") is False, 'legacy village: scene skipped (caller runs the existing line)')
+    pg2.evaluate("storyStage=3;FieldTalk.load({seen:[],cycle:{},flags:{}})")
+    check(pg2.evaluate("RildeVillage.afterTraining(()=>{})") is False and pg2.evaluate("FieldScene.running") is None, 'legacy village at stage 3: scene skipped (caller runs the existing line)')
+    # another scene already running: refuse up front so the caller still runs the existing line
+    check(ev("(()=>{storyStage=3;FieldTalk.load({seen:[],cycle:{},flags:{}});return true})()") and ev("(async()=>{const p=FieldScene.play({steps:[{wait:1500}]});const r=RildeVillage.afterTraining(()=>{});await p;return r})()") is False, 'busy FieldScene: afterTraining returns false')
 errs = [e for e in errs if 'favicon' not in e]
 check(not errs, 'no console errors %s' % errs[:3])
 print('FAILS', fails); sys.exit(1 if fails else 0)

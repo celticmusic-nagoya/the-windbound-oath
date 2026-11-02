@@ -11,32 +11,32 @@
   "target_pages": 138,
   "assignment_changes": {
     "retained": 5,
-    "added": 102,
+    "added": 125,
     "updated": 8
   },
   "excluded_pages": 25,
   "unhandled": [],
   "per_character": {
     "aidan": {
-      "named_speaker_pages": 50,
+      "named_speaker_pages": 56,
       "portrait_pages_before": 2,
-      "portrait_pages_after": 41,
+      "portrait_pages_after": 47,
       "faces": {
-        "smile": 2,
-        "normal": 21,
+        "smile": 5,
+        "normal": 24,
         "surprised": 8,
         "worried": 9,
         "sad": 1
       }
     },
     "fiona": {
-      "named_speaker_pages": 54,
+      "named_speaker_pages": 62,
       "portrait_pages_before": 1,
-      "portrait_pages_after": 48,
+      "portrait_pages_after": 56,
       "faces": {
-        "normal": 9,
-        "surprised": 7,
-        "smile": 8,
+        "normal": 13,
+        "surprised": 8,
+        "smile": 11,
         "worried": 15,
         "relieved": 2,
         "determined": 6,
@@ -56,13 +56,13 @@
       }
     },
     "emma": {
-      "named_speaker_pages": 16,
+      "named_speaker_pages": 25,
       "portrait_pages_before": 1,
-      "portrait_pages_after": 16,
+      "portrait_pages_after": 25,
       "faces": {
-        "normal": 3,
+        "normal": 6,
         "worried": 3,
-        "smile": 6,
+        "smile": 12,
         "relieved": 2,
         "surprised": 2
       }
@@ -2376,7 +2376,8 @@
       "previous_behavior_sha256": "4d9c203b00d45ac245a369350b8fe910bf4e2a1164e5cb492aa82bf7b1c10114",
       "previous_index_logic_sha256": "c6fa5ff607f98c0e64ebdad8a1185cff0ca52e4ade61b6db7ddda1835f513640",
       "index_logic_sha256": "fc6f1c32392f2d528ccf076c61f8f5f07e180cdae489690e4a9cb9b4b8d4c942",
-      "index_delta": "winTraining: existing say/setObj/storyToast wrapped in next(); RildeVillage.afterTraining(next) plays the scene once first"
+      "index_delta": "winTraining: existing say/setObj/storyToast wrapped in next(); RildeVillage.afterTraining(next) plays the scene once first",
+      "summary_fields_updated": "assignment_changes.added +23; per_character aidan/fiona/emma named_speaker_pages, portrait_pages_after and faces incremented by the new pages only"
     }
   ]
 }
