@@ -7492,6 +7492,18 @@
     "qa_status": "PASS",
     "delivery_date": "2026-11-02"
    }
+  },
+  {
+   "match": "^img/field/monsters/goblin/goblin_walk_up_",
+   "set": {
+    "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): back-view head volume restored by tools/art/fix_goblin20_up_head.py (hood cap from walk_down_01, mirrored, layered under the original pixels); still a candidate, not adopted."
+   }
+  },
+  {
+   "match": "^img/field/monsters/goblin/goblin_walk_down_",
+   "set": {
+    "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): front-view walk cycle replaced by the director-delivered 4 frames (delivered bytes kept in assets/candidates/goblin-field-20f/fix01-down-delivered/); still a candidate, not adopted."
+   }
   }
  ],
  "motion_gaps": [

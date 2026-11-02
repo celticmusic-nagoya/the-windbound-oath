@@ -32827,7 +32827,7 @@
    "category": "field_monster",
    "character": "goblin",
    "motion": "idle",
-   "delivery_date": "2026-11-02",
+   "delivery_date": "2026-11-03",
    "source_path": "img/field/monsters/goblin/goblin_idle_01.png",
    "source_branch": "feature/goblin-field-20f",
    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
@@ -32865,7 +32865,7 @@
    "category": "field_monster",
    "character": "goblin",
    "motion": "walk",
-   "delivery_date": "2026-11-02",
+   "delivery_date": "2026-11-03",
    "source_path": "img/field/monsters/goblin/goblin_walk_down_01.png",
    "source_branch": "feature/goblin-field-20f",
    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
@@ -32883,7 +32883,7 @@
    "qa_status": "PASS",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN.",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): front-view walk cycle replaced by the director-delivered 4 frames (delivered bytes kept in assets/candidates/goblin-field-20f/fix01-down-delivered/); still a candidate, not adopted.",
    "frames": [
     "img/field/monsters/goblin/goblin_walk_down_01.png",
     "img/field/monsters/goblin/goblin_walk_down_02.png",
@@ -32891,10 +32891,10 @@
     "img/field/monsters/goblin/goblin_walk_down_04.png"
    ],
    "frames_sha256": [
-    "e39e28d31e55d98e3528492305a64d99988d7779a410cdad7a0cc4781c520c3a",
-    "4fa688b5a59930bcc945e5016e50cadfb7f6b4d354fc21f6e67d9d06c68cce7a",
-    "93ce3fd1b1ed8f7ac34ef87b07dd432b95a15b6ddb68820270189948aa649106",
-    "c35593e2a2c0a69000acf2ac4818a344015bdcf19bb64e36e8fefeacf5494326"
+    "833325854171a6e53ea3d2ad4b6cc129278c689aee2e4942fce3e512089544d4",
+    "aed0ef1b60d327af863324ee41ea862cb17a20fbbb8225e7ae5b301966ccd11f",
+    "eba374def35d9745d92f8038ec9105634a6f82f9013d688ee28d0c3109f3d484",
+    "e4e54b8c58c476e63623fa69a47c782e3d593f4819a9cfa45102b53570b8e098"
    ]
   },
   {
@@ -32903,7 +32903,7 @@
    "category": "field_monster",
    "character": "goblin",
    "motion": "walk",
-   "delivery_date": "2026-11-02",
+   "delivery_date": "2026-11-03",
    "source_path": "img/field/monsters/goblin/goblin_walk_left_01.png",
    "source_branch": "feature/goblin-field-20f",
    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
@@ -32941,7 +32941,7 @@
    "category": "field_monster",
    "character": "goblin",
    "motion": "walk",
-   "delivery_date": "2026-11-02",
+   "delivery_date": "2026-11-03",
    "source_path": "img/field/monsters/goblin/goblin_walk_right_01.png",
    "source_branch": "feature/goblin-field-20f",
    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
@@ -32979,7 +32979,7 @@
    "category": "field_monster",
    "character": "goblin",
    "motion": "walk",
-   "delivery_date": "2026-11-02",
+   "delivery_date": "2026-11-03",
    "source_path": "img/field/monsters/goblin/goblin_walk_up_01.png",
    "source_branch": "feature/goblin-field-20f",
    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
@@ -32997,7 +32997,7 @@
    "qa_status": "PASS",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN.",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): back-view head volume restored by tools/art/fix_goblin20_up_head.py (hood cap from walk_down_01, mirrored, layered under the original pixels); still a candidate, not adopted.",
    "frames": [
     "img/field/monsters/goblin/goblin_walk_up_01.png",
     "img/field/monsters/goblin/goblin_walk_up_02.png",
@@ -33005,10 +33005,10 @@
     "img/field/monsters/goblin/goblin_walk_up_04.png"
    ],
    "frames_sha256": [
-    "8c9d46d20150246ba7a93b470b13536f80212280880c912bb4f1765d83363ff3",
-    "26e1040a8e3bce524ba1e189ea5078ade73f0096ec35b4f4b9c8894eb0b7c03b",
-    "44046759aface0e71aa7242df3eb3950bd9dea7110d0feaa2d134b02ed55e7b3",
-    "14b49e1c0a9d1a7e4843d9428c75d91686e7ea68842ea9a83a843eb012f677d0"
+    "62902c97ab7ff22cea1fcbd61cc0c0e2cc01250dd4f7e2b36c7af38594e04fac",
+    "430aca8ed232c8c55af6c08e64c7459f3ef437d4d0a8419908756b116d572080",
+    "8535346920463e62f950d03eb138a60be88316caa156870001d7851b8f6ec0d1",
+    "2089e79785befcd93225d9a2b4bfe694a85751246f7f6b3255ba128706661e3d"
    ]
   },
   {
