@@ -50,7 +50,7 @@
 - `fix/fiona-lou-p2-startup-race-qa`: 16 ファイル（例 `img/portraits/fiona/fiona_angry.png`）
 - `fix/fiona-lou-portrait-lifecycle-p2`: 16 ファイル（例 `img/portraits/fiona/fiona_angry.png`）
 
-## main上で参照が見つからない画像（45）— 原本保管/将来用の可能性があり自動削除しない
+## main上で参照が見つからない画像（47）— 原本保管/将来用の可能性があり自動削除しない
 
 - `assets/images/characters/portraits/fiona/provisional-20c/blink`: 8 件
 - `assets/images/characters/portraits/fiona/provisional-20c/expressions`: 7 件
@@ -59,6 +59,7 @@
 - `img/battle/characters/aidan`: 3 件
 - `img/battle/characters/fiona`: 1 件
 - `img/battle/characters/lou`: 1 件
+- `img/field/characters/aidan`: 2 件
 - `img/field/moss/art`: 8 件
 - `img/field/moss/standin`: 2 件
 - `img/field/moss/town`: 1 件

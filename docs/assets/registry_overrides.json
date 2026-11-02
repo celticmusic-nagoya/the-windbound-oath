@@ -7516,6 +7516,14 @@
     ],
     "notes": "Aidan side walk 6 frames per direction (ART-08E/08F, far leg shaded, derived 05/06). User-adopted art (2026-11-02); runtime via aidan-field-assets.js, side stride 72 world/cycle (DEV ?aidanSideStride). Physical Android not run."
    }
+  },
+  {
+   "match": "^img/field/characters/aidan/aidan_walk_(left|right)_0[1-4]\\.png$",
+   "set": {
+    "implementation_status": "NOT_IMPLEMENTED",
+    "runtime_reference": [],
+    "notes": "Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rollback."
+   }
   }
  ],
  "motion_gaps": [

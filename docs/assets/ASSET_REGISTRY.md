@@ -13,8 +13,8 @@
 - source_missing: **0**
 - approval_unknown: **886**
 - on_main: **1020**
-- implemented_on_main: **975**
-- unreferenced_on_main: **45**
+- implemented_on_main: **973**
+- unreferenced_on_main: **47**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
 
@@ -642,14 +642,14 @@
 | branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_down_02_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
 | branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_down_03_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
 | branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_down_04_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_01_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_02_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_03_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_04_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_01_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_02_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_03_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
-| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_04_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_01_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_02_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_03_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_left_04_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_01_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_02_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_03_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_right_04_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
 | branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_up_01_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
 | branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_up_02_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
 | branch:feat_aidan_side_walk_v4:img_field_characters_aidan_aidan_walk_up_03_png | aidan | walk | UNKNOWN | UNKNOWNxUNKNOWN | UNKNOWN | NOT_IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | NO | - / exists only on branch feat/aidan-side-walk-v4 (not merged to main) |
@@ -660,8 +660,8 @@
 | file:img_field_characters_aidan_aidan_idle_up | aidan | idle | 1 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_aidan_aidan_walk_dl | aidan | walk | 12 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_aidan_aidan_walk_down | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
-| seq:img_field_characters_aidan_aidan_walk_left | aidan | walk | 4 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
-| seq:img_field_characters_aidan_aidan_walk_right | aidan | walk | 4 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
+| seq:img_field_characters_aidan_aidan_walk_left | aidan | walk | 4 | 2048x1280 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
+| seq:img_field_characters_aidan_aidan_walk_right | aidan | walk | 4 | 2048x1280 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
 | seq:img_field_characters_aidan_aidan_walk_ul | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_aidan_aidan_walk_up | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_aidan_side6_aidan_walk_left | aidan | walk | 6 | 2048x1280 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/aidan-field-assets.js, js/field/moss-forest-runtime.js / Aidan side walk 6 frames per direction (ART-08E/08F, far leg shaded, derived 05/06). User- |

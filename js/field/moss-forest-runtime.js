@@ -38,7 +38,7 @@
   const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
   const sideCount=(frames,dir)=>{let n=0;while(frames.has('fiona_side_'+dir+'_'+String(n+1).padStart(2,'0')))n++;return n||4;};
   const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
-  // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~25 world px stride (~50 per two-step cycle), so the side sets use their own
+  // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~22 world px stride (~45 per two-step cycle), so the side sets use their own
   // cycle length; front/back (6 frames) and Fiona keep STRIDE_CYCLE. DEV builds accept ?aidanSideStride=<n> for A/B comparison.
   const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 72;})();   // ART-08F: initial value 72 (no-slide value is ~50, but at ~300 world/s it animates ~36 fps); DEV ?aidanSideStride=50|72|90 for QA
   const aidanStride=dir=>(dir==='left'||dir==='right')?AIDAN_SIDE_STRIDE:STRIDE_CYCLE;
