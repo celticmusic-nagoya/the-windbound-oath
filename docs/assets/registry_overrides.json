@@ -7475,6 +7475,21 @@
     "formal_source_pr": 95,
     "formal_source_commit": "8179a1100f6b33b3cbad70ea9b1d127e620323c5"
    }
+  },
+  {
+   "match": "^img/field/monsters/goblin/goblin_(idle|walk_(down|right|up|left))_",
+   "set": {
+    "approval_status": "PENDING",
+    "implementation_status": "IMPLEMENTED",
+    "integration_status": "BRANCH_ONLY",
+    "source_branch": "feature/goblin-field-20f",
+    "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+    "runtime_reference": [
+     "js/field/field-monsters.js"
+    ],
+    "android_status": "UNVERIFIED",
+    "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged."
+   }
   }
  ],
  "motion_gaps": [

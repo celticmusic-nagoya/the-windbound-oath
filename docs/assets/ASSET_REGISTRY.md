@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **1196**
+- total: **1202**
 - approved_implemented: **277**
 - approved_not_implemented: **0**
-- delivered_not_merged: **179**
-- pending_adoption: **2**
+- delivered_not_merged: **184**
+- pending_adoption: **7**
 - source_missing: **0**
-- approval_unknown: **885**
-- on_main: **1017**
-- implemented_on_main: **972**
+- approval_unknown: **886**
+- on_main: **1018**
+- implemented_on_main: **973**
 - unreferenced_on_main: **45**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -92,7 +92,7 @@
 | file:img_battle_characters_lou_lou_support_heal | lou | support | 1 | 1536x1024 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_characters_lou_lou_victory | lou | victory | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_goblin_attack | goblin | attack | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
-| file:img_battle_enemies_goblin_goblin_battle_idle | goblin | idle | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | css/style.css, index.html / existing asset on main; adoption record not re-verified |
+| file:img_battle_enemies_goblin_goblin_battle_idle | goblin | idle | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | css/style.css, img/field/monsters/goblin/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_goblin_call | goblin | call | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_goblin_damage | goblin | damage | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_goblin_goblin_ko | goblin | ko | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
@@ -111,7 +111,7 @@
 | file:img_battle_enemies_moss_slime_moss_slime_damage | moss_slime | damage | 1 | 440x380 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_moss_slime_moss_slime_ko | moss_slime | ko | 1 | 440x380 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_tainted_goblin_goblin_attack | tainted_goblin | attack | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
-| file:img_battle_enemies_tainted_goblin_goblin_battle_idle | tainted_goblin | idle | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | css/style.css, index.html / existing asset on main; adoption record not re-verified |
+| file:img_battle_enemies_tainted_goblin_goblin_battle_idle | tainted_goblin | idle | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | css/style.css, img/field/monsters/goblin/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_tainted_goblin_goblin_corruption_burst | tainted_goblin | corruption | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_tainted_goblin_goblin_damage | tainted_goblin | damage | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | js/assets.js / existing asset on main; adoption record not re-verified |
 | file:img_battle_enemies_tainted_goblin_goblin_ko | tainted_goblin | ko | 1 | 1312x1199 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | YES | img/battle/motion-manifest.json, js/assets.js / existing asset on main; adoption record not re-verified |
@@ -666,7 +666,7 @@
 | seq:img_field_characters_aidan_aidan_walk_up | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_lou_lou_idle | lou | idle | 6 | 73x120 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/assets.js / existing asset on main; adoption record not re-verified |
 
-## field_monster（15）
+## field_monster（20）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -684,9 +684,14 @@
 | file:img_field_monsters_leafy_boar_leafy_boar_10 | leafy_boar | UNKNOWN | 1 | 240x160 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
 | file:img_field_monsters_leafy_boar_leafy_boar_11 | leafy_boar | UNKNOWN | 1 | 240x160 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_monsters_forest_bat_forest_bat_idle | forest_bat | idle | 4 | 320x214 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/assets.js, js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
+| seq:img_field_monsters_goblin_goblin_idle | goblin | idle | 4 | 320x320 | PENDING | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | UNKNOWN | js/field/field-monsters.js / User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally a |
+| seq:img_field_monsters_goblin_goblin_walk_down | goblin | walk | 4 | 320x320 | PENDING | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | UNKNOWN | js/field/field-monsters.js / User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally a |
+| seq:img_field_monsters_goblin_goblin_walk_left | goblin | walk | 4 | 320x320 | PENDING | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | UNKNOWN | js/field/field-monsters.js / User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally a |
+| seq:img_field_monsters_goblin_goblin_walk_right | goblin | walk | 4 | 320x320 | PENDING | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | UNKNOWN | js/field/field-monsters.js / User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally a |
+| seq:img_field_monsters_goblin_goblin_walk_up | goblin | walk | 4 | 320x320 | PENDING | IMPLEMENTED | BRANCH_ONLY | UNVERIFIED | UNKNOWN | js/field/field-monsters.js / User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally a |
 | seq:img_field_monsters_moss_slime_moss_slime_walk | moss_slime | walk | 6 | 260x200 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/field-monsters.js / existing asset on main; adoption record not re-verified |
 
-## npc（260）
+## npc（261）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -853,6 +858,7 @@
 | file:img_field_moss_props_npc_questgiver_walk_05 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_questgiver_walk_06 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_soldier | UNKNOWN | UNKNOWN | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
+| file:img_field_moss_props_npc_soldier_idle_v2 | UNKNOWN | idle | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_soldier_walk_01 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_soldier_walk_02 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_props_npc_soldier_walk_03 | UNKNOWN | walk | 1 | 112x168 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |

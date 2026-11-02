@@ -39,15 +39,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 1196,
+  "total": 1202,
   "approved_implemented": 277,
   "approved_not_implemented": 0,
-  "delivered_not_merged": 179,
-  "pending_adoption": 2,
+  "delivered_not_merged": 184,
+  "pending_adoption": 7,
   "source_missing": 0,
-  "approval_unknown": 885,
-  "on_main": 1017,
-  "implemented_on_main": 972,
+  "approval_unknown": 886,
+  "on_main": 1018,
+  "implemented_on_main": 973,
   "unreferenced_on_main": 45
  },
  "motion_gaps": [
@@ -5419,6 +5419,7 @@
    "integration_status": "MAIN",
    "runtime_reference": [
     "css/style.css",
+    "img/field/monsters/goblin/manifest.json",
     "index.html",
     "js/assets.js"
    ],
@@ -5925,6 +5926,7 @@
    "integration_status": "MAIN",
    "runtime_reference": [
     "css/style.css",
+    "img/field/monsters/goblin/manifest.json",
     "index.html",
     "js/assets.js"
    ],
@@ -15342,6 +15344,32 @@
    "source_branch": "main",
    "source_commit": "99a0809da68d3afdc014a829785d6a6ce7d00fb9",
    "source_sha256": "a2ee8424e6339fb0380494dd3769d29ddb33b7b5deb56697ee7290357c16b643",
+   "width": 112,
+   "height": 168,
+   "frame_count": 1,
+   "approval_status": "UNKNOWN",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/moss/manifest.json"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "existing asset on main; adoption record not re-verified"
+  },
+  {
+   "asset_id": "file:img_field_moss_props_npc_soldier_idle_v2",
+   "name": "npc_soldier_idle_v2.png",
+   "category": "npc",
+   "character": "UNKNOWN",
+   "motion": "idle",
+   "delivery_date": "2026-11-02",
+   "source_path": "img/field/moss/props/npc_soldier_idle_v2.png",
+   "source_branch": "main",
+   "source_commit": "2046f3b9f13ca3931847370dccd6aaedc380627c",
+   "source_sha256": "bd2c994ec87cc1290368ebff8dbe5098a2942b9ecb444f4d473d34d3bdda1957",
    "width": 112,
    "height": 168,
    "frame_count": 1,
@@ -32791,6 +32819,196 @@
     "46c62129560f1fef5f2cd55ee149bfe4b8a31c43532b2496db4da944d39e3c86",
     "7ebb430115a408d5d3aca74700c01c2bf4ddf8e5ca41546e36719eb8f62f5987",
     "4cac0804acaa1a33bb0397756fb164f2cecfac9e0b2c3d78929bef59890c6584"
+   ]
+  },
+  {
+   "asset_id": "seq:img_field_monsters_goblin_goblin_idle",
+   "name": "goblin_idle (frames)",
+   "category": "field_monster",
+   "character": "goblin",
+   "motion": "idle",
+   "delivery_date": "2026-11-02",
+   "source_path": "img/field/monsters/goblin/goblin_idle_01.png",
+   "source_branch": "feature/goblin-field-20f",
+   "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+   "source_sha256": "see frames_sha256",
+   "width": 320,
+   "height": 320,
+   "frame_count": 4,
+   "approval_status": "PENDING",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "BRANCH_ONLY",
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
+   "arena_available": "UNKNOWN",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged.",
+   "frames": [
+    "img/field/monsters/goblin/goblin_idle_01.png",
+    "img/field/monsters/goblin/goblin_idle_02.png",
+    "img/field/monsters/goblin/goblin_idle_03.png",
+    "img/field/monsters/goblin/goblin_idle_04.png"
+   ],
+   "frames_sha256": [
+    "103293392d7425618e115b0e40c5c05d9869490654185deb2baa13ceda7be916",
+    "32480fa01f2cacd0b0c44a4df30ae447d4cd99c96f326aa5bb8f87e1b624f83c",
+    "e819be6032681763183584290f744aec6089a1b24447e8165ad5a86b5f40bd94",
+    "6fef007540575129500f2b0ef702fad387af928b1552ea5cafffb98e23263210"
+   ]
+  },
+  {
+   "asset_id": "seq:img_field_monsters_goblin_goblin_walk_down",
+   "name": "goblin_walk_down (frames)",
+   "category": "field_monster",
+   "character": "goblin",
+   "motion": "walk",
+   "delivery_date": "2026-11-02",
+   "source_path": "img/field/monsters/goblin/goblin_walk_down_01.png",
+   "source_branch": "feature/goblin-field-20f",
+   "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+   "source_sha256": "see frames_sha256",
+   "width": 320,
+   "height": 320,
+   "frame_count": 4,
+   "approval_status": "PENDING",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "BRANCH_ONLY",
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
+   "arena_available": "UNKNOWN",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged.",
+   "frames": [
+    "img/field/monsters/goblin/goblin_walk_down_01.png",
+    "img/field/monsters/goblin/goblin_walk_down_02.png",
+    "img/field/monsters/goblin/goblin_walk_down_03.png",
+    "img/field/monsters/goblin/goblin_walk_down_04.png"
+   ],
+   "frames_sha256": [
+    "e39e28d31e55d98e3528492305a64d99988d7779a410cdad7a0cc4781c520c3a",
+    "4fa688b5a59930bcc945e5016e50cadfb7f6b4d354fc21f6e67d9d06c68cce7a",
+    "93ce3fd1b1ed8f7ac34ef87b07dd432b95a15b6ddb68820270189948aa649106",
+    "c35593e2a2c0a69000acf2ac4818a344015bdcf19bb64e36e8fefeacf5494326"
+   ]
+  },
+  {
+   "asset_id": "seq:img_field_monsters_goblin_goblin_walk_left",
+   "name": "goblin_walk_left (frames)",
+   "category": "field_monster",
+   "character": "goblin",
+   "motion": "walk",
+   "delivery_date": "2026-11-02",
+   "source_path": "img/field/monsters/goblin/goblin_walk_left_01.png",
+   "source_branch": "feature/goblin-field-20f",
+   "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+   "source_sha256": "see frames_sha256",
+   "width": 320,
+   "height": 320,
+   "frame_count": 4,
+   "approval_status": "PENDING",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "BRANCH_ONLY",
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
+   "arena_available": "UNKNOWN",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged.",
+   "frames": [
+    "img/field/monsters/goblin/goblin_walk_left_01.png",
+    "img/field/monsters/goblin/goblin_walk_left_02.png",
+    "img/field/monsters/goblin/goblin_walk_left_03.png",
+    "img/field/monsters/goblin/goblin_walk_left_04.png"
+   ],
+   "frames_sha256": [
+    "9899984f85281eb9e47df868c7edf84d03a43e697be54fcfab7475da2a86db16",
+    "1e3654a569defe6abc1ccc83618dc16d8d4fae287c37066d33c119dbbd62ebd0",
+    "5386025b08be6e34ef64ad03f2f2426c3ba9dd7444f7494a4fbce49e4be41a19",
+    "e9e7e25bb5098179e945db36157af83daa28dbcfef94e733940332ffd9502a45"
+   ]
+  },
+  {
+   "asset_id": "seq:img_field_monsters_goblin_goblin_walk_right",
+   "name": "goblin_walk_right (frames)",
+   "category": "field_monster",
+   "character": "goblin",
+   "motion": "walk",
+   "delivery_date": "2026-11-02",
+   "source_path": "img/field/monsters/goblin/goblin_walk_right_01.png",
+   "source_branch": "feature/goblin-field-20f",
+   "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+   "source_sha256": "see frames_sha256",
+   "width": 320,
+   "height": 320,
+   "frame_count": 4,
+   "approval_status": "PENDING",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "BRANCH_ONLY",
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
+   "arena_available": "UNKNOWN",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged.",
+   "frames": [
+    "img/field/monsters/goblin/goblin_walk_right_01.png",
+    "img/field/monsters/goblin/goblin_walk_right_02.png",
+    "img/field/monsters/goblin/goblin_walk_right_03.png",
+    "img/field/monsters/goblin/goblin_walk_right_04.png"
+   ],
+   "frames_sha256": [
+    "5ee8e92a13defd1bc348b49ad7e53825a193eaf98dce1e940b06065e1c9157b4",
+    "a14d5e92cc1503681d3e1cdc7501f9e6766eee7370709866d50c1da56bbed396",
+    "2364286b22ee015c572e024a143c766808e8cab9c7f3dd97d8c0df5b41f83337",
+    "9479a5450cef4a112ad4a104775315956753b619c2c28cfa7d7b32dd205b05f5"
+   ]
+  },
+  {
+   "asset_id": "seq:img_field_monsters_goblin_goblin_walk_up",
+   "name": "goblin_walk_up (frames)",
+   "category": "field_monster",
+   "character": "goblin",
+   "motion": "walk",
+   "delivery_date": "2026-11-02",
+   "source_path": "img/field/monsters/goblin/goblin_walk_up_01.png",
+   "source_branch": "feature/goblin-field-20f",
+   "source_commit": "6d4ce260a136c776a505c8bc67952da7cb780592",
+   "source_sha256": "see frames_sha256",
+   "width": 320,
+   "height": 320,
+   "frame_count": 4,
+   "approval_status": "PENDING",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "BRANCH_ONLY",
+   "runtime_reference": [
+    "js/field/field-monsters.js"
+   ],
+   "arena_available": "UNKNOWN",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged.",
+   "frames": [
+    "img/field/monsters/goblin/goblin_walk_up_01.png",
+    "img/field/monsters/goblin/goblin_walk_up_02.png",
+    "img/field/monsters/goblin/goblin_walk_up_03.png",
+    "img/field/monsters/goblin/goblin_walk_up_04.png"
+   ],
+   "frames_sha256": [
+    "8c9d46d20150246ba7a93b470b13536f80212280880c912bb4f1765d83363ff3",
+    "26e1040a8e3bce524ba1e189ea5078ade73f0096ec35b4f4b9c8894eb0b7c03b",
+    "44046759aface0e71aa7242df3eb3950bd9dea7110d0feaa2d134b02ed55e7b3",
+    "14b49e1c0a9d1a7e4843d9428c75d91686e7ea68842ea9a83a843eb012f677d0"
    ]
   },
   {
