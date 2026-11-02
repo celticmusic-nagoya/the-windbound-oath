@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **1202**
-- approved_implemented: **277**
+- total: **1204**
+- approved_implemented: **279**
 - approved_not_implemented: **0**
 - delivered_not_merged: **184**
 - pending_adoption: **7**
 - source_missing: **0**
 - approval_unknown: **886**
-- on_main: **1018**
-- implemented_on_main: **973**
+- on_main: **1020**
+- implemented_on_main: **975**
 - unreferenced_on_main: **45**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -630,7 +630,7 @@
 | file:img_field_moss_town_weapon_stand_out | UNKNOWN | UNKNOWN | 1 | 240x200 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | data/maps/fort_dunvall_01_courtyard.json, img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_town_well | UNKNOWN | UNKNOWN | 1 | 192x200 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 
-## field_character（31）
+## field_character（33）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -664,6 +664,8 @@
 | seq:img_field_characters_aidan_aidan_walk_right | aidan | walk | 4 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_aidan_aidan_walk_ul | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | seq:img_field_characters_aidan_aidan_walk_up | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
+| seq:img_field_characters_aidan_side6_aidan_walk_left | aidan | walk | 6 | 2048x1280 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/aidan-field-assets.js, js/field/moss-forest-runtime.js / Aidan side walk 6 frames per direction (ART-08E/08F, far leg shaded, derived 05/06). User- |
+| seq:img_field_characters_aidan_side6_aidan_walk_right | aidan | walk | 6 | 2048x1280 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | js/field/aidan-field-assets.js, js/field/moss-forest-runtime.js / Aidan side walk 6 frames per direction (ART-08E/08F, far leg shaded, derived 05/06). User- |
 | seq:img_field_characters_lou_lou_idle | lou | idle | 6 | 73x120 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/assets.js / existing asset on main; adoption record not re-verified |
 
 ## field_monster（20）

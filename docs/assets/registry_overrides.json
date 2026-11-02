@@ -7503,6 +7503,19 @@
    "set": {
     "notes": "User-uploaded20frame candidate, reference-aligned using image editing tool. Not formally adopted; branch-only integration; existing official battle goblin unchanged. Self-QA:20/20actualimageopaque-pixel hashes at3viewports; original source files preserved; physicalAndroid NOT_RUN. GOBLIN-20F-FIX01 (2026-11-03): front-view walk cycle replaced by the director-delivered 4 frames (delivered bytes kept in assets/candidates/goblin-field-20f/fix01-down-delivered/); still a candidate, not adopted."
    }
+  },
+  {
+   "match": "^img/field/characters/aidan/side6/aidan_walk_(left|right)_",
+   "set": {
+    "approval_status": "APPROVED",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "runtime_reference": [
+     "js/field/aidan-field-assets.js",
+     "js/field/moss-forest-runtime.js"
+    ],
+    "notes": "Aidan side walk 6 frames per direction (ART-08E/08F, far leg shaded, derived 05/06). User-adopted art (2026-11-02); runtime via aidan-field-assets.js, side stride 72 world/cycle (DEV ?aidanSideStride). Physical Android not run."
+   }
   }
  ],
  "motion_gaps": [
