@@ -40,7 +40,7 @@
   const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
   // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~25 world px stride (~50 per two-step cycle), so the side sets use their own
   // cycle length; front/back (6 frames) and Fiona keep STRIDE_CYCLE. DEV builds accept ?aidanSideStride=<n> for A/B comparison.
-  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 50;})();   // ART-08E: 6-frame side set, painted stride ~25 world -> ~50 per two-step cycle
+  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 72;})();   // ART-08F: initial value 72 (no-slide value is ~50, but at ~300 world/s it animates ~36 fps); DEV ?aidanSideStride=50|72|90 for QA
   const aidanStride=dir=>(dir==='left'||dir==='right')?AIDAN_SIDE_STRIDE:STRIDE_CYCLE;
   function artOf(dir,flip){return window.AidanHeading&&AidanHeading.art?AidanHeading.art(dir,flip):{dir,flip:!!flip};}
   function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up|dl|ul)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}
