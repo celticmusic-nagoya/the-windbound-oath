@@ -16,8 +16,9 @@ if dup: err.append('duplicate asset_id: %s' % dup[:5])
 for a in A:
     for f in E:
         if a.get(f) not in E[f]: err.append('%s: invalid %s=%r' % (a['asset_id'], f, a.get(f)))
-    if a['integration_status'] == 'MAIN':
-        paths = a.get('frames') or [a['source_path']]
+    paths = a.get('frames') or [a['source_path']]
+    local_branch = a['integration_status'] == 'BRANCH_ONLY' and all((ROOT / p).is_file() for p in paths)
+    if a['integration_status'] == 'MAIN' or local_branch:
         for i, p in enumerate(paths):
             fp = ROOT / p
             if not fp.is_file(): err.append('%s: MAIN but file missing: %s' % (a['asset_id'], p)); continue
