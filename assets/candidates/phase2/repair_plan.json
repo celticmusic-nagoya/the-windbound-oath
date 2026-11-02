@@ -68,5 +68,51 @@
     "main_edit": false,
     "map_edit": false,
     "merge_requires_explicit_approval": true
-  }
+  },
+  "repairs": [
+    {
+      "id": "furn_h01_table_small",
+      "filename": "furn_h01_table_small.png",
+      "width": 192,
+      "height": 144,
+      "priority": "required",
+      "issue": "white background between table legs"
+    },
+    {
+      "id": "furn_h01_stool",
+      "filename": "furn_h01_stool.png",
+      "width": 64,
+      "height": 72,
+      "priority": "required",
+      "issue": "top right seat clipped"
+    },
+    {
+      "id": "furn_h01_jar",
+      "filename": "furn_h01_jar.png",
+      "width": 80,
+      "height": 104,
+      "priority": "required",
+      "issue": "white shadow near bottom"
+    },
+    {
+      "id": "furn_h01_chair_back",
+      "filename": "furn_h01_chair_back.png",
+      "width": 80,
+      "height": 112,
+      "priority": "optional",
+      "issue": "gray line below seat"
+    }
+  ],
+  "preserve_pass": [
+    {
+      "id": "furn_h01_doormat",
+      "width": 168,
+      "height": 72
+    },
+    {
+      "id": "furn_h01_barrel",
+      "width": 96,
+      "height": 124
+    }
+  ]
 }
