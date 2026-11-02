@@ -112,6 +112,7 @@ def board():
 
 def main():
     rules = []; os.makedirs(OUT, exist_ok=True)
+    curated = {r['match'] for r in json.load(open(MAN, encoding='utf-8'))['node'] if r.get('gen') not in (None, 'make_npcs')}   # adopted art (e.g. ART-05 soldier) is never replaced
     items = {k: (lambda k=k: chibi(k), 56, 84) for k in LOOKS}
     items['bed'] = (bed, 72, 52); items['board'] = (board, 80, 84)
     for look, (fn, w, h) in items.items():
@@ -120,7 +121,7 @@ def main():
         if look in LOOKS:   # 6-frame walk cycle next to the idle sprite: npc_<look>_walk_01..06.png (same canvas, feet bottom-centre)
             for k in range(6): chibi(look, step=k).png(os.path.join(OUT, 'npc_%s_walk_%02d.png' % (look, k + 1)))
             rule['walk'] = {'file': 'props/npc_%s_walk_{n}.png' % look, 'frames': 6}
-        rules.append(rule)
+        if rule['match'] not in curated: rules.append(rule)
     m = json.load(open(MAN, encoding='utf-8'))
     m['node'] = [r for r in m['node'] if r.get('gen') != 'make_npcs']; m['node'][0:0] = rules
     open(MAN, 'w', encoding='utf-8').write(json.dumps(m, ensure_ascii=False, indent=1)); print('wrote %d sprites + manifest rules' % len(rules))

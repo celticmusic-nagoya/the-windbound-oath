@@ -268,10 +268,11 @@
   },
   {
    "match": "^npc_slot_soldier$",
-   "file": "props/npc_soldier.png",
-   "w": 56,
-   "h": 84,
-   "gen": "make_npcs",
+   "file": "props/npc_soldier_idle_v2.png",
+   "w": 47.6,
+   "h": 71.4,
+   "gen": "art05_adopted",
+   "note": "DIRECTIVE-ART-05D: user-adopted front idle (112x168 @ 0.85 = villager height). walk frames are the legacy make_npcs set (known interim style mix).",
    "walk": {
     "file": "props/npc_soldier_walk_{n}.png",
     "frames": 6
