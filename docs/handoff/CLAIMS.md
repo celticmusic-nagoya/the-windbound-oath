@@ -190,3 +190,5 @@ Codex / codex/26b-early-rewards / basead4a3d679987a540fc0248c9b5bfd0e8c43a15a3. 
 
 ## Goblin field 20f integration (2026-11-02)
 Codex / `feature/goblin-field-20f` / base `2276c3c693cce9ea215dd68d51e1725bfb4e51fb`. User authorizes uploaded20frame visual alignment to officialgoblin and branch-only code integration. Scope newversioned field20PNG, field-monsters direction/state frame selection, focusedtests/docs; original battle assets/formal259/map/story/save/balance protected. Existing feat/goblin-field-art3535a24 is WIP2stills, not merged or adopted as20frames. New20frames remain candidate pending humanfinaladoption; no main merge/deploy authorization. STATUS: WIP.
+
+Goblin20 QA checkpoint: new20PNGs/5rows are PENDING, BRANCH_ONLY; officialreference/259formal/1298existingimagesunchanged. Actual20frames x3viewports/pixelhash/freeze-clear/defaultgoblincontactbattle PASS.7unique regressionfiles/9runs PASS, Node16files incl10newcases PASS, branch-hash/missingframe faults detected. docs/handoff/GOBLIN_FIELD_20F.md. Humanadoption/Androidphysical/mainmerge NOT_DONE. STATUS: READY_FOR_REVIEW.
