@@ -13,6 +13,17 @@
  *   {shake:{ms, amp}} · {wait:ms} · {set:{flag:true}} · {stage:n}  · {call:'hook'}
  * Stage flow: storyStage 3 (training done, road to the cliff open) -> this scene -> stage 4 -> returnScene -> 5 (village burning). */
 window.FieldSceneData = Object.freeze({scenes: Object.freeze({
+  // SCENARIO-PROLOGUE-02: played once by RildeVillage.afterTraining() right after the training dummy is beaten (stage 3).
+  // The flag emma_snack_done (FieldTalk flags, saved with SAVE) keeps it from playing again. No stage change.
+  emma_snack: {
+    requireStage: 3,
+    steps: [
+      {lock: true},
+      {talk: 'scene_emma_snack'},
+      {set: {emma_snack_done: true}},
+      {lock: false}
+    ]
+  },
   cliff_sunset_to_fire: {
     requireStage: 3,
     steps: [
