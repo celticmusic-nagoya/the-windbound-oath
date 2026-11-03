@@ -37,11 +37,11 @@ with server(8832) as base,sync_playwright() as pw:
    repl=p.evaluate("()=>{const i=document.querySelector('#raiderSprite img');return {url:i.currentSrc,loaded:i.complete&&i.naturalWidth>0,registered:BattleMotion.frames('goblin_raider','idle').urls.map(u=>new URL(u,location.href).href)}}")
    for e in failed:ck(view+' verified startup replacement',expected_retarget(e,urljoin(base+'/','img/battle/enemies/goblin_raider/goblin_raider_battle_idle.png'),repl))
    failed.clear()
-  ck(view+' real normal NEW GAME house',p.evaluate("MossForest.mapId==='rilde_in_house_01'&&storyStage===0&&!DevWalkTest.active"))
+  ck(view+' real normal NEW GAME house',p.evaluate("MossForest.mapId==='rilde_in_aidan'&&storyStage===0&&!DevWalkTest.active"))
   ck(view+' side-only production180',p.evaluate("['left','right'].every(d=>MossForest.walkStride('aidan',d)===180&&FieldWalkMotion.resolve('ally','aidan',d).stride===180)&&['up','down'].every(d=>MossForest.walkStride('aidan',d)===90)&&['up','down','left','right'].every(d=>MossForest.walkStride('fiona',d)===90)"))
   protected=p.evaluate("JSON.stringify({stage:storyStage,flags:PrologueProgress.eventSnapshot(),inventory:Inventory.serialize(),party:PartyManager.members,gold,storage:{...localStorage}})")
   # Clear central horizontal aisle by ordinary keyboard movement. No DEV jumps or game-state writes.
-  walk(p,'ArrowUp','MossForest.feet.y<=350');walk(p,'ArrowLeft','MossForest.feet.x<=130')
+  walk(p,'ArrowDown','MossForest.feet.y>=370');walk(p,'ArrowLeft','MossForest.feet.x<=130')
   field_cycles=[]
   for direction,key,condition in [('right','ArrowRight','MossForest.feet.x>=740'),('left','ArrowLeft','MossForest.feet.x<=130')]:
    p.evaluate(OBS);p.keyboard.down(key)
