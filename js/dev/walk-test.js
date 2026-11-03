@@ -3,11 +3,35 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
   const active = () => Boolean(root?.open);
+  const aidan = () => S.group === 'ally' && S.actor === 'aidan';
+  const sideWalk = () => aidan() && S.state === 'walk' && ['left', 'right'].includes(S.direction);
+  function strideInfo() {
+    q('[data-walk=stride-controls]').hidden = !aidan();
+    if (!aidan()) return;
+    q('[data-walk=stride]').value = String(S.sideStride);
+    q('[data-walk=stride-value]').textContent = String(S.sideStride);
+    for (const b of root.querySelectorAll('[data-stride]')) b.setAttribute('aria-pressed', String(Number(b.dataset.stride) === S.sideStride));
+    const source = W.resolve('ally', 'aidan', 'left');
+    q('[data-walk=stride-help]').textContent = `横歩き1周 ${(S.sideStride / source.speed() / S.speed).toFixed(3)} 秒（周期 ÷ 基準速度 ${source.speed()} ÷ 再生倍率 ${S.speed}）。大きい周期ほどゆっくり。本編設定 ${source.stride} は変更しません。`;
+  }
+  function setStride(value) {
+    if (!Number.isFinite(value)) return;
+    const next = Math.max(40, Math.min(300, value));
+    if (sideWalk() && S.def) {
+      // Preserve fractional cycle and bob; leave the single running RAF alive.
+      if (S.playing && S.last != null) { const now = performance.now(); S.time += (now - S.last) / 1000 * S.speed; S.last = now; }
+      S.time *= next / S.def.stride;
+      S.def = {...S.def, stride: next};
+      S.index = W.frameAt(S.def, S.time).index;
+    }
+    S.sideStride = next;
+    strideInfo(); render();
+  }
   function pause() {
     if (S.raf != null) cancelAnimationFrame(S.raf);
     S.raf = null; S.playing = false; S.last = null;
@@ -15,9 +39,10 @@
   }
   function info() {
     if (!root || !S.def) return;
+    strideInfo();
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
-    q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
+    q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (sideWalk() ? ' ／ DEV一時設定' : '') + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
     q('[data-walk=play]').disabled = !S.ready || S.def.frames.length < 2 || reduced.matches;
   }
   function render() {
@@ -72,6 +97,9 @@
     pause(); S.ready = false; S.loaded = false; S.time = 0; S.index = 0;
     const generation = ++S.generation;
     S.def = W.resolve(S.group, S.actor, S.direction, S.state);
+    // Clone the descriptor only; never mutate production settings or registries.
+    if (sideWalk() && S.def) S.def = {...S.def, stride: S.sideStride};
+    strideInfo();
     q('img').hidden = true; q('img').removeAttribute('src'); q('[data-walk=play]').disabled = true; q('[data-walk=error]').textContent = '';
     root.dataset.actor = S.actor; root.dataset.direction = S.direction; root.dataset.state = S.state;
     for (const b of root.querySelectorAll('[data-direction]')) {
@@ -117,12 +145,17 @@
 <div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
 <label>再生速度<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
+<fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
+<input id="walkSideStride" data-walk="stride" type="range" min="40" max="300" step="any" value="72" aria-describedby="walkStrideHelp">
+<div class="walkRow"><button type="button" data-stride="72">72</button><button type="button" data-stride="120">120</button><button type="button" data-stride="180">180</button><button type="button" data-stride="240">240</button></div>
+<p>40〜300・10刻み（採用値72はプリセット）。左右プレビューだけに適用。上下・待機・SAVEは変更しません。このページ内だけの一時設定です。</p><p id="walkStrideHelp" data-walk="stride-help"></p></fieldset>
 <label>背景<select data-walk="background"><option value="checker">チェッカーボード</option><option value="dark">暗色</option><option value="light">白</option><option value="green">緑</option></select></label>
 <output data-walk="count" aria-label="現在のコマ / 総コマ数"></output><div class="walkRow"><label><input type="checkbox" data-guide="checker" checked>チェッカーボード</label><label><input type="checkbox" data-guide="ground" checked>接地線</label><label><input type="checkbox" data-guide="center" checked>中心線</label></div>
 <p data-walk="policy"></p><p data-walk="source"></p><p data-walk="error" role="status"></p></section></div>`;
     document.body.append(root);
     root.addEventListener('click', e => {
       const button = e.target.closest('button'); if (!button) return;
+      if (button.dataset.stride) { setStride(Number(button.dataset.stride)); return; }
       if (button.dataset.direction) { S.direction = button.dataset.direction; S.state = 'walk'; void select(); return; }
       const action = button.dataset.walk;
       if (action === 'idle') { S.state = 'idle'; void select(); }
@@ -132,11 +165,13 @@
       else if (action === 'next' || action === 'prev') step(action === 'next' ? 1 : -1);
       else if (action === 'fold') { root.classList.toggle('folded'); button.setAttribute('aria-expanded', String(!root.classList.contains('folded'))); layout(); }
     });
+    // Native step=any admits the off-grid adopted value 72; drag values snap to 10.
+    root.addEventListener('input', e => { if (e.target.dataset.walk === 'stride') setStride(Math.round(Number(e.target.value) / 10) * 10); });
     root.addEventListener('change', e => {
       const control = e.target;
       if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
       else if (control.dataset.walk === 'actor') { S.actor = control.value; void select(); }
-      else if (control.dataset.walk === 'speed') { S.speed = Number(control.value); }
+      else if (control.dataset.walk === 'speed') { S.speed = Number(control.value); info(); }
       else if (control.dataset.walk === 'background') background(control.value);
       else if (control.dataset.guide === 'checker') background(control.checked ? 'checker' : 'dark');
       else if (control.dataset.guide === 'ground') q('.walkGround').hidden = !control.checked;
@@ -154,6 +189,7 @@
     if (!root) build();
     if (active()) return true;
     hint.textContent = ''; document.getElementById('devPanel').style.display = 'none';
+    if (S.sideStride == null) S.sideStride = Math.max(40, Math.min(300, W.resolve('ally', 'aidan', 'left').stride));
     window.dispatchEvent(new Event('loading-input-lock'));
     document.body.classList.add('devWalkOpen'); root.showModal();
     root.classList.remove('folded'); q('[data-walk=fold]').setAttribute('aria-expanded', 'true');
@@ -162,6 +198,14 @@
   for (const type of ['keydown', 'keyup']) window.addEventListener(type, e => {
     if (!active()) return;
     e.stopImmediatePropagation();
+    if (type === 'keydown' && e.target === q('[data-walk=stride]')) {
+      const key = e.key, up = ['ArrowRight', 'ArrowUp'].includes(key), down = ['ArrowLeft', 'ArrowDown'].includes(key);
+      if (up || down || key === 'Home' || key === 'End' || key === 'PageUp' || key === 'PageDown') {
+        e.preventDefault();
+        setStride(key === 'Home' ? 40 : key === 'End' ? 300 : up ? (Math.floor(S.sideStride / 10) + 1) * 10 : down ? (Math.ceil(S.sideStride / 10) - 1) * 10 : S.sideStride + (key === 'PageUp' ? 50 : -50));
+        return;
+      }
+    }
     if (type === 'keydown' && e.key === 'Escape') { e.preventDefault(); close(); }
     else if (type === 'keydown' && e.target === q('.walkStage')) {
       if (e.key === ' ') { e.preventDefault(); S.playing ? pause() : play(); }
@@ -178,5 +222,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
 })();
