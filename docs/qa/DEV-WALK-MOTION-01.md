@@ -1,117 +1,60 @@
 # DEV-WALK-MOTION-01 / WALK-QA-02
 
-## Scope
+実装・独立QA：**PASS**。公開状況は [PR #122](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/122) を参照。Android実機：**NOT_RUN**。
 
-Codex implements the common walk inspector; Claude owns integration of #107 and
-#112. The inspector changes no PNG, adoption status, dialogue, battle parameters,
-or save schema. Physical Android verification is NOT_RUN.
+基準main：`22efe877fbbfef5c5ec3445109b32bff70575da3`。
+実装・fixture検証HEAD：`bf689cd63e279e0737fc209adfbadd229ee3f05b`。
+最終文書・証拠の追記後は、PRに記録したHEADで独立差分レビューを行う。
 
-Base: `b85c3db4dbf1324cc248b1c4344e26efa1c1c783` (includes GOBLIN-20F-FIX01).
-Implementation/QA head: `5ca4818914a692f392f8832076698e62d5360ac9`.
+## 統合・素材保護
 
-## Production source and supported states
+- 王国兵士 #107 は #123、エイダン #112 は #124 を経由してmainへ外部統合済み。Codexは両素材を改変せず最新mainから取り込んだ。#109・#111の個別マージは行っていない。
+- #107 `7fd4b68`、#112 `964b2a5` の独立3画面検証・259PNG照合は別証拠。#112統合時の後続差分は説明コメント等で、画像・登録先は保持。統合後も実フィールドを再検証した。
+- エイダン左右は本編の周期72。DEVの50/72/90比較指定も維持。正面・背面・フィオナは90。50は速く、90は滑りが増すため72を推奨。滑りゼロ・Android実機性能は保証しない。
+- 259PNGの固定SHA一致。`img/`・`assets/`・採用台帳・画像登録先は上記mainと差分なし。シナリオ・戦闘設定・セーブ形式は変更していない。
 
-- Allies: Aidan/Fiona, exact field registries. Six/front and current side banks
-  follow the actual registry count; no private DEV frame list. Other allies are
-  not advertised as having a walking bank without an implemented registry.
-- Enemies: goblin, moss slime, leafy boar, forest bat, exact MONSTER_TYPES art.
-  Goblin has idle + four directions; legacy ground enemies expose horizontal
-  common/mirrored banks and explicitly identify dedicated direction art as absent.
-  Forest bat is an idle/flight loop, not a claimed walking bank.
-- NPCs: 25 manifest rules, including royal soldier and village residents, from
-  FieldWalkers.describe(). Idle and shared left/right patrol are available;
-  dedicated up/down are unavailable, show 未実装 and clear the previous preview.
-- Frame selection, cadence, bob/air lift and walker FPS are shared with production.
-  Aidan stride is read from MossForest.walkStride: Claude's #112 integration must
-  expose the actual runtime side stride via this adapter, preserving query override.
-  No preview-only stride is maintained. Current base uses 90; prior #112 comparison
-  of 50/72/90 recommended 72, and that PR's production code already uses 72.
+## 共通テスト
 
-## Operation
+DEV → **歩行モーションテスト**。会話・読み込み終了後、NEW GAME／CONTINUEのどちらからでも開ける。
 
-Start/CONTINUE the game, finish current dialogue, open DEV → 歩行モーションテスト.
-Select 味方 / 敵 / NPC, character, 待機 or direction. Loop, pause, previous/next frame,
-0.5/1/2 speed, frame counter, background checker/dark/white/green and foot/center
-lines are available. 操作パネル folds controls for mobile landscape inspection.
-Read the source-path/status text: common mirrored images are not dedicated art.
-One-frame static poses cannot start a useless playback timer.
+| 分類 | 登録元・対象 | 表示範囲 |
+|---|---|---|
+| 味方2種 | Aidan/Fiona field registries | 基準待機・上下左右。実登録のコマ数に追従 |
+| 敵4種 | FieldMonsters.MONSTER_TYPES | ゴブリン待機＋4方向、スライム／ボアの共通横向き、コウモリの待機飛行 |
+| NPC25種 | FieldWalkers.describe / 本編manifest | 本編待機・共通横向きバンク。王国兵士、村人等 |
 
-The modal freezes field and NPC updates, cancels held movement, and blocks game
-keyboard propagation. Close, LOAD invalidation, battle, portrait/cinematic takeover
-and page exit cancel playback and pending image completions. Hidden/reduced-motion
-pause loops; manual stepping remains available. No game state or localStorage write.
+未実装の方向は「未実装」、0/0、画像なし・再生不可とする。共用画像や反転は明示し、専用方向素材・正式採用素材であると偽装しない。コウモリの飛行を歩行として扱わない。基準待機は向き別待機の全網羅ではない。
 
-## QA (final results appended after collection)
+再生／一時停止／前後コマ送り／0.5・1・2倍／ループ／コマ番号、チェッカー・暗色・白・緑背景、接地線・中心線に対応。横画面は操作パネルを折りたためる。
 
-- Node direct original suite: 17/17 PASS, including 8 walk policy tests.
-- Formal portrait hashes: 259/259 unchanged. No img/assets diff vs base.
-- Registry generator: `python tools/assets/build_registry.py --check` PASS.
-- Expanded actual-UI matrix: PASS, 395 frame slots per viewport / 1,185 total; all three viewports. Console, pageerror, HTTP errors and failed requests: zero.
-- Required regression rerun: 11/11 PASS (SAVE/CONTINUE, m31, m9, goblin actual pixels/contact battle, town maps, Rilde, DEV arena, portrait DEV, battle motion, asset registry, goblin assets). Independent exact-head browser QA: pending.
+本編のPNG・メタデータ・位相計算・浮遊・bob・NPC FPSを共用。本編とDEVがともに `MossForest.walkStride` 経由で実際のAidan周期を読む。DEV専用の別画像・別歩行軌道・周期表は作らない。
 
-The final regression batch recorded 10 PASS and an asset-freshness failure because
-the archive omitted `--git-history`. The unchanged original asset test passed
-when rerun with committed history. Both raw results are retained; the first batch
-is not represented as an unconditional 11/11 PASS. No fixture/assertion was relaxed.
+DEV中はフィールド／NPC巡回を停止。終了・LOAD・戦闘等の引継ぎ時にRAFと未完了描画を解除する。非表示／reduced-motionでは再生を停止し、手動コマ送りは維持。ゲーム状態・localStorageを書き換えない。
 
-Historical failed attempts are retained in evidence: initial reduced-motion async
-fixture wait, then stale queued native-dialog close closing a newly reopened dialog.
-The latter was fixed with an `open` guard. Tester1's asset freshness failure concerned
-old squash delivery dates; subsequent upstream FIX01 ledger regeneration superseded
-that temporary date pin. Current ledger is byte-identical to the latest base.
+## 検証
 
-## PR integration boundaries
+| 検証 | 実行HEAD・結果 |
+|---|---|
+| 最終統合版・実UI全コマ | `f7311fa`、PC1920×1080／390×844／844×390、399×3＝**1,197コマPASS**。PNG decode・実画素変化・alpha・配置・操作・終了処理。173.068秒 |
+| 最終m31／SAVE・冷起動CONTINUE | 同HEAD、原版 **PASS／PASS**、19.199／26.951秒 |
+| 実フィールド周期72・DEV50/90 | `bf689cd`、実6コマ・wrap・停止再開・方向転換・回転・タッチ、実ランタイム／DEV表示の周期一致 **PASS** |
+| Node | 原版を含む17ファイル **PASS**。独立実行は共有方針8件・ゴブリン10件・S2 20件・startup20件・continue37件。原版17本のログと最終fixture SHAも独立照合 |
+| 主要回帰 | 11種類が環境修正後PASS。町／村の移動・遷移、主人公、ゴブリン接触戦闘、戦闘DEV、立ち絵DEV、素材監査等。全11本を最終HEADで再実行したという意味ではない。変更に関係するm31・SAVEと全コマを統合後に再実行 |
+| NPC・UIライフサイクル | `600fd78`、3画面96検査＋実際に巡回中のNPCを750ms停止、終了後再開、LOAD／戦闘でRAF解除 **PASS**。最終版とのUI/CSS/FieldWalkers同一性を照合し継承 |
+| 独立QA | `bf689cd` **PASS**。`f7311fa`以降の差分はNode fixture／文書／証拠のみ。旧実行を新HEADで実行したと書き換えていない |
+| 保護 | 259SHA、最新mainとの画像／採用記録差分0 **PASS** |
+| Android実機 | **未実施**。ブラウザのモバイル相当表示と区別 |
 
-Historical independent #107/#112 reviews are scoped to their recorded old SHAs.
-Newer heads require fresh review; neither an old PASS nor this tester's QA proves
-those PRs merged. See [coordination handoff](../handoff/WALK_QA_02_CODEX.md).
-Do not merge #109 or #111 separately. Exact tested head, CI, conflicts and remote
-rollback-ref readback must be checked before any normal authorized main merge.
+証拠：[`evidence/dev-walk-motion-01/`](evidence/dev-walk-motion-01/)。大きなraw JSON・ログは無加工gzip保存。独立最終報告・再現用プローブ・計測値・画面画像を含む。ブラウザ実行は直列、最終全コマのconsole/pageerror/HTTP/requestfailedは0。
 
-## Director Android checklist (NOT_RUN)
+失敗履歴も保持：初期のreduced-motion通知待ちfixture、再オープン時の古いdialog closeイベント（openガードで修正）。素材監査は履歴なしarchiveで鮮度FAIL後、`--git-history`付き原版PASS。統合後Nodeは共有モジュール未読込みで10/17となり、S2 fixtureへ実モジュールのloadを1行追加して17/17 PASS。stub・skip・assert緩和は行っていない。旧squash日付の暫定pinは最新main台帳で置換済みで、今回の台帳差分は0。
 
-1. Open tester after NEW GAME and after CONTINUE; verify labels/buttons in portrait
-   and landscape, folding controls while keeping the sprite visible.
-2. Select Aidan/Fiona, goblin/boar and soldier/village resident. Check idle and every
-   available direction, missing up/down warnings, left/right mirroring and no stale image.
-3. Pause, step forward/back through wrap, compare 0.5/1/2 loops and feet/contact lines.
-   Inspect all PNG edges on checker/white/dark/green for transparency fragments.
-4. Specifically inspect the latest FIX01 goblin up/down silhouettes and direction.
-   This is browser evidence only until the director performs physical-device QA.
-5. Close while looping, rotate, reopen, SAVE/CONTINUE and confirm normal field input.
-   With reduced-motion enabled, automatic loops must stay disabled; stepping must work.
-6. After Claude integrates #107/#112, confirm soldier six-frame cycle and Aidan side
-   cycle at the actual production cadence. Formal visual adoption remains the director's.
+## Android実機チェック
 
-## Latest-main integration checkpoint
+1. NEW GAME／CONTINUE → 会話終了 → DEV → 歩行モーションテスト。縦横で操作でき、折りたたみ時も人物が見えること。
+2. エイダン／フィオナ、ゴブリン／ボア、兵士／村人を選択。待機、利用可能な方向、左右反転、未実装表示と前画像の消去を確認。
+3. 停止・前後送り・6→1、0.5／1／2倍を比較。接地線と中心線で足・胴体のずれ、4背景で透過の欠損を確認。
+4. 兵士6コマ、エイダン横6コマの周期72、最新FIX01ゴブリン上下を重点確認。素材の最終視覚判断はディレクターが行う。
+5. 再生中に閉じる・画面回転・SAVE／CONTINUEし、通常操作へ復帰すること。reduced-motionではループ不可・コマ送り可能であること。
 
-Main advanced externally to `d6153ba026a51623b4aa9451ba5c71f2f4f1ef4b`
-(soldier #107 via #123). Merged into tester as `7bd63fbde664aade3d18c840b5eb30ba5900c2ea`.
-No JS/CSS/index/test changed in this upstream merge. Node17/17 and registry freshness
-PASS again. No tester img/assets diff vs new main. Independent newer-head reports
-for #107 `7fd4b68` and #112 `964b2a5` are now recorded separately in evidence.
-Both PASS their implemented isolated visual/runtime scope; #112 actual default72
-and original m31 PASS. The earlier50/72/90 comparison is historical immutable-source
-evidence, not a claimed new50 matrix. #112 main integration remains Claude-owned.
-
-## Final integration candidate
-
-Both upstream changes are now in main: soldier #107 via #123 (`d6153ba`),
-Aidan #112 via #124 (`22efe877fbbfef5c5ec3445109b32bff70575da3`).
-Their production images/registry are imported unchanged. The known runtime/cache
-merge overlap was reconciled only after the external integration completed:
-production Aidan side stride72 / DEV query50/72/90 remain verbatim, and both real
-sprite and inspector use that same value. Fiona/front/back remain90.
-No PNG/asset-ledger diff vs latest main; formal259 remain unchanged.
-
-Intermediate tester `600fd78` independent UI96checks across3views and an actual
-moving NPC freeze/resume plus LOAD/battle cleanup PASS; evidence retained as
-intermediate, not final-head acceptance. Final integrated-head verification pending.
-
-Integrated Node rerun initially recorded10/17 PASS:7 fixtures loaded the real Moss
-runtime without its shared module and threw at initialization. Added one actual
-`walk-motion.js` load before runtime in the existing shared S2 fixture, matching
-index order. No stub, skip, fallback or assertion relaxation. All17 original files
-then PASS. Both failed and passing logs retained. Integrated asset audit original
-PASS/FAILS0; formal259 SHA PASS and img/assets diff0 vs22efe87. Browser final-head
-result is still pending collection.
+rollback：`rollback/before-dev-walk-motion-01-20261102-22efe87`、リモート読戻しでmain22efe87一致を確認済み。通常merge後に問題があれば、そのmerge SHAを `git revert -m 1` する。画像統合#123／#124を巻き戻す手順ではない。

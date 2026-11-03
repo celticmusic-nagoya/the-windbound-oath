@@ -1,0 +1,102 @@
+[
+  {
+    "name": "empty slot disables CONTINUE",
+    "status": "PASS"
+  },
+  {
+    "name": "NEW GAME reaches actual house and releases title input owner",
+    "status": "PASS"
+  },
+  {
+    "name": "actual drawer acquisition and explicit unclaimed pot serialized",
+    "status": "PASS"
+  },
+  {
+    "name": "cold valid record enables CONTINUE",
+    "status": "PASS"
+  },
+  {
+    "name": "cold CONTINUE restores exact map/feet",
+    "status": "PASS"
+  },
+  {
+    "name": "cold CONTINUE restores claimed and unclaimed events",
+    "status": "PASS"
+  },
+  {
+    "name": "claimed drawer is not awarded twice",
+    "status": "PASS"
+  },
+  {
+    "name": "CONTINUE never auto-overwrites source bytes",
+    "status": "PASS"
+  },
+  {
+    "name": "old unknown acquisition restricts drawer/pot without rewriting SAVE",
+    "status": "PASS"
+  },
+  {
+    "name": "corrupt SAVE remains read-only at title",
+    "status": "PASS"
+  },
+  {
+    "name": "CONTINUE owns pending map transaction",
+    "status": "PASS"
+  },
+  {
+    "name": "CONTINUE repeat and duplicate API are rejected",
+    "status": "PASS"
+  },
+  {
+    "name": "new NEW GAME invalidates late CONTINUE response and restores unclaimed events",
+    "status": "PASS"
+  },
+  {
+    "name": "race leaves original SAVE bytes untouched",
+    "status": "PASS"
+  },
+  {
+    "name": "pending LOAD immediately locks input and shows Tips",
+    "status": "PASS"
+  },
+  {
+    "name": "pending LOAD blocks behind actions",
+    "status": "PASS"
+  },
+  {
+    "name": "duplicate LOAD rejected",
+    "status": "PASS"
+  },
+  {
+    "name": "SAVE during transition preserves source",
+    "status": "PASS"
+  },
+  {
+    "name": "rotation retains input ownership and visible overlay",
+    "status": "PASS"
+  },
+  {
+    "name": "fresh input restored after LOAD",
+    "status": "PASS"
+  },
+  {
+    "name": "fast LOAD paints before unlock and retains minimum visibility",
+    "status": "PASS"
+  },
+  {
+    "name": "old scene and motion cancelled before new map commits",
+    "status": "PASS"
+  },
+  {
+    "name": "stale actor and scene cannot overwrite current coordinates/stage",
+    "status": "PASS"
+  },
+  {
+    "name": "scene cancellation cleans owned dialogue without changing event history",
+    "status": "PASS"
+  },
+  {
+    "name": "no unhandled page errors",
+    "status": "PASS"
+  }
+]
