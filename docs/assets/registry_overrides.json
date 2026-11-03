@@ -7537,6 +7537,18 @@
     ],
     "notes": "Royal soldier walk 6 frames (ART-06R, leg-part offset from the adopted idle). User-adopted art (PR #106/#107 review, 2026-11-02); runtime via manifest npc_slot_soldier walk, 7 fps (PR #107). Physical Android not run."
    }
+  },
+  {
+   "match": "^img/field/characters/aidan/side6/fix01/",
+   "set": {
+    "approval_status": "PROVISIONAL_ANDROID_QA",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "runtime_reference": [
+     "js/field/aidan-field-assets.js"
+    ],
+    "notes": "AIDAN-SIDE-WALK-FIX01: four sparse toe-extraction repairs from delivered source sheets; original pixels/assets retained. Runtime stride72 unchanged; DEV comparison180 at1x. Director physical Android review pending. Sparse replacement files are not contiguous: left02/04/05 override the corresponding slots of the existing six-frame sequence; they are not an independent animation."
+   }
   }
  ],
  "motion_gaps": [
