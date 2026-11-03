@@ -31,7 +31,7 @@ with server(8831) as base,sync_playwright() as pw:
   q('[data-stride="180"]').tap();q('[data-walk=speed]').select_option('1');q('[data-walk=background]').select_option('light');q('[data-guide=ground]').uncheck();q('[data-guide=center]').uncheck()
   for side in ['left','right']:
    q('[data-direction='+side+']').tap();p.wait_for_function('DevWalkTest.snapshot().ready')
-   ck(view+'/'+side+' preview180 only / game72',p.evaluate("DevWalkTest.snapshot().effectiveStride===180&&DevWalkTest.snapshot().speed===1&&MossForest.walkStride('aidan','left')===72"))
+   ck(view+'/'+side+' preview180 / game180',p.evaluate("DevWalkTest.snapshot().effectiveStride===180&&DevWalkTest.snapshot().speed===1&&MossForest.walkStride('aidan','left')===180"))
    for n in range(1,7):
     name=f'aidan_walk_{side}_{n:02}.png';p.wait_for_function("n=>{const i=document.querySelector('#walkMotionTest img');return i.complete&&i.naturalWidth===2048&&i.currentSrc.includes(n)}",arg=name);ck(f'{view}/{name} actual image/index',p.evaluate('DevWalkTest.snapshot().index')==n-1)
     if name in M['frames']:

@@ -1,0 +1,19 @@
+FAIL pc real normal NEW GAME house
+Traceback (most recent call last):
+  File "/workspace/work/aidan-side-walk03/repo/tools/qa/run_regressions.py", line 193, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/work/aidan-side-walk03/repo/tools/qa/run_regressions.py", line 123, in main
+    if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/aidan-side-walk03/repo/tools/qa/run_regressions.py", line 68, in child
+    runpy.run_path(str(root/path),run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/codex-regression-rxya381t/repo/tests/moss/m58_aidan_side_stride.py", line 40, in <module>
+    ck(view+' real normal NEW GAME house',p.evaluate("MossForest.mapId==='rilde_in_house_01'&&storyStage===0&&!DevWalkTest.active"))
+  File "/tmp/codex-regression-rxya381t/repo/tests/moss/m58_aidan_side_stride.py", line 13, in ck
+    checks.append({'name':name,'pass':bool(ok)});(O/'side180-results.json').write_text(json.dumps(checks,indent=2));print(('PASS ' if ok else 'FAIL ')+name,flush=True);assert ok,name
+                                                                                                                                                                               ^^
+AssertionError: pc real normal NEW GAME house

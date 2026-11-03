@@ -37,7 +37,7 @@ test('phase selectors preserve production arithmetic across cycles and frame cou
   const {W} = fixture();
   for (const count of [4, 6, 11]) for (let i = 0; i < 4000; i++) {
     const d = i * .173;
-    for (const stride of [50,72,90]) {
+    for (const stride of [50,72,90,180]) {
       assert.equal(W.phaseDistance(d,count,stride),Math.floor(d/(stride/count))%count);
       assert.equal(W.bob(d,stride).toFixed(2),(-Math.abs(Math.sin(d/(stride/2)*Math.PI))*1.5).toFixed(2));
     }
