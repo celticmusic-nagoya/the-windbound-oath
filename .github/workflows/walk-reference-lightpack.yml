@@ -1,0 +1,27 @@
+name: Walk reference lightpack
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/walk-reference-lightpack.yml'
+      - 'scripts/build_walk_reference_lightpack.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Build lightweight reference ZIP
+        run: python scripts/build_walk_reference_lightpack.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: player-walk-official-reference-lightpack
+          path: dist/player-walk-official-reference-lightpack.zip
+          if-no-files-found: error
+          retention-days: 14
