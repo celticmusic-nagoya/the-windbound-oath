@@ -210,3 +210,6 @@ Codex / feature/aidan-side-walk-fix01 / base12b1dca9433f6c2f2b69c2a63c097ad95fdc
 
 ## AIDAN-SIDE-WALK-03 (2026-11-03)
 Codex / feature/aidan-side-walk-03 / base5523023306de776f0ce558e5486f4f4c675083f5. User explicitly adopts side cadence180 at1x for production; authorizes QA/PR/conditionalnormalmerge. Scope runtime side-only default/cache key and focusedtestexpectations/evidence. Up/down90, othercharacters, DEV40..300 controls, movement speed, art, SAVE/combat/story unchanged. STATUS: WIP.
+
+## PLAYER-WALK-POLISH-01 (2026-11-03)
+Codex / feature/player-walk-polish-01 / basee63780543d7ba1719a39a2f68b9924dc6d5b3933. User authorizes Aidan vertical cadence/display/DEV QA and conditionalmainmerge while side180 staysfixed. Fiona existingPNG/source audit and Claudehandoff separated; new/repaired Fiona art must remain candidate-only pending director appearance approval. Scope sharedwalk-policy/runtime/DEV/test/report; sourceassets/259PNGs/movement/collision/SAVE/combat/story protected. No concurrentassetfileediting. STATUS: PHASE_A_READY_FOR_REVIEW; v2 supersedes cadence-only rollout, no runtime/art change before approved candidates.
