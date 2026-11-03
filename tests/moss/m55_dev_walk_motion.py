@@ -9,6 +9,8 @@ sys.path.insert(0, str(ROOT / 'tools/qa'))
 from browser_support import server
 OUT = Path(os.getenv('QA_OUT', '/tmp/dev-walk-qa')); OUT.mkdir(parents=True, exist_ok=True)
 rows = []; errors = []
+def browser_error(message):
+    errors.append(message); print('BROWSER_ERROR '+message, flush=True)
 def ck(name, ok):
     rows.append({'name': name, 'pass': bool(ok)})
     (OUT / 'walk-results.json').write_text(json.dumps(rows, ensure_ascii=False, indent=2))
@@ -21,10 +23,10 @@ with server(8801) as base, sync_playwright() as pw:
     browser = pw.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE') or '/usr/bin/chromium')
     for label, width, height in [('pc',1920,1080),('portrait',390,844),('landscape',844,390)]:
         ctx = browser.new_context(viewport={'width':width,'height':height}, has_touch=True)
-        p = ctx.new_page(); p.on('pageerror',lambda e:errors.append(str(e)))
-        p.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
-        p.on('response',lambda r: errors.append(f'HTTP {r.status} {r.url}') if r.status>=400 else None)
-        p.on('requestfailed',lambda r:errors.append(f'REQUEST {r.url}: {r.failure}'))
+        p = ctx.new_page(); p.on('pageerror',lambda e:browser_error('pageerror '+str(e)))
+        p.on('console',lambda m:browser_error('console '+m.text) if m.type=='error' else None)
+        p.on('response',lambda r: browser_error(f'HTTP {r.status} {r.url}') if r.status>=400 else None)
+        p.on('requestfailed',lambda r:browser_error(f'REQUEST {r.url}: {r.failure}'))
         p.goto(base+'/index.html?title=1')
         p.get_by_role('button',name='NEW GAME',exact=True).click()
         p.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')")
@@ -105,5 +107,5 @@ with server(8801) as base, sync_playwright() as pw:
         print('PASS ',label,'frames checked',total,flush=True)
         ctx.close()
     browser.close()
-ck('no application errors',not errors)
+ck('no application errors '+repr(errors),not errors)
 print('FAILS 0')
