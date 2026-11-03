@@ -207,3 +207,6 @@ DEV-WALK-MOTION-02 checkpoint: implementation9fa6b89 independentPASS, latest m55
 
 ## AIDAN-SIDE-WALK-FIX01
 Codex / feature/aidan-side-walk-fix01 / base12b1dca9433f6c2f2b69c2a63c097ad95fdc5e2b. User authorizes targeted side-walk toe repair/QA/PR/conditional normalmainmerge; formal259/unrelatedart/runtime72 protected. Compare at DEV180/rate1 only. Initialinspection shows vertical toe cuts baked into currentPNG, original delivered swordside sheets retain fulltoes; investigate extraction bounds/alpha/registration before choosing minimalrepair. Scope affected side6frames/registration references andfocusedtests/evidence only; no redraw/regeneration ofwholebody, no formal180 adoption. STATUS: WIP.
+
+## AIDAN-SIDE-WALK-03 (2026-11-03)
+Codex / feature/aidan-side-walk-03 / base5523023306de776f0ce558e5486f4f4c675083f5. User explicitly adopts side cadence180 at1x for production; authorizes QA/PR/conditionalnormalmerge. Scope runtime side-only default/cache key and focusedtestexpectations/evidence. Up/down90, othercharacters, DEV40..300 controls, movement speed, art, SAVE/combat/story unchanged. STATUS: WIP.

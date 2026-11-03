@@ -37,9 +37,9 @@
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
   const Walk=window.FieldWalkMotion;
   const STRIDE_CYCLE=Walk.STRIDE;
-  // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~22 world px stride (~45 per two-step cycle), so the side sets use their own
-  // cycle length; front/back (6 frames) and Fiona keep STRIDE_CYCLE. DEV builds accept ?aidanSideStride=<n> for A/B comparison.
-  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 72;})();   // ART-08F: initial value 72 (no-slide value is ~50, but at ~300 world/s it animates ~36 fps); DEV ?aidanSideStride=50|72|90 for QA
+  // AIDAN-SIDE-WALK-03: director-approved Android cadence180 at1x for side walking only.
+  // Front/back and Fiona keep STRIDE_CYCLE; retain the existing DEV URL comparison range.
+  const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 180;})();
   const aidanStride=dir=>(dir==='left'||dir==='right')?AIDAN_SIDE_STRIDE:STRIDE_CYCLE;
 
   function artOf(dir,flip){return window.AidanHeading&&AidanHeading.art?AidanHeading.art(dir,flip):{dir,flip:!!flip};}

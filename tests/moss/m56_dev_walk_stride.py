@@ -25,7 +25,7 @@ with server(8828) as base,sync_playwright() as pw:
  b=pw.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE') or '/usr/bin/chromium')
  for label,w,h in [('pc',1920,1080),('portrait',390,844),('landscape',844,390)]:
   ctx=b.new_context(viewport={'width':w,'height':h},has_touch=True);p=ctx.new_page();boot(p,base+'/index.html?title=1');before=p.evaluate(STATE);q=open_ui(p);slider=q('[data-walk=stride]')
-  ck(label+' initial72 and bounds40/300',p.evaluate(SNAP)['sideStride']==72 and slider.input_value()=='72' and slider.get_attribute('min')=='40' and slider.get_attribute('max')=='300')
+  ck(label+' initial180 and bounds40/300',p.evaluate(SNAP)['sideStride']==180 and slider.input_value()=='180' and slider.get_attribute('min')=='40' and slider.get_attribute('max')=='300')
   ck(label+' exact four presets',q('[data-stride]').evaluate_all('(xs)=>xs.map(x=>Number(x.dataset.stride))')==[72,120,180,240])
   q('[data-direction=left]').tap();ready(p)
   # Paused phase/image preservation and exact ten-unit keyboard increments.
@@ -63,7 +63,7 @@ with server(8828) as base,sync_playwright() as pw:
   q('[data-direction=left]').tap();ready(p);q('[data-walk=actor]').select_option('fiona');ready(p);ck(label+' Fiona unaffected/controls hidden',q('[data-walk=stride-controls]').is_hidden() and p.evaluate(SNAP)['effectiveStride']==90)
   q('[data-walk=group]').select_option('enemy');q('[data-walk=actor]').select_option('goblin');ready(p);ck(label+' goblin unaffected',q('[data-walk=stride-controls]').is_hidden() and p.evaluate(SNAP)['effectiveStride']==48)
   q('[data-walk=group]').select_option('ally');q('[data-walk=actor]').select_option('aidan');ready(p);ck(label+' actor switch retains240',p.evaluate(SNAP)['effectiveStride']==240)
-  ck(label+' production stride unchanged',p.evaluate("MossForest.walkStride('aidan','left')===72&&FieldWalkMotion.resolve('ally','aidan','left').stride===72&&MossForest.walkStride('fiona','left')===90"))
+  ck(label+' production stride unchanged',p.evaluate("MossForest.walkStride('aidan','left')===180&&FieldWalkMotion.resolve('ally','aidan','left').stride===180&&MossForest.walkStride('fiona','left')===90"))
   slider.scroll_into_view_if_needed();p.screenshot(path=str(OUT/f'stride-{label}.png'));box=slider.bounding_box();ck(label+' range inside viewport',box['x']>=0 and box['x']+box['width']<=w and box['y']>=0 and box['y']+box['height']<=h)
   p.set_viewport_size({'width':h,'height':w});p.wait_for_timeout(100);ck(label+' rotation retains240',p.evaluate(SNAP)['sideStride']==240)
   q('[data-walk=close]').tap();ck(label+' game/SAVE/settings unchanged',p.evaluate(STATE)==before);ck(label+' no residual timer',not p.evaluate(SNAP)['timer']);q=open_ui(p);ck(label+' temporary memory-only setting retained on reopen',p.evaluate(SNAP)['sideStride']==240);q('[data-walk=close]').tap();ctx.close()
