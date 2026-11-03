@@ -1,0 +1,39 @@
+{
+  "head": "9fa6b89ead967f2ec860a0c3e04e46ee259accc7",
+  "formal_count": 259,
+  "formal_bad": [],
+  "changed_paths": [
+    "css/dev-walk-test.css",
+    "docs/handoff/CLAIMS.md",
+    "index.html",
+    "js/dev/walk-test.js",
+    "tests/helpers/walk_bootstrap_network.py",
+    "tests/moss/m55_dev_walk_motion.py",
+    "tests/moss/m56_dev_walk_stride.py",
+    "tests/system/walk_bootstrap_network.py"
+  ],
+  "raw_results": {
+    "walk": {
+      "count": 4423,
+      "failed": []
+    },
+    "stride": {
+      "count": 215,
+      "failed": []
+    }
+  },
+  "provenance": [
+    {
+      "test": "tests/moss/m55_dev_walk_motion.py",
+      "hash_match": true
+    },
+    {
+      "test": "tests/moss/m56_dev_walk_stride.py",
+      "hash_match": true
+    },
+    {
+      "test": "tests/system/walk_bootstrap_network.py",
+      "hash_match": true
+    }
+  ]
+}

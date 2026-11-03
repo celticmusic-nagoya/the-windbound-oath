@@ -1,0 +1,43 @@
+{
+  "source_head": "1c5bda76a0f90854db606ec7b19cc5553741430a",
+  "main_base": "3d1794340feb7210f209ae4beea2dc879034e92f",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "git_history": false,
+  "results": [
+    {
+      "test": "tests/moss/m55_dev_walk_motion.py",
+      "classification": "新規",
+      "exit_code": 1,
+      "seconds": 169.457,
+      "failure_lines": [
+        "FAIL no application errors ['REQUEST http://127.0.0.1:8783/img/battle/enemies/goblin_raider/goblin_raider_battle_idle.png: net::ERR_ABORTED']"
+      ],
+      "reported_fails": [],
+      "log": "tests_moss_m55_dev_walk_motion.py.log",
+      "test_sha256_before": "a6762fccf8ace45a0d76428b0b64ce8e34b5f004bfe06f97821b39cf30953089",
+      "test_sha256_after": "a6762fccf8ace45a0d76428b0b64ce8e34b5f004bfe06f97821b39cf30953089",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m56_dev_walk_stride.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 57.654,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m56_dev_walk_stride.py.log",
+      "test_sha256_before": "d82752ac925b89523837adf47b951c08b059dc9eaf7bc6fd95ce8a9f96782d5c",
+      "test_sha256_after": "d82752ac925b89523837adf47b951c08b059dc9eaf7bc6fd95ce8a9f96782d5c",
+      "server_stopped": true
+    }
+  ]
+}
