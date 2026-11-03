@@ -2,13 +2,16 @@
 import json
 import os
 import sys
+from urllib.parse import urljoin
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/qa'))
 from browser_support import server
+sys.path.insert(0, str(ROOT / 'tests/helpers'))
+from walk_bootstrap_network import expected_retarget
 OUT = Path(os.getenv('QA_OUT', '/tmp/dev-walk-qa')); OUT.mkdir(parents=True, exist_ok=True)
-rows = []; errors = []
+rows = []; errors = []; network_events = []; verified_retargets = []
 def browser_error(message):
     errors.append(message); print('BROWSER_ERROR '+message, flush=True)
 def ck(name, ok):
@@ -26,7 +29,15 @@ with server(8801) as base, sync_playwright() as pw:
         p = ctx.new_page(); p.on('pageerror',lambda e:browser_error('pageerror '+str(e)))
         p.on('console',lambda m:browser_error('console '+m.text) if m.type=='error' else None)
         p.on('response',lambda r: browser_error(f'HTTP {r.status} {r.url}') if r.status>=400 else None)
-        p.on('requestfailed',lambda r:browser_error(f'REQUEST {r.url}: {r.failure}'))
+        phase = {'dev': False}; startup = []
+        original = urljoin(base+'/', 'img/battle/enemies/goblin_raider/goblin_raider_battle_idle.png')
+        def request_failed(r, phase=phase, startup=startup, original=original):
+            event = {'url':r.url, 'failure':r.failure, 'resource_type':r.resource_type, 'before_dev':not phase['dev']}
+            network_events.append(event); print('REQUEST_FAILED '+json.dumps(event),flush=True)
+            if event['url']==original and event['failure']=='net::ERR_ABORTED' and event['resource_type']=='image' and event['before_dev']:
+                startup.append(event)
+            else: browser_error(f'REQUEST {r.url}: {r.failure}')
+        p.on('requestfailed',request_failed)
         p.goto(base+'/index.html?title=1')
         p.get_by_role('button',name='NEW GAME',exact=True).click()
         p.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')")
@@ -34,6 +45,16 @@ with server(8801) as base, sync_playwright() as pw:
             if p.evaluate("InputManager.state()!=='DIALOGUE'"): break
             p.keyboard.press('Enter'); p.wait_for_timeout(80)
         p.wait_for_function("!MossForest.busy&&!LoadingInput.busy&&!document.body.classList.contains('dialogueOpen')")
+        # HTML's unused still is replaced at DOMContentLoaded by registered idle motion.
+        # Validate the replacement; no other abort/HTTP/page error is exempted.
+        if startup:
+            p.wait_for_function("()=>{const i=document.querySelector('#raiderSprite img'),d=BattleMotion.frames('goblin_raider','idle');return i.complete&&i.naturalWidth>0&&d?.urls.some(u=>new URL(u,location.href).href===i.currentSrc)}")
+            replacement = p.evaluate("()=>{const i=document.querySelector('#raiderSprite img');return {url:i.currentSrc,loaded:i.complete&&i.naturalWidth>0,registered:BattleMotion.frames('goblin_raider','idle').urls.map(u=>new URL(u,location.href).href)}}")
+            for event in startup:
+                ck(label+' unused bootstrap image retarget verified',expected_retarget(event,original,replacement))
+                verified_retargets.append({'event':event,'replacement':replacement})
+                print('EXPECTED_BOOTSTRAP_RETARGET '+json.dumps(verified_retargets[-1]),flush=True)
+        phase['dev'] = True
         before = p.evaluate(SAVE)
         p.locator('#devBtn').click(); p.locator('#devWalkMotionTest').tap()
         p.wait_for_function('DevWalkTest.active&&DevWalkTest.snapshot().ready')
@@ -107,5 +128,6 @@ with server(8801) as base, sync_playwright() as pw:
         print('PASS ',label,'frames checked',total,flush=True)
         ctx.close()
     browser.close()
+(OUT / 'walk-network.json').write_text(json.dumps({'events':network_events,'verified_retargets':verified_retargets,'unexpected_errors':errors},indent=2))
 ck('no application errors '+repr(errors),not errors)
 print('FAILS 0')
