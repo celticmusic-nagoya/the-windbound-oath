@@ -5,18 +5,18 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..'))
-CAND = os.path.join(ROOT, 'assets/candidates/player-walk-polish-01')
+CAND = os.path.join(ROOT, 'assets/candidates/player-walk-polish01')
 OUT = os.path.join(CAND, 'compare')
 AID, FIO = 'img/field/characters/aidan/', 'img/field/moss/real/fiona/'
 BG = (70, 100, 70, 255)
 
 SETS = {
     # name: (before files, after files, crop full, crop legs, baseline y)
-    'aidan_down': ([AID + 'aidan_walk_down_%02d.png' % i for i in range(1, 7)], ['aidan/aidan_walk_down_%02d.png' % i for i in range(1, 7)], (560, 100, 1600, 1240), (930, 860, 1260, 1240), 1230),
-    'aidan_up': ([AID + 'aidan_walk_up_%02d.png' % i for i in range(1, 7)], ['aidan/aidan_walk_up_%02d.png' % i for i in range(1, 7)], (560, 100, 1600, 1240), (880, 860, 1210, 1240), 1230),
-    'fiona_side_left': ([FIO + 'fiona_side_left_%02d.png' % i for i in range(1, 7)], ['fiona/fiona_side_left_%02d.png' % i for i in range(1, 7)], (400, 170, 860, 800), (410, 620, 810, 795), 790),
-    'fiona_side_right': ([FIO + 'fiona_side_right_%02d.png' % i for i in range(1, 7)], ['fiona/fiona_side_right_%02d.png' % i for i in range(1, 7)], (270, 170, 730, 800), (280, 620, 680, 795), 790),
-    'fiona_up': ([FIO + 'fiona_walk_up_%02d.png' % i for i in range(1, 5)], ['fiona/fiona_walk_up_%02d.png' % i for i in range(1, 5)], (380, 120, 900, 800), (520, 600, 780, 795), 790),
+    'aidan_down': ([AID + 'aidan_walk_down_%02d.png' % i for i in range(1, 7)], ['aidan/frames/aidan_walk_down_%02d.png' % i for i in range(1, 7)], (560, 100, 1600, 1240), (930, 860, 1260, 1240), 1230),
+    'aidan_up': ([AID + 'aidan_walk_up_%02d.png' % i for i in range(1, 7)], ['aidan/frames/aidan_walk_up_%02d.png' % i for i in range(1, 7)], (560, 100, 1600, 1240), (880, 860, 1210, 1240), 1230),
+    'fiona_side_left': ([FIO + 'fiona_side_left_%02d.png' % i for i in range(1, 7)], ['reference/fiona-side-cue-swap/fiona_side_left_%02d.png' % i for i in range(1, 7)], (400, 170, 860, 800), (410, 620, 810, 795), 790),
+    'fiona_side_right': ([FIO + 'fiona_side_right_%02d.png' % i for i in range(1, 7)], ['reference/fiona-side-cue-swap/fiona_side_right_%02d.png' % i for i in range(1, 7)], (270, 170, 730, 800), (280, 620, 680, 795), 790),
+    'fiona_up': ([FIO + 'fiona_walk_up_%02d.png' % i for i in range(1, 5)], ['fiona/frames/fiona_walk_up_%02d.png' % i for i in range(1, 5)], (380, 120, 900, 800), (520, 600, 780, 795), 790),
 }
 
 

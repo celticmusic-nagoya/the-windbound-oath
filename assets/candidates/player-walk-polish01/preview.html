@@ -34,7 +34,7 @@
     <button id="prev">◀ コマ戻し</button><button id="next">コマ送り ▶</button>
     <button id="bg">背景切替</button>
   </div>
-  <p class="note">再生は本編と同じ「歩いた距離」方式（毎秒300px＝本編のクリック移動速度）。周期＝6コマ（または4コマ）を一周する距離。赤線は足元の基準線。フィオナ右（横）は絵の中心がずれているため、表示位置だけ寄せています（本編の配置は変えていません）。</p>
+  <p class="note">再生は本編と同じ「歩いた距離」方式（毎秒300px＝本編のクリック移動速度）。周期＝6コマ（または4コマ）を一周する距離。赤線は足元の基準線。フィオナ右（横）の修正前は本編どおり148px左へずれた登録のまま表示し、参考版は中心に戻しています。</p>
 </header>
 <main id="grid"></main>
 <script>
@@ -45,12 +45,12 @@
   const F = {w: 1280, h: 832, ax: 640, ay: 790, s: 0.1};          // FionaFieldAssets geometry
   const seq = (dir, pre, n) => Array.from({length: n}, (_, i) => dir + pre + String(i + 1).padStart(2, '0') + '.png');
   const SETS = [
-    {t: 'エイダン 下（正面）', g: A, before: seq(MAIN + 'img/field/characters/aidan/', 'aidan_walk_down_', 6), after: seq('aidan/', 'aidan_walk_down_', 6)},
-    {t: 'エイダン 上（背面）', g: A, before: seq(MAIN + 'img/field/characters/aidan/', 'aidan_walk_up_', 6), after: seq('aidan/', 'aidan_walk_up_', 6)},
-    {t: 'フィオナ 左（横）', g: F, cx: 640, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_side_left_', 6), after: seq('fiona/', 'fiona_side_left_', 6)},
-    {t: 'フィオナ 右（横）', g: F, cx: 500, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_side_right_', 6), after: seq('fiona/', 'fiona_side_right_', 6)},
-    {t: 'フィオナ 上（背面）', g: F, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_up_', 4), after: seq('fiona/', 'fiona_walk_up_', 4)},
-    {t: 'フィオナ 下（正面）※変更なし', g: F, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_down_', 4), after: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_down_', 4)},
+    {t: 'エイダン 下（正面）', g: A, before: seq(MAIN + 'img/field/characters/aidan/', 'aidan_walk_down_', 6), after: seq('aidan/frames/', 'aidan_walk_down_', 6)},
+    {t: 'エイダン 上（背面）', g: A, before: seq(MAIN + 'img/field/characters/aidan/', 'aidan_walk_up_', 6), after: seq('aidan/frames/', 'aidan_walk_up_', 6)},
+    {t: 'フィオナ 左（横）※参考：逆足として数えない', g: F, cx: 640, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_side_left_', 6), after: seq('reference/fiona-side-cue-swap/', 'fiona_side_left_', 6)},
+    {t: 'フィオナ 右（横）※参考：逆足として数えない', g: F, cx: 500, cxa: 640, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_side_right_', 6), after: seq('reference/fiona-side-cue-swap/', 'fiona_side_right_', 6)},
+    {t: 'フィオナ 上（背面）', g: F, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_up_', 4), after: seq('fiona/frames/', 'fiona_walk_up_', 4)},
+    {t: 'フィオナ 下（正面）※候補なし・新規描画が必要（両列とも main）', g: F, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_down_', 4), after: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_down_', 4)},
   ];
   const $ = id => document.getElementById(id);
   const grid = $('grid'), cells = [];
@@ -62,12 +62,12 @@
       const g = set.g, sec = document.createElement('section'), pair = document.createElement('div');
       sec.innerHTML = '<h2>' + set.t + '</h2>'; pair.className = 'pair';
       const H = Math.round(g.h * g.s * z * 0.95);
-      for (const [label, files] of [['修正前', set.before], ['候補', set.after]]) {
+      for (const [label, files, cx] of [['修正前', set.before, set.cx], ['候補', set.after, set.cxa || set.cx]]) {
         const st = document.createElement('div'); st.className = 'stage' + (bg ? ' bg' + (bg + 1) : ''); st.style.setProperty('--h', H + 'px');
         st.innerHTML = '<b>' + label + '</b><i></i>';
         const imgs = files.map(src => {
           const im = new Image(); im.src = src; im.alt = ''; im.hidden = true;
-          Object.assign(im.style, {width: g.w * g.s * z + 'px', height: g.h * g.s * z + 'px', left: 'calc(50% - ' + (set.cx || g.ax) * g.s * z + 'px)', top: (H - 6 * z - g.ay * g.s * z) + 'px'});
+          Object.assign(im.style, {width: g.w * g.s * z + 'px', height: g.h * g.s * z + 'px', left: 'calc(50% - ' + (cx || g.ax) * g.s * z + 'px)', top: (H - 6 * z - g.ay * g.s * z) + 'px'});
           st.appendChild(im); return im;
         });
         const base = document.createElement('div'); base.className = 'base'; base.style.top = (H - 6 * z) + 'px'; st.appendChild(base);

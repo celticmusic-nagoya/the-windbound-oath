@@ -1,0 +1,568 @@
+{
+ "task": "PLAYER-WALK-POLISH-01",
+ "approval_status": "CANDIDATE_NOT_ADOPTED",
+ "base_main": "e63780543d7ba1719a39a2f68b9924dc6d5b3933",
+ "spec": "docs/art/PLAYER-WALK-POLISH-01_CLAUDE.md @ 84e5c0c5 (PR #129)",
+ "frames": {
+  "aidan/frames/aidan_walk_down_01.png": {
+   "kind": "copy",
+   "target_bank": "aidan walk_down",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_down_01.png": "0aca5691c55c59610abf6484f0e6d0785ea6537123c301a592ed83e5c6772a84"
+   },
+   "sha256": "0aca5691c55c59610abf6484f0e6d0785ea6537123c301a592ed83e5c6772a84",
+   "note": "painted frame, unchanged (new cycle position 1)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "1 左足接地・右足後方",
+    "contact": "L heel/sole on ground (screen right, low)",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_down_02.png": {
+   "kind": "copy",
+   "target_bank": "aidan walk_down",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_down_02.png": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d"
+   },
+   "sha256": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d",
+   "note": "painted frame, unchanged (new cycle position 2)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "2 左支持・右足蹴り出し",
+    "contact": "L flat; R sole shown",
+    "uncertain": "R sole: toe-off vs heel strike not certain from a still"
+   }
+  },
+  "aidan/frames/aidan_walk_down_03.png": {
+   "kind": "copy",
+   "target_bank": "aidan walk_down",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_down_06.png": "b88fdf8e0b48bc303c065d0dcd179babbd2c6a55040f4ccca8a2c18ed8c55c00"
+   },
+   "sha256": "b88fdf8e0b48bc303c065d0dcd179babbd2c6a55040f4ccca8a2c18ed8c55c00",
+   "note": "painted frame, unchanged (new cycle position 3)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "3 左支持後半・右足通過",
+    "contact": "L flat; R just above ground",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_down_04.png": {
+   "kind": "legs-mirrored",
+   "target_bank": "aidan walk_down",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_down_01.png": "0aca5691c55c59610abf6484f0e6d0785ea6537123c301a592ed83e5c6772a84"
+   },
+   "sha256": "a9dde23c0841bae6abe1af2dcefe71930f307df4f19b58980a6f4b077aede587",
+   "note": "other foot: legs mirrored about x=1091, body unchanged",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "4 右足接地・左足後方",
+    "contact": "legs-mirror of 01",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_down_05.png": {
+   "kind": "legs-mirrored",
+   "target_bank": "aidan walk_down",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_down_02.png": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d"
+   },
+   "sha256": "fcda641cc87ae477baf7d65c6ad924dd24e16a04a6be3df681dd8bc5f7d139f7",
+   "note": "other foot: legs mirrored about x=1091, body unchanged",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "5 右支持・左足蹴り出し",
+    "contact": "legs-mirror of 02",
+    "uncertain": "same as 02"
+   }
+  },
+  "aidan/frames/aidan_walk_down_06.png": {
+   "kind": "legs-mirrored",
+   "target_bank": "aidan walk_down",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_down_06.png": "b88fdf8e0b48bc303c065d0dcd179babbd2c6a55040f4ccca8a2c18ed8c55c00"
+   },
+   "sha256": "84561fb4c6809b6530877c6d13667bb0a7644d5321408126aa0356cd34996a8f",
+   "note": "other foot: legs mirrored about x=1091, body unchanged",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "6 右支持後半・左足通過",
+    "contact": "legs-mirror of 06",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_up_01.png": {
+   "kind": "copy",
+   "target_bank": "aidan walk_up",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_up_03.png": "ca490c7c3ef9c7d55890f8c8bf438107ccfde9b8ebf99c2475df8bc219686088"
+   },
+   "sha256": "ca490c7c3ef9c7d55890f8c8bf438107ccfde9b8ebf99c2475df8bc219686088",
+   "note": "painted frame, unchanged (new cycle position 1)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "1 右足前方接地・左足後方支持",
+    "contact": "R far (higher); L near, planted",
+    "uncertain": "support labelled as the planted near foot"
+   }
+  },
+  "aidan/frames/aidan_walk_up_02.png": {
+   "kind": "copy",
+   "target_bank": "aidan walk_up",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_up_04.png": "3983826a6fdf7b58eea9a2518d722ccf8b72383dcc2ae8ce9e381c245fee84c7"
+   },
+   "sha256": "3983826a6fdf7b58eea9a2518d722ccf8b72383dcc2ae8ce9e381c245fee84c7",
+   "note": "painted frame, unchanged (new cycle position 2)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "2 右支持・左足つま先離れ",
+    "contact": "L sole shown (toe-off)",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_up_03.png": {
+   "kind": "copy",
+   "target_bank": "aidan walk_up",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_up_06.png": "340ef2f342dfdb49ea95de8ab9169135db0fa0c29a443e881a2515dda2e34266"
+   },
+   "sha256": "340ef2f342dfdb49ea95de8ab9169135db0fa0c29a443e881a2515dda2e34266",
+   "note": "painted frame, unchanged (new cycle position 3)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "3 右支持後半・左足通過",
+    "contact": "L raised beside R",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_up_04.png": {
+   "kind": "legs-mirrored",
+   "target_bank": "aidan walk_up",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_up_03.png": "ca490c7c3ef9c7d55890f8c8bf438107ccfde9b8ebf99c2475df8bc219686088"
+   },
+   "sha256": "140b3d4657289cc07271f36720961ab6b950c68a4ede6c16fe1066d55a9e21a8",
+   "note": "other foot: legs mirrored about x=1040, body unchanged",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "4 左足前方接地・右足後方支持",
+    "contact": "legs-mirror of 01",
+    "uncertain": "as 01"
+   }
+  },
+  "aidan/frames/aidan_walk_up_05.png": {
+   "kind": "legs-mirrored",
+   "target_bank": "aidan walk_up",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_up_04.png": "3983826a6fdf7b58eea9a2518d722ccf8b72383dcc2ae8ce9e381c245fee84c7"
+   },
+   "sha256": "51276efdff9e8037ea51b758567317148debe89b25211ac990d4aadfe189d2aa",
+   "note": "other foot: legs mirrored about x=1040, body unchanged",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "5 左支持・右足つま先離れ",
+    "contact": "legs-mirror of 02",
+    "uncertain": null
+   }
+  },
+  "aidan/frames/aidan_walk_up_06.png": {
+   "kind": "legs-mirrored",
+   "target_bank": "aidan walk_up",
+   "size": [
+    2048,
+    1280
+   ],
+   "sources": {
+    "img/field/characters/aidan/aidan_walk_up_06.png": "340ef2f342dfdb49ea95de8ab9169135db0fa0c29a443e881a2515dda2e34266"
+   },
+   "sha256": "78d0f715109510d50b058ea0eb7cd13c23a09fc7f8e1facb9c5b62168ee3557f",
+   "note": "other foot: legs mirrored about x=1040, body unchanged",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "6 左支持後半・右足通過",
+    "contact": "legs-mirror of 03",
+    "uncertain": null
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_left_01.png": {
+   "kind": "copy",
+   "target_bank": "reference only (fiona side_left)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_04.png": "2e82a0dfeac2b5314ce073440760a2d6ed1b14e4c64290d5ff2d00247da9dff1"
+   },
+   "sha256": "2e82a0dfeac2b5314ce073440760a2d6ed1b14e4c64290d5ff2d00247da9dff1",
+   "note": "painted frame, unchanged (new cycle position 1)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "前足=L 接地・最大歩幅",
+    "contact": "painted main frame",
+    "uncertain": "near leg leads in every painted frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_right_01.png": {
+   "kind": "mirror-of-left",
+   "target_bank": "reference only (fiona side_right)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_04.png": "2e82a0dfeac2b5314ce073440760a2d6ed1b14e4c64290d5ff2d00247da9dff1"
+   },
+   "sha256": "7703b344130f6a18ba946ce75fe95ae1c2b57c53a77a1d9876f5a5a6857c3db5",
+   "note": "left flipped about the anchor x=640 (main shifts it 148/149 px; not carried over)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "前足=R 接地・最大歩幅",
+    "contact": "painted main frame",
+    "uncertain": "near leg leads in every painted frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_left_02.png": {
+   "kind": "copy",
+   "target_bank": "reference only (fiona side_left)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_03.png": "84eb0ce995ff03fe428c8b47ee0970b3af7c8898ca0ab59825b366b85d9eec1e"
+   },
+   "sha256": "84eb0ce995ff03fe428c8b47ee0970b3af7c8898ca0ab59825b366b85d9eec1e",
+   "note": "painted frame, unchanged (new cycle position 2)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "前足=L 支持前半・歩幅縮小",
+    "contact": "painted main frame",
+    "uncertain": "near leg leads in every painted frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_right_02.png": {
+   "kind": "mirror-of-left",
+   "target_bank": "reference only (fiona side_right)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_03.png": "84eb0ce995ff03fe428c8b47ee0970b3af7c8898ca0ab59825b366b85d9eec1e"
+   },
+   "sha256": "baee9f7b31b6ddaa1c6b501b10fde7b20991a691840762b69263bd47834ef548",
+   "note": "left flipped about the anchor x=640 (main shifts it 148/149 px; not carried over)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "前足=R 支持前半・歩幅縮小",
+    "contact": "painted main frame",
+    "uncertain": "near leg leads in every painted frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_left_03.png": {
+   "kind": "copy",
+   "target_bank": "reference only (fiona side_left)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_01.png": "dde9115e0fafe5f833d4fc24a02ebe5e57566dc76fd7754bb28df5e6861f20df"
+   },
+   "sha256": "dde9115e0fafe5f833d4fc24a02ebe5e57566dc76fd7754bb28df5e6861f20df",
+   "note": "painted frame, unchanged (new cycle position 3)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "前足=L 両足接地（すれ違いではない）",
+    "contact": "painted main frame",
+    "uncertain": "near leg leads in every painted frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_right_03.png": {
+   "kind": "mirror-of-left",
+   "target_bank": "reference only (fiona side_right)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_01.png": "dde9115e0fafe5f833d4fc24a02ebe5e57566dc76fd7754bb28df5e6861f20df"
+   },
+   "sha256": "cbea00e3e9ebe8d7fe06bb232b873745e3e41ded34cff8835eb272c1bcc30640",
+   "note": "left flipped about the anchor x=640 (main shifts it 148/149 px; not carried over)",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "前足=R 両足接地（すれ違いではない）",
+    "contact": "painted main frame",
+    "uncertain": "near leg leads in every painted frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_left_04.png": {
+   "kind": "near-far-swapped",
+   "target_bank": "reference only (fiona side_left)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_04.png": "2e82a0dfeac2b5314ce073440760a2d6ed1b14e4c64290d5ff2d00247da9dff1"
+   },
+   "sha256": "ae0b97b125be6adb99feac71a96cfb7207aea1750e97f96d68c5cec3ca484c21",
+   "note": "far leg leading: flower moved to the trailing (near) boot, near/far shading swapped",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "前足=R 接地・最大歩幅",
+    "contact": "silhouette = main frame; only flower/shade cues differ",
+    "uncertain": "REFERENCE ONLY: shading/cue swap does not count as an opposite-foot contact (spec PR #129); no crossing/passing frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_right_04.png": {
+   "kind": "mirror-of-left",
+   "target_bank": "reference only (fiona side_right)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_04.png": "2e82a0dfeac2b5314ce073440760a2d6ed1b14e4c64290d5ff2d00247da9dff1"
+   },
+   "sha256": "b73d4ba28a561cd7d3e582c7968c55c7403075b77230fa497d1b21f0c75c6c27",
+   "note": "left flipped about the anchor x=640 (main shifts it 148/149 px; not carried over)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "前足=L 接地・最大歩幅",
+    "contact": "silhouette = main frame; only flower/shade cues differ",
+    "uncertain": "REFERENCE ONLY: shading/cue swap does not count as an opposite-foot contact (spec PR #129); no crossing/passing frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_left_05.png": {
+   "kind": "near-far-swapped",
+   "target_bank": "reference only (fiona side_left)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_03.png": "84eb0ce995ff03fe428c8b47ee0970b3af7c8898ca0ab59825b366b85d9eec1e"
+   },
+   "sha256": "f3d4664d974f187591861a58d62e997cdd92eb6f742d34ddbf2385e86183d83a",
+   "note": "far leg leading: flower moved to the trailing (near) boot, near/far shading swapped",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "前足=R 支持前半・歩幅縮小",
+    "contact": "silhouette = main frame; only flower/shade cues differ",
+    "uncertain": "REFERENCE ONLY: shading/cue swap does not count as an opposite-foot contact (spec PR #129); no crossing/passing frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_right_05.png": {
+   "kind": "mirror-of-left",
+   "target_bank": "reference only (fiona side_right)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_03.png": "84eb0ce995ff03fe428c8b47ee0970b3af7c8898ca0ab59825b366b85d9eec1e"
+   },
+   "sha256": "79c9242eef0730dbf60eb2d60d35942a2cc6127d6dbf837cec1c7ac50115fa05",
+   "note": "left flipped about the anchor x=640 (main shifts it 148/149 px; not carried over)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "前足=L 支持前半・歩幅縮小",
+    "contact": "silhouette = main frame; only flower/shade cues differ",
+    "uncertain": "REFERENCE ONLY: shading/cue swap does not count as an opposite-foot contact (spec PR #129); no crossing/passing frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_left_06.png": {
+   "kind": "near-far-swapped",
+   "target_bank": "reference only (fiona side_left)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_01.png": "dde9115e0fafe5f833d4fc24a02ebe5e57566dc76fd7754bb28df5e6861f20df"
+   },
+   "sha256": "71d9785556299a5b4371b7e5f23890ee278878b17da8cda3f7df3e28d0729d1e",
+   "note": "far leg leading: flower moved to the trailing (near) boot, near/far shading swapped",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "前足=R 両足接地（すれ違いではない）",
+    "contact": "silhouette = main frame; only flower/shade cues differ",
+    "uncertain": "REFERENCE ONLY: shading/cue swap does not count as an opposite-foot contact (spec PR #129); no crossing/passing frame"
+   }
+  },
+  "reference/fiona-side-cue-swap/fiona_side_right_06.png": {
+   "kind": "mirror-of-left",
+   "target_bank": "reference only (fiona side_right)",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_side_left_01.png": "dde9115e0fafe5f833d4fc24a02ebe5e57566dc76fd7754bb28df5e6861f20df"
+   },
+   "sha256": "544ff2215e4db671ffe6a210d078a906783f893d7a0a2226687116b6d902c8eb",
+   "note": "left flipped about the anchor x=640 (main shifts it 148/149 px; not carried over)",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "前足=L 両足接地（すれ違いではない）",
+    "contact": "silhouette = main frame; only flower/shade cues differ",
+    "uncertain": "REFERENCE ONLY: shading/cue swap does not count as an opposite-foot contact (spec PR #129); no crossing/passing frame"
+   }
+  },
+  "fiona/frames/fiona_walk_up_01.png": {
+   "kind": "rescaled",
+   "target_bank": "fiona walk_up",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_walk_up_01.png": "3bba93df11c74759d5330c04018c1640c5600e16dd77859c79b8b90f2afebd50"
+   },
+   "sha256": "47da5051a743721bbf8b4025fd5da16c13ffcff16b398c6191ab8f7affb1798c",
+   "note": "scaled x0.955 about the foot anchor (640,790) to idle size",
+   "gait": {
+    "support": "R",
+    "swing": "L",
+    "phase": "右足前方接地・左足つま先離れ（靴底）",
+    "contact": "L sole shown, screen left",
+    "uncertain": null
+   }
+  },
+  "fiona/frames/fiona_walk_up_02.png": {
+   "kind": "copy",
+   "target_bank": "fiona walk_up",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_walk_up_02.png": "714a277624b81d3a0227c39cadfe87665ef46aa8a4f8329690e33fd3cef47e95"
+   },
+   "sha256": "6f5ed7c21b871f5939ba4d6c927ba8d0c185493b46ebbfc7125cdd1eacc6bd34",
+   "note": "unchanged",
+   "gait": {
+    "support": "both",
+    "swing": null,
+    "phase": "中立（待機画像と同一）",
+    "contact": "both flat",
+    "uncertain": "passing pose not drawn; identical to idle_up"
+   }
+  },
+  "fiona/frames/fiona_walk_up_03.png": {
+   "kind": "rescaled",
+   "target_bank": "fiona walk_up",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_walk_up_03.png": "567827293d9deb614d689b82ae5599982cfc0ad5e40938b629e491dbd372b2da"
+   },
+   "sha256": "656917c5eec1e4aba8a8f21e2e301c3d1122c0e81370c9d391d0cf5581e4899c",
+   "note": "scaled x0.945 about the foot anchor (640,790) to idle size",
+   "gait": {
+    "support": "L",
+    "swing": "R",
+    "phase": "左足前方接地・右足つま先離れ（靴底）",
+    "contact": "R sole shown, screen right",
+    "uncertain": null
+   }
+  },
+  "fiona/frames/fiona_walk_up_04.png": {
+   "kind": "rescaled",
+   "target_bank": "fiona walk_up",
+   "size": [
+    1280,
+    832
+   ],
+   "sources": {
+    "img/field/moss/real/fiona/fiona_walk_up_04.png": "3f2dd81919681f36f68c81dab0e5c14e4dd0c425ff1066377881506e49b0869e"
+   },
+   "sha256": "8b7897119b91322014d35ffb97b329dcbbe26a13a54b9b00a017702d4819a2e4",
+   "note": "scaled x0.955 about the foot anchor (640,790) to idle size",
+   "gait": {
+    "support": "both",
+    "swing": null,
+    "phase": "中立（両足接地）",
+    "contact": "both near ground",
+    "uncertain": "passing pose weak"
+   }
+  }
+ }
+}
