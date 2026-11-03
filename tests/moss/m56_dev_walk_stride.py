@@ -70,7 +70,7 @@ with server(8828) as base,sync_playwright() as pw:
  for seed in [60,180,20]:
   ctx=b.new_context(viewport={'width':1280,'height':720});p=ctx.new_page();url=base+f'/index.html?title=1&dev=1&aidanSideStride={seed}';boot(p,url);q=open_ui(p);q('[data-direction=left]').click();ready(p);ck('URL seed '+str(seed),p.evaluate(SNAP)['effectiveStride']==max(40,seed) and p.evaluate("MossForest.walkStride('aidan','left')")==seed)
   q('[data-stride="240"]').click();q('[data-walk=close]').click();ck('URL runtime preserved '+str(seed),p.url==url and p.evaluate("MossForest.walkStride('aidan','left')")==seed)
-  p.reload();p.get_by_role('button',name='NEW GAME',exact=True).click();p.wait_for_function("LoadCoordinator.phase==='READY'");# all state is page-local; inspect anew after intro
+  p.reload();p.get_by_role('button',name='NEW GAME',exact=True).click();p.wait_for_function("LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')");# all state is page-local; inspect anew after intro
   for _ in range(40):
    if p.evaluate("InputManager.state()!=='DIALOGUE'"):break
    p.keyboard.press('Enter');p.wait_for_timeout(80)
