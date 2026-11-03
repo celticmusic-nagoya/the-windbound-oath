@@ -36,6 +36,7 @@ with server(8828) as base,sync_playwright() as pw:
   slider.press('ArrowRight');ck(label+' upper clamp',p.evaluate(SNAP)['sideStride']==300);slider.press('Home');slider.press('ArrowLeft');ck(label+' lower clamp',p.evaluate(SNAP)['sideStride']==40)
   slider.tap();s=p.evaluate(SNAP);ck(label+' native touch range snaps10',s['sideStride']==170 and s['effectiveStride']==170)
   q('[data-stride="72"]').tap();slider.press('ArrowRight');ck(label+' off-grid72 keyboard goes80',p.evaluate(SNAP)['sideStride']==80);q('[data-stride="72"]').tap();slider.press('ArrowLeft');ck(label+' off-grid72 keyboard goes70',p.evaluate(SNAP)['sideStride']==70)
+  q('[data-stride="72"]').tap();slider.press('PageUp');ck(label+' PageUp from72 stays on10-grid',p.evaluate(SNAP)['sideStride']==120);slider.press('PageDown');ck(label+' PageDown stays on10-grid',p.evaluate(SNAP)['sideStride']==70)
   for stride in [72,120,180,240]:
    for rate in [.5,1,2]:
     q(f'[data-stride="{stride}"]').tap();q('[data-walk=speed]').select_option(str(rate));s=p.evaluate(SNAP)

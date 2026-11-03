@@ -202,7 +202,7 @@
       const key = e.key, up = ['ArrowRight', 'ArrowUp'].includes(key), down = ['ArrowLeft', 'ArrowDown'].includes(key);
       if (up || down || key === 'Home' || key === 'End' || key === 'PageUp' || key === 'PageDown') {
         e.preventDefault();
-        setStride(key === 'Home' ? 40 : key === 'End' ? 300 : up ? (Math.floor(S.sideStride / 10) + 1) * 10 : down ? (Math.ceil(S.sideStride / 10) - 1) * 10 : S.sideStride + (key === 'PageUp' ? 50 : -50));
+        setStride(key === 'Home' ? 40 : key === 'End' ? 300 : up ? (Math.floor(S.sideStride / 10) + 1) * 10 : down ? (Math.ceil(S.sideStride / 10) - 1) * 10 : (key === 'PageUp' ? Math.floor(S.sideStride / 10) + 5 : Math.ceil(S.sideStride / 10) - 5) * 10);
         return;
       }
     }
