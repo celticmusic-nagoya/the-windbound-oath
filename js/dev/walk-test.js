@@ -144,11 +144,11 @@
 <section class="walkPanel"><label>分類<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option><option value="npc">NPC</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
 <div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
-<label>再生速度<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
+<label>再生倍率<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
 <fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
 <input id="walkSideStride" data-walk="stride" type="range" min="40" max="300" step="any" value="72" aria-describedby="walkStrideHelp">
 <div class="walkRow"><button type="button" data-stride="72">72</button><button type="button" data-stride="120">120</button><button type="button" data-stride="180">180</button><button type="button" data-stride="240">240</button></div>
-<p>40〜300・10刻み（採用値72はプリセット）。左右プレビューだけに適用。上下・待機・SAVEは変更しません。このページ内だけの一時設定です。</p><p id="walkStrideHelp" data-walk="stride-help"></p></fieldset>
+<p id="walkStrideHelp" data-walk="stride-help"></p><p>40〜300・10刻み（採用値72はプリセット）。左右プレビューだけに適用。上下・待機・SAVEは変更しません。このページ内だけの一時設定です。</p></fieldset>
 <label>背景<select data-walk="background"><option value="checker">チェッカーボード</option><option value="dark">暗色</option><option value="light">白</option><option value="green">緑</option></select></label>
 <output data-walk="count" aria-label="現在のコマ / 総コマ数"></output><div class="walkRow"><label><input type="checkbox" data-guide="checker" checked>チェッカーボード</label><label><input type="checkbox" data-guide="ground" checked>接地線</label><label><input type="checkbox" data-guide="center" checked>中心線</label></div>
 <p data-walk="policy"></p><p data-walk="source"></p><p data-walk="error" role="status"></p></section></div>`;
