@@ -39,15 +39,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 1210,
+  "total": 1212,
   "approved_implemented": 285,
   "approved_not_implemented": 0,
   "delivered_not_merged": 184,
   "pending_adoption": 7,
   "source_missing": 0,
   "approval_unknown": 886,
-  "on_main": 1026,
-  "implemented_on_main": 973,
+  "on_main": 1028,
+  "implemented_on_main": 975,
   "unreferenced_on_main": 53
  },
  "motion_gaps": [
@@ -6388,6 +6388,32 @@
    "android_status": "UNVERIFIED",
    "issue": "",
    "notes": "existing asset on main; adoption record not re-verified"
+  },
+  {
+   "asset_id": "file:img_field_characters_aidan_side6_fix01_aidan_walk_right_01",
+   "name": "aidan_walk_right_01.png",
+   "category": "field_character",
+   "character": "aidan",
+   "motion": "walk",
+   "delivery_date": "2026-11-03",
+   "source_path": "img/field/characters/aidan/side6/fix01/aidan_walk_right_01.png",
+   "source_branch": "main",
+   "source_commit": "fcaec713388262e97f593d54e6edc1a390734d85",
+   "source_sha256": "d55adc710b9f0d68edf3380e0331e12b15158b4252e67c743b8591a98c2865b6",
+   "width": 2048,
+   "height": 1280,
+   "frame_count": 1,
+   "approval_status": "PROVISIONAL_ANDROID_QA",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "js/field/aidan-field-assets.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "AIDAN-SIDE-WALK-FIX01: four sparse toe-extraction repairs from delivered source sheets; original pixels/assets retained. Runtime stride72 unchanged; DEV comparison180 at1x. Director physical Android review pending. Sparse replacement files are not contiguous: left02/04/05 override the corresponding slots of the existing six-frame sequence; they are not an independent animation."
   },
   {
    "asset_id": "file:img_field_lind_animals_chicken_idle",
@@ -32970,6 +32996,42 @@
     "b8a1260825e8e3ab72f2879c1acf26c06c3b14609965768a7ccc3c55d7493859",
     "1852893056fa428b8a6fd6a005bd99d103ff80dcd81a8d0a0764e47b65a0190d",
     "611f935a0e0097a4e3709c2dde0ac17288faffb80a747c4ea6d5818048f41876"
+   ]
+  },
+  {
+   "asset_id": "seq:img_field_characters_aidan_side6_fix01_aidan_walk_left",
+   "name": "aidan_walk_left (frames)",
+   "category": "field_character",
+   "character": "aidan",
+   "motion": "walk",
+   "delivery_date": "2026-11-03",
+   "source_path": "img/field/characters/aidan/side6/fix01/aidan_walk_left_02.png",
+   "source_branch": "main",
+   "source_commit": "fcaec713388262e97f593d54e6edc1a390734d85",
+   "source_sha256": "see frames_sha256",
+   "width": 2048,
+   "height": 1280,
+   "frame_count": 3,
+   "approval_status": "PROVISIONAL_ANDROID_QA",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "js/field/aidan-field-assets.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "UNVERIFIED",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "AIDAN-SIDE-WALK-FIX01: four sparse toe-extraction repairs from delivered source sheets; original pixels/assets retained. Runtime stride72 unchanged; DEV comparison180 at1x. Director physical Android review pending. Sparse replacement files are not contiguous: left02/04/05 override the corresponding slots of the existing six-frame sequence; they are not an independent animation.",
+   "frames": [
+    "img/field/characters/aidan/side6/fix01/aidan_walk_left_02.png",
+    "img/field/characters/aidan/side6/fix01/aidan_walk_left_04.png",
+    "img/field/characters/aidan/side6/fix01/aidan_walk_left_05.png"
+   ],
+   "frames_sha256": [
+    "72e5bf1ce97892ed0647fd0333ec759a11901d565dc20b2ac0f2e07a55b01db0",
+    "f96bb8532de73042709416d109aadf836d2cc17712620141cb0b0b4b9bcd0b93",
+    "cb2727564875f68e27d9844752e55ddf289e577b18afe2ba44afb230808bff1f"
    ]
   },
   {
