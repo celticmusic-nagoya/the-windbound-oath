@@ -1,0 +1,27 @@
+{
+  "source_head": "1d25a219a2947b05d8af8f1b30b4eef9467936dd",
+  "main_base": "88edef93760257df85059b8ff6d5964495ff7afe",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "git_history": true,
+  "results": [
+    {
+      "test": "tests/moss/m55_dev_walk_motion.py",
+      "classification": "新規",
+      "exit_code": 1,
+      "seconds": 50.359,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m55_dev_walk_motion.py.log",
+      "test_sha256_before": "5322bef03a9445a83edcd04775b2e40bc35c831016bcb8dfc65a86d631a73678",
+      "test_sha256_after": "5322bef03a9445a83edcd04775b2e40bc35c831016bcb8dfc65a86d631a73678",
+      "server_stopped": true
+    }
+  ]
+}

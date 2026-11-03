@@ -6,18 +6,28 @@
 (function () {
   'use strict';
   let list = [], layer = null, last = 0, raf = 0;
-  const FPS = 7;
+  const Walk = window.FieldWalkMotion, FPS = Walk.WALKER_FPS;
   function rule(look) { const m = window.ForestLoader && ForestLoader.art && ForestLoader.art.manifest; return m && (m.node || []).find(r => new RegExp(r.match).test('npc_slot_' + look)); }
+  function looks() {
+    const node = window.ForestLoader?.art?.manifest?.node || [];
+    return node.filter(r => r.file && r.walk).map(r => /^\^npc_slot_([a-z0-9_]+)\$$/.exec(r.match)?.[1]).filter(Boolean);
+  }
+  function describe(look) {
+    const r = rule(look); if (!r?.file) return null;
+    const base = ForestLoader.art.manifest.base || '';
+    const frames = [base + r.file];
+    for (let n = 1; n <= (r.walk?.frames || 0); n++) frames.push(base + r.walk.file.replace('{n}', String(n).padStart(2, '0')));
+    return {frames, w: r.w, h: r.h, fps: list.find(w => w.look === look)?.fps || FPS};
+  }
   function mount(map, world) {
     clear();
     const ws = (map && map.walkers) || []; if (!ws.length) return;
     layer = document.createElement('div'); layer.className = 'forest-walkers'; world.appendChild(layer);
-    const base = ForestLoader.art.manifest.base || '';
     for (const w of ws) {
       const r = rule(w.look); if (!r || !r.walk) continue;
       const el = document.createElement('img'); el.className = 'forest-walker'; el.draggable = false; el.alt = '';
       Object.assign(el.style, {position: 'absolute', width: r.w + 'px', height: r.h + 'px', pointerEvents: 'none'});
-      const frames = [base + r.file]; for (let n = 1; n <= r.walk.frames; n++) { frames.push(base + r.walk.file.replace('{n}', String(n).padStart(2, '0'))); }
+      const frames = describe(w.look).frames;
       frames.forEach(f => { const i = new Image(); i.src = f; });
       const pts = [[w.x, w.y], ...(w.path || []).map(p => [w.x + p[0], w.y + p[1]])];
       const rec = {id: w.id, look: w.look, el, frames, w: r.w, h: r.h, pts, i: 1, x: w.x, y: w.y, dir: w.dir || 1, speed: w.speed || 26, anim: Boolean(w.anim), fps: w.fps || FPS, lv: Number.isFinite(w.level) ? w.level : 0, rest: w.rest || [2, 4], wait: 1 + Math.random() * 2, clock: 0, state: 'idle', home: [w.x, w.y]};
@@ -27,7 +37,7 @@
   }
   function draw(r) {
     const walking = r.state === 'walk';
-    const src = walking ? r.frames[1 + Math.floor(r.clock * r.fps) % (r.frames.length - 1)] : r.frames[0];
+    const src = walking ? r.frames[1 + Walk.phaseTime(r.clock, r.frames.length - 1, r.fps)] : r.frames[0];
     if (r.el.dataset.src !== src) { r.el.dataset.src = src; r.el.src = src; }
     Object.assign(r.el.style, {left: r.x - r.w / 2 + 'px', top: r.y - r.h + 'px', zIndex: String(Math.round(r.y)), transform: r.dir < 0 ? 'scaleX(-1)' : 'none'});
   }
@@ -45,7 +55,7 @@
       r.x += dx / d * step; r.y += dy / d * step; if (Math.abs(dx) > .3) r.dir = dx > 0 ? 1 : -1; r.clock += sec; r.state = 'walk'; draw(r);
     }
   }
-  function tick(now) { update(Math.max(0, Math.min(.1, (now - last) / 1000))); last = now; raf = requestAnimationFrame(tick); }
+  function tick(now) { if (!document.body.classList.contains('devWalkOpen')) update(Math.max(0, Math.min(.1, (now - last) / 1000))); last = now; raf = requestAnimationFrame(tick); }
   function clear() { cancelAnimationFrame(raf); raf = 0; list = []; if (layer) { layer.remove(); layer = null; } }
-  window.FieldWalkers = Object.freeze({mount, clear, update, get list() { return list; }});
+  window.FieldWalkers = Object.freeze({mount, clear, update, looks, describe, get list() { return list; }});
 })();

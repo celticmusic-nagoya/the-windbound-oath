@@ -35,15 +35,14 @@
     S.configured=true;
   }
   // ---- Aidan field sprite (existing field assets; only present in builds that ship AidanFieldAssets) ----
-  const wcache=new Map();   // frames-map -> {dir: walk frame count}: 4-frame painted Aidan today, 6+ after an art drop (tools/field/install_hero_frames.py)
-  const sideCount=(frames,dir)=>{let n=0;while(frames.has('fiona_side_'+dir+'_'+String(n+1).padStart(2,'0')))n++;return n||4;};
-  const STRIDE_CYCLE=90;   // world px walked per full walk cycle (two steps): ties the painted foot swing to the ground speed
+  const Walk=window.FieldWalkMotion;
+  const STRIDE_CYCLE=Walk.STRIDE;
   // DIRECTIVE-ART-08B/08E (test): Aidan's side art paints a ~22 world px stride (~45 per two-step cycle), so the side sets use their own
   // cycle length; front/back (6 frames) and Fiona keep STRIDE_CYCLE. DEV builds accept ?aidanSideStride=<n> for A/B comparison.
   const AIDAN_SIDE_STRIDE=(()=>{try{const v=+new URLSearchParams(location.search).get('aidanSideStride');if(window.WINDBOUND_DEV&&v>=20&&v<=200)return v;}catch(e){}return 72;})();   // ART-08F: initial value 72 (no-slide value is ~50, but at ~300 world/s it animates ~36 fps); DEV ?aidanSideStride=50|72|90 for QA
   const aidanStride=dir=>(dir==='left'||dir==='right')?AIDAN_SIDE_STRIDE:STRIDE_CYCLE;
+
   function artOf(dir,flip){return window.AidanHeading&&AidanHeading.art?AidanHeading.art(dir,flip):{dir,flip:!!flip};}
-  function walkCount(frames,prefix,dir){let c=wcache.get(frames);if(!c||c.size!==frames.size){c={size:frames.size,n:{}};for(const k of frames.keys()){const m=k.match(/_walk_(down|left|right|up|dl|ul)_(\d+)$/);if(m&&k.startsWith(prefix))c.n[m[1]]=Math.max(c.n[m[1]]||0,+m[2]);}wcache.set(frames,c);}return c.n[dir]||4;}
   const FALLBACK_HEAD={step:(dx,dy)=>({dir:Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'),flip:false}),reset(){},idleDir:d=>d};
   const spr={head:null,flip:false,frames:new Map(),visible:null,dir:'down',state:'IDLE',phase:0,since:0,moved:0,px:null,py:null,ready:false};
   function mountPlayerSprite(){
@@ -63,13 +62,13 @@
       if(d>.01&&d<=23){const hd=spr.head.step(dx,dy),nx=hd.dir;spr.flip=hd.flip;   // side / straight up-down / diagonal (3/4 art, mirrored for right) - see aidan-heading.js
         if(spr.state!=='WALK'||spr.dir!==nx){spr.since=now;spr.phase=0;spr.dist=0;}spr.dir=nx;spr.state='WALK';spr.straight=false;spr.moved=now;spr.dist=(spr.dist||0)+d;}
       else if(d>23||now-spr.moved>110){if(spr.state==='WALK')spr.straight=spr.dir==='down'||spr.dir==='up';spr.state='IDLE';spr.phase=0;spr.head.reset();spr.dir=spr.head.idleDir(spr.dir);spr.flip=false;}
-      if(spr.state==='WALK'){const ad=artOf(spr.dir,spr.flip).dir,n=walkCount(spr.frames,'aidan_',ad);spr.phase=Math.floor((spr.dist||0)/(aidanStride(ad)/n))%n;}   // foot cadence follows the distance walked (no skating at any speed)
+      if(spr.state==='WALK'){const bank=Walk.ally('aidan',artOf(spr.dir,spr.flip).dir);spr.phase=Walk.phaseDistance(spr.dist,bank.frames.length,bank.stride);}   // foot cadence follows the distance walked (no skating at any speed)
     }
     spr.px=S.x;spr.py=S.y;
     const ART=artOf(spr.dir,spr.flip),name='aidan_'+(spr.state==='WALK'?'walk_'+ART.dir+'_'+String(spr.phase+1).padStart(2,'0'):(spr.straight&&spr.dir==='up'?'walk_up_01':'idle_'+spr.dir));   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
     if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
     else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
-    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+(-Math.abs(Math.sin((spr.dist||0)/(aidanStride(ART.dir)/2)*Math.PI))*1.5).toFixed(2)+'px)':'')+(spr.state==='WALK'&&ART.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames
+    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+Walk.bob(spr.dist,Walk.ally('aidan',ART.dir).stride).toFixed(2)+'px)':'')+(spr.state==='WALK'&&ART.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames
   }
   // ---- Fiona field sprite: 4 directions x (idle + 6-frame walk), tools/field/make_fiona.py -> js/field/fiona-field-assets.js ----
   const fsp={frames:new Map(),visible:null,dir:'down',walking:false,since:0,moved:0,px:null,py:null,pt:0,ready:false};
@@ -93,8 +92,8 @@
     }
     fsp.px=S.fx;fsp.py=S.fy;fsp.pt=now;
     const useSide=fsp.walking&&fsp.side&&fsp.frames.has('fiona_side_'+fsp.dir+'_01');
-    const nf=useSide?sideCount(fsp.frames,fsp.dir):walkCount(fsp.frames,'fiona_',fsp.dir);
-    const name=fsp.walking?(useSide?'fiona_side_':'fiona_walk_')+fsp.dir+'_'+String(Math.floor((fsp.dist||0)/(STRIDE_CYCLE/nf))%nf+1).padStart(2,'0'):'fiona_idle_'+fsp.dir;
+    const nf=Walk.ally('fiona',fsp.dir,Boolean(useSide)).frames.length;
+    const name=fsp.walking?(useSide?'fiona_side_':'fiona_walk_')+fsp.dir+'_'+String(Walk.phaseDistance(fsp.dist,nf)+1).padStart(2,'0'):'fiona_idle_'+fsp.dir;
     if(fsp.visible!==name&&fsp.frames.has(name)){if(fsp.visible)fsp.frames.get(fsp.visible).hidden=true;fsp.frames.get(name).hidden=!fsp.ready;fsp.visible=name;}
     else if(fsp.visible)fsp.frames.get(fsp.visible).hidden=!fsp.ready;
   }
@@ -638,7 +637,7 @@
   }
   function tick(){
     S.loopId=requestAnimationFrame(tick);
-    if(document.body.classList.contains('devPortraitOpen')||!S.active||S.busy||!S.forest||el.scene.style.display==='none'){S.hold=null;return;}
+    if(document.body.classList.contains('devPortraitOpen')||document.body.classList.contains('devWalkOpen')||!S.active||S.busy||!S.forest||el.scene.style.display==='none'){S.hold=null;return;}
     const bounds=S.map.world;
     if(S.forest.blocked(S.x,S.y))unstick(bounds);   // never leave the player embedded in a blocker (a spawn / warp / lock edge case): step to the nearest free spot
     const px0=S.x,py0=S.y;
@@ -724,7 +723,7 @@
   }
   function reset(){cancelPendingEnter();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
-  window.MossForest=Object.freeze({cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
+  window.MossForest=Object.freeze({walkStride(actor,dir){return actor==='aidan'?aidanStride(dir):Walk.STRIDE;},cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy||Boolean(entry)||recoveryRequired;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},

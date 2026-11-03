@@ -7,6 +7,7 @@ const path = require('node:path');
 function fixture(type = 'goblin') {
   const element = () => ({style: {}, dataset: {}, children: [], appendChild(e) { this.children.push(e); }, remove() { this.removed = true; }});
   const sandbox = {window: {}, document: {createElement: element}, Image: function () {}, performance: {now: () => 10000}};
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/field/walk-motion.js'), 'utf8'), sandbox);
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/field/field-monsters.js'), 'utf8'), sandbox);
   const f = sandbox.window.FieldMonsters;
   const ctx = {foot: {ax: 17, ay: 42}, player: () => ({x: 1000, y: 0}),

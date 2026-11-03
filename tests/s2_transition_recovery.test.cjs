@@ -25,6 +25,7 @@ function environment(){
  c.ForestLoader={...c.ForestLoader,loadAssets:async()=>{},async load(url){const id=url.replace(/^.*\//,'').replace(/\.json$/,'');loads.push(id);if(faults.load.has(id)){const f=faults.load.get(id);if(f instanceof Error)throw f;return f.promise;}return worlds.get(id)||map(id)},async prepare(m){if(faults.prepare)await faults.prepare(m)},mount(m,w,o){mounts.push(m.id);if(faults.mount)faults.mount(m);const forest={flags:o.flags,height:null,blocked:()=>false,destroy(){forest.destroyed=true},update(){if(faults.render)faults.render(m)}};if(m.height)forest.height={level:0,setLevel(v){this.level=v},derive:()=>0,commit(){},overpassOver:()=>null,lift:()=>0,fade(){},blockedAtLevel:()=>false};return forest;}};
  load('js/loading-input.js');
  load('js/loading-view.js'); // Exercise the shared view with real S2 rollback/cancellation.
+ load('js/field/walk-motion.js');
  load('js/field/moss-forest-runtime.js');
  c.MossForest.configure({hooks:{onEnter(m){events.push({type:'entered',id:m.id});if(faults.hook)faults.hook(m)}}});
  c.devResetScreens=()=>c.MossForest.hide();

@@ -1,0 +1,16 @@
+# DEV-WALK-MOTION-01 / WALK-QA-02 final independent QA
+
+**PASS for exact HEAD `bf689cd63e279e0737fc209adfbadd229ee3f05b`.**
+Integrated upstream main `22efe87` includes soldier107 and Aidan112. Final tester source preserves actual production Aidan side stride72 and DEV50/90; front/back and Fiona remain90. All259protectedPNG SHA and all image/assets/adoption records are unchanged from integrated main.
+
+Independently ran full m55 on committed snapshot `f7311fa468391df1c8f00aeca8027d6ebb177d99`:399frame slots per viewport ×3=1197, PASS173.068s. Original m31 PASS19.199s and save_continue_lifecycle PASS26.951s, strictly serial. Read raw logs: exit0/no printed FAIL/Traceback and allthree final test hashes match. Laterbf689 differs only test/docs/evidence, with no JS/CSS/index/image/data changes; browser results remain exact production-source evidence, not a falsely relabelled test run.
+
+Independently ran focused real-field default72 PC case at production-identical final checkout: allsix side frames/wrap, stop/restart, directional turn/front/back, rotation and trusted-touch target movement PASS. Actual runtime and preview bank both report72. Separate actual DEV URL50/90 loads show matching runtime bank and visible inspector policy, with front/Fiona90. Logs, raw rAF rows and API JSON in final-f731-independent. No universal no-slip or hardware-performance guarantee is inferred.
+
+Earlier independent600representative96 UI checks cover ally/goblin/NPC at1920×1080,390×844,844×390: step/play/pause, measured0.5/2playback rates, allfour computed backgrounds, idle, honest missing NPCup, reduced-motion, SAVE/flags/stock/player purity and screenshots. Additional test explicitly froze a currently walking NPC's position/clock/wait/state750ms, observed resume afterclose, and LOAD/battle RAF cleanup. UI/CSS/FieldWalkers bytes600→final are identical, so this focused lifecycle evidence is retained with its real sourcehead, not claimed rerun at final.
+
+Independently reran Node sharedpolicy8 and goblin10cases PASS. After final fixture fix, independently reran actual S2transition20/startup20/continue37cases PASS. Reviewed root final17Node rawlogs and exact before/after/final test hashes:17/17PASS. Earlier10/17failed integration fixture run is retained: missing actual walk-motion dependency in the Node environment. The only fixture repair loads the real module before runtime, without stub/skip/assert deletion. Original historyless archive asset-audit failures remain retained and distinguished from history-enabled PASS. Reviewed root full matrix/product logs and the successful asset rerun.
+
+Fresh external PR107 exact7fd4b68 and PR112 exact964b2a5 had separate3-view independent checks and259SHA protection;112 originalm31PASS. Claude-owned integration files were never edited. Latest main images/registries exactly match those integrations.
+
+Browser CLOSED/RELEASED. Only scratch QA scripts/evidence/reviews were written by this reviewer. No production, PR, main, merge or Pages operations performed. No unresolved blocker in this tester scope. Physical Android remains NOT_RUN; user visual decision and any future goblin image fixes are separate. Root must still follow current authorization, branch protection and verified-head checks before any merge.
