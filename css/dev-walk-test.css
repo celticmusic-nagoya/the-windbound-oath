@@ -25,3 +25,6 @@
 #walkMotionTest.folded .walkBody{grid-template-columns:minmax(0,1fr)}
 @media(orientation:portrait){#walkMotionTest .walkBody{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(160px,1fr) minmax(0,1fr)}#walkMotionTest.folded .walkBody{grid-template-rows:minmax(0,1fr)}#walkMotionTest h3{font-size:14px}#walkMotionTest header{gap:4px}#walkMotionTest header button{padding:5px;font-size:12px}}
 @media(orientation:landscape) and (max-height:500px){#walkMotionTest{padding:6px}#walkMotionTest .walkBody{grid-template-columns:minmax(0,1fr) minmax(250px,38%)}#walkMotionTest.folded .walkBody{grid-template-columns:minmax(0,1fr)}}
+#walkMotionTest [data-walk=stride-controls]{min-width:0;margin:8px 0;padding:8px;border:1px solid #b29d65;border-radius:6px}
+#walkMotionTest [data-walk=stride-controls] label{display:flex;align-items:center;justify-content:space-between}
+#walkMotionTest [data-walk=stride]{width:100%;height:44px;margin:0;accent-color:#e4c877;touch-action:pan-y}
