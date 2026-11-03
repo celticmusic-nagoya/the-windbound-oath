@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLAYER-WALK-POLISH-01 歩行候補 比較</title>
+<style>
+  body{margin:0;background:#1e2a22;color:#e8e2cc;font:14px/1.5 system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+  header{padding:10px 12px;background:#14201a;position:sticky;top:0;z-index:2}
+  h1{font-size:15px;margin:0 0 6px}
+  .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  button,select{font:inherit;padding:6px 10px;background:#2f4a3a;color:#fff;border:1px solid #6d8a62;border-radius:6px}
+  button[aria-pressed=true]{background:#6d8a62}
+  main{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;padding:10px}
+  section{background:#26352b;border-radius:8px;padding:8px}
+  h2{font-size:13px;margin:0 0 6px}
+  .pair{display:flex;gap:6px}
+  .stage{flex:1;position:relative;height:var(--h);background:#4a6a4a;border-radius:4px;overflow:hidden}
+  .stage.bg2{background:#c9c2a8}.stage.bg3{background:#111}
+  .stage b{position:absolute;left:4px;top:2px;font-size:11px;font-weight:600;text-shadow:0 1px 2px #000}
+  .stage i{position:absolute;right:4px;top:2px;font-size:11px;font-style:normal;text-shadow:0 1px 2px #000}
+  .stage img{position:absolute;image-rendering:auto;pointer-events:none}
+  .base{position:absolute;left:0;right:0;height:1px;background:#f44;opacity:.7}
+  p.note{margin:6px 0 0;font-size:12px;color:#c7c0a6}
+</style>
+</head>
+<body>
+<header>
+  <h1>PLAYER-WALK-POLISH-01｜修正前（main）と候補の歩行比較</h1>
+  <div class="ctl">
+    <label>周期 <select id="stride"><option value="90">90（現行の上下・フィオナ）</option><option value="180" selected>180（エイダン左右の正式値）</option></select></label>
+    <label>表示倍率 <select id="zoom"><option value="1">1倍（ゲーム表示）</option><option value="2">2倍</option><option value="4" selected>4倍</option></select></label>
+    <button id="play" aria-pressed="true">再生中</button>
+    <button id="prev">◀ コマ戻し</button><button id="next">コマ送り ▶</button>
+    <button id="bg">背景切替</button>
+  </div>
+  <p class="note">再生は本編と同じ「歩いた距離」方式（毎秒300px＝本編のクリック移動速度）。周期＝6コマ（または4コマ）を一周する距離。赤線は足元の基準線。フィオナ右（横）の修正前は本編どおり148px左へずれた登録のまま表示し、参考版は中心に戻しています。</p>
+</header>
+<main id="grid"></main>
+<script>
+(() => {
+  'use strict';
+  const MAIN = '../../../';
+  const A = {w: 2048, h: 1280, ax: 1024, ay: 1230, s: 0.0625};   // AidanFieldAssets geometry
+  const F = {w: 1280, h: 832, ax: 640, ay: 790, s: 0.1};          // FionaFieldAssets geometry
+  const seq = (dir, pre, n) => Array.from({length: n}, (_, i) => dir + pre + String(i + 1).padStart(2, '0') + '.png');
+  const SETS = [
+    {t: 'エイダン 下（正面）', g: A, before: seq(MAIN + 'img/field/characters/aidan/', 'aidan_walk_down_', 6), after: seq('aidan/frames/', 'aidan_walk_down_', 6)},
+    {t: 'エイダン 上（背面）', g: A, before: seq(MAIN + 'img/field/characters/aidan/', 'aidan_walk_up_', 6), after: seq('aidan/frames/', 'aidan_walk_up_', 6)},
+    {t: 'フィオナ 左（横）※参考：逆足として数えない', g: F, cx: 640, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_side_left_', 6), after: seq('reference/fiona-side-cue-swap/', 'fiona_side_left_', 6)},
+    {t: 'フィオナ 右（横）※参考：逆足として数えない', g: F, cx: 500, cxa: 640, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_side_right_', 6), after: seq('reference/fiona-side-cue-swap/', 'fiona_side_right_', 6)},
+    {t: 'フィオナ 上（背面）', g: F, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_up_', 4), after: seq('fiona/frames/', 'fiona_walk_up_', 4)},
+    {t: 'フィオナ 下（正面）※候補なし・新規描画が必要（両列とも main）', g: F, before: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_down_', 4), after: seq(MAIN + 'img/field/moss/real/fiona/', 'fiona_walk_down_', 4)},
+  ];
+  const $ = id => document.getElementById(id);
+  const grid = $('grid'), cells = [];
+  let playing = true, dist = 0, last = performance.now(), bg = 0;
+  function build() {
+    grid.textContent = ''; cells.length = 0;
+    const z = +$('zoom').value;
+    for (const set of SETS) {
+      const g = set.g, sec = document.createElement('section'), pair = document.createElement('div');
+      sec.innerHTML = '<h2>' + set.t + '</h2>'; pair.className = 'pair';
+      const H = Math.round(g.h * g.s * z * 0.95);
+      for (const [label, files, cx] of [['修正前', set.before, set.cx], ['候補', set.after, set.cxa || set.cx]]) {
+        const st = document.createElement('div'); st.className = 'stage' + (bg ? ' bg' + (bg + 1) : ''); st.style.setProperty('--h', H + 'px');
+        st.innerHTML = '<b>' + label + '</b><i></i>';
+        const imgs = files.map(src => {
+          const im = new Image(); im.src = src; im.alt = ''; im.hidden = true;
+          Object.assign(im.style, {width: g.w * g.s * z + 'px', height: g.h * g.s * z + 'px', left: 'calc(50% - ' + (cx || g.ax) * g.s * z + 'px)', top: (H - 6 * z - g.ay * g.s * z) + 'px'});
+          st.appendChild(im); return im;
+        });
+        const base = document.createElement('div'); base.className = 'base'; base.style.top = (H - 6 * z) + 'px'; st.appendChild(base);
+        pair.appendChild(st); cells.push({imgs, tag: st.querySelector('i'), cur: -1});
+      }
+      sec.appendChild(pair); grid.appendChild(sec);
+    }
+    draw();
+  }
+  function draw() {
+    const stride = +$('stride').value;
+    for (const c of cells) {
+      const n = c.imgs.length, i = Math.floor(dist / (stride / n)) % n;
+      if (i !== c.cur) { if (c.cur >= 0) c.imgs[c.cur].hidden = true; c.imgs[i].hidden = false; c.cur = i; }
+      c.tag.textContent = String(i + 1).padStart(2, '0') + '/' + String(n).padStart(2, '0');
+    }
+  }
+  function tick(now) {
+    if (playing) dist += (now - last) / 1000 * 300;
+    last = now; draw(); requestAnimationFrame(tick);
+  }
+  const step = k => { playing = false; $('play').setAttribute('aria-pressed', 'false'); $('play').textContent = '一時停止中'; dist = Math.max(0, (Math.floor(dist / (+$('stride').value / 6)) + k) * (+$('stride').value / 6) + 0.01); };
+  $('play').onclick = () => { playing = !playing; $('play').setAttribute('aria-pressed', String(playing)); $('play').textContent = playing ? '再生中' : '一時停止中'; };
+  $('prev').onclick = () => step(-1); $('next').onclick = () => step(1);
+  $('bg').onclick = () => { bg = (bg + 1) % 3; build(); };
+  $('zoom').onchange = build; $('stride').onchange = draw;
+  build(); requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
