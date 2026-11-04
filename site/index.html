@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THE WINDBOUND OATH | Official Website</title>
+<meta name="description" content="オリジナルRPG『THE WINDBOUND OATH ― Mionn na Gaoithe』公式サイト。失った故郷。残された仲間。そして、風だけが知っていた真実。">
+<meta name="theme-color" content="#101A17">
+<meta property="og:title" content="THE WINDBOUND OATH | Official Website">
+<meta property="og:description" content="失った故郷。残された仲間。そして、風だけが知っていた真実。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://celticmusic-nagoya.github.io/the-windbound-oath/site/img/hero/bg-landscape.webp">
+<link rel="icon" type="image/png" href="../img/field/lind/props/lind_sign.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap">
+<link rel="preload" as="image" href="img/hero/bg-landscape.webp" media="(min-width: 769px)">
+<link rel="preload" as="image" href="img/hero/bg-portrait.webp" media="(max-width: 768px)">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="site-header" id="top">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="#hero">THE WINDBOUND OATH</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+      <span class="visually-hidden">メニュー</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="メインメニュー">
+      <ul class="site-nav__list">
+        <li><a href="#news">NEWS</a></li>
+        <li><a href="#story">STORY</a></li>
+        <li><a href="#system">SYSTEM</a></li>
+        <li><a href="#characters">CHARACTERS</a></li>
+        <li><a href="#gallery">GALLERY</a></li>
+        <li><a class="site-nav__play" href="#play">PLAY GAME</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 01 HERO -->
+<section class="hero" id="hero" aria-labelledby="hero-title">
+  <picture class="hero__bg">
+    <source media="(max-width: 768px)" srcset="img/hero/bg-portrait.webp" width="941" height="1672">
+    <img src="img/hero/bg-landscape.webp" width="1672" height="941" alt="" fetchpriority="high" decoding="async">
+  </picture>
+  <div class="hero__shade" aria-hidden="true"></div>
+  <img class="hero__aidan" src="img/hero/aidan-back.webp" width="760" height="1140" alt="遠くの王都を見つめるエイダンの後ろ姿" decoding="async">
+  <div class="hero__content">
+    <h1 class="hero__title" id="hero-title">
+      <img class="hero__logo" src="img/hero/logo.webp" width="1200" height="427" alt="THE WINDBOUND OATH ― Mionn na Gaoithe">
+    </h1>
+    <p class="hero__catch">失った故郷。残された仲間。<br>そして、風だけが知っていた真実。</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="../">PLAY GAME</a>
+      <a class="btn btn--ghost" href="#story">ABOUT THE GAME</a>
+    </div>
+  </div>
+</section>
+
+<!-- 02 NEWS -->
+<section class="section section--alt" id="news" aria-labelledby="news-title">
+  <div class="section__inner">
+    <header class="section-head">
+      <p class="section-head__en">NEWS</p>
+      <h2 class="section-head__ja" id="news-title">開発ニュース</h2>
+    </header>
+    <ul class="news-list" data-news-src="data/news.json">
+      <li class="news-list__empty">ニュースを読み込んでいます…</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 03 STORY -->
+<section class="section story" id="story" aria-labelledby="story-title">
+  <img class="story__bg" src="img/story/bg-01.webp" width="1536" height="1024" alt="" loading="lazy" decoding="async">
+  <div class="story__shade" aria-hidden="true"></div>
+  <div class="section__inner story__inner">
+    <header class="section-head">
+      <p class="section-head__en">STORY</p>
+      <h2 class="section-head__ja" id="story-title">物語</h2>
+    </header>
+    <p class="story__chapter">PROLOGUE ―「風が止んだ夜」</p>
+    <p class="story__theme">守れなかった者たちが、<br>今度こそ誰かを守る。</p>
+    <!-- STORY-INTRO: pending director approval. Do not invent text here (WEBSITE-REBUILD-01 §5). -->
+    <div class="story__intro" data-status="pending-approval">
+      <p class="pending-note">物語紹介文は準備中です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 SYSTEM -->
+<section class="section section--alt" id="system" aria-labelledby="system-title">
+  <div class="section__inner">
+    <header class="section-head">
+      <p class="section-head__en">SYSTEM</p>
+      <h2 class="section-head__ja" id="system-title">ゲームシステム</h2>
+    </header>
+    <p class="section-lead">開発中のプロローグ版で遊べる内容を紹介します。仕様は今後変わる場合があります。</p>
+    <div class="system-grid">
+      <article class="system-card">
+        <p class="system-card__en">EXPLORE</p>
+        <h3 class="system-card__title">探索</h3>
+        <ul class="system-card__list">
+          <li>見下ろし型のフィールドマップを自由に歩いて探索</li>
+          <li>PCは方向キー・WASD・クリック、スマートフォンはタップで移動</li>
+          <li>村人との会話やサブクエスト</li>
+          <li>敵はフィールド上に姿を見せ、触れると戦闘が始まる</li>
+        </ul>
+      </article>
+      <article class="system-card">
+        <p class="system-card__en">BATTLE</p>
+        <h3 class="system-card__title">戦闘</h3>
+        <ul class="system-card__list">
+          <li>攻撃・技・防御・アイテムを選ぶコマンドバトル</li>
+          <li>攻撃や防御でTPを溜め、剣技「一閃」を放つ</li>
+          <li>仲間全員で共有するRUNEゲージ</li>
+          <li>妖精ルーがSUPPORTとして戦いを助ける</li>
+        </ul>
+      </article>
+      <article class="system-card">
+        <p class="system-card__en">GROWTH</p>
+        <h3 class="system-card__title">成長</h3>
+        <ul class="system-card__list">
+          <li>戦闘に勝利して経験値を獲得</li>
+          <li>物語の進行に合わせて仲間が加わる</li>
+          <li>装備などの成長要素は開発中</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 05 CHARACTERS -->
+<section class="section" id="characters" aria-labelledby="characters-title">
+  <div class="section__inner">
+    <header class="section-head">
+      <p class="section-head__en">CHARACTERS</p>
+      <h2 class="section-head__ja" id="characters-title">登場人物</h2>
+    </header>
+    <div class="char-grid">
+      <article class="char-card">
+        <div class="char-card__figure"><img src="img/chars/aidan.webp" width="640" height="960" alt="エイダン" loading="lazy" decoding="async"></div>
+        <div class="char-card__body">
+          <p class="char-card__en">AIDAN</p>
+          <h3 class="char-card__name">エイダン</h3>
+          <p class="char-card__text">騎士団長の息子である17歳の剣士。剣技で前線に立つ。</p>
+        </div>
+      </article>
+      <article class="char-card">
+        <div class="char-card__figure"><img src="img/chars/fiona.webp" width="640" height="960" alt="フィオナ" loading="lazy" decoding="async"></div>
+        <div class="char-card__body">
+          <p class="char-card__en">FIONA</p>
+          <h3 class="char-card__name">フィオナ</h3>
+          <p class="char-card__text">リルド村で暮らす少女。癒やしの力で仲間を支えるヒーラー。</p>
+        </div>
+      </article>
+      <article class="char-card">
+        <div class="char-card__figure char-card__figure--small"><img src="img/chars/lou.webp" width="720" height="658" alt="ルー" loading="lazy" decoding="async"></div>
+        <div class="char-card__body">
+          <p class="char-card__en">LOU</p>
+          <h3 class="char-card__name">ルー</h3>
+          <p class="char-card__text">手のひらほどの小さな妖精。いつも宙に浮かび、戦いではSUPPORTとして仲間を助ける。</p>
+        </div>
+      </article>
+      <article class="char-card">
+        <div class="char-card__figure"><img src="img/chars/emma.webp" width="640" height="960" alt="エマ" loading="lazy" decoding="async"></div>
+        <div class="char-card__body">
+          <p class="char-card__en">EMMA</p>
+          <h3 class="char-card__name">エマ</h3>
+          <!-- EMMA-PROFILE: pending director approval. -->
+          <p class="char-card__text pending-note" data-status="pending-approval">紹介文は準備中です。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 06 GALLERY -->
+<section class="section section--alt" id="gallery" aria-labelledby="gallery-title">
+  <div class="section__inner">
+    <header class="section-head">
+      <p class="section-head__en">GALLERY</p>
+      <h2 class="section-head__ja" id="gallery-title">ギャラリー</h2>
+    </header>
+    <ul class="gallery-grid">
+      <li><button class="gallery-item" type="button" data-full="img/hero/bg-landscape.webp" data-w="1672" data-h="941" data-caption="KEY VISUAL"><img src="img/gallery/key-visual-thumb.webp" width="640" height="360" alt="キービジュアル背景：王都を望む丘" loading="lazy" decoding="async"><span class="gallery-item__cap">KEY VISUAL</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/gallery/cg01-full.webp" data-w="1672" data-h="941" data-caption="EVENT CG ― ルーとの出会い"><img src="img/gallery/cg01-thumb.webp" width="640" height="360" alt="イベントCG：ルーとの出会い" loading="lazy" decoding="async"><span class="gallery-item__cap">EVENT CG</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/gallery/cg03-full.webp" data-w="1672" data-h="941" data-caption="EVENT CG ― 風の舞"><img src="img/gallery/cg03-thumb.webp" width="640" height="360" alt="イベントCG：フィオナの風の舞" loading="lazy" decoding="async"><span class="gallery-item__cap">EVENT CG</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/story/bg-01.webp" data-w="1536" data-h="1024" data-caption="BATTLE BACKGROUND ― 草原・街道"><img src="img/gallery/bg-01-thumb.webp" width="640" height="427" alt="戦闘背景：草原と街道" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE BG</span></button></li>
+      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/aidan-battle-full.webp" data-w="1536" data-h="1024" data-caption="BATTLE ― エイダン"><img src="img/gallery/aidan-battle-thumb.webp" width="640" height="427" alt="戦闘グラフィック：エイダン" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
+      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/fiona-battle-full.webp" data-w="1536" data-h="1024" data-caption="BATTLE ― フィオナ"><img src="img/gallery/fiona-battle-thumb.webp" width="640" height="427" alt="戦闘グラフィック：フィオナ" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
+      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/lou-battle-full.webp" data-w="1312" data-h="1199" data-caption="BATTLE ― ルー"><img src="img/gallery/lou-battle-thumb.webp" width="640" height="585" alt="戦闘グラフィック：ルー" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
+      <!-- Gameplay screenshots (img/screenshots/candidates/) are added after director approval. -->
+    </ul>
+  </div>
+</section>
+
+<!-- 07 PLAY GAME -->
+<section class="section play" id="play" aria-labelledby="play-title">
+  <div class="section__inner play__inner">
+    <header class="section-head">
+      <p class="section-head__en">PLAY GAME</p>
+      <h2 class="section-head__ja" id="play-title">ブラウザで遊ぶ</h2>
+    </header>
+    <p class="play__text">現在、プロローグを開発中です。<br>開発中のため、内容や動作は予告なく変更されることがあります。</p>
+    <p class="play__note">推奨環境：PCブラウザ（スマートフォンのブラウザにも対応を進めています）</p>
+    <a class="btn btn--primary btn--large" href="../">PLAY GAME</a>
+  </div>
+</section>
+
+</main>
+
+<!-- 08 FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__title">THE WINDBOUND OATH</p>
+    <p class="site-footer__sub">Mionn na Gaoithe</p>
+    <ul class="site-footer__links">
+      <li><a href="../">PLAY GAME</a></li>
+      <li><a href="https://github.com/celticmusic-nagoya/the-windbound-oath" rel="noopener">GitHub</a></li>
+      <li><a href="#top">PAGE TOP</a></li>
+    </ul>
+    <p class="site-footer__credit">Fonts: Cinzel / Noto Serif JP / Noto Sans JP (SIL Open Font License)</p>
+    <p class="site-footer__copy">&copy; 2026 THE WINDBOUND OATH</p>
+  </div>
+</footer>
+
+<dialog class="lightbox" aria-label="画像の拡大表示">
+  <figure class="lightbox__figure">
+    <img class="lightbox__img" src="" alt="" width="1672" height="941">
+    <figcaption class="lightbox__cap"></figcaption>
+  </figure>
+  <button class="lightbox__btn lightbox__prev" type="button" aria-label="前の画像">&#8249;</button>
+  <button class="lightbox__btn lightbox__next" type="button" aria-label="次の画像">&#8250;</button>
+  <button class="lightbox__close" type="button" aria-label="閉じる">&times;</button>
+</dialog>
+</body>
+</html>
