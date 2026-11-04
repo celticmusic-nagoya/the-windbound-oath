@@ -50,7 +50,11 @@ Claudeの自己QAスクリプトは `site/tools/qa_site.js`。**その結果を�
 - D7 JS無効時の挙動（遅延画像は非表示になる仕様。致命的崩れがないか）
 
 ### E. ゲーム本体への影響
-- E1 `git diff --stat e637805..<QA対象SHA>` が `site/` と `docs/qa/_evidence/website-rebuild-01/` のみ
+- E1 `git diff --name-only e637805..<QA対象SHA>` が次の許可対象のみ（2026-11-04 FIX-02で明記。ディレクター指示）
+  - `site/` 配下
+  - `docs/qa/_evidence/website-rebuild-01/` 配下
+  - `docs/qa/WEBSITE-REBUILD-01_CODEX_QA_BRIEF.md`（本指示書）
+  - `docs/qa/WEBSITE-REBUILD-01_PAGES_EXCLUSION_PROPOSAL.md`（Pages公開除外の提案・実施記録）
 - E2 ゲーム（`/`）: タイトル表示 → NEW GAME → エイダンの家 到達、コンソールエラー0
 - E3 既存テスト（必要範囲）が main と同じ結果（既知FAILは `docs/qa/KNOWN_ISSUES.md` 基準で区別）
 
@@ -68,7 +72,7 @@ Claudeの自己QAスクリプトは `site/tools/qa_site.js`。**その結果を�
 
 ## 2. 報告形式
 - 冒頭に総合判定（PASS / CONDITIONAL / FAIL）、QA対象SHA、**mainマージ可否の提案**（可／条件付き可／不可と理由）
-- **31項目すべて**を PASS / FAIL / BLOCKED で報告（未実施を省略しない）
+- **33項目すべて**（A1〜G4）を PASS / FAIL / BLOCKED で報告（未実施を省略しない）。HTML妥当性（H1、Nu HTML Checker）は33項目外の追加検査として別記
 - 項目別表（ID / 判定 / 根拠 / 環境：エミュレーション or 実機を明記）
 - 不具合: 重大度（P0〜P3）・再現手順・期待/実際・修正案
 - 証跡（スクリーンショット・ログ）は `docs/qa/_evidence/website-rebuild-01/codex/` に置く想定。push権限の扱いはディレクター指示に従う
