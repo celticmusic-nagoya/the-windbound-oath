@@ -131,6 +131,60 @@ const scrollAll = (p) => p.evaluate(async () => {
     rec(`${tag} コンソールエラー`, p.errs.length === 0, p.errs.join(' | ') || 'なし（Google Fontsは遮断して除外）');
     await ctx.close();
   }
+
+  // Hero: no overlap between logo / figure / copy / buttons, and buttons inside the first screen
+  for (const [w, h] of [[360, 640], [360, 740], [390, 664], [390, 844], [844, 390], [1024, 768], [1440, 900]]) {
+    const { ctx, p } = await page(b, { viewport: { width: w, height: h }, isMobile: w < 800, hasTouch: w < 800 });
+    const r = await p.evaluate(() => {
+      const g = (s) => document.querySelector(s).getBoundingClientRect();
+      const boxes = { logo: g('.hero__logo'), catch: g('.hero__catch'), actions: g('.hero__actions'), aidan: g('.hero__aidan') };
+      const hit = (a, b) => a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1;
+      const pairs = []; const k = Object.keys(boxes);
+      for (let i = 0; i < k.length; i++) for (let j = i + 1; j < k.length; j++) if (hit(boxes[k[i]], boxes[k[j]])) pairs.push(k[i] + '×' + k[j]);
+      const btn = [...document.querySelectorAll('.hero__actions .btn')].map((e) => ({ sw: e.scrollWidth, cw: e.clientWidth }));
+      return { pairs, actionsBottom: Math.round(boxes.actions.bottom), vh: innerHeight, btnOverflow: btn.some((x) => x.sw > x.cw + 1),
+        ratio: (() => { const i = document.querySelector('.hero__aidan'); const r = i.getBoundingClientRect(); const s = Math.min(r.width / i.naturalWidth, r.height / i.naturalHeight); return Math.abs((i.naturalWidth * s) / (i.naturalHeight * s) - i.naturalWidth / i.naturalHeight) < 0.01; })() };
+    });
+    rec(`HERO重なりなし ${w}x${h}`, r.pairs.length === 0 && r.actionsBottom <= r.vh && !r.btnOverflow && r.ratio,
+      `重なり=${JSON.stringify(r.pairs)} ボタン下端=${r.actionsBottom}/${r.vh} ボタン文字はみ出し=${r.btnOverflow} 縦横比=${r.ratio}`);
+    await ctx.close();
+  }
+
+  // prefers-reduced-motion: reduce
+  {
+    const { ctx, p } = await page(b, { viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    await p.evaluate(() => document.getElementById('gallery').scrollIntoView());
+    await p.waitForTimeout(600);
+    await p.hover('.gallery-item >> nth=0');
+    await p.waitForTimeout(400);
+    const r = await p.evaluate(() => {
+      const img = document.querySelector('.gallery-item img');
+      const cs = getComputedStyle(img);
+      const anyTransition = [...document.querySelectorAll('*')].some((e) => { const d = getComputedStyle(e).transitionDuration; return d && d.split(',').some((x) => parseFloat(x) > 0); });
+      return { transform: cs.transform, scroll: getComputedStyle(document.documentElement).scrollBehavior, anyTransition, mq: matchMedia('(prefers-reduced-motion: reduce)').matches };
+    });
+    rec('動きを減らす設定(reduce)', r.mq && r.transform === 'none' && r.scroll === 'auto' && !r.anyTransition,
+      `media=${r.mq} hover拡大=${r.transform} scroll-behavior=${r.scroll} transitionあり=${r.anyTransition}`);
+    await ctx.close();
+  }
+
+  // JavaScript disabled
+  {
+    const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
+    const p = await ctx.newPage();
+    await p.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+    await p.goto(BASE);
+    await p.evaluate(() => 0).catch(() => {});
+    for (let y = 0; y < 7000; y += 400) { await p.mouse.wheel(0, 400); await p.waitForTimeout(80); }
+    await p.waitForTimeout(1500);
+    const shot = await p.screenshot({ fullPage: true });
+    // Count visible <img> boxes with a decoded image via accessibility of layout (JS off: use locator API)
+    const vis = await p.locator('noscript + img, img').evaluateAll(() => 0).catch(() => null);
+    const shown = await p.locator('.char-card__figure img:visible, .gallery-item img:visible, .story__bg:visible').count();
+    rec('JavaScript無効時の画像表示', shown >= 12, `表示された遅延対象画像 ${shown}/12（noscriptフォールバック）`);
+    await ctx.close();
+  }
+
   await b.close();
   console.log(JSON.stringify(results, null, 1));
   const fail = results.filter((r) => r.result === 'FAIL').length;
