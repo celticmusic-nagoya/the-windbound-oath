@@ -1,0 +1,200 @@
+{
+  "checks": {
+    "pr139_head": "d15aa83ab73e77e505895bea3c89485d3a9254bd",
+    "original_sha256": "b88fdf8e0b48bc303c065d0dcd179babbd2c6a55040f4ccca8a2c18ed8c55c00",
+    "candidate_sha256": "d87b2ec56660568bd46eecb8559edfed1c3802fe1e2675a018f78f3c23f970df",
+    "source_size": [
+      2048,
+      1280
+    ],
+    "candidate_size": [
+      2048,
+      1280
+    ],
+    "mode_source": "RGBA",
+    "mode_candidate": "RGBA",
+    "changed_pixels": 16651,
+    "changed_bbox": [
+      990,
+      1062,
+      1126,
+      1237
+    ],
+    "changes_outside_supplied_mask": 0,
+    "changes_y_lt1062": 0,
+    "changes_x_ge1126": 0,
+    "lower_boot_core_roi_target": [
+      1000,
+      1180,
+      1110,
+      1225
+    ],
+    "lower_boot_core_shift7_mismatches": 0,
+    "alpha_bbox_source": [
+      668,
+      126,
+      1524,
+      1230
+    ],
+    "alpha_bbox_candidate": [
+      668,
+      126,
+      1524,
+      1237
+    ],
+    "below_anchor_alpha_nonzero": 755,
+    "below_anchor_alpha_max": 30,
+    "below_anchor_alpha_gt128": 0,
+    "connected_components": {
+      "0": {
+        "original": {
+          "components": 68,
+          "components_ge16px": 29
+        },
+        "candidate": {
+          "components": 68,
+          "components_ge16px": 29
+        }
+      },
+      "128": {
+        "original": {
+          "components": 1,
+          "components_ge16px": 1
+        },
+        "candidate": {
+          "components": 1,
+          "components_ge16px": 1
+        }
+      },
+      "200": {
+        "original": {
+          "components": 1,
+          "components_ge16px": 1
+        },
+        "candidate": {
+          "components": 1,
+          "components_ge16px": 1
+        }
+      }
+    }
+  },
+  "support_medians": [
+    [
+      1,
+      {
+        "128": 4.0,
+        "200": 5.0
+      }
+    ],
+    [
+      5,
+      {
+        "128": 4.0,
+        "200": 6.0
+      }
+    ],
+    [
+      2,
+      {
+        "128": 4.0,
+        "200": 5.0
+      }
+    ],
+    [
+      6,
+      {
+        "128": 11.0,
+        "200": 12.0
+      }
+    ],
+    [
+      "candidate",
+      {
+        "128": 4.0,
+        "200": 5.0
+      }
+    ]
+  ],
+  "transitions": [
+    {
+      "mode": "original",
+      "from": 1,
+      "to": 5,
+      "roi_mae_0_255": {
+        "cape_left": 36.69908190119185,
+        "cape_right": 35.21448993152816,
+        "waist": 31.790793534080297
+      }
+    },
+    {
+      "mode": "original",
+      "from": 5,
+      "to": 2,
+      "roi_mae_0_255": {
+        "cape_left": 50.91515793925413,
+        "cape_right": 39.46420413165266,
+        "waist": 49.037027135854345
+      }
+    },
+    {
+      "mode": "original",
+      "from": 2,
+      "to": 6,
+      "roi_mae_0_255": {
+        "cape_left": 44.481815330642064,
+        "cape_right": 42.422624782135074,
+        "waist": 40.01185941876751
+      }
+    },
+    {
+      "mode": "original",
+      "from": 6,
+      "to": 1,
+      "roi_mae_0_255": {
+        "cape_left": 33.01399317570166,
+        "cape_right": 31.65641688453159,
+        "waist": 43.592515849673205
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 1,
+      "to": 5,
+      "roi_mae_0_255": {
+        "cape_left": 36.69908190119185,
+        "cape_right": 35.21448993152816,
+        "waist": 31.790793534080297
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 5,
+      "to": 2,
+      "roi_mae_0_255": {
+        "cape_left": 50.91515793925413,
+        "cape_right": 39.46420413165266,
+        "waist": 49.037027135854345
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 2,
+      "to": "candidate",
+      "roi_mae_0_255": {
+        "cape_left": 44.481815330642064,
+        "cape_right": 42.422624782135074,
+        "waist": 40.01185941876751
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": "candidate",
+      "to": 1,
+      "roi_mae_0_255": {
+        "cape_left": 33.01399317570166,
+        "cape_right": 31.65641688453159,
+        "waist": 43.592515849673205
+      }
+    }
+  ]
+}

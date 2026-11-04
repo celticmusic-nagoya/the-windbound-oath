@@ -1,0 +1,63 @@
+{
+  "source_head": "ec7da38dab6a8c54549ebd9451b1f12003af1075",
+  "main_base": "e63780543d7ba1719a39a2f68b9924dc6d5b3933",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "git_history": true,
+  "results": [
+    {
+      "test": "tests/moss/m61_dev_ground_candidate.py",
+      "classification": "新規",
+      "exit_code": 125,
+      "seconds": 0.001,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m61_dev_ground_candidate.py.log",
+      "test_sha256_before": "20909e59288f4eccb3208f422240bc05cf305bd741988cf44cd31d4abaa91297",
+      "test_sha256_after": "20909e59288f4eccb3208f422240bc05cf305bd741988cf44cd31d4abaa91297",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m59_dev_down_cycle.py",
+      "classification": "新規",
+      "exit_code": 125,
+      "seconds": 0.0,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m59_dev_down_cycle.py.log",
+      "test_sha256_before": "a9c005b55a293a0948d23926ed34981bc1e57cd5c4de665ee033afb70a71959a",
+      "test_sha256_after": "a9c005b55a293a0948d23926ed34981bc1e57cd5c4de665ee033afb70a71959a",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/save_continue_lifecycle.py",
+      "classification": "新規",
+      "exit_code": 125,
+      "seconds": 0.0,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_save_continue_lifecycle.py.log",
+      "test_sha256_before": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/asset_registry_audit.py",
+      "classification": "新規",
+      "exit_code": 125,
+      "seconds": 0.0,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_asset_registry_audit.py.log",
+      "test_sha256_before": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "test_sha256_after": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "server_stopped": true
+    }
+  ]
+}

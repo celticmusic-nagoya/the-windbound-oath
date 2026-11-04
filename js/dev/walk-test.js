@@ -3,7 +3,8 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, downSequence: 'six', downStride: 90, downFoot: false, downBob: true, downSuppress: false, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, downSource: 'official', downSequence: 'six', downStride: 90, downFoot: false, downBob: true, downSuppress: false, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const groundCandidate = 'assets/candidates/player-walk-polish01/ground-01-aidan-down-06/aidan_walk_down_06_ground_candidate.png';
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
@@ -14,6 +15,8 @@
   const downTrial = () => downWalk() && S.downSequence === 'four';
   function downInfo() {
     q('[data-walk=down-controls]').hidden = !downWalk();
+    q('[data-walk=down-source]').value = S.downSource;
+    q('[data-walk=down-source]').disabled = !downTrial();
     q('[data-walk=down-foot]').checked = downTrial() && S.downFoot;
     q('[data-walk=down-bob]').checked = !downTrial() || S.downBob;
     q('[data-walk=down-suppress]').checked = downTrial() && S.downBob && S.downSuppress;
@@ -56,7 +59,7 @@
     strideInfo();
     const caption = q('[data-walk=down-condition]');
     caption.hidden = !downWalk();
-    const label = downTrial() ? `DEV 4コマ / ${S.downStride} / ${S.speed}倍 / bob ${S.downBob ? S.downSuppress ? '25%' : 'ON' : 'OFF'} / 06 ${S.downFoot ? '+8px' : '補正なし'}` : '現行6コマ / 90 / bob ON / 補正なし';
+    const label = downTrial() ? `DEV 4コマ / ${S.downSource === 'candidate' ? 'B:候補06（未採用）' : 'A:正式06'} / ${S.downStride} / ${S.speed}倍 / bob ${S.downBob ? S.downSuppress ? '25%' : 'ON' : 'OFF'} / 全身06 ${S.downFoot ? '+8px' : '補正なし'}` : '現行6コマ / 90 / bob ON / 補正なし';
     if (caption.textContent !== label) caption.textContent = label;
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
@@ -119,7 +122,7 @@
     if (sideWalk() && S.def) S.def = {...S.def, stride: S.sideStride};
     if (downTrial() && S.def) {
       const bank = S.def.frames;
-      S.def = {...S.def, frames: Object.freeze([1, 5, 2, 6].map(n => bank.find(f => f.key === `aidan_walk_down_${String(n).padStart(2, '0')}`))), stride: S.downStride, bob: S.downBob, note: 'DEV未採用4コマ（正式PNG参照）'};
+      S.def = {...S.def, frames: Object.freeze([1, 5, 2, 6].map(n => bank.find(f => f.key === `aidan_walk_down_${String(n).padStart(2, '0')}`)).map(f => S.downSource === 'candidate' && f.key === 'aidan_walk_down_06' ? Object.freeze({...f, url: groundCandidate}) : f)), stride: S.downStride, bob: S.downBob, note: S.downSource === 'candidate' ? 'DEV未採用4コマ（06局所修復候補）' : 'DEV未採用4コマ（正式PNG参照）'};
     }
     downInfo(); strideInfo();
     q('img').hidden = true; q('img').removeAttribute('src'); q('[data-walk=play]').disabled = true; q('[data-walk=error]').textContent = '';
@@ -168,8 +171,9 @@
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
 <fieldset data-walk="down-controls" hidden><legend>エイダン下方向4コマ比較（DEV・本番未採用）</legend>
 <label>構成<select data-walk="down-sequence"><option value="six">現行6コマ：01〜06／周期90</option><option value="four">検証4コマ：01→05→02→06</option></select></label>
+<label>06画像<select data-walk="down-source"><option value="official">A：正式06</option><option value="candidate">B：PR #139局所修復候補（未採用）</option></select></label><button type="button" data-walk="ground-baseline">接地比較条件：90・bob25%・全身補正OFF・1倍</button>
 <label>検証周期<select data-walk="down-stride"><option value="60">60</option><option value="75">75</option><option value="90" selected>90</option></select></label>
-<div class="walkRow"><label><input type="checkbox" data-walk="down-foot">06の足元補正 +8画像px</label><label><input type="checkbox" data-walk="down-bob" checked>本編の上下動</label><label><input type="checkbox" data-walk="down-suppress">bob振幅25%（05/06の持上げ抑制）</label></div><p data-walk="down-help"></p></fieldset>
+<div class="walkRow"><label><input type="checkbox" data-walk="down-foot">06全身 +8画像px（旧比較）</label><label><input type="checkbox" data-walk="down-bob" checked>本編の上下動</label><label><input type="checkbox" data-walk="down-suppress">bob振幅25%（05/06の持上げ抑制）</label></div><p data-walk="down-help"></p></fieldset>
 <label>再生倍率<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
 <fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
 <input id="walkSideStride" data-walk="stride" type="range" min="40" max="300" step="any" value="72" aria-describedby="walkStrideHelp">
@@ -184,7 +188,8 @@
       if (button.dataset.stride) { setStride(Number(button.dataset.stride)); return; }
       if (button.dataset.direction) { S.direction = button.dataset.direction; S.state = 'walk'; void select(); return; }
       const action = button.dataset.walk;
-      if (action === 'idle') { S.state = 'idle'; void select(); }
+      if (action === 'ground-baseline') { S.downSequence = 'four'; S.downStride = 90; S.downBob = true; S.downSuppress = true; S.downFoot = false; S.speed = 1; q('[data-walk=down-sequence]').value = 'four'; q('[data-walk=speed]').value = '1'; void select(); }
+      else if (action === 'idle') { S.state = 'idle'; void select(); }
       else if (action === 'close') close();
       else if (action === 'play') play();
       else if (action === 'pause') pause();
@@ -195,7 +200,8 @@
     root.addEventListener('input', e => { if (e.target.dataset.walk === 'stride') setStride(Math.round(Number(e.target.value) / 10) * 10); });
     root.addEventListener('change', e => {
       const control = e.target;
-      if (control.dataset.walk === 'down-sequence') { S.downSequence = control.value; void select(); }
+      if (control.dataset.walk === 'down-source') { S.downSource = control.value; void select(); }
+      else if (control.dataset.walk === 'down-sequence') { S.downSequence = control.value; void select(); }
       else if (control.dataset.walk === 'down-stride') { S.downStride = Number(control.value); void select(); }
       else if (control.dataset.walk === 'down-foot') { S.downFoot = control.checked; render(); }
       else if (control.dataset.walk === 'down-suppress') { S.downSuppress = control.checked; void select(); }
@@ -253,5 +259,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, downSequence: S.downSequence, downStride: S.downStride, downFoot: S.downFoot, downBob: S.downBob, downSuppress: S.downSuppress, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, downSource: S.downSource, downSequence: S.downSequence, downStride: S.downStride, downFoot: S.downFoot, downBob: S.downBob, downSuppress: S.downSuppress, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
 })();
