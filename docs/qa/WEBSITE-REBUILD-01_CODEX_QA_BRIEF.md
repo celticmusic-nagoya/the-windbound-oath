@@ -2,15 +2,16 @@
 
 - 対象PR: https://github.com/celticmusic-nagoya/the-windbound-oath/pull/137 （Draft）
 - 対象ブランチ: `feature/website-rebuild-01`
-- **QA対象SHA（固定）: `96eaedb18f94b9072ae0c9ed38b00c49ba1f9457`**（この指示書を追加したコミットはドキュメントのみ。差分が `site/` に及ぶ新コミットがあれば再指定を待つ）
+- **QA対象SHA（固定）: PR #137 の依頼コメントに記載した40桁SHA**（依頼時点のPR最新HEADと一致させる。開始前に `git ls-remote origin feature/website-rebuild-01` で一致を確認し、不一致なら BLOCKED として報告し再指定を待つ）
 - ベース: main `e63780543d7ba1719a39a2f68b9924dc6d5b3933`
 - 実装者: Claude Code（自己QA 28 PASS / 0 FAIL：`docs/qa/evidence/website-rebuild-01/qa_result.txt`）。本QAは実装者以外による独立QA。
+- 環境: Claudeの作業環境とは別の、独立した環境（クリーンなclone）で検証する。
 - 権限: 読み取り・ローカル実行のみ。**コード修正・commit・push・mainマージ・公開設定変更は禁止**。不具合は再現手順と修正案で報告。
 
 ## 0. 前提
 ```
 git fetch origin feature/website-rebuild-01
-git checkout 96eaedb18f94b9072ae0c9ed38b00c49ba1f9457
+git checkout <QA対象SHA>
 python3 -m http.server 8765        # リポジトリルートで起動
 # サイト: http://localhost:8765/site/   ゲーム: http://localhost:8765/
 ```
@@ -49,7 +50,7 @@ Claudeの自己QAスクリプトは `site/tools/qa_site.js`。**その結果を�
 - D7 JS無効時の挙動（遅延画像は非表示になる仕様。致命的崩れがないか）
 
 ### E. ゲーム本体への影響
-- E1 `git diff --stat e637805..96eaedb` が `site/` と `docs/qa/evidence/website-rebuild-01/` のみ
+- E1 `git diff --stat e637805..<QA対象SHA>` が `site/` と `docs/qa/evidence/website-rebuild-01/` のみ
 - E2 ゲーム（`/`）: タイトル表示 → NEW GAME → エイダンの家 到達、コンソールエラー0
 - E3 既存テスト（必要範囲）が main と同じ結果（既知FAILは `docs/qa/KNOWN_ISSUES.md` 基準で区別）
 
@@ -66,8 +67,10 @@ Claudeの自己QAスクリプトは `site/tools/qa_site.js`。**その結果を�
 - G4 NEWS 4件の内容が実際のマージ済みPRと一致
 
 ## 2. 報告形式
-- 冒頭に総合判定（PASS / CONDITIONAL / FAIL）と QA対象SHA
+- 冒頭に総合判定（PASS / CONDITIONAL / FAIL）、QA対象SHA、**mainマージ可否の提案**（可／条件付き可／不可と理由）
+- **31項目すべて**を PASS / FAIL / BLOCKED で報告（未実施を省略しない）
 - 項目別表（ID / 判定 / 根拠 / 環境：エミュレーション or 実機を明記）
 - 不具合: 重大度（P0〜P3）・再現手順・期待/実際・修正案
 - 証跡（スクリーンショット・ログ）は `docs/qa/evidence/website-rebuild-01/codex/` に置く想定。push権限の扱いはディレクター指示に従う
-- Android実機確認はユーザー担当。ブラウザのモバイル表示を実機確認済みとして扱わない
+- **Android実機は未検証と明記**する（実機確認はユーザー担当。ブラウザのモバイル表示を実機確認済みとして扱わない）
+- マージ可否は提案のみ。mainマージ・公開の判断はディレクター承認事項
