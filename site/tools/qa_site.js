@@ -185,6 +185,62 @@ const scrollAll = (p) => p.evaluate(async () => {
     await ctx.close();
   }
 
+  // Compact menu fits (or scrolls) on short screens; Esc returns focus to the toggle
+  for (const [w, h, m] of [[844, 390, true], [390, 844, true], [360, 640, true], [768, 1024, false]]) {
+    const { ctx, p } = await page(b, { viewport: { width: w, height: h }, isMobile: m, hasTouch: m });
+    await p.click('.nav-toggle'); await p.waitForTimeout(300);
+    const r = await p.evaluate(() => {
+      const nav = document.getElementById('site-nav');
+      const last = nav.querySelector('li:last-child a');
+      nav.scrollTop = nav.scrollHeight;
+      const lb = last.getBoundingClientRect(); const nb = nav.getBoundingClientRect();
+      return { lastBottom: Math.round(lb.bottom * 100) / 100, navBottom: Math.round(nb.bottom), vh: innerHeight, scrollable: nav.scrollHeight > nav.clientHeight };
+    });
+    await p.keyboard.press('Escape');
+    const focusBack = await p.evaluate(() => document.activeElement.classList.contains('nav-toggle'));
+    rec(`メニュー全体表示 ${w}x${h}`, r.lastBottom <= r.vh && r.navBottom <= r.vh && focusBack,
+      `最終リンク下端=${r.lastBottom}/${r.vh} パネル下端=${r.navBottom} 内部スクロール=${r.scrollable} Esc後フォーカス=${focusBack}`);
+    await ctx.close();
+  }
+
+  // Responsive images: declared sizes vs rendered width, and chosen candidate per DPR
+  {
+    const fails = []; const rows = [];
+    for (const w of [1440, 1280, 1190, 1024, 900, 844, 768, 390, 360]) for (const dpr of [1, 2, 3]) {
+      const { ctx, p } = await page(b, { viewport: { width: w, height: 900 }, deviceScaleFactor: dpr, isMobile: w < 800 });
+      await scrollAll(p); await p.waitForTimeout(800);
+      const r = await p.evaluate(() => {
+        const evalSizes = (sizes) => {
+          for (const part of sizes.split(/,(?![^(]*\))/)) {
+            const t = part.trim(); const m = t.match(/^(\(.*\))\s+(.+)$/);
+            if (!m || matchMedia(m[1]).matches) {
+              const d = document.createElement('div'); d.style.cssText = 'position:absolute;visibility:hidden;width:' + (m ? m[2] : t);
+              document.body.append(d); const v = d.getBoundingClientRect().width; d.remove(); return v;
+            }
+          }
+        };
+        return [...document.querySelectorAll('.gallery-item img:not(noscript img), .char-card__figure img')].filter((i) => i.srcset).map((i) => {
+          const cands = i.srcset.split(',').map((c) => { const [u, wd] = c.trim().split(/\s+/); return { u, w: parseInt(wd) }; }).sort((a, b) => a.w - b.w);
+          const box = i.closest('.gallery-item, .char-card__figure').getBoundingClientRect().width;
+          const declared = evalSizes(i.sizes);
+          const chosen = cands.find((c) => i.currentSrc.endsWith(c.u)) || {};
+          const need = box * devicePixelRatio;
+          const ideal = cands.find((c) => c.w >= need) || cands[cands.length - 1];
+          return { kind: i.closest('.gallery-item') ? 'gallery' : 'char', box: Math.round(box), declared: Math.round(declared), dev: Math.abs(declared - box) / box, chosen: chosen.w, ideal: ideal.w };
+        });
+      });
+      for (const kind of ['gallery', 'char']) {
+        const k = r.filter((x) => x.kind === kind); if (!k.length) continue;
+        const worst = k.reduce((a, x) => (x.dev > a.dev ? x : a));
+        const under = k.filter((x) => x.chosen < x.ideal);
+        rows.push(`${kind} ${w}@${dpr}x 実幅${worst.box} 申告${worst.declared} 選択${k[0].chosen}w`);
+        if (worst.dev > 0.06 || under.length) fails.push(`${kind} ${w}@${dpr}x dev=${(worst.dev * 100).toFixed(1)}% chosen<ideal=${under.length}`);
+      }
+      await ctx.close();
+    }
+    rec('画像sizesと実表示幅・DPR別の候補選択', fails.length === 0, fails.join(' | ') || rows.filter((x, i) => i % 6 === 0).join(' / ') + ` …（${rows.length}条件、乖離6%以内・候補不足0）`);
+  }
+
   await b.close();
   console.log(JSON.stringify(results, null, 1));
   const fail = results.filter((r) => r.result === 'FAIL').length;

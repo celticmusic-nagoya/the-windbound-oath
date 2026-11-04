@@ -9,6 +9,7 @@
      attributes reserve the space, so no layout shift. */
   const deferred = Array.from(document.querySelectorAll('img[data-defer]'));
   const reveal = (img) => {
+    if (img.dataset.sizes) img.sizes = img.dataset.sizes; // sizes only together with srcset (HTML validity)
     if (img.dataset.srcset) img.srcset = img.dataset.srcset;
     img.src = img.dataset.src;
     img.removeAttribute('data-defer');
@@ -112,5 +113,6 @@
     if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
     if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
   });
-  box.addEventListener('close', () => { img.removeAttribute('src'); if (opener) opener.focus(); });
+  const PLACEHOLDER = img.getAttribute('src');
+  box.addEventListener('close', () => { img.src = PLACEHOLDER; if (opener) opener.focus(); });
 })();

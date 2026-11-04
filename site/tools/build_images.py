@@ -37,6 +37,8 @@ JOBS = [
     ('img/battle/characters/fiona/fiona_battle_idle.png', 'gallery/fiona-battle-thumb.webp', 640),
     ('img/battle/characters/lou/lou_battle_idle.png', 'gallery/lou-battle-full.webp', 1312),
     ('img/battle/characters/lou/lou_battle_idle.png', 'gallery/lou-battle-thumb.webp', 640),
+    # favicon (the game's sign prop is 1MB; the site only needs a small icon)
+    ('img/field/lind/props/lind_sign.png', 'favicon-64.png', 64),
     # srcset variants (same lossless encoding, smaller widths for smaller slots)
     ('assets/images/characters/portraits/aidan/aidan_normal.png', 'chars/aidan-360.webp', 360),
     ('assets/images/characters/portraits/aidan/aidan_normal.png', 'chars/aidan-480.webp', 480),
@@ -82,7 +84,10 @@ def main():
         os.makedirs(os.path.dirname(op), exist_ok=True)
         # Set REBUILD=1 to re-encode outputs that already exist.
         if os.environ.get('REBUILD') == '1' or not os.path.exists(op):
-            im.save(op, 'WEBP', lossless=True, quality=100, method=6, exact=True)
+            if op.endswith('.png'):
+                im.save(op, 'PNG', optimize=True)
+            else:
+                im.save(op, 'WEBP', lossless=True, quality=100, method=6, exact=True)
         assert sha(sp) == before, 'source changed: ' + src
         chk = Image.open(op)
         assert chk.size == im.size
