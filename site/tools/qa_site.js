@@ -54,12 +54,13 @@ const scrollAll = (p) => p.evaluate(async () => {
         noDims: all.filter((i) => !i.getAttribute('width') || !i.getAttribute('height')).map((i) => i.getAttribute('src')),
         ratio: all.filter((i) => i.naturalWidth && Math.abs(i.naturalWidth / i.naturalHeight - i.width / i.height) > 0.02 && getComputedStyle(i).objectFit === 'fill').map((i) => i.getAttribute('src')),
         lazy: all.filter((i) => i.loading === 'lazy').length,
+        unrevealed: document.querySelectorAll('img[data-defer]').length,
       };
     });
     rec(`${tag} 画像表示`, img.broken.length === 0, `${img.total}枚, 失敗=${JSON.stringify(img.broken)}`);
     rec(`${tag} 画像寸法指定(CLS対策)`, img.noDims.length === 0, JSON.stringify(img.noDims));
     rec(`${tag} 画像の縦横比維持`, img.ratio.length === 0, JSON.stringify(img.ratio));
-    rec(`${tag} 遅延読み込み`, img.lazy >= 10, `loading=lazy ${img.lazy}枚`);
+    rec(`${tag} 遅延読み込み`, img.lazy >= 10 && img.unrevealed === 0, `loading=lazy ${img.lazy}枚 / スクロール後の未読込 ${img.unrevealed}枚`);
     const cls = await p.evaluate(() => window.__cls);
     rec(`${tag} レイアウトシフト`, cls < 0.1, `CLS=${cls.toFixed(4)}`);
 

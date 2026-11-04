@@ -2,6 +2,26 @@
 (() => {
   'use strict';
 
+  /* ---------- deferred images ----------
+     Native loading="lazy" starts fetching 1250–2500px ahead, which pulled ~6MB of
+     below-the-fold images into the first load. Images marked data-defer get their
+     src/srcset only when they come within 300px of the viewport. Width/height
+     attributes reserve the space, so no layout shift. */
+  const deferred = Array.from(document.querySelectorAll('img[data-defer]'));
+  const reveal = (img) => {
+    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+    img.src = img.dataset.src;
+    img.removeAttribute('data-defer');
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); } });
+    }, { rootMargin: '300px 0px' });
+    deferred.forEach((img) => io.observe(img));
+  } else {
+    deferred.forEach(reveal);
+  }
+
   /* ---------- mobile navigation ---------- */
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.getElementById('site-nav');

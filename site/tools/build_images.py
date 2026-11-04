@@ -37,6 +37,22 @@ JOBS = [
     ('img/battle/characters/fiona/fiona_battle_idle.png', 'gallery/fiona-battle-thumb.webp', 640),
     ('img/battle/characters/lou/lou_battle_idle.png', 'gallery/lou-battle-full.webp', 1312),
     ('img/battle/characters/lou/lou_battle_idle.png', 'gallery/lou-battle-thumb.webp', 640),
+    # srcset variants (same lossless encoding, smaller widths for smaller slots)
+    ('assets/images/characters/portraits/aidan/aidan_normal.png', 'chars/aidan-360.webp', 360),
+    ('assets/images/characters/portraits/aidan/aidan_normal.png', 'chars/aidan-480.webp', 480),
+    ('assets/images/characters/portraits/fiona/fiona_normal.png', 'chars/fiona-360.webp', 360),
+    ('assets/images/characters/portraits/fiona/fiona_normal.png', 'chars/fiona-480.webp', 480),
+    ('assets/images/characters/portraits/lou/lou_normal.png', 'chars/lou-360.webp', 360),
+    ('assets/images/characters/portraits/lou/lou_normal.png', 'chars/lou-480.webp', 480),
+    ('assets/images/characters/portraits/emma/emma_normal.png', 'chars/emma-360.webp', 360),
+    ('assets/images/characters/portraits/emma/emma_normal.png', 'chars/emma-480.webp', 480),
+    ('img/title/background-landscape.png', 'gallery/key-visual-thumb-360.webp', 360),
+    ('img/events/cg01_rue_encounter_landscape_16x9.png', 'gallery/cg01-thumb-360.webp', 360),
+    ('img/events/cg03_fiona_wind_dance_landscape_16x9.png', 'gallery/cg03-thumb-360.webp', 360),
+    ('img/battle/backgrounds/bg_BG-01_main.png', 'gallery/bg-01-thumb-360.webp', 360),
+    ('img/battle/characters/aidan/aidan_battle_idle.png', 'gallery/aidan-battle-thumb-360.webp', 360),
+    ('img/battle/characters/fiona/fiona_battle_idle.png', 'gallery/fiona-battle-thumb-360.webp', 360),
+    ('img/battle/characters/lou/lou_battle_idle.png', 'gallery/lou-battle-thumb-360.webp', 360),
 ]
 # Gameplay captures (real game, DEV overlays hidden only) are added after director approval.
 EXTRA = [l.split('|') for l in os.environ.get('SITE_EXTRA_JOBS', '').split(';') if l]
@@ -64,7 +80,9 @@ def main():
             im = im.resize((maxw, nh), Image.LANCZOS)
         op = os.path.join(OUT, name)
         os.makedirs(os.path.dirname(op), exist_ok=True)
-        im.save(op, 'WEBP', lossless=True, quality=100, method=6, exact=True)
+        # Set REBUILD=1 to re-encode outputs that already exist.
+        if os.environ.get('REBUILD') == '1' or not os.path.exists(op):
+            im.save(op, 'WEBP', lossless=True, quality=100, method=6, exact=True)
         assert sha(sp) == before, 'source changed: ' + src
         chk = Image.open(op)
         assert chk.size == im.size

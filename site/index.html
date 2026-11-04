@@ -18,6 +18,7 @@
 <link rel="preload" as="image" href="img/hero/bg-portrait.webp" media="(max-width: 768px)">
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js" defer></script>
+<noscript><style>img[data-defer]{display:none}</style></noscript>
 </head>
 <body>
 <a class="skip-link" href="#main">本文へスキップ</a>
@@ -79,7 +80,7 @@
 
 <!-- 03 STORY -->
 <section class="section story" id="story" aria-labelledby="story-title">
-  <img class="story__bg" src="img/story/bg-01.webp" width="1536" height="1024" alt="" loading="lazy" decoding="async">
+  <img class="story__bg" data-defer data-src="img/story/bg-01.webp" width="1536" height="1024" alt="" loading="lazy" decoding="async">
   <div class="story__shade" aria-hidden="true"></div>
   <div class="section__inner story__inner">
     <header class="section-head">
@@ -146,7 +147,7 @@
     </header>
     <div class="char-grid">
       <article class="char-card">
-        <div class="char-card__figure"><img src="img/chars/aidan.webp" width="640" height="960" alt="エイダン" loading="lazy" decoding="async"></div>
+        <div class="char-card__figure"><img data-defer data-src="img/chars/aidan.webp" data-srcset="img/chars/aidan-360.webp 360w, img/chars/aidan-480.webp 480w, img/chars/aidan.webp 640w" sizes="(max-width: 1024px) 46vw, 280px" width="640" height="960" alt="エイダン" loading="lazy" decoding="async"></div>
         <div class="char-card__body">
           <p class="char-card__en">AIDAN</p>
           <h3 class="char-card__name">エイダン</h3>
@@ -154,7 +155,7 @@
         </div>
       </article>
       <article class="char-card">
-        <div class="char-card__figure"><img src="img/chars/fiona.webp" width="640" height="960" alt="フィオナ" loading="lazy" decoding="async"></div>
+        <div class="char-card__figure"><img data-defer data-src="img/chars/fiona.webp" data-srcset="img/chars/fiona-360.webp 360w, img/chars/fiona-480.webp 480w, img/chars/fiona.webp 640w" sizes="(max-width: 1024px) 46vw, 280px" width="640" height="960" alt="フィオナ" loading="lazy" decoding="async"></div>
         <div class="char-card__body">
           <p class="char-card__en">FIONA</p>
           <h3 class="char-card__name">フィオナ</h3>
@@ -162,7 +163,7 @@
         </div>
       </article>
       <article class="char-card">
-        <div class="char-card__figure char-card__figure--small"><img src="img/chars/lou.webp" width="720" height="658" alt="ルー" loading="lazy" decoding="async"></div>
+        <div class="char-card__figure char-card__figure--small"><img data-defer data-src="img/chars/lou.webp" data-srcset="img/chars/lou-360.webp 360w, img/chars/lou-480.webp 480w, img/chars/lou.webp 720w" sizes="(max-width: 1024px) 46vw, 280px" width="720" height="658" alt="ルー" loading="lazy" decoding="async"></div>
         <div class="char-card__body">
           <p class="char-card__en">LOU</p>
           <h3 class="char-card__name">ルー</h3>
@@ -170,7 +171,7 @@
         </div>
       </article>
       <article class="char-card">
-        <div class="char-card__figure"><img src="img/chars/emma.webp" width="640" height="960" alt="エマ" loading="lazy" decoding="async"></div>
+        <div class="char-card__figure"><img data-defer data-src="img/chars/emma.webp" data-srcset="img/chars/emma-360.webp 360w, img/chars/emma-480.webp 480w, img/chars/emma.webp 640w" sizes="(max-width: 1024px) 46vw, 280px" width="640" height="960" alt="エマ" loading="lazy" decoding="async"></div>
         <div class="char-card__body">
           <p class="char-card__en">EMMA</p>
           <h3 class="char-card__name">エマ</h3>
@@ -190,13 +191,13 @@
       <h2 class="section-head__ja" id="gallery-title">ギャラリー</h2>
     </header>
     <ul class="gallery-grid">
-      <li><button class="gallery-item" type="button" data-full="img/hero/bg-landscape.webp" data-w="1672" data-h="941" data-caption="KEY VISUAL"><img src="img/gallery/key-visual-thumb.webp" width="640" height="360" alt="キービジュアル背景：王都を望む丘" loading="lazy" decoding="async"><span class="gallery-item__cap">KEY VISUAL</span></button></li>
-      <li><button class="gallery-item" type="button" data-full="img/gallery/cg01-full.webp" data-w="1672" data-h="941" data-caption="EVENT CG ― ルーとの出会い"><img src="img/gallery/cg01-thumb.webp" width="640" height="360" alt="イベントCG：ルーとの出会い" loading="lazy" decoding="async"><span class="gallery-item__cap">EVENT CG</span></button></li>
-      <li><button class="gallery-item" type="button" data-full="img/gallery/cg03-full.webp" data-w="1672" data-h="941" data-caption="EVENT CG ― 風の舞"><img src="img/gallery/cg03-thumb.webp" width="640" height="360" alt="イベントCG：フィオナの風の舞" loading="lazy" decoding="async"><span class="gallery-item__cap">EVENT CG</span></button></li>
-      <li><button class="gallery-item" type="button" data-full="img/story/bg-01.webp" data-w="1536" data-h="1024" data-caption="BATTLE BACKGROUND ― 草原・街道"><img src="img/gallery/bg-01-thumb.webp" width="640" height="427" alt="戦闘背景：草原と街道" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE BG</span></button></li>
-      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/aidan-battle-full.webp" data-w="1536" data-h="1024" data-caption="BATTLE ― エイダン"><img src="img/gallery/aidan-battle-thumb.webp" width="640" height="427" alt="戦闘グラフィック：エイダン" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
-      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/fiona-battle-full.webp" data-w="1536" data-h="1024" data-caption="BATTLE ― フィオナ"><img src="img/gallery/fiona-battle-thumb.webp" width="640" height="427" alt="戦闘グラフィック：フィオナ" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
-      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/lou-battle-full.webp" data-w="1312" data-h="1199" data-caption="BATTLE ― ルー"><img src="img/gallery/lou-battle-thumb.webp" width="640" height="585" alt="戦闘グラフィック：ルー" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/hero/bg-landscape.webp" data-w="1672" data-h="941" data-caption="KEY VISUAL"><img data-defer data-src="img/gallery/key-visual-thumb.webp" data-srcset="img/gallery/key-visual-thumb-360.webp 360w, img/gallery/key-visual-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="360" alt="キービジュアル背景：王都を望む丘" loading="lazy" decoding="async"><span class="gallery-item__cap">KEY VISUAL</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/gallery/cg01-full.webp" data-w="1672" data-h="941" data-caption="EVENT CG ― ルーとの出会い"><img data-defer data-src="img/gallery/cg01-thumb.webp" data-srcset="img/gallery/cg01-thumb-360.webp 360w, img/gallery/cg01-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="360" alt="イベントCG：ルーとの出会い" loading="lazy" decoding="async"><span class="gallery-item__cap">EVENT CG</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/gallery/cg03-full.webp" data-w="1672" data-h="941" data-caption="EVENT CG ― 風の舞"><img data-defer data-src="img/gallery/cg03-thumb.webp" data-srcset="img/gallery/cg03-thumb-360.webp 360w, img/gallery/cg03-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="360" alt="イベントCG：フィオナの風の舞" loading="lazy" decoding="async"><span class="gallery-item__cap">EVENT CG</span></button></li>
+      <li><button class="gallery-item" type="button" data-full="img/story/bg-01.webp" data-w="1536" data-h="1024" data-caption="BATTLE BACKGROUND ― 草原・街道"><img data-defer data-src="img/gallery/bg-01-thumb.webp" data-srcset="img/gallery/bg-01-thumb-360.webp 360w, img/gallery/bg-01-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="427" alt="戦闘背景：草原と街道" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE BG</span></button></li>
+      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/aidan-battle-full.webp" data-w="1536" data-h="1024" data-caption="BATTLE ― エイダン"><img data-defer data-src="img/gallery/aidan-battle-thumb.webp" data-srcset="img/gallery/aidan-battle-thumb-360.webp 360w, img/gallery/aidan-battle-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="427" alt="戦闘グラフィック：エイダン" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
+      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/fiona-battle-full.webp" data-w="1536" data-h="1024" data-caption="BATTLE ― フィオナ"><img data-defer data-src="img/gallery/fiona-battle-thumb.webp" data-srcset="img/gallery/fiona-battle-thumb-360.webp 360w, img/gallery/fiona-battle-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="427" alt="戦闘グラフィック：フィオナ" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
+      <li><button class="gallery-item gallery-item--alpha" type="button" data-full="img/gallery/lou-battle-full.webp" data-w="1312" data-h="1199" data-caption="BATTLE ― ルー"><img data-defer data-src="img/gallery/lou-battle-thumb.webp" data-srcset="img/gallery/lou-battle-thumb-360.webp 360w, img/gallery/lou-battle-thumb.webp 640w" sizes="(max-width: 768px) 46vw, 290px" width="640" height="585" alt="戦闘グラフィック：ルー" loading="lazy" decoding="async"><span class="gallery-item__cap">BATTLE ART</span></button></li>
       <!-- Gameplay screenshots (img/screenshots/candidates/) are added after director approval. -->
     </ul>
   </div>
