@@ -1,0 +1,10 @@
+[1/4] RUN tests/moss/m61_dev_ground_candidate.py
+新規 tests/moss/m61_dev_ground_candidate.py exit=1 seconds=12.312
+FAIL pc official decoded frame1
+[2/4] RUN tests/moss/m59_dev_down_cycle.py
+合格 tests/moss/m59_dev_down_cycle.py exit=0 seconds=50.346
+[3/4] RUN tests/system/save_continue_lifecycle.py
+合格 tests/system/save_continue_lifecycle.py exit=0 seconds=26.901
+[4/4] RUN tests/system/asset_registry_audit.py
+合格 tests/system/asset_registry_audit.py exit=0 seconds=5.543
+Finished: {'合格': 3, 'main既存': 0, '新規': 1, '未実施': 0}

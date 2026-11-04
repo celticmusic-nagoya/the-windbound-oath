@@ -1,0 +1,30 @@
+PASS candidate source SHA
+PASS official06 source SHA
+PASS same RGBA canvas
+PASS independent exact difference extent
+PASS outside author edit mask identical
+PASS entire upperbody unchanged
+PASS opposite leg unchanged
+PASS new bottom below original included
+PASS pc default original disabled
+PASS pc exact requested comparison settings
+FAIL pc official decoded frame1
+Traceback (most recent call last):
+  File "/workspace/work/dev-walk-ground-01-qa/repo/tools/qa/run_regressions.py", line 193, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/work/dev-walk-ground-01-qa/repo/tools/qa/run_regressions.py", line 123, in main
+    if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/dev-walk-ground-01-qa/repo/tools/qa/run_regressions.py", line 68, in child
+    runpy.run_path(str(root/path),run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/codex-regression-873scnq2/repo/tests/moss/m61_dev_ground_candidate.py", line 45, in <module>
+    src=q('img').get_attribute('src');ck(f'{view} {source} decoded frame{n}',src==(C if source=='candidate' and n==6 else f'img/field/characters/aidan/aidan_walk_down_{n:02}.png'))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/codex-regression-873scnq2/repo/tests/moss/m61_dev_ground_candidate.py", line 13, in ck
+    checks.append({'name':n,'pass':bool(v)});(O/'candidate-results.json').write_text(json.dumps(checks,indent=2));print(('PASS ' if v else 'FAIL ')+n,flush=True);assert v,n
+                                                                                                                                                                         ^
+AssertionError: pc official decoded frame1
