@@ -1,4 +1,6 @@
-# WEBSITE-REBUILD-01｜QA証跡をGitHub Pages公開対象から外す方法（提案・未実施）
+# WEBSITE-REBUILD-01｜QA証跡をGitHub Pages公開対象から外す方法
+
+> **2026-11-04 案Aをディレクター承認・実施済み**: `docs/qa/evidence/website-rebuild-01/` → `docs/qa/_evidence/website-rebuild-01/`（8ファイル、SHA-256一致）。案B・Cは不採用（記録として残す）。
 
 ## 現状調査（2026-11-04）
 - 公開元: `main` ルート、GitHub標準の「pages build and deployment」（`actions/jekyll-build-pages`、Jekyllビルド）。直近 run 41622166154（main `e637805`）成功、artifact `github-pages` = 1,312,331,579 bytes
@@ -16,4 +18,4 @@
 ## 注意
 - Pagesの公開物が実際に変わるのは main マージ後。現時点の公開サイトには影響なし
 - 案A採用時は `CANDIDATES_PREVIEW.md`・`candidates-preview.html`・QA指示書内のパスを同時に更新する
-- 承認まで実施しない
+- 案A以外は承認まで実施しない
