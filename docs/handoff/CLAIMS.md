@@ -213,3 +213,6 @@ Codex / feature/aidan-side-walk-03 / base5523023306de776f0ce558e5486f4f4c675083f
 
 ## DEV-WALK-CYCLE-A01 (2026-11-04 JST)
 Codex / feature/dev-walk-cycle-a01 / main e637805. Reference PR135 d209d72af8116262566433b9411fdf01d68ab661 read-only. User authorizes DEV-only Aidan down4frame01/05/02/06 at60/75/90 vsactual6/90; optionalfootdisplaycorrection, tests/evidence/DraftPR. No PNG, productionregistration/runtime/movement/collision/otheractor/SAVE changes, no mainmerge/deployment/adoption. STATUS: WIP.
+
+## DEV-WALK-CYCLE-A02 (2026-11-04 JST)
+Codex / feature/dev-walk-cycle-a02 / basePR13629c51e02a8c2cb5f443326de36392b926c2c70b6. User authorizes DEV-only12conditioncomparison:4frame01/05/02/06,90/75 at1x, bobON/OFF andsuppressed25% candidate,06+8nativepositionON/OFF. Measurefoot/pelvis/cape/all4edges withuncertainty. OriginalPNG/prodbank/SAVE/otherdirs/actors/mainunchanged; no formaladoption/mainmerge/deployment. STATUS: WIP.

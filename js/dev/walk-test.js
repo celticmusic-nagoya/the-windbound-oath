@@ -3,7 +3,7 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, downSequence: 'six', downStride: 90, downFoot: false, downBob: true, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, downSequence: 'six', downStride: 90, downFoot: false, downBob: true, downSuppress: false, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
@@ -16,10 +16,12 @@
     q('[data-walk=down-controls]').hidden = !downWalk();
     q('[data-walk=down-foot]').checked = downTrial() && S.downFoot;
     q('[data-walk=down-bob]').checked = !downTrial() || S.downBob;
+    q('[data-walk=down-suppress]').checked = downTrial() && S.downBob && S.downSuppress;
+    q('[data-walk=down-suppress]').disabled = !downTrial() || !S.downBob;
     q('[data-walk=down-stride]').value = String(downTrial() ? S.downStride : 90);
     for (const key of ['down-stride', 'down-foot', 'down-bob']) q(`[data-walk=${key}]`).disabled = !downTrial();
     q('[data-walk=down-help]').textContent = downTrial()
-      ? `DEV検証のみ：01 → 05 → 02 → 06 ／ 周期${S.downStride} ／ 1倍で${(S.downStride / S.def.speed()).toFixed(3)}秒/周。足元補正は06全体を+8画像px（0.5 world）移動。接地位相は画像からの推定です。`
+      ? `DEV検証のみ：01 → 05 → 02 → 06 ／ 周期${S.downStride} ／ 1倍で${(S.downStride / S.def.speed()).toFixed(3)}秒/周。足元補正は06全体を+8画像px（0.5 world）移動。支持位相抑制はbob振幅を25%にし、05/06のピークを1.5→0.375worldにします。接地位相は画像からの推定です。`
       : '現行本編の6コマ・周期90・上下動をそのまま比較。変更時は停止して先頭へ戻ります。';
   }
   function strideInfo() {
@@ -52,6 +54,10 @@
   function info() {
     if (!root || !S.def) return;
     strideInfo();
+    const caption = q('[data-walk=down-condition]');
+    caption.hidden = !downWalk();
+    const label = downTrial() ? `DEV 4コマ / ${S.downStride} / ${S.speed}倍 / bob ${S.downBob ? S.downSuppress ? '25%' : 'ON' : 'OFF'} / 06 ${S.downFoot ? '+8px' : '補正なし'}` : '現行6コマ / 90 / bob ON / 補正なし';
+    if (caption.textContent !== label) caption.textContent = label;
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
     q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (sideWalk() || downTrial() ? ' ／ DEV一時設定' : '') + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
@@ -67,7 +73,7 @@
     image.style.left = `${S.width / 2 - frame.anchor[0] * frame.scale * S.zoom}px`;
     image.style.top = `${S.height * .8 - frame.anchor[1] * frame.scale * S.zoom + (downTrial() && S.downFoot && frame.key === 'aidan_walk_down_06' ? 8 * frame.scale * S.zoom : 0)}px`;
     image.style.transformOrigin = `${frame.anchor[0] * frame.scale * S.zoom}px ${frame.anchor[1] * frame.scale * S.zoom}px`;
-    image.style.transform = `translateY(${-motion.lift * S.zoom}px)` + (S.def.flip ? ' scaleX(-1)' : '');
+    image.style.transform = `translateY(${-motion.lift * (downTrial() && S.downSuppress ? .25 : 1) * S.zoom}px)` + (S.def.flip ? ' scaleX(-1)' : '');
     image.dataset.frame = String(S.index + 1);
     info();
   }
@@ -156,14 +162,14 @@
   function build() {
     root = document.createElement('dialog'); root.id = 'walkMotionTest'; root.setAttribute('aria-label', '歩行モーションテスト');
     root.innerHTML = `<header><h3>歩行モーションテスト</h3><button type="button" data-walk="fold" aria-expanded="true">操作パネル</button><button type="button" data-walk="close">閉じる</button></header>
-<div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div></div>
+<div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div><span class="walkDownCondition" data-walk="down-condition" hidden></span></div>
 <section class="walkPanel"><label>分類<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option><option value="npc">NPC</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
 <div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
 <fieldset data-walk="down-controls" hidden><legend>エイダン下方向4コマ比較（DEV・本番未採用）</legend>
 <label>構成<select data-walk="down-sequence"><option value="six">現行6コマ：01〜06／周期90</option><option value="four">検証4コマ：01→05→02→06</option></select></label>
 <label>検証周期<select data-walk="down-stride"><option value="60">60</option><option value="75">75</option><option value="90" selected>90</option></select></label>
-<div class="walkRow"><label><input type="checkbox" data-walk="down-foot">06の足元補正 +8画像px</label><label><input type="checkbox" data-walk="down-bob" checked>本編の上下動</label></div><p data-walk="down-help"></p></fieldset>
+<div class="walkRow"><label><input type="checkbox" data-walk="down-foot">06の足元補正 +8画像px</label><label><input type="checkbox" data-walk="down-bob" checked>本編の上下動</label><label><input type="checkbox" data-walk="down-suppress">bob振幅25%（05/06の持上げ抑制）</label></div><p data-walk="down-help"></p></fieldset>
 <label>再生倍率<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
 <fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
 <input id="walkSideStride" data-walk="stride" type="range" min="40" max="300" step="any" value="72" aria-describedby="walkStrideHelp">
@@ -192,6 +198,7 @@
       if (control.dataset.walk === 'down-sequence') { S.downSequence = control.value; void select(); }
       else if (control.dataset.walk === 'down-stride') { S.downStride = Number(control.value); void select(); }
       else if (control.dataset.walk === 'down-foot') { S.downFoot = control.checked; render(); }
+      else if (control.dataset.walk === 'down-suppress') { S.downSuppress = control.checked; void select(); }
       else if (control.dataset.walk === 'down-bob') { S.downBob = control.checked; void select(); }
       else if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
       else if (control.dataset.walk === 'actor') { S.actor = control.value; void select(); }
@@ -246,5 +253,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, downSequence: S.downSequence, downStride: S.downStride, downFoot: S.downFoot, downBob: S.downBob, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, downSequence: S.downSequence, downStride: S.downStride, downFoot: S.downFoot, downBob: S.downBob, downSuppress: S.downSuppress, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
 })();
