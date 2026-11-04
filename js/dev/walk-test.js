@@ -3,13 +3,25 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, downSequence: 'six', downStride: 90, downFoot: false, downBob: true, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
   const active = () => Boolean(root?.open);
   const aidan = () => S.group === 'ally' && S.actor === 'aidan';
   const sideWalk = () => aidan() && S.state === 'walk' && ['left', 'right'].includes(S.direction);
+  const downWalk = () => aidan() && S.state === 'walk' && S.direction === 'down';
+  const downTrial = () => downWalk() && S.downSequence === 'four';
+  function downInfo() {
+    q('[data-walk=down-controls]').hidden = !downWalk();
+    q('[data-walk=down-foot]').checked = downTrial() && S.downFoot;
+    q('[data-walk=down-bob]').checked = !downTrial() || S.downBob;
+    q('[data-walk=down-stride]').value = String(downTrial() ? S.downStride : 90);
+    for (const key of ['down-stride', 'down-foot', 'down-bob']) q(`[data-walk=${key}]`).disabled = !downTrial();
+    q('[data-walk=down-help]').textContent = downTrial()
+      ? `DEV検証のみ：01 → 05 → 02 → 06 ／ 周期${S.downStride} ／ 1倍で${(S.downStride / S.def.speed()).toFixed(3)}秒/周。足元補正は06全体を+8画像px（0.5 world）移動。接地位相は画像からの推定です。`
+      : '現行本編の6コマ・周期90・上下動をそのまま比較。変更時は停止して先頭へ戻ります。';
+  }
   function strideInfo() {
     q('[data-walk=stride-controls]').hidden = !aidan();
     if (!aidan()) return;
@@ -42,7 +54,7 @@
     strideInfo();
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
-    q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (sideWalk() ? ' ／ DEV一時設定' : '') + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
+    q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (sideWalk() || downTrial() ? ' ／ DEV一時設定' : '') + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
     q('[data-walk=play]').disabled = !S.ready || S.def.frames.length < 2 || reduced.matches;
   }
   function render() {
@@ -53,7 +65,7 @@
     image.style.width = `${frame.width * frame.scale * S.zoom}px`;
     image.style.height = `${frame.height * frame.scale * S.zoom}px`;
     image.style.left = `${S.width / 2 - frame.anchor[0] * frame.scale * S.zoom}px`;
-    image.style.top = `${S.height * .8 - frame.anchor[1] * frame.scale * S.zoom}px`;
+    image.style.top = `${S.height * .8 - frame.anchor[1] * frame.scale * S.zoom + (downTrial() && S.downFoot && frame.key === 'aidan_walk_down_06' ? 8 * frame.scale * S.zoom : 0)}px`;
     image.style.transformOrigin = `${frame.anchor[0] * frame.scale * S.zoom}px ${frame.anchor[1] * frame.scale * S.zoom}px`;
     image.style.transform = `translateY(${-motion.lift * S.zoom}px)` + (S.def.flip ? ' scaleX(-1)' : '');
     image.dataset.frame = String(S.index + 1);
@@ -99,7 +111,11 @@
     S.def = W.resolve(S.group, S.actor, S.direction, S.state);
     // Clone the descriptor only; never mutate production settings or registries.
     if (sideWalk() && S.def) S.def = {...S.def, stride: S.sideStride};
-    strideInfo();
+    if (downTrial() && S.def) {
+      const bank = S.def.frames;
+      S.def = {...S.def, frames: Object.freeze([1, 5, 2, 6].map(n => bank.find(f => f.key === `aidan_walk_down_${String(n).padStart(2, '0')}`))), stride: S.downStride, bob: S.downBob, note: 'DEV未採用4コマ（正式PNG参照）'};
+    }
+    downInfo(); strideInfo();
     q('img').hidden = true; q('img').removeAttribute('src'); q('[data-walk=play]').disabled = true; q('[data-walk=error]').textContent = '';
     root.dataset.actor = S.actor; root.dataset.direction = S.direction; root.dataset.state = S.state;
     for (const b of root.querySelectorAll('[data-direction]')) {
@@ -144,6 +160,10 @@
 <section class="walkPanel"><label>分類<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option><option value="npc">NPC</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
 <div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
+<fieldset data-walk="down-controls" hidden><legend>エイダン下方向4コマ比較（DEV・本番未採用）</legend>
+<label>構成<select data-walk="down-sequence"><option value="six">現行6コマ：01〜06／周期90</option><option value="four">検証4コマ：01→05→02→06</option></select></label>
+<label>検証周期<select data-walk="down-stride"><option value="60">60</option><option value="75">75</option><option value="90" selected>90</option></select></label>
+<div class="walkRow"><label><input type="checkbox" data-walk="down-foot">06の足元補正 +8画像px</label><label><input type="checkbox" data-walk="down-bob" checked>本編の上下動</label></div><p data-walk="down-help"></p></fieldset>
 <label>再生倍率<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
 <fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
 <input id="walkSideStride" data-walk="stride" type="range" min="40" max="300" step="any" value="72" aria-describedby="walkStrideHelp">
@@ -169,7 +189,11 @@
     root.addEventListener('input', e => { if (e.target.dataset.walk === 'stride') setStride(Math.round(Number(e.target.value) / 10) * 10); });
     root.addEventListener('change', e => {
       const control = e.target;
-      if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
+      if (control.dataset.walk === 'down-sequence') { S.downSequence = control.value; void select(); }
+      else if (control.dataset.walk === 'down-stride') { S.downStride = Number(control.value); void select(); }
+      else if (control.dataset.walk === 'down-foot') { S.downFoot = control.checked; render(); }
+      else if (control.dataset.walk === 'down-bob') { S.downBob = control.checked; void select(); }
+      else if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
       else if (control.dataset.walk === 'actor') { S.actor = control.value; void select(); }
       else if (control.dataset.walk === 'speed') { S.speed = Number(control.value); info(); }
       else if (control.dataset.walk === 'background') background(control.value);
@@ -222,5 +246,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, downSequence: S.downSequence, downStride: S.downStride, downFoot: S.downFoot, downBob: S.downBob, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
 })();
