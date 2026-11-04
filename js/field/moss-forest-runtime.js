@@ -65,10 +65,10 @@
       if(spr.state==='WALK'){const bank=Walk.ally('aidan',artOf(spr.dir,spr.flip).dir);spr.phase=Walk.phaseDistance(spr.dist,bank.frames.length,bank.stride);}   // foot cadence follows the distance walked (no skating at any speed)
     }
     spr.px=S.x;spr.py=S.y;
-    const ART=artOf(spr.dir,spr.flip),name='aidan_'+(spr.state==='WALK'?'walk_'+ART.dir+'_'+String(spr.phase+1).padStart(2,'0'):(spr.straight&&spr.dir==='up'?'walk_up_01':'idle_'+spr.dir));   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
+    const ART=artOf(spr.dir,spr.flip),name=spr.state==='WALK'?Walk.ally('aidan',ART.dir).frames[spr.phase].key:'aidan_'+(spr.straight&&spr.dir==='up'?'walk_up_01':'idle_'+spr.dir);   // a stop after straight up/down keeps the frontal / back pose (the 3/4 idle would turn the hero)
     if(spr.visible!==name&&spr.frames.has(name)){if(spr.visible)spr.frames.get(spr.visible).hidden=true;spr.frames.get(name).hidden=!spr.ready;spr.visible=name;}
     else if(spr.visible)spr.frames.get(spr.visible).hidden=!spr.ready;
-    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+Walk.bob(spr.dist,Walk.ally('aidan',ART.dir).stride).toFixed(2)+'px)':'')+(spr.state==='WALK'&&ART.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames
+    if(spr.visible){const f=spr.frames.get(spr.visible);f.style.transform=(spr.state==='WALK'?'translateY('+Walk.bob(spr.dist,Walk.ally('aidan',ART.dir).stride,Walk.ally('aidan',ART.dir).bobScale).toFixed(2)+'px)':'')+(spr.state==='WALK'&&ART.flip?' scaleX(-1)':'');}   // soft step bob between the 4 painted frames
   }
   // ---- Fiona field sprite: 4 directions x (idle + 6-frame walk), tools/field/make_fiona.py -> js/field/fiona-field-assets.js ----
   const fsp={frames:new Map(),visible:null,dir:'down',walking:false,since:0,moved:0,px:null,py:null,pt:0,ready:false};

@@ -39,14 +39,14 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 1212,
-  "approved_implemented": 285,
+  "total": 1213,
+  "approved_implemented": 286,
   "approved_not_implemented": 0,
   "delivered_not_merged": 184,
   "pending_adoption": 7,
   "source_missing": 0,
   "approval_unknown": 886,
-  "on_main": 1028,
+  "on_main": 1029,
   "implemented_on_main": 975,
   "unreferenced_on_main": 53
  },
@@ -6388,6 +6388,33 @@
    "android_status": "UNVERIFIED",
    "issue": "",
    "notes": "existing asset on main; adoption record not re-verified"
+  },
+  {
+   "asset_id": "file:img_field_characters_aidan_down4_aidan_walk_down_06_ground",
+   "name": "aidan_walk_down_06_ground.png",
+   "category": "field_character",
+   "character": "aidan",
+   "motion": "walk",
+   "delivery_date": "2026-11-04",
+   "source_path": "img/field/characters/aidan/down4/aidan_walk_down_06_ground.png",
+   "source_branch": "feature/player-walk-ground-01",
+   "source_commit": "d15aa83ab73e77e505895bea3c89485d3a9254bd",
+   "source_sha256": "d87b2ec56660568bd46eecb8559edfed1c3802fe1e2675a018f78f3c23f970df",
+   "width": 2048,
+   "height": 1280,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/characters/aidan/down4/adopted-walk.json",
+    "js/field/aidan-field-assets.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "PLAYER-WALK-PRODUCTION-01: director-adopted PR139 repair06, exact d87b2ec5 bytes. PR140 independent source image QA PASS; production integration QA recorded separately. Bank01/05/02/06,90world,bob25%,whole-frameoffset0,anchor1024/1230,scale.0625. Original06 retained unchanged. Physical Android NOT_RUN. MAIN is the proposed post-merge registry state; actual landing/publication are gated separately in the integration report."
   },
   {
    "asset_id": "file:img_field_characters_aidan_side6_fix01_aidan_walk_right_01",
@@ -32729,16 +32756,17 @@
    "height": 1280,
    "frame_count": 6,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "PARTIAL",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/characters/aidan/down4/adopted-walk.json",
     "js/field/aidan-field-assets.js"
    ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified",
+   "notes": "PLAYER-WALK-PRODUCTION-01: original01/05/02 used in adopted four-pose order; original03/04 and original06 retained on disk, not the active down walk sequence. Repaired06 lives at down4/. Other source approval statuses unchanged. Per-file adoption for01/05/02 is recorded in img/field/characters/aidan/down4/adopted-walk.json; the six-file historical group is not blanket-promoted.",
    "frames": [
     "img/field/characters/aidan/aidan_walk_down_01.png",
     "img/field/characters/aidan/aidan_walk_down_02.png",

@@ -5,7 +5,7 @@
   const WALKER_FPS = 7;
   const phaseDistance = (distance, count, stride = STRIDE) => Math.floor((distance || 0) / (stride / count)) % count;
   const phaseTime = (seconds, count, fps) => Math.floor(seconds * fps) % count;
-  const bob = (distance, stride = STRIDE) => -Math.abs(Math.sin((distance || 0) / (stride / 2) * Math.PI)) * 1.5;
+  const bob = (distance, stride = STRIDE, scale = 1) => -Math.abs(Math.sin((distance || 0) / (stride / 2) * Math.PI)) * 1.5 * scale;
   const air = (art, clock) => art.air ? art.air + Math.sin(clock * 3) * 4 : 0;
   const cache = new WeakMap();
   const labels = {aidan: 'エイダン', fiona: 'フィオナ'};
@@ -17,12 +17,13 @@
     if (banks.has(tag)) return banks.get(tag);
     const side = id === 'fiona' && profile && source.frames['fiona_side_' + dir + '_01'];
     const prefix = id + (side ? '_side_' : '_walk_') + dir + '_';
-    const entries = state === 'idle' ? Object.entries(source.frames).filter(([k]) => k === id + '_idle_down') : Object.entries(source.frames).filter(([k]) => k.startsWith(prefix) && /^\d+$/.test(k.slice(prefix.length))).sort(([a], [b]) => Number(a.slice(prefix.length)) - Number(b.slice(prefix.length)));
+    let entries = state === 'idle' ? Object.entries(source.frames).filter(([k]) => k === id + '_idle_down') : Object.entries(source.frames).filter(([k]) => k.startsWith(prefix) && /^\d+$/.test(k.slice(prefix.length))).sort(([a], [b]) => Number(a.slice(prefix.length)) - Number(b.slice(prefix.length)));
+    if (state === 'walk' && source.walkBanks?.[dir]) entries = source.walkBanks[dir].map(key => [key, source.frames[key]]);
     const frames = Object.freeze(entries.map(([key, a]) =>
       Object.freeze({key, url: a.path, width: a.width, height: a.height, scale: a.scale, anchor: Object.freeze([...a.anchor])})));
     const def = frames.length ? Object.freeze({id, label: labels[id], group: 'ally', frames, kind: state === 'idle' ? 'time' : 'distance', fps: 1,
       get stride() { return window.MossForest?.walkStride?.(id, dir) ?? STRIDE; },
-      speed: () => (window.FieldMovement?.settings.pointerStep || 5) * 60, bob: state === 'walk' && id === 'aidan', flip: false, dedicated: true,
+      speed: () => (window.FieldMovement?.settings.pointerStep || 5) * 60, bob: state === 'walk' && id === 'aidan', bobScale: source.bobScale?.[dir] ?? 1, flip: false, dedicated: true,
       note: state === 'idle' ? '待機（基準向き・静止画）' : '専用方向'}) : null;
     banks.set(tag, def); return def;
   }
@@ -58,7 +59,7 @@
   function frameAt(def, seconds) {
     const distance = seconds * (def.speed?.() || 0);
     const index = def.kind === 'distance' ? phaseDistance(distance, def.frames.length, def.stride) : phaseTime(seconds, def.frames.length, def.fps);
-    return {index, frame: def.frames[index], lift: (def.bob ? -bob(distance, def.stride) : 0) + (def.art ? air(def.art, seconds * def.clockRate) : 0)};
+    return {index, frame: def.frames[index], lift: (def.bob ? -bob(distance, def.stride, def.bobScale ?? 1) : 0) + (def.art ? air(def.art, seconds * def.clockRate) : 0)};
   }
   function frameTime(def, index) {
     return def.kind === 'distance' ? index * def.stride / (def.frames.length * def.speed()) : index / def.fps;

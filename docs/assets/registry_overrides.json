@@ -7549,6 +7549,26 @@
     ],
     "notes": "AIDAN-SIDE-WALK-FIX01: four sparse toe-extraction repairs from delivered source sheets; original pixels/assets retained. Runtime stride180 at1x (AIDAN-SIDE-WALK-03 director adoption). Director physical Android review pending. Sparse replacement files are not contiguous: left02/04/05 override the corresponding slots of the existing six-frame sequence; they are not an independent animation."
    }
+  },
+  {
+   "match": "^file:img_field_characters_aidan_down4_aidan_walk_down_06_ground$",
+   "set": {
+    "approval_status": "APPROVED",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "source_branch": "feature/player-walk-ground-01",
+    "integration_status": "MAIN",
+    "notes": "PLAYER-WALK-PRODUCTION-01: director-adopted PR139 repair06, exact d87b2ec5 bytes. PR140 independent source image QA PASS; production integration QA recorded separately. Bank01/05/02/06,90world,bob25%,whole-frameoffset0,anchor1024/1230,scale.0625. Original06 retained unchanged. Physical Android NOT_RUN. MAIN is the proposed post-merge registry state; actual landing/publication are gated separately in the integration report.",
+    "source_commit": "d15aa83ab73e77e505895bea3c89485d3a9254bd",
+    "delivery_date": "2026-11-04"
+   }
+  },
+  {
+   "match": "^seq:img_field_characters_aidan_aidan_walk_down$",
+   "set": {
+    "implementation_status": "PARTIAL",
+    "notes": "PLAYER-WALK-PRODUCTION-01: original01/05/02 used in adopted four-pose order; original03/04 and original06 retained on disk, not the active down walk sequence. Repaired06 lives at down4/. Other source approval statuses unchanged. Per-file adoption for01/05/02 is recorded in img/field/characters/aidan/down4/adopted-walk.json; the six-file historical group is not blanket-promoted."
+   }
   }
  ],
  "motion_gaps": [
