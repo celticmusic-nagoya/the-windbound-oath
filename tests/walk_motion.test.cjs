@@ -20,7 +20,7 @@ test('catalog exposes only real walking allies and implemented field enemies', (
   assert.equal(W.catalog('enemy').length, 4);
   assert.equal(W.resolve('ally', 'emma', 'down'), null);
 });
-test('every direction uses exact production metadata and contiguous registered keys', () => {
+test('every direction uses exact production metadata and declared direction banks', () => {
   const {s, W} = fixture();
   for (const actor of ['aidan', 'fiona']) for (const dir of ['up', 'down', 'left', 'right']) {
     const def = W.resolve('ally', actor, dir), registry = actor === 'aidan' ? s.AidanFieldAssets : s.FionaFieldAssets;
@@ -49,9 +49,9 @@ test('phase selectors preserve production arithmetic across cycles and frame cou
 test('future ally frame count follows the registry without a DEV frame table', () => {
   const {s, W} = fixture();
   const frames = {...s.AidanFieldAssets.frames};
-  frames.aidan_walk_down_07 = frames.aidan_walk_down_06;
-  s.AidanFieldAssets = {frames};
-  assert.equal(W.resolve('ally', 'aidan', 'down').frames.length, 7);
+  frames.aidan_walk_up_07 = frames.aidan_walk_up_06;
+  s.AidanFieldAssets = {...s.AidanFieldAssets,frames};
+  assert.equal(W.resolve('ally', 'aidan', 'up').frames.length, 7);
 });
 test('goblin directions, boar walk-only bank and shared flyer bank match game config', () => {
   const {s, W} = fixture();
@@ -96,4 +96,16 @@ test('NPC metadata and missing directions reflect production, including future s
  assert.equal(W.resolve('npc','soldier','left','idle').frames.length,1);
  const node=s.ForestLoader.art.manifest.node.find(r=>r.match==='^npc_slot_soldier$');node.walk.frames=6;assert.equal(W.resolve('npc','soldier','right').frames.length,6);
  s.MossForest={walkStride:(id,dir)=>id==='aidan'&&dir==='left'?72:90};assert.equal(W.resolve('ally','aidan','left').stride,72);assert.equal(W.resolve('ally','fiona','left').stride,90);
+});
+
+test('adopted down bank uses source01/05/02/repaired06 and quarter bob only', () => {
+ const {s,W}=fixture(),d=W.ally('aidan','down');
+ assert.deepEqual(Array.from(d.frames,f=>f.key),[1,5,2,6].map(n=>'aidan_walk_down_'+String(n).padStart(2,'0')));
+ assert.equal(d.stride,90);assert.equal(d.bobScale,.25);assert.equal(d.speed(),300);
+ assert.match(d.frames[3].url,/down4\/aidan_walk_down_06_ground.png/);
+ for(let i=0;i<100;i++){const t=i*.013;assert.equal(W.frameAt(d,t).lift,-W.bob(t*300,90)*.25);}
+ for(const actor of ['aidan','fiona'])for(const dir of ['up','down','left','right']){
+  const b=W.ally(actor,dir);if(actor==='aidan'&&dir==='down')continue;assert.equal(b.bobScale,1);
+ }
+ assert.deepEqual(Array.from(d.frames[3].anchor),[1024,1230]);assert.equal(d.frames[3].scale,.0625);
 });

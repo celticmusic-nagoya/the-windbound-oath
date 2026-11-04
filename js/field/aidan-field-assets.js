@@ -341,14 +341,14 @@
   "scale": 0.0625
  },
  "aidan_walk_down_06": {
-  "path": "img/field/characters/aidan/aidan_walk_down_06.png?v=bfd1db5d",
+  "path": "img/field/characters/aidan/down4/aidan_walk_down_06_ground.png?v=d87b2ec5",
   "width": 2048,
   "height": 1280,
   "bounds": [
    668,
    126,
    856,
-   1104
+   1111
   ],
   "anchor": [
    1024,
@@ -742,5 +742,8 @@
  }
 };
   Object.values(frames).forEach(Object.freeze);
-  window.AidanFieldAssets = Object.freeze({frames:Object.freeze(frames)});
+  // PLAYER-WALK-PRODUCTION-01: director-adopted order; keep source originals on disk.
+  const walkBanks = Object.freeze({down: Object.freeze([1, 5, 2, 6].map(n => 'aidan_walk_down_' + String(n).padStart(2, '0')))});
+  const bobScale = Object.freeze({down: .25});
+  window.AidanFieldAssets = Object.freeze({frames:Object.freeze(frames), walkBanks, bobScale});
 })();
