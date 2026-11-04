@@ -1,0 +1,25 @@
+PASS pc default actual six90
+PASS pc/six/90 1x exact descriptor
+PASS pc/six/90 actual decoded loop order
+PASS pc/six/90 actual period 0.3000
+PASS pc paused RAF cancelled
+PASS pc/four/60 1x exact descriptor
+FAIL pc/four/60 actual decoded loop order
+Traceback (most recent call last):
+  File "/workspace/work/dev-walk-cycle-a01/repo/tools/qa/run_regressions.py", line 193, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/work/dev-walk-cycle-a01/repo/tools/qa/run_regressions.py", line 123, in main
+    if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/dev-walk-cycle-a01/repo/tools/qa/run_regressions.py", line 68, in child
+    runpy.run_path(str(root/path),run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/codex-regression-pakxyf6j/repo/tests/moss/m59_dev_down_cycle.py", line 43, in <module>
+    ck(f'{view}/{seq}/{cycle} actual decoded loop order',len(ids)>len(expected)*2 and all(b==expected[(expected.index(a)+1)%len(expected)] for a,b in zip(ids,ids[1:])))
+  File "/tmp/codex-regression-pakxyf6j/repo/tests/moss/m59_dev_down_cycle.py", line 12, in ck
+    checks.append({'name':n,'pass':bool(x)});(O/'down-results.json').write_text(json.dumps(checks,indent=2));print(('PASS ' if x else 'FAIL ')+n,flush=True);assert x,n
+                                                                                                                                                                    ^
+AssertionError: pc/four/60 actual decoded loop order

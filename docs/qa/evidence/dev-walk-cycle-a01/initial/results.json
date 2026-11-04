@@ -1,0 +1,84 @@
+{
+  "source_head": "045b73de0372df7e95a4fd05c92f6c4c7a881bce",
+  "main_base": "e63780543d7ba1719a39a2f68b9924dc6d5b3933",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "git_history": true,
+  "results": [
+    {
+      "test": "tests/moss/m59_dev_down_cycle.py",
+      "classification": "新規",
+      "exit_code": 1,
+      "seconds": 1.759,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_moss_m59_dev_down_cycle.py.log",
+      "test_sha256_before": "643f93c192fd43fe1a427e79144e6fbffdfd1e834bdfb40d90ba7b1971679d48",
+      "test_sha256_after": "643f93c192fd43fe1a427e79144e6fbffdfd1e834bdfb40d90ba7b1971679d48",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m56_dev_walk_stride.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 57.368,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m56_dev_walk_stride.py.log",
+      "test_sha256_before": "e5fefd29b894759143ffe5075ae7cd4e13f33b5fb017cfcb16e074b091a33c5e",
+      "test_sha256_after": "e5fefd29b894759143ffe5075ae7cd4e13f33b5fb017cfcb16e074b091a33c5e",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m58_aidan_side_stride.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 45.42,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m58_aidan_side_stride.py.log",
+      "test_sha256_before": "c4861c083449685602e99b267e75e6e53dd209de7e7570d34aad7e037449f87b",
+      "test_sha256_after": "c4861c083449685602e99b267e75e6e53dd209de7e7570d34aad7e037449f87b",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/save_continue_lifecycle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 25.976,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_save_continue_lifecycle.py.log",
+      "test_sha256_before": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/asset_registry_audit.py",
+      "classification": "新規",
+      "exit_code": 1,
+      "seconds": 5.134,
+      "failure_lines": [
+        "FAIL registry is up to date with the repository ",
+        "FAIL audit_registry: no errors it: 1212 assets, 1 errors, 0 approved-not-implemented, 184 unmerged, 53 unreferenced"
+      ],
+      "reported_fails": [
+        2
+      ],
+      "log": "tests_system_asset_registry_audit.py.log",
+      "test_sha256_before": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "test_sha256_after": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "server_stopped": true
+    }
+  ]
+}

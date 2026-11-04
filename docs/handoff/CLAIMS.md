@@ -210,3 +210,6 @@ Codex / feature/aidan-side-walk-fix01 / base12b1dca9433f6c2f2b69c2a63c097ad95fdc
 
 ## AIDAN-SIDE-WALK-03 (2026-11-03)
 Codex / feature/aidan-side-walk-03 / base5523023306de776f0ce558e5486f4f4c675083f5. User explicitly adopts side cadence180 at1x for production; authorizes QA/PR/conditionalnormalmerge. Scope runtime side-only default/cache key and focusedtestexpectations/evidence. Up/down90, othercharacters, DEV40..300 controls, movement speed, art, SAVE/combat/story unchanged. STATUS: WIP.
+
+## DEV-WALK-CYCLE-A01 (2026-11-04 JST)
+Codex / feature/dev-walk-cycle-a01 / main e637805. Reference PR135 d209d72af8116262566433b9411fdf01d68ab661 read-only. User authorizes DEV-only Aidan down4frame01/05/02/06 at60/75/90 vsactual6/90; optionalfootdisplaycorrection, tests/evidence/DraftPR. No PNG, productionregistration/runtime/movement/collision/otheractor/SAVE changes, no mainmerge/deployment/adoption. STATUS: WIP.
