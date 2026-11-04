@@ -30,3 +30,5 @@
 #walkMotionTest [data-walk=stride]{width:100%;height:44px;margin:0;accent-color:#e4c877;touch-action:pan-y}
 #walkMotionTest [data-walk=down-controls]{min-width:0;margin:8px 0;padding:8px;border:1px solid #b29d65}
 #walkMotionTest [data-walk=down-controls]>label{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:6px 0}
+
+#walkMotionTest .walkDownCondition{position:absolute;left:6px;right:6px;top:6px;z-index:3;pointer-events:none;font:12px/1.4 system-ui;background:#10201ce8;color:#fff;padding:3px 5px;border-radius:4px;overflow-wrap:anywhere}

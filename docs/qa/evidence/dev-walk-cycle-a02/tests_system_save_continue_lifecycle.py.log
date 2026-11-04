@@ -1,0 +1,26 @@
+PASS empty slot disables CONTINUE
+PASS NEW GAME reaches actual house and releases title input owner
+PASS actual drawer acquisition and explicit unclaimed pot serialized
+PASS cold valid record enables CONTINUE
+PASS cold CONTINUE restores exact map/feet
+PASS cold CONTINUE restores claimed and unclaimed events
+PASS claimed drawer is not awarded twice
+PASS CONTINUE never auto-overwrites source bytes
+PASS old unknown acquisition restricts drawer/pot without rewriting SAVE
+PASS corrupt SAVE remains read-only at title
+PASS CONTINUE owns pending map transaction
+PASS CONTINUE repeat and duplicate API are rejected
+PASS new NEW GAME invalidates late CONTINUE response and restores unclaimed events
+PASS race leaves original SAVE bytes untouched
+PASS pending LOAD immediately locks input and shows Tips
+PASS pending LOAD blocks behind actions
+PASS duplicate LOAD rejected
+PASS SAVE during transition preserves source
+PASS rotation retains input ownership and visible overlay
+PASS fresh input restored after LOAD
+PASS fast LOAD paints before unlock and retains minimum visibility
+PASS old scene and motion cancelled before new map commits
+PASS stale actor and scene cannot overwrite current coordinates/stage
+PASS scene cancellation cleans owned dialogue without changing event history
+PASS no unhandled page errors
+25 core browser assertions PASS
