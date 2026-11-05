@@ -1,0 +1,83 @@
+{
+  "source_head": "e7f581ab95190c3c7f25d0acbd9a99c15616a68a",
+  "main_base": "74d0401192f8417d9433253767c30b6b540af454",
+  "port": 8783,
+  "timeout": 900,
+  "known_failures": {
+    "tests/moss/m13_elder_attack_text.py": "peaceful elder cycles to the morning line",
+    "tests/moss/m4_e2e.py": "Fiona stage-9 line \\(elder/Emma warning wording\\)"
+  },
+  "snapshot_mode": "git archive committed HEAD",
+  "gameplay_ready": true,
+  "git_history": true,
+  "results": [
+    {
+      "test": "tests/moss/m64_dev_arm02_candidate.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 46.058,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m64_dev_arm02_candidate.py.log",
+      "test_sha256_before": "689130d7e5185c12dc389ca67d620f316c9989d85988f8a363dfc034de2085ec",
+      "test_sha256_after": "689130d7e5185c12dc389ca67d620f316c9989d85988f8a363dfc034de2085ec",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m62_aidan_down_production.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 29.523,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m62_aidan_down_production.py.log",
+      "test_sha256_before": "06dcda4777017f3760da273a20ecd2cda4576ab0d2cb32e6dc3ca5f9e4fb2883",
+      "test_sha256_after": "06dcda4777017f3760da273a20ecd2cda4576ab0d2cb32e6dc3ca5f9e4fb2883",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/save_continue_lifecycle.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 25.635,
+      "failure_lines": [],
+      "reported_fails": [],
+      "log": "tests_system_save_continue_lifecycle.py.log",
+      "test_sha256_before": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "test_sha256_after": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/system/asset_registry_audit.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 5.157,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_system_asset_registry_audit.py.log",
+      "test_sha256_before": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "test_sha256_after": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "server_stopped": true
+    },
+    {
+      "test": "tests/moss/m49_phase4_formal_adoption.py",
+      "classification": "合格",
+      "exit_code": 0,
+      "seconds": 0.432,
+      "failure_lines": [],
+      "reported_fails": [
+        0
+      ],
+      "log": "tests_moss_m49_phase4_formal_adoption.py.log",
+      "test_sha256_before": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "test_sha256_after": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "server_stopped": true
+    }
+  ]
+}

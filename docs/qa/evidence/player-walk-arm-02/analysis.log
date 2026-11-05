@@ -1,0 +1,244 @@
+{
+  "checks": [
+    {
+      "frame": 5,
+      "source_sha256": "6efcfe75cce44aea3a11ae3712c1277d0f324cb384870ed93efe2f6af01404ec",
+      "candidate_sha256": "6c857b4cbf1459df48ecd305b41ffa7f1b7b98a1458b6d2243a8c50c94e17bad",
+      "size": [
+        2048,
+        1280
+      ],
+      "mode": "RGBA",
+      "changed_pixels": 18809,
+      "changed_bbox_exclusive": [
+        1216,
+        624,
+        1337,
+        849
+      ],
+      "outside_core": 1727,
+      "outside_provided_envelope": 0,
+      "provided_envelope_vs_independent_dilation3_diff": 0,
+      "outside_independent_core_dilation3": 0,
+      "changes_y_lt560": 0,
+      "changes_y_ge870": 0,
+      "changes_x_lt1150": 0,
+      "alpha_changed_pixels": 99,
+      "alpha_bbox_source": [
+        673,
+        128,
+        1577,
+        1230
+      ],
+      "alpha_bbox_candidate": [
+        673,
+        128,
+        1577,
+        1230
+      ],
+      "enclosed_holes_source": 3,
+      "enclosed_holes_candidate": 3
+    },
+    {
+      "frame": 2,
+      "source_sha256": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d",
+      "candidate_sha256": "614bdeffb8c09b3dbb7e0b688cea21efdfc7b68ccdeea0ddf53694f0bc13824f",
+      "size": [
+        2048,
+        1280
+      ],
+      "mode": "RGBA",
+      "changed_pixels": 20938,
+      "changed_bbox_exclusive": [
+        1216,
+        615,
+        1352,
+        851
+      ],
+      "outside_core": 1639,
+      "outside_provided_envelope": 0,
+      "provided_envelope_vs_independent_dilation3_diff": 0,
+      "outside_independent_core_dilation3": 0,
+      "changes_y_lt560": 0,
+      "changes_y_ge870": 0,
+      "changes_x_lt1150": 0,
+      "alpha_changed_pixels": 690,
+      "alpha_bbox_source": [
+        647,
+        127,
+        1571,
+        1230
+      ],
+      "alpha_bbox_candidate": [
+        647,
+        127,
+        1571,
+        1230
+      ],
+      "enclosed_holes_source": 844,
+      "enclosed_holes_candidate": 844
+    }
+  ],
+  "donor": {
+    "C05_glove_roi": [
+      1270,
+      780,
+      1310,
+      805
+    ],
+    "C05_vs_A02_shift_minus1_minus1_different_pixels": 0,
+    "C02_glove_roi": [
+      1290,
+      745,
+      1320,
+      780
+    ],
+    "C02_vs_A06_shift7_9_different_pixels": 0
+  },
+  "transitions": [
+    {
+      "mode": "A",
+      "from": 1,
+      "to": 5,
+      "roi_mae_0_255": {
+        "right_arm_protected": 40.32644560185185,
+        "left_arm_and_lining": 23.719780434859967,
+        "left_glove_region": 27.239665340532348,
+        "inner_cape_white_lining": 33.25653714754823,
+        "chest_protected": 10.481372436330854
+      }
+    },
+    {
+      "mode": "A",
+      "from": 5,
+      "to": 2,
+      "roi_mae_0_255": {
+        "right_arm_protected": 42.845901416122004,
+        "left_arm_and_lining": 32.46360210194181,
+        "left_glove_region": 35.5851865113195,
+        "inner_cape_white_lining": 30.788530074831865,
+        "chest_protected": 12.086445977011492
+      }
+    },
+    {
+      "mode": "A",
+      "from": 2,
+      "to": 6,
+      "roi_mae_0_255": {
+        "right_arm_protected": 42.9047938453159,
+        "left_arm_and_lining": 44.78780033925245,
+        "left_glove_region": 52.667591171734394,
+        "inner_cape_white_lining": 49.809866818224876,
+        "chest_protected": 18.413345774171738
+      }
+    },
+    {
+      "mode": "A",
+      "from": 6,
+      "to": 1,
+      "roi_mae_0_255": {
+        "right_arm_protected": 34.45104915577342,
+        "left_arm_and_lining": 42.23688098881416,
+        "left_glove_region": 50.53666069906223,
+        "inner_cape_white_lining": 40.38099813709703,
+        "chest_protected": 12.591244173991434
+      }
+    },
+    {
+      "mode": "B",
+      "from": 1,
+      "to": 5,
+      "roi_mae_0_255": {
+        "right_arm_protected": 40.32644560185185,
+        "left_arm_and_lining": 23.608313417078868,
+        "left_glove_region": 27.258363455527135,
+        "inner_cape_white_lining": 31.39766297243535,
+        "chest_protected": 10.481372436330854
+      }
+    },
+    {
+      "mode": "B",
+      "from": 5,
+      "to": 2,
+      "roi_mae_0_255": {
+        "right_arm_protected": 42.845901416122004,
+        "left_arm_and_lining": 39.6826834869459,
+        "left_glove_region": 59.01527394146065,
+        "inner_cape_white_lining": 50.72029326513214,
+        "chest_protected": 12.086445977011492
+      }
+    },
+    {
+      "mode": "B",
+      "from": 2,
+      "to": 6,
+      "roi_mae_0_255": {
+        "right_arm_protected": 42.9047938453159,
+        "left_arm_and_lining": 36.3718092831809,
+        "left_glove_region": 34.88439149379559,
+        "inner_cape_white_lining": 39.014751791860064,
+        "chest_protected": 18.413345774171738
+      }
+    },
+    {
+      "mode": "B",
+      "from": 6,
+      "to": 1,
+      "roi_mae_0_255": {
+        "right_arm_protected": 34.45104915577342,
+        "left_arm_and_lining": 45.32842064932445,
+        "left_glove_region": 56.61665141612199,
+        "inner_cape_white_lining": 47.002526096428916,
+        "chest_protected": 12.591244173991434
+      }
+    },
+    {
+      "mode": "C",
+      "from": 1,
+      "to": 5,
+      "roi_mae_0_255": {
+        "right_arm_protected": 40.32644560185185,
+        "left_arm_and_lining": 27.18934956051386,
+        "left_glove_region": 34.372054466230935,
+        "inner_cape_white_lining": 32.528050645701114,
+        "chest_protected": 10.481372436330854
+      }
+    },
+    {
+      "mode": "C",
+      "from": 5,
+      "to": 2,
+      "roi_mae_0_255": {
+        "right_arm_protected": 42.845901416122004,
+        "left_arm_and_lining": 37.6558387957724,
+        "left_glove_region": 54.93487174386664,
+        "inner_cape_white_lining": 43.42327302579646,
+        "chest_protected": 12.086445977011492
+      }
+    },
+    {
+      "mode": "C",
+      "from": 2,
+      "to": 6,
+      "roi_mae_0_255": {
+        "right_arm_protected": 42.9047938453159,
+        "left_arm_and_lining": 39.28929945553539,
+        "left_glove_region": 38.44846499952638,
+        "inner_cape_white_lining": 44.158508540936495,
+        "chest_protected": 18.413345774171738
+      }
+    },
+    {
+      "mode": "C",
+      "from": 6,
+      "to": 1,
+      "roi_mae_0_255": {
+        "right_arm_protected": 34.45104915577342,
+        "left_arm_and_lining": 42.23688098881416,
+        "left_glove_region": 50.53666069906223,
+        "inner_cape_white_lining": 40.38099813709703,
+        "chest_protected": 12.591244173991434
+      }
+    }
+  ]
+}
