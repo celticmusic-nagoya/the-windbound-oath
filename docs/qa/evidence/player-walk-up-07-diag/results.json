@@ -1,0 +1,733 @@
+{
+  "condition": {
+    "fixed_head": "0494f6452548ea476b4cebbc69d9f41d878d540d",
+    "qa_head": "3c6de54ea53a76b0378e46cc6e84696e23d9857f",
+    "original_test_sha256": "c22fd2d7f4392794e330078fbaf20441b8f1007cae16aeb5f7f6b98bfcb7febb",
+    "instrumented_test_sha256": "5c995c234efd93fad7e45b56e6e2781758d25d6b3c3deb992edc34eb2e515b17",
+    "criteria_and_original_selectors_equal": true,
+    "requested_trials": {
+      "recorded": 5,
+      "unrecorded": 3
+    },
+    "viewport": [
+      960,
+      540
+    ],
+    "has_touch": true,
+    "dpr": 1,
+    "expected_bank": [
+      "pushoff",
+      "03",
+      "04",
+      "01",
+      "06"
+    ],
+    "period_world": 90,
+    "nominal_world_per_second": 300,
+    "python": "3.12.14",
+    "start_utc": "2026-11-05T22:53:23.808078+00:00",
+    "cpu_max": "200000 100000",
+    "memory_max": "8589934592"
+  },
+  "records": [
+    {
+      "label": "recorded-01/straight",
+      "recording": true,
+      "trial": 1,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "recorded-01/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-01/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-01/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-01_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999987,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.400000000000546,
+      "sampling_count": 68,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-01/ul",
+      "recording": true,
+      "trial": 1,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "recorded-01/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-01/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-01/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-01_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000061,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.799999999999272,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-01/ur",
+      "recording": true,
+      "trial": 1,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "recorded-01/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-01/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-01/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-01_ur",
+      "cadence_pass": true,
+      "median_world": 90.00000000000018,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.799999999999272,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-02/straight",
+      "recording": true,
+      "trial": 2,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "recorded-02/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-02/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-02/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-02_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999946,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.30000000000018,
+      "sampling_count": 69,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-02/ul",
+      "recording": true,
+      "trial": 2,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "recorded-02/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-02/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-02/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-02_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000097,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 84,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-02/ur",
+      "recording": true,
+      "trial": 2,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "recorded-02/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-02/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-02/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-02_ur",
+      "cadence_pass": true,
+      "median_world": 89.9999999999996,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000291,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-03/straight",
+      "recording": true,
+      "trial": 3,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "recorded-03/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-03/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-03/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-03_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999932,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.400000000000546,
+      "sampling_count": 68,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-03/ul",
+      "recording": true,
+      "trial": 3,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "recorded-03/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-03/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-03/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-03_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000064,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 84,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-03/ur",
+      "recording": true,
+      "trial": 3,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "recorded-03/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-03/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-03/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-03_ur",
+      "cadence_pass": true,
+      "median_world": 90.00000000000006,
+      "median_seconds": 0.3,
+      "raf_max_ms": 50.0,
+      "sampling_count": 80,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-04/straight",
+      "recording": true,
+      "trial": 4,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "recorded-04/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-04/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-04/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-04_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999953,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.400000000000546,
+      "sampling_count": 68,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-04/ul",
+      "recording": true,
+      "trial": 4,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "recorded-04/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-04/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-04/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-04_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000097,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-04/ur",
+      "recording": true,
+      "trial": 4,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "recorded-04/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-04/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-04/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-04_ur",
+      "cadence_pass": true,
+      "median_world": 89.99999999999947,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.799999999999272,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-05/straight",
+      "recording": true,
+      "trial": 5,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "recorded-05/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-05/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-05/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-05_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999932,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.400000000000546,
+      "sampling_count": 68,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-05/ul",
+      "recording": true,
+      "trial": 5,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "recorded-05/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-05/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-05/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-05_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000085,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 84,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "recorded-05/ur",
+      "recording": true,
+      "trial": 5,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "recorded-05/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "recorded-05/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "recorded-05/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/recorded-05_ur",
+      "cadence_pass": true,
+      "median_world": 89.99999999999996,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.799999999999272,
+      "sampling_count": 84,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-01/straight",
+      "recording": false,
+      "trial": 1,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-01/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-01/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-01/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-01_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999926,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.399999999999636,
+      "sampling_count": 72,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-01/ul",
+      "recording": false,
+      "trial": 1,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-01/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-01/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-01/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-01_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000072,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.29999999999927,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-01/ur",
+      "recording": false,
+      "trial": 1,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-01/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-01/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-01/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-01_ur",
+      "cadence_pass": true,
+      "median_world": 90.00000000000037,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-02/straight",
+      "recording": false,
+      "trial": 2,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-02/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-02/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-02/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-02_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999974,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.399999999999636,
+      "sampling_count": 69,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-02/ul",
+      "recording": false,
+      "trial": 2,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-02/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-02/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-02/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-02_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000072,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 84,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-02/ur",
+      "recording": false,
+      "trial": 2,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-02/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-02/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-02/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-02_ur",
+      "cadence_pass": true,
+      "median_world": 89.99999999999996,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.799999999999272,
+      "sampling_count": 83,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-03/straight",
+      "recording": false,
+      "trial": 3,
+      "route": "straight",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-03/straight five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-03/straight 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-03/straight quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-03_straight",
+      "cadence_pass": true,
+      "median_world": 89.99999999999949,
+      "median_seconds": 0.3,
+      "raf_max_ms": 33.400000000000546,
+      "sampling_count": 71,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-03/ul",
+      "recording": false,
+      "trial": 3,
+      "route": "ul",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-03/ul five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-03/ul 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-03/ul quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-03_ul",
+      "cadence_pass": true,
+      "median_world": 90.00000000000085,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000109,
+      "sampling_count": 85,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    },
+    {
+      "label": "unrecorded-03/ur",
+      "recording": false,
+      "trial": 3,
+      "route": "ur",
+      "original_check_calls": [
+        {
+          "name": "unrecorded-03/ur five actual decoded sources/order/wrap",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-03/ur 90world/.300second measured",
+          "pass": true
+        },
+        {
+          "name": "unrecorded-03/ur quarter bob/unmirrored/full anchor",
+          "pass": true
+        }
+      ],
+      "first_failed_assertion": null,
+      "measurement_path": "measurements/unrecorded-03_ur",
+      "cadence_pass": true,
+      "median_world": 89.99999999999928,
+      "median_seconds": 0.3,
+      "raf_max_ms": 16.80000000000291,
+      "sampling_count": 84,
+      "reason": "all original conjuncts true",
+      "blocked_nominal_points": 0
+    }
+  ],
+  "unexpected_errors": [],
+  "original_failure_deleted": false,
+  "diagnostic_only_not_integration_qa": true
+}
