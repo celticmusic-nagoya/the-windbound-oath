@@ -1,0 +1,36 @@
+PASS pc normal game reset starts production D
+PASS pcA descriptor90/order/bob
+PASS pcAFalse decoded cyclic order
+PASS pcAFalse period and bob
+PASS pcAFalse spatial scale
+PASS pcATrue decoded cyclic order
+PASS pcATrue period and bob
+PASS pcATrue spatial scale
+PASS pcAstraight field decoded order/unmirrored
+PASS pcAstraight actual90 distance/.300seconds
+PASS pcAstraight bob amplitude
+PASS pcAstraight stop and game state
+PASS pcAul field decoded order/unmirrored
+PASS pcAul actual90 distance/.300seconds
+PASS pcAul bob amplitude
+PASS pcAul stop and game state
+PASS pcAur field decoded order/unmirrored
+PASS pcAur actual90 distance/.300seconds
+PASS pcAur bob amplitude
+PASS pcAur stop and game state
+PASS pcB descriptor90/order/bob
+PASS pcBFalse decoded cyclic order
+PASS pcBFalse period and bob
+PASS pcBFalse spatial scale
+PASS pcBTrue decoded cyclic order
+PASS pcBTrue period and bob
+PASS pcBTrue spatial scale
+FAIL pcBstraight field decoded order/unmirrored
+Traceback (most recent call last):
+  File "/workspace/work/player-walk-up-06-qa/repo/tests/moss/m66_up06_independent.py", line 82, in <module>
+    a,z=trans[i],trans[i+len(order)];cycles.append({'distance':math.hypot(z['x']-a['x'],z['y']-a['y']),'seconds':(z['t']-a['t'])/1000})
+                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/player-walk-up-06-qa/repo/tests/moss/m66_up06_independent.py", line 12, in ck
+    checks.append({'name':n,'pass':bool(v)});(O/'up-results.json').write_text(json.dumps(checks,indent=2));(O/'up-runs.json').write_text(json.dumps(runs,indent=2));print(('PASS ' if v else 'FAIL ')+n,flush=True);assert v,n
+                                                                                                                                                                                                                           ^
+AssertionError: pcBstraight field decoded order/unmirrored
