@@ -1,0 +1,21 @@
+{
+ "target": "aidan_walk_up_pushoff (new slot between 06 and 03)",
+ "base": "img/field/characters/aidan/aidan_walk_up_03.png",
+ "canvas": [
+  2048,
+  1280
+ ],
+ "anchor": [
+  1024,
+  1230
+ ],
+ "baseline_y": 1229,
+ "repaint_area": "aidan_walk_up_pushoff_mask.png (white). Everything outside is restored from the base PNG when merged.",
+ "pose": "Back view. Anatomical RIGHT leg (screen right) extended behind the body towards the camera: knee slightly bent, heel lifted, sole facing the camera, toe on the ground line y~1229. Anatomical LEFT leg (screen left) as drawn in 03: planted, carrying the weight. Right boot = the right boot of the official set (do NOT copy the left boot; buckles/plates on the outer side of the right foot). Right thigh enters under the existing hem/cape; nothing above y=790 changes.",
+ "references": [
+  "aidan_walk_up_01/02/05 (left push-off: sole drawing, scale, shading)",
+  "aidan_walk_up_03 (right boot design, trousers)",
+  "docs/art/reference/characters/walk_delivery_20261011/aidan_back_a.png, aidan_back_b.png"
+ ],
+ "merge": "adapt assets/candidates/player-walk-polish01/repair-r2/tools/inpaint_kit.py (PR #132) merge with this mask"
+}
