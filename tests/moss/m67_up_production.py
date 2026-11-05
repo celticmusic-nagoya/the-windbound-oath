@@ -6,6 +6,7 @@ from playwright.sync_api import sync_playwright
 from PIL import Image
 R=Path(__file__).resolve().parents[2];sys.path.insert(0,str(R/'tools/qa'));from browser_support import server
 sys.path.insert(0,str(R/'tests/helpers'));from walk_bootstrap_network import expected_retarget
+from up07_metrics import capture_metrics
 O=Path(os.getenv('QA_OUT','/tmp/up07-production'));O.mkdir(parents=True,exist_ok=True);checks=[];runs=[];errors=[]
 M=json.loads((R/'img/field/characters/aidan/up5/adopted-walk.json').read_text());URLS=[r['path'] for r in M['files']];KEYS=['aidan_walk_up_pushoff']+['aidan_walk_up_'+str(n).zfill(2) for n in [3,4,1,6]]
 def ck(n,v):
@@ -13,14 +14,17 @@ def ck(n,v):
 for row in M['files']:ck('adopted SHA '+row['key'],hashlib.sha256((R/row['path']).read_bytes()).hexdigest()==row['sha256'])
 ck('exact approved candidate SHA',M['files'][0]['sha256']=='1bde96684c85739e821e8c7e5e8f07831b8819414569d07d6a3bbb3613e80dfd');im=Image.open(R/URLS[0]);ck('full adopted RGBA canvas/bounds',im.mode=='RGBA' and im.size==(2048,1280) and im.getbbox()==(604,126,1497,1230))
 STABLE="JSON.stringify({stage:storyStage,flags:PrologueProgress.eventSnapshot(),inventory:Inventory.serialize(),party:PartyManager.members,gold,movement:FieldMovement.settings,assets:AidanFieldAssets})"
-OBS="""()=>{const o=window.__up07={rows:[],id:null};function f(t){const i=[...document.querySelectorAll('.forest-aidan')].find(i=>!i.hidden);o.rows.push({t,...MossForest.feet,src:i?.dataset.src,currentSrc:i?.currentSrc,loaded:i?.complete&&i?.naturalWidth===2048,transform:i?.style.transform,top:i?.style.top,heading:MossForest.snapshot().facing});o.id=requestAnimationFrame(f)}o.id=requestAnimationFrame(f)}"""
+OBS="""()=>{const o=window.__up07={rows:[],id:null,keyEvents:[],keys:new Set(),longTasks:[],start:{t:performance.now(),feet:{...MossForest.feet},timeOrigin:performance.timeOrigin,viewport:[innerWidth,innerHeight],dpr:devicePixelRatio,visibility:document.visibilityState}};
+ o.onKey=e=>{if(e.type==='keydown')o.keys.add(e.key);else o.keys.delete(e.key);o.keyEvents.push({type:e.type,key:e.key,repeat:e.repeat,t:performance.now(),feet:{...MossForest.feet}})};addEventListener('keydown',o.onKey,{capture:true,passive:true});addEventListener('keyup',o.onKey,{capture:true,passive:true});
+ try{o.po=new PerformanceObserver(list=>o.longTasks.push(...list.getEntries().map(e=>({start:e.startTime,duration:e.duration,name:e.name}))));o.po.observe({entryTypes:['longtask']})}catch(e){o.longTaskUnsupported=String(e)}
+ function f(t){const observerStart=performance.now();const i=[...document.querySelectorAll('.forest-aidan')].find(i=>!i.hidden);o.rows.push({t,now:performance.now(),...MossForest.feet,frameScale:FieldMovement.frameScale,heldKeys:[...o.keys],inputState:InputManager.state(),src:i?.dataset.src,currentSrc:i?.currentSrc,loaded:i?.complete&&i?.naturalWidth===2048,transform:i?.style.transform,top:i?.style.top,heading:MossForest.snapshot().facing,observerStart,observerCostMs:performance.now()-observerStart});o.id=requestAnimationFrame(f)}o.id=requestAnimationFrame(f)}"""
 def settle(p):p.wait_for_timeout(160)
 def go(p,key,cond):
  p.keyboard.down(key)
  try:p.wait_for_function(cond,timeout=8000,polling='raf')
  finally:p.keyboard.up(key)
  settle(p)
-def stop(p):return p.evaluate('()=>{cancelAnimationFrame(__up07.id);return __up07.rows}')
+def stop(p):return p.evaluate("()=>{const o=__up07;cancelAnimationFrame(o.id);removeEventListener('keydown',o.onKey,true);removeEventListener('keyup',o.onKey,true);if(o.po){o.longTasks.push(...o.po.takeRecords().map(e=>({start:e.startTime,duration:e.duration,name:e.name})));o.po.disconnect()}o.end={t:performance.now(),feet:{...MossForest.feet}};return o.rows}")
 def decoded(rows):return all(r['loaded'] and r['currentSrc'].split('?')[0].endswith('/'+r['src'].split('?')[0]) for r in rows)
 def transitions(rows):
  out=[]
@@ -39,8 +43,11 @@ def network(p,failed,base,label):
 
 def field_check(p,rows,label):
  moving=[z for a,z in zip(rows,rows[1:]) if z['y']<a['y']-.01 and z['transform'] and (z['src'] or '').split('?')[0] in URLS];tr=transitions(moving)
- ck(label+' five actual decoded sources/order/wrap',set(r['frame'] for r in tr)==set(range(5)) and all(z['frame']==(a['frame']+1)%5 for a,z in zip(tr,tr[1:])) and decoded(moving))
  cycles=[{'distance':math.hypot(tr[i+5]['x']-tr[i]['x'],tr[i+5]['y']-tr[i]['y']),'seconds':(tr[i+5]['t']-tr[i]['t'])/1000} for i in range(len(tr)-5)]
+ context=p.evaluate('()=>({start:__up07.start,end:__up07.end,keyEvents:__up07.keyEvents,longTasks:__up07.longTasks,longTaskUnsupported:__up07.longTaskUnsupported||null})')
+ context.update(globals().get('MEASURE_CONTEXT',{}))
+ capture_metrics(O/'measurements'/label.replace('/','_'),label,rows,moving,tr,cycles,context)
+ ck(label+' five actual decoded sources/order/wrap',set(r['frame'] for r in tr)==set(range(5)) and all(z['frame']==(a['frame']+1)%5 for a,z in zip(tr,tr[1:])) and decoded(moving))
  ck(label+' 90world/.300second measured',len(cycles)>=4 and abs(statistics.median(x['distance'] for x in cycles)-90)<12 and abs(statistics.median(x['seconds'] for x in cycles)-.3)<.08)
  ck(label+' quarter bob/unmirrored/full anchor',all('scaleX' not in r['transform'] and abs(float(re.search(r'translateY\(([-\d.]+)px\)',r['transform'])[1]))<=.386 for r in moving) and len({r['top'] for r in moving})==1)
  return cycles

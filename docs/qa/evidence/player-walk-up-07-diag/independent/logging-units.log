@@ -1,0 +1,10 @@
+MEASURE {"label": "unit/route", "samples": 26, "transitions": 25, "cycles": 20, "median_world": 25.0, "median_seconds": 0.3, "max_raf_ms": 60, "result": "FAIL", "reason": "median_distance_within_12"}
+MEASURE {"label": "unit/route", "samples": 0, "transitions": 0, "cycles": 0, "median_world": null, "median_seconds": null, "max_raf_ms": null, "result": "FAIL", "reason": "cycle_windows_ge_4,median_distance_within_12,median_seconds_within_0_08"}
+MEASURE {"label": "unit/route", "samples": 5, "transitions": 4, "cycles": 0, "median_world": null, "median_seconds": null, "max_raf_ms": 60, "result": "FAIL", "reason": "cycle_windows_ge_4,median_distance_within_12,median_seconds_within_0_08"}
+MEASURE {"label": "unit/route", "samples": 26, "transitions": 25, "cycles": 20, "median_world": 90.0, "median_seconds": 0.3, "max_raf_ms": 60, "result": "PASS", "reason": "all original conjuncts true"}
+MEASURE {"label": "unit/route", "samples": 26, "transitions": 25, "cycles": 20, "median_world": 90.0, "median_seconds": 0.45, "max_raf_ms": 90, "result": "FAIL", "reason": "median_seconds_within_0_08"}
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.072s
+
+OK

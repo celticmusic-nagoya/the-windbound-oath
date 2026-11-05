@@ -1,0 +1,198 @@
+{
+  "condition": {
+    "fixed_head": "0494f6452548ea476b4cebbc69d9f41d878d540d",
+    "qa_head": "3c6de54ea53a76b0378e46cc6e84696e23d9857f",
+    "original_test_sha256": "c22fd2d7f4392794e330078fbaf20441b8f1007cae16aeb5f7f6b98bfcb7febb",
+    "instrumented_test_sha256": "5c995c234efd93fad7e45b56e6e2781758d25d6b3c3deb992edc34eb2e515b17",
+    "criteria_and_original_selectors_equal": true,
+    "requested_trials": {
+      "recorded": 5,
+      "unrecorded": 3
+    },
+    "viewport": [
+      960,
+      540
+    ],
+    "has_touch": true,
+    "dpr": 1,
+    "expected_bank": [
+      "pushoff",
+      "03",
+      "04",
+      "01",
+      "06"
+    ],
+    "period_world": 90,
+    "nominal_world_per_second": 300,
+    "python": "3.12.14",
+    "start_utc": "2026-11-05T22:53:23.808078+00:00",
+    "cpu_max": "200000 100000",
+    "memory_max": "8589934592"
+  },
+  "groups": [
+    {
+      "recording": true,
+      "route": "straight",
+      "n": 5,
+      "cadence_failures": 0,
+      "original_assertion_failures": 0,
+      "cycle_world_median_range": [
+        89.99999999999932,
+        89.99999999999987
+      ],
+      "cycle_seconds_median_range": [
+        0.3,
+        0.3
+      ],
+      "samples_range": [
+        68,
+        69
+      ],
+      "overlapping_window_range": [
+        16,
+        16
+      ],
+      "raf_max_ms": 33.400000000000546,
+      "observer_cost_max_ms": 14.599999999627471
+    },
+    {
+      "recording": true,
+      "route": "ul",
+      "n": 5,
+      "cadence_failures": 0,
+      "original_assertion_failures": 0,
+      "cycle_world_median_range": [
+        90.00000000000061,
+        90.00000000000097
+      ],
+      "cycle_seconds_median_range": [
+        0.3,
+        0.3
+      ],
+      "samples_range": [
+        83,
+        84
+      ],
+      "overlapping_window_range": [
+        19,
+        19
+      ],
+      "raf_max_ms": 16.80000000000109,
+      "observer_cost_max_ms": 4.8999999994412065
+    },
+    {
+      "recording": true,
+      "route": "ur",
+      "n": 5,
+      "cadence_failures": 0,
+      "original_assertion_failures": 0,
+      "cycle_world_median_range": [
+        89.99999999999947,
+        90.00000000000018
+      ],
+      "cycle_seconds_median_range": [
+        0.3,
+        0.3
+      ],
+      "samples_range": [
+        80,
+        84
+      ],
+      "overlapping_window_range": [
+        19,
+        19
+      ],
+      "raf_max_ms": 50.0,
+      "observer_cost_max_ms": 4.2000000001862645
+    },
+    {
+      "recording": false,
+      "route": "straight",
+      "n": 3,
+      "cadence_failures": 0,
+      "original_assertion_failures": 0,
+      "cycle_world_median_range": [
+        89.99999999999926,
+        89.99999999999974
+      ],
+      "cycle_seconds_median_range": [
+        0.3,
+        0.3
+      ],
+      "samples_range": [
+        69,
+        72
+      ],
+      "overlapping_window_range": [
+        16,
+        16
+      ],
+      "raf_max_ms": 33.400000000000546,
+      "observer_cost_max_ms": 0.6999999992549419
+    },
+    {
+      "recording": false,
+      "route": "ul",
+      "n": 3,
+      "cadence_failures": 0,
+      "original_assertion_failures": 0,
+      "cycle_world_median_range": [
+        90.00000000000072,
+        90.00000000000085
+      ],
+      "cycle_seconds_median_range": [
+        0.3,
+        0.3
+      ],
+      "samples_range": [
+        83,
+        85
+      ],
+      "overlapping_window_range": [
+        19,
+        19
+      ],
+      "raf_max_ms": 33.29999999999927,
+      "observer_cost_max_ms": 0.5
+    },
+    {
+      "recording": false,
+      "route": "ur",
+      "n": 3,
+      "cadence_failures": 0,
+      "original_assertion_failures": 0,
+      "cycle_world_median_range": [
+        89.99999999999928,
+        90.00000000000037
+      ],
+      "cycle_seconds_median_range": [
+        0.3,
+        0.3
+      ],
+      "samples_range": [
+        83,
+        84
+      ],
+      "overlapping_window_range": [
+        19,
+        19
+      ],
+      "raf_max_ms": 16.80000000000291,
+      "observer_cost_max_ms": 0.5
+    }
+  ],
+  "measurement_count": 24,
+  "cadence_failures": 0,
+  "original_assertion_failures": 0,
+  "original_failed_run_reproduced": false,
+  "initial_cause_classification": "D: historical UR metrics unavailable, not reproduced",
+  "confirmed_QA_defect": "Missing detailed evidence before assert; repaired without changing predicates",
+  "possible_C_mechanism": "Source clock caps effective delta to50ms/frame; controlled VM is not historical/browser reproduction",
+  "integration_blocked": true,
+  "limits": [
+    "Recorded trials precede controls, not randomized.",
+    "All reruns use required new instrumentation; observer overhead nonzero.",
+    "Overlapping cycle windows are not independent whole-cycle samples.",
+    "Original failed conjunct/time/RAF values remain unknown."
+  ]
+}
