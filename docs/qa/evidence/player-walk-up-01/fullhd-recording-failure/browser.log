@@ -1,0 +1,12 @@
+[1/5] RUN tests/moss/m65_dev_up_walk.py
+新規 tests/moss/m65_dev_up_walk.py exit=1 seconds=13.47
+FAIL pcAFalse decoded cyclic order
+[2/5] RUN tests/moss/m62_aidan_down_production.py
+合格 tests/moss/m62_aidan_down_production.py exit=0 seconds=29.368
+[3/5] RUN tests/system/save_continue_lifecycle.py
+合格 tests/system/save_continue_lifecycle.py exit=0 seconds=26.9
+[4/5] RUN tests/system/asset_registry_audit.py
+合格 tests/system/asset_registry_audit.py exit=0 seconds=5.204
+[5/5] RUN tests/moss/m49_phase4_formal_adoption.py
+合格 tests/moss/m49_phase4_formal_adoption.py exit=0 seconds=0.429
+Finished: {'合格': 4, 'main既存': 0, '新規': 1, '未実施': 0}
