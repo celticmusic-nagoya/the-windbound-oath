@@ -277,7 +277,7 @@
   "scale": 0.0625
  },
  "aidan_walk_down_02": {
-  "path": "img/field/characters/aidan/aidan_walk_down_02.png?v=bec8540a",
+  "path": "img/field/characters/aidan/down4/arm02/aidan_walk_down_02_arm02.png?v=614bdeff",
   "width": 2048,
   "height": 1280,
   "bounds": [
@@ -325,7 +325,7 @@
   "scale": 0.0625
  },
  "aidan_walk_down_05": {
-  "path": "img/field/characters/aidan/aidan_walk_down_05.png?v=2e1cafe1",
+  "path": "img/field/characters/aidan/down4/arm02/aidan_walk_down_05_arm02.png?v=6c857b4c",
   "width": 2048,
   "height": 1280,
   "bounds": [

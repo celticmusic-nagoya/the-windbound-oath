@@ -1,12 +1,12 @@
 {
   "schema": "adopted-field-walk-v1",
   "approval_status": "APPROVED",
-  "adoption_basis": "Director approval: PLAYER-WALK-PRODUCTION-01 (2026-11-04 JST)",
+  "adoption_basis": "Director approval: PLAYER-WALK-ARM-02 production integration (2026-11-05 JST)",
   "android_physical_qa": "NOT_RUN",
   "source_pr": 139,
   "source_commit": "d15aa83ab73e77e505895bea3c89485d3a9254bd",
-  "independent_qa_pr": 140,
-  "independent_qa_commit": "6e283b20962d25c4e0caf54b8b17b7d644e8ee1a",
+  "independent_qa_pr": 145,
+  "independent_qa_commit": "996eb165fe6089ab92334b53274a4b27db395e88",
   "order": [
     1,
     5,
@@ -40,13 +40,17 @@
     },
     {
       "frame": 5,
-      "path": "img/field/characters/aidan/aidan_walk_down_05.png",
-      "sha256": "6efcfe75cce44aea3a11ae3712c1277d0f324cb384870ed93efe2f6af01404ec"
+      "path": "img/field/characters/aidan/down4/arm02/aidan_walk_down_05_arm02.png",
+      "sha256": "6c857b4cbf1459df48ecd305b41ffa7f1b7b98a1458b6d2243a8c50c94e17bad",
+      "source_pr": 144,
+      "source_commit": "95e5563032095790e7a6887c74fa466f44a0bead"
     },
     {
       "frame": 2,
-      "path": "img/field/characters/aidan/aidan_walk_down_02.png",
-      "sha256": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d"
+      "path": "img/field/characters/aidan/down4/arm02/aidan_walk_down_02_arm02.png",
+      "sha256": "614bdeffb8c09b3dbb7e0b688cea21efdfc7b68ccdeea0ddf53694f0bc13824f",
+      "source_pr": 144,
+      "source_commit": "95e5563032095790e7a6887c74fa466f44a0bead"
     },
     {
       "frame": 6,
@@ -57,5 +61,47 @@
   "preserved_original06": {
     "path": "img/field/characters/aidan/aidan_walk_down_06.png",
     "sha256": "b88fdf8e0b48bc303c065d0dcd179babbd2c6a55040f4ccca8a2c18ed8c55c00"
+  },
+  "adoption_history": [
+    {
+      "adoption_basis": "Director approval: PLAYER-WALK-PRODUCTION-01 (2026-11-04 JST)",
+      "source_pr": 139,
+      "source_commit": "d15aa83ab73e77e505895bea3c89485d3a9254bd",
+      "independent_qa_pr": 140,
+      "independent_qa_commit": "6e283b20962d25c4e0caf54b8b17b7d644e8ee1a",
+      "files": [
+        {
+          "frame": 1,
+          "path": "img/field/characters/aidan/aidan_walk_down_01.png",
+          "sha256": "0aca5691c55c59610abf6484f0e6d0785ea6537123c301a592ed83e5c6772a84"
+        },
+        {
+          "frame": 5,
+          "path": "img/field/characters/aidan/aidan_walk_down_05.png",
+          "sha256": "6efcfe75cce44aea3a11ae3712c1277d0f324cb384870ed93efe2f6af01404ec"
+        },
+        {
+          "frame": 2,
+          "path": "img/field/characters/aidan/aidan_walk_down_02.png",
+          "sha256": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d"
+        },
+        {
+          "frame": 6,
+          "path": "img/field/characters/aidan/down4/aidan_walk_down_06_ground.png",
+          "sha256": "d87b2ec56660568bd46eecb8559edfed1c3802fe1e2675a018f78f3c23f970df"
+        }
+      ]
+    }
+  ],
+  "arm02_adoption": {
+    "status": "APPROVED",
+    "source_pr": 144,
+    "source_commit": "95e5563032095790e7a6887c74fa466f44a0bead",
+    "android_physical_qa": "NOT_RUN",
+    "residuals": [
+      "Minor white-lining difference at05->02",
+      "Minor cuff/cloak crease at05 enlarged view",
+      "Brief near-hold at02->06"
+    ]
   }
 }

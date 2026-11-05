@@ -5,15 +5,15 @@
 
 ## 集計（2026-10-19）
 
-- total: **1213**
-- approved_implemented: **286**
+- total: **1215**
+- approved_implemented: **288**
 - approved_not_implemented: **0**
 - delivered_not_merged: **184**
 - pending_adoption: **7**
 - source_missing: **0**
 - approval_unknown: **886**
-- on_main: **1029**
-- implemented_on_main: **975**
+- on_main: **1031**
+- implemented_on_main: **977**
 - unreferenced_on_main: **53**
 
 調査範囲: リモートブランチ 235（main未統合 45）、PR 11、Issue 15、`docs/art/delivered/` 13ディレクトリ、handoff原本。
@@ -630,7 +630,7 @@
 | file:img_field_moss_town_weapon_stand_out | UNKNOWN | UNKNOWN | 1 | 240x200 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | data/maps/fort_dunvall_01_courtyard.json, img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 | file:img_field_moss_town_well | UNKNOWN | UNKNOWN | 1 | 192x200 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | img/field/moss/manifest.json / existing asset on main; adoption record not re-verified |
 
-## field_character（36）
+## field_character（38）
 
 | asset_id | character | motion | frames | size | 採用 | 実装 | 統合 | QA | arena | 参照 / 備考 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -659,9 +659,11 @@
 | file:img_field_characters_aidan_aidan_idle_right | aidan | idle | 1 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | file:img_field_characters_aidan_aidan_idle_up | aidan | idle | 1 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
 | file:img_field_characters_aidan_down4_aidan_walk_down_06_ground | aidan | walk | 1 | 2048x1280 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/characters/aidan/down4/adopted-walk.json, js/field/aidan-field-assets.js / PLAYER-WALK-PRODUCTION-01: director-adopted PR139 repair06, exact d87b2ec5 bytes. PR140 in |
+| file:img_field_characters_aidan_down4_arm02_aidan_walk_down_02_arm02 | aidan | walk | 1 | 2048x1280 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/characters/aidan/down4/adopted-walk.json, js/field/aidan-field-assets.js / Director adopted ARM02 from PR144 after PR145 independent QA PASS. Exact original candidat |
+| file:img_field_characters_aidan_down4_arm02_aidan_walk_down_05_arm02 | aidan | walk | 1 | 2048x1280 | APPROVED | IMPLEMENTED | MAIN | PASS | N/A | img/field/characters/aidan/down4/adopted-walk.json, js/field/aidan-field-assets.js / Director adopted ARM02 from PR144 after PR145 independent QA PASS. Exact original candidat |
 | file:img_field_characters_aidan_side6_fix01_aidan_walk_right_01 | aidan | walk | 1 | 2048x1280 | PROVISIONAL_ANDROID_QA | IMPLEMENTED | MAIN | PASS | N/A | js/field/aidan-field-assets.js / AIDAN-SIDE-WALK-FIX01: four sparse toe-extraction repairs from delivered source sheets; or |
 | seq:img_field_characters_aidan_aidan_walk_dl | aidan | walk | 12 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
-| seq:img_field_characters_aidan_aidan_walk_down | aidan | walk | 6 | 2048x1280 | UNKNOWN | PARTIAL | MAIN | UNVERIFIED | N/A | img/field/characters/aidan/down4/adopted-walk.json, js/field/aidan-field-assets.js / PLAYER-WALK-PRODUCTION-01: original01/05/02 used in adopted four-pose order; original03/04 |
+| seq:img_field_characters_aidan_aidan_walk_down | aidan | walk | 6 | 2048x1280 | UNKNOWN | PARTIAL | MAIN | UNVERIFIED | N/A | img/field/characters/aidan/down4/adopted-walk.json, js/field/aidan-field-assets.js / PLAYER-WALK-ARM-02: original01 remains in active bank. Old05/02/03/04/06 remain unchanged  |
 | seq:img_field_characters_aidan_aidan_walk_left | aidan | walk | 4 | 2048x1280 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
 | seq:img_field_characters_aidan_aidan_walk_right | aidan | walk | 4 | 2048x1280 | UNKNOWN | NOT_IMPLEMENTED | MAIN | UNVERIFIED | N/A | - / Retired 4-frame side walk: superseded at runtime by side6/ (PR #112). Kept on disk for rol |
 | seq:img_field_characters_aidan_aidan_walk_ul | aidan | walk | 6 | 2048x1280 | UNKNOWN | IMPLEMENTED | MAIN | UNVERIFIED | N/A | js/field/aidan-field-assets.js / existing asset on main; adoption record not re-verified |
