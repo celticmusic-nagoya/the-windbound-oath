@@ -1,0 +1,202 @@
+{
+  "checks": [
+    {
+      "frame": 1,
+      "original_sha256": "0aca5691c55c59610abf6484f0e6d0785ea6537123c301a592ed83e5c6772a84",
+      "candidate_sha256": "7c09040f93b39462a97796505ee0dabe115f194adb8fdba16fa21ab1fc9b9764",
+      "size_source": [
+        2048,
+        1280
+      ],
+      "size_candidate": [
+        2048,
+        1280
+      ],
+      "mode_source": "RGBA",
+      "mode_candidate": "RGBA",
+      "changed_pixels": 32374,
+      "bbox_exclusive": [
+        1198,
+        576,
+        1375,
+        846
+      ],
+      "outside_raw_core_mask": 2000,
+      "outside_documented_3px_feather_envelope": 0,
+      "heads_lt560_changes": 0,
+      "legs_ge870_changes": 0,
+      "screen_left_and_central_x_lt1150_changes": 0,
+      "alpha_changed_pixels": 1921,
+      "alpha_bounds_source": [
+        679,
+        127,
+        1511,
+        1230
+      ],
+      "alpha_bounds_candidate": [
+        679,
+        127,
+        1511,
+        1230
+      ],
+      "closed_alpha_hole_pixels_source": 1074,
+      "closed_alpha_hole_pixels_candidate": 1074
+    },
+    {
+      "frame": 2,
+      "original_sha256": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d",
+      "candidate_sha256": "1a6e2d3677b10b8e280c7bfc80293c5686b89ffa778d2242d1c4111c31c48e93",
+      "size_source": [
+        2048,
+        1280
+      ],
+      "size_candidate": [
+        2048,
+        1280
+      ],
+      "mode_source": "RGBA",
+      "mode_candidate": "RGBA",
+      "changed_pixels": 33816,
+      "bbox_exclusive": [
+        1209,
+        572,
+        1379,
+        851
+      ],
+      "outside_raw_core_mask": 2139,
+      "outside_documented_3px_feather_envelope": 0,
+      "heads_lt560_changes": 0,
+      "legs_ge870_changes": 0,
+      "screen_left_and_central_x_lt1150_changes": 0,
+      "alpha_changed_pixels": 2256,
+      "alpha_bounds_source": [
+        647,
+        127,
+        1571,
+        1230
+      ],
+      "alpha_bounds_candidate": [
+        647,
+        127,
+        1571,
+        1230
+      ],
+      "closed_alpha_hole_pixels_source": 844,
+      "closed_alpha_hole_pixels_candidate": 844
+    }
+  ],
+  "donor": {
+    "candidate01_glove_roi": [
+      1270,
+      750,
+      1320,
+      800
+    ],
+    "candidate01_vs_source02_shift_2_minus5_mismatches": 0,
+    "candidate02_glove_roi": [
+      1274,
+      730,
+      1342,
+      793
+    ],
+    "candidate02_vs_production06_shift_7_9_mismatches": 0
+  },
+  "transitions": [
+    {
+      "mode": "production",
+      "from": 1,
+      "to": 5,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 40.32644560185185,
+        "left_arm_and_lining": 23.719780434859967,
+        "left_glove_region": 27.239665340532348,
+        "inner_cape_white_lining": 33.25653714754823,
+        "chest_protected": 10.481372436330854
+      }
+    },
+    {
+      "mode": "production",
+      "from": 5,
+      "to": 2,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 42.845901416122004,
+        "left_arm_and_lining": 32.46360210194181,
+        "left_glove_region": 35.5851865113195,
+        "inner_cape_white_lining": 30.788530074831865,
+        "chest_protected": 12.086445977011492
+      }
+    },
+    {
+      "mode": "production",
+      "from": 2,
+      "to": 6,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 42.9047938453159,
+        "left_arm_and_lining": 44.78780033925245,
+        "left_glove_region": 52.667591171734394,
+        "inner_cape_white_lining": 49.809866818224876,
+        "chest_protected": 18.413345774171738
+      }
+    },
+    {
+      "mode": "production",
+      "from": 6,
+      "to": 1,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 34.45104915577342,
+        "left_arm_and_lining": 42.23688098881416,
+        "left_glove_region": 50.53666069906223,
+        "inner_cape_white_lining": 40.38099813709703,
+        "chest_protected": 12.591244173991434
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 1,
+      "to": 5,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 40.32644560185185,
+        "left_arm_and_lining": 23.608313417078868,
+        "left_glove_region": 27.258363455527135,
+        "inner_cape_white_lining": 31.39766297243535,
+        "chest_protected": 10.481372436330854
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 5,
+      "to": 2,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 42.845901416122004,
+        "left_arm_and_lining": 39.6826834869459,
+        "left_glove_region": 59.01527394146065,
+        "inner_cape_white_lining": 50.72029326513214,
+        "chest_protected": 12.086445977011492
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 2,
+      "to": 6,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 42.9047938453159,
+        "left_arm_and_lining": 36.3718092831809,
+        "left_glove_region": 34.88439149379559,
+        "inner_cape_white_lining": 39.014751791860064,
+        "chest_protected": 18.413345774171738
+      }
+    },
+    {
+      "mode": "candidate",
+      "from": 6,
+      "to": 1,
+      "registered_rgb_mae_0_255": {
+        "right_arm_protected": 34.45104915577342,
+        "left_arm_and_lining": 45.32842064932445,
+        "left_glove_region": 56.61665141612199,
+        "inner_cape_white_lining": 47.002526096428916,
+        "chest_protected": 12.591244173991434
+      }
+    }
+  ]
+}

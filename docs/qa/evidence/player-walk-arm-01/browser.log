@@ -1,0 +1,14 @@
+[1/5] RUN tests/moss/m63_dev_arm_candidate.py
+新規 tests/moss/m63_dev_arm_candidate.py exit=1 seconds=0.604
+FAIL outside author mask unchanged 1
+[2/5] RUN tests/moss/m62_aidan_down_production.py
+合格 tests/moss/m62_aidan_down_production.py exit=0 seconds=31.186
+[3/5] RUN tests/system/save_continue_lifecycle.py
+合格 tests/system/save_continue_lifecycle.py exit=0 seconds=25.828
+[4/5] RUN tests/system/asset_registry_audit.py
+新規 tests/system/asset_registry_audit.py exit=1 seconds=5.186
+FAIL registry is up to date with the repository 
+FAIL audit_registry: no errors it: 1213 assets, 1 errors, 0 approved-not-implemented, 184 unmerged, 53 unreferenced
+[5/5] RUN tests/moss/m49_phase4_formal_adoption.py
+合格 tests/moss/m49_phase4_formal_adoption.py exit=0 seconds=0.42
+Finished: {'合格': 3, 'main既存': 0, '新規': 2, '未実施': 0}
