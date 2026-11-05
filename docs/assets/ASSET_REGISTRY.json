@@ -39,15 +39,15 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 1213,
-  "approved_implemented": 286,
+  "total": 1215,
+  "approved_implemented": 288,
   "approved_not_implemented": 0,
   "delivered_not_merged": 184,
   "pending_adoption": 7,
   "source_missing": 0,
   "approval_unknown": 886,
-  "on_main": 1029,
-  "implemented_on_main": 975,
+  "on_main": 1031,
+  "implemented_on_main": 977,
   "unreferenced_on_main": 53
  },
  "motion_gaps": [
@@ -6415,6 +6415,60 @@
    "android_status": "UNVERIFIED",
    "issue": "",
    "notes": "PLAYER-WALK-PRODUCTION-01: director-adopted PR139 repair06, exact d87b2ec5 bytes. PR140 independent source image QA PASS; production integration QA recorded separately. Bank01/05/02/06,90world,bob25%,whole-frameoffset0,anchor1024/1230,scale.0625. Original06 retained unchanged. Physical Android NOT_RUN. MAIN is the proposed post-merge registry state; actual landing/publication are gated separately in the integration report."
+  },
+  {
+   "asset_id": "file:img_field_characters_aidan_down4_arm02_aidan_walk_down_02_arm02",
+   "name": "aidan_walk_down_02_arm02.png",
+   "category": "field_character",
+   "character": "aidan",
+   "motion": "walk",
+   "delivery_date": "2026-11-05",
+   "source_path": "img/field/characters/aidan/down4/arm02/aidan_walk_down_02_arm02.png",
+   "source_branch": "feature/player-walk-arm-02",
+   "source_commit": "95e5563032095790e7a6887c74fa466f44a0bead",
+   "source_sha256": "614bdeffb8c09b3dbb7e0b688cea21efdfc7b68ccdeea0ddf53694f0bc13824f",
+   "width": 2048,
+   "height": 1280,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/characters/aidan/down4/adopted-walk.json",
+    "js/field/aidan-field-assets.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Director adopted ARM02 from PR144 after PR145 independent QA PASS. Exact original candidate bytes copied to production paths; original05/02 retained. Slot01/current,05/ARM02,02/ARM02,06/ground repair;90world,bob25%,whole-frameoffset0. Physical Android NOT_RUN. Integration QA recorded separately."
+  },
+  {
+   "asset_id": "file:img_field_characters_aidan_down4_arm02_aidan_walk_down_05_arm02",
+   "name": "aidan_walk_down_05_arm02.png",
+   "category": "field_character",
+   "character": "aidan",
+   "motion": "walk",
+   "delivery_date": "2026-11-05",
+   "source_path": "img/field/characters/aidan/down4/arm02/aidan_walk_down_05_arm02.png",
+   "source_branch": "feature/player-walk-arm-02",
+   "source_commit": "95e5563032095790e7a6887c74fa466f44a0bead",
+   "source_sha256": "6c857b4cbf1459df48ecd305b41ffa7f1b7b98a1458b6d2243a8c50c94e17bad",
+   "width": 2048,
+   "height": 1280,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/characters/aidan/down4/adopted-walk.json",
+    "js/field/aidan-field-assets.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Director adopted ARM02 from PR144 after PR145 independent QA PASS. Exact original candidate bytes copied to production paths; original05/02 retained. Slot01/current,05/ARM02,02/ARM02,06/ground repair;90world,bob25%,whole-frameoffset0. Physical Android NOT_RUN. Integration QA recorded separately."
   },
   {
    "asset_id": "file:img_field_characters_aidan_side6_fix01_aidan_walk_right_01",
@@ -32766,7 +32820,7 @@
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "PLAYER-WALK-PRODUCTION-01: original01/05/02 used in adopted four-pose order; original03/04 and original06 retained on disk, not the active down walk sequence. Repaired06 lives at down4/. Other source approval statuses unchanged. Per-file adoption for01/05/02 is recorded in img/field/characters/aidan/down4/adopted-walk.json; the six-file historical group is not blanket-promoted.",
+   "notes": "PLAYER-WALK-ARM-02: original01 remains in active bank. Old05/02/03/04/06 remain unchanged on disk; active05/02 use down4/arm02/, active06 uses down4/ground repair. Current adopted SHA/order/history is down4/adopted-walk.json; no blanket promotion of historical six-file group.",
    "frames": [
     "img/field/characters/aidan/aidan_walk_down_01.png",
     "img/field/characters/aidan/aidan_walk_down_02.png",

@@ -7569,6 +7569,25 @@
     "implementation_status": "PARTIAL",
     "notes": "PLAYER-WALK-PRODUCTION-01: original01/05/02 used in adopted four-pose order; original03/04 and original06 retained on disk, not the active down walk sequence. Repaired06 lives at down4/. Other source approval statuses unchanged. Per-file adoption for01/05/02 is recorded in img/field/characters/aidan/down4/adopted-walk.json; the six-file historical group is not blanket-promoted."
    }
+  },
+  {
+   "match": "^file:img_field_characters_aidan_down4_arm02_aidan_walk_down_(02|05)_arm02$",
+   "set": {
+    "approval_status": "APPROVED",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "source_branch": "feature/player-walk-arm-02",
+    "source_commit": "95e5563032095790e7a6887c74fa466f44a0bead",
+    "delivery_date": "2026-11-05",
+    "notes": "Director adopted ARM02 from PR144 after PR145 independent QA PASS. Exact original candidate bytes copied to production paths; original05/02 retained. Slot01/current,05/ARM02,02/ARM02,06/ground repair;90world,bob25%,whole-frameoffset0. Physical Android NOT_RUN. Integration QA recorded separately."
+   }
+  },
+  {
+   "match": "^seq:img_field_characters_aidan_aidan_walk_down$",
+   "set": {
+    "implementation_status": "PARTIAL",
+    "notes": "PLAYER-WALK-ARM-02: original01 remains in active bank. Old05/02/03/04/06 remain unchanged on disk; active05/02 use down4/arm02/, active06 uses down4/ground repair. Current adopted SHA/order/history is down4/adopted-walk.json; no blanket promotion of historical six-file group."
+   }
   }
  ],
  "motion_gaps": [

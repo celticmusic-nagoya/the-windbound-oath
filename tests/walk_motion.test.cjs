@@ -109,3 +109,20 @@ test('adopted down bank uses source01/05/02/repaired06 and quarter bob only', ()
  }
  assert.deepEqual(Array.from(d.frames[3].anchor),[1024,1230]);assert.equal(d.frames[3].scale,.0625);
 });
+
+test('director-adopted ARM02 PNG bytes and live slot references are pinned', () => {
+ const crypto=require('node:crypto'),{W}=fixture(),d=W.ally('aidan','down');
+ for(const [n,h] of [[5,'6c857b4cbf1459df48ecd305b41ffa7f1b7b98a1458b6d2243a8c50c94e17bad'],[2,'614bdeffb8c09b3dbb7e0b688cea21efdfc7b68ccdeea0ddf53694f0bc13824f']]){
+  const f=d.frames.find(f=>f.key==='aidan_walk_down_'+String(n).padStart(2,'0'));
+  assert.match(f.url,/down4\/arm02\//);assert.ok(!f.url.includes('candidate'));
+  assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f.url.split('?')[0]))).digest('hex'),h);
+ }
+ assert.match(d.frames[0].url,/aidan\/aidan_walk_down_01.png/);assert.match(d.frames[3].url,/down4\/aidan_walk_down_06_ground.png/);
+});
+
+test('ARM02 adoption retains the original production adoption history', () => {
+ const m=JSON.parse(fs.readFileSync(path.join(root,'img/field/characters/aidan/down4/adopted-walk.json'),'utf8'));
+ const old=m.adoption_history[0].files;assert.equal(old.find(f=>f.frame===5).sha256,'6efcfe75cce44aea3a11ae3712c1277d0f324cb384870ed93efe2f6af01404ec');
+ assert.equal(old.find(f=>f.frame===2).sha256,'7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d');
+ assert.ok(m.files.filter(f=>[5,2].includes(f.frame)).every(f=>f.source_pr===144&&f.path.includes('/arm02/')));
+});

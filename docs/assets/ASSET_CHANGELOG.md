@@ -21,3 +21,5 @@
 - 2026-10-17 | BATTLE-ANIM4 | aidan hit/lowhp/ko 改訂版、fiona winddance 改訂版 納品（10/16の hplow/ko/danceofthewind は置換） | handoff assets-originals/battle_anim4_20261017
 - 2026-10-16 | aidan_fiona_lou_new_asset.zip | 10 PNG（Aidan 2 / Fiona 5 / Lou 3）納品。ブランチ assets/aidan-fiona-lou-* / assets/party-motion-originals-* は実在せず、原本は handoff のみ | ZIP SHA-256 af0c79c3bc95b337edc8b4b52c9005127a1db5cfbe9d957bde4d04eef931c5b0
 - 2026-10-16 | ゴブリン・レイダー 6コマ7シート | 納品（5シート採用・未切り出し、powered_attack/ko_dissolve は候補で採用待ち）。ブランチ assets/goblin-raider-ko-from-dissolve-f1 のみ、未実装 | Phase 5 予定
+
+- 2026-11-05 | PLAYER-WALK-ARM-02 | Director formally adopts PR144 slots05/02 after PR145 independent QA PASS. Production copies under img/field/characters/aidan/down4/arm02/; exact SHA6c857b4c/614bdeff, originals retained. Bank01->05->02->ground06,90world,bob25%,offset0 unchanged. Physical Android NOT_RUN.
