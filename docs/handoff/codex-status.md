@@ -108,3 +108,9 @@ KK完了: command-initial-open-mobile-20261013.md / measure tool / 12条件画�
 全5項目を各区切りpush。納品一覧codex-GG-KK-delivery-20261013.md。HHの別環境向け一時候補自動生成版も37/37再合格し、表/ログ/画像を最終実行へ更新。GG40合格/2指摘、II9合格、JJ20連続+関連2合格、KK12計測完了。進行中なし、GG〜KK未着手なし。実機/全回帰は今回未実施。
 
 再開: git fetch --all、main/status/standing/新規briefsと本branchのgit logを確認し、完了GG〜KKは繰り返さない。未解決の採用/実機/2指摘は納品一覧を参照。main未マージ、force pushなし、保護対象差分0、元worktreeはwork/codex-wind-dance-sim2のcleanを維持。未コミット懸念なし（最終push時点）、自身のサーバー終了。Claudeが資料/branchをレビューして統合する。
+
+## PLAYER-WALK-UP-07 — 担当範囲
+
+Codex担当、`feature/player-walk-up-07-production`。ユーザーが上5コマの正式採用・独立QA PASS後のmainマージ／Pages公開を承認。変更対象：aidan-field-assets.js、indexキャッシュ、up5正式PNG／台帳、素材台帳生成物、関連歩行テストとQA資料。他方向・SAVE・共有描画エンジンは変更しない。最終HEAD・独立QA・マージ／公開結果は統合PRを正本として参照する。
+
+UP07停止記録：実装HEAD `7c7ea60232c993eff98d52593de4d94d392bdbaf` の初回m67が `pc/ur 90world/.300second measured` でFAIL。ユーザーの停止指示を適用し、以後の実装修正・再実行・mainマージ・Pages公開を停止。詳細と再開条件は `docs/qa/PLAYER-WALK-UP-07.md`、保存証拠は同QAフォルダ。統合済み／QA PASSと扱わない。

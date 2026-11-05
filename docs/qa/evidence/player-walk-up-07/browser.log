@@ -1,0 +1,30 @@
+PASS adopted SHA aidan_walk_up_pushoff
+PASS adopted SHA aidan_walk_up_03
+PASS adopted SHA aidan_walk_up_04
+PASS adopted SHA aidan_walk_up_01
+PASS adopted SHA aidan_walk_up_06
+PASS exact approved candidate SHA
+PASS full adopted RGBA canvas/bounds
+PASS pc exact unused startup retarget
+PASS pc real production five/order90/bob25
+PASS pc no imported fixture or alias
+PASS pc/straight five actual decoded sources/order/wrap
+PASS pc/straight 90world/.300second measured
+PASS pc/straight quarter bob/unmirrored/full anchor
+PASS pc/straight stop/protected game and SAVE
+PASS pc/ul five actual decoded sources/order/wrap
+PASS pc/ul 90world/.300second measured
+PASS pc/ul quarter bob/unmirrored/full anchor
+PASS pc/ul stop/protected game and SAVE
+PASS pc/ur five actual decoded sources/order/wrap
+FAIL pc/ur 90world/.300second measured
+Traceback (most recent call last):
+  File "/workspace/work/player-walk-up-07/repo/tests/moss/m67_up_production.py", line 68, in <module>
+    rows=stop(p);cycles=field_check(p,rows,view+'/'+route);runs.append({'view':view,'kind':'field','route':route,'cycles':cycles,'rows':rows});settle(p);ck(view+'/'+route+' stop/protected game and SAVE',p.evaluate(STABLE)==stable and p.evaluate('JSON.stringify({...localStorage})')==storage and p.evaluate("[...document.querySelectorAll('.forest-aidan')].find(i=>!i.hidden).style.transform")=="");p.screenshot(path=str(O/f'{view}-{route}-stopped.png'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/player-walk-up-07/repo/tests/moss/m67_up_production.py", line 44, in field_check
+    ck(label+' 90world/.300second measured',len(cycles)>=4 and abs(statistics.median(x['distance'] for x in cycles)-90)<12 and abs(statistics.median(x['seconds'] for x in cycles)-.3)<.08)
+  File "/workspace/work/player-walk-up-07/repo/tests/moss/m67_up_production.py", line 12, in ck
+    checks.append({'name':n,'pass':bool(v)});(O/'results.json').write_text(json.dumps(checks,indent=2));(O/'runs.json').write_text(json.dumps(runs,indent=2));print(('PASS ' if v else 'FAIL ')+n,flush=True);assert v,n
+                                                                                                                                                                                                                     ^
+AssertionError: pc/ur 90world/.300second measured

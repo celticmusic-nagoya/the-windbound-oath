@@ -39,14 +39,14 @@
   "issues_total": 15
  },
  "summary": {
-  "total": 1215,
-  "approved_implemented": 288,
+  "total": 1216,
+  "approved_implemented": 289,
   "approved_not_implemented": 0,
   "delivered_not_merged": 184,
   "pending_adoption": 7,
   "source_missing": 0,
   "approval_unknown": 886,
-  "on_main": 1031,
+  "on_main": 1032,
   "implemented_on_main": 977,
   "unreferenced_on_main": 53
  },
@@ -6495,6 +6495,33 @@
    "android_status": "UNVERIFIED",
    "issue": "",
    "notes": "AIDAN-SIDE-WALK-FIX01: four sparse toe-extraction repairs from delivered source sheets; original pixels/assets retained. Runtime stride180 at1x (AIDAN-SIDE-WALK-03 director adoption). Director physical Android review pending. Sparse replacement files are not contiguous: left02/04/05 override the corresponding slots of the existing six-frame sequence; they are not an independent animation."
+  },
+  {
+   "asset_id": "file:img_field_characters_aidan_up5_aidan_walk_up_pushoff",
+   "name": "aidan_walk_up_pushoff.png",
+   "category": "field_character",
+   "character": "aidan",
+   "motion": "walk",
+   "delivery_date": "2026-11-05",
+   "source_path": "img/field/characters/aidan/up5/aidan_walk_up_pushoff.png",
+   "source_branch": "feature/player-walk-up-06",
+   "source_commit": "c15a715fe450e76820153e71ea7b04e70e258d6d",
+   "source_sha256": "1bde96684c85739e821e8c7e5e8f07831b8819414569d07d6a3bbb3613e80dfd",
+   "width": 2048,
+   "height": 1280,
+   "frame_count": 1,
+   "approval_status": "APPROVED",
+   "implementation_status": "IMPLEMENTED",
+   "integration_status": "MAIN",
+   "runtime_reference": [
+    "img/field/characters/aidan/up5/adopted-walk.json",
+    "js/field/aidan-field-assets.js"
+   ],
+   "arena_available": "N/A",
+   "qa_status": "PASS",
+   "android_status": "UNVERIFIED",
+   "issue": "",
+   "notes": "Director adopted PLAYER-WALK-UP-07 from PR153 after PR154 independent QA PASS. Exact SHA1bde9668 candidate bytes copied to a new production path/key; no QA up02 alias. New/03/04/01/06,90world,bob25%,anchor1024/1230,scale.0625. Old six originals preserved. Physical Android NOT_RUN; integration QA recorded separately."
   },
   {
    "asset_id": "file:img_field_lind_animals_chicken_idle",
@@ -32967,16 +32994,17 @@
    "height": 1280,
    "frame_count": 6,
    "approval_status": "UNKNOWN",
-   "implementation_status": "IMPLEMENTED",
+   "implementation_status": "PARTIAL",
    "integration_status": "MAIN",
    "runtime_reference": [
+    "img/field/characters/aidan/up5/adopted-walk.json",
     "js/field/aidan-field-assets.js"
    ],
    "arena_available": "N/A",
    "qa_status": "UNVERIFIED",
    "android_status": "UNVERIFIED",
    "issue": "",
-   "notes": "existing asset on main; adoption record not re-verified",
+   "notes": "PLAYER-WALK-UP-07: original03/04/01/06 remain active; old02/05 remain unchanged on disk. Active five-frame bank begins with up5/aidan_walk_up_pushoff.png. See up5/adopted-walk.json; no blanket promotion of historical six-file group.",
    "frames": [
     "img/field/characters/aidan/aidan_walk_up_01.png",
     "img/field/characters/aidan/aidan_walk_up_02.png",
