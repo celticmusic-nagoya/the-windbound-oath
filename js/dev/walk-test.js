@@ -3,13 +3,25 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, armSource: 'production', time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const armCandidates = Object.freeze({aidan_walk_down_01: 'assets/candidates/player-walk-polish01/arm-01-aidan-down/aidan_walk_down_01_arm_candidate.png', aidan_walk_down_02: 'assets/candidates/player-walk-polish01/arm-01-aidan-down/aidan_walk_down_02_arm_candidate.png'});
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
   const active = () => Boolean(root?.open);
   const aidan = () => S.group === 'ally' && S.actor === 'aidan';
   const sideWalk = () => aidan() && S.state === 'walk' && ['left', 'right'].includes(S.direction);
+  const armTrial = () => aidan() && S.state === 'walk' && S.direction === 'down';
+  function armInfo() {
+    q('[data-walk=arm-controls]').hidden = !armTrial();
+    q('[data-walk=arm-source]').value = armTrial() ? S.armSource : 'production';
+    q('[data-walk=arm-source]').disabled = !armTrial();
+    const caption = q('[data-walk=arm-condition]'); caption.hidden = !armTrial();
+    if (armTrial() && S.def) {
+      const text = `${S.armSource === 'candidate' ? 'B: 未採用の腕候補01/02' : 'A: 本番'} / 周期${S.def.stride} / bob${(S.def.bobScale ?? 1) * 100}% / 全身補正OFF / ${S.speed}倍`;
+      if (caption.textContent !== text) caption.textContent = text;
+    }
+  }
   function strideInfo() {
     q('[data-walk=stride-controls]').hidden = !aidan();
     if (!aidan()) return;
@@ -39,7 +51,7 @@
   }
   function info() {
     if (!root || !S.def) return;
-    strideInfo();
+    strideInfo(); armInfo();
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
     q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (sideWalk() ? ' ／ DEV一時設定' : '') + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
@@ -99,7 +111,8 @@
     S.def = W.resolve(S.group, S.actor, S.direction, S.state);
     // Clone the descriptor only; never mutate production settings or registries.
     if (sideWalk() && S.def) S.def = {...S.def, stride: S.sideStride};
-    strideInfo();
+    if (armTrial() && S.armSource === 'candidate' && S.def) S.def = {...S.def, frames: Object.freeze(S.def.frames.map(f => armCandidates[f.key] ? Object.freeze({...f, url: armCandidates[f.key]}) : f)), note: 'DEV左腕候補01/02（未採用・本番bank不変）'};
+    strideInfo(); armInfo();
     q('img').hidden = true; q('img').removeAttribute('src'); q('[data-walk=play]').disabled = true; q('[data-walk=error]').textContent = '';
     root.dataset.actor = S.actor; root.dataset.direction = S.direction; root.dataset.state = S.state;
     for (const b of root.querySelectorAll('[data-direction]')) {
@@ -140,9 +153,10 @@
   function build() {
     root = document.createElement('dialog'); root.id = 'walkMotionTest'; root.setAttribute('aria-label', '歩行モーションテスト');
     root.innerHTML = `<header><h3>歩行モーションテスト</h3><button type="button" data-walk="fold" aria-expanded="true">操作パネル</button><button type="button" data-walk="close">閉じる</button></header>
-<div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div></div>
+<div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div><span class="walkArmCondition" data-walk="arm-condition" hidden></span></div>
 <section class="walkPanel"><label>分類<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option><option value="npc">NPC</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
 <div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
+<fieldset data-walk="arm-controls" hidden><legend>左腕A/B比較（DEV・候補未採用）</legend><label>画像<select data-walk="arm-source"><option value="production">A：本番01・02</option><option value="candidate">B：PR #142候補01・02</option></select></label><p>本番と同じ01→05→02→修復06、周期90・bob25%。05/06・アンカー・全身位置は変更しません。切替時は停止して01へ戻ります。</p></fieldset>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
 <label>再生倍率<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
 <fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
@@ -169,7 +183,8 @@
     root.addEventListener('input', e => { if (e.target.dataset.walk === 'stride') setStride(Math.round(Number(e.target.value) / 10) * 10); });
     root.addEventListener('change', e => {
       const control = e.target;
-      if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
+      if (control.dataset.walk === 'arm-source') { S.armSource = control.value; void select(); }
+      else if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
       else if (control.dataset.walk === 'actor') { S.actor = control.value; void select(); }
       else if (control.dataset.walk === 'speed') { S.speed = Number(control.value); info(); }
       else if (control.dataset.walk === 'background') background(control.value);
@@ -222,5 +237,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, armSource: S.armSource, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
 })();
