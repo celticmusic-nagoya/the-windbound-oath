@@ -1,0 +1,73 @@
+PASS fixture gate /DEV=true
+PASS fixture gate ?dev=1/DEV=true
+PASS fixture gate ?up06QA=1/DEV=true
+PASS fixture gate ?dev=1&up06QA=1/DEV=false
+PASS fixture gate ?dev=1&up06QA=1/DEV=true
+PASS pc normal game reset starts production D
+PASS pcA descriptor90/order/bob
+PASS pcAFalse decoded cyclic order
+PASS pcAFalse period and bob
+PASS pcAFalse spatial scale
+PASS pcATrue decoded cyclic order
+PASS pcATrue period and bob
+PASS pcATrue spatial scale
+PASS pcAstraight field decoded order/unmirrored
+PASS pcAstraight actual90 distance/.300seconds
+PASS pcAstraight bob amplitude
+PASS pcAstraight stop and game state
+PASS pcAul field decoded order/unmirrored
+PASS pcAul actual90 distance/.300seconds
+PASS pcAul bob amplitude
+PASS pcAul stop and game state
+PASS pcAur field decoded order/unmirrored
+PASS pcAur actual90 distance/.300seconds
+PASS pcAur bob amplitude
+PASS pcAur stop and game state
+PASS pcB descriptor90/order/bob
+PASS pcBFalse decoded cyclic order
+PASS pcBFalse period and bob
+PASS pcBFalse spatial scale
+PASS pcBTrue decoded cyclic order
+PASS pcBTrue period and bob
+PASS pcBTrue spatial scale
+PASS pcBstraight field decoded order/unmirrored
+PASS pcBstraight actual90 distance/.300seconds
+PASS pcBstraight bob amplitude
+PASS pcBstraight stop and game state
+PASS pcBul field decoded order/unmirrored
+PASS pcBul actual90 distance/.300seconds
+PASS pcBul bob amplitude
+PASS pcBul stop and game state
+PASS pcBur field decoded order/unmirrored
+PASS pcBur actual90 distance/.300seconds
+PASS pcBur bob amplitude
+PASS pcBur stop and game state
+PASS pcC descriptor90/order/bob
+PASS pcCFalse decoded cyclic order
+PASS pcCFalse period and bob
+PASS pcCFalse spatial scale
+PASS pcCTrue decoded cyclic order
+PASS pcCTrue period and bob
+PASS pcCTrue spatial scale
+PASS pcCstraight field decoded order/unmirrored
+PASS pcCstraight actual90 distance/.300seconds
+PASS pcCstraight bob amplitude
+PASS pcCstraight stop and game state
+PASS pcCul field decoded order/unmirrored
+PASS pcCul actual90 distance/.300seconds
+PASS pcCul bob amplitude
+PASS pcCul stop and game state
+PASS pcCur field decoded order/unmirrored
+PASS pcCur actual90 distance/.300seconds
+PASS pcCur bob amplitude
+PASS pcCur stop and game state
+PASS pcD descriptor90/order/bob
+FAIL pcDFalse decoded cyclic order
+Traceback (most recent call last):
+  File "/workspace/work/player-walk-up-06-qa/repo/tests/moss/m66_up06_independent.py", line 65, in <module>
+    runs.append({'view':view,'mode':mode,'kind':'preview','field_scale':field,'period':period,'bob_error':max(err),'rows':rows});ck(view+mode+str(field)+' decoded cyclic order',len(trans)>10 and all(y['frame']==order[(order.index(x['frame'])+1)%len(order)] for x,y in zip(trans,trans[1:])));ck(view+mode+str(field)+' period and bob',abs(period-.3)<.04 and max(err)<.04);ck(view+mode+str(field)+' spatial scale',not field or all(abs(r['height']-80)<.1 for r in rows))
+                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/player-walk-up-06-qa/repo/tests/moss/m66_up06_independent.py", line 12, in ck
+    checks.append({'name':n,'pass':bool(v)});(O/'up-results.json').write_text(json.dumps(checks,indent=2));(O/'up-runs.json').write_text(json.dumps(runs,indent=2));print(('PASS ' if v else 'FAIL ')+n,flush=True);assert v,n
+                                                                                                                                                                                                                           ^
+AssertionError: pcDFalse decoded cyclic order

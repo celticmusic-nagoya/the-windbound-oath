@@ -1,0 +1,15 @@
+/workspace/work/player-walk-up-06-qa/independent-review/fixture-contract.cjs:3
+for(const [search,dev]of [['',true],['?dev=1',true],['?dev=1&up06QA=1',false]]){const s=fixture(search,dev);assert.equal(s.QAUp06,undefined);assert.deepEqual(Array.from(s.FieldWalkMotion.ally('aidan','up').frames,f=>Number(f.key.slice(-2))),[1,2,3,4,5,6]);count++}
+                                                                                                                                                                                                             ^
+
+TypeError: Cannot read properties of null (reading 'frames')
+    at Object.<anonymous> (/workspace/work/player-walk-up-06-qa/independent-review/fixture-contract.cjs:3:206)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.19.0
