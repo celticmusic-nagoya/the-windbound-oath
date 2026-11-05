@@ -3,13 +3,20 @@
   'use strict';
   if (!window.WINDBOUND_DEV) return;
   const W = window.FieldWalkMotion;
-  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
+  const S = {group: 'ally', actor: 'aidan', direction: 'down', state: 'walk', loaded: false, speed: 1, sideStride: null, upFieldScale: false, time: 0, index: 0, playing: false, raf: null, last: null, generation: 0, def: null, zoom: 1, width: 0, height: 0, ready: false};
   const images = new Map(), reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let root;
   const q = selector => root.querySelector(selector);
   const active = () => Boolean(root?.open);
   const aidan = () => S.group === 'ally' && S.actor === 'aidan';
   const sideWalk = () => aidan() && S.state === 'walk' && ['left', 'right'].includes(S.direction);
+  const upTrial = () => Boolean(window.DevUpWalkQA) && aidan() && S.state === 'walk' && S.direction === 'up';
+  function upInfo() {
+    q('[data-walk=up-controls]').hidden = !upTrial();
+    q('[data-walk=up-condition]').value = window.DevUpWalkQA?.condition || 'A';
+    const label = q('[data-walk=up-caption]'); label.hidden = !upTrial();
+    if (upTrial() && S.def) label.textContent = `DEV上${DevUpWalkQA.condition} / ${S.def.frames.map(f=>f.key.slice(-2)).join('→')} / 周期${S.def.stride} / bob${S.def.bobScale*100}% / ${S.speed}倍 / ${S.upFieldScale ? '本編等倍' : '拡大'} / 実フィールド上・斜め上にも一時適用`;
+  }
   function strideInfo() {
     q('[data-walk=stride-controls]').hidden = !aidan();
     if (!aidan()) return;
@@ -39,7 +46,7 @@
   }
   function info() {
     if (!root || !S.def) return;
-    strideInfo();
+    strideInfo(); upInfo();
     q('[data-walk=count]').textContent = `${S.index + 1} / ${S.def.frames.length}`;
     q('[data-walk=source]').textContent = `${S.def.note} / ${S.def.frames[S.index].url}`;
     q('[data-walk=policy]').textContent = (S.def.kind === 'distance' ? `周期 ${S.def.stride} world・基準速度 ${S.def.speed()} world/s` : `実ゲーム設定 ${S.def.fps} コマ/秒`) + (sideWalk() ? ' ／ DEV一時設定' : '') + (reduced.matches ? ' ／ 動きを減らす設定：コマ送りで確認' : '');
@@ -65,7 +72,7 @@
     const widths = S.def.frames.map(f => f.width * f.scale);
     const above = S.def.frames.map(f => f.anchor[1] * f.scale + (S.def.art?.air || 0) + 5);
     const below = S.def.frames.map(f => (f.height - f.anchor[1]) * f.scale + 5);
-    S.zoom = Math.min(3, (S.width - 20) / Math.max(...widths), S.height * .76 / Math.max(...above), S.height * .16 / Math.max(...below));
+    S.zoom = Math.min(upTrial() && S.upFieldScale ? 1 : 3, (S.width - 20) / Math.max(...widths), S.height * .76 / Math.max(...above), S.height * .16 / Math.max(...below));
     render();
   }
   function tick(now) {
@@ -99,7 +106,7 @@
     S.def = W.resolve(S.group, S.actor, S.direction, S.state);
     // Clone the descriptor only; never mutate production settings or registries.
     if (sideWalk() && S.def) S.def = {...S.def, stride: S.sideStride};
-    strideInfo();
+    strideInfo(); upInfo();
     q('img').hidden = true; q('img').removeAttribute('src'); q('[data-walk=play]').disabled = true; q('[data-walk=error]').textContent = '';
     root.dataset.actor = S.actor; root.dataset.direction = S.direction; root.dataset.state = S.state;
     for (const b of root.querySelectorAll('[data-direction]')) {
@@ -140,9 +147,10 @@
   function build() {
     root = document.createElement('dialog'); root.id = 'walkMotionTest'; root.setAttribute('aria-label', '歩行モーションテスト');
     root.innerHTML = `<header><h3>歩行モーションテスト</h3><button type="button" data-walk="fold" aria-expanded="true">操作パネル</button><button type="button" data-walk="close">閉じる</button></header>
-<div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div></div>
+<div class="walkBody"><div class="walkStage checker" tabindex="0" aria-label="歩行プレビュー"><img alt="歩行フレーム" draggable="false" hidden><div class="walkGround" aria-hidden="true"></div><div class="walkCenter" aria-hidden="true"></div><span class="walkUpCaption" data-walk="up-caption" hidden></span></div>
 <section class="walkPanel"><label>分類<select data-walk="group"><option value="ally">味方</option><option value="enemy">敵</option><option value="npc">NPC</option></select></label><label>キャラクター<select data-walk="actor"></select></label>
 <div class="walkRow"><button type="button" data-walk="idle">待機</button><button type="button" data-direction="up">上</button><button type="button" data-direction="down">下</button><button type="button" data-direction="left">左</button><button type="button" data-direction="right">右</button></div>
+<fieldset data-walk="up-controls" hidden><legend>上方向4条件（DEV・本番未採用）</legend><select data-walk="up-condition"><option value="A">A：現行6コマ・bob100%</option><option value="B">B：03→04→01→06・bob100%</option><option value="C">C：03→04→01→06・bob25%</option><option value="D">D：現行6コマ・bob25%</option></select><label><input type="checkbox" data-walk="up-field-scale">本編スケール（拡大なし）</label><p>周期90・移動速度は共通。閉じた後の上方向/斜め上にもDEV一時条件を適用。Aへ戻すかLOAD/再読込で解除。本番bankとSAVEは変更しません。</p></fieldset>
 <div class="walkRow"><button type="button" data-walk="play" aria-pressed="false">再生・ループ</button><button type="button" data-walk="pause">一時停止</button></div><div class="walkRow"><button type="button" data-walk="prev">◀ コマ戻し</button><button type="button" data-walk="next">コマ送り ▶</button></div>
 <label>再生倍率<select data-walk="speed"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option></select></label>
 <fieldset data-walk="stride-controls" hidden><legend>エイダン横歩き周期（DEV）</legend><label for="walkSideStride">横歩き周期 <output data-walk="stride-value" for="walkSideStride">72</output></label>
@@ -169,7 +177,9 @@
     root.addEventListener('input', e => { if (e.target.dataset.walk === 'stride') setStride(Math.round(Number(e.target.value) / 10) * 10); });
     root.addEventListener('change', e => {
       const control = e.target;
-      if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
+      if (control.dataset.walk === 'up-condition') { DevUpWalkQA.setCondition(control.value); void select(); }
+      else if (control.dataset.walk === 'up-field-scale') { S.upFieldScale = control.checked; layout(); }
+      else if (control.dataset.walk === 'group') { S.group = control.value; characters(); void select(); }
       else if (control.dataset.walk === 'actor') { S.actor = control.value; void select(); }
       else if (control.dataset.walk === 'speed') { S.speed = Number(control.value); info(); }
       else if (control.dataset.walk === 'background') background(control.value);
@@ -222,5 +232,5 @@
   const panel = document.getElementById('devPanel'); panel.querySelector('h3').after(entry);
   const hint = document.createElement('p'); entry.after(hint);
   window.DevWalkTest = Object.freeze({open, close, get active() { return active(); },
-    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
+    snapshot() { return {group: S.group, actor: S.actor, direction: S.direction, state: S.state, loaded: S.loaded, index: S.index, total: S.def?.frames.length || 0, ready: S.ready, playing: S.playing, timer: S.raf != null, speed: S.speed, upCondition: window.DevUpWalkQA?.condition || null, upFieldScale: S.upFieldScale, sideStride: S.sideStride, effectiveStride: S.def?.stride ?? null, time: S.time}; }});
 })();

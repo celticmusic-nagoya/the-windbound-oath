@@ -1,0 +1,97 @@
+PASS pc normal game reset starts A
+PASS pcA descriptor90/order/bob
+PASS pcAFalse decoded cyclic order
+PASS pcAFalse period and bob
+PASS pcAFalse spatial scale
+PASS pcATrue decoded cyclic order
+PASS pcATrue period and bob
+PASS pcATrue spatial scale
+PASS pcAstraight field decoded order/unmirrored
+PASS pcAstraight actual90 distance/.300seconds
+PASS pcAstraight bob amplitude
+PASS pcAstraight stop and game state
+PASS pcAul field decoded order/unmirrored
+PASS pcAul actual90 distance/.300seconds
+PASS pcAul bob amplitude
+PASS pcAul stop and game state
+PASS pcAur field decoded order/unmirrored
+PASS pcAur actual90 distance/.300seconds
+PASS pcAur bob amplitude
+PASS pcAur stop and game state
+PASS pcB descriptor90/order/bob
+PASS pcBFalse decoded cyclic order
+PASS pcBFalse period and bob
+PASS pcBFalse spatial scale
+PASS pcBTrue decoded cyclic order
+PASS pcBTrue period and bob
+PASS pcBTrue spatial scale
+PASS pcBstraight field decoded order/unmirrored
+PASS pcBstraight actual90 distance/.300seconds
+PASS pcBstraight bob amplitude
+PASS pcBstraight stop and game state
+PASS pcBul field decoded order/unmirrored
+PASS pcBul actual90 distance/.300seconds
+PASS pcBul bob amplitude
+PASS pcBul stop and game state
+PASS pcBur field decoded order/unmirrored
+PASS pcBur actual90 distance/.300seconds
+PASS pcBur bob amplitude
+PASS pcBur stop and game state
+PASS pcC descriptor90/order/bob
+PASS pcCFalse decoded cyclic order
+PASS pcCFalse period and bob
+PASS pcCFalse spatial scale
+PASS pcCTrue decoded cyclic order
+PASS pcCTrue period and bob
+PASS pcCTrue spatial scale
+PASS pcCstraight field decoded order/unmirrored
+PASS pcCstraight actual90 distance/.300seconds
+PASS pcCstraight bob amplitude
+PASS pcCstraight stop and game state
+PASS pcCul field decoded order/unmirrored
+PASS pcCul actual90 distance/.300seconds
+PASS pcCul bob amplitude
+PASS pcCul stop and game state
+PASS pcCur field decoded order/unmirrored
+PASS pcCur actual90 distance/.300seconds
+PASS pcCur bob amplitude
+PASS pcCur stop and game state
+PASS pcD descriptor90/order/bob
+PASS pcDFalse decoded cyclic order
+PASS pcDFalse period and bob
+PASS pcDFalse spatial scale
+PASS pcDTrue decoded cyclic order
+PASS pcDTrue period and bob
+PASS pcDTrue spatial scale
+PASS pcDstraight field decoded order/unmirrored
+PASS pcDstraight actual90 distance/.300seconds
+PASS pcDstraight bob amplitude
+PASS pcDstraight stop and game state
+PASS pcDul field decoded order/unmirrored
+PASS pcDul actual90 distance/.300seconds
+PASS pcDul bob amplitude
+PASS pcDul stop and game state
+PASS pcDur field decoded order/unmirrored
+PASS pcDur actual90 distance/.300seconds
+PASS pcDur bob amplitude
+PASS pcDur stop and game state
+FAIL pc other bank unchanged
+Traceback (most recent call last):
+  File "/workspace/work/player-walk-up-01-qa/repo/tools/qa/run_regressions.py", line 193, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/work/player-walk-up-01-qa/repo/tools/qa/run_regressions.py", line 123, in main
+    if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/player-walk-up-01-qa/repo/tools/qa/run_regressions.py", line 68, in child
+    runpy.run_path(str(root/path),run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/codex-regression-6j_bx6ir/repo/tests/moss/m65_dev_up_walk.py", line 81, in <module>
+    ck(view+' other bank unchanged',p.evaluate("(()=>{const d=FieldWalkMotion.ally('aidan','down');return d.frames.length===4&&d.bobScale===.25&&d.frames[1].url.includes('/arm02/')&&FieldWalkMotion.ally('aidan','left').stride===180&&FieldWalkMotion.ally('fiona','up').frames.length===6})()"));ck(view+' no failures',not failed);v=p.video;c.close();v.save_as(str(O/f'{view}-four-conditions.webm'))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/codex-regression-6j_bx6ir/repo/tests/moss/m65_dev_up_walk.py", line 11, in ck
+    checks.append({'name':n,'pass':bool(v)});(O/'up-results.json').write_text(json.dumps(checks,indent=2));(O/'up-runs.json').write_text(json.dumps(runs,indent=2));print(('PASS ' if v else 'FAIL ')+n,flush=True);assert v,n
+                                                                                                                                                                                                                           ^
+AssertionError: pc other bank unchanged

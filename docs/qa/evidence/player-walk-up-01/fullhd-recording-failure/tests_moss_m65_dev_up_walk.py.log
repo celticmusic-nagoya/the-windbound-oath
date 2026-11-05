@@ -1,0 +1,22 @@
+PASS pc normal game reset starts A
+PASS pcA descriptor90/order/bob
+FAIL pcAFalse decoded cyclic order
+Traceback (most recent call last):
+  File "/workspace/work/player-walk-up-01-qa/repo/tools/qa/run_regressions.py", line 193, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/work/player-walk-up-01-qa/repo/tools/qa/run_regressions.py", line 123, in main
+    if args.child:child(args.root,args.child,args.port,json.loads(args.extra_json));return
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/work/player-walk-up-01-qa/repo/tools/qa/run_regressions.py", line 68, in child
+    runpy.run_path(str(root/path),run_name='__main__')
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/codex-regression-h3stx42a/repo/tests/moss/m65_dev_up_walk.py", line 62, in <module>
+    runs.append({'view':view,'mode':mode,'kind':'preview','field_scale':field,'period':period,'bob_error':max(err),'rows':rows});ck(view+mode+str(field)+' decoded cyclic order',len(trans)>10 and all(y['frame']==order[(order.index(x['frame'])+1)%len(order)] for x,y in zip(trans,trans[1:])));ck(view+mode+str(field)+' period and bob',abs(period-.3)<.04 and max(err)<.04);ck(view+mode+str(field)+' spatial scale',not field or all(abs(r['height']-80)<.1 for r in rows))
+                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/codex-regression-h3stx42a/repo/tests/moss/m65_dev_up_walk.py", line 11, in ck
+    checks.append({'name':n,'pass':bool(v)});(O/'up-results.json').write_text(json.dumps(checks,indent=2));(O/'up-runs.json').write_text(json.dumps(runs,indent=2));print(('PASS ' if v else 'FAIL ')+n,flush=True);assert v,n
+                                                                                                                                                                                                                           ^
+AssertionError: pcAFalse decoded cyclic order

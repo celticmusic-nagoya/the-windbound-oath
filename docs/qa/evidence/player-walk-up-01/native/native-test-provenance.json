@@ -1,0 +1,14 @@
+{
+  "head": "d0e396cbbfffea77a7a9160cf991ad5803bb27bc",
+  "base_tested_head": "64a7a56f1f250b57536f084004d50660e5f3bbdc",
+  "changed_paths": [
+    "tests/moss/m65_dev_up_walk.py"
+  ],
+  "diff": "diff --git a/tests/moss/m65_dev_up_walk.py b/tests/moss/m65_dev_up_walk.py\nindex f37d389..06ec3bc 100644\n--- a/tests/moss/m65_dev_up_walk.py\n+++ b/tests/moss/m65_dev_up_walk.py\n@@ -30,7 +30,7 @@ def phases(rows):\n  return trans\n with server(8839) as base,sync_playwright() as pw:\n  b=pw.chromium.launch(executable_path=os.getenv('PW_CHROMIUM_EXECUTABLE') or '/usr/bin/chromium')\n- for view,w,h in [('pc',1920,1080),('portrait',390,844),('landscape',844,390)]:\n+ for view,w,h in [('pc',1280,720),('portrait',390,844),('landscape',844,390)]:\n   c=b.new_context(viewport={'width':w,'height':h},has_touch=True,record_video_dir=str(O/'video'),record_video_size={'width':w,'height':h});p=c.new_page();failed=[];phase={'dev':False}\n   p.on('pageerror',lambda e:errors.append(str(e)));p.on('console',lambda m:errors.append(m.text) if m.type=='error' else None);p.on('response',lambda r:errors.append(f'HTTP{r.status} {r.url}') if r.status>=400 else None);p.on('requestfailed',lambda r:failed.append({'url':r.url,'failure':r.failure,'resource_type':r.resource_type,'before_dev':not phase['dev']}))\n   p.goto(base+'/index.html?title=1&dev=1&upWalkQA=1');p.get_by_role('button',name='NEW GAME',exact=True).click();p.wait_for_function(\"LoadCoordinator.phase==='READY'&&MossForest.active&&document.body.classList.contains('dialogueOpen')\")",
+  "test_sha256": "9082997b30b85cc2ce4d6a4756602dbb060d1d0d0675f3f9bbf506703a925eea",
+  "root_test_sha256": "9082997b30b85cc2ce4d6a4756602dbb060d1d0d0675f3f9bbf506703a925eea",
+  "separate_test_inode": true,
+  "mode": "direct test from clean committed isolated linked worktree; snapshot omitted for disk capacity",
+  "gameplay_boot_equivalence": "title=1 prevents runner gameplay_boot_url rewrite/wait; same original owned-server/test/assertions",
+  "status": ""
+}
