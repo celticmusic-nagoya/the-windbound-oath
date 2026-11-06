@@ -1,6 +1,6 @@
 # PLAYER-WALK-UP-07 — director-authorized integration
 
-Status: **READY_TO_MERGE_WITH_EXPLICIT_DIRECTOR_WAIVER**; no merge performed at this checkpoint.
+Status: **MERGED_AND_DEPLOYED_WITH_EXPLICIT_DIRECTOR_WAIVER**. Known failures remain deferred; no unconditional full-m67 PASS.
 
 ## Approval superseding the earlier hold
 
@@ -35,3 +35,17 @@ Results, independent integration verdict, rollback/readback, merge and deployed-
 [Independent integration recommendation](evidence/player-walk-up-07-authorized/MERGE-WAIVER-REVIEW.md) · [Independent visual review](evidence/player-walk-up-07-authorized/VISUAL-REVIEW.md) · [Original regressions](evidence/player-walk-up-07-authorized/regression-results.json) · [Supplemental authoritative result](evidence/player-walk-up-07-authorized/supplemental-results.json) · [Lossless raw evidence, complete native videos and SHA index](evidence/player-walk-up-07-authorized/README.md).
 
 Merge only PR1550494. Do not merge PR156 diagnostics, Draft157 REQA or supplemental continuation code. Rollback ref was created and remotely read back at the unchanged current main. No configured required checks were found; GitHub's normal merge gate remains in force. Preserve existing failure histories for later comprehensive audit.
+
+## Integration readback
+
+PR #155 was normally merged at `259a25537de6f3e629f89a18cae8782f1f2f0c77`. Parents are unchanged prior main6e284667 and fixed implementation0494f645. Merge tree `b01b0834b88d662dff269b38d2699c32a2610661` is exactly the QAed PR155 tree; all post-hoc diagnostic/waiver code remains outside main. GitHub Pages run42166161533 started automatically for that merge. An immediate pre-deployment file probe encountered HTTP404 while Pages API still reported BUILDING; this is recorded as pending propagation, not a completed deployment failure or production-code fix. Final public-byte verification follows after the build completes.
+
+## Publication verified
+
+GitHub Pages [run42166161533](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/42166161533) completed SUCCESS for main `259a25537de6f3e629f89a18cae8782f1f2f0c77`. Pages build API reports BUILT for the same commit. [Public-byte verification](evidence/player-walk-up-07-authorized/pages-verification.json) confirms all8 checked files exactly equal that main commit: index, active asset JS, adopted up5 manifest and all5 up-bank PNGs. New PNG SHA remains `1bde96684c85739e821e8c7e5e8f07831b8819414569d07d6a3bbb3613e80dfd`. No settings or deployment fixes were made.
+
+Production asset: `img/field/characters/aidan/up5/aidan_walk_up_pushoff.png`. Source originals were retained, not overwritten.
+
+Android check: [open production](https://celticmusic-nagoya.github.io/the-windbound-oath/?title=1&up07=259a255), reload, CONTINUE or NEW GAME, dismiss opening dialogue, walk straight up and diagonally up-left/up-right by normal field input. Compare foot planting and loop, then stop/restart/turn; check portrait/landscape. Physical Android is still director NOT_RUN.
+
+Known original UR cause (CASE D) and exact floating-foot assertion remain deferred to comprehensive audit under the explicit user decision. Their histories/false values were not erased. Integration is complete; this does not declare every original QA PASS.
