@@ -1,0 +1,36 @@
+RUN tests/common_loading.test.cjs
+PASS tests/common_loading.test.cjs 1.276
+RUN tests/continue_restore.test.cjs
+PASS tests/continue_restore.test.cjs 0.673
+RUN tests/early_rewards.test.cjs
+PASS tests/early_rewards.test.cjs 0.223
+RUN tests/goblin_field_animation.test.cjs
+PASS tests/goblin_field_animation.test.cjs 0.122
+RUN tests/issue51_command_lock.test.cjs
+PASS tests/issue51_command_lock.test.cjs 0.072
+RUN tests/issue54_coordinator.test.cjs
+PASS tests/issue54_coordinator.test.cjs 0.071
+RUN tests/load_input_ownership.test.cjs
+PASS tests/load_input_ownership.test.cjs 0.072
+RUN tests/loading_input.test.cjs
+PASS tests/loading_input.test.cjs 0.122
+RUN tests/loading_lifecycle.test.cjs
+PASS tests/loading_lifecycle.test.cjs 0.073
+RUN tests/loading_map_readiness.test.cjs
+PASS tests/loading_map_readiness.test.cjs 0.824
+RUN tests/portrait_blink.test.cjs
+PASS tests/portrait_blink.test.cjs 0.123
+RUN tests/s2_transition_recovery.test.cjs
+PASS tests/s2_transition_recovery.test.cjs 0.172
+RUN tests/save_compatibility.test.cjs
+PASS tests/save_compatibility.test.cjs 0.626
+RUN tests/scene_lifecycle_ownership.test.cjs
+PASS tests/scene_lifecycle_ownership.test.cjs 0.123
+RUN tests/startup_race.test.cjs
+PASS tests/startup_race.test.cjs 0.272
+RUN tests/title_continue.test.cjs
+PASS tests/title_continue.test.cjs 0.222
+RUN tests/walk_motion.test.cjs
+PASS tests/walk_motion.test.cjs 0.272
+RUN tests/moss/m67_up_production.py
+FAIL tests/moss/m67_up_production.py 25.455

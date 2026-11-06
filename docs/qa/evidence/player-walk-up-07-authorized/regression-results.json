@@ -1,0 +1,113 @@
+{
+  "qa_head": "ed7d2473633c681c059e97d5677ca4d67e5aadc8",
+  "implementation": "0494f6452548ea476b4cebbc69d9f41d878d540d",
+  "prior_failure": "pc CONTINUE exact feet/progress/SAVE remains FAIL, user-waived/deferred; not rerun here",
+  "user_waiver": "New user authorizes remaining independent regression and conditional main integration; nonfatal known exactfeet issue held for audit",
+  "tests": [
+    {
+      "path": "tests/moss/m62_aidan_down_production.py",
+      "status": "PASS",
+      "exit": 0,
+      "seconds": 36.176,
+      "failure_lines": [],
+      "fail_counts": [
+        0
+      ],
+      "skips": [],
+      "source_sha256": "b0ce01b945aeb33eb964d9913cd0d3122979da708aafb39de2ff6135b459b89b",
+      "source_unchanged": true,
+      "generated_report": null,
+      "worktree_status": ""
+    },
+    {
+      "path": "tests/moss/m58_aidan_side_stride.py",
+      "status": "PASS",
+      "exit": 0,
+      "seconds": 46.405,
+      "failure_lines": [],
+      "fail_counts": [
+        0
+      ],
+      "skips": [],
+      "source_sha256": "c4861c083449685602e99b267e75e6e53dd209de7e7570d34aad7e037449f87b",
+      "source_unchanged": true,
+      "generated_report": null,
+      "worktree_status": ""
+    },
+    {
+      "path": "tests/moss/m55_dev_walk_motion.py",
+      "status": "PASS",
+      "exit": 0,
+      "seconds": 192.164,
+      "failure_lines": [],
+      "fail_counts": [
+        0
+      ],
+      "skips": [],
+      "source_sha256": "f7eef721b9da47b92ed538d152a7b59f3897aa8d48de327ed689dff0243fa8d7",
+      "source_unchanged": true,
+      "generated_report": null,
+      "worktree_status": ""
+    },
+    {
+      "path": "tests/system/save_continue_lifecycle.py",
+      "status": "PASS",
+      "exit": 0,
+      "seconds": 30.509,
+      "failure_lines": [],
+      "fail_counts": [],
+      "skips": [],
+      "source_sha256": "9b4e116703b3b06a4d4655865cf66b0a235f26141f30f09bbb1aad1747745aaf",
+      "source_unchanged": true,
+      "generated_report": null,
+      "worktree_status": ""
+    },
+    {
+      "path": "tests/system/asset_registry_audit.py",
+      "status": "PASS",
+      "exit": 0,
+      "seconds": 6.963,
+      "failure_lines": [],
+      "fail_counts": [
+        0
+      ],
+      "skips": [],
+      "source_sha256": "7fea2158093d32a3c5bb6863f896e3fa2fcc2f223a825a70b47660629d90ed52",
+      "source_unchanged": true,
+      "generated_report": {
+        "generated_sha256": "f9c823bc4dc36854c62c39b9090e26f982ed30c2097dafe077aeeea2c271d6fc",
+        "original_sha256": "8f5136aea8717d49c05e37eacf6bf45dbda93e816dff53ee0446d0b36e8db369",
+        "restored_exact": true
+      },
+      "worktree_status": ""
+    },
+    {
+      "path": "tests/moss/m49_phase4_formal_adoption.py",
+      "status": "PASS",
+      "exit": 0,
+      "seconds": 0.382,
+      "failure_lines": [],
+      "fail_counts": [
+        0
+      ],
+      "skips": [],
+      "source_sha256": "ed3f5866a15ea284a02ac9ede2368b87e840959d01f5b1d897e91b91fd068b1f",
+      "source_unchanged": true,
+      "generated_report": null,
+      "worktree_status": ""
+    }
+  ],
+  "status": "REMAINING_REGRESSIONS_PASS",
+  "protection_after": {
+    "fixed_implementation": "0494f6452548ea476b4cebbc69d9f41d878d540d",
+    "fixed_measurement": "442ab3b75141376fd83e37541504d896ba02638e",
+    "production_diff": [],
+    "history_diff": [],
+    "fixed_png_and_old_evidence_count": 1857,
+    "fixed_files_changed": [],
+    "formal_sha_count": 259,
+    "formal_sha_failures": [],
+    "measurement_inputs_changed": [],
+    "pass": true
+  }
+}

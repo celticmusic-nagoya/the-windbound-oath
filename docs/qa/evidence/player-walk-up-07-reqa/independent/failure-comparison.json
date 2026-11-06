@@ -1,0 +1,46 @@
+{
+  "qa_head": "c6f4d138cfe5edd93cff341027ca73e25eff5c97",
+  "first_failed_test": "tests/moss/m67_up_production.py",
+  "failed_original_assertion": "pc CONTINUE exact feet/progress/SAVE",
+  "before_save_feet": {
+    "x": 421.3873950262489,
+    "y": 259.6053351839163
+  },
+  "after_continue_feet": {
+    "x": 421,
+    "y": 260
+  },
+  "saved_internal_moss_xy": {
+    "x": 404,
+    "y": 218
+  },
+  "saved_internal_plus_foot_anchor": {
+    "x": 421,
+    "y": 260
+  },
+  "delta_world_axes": {
+    "x": -0.3873950262488961,
+    "y": 0.3946648160837185
+  },
+  "euclidean_delta_world": 0.5530237096334824,
+  "restored_exact_serialized_point": true,
+  "live_snapshot_SAVE_bytes_equal": true,
+  "live_snapshot_STABLE_string_equal": true,
+  "original_AND_short_circuit_note": "Original boolean stopped at unequal feet; later conjuncts were independently observed equal in pre-assert failure snapshot, not executed as original predicates.",
+  "original_m67_pass_checks": 31,
+  "original_m67_failed_checks": 1,
+  "checkpoint_failure_records": 2,
+  "duplicate_unhandled_record_note": "One original false check plus its propagation snapshot, not two distinct product failures.",
+  "Node_pass": 17,
+  "remaining_scripts_NOT_RUN": [
+    "tests/moss/m62_aidan_down_production.py",
+    "tests/moss/m58_aidan_side_stride.py",
+    "tests/moss/m55_dev_walk_motion.py",
+    "tests/system/save_continue_lifecycle.py",
+    "tests/system/asset_registry_audit.py",
+    "tests/moss/m49_phase4_formal_adoption.py"
+  ],
+  "protection_after_pass": true,
+  "browser_snapshot_file": "/tmp/player-walk-up-07-reqa-run/18-m67_up_production/assertions/failure-browser-0032.json.gz",
+  "browser_snapshot_raw_sha256": "9d2d037b6f4e2eba5674a0f05b8140d806a96a2529b151655085f030037da4b6"
+}
