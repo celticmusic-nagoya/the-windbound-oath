@@ -1,4 +1,7 @@
-/* DIRECTIVE-ART-08E (trial): side walk = 6 frames per side from img/field/characters/aidan/side6/ (far leg shaded; 05/06 derived), the adopted 4-frame files stay untouched.
+/* FIELD-STATE-01: the delivered side idle PNGs are painted facing the opposite way to their file names
+ * (aidan_idle_left.png faces right, aidan_idle_right.png faces left; side walk banks face their names).
+ * The aidan_idle_left / aidan_idle_right keys therefore point at the file that actually faces that way. PNGs unchanged.
+ * DIRECTIVE-ART-08E (trial): side walk = 6 frames per side from img/field/characters/aidan/side6/ (far leg shaded; 05/06 derived), the adopted 4-frame files stay untouched.
  * Aidan standalone field assets (tools/field/install_hero_frames.py): one shared scale + feet anchor. Explicit foot registration; no battle paths. */
 (function () {
   "use strict";
@@ -21,13 +24,13 @@
   "scale": 0.0625
  },
  "aidan_idle_left": {
-  "path": "img/field/characters/aidan/aidan_idle_left.png?v=c3bc0082",
+  "path": "img/field/characters/aidan/aidan_idle_right.png?v=b26cdaeb",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   660,
+   863,
    126,
-   667,
+   664,
    1104
   ],
   "anchor": [
@@ -37,13 +40,13 @@
   "scale": 0.0625
  },
  "aidan_idle_right": {
-  "path": "img/field/characters/aidan/aidan_idle_right.png?v=b26cdaeb",
+  "path": "img/field/characters/aidan/aidan_idle_left.png?v=c3bc0082",
   "width": 2048,
   "height": 1280,
   "bounds": [
-   863,
+   660,
    126,
-   664,
+   667,
    1104
   ],
   "anchor": [

@@ -716,7 +716,7 @@
   function show(){el.scene.style.display='block';}
   function hide(){window.FieldScene?.cancel();window.FieldChoreo?.cancelAll();cancelPendingEnter();S.active=false;S.target=null;S.keys.clear();FieldNavigation.cancel();el.scene.style.display='none';if(window.FieldBgm)FieldBgm.stop();}
   function resume(){if(entry||recoveryRequired)return false;show();playBgm();S.active=true;S.battleLatch=true;S.target=null;syncSymbols();if(S.forest){render();}startLoop();}
-  function snapshot(){const o={map:S.mapId,x:Math.round(S.x),y:Math.round(S.y),opened:[...S.opened],fired:[...S.fired],facing:{dir:spr.dir,flip:Boolean(spr.flip)}};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged)
+  function snapshot(){const o={map:S.mapId,x:S.x,y:S.y,opened:[...S.opened],fired:[...S.fired],facing:{dir:spr.dir,flip:Boolean(spr.flip)}};if(S.forest&&S.forest.height)o.level=S.forest.height.level;return o;}   // `level` only exists on height maps (additive; old saves / plain maps are unchanged); x/y are stored unrounded so CONTINUE restores the exact SAVE position (FIELD-STATE-01; integer coordinates in older saves still load)
   function restoreState(snap){
     S.opened=new Set(Array.isArray(snap&&snap.opened)?snap.opened.filter(x=>typeof x==='string'):[]);
     S.fired=new Set(Array.isArray(snap&&snap.fired)?snap.fired.filter(x=>typeof x==='string'):[]);
