@@ -89,9 +89,11 @@ Fastest party member; CRI/steal identity.
 Russet/red patterned bandana, goggles, agile dark leather equipment.
 
 ### Morwen / モルウェン
-18, reserved black mage.
-Long dark hair, violet eyes, modest academy/gothic witch styling, black/navy/purple + antique gold.
+17, top-ranked student at the Royal Magic Academy (王立魔法学院), and a reserved black mage.
+Her officially approved v3.0 design is the academy uniform; preserve the existing character artwork and black/navy/purple + antique gold palette, long dark hair, and violet eyes.
+The Royal Magic Research Institute (王立魔法研究院) is a separate research institution located alongside the academy. Morwen's admired mentor, Edric Vane (エドリック・ヴェイン), belongs to the institute; retain his existing story arc without inventing new details.
 Highest MAG; Resonance system 0–3.
+Canon: private handoff repository `reference/lore/CANON_ADDENDUM.md` ADD-002 (2026-11-06). Original v5.0 remains immutable; clean up outdated references only after game-main integration and formal scenario revision.
 
 ### Future dwarf
 Blacksmith/tank. High DEF, provoke, cover, iron wall, shield bash/BREAK.
