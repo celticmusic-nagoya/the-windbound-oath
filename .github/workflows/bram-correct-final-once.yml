@@ -1,0 +1,58 @@
+name: Adopt SHA-verified final Bram art (one-time)
+on:
+  push:
+    branches: [feature/bram-correct-sha9a77-final]
+    paths: [.github/workflows/bram-correct-final-once.yml]
+permissions:
+  contents: write
+jobs:
+  adopt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify original, replace master, remove mistaken copies
+        shell: bash
+        run: |
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,shutil
+          from PIL import Image
+          src=Path('assets/companions/bram/BRAM_CORRECT_SHA9a77b564.png')
+          sha='9a77b5644a016237463d4dd308aaf957b9fda88a51dfc20e14508dc7ac7669da'
+          assert hashlib.sha256(src.read_bytes()).hexdigest()==sha, 'Wrong PNG!'
+          im=Image.open(src)
+          assert im.mode=='RGBA' and im.size==(1024,1535), (im.mode,im.size)
+          assert im.getchannel('A').getextrema()==(0,255)
+          assert all(im.getpixel(pos)[3]==0 for pos in [(0,0),(1023,0),(0,1534),(1023,1534)])
+          master=Path('assets/companions/bram/master/bram-full-body.png')
+          shutil.copyfile(src,master)
+          web=Path('web/companions/bram.webp')
+          im.save(web,'WEBP',quality=94,method=6)
+          assert Image.open(web).convert('RGBA').getchannel('A').getextrema()==(0,255)
+          manifest=Path('assets/companions/MANIFEST.json')
+          data=json.loads(manifest.read_text())
+          found=False
+          for item in data['assets']:
+            if item.get('path')==str(master):
+              item.update(status='approved',sha256=sha,bytes=src.stat().st_size,dimensions=[1024,1535],alpha=True)
+              found=True
+          assert found
+          data['notes']=[n for n in data.get('notes',[]) if 'Bram canonical master replaced with director-confirmed GitHub upload' not in n]
+          data['notes'].append('Bram final approved source SHA-256 9a77b5644a016237463d4dd308aaf957b9fda88a51dfc20e14508dc7ac7669da verified and adopted; incorrect copies deleted')
+          manifest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          for name in ['bram-approved-final.png','bram_fullbody_original_alpha0_new(1).png']:
+            path=Path('assets/companions/bram')/name
+            if path.exists(): path.unlink()
+          print('SOURCE_SHA256',sha)
+          print('MASTER_SHA256',hashlib.sha256(master.read_bytes()).hexdigest())
+          print('WEBP_SHA256',hashlib.sha256(web.read_bytes()).hexdigest())
+          print('WEBP_BYTES',web.stat().st_size)
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A assets/companions/bram assets/companions/MANIFEST.json web/companions/bram.webp
+          git diff --cached --quiet || (git commit -m "assets(bram): adopt SHA-verified final transparent master and remove mistaken copies" && git pull --rebase origin feature/bram-correct-sha9a77-final && git push origin HEAD:feature/bram-correct-sha9a77-final)
