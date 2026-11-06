@@ -1,0 +1,172 @@
+{
+  "status": "COMPLETED_WITH_DEFERRED_KNOWN_FAILURES",
+  "original_prior_REQA_m67_result": "FAIL preserved",
+  "unconditional_full_m67_pass": false,
+  "executed_original_checks": 98,
+  "original_true_checks": 95,
+  "original_false_checks": [
+    {
+      "name": "pc CONTINUE exact feet/progress/SAVE",
+      "pass": false
+    },
+    {
+      "name": "portrait CONTINUE exact feet/progress/SAVE",
+      "pass": false
+    },
+    {
+      "name": "landscape CONTINUE exact feet/progress/SAVE",
+      "pass": false
+    }
+  ],
+  "deferred_known_failures": [
+    {
+      "checks": {
+        "map_equals_saved": true,
+        "restored_exact_serialized_feet": true,
+        "saved_point_is_original_rounding": true,
+        "quantization_each_axis_le_half": true,
+        "SAVE_bytes_unchanged": true,
+        "STABLE_string_unchanged": true
+      },
+      "qualified": true,
+      "before_save_feet": {
+        "x": 421.41739502625234,
+        "y": 259.51533518391267
+      },
+      "restored_feet": {
+        "x": 421,
+        "y": 260
+      },
+      "saved_internal": {
+        "x": 404,
+        "y": 218
+      },
+      "strict_serialized_feet": {
+        "x": 421,
+        "y": 260
+      },
+      "source_rounding_result": {
+        "x": 404,
+        "y": 218
+      },
+      "name": "pc CONTINUE exact feet/progress/SAVE",
+      "utc": "2026-11-06T04:36:33.758275+00:00",
+      "original_computed_result": false,
+      "original_failure_checkpoint": 32,
+      "snapshot": {
+        "capture": "read-only failure snapshot",
+        "file": "failure-browser-0032.json.gz",
+        "sha256": "f7d0de7c2d84e5e2805f93902f1bec53986d76482f7ded4401722a879acbadeb",
+        "feet": {
+          "x": 421,
+          "y": 260
+        },
+        "map": "rilde_in_aidan"
+      },
+      "status": "FAIL_DEFERRED_KNOWN_EXACTFEET",
+      "approval": "New explicit user waiver relayed by root; all six qualification conditions required",
+      "original_assertion_is_not_pass": true
+    },
+    {
+      "checks": {
+        "map_equals_saved": true,
+        "restored_exact_serialized_feet": true,
+        "saved_point_is_original_rounding": true,
+        "quantization_each_axis_le_half": true,
+        "SAVE_bytes_unchanged": true,
+        "STABLE_string_unchanged": true
+      },
+      "qualified": true,
+      "before_save_feet": {
+        "x": 421.4773950262525,
+        "y": 259.5753351839133
+      },
+      "restored_feet": {
+        "x": 421,
+        "y": 260
+      },
+      "saved_internal": {
+        "x": 404,
+        "y": 218
+      },
+      "strict_serialized_feet": {
+        "x": 421,
+        "y": 260
+      },
+      "source_rounding_result": {
+        "x": 404,
+        "y": 218
+      },
+      "name": "portrait CONTINUE exact feet/progress/SAVE",
+      "utc": "2026-11-06T04:36:59.798371+00:00",
+      "original_computed_result": false,
+      "original_failure_checkpoint": 62,
+      "snapshot": {
+        "capture": "read-only failure snapshot",
+        "file": "failure-browser-0062.json.gz",
+        "sha256": "7ebcf842743a4527408c89e60d982a5cf315fd482586bad01a2a7674af0a3dcf",
+        "feet": {
+          "x": 421,
+          "y": 260
+        },
+        "map": "rilde_in_aidan"
+      },
+      "status": "FAIL_DEFERRED_KNOWN_EXACTFEET",
+      "approval": "New explicit user waiver relayed by root; all six qualification conditions required",
+      "original_assertion_is_not_pass": true
+    },
+    {
+      "checks": {
+        "map_equals_saved": true,
+        "restored_exact_serialized_feet": true,
+        "saved_point_is_original_rounding": true,
+        "quantization_each_axis_le_half": true,
+        "SAVE_bytes_unchanged": true,
+        "STABLE_string_unchanged": true
+      },
+      "qualified": true,
+      "before_save_feet": {
+        "x": 420.03121320342984,
+        "y": 258.1467269542246
+      },
+      "restored_feet": {
+        "x": 420,
+        "y": 258
+      },
+      "saved_internal": {
+        "x": 403,
+        "y": 216
+      },
+      "strict_serialized_feet": {
+        "x": 420,
+        "y": 258
+      },
+      "source_rounding_result": {
+        "x": 403,
+        "y": 216
+      },
+      "name": "landscape CONTINUE exact feet/progress/SAVE",
+      "utc": "2026-11-06T04:37:26.267236+00:00",
+      "original_computed_result": false,
+      "original_failure_checkpoint": 92,
+      "snapshot": {
+        "capture": "read-only failure snapshot",
+        "file": "failure-browser-0092.json.gz",
+        "sha256": "dc26841ae372b674943f26504a7d834e8592480eca1764372994c09d07a4c255",
+        "feet": {
+          "x": 420,
+          "y": 258
+        },
+        "map": "rilde_in_aidan"
+      },
+      "status": "FAIL_DEFERRED_KNOWN_EXACTFEET",
+      "approval": "New explicit user waiver relayed by root; all six qualification conditions required",
+      "original_assertion_is_not_pass": true
+    }
+  ],
+  "new_false_checks": [],
+  "exception": null,
+  "all_nondeferred_original_checks_pass": true,
+  "user_waiver_explicit": true,
+  "production_source_edited": false
+}
