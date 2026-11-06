@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "status": "STAGING_ASSETS_NOT_UPLOADED",
+  "scene": "Rilde village reconstruction after the raid",
+  "story_order": [
+    "Rilde raid",
+    "escape",
+    "Moss forest",
+    "Raider defeated",
+    "report at Dunval Fort",
+    "temporary return to Rilde"
+  ],
+  "approved_assets": [
+    {
+      "id": "rilde_recovery_bg",
+      "role": "background-only",
+      "status": "approved; source not yet uniquely identified for upload",
+      "target": "assets/approved/game/rilde/recovery/background_only.png"
+    },
+    {
+      "id": "rilde_recovery_relief",
+      "role": "event CG: soldiers, rebuilding villagers, aid distribution",
+      "status": "approved",
+      "target": "assets/approved/game/rilde/recovery/relief_scene.png",
+      "source_local_filename": "wide_cinematic_medieval_fantasy_village_reconstru.png",
+      "sha256": "5a4ac086add641b22601c97730a6b702644c2dbcf2c800a1a01e32321192f5f0",
+      "dimensions": [
+        1670,
+        941
+      ],
+      "notes": "Final approved version with ponytail female soldier in foreground; preserve original unchanged"
+    }
+  ],
+  "constraints": [
+    "No overwriting or deleting existing assets",
+    "Do not publish on official website",
+    "No runtime or SAVE changes in staging PR",
+    "Keep Wind Stone, bridge and ruined village geography",
+    "Reuse approved original PNG without edits",
+    "Only link scene once binaries are present and validated"
+  ],
+  "qa": {
+    "binary_uploaded": false,
+    "sha256_verified_on_github": false,
+    "android_device": "NOT_RUN",
+    "integration": "NOT_STARTED"
+  }
+}
