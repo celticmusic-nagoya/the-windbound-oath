@@ -19,11 +19,11 @@ jobs:
           import hashlib,json,shutil
           from PIL import Image
           src=Path('assets/companions/bram/bram_fullbody_original_alpha0_new.png')
-          sha='9a77b5644a016237463d4dd308aaf957b9fda88a51dfc20e14508dc7ac7669da'
+          sha='403f9e01a05d6b5ae4dbca1b7614b3d17b2797f6054ab8a2797f67c43cf5e191'
           print('UPLOADED_SHA256:',hashlib.sha256(src.read_bytes()).hexdigest(),flush=True)
           assert hashlib.sha256(src.read_bytes()).hexdigest()==sha, 'Incorrect uploaded file'
           im=Image.open(src).convert('RGBA')
-          assert im.size==(1024,1535)
+          assert im.size[0]==1024 and im.size[1] in (1535,1536), im.size
           assert im.getchannel('A').getextrema()==(0,255)
           master=Path('assets/companions/bram/master/bram-full-body.png')
           shutil.copyfile(src,master)
@@ -34,9 +34,9 @@ jobs:
           data=json.loads(manifest.read_text())
           for entry in data['assets']:
             if entry['path']==str(master):
-              entry.update(status='approved',sha256=sha,bytes=src.stat().st_size,dimensions=[1024,1535],alpha=True)
+              entry.update(status='approved',sha256=sha,bytes=src.stat().st_size,dimensions=list(im.size),alpha=True)
           data['notes']=[n for n in data.get('notes',[]) if 'Bram approved transparent PNG replaces previous master image' not in n]
-          data['notes'].append('Bram canonical master replaced with director-corrected 1024x1535 transparent PNG; superseded upload removed from working tree')
+          data['notes'].append('Bram canonical master replaced with director-confirmed GitHub upload; source SHA-256 verified and superseded uploads removed from working tree')
           manifest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
           old=Path('assets/companions/bram/bram_fullbody_original_alpha0.png')
           if old.exists(): old.unlink()
