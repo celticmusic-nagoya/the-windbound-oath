@@ -18,7 +18,7 @@ jobs:
           from pathlib import Path
           import hashlib,json,shutil
           from PIL import Image
-          src=Path('assets/companions/bram/赤髭のドワーフ戦士と巨大戦槌 (1).png')
+          src=Path('assets/companions/bram/bram_fullbody_original_alpha0_new.png')
           sha='9a77b5644a016237463d4dd308aaf957b9fda88a51dfc20e14508dc7ac7669da'
           print('UPLOADED_SHA256:',hashlib.sha256(src.read_bytes()).hexdigest(),flush=True)
           assert hashlib.sha256(src.read_bytes()).hexdigest()==sha, 'Incorrect uploaded file'
@@ -41,6 +41,8 @@ jobs:
           old=Path('assets/companions/bram/bram_fullbody_original_alpha0.png')
           if old.exists(): old.unlink()
           src.unlink()
+          mistaken=Path('assets/companions/bram/赤髭のドワーフ戦士と巨大戦槌 (1).png')
+          if mistaken.exists(): mistaken.unlink()
           print('CORRECT_APPROVED_SHA256:',sha)
           print('MASTER_SHA256:',hashlib.sha256(master.read_bytes()).hexdigest())
           print('WEBP_SHA256:',hashlib.sha256(web.read_bytes()).hexdigest())
