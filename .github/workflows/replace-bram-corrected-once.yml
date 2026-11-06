@@ -20,6 +20,7 @@ jobs:
           from PIL import Image
           src=Path('assets/companions/bram/赤髭のドワーフ戦士と巨大戦槌 (1).png')
           sha='9a77b5644a016237463d4dd308aaf957b9fda88a51dfc20e14508dc7ac7669da'
+          print('UPLOADED_SHA256:',hashlib.sha256(src.read_bytes()).hexdigest(),flush=True)
           assert hashlib.sha256(src.read_bytes()).hexdigest()==sha, 'Incorrect uploaded file'
           im=Image.open(src).convert('RGBA')
           assert im.size==(1024,1535)
