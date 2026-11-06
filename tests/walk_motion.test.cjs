@@ -35,7 +35,7 @@ test('every direction uses exact production metadata and declared direction bank
 });
 test('phase selectors preserve production arithmetic across cycles and frame counts', () => {
   const {W} = fixture();
-  for (const count of [4, 6, 11]) for (let i = 0; i < 4000; i++) {
+  for (const count of [4, 5, 6, 11]) for (let i = 0; i < 4000; i++) {
     const d = i * .173;
     for (const stride of [50,72,90,180]) {
       assert.equal(W.phaseDistance(d,count,stride),Math.floor(d/(stride/count))%count);
@@ -50,7 +50,10 @@ test('future ally frame count follows the registry without a DEV frame table', (
   const {s, W} = fixture();
   const frames = {...s.AidanFieldAssets.frames};
   frames.aidan_walk_up_07 = frames.aidan_walk_up_06;
-  s.AidanFieldAssets = {...s.AidanFieldAssets,frames};
+  const bank = s.AidanFieldAssets.walkBanks.up;
+  s.AidanFieldAssets = {...s.AidanFieldAssets,frames,walkBanks:{...s.AidanFieldAssets.walkBanks,up:[...bank,'aidan_walk_up_07']}};
+  assert.equal(W.resolve('ally', 'aidan', 'up').frames.length, 6);
+  s.AidanFieldAssets = {...s.AidanFieldAssets,walkBanks:{...s.AidanFieldAssets.walkBanks,up:undefined}};
   assert.equal(W.resolve('ally', 'aidan', 'up').frames.length, 7);
 });
 test('goblin directions, boar walk-only bank and shared flyer bank match game config', () => {
@@ -105,7 +108,7 @@ test('adopted down bank uses source01/05/02/repaired06 and quarter bob only', ()
  assert.match(d.frames[3].url,/down4\/aidan_walk_down_06_ground.png/);
  for(let i=0;i<100;i++){const t=i*.013;assert.equal(W.frameAt(d,t).lift,-W.bob(t*300,90)*.25);}
  for(const actor of ['aidan','fiona'])for(const dir of ['up','down','left','right']){
-  const b=W.ally(actor,dir);if(actor==='aidan'&&dir==='down')continue;assert.equal(b.bobScale,1);
+  const b=W.ally(actor,dir);if(actor==='aidan'&&['down','up'].includes(dir)){assert.equal(b.bobScale,.25);continue;}assert.equal(b.bobScale,1);
  }
  assert.deepEqual(Array.from(d.frames[3].anchor),[1024,1230]);assert.equal(d.frames[3].scale,.0625);
 });
@@ -125,4 +128,19 @@ test('ARM02 adoption retains the original production adoption history', () => {
  const old=m.adoption_history[0].files;assert.equal(old.find(f=>f.frame===5).sha256,'6efcfe75cce44aea3a11ae3712c1277d0f324cb384870ed93efe2f6af01404ec');
  assert.equal(old.find(f=>f.frame===2).sha256,'7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d');
  assert.ok(m.files.filter(f=>[5,2].includes(f.frame)).every(f=>f.source_pr===144&&f.path.includes('/arm02/')));
+});
+
+
+test('UP07 adopted real key, PNG bytes, anchor, order and bob are pinned without DEV aliases', () => {
+ const crypto=require('node:crypto'),{s,W}=fixture(),d=W.ally('aidan','up');
+ const expected=['aidan_walk_up_pushoff',...[3,4,1,6].map(n=>'aidan_walk_up_'+String(n).padStart(2,'0'))];
+ assert.deepEqual(Array.from(d.frames,f=>f.key),expected);assert.equal(d.stride,90);assert.equal(d.bobScale,.25);assert.equal(d.speed(),300);
+ const f=d.frames[0];assert.match(f.url,/aidan\/up5\/aidan_walk_up_pushoff.png/);assert.ok(!f.url.includes('candidate'));
+ assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f.url.split('?')[0]))).digest('hex'),'1bde96684c85739e821e8c7e5e8f07831b8819414569d07d6a3bbb3613e80dfd');
+ assert.deepEqual(Array.from(f.anchor),[1024,1230]);assert.equal(f.scale,.0625);assert.equal(f.width,2048);assert.equal(f.height,1280);
+ assert.match(s.AidanFieldAssets.frames.aidan_walk_up_02.path,/aidan_walk_up_02.png/);
+ const m=JSON.parse(fs.readFileSync(path.join(root,'img/field/characters/aidan/up5/adopted-walk.json'),'utf8'));
+ assert.deepEqual(m.order,expected);assert.equal(m.qa_only_alias_imported,false);assert.equal(m.android_physical_qa,'NOT_RUN');
+ for(const row of m.files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,row.path))).digest('hex'),row.sha256);
+ for(let i=0;i<50;i++){const t=i*.017;assert.equal(W.frameAt(d,t).lift,-W.bob(t*300,90)*.25);}
 });

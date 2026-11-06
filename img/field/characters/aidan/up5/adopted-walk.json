@@ -1,0 +1,77 @@
+{
+  "schema": "adopted-field-walk-v1",
+  "approval_status": "APPROVED",
+  "adoption_basis": "Director approval: PLAYER-WALK-UP-07 production integration (chat directive)",
+  "android_physical_qa": "NOT_RUN",
+  "source_pr": 153,
+  "source_commit": "c15a715fe450e76820153e71ea7b04e70e258d6d",
+  "source_candidate_path": "assets/candidates/player-walk-polish01/up-06-left-boot-outline/aidan_walk_up_pushoff_candidate_v2.png",
+  "independent_qa_pr": 154,
+  "independent_qa_commit": "fb99ef64e5852c0ccc93056cf0a1d843e91da259",
+  "order": [
+    "aidan_walk_up_pushoff",
+    "aidan_walk_up_03",
+    "aidan_walk_up_04",
+    "aidan_walk_up_01",
+    "aidan_walk_up_06"
+  ],
+  "stride_world": 90,
+  "bob_scale": 0.25,
+  "applies_to": [
+    "up",
+    "ul",
+    "ur"
+  ],
+  "anchor": [
+    1024,
+    1230
+  ],
+  "scale": 0.0625,
+  "canvas": [
+    2048,
+    1280
+  ],
+  "whole_frame_offset": 0,
+  "movement_speed": "unchanged",
+  "files": [
+    {
+      "key": "aidan_walk_up_pushoff",
+      "path": "img/field/characters/aidan/up5/aidan_walk_up_pushoff.png",
+      "sha256": "1bde96684c85739e821e8c7e5e8f07831b8819414569d07d6a3bbb3613e80dfd"
+    },
+    {
+      "key": "aidan_walk_up_03",
+      "path": "img/field/characters/aidan/aidan_walk_up_03.png",
+      "sha256": "ca490c7c3ef9c7d55890f8c8bf438107ccfde9b8ebf99c2475df8bc219686088"
+    },
+    {
+      "key": "aidan_walk_up_04",
+      "path": "img/field/characters/aidan/aidan_walk_up_04.png",
+      "sha256": "3983826a6fdf7b58eea9a2518d722ccf8b72383dcc2ae8ce9e381c245fee84c7"
+    },
+    {
+      "key": "aidan_walk_up_01",
+      "path": "img/field/characters/aidan/aidan_walk_up_01.png",
+      "sha256": "c2e8fea167d06d7f0e8e0a7df9957f1415833e5838e4cf7e45211c04faa82930"
+    },
+    {
+      "key": "aidan_walk_up_06",
+      "path": "img/field/characters/aidan/aidan_walk_up_06.png",
+      "sha256": "340ef2f342dfdb49ea95de8ab9169135db0fa0c29a443e881a2515dda2e34266"
+    }
+  ],
+  "preserved_original_keys": [
+    "aidan_walk_up_01",
+    "aidan_walk_up_02",
+    "aidan_walk_up_03",
+    "aidan_walk_up_04",
+    "aidan_walk_up_05",
+    "aidan_walk_up_06"
+  ],
+  "qa_only_alias_imported": false,
+  "source_qa_corrections": [
+    "Extension original alpha26-200, no alpha255 outside original mask changed.",
+    "Actual boot notch8 to1 nativepx.",
+    "Alpha24 holes0 in edited legs;20 original pixels outside edited area unchanged."
+  ]
+}

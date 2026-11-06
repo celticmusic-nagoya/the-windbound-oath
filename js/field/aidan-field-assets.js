@@ -739,11 +739,30 @@
    1230
   ],
   "scale": 0.0625
+ },
+ "aidan_walk_up_pushoff": {
+  "path": "img/field/characters/aidan/up5/aidan_walk_up_pushoff.png?v=1bde9668",
+  "width": 2048,
+  "height": 1280,
+  "bounds": [
+   604,
+   126,
+   893,
+   1104
+  ],
+  "anchor": [
+   1024,
+   1230
+  ],
+  "scale": 0.0625
  }
 };
   Object.values(frames).forEach(Object.freeze);
-  // PLAYER-WALK-PRODUCTION-01: director-adopted order; keep source originals on disk.
-  const walkBanks = Object.freeze({down: Object.freeze([1, 5, 2, 6].map(n => 'aidan_walk_down_' + String(n).padStart(2, '0')))});
-  const bobScale = Object.freeze({down: .25});
+  // Director-adopted down ARM-02 and PLAYER-WALK-UP-07 banks; keep all source originals on disk.
+  const walkBanks = Object.freeze({
+    down: Object.freeze([1, 5, 2, 6].map(n => 'aidan_walk_down_' + String(n).padStart(2, '0'))),
+    up: Object.freeze(['aidan_walk_up_pushoff', ...[3, 4, 1, 6].map(n => 'aidan_walk_up_' + String(n).padStart(2, '0'))])
+  });
+  const bobScale = Object.freeze({down: .25, up: .25});
   window.AidanFieldAssets = Object.freeze({frames:Object.freeze(frames), walkBanks, bobScale});
 })();

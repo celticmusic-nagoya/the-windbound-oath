@@ -7588,6 +7588,25 @@
     "implementation_status": "PARTIAL",
     "notes": "PLAYER-WALK-ARM-02: original01 remains in active bank. Old05/02/03/04/06 remain unchanged on disk; active05/02 use down4/arm02/, active06 uses down4/ground repair. Current adopted SHA/order/history is down4/adopted-walk.json; no blanket promotion of historical six-file group."
    }
+  },
+  {
+   "match": "^file:img_field_characters_aidan_up5_aidan_walk_up_pushoff$",
+   "set": {
+    "approval_status": "APPROVED",
+    "qa_status": "PASS",
+    "android_status": "UNVERIFIED",
+    "source_branch": "feature/player-walk-up-06",
+    "source_commit": "c15a715fe450e76820153e71ea7b04e70e258d6d",
+    "delivery_date": "2026-11-05",
+    "notes": "Director adopted PLAYER-WALK-UP-07 from PR153 after PR154 independent QA PASS. Exact SHA1bde9668 candidate bytes copied to a new production path/key; no QA up02 alias. New/03/04/01/06,90world,bob25%,anchor1024/1230,scale.0625. Old six originals preserved. Physical Android NOT_RUN; integration QA recorded separately."
+   }
+  },
+  {
+   "match": "^seq:img_field_characters_aidan_aidan_walk_up$",
+   "set": {
+    "implementation_status": "PARTIAL",
+    "notes": "PLAYER-WALK-UP-07: original03/04/01/06 remain active; old02/05 remain unchanged on disk. Active five-frame bank begins with up5/aidan_walk_up_pushoff.png. See up5/adopted-walk.json; no blanket promotion of historical six-file group."
+   }
   }
  ],
  "motion_gaps": [

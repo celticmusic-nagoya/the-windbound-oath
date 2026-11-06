@@ -1,0 +1,30 @@
+{
+  "source_head": "7c7ea60232c993eff98d52593de4d94d392bdbaf",
+  "test": "tests/moss/m67_up_production.py",
+  "exit_code": 1,
+  "passed_assertions": 19,
+  "failed_assertion": "pc/ur 90world/.300second measured",
+  "failure_cause": "UNCONFIRMED",
+  "failing_route_numeric_rows_saved": false,
+  "reason_missing": "field_check asserted before runs.append; no numerical values for the failing route can be claimed",
+  "saved_successful_routes": {
+    "straight": {
+      "median_cycle_world": 89.99999999999989,
+      "median_cycle_seconds": 0.33335000000000037
+    },
+    "ul": {
+      "median_cycle_world": 90.00000000000081,
+      "median_cycle_seconds": 0.3
+    }
+  },
+  "not_run": [
+    "m67 SAVE/CONTINUE",
+    "m67 portrait/landscape",
+    "complete independent integration QA",
+    "main merge",
+    "Pages deploy",
+    "public-file comparison"
+  ],
+  "director_instruction": "Stop and report if a problem occurs",
+  "production_changes_after_failure": false
+}
