@@ -25,3 +25,13 @@
 - 現行シーンランナーが対応するstep命令の確認、未対応なら既存互換を保つ追加実装
 - 既存会話/フラグ/セーブ互換性、Android実機、スキップ/リロード/途中復帰、音声停止、reduced-motionのQA
 - ゲーム本体mainへのマージは上記完了後。公式サイトには断崖イベントCGを掲載しない。
+
+## 2026-11-07 implementation checkpoint
+- `js/field/cliff-presentation.js`: CG presentation controller implemented; approved-path allowlist, async preload, graceful failure and hide/cancel.
+- `js/field/field-scene.js`: optional `{cg:{src,alt,mode}}` / `{cg:{hide:true}}` vocabulary wired, plus cleanup on cancellation and scene exit.
+- `index.html`: presentation controller loaded before scene runner.
+- `tests/moss/cliff_presentation.test.js`: mock regression created.
+- GitHub Actions QA PASS: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/42249268457 (syntax and mock tests).
+- The existing `cliff_sunset_to_fire` step sequence is deliberately UNCHANGED until new background CG is uploaded and the old village camera-pan sequence can be replaced atomically.
+- Approved new background local SHA-256: `2d500df62460e7843dbb8226d017eda8331afe9f86ce18d2d8c4973734018ce0`. Not yet in GitHub. Do not mark as uploaded.
+- Android real-device QA and full scene regression NOT_RUN. Do not merge to main yet.
