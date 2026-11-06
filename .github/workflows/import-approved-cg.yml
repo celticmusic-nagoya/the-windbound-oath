@@ -20,7 +20,7 @@ jobs:
           FILE_ID: 1zxFm3fHf-mwmh1Yzv1fER2qjvRtdSP-g
         run: |
           python -m pip install --quiet gdown
-          gdown --id "$FILE_ID" -O /tmp/approved.zip
+          gdown "$FILE_ID" -O /tmp/approved.zip
       - name: Verify archive and copy only allowlisted assets
         env:
           EXPECTED_SHA256: eac7534628a7fcd74aded8ba1795ced97da8773aa3437bd67ab92fd29708d9bd
