@@ -1,0 +1,683 @@
+{
+  "implementation": "0494f6452548ea476b4cebbc69d9f41d878d540d",
+  "measurement": "442ab3b75141376fd83e37541504d896ba02638e",
+  "qa_head": "c6f4d138cfe5edd93cff341027ca73e25eff5c97",
+  "tests": [
+    {
+      "path": "tests/common_loading.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:56.409612+00:00",
+      "end_utc": "2026-11-05T23:30:57.685855+00:00",
+      "elapsed_seconds": 1.2762791469995136,
+      "start_monotonic_ns": 9112374825804,
+      "end_monotonic_ns": 9113651106541,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "da2d484b174597375569eff4b998ba2b714077b392cd1636ed5cbd8f530dc0f6",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "01-common_loading.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/continue_restore.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:57.686871+00:00",
+      "end_utc": "2026-11-05T23:30:58.360036+00:00",
+      "elapsed_seconds": 0.6731871560004947,
+      "start_monotonic_ns": 9113652096795,
+      "end_monotonic_ns": 9114325284171,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "30fdcd23760aa9ab3e2f39504029ec25fd04619466e7dd671e0f517963f3ee3d",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "02-continue_restore.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/early_rewards.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:58.360684+00:00",
+      "end_utc": "2026-11-05T23:30:58.583623+00:00",
+      "elapsed_seconds": 0.22296010699938051,
+      "start_monotonic_ns": 9114325911811,
+      "end_monotonic_ns": 9114548872304,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "17ad0f7ecdcef0d70640d8b613c0a4ae2059280f634a90741113ec41a0dfe927",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "03-early_rewards.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/goblin_field_animation.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:58.584245+00:00",
+      "end_utc": "2026-11-05T23:30:58.706010+00:00",
+      "elapsed_seconds": 0.12178297500031476,
+      "start_monotonic_ns": 9114549473958,
+      "end_monotonic_ns": 9114671257356,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [
+          0
+        ],
+        "skipped": [
+          0
+        ],
+        "source_unchanged": true
+      },
+      "source_sha256": "f1c3e723a5d61195a26234d4d60b42ab61c3d1808b1c90dc6341eb3982dd38d0",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "04-goblin_field_animation.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/issue51_command_lock.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:58.706681+00:00",
+      "end_utc": "2026-11-05T23:30:58.778167+00:00",
+      "elapsed_seconds": 0.07150545399963448,
+      "start_monotonic_ns": 9114671908956,
+      "end_monotonic_ns": 9114743414840,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "937e478ebab01d90313ac0277aa8e7c67a7f23a626b9bd16a0055db4e28fedbf",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "05-issue51_command_lock.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/issue54_coordinator.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:58.779032+00:00",
+      "end_utc": "2026-11-05T23:30:58.850408+00:00",
+      "elapsed_seconds": 0.0713973679994524,
+      "start_monotonic_ns": 9114744259531,
+      "end_monotonic_ns": 9114815656934,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "44605564b00c3c9a1bcf80745ac8c3d5758fe7fdea7078ea4c7f73e2e047a730",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "06-issue54_coordinator.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/load_input_ownership.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:58.851276+00:00",
+      "end_utc": "2026-11-05T23:30:58.923136+00:00",
+      "elapsed_seconds": 0.07188076700003876,
+      "start_monotonic_ns": 9114816504072,
+      "end_monotonic_ns": 9114888385391,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "e75dd57b0c16590334cef33fdfb85eb7729dc05e49f3c248ea3fa27c8599e86b",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "07-load_input_ownership.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/loading_input.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:58.924089+00:00",
+      "end_utc": "2026-11-05T23:30:59.045984+00:00",
+      "elapsed_seconds": 0.1219156799998018,
+      "start_monotonic_ns": 9114889316082,
+      "end_monotonic_ns": 9115011232153,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "110ab79a731e6c7b0cbc668508cdb3991198e00a55d263ae83bdece3db1ee7fc",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "08-loading_input.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/loading_lifecycle.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:59.046719+00:00",
+      "end_utc": "2026-11-05T23:30:59.119254+00:00",
+      "elapsed_seconds": 0.07255425500079582,
+      "start_monotonic_ns": 9115011947831,
+      "end_monotonic_ns": 9115084502517,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "297d9a1b286314344081ef959c477925b6386ced08949b7d6019aae243452569",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "09-loading_lifecycle.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/loading_map_readiness.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:59.120163+00:00",
+      "end_utc": "2026-11-05T23:30:59.944393+00:00",
+      "elapsed_seconds": 0.8242504699992423,
+      "start_monotonic_ns": 9115085390982,
+      "end_monotonic_ns": 9115909641907,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "34e9843de06440fbf3d0eb8434f1d873900d8520b4b6407944881f07f157ef8f",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "10-loading_map_readiness.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/portrait_blink.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:30:59.945304+00:00",
+      "end_utc": "2026-11-05T23:31:00.068174+00:00",
+      "elapsed_seconds": 0.12288999399970635,
+      "start_monotonic_ns": 9115910532071,
+      "end_monotonic_ns": 9116033422332,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [
+          0
+        ],
+        "skipped": [
+          0
+        ],
+        "source_unchanged": true
+      },
+      "source_sha256": "2b6cf0fc7c29c013c5dc8dab916a92573a5db4baa2b0a75ca672a250b0f667d5",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "11-portrait_blink.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/s2_transition_recovery.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:31:00.069011+00:00",
+      "end_utc": "2026-11-05T23:31:00.241375+00:00",
+      "elapsed_seconds": 0.17238485300003958,
+      "start_monotonic_ns": 9116034239312,
+      "end_monotonic_ns": 9116206624864,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "e0d19f2c007f293ca0ea3291ffe6d756cc6687a1a273da15786a98a17556f7b6",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "12-s2_transition_recovery.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/save_compatibility.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:31:00.242208+00:00",
+      "end_utc": "2026-11-05T23:31:00.867701+00:00",
+      "elapsed_seconds": 0.625512737000463,
+      "start_monotonic_ns": 9116207436296,
+      "end_monotonic_ns": 9116832949647,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "a3ea07b44229c1baed39266d93e9b971e165355a8a01d813a09624ab25e225cd",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "13-save_compatibility.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/scene_lifecycle_ownership.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:31:00.868509+00:00",
+      "end_utc": "2026-11-05T23:31:00.991038+00:00",
+      "elapsed_seconds": 0.12254701899837528,
+      "start_monotonic_ns": 9116833737652,
+      "end_monotonic_ns": 9116956285183,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "ad4fcb75f632eced9370f83fbf0260b5322f0300c3c79b580c0a0f4ea8dd9912",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "14-scene_lifecycle_ownership.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/startup_race.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:31:00.992137+00:00",
+      "end_utc": "2026-11-05T23:31:01.264117+00:00",
+      "elapsed_seconds": 0.2720001620000403,
+      "start_monotonic_ns": 9116957364780,
+      "end_monotonic_ns": 9117229365381,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "f5ec31ac726dd492ce3d061d48b2e0d1b7639fa9f8935858ba83e0b82374ae7b",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "15-startup_race.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/title_continue.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:31:01.265022+00:00",
+      "end_utc": "2026-11-05T23:31:01.487368+00:00",
+      "elapsed_seconds": 0.22236516200064216,
+      "start_monotonic_ns": 9117230250629,
+      "end_monotonic_ns": 9117452616202,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "1343eaf0de40b0e3c711fff67576789faf8bd754329f7fb86be6d3a77ccec565",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "16-title_continue.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/walk_motion.test.cjs",
+      "kind": "Node",
+      "status": "PASS",
+      "start_utc": "2026-11-05T23:31:01.489276+00:00",
+      "end_utc": "2026-11-05T23:31:01.761193+00:00",
+      "elapsed_seconds": 0.27193881400125974,
+      "start_monotonic_ns": 9117454502762,
+      "end_monotonic_ns": 9117726441839,
+      "exit_code": 0,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [],
+        "FAILS": [
+          0
+        ],
+        "skipped": [
+          0
+        ],
+        "source_unchanged": true
+      },
+      "source_sha256": "826e740fb482cffdb35e893279e78f04de49c33a00b95cd80a098bc5d60ec702",
+      "coordinates_and_RAF": {
+        "status": "N/A",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": null,
+      "log": "17-walk_motion.test/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "All original checks satisfied"
+    },
+    {
+      "path": "tests/moss/m67_up_production.py",
+      "kind": "browser/static",
+      "status": "FAIL",
+      "start_utc": "2026-11-05T23:31:01.762173+00:00",
+      "end_utc": "2026-11-05T23:31:27.217156+00:00",
+      "elapsed_seconds": 25.455003843999293,
+      "start_monotonic_ns": 9117727401439,
+      "end_monotonic_ns": 9143182405790,
+      "exit_code": 1,
+      "expected": {
+        "exit": 0,
+        "FAIL_lines": 0,
+        "nonzero_FAILS": 0,
+        "skipped": 0,
+        "source_unchanged": true
+      },
+      "actual": {
+        "FAIL_lines": [
+          "FAIL pc CONTINUE exact feet/progress/SAVE"
+        ],
+        "FAILS": [],
+        "skipped": [],
+        "source_unchanged": true
+      },
+      "source_sha256": "5c995c234efd93fad7e45b56e6e2781758d25d6b3c3deb992edc34eb2e515b17",
+      "coordinates_and_RAF": {
+        "status": "See pre-assert traces for sampled movements",
+        "reason": "Unit/static/UI predicates do not define a sampled movement interval; never invent zero coordinates or RAF."
+      },
+      "checkpoint_evidence": "18-m67_up_production/assertions",
+      "log": "18-m67_up_production/stdout.log",
+      "generated_report": null,
+      "unexpected_tracked_changes": [],
+      "reason": "Original check/exit/skip/source-integrity gate failed; remaining tests NOT_RUN"
+    },
+    {
+      "path": "tests/moss/m62_aidan_down_production.py",
+      "kind": "browser/static",
+      "status": "NOT_RUN"
+    },
+    {
+      "path": "tests/moss/m58_aidan_side_stride.py",
+      "kind": "browser/static",
+      "status": "NOT_RUN"
+    },
+    {
+      "path": "tests/moss/m55_dev_walk_motion.py",
+      "kind": "browser/static",
+      "status": "NOT_RUN"
+    },
+    {
+      "path": "tests/system/save_continue_lifecycle.py",
+      "kind": "browser/static",
+      "status": "NOT_RUN"
+    },
+    {
+      "path": "tests/system/asset_registry_audit.py",
+      "kind": "browser/static",
+      "status": "NOT_RUN"
+    },
+    {
+      "path": "tests/moss/m49_phase4_formal_adoption.py",
+      "kind": "browser/static",
+      "status": "NOT_RUN"
+    }
+  ],
+  "stop_on_first_failure": true,
+  "initial_failure_deleted": false,
+  "source_mode": "Original scripts from committed worktree; AST logging shim only, no asset-copy snapshot. SAVE uses owned loopback server.",
+  "status": "BLOCKED",
+  "first_failed_test": "tests/moss/m67_up_production.py",
+  "protection_after": {
+    "fixed_implementation": "0494f6452548ea476b4cebbc69d9f41d878d540d",
+    "fixed_measurement": "442ab3b75141376fd83e37541504d896ba02638e",
+    "production_diff": [],
+    "history_diff": [],
+    "fixed_png_and_old_evidence_count": 1857,
+    "fixed_files_changed": [],
+    "formal_sha_count": 259,
+    "formal_sha_failures": [],
+    "measurement_inputs_changed": [],
+    "pass": true
+  },
+  "all_required_pass": false,
+  "main_merge_permitted": false,
+  "pages_publish_permitted": false
+}

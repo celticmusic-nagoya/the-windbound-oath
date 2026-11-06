@@ -1,0 +1,42 @@
+{
+  "expected_original_predicate": [
+    "ck(view+' CONTINUE exact feet/progress/SAVE',p.evaluate('MossForest.feet')==feet and p.evaluate(STABLE)==stable and p.evaluate('localStorage.getItem(SAVE_KEY)')==raw)"
+  ],
+  "computed_result": false,
+  "before_feet": {
+    "x": 421.3873950262489,
+    "y": 259.6053351839163
+  },
+  "after_feet": {
+    "x": 421,
+    "y": 260
+  },
+  "delta_world": {
+    "x": -0.3873950262488961,
+    "y": 0.3946648160837185,
+    "euclidean": 0.5530237096334824
+  },
+  "feet_exact_equal": false,
+  "STABLE_string_exact_equal": true,
+  "SAVE_string_exact_equal": true,
+  "saved_map_coordinates": {
+    "map": "rilde_in_aidan",
+    "x": 404,
+    "y": 218,
+    "opened": [],
+    "fired": [
+      "ev_arrival"
+    ],
+    "facing": {
+      "dir": "up",
+      "flip": false
+    }
+  },
+  "save_policy_source": "js/field/moss-forest-runtime.js:719 Math.round(S.x/S.y)",
+  "continue_safety_source": "js/save-continue.js:72 existing <=1 world per-axis check",
+  "classification": "Evidence-supported QA exact-feet mismatch with existing save quantization; no predicate or production changes made, no retest",
+  "initial_UR_case": "D / undetermined, separate from this newly observed failure",
+  "console_promise_http_errors_observed": [],
+  "request_failures_at_stop": [],
+  "movement_during_this_save_assertion": "N/A; retained last UR trace is reference only"
+}
