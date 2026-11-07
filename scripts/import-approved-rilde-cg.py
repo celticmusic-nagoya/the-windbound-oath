@@ -49,9 +49,12 @@ def main() -> None:
             zipped = ZIP_PREFIX + repo_path
             data = z.read(zipped)
             sha = hashlib.sha256(data).hexdigest()
-            if sha != expected_sha or not data.startswith(b"\x89PNG\r\n\x1a\n"):
+            is_jpeg = repo_path in jpeg_sources
+            signature = b"\\xff\\xd8\\xff" if is_jpeg else b"\\x89PNG\\r\\n\\x1a\\n"
+            if sha != expected_sha or not data.startswith(signature):
                 raise RuntimeError(f"SHA-256 or PNG signature mismatch: {repo_path}")
-            target = Path(repo_path)
+            output_path = str(Path(repo_path).with_suffix(".jpg")) if is_jpeg else repo_path
+            target = Path(output_path)
             if target.is_file():
                 if target.read_bytes() != data:
                     raise RuntimeError(f"Approved asset differs: {repo_path}; refusing overwrite")
