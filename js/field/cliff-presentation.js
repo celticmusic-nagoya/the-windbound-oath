@@ -5,6 +5,7 @@
 (function () {
   'use strict';
   const APPROVED_PREFIX = 'assets/approved/game/cliff/';
+  const RILDE_PREFIX = 'assets/approved/game/rilde_story/';
   let root = null, image = null, current = 0;
   function ensure() {
     if (root) return root;
