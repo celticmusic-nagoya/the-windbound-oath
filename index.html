@@ -159,7 +159,7 @@
 <button id="nGuard">防御</button><button id="nItem">アイテム</button>
 </div>
 </div>
-<div id="returnScene"><div id="returnBackdrop"><div id="returnRoad"></div><div id="returnAidan"></div><div id="returnFiona"></div><div id="returnGoblin"></div><div id="returnFlash"></div></div><div id="returnText"></div><div id="returnHint">タップして進む</div></div>
+<div id="returnScene"><div id="returnBackdrop"><img id="returnRaidCg" src="assets/approved/game/rilde_story/raid/attack_background_only.png" alt="" aria-hidden="true" decoding="async"><div id="returnRoad"></div><div id="returnAidan"></div><div id="returnFiona"></div><div id="returnGoblin"></div><div id="returnFlash"></div></div><div id="returnText"></div><div id="returnHint">タップして進む</div></div>
 <div id="dangerBanner">風が、止まった。</div>
 <div id="escapeScene"><div id="escapeRiver"></div><div id="escapeBank"></div><div id="escapeA">A</div><div id="escapeF">F</div><div id="escapeGob">異形</div><div id="escapeText"></div><div id="escapeHint">タップして進む</div></div>
 <div id="forestScene"><div id="forestWorld"><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div><div id="forestFade"></div></div>
@@ -611,6 +611,7 @@ const returnPortraitPages=[{"char":"aidan","face":"normal","side":"left"},{"char
 let returnIndex=0;
 function startReturnScene(){
  returnIndex=0;
+ $('#returnScene').classList.remove('raid-cg-active');
  $('#returnScene').style.display='block';
  $('#returnText').textContent=returnLines[0];storyPortraitPage('returnScene','returnText',returnPortraitPages,0);
 }
@@ -618,13 +619,13 @@ $('#returnScene').onclick=()=>{
  returnIndex++;
  if(returnIndex<returnLines.length){
    $('#returnText').textContent=returnLines[returnIndex];storyPortraitPage('returnScene','returnText',returnPortraitPages,returnIndex);
-   if(returnIndex===6) $('#returnGoblin').style.display='block';
+   if(returnIndex===6){ $('#returnGoblin').style.display='block'; $('#returnScene').classList.add('raid-cg-active'); }
    if(returnIndex===12){
      const rs=$('#returnScene'); rs.classList.remove('flash'); void rs.offsetWidth; rs.classList.add('flash');
      $('#returnFiona').style.opacity='.15';
    }
  }else{
-   window.TalkPortrait?.close('story:returnScene');$('#returnScene').style.display='none';
+   window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.remove('raid-cg-active');$('#returnScene').style.display='none';
    enterBurningVillage();
  }
 };
