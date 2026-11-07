@@ -1,0 +1,25 @@
+name: Rilde CG registry QA
+on:
+  pull_request:
+    paths:
+      - 'js/field/rilde-cg.js'
+      - 'js/field/cliff-presentation.js'
+      - 'index.html'
+      - 'tests/moss/rilde_cg_registry.test.js'
+      - 'docs/art/approved-rilde-story-20261107.json'
+      - '.github/workflows/rilde-cg-registry-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Approved CG registry and reference-only checks
+        run: node tests/moss/rilde_cg_registry.test.js
+      - name: Existing cliff presentation regression
+        run: node tests/moss/cliff_presentation.test.js
