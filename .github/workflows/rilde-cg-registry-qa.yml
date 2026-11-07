@@ -5,6 +5,8 @@ on:
       - 'js/field/rilde-cg.js'
       - 'js/field/cliff-presentation.js'
       - 'index.html'
+      - 'js/field/scene-data.js'
+      - 'tests/moss/rilde_cg_scene_cue.test.js'
       - 'tests/moss/rilde_cg_registry.test.js'
       - 'docs/art/approved-rilde-story-20261107.json'
       - '.github/workflows/rilde-cg-registry-qa.yml'
@@ -21,5 +23,7 @@ jobs:
           node-version: '22'
       - name: Approved CG registry and reference-only checks
         run: node tests/moss/rilde_cg_registry.test.js
+      - name: Approved cliff-night CG cue and story invariant
+        run: node tests/moss/rilde_cg_scene_cue.test.js
       - name: Existing cliff presentation regression
         run: node tests/moss/cliff_presentation.test.js
