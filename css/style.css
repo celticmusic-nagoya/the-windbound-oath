@@ -121,6 +121,11 @@ body.villageAttack #world{filter:brightness(.48) saturate(.75) hue-rotate(8deg)}
 #returnBackdrop{position:absolute;inset:0;background:
  radial-gradient(circle at 72% 48%,#b84e2c55 0 6%,transparent 24%),
  linear-gradient(#111923 0 54%,#252c24 55% 100%)}
+/* Approved raid background: activate only when the goblin encounter is revealed.
+ * Keep the original dialogue and character layers above the CG. */
+#returnRaidCg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:1;pointer-events:none}
+#returnScene.raid-cg-active #returnRaidCg{display:block}
+#returnScene.raid-cg-active #returnRoad{opacity:.25}
 #returnRoad{position:absolute;left:10%;right:10%;bottom:-15%;height:58%;background:#4a4034;clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)}
 #returnAidan,#returnFiona{position:absolute;bottom:25%;width:48px;height:82px;border-radius:48% 48% 25% 25%;z-index:2}
 #returnAidan{left:39%;background:#17372f;border:3px solid #c5a45b}
