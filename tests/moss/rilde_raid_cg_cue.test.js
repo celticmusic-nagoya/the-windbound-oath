@@ -1,0 +1,19 @@
+/* Return-road approved raid CG: source and trigger regression */
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const html = fs.readFileSync('index.html','utf8');
+const css = fs.readFileSync('css/style.css','utf8');
+assert.match(html, /id="returnRaidCg" src="assets\/approved\/game\/rilde_story\/raid\/attack_background_only\.png"/);
+const start = html.indexOf('function startReturnScene(){');
+const end = html.indexOf('function showBurningVillageVisuals(){',start);
+assert.ok(start>=0&&end>start);
+const scene = html.slice(start,end);
+assert.match(scene, /returnIndex===6/);
+assert.match(scene, /returnScene'\)\.classList\.add\('raid-cg-active'\)/);
+assert.match(scene, /function startReturnScene\(\)\{[\s\S]*?classList\.remove\('raid-cg-active'\)/);
+assert.match(scene, /close\('story:returnScene'\)[\s\S]*?classList\.remove\('raid-cg-active'\)/);
+assert.match(scene, /enterBurningVillage\(\)/);
+assert.match(css, /#returnRaidCg\{[^}]*display:none/);
+assert.match(css, /#returnScene\.raid-cg-active #returnRaidCg\{display:block\}/);
+assert.match(css, /#returnText\{[^}]*z-index:5/);
+console.log('Approved raid CG return-road cue and cleanup PASS');
