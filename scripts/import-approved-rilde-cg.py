@@ -70,7 +70,7 @@ def main() -> None:
             raise RuntimeError(f"Obsolete filename in canonical set: {forbidden}")
     manifest = {
         "project": "THE WINDBOUND OATH",
-        "status": "approved original PNGs; runtime integration pending",
+        "status": "approved originals registered; Rilde runtime integration pending",
         "source": "Google Drive public shared ZIP, director-approved 2026-11-07",
         "preserve_original_bytes": True,
         "files": entries,
@@ -78,9 +78,9 @@ def main() -> None:
     path = Path("docs/art/approved-rilde-story-20261107.json")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    if new_files != 6:
-        raise RuntimeError(f"Expected exactly 6 new files, got {new_files}")
-    print("ZIP CRC PASS; 10/10 SHA-256 PASS; 4 preserved; 6 new originals (3 PNG, 3 JPEG).")
+    if new_files not in (0, 6):
+        raise RuntimeError(f"Expected 0 or 6 new files, got {new_files}")
+    print(f"ZIP CRC PASS; 10/10 SHA-256 PASS; 4 preserved; {new_files} newly added; 6 approved Rilde originals present.")
 
 
 if __name__ == "__main__":
