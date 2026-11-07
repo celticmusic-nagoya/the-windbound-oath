@@ -1,0 +1,33 @@
+name: Rilde CG registry QA
+on:
+  pull_request:
+    paths:
+      - 'js/field/rilde-cg.js'
+      - 'js/field/cliff-presentation.js'
+      - 'index.html'
+      - 'css/style.css'
+      - 'tests/moss/rilde_raid_cg_cue.test.js'
+      - 'js/field/scene-data.js'
+      - 'tests/moss/rilde_cg_scene_cue.test.js'
+      - 'tests/moss/rilde_cg_registry.test.js'
+      - 'docs/art/approved-rilde-story-20261107.json'
+      - '.github/workflows/rilde-cg-registry-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Approved CG registry and reference-only checks
+        run: node tests/moss/rilde_cg_registry.test.js
+      - name: Approved cliff-night CG cue and story invariant
+        run: node tests/moss/rilde_cg_scene_cue.test.js
+      - name: Approved raid CG reveal and cleanup
+        run: node tests/moss/rilde_raid_cg_cue.test.js
+      - name: Existing cliff presentation regression
+        run: node tests/moss/cliff_presentation.test.js

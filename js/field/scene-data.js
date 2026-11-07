@@ -31,12 +31,18 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
       {move: {actor: 'aidan', x: 2384, y: 1022, ms: 650}},      // sit down on the bench: Aidan and Fiona settle in front of it
       {move: {actor: 'fiona', x: 2424, y: 1022, ms: 650}},
       {wait: 500},
+      // Approved sunset two-character CG behind the original dialogue.
+      {cg: {src: 'assets/approved/game/cliff/sunset_two_characters_back_view.png', alt: '夕暮れの断崖に佇むエイダンとフィオナ', mode: 'dialogue'}},
       {talk: 'scene_cliff_sunset'},
+      {cg: {hide: true}},
       {fade: {to: 1, ms: 1200}},
       {tod: {set: 'night', instant: true}},
       {wait: 800},
       {fade: {to: 0, ms: 1600}},
+      // Approved starry-sky background behind the existing dialogue; no new story flags.
+      {cg: {src: 'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png', alt: '星空を見上げる断崖', mode: 'dialogue'}},
       {talk: 'scene_cliff_night'},
+      {cg: {hide: true}},
       {vista: {id: 'village_fire', on: true, ms: 2000}},
       {focus: {x: 560, y: 2830, ms: 2200}},     // camera slides down to the far village and stays
       {wait: 900},

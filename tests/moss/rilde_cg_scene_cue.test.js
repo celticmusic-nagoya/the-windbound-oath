@@ -1,0 +1,26 @@
+/* Approved cliff-night cue regression; run: node tests/moss/rilde_cg_scene_cue.test.js */
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const context = {window: {}};
+vm.runInNewContext(fs.readFileSync('js/field/scene-data.js','utf8'), context);
+const scene = context.window.FieldSceneData.scenes.cliff_sunset_to_fire;
+const steps = scene.steps;
+const sunset = steps.findIndex(s => s.talk === 'scene_cliff_sunset');
+assert.ok(sunset > 0);
+assert.equal(steps[sunset-1].cg.src, 'assets/approved/game/cliff/sunset_two_characters_back_view.png');
+assert.equal(steps[sunset-1].cg.mode, 'dialogue');
+assert.equal(steps[sunset+1].cg.hide, true);
+assert.equal(steps[sunset+2].fade.to, 1);
+const night = steps.findIndex(s => s.talk === 'scene_cliff_night');
+assert.ok(night > 0);
+assert.equal(steps[night-1].cg.src, 'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png');
+assert.equal(steps[night-1].cg.mode, 'dialogue');
+assert.equal(steps[night+1].cg.hide, true);
+assert.equal(steps[night+2].vista.id, 'village_fire');
+assert.equal(steps.filter(s => 'stage' in s).length, 1);
+assert.equal(steps.find(s => 'stage' in s).stage, 4);
+assert.equal(steps.at(-1).call, 'cliffRunHome');
+assert.equal(scene.requireStage, 3);
+assert.equal(steps.filter(s => s.cg && !s.cg.hide).length, 2);
+console.log('Approved cliff-night CG cue ordering: PASS');
