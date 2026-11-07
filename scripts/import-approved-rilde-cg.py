@@ -37,6 +37,11 @@ def main() -> None:
         raise RuntimeError("Google Drive download failed; do not commit partial assets")
     entries = []
     new_files = 0
+    jpeg_sources = {
+        "assets/approved/game/rilde_story/road/curve_reveal_APPROVED_user_reference.png",
+        "assets/approved/game/rilde_story/raid/attack_with_characters_APPROVED_user_reference.png",
+        "assets/approved/game/rilde_story/recovery/relief_with_characters_APPROVED_user_reference.png",
+    }
     with zipfile.ZipFile(archive) as z:
         if z.testzip() is not None:
             raise RuntimeError("ZIP CRC check failed")
@@ -56,7 +61,7 @@ def main() -> None:
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(data)
                 new_files += 1
-            entries.append({"path": repo_path, "sha256": sha, "bytes": len(data), "usage": "game only"})
+            entries.append({"path": output_path, "source_zip_path": repo_path, "format": "JPEG" if is_jpeg else "PNG", "sha256": sha, "bytes": len(data), "usage": "game only"})
     for forbidden in LEGACY_FORBIDDEN:
         if any(Path(p).name == forbidden for p in CANONICAL):
             raise RuntimeError(f"Obsolete filename in canonical set: {forbidden}")
@@ -72,7 +77,7 @@ def main() -> None:
     path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     if new_files != 6:
         raise RuntimeError(f"Expected exactly 6 new files, got {new_files}")
-    print("ZIP CRC PASS; 10/10 SHA-256 PASS; 4 preserved; 6 new PNG files.")
+    print("ZIP CRC PASS; 10/10 SHA-256 PASS; 4 preserved; 6 new originals (3 PNG, 3 JPEG).")
 
 
 if __name__ == "__main__":
