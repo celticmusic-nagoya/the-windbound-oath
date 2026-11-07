@@ -10,7 +10,7 @@
     const r=running;if(!r)return Promise.resolve();const talkId=r.talk;r.cancelled=true;running=null;MossForest.lock(false);
     for(const stop of [...r.cleanups])stop();
     if(talkId)window.FieldTalk?.cancel(talkId);
-    window.FieldChoreo?.cancelAll();r.abort();return r.done;
+    window.FieldChoreo?.cancelAll();window.CliffPresentation?.hide();r.abort();return r.done;
   }
   const stageOk = (req) => { if (req == null) return true; const s = typeof storyStage === 'number' ? storyStage : 0; return Array.isArray(req) ? s >= req[0] && s <= req[1] : s === req; };
   function talk(id,r) {
@@ -26,6 +26,7 @@
   async function step(s,r) {
     if ('lock' in s) { MossForest.lock(s.lock); return; }
     if (s.talk) return talk(s.talk,r);
+    if (s.cg) { if (!window.CliffPresentation) return; if (s.cg.hide) { window.CliffPresentation.hide(); return; } await window.CliffPresentation.show(s.cg); return; }
     if (s.fade) { await MossForest.fade(s.fade.to, s.fade.ms); return; }
     if (s.tod) { FieldTimeOfDay.set(s.tod.set, s.tod); return s.tod.instant ? undefined : wait(s.tod.ms ?? 1600,r); }
     if (s.vista) { MossForest.vista(s.vista.id, s.vista.on, {ms: s.vista.ms}); return; }
@@ -47,7 +48,7 @@
     const r={id:typeof id==='string'?id:'(inline)',generation:window.LoadCoordinator?.generation,map:MossForest.enterCount,cancelled:false,cleanups:new Set()};
     r.cancelledPromise=new Promise(resolve=>r.abort=resolve);r.done=new Promise(resolve=>r.finish=resolve);running=r;
     try { for (const s of sc.steps) {if(!valid(r))return false;await Promise.race([step(s,r),r.cancelledPromise]);if(!valid(r))return false;}return true; }
-    finally {for(const stop of [...r.cleanups])stop();if(running===r)running=null;r.finish();}
+    finally {window.CliffPresentation?.hide();for(const stop of [...r.cleanups])stop();if(running===r)running=null;r.finish();}
 
   }
   window.FieldScene = Object.freeze({play, cancel, hook: (n, f) => hooks.set(n, f), get running() { return running?.id||null; }});

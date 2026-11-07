@@ -1,0 +1,52 @@
+name: Import director-approved Rilde CG originals
+on:
+  push:
+    branches:
+      - feature/approved-world-event-integration-20261106
+    paths:
+      - .github/workflows/import-approved-rilde-cg.yml
+      - scripts/import-approved-rilde-cg.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: approved-rilde-cg-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public Drive downloader
+        run: python -m pip install 'gdown==5.2.0'
+      - name: Download and verify all 10 originals, add only missing six
+        run: python scripts/import-approved-rilde-cg.py
+      - name: Commit only approved images and canonical manifest to PR branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- \
+            assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png \
+            assets/approved/game/rilde_story/road/curve_reveal_APPROVED_user_reference.jpg \
+            assets/approved/game/rilde_story/raid/attack_background_only.png \
+            assets/approved/game/rilde_story/raid/attack_with_characters_APPROVED_user_reference.jpg \
+            assets/approved/game/rilde_story/aftermath/ruins_background_only.png \
+            assets/approved/game/rilde_story/recovery/relief_with_characters_APPROVED_user_reference.jpg \
+            docs/art/approved-rilde-story-20261107.json
+          if git diff --cached --quiet; then
+            echo 'No changes: already imported.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Register approved Rilde event CG originals (10/10 SHA-256 PASS)'
+          git push origin HEAD:feature/approved-world-event-integration-20261106

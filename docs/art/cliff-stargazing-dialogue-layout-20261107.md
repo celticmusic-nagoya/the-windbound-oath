@@ -1,0 +1,37 @@
+# SC-02 星空会話CG＋立ち絵 実装仕様（2026-11-07）
+
+状態: 演出方針確定 / 実装・実機QA未完。公式サイト非公開。新しい背景CGはこの会話で正式採用されたが、まだGitHubへの原本転送・SHA-256登録は未完。
+
+## 採用素材と表示順
+1. 既存の正式採用済み星空CG（エイダン・フィオナが立って真上を見上げる）を全面表示。立ち絵・会話ウィンドウなし。画像の全体を見せる（モバイルではcoverによる人物切れを避ける）。
+2. 人物なしの星空断崖背景CGへフェード。今回正式採用した背景（左の木、天の川、海、花の咲く草地）。この画像は追加登録待ち。
+3. 会話中は背景CG＋既存の正式立ち絵＋既存のテキストUI。エイダン左、フィオナ右を基本配置。台詞・表情IDは既存データと照合し、推測で増やさない。
+4. 風が止まる瞬間は環境音を停止し、立ち絵の揺れ・草木の演出を停止。短い静寂を経て既存の後続イベントに接続。減光・点滅は控えめにし、reduced-motionへ対応。
+
+## ソース監査結果
+- `js/field/scene-data.js`: 現行シーンID `cliff_sunset_to_fire`、会話 `scene_cliff_sunset`、`scene_cliff_night`、`scene_cliff_fire`。既存実装は夜へ切替後に `vista: village_fire` と村方向への `focus` を実行する。
+- `js/field/talk-data-scenes.js`: `cliff_bench` の「はい」で `cliff_bench_sat` とシーン開始。既存の会話台詞・分岐を保護。
+- `js/field/field-scene.js`: ステップ実行系。CG表示/非表示の実装可否と中断・再開を要調査。
+- `js/field/field-vista.js`: 初期仮演出の村の炎表示。今回の海向き・村が死角の正式地形とは不整合。旧カメラパンは置換候補。ただし襲撃イベント自体を削除しない。
+
+## レイアウト案
+- 16:9基準。背景は全幅。縦長スマホでは主題（天の川と地平線）を維持するトリミングを採用。
+- 立ち絵は左右に配置し、台詞UIに顔を重ねない。重要な星空全画面CG中は立ち絵と台詞UIを表示しない。
+- 画面下部の会話ウィンドウは既存デザインを再利用。テキスト可読性とタップ領域を優先。
+- 星の配置や崖の形は採用済みの二人CGと背景CGの連続性を維持。
+
+## 実装ゲート
+- 新しい背景PNG原本のアップロード・SHA-256登録
+- 現行シーンランナーが対応するstep命令の確認、未対応なら既存互換を保つ追加実装
+- 既存会話/フラグ/セーブ互換性、Android実機、スキップ/リロード/途中復帰、音声停止、reduced-motionのQA
+- ゲーム本体mainへのマージは上記完了後。公式サイトには断崖イベントCGを掲載しない。
+
+## 2026-11-07 implementation checkpoint
+- `js/field/cliff-presentation.js`: CG presentation controller implemented; approved-path allowlist, async preload, graceful failure and hide/cancel.
+- `js/field/field-scene.js`: optional `{cg:{src,alt,mode}}` / `{cg:{hide:true}}` vocabulary wired, plus cleanup on cancellation and scene exit.
+- `index.html`: presentation controller loaded before scene runner.
+- `tests/moss/cliff_presentation.test.js`: mock regression created.
+- GitHub Actions QA PASS: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/42249268457 (syntax and mock tests).
+- The existing `cliff_sunset_to_fire` step sequence is deliberately UNCHANGED until new background CG is uploaded and the old village camera-pan sequence can be replaced atomically.
+- Approved new background local SHA-256: `2d500df62460e7843dbb8226d017eda8331afe9f86ce18d2d8c4973734018ce0`. Not yet in GitHub. Do not mark as uploaded.
+- Android real-device QA and full scene regression NOT_RUN. Do not merge to main yet.
