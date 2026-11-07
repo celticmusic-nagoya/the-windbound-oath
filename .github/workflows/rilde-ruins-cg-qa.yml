@@ -1,0 +1,26 @@
+name: Rilde ruins CG QA
+on:
+  pull_request:
+    paths:
+      - 'js/field/rilde-ruins-cg.js'
+      - 'js/field/rilde-cg.js'
+      - 'js/field/rilde-village.js'
+      - 'index.html'
+      - 'css/style.css'
+      - 'tests/moss/rilde_ruins_cg.test.js'
+      - '.github/workflows/rilde-ruins-cg-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check js/field/rilde-ruins-cg.js
+      - run: node tests/moss/rilde_ruins_cg.test.js
+      - run: node tests/moss/rilde_cg_registry.test.js
+      - run: node tests/moss/rilde_cg_scene_cue.test.js
