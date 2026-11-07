@@ -29,9 +29,12 @@
     image.removeAttribute('src');
   }
   function allowed(src) {
-    return typeof src === 'string' &&
-      src.startsWith(APPROVED_PREFIX) &&
-      /^assets\/approved\/game\/cliff\/[a-z0-9_-]+\.png$/.test(src);
+    if (typeof src !== 'string') return false;
+    if (src.startsWith(APPROVED_PREFIX))
+      return /^assets\/approved\/game\/cliff\/[a-z0-9_-]+\.png$/.test(src);
+    if (!src.startsWith(RILDE_PREFIX) || !window.RildeCG) return false;
+    return ['cliff_dialogue', 'raid_background', 'aftermath_background']
+      .some(id => window.RildeCG.gameplayPathFor(id) === src);
   }
   function show(options) {
     const opts = options || {};
