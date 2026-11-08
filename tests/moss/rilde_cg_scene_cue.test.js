@@ -7,7 +7,7 @@ vm.runInNewContext(fs.readFileSync('js/field/scene-data.js','utf8'),ctx);
 const scene=ctx.window.FieldSceneData.scenes.cliff_sunset_to_fire;
 const steps=scene.steps;
 const cg=steps.filter(s=>s.cg&&!s.cg.hide).map(s=>s.cg.src);
-assert.deepEqual(cg,[
+assert.deepEqual(Array.from(cg),[
  'assets/approved/game/cliff/sunset_background.png',
  'assets/approved/game/cliff/sunset_two_characters_back_view.png',
  'assets/approved/game/cliff/stargazing_seated.png',
