@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const ctx={window:{}};
+vm.runInNewContext(fs.readFileSync('js/field/talk-data-scenes.js','utf8'),ctx);
+const tables=ctx.window.TalkDataScenes.tables;
+const pages=id=>tables.find(t=>t.npc===id).entries[0].lines[0].pages;
+const portraits=id=>tables.find(t=>t.npc===id).entries[0].lines[0].portraits;
+const stars=pages('scene_cliff_night');
+const wind=pages('scene_cliff_wind_stops');
+assert.equal(stars.length,6);
+assert.equal(wind.length,4);
+assert.equal(portraits('scene_cliff_night').length,stars.length);
+assert.equal(portraits('scene_cliff_wind_stops').length,wind.length);
+assert(stars.at(-1).includes('星を見上げていた'));
+assert(wind[0].includes('風が……止まってる'));
+assert(wind.at(-1).includes('村のほうが'));
+console.log('Cliff stars/wind split and portrait counts PASS');
