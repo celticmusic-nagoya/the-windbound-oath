@@ -1,0 +1,32 @@
+name: Prologue escape-return static QA
+on:
+  push:
+    branches:
+      - qa/prologue-escape-return-integration-01
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'js/field/talk-data-attack.js'
+      - 'js/field/talk-data-scenes.js'
+      - 'js/prologue-progress.js'
+      - 'tests/prologue-escape-return-static.test.cjs'
+      - 'tests/prologue-return-flow.test.cjs'
+      - 'tests/prologue-save-route.test.cjs'
+      - 'tests/prologue-return-save-guard.test.cjs'
+      - '.github/workflows/prologue-escape-return-qa.yml'
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run prologue escape-return static regression
+        run: node tests/prologue-escape-return-static.test.cjs
+      - name: Execute isolated return-scene flow
+        run: node tests/prologue-return-flow.test.cjs
+      - name: Execute legacy SAVE route planner
+        run: node tests/prologue-save-route.test.cjs
+      - name: Execute return-scene SAVE guard
+        run: node tests/prologue-return-save-guard.test.cjs

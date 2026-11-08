@@ -454,7 +454,7 @@ function mainQuestData(){
  if(storyStage===11)return {title:'妖精ルー',desc:'小さな妖精ルーが姿を現し、目には見えない「風の道」を示した。その先を調べる。'};
  if(storyStage===12)return {title:'古代祭壇',desc:'ルーに導かれた祭壇でゴブリン・レイダーに襲われ、父の剣を折られた。古代石に応えた「誓いの剣」と契約し、反撃する。'};
  if(storyStage===13)return {title:'新しい仲間',desc:'ゴブリン・レイダーを退けた。静けさを取り戻した古代祭壇でルーと話し、これからの行き先を決める。'};
- if(storyStage===14)return {title:'夜明けの砦',desc:'ルーを新たな仲間に迎え、エイダンとフィオナは森を抜けてドゥンヴァル砦へ向かう。'};
+ if(storyStage===14)return {title:'リルドへの帰還と旅立ち',desc:'ルーの案内でリルド村へ戻り、エマと再会してからドゥンヴァル砦へ向かう。'};
  if(storyStage>=15)return {title:'風に結ばれた誓い',desc:'リルド村を失ったエイダンたちは王国の砦へ到着した。黒いルーンの異変を追う旅は、ここから始まる。'};
  return {title:'炎の中のリルド',desc:'フィオナと再会した。二人で村の北側へ向かい、襲撃の状況を確かめる。'};
 }
@@ -983,7 +983,7 @@ $('#escapeScene').onclick=()=>{
  if(escapeIndex<escapeLinesNow().length){
    $('#escapeText').textContent=escapeLinesNow()[escapeIndex];storyPortraitPage('escapeScene','escapeText',TalkDataAttack.escapePortraits,escapeIndex);
    if(escapeIndex===4)$('#escapeGob').style.display='grid';
-   if(escapeIndex===7){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
+   if(escapeIndex===9){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
  }else{
    window.TalkPortrait?.close('story:escapeScene');$('#escapeScene').style.display='none';
    enterMossForest();
@@ -1149,7 +1149,7 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
- if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
+ if(rildeReturnActive||window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}const saveMsg=$('#saveMsg');if(saveMsg)saveMsg.innerHTML='<small>セーブしました。</small>';
 }
@@ -1518,7 +1518,7 @@ const aftermathLines=[
  'ルーの羽がふわりと光る。止まっていた風が三人の間を通り抜け、夜明けの方角へ流れていった。',
  'ルー「うん！　よろしくね、エイダン、フィオナ！」',
  '――こうしてルーは、二人の旅に加わった。',
- '三人は夜明けを待ち、まず王国軍のドゥンヴァル砦を目指すことにした。'
+ 'ルー「村へ戻る道なら、わかるよ。……みんなのこと、確かめに行こう。」'
 ]
 let aftermathIndex=0;
 const aftermathPortraitOwner='aftermathTalk';
@@ -1526,6 +1526,60 @@ const aftermathPortraitPages=[{"char":null},{"char":"fiona","face":"surprised","
 function showAftermathPage(){
  $('#aftermathText').textContent=aftermathLines[aftermathIndex];
  window.TalkPortrait?.page(aftermathPortraitPages[aftermathIndex]||{char:null},aftermathPortraitOwner);
+}
+// PROLOGUE-RETURN-01: narrative return to Rilde. This is a scene-only pass;
+// actual map traversal and optional Emma charm quest remain separate tasks.
+// storyStage 14 stays reserved for the existing fort transition (legacy SAVE compatibility).
+const rildeReturnLines=[
+ 'ルーに案内され、三人は森の細い道を抜けてリルド村へ戻った。焼け落ちた家々の間に、救助と片づけを続ける人々の姿があった。',
+ 'フィオナ「……エマおばあちゃん……どこ……？」',
+ '瓦礫の向こうから、聞き慣れた声がした。エマは避難した人々の手当てを手伝っていた。',
+ 'フィオナ「エマぁっ！！」',
+ 'エマ「……おかえり、フィオナ。」',
+ 'フィオナ「……ただいま……エマ……！」',
+ 'エマは二人を抱きしめ、エイダンを見上げた。',
+ 'エマは言葉を探すように微笑んだ。',
+ '復興の指揮を執る増援の騎士が、エイダンの名を聞いて振り返る。',
+ '増援騎士「……コナー殿の息子か。」',
+ 'エイダンは父の名を聞き、黙って騎士を見つめた。',
+ 'エイダンは村を襲った魔物と黒いルーンの異変を調べるため、騎士たちの行く先へ同行したいと申し出た。',
+ 'フィオナ「私も行く。……私が決めたことだから。」',
+ 'エマは村の再建に残り、フィオナの旅立ちを静かに見送った。',
+ '三人はリルド村を後にし、ドゥンヴァル砦へ向かった。'
+];
+const rildeReturnPortraitPages=[
+ {char:null},{char:'fiona',face:'worried',side:'right'},{char:null},
+ {char:'fiona',face:'surprised',side:'right'},{char:'emma',face:'smile',side:'right'},
+ {char:'fiona',face:'relieved',side:'right'},{char:null},
+ {char:'emma',face:'smile',side:'right'},{char:null},{char:null},
+ {char:'aidan',face:'normal',side:'left'},{char:null},
+ {char:'fiona',face:'determined',side:'right'},{char:null},{char:null}
+];
+let rildeReturnIndex=0,rildeReturnActive=false;
+function startRildeReturnScene(){
+ if(rildeReturnActive)return;
+ rildeReturnActive=true;rildeReturnIndex=0;
+ storyStage=14;
+ currentObjective='リルド村でエマと再会し、次の行き先を決めよう';
+ renderJournal();
+ // Keep the existing aftermath overlay as cover: no map/asset/save format changes.
+ $('#aftermathScene').style.display='block';
+ window.TalkPortrait?.open(aftermathPortraitOwner,{scene:$('#aftermathScene'),anchor:$('#aftermathText')});
+ showRildeReturnPage();
+}
+function showRildeReturnPage(){
+ $('#aftermathText').textContent=rildeReturnLines[rildeReturnIndex];
+ window.TalkPortrait?.page(rildeReturnPortraitPages[rildeReturnIndex]||{char:null},aftermathPortraitOwner);
+}
+function advanceRildeReturnScene(){
+ if(!rildeReturnActive)return;
+ rildeReturnIndex++;
+ if(rildeReturnIndex<rildeReturnLines.length){showRildeReturnPage();return;}
+ rildeReturnActive=false;
+ window.TalkPortrait?.close(aftermathPortraitOwner);
+ // Show the destination first; avoid flashing the underlying field.
+ startFortFinale();
+ $('#aftermathScene').style.display='none';
 }
 function startRaiderAftermath(){
  storyStage=13;aftermathIndex=0;forestActive=false;
@@ -1536,6 +1590,7 @@ function startRaiderAftermath(){
  questPop('ゴブリン・レイダーを討伐した');
 }
 $('#aftermathScene').onclick=()=>{
+ if(rildeReturnActive){advanceRildeReturnScene();return;}
  aftermathIndex++;
  if(aftermathIndex<aftermathLines.length){
    showAftermathPage();
@@ -1543,22 +1598,13 @@ $('#aftermathScene').onclick=()=>{
    window.TalkPortrait?.close(aftermathPortraitOwner);
    PartyManager.support.joined=true;
    storyStage=14;
-   // Keep the aftermath layer visible as a transition cover.
-   // Hiding it here exposed the underlying Lind Village for ~650ms.
-   $('#aftermathText').textContent='夜が明ける。三人は風の向かう先――ドゥンヴァル砦へ歩き出した。';
    questPop('ルーがSUPPORTとして仲間になった');
-   const eventGeneration=PrologueCombat.generation;
-   setTimeout(()=>{
-     if(eventGeneration!==PrologueCombat.generation||storyStage!==14)return;
-     startFortFinale();
-     // Fort is now in front; only then remove the previous scene.
-     $('#aftermathScene').style.display='none';
-   },650);
+   startRildeReturnScene();
  }
 };
 
 const fortLines=[
- '夜明け。長い森を抜けた先に、王国軍の小さな砦が見えた。',
+ 'リルド村を出発した三人の前に、王国軍のドゥンヴァル砦が見えてきた。',
  'フィオナ「……着いた。ここなら、少しは休めるかな。」',
  'ルー「でも、あの黒いルーン……普通の魔物じゃなかった。風もずっと怯えてたよ。」',
  'エイダンは「誓いの剣」の柄を握る。村を守れなかった重さが、まだ手の中に残っていた。',
