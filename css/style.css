@@ -3627,3 +3627,17 @@ body.cliff-cg-active #talkPortrait{z-index:201!important}
 #returnScene.raid-cg-active #returnGoblin{right:8%;bottom:24%;width:clamp(75px,16vw,160px);height:clamp(95px,31vh,230px)}
 #returnScene.raid-cg-active .return-character-art{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 8px #0009)}
 .return-character-art{display:none}
+
+
+/* SC-01–03 approved CG sequence: reveal after the bend, then composite raid, then
+   clean raid background with the game's existing dialogue portraits. */
+#returnRoadRevealCg,#returnRaidCompositeCg{
+ position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+ display:none;z-index:1;pointer-events:none;
+}
+#returnScene.road-reveal-active #returnRoadRevealCg{display:block}
+#returnScene.raid-composite-active #returnRaidCompositeCg{display:block}
+#returnScene.raid-background-active #returnRaidCg{display:block}
+#returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) #returnRoad{display:none}
+/* Do not mix tiny battle sprites into cinematic, full-frame approved artwork. */
+#returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) :is(#returnAidan,#returnFiona,#returnGoblin){display:none!important}

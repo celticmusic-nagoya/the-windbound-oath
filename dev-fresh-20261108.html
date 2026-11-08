@@ -163,7 +163,7 @@
 <button id="nGuard">防御</button><button id="nItem">アイテム</button>
 </div>
 </div>
-<div id="returnScene"><div id="returnBackdrop"><img id="returnRaidCg" src="assets/approved/game/rilde_story/raid/attack_background_only.png" alt="" aria-hidden="true" decoding="async"><div id="returnRoad"></div><div id="returnAidan"><img class="return-character-art" src="img/battle/characters/aidan/aidan_battle_idle.png" alt="エイダン" decoding="async"></div><div id="returnFiona"><img class="return-character-art" src="img/battle/characters/fiona/fiona_battle_idle.png" alt="フィオナ" decoding="async"></div><div id="returnGoblin"><img class="return-character-art" src="img/battle/enemies/goblin/goblin_battle_idle.png" alt="ゴブリン" decoding="async"></div><div id="returnFlash"></div></div><div id="returnText"></div><div id="returnHint">タップして進む</div></div>
+<div id="returnScene"><div id="returnBackdrop"><img id="returnRoadRevealCg" src="assets/approved/game/rilde_story/road/curve_reveal_APPROVED_user_reference.jpg" alt="カーブの先に初めて見えた炎上するリルド村" decoding="async"><img id="returnRaidCompositeCg" src="assets/approved/game/rilde_story/raid/attack_with_characters_APPROVED_user_reference.jpg" alt="ゴブリンに襲われるリルド村の人々" decoding="async"><img id="returnRaidCg" src="assets/approved/game/rilde_story/raid/attack_background_only.png" alt="" aria-hidden="true" decoding="async"><div id="returnRoad"></div><div id="returnAidan"><img class="return-character-art" src="img/battle/characters/aidan/aidan_battle_idle.png" alt="エイダン" decoding="async"></div><div id="returnFiona"><img class="return-character-art" src="img/battle/characters/fiona/fiona_battle_idle.png" alt="フィオナ" decoding="async"></div><div id="returnGoblin"><img class="return-character-art" src="img/battle/enemies/goblin/goblin_battle_idle.png" alt="ゴブリン" decoding="async"></div><div id="returnFlash"></div></div><div id="returnText"></div><div id="returnHint">タップして進む</div></div>
 <div id="dangerBanner">風が、止まった。</div>
 <div id="escapeScene"><div id="escapeRiver"></div><div id="escapeBank"></div><div id="escapeA">A</div><div id="escapeF">F</div><div id="escapeGob">異形</div><div id="escapeText"></div><div id="escapeHint">タップして進む</div></div>
 <div id="forestScene"><div id="forestWorld"><div id="forestFiona">F</div><div id="forestPlayer"></div></div><div id="forestLabel">苔むした森</div><div id="forestToast"></div><div id="forestFade"></div></div>
@@ -581,7 +581,9 @@ const returnPortraitPages=[{"char":"aidan","face":"normal","side":"left"},{"char
 let returnIndex=0;
 function startReturnScene(){
  returnIndex=0;
- $('#returnScene').classList.remove('raid-cg-active');
+ $('#returnScene').classList.remove('raid-cg-active','road-reveal-active','raid-composite-active','raid-background-active');
+ $('#returnGoblin').style.display='none';
+ $('#returnFiona').style.opacity='1';
  $('#returnScene').style.display='block';
  $('#returnText').textContent=returnLines[0];storyPortraitPage('returnScene','returnText',returnPortraitPages,0);
 }
@@ -589,13 +591,18 @@ $('#returnScene').onclick=()=>{
  returnIndex++;
  if(returnIndex<returnLines.length){
    $('#returnText').textContent=returnLines[returnIndex];storyPortraitPage('returnScene','returnText',returnPortraitPages,returnIndex);
-   if(returnIndex===6){ $('#returnGoblin').style.display='block'; $('#returnScene').classList.add('raid-cg-active'); }
+   // Only reveal the burning village after the last bend is fully rounded (index 5).
+   if(returnIndex===5)$('#returnScene').classList.add('road-reveal-active');
+   // Show the director-approved full raid composition before dialogue-only staging.
+   if(returnIndex===6){$('#returnScene').classList.remove('road-reveal-active');$('#returnScene').classList.add('raid-composite-active');}
+   // From the exchange onward, use the clean background and existing talk portraits.
+   if(returnIndex===8){$('#returnScene').classList.remove('raid-composite-active');$('#returnScene').classList.add('raid-background-active');}
    if(returnIndex===12){
      const rs=$('#returnScene'); rs.classList.remove('flash'); void rs.offsetWidth; rs.classList.add('flash');
      $('#returnFiona').style.opacity='.15';
    }
  }else{
-   window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.remove('raid-cg-active');$('#returnScene').style.display='none';
+   window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.remove('raid-cg-active','road-reveal-active','raid-composite-active','raid-background-active');$('#returnScene').style.display='none';
    enterBurningVillage();
  }
 };
