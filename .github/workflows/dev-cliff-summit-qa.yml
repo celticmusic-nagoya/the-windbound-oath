@@ -1,0 +1,23 @@
+name: DEV cliff summit QA
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'data/maps/cliff_moher_01_spiral_ascent.json'
+      - 'tests/moss/dev_cliff_summit_jump.test.js'
+      - '.github/workflows/dev-cliff-summit-qa.yml'
+  push:
+    paths:
+      - 'index.html'
+      - 'data/maps/cliff_moher_01_spiral_ascent.json'
+      - 'tests/moss/dev_cliff_summit_jump.test.js'
+      - '.github/workflows/dev-cliff-summit-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/moss/dev_cliff_summit_jump.test.js

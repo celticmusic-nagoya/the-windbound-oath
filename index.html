@@ -1643,6 +1643,7 @@ const DEV_EVENTS=[
  ['opening','01　エイダンの家'],
  ['training','02　訓練場・フィオナ'],
  ['sunset','03　風見の断崖'],
+ ['cliff_summit','03a　風見の断崖・頂上（CG確認）'],
  ['attack','04　リルド村襲撃'],
  ['reunion','05　フィオナ再合流後'],
  ['north','06　王国騎士・北の退路'],
@@ -1672,6 +1673,14 @@ function devResetScreens(ownerToken){
 }
 function devJump(key){
  devResetScreens();
+ if(key==='cliff_summit'){
+   storyStage=3;
+   currentObjective='風見の断崖の頂上でフィオナと夕陽を見よう';
+   // Dedicated DEV shortcut: use the map's existing summit spawn, not the village entrance.
+   // Keep stage 3 so the bench triggers the approved sunset-to-stars scene.
+   enterWorldMap('cliff_moher_01_spiral_ascent','summit');
+   renderJournal();popObjective();return;
+ }
  if(key.startsWith('map:')){if(storyStage<15){storyStage=15;currentObjective='プロローグクリア';}enterWorldMap(key.slice(4));renderJournal();popObjective();return;}
  if(key==='opening'&&window.RildeVillage&&RildeVillage.enabled()){RildeVillage.startOpening();return;}
  if(key==='training'&&window.RildeVillage&&RildeVillage.enabled()){storyStage=1;currentObjective='訓練場でフィオナと話そう';RildeVillage.enter('from_training');renderJournal();popObjective();return;}
