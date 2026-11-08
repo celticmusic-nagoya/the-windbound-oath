@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"/>
-<title>THE WINDBOUND OATH v0.64</title>
+<title>THE WINDBOUND OATH v0.64 | 20261108-pages-html-refresh-01</title>
+<meta name="game-html-revision" content="20261108-pages-html-refresh-01">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
 <script src="js/field/field-movement.js?v=20261011-quality-g"></script>
 <script src="js/field/field-navigation.js"></script>
@@ -1642,7 +1646,7 @@ document.querySelectorAll('.attackRubble,.attackSmoke,.attackFlame').forEach(el=
 const DEV_EVENTS=[
  ['opening','01　エイダンの家'],
  ['training','02　訓練場・フィオナ'],
- ['sunset','03　風見の断崖'],
+ ['sunset','03　風見の断崖（入口）'],
  ['cliff_summit','03a　風見の断崖・頂上（CG確認）'],
  ['attack','04　リルド村襲撃'],
  ['reunion','05　フィオナ再合流後'],
@@ -1723,6 +1727,12 @@ function devJump(key){
  renderJournal();popObjective();
 }
 $('#devGrid').innerHTML=DEV_EVENTS.map(([k,n])=>`<button data-jump="${k}">${n}</button>`).join('');
+// Visible release marker makes stale HTML immediately distinguishable from current main.
+const devRevision=document.createElement('small');
+devRevision.id='devHtmlRevision';
+devRevision.textContent='HTML: 20261108-pages-html-refresh-01';
+devRevision.style.cssText='display:block;margin:8px 0;color:#c9b780;font:12px monospace';
+$('#devGrid').before(devRevision);
 $('#devBtn').onclick=()=>{$('#devPanel').style.display='block'};
 $('#devClose').onclick=()=>{$('#devPanel').style.display='none'};
 $('#devArena').onclick=e=>{
