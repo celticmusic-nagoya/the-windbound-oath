@@ -1,0 +1,38 @@
+name: Official HD pixel candidate QA
+on:
+  pull_request:
+    paths:
+      - 'scripts/qa_field_hd_pixel.py'
+      - 'tests/moss/test_qa_field_hd_pixel.py'
+      - 'assets/candidates/field-hd-pixel/**'
+      - '.github/workflows/field-hd-pixel-qa.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/qa_field_hd_pixel.py'
+      - 'tests/moss/test_qa_field_hd_pixel.py'
+      - 'assets/candidates/field-hd-pixel/**'
+      - '.github/workflows/field-hd-pixel-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow==11.3.0
+      - run: python -m unittest discover -s tests/moss -p test_qa_field_hd_pixel.py -v
+      - name: Validate any committed candidates
+        run: |
+          if [ -d assets/candidates/field-hd-pixel ]; then
+            for d in assets/candidates/field-hd-pixel/*; do
+              [ -d "$d" ] || continue
+              python scripts/qa_field_hd_pixel.py --character "$(basename "$d")"
+            done
+          else
+            echo 'No candidate PNGs committed; technical unit tests only'
+          fi
