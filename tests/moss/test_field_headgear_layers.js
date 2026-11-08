@@ -1,0 +1,10 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {test}=require('node:test');
+const h=require('../../js/field/field-headgear-layers.js');
+const make=(id,slot,occupies)=>({id,slot,occupies,directions:Object.fromEntries(h.DIRECTIONS.map(d=>[d,'assets/candidates/headgear/'+id+'/'+d+'.png']))});
+test('four directions and three slots',()=>{assert.deepEqual(h.DIRECTIONS,['down','left','right','up']);assert.deepEqual(h.SLOTS,['upper','middle','lower']);});
+test('all directions map to their own sprites',()=>{const a=make('ribbon_red','upper');for(const d of h.DIRECTIONS)assert.equal(h.compose('assets/candidates/field-hd-pixel/aidan/'+d+'.png',[a],d)[1].src,a.directions[d]);});
+test('equip replaces occupied slots atomically',()=>{const a=make('ribbon_red','upper'),b=make('glasses_round','middle'),c=make('helmet_iron','upper',['upper','middle']);assert.deepEqual(h.equip([a,b],c).map(x=>x.id),['helmet_iron']);});
+test('composes in base upper middle lower order',()=>{const a=make('ribbon_red','upper'),b=make('glasses_round','middle'),c=make('scarf_red','lower');assert.deepEqual(h.compose('assets/candidates/field-hd-pixel/aidan/down.png',[c,b,a],'down').map(x=>x.slot),['base','upper','middle','lower']);});
+test('rejects conflicts and traversal paths',()=>{const a=make('ribbon_red','upper');assert.throws(()=>h.compose('../evil.png',[a],'down'));assert.throws(()=>h.compose('assets/candidates/field-hd-pixel/aidan/down.png',[a,a],'down'));assert.throws(()=>h.validateItem({...a,directions:{...a.directions,down:'../evil.png'}}));});
