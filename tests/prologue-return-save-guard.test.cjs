@@ -13,6 +13,7 @@ const writes=[];
 const notices=[];
 const context={
  window:{BattleLoading:{canSave:true},FieldTalk:{serialize:()=>({})}},
+ FieldTalk:{serialize:()=>({})},
  LoadCoordinator:{canSave:true},
  MossForest:{canSave:true,active:false,busy:false},
  forestActive:false,
