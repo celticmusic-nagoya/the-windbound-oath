@@ -12,6 +12,7 @@ on:
       - 'tests/prologue-escape-return-static.test.cjs'
       - 'tests/prologue-return-flow.test.cjs'
       - 'tests/prologue-save-route.test.cjs'
+      - 'tests/prologue-return-save-guard.test.cjs'
       - '.github/workflows/prologue-escape-return-qa.yml'
 jobs:
   static:
@@ -27,3 +28,5 @@ jobs:
         run: node tests/prologue-return-flow.test.cjs
       - name: Execute legacy SAVE route planner
         run: node tests/prologue-save-route.test.cjs
+      - name: Execute return-scene SAVE guard
+        run: node tests/prologue-return-save-guard.test.cjs
