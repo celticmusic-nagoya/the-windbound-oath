@@ -1755,6 +1755,24 @@ $('#devArena').onclick=e=>{
  else if(k==='place'){info.textContent=MossForest.devSpawn(type,count,group)+' 体を配置しました。（現在 '+MossForest.monsters.length+' 体）';}
  else if(k==='all'){let n=0;for(const t of Object.keys(FieldMonsters.MONSTER_TYPES))n+=MossForest.devSpawn(t,1,group);info.textContent=n+' 体を配置しました。（現在 '+MossForest.monsters.length+' 体）';}
 };
+// The current DEV menu can coexist with an older click handler from legacy scripts.
+// Capture the summit shortcut before any bubbling handler can swallow it.
+devGridEl.addEventListener('click',e=>{
+ const b=e.target.closest('[data-jump="cliff_summit"]');
+ if(!b||!devGridEl.contains(b))return;
+ e.preventDefault();e.stopImmediatePropagation();
+ // Summit is a height-map level 2 spawn; use the dedicated map entry, not the old village jump.
+ devResetScreens();storyStage=3;
+ currentObjective='風見の断崖の頂上でフィオナと夕陽を見よう';
+ const task=enterWorldMap('cliff_moher_01_spiral_ascent','summit');
+ Promise.resolve(task).then(()=>{renderJournal();popObjective();}).catch(err=>{
+   console.error('[DEV summit] map entry failed',err);
+   const panel=$('#devPanel');panel.style.display='block';
+   let message=document.getElementById('devSummitError');
+   if(!message){message=document.createElement('p');message.id='devSummitError';message.setAttribute('role','alert');panel.prepend(message);}
+   message.textContent='頂上への移動に失敗しました: '+String(err&&err.message||err);
+ });
+},true);
 $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b.dataset.jump)};
 
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
