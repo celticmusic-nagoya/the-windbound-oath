@@ -3665,6 +3665,24 @@ body.cliff-cg-active #talkPortrait{z-index:201!important}
  }
 }
 
+/* CG-LANDSCAPE-01: cinematic art fills the wide viewport instead of being
+   squeezed into the narrow portrait-only area above the dialogue box.
+   Full source composition is retained; dialogue overlays the bottom edge. */
+@media (orientation:landscape) and (min-aspect-ratio: 4/3){
+ #returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active)
+ :is(#returnRoadRevealCg,#returnRaidCompositeCg,#returnRaidCg){
+  inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
+ }
+ #returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) #returnText{
+  bottom:max(2%,env(safe-area-inset-bottom));min-height:0;
+  padding:clamp(8px,2vh,14px) clamp(12px,2vw,24px);
+  background:rgba(9,19,23,.88);
+ }
+ #returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) #returnHint{
+  bottom:4%;
+ }
+}
+
 /* Portrait integration: soften hard rectangular crop on the OUTER rendered canvas,
    so face/blink overlays share exactly the same mask and stay pixel-aligned. */
 #talkPortrait canvas{

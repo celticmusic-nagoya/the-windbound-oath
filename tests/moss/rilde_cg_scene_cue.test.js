@@ -15,7 +15,8 @@ assert.deepEqual(Array.from(cg),[
 ]);
 assert.equal(steps[night-2].cg.src,'assets/approved/game/cliff/stargazing_seated.png');
 assert.equal(steps[standing-2].cg.src,'assets/approved/game/cliff/stargazing_standing_final.png');
-assert.equal(steps[wind-1].cg.src,'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png');
+assert.equal(steps[wind-2].cg.src,'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png');
+assert.equal(steps[wind-1].wait,1200);
 assert.equal(steps[wind+1].cg.hide,true);
 assert(!steps.some(s=>s.vista?.id==='village_fire'));
 assert(!steps.some(s=>s.talk==='scene_cliff_fire'));
