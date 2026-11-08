@@ -1589,7 +1589,8 @@ function startRaiderAftermath(){
  showAftermathPage();
  questPop('ゴブリン・レイダーを討伐した');
 }
-$('#aftermathScene').onclick=()=>{\n if(rildeReturnActive){advanceRildeReturnScene();return;}
+$('#aftermathScene').onclick=()=>{
+ if(rildeReturnActive){advanceRildeReturnScene();return;}
  aftermathIndex++;
  if(aftermathIndex<aftermathLines.length){
    showAftermathPage();
