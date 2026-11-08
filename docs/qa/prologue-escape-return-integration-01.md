@@ -36,3 +36,11 @@
 ## QA判定
 **STATIC PASS (11/11), INTEGRATION QA PARTIAL, MERGE BLOCKED**。
 現時点ではどのPRもmainへマージ・公開しない。
+
+## 追加調査: SAVE/CONTINUE (2026-11-08)
+- `js/prologue-progress.js`: 保存形式version 2、stage13は`AFTERMATH`、stage14は`FORT_FINALE`、stage15は`PROLOGUE_END`。旧SAVEのstage14→砦復帰は維持。
+- `js/save-continue.js`: タイトルからのロードも`PrologueProgress.plan()`を使用。
+- 統合QAブランチの`index.html`で`saveGrowthData()`のガードに`rildeReturnActive`を追加し、帰還会話中の中断セーブを禁止。帰還完了後は従来の砦stage14へ遷移。
+- 不確定な新規補間台詞を一部ト書きへ変更し、未承認設定を断定しないよう修正。
+- **追加静的確認8/8 PASS**：ガード、旧stage13/14の復帰ルート、stage14復帰処理、帰還開始・終了、再会台詞、SAVE version不変。
+- **制限**：帰還中のアプリ終了時は直前SAVEからの再開。会話途中からの再開には非対応。実行・Android・旧SAVE復帰テストはNOT_RUN。独立QAなしにマージしない。
