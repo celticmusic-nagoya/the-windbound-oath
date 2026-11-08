@@ -3641,3 +3641,26 @@ body.cliff-cg-active #talkPortrait{z-index:201!important}
 #returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) #returnRoad{display:none}
 /* Do not mix tiny battle sprites into cinematic, full-frame approved artwork. */
 #returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) :is(#returnAidan,#returnFiona,#returnGoblin){display:none!important}
+
+/* Unified event-CG framing: show complete approved compositions on portrait screens.
+   Never crop faces, village crowds or the skyline to fill a tall viewport. */
+#returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active)
+:is(#returnRoadRevealCg,#returnRaidCompositeCg,#returnRaidCg){
+ object-fit:contain;object-position:center center;
+ width:100%;height:calc(100% - clamp(132px,19vh,210px));
+ top:0;bottom:auto;
+}
+#returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active) #returnBackdrop{
+ background:#101720;
+}
+#returnScene.road-reveal-active #returnText,
+#returnScene.raid-composite-active #returnText{
+ background:rgba(9,19,23,.95);
+}
+/* CGs should be fully visible above the dialogue area, including in portrait. */
+@media (orientation:portrait){
+ #returnScene:is(.road-reveal-active,.raid-composite-active,.raid-background-active)
+ :is(#returnRoadRevealCg,#returnRaidCompositeCg,#returnRaidCg){
+  object-fit:contain;object-position:center;
+ }
+}
