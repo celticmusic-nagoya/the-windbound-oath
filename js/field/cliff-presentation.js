@@ -12,7 +12,7 @@
     root = document.createElement('div');
     root.id = 'cliff-cg-layer';
     root.setAttribute('aria-hidden', 'true');
-    root.style.cssText = 'position:fixed;inset:0;z-index:120;pointer-events:none;display:none;background:#061326;';
+    root.style.cssText = 'position:fixed;inset:0;z-index:172;pointer-events:none;display:none;background:#061326;';
     image = document.createElement('img');
     image.style.cssText = 'display:block;width:100%;height:100%;object-fit:contain;';
     image.alt = '';
@@ -24,6 +24,7 @@
     current++;
     if (!root) return;
     root.style.display = 'none';
+    document.body.classList.remove('cliff-cg-active');
     root.setAttribute('aria-hidden', 'true');
     root.classList.remove('cliff-cg--dialogue');
     image.removeAttribute('src');
@@ -51,6 +52,7 @@
         image.src = opts.src;
         image.alt = String(opts.alt || '');
         root.style.display = 'block';
+        document.body.classList.add('cliff-cg-active');
         root.style.background = opts.mode === 'dialogue' ? 'transparent' : '#061326';
         root.classList.toggle('cliff-cg--dialogue', opts.mode === 'dialogue');
         image.style.objectFit = 'contain';
