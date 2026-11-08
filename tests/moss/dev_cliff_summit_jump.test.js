@@ -11,4 +11,7 @@ assert.match(jump,/enterWorldMap\('cliff_moher_01_spiral_ascent','summit'\)/);
 assert.match(jump,/renderJournal\(\);popObjective\(\);return/);
 assert.match(html,/function enterWorldMap\(id,spawn\)/);
 assert.match(html,/MossForestStory\.enterMap\(id,spawn\)/);
-console.log('DEV summit teleport + stage 3 sunset trigger PASS');
+assert.match(html,/game-html-revision" content="20261108-pages-html-refresh-01"/);
+assert.match(html,/devHtmlRevision/);
+assert(!html.includes("['sunset','03　夕暮れ']"));
+console.log('DEV summit teleport, latest HTML marker and stage 3 sunset trigger PASS');
