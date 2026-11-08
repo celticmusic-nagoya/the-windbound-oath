@@ -1,27 +1,23 @@
-/* Return-road approved raid CG: source and trigger regression */
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const html = fs.readFileSync('index.html','utf8');
-const css = fs.readFileSync('css/style.css','utf8');
-assert.match(html, /id="returnRaidCg" src="assets\/approved\/game\/rilde_story\/raid\/attack_background_only\.png"/);
-const start = html.indexOf('function startReturnScene(){');
-const end = html.indexOf('function showBurningVillageVisuals(){',start);
-assert.ok(start>=0&&end>start);
-const scene = html.slice(start,end);
-assert.match(scene, /returnIndex===6/);
-assert.match(scene, /returnScene'\)\.classList\.add\('raid-cg-active'\)/);
-assert.match(scene, /function startReturnScene\(\)\{[\s\S]*?classList\.remove\('raid-cg-active'\)/);
-assert.match(scene, /close\('story:returnScene'\)[\s\S]*?classList\.remove\('raid-cg-active'\)/);
-assert.match(scene, /enterBurningVillage\(\)/);
-assert.match(css, /#returnRaidCg\{[^}]*display:none/);
-assert.match(css, /#returnScene\.raid-cg-active #returnRaidCg\{display:block\}/);
-assert.match(css, /#returnText\{[^}]*z-index:5/);
-for(const id of ['returnAidan','returnFiona','returnGoblin']) assert.match(html,new RegExp('id="'+id+'"[^>]*><img class="return-character-art"'));
-assert.match(css, /#returnScene\.raid-cg-active \.return-character-art\{display:block/);
+/* Approved road/raid composite transition regression. */
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const css=fs.readFileSync('css/style.css','utf8');
+for(const path of ['index.html','dev-fresh-20261108.html']){
+ const html=fs.readFileSync(path,'utf8');
+ const start=html.indexOf('function startReturnScene(){');const end=html.indexOf('function showBurningVillageVisuals(){',start);
+ assert(start>=0&&end>start);const scene=html.slice(start,end);
+ for(const [id,file] of [['returnRoadRevealCg','road/curve_reveal_APPROVED_user_reference.jpg'],['returnRaidCompositeCg','raid/attack_with_characters_APPROVED_user_reference.jpg'],['returnRaidCg','raid/attack_background_only.png']]){
+  assert(html.includes('id="'+id+'" src="assets/approved/game/rilde_story/'+file+'"'));
+ }
+ assert(scene.includes('returnIndex===5')&&scene.includes("classList.add('road-reveal-active')"));
+ assert(scene.includes('returnIndex===6')&&scene.includes("classList.add('raid-composite-active')"));
+ assert(scene.includes('returnIndex===8')&&scene.includes("classList.add('raid-background-active')"));
+ assert(scene.includes("classList.remove('raid-cg-active','road-reveal-active','raid-composite-active','raid-background-active')"));
+ assert(scene.includes('enterBurningVillage()'));
+}
+for(const selector of ['#returnScene.road-reveal-active #returnRoadRevealCg{display:block}', '#returnScene.raid-composite-active #returnRaidCompositeCg{display:block}', '#returnScene.raid-background-active #returnRaidCg{display:block}'])assert(css.includes(selector));
+assert(css.includes('#returnAidan,#returnFiona,#returnGoblin){display:none!important}'));
 const cliff=fs.readFileSync('js/field/cliff-presentation.js','utf8');
-assert.match(cliff,/z-index:172/);
-assert(cliff.includes("classList?.add('cliff-cg-active')"));
-assert(cliff.includes("classList?.remove('cliff-cg-active')"));
-assert.match(css,/body\.cliff-cg-active #msg\{z-index:200!important\}/);
-assert.match(css,/body\.cliff-cg-active #talkPortrait\{z-index:201!important\}/);
-console.log('Approved raid CG + character layers and cliff CG stacking PASS');
+assert(cliff.includes('z-index:172'));assert(cliff.includes("classList?.add('cliff-cg-active')"));assert(cliff.includes("classList?.remove('cliff-cg-active')"));
+assert(css.includes('body.cliff-cg-active #msg{z-index:200!important}'));
+assert(css.includes('body.cliff-cg-active #talkPortrait{z-index:201!important}'));
+console.log('Approved raid composition and clean portrait transition PASS');
