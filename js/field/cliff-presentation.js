@@ -24,7 +24,7 @@
     current++;
     if (!root) return;
     root.style.display = 'none';
-    document.body.classList.remove('cliff-cg-active');
+    document.body.classList?.remove('cliff-cg-active');
     root.setAttribute('aria-hidden', 'true');
     root.classList.remove('cliff-cg--dialogue');
     image.removeAttribute('src');
@@ -52,7 +52,7 @@
         image.src = opts.src;
         image.alt = String(opts.alt || '');
         root.style.display = 'block';
-        document.body.classList.add('cliff-cg-active');
+        document.body.classList?.add('cliff-cg-active');
         root.style.background = opts.mode === 'dialogue' ? 'transparent' : '#061326';
         root.classList.toggle('cliff-cg--dialogue', opts.mode === 'dialogue');
         image.style.objectFit = 'contain';
