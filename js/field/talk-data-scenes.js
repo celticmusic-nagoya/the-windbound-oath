@@ -11,16 +11,25 @@ window.TalkDataScenes = Object.freeze({tables: [
       choice: {options: [
         {label: 'はい', set: {cliff_bench_sat: true}, scene: 'cliff_sunset_to_fire'},
         {label: 'いいえ', reply: {pages:['フィオナ「そっか。……気が向いたら、いつでも声をかけてね。」', 'もう少し、あたりを見ていよう。'],portraits:[{"char":"fiona","face":"normal","side":"right"},{"char":null}]}}]}}]}]},
+  // SC-01 reconstructed candidate: source dialogue from 2026-11-02 is not available.
+  // Keep this in Draft PR until director confirms wording; never label it as recovered canon.
   {npc: 'scene_cliff_sunset', entries: [
-    {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{portraits:[{"char":"fiona","face":"smile","side":"right"},{"char":null},{"char":"aidan","face":"smile","side":"left"},{"char":"fiona","face":"smile","side":"right"},{"char":"fiona","face":"normal","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"normal","side":"right"},{"char":null}],pages: [
-      'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',
-      '果てのない海が、橙色にとけていく。断崖の草原を、風がやわらかく撫でていった。',
-      {speaker: 'エイダン', text: '「訓練のあとに、こんな坂道を登らされるとは思わなかったけどな。」', char: 'aidan', face: 'smile', side: 'left'},
-      {speaker: 'フィオナ', text: '「ふふ。エイダン、昔からすぐそういうこと言う。」', char: null},
-      'フィオナ「ねえ。エイダンは……王都へ行ったら、お父さんみたいな騎士になるの？」',
-      {speaker: 'エイダン', text: '「まだ分からない。でも――守れるくらいには強くなりたい。」', char: 'aidan', face: 'normal', side: 'left'},
-      {speaker: 'フィオナ', text: '「そっか。」', char: null},
-      '夕陽が、水平線の向こうへゆっくりと沈んでいく。']}]}]},
+    {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{portraits:[
+      {char:null},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'smile',side:'left'},
+      {char:'fiona',face:'normal',side:'right'},{char:'aidan',face:'normal',side:'left'},
+      {char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},
+      {char:'fiona',face:'normal',side:'right'},{char:null}
+    ],pages: [
+      '夕陽が海を赤く染め、風見の断崖の草を金色に揺らしていた。',
+      'フィオナ「ねえ、エイダン。覚えてる？　小さいころも、ここで夕日を見たよね。」',
+      'エイダン「ああ。お前が帰りたくないって言って、エマばあちゃんに叱られた。」',
+      'フィオナ「ふふ……そんなこともあったね。ねえ、王都へ行ったら、やっぱり騎士になるの？」',
+      'エイダン「……まだ、分からない。ただ、強くなりたいんだ。」',
+      'フィオナ「どうして？」',
+      'エイダン「目の前で誰かが困っているとき、何もできずに見ているだけなのは嫌だから。」',
+      'フィオナ「……そっか。じゃあ、約束して。どんなに遠くへ行っても、ちゃんと帰ってきてね。」',
+      '二人の間を、いつもの穏やかな風が吹き抜けた。'
+    ]}]}]},
   // The approved standing stargazing CG must appear BEFORE the wind stops.
   {npc: 'scene_cliff_night', entries: [
     {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{portraits:[{char:null},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},{char:null}],pages: [
