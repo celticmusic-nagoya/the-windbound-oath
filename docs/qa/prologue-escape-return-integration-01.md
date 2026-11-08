@@ -44,3 +44,21 @@
 - 不確定な新規補間台詞を一部ト書きへ変更し、未承認設定を断定しないよう修正。
 - **追加静的確認8/8 PASS**：ガード、旧stage13/14の復帰ルート、stage14復帰処理、帰還開始・終了、再会台詞、SAVE version不変。
 - **制限**：帰還中のアプリ終了時は直前SAVEからの再開。会話途中からの再開には非対応。実行・Android・旧SAVE復帰テストはNOT_RUN。独立QAなしにマージしない。
+
+## 自動テスト実行結果（2026-11-08）
+- GitHub Actions `Prologue escape-return static QA` run **42440757926**: **SUCCESS**。
+- ジョブログの `node tests/prologue-escape-return-static.test.cjs` に **15/15 static integration checks passed** と各15項目のPASSが出力されたことを確認。
+- `Rilde CG registry QA` run **42440758117**: **SUCCESS**。
+- この2件は静的整合・既存CGの検査であり、ブラウザでのゲーム通しプレイ・旧SAVEの実ロード・Android実機QAを代替しない。
+
+## 次の実行QAの受入チェック
+1. 新規開始から川へ飛び込む12ページを連続タップし、最後にモスの森の川岸へ到達する。
+2. 森でルー加入、誓いの剣契約、レイダー戦終了後にリルド帰還15ページが一度だけ再生される。
+3. エマとの再会台詞が順番どおりで、終了時のみ砦へ進み、支給装備を一度だけ取得する。
+4. 旧SAVE stage13をロードするとレイダー討伐後の会話から再開する。
+5. 旧SAVE stage14をロードすると従来どおり砦シーンから再開する（帰還イベントへ強制遷移しない）。
+6. 旧SAVE stage15をロードするとプロローグクリア後へ復帰する。
+7. 帰還会話中はSAVE不可、帰還完了後の砦では通常のSAVE仕様を維持する。
+8. Android縦・横で立ち絵、会話タップ、画面遷移、再起動時の動作を確認する。
+
+判定: **STATIC CI PASS 15/15 / EXISTING CG CI PASS / RUNTIME & SAVE REPLAY NOT_RUN / MERGE BLOCKED**。
