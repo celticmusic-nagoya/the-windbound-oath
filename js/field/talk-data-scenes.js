@@ -11,40 +11,11 @@ window.TalkDataScenes = Object.freeze({tables: [
       choice: {options: [
         {label: 'はい', set: {cliff_bench_sat: true}, scene: 'cliff_sunset_to_fire'},
         {label: 'いいえ', reply: {pages:['フィオナ「そっか。……気が向いたら、いつでも声をかけてね。」', 'もう少し、あたりを見ていよう。'],portraits:[{"char":"fiona","face":"normal","side":"right"},{"char":null}]}}]}}]}]},
-  // SC-01 reconstructed candidate: source dialogue from 2026-11-02 is not available.
-  // Keep this in Draft PR until director confirms wording; never label it as recovered canon.
-  {npc: 'scene_cliff_sunset', entries: [
-    {id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{portraits:[
-      {char:null},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'smile',side:'left'},
-      {char:'fiona',face:'normal',side:'right'},{char:'aidan',face:'normal',side:'left'},
-      {char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},
-      {char:'fiona',face:'normal',side:'right'},{char:null}
-    ],pages: [
-      '夕陽が海を赤く染め、風見の断崖の草を金色に揺らしていた。',
-      'フィオナ「ねえ、エイダン。覚えてる？　小さいころも、ここで夕日を見たよね。」',
-      'エイダン「ああ。お前が帰りたくないって言って、エマばあちゃんに叱られた。」',
-      'フィオナ「ふふ……そんなこともあったね。ねえ、王都へ行ったら、やっぱり騎士になるの？」',
-      'エイダン「……まだ、分からない。ただ、強くなりたいんだ。」',
-      'フィオナ「どうして？」',
-      'エイダン「目の前で誰かが困っているとき、何もできずに見ているだけなのは嫌だから。」',
-      'フィオナ「……そっか。じゃあ、約束して。どんなに遠くへ行っても、ちゃんと帰ってきてね。」',
-      '二人の間を、いつもの穏やかな風が吹き抜けた。'
-    ]}]}]},
-  // The approved standing stargazing CG must appear BEFORE the wind stops.
-  {npc: 'scene_cliff_night', entries: [
-    {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{portraits:[{char:null},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},{char:null}],pages: [
-      'いつのまにか、空は深い群青に変わっていた。',
-      'フィオナ「見て、エイダン。星……こんなにたくさん。」',
-      'エイダン「ああ。村の灯りが遠いと、こんなに見えるんだな。」',
-      'フィオナ「わたしね、ここで星を見るのが好きなの。……誰かと一緒に見るのは、初めて。」',
-      'エイダン「……そうか。」',
-      '二人はしばらく、何も言わずに星を見上げていた。']}]}]},
-  {npc: 'scene_cliff_wind_stops', entries: [
-    {id: 'scene_cliff_wind_stops_1', priority: 1, mode: 'cycle', lines: [{portraits:[{char:'fiona',face:'worried',side:'right'},{char:null},{char:'aidan',face:'surprised',side:'left'},{char:'fiona',face:'worried',side:'right'}],pages: [
-      'フィオナ「……あれ。風が……止まってる。」',
-      '鳥の声も、木々のざわめきも消えた。静けさの底で、遠くから鐘の音が聞こえる。何度も、何度も。',
-      'エイダン「鐘……？　こんな時間に？」',
-      'フィオナ「村のほうが……なんだか、騒がしい。」']}]}]},
+  // Director-approved 2026-11-08 revised cliff sunset/stars/wind script.
+  {npc: 'scene_cliff_sunset', entries: [{id: 'scene_cliff_sunset_1', priority: 1, mode: 'cycle', lines: [{pages: ["夕陽が海を黄金色に染めていた。断崖の草原を、柔らかな風が吹き抜ける。","フィオナ「……きれい。ここから見る夕日は、昔とちっとも変わらないね。」","エイダン「ああ。お前、昔は日が沈んでも帰ろうとしなかったよな。」","フィオナ「ふふっ。エイダンだって、いつも一緒だったじゃない。」","エイダン「そうだったっけ？」","フィオナ「そうだよ。エマおばあちゃんに二人そろって叱られたんだから。」","二人は顔を見合わせて笑った。","フィオナ「……ねえ、エイダン。王都へ行ったら、やっぱり騎士になるの？」","エイダン「……まだ、はっきりとは決めてない。」","フィオナ「そっか。でも、強くなりたいんだよね。」","エイダン「ああ。」","エイダンは、夕陽に照らされた自分の手を見つめる。","エイダン「もし、目の前で誰かが傷つこうとしてたらさ……そのとき、何もできない自分ではいたくないんだ。」","フィオナ「……エイダンらしいね。」","エイダン「そうかな。」","フィオナ「うん。でもね、ひとつだけ約束してほしいの。」","エイダン「約束？」","フィオナ「誰かを守ろうとして、自分のことを忘れないで。」","フィオナ「……ちゃんと、生きて帰ってきてね。」","エイダン「……ああ。約束する。」","フィオナはほっとしたように微笑み、沈みゆく夕陽を見つめた。","フィオナ「……もう少しだけ、ここにいてもいい？」","エイダン「いいけど……暗くなるぞ。」","フィオナ「うん。……今日は、まだ帰りたくないな。」","エイダンは少し驚いたようにフィオナを見る。","エイダン「……じゃあ、もう少しだけ。」","夕陽が水平線へ沈んでいく。二人の影が、ゆっくりと長く伸びた。"]}]}]},
+  {npc: 'scene_cliff_night', entries: [{id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{pages: ["空は茜色から深い群青へと移り変わり、やがて無数の星が輝き始めた。","二人は草の上に並んで座り、夜空を見上げている。","フィオナ「……わあ。見て、エイダン。星がいっぱい。」","エイダン「すごいな……こんなに見えるんだ。」","フィオナ「小さいころ、ここで星を数えたこともあったよね。」","エイダン「ああ。途中でどこまで数えたか分からなくなってさ。」","フィオナ「ふふっ。あれ、エイダンが先に寝ちゃったんだよ。」","エイダン「……そうだったか？」","フィオナ「そうだったの。」","二人の笑い声が、静かな夜の草原に溶けていく。","フィオナ「……ねえ。」","エイダン「ん？」","フィオナ「王都に行っても……たまには、ここのこと思い出してくれる？」","エイダン「当たり前だろ。忘れるわけない。」","フィオナ「……ほんと？」","エイダン「ああ。それに……」","エイダンは言いかけて、少し照れくさそうに空を見上げる。","エイダン「……お前がいるしな。」","フィオナは一瞬、言葉を失う。","フィオナ「……もう。そういうこと、急に言わないでよ。」","エイダン「え？　何か変なこと言ったか？」","フィオナ「……なんでもない。」","フィオナは赤くなった頬を隠すように、夜空を見上げた。"]}]}]},
+  {npc: 'scene_cliff_standing', entries: [{id: 'scene_cliff_standing_1', priority: 1, mode: 'cycle', lines: [{pages: ["やがて二人は立ち上がり、頭上いっぱいに広がる星空を見上げる。","フィオナ「……ねえ、エイダン。」","エイダン「ん？」","フィオナ「いつかまた、二人でここに来ようね。」","エイダン「……ああ。約束だ。」","肩が触れそうな距離で、二人はしばらく星を見上げていた。","草を揺らす風が、二人の間を優しく通り過ぎる。"]}]}]},
+  {npc: 'scene_cliff_wind_stops', entries: [{id: 'scene_cliff_wind_stops_1', priority: 1, mode: 'cycle', lines: [{pages: ["ふいに、その風が止んだ。","フィオナ「……あれ？」","エイダン「どうした？」","フィオナ「……風が、止まった。」","エイダンは辺りを見渡す。さっきまで草を揺らしていた風が、嘘のように消えている。","エイダン「……本当だ。」","虫の声も聞こえない。","フィオナ「……なんだろう。急に、静かになっちゃったね。」","エイダン「……ああ。」","胸の奥が、かすかにざわついた。","遠くで、何かが鳴った気がした。","フィオナ「……今、何か聞こえなかった？」","エイダン「……いや、よく聞こえなかった。」","二人は耳を澄ませる。しかし、もう何も聞こえない。","フィオナ「……なんだか、嫌な感じがする。」","エイダン「……俺もだ。」","エイダンは村へ続く道に目を向けた。木々と曲がりくねった道の向こうは、ここからは見えない。","エイダン「……戻ろう。何もなければ、それでいい。」","フィオナ「……うん。」","二人は足早に断崖を後にした。いつもなら心地よい夜風が、今はどこにも吹いていない。","やがて、二人の足音は駆け足へと変わっていった。"]}]}]},
   // SCENARIO-PROLOGUE-02 エマの差し入れ (APPROVED SCRIPT, 2026-11-02): 木人訓練の勝利直後(storyStage 3)に FieldScene 'emma_snack' が一度だけ再生。
   // 台詞・発言順は脚本どおり。ト書き（括弧書き）は地の文ページ。エマの表情は provisional-20c（暫定・正式版で差し替え可）。
   {npc: 'scene_emma_snack', entries: [
