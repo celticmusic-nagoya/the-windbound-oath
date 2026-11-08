@@ -1,0 +1,84 @@
+name: Build all-character design reference ZIP
+on:
+  push:
+    paths:
+      - '.github/workflows/all-character-reference-zip.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: game
+      - uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath-website
+          path: website
+      - name: Build curated comprehensive ZIP and SHA manifest
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, re, zipfile
+          roots = {'game':Path('game'), 'website':Path('website')}
+          selected = {}
+          def add(source, p, reason):
+              if p.is_file() and p.suffix.lower() in ('.png','.jpg','.jpeg','.webp'):
+                  rel=p.relative_to(roots[source]).as_posix()
+                  selected[(source,rel)]=reason
+          game=roots['game']
+          # All explicitly approved masters, their references and unverified Liam master candidate.
+          for p in (game/'assets/companions').rglob('*'):
+              if p.is_file() and ('/master/' in p.as_posix() or '/reference/' in p.as_posix() or p.name in ('liam_character_design_04.png','liam_idle.png')):
+                  add('game',p,'approved_or_candidate_companion_source')
+          # Every named portrait's base expressions, no blink frame flood.
+          for p in (game/'assets/images/characters/portraits').rglob('*'):
+              if p.is_file() and not any(s in p.parts for s in ('blink','mouth','provisional-20c')):
+                  add('game',p,'character_portrait')
+          for p in (game/'assets/images/characters').glob('*.png'):
+              add('game',p,'character_fullbody_or_back_reference')
+          # All NPC/enemy archetypes, idle first and one representative action per archetype.
+          for prefix in ('img/field/lind/npc','img/field/moss','img/field/characters','img/field/monsters','img/battle/characters','img/battle/enemies'):
+              base=game/prefix
+              if not base.exists():continue
+              by_group={}
+              for p in base.rglob('*'):
+                  if not p.is_file() or p.suffix.lower() not in ('.png','.webp','.jpg'):continue
+                  rel=p.relative_to(base)
+                  if prefix=='img/field/moss' and not re.search(r'(npc|monster|enemy|character|fairy|soldier|goblin|slime|bat|boar)',str(rel),re.I):continue
+                  group=str(rel.parent)
+                  by_group.setdefault(group,[]).append(p)
+              for group,ps in by_group.items():
+                  ps.sort(key=lambda p:(0 if re.search(r'idle|normal|reference|stand',p.name,re.I) else 1,p.name))
+                  for p in ps[:3]:add('game',p,'representative_npc_enemy_or_battle')
+          for p in (game/'docs/art/reference/characters').glob('*.png'):
+              add('game',p,'design_reference')
+          # Website official published art (images only, avoid background/gallery noise).
+          for p in roots['website'].rglob('*'):
+              if p.is_file() and p.suffix.lower() in ('.png','.jpg','.jpeg','.webp') and re.search(r'(character|portrait|morwen|serena|aidan|fiona|emma|liam|bram|lou|rue|npc|enemy|goblin)',p.as_posix(),re.I):
+                  add('website',p,'published_site_character_reference')
+          manifest={'purpose':'all-character official-design visual comparison; no approval inferred',
+                    'game_ref':'workflow checkout commit','website_ref':'workflow checkout commit',
+                    'items':[],'categories':{}}
+          out=Path('THE_WINDBOUND_OATH_ALL_CHARACTER_REFERENCES.zip')
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED,compresslevel=5,allowZip64=True) as z:
+              for (source,rel),reason in sorted(selected.items()):
+                  p=roots[source]/rel
+                  arc=f'{source}/{rel}'
+                  data=p.read_bytes()
+                  z.writestr(arc,data)
+                  manifest['items'].append({'path':arc,'reason':reason,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+                  manifest['categories'][reason]=manifest['categories'].get(reason,0)+1
+              z.writestr('README_JA.txt','THE WINDBOUND OATH 公式デザイン比較用原本集\\n採用済み/未確認/参考資料が混在します。原本を無加工で格納し、manifest.jsonにSHA-256を記録。\\nこのZIP内の全画像が正式採用済みという意味ではありません。\\n')
+              z.writestr('MANIFEST_SHA256.json',json.dumps(manifest,ensure_ascii=False,indent=2))
+          print(json.dumps({'zip':str(out),'files':len(selected),'categories':manifest['categories'],'bytes':out.stat().st_size},ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: THE_WINDBOUND_OATH_ALL_CHARACTER_REFERENCES
+          path: THE_WINDBOUND_OATH_ALL_CHARACTER_REFERENCES.zip
+          retention-days: 30
+          if-no-files-found: error
