@@ -10,6 +10,7 @@ on:
       - 'js/field/talk-data-scenes.js'
       - 'js/prologue-progress.js'
       - 'tests/prologue-escape-return-static.test.cjs'
+      - 'tests/prologue-return-flow.test.cjs'
       - '.github/workflows/prologue-escape-return-qa.yml'
 jobs:
   static:
@@ -21,3 +22,5 @@ jobs:
           node-version: '22'
       - name: Run prologue escape-return static regression
         run: node tests/prologue-escape-return-static.test.cjs
+      - name: Execute isolated return-scene flow
+        run: node tests/prologue-return-flow.test.cjs
