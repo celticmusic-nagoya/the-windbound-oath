@@ -1,0 +1,27 @@
+name: Portrait event CG QA
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'dev-fresh-20261108.html'
+      - 'css/style.css'
+      - 'js/field/cliff-presentation.js'
+      - 'tests/moss/portrait_event_cg.test.js'
+      - '.github/workflows/portrait-event-cg-qa.yml'
+  push:
+    paths:
+      - 'index.html'
+      - 'dev-fresh-20261108.html'
+      - 'css/style.css'
+      - 'js/field/cliff-presentation.js'
+      - 'tests/moss/portrait_event_cg.test.js'
+      - '.github/workflows/portrait-event-cg-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/moss/portrait_event_cg.test.js
