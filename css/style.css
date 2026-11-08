@@ -3616,3 +3616,14 @@ body.battleMode #talkPortrait{display:none!important}
 
 /* Common portrait above an existing non-FieldTalk scene dialogue anchor (19B). */
 #talkPortrait[data-scene-owned]:not([hidden]){display:block;z-index:207}
+
+/* CG-VISIBILITY-02: the forest is z=170, so CG must be above it while dialogue remains readable. */
+body.cliff-cg-active #msg{z-index:200!important}
+body.cliff-cg-active #talkPortrait{z-index:201!important}
+#returnScene.raid-cg-active #returnAidan,#returnScene.raid-cg-active #returnFiona,#returnScene.raid-cg-active #returnGoblin{background:none;border:0;box-shadow:none;border-radius:0;display:block}
+#returnScene.raid-cg-active #returnAidan,#returnScene.raid-cg-active #returnFiona{width:clamp(75px,17vw,170px);height:clamp(145px,43vh,310px);bottom:20%}
+#returnScene.raid-cg-active #returnAidan{left:24%}
+#returnScene.raid-cg-active #returnFiona{left:51%}
+#returnScene.raid-cg-active #returnGoblin{right:8%;bottom:24%;width:clamp(75px,16vw,160px);height:clamp(95px,31vh,230px)}
+#returnScene.raid-cg-active .return-character-art{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 8px #0009)}
+.return-character-art{display:none}
