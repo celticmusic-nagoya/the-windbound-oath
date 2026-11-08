@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "project": "THE WINDBOUND OATH",
+  "policy": "docs/design/FIELD_VISUAL_OVERHAUL_20261108.md",
+  "status": "planning_only",
+  "projection": {
+    "view": "quarter",
+    "downwardAngleDegrees": [
+      25,
+      30
+    ],
+    "coordinateMigration": "not_implemented"
+  },
+  "visualStyle": {
+    "fieldCharacter": "original RO-inspired pixel art",
+    "humanHeadToBodyRatio": 2.8,
+    "animation": "static_directional_sprites_with_presentation_motion",
+    "battleAndEventCG": "preserve_existing_high_resolution"
+  },
+  "requiredDirections": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "assets": [
+    {
+      "id": "aidan",
+      "role": "player",
+      "status": "awaiting_new_art",
+      "referencePaths": [
+        "img/field/characters/aidan/aidan_idle_down.png",
+        "img/field/characters/aidan/aidan_idle_left.png",
+        "img/field/characters/aidan/aidan_idle_right.png",
+        "img/field/characters/aidan/aidan_idle_up.png"
+      ],
+      "sourceStatus": "existing_field_art_not_new_pixel_art",
+      "targetDirectory": "assets/candidates/field-ro/aidan/",
+      "artDirection": "逆三角形、背中の剣、シャープなマント"
+    },
+    {
+      "id": "emma",
+      "role": "npc",
+      "status": "awaiting_new_art",
+      "referencePaths": [
+        "img/field/lind/npc/emma/emma_idle.png"
+      ],
+      "sourceStatus": "existing_field_art_not_new_pixel_art",
+      "targetDirectory": "assets/candidates/field-ro/emma/",
+      "artDirection": "村の生活感、年齢・職業の判別、既存正式立ち絵を保護"
+    },
+    {
+      "id": "goblin",
+      "role": "enemy",
+      "status": "awaiting_new_art",
+      "referencePaths": [
+        "img/field/monsters/goblin/goblin_idle_01.png"
+      ],
+      "sourceStatus": "existing_field_art_not_new_pixel_art",
+      "targetDirectory": "assets/candidates/field-ro/goblin/",
+      "artDirection": "独自のデフォルメ・愛らしさと不気味さ、敵としての識別性"
+    }
+  ],
+  "legacyWalkPRs": {
+    "status": "hold",
+    "numbers": [
+      139,
+      140,
+      144,
+      145,
+      153,
+      154
+    ]
+  },
+  "qaGates": [
+    "all referenced files exist",
+    "new sprites transparent and dimensions verified",
+    "source artwork untouched",
+    "direction and foot anchor checked",
+    "Android visual and motion QA",
+    "SAVE/collision unaffected"
+  ]
+}

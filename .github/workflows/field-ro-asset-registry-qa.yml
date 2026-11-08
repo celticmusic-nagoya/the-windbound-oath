@@ -1,0 +1,26 @@
+name: Field RO sprite registry QA
+on:
+  pull_request:
+    paths:
+      - 'data/field-ro-asset-registry.json'
+      - 'tests/moss/field_ro_asset_registry.test.js'
+      - '.github/workflows/field-ro-asset-registry-qa.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'data/field-ro-asset-registry.json'
+      - 'tests/moss/field_ro_asset_registry.test.js'
+      - '.github/workflows/field-ro-asset-registry-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check tests/moss/field_ro_asset_registry.test.js
+      - run: node --test tests/moss/field_ro_asset_registry.test.js
