@@ -21,14 +21,17 @@ window.TalkDataScenes = Object.freeze({tables: [
       {speaker: 'エイダン', text: '「まだ分からない。でも――守れるくらいには強くなりたい。」', char: 'aidan', face: 'normal', side: 'left'},
       {speaker: 'フィオナ', text: '「そっか。」', char: null},
       '夕陽が、水平線の向こうへゆっくりと沈んでいく。']}]}]},
+  // The approved standing stargazing CG must appear BEFORE the wind stops.
   {npc: 'scene_cliff_night', entries: [
-    {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{portraits:[{"char":null},{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":null},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":"aidan","face":"surprised","side":"left"},{"char":"fiona","face":"worried","side":"right"}],pages: [
+    {id: 'scene_cliff_night_1', priority: 1, mode: 'cycle', lines: [{portraits:[{char:null},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},{char:'fiona',face:'smile',side:'right'},{char:'aidan',face:'normal',side:'left'},{char:null}],pages: [
       'いつのまにか、空は深い群青に変わっていた。',
       'フィオナ「見て、エイダン。星……こんなにたくさん。」',
       'エイダン「ああ。村の灯りが遠いと、こんなに見えるんだな。」',
       'フィオナ「わたしね、ここで星を見るのが好きなの。……誰かと一緒に見るのは、初めて。」',
       'エイダン「……そうか。」',
-      '二人はしばらく、何も言わずに星を見上げていた。',
+      '二人はしばらく、何も言わずに星を見上げていた。']}]}]},
+  {npc: 'scene_cliff_wind_stops', entries: [
+    {id: 'scene_cliff_wind_stops_1', priority: 1, mode: 'cycle', lines: [{portraits:[{char:'fiona',face:'worried',side:'right'},{char:null},{char:'aidan',face:'surprised',side:'left'},{char:'fiona',face:'worried',side:'right'}],pages: [
       'フィオナ「……あれ。風が……止まってる。」',
       '鳥の声も、木々のざわめきも消えた。静けさの底で、遠くから鐘の音が聞こえる。何度も、何度も。',
       'エイダン「鐘……？　こんな時間に？」',
