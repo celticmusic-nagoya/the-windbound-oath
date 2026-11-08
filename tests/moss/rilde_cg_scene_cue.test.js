@@ -17,11 +17,13 @@ assert.deepEqual(Array.from(cg),[
 const indexOfTalk=id=>steps.findIndex(s=>s.talk===id);
 const sunset=indexOfTalk('scene_cliff_sunset');
 const night=indexOfTalk('scene_cliff_night');
+const standing=indexOfTalk('scene_cliff_standing');
 const wind=indexOfTalk('scene_cliff_wind_stops');
-assert(sunset>0&&night>sunset&&wind>night);
-assert.equal(steps[wind-2].cg.src,'assets/approved/game/cliff/stargazing_standing_final.png');
+assert(sunset>0&&night>sunset&&standing>night&&wind>standing);
+assert.equal(steps[standing-2].cg.src,'assets/approved/game/cliff/stargazing_standing_final.png');
 assert.equal(steps[wind+1].cg.hide,true);
-assert.equal(steps[wind+2].vista.id,'village_fire');
+assert(!steps.some(s=>s.vista?.id==='village_fire'),'no premature fire vista');
+assert(!steps.some(s=>s.talk==='scene_cliff_fire'),'no premature cliff fire dialogue');
 assert.equal(steps.filter(s=>'stage' in s).length,1);
 assert.equal(steps.find(s=>'stage' in s).stage,4);
 assert.equal(steps.at(-1).call,'cliffRunHome');
