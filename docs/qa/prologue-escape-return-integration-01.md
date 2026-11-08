@@ -62,3 +62,8 @@
 8. Android縦・横で立ち絵、会話タップ、画面遷移、再起動時の動作を確認する。
 
 判定: **STATIC CI PASS 15/15 / EXISTING CG CI PASS / RUNTIME & SAVE REPLAY NOT_RUN / MERGE BLOCKED**。
+
+## SAVEルート自動QA結果（2026-11-08）
+- GitHub Actions run **42441895896**: **SUCCESS**。ジョブログで旧SAVE v1/v2 stage13/14/15の6ケース＋討伐記録不整合1ケースの **7/7 PASS** を確認。
+- 追加テスト `tests/prologue-return-save-guard.test.cjs`：実際の `saveGrowthData()` をNode VMで実行し、帰還会話中はlocalStorageへ書き込まず通知を表示、帰還外ではversion30で通常保存することを確認する設計。
+- 上記SAVEガード実行テストは追加直後のため**CI結果未確認**。旧SAVE実ファイルのブラウザロードやAndroid実機は引き続きNOT_RUN。
