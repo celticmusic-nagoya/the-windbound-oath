@@ -1,0 +1,23 @@
+name: DEV fresh entry QA
+on:
+  pull_request:
+    paths:
+      - 'dev-fresh-20261108.html'
+      - 'index.html'
+      - 'tests/moss/dev_fresh_entry.test.js'
+      - '.github/workflows/dev-fresh-entry-qa.yml'
+  push:
+    paths:
+      - 'dev-fresh-20261108.html'
+      - 'index.html'
+      - 'tests/moss/dev_fresh_entry.test.js'
+      - '.github/workflows/dev-fresh-entry-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/moss/dev_fresh_entry.test.js
