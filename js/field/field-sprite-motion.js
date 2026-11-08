@@ -31,7 +31,7 @@
     const bounce = moving || airborne ? p.bounce * (airborne ? Math.sin(angle) : Math.max(0, Math.sin(angle))) : 0;
     const sway = moving || airborne ? p.sway * Math.sin(angle - TAU / 4) : 0;
     const pulse = kind === 'enemy' || kind === 'fairy' ? p.pulse * Math.sin(angle) : 0;
-    return {x: 0, y: -bounce, sway, scale: 1 + pulse};
+    return {x: 0, y: bounce === 0 ? 0 : -bounce, sway, scale: 1 + pulse};
   }
   return Object.freeze({profiles, sample});
 });
