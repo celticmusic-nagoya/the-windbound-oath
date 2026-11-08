@@ -11,5 +11,5 @@ for(const id of ['aidan','fiona','lou','emma']){
  console.log(id+' normal + '+r.get(id).blink.faces.length+' blinking faces: all overlay PNGs exist');
 }
 const css=fs.readFileSync('css/style.css','utf8');assert(css.includes('#talkPortrait canvas{\n -webkit-mask-image:'));assert(css.includes('#talkPortrait[data-side="left"] canvas{'));
-const talk=fs.readFileSync('js/field/talk-data.js','utf8');assert(!talk.includes('"char":"emma","face":"smile"'));assert(!talk.includes('"char":"emma","face":"relieved"'));
-console.log('Portrait edges + Emma open-eye expression fallback PASS');
+const talk=fs.readFileSync('js/field/talk-data.js','utf8');assert(talk.includes('"char":"emma","face":"smile"'), 'Emma smile dialogue must remain');assert(talk.includes('"char":"emma","face":"relieved"'), 'Emma relieved dialogue must remain');
+console.log('Portrait edges + adopted Emma emotional expressions preserved PASS');
