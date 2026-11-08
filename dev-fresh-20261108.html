@@ -1726,7 +1726,18 @@ function devJump(key){
  }
  renderJournal();popObjective();
 }
-$('#devGrid').innerHTML=DEV_EVENTS.map(([k,n])=>`<button data-jump="${k}">${n}</button>`).join('');
+// Reconcile DEV buttons if a later legacy runtime script rewrites their DOM.
+const devGridEl=$('#devGrid');
+const renderDevEvents=()=>{
+ const expected=DEV_EVENTS.map(([k,n])=>`<button data-jump="${k}">${n}</button>`).join('');
+ if(devGridEl.innerHTML!==expected)devGridEl.innerHTML=expected;
+};
+renderDevEvents();
+const devMenuObserver=new MutationObserver(()=>renderDevEvents());
+devMenuObserver.observe(devGridEl,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['data-jump']});
+// Reconcile on opening as well; event capture precedes potentially stale handlers.
+$('#devBtn').addEventListener('click',renderDevEvents,true);
+
 // Visible release marker makes stale HTML immediately distinguishable from current main.
 const devRevision=document.createElement('small');
 devRevision.id='devHtmlRevision';
