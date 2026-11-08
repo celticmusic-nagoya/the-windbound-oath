@@ -1,0 +1,24 @@
+name: Headgear layer candidate QA
+on:
+  push:
+    paths:
+      - 'js/field/field-headgear-layers.js'
+      - 'tests/moss/test_field_headgear_layers.js'
+      - 'data/headgear-candidate-registry.json'
+      - '.github/workflows/headgear-layer-qa.yml'
+  pull_request:
+    paths:
+      - 'js/field/field-headgear-layers.js'
+      - 'tests/moss/test_field_headgear_layers.js'
+      - 'data/headgear-candidate-registry.json'
+      - '.github/workflows/headgear-layer-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node --test tests/moss/test_field_headgear_layers.js
+      - run: node -e "const d=require('./data/headgear-candidate-registry.json');if(d.productionEnabled!==false)process.exit(1)"
