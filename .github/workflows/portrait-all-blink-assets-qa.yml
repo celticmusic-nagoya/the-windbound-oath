@@ -1,0 +1,25 @@
+name: Four-character portrait blink asset QA
+on:
+  pull_request:
+    paths:
+      - 'css/style.css'
+      - 'js/field/talk-data.js'
+      - 'js/field/portrait-registry.js'
+      - 'tests/moss/portrait_all_blink_assets.test.cjs'
+      - '.github/workflows/portrait-all-blink-assets-qa.yml'
+  push:
+    paths:
+      - 'css/style.css'
+      - 'js/field/talk-data.js'
+      - 'js/field/portrait-registry.js'
+      - 'tests/moss/portrait_all_blink_assets.test.cjs'
+      - '.github/workflows/portrait-all-blink-assets-qa.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/moss/portrait_all_blink_assets.test.cjs
