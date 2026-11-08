@@ -10,8 +10,8 @@ assert(night>=0&&night<nightTalk&&nightTalk<standing&&standing<windBackground&&w
 for(const file of ['index.html','dev-fresh-20261108.html']){
  const html=fs.readFileSync(file,'utf8');
  for(const asset of ['road/curve_reveal_APPROVED_user_reference.jpg','raid/attack_with_characters_APPROVED_user_reference.jpg','raid/attack_background_only.png'])assert(html.includes(asset),file+' '+asset);
- assert(html.includes("if(returnIndex===5)$('#returnScene').classList.add('road-reveal-active')"));
- assert(html.includes("if(returnIndex===6){$('#returnScene').classList.remove('road-reveal-active');$('#returnScene').classList.add('raid-composite-active');}"));
+ assert(html.includes("if(returnIndex===5){window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.add('road-reveal-active')"));
+ assert(html.includes("if(returnIndex===6){window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.remove('road-reveal-active');$('#returnScene').classList.add('raid-composite-active');}"));
  assert(html.includes("if(returnIndex===8){$('#returnScene').classList.remove('raid-composite-active');$('#returnScene').classList.add('raid-background-active');}"));
  assert(!html.includes("if(returnIndex===6){ $('#returnGoblin').style.display='block'"),'no goblin battle sprite insertion');
 }
