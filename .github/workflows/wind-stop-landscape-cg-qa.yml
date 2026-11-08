@@ -1,0 +1,25 @@
+name: Wind-stop portraits and landscape CG QA
+on:
+  pull_request:
+    paths:
+      - 'js/field/scene-data.js'
+      - 'js/field/talk-data-scenes.js'
+      - 'css/style.css'
+      - 'tests/moss/wind_stop_landscape_cg.test.cjs'
+      - '.github/workflows/wind-stop-landscape-cg-qa.yml'
+  push:
+    paths:
+      - 'js/field/scene-data.js'
+      - 'js/field/talk-data-scenes.js'
+      - 'css/style.css'
+      - 'tests/moss/wind_stop_landscape_cg.test.cjs'
+      - '.github/workflows/wind-stop-landscape-cg-qa.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/moss/wind_stop_landscape_cg.test.cjs

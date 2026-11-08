@@ -51,6 +51,8 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
       {talk: 'scene_cliff_standing'},
       // The wind stops: switch to background + the existing dialogue portraits.
       {cg: {src: 'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png', alt: '風が止んだ夜の断崖', mode: 'dialogue'}},
+      // Hold the empty, windless landscape before portraits enter with the first dialogue.
+      {wait: 1200},
       {talk: 'scene_cliff_wind_stops'},
       {cg: {hide: true}},
       // Do not reveal village fire from the cliff. First sighting is after the road bend.
