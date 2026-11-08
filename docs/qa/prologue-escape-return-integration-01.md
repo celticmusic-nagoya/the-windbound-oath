@@ -67,3 +67,9 @@
 - GitHub Actions run **42441895896**: **SUCCESS**。ジョブログで旧SAVE v1/v2 stage13/14/15の6ケース＋討伐記録不整合1ケースの **7/7 PASS** を確認。
 - 追加テスト `tests/prologue-return-save-guard.test.cjs`：実際の `saveGrowthData()` をNode VMで実行し、帰還会話中はlocalStorageへ書き込まず通知を表示、帰還外ではversion30で通常保存することを確認する設計。
 - 上記SAVEガード実行テストは追加直後のため**CI結果未確認**。旧SAVE実ファイルのブラウザロードやAndroid実機は引き続きNOT_RUN。
+
+## SAVEガード実行QA最終結果（2026-11-08）
+- GitHub Actions **42442112653 SUCCESS**：専用静的15項目、帰還イベント実行、旧SAVEルート7項目、帰還中SAVE禁止／帰還外通常SAVEの4ジョブステップがすべてPASS。
+- GitHub Actions **42442112691 SUCCESS**：既存CG関連回帰PASS。
+- 初回の `FieldTalk is not defined` はテストVMに不足していたモックを追加して解消。ゲーム本体コード変更なし。
+- 実ブラウザ全体でのイベント通しプレイ、既存SAVE実ファイルのロード、Android実機QAは**NOT_RUN**。この3点をマージブロッカーとして維持。
