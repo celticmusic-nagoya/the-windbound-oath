@@ -1,0 +1,27 @@
+name: Field sprite motion foundation QA
+on:
+  pull_request:
+    paths:
+      - 'js/field/field-sprite-motion.js'
+      - 'tests/moss/field_sprite_motion.test.js'
+      - '.github/workflows/field-sprite-motion-qa.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'js/field/field-sprite-motion.js'
+      - 'tests/moss/field_sprite_motion.test.js'
+      - '.github/workflows/field-sprite-motion-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check js/field/field-sprite-motion.js
+      - run: node --check tests/moss/field_sprite_motion.test.js
+      - run: node --test tests/moss/field_sprite_motion.test.js
