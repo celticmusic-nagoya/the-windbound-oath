@@ -6,15 +6,20 @@
   'use strict';
   const APPROVED_PREFIX = 'assets/approved/game/cliff/';
   const RILDE_PREFIX = 'assets/approved/game/rilde_story/';
-  let root = null, image = null, current = 0;
+  let root = null, image = null, ambient = null, current = 0;
   function ensure() {
     if (root) return root;
     root = document.createElement('div');
     root.id = 'cliff-cg-layer';
     root.setAttribute('aria-hidden', 'true');
     root.style.cssText = 'position:fixed;inset:0;z-index:172;pointer-events:none;display:none;background:#061326;';
+    ambient = document.createElement('img');
+    ambient.alt='';
+    ambient.setAttribute('aria-hidden','true');
+    ambient.style.cssText='position:absolute;inset:-12%;width:124%;height:124%;object-fit:cover;filter:blur(26px) brightness(.38);opacity:.75;pointer-events:none;';
+    root.appendChild(ambient);
     image = document.createElement('img');
-    image.style.cssText = 'display:block;width:100%;height:100%;object-fit:contain;';
+    image.style.cssText = 'position:relative;display:block;width:100%;height:100%;object-fit:contain;object-position:center;';
     image.alt = '';
     root.appendChild(image);
     document.body.appendChild(root);
@@ -28,6 +33,7 @@
     root.setAttribute('aria-hidden', 'true');
     root.classList.remove('cliff-cg--dialogue');
     image.removeAttribute('src');
+    ambient?.removeAttribute('src');
   }
   function allowed(src) {
     if (typeof src !== 'string') return false;
@@ -50,6 +56,7 @@
         if (id !== current || !ok) return resolve(false);
         ensure();
         image.src = opts.src;
+        ambient.src = opts.src;
         image.alt = String(opts.alt || '');
         root.style.display = 'block';
         document.body.classList?.add('cliff-cg-active');
