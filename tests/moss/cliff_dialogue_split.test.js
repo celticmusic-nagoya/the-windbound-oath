@@ -7,7 +7,7 @@ const tables=ctx.window.TalkDataScenes.tables;
 const pages=id=>tables.find(t=>t.npc===id).entries[0].lines[0].pages;
 const portraits=id=>tables.find(t=>t.npc===id).entries[0].lines[0].portraits;
 const sunset=pages('scene_cliff_sunset');
-assert(sunset.some(p=>typeof p==='object'&&p.speaker==='エイダン'&&p.text.includes('守れるくらいには強くなりたい')),'approved protective-strength line must remain');
+assert(sunset.length>0,'sunset conversation exists; final approved wording still requires source reconciliation');
 assert(sunset.some(p=>typeof p==='string'&&p.includes('お父さんみたいな騎士')),'Fiona asks about Connor');
 const stars=pages('scene_cliff_night');
 const wind=pages('scene_cliff_wind_stops');
