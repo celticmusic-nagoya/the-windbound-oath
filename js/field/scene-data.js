@@ -31,7 +31,9 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
       {move: {actor: 'aidan', x: 2384, y: 1022, ms: 650}},      // sit down on the bench: Aidan and Fiona settle in front of it
       {move: {actor: 'fiona', x: 2424, y: 1022, ms: 650}},
       {wait: 500},
-      // Approved sunset two-character CG behind the original dialogue.
+      // Establishing sunset background, followed by the approved back-view two-character CG.
+      {cg: {src: 'assets/approved/game/cliff/sunset_background.png', alt: '夕暮れの断崖と海', mode: 'dialogue'}},
+      {wait: 900},
       {cg: {src: 'assets/approved/game/cliff/sunset_two_characters_back_view.png', alt: '夕暮れの断崖に佇むエイダンとフィオナ', mode: 'dialogue'}},
       {talk: 'scene_cliff_sunset'},
       {cg: {hide: true}},
@@ -39,9 +41,14 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
       {tod: {set: 'night', instant: true}},
       {wait: 800},
       {fade: {to: 0, ms: 1600}},
-      // Approved starry-sky background behind the existing dialogue; no new story flags.
+      // Establishing starry-sky view; seated and standing approved compositions.
+      {cg: {src: 'assets/approved/game/cliff/stargazing_seated.png', alt: '断崖で星空を見上げる二人', mode: 'dialogue'}},
+      {wait: 900},
       {cg: {src: 'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png', alt: '星空を見上げる断崖', mode: 'dialogue'}},
       {talk: 'scene_cliff_night'},
+      {cg: {src: 'assets/approved/game/cliff/stargazing_standing_final.png', alt: '立ち上がり真上の星空を見上げる二人', mode: 'dialogue'}},
+      {wait: 1100},
+      {talk: 'scene_cliff_wind_stops'},
       {cg: {hide: true}},
       {vista: {id: 'village_fire', on: true, ms: 2000}},
       {focus: {x: 560, y: 2830, ms: 2200}},     // camera slides down to the far village and stays
