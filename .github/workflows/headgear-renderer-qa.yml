@@ -1,0 +1,24 @@
+name: Headgear renderer candidate QA
+on:
+  push:
+    paths:
+      - 'js/field/field-headgear-renderer.js'
+      - 'dev/headgear-preview/**'
+      - 'tests/moss/test_field_headgear_renderer.js'
+      - '.github/workflows/headgear-renderer-qa.yml'
+  pull_request:
+    paths:
+      - 'js/field/field-headgear-renderer.js'
+      - 'dev/headgear-preview/**'
+      - 'tests/moss/test_field_headgear_renderer.js'
+      - '.github/workflows/headgear-renderer-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node --test tests/moss/test_field_headgear_layers.js tests/moss/test_field_headgear_renderer.js
+      - run: node --check dev/headgear-preview/preview.js
