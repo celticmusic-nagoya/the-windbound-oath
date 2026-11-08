@@ -1,3 +1,8 @@
+## 2026-11-08 将来実装計画：RO風・頭装備着せ替え
+- `docs/design/HEADGEAR_LAYER_SYSTEM_20261108.md` を設計正本とする。upper/middle/lowerの3スロット、4方向RGBA、ベースと同一anchor・親transform同期、戦闘/会話差分は将来の任意拡張。
+- モルウェンの標準メガネはmiddle候補。正式髪型・ニーソックスと公式原本を保護。未照合のv5.3比較画像は本番採用しない。
+- `js/field/field-headgear-layers.js` は**純粋な候補合成ロジック**。本番UI・SAVE・Androidは未接続。アセット未制作で本番切替禁止。
+
 ## 最新方針 2026-11-08: 公式デザイン準拠・HDピクセル制作
 - `docs/design/FIELD_HD_PIXEL_OFFICIAL_PIPELINE.md` を新規フィールドキャラ素材の最優先制作規約とする。正式採用原本・年齢/役割・公式衣装を保護し、17歳キャラを性的に強調しない。
 - 2.8–3.0頭身、現代高精細ピクセル、透明RGBA/方向別統一anchor、32/40/48px表示QA。制作前の比較シートや未検証候補を「正式合致済み」と記録しない。
