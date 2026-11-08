@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "status": "planning_only",
+  "slots": [
+    "upper",
+    "middle",
+    "lower"
+  ],
+  "directions": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "baseArt": "assets/candidates/field-hd-pixel/",
+  "layerArt": "assets/candidates/headgear/",
+  "initialCandidates": [
+    {
+      "id": "ribbon_red",
+      "slot": "upper",
+      "status": "awaiting_art"
+    },
+    {
+      "id": "glasses_round",
+      "slot": "middle",
+      "status": "awaiting_art",
+      "morwenDefaultCandidate": true
+    },
+    {
+      "id": "helmet_iron",
+      "slot": "upper",
+      "status": "awaiting_art"
+    }
+  ],
+  "battlePortraitLayers": "future_optional",
+  "saveIntegration": "not_implemented",
+  "productionEnabled": false
+}
