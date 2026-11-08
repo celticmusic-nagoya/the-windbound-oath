@@ -1149,7 +1149,7 @@ function renderSystemTab(tab='status'){
  }
 }
 function saveGrowthData(){
- if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
+ if(rildeReturnActive||window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
  localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}const saveMsg=$('#saveMsg');if(saveMsg)saveMsg.innerHTML='<small>セーブしました。</small>';
 }
@@ -1538,10 +1538,10 @@ const rildeReturnLines=[
  'エマ「……おかえり、フィオナ。」',
  'フィオナ「……ただいま……エマ……！」',
  'エマは二人を抱きしめ、エイダンを見上げた。',
- 'エマ「今は、それだけで十分だよ。」',
+ 'エマは言葉を探すように微笑んだ。',
  '復興の指揮を執る増援の騎士が、エイダンの名を聞いて振り返る。',
- '増援騎士「……コナー殿の息子か。あの方は今も前線で指揮を執っておられる。」',
- 'エイダン「手紙の一通も寄こさない人ですから。」',
+ '増援騎士「……コナー殿の息子か。」',
+ 'エイダンは父の名を聞き、黙って騎士を見つめた。',
  'エイダンは村を襲った魔物と黒いルーンの異変を調べるため、騎士たちの行く先へ同行したいと申し出た。',
  'フィオナ「私も行く。……私が決めたことだから。」',
  'エマは村の再建に残り、フィオナの旅立ちを静かに見送った。',
