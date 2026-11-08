@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const ctx={window:{}};vm.runInNewContext(fs.readFileSync('js/field/scene-data.js','utf8'),ctx);
+const steps=ctx.window.FieldSceneData.scenes.cliff_sunset_to_fire.steps;
+const talk=steps.findIndex(s=>s.talk==='scene_cliff_wind_stops');
+assert(talk>1);assert.equal(steps[talk-1].wait,1200);assert(steps[talk-2].cg.src.includes('stargazing_dialogue_background.png'));
+const src=fs.readFileSync('js/field/talk-data-scenes.js','utf8');
+const segment=src.slice(src.indexOf("npc: 'scene_cliff_wind_stops'"),src.indexOf("npc: 'scene_emma_snack'"));
+assert(segment.includes('"char":"fiona"'));assert(segment.includes('"char":"aidan"'));
+assert(segment.includes('"text":"フィオナ「……あれ？」"'));
+assert(segment.includes('"text":"エイダン「どうした？」"'));
+const css=fs.readFileSync('css/style.css','utf8');
+assert(css.includes('@media (orientation:landscape) and (min-aspect-ratio: 4/3)'));
+assert(css.includes('inset:0;width:100%;height:100%;object-fit:contain'));
+console.log('Wind-stop portrait staging + landscape full-viewport CG PASS');
