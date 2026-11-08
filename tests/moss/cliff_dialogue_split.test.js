@@ -7,18 +7,19 @@ const tables=ctx.window.TalkDataScenes.tables;
 const pages=id=>tables.find(t=>t.npc===id).entries[0].lines[0].pages;
 const sunset=pages('scene_cliff_sunset'),stars=pages('scene_cliff_night');
 const standing=pages('scene_cliff_standing'),wind=pages('scene_cliff_wind_stops');
+const lineText=p=>typeof p==='string'?p:p.text;
 assert.equal(sunset.length,27);
 assert.equal(stars.length,23);
 assert.equal(standing.length,7);
 assert.equal(wind.length,21);
-assert(sunset.some(p=>p.includes('何もできない自分ではいたくない')));
-assert(sunset.some(p=>p.includes('今日は、まだ帰りたくないな')));
-assert(stars.some(p=>p.includes('お前がいるしな')));
-assert(standing.some(p=>p.includes('いつかまた、二人でここに来ようね')));
-assert(wind.some(p=>p.includes('曲がりくねった道の向こうは、ここからは見えない')));
+assert(sunset.some(p=>lineText(p).includes('何もできない自分ではいたくない')));
+assert(sunset.some(p=>lineText(p).includes('今日は、まだ帰りたくないな')));
+assert(stars.some(p=>lineText(p).includes('お前がいるしな')));
+assert(standing.some(p=>lineText(p).includes('いつかまた、二人でここに来ようね')));
+assert(wind.some(p=>lineText(p).includes('曲がりくねった道の向こうは、ここからは見えない')));
 for(const id of ['scene_cliff_sunset','scene_cliff_night','scene_cliff_standing','scene_cliff_wind_stops']){
- assert(!pages(id).some(p=>p.includes('まだ分からない。でも――守れるくらいには強くなりたい')));
- assert(!pages(id).some(p=>p.includes('村が炎に包まれて')));
+ assert(!pages(id).some(p=>lineText(p).includes('まだ分からない。でも――守れるくらいには強くなりたい')));
+ assert(!pages(id).some(p=>lineText(p).includes('村が炎に包まれて')));
 }
 const html=fs.readFileSync('index.html','utf8');
 const hill=html.slice(html.indexOf('const hillLines='),html.indexOf('let hillIndex=0;'));
