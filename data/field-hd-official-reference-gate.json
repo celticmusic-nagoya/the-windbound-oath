@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "stage": "reference_audit_not_approved_art",
+  "sourceOfTruth": "approved game assets and published official site",
+  "approvedMasters": [
+    {
+      "character": "bram",
+      "path": "assets/companions/bram/master/bram-full-body.png",
+      "sha256": "9a77b5644a016237463d4dd308aaf957b9fda88a51dfc20e14508dc7ac7669da",
+      "approval": "approved"
+    },
+    {
+      "character": "serena",
+      "path": "assets/companions/serena/master/serena-full-body-v1.png",
+      "sha256": "dcb7dfc7120709c34c3be1cd4bbe4460b253028651b3accb64064c81093be3bd",
+      "approval": "approved"
+    },
+    {
+      "character": "morwen",
+      "path": "assets/companions/morwen/master/morwen-full-body-v3.png",
+      "sha256": "96a88e1deb86734fc18b5d762bad6d5c33b9a481cdbf76d45d954e92a875f990",
+      "approval": "approved"
+    }
+  ],
+  "additionalReferences": [
+    {
+      "character": "aidan",
+      "path": "assets/images/characters/portraits/aidan/aidan_normal.png",
+      "status": "reference_pending_full_body_match"
+    },
+    {
+      "character": "fiona",
+      "path": "assets/images/characters/portraits/fiona/fiona_normal.png",
+      "status": "reference_pending_full_body_match"
+    },
+    {
+      "character": "emma",
+      "path": "assets/images/characters/portraits/emma/emma_normal.png",
+      "status": "reference_pending_full_body_match"
+    },
+    {
+      "character": "lou",
+      "path": "assets/images/characters/portraits/lou/lou_normal.png",
+      "status": "reference_pending_full_body_match"
+    },
+    {
+      "character": "liam",
+      "path": "assets/companions/liam/source/liam_character_design_04.png",
+      "status": "unverified"
+    }
+  ],
+  "morwenLocks": {
+    "age": 17,
+    "affiliation": "Royal Magic Academy top student; Royal Magic Research Institute collaborator",
+    "legwear": "knee-high socks",
+    "hair": "must_match_approved_master_exactly",
+    "eyewear": "glasses"
+  },
+  "requiredGates": [
+    "official_master_visual_comparison",
+    "all_four_independent_RGBA_directions",
+    "anchor_and_scale_consistency",
+    "32_40_48px_visual_readability",
+    "browser_background_contrast",
+    "android_physical_device",
+    "regression_tests"
+  ],
+  "gateStatus": "BLOCKED_PENDING_VERIFIED_SPRITES",
+  "productionSwitchAllowed": false
+}
