@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>DEV | Headgear layer preview</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#151d19;color:#f3eee2;font-family:system-ui,sans-serif}main{max-width:780px;margin:auto;padding:18px}p{line-height:1.6}label{display:inline-flex;align-items:center;gap:8px;margin:6px 12px 6px 0}select,input{font:inherit;min-height:44px}select{background:#25392e;color:white}button{min-height:44px}.stage{min-height:250px;border:1px solid #6d8d7d;background:repeating-linear-gradient(45deg,#294238 0 16px,#1d332a 16px 32px);display:grid;place-items:center;border-radius:12px;overflow:hidden}.headgear-sprite{position:relative;transform-origin:center bottom;image-rendering:pixelated;will-change:transform}.headgear-sprite__layer{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;object-fit:contain;pointer-events:none}.note{color:#e3d1a5}.status{min-height:2em}a{color:#b9e2cf}
+@media(prefers-reduced-motion:reduce){.headgear-sprite{will-change:auto}}
+</style></head><body><main><h1>頭装備レイヤー合成｜隔離プレビュー</h1>
+<p><strong>正式デザインの採用画面ではありません。</strong>登録済みの透過PNG候補がない場合は何も表示せず、画像を捏造しません。ゲーム本体・SAVEには未接続です。</p>
+<div><label>方向 <select id="direction"><option value="down">下</option><option value="left">左</option><option value="right">右</option><option value="up">上</option></select></label>
+<label>表示高さ <select id="size"><option value="32">32px</option><option value="40">40px</option><option value="48">48px</option></select></label>
+<label><input id="move" type="checkbox" checked> 歩行バウンス</label>
+<label><input id="reduced" type="checkbox"> 動きを減らす</label></div>
+<div class="stage" id="stage"><div id="sprite"></div></div>
+<p class="status" id="status" role="status"></p>
+<p class="note">候補素材を導入後、方向別画像・上中下の合成順序・原点一致・32/40/48px・Android表示を確認します。未登録時は検証BLOCKEDです。</p>
+</main><script src="../../js/field/field-sprite-motion.js"></script><script src="../../js/field/field-headgear-renderer.js"></script><script src="preview.js"></script></body></html>
