@@ -1518,7 +1518,7 @@ const aftermathLines=[
  'ルーの羽がふわりと光る。止まっていた風が三人の間を通り抜け、夜明けの方角へ流れていった。',
  'ルー「うん！　よろしくね、エイダン、フィオナ！」',
  '――こうしてルーは、二人の旅に加わった。',
- '三人は夜明けを待ち、まず王国軍のドゥンヴァル砦を目指すことにした。'
+ 'ルー「村へ戻る道なら、わかるよ。……みんなのこと、確かめに行こう。」'
 ]
 let aftermathIndex=0;
 const aftermathPortraitOwner='aftermathTalk';
@@ -1589,7 +1589,7 @@ function startRaiderAftermath(){
  showAftermathPage();
  questPop('ゴブリン・レイダーを討伐した');
 }
-$('#aftermathScene').onclick=()=>{
+$('#aftermathScene').onclick=()=>{\n if(rildeReturnActive){advanceRildeReturnScene();return;}
  aftermathIndex++;
  if(aftermathIndex<aftermathLines.length){
    showAftermathPage();
