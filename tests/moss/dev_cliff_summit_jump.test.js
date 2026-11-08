@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const html=fs.readFileSync('index.html','utf8');
+const map=JSON.parse(fs.readFileSync('data/maps/cliff_moher_01_spiral_ascent.json','utf8'));
+assert(map.spawns.points.summit,'summit spawn must exist');
+assert.equal(map.spawns.points.summit.level,2);
+assert.match(html,/\['cliff_summit','03a　風見の断崖・頂上（CG確認）'\]/);
+const jump=html.slice(html.indexOf('function devJump(key){'),html.indexOf("if(key.startsWith('map:'))",html.indexOf('function devJump(key){')));
+assert.match(jump,/storyStage=3/);
+assert.match(jump,/enterWorldMap\('cliff_moher_01_spiral_ascent','summit'\)/);
+assert.match(jump,/renderJournal\(\);popObjective\(\);return/);
+assert.match(html,/function enterWorldMap\(id,spawn\)/);
+assert.match(html,/MossForestStory\.enterMap\(id,spawn\)/);
+console.log('DEV summit teleport + stage 3 sunset trigger PASS');
