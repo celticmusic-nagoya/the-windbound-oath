@@ -1,0 +1,30 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const ctx={window:{}};
+vm.runInNewContext(fs.readFileSync('js/field/talk-data-scenes.js','utf8'),ctx);
+const tables=ctx.window.TalkDataScenes.tables;
+const pages=id=>tables.find(t=>t.npc===id).entries[0].lines[0].pages;
+const sunset=pages('scene_cliff_sunset'),stars=pages('scene_cliff_night');
+const standing=pages('scene_cliff_standing'),wind=pages('scene_cliff_wind_stops');
+assert.equal(sunset.length,27);
+assert.equal(stars.length,23);
+assert.equal(standing.length,7);
+assert.equal(wind.length,21);
+assert(sunset.some(p=>p.includes('何もできない自分ではいたくない')));
+assert(sunset.some(p=>p.includes('今日は、まだ帰りたくないな')));
+assert(stars.some(p=>p.includes('お前がいるしな')));
+assert(standing.some(p=>p.includes('いつかまた、二人でここに来ようね')));
+assert(wind.some(p=>p.includes('曲がりくねった道の向こうは、ここからは見えない')));
+for(const id of ['scene_cliff_sunset','scene_cliff_night','scene_cliff_standing','scene_cliff_wind_stops']){
+ assert(!pages(id).some(p=>p.includes('まだ分からない。でも――守れるくらいには強くなりたい')));
+ assert(!pages(id).some(p=>p.includes('村が炎に包まれて')));
+}
+const html=fs.readFileSync('index.html','utf8');
+const hill=html.slice(html.indexOf('const hillLines='),html.indexOf('let hillIndex=0;'));
+assert(!hill.includes('まだ分からない。でも――守れるくらいには強くなりたい'));
+assert(!hill.includes('赤い光が揺れた'));
+const road=html.slice(html.indexOf('const returnLines='),html.indexOf('const returnPortraitPages='));
+assert(road.indexOf('最後の大きなカーブ')<road.indexOf('炎に包まれていた'));
+assert(road.indexOf('炎に包まれていた')<road.indexOf('ゴブリン'));
+console.log('Director-approved cliff script and bend-only fire reveal PASS');

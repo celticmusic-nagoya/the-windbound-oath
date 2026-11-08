@@ -8,6 +8,8 @@ on:
       - 'css/style.css'
       - 'tests/moss/rilde_raid_cg_cue.test.js'
       - 'js/field/scene-data.js'
+      - 'js/field/talk-data-scenes.js'
+      - 'tests/moss/cliff_dialogue_split.test.js'
       - 'tests/moss/rilde_cg_scene_cue.test.js'
       - 'tests/moss/rilde_cg_registry.test.js'
       - 'docs/art/approved-rilde-story-20261107.json'
@@ -31,3 +33,5 @@ jobs:
         run: node tests/moss/rilde_raid_cg_cue.test.js
       - name: Existing cliff presentation regression
         run: node tests/moss/cliff_presentation.test.js
+      - name: Cliff dialogue split and portraits
+        run: node tests/moss/cliff_dialogue_split.test.js

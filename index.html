@@ -555,23 +555,9 @@ function storyPortraitPage(sceneId, textId, pages, index){
  if(tp.owner!==owner){tp.open(owner,{scene:$('#'+sceneId),anchor:$('#'+textId)});for(const p of pages)if(p.char)tp.preload(p.char,p.face);}
  tp.page(pages[index]||{char:null},owner);
 }
-const hillLines=[
- 'フィオナ「間に合ったね。ここから見る夕日は、やっぱりきれい。」',
- 'エイダン「訓練の後にここまで歩かされるとは思わなかったけどな。」',
- 'フィオナ「ふふ。エイダン、昔からすぐそういうこと言う。」',
- '……風が、草原を撫でていく。',
- 'フィオナ「ねえ。エイダンは……王都へ行ったら、お父さんみたいな騎士になるの？」',
- 'エイダン「まだ分からない。でも――守れるくらいには強くなりたい。」',
- 'フィオナ「そっか。」',
- '…………。',
- 'フィオナ「……エイダン。」',
- 'エイダン「どうした？」',
- 'フィオナ「風が……止まってる。」',
- '鳥の声も、木々のざわめきも消えた。',
- '遠く、リルド村の方角で赤い光が揺れた。',
- 'エイダン「村が――！」'
-];
-const hillPortraitPages=[{"char":"fiona","face":"smile","side":"right"},{"char":"aidan","face":"smile","side":"left"},{"char":"fiona","face":"smile","side":"right"},{"char":null},{"char":"fiona","face":"normal","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"normal","side":"right"},{"char":null},{"char":"fiona","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"surprised","side":"left"}];
+// Legacy cinema fallback: no cliff-side fire reveal or superseded dialogue.
+const hillLines=["夕陽が海を黄金色に染めていた。","フィオナ「……きれい。ここから見る夕日は、昔とちっとも変わらないね。」","エイダン「もし、目の前で誰かが傷つこうとしてたらさ……そのとき、何もできない自分ではいたくないんだ。」","フィオナ「……ちゃんと、生きて帰ってきてね。」","エイダン「……ああ。約束する。」","フィオナ「……今日は、まだ帰りたくないな。」","エイダン「……じゃあ、もう少しだけ。」","空は深い群青へと変わり、満天の星が輝いた。","フィオナ「王都に行っても……たまには、ここのこと思い出してくれる？」","エイダン「当たり前だろ。……お前がいるしな。」","フィオナ「……もう。そういうこと、急に言わないでよ。」","二人は立ち上がり、真上に広がる星を見上げた。","フィオナ「いつかまた、二人でここに来ようね。」","エイダン「……ああ。約束だ。」","ふいに風が止んだ。虫の声も聞こえない。","フィオナ「……なんだか、嫌な感じがする。」","エイダン「……戻ろう。何もなければ、それでいい。」","二人は村へ続く曲がりくねった道を急いだ。"];
+const hillPortraitPages=hillLines.map(()=>({char:null}));
 let hillIndex=0;
 function startHillScene(){
  hillIndex=0; $('#cinema').style.display='block'; $('#cinemaText').textContent=hillLines[0];storyPortraitPage('cinema','cinemaText',hillPortraitPages,0);
@@ -580,33 +566,13 @@ $('#cinema').onclick=()=>{
  hillIndex++;
  if(hillIndex<hillLines.length){
   $('#cinemaText').textContent=hillLines[hillIndex];storyPortraitPage('cinema','cinemaText',hillPortraitPages,hillIndex);
-  if(hillIndex===10){$('#windVeil').style.animation='none';$('#windVeil').style.opacity='0';}
-  if(hillIndex===12){$('#hillScene').style.background='radial-gradient(circle at 25% 58%,#c64e2e 0 3%,transparent 18%),linear-gradient(#18212a 0 45%,#493329 46% 56%,#1e2b21 57% 100%)';}
  }else{
   window.TalkPortrait?.close('story:cinema');$('#cinema').style.display='none'; startReturnScene();
  }
 };
 
-const returnLines=[
- 'エイダン「急ぐぞ、フィオナ！」',
- 'フィオナ「うん！　村のみんなが心配……！」',
- '二人は断崖の坂道を駆け下り、村へ続く道を走った。',
- '――そのとき、村の入口から悲鳴が響いた。',
- '村人「た、助けて！　魔物が……！」',
- 'フィオナ「エイダン、あそこ！」',
- '黒紫の光をまとったゴブリンが、逃げ遅れた村人へ迫っている。',
- 'エイダン「俺が引きつける！　フィオナはその人を安全な場所へ！」',
- 'フィオナ「でも、エイダン一人じゃ――」',
- 'エイダン「大丈夫だ。あとで村の広場で合流しよう！」',
- 'フィオナ「……分かった。絶対、無茶しないで！」',
- 'エイダンは魔物の前へ飛び出した。',
- '――爆ぜるような黒紫の光。',
- 'エイダン「くっ……！」',
- '煙と炎が道を遮る。フィオナの姿が見えない。',
- 'エイダン「フィオナ！　……返事をしろ！」',
- '返事はない。村の奥から、さらに悲鳴が聞こえた。',
- 'エイダン「……先に広場へ。約束した場所にいるはずだ。」'
-];
+// First sight of burning Rilde is strictly after the last road bend (index 5).
+const returnLines=["二人は断崖を駆け下り、村へ続く坂道を急いだ。","フィオナ「はぁ……はぁ……エイダン、待って……！」","エイダン「大丈夫か、フィオナ？」　フィオナ「うん……大丈夫。急ごう。」","木々に囲まれた道を抜け、最後の大きなカーブへ差しかかる。かすかな焦げ臭さが漂ってきた。","エイダン「……この匂い……？」　二人がカーブを曲がり切った、その瞬間――視界が開けた。","いつもなら家々の明かりが見えるはずのリルド村が、炎に包まれていた。フィオナ「……うそ……。」　エイダン「……リルドが……！」","黒紫の光をまとったゴブリンが、逃げ遅れた村人へ迫っている。","エイダン「俺が引きつける！　フィオナはその人を安全な場所へ！」","フィオナ「でも、エイダン一人じゃ――」","エイダン「大丈夫だ。あとで村の広場で合流しよう！」","フィオナ「……分かった。絶対、無茶しないで！」","エイダンは魔物の前へ飛び出した。","――爆ぜるような黒紫の光。","エイダン「くっ……！」","煙と炎が道を遮る。フィオナの姿が見えない。","エイダン「フィオナ！　……返事をしろ！」","返事はない。村の奥から、さらに悲鳴が聞こえた。","エイダン「……先に広場へ。約束した場所にいるはずだ。」"];
 const returnPortraitPages=[{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":null},{"char":null},{"char":"fiona","face":"surprised","side":"right"},{"char":null},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":"aidan","face":"normal","side":"left"},{"char":"fiona","face":"worried","side":"right"},{"char":null},{"char":null},{"char":"aidan","face":"worried","side":"left"},{"char":null},{"char":"aidan","face":"worried","side":"left"},{"char":null},{"char":"aidan","face":"normal","side":"left"}];
 let returnIndex=0;
 function startReturnScene(){
@@ -2142,7 +2108,7 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/talk-conditions.js"></script>
 <script src="js/field/talk-data.js?v=20261031phase5expressions"></script>
 <script src="js/field/talk-data-quests.js?v=20261031phase5expressions"></script>
-<script src="js/field/talk-data-scenes.js?v=20261031phase5expressions"></script>
+<script src="js/field/talk-data-scenes.js?v=20261108cliffcanonv31"></script>
 <script src="js/field/talk-data-capital.js?v=20261031phase5expressions"></script>
 <script src="js/field/talk-data-rilde.js?v=20261011d"></script>
 <script src="js/field/talk-data-attack.js?v=20261031phase5expressions"></script>
@@ -2152,11 +2118,11 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <link rel="stylesheet" href="css/dev-portrait-test.css?v=20261029dev18d">
 <script src="js/dev/portrait-test.js?v=20261101formal24b"></script>
 <script src="js/field/field-talk.js?v=20261031phase5expressions"></script>
-<script src="js/field/scene-data.js"></script>
+<script src="js/field/scene-data.js?v=20261108cliffcgfix01"></script>
 <script src="js/field/field-choreo.js"></script>
-<script src="js/field/rilde-cg.js"></script>
-<script src="js/field/cliff-presentation.js"></script>
-<script src="js/field/field-scene.js"></script>
+<script src="js/field/rilde-cg.js?v=20261108cliffcgfix01"></script>
+<script src="js/field/cliff-presentation.js?v=20261108cliffcgfix01"></script>
+<script src="js/field/field-scene.js?v=20261108cliffcgfix01"></script>
 <script>MossForestStory.init();</script>
 <script src="js/field/lind-content-bounds.js"></script>
 <script src="js/field/lind-assets.js"></script>
