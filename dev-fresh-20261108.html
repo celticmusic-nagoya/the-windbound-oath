@@ -590,11 +590,11 @@ function startReturnScene(){
 $('#returnScene').onclick=()=>{
  returnIndex++;
  if(returnIndex<returnLines.length){
-   $('#returnText').textContent=returnLines[returnIndex];storyPortraitPage('returnScene','returnText',returnPortraitPages,returnIndex);
+   $('#returnText').textContent=returnLines[returnIndex];storyPortraitPage('returnScene','returnText',returnPortraitPages,returnIndex===5||returnIndex===6?5: returnIndex);
    // Only reveal the burning village after the last bend is fully rounded (index 5).
-   if(returnIndex===5)$('#returnScene').classList.add('road-reveal-active');
+   if(returnIndex===5){window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.add('road-reveal-active');}
    // Show the director-approved full raid composition before dialogue-only staging.
-   if(returnIndex===6){$('#returnScene').classList.remove('road-reveal-active');$('#returnScene').classList.add('raid-composite-active');}
+   if(returnIndex===6){window.TalkPortrait?.close('story:returnScene');$('#returnScene').classList.remove('road-reveal-active');$('#returnScene').classList.add('raid-composite-active');}
    // From the exchange onward, use the clean background and existing talk portraits.
    if(returnIndex===8){$('#returnScene').classList.remove('raid-composite-active');$('#returnScene').classList.add('raid-background-active');}
    if(returnIndex===12){
