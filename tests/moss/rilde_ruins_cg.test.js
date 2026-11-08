@@ -1,0 +1,33 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const elements=new Map();
+function element(tag){
+ return {tag,attrs:{},listeners:{},children:[],className:'',setAttribute(k,v){this.attrs[k]=v;},addEventListener(k,fn){this.listeners[k]=fn;},append(...items){this.children.push(...items);},remove(){elements.delete(this.id);},focus(){this.focused=true;}};
+}
+const document={createElement:element,getElementById:id=>elements.get(id)||null,body:{appendChild(el){elements.set(el.id,el);}}};
+const window={RildeCG:{gameplayPathFor:id=>id==='aftermath_background'?'assets/approved/game/rilde_story/aftermath/ruins_background_only.png':null}};
+const ctx={document,window};vm.runInNewContext(fs.readFileSync('js/field/rilde-ruins-cg.js','utf8'),ctx);
+const api=window.RildeRuinsCG;
+assert.equal(api.active,false);
+assert.equal(api.show(),true);
+assert.equal(api.show(),false);
+assert.equal(api.active,true);
+const root=elements.get('rildeRuinsCg');
+assert.equal(root.children[0].src,window.RildeCG.gameplayPathFor('aftermath_background'));
+assert.equal(root.children[1].type,'button');
+assert.equal(root.children[1].focused,true);
+root.children[1].listeners.click();
+assert.equal(api.active,false);
+assert.equal(elements.size,0);
+assert.equal(api.show(),true);
+elements.get('rildeRuinsCg').listeners.keydown({key:'Escape',preventDefault(){}});
+assert.equal(api.active,false);
+window.RildeCG.gameplayPathFor=()=>null;
+assert.equal(api.show(),false);
+assert.equal(elements.size,0);
+const html=fs.readFileSync('index.html','utf8');
+assert.ok(html.indexOf('js/field/rilde-cg.js')<html.indexOf('js/field/rilde-ruins-cg.js'));
+const village=fs.readFileSync('js/field/rilde-village.js','utf8');
+assert.ok(!village.includes('RildeRuinsCG'));
+console.log('Rilde ruins CG presenter isolation, cleanup and policy PASS');

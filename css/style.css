@@ -3694,3 +3694,8 @@ body.cliff-cg-active #talkPortrait{z-index:201!important}
  -webkit-mask-image:linear-gradient(to left,transparent 0%,rgba(0,0,0,.55) 5%,#000 17%,#000 100%),linear-gradient(to top,transparent 0%,#000 16%,#000 100%);
  mask-image:linear-gradient(to left,transparent 0%,rgba(0,0,0,.55) 5%,#000 17%,#000 100%),linear-gradient(to top,transparent 0%,#000 16%,#000 100%);
 }
+
+/* Opt-in ruins CG: independent of map/quest/save state; close remains touch-accessible. */
+.rilde-ruins-cg{position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:#0b1215ed;padding:clamp(12px,3vw,36px);box-sizing:border-box}
+.rilde-ruins-cg img{max-width:100%;max-height:calc(100dvh - 92px);width:auto;height:auto;object-fit:contain}
+.rilde-ruins-cg-close{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-width:88px;min-height:44px;border:1px solid #c5a45b;border-radius:8px;background:#132620;color:#f0e5cf;font:inherit;cursor:pointer}
