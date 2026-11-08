@@ -48,13 +48,10 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
       {talk: 'scene_cliff_night'},
       {cg: {src: 'assets/approved/game/cliff/stargazing_standing_final.png', alt: '立ち上がり真上の星空を見上げる二人', mode: 'dialogue'}},
       {wait: 1100},
+      {talk: 'scene_cliff_standing'},
       {talk: 'scene_cliff_wind_stops'},
       {cg: {hide: true}},
-      {vista: {id: 'village_fire', on: true, ms: 2000}},
-      {focus: {x: 560, y: 2830, ms: 2200}},     // camera slides down to the far village and stays
-      {wait: 900},
-      {shake: {ms: 700, amp: 4}},
-      {talk: 'scene_cliff_fire'},
+      // Do not reveal village fire from the cliff. First sighting is after the road bend.
       {wait: 600},
       {fade: {to: 1, ms: 1000}},
       {release: {ms: 10}},
