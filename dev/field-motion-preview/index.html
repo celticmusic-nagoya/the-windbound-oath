@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>DEV | Field sprite motion preview</title>
+<style>
+:root{color-scheme:dark}body{font-family:system-ui,sans-serif;margin:0;background:#16201b;color:#f2eee4}main{max-width:920px;margin:auto;padding:20px}p{line-height:1.6}.controls{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0}button{font:inherit;padding:10px 18px;min-height:44px}.stage{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.sample{background:#26372d;border:1px solid #68806d;border-radius:12px;text-align:center;padding:16px;min-height:270px}.art{height:185px;display:flex;align-items:end;justify-content:center;overflow:visible}.sprite{max-height:170px;max-width:150px;width:auto;height:auto;object-fit:contain;image-rendering:pixelated;transform-origin:center bottom;will-change:transform}.note{font-size:.85rem;color:#d4d9c7}a{color:#cce5b7}
+@media(prefers-reduced-motion:reduce){.sprite{will-change:auto}}
+</style></head><body><main>
+<h1>フィールド静止スプライト・共通モーション試作</h1>
+<p>開発者専用の隔離プレビューです。既存画像を一枚ずつ参照し、共通モーションのみを比較します。<strong>RO風の新規正式ドット絵を制作・採用した画面ではありません。</strong>ゲーム本体・SAVE・マップ・当たり判定には接続しません。</p>
+<div class="controls"><button id="toggle" type="button" aria-pressed="true">動作: ON</button><label><input id="reduced" type="checkbox"> 動きを減らす</label></div>
+<div class="stage">
+<section class="sample"><h2>エイダン（PC）</h2><div class="art"><img class="sprite" data-kind="player" src="../../img/field/characters/aidan/aidan_idle_down.png" alt="エイダンの現行静止画"></div><p class="note">歩行バウンス／方向別静止画の一例</p></section>
+<section class="sample"><h2>エマ（NPC）</h2><div class="art"><img class="sprite" data-kind="npc" src="../../img/field/lind/npc/emma/emma_idle.png" alt="エマの現行静止画"></div><p class="note">控えめな生活動作／停止時は静止</p></section>
+<section class="sample"><h2>ゴブリン（敵）</h2><div class="art"><img class="sprite" data-kind="enemy" src="../../img/field/monsters/goblin/goblin_idle_01.png" alt="ゴブリンの現行静止画"></div><p class="note">呼吸パルス／追跡中の揺れ</p></section>
+</div><p class="note">検証対象: 動作の視認性、停止・再開、reduced-motion、Android画面幅。正式デザイン・縮尺・方向数は別途制作・審査が必要です。</p>
+</main><script src="../../js/field/field-sprite-motion.js"></script><script src="preview.js"></script></body></html>
