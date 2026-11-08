@@ -3682,3 +3682,15 @@ body.cliff-cg-active #talkPortrait{z-index:201!important}
   bottom:4%;
  }
 }
+
+/* Portrait integration: soften hard rectangular crop on the OUTER rendered canvas,
+   so face/blink overlays share exactly the same mask and stay pixel-aligned. */
+#talkPortrait canvas{
+ -webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.55) 5%,#000 17%,#000 100%),linear-gradient(to top,transparent 0%,#000 16%,#000 100%);
+ mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.55) 5%,#000 17%,#000 100%),linear-gradient(to top,transparent 0%,#000 16%,#000 100%);
+ -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+#talkPortrait[data-side="left"] canvas{
+ -webkit-mask-image:linear-gradient(to left,transparent 0%,rgba(0,0,0,.55) 5%,#000 17%,#000 100%),linear-gradient(to top,transparent 0%,#000 16%,#000 100%);
+ mask-image:linear-gradient(to left,transparent 0%,rgba(0,0,0,.55) 5%,#000 17%,#000 100%),linear-gradient(to top,transparent 0%,#000 16%,#000 100%);
+}
