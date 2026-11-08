@@ -983,7 +983,7 @@ $('#escapeScene').onclick=()=>{
  if(escapeIndex<escapeLinesNow().length){
    $('#escapeText').textContent=escapeLinesNow()[escapeIndex];storyPortraitPage('escapeScene','escapeText',TalkDataAttack.escapePortraits,escapeIndex);
    if(escapeIndex===4)$('#escapeGob').style.display='grid';
-   if(escapeIndex===7){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
+   if(escapeIndex===9){$('#escapeScene').style.filter='brightness(.55)';setTimeout(()=>$('#escapeScene').style.filter='',220)}
  }else{
    window.TalkPortrait?.close('story:escapeScene');$('#escapeScene').style.display='none';
    enterMossForest();
