@@ -44,11 +44,13 @@ window.FieldSceneData = Object.freeze({scenes: Object.freeze({
       // Establishing starry-sky view; seated and standing approved compositions.
       {cg: {src: 'assets/approved/game/cliff/stargazing_seated.png', alt: '断崖で星空を見上げる二人', mode: 'dialogue'}},
       {wait: 900},
-      {cg: {src: 'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png', alt: '星空を見上げる断崖', mode: 'dialogue'}},
+      // Keep the approved seated two-character CG for the full night conversation.
       {talk: 'scene_cliff_night'},
       {cg: {src: 'assets/approved/game/cliff/stargazing_standing_final.png', alt: '立ち上がり真上の星空を見上げる二人', mode: 'dialogue'}},
       {wait: 1100},
       {talk: 'scene_cliff_standing'},
+      // The wind stops: switch to background + the existing dialogue portraits.
+      {cg: {src: 'assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png', alt: '風が止んだ夜の断崖', mode: 'dialogue'}},
       {talk: 'scene_cliff_wind_stops'},
       {cg: {hide: true}},
       // Do not reveal village fire from the cliff. First sighting is after the road bend.
