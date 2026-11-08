@@ -1,0 +1,27 @@
+name: Approved story CG sequence QA
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'dev-fresh-20261108.html'
+      - 'css/style.css'
+      - 'js/field/scene-data.js'
+      - 'tests/moss/approved_story_cg_sequence.test.js'
+      - '.github/workflows/approved-story-cg-sequence-qa.yml'
+  push:
+    paths:
+      - 'index.html'
+      - 'dev-fresh-20261108.html'
+      - 'css/style.css'
+      - 'js/field/scene-data.js'
+      - 'tests/moss/approved_story_cg_sequence.test.js'
+      - '.github/workflows/approved-story-cg-sequence-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/moss/approved_story_cg_sequence.test.js
