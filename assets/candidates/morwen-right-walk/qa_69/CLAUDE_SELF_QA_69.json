@@ -1,0 +1,262 @@
+{
+ "kind": "CLAUDE_SELF_CHECK (not third-party art QA)",
+ "items": {
+  "translucent_pixels_68": {
+   "value": 0,
+   "result": "PASS"
+  },
+  "colour_count": {
+   "value": {
+    "96x128": {
+     "67": [
+      3775,
+      3772,
+      3774,
+      3774,
+      3772,
+      3774
+     ],
+     "68": [
+      3802,
+      3797,
+      3773,
+      3800,
+      3799,
+      3774
+     ]
+    },
+    "48x64": {
+     "67": [
+      976,
+      976,
+      979,
+      976,
+      975,
+      980
+     ],
+     "68": [
+      985,
+      986,
+      989,
+      985,
+      986,
+      989
+     ]
+    }
+   },
+   "delta_96_68_minus_67": [
+    27,
+    25,
+    -1,
+    26,
+    27,
+    0
+   ],
+   "colours_not_from_reference_or_palette": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "result": "PASS",
+   "note": "the +25..37 colours are 65B reference colours uncovered by the mantle offset, plus the skin ramp; no invented colours"
+  },
+  "stretch_fill": {
+   "value": {
+    "collar_ribbon": {
+     "stretch_fill_px_per_frame": [
+      0,
+      0,
+      2,
+      0,
+      0,
+      2
+     ],
+     "part_px": 62
+    },
+    "cape_front": {
+     "stretch_fill_px_per_frame": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "part_px": 50
+    },
+    "mantle": {
+     "stretch_fill_px_per_frame": [
+      8,
+      8,
+      39,
+      8,
+      8,
+      39
+     ],
+     "part_px": 613
+    }
+   },
+   "max_ratio": 0.064,
+   "result": "PASS",
+   "note": "pixels re-used to close a 1-2px gap; threshold 10% of the part"
+  },
+  "anchor_weight": {
+   "value": {
+    "collar_ribbon": 0.10101525445522108,
+    "cape_front": 0.07856742013183862,
+    "mantle": 0.017677669529663688
+   },
+   "result": "PASS"
+  },
+  "skin_band_consistency": {
+   "value": [
+    {
+     "frame": 0,
+     "skin_label_px": 78,
+     "visible_skin_or_garter_px": 23,
+     "welt_rows": [
+      91,
+      94
+     ]
+    },
+    {
+     "frame": 1,
+     "skin_label_px": 77,
+     "visible_skin_or_garter_px": 22,
+     "welt_rows": [
+      92,
+      95
+     ]
+    },
+    {
+     "frame": 2,
+     "skin_label_px": 80,
+     "visible_skin_or_garter_px": 24,
+     "welt_rows": [
+      92,
+      93
+     ]
+    },
+    {
+     "frame": 3,
+     "skin_label_px": 79,
+     "visible_skin_or_garter_px": 24,
+     "welt_rows": [
+      92,
+      93
+     ]
+    },
+    {
+     "frame": 4,
+     "skin_label_px": 77,
+     "visible_skin_or_garter_px": 20,
+     "welt_rows": [
+      91,
+      95
+     ]
+    },
+    {
+     "frame": 5,
+     "skin_label_px": 79,
+     "visible_skin_or_garter_px": 19,
+     "welt_rows": [
+      89,
+      94
+     ]
+    }
+   ],
+   "spread_px": 5,
+   "result": "PASS",
+   "note": "welt is fixed at 5.4px along the thigh; visible width changes only with the skirt occlusion / thigh angle"
+  },
+  "potion_bag_overlap_px": {
+   "value": [
+    0,
+    0,
+    2,
+    0,
+    0,
+    2
+   ],
+   "result": "PASS (bag drawn in front)",
+   "note": "overlap pixels are hidden behind the bag by z-order; hand/bag mismatch = 0 in QA_REPORT"
+  },
+  "boot_detail_counts": {
+   "value": [
+    110,
+    120,
+    115,
+    105,
+    114,
+    118
+   ],
+   "result": "INFO",
+   "note": "bright-gold pixels below y88 (laces/buckles/clip), should stay in a narrow band"
+  }
+ },
+ "vest_experiment": {
+  "mask_px": 72,
+  "mask_conflicts": {
+   "immutable_details": 0,
+   "collar_ribbon": 0,
+   "cape_front": 0,
+   "mantle": 0,
+   "potions": 0,
+   "accessories_fixed": 0,
+   "skirt": 0,
+   "redraw": 0
+  },
+  "frames": [
+   {
+    "frame": 0,
+    "changed_px_96": 0,
+    "changed_px_48": 0,
+    "immutable_changed": 0,
+    "skirt_changed": 0
+   },
+   {
+    "frame": 1,
+    "changed_px_96": 0,
+    "changed_px_48": 0,
+    "immutable_changed": 0,
+    "skirt_changed": 0
+   },
+   {
+    "frame": 2,
+    "changed_px_96": 15,
+    "changed_px_48": 3,
+    "immutable_changed": 0,
+    "skirt_changed": 0
+   },
+   {
+    "frame": 3,
+    "changed_px_96": 0,
+    "changed_px_48": 0,
+    "immutable_changed": 0,
+    "skirt_changed": 0
+   },
+   {
+    "frame": 4,
+    "changed_px_96": 0,
+    "changed_px_48": 0,
+    "immutable_changed": 0,
+    "skirt_changed": 0
+   },
+   {
+    "frame": 5,
+    "changed_px_96": 15,
+    "changed_px_48": 3,
+    "immutable_changed": 0,
+    "skirt_changed": 0
+   }
+  ]
+ },
+ "chain_evidence": {
+  "gold_px_in_band": 36,
+  "of_which_owned_by_protected_skirt_mask": 30,
+  "isolatable_chain_px": "UNVERIFIED (no pixel rule separates chain links from plaid gold stripes at 96x128)"
+ }
+}
