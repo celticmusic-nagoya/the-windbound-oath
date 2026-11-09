@@ -1,0 +1,173 @@
+{
+ "task": "MORWEN-PIXEL-69/70 third-party art QA",
+ "candidate": {
+  "pr": 205,
+  "branch": "feature/morwen-pixel-68-secondary-motion",
+  "head": "51b15addcaec02680d7dd8677ec48ad456645e66",
+  "compare_with": {
+   "pr": 204,
+   "head": "54f3e9d61b88321f990d9b2591657e2c042c4fd7"
+  }
+ },
+ "reviewer": "",
+ "role": "",
+ "date": "",
+ "devices": [
+  {
+   "type": "PC",
+   "browser": "",
+   "result": "NOT_RUN"
+  },
+  {
+   "type": "Android",
+   "model": "",
+   "browser": "",
+   "result": "NOT_RUN"
+  }
+ ],
+ "items": {
+  "ID-1": {
+   "category": "顔・キャラクター同一性",
+   "check": "髪型・顔・眼鏡・帽子・花飾り・紋章・衣装配色が公式正本と一致する",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LB-1": {
+   "category": "下半身",
+   "check": "ストッキングが太腿丈（ニーソックスではない）で、口ゴム・ガーター金具が正本どおり",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LB-2": {
+   "category": "下半身",
+   "check": "スカート裾〜口ゴム間の肌の帯の幅が6コマで不自然に変化しない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LB-3": {
+   "category": "下半身",
+   "check": "太腿から膝へのラインが自然（段差・直線的な切断がない）",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LB-4": {
+   "category": "下半身",
+   "check": "立脚・遊脚の陰影が破綻しない（奥脚が手前脚より暗い）",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LB-5": {
+   "category": "下半身",
+   "check": "ブーツの形状・編み上げ・バックルが各コマで一貫している",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "UB-1": {
+   "category": "上半身",
+   "check": "リボン・ケープ・マントが体の上下動から自然に遅れて動く",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "UB-2": {
+   "category": "上半身",
+   "check": "画素が不自然に伸びない（布の引き伸ばしが目立たない）",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "UB-3": {
+   "category": "上半身",
+   "check": "動きが過剰でない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "UB-4": {
+   "category": "上半身",
+   "check": "ポーション瓶が鞄に食い込まない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "UB-5": {
+   "category": "上半身",
+   "check": "固定点（首元・肩・留め具）が不自然に移動しない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "PX-1": {
+   "category": "ドット品質",
+   "check": "ボケ・半透明画素・不要な色数増加がない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "PX-2": {
+   "category": "ドット品質",
+   "check": "上半身と下半身の描画密度が馴染む",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "PX-3": {
+   "category": "ドット品質",
+   "check": "48×64でチェック柄と金装飾が判別できる",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "PX-4": {
+   "category": "ドット品質",
+   "check": "暗背景・明背景・ゲーム背景で美しく見える",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LP-1": {
+   "category": "ループ",
+   "check": "F05→F00の継ぎ目に跳び・急な位置変化がない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  },
+  "LP-2": {
+   "category": "ループ",
+   "check": "連続再生で脚が滑らず、体が分離して見えない",
+   "result": "NOT_RUN",
+   "frames": [],
+   "region_px": "",
+   "note": ""
+  }
+ },
+ "overall": "NOT_RUN",
+ "allowed_results": [
+  "PASS",
+  "FAIL",
+  "BLOCKED",
+  "NOT_RUN"
+ ]
+}
