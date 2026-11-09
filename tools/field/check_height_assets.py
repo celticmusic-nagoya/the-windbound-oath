@@ -29,6 +29,12 @@ def validate_pieces(spec):
             errors.append(f"pieces[{i}]: duplicate id {pid}")
         else:
             seen.add(pid)
+        asset = piece.get("asset")
+        if not isinstance(asset, str) or not asset:
+            errors.append(f"pieces[{i}]: missing asset id")
+        level = piece.get("level", 0)
+        if type(level) is not int or level < 0:
+            errors.append(f"pieces[{i}]: level must be a nonnegative integer")
         anchor = piece.get("anchor")
         if not isinstance(anchor, list) or len(anchor) != 2 or any(type(v) not in (int, float) for v in anchor):
             errors.append(f"pieces[{i}]: anchor must be [x,y]")
