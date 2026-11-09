@@ -10,16 +10,21 @@ const context = { window: {}, document: { createElement: makeNode }, performance
 vm.runInNewContext(code, context);
 const spec = { visuals: [{ id: 'legacy', kind: 'rect', rect: [0,0,10,10], z: 1, color: '#fff' }], pieces: [
   { id: 'rock', asset: 'height_cliff_rock_01', anchor: [100, 200], level: 1, z: 5, fade: 'deck' },
+  { id: 'canopy', asset: 'height_foreground_canopy_01', anchor: [150, 320] },
   { id: 'legacy', asset: 'height_cliff_ruin_01', anchor: [50, 50] },
   { id: 'missing', asset: 'unregistered', anchor: [0, 0] }
 ] };
-const height = context.window.FieldHeight.create(spec, { blocked: () => false }, { resolveAsset: id => id === 'height_cliff_rock_01' ? {url:'/registered.png',w:80,h:56} : null });
+const height = context.window.FieldHeight.create(spec, { blocked: () => false }, { resolveAsset: id => id === 'height_cliff_rock_01' ? {url:'/registered.png',w:80,h:56} : id === 'height_foreground_canopy_01' ? {url:'/canopy.png',w:140,h:150} : null });
 const world = makeNode('div');
 height.mount(world);
-assert.equal(world.children.length, 2, 'one legacy placeholder and one registered PNG');
+assert.equal(world.children.length, 3, 'one legacy placeholder and two registered PNGs');
+const canopy = world.children.find(n => n.dataset.piece === 'canopy');
+assert.ok(canopy);
+assert.equal(canopy.style.zIndex, '320', 'missing z defaults to foot Y');
 const png = world.children.find(n => n.tag === 'img');
 assert.ok(png);
 assert.equal(png.src, '/registered.png');
+assert.equal(png.style.zIndex, '5', 'explicit z remains authoritative');
 assert.equal(png.style.left, '100px');
 assert.equal(png.style.top, '144px', 'lift applied exactly once');
 assert.equal(png.style.width, '80px');
