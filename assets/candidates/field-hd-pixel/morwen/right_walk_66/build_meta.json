@@ -1,0 +1,276 @@
+{
+  "halo_pixels_removed_from_reference": 539,
+  "old_lower_body_pixels_discarded": 912,
+  "gait": {
+    "0": {
+      "dx": 9.0,
+      "pitch": 16,
+      "lift": 0,
+      "role": "contact / heel strike"
+    },
+    "1": {
+      "dx": 3.0,
+      "pitch": 0,
+      "lift": 0,
+      "role": "loading, foot flat"
+    },
+    "2": {
+      "dx": -3.0,
+      "pitch": 0,
+      "lift": 0,
+      "role": "mid-stance, body passes over"
+    },
+    "3": {
+      "dx": -9.0,
+      "pitch": -24,
+      "lift": 0,
+      "role": "toe-off (heel up, toe on ground)"
+    },
+    "4": {
+      "dx": -6.5,
+      "pitch": -22,
+      "lift": 5,
+      "role": "swing back, knee forward"
+    },
+    "5": {
+      "dx": 4.0,
+      "pitch": 2,
+      "lift": 4,
+      "role": "swing forward / passing"
+    }
+  },
+  "bob": [
+    0,
+    1,
+    0,
+    0,
+    1,
+    0
+  ],
+  "cape_sway": [
+    0,
+    -1,
+    -1,
+    0,
+    -1,
+    -1
+  ],
+  "legs": [
+    {
+      "frame": 0,
+      "bob": 0,
+      "near": {
+        "hip": [
+          56.0,
+          87.0
+        ],
+        "knee": [
+          60.35,
+          101.36
+        ],
+        "ankle": [
+          65.0,
+          117.66
+        ],
+        "pitch": 16,
+        "phase": "contact / heel strike"
+      },
+      "far": {
+        "hip": [
+          54.0,
+          87.0
+        ],
+        "knee": [
+          55.16,
+          101.96
+        ],
+        "ankle": [
+          45.0,
+          114.96
+        ],
+        "pitch": -24,
+        "phase": "toe-off (heel up, toe on ground)"
+      }
+    },
+    {
+      "frame": 1,
+      "bob": 1,
+      "near": {
+        "hip": [
+          56.0,
+          88.0
+        ],
+        "knee": [
+          61.04,
+          102.13
+        ],
+        "ankle": [
+          59.0,
+          118.5
+        ],
+        "pitch": 0,
+        "phase": "loading, foot flat"
+      },
+      "far": {
+        "hip": [
+          54.0,
+          88.0
+        ],
+        "knee": [
+          61.27,
+          101.12
+        ],
+        "ankle": [
+          47.5,
+          110.22
+        ],
+        "pitch": -22,
+        "phase": "swing back, knee forward"
+      }
+    },
+    {
+      "frame": 2,
+      "bob": 0,
+      "near": {
+        "hip": [
+          56.0,
+          87.0
+        ],
+        "knee": [
+          54.7,
+          101.94
+        ],
+        "ankle": [
+          53.0,
+          118.5
+        ],
+        "pitch": 0,
+        "phase": "mid-stance, body passes over"
+      },
+      "far": {
+        "hip": [
+          54.0,
+          87.0
+        ],
+        "knee": [
+          63.35,
+          98.73
+        ],
+        "ankle": [
+          58.0,
+          114.34
+        ],
+        "pitch": 2,
+        "phase": "swing forward / passing"
+      }
+    },
+    {
+      "frame": 3,
+      "bob": 0,
+      "near": {
+        "hip": [
+          56.0,
+          87.0
+        ],
+        "knee": [
+          57.16,
+          101.96
+        ],
+        "ankle": [
+          47.0,
+          114.96
+        ],
+        "pitch": -24,
+        "phase": "toe-off (heel up, toe on ground)"
+      },
+      "far": {
+        "hip": [
+          54.0,
+          87.0
+        ],
+        "knee": [
+          58.35,
+          101.36
+        ],
+        "ankle": [
+          63.0,
+          117.66
+        ],
+        "pitch": 16,
+        "phase": "contact / heel strike"
+      }
+    },
+    {
+      "frame": 4,
+      "bob": 1,
+      "near": {
+        "hip": [
+          56.0,
+          88.0
+        ],
+        "knee": [
+          63.27,
+          101.12
+        ],
+        "ankle": [
+          49.5,
+          110.22
+        ],
+        "pitch": -22,
+        "phase": "swing back, knee forward"
+      },
+      "far": {
+        "hip": [
+          54.0,
+          88.0
+        ],
+        "knee": [
+          59.04,
+          102.13
+        ],
+        "ankle": [
+          57.0,
+          118.5
+        ],
+        "pitch": 0,
+        "phase": "loading, foot flat"
+      }
+    },
+    {
+      "frame": 5,
+      "bob": 0,
+      "near": {
+        "hip": [
+          56.0,
+          87.0
+        ],
+        "knee": [
+          65.35,
+          98.73
+        ],
+        "ankle": [
+          60.0,
+          114.34
+        ],
+        "pitch": 2,
+        "phase": "swing forward / passing"
+      },
+      "far": {
+        "hip": [
+          54.0,
+          87.0
+        ],
+        "knee": [
+          52.7,
+          101.94
+        ],
+        "ankle": [
+          51.0,
+          118.5
+        ],
+        "pitch": 0,
+        "phase": "mid-stance, body passes over"
+      }
+    }
+  ]
+}
