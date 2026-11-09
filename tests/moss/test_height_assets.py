@@ -29,7 +29,11 @@ class HeightAssetPreflightTests(unittest.TestCase):
         errors = mod.validate_pieces({"pieces":[{"id":"same","anchor":[1,2]},{"id":"same","anchor":[3,4]}]})
         self.assertTrue(any("duplicate id" in e for e in errors))
     def test_valid_piece(self):
-        self.assertEqual(mod.validate_pieces({"pieces":[{"id":"rock","anchor":[1,2]}]}), [])
+        self.assertEqual(mod.validate_pieces({"pieces":[{"id":"rock","asset":"height_cliff_rock_01","anchor":[1,2]}]}), [])
+    def test_missing_asset_and_invalid_level(self):
+        errors = mod.validate_pieces({"pieces":[{"id":"rock","anchor":[1,2],"level":-1}]})
+        self.assertTrue(any("missing asset" in e for e in errors))
+        self.assertTrue(any("level" in e for e in errors))
     def test_invalid_anchor(self):
         self.assertTrue(mod.validate_pieces({"pieces":[{"id":"rock","anchor":[1]}]}))
     def test_rgba_dimensions(self):
