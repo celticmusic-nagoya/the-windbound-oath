@@ -15,7 +15,7 @@ spec.loader.exec_module(mod)
 def png(width, height, color=6, depth=8):
     def chunk(name, data):
         return struct.pack(">I", len(data)) + name + data + struct.pack(">I", zlib.crc32(name + data) & 0xffffffff)
-    pixel = b"\\x00" + (b"\\x00" * (width * (4 if color == 6 else 3)))
+    pixel = bytes([0]) + (bytes([0]) * (width * (4 if color == 6 else 3)))
     raw = pixel * height
     return (bytes([137,80,78,71,13,10,26,10]) +
             chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, depth, color, 0, 0, 0)) +
