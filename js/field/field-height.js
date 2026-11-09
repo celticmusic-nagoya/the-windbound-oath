@@ -145,8 +145,8 @@
         if (!piece || !piece.id || seen.has(piece.id)) continue;
         seen.add(piece.id);
         if (!Array.isArray(piece.anchor) || piece.anchor.length !== 2 || !piece.anchor.every(Number.isFinite)) continue;
-        const url = typeof options.resolveAsset === 'function' ? options.resolveAsset(piece.asset) : null;
-        if (typeof url !== 'string' || !url) continue;
+        const asset = typeof options.resolveAsset === 'function' ? options.resolveAsset(piece.asset) : null;
+        if (!asset || typeof asset.url !== 'string' || !asset.url || !Number.isFinite(asset.w) || !Number.isFinite(asset.h)) continue;
         const img = document.createElement('img');
         img.className = 'forest-height-piece forest-height-png';
         img.dataset.piece = piece.id;
@@ -154,11 +154,13 @@
         img.alt = '';
         img.draggable = false;
         img.decoding = 'async';
-        img.src = url;
+        img.src = asset.url;
         const stl = img.style;
         stl.position = 'absolute';
         stl.left = piece.anchor[0] + 'px';
-        stl.top = piece.anchor[1] + 'px';
+        stl.top = (piece.anchor[1] - H * (Number.isInteger(piece.level) && piece.level >= 0 ? piece.level : 0)) + 'px';
+        stl.width = asset.w + 'px';
+        stl.height = asset.h + 'px';
         stl.transform = 'translate(-50%, -100%)';
         stl.pointerEvents = 'none';
         if (Number.isFinite(piece.z)) stl.zIndex = String(piece.z);
