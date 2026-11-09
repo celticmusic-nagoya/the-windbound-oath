@@ -163,7 +163,7 @@
         stl.height = asset.h + 'px';
         stl.transform = 'translate(-50%, -100%)';
         stl.pointerEvents = 'none';
-        if (Number.isFinite(piece.z)) stl.zIndex = String(piece.z);
+        stl.zIndex = String(Number.isFinite(piece.z) ? piece.z : Math.round(piece.anchor[1]));
         if (Number.isFinite(piece.opacity)) stl.opacity = String(Math.max(0, Math.min(1, piece.opacity)));
         img.dataset.baseOpacity = stl.opacity || '';
         world.appendChild(img);
