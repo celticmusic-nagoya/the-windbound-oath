@@ -19,7 +19,7 @@
   const AX = 17, AY = 42, BOX = { x: 6, y: 32, w: 22, h: 10 };
   const inR = (px, py, r) => px >= r[0] && px <= r[0] + r[2] && py >= r[1] && py <= r[1] + r[3];
 
-  function create(spec, solid) {
+  function create(spec, solid, options = {}) {
     const H = spec.levelHeight || 56;
     const walk = new Map(Object.entries(spec.levels || {}).map(([k, v]) => [Number(k), v.walk || []]));
     const conns = (spec.connectors || []).map(c => ({ zone: .22, ...c }));
@@ -139,6 +139,34 @@
     // ---- placeholder visuals (absolute visual coordinates, z already decided by the map data) ----
     let nodes = [];
     function mount(world) {
+      // Opt-in PNG pieces. Only registered asset IDs resolved by the caller are loaded.
+      const seen = new Set((spec.visuals || []).map(v => v.id));
+      for (const piece of spec.pieces || []) {
+        if (!piece || !piece.id || seen.has(piece.id)) continue;
+        seen.add(piece.id);
+        if (!Array.isArray(piece.anchor) || piece.anchor.length !== 2 || !piece.anchor.every(Number.isFinite)) continue;
+        const url = typeof options.resolveAsset === 'function' ? options.resolveAsset(piece.asset) : null;
+        if (typeof url !== 'string' || !url) continue;
+        const img = document.createElement('img');
+        img.className = 'forest-height-piece forest-height-png';
+        img.dataset.piece = piece.id;
+        if (piece.fade) img.dataset.fade = piece.fade;
+        img.alt = '';
+        img.draggable = false;
+        img.decoding = 'async';
+        img.src = url;
+        const stl = img.style;
+        stl.position = 'absolute';
+        stl.left = piece.anchor[0] + 'px';
+        stl.top = piece.anchor[1] + 'px';
+        stl.transform = 'translate(-50%, -100%)';
+        stl.pointerEvents = 'none';
+        if (Number.isFinite(piece.z)) stl.zIndex = String(piece.z);
+        if (Number.isFinite(piece.opacity)) stl.opacity = String(Math.max(0, Math.min(1, piece.opacity)));
+        img.dataset.baseOpacity = stl.opacity || '';
+        world.appendChild(img);
+        nodes.push(img);
+      }
       for (const v of spec.visuals || []) {
         const d = document.createElement('div'); d.className = 'forest-height-piece'; d.dataset.piece = v.id; if (v.fade) d.dataset.fade = v.fade;
         const s = d.style; s.position = 'absolute'; s.pointerEvents = 'none'; s.zIndex = String(v.z); s.background = v.stripes
