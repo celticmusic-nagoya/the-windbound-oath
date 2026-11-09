@@ -1,0 +1,502 @@
+{
+ "palette": {
+  "stock": [
+   [
+    22,
+    4,
+    23
+   ],
+   [
+    45,
+    14,
+    44
+   ],
+   [
+    69,
+    23,
+    68
+   ],
+   [
+    101,
+    40,
+    83
+   ],
+   [
+    137,
+    58,
+    100
+   ]
+  ],
+  "stock_far": [
+   [
+    15,
+    5,
+    18
+   ],
+   [
+    34,
+    10,
+    32
+   ],
+   [
+    50,
+    17,
+    50
+   ],
+   [
+    69,
+    23,
+    68
+   ],
+   [
+    91,
+    38,
+    78
+   ]
+  ],
+  "boot": [
+   [
+    20,
+    4,
+    22
+   ],
+   [
+    46,
+    13,
+    46
+   ],
+   [
+    73,
+    20,
+    75
+   ],
+   [
+    110,
+    47,
+    113
+   ],
+   [
+    146,
+    90,
+    166
+   ],
+   [
+    209,
+    163,
+    213
+   ]
+  ],
+  "boot_far": [
+   [
+    15,
+    3,
+    17
+   ],
+   [
+    38,
+    8,
+    42
+   ],
+   [
+    53,
+    14,
+    68
+   ],
+   [
+    90,
+    33,
+    81
+   ],
+   [
+    106,
+    58,
+    122
+   ],
+   [
+    150,
+    110,
+    166
+   ]
+  ],
+  "gold": [
+   [
+    109,
+    61,
+    4
+   ],
+   [
+    180,
+    99,
+    3
+   ],
+   [
+    237,
+    158,
+    7
+   ],
+   [
+    252,
+    214,
+    39
+   ],
+   [
+    255,
+    247,
+    165
+   ]
+  ],
+  "gold_far": [
+   [
+    81,
+    40,
+    7
+   ],
+   [
+    142,
+    81,
+    6
+   ],
+   [
+    194,
+    122,
+    11
+   ],
+   [
+    214,
+    170,
+    34
+   ],
+   [
+    226,
+    200,
+    110
+   ]
+  ],
+  "pleat": [
+   [
+    28,
+    3,
+    21
+   ],
+   [
+    54,
+    11,
+    42
+   ],
+   [
+    79,
+    23,
+    74
+   ],
+   [
+    90,
+    33,
+    81
+   ],
+   [
+    109,
+    45,
+    102
+   ]
+  ]
+ },
+ "palette_snapped_to_upper_body": {
+  "stock": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "stock_far": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "boot": [
+   true,
+   true,
+   true,
+   true,
+   false,
+   true
+  ],
+  "boot_far": [
+   true,
+   true,
+   true,
+   true,
+   false,
+   false
+  ],
+  "gold": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "gold_far": [
+   true,
+   true,
+   true,
+   false,
+   false
+  ],
+  "pleat": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ]
+ },
+ "skirt_sway": [
+  0,
+  -1,
+  0,
+  0,
+  -1,
+  0
+ ],
+ "mask_pixels": {
+  "accessories": 299,
+  "skirt": 220,
+  "torso": 3124,
+  "redraw": 42
+ },
+ "halo_removed": 539,
+ "old_lower_body_discarded": 912,
+ "frames": [
+  {
+   "frame": 0,
+   "bob": 0,
+   "skirt_sway": 0,
+   "cape_sway": 0,
+   "near_phase": "contact / heel strike",
+   "far_phase": "toe-off (heel up, toe on ground)",
+   "near": {
+    "hip": [
+     56.0,
+     87.0
+    ],
+    "knee": [
+     60.35,
+     101.36
+    ],
+    "ankle": [
+     65.0,
+     117.66
+    ]
+   },
+   "far": {
+    "hip": [
+     54.0,
+     87.0
+    ],
+    "knee": [
+     55.16,
+     101.96
+    ],
+    "ankle": [
+     45.0,
+     114.96
+    ]
+   },
+   "patches_96": [],
+   "patches_48": []
+  },
+  {
+   "frame": 1,
+   "bob": 1,
+   "skirt_sway": -1,
+   "cape_sway": -1,
+   "near_phase": "loading, foot flat",
+   "far_phase": "swing back, knee forward",
+   "near": {
+    "hip": [
+     56.0,
+     88.0
+    ],
+    "knee": [
+     61.04,
+     102.13
+    ],
+    "ankle": [
+     59.0,
+     118.5
+    ]
+   },
+   "far": {
+    "hip": [
+     54.0,
+     88.0
+    ],
+    "knee": [
+     61.27,
+     101.12
+    ],
+    "ankle": [
+     47.5,
+     110.22
+    ]
+   },
+   "patches_96": [],
+   "patches_48": []
+  },
+  {
+   "frame": 2,
+   "bob": 0,
+   "skirt_sway": 0,
+   "cape_sway": -1,
+   "near_phase": "mid-stance, body passes over",
+   "far_phase": "swing forward / passing",
+   "near": {
+    "hip": [
+     56.0,
+     87.0
+    ],
+    "knee": [
+     54.7,
+     101.94
+    ],
+    "ankle": [
+     53.0,
+     118.5
+    ]
+   },
+   "far": {
+    "hip": [
+     54.0,
+     87.0
+    ],
+    "knee": [
+     63.35,
+     98.73
+    ],
+    "ankle": [
+     58.0,
+     114.34
+    ]
+   },
+   "patches_96": [],
+   "patches_48": []
+  },
+  {
+   "frame": 3,
+   "bob": 0,
+   "skirt_sway": 0,
+   "cape_sway": 0,
+   "near_phase": "toe-off (heel up, toe on ground)",
+   "far_phase": "contact / heel strike",
+   "near": {
+    "hip": [
+     56.0,
+     87.0
+    ],
+    "knee": [
+     57.16,
+     101.96
+    ],
+    "ankle": [
+     47.0,
+     114.96
+    ]
+   },
+   "far": {
+    "hip": [
+     54.0,
+     87.0
+    ],
+    "knee": [
+     58.35,
+     101.36
+    ],
+    "ankle": [
+     63.0,
+     117.66
+    ]
+   },
+   "patches_96": [],
+   "patches_48": []
+  },
+  {
+   "frame": 4,
+   "bob": 1,
+   "skirt_sway": -1,
+   "cape_sway": -1,
+   "near_phase": "swing back, knee forward",
+   "far_phase": "loading, foot flat",
+   "near": {
+    "hip": [
+     56.0,
+     88.0
+    ],
+    "knee": [
+     63.27,
+     101.12
+    ],
+    "ankle": [
+     49.5,
+     110.22
+    ]
+   },
+   "far": {
+    "hip": [
+     54.0,
+     88.0
+    ],
+    "knee": [
+     59.04,
+     102.13
+    ],
+    "ankle": [
+     57.0,
+     118.5
+    ]
+   },
+   "patches_96": [],
+   "patches_48": []
+  },
+  {
+   "frame": 5,
+   "bob": 0,
+   "skirt_sway": 0,
+   "cape_sway": -1,
+   "near_phase": "swing forward / passing",
+   "far_phase": "mid-stance, body passes over",
+   "near": {
+    "hip": [
+     56.0,
+     87.0
+    ],
+    "knee": [
+     65.35,
+     98.73
+    ],
+    "ankle": [
+     60.0,
+     114.34
+    ]
+   },
+   "far": {
+    "hip": [
+     54.0,
+     87.0
+    ],
+    "knee": [
+     52.7,
+     101.94
+    ],
+    "ankle": [
+     51.0,
+     118.5
+    ]
+   },
+   "patches_96": [],
+   "patches_48": []
+  }
+ ]
+}
