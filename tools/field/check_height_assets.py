@@ -37,7 +37,7 @@ def validate_pieces(spec):
 def validate_png(path, expected):
     errors = []
     data = path.read_bytes()
-    if len(data) < 33 or data[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+    if len(data) < 33 or data[:8] != bytes([137, 80, 78, 71, 13, 10, 26, 10]):
         return [f"{path}: invalid PNG signature"]
     if data[12:16] != b"IHDR":
         return [f"{path}: missing IHDR"]
