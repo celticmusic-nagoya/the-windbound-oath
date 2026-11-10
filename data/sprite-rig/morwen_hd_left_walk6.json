@@ -1,0 +1,437 @@
+{
+ "schema": "windbound.hd-sprite-rig/1",
+ "character": "morwen",
+ "style": "tall-proportion HD pixel art (ChatGPT master)",
+ "master": {
+  "canvas": [
+   1024,
+   1280
+  ],
+  "units": "master px",
+  "ground_row": 1230,
+  "centre_x": 512,
+  "anchor": [
+   512,
+   1230
+  ],
+  "figure_height_incl_hat": 1104,
+  "hat_top_row": 126,
+  "runtime_scale_master": 0.0625,
+  "display_master": {
+   "canvas": [
+    256,
+    320
+   ],
+   "scale": 0.25,
+   "anchor": [
+    128,
+    307.5
+   ],
+   "note": "high-quality downscale of the master, delivered by us, not by ChatGPT"
+  },
+  "field_anchor_css": [
+   17,
+   42
+  ],
+  "collider_unchanged": {
+   "x": 6,
+   "y": 32,
+   "width": 22,
+   "height": 10
+  }
+ },
+ "landmarks_left_idle": {
+  "hat_top": 126,
+  "crown_hair": 330,
+  "eye": 400,
+  "chin": 470,
+  "neck": 500,
+  "shoulder": 540,
+  "chest": 600,
+  "waist": 740,
+  "hip": 790,
+  "skirt_hem": 860,
+  "knee": 1000,
+  "sock_top": 960,
+  "boot_top": 1090,
+  "ankle": 1180,
+  "sole": 1230,
+  "head_count": null,
+  "note": "rows in master px are provisional; head count and rows are measured from the delivered ChatGPT art once, then fixed for all frames"
+ },
+ "minimum_detail_px": 12,
+ "walk": {
+  "facing": "left",
+  "frames": 6,
+  "loop": true,
+  "contact_frames": [
+   1,
+   4
+  ],
+  "stance_ratio": 0.66,
+  "timing": {
+   "lind_player": "time, 100 ms per frame (10 fps)",
+   "moss_ally": "distance, stride 180 css px -> 30 px per frame -> 10 fps at 300 px/s",
+   "event": "time, 100 ms per frame or 140 ms for slow walks"
+  },
+  "poses": [
+   {
+    "f": 1,
+    "role": "far (right) heel contact",
+    "pelvis_dy": 0,
+    "chest_dy": 0,
+    "head_dy": 0,
+    "near_leg": {
+     "hip_deg": -20,
+     "knee_deg": 5,
+     "foot": "toe, behind"
+    },
+    "far_leg": {
+     "hip_deg": 25,
+     "knee_deg": 0,
+     "foot": "heel contact, front"
+    },
+    "near_arm_deg": 18,
+    "far_arm_deg": -12,
+    "foot_span": 600
+   },
+   {
+    "f": 2,
+    "role": "down / loading",
+    "pelvis_dy": 16,
+    "chest_dy": 8,
+    "head_dy": 8,
+    "near_leg": {
+     "hip_deg": -10,
+     "knee_deg": 30,
+     "foot": "lifting off"
+    },
+    "far_leg": {
+     "hip_deg": 12,
+     "knee_deg": 10,
+     "foot": "flat, planted"
+    },
+    "near_arm_deg": 10,
+    "far_arm_deg": -6,
+    "foot_span": 540
+   },
+   {
+    "f": 3,
+    "role": "passing (far leg supports)",
+    "pelvis_dy": -16,
+    "chest_dy": -8,
+    "head_dy": -8,
+    "near_leg": {
+     "hip_deg": 10,
+     "knee_deg": 45,
+     "foot": "swing, sole 40 px up"
+    },
+    "far_leg": {
+     "hip_deg": 0,
+     "knee_deg": 3,
+     "foot": "flat, under body"
+    },
+    "near_arm_deg": 0,
+    "far_arm_deg": 0,
+    "foot_span": 420
+   },
+   {
+    "f": 4,
+    "role": "near (left) heel contact",
+    "pelvis_dy": 0,
+    "chest_dy": 0,
+    "head_dy": 0,
+    "near_leg": {
+     "hip_deg": 25,
+     "knee_deg": 0,
+     "foot": "heel contact, front"
+    },
+    "far_leg": {
+     "hip_deg": -20,
+     "knee_deg": 5,
+     "foot": "toe, behind"
+    },
+    "near_arm_deg": -18,
+    "far_arm_deg": 12,
+    "foot_span": 600
+   },
+   {
+    "f": 5,
+    "role": "down / loading",
+    "pelvis_dy": 16,
+    "chest_dy": 8,
+    "head_dy": 8,
+    "near_leg": {
+     "hip_deg": 12,
+     "knee_deg": 10,
+     "foot": "flat, planted"
+    },
+    "far_leg": {
+     "hip_deg": -10,
+     "knee_deg": 30,
+     "foot": "lifting off"
+    },
+    "near_arm_deg": -10,
+    "far_arm_deg": 6,
+    "foot_span": 540
+   },
+   {
+    "f": 6,
+    "role": "passing (near leg supports)",
+    "pelvis_dy": -16,
+    "chest_dy": -8,
+    "head_dy": -8,
+    "near_leg": {
+     "hip_deg": 0,
+     "knee_deg": 3,
+     "foot": "flat, under body"
+    },
+    "far_leg": {
+     "hip_deg": 10,
+     "knee_deg": 45,
+     "foot": "swing, sole 40 px up"
+    },
+    "near_arm_deg": 0,
+    "far_arm_deg": 0,
+    "foot_span": 420
+   }
+  ],
+  "angles": "hip_deg: thigh from vertical, + = forward (to the left on screen); arm_deg: + = forward",
+  "planted_foot_rule": "a planted sole stays on row 1230 at the same x while it supports (no slide)",
+  "secondary": {
+   "cape": {
+    "lag_frames": [
+     1,
+     2
+    ],
+    "hem_swing_px": 24
+   },
+   "back_hair": {
+    "lag_frames": 1,
+    "swing_px": 12
+   },
+   "hat_ribbon": {
+    "lag_frames": 1,
+    "note": "not visible on the left facing"
+   },
+   "hat_crystal": {
+    "lag_frames": 2,
+    "pendulum_deg": 8
+   },
+   "capelet": {
+    "lag_frames": [
+     0,
+     1
+    ],
+    "vertical_only": true
+   },
+   "pelvis_tilt_deg": 2
+  }
+ },
+ "parts": {
+  "far_arm": {
+   "slot": "Inner",
+   "z": 1,
+   "pivot": [
+    530,
+    560
+   ],
+   "range": "arm swing -12..+12 deg"
+  },
+  "far_leg": {
+   "slot": "Legs+Feet",
+   "z": 2,
+   "pivot": [
+    520,
+    800
+   ],
+   "joints": {
+    "knee": [
+     520,
+     1000
+    ],
+    "ankle": [
+     520,
+     1180
+    ]
+   },
+   "range": "hip -20..+25, knee 0..45"
+  },
+  "cape_back": {
+   "slot": "Cape",
+   "z": 3,
+   "pivot": [
+    560,
+    540
+   ],
+   "range": "hem +-24 px, lag 1-2"
+  },
+  "skirt_back": {
+   "slot": "Bottom",
+   "z": 4,
+   "pivot": [
+    512,
+    760
+   ]
+  },
+  "body": {
+   "slot": "Body",
+   "z": 5,
+   "pivot": [
+    512,
+    790
+   ],
+   "note": "torso + neck, follows pelvis/chest offsets"
+  },
+  "inner": {
+   "slot": "Inner",
+   "z": 6,
+   "pivot": [
+    500,
+    620
+   ],
+   "note": "shirt frill, jacket, chest bow"
+  },
+  "skirt_front": {
+   "slot": "Bottom",
+   "z": 7,
+   "pivot": [
+    512,
+    760
+   ],
+   "note": "plaid panel with gold trim"
+  },
+  "strap": {
+   "slot": "Bag",
+   "z": 8,
+   "pivot": [
+    512,
+    560
+   ],
+   "note": "over the jacket, under the capelet; bag body hidden (far side)"
+  },
+  "potions": {
+   "slot": "Accessory",
+   "z": 9,
+   "pivot": [
+    470,
+    760
+   ],
+   "note": "2 vials + gold chain at the front waist"
+  },
+  "near_leg": {
+   "slot": "Legs+Feet",
+   "z": 10,
+   "pivot": [
+    500,
+    800
+   ],
+   "joints": {
+    "knee": [
+     500,
+     1000
+    ],
+    "ankle": [
+     500,
+     1180
+    ]
+   },
+   "range": "hip -20..+25, knee 0..45"
+  },
+  "near_arm": {
+   "slot": "Inner",
+   "z": 11,
+   "pivot": [
+    500,
+    560
+   ],
+   "joints": {
+    "elbow": [
+     500,
+     680
+    ],
+    "wrist": [
+     500,
+     790
+    ]
+   },
+   "range": "-18..+18 deg"
+  },
+  "capelet": {
+   "slot": "Outer",
+   "z": 12,
+   "pivot": [
+    520,
+    520
+   ],
+   "note": "double purple/gold capelet with the book-and-laurel crest on the near shoulder"
+  },
+  "hair_back": {
+   "slot": "Body",
+   "z": 13,
+   "pivot": [
+    540,
+    420
+   ],
+   "range": "swing 12 px, lag 1"
+  },
+  "head": {
+   "slot": "Body",
+   "z": 14,
+   "pivot": [
+    500,
+    470
+   ],
+   "note": "face, eye (violet), ear"
+  },
+  "hair_front": {
+   "slot": "Body",
+   "z": 15,
+   "pivot": [
+    480,
+    380
+   ]
+  },
+  "glasses": {
+   "slot": "Accessory",
+   "z": 16,
+   "pivot": [
+    450,
+    400
+   ],
+   "note": "round gold rim >= 12 px line, temple arm to the ear"
+  },
+  "earring_flower": {
+   "slot": "HairAccessory",
+   "z": 17,
+   "pivot": [
+    530,
+    450
+   ],
+   "note": "violet drop earring + small pink flower above the ear"
+  },
+  "hat": {
+   "slot": "Head",
+   "z": 18,
+   "pivot": [
+    520,
+    330
+   ],
+   "note": "purple witch hat, dense gold bands, tip trails back"
+  },
+  "hat_ornament": {
+   "slot": "HairAccessory",
+   "z": 19,
+   "pivot": "hat tip",
+   "range": "crystal pendulum 8 deg, lag 2",
+   "note": "big flower + long ribbon are on the far side: not visible facing left"
+  }
+ },
+ "naming": {
+  "composite": "morwen_hd_{facing}_{anim}_{nn}.png  e.g. morwen_hd_left_walk_01.png, morwen_hd_left_idle_01.png",
+  "part_base": "morwen_hd_{facing}_part_{part}.png (idle pose, full 1024x1280 canvas, transparent)",
+  "part_frame": "morwen_hd_{facing}_{anim}_{nn}_part_{part}.png (only parts that differ from the base)",
+  "rules": "lower case, no spaces, 2-digit frame numbers from 01, PNG RGBA 8-bit, alpha 0 or 255, same canvas and anchor in every file"
+ },
+ "delivery": "assets/candidates/morwen-hd/source/ + SHA256SUMS.txt; composites first, parts when available (composite = exact stack of its parts)"
+}
