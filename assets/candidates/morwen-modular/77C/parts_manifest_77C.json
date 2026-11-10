@@ -1,0 +1,609 @@
+{
+ "task": "MORWEN-MODULAR-SPRITE-01",
+ "facing": "down",
+ "still": "neutral",
+ "ramps": {
+  "purple": [
+   [
+    67,
+    3,
+    87
+   ],
+   [
+    74,
+    39,
+    87
+   ],
+   [
+    90,
+    42,
+    110
+   ],
+   [
+    104,
+    52,
+    122
+   ],
+   [
+    137,
+    71,
+    160
+   ],
+   [
+    185,
+    91,
+    225
+   ]
+  ],
+  "violet": [
+   [
+    96,
+    0,
+    120
+   ],
+   [
+    113,
+    46,
+    146
+   ],
+   [
+    133,
+    70,
+    166
+   ],
+   [
+    187,
+    31,
+    210
+   ],
+   [
+    206,
+    102,
+    255
+   ]
+  ],
+  "gold": [
+   [
+    167,
+    107,
+    42
+   ],
+   [
+    226,
+    163,
+    85
+   ],
+   [
+    226,
+    163,
+    85
+   ],
+   [
+    255,
+    217,
+    136
+   ]
+  ],
+  "skin": [
+   [
+    212,
+    143,
+    119
+   ],
+   [
+    255,
+    224,
+    173
+   ],
+   [
+    252,
+    233,
+    207
+   ],
+   [
+    253,
+    235,
+    210
+   ]
+  ],
+  "white": [
+   [
+    247,
+    229,
+    244
+   ],
+   [
+    252,
+    248,
+    252
+   ],
+   [
+    253,
+    255,
+    247
+   ]
+  ],
+  "brown": [
+   [
+    105,
+    71,
+    84
+   ],
+   [
+    105,
+    71,
+    84
+   ],
+   [
+    122,
+    87,
+    45
+   ],
+   [
+    154,
+    102,
+    86
+   ]
+  ],
+  "hair": [
+   [
+    19,
+    9,
+    16
+   ],
+   [
+    36,
+    23,
+    33
+   ],
+   [
+    52,
+    32,
+    55
+   ],
+   [
+    80,
+    52,
+    76
+   ]
+  ]
+ },
+ "parts": {
+  "96x128": [
+   {
+    "part": "cape_lower",
+    "slot": "Cape",
+    "z": 0,
+    "file": "morwen_down_77C_cape_lower_96x128.png",
+    "bbox": [
+     16,
+     60,
+     80,
+     113
+    ]
+   },
+   {
+    "part": "socks",
+    "slot": "Legs",
+    "z": 1,
+    "file": "morwen_down_77C_socks_96x128.png",
+    "bbox": [
+     41,
+     96,
+     54,
+     111
+    ]
+   },
+   {
+    "part": "boots",
+    "slot": "Feet",
+    "z": 2,
+    "file": "morwen_down_77C_boots_96x128.png",
+    "bbox": [
+     40,
+     111,
+     55,
+     124
+    ]
+   },
+   {
+    "part": "skirt",
+    "slot": "Bottom",
+    "z": 3,
+    "file": "morwen_down_77C_skirt_96x128.png",
+    "bbox": [
+     33,
+     78,
+     63,
+     98
+    ]
+   },
+   {
+    "part": "jacket",
+    "slot": "Inner",
+    "z": 4,
+    "file": "morwen_down_77C_jacket_96x128.png",
+    "bbox": [
+     36,
+     56,
+     60,
+     79
+    ]
+   },
+   {
+    "part": "sleeves",
+    "slot": "Inner",
+    "z": 5,
+    "file": "morwen_down_77C_sleeves_96x128.png",
+    "bbox": [
+     29,
+     58,
+     67,
+     82
+    ]
+   },
+   {
+    "part": "hands",
+    "slot": "Body",
+    "z": 6,
+    "file": "morwen_down_77C_hands_96x128.png",
+    "bbox": [
+     29,
+     83,
+     67,
+     87
+    ]
+   },
+   {
+    "part": "potions",
+    "slot": "Accessory",
+    "z": 7,
+    "file": "morwen_down_77C_potions_96x128.png",
+    "bbox": [
+     49,
+     79,
+     57,
+     86
+    ]
+   },
+   {
+    "part": "bag",
+    "slot": "Bag",
+    "z": 8,
+    "file": "morwen_down_77C_bag_96x128.png",
+    "bbox": [
+     28,
+     56,
+     61,
+     83
+    ]
+   },
+   {
+    "part": "capelet",
+    "slot": "Outer",
+    "z": 9,
+    "file": "morwen_down_77C_capelet_96x128.png",
+    "bbox": [
+     27,
+     54,
+     69,
+     70
+    ]
+   },
+   {
+    "part": "collar",
+    "slot": "Inner",
+    "z": 10,
+    "file": "morwen_down_77C_collar_96x128.png",
+    "bbox": [
+     42,
+     52,
+     54,
+     60
+    ]
+   },
+   {
+    "part": "hair_back",
+    "slot": "Body",
+    "z": 11,
+    "file": "morwen_down_77C_hair_back_96x128.png",
+    "bbox": [
+     31,
+     32,
+     65,
+     56
+    ]
+   },
+   {
+    "part": "face",
+    "slot": "Body",
+    "z": 12,
+    "file": "morwen_down_77C_face_96x128.png",
+    "bbox": [
+     38,
+     33,
+     58,
+     52
+    ]
+   },
+   {
+    "part": "hair_front",
+    "slot": "Body",
+    "z": 13,
+    "file": "morwen_down_77C_hair_front_96x128.png",
+    "bbox": [
+     35,
+     32,
+     61,
+     54
+    ]
+   },
+   {
+    "part": "glasses",
+    "slot": "Accessory",
+    "z": 14,
+    "file": "morwen_down_77C_glasses_96x128.png",
+    "bbox": [
+     35,
+     38,
+     61,
+     51
+    ]
+   },
+   {
+    "part": "hat_brim",
+    "slot": "Head",
+    "z": 15,
+    "file": "morwen_down_77C_hat_brim_96x128.png",
+    "bbox": [
+     14,
+     22,
+     82,
+     40
+    ]
+   },
+   {
+    "part": "hat_crown",
+    "slot": "Head",
+    "z": 16,
+    "file": "morwen_down_77C_hat_crown_96x128.png",
+    "bbox": [
+     21,
+     4,
+     64,
+     30
+    ]
+   },
+   {
+    "part": "hat_ornament",
+    "slot": "HairAccessory",
+    "z": 17,
+    "file": "morwen_down_77C_hat_ornament_96x128.png",
+    "bbox": [
+     19,
+     20,
+     41,
+     50
+    ]
+   }
+  ],
+  "48x64": [
+   {
+    "part": "cape_lower",
+    "slot": "Cape",
+    "z": 0,
+    "file": "morwen_down_77C_cape_lower_48x64.png",
+    "bbox": [
+     8,
+     30,
+     40,
+     56
+    ]
+   },
+   {
+    "part": "socks",
+    "slot": "Legs",
+    "z": 1,
+    "file": "morwen_down_77C_socks_48x64.png",
+    "bbox": [
+     20,
+     48,
+     27,
+     56
+    ]
+   },
+   {
+    "part": "boots",
+    "slot": "Feet",
+    "z": 2,
+    "file": "morwen_down_77C_boots_48x64.png",
+    "bbox": [
+     20,
+     56,
+     28,
+     62
+    ]
+   },
+   {
+    "part": "skirt",
+    "slot": "Bottom",
+    "z": 3,
+    "file": "morwen_down_77C_skirt_48x64.png",
+    "bbox": [
+     16,
+     39,
+     32,
+     49
+    ]
+   },
+   {
+    "part": "jacket",
+    "slot": "Inner",
+    "z": 4,
+    "file": "morwen_down_77C_jacket_48x64.png",
+    "bbox": [
+     18,
+     28,
+     30,
+     40
+    ]
+   },
+   {
+    "part": "sleeves",
+    "slot": "Inner",
+    "z": 5,
+    "file": "morwen_down_77C_sleeves_48x64.png",
+    "bbox": [
+     14,
+     29,
+     34,
+     41
+    ]
+   },
+   {
+    "part": "hands",
+    "slot": "Body",
+    "z": 6,
+    "file": "morwen_down_77C_hands_48x64.png",
+    "bbox": [
+     14,
+     42,
+     34,
+     44
+    ]
+   },
+   {
+    "part": "potions",
+    "slot": "Accessory",
+    "z": 7,
+    "file": "morwen_down_77C_potions_48x64.png",
+    "bbox": [
+     26,
+     40,
+     28,
+     42
+    ]
+   },
+   {
+    "part": "bag",
+    "slot": "Bag",
+    "z": 8,
+    "file": "morwen_down_77C_bag_48x64.png",
+    "bbox": [
+     14,
+     28,
+     30,
+     42
+    ]
+   },
+   {
+    "part": "capelet",
+    "slot": "Outer",
+    "z": 9,
+    "file": "morwen_down_77C_capelet_48x64.png",
+    "bbox": [
+     14,
+     27,
+     34,
+     35
+    ]
+   },
+   {
+    "part": "collar",
+    "slot": "Inner",
+    "z": 10,
+    "file": "morwen_down_77C_collar_48x64.png",
+    "bbox": [
+     21,
+     26,
+     27,
+     30
+    ]
+   },
+   {
+    "part": "hair_back",
+    "slot": "Body",
+    "z": 11,
+    "file": "morwen_down_77C_hair_back_48x64.png",
+    "bbox": [
+     16,
+     16,
+     32,
+     28
+    ]
+   },
+   {
+    "part": "face",
+    "slot": "Body",
+    "z": 12,
+    "file": "morwen_down_77C_face_48x64.png",
+    "bbox": [
+     19,
+     16,
+     29,
+     26
+    ]
+   },
+   {
+    "part": "hair_front",
+    "slot": "Body",
+    "z": 13,
+    "file": "morwen_down_77C_hair_front_48x64.png",
+    "bbox": [
+     18,
+     16,
+     30,
+     27
+    ]
+   },
+   {
+    "part": "glasses",
+    "slot": "Accessory",
+    "z": 14,
+    "file": "morwen_down_77C_glasses_48x64.png",
+    "bbox": [
+     21,
+     20,
+     26,
+     24
+    ]
+   },
+   {
+    "part": "hat_brim",
+    "slot": "Head",
+    "z": 15,
+    "file": "morwen_down_77C_hat_brim_48x64.png",
+    "bbox": [
+     7,
+     11,
+     41,
+     20
+    ]
+   },
+   {
+    "part": "hat_crown",
+    "slot": "Head",
+    "z": 16,
+    "file": "morwen_down_77C_hat_crown_48x64.png",
+    "bbox": [
+     10,
+     2,
+     32,
+     15
+    ]
+   },
+   {
+    "part": "hat_ornament",
+    "slot": "HairAccessory",
+    "z": 17,
+    "file": "morwen_down_77C_hat_ornament_48x64.png",
+    "bbox": [
+     10,
+     10,
+     20,
+     25
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,1016 @@
+{
+ "schema": "windbound.sprite-rig/1",
+ "character": "morwen",
+ "grid": {
+  "96": [
+   96,
+   128
+  ],
+  "48": [
+   48,
+   64
+  ]
+ },
+ "ground_row": {
+  "96": 124,
+  "48": 62
+ },
+ "anchor": {
+  "96": [
+   48,
+   124
+  ],
+  "48": [
+   24,
+   62
+  ]
+ },
+ "cycle_ms": 840,
+ "frames": 12,
+ "stance_ratio": 0.66,
+ "f00": "right heel strike",
+ "joints": [
+  "head",
+  "neck",
+  "chest",
+  "pelvis",
+  "shoulderL",
+  "shoulderR",
+  "elbowL",
+  "elbowR",
+  "wristL",
+  "wristR",
+  "hipL",
+  "hipR",
+  "kneeL",
+  "kneeR",
+  "ankleL",
+  "ankleR",
+  "soleL",
+  "soleR"
+ ],
+ "static_joints_96": {
+  "down": {
+   "head": [
+    48,
+    41
+   ],
+   "neck": [
+    48,
+    52
+   ],
+   "chest": [
+    48,
+    62
+   ],
+   "pelvis": [
+    48,
+    80
+   ],
+   "shoulderL": [
+    58,
+    58
+   ],
+   "shoulderR": [
+    38,
+    58
+   ],
+   "elbowL": [
+    63,
+    70
+   ],
+   "elbowR": [
+    33,
+    70
+   ],
+   "wristL": [
+    64,
+    82
+   ],
+   "wristR": [
+    32,
+    82
+   ],
+   "hipL": [
+    52,
+    86
+   ],
+   "hipR": [
+    44,
+    86
+   ],
+   "kneeL": [
+    52,
+    106
+   ],
+   "kneeR": [
+    44,
+    106
+   ],
+   "ankleL": [
+    52,
+    120
+   ],
+   "ankleR": [
+    44,
+    120
+   ],
+   "soleL": [
+    52,
+    124
+   ],
+   "soleR": [
+    44,
+    124
+   ]
+  },
+  "up": {
+   "head": [
+    48,
+    44
+   ],
+   "neck": [
+    48,
+    54
+   ],
+   "chest": [
+    48,
+    62
+   ],
+   "pelvis": [
+    48,
+    80
+   ],
+   "shoulderL": [
+    38,
+    58
+   ],
+   "shoulderR": [
+    58,
+    58
+   ],
+   "elbowL": [
+    30,
+    72
+   ],
+   "elbowR": [
+    66,
+    72
+   ],
+   "wristL": [
+    24,
+    84
+   ],
+   "wristR": [
+    74,
+    84
+   ],
+   "hipL": [
+    44,
+    86
+   ],
+   "hipR": [
+    52,
+    86
+   ],
+   "kneeL": [
+    44,
+    106
+   ],
+   "kneeR": [
+    52,
+    106
+   ],
+   "ankleL": [
+    44,
+    120
+   ],
+   "ankleR": [
+    52,
+    120
+   ],
+   "soleL": [
+    44,
+    124
+   ],
+   "soleR": [
+    52,
+    124
+   ]
+  },
+  "left": {
+   "source": "assets/candidates/morwen-left-walk/74E (VIDEO_ANALYSIS_74E.json, build tables) + 74F-C levels; mirrored right coordinates"
+  },
+  "right": {
+   "source": "same tables as left (right coordinates, no mirror) - assets/candidates/morwen-right-walk/75/build_meta_75.json"
+  }
+ },
+ "per_frame_offsets_96": {
+  "down": [
+   {
+    "frame": 0,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     1,
+     1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 124,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 1,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     0,
+     1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 124,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 121,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 2,
+    "head": [
+     0,
+     1
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     -1,
+     0
+    ],
+    "cape_hem": [
+     0,
+     0
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 121,
+     "lift": 0,
+     "contact": false
+    }
+   },
+   {
+    "frame": 3,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     -1,
+     -1
+    ],
+    "cape_hem": [
+     0,
+     -1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 122,
+     "lift": 4,
+     "contact": false
+    }
+   },
+   {
+    "frame": 4,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     1,
+     -1
+    ],
+    "pelvis": [
+     -1,
+     -1
+    ],
+    "cape_hem": [
+     -1,
+     -1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 123,
+     "lift": 5,
+     "contact": false
+    }
+   },
+   {
+    "frame": 5,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     1,
+     -1
+    ],
+    "pelvis": [
+     0,
+     0
+    ],
+    "cape_hem": [
+     -1,
+     0
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 123,
+     "lift": 3,
+     "contact": false
+    }
+   },
+   {
+    "frame": 6,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     -1,
+     1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 124,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 7,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     0,
+     1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 121,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 52,
+     "foot": 124,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 8,
+    "head": [
+     0,
+     1
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     1,
+     0
+    ],
+    "cape_hem": [
+     0,
+     0
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 121,
+     "lift": 0,
+     "contact": false
+    },
+    "legL": {
+     "x": 52,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 9,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     1,
+     -1
+    ],
+    "cape_hem": [
+     0,
+     -1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 122,
+     "lift": 4,
+     "contact": false
+    },
+    "legL": {
+     "x": 52,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 10,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     -1,
+     -1
+    ],
+    "pelvis": [
+     1,
+     -1
+    ],
+    "cape_hem": [
+     1,
+     -1
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 123,
+     "lift": 5,
+     "contact": false
+    },
+    "legL": {
+     "x": 52,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 11,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     -1,
+     -1
+    ],
+    "pelvis": [
+     0,
+     0
+    ],
+    "cape_hem": [
+     1,
+     0
+    ],
+    "legR": {
+     "x": 44,
+     "foot": 123,
+     "lift": 3,
+     "contact": false
+    },
+    "legL": {
+     "x": 52,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    }
+   }
+  ],
+  "up": [
+   {
+    "frame": 0,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     -1,
+     1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 121,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 1,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     0,
+     1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 121,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 124,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 2,
+    "head": [
+     0,
+     1
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     1,
+     0
+    ],
+    "cape_hem": [
+     0,
+     0
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 124,
+     "lift": 0,
+     "contact": false
+    }
+   },
+   {
+    "frame": 3,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     1,
+     -1
+    ],
+    "cape_hem": [
+     0,
+     -1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 123,
+     "lift": 4,
+     "contact": false
+    }
+   },
+   {
+    "frame": 4,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     -1,
+     -1
+    ],
+    "pelvis": [
+     1,
+     -1
+    ],
+    "cape_hem": [
+     1,
+     -1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 122,
+     "lift": 5,
+     "contact": false
+    }
+   },
+   {
+    "frame": 5,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     -1,
+     -1
+    ],
+    "pelvis": [
+     0,
+     0
+    ],
+    "cape_hem": [
+     1,
+     0
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 122,
+     "lift": 3,
+     "contact": false
+    }
+   },
+   {
+    "frame": 6,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     1,
+     1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 121,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 7,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     0,
+     1
+    ],
+    "cape_hem": [
+     0,
+     1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 124,
+     "lift": 0,
+     "contact": true
+    },
+    "legL": {
+     "x": 44,
+     "foot": 121,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 8,
+    "head": [
+     0,
+     1
+    ],
+    "chest": [
+     0,
+     1
+    ],
+    "pelvis": [
+     -1,
+     0
+    ],
+    "cape_hem": [
+     0,
+     0
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 124,
+     "lift": 0,
+     "contact": false
+    },
+    "legL": {
+     "x": 44,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 9,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     0,
+     0
+    ],
+    "pelvis": [
+     -1,
+     -1
+    ],
+    "cape_hem": [
+     0,
+     -1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 123,
+     "lift": 4,
+     "contact": false
+    },
+    "legL": {
+     "x": 44,
+     "foot": 122,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 10,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     1,
+     -1
+    ],
+    "pelvis": [
+     -1,
+     -1
+    ],
+    "cape_hem": [
+     -1,
+     -1
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 122,
+     "lift": 5,
+     "contact": false
+    },
+    "legL": {
+     "x": 44,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    }
+   },
+   {
+    "frame": 11,
+    "head": [
+     0,
+     0
+    ],
+    "chest": [
+     1,
+     -1
+    ],
+    "pelvis": [
+     0,
+     0
+    ],
+    "cape_hem": [
+     -1,
+     0
+    ],
+    "legR": {
+     "x": 52,
+     "foot": 122,
+     "lift": 3,
+     "contact": false
+    },
+    "legL": {
+     "x": 44,
+     "foot": 123,
+     "lift": 0,
+     "contact": true
+    }
+   }
+  ],
+  "side_levels_74FC": {
+   "pelvis_dy": [
+    1,
+    1,
+    0,
+    -1,
+    -1,
+    0,
+    1,
+    1,
+    0,
+    -1,
+    -1,
+    0
+   ],
+   "chest_dy": [
+    0,
+    1,
+    1,
+    0,
+    -1,
+    -1,
+    0,
+    1,
+    1,
+    0,
+    -1,
+    -1
+   ],
+   "head_dy": "head down only after 2 chest-down frames (74F-C HD)",
+   "pelvis_dx": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0
+   ]
+  }
+ },
+ "rules_48": "offsets at 48 = (v+1)//2 (74G stable sampling); lateral 1-px moves only on peak frames (F03/F09)",
+ "attachment_points_96": {
+  "Head": "brim centre: down [48,31], up [48,41]; follows head",
+  "HairAccessory": "hat flower: down [37,25], up [59,33]; follows head (+ribbon lag 2 frames)",
+  "Outer": "capelet collar: [48,54]; follows chest",
+  "Inner": "jacket centre [48,66]; follows chest",
+  "Bottom": "skirt waist [48,78]; follows pelvis",
+  "Cape": "cape yoke [48,60]; hem follows pelvis 2 frames late",
+  "Legs": "hip joints",
+  "Feet": "sole joints (contact rows from per_frame_offsets)",
+  "Bag": "down hip [33,78], up hip [65,84], side: near hip; strap from opposite shoulder",
+  "Accessory": "glasses: eye line down [48,42]; potions belt [55,80]"
+ }
+}

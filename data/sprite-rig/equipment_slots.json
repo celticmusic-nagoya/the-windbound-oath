@@ -1,0 +1,84 @@
+{
+ "schema": "windbound.equipment-appearance/1",
+ "slots": [
+  "Head",
+  "HairAccessory",
+  "Inner",
+  "Outer",
+  "Cape",
+  "Bottom",
+  "Legs",
+  "Feet",
+  "Bag",
+  "Accessory"
+ ],
+ "draw_order": {
+  "down": [
+   "Cape",
+   "Legs",
+   "Feet",
+   "Bottom",
+   "Inner",
+   "Body.hands",
+   "Accessory.belt",
+   "Bag",
+   "Outer",
+   "Inner.collar",
+   "Body.hair_back",
+   "Body.face",
+   "Body.hair_front",
+   "Accessory.face",
+   "Head",
+   "HairAccessory"
+  ],
+  "up": [
+   "Cape.lower",
+   "Legs",
+   "Feet",
+   "Cape.upper",
+   "Body.hands",
+   "Bag",
+   "Outer",
+   "Body.hair",
+   "Head",
+   "HairAccessory"
+  ],
+  "left": "side order of the 74 pipeline (D.Z): far cape / far leg / body / near leg / near cape / head; right = same with near/far swapped",
+  "right": "see left"
+ },
+ "item": {
+  "id": "string, unique (e.g. morwen.default.hat)",
+  "character": "morwen | * (shared)",
+  "slot": "one of slots",
+  "frames": "{facing}/{anim}/{frame:02d}_{96x128|48x64}.png or 'composite' (baked into the character sheet)",
+  "anchor": "attachment point name from the rig",
+  "fit": "default | custom_motion (large silhouettes get their own motion table)",
+  "palette": "ramp ids from the shared side palette",
+  "hides": "list of base parts it covers (e.g. Head hides Body.hair_top)"
+ },
+ "default_outfit_morwen": {
+  "Head": "morwen.default.hat",
+  "HairAccessory": "morwen.default.hat_flower_ribbon_crystal",
+  "Inner": "morwen.default.jacket_shirt_bow",
+  "Outer": "morwen.default.capelet",
+  "Cape": "morwen.default.cape",
+  "Bottom": "morwen.default.skirt_plaid",
+  "Legs": "morwen.default.knee_socks",
+  "Feet": "morwen.default.short_boots",
+  "Bag": "morwen.default.satchel",
+  "Accessory": [
+   "morwen.default.glasses",
+   "morwen.default.earrings",
+   "morwen.default.potions"
+  ]
+ },
+ "save_schema_proposal_NOT_ACTIVE": {
+  "appearance": {
+   "morwen": {
+    "Head": "morwen.default.hat"
+   }
+  },
+  "version": 1,
+  "note": "proposal only; the production save format is NOT changed by this task"
+ }
+}
