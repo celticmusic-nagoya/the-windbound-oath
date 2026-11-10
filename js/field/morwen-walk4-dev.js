@@ -1,4 +1,4 @@
-/* MORWEN-WALK-4DIR: DEV-only Morwen field walker, 12 frames per facing (left 74G / right 75 / up 76 / down 77).
+/* MORWEN-WALK-4DIR: DEV-only Morwen field walker, 12 frames per facing (left 74G / right 75 / up 76B / down 77B; 76 / 77 kept for comparison).
  * Opt-in only: window.WINDBOUND_DEV === true AND the URL flag ?morwenWalk4=1. Otherwise the file returns at once:
  * no globals, no DOM, no timers, no save / party / story access. Production display and other actors are unchanged.
  * Art is read in place from assets/candidates/ (candidates; never copied or modified here).
@@ -26,8 +26,8 @@
   const BANKS = Object.freeze({
     left: {dir: C + 'morwen-left-walk/74G/', name: (i, s) => `morwen_left_walk_74G_12f_${i}_${s}.png`, task: 'MORWEN-ASSET-74G'},
     right: {dir: C + 'morwen-right-walk/75/', name: (i, s) => `morwen_right_walk_75_12f_${i}_${s}.png`, task: 'MORWEN-WALK-RIGHT-75'},
-    up: {dir: C + 'morwen-up-walk/76/', name: (i, s) => `morwen_up_walk_76_12f_${i}_${s}.png`, task: 'MORWEN-WALK-UP-76'},
-    down: {dir: C + 'morwen-down-walk/77/', name: (i, s) => `morwen_down_walk_77_12f_${i}_${s}.png`, task: 'MORWEN-ASSET-77'},
+    up: {dir: C + 'morwen-up-walk/76B/', name: (i, s) => `morwen_up_walk_76B_12f_${i}_${s}.png`, task: 'MORWEN-WALK-4DIR-ART-FIX-02 76B'},
+    down: {dir: C + 'morwen-down-walk/77B/', name: (i, s) => `morwen_down_walk_77B_12f_${i}_${s}.png`, task: 'MORWEN-WALK-4DIR-ART-FIX-02 77B'},
   });
   const sz = SIZE === 96 ? '96x128' : '48x64';
   const frames = Object.freeze(Object.fromEntries(Object.entries(BANKS).filter(([, b]) => b).map(([face, b]) =>
@@ -95,7 +95,7 @@
         im.src = f.path; d.appendChild(im); all.push(im); return im;
       });
     }
-    const tag = document.createElement('span'); tag.textContent = 'DEV モルウェン12コマ（左74G／右75／上76／下77）';
+    const tag = document.createElement('span'); tag.textContent = 'DEV モルウェン12コマ（左74G／右75／上76B／下77B）';
     Object.assign(tag.style, {position: 'absolute', left: '-60px', top: '-84px', font: '9px/1 sans-serif', color: '#fff', background: 'rgba(0,0,0,.55)', padding: '1px 3px', whiteSpace: 'nowrap', pointerEvents: 'none'});
     d.appendChild(tag); world.appendChild(d); st.el = d;
     Promise.all(all.map(im => im.decode ? im.decode().catch(() => {}) : 0)).then(() => { st.ready = true; });

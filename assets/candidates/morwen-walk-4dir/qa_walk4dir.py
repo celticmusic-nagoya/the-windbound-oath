@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """MORWEN-WALK-4DIR technical QA + comparison material for the 12-frame walk set
-(left 74G = quality reference, right 75, up 76, down 77).
+(left 74G = quality reference, right 75, up 76B, down 77B; 76 / 77 kept for comparison).
   python3 qa_walk4dir.py --repo ../../.. --out .
 Writes QA_REPORT_4DIR.json, SHA256SUMS_4DIR.txt (all 72 new / referenced PNGs + protected sets) and the sheets / GIFs /
 comparison PNGs listed in README.md. Art QA by a person is NOT part of this script (reported NOT_RUN)."""
@@ -15,9 +15,11 @@ C = R / 'assets' / 'candidates'; NF = 12; CYCLE = 840
 DIRS = {
     'left 74G': lambda f, s: C / 'morwen-left-walk/74G' / f'morwen_left_walk_74G_12f_{f:02d}_{s}.png',
     'right 75': lambda f, s: C / 'morwen-right-walk/75' / f'morwen_right_walk_75_12f_{f:02d}_{s}.png',
-    'up 76': lambda f, s: C / 'morwen-up-walk/76' / f'morwen_up_walk_76_12f_{f:02d}_{s}.png',
-    'down 77': lambda f, s: C / 'morwen-down-walk/77' / f'morwen_down_walk_77_12f_{f:02d}_{s}.png',
+    'up 76B': lambda f, s: C / 'morwen-up-walk/76B' / f'morwen_up_walk_76B_12f_{f:02d}_{s}.png',
+    'down 77B': lambda f, s: C / 'morwen-down-walk/77B' / f'morwen_down_walk_77B_12f_{f:02d}_{s}.png',
 }
+PREV = {'up 76B': lambda f, s: C / 'morwen-up-walk/76' / f'morwen_up_walk_76_12f_{f:02d}_{s}.png',
+        'down 77B': lambda f, s: C / 'morwen-down-walk/77' / f'morwen_down_walk_77_12f_{f:02d}_{s}.png'}
 FRONT = (C / 'morwen-down-walk/77/reference/morwen_front_candidate_73e99f19.png', '73e99f192867f853120573e425ee4a768015cdaf30a64d08f10217dfb3b95fb8')
 OFF = R / 'assets/official/characters/morwen/turnaround'
 OFFICIAL = {'right': ('file_00000000a6308211aaeeb9e2482c2e83.png', '7eeff76ac07f631c14cb536e0e08346cfe815247a88520fb5a68cf0e877e5548'),
@@ -31,11 +33,13 @@ def holes(x):
     t = (x[:, :, 3] == 0).astype(np.uint8); n, _ = cv2.connectedComponents(t, connectivity=4); return n - 2
 
 
-def islands(x):
+def islands(x, face=None):
+    """face: (x0, y0, x1, y1) of a constructed face (eyes / glasses are single pixels on purpose) - not counted."""
     h, w = x.shape[:2]; c = x[:, :, :3].astype(int); op = x[:, :, 3] > 0; n = 0
     for y in range(1, h - 1):
         for xx in range(1, w - 1):
             if not op[y, xx]: continue
+            if face and face[0] <= xx <= face[2] and face[1] <= y <= face[3]: continue
             nb = [tuple(c[y + dy, xx + dx]) for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)) if op[y + dy, xx + dx]]
             if len(nb) == 4 and tuple(c[y, xx]) not in nb and max(nb.count(v) for v in nb) >= 3: n += 1
     return n
@@ -51,6 +55,11 @@ def diff(a_, b_):
 
 fails = []; rep = {'task': 'MORWEN-WALK-4DIR', 'technical_qa': None, 'self_art_check': 'DONE (see README; not a PASS of art QA)',
                    'art_qa_third_party': 'NOT_RUN', 'android_device_qa': 'NOT_RUN', 'down_77_reference': 'front illustration registered as CANDIDATE reference (not in the official turnaround set)', 'directions': {}}
+def face_box(name, s):
+    m = {'down 77B': C / 'morwen-down-walk/77B/build_meta_77B.json'}.get(name)
+    return json.loads(m.read_text())['face_box'][s] if m and m.exists() else None
+
+
 for name, fn in DIRS.items():
     d = {}
     for s, (w, h) in (('96x128', (96, 128)), ('48x64', (48, 64))):
@@ -63,7 +72,7 @@ for name, fn in DIRS.items():
         seq = [diff(fr[f], fr[(f + 1) % NF]) for f in range(NF)]
         d[s] = dict(format_ok=ok_fmt, alpha_0_or_255=alpha_bin, bottom_rows=bottoms, top_rows=tops,
                     width_px=[int(v.max() - v.min() + 1) for v in xs], holes_max=max(holes(x) for x in fr),
-                    isolated_1px_mean=round(float(np.mean([islands(x) for x in fr])), 2),
+                    isolated_1px_mean=round(float(np.mean([islands(x, face_box(name, s)) for x in fr])), 2), face_box_excluded=face_box(name, s),
                     gold_px_cv=round(float(np.std(gp) / max(np.mean(gp), 1)), 4),
                     colours_mean=int(np.mean([len(np.unique(x[x[:, :, 3] > 0][:, :3], axis=0)) for x in fr])),
                     seam_F11_F00=seq[-1], max_other_step=max(seq[:-1]), min_other_step=min(seq[:-1]),
@@ -81,7 +90,7 @@ rep['consistency_96'] = {'ground_row_max': g96, 'top_row_min': t96}
 if len(set(g96.values())) != 1: fails.append('ground row differs between directions')
 if max(t96.values()) - min(t96.values()) > 2: fails.append('height differs between directions by > 2 px')
 ref = rep['directions']['left 74G']
-for n in ('right 75', 'up 76', 'down 77'):
+for n in ('right 75', 'up 76B', 'down 77B'):
     for s in ('96x128', '48x64'):
         if rep['directions'][n][s]['isolated_1px_mean'] > max(ref[s]['isolated_1px_mean'] * 3, ref[s]['isolated_1px_mean'] + 4):
             fails.append(f'{n} {s} isolated pixels far above 74G')
@@ -97,7 +106,9 @@ rep['protected_png_count'] = len(prot)
 try:
     changed = []
     for base, paths in (('feature/morwen-asset-74g-final', ['assets/candidates/morwen-left-walk', 'assets/candidates/morwen-right-walk/72']),
-                        ('1de4f90c374ca0799d6c80a29a1d2ad1d4e4f410', ['assets/official'])):
+                        ('1de4f90c374ca0799d6c80a29a1d2ad1d4e4f410', ['assets/official']),
+                        ('258cb3571004a8336e7b64c559fde0ef6c696d21', ['assets/candidates/morwen-right-walk/75', 'assets/candidates/morwen-up-walk/76',
+                                                                       'assets/candidates/morwen-down-walk/77'])):
         c_ = subprocess.run(['git', '-C', str(R), 'diff', '--name-only', base, '--'] + paths, capture_output=True, text=True, check=True).stdout.split()
         rep[f'protected_changed_vs_{base[:12]}'] = c_; changed += c_
     if changed: fails.append('protected files changed: ' + ', '.join(changed[:5]))
@@ -124,7 +135,7 @@ art = R / 'img' / 'field'
 BG = {'meadow (lind_grass)': tex(art / 'lind/terrain/lind_grass.png'), 'moss forest (ground_moss)': tex(art / 'moss/art/ground_moss.png'),
       'cave (lind_stone x0.28, simulated)': tex(art / 'lind/terrain/lind_stone.png', 0.28),
       'night field (lind_grass x0.22 + blue, simulated)': tex(art / 'lind/terrain/lind_grass.png', 0.22, (4, 8, 26))}
-TAG = {'left 74G': 'left_74G', 'right 75': 'right_75', 'up 76': 'up_76', 'down 77': 'down_77'}
+TAG = {'left 74G': 'left_74G', 'right 75': 'right_75', 'up 76B': 'up_76B', 'down 77B': 'down_77B'}
 for n in DIRS:
     for s, (w, h) in (('96x128', (96, 128)), ('48x64', (48, 64))):
         sh = Image.new('RGBA', (w * NF, h), (0, 0, 0, 0))
@@ -139,7 +150,7 @@ for s, k, name in (('96x128', 2, 'COMPARE_4DIR_96x2.gif'), ('48x64', 1, 'COMPARE
     frames = []
     for f in range(NF):
         im = Image.new('RGBA', (4 * (W_ + 6) + 6, H_ + 20), DARK); d = ImageDraw.Draw(im)
-        for i, n in enumerate(['down 77', 'left 74G', 'right 75', 'up 76']):
+        for i, n in enumerate(['down 77B', 'left 74G', 'right 75', 'up 76B']):
             x0 = 6 + i * (W_ + 6)
             im.alpha_composite(up(on(fr(n, f, s), BG['moss forest (ground_moss)']), k) if n else blocked(W_, H_), (x0, 16))
             if k > 1 or i == 0: d.text((x0, 2), (n or 'down 77') + (f' F{f:02d}' if k > 1 else ''), fill=WHITE)
@@ -156,7 +167,7 @@ s_.save(O / 'BACKGROUNDS_4DIR.png')
 # official vs sprite (F00 x5)
 s_ = Image.new('RGBA', (4 * (430 + 490) + 20, 680), DARK); d = ImageDraw.Draw(s_)
 OFFX = dict(OFFICIAL, front=(str(FRONT[0]), FRONT[1]))
-for i, (n, ok_) in enumerate((('down 77', 'front'), ('right 75', 'right'), ('up 76', 'back'), ('left 74G', 'left'))):
+for i, (n, ok_) in enumerate((('down 77B', 'front'), ('right 75', 'right'), ('up 76B', 'back'), ('left 74G', 'left'))):
     o = on(Image.open(OFF / OFFX[ok_][0]).convert('RGBA'), GREY); o = o.resize((int(o.width * 640 / o.height), 640), Image.LANCZOS)
     x = 10 + i * (430 + 490); s_.alpha_composite(o, (x, 30)); d.text((x, 8), f'{"candidate" if ok_ == "front" else "official"} {ok_} ({OFFX[ok_][1][:8]})', fill=WHITE)
     s_.alpha_composite(up(on(fr(n, 0), GREY), 5), (x + 430, 30)); d.text((x + 430, 8), f'{n} F00 x5', fill=WHITE)
@@ -167,4 +178,12 @@ for r, n in enumerate(DIRS):
     for f in range(NF):
         s_.alpha_composite(fr(n, f, '48x64'), (6 + f * 52, 6 + r * 204)); s_.alpha_composite(up(fr(n, f, '48x64'), 2), (6 + f * 52 - 0, 6 + r * 204 + 68)) if f < 6 else None
 s_.save(O / 'COMPARE_48NATIVE_4DIR.png')
+# before / after (FIX-02): 76 -> 76B, 77 -> 77B, F00 and F03 at 96 x3 and 48 x3
+s_ = Image.new('RGBA', (4 * (96 * 3 + 8) + 8, 2 * (128 * 3 + 24) + 8), DARK); d = ImageDraw.Draw(s_)
+for r, n in enumerate(PREV):
+    for i, (lab_, fn_, f) in enumerate((('before', PREV[n], 0), ('after', DIRS[n], 0), ('before 48', PREV[n], 3), ('after 48', DIRS[n], 3))):
+        sz = '48x64' if '48' in lab_ else '96x128'; kk = 6 if sz == '48x64' else 3
+        im = Image.open(fn_(f, sz)).convert('RGBA'); x0 = 8 + i * (96 * 3 + 8); y0 = 8 + r * (128 * 3 + 24)
+        s_.alpha_composite(up(on(im, GREY), kk), (x0, y0 + 16)); d.text((x0, y0), f'{n} {lab_} F{f:02d}', fill=WHITE)
+s_.save(O / 'COMPARE_FIX02_BEFORE_AFTER.png')
 print(rep['technical_qa'], fails)
