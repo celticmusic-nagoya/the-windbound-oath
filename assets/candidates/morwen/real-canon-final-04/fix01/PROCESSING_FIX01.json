@@ -1,0 +1,91 @@
+{
+ "task": "MORWEN-REAL-CANON-FINAL-04-FIX-01",
+ "status": "CANDIDATE_NOT_PRODUCTION",
+ "back": {
+  "input": "aligned/morwen_back_aligned.png",
+  "steps": [
+   "class_scale.py gold_dark dL0 kC0.86",
+   "boot_extend.py 510 690 1295 1362 1440 25"
+  ],
+  "boot": {
+   "boot_box_x": [
+    510,
+    690
+   ],
+   "top_old": 1295,
+   "cuff_end": 1362,
+   "keep_from": 1440,
+   "raise_px": 25,
+   "boot_edit_changed_px": 22327,
+   "boot_edit_bbox": [
+    519,
+    1270,
+    680,
+    1439
+   ]
+  },
+  "boot_top": {
+   "before": 1295,
+   "after": 1270
+  }
+ },
+ "left": {
+  "input": "aligned/morwen_left_aligned.png",
+  "steps": [
+   "class_scale.py gold_dark dL-2.5 kC0.87",
+   "skin_fix.py +2.0 L, kC 0.9",
+   "skin_fix.py +3.0 L, kC 0.8",
+   "boot_extend.py 505 688 1289 1352 1440 19"
+  ],
+  "boot": {
+   "boot_box_x": [
+    505,
+    688
+   ],
+   "top_old": 1289,
+   "cuff_end": 1352,
+   "keep_from": 1440,
+   "raise_px": 19,
+   "boot_edit_changed_px": 15087,
+   "boot_edit_bbox": [
+    573,
+    1270,
+    687,
+    1439
+   ]
+  },
+  "boot_top": {
+   "before": 1289,
+   "after": 1271
+  }
+ },
+ "boot_method": "cuff + upper strap moved up unchanged; only the shaft between the upper strap and row 1440 stretched (back 78->103 px x1.32; left 88->107 px x1.22; right 92->102 px x1.11); rows >= 1440 untouched; no whole-image scaling",
+ "originals": "not modified (RGB of canonical/official files unchanged)",
+ "right": {
+  "input": "aligned/morwen_right_aligned.png (already includes the 6 px heel fix)",
+  "steps": [
+   "boot_extend.py 512 640 1278 1348 1440 10"
+  ],
+  "boot": {
+   "boot_box_x": [
+    512,
+    640
+   ],
+   "top_old": 1278,
+   "cuff_end": 1348,
+   "keep_from": 1440,
+   "raise_px": 10,
+   "boot_edit_changed_px": 15870,
+   "boot_edit_bbox": [
+    516,
+    1268,
+    634,
+    1439
+   ]
+  },
+  "boot_top": {
+   "before": 1280,
+   "after": 1270
+  }
+ }
+}
