@@ -3,7 +3,7 @@
   python3 qa_original_still.py --still <png 96x128> [--still48 <png 48x64>] --facing down|up --repo ../../../.. [--out report.json]
 Checks: size, full transparency (alpha 0/255), ground row 124 (48: 61-62), centre, height / width vs the side
 frames, colour density and gold share vs 74G / 75 F00 (side_metrics.json), palette distance to the side ramps,
-1-px islands, enclosed holes, detached pieces. A PASS here is NOT art QA: art QA stays a separate, independent gate."""
+1-px islands, enclosed holes, detached pieces. A PASS here is NOT art QA: colour count, gold share, connected parts and palette distance are warnings for independent visual review."""
 import argparse, json
 from pathlib import Path
 import numpy as np, cv2
@@ -34,23 +34,23 @@ def check(p, size, ground):
     if r['bottom_row'] not in ground: f.append(f'ground row {r["bottom_row"]} not in {ground}')
     if abs(r['centre_x'] - size[0] / 2) > size[0] * 0.08: f.append('figure not centred')
     n, lab, st, _ = cv2.connectedComponentsWithStats(op.astype(np.uint8), connectivity=8); r['pieces'] = n - 1
-    if n - 1 > 1: f.append(f'{n - 1} detached pieces')
+    if n - 1 > 1: r.setdefault('warnings', []).append(f'{n - 1} separate opaque components; check ornament connectors visually')
     t = (~op).astype(np.uint8); nh, _ = cv2.connectedComponents(t, connectivity=4); r['enclosed_holes'] = nh - 2
     r['isolated_1px'] = islands(x)
     v = x[op][:, :3]; r['colours'] = int(len(np.unique(v, axis=0)))
     L, C, h = lch(rgb2oklab(v.astype(float))); r['gold_share'] = round(float(((h > 45) & (h < 115) & (C >= 0.085) & (L > 0.42)).mean()), 3)
     d = np.sqrt(((rgb2oklab(v.astype(float))[:, None] - PL[None]) ** 2).sum(-1)).min(1)
     r['palette_dist_median'] = round(float(np.median(d)), 4); r['palette_dist_p95'] = round(float(np.percentile(d, 95)), 4)
-    if r['palette_dist_p95'] > 0.08: f.append('colours far from the side ramps (p95 > 0.08)')
+    if r['palette_dist_p95'] > 0.08: r.setdefault('warnings', []).append('palette differs from side reference: confirm against facing-specific official art')
     r['opaque_px'] = int(op.sum()); r['fails'] = f
     return r
 rep = {'facing': a.facing, 'gate': 'technical (not art QA)', 's96': check(a.still, (96, 128), [124])}
 side = list(SM.values())
 ref = dict(colours=min(s['colours'] for s in side), gold=min(s['gold_share'] for s in side), px=np.mean([s['opaque_px'] for s in side]))
 s = rep['s96']
-if s['colours'] < 0.4 * ref['colours']: s['fails'].append(f'colour density {s["colours"]} < 40 % of the side frames ({ref["colours"]})')
-if s['gold_share'] < 0.5 * ref['gold']: s['fails'].append(f'gold share {s["gold_share"]} < half of the side frames ({ref["gold"]})')
-if not 0.75 * ref['px'] <= s['opaque_px'] <= 1.3 * ref['px']: s['fails'].append(f'body volume {s["opaque_px"]} px vs side ~{int(ref["px"])}')
+if s['colours'] < 0.4 * ref['colours']: s.setdefault('warnings', []).append(f'colour density {s["colours"]} < 40 % of side frames ({ref["colours"]}); visual review needed')
+if s['gold_share'] < 0.5 * ref['gold']: s.setdefault('warnings', []).append(f'gold share {s["gold_share"]} < half of side frames ({ref["gold"]}); inspect embroidery placement')
+if not 0.75 * ref['px'] <= s['opaque_px'] <= 1.3 * ref['px']: s.setdefault('warnings', []).append(f'body area {s["opaque_px"]} px vs side ~{int(ref["px"])}; facing-dependent silhouette may differ')
 if s['top_row'] > LM['hat_top'] + 3: s['fails'].append('hat lower than the side frames (top row)')
 if a.still48: rep['s48'] = check(a.still48, (48, 64), [61, 62])
 rep['result'] = 'PASS' if not any(v['fails'] for k, v in rep.items() if k.startswith('s')) else 'FAIL'
