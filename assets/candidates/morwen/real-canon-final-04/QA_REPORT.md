@@ -7,7 +7,7 @@
 
 | 区分 | 結果 |
 |---|---|
-| 機械QA（`scripts/qa_morwen_final04.py`、31項目） | 23 PASS／8 FAIL（下表） |
+| 機械QA（`scripts/qa_morwen_final04.py`、31項目） | 24 PASS／7 FAIL（下表） |
 | 視覚QA（独立AI QA、`INDEPENDENT_AI_QA.md`） | FAIL（ディレクターが下記を背面デザインとして認めれば PASS_WITH_NOTES） |
 | 人間による第三者QA、Android実機、ゲーム内の縮尺 | NOT_RUN |
 
