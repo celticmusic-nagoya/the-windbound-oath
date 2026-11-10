@@ -1,0 +1,183 @@
+{
+ "task": "MORWEN-REAL-CANON-FINAL-ALIGN-01",
+ "result": "PASS",
+ "checks": 34,
+ "fail_count": 0,
+ "rows": [
+  {
+   "check": "source sha front",
+   "result": "PASS",
+   "detail": "f9a0272c99059480a59fdcb8a6278f318bc2da6f14f160e08f01eefdfe1d13ec"
+  },
+  {
+   "check": "source sha right",
+   "result": "PASS",
+   "detail": "b435dde0b048b1d4d7a36dd6b7b3437c6977581049ef400b3dcd290e21f50850"
+  },
+  {
+   "check": "source sha back",
+   "result": "PASS",
+   "detail": "6cc28f0056afa7caa87fef6e6150e7be5cb4f171fefb123822ef47ef25a0d2d2"
+  },
+  {
+   "check": "source sha left",
+   "result": "PASS",
+   "detail": "3492dc1c8949dde4bc3669b0f4d39166c84d5a9801a81db4b0464553911e5209"
+  },
+  {
+   "check": "size+mode front",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / not cut front",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "no faint specks (alpha 1-12) front",
+   "result": "PASS",
+   "detail": "0 px"
+  },
+  {
+   "check": "cut-out residue front",
+   "result": "PASS",
+   "detail": "detached px 2 (<=5); faint px >2px outside the outline 77 (<=100)"
+  },
+  {
+   "check": "size+mode right",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / not cut right",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "no faint specks (alpha 1-12) right",
+   "result": "PASS",
+   "detail": "0 px"
+  },
+  {
+   "check": "cut-out residue right",
+   "result": "PASS",
+   "detail": "detached px 0 (<=5); faint px >2px outside the outline 72 (<=100)"
+  },
+  {
+   "check": "size+mode back",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / not cut back",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "no faint specks (alpha 1-12) back",
+   "result": "PASS",
+   "detail": "0 px"
+  },
+  {
+   "check": "cut-out residue back",
+   "result": "PASS",
+   "detail": "detached px 0 (<=5); faint px >2px outside the outline 8 (<=100)"
+  },
+  {
+   "check": "size+mode left",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / not cut left",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "no faint specks (alpha 1-12) left",
+   "result": "PASS",
+   "detail": "0 px"
+  },
+  {
+   "check": "cut-out residue left",
+   "result": "PASS",
+   "detail": "detached px 2 (<=5); faint px >2px outside the outline 54 (<=100)"
+  },
+  {
+   "check": "ground contact front",
+   "result": "PASS",
+   "detail": "bottom 1540; contact segments [(528, 598), (604, 674)] lowest rows [1540, 1540]; support centre x 601.0 (anchor 600,1540, tol 4)"
+  },
+  {
+   "check": "ground contact right",
+   "result": "PASS",
+   "detail": "bottom 1540; contact segments [(515, 567), (597, 681)] lowest rows [1540, 1540]; support centre x 598.0 (anchor 600,1540, tol 4)"
+  },
+  {
+   "check": "ground contact back",
+   "result": "PASS",
+   "detail": "bottom 1540; contact segments [(549, 590), (607, 649)] lowest rows [1540, 1540]; support centre x 599.0 (anchor 600,1540, tol 4)"
+  },
+  {
+   "check": "ground contact left",
+   "result": "PASS",
+   "detail": "bottom 1540; contact segments [(518, 603), (643, 682)] lowest rows [1540, 1540]; support centre x 600.0 (anchor 600,1540, tol 4)"
+  },
+  {
+   "check": "colour vs front/right back",
+   "result": "PASS",
+   "detail": "gold dL+1.4 dC-2%; gold_dark dL+0.1 dC+9%; leather dL-1.0 dC-0%; magenta dL+0.3 dC-1%; purple dL+0.2 dC-1%"
+  },
+  {
+   "check": "colour vs front/right left",
+   "result": "PASS",
+   "detail": "gold dL-0.0 dC-2%; gold_dark dL-0.7 dC-4%; leather dL+1.3 dC+1%; magenta dL+2.7 dC+5%; purple dL+0.5 dC+1%"
+  },
+  {
+   "check": "cape purple vs front or right back",
+   "result": "PASS",
+   "detail": "L 30.2 C 43.7 (front L 29.9 C 44.0; right L 28.1 C 39.1)"
+  },
+  {
+   "check": "cape purple vs front or right left",
+   "result": "PASS",
+   "detail": "L 27.2 C 37.6 (front L 29.9 C 44.0; right L 28.1 C 39.1)"
+  },
+  {
+   "check": "skin (face/hands) vs front/right back",
+   "result": "PASS",
+   "detail": "L 86.3 vs 89.2, C 14.3 vs 13.7, 1302 px"
+  },
+  {
+   "check": "skin (face/hands) vs front/right left",
+   "result": "PASS",
+   "detail": "L 86.4 vs 89.2, C 12.7 vs 13.7, 8346 px"
+  },
+  {
+   "check": "registered canonical originals unchanged",
+   "result": "PASS",
+   "detail": "13 files"
+  },
+  {
+   "check": "v3 candidates unchanged",
+   "result": "PASS",
+   "detail": "4 files"
+  },
+  {
+   "check": "v2 candidates unchanged",
+   "result": "PASS",
+   "detail": "4 files"
+  },
+  {
+   "check": "MANIFEST.json sha256",
+   "result": "PASS",
+   "detail": "6 files"
+  }
+ ],
+ "not_run": [
+  "human third-party QA",
+  "Android device",
+  "in-game scale"
+ ]
+}

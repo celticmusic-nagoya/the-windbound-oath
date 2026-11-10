@@ -1,0 +1,90 @@
+{
+ "front": {
+  "source": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+  "scale": 1.0,
+  "source_anchor": [
+   512.5,
+   1510
+  ],
+  "offset": [
+   88,
+   30
+  ],
+  "anchor_error_px": [
+   0.5,
+   0.0
+  ],
+  "steps": [
+   "placement only (integer translation)",
+   "alpha >=250 -> 255, alpha <=12 -> 0"
+  ]
+ },
+ "right": {
+  "source": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+  "scale": 1.0,
+  "source_anchor": [
+   605.5,
+   1524
+  ],
+  "offset": [
+   -6,
+   16
+  ],
+  "anchor_error_px": [
+   -0.5,
+   0.0
+  ],
+  "steps": [
+   "heelfix.py: local vertical shear of the heel block only (x513-599, y1441-1530), heel bottom 1518->1524",
+   "placement (integer translation)",
+   "alpha >=250 -> 255, alpha <=12 -> 0"
+  ]
+ },
+ "back": {
+  "source": "assets/candidates/morwen/real-canon-final-align-01/source/morwen_back_provided_20261111_blackbg.png",
+  "scale": 1.0,
+  "source_anchor": [
+   500.0,
+   1519
+  ],
+  "offset": [
+   100,
+   21
+  ],
+  "anchor_error_px": [
+   0.0,
+   0.0
+  ],
+  "steps": [
+   "matte.py rev2 (back): black background -> alpha; leg gap and hair-side gap made transparent",
+   "colormatch.py: per-material Lab match to front+right",
+   "leather_fix.py: bag/strap leather hue +18 deg (mauve -> brown)",
+   "placement (integer translation)",
+   "alpha >=250 -> 255, alpha <=12 -> 0"
+  ]
+ },
+ "left": {
+  "source": "assets/candidates/morwen/real-canon-final-align-01/source/morwen_left_provided_20261111_blackbg.png",
+  "scale": 1.07,
+  "source_anchor": [
+   426.5,
+   1435.5
+  ],
+  "offset": [
+   144,
+   4
+  ],
+  "anchor_error_px": [
+   0.36,
+   -0.01
+  ],
+  "steps": [
+   "matte.py rev2 (left): black background -> alpha; cape/boot gap and hat-tip ring hole made transparent",
+   "colormatch.py: per-material Lab match to front+right",
+   "cape_fix.py: purple cloth in feathered box x560-1000,y280-1420 chroma x1.12, L +1.5",
+   "scale 1.07 (Lanczos, premultiplied)",
+   "placement",
+   "alpha >=250 -> 255, alpha <=12 -> 0"
+  ]
+ }
+}
