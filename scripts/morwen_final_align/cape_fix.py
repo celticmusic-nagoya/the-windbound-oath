@@ -1,5 +1,5 @@
-"""Region-limited purple-cloth correction (feathered box), used for the left view's cape after the
-global colour match left it ~10% less saturated than the right view's cape.
+"""Region-limited purple correction (feathered box): chroma factor and lightness delta applied to the
+purple class inside the box (used for the left cape in final-align-01 and the back hair in final-04).
 Usage: python3 cape_fix.py IN.png OUT.png x0 y0 x1 y1 chroma_factor L_delta"""
 import sys, numpy as np
 from PIL import Image

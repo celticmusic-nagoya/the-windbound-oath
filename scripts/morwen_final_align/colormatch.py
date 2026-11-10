@@ -7,6 +7,8 @@ CLS = [("gold", (30, 75), (55, 101)), ("gold_dark", (30, 75), (0, 55)),
        ("purple", (275, 325), (0, 101)), ("magenta", (325, 360), (0, 101)),
        ("green", (75, 170), (0, 101))]
 FEATHER_H, FEATHER_L = 8.0, 6.0
+import os
+KC_MIN = float(os.environ.get("KC_MIN", "0.75"))   # final-align-01 used 0.75; final-04 uses 0.6
 
 def prep(path):
     a = np.asarray(Image.open(path).convert("RGBA")).astype(np.float64)
@@ -63,7 +65,7 @@ if __name__ == "__main__":
         sratio = np.clip(r["sL"] / max(st["sL"], 1e-3), 0.85, 1.15)
         Lnew = (L - st["mL"]) * sratio + r["mL"]
         dL += w * (np.clip(Lnew - L, -8, 8))
-        kC += w * np.clip(r["mC"] / max(st["mC"], 1e-3), 0.75, 1.15)
+        kC += w * np.clip(r["mC"] / max(st["mC"], 1e-3), KC_MIN, 1.15)
         dh = (r["mH"] - st["mH"] + np.pi) % (2 * np.pi) - np.pi
         dH += w * np.clip(dh, -0.12, 0.12)
         W += w

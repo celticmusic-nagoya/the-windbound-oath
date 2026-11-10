@@ -1,0 +1,115 @@
+{
+ "front": {
+  "source": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+  "contact_source": [
+   513.0,
+   1510
+  ],
+  "contact_segments": [
+   [
+    440,
+    510
+   ],
+   [
+    516,
+    586
+   ]
+  ],
+  "offset": [
+   87,
+   30
+  ],
+  "residual_x": 0.0,
+  "colour_and_local_steps": [
+   "none (reference)"
+  ],
+  "placement": "place_auto.py: integer translation to anchor (600,1540); alpha >=250->255, <=12->0, detached specks and faint haze removed"
+ },
+ "right": {
+  "source": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+  "contact_source": [
+   604.0,
+   1524
+  ],
+  "contact_segments": [
+   [
+    521,
+    573
+   ],
+   [
+    603,
+    687
+   ]
+  ],
+  "offset": [
+   -4,
+   16
+  ],
+  "residual_x": 0.0,
+  "colour_and_local_steps": [
+   "heelfix.py: heel block lowered 6 px (x513-599, y1441-1530 source coords); same correction as final-align-01"
+  ],
+  "placement": "place_auto.py: integer translation to anchor (600,1540); alpha >=250->255, <=12->0, detached specks and faint haze removed"
+ },
+ "back": {
+  "source": "assets/candidates/morwen/real-canon-final-04/morwen_back_final_canonical.png",
+  "contact_source": [
+   505.5,
+   1499
+  ],
+  "contact_segments": [
+   [
+    457,
+    497
+   ],
+   [
+    513,
+    554
+   ]
+  ],
+  "offset": [
+   94,
+   41
+  ],
+  "residual_x": -0.5,
+  "colour_and_local_steps": [
+   "colormatch.py (KC_MIN=0.6): per-material Lab match to front+right",
+   "cape_fix.py 410 300 650 395 0.75 -3.5 (hair box)",
+   "leather_fix.py 400 380 760 800 7 (bag/strap)",
+   "cape_fix.py 410 300 650 395 0.85 -2.5 (hair box, 2nd pass)",
+   "skin_fix.py +3.5 L (face/hands window)",
+   "colormatch.py (KC_MIN=0.6) second pass",
+   "region_fix.py leather 400 380 720 800 dL-9 kC0.84 (bag+strap: lighter/pinker than front/right)",
+   "region_fix.py purple 445 1265 565 1500 dL-1.3 kC0.82 (boots: over-saturated)"
+  ],
+  "placement": "place_auto.py: integer translation to anchor (600,1540); alpha >=250->255, <=12->0, detached specks and faint haze removed"
+ },
+ "left": {
+  "source": "assets/official/characters/morwen/hd-v2/originals/real/left.png",
+  "contact_source": [
+   430.0,
+   1513
+  ],
+  "contact_segments": [
+   [
+    348,
+    429
+   ],
+   [
+    477,
+    512
+   ]
+  ],
+  "offset": [
+   170,
+   27
+  ],
+  "residual_x": 0.0,
+  "colour_and_local_steps": [
+   "colormatch.py (KC_MIN=0.6): per-material Lab match to front+right",
+   "skin_fix.py +3.5 L (face/hands window)",
+   "colormatch.py (KC_MIN=0.6) second pass"
+  ],
+  "placement": "place_auto.py: integer translation to anchor (600,1540); alpha >=250->255, <=12->0, detached specks and faint haze removed"
+ }
+}
