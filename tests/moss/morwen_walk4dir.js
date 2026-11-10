@@ -22,10 +22,10 @@ for (const [dev, q, label] of [[false, '', 'DEV off'], [false, '?morwenWalk4=1',
 const on = run(true, '?morwenWalk4=1'); const M = on.win.MorwenWalk4Dev;
 ok(Boolean(M) && on.touched.raf === 1 && on.touched.storage === 0, 'DEV + flag: one rAF loop, no storage access (SAVE untouched)');
 ok(M.frameCount === 12 && M.cycleMs === 840 && M.stride === 180, '12 frames, 840 ms event cycle, field stride 180');
-ok(['left', 'right', 'up'].every(k => M.frames[k].length === 12) && !('down' in M.frames) && M.banks.down === null, 'left/right/up banks; down BLOCKED (null)');
-ok(Object.values(M.frames).flat().every(f => fs.existsSync(path.join(ROOT, f.path))), 'all 36 frame files exist (read in place)');
+ok(['left', 'right', 'up', 'down'].every(k => M.frames[k].length === 12), 'left/right/up/down banks, 12 frames each');
+ok(Object.values(M.frames).flat().every(f => fs.existsSync(path.join(ROOT, f.path))), 'all 48 frame files exist (read in place)');
 ok(Object.values(M.frames).flat().every(f => f.width === 48 && f.height === 64 && f.anchor[0] === 24 && f.anchor[1] === 62), '48x64, anchor (24,62)');
-ok(M.frames.left.every((f, i) => f.path.endsWith(`74G_12f_${String(i).padStart(2, '0')}_48x64.png`)) && M.frames.right[11].path.endsWith('75_12f_11_48x64.png') && M.frames.up[0].path.includes('morwen-up-walk/76/'), 'frame order F00..F11 per facing');
+ok(M.frames.left.every((f, i) => f.path.endsWith(`74G_12f_${String(i).padStart(2, '0')}_48x64.png`)) && M.frames.right[11].path.endsWith('75_12f_11_48x64.png') && M.frames.up[0].path.includes('morwen-up-walk/76/') && M.frames.down[5].path.endsWith('morwen-down-walk/77/morwen_down_walk_77_12f_05_48x64.png'), 'frame order F00..F11 per facing');
 const big = run(true, '?morwenWalk4=1&morwenSize=96').win.MorwenWalk4Dev;
 ok(Object.values(big.frames).flat().every(f => f.width === 96 && f.scale === 0.5 && f.anchor[1] === 124), '96x128 @0.5, anchor (48,124)');
 
@@ -48,7 +48,9 @@ for (const hz of [60, 120, 144]) {
   const before = r.frame; r = s.step({dx: 0, dy: -5});
   ok(r.face === 'up' && (r.frame - before + 12) % 12 <= 1, `turn right->up keeps the leg phase (F${before} -> F${r.frame})`);
   r = s.step({dx: -5, dy: 0}); ok(r.face === 'left', 'turn up->left');
-  r = s.step({dx: 0, dy: 5}); ok(r.face === 'left', 'down travel keeps the last side facing (down BLOCKED)');
+  r = s.step({dx: 0, dy: 5}); ok(r.face === 'down', 'turn left->down (77)');
+  const fd = r.frame; r = s.step({dx: 5, dy: 0}); ok(r.face === 'right' && (r.frame - fd + 12) % 12 <= 1, 'turn down->right keeps the leg phase');
+  r = s.step({dx: -5, dy: 0});
   r = s.step({dx: 4, dy: 4}); ok(r.face === 'left', 'diagonal dead zone does not flicker the facing');
 }
 // stop settles forward on a contact frame, resume continues from it

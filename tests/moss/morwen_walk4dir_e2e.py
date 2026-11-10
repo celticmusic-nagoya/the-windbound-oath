@@ -1,6 +1,6 @@
 # MORWEN-WALK-4DIR e2e (playwright). Branch on :8765, reference main worktree on :8766 (python3 -m http.server).
 # 1) flag OFF: globals / forest DOM / console errors / localStorage keys identical to main.
-# 2) flag ON: one walker element, 4-direction travel shows left / right / up banks (down keeps the side), no errors,
+# 2) flag ON: one walker element, 4-direction travel shows the left / right / up / down banks, no errors,
 #    localStorage unchanged (SAVE untouched), other actors (#forestPlayer, #forestFiona) still present.
 import sys, json
 from playwright.sync_api import sync_playwright
@@ -31,7 +31,7 @@ with sync_playwright() as p:
     st0 = pg.evaluate('JSON.stringify(localStorage)')
     check(pg.evaluate("document.querySelectorAll('#forestMorwenWalk4Dev').length") == 1, 'flag ON: one walker element')
     seen = {}
-    for key, want in (('ArrowRight', 'right'), ('ArrowUp', 'up'), ('ArrowLeft', 'left'), ('ArrowDown', 'side'), ('ArrowRight', 'right')):
+    for key, want in (('ArrowRight', 'right'), ('ArrowUp', 'up'), ('ArrowLeft', 'left'), ('ArrowDown', 'down'), ('ArrowRight', 'right')):
         pg.keyboard.down(key); fr = set(); faces = set()
         for i in range(24):
             pg.wait_for_timeout(50)
@@ -40,7 +40,7 @@ with sync_playwright() as p:
             last = d
         pg.keyboard.up(key); pg.wait_for_timeout(400)
         seen[key + ':' + want] = dict(faces=sorted(faces), frames=sorted(fr), src=last[3])
-        ok_face = (want in faces) if want != 'side' else (faces <= {'left', 'right', 'up'} and 'down' not in faces)
+        ok_face = want in faces
         check(ok_face and len(fr) >= 4, f'{key}: facing {sorted(faces)} frames {sorted(fr)}')
         pg.screenshot(path=f'/tmp/aw/walk4_{key}.png')
     pg.wait_for_timeout(600)

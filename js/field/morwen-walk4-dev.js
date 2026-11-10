@@ -1,4 +1,4 @@
-/* MORWEN-WALK-4DIR: DEV-only Morwen field walker, 12 frames per facing (left 74G / right 75 / up 76; down 77 BLOCKED).
+/* MORWEN-WALK-4DIR: DEV-only Morwen field walker, 12 frames per facing (left 74G / right 75 / up 76 / down 77).
  * Opt-in only: window.WINDBOUND_DEV === true AND the URL flag ?morwenWalk4=1. Otherwise the file returns at once:
  * no globals, no DOM, no timers, no save / party / story access. Production display and other actors are unchanged.
  * Art is read in place from assets/candidates/ (candidates; never copied or modified here).
@@ -11,7 +11,6 @@
  *   stop:  after 100 ms without movement the clock runs on at the event rate to the next contact frame (F00 / F06)
  *          and holds there; resume continues from the held phase. The shown frame only ever advances by 0 or +1 per tick
  *          at <= 300 px/s and >= 30 Hz (max 10 px/tick < 15 px/frame).
- *   down:  no approved front art (MORWEN-WALK-DOWN-77 BLOCKED) -> down travel keeps the last side facing (provisional).
  * Optional DEV URL params: morwenStride=<px> (default 180), morwenMode=event, morwenSize=48|96, morwenFoot=<row 48x64>. */
 (function () {
   'use strict';
@@ -28,7 +27,7 @@
     left: {dir: C + 'morwen-left-walk/74G/', name: (i, s) => `morwen_left_walk_74G_12f_${i}_${s}.png`, task: 'MORWEN-ASSET-74G'},
     right: {dir: C + 'morwen-right-walk/75/', name: (i, s) => `morwen_right_walk_75_12f_${i}_${s}.png`, task: 'MORWEN-WALK-RIGHT-75'},
     up: {dir: C + 'morwen-up-walk/76/', name: (i, s) => `morwen_up_walk_76_12f_${i}_${s}.png`, task: 'MORWEN-WALK-UP-76'},
-    down: null,
+    down: {dir: C + 'morwen-down-walk/77/', name: (i, s) => `morwen_down_walk_77_12f_${i}_${s}.png`, task: 'MORWEN-ASSET-77'},
   });
   const sz = SIZE === 96 ? '96x128' : '48x64';
   const frames = Object.freeze(Object.fromEntries(Object.entries(BANKS).filter(([, b]) => b).map(([face, b]) =>
@@ -44,11 +43,8 @@
     function faceFor(dx, dy) {
       const ax = Math.abs(dx), ay = Math.abs(dy);
       if (ax < 0.01 && ay < 0.01) return s.face;
-      if (ay > ax * 1.2) {
-        if (dy < 0) return 'up';
-        return s.side;                                   // down: BLOCKED -> keep the last side facing
-      }
-      if (ax > ay * 1.2 || s.face === 'up') { s.side = dx > 0 ? 'right' : 'left'; return ax > ay * 1.2 ? s.side : s.face; }
+      if (ay > ax * 1.2) return dy < 0 ? 'up' : 'down';
+      if (ax > ay * 1.2 || s.face === 'up' || s.face === 'down') { s.side = dx > 0 ? 'right' : 'left'; return ax > ay * 1.2 ? s.side : s.face; }
       return s.face;                                     // diagonal dead zone: keep facing (no flicker)
     }
     function step({dx = 0, dy = 0, dt = 1000 / 60}) {
@@ -99,7 +95,7 @@
         im.src = f.path; d.appendChild(im); all.push(im); return im;
       });
     }
-    const tag = document.createElement('span'); tag.textContent = 'DEV モルウェン12コマ（左74G／右75／上76／下=未制作）';
+    const tag = document.createElement('span'); tag.textContent = 'DEV モルウェン12コマ（左74G／右75／上76／下77）';
     Object.assign(tag.style, {position: 'absolute', left: '-60px', top: '-84px', font: '9px/1 sans-serif', color: '#fff', background: 'rgba(0,0,0,.55)', padding: '1px 3px', whiteSpace: 'nowrap', pointerEvents: 'none'});
     d.appendChild(tag); world.appendChild(d); st.el = d;
     Promise.all(all.map(im => im.decode ? im.decode().catch(() => {}) : 0)).then(() => { st.ready = true; });

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """MORWEN-WALK-4DIR technical QA + comparison material for the 12-frame walk set
-(left 74G = quality reference, right 75, up 76; down 77 BLOCKED).
+(left 74G = quality reference, right 75, up 76, down 77).
   python3 qa_walk4dir.py --repo ../../.. --out .
 Writes QA_REPORT_4DIR.json, SHA256SUMS_4DIR.txt (all 72 new / referenced PNGs + protected sets) and the sheets / GIFs /
 comparison PNGs listed in README.md. Art QA by a person is NOT part of this script (reported NOT_RUN)."""
@@ -16,7 +16,9 @@ DIRS = {
     'left 74G': lambda f, s: C / 'morwen-left-walk/74G' / f'morwen_left_walk_74G_12f_{f:02d}_{s}.png',
     'right 75': lambda f, s: C / 'morwen-right-walk/75' / f'morwen_right_walk_75_12f_{f:02d}_{s}.png',
     'up 76': lambda f, s: C / 'morwen-up-walk/76' / f'morwen_up_walk_76_12f_{f:02d}_{s}.png',
+    'down 77': lambda f, s: C / 'morwen-down-walk/77' / f'morwen_down_walk_77_12f_{f:02d}_{s}.png',
 }
+FRONT = (C / 'morwen-down-walk/77/reference/morwen_front_candidate_73e99f19.png', '73e99f192867f853120573e425ee4a768015cdaf30a64d08f10217dfb3b95fb8')
 OFF = R / 'assets/official/characters/morwen/turnaround'
 OFFICIAL = {'right': ('file_00000000a6308211aaeeb9e2482c2e83.png', '7eeff76ac07f631c14cb536e0e08346cfe815247a88520fb5a68cf0e877e5548'),
             'left': ('file_0000000035a0820989d20c639724cc25.png', 'd858c428c64007596302057453f414dd43c580bc1546b9578c3d1dfb0af17591'),
@@ -48,7 +50,7 @@ def diff(a_, b_):
 
 
 fails = []; rep = {'task': 'MORWEN-WALK-4DIR', 'technical_qa': None, 'self_art_check': 'DONE (see README; not a PASS of art QA)',
-                   'art_qa_third_party': 'NOT_RUN', 'android_device_qa': 'NOT_RUN', 'down_77': 'BLOCKED (no approved front design)', 'directions': {}}
+                   'art_qa_third_party': 'NOT_RUN', 'android_device_qa': 'NOT_RUN', 'down_77_reference': 'front illustration registered as CANDIDATE reference (not in the official turnaround set)', 'directions': {}}
 for name, fn in DIRS.items():
     d = {}
     for s, (w, h) in (('96x128', (96, 128)), ('48x64', (48, 64))):
@@ -79,13 +81,15 @@ rep['consistency_96'] = {'ground_row_max': g96, 'top_row_min': t96}
 if len(set(g96.values())) != 1: fails.append('ground row differs between directions')
 if max(t96.values()) - min(t96.values()) > 2: fails.append('height differs between directions by > 2 px')
 ref = rep['directions']['left 74G']
-for n in ('right 75', 'up 76'):
+for n in ('right 75', 'up 76', 'down 77'):
     for s in ('96x128', '48x64'):
         if rep['directions'][n][s]['isolated_1px_mean'] > max(ref[s]['isolated_1px_mean'] * 3, ref[s]['isolated_1px_mean'] + 4):
             fails.append(f'{n} {s} isolated pixels far above 74G')
 # official designs + protected sets
 rep['official_turnaround'] = {k: dict(file=v[0], expected=v[1], actual=sha(OFF / v[0]), match=sha(OFF / v[0]) == v[1]) for k, v in OFFICIAL.items()}
 if not all(v['match'] for v in rep['official_turnaround'].values()): fails.append('official turnaround SHA mismatch')
+rep['front_candidate_reference'] = dict(file=str(FRONT[0].relative_to(R)), expected=FRONT[1], actual=sha(FRONT[0]), match=sha(FRONT[0]) == FRONT[1])
+if not rep['front_candidate_reference']['match']: fails.append('front candidate SHA mismatch')
 prot = {}
 for sub in ['morwen-left-walk/74' + c for c in 'ABCDEFG'] + ['morwen-right-walk/72']:
     for p in sorted((C / sub).glob('*.png')): prot[str(p.relative_to(R))] = sha(p)
@@ -103,6 +107,7 @@ rep['fails'] = fails; rep['technical_qa'] = 'PASS' if not fails else 'FAIL'
 (O / 'QA_REPORT_4DIR.json').write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding='utf-8')
 lines = [f'{h}  {k}' for n in DIRS for k, h in rep['directions'][n]['sha256'].items()]
 lines += [f'{v["actual"]}  official/{k}/{v["file"]}' for k, v in rep['official_turnaround'].items()]
+lines += [f'{FRONT[1]}  {rep["front_candidate_reference"]["file"]}']
 lines += [f'{h}  {k}' for k, h in prot.items()]
 (O / 'SHA256SUMS_4DIR.txt').write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
@@ -119,7 +124,7 @@ art = R / 'img' / 'field'
 BG = {'meadow (lind_grass)': tex(art / 'lind/terrain/lind_grass.png'), 'moss forest (ground_moss)': tex(art / 'moss/art/ground_moss.png'),
       'cave (lind_stone x0.28, simulated)': tex(art / 'lind/terrain/lind_stone.png', 0.28),
       'night field (lind_grass x0.22 + blue, simulated)': tex(art / 'lind/terrain/lind_grass.png', 0.22, (4, 8, 26))}
-TAG = {'left 74G': 'left_74G', 'right 75': 'right_75', 'up 76': 'up_76'}
+TAG = {'left 74G': 'left_74G', 'right 75': 'right_75', 'up 76': 'up_76', 'down 77': 'down_77'}
 for n in DIRS:
     for s, (w, h) in (('96x128', (96, 128)), ('48x64', (48, 64))):
         sh = Image.new('RGBA', (w * NF, h), (0, 0, 0, 0))
@@ -134,14 +139,14 @@ for s, k, name in (('96x128', 2, 'COMPARE_4DIR_96x2.gif'), ('48x64', 1, 'COMPARE
     frames = []
     for f in range(NF):
         im = Image.new('RGBA', (4 * (W_ + 6) + 6, H_ + 20), DARK); d = ImageDraw.Draw(im)
-        for i, n in enumerate(['left 74G', 'right 75', 'up 76', None]):
+        for i, n in enumerate(['down 77', 'left 74G', 'right 75', 'up 76']):
             x0 = 6 + i * (W_ + 6)
             im.alpha_composite(up(on(fr(n, f, s), BG['moss forest (ground_moss)']), k) if n else blocked(W_, H_), (x0, 16))
             if k > 1 or i == 0: d.text((x0, 2), (n or 'down 77') + (f' F{f:02d}' if k > 1 else ''), fill=WHITE)
         frames.append(im.convert('P', palette=Image.ADAPTIVE))
     frames[0].save(O / name, save_all=True, append_images=frames[1:], duration=CYCLE // NF, loop=0, disposal=2)
 # backgrounds: 4 grounds x 3 directions, F03, 96 x2 + 48 x1
-s_ = Image.new('RGBA', (3 * (192 + 8 + 48 + 16) + 10, len(BG) * (256 + 30) + 10), DARK); d = ImageDraw.Draw(s_); y = 6
+s_ = Image.new('RGBA', (4 * (192 + 8 + 48 + 16) + 10, len(BG) * (256 + 30) + 10), DARK); d = ImageDraw.Draw(s_); y = 6
 for bn, bg in BG.items():
     d.text((10, y), bn, fill=WHITE); x = 10
     for n in DIRS:
@@ -149,14 +154,15 @@ for bn, bg in BG.items():
     y += 256 + 30
 s_.save(O / 'BACKGROUNDS_4DIR.png')
 # official vs sprite (F00 x5)
-s_ = Image.new('RGBA', (3 * (430 + 490) + 20, 680), DARK); d = ImageDraw.Draw(s_)
-for i, (n, ok_) in enumerate((('right 75', 'right'), ('up 76', 'back'), ('left 74G', 'left'))):
-    o = on(Image.open(OFF / OFFICIAL[ok_][0]).convert('RGBA'), GREY); o = o.resize((int(o.width * 640 / o.height), 640), Image.LANCZOS)
-    x = 10 + i * (430 + 490); s_.alpha_composite(o, (x, 30)); d.text((x, 8), f'official {ok_} ({OFFICIAL[ok_][1][:8]})', fill=WHITE)
+s_ = Image.new('RGBA', (4 * (430 + 490) + 20, 680), DARK); d = ImageDraw.Draw(s_)
+OFFX = dict(OFFICIAL, front=(str(FRONT[0]), FRONT[1]))
+for i, (n, ok_) in enumerate((('down 77', 'front'), ('right 75', 'right'), ('up 76', 'back'), ('left 74G', 'left'))):
+    o = on(Image.open(OFF / OFFX[ok_][0]).convert('RGBA'), GREY); o = o.resize((int(o.width * 640 / o.height), 640), Image.LANCZOS)
+    x = 10 + i * (430 + 490); s_.alpha_composite(o, (x, 30)); d.text((x, 8), f'{"candidate" if ok_ == "front" else "official"} {ok_} ({OFFX[ok_][1][:8]})', fill=WHITE)
     s_.alpha_composite(up(on(fr(n, 0), GREY), 5), (x + 430, 30)); d.text((x + 430, 8), f'{n} F00 x5', fill=WHITE)
 s_.save(O / 'COMPARE_OFFICIAL_4DIR.png')
 # 48 native row (all 12 frames, 3 directions, x1 and x2)
-s_ = Image.new('RGBA', (NF * 52 + 10, 3 * (64 * 3 + 12) + 10), GREY); d = ImageDraw.Draw(s_)
+s_ = Image.new('RGBA', (NF * 52 + 10, 4 * (64 * 3 + 12) + 10), GREY); d = ImageDraw.Draw(s_)
 for r, n in enumerate(DIRS):
     for f in range(NF):
         s_.alpha_composite(fr(n, f, '48x64'), (6 + f * 52, 6 + r * 204)); s_.alpha_composite(up(fr(n, f, '48x64'), 2), (6 + f * 52 - 0, 6 + r * 204 + 68)) if f < 6 else None
