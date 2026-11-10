@@ -1,0 +1,57 @@
+{
+  "schema": "windbound.field-hd-migration/1",
+  "status": "DEV_PILOT_NO_RUNTIME_SWITCH",
+  "proportion": {
+    "target_heads": 7.5,
+    "policy": "character-specific; not universal",
+    "legacy_heads": [
+      2.8,
+      3
+    ],
+    "legacy_status": "COMPATIBILITY_ONLY"
+  },
+  "pilot": {
+    "character": "morwen",
+    "canonical_left_sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+    "source": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+    "walk": {
+      "direction": "left",
+      "frames": 6,
+      "fps": 10,
+      "canvas": [
+        1200,
+        1600
+      ],
+      "ground_anchor": [
+        600,
+        1540
+      ],
+      "hair_to_sole_css_px": 69,
+      "hat_inclusive_css_px_approx": 76.5,
+      "alpha_allowed": [
+        0,
+        255
+      ],
+      "contact_frames": [
+        1,
+        4
+      ],
+      "status": "NOT_DRAWN"
+    },
+    "production_connected": false
+  },
+  "rollout": [
+    "morwen-dev-walk",
+    "aidan-fiona-party",
+    "companions-npcs-enemies",
+    "map-props-architecture",
+    "independent-qa-android-gated-release"
+  ],
+  "protected": [
+    "existing production sprites",
+    "original masters",
+    "battle",
+    "SAVE",
+    "website published pages"
+  ]
+}
