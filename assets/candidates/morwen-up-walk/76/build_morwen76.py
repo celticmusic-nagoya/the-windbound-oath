@@ -27,7 +27,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 import back_base76 as BB
-from walkclean import clean_islands_generic
+from walkclean import clean_islands_generic, fill_small_holes
 from oklab import rgb2oklab, oklab2rgb, lch
 
 H, W, NF = 128, 96, 12
@@ -37,8 +37,13 @@ C_DY = [0, 1, 1, 0, -1, -1, 0, 1, 1, 0, -1, -1]
 H_DY = [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0]
 P_DX = [0, 0, 1, 1, 1, 0, 0, 0, -1, -1, -1, 0]      # weight over the right leg (viewer's right) F02-F04, left F08-F10
 S_DX = [0, 0, 0, -1, -1, 0, 0, 0, 0, 1, 1, 0]       # shoulders opposite, 1 frame later
-TILT = [0, 0, 1, 1, 1, 0, 0, 0, -1, -1, -1, 0]      # +1: viewer-left hip (left leg swinging) drops
+TILT = [0, 0, 1, 1, 1, 0, 0, 0, -1, -1, -1, 0]      # +1: viewer-left cape side (left leg swinging) drops 1 px
 HEM_LAG, SHOULDER_ROW, WAIST_ROW, HEM_ROW = 2, 63, 74, 88
+CAPE_SIDE = (34, 62)                                 # columns outside these are the cape's free sides
+HAIR_ROWS = (36, 52)                                 # bob hair under the brim (96 rows)
+RIBBON_FROM = 38
+NECK_ROWS = (42, 56)
+PAL_K = 160                                          # shared palette size (64 looked flat next to the side walks)
 LEG_X = {'R': 52, 'L': 44}                           # character right leg = viewer's right from behind
 STK = dict(o=(12, 2, 12), d=(62, 32, 45), m=(85, 52, 65), l=(105, 71, 84), h=(129, 93, 107))
 BOOT = dict(o=(12, 2, 12), d=(33, 12, 37), m=(51, 29, 54), l=(72, 49, 76), sole=(17, 1, 20), g=(226, 163, 85), gd=(167, 107, 42))
@@ -49,9 +54,9 @@ def leg_state(p):
     p %= 1.0
     if p < STANCE:
         u = p / STANCE
-        return dict(foot=122 + round(2 * u), lift=0, sole=u > 0.8, stance=True)
+        return dict(foot=121 + round(3 * u), lift=0, sole=u > 0.8, stance=True)
     u = (p - STANCE) / (1 - STANCE)
-    return dict(foot=124 - round(2 * u), lift=round(3 * math.sin(math.pi * u)), sole=u < 0.5, stance=False)
+    return dict(foot=124 - round(3 * u), lift=round(5 * math.sin(math.pi * u)), sole=u < 0.5, stance=False)
 
 
 def draw_leg(img, cx, st, top=94):
@@ -101,11 +106,12 @@ def outline(img, pal_lab, pal):
     return out
 
 
-def shift_rows(layer, oy, ox, colshift=None):
-    """oy, ox: per-row integer offsets; colshift: optional per-column extra dy. Pixels only move, never get recoloured."""
+def shift_rows(layer, oy, ox, colshift=None, col_from_row=0):
+    """oy, ox: per-row integer offsets; colshift: optional per-column extra dy for rows >= col_from_row.
+    Pixels only move, never get recoloured."""
     h, w = layer.shape[:2]; out = np.zeros_like(layer)
     ys, xs = np.where(layer[:, :, 3] > 0)
-    ny = ys + oy[ys] + (colshift[xs] if colshift is not None else 0); nx = xs + ox[ys]
+    ny = ys + oy[ys] + (np.where(ys >= col_from_row, colshift[xs], 0) if colshift is not None else 0); nx = xs + ox[ys]
     ok = (ny >= 0) & (ny < h) & (nx >= 0) & (nx < w)
     out[ny[ok], nx[ok]] = layer[ys[ok], xs[ok]]
     return out
@@ -153,7 +159,10 @@ def frame(f, layers, hands, k=1):
     legs = np.zeros((H, W, 4), np.uint8)
     for name, st in sorted((('R', sR), ('L', sL)), key=lambda t: t[1]['foot'] - t[1]['lift']):
         draw_leg(legs, LEG_X[name], st)
-    if k == 2: legs = legs[1::2, 1::2].copy()
+    if k == 2:                                            # 48: nearest sampling would make the 1-px buckles blink
+        legs = legs[1::2, 1::2].copy()                    # frame to frame, so boot gold is drawn as boot leather
+        g = (legs[:, :, 0] > 150) & (legs[:, :, 2] < 120) | (np.all(legs[:, :, :3] == BOOT['gd'], axis=2))
+        legs[g & (legs[:, :, 3] > 0), :3] = BOOT['m']
     body = layers['body'].copy()
     if hands.any():   # hand on the side of the leg that has just landed swings back = 1 px lower (closer)
         xs = np.mgrid[0:h, 0:w][1]
@@ -165,34 +174,115 @@ def frame(f, layers, hands, k=1):
         body[hands] = 0; m = moved[:, :, 3] > 0; body[m] = moved[m]
     yrow = (np.arange(h) * k + (k - 1))
     oy = np.where(yrow < WAIST_ROW, cd, pdy); ox = np.where(yrow < SHOULDER_ROW, sdx, np.where(yrow < WAIST_ROW, 0, np.where(yrow < HEM_ROW, pdx, hmx)))
-    col = np.zeros(w, int)
-    if tilt > 0: col[:46 // k] = 1
-    if tilt < 0: col[51 // k:] = 1
-    b = shift_rows(body, oy.astype(int), ox.astype(int), col)
+    col = np.zeros(w, int)                               # tilt: only the cape side on the swing leg drops (no seam
+    if tilt > 0: col[:CAPE_SIDE[0] // k] = 1             # through the middle of the body)
+    if tilt < 0: col[CAPE_SIDE[1] // k:] = 1
+    b = shift_rows(body, oy.astype(int), ox.astype(int), col, WAIST_ROW // k)
     b = fill_gaps(b, [r // k for r in range(SHOULDER_ROW - 2, HEM_ROW + 30)])
     hdv = shift_rows(layers['head'], np.full(h, hd_), np.zeros(h, int))
+    rib = layers.get('ribbon')
+    if rib is not None and rib.any():                    # hanging ribbon follows the pelvis 2 frames late (1 px, 96 only)
+        rdx = P_DX[(f - 2) % NF] if k == 1 else 0
+        if rdx:
+            mv = shift_rows(np.where(rib[..., None], hdv, 0).astype(np.uint8), np.full(h, hd_ * 0), np.full(h, rdx))
+            ys_, xs_ = np.where(np.roll(rib, hd_, 0)); hdv[ys_, xs_] = 0
+            m = mv[:, :, 3] > 0; hdv[m] = mv[m]
     out = np.zeros((h, w, 4), np.uint8)
     for L in (legs, b, hdv):
         m = L[:, :, 3] > 0; out[m] = L[m]
-    return out, dict(R=sR, L=sL)
+    out = fill_gaps(out, [r // k for r in range(NECK_ROWS[0], NECK_ROWS[1])])   # head / capelet 1-px split (F01, F07)
+    return attach_floaters(out), dict(R=sR, L=sL)
+
+
+def attach_floaters(img, max_px=30, max_gap=10):
+    """small detached pieces (e.g. the hat-tip crystal at 48 px) are joined to the body with a 1-px dark chain line
+    when they are within max_gap px; nothing is deleted."""
+    import cv2
+    a = (img[:, :, 3] > 0).astype(np.uint8)
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(a, connectivity=8)
+    if n <= 2: return img
+    main = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+    my, mx = np.where(lab == main)
+    out = img.copy()
+    for i in range(1, n):
+        if i == main or stats[i, cv2.CC_STAT_AREA] > max_px: continue
+        ys, xs = np.where(lab == i)
+        d = (ys[:, None] - my[None]) ** 2 + (xs[:, None] - mx[None]) ** 2
+        j = np.unravel_index(d.argmin(), d.shape)
+        if d[j] > max_gap ** 2 * 2: continue
+        y0, x0, y1, x1 = ys[j[0]], xs[j[0]], my[j[1]], mx[j[1]]
+        steps = max(abs(y1 - y0), abs(x1 - x0))
+        for t in range(1, steps):
+            yy = round(y0 + (y1 - y0) * t / steps); xx = round(x0 + (x1 - x0) * t / steps)
+            if not out[yy, xx, 3]: out[yy, xx] = (111, 72, 30, 255)    # dark gold chain
+    return out
+
+
+def ribbon_violet(head, pal, pal_lab, hue=313.0, cscale=0.8):
+    """hat ribbon / flower pixels with magenta hue -> official violet (hue 313), re-quantised to the shared palette."""
+    a = head[:, :, 3] > 0
+    lab = rgb2oklab(head[:, :, :3].reshape(-1, 3).astype(float)); L, C, hh = lch(lab)
+    hh = hh.reshape(head.shape[:2]); C = C.reshape(head.shape[:2]); L = L.reshape(head.shape[:2])
+    m = a & (C > 0.09) & (hh > 318) & (hh < 360)
+    if not m.any(): return head
+    c2 = C[m] * cscale; h2 = np.radians(np.full(c2.shape, hue))
+    tgt = np.stack([L[m], c2 * np.cos(h2), c2 * np.sin(h2)], -1)
+    out = head.copy(); out[m, :3] = pal[((tgt[:, None] - pal_lab[None]) ** 2).sum(-1).argmin(1)]
+    return out
+
+
+def ribbon_mask(head, k):
+    L, C, hh = lch(rgb2oklab(head[:, :, :3].reshape(-1, 3).astype(float)))
+    h, w = head.shape[:2]; C = C.reshape(h, w); hh = hh.reshape(h, w)
+    m = (head[:, :, 3] > 0) & (C > 0.12) & (hh > 285) & (hh < 340)
+    m[:RIBBON_FROM // k] = False
+    return m
+
+
+def hair_detail(head, pal, pal_lab, top=36, bottom=52):
+    """bob hair under the brim: light strands every 3rd column and a scalloped hem instead of a flat dark block."""
+    out = head.copy(); h, w = head.shape[:2]
+    a = head[:, :, 3] > 0
+    L, C, hh = lch(rgb2oklab(head[:, :, :3].reshape(-1, 3).astype(float)))
+    L = L.reshape(h, w); hh = hh.reshape(h, w)
+    hair = a & (L < 0.40) & ((hh > 270) | (hh < 30))
+    hair[:top] = False; hair[bottom:] = False
+    ys, xs = np.where(hair)
+    if not len(ys): return out
+    def tone(y, x, dl):
+        lab = rgb2oklab(head[y, x, :3].astype(float)[None])[0]; lab[0] = min(0.9, lab[0] + dl)
+        return pal[((pal_lab - lab) ** 2).sum(1).argmin()]
+    for y, x in zip(ys, xs):
+        if x % 3 == 1 and y < bottom - 2 and hair[y - 1, x]: out[y, x, :3] = tone(y, x, 0.10)
+    for x in range(w):                                    # scalloped hem: every other column pair loses its lowest pixel
+        col = np.where(hair[:, x])[0]
+        if len(col) > 3 and (x // 2) % 2 == 0 and not a[min(col.max() + 1, h - 1), x]:
+            out[col.max(), x] = 0
+    return out
 
 
 def build(official_back, pal_dirs, out):
     out.mkdir(parents=True, exist_ok=True)
     paths = []
     for d in pal_dirs: paths += sorted(glob.glob(str(Path(d) / '*_12f_[0-9][0-9]_96x128.png')))
-    pal = BB.palette(paths, 64)
+    pal = BB.palette(paths, PAL_K)
     pal_lab = rgb2oklab(pal.astype(float))
     L96 = {k_: outline(v, pal_lab, pal) for k_, v in BB.base_layers(official_back, pal, 1.0).items()}
     L48 = {k_: outline(v, pal_lab, pal) for k_, v in BB.base_layers(official_back, pal, 0.5).items()}
+    L96['head'] = ribbon_violet(L96['head'], pal, pal_lab); L48['head'] = ribbon_violet(L48['head'], pal, pal_lab)
+    L96['head'] = hair_detail(L96['head'], pal, pal_lab, *HAIR_ROWS)
+    L48['head'] = hair_detail(L48['head'], pal, pal_lab, HAIR_ROWS[0] // 2, HAIR_ROWS[1] // 2)
+    L96['ribbon'] = ribbon_mask(L96['head'], 1); L48['ribbon'] = ribbon_mask(L48['head'], 2)
     h96, h48 = hand_mask(L96['body']), hand_mask48(L48['body'])
     meta = {'task': 'MORWEN-WALK-UP-76', 'frames': {}, 'palette_colours': int(len(pal)), 'hand_px': [int(h96.sum()), int(h48.sum())]}
     for f in range(NF):
         im, st = frame(f, L96, h96, 1)
         im = outline(im, pal_lab, pal); im, n96 = clean_islands_generic(im)
+        im, _ = fill_small_holes(im, 3)
         Image.fromarray(im, 'RGBA').save(out / f'morwen_up_walk_76_12f_{f:02d}_96x128.png')
         s, _ = frame(f, L48, h48, 2)
         s, n48 = clean_islands_generic(s)
+        s, _ = fill_small_holes(s, 3)
         Image.fromarray(s, 'RGBA').save(out / f'morwen_up_walk_76_12f_{f:02d}_48x64.png')
         meta['frames'][f'{f:02d}'] = dict(R=st['R'], L=st['L'], levels96=levels(f, 1), levels48=levels(f, 2), islands=[n96, n48])
     (out / 'build_meta_76.json').write_text(json.dumps(meta, ensure_ascii=False, indent=1, default=str), encoding='utf-8')

@@ -17,3 +17,25 @@ def clean_islands_generic(img, protect=None):
             best = max(set(nb), key=nb.count)
             if nb.count(best) >= 3: out[y, x, :3] = best; n += 1
     return out, n
+
+
+def fill_small_holes(img, max_px=2):
+    """enclosed transparent specks (<= max_px, not touching the border) take the most common surrounding colour."""
+    import cv2
+    t = (img[:, :, 3] == 0).astype(np.uint8)
+    n, lab, st, _ = cv2.connectedComponentsWithStats(t, connectivity=4)
+    out = img.copy(); filled = 0; h, w = t.shape
+    for i in range(1, n):
+        x, y, bw, bh, area = st[i]
+        if area > max_px or x == 0 or y == 0 or x + bw >= w or y + bh >= h: continue
+        ys, xs = np.where(lab == i)
+        nb = []
+        for yy, xx in zip(ys, xs):
+            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                p = out[yy + dy, xx + dx]
+                if p[3]: nb.append(tuple(p))
+        if nb:
+            c = max(set(nb), key=nb.count)
+            for yy, xx in zip(ys, xs): out[yy, xx] = c
+            filled += 1
+    return out, filled

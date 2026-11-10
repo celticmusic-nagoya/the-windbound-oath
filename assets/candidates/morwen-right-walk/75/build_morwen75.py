@@ -26,7 +26,7 @@ _os.environ.setdefault('MORWEN74D_DIR', _os.path.join(_LEFT, '74D'))
 _os.environ.setdefault('MORWEN74C_DIR', _os.path.join(_LEFT, '74C'))
 _os.environ.setdefault('MORWEN74B_DIR', _os.path.join(_LEFT, '74B'))
 _os.environ.setdefault('MORWEN72_PIPELINE', _os.path.join(_HERE, '..', '72'))
-_sys.path[:0] = [_HERE, _G74]
+_sys.path[:0] = [_HERE, _G74, _os.path.join(_HERE, '..', '..', 'morwen-up-walk', '76')]
 import argparse, json, shutil
 from pathlib import Path
 import numpy as np
@@ -35,6 +35,7 @@ import build_morwen74g as G
 from build_morwen74g import B, F, part_masks, recolor, EYE_BOX, EAR_BOX
 from oklab import rgb2oklab, oklab2rgb, lch
 from recolor74d import qmap, circ_mean
+from walkclean import clean_islands_generic, fill_small_holes
 
 H, W, NF = 128, 96, 12
 # official right profile (1024x1536), OKLab, measured with official_stats75() (boxes there)
@@ -109,17 +110,22 @@ def build(ref_path, source, out):
     F.row_offsets = G.row_offsets_g; G.patch_run_variant(); G.protect_mask = protect_mask_right
     try:
         meta = F.run_variant(ref_e, ref, source, w / 'C', 'C')
-        clean = {}
+        clean = {}; holes = {}
         for f in range(NF):
             for s, k in (('96x128', 1.0), ('48x64', 0.5)):
                 im = np.array(Image.open(w / 'C' / f'morwen_right_walk_{f:02d}_{s}.png').convert('RGBA'))   # right-facing, no mirror
-                im, n = G.clean_islands(im, k); clean[f'{f:02d}_{s}'] = n
+                im, n = G.clean_islands(im, k)
+                if s == '48x64':                      # ASSET-77 audit: 48 px islands / specks / small holes
+                    prot = protect_mask_right(64, 48, 0.5)
+                    im, n2 = clean_islands_generic(im, prot); im, n3 = clean_islands_generic(im, prot)
+                    im, nh = fill_small_holes(im, 2); n += n2 + n3; holes[f'{f:02d}'] = nh
+                clean[f'{f:02d}_{s}'] = n
                 Image.fromarray(im, 'RGBA').save(out / f'morwen_right_walk_75_12f_{f:02d}_{s}.png')
     finally:
         F.row_offsets, F.run_variant, G.protect_mask = o_ro, o_rv, o_pm
     m = {'task': 'MORWEN-WALK-RIGHT-75', 'design_source': str(Path(ref_path).name), 'pipeline': 'ART-74G (shared with left)',
          'switch_rows': rows, 'recolor': log, 'right_part_px': {'bag': int(bag.sum()), 'flower_ribbon_crystal': int(flower.sum())},
-         'islands_cleaned': clean, 'C': meta}
+         'islands_cleaned': clean, 'holes_filled_48': holes, 'C': meta}
     (out / 'build_meta_75.json').write_text(json.dumps(m, ensure_ascii=False, indent=1, default=str), encoding='utf-8')
     shutil.rmtree(w)
     return m
