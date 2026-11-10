@@ -1,0 +1,23 @@
+{
+ "task": "MORWEN-REAL-CANON-FINAL-04-FIX-02",
+ "base_commit": "6fde1d9a056a892d08aec7e040efd53c0ff0585e",
+ "status": "BLOCKED - no PNG candidate produced",
+ "reason": "Raising the back shoulders/capelet ~48 px to the front heights needs shorter hair with newly drawn nape/collar, a raised capelet and ~48 px longer upper arms/sleeves; pixels for the revealed areas do not exist and stretching/compressing would distort hair strands, cuffs and embroidery (self QA and independent AI QA agree). Head cut-and-paste and anisotropic whole-image scaling are prohibited.",
+ "inputs": {
+  "front": "aligned/morwen_front_aligned.png",
+  "right": "fix01/morwen_right_fix01.png",
+  "back": "fix01/morwen_back_fix01.png",
+  "left": "fix01/morwen_left_fix01.png"
+ },
+ "outputs": {
+  "UPPER_BODY_LANDMARKS.json/.png": "front vs back landmark rows (self + independent readings)",
+  "EDIT_MASK_back_upper_body.png": "layers: magenta hair redraw, orange move up ~48 px, cyan redraw/lengthen, yellow ribbon protect, green bag protect, brown strap re-route",
+  "EDIT_MASK_back_upper_body_preview.png": "mask over the back fix01 image",
+  "UPPER_BODY_EDIT_SPEC.md": "target rows and drawing rules",
+  "ARMS_ROBE_ZOOM_4DIR.png": "arm/sleeve/robe layering, 4 directions",
+  "FOUR_DIRECTION_COMPARISON_FIX02.png": "FIX-01 set with the front landmark rows",
+  "INDEPENDENT_AI_QA_FIX02.md + INDEP_*.png": "independent AI QA and its crops"
+ },
+ "pixels_changed": 0,
+ "originals": "not modified"
+}
