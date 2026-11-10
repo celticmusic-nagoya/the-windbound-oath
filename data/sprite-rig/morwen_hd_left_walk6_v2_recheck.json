@@ -1,0 +1,299 @@
+{
+ "schema": "windbound.hd-sprite-rig-recheck/1",
+ "task": "MORWEN-HD-WALK-01 (pre-production recheck after MORWEN-HD-CANONICAL-V2)",
+ "date": "2026-11-10",
+ "supersedes_values_in": "data/sprite-rig/morwen_hd_left_walk6.json on PR #220 (master 1024x1280, anchor 512,1230, figure 1104) - those were provisional before the canonical art existed",
+ "canonical_source": {
+  "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+  "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+  "size": [
+   1024,
+   1535
+  ],
+  "alpha_bbox": [
+   39,
+   0,
+   1006,
+   1535
+  ]
+ },
+ "recommended_frame_space": {
+  "canvas": [
+   1200,
+   1600
+  ],
+  "ground_anchor": [
+   600,
+   1540
+  ],
+  "mapping_from_original": {
+   "scale": 0.9771986970684039,
+   "x": "127 + (x-39)*scale + 101 (boot-centre correction)",
+   "y": "40 + y*scale"
+  },
+  "why": "Same coordinate space as the registered display derivatives (task item 5). The delivered left derivative is bbox-centred; its boot centre is at x=499, so frames must be drawn 101 px to the right of the delivered derivative (or the runtime applies anchor_dx=+101). Decide one, not both."
+ },
+ "measurement_method": "alpha bbox for boot/sock/bottom rows; other landmarks by visual inspection on a 50 px grid (+-10 px)",
+ "landmarks_original_rows": {
+  "hat_tip": 0,
+  "hat_brim_top": 65,
+  "hair_top": 150,
+  "eye": 255,
+  "chin": 335,
+  "neck": 370,
+  "shoulder": 420,
+  "chest": 490,
+  "waist": 650,
+  "hip": 700,
+  "skirt_hem": 895,
+  "sock_top": 925,
+  "knee": 1060,
+  "boot_top": 1280,
+  "ankle": 1440,
+  "sole_alpha128": 1526,
+  "sole_alpha_any": 1534
+ },
+ "landmarks_display_rows": {
+  "hat_tip": 40.0,
+  "hat_brim_top": 103.5,
+  "hair_top": 186.6,
+  "eye": 289.2,
+  "chin": 367.4,
+  "neck": 401.6,
+  "shoulder": 450.4,
+  "chest": 518.8,
+  "waist": 675.2,
+  "hip": 724.0,
+  "skirt_hem": 914.6,
+  "sock_top": 943.9,
+  "knee": 1075.8,
+  "boot_top": 1290.8,
+  "ankle": 1447.2,
+  "sole_alpha128": 1531.2,
+  "sole_alpha_any": 1539.0
+ },
+ "head_count": {
+  "head_px_original": 185,
+  "hair_top_to_sole_px": 1384,
+  "heads": 7.5,
+  "note": "Tall proportion; differs from the 2.8-3.0 head field rule in FIELD_HD_PIXEL_OFFICIAL_PIPELINE.md. Director has approved this HD canonical; confirm that the field walk uses it at this proportion."
+ },
+ "game_scale_options": [
+  {
+   "rule": "hair top to sole = Aidan 69 px",
+   "scale_from_original": 0.0499,
+   "total_height_with_hat_px": 76.5
+  },
+  {
+   "rule": "hat-inclusive height = 69 px",
+   "scale_from_original": 0.045,
+   "total_height_with_hat_px": 69.0,
+   "note": "body would be about 62 px, smaller than Aidan"
+  }
+ ],
+ "movable_regions": {
+  "hat": {
+   "original": [
+    215,
+    0,
+    780,
+    370
+   ],
+   "display_anchor_corrected": [
+    400.0,
+    40.0,
+    952.1,
+    401.6
+   ],
+   "pivot_original": [
+    470,
+    250
+   ],
+   "motion": "rigid with head; tip and crystal (715-780,180-295) lag 1-2 frames"
+  },
+  "head_hair": {
+   "original": [
+    340,
+    150,
+    610,
+    390
+   ],
+   "display_anchor_corrected": [
+    522.1,
+    186.6,
+    786.0,
+    421.1
+   ],
+   "pivot_original": [
+    440,
+    370
+   ],
+   "motion": "rigid; bob with chest_dy"
+  },
+  "torso_bodice": {
+   "original": [
+    300,
+    370,
+    470,
+    700
+   ],
+   "display_anchor_corrected": [
+    483.0,
+    401.6,
+    649.2,
+    724.0
+   ],
+   "pivot_original": [
+    400,
+    700
+   ],
+   "motion": "bob; slight lean forward <= 2 deg"
+  },
+  "near_arm_visible": {
+   "original": [
+    390,
+    420,
+    470,
+    915
+   ],
+   "display_anchor_corrected": [
+    571.0,
+    450.4,
+    649.2,
+    934.1
+   ],
+   "joints_original": {
+    "shoulder": [
+     440,
+     440
+    ],
+    "elbow": [
+     432,
+     710
+    ],
+    "wrist": [
+     425,
+     830
+    ]
+   },
+   "motion": "swing opposite to near leg",
+   "note": "upper arm is hidden under the capelet above about y=690; only forearm, cuff and hand are visible"
+  },
+  "far_arm": {
+   "status": "NOT_PRESENT_IN_ART",
+   "note": "hidden behind torso and cape; new art needed only if it shows during swing"
+  },
+  "pouch_vials": {
+   "original": [
+    255,
+    675,
+    340,
+    780
+   ],
+   "display_anchor_corrected": [
+    439.1,
+    699.6,
+    522.1,
+    802.2
+   ],
+   "motion": "secondary bounce 1 frame lag"
+  },
+  "skirt": {
+   "original": [
+    235,
+    690,
+    530,
+    900
+   ],
+   "display_anchor_corrected": [
+    419.5,
+    714.3,
+    707.8,
+    919.5
+   ],
+   "motion": "follows hips; hem sway"
+  },
+  "cape": {
+   "original": [
+    380,
+    400,
+    850,
+    1470
+   ],
+   "display_anchor_corrected": [
+    561.2,
+    430.9,
+    1020.5,
+    1476.5
+   ],
+   "motion": "follows torso with 1-2 frame lag; must stay inside 1200 canvas (corrected right edge about 1021 px, margin 179 px)"
+  },
+  "near_leg_visible": {
+   "original": [
+    325,
+    880,
+    560,
+    1534
+   ],
+   "display_anchor_corrected": [
+    507.5,
+    899.9,
+    737.1,
+    1539.0
+   ],
+   "joints_original": {
+    "hip": [
+     415,
+     790
+    ],
+    "knee": [
+     425,
+     1060
+    ],
+    "ankle": [
+     435,
+     1440
+    ]
+   },
+   "sock": [
+    337,
+    925,
+    519,
+    1280
+   ],
+   "boot_alpha128": [
+    325,
+    1280,
+    559,
+    1526
+   ],
+   "note": "hip joint is under the skirt; thigh is visible from the skirt hem (y about 895)"
+  },
+  "far_leg": {
+   "status": "NOT_PRESENT_IN_ART",
+   "note": "profile shows one leg only; the far leg must be newly drawn for frames 01-06 (same issue as Aidan side walk). Do not mirror the near leg: toes would point backwards."
+  }
+ },
+ "walk_plan_carried_over": {
+  "frames": 6,
+  "fps": 10,
+  "contact_frames": [
+   1,
+   4
+  ],
+  "stride_css_px": 180,
+  "pelvis_bob_scaled_px": 19.6,
+  "foot_span_scaled_px": 735.0
+ },
+ "canvas_headroom": {
+  "top_px": 40,
+  "bob_up_px": 19.6,
+  "ok": true
+ },
+ "blockers_before_frame_production": [
+  "Decide whether frames are drawn boot-centred at x=600 (recommended) or keep the delivered bbox-centred derivative plus runtime anchor_dx.",
+  "Decide the in-game scale rule (options above).",
+  "Far leg art does not exist; it has to be drawn new for every frame.",
+  "Alpha rule: originals use alpha 253 for the body; the walk spec asks for 0/255 only."
+ ]
+}

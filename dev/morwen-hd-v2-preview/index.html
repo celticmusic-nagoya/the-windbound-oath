@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>DEV | Morwen HD canonical v2 preview</title><link rel="icon" href="data:,">
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#151d19;color:#f3eee2;font-family:system-ui,sans-serif}
+main{max-width:1240px;margin:auto;padding:16px}p{line-height:1.6;margin:.4em 0}
+.controls{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:10px 0}
+label{display:inline-flex;align-items:center;gap:6px}select,button{font:inherit;min-height:44px}select{background:#25392e;color:#fff;border:1px solid #6d8d7d;border-radius:6px;padding:0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.cell{border:1px solid #6d8d7d;border-radius:10px;overflow:hidden;background:#1d2a24}
+.cell h2{font-size:14px;margin:0;padding:6px 8px;background:#25392e;display:flex;justify-content:space-between;gap:8px}
+.stage{position:relative;height:var(--stage-h,420px);overflow:hidden}
+.stage.bg-checker{background:repeating-conic-gradient(#3b4a43 0 25%,#2a3731 0 50%) 0 0/24px 24px}
+.stage.bg-light{background:#e8e4da}.stage.bg-dark{background:#0d1210}.stage.bg-field{background:linear-gradient(#5d7d4f,#3f5f37)}
+.stage img{position:absolute;max-width:none;user-select:none;pointer-events:none}
+.stage.pixelated img{image-rendering:pixelated}
+.guide-ground,.guide-anchor{position:absolute;pointer-events:none}
+.guide-ground{left:0;right:0;height:1px;background:#ff4b4b}
+.guide-anchor{top:0;bottom:0;width:1px;background:#46d17b}
+.meta{font:12px/1.5 ui-monospace,monospace;padding:6px 8px;color:#cfd8d2;word-break:break-all}
+.note{color:#e3d1a5}.status{min-height:1.6em}.bad{color:#ff9b9b}
+</style></head><body><main>
+<h1>モルウェン HD正本 v2｜4方向プレビュー（DEV専用）</h1>
+<p><strong>開発用の確認画面です。</strong>ゲーム本体・SAVE・本番スプライトには接続していません。旧左向き（MORWEN-3V左・74I/75系ちびキャラ歩行）は表示対象から除外しています。</p>
+<div class="controls">
+  <label>素材 <select id="style">
+    <option value="display">ドット絵 表示用 1200×1600（派生）</option>
+    <option value="pixel">ドット絵 原本</option>
+    <option value="real">イラスト 原本</option>
+  </select></label>
+  <label>表示高さ <select id="height">
+    <option value="76">76px（ゲーム相当の目安）</option>
+    <option value="160">160px</option>
+    <option value="400" selected>400px</option>
+    <option value="800">800px</option>
+  </select></label>
+  <label>背景 <select id="bg">
+    <option value="checker">市松</option><option value="field">草地</option><option value="dark">暗</option><option value="light">明</option>
+  </select></label>
+  <label><input id="anchorFix" type="checkbox"> 足元中心を (600,1540) に補正（計測値・画像は無加工）</label>
+  <label><input id="pixelated" type="checkbox"> 最近傍拡大</label>
+</div>
+<div class="grid" id="grid"></div>
+<p class="status" id="status" role="status"></p>
+<p class="note">赤線＝接地行 y=1540、緑線＝アンカー x=600（表示用派生のみ）。原本は素材ごとのキャンバスのため、下端中央に揃えて表示します。</p>
+</main>
+<script src="../../js/field/morwen-hd-canonical.js"></script>
+<script src="preview.js"></script>
+</body></html>

@@ -1,0 +1,322 @@
+{
+ "schema": "windbound.morwen-hd-canonical/2",
+ "task": "MORWEN-HD-CANONICAL-V2-REGISTER",
+ "date": "2026-11-10",
+ "status": "REGISTERED_ON_DRAFT_BRANCH",
+ "production_runtime": "NOT_CONNECTED",
+ "policy": "Latest user-supplied pixel left is sole canonical left; legacy left superseded. Originals byte-preserved. Normalized copies are display derivatives only. No GitHub changes performed.",
+ "canonical_left": "pixel.left",
+ "display": {
+  "canvas": [
+   1200,
+   1600
+  ],
+  "ground_anchor": [
+   600,
+   1540
+  ],
+  "anchor_note": "Delivered derivatives are centred on the full alpha bbox, not on the feet. Baseline is correct (lowest alpha row 1539). Horizontal foot centre differs per direction; measured anchor_dx moves the image so the boot centre sits on x=600. anchor_dx is preview/runtime data only; the PNGs are not modified."
+ },
+ "assets": {
+  "pixel.front": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/pixel/front.png",
+   "sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a",
+   "size": [
+    1024,
+    1536
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "pixel",
+   "direction": "front",
+   "byte_preserved": true
+  },
+  "pixel.left": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+   "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+   "size": [
+    1024,
+    1535
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "pixel",
+   "direction": "left",
+   "byte_preserved": true
+  },
+  "pixel.right": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+   "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+   "size": [
+    1087,
+    1446
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "pixel",
+   "direction": "right",
+   "byte_preserved": true
+  },
+  "pixel.back": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/pixel/back.png",
+   "sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f",
+   "size": [
+    1086,
+    1448
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "pixel",
+   "direction": "back",
+   "byte_preserved": true
+  },
+  "real.front": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+   "sha256": "f9a0272c99059480a59fdcb8a6278f318bc2da6f14f160e08f01eefdfe1d13ec",
+   "size": [
+    1024,
+    1536
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "real",
+   "direction": "front",
+   "byte_preserved": true
+  },
+  "real.left": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/real/left.png",
+   "sha256": "a48ab1bc86bb7a1597b701575657b95ddbbb153c5f7b0528d3e885cca7645279",
+   "size": [
+    1024,
+    1535
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "real",
+   "direction": "left",
+   "byte_preserved": true
+  },
+  "real.right": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+   "sha256": "b435dde0b048b1d4d7a36dd6b7b3437c6977581049ef400b3dcd290e21f50850",
+   "size": [
+    1024,
+    1536
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "real",
+   "direction": "right",
+   "byte_preserved": true
+  },
+  "real.back": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/real/back.png",
+   "sha256": "66bc519ddd54878b66e298b72919d52d3727f2fdfdcf8c9cfc706c699cdad8ab",
+   "size": [
+    1024,
+    1536
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "real",
+   "direction": "back",
+   "byte_preserved": true
+  },
+  "display.pixel.front": {
+   "path": "assets/official/characters/morwen/hd-v2/display/pixel/front_1200x1600.png",
+   "sha256": "a1cec16d21c6427c5b876324a7a14a2b21d83bce9cbc13ae80c0589db245ac9c",
+   "size": [
+    1200,
+    1600
+   ],
+   "role": "DISPLAY_DERIVATIVE",
+   "status": "DERIVED_NOT_MASTER",
+   "direction": "front",
+   "source": "pixel.front",
+   "source_sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a",
+   "source_bbox": [
+    0,
+    0,
+    1008,
+    1536
+   ],
+   "paste_xy": [
+    108,
+    40
+   ],
+   "scale": 0.9765625,
+   "resampling": "nearest",
+   "reproduced_from_source": true,
+   "measured": {
+    "boot_x": [
+     532,
+     691
+    ],
+    "foot_center_x": 611.5,
+    "sole_row_alpha128": 1530,
+    "anchor_dx": -11.5,
+    "eye_row_visual": 330
+   }
+  },
+  "display.pixel.left": {
+   "path": "assets/official/characters/morwen/hd-v2/display/pixel/left_1200x1600.png",
+   "sha256": "e0fe405042d2aac57a1cebf233af5b8f0c238a12c9562394e676615235a8d7e7",
+   "size": [
+    1200,
+    1600
+   ],
+   "role": "DISPLAY_DERIVATIVE",
+   "status": "DERIVED_NOT_MASTER",
+   "direction": "left",
+   "source": "pixel.left",
+   "source_sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+   "source_bbox": [
+    39,
+    0,
+    1006,
+    1535
+   ],
+   "paste_xy": [
+    127,
+    40
+   ],
+   "scale": 0.9771986970684039,
+   "resampling": "nearest",
+   "reproduced_from_source": true,
+   "measured": {
+    "boot_x": [
+     406,
+     592
+    ],
+    "foot_center_x": 499.0,
+    "sole_row_alpha128": 1531,
+    "anchor_dx": 101.0,
+    "eye_row_visual": 290
+   }
+  },
+  "display.pixel.right": {
+   "path": "assets/official/characters/morwen/hd-v2/display/pixel/right_1200x1600.png",
+   "sha256": "531c4ee0618f2d7648cc76e4f83c3390de0e470badccb13e159ca909e5d68144",
+   "size": [
+    1200,
+    1600
+   ],
+   "role": "DISPLAY_DERIVATIVE",
+   "status": "DERIVED_NOT_MASTER",
+   "direction": "right",
+   "source": "pixel.right",
+   "source_sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+   "source_bbox": [
+    0,
+    0,
+    1049,
+    1446
+   ],
+   "paste_xy": [
+    75,
+    94
+   ],
+   "scale": 1.0,
+   "resampling": "nearest",
+   "reproduced_from_source": true,
+   "measured": {
+    "boot_x": [
+     625,
+     800
+    ],
+    "foot_center_x": 712.5,
+    "sole_row_alpha128": 1533,
+    "anchor_dx": -112.5,
+    "eye_row_visual": 368
+   }
+  },
+  "display.pixel.back": {
+   "path": "assets/official/characters/morwen/hd-v2/display/pixel/back_1200x1600.png",
+   "sha256": "047fb26bd6ae5598178a8a9897454aac1e5a155d5613ccf9e35628ece3db7f64",
+   "size": [
+    1200,
+    1600
+   ],
+   "role": "DISPLAY_DERIVATIVE",
+   "status": "DERIVED_NOT_MASTER",
+   "direction": "back",
+   "source": "pixel.back",
+   "source_sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f",
+   "source_bbox": [
+    0,
+    0,
+    1066,
+    1448
+   ],
+   "paste_xy": [
+    67,
+    92
+   ],
+   "scale": 1.0,
+   "resampling": "nearest",
+   "reproduced_from_source": true,
+   "measured": {
+    "boot_x": [
+     510,
+     691
+    ],
+    "foot_center_x": 600.5,
+    "sole_row_alpha128": 1531,
+    "anchor_dx": -0.5,
+    "eye_row_visual": null
+   }
+  },
+  "real.portrait": {
+   "path": "web/companions/morwen.webp",
+   "sha256": "141a6955af90f8678e408efd3649e3e114c3c4c44c682e00c6679e386474581b",
+   "size": [
+    720,
+    1080
+   ],
+   "role": "CANONICAL",
+   "kind": "original",
+   "style": "real",
+   "direction": "portrait",
+   "already_registered": true,
+   "note": "Identical SHA-256 already in this repository (and website assets/companions/morwen.webp); not re-registered."
+  }
+ },
+ "delivery_manifest": {
+  "path": "assets/official/characters/morwen/hd-v2/DELIVERY_MANIFEST_V2.json",
+  "sha256": "7b84befac1c5521494457843ff63e11cd10436e58ba2b007fd7113f4c1c6095e"
+ },
+ "superseded": [
+  {
+   "path": "assets/official/characters/morwen/turnaround/file_0000000035a0820989d20c639724cc25.png",
+   "sha256": "d858c428c64007596302057453f414dd43c580bc1546b9578c3d1dfb0af17591",
+   "was": "MORWEN-3V left profile (2026-11-09)",
+   "status": "SUPERSEDED / EXCLUDE_FROM_PRODUCTION",
+   "file_retained": true
+  },
+  {
+   "ref": "PR #219 official 4-view audit candidates (left 81ef16e1…, front 73e99f19…)",
+   "status": "SUPERSEDED for left; not referenced by this registry",
+   "file_retained": true
+  },
+  {
+   "ref": "Morwen 74I/75/76/77 chibi walk candidates (PR #213–#219)",
+   "status": "Not mixed with HD canonical; unchanged",
+   "file_retained": true
+  }
+ ],
+ "equivalents": {
+  "real.right": {
+   "existing": "assets/official/characters/morwen/turnaround/file_00000000a6308211aaeeb9e2482c2e83.png",
+   "relation": "same alpha; RGB differs only where premultiplied colour is equal (max premultiplied diff < 1/255). Different bytes, so registered separately."
+  },
+  "real.back": {
+   "existing": "assets/official/characters/morwen/turnaround/file_00000000055481f8bac7574e5cab00dc.png",
+   "relation": "same as real.right"
+  }
+ },
+ "qa_warnings": [
+  "Body alpha is mostly 253 (not 255) in all originals: about 1% translucent. Originals are not modified; future in-game sprites must be derived with a decided alpha rule.",
+  "Display derivatives: boot centre x is front 611.5 / left 499.0 / right 712.5 / back 600.5 against anchor x=600 (left and right off by about 100 px).",
+  "Display derivatives: eye row (visual, +-8 px) front 330 / left 290 / right 368; figure scale differs by about 6-7% between left and right because normalisation used the hat-inclusive bbox."
+ ]
+}
