@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build Morwen real-canon v3 candidates from the checked-in v2 files.
 
-No edits to official originals or v2. Requires Pillow.
+No edits to official originals or v2. Requires Pillow. Trigger v3 CI once.
 """
 from pathlib import Path
 from PIL import Image
