@@ -1,0 +1,136 @@
+{
+ "task": "MORWEN-REAL-CANON-V2-UPLOAD-01",
+ "result": "FAIL",
+ "checks": 24,
+ "fail_count": 2,
+ "rows": [
+  {
+   "check": "sha256 front",
+   "result": "PASS",
+   "detail": "16c71079231b1a0f7b960a35d1e5cb1e3abfcd092ad22729924ac74c0bb0bca4"
+  },
+  {
+   "check": "size+mode front",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border front",
+   "result": "PASS",
+   "detail": "corners [0, 0, 0, 0] border max 0"
+  },
+  {
+   "check": "sha256 right",
+   "result": "PASS",
+   "detail": "55c5ce7ffaf5380eae56a79bae6fc3ddc50c5f7907a236c59bd4850c443823e1"
+  },
+  {
+   "check": "size+mode right",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border right",
+   "result": "PASS",
+   "detail": "corners [0, 0, 0, 0] border max 0"
+  },
+  {
+   "check": "sha256 back",
+   "result": "PASS",
+   "detail": "eb39bcbe0155f0b329e42cec1dc159f24d4758e362ad7a5130c14134020cb02c"
+  },
+  {
+   "check": "size+mode back",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border back",
+   "result": "PASS",
+   "detail": "corners [0, 0, 0, 0] border max 0"
+  },
+  {
+   "check": "sha256 left",
+   "result": "PASS",
+   "detail": "a4339f30cc7425521672b720aa226c510ec153c4f669b81deb48466a2dacb7e4"
+  },
+  {
+   "check": "size+mode left",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border left",
+   "result": "PASS",
+   "detail": "corners [0, 0, 0, 0] border max 0"
+  },
+  {
+   "check": "direction match front",
+   "result": "PASS",
+   "detail": "IoU front=1.000, right=0.579, back=0.782, left=0.588"
+  },
+  {
+   "check": "direction match right",
+   "result": "PASS",
+   "detail": "IoU front=0.579, right=0.999, back=0.554, left=0.489"
+  },
+  {
+   "check": "direction match back",
+   "result": "PASS",
+   "detail": "IoU front=0.782, right=0.554, back=0.998, left=0.613"
+  },
+  {
+   "check": "direction match left",
+   "result": "PASS",
+   "detail": "IoU front=0.586, right=0.489, back=0.612, left=0.997"
+  },
+  {
+   "check": "ground row identical (alpha>=128)",
+   "result": "PASS",
+   "detail": "{'front': 1558, 'right': 1558, 'back': 1558, 'left': 1558}"
+  },
+  {
+   "check": "ground row vs registered anchor y",
+   "result": "FAIL",
+   "detail": "candidates [1558] vs registry y=1540 (manifest target_bottom_y 1558)"
+  },
+  {
+   "check": "boot centre x vs anchor x",
+   "result": "FAIL",
+   "detail": "front 504-653 centre 578.5; right 606-787 centre 696.5; back 481-648 centre 564.5; left 432-610 centre 521.0; spread 175.5"
+  },
+  {
+   "check": "colour adjustment matches manifest front",
+   "result": "PASS",
+   "detail": "declared color_adjusted=False; mean RGB original [109.8, 67.5, 101.9] v2 [109.8, 67.5, 101.9]"
+  },
+  {
+   "check": "colour adjustment matches manifest right",
+   "result": "PASS",
+   "detail": "declared color_adjusted=False; mean RGB original [104.2, 64.9, 98.5] v2 [103.7, 64.6, 97.9]"
+  },
+  {
+   "check": "colour adjustment matches manifest back",
+   "result": "PASS",
+   "detail": "declared color_adjusted=True; mean RGB original [119.2, 72.5, 105.4] v2 [111.3, 68.8, 96.7]"
+  },
+  {
+   "check": "colour adjustment matches manifest left",
+   "result": "PASS",
+   "detail": "declared color_adjusted=True; mean RGB original [122.5, 68.9, 109.0] v2 [110.5, 68.1, 99.5]"
+  },
+  {
+   "check": "registered canonical files unchanged",
+   "result": "PASS",
+   "detail": "13 files"
+  }
+ ],
+ "not_verified": [
+  "full-silhouette halo inspection",
+  "design equivalence at detail level (strap path, vials)",
+  "perceptual colour equivalence",
+  "independent QA",
+  "Android device",
+  "in-game scale"
+ ]
+}

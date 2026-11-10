@@ -1,0 +1,74 @@
+{
+  "status": "CANDIDATE_QA_PENDING_VISUAL",
+  "version": "v2",
+  "canvas": [
+    1200,
+    1600
+  ],
+  "reference_colors": [
+    "front",
+    "right"
+  ],
+  "alignment_alpha_threshold": 128,
+  "target_bottom_y": 1558,
+  "method": "conservative selective RGB adjustments to back and left, vertical alignment without scaling or repainting",
+  "limitations": [
+    "no full design equivalence verification",
+    "perceptual color equivalence not guaranteed",
+    "Android and in-game QA not run"
+  ],
+  "files": [
+    {
+      "direction": "front",
+      "source_v1_sha256": "66697c2e10c0b9e09577f752cd80a896bb92a4a68bcbc73c0dcac750312321f7",
+      "output_sha256": "16c71079231b1a0f7b960a35d1e5cb1e3abfcd092ad22729924ac74c0bb0bca4",
+      "size": [
+        1200,
+        1600
+      ],
+      "bottom_y": 1558,
+      "vertical_shift_px": 8,
+      "alpha_identical_except_translation": true,
+      "color_adjusted": false
+    },
+    {
+      "direction": "right",
+      "source_v1_sha256": "80fc240a0cfbb5af7ab6395d8f5688c2b9dd7af89f33c992a87f76be1a64783b",
+      "output_sha256": "55c5ce7ffaf5380eae56a79bae6fc3ddc50c5f7907a236c59bd4850c443823e1",
+      "size": [
+        1200,
+        1600
+      ],
+      "bottom_y": 1558,
+      "vertical_shift_px": 10,
+      "alpha_identical_except_translation": true,
+      "color_adjusted": false
+    },
+    {
+      "direction": "back",
+      "source_v1_sha256": "9aa57f963ccab983e7d6123d9b2085b5abbafa36dab4481c9a2339115cc3e5aa",
+      "output_sha256": "eb39bcbe0155f0b329e42cec1dc159f24d4758e362ad7a5130c14134020cb02c",
+      "size": [
+        1200,
+        1600
+      ],
+      "bottom_y": 1558,
+      "vertical_shift_px": 1,
+      "alpha_identical_except_translation": true,
+      "color_adjusted": true
+    },
+    {
+      "direction": "left",
+      "source_v1_sha256": "0729a05184986d6ea2a174fa1df5447c901e14834758fd01b2a9ea3c0bf3776d",
+      "output_sha256": "a4339f30cc7425521672b720aa226c510ec153c4f669b81deb48466a2dacb7e4",
+      "size": [
+        1200,
+        1600
+      ],
+      "bottom_y": 1558,
+      "vertical_shift_px": 20,
+      "alpha_identical_except_translation": true,
+      "color_adjusted": true
+    }
+  ]
+}
