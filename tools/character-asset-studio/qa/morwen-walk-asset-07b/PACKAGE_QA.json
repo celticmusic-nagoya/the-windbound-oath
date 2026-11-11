@@ -1,0 +1,84 @@
+{
+  "packageStatus": "PASS",
+  "productionImageStatus": "FAIL",
+  "taskStatus": "BLOCKED",
+  "adoptionReady": false,
+  "export06Allowed": false,
+  "checks": [
+    {
+      "id": "source:front",
+      "status": "PASS",
+      "sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a"
+    },
+    {
+      "id": "source:left",
+      "status": "PASS",
+      "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8"
+    },
+    {
+      "id": "source:right",
+      "status": "PASS",
+      "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7"
+    },
+    {
+      "id": "source:back",
+      "status": "PASS",
+      "sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f"
+    },
+    {
+      "id": "package:manifest",
+      "status": "PASS"
+    },
+    {
+      "id": "package:pose-spec",
+      "status": "PASS"
+    },
+    {
+      "id": "planned-frame-contract",
+      "status": "PASS"
+    },
+    {
+      "id": "no-inferred-contact",
+      "status": "PASS"
+    },
+    {
+      "id": "candidate-binding:left_F01",
+      "status": "PASS"
+    }
+  ],
+  "candidatePngs": [
+    {
+      "path": "assets/candidates/morwen-walk-asset-07b/candidates/left_F01_attempt02.png",
+      "sha256": "6151590283c67838d33005e68a1cddfbcbb557a7f213285dc0b2864208e7c342",
+      "size": [
+        1025,
+        1535
+      ],
+      "mode": "RGBA",
+      "canvasStatus": "FAIL",
+      "binaryAlphaStatus": "FAIL",
+      "transparentPixels": 994754,
+      "partialAlphaPixels": 578109
+    },
+    {
+      "path": "assets/candidates/morwen-walk-asset-07b/rejected/attempt01_left_sheet.png",
+      "sha256": "163fa6c61066bc8c51beaf0160d3f888dfd9b3a4adb6eecaa832c5132e3b3bf8",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "canvasStatus": "FAIL",
+      "binaryAlphaStatus": "FAIL",
+      "transparentPixels": 1211922,
+      "partialAlphaPixels": 360942
+    }
+  ],
+  "notRun": [
+    "12-frame duplicate comparison and full loop",
+    "measured anchor/contact QA",
+    "independent design/asymmetry approval",
+    "right-facing frame production",
+    "Android hardware"
+  ]
+}
