@@ -1,0 +1,186 @@
+{
+ "approval_status": "CANDIDATE_NOT_ADOPTED",
+ "production_sha256": {
+  "01": "0aca5691c55c59610abf6484f0e6d0785ea6537123c301a592ed83e5c6772a84",
+  "05": "6efcfe75cce44aea3a11ae3712c1277d0f324cb384870ed93efe2f6af01404ec",
+  "02": "7b5b916807987cf9219488939c1f538aeca9d9f8a21b843d1e70bd27aa31b16d",
+  "06": "d87b2ec56660568bd46eecb8559edfed1c3802fe1e2675a018f78f3c23f970df"
+ },
+ "frames": {
+  "01": {
+   "candidate": "assets/candidates/player-walk-polish01/arm-01-aidan-down/aidan_walk_down_01_arm_candidate.png",
+   "sha256": "7c09040f93b39462a97796505ee0dabe115f194adb8fdba16fa21ab1fc9b9764",
+   "base": "img/field/characters/aidan/aidan_walk_down_01.png",
+   "arm_donor": "img/field/characters/aidan/aidan_walk_down_02.png",
+   "tool": {
+    "target": "/home/claude/arm/img/field/characters/aidan/aidan_walk_down_01.png",
+    "donor": "/home/claude/arm/img/field/characters/aidan/aidan_walk_down_02.png",
+    "donor_shift": [
+     2,
+     -5
+    ],
+    "region_px": 30383,
+    "changed_px": 32374,
+    "changed_bbox": [
+     1198,
+     576,
+     1374,
+     845
+    ],
+    "rows_from_870_unchanged": true,
+    "seam_mean_diff": 9.43
+   },
+   "size_mode_ok": true,
+   "changed_px": 32374,
+   "changed_outside_edit_region": 0,
+   "head_face_rows_0_560_identical": true,
+   "legs_rows_870_1280_identical": true,
+   "screen_left_half_x_lt_1150_identical": true,
+   "enclosed_hole_px": {
+    "candidate": 1074,
+    "production": 1074
+   },
+   "canvas_corner_alpha_max": 0,
+   "lowest_opaque_row": {
+    "candidate": 1226,
+    "production": 1226
+   }
+  },
+  "02": {
+   "candidate": "assets/candidates/player-walk-polish01/arm-01-aidan-down/aidan_walk_down_02_arm_candidate.png",
+   "sha256": "1a6e2d3677b10b8e280c7bfc80293c5686b89ffa778d2242d1c4111c31c48e93",
+   "base": "img/field/characters/aidan/aidan_walk_down_02.png",
+   "arm_donor": "img/field/characters/aidan/down4/aidan_walk_down_06_ground.png",
+   "tool": {
+    "target": "/home/claude/arm/img/field/characters/aidan/aidan_walk_down_02.png",
+    "donor": "/home/claude/arm/img/field/characters/aidan/down4/aidan_walk_down_06_ground.png",
+    "donor_shift": [
+     7,
+     9
+    ],
+    "region_px": 31678,
+    "changed_px": 33816,
+    "changed_bbox": [
+     1209,
+     572,
+     1378,
+     850
+    ],
+    "rows_from_870_unchanged": true,
+    "seam_mean_diff": 13.26
+   },
+   "size_mode_ok": true,
+   "changed_px": 33816,
+   "changed_outside_edit_region": 0,
+   "head_face_rows_0_560_identical": true,
+   "legs_rows_870_1280_identical": true,
+   "screen_left_half_x_lt_1150_identical": true,
+   "enclosed_hole_px": {
+    "candidate": 844,
+    "production": 844
+   },
+   "canvas_corner_alpha_max": 0,
+   "lowest_opaque_row": {
+    "candidate": 1226,
+    "production": 1226
+   }
+  }
+ },
+ "swing_analysis": {
+  "method": "manual fist annotations on 10px grids (x3), +-3 px; y relative to chest shift; corr < 0 = arms in opposite phase",
+  "order": [
+   "01",
+   "05",
+   "02",
+   "06"
+  ],
+  "official": {
+   "left_rel_y": [
+    790.0,
+    789.2,
+    806.9,
+    777.8
+   ],
+   "left_range": 29.1,
+   "left_moves_per_transition": [
+    0.8,
+    17.7,
+    29.1,
+    12.2
+   ],
+   "right_rel_y": [
+    695.0,
+    689.2,
+    716.9,
+    713.8
+   ],
+   "right_range": 27.7,
+   "right_moves_per_transition": [
+    5.8,
+    27.7,
+    3.1,
+    18.8
+   ],
+   "corr_left_vs_right": 0.23
+  },
+  "candidate": {
+   "left_rel_y": [
+    805.0,
+    789.2,
+    774.9,
+    777.8
+   ],
+   "left_range": 30.1,
+   "left_moves_per_transition": [
+    15.8,
+    14.3,
+    2.9,
+    27.2
+   ],
+   "right_rel_y": [
+    695.0,
+    689.2,
+    716.9,
+    713.8
+   ],
+   "right_range": 27.7,
+   "right_moves_per_transition": [
+    5.8,
+    27.7,
+    3.1,
+    18.8
+   ],
+   "corr_left_vs_right": -0.79
+  },
+  "annotations": {
+   "left_arm_fist_bottom": {
+    "official": {
+     "01": 790,
+     "05": 790,
+     "02": 812,
+     "06": 777
+    },
+    "candidate": {
+     "01": 805,
+     "05": 790,
+     "02": 780,
+     "06": 777
+    }
+   },
+   "right_arm_fist_centre": {
+    "official": {
+     "01": 695,
+     "05": 690,
+     "02": 722,
+     "06": 713
+    }
+   }
+  },
+  "chest_dy": {
+   "01": 0.0,
+   "05": 0.8,
+   "02": 5.1,
+   "06": -0.8
+  }
+ }
+}
