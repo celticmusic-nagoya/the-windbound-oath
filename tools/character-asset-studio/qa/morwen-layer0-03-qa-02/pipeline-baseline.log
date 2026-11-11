@@ -1,0 +1,113 @@
+test_align_writes_new_file_onto_anchor (test_pipeline.T.test_align_writes_new_file_onto_anchor) ... ok
+test_body_spec_v2_from_studio_validates (test_pipeline.T.test_body_spec_v2_from_studio_validates) ... ok
+test_brief_is_valid_unapproved_and_guarded (test_pipeline.T.test_brief_is_valid_unapproved_and_guarded) ... ok
+test_cli_exit_codes (test_pipeline.T.test_cli_exit_codes) ... ok
+test_coordinate_parity_with_studio_core (test_pipeline.T.test_coordinate_parity_with_studio_core) ... ok
+test_costume_layer_without_feet_skips_ground_checks (test_pipeline.T.test_costume_layer_without_feet_skips_ground_checks) ... ok
+test_demo_candidates_example (test_pipeline.T.test_demo_candidates_example) ... ok
+test_failures_are_detected (test_pipeline.T.test_failures_are_detected) ... ok
+test_frame_integrity (test_pipeline.T.test_frame_integrity) ... ok
+test_good_walk_set_passes_automated_and_leaves_human_not_run (test_pipeline.T.test_good_walk_set_passes_automated_and_leaves_human_not_run) ... ok
+test_human_review_records_are_used_never_invented (test_pipeline.T.test_human_review_records_are_used_never_invented) ... ok
+test_manifest_build_verify_and_tamper (test_pipeline.T.test_manifest_build_verify_and_tamper) ... ok
+test_map_point_and_alignment_offset (test_pipeline.T.test_map_point_and_alignment_offset) ... ok
+test_overall_precedence_and_markdown (test_pipeline.T.test_overall_precedence_and_markdown) ... ok
+test_protected_assets_unchanged_and_guarded (test_pipeline.T.test_protected_assets_unchanged_and_guarded) ... ok
+test_schema_validation_classification (test_pipeline.T.test_schema_validation_classification) ... ok
+test_status_and_blocked_reference (test_pipeline.T.test_status_and_blocked_reference) ... ok
+test_adoption_ready_requires_human_checks (test_pipeline.V051.test_adoption_ready_requires_human_checks) ... ok
+test_brief_overwrite_only_regenerates_its_own_guides (test_pipeline.V051.test_brief_overwrite_only_regenerates_its_own_guides) ... ok
+test_cli_gate_codes_in_repo (test_pipeline.V051.test_cli_gate_codes_in_repo) ... ok
+test_legacy_body_spec_kept_and_upgrade_matches_studio (test_pipeline.V051.test_legacy_body_spec_kept_and_upgrade_matches_studio) ... ok
+test_overwrite_policy (test_pipeline.V051.test_overwrite_policy) ... ok
+test_pr_body_legacy_marker_converted_without_text_loss (test_pipeline.V051.test_pr_body_legacy_marker_converted_without_text_loss) ... ok
+test_pr_body_merge_is_idempotent (test_pipeline.V051.test_pr_body_merge_is_idempotent) ... ok
+test_pr_body_refuses_ambiguous_markers (test_pipeline.V051.test_pr_body_refuses_ambiguous_markers) ... ok
+test_committed_candidate_reproducible (test_pipeline.V07Layer0.test_committed_candidate_reproducible) ... FAIL
+test_design_protection_items_are_not_run (test_pipeline.V07Layer0.test_design_protection_items_are_not_run) ... ok
+test_hidden_points_not_registered_as_measured (test_pipeline.V07Layer0.test_hidden_points_not_registered_as_measured) ... ok
+test_normalised_coordinates_and_ground (test_pipeline.V07Layer0.test_normalised_coordinates_and_ground) ... ok
+test_outputs_and_schemas (test_pipeline.V07Layer0.test_outputs_and_schemas) ... /workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py:718: ResourceWarning: unclosed file <_io.BufferedReader name='/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/_tmp_l0/o/front_body_guide.png'>
+  self.assertEqual(Image.open(o / "front_body_guide.png").mode, "RGBA")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_clean_set_passes_automated (test_pipeline.V07Layers.test_clean_set_passes_automated) ... ok
+test_committed_synthetic_example (test_pipeline.V07Layers.test_committed_synthetic_example) ... ok
+test_defects_detected (test_pipeline.V07Layers.test_defects_detected) ... ok
+test_layer_toggle_and_reproducible_compositing (test_pipeline.V07Layers.test_layer_toggle_and_reproducible_compositing) ... ok
+test_previews_are_separate_and_regenerable (test_pipeline.V07Layers.test_previews_are_separate_and_regenerable) ... ok
+test_contacts_identical_and_pixels_preserved (test_pipeline.V07Normalize.test_contacts_identical_and_pixels_preserved) ... /workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py:573: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/cas07n_sfd5ne88/a/front.png'>
+  modes = {v: Image.open(self.tmp / "a" / f"{v}.png").mode for v in core.VIEWS}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py:573: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/cas07n_sfd5ne88/a/back.png'>
+  modes = {v: Image.open(self.tmp / "a" / f"{v}.png").mode for v in core.VIEWS}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py:573: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/cas07n_sfd5ne88/a/left.png'>
+  modes = {v: Image.open(self.tmp / "a" / f"{v}.png").mode for v in core.VIEWS}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py:573: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/cas07n_sfd5ne88/a/right.png'>
+  modes = {v: Image.open(self.tmp / "a" / f"{v}.png").mode for v in core.VIEWS}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_reproducible_and_sources_untouched (test_pipeline.V07Normalize.test_reproducible_and_sources_untouched) ... FAIL
+test_transforms_come_from_measured_contacts (test_pipeline.V07Normalize.test_transforms_come_from_measured_contacts) ... ok
+test_draw_order_is_zorder_not_layer (test_pipeline.V07Schema.test_draw_order_is_zorder_not_layer) ... ok
+test_required_fields_and_status_rules (test_pipeline.V07Schema.test_required_fields_and_status_rules) ... ok
+test_semantic_checks_detect_mismatches (test_pipeline.V07Schema.test_semantic_checks_detect_mismatches) ... ok
+test_v06_status_mapping_and_v2_compat (test_pipeline.V07Schema.test_v06_status_mapping_and_v2_compat) ... ok
+test_valid_character_and_parts (test_pipeline.V07Schema.test_valid_character_and_parts) ... ok
+test_canon_read_only_and_r21_blocked (test_pipeline.V08CanonMeasurement.test_canon_read_only_and_r21_blocked) ... ok
+test_committed_outputs_match_a_fresh_run (test_pipeline.V08CanonMeasurement.test_committed_outputs_match_a_fresh_run) ... ok
+test_guards (test_pipeline.V08CanonMeasurement.test_guards) ... ok
+test_head_shoulders_pelvis_unmeasurable_costume_not_body (test_pipeline.V08CanonMeasurement.test_head_shoulders_pelvis_unmeasurable_costume_not_body) ... ok
+test_px_norm_consistency_and_ground_comparison (test_pipeline.V08CanonMeasurement.test_px_norm_consistency_and_ground_comparison) ... ok
+test_statuses_and_no_template_promotion (test_pipeline.V08CanonMeasurement.test_statuses_and_no_template_promotion) ... ok
+test_generated_image_fit_is_numeric_and_deterministic (test_pipeline.V08MasterBody.test_generated_image_fit_is_numeric_and_deterministic) ... ok
+test_guides_contain_no_canon_pixels_and_are_reproducible (test_pipeline.V08MasterBody.test_guides_contain_no_canon_pixels_and_are_reproducible) ... FAIL
+test_inputs_and_canon_unchanged (test_pipeline.V08MasterBody.test_inputs_and_canon_unchanged) ... ok
+test_shared_parameters_and_reference_lines (test_pipeline.V08MasterBody.test_shared_parameters_and_reference_lines) ... ok
+test_spec_schema_and_statuses (test_pipeline.V08MasterBody.test_spec_schema_and_statuses) ... ok
+test_automated_checks_pass_and_adoption_not_run (test_pipeline.V09Articulated.test_automated_checks_pass_and_adoption_not_run) ... ok
+test_layer1_is_opaque_base_layer (test_pipeline.V09Articulated.test_layer1_is_opaque_base_layer) ... /workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py:993: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  vals = set(a.getdata())
+ok
+test_v08_anchors_unchanged_and_additions_explained (test_pipeline.V09Articulated.test_v08_anchors_unchanged_and_additions_explained) ... ok
+test_walk_fk_and_layer_toggle (test_pipeline.V09Articulated.test_walk_fk_and_layer_toggle) ... ok
+
+======================================================================
+FAIL: test_committed_candidate_reproducible (test_pipeline.V07Layer0.test_committed_candidate_reproducible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py", line 767, in test_committed_candidate_reproducible
+    self.assertEqual(core.sha256_file(self.tmp / "o" / f"{v}_body_guide.png"), core.sha256_file(self.COMMITTED / f"{v}_body_guide.png"))
+AssertionError: 'aa22e54517d7009a5232d7a3428c098e390aba8e2784d367058a85662741b82c' != 'e216a9717613a4826c7332edf82421e6df288b6ffff771fa0a73a57bd53a7397'
+- aa22e54517d7009a5232d7a3428c098e390aba8e2784d367058a85662741b82c
++ e216a9717613a4826c7332edf82421e6df288b6ffff771fa0a73a57bd53a7397
+
+
+======================================================================
+FAIL: test_reproducible_and_sources_untouched (test_pipeline.V07Normalize.test_reproducible_and_sources_untouched)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py", line 587, in test_reproducible_and_sources_untouched
+    self.assertEqual(core.sha256_file(committed / f"{v}.png"), core.sha256_file(self.tmp / "a" / f"{v}.png"), "committed output reproducible")
+AssertionError: 'b2f9cf65d66bd364cf204b1f304eb8065be24340e6b594fbdc646052c0da1844' != 'c42a936fd8d047811e905a90b93474c1d83a977df6f47ef472d8995280caacae'
+- b2f9cf65d66bd364cf204b1f304eb8065be24340e6b594fbdc646052c0da1844
++ c42a936fd8d047811e905a90b93474c1d83a977df6f47ef472d8995280caacae
+ : committed output reproducible
+
+======================================================================
+FAIL: test_guides_contain_no_canon_pixels_and_are_reproducible (test_pipeline.V08MasterBody.test_guides_contain_no_canon_pixels_and_are_reproducible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/pipeline/tests/test_pipeline.py", line 907, in test_guides_contain_no_canon_pixels_and_are_reproducible
+    self.assertEqual(core.sha256_file(self.tmp / f"{v}_structure_guide.png"), core.sha256_file(self.O / f"{v}_structure_guide.png"))
+AssertionError: 'e5212e2a43cf1fa227e480b8dfb09e7041c1e39e71a352848f901747339ac2fd' != 'ab2ae8e4663037527eb72a58006338b1f6b917b69b25b2b1753e25233c6ea799'
+- e5212e2a43cf1fa227e480b8dfb09e7041c1e39e71a352848f901747339ac2fd
++ ab2ae8e4663037527eb72a58006338b1f6b917b69b25b2b1753e25233c6ea799
+
+
+----------------------------------------------------------------------
+Ran 58 tests in 49.618s
+
+FAILED (failures=3)

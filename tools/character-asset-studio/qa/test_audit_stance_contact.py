@@ -20,6 +20,15 @@ class ContactTests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["maxDriftPx"], 5)
 
+    def test_subprecision_slide_cannot_round_to_pass(self):
+        result = audit_stance(sample([(0, 0), (2.0000001, 0)]), 2)
+        self.assertEqual(result["observations"][-1]["status"], "FAIL")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertGreater(result["maxDriftPx"], 2)
+
+    def test_exact_tolerance_passes(self):
+        self.assertEqual(audit_stance(sample([(0, 0), (2, 0)]), 2)["status"], "PASS")
+
     def test_new_stance_after_swing_reanchors(self):
         data = sample([(100, 200), (100, 200)])
         data["frames"].insert(1, {"id": "swing", "contacts": {"L": {"phase": "swing"}}})

@@ -1,0 +1,23 @@
+test_exact_tolerance_passes (test_audit_stance_contact.ContactTests.test_exact_tolerance_passes) ... ok
+test_invalid_data_rejected (test_audit_stance_contact.ContactTests.test_invalid_data_rejected) ... ok
+test_missing_stance_not_run (test_audit_stance_contact.ContactTests.test_missing_stance_not_run) ... ok
+test_new_stance_after_swing_reanchors (test_audit_stance_contact.ContactTests.test_new_stance_after_swing_reanchors) ... ok
+test_slide_detected (test_audit_stance_contact.ContactTests.test_slide_detected) ... ok
+test_stable_stance (test_audit_stance_contact.ContactTests.test_stable_stance) ... ok
+test_subprecision_slide_cannot_round_to_pass (test_audit_stance_contact.ContactTests.test_subprecision_slide_cannot_round_to_pass) ... FAIL
+
+======================================================================
+FAIL: test_subprecision_slide_cannot_round_to_pass (test_audit_stance_contact.ContactTests.test_subprecision_slide_cannot_round_to_pass)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/morwen-layer0-03-qa-02/tools/character-asset-studio/qa/test_audit_stance_contact.py", line 26, in test_subprecision_slide_cannot_round_to_pass
+    self.assertEqual(result["status"], "FAIL")
+AssertionError: 'PASS' != 'FAIL'
+- PASS
++ FAIL
+
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+FAILED (failures=1)
