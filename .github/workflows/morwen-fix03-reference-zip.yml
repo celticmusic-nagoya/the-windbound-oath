@@ -1,0 +1,44 @@
+name: Morwen FIX-03 reference images ZIP
+on:
+  push:
+    branches:
+      - feature/morwen-hd-canonical-v2-registration
+    paths:
+      - .github/workflows/morwen-fix03-reference-zip.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package source images and QA references
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=assets/candidates/morwen/real-canon-final-04
+          mkdir -p /tmp/morwen-reference
+          cp "$root/aligned/morwen_front_aligned.png" /tmp/morwen-reference/morwen_front_latest.png
+          cp "$root/fix01/morwen_right_fix01.png" /tmp/morwen-reference/morwen_right_latest.png
+          cp "$root/fix01/morwen_back_fix01.png" /tmp/morwen-reference/morwen_back_latest.png
+          cp "$root/fix01/morwen_left_fix01.png" /tmp/morwen-reference/morwen_left_latest.png
+          cp "$root/FOUR_DIRECTION_COMPARISON_FIX01.png" /tmp/morwen-reference/FOUR_DIRECTION_COMPARISON_FIX01.png
+          cp "$root/fix03/BASE_BODY_OVERLAY_4DIR.png" /tmp/morwen-reference/BASE_BODY_OVERLAY_4DIR.png
+          cp "$root/fix03/BASE_BODY_CROSS_VIEW.png" /tmp/morwen-reference/BASE_BODY_CROSS_VIEW.png
+          cp "$root/fix03/BASE_BODY_SPEC.json" /tmp/morwen-reference/BASE_BODY_SPEC.json
+          cp "$root/fix03/QA_REPORT_FIX03.md" /tmp/morwen-reference/QA_REPORT_FIX03.md
+          cat > /tmp/morwen-reference/README.txt <<'EOF'
+          MORWEN FIX-03 — reference images, NOT final adopted artwork.
+          Front: aligned/front; right/back/left: FIX-01 boot-adjusted candidates.
+          FIX-03 only contains base-body overlays and masks; back upper-body redraw is BLOCKED.
+          All original PNG bytes are preserved. No production adoption is implied.
+          EOF
+          (cd /tmp/morwen-reference && sha256sum *.png > SHA256SUMS.txt)
+          (cd /tmp && zip -q -r morwen-fix03-reference-images.zip morwen-reference)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-fix03-reference-images
+          path: /tmp/morwen-fix03-reference-images.zip
+          if-no-files-found: error
+          retention-days: 30
