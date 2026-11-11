@@ -1,0 +1,536 @@
+{
+  "schema": "cas/walk-production-manifest/07b",
+  "task": "MORWEN-WALK-ASSET-07B",
+  "base": "2cbbc631426e240eeb9a2f03257d19f913c31c46",
+  "status": "BLOCKED_ART_PRODUCTION",
+  "adoptionReady": false,
+  "export06Allowed": false,
+  "frameCount": 12,
+  "actualUsableFrames": 0,
+  "fps": 10,
+  "fpsStatus": {
+    "left": "existing HD DEV direction; ART74 checked as historical mechanics only",
+    "right": "task proposal, independent artwork required"
+  },
+  "referencePolicy": "User-requested HD v2 pixel originals only; no historical sprite/costume substitutions; metadata already labelled SUPERSEDED remains excluded. This task does not update global canon.",
+  "references": [
+    {
+      "direction": "front",
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/front.png",
+      "sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a"
+    },
+    {
+      "direction": "left",
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+      "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8"
+    },
+    {
+      "direction": "right",
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+      "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7"
+    },
+    {
+      "direction": "back",
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/back.png",
+      "sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f"
+    }
+  ],
+  "frames": [
+    {
+      "frameId": "left_F01",
+      "direction": "left",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "L heel leads; R toe trails; all toes face left"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": "assets/candidates/morwen-walk-asset-07b/candidates/left_F01_attempt02.png",
+      "imageSHA256": "6151590283c67838d33005e68a1cddfbcbb557a7f213285dc0b2864208e7c342",
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/left_F01.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+        "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+        "size": [
+          1024,
+          1535
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "left",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "UNAPPROVED_CANDIDATE_TECH_FAIL",
+      "targetTimeMs": 0
+    },
+    {
+      "frameId": "left_F02",
+      "direction": "left",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "L loading/foot-flat; R early swing; all toes face left"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/left_F02.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+        "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+        "size": [
+          1024,
+          1535
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "left",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 100
+    },
+    {
+      "frameId": "left_F03",
+      "direction": "left",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "L mid-stance; R passing knee flexed; all toes face left"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/left_F03.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+        "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+        "size": [
+          1024,
+          1535
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "left",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 200
+    },
+    {
+      "frameId": "left_F04",
+      "direction": "left",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "R heel leads; L toe trails; all toes face left"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/left_F04.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+        "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+        "size": [
+          1024,
+          1535
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "left",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 300
+    },
+    {
+      "frameId": "left_F05",
+      "direction": "left",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "R loading/foot-flat; L early swing; all toes face left"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/left_F05.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+        "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+        "size": [
+          1024,
+          1535
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "left",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 400
+    },
+    {
+      "frameId": "left_F06",
+      "direction": "left",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "R mid-stance; L passing knee flexed; all toes face left"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/left_F06.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+        "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+        "size": [
+          1024,
+          1535
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "left",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 500
+    },
+    {
+      "frameId": "right_F01",
+      "direction": "right",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "L heel leads; R toe trails; all toes face right"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/right_F01.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+        "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+        "size": [
+          1087,
+          1446
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "right",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 0
+    },
+    {
+      "frameId": "right_F02",
+      "direction": "right",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "L loading/foot-flat; R early swing; all toes face right"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/right_F02.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+        "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+        "size": [
+          1087,
+          1446
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "right",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 100
+    },
+    {
+      "frameId": "right_F03",
+      "direction": "right",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "L mid-stance; R passing knee flexed; all toes face right"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/right_F03.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+        "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+        "size": [
+          1087,
+          1446
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "right",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 200
+    },
+    {
+      "frameId": "right_F04",
+      "direction": "right",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "R heel leads; L toe trails; all toes face right"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/right_F04.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+        "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+        "size": [
+          1087,
+          1446
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "right",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 300
+    },
+    {
+      "frameId": "right_F05",
+      "direction": "right",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "R loading/foot-flat; L early swing; all toes face right"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/right_F05.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+        "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+        "size": [
+          1087,
+          1446
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "right",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 400
+    },
+    {
+      "frameId": "right_F06",
+      "direction": "right",
+      "pose": {
+        "status": "PROPOSED_NOT_RENDER_VERIFIED",
+        "description": "R mid-stance; L passing knee flexed; all toes face right"
+      },
+      "anatomicalFoot": null,
+      "contactPhase": null,
+      "stanceId": null,
+      "timeMs": null,
+      "timeStatus": "NOT_CAPTURED; targetTimeMs is proposed 10fps schedule",
+      "imagePath": null,
+      "imageSHA256": null,
+      "anchor": null,
+      "targetAnchorPx": [
+        600,
+        1540
+      ],
+      "targetCanvas": [
+        1200,
+        1600
+      ],
+      "targetImagePath": "assets/candidates/morwen-walk-asset-07b/frames/right_F06.png",
+      "reference": {
+        "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+        "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+        "size": [
+          1087,
+          1446
+        ],
+        "role": "CANONICAL",
+        "kind": "original",
+        "style": "pixel",
+        "direction": "right",
+        "byte_preserved": true
+      },
+      "worldPx": null,
+      "status": "NOT_PRODUCED",
+      "targetTimeMs": 500
+    }
+  ],
+  "generatedCandidateImages": 2,
+  "attemptLimit": 2,
+  "attemptsUsed": 2,
+  "usableProductionFrames": 0
+}
