@@ -30,3 +30,5 @@ jobs:
         run: python tools/character-asset-studio/qa/audit_stance_contact.py tools/character-asset-studio/qa/stance_contact_fixture_v1.json --tolerance-px 2
       - name: Real motion export validator unit tests
         run: python -m unittest discover -s tools/character-asset-studio/qa -p 'test_validate_real_motion_export.py' -v
+      - name: Real motion evidence conversion tests
+        run: python -m unittest discover -s tools/character-asset-studio/qa -p 'test_convert_real_motion_export.py' -v
