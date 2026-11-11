@@ -1,0 +1,63 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/manifest.schema.json",
+ "title": "Asset MANIFEST with SHA-256 and protection flags",
+ "type": "object",
+ "required": [
+  "schema",
+  "root",
+  "files"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "cas/manifest/0.5"
+  },
+  "root": {
+   "$ref": "common.schema.json#/$defs/relPath"
+  },
+  "note": {
+   "type": "string"
+  },
+  "files": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "path",
+     "sha256",
+     "bytes",
+     "status"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "path": {
+      "$ref": "common.schema.json#/$defs/relPath"
+     },
+     "sha256": {
+      "$ref": "common.schema.json#/$defs/sha256"
+     },
+     "bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "status": {
+      "$ref": "common.schema.json#/$defs/assetStatus"
+     },
+     "role": {
+      "type": "string"
+     },
+     "width": {
+      "type": "integer"
+     },
+     "height": {
+      "type": "integer"
+     },
+     "mode": {
+      "type": "string"
+     }
+    }
+   }
+  }
+ }
+}

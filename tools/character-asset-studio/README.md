@@ -1,4 +1,6 @@
-# Character Asset Studio v0.4
+# Character Asset Studio v0.5
+
+> **v0.5 の方針（CHARACTER-ASSET-STUDIO-06）:** 人間向けの画面の改善より、ChatGPT と Claude のあいだでアセットの制作・検証・データの受け渡しを自動化することを優先する。中心は `pipeline/`（コマンドライン、[pipeline/README.md](pipeline/README.md)）。画面の v0.4 の機能はそのまま残す。自動位置合わせなどの画面の改善は保留する（内部処理としての座標の正規化・位置合わせは `pipeline/` にある）。
 
 THE WINDBOUND OATH のキャラクター素材を確認するためのローカルブラウザツール。正本画像を変更することはない。
 ChatGPT から納品された v0.1 MVP（コミット f5088ae に、受け取ったままの状態で取り込み済み）を、`docs/CLAUDE_HANDOFF.md`（CHARACTER-ASSET-STUDIO-02）に従って強化した。
@@ -56,7 +58,21 @@ python3 -m http.server 8000
 - **歩行フェーズ:** 「脚の開き幅の極大・極小」は解析マーカー（`candidates`）として、接地（`phases` の contact）とは別に記録する。接地は登録時点では「候補（未確定）」で、動画を見て確認したものだけ「目視確定」（`verification: "visual_confirmed"`）にする。確定してもファイル全体は未承認の参考値のまま。
 - **Grid Overlay 参考JSON:** ファイルは変更していない（バイト単位で同一）。中の contact は脚の開き幅の極大から求めた値で、目視確定はしていないため、読み込むと9件すべて「候補（未確定）」と表示される。
 
+## v0.5 AI Collaboration Pipeline（CHARACTER-ASSET-STUDIO-06）
+| 優先事項 | 実装 |
+|---|---|
+| 1. 共通JSONスキーマ | `pipeline/schemas/`。対象は asset-set（素体・衣装レイヤー・歩行フレーム）、anchor-set、motion-reference、manifest、production-brief、qa-report。BASE_BODY_SPEC 2.0 は既存の `docs/BASE_BODY_SPEC.schema.json` を使う |
+| 2. SHA-256 MANIFEST と正本保護 | `cas.py manifest-build／manifest-verify／protect-verify／protect-diff`、`pipeline/protected_assets.json`（17件）。すべての書き込み処理は、保護対象のパスへの書き込みと既存ファイルの上書きを拒否する |
+| 3. 画像の自動QA | `cas.py qa`。寸法、アルファ、外周の透明、接地とアンカー、フレームの欠落・重複、フレーム間の整合、同じ画像の連続 |
+| 4. ガイドPNGと制作指示JSON | `cas.py brief`。方向ごとの透明ガイドとプレビュー、`cas/production-brief/0.5`（`autoAdopt: false`） |
+| 5. PASS／FAIL／BLOCKED／NOT_RUN | `cas/qa-report/0.5`。人間の検査項目は記録がなければ NOT_RUN |
+| 6. Draft PR への集約 | `cas.py pr-summary` と `cas.py pr-append`（開いた Draft PR だけを編集し、マージはしない） |
+
+この版の MANIFEST.json は `cas/manifest/0.5` 形式（各ファイルの SHA-256 と状態）。
+
 ## Android 実機での起動（CHARACTER-ASSET-STUDIO-05）
+**実機QA: 4/4 PASS**（ディレクター報告、2026-11-11。`qa/android_device_qa_20261111.json`）。PASS した4項目は、下の「実機チェック手順」の4つの確認点。
+
 ターミナルは不要。Android の Chrome で次のURLを開く（このリポジトリは公開リポジトリで、raw.githack.com はブランチ上のファイルを正しい形式で配信する外部サービス。公式サイトへの公開ではない）。
 
 - 検証する版を固定するURL（推奨。`<SHA>` は PR #224 の最新コミットSHA。チェックリストに記録する）:
@@ -87,9 +103,10 @@ python3 -m http.server 8000
 node --test tools/character-asset-studio/tests/*.cjs                    # 中核ロジック（v0.2 6件 + モーション 13件）
 python3 tools/character-asset-studio/tests/e2e_studio.py [OUT_DIR]       # v0.2 機能（390px・1440px）
 python3 tools/character-asset-studio/tests/e2e_motion.py [OUT_DIR] [--real-video PATH]   # v0.3 モーション
+python3 -m unittest discover -s tools/character-asset-studio/pipeline/tests             # v0.5 パイプライン
 ```
 `e2e_motion.py` は、テストのたびに ffmpeg で合成動画（コマ番号を灰色の濃さで表した可逆H.264）を作り、コマ送りが正確かを確かめる。`--real-video` を付けると実際の参考動画でも確かめるが、そのスクリーンショットは一時ディレクトリにだけ保存する。
-結果は `qa/QA_REPORT_v0.4.md`（以前の版は `qa/QA_REPORT_v0.3.md`、`qa/QA_REPORT_v0.2.md`）、`qa/e2e_report.json`、`qa/e2e_motion_report.json`、`qa/*.png` に保存している。
+結果は `qa/QA_REPORT_v0.5.md`（以前の版は `qa/QA_REPORT_v0.4.md`、`v0.3`、`v0.2`）、`qa/e2e_report.json`、`qa/e2e_motion_report.json`、`qa/*.png` に保存している。
 
 ## 実装していないこと
 - 自動リギング、隠れた部分の自動補正、IK、解剖学的な整合性の証明

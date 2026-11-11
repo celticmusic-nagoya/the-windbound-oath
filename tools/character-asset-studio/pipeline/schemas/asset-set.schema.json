@@ -1,0 +1,199 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/asset-set.schema.json",
+ "title": "Asset set (body / costume layer / walk frames) — QA input and delivery record",
+ "type": "object",
+ "required": [
+  "schema",
+  "status",
+  "characterId",
+  "kind",
+  "canvas",
+  "anchor",
+  "frameCount",
+  "views"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "cas/asset-set/0.5"
+  },
+  "status": {
+   "$ref": "common.schema.json#/$defs/assetStatus"
+  },
+  "characterId": {
+   "type": "string",
+   "minLength": 1
+  },
+  "kind": {
+   "enum": [
+    "base_body",
+    "costume_layer",
+    "walk_frames",
+    "reference"
+   ]
+  },
+  "layer": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "slot": {
+     "enum": [
+      "base",
+      "underwear",
+      "bottom",
+      "top",
+      "outer",
+      "footwear",
+      "hair",
+      "headgear_upper",
+      "headgear_middle",
+      "headgear_lower",
+      "accessory",
+      "effect"
+     ]
+    },
+    "zOrder": {
+     "type": "integer"
+    },
+    "parentAnchor": {
+     "const": "shared"
+    }
+   }
+  },
+  "presetId": {
+   "type": "string"
+  },
+  "canvas": {
+   "$ref": "common.schema.json#/$defs/canvas"
+  },
+  "anchor": {
+   "$ref": "common.schema.json#/$defs/anchor"
+  },
+  "frameCount": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 64
+  },
+  "views": {
+   "type": "object",
+   "minProperties": 1,
+   "additionalProperties": false,
+   "patternProperties": {
+    "^(front|back|left|right)$": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "frame",
+       "file"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "frame": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "file": {
+        "$ref": "common.schema.json#/$defs/fileRef"
+       },
+       "anchors": {
+        "type": "object",
+        "additionalProperties": {
+         "$ref": "common.schema.json#/$defs/norm"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "tolerances": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "groundPx": {
+     "type": "number",
+     "minimum": 0
+    },
+    "anchorXPx": {
+     "type": "number",
+     "minimum": 0
+    },
+    "bboxHeightRatio": {
+     "type": "number",
+     "minimum": 0
+    },
+    "groundSpreadPx": {
+     "type": "number",
+     "minimum": 0
+    },
+    "borderAlphaPixels": {
+     "type": "integer",
+     "minimum": 0
+    }
+   }
+  },
+  "references": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "path",
+     "sha256",
+     "role"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "path": {
+      "$ref": "common.schema.json#/$defs/relPath"
+     },
+     "sha256": {
+      "$ref": "common.schema.json#/$defs/sha256"
+     },
+     "role": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "humanReviews": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "required": [
+     "result",
+     "by",
+     "date"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "result": {
+      "enum": [
+       "PASS",
+       "FAIL"
+      ]
+     },
+     "by": {
+      "type": "string"
+     },
+     "date": {
+      "type": "string"
+     },
+     "note": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "approvals": {
+   "type": "array",
+   "items": {
+    "$ref": "common.schema.json#/$defs/approval"
+   }
+  },
+  "note": {
+   "type": "string"
+  }
+ }
+}

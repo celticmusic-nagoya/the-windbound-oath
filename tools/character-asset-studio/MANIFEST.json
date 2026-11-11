@@ -1,393 +1,732 @@
 {
- "schemaVersion": "1.0",
- "tool": "Character Asset Studio",
- "version": "0.4",
- "note": "No canonical artwork is stored here. demo/ PNGs are derived non-canonical candidates. docs/FILE_MANIFEST.json is the v0.1 delivery manifest kept as received. motion/ holds UNAPPROVED_REFERENCE timing JSON derived from a third-party reference video (no video pixels; the video itself is not stored).",
- "files": [
-  {
-   "path": "README.md",
-   "sha256": "cc38002b8928be62927811889ad46470d20bc2ef1f71a5c5695de6d79a2f17f7",
-   "bytes": 13513,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "app.js",
-   "sha256": "a41587179dd7ff8885901168c55dc5fbd1e6f2b078c65302cdd25cf9007251b3",
-   "bytes": 20137,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "demo/morwen_back_candidate.png",
-   "sha256": "f1fda2faf8f1b56abed8c3b9252b87347926d0f7ce1221e86095210e0a4b3729",
-   "bytes": 1370855,
-   "canonical": false,
-   "role": "derived_candidate_non_canonical"
-  },
-  {
-   "path": "demo/morwen_front_candidate.png",
-   "sha256": "6b0e8f9be5802af82743703e4b7c5796e19dbf632be7067b175a7206b788df78",
-   "bytes": 1447978,
-   "canonical": false,
-   "role": "derived_candidate_non_canonical"
-  },
-  {
-   "path": "demo/morwen_left_candidate.png",
-   "sha256": "4bb9ae8763ed0604125f5bdd2d80558a1e8df399023e802b7a6541850fbae318",
-   "bytes": 1096787,
-   "canonical": false,
-   "role": "derived_candidate_non_canonical"
-  },
-  {
-   "path": "demo/morwen_right_candidate.png",
-   "sha256": "99ac43d3b60451eef3d5961287fa3f691aa56217b76d8c518c2817f00eee6089",
-   "bytes": 1251064,
-   "canonical": false,
-   "role": "derived_candidate_non_canonical"
-  },
-  {
-   "path": "docs/BASE_BODY_SPEC.example.json",
-   "sha256": "793f3813e4db106609aa77f67c7da74727f27abfb1d9795f0e50f7e65d2b38f6",
-   "bytes": 2770,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "docs/BASE_BODY_SPEC.schema.json",
-   "sha256": "c59829c9e2e2fec6beea8907760fa650745aa74048eb8df2b88c6f273e2563a7",
-   "bytes": 4168,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "docs/CLAUDE_HANDOFF.md",
-   "sha256": "cbcf38cb6b4523f30a923fb3452fd456cd5729bfa1d8511edd12be343ba97bcd",
-   "bytes": 2878,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "docs/FILE_MANIFEST.json",
-   "sha256": "89bed433cd780ab282f014f89d1344f8052eb9d1acb475d0533b4c102e10e4b1",
-   "bytes": 1770,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "docs/QA_REPORT.md",
-   "sha256": "cbfbc32fc6e8bee66d6084dee7cf8a772df4cd35cb2b16f05948364dc0cf1a81",
-   "bytes": 844,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "index.html",
-   "sha256": "7ad7b6b5309481c4f1bd880289d214651f55a7dc757c9291da5de3eba61be315",
-   "bytes": 13095,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "motion-core.js",
-   "sha256": "c22ec841abe3280e681707a363de7cf8281e8ecb7505404c55b945c5b23c755c",
-   "bytes": 12156,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "motion.js",
-   "sha256": "3a059a942242585a187cb08498dd277c385cf0ace544aa21c53f16bf6c3fa0f0",
-   "bytes": 28102,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "motion/grid_overlay_walk.reference.json",
-   "sha256": "e758a5c60e03dc464d18ea7382c13d44a7a447d0af3173ab5dadb3f39893e569",
-   "bytes": 4361,
-   "canonical": false,
-   "role": "unapproved_motion_reference"
-  },
-  {
-   "path": "profiles/morwen_constraints.json",
-   "sha256": "692970035d386a7dd28d21de55b03666d09d412da735d90e2bb6d25c731dd0d6",
-   "bytes": 2531,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "profiles/presets.json",
-   "sha256": "57860a984400d17df28671e93dc476e88880bd42c2779f7c235c5fb97bb8d244",
-   "bytes": 1173,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "profiles/reference_bodies.json",
-   "sha256": "0f37a9b438870fadcfd3f158ad6cd6fb20f03120c339120f677567d851026bbb",
-   "bytes": 525,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "qa/ANDROID_DEVICE_QA_CHECKLIST.md",
-   "sha256": "2aa45b931ec8a8fa9b2cb03e32338beed6cf678315259623f15c00e58e6df64a",
-   "bytes": 6751,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/QA_REPORT_v0.2.md",
-   "sha256": "dcd75bf039e44b8d5394f060ead7cfa2f24f840a2fcbc7c808b972723759f138",
-   "bytes": 4338,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/QA_REPORT_v0.3.md",
-   "sha256": "7cd68feb19b34ec8893b8b7fb7f9cfe649013f5e005f5735b3e14dfbb1cc08b5",
-   "bytes": 3733,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/QA_REPORT_v0.4.md",
-   "sha256": "22421032ab2da87c064c8b5fb28d957306a3d4475cbe2ab996a172e10cab72a8",
-   "bytes": 3597,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/android_prep_android360x640.png",
-   "sha256": "8fc8efafe1a52f03ce42230e6b0c9ea95ce8071b5d8ebd86edd595836b049027",
-   "bytes": 431615,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/android_prep_android390x740.png",
-   "sha256": "535453f4f1f969743104e47bc257637ccf6df3f9d05c038cba4c51ec8d42fc46",
-   "bytes": 530450,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/android_prep_landscape780x360.png",
-   "sha256": "5e8fddbfcdb627212d272de403eff9246a713ad452050e476189fa7508e5c233",
-   "bytes": 165579,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/android_prep_pixel7_412x780.png",
-   "sha256": "c0d2b66fa35c3791cbe3216140e29f88a99d7fd7ae0bfff96d9ada8efc1ac926",
-   "bytes": 578002,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/android_prep_report.json",
-   "sha256": "831c6acca2c30682cee30f27811b7399302c81a0629ffaf60a775280d0e3aa6c",
-   "bytes": 3900,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/canon_sha_check.json",
-   "sha256": "0c45d1cb8d9652dd7bb37450ee0560d8139d389217a0d6c6808132b3f42062f5",
-   "bytes": 4001,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/desktop1440_01_demo_right.png",
-   "sha256": "f27607222fdc988f3fafcfbddb3a372b11866a92c14ea03ac117b7e1d5f8db2b",
-   "bytes": 401460,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/desktop1440_02_qa.png",
-   "sha256": "fd63a20fb935c5373460e865d95cfccc88608da95cbd6e01b0149e8b13d24d26",
-   "bytes": 846882,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/desktop1440_03_preset_hd.png",
-   "sha256": "2e5308832cce4f9b34534613cd901dca506165f73f6b34badb9c61e9dda90cf4",
-   "bytes": 488093,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/e2e_motion_report.json",
-   "sha256": "341c3df7b59947e2f5ed665b9f468e4f1988b5afe994b18a019041719db2cc72",
-   "bytes": 21096,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/e2e_report.json",
-   "sha256": "8023d0e07df1091e01af504fe97df0413c26ed59f9499b085ffa38ef5e771a67",
-   "bytes": 7887,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/mobile390_01_demo_right.png",
-   "sha256": "ceccbb109ac47305709a44b71e045bffacfb9ed3cc9dd37a7b59aa3f696d533d",
-   "bytes": 204967,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/mobile390_02_qa.png",
-   "sha256": "3d436e78ac8a5937dfaa8764e09d30467afa7815acfb53efe15c987312ea700f",
-   "bytes": 2121282,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/mobile390_03_preset_hd.png",
-   "sha256": "4f0d7278f537f5d8e813b40fb420038f20f950f9818cd793202d94f41142c9ac",
-   "bytes": 277114,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_desktop1440_01_compare.png",
-   "sha256": "e6178bc6ba9809366f9c5a5c4ccf61d377e4d1654b2930e052d6588d66f80a52",
-   "bytes": 400487,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_desktop1440_02_anchors.png",
-   "sha256": "3dbba60ff9aab55abbb45671241ea2273e65013b0b06809f31e22eeda48aa9a4",
-   "bytes": 152224,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_desktop1440_03_cycle12_missing.png",
-   "sha256": "ceda2e580706a4d26352f450d9b2aecf12a3e860b0fecf4d7ae352423b91e95d",
-   "bytes": 136587,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_desktop1440_04_cycle12_reuse.png",
-   "sha256": "434c564d24485d655058718f82649b29f8d0cbe252f07eb0d5c7f4541cae4b7d",
-   "bytes": 285755,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_desktop1440_05_cycle12_all.png",
-   "sha256": "95ed40d4f21307454d482b57662f8e7b3f696babc6231d043c9679e24380c836",
-   "bytes": 312924,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_desktop1440_06_compare_aligned.png",
-   "sha256": "b34ed5dcbd7c1b94ec51012af055034493434cc9f0a7214056a6ceec446dc903",
-   "bytes": 247413,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_mobile390_01_compare.png",
-   "sha256": "e39d62ad41319e024dfce373e07335ccd525dddb37bd49fb9eaee50593e6a07f",
-   "bytes": 288598,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_mobile390_02_anchors.png",
-   "sha256": "5aa8063be1aa4065a5e1583fe60ce184cef8b7a547cb117a9e1a73888ad1188b",
-   "bytes": 117737,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_mobile390_03_cycle12_missing.png",
-   "sha256": "cf13cfa38b489e5820a2e6699a2e23be698841a2db8cd77f9afd16bed7ed50b2",
-   "bytes": 152667,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_mobile390_04_cycle12_reuse.png",
-   "sha256": "d5aa3b8de51411d0f934c235e9bc3648735ba6191c13c408ae8254194014e624",
-   "bytes": 282943,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_mobile390_05_cycle12_all.png",
-   "sha256": "c61af4468ec59355d09cfe71844643e00515c41a1832c89697355b20dd48cb4b",
-   "bytes": 362321,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "qa/motion_mobile390_06_compare_aligned.png",
-   "sha256": "8e496570225413f40322f86cde19a8101016c8ea6cf2d9569a27617078752f47",
-   "bytes": 249700,
-   "canonical": false,
-   "role": "qa_evidence"
-  },
-  {
-   "path": "studio-core.js",
-   "sha256": "a735a00dcf9c40bd14fe4cfb7356dd5f928ac17b41de8eaa404ced97e35ed986",
-   "bytes": 7278,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "styles.css",
-   "sha256": "0b5ba90e23222b9240d37acb87e780ab91899ae29837576c4006cc714de0c9f8",
-   "bytes": 6911,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "tests/android_prep_check.py",
-   "sha256": "b8f42b3fa4e9dcdffeec9d56f1dc310a10493a006fee51e1f7346c6c279ec0aa",
-   "bytes": 6467,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "tests/e2e_motion.py",
-   "sha256": "0794d5d330d89ad275ea38cfec85217bfe5d47a7d4a543dd310e75289e03697c",
-   "bytes": 24864,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "tests/e2e_studio.py",
-   "sha256": "931a8bd423e043b5079888c2d2f387b8df6c0f621932eef19628dc873a295dee",
-   "bytes": 9877,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "tests/motion_core.test.cjs",
-   "sha256": "62320cf07393da5c2c8ae964e73bdaa58b51f6d7bad860257d5cafa3db492752",
-   "bytes": 8566,
-   "canonical": false,
-   "role": "tool"
-  },
-  {
-   "path": "tests/studio_core.test.cjs",
-   "sha256": "cefff7eceae9b9b22bf10826cd7eee966a3ef8bc1e82a6bd6cde95147ef10c00",
-   "bytes": 3611,
-   "canonical": false,
-   "role": "tool"
-  }
- ]
+  "files": [
+    {
+      "bytes": 15714,
+      "path": "tools/character-asset-studio/README.md",
+      "role": "tool",
+      "sha256": "898419c67db661055610cfd2f3042e798883c7bf8329cae3f568401812be56a6",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 20137,
+      "path": "tools/character-asset-studio/app.js",
+      "role": "tool",
+      "sha256": "a41587179dd7ff8885901168c55dc5fbd1e6f2b078c65302cdd25cf9007251b3",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1370855,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/demo/morwen_back_candidate.png",
+      "role": "derived_candidate_non_canonical",
+      "sha256": "f1fda2faf8f1b56abed8c3b9252b87347926d0f7ce1221e86095210e0a4b3729",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1200
+    },
+    {
+      "bytes": 1447978,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/demo/morwen_front_candidate.png",
+      "role": "derived_candidate_non_canonical",
+      "sha256": "6b0e8f9be5802af82743703e4b7c5796e19dbf632be7067b175a7206b788df78",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1200
+    },
+    {
+      "bytes": 1096787,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/demo/morwen_left_candidate.png",
+      "role": "derived_candidate_non_canonical",
+      "sha256": "4bb9ae8763ed0604125f5bdd2d80558a1e8df399023e802b7a6541850fbae318",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1200
+    },
+    {
+      "bytes": 1251064,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/demo/morwen_right_candidate.png",
+      "role": "derived_candidate_non_canonical",
+      "sha256": "99ac43d3b60451eef3d5961287fa3f691aa56217b76d8c518c2817f00eee6089",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1200
+    },
+    {
+      "bytes": 2770,
+      "path": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.json",
+      "role": "tool",
+      "sha256": "793f3813e4db106609aa77f67c7da74727f27abfb1d9795f0e50f7e65d2b38f6",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4168,
+      "path": "tools/character-asset-studio/docs/BASE_BODY_SPEC.schema.json",
+      "role": "tool",
+      "sha256": "c59829c9e2e2fec6beea8907760fa650745aa74048eb8df2b88c6f273e2563a7",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2878,
+      "path": "tools/character-asset-studio/docs/CLAUDE_HANDOFF.md",
+      "role": "tool",
+      "sha256": "cbcf38cb6b4523f30a923fb3452fd456cd5729bfa1d8511edd12be343ba97bcd",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1770,
+      "path": "tools/character-asset-studio/docs/FILE_MANIFEST.json",
+      "role": "tool",
+      "sha256": "89bed433cd780ab282f014f89d1344f8052eb9d1acb475d0533b4c102e10e4b1",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 844,
+      "path": "tools/character-asset-studio/docs/QA_REPORT.md",
+      "role": "tool",
+      "sha256": "cbfbc32fc6e8bee66d6084dee7cf8a772df4cd35cb2b16f05948364dc0cf1a81",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 13095,
+      "path": "tools/character-asset-studio/index.html",
+      "role": "tool",
+      "sha256": "7ad7b6b5309481c4f1bd880289d214651f55a7dc757c9291da5de3eba61be315",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4361,
+      "path": "tools/character-asset-studio/motion/grid_overlay_walk.reference.json",
+      "role": "unapproved_motion_reference",
+      "sha256": "e758a5c60e03dc464d18ea7382c13d44a7a447d0af3173ab5dadb3f39893e569",
+      "status": "UNAPPROVED_REFERENCE"
+    },
+    {
+      "bytes": 12156,
+      "path": "tools/character-asset-studio/motion-core.js",
+      "role": "tool",
+      "sha256": "c22ec841abe3280e681707a363de7cf8281e8ecb7505404c55b945c5b23c755c",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 28102,
+      "path": "tools/character-asset-studio/motion.js",
+      "role": "tool",
+      "sha256": "3a059a942242585a187cb08498dd277c385cf0ace544aa21c53f16bf6c3fa0f0",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 8424,
+      "path": "tools/character-asset-studio/pipeline/README.md",
+      "role": "pipeline",
+      "sha256": "95b3fe9adaae59f650a9d2a35b228118c8458ca1e152c4c4f8d9087c09ade61e",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 8092,
+      "path": "tools/character-asset-studio/pipeline/cas.py",
+      "role": "pipeline",
+      "sha256": "0e27363f95fec4b45fd4f003e9dd24b7d4a0e69ca276d46ba34823806f390222",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 63,
+      "path": "tools/character-asset-studio/pipeline/caslib/__init__.py",
+      "role": "pipeline",
+      "sha256": "ae544c27f7da5aca0530608dbd35697a24ad90203d353efd4d751f6a84a6e12e",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2338,
+      "path": "tools/character-asset-studio/pipeline/caslib/align.py",
+      "role": "pipeline",
+      "sha256": "c88e87f268baf0bf42ec26a2696b2885530a011c4d7c8f6b84bf63b482a5a94d",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 10890,
+      "path": "tools/character-asset-studio/pipeline/caslib/brief.py",
+      "role": "pipeline",
+      "sha256": "918708ea46fd3b3a05ecd089349ff7d186a61a343879940b270694f46afb0fbb",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 5269,
+      "path": "tools/character-asset-studio/pipeline/caslib/core.py",
+      "role": "pipeline",
+      "sha256": "2d55b4796891f68e205c33db8a598a74b97911784d4ef87e7409744efbf34d39",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 11806,
+      "path": "tools/character-asset-studio/pipeline/caslib/imageqa.py",
+      "role": "pipeline",
+      "sha256": "b2c8cf86aa2d8a56dd7ddd5bbfc0de77d80c6d3f61c227f3e42c2144d46c0e0e",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3872,
+      "path": "tools/character-asset-studio/pipeline/caslib/manifest.py",
+      "role": "pipeline",
+      "sha256": "676ac1f51930ee5b120ecea349b67361df7e2c0699657a043f6d9a182a098d4f",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2597,
+      "path": "tools/character-asset-studio/pipeline/caslib/report.py",
+      "role": "pipeline",
+      "sha256": "175c451975c78cbe6dc5633c0493cb261125c240cb0705e2bad39b450395f267",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2525,
+      "path": "tools/character-asset-studio/pipeline/caslib/schemas.py",
+      "role": "pipeline",
+      "sha256": "28dd81cc9addaa8bd946cd4e632b9c58627280719e134ef7049d25bacc05adfa",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1536,
+      "path": "tools/character-asset-studio/pipeline/examples/demo_candidates.asset-set.json",
+      "role": "pipeline",
+      "sha256": "232e822c5b8027c66011e88b94de80a01c7d53f53fded8e87ac7f30f42a4c6f7",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 40713,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_back.png",
+      "role": "ai_production_brief_example",
+      "sha256": "2a82c8d1ceca9dc8a0abd4619e46161db1cf62b7524b33b48f0be9934475a0e2",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 949003,
+      "height": 1600,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_back_preview.png",
+      "role": "ai_production_brief_example",
+      "sha256": "ee8602a470bab28b7c344cc725f39870d430dbf7f3d6fde6c11e9c17d9aa0949",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 40463,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_front.png",
+      "role": "ai_production_brief_example",
+      "sha256": "4ec36f4193e6aceec67e64a8a09b95bcbd7562a3b3f0067f0c53a6ca35a1d384",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 1000731,
+      "height": 1600,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_front_preview.png",
+      "role": "ai_production_brief_example",
+      "sha256": "18146a5b78c4e2c788f637585f3f0f4a9b2ed0a243f7e75a2a7bae8374201022",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 40431,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_left.png",
+      "role": "ai_production_brief_example",
+      "sha256": "52193ebcb3486338893fe554c469dbf9d118d133f3fcce36baf799e13fead962",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 781501,
+      "height": 1600,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_left_preview.png",
+      "role": "ai_production_brief_example",
+      "sha256": "837a94bc779e08df3b5018583cd7f3c9a1d9cc0ce1b8113a44c47004b552ddaf",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 40751,
+      "height": 1600,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_right.png",
+      "role": "ai_production_brief_example",
+      "sha256": "00e5e3e86a135a3a6e11288b87f55609311350a175cc49d123d043051b11bfd8",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 825178,
+      "height": 1600,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/guide_right_preview.png",
+      "role": "ai_production_brief_example",
+      "sha256": "11c18facd723406529990b7def56fb9753ae7051829c5ea15af3bf7afe44fc6e",
+      "status": "UNAPPROVED_INSTRUCTION",
+      "width": 1200
+    },
+    {
+      "bytes": 24074,
+      "path": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/production_brief.json",
+      "role": "ai_production_brief_example",
+      "sha256": "35f8bb0dc73a4be34ee38ecddf2bc443b8e9f25f7b5909d0deb7ec8fdcd9123d",
+      "status": "UNAPPROVED_INSTRUCTION"
+    },
+    {
+      "bytes": 3907,
+      "path": "tools/character-asset-studio/pipeline/protected_assets.json",
+      "role": "pipeline",
+      "sha256": "62e387e389d8d040fc2492373addfb234aa589cd76a96da8a86b60eb7c92382c",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1589,
+      "path": "tools/character-asset-studio/pipeline/schemas/anchor-set.schema.json",
+      "role": "pipeline",
+      "sha256": "d5c92dcbfac8840e507c3ff730fe9f7e30d39adb13223cee3190f642179f2906",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3513,
+      "path": "tools/character-asset-studio/pipeline/schemas/asset-set.schema.json",
+      "role": "pipeline",
+      "sha256": "34dc48d44c78543a3c44003e7cfbae2172cc1f16e675d8df4b4f0353a1451cde",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2847,
+      "path": "tools/character-asset-studio/pipeline/schemas/common.schema.json",
+      "role": "pipeline",
+      "sha256": "81efaf722cdef767f1ee6bf03d10711c5d59db9856c8e3a863402b31e0bb981b",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1161,
+      "path": "tools/character-asset-studio/pipeline/schemas/manifest.schema.json",
+      "role": "pipeline",
+      "sha256": "da42985b1dce7a38666082afe5ac3529492d6597ef968ff248897b4267d85151",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2958,
+      "path": "tools/character-asset-studio/pipeline/schemas/motion-reference.schema.json",
+      "role": "pipeline",
+      "sha256": "fcd3802d1953d4a4ffa7d4add97842d1b81eebe4994f238366f03911bcd8b5c6",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4682,
+      "path": "tools/character-asset-studio/pipeline/schemas/production-brief.schema.json",
+      "role": "pipeline",
+      "sha256": "f1f2ef85672175502e672ea48791907541f266e7f8be36f49cd3ad2808dc8d3e",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1878,
+      "path": "tools/character-asset-studio/pipeline/schemas/qa-report.schema.json",
+      "role": "pipeline",
+      "sha256": "106267122826ed908ae6dd6a589f946192558b36908668e1e03c289137864173",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 17475,
+      "path": "tools/character-asset-studio/pipeline/tests/test_pipeline.py",
+      "role": "pipeline",
+      "sha256": "b6ba44f4217633a8c1a898e0aef1d27add255e3020388ba23c9dd2a85e6d8df0",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2531,
+      "path": "tools/character-asset-studio/profiles/morwen_constraints.json",
+      "role": "tool",
+      "sha256": "692970035d386a7dd28d21de55b03666d09d412da735d90e2bb6d25c731dd0d6",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1173,
+      "path": "tools/character-asset-studio/profiles/presets.json",
+      "role": "tool",
+      "sha256": "57860a984400d17df28671e93dc476e88880bd42c2779f7c235c5fb97bb8d244",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 525,
+      "path": "tools/character-asset-studio/profiles/reference_bodies.json",
+      "role": "tool",
+      "sha256": "0f37a9b438870fadcfd3f158ad6cd6fb20f03120c339120f677567d851026bbb",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 8105,
+      "path": "tools/character-asset-studio/qa/ANDROID_DEVICE_QA_CHECKLIST.md",
+      "role": "qa_evidence",
+      "sha256": "09df9a2ab65c4bd7a080ad5b0a9b0cad1f32962bf676e399fde3a03c0ac550db",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4338,
+      "path": "tools/character-asset-studio/qa/QA_REPORT_v0.2.md",
+      "role": "qa_evidence",
+      "sha256": "dcd75bf039e44b8d5394f060ead7cfa2f24f840a2fcbc7c808b972723759f138",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3733,
+      "path": "tools/character-asset-studio/qa/QA_REPORT_v0.3.md",
+      "role": "qa_evidence",
+      "sha256": "7cd68feb19b34ec8893b8b7fb7f9cfe649013f5e005f5735b3e14dfbb1cc08b5",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3597,
+      "path": "tools/character-asset-studio/qa/QA_REPORT_v0.4.md",
+      "role": "qa_evidence",
+      "sha256": "22421032ab2da87c064c8b5fb28d957306a3d4475cbe2ab996a172e10cab72a8",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3250,
+      "path": "tools/character-asset-studio/qa/QA_REPORT_v0.5.md",
+      "role": "qa_evidence",
+      "sha256": "496623f3a84f3d107664c54093a2bda18abc38af6333422e7c95c1724291d2da",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2177,
+      "path": "tools/character-asset-studio/qa/android_device_qa_20261111.json",
+      "role": "qa_evidence",
+      "sha256": "cd2069a9798b2dbb4ff2a32223bccf09f2d7d8f722dfe3ca86a2d91ff1a7ce63",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 431615,
+      "height": 1680,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/android_prep_android360x640.png",
+      "role": "qa_evidence",
+      "sha256": "8fc8efafe1a52f03ce42230e6b0c9ea95ce8071b5d8ebd86edd595836b049027",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 945
+    },
+    {
+      "bytes": 530450,
+      "height": 1943,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/android_prep_android390x740.png",
+      "role": "qa_evidence",
+      "sha256": "535453f4f1f969743104e47bc257637ccf6df3f9d05c038cba4c51ec8d42fc46",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1024
+    },
+    {
+      "bytes": 165579,
+      "height": 945,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/android_prep_landscape780x360.png",
+      "role": "qa_evidence",
+      "sha256": "5e8fddbfcdb627212d272de403eff9246a713ad452050e476189fa7508e5c233",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 2048
+    },
+    {
+      "bytes": 578002,
+      "height": 2048,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/android_prep_pixel7_412x780.png",
+      "role": "qa_evidence",
+      "sha256": "c0d2b66fa35c3791cbe3216140e29f88a99d7fd7ae0bfff96d9ada8efc1ac926",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1082
+    },
+    {
+      "bytes": 3900,
+      "path": "tools/character-asset-studio/qa/android_prep_report.json",
+      "role": "qa_evidence",
+      "sha256": "831c6acca2c30682cee30f27811b7399302c81a0629ffaf60a775280d0e3aa6c",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4001,
+      "path": "tools/character-asset-studio/qa/canon_sha_check.json",
+      "role": "qa_evidence",
+      "sha256": "0c45d1cb8d9652dd7bb37450ee0560d8139d389217a0d6c6808132b3f42062f5",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 401460,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/desktop1440_01_demo_right.png",
+      "role": "qa_evidence",
+      "sha256": "f27607222fdc988f3fafcfbddb3a372b11866a92c14ea03ac117b7e1d5f8db2b",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 846882,
+      "height": 1862,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/desktop1440_02_qa.png",
+      "role": "qa_evidence",
+      "sha256": "fd63a20fb935c5373460e865d95cfccc88608da95cbd6e01b0149e8b13d24d26",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 488093,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/desktop1440_03_preset_hd.png",
+      "role": "qa_evidence",
+      "sha256": "2e5308832cce4f9b34534613cd901dca506165f73f6b34badb9c61e9dda90cf4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 21096,
+      "path": "tools/character-asset-studio/qa/e2e_motion_report.json",
+      "role": "qa_evidence",
+      "sha256": "341c3df7b59947e2f5ed665b9f468e4f1988b5afe994b18a019041719db2cc72",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 7887,
+      "path": "tools/character-asset-studio/qa/e2e_report.json",
+      "role": "qa_evidence",
+      "sha256": "8023d0e07df1091e01af504fe97df0413c26ed59f9499b085ffa38ef5e771a67",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 204967,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/mobile390_01_demo_right.png",
+      "role": "qa_evidence",
+      "sha256": "ceccbb109ac47305709a44b71e045bffacfb9ed3cc9dd37a7b59aa3f696d533d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 2121282,
+      "height": 13056,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/mobile390_02_qa.png",
+      "role": "qa_evidence",
+      "sha256": "3d436e78ac8a5937dfaa8764e09d30467afa7815acfb53efe15c987312ea700f",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 277114,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/mobile390_03_preset_hd.png",
+      "role": "qa_evidence",
+      "sha256": "4f0d7278f537f5d8e813b40fb420038f20f950f9818cd793202d94f41142c9ac",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 400487,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_desktop1440_01_compare.png",
+      "role": "qa_evidence",
+      "sha256": "e6178bc6ba9809366f9c5a5c4ccf61d377e4d1654b2930e052d6588d66f80a52",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 152224,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_desktop1440_02_anchors.png",
+      "role": "qa_evidence",
+      "sha256": "3dbba60ff9aab55abbb45671241ea2273e65013b0b06809f31e22eeda48aa9a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 136587,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_desktop1440_03_cycle12_missing.png",
+      "role": "qa_evidence",
+      "sha256": "ceda2e580706a4d26352f450d9b2aecf12a3e860b0fecf4d7ae352423b91e95d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 285755,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_desktop1440_04_cycle12_reuse.png",
+      "role": "qa_evidence",
+      "sha256": "434c564d24485d655058718f82649b29f8d0cbe252f07eb0d5c7f4541cae4b7d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 312924,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_desktop1440_05_cycle12_all.png",
+      "role": "qa_evidence",
+      "sha256": "95ed40d4f21307454d482b57662f8e7b3f696babc6231d043c9679e24380c836",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 247413,
+      "height": 900,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_desktop1440_06_compare_aligned.png",
+      "role": "qa_evidence",
+      "sha256": "b34ed5dcbd7c1b94ec51012af055034493434cc9f0a7214056a6ceec446dc903",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1440
+    },
+    {
+      "bytes": 288598,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_mobile390_01_compare.png",
+      "role": "qa_evidence",
+      "sha256": "e39d62ad41319e024dfce373e07335ccd525dddb37bd49fb9eaee50593e6a07f",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 117737,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_mobile390_02_anchors.png",
+      "role": "qa_evidence",
+      "sha256": "5aa8063be1aa4065a5e1583fe60ce184cef8b7a547cb117a9e1a73888ad1188b",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 152667,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_mobile390_03_cycle12_missing.png",
+      "role": "qa_evidence",
+      "sha256": "cf13cfa38b489e5820a2e6699a2e23be698841a2db8cd77f9afd16bed7ed50b2",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 282943,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_mobile390_04_cycle12_reuse.png",
+      "role": "qa_evidence",
+      "sha256": "d5aa3b8de51411d0f934c235e9bc3648735ba6191c13c408ae8254194014e624",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 362321,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_mobile390_05_cycle12_all.png",
+      "role": "qa_evidence",
+      "sha256": "c61af4468ec59355d09cfe71844643e00515c41a1832c89697355b20dd48cb4b",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 249700,
+      "height": 1688,
+      "mode": "RGB",
+      "path": "tools/character-asset-studio/qa/motion_mobile390_06_compare_aligned.png",
+      "role": "qa_evidence",
+      "sha256": "8e496570225413f40322f86cde19a8101016c8ea6cf2d9569a27617078752f47",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 780
+    },
+    {
+      "bytes": 12621,
+      "path": "tools/character-asset-studio/qa/pipeline/demo_candidates_qa.json",
+      "role": "qa_evidence",
+      "sha256": "605d8b411663af85ec68aeb4638baa391728049a7f72a5b53df71d7548aed1b9",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3331,
+      "path": "tools/character-asset-studio/qa/pipeline/protect_verify.json",
+      "role": "qa_evidence",
+      "sha256": "10817e6133505f86bca7e8fe35bd6483b49ee59a705464176757f1f218fc4ba2",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 2158,
+      "path": "tools/character-asset-studio/qa/pipeline/schema_validation.json",
+      "role": "qa_evidence",
+      "sha256": "db517b8c53d3962c3471237fe05792f7318551dbabf44d70b6d5de9db0774b92",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 7278,
+      "path": "tools/character-asset-studio/studio-core.js",
+      "role": "tool",
+      "sha256": "a735a00dcf9c40bd14fe4cfb7356dd5f928ac17b41de8eaa404ced97e35ed986",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 6911,
+      "path": "tools/character-asset-studio/styles.css",
+      "role": "tool",
+      "sha256": "0b5ba90e23222b9240d37acb87e780ab91899ae29837576c4006cc714de0c9f8",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 6467,
+      "path": "tools/character-asset-studio/tests/android_prep_check.py",
+      "role": "tool",
+      "sha256": "b8f42b3fa4e9dcdffeec9d56f1dc310a10493a006fee51e1f7346c6c279ec0aa",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 24864,
+      "path": "tools/character-asset-studio/tests/e2e_motion.py",
+      "role": "tool",
+      "sha256": "0794d5d330d89ad275ea38cfec85217bfe5d47a7d4a543dd310e75289e03697c",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 9877,
+      "path": "tools/character-asset-studio/tests/e2e_studio.py",
+      "role": "tool",
+      "sha256": "931a8bd423e043b5079888c2d2f387b8df6c0f621932eef19628dc873a295dee",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 8566,
+      "path": "tools/character-asset-studio/tests/motion_core.test.cjs",
+      "role": "tool",
+      "sha256": "62320cf07393da5c2c8ae964e73bdaa58b51f6d7bad860257d5cafa3db492752",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 3611,
+      "path": "tools/character-asset-studio/tests/studio_core.test.cjs",
+      "role": "tool",
+      "sha256": "cefff7eceae9b9b22bf10826cd7eee966a3ef8bc1e82a6bd6cde95147ef10c00",
+      "status": "UNAPPROVED_CANDIDATE"
+    }
+  ],
+  "note": "Character Asset Studio v0.5 (tool, QA evidence, examples). Nothing here is canonical or adopted: tool code and QA evidence are UNAPPROVED_CANDIDATE, motion JSON is UNAPPROVED_REFERENCE, briefs/guides are UNAPPROVED_INSTRUCTION. Third-party reference videos are not stored.",
+  "root": "tools/character-asset-studio",
+  "schema": "cas/manifest/0.5"
 }

@@ -1,0 +1,185 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/motion-reference.schema.json",
+ "title": "Motion reference 1.0 (written by motion-core.js; always UNAPPROVED_REFERENCE)",
+ "type": "object",
+ "required": [
+  "schema",
+  "status",
+  "autoApply",
+  "video",
+  "region",
+  "phases",
+  "anchors"
+ ],
+ "properties": {
+  "schema": {
+   "const": "motion-reference/1.0"
+  },
+  "status": {
+   "const": "UNAPPROVED_REFERENCE"
+  },
+  "autoApply": {
+   "const": false
+  },
+  "policy": {
+   "type": "string"
+  },
+  "video": {
+   "type": "object",
+   "required": [
+    "fps"
+   ],
+   "properties": {
+    "name": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "sha256": {
+     "anyOf": [
+      {
+       "$ref": "common.schema.json#/$defs/sha256"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "width": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "height": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "fps": {
+     "type": "number",
+     "exclusiveMinimum": 0
+    },
+    "frameCount": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "fpsSource": {
+     "type": "string"
+    }
+   }
+  },
+  "region": {
+   "type": "array",
+   "items": {
+    "type": "number",
+    "minimum": 0,
+    "maximum": 1
+   },
+   "minItems": 4,
+   "maxItems": 4
+  },
+  "phases": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "frame",
+     "phase",
+     "side",
+     "confidence"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "frame": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "phase": {
+      "enum": [
+       "contact",
+       "down",
+       "passing",
+       "up",
+       "push_off"
+      ]
+     },
+     "side": {
+      "enum": [
+       "L",
+       "R",
+       "A",
+       "B",
+       "unknown"
+      ]
+     },
+     "confidence": {
+      "$ref": "common.schema.json#/$defs/confidence"
+     },
+     "verification": {
+      "const": "visual_confirmed"
+     }
+    }
+   }
+  },
+  "candidates": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "frame",
+     "kind"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "frame": {
+      "type": "integer"
+     },
+     "kind": {
+      "enum": [
+       "leg_spread_max",
+       "leg_spread_min"
+      ]
+     },
+     "source": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "anchors": {
+   "type": "object",
+   "patternProperties": {
+    "^[0-9]+$": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "object",
+      "required": [
+       "n"
+      ],
+      "properties": {
+       "n": {
+        "$ref": "common.schema.json#/$defs/norm"
+       },
+       "confidence": {
+        "$ref": "common.schema.json#/$defs/confidence"
+       }
+      }
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "derived": {
+   "type": "object"
+  },
+  "note": {
+   "type": "string"
+  }
+ }
+}

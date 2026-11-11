@@ -1,0 +1,115 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/qa-report.schema.json",
+ "title": "QA report — every check is PASS / FAIL / BLOCKED / NOT_RUN",
+ "type": "object",
+ "required": [
+  "schema",
+  "subject",
+  "overall",
+  "counts",
+  "checks",
+  "qaKind"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "cas/qa-report/0.5"
+  },
+  "subject": {
+   "type": "object",
+   "required": [
+    "kind"
+   ],
+   "properties": {
+    "kind": {
+     "type": "string"
+    },
+    "path": {
+     "type": "string"
+    },
+    "sha256": {
+     "$ref": "common.schema.json#/$defs/sha256"
+    },
+    "characterId": {
+     "type": "string"
+    }
+   }
+  },
+  "qaKind": {
+   "enum": [
+    "automated_self_qa",
+    "human_device_qa",
+    "human_review",
+    "independent_ai_qa"
+   ]
+  },
+  "overall": {
+   "$ref": "common.schema.json#/$defs/qaResult"
+  },
+  "counts": {
+   "type": "object",
+   "required": [
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "NOT_RUN"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "PASS": {
+     "type": "integer"
+    },
+    "FAIL": {
+     "type": "integer"
+    },
+    "BLOCKED": {
+     "type": "integer"
+    },
+    "NOT_RUN": {
+     "type": "integer"
+    }
+   }
+  },
+  "checks": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "scope",
+     "result",
+     "kind"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "scope": {
+      "type": "string"
+     },
+     "result": {
+      "$ref": "common.schema.json#/$defs/qaResult"
+     },
+     "kind": {
+      "enum": [
+       "automated",
+       "human"
+      ]
+     },
+     "detail": {},
+     "reason": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "source": {
+   "type": "string"
+  },
+  "note": {
+   "type": "string"
+  }
+ }
+}

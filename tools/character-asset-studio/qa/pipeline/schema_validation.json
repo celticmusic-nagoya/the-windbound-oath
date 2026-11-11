@@ -1,0 +1,83 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "errors": [
+          "unknown document type (no recognised 'schema' / 'schemaVersion')"
+        ],
+        "schema": null
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "reason": "legacy v1.0 example (pixel landmarks); no v0.5 schema - kept as delivered in v0.1",
+      "result": "BLOCKED",
+      "scope": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.json"
+    },
+    {
+      "detail": {
+        "schema": "motion-reference/1.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/motion/grid_overlay_walk.reference.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/asset-set/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/pipeline/examples/demo_candidates.asset-set.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/production-brief/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/production_brief.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/android_device_qa_20261111.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/pipeline/demo_candidates_qa.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/pipeline/protect_verify.json"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 1,
+    "FAIL": 0,
+    "NOT_RUN": 0,
+    "PASS": 6
+  },
+  "overall": "BLOCKED",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "kind": "schema-validation"
+  }
+}
