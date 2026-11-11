@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -206,7 +206,7 @@ console.log(C.stableStringify(C.buildSpec({characterId:'morwen',preset:p,landmar
         self.assertTrue(core.is_protected("assets/official/characters/morwen/new.png"))
         self.assertFalse(core.is_protected("assets/candidates/morwen/walk-ai/x.png"))
         with self.assertRaises(core.PolicyError):
-            core.guard_write(REPO / canon, allow_overwrite=True)
+            core.guard_write(REPO / canon, overwrite=True)
         p = figure(self.tmp / "exists.png")
         with self.assertRaises(core.PolicyError):
             core.guard_write(p)
@@ -271,6 +271,162 @@ console.log(C.stableStringify(C.buildSpec({characterId:'morwen',preset:p,landmar
         r = subprocess.run(cas + ["brief", "--task-id", "X", "--kind", "walk_frames", "--character", "morwen", "--preset", "MORWEN_REAL_1200x1600",
                                   "--out-dir", str(self.tmp / "b"), "--deliver-to", "assets/candidates/morwen/final-visual-canon-20261111/x"], capture_output=True, text=True)
         self.assertEqual(r.returncode, 64); self.assertIn("BLOCKED", r.stdout)
+
+
+class V051(unittest.TestCase):
+    """CHARACTER-ASSET-STUDIO-07 reliability fixes."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="cas051_"))
+        self.cas = [sys.executable, str(PIPE / "cas.py")]
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    # 1. idempotent PR sections
+    def test_pr_body_merge_is_idempotent(self):
+        body = "Intro\n\n## Notes\ntext"
+        b1, a1 = prbody.merge(body, "pipeline-qa", "### QA\n| x |\n")
+        b2, a2 = prbody.merge(b1, "pipeline-qa", "### QA\n| x |\n")
+        self.assertEqual((a1, a2, b1 == b2), ("appended", "unchanged", True))
+        self.assertEqual(b2.count(prbody.begin("pipeline-qa")), 1)
+        b3, a3 = prbody.merge(b2, "pipeline-qa", "### QA\n| y |")
+        self.assertEqual((a3, b3.count("| x |"), b3.count("| y |")), ("replaced", 0, 1))
+        self.assertTrue(b3.startswith("Intro\n\n## Notes\ntext"))
+        b4, _ = prbody.merge(b3, "other", "B")
+        self.assertEqual(prbody.sections(b4), ["pipeline-qa", "other"])
+        b5, a5 = prbody.merge(b4, "pipeline-qa", "### QA\n| y |")
+        self.assertEqual((a5, b5), ("unchanged", b4))
+
+    def test_pr_body_legacy_marker_converted_without_text_loss(self):
+        legacy_tail = "\n---\n## v0.5 section\n| a |\n\nfooter\n"
+        body = "Top text\n\n" + prbody.LEGACY + legacy_tail
+        new, action = prbody.merge(body, "pipeline-qa", "S")
+        self.assertEqual(action, "appended+legacy-converted")
+        self.assertEqual(prbody.sections(new), [prbody.LEGACY_KEY, "pipeline-qa"])
+        self.assertIn(legacy_tail.strip(), new)
+        self.assertNotIn(prbody.LEGACY, new)
+        again, a2 = prbody.merge(new, "pipeline-qa", "S")
+        self.assertEqual((a2, again), ("unchanged", new))
+
+    def test_pr_body_refuses_ambiguous_markers(self):
+        bad = prbody.begin("k") + "\nA\n" + prbody.end("k") + "\n" + prbody.begin("k") + "\nB\n" + prbody.end("k")
+        with self.assertRaises(ValueError):
+            prbody.merge(bad, "k", "C")
+        with self.assertRaises(ValueError):
+            prbody.merge(prbody.begin("k") + "\nA\n", "k", "C")
+        with self.assertRaises(ValueError):
+            prbody.merge("", "bad key", "C")
+
+    # 2. QA verdict vs exit code, adoptionReady
+    def _qa_fixture(self, **extra):
+        frames = [(i, figure(self.tmp / f"q{i}.png", shade=i * 20)) for i in range(2)]
+        doc = asset_set(self.tmp, frames, **extra)
+        p = self.tmp / "set.json"; p.write_text(json.dumps(doc))
+        return doc, p
+
+    def test_adoption_ready_requires_human_checks(self):
+        doc, _ = self._qa_fixture()
+        rep = imageqa.run(doc, repo_root=self.tmp)
+        self.assertTrue(all(c["result"] == "PASS" for c in rep["checks"] if c["kind"] == "automated"))
+        self.assertEqual((rep["overall"], rep["adoptionReady"]), ("NOT_RUN", False))
+        self.assertTrue(any("human checks NOT_RUN" in b for b in rep["adoptionBlockers"]))
+        self.assertEqual(schemas.validate(rep)["result"], "PASS")
+        forged = dict(rep, adoptionReady=True)
+        self.assertEqual(schemas.validate(forged)["result"], "FAIL", "schema rejects adoptionReady with a non-PASS overall")
+        ids = [c["id"] for c in rep["checks"] if c["kind"] == "human"]
+        reviews = {i: {"result": "PASS", "by": "director", "date": "2026-11-11"} for i in ids}
+        rep2 = imageqa.run(dict(doc, humanReviews=reviews), repo_root=self.tmp)
+        self.assertEqual((rep2["overall"], rep2["adoptionReady"], rep2["adoptionBlockers"]), ("PASS", True, []))
+        auto_only = report.make_report({"kind": "t"}, [{"id": "a", "scope": "s", "result": "PASS", "kind": "automated"}])
+        self.assertEqual((auto_only["overall"], auto_only["adoptionReady"]), ("PASS", False))
+
+    def test_cli_gate_codes_in_repo(self):
+        work = REPO / "tools/character-asset-studio/pipeline/tests/_tmp_v051"
+        shutil.rmtree(work, ignore_errors=True); work.mkdir()
+        try:
+            good = [(i, figure(work / f"g{i}.png", shade=i * 20)) for i in range(2)]
+            doc = asset_set(REPO, good); gp = work / "good.json"; gp.write_text(json.dumps(doc))
+            bad = asset_set(REPO, [(0, figure(work / "bad.png", dy=-12))]); bp = work / "bad.json"; bp.write_text(json.dumps(bad))
+            r = lambda *a: subprocess.run(self.cas + list(a), capture_output=True, text=True)
+            g0 = r("qa", str(gp)); out = json.loads(g0.stdout)
+            self.assertEqual((g0.returncode, out["overall"], out["adoptionReady"]), (0, "NOT_RUN", False))
+            self.assertEqual(r("qa", str(gp), "--gate", "no-fail").returncode, 0)
+            self.assertEqual(r("qa", str(gp), "--gate", "adoption").returncode, 3)
+            b0 = r("qa", str(bp))
+            self.assertEqual((b0.returncode, json.loads(b0.stdout)["overall"]), (0, "FAIL"))
+            self.assertEqual(r("qa", str(bp), "--gate", "no-fail").returncode, 1)
+            self.assertEqual(r("qa", str(bp), "--gate", "adoption").returncode, 1)
+            # 3. overwrite rules through the CLI
+            rp = work / "rep.json"
+            self.assertEqual(r("qa", str(gp), "--report", str(rp)).returncode, 0)
+            self.assertEqual(r("qa", str(gp), "--report", str(rp)).returncode, 64, "no silent overwrite")
+            self.assertEqual(r("qa", str(gp), "--report", str(rp), "--overwrite").returncode, 0, "own qa-report can be regenerated")
+            self.assertEqual(r("qa", str(gp), "--report", str(gp), "--overwrite").returncode, 64, "asset-set is not pipeline output")
+            self.assertEqual(r("qa", str(gp), "--report", str(work / "g0.png"), "--overwrite").returncode, 64)
+            canon = REPO / "assets/candidates/morwen/final-visual-canon-20261111/MANIFEST.json"
+            before = core.sha256_file(canon)
+            self.assertEqual(r("protect-verify", "--report", str(canon), "--overwrite").returncode, 64)
+            self.assertEqual(core.sha256_file(canon), before)
+        finally:
+            shutil.rmtree(work, ignore_errors=True)
+
+    # 3. overwrite policy (library level)
+    def test_overwrite_policy(self):
+        rep = report.make_report({"kind": "t"}, [])
+        own = self.tmp / "r.json"; own.write_text(core.stable_dumps(rep))
+        self.assertEqual(core.guard_write(own, self.tmp, overwrite=True), own.resolve())
+        with self.assertRaises(core.PolicyError):
+            core.guard_write(own, self.tmp)
+        foreign = self.tmp / "f.json"; foreign.write_text('{"schema": "cas/asset-set/0.5"}')
+        with self.assertRaises(core.PolicyError):
+            core.guard_write(foreign, self.tmp, overwrite=True)
+        md = self.tmp / "m.md"; md.write_text("hand written")
+        with self.assertRaises(core.PolicyError):
+            core.guard_write(md, self.tmp, overwrite=True)
+        md.write_text(report.to_markdown([("x", rep)]))
+        core.guard_write(md, self.tmp, overwrite=True)
+        cand = self.tmp / "assets" / "candidates" / "x" / "r.json"; cand.parent.mkdir(parents=True); cand.write_text(core.stable_dumps(rep))
+        with self.assertRaises(core.PolicyError):
+            core.guard_write(cand, self.tmp, overwrite=True)
+        new = self.tmp / "brand-new.json"
+        self.assertEqual(core.guard_write(new, self.tmp), new.resolve())
+
+    def test_brief_overwrite_only_regenerates_its_own_guides(self):
+        out = self.tmp / "brief"
+        b = brief.build_brief("T", "walk_frames", "morwen", "PIXEL_96x128", out, "assets/candidates/morwen/t", repo_root=self.tmp, with_preview=False)
+        (out / "production_brief.json").write_text(core.stable_dumps(b))
+        with self.assertRaises(core.PolicyError):
+            brief.build_brief("T", "walk_frames", "morwen", "PIXEL_96x128", out, "assets/candidates/morwen/t", repo_root=self.tmp, with_preview=False)
+        brief.build_brief("T", "walk_frames", "morwen", "PIXEL_96x128", out, "assets/candidates/morwen/t", repo_root=self.tmp, with_preview=False, overwrite=True)
+        stranger = out / "guide_front_preview.png"; figure(stranger)
+        before = core.sha256_file(out / "guide_front.png")
+        with self.assertRaises(core.PolicyError):   # preview not listed by the brief -> refused before anything is written
+            brief.build_brief("T2", "walk_frames", "morwen", "PIXEL_96x128", out, "assets/candidates/morwen/t", repo_root=self.tmp, with_preview=True, overwrite=True)
+        self.assertEqual(core.sha256_file(out / "guide_front.png"), before)
+
+    # 4. legacy BASE_BODY_SPEC
+    def test_legacy_body_spec_kept_and_upgrade_matches_studio(self):
+        legacy = STUDIO / "docs" / "BASE_BODY_SPEC.example.json"
+        sha = core.sha256_file(legacy)
+        v = schemas.validate_file(legacy)
+        self.assertEqual((v["schema"], v["result"]), ("BASE_BODY_SPEC/1.0-legacy", "PASS"))
+        up = bodyspec.upgrade_v1(core.load_json(legacy))
+        self.assertEqual(schemas.validate(up)["result"], "PASS", schemas.validate(up)["errors"])
+        js = """const C=require(process.argv[1]);const fs=require('fs');const j=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+const P=JSON.parse(fs.readFileSync(process.argv[3],'utf8')).presets.find(p=>p.id===j.presetId);
+const r=C.parseSpec(j,P);process.stdout.write(C.stableStringify(C.buildSpec({characterId:j.characterId,preset:P,landmarks:r.landmarks,assets:[],referenceBody:null})));"""
+        node = subprocess.run(["node", "-e", js, str(STUDIO / "studio-core.js"), str(legacy), str(STUDIO / "profiles" / "presets.json")], capture_output=True, text=True)
+        self.assertEqual(node.returncode, 0, node.stderr)
+        self.assertEqual(core.stable_dumps(up), node.stdout)
+        committed = STUDIO / "docs" / "BASE_BODY_SPEC.example.v2.json"
+        self.assertEqual(committed.read_text(encoding="utf-8"), node.stdout, "committed v2 example equals the studio's own conversion")
+        self.assertEqual(core.sha256_file(legacy), sha, "legacy original unchanged")
+        r = subprocess.run(self.cas + ["body-spec-upgrade", str(legacy), "--out", str(committed)], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 64, "existing output is never overwritten")
+        bad = dict(core.load_json(legacy)); bad["landmarks"] = {"front": {}}
+        with self.assertRaises(ValueError):
+            bodyspec.upgrade_v1(bad)
 
 
 if __name__ == "__main__":

@@ -85,7 +85,7 @@ def draw_guide(canvas, anchor_px, lms, view, label_lines, out_path, preview_ref=
         d.text((x + 9 * s, y - lh // 2), k, fill=col, font=font)
     for i, t in enumerate(label_lines):
         d.text((inset + 4 * s, inset + 4 * s + i * lh), t, fill=(255, 255, 255, 230), font=font)
-    out = guard_write(out_path, repo_root, allow_overwrite=overwrite)
+    out = guard_write(out_path, repo_root, overwrite=overwrite)
     out.parent.mkdir(parents=True, exist_ok=True)
     im.save(out, optimize=True)
     files = {"guide": {"path": rel(out, repo_root), "sha256": sha256_file(out), "width": W, "height": H, "mode": "RGBA"}}
@@ -99,7 +99,7 @@ def draw_guide(canvas, anchor_px, lms, view, label_lines, out_path, preview_ref=
                 r2.putalpha(r2.getchannel("A").point(lambda a: a * 90 // 255))
                 bg.alpha_composite(r2, (round(pl["x"]), round(pl["y"])))
         bg.alpha_composite(im)
-        pv = guard_write(Path(out_path).with_name(Path(out_path).stem + "_preview.png"), repo_root, allow_overwrite=overwrite)
+        pv = guard_write(Path(out_path).with_name(Path(out_path).stem + "_preview.png"), repo_root, overwrite=overwrite)
         bg.convert("RGB").save(pv, optimize=True)
         files["guidePreview"] = {"path": rel(pv, repo_root), "sha256": sha256_file(pv), "width": W, "height": H, "mode": "RGB"}
     return files
@@ -124,6 +124,12 @@ def build_brief(task_id, kind, character_id, preset_id, out_dir, deliver_to, fra
            "note": rel(body_spec_path, repo_root) if spec else "Template landmarks only; not a measured body. Use for canvas/anchor/ground framing, not anatomy."}
     fc = frame_count or p["frames"]
     out_dir = Path(out_dir)
+    # Check every target before writing anything, so a refused overwrite never leaves a half-regenerated set.
+    targets = [out_dir / "production_brief.json"] + [out_dir / f"guide_{v}.png" for v in views]
+    if with_preview:
+        targets += [out_dir / f"guide_{v}_preview.png" for v in views]
+    for t in targets:
+        guard_write(t, repo_root, overwrite=overwrite)
     vdocs = {}
     for v in views:
         ref = visual_reference(character_id, v, repo_root)

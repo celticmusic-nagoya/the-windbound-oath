@@ -1,17 +1,27 @@
 {
+  "adoptionBlockers": [
+    "subject is not an adoption candidate (QA record of the tool, not an asset)",
+    "no human review checks in this report (automated QA alone cannot make anything adoptable)"
+  ],
+  "adoptionReady": false,
   "checks": [
     {
       "detail": {
-        "errors": [
-          "unknown document type (no recognised 'schema' / 'schemaVersion')"
-        ],
-        "schema": null
+        "schema": "BASE_BODY_SPEC/1.0-legacy"
       },
       "id": "schema_valid",
       "kind": "automated",
-      "reason": "legacy v1.0 example (pixel landmarks); no v0.5 schema - kept as delivered in v0.1",
-      "result": "BLOCKED",
+      "result": "PASS",
       "scope": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.json"
+    },
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/2.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.v2.json"
     },
     {
       "detail": {
@@ -56,7 +66,7 @@
       "id": "schema_valid",
       "kind": "automated",
       "result": "PASS",
-      "scope": "tools/character-asset-studio/qa/pipeline/demo_candidates_qa.json"
+      "scope": "tools/character-asset-studio/qa/pipeline/protect_verify.json"
     },
     {
       "detail": {
@@ -65,16 +75,25 @@
       "id": "schema_valid",
       "kind": "automated",
       "result": "PASS",
-      "scope": "tools/character-asset-studio/qa/pipeline/protect_verify.json"
+      "scope": "tools/character-asset-studio/qa/pipeline/demo_candidates_qa.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/manifest/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/MANIFEST.json"
     }
   ],
   "counts": {
-    "BLOCKED": 1,
+    "BLOCKED": 0,
     "FAIL": 0,
     "NOT_RUN": 0,
-    "PASS": 6
+    "PASS": 9
   },
-  "overall": "BLOCKED",
+  "overall": "PASS",
   "qaKind": "automated_self_qa",
   "schema": "cas/qa-report/0.5",
   "subject": {

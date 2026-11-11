@@ -21,6 +21,8 @@ def detect(doc):
         return sid, SCHEMA_DIR / REGISTRY[sid]
     if isinstance(doc, dict) and doc.get("schemaVersion") == "2.0" and "landmarks" in doc:
         return "BASE_BODY_SPEC/2.0", BODY_SPEC_SCHEMA
+    if isinstance(doc, dict) and doc.get("schemaVersion") == "1.0" and "landmarks" in doc:
+        return "BASE_BODY_SPEC/1.0-legacy", SCHEMA_DIR / "base-body-spec-1.0-legacy.schema.json"
     return None, None
 
 

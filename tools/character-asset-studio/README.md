@@ -1,4 +1,4 @@
-# Character Asset Studio v0.5
+# Character Asset Studio v0.5.1
 
 > **v0.5 の方針（CHARACTER-ASSET-STUDIO-06）:** 人間向けの画面の改善より、ChatGPT と Claude のあいだでアセットの制作・検証・データの受け渡しを自動化することを優先する。中心は `pipeline/`（コマンドライン、[pipeline/README.md](pipeline/README.md)）。画面の v0.4 の機能はそのまま残す。自動位置合わせなどの画面の改善は保留する（内部処理としての座標の正規化・位置合わせは `pipeline/` にある）。
 
@@ -69,6 +69,14 @@ python3 -m http.server 8000
 | 6. Draft PR への集約 | `cas.py pr-summary` と `cas.py pr-append`（開いた Draft PR だけを編集し、マージはしない） |
 
 この版の MANIFEST.json は `cas/manifest/0.5` 形式（各ファイルの SHA-256 と状態）。
+
+**v0.5.1（CHARACTER-ASSET-STUDIO-07）:** パイプラインの信頼性を修正した。
+- `pr-append` は、同じ key の範囲を置き換えるだけになった（冪等）。
+- QA の判定（`overall`、`adoptionReady`）と終了コードを分けた。
+- `--overwrite` で置き換えられるのは、パイプラインが作ったファイルだけになった。
+- 旧形式の `docs/BASE_BODY_SPEC.example.json` は原本のまま残し、2.0 に変換した例を `docs/BASE_BODY_SPEC.example.v2.json` として追加した。
+
+詳しくは [pipeline/README.md](pipeline/README.md)。
 
 ## Android 実機での起動（CHARACTER-ASSET-STUDIO-05）
 **実機QA: 4/4 PASS**（ディレクター報告、2026-11-11。`qa/android_device_qa_20261111.json`）。PASS した4項目は、下の「実機チェック手順」の4つの確認点。

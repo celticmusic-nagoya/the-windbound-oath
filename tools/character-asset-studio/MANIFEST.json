@@ -1,10 +1,10 @@
 {
   "files": [
     {
-      "bytes": 15714,
+      "bytes": 16319,
       "path": "tools/character-asset-studio/README.md",
       "role": "tool",
-      "sha256": "898419c67db661055610cfd2f3042e798883c7bf8329cae3f568401812be56a6",
+      "sha256": "52024997c26677b1c75c5b4bae9358b4fbf24629648d9d506f1a678c59143423",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -59,6 +59,13 @@
       "path": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.json",
       "role": "tool",
       "sha256": "793f3813e4db106609aa77f67c7da74727f27abfb1d9795f0e50f7e65d2b38f6",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 9362,
+      "path": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.v2.json",
+      "role": "tool_doc_example",
+      "sha256": "88a6fc2507de23098b7414c5bd05f24274d3005303cc3388f7346d06ca6b6a4e",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -118,17 +125,17 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 8424,
+      "bytes": 12148,
       "path": "tools/character-asset-studio/pipeline/README.md",
       "role": "pipeline",
-      "sha256": "95b3fe9adaae59f650a9d2a35b228118c8458ca1e152c4c4f8d9087c09ade61e",
+      "sha256": "1c80362b6f965d18923ff4bdc858809626df04b26fc8badaafba98b2ee43c46f",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 8092,
+      "bytes": 11917,
       "path": "tools/character-asset-studio/pipeline/cas.py",
       "role": "pipeline",
-      "sha256": "0e27363f95fec4b45fd4f003e9dd24b7d4a0e69ca276d46ba34823806f390222",
+      "sha256": "daf373b7d3a392ab4b108be0df165b5cc1e3447ca1d85adad787f8becb47799e",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -146,17 +153,24 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 10890,
-      "path": "tools/character-asset-studio/pipeline/caslib/brief.py",
+      "bytes": 2164,
+      "path": "tools/character-asset-studio/pipeline/caslib/bodyspec.py",
       "role": "pipeline",
-      "sha256": "918708ea46fd3b3a05ecd089349ff7d186a61a343879940b270694f46afb0fbb",
+      "sha256": "7b7eee5cc48d3e0482a5d44f9530ddeec0f92bca106fdfc7a1e850a3bbbd9eca",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 5269,
+      "bytes": 11253,
+      "path": "tools/character-asset-studio/pipeline/caslib/brief.py",
+      "role": "pipeline",
+      "sha256": "ef224f1d4eb28af01758406725d883c9452b7e32ea3dd48b15438074dfc7c3a3",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 7460,
       "path": "tools/character-asset-studio/pipeline/caslib/core.py",
       "role": "pipeline",
-      "sha256": "2d55b4796891f68e205c33db8a598a74b97911784d4ef87e7409744efbf34d39",
+      "sha256": "e29babb0fa0c605bee7375eb57d407a279831dddd21ece5f5ce3b774f12d9fb1",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -167,24 +181,31 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 3872,
+      "bytes": 3920,
       "path": "tools/character-asset-studio/pipeline/caslib/manifest.py",
       "role": "pipeline",
-      "sha256": "676ac1f51930ee5b120ecea349b67361df7e2c0699657a043f6d9a182a098d4f",
+      "sha256": "5ed17547d701d854e7a4b40598400fdd74f6122b31c46cefdbd07ef0e20c8224",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 2597,
+      "bytes": 2364,
+      "path": "tools/character-asset-studio/pipeline/caslib/prbody.py",
+      "role": "pipeline",
+      "sha256": "e6c125b47b5af8032f59ca4afb8e6a806f424d9ba46b4f8282a19018163a6ebe",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4374,
       "path": "tools/character-asset-studio/pipeline/caslib/report.py",
       "role": "pipeline",
-      "sha256": "175c451975c78cbe6dc5633c0493cb261125c240cb0705e2bad39b450395f267",
+      "sha256": "3d1945291fda41e34ddff6fc479d1f4d97b847b10ba614881c92aa8261a103e0",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 2525,
+      "bytes": 2713,
       "path": "tools/character-asset-studio/pipeline/caslib/schemas.py",
       "role": "pipeline",
-      "sha256": "28dd81cc9addaa8bd946cd4e632b9c58627280719e134ef7049d25bacc05adfa",
+      "sha256": "79bf16aff5699b55d8269342b38a7dd4f4c38b8cba34f63deae16c37b58f1f18",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -303,6 +324,13 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
+      "bytes": 1477,
+      "path": "tools/character-asset-studio/pipeline/schemas/base-body-spec-1.0-legacy.schema.json",
+      "role": "pipeline",
+      "sha256": "3ccc0e93843f9dc6d503981d3c89d030ed394ef1c780f7999c08d622727d5171",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
       "bytes": 2847,
       "path": "tools/character-asset-studio/pipeline/schemas/common.schema.json",
       "role": "pipeline",
@@ -331,17 +359,17 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 1878,
+      "bytes": 2426,
       "path": "tools/character-asset-studio/pipeline/schemas/qa-report.schema.json",
       "role": "pipeline",
-      "sha256": "106267122826ed908ae6dd6a589f946192558b36908668e1e03c289137864173",
+      "sha256": "58a11bab69a9e2b11beb3d14ff5e2c10c364c807d621c14a9732d0d4009c3400",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 17475,
+      "bytes": 27800,
       "path": "tools/character-asset-studio/pipeline/tests/test_pipeline.py",
       "role": "pipeline",
-      "sha256": "b6ba44f4217633a8c1a898e0aef1d27add255e3020388ba23c9dd2a85e6d8df0",
+      "sha256": "69ba52c604af6403dfa0805dcfcc37580fb6777eb86c527a6ca1cc76703d0088",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -394,6 +422,13 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
+      "bytes": 3774,
+      "path": "tools/character-asset-studio/qa/QA_REPORT_v0.5.1.md",
+      "role": "qa_evidence",
+      "sha256": "f1cc1fc18413019bcf5b3cfe5f967f61ff0fed84533d7b42e4119d6c24980805",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
       "bytes": 3250,
       "path": "tools/character-asset-studio/qa/QA_REPORT_v0.5.md",
       "role": "qa_evidence",
@@ -401,10 +436,10 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 2177,
+      "bytes": 2313,
       "path": "tools/character-asset-studio/qa/android_device_qa_20261111.json",
       "role": "qa_evidence",
-      "sha256": "cd2069a9798b2dbb4ff2a32223bccf09f2d7d8f722dfe3ca86a2d91ff1a7ce63",
+      "sha256": "38af9354182d3ba9ec070bf432d06836407856f4c15f66fca2f830ef7d0b7587",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -656,24 +691,24 @@
       "width": 780
     },
     {
-      "bytes": 12621,
+      "bytes": 13057,
       "path": "tools/character-asset-studio/qa/pipeline/demo_candidates_qa.json",
       "role": "qa_evidence",
-      "sha256": "605d8b411663af85ec68aeb4638baa391728049a7f72a5b53df71d7548aed1b9",
+      "sha256": "1f4566d75b5a23168bee0a7b805646546679990718d6fe4cd1b9dbf9b30ec836",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 3331,
+      "bytes": 3564,
       "path": "tools/character-asset-studio/qa/pipeline/protect_verify.json",
       "role": "qa_evidence",
-      "sha256": "10817e6133505f86bca7e8fe35bd6483b49ee59a705464176757f1f218fc4ba2",
+      "sha256": "0e207bbba6b59fe10cccbdbc1295e0b0057f941bc922811a716c584b6e2d14f4",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 2158,
+      "bytes": 2655,
       "path": "tools/character-asset-studio/qa/pipeline/schema_validation.json",
       "role": "qa_evidence",
-      "sha256": "db517b8c53d3962c3471237fe05792f7318551dbabf44d70b6d5de9db0774b92",
+      "sha256": "17e823ca23843367b6e51ac65ab1e907719b8aa56a76b5f5b02aa508223827a5",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {

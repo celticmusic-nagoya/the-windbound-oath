@@ -59,7 +59,7 @@ def verify(manifest, repo_root=REPO_ROOT, check_untracked=True):
         extra = [rel(p, repo_root) for p in sorted(root.rglob("*")) if p.is_file() and not SKIP_PARTS & set(p.parts)
                  and p.name != "MANIFEST.json" and rel(p, repo_root) not in listed]
         ck.add("no_unlisted_files", manifest["root"], "PASS" if not extra else "FAIL", detail=extra[:50] or None)
-    return make_report({"kind": "manifest", "path": manifest["root"]}, ck.rows)
+    return make_report({"kind": "manifest", "path": manifest["root"]}, ck.rows, adoption_subject=False)
 
 
 def verify_protected(repo_root=REPO_ROOT):
@@ -73,7 +73,7 @@ def verify_protected(repo_root=REPO_ROOT):
         sha = sha256_file(p)
         ck.add("protected_sha256", e["path"], "PASS" if sha == e["sha256"] else "FAIL",
                detail=None if sha == e["sha256"] else {"recorded": e["sha256"], "actual": sha})
-    return make_report({"kind": "protected-assets", "path": "tools/character-asset-studio/pipeline/protected_assets.json"}, ck.rows)
+    return make_report({"kind": "protected-assets", "path": "tools/character-asset-studio/pipeline/protected_assets.json"}, ck.rows, adoption_subject=False)
 
 
 def changed_protected(changed_paths):

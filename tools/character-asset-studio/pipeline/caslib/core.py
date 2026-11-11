@@ -123,17 +123,58 @@ def is_protected(rel_path):
     return any(rel.startswith(d.rstrip("/") + "/") for d in data.get("protectedDirs", []))
 
 
-def guard_write(path, repo_root=REPO_ROOT, allow_overwrite=False):
-    """Refuse writes into protected assets/directories and (by default) overwriting existing files."""
+GENERATED_SCHEMAS = {"cas/qa-report/0.5", "cas/manifest/0.5", "cas/production-brief/0.5"}
+GENERATED_MD_MARK = "<!-- cas:generated -->"
+
+
+def pipeline_owned(path, repo_root=REPO_ROOT):
+    """(owned, reason): is an existing file something this pipeline generated and may regenerate?
+    Owned = a qa-report / manifest / production-brief JSON, a Markdown file carrying the generated marker,
+    or a guide PNG listed by the production_brief.json next to it. Everything else is not owned."""
+    p = Path(path)
+    suf = p.suffix.lower()
+    try:
+        if suf == ".json":
+            sid = load_json(p).get("schema")
+            return (sid in GENERATED_SCHEMAS, f"schema {sid!r}")
+        if suf == ".md":
+            return (GENERATED_MD_MARK in p.read_text(encoding="utf-8"), "generated marker")
+        if suf == ".png":
+            b = p.parent / "production_brief.json"
+            if b.exists():
+                doc = load_json(b)
+                if doc.get("schema") == "cas/production-brief/0.5":
+                    listed = {v[k]["path"] for v in doc.get("views", {}).values() for k in ("guide", "guidePreview") if k in v}
+                    r = rel(p, repo_root)
+                    return (r in listed, "listed guide" if r in listed else "not listed in production_brief.json")
+            return (False, "no production_brief.json lists this image")
+    except (ValueError, OSError, AttributeError) as e:
+        return (False, f"unreadable: {e}")
+    return (False, f"{suf or 'no extension'} files are never treated as pipeline output")
+
+
+def guard_write(path, repo_root=REPO_ROOT, overwrite=False):
+    """Write gate, strictest first:
+    1. protected (canonical) path -> always refused, with or without --overwrite;
+    2. new file -> allowed;
+    3. existing file -> refused unless overwrite=True AND it is not under assets/ (candidate deliveries are
+       never replaced) AND the pipeline generated it (pipeline_owned)."""
     p = Path(path).resolve()
     try:
-        rel = p.relative_to(Path(repo_root).resolve()).as_posix()
+        r = p.relative_to(Path(repo_root).resolve()).as_posix()
     except ValueError:
-        rel = None
-    if rel is not None and is_protected(rel):
-        raise PolicyError(f"refusing to write protected path: {rel}")
-    if p.exists() and not allow_overwrite:
-        raise PolicyError(f"refusing to overwrite existing file: {p}")
+        r = None
+    if r is not None and is_protected(r):
+        raise PolicyError(f"refusing to write protected path: {r}")
+    if not p.exists():
+        return p
+    if not overwrite:
+        raise PolicyError(f"refusing to overwrite existing file (use --overwrite; only pipeline-generated files can be replaced): {r or p}")
+    if r is not None and r.startswith("assets/"):
+        raise PolicyError(f"refusing to overwrite a file under assets/ (candidate deliveries are never replaced): {r}")
+    owned, why = pipeline_owned(p, repo_root)
+    if not owned:
+        raise PolicyError(f"refusing to overwrite a file the pipeline did not generate ({why}): {r or p}")
     return p
 
 

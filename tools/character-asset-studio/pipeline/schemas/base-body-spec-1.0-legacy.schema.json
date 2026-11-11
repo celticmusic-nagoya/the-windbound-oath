@@ -1,0 +1,34 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/base-body-spec-1.0-legacy.schema.json",
+ "title": "BASE_BODY_SPEC v1.0 (legacy, pixel landmarks) — read-only format",
+ "description": "Format of docs/BASE_BODY_SPEC.example.json as delivered with v0.1. Accepted for reading/conversion only; new data is written as v2.0 (cas.py body-spec-upgrade). Mirrors the checks in studio-core.js parseSpec (v1.0 branch).",
+ "type": "object",
+ "required": ["schemaVersion", "canvas", "landmarks"],
+ "properties": {
+  "schemaVersion": {"const": "1.0"},
+  "status": {"type": "string"},
+  "characterId": {"type": "string"},
+  "presetId": {"type": "string"},
+  "canvas": {
+   "type": "object",
+   "required": ["width", "height"],
+   "properties": {"width": {"type": "number", "exclusiveMinimum": 0}, "height": {"type": "number", "exclusiveMinimum": 0}}
+  },
+  "views": {"type": "array", "items": {"enum": ["front", "back", "left", "right"]}},
+  "landmarks": {
+   "type": "object",
+   "required": ["front", "back", "left", "right"],
+   "additionalProperties": false,
+   "patternProperties": {
+    "^(front|back|left|right)$": {
+     "type": "object",
+     "required": ["headTop", "neck", "shoulderLeft", "shoulderRight", "pelvis", "kneeLeft", "kneeRight", "footLeft", "footRight", "ground"],
+     "additionalProperties": {
+      "type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 2, "maxItems": 2
+     }
+    }
+   }
+  }
+ }
+}

@@ -9,7 +9,15 @@
   "overall",
   "counts",
   "checks",
-  "qaKind"
+  "qaKind",
+  "adoptionReady",
+  "adoptionBlockers"
+ ],
+ "allOf": [
+  {
+   "if": {"properties": {"adoptionReady": {"const": true}}},
+   "then": {"properties": {"overall": {"const": "PASS"}, "adoptionBlockers": {"maxItems": 0}}}
+  }
  ],
  "additionalProperties": false,
  "properties": {
@@ -46,6 +54,14 @@
   },
   "overall": {
    "$ref": "common.schema.json#/$defs/qaResult"
+  },
+  "adoptionReady": {
+   "type": "boolean",
+   "description": "true only if every check is PASS, at least one human check exists and none is NOT_RUN. NOT_RUN is never an adoptable PASS. Adoption itself still needs a director approval record."
+  },
+  "adoptionBlockers": {
+   "type": "array",
+   "items": {"type": "string"}
   },
   "counts": {
    "type": "object",
