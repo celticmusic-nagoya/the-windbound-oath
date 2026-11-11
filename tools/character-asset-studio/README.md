@@ -56,6 +56,29 @@ python3 -m http.server 8000
 - **歩行フェーズ:** 「脚の開き幅の極大・極小」は解析マーカー（`candidates`）として、接地（`phases` の contact）とは別に記録する。接地は登録時点では「候補（未確定）」で、動画を見て確認したものだけ「目視確定」（`verification: "visual_confirmed"`）にする。確定してもファイル全体は未承認の参考値のまま。
 - **Grid Overlay 参考JSON:** ファイルは変更していない（バイト単位で同一）。中の contact は脚の開き幅の極大から求めた値で、目視確定はしていないため、読み込むと9件すべて「候補（未確定）」と表示される。
 
+## Android 実機での起動（CHARACTER-ASSET-STUDIO-05）
+ターミナルは不要。Android の Chrome で次のURLを開く（このリポジトリは公開リポジトリで、raw.githack.com はブランチ上のファイルを正しい形式で配信する外部サービス。公式サイトへの公開ではない）。
+
+- 検証する版を固定するURL（推奨。`<SHA>` は PR #224 の最新コミットSHA。チェックリストに記録する）:
+  `https://raw.githack.com/celticmusic-nagoya/the-windbound-oath/<SHA>/tools/character-asset-studio/index.html`
+- ブランチの最新版（数分遅れることがある）:
+  `https://raw.githack.com/celticmusic-nagoya/the-windbound-oath/feature/character-asset-studio/tools/character-asset-studio/index.html`
+
+注意:
+- 動画・PNG・JSONは端末内だけで処理する。外部へ送信しない（ページのプログラムを配信サービスから読み込むだけ）。
+- 参考動画は、端末の「ダウンロード」や Google ドライブなどに置き、「参考動画（MP4）を選択」から選ぶ。
+- `http://192.168.x.x:8000` のような HTTPS でないアドレスは使わない。ブラウザが SHA-256 計算機能を無効にするので、動画の読み込みと正本の照合が失敗する（エミュレーションで確認済み）。
+- 保存したJSON・PNGは、Chrome の「ダウンロード」（端末の Download フォルダ）に入る。
+
+### 実機チェック手順
+`qa/ANDROID_DEVICE_QA_CHECKLIST.md` に手順と期待結果がある（起動3項目、動画の読み込み5項目、タッチ操作7項目、390px前後の固定表示4項目、保存5項目）。結果は同じファイルに記入する。主な確認点は次のとおり。
+1. **動画の読み込み:** 同梱JSONを読み込んでから Grid Overlay の MP4 を選び、「618コマ」「参照JSONと一致」になる。再生・一時停止・±1／±10コマ送りで、表示とコマ番号が一致する。
+2. **タッチ操作:** 動画をタップしてアンカーを記録しても、ページがスクロール・拡大しない。タイムラインのタップ、スライダー、マスターキャンバスのマーカーのドラッグ、「足元を揃える」が動く。
+3. **固定表示:** 390px前後で比較画面を上部に固定したまま、各ボタンを押せるか。エミュレーションでは、固定部分が画面の6〜7割を占め、ボタンが隠れることがあった。実機でも支障があれば、固定の解除・折りたたみの切り替えを最小修正で追加する。
+4. **保存:** モーションJSON・素体仕様JSON・QA JSON・合成／シルエット／ガイドPNGがダウンロードに保存され、開ける。書き出したモーションJSONを読み込み直しても内容が変わらない。
+
+事前確認（エミュレーション）は `python3 tools/character-asset-studio/tests/android_prep_check.py [OUT_DIR]` で行う。実機QAの代わりにはならない。
+
 ## 参照しない素体（BLOCKED）
 `profiles/reference_bodies.json` 参照。素体 R2.1 は、以前の候補画像で計測したもので、最終正本4方向では計測していない。そのため、R2.1 の座標は読み込まず、新しい座標を推測で作ることもしない。
 
