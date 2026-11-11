@@ -9,7 +9,7 @@ from pathlib import Path
 
 def build(source):
     result = copy.deepcopy(source)
-    if source.get("version") != "0.9":
+    if source.get("version") != "0.9-articulated":
         raise ValueError("expected v0.9 candidate")
     if source.get("anchor", {}).get("px") != [600, 1540]:
         raise ValueError("unexpected canonical ground anchor")
