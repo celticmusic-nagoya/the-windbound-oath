@@ -1,4 +1,4 @@
-# Character Asset Studio v0.2
+# Character Asset Studio v0.3
 
 THE WINDBOUND OATH のキャラクター素材を確認するためのローカルブラウザツール。正本画像を変更することはない。
 ChatGPT から納品された v0.1 MVP（コミット f5088ae に、受け取ったままの状態で取り込み済み）を、`docs/CLAUDE_HANDOFF.md`（CHARACTER-ASSET-STUDIO-02）に従って強化した。
@@ -31,15 +31,34 @@ python3 -m http.server 8000
 | QA | SHA-256（正本は MANIFEST と照合）、寸法、本当に透過しているか、外周のα、αの外接矩形、4方向そろっているかを確認する。解剖とデザインの確認は常に NOT_RUN |
 | 書き出し | ガイドPNG（背景とガイド線あり）、合成PNG（ガイドなし・透過）、シルエットPNG |
 
+## v0.3 モーション参考スタジオ（07 / CHARACTER-ASSET-STUDIO-03）
+参考動画（MP4/WebM）を見ながら歩行の目安を記録する。**記録した値はすべて「未承認の参考値」（`UNAPPROVED_REFERENCE`）として扱う。** 素体仕様（BASE_BODY_SPEC）、正本、キャラクターのデザインには自動で反映しない（`autoApply: false`。読み込んだJSONに別の値が書かれていても上書きして戻す）。
+
+| 機能 | 内容 |
+|---|---|
+| 動画 | 端末内のファイルを読み込み、再生・一時停止・±1／±10コマ送り・スライダー・タイムラインのタップで移動する（キーボードでは `,` と `.` でコマ送り）。FPSは入力値を使い、各コマの中央の時刻へシークする。SHA-256はブラウザ内で計算する |
+| 計測範囲 | 全体／左半分／右半分。分割画面の動画（Grid Overlay は左半分が側面）に使う |
+| 比較表示 | 左右に並べる表示と重ねる表示。スプライトの不透明度・拡大率・横位置を調整できる。スタジオの ground 線を表示する。周期内の位置に合わせてスプライトのフレームを切り替えられる |
+| 歩行フェーズ | contact / down / passing / up / push_off。側は L / R / A / B / unknown（A・B は交互だが解剖学的な左右を特定していない）。同じ側の contact から次の contact までを1周期とする |
+| 関節アンカー | head・shoulder・elbow・wrist・hip・左右の knee・ankle・toe。動画をタップしてコマごとに記録する。軌跡を表示し、記録のないコマは補間位置を点線で表示する |
+| 周期比較 | 選んだ周期を 6・8・12 コマに等間隔で分け、動画のコマとスプライトのフレームを並べる |
+| JSON | `motion-reference/1.0`。キーを並べ替えて書き出すので、同じ状態なら毎回同じ内容になる。動画の画素は含めず、ファイル名・SHA-256・寸法・FPSだけを記録する。別の動画用（SHA-256不一致）のJSONは適用しない |
+
+`motion/grid_overlay_walk.reference.json` は、添付の Grid Overlay 動画（640×360、25fps、618コマ）の側面を解析した結果（接地9回、通過8回、7周期、1歩 平均53.25コマ、1周期 平均106.3コマ）。動画fpsで換算すると1歩 約28歩/分となり、通常の歩行よりかなり遅い。動画がスロー再生かどうかは確認していないため、値はコマ数で扱う。関節アンカーは計測していない。
+
+参考動画そのもの、動画から切り出したフレーム、動画が写ったスクリーンショットはリポジトリに入れない。
+
 ## 参照しない素体（BLOCKED）
 `profiles/reference_bodies.json` 参照。素体 R2.1 は、以前の候補画像で計測したもので、最終正本4方向では計測していない。そのため、R2.1 の座標は読み込まず、新しい座標を推測で作ることもしない。
 
 ## テスト
 ```sh
-node --test tools/character-asset-studio/tests/studio_core.test.cjs     # 中核ロジック（6件）
-python3 tools/character-asset-studio/tests/e2e_studio.py [OUT_DIR]       # Playwright で 390px と 1440px を確認
+node --test tools/character-asset-studio/tests/*.cjs                    # 中核ロジック（v0.2 6件 + モーション 8件）
+python3 tools/character-asset-studio/tests/e2e_studio.py [OUT_DIR]       # v0.2 機能（390px・1440px）
+python3 tools/character-asset-studio/tests/e2e_motion.py [OUT_DIR] [--real-video PATH]   # v0.3 モーション
 ```
-結果は `qa/QA_REPORT_v0.2.md`、`qa/e2e_report.json`、`qa/*.png` に保存している。
+`e2e_motion.py` は、テストのたびに ffmpeg で合成動画（コマ番号を灰色の濃さで表した可逆H.264）を作り、コマ送りが正確かを確かめる。`--real-video` を付けると実際の参考動画でも確かめるが、そのスクリーンショットは一時ディレクトリにだけ保存する。
+結果は `qa/QA_REPORT_v0.3.md`（v0.2 は `qa/QA_REPORT_v0.2.md`）、`qa/e2e_report.json`、`qa/e2e_motion_report.json`、`qa/*.png` に保存している。
 
 ## 実装していないこと
 - 自動リギング、隠れた部分の自動補正、IK、解剖学的な整合性の証明
@@ -49,6 +68,8 @@ python3 tools/character-asset-studio/tests/e2e_studio.py [OUT_DIR]       # Playw
 ## ファイル
 - `index.html`、`styles.css`、`app.js`: 画面
 - `studio-core.js`: DOM を使わない中核ロジック（Node でもテストできる）
+- `motion-core.js`、`motion.js`: v0.3 モーション参考の中核ロジックと画面
+- `motion/`: 参考動画から作った未承認の参考JSON（画素は含まない）
 - `profiles/`: プリセット、制約、参照する素体の状態
 - `demo/`: v0.1 に同梱されていた派生候補4枚（正本ではない）
 - `docs/`: 引き継ぎ書、v0.1 の QA と FILE_MANIFEST（受け取ったときのまま）、スキーマ、例

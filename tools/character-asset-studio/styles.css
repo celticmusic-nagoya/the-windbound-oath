@@ -2,3 +2,13 @@
 .lmedit{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12px}.lmedit label{margin:0;display:flex;gap:6px;align-items:center}.lmedit select{width:auto;margin:0;padding:5px}.lmedit code{font-size:10px;color:#9cb6d2;word-break:break-all}.constraints .check{align-items:flex-start;font-size:11px;line-height:1.5}.qa .not_run{color:#a9b4c4}
 @media(max-width:670px){button,.upload{min-height:40px}.buttonrow button{flex:1 1 auto}}
 @media(max-width:670px){.stage{order:-1}.canvaswrap{min-height:0}}
+
+/* v0.3 Motion Reference Studio */
+.motion{max-width:1700px;margin:0 12px 12px;}@media(min-width:1724px){.motion{margin:0 auto 12px}}
+.unapproved{color:#f2c984}.mvgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,320px);gap:14px;margin-top:10px}
+.mvwrap{min-height:200px;max-height:none}#mvCanvas{max-height:62vh;touch-action:none}#mvTimeline{width:100%;height:34px;margin-top:8px;border-radius:5px;cursor:pointer;touch-action:none;display:block}
+.mvtransport button{min-width:52px}.mvslider{min-width:160px!important;white-space:nowrap}.mvside{max-height:80vh;overflow:auto}.mvrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mvrow label{margin:8px 0}
+.mvside>button{width:100%;margin:6px 0}.mvcycle{display:grid;grid-template-columns:repeat(var(--n,8),minmax(0,1fr));gap:6px;margin-top:12px;font-size:11px;color:#9ba8bb}
+.mvcell{margin:0;background:#0e1622;border-radius:6px;padding:4px;min-width:0}.mvcell canvas{width:100%;height:auto;max-height:none;cursor:default}.mvcell figcaption{padding:3px 2px;line-height:1.35}
+@media(max-width:900px){.mvgrid{grid-template-columns:1fr}.mvside{max-height:none}.mvcycle{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}}
+@media(max-width:670px){.motion{margin:0 8px 8px}.mvtransport button,.motion button,.motion .upload,.motion select{min-height:44px}.mvtransport output{flex:1;text-align:center}.mvslider{flex-basis:100%}}

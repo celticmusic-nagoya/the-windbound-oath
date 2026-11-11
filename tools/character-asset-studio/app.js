@@ -1,5 +1,5 @@
 'use strict';
-/* Character Asset Studio v0.2 — UI layer. Pure logic lives in studio-core.js (window.StudioCore). */
+/* Character Asset Studio v0.3 — UI layer (v0.2 behaviour unchanged; v0.3 adds motion.js). Pure logic lives in studio-core.js (window.StudioCore). */
 const C = window.StudioCore;
 const VIEWS = C.VIEWS;
 const LAYERS = ['body', 'underlayer', 'legs', 'bottom', 'top', 'outer', 'arms', 'head', 'props', 'reference'];
@@ -16,6 +16,7 @@ const state = {
 const canvas = $('canvas');
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
 let timer = null, drag = null;
+const drawListeners = [];
 
 const W = () => state.preset.canvas[0];
 const H = () => state.preset.canvas[1];
@@ -96,6 +97,7 @@ function draw() {
     $('lmCoord').textContent = `px ${px.join(',')} · n ${p.n.join(',')} · ${p.source}`;
     $('lmConfidence').value = p.confidence;
   } else $('lmCoord').textContent = '';
+  for (const fn of drawListeners) fn();
 }
 function applyPreset(id) {
   const p = state.presets.find(x => x.id === id) || state.presets[0];
@@ -308,4 +310,6 @@ async function init() {
   renderConstraints();
   document.body.dataset.ready = '1';
 }
+// Read-only bridge for the v0.3 Motion Reference panel (motion.js). Motion data never writes into state.landmarks.
+window.Studio = { state, paint, W, H, frames, onDraw: fn => drawListeners.push(fn) };
 init();

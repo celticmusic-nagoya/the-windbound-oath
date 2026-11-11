@@ -1,20 +1,20 @@
 {
  "schemaVersion": "1.0",
  "tool": "Character Asset Studio",
- "version": "0.2",
- "note": "No canonical artwork is stored here. demo/ PNGs are derived non-canonical candidates. docs/FILE_MANIFEST.json is the v0.1 delivery manifest kept as received.",
+ "version": "0.3",
+ "note": "No canonical artwork is stored here. demo/ PNGs are derived non-canonical candidates. docs/FILE_MANIFEST.json is the v0.1 delivery manifest kept as received. motion/ holds UNAPPROVED_REFERENCE timing JSON derived from a third-party reference video (no video pixels; the video itself is not stored).",
  "files": [
   {
    "path": "README.md",
-   "sha256": "17274f9b7b38580db720ea25f65c81dc2b9cf623f15fce16acd5333fd9266239",
-   "bytes": 4611,
+   "sha256": "7400bef2afdeaaecb95de3efe717d53a377c1f8ee8b49753d2f330854696cde9",
+   "bytes": 8091,
    "canonical": false,
    "role": "tool"
   },
   {
    "path": "app.js",
-   "sha256": "fd16fa861b78b5c523f459b1185f2104c48df507771cbb83f358377b7fdc78d9",
-   "bytes": 19821,
+   "sha256": "a41587179dd7ff8885901168c55dc5fbd1e6f2b078c65302cdd25cf9007251b3",
+   "bytes": 20137,
    "canonical": false,
    "role": "tool"
   },
@@ -83,10 +83,31 @@
   },
   {
    "path": "index.html",
-   "sha256": "58ca74145b4110b896cd048c903fa69b85724ef933c062224e5258f97723c2df",
-   "bytes": 6242,
+   "sha256": "36d42e3fa56c0bdf6b41d7cf351b1be824251daafffbbe9fa72e2cd686909019",
+   "bytes": 11228,
    "canonical": false,
    "role": "tool"
+  },
+  {
+   "path": "motion-core.js",
+   "sha256": "588e1577999ea1aa3f5d979b1c4a795bba7093a8c8d1bd368976694483e2b581",
+   "bytes": 9162,
+   "canonical": false,
+   "role": "tool"
+  },
+  {
+   "path": "motion.js",
+   "sha256": "0fca0e49767691867adb14c5f5cbb70f5314b2b063e874e06ad50aa887f86a5e",
+   "bytes": 18457,
+   "canonical": false,
+   "role": "tool"
+  },
+  {
+   "path": "motion/grid_overlay_walk.reference.json",
+   "sha256": "e758a5c60e03dc464d18ea7382c13d44a7a447d0af3173ab5dadb3f39893e569",
+   "bytes": 4361,
+   "canonical": false,
+   "role": "unapproved_motion_reference"
   },
   {
    "path": "profiles/morwen_constraints.json",
@@ -117,6 +138,13 @@
    "role": "qa_evidence"
   },
   {
+   "path": "qa/QA_REPORT_v0.3.md",
+   "sha256": "7cd68feb19b34ec8893b8b7fb7f9cfe649013f5e005f5735b3e14dfbb1cc08b5",
+   "bytes": 3733,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
    "path": "qa/canon_sha_check.json",
    "sha256": "0c45d1cb8d9652dd7bb37450ee0560d8139d389217a0d6c6808132b3f42062f5",
    "bytes": 4001,
@@ -125,22 +153,29 @@
   },
   {
    "path": "qa/desktop1440_01_demo_right.png",
-   "sha256": "3bcecfbcf6a70c1fbff716559bd345a069171c9ddfd91a75fe9f1b8916ade205",
-   "bytes": 401466,
+   "sha256": "570dcc51bf27468e7248fbdee9f131dd6b10efe49075153ae8224144ab3ec257",
+   "bytes": 401545,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/desktop1440_02_qa.png",
-   "sha256": "5470ed1fdd82fce47fc41bfd027803b447f3d07f33972be094d49cd8d4fba3a5",
-   "bytes": 521396,
+   "sha256": "31b2dc4ba4d70695e8972906ecdb20003d93cf2b921b2110fd3bcd4573adcf23",
+   "bytes": 848283,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/desktop1440_03_preset_hd.png",
-   "sha256": "c15f64cb9781e3c1d36fb60143aefe9de4e0c3e0e8a470312b8a69613f50ebdc",
-   "bytes": 488107,
+   "sha256": "560f854402bada039aaa604a6a9fb1ae49076bf1f1d46e565cc633736c34f9d0",
+   "bytes": 488230,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/e2e_motion_report.json",
+   "sha256": "25cee40635ab0c167b5ac5420c73a5e5a59095149e32377f57a8e19db33a714c",
+   "bytes": 11179,
    "canonical": false,
    "role": "qa_evidence"
   },
@@ -160,15 +195,57 @@
   },
   {
    "path": "qa/mobile390_02_qa.png",
-   "sha256": "302d22dd6164f164697b24d318572f190df19b460f0d1bde3c93cc2e4605d88f",
-   "bytes": 1464124,
+   "sha256": "a413550aced424b856c4f8d7db73da3fc7e5c85d1333c3742c6a668188a7868d",
+   "bytes": 1904026,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/mobile390_03_preset_hd.png",
-   "sha256": "98b73ed9a5224797b3b23f2957005c2a47b4325f500687ca610306cd7baa6143",
-   "bytes": 265495,
+   "sha256": "4f0d7278f537f5d8e813b40fb420038f20f950f9818cd793202d94f41142c9ac",
+   "bytes": 277114,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_desktop1440_01_compare.png",
+   "sha256": "5d5ad0f7d3a542d2c9c638e8f56fca4ed90968a535fe048bb07b3e10015e19c5",
+   "bytes": 400548,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_desktop1440_02_anchors.png",
+   "sha256": "46f3b33b98361984b10bc23d5aeee90d00c819324fcca43c90e71b641e760c3c",
+   "bytes": 115223,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_desktop1440_03_cycle12.png",
+   "sha256": "9b7c8a8b8a13685ae14bb5cb02af5eb378431f81aa23be7d957a9f0231958a0d",
+   "bytes": 127956,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_mobile390_01_compare.png",
+   "sha256": "e39d62ad41319e024dfce373e07335ccd525dddb37bd49fb9eaee50593e6a07f",
+   "bytes": 288598,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_mobile390_02_anchors.png",
+   "sha256": "9ff9a27825e16130497e61625d5428c70648b05ef46d3a3e6b8f852bdc9b798a",
+   "bytes": 189431,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_mobile390_03_cycle12.png",
+   "sha256": "59b837b9d16db24d72b8d2fe73aa4bbbcf5e4adc34026b2a07854f1cc9fc0413",
+   "bytes": 138199,
    "canonical": false,
    "role": "qa_evidence"
   },
@@ -181,8 +258,15 @@
   },
   {
    "path": "styles.css",
-   "sha256": "dd0cacf728b32827c176130346accb401412afc7b66b85aae9a0123c4d5b7c07",
-   "bytes": 3995,
+   "sha256": "1d39a0ac2eccf222ce0a71833d051add93f5f0331a38dd68442a32ee63b8faab",
+   "bytes": 5397,
+   "canonical": false,
+   "role": "tool"
+  },
+  {
+   "path": "tests/e2e_motion.py",
+   "sha256": "7be8b4e28265fd7e86e968985277c6c6815c9e515a276882a9082aa523ab39e2",
+   "bytes": 16711,
    "canonical": false,
    "role": "tool"
   },
@@ -190,6 +274,13 @@
    "path": "tests/e2e_studio.py",
    "sha256": "931a8bd423e043b5079888c2d2f387b8df6c0f621932eef19628dc873a295dee",
    "bytes": 9877,
+   "canonical": false,
+   "role": "tool"
+  },
+  {
+   "path": "tests/motion_core.test.cjs",
+   "sha256": "882fb563f3ea4b26a9d1b31002e77f243af6972bdd684bb73b2fbd311a1a78f1",
+   "bytes": 5186,
    "canonical": false,
    "role": "tool"
   },

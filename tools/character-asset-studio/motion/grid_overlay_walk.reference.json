@@ -1,0 +1,205 @@
+{
+  "anchors": {},
+  "autoApply": false,
+  "derived": {
+    "cadenceStepsPerMinAtVideoFps": 28.169014,
+    "contacts": 9,
+    "cycleFrames": [
+      109,
+      103,
+      103,
+      106,
+      107,
+      109,
+      107
+    ],
+    "cycles": [
+      {
+        "end": 194,
+        "length": 109,
+        "side": "A",
+        "sideAssumed": false,
+        "start": 85
+      },
+      {
+        "end": 243,
+        "length": 103,
+        "side": "B",
+        "sideAssumed": false,
+        "start": 140
+      },
+      {
+        "end": 297,
+        "length": 103,
+        "side": "A",
+        "sideAssumed": false,
+        "start": 194
+      },
+      {
+        "end": 349,
+        "length": 106,
+        "side": "B",
+        "sideAssumed": false,
+        "start": 243
+      },
+      {
+        "end": 404,
+        "length": 107,
+        "side": "A",
+        "sideAssumed": false,
+        "start": 297
+      },
+      {
+        "end": 458,
+        "length": 109,
+        "side": "B",
+        "sideAssumed": false,
+        "start": 349
+      },
+      {
+        "end": 511,
+        "length": 107,
+        "side": "A",
+        "sideAssumed": false,
+        "start": 404
+      }
+    ],
+    "meanCycleFrames": 106.285714,
+    "meanCycleSecondsAtVideoFps": 4.251429,
+    "meanStepFrames": 53.25,
+    "status": "UNAPPROVED_REFERENCE",
+    "stepFrames": [
+      55,
+      54,
+      49,
+      54,
+      52,
+      55,
+      54,
+      53
+    ]
+  },
+  "note": "Side view (left half of the split-screen grid video). Contact = local maximum of foot spread, passing = local minimum (skin-mask spread, 5-frame smoothing), spot-checked on extracted frames (not committed). Sides A/B alternate; anatomical left/right NOT identified. Frames 0-84 = start-up, after ~511 = slowing/turn: excluded. Whether the clip is slowed relative to real time is NOT verified; timings are in video frames. Joint anchors are not measured (record manually in the studio).",
+  "phases": [
+    {
+      "confidence": "medium",
+      "frame": 85,
+      "phase": "contact",
+      "side": "A"
+    },
+    {
+      "confidence": "low",
+      "frame": 111,
+      "phase": "passing",
+      "side": "A"
+    },
+    {
+      "confidence": "medium",
+      "frame": 140,
+      "phase": "contact",
+      "side": "B"
+    },
+    {
+      "confidence": "low",
+      "frame": 165,
+      "phase": "passing",
+      "side": "B"
+    },
+    {
+      "confidence": "medium",
+      "frame": 194,
+      "phase": "contact",
+      "side": "A"
+    },
+    {
+      "confidence": "low",
+      "frame": 215,
+      "phase": "passing",
+      "side": "A"
+    },
+    {
+      "confidence": "medium",
+      "frame": 243,
+      "phase": "contact",
+      "side": "B"
+    },
+    {
+      "confidence": "low",
+      "frame": 267,
+      "phase": "passing",
+      "side": "B"
+    },
+    {
+      "confidence": "medium",
+      "frame": 297,
+      "phase": "contact",
+      "side": "A"
+    },
+    {
+      "confidence": "low",
+      "frame": 318,
+      "phase": "passing",
+      "side": "A"
+    },
+    {
+      "confidence": "medium",
+      "frame": 349,
+      "phase": "contact",
+      "side": "B"
+    },
+    {
+      "confidence": "low",
+      "frame": 372,
+      "phase": "passing",
+      "side": "B"
+    },
+    {
+      "confidence": "medium",
+      "frame": 404,
+      "phase": "contact",
+      "side": "A"
+    },
+    {
+      "confidence": "low",
+      "frame": 428,
+      "phase": "passing",
+      "side": "A"
+    },
+    {
+      "confidence": "medium",
+      "frame": 458,
+      "phase": "contact",
+      "side": "B"
+    },
+    {
+      "confidence": "low",
+      "frame": 483,
+      "phase": "passing",
+      "side": "B"
+    },
+    {
+      "confidence": "medium",
+      "frame": 511,
+      "phase": "contact",
+      "side": "A"
+    }
+  ],
+  "policy": "Measured on a third-party reference video. Unapproved reference values only; never applied automatically to character skeleton, BASE_BODY_SPEC or designs. Video pixels are not stored.",
+  "region": [
+    0,
+    0,
+    0.5,
+    1
+  ],
+  "schema": "motion-reference/1.0",
+  "status": "UNAPPROVED_REFERENCE",
+  "video": {
+    "fps": 25,
+    "fpsSource": "container_metadata_ffprobe",
+    "frameCount": 618,
+    "height": 360,
+    "name": "animation_reference_-_female_standard_walk_-_grid_overlay_360p.mp4",
+    "sha256": "429bdb1080f4b2725ff1d67b3ed6ad507f370b8167f89b4f56a4c20c296cce75",
+    "width": 640
+  }
+}
