@@ -1,0 +1,257 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "windbound/character-asset-studio/BASE_BODY_SPEC/2.0",
+ "title": "BASE_BODY_SPEC v2.0 (Character Asset Studio)",
+ "type": "object",
+ "required": [
+  "schemaVersion",
+  "status",
+  "characterId",
+  "presetId",
+  "canvas",
+  "groundNormalized",
+  "views",
+  "landmarks",
+  "referenceBody",
+  "assets"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "2.0"
+  },
+  "status": {
+   "enum": [
+    "candidate_not_canonical",
+    "measured_pending_review",
+    "director_approved"
+   ],
+   "description": "the studio only ever writes candidate_not_canonical"
+  },
+  "characterId": {
+   "type": "string"
+  },
+  "presetId": {
+   "type": "string"
+  },
+  "canvas": {
+   "type": "object",
+   "required": [
+    "width",
+    "height"
+   ],
+   "properties": {
+    "width": {
+     "type": "integer",
+     "minimum": 1
+    },
+    "height": {
+     "type": "integer",
+     "minimum": 1
+    }
+   }
+  },
+  "groundNormalized": {
+   "type": "array",
+   "items": {
+    "type": "number"
+   },
+   "minItems": 2,
+   "maxItems": 2
+  },
+  "worldScale": {
+   "type": "object",
+   "properties": {
+    "pixelsPerUnit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   }
+  },
+  "coordinateSpace": {
+   "type": "string"
+  },
+  "views": {
+   "type": "array",
+   "items": {
+    "enum": [
+     "front",
+     "back",
+     "left",
+     "right"
+    ]
+   }
+  },
+  "landmarks": {
+   "type": "object",
+   "required": [
+    "front",
+    "back",
+    "left",
+    "right"
+   ],
+   "properties": {
+    "front": {
+     "$ref": "#/$defs/view"
+    },
+    "back": {
+     "$ref": "#/$defs/view"
+    },
+    "left": {
+     "$ref": "#/$defs/view"
+    },
+    "right": {
+     "$ref": "#/$defs/view"
+    }
+   }
+  },
+  "referenceBody": {
+   "type": [
+    "array",
+    "null"
+   ],
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "status"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "assets": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "name",
+     "view",
+     "layer",
+     "frame",
+     "sha256",
+     "dimensions",
+     "canonical"
+    ],
+    "properties": {
+     "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "canonical": {
+      "type": "boolean"
+     }
+    }
+   }
+  },
+  "notes": {
+   "type": "string"
+  }
+ },
+ "$defs": {
+  "landmark": {
+   "type": "object",
+   "required": [
+    "n",
+    "px",
+    "confidence",
+    "source"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "n": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+     },
+     "minItems": 2,
+     "maxItems": 2,
+     "description": "normalised canvas coordinate (0..1, y down)"
+    },
+    "px": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "minItems": 2,
+     "maxItems": 2,
+     "description": "derived: n * canvas size (informational)"
+    },
+    "confidence": {
+     "enum": [
+      "high",
+      "medium",
+      "low",
+      "provisional"
+     ]
+    },
+    "source": {
+     "enum": [
+      "template_default",
+      "manual_edit",
+      "imported_spec",
+      "measured_reference"
+     ]
+    }
+   }
+  },
+  "view": {
+   "type": "object",
+   "required": [
+    "headTop",
+    "neck",
+    "shoulderLeft",
+    "shoulderRight",
+    "pelvis",
+    "kneeLeft",
+    "kneeRight",
+    "footLeft",
+    "footRight",
+    "ground"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "headTop": {
+     "$ref": "#/$defs/landmark"
+    },
+    "neck": {
+     "$ref": "#/$defs/landmark"
+    },
+    "shoulderLeft": {
+     "$ref": "#/$defs/landmark"
+    },
+    "shoulderRight": {
+     "$ref": "#/$defs/landmark"
+    },
+    "pelvis": {
+     "$ref": "#/$defs/landmark"
+    },
+    "kneeLeft": {
+     "$ref": "#/$defs/landmark"
+    },
+    "kneeRight": {
+     "$ref": "#/$defs/landmark"
+    },
+    "footLeft": {
+     "$ref": "#/$defs/landmark"
+    },
+    "footRight": {
+     "$ref": "#/$defs/landmark"
+    },
+    "ground": {
+     "$ref": "#/$defs/landmark"
+    }
+   }
+  }
+ }
+}
