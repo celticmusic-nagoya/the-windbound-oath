@@ -1,0 +1,79 @@
+{
+  "schema": "cas/motion-source-inventory/1.0",
+  "status": "BLOCKED",
+  "actualAdoptedWalkFramesVerified": 0,
+  "requiredFrameSlots": 12,
+  "export06Allowed": false,
+  "sources": [
+    {
+      "path": "data/morwen-hd-canonical-v2.json",
+      "sha256": "f6f3a710194c80c907d1c3b1cec7dc788e7e1d2846cabc3254caea83ca199b69"
+    },
+    {
+      "path": "data/sprite-rig/morwen_hd_left_walk6_delivery.json",
+      "sha256": "e8fbd90f7191015744ff0943089d13819639daf07b59d6448e5068bd5074a7ff"
+    },
+    {
+      "path": "docs/design/morwen-hd-walk/MORWEN_HD_WALK_01_V2_DIRECTOR_DECISIONS.md",
+      "sha256": "56bb8a150ce461673a68aa6f5ae1606b08c2f1c2eb9caad89c4502e1b652b525"
+    },
+    {
+      "path": "tools/character-asset-studio/qa/build_morwen_v10_candidate.py",
+      "sha256": "16fad5dc46db13e0e4af47ecd875f5845090e089349757ddf9fd3f945a80b426"
+    },
+    {
+      "path": "tools/character-asset-studio/pipeline/caslib/articulated.py",
+      "sha256": "c712cafad42c19643249ee5505553ae7e8018257ea05d48b9cc97810411749b0"
+    },
+    {
+      "path": "js/field/morwen-hd-canonical.js",
+      "sha256": "ad8cdf9057c47c380e02fd2944767a35d65d376f76d12bd8a5ca3a2784d1f47e"
+    }
+  ],
+  "plannedLeftFrames": [
+    {
+      "id": "F1",
+      "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_01.png",
+      "exists": false,
+      "deliveryStatus": "NOT_DRAWN"
+    },
+    {
+      "id": "F2",
+      "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_02.png",
+      "exists": false,
+      "deliveryStatus": "NOT_DRAWN"
+    },
+    {
+      "id": "F3",
+      "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_03.png",
+      "exists": false,
+      "deliveryStatus": "NOT_DRAWN"
+    },
+    {
+      "id": "F4",
+      "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_04.png",
+      "exists": false,
+      "deliveryStatus": "NOT_DRAWN"
+    },
+    {
+      "id": "F5",
+      "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_05.png",
+      "exists": false,
+      "deliveryStatus": "NOT_DRAWN"
+    },
+    {
+      "id": "F6",
+      "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_06.png",
+      "exists": false,
+      "deliveryStatus": "NOT_DRAWN"
+    }
+  ],
+  "findings": [
+    "v1.0 candidate migration is static; v0.9 FK is isolated QA, frameCount 1",
+    "left six-frame DEV specification exists but frame images are NOT_DRAWN",
+    "no adopted right six-frame definition/images located",
+    "static official PNGs and placement transforms are not animation evidence",
+    "historical candidate72 local ankles/phases do not establish v1.0 anatomical sole world contacts",
+    "new frame-data supplier implemented; no pose/raster sequence fabricated"
+  ]
+}
