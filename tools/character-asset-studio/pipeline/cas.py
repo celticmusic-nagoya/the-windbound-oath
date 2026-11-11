@@ -124,6 +124,14 @@ def cmd_measure_canon(a):
     return gate_code(a.gate, rep["overall"], rep["adoptionReady"])
 
 
+def cmd_normalize_views(a):
+    from caslib import normalize
+    doc, rep = normalize.run(a.evidence, a.out_dir, a.overwrite)
+    print(json.dumps({"transforms": {v: d["translate"] for v, d in doc["views"].items()},
+                      "after": {v: d["measuredAfter"]["px"] for v, d in doc["views"].items()}}))
+    return _emit(rep, a)
+
+
 def cmd_manifest_build(a):
     m = manifest.build(a.root, a.status, a.note)
     _write(a.out, core.stable_dumps(m), a.overwrite)
@@ -213,6 +221,8 @@ def main(argv=None):
     p = gated(sp.add_parser("align")); p.add_argument("src"); p.add_argument("dst"); p.add_argument("--preset", required=True); p.add_argument("--no-x", action="store_true"); p.set_defaults(fn=cmd_align)
     p = writes(gated(sp.add_parser("measure-canon"))); p.add_argument("--character", required=True); p.add_argument("--observations", required=True)
     p.add_argument("--out-dir", required=True); p.set_defaults(fn=cmd_measure_canon)
+    p = writes(gated(sp.add_parser("normalize-views"))); p.add_argument("--evidence", required=True); p.add_argument("--out-dir", required=True)
+    p.set_defaults(fn=cmd_normalize_views, report=None)
     p = sp.add_parser("body-spec-upgrade"); p.add_argument("src"); p.add_argument("--out", required=True); p.add_argument("--preset"); p.set_defaults(fn=cmd_body_spec_upgrade)
     p = writes(sp.add_parser("manifest-build")); p.add_argument("root"); p.add_argument("--out", required=True); p.add_argument("--status", default="UNAPPROVED_CANDIDATE"); p.add_argument("--note"); p.set_defaults(fn=cmd_manifest_build)
     p = writes(gated(sp.add_parser("manifest-verify"))); p.add_argument("file"); p.add_argument("--report"); p.set_defaults(fn=cmd_manifest_verify)

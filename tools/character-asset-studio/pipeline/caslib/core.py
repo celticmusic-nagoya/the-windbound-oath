@@ -123,8 +123,26 @@ def is_protected(rel_path):
     return any(rel.startswith(d.rstrip("/") + "/") for d in data.get("protectedDirs", []))
 
 
-GENERATED_SCHEMAS = {"cas/qa-report/0.5", "cas/manifest/0.5", "cas/production-brief/0.5", "cas/canon-measurement/0.5"}
+GENERATED_SCHEMAS = {"cas/qa-report/0.5", "cas/manifest/0.5", "cas/production-brief/0.5", "cas/canon-measurement/0.5",
+                     "cas/view-transforms/0.7", "cas/body-landmark-evidence/0.7", "cas/layer-outputs/0.7"}
 GENERATED_MD_MARK = "<!-- cas:generated -->"
+OUTPUT_KEYS = {"guide", "guidePreview", "guides", "output", "outputs", "bodyGuides"}
+
+
+def _output_paths(doc, under_output=False):
+    """Every 'path' that appears below an output-type key (guide/guidePreview/guides/output/outputs/bodyGuides)."""
+    found = set()
+    if isinstance(doc, dict):
+        for k, v in doc.items():
+            inside = under_output or k in OUTPUT_KEYS
+            if k == "path" and inside and isinstance(v, str):
+                found.add(v)
+            else:
+                found |= _output_paths(v, inside)
+    elif isinstance(doc, list):
+        for x in doc:
+            found |= _output_paths(x, under_output)
+    return found
 
 
 def pipeline_owned(path, repo_root=REPO_ROOT):
@@ -144,22 +162,16 @@ def pipeline_owned(path, repo_root=REPO_ROOT):
         if suf == ".md":
             return (GENERATED_MD_MARK in p.read_text(encoding="utf-8"), "generated marker")
         if suf == ".png":
-            ev = p.parent / "measurement_evidence.json"
-            if ev.exists():
-                doc = load_json(ev)
-                if doc.get("schema") == "cas/canon-measurement/0.5":
-                    listed = {g[k]["path"] for vv in doc.get("views", {}).values() for g in [vv.get("guides", {})] for k in g}
-                    r = rel(p, repo_root)
-                    if r in listed:
-                        return (True, "listed measurement guide")
-            b = p.parent / "production_brief.json"
-            if b.exists():
-                doc = load_json(b)
-                if doc.get("schema") == "cas/production-brief/0.5":
-                    listed = {v[k]["path"] for v in doc.get("views", {}).values() for k in ("guide", "guidePreview") if k in v}
-                    r = rel(p, repo_root)
-                    return (r in listed, "listed guide" if r in listed else "not listed in production_brief.json")
-            return (False, "no production_brief.json lists this image")
+            # owned only if a pipeline-generated JSON in the same folder lists it as one of its OUTPUTS
+            r = rel(p, repo_root)
+            for j in sorted(p.parent.glob("*.json")):
+                try:
+                    doc = load_json(j)
+                except (ValueError, OSError):
+                    continue
+                if isinstance(doc, dict) and doc.get("schema") in GENERATED_SCHEMAS and r in _output_paths(doc):
+                    return (True, f"listed as output by {j.name}")
+            return (False, "not listed as an output by a pipeline-generated JSON in the same folder")
     except (ValueError, OSError, AttributeError) as e:
         return (False, f"unreadable: {e}")
     return (False, f"{suf or 'no extension'} files are never treated as pipeline output")

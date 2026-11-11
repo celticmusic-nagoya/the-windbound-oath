@@ -1,0 +1,242 @@
+{
+  "adoptionBlockers": [
+    "subject is not an adoption candidate (QA record of the tool, not an asset)",
+    "overall is NOT_RUN",
+    "human checks NOT_RUN: skeleton_consistency"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "id": "source_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "clippedForegroundPixels": 0,
+        "copiedRegionIdentical": true,
+        "mode": "RGB",
+        "translate": [
+          -8,
+          -9
+        ]
+      },
+      "id": "pixels_alpha_preserved",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "measuredAfter": [
+          600,
+          1540
+        ],
+        "raw": [
+          599.75,
+          1540
+        ],
+        "reference": [
+          600,
+          1540
+        ]
+      },
+      "id": "contact_on_reference",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "id": "source_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "id": "source_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "clippedForegroundPixels": 0,
+        "copiedRegionIdentical": true,
+        "mode": "RGB",
+        "translate": [
+          0,
+          -2
+        ]
+      },
+      "id": "pixels_alpha_preserved",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "measuredAfter": [
+          600,
+          1540
+        ],
+        "raw": [
+          599.75,
+          1540
+        ],
+        "reference": [
+          600,
+          1540
+        ]
+      },
+      "id": "contact_on_reference",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "id": "source_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "id": "source_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "clippedForegroundPixels": 0,
+        "copiedRegionIdentical": true,
+        "mode": "RGB",
+        "translate": [
+          108,
+          3
+        ]
+      },
+      "id": "pixels_alpha_preserved",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "measuredAfter": [
+          600,
+          1540
+        ],
+        "raw": [
+          600,
+          1540
+        ],
+        "reference": [
+          600,
+          1540
+        ]
+      },
+      "id": "contact_on_reference",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "source_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "source_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "clippedForegroundPixels": 0,
+        "copiedRegionIdentical": true,
+        "mode": "RGBA",
+        "translate": [
+          0,
+          0
+        ]
+      },
+      "id": "pixels_alpha_preserved",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "measuredAfter": [
+          600,
+          1540
+        ],
+        "raw": [
+          600,
+          1540
+        ],
+        "reference": [
+          600,
+          1540
+        ]
+      },
+      "id": "contact_on_reference",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "id": "source_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "back": [
+          600,
+          1540
+        ],
+        "front": [
+          600,
+          1540
+        ],
+        "left": [
+          600,
+          1540
+        ],
+        "right": [
+          600,
+          1540
+        ]
+      },
+      "id": "contacts_identical_4views",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "all"
+    },
+    {
+      "id": "skeleton_consistency",
+      "kind": "human",
+      "reason": "contact alignment does not show that body proportions match across views",
+      "result": "NOT_RUN",
+      "scope": "all"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "NOT_RUN": 1,
+    "PASS": 17
+  },
+  "overall": "NOT_RUN",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "kind": "view-normalisation",
+    "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111"
+  }
+}

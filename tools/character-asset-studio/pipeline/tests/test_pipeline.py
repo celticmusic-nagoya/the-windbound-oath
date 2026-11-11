@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -529,6 +529,66 @@ class V08CanonMeasurement(unittest.TestCase):
         ev, rep = canonmeasure.run("morwen", p, self.tmp / "out_empty")
         st = [ev["views"][v]["landmarks"][k]["status"] for v in core.VIEWS for k in ("headTop", "neck", "kneeLeft")]
         self.assertTrue(all(s == "unmeasurable" for s in st), "missing observations never fall back to template-as-measured")
+
+
+class V07Normalize(unittest.TestCase):
+    """CHARACTER-ASSET-STUDIO-10 TASK A: per-view working-coordinate normalisation."""
+    EV = STUDIO / "measurements" / "morwen-final-canon-20261111" / "measurement_evidence.json"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp(prefix="cas07n_"))
+        cls.canon_before = {e["path"]: core.sha256_file(REPO / e["path"]) for e in core.protected_list()["files"]}
+        cls.meas_before = {p.name: core.sha256_file(p) for p in (STUDIO / "measurements" / "morwen-final-canon-20261111").iterdir()}
+        cls.doc, cls.rep = normalize.run(cls.EV, cls.tmp / "a")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_transforms_come_from_measured_contacts(self):
+        ev = core.load_json(self.EV)
+        for v, d in self.doc["views"].items():
+            gx, gy = ev["views"][v]["landmarks"]["ground"]["px"]
+            self.assertEqual(d["translate"], [600 - gx, 1540 - gy], v)
+        self.assertEqual({v: d["translate"] for v, d in self.doc["views"].items()},
+                         {"front": [0, -2], "back": [-8, -9], "left": [108, 3], "right": [0, 0]})
+        fake = core.load_json(self.EV)
+        fake["views"]["left"]["landmarks"]["ground"]["px"] = [500, 1530]
+        p = self.tmp / "fake_ev.json"; p.write_text(json.dumps(fake))
+        self.assertEqual(normalize.transforms_from_evidence(p)["left"]["translate"], [100, 10])
+        fake["views"]["left"]["landmarks"]["ground"] = {"status": "unmeasurable", "reason": "x"}
+        p.write_text(json.dumps(fake))
+        with self.assertRaises(ValueError):
+            normalize.transforms_from_evidence(p)
+
+    def test_contacts_identical_and_pixels_preserved(self):
+        res = {(c["id"], c["scope"]): c for c in self.rep["checks"]}
+        self.assertEqual(res[("contacts_identical_4views", "all")]["result"], "PASS")
+        for v in core.VIEWS:
+            self.assertEqual(res[("contact_on_reference", v)]["detail"]["measuredAfter"], [600, 1540])
+            self.assertEqual(res[("pixels_alpha_preserved", v)]["result"], "PASS")
+            self.assertEqual(res[("pixels_alpha_preserved", v)]["detail"]["clippedForegroundPixels"], 0)
+        modes = {v: Image.open(self.tmp / "a" / f"{v}.png").mode for v in core.VIEWS}
+        self.assertEqual(modes, {"front": "RGB", "back": "RGB", "left": "RGB", "right": "RGBA"}, "no alpha invented, none dropped")
+        right_src = Image.open(REPO / "assets/candidates/morwen/final-visual-canon-20261111/right.png")
+        import numpy as np
+        self.assertTrue((np.asarray(right_src) == np.asarray(Image.open(self.tmp / "a" / "right.png"))).all(), "right: zero shift = identical pixels and alpha")
+        self.assertEqual(res[("skeleton_consistency", "all")]["result"], "NOT_RUN")
+        self.assertEqual(self.doc["skeletonConsistency"], "NOT_EVALUATED")
+
+    def test_reproducible_and_sources_untouched(self):
+        doc2, _ = normalize.run(self.EV, self.tmp / "b")
+        for v in core.VIEWS:
+            self.assertEqual(core.sha256_file(self.tmp / "a" / f"{v}.png"), core.sha256_file(self.tmp / "b" / f"{v}.png"), v)
+        committed = STUDIO / "normalized" / "morwen-final-canon-20261111"
+        for v in core.VIEWS:
+            self.assertEqual(core.sha256_file(committed / f"{v}.png"), core.sha256_file(self.tmp / "a" / f"{v}.png"), "committed output reproducible")
+        self.assertEqual({e: core.sha256_file(REPO / e) for e in self.canon_before}, self.canon_before)
+        self.assertEqual({p.name: core.sha256_file(p) for p in (STUDIO / "measurements" / "morwen-final-canon-20261111").iterdir()}, self.meas_before)
+        with self.assertRaises(core.PolicyError):
+            normalize.run(self.EV, self.tmp / "a")
+        normalize.run(self.EV, self.tmp / "a", overwrite=True)   # own outputs may be regenerated
 
 
 if __name__ == "__main__":
