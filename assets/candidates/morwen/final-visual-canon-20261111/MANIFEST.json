@@ -1,0 +1,63 @@
+{
+  "character": "Morwen",
+  "date": "2026-11-11",
+  "status": "DIRECTOR_APPROVED_VISUAL_CANON",
+  "binary_registration": "PENDING_BINARY_UPLOAD",
+  "source_archive": "MORWEN_FINAL_CANON_4VIEW_20261111.zip",
+  "files": [
+    {
+      "direction": "front",
+      "source_upload": "7694.png",
+      "expected_repo_path": "assets/candidates/morwen/final-visual-canon-20261111/front.png",
+      "sha256": "a0f9bdbdfaf928aab49ea116d3ec40620f1558efe55f5f90aa55002213ae7bbd",
+      "width": 1152,
+      "height": 1536,
+      "mode": "RGB"
+    },
+    {
+      "direction": "back",
+      "source_upload": "7692.png",
+      "expected_repo_path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+      "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+      "width": 1152,
+      "height": 1536,
+      "mode": "RGB"
+    },
+    {
+      "direction": "left",
+      "source_upload": "7693.png",
+      "expected_repo_path": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+      "sha256": "cd1dbc8447de72f0b4239cb6e76ea12c703df0812b1fc225ecb892c34db1b984",
+      "width": 1152,
+      "height": 1536,
+      "mode": "RGB"
+    },
+    {
+      "direction": "right",
+      "source_upload": "7684.png",
+      "expected_repo_path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+      "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+      "width": 1200,
+      "height": 1600,
+      "mode": "RGBA"
+    }
+  ],
+  "rules": {
+    "visual_canon": "Only these 4 director-approved uploads. Old art is anatomy/dimensions reference only.",
+    "locked": [
+      "costume structure",
+      "character details",
+      "ornament presence and placement",
+      "hat and hairstyle",
+      "garter and thigh-high stockings",
+      "approved color palette"
+    ],
+    "allowed": [
+      "skeletal anchor alignment",
+      "canvas normalization",
+      "subtle consistency adjustments that do not overwrite visual details"
+    ],
+    "technical": "Three images are RGB on black background, right is RGBA; not yet production-ready transparent uniform assets",
+    "merge": "Draft PR only; no main merge or site publish"
+  }
+}
