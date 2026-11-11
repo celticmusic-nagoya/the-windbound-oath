@@ -1,0 +1,19 @@
+{
+ "task": "MORWEN-FIX-03 (base-body-first)",
+ "packet": "docs/design/morwen-hd-walk/MORWEN_FIX03_EXECUTION_PACKET_20261111.md (commit 9470d1f)",
+ "decisions": "docs/design/morwen-hd-walk/MORWEN_FIX03_DIRECTOR_DECISIONS_20261111.md",
+ "step1_base_body": {
+  "status": "CANDIDATE R2.1 - independent QA R2: PASS_WITH_CORRECTIONS (C1/C2 applied); freeze awaits director approval",
+  "files": ["BASE_BODY_SPEC.json", "BASE_BODY_OVERLAY_4DIR.png", "BASE_BODY_CROSS_VIEW.png"],
+  "tools": ["scripts/morwen_final_align/base_body_r2.py", "scripts/morwen_final_align/base_body_overlay.py"],
+  "method": "visual joint estimation on 25 px grids; no garment contours used as bones; confidence per joint"
+ },
+ "step2_rebuild": {
+  "status": "BLOCKED - no drawing/image-generation capability in this environment; no candidate PNG produced",
+  "spec": "REBUILD_SPEC_FIX03.md (R2)",
+  "masks": "EDIT_MASK_FIX03.png (8 layers, R2.1), EDIT_MASK_FIX03_layers.json, EDIT_MASK_FIX03_preview.png, EDIT_MASK_FIX03_derived_revealed.png",
+  "mask_status": "independent QA R2: FAIL; R2.1 fixed C7 (bag leak), C9 (orange specks), C6 (derived revealed areas); C3/C4/C5/C8 open"
+ },
+ "pixels_changed_in_artwork": 0,
+ "originals": "not modified"
+}

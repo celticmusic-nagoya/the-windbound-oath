@@ -1,0 +1,98 @@
+{
+ "order_top_to_bottom": [
+  "hat_move",
+  "hair_redraw",
+  "strap_reroute",
+  "capelet_move",
+  "cuff_hand_protect",
+  "bag_protect",
+  "slit_protect",
+  "band_redraw"
+ ],
+ "colours": {
+  "hat_move": [
+   255,
+   230,
+   0
+  ],
+  "hair_redraw": [
+   255,
+   0,
+   255
+  ],
+  "strap_reroute": [
+   150,
+   75,
+   0
+  ],
+  "capelet_move": [
+   255,
+   140,
+   0
+  ],
+  "cuff_hand_protect": [
+   255,
+   255,
+   255
+  ],
+  "bag_protect": [
+   0,
+   200,
+   0
+  ],
+  "slit_protect": [
+   0,
+   90,
+   255
+  ],
+  "band_redraw": [
+   0,
+   200,
+   255
+  ]
+ },
+ "px": {
+  "hat_move": 106875,
+  "hair_redraw": 24534,
+  "strap_reroute": 5933,
+  "capelet_move": 46632,
+  "cuff_hand_protect": 21258,
+  "bag_protect": 21581,
+  "slit_protect": 23235,
+  "band_redraw": 48470,
+  "strap_components": 1,
+  "capelet_move_holes": 107,
+  "unassigned_px_above_790 (red in preview)": 0
+ },
+ "rules": {
+  "hat_move": "move only, up 14-20 px (front crown 34-35); no redraw",
+  "hair_redraw": "redraw; tips at y~370-380; fill revealed nape/collar and hair under the raised brim",
+  "strap_reroute": "one piece; re-route from raised shoulder to bag ring; buckle shape protected",
+  "capelet_move": "move only, up ~48 px (capelet top ~384, tier-1 bottom ~540); emblem shape/size protected",
+  "cuff_hand_protect": "move only, wrists ~10-15 px inward/up if the arm cannot reach (see BASE_BODY_SPEC); no redraw",
+  "bag_protect": "no change",
+  "slit_protect": "no change (rear slit above row 790)",
+  "band_redraw": "redraw rows 549-789: capelet tier 2, upper arms, sleeves, robe upper part, vacated band 549-597 after the capelet move; robe edges overlap sleeves naturally",
+  "seams": "row 597/598: tier-1 trim must close cleanly after the move; row 789/790: robe tails/skirt below 790 untouched, redraw must meet them without a visible seam"
+ },
+ "note": "hat_move also includes all subject pixels above row 400 right of x=745 (hat tip crystal, brim edge behind the ribbon)",
+ "revision": "R2.1",
+ "derived_revealed_areas": {
+  "file": "EDIT_MASK_FIX03_derived_revealed.png",
+  "red": "area vacated by the capelet move = orange minus orange shifted up 48 px (20777 px) -> redraw",
+  "blue": "area uncovered under the hat after the 16 px hat move = hat minus hat shifted up 16 px (10904 px) -> hair redraw",
+  "green": "ribbon footprint below row 430 (capelet that may be revealed when the ribbon moves) -> capelet redraw if uncovered"
+ },
+ "fixes_R2.1": [
+  "green leak at 735-762 x 668-700 moved to band_redraw (670 px)",
+  "orange specks < 200 px moved to hat_move (ribbon edge)"
+ ],
+ "band_redraw_rows_actual": "598-789 in the label image; rows 549-597 are redrawn as the 'vacated' derived area after the capelet move",
+ "open_R2_corrections": [
+  "C3 capelet-move top cut at 455/456 (collar + emblem star in hair layer)",
+  "C4 capelet-move bottom should follow the tier-1 hem, not row 597",
+  "C5 cuff/hand protect must follow the cuff/frill/hand outline incl. rows 700-728, no robe pixels; spec exception for hands below 790",
+  "C8 slit-protect must follow the robe panel edges; strip at 605-676 x 598-690",
+  "C10 re-run independent mask QA"
+ ]
+}

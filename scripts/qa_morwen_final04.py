@@ -251,7 +251,8 @@ def write(fin, name="FOUR_DIRECTION_COMPARISON.png", label2=None):
              "QA_TECH_REPORT.json", "INDEPENDENT_AI_QA.md", "aligned/PROCESSING.json"] + [f"aligned/morwen_{d}_aligned.png" for d in DIRS] + \
             ["QA_REPORT_FIX01.md", "FOUR_DIRECTION_COMPARISON_FIX01.png", "fix01/morwen_right_fix01.png", "fix01/morwen_back_fix01.png", "fix01/morwen_left_fix01.png",
              "fix01/PROCESSING_FIX01.json", "fix01/EDIT_MASK_back_hair_below_395.png", "fix01/EDIT_MASK_back_hair_preview.png", "fix01/HAIR_EDIT_SPEC.md"] + \
-            [str(p.relative_to(DIR)) for p in sorted((DIR / "fix02").glob("*")) if p.is_file()]
+            [str(p.relative_to(DIR)) for p in sorted((DIR / "fix02").glob("*")) if p.is_file()] + \
+            [str(p.relative_to(DIR)) for p in sorted((DIR / "fix03").glob("*")) if p.is_file()]
     man = {"task": "MORWEN-REAL-CANON-FINAL-04", "status": "CANDIDATE_NOT_PRODUCTION",
            "canonical_back": {"file": "morwen_back_final_canonical.png", "sha256": CANON_BACK_SHA, "processing": "none (bytes as received)",
                               "format": "RGBA 1024x1536, background alpha 0 (verified)"},
