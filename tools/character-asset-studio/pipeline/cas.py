@@ -15,7 +15,7 @@ jsonschema (all usually present in AI sandboxes). Run from anywhere; paths are r
   protect-diff --base REF                  FAIL if a git change set touches a protected path
   pr-summary REPORT... [--out MD]          Markdown summary of QA reports for a Draft PR
   pr-append --repo O/R --pr N --file MD    idempotent section in a DRAFT PR body (replace by --key; never merges)
-  v0.6-v0.8: master-body, master-body-fit, measure-canon, normalize-views, layer0-candidate, layer-manifest, layer-qa, layer-preview, compose, compare-views
+  v0.6-v0.9: articulated-body, master-body, master-body-fit, measure-canon, normalize-views, layer0-candidate, layer-manifest, layer-qa, layer-preview, compose, compare-views
 
 QA verdicts and exit codes are separate. Every QA command prints JSON with "overall" (PASS/FAIL/BLOCKED/NOT_RUN)
 and "adoptionReady" (true only if everything incl. human checks PASSed). The exit code says whether the command
@@ -205,6 +205,22 @@ def cmd_master_body_fit(a):
     return EXIT_OK
 
 
+def cmd_articulated_body(a):
+    from caslib import articulated, layers
+    spec, rep, mdoc, contain = articulated.run(a.v08_spec, a.transforms, a.out_l0, a.out_l1, a.overwrite)
+    l0, l1 = Path(a.out_l0), Path(a.out_l1)
+    mpath = l0 / "LAYER01_MODULAR.json"
+    _write(mpath, core.stable_dumps(mdoc), a.overwrite)
+    lq = layers.layer_qa(mdoc, mpath)
+    _write(l0 / "LAYER01_QA_v0.9.json", core.stable_dumps(lq), a.overwrite)
+    layers.previews(mdoc, l0 / "layer_onoff_previews", a.overwrite)
+    for d, note in ((l1, "Layer 1 opaque base-layer candidate v0.9 (unapproved)"), (l0, "Layer 0 articulated master-body candidate v0.9 (unapproved)")):
+        m = manifest.build(d, "UNAPPROVED_CANDIDATE", note)
+        _write(d / "MANIFEST.json", core.stable_dumps(m), a.overwrite and (d / "MANIFEST.json").exists())
+    print(json.dumps({"containment": contain, "layer01QA": {"overall": lq["overall"], "counts": lq["counts"]}}))
+    return _emit(rep, a)
+
+
 def cmd_manifest_build(a):
     m = manifest.build(a.root, a.status, a.note)
     _write(a.out, core.stable_dumps(m), a.overwrite)
@@ -311,6 +327,8 @@ def main(argv=None):
     p.set_defaults(fn=cmd_master_body, report=None)
     p = sp.add_parser("master-body-fit"); p.add_argument("--spec", required=True); p.add_argument("--view", required=True, choices=core.VIEWS)
     p.add_argument("--image", required=True); p.add_argument("--out"); p.set_defaults(fn=cmd_master_body_fit)
+    p = writes(gated(sp.add_parser("articulated-body"))); p.add_argument("--v08-spec", required=True); p.add_argument("--transforms", required=True)
+    p.add_argument("--out-l0", required=True); p.add_argument("--out-l1", required=True); p.set_defaults(fn=cmd_articulated_body, report=None)
     p = sp.add_parser("body-spec-upgrade"); p.add_argument("src"); p.add_argument("--out", required=True); p.add_argument("--preset"); p.set_defaults(fn=cmd_body_spec_upgrade)
     p = writes(sp.add_parser("manifest-build")); p.add_argument("root"); p.add_argument("--out", required=True); p.add_argument("--status", default="UNAPPROVED_CANDIDATE"); p.add_argument("--note"); p.set_defaults(fn=cmd_manifest_build)
     p = writes(gated(sp.add_parser("manifest-verify"))); p.add_argument("file"); p.add_argument("--report"); p.set_defaults(fn=cmd_manifest_verify)

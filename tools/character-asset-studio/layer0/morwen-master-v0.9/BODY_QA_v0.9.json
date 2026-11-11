@@ -1,0 +1,676 @@
+{
+  "adoptionBlockers": [
+    "overall is NOT_RUN",
+    "human checks NOT_RUN: L1_layer_design_is_non_revealing, design:bag_position_strap, design:face_and_glasses, design:four_view_asymmetry, design:garter_kneesocks_structure, design:hat_flower_green_leaves, design:hat_gold_laurel, design:long_robe_hem_spread, design:purple_bob_hair, design:purple_gold_palette, design:rear_center_slit, design:right_only_asymmetric_check …"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "detail": {
+        "added": [
+          "ballL",
+          "ballR",
+          "handL",
+          "handR",
+          "heelL",
+          "heelR",
+          "jawL",
+          "jawR",
+          "neckTop",
+          "toeL",
+          "toeR",
+          "waist"
+        ],
+        "v08Joints": 20
+      },
+      "id": "v08_joints_unchanged",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "joints3d"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "canvas_contact_headtop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "canvas_contact_headtop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "canvas_contact_headtop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "canvas_contact_headtop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "back": {
+          "ankleY": 1470,
+          "elbowY": 601,
+          "headsTall": 8.531,
+          "hipY": 744,
+          "kneeY": 1076,
+          "legLength": 796,
+          "shoulderY": 430,
+          "wristY": 772
+        },
+        "front": {
+          "ankleY": 1470,
+          "elbowY": 601,
+          "headsTall": 8.531,
+          "hipY": 744,
+          "kneeY": 1076,
+          "legLength": 796,
+          "shoulderY": 430,
+          "wristY": 772
+        },
+        "left": {
+          "ankleY": 1470,
+          "elbowY": 601,
+          "headsTall": 8.531,
+          "hipY": 744,
+          "kneeY": 1076,
+          "legLength": 796,
+          "shoulderY": 430,
+          "wristY": 772
+        },
+        "right": {
+          "ankleY": 1470,
+          "elbowY": 601,
+          "headsTall": 8.531,
+          "hipY": 744,
+          "kneeY": 1076,
+          "legLength": 796,
+          "shoulderY": 430,
+          "wristY": 772
+        }
+      },
+      "id": "heads_joints_leglength_4views",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "all"
+    },
+    {
+      "id": "front_back_mirror",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/back"
+    },
+    {
+      "id": "left_right_mirror",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/right"
+    },
+    {
+      "detail": {
+        "joints": 32,
+        "orphans": []
+      },
+      "id": "skeleton_connected",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "joints"
+    },
+    {
+      "detail": {
+        "ankleL->ballL": 94.85,
+        "ankleL->footL": 78.71,
+        "ankleL->heelL": 71.39,
+        "ankleR->ballR": 94.85,
+        "ankleR->footR": 78.71,
+        "ankleR->heelR": 71.39,
+        "ballL->toeL": 22,
+        "ballR->toeR": 22,
+        "elbowL->wristL": 178.73,
+        "elbowR->wristR": 178.73,
+        "headCenter->headTop": 80,
+        "headCenter->jawL": 54.72,
+        "headCenter->jawR": 54.72,
+        "hipL->kneeL": 332.25,
+        "hipR->kneeR": 332.25,
+        "kneeL->ankleL": 395.64,
+        "kneeR->ankleR": 395.64,
+        "neckBase->neckTop": 83.17,
+        "neckBase->shoulderL": 120.21,
+        "neckBase->shoulderR": 120.21,
+        "neckTop->chin": 32.2,
+        "neckTop->headCenter": 66.31,
+        "pelvis->ground": 796,
+        "pelvis->hipL": 50,
+        "pelvis->hipR": 50,
+        "pelvis->waist": 94,
+        "shoulderL->elbowL": 178.73,
+        "shoulderR->elbowR": 178.73,
+        "waist->neckBase": 255,
+        "wristL->handL": 72.12,
+        "wristR->handR": 72.12
+      },
+      "id": "segment_lengths_left_right",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "joints"
+    },
+    {
+      "id": "joints_connected_in_render",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "all"
+    },
+    {
+      "detail": {
+        "ankle": {
+          "lengthsPreserved": true,
+          "moved": [
+            "heelL",
+            "ballL",
+            "footL",
+            "toeL"
+          ],
+          "pivotFixed": true
+        },
+        "ball": {
+          "lengthsPreserved": true,
+          "moved": [
+            "toeL"
+          ],
+          "pivotFixed": true
+        },
+        "elbow": {
+          "lengthsPreserved": true,
+          "moved": [
+            "wristL",
+            "handL"
+          ],
+          "pivotFixed": true
+        },
+        "heel": {
+          "lengthsPreserved": true,
+          "moved": [
+            "ankleL",
+            "ballL",
+            "footL",
+            "toeL"
+          ],
+          "pivotFixed": true
+        },
+        "hip": {
+          "lengthsPreserved": true,
+          "moved": [
+            "kneeL",
+            "ankleL",
+            "heelL",
+            "ballL",
+            "footL",
+            "toeL"
+          ],
+          "pivotFixed": true
+        },
+        "knee": {
+          "lengthsPreserved": true,
+          "moved": [
+            "ankleL",
+            "heelL",
+            "ballL",
+            "footL",
+            "toeL"
+          ],
+          "pivotFixed": true
+        },
+        "neck": {
+          "lengthsPreserved": true,
+          "moved": [
+            "chin",
+            "headCenter",
+            "headTop",
+            "jawL",
+            "jawR"
+          ],
+          "pivotFixed": true
+        },
+        "shoulder": {
+          "lengthsPreserved": true,
+          "moved": [
+            "elbowL",
+            "wristL",
+            "handL"
+          ],
+          "pivotFixed": true
+        },
+        "waist": "vertical axis (twist): not tested by the sagittal FK check"
+      },
+      "id": "walk_rotation_axes",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "joints"
+    },
+    {
+      "detail": {
+        "ballL": [
+          37,
+          1540,
+          28
+        ],
+        "footL": [
+          37,
+          1540,
+          0
+        ],
+        "heelL": [
+          37,
+          1540,
+          -50
+        ],
+        "toeL": [
+          37,
+          1540,
+          50
+        ]
+      },
+      "id": "foot_contact_pivots_on_ground",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "joints"
+    },
+    {
+      "detail": {
+        "L0insideCanon": 0.9999,
+        "L1insideCanon": 0.9981,
+        "L1onL0": 1
+      },
+      "id": "L1_hugs_L0",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "coveredRatio": 1
+      },
+      "id": "L1_opaque_coverage_torso_hips",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": 0.9999,
+      "id": "L0_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": 0.9981,
+      "id": "L1_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "L0insideCanon": 0.997,
+        "L1insideCanon": 0.9942,
+        "L1onL0": 1
+      },
+      "id": "L1_hugs_L0",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "coveredRatio": 1
+      },
+      "id": "L1_opaque_coverage_torso_hips",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": 0.997,
+      "id": "L0_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": 0.9942,
+      "id": "L1_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "L0insideCanon": 0.9881,
+        "L1insideCanon": 0.9803,
+        "L1onL0": 1
+      },
+      "id": "L1_hugs_L0",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "coveredRatio": 1
+      },
+      "id": "L1_opaque_coverage_torso_hips",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": 0.9881,
+      "id": "L0_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": 0.9803,
+      "id": "L1_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "L0insideCanon": 0.992,
+        "L1insideCanon": 0.9881,
+        "L1onL0": 1
+      },
+      "id": "L1_hugs_L0",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "coveredRatio": 1
+      },
+      "id": "L1_opaque_coverage_torso_hips",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": 0.992,
+      "id": "L0_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": 0.9881,
+      "id": "L1_inside_L2L3_canon",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "id": "L1_layer_design_is_non_revealing",
+      "kind": "human",
+      "reason": "independent visual review of the opaque base layer (no lingerie elements by construction)",
+      "result": "NOT_RUN",
+      "scope": "layer1"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/front.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/back.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/left.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/right.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/front.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/back.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/front.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/left.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/right.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/back.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/front_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/left_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/right_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/back_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "web/companions/morwen.webp"
+    },
+    {
+      "id": "v08_outputs_unchanged",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8"
+    },
+    {
+      "id": "design:purple_bob_hair",
+      "kind": "human",
+      "reason": "mandatory visual QA: 紫色のボブヘア",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:face_and_glasses",
+      "kind": "human",
+      "reason": "mandatory visual QA: 既存の顔・眼鏡",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:hat_flower_green_leaves",
+      "kind": "human",
+      "reason": "mandatory visual QA: 帽子の花と緑の葉",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:hat_gold_laurel",
+      "kind": "human",
+      "reason": "mandatory visual QA: 帽子の金色月桂樹装飾",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:purple_gold_palette",
+      "kind": "human",
+      "reason": "mandatory visual QA: 紫・金の基本配色",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:right_only_asymmetric_check",
+      "kind": "human",
+      "reason": "mandatory visual QA: 右側のみの非対称チェック柄",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:robe_front_open",
+      "kind": "human",
+      "reason": "mandatory visual QA: ローブ前面の開放構造",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:rear_center_slit",
+      "kind": "human",
+      "reason": "mandatory visual QA: 背面中央スリット",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:long_robe_hem_spread",
+      "kind": "human",
+      "reason": "mandatory visual QA: 左右に広がる長いローブ裾",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:garter_kneesocks_structure",
+      "kind": "human",
+      "reason": "mandatory visual QA: 正式なガーター・ニーソックス構造",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:bag_position_strap",
+      "kind": "human",
+      "reason": "mandatory visual QA: バッグの位置・ストラップ",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:four_view_asymmetry",
+      "kind": "human",
+      "reason": "mandatory visual QA: 既存の前後左右の非対称設定",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "independent_visual_review_layer0",
+      "kind": "human",
+      "reason": "independent (non-author) review of the articulated guides",
+      "result": "NOT_RUN",
+      "scope": "all"
+    },
+    {
+      "id": "final_layer0_adoption",
+      "kind": "human",
+      "reason": "director decision",
+      "result": "NOT_RUN",
+      "scope": "all"
+    },
+    {
+      "id": "final_layer1_adoption",
+      "kind": "human",
+      "reason": "director decision",
+      "result": "NOT_RUN",
+      "scope": "all"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "NOT_RUN": 16,
+    "PASS": 47
+  },
+  "overall": "NOT_RUN",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "characterId": "morwen",
+    "kind": "layer0-articulated-candidate",
+    "path": "tools/character-asset-studio/layer0/morwen-master-v0.9"
+  }
+}

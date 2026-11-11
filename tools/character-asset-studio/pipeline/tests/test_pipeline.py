@@ -3,6 +3,7 @@
 Run:  python3 -m unittest discover -s tools/character-asset-studio/pipeline/tests -v
 """
 import copy
+import math
 import json
 import shutil
 import subprocess
@@ -13,7 +14,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0, layers, masterbody  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0, layers, masterbody, articulated  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -930,6 +931,67 @@ class V08MasterBody(unittest.TestCase):
         self.assertEqual(w["sha256"], w2["sha256"], "deterministic correction")
         with self.assertRaises(core.PolicyError):
             masterbody.apply_fit(src, self.tmp / "gen_front_fitted.png", fit)
+
+
+class V09Articulated(unittest.TestCase):
+    """MORWEN-LAYER0-02 (v0.9): articulated Layer 0 + opaque Layer 1 base-layer candidate."""
+    V08 = STUDIO / "layer0" / "morwen-master-v0.8" / "MASTER_BODY_SPEC.candidate.json"
+    TF = STUDIO / "normalized" / "morwen-final-canon-20261111" / "view_transforms.json"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = PIPE / "tests" / "_tmp_v09"
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+        cls.v08_before = {p.name: core.sha256_file(p) for p in cls.V08.parent.iterdir()}
+        cls.spec, cls.rep, cls.mdoc, cls.contain = articulated.run(cls.V08, cls.TF, cls.tmp / "l0", cls.tmp / "l1")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def res(self, cid):
+        return {c["scope"]: c["result"] for c in self.rep["checks"] if c["id"] == cid}
+
+    def test_v08_anchors_unchanged_and_additions_explained(self):
+        v08 = core.load_json(self.V08)
+        for k, v in v08["joints3d"].items():
+            self.assertEqual(self.spec["joints3d"][k], v, k)
+        ch = core.load_json(self.tmp / "l0" / "JOINT_CHANGES_v0.9.json")
+        self.assertEqual(ch["changed"], [])
+        self.assertTrue(all(len(x["reason"]) > 10 for x in ch["added"].values()))
+        self.assertEqual({p.name: core.sha256_file(p) for p in self.V08.parent.iterdir()}, self.v08_before)
+        self.assertEqual(schemas.validate(self.spec)["result"], "PASS", schemas.validate(self.spec)["errors"])
+
+    def test_automated_checks_pass_and_adoption_not_run(self):
+        self.assertEqual(self.rep["counts"]["FAIL"], 0, [c for c in self.rep["checks"] if c["result"] == "FAIL"])
+        for cid in ("canvas_contact_headtop", "L1_hugs_L0", "L1_opaque_coverage_torso_hips"):
+            self.assertEqual(set(self.res(cid).values()), {"PASS"}, cid); self.assertEqual(len(self.res(cid)), 4)
+        for cid in ("heads_joints_leglength_4views", "front_back_mirror", "left_right_mirror", "skeleton_connected", "segment_lengths_left_right",
+                    "joints_connected_in_render", "walk_rotation_axes", "foot_contact_pivots_on_ground", "v08_joints_unchanged", "v08_outputs_unchanged"):
+            self.assertEqual(set(self.res(cid).values()), {"PASS"}, cid)
+        for cid in ("final_layer0_adoption", "final_layer1_adoption", "independent_visual_review_layer0", "L1_layer_design_is_non_revealing"):
+            self.assertEqual(list(self.res(cid).values()), ["NOT_RUN"], cid)
+        self.assertFalse(self.rep["adoptionReady"])
+
+    def test_walk_fk_and_layer_toggle(self):
+        J = {k: list(v) for k, v in self.spec["joints3d"].items()}
+        Jr = articulated.fk_rotate(J, "hipL", 30, articulated.descendants("hipL"))
+        self.assertEqual(Jr["hipL"], J["hipL"])
+        self.assertAlmostEqual(math.dist(Jr["kneeL"], Jr["hipL"]), math.dist(J["kneeL"], J["hipL"]))
+        self.assertNotEqual(Jr["ankleL"], J["ankleL"])
+        self.assertEqual(Jr["ankleR"], J["ankleR"], "other leg untouched")
+        lq = layers.layer_qa(self.mdoc)
+        self.assertEqual(lq["counts"]["FAIL"] + lq["counts"]["BLOCKED"], 0)
+        tog = {c["scope"]: c["result"] for c in lq["checks"] if c["id"] == "layer_toggle"}
+        self.assertEqual(sum(1 for k, r in tog.items() if r == "PASS" and ("L0_BASE_BODY" in k or "L1_UNDERWEAR" in k)), 8)
+
+    def test_layer1_is_opaque_base_layer(self):
+        l1 = core.load_json(self.tmp / "l1" / "LAYER1_BASE_SPEC.candidate.json")
+        self.assertIn("lingerie elements", l1["design"]["excluded"])
+        for v in core.VIEWS:
+            a = Image.open(self.tmp / "l1" / f"{v}_layer1_base_part.png").getchannel("A")
+            vals = set(a.getdata())
+            self.assertEqual(vals, {0, 255}, "fully opaque or empty - no sheer pixels")
 
 
 if __name__ == "__main__":

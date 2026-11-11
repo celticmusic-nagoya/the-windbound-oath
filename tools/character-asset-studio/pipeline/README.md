@@ -134,3 +134,8 @@ ChatGPT と Claude のあいだで、アセット制作の指示・成果物・�
 |---|---|
 | `master-body --character ID --observations OBS --layer0-evidence EV --transforms TF --out-dir DIR` | 共通の3D骨格を設計し（各パラメータに VERIFIED／ESTIMATED／DESIGNED_CANDIDATE／UNKNOWN の状態と導き方を付ける）、4方向に投影する。`MASTER_BODY_SPEC.candidate.json`（`cas/master-body/0.8`）、構造ガイドPNG、正本との比較画像、`BODY_CONSISTENCY_QA.json`、`production_brief.json`、`MANIFEST.json` を作る |
 | `master-body-fit --spec SPEC --view V --image PNG [--out NEW]` | 生成した画像の頭頂・接地・接地点の x を測る。`--out` を付けると、均等な拡大縮小と整数ピクセルの平行移動で補正した新しいファイルを書き出す |
+
+### v0.9 のコマンド（MORWEN-LAYER0-02）
+| コマンド | 内容 |
+|---|---|
+| `articulated-body --v08-spec SPEC --transforms TF --out-l0 DIR --out-l1 DIR` | v0.8 の関節を変えずに、関節構造の候補を作る（頭蓋・顎・首、肩甲帯、胸郭・腰・骨盤、球関節、足の支点）。追加した関節と理由（`JOINT_CHANGES_v0.9.json`）、歩行用の回転軸、4方向のガイドとパーツ、Layer 1 の不透明な基本インナーウェア候補、Layer 0／1 のモジュラー定義、レイヤーQA、ON/OFF プレビュー、MANIFEST を出力する |

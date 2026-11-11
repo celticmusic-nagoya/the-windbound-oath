@@ -1,4 +1,4 @@
-# Character Asset Studio v0.8
+# Character Asset Studio v0.9
 
 > **v0.5 の方針（CHARACTER-ASSET-STUDIO-06）:** 人間向けの画面の改善より、ChatGPT と Claude のあいだでアセットの制作・検証・データの受け渡しを自動化することを優先する。中心は `pipeline/`（コマンドライン、[pipeline/README.md](pipeline/README.md)）。画面の v0.4 の機能はそのまま残す。自動位置合わせなどの画面の改善は保留する（内部処理としての座標の正規化・位置合わせは `pipeline/` にある）。
 
@@ -77,6 +77,11 @@ python3 -m http.server 8000
 - 旧形式の `docs/BASE_BODY_SPEC.example.json` は原本のまま残し、2.0 に変換した例を `docs/BASE_BODY_SPEC.example.v2.json` として追加した。
 
 詳しくは [pipeline/README.md](pipeline/README.md)。
+
+## v0.9 Layer 0 関節構造の改善と Layer 1 基本インナーウェア候補（MORWEN-LAYER0-02）
+- `layer0/morwen-master-v0.9/`: v0.8 の関節を1つも変えずに、関節構造を区別できるようにした（12関節を追加し、理由を記録した）。歩行用の回転軸も定義した。
+- `layer1/morwen-base-v0.9/`: Layer 0 から作った、不透明で露出の少ない基本インナーウェアの候補。
+- Layer 0／1 の ON/OFF 合成と、正本（Layer 2・3）との位置関係を自動で検査した。最終採用と独立した目視レビューは NOT_RUN。
 
 ## v0.8 モルウェン Layer 0 マスター素体候補（MORWEN-LAYER0-01）
 `layer0/morwen-master-v0.8/`（未承認）。1つの3D骨格を4方向に投影した、中立的なマネキン型の構造ガイド。
