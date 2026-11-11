@@ -87,7 +87,10 @@
     const layerItems=all.filter(e=>e.render==='layer');
     const solid=collision(map,ents,flags);
     // Opt-in height levels (field-height.js). Maps without `height` keep the plain 2D predicate.
-    const height=map.height&&window.FieldHeight?FieldHeight.create(map.height,solid):null;
+    const height=map.height&&window.FieldHeight?FieldHeight.create(map.height,solid,{resolveAsset(asset){
+      const sprite=nodeArt(asset);
+      return sprite?{url:sprite.im.src,w:sprite.w,h:sprite.h}:null;
+    }}):null;
     if(height)height.blocked.height=height;
     world.style.width=map.world.width+'px';world.style.height=map.world.height+'px';world.style.position='relative';
     const cull=FieldCulling.create({chunk:map.culling.chunk,margin:map.culling.margin,maxLiveNodes:map.culling.maxLiveNodes,parent:world});
