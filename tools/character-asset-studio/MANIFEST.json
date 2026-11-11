@@ -1,13 +1,13 @@
 {
  "schemaVersion": "1.0",
  "tool": "Character Asset Studio",
- "version": "0.3",
+ "version": "0.4",
  "note": "No canonical artwork is stored here. demo/ PNGs are derived non-canonical candidates. docs/FILE_MANIFEST.json is the v0.1 delivery manifest kept as received. motion/ holds UNAPPROVED_REFERENCE timing JSON derived from a third-party reference video (no video pixels; the video itself is not stored).",
  "files": [
   {
    "path": "README.md",
-   "sha256": "7400bef2afdeaaecb95de3efe717d53a377c1f8ee8b49753d2f330854696cde9",
-   "bytes": 8091,
+   "sha256": "e915551c2281df3307b6c10e2222dcd91d126e071ce4c80d42e61e01ec866a3e",
+   "bytes": 10451,
    "canonical": false,
    "role": "tool"
   },
@@ -83,22 +83,22 @@
   },
   {
    "path": "index.html",
-   "sha256": "36d42e3fa56c0bdf6b41d7cf351b1be824251daafffbbe9fa72e2cd686909019",
-   "bytes": 11228,
+   "sha256": "7ad7b6b5309481c4f1bd880289d214651f55a7dc757c9291da5de3eba61be315",
+   "bytes": 13095,
    "canonical": false,
    "role": "tool"
   },
   {
    "path": "motion-core.js",
-   "sha256": "588e1577999ea1aa3f5d979b1c4a795bba7093a8c8d1bd368976694483e2b581",
-   "bytes": 9162,
+   "sha256": "c22ec841abe3280e681707a363de7cf8281e8ecb7505404c55b945c5b23c755c",
+   "bytes": 12156,
    "canonical": false,
    "role": "tool"
   },
   {
    "path": "motion.js",
-   "sha256": "0fca0e49767691867adb14c5f5cbb70f5314b2b063e874e06ad50aa887f86a5e",
-   "bytes": 18457,
+   "sha256": "3a059a942242585a187cb08498dd277c385cf0ace544aa21c53f16bf6c3fa0f0",
+   "bytes": 28102,
    "canonical": false,
    "role": "tool"
   },
@@ -145,6 +145,13 @@
    "role": "qa_evidence"
   },
   {
+   "path": "qa/QA_REPORT_v0.4.md",
+   "sha256": "22421032ab2da87c064c8b5fb28d957306a3d4475cbe2ab996a172e10cab72a8",
+   "bytes": 3597,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
    "path": "qa/canon_sha_check.json",
    "sha256": "0c45d1cb8d9652dd7bb37450ee0560d8139d389217a0d6c6808132b3f42062f5",
    "bytes": 4001,
@@ -153,29 +160,29 @@
   },
   {
    "path": "qa/desktop1440_01_demo_right.png",
-   "sha256": "570dcc51bf27468e7248fbdee9f131dd6b10efe49075153ae8224144ab3ec257",
-   "bytes": 401545,
+   "sha256": "f27607222fdc988f3fafcfbddb3a372b11866a92c14ea03ac117b7e1d5f8db2b",
+   "bytes": 401460,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/desktop1440_02_qa.png",
-   "sha256": "31b2dc4ba4d70695e8972906ecdb20003d93cf2b921b2110fd3bcd4573adcf23",
-   "bytes": 848283,
+   "sha256": "fd63a20fb935c5373460e865d95cfccc88608da95cbd6e01b0149e8b13d24d26",
+   "bytes": 846882,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/desktop1440_03_preset_hd.png",
-   "sha256": "560f854402bada039aaa604a6a9fb1ae49076bf1f1d46e565cc633736c34f9d0",
-   "bytes": 488230,
+   "sha256": "2e5308832cce4f9b34534613cd901dca506165f73f6b34badb9c61e9dda90cf4",
+   "bytes": 488093,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/e2e_motion_report.json",
-   "sha256": "25cee40635ab0c167b5ac5420c73a5e5a59095149e32377f57a8e19db33a714c",
-   "bytes": 11179,
+   "sha256": "341c3df7b59947e2f5ed665b9f468e4f1988b5afe994b18a019041719db2cc72",
+   "bytes": 21096,
    "canonical": false,
    "role": "qa_evidence"
   },
@@ -195,8 +202,8 @@
   },
   {
    "path": "qa/mobile390_02_qa.png",
-   "sha256": "a413550aced424b856c4f8d7db73da3fc7e5c85d1333c3742c6a668188a7868d",
-   "bytes": 1904026,
+   "sha256": "3d436e78ac8a5937dfaa8764e09d30467afa7815acfb53efe15c987312ea700f",
+   "bytes": 2121282,
    "canonical": false,
    "role": "qa_evidence"
   },
@@ -209,22 +216,43 @@
   },
   {
    "path": "qa/motion_desktop1440_01_compare.png",
-   "sha256": "5d5ad0f7d3a542d2c9c638e8f56fca4ed90968a535fe048bb07b3e10015e19c5",
-   "bytes": 400548,
+   "sha256": "e6178bc6ba9809366f9c5a5c4ccf61d377e4d1654b2930e052d6588d66f80a52",
+   "bytes": 400487,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
    "path": "qa/motion_desktop1440_02_anchors.png",
-   "sha256": "46f3b33b98361984b10bc23d5aeee90d00c819324fcca43c90e71b641e760c3c",
-   "bytes": 115223,
+   "sha256": "3dbba60ff9aab55abbb45671241ea2273e65013b0b06809f31e22eeda48aa9a4",
+   "bytes": 152224,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
-   "path": "qa/motion_desktop1440_03_cycle12.png",
-   "sha256": "9b7c8a8b8a13685ae14bb5cb02af5eb378431f81aa23be7d957a9f0231958a0d",
-   "bytes": 127956,
+   "path": "qa/motion_desktop1440_03_cycle12_missing.png",
+   "sha256": "ceda2e580706a4d26352f450d9b2aecf12a3e860b0fecf4d7ae352423b91e95d",
+   "bytes": 136587,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_desktop1440_04_cycle12_reuse.png",
+   "sha256": "434c564d24485d655058718f82649b29f8d0cbe252f07eb0d5c7f4541cae4b7d",
+   "bytes": 285755,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_desktop1440_05_cycle12_all.png",
+   "sha256": "95ed40d4f21307454d482b57662f8e7b3f696babc6231d043c9679e24380c836",
+   "bytes": 312924,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_desktop1440_06_compare_aligned.png",
+   "sha256": "b34ed5dcbd7c1b94ec51012af055034493434cc9f0a7214056a6ceec446dc903",
+   "bytes": 247413,
    "canonical": false,
    "role": "qa_evidence"
   },
@@ -237,15 +265,36 @@
   },
   {
    "path": "qa/motion_mobile390_02_anchors.png",
-   "sha256": "9ff9a27825e16130497e61625d5428c70648b05ef46d3a3e6b8f852bdc9b798a",
-   "bytes": 189431,
+   "sha256": "5aa8063be1aa4065a5e1583fe60ce184cef8b7a547cb117a9e1a73888ad1188b",
+   "bytes": 117737,
    "canonical": false,
    "role": "qa_evidence"
   },
   {
-   "path": "qa/motion_mobile390_03_cycle12.png",
-   "sha256": "59b837b9d16db24d72b8d2fe73aa4bbbcf5e4adc34026b2a07854f1cc9fc0413",
-   "bytes": 138199,
+   "path": "qa/motion_mobile390_03_cycle12_missing.png",
+   "sha256": "cf13cfa38b489e5820a2e6699a2e23be698841a2db8cd77f9afd16bed7ed50b2",
+   "bytes": 152667,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_mobile390_04_cycle12_reuse.png",
+   "sha256": "d5aa3b8de51411d0f934c235e9bc3648735ba6191c13c408ae8254194014e624",
+   "bytes": 282943,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_mobile390_05_cycle12_all.png",
+   "sha256": "c61af4468ec59355d09cfe71844643e00515c41a1832c89697355b20dd48cb4b",
+   "bytes": 362321,
+   "canonical": false,
+   "role": "qa_evidence"
+  },
+  {
+   "path": "qa/motion_mobile390_06_compare_aligned.png",
+   "sha256": "8e496570225413f40322f86cde19a8101016c8ea6cf2d9569a27617078752f47",
+   "bytes": 249700,
    "canonical": false,
    "role": "qa_evidence"
   },
@@ -258,15 +307,15 @@
   },
   {
    "path": "styles.css",
-   "sha256": "1d39a0ac2eccf222ce0a71833d051add93f5f0331a38dd68442a32ee63b8faab",
-   "bytes": 5397,
+   "sha256": "0b5ba90e23222b9240d37acb87e780ab91899ae29837576c4006cc714de0c9f8",
+   "bytes": 6911,
    "canonical": false,
    "role": "tool"
   },
   {
    "path": "tests/e2e_motion.py",
-   "sha256": "7be8b4e28265fd7e86e968985277c6c6815c9e515a276882a9082aa523ab39e2",
-   "bytes": 16711,
+   "sha256": "0794d5d330d89ad275ea38cfec85217bfe5d47a7d4a543dd310e75289e03697c",
+   "bytes": 24864,
    "canonical": false,
    "role": "tool"
   },
@@ -279,8 +328,8 @@
   },
   {
    "path": "tests/motion_core.test.cjs",
-   "sha256": "882fb563f3ea4b26a9d1b31002e77f243af6972bdd684bb73b2fbd311a1a78f1",
-   "bytes": 5186,
+   "sha256": "62320cf07393da5c2c8ae964e73bdaa58b51f6d7bad860257d5cafa3db492752",
+   "bytes": 8566,
    "canonical": false,
    "role": "tool"
   },

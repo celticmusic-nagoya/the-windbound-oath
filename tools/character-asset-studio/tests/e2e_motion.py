@@ -38,7 +38,7 @@ def make_video():
 def lum_frame(page):
     """Grey level at the centre of the video box -> frame index."""
     v = page.evaluate("""() => { const c = document.getElementById('mvCanvas'), x = c.getContext('2d');
-        const d = x.getImageData(Math.round(c.width * 0.25), Math.round(c.height * 0.5), 1, 1).data; return d[0]; }""")
+        const b = MotionStudio.vbox; const d = x.getImageData(Math.round(b.x + b.w * 0.5), Math.round(b.y + b.h * 0.5), 1, 1).data; return d[0]; }""")
     return round(((v * 219 / 255 + 16) - 20) / 2), v  # limited-range YUV -> RGB
 
 
@@ -103,14 +103,26 @@ def run_viewport(p, base, name, vp, mobile, vid):
     rec("phases registered and sorted", ph == [[10, "contact", "A"], [22, "passing", "A"], [35, "contact", "B"], [60, "contact", "A"], [85, "contact", "B"]], ph)
     rec("cycles derived from same-side contacts", page.locator("#mvCycle option").count() == 2 and "F10→F60" in page.locator("#mvCycle option").first.inner_text(), page.locator("#mvCycle option").first.inner_text())
 
+    # C. leg-spread extrema are separate markers; contacts are unverified candidates until confirmed by eye
+    to(40); page.select_option("#mvPhase", "leg_spread_max"); page.click("#mvAddPhase")
+    cand = page.evaluate("[MotionStudio.ref.candidates.map(c => [c.frame, c.kind]), MotionStudio.ref.phases.length]")
+    rec("C: leg-spread maximum stored as analysis marker, not as contact", cand == [[[40, "leg_spread_max"]], 5], cand)
+    badges = page.locator("#mvPhaseList .mvbadge.cand").count()
+    rec("C: registered contacts shown as 候補（未確定）", badges == 4, badges)
+    to(10); page.click("#mvConfirm")
+    conf = page.evaluate("MotionStudio.ref.phases.filter(p => p.verification === 'visual_confirmed').map(p => p.frame)")
+    rec("C: visual confirmation is an explicit per-contact action", conf == [10] and page.locator("#mvPhaseList .mvbadge.ok").count() == 1, conf)
+    page.click("#mvConfirm"); page.click("#mvConfirm")   # toggle off and on again
+    rec("C: confirmation can be toggled", page.evaluate("MotionStudio.ref.phases.filter(p => p.verification).length") == 1, "")
+
     # 4. joint anchors via tap/click on the video, trajectory
     page.select_option("#mvJoint", "hip"); page.locator("#mvCanvas").scroll_into_view_if_needed()
-    box = page.locator("#mvCanvas").bounding_box(); s = box["width"] / 960
     pts = {10: (0.30, 0.50), 20: (0.45, 0.48), 30: (0.60, 0.50)}
     for fr, (nx, ny) in pts.items():
         to(fr)
-        # video box in side mode for 320x240 source in a 480x540 half: fitBox -> x 0, w 480, h 360, y 180
-        x = box["x"] + (0 + nx * 480) * s; y = box["y"] + (180 + ny * 360) * s
+        box = page.locator("#mvCanvas").bounding_box(); cw = page.evaluate("MotionStudio.cv.width"); s = box["width"] / cw
+        vb = page.evaluate("MotionStudio.vbox")
+        x = box["x"] + (vb["x"] + nx * vb["w"]) * s; y = box["y"] + (vb["y"] + ny * vb["h"]) * s
         if mobile: page.touchscreen.tap(x, y)
         else: page.mouse.click(x, y)
         time.sleep(0.1)
@@ -125,16 +137,87 @@ def run_viewport(p, base, name, vp, mobile, vid):
     rec("trajectory polyline drawn", trail > 30, trail)
     page.screenshot(path=str(OUT / f"motion_{name}_02_anchors.png"), full_page=False)
 
-    # 5. 6/8/12 cycle comparison
-    for n in (6, 8, 12):
+    # D1. 12-frame comparison with only one registered sprite frame -> 未登録 shown, counts explicit
+    def build(n):
         page.select_option("#mvCount", str(n)); page.click("#mvBuildCycle")
-        page.wait_for_function(f"document.getElementById('mvCycleGrid').dataset.count === '{n}'", timeout=20000)
+        page.wait_for_function(f"document.getElementById('mvCycleGrid').dataset.count === '{n}'", timeout=30000)
+    purple = """(i) => { const c = document.querySelectorAll('#mvCycleGrid canvas')[i], d = c.getContext('2d').getImageData(0, 200, 200, 200).data;
+        let n = 0; for (let k = 0; k < d.length; k += 4) if (d[k+2] > d[k+1] + 30 && d[k] > d[k+1] + 15) n++; return n; }"""
+    build(12)
+    g = page.evaluate("Object.assign({}, document.getElementById('mvCycleGrid').dataset)")
+    info = page.inner_text("#mvCycleInfo")
+    rec("D1: 1 registered / 11 未登録 in 12-frame comparison", g["registered"] == "1" and g["missing"] == "11" and g["reused"] == "0", g)
+    rec("D1: counts stated (登録済み 1/12, 比較枠 12)", "比較枠 12" in info and "登録済みスプライト 1 / 12" in info and "未登録 11 枠" in info, info)
+    caps = page.locator("#mvCycleGrid figcaption").all_inner_texts()
+    rec("D1: missing cells captioned 未登録", sum("未登録" in c for c in caps) == 11, caps[:3])
+    px = [page.evaluate(purple, i) for i in range(12)]
+    rec("D1: sprite drawn only in the registered cell (no auto-fill)", px[0] > 800 and all(v == 0 for v in px[1:]), px)
+    page.locator("#mvCycleInfo").scroll_into_view_if_needed()
+    page.screenshot(path=str(OUT / f"motion_{name}_03_cycle12_missing.png"), full_page=False)
+    # reuse preview: opt-in, labelled 仮表示, never counted as registered
+    page.check("#mvReuse"); build(12)
+    g = page.evaluate("Object.assign({}, document.getElementById('mvCycleGrid').dataset)")
+    caps = page.locator("#mvCycleGrid figcaption").all_inner_texts()
+    src = page.evaluate("[...document.querySelectorAll('#mvCycleGrid .mvcell')].map(c => c.dataset.state + ':' + c.dataset.sourceFrame)")
+    rec("D1: reuse preview labelled 仮表示 (11 cells reuse f0)", g["reused"] == "11" and g["registered"] == "1" and sum("仮表示" in c for c in caps) == 11 and all(x == "reused:0" for x in src[1:]), src[:4])
+    rec("D1: reuse notice explains it is not animation material", "アニメーション素材ではありません" in page.inner_text("#mvCycleInfo"), page.inner_text("#mvCycleInfo"))
+    rec("D1: reuse does not register frames in the studio", page.evaluate("MotionStudio.registeredFrames()") == [0], page.evaluate("MotionStudio.registeredFrames()"))
+    page.screenshot(path=str(OUT / f"motion_{name}_04_cycle12_reuse.png"), full_page=False)
+    page.uncheck("#mvReuse")
+
+    rec("phases/anchors/reuse leave BASE_BODY_SPEC unchanged", download("#exportSpec") == spec_before, "")
+    # D2. register all 12 frames (distinct images cycle right/front/back/left) -> 6/8/12 show the right frames
+    files = ["right", "front", "back", "left"]
+    for f in range(1, 12):
+        page.fill("#frameInput", str(f)); page.dispatch_event("#frameInput", "change")
+        page.set_input_files("#file", str(ROOT / STUDIO / f"demo/morwen_{files[f % 4]}_candidate.png"))
+        page.wait_for_function(f"MotionStudio.registeredFrames().includes({f})", timeout=15000)
+    page.fill("#frameInput", "0"); page.dispatch_event("#frameInput", "change")
+    fp = """(i) => { const c = document.querySelectorAll('#mvCycleGrid canvas')[i], d = c.getContext('2d').getImageData(0, 200, 200, 200).data;
+        let h = 2166136261; for (let k = 0; k < d.length; k += 16) { h ^= d[k] + 3 * d[k+1] + 7 * d[k+2]; h = Math.imul(h, 16777619) >>> 0; } return h; }"""
+    for n in (6, 8, 12):
+        build(n)
+        cells = page.evaluate("[...document.querySelectorAll('#mvCycleGrid .mvcell')].map(c => [c.dataset.state, Number(c.dataset.spriteFrame), Number(c.dataset.sourceFrame)])")
+        exp = [page.evaluate(f"MotionCore.spriteFrameFor({i}, {n}, 12)") for i in range(n)]
+        okmap = all(c[0] == "registered" and c[1] == e and c[2] == e for c, e in zip(cells, exp)) and len(cells) == n
+        hashes = [page.evaluate(fp, i) for i in range(n)]
+        groups = {}
+        for i, e in enumerate(exp): groups.setdefault(files[e % 4], set()).add(hashes[i])
+        distinct = len({next(iter(v)) for v in groups.values()}) == len(groups)
+        same = all(len(v) == 1 for v in groups.values())
         caps = page.locator("#mvCycleGrid figcaption").all_inner_texts()
-        exp = page.evaluate(f"MotionCore.sampleCycle(10, 60, {n})")
-        got = [int(c.split("動画F")[1].split(" ")[0]) for c in caps]
-        rec(f"{n}-frame cycle comparison sampled evenly (F10..F60)", got == exp and len(caps) == n, got)
-    page.locator("#mvCycleGrid").scroll_into_view_if_needed()
-    page.screenshot(path=str(OUT / f"motion_{name}_03_cycle12.png"), full_page=False)
+        vf = [int(c.split("動画F")[1].split(" ")[0]) for c in caps]
+        info = page.inner_text("#mvCycleInfo")
+        rec(f"D2: {n}-frame comparison: every cell shows its registered sprite frame", okmap and same and distinct and "登録済みスプライト 12 / 12" in info and f"未登録 0 枠" in info,
+            {"frames": [c[1] for c in cells], "images": [files[e % 4] for e in exp], "same_image_identical": same, "different_images_differ": distinct})
+        rec(f"D2: {n}-frame comparison sampled evenly (F10..F60)", vf == page.evaluate(f"MotionCore.sampleCycle(10, 60, {n})"), vf)
+    page.locator("#mvCycleInfo").scroll_into_view_if_needed()
+    page.screenshot(path=str(OUT / f"motion_{name}_05_cycle12_all.png"), full_page=False)
+
+    spec_before = download("#exportSpec")  # re-baseline: frames 1-11 were added through the studio's own layer input
+    # B / D3. comparison view: fit, aspect, independent scales, ground alignment
+    page.click("#mvResetView"); to(10)
+    geo = page.evaluate("({cw: MotionStudio.cv.width, ch: MotionStudio.cv.height, v: MotionStudio.vbox, s: MotionStudio.sbox})")
+    half_w, ch = geo["cw"] / 2, geo["ch"]
+    v, sb = geo["v"], geo["s"]
+    rec("B: video fitted to its half (touches width or height, aspect 4:3 kept)", (abs(v["w"] - half_w) < 1 or abs(v["h"] - ch) < 1) and abs(v["w"] / v["h"] - 4 / 3) < 0.01, v)
+    rec("B: sprite cropped to content and fitted (touches width or height)", abs(sb["w"] - half_w) < 1 or abs(sb["h"] - ch) < 1, sb)
+    page.evaluate("() => { const e = document.getElementById('mvVScale'); e.value = 200; e.dispatchEvent(new Event('input')); }")
+    g2 = page.evaluate("({v: MotionStudio.vbox, s: MotionStudio.sbox})")
+    rec("B: video scale independent of sprite", abs(g2["v"]["w"] - 2 * v["w"]) < 1 and g2["s"] == sb, [g2["v"]["w"], v["w"]])
+    page.evaluate("() => { const e = document.getElementById('mvVScale'); e.value = 100; e.dispatchEvent(new Event('input')); const s = document.getElementById('mvScale'); s.value = 70; s.dispatchEvent(new Event('input')); }")
+    g3 = page.evaluate("({v: MotionStudio.vbox, s: MotionStudio.sbox})")
+    rec("B: sprite scale independent of video", g3["v"] == v and abs(g3["s"]["h"] - 0.7 * sb["h"]) < 1, [g3["s"]["h"], sb["h"]])
+    page.evaluate("() => { const e = document.getElementById('mvVGround'); e.value = 80; e.dispatchEvent(new Event('input')); }")
+    page.click("#mvAlignGround")
+    gy = page.evaluate("[MotionStudio.vGroundY, MotionStudio.sGroundY]")
+    rec("B: 足元を揃える aligns sprite ground to video foot line", abs(gy[0] - gy[1]) <= 1.5, gy)
+    rec("B: alignment changes display only (BASE_BODY_SPEC unchanged)", download("#exportSpec") == spec_before, "")
+    cvb = page.locator("#mvCanvas").bounding_box()
+    rec("D3: comparison canvas legible size", cvb["height"] >= (250 if mobile else 400) and cvb["width"] >= (320 if mobile else 700), cvb)
+    page.locator("#mvCanvas").scroll_into_view_if_needed()
+    page.screenshot(path=str(OUT / f"motion_{name}_06_compare_aligned.png"), full_page=False)
+    page.click("#mvResetView")
 
     # 6. JSON export / import
     j1, j2 = download("#mvExport"), download("#mvExport")
@@ -182,6 +265,7 @@ def run_real(p, base, path):
     st = page.inner_text("#mvStatus")
     rec("real Grid Overlay MP4 (H.264) decodes; SHA matches bundled reference JSON", "参照JSONと一致" in st and "618コマ" in st, st)
     rec("bundled reference applied: 9 contacts, 7 cycles", page.locator("#mvCycle option").count() == 7, page.inner_text("#mvStats"))
+    rec("bundled contacts shown as 候補（未確定）, none confirmed", page.locator("#mvPhaseList .mvbadge.cand").count() == 9 and page.locator("#mvPhaseList .mvbadge.ok").count() == 0, page.inner_text("#mvStats"))
     page.evaluate("() => { const s = document.getElementById('mvSlider'); s.value = 85; s.dispatchEvent(new Event('input')); }")
     page.wait_for_function("document.getElementById('mvFrameLabel').innerText === '85 / 617'")
     page.select_option("#mvCount", "8"); page.click("#mvBuildCycle"); page.wait_for_function("document.getElementById('mvCycleGrid').dataset.count === '8'", timeout=30000)
@@ -227,7 +311,7 @@ def main():
     finally:
         srv.terminate()
     fails = [r for r in rows if r["result"] != "PASS"]
-    rep = {"tool": "Character Asset Studio v0.3 Motion Reference", "runner": "Playwright headless Chromium (emulated viewports)",
+    rep = {"tool": "Character Asset Studio v0.4 Motion Reference", "runner": "Playwright headless Chromium (emulated viewports)",
            "video": "synthetic H.264 generated by ffmpeg at test time (lossless, frame index as grey level); not committed",
            "real_video_check": "RUN (screenshots kept outside the repository)" if REAL else "NOT_RUN",
            "extra_videos": [e.name for e in EXTRA],

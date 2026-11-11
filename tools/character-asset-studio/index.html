@@ -10,7 +10,7 @@
 <header>
   <div>
     <span class="eyebrow">THE WINDBOUND OATH · ASSET PIPELINE</span>
-    <h1>Character Asset Studio <small>v0.3</small></h1>
+    <h1>Character Asset Studio <small>v0.4</small></h1>
     <p>正本を変更せず、素体・レイヤー・4方向・接地点を検証するローカルスタジオ</p>
   </div>
   <span class="status">LOCAL ONLY · NO UPLOAD</span>
@@ -117,17 +117,30 @@
       <label>計測範囲（分割画面）<select id="mvRegion"><option value="full">全体</option><option value="left_half">左半分（側面）</option><option value="right_half">右半分（正面）</option></select></label>
       <h2>比較表示</h2>
       <label>表示<select id="mvMode"><option value="side">左右並べ</option><option value="overlay">重ね合わせ</option></select></label>
-      <label>スプライト不透明度（重ね） <input id="mvAlpha" type="range" min="10" max="100" value="55"></label>
-      <label>スプライト拡大率 <input id="mvScale" type="range" min="30" max="200" value="100"></label>
-      <label>スプライト横位置 <input id="mvOffset" type="range" min="-50" max="50" value="0"></label>
+      <label>スプライト不透明度（重ね） <output id="mvAlphaOut">55%</output><input id="mvAlpha" type="range" min="10" max="100" value="55"></label>
+      <fieldset class="mvfs"><legend>動画</legend>
+        <label>拡大率 <output id="mvVScaleOut">100%</output><input id="mvVScale" type="range" min="50" max="300" value="100"></label>
+        <label>上下位置 <output id="mvVOffYOut">0</output><input id="mvVOffY" type="range" min="-50" max="50" value="0"></label>
+        <label>足元ライン（動画内の高さ） <output id="mvVGroundOut">95%</output><input id="mvVGround" type="range" min="50" max="100" step="0.5" value="95"></label>
+      </fieldset>
+      <fieldset class="mvfs"><legend>スプライト</legend>
+        <label>拡大率 <output id="mvScaleOut">100%</output><input id="mvScale" type="range" min="30" max="300" value="100"></label>
+        <label>上下位置 <output id="mvSOffYOut">0</output><input id="mvSOffY" type="range" min="-50" max="50" step="0.1" value="0"></label>
+        <label>横位置 <output id="mvOffsetOut">0</output><input id="mvOffset" type="range" min="-50" max="50" value="0"></label>
+      </fieldset>
+      <div class="buttonrow"><button id="mvAlignGround" class="primary">足元を揃える</button><button id="mvResetView">表示をリセット</button></div>
+      <p class="hint">水色＝動画の足元ライン、橙＝スプライトの ground。「足元を揃える」はスプライトの上下位置だけを動かします（計測値・素体仕様は変えません）。</p>
       <label class="check"><input id="mvSync" type="checkbox" checked>周期内の位置でスプライトのフレームを同期</label>
+      <label class="check"><input id="mvReuse" type="checkbox">未登録フレームに既存フレームを再利用（仮表示）</label>
       <h2>歩行フェーズ</h2>
       <div class="mvrow">
-        <label>フェーズ<select id="mvPhase"></select></label>
+        <label>種類<select id="mvPhase"></select></label>
         <label>側<select id="mvSide"></select></label>
       </div>
       <label>信頼度<select id="mvConf"><option>provisional</option><option>low</option><option>medium</option><option>high</option></select></label>
       <button id="mvAddPhase" class="primary">現在のコマに登録</button>
+      <button id="mvConfirm">このコマの接地を目視で確定／解除</button>
+      <p class="hint">「脚の開き幅の極大・極小」は解析マーカーで、接地とは別に記録します。接地（contact）は登録時点では<b>候補（未確定）</b>です。動画を見て足が着いていることを確認してから確定してください。確定しても全体は未承認の参考値のままです。</p>
       <div id="mvPhaseList" class="layerlist"></div>
       <h2>関節アンカー</h2>
       <label class="check"><input id="mvRecord" type="checkbox" checked>動画をタップして記録</label>
@@ -154,6 +167,7 @@
       </div>
     </div>
   </div>
+  <p id="mvCycleInfo" class="hint mvcycleinfo" aria-live="polite"></p>
   <div id="mvCycleGrid" class="mvcycle" aria-live="polite"></div>
 </section>
 <footer>Candidate inspection only · No GitHub write · No merge · No publication</footer>

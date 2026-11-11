@@ -90,3 +90,58 @@ test('box mapping helpers', () => {
   assert.deepStrictEqual([box.w, box.h], [320, 360]);
   assert.deepStrictEqual(M.boxToRegion(M.regionToBox([0.25, 0.75], box), box), [0.25, 0.75]);
 });
+
+test('v0.4: leg-spread extrema are candidates, separate from contact phases', () => {
+  const r = M.createRef({ video: { fps: 25 } });
+  M.setCandidate(r, 85, 'leg_spread_max', 'auto_spread_analysis'); M.setCandidate(r, 111, 'leg_spread_min');
+  assert.strictEqual(r.phases.length, 0, 'a spread maximum must not create a contact');
+  assert.deepStrictEqual(M.cycles(r), []);
+  assert.throws(() => M.setCandidate(r, 1, 'contact'));
+  const j = JSON.parse(M.serialize(r));
+  assert.deepStrictEqual(j.candidates.map(c => [c.frame, c.kind]), [[85, 'leg_spread_max'], [111, 'leg_spread_min']]);
+  assert.strictEqual(M.serialize(M.parse(M.serialize(r))), M.serialize(r));
+  M.removeCandidate(r, 85); assert.strictEqual(r.candidates.length, 1);
+});
+
+test('v0.4: contacts start unverified; visual confirmation is explicit and survives round trip', () => {
+  const r = M.createRef({ video: { fps: 25 } });
+  M.setPhase(r, 85, 'contact', 'A');
+  assert.strictEqual(M.isConfirmed(r.phases[0]), false);
+  assert.ok(!('verification' in JSON.parse(M.serialize(r)).phases[0]));
+  assert.ok(M.confirmPhase(r, 85));
+  const back = M.parse(M.serialize(r));
+  assert.strictEqual(M.isConfirmed(back.phases[0]), true);
+  assert.strictEqual(JSON.parse(M.serialize(back)).status, 'UNAPPROVED_REFERENCE');
+  M.confirmPhase(r, 85, false); assert.strictEqual(M.isConfirmed(r.phases[0]), false);
+  M.setPhase(r, 85, 'contact', 'B'); assert.strictEqual(M.isConfirmed(r.phases[0]), false, 're-registering resets confirmation');
+  assert.strictEqual(M.confirmPhase(r, 99), false);
+});
+
+test('v0.4: committed Grid Overlay JSON stays byte-identical and its contacts load as unverified', () => {
+  const f = path.join(__dirname, '..', 'motion', 'grid_overlay_walk.reference.json');
+  const text = fs.readFileSync(f, 'utf8');
+  const ref = M.parse(text);
+  assert.strictEqual(M.serialize(ref), text);
+  assert.ok(ref.phases.every(p => !M.isConfirmed(p)));
+  assert.deepStrictEqual(ref.phases.filter(p => p.phase === 'contact').map(p => p.frame), [85, 140, 194, 243, 297, 349, 404, 458, 511]);
+});
+
+test('v0.4: sprite source — missing frames are reported, reuse is opt-in and holds the previous frame', () => {
+  const miss = Array.from({ length: 12 }, (_, i) => M.spriteSource(i, 12, 12, [0], false));
+  assert.deepStrictEqual(miss.map(s => s.state), ['registered', ...Array(11).fill('missing')]);
+  assert.ok(miss.slice(1).every(s => s.source === null));
+  const reuse = Array.from({ length: 12 }, (_, i) => M.spriteSource(i, 12, 12, [0, 6], true));
+  assert.deepStrictEqual(reuse.map(s => s.source), [0, 0, 0, 0, 0, 0, 6, 6, 6, 6, 6, 6]);
+  assert.deepStrictEqual(reuse.map(s => s.state).filter(s => s === 'registered').length, 2);
+  assert.deepStrictEqual(M.spriteSource(0, 6, 12, [3], true), { frame: 0, source: 3, state: 'reused' });
+  const all = Array.from({ length: 12 }, (_, f) => f);
+  for (const n of M.SAMPLE_COUNTS) for (let i = 0; i < n; i++) {
+    const s = M.spriteSource(i, n, 12, all, true); assert.strictEqual(s.state, 'registered'); assert.strictEqual(s.source, M.spriteFrameFor(i, n, 12));
+  }
+  assert.deepStrictEqual(M.spriteSource(1, 6, 12, [], true).state, 'missing');
+});
+
+test('v0.4: unionBox includes the ground line', () => {
+  assert.deepStrictEqual(M.unionBox([[10, 20, 50, 100], null, [5, 30, 40, 90]], 120), [5, 20, 50, 121]);
+  assert.strictEqual(M.unionBox([], 5), null);
+});

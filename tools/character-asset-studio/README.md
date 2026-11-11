@@ -1,4 +1,4 @@
-# Character Asset Studio v0.3
+# Character Asset Studio v0.4
 
 THE WINDBOUND OATH のキャラクター素材を確認するためのローカルブラウザツール。正本画像を変更することはない。
 ChatGPT から納品された v0.1 MVP（コミット f5088ae に、受け取ったままの状態で取り込み済み）を、`docs/CLAUDE_HANDOFF.md`（CHARACTER-ASSET-STUDIO-02）に従って強化した。
@@ -48,17 +48,25 @@ python3 -m http.server 8000
 
 参考動画そのもの、動画から切り出したフレーム、動画が写ったスクリーンショットはリポジトリに入れない。
 
+## v0.4 視覚QA修正（CHARACTER-ASSET-STUDIO-04）
+- **未登録フレーム:** 比較画面と周期比較で、スプライトが登録されていないフレームは「未登録」と表示する。周期比較では「比較枠 N · 登録済みスプライト X / 12 フレーム · 未登録 · 仮表示」の枠数を明示する。
+- **再利用プレビュー（任意）:** 「未登録フレームに既存フレームを再利用（仮表示）」をオンにすると、直前の登録済みフレームを表示する。枠は橙の破線、ラベルは「仮表示 f3←f0」で、アニメーション素材とは区別する。スタジオのレイヤーには追加しない。画像の自動生成・自動補完はしない。
+- **比較画面:** スプライトは登録済みフレーム全体の不透明部分＋ground で切り抜き、縦横比を保って表示領域いっぱいに拡大する（全フレーム同じ切り抜きなので縮尺はそろう）。動画は計測範囲を縦横比を保って拡大する。動画（拡大率・上下位置・足元ライン）とスプライト（拡大率・上下位置・横位置）を別々に調整できる。「足元を揃える」で、スプライトの ground（橙）を動画の足元ライン（水色）の高さに合わせる。表示だけの調整で、計測値や素体仕様は変えない。
+- **390px:** 比較画面のキャンバスを縦長（720×640）にし、比較画面と再生操作を画面上部に固定する（操作パネルをスクロールしても見える）。再生ボタンは5列で並べる。
+- **歩行フェーズ:** 「脚の開き幅の極大・極小」は解析マーカー（`candidates`）として、接地（`phases` の contact）とは別に記録する。接地は登録時点では「候補（未確定）」で、動画を見て確認したものだけ「目視確定」（`verification: "visual_confirmed"`）にする。確定してもファイル全体は未承認の参考値のまま。
+- **Grid Overlay 参考JSON:** ファイルは変更していない（バイト単位で同一）。中の contact は脚の開き幅の極大から求めた値で、目視確定はしていないため、読み込むと9件すべて「候補（未確定）」と表示される。
+
 ## 参照しない素体（BLOCKED）
 `profiles/reference_bodies.json` 参照。素体 R2.1 は、以前の候補画像で計測したもので、最終正本4方向では計測していない。そのため、R2.1 の座標は読み込まず、新しい座標を推測で作ることもしない。
 
 ## テスト
 ```sh
-node --test tools/character-asset-studio/tests/*.cjs                    # 中核ロジック（v0.2 6件 + モーション 8件）
+node --test tools/character-asset-studio/tests/*.cjs                    # 中核ロジック（v0.2 6件 + モーション 13件）
 python3 tools/character-asset-studio/tests/e2e_studio.py [OUT_DIR]       # v0.2 機能（390px・1440px）
 python3 tools/character-asset-studio/tests/e2e_motion.py [OUT_DIR] [--real-video PATH]   # v0.3 モーション
 ```
 `e2e_motion.py` は、テストのたびに ffmpeg で合成動画（コマ番号を灰色の濃さで表した可逆H.264）を作り、コマ送りが正確かを確かめる。`--real-video` を付けると実際の参考動画でも確かめるが、そのスクリーンショットは一時ディレクトリにだけ保存する。
-結果は `qa/QA_REPORT_v0.3.md`（v0.2 は `qa/QA_REPORT_v0.2.md`）、`qa/e2e_report.json`、`qa/e2e_motion_report.json`、`qa/*.png` に保存している。
+結果は `qa/QA_REPORT_v0.4.md`（以前の版は `qa/QA_REPORT_v0.3.md`、`qa/QA_REPORT_v0.2.md`）、`qa/e2e_report.json`、`qa/e2e_motion_report.json`、`qa/*.png` に保存している。
 
 ## 実装していないこと
 - 自動リギング、隠れた部分の自動補正、IK、解剖学的な整合性の証明

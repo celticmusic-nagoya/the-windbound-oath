@@ -16,6 +16,11 @@
   const SIDES = ['L', 'R', 'A', 'B', 'unknown'];
   const JOINTS = ['head', 'shoulder', 'elbow', 'wrist', 'hip', 'knee_L', 'knee_R', 'ankle_L', 'ankle_R', 'toe_L', 'toe_R'];
   const SAMPLE_COUNTS = [6, 8, 12];
+  // Analysis markers are NOT phases: a leg-spread extremum is evidence, not a foot contact.
+  const CANDIDATE_KINDS = ['leg_spread_max', 'leg_spread_min'];
+  // Phase verification: absent = unverified candidate; 'visual_confirmed' = a person checked the frame by eye.
+  // (Still UNAPPROVED_REFERENCE as a whole — confirmation is not adoption.)
+  const VERIFIED = 'visual_confirmed';
   const REGIONS = { full: [0, 0, 1, 1], left_half: [0, 0, 0.5, 1], right_half: [0.5, 0, 0.5, 1] };
 
   const r6 = v => Math.round(v * 1e6) / 1e6;
@@ -51,7 +56,7 @@
         fpsSource: video.fpsSource || 'user_entered'
       },
       region: Array.isArray(region) ? region.map(r6) : (REGIONS[region] || REGIONS.full).slice(),
-      phases: [], anchors: {}, note
+      phases: [], candidates: [], anchors: {}, note
     };
   }
 
@@ -60,10 +65,26 @@
     if (!SIDES.includes(side)) throw new Error('unknown side: ' + side);
     frame = Math.round(frame);
     ref.phases = ref.phases.filter(p => p.frame !== frame);
-    ref.phases.push({ frame, phase, side, confidence });
+    ref.phases.push({ frame, phase, side, confidence });   // new phases always start unverified
     ref.phases.sort((a, b) => a.frame - b.frame);
     return ref;
   }
+  function confirmPhase(ref, frame, confirmed = true) {
+    const p = ref.phases.find(x => x.frame === Math.round(frame));
+    if (!p) return false;
+    if (confirmed) p.verification = VERIFIED; else delete p.verification;
+    return true;
+  }
+  function isConfirmed(p) { return p.verification === VERIFIED; }
+  function setCandidate(ref, frame, kind, source = 'manual_mark') {
+    if (!CANDIDATE_KINDS.includes(kind)) throw new Error('unknown candidate kind: ' + kind);
+    frame = Math.round(frame);
+    ref.candidates = ref.candidates.filter(c => !(c.frame === frame && c.kind === kind));
+    ref.candidates.push({ frame, kind, source });
+    ref.candidates.sort((a, b) => a.frame - b.frame || a.kind.localeCompare(b.kind));
+    return ref;
+  }
+  function removeCandidate(ref, frame, kind) { ref.candidates = ref.candidates.filter(c => !(c.frame === Math.round(frame) && (!kind || c.kind === kind))); return ref; }
   function removePhase(ref, frame) { ref.phases = ref.phases.filter(p => p.frame !== Math.round(frame)); return ref; }
 
   // Anchors are normalised to the selected region of the video frame (0..1).
@@ -135,6 +156,7 @@
     out.schema = SCHEMA; out.status = STATUS; out.autoApply = false;
     out.derived = stats(ref);
     out.derived.cycles = cycles(ref);
+    if (!out.candidates || !out.candidates.length) delete out.candidates;   // keeps pre-v0.4 files byte-identical
     return stableStringify(out);
   }
 
@@ -143,7 +165,8 @@
     if (!j || j.schema !== SCHEMA) throw new Error('not a ' + SCHEMA + ' file');
     const ref = createRef({ video: j.video || {}, region: j.region || 'full', note: j.note || '' });
     ref.video.fpsSource = (j.video && j.video.fpsSource) || ref.video.fpsSource;
-    for (const p of j.phases || []) setPhase(ref, p.frame, p.phase, p.side || 'unknown', p.confidence || 'provisional');
+    for (const p of j.phases || []) { setPhase(ref, p.frame, p.phase, p.side || 'unknown', p.confidence || 'provisional'); if (p.verification === VERIFIED) confirmPhase(ref, p.frame); }
+    for (const c of j.candidates || []) setCandidate(ref, c.frame, c.kind, c.source || 'imported');
     for (const f of Object.keys(j.anchors || {})) for (const joint of Object.keys(j.anchors[f])) {
       const a = j.anchors[f][joint]; setAnchor(ref, Number(f), joint, a.n, a.confidence || 'provisional');
     }
@@ -152,6 +175,24 @@
     return ref;
   }
 
+  // Sprite frame shown for comparison cell i of n. Missing frames are never generated: they are reported as
+  // 'missing', or — only when reuse preview is on — filled by holding the previous registered frame ('reused', provisional).
+  function spriteSource(i, n, spriteFrames, registered, reuse) {
+    const frame = spriteFrameFor(i, n, spriteFrames);
+    const reg = [...new Set(registered)].filter(f => f >= 0 && f < spriteFrames).sort((a, b) => a - b);
+    if (reg.includes(frame)) return { frame, source: frame, state: 'registered' };
+    if (!reuse || !reg.length) return { frame, source: null, state: 'missing' };
+    const prev = reg.filter(f => f < frame);
+    return { frame, source: prev.length ? prev[prev.length - 1] : reg[reg.length - 1], state: 'reused' };
+  }
+  // Union of pixel boxes [x0,y0,x1,y1] (inclusive-exclusive), optionally including a horizontal line y.
+  function unionBox(boxes, lineY) {
+    const b = boxes.filter(Boolean);
+    if (!b.length) return null;
+    const u = [Math.min(...b.map(x => x[0])), Math.min(...b.map(x => x[1])), Math.max(...b.map(x => x[2])), Math.max(...b.map(x => x[3]))];
+    if (lineY != null) { u[1] = Math.min(u[1], lineY); u[3] = Math.max(u[3], lineY + 1); }
+    return u;
+  }
   // Map a normalised anchor (relative to region) to pixel coords inside a draw box {x,y,w,h}.
   function regionToBox(n, box) { return [box.x + n[0] * box.w, box.y + n[1] * box.h]; }
   function boxToRegion(px, box) { return [r6(clamp((px[0] - box.x) / box.w, 0, 1)), r6(clamp((px[1] - box.y) / box.h, 0, 1))]; }
@@ -162,7 +203,8 @@
   }
 
   return {
-    SCHEMA, STATUS, PHASES, SIDES, JOINTS, SAMPLE_COUNTS, REGIONS,
+    SCHEMA, STATUS, PHASES, SIDES, JOINTS, SAMPLE_COUNTS, REGIONS, CANDIDATE_KINDS, VERIFIED,
+    confirmPhase, isConfirmed, setCandidate, removeCandidate, spriteSource, unionBox,
     stableStringify, frameToTime, timeToFrame, frameCountFor, stepFrame, timecode,
     createRef, setPhase, removePhase, setAnchor, removeAnchor, trajectory, anchorAt,
     cycles, sampleCycle, spriteFrameFor, stats, serialize, parse, regionToBox, boxToRegion, fitBox
