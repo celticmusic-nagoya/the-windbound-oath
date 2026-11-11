@@ -25,20 +25,20 @@ Each work packet specifies: TASK ID, issue/PR, source revision, authoritative sp
 - One bounded intent per issue/branch/PR; note coupled dependencies explicitly.
 - Preserve official assets and original hashes. Separate assets/content from gameplay logic using existing interfaces and manifests.
 - Commit incremental, reviewable changes to a work branch. Open or update a Draft PR with change list, tests and risks.
-- No automatic main merge, release, website publication, canonical design promotion or irreversible deletion without director authorization.
+- For routine code changes, follow the latest Auto-Pilot / Auto-Merge policy in AGENTS.md, including its stop triggers and QA requirements. Task-specific explicit prohibitions on merge, release, website publication, canonical asset promotion or irreversible deletion remain binding; do not bypass protected-asset or canon gates.
 
 ## 4. Self-review and bounded retry
 1. Run targeted tests and static checks, inspect failures.
 2. Perform self-review for regressions, edge cases, null/missing data, ID mismatches, SAVE compatibility, mobile performance, UI overflow, accessibility and asset integrity.
 3. Apply minimal patch and rerun tests.
-4. Limit automatic repair to two focused retries per failure class. If still failing, record reproducible evidence and mark BLOCKED rather than broad speculative changes.
+4. Prefer an early review after two focused retries per failure class; follow AGENTS.md's current soft limit of up to three retries. If still failing, record reproducible evidence and mark BLOCKED rather than broad speculative changes.
 5. Independent QA is separate from self-QA. Record PASS/FAIL/BLOCKED/NOT_RUN honestly; never claim unexecuted device tests passed.
 
 ## 5. Visual base-first
 For characters, use locked base-body, anatomical anchors, shared master canvas, one-edit-intent, layer-based costume and multi-angle QA per CHARACTER_ASSET_GENERATION_GUIDE_v1.2.md. For UI, fix layout grid, sizing and responsive constraints before decoration. No guarantee of zero rework; use measurable quality gates.
 
 ## 6. Acceptance and reporting
-Deliver implementation paths, code/diff, tests and results, regressions, unresolved issues, and next recommended task. Preserve user-facing director decision points for changes to canon, major architecture, official assets, publication and merge. Otherwise proceed autonomously within the approved bounded task.
+Deliver implementation paths, code/diff, tests and results, regressions, unresolved issues, and next recommended task. Preserve director decision points for protected canon and official assets, fundamental architecture choices, and any task-specific approval gates; for routine merges follow the latest AGENTS.md Auto-Merge policy. Otherwise proceed autonomously within the approved bounded task.
 
 ## 7. Current priorities
 Do not displace approved prologue work or ongoing Morwen FIX-03. For Morwen, base-body/anchor validation remains the prerequisite; HD pixel-art production remains BLOCKED until four-angle independent QA and director adoption.
