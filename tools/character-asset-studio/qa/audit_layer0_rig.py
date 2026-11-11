@@ -18,7 +18,7 @@ def audit(spec):
           spec.get("anchor", {}).get("px"))
     check("joint_parent_refs", all(k in joints and p in joints for k, p in tree.items()),
           {"jointCount": len(joints), "parentLinks": len(tree)})
-    check("single_deform_root", set(joints) - set(tree) == {"pelvis"},
+    check("single_deform_root", set(joints) - set(tree) in ({"pelvis"}, {"pelvis", "ground"}),
           sorted(set(joints) - set(tree)))
 
     cycles = []
@@ -44,7 +44,7 @@ def audit(spec):
     check("paired_joint_mirror", not symmetry_errors, symmetry_errors)
 
     # A planted world-space reference must not inherit pelvis transforms.
-    check("ground_not_deform_child", "ground" not in tree,
+    check("ground_not_deform_child", "ground" not in tree and spec.get("worldAnchors", {}).get("ground", {}).get("followsRig") is False,
           {"groundParent": tree.get("ground")})
 
     # Age migration is an explicit candidate metadata gate, not a retroactive edit.
