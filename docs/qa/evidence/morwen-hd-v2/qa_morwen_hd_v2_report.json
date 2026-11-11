@@ -1,0 +1,13 @@
+{
+ "task": "MORWEN-HD-CANONICAL-V2-REGISTER",
+ "result": "PASS",
+ "checks": 74,
+ "fails": [],
+ "warnings": [
+  "Body alpha is mostly 253 (not 255) in all originals: about 1% translucent. Originals are not modified; future in-game sprites must be derived with a decided alpha rule.",
+  "Display derivatives: boot centre x is front 611.5 / left 499.0 / right 712.5 / back 600.5 against anchor x=600 (left and right off by about 100 px).",
+  "Display derivatives: eye row (visual, +-8 px) front 330 / left 290 / right 368; figure scale differs by about 6-7% between left and right because normalisation used the hat-inclusive bbox."
+ ],
+ "visual_director_review": "NOT_RUN",
+ "android_physical_device": "NOT_RUN"
+}

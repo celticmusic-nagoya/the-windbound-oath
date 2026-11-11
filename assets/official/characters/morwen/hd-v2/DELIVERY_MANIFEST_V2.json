@@ -1,0 +1,180 @@
+{
+  "version": "2.0",
+  "date": "2026-11-10",
+  "policy": "Latest user-supplied pixel left is sole canonical left; legacy left superseded. Originals byte-preserved. Normalized copies are display derivatives only. No GitHub changes performed.",
+  "canvas": [
+    1200,
+    1600
+  ],
+  "ground_anchor": [
+    600,
+    1540
+  ],
+  "assets": {
+    "originals/pixel/front.png": {
+      "sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a",
+      "size": [
+        1024,
+        1536
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/pixel/left.png": {
+      "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+      "size": [
+        1024,
+        1535
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/pixel/right.png": {
+      "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+      "size": [
+        1087,
+        1446
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/pixel/back.png": {
+      "sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f",
+      "size": [
+        1086,
+        1448
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/real/portrait.webp": {
+      "sha256": "141a6955af90f8678e408efd3649e3e114c3c4c44c682e00c6679e386474581b",
+      "size": [
+        720,
+        1080
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/real/front.png": {
+      "sha256": "f9a0272c99059480a59fdcb8a6278f318bc2da6f14f160e08f01eefdfe1d13ec",
+      "size": [
+        1024,
+        1536
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/real/back.png": {
+      "sha256": "66bc519ddd54878b66e298b72919d52d3727f2fdfdcf8c9cfc706c699cdad8ab",
+      "size": [
+        1024,
+        1536
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/real/right.png": {
+      "sha256": "b435dde0b048b1d4d7a36dd6b7b3437c6977581049ef400b3dcd290e21f50850",
+      "size": [
+        1024,
+        1536
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "originals/real/left.png": {
+      "sha256": "a48ab1bc86bb7a1597b701575657b95ddbbb153c5f7b0528d3e885cca7645279",
+      "size": [
+        1024,
+        1535
+      ],
+      "role": "CANONICAL",
+      "alpha": true
+    },
+    "display/pixel/front_1200x1600.png": {
+      "sha256": "a1cec16d21c6427c5b876324a7a14a2b21d83bce9cbc13ae80c0589db245ac9c",
+      "size": [
+        1200,
+        1600
+      ],
+      "source": "originals/pixel/front.png",
+      "source_bbox": [
+        0,
+        0,
+        1008,
+        1536
+      ],
+      "paste_xy": [
+        108,
+        40
+      ],
+      "scale": 0.9765625,
+      "resampling": "nearest",
+      "status": "DERIVED_NOT_MASTER"
+    },
+    "display/pixel/left_1200x1600.png": {
+      "sha256": "e0fe405042d2aac57a1cebf233af5b8f0c238a12c9562394e676615235a8d7e7",
+      "size": [
+        1200,
+        1600
+      ],
+      "source": "originals/pixel/left.png",
+      "source_bbox": [
+        39,
+        0,
+        1006,
+        1535
+      ],
+      "paste_xy": [
+        127,
+        40
+      ],
+      "scale": 0.9771986970684039,
+      "resampling": "nearest",
+      "status": "DERIVED_NOT_MASTER"
+    },
+    "display/pixel/right_1200x1600.png": {
+      "sha256": "531c4ee0618f2d7648cc76e4f83c3390de0e470badccb13e159ca909e5d68144",
+      "size": [
+        1200,
+        1600
+      ],
+      "source": "originals/pixel/right.png",
+      "source_bbox": [
+        0,
+        0,
+        1049,
+        1446
+      ],
+      "paste_xy": [
+        75,
+        94
+      ],
+      "scale": 1.0,
+      "resampling": "nearest",
+      "status": "DERIVED_NOT_MASTER"
+    },
+    "display/pixel/back_1200x1600.png": {
+      "sha256": "047fb26bd6ae5598178a8a9897454aac1e5a155d5613ccf9e35628ece3db7f64",
+      "size": [
+        1200,
+        1600
+      ],
+      "source": "originals/pixel/back.png",
+      "source_bbox": [
+        0,
+        0,
+        1066,
+        1448
+      ],
+      "paste_xy": [
+        67,
+        92
+      ],
+      "scale": 1.0,
+      "resampling": "nearest",
+      "status": "DERIVED_NOT_MASTER"
+    }
+  }
+}

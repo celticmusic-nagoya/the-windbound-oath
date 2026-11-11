@@ -1,0 +1,179 @@
+{
+ "canvas": [
+  1200,
+  1600
+ ],
+ "anchor": [
+  600,
+  1540
+ ],
+ "rows": {
+  "hat_top": {
+   "front": 35,
+   "right": 32,
+   "back": 45,
+   "left": 40
+  },
+  "hat_brim_lowest": {
+   "front": 325,
+   "right": 330,
+   "back": 345,
+   "left": 335
+  },
+  "hair_tip_lowest": {
+   "front": 370,
+   "right": 365,
+   "back": 445,
+   "left": 365
+  },
+  "shoulder_capelet_top": {
+   "front": 385,
+   "right": 385,
+   "back": 440,
+   "left": 400
+  },
+  "capelet_layer1_bottom": {
+   "front": 545,
+   "right": 555,
+   "back": 598,
+   "left": 565
+  },
+  "cuff_bottom": {
+   "front": 775,
+   "right": 780,
+   "back": 775,
+   "left": 800
+  },
+  "skirt_hem": {
+   "front": 868,
+   "right": 875,
+   "back": 862,
+   "left": 868
+  },
+  "sock_top": {
+   "front": 905,
+   "right": 924,
+   "back": 908,
+   "left": 911
+  },
+  "boot_top_fix01": {
+   "front": 1270,
+   "right": 1270,
+   "back": 1270,
+   "left": 1271
+  },
+  "sole": {
+   "front": 1540,
+   "right": 1540,
+   "back": 1540,
+   "left": 1540
+  }
+ },
+ "delta_vs_front": {
+  "hat_top": {
+   "front": 0,
+   "right": -3,
+   "back": 10,
+   "left": 5
+  },
+  "hat_brim_lowest": {
+   "front": 0,
+   "right": 5,
+   "back": 20,
+   "left": 10
+  },
+  "hair_tip_lowest": {
+   "front": 0,
+   "right": -5,
+   "back": 75,
+   "left": -5
+  },
+  "shoulder_capelet_top": {
+   "front": 0,
+   "right": 0,
+   "back": 55,
+   "left": 15
+  },
+  "capelet_layer1_bottom": {
+   "front": 0,
+   "right": 10,
+   "back": 53,
+   "left": 20
+  },
+  "cuff_bottom": {
+   "front": 0,
+   "right": 5,
+   "back": 0,
+   "left": 25
+  },
+  "skirt_hem": {
+   "front": 0,
+   "right": 7,
+   "back": -6,
+   "left": 0
+  },
+  "sock_top": {
+   "front": 0,
+   "right": 19,
+   "back": 3,
+   "left": 6
+  },
+  "boot_top_fix01": {
+   "front": 0,
+   "right": 0,
+   "back": 0,
+   "left": 1
+  },
+  "sole": {
+   "front": 0,
+   "right": 0,
+   "back": 0,
+   "left": 0
+  }
+ },
+ "notes": {
+  "chest_waist": "front waist (vest bottom/belt) ~650-670; back waist is hidden by the capelet/robe, not measurable",
+  "neck": "front neck/collar 345-375; back neck hidden by hair",
+  "method": "rows read on fix01/aligned images at 1:1 with 10 px ticks; hat_top = crown top (tip excluded)",
+  "disagreement": "self vs independent: hair tip 445 vs ~424, shoulder 440 vs ~432 (hair strands overlap the capelet top; reading depends on which strand counts). Spec targets use the independent values (lift ~48 px).",
+  "arm_length": "shoulder->cuff: front ~407 px, back ~356 px (back 12.5% short, independent QA)"
+ },
+ "independent_rows_back_minus_front": {
+  "hat_crown_top": 14,
+  "hat_brim_lowest": 20,
+  "hair_tip_lowest": 57,
+  "shoulder_capelet_top": 48,
+  "capelet_layer1_bottom": 54,
+  "cuff_bottom": -4,
+  "skirt_hem": -5,
+  "sock_top": 4,
+  "boot_top": 1,
+  "sole": 0
+ },
+ "independent_rows": {
+  "front": {
+   "hat_crown_top": 34,
+   "hat_brim_lowest": 345,
+   "hair_tip_lowest": 367,
+   "shoulder_capelet_top": 384,
+   "capelet_layer1_bottom": 537,
+   "cuff_bottom": 792,
+   "skirt_hem": 866,
+   "sock_top": 903,
+   "boot_top": 1270,
+   "sole": 1540
+  },
+  "back": {
+   "hat_crown_top": 48,
+   "hat_brim_lowest": 365,
+   "hair_tip_lowest": 424,
+   "shoulder_capelet_top": 432,
+   "capelet_layer1_bottom": 591,
+   "cuff_bottom": 788,
+   "skirt_hem": 861,
+   "sock_top": 907,
+   "boot_top": 1271,
+   "sole": 1540
+  }
+ }
+}

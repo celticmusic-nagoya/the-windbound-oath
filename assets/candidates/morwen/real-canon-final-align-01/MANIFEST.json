@@ -1,0 +1,146 @@
+{
+ "task": "MORWEN-REAL-CANON-FINAL-ALIGN-01",
+ "status": "CANDIDATE_NOT_PRODUCTION",
+ "canvas": [
+  1200,
+  1600
+ ],
+ "anchor": [
+  600,
+  1540
+ ],
+ "files": [
+  {
+   "file": "morwen_front_final.png",
+   "sha256": "acdc6556793408cc4b3300d07a48698b46d7457904947a0a270319100da45437"
+  },
+  {
+   "file": "morwen_right_final.png",
+   "sha256": "ff8d8d982ae7e020ebaad2112c953046e4f3e8ebe656d7953b600c92f861ec24"
+  },
+  {
+   "file": "morwen_back_final.png",
+   "sha256": "4c4f10586cf80a38e92e9bad2b9b8b8540ad9199ff72345234022af10e9d776d"
+  },
+  {
+   "file": "morwen_left_final.png",
+   "sha256": "12a10a2c20d5b5f1a879db0eb95d11a2c37b60ddfe108030846afb9d8415ad29"
+  },
+  {
+   "file": "comparison_4directions.png",
+   "sha256": "3b9951b9f80f24355191fb7c33da0b56c91dd6336ddbf6aa568c76f2011b4508"
+  },
+  {
+   "file": "QA_REPORT.md",
+   "sha256": "b1afb53c607a944cb24fe82bb0b48e2fc53a022b4249cda1484ffefb1d78a6de"
+  }
+ ],
+ "sources": {
+  "front": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+   "sha256": "f9a0272c99059480a59fdcb8a6278f318bc2da6f14f160e08f01eefdfe1d13ec"
+  },
+  "right": {
+   "path": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+   "sha256": "b435dde0b048b1d4d7a36dd6b7b3437c6977581049ef400b3dcd290e21f50850"
+  },
+  "back": {
+   "path": "assets/candidates/morwen/real-canon-final-align-01/source/morwen_back_provided_20261111_blackbg.png",
+   "sha256": "6cc28f0056afa7caa87fef6e6150e7be5cb4f171fefb123822ef47ef25a0d2d2"
+  },
+  "left": {
+   "path": "assets/candidates/morwen/real-canon-final-align-01/source/morwen_left_provided_20261111_blackbg.png",
+   "sha256": "3492dc1c8949dde4bc3669b0f4d39166c84d5a9801a81db4b0464553911e5209"
+  }
+ },
+ "processing": {
+  "front": {
+   "source": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+   "scale": 1.0,
+   "source_anchor": [
+    512.5,
+    1510
+   ],
+   "offset": [
+    88,
+    30
+   ],
+   "anchor_error_px": [
+    0.5,
+    0.0
+   ],
+   "steps": [
+    "placement only (integer translation)",
+    "alpha >=250 -> 255, alpha <=12 -> 0"
+   ]
+  },
+  "right": {
+   "source": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+   "scale": 1.0,
+   "source_anchor": [
+    605.5,
+    1524
+   ],
+   "offset": [
+    -6,
+    16
+   ],
+   "anchor_error_px": [
+    -0.5,
+    0.0
+   ],
+   "steps": [
+    "heelfix.py: local vertical shear of the heel block only (x513-599, y1441-1530), heel bottom 1518->1524",
+    "placement (integer translation)",
+    "alpha >=250 -> 255, alpha <=12 -> 0"
+   ]
+  },
+  "back": {
+   "source": "assets/candidates/morwen/real-canon-final-align-01/source/morwen_back_provided_20261111_blackbg.png",
+   "scale": 1.0,
+   "source_anchor": [
+    500.0,
+    1519
+   ],
+   "offset": [
+    100,
+    21
+   ],
+   "anchor_error_px": [
+    0.0,
+    0.0
+   ],
+   "steps": [
+    "matte.py rev2 (back): black background -> alpha; leg gap and hair-side gap made transparent",
+    "colormatch.py: per-material Lab match to front+right",
+    "leather_fix.py: bag/strap leather hue +18 deg (mauve -> brown)",
+    "placement (integer translation)",
+    "alpha >=250 -> 255, alpha <=12 -> 0"
+   ]
+  },
+  "left": {
+   "source": "assets/candidates/morwen/real-canon-final-align-01/source/morwen_left_provided_20261111_blackbg.png",
+   "scale": 1.07,
+   "source_anchor": [
+    426.5,
+    1435.5
+   ],
+   "offset": [
+    144,
+    4
+   ],
+   "anchor_error_px": [
+    0.36,
+    -0.01
+   ],
+   "steps": [
+    "matte.py rev2 (left): black background -> alpha; cape/boot gap and hat-tip ring hole made transparent",
+    "colormatch.py: per-material Lab match to front+right",
+    "cape_fix.py: purple cloth in feathered box x560-1000,y280-1420 chroma x1.12, L +1.5",
+    "scale 1.07 (Lanczos, premultiplied)",
+    "placement",
+    "alpha >=250 -> 255, alpha <=12 -> 0"
+   ]
+  }
+ }
+}

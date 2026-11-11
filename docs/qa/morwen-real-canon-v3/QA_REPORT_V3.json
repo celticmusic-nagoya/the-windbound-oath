@@ -1,0 +1,209 @@
+{
+ "task": "MORWEN-REAL-CANON-V3-REGISTER-01",
+ "result": "FAIL",
+ "checks": 35,
+ "fail_count": 1,
+ "rows": [
+  {
+   "check": "manifest anchor target",
+   "result": "PASS",
+   "detail": "[600, 1540]"
+  },
+  {
+   "check": "sha256 front vs MANIFEST_V3",
+   "result": "PASS",
+   "detail": "afb07fe61af05f3e393de94bc19de2978c70d25f18abbd5baa8a141eaf686077"
+  },
+  {
+   "check": "source v2 sha256 front",
+   "result": "PASS",
+   "detail": "16c71079231b1a0f7b960a35d1e5cb1e3abfcd092ad22729924ac74c0bb0bca4"
+  },
+  {
+   "check": "move front matches spec",
+   "result": "PASS",
+   "detail": "(22,-18)"
+  },
+  {
+   "check": "size+mode front",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / no clipping front",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "pure translation of v2 front",
+   "result": "PASS",
+   "detail": "alpha identical=True, rgb identical=True, pixels lost=0"
+  },
+  {
+   "check": "sha256 right vs MANIFEST_V3",
+   "result": "PASS",
+   "detail": "76e8359736f8f8ce957f7c49766141106b1de8ee81fe220a43f26e33ce0fba5d"
+  },
+  {
+   "check": "source v2 sha256 right",
+   "result": "PASS",
+   "detail": "55c5ce7ffaf5380eae56a79bae6fc3ddc50c5f7907a236c59bd4850c443823e1"
+  },
+  {
+   "check": "move right matches spec",
+   "result": "PASS",
+   "detail": "(-96,-18)"
+  },
+  {
+   "check": "size+mode right",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / no clipping right",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "pure translation of v2 right",
+   "result": "PASS",
+   "detail": "alpha identical=True, rgb identical=True, pixels lost=0"
+  },
+  {
+   "check": "sha256 back vs MANIFEST_V3",
+   "result": "PASS",
+   "detail": "d5476cada216c0738211a3e020050fdaf901cbb45b78de388c3bf430d5c84ef2"
+  },
+  {
+   "check": "source v2 sha256 back",
+   "result": "PASS",
+   "detail": "eb39bcbe0155f0b329e42cec1dc159f24d4758e362ad7a5130c14134020cb02c"
+  },
+  {
+   "check": "move back matches spec",
+   "result": "PASS",
+   "detail": "(36,-18)"
+  },
+  {
+   "check": "size+mode back",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / no clipping back",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "pure translation of v2 back",
+   "result": "PASS",
+   "detail": "alpha identical=True, rgb identical=True, pixels lost=0"
+  },
+  {
+   "check": "sha256 left vs MANIFEST_V3",
+   "result": "PASS",
+   "detail": "87f9158d7fb9f0106ee5ef291fbdb114159a693b27af57619c75ef2c478596b5"
+  },
+  {
+   "check": "source v2 sha256 left",
+   "result": "PASS",
+   "detail": "a4339f30cc7425521672b720aa226c510ec153c4f669b81deb48466a2dacb7e4"
+  },
+  {
+   "check": "move left matches spec",
+   "result": "PASS",
+   "detail": "(79,-18)"
+  },
+  {
+   "check": "size+mode left",
+   "result": "PASS",
+   "detail": "RGBA (1200, 1600)"
+  },
+  {
+   "check": "transparent border / no clipping left",
+   "result": "PASS",
+   "detail": "border alpha max 0"
+  },
+  {
+   "check": "pure translation of v2 left",
+   "result": "PASS",
+   "detail": "alpha identical=True, rgb identical=True, pixels lost=0"
+  },
+  {
+   "check": "ground row front",
+   "result": "PASS",
+   "detail": "lowest alpha>=128 row 1540"
+  },
+  {
+   "check": "boot contact front",
+   "result": "PASS",
+   "detail": "boot span x 526-675 centre 600.5; lowest row per contact segment {'(526, 600)': 1540, '(602, 675)': 1540} (tol x±4, y≤4)"
+  },
+  {
+   "check": "ground row right",
+   "result": "PASS",
+   "detail": "lowest alpha>=128 row 1540"
+  },
+  {
+   "check": "boot contact right",
+   "result": "FAIL",
+   "detail": "boot span x 510-691 centre 600.5; lowest row per contact segment {'(510, 563)': 1534, '(585, 691)': 1540} (tol x±4, y≤4)"
+  },
+  {
+   "check": "ground row back",
+   "result": "PASS",
+   "detail": "lowest alpha>=128 row 1540"
+  },
+  {
+   "check": "boot contact back",
+   "result": "PASS",
+   "detail": "boot span x 517-684 centre 600.5; lowest row per contact segment {'(517, 598)': 1540, '(604, 684)': 1539} (tol x±4, y≤4)"
+  },
+  {
+   "check": "ground row left",
+   "result": "PASS",
+   "detail": "lowest alpha>=128 row 1540"
+  },
+  {
+   "check": "boot contact left",
+   "result": "PASS",
+   "detail": "boot span x 511-689 centre 600.0; lowest row per contact segment {'(511, 620)': 1540, '(643, 687)': 1538} (tol x±4, y≤4)"
+  },
+  {
+   "check": "alpha profile front",
+   "result": "INFO",
+   "detail": "max alpha 254; partial-alpha edge px 43921; edge mean L 88.4 vs body 93.1"
+  },
+  {
+   "check": "alpha profile right",
+   "result": "INFO",
+   "detail": "max alpha 255; partial-alpha edge px 36902; edge mean L 79.2 vs body 88.7"
+  },
+  {
+   "check": "alpha profile back",
+   "result": "INFO",
+   "detail": "max alpha 255; partial-alpha edge px 42357; edge mean L 80.0 vs body 92.3"
+  },
+  {
+   "check": "alpha profile left",
+   "result": "INFO",
+   "detail": "max alpha 255; partial-alpha edge px 39222; edge mean L 73.8 vs body 92.7"
+  },
+  {
+   "check": "registered canonical files unchanged",
+   "result": "PASS",
+   "detail": "13 files"
+  },
+  {
+   "check": "v2 candidates unchanged",
+   "result": "PASS",
+   "detail": "4 files"
+  }
+ ],
+ "not_run": [
+  "independent visual QA (separate document)",
+  "human third-party QA",
+  "Android device",
+  "in-game scale"
+ ]
+}

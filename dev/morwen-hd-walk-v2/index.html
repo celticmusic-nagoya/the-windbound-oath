@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>DEV | Morwen HD left walk</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#151d19;color:#f3eee2;font:16px system-ui,sans-serif}
+main{max-width:900px;margin:auto;padding:18px}p{line-height:1.55}button,select{font:inherit;min-height:44px;padding:6px 12px}
+button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}label{display:inline-flex;gap:8px;align-items:center}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:14px 0}
+.stage{height:270px;position:relative;overflow:hidden;border:1px solid #78877b;border-radius:12px;background:linear-gradient(#5a7956 75%,#39533b 75%)}
+.stage img{position:absolute;max-width:none;image-rendering:pixelated}
+.ground{position:absolute;left:0;right:0;bottom:36px;height:1px;background:#f0bd7a}
+.status{padding:10px;background:#27372e;border-radius:8px;white-space:pre-wrap}
+.warn{color:#ffd48a}small{color:#d2d7ce}
+</style></head><body><main>
+<h1>モルウェン｜左向き歩行6コマ DEVプレビュー</h1>
+<p>正本v2の派生フレームだけを再生します。未納品画像は代替画像で埋めず、NOT_READYと表示します。本番・SAVE・公式サイトには接続しません。</p>
+<div class="controls">
+<button id="play" disabled>再生</button><button id="step" disabled>1コマ進む</button>
+<label>速度 <select id="speed"><option value="5">5fps</option><option value="10" selected>10fps</option><option value="15">15fps</option></select></label>
+<label>高さ <select id="height"><option value="76.5" selected>76.5px（帽子込み）</option><option value="153">153px</option><option value="306">306px</option></select></label>
+</div>
+<div class="stage" id="stage"><div class="ground"></div><img id="sprite" alt="モルウェン左向き歩行フレーム" hidden></div>
+<p class="status" id="status" role="status">読み込み中…</p>
+<small>画像6点が揃い、manifestにSHA-256が登録されて初めて再生できます。フレームごとのSHAは別途QAスクリプトで検証してください。端末上のプレビュー表示だけではQA合格を意味しません。</small>
+</main><script src="walk.js"></script></body></html>

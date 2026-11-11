@@ -1,0 +1,110 @@
+{
+ "revision": "R3",
+ "order_top_to_bottom": [
+  "hat_move",
+  "hair_redraw",
+  "strap_reroute",
+  "cuff_hand_move",
+  "bag_protect",
+  "slit_protect",
+  "capelet_move",
+  "band_redraw"
+ ],
+ "colours": {
+  "hat_move": [
+   255,
+   230,
+   0
+  ],
+  "hair_redraw": [
+   255,
+   0,
+   255
+  ],
+  "strap_reroute": [
+   150,
+   75,
+   0
+  ],
+  "cuff_hand_move": [
+   255,
+   255,
+   255
+  ],
+  "bag_protect": [
+   0,
+   200,
+   0
+  ],
+  "slit_protect": [
+   0,
+   90,
+   255
+  ],
+  "capelet_move": [
+   255,
+   140,
+   0
+  ],
+  "band_redraw": [
+   0,
+   200,
+   255
+  ]
+ },
+ "px": {
+  "hat_move": 106893,
+  "hair_redraw": 17326,
+  "strap_reroute": 5943,
+  "cuff_hand_move": 9934,
+  "bag_protect": 20911,
+  "slit_protect": 7847,
+  "capelet_move": 48038,
+  "band_redraw": 71933
+ },
+ "checks": {
+  "unassigned_subject_px_above_790": 0,
+  "strap_components": 1,
+  "capelet_holes_not_strap": 117,
+  "emblem_gold_in_hair": 0,
+  "capelet_top_cut": "traced: hair tip curve [(400, 428), (430, 423), (470, 426), (520, 424), (560, 423), (600, 426), (640, 423), (680, 421), (720, 423), (745, 426)] (no straight row cut); capelet collar and emblem star are in capelet_move",
+  "capelet_bottom_cut": "traced: per-column lowest gold-rim pixel of the tier-1 hem in rows 540-615 (+2 px), median-smoothed, interpolated where the strap crosses the hem",
+  "cuff_hand": "flood fill bounded by the dark outline, but the inner side is still cut by a straight polygon line (independent QA R3: FAIL)",
+  "slit": "flood fill between the gold trims; straight polygon edge remains at rows 755-790 (left) and a straight top cut at y648 (independent QA R3: FAIL)"
+ },
+ "y790_exception": {
+  "rule": "only the exact alpha of the moved cuff/hand pixels may change below row 790 (move ~11 px inward, ~9 px up)",
+  "moved_px_landing_below_790": 753,
+  "uncovered_px_to_repaint": 2659,
+  "note": "uncovered pixels (orange in the derived file) are repainted as robe/background; other lower-body pixels stay protected"
+ },
+ "derived_revealed": {
+  "file": "EDIT_MASK_FIX03_derived_revealed.png",
+  "red_capelet_vacated": 20840,
+  "blue_under_raised_brim": 10855,
+  "green_under_ribbon": 1490,
+  "orange_uncovered_by_cuff_move": 2659
+ },
+ "rules": {
+  "hat_move": "move only, up 14-20 px",
+  "hair_redraw": "redraw; tips ~370-380; width redesigned per director (natural back-of-head width, final width by QA/director)",
+  "strap_reroute": "re-route from raised shoulder to bag ring; buckle shape protected",
+  "cuff_hand_move": "move only (initial target wrists (356,786)/(844,786), fine-tune allowed and recorded)",
+  "bag_protect": "no change",
+  "slit_protect": "no change",
+  "capelet_move": "move only, up ~48 px; emblem/star/gold patterns protected",
+  "band_redraw": "redraw (tier 2, upper arms, sleeves, robe upper part, collar); robe edges overlap sleeves naturally",
+  "layer_priority_at_boundaries": "hat > hair > strap > cuff/hand > bag > slit > capelet > band"
+ },
+ "independent_qa_R3": {
+  "verdict": "MASKS FAIL",
+  "open": [
+   "C5 cuff inner edge still a straight polygon line; 30-40% of each cuff in cyan; right hand strip below 790 unassigned; sleeve fabric included",
+   "C8 straight polygon edge at rows 755-790 (left) and straight top cut at y648; trim stripes in slit layer",
+   "C3 hair wisps at x458-501 and 665-707 in capelet; 106 px capelet highlight in hat; ~40 px orange specks",
+   "bag leaks onto robe trim (640-668 x 715-790, 763-783 x 679-696); rectangle cut at the handle",
+   "derived: brim-uncovered area mixes hair repaint and background->transparent"
+  ],
+  "invalid_values": "y790_exception counts and orange derived area depend on the faulty cuff mask"
+ }
+}

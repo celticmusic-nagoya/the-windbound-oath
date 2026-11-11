@@ -1,0 +1,677 @@
+{
+ "task": "MORWEN-FIX-03 Step 1 (base body)",
+ "status": "CANDIDATE R2 - pending independent re-QA and director freeze",
+ "coordinate_convention": "1200x1600 canvas, origin top-left, y down; ground line y=1540; nominal anchor (600,1540), x = real contact (front/back: between both soles; side: heel and forefoot listed separately)",
+ "sources": {
+  "front": {
+   "path": "assets/candidates/morwen/real-canon-final-04/aligned/morwen_front_aligned.png",
+   "sha256": "c7d4504b614904512401fc23bfab27f07eee61583db893c0e1a9e391b0dfb005"
+  },
+  "right": {
+   "path": "assets/candidates/morwen/real-canon-final-04/fix01/morwen_right_fix01.png",
+   "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1"
+  },
+  "back": {
+   "path": "assets/candidates/morwen/real-canon-final-04/fix01/morwen_back_fix01.png",
+   "sha256": "9aca3a79ad62cb1c37a998a0e48f333988287527ec422fb9d1b29f7fa9459d2a"
+  },
+  "left": {
+   "path": "assets/candidates/morwen/real-canon-final-04/fix01/morwen_left_fix01.png",
+   "sha256": "811952595837b568df81bac2c9b4314f899fef37308ddd2c81ea6f86b1d62b40"
+  }
+ },
+ "method": "joint centres estimated visually from the clothed images on 25 px grids (the images were not drawn from a common base body). Clothing outer contours were not used as bone positions; obscured joints carry low confidence.",
+ "landmarks": {
+  "front": {
+   "crown_skull": {
+    "xy": [
+     600,
+     184
+    ],
+    "confidence": "low",
+    "note": "range 180-188 (under the hat)"
+   },
+   "eye_line": {
+    "xy": [
+     600,
+     255
+    ],
+    "confidence": "high"
+   },
+   "chin": {
+    "xy": [
+     600,
+     322
+    ],
+    "confidence": "high"
+   },
+   "neck_base": {
+    "xy": [
+     600,
+     395
+    ],
+    "confidence": "medium"
+   },
+   "shoulder_R": {
+    "xy": [
+     487,
+     430
+    ],
+    "confidence": "medium",
+    "note": "joint ~20-25 px below the shoulder surface (convention)"
+   },
+   "shoulder_L": {
+    "xy": [
+     713,
+     430
+    ],
+    "confidence": "medium",
+    "note": "same convention"
+   },
+   "elbow_R": {
+    "xy": [
+     410,
+     605
+    ],
+    "confidence": "low",
+    "note": "under the capelet"
+   },
+   "elbow_L": {
+    "xy": [
+     790,
+     605
+    ],
+    "confidence": "low",
+    "note": "under the capelet"
+   },
+   "wrist_R": {
+    "xy": [
+     398,
+     795
+    ],
+    "confidence": "high"
+   },
+   "wrist_L": {
+    "xy": [
+     802,
+     795
+    ],
+    "confidence": "high"
+   },
+   "waist": {
+    "xy": [
+     600,
+     655
+    ],
+    "confidence": "medium"
+   },
+   "hip_R": {
+    "xy": [
+     545,
+     770
+    ],
+    "confidence": "low"
+   },
+   "hip_L": {
+    "xy": [
+     655,
+     770
+    ],
+    "confidence": "low"
+   },
+   "knee_R": {
+    "xy": [
+     555,
+     1100
+    ],
+    "confidence": "medium"
+   },
+   "knee_L": {
+    "xy": [
+     642,
+     1100
+    ],
+    "confidence": "medium"
+   },
+   "ankle_R": {
+    "xy": [
+     560,
+     1470
+    ],
+    "confidence": "medium"
+   },
+   "ankle_L": {
+    "xy": [
+     640,
+     1470
+    ],
+    "confidence": "medium"
+   },
+   "contact_R": {
+    "xy": [
+     560,
+     1540
+    ],
+    "confidence": "high"
+   },
+   "contact_L": {
+    "xy": [
+     640,
+     1540
+    ],
+    "confidence": "high"
+   }
+  },
+  "back": {
+   "crown_skull": {
+    "xy": [
+     600,
+     200
+    ],
+    "confidence": "low"
+   },
+   "neck_base": {
+    "xy": [
+     600,
+     410
+    ],
+    "confidence": "low",
+    "note": "anatomical estimate; the collar/hair-end contour is at ~445"
+   },
+   "shoulder_L": {
+    "xy": [
+     470,
+     470
+    ],
+    "confidence": "medium"
+   },
+   "shoulder_R": {
+    "xy": [
+     730,
+     470
+    ],
+    "confidence": "medium"
+   },
+   "elbow_L": {
+    "xy": [
+     400,
+     640
+    ],
+    "confidence": "low"
+   },
+   "elbow_R": {
+    "xy": [
+     800,
+     640
+    ],
+    "confidence": "low"
+   },
+   "wrist_L": {
+    "xy": [
+     345,
+     795
+    ],
+    "confidence": "high"
+   },
+   "wrist_R": {
+    "xy": [
+     855,
+     795
+    ],
+    "confidence": "high"
+   },
+   "waist": {
+    "xy": [
+     600,
+     660
+    ],
+    "confidence": "low"
+   },
+   "hip_L": {
+    "xy": [
+     545,
+     770
+    ],
+    "confidence": "low",
+    "note": "hidden; copied from front, not verifiable"
+   },
+   "hip_R": {
+    "xy": [
+     655,
+     770
+    ],
+    "confidence": "low",
+    "note": "hidden; copied from front, not verifiable"
+   },
+   "knee_L": {
+    "xy": [
+     555,
+     1100
+    ],
+    "confidence": "medium"
+   },
+   "knee_R": {
+    "xy": [
+     645,
+     1100
+    ],
+    "confidence": "medium"
+   },
+   "ankle_L": {
+    "xy": [
+     570,
+     1470
+    ],
+    "confidence": "medium"
+   },
+   "ankle_R": {
+    "xy": [
+     628,
+     1470
+    ],
+    "confidence": "medium"
+   },
+   "contact_L": {
+    "xy": [
+     571,
+     1540
+    ],
+    "confidence": "high"
+   },
+   "contact_R": {
+    "xy": [
+     628,
+     1540
+    ],
+    "confidence": "high"
+   },
+   "collar_contour": {
+    "xy": [
+     600,
+     445
+    ],
+    "confidence": "medium",
+    "note": "garment contour, not anatomy"
+   }
+  },
+  "right": {
+   "crown_skull": {
+    "xy": [
+     590,
+     185
+    ],
+    "confidence": "low"
+   },
+   "eye_line": {
+    "xy": [
+     655,
+     250
+    ],
+    "confidence": "high"
+   },
+   "chin": {
+    "xy": [
+     650,
+     320
+    ],
+    "confidence": "high"
+   },
+   "neck_base": {
+    "xy": [
+     615,
+     395
+    ],
+    "confidence": "medium"
+   },
+   "shoulder_near": {
+    "xy": [
+     610,
+     428
+    ],
+    "confidence": "medium",
+    "note": "joint convention; surface ~400-405"
+   },
+   "elbow_near": {
+    "xy": [
+     595,
+     615
+    ],
+    "confidence": "medium"
+   },
+   "wrist_near": {
+    "xy": [
+     600,
+     798
+    ],
+    "confidence": "high",
+    "note": "R1 correction: previous value was on the belt chain"
+   },
+   "waist": {
+    "xy": [
+     625,
+     655
+    ],
+    "confidence": "medium"
+   },
+   "hip_near": {
+    "xy": [
+     615,
+     770
+    ],
+    "confidence": "low",
+    "note": "hidden; estimated, not verifiable"
+   },
+   "knee_near": {
+    "xy": [
+     593,
+     1100
+    ],
+    "confidence": "medium",
+    "note": "joint centre, not shin contour"
+   },
+   "ankle_near": {
+    "xy": [
+     573,
+     1465
+    ],
+    "confidence": "medium"
+   },
+   "contact_heel": {
+    "xy": [
+     543,
+     1540
+    ],
+    "confidence": "high"
+   },
+   "contact_forefoot": {
+    "xy": [
+     625,
+     1540
+    ],
+    "confidence": "high"
+   }
+  },
+  "left": {
+   "crown_skull": {
+    "xy": [
+     615,
+     195
+    ],
+    "confidence": "low"
+   },
+   "eye_line": {
+    "xy": [
+     545,
+     262
+    ],
+    "confidence": "high"
+   },
+   "chin": {
+    "xy": [
+     550,
+     330
+    ],
+    "confidence": "high"
+   },
+   "neck_base": {
+    "xy": [
+     585,
+     405
+    ],
+    "confidence": "medium"
+   },
+   "shoulder_near": {
+    "xy": [
+     600,
+     436
+    ],
+    "confidence": "medium",
+    "note": "left view drawn ~8 px lower than front (chin 330 vs 322)"
+   },
+   "elbow_near": {
+    "xy": [
+     615,
+     625
+    ],
+    "confidence": "medium"
+   },
+   "wrist_near": {
+    "xy": [
+     605,
+     820
+    ],
+    "confidence": "high"
+   },
+   "waist": {
+    "xy": [
+     580,
+     665
+    ],
+    "confidence": "medium"
+   },
+   "hip_near": {
+    "xy": [
+     590,
+     775
+    ],
+    "confidence": "low",
+    "note": "hidden; estimated, not verifiable"
+   },
+   "knee_near": {
+    "xy": [
+     610,
+     1100
+    ],
+    "confidence": "medium"
+   },
+   "ankle_near": {
+    "xy": [
+     630,
+     1465
+    ],
+    "confidence": "medium"
+   },
+   "contact_forefoot": {
+    "xy": [
+     558,
+     1540
+    ],
+    "confidence": "high"
+   },
+   "contact_heel": {
+    "xy": [
+     664,
+     1540
+    ],
+    "confidence": "high"
+   }
+  }
+ },
+ "target_base_body_from_front": {
+  "rows": {
+   "crown_skull": 184,
+   "eye_line": 255,
+   "chin": 322,
+   "neck_base": 395,
+   "shoulder": 430,
+   "elbow": 605,
+   "wrist": 795,
+   "waist": 655,
+   "hip": 770,
+   "knee": 1100,
+   "ankle": 1470,
+   "sole": 1540
+  },
+  "shoulder_width_joint_to_joint": 226,
+  "hip_width": 110,
+  "upper_arm": 191.2,
+  "forearm": 190.4,
+  "thigh": 330.0,
+  "shank": 370.0,
+  "head_height_estimate": "chin 322 - crown 180..188 = 134..142 px; ~9.6 heads including ~50 px boot heel (stylised, approved art)",
+  "crown_range": [
+   180,
+   188
+  ],
+  "shoulder_row_tolerance": 8,
+  "shoulder_joint_convention": "joint centre ~20-25 px below the shoulder surface; front surface ~400-405",
+  "arm_total": 381.6,
+  "head_hair_width": {
+   "front_bob": 243,
+   "back_bob": 280,
+   "note": "back ~15% wider (UNSURE, ribbon hides the right edge) - director decision"
+  },
+  "back_targets": {
+   "shoulders": [
+    [
+     487,
+     430
+    ],
+    [
+     713,
+     430
+    ]
+   ],
+   "wrists_current": [
+    [
+     345,
+     795
+    ],
+    [
+     855,
+     795
+    ]
+   ],
+   "wrists_target": [
+    [
+     356,
+     786
+    ],
+    [
+     844,
+     786
+    ]
+   ],
+   "reason": "front arm length ~381 px; target shoulder to current wrist ~392 px (unreachable). Moving cuffs+hands ~11 px inward and ~9 px up (move-only layer) gives ~379 px with a slight elbow bend.",
+   "neck_base": 395,
+   "hair_tip": [
+    370,
+    380
+   ],
+   "capelet_top": 384,
+   "capelet_tier1_bottom": 540,
+   "hat_crown_top": [
+    34,
+    35
+   ],
+   "elbows_target": [
+    [
+     399,
+     600
+    ],
+    [
+     801,
+     600
+    ]
+   ],
+   "arm_margin": {
+    "front_segment_sum": 381.6,
+    "front_shoulder_to_wrist": 375.7,
+    "back_target_shoulder_to_wrist": 379.3,
+    "note": "reachable with ~12.5 deg elbow bend (front ~20 deg). If the hidden front elbow is at (415,615) the arm locks straight; the director may move the wrist target 3-4 px further in/up."
+   }
+  }
+ },
+ "row_delta_vs_target": {
+  "neck_base": {
+   "front": 0,
+   "back": 15,
+   "right": 0,
+   "left": 10
+  },
+  "shoulder": {
+   "front": 0,
+   "back": 40,
+   "right": -2,
+   "left": 6
+  },
+  "elbow": {
+   "front": 0,
+   "back": 35,
+   "right": 10,
+   "left": 20
+  },
+  "wrist": {
+   "front": 0,
+   "back": 0,
+   "right": 3,
+   "left": 25
+  },
+  "waist": {
+   "front": 0,
+   "back": 5,
+   "right": 0,
+   "left": 10
+  },
+  "hip": {
+   "front": 0,
+   "back": 0,
+   "right": 0,
+   "left": 5
+  },
+  "knee": {
+   "front": 0,
+   "back": 0,
+   "right": 0,
+   "left": 0
+  },
+  "ankle": {
+   "front": 0,
+   "back": 0,
+   "right": -5,
+   "left": -5
+  }
+ },
+ "limb_lengths": {
+  "front": {
+   "upper_arm": 191.2,
+   "forearm": 190.4,
+   "shoulder_to_wrist": 375.7,
+   "thigh": 330.2,
+   "shank": 370.0
+  },
+  "back": {
+   "upper_arm": 183.8,
+   "forearm": 164.5,
+   "shoulder_to_wrist": 348.2,
+   "thigh": 330.2,
+   "shank": 370.3
+  },
+  "right": {
+   "upper_arm": 187.6,
+   "forearm": 183.1,
+   "shoulder_to_wrist": 370.1,
+   "thigh": 330.7,
+   "shank": 365.5
+  },
+  "left": {
+   "upper_arm": 189.6,
+   "forearm": 195.3,
+   "shoulder_to_wrist": 384.0,
+   "thigh": 325.6,
+   "shank": 365.5
+  }
+ },
+ "pose_differences_not_anatomy": [
+  "back arms abducted outward ~20 deg (approved pose)",
+  "side views: near arm slightly forward; contact heel/forefoot differ by view"
+ ],
+ "findings": [
+  "legs: rows (knee 1100, ankle 1465-1470, contact 1540) agree within ~5 px; the earlier side-view x differences were reading errors and are corrected in R2",
+  "back shoulders ~40 px low (joint convention) and back shoulder-to-wrist ~9% short vs front -> back upper body must be rebuilt (FIX-03 Step 2)",
+  "side-view shoulder offset was a reading error (not perspective); the left view is drawn ~8 px lower than the front"
+ ],
+ "side_shoulder_offset": "reading error, not perspective: the shoulder surface sits at y~395-405 in front/right/left; left view additionally drawn ~8 px lower",
+ "legs_consistency": "rows agree within ~5 px in all four views; side-view x positions were reading errors in R1 and are corrected in R2 (no pose difference claimed)",
+ "revision": "R2.1 (R2 QA correction C1-C2 applied)"
+}

@@ -18,3 +18,7 @@ Target path: assets/official/characters/morwen/turnaround/
 Source: director-provided MORWEN_3V_DEPLOY_READY_20261109.zip on Google Drive.
 
 Do not enable website references before all three PNGs are present and hashes verified. Do not replace existing Morwen portrait, v5.61 canonical reference, or walk-72 sprites. Android QA remains NOT_RUN.
+
+## 2026-11-10 追記（MORWEN-HD-CANONICAL-V2）
+- 上表の **left（`d858c428…`）は SUPERSEDED / EXCLUDE_FROM_PRODUCTION**。左向きの正本は `assets/official/characters/morwen/hd-v2/originals/pixel/left.png`（`5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8`）。ファイルと履歴は保護し、削除しない。
+- right・backは、v2のイラスト版（`originals/real/right.png`・`back.png`）と見た目は同一だがバイトが異なる。詳細は `data/morwen-hd-canonical-v2.json` の `equivalents`。
