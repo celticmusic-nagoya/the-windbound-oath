@@ -1,0 +1,1656 @@
+{
+  "addedJoints": [
+    "ballL",
+    "ballR",
+    "handL",
+    "handR",
+    "heelL",
+    "heelR",
+    "jawL",
+    "jawR",
+    "neckTop",
+    "toeL",
+    "toeR",
+    "waist"
+  ],
+  "ageCategory": "adult",
+  "anchor": {
+    "n": [
+      0.5,
+      0.9625
+    ],
+    "px": [
+      600,
+      1540
+    ]
+  },
+  "base": {
+    "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/MASTER_BODY_SPEC.candidate.json",
+    "sha256": "1f42c9d1d268d8746f26d9ea9ab75469911291b6a460a540b3920c2bc864c76d"
+  },
+  "baseBodySpecV2": {
+    "assets": [],
+    "canvas": {
+      "height": 1600,
+      "width": 1200
+    },
+    "characterId": "morwen",
+    "coordinateSpace": "normalized canvas (0..1, origin top-left, y down); px = n * canvas size",
+    "groundNormalized": [
+      0.5,
+      0.9625
+    ],
+    "landmarks": {
+      "back": {
+        "footLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.9625
+          ],
+          "px": [
+            563,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "footRight": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.9625
+          ],
+          "px": [
+            637,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "manual_edit"
+        },
+        "kneeLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.6725
+          ],
+          "px": [
+            563,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "kneeRight": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.6725
+          ],
+          "px": [
+            637,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "neck": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "manual_edit"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.40417,
+            0.26875
+          ],
+          "px": [
+            485,
+            430
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderRight": {
+          "confidence": "provisional",
+          "n": [
+            0.59583,
+            0.26875
+          ],
+          "px": [
+            715,
+            430
+          ],
+          "source": "manual_edit"
+        }
+      },
+      "front": {
+        "footLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.9625
+          ],
+          "px": [
+            563,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "footRight": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.9625
+          ],
+          "px": [
+            637,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "manual_edit"
+        },
+        "kneeLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.6725
+          ],
+          "px": [
+            563,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "kneeRight": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.6725
+          ],
+          "px": [
+            637,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "neck": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "manual_edit"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.40417,
+            0.26875
+          ],
+          "px": [
+            485,
+            430
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderRight": {
+          "confidence": "provisional",
+          "n": [
+            0.59583,
+            0.26875
+          ],
+          "px": [
+            715,
+            430
+          ],
+          "source": "manual_edit"
+        }
+      },
+      "left": {
+        "footLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "footRight": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "manual_edit"
+        },
+        "kneeLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "kneeRight": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "neck": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "manual_edit"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderRight": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "manual_edit"
+        }
+      },
+      "right": {
+        "footLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "footRight": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "manual_edit"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "manual_edit"
+        },
+        "kneeLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "kneeRight": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "manual_edit"
+        },
+        "neck": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "manual_edit"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderLeft": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "manual_edit"
+        },
+        "shoulderRight": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "manual_edit"
+        }
+      }
+    },
+    "notes": "Projection of the v0.8 designed master skeleton. manual_edit/provisional = DESIGNED_CANDIDATE, not measured.",
+    "presetId": "MORWEN_REAL_1200x1600",
+    "referenceBody": [
+      {
+        "id": "MORWEN_MASTER_BODY_V0.8",
+        "status": "UNAPPROVED_DESIGNED_CANDIDATE"
+      }
+    ],
+    "schemaVersion": "2.0",
+    "status": "candidate_not_canonical",
+    "views": [
+      "front",
+      "back",
+      "left",
+      "right"
+    ],
+    "worldScale": {
+      "pixelsPerUnit": null
+    }
+  },
+  "bodyGuidePolicy": "adult_neutral_structure",
+  "canvas": {
+    "height": 1600,
+    "width": 1200
+  },
+  "characterId": "morwen",
+  "finalAdoption": "NOT_RUN",
+  "joints3d": {
+    "ankleL": [
+      37,
+      1470,
+      -36
+    ],
+    "ankleR": [
+      -37,
+      1470,
+      -36
+    ],
+    "ballL": [
+      37,
+      1540,
+      28
+    ],
+    "ballR": [
+      -37,
+      1540,
+      28
+    ],
+    "chin": [
+      0,
+      335,
+      0
+    ],
+    "elbowL": [
+      167,
+      601,
+      0
+    ],
+    "elbowR": [
+      -167,
+      601,
+      0
+    ],
+    "footL": [
+      37,
+      1540,
+      0
+    ],
+    "footR": [
+      -37,
+      1540,
+      0
+    ],
+    "ground": [
+      0,
+      1540,
+      0
+    ],
+    "handL": [
+      240,
+      841,
+      0
+    ],
+    "handR": [
+      -240,
+      841,
+      0
+    ],
+    "headCenter": [
+      0,
+      255,
+      0
+    ],
+    "headTop": [
+      0,
+      175,
+      0
+    ],
+    "heelL": [
+      37,
+      1540,
+      -50
+    ],
+    "heelR": [
+      -37,
+      1540,
+      -50
+    ],
+    "hipL": [
+      50,
+      744,
+      0
+    ],
+    "hipR": [
+      -50,
+      744,
+      0
+    ],
+    "jawL": [
+      41,
+      287,
+      -17
+    ],
+    "jawR": [
+      -41,
+      287,
+      -17
+    ],
+    "kneeL": [
+      37,
+      1076,
+      0
+    ],
+    "kneeR": [
+      -37,
+      1076,
+      0
+    ],
+    "neckBase": [
+      0,
+      395,
+      0
+    ],
+    "neckTop": [
+      0,
+      316,
+      -26
+    ],
+    "pelvis": [
+      0,
+      744,
+      0
+    ],
+    "shoulderL": [
+      115,
+      430,
+      0
+    ],
+    "shoulderR": [
+      -115,
+      430,
+      0
+    ],
+    "toeL": [
+      37,
+      1540,
+      50
+    ],
+    "toeR": [
+      -37,
+      1540,
+      50
+    ],
+    "waist": [
+      0,
+      650,
+      0
+    ],
+    "wristL": [
+      219,
+      772,
+      0
+    ],
+    "wristR": [
+      -219,
+      772,
+      0
+    ]
+  },
+  "kinematicTree": {
+    "ankleL": "kneeL",
+    "ankleR": "kneeR",
+    "ballL": "ankleL",
+    "ballR": "ankleR",
+    "chin": "neckTop",
+    "elbowL": "shoulderL",
+    "elbowR": "shoulderR",
+    "footL": "ankleL",
+    "footR": "ankleR",
+    "handL": "wristL",
+    "handR": "wristR",
+    "headCenter": "neckTop",
+    "headTop": "headCenter",
+    "heelL": "ankleL",
+    "heelR": "ankleR",
+    "hipL": "pelvis",
+    "hipR": "pelvis",
+    "jawL": "headCenter",
+    "jawR": "headCenter",
+    "kneeL": "hipL",
+    "kneeR": "hipR",
+    "neckBase": "waist",
+    "neckTop": "neckBase",
+    "shoulderL": "neckBase",
+    "shoulderR": "neckBase",
+    "toeL": "ballL",
+    "toeR": "ballR",
+    "waist": "pelvis",
+    "wristL": "elbowL",
+    "wristR": "elbowR"
+  },
+  "outputs": [
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/compare_4views_structure.png"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/front_stack_with_canon.png"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/back_stack_with_canon.png"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/left_stack_with_canon.png"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/right_stack_with_canon.png"
+    }
+  ],
+  "parameters": {
+    "ankleDepthOffset": {
+      "derivation": "ankle above the heel: -0.6 x mean heel-centre offset [64.5, 57.0] px from the sole contact centre (VERIFIED side sole spans)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": -36
+    },
+    "ankleY": {
+      "derivation": "groundY - 0.44 x headHeight (ankle hidden by the boot; heel and sole included)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 1470
+    },
+    "armLength": {
+      "derivation": "distance shoulder joint -> observed front wrist; elbow at the midpoint",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 357
+    },
+    "centerX": {
+      "derivation": "normalised contact x, identical in all four views",
+      "status": "VERIFIED",
+      "unit": "px",
+      "value": 600
+    },
+    "chinY": {
+      "derivation": "front observation (AI visual)",
+      "status": "ESTIMATED",
+      "unit": "px",
+      "value": 335
+    },
+    "footHalfWidth": {
+      "derivation": "= kneeHalfWidth (straight legs)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 37
+    },
+    "groundY": {
+      "derivation": "normalised sole contact, identical in all four views (v0.7 TASK A)",
+      "status": "VERIFIED",
+      "unit": "px",
+      "value": 1540
+    },
+    "headDepth": {
+      "derivation": "0.9 x headHeight (side profile of the skull)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 144
+    },
+    "headHeight": {
+      "derivation": "(chinY - eyeLineY) / (1 - 0.58): eye line placed at 58% of the head height from the top",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 160
+    },
+    "headTopY": {
+      "derivation": "chinY - headHeight; skull top is hidden by the hat (UNKNOWN in the canon); range for review 167..186 (eye ratio 0.55..0.60)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 175
+    },
+    "headWidth": {
+      "derivation": "faceWidthAtEyes x 1.08 (skull slightly wider than the cheeks)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 125
+    },
+    "headsTall": {
+      "derivation": "stature / headHeight (unitless)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "ratio",
+      "value": 8.53
+    },
+    "hipHalfWidth": {
+      "derivation": "0.4 x headWidth (hip joints)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 50
+    },
+    "kneeHalfWidth": {
+      "derivation": "mean |x - 600| of the ESTIMATED front/back knees [35, 38, 41, 35]",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 37
+    },
+    "kneeY": {
+      "derivation": "v0.7 common knee height (mean of ESTIMATED knees 1059..1093, kept as unapproved observations)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 1076
+    },
+    "neckBaseY": {
+      "derivation": "chinY + 0.375 x headHeight",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 395
+    },
+    "pelvisHalfWidth": {
+      "derivation": "0.62 x headWidth (pelvis block, inside the skirt)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 78
+    },
+    "pelvisY": {
+      "derivation": "waistband + 0.65 x headHeight: hip-joint centre below the skirt waistband",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 744
+    },
+    "ribcageBottomY": {
+      "derivation": "waistband - 0.25 x headHeight (waistband is costume; used only as a reference line)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 600
+    },
+    "shoulderHalfWidth": {
+      "derivation": "0.92 x headWidth (shoulder width = 1.84 head widths)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 115
+    },
+    "shoulderY": {
+      "derivation": "max(capelet ridge + 12, neckBase + 35): joint stays under the capelet surface (the capelet itself is NOT a body dimension)",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 430
+    },
+    "statureWithFootwear": {
+      "derivation": "groundY - headTopY",
+      "status": "DESIGNED_CANDIDATE",
+      "unit": "px",
+      "value": 1365
+    },
+    "wristHalfSpanFront": {
+      "derivation": "mean of the two front wrist observations (arms slightly abducted)",
+      "status": "ESTIMATED",
+      "unit": "px",
+      "value": 219
+    },
+    "wristYFront": {
+      "derivation": "mean of the two front wrist observations",
+      "status": "ESTIMATED",
+      "unit": "px",
+      "value": 772
+    }
+  },
+  "projection": {
+    "back": "screen x = 600 - x",
+    "front": "screen x = 600 + x",
+    "left": "screen x = 600 - z",
+    "right": "screen x = 600 + z",
+    "y": "unchanged"
+  },
+  "rotationAxes": {
+    "ankle": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "ankleL",
+        "ankleR"
+      ],
+      "rangeDeg": [
+        -20,
+        20
+      ],
+      "use": "dorsi/plantar flexion"
+    },
+    "ball": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "ballL",
+        "ballR"
+      ],
+      "rangeDeg": [
+        0,
+        40
+      ],
+      "use": "toe-off pivot"
+    },
+    "elbow": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "elbowL",
+        "elbowR"
+      ],
+      "rangeDeg": [
+        0,
+        45
+      ],
+      "use": "forearm swing"
+    },
+    "heel": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "heelL",
+        "heelR"
+      ],
+      "rangeDeg": [
+        -15,
+        0
+      ],
+      "use": "heel-strike pivot"
+    },
+    "hip": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "hipL",
+        "hipR"
+      ],
+      "rangeDeg": [
+        -25,
+        30
+      ],
+      "use": "thigh swing (flexion/extension)"
+    },
+    "knee": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "kneeL",
+        "kneeR"
+      ],
+      "rangeDeg": [
+        0,
+        65
+      ],
+      "use": "knee flexion"
+    },
+    "neck": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "neckTop"
+      ],
+      "rangeDeg": [
+        -10,
+        10
+      ],
+      "use": "head nod"
+    },
+    "shoulder": {
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "joints": [
+        "shoulderL",
+        "shoulderR"
+      ],
+      "rangeDeg": [
+        -30,
+        30
+      ],
+      "use": "arm swing"
+    },
+    "waist": {
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "joints": [
+        "waist"
+      ],
+      "rangeDeg": [
+        -8,
+        8
+      ],
+      "use": "torso counter-rotation (vertical axis)"
+    }
+  },
+  "schema": "cas/master-body/0.8",
+  "status": "UNAPPROVED_CANDIDATE",
+  "statusLegend": {
+    "DESIGNED_CANDIDATE": "new design value from a stated rule; NOT a canon measurement",
+    "ESTIMATED": "AI visual observation (not human-confirmed)",
+    "UNKNOWN": "not measurable and not designed",
+    "VERIFIED": "automated canon measurement"
+  },
+  "version": "1.0",
+  "views": {
+    "back": {
+      "articulatedGuide": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/back_articulated_guide.png"
+      },
+      "joints": {
+        "ankleL": [
+          563,
+          1470
+        ],
+        "ankleR": [
+          637,
+          1470
+        ],
+        "ballL": [
+          563,
+          1540
+        ],
+        "ballR": [
+          637,
+          1540
+        ],
+        "chin": [
+          600,
+          335
+        ],
+        "elbowL": [
+          433,
+          601
+        ],
+        "elbowR": [
+          767,
+          601
+        ],
+        "footL": [
+          563,
+          1540
+        ],
+        "footR": [
+          637,
+          1540
+        ],
+        "ground": [
+          600,
+          1540
+        ],
+        "handL": [
+          360,
+          841
+        ],
+        "handR": [
+          840,
+          841
+        ],
+        "headCenter": [
+          600,
+          255
+        ],
+        "headTop": [
+          600,
+          175
+        ],
+        "heelL": [
+          563,
+          1540
+        ],
+        "heelR": [
+          637,
+          1540
+        ],
+        "hipL": [
+          550,
+          744
+        ],
+        "hipR": [
+          650,
+          744
+        ],
+        "jawL": [
+          559,
+          287
+        ],
+        "jawR": [
+          641,
+          287
+        ],
+        "kneeL": [
+          563,
+          1076
+        ],
+        "kneeR": [
+          637,
+          1076
+        ],
+        "neckBase": [
+          600,
+          395
+        ],
+        "neckTop": [
+          600,
+          316
+        ],
+        "pelvis": [
+          600,
+          744
+        ],
+        "shoulderL": [
+          485,
+          430
+        ],
+        "shoulderR": [
+          715,
+          430
+        ],
+        "toeL": [
+          563,
+          1540
+        ],
+        "toeR": [
+          637,
+          1540
+        ],
+        "waist": [
+          600,
+          650
+        ],
+        "wristL": [
+          381,
+          772
+        ],
+        "wristR": [
+          819,
+          772
+        ]
+      },
+      "layer0Part": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/back_layer0_part.png",
+        "sha256": "803dcdb70f14e17f3de1103415a76dd7494575c48424c53cef536f8b734ec2d8"
+      }
+    },
+    "front": {
+      "articulatedGuide": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/front_articulated_guide.png"
+      },
+      "joints": {
+        "ankleL": [
+          637,
+          1470
+        ],
+        "ankleR": [
+          563,
+          1470
+        ],
+        "ballL": [
+          637,
+          1540
+        ],
+        "ballR": [
+          563,
+          1540
+        ],
+        "chin": [
+          600,
+          335
+        ],
+        "elbowL": [
+          767,
+          601
+        ],
+        "elbowR": [
+          433,
+          601
+        ],
+        "footL": [
+          637,
+          1540
+        ],
+        "footR": [
+          563,
+          1540
+        ],
+        "ground": [
+          600,
+          1540
+        ],
+        "handL": [
+          840,
+          841
+        ],
+        "handR": [
+          360,
+          841
+        ],
+        "headCenter": [
+          600,
+          255
+        ],
+        "headTop": [
+          600,
+          175
+        ],
+        "heelL": [
+          637,
+          1540
+        ],
+        "heelR": [
+          563,
+          1540
+        ],
+        "hipL": [
+          650,
+          744
+        ],
+        "hipR": [
+          550,
+          744
+        ],
+        "jawL": [
+          641,
+          287
+        ],
+        "jawR": [
+          559,
+          287
+        ],
+        "kneeL": [
+          637,
+          1076
+        ],
+        "kneeR": [
+          563,
+          1076
+        ],
+        "neckBase": [
+          600,
+          395
+        ],
+        "neckTop": [
+          600,
+          316
+        ],
+        "pelvis": [
+          600,
+          744
+        ],
+        "shoulderL": [
+          715,
+          430
+        ],
+        "shoulderR": [
+          485,
+          430
+        ],
+        "toeL": [
+          637,
+          1540
+        ],
+        "toeR": [
+          563,
+          1540
+        ],
+        "waist": [
+          600,
+          650
+        ],
+        "wristL": [
+          819,
+          772
+        ],
+        "wristR": [
+          381,
+          772
+        ]
+      },
+      "layer0Part": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/front_layer0_part.png",
+        "sha256": "11a7f80dfce90ff5d5376ab752f50c2c35ef1d06c04413608d589df035f8c842"
+      }
+    },
+    "left": {
+      "articulatedGuide": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/left_articulated_guide.png"
+      },
+      "joints": {
+        "ankleL": [
+          636,
+          1470
+        ],
+        "ankleR": [
+          636,
+          1470
+        ],
+        "ballL": [
+          572,
+          1540
+        ],
+        "ballR": [
+          572,
+          1540
+        ],
+        "chin": [
+          600,
+          335
+        ],
+        "elbowL": [
+          600,
+          601
+        ],
+        "elbowR": [
+          600,
+          601
+        ],
+        "footL": [
+          600,
+          1540
+        ],
+        "footR": [
+          600,
+          1540
+        ],
+        "ground": [
+          600,
+          1540
+        ],
+        "handL": [
+          600,
+          841
+        ],
+        "handR": [
+          600,
+          841
+        ],
+        "headCenter": [
+          600,
+          255
+        ],
+        "headTop": [
+          600,
+          175
+        ],
+        "heelL": [
+          650,
+          1540
+        ],
+        "heelR": [
+          650,
+          1540
+        ],
+        "hipL": [
+          600,
+          744
+        ],
+        "hipR": [
+          600,
+          744
+        ],
+        "jawL": [
+          617,
+          287
+        ],
+        "jawR": [
+          617,
+          287
+        ],
+        "kneeL": [
+          600,
+          1076
+        ],
+        "kneeR": [
+          600,
+          1076
+        ],
+        "neckBase": [
+          600,
+          395
+        ],
+        "neckTop": [
+          626,
+          316
+        ],
+        "pelvis": [
+          600,
+          744
+        ],
+        "shoulderL": [
+          600,
+          430
+        ],
+        "shoulderR": [
+          600,
+          430
+        ],
+        "toeL": [
+          550,
+          1540
+        ],
+        "toeR": [
+          550,
+          1540
+        ],
+        "waist": [
+          600,
+          650
+        ],
+        "wristL": [
+          600,
+          772
+        ],
+        "wristR": [
+          600,
+          772
+        ]
+      },
+      "layer0Part": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/left_layer0_part.png",
+        "sha256": "05eed475bbe5377d63b85bda18b4bad511571c7e306ce38374ae0e64fcb72739"
+      }
+    },
+    "right": {
+      "articulatedGuide": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/right_articulated_guide.png"
+      },
+      "joints": {
+        "ankleL": [
+          564,
+          1470
+        ],
+        "ankleR": [
+          564,
+          1470
+        ],
+        "ballL": [
+          628,
+          1540
+        ],
+        "ballR": [
+          628,
+          1540
+        ],
+        "chin": [
+          600,
+          335
+        ],
+        "elbowL": [
+          600,
+          601
+        ],
+        "elbowR": [
+          600,
+          601
+        ],
+        "footL": [
+          600,
+          1540
+        ],
+        "footR": [
+          600,
+          1540
+        ],
+        "ground": [
+          600,
+          1540
+        ],
+        "handL": [
+          600,
+          841
+        ],
+        "handR": [
+          600,
+          841
+        ],
+        "headCenter": [
+          600,
+          255
+        ],
+        "headTop": [
+          600,
+          175
+        ],
+        "heelL": [
+          550,
+          1540
+        ],
+        "heelR": [
+          550,
+          1540
+        ],
+        "hipL": [
+          600,
+          744
+        ],
+        "hipR": [
+          600,
+          744
+        ],
+        "jawL": [
+          583,
+          287
+        ],
+        "jawR": [
+          583,
+          287
+        ],
+        "kneeL": [
+          600,
+          1076
+        ],
+        "kneeR": [
+          600,
+          1076
+        ],
+        "neckBase": [
+          600,
+          395
+        ],
+        "neckTop": [
+          574,
+          316
+        ],
+        "pelvis": [
+          600,
+          744
+        ],
+        "shoulderL": [
+          600,
+          430
+        ],
+        "shoulderR": [
+          600,
+          430
+        ],
+        "toeL": [
+          650,
+          1540
+        ],
+        "toeR": [
+          650,
+          1540
+        ],
+        "waist": [
+          600,
+          650
+        ],
+        "wristL": [
+          600,
+          772
+        ],
+        "wristR": [
+          600,
+          772
+        ]
+      },
+      "layer0Part": {
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/right_layer0_part.png",
+        "sha256": "8f7b3d98cd5c2144fccf92508298e995df85411257cf2cb9253952be81960bc5"
+      }
+    }
+  },
+  "worldAnchors": {
+    "ground": {
+      "px": [
+        600,
+        1540
+      ],
+      "space": "world",
+      "followsRig": false
+    }
+  },
+  "ageYears": 18,
+  "migration": {
+    "fromVersion": "0.9-articulated",
+    "changedJointCoordinates": [],
+    "removedParentLinks": [
+      "ground->pelvis"
+    ],
+    "preservedHistoricalEvidence": true,
+    "note": "Age metadata update does not itself approve or change proportions.",
+    "sourceBlobSha": "8f943e5a39e780e2f70321df8a45e8c2190ad9d0"
+  }
+}
