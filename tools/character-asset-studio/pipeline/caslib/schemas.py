@@ -10,6 +10,8 @@ REGISTRY = {
     "cas/production-brief/0.5": "production-brief.schema.json",
     "cas/qa-report/0.5": "qa-report.schema.json",
     "motion-reference/1.0": "motion-reference.schema.json",
+    "cas/modular-part/0.7": "modular-part.schema.json",
+    "cas/modular-character/0.7": "modular-character.schema.json",
 }
 BODY_SPEC_SCHEMA = STUDIO_DIR / "docs" / "BASE_BODY_SPEC.schema.json"
 

@@ -86,3 +86,32 @@ ChatGPT と Claude のあいだで、アセット制作の指示・成果物・�
 
 ## テスト
 `python3 -m unittest discover -s tools/character-asset-studio/pipeline/tests -v`（31件。正本の計測（v0.6）を含む。座標・テンプレート・JSON出力・素体仕様の変換が `studio-core.js` と一致すること、合成画像で各検査が FAIL を検出すること、保護対象への書き込みが拒否されること、PR 本文の更新が冪等であること、`adoptionReady` と終了コード、上書きの範囲、など）
+
+## v0.7 4階層モジュラーモデル（CHARACTER-ASSET-STUDIO-10）
+全キャラクター共通の論理階層（`profiles/layer_catalog.json`）:
+
+| 階層 | 内容 |
+|---|---|
+| `L0_BASE_BODY` | 体の構造ガイド（身長・頭身・骨格の比率、関節、接地点、4方向で共通の体格）。成人は露骨でない人体構造ガイド（`adult_nonexplicit_anatomy`）、未成年は中立的な構造ガイド（`minor_neutral_structure`）を使う |
+| `L1_UNDERWEAR` | インナー、ガーターベルト、ニーソックスなど下層の衣装 |
+| `L2_BASE_OUTFIT` | ブラウス、スカート、パンツ、基本の防具 |
+| `L3_OUTER_ACCESSORIES` | ローブ、ケープ、帽子、バッグ、眼鏡、武器、装飾 |
+
+- 階層は分類で、描く順番ではない。描く順番はパーツごとの `zOrder`（同じ値なら `partId` 順）と、`occlusion`（前後関係のメモ）で決める。たとえば、背面のローブは L3 でも、体より後ろ（zOrder が小さい）に描ける。
+- スキーマ:
+  - `cas/modular-part/0.7`（パーツ1枚 = 1つの階層・方向・フレーム）。必須項目は characterId、view、frameIndex、canvas、layerId、partId、zOrder、anchorSet、sourceAsset、sha256、approvalStatus、measurementStatus、sourceEvidence。
+  - `cas/modular-character/0.7`（パーツの集合）。`baseBodySpec` で既存の BASE_BODY_SPEC v2.0 を参照する。v2.0 自体は変更していない。
+- **計測状態（measurementStatus）:**
+  | 値 | 意味 |
+  |---|---|
+  | VERIFIED | 実測・検証済み |
+  | ESTIMATED | 推定、または AI の目視で人間の確認がないもの |
+  | UNKNOWN | 測定不能 |
+  | TEMPLATE | テンプレートの値 |
+  | DESIGNED_CANDIDATE | 新しく設計した候補値で、正本の計測値ではない |
+
+  計測状態は、採用状態（approvalStatus）とは別の項目。v0.6 の計測からの対応は、自動で測った可視点 → VERIFIED、AIの目視で求めた点と推定 → ESTIMATED、測定不能 → UNKNOWN。
+- **スキーマで強制する規則:**
+  - L0 のパーツには bodyGuidePolicy が必須。
+  - 未成年キャラクターは `minor_neutral_structure` 以外を使えない。
+  - DIRECTOR_APPROVED には承認記録が必須。

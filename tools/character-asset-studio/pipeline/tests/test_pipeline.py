@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -589,6 +589,106 @@ class V07Normalize(unittest.TestCase):
         with self.assertRaises(core.PolicyError):
             normalize.run(self.EV, self.tmp / "a")
         normalize.run(self.EV, self.tmp / "a", overwrite=True)   # own outputs may be regenerated
+
+
+# ---------- synthetic 4-layer modular character (shared by v0.7 tests) ----------
+LAYER_SHAPES = {  # layer -> (zOrder, colour, box) on a 120x160 canvas; rear robe sits BEHIND the body (zOrder -10)
+    "L0_BASE_BODY": ("body", 10, (200, 200, 200, 255), (50, 30, 71, 155)),
+    "L1_UNDERWEAR": ("stockings", 110, (40, 30, 40, 255), (52, 110, 69, 155)),
+    "L2_BASE_OUTFIT": ("skirt", 210, (120, 40, 160, 255), (45, 80, 76, 115)),
+    "L3_OUTER_ACCESSORIES": ("robe_rear", -10, (90, 20, 120, 255), (30, 60, 91, 150)),
+}
+
+
+def make_modular(root, frames=2, views=("front", "back", "left", "right"), age="minor"):
+    root = Path(root)
+    parts = []
+    for v in views:
+        for f in range(frames):
+            for layer, (pid, z, col, box) in LAYER_SHAPES.items():
+                im = Image.new("RGBA", (120, 160), (0, 0, 0, 0))
+                x0, y0, x1, y1 = box
+                for y in range(y0, y1):
+                    for x in range(x0 + f, x1 + f):
+                        im.putpixel((x, y), col)
+                p = root / "parts" / v / f"f{f:02d}" / f"{layer}_{pid}.png"
+                p.parent.mkdir(parents=True, exist_ok=True)
+                im.save(p)
+                sha = core.sha256_file(p)
+                part = {"schema": "cas/modular-part/0.7", "characterId": "testchar", "view": v, "frameIndex": f, "canvas": dict(CANVAS),
+                        "layerId": layer, "partId": pid, "zOrder": z, "anchorSet": {"anchor": {"px": list(ANCHOR), "n": core.to_norm(ANCHOR, CANVAS)}},
+                        "sourceAsset": {"path": core.rel(p, root), "sha256": sha, "width": 120, "height": 160, "mode": "RGBA"},
+                        "sha256": sha, "approvalStatus": "UNAPPROVED_CANDIDATE", "measurementStatus": "DESIGNED_CANDIDATE",
+                        "sourceEvidence": [{"kind": "synthetic_test_fixture"}]}
+                if layer == "L0_BASE_BODY":
+                    part["bodyGuidePolicy"] = "minor_neutral_structure" if age == "minor" else "adult_nonexplicit_anatomy"
+                if pid == "robe_rear":
+                    part["occlusion"] = {"occludedBy": ["body"], "note": "rear robe panel behind the body"}
+                parts.append(part)
+    return {"schema": "cas/modular-character/0.7", "characterId": "testchar", "ageCategory": age,
+            "bodyGuidePolicy": "minor_neutral_structure" if age == "minor" else "adult_nonexplicit_anatomy",
+            "canvas": dict(CANVAS), "anchor": {"px": list(ANCHOR), "n": core.to_norm(ANCHOR, CANVAS)},
+            "views": list(views), "frameCount": frames, "layerCatalog": "tools/character-asset-studio/profiles/layer_catalog.json", "parts": parts}
+
+
+class V07Schema(unittest.TestCase):
+    """CHARACTER-ASSET-STUDIO-10 TASK B/C: 4-layer common schema."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="cas07b_"))
+        self.doc = make_modular(self.tmp)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_valid_character_and_parts(self):
+        self.assertEqual(schemas.validate(self.doc)["result"], "PASS", schemas.validate(self.doc)["errors"])
+        rows = modular.check_character(self.doc, repo_root=self.tmp)
+        self.assertTrue(all(r["result"] == "PASS" for r in rows), [r for r in rows if r["result"] != "PASS"])
+        self.assertEqual(schemas.validate(self.doc["parts"][0])["schema"], "cas/modular-part/0.7")
+
+    def test_required_fields_and_status_rules(self):
+        for f in ["characterId", "view", "frameIndex", "canvas", "layerId", "partId", "zOrder", "anchorSet", "sourceAsset", "sha256", "approvalStatus", "measurementStatus", "sourceEvidence"]:
+            p = copy.deepcopy(self.doc["parts"][1]); p.pop(f)
+            self.assertEqual(schemas.validate(p)["result"], "FAIL", f)
+        p = copy.deepcopy(self.doc["parts"][0]); p.pop("bodyGuidePolicy")
+        self.assertEqual(schemas.validate(p)["result"], "FAIL", "L0 needs a body guide policy")
+        p = copy.deepcopy(self.doc["parts"][1]); p["approvalStatus"] = "DIRECTOR_APPROVED"
+        self.assertEqual(schemas.validate(p)["result"], "FAIL", "approval needs a record")
+        p = copy.deepcopy(self.doc["parts"][1]); p["measurementStatus"] = "PASS"
+        self.assertEqual(schemas.validate(p)["result"], "FAIL")
+        d = copy.deepcopy(self.doc); d["bodyGuidePolicy"] = "adult_nonexplicit_anatomy"
+        self.assertEqual(schemas.validate(d)["result"], "FAIL", "minor characters must use the neutral structure guide")
+        p = copy.deepcopy(self.doc["parts"][1]); p["layerId"] = "L4_EXTRA"
+        self.assertEqual(schemas.validate(p)["result"], "FAIL")
+
+    def test_semantic_checks_detect_mismatches(self):
+        d = copy.deepcopy(self.doc)
+        d["parts"][0]["anchorSet"]["anchor"]["px"] = [61, 154]
+        d["parts"][1]["sha256"] = "0" * 64
+        bad = {r["id"] for r in modular.check_character(d, repo_root=self.tmp) if r["result"] == "FAIL"}
+        self.assertTrue({"anchor_shared", "sha256_field_matches_source"} <= bad, bad)
+        Path(self.tmp / self.doc["parts"][3]["sourceAsset"]["path"]).write_bytes(b"x")
+        bad = {r["id"] for r in modular.check_character(self.doc, repo_root=self.tmp) if r["result"] == "FAIL"}
+        self.assertIn("file_sha256", bad)
+
+    def test_draw_order_is_zorder_not_layer(self):
+        order = [p["partId"] for p in modular.select_parts(self.doc, "front", 0)]
+        self.assertEqual(order, ["robe_rear", "body", "stockings", "skirt"])
+        self.assertEqual([p["partId"] for p in modular.select_parts(self.doc, "front", 0, ["L0_BASE_BODY", "L2_BASE_OUTFIT"])], ["body", "skirt"])
+        with self.assertRaises(ValueError):
+            modular.select_parts(self.doc, "front", 0, ["L9"])
+
+    def test_v06_status_mapping_and_v2_compat(self):
+        ev = core.load_json(STUDIO / "measurements" / "morwen-final-canon-20261111" / "measurement_evidence.json")
+        c = {}
+        for v in core.VIEWS:
+            for k, r in ev["views"][v]["landmarks"].items():
+                st = modular.status_from_v06(r); c[st] = c.get(st, 0) + 1
+        self.assertEqual(c, {"VERIFIED": 10, "ESTIMATED": 7, "UNKNOWN": 23})
+        cat = core.load_json(STUDIO / "profiles" / "layer_catalog.json")
+        self.assertEqual([l["id"] for l in cat["layers"]], modular.LAYERS)
+        self.assertEqual(schemas.validate_file(STUDIO / "measurements" / "morwen-final-canon-20261111" / "BASE_BODY_SPEC.candidate.json")["result"], "PASS")
 
 
 if __name__ == "__main__":

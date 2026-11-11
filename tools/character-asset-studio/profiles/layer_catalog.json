@@ -1,0 +1,78 @@
+{
+ "schema": "cas/layer-catalog/0.7",
+ "note": "Logical 4-layer classification shared by all characters. Layers are categories, not draw order: the actual stacking is each part's zOrder plus occlusion data (e.g. back hair or the rear robe can be drawn behind the body while belonging to L3). zOrderBand is only the default range for new parts.",
+ "layers": [
+  {
+   "id": "L0_BASE_BODY",
+   "label": "Layer 0 BASE_BODY",
+   "contents": [
+    "anatomical structure guide",
+    "height, head ratio and skeletal proportions",
+    "joint landmarks",
+    "ground contact",
+    "common build across the four views"
+   ],
+   "bodyGuidePolicy": {
+    "adult": "adult_nonexplicit_anatomy (non-explicit human structure guide)",
+    "minor": "minor_neutral_structure (neutral mannequin-like structure guide, no anatomical detail)"
+   },
+   "zOrderBand": [
+    0,
+    99
+   ]
+  },
+  {
+   "id": "L1_UNDERWEAR",
+   "label": "Layer 1 UNDERWEAR",
+   "contents": [
+    "inner wear",
+    "garter belt",
+    "knee socks / stockings",
+    "other under-layer garments"
+   ],
+   "zOrderBand": [
+    100,
+    199
+   ]
+  },
+  {
+   "id": "L2_BASE_OUTFIT",
+   "label": "Layer 2 BASE_OUTFIT",
+   "contents": [
+    "blouse",
+    "skirt",
+    "trousers",
+    "basic armour"
+   ],
+   "zOrderBand": [
+    200,
+    299
+   ]
+  },
+  {
+   "id": "L3_OUTER_ACCESSORIES",
+   "label": "Layer 3 OUTER_ACCESSORIES",
+   "contents": [
+    "robe",
+    "cape",
+    "hat",
+    "bag",
+    "glasses",
+    "weapon",
+    "ornaments"
+   ],
+   "zOrderBand": [
+    300,
+    399
+   ]
+  }
+ ],
+ "measurementStatus": {
+  "VERIFIED": "measured and verified (automated measurement or human-confirmed)",
+  "ESTIMATED": "inferred from nearby visible evidence or measured by AI visual inspection without human confirmation",
+  "UNKNOWN": "cannot be measured (e.g. hidden by costume)",
+  "TEMPLATE": "studio template placeholder; never a measurement",
+  "DESIGNED_CANDIDATE": "newly designed value proposed for a master body; never a canon measurement"
+ },
+ "note2": "measurementStatus is independent of approvalStatus (UNAPPROVED_* / DIRECTOR_APPROVED / CANONICAL_PROTECTED ...)."
+}
