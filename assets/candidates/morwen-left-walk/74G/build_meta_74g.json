@@ -1,0 +1,809 @@
+{
+ "base": "ART-74F-C (motion / timing / design identical)",
+ "switch_rows": {
+  "neck": 56,
+  "neck_score": {
+   "51": 22,
+   "52": 27,
+   "53": 18,
+   "54": 17,
+   "55": 14,
+   "56": 9,
+   "57": 13,
+   "58": 18
+  },
+  "waist": 81,
+  "waist_score": {
+   "79": 41,
+   "80": 29,
+   "81": 26,
+   "82": 47,
+   "83": 41,
+   "84": 43,
+   "85": 40,
+   "86": 46
+  }
+ },
+ "levels": {
+  "pelvis_dy": [
+   1,
+   1,
+   0,
+   -1,
+   -1,
+   0,
+   1,
+   1,
+   0,
+   -1,
+   -1,
+   0
+  ],
+  "chest_dy": [
+   0,
+   1,
+   1,
+   0,
+   -1,
+   -1,
+   0,
+   1,
+   1,
+   0,
+   -1,
+   -1
+  ],
+  "head_dy": [
+   0,
+   0,
+   1,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  "pelvis_dx": [
+   0,
+   0,
+   0,
+   1,
+   1,
+   0,
+   0,
+   0,
+   0,
+   1,
+   1,
+   0
+  ]
+ },
+ "islands_cleaned": {
+  "00_96x128": 14,
+  "00_48x64": 6,
+  "01_96x128": 20,
+  "01_48x64": 2,
+  "02_96x128": 21,
+  "02_48x64": 1,
+  "03_96x128": 18,
+  "03_48x64": 2,
+  "04_96x128": 13,
+  "04_48x64": 2,
+  "05_96x128": 10,
+  "05_48x64": 5,
+  "06_96x128": 14,
+  "06_48x64": 2,
+  "07_96x128": 29,
+  "07_48x64": 2,
+  "08_96x128": 20,
+  "08_48x64": 4,
+  "09_96x128": 20,
+  "09_48x64": 2,
+  "10_96x128": 15,
+  "10_48x64": 1,
+  "11_96x128": 12,
+  "11_48x64": 6
+ },
+ "C": {
+  "variant": "C",
+  "frames": [
+   {
+    "frame": 0,
+    "t": 0.0,
+    "pelvis_dy": 1,
+    "chest_dy": 0,
+    "head_dy": 0,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": 8.185,
+     "pitch": 19.0,
+     "lift": 0,
+     "role": "heel strike"
+    },
+    "far": {
+     "dx": -6.342,
+     "pitch": -28.0,
+     "lift": 0,
+     "role": "pre-swing / opposite heel strike"
+    },
+    "near_role": "heel strike",
+    "far_role": "pre-swing / opposite heel strike",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -2,
+      "dy": 0
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": -2,
+      "dy": 0
+     },
+     "hand": {
+      "dx": -2,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     18,
+     11
+    ]
+   },
+   {
+    "frame": 1,
+    "t": 0.0833,
+    "pelvis_dy": 1,
+    "chest_dy": 1,
+    "head_dy": 0,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": 6.933,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "loading"
+    },
+    "far": {
+     "dx": -6.423,
+     "pitch": -45.47,
+     "lift": 0,
+     "role": "late pre-swing (toe contact)"
+    },
+    "near_role": "loading",
+    "far_role": "late pre-swing (toe contact)",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": -1,
+      "dy": 1
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 0
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 1
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": -1,
+      "dy": 0
+     },
+     "hand": {
+      "dx": -2,
+      "dy": 0
+     }
+    },
+    "skirt_sway": -1,
+    "leg_rim_px": [
+     14,
+     7
+    ]
+   },
+   {
+    "frame": 2,
+    "t": 0.1667,
+    "pelvis_dy": 0,
+    "chest_dy": 1,
+    "head_dy": 1,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": 3.467,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "mid-stance"
+    },
+    "far": {
+     "dx": -8.649,
+     "pitch": -60,
+     "lift": 0,
+     "role": "toe-off"
+    },
+    "near_role": "mid-stance",
+    "far_role": "toe-off",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": -1,
+      "dy": 1
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 1
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 1
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 1
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 1
+     },
+     "arm": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hand": {
+      "dx": -1,
+      "dy": 0
+     }
+    },
+    "skirt_sway": -1,
+    "leg_rim_px": [
+     13,
+     7
+    ]
+   },
+   {
+    "frame": 3,
+    "t": 0.25,
+    "pelvis_dy": -1,
+    "chest_dy": 0,
+    "head_dy": 0,
+    "pelvis_dx": 1,
+    "near": {
+     "dx": 0.0,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "mid-stance"
+    },
+    "far": {
+     "dx": -6.06,
+     "pitch": -49.65,
+     "lift": 2,
+     "role": "mid swing"
+    },
+    "near_role": "mid-stance",
+    "far_role": "mid swing",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 1
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": 1,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 0,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     12,
+     6
+    ]
+   },
+   {
+    "frame": 4,
+    "t": 0.3333,
+    "pelvis_dy": -1,
+    "chest_dy": -1,
+    "head_dy": 0,
+    "pelvis_dx": 1,
+    "near": {
+     "dx": -3.467,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "mid-stance"
+    },
+    "far": {
+     "dx": 1.394,
+     "pitch": -16.52,
+     "lift": 1,
+     "role": "mid-late swing"
+    },
+    "near_role": "mid-stance",
+    "far_role": "mid-late swing",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": -1,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 1
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": 2,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 1,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     7,
+     5
+    ]
+   },
+   {
+    "frame": 5,
+    "t": 0.4167,
+    "pelvis_dy": 0,
+    "chest_dy": -1,
+    "head_dy": 0,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": -6.188,
+     "pitch": -6.48,
+     "lift": 0,
+     "role": "terminal stance"
+    },
+    "far": {
+     "dx": 9.158,
+     "pitch": 19.04,
+     "lift": 1,
+     "role": "reach"
+    },
+    "near_role": "terminal stance",
+    "far_role": "reach",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": -1,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -2,
+      "dy": 0
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": 2,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 2,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     13,
+     7
+    ]
+   },
+   {
+    "frame": 6,
+    "t": 0.5,
+    "pelvis_dy": 1,
+    "chest_dy": 0,
+    "head_dy": 0,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": -6.342,
+     "pitch": -28.0,
+     "lift": 0,
+     "role": "pre-swing / opposite heel strike"
+    },
+    "far": {
+     "dx": 8.185,
+     "pitch": 19.0,
+     "lift": 0,
+     "role": "heel strike"
+    },
+    "near_role": "pre-swing / opposite heel strike",
+    "far_role": "heel strike",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -2,
+      "dy": 0
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": 2,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 2,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     18,
+     12
+    ]
+   },
+   {
+    "frame": 7,
+    "t": 0.5833,
+    "pelvis_dy": 1,
+    "chest_dy": 1,
+    "head_dy": 0,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": -6.423,
+     "pitch": -45.47,
+     "lift": 0,
+     "role": "late pre-swing (toe contact)"
+    },
+    "far": {
+     "dx": 6.933,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "loading"
+    },
+    "near_role": "late pre-swing (toe contact)",
+    "far_role": "loading",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": -1,
+      "dy": 1
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 0
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 1
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": 1,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 2,
+      "dy": 0
+     }
+    },
+    "skirt_sway": -1,
+    "leg_rim_px": [
+     15,
+     8
+    ]
+   },
+   {
+    "frame": 8,
+    "t": 0.6667,
+    "pelvis_dy": 0,
+    "chest_dy": 1,
+    "head_dy": 1,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": -8.649,
+     "pitch": -60,
+     "lift": 0,
+     "role": "toe-off"
+    },
+    "far": {
+     "dx": 3.467,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "mid-stance"
+    },
+    "near_role": "toe-off",
+    "far_role": "mid-stance",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": -1,
+      "dy": 1
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 1
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 1
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 1
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 1
+     },
+     "arm": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 1,
+      "dy": 0
+     }
+    },
+    "skirt_sway": -1,
+    "leg_rim_px": [
+     10,
+     8
+    ]
+   },
+   {
+    "frame": 9,
+    "t": 0.75,
+    "pelvis_dy": -1,
+    "chest_dy": 0,
+    "head_dy": 0,
+    "pelvis_dx": 1,
+    "near": {
+     "dx": -6.06,
+     "pitch": -49.65,
+     "lift": 2,
+     "role": "mid swing"
+    },
+    "far": {
+     "dx": 0.0,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "mid-stance"
+    },
+    "near_role": "mid swing",
+    "far_role": "mid-stance",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": 0,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 1
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": -1,
+      "dy": 0
+     },
+     "hand": {
+      "dx": 0,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     11,
+     6
+    ]
+   },
+   {
+    "frame": 10,
+    "t": 0.8333,
+    "pelvis_dy": -1,
+    "chest_dy": -1,
+    "head_dy": 0,
+    "pelvis_dx": 1,
+    "near": {
+     "dx": 1.394,
+     "pitch": -16.52,
+     "lift": 1,
+     "role": "mid-late swing"
+    },
+    "far": {
+     "dx": -3.467,
+     "pitch": 0.0,
+     "lift": 0,
+     "role": "mid-stance"
+    },
+    "near_role": "mid-late swing",
+    "far_role": "mid-stance",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": -1,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -1,
+      "dy": 1
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": -2,
+      "dy": 0
+     },
+     "hand": {
+      "dx": -1,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     9,
+     7
+    ]
+   },
+   {
+    "frame": 11,
+    "t": 0.9167,
+    "pelvis_dy": 0,
+    "chest_dy": -1,
+    "head_dy": 0,
+    "pelvis_dx": 0,
+    "near": {
+     "dx": 9.158,
+     "pitch": 19.04,
+     "lift": 1,
+     "role": "reach"
+    },
+    "far": {
+     "dx": -6.188,
+     "pitch": -6.48,
+     "lift": 0,
+     "role": "terminal stance"
+    },
+    "near_role": "reach",
+    "far_role": "terminal stance",
+    "secondary": {
+     "collar_ribbon": {
+      "dx": 0,
+      "dy": 0
+     },
+     "cape_front": {
+      "dx": -1,
+      "dy": 0
+     },
+     "mantle": {
+      "dx": -2,
+      "dy": 0
+     },
+     "potions": {
+      "dx": 0,
+      "dy": 0
+     },
+     "hair_tips": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm": {
+      "dx": -2,
+      "dy": 0
+     },
+     "hand": {
+      "dx": -2,
+      "dy": 0
+     }
+    },
+    "skirt_sway": 0,
+    "leg_rim_px": [
+     12,
+     6
+    ]
+   }
+  ],
+  "toe_off_t": 0.675,
+  "ground_speed_px_per_cycle": {
+   "96x128": 41.6,
+   "48x64": 20.8
+  },
+  "ground_speed_px_per_frame": {
+   "96x128": 3.4667,
+   "48x64": 1.7333
+  }
+ }
+}
