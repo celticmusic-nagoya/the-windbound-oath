@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "task": "MORWEN-FIX-03",
+  "status": "MEASURED_COSTUME_ANCHORS_ONLY_BASE_BODY_NOT_LOCKED",
+  "canvas": {
+    "width": 1200,
+    "height": 1600,
+    "coordinate_origin": "top-left",
+    "nominal_foot_contact": [
+      600,
+      1540
+    ]
+  },
+  "source": {
+    "file": "fix02/UPPER_BODY_LANDMARKS.json",
+    "basis": "independent_rows",
+    "warning": "These are garment and silhouette landmarks, NOT anatomical joints. Do not use as frozen base-body joints."
+  },
+  "views": {
+    "front": {
+      "hat_crown_top": 34,
+      "hat_brim_lowest": 345,
+      "hair_tip_lowest": 367,
+      "shoulder_capelet_top": 384,
+      "capelet_layer1_bottom": 537,
+      "cuff_bottom": 792,
+      "skirt_hem": 866,
+      "sock_top": 903,
+      "boot_top": 1270,
+      "sole": 1540
+    },
+    "back_fix01": {
+      "hat_crown_top": 48,
+      "hat_brim_lowest": 365,
+      "hair_tip_lowest": 424,
+      "shoulder_capelet_top": 432,
+      "capelet_layer1_bottom": 591,
+      "cuff_bottom": 788,
+      "skirt_hem": 861,
+      "sock_top": 907,
+      "boot_top": 1271,
+      "sole": 1540
+    }
+  },
+  "back_minus_front": {
+    "hat_crown_top": 14,
+    "hat_brim_lowest": 20,
+    "hair_tip_lowest": 57,
+    "shoulder_capelet_top": 48,
+    "capelet_layer1_bottom": 54,
+    "cuff_bottom": -4,
+    "skirt_hem": -5,
+    "sock_top": 4,
+    "boot_top": 1,
+    "sole": 0
+  },
+  "base_body": {
+    "status": "BLOCKED_PENDING_VISUAL_CONSTRUCTION",
+    "required_joints": [
+      "head_center",
+      "neck",
+      "left_shoulder",
+      "right_shoulder",
+      "left_elbow",
+      "right_elbow",
+      "left_wrist",
+      "right_wrist",
+      "pelvis",
+      "left_hip",
+      "right_hip",
+      "left_knee",
+      "right_knee",
+      "left_ankle",
+      "right_ankle"
+    ],
+    "note": "Hidden anatomical joints require visual inference and confidence; no pixel-perfect body coordinates are asserted."
+  },
+  "acceptance": {
+    "must_reconstruct": [
+      "back hair",
+      "nape and collar",
+      "shoulder cape",
+      "upper arms",
+      "hat height",
+      "robe-sleeve overlap",
+      "bag strap"
+    ],
+    "protected": [
+      "FIX-01 boots",
+      "lower robe silhouette",
+      "original PNGs"
+    ],
+    "qa_status": "NOT_RUN"
+  },
+  "evidence_disagreement": "Self readings differ for back hair/shoulder due to overlapping strands. Independent QA measurements used as diagnostic; do not treat them as approved final coordinates."
+}
