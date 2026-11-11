@@ -1,0 +1,47 @@
+{
+  "repository": {
+    "priorPr228FailingIds": [
+      "tests/common_loading.test.cjs",
+      "tests/continue_restore.test.cjs",
+      "tests/early_rewards.test.cjs",
+      "tests/field/frame_clock.test.js",
+      "tests/s2_transition_recovery.test.cjs",
+      "tests/save_compatibility.test.cjs",
+      "tests/startup_race.test.cjs",
+      "tests/title_continue.test.cjs"
+    ],
+    "freshPinnedBaseFailingIds": [
+      "tests/common_loading.test.cjs",
+      "tests/continue_restore.test.cjs",
+      "tests/early_rewards.test.cjs",
+      "tests/field/frame_clock.test.js",
+      "tests/s2_transition_recovery.test.cjs",
+      "tests/save_compatibility.test.cjs",
+      "tests/startup_race.test.cjs",
+      "tests/title_continue.test.cjs"
+    ],
+    "newFailures": [],
+    "resolvedFailures": []
+  },
+  "pipeline": {
+    "priorPr228FailingIds": [
+      "test_committed_candidate_reproducible (test_pipeline.V07Layer0.test_committed_candidate_reproducible)",
+      "test_guides_contain_no_canon_pixels_and_are_reproducible (test_pipeline.V08MasterBody.test_guides_contain_no_canon_pixels_and_are_reproducible)",
+      "test_reproducible_and_sources_untouched (test_pipeline.V07Normalize.test_reproducible_and_sources_untouched)"
+    ],
+    "freshPinnedBaseFailingIds": [
+      "test_committed_candidate_reproducible (test_pipeline.V07Layer0.test_committed_candidate_reproducible)",
+      "test_guides_contain_no_canon_pixels_and_are_reproducible (test_pipeline.V08MasterBody.test_guides_contain_no_canon_pixels_and_are_reproducible)",
+      "test_reproducible_and_sources_untouched (test_pipeline.V07Normalize.test_reproducible_and_sources_untouched)"
+    ],
+    "newFailures": [],
+    "resolvedFailures": []
+  },
+  "newWorktreeQa": {
+    "command": "python -m unittest discover -s tools/character-asset-studio/qa -p 'test_*.py' -v",
+    "passed": 52,
+    "addedSyntheticTests": 15,
+    "failed": 0
+  },
+  "limitation": "Full runtime/pipeline suite was not rerun inside sparse worktree. No existing runtime, pipeline or prior QA file changed; comparison above is fresh baseline vs prior evidence, not two changed runtime builds."
+}

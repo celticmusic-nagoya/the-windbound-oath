@@ -1,0 +1,57 @@
+test_invalid_data_rejected (test_audit_stance_contact.ContactTests.test_invalid_data_rejected) ... ok
+test_missing_stance_not_run (test_audit_stance_contact.ContactTests.test_missing_stance_not_run) ... ok
+test_new_stance_after_swing_reanchors (test_audit_stance_contact.ContactTests.test_new_stance_after_swing_reanchors) ... ok
+test_slide_detected (test_audit_stance_contact.ContactTests.test_slide_detected) ... ok
+test_stable_stance (test_audit_stance_contact.ContactTests.test_stable_stance) ... ok
+test_source_immutable_and_coordinates_preserved (test_build_morwen_v10_candidate.MigrationTests.test_source_immutable_and_coordinates_preserved) ... ok
+test_unexpected_source_rejected (test_build_morwen_v10_candidate.MigrationTests.test_unexpected_source_rejected) ... ok
+test_world_anchor_and_metadata (test_build_morwen_v10_candidate.MigrationTests.test_world_anchor_and_metadata) ... ok
+test_missing_mapping_blocks (test_convert_real_motion_export.ConverterTests.test_missing_mapping_blocks) ... ok
+test_missing_world_blocks (test_convert_real_motion_export.ConverterTests.test_missing_world_blocks) ... ok
+test_replant_after_swing (test_convert_real_motion_export.ConverterTests.test_replant_after_swing) ... ok
+test_stance_id_switch_blocks (test_convert_real_motion_export.ConverterTests.test_stance_id_switch_blocks) ... ok
+test_valid_export_converts (test_convert_real_motion_export.ConverterTests.test_valid_export_converts) ... ok
+test_missing_selected_contact_point_blocks (test_motion_contact_export_04.Export04Tests.test_missing_selected_contact_point_blocks) ... ok
+test_missing_source_transform_blocks_conversion (test_motion_contact_export_04.Export04Tests.test_missing_source_transform_blocks_conversion) ... ok
+test_stance_switch_without_swing_blocks (test_motion_contact_export_04.Export04Tests.test_stance_switch_without_swing_blocks) ... ok
+test_static_v10_rig_is_not_an_animated_contact_export (test_motion_contact_export_04.Export04Tests.test_static_v10_rig_is_not_an_animated_contact_export) ... ok
+test_swapped_lr_provenance_exposes_authenticity_gap (test_motion_contact_export_04.Export04Tests.test_swapped_lr_provenance_exposes_authenticity_gap) ... ok
+test_synthetic_drift_over_tolerance_reaches_auditor (test_motion_contact_export_04.Export04Tests.test_synthetic_drift_over_tolerance_reaches_auditor) ... ok
+test_changed_source_hash_rejected (test_motion_source_05.MotionSource05Tests.test_changed_source_hash_rejected) ... ok
+test_current_plan_twelve_unknown_slots (test_motion_source_05.MotionSource05Tests.test_current_plan_twelve_unknown_slots) ... ok
+test_duplicate_frame_ids_rejected (test_motion_source_05.MotionSource05Tests.test_duplicate_frame_ids_rejected) ... ok
+test_explicit_transform_computes_synthetic_contact (test_motion_source_05.MotionSource05Tests.test_explicit_transform_computes_synthetic_contact) ... ok
+test_left_right_joint_inversion_rejected (test_motion_source_05.MotionSource05Tests.test_left_right_joint_inversion_rejected) ... ok
+test_measurement_bound_to_frame_image_time (test_motion_source_05.MotionSource05Tests.test_measurement_bound_to_frame_image_time) ... ok
+test_missing_measurement_never_uses_ground_marker (test_motion_source_05.MotionSource05Tests.test_missing_measurement_never_uses_ground_marker) ... ok
+test_no_receipt_does_not_adopt_frame (test_motion_source_05.MotionSource05Tests.test_no_receipt_does_not_adopt_frame) ... ok
+test_nonfinite_transform_rejected (test_motion_source_05.MotionSource05Tests.test_nonfinite_transform_rejected) ... ok
+test_rotation_and_scale_coordinate_convention (test_motion_source_05.MotionSource05Tests.test_rotation_and_scale_coordinate_convention) ... ok
+test_transform_not_defaulted (test_motion_source_05.MotionSource05Tests.test_transform_not_defaulted) ... ok
+test_unmeasured_contact_remains_null (test_motion_source_05.MotionSource05Tests.test_unmeasured_contact_remains_null) ... ok
+test_actual_synthetic_sliding_fails (test_rig_integration_08.Integration08Tests.test_actual_synthetic_sliding_fails) ... ok
+test_drawing_order (test_rig_integration_08.Integration08Tests.test_drawing_order) ... ok
+test_explicit_sheet_conversion (test_rig_integration_08.Integration08Tests.test_explicit_sheet_conversion) ... ok
+test_mirror_forbidden (test_rig_integration_08.Integration08Tests.test_mirror_forbidden) ... ok
+test_missing_actor_transform (test_rig_integration_08.Integration08Tests.test_missing_actor_transform) ... ok
+test_missing_joint_coordinate (test_rig_integration_08.Integration08Tests.test_missing_joint_coordinate) ... ok
+test_parent_cycle (test_rig_integration_08.Integration08Tests.test_parent_cycle) ... ok
+test_pose_left_right_contact_inversion (test_rig_integration_08.Integration08Tests.test_pose_left_right_contact_inversion) ... ok
+test_pose_missing_stays_blocked (test_rig_integration_08.Integration08Tests.test_pose_missing_stays_blocked) ... ok
+test_reflection_matrix_blocked (test_rig_integration_08.Integration08Tests.test_reflection_matrix_blocked) ... ok
+test_right_garter_cannot_move_to_left (test_rig_integration_08.Integration08Tests.test_right_garter_cannot_move_to_left) ... ok
+test_sha_mismatch (test_rig_integration_08.Integration08Tests.test_sha_mismatch) ... ok
+test_subprecision_drift_fails_without_editing_pr225 (test_rig_integration_08.Integration08Tests.test_subprecision_drift_fails_without_editing_pr225) ... ok
+test_synthetic_pipeline_pass_never_adopts (test_rig_integration_08.Integration08Tests.test_synthetic_pipeline_pass_never_adopts) ... ok
+test_unknown_sheet_transform (test_rig_integration_08.Integration08Tests.test_unknown_sheet_transform) ... ok
+test_inverted_mapping_without_provenance_blocks (test_validate_real_motion_export.EvidenceValidationTests.test_inverted_mapping_without_provenance_blocks) ... ok
+test_missing_foot_mapping_blocks (test_validate_real_motion_export.EvidenceValidationTests.test_missing_foot_mapping_blocks) ... ok
+test_missing_transform_blocks (test_validate_real_motion_export.EvidenceValidationTests.test_missing_transform_blocks) ... ok
+test_null_world_contact_blocks (test_validate_real_motion_export.EvidenceValidationTests.test_null_world_contact_blocks) ... ok
+test_unknown_scale_blocks (test_validate_real_motion_export.EvidenceValidationTests.test_unknown_scale_blocks) ... ok
+test_valid (test_validate_real_motion_export.EvidenceValidationTests.test_valid) ... ok
+
+----------------------------------------------------------------------
+Ran 52 tests in 9.428s
+
+OK
