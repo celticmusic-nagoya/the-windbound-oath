@@ -123,7 +123,7 @@ def is_protected(rel_path):
     return any(rel.startswith(d.rstrip("/") + "/") for d in data.get("protectedDirs", []))
 
 
-GENERATED_SCHEMAS = {"cas/qa-report/0.5", "cas/manifest/0.5", "cas/production-brief/0.5"}
+GENERATED_SCHEMAS = {"cas/qa-report/0.5", "cas/manifest/0.5", "cas/production-brief/0.5", "cas/canon-measurement/0.5"}
 GENERATED_MD_MARK = "<!-- cas:generated -->"
 
 
@@ -135,11 +135,23 @@ def pipeline_owned(path, repo_root=REPO_ROOT):
     suf = p.suffix.lower()
     try:
         if suf == ".json":
-            sid = load_json(p).get("schema")
+            doc = load_json(p)
+            sid = doc.get("schema")
+            refs = doc.get("referenceBody") if isinstance(doc.get("referenceBody"), list) else []
+            if sid is None and any(isinstance(r, dict) and r.get("status") == "UNAPPROVED_PARTIAL_MEASUREMENT" for r in refs):
+                return (True, "canon-measurement candidate spec")
             return (sid in GENERATED_SCHEMAS, f"schema {sid!r}")
         if suf == ".md":
             return (GENERATED_MD_MARK in p.read_text(encoding="utf-8"), "generated marker")
         if suf == ".png":
+            ev = p.parent / "measurement_evidence.json"
+            if ev.exists():
+                doc = load_json(ev)
+                if doc.get("schema") == "cas/canon-measurement/0.5":
+                    listed = {g[k]["path"] for vv in doc.get("views", {}).values() for g in [vv.get("guides", {})] for k in g}
+                    r = rel(p, repo_root)
+                    if r in listed:
+                        return (True, "listed measurement guide")
             b = p.parent / "production_brief.json"
             if b.exists():
                 doc = load_json(b)

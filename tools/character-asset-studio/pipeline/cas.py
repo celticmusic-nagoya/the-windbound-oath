@@ -115,6 +115,15 @@ def cmd_body_spec_upgrade(a):
     return EXIT_OK if v["result"] == "PASS" else EXIT_INTERNAL
 
 
+def cmd_measure_canon(a):
+    from caslib import canonmeasure
+    ev, rep = canonmeasure.run(a.character, a.observations, a.out_dir, a.overwrite)
+    if ev:
+        print(json.dumps({"landmarkStatusCounts": ev["summary"]["landmarkStatusCounts"], "groundRowPx": ev["summary"]["groundRowPx"]}))
+    print(json.dumps({"overall": rep["overall"], "adoptionReady": rep["adoptionReady"], "counts": rep["counts"], "gate": a.gate}))
+    return gate_code(a.gate, rep["overall"], rep["adoptionReady"])
+
+
 def cmd_manifest_build(a):
     m = manifest.build(a.root, a.status, a.note)
     _write(a.out, core.stable_dumps(m), a.overwrite)
@@ -202,6 +211,8 @@ def main(argv=None):
     p.add_argument("--body-spec"); p.add_argument("--views", default=",".join(core.VIEWS)); p.add_argument("--no-preview", action="store_true")
     p.set_defaults(fn=cmd_brief)
     p = gated(sp.add_parser("align")); p.add_argument("src"); p.add_argument("dst"); p.add_argument("--preset", required=True); p.add_argument("--no-x", action="store_true"); p.set_defaults(fn=cmd_align)
+    p = writes(gated(sp.add_parser("measure-canon"))); p.add_argument("--character", required=True); p.add_argument("--observations", required=True)
+    p.add_argument("--out-dir", required=True); p.set_defaults(fn=cmd_measure_canon)
     p = sp.add_parser("body-spec-upgrade"); p.add_argument("src"); p.add_argument("--out", required=True); p.add_argument("--preset"); p.set_defaults(fn=cmd_body_spec_upgrade)
     p = writes(sp.add_parser("manifest-build")); p.add_argument("root"); p.add_argument("--out", required=True); p.add_argument("--status", default="UNAPPROVED_CANDIDATE"); p.add_argument("--note"); p.set_defaults(fn=cmd_manifest_build)
     p = writes(gated(sp.add_parser("manifest-verify"))); p.add_argument("file"); p.add_argument("--report"); p.set_defaults(fn=cmd_manifest_verify)

@@ -1,4 +1,4 @@
-# Character Asset Studio v0.5.1
+# Character Asset Studio v0.6
 
 > **v0.5 の方針（CHARACTER-ASSET-STUDIO-06）:** 人間向けの画面の改善より、ChatGPT と Claude のあいだでアセットの制作・検証・データの受け渡しを自動化することを優先する。中心は `pipeline/`（コマンドライン、[pipeline/README.md](pipeline/README.md)）。画面の v0.4 の機能はそのまま残す。自動位置合わせなどの画面の改善は保留する（内部処理としての座標の正規化・位置合わせは `pipeline/` にある）。
 
@@ -77,6 +77,13 @@ python3 -m http.server 8000
 - 旧形式の `docs/BASE_BODY_SPEC.example.json` は原本のまま残し、2.0 に変換した例を `docs/BASE_BODY_SPEC.example.v2.json` として追加した。
 
 詳しくは [pipeline/README.md](pipeline/README.md)。
+
+## v0.6 モルウェン最終正本の骨格計測（CHARACTER-ASSET-STUDIO-08）
+最終正本4方向を読み取り専用で計測し、未承認の候補を `measurements/morwen-final-canon-20261111/` に置いた。概要は [そのフォルダの README](measurements/morwen-final-canon-20261111/README.md) を参照。
+
+- 40点のうち 可視14・推定3・測定不能23。頭頂・肩・骨盤は帽子とケープ、スカートに隠れているため、すべての方向で測定不能。測定不能の点を計測値や PASS として扱うことはない。
+- 接地の高さは4方向で最大12px違い、left の画像は接地点がアンカーから108px左にずれていた。どちらも QA で FAIL として報告した（正本は変更していない）。
+- R2.1 は BLOCKED のまま。
 
 ## Android 実機での起動（CHARACTER-ASSET-STUDIO-05）
 **実機QA: 4/4 PASS**（ディレクター報告、2026-11-11。`qa/android_device_qa_20261111.json`）。PASS した4項目は、下の「実機チェック手順」の4つの確認点。

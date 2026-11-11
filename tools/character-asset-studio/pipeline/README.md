@@ -54,6 +54,7 @@ ChatGPT と Claude のあいだで、アセット制作の指示・成果物・�
 | コマンド | 内容 |
 |---|---|
 | `validate FILE... [--report OUT]` | `schema` の値から種類を判定して検証する。種類が分からないファイルは BLOCKED。`--report` を付けると QA 結果として保存する |
+| `measure-canon --character ID --observations FILE --out-dir DIR` | 正本4方向を読み取り専用で計測する（接地と足は自動、ほかの関節は観察ファイルから）。可視／推定／測定不能を区別した根拠 JSON、BASE_BODY_SPEC v2.0 の未承認候補、ガイドPNG、QA結果を作る。測定不能の関節を計測値として扱うことはない（v0.6） |
 | `body-spec-upgrade SRC --out DST [--preset ID]` | 旧形式 1.0（ピクセル座標）の素体仕様を 2.0（正規化座標）に変換して、新しいファイルに書く。元のファイルは変更しない。結果は画面（`studio-core.js`）の変換と完全に一致する（信頼度 provisional、出典 imported_spec、状態 candidate_not_canonical） |
 | `qa ASSET_SET [--report OUT]` | 画像の自動QA（下記）を行い、`cas/qa-report/0.5` を出力する |
 | `brief --task-id --kind --character --preset --out-dir --deliver-to [--frames] [--slot] [--body-spec] [--description]` | 方向ごとのガイドPNG（透明背景）とプレビュー（正本を薄く重ねた確認用）、`production_brief.json` を作る。納品先は `assets/candidates/` の下だけ |
@@ -84,4 +85,4 @@ ChatGPT と Claude のあいだで、アセット制作の指示・成果物・�
 - `examples/morwen_walk_brief/`: 8コマ歩行のブリーフの例（ガイド4方向とプレビュー）。ランドマークはテンプレートの値で、実測した骨格ではない（`TEMPLATE_NOT_MEASURED`）。制作の発注ではない。
 
 ## テスト
-`python3 -m unittest discover -s tools/character-asset-studio/pipeline/tests -v`（25件。座標・テンプレート・JSON出力・素体仕様の変換が `studio-core.js` と一致すること、合成画像で各検査が FAIL を検出すること、保護対象への書き込みが拒否されること、PR 本文の更新が冪等であること、`adoptionReady` と終了コード、上書きの範囲、など）
+`python3 -m unittest discover -s tools/character-asset-studio/pipeline/tests -v`（31件。正本の計測（v0.6）を含む。座標・テンプレート・JSON出力・素体仕様の変換が `studio-core.js` と一致すること、合成画像で各検査が FAIL を検出すること、保護対象への書き込みが拒否されること、PR 本文の更新が冪等であること、`adoptionReady` と終了コード、上書きの範囲、など）

@@ -1,0 +1,978 @@
+{
+  "adoptionBlockers": [
+    "overall is FAIL",
+    "FAIL: ground_x_vs_anchor_4views, ground_y_consistency_4views",
+    "BLOCKED: landmark_measured",
+    "human checks NOT_RUN: director_confirms_landmarks, director_decides_unmeasurable_handling, landmark_visual_review"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "detail": "assets/candidates/morwen/final-visual-canon-20261111/front.png",
+      "id": "canon_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+      "id": "canon_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+      "id": "canon_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+      "id": "canon_sha256_before",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "back": 1549,
+        "front": 1542,
+        "left": 1537,
+        "right": 1540
+      },
+      "id": "ground_measured_4views",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "all"
+    },
+    {
+      "detail": {
+        "groundRowPx": {
+          "back": 1549,
+          "front": 1542,
+          "left": 1537,
+          "right": 1540
+        },
+        "spreadPx": 12,
+        "tolPx": 6
+      },
+      "id": "ground_y_consistency_4views",
+      "kind": "automated",
+      "reason": "the four canonical images put the soles at different heights on the shared canvas; reported, not corrected (canon is protected)",
+      "result": "FAIL",
+      "scope": "all"
+    },
+    {
+      "detail": {
+        "contactX": {
+          "back": 608,
+          "front": 600,
+          "left": 492,
+          "right": 600
+        },
+        "deltaFromAnchor600": {
+          "back": 8,
+          "front": 0,
+          "left": -108,
+          "right": 0
+        },
+        "tolPx": 24
+      },
+      "id": "ground_x_vs_anchor_4views",
+      "kind": "automated",
+      "reason": "contact centre is off the shared anchor x=600 in: left",
+      "result": "FAIL",
+      "scope": "all"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: skull top hidden under the hat crown; hat/brim outline is costume, not head",
+      "result": "BLOCKED",
+      "scope": "front/headTop"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/headTop"
+    },
+    {
+      "detail": {
+        "n": [
+          0.48333,
+          0.2375
+        ],
+        "px": [
+          580,
+          380
+        ],
+        "pxFromN": [
+          580,
+          380
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/neck"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "estimated by AI visual inspection (low); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "front/neck"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: shoulder joints covered by the capelet; capelet ridge (~(455,420)) is costume volume, not the acromion",
+      "result": "BLOCKED",
+      "scope": "front/shoulderLeft"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/shoulderLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet; capelet ridge (~(705,420)) is costume volume",
+      "result": "BLOCKED",
+      "scope": "front/shoulderRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/shoulderRight"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: hip joints covered by the skirt and robe; skirt waistband is costume, not the pelvis",
+      "result": "BLOCKED",
+      "scope": "front/pelvis"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/pelvis"
+    },
+    {
+      "detail": {
+        "n": [
+          0.47083,
+          0.675
+        ],
+        "px": [
+          565,
+          1080
+        ],
+        "pxFromN": [
+          565,
+          1080
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/kneeLeft"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "visible by AI visual inspection (medium); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "front/kneeLeft"
+    },
+    {
+      "detail": {
+        "n": [
+          0.53167,
+          0.675
+        ],
+        "px": [
+          638,
+          1080
+        ],
+        "pxFromN": [
+          638,
+          1080
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/kneeRight"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "visible by AI visual inspection (medium); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "front/kneeRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.4675,
+          0.96375
+        ],
+        "px": [
+          561,
+          1542
+        ],
+        "pxFromN": [
+          561,
+          1542
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/footLeft"
+    },
+    {
+      "detail": {
+        "method": "screen-left sole span 525..597 at row 1536",
+        "px": [
+          561,
+          1542
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/footLeft"
+    },
+    {
+      "detail": {
+        "n": [
+          0.5325,
+          0.96375
+        ],
+        "px": [
+          639,
+          1542
+        ],
+        "pxFromN": [
+          639,
+          1542
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/footRight"
+    },
+    {
+      "detail": {
+        "method": "screen-right sole span 603..674 at row 1536",
+        "px": [
+          639,
+          1542
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/footRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.5,
+          0.96375
+        ],
+        "px": [
+          600,
+          1542
+        ],
+        "pxFromN": [
+          600,
+          1542
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/ground"
+    },
+    {
+      "detail": {
+        "method": "midpoint of the two sole contacts; y = lowest row with a >=8 px run",
+        "px": [
+          600,
+          1542
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/ground"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: hidden under the hat crown",
+      "result": "BLOCKED",
+      "scope": "back/headTop"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/headTop"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: back of the neck hidden by the bob hair and the capelet collar",
+      "result": "BLOCKED",
+      "scope": "back/neck"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/neck"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet",
+      "result": "BLOCKED",
+      "scope": "back/shoulderLeft"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/shoulderLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet",
+      "result": "BLOCKED",
+      "scope": "back/shoulderRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/shoulderRight"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the skirt and robe",
+      "result": "BLOCKED",
+      "scope": "back/pelvis"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/pelvis"
+    },
+    {
+      "detail": {
+        "n": [
+          0.4725,
+          0.6675
+        ],
+        "px": [
+          567,
+          1068
+        ],
+        "pxFromN": [
+          567,
+          1068
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/kneeLeft"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "visible by AI visual inspection (medium); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "back/kneeLeft"
+    },
+    {
+      "detail": {
+        "n": [
+          0.53583,
+          0.6675
+        ],
+        "px": [
+          643,
+          1068
+        ],
+        "pxFromN": [
+          643,
+          1068
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/kneeRight"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "visible by AI visual inspection (medium); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "back/kneeRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.4825,
+          0.96813
+        ],
+        "px": [
+          579,
+          1549
+        ],
+        "pxFromN": [
+          579,
+          1549
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/footLeft"
+    },
+    {
+      "detail": {
+        "method": "screen-left sole span 557..601 at row 1543",
+        "px": [
+          579,
+          1549
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/footLeft"
+    },
+    {
+      "detail": {
+        "n": [
+          0.53083,
+          0.96813
+        ],
+        "px": [
+          637,
+          1549
+        ],
+        "pxFromN": [
+          637,
+          1549
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/footRight"
+    },
+    {
+      "detail": {
+        "method": "screen-right sole span 615..658 at row 1543",
+        "px": [
+          637,
+          1549
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/footRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.50667,
+          0.96813
+        ],
+        "px": [
+          608,
+          1549
+        ],
+        "pxFromN": [
+          608,
+          1549
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/ground"
+    },
+    {
+      "detail": {
+        "method": "midpoint of the two sole contacts; y = lowest row with a >=8 px run",
+        "px": [
+          608,
+          1549
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/ground"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: hidden under the hat crown",
+      "result": "BLOCKED",
+      "scope": "left/headTop"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/headTop"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: front of the neck partly visible under the chin, but the back contour is hidden by hair, so the neck centre cannot be located",
+      "result": "BLOCKED",
+      "scope": "left/neck"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/neck"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet",
+      "result": "BLOCKED",
+      "scope": "left/shoulderLeft"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/shoulderLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet (far side)",
+      "result": "BLOCKED",
+      "scope": "left/shoulderRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/shoulderRight"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the skirt and robe",
+      "result": "BLOCKED",
+      "scope": "left/pelvis"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/pelvis"
+    },
+    {
+      "detail": {
+        "n": [
+          0.42333,
+          0.68125
+        ],
+        "px": [
+          508,
+          1090
+        ],
+        "pxFromN": [
+          508,
+          1090
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/kneeLeft"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "estimated by AI visual inspection (low); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "left/kneeLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: far leg hidden behind the near leg",
+      "result": "BLOCKED",
+      "scope": "left/kneeRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/kneeRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.41,
+          0.96063
+        ],
+        "px": [
+          492,
+          1537
+        ],
+        "pxFromN": [
+          492,
+          1537
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/footLeft"
+    },
+    {
+      "detail": {
+        "method": "near-boot sole: outer span 409..575 at row 1531 (toe and heel of one boot), y = lowest sole row",
+        "px": [
+          492,
+          1537
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/footLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: far foot hidden behind the near foot",
+      "result": "BLOCKED",
+      "scope": "left/footRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/footRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.41,
+          0.96063
+        ],
+        "px": [
+          492,
+          1537
+        ],
+        "pxFromN": [
+          492,
+          1537
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/ground"
+    },
+    {
+      "detail": {
+        "method": "centre of the visible sole contact; y = lowest row with a >=8 px run",
+        "px": [
+          492,
+          1537
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/ground"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: hidden under the hat crown",
+      "result": "BLOCKED",
+      "scope": "right/headTop"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/headTop"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: back contour of the neck hidden by hair",
+      "result": "BLOCKED",
+      "scope": "right/neck"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/neck"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet",
+      "result": "BLOCKED",
+      "scope": "right/shoulderLeft"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/shoulderLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the capelet (far side)",
+      "result": "BLOCKED",
+      "scope": "right/shoulderRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/shoulderRight"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: covered by the skirt and robe",
+      "result": "BLOCKED",
+      "scope": "right/pelvis"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/pelvis"
+    },
+    {
+      "detail": {
+        "n": [
+          0.49333,
+          0.68125
+        ],
+        "px": [
+          592,
+          1090
+        ],
+        "pxFromN": [
+          592,
+          1090
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/kneeLeft"
+    },
+    {
+      "id": "landmark_visual_review",
+      "kind": "human",
+      "reason": "estimated by AI visual inspection (low); needs human/director confirmation",
+      "result": "NOT_RUN",
+      "scope": "right/kneeLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: far leg (mostly) hidden behind the near leg; a partial contour is not enough to place the joint",
+      "result": "BLOCKED",
+      "scope": "right/kneeRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/kneeRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "pxFromN": [
+          600,
+          1540
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/footLeft"
+    },
+    {
+      "detail": {
+        "method": "near-boot sole: outer span 517..683 at row 1534 (toe and heel of one boot), y = lowest sole row",
+        "px": [
+          600,
+          1540
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/footLeft"
+    },
+    {
+      "id": "landmark_measured",
+      "kind": "automated",
+      "reason": "UNMEASURABLE: far foot hidden behind the near foot",
+      "result": "BLOCKED",
+      "scope": "right/footRight"
+    },
+    {
+      "id": "unmeasured_not_promoted",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/footRight"
+    },
+    {
+      "detail": {
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "pxFromN": [
+          600,
+          1540
+        ]
+      },
+      "id": "px_norm_consistency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/ground"
+    },
+    {
+      "detail": {
+        "method": "centre of the visible sole contact; y = lowest row with a >=8 px run",
+        "px": [
+          600,
+          1540
+        ]
+      },
+      "id": "landmark_measured",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/ground"
+    },
+    {
+      "id": "spec_schema_v2",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "BASE_BODY_SPEC.candidate.json"
+    },
+    {
+      "id": "spec_status_unapproved",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "BASE_BODY_SPEC.candidate.json"
+    },
+    {
+      "id": "r21_still_blocked",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "profiles/reference_bodies.json"
+    },
+    {
+      "id": "canon_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "id": "canon_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "id": "canon_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "canon_sha256_after",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "id": "director_confirms_landmarks",
+      "kind": "human",
+      "reason": "director confirms visible/estimated landmarks",
+      "result": "NOT_RUN",
+      "scope": "all"
+    },
+    {
+      "id": "director_decides_unmeasurable_handling",
+      "kind": "human",
+      "reason": "decide how unmeasurable joints (head top, shoulders, pelvis, neck) get a body reference, e.g. a separate base-body drawing",
+      "result": "NOT_RUN",
+      "scope": "all"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 23,
+    "FAIL": 2,
+    "NOT_RUN": 9,
+    "PASS": 62
+  },
+  "overall": "FAIL",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "characterId": "morwen",
+    "kind": "canon-measurement",
+    "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111"
+  }
+}

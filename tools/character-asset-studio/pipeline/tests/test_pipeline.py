@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -427,6 +427,108 @@ const r=C.parseSpec(j,P);process.stdout.write(C.stableStringify(C.buildSpec({cha
         bad = dict(core.load_json(legacy)); bad["landmarks"] = {"front": {}}
         with self.assertRaises(ValueError):
             bodyspec.upgrade_v1(bad)
+
+
+class V08CanonMeasurement(unittest.TestCase):
+    """CHARACTER-ASSET-STUDIO-08: read-only measurement of the final canon."""
+    OBS = STUDIO / "measurements" / "morwen-final-canon-20261111" / "observations.json"
+    COMMITTED = STUDIO / "measurements" / "morwen-final-canon-20261111"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp(prefix="cas08_"))
+        cls.canon_before = {e["path"]: core.sha256_file(REPO / e["path"]) for e in core.protected_list()["files"]}
+        cls.ev, cls.rep = canonmeasure.run("morwen", cls.OBS, cls.tmp / "out")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_canon_read_only_and_r21_blocked(self):
+        after = {p: core.sha256_file(REPO / p) for p in self.canon_before}
+        self.assertEqual(after, self.canon_before)
+        self.assertEqual(len(after), 17)
+        self.assertEqual(core.load_json(STUDIO / "profiles" / "reference_bodies.json")["references"][0]["status"], "BLOCKED_FOR_FINAL_CANON")
+        self.assertEqual(manifest.verify_protected()["overall"], "PASS")
+
+    def test_statuses_and_no_template_promotion(self):
+        spec = core.load_json(self.tmp / "out" / "BASE_BODY_SPEC.candidate.json")
+        self.assertEqual(schemas.validate(spec)["result"], "PASS")
+        self.assertEqual(spec["status"], "candidate_not_canonical")
+        for v in core.VIEWS:
+            for k in core.LANDMARK_KEYS:
+                r = self.ev["views"][v]["landmarks"][k]
+                s = spec["landmarks"][v][k]
+                self.assertIn(r["status"], ("visible", "estimated", "unmeasurable"))
+                if r["status"] == "unmeasurable":
+                    self.assertEqual((s["source"], s["confidence"]), ("template_default", "provisional"), f"{v}/{k}")
+                    self.assertNotIn("px", r)
+                else:
+                    self.assertEqual(s["source"], "measured_reference")
+                    self.assertEqual((s["n"], s["px"]), (r["n"], r["px"]))
+                    if r["status"] == "estimated":
+                        self.assertEqual(s["confidence"], "low")
+        res = {(c["id"], c["scope"]): c["result"] for c in self.rep["checks"]}
+        for v in core.VIEWS:
+            for k in core.LANDMARK_KEYS:
+                st = self.ev["views"][v]["landmarks"][k]["status"]
+                origin = self.ev["views"][v]["landmarks"][k]["origin"]
+                if st == "unmeasurable":
+                    self.assertEqual(res[("landmark_measured", f"{v}/{k}")], "BLOCKED")
+                elif origin == "observation":
+                    self.assertEqual(res[("landmark_visual_review", f"{v}/{k}")], "NOT_RUN")
+        self.assertFalse(self.rep["adoptionReady"])
+        self.assertEqual(self.ev["summary"]["landmarkStatusCounts"], {"visible": 14, "estimated": 3, "unmeasurable": 23})
+
+    def test_head_shoulders_pelvis_unmeasurable_costume_not_body(self):
+        for v in core.VIEWS:
+            for k in ("headTop", "shoulderLeft", "shoulderRight", "pelvis"):
+                self.assertEqual(self.ev["views"][v]["landmarks"][k]["status"], "unmeasurable", f"{v}/{k}")
+            bb = self.ev["views"][v]["automated"]["costumeSilhouetteBBox"]
+            self.assertIn("NOT a body dimension", self.ev["views"][v]["automated"]["costumeNote"])
+            # hat top (costume) is far above any measured body point
+            self.assertLess(bb[1], 60)
+        spec = core.load_json(self.tmp / "out" / "BASE_BODY_SPEC.candidate.json")
+        self.assertEqual(spec["landmarks"]["front"]["headTop"]["n"], brief.TEMPLATE["headTop"])
+
+    def test_px_norm_consistency_and_ground_comparison(self):
+        for v in core.VIEWS:
+            for k in core.LANDMARK_KEYS:
+                r = self.ev["views"][v]["landmarks"][k]
+                if "px" in r:
+                    self.assertEqual(core.to_pixel(r["n"], canonmeasure.CANVAS), r["px"])
+                    self.assertEqual(core.to_norm(r["px"], canonmeasure.CANVAS), r["n"])
+        self.assertEqual(self.ev["summary"]["groundRowPx"], {"front": 1542, "back": 1549, "left": 1537, "right": 1540})
+        res = {c["id"]: c["result"] for c in self.rep["checks"] if c["scope"] == "all"}
+        self.assertEqual(res["ground_y_consistency_4views"], "FAIL")      # 12 px spread > 6 px: reported, not corrected
+        self.assertEqual(res["ground_x_vs_anchor_4views"], "FAIL")        # left view contact centre -108 px
+        self.assertEqual(self.rep["overall"], "FAIL")
+
+    def test_committed_outputs_match_a_fresh_run(self):
+        for name in ("measurement_evidence.json", "BASE_BODY_SPEC.candidate.json", "qa_report.json"):
+            fresh = core.load_json(self.tmp / "out" / name)
+            committed = core.load_json(self.COMMITTED / name)
+            for d in (fresh, committed):      # output paths differ between the two runs
+                d.pop("subject", None)
+            if name == "measurement_evidence.json":
+                for d in (fresh, committed):
+                    for v in d["views"].values():
+                        v.pop("guides", None)
+            if name == "BASE_BODY_SPEC.candidate.json":
+                for d in (fresh, committed):
+                    d["referenceBody"][-1].pop("path", None)
+            self.assertEqual(fresh, committed, name)
+
+    def test_guards(self):
+        with self.assertRaises(core.PolicyError):
+            canonmeasure.run("morwen", self.OBS, self.tmp / "out")          # existing outputs, no --overwrite
+        with self.assertRaises(core.PolicyError):
+            canonmeasure.run("morwen", self.OBS, REPO / "assets/candidates/morwen/final-visual-canon-20261111")
+        empty = dict(core.load_json(self.OBS)); empty["landmarks"] = {v: {} for v in core.VIEWS}
+        p = self.tmp / "obs_empty.json"; p.write_text(json.dumps(empty))
+        ev, rep = canonmeasure.run("morwen", p, self.tmp / "out_empty")
+        st = [ev["views"][v]["landmarks"][k]["status"] for v in core.VIEWS for k in ("headTop", "neck", "kneeLeft")]
+        self.assertTrue(all(s == "unmeasurable" for s in st), "missing observations never fall back to template-as-measured")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,49 @@
+{
+ "schema": "cas/canon-observations/0.5",
+ "status": "UNAPPROVED_REFERENCE",
+ "characterId": "morwen",
+ "observer": "Claude (AI visual inspection of zoomed, gridded crops of the protected canon, read-only). Not a human or director measurement.",
+ "date": "2026-11-11",
+ "canvas": {"width": 1200, "height": 1600},
+ "coordinateNote": "Pixel coordinates on the 1200x1600 canvas after studio placement() (front/back/left: 1152x1536 scaled uniformly x1.041667, exact fit; right: 1200x1600 1:1).",
+ "sideConvention": "Left/Right in landmark names = screen-left/screen-right of each image (studio convention), not anatomical. Front: screen-left = character's right. Back: screen-left = character's left. Side views (left/right files): legs overlap; *Left = near (visible) limb, *Right = far (occluded) limb; anatomical side not asserted.",
+ "automated": ["ground", "footLeft", "footRight (front/back)"],
+ "landmarks": {
+  "front": {
+   "headTop": {"status": "unmeasurable", "reason": "skull top hidden under the hat crown; hat/brim outline is costume, not head"},
+   "neck": {"status": "estimated", "px": [580, 380], "confidence": "low", "method": "midline x from the visible face (nose/chin, x~578-582); y between the visible chin (y~333) and the collar/capelet junction (y~395); neck skin itself is covered by the high ruffled collar", "range": {"y": [360, 395]}},
+   "shoulderLeft": {"status": "unmeasurable", "reason": "shoulder joints covered by the capelet; capelet ridge (~(455,420)) is costume volume, not the acromion", "costumeReference": [455, 420]},
+   "shoulderRight": {"status": "unmeasurable", "reason": "covered by the capelet; capelet ridge (~(705,420)) is costume volume", "costumeReference": [705, 420]},
+   "pelvis": {"status": "unmeasurable", "reason": "hip joints covered by the skirt and robe; skirt waistband is costume, not the pelvis"},
+   "kneeLeft": {"status": "visible", "px": [565, 1080], "confidence": "medium", "method": "screen-left leg (character's right) visible in stockings below the skirt; knee = narrowest point of the leg contour between thigh and calf bulge (outer edge x~530, inner edge x~600 at y~1080)"},
+   "kneeRight": {"status": "visible", "px": [638, 1080], "confidence": "medium", "method": "screen-right leg; same contour method (inner x~605, outer x~671 at y~1080)"}
+  },
+  "back": {
+   "headTop": {"status": "unmeasurable", "reason": "hidden under the hat crown"},
+   "neck": {"status": "unmeasurable", "reason": "back of the neck hidden by the bob hair and the capelet collar"},
+   "shoulderLeft": {"status": "unmeasurable", "reason": "covered by the capelet"},
+   "shoulderRight": {"status": "unmeasurable", "reason": "covered by the capelet"},
+   "pelvis": {"status": "unmeasurable", "reason": "covered by the skirt and robe"},
+   "kneeLeft": {"status": "visible", "px": [567, 1068], "confidence": "medium", "method": "screen-left leg (character's left) visible through the robe's rear slit; knee = popliteal crease / narrowest contour (outer x~534, inner x~601 at y~1068)"},
+   "kneeRight": {"status": "visible", "px": [643, 1068], "confidence": "medium", "method": "screen-right leg; crease/contour (inner x~608, outer x~678)"}
+  },
+  "left": {
+   "headTop": {"status": "unmeasurable", "reason": "hidden under the hat crown"},
+   "neck": {"status": "unmeasurable", "reason": "front of the neck partly visible under the chin, but the back contour is hidden by hair, so the neck centre cannot be located"},
+   "shoulderLeft": {"status": "unmeasurable", "reason": "covered by the capelet"},
+   "shoulderRight": {"status": "unmeasurable", "reason": "covered by the capelet (far side)"},
+   "pelvis": {"status": "unmeasurable", "reason": "covered by the skirt and robe"},
+   "kneeLeft": {"status": "estimated", "px": [508, 1090], "confidence": "low", "method": "near leg only; knee from the slight bend of the front and back leg contours (x~465..552 at y~1090); no clear patella or crease"},
+   "kneeRight": {"status": "unmeasurable", "reason": "far leg hidden behind the near leg"}
+  },
+  "right": {
+   "headTop": {"status": "unmeasurable", "reason": "hidden under the hat crown"},
+   "neck": {"status": "unmeasurable", "reason": "back contour of the neck hidden by hair"},
+   "shoulderLeft": {"status": "unmeasurable", "reason": "covered by the capelet"},
+   "shoulderRight": {"status": "unmeasurable", "reason": "covered by the capelet (far side)"},
+   "pelvis": {"status": "unmeasurable", "reason": "covered by the skirt and robe"},
+   "kneeLeft": {"status": "estimated", "px": [592, 1090], "confidence": "low", "method": "near leg only; bend of the leg contours (x~547..638 at y~1090); no clear patella or crease"},
+   "kneeRight": {"status": "unmeasurable", "reason": "far leg (mostly) hidden behind the near leg; a partial contour is not enough to place the joint"}
+  }
+ }
+}
