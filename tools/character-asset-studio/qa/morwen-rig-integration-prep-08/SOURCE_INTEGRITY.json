@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "path": "tools/character-asset-studio/motion-source/generate_frame_data.py",
+      "expectedSha256": "17bc3ffab419112363eeda736726ed335710a0b457d3cb73aafcc581e37ad174",
+      "actualSha256": "17bc3ffab419112363eeda736726ed335710a0b457d3cb73aafcc581e37ad174",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/motion-source/morwen_walk6.source-plan.json",
+      "expectedSha256": "070fe3d4ee627f704809d8c58a1def27bfee6efa12c373e2d77077f7317397ff",
+      "actualSha256": "070fe3d4ee627f704809d8c58a1def27bfee6efa12c373e2d77077f7317397ff",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/qa/convert_real_motion_export.py",
+      "expectedSha256": "94f3036c6e5840c1e001f4a62ac781b4e78fe44ecf3f044d320118b6180b2762",
+      "actualSha256": "94f3036c6e5840c1e001f4a62ac781b4e78fe44ecf3f044d320118b6180b2762",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/qa/audit_stance_contact.py",
+      "expectedSha256": "ccbadc94453ddae33be49a3f044b70a705cfd68687e08745054d05bdb666b349",
+      "actualSha256": "ccbadc94453ddae33be49a3f044b70a705cfd68687e08745054d05bdb666b349",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v1.0/MASTER_BODY_SPEC.v1.0.candidate.json",
+      "expectedSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "actualSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "status": "PASS"
+    }
+  ],
+  "canonicalShaVerification": "protected.json: 17/17 PASS on complete pinned base worktree",
+  "existingTrackedDiff": [],
+  "imageGeneration": "NOT_RUN / forbidden",
+  "adoptionReady": false
+}
