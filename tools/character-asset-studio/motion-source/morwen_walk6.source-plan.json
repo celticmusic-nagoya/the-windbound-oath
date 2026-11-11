@@ -1,0 +1,155 @@
+{
+  "schema": "cas/motion-source-plan/1.0",
+  "task": "MORWEN-MOTION-SOURCE-05",
+  "rigVersion": "1.0",
+  "status": "INCOMPLETE_SOURCE_PLAN",
+  "sourcePolicy": "No adopted walking PNGs located. Frame slots are NOT actual generated images. F1/F4 are planned contact events, not per-foot phase measurements.",
+  "references": [
+    {
+      "path": "data/sprite-rig/morwen_hd_left_walk6_delivery.json",
+      "sha256": "e8fbd90f7191015744ff0943089d13819639daf07b59d6448e5068bd5074a7ff"
+    },
+    {
+      "path": "docs/design/morwen-hd-walk/MORWEN_HD_WALK_01_V2_DIRECTOR_DECISIONS.md",
+      "sha256": "56bb8a150ce461673a68aa6f5ae1606b08c2f1c2eb9caad89c4502e1b652b525"
+    },
+    {
+      "path": "data/morwen-hd-canonical-v2.json",
+      "sha256": "f6f3a710194c80c907d1c3b1cec7dc788e7e1d2846cabc3254caea83ca199b69"
+    }
+  ],
+  "tracks": {
+    "left": {
+      "fps": 10,
+      "timingStatus": "PLANNED_NOT_CAPTURED",
+      "frames": [
+        {
+          "id": "left_F1",
+          "sourceFrameId": "F1",
+          "timeMs": null,
+          "plannedTimeMs": 0,
+          "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_01.png",
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "left_F2",
+          "sourceFrameId": "F2",
+          "timeMs": null,
+          "plannedTimeMs": 100,
+          "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_02.png",
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "left_F3",
+          "sourceFrameId": "F3",
+          "timeMs": null,
+          "plannedTimeMs": 200,
+          "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_03.png",
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "left_F4",
+          "sourceFrameId": "F4",
+          "timeMs": null,
+          "plannedTimeMs": 300,
+          "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_04.png",
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "left_F5",
+          "sourceFrameId": "F5",
+          "timeMs": null,
+          "plannedTimeMs": 400,
+          "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_05.png",
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "left_F6",
+          "sourceFrameId": "F6",
+          "timeMs": null,
+          "plannedTimeMs": 500,
+          "plannedPath": "assets/candidates/field-hd-pixel/morwen/walk-left-v2/frame_06.png",
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        }
+      ]
+    },
+    "right": {
+      "fps": null,
+      "timingStatus": "UNKNOWN",
+      "frames": [
+        {
+          "id": "right_F1",
+          "sourceFrameId": null,
+          "timeMs": null,
+          "plannedTimeMs": null,
+          "plannedPath": null,
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "right_F2",
+          "sourceFrameId": null,
+          "timeMs": null,
+          "plannedTimeMs": null,
+          "plannedPath": null,
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "right_F3",
+          "sourceFrameId": null,
+          "timeMs": null,
+          "plannedTimeMs": null,
+          "plannedPath": null,
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "right_F4",
+          "sourceFrameId": null,
+          "timeMs": null,
+          "plannedTimeMs": null,
+          "plannedPath": null,
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "right_F5",
+          "sourceFrameId": null,
+          "timeMs": null,
+          "plannedTimeMs": null,
+          "plannedPath": null,
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        },
+        {
+          "id": "right_F6",
+          "sourceFrameId": null,
+          "timeMs": null,
+          "plannedTimeMs": null,
+          "plannedPath": null,
+          "image": null,
+          "adoptionReceipt": null,
+          "measurement": null
+        }
+      ]
+    }
+  }
+}
