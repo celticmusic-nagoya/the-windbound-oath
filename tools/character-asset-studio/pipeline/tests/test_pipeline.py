@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0, layers  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0, layers, masterbody  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -850,6 +850,86 @@ class V07Layers(unittest.TestCase):
 def sha256_png(img):
     import hashlib
     return hashlib.sha256(img.convert("RGBA").tobytes()).hexdigest()
+
+
+class V08MasterBody(unittest.TestCase):
+    """MORWEN-LAYER0-01 (v0.8): shared master skeleton candidate."""
+    O = STUDIO / "layer0" / "morwen-master-v0.8"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = PIPE / "tests" / "_tmp_mb"
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+        cls.frozen = {p: core.sha256_file(p) for d in ("measurements/morwen-final-canon-20261111", "normalized/morwen-final-canon-20261111", "layer0/morwen-v0.7")
+                      for p in sorted((STUDIO / d).iterdir())}
+        cls.spec, cls.rep = masterbody.run("morwen", cls.O / "observations_v0.8.json", STUDIO / "layer0/morwen-v0.7/landmark_evidence.json",
+                                           STUDIO / "normalized/morwen-final-canon-20261111/view_transforms.json", cls.tmp)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def res(self, cid):
+        return {c["scope"]: c["result"] for c in self.rep["checks"] if c["id"] == cid}
+
+    def test_spec_schema_and_statuses(self):
+        self.assertEqual(schemas.validate(self.spec)["result"], "PASS", schemas.validate(self.spec)["errors"])
+        self.assertEqual(schemas.validate(self.spec["baseBodySpecV2"])["result"], "PASS")
+        P = self.spec["parameters"]
+        for k in ("headTopY", "shoulderY", "shoulderHalfWidth", "pelvisY", "hipHalfWidth", "kneeY", "armLength", "headHeight"):
+            self.assertEqual(P[k]["status"], "DESIGNED_CANDIDATE", k)
+        self.assertEqual((P["groundY"]["status"], P["groundY"]["value"]), ("VERIFIED", 1540))
+        self.assertEqual(P["kneeY"]["value"], 1076)
+        self.assertEqual(self.spec["unapprovedObservationsKept"]["kneeYByView"]["back/kneeLeft"], 1059)
+        self.assertEqual(self.spec["finalAdoption"], "NOT_RUN")
+        bad = copy.deepcopy(self.spec); bad["finalAdoption"] = "APPROVED"
+        self.assertEqual(schemas.validate(bad)["result"], "FAIL", "an unapproved candidate cannot carry a final adoption")
+        bad = copy.deepcopy(self.spec); bad["bodyGuidePolicy"] = "adult_nonexplicit_anatomy"
+        self.assertEqual(schemas.validate(bad)["result"], "FAIL")
+        v2 = self.spec["baseBodySpecV2"]["landmarks"]["front"]
+        self.assertEqual((v2["headTop"]["source"], v2["headTop"]["confidence"]), ("manual_edit", "provisional"), "designed, not measured")
+
+    def test_shared_parameters_and_reference_lines(self):
+        for cid in ("front_back_dimensions_equal", "front_back_symmetric_skeleton", "left_right_joints_mirror", "limb_lengths_symmetric_3d", "reference_lines_4views"):
+            self.assertTrue(all(r == "PASS" for r in self.res(cid).values()), cid)
+        for cid in ("canvas_1200x1600_rgba", "transparent_area", "body_contact_on_anchor", "body_top_on_headTop", "ground_joint", "verified_ground_match"):
+            r = self.res(cid)
+            self.assertEqual(set(r.values()), {"PASS"}, cid); self.assertEqual(len(r), 4, cid)
+        self.assertEqual(set(self.res("body_inside_canon_figure").values()), {"PASS"})
+        self.assertFalse(self.rep["adoptionReady"])
+        self.assertEqual(self.res("final_skeleton_adoption"), {"all": "NOT_RUN"})
+
+    def test_guides_contain_no_canon_pixels_and_are_reproducible(self):
+        for v in core.VIEWS:
+            g = Image.open(self.tmp / f"{v}_structure_guide.png")
+            self.assertLess(len(g.getcolors(1 << 20)), 2000, "generated shapes/lines only")
+            self.assertEqual(core.sha256_file(self.tmp / f"{v}_structure_guide.png"), core.sha256_file(self.O / f"{v}_structure_guide.png"))
+        a = core.load_json(self.tmp / "MASTER_BODY_SPEC.candidate.json"); b = core.load_json(self.O / "MASTER_BODY_SPEC.candidate.json")
+        for d in (a, b):
+            d.pop("views"); 
+        self.assertEqual(a, b)
+
+    def test_inputs_and_canon_unchanged(self):
+        self.assertEqual({p: core.sha256_file(p) for p in self.frozen}, self.frozen)
+        self.assertEqual(manifest.verify_protected()["overall"], "PASS")
+
+    def test_generated_image_fit_is_numeric_and_deterministic(self):
+        from PIL import ImageFont
+        PJ = {v: masterbody.project(masterbody.joints3d(self.spec["parameters"]), v) for v in core.VIEWS}
+        body = masterbody.render("front", self.spec["parameters"], PJ, ImageFont.load_default(), with_labels=False)
+        fake = Image.new("RGBA", (1200, 1600), (0, 0, 0, 0))
+        small = body.resize((1080, 1440), Image.LANCZOS)
+        fake.alpha_composite(small, (75, 60))          # "generated" result: wrong scale and offset
+        src = self.tmp / "gen_front.png"; fake.save(src)
+        fit = masterbody.fit_generated(src, self.spec, "front")
+        self.assertEqual(fit["result"], "NEEDS_CORRECTION")
+        w = masterbody.apply_fit(src, self.tmp / "gen_front_fitted.png", fit)
+        after = masterbody.fit_generated(self.tmp / "gen_front_fitted.png", self.spec, "front")
+        self.assertEqual(after["result"], "PASS", after)
+        w2 = masterbody.apply_fit(src, self.tmp / "gen_front_fitted2.png", fit)
+        self.assertEqual(w["sha256"], w2["sha256"], "deterministic correction")
+        with self.assertRaises(core.PolicyError):
+            masterbody.apply_fit(src, self.tmp / "gen_front_fitted.png", fit)
 
 
 if __name__ == "__main__":

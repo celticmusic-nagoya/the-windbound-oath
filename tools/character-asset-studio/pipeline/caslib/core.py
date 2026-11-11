@@ -124,9 +124,10 @@ def is_protected(rel_path):
 
 
 GENERATED_SCHEMAS = {"cas/qa-report/0.5", "cas/manifest/0.5", "cas/production-brief/0.5", "cas/canon-measurement/0.5",
-                     "cas/view-transforms/0.7", "cas/body-landmark-evidence/0.7", "cas/layer-outputs/0.7"}
+                     "cas/view-transforms/0.7", "cas/body-landmark-evidence/0.7", "cas/layer-outputs/0.7",
+                     "cas/master-body/0.8"}
 GENERATED_MD_MARK = "<!-- cas:generated -->"
-OUTPUT_KEYS = {"guide", "guidePreview", "guides", "output", "outputs", "bodyGuides"}
+OUTPUT_KEYS = {"guide", "guidePreview", "guides", "output", "outputs", "bodyGuides", "structureGuide", "overlay"}
 
 
 def _output_paths(doc, under_output=False):

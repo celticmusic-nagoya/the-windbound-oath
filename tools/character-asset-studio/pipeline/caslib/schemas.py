@@ -12,6 +12,7 @@ REGISTRY = {
     "motion-reference/1.0": "motion-reference.schema.json",
     "cas/modular-part/0.7": "modular-part.schema.json",
     "cas/modular-character/0.7": "modular-character.schema.json",
+    "cas/master-body/0.8": "master-body.schema.json",
 }
 BODY_SPEC_SCHEMA = STUDIO_DIR / "docs" / "BASE_BODY_SPEC.schema.json"
 

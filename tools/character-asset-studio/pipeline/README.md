@@ -128,3 +128,9 @@ ChatGPT と Claude のあいだで、アセット制作の指示・成果物・�
 | `compare-views --images front=PATH back=PATH ... --out PNG [--ground-y Y]` | 画像を並べた比較シートを作る（共通の接地線を引く） |
 
 例: `examples/synthetic_modular/`（`make_synthetic_modular.py` で作る、単純な図形だけの4階層・4方向・2フレームの例）。結果: `../qa/v0.7/`。
+
+### v0.8 のコマンド（MORWEN-LAYER0-01）
+| コマンド | 内容 |
+|---|---|
+| `master-body --character ID --observations OBS --layer0-evidence EV --transforms TF --out-dir DIR` | 共通の3D骨格を設計し（各パラメータに VERIFIED／ESTIMATED／DESIGNED_CANDIDATE／UNKNOWN の状態と導き方を付ける）、4方向に投影する。`MASTER_BODY_SPEC.candidate.json`（`cas/master-body/0.8`）、構造ガイドPNG、正本との比較画像、`BODY_CONSISTENCY_QA.json`、`production_brief.json`、`MANIFEST.json` を作る |
+| `master-body-fit --spec SPEC --view V --image PNG [--out NEW]` | 生成した画像の頭頂・接地・接地点の x を測る。`--out` を付けると、均等な拡大縮小と整数ピクセルの平行移動で補正した新しいファイルを書き出す |

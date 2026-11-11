@@ -1,0 +1,1202 @@
+{
+  "acceptanceChecks": [
+    {
+      "id": "canvas_1200x1600_rgba",
+      "kind": "automated"
+    },
+    {
+      "id": "transparent_area",
+      "kind": "automated"
+    },
+    {
+      "id": "body_contact_on_anchor",
+      "kind": "automated"
+    },
+    {
+      "id": "body_top_on_headTop",
+      "kind": "automated"
+    },
+    {
+      "id": "reference_lines_4views",
+      "kind": "automated"
+    },
+    {
+      "id": "final_skeleton_adoption",
+      "kind": "human",
+      "text": "director"
+    }
+  ],
+  "adoption": {
+    "autoAdopt": false,
+    "requires": "image generation, numeric fit, skeleton comparison, independent visual QA and director approval"
+  },
+  "anchor": {
+    "n": [
+      0.5,
+      0.9625
+    ],
+    "px": [
+      600,
+      1540
+    ]
+  },
+  "canvas": {
+    "height": 1600,
+    "width": 1200
+  },
+  "constraints": [
+    {
+      "check": "human",
+      "id": "neutral_structure",
+      "text": "minor_neutral_structure: mannequin-like volumes only"
+    },
+    {
+      "check": "automated",
+      "id": "shared_skeleton",
+      "text": "all four views use the same parameters (MASTER_BODY_SPEC.candidate.json)"
+    },
+    {
+      "check": "automated",
+      "id": "post_generation_fit",
+      "text": "measure top/ground/contact; correct by uniform scale + integer translation; never redraw"
+    }
+  ],
+  "handoff": {
+    "fitCommand": "python3 tools/character-asset-studio/pipeline/cas.py master-body-fit --spec <MASTER_BODY_SPEC.candidate.json> --view <v> --image <png> --out <new png>",
+    "parameterStatus": {
+      "ankleDepthOffset": "DESIGNED_CANDIDATE",
+      "ankleY": "DESIGNED_CANDIDATE",
+      "armLength": "DESIGNED_CANDIDATE",
+      "centerX": "VERIFIED",
+      "chinY": "ESTIMATED",
+      "footHalfWidth": "DESIGNED_CANDIDATE",
+      "groundY": "VERIFIED",
+      "headDepth": "DESIGNED_CANDIDATE",
+      "headHeight": "DESIGNED_CANDIDATE",
+      "headTopY": "DESIGNED_CANDIDATE",
+      "headWidth": "DESIGNED_CANDIDATE",
+      "headsTall": "DESIGNED_CANDIDATE",
+      "hipHalfWidth": "DESIGNED_CANDIDATE",
+      "kneeHalfWidth": "DESIGNED_CANDIDATE",
+      "kneeY": "DESIGNED_CANDIDATE",
+      "neckBaseY": "DESIGNED_CANDIDATE",
+      "pelvisHalfWidth": "DESIGNED_CANDIDATE",
+      "pelvisY": "DESIGNED_CANDIDATE",
+      "ribcageBottomY": "DESIGNED_CANDIDATE",
+      "shoulderHalfWidth": "DESIGNED_CANDIDATE",
+      "shoulderY": "DESIGNED_CANDIDATE",
+      "statureWithFootwear": "DESIGNED_CANDIDATE",
+      "wristHalfSpanFront": "ESTIMATED",
+      "wristYFront": "ESTIMATED"
+    },
+    "returnFormat": "cas/modular-part/0.7 per view (layerId L0_BASE_BODY, measurementStatus DESIGNED_CANDIDATE, bodyGuidePolicy minor_neutral_structure)",
+    "statusLegend": {
+      "DESIGNED_CANDIDATE": "new design value from a stated rule; NOT a canon measurement",
+      "ESTIMATED": "AI visual observation (not human-confirmed)",
+      "UNKNOWN": "not measurable and not designed",
+      "VERIFIED": "automated canon measurement"
+    }
+  },
+  "landmarkSource": {
+    "kind": "v0.8 designed master skeleton (shared 3D joints, projected)",
+    "status": "DESIGNED_CANDIDATE except ground (VERIFIED)"
+  },
+  "outputRequirements": {
+    "background": "real alpha=0 (transparent)",
+    "deliverTo": "assets/candidates/morwen/layer0-master-v0.8",
+    "fileNamePattern": "morwen_layer0_master_{view}.png",
+    "forbidden": [
+      "anatomical or sexual detail",
+      "clothing, underwear, hair, hat or accessories",
+      "changing age, height or build",
+      "editing protected files",
+      "text or watermarks"
+    ],
+    "format": "PNG",
+    "height": 1600,
+    "mode": "RGBA",
+    "width": 1200
+  },
+  "presetId": "MORWEN_REAL_1200x1600",
+  "protectedReferences": [
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/front.png",
+      "sha256": "a0f9bdbdfaf928aab49ea116d3ec40620f1558efe55f5f90aa55002213ae7bbd",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+      "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+      "sha256": "cd1dbc8447de72f0b4239cb6e76ea12c703df0812b1fc225ecb892c34db1b984",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+      "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/front.png",
+      "sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+      "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+      "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/back.png",
+      "sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+      "sha256": "f9a0272c99059480a59fdcb8a6278f318bc2da6f14f160e08f01eefdfe1d13ec",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/left.png",
+      "sha256": "a48ab1bc86bb7a1597b701575657b95ddbbb153c5f7b0528d3e885cca7645279",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+      "sha256": "b435dde0b048b1d4d7a36dd6b7b3437c6977581049ef400b3dcd290e21f50850",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/back.png",
+      "sha256": "66bc519ddd54878b66e298b72919d52d3727f2fdfdcf8c9cfc706c699cdad8ab",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/front_1200x1600.png",
+      "sha256": "a1cec16d21c6427c5b876324a7a14a2b21d83bce9cbc13ae80c0589db245ac9c",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/left_1200x1600.png",
+      "sha256": "e0fe405042d2aac57a1cebf233af5b8f0c238a12c9562394e676615235a8d7e7",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/right_1200x1600.png",
+      "sha256": "531c4ee0618f2d7648cc76e4f83c3390de0e470badccb13e159ca909e5d68144",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/back_1200x1600.png",
+      "sha256": "047fb26bd6ae5598178a8a9897454aac1e5a155d5613ccf9e35628ece3db7f64",
+      "use": "visual reference only; never modify"
+    }
+  ],
+  "schema": "cas/production-brief/0.5",
+  "status": "UNAPPROVED_INSTRUCTION",
+  "task": {
+    "characterId": "morwen",
+    "description": "Draw a neutral, non-explicit mannequin-type structure figure (simple head, ribcage, pelvis and limb volumes; smooth uniform grey; no anatomical or sexual detail; no clothing, hair or accessories) in four views on the guides. The character is 17: keep age-appropriate, unchanged proportions. Match the joints of the structure guide; exact pixel accuracy is NOT expected from image generation — results are measured and corrected deterministically afterwards (cas.py master-body-fit).",
+    "frameCount": 1,
+    "id": "MORWEN-LAYER0-MASTER-V0.8",
+    "kind": "base_body"
+  },
+  "views": {
+    "back": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/back_structure_guide.png",
+        "sha256": "b819b3b8d27fbc717261f5c0df188d4bb829f0fa78177640c47688afa7679438",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/back_structure_overlay.png",
+        "sha256": "87b0f7583e85eb8f3338d7b4100518ca731fa37c295715fb567b82eae46cbf72",
+        "width": 1200
+      },
+      "landmarks": {
+        "ankleL": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.91875
+          ],
+          "px": [
+            563,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ankleR": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.91875
+          ],
+          "px": [
+            637,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "chin": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.20938
+          ],
+          "px": [
+            600,
+            335
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowL": {
+          "confidence": "provisional",
+          "n": [
+            0.36083,
+            0.37563
+          ],
+          "px": [
+            433,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowR": {
+          "confidence": "provisional",
+          "n": [
+            0.63917,
+            0.37563
+          ],
+          "px": [
+            767,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footL": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.9625
+          ],
+          "px": [
+            563,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footR": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.9625
+          ],
+          "px": [
+            637,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "VERIFIED"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipL": {
+          "confidence": "provisional",
+          "n": [
+            0.45833,
+            0.465
+          ],
+          "px": [
+            550,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipR": {
+          "confidence": "provisional",
+          "n": [
+            0.54167,
+            0.465
+          ],
+          "px": [
+            650,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeL": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.6725
+          ],
+          "px": [
+            563,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeR": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.6725
+          ],
+          "px": [
+            637,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "neckBase": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderL": {
+          "confidence": "provisional",
+          "n": [
+            0.40417,
+            0.26875
+          ],
+          "px": [
+            485,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderR": {
+          "confidence": "provisional",
+          "n": [
+            0.59583,
+            0.26875
+          ],
+          "px": [
+            715,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristL": {
+          "confidence": "provisional",
+          "n": [
+            0.3175,
+            0.4825
+          ],
+          "px": [
+            381,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristR": {
+          "confidence": "provisional",
+          "n": [
+            0.6825,
+            0.4825
+          ],
+          "px": [
+            819,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        }
+      },
+      "visualReference": null
+    },
+    "front": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/front_structure_guide.png",
+        "sha256": "ab2ae8e4663037527eb72a58006338b1f6b917b69b25b2b1753e25233c6ea799",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/front_structure_overlay.png",
+        "sha256": "24c23453e5c7506d916aac99b2088e77b71b7da88b52450e2f89cbee10cb6800",
+        "width": 1200
+      },
+      "landmarks": {
+        "ankleL": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.91875
+          ],
+          "px": [
+            637,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ankleR": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.91875
+          ],
+          "px": [
+            563,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "chin": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.20938
+          ],
+          "px": [
+            600,
+            335
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowL": {
+          "confidence": "provisional",
+          "n": [
+            0.63917,
+            0.37563
+          ],
+          "px": [
+            767,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowR": {
+          "confidence": "provisional",
+          "n": [
+            0.36083,
+            0.37563
+          ],
+          "px": [
+            433,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footL": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.9625
+          ],
+          "px": [
+            637,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footR": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.9625
+          ],
+          "px": [
+            563,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "VERIFIED"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipL": {
+          "confidence": "provisional",
+          "n": [
+            0.54167,
+            0.465
+          ],
+          "px": [
+            650,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipR": {
+          "confidence": "provisional",
+          "n": [
+            0.45833,
+            0.465
+          ],
+          "px": [
+            550,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeL": {
+          "confidence": "provisional",
+          "n": [
+            0.53083,
+            0.6725
+          ],
+          "px": [
+            637,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeR": {
+          "confidence": "provisional",
+          "n": [
+            0.46917,
+            0.6725
+          ],
+          "px": [
+            563,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "neckBase": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderL": {
+          "confidence": "provisional",
+          "n": [
+            0.59583,
+            0.26875
+          ],
+          "px": [
+            715,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderR": {
+          "confidence": "provisional",
+          "n": [
+            0.40417,
+            0.26875
+          ],
+          "px": [
+            485,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristL": {
+          "confidence": "provisional",
+          "n": [
+            0.6825,
+            0.4825
+          ],
+          "px": [
+            819,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristR": {
+          "confidence": "provisional",
+          "n": [
+            0.3175,
+            0.4825
+          ],
+          "px": [
+            381,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        }
+      },
+      "visualReference": null
+    },
+    "left": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/left_structure_guide.png",
+        "sha256": "1ab5c1a52c68ff3cc4ac09d5ac72c8a7bf4cd06b223bf253863c4fba9621b79c",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/left_structure_overlay.png",
+        "sha256": "9ce54bd61cef5c8b3ebffc1b13fbbc9ed85fb77ca366eaf758e53dc7bf3f4ebe",
+        "width": 1200
+      },
+      "landmarks": {
+        "ankleL": {
+          "confidence": "provisional",
+          "n": [
+            0.53,
+            0.91875
+          ],
+          "px": [
+            636,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ankleR": {
+          "confidence": "provisional",
+          "n": [
+            0.53,
+            0.91875
+          ],
+          "px": [
+            636,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "chin": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.20938
+          ],
+          "px": [
+            600,
+            335
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.37563
+          ],
+          "px": [
+            600,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.37563
+          ],
+          "px": [
+            600,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "VERIFIED"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "neckBase": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.4825
+          ],
+          "px": [
+            600,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.4825
+          ],
+          "px": [
+            600,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        }
+      },
+      "visualReference": null
+    },
+    "right": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/right_structure_guide.png",
+        "sha256": "9fe2d86f77e7aeb39110c17e361efc547b12298bcc19e01356bbb4652640e406",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/right_structure_overlay.png",
+        "sha256": "e54a64e107858c69a77414f3a76ff51c308303395a690a893b537edfca86e4f3",
+        "width": 1200
+      },
+      "landmarks": {
+        "ankleL": {
+          "confidence": "provisional",
+          "n": [
+            0.47,
+            0.91875
+          ],
+          "px": [
+            564,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ankleR": {
+          "confidence": "provisional",
+          "n": [
+            0.47,
+            0.91875
+          ],
+          "px": [
+            564,
+            1470
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "chin": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.20938
+          ],
+          "px": [
+            600,
+            335
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.37563
+          ],
+          "px": [
+            600,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "elbowR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.37563
+          ],
+          "px": [
+            600,
+            601
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "footR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "VERIFIED"
+        },
+        "headTop": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.10938
+          ],
+          "px": [
+            600,
+            175
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "hipR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "kneeR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.6725
+          ],
+          "px": [
+            600,
+            1076
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "neckBase": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.24688
+          ],
+          "px": [
+            600,
+            395
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "pelvis": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.465
+          ],
+          "px": [
+            600,
+            744
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "shoulderR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.26875
+          ],
+          "px": [
+            600,
+            430
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristL": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.4825
+          ],
+          "px": [
+            600,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        },
+        "wristR": {
+          "confidence": "provisional",
+          "n": [
+            0.5,
+            0.4825
+          ],
+          "px": [
+            600,
+            772
+          ],
+          "source": "DESIGNED_CANDIDATE"
+        }
+      },
+      "visualReference": null
+    }
+  }
+}

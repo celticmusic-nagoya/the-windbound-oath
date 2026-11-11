@@ -1,4 +1,4 @@
-# Character Asset Studio v0.7
+# Character Asset Studio v0.8
 
 > **v0.5 の方針（CHARACTER-ASSET-STUDIO-06）:** 人間向けの画面の改善より、ChatGPT と Claude のあいだでアセットの制作・検証・データの受け渡しを自動化することを優先する。中心は `pipeline/`（コマンドライン、[pipeline/README.md](pipeline/README.md)）。画面の v0.4 の機能はそのまま残す。自動位置合わせなどの画面の改善は保留する（内部処理としての座標の正規化・位置合わせは `pipeline/` にある）。
 
@@ -77,6 +77,12 @@ python3 -m http.server 8000
 - 旧形式の `docs/BASE_BODY_SPEC.example.json` は原本のまま残し、2.0 に変換した例を `docs/BASE_BODY_SPEC.example.v2.json` として追加した。
 
 詳しくは [pipeline/README.md](pipeline/README.md)。
+
+## v0.8 モルウェン Layer 0 マスター素体候補（MORWEN-LAYER0-01）
+`layer0/morwen-master-v0.8/`（未承認）。1つの3D骨格を4方向に投影した、中立的なマネキン型の構造ガイド。
+- 接地と中心は VERIFIED、顎と手首は ESTIMATED、頭頂・肩・骨盤などは DESIGNED_CANDIDATE（新しい設計値。実測値ではない）。
+- 寸法と整合の自動検査はすべて PASS。デザインと骨格の最終的な採用、独立した目視QA、デザイン保護12項目は NOT_RUN。
+- 詳しくは [そのフォルダの README](layer0/morwen-master-v0.8/README.md)。
 
 ## v0.7 4階層モジュラー基盤とモルウェン Layer 0 候補（CHARACTER-ASSET-STUDIO-10）
 - **A 作業座標の正規化:** `normalized/morwen-final-canon-20261111/`。v0.6 の実測した接地点から変換量を計算し、4方向の接地点を (600, 1540) にそろえた（PASS）。骨格の整合は評価していない（NOT_RUN）。

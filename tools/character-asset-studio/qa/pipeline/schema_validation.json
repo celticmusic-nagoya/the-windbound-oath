@@ -130,13 +130,49 @@
       "kind": "automated",
       "result": "PASS",
       "scope": "tools/character-asset-studio/qa/android_device_qa_20261111.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/master-body/0.8"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/MASTER_BODY_SPEC.candidate.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/production-brief/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/production_brief.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/BODY_CONSISTENCY_QA.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/manifest/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/MANIFEST.json"
     }
   ],
   "counts": {
     "BLOCKED": 0,
     "FAIL": 0,
     "NOT_RUN": 0,
-    "PASS": 14
+    "PASS": 18
   },
   "overall": "PASS",
   "qaKind": "automated_self_qa",

@@ -15,7 +15,7 @@ jsonschema (all usually present in AI sandboxes). Run from anywhere; paths are r
   protect-diff --base REF                  FAIL if a git change set touches a protected path
   pr-summary REPORT... [--out MD]          Markdown summary of QA reports for a Draft PR
   pr-append --repo O/R --pr N --file MD    idempotent section in a DRAFT PR body (replace by --key; never merges)
-  v0.6/v0.7: measure-canon, normalize-views, layer0-candidate, layer-manifest, layer-qa, layer-preview, compose, compare-views
+  v0.6-v0.8: master-body, master-body-fit, measure-canon, normalize-views, layer0-candidate, layer-manifest, layer-qa, layer-preview, compose, compare-views
 
 QA verdicts and exit codes are separate. Every QA command prints JSON with "overall" (PASS/FAIL/BLOCKED/NOT_RUN)
 and "adoptionReady" (true only if everything incl. human checks PASSed). The exit code says whether the command
@@ -185,6 +185,26 @@ def cmd_compare_views(a):
     return EXIT_OK
 
 
+def cmd_master_body(a):
+    from caslib import masterbody
+    spec, rep = masterbody.run(a.character, a.observations, a.layer0_evidence, a.transforms, a.out_dir, a.overwrite)
+    m = manifest.build(a.out_dir, "UNAPPROVED_CANDIDATE", "Layer 0 master-body candidate v0.8 (unapproved; no canon pixels in the structure guides)")
+    _write(Path(a.out_dir) / "MANIFEST.json", core.stable_dumps(m), True if (Path(a.out_dir) / "MANIFEST.json").exists() and a.overwrite else False)
+    print(json.dumps({"parameters": {k: [p["value"], p["status"]] for k, p in spec["parameters"].items()}}))
+    return _emit(rep, a)
+
+
+def cmd_master_body_fit(a):
+    from caslib import masterbody
+    spec = core.load_json(a.spec)
+    fit = masterbody.fit_generated(a.image, spec, a.view)
+    if a.out and fit.get("scale"):
+        fit["written"] = masterbody.apply_fit(a.image, a.out, fit)
+        fit["after"] = masterbody.fit_generated(a.out, spec, a.view)
+    print(core.stable_dumps(fit), end="")
+    return EXIT_OK
+
+
 def cmd_manifest_build(a):
     m = manifest.build(a.root, a.status, a.note)
     _write(a.out, core.stable_dumps(m), a.overwrite)
@@ -286,6 +306,11 @@ def main(argv=None):
     p.add_argument("--layers", help="comma-separated layer ids to turn ON (default: all)"); p.add_argument("--out", required=True); p.set_defaults(fn=cmd_compose)
     p = writes(sp.add_parser("compare-views")); p.add_argument("--images", nargs="+", required=True, help="label=path ..."); p.add_argument("--out", required=True)
     p.add_argument("--ground-y", type=int); p.set_defaults(fn=cmd_compare_views)
+    p = writes(gated(sp.add_parser("master-body"))); p.add_argument("--character", required=True); p.add_argument("--observations", required=True)
+    p.add_argument("--layer0-evidence", required=True); p.add_argument("--transforms", required=True); p.add_argument("--out-dir", required=True)
+    p.set_defaults(fn=cmd_master_body, report=None)
+    p = sp.add_parser("master-body-fit"); p.add_argument("--spec", required=True); p.add_argument("--view", required=True, choices=core.VIEWS)
+    p.add_argument("--image", required=True); p.add_argument("--out"); p.set_defaults(fn=cmd_master_body_fit)
     p = sp.add_parser("body-spec-upgrade"); p.add_argument("src"); p.add_argument("--out", required=True); p.add_argument("--preset"); p.set_defaults(fn=cmd_body_spec_upgrade)
     p = writes(sp.add_parser("manifest-build")); p.add_argument("root"); p.add_argument("--out", required=True); p.add_argument("--status", default="UNAPPROVED_CANDIDATE"); p.add_argument("--note"); p.set_defaults(fn=cmd_manifest_build)
     p = writes(gated(sp.add_parser("manifest-verify"))); p.add_argument("file"); p.add_argument("--report"); p.set_defaults(fn=cmd_manifest_verify)
