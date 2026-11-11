@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MORWEN-PRODUCTION-73 DEVフィールド表示プレビュー</title>
+<style>body{margin:0;background:#16141b;color:#ece9f1;font:14px/1.5 system-ui,sans-serif}header{padding:10px 14px;border-bottom:1px solid #3a3544}h1{font-size:15px;margin:0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px;border-bottom:1px solid #3a3544}label{display:flex;flex-direction:column;font-size:11px;color:#a9a3b5}
+select,button,input{background:#24212b;color:#ece9f1;border:1px solid #3a3544;border-radius:6px;padding:7px 9px;font-size:14px;min-height:38px}
+canvas{display:block;image-rendering:pixelated;max-width:100%}.wrap{padding:12px 14px;display:grid;gap:12px}.card{background:#24212b;border:1px solid #3a3544;border-radius:8px;padding:10px}
+.m{font:12px/1.5 ui-monospace,monospace;color:#cfc8da}.warn{color:#ffcf6a}</style></head><body>
+<header><h1>MORWEN-PRODUCTION-73 DEVフィールド表示プレビュー（本番未使用）</h1><div class="m">右＝正式素材72／左＝暫定ミラー（鞄の側が反転・正式素材はASSET-74）／上下・待機＝未制作。ゲーム内表示は <b>?morwenField=1</b>（DEVビルドのみ）。</div></header>
+<div class="bar">
+<label>向き<select id="dir"><option value="right">右（正式72）</option><option value="left">左（暫定ミラー）</option><option value="pingpong" selected>往復</option></select></label>
+<label>素材<select id="size"><option value="48" selected>48×64（1:1）</option><option value="96">96×128（×0.5）</option></select></label>
+<label>移動速度 px/s<input id="speed" type="number" value="300" min="0" max="600" step="6"></label>
+<label>周期の基準<select id="mode"><option value="fps8" selected>8fps相当（stride=速度×6/8）</option><option value="art">足の描画幅（stride=18）</option><option value="custom">任意stride</option></select></label>
+<label>stride px<input id="stride" type="number" value="225" min="6" max="400" step="1"></label>
+<label>足元行<select id="foot"><option value="63" selected>63（(24,63)暫定）</option><option value="62">62（足裏の下端）</option></select></label>
+<label>倍率<select id="zoom"><option>2</option><option selected>3</option><option>4</option></select></label>
+<label>&nbsp;<button id="play">一時停止</button></label></div>
+<div class="wrap">
+<div class="card"><canvas id="c"></canvas><div class="m" id="meter"></div></div>
+<div class="card"><div class="m">縮尺比較（同じワールド座標・足元基準）：エイダン／フィオナの既存フィールド待機画像（右向き）とモルウェン72 F00。</div><canvas id="cmp"></canvas><div class="m" id="cmpm"></div></div>
+<div class="card m">確認：F05→F00の継ぎ目は往復モードの連続再生と下のコマ番号で確認。Android実機の結果はNOT_RUN（記録は別途）。</div></div>
+<script>
+const D=__D__,R=__REF__;const $=id=>document.getElementById(id);
+const L=a=>a.map(s=>{const i=new Image();i.src=s;return i});const M48=L(D.m48),M96=L(D.m96),G=new Image();G.src=D.ground;
+const RI={};for(const k in R){RI[k]=new Image();RI[k].src=R[k].img}
+let x=60,dir=1,dist=0,last=0,playing=true,scroll=0;
+function stride(){const m=$('mode').value,v=+$('speed').value;if(m==='fps8')return Math.max(6,v*6/8);if(m==='art')return 18;return +$('stride').value}
+function frameOf(d){return Math.floor(d/(stride()/6))%6}
+function draw(){const z=+$('zoom').value,W=320,H=96,c=$('c');c.width=W*z;c.height=H*z;const g=c.getContext('2d');g.imageSmoothingEnabled=false;
+ for(let ox=-(scroll%384);ox<W;ox+=384)g.drawImage(G,ox*z,0,384*z,192*z);
+ const groundY=80,f=frameOf(dist),big=$('size').value==='96',im=(big?M96:M48)[f],foot=+$('foot').value,ay=big?foot*2:foot,ax=big?48:24,s=big?.5:1;
+ g.save();g.translate(Math.round(x)*z,groundY*z);if(dir<0)g.scale(-1,1);g.drawImage(im,-ax*s*z,-ay*s*z,im.width*s*z,im.height*s*z);g.restore();
+ g.fillStyle='rgba(255,80,80,.9)';g.fillRect(Math.round(x)*z-z,groundY*z,2*z,z);
+ const sl=stride()/6-3,v=+$('speed').value;
+ $('meter').innerHTML='コマ F0'+f+' ／ 向き '+(dir>0?'右（正式）':'左（暫定ミラー）')+' ／ stride '+stride().toFixed(1)+'px（描画上の足の移動は18px/周期）<br>表示fps '+(v/(stride()/6)).toFixed(1)+' ／ 1コマあたりの足滑り <span class="'+(Math.abs(sl)>1?'warn':'')+'">'+sl.toFixed(1)+'px</span>（0にするには移動速度 '+(18*8/6).toFixed(0)+'px/s・8fps）';}
+function drawCmp(){const z=+$('zoom').value,W=200,H=80,c=$('cmp');c.width=W*z;c.height=H*z;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.fillStyle='#2e3a2a';g.fillRect(0,0,c.width,c.height);
+ const gy=74;let ox=34,out=[];
+ for(const k of ['aidan','fiona']){const r=R[k],im=RI[k];g.drawImage(im,(ox-r.anchor[0]*r.scale)*z,(gy-r.anchor[1]*r.scale)*z,r.w*r.scale*z,r.h*r.scale*z);out.push(k+' 身長 '+r.charH+'px');ox+=62}
+ const foot=+$('foot').value;g.drawImage(M48[0],(ox-24)*z,(gy-foot)*z,48*z,64*z);out.push('morwen 身長 62px（帽子込み・48×64）');
+ g.fillStyle='rgba(255,80,80,.8)';g.fillRect(0,gy*z,c.width,z);$('cmpm').textContent=out.join(' ／ ');}
+function tick(t){const dt=last?Math.min(.05,(t-last)/1000):0;last=t;if(playing){const v=+$('speed').value,mv=v*dt;const d=$('dir').value;
+ if(d==='right')dir=1;else if(d==='left')dir=-1;else{if(x>280)dir=-1;if(x<40)dir=1}
+ x+=dir*mv;if(d!=='pingpong'){scroll+=dir*mv;x=160}dist+=mv}draw();drawCmp();requestAnimationFrame(tick)}
+$('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'一時停止':'再生'};
+Promise.all([...M48,...M96,G,...Object.values(RI)].map(i=>i.decode().catch(()=>{}))).then(()=>requestAnimationFrame(tick));
+</script></body></html>
