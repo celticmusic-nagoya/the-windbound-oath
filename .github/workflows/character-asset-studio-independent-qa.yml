@@ -1,0 +1,30 @@
+name: Character Asset Studio independent QA
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/character-asset-studio/qa/**'
+      - 'tools/character-asset-studio/layer0/morwen-master-v1.0/**'
+      - '.github/workflows/character-asset-studio-independent-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  morwen-rig-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Migration regression tests
+        run: python -m unittest discover -s tools/character-asset-studio/qa -p 'test_build_morwen_v10_candidate.py' -v
+      - name: Stance contact regression tests
+        run: python -m unittest discover -s tools/character-asset-studio/qa -p 'test_audit_stance_contact.py' -v
+      - name: v1.0 rig metadata and hierarchy audit
+        run: python tools/character-asset-studio/qa/audit_layer0_rig.py tools/character-asset-studio/layer0/morwen-master-v1.0/MASTER_BODY_SPEC.v1.0.candidate.json
+      - name: Synthetic stance fixture
+        run: python tools/character-asset-studio/qa/audit_stance_contact.py tools/character-asset-studio/qa/stance_contact_fixture_v1.json --tolerance-px 2
