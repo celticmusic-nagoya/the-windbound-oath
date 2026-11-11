@@ -1,4 +1,4 @@
-# Character Asset Studio v0.6
+# Character Asset Studio v0.7
 
 > **v0.5 の方針（CHARACTER-ASSET-STUDIO-06）:** 人間向けの画面の改善より、ChatGPT と Claude のあいだでアセットの制作・検証・データの受け渡しを自動化することを優先する。中心は `pipeline/`（コマンドライン、[pipeline/README.md](pipeline/README.md)）。画面の v0.4 の機能はそのまま残す。自動位置合わせなどの画面の改善は保留する（内部処理としての座標の正規化・位置合わせは `pipeline/` にある）。
 
@@ -77,6 +77,14 @@ python3 -m http.server 8000
 - 旧形式の `docs/BASE_BODY_SPEC.example.json` は原本のまま残し、2.0 に変換した例を `docs/BASE_BODY_SPEC.example.v2.json` として追加した。
 
 詳しくは [pipeline/README.md](pipeline/README.md)。
+
+## v0.7 4階層モジュラー基盤とモルウェン Layer 0 候補（CHARACTER-ASSET-STUDIO-10）
+- **A 作業座標の正規化:** `normalized/morwen-final-canon-20261111/`。v0.6 の実測した接地点から変換量を計算し、4方向の接地点を (600, 1540) にそろえた（PASS）。骨格の整合は評価していない（NOT_RUN）。
+- **B 4階層の共通スキーマ:** L0 BASE_BODY／L1 UNDERWEAR／L2 BASE_OUTFIT／L3 OUTER_ACCESSORIES（`profiles/layer_catalog.json`、`cas/modular-part/0.7`、`cas/modular-character/0.7`）。計測状態（VERIFIED／ESTIMATED／UNKNOWN／TEMPLATE／DESIGNED_CANDIDATE）と採用状態は別の項目にした。
+- **C モルウェン Layer 0 候補:** `layer0/morwen-v0.7/`（未承認）。測定不能の23点は計測値として登録していない。
+- **D レイヤー検証:** MANIFEST、SHA-256、PNG の検査、アンカー、ON/OFF 合成、4方向比較、フレームの整合、PR への集約。
+- **デザイン保護:** `profiles/morwen_design_protection.json` の12項目は、人間が確認するまで常に NOT_RUN。
+- v0.7 の実装が終わっても、モルウェンのマスター素体を正式に採用したことにはならない。
 
 ## v0.6 モルウェン最終正本の骨格計測（CHARACTER-ASSET-STUDIO-08）
 最終正本4方向を読み取り専用で計測し、未承認の候補を `measurements/morwen-final-canon-20261111/` に置いた。概要は [そのフォルダの README](measurements/morwen-final-canon-20261111/README.md) を参照。

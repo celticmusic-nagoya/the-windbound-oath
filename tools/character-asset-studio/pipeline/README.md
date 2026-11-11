@@ -115,3 +115,16 @@ ChatGPT と Claude のあいだで、アセット制作の指示・成果物・�
   - L0 のパーツには bodyGuidePolicy が必須。
   - 未成年キャラクターは `minor_neutral_structure` 以外を使えない。
   - DIRECTOR_APPROVED には承認記録が必須。
+
+### v0.7 のコマンド
+| コマンド | 内容 |
+|---|---|
+| `normalize-views --evidence EV --out-dir DIR` | v0.6 で実測した接地点から方向ごとの変換量を計算し、接地点を (600, 1540) に合わせた作業用コピーと `view_transforms.json` を作る（TASK A）。整数ピクセルの平行移動だけで、画素とアルファは保持される。骨格の整合は評価しない（NOT_RUN） |
+| `layer0-candidate --character ID --age-category adult\|minor --evidence EV --transforms TF --out-dir DIR` | Layer 0 素体の候補を作る（TASK D）: BASE_BODY_SPEC v2.0 の候補、方向ごとの body guide PNG、landmark_evidence、制作指示、BODY_QA_REPORT。UNKNOWN の点は計測値として登録しない |
+| `layer-manifest MODULAR --out FILE` | パーツ単位の MANIFEST（SHA-256 付き）を作り、照合する |
+| `layer-qa MODULAR [--report OUT]` | スキーマ、共有アンカー、SHA-256、PNG（寸法・RGBA・外周の透明・本物の透明部分）、L0 の接地、フレームごとの整合（欠落、zOrder、接地のばらつき、同じ体のフレームの連続）、合成の再現性、各レイヤーの ON/OFF を検査する。デザイン保護の項目とディレクターの承認は NOT_RUN |
+| `layer-preview MODULAR --out-dir DIR` | 全レイヤーの合成、レイヤーを1つずつ OFF にした合成、フレームごとの4方向比較を、元のパーツとは別のファイルに出力する（`layer_outputs.json` に記録） |
+| `compose MODULAR --view V --frame F [--layers L0_BASE_BODY,...] --out PNG` | 指定したレイヤーだけを ON にして合成する |
+| `compare-views --images front=PATH back=PATH ... --out PNG [--ground-y Y]` | 画像を並べた比較シートを作る（共通の接地線を引く） |
+
+例: `examples/synthetic_modular/`（`make_synthetic_modular.py` で作る、単純な図形だけの4階層・4方向・2フレームの例）。結果: `../qa/v0.7/`。

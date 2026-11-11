@@ -52,30 +52,12 @@
     },
     {
       "detail": {
-        "schema": "cas/qa-report/0.5"
+        "schema": "cas/modular-character/0.7"
       },
       "id": "schema_valid",
       "kind": "automated",
       "result": "PASS",
-      "scope": "tools/character-asset-studio/qa/android_device_qa_20261111.json"
-    },
-    {
-      "detail": {
-        "schema": "cas/qa-report/0.5"
-      },
-      "id": "schema_valid",
-      "kind": "automated",
-      "result": "PASS",
-      "scope": "tools/character-asset-studio/qa/pipeline/protect_verify.json"
-    },
-    {
-      "detail": {
-        "schema": "cas/qa-report/0.5"
-      },
-      "id": "schema_valid",
-      "kind": "automated",
-      "result": "PASS",
-      "scope": "tools/character-asset-studio/qa/pipeline/demo_candidates_qa.json"
+      "scope": "tools/character-asset-studio/pipeline/examples/synthetic_modular/modular_character.json"
     },
     {
       "detail": {
@@ -84,14 +66,77 @@
       "id": "schema_valid",
       "kind": "automated",
       "result": "PASS",
-      "scope": "tools/character-asset-studio/MANIFEST.json"
+      "scope": "tools/character-asset-studio/pipeline/examples/synthetic_modular/LAYER_MANIFEST.json"
+    },
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/2.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/BASE_BODY_SPEC.candidate.json"
+    },
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/2.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-v0.7/BASE_BODY_SPEC.candidate.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/production-brief/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-v0.7/production_brief.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-v0.7/BODY_QA_REPORT.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/normalize_qa.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/v0.7/synthetic_layer_qa.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/android_device_qa_20261111.json"
     }
   ],
   "counts": {
     "BLOCKED": 0,
     "FAIL": 0,
     "NOT_RUN": 0,
-    "PASS": 9
+    "PASS": 14
   },
   "overall": "PASS",
   "qaKind": "automated_self_qa",

@@ -1,10 +1,10 @@
 {
   "files": [
     {
-      "bytes": 17134,
+      "bytes": 18367,
       "path": "tools/character-asset-studio/README.md",
       "role": "tool",
-      "sha256": "61da31046810109b30624ab7e2f0e9430507eab7652f58df03fff7c3bca93881",
+      "sha256": "9b57c9fd429bee3cec969d8251f47aaca8cb10806b2ed613cc4862b001b6f9e9",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -416,17 +416,17 @@
       "status": "UNAPPROVED_REFERENCE"
     },
     {
-      "bytes": 14908,
+      "bytes": 16911,
       "path": "tools/character-asset-studio/pipeline/README.md",
       "role": "pipeline",
-      "sha256": "551c3f71e6ac0dd1a648a09ba1120580ef90daeca787c6bc5d0b935334c4dc5c",
+      "sha256": "799cbad0dc020112b258d30d854755a55ad7928e52a5fc380303a14c6df42b33",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 13902,
+      "bytes": 16636,
       "path": "tools/character-asset-studio/pipeline/cas.py",
       "role": "pipeline",
-      "sha256": "e130a13c797be0a33cec5f97887bf81c5b587ffd4df299628273195110297fcd",
+      "sha256": "42c441f690222ff85af77bd8e86ef489acf1fd1bbcfb975f6c80a3209ef9de46",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -486,6 +486,13 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
+      "bytes": 10430,
+      "path": "tools/character-asset-studio/pipeline/caslib/layers.py",
+      "role": "pipeline",
+      "sha256": "cde6114c32de41838f22873efef0132e11f9e34c5189c6505bdd5b24cbf4dbc0",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
       "bytes": 3920,
       "path": "tools/character-asset-studio/pipeline/caslib/manifest.py",
       "role": "pipeline",
@@ -532,6 +539,13 @@
       "path": "tools/character-asset-studio/pipeline/examples/demo_candidates.asset-set.json",
       "role": "pipeline",
       "sha256": "232e822c5b8027c66011e88b94de80a01c7d53f53fded8e87ac7f30f42a4c6f7",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4699,
+      "path": "tools/character-asset-studio/pipeline/examples/make_synthetic_modular.py",
+      "role": "pipeline_example",
+      "sha256": "5b6f68caa1a7eb30ee83c59f1794bb9b37da5114e81a30b168ca0007623fef20",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -622,6 +636,420 @@
       "status": "UNAPPROVED_INSTRUCTION"
     },
     {
+      "bytes": 15943,
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/LAYER_MANIFEST.json",
+      "role": "pipeline_example",
+      "sha256": "f5b63e488f4f69b388539e0e3a3639adf3e993b7db187f414e0e6b694bb10250",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 47400,
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/modular_character.json",
+      "role": "pipeline_example",
+      "sha256": "72f53ee7660ccb9c8da2351c4734d313bdb977882760297c52e38e541e368224",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 816,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f00/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "a82e3b41cb3f55495066f7572d7110187dbacca1cc9a2287833386d8bd320fac",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 475,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f00/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "825e41cfebeaab4cb235327eae517911dcafa194ad533c8cefeffe4c2c1227f1",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f00/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f00/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f00/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 801,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f01/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "061ae03023fd68eb134a6d99bbcb5b8b485fc824ee638bad1639d5987b9f60db",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 473,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f01/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "2b449f4e30bb406c8ff7f476f4f50e6d7b8d65bce0440c8f1f8f453b219baffb",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f01/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f01/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/back/f01/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 816,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f00/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "a82e3b41cb3f55495066f7572d7110187dbacca1cc9a2287833386d8bd320fac",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 475,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f00/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "825e41cfebeaab4cb235327eae517911dcafa194ad533c8cefeffe4c2c1227f1",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f00/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f00/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f00/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 801,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f01/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "061ae03023fd68eb134a6d99bbcb5b8b485fc824ee638bad1639d5987b9f60db",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 473,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f01/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "2b449f4e30bb406c8ff7f476f4f50e6d7b8d65bce0440c8f1f8f453b219baffb",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f01/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f01/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/front/f01/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 815,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f00/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "64468c7ed7a2a76462bab69e5821a8b60b31a1e11693c6a9d91895898711ca08",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 475,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f00/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "825e41cfebeaab4cb235327eae517911dcafa194ad533c8cefeffe4c2c1227f1",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f00/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f00/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f00/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 801,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f01/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "ab49045f570b1f38ba6a6dfc6ca42c75b815d480604493679f7f4c1aef39ecda",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 473,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f01/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "2b449f4e30bb406c8ff7f476f4f50e6d7b8d65bce0440c8f1f8f453b219baffb",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f01/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f01/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/left/f01/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 815,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f00/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "64468c7ed7a2a76462bab69e5821a8b60b31a1e11693c6a9d91895898711ca08",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 475,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f00/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "825e41cfebeaab4cb235327eae517911dcafa194ad533c8cefeffe4c2c1227f1",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f00/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f00/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f00/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 801,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f01/L0_BASE_BODY_body.png",
+      "role": "pipeline_example",
+      "sha256": "ab49045f570b1f38ba6a6dfc6ca42c75b815d480604493679f7f4c1aef39ecda",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 473,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f01/L1_UNDERWEAR_socks.png",
+      "role": "pipeline_example",
+      "sha256": "2b449f4e30bb406c8ff7f476f4f50e6d7b8d65bce0440c8f1f8f453b219baffb",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 513,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f01/L2_BASE_OUTFIT_skirt.png",
+      "role": "pipeline_example",
+      "sha256": "245e127453dbe708b7fc7d6ec1ab7c9f120bd3231f26dff772563c03e5e733e9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 528,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f01/L3_OUTER_ACCESSORIES_hat.png",
+      "role": "pipeline_example",
+      "sha256": "48de9ae081361c4b5f1f39ac32596ce5d715933bdf4bce6f6fb96ab33a4dc0a4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 721,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/pipeline/examples/synthetic_modular/parts/right/f01/L3_OUTER_ACCESSORIES_robe_rear.png",
+      "role": "pipeline_example",
+      "sha256": "5a486cee55f2cde02e7df39fb980fb17c0b9f8d54254a6657149dc43c7871ae7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
       "bytes": 3907,
       "path": "tools/character-asset-studio/pipeline/protected_assets.json",
       "role": "pipeline",
@@ -699,10 +1127,10 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 48897,
+      "bytes": 54119,
       "path": "tools/character-asset-studio/pipeline/tests/test_pipeline.py",
       "role": "pipeline",
-      "sha256": "0ba661a433c53d5cb29bac60eafcc4d31c6c85b60bdd102403b398135e9310fb",
+      "sha256": "a3ac0baee8d3eab1a90548565dc2b2e79d186b727f8fc7741b6606b72d1ebf5a",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -787,6 +1215,13 @@
       "path": "tools/character-asset-studio/qa/QA_REPORT_v0.6.md",
       "role": "qa_evidence",
       "sha256": "865c8ec00eeeecca02ee3001220f71ed9ef495928dbde0437a7aedaa502e4872",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 4109,
+      "path": "tools/character-asset-studio/qa/QA_REPORT_v0.7.md",
+      "role": "qa_evidence",
+      "sha256": "adf140c3e7c8de5873552a1bbbefae343120b0264dc90743c376ae16315c8b52",
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
@@ -1059,11 +1494,472 @@
       "status": "UNAPPROVED_CANDIDATE"
     },
     {
-      "bytes": 2655,
+      "bytes": 4010,
       "path": "tools/character-asset-studio/qa/pipeline/schema_validation.json",
       "role": "qa_evidence",
-      "sha256": "17e823ca23843367b6e51ac65ab1e907719b8aa56a76b5f5b02aa508223827a5",
+      "sha256": "ee3d9335fe8464ed91f43e6ced2bc6bbfbb061f31f924c0af2a318d918a6c142",
       "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1283,
+      "path": "tools/character-asset-studio/qa/v0.7/layer_outputs.json",
+      "role": "qa_evidence",
+      "sha256": "378308004e81a0f93518745c465d864a315fe653b02aaed35cb5e45ab342e696",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 5493542,
+      "height": 1652,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/morwen_normalized_4views.png",
+      "role": "qa_evidence",
+      "sha256": "b55a2ba03dadc27223593a306bcfd72d9e94f77e5c6f3b4cb86b334f4875e2ea",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 4860
+    },
+    {
+      "bytes": 95487,
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_layer_qa.json",
+      "role": "qa_evidence",
+      "sha256": "446e901f71bbf60a3a127783ada492f6a8e46668a08c923fe3c58769dd9fa7ad",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1208,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f00_all.png",
+      "role": "qa_evidence",
+      "sha256": "7e7bc95e09f5ffd335feac298cad3a6f1ba4f6f30cf4e7e01fe345afd798823a",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1022,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f00_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "ccb8969c6b6ca331fef2ddd203c0b8e51967748122fd10210dc91f5d1e6911d4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1157,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f00_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "04e5e53047e27805dd9fbbc0b424b2b6f14366292126419da963289a4f9f6163",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1119,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f00_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "70db922b501ef0c7a3c3c9daba4d442a9c896af71c41248c32b93e70dcaefe05",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 915,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f00_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "fcd1b4752ce69116726aeb26f03011f2ffddecf720a95206d4056c054e135fb9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1185,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f01_all.png",
+      "role": "qa_evidence",
+      "sha256": "eb335080e0d002abba7ac2f5c2cb20227f563ae8fe512a677f671814f0666fa6",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1019,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f01_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "1792c31be2b66e3dd59db2e5798d4afb279f6955fa08b19eb81a747ce3579d33",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1149,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f01_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "49ba9303a323fa77999561d317a9e52fa4ed9491dc2c4e31db189ab54d966597",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1096,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f01_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "e0700cc5a8d6c1084d5b32d7d136072009388033ac71776f8d298224691dd376",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 909,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/back_f01_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "7e91eeee58301e634c7a395c4ddb5a0212e4532e766ee698c19eab9e69526f15",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 4628,
+      "height": 372,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/compare_4views_f00.png",
+      "role": "qa_evidence",
+      "sha256": "edee7507eadc66d92b5ad592dd74af60a08eae50b420a72400b1acaaa76ae9b7",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1020
+    },
+    {
+      "bytes": 4585,
+      "height": 372,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/compare_4views_f01.png",
+      "role": "qa_evidence",
+      "sha256": "a1199a054e37f46365d105bc4bc39361800d72d0f4317963f43e2896b2bca6c0",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 1020
+    },
+    {
+      "bytes": 836,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/custom_front_f01_L0_L1.png",
+      "role": "qa_evidence",
+      "sha256": "193b1f384894f06a29fa5cdacfee26b11af0ae7f1fd7bb393bb667957bfe3417",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1208,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f00_all.png",
+      "role": "qa_evidence",
+      "sha256": "7e7bc95e09f5ffd335feac298cad3a6f1ba4f6f30cf4e7e01fe345afd798823a",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1022,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f00_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "ccb8969c6b6ca331fef2ddd203c0b8e51967748122fd10210dc91f5d1e6911d4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1157,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f00_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "04e5e53047e27805dd9fbbc0b424b2b6f14366292126419da963289a4f9f6163",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1119,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f00_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "70db922b501ef0c7a3c3c9daba4d442a9c896af71c41248c32b93e70dcaefe05",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 915,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f00_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "fcd1b4752ce69116726aeb26f03011f2ffddecf720a95206d4056c054e135fb9",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1185,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f01_all.png",
+      "role": "qa_evidence",
+      "sha256": "eb335080e0d002abba7ac2f5c2cb20227f563ae8fe512a677f671814f0666fa6",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1019,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f01_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "1792c31be2b66e3dd59db2e5798d4afb279f6955fa08b19eb81a747ce3579d33",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1149,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f01_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "49ba9303a323fa77999561d317a9e52fa4ed9491dc2c4e31db189ab54d966597",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1096,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f01_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "e0700cc5a8d6c1084d5b32d7d136072009388033ac71776f8d298224691dd376",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 909,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/front_f01_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "7e91eeee58301e634c7a395c4ddb5a0212e4532e766ee698c19eab9e69526f15",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 20212,
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/layer_outputs.json",
+      "role": "qa_evidence",
+      "sha256": "51449803787d137c31016237c73b76dfad01fca2a74c998277a7a32fcadb6181",
+      "status": "UNAPPROVED_CANDIDATE"
+    },
+    {
+      "bytes": 1206,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f00_all.png",
+      "role": "qa_evidence",
+      "sha256": "c2014b1a5e0d27cc44fb9c33a5ff9c30e385090cab3a845c644db324fe3bbabe",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1022,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f00_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "ccb8969c6b6ca331fef2ddd203c0b8e51967748122fd10210dc91f5d1e6911d4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1166,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f00_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "d053216f74bbbe390128a85997dd39df6f95bc2692e2923fd95d4fbe7c39b89e",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1105,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f00_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "161c33240819f88bc455d9dfb951e11b54f49b7f2f9c260f388e3f20ecd6e3b4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 951,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f00_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "0378b558ecd4d8c5122608ff0ee1d4eea0b6d1c827cffd4a008075d0cee05f6d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1186,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f01_all.png",
+      "role": "qa_evidence",
+      "sha256": "8f511d39fe6c43177c668ddad48c5ff931b6544d661094219252fe191389ce2d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1019,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f01_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "1792c31be2b66e3dd59db2e5798d4afb279f6955fa08b19eb81a747ce3579d33",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1148,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f01_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "52d16aa6a38af2928e07556156f08527aa3af0a667da24fd6042db9d6baba826",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1096,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f01_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "84e11a23fb00c795f011e9eddfb7aae2c04ada43b9f575fe3f22cc88b3c8676a",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 933,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/left_f01_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "4808106b5649d0826b1cc62db4cec69888ca4c8dc9d80b3660afdfc586dbee95",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1206,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f00_all.png",
+      "role": "qa_evidence",
+      "sha256": "c2014b1a5e0d27cc44fb9c33a5ff9c30e385090cab3a845c644db324fe3bbabe",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1022,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f00_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "ccb8969c6b6ca331fef2ddd203c0b8e51967748122fd10210dc91f5d1e6911d4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1166,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f00_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "d053216f74bbbe390128a85997dd39df6f95bc2692e2923fd95d4fbe7c39b89e",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1105,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f00_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "161c33240819f88bc455d9dfb951e11b54f49b7f2f9c260f388e3f20ecd6e3b4",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 951,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f00_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "0378b558ecd4d8c5122608ff0ee1d4eea0b6d1c827cffd4a008075d0cee05f6d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1186,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f01_all.png",
+      "role": "qa_evidence",
+      "sha256": "8f511d39fe6c43177c668ddad48c5ff931b6544d661094219252fe191389ce2d",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1019,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f01_without_L0_BASE_BODY.png",
+      "role": "qa_evidence",
+      "sha256": "1792c31be2b66e3dd59db2e5798d4afb279f6955fa08b19eb81a747ce3579d33",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1148,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f01_without_L1_UNDERWEAR.png",
+      "role": "qa_evidence",
+      "sha256": "52d16aa6a38af2928e07556156f08527aa3af0a667da24fd6042db9d6baba826",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 1096,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f01_without_L2_BASE_OUTFIT.png",
+      "role": "qa_evidence",
+      "sha256": "84e11a23fb00c795f011e9eddfb7aae2c04ada43b9f575fe3f22cc88b3c8676a",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
+    },
+    {
+      "bytes": 933,
+      "height": 320,
+      "mode": "RGBA",
+      "path": "tools/character-asset-studio/qa/v0.7/synthetic_previews/right_f01_without_L3_OUTER_ACCESSORIES.png",
+      "role": "qa_evidence",
+      "sha256": "4808106b5649d0826b1cc62db4cec69888ca4c8dc9d80b3660afdfc586dbee95",
+      "status": "UNAPPROVED_CANDIDATE",
+      "width": 240
     },
     {
       "bytes": 7278,

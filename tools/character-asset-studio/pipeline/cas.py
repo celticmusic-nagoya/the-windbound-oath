@@ -15,6 +15,7 @@ jsonschema (all usually present in AI sandboxes). Run from anywhere; paths are r
   protect-diff --base REF                  FAIL if a git change set touches a protected path
   pr-summary REPORT... [--out MD]          Markdown summary of QA reports for a Draft PR
   pr-append --repo O/R --pr N --file MD    idempotent section in a DRAFT PR body (replace by --key; never merges)
+  v0.6/v0.7: measure-canon, normalize-views, layer0-candidate, layer-manifest, layer-qa, layer-preview, compose, compare-views
 
 QA verdicts and exit codes are separate. Every QA command prints JSON with "overall" (PASS/FAIL/BLOCKED/NOT_RUN)
 and "adoptionReady" (true only if everything incl. human checks PASSed). The exit code says whether the command
@@ -139,6 +140,51 @@ def cmd_layer0_candidate(a):
     return _emit(rep, a)
 
 
+def _modular(a):
+    return core.load_json(a.modular)
+
+
+def cmd_layer_manifest(a):
+    from caslib import layers
+    m = layers.fill_bytes(layers.layer_manifest(_modular(a)))
+    _write(a.out, core.stable_dumps(m), a.overwrite)
+    v = manifest.verify(m, check_untracked=False)
+    print(json.dumps({"manifest": a.out, "files": len(m["files"]), "schema": schemas.validate(m)["result"], "sha256Verify": v["overall"]}))
+    return gate_code(a.gate, v["overall"], False)
+
+
+def cmd_layer_qa(a):
+    from caslib import layers
+    return _emit(layers.layer_qa(_modular(a), a.modular), a)
+
+
+def cmd_layer_preview(a):
+    from caslib import layers
+    entries = layers.previews(_modular(a), a.out_dir, a.overwrite)
+    print(json.dumps({"written": len(entries), "outputs": core.rel(Path(a.out_dir) / layers.OUTPUTS)}))
+    return EXIT_OK
+
+
+def cmd_compose(a):
+    from caslib import layers, modular
+    doc = _modular(a)
+    lay = a.layers.split(",") if a.layers else None
+    img, used = modular.compose(doc, a.view, a.frame, lay)
+    e = layers._save(img, a.out, a.overwrite, core.REPO_ROOT)
+    e.update({"kind": "composite", "view": a.view, "frame": a.frame, "layers": lay or modular.LAYERS, "parts": used})
+    layers.record_outputs(Path(a.out).parent, [e])
+    print(json.dumps(e))
+    return EXIT_OK
+
+
+def cmd_compare_views(a):
+    from caslib import layers
+    pairs = dict(x.split("=", 1) for x in a.images)
+    e = layers.compare_images(pairs, a.out, a.ground_y, a.overwrite)
+    print(json.dumps({"written": e["path"], "sha256": e["sha256"]}))
+    return EXIT_OK
+
+
 def cmd_manifest_build(a):
     m = manifest.build(a.root, a.status, a.note)
     _write(a.out, core.stable_dumps(m), a.overwrite)
@@ -233,6 +279,13 @@ def main(argv=None):
     p = writes(gated(sp.add_parser("layer0-candidate"))); p.add_argument("--character", required=True); p.add_argument("--age-category", required=True, choices=["adult", "minor"])
     p.add_argument("--evidence", required=True); p.add_argument("--transforms", required=True); p.add_argument("--out-dir", required=True)
     p.set_defaults(fn=cmd_layer0_candidate, report=None)
+    p = writes(gated(sp.add_parser("layer-manifest"))); p.add_argument("modular"); p.add_argument("--out", required=True); p.set_defaults(fn=cmd_layer_manifest)
+    p = writes(gated(sp.add_parser("layer-qa"))); p.add_argument("modular"); p.add_argument("--report"); p.set_defaults(fn=cmd_layer_qa)
+    p = writes(sp.add_parser("layer-preview")); p.add_argument("modular"); p.add_argument("--out-dir", required=True); p.set_defaults(fn=cmd_layer_preview)
+    p = writes(sp.add_parser("compose")); p.add_argument("modular"); p.add_argument("--view", required=True, choices=core.VIEWS); p.add_argument("--frame", type=int, default=0)
+    p.add_argument("--layers", help="comma-separated layer ids to turn ON (default: all)"); p.add_argument("--out", required=True); p.set_defaults(fn=cmd_compose)
+    p = writes(sp.add_parser("compare-views")); p.add_argument("--images", nargs="+", required=True, help="label=path ..."); p.add_argument("--out", required=True)
+    p.add_argument("--ground-y", type=int); p.set_defaults(fn=cmd_compare_views)
     p = sp.add_parser("body-spec-upgrade"); p.add_argument("src"); p.add_argument("--out", required=True); p.add_argument("--preset"); p.set_defaults(fn=cmd_body_spec_upgrade)
     p = writes(sp.add_parser("manifest-build")); p.add_argument("root"); p.add_argument("--out", required=True); p.add_argument("--status", default="UNAPPROVED_CANDIDATE"); p.add_argument("--note"); p.set_defaults(fn=cmd_manifest_build)
     p = writes(gated(sp.add_parser("manifest-verify"))); p.add_argument("file"); p.add_argument("--report"); p.set_defaults(fn=cmd_manifest_verify)

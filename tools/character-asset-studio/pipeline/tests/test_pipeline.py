@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0, layers  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -764,6 +764,92 @@ class V07Layer0(unittest.TestCase):
             self.assertEqual(a, b, n)
         for v in core.VIEWS:
             self.assertEqual(core.sha256_file(self.tmp / "o" / f"{v}_body_guide.png"), core.sha256_file(self.COMMITTED / f"{v}_body_guide.png"))
+
+
+class V07Layers(unittest.TestCase):
+    """CHARACTER-ASSET-STUDIO-10 TASK E: layer verification pipeline."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="cas07e_"))
+        self.doc = make_modular(self.tmp)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def res(self, rep, cid):
+        return [c["result"] for c in rep["checks"] if c["id"] == cid]
+
+    def test_clean_set_passes_automated(self):
+        rep = layers.layer_qa(self.doc, repo_root=self.tmp)
+        auto = [c for c in rep["checks"] if c["kind"] == "automated" and c["result"] not in ("PASS",)]
+        self.assertEqual([c for c in auto if c["result"] == "FAIL"], [])
+        self.assertFalse(rep["adoptionReady"])
+        self.assertEqual(schemas.validate(rep)["result"], "PASS")
+        m = layers.fill_bytes(layers.layer_manifest(self.doc), self.tmp)
+        self.assertEqual(schemas.validate(m)["result"], "PASS")
+        self.assertEqual(manifest.verify(m, repo_root=self.tmp, check_untracked=False)["overall"], "PASS")
+
+    def test_defects_detected(self):
+        d = copy.deepcopy(self.doc)
+        parts = d["parts"]
+        Image.new("RGB", (120, 160), (0, 0, 0)).save(self.tmp / parts[1]["sourceAsset"]["path"])            # RGB, no alpha
+        im = Image.open(self.tmp / parts[2]["sourceAsset"]["path"]).copy(); im.putpixel((0, 5), (255, 0, 0, 255)); im.save(self.tmp / parts[2]["sourceAsset"]["path"])
+        for p in (parts[1], parts[2]):
+            sha = core.sha256_file(self.tmp / p["sourceAsset"]["path"]); p["sha256"] = p["sourceAsset"]["sha256"] = sha
+        body0 = [p for p in parts if p["view"] == "back" and p["partId"] == "body"]
+        shutil.copy(self.tmp / body0[0]["sourceAsset"]["path"], self.tmp / body0[1]["sourceAsset"]["path"])
+        body0[1]["sha256"] = body0[1]["sourceAsset"]["sha256"] = core.sha256_file(self.tmp / body0[1]["sourceAsset"]["path"])
+        d["parts"] = [p for p in parts if not (p["view"] == "left" and p["partId"] == "skirt" and p["frameIndex"] == 1)]
+        rep = layers.layer_qa(d, repo_root=self.tmp)
+        self.assertIn("FAIL", self.res(rep, "png_rgba"))
+        self.assertIn("FAIL", self.res(rep, "transparent_border"))
+        self.assertIn("FAIL", self.res(rep, "body_frames_not_identical"))
+        self.assertIn("FAIL", self.res(rep, "frames_complete"))
+        Path(self.tmp / parts[5]["sourceAsset"]["path"]).write_bytes(Path(self.tmp / parts[6]["sourceAsset"]["path"]).read_bytes())
+        self.assertIn("FAIL", self.res(layers.layer_qa(d, repo_root=self.tmp), "file_sha256"))
+
+    def test_layer_toggle_and_reproducible_compositing(self):
+        import numpy as np
+        a, used = modular.compose(self.doc, "front", 0, None, repo_root=self.tmp)
+        b, _ = modular.compose(self.doc, "front", 0, None, repo_root=self.tmp)
+        self.assertEqual(a.tobytes(), b.tobytes())
+        self.assertEqual(used, ["robe_rear", "body", "stockings", "skirt"])
+        self.assertEqual(a.getpixel((35, 100)), (90, 20, 120, 255), "rear robe visible beside the body")
+        self.assertEqual(a.getpixel((60, 40)), (200, 200, 200, 255), "body drawn over the rear robe")
+        for layer in modular.LAYERS:
+            c, _ = modular.compose(self.doc, "front", 0, [l for l in modular.LAYERS if l != layer], repo_root=self.tmp)
+            self.assertNotEqual(c.tobytes(), a.tobytes(), layer)
+        only0, _ = modular.compose(self.doc, "front", 0, ["L0_BASE_BODY"], repo_root=self.tmp)
+        self.assertEqual(int((np.asarray(only0)[..., 3] > 0).sum()), 21 * 125)
+        with self.assertRaises(ValueError):
+            modular.compose(self.doc, "front", 0, None, out=self.tmp / self.doc["parts"][0]["sourceAsset"]["path"], repo_root=self.tmp)
+
+    def test_previews_are_separate_and_regenerable(self):
+        before = {p["sourceAsset"]["path"]: core.sha256_file(self.tmp / p["sourceAsset"]["path"]) for p in self.doc["parts"]}
+        out = self.tmp / "prev"
+        e = layers.previews(self.doc, out, repo_root=self.tmp)
+        self.assertEqual(len(e), 4 * 2 * 5 + 2)
+        with self.assertRaises(core.PolicyError):
+            layers.previews(self.doc, out, repo_root=self.tmp)
+        e2 = layers.previews(self.doc, out, overwrite=True, repo_root=self.tmp)
+        self.assertEqual([x["sha256"] for x in e], [x["sha256"] for x in e2], "reproducible")
+        self.assertEqual({p: core.sha256_file(self.tmp / p) for p in before}, before, "sources untouched")
+        self.assertEqual(core.load_json(out / "layer_outputs.json")["schema"], "cas/layer-outputs/0.7")
+
+    def test_committed_synthetic_example(self):
+        ex = PIPE / "examples" / "synthetic_modular" / "modular_character.json"
+        doc = core.load_json(ex)
+        rep = layers.layer_qa(doc)
+        self.assertEqual(rep["counts"]["FAIL"] + rep["counts"]["BLOCKED"], 0)
+        self.assertFalse(rep["adoptionReady"])
+        prev = STUDIO / "qa" / "v0.7" / "synthetic_previews"
+        img, _ = modular.compose(doc, "left", 1, None)
+        self.assertEqual(sha256_png(img), sha256_png(Image.open(prev / "left_f01_all.png")))
+
+
+def sha256_png(img):
+    import hashlib
+    return hashlib.sha256(img.convert("RGBA").tobytes()).hexdigest()
 
 
 if __name__ == "__main__":
