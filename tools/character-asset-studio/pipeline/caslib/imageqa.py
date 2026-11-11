@@ -19,6 +19,14 @@ HUMAN_CHECKS = [
 ]
 
 
+def design_protection_checks(character_id):
+    """Mandatory human visual checks protecting an adopted design (profiles/<id>_design_protection.json)."""
+    p = STUDIO_DIR / "profiles" / f"{character_id}_design_protection.json"
+    if not p.exists():
+        return []
+    return [(f"design:{i['id']}", i["label"]) for i in load_json(p)["items"]]
+
+
 def _tol(doc):
     c = doc["canvas"]
     t = dict(DEFAULT_TOL)
@@ -197,6 +205,7 @@ def run(doc, doc_path=None, repo_root=REPO_ROOT):
     human = list(HUMAN_CHECKS)
     if cons.exists():
         human += [(f"constraint:{c['id']}", c["label"]) for c in load_json(cons)["constraints"]]
+    human += design_protection_checks(doc["characterId"])
     for cid, label in human:
         r = reviews.get(cid)
         if r:

@@ -13,7 +13,7 @@ from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PIPE))
-from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular  # noqa: E402
+from caslib import core, schemas, imageqa, manifest, report, brief, align, prbody, bodyspec, canonmeasure, normalize, modular, layer0  # noqa: E402
 from PIL import Image  # noqa: E402
 
 STUDIO = PIPE.parent
@@ -689,6 +689,81 @@ class V07Schema(unittest.TestCase):
         cat = core.load_json(STUDIO / "profiles" / "layer_catalog.json")
         self.assertEqual([l["id"] for l in cat["layers"]], modular.LAYERS)
         self.assertEqual(schemas.validate_file(STUDIO / "measurements" / "morwen-final-canon-20261111" / "BASE_BODY_SPEC.candidate.json")["result"], "PASS")
+
+
+class V07Layer0(unittest.TestCase):
+    """CHARACTER-ASSET-STUDIO-10 TASK D/F: Morwen Layer 0 candidate."""
+    EV = STUDIO / "measurements" / "morwen-final-canon-20261111" / "measurement_evidence.json"
+    TF = STUDIO / "normalized" / "morwen-final-canon-20261111" / "view_transforms.json"
+    COMMITTED = STUDIO / "layer0" / "morwen-v0.7"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = PIPE / "tests" / "_tmp_l0"            # inside the repository so output paths are repo-relative
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+        cls.lev, cls.rep = layer0.run("morwen", "minor", cls.EV, cls.TF, cls.tmp / "o")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_outputs_and_schemas(self):
+        o = self.tmp / "o"
+        for n in ["BASE_BODY_SPEC.candidate.json", "landmark_evidence.json", "BODY_QA_REPORT.json", "production_brief.json"] + [f"{v}_body_guide.png" for v in core.VIEWS]:
+            self.assertTrue((o / n).exists(), n)
+        self.assertEqual(schemas.validate_file(o / "BASE_BODY_SPEC.candidate.json")["result"], "PASS")
+        self.assertEqual(schemas.validate_file(o / "production_brief.json")["result"], "PASS")
+        self.assertEqual(schemas.validate_file(o / "BODY_QA_REPORT.json")["result"], "PASS")
+        self.assertEqual(Image.open(o / "front_body_guide.png").mode, "RGBA")
+        self.assertEqual(self.lev["bodyGuidePolicy"], "minor_neutral_structure")
+
+    def test_hidden_points_not_registered_as_measured(self):
+        spec = core.load_json(self.tmp / "o" / "BASE_BODY_SPEC.candidate.json")
+        self.assertEqual(self.lev["summary"]["measurementStatusCounts"], {"VERIFIED": 10, "ESTIMATED": 7, "UNKNOWN": 23})
+        for v in core.VIEWS:
+            for k, r in self.lev["views"][v]["landmarks"].items():
+                s = spec["landmarks"][v][k]
+                if r["measurementStatus"] == "UNKNOWN":
+                    self.assertEqual((s["source"], s["confidence"]), ("template_default", "provisional"))
+                    self.assertNotIn("px", r)
+                else:
+                    self.assertEqual(s["source"], "measured_reference")
+            for k in ("headTop", "shoulderLeft", "shoulderRight", "pelvis"):
+                self.assertEqual(self.lev["views"][v]["landmarks"][k]["measurementStatus"], "UNKNOWN")
+        self.assertEqual(self.lev["designedCandidates"]["commonKneeHeight"]["measurementStatus"], "DESIGNED_CANDIDATE")
+        self.assertTrue(all(s["source"] != "manual_edit" for v in core.VIEWS for s in spec["landmarks"][v].values()), "designed values stay out of the spec")
+        brief_lm = core.load_json(self.tmp / "o" / "production_brief.json")["views"]["front"]["landmarks"]
+        self.assertNotIn("headTop", brief_lm)
+        self.assertFalse(self.rep["adoptionReady"])
+
+    def test_normalised_coordinates_and_ground(self):
+        for v in core.VIEWS:
+            g = self.lev["views"][v]["landmarks"]["ground"]
+            self.assertEqual((g["px"], g["measurementStatus"]), ([600, 1540], "VERIFIED"))
+            for r in self.lev["views"][v]["landmarks"].values():
+                if "px" in r:
+                    self.assertEqual(core.to_pixel(r["n"], canonmeasure.CANVAS), r["px"])
+
+    def test_design_protection_items_are_not_run(self):
+        ids = [c["id"] for c in self.rep["checks"] if c["id"].startswith("design:")]
+        self.assertEqual(len(ids), 12)
+        self.assertTrue(all(c["result"] == "NOT_RUN" and c["kind"] == "human" for c in self.rep["checks"] if c["id"].startswith("design:")))
+        d = Path(tempfile.mkdtemp())
+        doc = asset_set(d, [(0, figure(d / "dp.png"))]); doc["characterId"] = "morwen"
+        rep = imageqa.run(doc, repo_root=d)
+        shutil.rmtree(d, ignore_errors=True)
+        self.assertEqual(sum(1 for c in rep["checks"] if c["id"].startswith("design:") and c["result"] == "NOT_RUN"), 12)
+
+    def test_committed_candidate_reproducible(self):
+        for n in ("BASE_BODY_SPEC.candidate.json", "BODY_QA_REPORT.json", "landmark_evidence.json"):
+            a, b = core.load_json(self.tmp / "o" / n), core.load_json(self.COMMITTED / n)
+            for d in (a, b):
+                d.pop("subject", None); d.pop("bodyGuides", None)
+                if "referenceBody" in d:
+                    d["referenceBody"][-1].pop("path", None)
+            self.assertEqual(a, b, n)
+        for v in core.VIEWS:
+            self.assertEqual(core.sha256_file(self.tmp / "o" / f"{v}_body_guide.png"), core.sha256_file(self.COMMITTED / f"{v}_body_guide.png"))
 
 
 if __name__ == "__main__":

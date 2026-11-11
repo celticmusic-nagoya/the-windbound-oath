@@ -132,6 +132,13 @@ def cmd_normalize_views(a):
     return _emit(rep, a)
 
 
+def cmd_layer0_candidate(a):
+    from caslib import layer0
+    lev, rep = layer0.run(a.character, a.age_category, a.evidence, a.transforms, a.out_dir, a.overwrite)
+    print(json.dumps({"measurementStatusCounts": lev["summary"]["measurementStatusCounts"], "commonKneeHeight": lev["summary"]["commonKneeHeight"]}))
+    return _emit(rep, a)
+
+
 def cmd_manifest_build(a):
     m = manifest.build(a.root, a.status, a.note)
     _write(a.out, core.stable_dumps(m), a.overwrite)
@@ -223,6 +230,9 @@ def main(argv=None):
     p.add_argument("--out-dir", required=True); p.set_defaults(fn=cmd_measure_canon)
     p = writes(gated(sp.add_parser("normalize-views"))); p.add_argument("--evidence", required=True); p.add_argument("--out-dir", required=True)
     p.set_defaults(fn=cmd_normalize_views, report=None)
+    p = writes(gated(sp.add_parser("layer0-candidate"))); p.add_argument("--character", required=True); p.add_argument("--age-category", required=True, choices=["adult", "minor"])
+    p.add_argument("--evidence", required=True); p.add_argument("--transforms", required=True); p.add_argument("--out-dir", required=True)
+    p.set_defaults(fn=cmd_layer0_candidate, report=None)
     p = sp.add_parser("body-spec-upgrade"); p.add_argument("src"); p.add_argument("--out", required=True); p.add_argument("--preset"); p.set_defaults(fn=cmd_body_spec_upgrade)
     p = writes(sp.add_parser("manifest-build")); p.add_argument("root"); p.add_argument("--out", required=True); p.add_argument("--status", default="UNAPPROVED_CANDIDATE"); p.add_argument("--note"); p.set_defaults(fn=cmd_manifest_build)
     p = writes(gated(sp.add_parser("manifest-verify"))); p.add_argument("file"); p.add_argument("--report"); p.set_defaults(fn=cmd_manifest_verify)

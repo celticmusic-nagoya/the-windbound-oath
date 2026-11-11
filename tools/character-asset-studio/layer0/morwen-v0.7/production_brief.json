@@ -1,0 +1,575 @@
+{
+  "acceptanceChecks": [
+    {
+      "id": "schema_valid",
+      "kind": "automated"
+    },
+    {
+      "id": "status_unapproved",
+      "kind": "automated"
+    },
+    {
+      "id": "frame_set_complete",
+      "kind": "automated"
+    },
+    {
+      "id": "file_sha256",
+      "kind": "automated"
+    },
+    {
+      "id": "dimensions",
+      "kind": "automated"
+    },
+    {
+      "id": "alpha_channel",
+      "kind": "automated"
+    },
+    {
+      "id": "real_transparency",
+      "kind": "automated"
+    },
+    {
+      "id": "transparent_border",
+      "kind": "automated"
+    },
+    {
+      "id": "content_present",
+      "kind": "automated"
+    },
+    {
+      "id": "ground_contact",
+      "kind": "automated"
+    },
+    {
+      "id": "anchor_x_at_contact",
+      "kind": "automated"
+    },
+    {
+      "id": "frame_size_consistency",
+      "kind": "automated"
+    },
+    {
+      "id": "ground_consistency",
+      "kind": "automated"
+    },
+    {
+      "id": "bbox_height_consistency",
+      "kind": "automated"
+    },
+    {
+      "id": "no_identical_consecutive_frames",
+      "kind": "automated"
+    },
+    {
+      "id": "director_layer0_approval",
+      "kind": "human",
+      "text": "director approves the master body"
+    }
+  ],
+  "adoption": {
+    "autoAdopt": false,
+    "requires": "image generation, skeleton comparison and director approval (separate steps)"
+  },
+  "anchor": {
+    "definition": "normalised sole contact shared by all four views",
+    "n": [
+      0.5,
+      0.9625
+    ],
+    "px": [
+      600,
+      1540
+    ]
+  },
+  "canvas": {
+    "height": 1600,
+    "width": 1200
+  },
+  "constraints": [
+    {
+      "check": "human",
+      "id": "body_guide_policy",
+      "text": "neutral structure guide: smooth mannequin-like form, uniform grey, no anatomical detail, no sexual characteristics, age and body unchanged (character is a minor)"
+    },
+    {
+      "check": "automated",
+      "id": "keep_verified_points",
+      "text": "VERIFIED points (ground, sole contacts) must match within 2 px"
+    },
+    {
+      "check": "automated",
+      "id": "designed_values_labelled",
+      "text": "Return designed joints as DESIGNED_CANDIDATE with px/n; never as measured"
+    },
+    {
+      "check": "human",
+      "id": "design:purple_bob_hair",
+      "text": "紫色のボブヘア"
+    },
+    {
+      "check": "human",
+      "id": "design:face_and_glasses",
+      "text": "既存の顔・眼鏡"
+    },
+    {
+      "check": "human",
+      "id": "design:hat_flower_green_leaves",
+      "text": "帽子の花と緑の葉"
+    },
+    {
+      "check": "human",
+      "id": "design:hat_gold_laurel",
+      "text": "帽子の金色月桂樹装飾"
+    },
+    {
+      "check": "human",
+      "id": "design:purple_gold_palette",
+      "text": "紫・金の基本配色"
+    },
+    {
+      "check": "human",
+      "id": "design:right_only_asymmetric_check",
+      "text": "右側のみの非対称チェック柄"
+    },
+    {
+      "check": "human",
+      "id": "design:robe_front_open",
+      "text": "ローブ前面の開放構造"
+    },
+    {
+      "check": "human",
+      "id": "design:rear_center_slit",
+      "text": "背面中央スリット"
+    },
+    {
+      "check": "human",
+      "id": "design:long_robe_hem_spread",
+      "text": "左右に広がる長いローブ裾"
+    },
+    {
+      "check": "human",
+      "id": "design:garter_kneesocks_structure",
+      "text": "正式なガーター・ニーソックス構造"
+    },
+    {
+      "check": "human",
+      "id": "design:bag_position_strap",
+      "text": "バッグの位置・ストラップ"
+    },
+    {
+      "check": "human",
+      "id": "design:four_view_asymmetry",
+      "text": "既存の前後左右の非対称設定"
+    }
+  ],
+  "handoff": {
+    "qaCommand": "python3 tools/character-asset-studio/pipeline/cas.py layer-qa <modular-character.json>",
+    "returnFormat": "cas/modular-part/0.7 (layerId L0_BASE_BODY, measurementStatus DESIGNED_CANDIDATE) per view"
+  },
+  "landmarkSource": {
+    "kind": "normalised canon measurement (v0.6 + v0.7 transforms)",
+    "status": "PARTIAL: UNKNOWN joints omitted, see landmark_evidence.json"
+  },
+  "outputRequirements": {
+    "background": "real alpha=0 (transparent)",
+    "deliverTo": "assets/candidates/morwen/layer0-body-v0.7",
+    "fileNamePattern": "morwen_layer0_body_{view}.png",
+    "forbidden": [
+      "clothing or costume",
+      "anatomical or sexual detail",
+      "changing age, height or build",
+      "editing protected files",
+      "text or watermarks"
+    ],
+    "format": "PNG",
+    "height": 1600,
+    "mode": "RGBA",
+    "width": 1200
+  },
+  "presetId": "MORWEN_REAL_1200x1600",
+  "protectedReferences": [
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/front.png",
+      "sha256": "a0f9bdbdfaf928aab49ea116d3ec40620f1558efe55f5f90aa55002213ae7bbd",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+      "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+      "sha256": "cd1dbc8447de72f0b4239cb6e76ea12c703df0812b1fc225ecb892c34db1b984",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+      "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/front.png",
+      "sha256": "d6fe876bf997dda37aa513519f940f5560ea21ec2ac8332a05c1e1e82d2c2b5a",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png",
+      "sha256": "5d0608bf2d60708325b0cdbb0a75a160e7153365cb402d5b33183c608c7eccf8",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png",
+      "sha256": "f2a485d2d9591cb4cdc5b5d7aabb87f539546b53899bbb1dfd8410ba99c060c7",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/pixel/back.png",
+      "sha256": "64bc5cbe418d39255d28830e317c8b22fe19cb7fa5da626281fa9bca9b91e03f",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/front.png",
+      "sha256": "f9a0272c99059480a59fdcb8a6278f318bc2da6f14f160e08f01eefdfe1d13ec",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/left.png",
+      "sha256": "a48ab1bc86bb7a1597b701575657b95ddbbb153c5f7b0528d3e885cca7645279",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/right.png",
+      "sha256": "b435dde0b048b1d4d7a36dd6b7b3437c6977581049ef400b3dcd290e21f50850",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/originals/real/back.png",
+      "sha256": "66bc519ddd54878b66e298b72919d52d3727f2fdfdcf8c9cfc706c699cdad8ab",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/front_1200x1600.png",
+      "sha256": "a1cec16d21c6427c5b876324a7a14a2b21d83bce9cbc13ae80c0589db245ac9c",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/left_1200x1600.png",
+      "sha256": "e0fe405042d2aac57a1cebf233af5b8f0c238a12c9562394e676615235a8d7e7",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/right_1200x1600.png",
+      "sha256": "531c4ee0618f2d7648cc76e4f83c3390de0e470badccb13e159ca909e5d68144",
+      "use": "visual reference only; never modify"
+    },
+    {
+      "path": "assets/official/characters/morwen/hd-v2/display/pixel/back_1200x1600.png",
+      "sha256": "047fb26bd6ae5598178a8a9897454aac1e5a155d5613ccf9e35628ece3db7f64",
+      "use": "visual reference only; never modify"
+    }
+  ],
+  "schema": "cas/production-brief/0.5",
+  "status": "UNAPPROVED_INSTRUCTION",
+  "task": {
+    "characterId": "morwen",
+    "description": "Draw a Layer 0 master-body guide for morwen in four views on the normalised canvas. neutral structure guide: smooth mannequin-like form, uniform grey, no anatomical detail, no sexual characteristics, age and body unchanged (character is a minor). Keep every VERIFIED point exactly; treat ESTIMATED points as soft targets; propose positions for UNKNOWN joints and return them as DESIGNED_CANDIDATE. Do not copy costume outlines as body contours.",
+    "frameCount": 1,
+    "id": "MORWEN-LAYER0-BODY-V0.7",
+    "kind": "base_body"
+  },
+  "views": {
+    "back": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/back_body_guide.png",
+        "sha256": "a50228046e48f96a8551750eb7e5c9e49b667cc5cc3f0274ffe9848597932761",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/back_body_guide_preview.png",
+        "sha256": "eda3725a94c5fa92dc9886fb0b817a245531e90857d10aa0f31d8525642a3c03",
+        "width": 1200
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "n": [
+            0.47583,
+            0.9625
+          ],
+          "px": [
+            571,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "footRight": {
+          "confidence": "high",
+          "n": [
+            0.52417,
+            0.9625
+          ],
+          "px": [
+            629,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "kneeLeft": {
+          "confidence": "medium",
+          "n": [
+            0.46583,
+            0.66188
+          ],
+          "px": [
+            559,
+            1059
+          ],
+          "source": "measured_reference"
+        },
+        "kneeRight": {
+          "confidence": "medium",
+          "n": [
+            0.52917,
+            0.66188
+          ],
+          "px": [
+            635,
+            1059
+          ],
+          "source": "measured_reference"
+        }
+      },
+      "visualReference": {
+        "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/back.png",
+        "sha256": "f093f9d35728776746078c4c9e95b9405276e6828f50c203ea6d0920edeb0c5e"
+      }
+    },
+    "front": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/front_body_guide.png",
+        "sha256": "e216a9717613a4826c7332edf82421e6df288b6ffff771fa0a73a57bd53a7397",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/front_body_guide_preview.png",
+        "sha256": "1fcbacccd502b71e65430412a4dae4fa248ea2375000e363366b6b113a7c54aa",
+        "width": 1200
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "n": [
+            0.4675,
+            0.9625
+          ],
+          "px": [
+            561,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "footRight": {
+          "confidence": "high",
+          "n": [
+            0.5325,
+            0.9625
+          ],
+          "px": [
+            639,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "kneeLeft": {
+          "confidence": "medium",
+          "n": [
+            0.47083,
+            0.67375
+          ],
+          "px": [
+            565,
+            1078
+          ],
+          "source": "measured_reference"
+        },
+        "kneeRight": {
+          "confidence": "medium",
+          "n": [
+            0.53167,
+            0.67375
+          ],
+          "px": [
+            638,
+            1078
+          ],
+          "source": "measured_reference"
+        },
+        "neck": {
+          "confidence": "low",
+          "n": [
+            0.48333,
+            0.23625
+          ],
+          "px": [
+            580,
+            378
+          ],
+          "source": "measured_reference"
+        }
+      },
+      "visualReference": {
+        "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/front.png",
+        "sha256": "b2f9cf65d66bd364cf204b1f304eb8065be24340e6b594fbdc646052c0da1844"
+      }
+    },
+    "left": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/left_body_guide.png",
+        "sha256": "c5ec2080991662554f84a0a7f84296a84c324bdc3ec2a4a536a90f26205fa9b9",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/left_body_guide_preview.png",
+        "sha256": "de7ea35612496e6b521d26ea3095ff3cb9be400f3152dd41b58f7aa6cc2fd9da",
+        "width": 1200
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "kneeLeft": {
+          "confidence": "low",
+          "n": [
+            0.51333,
+            0.68313
+          ],
+          "px": [
+            616,
+            1093
+          ],
+          "source": "measured_reference"
+        }
+      },
+      "visualReference": {
+        "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/left.png",
+        "sha256": "b9214ca29e8c9b7ba9742d06c4b8d4ee67eddbba1c3999a5e2fdad9cc0fe9930"
+      }
+    },
+    "right": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/right_body_guide.png",
+        "sha256": "181c52fe6bea9fc0e7a90ff8177f8f440c3e2e831ba105cb3e3829943b8a754e",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/right_body_guide_preview.png",
+        "sha256": "d95d5ac1291021ec5f48c52a61a13b311afcc56a06626808bb4ad03317913d23",
+        "width": 1200
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "ground": {
+          "confidence": "high",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "source": "measured_reference"
+        },
+        "kneeLeft": {
+          "confidence": "low",
+          "n": [
+            0.49333,
+            0.68125
+          ],
+          "px": [
+            592,
+            1090
+          ],
+          "source": "measured_reference"
+        }
+      },
+      "visualReference": {
+        "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/right.png",
+        "sha256": "7686189bb31c3e15caa09c127e4f3f812736c8e3488c96ebb82a9bba631ca295"
+      }
+    }
+  }
+}
