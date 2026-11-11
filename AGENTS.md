@@ -377,3 +377,18 @@ This section applies to ChatGPT, Claude, Codex and other agents when working on 
 - **自律QA:** テスト→原因分析→最小パッチ→再テスト。自己QAと独立QAを区別し、未実施をPASSと記録しない。失敗の無限反復は禁止。
 - **既存規約との整合:** この節は既存のAuto-Pilot／Auto-Merge Policy、2026-11-08優先変更、Self-Retry Policyを上書きしない。マージ判断は既存の最新Auto-Merge Policyに従い、同ポリシーに列挙された停止条件および正式設定・素材・SAVE保護を守る。再試行は既存のソフトリミット（原則最大3回）を優先し、2回は推奨早期レビューの目安とする。タスク固有の明示的な禁止（例: PR #221の正式アセット採用・公開・本番統合保留）は維持する。
 - **成果物:** 変更ファイル、検証証拠、既知のFAIL/BLOCKED/NOT_RUN、次の推奨タスクを記録。実際に実施していないpush・マージ・Android実機確認を完了と報告しない。
+
+
+## Asset Generation Loop Prevention & Forward-Only Protocol (2026-11-11)
+
+Scope: character/background/UI assets, sprites, masks, reference sheets, and image QA. This is a stricter asset-specific rule that complements the existing Self-Retry and Auto-Pilot policies.
+
+1. **No blind repetition.** Every generation must be followed by an inspection of the actual result and a concise record of the delta from the canonical design. Never repeat a nearly identical prompt without an identified changed condition.
+2. **Analyze after two failed attempts.** Before a third attempt on the same asset/defect, document the structural cause (orientation, occlusion, layers, anatomy, anchors, palette, or model limitations) and change the method rather than merely rewording the prompt.
+3. **Three attempts maximum for the same defect.** Count the initial generation and subsequent corrections together. After three unsuccessful attempts, STOP that generation approach. Offer at least two alternatives such as component-level editing and manual retouching. This asset-specific cap is stricter than the general retry soft limit. Do not reset the counter through trivial prompt changes.
+4. **Lock approved design decisions.** Explicit director approval marks the specified *design decision* DONE/LOCKED. A later explicit director change supersedes it. Design approval does not imply that the PNG has passed transparency, anchor, hash, independent QA, or device testing.
+5. **Forward-only deliverables.** Prioritize the next real output (individual transparent PNG, comparison against original, QA evidence, integration) over recreating overview sheets. Fix minor visual discrepancies as part of the next production step without reopening accepted design decisions.
+6. **Emergency recovery.** On detecting a loop, state STOP, show the expected-versus-actual delta and attempt count, identify the cause, provide two actionable alternative approaches, and proceed only with a changed method. Do not silently resume the same generation.
+7. **Evidence.** Track asset ID, canonical reference, attempt count, structural analysis, observed delta, QA status, and next deliverable. Preserve originals. Report blocked/unrun work accurately.
+
+Precedence: this section governs asset-generation attempt counting and forward progress. It does not waive repository safety rules, canonical asset protection, task-specific prohibitions on publishing or merging, or existing approval gates.
