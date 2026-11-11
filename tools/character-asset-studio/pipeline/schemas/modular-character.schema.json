@@ -1,0 +1,108 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/modular-character.schema.json",
+ "title": "Modular character — 4-layer assembly (v0.7)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schema",
+  "characterId",
+  "ageCategory",
+  "bodyGuidePolicy",
+  "canvas",
+  "anchor",
+  "views",
+  "frameCount",
+  "parts"
+ ],
+ "properties": {
+  "schema": {
+   "const": "cas/modular-character/0.7"
+  },
+  "characterId": {
+   "type": "string"
+  },
+  "ageCategory": {
+   "enum": [
+    "adult",
+    "minor"
+   ]
+  },
+  "bodyGuidePolicy": {
+   "enum": [
+    "adult_nonexplicit_anatomy",
+    "minor_neutral_structure"
+   ]
+  },
+  "canvas": {
+   "$ref": "common.schema.json#/$defs/canvas"
+  },
+  "anchor": {
+   "$ref": "common.schema.json#/$defs/anchor"
+  },
+  "views": {
+   "type": "array",
+   "items": {
+    "$ref": "common.schema.json#/$defs/view"
+   },
+   "minItems": 1,
+   "uniqueItems": true
+  },
+  "frameCount": {
+   "type": "integer",
+   "minimum": 1
+  },
+  "layerCatalog": {
+   "type": "string"
+  },
+  "baseBodySpec": {
+   "type": "object",
+   "required": [
+    "path",
+    "sha256"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "path": {
+     "$ref": "common.schema.json#/$defs/relPath"
+    },
+    "sha256": {
+     "$ref": "common.schema.json#/$defs/sha256"
+    },
+    "schemaVersion": {
+     "const": "2.0"
+    },
+    "approvalStatus": {
+     "$ref": "common.schema.json#/$defs/assetStatus"
+    }
+   }
+  },
+  "parts": {
+   "type": "array",
+   "items": {
+    "$ref": "modular-part.schema.json"
+   }
+  },
+  "note": {
+   "type": "string"
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "ageCategory": {
+      "const": "minor"
+     }
+    }
+   },
+   "then": {
+    "properties": {
+     "bodyGuidePolicy": {
+      "const": "minor_neutral_structure"
+     }
+    }
+   }
+  }
+ ]
+}

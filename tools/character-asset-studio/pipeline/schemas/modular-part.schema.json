@@ -1,0 +1,247 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/modular-part.schema.json",
+ "title": "Modular part (one PNG of one layer, view and frame) — 4-layer model v0.7",
+ "description": "measurementStatus (VERIFIED/ESTIMATED/UNKNOWN/TEMPLATE/DESIGNED_CANDIDATE) describes how the geometry was obtained; approvalStatus is the separate adoption state. Logical layer != draw order: drawing uses zOrder (+ occlusion).",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schema",
+  "characterId",
+  "view",
+  "frameIndex",
+  "canvas",
+  "layerId",
+  "partId",
+  "zOrder",
+  "anchorSet",
+  "sourceAsset",
+  "sha256",
+  "approvalStatus",
+  "measurementStatus",
+  "sourceEvidence"
+ ],
+ "properties": {
+  "schema": {
+   "const": "cas/modular-part/0.7"
+  },
+  "characterId": {
+   "type": "string",
+   "minLength": 1
+  },
+  "view": {
+   "$ref": "common.schema.json#/$defs/view"
+  },
+  "frameIndex": {
+   "type": "integer",
+   "minimum": 0
+  },
+  "canvas": {
+   "$ref": "common.schema.json#/$defs/canvas"
+  },
+  "layerId": {
+   "enum": [
+    "L0_BASE_BODY",
+    "L1_UNDERWEAR",
+    "L2_BASE_OUTFIT",
+    "L3_OUTER_ACCESSORIES"
+   ]
+  },
+  "partId": {
+   "type": "string",
+   "pattern": "^[a-z0-9_]+$"
+  },
+  "zOrder": {
+   "type": "integer"
+  },
+  "occlusion": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "occludes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "occludedBy": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "note": {
+     "type": "string"
+    }
+   }
+  },
+  "anchorSet": {
+   "type": "object",
+   "required": [
+    "anchor"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "anchor": {
+     "$ref": "common.schema.json#/$defs/anchor"
+    },
+    "landmarks": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "object",
+      "required": [
+       "n",
+       "px",
+       "measurementStatus"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "n": {
+        "$ref": "common.schema.json#/$defs/norm"
+       },
+       "px": {
+        "type": "array",
+        "items": {
+         "type": "integer"
+        },
+        "minItems": 2,
+        "maxItems": 2
+       },
+       "measurementStatus": {
+        "enum": [
+         "VERIFIED",
+         "ESTIMATED",
+         "UNKNOWN",
+         "TEMPLATE",
+         "DESIGNED_CANDIDATE"
+        ]
+       },
+       "evidence": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  },
+  "sourceAsset": {
+   "type": "object",
+   "required": [
+    "path",
+    "sha256",
+    "width",
+    "height",
+    "mode"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "path": {
+     "$ref": "common.schema.json#/$defs/relPath"
+    },
+    "sha256": {
+     "$ref": "common.schema.json#/$defs/sha256"
+    },
+    "width": {
+     "type": "integer"
+    },
+    "height": {
+     "type": "integer"
+    },
+    "mode": {
+     "type": "string"
+    }
+   }
+  },
+  "sha256": {
+   "$ref": "common.schema.json#/$defs/sha256",
+   "description": "SHA-256 of sourceAsset (must equal sourceAsset.sha256)"
+  },
+  "approvalStatus": {
+   "$ref": "common.schema.json#/$defs/assetStatus"
+  },
+  "measurementStatus": {
+   "enum": [
+    "VERIFIED",
+    "ESTIMATED",
+    "UNKNOWN",
+    "TEMPLATE",
+    "DESIGNED_CANDIDATE"
+   ]
+  },
+  "sourceEvidence": {
+   "type": "array",
+   "minItems": 1,
+   "items": {
+    "type": "object",
+    "required": [
+     "kind"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "kind": {
+      "type": "string"
+     },
+     "path": {
+      "type": "string"
+     },
+     "sha256": {
+      "$ref": "common.schema.json#/$defs/sha256"
+     },
+     "note": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "bodyGuidePolicy": {
+   "enum": [
+    "adult_nonexplicit_anatomy",
+    "minor_neutral_structure"
+   ]
+  },
+  "approvals": {
+   "type": "array",
+   "items": {
+    "$ref": "common.schema.json#/$defs/approval"
+   }
+  },
+  "note": {
+   "type": "string"
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "layerId": {
+      "const": "L0_BASE_BODY"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "bodyGuidePolicy"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "approvalStatus": {
+      "const": "DIRECTOR_APPROVED"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "approvals"
+    ],
+    "properties": {
+     "approvals": {
+      "minItems": 1
+     }
+    }
+   }
+  }
+ ]
+}

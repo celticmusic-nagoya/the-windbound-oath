@@ -1,0 +1,77 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/anchor-set.schema.json",
+ "title": "Anchor set — shared normalised joint/contact anchors per view and frame",
+ "type": "object",
+ "required": [
+  "schema",
+  "status",
+  "characterId",
+  "canvas",
+  "anchor",
+  "views"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "cas/anchor-set/0.5"
+  },
+  "status": {
+   "$ref": "common.schema.json#/$defs/assetStatus"
+  },
+  "characterId": {
+   "type": "string"
+  },
+  "canvas": {
+   "$ref": "common.schema.json#/$defs/canvas"
+  },
+  "anchor": {
+   "$ref": "common.schema.json#/$defs/anchor"
+  },
+  "source": {
+   "enum": [
+    "template_default",
+    "manual_edit",
+    "imported_spec",
+    "measured_reference",
+    "motion_reference"
+   ]
+  },
+  "views": {
+   "type": "object",
+   "additionalProperties": false,
+   "patternProperties": {
+    "^(front|back|left|right)$": {
+     "type": "object",
+     "additionalProperties": false,
+     "patternProperties": {
+      "^[0-9]+$": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "object",
+        "required": [
+         "n"
+        ],
+        "additionalProperties": false,
+        "properties": {
+         "n": {
+          "$ref": "common.schema.json#/$defs/norm"
+         },
+         "px": {
+          "$ref": "common.schema.json#/$defs/px"
+         },
+         "confidence": {
+          "$ref": "common.schema.json#/$defs/confidence"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "note": {
+   "type": "string"
+  }
+ }
+}

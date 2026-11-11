@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "characterId": "morwen",
+  "source": [
+    "docs/policy/CHARACTER_BASE_BODY_FIRST_WORKFLOW_v1.0.md (Gate 3, visual invariants)",
+    "assets/candidates/morwen/final-visual-canon-20261111/MANIFEST.json (rules.locked)"
+  ],
+  "policy": "Declarative review checklist. The studio never repaints, never infers anatomy and never marks these PASS automatically. Regions are null until a reviewer records them from an approved measurement.",
+  "constraints": [
+    {"id": "robe_front_open", "label": "ローブ前面は開いている（スカート・脚・ブーツが見える）", "views": ["front"], "kind": "occlusion", "region": null},
+    {"id": "robe_rear_slit", "label": "背面中央のスリットからプリーツスカート・ガーター・脚が見える／脚を覆う中央の長布はない", "views": ["back"], "kind": "occlusion", "region": null},
+    {"id": "robe_hem_left", "label": "ローブ左側の裾は大きく広がり、かかと付近まで届く", "views": ["front", "back", "left"], "kind": "silhouette", "region": null},
+    {"id": "robe_hem_right", "label": "ローブ右側の裾は大きく広がり、かかと付近まで届く", "views": ["front", "back", "right"], "kind": "silhouette", "region": null},
+    {"id": "bag_strap", "label": "肩掛けバッグと紐の左右位置・掛け方が方向ごとに正しい（自動反転しない）", "views": ["front", "back", "left", "right"], "kind": "asymmetry", "region": null},
+    {"id": "socks_garter", "label": "ニーソックス（タイツではない）とガーター装飾の配置が正本どおり", "views": ["front", "back", "left", "right"], "kind": "asymmetry", "region": null},
+    {"id": "skirt_check_right", "label": "スカートのチェック柄はキャラクター右側のみ（方向ごとに確認、自動反転しない）", "views": ["front", "back", "left", "right"], "kind": "asymmetry", "region": null},
+    {"id": "arm_sleeve_robe", "label": "腕・袖・ローブの前後関係が自然", "views": ["front", "back", "left", "right"], "kind": "occlusion", "region": null},
+    {"id": "hat_invariants", "label": "帽子の花の向き、花下の緑の葉、金の月桂樹（帽子帯）", "views": ["front", "back", "left", "right"], "kind": "invariant", "region": null},
+    {"id": "alpha_zero_bg", "label": "納品PNGの背景は本物の alpha=0（チェッカー焼き込みなし）", "views": ["front", "back", "left", "right"], "kind": "technical", "region": null}
+  ]
+}

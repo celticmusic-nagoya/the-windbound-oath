@@ -1,0 +1,67 @@
+{
+  "adoptionBlockers": [
+    "subject is not an adoption candidate (QA record of the tool, not an asset)"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "detail": {
+        "date": "2026-11-11",
+        "item": "動画の読み込み（Grid Overlay MP4・618コマ・参照JSONと一致、再生・一時停止・コマ送り）",
+        "reportedBy": "director"
+      },
+      "id": "android_video_load",
+      "kind": "human",
+      "result": "PASS",
+      "scope": "Android Chrome real device"
+    },
+    {
+      "detail": {
+        "date": "2026-11-11",
+        "item": "タッチ操作（アンカー記録時にページが動かない、タイムライン、スライダー、マーカーのドラッグ、足元を揃える）",
+        "reportedBy": "director"
+      },
+      "id": "android_touch",
+      "kind": "human",
+      "result": "PASS",
+      "scope": "Android Chrome real device"
+    },
+    {
+      "detail": {
+        "date": "2026-11-11",
+        "item": "390px前後の固定表示（固定したまま各ボタンを操作できる）",
+        "reportedBy": "director"
+      },
+      "id": "android_sticky_390",
+      "kind": "human",
+      "result": "PASS",
+      "scope": "Android Chrome real device"
+    },
+    {
+      "detail": {
+        "date": "2026-11-11",
+        "item": "保存（モーションJSON・素体仕様JSON・QA JSON・PNGのダウンロードと読み直し）",
+        "reportedBy": "director"
+      },
+      "id": "android_save",
+      "kind": "human",
+      "result": "PASS",
+      "scope": "Android Chrome real device"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "NOT_RUN": 0,
+    "PASS": 4
+  },
+  "note": "Summary-level result for the four README check points (CHARACTER-ASSET-STUDIO-05). Device model, Android/Chrome versions and per-row results of the 24-row checklist were not reported, so they are not recorded here. Human QA, not AI QA. Tested build: PR #224 at or after 49f18f6 (v0.4 UI).",
+  "overall": "PASS",
+  "qaKind": "human_device_qa",
+  "schema": "cas/qa-report/0.5",
+  "source": "Director report in the CHARACTER-ASSET-STUDIO-06 task packet (2026-11-11): 'Android実機QA 4/4 PASS'",
+  "subject": {
+    "kind": "android-device-qa",
+    "path": "tools/character-asset-studio/qa/ANDROID_DEVICE_QA_CHECKLIST.md"
+  }
+}

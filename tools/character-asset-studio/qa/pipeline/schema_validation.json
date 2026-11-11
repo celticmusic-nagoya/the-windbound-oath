@@ -1,0 +1,183 @@
+{
+  "adoptionBlockers": [
+    "subject is not an adoption candidate (QA record of the tool, not an asset)",
+    "no human review checks in this report (automated QA alone cannot make anything adoptable)"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/1.0-legacy"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.json"
+    },
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/2.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/docs/BASE_BODY_SPEC.example.v2.json"
+    },
+    {
+      "detail": {
+        "schema": "motion-reference/1.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/motion/grid_overlay_walk.reference.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/asset-set/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/pipeline/examples/demo_candidates.asset-set.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/production-brief/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/pipeline/examples/morwen_walk_brief/production_brief.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/modular-character/0.7"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/pipeline/examples/synthetic_modular/modular_character.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/manifest/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/pipeline/examples/synthetic_modular/LAYER_MANIFEST.json"
+    },
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/2.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/BASE_BODY_SPEC.candidate.json"
+    },
+    {
+      "detail": {
+        "schema": "BASE_BODY_SPEC/2.0"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-v0.7/BASE_BODY_SPEC.candidate.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/production-brief/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-v0.7/production_brief.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-v0.7/BODY_QA_REPORT.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/normalize_qa.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/v0.7/synthetic_layer_qa.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/qa/android_device_qa_20261111.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/master-body/0.8"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/MASTER_BODY_SPEC.candidate.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/production-brief/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/production_brief.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/qa-report/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/BODY_CONSISTENCY_QA.json"
+    },
+    {
+      "detail": {
+        "schema": "cas/manifest/0.5"
+      },
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "tools/character-asset-studio/layer0/morwen-master-v0.8/MANIFEST.json"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "NOT_RUN": 0,
+    "PASS": 18
+  },
+  "overall": "PASS",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "kind": "schema-validation"
+  }
+}

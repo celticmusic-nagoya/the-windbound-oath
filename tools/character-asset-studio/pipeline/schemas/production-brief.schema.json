@@ -1,0 +1,279 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/production-brief.schema.json",
+ "title": "Machine-readable production brief for AI image generation",
+ "type": "object",
+ "required": [
+  "schema",
+  "status",
+  "task",
+  "canvas",
+  "anchor",
+  "views",
+  "outputRequirements",
+  "constraints",
+  "acceptanceChecks",
+  "adoption"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "schema": {
+   "const": "cas/production-brief/0.5"
+  },
+  "status": {
+   "const": "UNAPPROVED_INSTRUCTION"
+  },
+  "task": {
+   "type": "object",
+   "required": [
+    "id",
+    "kind",
+    "characterId",
+    "frameCount"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "base_body",
+      "costume_layer",
+      "walk_frames"
+     ]
+    },
+    "characterId": {
+     "type": "string"
+    },
+    "frameCount": {
+     "type": "integer",
+     "minimum": 1
+    },
+    "layerSlot": {
+     "type": "string"
+    },
+    "description": {
+     "type": "string"
+    }
+   }
+  },
+  "canvas": {
+   "$ref": "common.schema.json#/$defs/canvas"
+  },
+  "anchor": {
+   "$ref": "common.schema.json#/$defs/anchor"
+  },
+  "presetId": {
+   "type": "string"
+  },
+  "views": {
+   "type": "object",
+   "additionalProperties": false,
+   "patternProperties": {
+    "^(front|back|left|right)$": {
+     "type": "object",
+     "required": [
+      "guide",
+      "landmarks"
+     ],
+     "additionalProperties": false,
+     "properties": {
+      "guide": {
+       "$ref": "common.schema.json#/$defs/fileRef"
+      },
+      "guidePreview": {
+       "$ref": "common.schema.json#/$defs/fileRef"
+      },
+      "landmarks": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "object",
+        "required": [
+         "n",
+         "px",
+         "confidence",
+         "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+         "n": {
+          "$ref": "common.schema.json#/$defs/norm"
+         },
+         "px": {
+          "$ref": "common.schema.json#/$defs/px"
+         },
+         "confidence": {
+          "$ref": "common.schema.json#/$defs/confidence"
+         },
+         "source": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "visualReference": {
+       "anyOf": [
+        {
+         "$ref": "common.schema.json#/$defs/fileRef"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "landmarkSource": {
+   "type": "object",
+   "required": [
+    "kind",
+    "status"
+   ],
+   "properties": {
+    "kind": {
+     "type": "string"
+    },
+    "status": {
+     "type": "string"
+    },
+    "note": {
+     "type": "string"
+    }
+   }
+  },
+  "outputRequirements": {
+   "type": "object",
+   "required": [
+    "format",
+    "mode",
+    "width",
+    "height",
+    "background",
+    "fileNamePattern",
+    "deliverTo"
+   ],
+   "properties": {
+    "format": {
+     "const": "PNG"
+    },
+    "mode": {
+     "const": "RGBA"
+    },
+    "width": {
+     "type": "integer"
+    },
+    "height": {
+     "type": "integer"
+    },
+    "background": {
+     "type": "string"
+    },
+    "fileNamePattern": {
+     "type": "string"
+    },
+    "deliverTo": {
+     "type": "string"
+    },
+    "forbidden": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "constraints": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "text"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "text": {
+      "type": "string"
+     },
+     "views": {
+      "type": "array"
+     },
+     "check": {
+      "enum": [
+       "automated",
+       "human"
+      ]
+     }
+    }
+   }
+  },
+  "protectedReferences": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "path",
+     "sha256"
+    ],
+    "properties": {
+     "path": {
+      "type": "string"
+     },
+     "sha256": {
+      "$ref": "common.schema.json#/$defs/sha256"
+     },
+     "use": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "acceptanceChecks": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "kind"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "automated",
+       "human"
+      ]
+     },
+     "text": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "adoption": {
+   "type": "object",
+   "required": [
+    "autoAdopt",
+    "requires"
+   ],
+   "properties": {
+    "autoAdopt": {
+     "const": false
+    },
+    "requires": {
+     "type": "string"
+    }
+   }
+  },
+  "handoff": {
+   "type": "object"
+  }
+ }
+}

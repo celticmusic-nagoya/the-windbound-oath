@@ -1,0 +1,278 @@
+{
+ "tool": "Character Asset Studio v0.2",
+ "runner": "Playwright headless Chromium (emulated viewports)",
+ "result": "PASS",
+ "checks": 44,
+ "fail_count": 0,
+ "rows": [
+  {
+   "viewport": "mobile390",
+   "check": "presets loaded",
+   "result": "PASS",
+   "detail": "6"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "constraints rendered (front)",
+   "result": "PASS",
+   "detail": "9"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "no horizontal overflow",
+   "result": "PASS",
+   "detail": "[390, 390]"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "view front: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_front_candidate.png [候補] / painted px 79025"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "view back: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_back_candidate.png [候補] / painted px 79180"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "view left: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_left_candidate.png [候補] / painted px 68442"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "view right: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_right_candidate.png [候補] / painted px 74424"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "canonical 4 views SHA-256 match MANIFEST",
+   "result": "PASS",
+   "detail": "正本照合: front: SHA一致 / back: SHA一致 / left: SHA一致 / right: SHA一致"
+  },
+  {
+   "viewport": "mobile390",
+   "check": ">= 6 frames inspectable via playback",
+   "result": "PASS",
+   "detail": "['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "landmark drag updates coordinates",
+   "result": "PASS",
+   "detail": "px 650,1500 · n 0.54167,0.9375 · manual_edit"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "spec JSON deterministic",
+   "result": "PASS",
+   "detail": "be83e0287a091650"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "spec v2.0 records drag + confidence",
+   "result": "PASS",
+   "detail": "{'confidence': 'medium', 'n': [0.54167, 0.9375], 'px': [650, 1500], 'source': 'manual_edit'}"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "spec marks assets canonical/non-canonical",
+   "result": "PASS",
+   "detail": "13"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "spec import -> export round trip identical",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "viewport": "mobile390",
+   "check": "composite PNG 1200x1600 RGBA with alpha 0 corners",
+   "result": "PASS",
+   "detail": "((1200, 1600), 'RGBA', (0, 0, 0, 0))"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "composite excludes read-only canonical layer but keeps candidate",
+   "result": "PASS",
+   "detail": "644920"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "guide PNG differs from clean composite (opaque background + guides)",
+   "result": "PASS",
+   "detail": "(0, 0, 0, 255)"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "QA JSON: canonical SHA PASS, anatomy NOT_RUN, checklist NOT_RUN",
+   "result": "PASS",
+   "detail": "{'canvas_dimensions': 'FAIL', 'real_transparency': 'FAIL', 'transparent_canvas_border': 'FAIL', 'canonical_sha256': 'PASS', 'four_view_coverage_frame0': 'PASS', 'anatomy_and_design': 'NOT_RUN'}"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "QA flags RGB canon as not transparent (expected FAIL item)",
+   "result": "PASS",
+   "detail": "FAIL"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "preset switch resizes canvas (1024x1280)",
+   "result": "PASS",
+   "detail": "[1024, 1280]"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "normalised anchor converts to new canvas",
+   "result": "PASS",
+   "detail": "[512, 1232]"
+  },
+  {
+   "viewport": "mobile390",
+   "check": "no console/page errors or alert dialogs",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "presets loaded",
+   "result": "PASS",
+   "detail": "6"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "constraints rendered (front)",
+   "result": "PASS",
+   "detail": "9"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "no horizontal overflow",
+   "result": "PASS",
+   "detail": "[1440, 1440]"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "view front: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_front_candidate.png [候補] / painted px 79025"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "view back: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_back_candidate.png [候補] / painted px 79180"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "view left: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_left_candidate.png [候補] / painted px 68442"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "view right: candidate shown and labelled non-canonical",
+   "result": "PASS",
+   "detail": "reference: morwen_right_candidate.png [候補] / painted px 74424"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "canonical 4 views SHA-256 match MANIFEST",
+   "result": "PASS",
+   "detail": "正本照合: front: SHA一致 / back: SHA一致 / left: SHA一致 / right: SHA一致"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": ">= 6 frames inspectable via playback",
+   "result": "PASS",
+   "detail": "['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "landmark drag updates coordinates",
+   "result": "PASS",
+   "detail": "px 650,1500 · n 0.54167,0.9375 · manual_edit"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "spec JSON deterministic",
+   "result": "PASS",
+   "detail": "be83e0287a091650"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "spec v2.0 records drag + confidence",
+   "result": "PASS",
+   "detail": "{'confidence': 'medium', 'n': [0.54167, 0.9375], 'px': [650, 1500], 'source': 'manual_edit'}"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "spec marks assets canonical/non-canonical",
+   "result": "PASS",
+   "detail": "13"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "spec import -> export round trip identical",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "composite PNG 1200x1600 RGBA with alpha 0 corners",
+   "result": "PASS",
+   "detail": "((1200, 1600), 'RGBA', (0, 0, 0, 0))"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "composite excludes read-only canonical layer but keeps candidate",
+   "result": "PASS",
+   "detail": "644920"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "guide PNG differs from clean composite (opaque background + guides)",
+   "result": "PASS",
+   "detail": "(0, 0, 0, 255)"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "QA JSON: canonical SHA PASS, anatomy NOT_RUN, checklist NOT_RUN",
+   "result": "PASS",
+   "detail": "{'canvas_dimensions': 'FAIL', 'real_transparency': 'FAIL', 'transparent_canvas_border': 'FAIL', 'canonical_sha256': 'PASS', 'four_view_coverage_frame0': 'PASS', 'anatomy_and_design': 'NOT_RUN'}"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "QA flags RGB canon as not transparent (expected FAIL item)",
+   "result": "PASS",
+   "detail": "FAIL"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "preset switch resizes canvas (1024x1280)",
+   "result": "PASS",
+   "detail": "[1024, 1280]"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "normalised anchor converts to new canvas",
+   "result": "PASS",
+   "detail": "[512, 1232]"
+  },
+  {
+   "viewport": "desktop1440",
+   "check": "no console/page errors or alert dialogs",
+   "result": "PASS",
+   "detail": "[]"
+  }
+ ],
+ "not_run": [
+  "Android real device",
+  "iOS Safari",
+  "real touch-screen drag (emulated pointer only)"
+ ]
+}

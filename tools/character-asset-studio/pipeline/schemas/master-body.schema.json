@@ -1,0 +1,175 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://windbound.local/cas/master-body.schema.json",
+ "title": "Layer 0 master body candidate (shared skeleton projected to four views) v0.8",
+ "type": "object",
+ "required": [
+  "schema",
+  "status",
+  "characterId",
+  "ageCategory",
+  "bodyGuidePolicy",
+  "canvas",
+  "anchor",
+  "finalAdoption",
+  "parameters",
+  "joints3d",
+  "views",
+  "baseBodySpecV2"
+ ],
+ "properties": {
+  "schema": {
+   "const": "cas/master-body/0.8"
+  },
+  "status": {
+   "enum": [
+    "UNAPPROVED_CANDIDATE",
+    "DIRECTOR_APPROVED",
+    "SUPERSEDED",
+    "BLOCKED"
+   ]
+  },
+  "characterId": {
+   "type": "string"
+  },
+  "ageCategory": {
+   "enum": [
+    "adult",
+    "minor"
+   ]
+  },
+  "bodyGuidePolicy": {
+   "enum": [
+    "adult_nonexplicit_anatomy",
+    "minor_neutral_structure"
+   ]
+  },
+  "canvas": {
+   "$ref": "common.schema.json#/$defs/canvas"
+  },
+  "anchor": {
+   "$ref": "common.schema.json#/$defs/anchor"
+  },
+  "finalAdoption": {
+   "enum": [
+    "NOT_RUN",
+    "APPROVED",
+    "REJECTED"
+   ]
+  },
+  "parameters": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "required": [
+     "value",
+     "unit",
+     "status",
+     "derivation"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "value": {
+      "type": "number"
+     },
+     "unit": {
+      "enum": [
+       "px",
+       "ratio"
+      ]
+     },
+     "status": {
+      "enum": [
+       "VERIFIED",
+       "ESTIMATED",
+       "DESIGNED_CANDIDATE",
+       "UNKNOWN"
+      ]
+     },
+     "derivation": {
+      "type": "string",
+      "minLength": 5
+     }
+    }
+   }
+  },
+  "joints3d": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "array",
+    "items": {
+     "type": "integer"
+    },
+    "minItems": 3,
+    "maxItems": 3
+   }
+  },
+  "views": {
+   "type": "object",
+   "additionalProperties": false,
+   "patternProperties": {
+    "^(front|back|left|right)$": {
+     "type": "object",
+     "required": [
+      "joints"
+     ],
+     "properties": {
+      "joints": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "array",
+        "items": {
+         "type": "integer"
+        },
+        "minItems": 2,
+        "maxItems": 2
+       }
+      }
+     }
+    }
+   }
+  },
+  "baseBodySpecV2": {
+   "type": "object",
+   "properties": {
+    "schemaVersion": {
+     "const": "2.0"
+    }
+   }
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "ageCategory": {
+      "const": "minor"
+     }
+    }
+   },
+   "then": {
+    "properties": {
+     "bodyGuidePolicy": {
+      "const": "minor_neutral_structure"
+     }
+    }
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "status": {
+      "const": "UNAPPROVED_CANDIDATE"
+     }
+    }
+   },
+   "then": {
+    "properties": {
+     "finalAdoption": {
+      "const": "NOT_RUN"
+     }
+    }
+   }
+  }
+ ]
+}

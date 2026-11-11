@@ -1,0 +1,653 @@
+{
+  "adoptionBlockers": [
+    "overall is NOT_RUN",
+    "human checks NOT_RUN: age_appropriate_no_sexualisation, anatomy_and_proportion, constraint:alpha_zero_bg, constraint:arm_sleeve_robe, constraint:bag_strap, constraint:hat_invariants, constraint:robe_front_open, constraint:robe_hem_left, constraint:robe_hem_right, constraint:robe_rear_slit, constraint:skirt_check_right, constraint:socks_garter …"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "id": "schema_valid",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "asset-set"
+    },
+    {
+      "detail": "UNAPPROVED_CANDIDATE",
+      "id": "status_unapproved",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "asset-set"
+    },
+    {
+      "detail": [
+        600,
+        1540
+      ],
+      "id": "anchor_inside_canvas",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "asset-set"
+    },
+    {
+      "detail": {
+        "expectedN": [
+          0.5,
+          0.9625
+        ],
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ]
+      },
+      "id": "anchor_px_norm_consistent",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "asset-set"
+    },
+    {
+      "detail": {
+        "duplicates": [],
+        "expected": 1,
+        "extra": [],
+        "missing": []
+      },
+      "id": "frame_set_complete",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "id": "file_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "actual": [
+          1200,
+          1600
+        ],
+        "expected": [
+          1200,
+          1600
+        ]
+      },
+      "id": "dimensions",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": "RGBA",
+      "id": "alpha_channel",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "alpha0": 1275080
+      },
+      "id": "real_transparency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "nonZeroBorderPixels": 0
+      },
+      "id": "transparent_border",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "bbox": [
+          177,
+          92,
+          1003,
+          1540
+        ]
+      },
+      "id": "content_present",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "anchorY": 1540,
+        "bottomRow": 1540,
+        "deltaPx": 0,
+        "tolPx": 6
+      },
+      "id": "ground_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "anchorX": 600,
+        "contactSpan": [
+          522,
+          661
+        ],
+        "contactX": 591.5,
+        "deltaPx": -8.5,
+        "tolPx": 24
+      },
+      "id": "anchor_x_at_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/f00"
+    },
+    {
+      "detail": {
+        "duplicates": [],
+        "expected": 1,
+        "extra": [],
+        "missing": []
+      },
+      "id": "frame_set_complete",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "id": "file_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "actual": [
+          1200,
+          1600
+        ],
+        "expected": [
+          1200,
+          1600
+        ]
+      },
+      "id": "dimensions",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": "RGBA",
+      "id": "alpha_channel",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "alpha0": 1304220
+      },
+      "id": "real_transparency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "nonZeroBorderPixels": 0
+      },
+      "id": "transparent_border",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "bbox": [
+          206,
+          98,
+          978,
+          1540
+        ]
+      },
+      "id": "content_present",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "anchorY": 1540,
+        "bottomRow": 1540,
+        "deltaPx": 0,
+        "tolPx": 6
+      },
+      "id": "ground_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "anchorX": 600,
+        "contactSpan": [
+          542,
+          637
+        ],
+        "contactX": 589.5,
+        "deltaPx": -10.5,
+        "tolPx": 24
+      },
+      "id": "anchor_x_at_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/f00"
+    },
+    {
+      "detail": {
+        "duplicates": [],
+        "expected": 1,
+        "extra": [],
+        "missing": []
+      },
+      "id": "frame_set_complete",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "file_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "actual": [
+          1200,
+          1600
+        ],
+        "expected": [
+          1200,
+          1600
+        ]
+      },
+      "id": "dimensions",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": "RGBA",
+      "id": "alpha_channel",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "alpha0": 1479155
+      },
+      "id": "real_transparency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "nonZeroBorderPixels": 0
+      },
+      "id": "transparent_border",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "bbox": [
+          461,
+          100,
+          1018,
+          1540
+        ]
+      },
+      "id": "content_present",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "anchorY": 1540,
+        "bottomRow": 1540,
+        "deltaPx": 0,
+        "tolPx": 6
+      },
+      "id": "ground_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "anchorX": 600,
+        "contactSpan": [
+          545,
+          703
+        ],
+        "contactX": 624,
+        "deltaPx": 24,
+        "tolPx": 24
+      },
+      "id": "anchor_x_at_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/f00"
+    },
+    {
+      "detail": {
+        "duplicates": [],
+        "expected": 1,
+        "extra": [],
+        "missing": []
+      },
+      "id": "frame_set_complete",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "id": "file_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": {
+        "actual": [
+          1200,
+          1600
+        ],
+        "expected": [
+          1200,
+          1600
+        ]
+      },
+      "id": "dimensions",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": "RGBA",
+      "id": "alpha_channel",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": {
+        "alpha0": 1389254
+      },
+      "id": "real_transparency",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": {
+        "nonZeroBorderPixels": 0
+      },
+      "id": "transparent_border",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": {
+        "bbox": [
+          136,
+          24,
+          759,
+          1540
+        ]
+      },
+      "id": "content_present",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": {
+        "anchorY": 1540,
+        "bottomRow": 1540,
+        "deltaPx": 0,
+        "tolPx": 6
+      },
+      "id": "ground_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "detail": {
+        "anchorX": 600,
+        "contactSpan": [
+          501,
+          667
+        ],
+        "contactX": 584,
+        "deltaPx": -16,
+        "tolPx": 24
+      },
+      "id": "anchor_x_at_contact",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right/f00"
+    },
+    {
+      "id": "design_matches_protected_reference",
+      "kind": "human",
+      "reason": "needs a human/director review: Design matches the protected canonical reference (hair, hat, uniform, palette)",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "anatomy_and_proportion",
+      "kind": "human",
+      "reason": "needs a human/director review: Anatomy, head-to-body ratio and joint placement are plausible and unchanged",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "age_appropriate_no_sexualisation",
+      "kind": "human",
+      "reason": "needs a human/director review: Character age/body unchanged; no sexualised emphasis (Morwen is 17)",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "costume_structure_not_guessed",
+      "kind": "human",
+      "reason": "needs a human/director review: No unconfirmed equipment/costume structure was invented",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:robe_front_open",
+      "kind": "human",
+      "reason": "needs a human/director review: ローブ前面は開いている（スカート・脚・ブーツが見える）",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:robe_rear_slit",
+      "kind": "human",
+      "reason": "needs a human/director review: 背面中央のスリットからプリーツスカート・ガーター・脚が見える／脚を覆う中央の長布はない",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:robe_hem_left",
+      "kind": "human",
+      "reason": "needs a human/director review: ローブ左側の裾は大きく広がり、かかと付近まで届く",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:robe_hem_right",
+      "kind": "human",
+      "reason": "needs a human/director review: ローブ右側の裾は大きく広がり、かかと付近まで届く",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:bag_strap",
+      "kind": "human",
+      "reason": "needs a human/director review: 肩掛けバッグと紐の左右位置・掛け方が方向ごとに正しい（自動反転しない）",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:socks_garter",
+      "kind": "human",
+      "reason": "needs a human/director review: ニーソックス（タイツではない）とガーター装飾の配置が正本どおり",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:skirt_check_right",
+      "kind": "human",
+      "reason": "needs a human/director review: スカートのチェック柄はキャラクター右側のみ（方向ごとに確認、自動反転しない）",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:arm_sleeve_robe",
+      "kind": "human",
+      "reason": "needs a human/director review: 腕・袖・ローブの前後関係が自然",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:hat_invariants",
+      "kind": "human",
+      "reason": "needs a human/director review: 帽子の花の向き、花下の緑の葉、金の月桂樹（帽子帯）",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "constraint:alpha_zero_bg",
+      "kind": "human",
+      "reason": "needs a human/director review: 納品PNGの背景は本物の alpha=0（チェッカー焼き込みなし）",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:purple_bob_hair",
+      "kind": "human",
+      "reason": "needs a human/director review: 紫色のボブヘア",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:face_and_glasses",
+      "kind": "human",
+      "reason": "needs a human/director review: 既存の顔・眼鏡",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:hat_flower_green_leaves",
+      "kind": "human",
+      "reason": "needs a human/director review: 帽子の花と緑の葉",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:hat_gold_laurel",
+      "kind": "human",
+      "reason": "needs a human/director review: 帽子の金色月桂樹装飾",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:purple_gold_palette",
+      "kind": "human",
+      "reason": "needs a human/director review: 紫・金の基本配色",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:right_only_asymmetric_check",
+      "kind": "human",
+      "reason": "needs a human/director review: 右側のみの非対称チェック柄",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:robe_front_open",
+      "kind": "human",
+      "reason": "needs a human/director review: ローブ前面の開放構造",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:rear_center_slit",
+      "kind": "human",
+      "reason": "needs a human/director review: 背面中央スリット",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:long_robe_hem_spread",
+      "kind": "human",
+      "reason": "needs a human/director review: 左右に広がる長いローブ裾",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:garter_kneesocks_structure",
+      "kind": "human",
+      "reason": "needs a human/director review: 正式なガーター・ニーソックス構造",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:bag_position_strap",
+      "kind": "human",
+      "reason": "needs a human/director review: バッグの位置・ストラップ",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    },
+    {
+      "id": "design:four_view_asymmetry",
+      "kind": "human",
+      "reason": "needs a human/director review: 既存の前後左右の非対称設定",
+      "result": "NOT_RUN",
+      "scope": "asset-set"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "NOT_RUN": 26,
+    "PASS": 40
+  },
+  "overall": "NOT_RUN",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "characterId": "morwen",
+    "kind": "asset-set",
+    "path": "tools/character-asset-studio/pipeline/examples/demo_candidates.asset-set.json",
+    "sha256": "232e822c5b8027c66011e88b94de80a01c7d53f53fded8e87ac7f30f42a4c6f7"
+  }
+}

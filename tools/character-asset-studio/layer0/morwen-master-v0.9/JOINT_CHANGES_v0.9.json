@@ -1,0 +1,108 @@
+{
+  "added": {
+    "ballL": {
+      "joint3d": [
+        37,
+        1540,
+        28
+      ],
+      "reason": "ball-of-foot pivot for toe-off, inside the sole contact span"
+    },
+    "ballR": {
+      "joint3d": [
+        -37,
+        1540,
+        28
+      ],
+      "reason": "ball-of-foot pivot for toe-off, inside the sole contact span"
+    },
+    "handL": {
+      "joint3d": [
+        240,
+        841,
+        0
+      ],
+      "reason": "hand end along the forearm (0.45 head)"
+    },
+    "handR": {
+      "joint3d": [
+        -240,
+        841,
+        0
+      ],
+      "reason": "hand end along the forearm (0.45 head)"
+    },
+    "heelL": {
+      "joint3d": [
+        37,
+        1540,
+        -50
+      ],
+      "reason": "heel-strike pivot at the back of the v0.8 sole contact span (-50..+50)"
+    },
+    "heelR": {
+      "joint3d": [
+        -37,
+        1540,
+        -50
+      ],
+      "reason": "heel-strike pivot at the back of the v0.8 sole contact span (-50..+50)"
+    },
+    "jawL": {
+      "joint3d": [
+        41,
+        287,
+        -17
+      ],
+      "reason": "jaw angle (left) so the jaw reads as a separate volume from the cranium"
+    },
+    "jawR": {
+      "joint3d": [
+        -41,
+        287,
+        -17
+      ],
+      "reason": "jaw angle (right)"
+    },
+    "neckTop": {
+      "joint3d": [
+        0,
+        316,
+        -26
+      ],
+      "reason": "neck attaches under/behind the skull, not at the chin: needed for a clear skull-jaw-neck connection"
+    },
+    "toeL": {
+      "joint3d": [
+        37,
+        1540,
+        50
+      ],
+      "reason": "front end of the v0.8 sole contact span"
+    },
+    "toeR": {
+      "joint3d": [
+        -37,
+        1540,
+        50
+      ],
+      "reason": "front end of the v0.8 sole contact span"
+    },
+    "waist": {
+      "joint3d": [
+        0,
+        650,
+        0
+      ],
+      "reason": "separates ribcage / waist / pelvis and gives the torso twist axis"
+    }
+  },
+  "base": {
+    "path": "tools/character-asset-studio/layer0/morwen-master-v0.8/MASTER_BODY_SPEC.candidate.json",
+    "sha256": "1f42c9d1d268d8746f26d9ea9ab75469911291b6a460a540b3920c2bc864c76d"
+  },
+  "changed": [],
+  "note": "No v0.8 joint coordinate was changed. Only articulation joints were added; each entry gives the reason. All added joints are DESIGNED_CANDIDATE.",
+  "schema": "cas/joint-changes/0.9",
+  "status": "UNAPPROVED_CANDIDATE"
+}

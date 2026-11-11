@@ -1,0 +1,652 @@
+{
+  "adoptionBlockers": [
+    "overall is NOT_RUN",
+    "human checks NOT_RUN: design:bag_position_strap, design:face_and_glasses, design:four_view_asymmetry, design:garter_kneesocks_structure, design:hat_flower_green_leaves, design:hat_gold_laurel, design:long_robe_hem_spread, design:purple_bob_hair, design:purple_gold_palette, design:rear_center_slit, design:right_only_asymmetric_check, design:robe_front_open …"
+  ],
+  "adoptionReady": false,
+  "checks": [
+    {
+      "id": "brief_schema",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "production_brief.json"
+    },
+    {
+      "id": "v2_compatible_landmarks",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "baseBodySpecV2"
+    },
+    {
+      "id": "canvas_1200x1600_rgba",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "alpha0": 1727014,
+        "borderNonZero": 8,
+        "note": "border pixels come only from the dashed reference lines"
+      },
+      "id": "transparent_area",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "body_contact_on_anchor",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "headTopY": 175,
+        "top": 175
+      },
+      "id": "body_top_on_headTop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "id": "ground_joint",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "id": "canvas_1200x1600_rgba",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "alpha0": 1726966,
+        "borderNonZero": 8,
+        "note": "border pixels come only from the dashed reference lines"
+      },
+      "id": "transparent_area",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "body_contact_on_anchor",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "headTopY": 175,
+        "top": 175
+      },
+      "id": "body_top_on_headTop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "id": "ground_joint",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "id": "canvas_1200x1600_rgba",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "alpha0": 1790638,
+        "borderNonZero": 8,
+        "note": "border pixels come only from the dashed reference lines"
+      },
+      "id": "transparent_area",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "body_contact_on_anchor",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "headTopY": 175,
+        "top": 175
+      },
+      "id": "body_top_on_headTop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "ground_joint",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "canvas_1200x1600_rgba",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "alpha0": 1789507,
+        "borderNonZero": 8,
+        "note": "border pixels come only from the dashed reference lines"
+      },
+      "id": "transparent_area",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "bottom": 1540,
+        "contactX": 600,
+        "top": 175
+      },
+      "id": "body_contact_on_anchor",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "headTopY": 175,
+        "top": 175
+      },
+      "id": "body_top_on_headTop",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "id": "ground_joint",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "back": {
+          "headsTall": 8.531,
+          "legLength": 796,
+          "lines": [
+            175,
+            744,
+            1076,
+            1540
+          ],
+          "pelvisWidth": 100,
+          "shoulderWidth": 230
+        },
+        "front": {
+          "headsTall": 8.531,
+          "legLength": 796,
+          "lines": [
+            175,
+            744,
+            1076,
+            1540
+          ],
+          "pelvisWidth": 100,
+          "shoulderWidth": 230
+        }
+      },
+      "id": "front_back_dimensions_equal",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/back"
+    },
+    {
+      "id": "front_back_symmetric_skeleton",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/back"
+    },
+    {
+      "id": "left_right_joints_mirror",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left/right"
+    },
+    {
+      "detail": {
+        "elbowL-wristL": 178.73,
+        "hipL-kneeL": 332.25,
+        "hipR-kneeR": 332.25,
+        "kneeL-ankleL": 395.64,
+        "shoulderL-elbowL": 178.73,
+        "shoulderR-elbowR": 178.73
+      },
+      "id": "limb_lengths_symmetric_3d",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "skeleton"
+    },
+    {
+      "detail": {
+        "headTop/pelvis/knee/ground": {
+          "back": [
+            175,
+            744,
+            1076,
+            1540
+          ],
+          "front": [
+            175,
+            744,
+            1076,
+            1540
+          ],
+          "left": [
+            175,
+            744,
+            1076,
+            1540
+          ],
+          "right": [
+            175,
+            744,
+            1076,
+            1540
+          ]
+        }
+      },
+      "id": "reference_lines_4views",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "all"
+    },
+    {
+      "id": "verified_ground_match",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "deltaPx": 2,
+        "designedX": 563,
+        "measuredX": 561,
+        "note": "measured point = centre of the sole/heel span at the probe row; tolerance = quarter of a boot width",
+        "tolPx": 10
+      },
+      "id": "verified_foot_contact_within_sole",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/footLeft"
+    },
+    {
+      "detail": {
+        "deltaPx": -2,
+        "designedX": 637,
+        "measuredX": 639,
+        "note": "measured point = centre of the sole/heel span at the probe row; tolerance = quarter of a boot width",
+        "tolPx": 10
+      },
+      "id": "verified_foot_contact_within_sole",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front/footRight"
+    },
+    {
+      "id": "verified_ground_match",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "deltaPx": -8,
+        "designedX": 563,
+        "measuredX": 571,
+        "note": "measured point = centre of the sole/heel span at the probe row; tolerance = quarter of a boot width",
+        "tolPx": 10
+      },
+      "id": "verified_foot_contact_within_sole",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/footLeft"
+    },
+    {
+      "detail": {
+        "deltaPx": 8,
+        "designedX": 637,
+        "measuredX": 629,
+        "note": "measured point = centre of the sole/heel span at the probe row; tolerance = quarter of a boot width",
+        "tolPx": 10
+      },
+      "id": "verified_foot_contact_within_sole",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back/footRight"
+    },
+    {
+      "id": "verified_ground_match",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "id": "verified_ground_match",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "detail": {
+        "designedMinusObservedY": {
+          "left.wrist": -15
+        }
+      },
+      "id": "side_wrist_vs_observation",
+      "kind": "human",
+      "reason": "same 3D arm pose projected sideways; the side-view observation differs slightly (ESTIMATED)",
+      "result": "NOT_RUN",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "bodyPixels": 173057,
+        "insideCanonFigure": 172694,
+        "outsidePixels": 363,
+        "ratio": 0.9979
+      },
+      "id": "body_inside_canon_figure",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "front"
+    },
+    {
+      "detail": {
+        "bodyPixels": 173057,
+        "insideCanonFigure": 172640,
+        "outsidePixels": 417,
+        "ratio": 0.9976
+      },
+      "id": "body_inside_canon_figure",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "back"
+    },
+    {
+      "detail": {
+        "bodyPixels": 109479,
+        "insideCanonFigure": 107480,
+        "outsidePixels": 1999,
+        "ratio": 0.9817
+      },
+      "id": "body_inside_canon_figure",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "left"
+    },
+    {
+      "detail": {
+        "bodyPixels": 110540,
+        "insideCanonFigure": 109549,
+        "outsidePixels": 991,
+        "ratio": 0.991
+      },
+      "id": "body_inside_canon_figure",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "right"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/front.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/back.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/left.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/candidates/morwen/final-visual-canon-20261111/right.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/front.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/left.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/right.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/pixel/back.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/front.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/left.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/right.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/originals/real/back.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/front_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/left_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/right_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "assets/official/characters/morwen/hd-v2/display/pixel/back_1200x1600.png"
+    },
+    {
+      "id": "protected_sha256",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "web/companions/morwen.webp"
+    },
+    {
+      "id": "designed_values_labelled",
+      "kind": "automated",
+      "result": "PASS",
+      "scope": "parameters"
+    },
+    {
+      "id": "design:purple_bob_hair",
+      "kind": "human",
+      "reason": "mandatory visual QA: 紫色のボブヘア",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:face_and_glasses",
+      "kind": "human",
+      "reason": "mandatory visual QA: 既存の顔・眼鏡",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:hat_flower_green_leaves",
+      "kind": "human",
+      "reason": "mandatory visual QA: 帽子の花と緑の葉",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:hat_gold_laurel",
+      "kind": "human",
+      "reason": "mandatory visual QA: 帽子の金色月桂樹装飾",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:purple_gold_palette",
+      "kind": "human",
+      "reason": "mandatory visual QA: 紫・金の基本配色",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:right_only_asymmetric_check",
+      "kind": "human",
+      "reason": "mandatory visual QA: 右側のみの非対称チェック柄",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:robe_front_open",
+      "kind": "human",
+      "reason": "mandatory visual QA: ローブ前面の開放構造",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:rear_center_slit",
+      "kind": "human",
+      "reason": "mandatory visual QA: 背面中央スリット",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:long_robe_hem_spread",
+      "kind": "human",
+      "reason": "mandatory visual QA: 左右に広がる長いローブ裾",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:garter_kneesocks_structure",
+      "kind": "human",
+      "reason": "mandatory visual QA: 正式なガーター・ニーソックス構造",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:bag_position_strap",
+      "kind": "human",
+      "reason": "mandatory visual QA: バッグの位置・ストラップ",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "design:four_view_asymmetry",
+      "kind": "human",
+      "reason": "mandatory visual QA: 既存の前後左右の非対称設定",
+      "result": "NOT_RUN",
+      "scope": "design"
+    },
+    {
+      "id": "final_design_adoption",
+      "kind": "human",
+      "reason": "director decision",
+      "result": "NOT_RUN",
+      "scope": "all"
+    },
+    {
+      "id": "final_skeleton_adoption",
+      "kind": "human",
+      "reason": "director decision after image generation and skeleton comparison",
+      "result": "NOT_RUN",
+      "scope": "all"
+    },
+    {
+      "id": "independent_visual_qa",
+      "kind": "human",
+      "reason": "independent (non-author) visual QA of the guides and overlays",
+      "result": "NOT_RUN",
+      "scope": "all"
+    }
+  ],
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "NOT_RUN": 16,
+    "PASS": 57
+  },
+  "overall": "NOT_RUN",
+  "qaKind": "automated_self_qa",
+  "schema": "cas/qa-report/0.5",
+  "subject": {
+    "characterId": "morwen",
+    "kind": "master-body-candidate",
+    "path": "tools/character-asset-studio/layer0/morwen-master-v0.8"
+  }
+}

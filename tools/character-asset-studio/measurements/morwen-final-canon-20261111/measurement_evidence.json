@@ -1,0 +1,709 @@
+{
+  "canvas": {
+    "height": 1600,
+    "width": 1200
+  },
+  "characterId": "morwen",
+  "observations": {
+    "observer": "Claude (AI visual inspection of zoomed, gridded crops of the protected canon, read-only). Not a human or director measurement.",
+    "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/observations.json",
+    "sha256": "f38012a88e6c0a0f60bc8a0635bb13882405a844860a6870247fb33184554c5c"
+  },
+  "policy": "Read-only measurement of the protected canon. visible = located on visible body; estimated = inferred from nearby visible evidence (needs human review); unmeasurable = no body evidence (costume covers it). Costume outlines are not body dimensions. Nothing here is adopted.",
+  "schema": "cas/canon-measurement/0.5",
+  "sideConvention": "Left/Right in landmark names = screen-left/screen-right of each image (studio convention), not anatomical. Front: screen-left = character's right. Back: screen-left = character's left. Side views (left/right files): legs overlap; *Left = near (visible) limb, *Right = far (occluded) limb; anatomical side not asserted.",
+  "status": "UNAPPROVED_REFERENCE",
+  "summary": {
+    "contactXDeltaFromAnchor": {
+      "back": 8,
+      "front": 0,
+      "left": -108,
+      "right": 0
+    },
+    "groundRowPx": {
+      "back": 1549,
+      "front": 1542,
+      "left": 1537,
+      "right": 1540
+    },
+    "groundSpreadPx": 12,
+    "landmarkStatusCounts": {
+      "estimated": 3,
+      "unmeasurable": 23,
+      "visible": 14
+    }
+  },
+  "views": {
+    "back": {
+      "automated": {
+        "costumeNote": "outline of the whole costumed figure incl. hat, capelet and robe; NOT a body dimension",
+        "costumeSilhouetteBBox": [
+          208,
+          45,
+          1014,
+          1549
+        ],
+        "groundNote": "lowest row with a >=8 px foreground run; the sole edge fades into the background over ~3 px, so the row can move by about +-3 px with the threshold",
+        "groundRow": 1549,
+        "groundUncertaintyPx": 3,
+        "probeRow": 1543,
+        "probeSpans": [
+          [
+            557,
+            601
+          ],
+          [
+            615,
+            658
+          ]
+        ]
+      },
+      "guides": {
+        "guide": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_back.png",
+          "sha256": "fe87aae0754939e412d05789e82830f6a6c2250daf2f3ae72cabed82948a2442"
+        },
+        "guidePreview": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_back_preview.png",
+          "sha256": "1d9d045a0655f0bd3389c39e5120b575df2ea8eec0a14cccaccf8c4c81841136"
+        }
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "method": "screen-left sole span 557..601 at row 1543",
+          "n": [
+            0.4825,
+            0.96813
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            579,
+            1549
+          ],
+          "pxFromN": [
+            579,
+            1549
+          ],
+          "status": "visible"
+        },
+        "footRight": {
+          "confidence": "high",
+          "method": "screen-right sole span 615..658 at row 1543",
+          "n": [
+            0.53083,
+            0.96813
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            637,
+            1549
+          ],
+          "pxFromN": [
+            637,
+            1549
+          ],
+          "pxRaw": [
+            636.5,
+            1549
+          ],
+          "status": "visible"
+        },
+        "ground": {
+          "confidence": "high",
+          "method": "midpoint of the two sole contacts; y = lowest row with a >=8 px run",
+          "n": [
+            0.50667,
+            0.96813
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            608,
+            1549
+          ],
+          "pxFromN": [
+            608,
+            1549
+          ],
+          "pxRaw": [
+            607.75,
+            1549
+          ],
+          "status": "visible"
+        },
+        "headTop": {
+          "origin": "observation",
+          "reason": "hidden under the hat crown",
+          "status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "medium",
+          "method": "screen-left leg (character's left) visible through the robe's rear slit; knee = popliteal crease / narrowest contour (outer x~534, inner x~601 at y~1068)",
+          "n": [
+            0.4725,
+            0.6675
+          ],
+          "origin": "observation",
+          "px": [
+            567,
+            1068
+          ],
+          "pxFromN": [
+            567,
+            1068
+          ],
+          "status": "visible"
+        },
+        "kneeRight": {
+          "confidence": "medium",
+          "method": "screen-right leg; crease/contour (inner x~608, outer x~678)",
+          "n": [
+            0.53583,
+            0.6675
+          ],
+          "origin": "observation",
+          "px": [
+            643,
+            1068
+          ],
+          "pxFromN": [
+            643,
+            1068
+          ],
+          "status": "visible"
+        },
+        "neck": {
+          "origin": "observation",
+          "reason": "back of the neck hidden by the bob hair and the capelet collar",
+          "status": "unmeasurable"
+        },
+        "pelvis": {
+          "origin": "observation",
+          "reason": "covered by the skirt and robe",
+          "status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "origin": "observation",
+          "reason": "covered by the capelet",
+          "status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "origin": "observation",
+          "reason": "covered by the capelet",
+          "status": "unmeasurable"
+        }
+      },
+      "source": {
+        "foreground": "alpha>=128 and max(R,G,B)>10 (RGB on black)",
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+        "placement": {
+          "exact": false,
+          "h": 1600,
+          "scale": 1.041667,
+          "w": 1200,
+          "x": 0,
+          "y": 0
+        },
+        "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+        "sourceMode": "RGB",
+        "sourceSize": [
+          1152,
+          1536
+        ]
+      }
+    },
+    "front": {
+      "automated": {
+        "costumeNote": "outline of the whole costumed figure incl. hat, capelet and robe; NOT a body dimension",
+        "costumeSilhouetteBBox": [
+          167,
+          33,
+          1030,
+          1543
+        ],
+        "groundNote": "lowest row with a >=8 px foreground run; the sole edge fades into the background over ~3 px, so the row can move by about +-3 px with the threshold",
+        "groundRow": 1542,
+        "groundUncertaintyPx": 3,
+        "probeRow": 1536,
+        "probeSpans": [
+          [
+            525,
+            597
+          ],
+          [
+            603,
+            674
+          ]
+        ]
+      },
+      "guides": {
+        "guide": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_front.png",
+          "sha256": "be77d2632a7cd9740a9806ca7d5233b643761df7f54c90ba8d5cbb174554fd35"
+        },
+        "guidePreview": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_front_preview.png",
+          "sha256": "6c8a075f79b5898efedc18f8b6baa8cda9f4b8d2037ab322c06bd47c9feb5a39"
+        }
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "method": "screen-left sole span 525..597 at row 1536",
+          "n": [
+            0.4675,
+            0.96375
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            561,
+            1542
+          ],
+          "pxFromN": [
+            561,
+            1542
+          ],
+          "status": "visible"
+        },
+        "footRight": {
+          "confidence": "high",
+          "method": "screen-right sole span 603..674 at row 1536",
+          "n": [
+            0.5325,
+            0.96375
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            639,
+            1542
+          ],
+          "pxFromN": [
+            639,
+            1542
+          ],
+          "pxRaw": [
+            638.5,
+            1542
+          ],
+          "status": "visible"
+        },
+        "ground": {
+          "confidence": "high",
+          "method": "midpoint of the two sole contacts; y = lowest row with a >=8 px run",
+          "n": [
+            0.5,
+            0.96375
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            600,
+            1542
+          ],
+          "pxFromN": [
+            600,
+            1542
+          ],
+          "pxRaw": [
+            599.75,
+            1542
+          ],
+          "status": "visible"
+        },
+        "headTop": {
+          "origin": "observation",
+          "reason": "skull top hidden under the hat crown; hat/brim outline is costume, not head",
+          "status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "medium",
+          "method": "screen-left leg (character's right) visible in stockings below the skirt; knee = narrowest point of the leg contour between thigh and calf bulge (outer edge x~530, inner edge x~600 at y~1080)",
+          "n": [
+            0.47083,
+            0.675
+          ],
+          "origin": "observation",
+          "px": [
+            565,
+            1080
+          ],
+          "pxFromN": [
+            565,
+            1080
+          ],
+          "status": "visible"
+        },
+        "kneeRight": {
+          "confidence": "medium",
+          "method": "screen-right leg; same contour method (inner x~605, outer x~671 at y~1080)",
+          "n": [
+            0.53167,
+            0.675
+          ],
+          "origin": "observation",
+          "px": [
+            638,
+            1080
+          ],
+          "pxFromN": [
+            638,
+            1080
+          ],
+          "status": "visible"
+        },
+        "neck": {
+          "confidence": "low",
+          "method": "midline x from the visible face (nose/chin, x~578-582); y between the visible chin (y~333) and the collar/capelet junction (y~395); neck skin itself is covered by the high ruffled collar",
+          "n": [
+            0.48333,
+            0.2375
+          ],
+          "origin": "observation",
+          "px": [
+            580,
+            380
+          ],
+          "pxFromN": [
+            580,
+            380
+          ],
+          "range": {
+            "y": [
+              360,
+              395
+            ]
+          },
+          "status": "estimated"
+        },
+        "pelvis": {
+          "origin": "observation",
+          "reason": "hip joints covered by the skirt and robe; skirt waistband is costume, not the pelvis",
+          "status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "costumeReference": [
+            455,
+            420
+          ],
+          "origin": "observation",
+          "reason": "shoulder joints covered by the capelet; capelet ridge (~(455,420)) is costume volume, not the acromion",
+          "status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "costumeReference": [
+            705,
+            420
+          ],
+          "origin": "observation",
+          "reason": "covered by the capelet; capelet ridge (~(705,420)) is costume volume",
+          "status": "unmeasurable"
+        }
+      },
+      "source": {
+        "foreground": "alpha>=128 and max(R,G,B)>10 (RGB on black)",
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/front.png",
+        "placement": {
+          "exact": false,
+          "h": 1600,
+          "scale": 1.041667,
+          "w": 1200,
+          "x": 0,
+          "y": 0
+        },
+        "sha256": "a0f9bdbdfaf928aab49ea116d3ec40620f1558efe55f5f90aa55002213ae7bbd",
+        "sourceMode": "RGB",
+        "sourceSize": [
+          1152,
+          1536
+        ]
+      }
+    },
+    "left": {
+      "automated": {
+        "costumeNote": "outline of the whole costumed figure incl. hat, capelet and robe; NOT a body dimension",
+        "costumeSilhouetteBBox": [
+          321,
+          35,
+          904,
+          1537
+        ],
+        "groundNote": "lowest row with a >=8 px foreground run; the sole edge fades into the background over ~3 px, so the row can move by about +-3 px with the threshold",
+        "groundRow": 1537,
+        "groundUncertaintyPx": 3,
+        "probeRow": 1531,
+        "probeSpans": [
+          [
+            409,
+            499
+          ],
+          [
+            538,
+            575
+          ]
+        ]
+      },
+      "guides": {
+        "guide": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_left.png",
+          "sha256": "bce4d87f88177c8faf86d48e17eaccc5dc219e03be702df92298119fddf465c6"
+        },
+        "guidePreview": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_left_preview.png",
+          "sha256": "35d3dcac9bc7c62ccf45dc4bf3d7dbd29d7c53f42f6f8e59e53d895b7495ce63"
+        }
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "method": "near-boot sole: outer span 409..575 at row 1531 (toe and heel of one boot), y = lowest sole row",
+          "n": [
+            0.41,
+            0.96063
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            492,
+            1537
+          ],
+          "pxFromN": [
+            492,
+            1537
+          ],
+          "status": "visible"
+        },
+        "footRight": {
+          "origin": "automated_alpha",
+          "reason": "far foot hidden behind the near foot",
+          "status": "unmeasurable"
+        },
+        "ground": {
+          "confidence": "high",
+          "method": "centre of the visible sole contact; y = lowest row with a >=8 px run",
+          "n": [
+            0.41,
+            0.96063
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            492,
+            1537
+          ],
+          "pxFromN": [
+            492,
+            1537
+          ],
+          "status": "visible"
+        },
+        "headTop": {
+          "origin": "observation",
+          "reason": "hidden under the hat crown",
+          "status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "low",
+          "method": "near leg only; knee from the slight bend of the front and back leg contours (x~465..552 at y~1090); no clear patella or crease",
+          "n": [
+            0.42333,
+            0.68125
+          ],
+          "origin": "observation",
+          "px": [
+            508,
+            1090
+          ],
+          "pxFromN": [
+            508,
+            1090
+          ],
+          "status": "estimated"
+        },
+        "kneeRight": {
+          "origin": "observation",
+          "reason": "far leg hidden behind the near leg",
+          "status": "unmeasurable"
+        },
+        "neck": {
+          "origin": "observation",
+          "reason": "front of the neck partly visible under the chin, but the back contour is hidden by hair, so the neck centre cannot be located",
+          "status": "unmeasurable"
+        },
+        "pelvis": {
+          "origin": "observation",
+          "reason": "covered by the skirt and robe",
+          "status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "origin": "observation",
+          "reason": "covered by the capelet",
+          "status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "origin": "observation",
+          "reason": "covered by the capelet (far side)",
+          "status": "unmeasurable"
+        }
+      },
+      "source": {
+        "foreground": "alpha>=128 and max(R,G,B)>10 (RGB on black)",
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+        "placement": {
+          "exact": false,
+          "h": 1600,
+          "scale": 1.041667,
+          "w": 1200,
+          "x": 0,
+          "y": 0
+        },
+        "sha256": "cd1dbc8447de72f0b4239cb6e76ea12c703df0812b1fc225ecb892c34db1b984",
+        "sourceMode": "RGB",
+        "sourceSize": [
+          1152,
+          1536
+        ]
+      }
+    },
+    "right": {
+      "automated": {
+        "costumeNote": "outline of the whole costumed figure incl. hat, capelet and robe; NOT a body dimension",
+        "costumeSilhouetteBBox": [
+          152,
+          24,
+          775,
+          1540
+        ],
+        "groundNote": "lowest row with a >=8 px foreground run; the sole edge fades into the background over ~3 px, so the row can move by about +-3 px with the threshold",
+        "groundRow": 1540,
+        "groundUncertaintyPx": 3,
+        "probeRow": 1534,
+        "probeSpans": [
+          [
+            517,
+            569
+          ],
+          [
+            599,
+            683
+          ]
+        ]
+      },
+      "guides": {
+        "guide": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_right.png",
+          "sha256": "12d844c593c3adc815fbcdb48182da3d11da3a04e5fac7f1bff2c02d20007daa"
+        },
+        "guidePreview": {
+          "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/guide_right_preview.png",
+          "sha256": "56ece08df262f623fc6173e5fef3a779626290547a0adecfb434df03daa82b1e"
+        }
+      },
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "method": "near-boot sole: outer span 517..683 at row 1534 (toe and heel of one boot), y = lowest sole row",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            600,
+            1540
+          ],
+          "pxFromN": [
+            600,
+            1540
+          ],
+          "status": "visible"
+        },
+        "footRight": {
+          "origin": "automated_alpha",
+          "reason": "far foot hidden behind the near foot",
+          "status": "unmeasurable"
+        },
+        "ground": {
+          "confidence": "high",
+          "method": "centre of the visible sole contact; y = lowest row with a >=8 px run",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "origin": "automated_alpha",
+          "px": [
+            600,
+            1540
+          ],
+          "pxFromN": [
+            600,
+            1540
+          ],
+          "status": "visible"
+        },
+        "headTop": {
+          "origin": "observation",
+          "reason": "hidden under the hat crown",
+          "status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "low",
+          "method": "near leg only; bend of the leg contours (x~547..638 at y~1090); no clear patella or crease",
+          "n": [
+            0.49333,
+            0.68125
+          ],
+          "origin": "observation",
+          "px": [
+            592,
+            1090
+          ],
+          "pxFromN": [
+            592,
+            1090
+          ],
+          "status": "estimated"
+        },
+        "kneeRight": {
+          "origin": "observation",
+          "reason": "far leg (mostly) hidden behind the near leg; a partial contour is not enough to place the joint",
+          "status": "unmeasurable"
+        },
+        "neck": {
+          "origin": "observation",
+          "reason": "back contour of the neck hidden by hair",
+          "status": "unmeasurable"
+        },
+        "pelvis": {
+          "origin": "observation",
+          "reason": "covered by the skirt and robe",
+          "status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "origin": "observation",
+          "reason": "covered by the capelet",
+          "status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "origin": "observation",
+          "reason": "covered by the capelet (far side)",
+          "status": "unmeasurable"
+        }
+      },
+      "source": {
+        "foreground": "alpha>=128",
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+        "placement": {
+          "exact": true,
+          "h": 1600,
+          "scale": 1,
+          "w": 1200,
+          "x": 0,
+          "y": 0
+        },
+        "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+        "sourceMode": "RGBA",
+        "sourceSize": [
+          1200,
+          1600
+        ]
+      }
+    }
+  }
+}

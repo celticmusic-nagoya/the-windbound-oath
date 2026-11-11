@@ -1,0 +1,22 @@
+{
+ "schema": "cas/master-body-observations/0.8",
+ "status": "UNAPPROVED_REFERENCE",
+ "characterId": "morwen",
+ "observer": "Claude (AI visual inspection of zoomed, gridded crops of the NORMALISED working copies, read-only). Not a human or director measurement.",
+ "date": "2026-11-11",
+ "coordinateSpace": "normalised working canvas 1200x1600, contact (600,1540) (tools/character-asset-studio/normalized/morwen-final-canon-20261111/)",
+ "observations": {
+  "front.eyeLineY": {"value": 268, "status": "ESTIMATED", "method": "centre of both pupils (y 265-272)"},
+  "front.chinY": {"value": 335, "status": "ESTIMATED", "method": "lowest point of the visible jaw line"},
+  "front.faceMidlineX": {"value": 605, "status": "ESTIMATED", "method": "nose and mouth centre"},
+  "front.faceWidthAtEyes": {"value": 116, "status": "ESTIMATED", "method": "cheek contour x 552..668 at the eye line"},
+  "front.capeletRidgeY": {"value": 418, "status": "ESTIMATED", "method": "top of the capelet over the shoulders (costume surface; used only as an upper bound for the shoulder joint, never as a body dimension)"},
+  "front.waistbandY": {"value": 640, "status": "ESTIMATED", "method": "top of the pleated skirt waistband below the vest points (costume; used only to place the pelvis below it)"},
+  "front.wristLeft": {"value": [381, 769], "status": "ESTIMATED", "method": "screen-left hand: end of the sleeve cuff / start of the hand"},
+  "front.wristRight": {"value": [819, 774], "status": "ESTIMATED", "method": "screen-right hand, same method"},
+  "left.wrist": {"value": [608, 787], "status": "ESTIMATED", "method": "near hand in the left view, end of the cuff"}
+ },
+ "findings": [
+  "The v0.6 front neck estimate used x=580; the face midline in the same image is x~605 (v0.6 data is kept unchanged as required; v0.8 uses its own observation)."
+ ]
+}

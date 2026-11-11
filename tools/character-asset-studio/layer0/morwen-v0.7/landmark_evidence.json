@@ -1,0 +1,567 @@
+{
+  "ageCategory": "minor",
+  "bodyGuidePolicy": "minor_neutral_structure",
+  "bodyGuides": {
+    "back": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/back_body_guide.png",
+        "sha256": "a50228046e48f96a8551750eb7e5c9e49b667cc5cc3f0274ffe9848597932761",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/back_body_guide_preview.png",
+        "sha256": "eda3725a94c5fa92dc9886fb0b817a245531e90857d10aa0f31d8525642a3c03",
+        "width": 1200
+      }
+    },
+    "front": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/front_body_guide.png",
+        "sha256": "e216a9717613a4826c7332edf82421e6df288b6ffff771fa0a73a57bd53a7397",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/front_body_guide_preview.png",
+        "sha256": "1fcbacccd502b71e65430412a4dae4fa248ea2375000e363366b6b113a7c54aa",
+        "width": 1200
+      }
+    },
+    "left": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/left_body_guide.png",
+        "sha256": "c5ec2080991662554f84a0a7f84296a84c324bdc3ec2a4a536a90f26205fa9b9",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/left_body_guide_preview.png",
+        "sha256": "de7ea35612496e6b521d26ea3095ff3cb9be400f3152dd41b58f7aa6cc2fd9da",
+        "width": 1200
+      }
+    },
+    "right": {
+      "guide": {
+        "height": 1600,
+        "mode": "RGBA",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/right_body_guide.png",
+        "sha256": "181c52fe6bea9fc0e7a90ff8177f8f440c3e2e831ba105cb3e3829943b8a754e",
+        "width": 1200
+      },
+      "guidePreview": {
+        "height": 1600,
+        "mode": "RGB",
+        "path": "tools/character-asset-studio/layer0/morwen-v0.7/right_body_guide_preview.png",
+        "sha256": "d95d5ac1291021ec5f48c52a61a13b311afcc56a06626808bb4ad03317913d23",
+        "width": 1200
+      }
+    }
+  },
+  "canvas": {
+    "height": 1600,
+    "width": 1200
+  },
+  "characterId": "morwen",
+  "designedCandidates": {
+    "commonGround": {
+      "measurementStatus": "VERIFIED",
+      "n": [
+        0.5,
+        0.9625
+      ],
+      "note": "all four normalised views put the measured sole contact on this point",
+      "px": [
+        600,
+        1540
+      ]
+    },
+    "commonKneeHeight": {
+      "derivedFrom": {
+        "back/kneeLeft": 1059,
+        "back/kneeRight": 1059,
+        "front/kneeLeft": 1078,
+        "front/kneeRight": 1078,
+        "left/kneeLeft": 1093,
+        "right/kneeLeft": 1090
+      },
+      "measurementStatus": "DESIGNED_CANDIDATE",
+      "note": "mean of the normalised knee heights (all ESTIMATED). A proposal for a common build, not a measurement.",
+      "spreadPx": 34,
+      "y": 1076
+    },
+    "hiddenJoints": {
+      "keys": [
+        "headTop",
+        "neck (back/side)",
+        "shoulderLeft",
+        "shoulderRight",
+        "pelvis",
+        "far knee/foot (side views)"
+      ],
+      "measurementStatus": "UNKNOWN",
+      "note": "To be designed in the image-generation step and returned as DESIGNED_CANDIDATE; never back-filled from the template or the canon outline."
+    }
+  },
+  "inputs": {
+    "measurementEvidence": {
+      "path": "tools/character-asset-studio/measurements/morwen-final-canon-20261111/measurement_evidence.json",
+      "sha256": "1372784a8ee16d2e2d80a03b1cab8867ad07ca486bbbce90bb702075849477cd"
+    },
+    "viewTransforms": {
+      "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/view_transforms.json",
+      "sha256": "2d8700706606412859e7bd79f68c09e104bd59f06226ba9c5ab390eeef990a44"
+    }
+  },
+  "policy": "Normalised coordinates = v0.6 canon measurements + per-view translation. measurementStatus: VERIFIED (automated sole/ground), ESTIMATED (AI visual or inferred, not human-confirmed), UNKNOWN (hidden by costume). DESIGNED_CANDIDATE values are listed separately and are never canon measurements. Nothing here is adopted.",
+  "referenceContact": [
+    600,
+    1540
+  ],
+  "schema": "cas/body-landmark-evidence/0.7",
+  "status": "UNAPPROVED_REFERENCE",
+  "summary": {
+    "commonKneeHeight": 1076,
+    "measurementStatusCounts": {
+      "ESTIMATED": 7,
+      "UNKNOWN": 23,
+      "VERIFIED": 10
+    }
+  },
+  "views": {
+    "back": {
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "screen-left sole span 557..601 at row 1543",
+          "n": [
+            0.47583,
+            0.9625
+          ],
+          "px": [
+            571,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "footRight": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "screen-right sole span 615..658 at row 1543",
+          "n": [
+            0.52417,
+            0.9625
+          ],
+          "px": [
+            629,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "ground": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "midpoint of the two sole contacts; y = lowest row with a >=8 px run",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "headTop": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "hidden under the hat crown",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "medium",
+          "measurementStatus": "ESTIMATED",
+          "method": "screen-left leg (character's left) visible through the robe's rear slit; knee = popliteal crease / narrowest contour (outer x~534, inner x~601 at y~1068)",
+          "n": [
+            0.46583,
+            0.66188
+          ],
+          "px": [
+            559,
+            1059
+          ],
+          "v06Origin": "observation",
+          "v06Status": "visible"
+        },
+        "kneeRight": {
+          "confidence": "medium",
+          "measurementStatus": "ESTIMATED",
+          "method": "screen-right leg; crease/contour (inner x~608, outer x~678)",
+          "n": [
+            0.52917,
+            0.66188
+          ],
+          "px": [
+            635,
+            1059
+          ],
+          "v06Origin": "observation",
+          "v06Status": "visible"
+        },
+        "neck": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "back of the neck hidden by the bob hair and the capelet collar",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "pelvis": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the skirt and robe",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        }
+      },
+      "translate": [
+        -8,
+        -9
+      ]
+    },
+    "front": {
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "screen-left sole span 525..597 at row 1536",
+          "n": [
+            0.4675,
+            0.9625
+          ],
+          "px": [
+            561,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "footRight": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "screen-right sole span 603..674 at row 1536",
+          "n": [
+            0.5325,
+            0.9625
+          ],
+          "px": [
+            639,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "ground": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "midpoint of the two sole contacts; y = lowest row with a >=8 px run",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "headTop": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "skull top hidden under the hat crown; hat/brim outline is costume, not head",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "medium",
+          "measurementStatus": "ESTIMATED",
+          "method": "screen-left leg (character's right) visible in stockings below the skirt; knee = narrowest point of the leg contour between thigh and calf bulge (outer edge x~530, inner edge x~600 at y~1080)",
+          "n": [
+            0.47083,
+            0.67375
+          ],
+          "px": [
+            565,
+            1078
+          ],
+          "v06Origin": "observation",
+          "v06Status": "visible"
+        },
+        "kneeRight": {
+          "confidence": "medium",
+          "measurementStatus": "ESTIMATED",
+          "method": "screen-right leg; same contour method (inner x~605, outer x~671 at y~1080)",
+          "n": [
+            0.53167,
+            0.67375
+          ],
+          "px": [
+            638,
+            1078
+          ],
+          "v06Origin": "observation",
+          "v06Status": "visible"
+        },
+        "neck": {
+          "confidence": "low",
+          "measurementStatus": "ESTIMATED",
+          "method": "midline x from the visible face (nose/chin, x~578-582); y between the visible chin (y~333) and the collar/capelet junction (y~395); neck skin itself is covered by the high ruffled collar",
+          "n": [
+            0.48333,
+            0.23625
+          ],
+          "px": [
+            580,
+            378
+          ],
+          "v06Origin": "observation",
+          "v06Status": "estimated"
+        },
+        "pelvis": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "hip joints covered by the skirt and robe; skirt waistband is costume, not the pelvis",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "shoulder joints covered by the capelet; capelet ridge (~(455,420)) is costume volume, not the acromion",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet; capelet ridge (~(705,420)) is costume volume",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        }
+      },
+      "translate": [
+        0,
+        -2
+      ]
+    },
+    "left": {
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "near-boot sole: outer span 409..575 at row 1531 (toe and heel of one boot), y = lowest sole row",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "footRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "far foot hidden behind the near foot",
+          "v06Origin": "automated_alpha",
+          "v06Status": "unmeasurable"
+        },
+        "ground": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "centre of the visible sole contact; y = lowest row with a >=8 px run",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "headTop": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "hidden under the hat crown",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "low",
+          "measurementStatus": "ESTIMATED",
+          "method": "near leg only; knee from the slight bend of the front and back leg contours (x~465..552 at y~1090); no clear patella or crease",
+          "n": [
+            0.51333,
+            0.68313
+          ],
+          "px": [
+            616,
+            1093
+          ],
+          "v06Origin": "observation",
+          "v06Status": "estimated"
+        },
+        "kneeRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "far leg hidden behind the near leg",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "neck": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "front of the neck partly visible under the chin, but the back contour is hidden by hair, so the neck centre cannot be located",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "pelvis": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the skirt and robe",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet (far side)",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        }
+      },
+      "translate": [
+        108,
+        3
+      ]
+    },
+    "right": {
+      "landmarks": {
+        "footLeft": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "near-boot sole: outer span 517..683 at row 1534 (toe and heel of one boot), y = lowest sole row",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "footRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "far foot hidden behind the near foot",
+          "v06Origin": "automated_alpha",
+          "v06Status": "unmeasurable"
+        },
+        "ground": {
+          "confidence": "high",
+          "measurementStatus": "VERIFIED",
+          "method": "centre of the visible sole contact; y = lowest row with a >=8 px run",
+          "n": [
+            0.5,
+            0.9625
+          ],
+          "px": [
+            600,
+            1540
+          ],
+          "v06Origin": "automated_alpha",
+          "v06Status": "visible"
+        },
+        "headTop": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "hidden under the hat crown",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "kneeLeft": {
+          "confidence": "low",
+          "measurementStatus": "ESTIMATED",
+          "method": "near leg only; bend of the leg contours (x~547..638 at y~1090); no clear patella or crease",
+          "n": [
+            0.49333,
+            0.68125
+          ],
+          "px": [
+            592,
+            1090
+          ],
+          "v06Origin": "observation",
+          "v06Status": "estimated"
+        },
+        "kneeRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "far leg (mostly) hidden behind the near leg; a partial contour is not enough to place the joint",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "neck": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "back contour of the neck hidden by hair",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "pelvis": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the skirt and robe",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderLeft": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        },
+        "shoulderRight": {
+          "measurementStatus": "UNKNOWN",
+          "reason": "covered by the capelet (far side)",
+          "v06Origin": "observation",
+          "v06Status": "unmeasurable"
+        }
+      },
+      "translate": [
+        0,
+        0
+      ]
+    }
+  }
+}

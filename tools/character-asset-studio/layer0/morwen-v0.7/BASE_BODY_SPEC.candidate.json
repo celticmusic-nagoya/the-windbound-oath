@@ -1,0 +1,576 @@
+{
+  "assets": [
+    {
+      "canonical": false,
+      "dimensions": [
+        1200,
+        1600
+      ],
+      "frame": 0,
+      "layer": "reference",
+      "name": "front.png",
+      "sha256": "b2f9cf65d66bd364cf204b1f304eb8065be24340e6b594fbdc646052c0da1844",
+      "view": "front"
+    },
+    {
+      "canonical": false,
+      "dimensions": [
+        1200,
+        1600
+      ],
+      "frame": 0,
+      "layer": "reference",
+      "name": "back.png",
+      "sha256": "f093f9d35728776746078c4c9e95b9405276e6828f50c203ea6d0920edeb0c5e",
+      "view": "back"
+    },
+    {
+      "canonical": false,
+      "dimensions": [
+        1200,
+        1600
+      ],
+      "frame": 0,
+      "layer": "reference",
+      "name": "left.png",
+      "sha256": "b9214ca29e8c9b7ba9742d06c4b8d4ee67eddbba1c3999a5e2fdad9cc0fe9930",
+      "view": "left"
+    },
+    {
+      "canonical": false,
+      "dimensions": [
+        1200,
+        1600
+      ],
+      "frame": 0,
+      "layer": "reference",
+      "name": "right.png",
+      "sha256": "7686189bb31c3e15caa09c127e4f3f812736c8e3488c96ebb82a9bba631ca295",
+      "view": "right"
+    }
+  ],
+  "canvas": {
+    "height": 1600,
+    "width": 1200
+  },
+  "characterId": "morwen",
+  "coordinateSpace": "normalized canvas (0..1, origin top-left, y down); px = n * canvas size",
+  "groundNormalized": [
+    0.5,
+    0.9625
+  ],
+  "landmarks": {
+    "back": {
+      "footLeft": {
+        "confidence": "high",
+        "n": [
+          0.47583,
+          0.9625
+        ],
+        "px": [
+          571,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "footRight": {
+        "confidence": "high",
+        "n": [
+          0.52417,
+          0.9625
+        ],
+        "px": [
+          629,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "ground": {
+        "confidence": "high",
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "headTop": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.075
+        ],
+        "px": [
+          600,
+          120
+        ],
+        "source": "template_default"
+      },
+      "kneeLeft": {
+        "confidence": "medium",
+        "n": [
+          0.46583,
+          0.66188
+        ],
+        "px": [
+          559,
+          1059
+        ],
+        "source": "measured_reference"
+      },
+      "kneeRight": {
+        "confidence": "medium",
+        "n": [
+          0.52917,
+          0.66188
+        ],
+        "px": [
+          635,
+          1059
+        ],
+        "source": "measured_reference"
+      },
+      "neck": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.19375
+        ],
+        "px": [
+          600,
+          310
+        ],
+        "source": "template_default"
+      },
+      "pelvis": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.5125
+        ],
+        "px": [
+          600,
+          820
+        ],
+        "source": "template_default"
+      },
+      "shoulderLeft": {
+        "confidence": "provisional",
+        "n": [
+          0.4,
+          0.21875
+        ],
+        "px": [
+          480,
+          350
+        ],
+        "source": "template_default"
+      },
+      "shoulderRight": {
+        "confidence": "provisional",
+        "n": [
+          0.6,
+          0.21875
+        ],
+        "px": [
+          720,
+          350
+        ],
+        "source": "template_default"
+      }
+    },
+    "front": {
+      "footLeft": {
+        "confidence": "high",
+        "n": [
+          0.4675,
+          0.9625
+        ],
+        "px": [
+          561,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "footRight": {
+        "confidence": "high",
+        "n": [
+          0.5325,
+          0.9625
+        ],
+        "px": [
+          639,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "ground": {
+        "confidence": "high",
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "headTop": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.075
+        ],
+        "px": [
+          600,
+          120
+        ],
+        "source": "template_default"
+      },
+      "kneeLeft": {
+        "confidence": "medium",
+        "n": [
+          0.47083,
+          0.67375
+        ],
+        "px": [
+          565,
+          1078
+        ],
+        "source": "measured_reference"
+      },
+      "kneeRight": {
+        "confidence": "medium",
+        "n": [
+          0.53167,
+          0.67375
+        ],
+        "px": [
+          638,
+          1078
+        ],
+        "source": "measured_reference"
+      },
+      "neck": {
+        "confidence": "low",
+        "n": [
+          0.48333,
+          0.23625
+        ],
+        "px": [
+          580,
+          378
+        ],
+        "source": "measured_reference"
+      },
+      "pelvis": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.5125
+        ],
+        "px": [
+          600,
+          820
+        ],
+        "source": "template_default"
+      },
+      "shoulderLeft": {
+        "confidence": "provisional",
+        "n": [
+          0.4,
+          0.21875
+        ],
+        "px": [
+          480,
+          350
+        ],
+        "source": "template_default"
+      },
+      "shoulderRight": {
+        "confidence": "provisional",
+        "n": [
+          0.6,
+          0.21875
+        ],
+        "px": [
+          720,
+          350
+        ],
+        "source": "template_default"
+      }
+    },
+    "left": {
+      "footLeft": {
+        "confidence": "high",
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "footRight": {
+        "confidence": "provisional",
+        "n": [
+          0.56667,
+          0.9625
+        ],
+        "px": [
+          680,
+          1540
+        ],
+        "source": "template_default"
+      },
+      "ground": {
+        "confidence": "high",
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "headTop": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.075
+        ],
+        "px": [
+          600,
+          120
+        ],
+        "source": "template_default"
+      },
+      "kneeLeft": {
+        "confidence": "low",
+        "n": [
+          0.51333,
+          0.68313
+        ],
+        "px": [
+          616,
+          1093
+        ],
+        "source": "measured_reference"
+      },
+      "kneeRight": {
+        "confidence": "provisional",
+        "n": [
+          0.55417,
+          0.725
+        ],
+        "px": [
+          665,
+          1160
+        ],
+        "source": "template_default"
+      },
+      "neck": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.19375
+        ],
+        "px": [
+          600,
+          310
+        ],
+        "source": "template_default"
+      },
+      "pelvis": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.5125
+        ],
+        "px": [
+          600,
+          820
+        ],
+        "source": "template_default"
+      },
+      "shoulderLeft": {
+        "confidence": "provisional",
+        "n": [
+          0.4,
+          0.21875
+        ],
+        "px": [
+          480,
+          350
+        ],
+        "source": "template_default"
+      },
+      "shoulderRight": {
+        "confidence": "provisional",
+        "n": [
+          0.6,
+          0.21875
+        ],
+        "px": [
+          720,
+          350
+        ],
+        "source": "template_default"
+      }
+    },
+    "right": {
+      "footLeft": {
+        "confidence": "high",
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "footRight": {
+        "confidence": "provisional",
+        "n": [
+          0.56667,
+          0.9625
+        ],
+        "px": [
+          680,
+          1540
+        ],
+        "source": "template_default"
+      },
+      "ground": {
+        "confidence": "high",
+        "n": [
+          0.5,
+          0.9625
+        ],
+        "px": [
+          600,
+          1540
+        ],
+        "source": "measured_reference"
+      },
+      "headTop": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.075
+        ],
+        "px": [
+          600,
+          120
+        ],
+        "source": "template_default"
+      },
+      "kneeLeft": {
+        "confidence": "low",
+        "n": [
+          0.49333,
+          0.68125
+        ],
+        "px": [
+          592,
+          1090
+        ],
+        "source": "measured_reference"
+      },
+      "kneeRight": {
+        "confidence": "provisional",
+        "n": [
+          0.55417,
+          0.725
+        ],
+        "px": [
+          665,
+          1160
+        ],
+        "source": "template_default"
+      },
+      "neck": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.19375
+        ],
+        "px": [
+          600,
+          310
+        ],
+        "source": "template_default"
+      },
+      "pelvis": {
+        "confidence": "provisional",
+        "n": [
+          0.5,
+          0.5125
+        ],
+        "px": [
+          600,
+          820
+        ],
+        "source": "template_default"
+      },
+      "shoulderLeft": {
+        "confidence": "provisional",
+        "n": [
+          0.4,
+          0.21875
+        ],
+        "px": [
+          480,
+          350
+        ],
+        "source": "template_default"
+      },
+      "shoulderRight": {
+        "confidence": "provisional",
+        "n": [
+          0.6,
+          0.21875
+        ],
+        "px": [
+          720,
+          350
+        ],
+        "source": "template_default"
+      }
+    }
+  },
+  "notes": "UNAPPROVED Layer 0 candidate on the normalised working coordinates (contact (600,1540)). template_default/provisional entries are UNKNOWN placeholders (hidden by costume), not measurements; DESIGNED_CANDIDATE values live only in landmark_evidence.json. Not for adoption without director approval.",
+  "presetId": "MORWEN_REAL_1200x1600",
+  "referenceBody": [
+    {
+      "id": "MORWEN_BASE_BODY_R2.1",
+      "status": "BLOCKED_FOR_FINAL_CANON"
+    },
+    {
+      "id": "MORWEN_LAYER0_V0.7",
+      "path": "tools/character-asset-studio/layer0/morwen-v0.7/landmark_evidence.json",
+      "status": "UNAPPROVED_PARTIAL_MEASUREMENT"
+    }
+  ],
+  "schemaVersion": "2.0",
+  "status": "candidate_not_canonical",
+  "views": [
+    "front",
+    "back",
+    "left",
+    "right"
+  ],
+  "worldScale": {
+    "pixelsPerUnit": null
+  }
+}
