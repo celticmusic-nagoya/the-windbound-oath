@@ -269,3 +269,11 @@ body.raiderBattleMode #raiderBattle #rbEnemyHud small{
    overflow:visible!important;
  }
 }
+
+/* UX-MOBILE-15: separate enemy HP label from Fiona's label in
+   compact landscape normal battles; leave sprites and game logic intact. */
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle #hudGob{
+   translate:0 -16px;
+ }
+}
