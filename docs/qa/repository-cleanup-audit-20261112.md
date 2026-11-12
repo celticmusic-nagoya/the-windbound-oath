@@ -31,3 +31,8 @@ No files are deleted by this audit. The next cleanup PR must contain a concrete 
 - Five `qa_preview_*.html` files total **7,080,933 bytes**; `71/qa_preview_71.html` is already proposed for deletion in PR #242. The other four total **4,996,359 bytes** and are held for dependency review.
 - **DELETE_APPROVED: 0 additional files**. **HOLD** all SHA duplicates, logs, and remaining previews until reference scanning establishes safe removal.
 - No source assets, Blender rigs, canon files, QA evidence, or runtime files have been modified.
+
+## Phase 3 — CI execution verified
+- GitHub Actions run [43211465775](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43211465775): completed / success.
+- Audit job: success; artifact `duplicate-audit-report` (artifact ID 13941486960) uploaded.
+- This proves the read-only scan executed, **not** that any candidate is safe to delete. No new deletions approved.
