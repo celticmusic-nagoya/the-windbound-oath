@@ -86,10 +86,11 @@ function renderPanels() {
     ...t.layers.map(L => { const s = st.layers[L.id + ':' + v] || {}; return [L.id, `${badge(s.status || 'NOT_RUN')} ${s.hash ? s.hash.slice(0, 12) + '…' : ''} ${s.detail || ''}`]; })
   ];
   $('info').innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+  const VJ = { MATCH: ['NOT_RUN', '一致（推定・要確認）'], MISMATCH: ['BLOCKED', '不一致・修正待ち'], NOT_VISIBLE_OCCLUSION_POSSIBLE: ['BLOCKED', '見えない・遮蔽の可能性'] };
   $('asym').innerHTML = t.asymmetry.map(a => {
-    const s = a.status.startsWith('CONFLICT') ? 'BLOCKED' : 'REVIEW';
-    return `<tr><td>${a.label}<br>${badge(s, a.status)}</td><td>想定: ${a.expectedScreenSide[v]}<br>正本の観察: ${a.canonObservation[v]}</td></tr>`;
-  }).join('') + `<tr><td colspan="2"><small>観察はAIの目視（ESTIMATED）。人間の確認が必要。左右反転での流用は禁止。</small></td></tr>`;
+    const e = a.views[v], [s, txt] = VJ[e.verdict] || ['FAIL', e.verdict];
+    return `<tr><td>${a.label}<br>${badge(s, txt)}</td><td>想定: ${e.expected}<br>正本: ${e.observed}</td></tr>`;
+  }).join('') + `<tr><td colspan="2"><small>観察はAIの目視（ESTIMATED）。見えない装備は反対側にあると推定しない。左右反転での流用は禁止。</small></td></tr>`;
 }
 function overall() {
   const all = [...Object.values(st.canon), ...Object.values(st.layers)].map(s => s.status);

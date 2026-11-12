@@ -6,8 +6,6 @@ from PIL import Image
 
 VIEWS = ['front', 'back', 'left', 'right']
 LAYER_IDS = ['L0', 'L1', 'L2', 'L3']
-SIDE_RULE = {'front': {'R': 'screen-left', 'L': 'screen-right'}, 'back': {'R': 'screen-right', 'L': 'screen-left'},
-             'left': {'R': 'near (visible)', 'L': 'far (occluded)'}, 'right': {'R': 'far (occluded)', 'L': 'near (visible)'}}
 RANK = {'FAIL': 3, 'BLOCKED': 2, 'NOT_RUN': 1, 'PASS': 0}
 
 
@@ -96,13 +94,19 @@ def run(template_path, root='.'):
                 add(f'L0:{v}:sole_on_ground', 'PASS' if y is not None and abs(y - g['y']) <= 1 else 'FAIL', str(y))
     anchors = t.get('anchors', {})
     add('joint_anchors', 'BLOCKED' if anchors.get('status') == 'UNRESOLVED' else 'NOT_RUN', anchors.get('status'))
+    expected = {'front': 'screen-left', 'back': 'screen-right', 'left': 'near (visible)', 'right': 'far (occluded)'}
+    verdicts = {'MATCH', 'MISMATCH', 'NOT_VISIBLE_OCCLUSION_POSSIBLE'}
     for it in t.get('asymmetry', []):
-        side = it['characterSide']
-        if side in ('R', 'L'):
-            rule_ok = all(it['expectedScreenSide'][v] == SIDE_RULE[v][side] for v in VIEWS)
-            add(f"asym:{it['id']}:side_rule", 'PASS' if rule_ok else 'FAIL')
-        human = 'BLOCKED' if it['status'].startswith('CONFLICT') else 'NOT_RUN'
-        add(f"asym:{it['id']}:canon_review", human, it['status'])
+        ok = it.get('characterSide') == 'R' and all(it['views'][v]['expected'] == expected[v] for v in VIEWS)
+        add(f"asym:{it['id']}:side_rule", 'PASS' if ok else 'FAIL')
+        for v in VIEWS:
+            e = it['views'][v]
+            if e['verdict'] not in verdicts:
+                add(f"asym:{it['id']}:{v}", 'FAIL', 'unknown verdict')
+            elif e['verdict'] == 'MATCH':
+                add(f"asym:{it['id']}:{v}", 'NOT_RUN', 'AI estimate MATCH; human confirmation pending')
+            else:
+                add(f"asym:{it['id']}:{v}", 'BLOCKED', e['verdict'])
     for name in ('design_match', 'age_appropriate_expression', 'android_device'):
         add(f'human:{name}', 'NOT_RUN')
     counts = {k: sum(1 for c in checks if c['status'] == k) for k in RANK}

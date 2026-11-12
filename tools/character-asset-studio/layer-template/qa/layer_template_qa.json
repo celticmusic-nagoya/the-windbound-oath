@@ -4,8 +4,8 @@
   "overall": "BLOCKED",
   "counts": {
     "FAIL": 0,
-    "BLOCKED": 20,
-    "NOT_RUN": 5,
+    "BLOCKED": 25,
+    "NOT_RUN": 11,
     "PASS": 26
   },
   "adoptionReady": false,
@@ -211,9 +211,24 @@
       "detail": ""
     },
     {
-      "name": "asym:right_garter:canon_review",
+      "name": "asym:right_garter:front",
+      "status": "NOT_RUN",
+      "detail": "AI estimate MATCH; human confirmation pending"
+    },
+    {
+      "name": "asym:right_garter:back",
       "status": "BLOCKED",
-      "detail": "CONFLICT_REVIEW_REQUIRED"
+      "detail": "MISMATCH"
+    },
+    {
+      "name": "asym:right_garter:left",
+      "status": "NOT_RUN",
+      "detail": "AI estimate MATCH; human confirmation pending"
+    },
+    {
+      "name": "asym:right_garter:right",
+      "status": "BLOCKED",
+      "detail": "MISMATCH"
     },
     {
       "name": "asym:bag:side_rule",
@@ -221,34 +236,74 @@
       "detail": ""
     },
     {
-      "name": "asym:bag:canon_review",
-      "status": "BLOCKED",
-      "detail": "CONFLICT_REVIEW_REQUIRED"
+      "name": "asym:bag:front",
+      "status": "NOT_RUN",
+      "detail": "AI estimate MATCH; human confirmation pending"
     },
     {
-      "name": "asym:hat_flower_ribbon:side_rule",
+      "name": "asym:bag:back",
+      "status": "NOT_RUN",
+      "detail": "AI estimate MATCH; human confirmation pending"
+    },
+    {
+      "name": "asym:bag:left",
+      "status": "BLOCKED",
+      "detail": "NOT_VISIBLE_OCCLUSION_POSSIBLE"
+    },
+    {
+      "name": "asym:bag:right",
+      "status": "BLOCKED",
+      "detail": "MISMATCH"
+    },
+    {
+      "name": "asym:hat_flower:side_rule",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "asym:hat_flower_ribbon:canon_review",
-      "status": "BLOCKED",
-      "detail": "CONFLICT_REVIEW_REQUIRED"
-    },
-    {
-      "name": "asym:shoulder_emblem:canon_review",
+      "name": "asym:hat_flower:front",
       "status": "NOT_RUN",
-      "detail": "REVIEW_REQUIRED"
+      "detail": "AI estimate MATCH; human confirmation pending"
     },
     {
-      "name": "asym:right_only_check_pattern:side_rule",
+      "name": "asym:hat_flower:back",
+      "status": "NOT_RUN",
+      "detail": "AI estimate MATCH; human confirmation pending"
+    },
+    {
+      "name": "asym:hat_flower:left",
+      "status": "BLOCKED",
+      "detail": "NOT_VISIBLE_OCCLUSION_POSSIBLE"
+    },
+    {
+      "name": "asym:hat_flower:right",
+      "status": "BLOCKED",
+      "detail": "MISMATCH"
+    },
+    {
+      "name": "asym:hat_ribbon:side_rule",
       "status": "PASS",
       "detail": ""
     },
     {
-      "name": "asym:right_only_check_pattern:canon_review",
+      "name": "asym:hat_ribbon:front",
       "status": "NOT_RUN",
-      "detail": "REVIEW_REQUIRED"
+      "detail": "AI estimate MATCH; human confirmation pending"
+    },
+    {
+      "name": "asym:hat_ribbon:back",
+      "status": "NOT_RUN",
+      "detail": "AI estimate MATCH; human confirmation pending"
+    },
+    {
+      "name": "asym:hat_ribbon:left",
+      "status": "BLOCKED",
+      "detail": "NOT_VISIBLE_OCCLUSION_POSSIBLE"
+    },
+    {
+      "name": "asym:hat_ribbon:right",
+      "status": "BLOCKED",
+      "detail": "MISMATCH"
     },
     {
       "name": "human:design_match",

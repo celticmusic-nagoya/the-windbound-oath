@@ -349,105 +349,148 @@
       "label": "ガーターベルト（本人の右脚のみ）",
       "characterSide": "R",
       "layer": "L1",
-      "expectedScreenSide": {
-        "front": "screen-left",
-        "back": "screen-right",
-        "left": "near (visible)",
-        "right": "far (occluded)"
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "screen-left leg (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "screen-left leg (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "front edge of near leg (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "near leg (= character LEFT); visible",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
       },
-      "canonObservation": {
-        "front": "screen-left leg",
-        "back": "screen-right leg",
-        "left": "near leg (= right) — consistent",
-        "right": "garter visible on near leg (= character LEFT)"
-      },
-      "observationMethod": "AI visual inspection of canon PNGs (ESTIMATED, not measured; human confirmation required)",
-      "status": "CONFLICT_REVIEW_REQUIRED",
-      "note": "right.png shows the garter on the character-left leg; contradicts the right-leg-only rule. Canon not edited; director decision required."
+      "note": "Director spec 2026-11-12: right leg only; right-facing view = far leg."
     },
     {
       "id": "bag",
-      "label": "バッグ（本人の右腰、ストラップは左肩から）",
+      "label": "バッグ本体（本人の右腰）",
       "characterSide": "R",
       "layer": "L3",
-      "expectedScreenSide": {
-        "front": "screen-left",
-        "back": "screen-right",
-        "left": "near (visible)",
-        "right": "far (occluded)"
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "screen-left hip (character right); strap from screen-right shoulder",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "screen-right hip (character right); strap from screen-left shoulder",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "bag not visible on near (right) side; potion vials visible at front",
+          "verdict": "NOT_VISIBLE_OCCLUSION_POSSIBLE",
+          "visualQa": "BLOCKED",
+          "blockReason": "not visible in canon; occlusion possible; not inferred"
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "bag on near hip (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
       },
-      "canonObservation": {
-        "front": "screen-left hip",
-        "back": "screen-right hip",
-        "left": "not visible on near (right) side",
-        "right": "bag on near side (= character LEFT)"
-      },
-      "observationMethod": "AI visual inspection of canon PNGs (ESTIMATED, not measured; human confirmation required)",
-      "status": "CONFLICT_REVIEW_REQUIRED",
-      "note": "left.png lacks the bag on the visible right side and right.png shows it on the left side; side views appear inconsistent with front/back."
+      "note": "Right-hip reference. Strap direction recorded as observed, not inferred for side views."
     },
     {
-      "id": "hat_flower_ribbon",
-      "label": "帽子の花・リボン",
+      "id": "hat_flower",
+      "label": "帽子の花",
       "characterSide": "R",
       "layer": "L3",
-      "expectedScreenSide": {
-        "front": "screen-left",
-        "back": "screen-right",
-        "left": "near (visible)",
-        "right": "far (occluded)"
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "screen-left of crown (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "screen-right of crown (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "no flower visible on near (right) side of crown",
+          "verdict": "NOT_VISIBLE_OCCLUSION_POSSIBLE",
+          "visualQa": "BLOCKED",
+          "blockReason": "not visible in canon; occlusion possible; not inferred"
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "flower on near side of crown (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
       },
-      "canonObservation": {
-        "front": "screen-left of crown",
-        "back": "screen-right of crown",
-        "left": "not clearly visible on near (right) side",
-        "right": "flower and ribbon on visible (character-left) side"
-      },
-      "observationMethod": "AI visual inspection of canon PNGs (ESTIMATED, not measured; human confirmation required)",
-      "status": "CONFLICT_REVIEW_REQUIRED",
-      "note": "Same side-view pattern as the bag."
+      "note": "Judged per canon view as instructed."
     },
     {
-      "id": "shoulder_emblem",
-      "label": "肩・ケープの紋章",
-      "characterSide": "both",
-      "layer": "L3",
-      "expectedScreenSide": {
-        "front": "both",
-        "back": "both",
-        "left": "near visible / far occluded",
-        "right": "near visible / far occluded"
-      },
-      "canonObservation": {
-        "front": "both shoulders",
-        "back": "single centre emblem on cape",
-        "left": "visible shoulder",
-        "right": "visible shoulder"
-      },
-      "observationMethod": "AI visual inspection of canon PNGs (ESTIMATED, not measured; human confirmation required)",
-      "status": "REVIEW_REQUIRED",
-      "note": "Presence recorded only; exact placement not measured."
-    },
-    {
-      "id": "right_only_check_pattern",
-      "label": "右側のみの非対称チェック柄（既存の保護項目）",
+      "id": "hat_ribbon",
+      "label": "帽子のリボン",
       "characterSide": "R",
-      "layer": "L2",
-      "expectedScreenSide": {
-        "front": "screen-left",
-        "back": "screen-right",
-        "left": "near (visible)",
-        "right": "far (occluded)"
+      "layer": "L3",
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "hangs below flower, screen-left (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "hangs below flower, screen-right (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "no ribbon visible on near (right) side",
+          "verdict": "NOT_VISIBLE_OCCLUSION_POSSIBLE",
+          "visualQa": "BLOCKED",
+          "blockReason": "not visible in canon; occlusion possible; not inferred"
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "ribbon hangs on near side (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
       },
-      "canonObservation": {
-        "front": "screen-left of skirt",
-        "back": "not visible",
-        "left": "visible",
-        "right": "visible on near side"
-      },
-      "observationMethod": "AI visual inspection of canon PNGs (ESTIMATED, not measured; human confirmation required)",
-      "status": "REVIEW_REQUIRED",
-      "note": "Existing item in profiles/morwen_design_protection.json; side-view placement needs human confirmation."
+      "note": "Tracked separately from the flower."
     }
   ],
   "receivedUploads20261112": [
@@ -492,9 +535,56 @@
         1448
       ],
       "mode": "RGBA",
-      "relation": "back: different file from canon back.png (canon is RGB 1152x1536 on black; this upload is RGBA with soft alpha); provenance unverified",
+      "relation": "back: different file from canon back.png (canon is RGB 1152x1536 on black; this upload is RGBA with soft alpha); provenance unverified. Visual note: garter appears on screen-right leg (character right) in this upload, unlike canon back.png; not adopted, provenance unverified.",
       "stored": false
     }
   ],
-  "adoptionReady": false
+  "adoptionReady": false,
+  "asymmetryMethod": {
+    "source": "repository canon PNGs (final-visual-canon-20261111), each view viewed at 1200x1600 display scale",
+    "observer": "Claude visual inspection (ESTIMATED, not measured); human/director confirmation required",
+    "rules": [
+      "No mirroring of any view.",
+      "An item not visible is never assumed to exist on the opposite side; occlusion possibility is recorded.",
+      "Canon PNGs are not edited; mismatches are correction targets for new candidate images."
+    ]
+  },
+  "correctionTargets": [
+    {
+      "view": "back",
+      "canonFile": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+      "items": [
+        "right_garter"
+      ],
+      "action": "new corrected candidate image required; canon untouched"
+    },
+    {
+      "view": "right",
+      "canonFile": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+      "items": [
+        "right_garter",
+        "bag",
+        "hat_flower",
+        "hat_ribbon"
+      ],
+      "action": "new corrected candidate image required; canon untouched"
+    },
+    {
+      "view": "left",
+      "canonFile": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+      "items": [
+        "bag",
+        "hat_flower",
+        "hat_ribbon"
+      ],
+      "action": "director to confirm whether occlusion is intended or a corrected image is needed"
+    }
+  ],
+  "correctionLog": [
+    {
+      "date": "2026-11-12",
+      "task": "MORWEN-LAYER-05-FIX-01",
+      "change": "Earlier ledger recorded back-view garter as screen-right; that observation came from upload 7776.png, not canon back.png. Re-inspected canon: back.png garter is screen-left (character left). Ledger split into separate garter/bag/flower/ribbon items."
+    }
+  ]
 }

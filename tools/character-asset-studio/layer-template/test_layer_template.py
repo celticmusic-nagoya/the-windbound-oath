@@ -41,7 +41,12 @@ class LayerTemplateTest(unittest.TestCase):
             self.assertEqual(status(r, f'{v}:canon_sha'), 'PASS')
             self.assertEqual(status(r, f'{v}:ground_contact'), 'PASS')
             self.assertEqual(status(r, f'L0:{v}:image'), 'BLOCKED')
-        self.assertEqual(status(r, 'asym:right_garter:canon_review'), 'BLOCKED')
+        self.assertEqual(status(r, 'asym:right_garter:front'), 'NOT_RUN')
+        self.assertEqual(status(r, 'asym:right_garter:back'), 'BLOCKED')
+        self.assertEqual(status(r, 'asym:right_garter:right'), 'BLOCKED')
+        self.assertEqual(status(r, 'asym:bag:left'), 'BLOCKED')
+        ids = [a['id'] for a in self.t['asymmetry']]
+        self.assertEqual(ids, ['right_garter', 'bag', 'hat_flower', 'hat_ribbon'])
         self.assertFalse(r['adoptionReady'])
 
     def test_valid_layer_png_passes(self):
@@ -67,11 +72,13 @@ class LayerTemplateTest(unittest.TestCase):
         t = copy.deepcopy(self.t)
         t['layers'][3]['views']['left']['mirrored'] = True
         t['views']['left']['canonToCanvas']['matrix'][2] = 0.1
-        t['asymmetry'][0]['expectedScreenSide']['front'] = 'screen-right'
+        t['asymmetry'][0]['views']['right']['expected'] = 'near (visible)'
+        t['asymmetry'][1]['views']['front']['verdict'] = 'ASSUMED_OK'
         r = self.run_with(t)
         self.assertEqual(status(r, 'no_mirroring'), 'FAIL')
         self.assertEqual(status(r, 'left:transform_uniform_no_shear'), 'FAIL')
         self.assertEqual(status(r, 'asym:right_garter:side_rule'), 'FAIL')
+        self.assertEqual(status(r, 'asym:bag:front'), 'FAIL')
 
     def test_canon_sha_tamper_fails(self):
         t = copy.deepcopy(self.t)
