@@ -22,7 +22,9 @@ def main():
     # Exclude the four independent source-view blockouts from rendering.
     for obj in scene.objects:
         obj.hide_render=obj not in (rig,body) and obj.type=="MESH"
-    scene.render.engine="BLENDER_EEVEE" if bpy.app.version<(4,0,0) else "BLENDER_EEVEE_NEXT"
+    scene.render.engine="CYCLES"
+    scene.cycles.device="CPU"
+    scene.cycles.samples=8
     scene.render.resolution_x=384
     scene.render.resolution_y=1024
     scene.render.resolution_percentage=100
