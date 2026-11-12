@@ -46,6 +46,10 @@ def main():
     scene.render.engine="CYCLES"
     scene.cycles.device="CPU"
     scene.cycles.samples=12
+    scene.cycles.use_denoising=False
+    for layer in scene.view_layers:
+        if hasattr(layer, "cycles"):
+            layer.cycles.use_denoising=False
     scene.render.resolution_x=384
     scene.render.resolution_y=1024
     scene.render.resolution_percentage=100
