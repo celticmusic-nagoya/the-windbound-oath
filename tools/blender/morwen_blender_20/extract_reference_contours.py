@@ -16,7 +16,7 @@ EXPECTED={
 "back":"b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f"}
 
 def rgba_png_alpha(data):
-    assert data[:8]==b"\\x89PNG\\r\\n\\x1a\\n"
+    assert data[:8]==bytes([137,80,78,71,13,10,26,10])
     pos=8; chunks=[];width=height=depth=color=interlace=None
     while pos<len(data):
         length=struct.unpack(">I",data[pos:pos+4])[0]
@@ -65,6 +65,6 @@ def main():
         assert len(scan)>200,"unexpectedly empty silhouette"
         report["views"][name]={"sha256":sha,"rows":scan,
            "bbox":[min(x["left"] for x in scan),scan[0]["y"],max(x["right"] for x in scan),scan[-1]["y"]]}
-    (OUT/"canonical_alpha_contours.json").write_text(json.dumps(report,separators=(",",":"))+"\\n")
+    (OUT/"canonical_alpha_contours.json").write_text(json.dumps(report,separators=(",",":"))+"\n")
     print("MORWEN_20_CANONICAL_ALPHA_CONTOURS_PASS")
 if __name__=="__main__":main()
