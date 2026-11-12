@@ -1,0 +1,33 @@
+name: Morwen Blender 27 Runtime Preflight
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_27/**'
+      - '.github/workflows/morwen-blender-27.yml'
+  workflow_dispatch:
+jobs:
+  runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install complete system Blender runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Preflight Blender Python and glTF dependencies
+        run: |
+          blender -b -noaudio --python tools/blender/morwen_blender_27/preflight.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("assets/candidates/morwen-blender-27/preflight.json").read_text())
+          assert d["ready"] and d["numpy_available"] and d["gltf_exporter_available"]
+          print("MORWEN_27_PREFLIGHT_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-blender-27-preflight
+          path: assets/candidates/morwen-blender-27/
+          if-no-files-found: warn
