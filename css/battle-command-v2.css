@@ -223,3 +223,36 @@ body.raiderBattleMode #raiderBattle #rbEnemyHud small{
    line-height:1.35!important;
  }
 }
+
+/* UX-MOBILE-07: Keep the actor stage clear during normal encounters.
+   Place the command deck on the right; retain a scrollable 2-column grid.
+   Raider battle intentionally retains its separately verified layout. */
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]){
+   left:auto!important;
+   right:max(10px,env(safe-area-inset-right))!important;
+   width:min(340px,43vw)!important;
+   max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;
+ }
+ body.normalBattleMode #attackBattle #normalCommandToggle{
+   left:auto!important;
+   right:max(10px,env(safe-area-inset-right))!important;
+ }
+}
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]){
+   left:auto!important;
+   right:max(10px,env(safe-area-inset-right))!important;
+   width:min(250px,68vw)!important;
+   max-height:min(62dvh,450px)!important;
+   grid-template-columns:1fr!important;
+   grid-auto-rows:minmax(48px,auto)!important;
+ }
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button{
+   min-height:48px!important;
+ }
+ body.normalBattleMode #attackBattle #normalCommandToggle{
+   left:auto!important;
+   right:max(10px,env(safe-area-inset-right))!important;
+ }
+}
