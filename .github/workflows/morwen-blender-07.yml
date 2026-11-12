@@ -1,0 +1,35 @@
+name: Morwen Blender 07 Continuous Core QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_07/**'
+      - '.github/workflows/morwen-blender-07.yml'
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Build original candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build continuous-core candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Verify saved candidate
+        run: blender -b assets/candidates/morwen-blender-07/morwen_continuous_core_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/verify_core.py
+      - name: Upload Blender candidate and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-07-continuous-core
+          path: assets/candidates/morwen-blender-07/
+          if-no-files-found: warn
+          retention-days: 14
