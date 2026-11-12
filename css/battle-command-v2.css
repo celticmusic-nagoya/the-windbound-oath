@@ -256,3 +256,18 @@ body.raiderBattleMode #raiderBattle #rbEnemyHud small{
    right:max(10px,env(safe-area-inset-right))!important;
  }
 }
+
+/* UX-MOBILE-09: landscape split-stage experiment.
+   Reserve a left visual stage and right command rail without touching battle state.
+   All original battler positions remain relative to their scaled stage. */
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle .v2BattleStage{
+   transform-origin:left center!important;
+   transform:scale(.57)!important;
+   width:100%!important;
+ }
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]){
+   width:min(340px,43vw)!important;
+   max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;
+ }
+}
