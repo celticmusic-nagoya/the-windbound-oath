@@ -1,0 +1,52 @@
+name: Morwen Candidate Rig QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/build_morwen_candidate.py'
+      - 'tools/blender/profiles/morwen_v1.json'
+      - 'tools/blender/rigs/humanoid_v1.json'
+      - '.github/workflows/blender-morwen-rig-qa.yml'
+permissions:
+  contents: read
+jobs:
+  candidate-rig:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Check syntax
+        run: python3 -m py_compile tools/blender/build_morwen_candidate.py
+      - name: Build candidate-only rig
+        run: blender --background --threads 1 --python tools/blender/build_morwen_candidate.py
+      - name: Verify report
+        run: |
+          test -s /tmp/morwen-rig-03/morwen_rig_candidate.blend
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('/tmp/morwen-rig-03/qa.json').read_text())
+          assert d['status'] == 'PASS'
+          assert d['bone_count'] == 17
+          assert d['placeholder_attachments'] == 7
+          assert d['canon_image_imported'] is False
+          assert d['pose_or_sprite_rendered'] is False
+          assert d['production_assets_modified'] is False
+          print('MORWEN_RIG_QA_PASS')
+          PY
+      - name: Upload candidate-only artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-rig-03-candidate
+          path: |
+            /tmp/morwen-rig-03/morwen_rig_candidate.blend
+            /tmp/morwen-rig-03/qa.json
+          if-no-files-found: warn
+          retention-days: 7
