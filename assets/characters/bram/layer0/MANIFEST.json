@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "LAYER0-MALE-TRIO-REGISTER-01",
+  "character": "bram",
+  "display_name": "ブラム",
+  "base_commit": "cab9aa52da653198a712bd986992adc03ea4bfe2",
+  "adoption_status": "Layer 0採用候補",
+  "adoption_basis": "User task instruction; design decision only, technical registration remains blocked.",
+  "registration_status": "BLOCKED",
+  "blocker": "SOURCE_PNG_BYTES_UNAVAILABLE: inline images visible in chat, but no downloadable attachment ID or local source file supplied to executor.",
+  "original": {
+    "path": null,
+    "sha256": null,
+    "resolution": null,
+    "mode": null,
+    "rgba": null,
+    "preservation_status": "BLOCKED_SOURCE_NOT_RECEIVED"
+  },
+  "processed": {
+    "path": "assets/characters/bram/layer0/bram_layer0_fourview_master.png",
+    "file_present": false,
+    "sha256": null,
+    "resolution": null,
+    "mode": null,
+    "rgba": null
+  },
+  "background_processing": {
+    "attempts": 0,
+    "maximum_attempts": 2,
+    "status": "NOT_RUN",
+    "original_overwrite_allowed": false
+  },
+  "qa": {
+    "three_characters_four_views_consistency": "BLOCKED",
+    "body_hair_inner_design_preservation": "BLOCKED",
+    "background_alpha_zero": "BLOCKED",
+    "outline_intact": "BLOCKED",
+    "sha256_matches": "BLOCKED",
+    "common_rig_connection": "BLOCKED"
+  },
+  "restrictions": {
+    "preserve_existing_official_designs": true,
+    "merge_main": false,
+    "game_integration": false,
+    "site_publication": false,
+    "blender_rig_production": "DEFERRED_UNTIL_MORWEN_COMPLETE"
+  }
+}
