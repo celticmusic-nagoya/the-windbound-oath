@@ -1,3 +1,7 @@
+## 2026-11-12 ディレクター正式訂正：モルウェンの年齢
+- モルウェンは**18歳**。旧資料・過去の17歳表記は年齢についてのみ誤記として読み替える。エイダン17歳など他キャラクターの年齢は変更しない。
+- 既存の衣装・表現に関する品質基準、正本ロック、画像SHA保護は継続する。年齢変更は過去画像の自動採用・本体組込みを意味しない。
+
 ## モルウェン正本ロック（2026-11-08）
 - 唯一の制作デザイン正本はユーザー添付のv5.61比較シート（SHA-256 `47d58cbeb0f8ad41f51543716d872bfcc8c7d0dc91d45196c9c02b22402df638`）。`docs/design/MORWEN_V561_CANONICAL_20261108.md` と `data/morwen-design-canonical.json` を参照。
 - 他のv5.x画像・切り出し・清掃・リカラー試作品はすべてSUPERSEDED。ゲーム用RGBA PNGとして正式採用しない。添付はJPEG実体のため、画像シートを48×64透過PNGと誤認しない。
@@ -116,7 +120,7 @@ Fastest party member; CRI/steal identity.
 Russet/red patterned bandana, goggles, agile dark leather equipment.
 
 ### Morwen / モルウェン
-17, top-ranked student at the Royal Magic Academy (王立魔法学院), and a reserved black mage.
+18, top-ranked student at the Royal Magic Academy (王立魔法学院), and a reserved black mage.
 Her officially approved v3.0 design is the academy uniform; preserve the existing character artwork and black/navy/purple + antique gold palette, long dark hair, and violet eyes.
 The Royal Magic Research Institute (王立魔法研究院) is a separate research institution located alongside the academy. Morwen's admired mentor, Edric Vane (エドリック・ヴェイン), belongs to the institute; retain his existing story arc without inventing new details.
 Highest MAG; Resonance system 0–3.
