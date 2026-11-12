@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'tools/qa/check_release_ui.py'
+      - 'tools/qa/stage_release.py'
       - 'index.html'
       - '.github/workflows/release-ui-audit.yml'
   workflow_dispatch:
@@ -32,3 +33,23 @@ jobs:
           printf '%s\n' '<!doctype html><html><body><main>Game</main></body></html>' > "$fixture"
           python tools/qa/check_release_ui.py "$fixture"
           echo "Audit self-test PASS; this is NOT a release artifact approval."
+      - name: Verify release staging rejects development and copies clean candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir "$tmp/dev" "$tmp/clean"
+          cp index.html "$tmp/dev/index.html"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/clean/index.html"
+          if python tools/qa/stage_release.py "$tmp/dev" "$tmp/rejected"; then
+            echo "::error::Development build was staged"
+            exit 1
+          fi
+          test ! -e "$tmp/rejected"
+          python tools/qa/stage_release.py "$tmp/clean" "$tmp/release"
+          test -f "$tmp/release/index.html"
+          if python tools/qa/stage_release.py "$tmp/clean" "$tmp/release"; then
+            echo "::error::Existing output was overwritten"
+            exit 1
+          fi
