@@ -1,0 +1,49 @@
+name: Morwen Blender 03 Unified Candidate
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_03/**'
+      - '.github/workflows/morwen-blender-03.yml'
+permissions:
+  contents: read
+jobs:
+  unified-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+      - name: Static compile
+        run: python3 -m py_compile tools/blender/morwen_blender_03/build_unified.py
+      - name: Generate unified candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Verify saved blend and JSON
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-blender-03')
+          assert (p/'morwen_unified_neutral_candidate.blend').stat().st_size>10000
+          r=json.loads((p/'build_report.json').read_text())
+          assert r['bones']==17 and r['single_shared_armature'] and r['single_mesh_object']
+          assert r['visual_qa']=='NOT_RUN' and not r['production_use']
+          print(r)
+          PY
+          blender -b assets/candidates/morwen-blender-03/morwen_unified_neutral_candidate.blend -t 1 --python-exit-code 1 --python-expr "import bpy; a=bpy.data.objects['Morwen_unified_17_candidate']; m=bpy.data.objects['Morwen_unified_neutral_3d_candidate']; assert len(a.data.bones)==17; assert len(m.vertex_groups)==16; assert len(m.data.vertices)>1000; print('MORWEN_03_RELOAD_PASS')"
+      - name: Upload candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-03-unified-candidate
+          path: assets/candidates/morwen-blender-03/
+          if-no-files-found: warn
+          retention-days: 14
