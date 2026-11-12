@@ -53,3 +53,17 @@ jobs:
             echo "::error::Existing output was overwritten"
             exit 1
           fi
+      - name: Reject symlinked release candidate assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir "$tmp/source"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/source/index.html"
+          ln -s /etc/hosts "$tmp/source/linked-secret"
+          if python tools/qa/stage_release.py "$tmp/source" "$tmp/output"; then
+            echo "::error::Symlinked asset was accepted"
+            exit 1
+          fi
+          test ! -e "$tmp/output"
