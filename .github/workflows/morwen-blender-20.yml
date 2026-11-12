@@ -1,8 +1,9 @@
 name: Morwen Blender 20 Canonical Contours QA
 on:
-  push:
-    branches:
-      - feature/morwen-blender-20-reference-contours
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_20/**'
+      - '.github/workflows/morwen-blender-20.yml'
   workflow_dispatch:
 jobs:
   contours:
