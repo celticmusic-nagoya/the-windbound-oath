@@ -24,3 +24,12 @@ B. Evaluate Poly Haven HDRI/stone/wood materials baked into stylized textures; n
 C. Quaternius medieval architecture: visual reference until individual pack license and distribution terms verified.
 
 MAP22 remains under CI / art review. Do not claim this plan is a completed asset import.
+
+## Original modeling policy — director-approved (2026-11-13)
+- When an asset has restrictive licensing, study general production methods only: modular blockout, bevel/weighted normals, UV mapping, trim sheets, procedural geometry, instancing, baking and LOD.
+- Create independent designs from the official TWO world bible, character/environment palettes, and Rilde's coastal farming/fishing architecture.
+- Do not trace, mesh-extract, retopologize, texture-extract, or closely reproduce a distinctive restricted model or its ornaments. Avoid one-to-one copying of compositions and proprietary layouts.
+- Prefer a clean-room workflow: write an original design brief from canon first; then generate Blender meshes with original parameters and deterministic seeds, without using restricted assets as source geometry.
+- Provenance manifest for each original asset: authoring script, seed, original concept spec, dependencies, source of generic technique, SHA-256, QA status. Restricted reference files are never packaged.
+- Distinguish copyright, trademark and license rights; do not claim legal clearance solely because the geometry was recreated.
+- Target next modular prototypes: timber-frame cottage, red-brown pitched roof, irregular fieldstone wall, mossy coastal rock, wind-shaped coastal tree. Use candidate status until independent visual and gameplay QA passes.
