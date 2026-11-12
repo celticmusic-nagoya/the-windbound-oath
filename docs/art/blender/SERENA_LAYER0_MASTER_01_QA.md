@@ -22,6 +22,7 @@ Background-only alpha editing cannot relocate the stocking. Moving it, mirroring
 ## QA and delivery
 
 - Source PNG metadata/SHA/byte-preservation: PASS.
+- Protected original GitHub REST re-download: PASS, exact byte/SHA identity at source-preservation commit `0eb5a09f7ed62958cb46a6b464c54c851f0d29cd`, blob `f0c35f8ccf0e290c8fd731e7df3c23bbfecafc01`. This verifies only the original; no processed master is claimed.
 - Source contains the four supplied views: PASS by visual inspection.
 - Required right-leg asymmetry: FAIL; primary blocker.
 - Background removal attempts: **0 / maximum 2**. Stopped at the input design gate; no pointless background retry can fix a character-side mismatch.
