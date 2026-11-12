@@ -27,7 +27,11 @@ def main() -> int:
     if links:
         print("BLOCKED: symlinks are not allowed in release candidate: " + ", ".join(str(p.relative_to(src)) for p in links), file=sys.stderr)
         return 2
-    hits = audit((src / "index.html").read_text(encoding="utf-8"))
+    hits = []
+    for candidate in sorted(src.rglob("*")):
+        if candidate.is_file() and candidate.suffix.lower() in {".html", ".htm", ".js", ".mjs"}:
+            for name in audit(candidate.read_text(encoding="utf-8")):
+                hits.append(f"{candidate.relative_to(src)}: {name}")
     if hits:
         print("BLOCKED: development hooks in release candidate: " + ", ".join(hits), file=sys.stderr)
         return 1
