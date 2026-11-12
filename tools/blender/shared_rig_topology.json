@@ -1,0 +1,136 @@
+{
+  "schema": "cas/shared-topology/01",
+  "source": {
+    "pr": 229,
+    "path": "tools/character-asset-studio/rig-integration/morwen.import.template.json",
+    "blobSha": "2590f81979ae43da42fa6ed3e274a469c0ba98b7"
+  },
+  "coordinateSystem": "2d_rigPx_top_left_y_down",
+  "status": "TOPOLOGY_ONLY_NOT_MEASURED",
+  "joints": {
+    "ankleL": {
+      "parent": "kneeL",
+      "side": "L"
+    },
+    "ankleR": {
+      "parent": "kneeR",
+      "side": "R"
+    },
+    "ballL": {
+      "parent": "ankleL",
+      "side": "L"
+    },
+    "ballR": {
+      "parent": "ankleR",
+      "side": "R"
+    },
+    "chin": {
+      "parent": "neckTop",
+      "side": null
+    },
+    "elbowL": {
+      "parent": "shoulderL",
+      "side": "L"
+    },
+    "elbowR": {
+      "parent": "shoulderR",
+      "side": "R"
+    },
+    "footL": {
+      "parent": "ankleL",
+      "side": "L"
+    },
+    "footR": {
+      "parent": "ankleR",
+      "side": "R"
+    },
+    "handL": {
+      "parent": "wristL",
+      "side": "L"
+    },
+    "handR": {
+      "parent": "wristR",
+      "side": "R"
+    },
+    "headCenter": {
+      "parent": "neckTop",
+      "side": null
+    },
+    "headTop": {
+      "parent": "headCenter",
+      "side": null
+    },
+    "heelL": {
+      "parent": "ankleL",
+      "side": "L"
+    },
+    "heelR": {
+      "parent": "ankleR",
+      "side": "R"
+    },
+    "hipL": {
+      "parent": "pelvis",
+      "side": "L"
+    },
+    "hipR": {
+      "parent": "pelvis",
+      "side": "R"
+    },
+    "jawL": {
+      "parent": "headCenter",
+      "side": "L"
+    },
+    "jawR": {
+      "parent": "headCenter",
+      "side": "R"
+    },
+    "kneeL": {
+      "parent": "hipL",
+      "side": "L"
+    },
+    "kneeR": {
+      "parent": "hipR",
+      "side": "R"
+    },
+    "neckBase": {
+      "parent": "waist",
+      "side": null
+    },
+    "neckTop": {
+      "parent": "neckBase",
+      "side": null
+    },
+    "shoulderL": {
+      "parent": "neckBase",
+      "side": "L"
+    },
+    "shoulderR": {
+      "parent": "neckBase",
+      "side": "R"
+    },
+    "toeL": {
+      "parent": "ballL",
+      "side": "L"
+    },
+    "toeR": {
+      "parent": "ballR",
+      "side": "R"
+    },
+    "waist": {
+      "parent": "pelvis",
+      "side": null
+    },
+    "wristL": {
+      "parent": "elbowL",
+      "side": "L"
+    },
+    "wristR": {
+      "parent": "elbowR",
+      "side": "R"
+    },
+    "pelvis": {
+      "parent": null,
+      "side": null
+    }
+  }
+}
