@@ -14,6 +14,7 @@ scene.render.film_transparent = True
 scene.render.image_settings.file_format = "PNG"
 scene.render.image_settings.color_mode = "RGBA"
 scene.render.filepath = str(out / "smoke.png")
+scene.world = bpy.data.worlds.new('SmokeWorld')
 scene.world.color = (0.0, 0.0, 0.0)
 bpy.ops.wm.save_as_mainfile(filepath=str(out / "smoke.blend"))
 # No render: empty scene render behavior varies with engine, but the .blend is portable.
