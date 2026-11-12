@@ -79,4 +79,4 @@ try:
 except (OSError,subprocess.CalledProcessError):
  baseline = os.getenv('QA_BASE_SHA','UNKNOWN')
 (OUT/'results.json').write_text(json.dumps(dict(base=baseline,rows=rows,errors=errors,failures=failures,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
-print(json.dumps([dict(view=x['view'],kind=x['kind'],expanded=x['expanded'],spritePct=x['spriteCoveragePct'],viewportPct=x['panelViewportPct']) for x in rows],indent=2));print('FAILURES',*failures,sep='\n');print('PAGE_ERRORS',*errors,sep='\n');sys.exit(bool(errors or failures))
+print(json.dumps([dict(view=x['view'],kind=x['kind'],expanded=x['expanded'],spritePct=x['spriteCoveragePct'],viewportPct=x['panelViewportPct'],stage=x['stage'],stagePanelOverlapPct=x['stagePanelOverlapPct']) for x in rows],indent=2));print('FAILURES',*failures,sep='\n');print('PAGE_ERRORS',*errors,sep='\n');sys.exit(bool(errors or failures))
