@@ -362,7 +362,14 @@
           "observed": "screen-left leg (= character LEFT)",
           "verdict": "MISMATCH",
           "visualQa": "BLOCKED",
-          "blockReason": "awaiting corrected image"
+          "blockReason": "awaiting corrected image",
+          "candidateObservation": {
+            "candidate": "7776.png",
+            "observed": "screen-right leg (character right)",
+            "positionVerdict": "MATCH (AI estimate)",
+            "technicalQa": "FAIL",
+            "visualQa": "BLOCKED until a technically passing corrected image is delivered and reviewed"
+          }
         },
         "left": {
           "expected": "near (visible)",
@@ -376,7 +383,11 @@
           "observed": "near leg (= character LEFT); visible",
           "verdict": "MISMATCH",
           "visualQa": "BLOCKED",
-          "blockReason": "awaiting corrected image"
+          "blockReason": "awaiting corrected image",
+          "candidateObservation": {
+            "candidate": null,
+            "technicalQa": "BLOCKED (not delivered)"
+          }
         }
       },
       "note": "Director spec 2026-11-12: right leg only; right-facing view = far leg."
@@ -556,7 +567,25 @@
       "items": [
         "right_garter"
       ],
-      "action": "new corrected candidate image required; canon untouched"
+      "action": "new corrected candidate image required; canon untouched",
+      "zonesCanonPx": [
+        [
+          445,
+          732,
+          764,
+          880
+        ]
+      ],
+      "zonesClassification": "ESTIMATED (garter/thigh band drawn from visual inspection; human confirmation required)",
+      "candidates": [
+        {
+          "path": "assets/candidates/morwen/fix-candidates/back-7776/7776.png",
+          "sha256": "d9506845f6377ad465b291b8ba6bc0ff2e60340f836ad7c18c213c453e7bb393",
+          "provenance": "chat upload 7776.png (2026-11-12); producer and generation source not recorded",
+          "status": "UNAPPROVED_CANDIDATE",
+          "qa": "tools/character-asset-studio/layer-template/qa/fix_candidate_back_7776.json"
+        }
+      ]
     },
     {
       "view": "right",
@@ -567,7 +596,10 @@
         "hat_flower",
         "hat_ribbon"
       ],
-      "action": "new corrected candidate image required; canon untouched"
+      "action": "new corrected candidate image required; canon untouched",
+      "zonesCanonPx": null,
+      "zonesClassification": "UNRESOLVED",
+      "candidates": []
     },
     {
       "view": "left",
@@ -577,7 +609,10 @@
         "hat_flower",
         "hat_ribbon"
       ],
-      "action": "director to confirm whether occlusion is intended or a corrected image is needed"
+      "action": "director to confirm whether occlusion is intended or a corrected image is needed",
+      "zonesCanonPx": null,
+      "zonesClassification": "UNRESOLVED (occlusion review)",
+      "candidates": []
     }
   ],
   "correctionLog": [
@@ -585,6 +620,11 @@
       "date": "2026-11-12",
       "task": "MORWEN-LAYER-05-FIX-01",
       "change": "Earlier ledger recorded back-view garter as screen-right; that observation came from upload 7776.png, not canon back.png. Re-inspected canon: back.png garter is screen-left (character left). Ledger split into separate garter/bag/flower/ribbon items."
+    },
+    {
+      "date": "2026-11-12",
+      "task": "MORWEN-LAYER-05-FIX-02",
+      "change": "7776.png stored as UNAPPROVED_CANDIDATE for back garter; technical QA FAIL (size, border alpha, soft body alpha, changes outside target zone, provenance unverified). Right-view correction not delivered (BLOCKED)."
     }
   ]
 }

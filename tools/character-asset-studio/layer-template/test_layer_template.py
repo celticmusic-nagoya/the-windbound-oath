@@ -88,3 +88,56 @@ class LayerTemplateTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+import verify_fix_candidate as vf  # noqa: E402
+
+
+class FixCandidateTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        rng = np.random.default_rng(0)
+        base = np.zeros((600, 300, 3), np.uint8)
+        base[50:580, 80:220] = rng.integers(60, 200, (530, 140, 3))
+        self.canon = os.path.join(self.tmp, 'canon.png')
+        Image.fromarray(base).save(self.canon)
+        self.base = base
+        t = {'views': {'back': {'canonSource': {'path': self.canon, 'sha256': hashlib.sha256(open(self.canon, 'rb').read()).hexdigest()}}},
+             'correctionTargets': [{'view': 'back', 'zonesCanonPx': [[80, 300, 220, 360]]}]}
+        self.tpl = os.path.join(self.tmp, 't.json')
+        with open(self.tpl, 'w') as f:
+            json.dump(t, f)
+
+    def cand(self, name, edit):
+        rgba = np.zeros((600, 300, 4), np.uint8)
+        rgba[..., :3] = self.base
+        rgba[50:580, 80:220, 3] = 255
+        edit(rgba)
+        p = os.path.join(self.tmp, name)
+        Image.fromarray(rgba, 'RGBA').save(p)
+        return p
+
+    def st(self, r, n):
+        return next(c['status'] for c in r['checks'] if c['name'] == n)
+
+    def test_target_only_change_passes_technical(self):
+        def e(a): a[310:350, 100:200, :3] = 255
+        r = vf.run(self.tpl, 'back', self.cand('ok.png', e), 'test fixture', root='/')
+        for n in ('size_matches_canon', 'border_alpha_zero', 'opaque_body', 'changes_inside_target', 'no_changes_outside_target'):
+            self.assertEqual(self.st(r, n), 'PASS', n)
+        self.assertEqual(r['overall'], 'NOT_RUN')
+        self.assertFalse(r['adoptionReady'])
+
+    def test_outside_change_and_soft_alpha_fail(self):
+        def e(a):
+            a[310:350, 100:200, :3] = 255
+            a[60:200, 90:210, :3] = 0
+            a[50:580, 80:220, 3] = 253
+        r = vf.run(self.tpl, 'back', self.cand('bad.png', e), 'test fixture', root='/')
+        self.assertEqual(self.st(r, 'no_changes_outside_target'), 'FAIL')
+        self.assertEqual(self.st(r, 'opaque_body'), 'FAIL')
+        self.assertEqual(r['overall'], 'FAIL')
+
+    def test_missing_candidate_blocked(self):
+        r = vf.run(self.tpl, 'back', os.path.join(self.tmp, 'none.png'), root='/')
+        self.assertEqual(r['overall'], 'BLOCKED')
