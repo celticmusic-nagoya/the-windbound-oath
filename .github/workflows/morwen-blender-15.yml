@@ -1,0 +1,47 @@
+name: Morwen Blender 15 Anatomical Torso QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_15/**'
+      - '.github/workflows/morwen-blender-15.yml'
+permissions:
+  contents: read
+jobs:
+  topology:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Validate canonical references
+        run: python3 tools/blender/morwen_blender_14/build_topology_contract.py
+      - name: Build manifold torso candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_15/build_anatomical_torso.py
+      - name: Validate topology report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('assets/candidates/morwen-blender-15')
+          d=json.loads((root/'build_report.json').read_text())
+          assert d['components']==1
+          assert d['boundary_edges']==0 and d['nonmanifold_edges']==0
+          assert d['vertices']==192 and d['faces']==170
+          assert d['full_body'] is False and d['production_use'] is False
+          assert (root/'morwen_anatomical_torso_candidate.blend').stat().st_size>1000
+          print('MORWEN_15_TORSO_QA_PASS')
+          PY
+      - name: Upload torso candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-15-anatomical-torso
+          path: assets/candidates/morwen-blender-15/
+          if-no-files-found: warn
+          retention-days: 14
