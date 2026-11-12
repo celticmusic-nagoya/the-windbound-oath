@@ -53,6 +53,32 @@ with server(8814) as base,sync_playwright() as p:
        }""",button['id'])
        button['scrollReachable44']=reachable
    ctx.close()
+ # UX-MOBILE-20: verify release preview hides development UI without changing battle controls.
+ preview_checks=[]
+ for kind in ('normal','raider'):
+  ctx=b.new_context(viewport={'width':800,'height':360},is_mobile=True,has_touch=True)
+  pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)))
+  pg.goto(base+'/index.html?releasePreview=1')
+  pg.wait_for_function('window.InputManager && window.BattleIdleMotion')
+  pg.wait_for_timeout(1300)
+  if kind=='normal':
+   pg.evaluate("devJump('forest')");pg.wait_for_function('MossForest.active',timeout=30000)
+   pg.evaluate("closeDialogue();FieldMonsters.removeAll();startAttackBattle('fieldGob1',100)")
+  else:
+   pg.evaluate("closeDialogue();devJump('raider')")
+  pg.wait_for_function("InputManager.state()==='BATTLE_COMMAND'",timeout=30000)
+  pg.locator('#normalCommandToggle' if kind=='normal' else '#rbCommandToggle').tap()
+  pg.wait_for_timeout(250)
+  check=pg.evaluate("""kind=>{
+   const visible=id=>{const e=document.getElementById(id);return !!e&&!!e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'};
+   return {kind,previewEnabled:document.documentElement.classList.contains('release-ui-preview'),
+    devMenuHidden:!visible('devBtn')&&!visible('devPanel'),
+    devKillHidden:!visible(kind==='normal'?'nDevKill':'rbDevKill'),
+    attackVisible:visible(kind==='normal'?'nAtk':'rbAtk')};
+  }""",kind)
+  preview_checks.append(check)
+  pg.screenshot(path=str(OUT/('landscape-small-'+kind+'-release-preview.png')))
+  ctx.close()
  b.close()
 # UX-MOBILE-06: diagnostic occlusion review; not a gameplay failure.
 for row in rows:
@@ -97,6 +123,11 @@ for row in rows:
    failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} tap target below 44 CSS px")
   if not button['visible44'] and not button.get('scrollReachable44',False):
    failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} visible target below 44 CSS px")
+# UX-MOBILE-20: release preview must hide dev UI and retain normal attack commands.
+for check in preview_checks:
+ for key in ('previewEnabled','devMenuHidden','devKillHidden','attackVisible'):
+  if not check[key]:
+   failures.append(f"releasePreview/{check['kind']}: {key} is false")
 # UX-MOBILE-18: explicit release-readiness audit, informational in development.
 # Never silently treat the current development build as production-ready.
 dev_controls = sorted({b['id'] for row in rows if row['expanded'] for b in row['buttons']
@@ -109,5 +140,5 @@ try:
  baseline = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 except (OSError,subprocess.CalledProcessError):
  baseline = os.getenv('QA_BASE_SHA','UNKNOWN')
-(OUT/'results.json').write_text(json.dumps(dict(base=baseline,rows=rows,errors=errors,failures=failures,releaseAudit=release_audit,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
+(OUT/'results.json').write_text(json.dumps(dict(base=baseline,rows=rows,errors=errors,failures=failures,releaseAudit=release_audit,releasePreviewChecks=preview_checks,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
 print(json.dumps([dict(view=x['view'],kind=x['kind'],expanded=x['expanded'],spritePct=x['spriteCoveragePct'],viewportPct=x['panelViewportPct'],stage=x['stage'],stagePanelOverlapPct=x['stagePanelOverlapPct']) for x in rows],indent=2));print('FAILURES',*failures,sep='\n');print('PAGE_ERRORS',*errors,sep='\n');sys.exit(bool(errors or failures))
