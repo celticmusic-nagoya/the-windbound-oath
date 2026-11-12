@@ -1,0 +1,48 @@
+name: Morwen Blender 04 Rig Deformation QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_04/**'
+      - '.github/workflows/morwen-blender-04.yml'
+permissions:
+  contents: read
+jobs:
+  rig-deformation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Compile QA script
+        run: python3 -m py_compile tools/blender/morwen_blender_04/verify_deformation.py
+      - name: Rebuild unified 3D candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Execute deformation QA
+        run: |
+          blender -b assets/candidates/morwen-blender-03/morwen_unified_neutral_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_04/verify_deformation.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-blender-04/deformation_qa.json')
+          q=json.loads(p.read_text())
+          assert q['status']=='PASS_TECHNICAL_ONLY'
+          assert len(q['deformation_tests'])==4
+          assert q['visual_comparison']=='NOT_RUN'
+          assert not q['production_use']
+          PY
+      - name: Upload QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-04-deformation-qa
+          path: assets/candidates/morwen-blender-04/
+          if-no-files-found: warn
+          retention-days: 14
