@@ -1,0 +1,48 @@
+{
+  "task": "MORWEN-MOTION-CONTACT-EXPORT-04",
+  "status": "BLOCKED",
+  "baseHead": "962e5af15f1bb2c261e235edff28d253bee7838c",
+  "adoptionReady": false,
+  "exportImplemented": false,
+  "realDriftAudit": "NOT_RUN",
+  "perFootMaxPx": {
+    "L": null,
+    "R": null
+  },
+  "reason": "No actual animated v1.0 rig generator, authored per-frame pose sequence or actor/root transform calculation exists in inspected tracked code. v1.0 is a static migration; v0.9 FK probes are QA-only. No authentic insertion point for a runtime export hook.",
+  "requiredInputs": [
+    "actual v1.0 frame generator consuming the candidate rig",
+    "authored frame IDs/times and anatomical L/R gait states/stanceId",
+    "selected heel/ball/toe pose contact per foot and frame",
+    "actual actor/root local-to-world transform, projection, coordinate units and scale",
+    "source path/hash and evidence tying generated poses to the v1.0 rig"
+  ],
+  "inspectedSources": [
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v1.0/MASTER_BODY_SPEC.v1.0.candidate.json",
+      "sha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66"
+    },
+    {
+      "path": "tools/character-asset-studio/qa/build_morwen_v10_candidate.py",
+      "sha256": "16fad5dc46db13e0e4af47ecd875f5845090e089349757ddf9fd3f945a80b426"
+    },
+    {
+      "path": "tools/character-asset-studio/pipeline/caslib/articulated.py",
+      "sha256": "c712cafad42c19643249ee5505553ae7e8018257ea05d48b9cc97810411749b0"
+    },
+    {
+      "path": "tools/character-asset-studio/pipeline/cas.py",
+      "sha256": "9a7ee1e239fe679ee42a799967bcfd0b7d771198d5e1c48a27edc796079f1c2c"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/LAYER01_MODULAR.json",
+      "sha256": "28439473bdfdeaa3f0a7f07de691be6891a034a42259dacb3cc38c0417aa7480"
+    },
+    {
+      "path": "assets/candidates/morwen-right-walk/72/build_meta.json",
+      "sha256": "7b343339cbf7de9d0bd1b994af66c47052274f17ac35ffc3e54e52bebaf74326"
+    }
+  ],
+  "structuralValidatorLimitation": "Nonempty provenance does not authenticate file hashes or reject L/R provenance inversion; synthetic diagnostic test demonstrates this. No real-world mapping evidence exists to validate against.",
+  "repairAttempts": 0
+}

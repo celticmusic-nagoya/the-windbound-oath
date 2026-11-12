@@ -1,0 +1,5 @@
+./tools/character-asset-studio/pipeline/tests/test_pipeline.py:978:        Jr = articulated.fk_rotate(J, "hipL", 30, articulated.descendants("hipL"))
+./tools/character-asset-studio/pipeline/caslib/articulated.py:217:def fk_rotate(J, joint, axis_deg, chain):
+./tools/character-asset-studio/pipeline/caslib/articulated.py:335:        Jr = fk_rotate(J, jn, ax["rangeDeg"][1] if ax["rangeDeg"][1] else ax["rangeDeg"][0], ch)
+./tools/character-asset-studio/qa/test_validate_real_motion_export.py:9:        "schema": "cas/real-motion-contact-export/1.0", "rigVersion": "1.0",
+./tools/character-asset-studio/qa/validate_real_motion_export.py:19:    require(data.get("schema") == "cas/real-motion-contact-export/1.0", "SCHEMA")
