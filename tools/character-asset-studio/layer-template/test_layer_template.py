@@ -103,7 +103,7 @@ class FixCandidateTest(unittest.TestCase):
         Image.fromarray(base).save(self.canon)
         self.base = base
         t = {'views': {'back': {'canonSource': {'path': self.canon, 'sha256': hashlib.sha256(open(self.canon, 'rb').read()).hexdigest()}}},
-             'correctionTargets': [{'view': 'back', 'zonesCanonPx': [[80, 300, 220, 360]]}]}
+             'correctionTargets': [{'view': 'back', 'zonesCanonPx': [[80, 300, 220, 360]], 'zonesDeclaredBeforeEdit': {'commit': 'test'}}]}
         self.tpl = os.path.join(self.tmp, 't.json')
         with open(self.tpl, 'w') as f:
             json.dump(t, f)
@@ -123,7 +123,7 @@ class FixCandidateTest(unittest.TestCase):
     def test_target_only_change_passes_technical(self):
         def e(a): a[310:350, 100:200, :3] = 255
         r = vf.run(self.tpl, 'back', self.cand('ok.png', e), 'test fixture', root='/')
-        for n in ('size_matches_canon', 'border_alpha_zero', 'opaque_body', 'changes_inside_target', 'no_changes_outside_target'):
+        for n in ('size_matches_canon', 'border_alpha_zero', 'opaque_body', 'background_transparent', 'changes_inside_target', 'no_changes_outside_target'):
             self.assertEqual(self.st(r, n), 'PASS', n)
         self.assertEqual(r['overall'], 'NOT_RUN')
         self.assertFalse(r['adoptionReady'])
@@ -137,6 +137,11 @@ class FixCandidateTest(unittest.TestCase):
         self.assertEqual(self.st(r, 'no_changes_outside_target'), 'FAIL')
         self.assertEqual(self.st(r, 'opaque_body'), 'FAIL')
         self.assertEqual(r['overall'], 'FAIL')
+
+    def test_opaque_background_fails(self):
+        def e(a): a[..., 3] = 255
+        r = vf.run(self.tpl, 'back', self.cand('opaque.png', e), 'test fixture', root='/')
+        self.assertEqual(self.st(r, 'background_transparent'), 'FAIL')
 
     def test_missing_candidate_blocked(self):
         r = vf.run(self.tpl, 'back', os.path.join(self.tmp, 'none.png'), root='/')

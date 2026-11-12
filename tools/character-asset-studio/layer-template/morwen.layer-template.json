@@ -570,13 +570,19 @@
       "action": "new corrected candidate image required; canon untouched",
       "zonesCanonPx": [
         [
-          445,
-          732,
-          764,
-          880
+          480,
+          785,
+          690,
+          835
+        ],
+        [
+          470,
+          835,
+          740,
+          920
         ]
       ],
-      "zonesClassification": "ESTIMATED (garter/thigh band drawn from visual inspection; human confirmation required)",
+      "zonesClassification": "ESTIMATED (visual inspection on 50px grid; human confirmation required)",
       "candidates": [
         {
           "path": "assets/candidates/morwen/fix-candidates/back-7776/7776.png",
@@ -585,7 +591,42 @@
           "status": "UNAPPROVED_CANDIDATE",
           "qa": "tools/character-asset-studio/layer-template/qa/fix_candidate_back_7776.json"
         }
-      ]
+      ],
+      "sourceForEdit": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+        "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+        "size": [
+          1152,
+          1536
+        ]
+      },
+      "zoneLabels": [
+        "skirt hem to garter strap top (avoids bag)",
+        "thigh band incl. stocking tops, both legs"
+      ],
+      "zonesDeclaredBeforeEdit": {
+        "task": "MORWEN-ASSET-FIX-03",
+        "date": "2026-11-12",
+        "by": "Claude (technical QA)",
+        "note": "Declared before any FIX-03 edit; the commit adding this field is the reference."
+      },
+      "mustNotChange": [
+        "hat",
+        "hair",
+        "cape",
+        "bag",
+        "uniform",
+        "boots"
+      ],
+      "deliveryRequirements": {
+        "size": [
+          1152,
+          1536
+        ],
+        "mode": "RGBA",
+        "background": "alpha 0",
+        "method": "local edit of canon back.png; no full regeneration"
+      }
     },
     {
       "view": "right",
@@ -597,9 +638,68 @@
         "hat_ribbon"
       ],
       "action": "new corrected candidate image required; canon untouched",
-      "zonesCanonPx": null,
-      "zonesClassification": "UNRESOLVED",
-      "candidates": []
+      "zonesCanonPx": [
+        [
+          320,
+          90,
+          560,
+          515
+        ],
+        [
+          410,
+          690,
+          630,
+          935
+        ],
+        [
+          600,
+          540,
+          690,
+          760
+        ],
+        [
+          600,
+          860,
+          700,
+          975
+        ]
+      ],
+      "zonesClassification": "ESTIMATED (visual inspection on 50px grid; human confirmation required)",
+      "candidates": [],
+      "sourceForEdit": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+        "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+        "size": [
+          1200,
+          1600
+        ]
+      },
+      "zoneLabels": [
+        "hat flower, ribbon and pendant (near side of crown)",
+        "bag on near hip and area behind it",
+        "strap segment across near torso",
+        "garter on near leg and far-leg thigh top"
+      ],
+      "zonesDeclaredBeforeEdit": {
+        "task": "MORWEN-ASSET-FIX-03",
+        "date": "2026-11-12",
+        "by": "Claude (technical QA)",
+        "note": "Declared before any FIX-03 edit; the commit adding this field is the reference."
+      },
+      "rules": [
+        "Garter only on the character right (far) leg; draw only what would be visible.",
+        "Bag referenced to the character right (far) hip; do not add hidden items by guess.",
+        "Hat flower/ribbon must match the official hat design seen in front/back; director confirms placement."
+      ],
+      "deliveryRequirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "mode": "RGBA",
+        "background": "alpha 0",
+        "method": "local edit of canon right.png; no full regeneration"
+      }
     },
     {
       "view": "left",
@@ -626,5 +726,27 @@
       "task": "MORWEN-LAYER-05-FIX-02",
       "change": "7776.png stored as UNAPPROVED_CANDIDATE for back garter; technical QA FAIL (size, border alpha, soft body alpha, changes outside target zone, provenance unverified). Right-view correction not delivered (BLOCKED)."
     }
-  ]
+  ],
+  "attemptPolicy": {
+    "rule": "Two failures with the same method stop regeneration; switch to manual layer editing.",
+    "log": [
+      {
+        "view": "back",
+        "candidate": "7776.png",
+        "method": "full regeneration (pre-FIX-03)",
+        "result": "FAIL",
+        "countsToward": "full regeneration"
+      }
+    ],
+    "counts": {
+      "back": {
+        "full regeneration": 1,
+        "local edit": 0
+      },
+      "right": {
+        "full regeneration": 0,
+        "local edit": 0
+      }
+    }
+  }
 }

@@ -8,11 +8,13 @@ Diff zones come from template.correctionTargets[view].zonesCanonPx ([x0,y0,x1,y1
 import argparse, hashlib, json, os, sys
 import numpy as np
 from PIL import Image
+from scipy import ndimage as nd
 
 RANK = {'FAIL': 3, 'BLOCKED': 2, 'NOT_RUN': 1, 'PASS': 0}
 BLUR = 6                    # box-downsample factor that suppresses resampling/edge noise
 DIFF_LEVEL = 20             # mean |RGB| difference counted as a real change after blur
 OUTSIDE_LIMIT = 0.02        # max share of figure area changed outside the declared target zones
+BG_LIMIT = 0.995            # min share of canon background (eroded 3px) that must be alpha 0 in the candidate
 
 
 def sha(p):
@@ -49,6 +51,18 @@ def run(template_path, view, cand_path, provenance=None, root='.'):
     body = al >= 128
     soft = float(((al >= 128) & (al < 255)).sum() / max(body.sum(), 1))
     add('opaque_body', 'PASS' if soft <= 0.05 else 'FAIL', f'{soft:.1%} of body pixels have alpha 128-254')
+    if canon.mode == 'RGB':
+        cb = np.asarray(canon).max(2) <= 12
+        lab, _ = nd.label(cb)
+        edge = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+        bgm = np.isin(lab, list(edge))
+    else:
+        bgm = np.asarray(canon.convert('RGBA'))[..., 3] == 0
+    bgm = nd.binary_erosion(bgm, iterations=3)
+    if bgm.shape != al.shape:
+        bgm = np.asarray(Image.fromarray(bgm.astype(np.uint8) * 255).resize(cim.size, Image.NEAREST)) > 0
+    clear = float((al[bgm] == 0).mean()) if bgm.any() else 0.0
+    add('background_transparent', 'PASS' if clear >= BG_LIMIT else 'FAIL', f'{clear:.2%} of canon background is alpha 0 (min {BG_LIMIT:.1%})')
     rows = np.nonzero(body.any(1))[0]
     sy = canon.size[1] / cim.size[1]
     add('ground_row_canon_px', 'NOT_RUN', f'lowest alpha>=128 row {int(rows[-1]) if len(rows) else None} (x{sy:.4f} to canon px); contact compare needs the view_transforms method')
@@ -71,6 +85,8 @@ def run(template_path, view, cand_path, provenance=None, root='.'):
     fig = (Ab.mean(2) > 15) | (Bb.mean(2) > 15)
     zone = np.zeros_like(fig)
     zones = (target or {}).get('zonesCanonPx')
+    if zones and not (target or {}).get('zonesDeclaredBeforeEdit'):
+        add('zones_declared_before_edit', 'FAIL', 'allowed zones must be recorded before the edit')
     if not zones:
         add('target_zones', 'BLOCKED', 'zonesCanonPx not defined for this view')
     else:
@@ -92,7 +108,7 @@ def finish(view, csha, checks):
     overall = max((c['status'] for c in checks), key=lambda s: RANK[s])
     return {'schema': 'cas/fix-candidate-qa/05', 'view': view, 'candidateSha256': csha, 'overall': overall,
             'counts': counts, 'adoptionReady': False,
-            'thresholds': {'blur': BLUR, 'diffLevel': DIFF_LEVEL, 'outsideLimit': OUTSIDE_LIMIT}, 'checks': checks}
+            'thresholds': {'blur': BLUR, 'diffLevel': DIFF_LEVEL, 'outsideLimit': OUTSIDE_LIMIT, 'backgroundClear': BG_LIMIT}, 'checks': checks}
 
 
 if __name__ == '__main__':

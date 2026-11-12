@@ -4,7 +4,7 @@
   "candidateSha256": "d9506845f6377ad465b291b8ba6bc0ff2e60340f836ad7c18c213c453e7bb393",
   "overall": "FAIL",
   "counts": {
-    "FAIL": 4,
+    "FAIL": 5,
     "BLOCKED": 1,
     "NOT_RUN": 3,
     "PASS": 6
@@ -13,7 +13,8 @@
   "thresholds": {
     "blur": 6,
     "diffLevel": 20,
-    "outsideLimit": 0.02
+    "outsideLimit": 0.02,
+    "backgroundClear": 0.995
   },
   "checks": [
     {
@@ -62,6 +63,11 @@
       "detail": "100.0% of body pixels have alpha 128-254"
     },
     {
+      "name": "background_transparent",
+      "status": "FAIL",
+      "detail": "96.80% of canon background is alpha 0 (min 99.5%)"
+    },
+    {
       "name": "ground_row_canon_px",
       "status": "NOT_RUN",
       "detail": "lowest alpha>=128 row 1402 (x1.0608 to canon px); contact compare needs the view_transforms method"
@@ -69,12 +75,12 @@
     {
       "name": "changes_inside_target",
       "status": "PASS",
-      "detail": "mean 14.2"
+      "detail": "mean 17.6"
     },
     {
       "name": "no_changes_outside_target",
       "status": "FAIL",
-      "detail": "9.7% of figure outside target changed (limit 2%); shift (-1,0)"
+      "detail": "9.4% of figure outside target changed (limit 2%); shift (-1,0)"
     },
     {
       "name": "design_match_human",
