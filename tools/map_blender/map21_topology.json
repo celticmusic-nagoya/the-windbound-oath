@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "status": "PROVISIONAL_NOT_CANON",
+  "units": "conceptual_world_units",
+  "landmarks": [
+    {
+      "id": "village_square",
+      "kind": "village",
+      "xy": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "aidan_home",
+      "kind": "home",
+      "xy": [
+        -5,
+        4
+      ]
+    },
+    {
+      "id": "north_road",
+      "kind": "road",
+      "xy": [
+        3,
+        25
+      ]
+    },
+    {
+      "id": "dunvar_exit",
+      "kind": "exit",
+      "xy": [
+        4,
+        34
+      ]
+    },
+    {
+      "id": "windwatch_cliff",
+      "kind": "sea_cliff",
+      "xy": [
+        -27,
+        17
+      ]
+    },
+    {
+      "id": "sunset_view",
+      "kind": "cinematic",
+      "xy": [
+        -29,
+        19
+      ]
+    },
+    {
+      "id": "return_bend",
+      "kind": "road_bend",
+      "xy": [
+        -13,
+        11
+      ]
+    },
+    {
+      "id": "fishing_inlet",
+      "kind": "inlet",
+      "xy": [
+        -26,
+        -21
+      ]
+    },
+    {
+      "id": "river_bridge",
+      "kind": "bridge",
+      "xy": [
+        16,
+        2
+      ]
+    },
+    {
+      "id": "riverbank_escape_cliff",
+      "kind": "river_cliff",
+      "xy": [
+        20,
+        -10
+      ]
+    },
+    {
+      "id": "moss_forest",
+      "kind": "forest",
+      "xy": [
+        21,
+        -25
+      ]
+    },
+    {
+      "id": "ancient_altar",
+      "kind": "altar",
+      "xy": [
+        28,
+        -32
+      ]
+    }
+  ],
+  "edges": [
+    [
+      "aidan_home",
+      "village_square"
+    ],
+    [
+      "village_square",
+      "north_road"
+    ],
+    [
+      "north_road",
+      "dunvar_exit"
+    ],
+    [
+      "village_square",
+      "return_bend"
+    ],
+    [
+      "return_bend",
+      "windwatch_cliff"
+    ],
+    [
+      "windwatch_cliff",
+      "sunset_view"
+    ],
+    [
+      "village_square",
+      "fishing_inlet"
+    ],
+    [
+      "village_square",
+      "river_bridge"
+    ],
+    [
+      "river_bridge",
+      "riverbank_escape_cliff"
+    ],
+    [
+      "river_bridge",
+      "moss_forest"
+    ],
+    [
+      "moss_forest",
+      "ancient_altar"
+    ]
+  ],
+  "constraints": {
+    "sea_cliff_and_riverbank_cliff_distinct": true,
+    "village_fire_invisible_from_sunset_view": true,
+    "village_fire_first_visible_after_return_bend": true,
+    "north_exit_to_dunvar": true,
+    "forest_southeast": true,
+    "bridge_crosses_eastern_river": true
+  },
+  "notes": "Coordinates and connections are schematic only; do not interpret as canon placement or runtime navigation."
+}
