@@ -1,0 +1,51 @@
+name: Morwen Blender 12 Deformation QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_12/**'
+      - '.github/workflows/morwen-blender-12.yml'
+permissions:
+  contents: read
+jobs:
+  deformation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Build original candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build 07 core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Build 09 calibrated core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_09/build_landmark_core.py
+      - name: Build 11 connected mesh
+        run: blender -b assets/candidates/morwen-blender-09/morwen_landmark_core_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_11/build_connected.py
+      - name: Verify 8 joint poses and reset
+        run: blender -b assets/candidates/morwen-blender-11/morwen_connected_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_12/verify_deformation.py
+      - name: Validate QA report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('assets/candidates/morwen-blender-12/deformation_report.json').read_text())
+          assert d['bones']==17 and d['missing_weights']==0
+          assert len(d['pose_displacements'])==8
+          assert min(d['pose_displacements'].values())>1e-6
+          assert d['reset_error']<1e-5 and d['max_weight_sum_error']<.001
+          print('MORWEN_12_REPORT_PASS')
+          PY
+      - name: Upload deformation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-12-deformation-report
+          path: assets/candidates/morwen-blender-12/
+          if-no-files-found: warn
+          retention-days: 14
