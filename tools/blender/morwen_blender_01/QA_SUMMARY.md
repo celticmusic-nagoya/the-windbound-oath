@@ -12,7 +12,11 @@
 
 ## GitHub Actions
 
-Real workflow build/reload is pending at this initial implementation commit. Final run URL, tested commit, outcome and artifact link will be recorded in `CI_EVIDENCE.json` and the Draft PR after completion. A local PASS is not presented as an Actions PASS.
+**PASS**: [Actions run 43212851624](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43212851624), tested implementation commit `c2d53418d47408b507889250da6c5cae9d70b89b`. Source/unit checks, actual headless Blender build/render/reload, output assertions and artifact upload all completed successfully (job 1m35s).
+
+[Download review artifact](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43212851624/artifacts/13941094268): `morwen-blender-01-candidate`, 5,341,136 bytes; archive SHA-256 `05e82c56078c1066114d935748fa33794b112126369ac65b90c8e556674c70d9`. Artifact retention is 14 days; local .blend/previews are also committed for durable review.
+
+API run/job/step status and artifact metadata were retrieved. Raw runner log download returned Forbidden from the Actions results receiver; no CI Blender version is inferred from that inaccessible log. Local Blender version is verified separately. `CI_EVIDENCE.json` contains the actual API evidence. The follow-up commit updates only these evidence records, with scripts, inputs and generated artifacts unchanged.
 
 ## Review and limits
 
