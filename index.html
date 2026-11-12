@@ -752,7 +752,10 @@ function updateNormalPartyHud(){
  $('#nAHP').style.width=Math.max(0,aahp)+'%';$('#nATxt').textContent=`HP ${Math.max(0,aahp)} / 100　TP ${aatp}`;
  $('#nFHP').style.width=Math.max(0,normalFHP/90*100)+'%';$('#nFTxt').textContent=`HP ${Math.max(0,normalFHP)} / 90　MP ${normalFMP}`;
  $('#nCardA').classList.toggle('active',normalActor==='aidan');$('#nCardF').classList.toggle('active',normalActor==='fiona');
- $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;updateV2BattleHud();
+ $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;
+ $('#normalBattleCmd').dataset.actor=normalActor;
+ $('#normalCommandToggle').setAttribute('aria-label',`${normalActor==='aidan'?'エイダン':'フィオナ'}のコマンドを開く`);
+ updateV2BattleHud();
 }
 function updateNormalCommands(){
  setNormalCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('normal')));
@@ -1340,6 +1343,8 @@ function updateRaider(){
  }
  $('#cardA').classList.toggle('active',rbActor==='aidan');$('#cardF').classList.toggle('active',rbActor==='fiona');
  $('#rbCmd').classList.toggle('fionaTurn',rbActor==='fiona');
+ $('#rbCmd').dataset.actor=rbActor;
+ $('#rbCommandToggle').setAttribute('aria-label',`${rbActor==='aidan'?'エイダン':'フィオナ'}のコマンドを開く`);
  $('#rbWindbloom').disabled=rbFMP<8;$('#rbSkill').disabled=rbTP<30;$('#rbSkill').textContent=`一閃 TP30（${rbTP}）`;
  $('#rbHeal').disabled=rbFMP<8;$('#rbRuneSkill').disabled=rbFMP<6;
  const ready=rbRune>=100;$('#raiderBattle').classList.toggle('windReady',ready);$('#rbWind').disabled=!ready;
@@ -1453,6 +1458,8 @@ function setBattleCommandDrawer(battle,open){
  syncBattleCommandLocks();
  if(open&&battleCommandLocked(battle))return false;
  panel.hidden=!open;toggle.hidden=!!open;
+ toggle.setAttribute('aria-expanded',String(!!open));
+ toggle.setAttribute('aria-controls',panel.id);
  panel.classList.toggle('expanded',!!open);
  panel.style.setProperty('display',open?'grid':'none','important');
  // Visibility and hit-testing belong to CSS so presentation locks can override an open drawer.
