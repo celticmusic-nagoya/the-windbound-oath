@@ -1,5 +1,5 @@
 """Measure real mobile COMMAND geometry and sprite alpha coverage, proposal only."""
-import json,os,sys
+import json,os,sys,subprocess
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from browser_support import server
@@ -24,7 +24,7 @@ MEASURE="""({kind,open})=>{
 rows=[];errors=[]
 with server(8814) as base,sync_playwright() as p:
  b=p.chromium.launch(executable_path=(os.getenv('PW_CHROMIUM_EXECUTABLE') or (os.path.exists('/usr/bin/chromium') and '/usr/bin/chromium') or None))
- for view,(w,h) in [('portrait',(390,844)),('landscape',(844,390)),('small',(360,640))]:
+ for view,(w,h) in [('portrait',(390,844)),('landscape',(844,390)),('landscape-small',(800,360)),('small',(360,640))]:
   for kind in ['normal','raider']:
    ctx=b.new_context(viewport={'width':w,'height':h},is_mobile=True,has_touch=True);pg=ctx.new_page();pg.on('pageerror',lambda e:errors.append(str(e)));pg.goto(base+'/index.html');pg.wait_for_function('window.InputManager && window.BattleIdleMotion');pg.wait_for_timeout(1300)
    if kind=='normal':
@@ -37,5 +37,16 @@ with server(8814) as base,sync_playwright() as p:
     pg.wait_for_timeout(250);m=pg.evaluate(MEASURE,dict(kind=kind,open=expanded));m.update(view=view,kind=kind,expanded=expanded);rows.append(m);pg.screenshot(path=str(OUT/(view+'-'+kind+('-open' if expanded else '-closed')+'.png')))
    ctx.close()
  b.close()
-(OUT/'results.json').write_text(json.dumps(dict(base='31a5f5e',rows=rows,errors=errors,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
-print(json.dumps([dict(view=x['view'],kind=x['kind'],expanded=x['expanded'],spritePct=x['spriteCoveragePct'],viewportPct=x['panelViewportPct']) for x in rows],indent=2));print('FAILS',int(bool(errors)));sys.exit(bool(errors))
+failures = []
+for row in rows:
+ for button in row['buttons']:
+  if not button['minimum44']:
+   failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} tap target below 44 CSS px")
+  if not button['visible44']:
+   failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} visible target below 44 CSS px")
+try:
+ baseline = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+except (OSError,subprocess.CalledProcessError):
+ baseline = os.getenv('QA_BASE_SHA','UNKNOWN')
+(OUT/'results.json').write_text(json.dumps(dict(base=baseline,rows=rows,errors=errors,failures=failures,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
+print(json.dumps([dict(view=x['view'],kind=x['kind'],expanded=x['expanded'],spritePct=x['spriteCoveragePct'],viewportPct=x['panelViewportPct']) for x in rows],indent=2));print('FAILURES',*failures,sep='\n');print('PAGE_ERRORS',*errors,sep='\n');sys.exit(bool(errors or failures))
