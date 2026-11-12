@@ -44,6 +44,21 @@
 .dev-only-command{border-color:#b88b45!important;color:#e6c987!important;background:rgba(70,38,12,.30)!important;font-size:.78rem!important}
 .dev-only-command::before{content:"⚙ ";opacity:.8}
 </style>
+<script id="ux-mobile-release-preview">
+/* UX-MOBILE-19: opt-in UI-only release preview; NOT a security boundary.
+   Existing development flow remains unchanged unless ?releasePreview=1. */
+if(new URLSearchParams(location.search).get('releasePreview')==='1'){
+ document.documentElement.classList.add('release-ui-preview');
+}
+</script>
+<style id="ux-mobile-release-preview-style">
+html.release-ui-preview body #devBtn,
+html.release-ui-preview body #devPanel,
+html.release-ui-preview body #normalBattleCmd #nDevKill,
+html.release-ui-preview body #normalBattleCmd #nDevKill.v2-visible,
+html.release-ui-preview body #rbCmd #rbDevKill,
+html.release-ui-preview body #rbCmd #rbDevKill.rb-visible{display:none!important}
+</style>
 </head><body>
 <div id="game"><div id="world">
 <div class="road" style="left:80px;top:560px;width:1600px;height:150px"></div><div class="road" style="left:680px;top:100px;width:150px;height:1000px"></div>
@@ -752,7 +767,10 @@ function updateNormalPartyHud(){
  $('#nAHP').style.width=Math.max(0,aahp)+'%';$('#nATxt').textContent=`HP ${Math.max(0,aahp)} / 100　TP ${aatp}`;
  $('#nFHP').style.width=Math.max(0,normalFHP/90*100)+'%';$('#nFTxt').textContent=`HP ${Math.max(0,normalFHP)} / 90　MP ${normalFMP}`;
  $('#nCardA').classList.toggle('active',normalActor==='aidan');$('#nCardF').classList.toggle('active',normalActor==='fiona');
- $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;updateV2BattleHud();
+ $('#normalActor').textContent=`COMMAND — ${normalActor==='aidan'?'エイダン':'フィオナ'}`;
+ $('#normalBattleCmd').dataset.actor=normalActor;
+ $('#normalCommandToggle').setAttribute('aria-label',`${normalActor==='aidan'?'エイダン':'フィオナ'}のコマンドを開く`);
+ updateV2BattleHud();
 }
 function updateNormalCommands(){
  setNormalCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('normal')));
@@ -1340,6 +1358,8 @@ function updateRaider(){
  }
  $('#cardA').classList.toggle('active',rbActor==='aidan');$('#cardF').classList.toggle('active',rbActor==='fiona');
  $('#rbCmd').classList.toggle('fionaTurn',rbActor==='fiona');
+ $('#rbCmd').dataset.actor=rbActor;
+ $('#rbCommandToggle').setAttribute('aria-label',`${rbActor==='aidan'?'エイダン':'フィオナ'}のコマンドを開く`);
  $('#rbWindbloom').disabled=rbFMP<8;$('#rbSkill').disabled=rbTP<30;$('#rbSkill').textContent=`一閃 TP30（${rbTP}）`;
  $('#rbHeal').disabled=rbFMP<8;$('#rbRuneSkill').disabled=rbFMP<6;
  const ready=rbRune>=100;$('#raiderBattle').classList.toggle('windReady',ready);$('#rbWind').disabled=!ready;
@@ -1453,6 +1473,8 @@ function setBattleCommandDrawer(battle,open){
  syncBattleCommandLocks();
  if(open&&battleCommandLocked(battle))return false;
  panel.hidden=!open;toggle.hidden=!!open;
+ toggle.setAttribute('aria-expanded',String(!!open));
+ toggle.setAttribute('aria-controls',panel.id);
  panel.classList.toggle('expanded',!!open);
  panel.style.setProperty('display',open?'grid':'none','important');
  // Visibility and hit-testing belong to CSS so presentation locks can override an open drawer.
@@ -2227,4 +2249,5 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/save-continue.js?v=20261025continue"></script>
 <script src="js/title-screen.js?v=20261027aidanv2"></script>
 <link rel="stylesheet" href="css/title-screen.css?v=20261028portraitfinal">
+<link rel="stylesheet" href="css/battle-command-v2.css?v=ux-mobile-02">
 </body></html>

@@ -1,0 +1,109 @@
+name: Release UI Audit Self-Test
+on:
+  pull_request:
+    paths:
+      - 'tools/qa/check_release_ui.py'
+      - 'tools/qa/stage_release.py'
+      - 'index.html'
+      - '.github/workflows/release-ui-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-self-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate release audit rejects development HTML and accepts clean fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python tools/qa/check_release_ui.py index.html; then
+            echo "::error::Development HTML incorrectly passed release audit"
+            exit 1
+          fi
+          fixture="$(mktemp --suffix=.html)"
+          trap 'rm -f "$fixture"' EXIT
+          printf '%s\n' '<!doctype html><html><body><main>Game</main></body></html>' > "$fixture"
+          python tools/qa/check_release_ui.py "$fixture"
+          echo "Audit self-test PASS; this is NOT a release artifact approval."
+      - name: Verify release staging rejects development and copies clean candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir "$tmp/dev" "$tmp/clean"
+          cp index.html "$tmp/dev/index.html"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/clean/index.html"
+          if python tools/qa/stage_release.py "$tmp/dev" "$tmp/rejected"; then
+            echo "::error::Development build was staged"
+            exit 1
+          fi
+          test ! -e "$tmp/rejected"
+          python tools/qa/stage_release.py "$tmp/clean" "$tmp/release"
+          test -f "$tmp/release/index.html"
+          if python tools/qa/stage_release.py "$tmp/clean" "$tmp/release"; then
+            echo "::error::Existing output was overwritten"
+            exit 1
+          fi
+      - name: Reject symlinked release candidate assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir "$tmp/source"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/source/index.html"
+          ln -s /etc/hosts "$tmp/source/linked-secret"
+          if python tools/qa/stage_release.py "$tmp/source" "$tmp/output"; then
+            echo "::error::Symlinked asset was accepted"
+            exit 1
+          fi
+          test ! -e "$tmp/output"
+      - name: Reject development hooks in external JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir "$tmp/source"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/source/index.html"
+          printf '%s\n' 'PrologueCombat.instantKill("normal");' > "$tmp/source/game.js"
+          if python tools/qa/check_release_ui.py "$tmp/source"; then
+            echo "::error::External JavaScript hook passed audit"
+            exit 1
+          fi
+          if python tools/qa/stage_release.py "$tmp/source" "$tmp/output"; then
+            echo "::error::External JavaScript hook was staged"
+            exit 1
+          fi
+          test ! -e "$tmp/output"
+      - name: Verify nested JavaScript and clean candidate behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir -p "$tmp/source/js"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/source/index.html"
+          printf '%s\n' 'console.log("ready");' > "$tmp/source/js/game.js"
+          python tools/qa/check_release_ui.py "$tmp/source"
+          python tools/qa/stage_release.py "$tmp/source" "$tmp/clean-output"
+          test -f "$tmp/clean-output/js/game.js"
+          printf '%s\n' 'devJump(3);' > "$tmp/source/js/game.js"
+          if python tools/qa/check_release_ui.py "$tmp/source"; then
+            echo "::error::Nested development jump passed audit"
+            exit 1
+          fi
+          if python tools/qa/stage_release.py "$tmp/source" "$tmp/rejected-output"; then
+            echo "::error::Nested development jump was staged"
+            exit 1
+          fi
+          test ! -e "$tmp/rejected-output"
