@@ -164,3 +164,62 @@ body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button:not(:disabled){
  body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden])::before,
  body.raiderBattleMode #raiderBattle #rbCmd:not([hidden])::before{font-size:12px}
 }
+
+/* UX-MOBILE-05 — shared battle information hierarchy.
+   Presentational only; no HUD node moves or state changes. */
+body.normalBattleMode #attackBattle #battleMsg2,
+body.raiderBattleMode #raiderBattle #rbMsg{
+  box-sizing:border-box!important;
+  max-width:calc(100vw - 24px)!important;
+  padding:9px 15px!important;
+  border:1px solid rgba(225,198,129,.6)!important;
+  border-radius:10px!important;
+  background:linear-gradient(135deg,rgba(7,27,23,.95),rgba(13,33,28,.91))!important;
+  color:#f8f0df!important;
+  font:600 clamp(12px,2.6vw,15px)/1.5 system-ui,sans-serif!important;
+  text-shadow:0 2px 4px #000!important;
+  box-shadow:0 7px 24px #0009!important;
+  overflow-wrap:anywhere!important;
+}
+body.normalBattleMode #attackBattle .v2NearHud,
+body.raiderBattleMode #raiderBattle .rbNearHud,
+body.raiderBattleMode #raiderBattle #rbEnemyHud{
+  background:rgba(5,23,20,.83)!important;
+  border:1px solid rgba(225,198,129,.4)!important;
+  border-radius:9px!important;
+  box-shadow:0 4px 14px #0008!important;
+  padding:5px 7px!important;
+}
+body.normalBattleMode #attackBattle .v2NearHud b,
+body.raiderBattleMode #raiderBattle .rbNearHud b,
+body.raiderBattleMode #raiderBattle #rbEnemyHud b{
+  color:#f4dfaa!important;
+  font-weight:700!important;
+}
+body.raiderBattleMode #raiderBattle #rbEnemyHud{
+  min-width:116px!important;
+  max-width:min(40vw,210px)!important;
+  box-sizing:border-box!important;
+}
+body.raiderBattleMode #raiderBattle #rbEnemyHud small{
+  color:#f5e9d3!important;
+  font-variant-numeric:tabular-nums!important;
+}
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle #battleMsg2,
+ body.raiderBattleMode #raiderBattle #rbMsg{
+   font-size:12px!important;
+   padding:7px 10px!important;
+ }
+ body.raiderBattleMode #raiderBattle #rbEnemyHud{
+   max-width:42vw!important;
+ }
+}
+@media (orientation:landscape) and (max-height:390px){
+ body.normalBattleMode #attackBattle #battleMsg2,
+ body.raiderBattleMode #raiderBattle #rbMsg{
+   padding:5px 10px!important;
+   font-size:12px!important;
+   line-height:1.35!important;
+ }
+}
