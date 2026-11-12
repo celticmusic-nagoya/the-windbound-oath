@@ -36,3 +36,10 @@ No files are deleted by this audit. The next cleanup PR must contain a concrete 
 - GitHub Actions run [43211465775](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43211465775): completed / success.
 - Audit job: success; artifact `duplicate-audit-report` (artifact ID 13941486960) uploaded.
 - This proves the read-only scan executed, **not** that any candidate is safe to delete. No new deletions approved.
+
+## Phase 4 — GitHub code-reference check
+GitHub code search was performed against the current repository for exact preview basenames:
+- `qa_preview_69.html`: 9 matching files (QA checklist, reports, generators).
+- `qa_preview_70.html`: 1 matching file (`70/README.md`).
+- `qa_preview_72.html`: 1 matching file (`72/INTEGRATION_PLAN_72.md`).
+These previews are **HOLD**, because removing them as-is creates broken references. Search hit counts are not a complete dependency proof. PR #242's `qa_preview_71.html` remains separately pending review. No new deletion is approved by this phase.
