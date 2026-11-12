@@ -35,6 +35,20 @@ with server(8814) as base,sync_playwright() as p:
     if expanded:pg.locator('#normalCommandToggle' if kind=='normal' else '#rbCommandToggle').tap()
     else:pg.evaluate(('setNormalCommandDrawer' if kind=='normal' else 'setRaiderCommandDrawer')+'(false)')
     pg.wait_for_timeout(250);m=pg.evaluate(MEASURE,dict(kind=kind,open=expanded));m.update(view=view,kind=kind,expanded=expanded);rows.append(m);pg.screenshot(path=str(OUT/(view+'-'+kind+('-open' if expanded else '-closed')+'.png')))
+    if expanded:
+     # A scrollable drawer can legitimately start with commands below the fold.
+     # Verify every rendered command can be brought fully into its scrollport.
+     for button in m['buttons']:
+      if button['id'] and not button['visible44']:
+       reachable=pg.evaluate("""id=>{
+        const el=document.getElementById(id),panel=el?.closest('#normalBattleCmd,#rbCmd');
+        if(!el||!panel)return false;
+        el.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
+        const a=el.getBoundingClientRect(),p=panel.getBoundingClientRect();
+        return Math.min(a.right,p.right,innerWidth)-Math.max(a.left,p.left,0)>=44 &&
+               Math.min(a.bottom,p.bottom,innerHeight)-Math.max(a.top,p.top,0)>=44;
+       }""",button['id'])
+       button['scrollReachable44']=reachable
    ctx.close()
  b.close()
 failures = []
@@ -42,7 +56,7 @@ for row in rows:
  for button in row['buttons']:
   if not button['minimum44']:
    failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} tap target below 44 CSS px")
-  if not button['visible44']:
+  if not button['visible44'] and not button.get('scrollReachable44',False):
    failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} visible target below 44 CSS px")
 try:
  baseline = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
