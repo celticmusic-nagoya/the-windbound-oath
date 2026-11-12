@@ -85,3 +85,25 @@ jobs:
             exit 1
           fi
           test ! -e "$tmp/output"
+      - name: Verify nested JavaScript and clean candidate behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir -p "$tmp/source/js"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/source/index.html"
+          printf '%s\n' 'console.log("ready");' > "$tmp/source/js/game.js"
+          python tools/qa/check_release_ui.py "$tmp/source"
+          python tools/qa/stage_release.py "$tmp/source" "$tmp/clean-output"
+          test -f "$tmp/clean-output/js/game.js"
+          printf '%s\n' 'devJump(3);' > "$tmp/source/js/game.js"
+          if python tools/qa/check_release_ui.py "$tmp/source"; then
+            echo "::error::Nested development jump passed audit"
+            exit 1
+          fi
+          if python tools/qa/stage_release.py "$tmp/source" "$tmp/rejected-output"; then
+            echo "::error::Nested development jump was staged"
+            exit 1
+          fi
+          test ! -e "$tmp/rejected-output"
