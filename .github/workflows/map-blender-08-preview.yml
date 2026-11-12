@@ -1,0 +1,29 @@
+name: Map Blender 08 Preview
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+      - name: Validate Python
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py
+      - name: Generate provisional preview
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: blender --background --python tools/map_blender/map_blender_08.py
+      - name: Upload QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-blender-08-preview
+          path: ${{ runner.temp }}/map-blender-08/
+          if-no-files-found: warn
+          retention-days: 14
