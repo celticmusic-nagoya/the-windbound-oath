@@ -52,9 +52,12 @@ if(new URLSearchParams(location.search).get('releasePreview')==='1'){
 }
 </script>
 <style id="ux-mobile-release-preview-style">
-html.release-ui-preview #devBtn,
-html.release-ui-preview #devPanel,
-html.release-ui-preview .dev-only-command{display:none!important}
+html.release-ui-preview body #devBtn,
+html.release-ui-preview body #devPanel,
+html.release-ui-preview body #normalBattleCmd #nDevKill,
+html.release-ui-preview body #normalBattleCmd #nDevKill.v2-visible,
+html.release-ui-preview body #rbCmd #rbDevKill,
+html.release-ui-preview body #rbCmd #rbDevKill.rb-visible{display:none!important}
 </style>
 </head><body>
 <div id="game"><div id="world">
