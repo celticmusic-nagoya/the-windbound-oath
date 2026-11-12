@@ -1,0 +1,31 @@
+{
+  "schema": "cas/fix-candidate-qa/05",
+  "view": "right",
+  "candidateSha256": null,
+  "overall": "BLOCKED",
+  "counts": {
+    "FAIL": 0,
+    "BLOCKED": 1,
+    "NOT_RUN": 0,
+    "PASS": 1
+  },
+  "adoptionReady": false,
+  "thresholds": {
+    "blur": 6,
+    "diffLevel": 20,
+    "outsideLimit": 0.02,
+    "backgroundClear": 0.995
+  },
+  "checks": [
+    {
+      "name": "canon_sha_protected",
+      "status": "PASS",
+      "detail": "f5b5787cce36"
+    },
+    {
+      "name": "candidate_present",
+      "status": "BLOCKED",
+      "detail": "not delivered"
+    }
+  ]
+}

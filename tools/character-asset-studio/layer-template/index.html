@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MORWEN-LAYER-05 固定キャンバス・レイヤー検証</title>
+<style>
+body{margin:0;font:14px system-ui,sans-serif;background:#1b1f27;color:#eef1f5}
+header{padding:8px 12px;background:#11141a}h1{font-size:16px;margin:0}
+main{display:flex;flex-wrap:wrap;gap:12px;padding:12px}
+#stage{flex:1 1 360px;max-width:600px}
+#stage canvas{width:100%;height:auto;display:block;background-color:#ddd;background-image:linear-gradient(45deg,#bbb 25%,transparent 25%),linear-gradient(-45deg,#bbb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#bbb 75%),linear-gradient(-45deg,transparent 75%,#bbb 75%);background-size:32px 32px;background-position:0 0,0 16px,16px -16px,-16px 0;touch-action:pan-y}
+aside{flex:1 1 320px;min-width:280px}
+fieldset{border:1px solid #3a4252;border-radius:6px;margin:0 0 10px;padding:8px}
+legend{padding:0 4px;color:#9fb3c8}
+button{min-height:40px;min-width:64px;margin:2px;border:0;border-radius:6px;background:#dce7f5;font-size:15px}
+button[aria-pressed=true]{background:#ffd67d}
+label{display:block;margin:4px 0;min-height:32px}
+input[type=checkbox]{width:20px;height:20px;vertical-align:middle}
+.b{display:inline-block;padding:1px 6px;border-radius:4px;font-size:12px;font-weight:600;margin-left:4px}
+.PASS{background:#2e7d32}.FAIL{background:#c62828}.BLOCKED{background:#8a5a00}.NOT_RUN{background:#555}.REVIEW{background:#6a1b9a}
+table{border-collapse:collapse;width:100%;font-size:12px}td{border-top:1px solid #333;padding:3px 4px;vertical-align:top}
+small{color:#aab4c0}
+</style>
+</head>
+<body>
+<header><h1>MORWEN-LAYER-05｜固定キャンバス・レイヤー検証 <span id="overall" class="b NOT_RUN">読込中</span></h1>
+<small>1200×1600・接地 y=1540・中心 x=600（すべて DERIVED_CANDIDATE）。正本は読み取り専用。表示は候補で、採用ではない。</small></header>
+<main>
+<div id="stage"><canvas id="cv" width="1200" height="1600" aria-label="レイヤー合成キャンバス"></canvas></div>
+<aside>
+<fieldset><legend>方向</legend><div id="views"></div></fieldset>
+<fieldset><legend>レイヤー</legend><div id="layers"></div></fieldset>
+<fieldset><legend>正本の重ね合わせ</legend>
+<label><input type="checkbox" id="canonOn" checked> 正本を表示 <span id="canonBadge" class="b NOT_RUN">-</span></label>
+<label>不透明度 <input type="range" id="canonAlpha" min="0" max="100" value="40"> <span id="canonAlphaV">40</span>%</label></fieldset>
+<fieldset><legend>ガイド</legend>
+<label><input type="checkbox" id="gGround" checked> 接地線</label>
+<label><input type="checkbox" id="gCenter" checked> 中心線</label>
+<label><input type="checkbox" id="gAnchor" checked> アンカー <span id="anchorBadge" class="b BLOCKED">UNRESOLVED</span></label></fieldset>
+<fieldset><legend>検証</legend><table id="info"></table></fieldset>
+<fieldset><legend>非対称デザイン（本人基準）</legend><table id="asym"></table></fieldset>
+</aside>
+</main>
+<script src="layer-template.js"></script>
+</body>
+</html>

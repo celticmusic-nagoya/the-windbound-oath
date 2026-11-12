@@ -1,0 +1,96 @@
+{
+  "schema": "cas/fix-candidate-qa/05",
+  "view": "back",
+  "candidateSha256": "d9506845f6377ad465b291b8ba6bc0ff2e60340f836ad7c18c213c453e7bb393",
+  "overall": "FAIL",
+  "counts": {
+    "FAIL": 5,
+    "BLOCKED": 1,
+    "NOT_RUN": 3,
+    "PASS": 6
+  },
+  "adoptionReady": false,
+  "thresholds": {
+    "blur": 6,
+    "diffLevel": 20,
+    "outsideLimit": 0.02,
+    "backgroundClear": 0.995
+  },
+  "checks": [
+    {
+      "name": "canon_sha_protected",
+      "status": "PASS",
+      "detail": "15c9d45283e0"
+    },
+    {
+      "name": "candidate_present",
+      "status": "PASS",
+      "detail": "d9506845f6377ad465b291b8ba6bc0ff2e60340f836ad7c18c213c453e7bb393"
+    },
+    {
+      "name": "candidate_is_not_canon",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "provenance",
+      "status": "BLOCKED",
+      "detail": "producer/source not recorded"
+    },
+    {
+      "name": "mode_rgba",
+      "status": "PASS",
+      "detail": "RGBA"
+    },
+    {
+      "name": "size_matches_canon",
+      "status": "FAIL",
+      "detail": "(1086, 1448) vs canon (1152, 1536)"
+    },
+    {
+      "name": "border_alpha_zero",
+      "status": "FAIL",
+      "detail": "19 nonzero border px"
+    },
+    {
+      "name": "real_transparency",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "opaque_body",
+      "status": "FAIL",
+      "detail": "100.0% of body pixels have alpha 128-254"
+    },
+    {
+      "name": "background_transparent",
+      "status": "FAIL",
+      "detail": "96.80% of canon background is alpha 0 (min 99.5%)"
+    },
+    {
+      "name": "ground_row_canon_px",
+      "status": "NOT_RUN",
+      "detail": "lowest alpha>=128 row 1402 (x1.0608 to canon px); contact compare needs the view_transforms method"
+    },
+    {
+      "name": "changes_inside_target",
+      "status": "PASS",
+      "detail": "mean 17.6"
+    },
+    {
+      "name": "no_changes_outside_target",
+      "status": "FAIL",
+      "detail": "9.4% of figure outside target changed (limit 2%); shift (-1,0)"
+    },
+    {
+      "name": "design_match_human",
+      "status": "NOT_RUN",
+      "detail": "human/director review"
+    },
+    {
+      "name": "asymmetry_position_human",
+      "status": "NOT_RUN",
+      "detail": "human/director review"
+    }
+  ]
+}

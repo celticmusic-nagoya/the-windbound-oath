@@ -1,0 +1,752 @@
+{
+  "schema": "cas/layer-template/05",
+  "task": "MORWEN-LAYER-05",
+  "characterId": "morwen",
+  "status": "BLOCKED",
+  "statusReason": "Canvas, ground and canon overlay are defined; no Layer 0–3 image is delivered and joint anchors are not measured on the canon.",
+  "canvas": {
+    "width": 1200,
+    "height": 1600,
+    "origin": "top-left",
+    "axes": "+x right, +y down",
+    "basis": "PR #229 rig (1200x1600) — candidate, not formally adopted"
+  },
+  "ground": {
+    "y": 1540,
+    "centerX": 600,
+    "classification": "DERIVED_CANDIDATE",
+    "source": {
+      "path": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/view_transforms.json",
+      "sha256": "2d8700706606412859e7bd79f68c09e104bd59f06226ba9c5ab390eeef990a44"
+    }
+  },
+  "anchors": {
+    "status": "UNRESOLVED",
+    "reason": "Joint anchors have not been measured on the director-approved canon; bridge-11 generic values and the v1.0 designed rig are not substituted."
+  },
+  "rules": [
+    "All views and layers share the same canvas, origin and ground.",
+    "Each view uses its own explicit canonToCanvas matrix; no implicit scaling.",
+    "Mirroring one view to produce another is forbidden (asymmetric ornaments).",
+    "Layer images are never resized, re-encoded or alpha-rewritten at intake.",
+    "Values not verified against the canon are never promoted to formal values."
+  ],
+  "views": {
+    "front": {
+      "directionId": 0,
+      "facing": "toward viewer",
+      "canonSource": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/front.png",
+        "sha256": "a0f9bdbdfaf928aab49ea116d3ec40620f1558efe55f5f90aa55002213ae7bbd",
+        "size": [
+          1152,
+          1536
+        ],
+        "mode": "RGB"
+      },
+      "canonToCanvas": {
+        "matrix": [
+          1.041667,
+          0,
+          0,
+          1.041667,
+          0,
+          -2
+        ],
+        "convention": "canvas = [a*x+c*y+tx, b*x+d*y+ty], source px, top-left origin",
+        "classification": "DERIVED_CANDIDATE",
+        "basis": "ground-contact alignment only (view_transforms.json); proportions NOT_EVALUATED",
+        "contactAfterTransform": [
+          599.75,
+          1540
+        ]
+      },
+      "dimensionDiff": {
+        "source": [
+          1152,
+          1536
+        ],
+        "canvas": [
+          1200,
+          1600
+        ],
+        "uniformScale": 1.041667,
+        "exactFit": false,
+        "sourceHasAlpha": false
+      }
+    },
+    "back": {
+      "directionId": 2,
+      "facing": "away from viewer",
+      "canonSource": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+        "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+        "size": [
+          1152,
+          1536
+        ],
+        "mode": "RGB"
+      },
+      "canonToCanvas": {
+        "matrix": [
+          1.041667,
+          0,
+          0,
+          1.041667,
+          -8,
+          -9
+        ],
+        "convention": "canvas = [a*x+c*y+tx, b*x+d*y+ty], source px, top-left origin",
+        "classification": "DERIVED_CANDIDATE",
+        "basis": "ground-contact alignment only (view_transforms.json); proportions NOT_EVALUATED",
+        "contactAfterTransform": [
+          599.75,
+          1540
+        ]
+      },
+      "dimensionDiff": {
+        "source": [
+          1152,
+          1536
+        ],
+        "canvas": [
+          1200,
+          1600
+        ],
+        "uniformScale": 1.041667,
+        "exactFit": false,
+        "sourceHasAlpha": false
+      }
+    },
+    "left": {
+      "directionId": 3,
+      "facing": "faces screen-left (character right side visible)",
+      "canonSource": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+        "sha256": "cd1dbc8447de72f0b4239cb6e76ea12c703df0812b1fc225ecb892c34db1b984",
+        "size": [
+          1152,
+          1536
+        ],
+        "mode": "RGB"
+      },
+      "canonToCanvas": {
+        "matrix": [
+          1.041667,
+          0,
+          0,
+          1.041667,
+          108,
+          3
+        ],
+        "convention": "canvas = [a*x+c*y+tx, b*x+d*y+ty], source px, top-left origin",
+        "classification": "DERIVED_CANDIDATE",
+        "basis": "ground-contact alignment only (view_transforms.json); proportions NOT_EVALUATED",
+        "contactAfterTransform": [
+          600,
+          1540
+        ]
+      },
+      "dimensionDiff": {
+        "source": [
+          1152,
+          1536
+        ],
+        "canvas": [
+          1200,
+          1600
+        ],
+        "uniformScale": 1.041667,
+        "exactFit": false,
+        "sourceHasAlpha": false
+      }
+    },
+    "right": {
+      "directionId": 1,
+      "facing": "faces screen-right (character left side visible)",
+      "canonSource": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+        "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+        "size": [
+          1200,
+          1600
+        ],
+        "mode": "RGBA"
+      },
+      "canonToCanvas": {
+        "matrix": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "convention": "canvas = [a*x+c*y+tx, b*x+d*y+ty], source px, top-left origin",
+        "classification": "DERIVED_CANDIDATE",
+        "basis": "ground-contact alignment only (view_transforms.json); proportions NOT_EVALUATED",
+        "contactAfterTransform": [
+          600,
+          1540
+        ]
+      },
+      "dimensionDiff": {
+        "source": [
+          1200,
+          1600
+        ],
+        "canvas": [
+          1200,
+          1600
+        ],
+        "uniformScale": 1,
+        "exactFit": true,
+        "sourceHasAlpha": true
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "L0",
+      "label": "共通素体",
+      "zOrderBand": [
+        0,
+        99
+      ],
+      "views": {
+        "front": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/front.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "back": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/back.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "left": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/left.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "right": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/right.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        }
+      }
+    },
+    {
+      "id": "L1",
+      "label": "インナー・基本衣装",
+      "zOrderBand": [
+        100,
+        199
+      ],
+      "views": {
+        "front": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/front.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "back": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/back.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "left": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/left.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "right": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/right.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        }
+      }
+    },
+    {
+      "id": "L2",
+      "label": "制服・メイン衣装",
+      "zOrderBand": [
+        200,
+        299
+      ],
+      "views": {
+        "front": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/front.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "back": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/back.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "left": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/left.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "right": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/right.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        }
+      }
+    },
+    {
+      "id": "L3",
+      "label": "帽子・マント・バッグ・装飾",
+      "zOrderBand": [
+        300,
+        399
+      ],
+      "views": {
+        "front": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/front.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "back": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/back.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "left": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/left.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        },
+        "right": {
+          "image": null,
+          "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/right.png",
+          "status": "BLOCKED",
+          "reason": "NOT_DELIVERED"
+        }
+      }
+    }
+  ],
+  "asymmetry": [
+    {
+      "id": "right_garter",
+      "label": "ガーターベルト（本人の右脚のみ）",
+      "characterSide": "R",
+      "layer": "L1",
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "screen-left leg (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "screen-left leg (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image",
+          "candidateObservation": {
+            "candidate": "7776.png",
+            "observed": "screen-right leg (character right)",
+            "positionVerdict": "MATCH (AI estimate)",
+            "technicalQa": "FAIL",
+            "visualQa": "BLOCKED until a technically passing corrected image is delivered and reviewed"
+          }
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "front edge of near leg (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "near leg (= character LEFT); visible",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image",
+          "candidateObservation": {
+            "candidate": null,
+            "technicalQa": "BLOCKED (not delivered)"
+          }
+        }
+      },
+      "note": "Director spec 2026-11-12: right leg only; right-facing view = far leg."
+    },
+    {
+      "id": "bag",
+      "label": "バッグ本体（本人の右腰）",
+      "characterSide": "R",
+      "layer": "L3",
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "screen-left hip (character right); strap from screen-right shoulder",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "screen-right hip (character right); strap from screen-left shoulder",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "bag not visible on near (right) side; potion vials visible at front",
+          "verdict": "NOT_VISIBLE_OCCLUSION_POSSIBLE",
+          "visualQa": "BLOCKED",
+          "blockReason": "not visible in canon; occlusion possible; not inferred"
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "bag on near hip (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
+      },
+      "note": "Right-hip reference. Strap direction recorded as observed, not inferred for side views."
+    },
+    {
+      "id": "hat_flower",
+      "label": "帽子の花",
+      "characterSide": "R",
+      "layer": "L3",
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "screen-left of crown (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "screen-right of crown (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "no flower visible on near (right) side of crown",
+          "verdict": "NOT_VISIBLE_OCCLUSION_POSSIBLE",
+          "visualQa": "BLOCKED",
+          "blockReason": "not visible in canon; occlusion possible; not inferred"
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "flower on near side of crown (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
+      },
+      "note": "Judged per canon view as instructed."
+    },
+    {
+      "id": "hat_ribbon",
+      "label": "帽子のリボン",
+      "characterSide": "R",
+      "layer": "L3",
+      "views": {
+        "front": {
+          "expected": "screen-left",
+          "observed": "hangs below flower, screen-left (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "back": {
+          "expected": "screen-right",
+          "observed": "hangs below flower, screen-right (character right)",
+          "verdict": "MATCH",
+          "visualQa": "NOT_RUN",
+          "blockReason": null
+        },
+        "left": {
+          "expected": "near (visible)",
+          "observed": "no ribbon visible on near (right) side",
+          "verdict": "NOT_VISIBLE_OCCLUSION_POSSIBLE",
+          "visualQa": "BLOCKED",
+          "blockReason": "not visible in canon; occlusion possible; not inferred"
+        },
+        "right": {
+          "expected": "far (occluded)",
+          "observed": "ribbon hangs on near side (= character LEFT)",
+          "verdict": "MISMATCH",
+          "visualQa": "BLOCKED",
+          "blockReason": "awaiting corrected image"
+        }
+      },
+      "note": "Tracked separately from the flower."
+    }
+  ],
+  "receivedUploads20261112": [
+    {
+      "name": "7694.png",
+      "sha256": "d9fc63852cb07b4e358e83028ae596b90dc83f5459de8606085768de73b7450c",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGB",
+      "relation": "front: chat-recompressed/downscaled copy; SHA differs from canon front.png",
+      "stored": false
+    },
+    {
+      "name": "7693.png",
+      "sha256": "bec8fde02351924a491a8747bca93cfff62981b7fc7b91b73ca207f4477fef93",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGB",
+      "relation": "left: chat-recompressed/downscaled copy; SHA differs from canon left.png",
+      "stored": false
+    },
+    {
+      "name": "7684.png",
+      "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+      "size": [
+        1200,
+        1600
+      ],
+      "mode": "RGBA",
+      "relation": "right: byte-identical to canon right.png",
+      "stored": "already in repo (protected)"
+    },
+    {
+      "name": "7776.png",
+      "sha256": "d9506845f6377ad465b291b8ba6bc0ff2e60340f836ad7c18c213c453e7bb393",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGBA",
+      "relation": "back: different file from canon back.png (canon is RGB 1152x1536 on black; this upload is RGBA with soft alpha); provenance unverified. Visual note: garter appears on screen-right leg (character right) in this upload, unlike canon back.png; not adopted, provenance unverified.",
+      "stored": false
+    }
+  ],
+  "adoptionReady": false,
+  "asymmetryMethod": {
+    "source": "repository canon PNGs (final-visual-canon-20261111), each view viewed at 1200x1600 display scale",
+    "observer": "Claude visual inspection (ESTIMATED, not measured); human/director confirmation required",
+    "rules": [
+      "No mirroring of any view.",
+      "An item not visible is never assumed to exist on the opposite side; occlusion possibility is recorded.",
+      "Canon PNGs are not edited; mismatches are correction targets for new candidate images."
+    ]
+  },
+  "correctionTargets": [
+    {
+      "view": "back",
+      "canonFile": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+      "items": [
+        "right_garter"
+      ],
+      "action": "new corrected candidate image required; canon untouched",
+      "zonesCanonPx": [
+        [
+          480,
+          785,
+          690,
+          835
+        ],
+        [
+          470,
+          835,
+          740,
+          920
+        ]
+      ],
+      "zonesClassification": "ESTIMATED (visual inspection on 50px grid; human confirmation required)",
+      "candidates": [
+        {
+          "path": "assets/candidates/morwen/fix-candidates/back-7776/7776.png",
+          "sha256": "d9506845f6377ad465b291b8ba6bc0ff2e60340f836ad7c18c213c453e7bb393",
+          "provenance": "chat upload 7776.png (2026-11-12); producer and generation source not recorded",
+          "status": "UNAPPROVED_CANDIDATE",
+          "qa": "tools/character-asset-studio/layer-template/qa/fix_candidate_back_7776.json"
+        }
+      ],
+      "sourceForEdit": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/back.png",
+        "sha256": "15c9d45283e0e7d1910ae35c8f271c80241e002b1c6b5a8ad1d71e0281eeb7eb",
+        "size": [
+          1152,
+          1536
+        ]
+      },
+      "zoneLabels": [
+        "skirt hem to garter strap top (avoids bag)",
+        "thigh band incl. stocking tops, both legs"
+      ],
+      "zonesDeclaredBeforeEdit": {
+        "task": "MORWEN-ASSET-FIX-03",
+        "date": "2026-11-12",
+        "by": "Claude (technical QA)",
+        "note": "Declared before any FIX-03 edit; the commit adding this field is the reference."
+      },
+      "mustNotChange": [
+        "hat",
+        "hair",
+        "cape",
+        "bag",
+        "uniform",
+        "boots"
+      ],
+      "deliveryRequirements": {
+        "size": [
+          1152,
+          1536
+        ],
+        "mode": "RGBA",
+        "background": "alpha 0",
+        "method": "local edit of canon back.png; no full regeneration"
+      }
+    },
+    {
+      "view": "right",
+      "canonFile": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+      "items": [
+        "right_garter",
+        "bag",
+        "hat_flower",
+        "hat_ribbon"
+      ],
+      "action": "new corrected candidate image required; canon untouched",
+      "zonesCanonPx": [
+        [
+          320,
+          90,
+          560,
+          515
+        ],
+        [
+          410,
+          690,
+          630,
+          935
+        ],
+        [
+          600,
+          540,
+          690,
+          760
+        ],
+        [
+          600,
+          860,
+          700,
+          975
+        ]
+      ],
+      "zonesClassification": "ESTIMATED (visual inspection on 50px grid; human confirmation required)",
+      "candidates": [],
+      "sourceForEdit": {
+        "path": "assets/candidates/morwen/final-visual-canon-20261111/right.png",
+        "sha256": "f5b5787cce36806a365251095f1c43138e4a12409e176c24af8a8406642117d1",
+        "size": [
+          1200,
+          1600
+        ]
+      },
+      "zoneLabels": [
+        "hat flower, ribbon and pendant (near side of crown)",
+        "bag on near hip and area behind it",
+        "strap segment across near torso",
+        "garter on near leg and far-leg thigh top"
+      ],
+      "zonesDeclaredBeforeEdit": {
+        "task": "MORWEN-ASSET-FIX-03",
+        "date": "2026-11-12",
+        "by": "Claude (technical QA)",
+        "note": "Declared before any FIX-03 edit; the commit adding this field is the reference."
+      },
+      "rules": [
+        "Garter only on the character right (far) leg; draw only what would be visible.",
+        "Bag referenced to the character right (far) hip; do not add hidden items by guess.",
+        "Hat flower/ribbon must match the official hat design seen in front/back; director confirms placement."
+      ],
+      "deliveryRequirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "mode": "RGBA",
+        "background": "alpha 0",
+        "method": "local edit of canon right.png; no full regeneration"
+      }
+    },
+    {
+      "view": "left",
+      "canonFile": "assets/candidates/morwen/final-visual-canon-20261111/left.png",
+      "items": [
+        "bag",
+        "hat_flower",
+        "hat_ribbon"
+      ],
+      "action": "director to confirm whether occlusion is intended or a corrected image is needed",
+      "zonesCanonPx": null,
+      "zonesClassification": "UNRESOLVED (occlusion review)",
+      "candidates": []
+    }
+  ],
+  "correctionLog": [
+    {
+      "date": "2026-11-12",
+      "task": "MORWEN-LAYER-05-FIX-01",
+      "change": "Earlier ledger recorded back-view garter as screen-right; that observation came from upload 7776.png, not canon back.png. Re-inspected canon: back.png garter is screen-left (character left). Ledger split into separate garter/bag/flower/ribbon items."
+    },
+    {
+      "date": "2026-11-12",
+      "task": "MORWEN-LAYER-05-FIX-02",
+      "change": "7776.png stored as UNAPPROVED_CANDIDATE for back garter; technical QA FAIL (size, border alpha, soft body alpha, changes outside target zone, provenance unverified). Right-view correction not delivered (BLOCKED)."
+    }
+  ],
+  "attemptPolicy": {
+    "rule": "Two failures with the same method stop regeneration; switch to manual layer editing.",
+    "log": [
+      {
+        "view": "back",
+        "candidate": "7776.png",
+        "method": "full regeneration (pre-FIX-03)",
+        "result": "FAIL",
+        "countsToward": "full regeneration"
+      }
+    ],
+    "counts": {
+      "back": {
+        "full regeneration": 1,
+        "local edit": 0
+      },
+      "right": {
+        "full regeneration": 0,
+        "local edit": 0
+      }
+    }
+  }
+}
