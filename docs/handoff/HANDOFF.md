@@ -1,7 +1,15 @@
+# CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
+
+- **モルウェンの公式年齢は18歳で固定。** エイダン17歳など他人物の年齢は変更しない。過去の誤設定を再採用しない。
+- **唯一の現行正典参照先**: private `celticmusic-nagoya/the-windbound-oath-handoff/reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md` の **main最新版**、`reference/lore/CANON_ADDENDUM.md`、`CANON_STATUS.md`。年齢は18歳、同一人物の他設定は後発の正式採用を優先する。
+- Claudeを含むすべてのエージェントは**毎タスク開始時**に現行mainの `AGENTS.md` と本書を読み、正典のmain最新版と照合する。旧コミット・バックアップ・アーカイブ・PR・他ブランチ・過去会話・キャッシュの内容は**現行設定の根拠にしない**。履歴は差分調査・回帰確認に限って使用する。
+- 作業ブランチが古い場合は最新mainの正典変更を取り込み、同じ設定の再導入を禁止。正典が参照不能なら `CANON_SOURCE_UNAVAILABLE` として設定依存作業をBLOCKEDにし、推測で補完しない。
+- 既存画像のSHAロック、採用・未採用区分、他キャラクター設定は保護。年齢訂正だけで未承認アセットを採用しない。ゲーム本体・公式サイトへの公開は個別のQAゲートに従う。
+
 # THE WINDBOUND OATH — 引き継ぎ書（2026-10-11 時点 / main `f83ab09`）
 
 対象読者: 並行開発する Codex / 次のセッションの Claude / 作者。
-正典: **公式統合設定資料集 v5.0**（2026-10-19, SHA-256 `e6f7331b867a7307017c7abb30bae7b6317363a33e5f9d831b80d34f0e51bf49`。全文は非公開の引継ぎリポジトリで管理。`AGENTS.md` §0 と `docs/lore/README.md` を参照。読めない場合は推測で補わず、ユーザーに確認する）。旧 `docs/story/WORLD_STORY_BIBLE_v1.1.txt` は旧版（履歴参照のみ・正典ではない）。設定確定と実装済みは別物で、実装は現行 main で確認する。
+正典: **公式統合設定資料集 v5.0**（2026-10-19, 最新main版を使用。旧SHAは失効。全文は非公開の引継ぎリポジトリで管理。`AGENTS.md` §0 と `docs/lore/README.md` を参照。読めない場合は推測で補わず、ユーザーに確認する）。旧 `docs/story/WORLD_STORY_BIBLE_v1.1.txt` は旧版（履歴参照のみ・正典ではない）。設定確定と実装済みは別物で、実装は現行 main で確認する。
 本書は「いま何がどこまで出来ていて、どう作られていて、次に何が要るか」をまとめる。作業依頼は `docs/handoff/CODEX_BRIEFS.md`。
 
 > 注: 本書中の「バイブル12／35／56」などの番号は**旧 v1.1 の節番号**で、現行の正典ではありません（現行は `docs/lore/README.md` 参照）。旧版の節を根拠に新規発注しないでください。

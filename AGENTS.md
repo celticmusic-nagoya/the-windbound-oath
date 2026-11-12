@@ -1,3 +1,11 @@
+# CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
+
+- **モルウェンの公式年齢は18歳で固定。** エイダン17歳など他人物の年齢は変更しない。過去の誤設定を再採用しない。
+- **唯一の現行正典参照先**: private `celticmusic-nagoya/the-windbound-oath-handoff/reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md` の **main最新版**、`reference/lore/CANON_ADDENDUM.md`、`CANON_STATUS.md`。年齢は18歳、同一人物の他設定は後発の正式採用を優先する。
+- Claudeを含むすべてのエージェントは**毎タスク開始時**に現行mainの `AGENTS.md` と本書を読み、正典のmain最新版と照合する。旧コミット・バックアップ・アーカイブ・PR・他ブランチ・過去会話・キャッシュの内容は**現行設定の根拠にしない**。履歴は差分調査・回帰確認に限って使用する。
+- 作業ブランチが古い場合は最新mainの正典変更を取り込み、同じ設定の再導入を禁止。正典が参照不能なら `CANON_SOURCE_UNAVAILABLE` として設定依存作業をBLOCKEDにし、推測で補完しない。
+- 既存画像のSHAロック、採用・未採用区分、他キャラクター設定は保護。年齢訂正だけで未承認アセットを採用しない。ゲーム本体・公式サイトへの公開は個別のQAゲートに従う。
+
 ## 2026-11-12 ディレクター正式訂正：モルウェンの年齢
 - モルウェンは**18歳**。旧資料・過去の17歳表記は年齢についてのみ誤記として読み替える。エイダン17歳など他キャラクターの年齢は変更しない。
 - 既存の衣装・表現に関する品質基準、正本ロック、画像SHA保護は継続する。年齢変更は過去画像の自動採用・本体組込みを意味しない。
@@ -32,11 +40,11 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
 ## 0. Official lore master (canon reference)
-- The canon for world, story, characters and dialogue is 「THE WINDBOUND OATH 公式統合設定資料集 v5.0」(2026-10-19), SHA-256 `e6f7331b867a7307017c7abb30bae7b6317363a33e5f9d831b80d34f0e51bf49`. The full text is **not stored in this public repository**; it is kept in the private handoff repository (`celticmusic-nagoya/the-windbound-oath-handoff`, `reference/lore/`). Access must be granted by the user. See `docs/lore/README.md`.
+- The canon for world, story, characters and dialogue is 「THE WINDBOUND OATH 公式統合設定資料集 v5.0」(2026-10-19), (historical SHA no longer valid after director-authorized v5.0 correction). The full text is **not stored in this public repository**; it is kept in the private handoff repository (`celticmusic-nagoya/the-windbound-oath-handoff`, `reference/lore/`). Access must be granted by the user. See `docs/lore/README.md`.
 - If you cannot read it, **do not reconstruct or guess it**: report `LORE_INACCESSIBLE` (what you tried and the error), ask the user to grant read access (how: `docs/lore/README.md`), and leave lore-dependent details unchanged.
 - Priority: later explicit user adoption > formal addenda (`CANON_ADDENDUM.md`, private) > v5.0 latest addenda > the rest of v5.0 > archived older versions (history only) > proposals. Do not read the original alone: the addenda and status table are in the same private directory. Keep the labels 確定 / 脚本採用案 / 未決定 / 撤回 / 要コード照合 exactly; never promote candidates or undecided items to 確定 without the user.
 - 設定確定 is not 実装済み: verify implementation with current main code, Git history and tests. Do not promote numbers found in code to official settings, and do not change existing scenario, dialogue, character design or balance on the strength of the lore text alone.
-- Adopted changes are managed as addenda in the private repository, never by editing the original.
+- Adopted changes are managed in the private canon repository. The director explicitly authorized correcting the original v5.0 age in place; use the latest main version plus addenda. Do not independently rewrite other original lore.
 - Do not make copies of the full lore text (one master, kept private). Refer to it by version and section instead. Early-game dialogue and NPC lines may only use what the characters know at that point. Spoilers in development docs are tolerated before release (2026-10-20 policy), but credentials, keys, tokens and personal data must never be committed.
 - Open item kept as-is: the timing of Fiona's 風の舞 acquisition is 要確認 (current code gate: story stage 13).
 - Superseded: `docs/story/WORLD_STORY_BIBLE_v1.1.txt` (history only; not canon).
@@ -124,7 +132,7 @@ Russet/red patterned bandana, goggles, agile dark leather equipment.
 Her officially approved v3.0 design is the academy uniform; preserve the existing character artwork and black/navy/purple + antique gold palette, long dark hair, and violet eyes.
 The Royal Magic Research Institute (王立魔法研究院) is a separate research institution located alongside the academy. Morwen's admired mentor, Edric Vane (エドリック・ヴェイン), belongs to the institute; retain his existing story arc without inventing new details.
 Highest MAG; Resonance system 0–3.
-Canon: private handoff repository `reference/lore/CANON_ADDENDUM.md` ADD-002 (2026-11-06). Original v5.0 remains immutable; clean up outdated references only after game-main integration and formal scenario revision.
+Canon: private handoff repository `reference/lore/CANON_ADDENDUM.md` ADD-002 (2026-11-06). Original v5.0 has been corrected by director instruction; use its latest main text and the later addenda.
 
 ### Future dwarf
 Blacksmith/tank. High DEF, provoke, cover, iron wall, shield bash/BREAK.
