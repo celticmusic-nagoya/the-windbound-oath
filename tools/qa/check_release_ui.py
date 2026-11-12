@@ -2,7 +2,7 @@
 """UX-MOBILE-21: fail closed when development hooks enter a release HTML artifact.
 
 Usage:
-  python tools/qa/check_release_ui.py path/to/release/index.html
+  python tools/qa/check_release_ui.py path/to/release/
 
 This is a release-artifact guard, NOT proof that all debug code is absent.
 Do not run against the development index.html as a passing release test.
@@ -24,13 +24,17 @@ def audit(html: str) -> list[str]:
 
 def main() -> int:
     if len(sys.argv) != 2:
-        print("Usage: check_release_ui.py RELEASE_INDEX_HTML", file=sys.stderr)
+        print("Usage: check_release_ui.py RELEASE_HTML_OR_DIRECTORY", file=sys.stderr)
         return 2
     path = Path(sys.argv[1])
-    if not path.is_file():
+    if not path.is_file() and not path.is_dir():
         print(f"RELEASE_AUDIT_FAIL: missing artifact: {path}", file=sys.stderr)
         return 2
-    hits = audit(path.read_text(encoding="utf-8"))
+    hits = []
+    for candidate in ([path] if path.is_file() else sorted(path.rglob("*")) if path.is_dir() else []):
+        if candidate.is_file() and candidate.suffix.lower() in {".html", ".htm", ".js", ".mjs"}:
+            for name in audit(candidate.read_text(encoding="utf-8")):
+                hits.append(f"{candidate}: {name}")
     if hits:
         print("RELEASE_AUDIT_FAIL: development hooks detected: " + ", ".join(hits))
         return 1
