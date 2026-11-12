@@ -1,0 +1,45 @@
+name: Morwen Blender 26 Render Export QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_26/**'
+      - 'tools/blender/morwen_blender_24/**'
+      - '.github/workflows/morwen-blender-26.yml'
+  workflow_dispatch:
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Generate candidate mesh
+        run: |
+          blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
+          test -s assets/candidates/morwen-blender-24/build_report.json
+      - name: Render and export
+        run: |
+          blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
+          test -s assets/candidates/morwen-blender-26/report.json
+      - name: Verify outputs
+        run: |
+          python3 - <<'PY'
+          import json,struct
+          from pathlib import Path
+          p=Path("assets/candidates/morwen-blender-26")
+          d=json.loads((p/"report.json").read_text())
+          assert d["art_approval"]=="NOT_RUN" and not d["production_use"]
+          assert len(d["render_views"])==5
+          for name in d["render_views"]:
+              data=(p/name).read_bytes()
+              assert data[:8]==b"\x89PNG\r\n\x1a\n" and len(data)>1000
+          data=(p/d["glb"]).read_bytes()
+          assert data[:4]==b"glTF" and struct.unpack_from("<I",data,8)[0]==len(data)
+          print("MORWEN_26_ARTIFACT_QA_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-26-renders-glb
+          path: assets/candidates/morwen-blender-26/
+          if-no-files-found: error
