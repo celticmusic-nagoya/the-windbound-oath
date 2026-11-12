@@ -1,0 +1,25 @@
+name: Morwen Master Verifier Unit QA
+on:
+  pull_request:
+    paths:
+      - 'scripts/verify_morwen_master.py'
+      - 'tests/test_verify_morwen_master.py'
+      - '.github/workflows/morwen-master-verifier-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verifier-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests without original image
+        run: python -m unittest discover -s tests -p 'test_verify_morwen_master.py' -v
