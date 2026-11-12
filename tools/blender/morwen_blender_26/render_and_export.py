@@ -17,7 +17,12 @@ def main():
     scene=bpy.context.scene
     scene.render.engine="CYCLES"
     scene.cycles.device="CPU"
-    scene.cycles.samples=24
+    scene.cycles.samples=16
+    scene.cycles.use_denoising=False
+    for layer in scene.view_layers:
+        if hasattr(layer,"cycles"):
+            layer.cycles.use_denoising=False
+    scene.use_nodes=False
     scene.render.resolution_x=512;scene.render.resolution_y=768
     scene.render.resolution_percentage=100
     scene.render.image_settings.file_format="PNG"
@@ -47,6 +52,7 @@ def main():
     views={"front":(0,-1,0),"left":(-1,0,0),"right":(1,0,0),
            "back":(0,1,0),"three_quarter":(.8,-1,0.35)}
     files=[]
+    smoke_only=os.environ.get("MORWEN_SMOKE_ONLY")=="1"
     for name,direction in views.items():
         direction=Vector(direction).normalized()
         camera.location=center+direction*2.0
@@ -67,13 +73,15 @@ def main():
         bpy.ops.render.render(write_still=True)
         assert (OUT/(name+".png")).stat().st_size>1000
         files.append(name+".png")
-    if os.environ.get("MORWEN_RENDER_ONLY") != "1":
+        if smoke_only:
+            break
+    if os.environ.get("MORWEN_RENDER_ONLY") != "1" and not smoke_only:
         bpy.ops.export_scene.gltf(filepath=str(OUT/"morwen_torso_candidate.glb"),
            export_format="GLB",use_selection=True)
         assert (OUT/"morwen_torso_candidate.glb").stat().st_size>1000
     report={"task":"MORWEN-BLENDER-26","art_approval":"NOT_RUN",
       "source_candidate":"BLENDER-24","render_views":files,
-      "glb":None if os.environ.get("MORWEN_RENDER_ONLY") == "1" else "morwen_torso_candidate.glb","production_use":False}
+      "glb":None if os.environ.get("MORWEN_RENDER_ONLY") == "1" or smoke_only else "morwen_torso_candidate.glb","production_use":False}
     (OUT/"report.json").write_text(json.dumps(report,indent=2)+"\n")
     print("MORWEN_26_RENDER_EXPORT_PASS")
 if __name__=="__main__":main()
