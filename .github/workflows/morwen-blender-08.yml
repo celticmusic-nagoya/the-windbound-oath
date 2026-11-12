@@ -1,0 +1,52 @@
+name: Morwen Blender 08 Clean Render QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_08/**'
+      - '.github/workflows/morwen-blender-08.yml'
+permissions:
+  contents: read
+jobs:
+  four-view:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender and Pillow
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-pil
+      - name: Build original 17-bone candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build continuous-core candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Render 4 padded clean views
+        run: blender -b assets/candidates/morwen-blender-07/morwen_continuous_core_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_08/render_clean.py
+      - name: Validate alpha margins and no overlapping torso
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('assets/candidates/morwen-blender-08')
+          r=json.loads((root/'render_report.json').read_text())
+          assert r['bones']==17 and r['core_faces']==146 and r['limb_faces']>0
+          for facing in ('front','right','back','left'):
+              with Image.open(root/(facing+'_projection.png')) as im:
+                  assert im.mode=='RGBA' and im.size==(384,1024)
+                  bbox=im.getchannel('A').getbbox()
+                  assert bbox and bbox[0]>0 and bbox[1]>0
+                  assert bbox[2]<384 and bbox[3]<1024, (facing,bbox)
+          print('MORWEN_08_ALPHA_MARGIN_PASS')
+          PY
+      - name: Upload QA candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-08-clean-four-views
+          path: assets/candidates/morwen-blender-08/
+          if-no-files-found: warn
+          retention-days: 14
