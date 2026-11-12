@@ -1,0 +1,460 @@
+{
+  "schema": "cas/delivery-slots/12",
+  "task": "MORWEN-BRIDGE-12",
+  "characterId": "morwen",
+  "status": "BLOCKED",
+  "reason": "No ChatGPT four-view sheet or L0–L3 layer PNG has been delivered. No provisional value is substituted.",
+  "baseline": {
+    "pr": 230,
+    "head": "9d06cbc88d933f87a68b1c16402cc3a0ffd2f53f"
+  },
+  "contracts": {
+    "import": "rig-integration/morwen.import.template.json (cas/rig-import/08) — unchanged, used as the single intake contract",
+    "importer": "rig-integration/import_rig.py — unchanged; exit 0 PASS / 1 FAIL / 2 BLOCKED",
+    "layerQa": "pipeline/cas.py layer-qa (cas/modular-character/0.7) — unchanged",
+    "protect": "pipeline/cas.py protect-verify — 17 canonical files"
+  },
+  "measurementClasses": {
+    "MEASURED": "read from an authored marker/export of the delivered image itself, with source SHA",
+    "DERIVED": "computed by a recorded rule from MEASURED inputs; rule and inputs stored with the value",
+    "UNRESOLVED": "null with a reason; blocks the dependent check; never filled from template, synthetic or bridge-11 generic data"
+  },
+  "forbiddenSubstitutions": [
+    "bridge-11 generic mannequin coordinates or sheet_to_rig matrices as Morwen values",
+    "SYNTHETIC_ONLY frames/contacts as real walk data",
+    "automatic mirroring of one view to another",
+    "resizing, colour conversion or alpha rewrite at intake",
+    "overwriting an earlier delivery directory"
+  ],
+  "ageGate": {
+    "source": "AGENTS.md §5 (Morwen: 17) + pipeline/schemas/modular-*.schema.json",
+    "L0_bodyGuidePolicy": "minor_neutral_structure",
+    "note": "Applied as written in the repository today; schema rejects any other L0 policy for a minor."
+  },
+  "slots": [
+    {
+      "slotId": "SHEET",
+      "kind": "designSource",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/sheet/four_view.png",
+      "requirements": {
+        "size": [
+          1536,
+          1024
+        ],
+        "space": "sheetPx",
+        "mode": "RGBA or RGB (reference only, never composited)",
+        "perViewMapping": "explicit crop+matrix measured on THIS sheet; bridge-11 template matrices must not be reused"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L0:front",
+      "kind": "layerImage",
+      "layerId": "L0",
+      "role": "body",
+      "zOrder": 0,
+      "view": "front",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/front.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L0:back",
+      "kind": "layerImage",
+      "layerId": "L0",
+      "role": "body",
+      "zOrder": 0,
+      "view": "back",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/back.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L0:left",
+      "kind": "layerImage",
+      "layerId": "L0",
+      "role": "body",
+      "zOrder": 0,
+      "view": "left",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/left.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L0:right",
+      "kind": "layerImage",
+      "layerId": "L0",
+      "role": "body",
+      "zOrder": 0,
+      "view": "right",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L0/right.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L1:front",
+      "kind": "layerImage",
+      "layerId": "L1",
+      "role": "base clothing (rig-import/08) / L1_UNDERWEAR (layer_catalog 0.7) — naming UNRESOLVED",
+      "zOrder": 100,
+      "view": "front",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/front.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L1:back",
+      "kind": "layerImage",
+      "layerId": "L1",
+      "role": "base clothing (rig-import/08) / L1_UNDERWEAR (layer_catalog 0.7) — naming UNRESOLVED",
+      "zOrder": 100,
+      "view": "back",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/back.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L1:left",
+      "kind": "layerImage",
+      "layerId": "L1",
+      "role": "base clothing (rig-import/08) / L1_UNDERWEAR (layer_catalog 0.7) — naming UNRESOLVED",
+      "zOrder": 100,
+      "view": "left",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/left.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L1:right",
+      "kind": "layerImage",
+      "layerId": "L1",
+      "role": "base clothing (rig-import/08) / L1_UNDERWEAR (layer_catalog 0.7) — naming UNRESOLVED",
+      "zOrder": 100,
+      "view": "right",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L1/right.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L2:front",
+      "kind": "layerImage",
+      "layerId": "L2",
+      "role": "outfit",
+      "zOrder": 200,
+      "view": "front",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/front.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L2:back",
+      "kind": "layerImage",
+      "layerId": "L2",
+      "role": "outfit",
+      "zOrder": 200,
+      "view": "back",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/back.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L2:left",
+      "kind": "layerImage",
+      "layerId": "L2",
+      "role": "outfit",
+      "zOrder": 200,
+      "view": "left",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/left.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L2:right",
+      "kind": "layerImage",
+      "layerId": "L2",
+      "role": "outfit",
+      "zOrder": 200,
+      "view": "right",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L2/right.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L3:front",
+      "kind": "layerImage",
+      "layerId": "L3",
+      "role": "outer/accessories",
+      "zOrder": 300,
+      "view": "front",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/front.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L3:back",
+      "kind": "layerImage",
+      "layerId": "L3",
+      "role": "outer/accessories",
+      "zOrder": 300,
+      "view": "back",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/back.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L3:left",
+      "kind": "layerImage",
+      "layerId": "L3",
+      "role": "outer/accessories",
+      "zOrder": 300,
+      "view": "left",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/left.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    },
+    {
+      "slotId": "L3:right",
+      "kind": "layerImage",
+      "layerId": "L3",
+      "role": "outer/accessories",
+      "zOrder": 300,
+      "view": "right",
+      "expectedPath": "assets/candidates/morwen/layers-<deliveryId>/L3/right.png",
+      "requirements": {
+        "size": [
+          1200,
+          1600
+        ],
+        "space": "rigPx",
+        "mode": "RGBA 8bit",
+        "realTransparentPixels": true,
+        "borderAlpha": 0,
+        "mirrored": false,
+        "anchor": "must equal every other layer of the same view",
+        "joints": "rig-import/08 31-ID set; each value carries MEASURED|DERIVED|UNRESOLVED"
+      },
+      "status": "NOT_DELIVERED",
+      "sha256": null,
+      "gate": "BLOCKED"
+    }
+  ],
+  "counts": {
+    "total": 17,
+    "NOT_DELIVERED": 17,
+    "BLOCKED": 17
+  },
+  "adoptionReady": false,
+  "productionReady": false
+}
