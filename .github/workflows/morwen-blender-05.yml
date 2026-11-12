@@ -1,0 +1,51 @@
+name: Morwen Blender 05 Projection QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_05/**'
+      - '.github/workflows/morwen-blender-05.yml'
+permissions:
+  contents: read
+jobs:
+  four-view:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender and Pillow
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-pil
+      - name: Build candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Render 4 orthographic views
+        run: blender -b assets/candidates/morwen-blender-03/morwen_unified_neutral_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_05/render_projections.py
+      - name: Validate 4 transparent outputs
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('assets/candidates/morwen-blender-05')
+          report=json.loads((root/'projection_report.json').read_text())
+          assert report['visual_reference_comparison']=='NOT_RUN'
+          for direction in ('front','right','back','left'):
+              with Image.open(root/(direction+'_projection.png')) as im:
+                  assert im.size==(384,1024)
+                  assert im.mode=='RGBA'
+                  assert im.getbbox() is not None
+          print('MORWEN_05_4VIEW_TECHNICAL_PASS')
+          PY
+      - name: Upload visual QA candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-05-four-projections
+          path: assets/candidates/morwen-blender-05/
+          if-no-files-found: warn
+          retention-days: 14
