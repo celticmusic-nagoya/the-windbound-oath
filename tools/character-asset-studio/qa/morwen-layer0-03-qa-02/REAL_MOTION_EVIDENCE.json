@@ -1,0 +1,202 @@
+{
+  "schema": "cas/real-motion-evidence/1.0",
+  "status": "BLOCKED",
+  "auditStatus": "NOT_RUN",
+  "adoptionReady": false,
+  "sourceSha256": "7b343339cbf7de9d0bd1b994af66c47052274f17ac35ffc3e54e52bebaf74326",
+  "reason": "Authored near/far gait phases and local hip/knee/ankle coordinates exist, but anatomical L/R mapping, heel/ball/toe contact coordinates and per-frame root/world transforms are not exported. Ankle positions and fixed ground anchors cannot establish planted world-space contact. This historical candidate is not the v1.0 rig.",
+  "frames": [
+    {
+      "frameId": 0,
+      "footSide": null,
+      "sourceLeg": "near",
+      "authoredPhase": "contact / heel strike",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        65.0,
+        117.66
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 0,
+      "footSide": null,
+      "sourceLeg": "far",
+      "authoredPhase": "toe-off (heel up, toe on ground)",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        45.0,
+        114.96
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 1,
+      "footSide": null,
+      "sourceLeg": "near",
+      "authoredPhase": "loading, foot flat",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        59.0,
+        118.5
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 1,
+      "footSide": null,
+      "sourceLeg": "far",
+      "authoredPhase": "swing back, knee forward",
+      "phase": "swing",
+      "worldPx": null,
+      "sourceAnklePx": [
+        47.5,
+        110.22
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 2,
+      "footSide": null,
+      "sourceLeg": "near",
+      "authoredPhase": "mid-stance, body passes over",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        53.0,
+        118.5
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 2,
+      "footSide": null,
+      "sourceLeg": "far",
+      "authoredPhase": "swing forward / passing",
+      "phase": "swing",
+      "worldPx": null,
+      "sourceAnklePx": [
+        58.0,
+        114.34
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 3,
+      "footSide": null,
+      "sourceLeg": "near",
+      "authoredPhase": "toe-off (heel up, toe on ground)",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        47.0,
+        114.96
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 3,
+      "footSide": null,
+      "sourceLeg": "far",
+      "authoredPhase": "contact / heel strike",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        63.0,
+        117.66
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 4,
+      "footSide": null,
+      "sourceLeg": "near",
+      "authoredPhase": "swing back, knee forward",
+      "phase": "swing",
+      "worldPx": null,
+      "sourceAnklePx": [
+        49.5,
+        110.22
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 4,
+      "footSide": null,
+      "sourceLeg": "far",
+      "authoredPhase": "loading, foot flat",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        57.0,
+        118.5
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 5,
+      "footSide": null,
+      "sourceLeg": "near",
+      "authoredPhase": "swing forward / passing",
+      "phase": "swing",
+      "worldPx": null,
+      "sourceAnklePx": [
+        60.0,
+        114.34
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    },
+    {
+      "frameId": 5,
+      "footSide": null,
+      "sourceLeg": "far",
+      "authoredPhase": "mid-stance, body passes over",
+      "phase": "stance",
+      "worldPx": null,
+      "sourceAnklePx": [
+        51.0,
+        118.5
+      ],
+      "sourceCoordinateSpace": "sprite-local; not a sole contact",
+      "originalDataPath": "assets/candidates/morwen-right-walk/72/build_meta.json"
+    }
+  ],
+  "perFootMaxPx": {
+    "L": null,
+    "R": null
+  },
+  "requiredExport": [
+    "frame id and timestamp, source path and hash",
+    "anatomical L/R mapping and authored stance/swing phase per foot",
+    "consistent tracked contact point (heel/ball/toe) and stance interval ID",
+    "actual worldPx after the pose and actor/root transform, with units/scale documented"
+  ],
+  "otherSources": [
+    {
+      "path": "tools/character-asset-studio/motion/grid_overlay_walk.reference.json",
+      "finding": "17 reference phase markers; A/B sides; anchors empty; not Morwen pose export"
+    },
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v0.9/LAYER01_MODULAR.json",
+      "finding": "4 static views at frameIndex 0; fixed anchor only"
+    },
+    {
+      "path": "data/sprite-rig/morwen_hd_left_walk6_delivery.json",
+      "finding": "AWAITING_ART / NOT_DRAWN; contact_frames 1 and 4 without foot coordinates"
+    }
+  ]
+}

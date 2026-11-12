@@ -1,0 +1,40 @@
+{
+  "pipeline": {
+    "baselineFailingIds": [
+      "test_committed_candidate_reproducible (test_pipeline.V07Layer0.test_committed_candidate_reproducible)",
+      "test_guides_contain_no_canon_pixels_and_are_reproducible (test_pipeline.V08MasterBody.test_guides_contain_no_canon_pixels_and_are_reproducible)",
+      "test_reproducible_and_sources_untouched (test_pipeline.V07Normalize.test_reproducible_and_sources_untouched)"
+    ],
+    "finalFailingIds": [
+      "test_committed_candidate_reproducible (test_pipeline.V07Layer0.test_committed_candidate_reproducible)",
+      "test_guides_contain_no_canon_pixels_and_are_reproducible (test_pipeline.V08MasterBody.test_guides_contain_no_canon_pixels_and_are_reproducible)",
+      "test_reproducible_and_sources_untouched (test_pipeline.V07Normalize.test_reproducible_and_sources_untouched)"
+    ],
+    "newFailures": [],
+    "resolvedFailures": []
+  },
+  "repository": {
+    "baselineFailingIds": [
+      "tests/common_loading.test.cjs",
+      "tests/continue_restore.test.cjs",
+      "tests/early_rewards.test.cjs",
+      "tests/field/frame_clock.test.js",
+      "tests/s2_transition_recovery.test.cjs",
+      "tests/save_compatibility.test.cjs",
+      "tests/startup_race.test.cjs",
+      "tests/title_continue.test.cjs"
+    ],
+    "finalFailingIds": [
+      "tests/common_loading.test.cjs",
+      "tests/continue_restore.test.cjs",
+      "tests/early_rewards.test.cjs",
+      "tests/field/frame_clock.test.js",
+      "tests/s2_transition_recovery.test.cjs",
+      "tests/save_compatibility.test.cjs",
+      "tests/startup_race.test.cjs",
+      "tests/title_continue.test.cjs"
+    ],
+    "newFailures": [],
+    "resolvedFailures": []
+  }
+}

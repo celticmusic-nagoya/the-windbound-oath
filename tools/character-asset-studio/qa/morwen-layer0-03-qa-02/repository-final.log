@@ -1,0 +1,355 @@
+PASS required fetch and decode are separate; ready only after decode
+PASS normal starts exactly once after required decode; opening follows real combat entry
+PASS normal required fetch failure blocks combat and explicit retry succeeds
+PASS normal required decode failure blocks combat and explicit retry succeeds
+PASS raider starts exactly once after required decode; opening follows real combat entry
+PASS raider required fetch failure blocks combat and explicit retry succeeds
+PASS raider required decode failure blocks combat and explicit retry succeeds
+PASS missing required opening frame blocks battle
+PASS optional manifest failure uses verified stills and no unready motion
+PASS late cancelled response cannot start or hide a newer retry/transaction
+PASS combat generation invalidation rejects stale completion
+PASS timeout is explicit, does not become ready after late decode
+PASS map entry exclusion and capture input guard cover pointer/tap/keyboard
+PASS all registered still/idle and opening fixture paths exist on disk
+ReferenceError: rildeReturnActive is not defined
+    at Object.saveGrowthData (evalmachine.<anonymous>:2:2)
+    at /workspace/morwen-layer0-03-qa-02/tests/common_loading.test.cjs:42:226
+    at async test (/workspace/morwen-layer0-03-qa-02/tests/common_loading.test.cjs:26:43)
+    at async /workspace/morwen-layer0-03-qa-02/tests/common_loading.test.cjs:41:2
+✖ tests/common_loading.test.cjs (1253.605183ms)
+FAIL AssertionError [ERR_ASSERTION]: fixture: product DEV block end not found
+    at extractDevBlock (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:10:9)
+    at setup (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:25:17)
+    at env (/workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:8:10)
+    at /workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:32:107
+    at test (/workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:29:137)
+    at /workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:32:8
+    at Object.<anonymous> (/workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:100:3)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+✖ tests/continue_restore.test.cjs (83.966224ms)
+FAIL AssertionError [ERR_ASSERTION]: fixture: product DEV block end not found
+    at extractDevBlock (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:10:9)
+    at setup (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:25:17)
+    at env (/workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:8:10)
+    at ready (/workspace/morwen-layer0-03-qa-02/tests/early_rewards.test.cjs:6:32)
+    at /workspace/morwen-layer0-03-qa-02/tests/early_rewards.test.cjs:10:17
+    at test (/workspace/morwen-layer0-03-qa-02/tests/early_rewards.test.cjs:5:44)
+    at /workspace/morwen-layer0-03-qa-02/tests/early_rewards.test.cjs:9:114
+    at Object.<anonymous> (/workspace/morwen-layer0-03-qa-02/tests/early_rewards.test.cjs:48:3)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+✖ tests/early_rewards.test.cjs (89.623013ms)
+✔ new HD policy targets 7.5 heads but preserves legacy (0.953768ms)
+✔ pilot is bound to new canonical left, never superseded 3V (0.607093ms)
+✔ walk output anchor is consistent with recheck (0.787237ms)
+ok   seed 8721: 30 catches / 30 min, intervals 45.9-70.3s
+ok   seed 1: 30 catches / 30 min, intervals 45.0-73.0s
+ok   seed 42: 29 catches / 30 min, intervals 45.6-74.9s
+ok   seed 99999: 29 catches / 30 min, intervals 46.0-74.2s
+ok   mean catch interval 60.3s (target 60s)
+✔ tests/field/fisherman.test.js (84.252627ms)
+ok 30 Hz actual clock: 600.000 px / 2 s
+ok 60 Hz actual clock: 600.000 px / 2 s
+ok 120 Hz actual clock: 600.000 px / 2 s
+ok 144 Hz actual clock: 600.000 px / 2 s
+ok 240 Hz actual clock: 600.000 px / 2 s
+ok 1000 Hz actual clock: 600.000 px / 2 s
+evalmachine.<anonymous>:9
+  const Walk = window.FieldWalkMotion, FPS = Walk.WALKER_FPS;
+                                                  ^
+
+TypeError: Cannot read properties of undefined (reading 'WALKER_FPS')
+    at evalmachine.<anonymous>:9:51
+    at evalmachine.<anonymous>:61:3
+    at Script.runInContext (node:vm:149:12)
+    at Script.runInNewContext (node:vm:154:17)
+    at Object.runInNewContext (node:vm:310:38)
+    at Object.<anonymous> (/workspace/morwen-layer0-03-qa-02/tests/field/frame_clock.test.js:24:5)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+
+Node.js v24.19.0
+✖ tests/field/frame_clock.test.js (95.292646ms)
+PASS house02 exact feet collision, preserved stool, safe entry and exit route
+✔ tests/field/house02_spawn.test.js (60.913465ms)
+ok   hash==brute-force (9514 blocked samples, 0 diffs)
+ok   compile rejects non-rect
+ok   compileMap rejects non-rect
+ok   seal blocks while closed
+ok   seal passes when open
+ok   multi-rect blocker
+ok   default bound 2160 kept
+ok   custom bound allows >2160
+ok   A* routes around wall on 9600x6000 (2251 frames, arrived)
+ok   configure() restores Lind defaults
+ok   culling keeps live nodes <=800 of 6000 @1920x1080 chunk256 (peak 660)
+ok   2 s travel equal across 30/60/120/144 Hz (30:600 60:600 120:600 144:600)
+✔ tests/field/m0.test.js (1299.586016ms)
+✔ four directions resolve to registered display derivatives (1.097396ms)
+✔ anchor correction moves boot centre onto the anchor (0.566836ms)
+✔ scaled placement keeps the foot on the given point (0.313355ms)
+✔ canonical left is the new pixel left; superseded left is rejected (0.880177ms)
+✔ bad schema and direction are rejected (1.683734ms)
+ok   ids are unique (14 NPCs)
+ok   farmer_male   [walk: legacy]
+ok   farmer_female [walk: 4]
+ok   young_man     [walk: 6]
+ok   young_woman   [walk: 6]
+ok   elder_man     [walk: 6]
+ok   elder_woman   [walk: 6]
+ok   boy           [walk: 4]
+ok   girl          [walk: 4]
+ok   merchant      [walk: 6]
+ok   innkeeper     [walk: 6]
+ok   fisherman     [walk: waiting for delivery]
+ok   caretaker     [walk: 6]
+ok   boy_swordsman [walk: waiting for delivery]
+ok   emma          [walk: 3]
+walk frames still to deliver (1): boy_swordsman
+✔ tests/field/npc_registry.test.js (59.831012ms)
+ok   empty / null condition is true
+ok   sealOpen true/false
+ok   sealOpen:false means closed
+ok   flag
+ok   stage range / open-ended
+ok   item with min
+ok   treasure opened
+ok   talked
+ok   quest state
+ok   all
+ok   any
+ok   not
+ok   keys in one object are ANDed
+ok   unknown key / non-object is false (fails closed)
+ok   validate reports unknown keys, including nested
+✔ tests/field/talk_conditions.test.js (47.717368ms)
+✔ four idle frames animate without movement or an extra timer (11.704493ms)
+✔ right: real movement selects four supplied frames without mirroring (3.331551ms)
+✔ left: real movement selects four supplied frames without mirroring (6.130493ms)
+✔ up: real movement selects four supplied frames without mirroring (2.157597ms)
+✔ down: real movement selects four supplied frames without mirroring (4.056055ms)
+✔ a blocked goblin idles rather than walking in place (2.20879ms)
+✔ freeze, resume, return to idle, clear have no animation owner left over (4.29762ms)
+✔ moss_slime: legacy preload and animation selection retained (3.105403ms)
+✔ forest_bat: legacy preload and animation selection retained (2.140405ms)
+✔ leafy_boar: legacy preload and animation selection retained (4.280699ms)
+PASS normal closed drawer rejects pointer/keyboard/programmatic open during hold
+PASS normal unlock is immediately usable without a polling timer
+PASS normal open drawer and descendants disappear during hold and resume afterwards
+PASS normal busy/action-cinematic guards agree with drawer gate
+PASS raider closed drawer rejects pointer/keyboard/programmatic open during hold
+PASS raider unlock is immediately usable without a polling timer
+PASS raider open drawer and descendants disappear during hold and resume afterwards
+PASS raider busy/action-cinematic guards agree with drawer gate
+PASS normal Loading locks COMMAND until readiness or explicit cancellation
+PASS raider Loading locks COMMAND until readiness or explicit cancellation
+PASS normal action submission rejected throughout presentation lock
+PASS raider action submission rejected throughout presentation lock
+PASS lock styling does not depend on viewport orientation
+PASS keyboard layer consumes confirmation/navigation during animation
+14 PASS; simulated DOM only, not browser rendering
+✔ tests/issue51_command_lock.test.cjs (59.214718ms)
+PASS: boot guard, load exclusion, failure latch, explicit retry, stale generation
+✔ tests/issue54_coordinator.test.cjs (50.216957ms)
+PASS LOAD input ownership, nested completion, duplicate LOAD and release
+PASS failed LOAD remains protected; explicit retry recovers
+PASS stale LOAD cannot release new boot owner
+✔ tests/load_input_ownership.test.cjs (51.283095ms)
+PASS normal consumes "Enter" before underlying handlers
+PASS normal consumes " " before underlying handlers
+PASS normal consumes "Escape" before underlying handlers
+PASS normal consumes "ArrowUp" before underlying handlers
+PASS normal consumes "ArrowDown" before underlying handlers
+PASS normal consumes "ArrowLeft" before underlying handlers
+PASS normal consumes "ArrowRight" before underlying handlers
+PASS raider consumes "Enter" before underlying handlers
+PASS raider consumes " " before underlying handlers
+PASS raider consumes "Escape" before underlying handlers
+PASS raider consumes "ArrowUp" before underlying handlers
+PASS raider consumes "ArrowDown" before underlying handlers
+PASS raider consumes "ArrowLeft" before underlying handlers
+PASS raider consumes "ArrowRight" before underlying handlers
+PASS map consumes "Enter" before underlying handlers
+PASS map consumes " " before underlying handlers
+PASS map consumes "Escape" before underlying handlers
+PASS map consumes "ArrowUp" before underlying handlers
+PASS map consumes "ArrowDown" before underlying handlers
+PASS map consumes "ArrowLeft" before underlying handlers
+PASS map consumes "ArrowRight" before underlying handlers
+PASS InputManager itself protects Loading even when registered before the common capture listener
+PASS window/document capture and target/bubble order: blocked event reaches none of the game listeners
+PASS mouse pointerdown/click cannot activate the background during Loading
+PASS touch pointerdown/click cannot activate the background during Loading
+PASS retry "Enter" activates once, repeats and keyup cannot replay
+PASS retry " " activates once, repeats and keyup cannot replay
+PASS mouse explicit retry works after a blocked gesture and only once
+PASS touch explicit retry works after a blocked gesture and only once
+PASS held Enter crossing Loading completion is quarantined until release; fresh input works
+PASS already held direction is cleared and cannot resume movement after unlock until key release
+PASS Space retry that completes synchronously cannot click again on keyup or leak into field
+PASS pointer held across Loading cannot replay a delayed click after completion
+PASS stale owner close cannot unlock a newer map Loading
+PASS disabled recovery action is never allowed, Tab stays on the permitted recovery control
+PASS map failure recovery control remains keyboard usable after Loading view closes
+PASS keyboard retry remains usable after a blocked touch gesture
+37 PASS; real modules, simulated event phases; browser NOT_RUN
+✔ tests/loading_input.test.cjs (146.098088ms)
+PASS fast Loading keeps Tips and input lock through two real frame callbacks and minimum visibility
+PASS stale view completion cannot close a newer view
+PASS nested map view completion preserves LOAD input ownership
+✔ tests/loading_lifecycle.test.cjs (53.594088ms)
+PASS map optional prop ready explicitly reported; placeholder policy retained
+PASS map optional prop failed explicitly reported; placeholder policy retained
+PASS map optional prop timeout explicitly reported; placeholder policy retained
+✔ tests/loading_map_readiness.test.cjs (824.792967ms)
+✔ one blink follows the v3 sequence exactly (260 ms) after a 3-6 s gap (2.156869ms)
+✔ gaps stay within 3-6 s and blinks never overlap over a long run (4.250646ms)
+✔ stop() mid-blink reopens the eyes once and leaves no timer; start() again does not duplicate (3.763221ms)
+✔ stop() when idle reports nothing; blinkNow runs one blink immediately (0.230113ms)
+✔ registry: Aidan paths, faces, side and blink come from one place (12.199892ms)
+✔ adopted Aidan files are byte-identical to the approved originals (41.510026ms)
+PASS 12 escape pages
+PASS 12 escape portraits
+PASS approved river jump
+PASS jump visual cue
+PASS Moss Forest riverbank
+PASS no old cliff arrival
+PASS 15 return pages
+PASS 15 return portraits
+PASS Emma reunion
+PASS return click routing
+PASS return save guard
+PASS fort after return
+PASS legacy stage14 fort restore
+PASS legacy stage13 aftermath restore
+PASS equipment grant unchanged
+15/15 static integration checks passed
+✔ tests/prologue-escape-return-static.test.cjs (52.522021ms)
+PASS: aftermath → Lou join → 15-page Rilde return → fort once
+✔ tests/prologue-return-flow.test.cjs (62.792387ms)
+PASS return scene blocks SAVE and displays notice
+PASS outside return scene SAVE succeeds with version 30
+✔ tests/prologue-return-save-guard.test.cjs (58.414327ms)
+PASS SAVE v1 stage 13 → AFTERMATH
+PASS SAVE v2 stage 13 → AFTERMATH
+PASS SAVE v1 stage 14 → FORT_FINALE
+PASS SAVE v2 stage 14 → FORT_FINALE
+PASS SAVE v1 stage 15 → PROLOGUE_END
+PASS SAVE v2 stage 15 → PROLOGUE_END
+PASS invalid stage14 with missing victories falls back to stage10
+7/7 SAVE routing cases passed
+✔ tests/prologue-save-route.test.cjs (51.6396ms)
+PASS normal transition commits once and resolves the map
+PASS fetch failure rejects; previous map, controls, flags and success callbacks are protected
+PASS prepare failure preserves treasure/event/slain state before commit
+PASS mount failure rebuilds the previous world and deep-copied slain state
+PASS render failure restores positions, height level and playable state
+FAIL ReferenceError: rildeReturnActive is not defined
+    at Object.saveGrowthData (evalmachine.<anonymous>:2:2)
+    at /workspace/morwen-layer0-03-qa-02/tests/s2_transition_recovery.test.cjs:47:800
+    at async test (/workspace/morwen-layer0-03-qa-02/tests/s2_transition_recovery.test.cjs:39:111)
+    at async /workspace/morwen-layer0-03-qa-02/tests/s2_transition_recovery.test.cjs:47:2
+✖ tests/s2_transition_recovery.test.cjs (95.593208ms)
+FAIL AssertionError [ERR_ASSERTION]: fixture: product DEV block end not found
+    at extractDevBlock (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:10:9)
+    at setup (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:25:17)
+    at env (/workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:8:10)
+    at ready (/workspace/morwen-layer0-03-qa-02/tests/save_compatibility.test.cjs:4:32)
+    at /workspace/morwen-layer0-03-qa-02/tests/save_compatibility.test.cjs:8:17
+    at test (/workspace/morwen-layer0-03-qa-02/tests/save_compatibility.test.cjs:3:48)
+    at /workspace/morwen-layer0-03-qa-02/tests/save_compatibility.test.cjs:7:72
+    at Object.<anonymous> (/workspace/morwen-layer0-03-qa-02/tests/save_compatibility.test.cjs:50:3)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+✖ tests/save_compatibility.test.cjs (82.36127ms)
+PASS cancelled choreography and stale actor adapters cannot overwrite new map coordinates/pose
+PASS old wait/continuation cannot change stage/events and cleanup releases old lock
+PASS old completion cannot clear or overwrite a new scene
+PASS transition failure restores playable old map without resurrecting cancelled scene
+PASS cancelled pan cannot relock the new scene after a late camera response
+PASS input is locked before cleanup await and new construction waits for cleanup completion
+PASS normal scene progress and hook behavior retained
+✔ tests/scene_lifecycle_ownership.test.cjs (119.002948ms)
+FAIL AssertionError [ERR_ASSERTION]: fixture: product DEV block end not found
+    at extractDevBlock (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:10:9)
+    at setup (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:25:17)
+    at /workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:41:117
+    at test (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:38:135)
+    at /workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:41:8
+    at Object.<anonymous> (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:111:3)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+✖ tests/startup_race.test.cjs (67.810547ms)
+FAIL AssertionError [ERR_ASSERTION]: fixture: product DEV block end not found
+    at extractDevBlock (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:10:9)
+    at setup (/workspace/morwen-layer0-03-qa-02/tests/startup_race.test.cjs:25:17)
+    at env (/workspace/morwen-layer0-03-qa-02/tests/continue_restore.test.cjs:8:10)
+    at fixture (/workspace/morwen-layer0-03-qa-02/tests/title_continue.test.cjs:4:10)
+    at /workspace/morwen-layer0-03-qa-02/tests/title_continue.test.cjs:19:116
+    at test (/workspace/morwen-layer0-03-qa-02/tests/title_continue.test.cjs:17:44)
+    at /workspace/morwen-layer0-03-qa-02/tests/title_continue.test.cjs:19:8
+    at Object.<anonymous> (/workspace/morwen-layer0-03-qa-02/tests/title_continue.test.cjs:27:3)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+✖ tests/title_continue.test.cjs (94.989114ms)
+✔ catalog exposes only real walking allies and implemented field enemies (9.332673ms)
+✔ every direction uses exact production metadata and declared direction banks (4.351827ms)
+✔ phase selectors preserve production arithmetic across cycles and frame counts (130.872177ms)
+✔ future ally frame count follows the registry without a DEV frame table (2.630941ms)
+✔ goblin directions, boar walk-only bank and shared flyer bank match game config (15.296438ms)
+✔ manual frames and speed multipliers use the shared selector (20.780795ms)
+✔ DEV-disabled UI never installs DOM, input handlers or a timer (2.527228ms)
+✔ NPC metadata and missing directions reflect production, including future six-frame soldier (9.158482ms)
+✔ adopted down bank uses source01/05/02/repaired06 and quarter bob only (9.486956ms)
+✔ director-adopted ARM02 PNG bytes and live slot references are pinned (11.504983ms)
+✔ ARM02 adoption retains the original production adoption history (0.428522ms)
+✔ UP07 adopted real key, PNG bytes, anchor, order and bob are pinned without DEV aliases (16.783455ms)
+ℹ tests 60
+ℹ suites 0
+ℹ pass 52
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5800.598849
+
+✖ failing tests:
+
+test at tests/common_loading.test.cjs:1:1
+✖ tests/common_loading.test.cjs (1253.605183ms)
+  'test failed'
+
+test at tests/continue_restore.test.cjs:1:1
+✖ tests/continue_restore.test.cjs (83.966224ms)
+  'test failed'
+
+test at tests/early_rewards.test.cjs:1:1
+✖ tests/early_rewards.test.cjs (89.623013ms)
+  'test failed'
+
+test at tests/field/frame_clock.test.js:1:1
+✖ tests/field/frame_clock.test.js (95.292646ms)
+  'test failed'
+
+test at tests/s2_transition_recovery.test.cjs:1:1
+✖ tests/s2_transition_recovery.test.cjs (95.593208ms)
+  'test failed'
+
+test at tests/save_compatibility.test.cjs:1:1
+✖ tests/save_compatibility.test.cjs (82.36127ms)
+  'test failed'
+
+test at tests/startup_race.test.cjs:1:1
+✖ tests/startup_race.test.cjs (67.810547ms)
+  'test failed'
+
+test at tests/title_continue.test.cjs:1:1
+✖ tests/title_continue.test.cjs (94.989114ms)
+  'test failed'

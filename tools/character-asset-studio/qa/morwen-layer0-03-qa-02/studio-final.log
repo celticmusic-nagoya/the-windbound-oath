@@ -1,0 +1,27 @@
+✔ frame <-> time: mid-frame seek round-trips at 24/25/30 fps (2.223613ms)
+✔ phases: register, replace on same frame, sort, reject unknown (1.846588ms)
+✔ cycles: same-side contacts; alternation assumed (flagged) when side unknown (1.829991ms)
+✔ 6/8/12 sampling covers [start,end) evenly and maps to a 12-frame sprite (0.447705ms)
+✔ anchors: per-frame record, clamp, trajectory order, interpolation (0.465902ms)
+✔ JSON: deterministic, round-trips, status cannot be upgraded on import, no pixel payload (1.986528ms)
+✔ committed Grid Overlay reference JSON is valid, unapproved and self-consistent (0.61306ms)
+✔ box mapping helpers (0.342333ms)
+✔ v0.4: leg-spread extrema are candidates, separate from contact phases (0.828699ms)
+✔ v0.4: contacts start unverified; visual confirmation is explicit and survives round trip (3.372224ms)
+✔ v0.4: committed Grid Overlay JSON stays byte-identical and its contacts load as unverified (1.011217ms)
+✔ v0.4: sprite source — missing frames are reported, reuse is opt-in and holds the previous frame (0.586788ms)
+✔ v0.4: unionBox includes the ground line (0.14518ms)
+✔ normalised <-> pixel round trip on 1200x1600 and other presets (10.088397ms)
+✔ template ground is (600,1540) on the Morwen 1200x1600 profile (4.752229ms)
+✔ placement: exact for same size, uniform bottom-centred otherwise (1.424767ms)
+✔ spec export is deterministic and round-trips through parseSpec (35.742766ms)
+✔ parseSpec accepts v1.0 pixel specs and rejects bad input (1.238603ms)
+✔ alphaStats counts border, transparency and bbox (0.526743ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 428.684236

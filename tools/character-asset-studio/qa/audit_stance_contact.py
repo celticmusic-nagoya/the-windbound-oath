@@ -48,10 +48,12 @@ def audit_stance(data, tolerance_px=2.0):
             drift = math.dist(planted[side], pt)
             displacements[side].append(drift)
             observations.append({"frame": frame.get("id", i), "side": side,
-                                 "driftPx": round(drift, 6),
+                                 "driftPx": drift,
                                  "status": "PASS" if drift <= tolerance_px else "FAIL"})
     if not observations:
         return {"status": "NOT_RUN", "reason": "no stance samples", "adoptionReady": False}
+    # Keep full precision for both evidence and the gate: display rounding can
+    # otherwise turn a slightly over-tolerance FAIL into an overall PASS.
     maximum = max(v["driftPx"] for v in observations)
     return {"schema": "cas/stance-contact-qa/1.0",
             "status": "PASS" if maximum <= tolerance_px else "FAIL",
