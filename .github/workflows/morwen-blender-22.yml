@@ -1,0 +1,32 @@
+name: Morwen Blender 22 Contour Review Overlays QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_22/**'
+      - '.github/workflows/morwen-blender-22.yml'
+  workflow_dispatch:
+jobs:
+  contours:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate four-view contour review overlays
+        run: python3 tools/blender/morwen_blender_22/create_review_overlays.py
+      - name: Verify report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("assets/candidates/morwen-blender-22/review_manifest.json")
+          d=json.loads(p.read_text())
+          assert len(d["views"])==4
+          assert not d["anatomical_fit_authorized"] and d["human_review_required"]
+          for view in d["views"].values():
+              assert view["status"]=="HUMAN_REVIEW_REQUIRED"
+          print("MORWEN_22_QA_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-22-review-overlays
+          path: assets/candidates/morwen-blender-22/
+          if-no-files-found: error
