@@ -1,0 +1,47 @@
+name: Morwen Blender 09 Landmark Core QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_09/**'
+      - '.github/workflows/morwen-blender-09.yml'
+permissions:
+  contents: read
+jobs:
+  landmark-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Build source candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build previous core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Build landmark-calibrated core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_09/build_landmark_core.py
+      - name: Check anatomical ratios and weights
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('assets/candidates/morwen-blender-09/build_report.json').read_text())
+          assert d['bones']==17 and d['vertices']==168 and d['faces']==146
+          assert 0.07<d['core_width_to_body_height']<0.30
+          assert 0.14<d['core_height_to_body_height']<0.32
+          assert d['production_use'] is False and d['art_approval']=='NOT_RUN'
+          print('MORWEN_09_RATIO_QA_PASS')
+          PY
+      - name: Upload candidate and numerical report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-09-landmark-core
+          path: assets/candidates/morwen-blender-09/
+          if-no-files-found: warn
+          retention-days: 14
