@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'tools/blender/morwen_blender_19/**'
+      - 'tools/blender/morwen_blender_20/**'
       - '.github/workflows/morwen-blender-19.yml'
 permissions:
   contents: read
@@ -27,6 +28,8 @@ jobs:
         run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_18/render_monotonic_torso.py
       - name: Measure anatomical cross-sections
         run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_19/measure_profiles.py
+      - name: Extract locked canonical alpha contours
+        run: python3 tools/blender/morwen_blender_20/extract_reference_contours.py
       - name: Verify render manifest
         run: |
           python3 - <<'PY'
@@ -47,5 +50,6 @@ jobs:
           path: |
             assets/candidates/morwen-blender-18/
             assets/candidates/morwen-blender-19/
+            assets/candidates/morwen-blender-20/
           if-no-files-found: warn
           retention-days: 14
