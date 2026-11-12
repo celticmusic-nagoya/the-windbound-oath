@@ -68,6 +68,18 @@ for row in rows:
   pct = row['spriteCoveragePct']
   if pct is None or pct > portrait_budget[row['view']]:
    failures.append(f"{row['view']}/normal: sprite occlusion {pct}% exceeds {portrait_budget[row['view']]}% budget")
+# UX-MOBILE-14: protect the verified landscape split against regressions.
+# Per-actor budget catches hidden character loss masked by the aggregate.
+for row in rows:
+ if not (row['expanded'] and row['kind']=='normal' and row['view'] in ('landscape','landscape-small')):
+  continue
+ if row['stagePanelOverlapPct'] is None or row['stagePanelOverlapPct']>0.1:
+  failures.append(f"{row['view']}/normal: stage overlaps command rail ({row['stagePanelOverlapPct']}%)")
+ if row['spriteCoveragePct'] is None or row['spriteCoveragePct']>5.0:
+  failures.append(f"{row['view']}/normal: sprite occlusion exceeds 5% ({row['spriteCoveragePct']}%)")
+ for group in row['groups']:
+  if group['coveragePct'] is not None and group['coveragePct']>10.0:
+   failures.append(f"{row['view']}/normal: {group['selector']} occlusion exceeds 10% ({group['coveragePct']}%)")
 for row in rows:
  for button in row['buttons']:
   if not button['minimum44']:
