@@ -28,7 +28,9 @@ def main():
     camera=bpy.data.objects.new("Morwen_13_camera",camera_data)
     scene.collection.objects.link(camera)
     scene.camera=camera;camera_data.type="ORTHO";camera_data.ortho_scale=ortho
-    scene.render.engine="BLENDER_EEVEE"
+    scene.render.engine="CYCLES"
+    scene.cycles.device="CPU"
+    scene.cycles.samples=8
     scene.render.resolution_x=384;scene.render.resolution_y=1024
     scene.render.resolution_percentage=100
     scene.render.image_settings.file_format="PNG"
