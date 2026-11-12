@@ -1,0 +1,74 @@
+name: Common Syntax QA
+on:
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.py'
+      - '.github/workflows/common-syntax-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: common-syntax-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate changed source syntax
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PY'
+          import os, subprocess, sys
+          from pathlib import Path
+
+          base = os.environ.get("BASE_SHA") or subprocess.check_output(
+              ["git", "rev-parse", "HEAD^"], text=True).strip()
+          head = os.environ.get("HEAD_SHA") or subprocess.check_output(
+              ["git", "rev-parse", "HEAD"], text=True).strip()
+          result = subprocess.run(
+              ["git", "diff", "--name-only", "-z", "--diff-filter=ACMR", base, head],
+              check=True, capture_output=True)
+          files = [os.fsdecode(f) for f in result.stdout.split(b"\0") if f]
+          failures = []
+          checked = 0
+          for name in files:
+              path = Path(name)
+              if not path.is_file():
+                  continue
+              if path.suffix in (".js", ".mjs", ".cjs"):
+                  cmd = ["node", "--check", str(path)]
+              elif path.suffix == ".py":
+                  cmd = [sys.executable, "-c",
+                         "import ast,sys; ast.parse(open(sys.argv[1], encoding='utf-8-sig').read(), filename=sys.argv[1])",
+                         str(path)]
+              else:
+                  continue
+              checked += 1
+              proc = subprocess.run(cmd, text=True, capture_output=True)
+              if proc.returncode:
+                  failures.append((name, proc.stderr.strip()))
+          print(f"Syntax QA: checked={checked}, failed={len(failures)}")
+          for name, error in failures:
+              print(f"FAIL: {name}\n{error}", file=sys.stderr)
+          sys.exit(bool(failures))
+          PY
