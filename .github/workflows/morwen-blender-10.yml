@@ -1,0 +1,54 @@
+name: Morwen Blender 10 Four-View QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_10/**'
+      - '.github/workflows/morwen-blender-10.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender and Pillow
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-pil
+      - name: Build source
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build previous core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Build calibrated core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_09/build_landmark_core.py
+      - name: Render four calibrated views
+        run: blender -b assets/candidates/morwen-blender-09/morwen_landmark_core_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_10/render_four_views.py
+      - name: Verify alpha margins
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('assets/candidates/morwen-blender-10')
+          report=json.loads((root/'render_report.json').read_text())
+          assert report['bones']==17 and report['core_faces']==146
+          assert report['source_guide_objects_hidden'] is True
+          for facing in ('front','right','back','left'):
+              with Image.open(root/(facing+'_projection.png')) as im:
+                  assert im.mode=='RGBA' and im.size==(384,1024)
+                  b=im.getchannel('A').getbbox()
+                  assert b and 0<b[0]<b[2]<384 and 0<b[1]<b[3]<1024,(facing,b)
+          print('MORWEN_10_ALPHA_MARGIN_PASS')
+          PY
+      - name: Upload four-view candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-10-four-view
+          path: assets/candidates/morwen-blender-10/
+          if-no-files-found: warn
+          retention-days: 14
