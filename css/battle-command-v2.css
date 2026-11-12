@@ -92,3 +92,44 @@ body.raiderBattleMode #raiderBattle #rbCmd button[hidden]{display:none!important
  body.battleMode :is(#normalCommandToggle,#rbCommandToggle),
  body.battleMode :is(#normalBattleCmd,#rbCmd) button{transition:none!important}
 }
+
+/* UX-MOBILE-03 — restrained battle information hierarchy.
+   Preserve all existing HUD content, HP/MP/TP calculations and animation transforms. */
+body.normalBattleMode #attackBattle :is(.v2NearHud,#normalActor),
+body.raiderBattleMode #raiderBattle :is(.rbNearHud,#rbTurn){
+  color:#f8f0df!important;
+  text-shadow:0 2px 4px #000,0 0 9px #000b!important;
+}
+body.normalBattleMode #attackBattle .v2NearHud,
+body.raiderBattleMode #raiderBattle .rbNearHud{
+  border-radius:8px!important;
+  outline:1px solid rgba(222,192,119,.35)!important;
+  outline-offset:2px!important;
+}
+body.normalBattleMode #attackBattle :is(.v2NearHud,.v2NearHud *) ,
+body.raiderBattleMode #raiderBattle :is(.rbNearHud,.rbNearHud *){
+  font-variant-numeric:tabular-nums;
+}
+/* Highlight the active actor's command context without moving the battlers. */
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]){
+  border-color:rgba(241,212,144,.75)!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button:not(:disabled):active,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button:not(:disabled):active{
+  background:#4a7158!important;
+  box-shadow:inset 0 2px 7px #0008!important;
+}
+/* Separate current action and cost at a glance, even on small devices. */
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button{
+  text-wrap:balance;
+  -webkit-font-smoothing:antialiased;
+}
+@media (forced-colors:active){
+ body.battleMode :is(#normalCommandToggle,#rbCommandToggle),
+ body.battleMode :is(#normalBattleCmd,#rbCmd) button{
+   forced-color-adjust:auto!important;
+   border:1px solid ButtonText!important;
+ }
+}
