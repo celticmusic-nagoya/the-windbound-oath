@@ -12,11 +12,11 @@ import re
 import sys
 
 PATTERNS = {
-    "dev menu": r'id=["\\\']dev(?:Btn|Panel)["\\\']',
-    "instant-kill command": r'id=["\\\'](?:nDevKill|rbDevKill)["\\\']',
-    "instant-kill binding": r'PrologueCombat\\.instantKill\\s*\\(',
-    "development event jump": r'\\bdevJump\\s*\\(',
-    "release-preview flag": r'releasePreview',
+    "dev menu": r"""id=["']dev(?:Btn|Panel)["']""",
+    "instant-kill command": r"""id=["'](?:nDevKill|rbDevKill)["']""",
+    "instant-kill binding": r"PrologueCombat\.instantKill\s*\(",
+    "development event jump": r"\bdevJump\s*\(",
+    "release-preview flag": r"releasePreview",
 }
 
 def audit(html: str) -> list[str]:
