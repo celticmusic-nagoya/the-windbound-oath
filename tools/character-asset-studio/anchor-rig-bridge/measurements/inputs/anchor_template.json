@@ -1,0 +1,375 @@
+{
+  "id": "ANCHOR_TEMPLATE_v1.0",
+  "scope": "generic, not bound to any character",
+  "status": "draft",
+  "canvas": {
+    "width": 384,
+    "height": 1024,
+    "units": "px",
+    "origin": "top-left",
+    "per_view": true
+  },
+  "sheet": {
+    "width": 1536,
+    "height": 1024,
+    "order": [
+      "front",
+      "right",
+      "left",
+      "back"
+    ],
+    "view_offset_x": {
+      "front": 0,
+      "right": 384,
+      "left": 768,
+      "back": 1152
+    }
+  },
+  "view_convention": {
+    "front": "faces viewer",
+    "right": "faces screen-right (+x)",
+    "left": "faces screen-left (-x), mirror of right",
+    "back": "faces away; mirror of front"
+  },
+  "joint_side_convention": "_L/_R = character-left/right. In side views both sides share x; far limb drawn darker.",
+  "center_x": 192,
+  "y_anchors": {
+    "crown": 64,
+    "chin": 184,
+    "neck_base": 212,
+    "shoulder": 232,
+    "chest": 300,
+    "waist": 392,
+    "pelvis": 480,
+    "crotch": 520,
+    "knee": 724,
+    "ankle": 940,
+    "ground": 984
+  },
+  "proportion": {
+    "figure_height": 920,
+    "head_height": 120,
+    "heads_tall": 7.67
+  },
+  "regions_y": {
+    "head": [
+      64,
+      184
+    ],
+    "neck": [
+      184,
+      232
+    ],
+    "torso_upper": [
+      232,
+      392
+    ],
+    "torso_lower": [
+      392,
+      480
+    ],
+    "pelvis": [
+      480,
+      520
+    ],
+    "thigh": [
+      520,
+      724
+    ],
+    "shin": [
+      724,
+      940
+    ],
+    "foot": [
+      940,
+      984
+    ]
+  },
+  "joints": {
+    "front": {
+      "crown": [
+        192,
+        64
+      ],
+      "head_center": [
+        192,
+        124
+      ],
+      "neck_base": [
+        192,
+        212
+      ],
+      "shoulder_L": [
+        262,
+        240
+      ],
+      "shoulder_R": [
+        122,
+        240
+      ],
+      "elbow_L": [
+        276,
+        392
+      ],
+      "elbow_R": [
+        108,
+        392
+      ],
+      "wrist_L": [
+        286,
+        520
+      ],
+      "wrist_R": [
+        98,
+        520
+      ],
+      "pelvis_center": [
+        192,
+        480
+      ],
+      "hip_L": [
+        226,
+        488
+      ],
+      "hip_R": [
+        158,
+        488
+      ],
+      "knee_L": [
+        222,
+        724
+      ],
+      "knee_R": [
+        162,
+        724
+      ],
+      "ankle_L": [
+        216,
+        940
+      ],
+      "ankle_R": [
+        168,
+        940
+      ],
+      "ground_center": [
+        192,
+        984
+      ]
+    },
+    "right": {
+      "crown": [
+        192,
+        64
+      ],
+      "head_center": [
+        196,
+        124
+      ],
+      "neck_base": [
+        192,
+        212
+      ],
+      "shoulder_L": [
+        192,
+        240
+      ],
+      "shoulder_R": [
+        192,
+        240
+      ],
+      "elbow_L": [
+        188,
+        392
+      ],
+      "elbow_R": [
+        188,
+        392
+      ],
+      "wrist_L": [
+        196,
+        520
+      ],
+      "wrist_R": [
+        196,
+        520
+      ],
+      "pelvis_center": [
+        192,
+        480
+      ],
+      "hip_L": [
+        192,
+        488
+      ],
+      "hip_R": [
+        192,
+        488
+      ],
+      "knee_L": [
+        196,
+        724
+      ],
+      "knee_R": [
+        196,
+        724
+      ],
+      "ankle_L": [
+        192,
+        940
+      ],
+      "ankle_R": [
+        192,
+        940
+      ],
+      "ground_center": [
+        192,
+        984
+      ]
+    },
+    "left": {
+      "crown": [
+        192,
+        64
+      ],
+      "head_center": [
+        188,
+        124
+      ],
+      "neck_base": [
+        192,
+        212
+      ],
+      "shoulder_L": [
+        192,
+        240
+      ],
+      "shoulder_R": [
+        192,
+        240
+      ],
+      "elbow_L": [
+        196,
+        392
+      ],
+      "elbow_R": [
+        196,
+        392
+      ],
+      "wrist_L": [
+        188,
+        520
+      ],
+      "wrist_R": [
+        188,
+        520
+      ],
+      "pelvis_center": [
+        192,
+        480
+      ],
+      "hip_L": [
+        192,
+        488
+      ],
+      "hip_R": [
+        192,
+        488
+      ],
+      "knee_L": [
+        188,
+        724
+      ],
+      "knee_R": [
+        188,
+        724
+      ],
+      "ankle_L": [
+        192,
+        940
+      ],
+      "ankle_R": [
+        192,
+        940
+      ],
+      "ground_center": [
+        192,
+        984
+      ]
+    },
+    "back": {
+      "crown": [
+        192,
+        64
+      ],
+      "head_center": [
+        192,
+        124
+      ],
+      "neck_base": [
+        192,
+        212
+      ],
+      "shoulder_L": [
+        122,
+        240
+      ],
+      "shoulder_R": [
+        262,
+        240
+      ],
+      "elbow_L": [
+        108,
+        392
+      ],
+      "elbow_R": [
+        276,
+        392
+      ],
+      "wrist_L": [
+        98,
+        520
+      ],
+      "wrist_R": [
+        286,
+        520
+      ],
+      "pelvis_center": [
+        192,
+        480
+      ],
+      "hip_L": [
+        158,
+        488
+      ],
+      "hip_R": [
+        226,
+        488
+      ],
+      "knee_L": [
+        162,
+        724
+      ],
+      "knee_R": [
+        222,
+        724
+      ],
+      "ankle_L": [
+        168,
+        940
+      ],
+      "ankle_R": [
+        216,
+        940
+      ],
+      "ground_center": [
+        192,
+        984
+      ]
+    }
+  },
+  "rules": [
+    "All views share identical y_anchors.",
+    "Costume layers (L2/L3) use the same canvas and anchors as L0.",
+    "Scale uniformly about ground_center for other sizes; never stretch one axis."
+  ]
+}

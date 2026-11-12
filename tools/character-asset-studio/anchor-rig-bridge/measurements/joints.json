@@ -1,0 +1,1061 @@
+{
+  "schema": "cas/anchor-bridge/measurements-11",
+  "space": "per-view-local-px",
+  "subject": "generic mannequin draft; not Morwen measurements",
+  "sourceKind": "authored SVG",
+  "views": {
+    "front": {
+      "ankleL": {
+        "xy": [
+          216.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=ankle_L"
+      },
+      "ankleR": {
+        "xy": [
+          168.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=ankle_R"
+      },
+      "ballL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "ballR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "chin": {
+        "xy": [
+          192.0,
+          184
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "generic head-centre x intersect chin guide y (not observed mandible)"
+      },
+      "elbowL": {
+        "xy": [
+          276.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=elbow_L"
+      },
+      "elbowR": {
+        "xy": [
+          108.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=elbow_R"
+      },
+      "footL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "footR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "headCenter": {
+        "xy": [
+          192.0,
+          124.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=head_center"
+      },
+      "headTop": {
+        "xy": [
+          192.0,
+          64.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=crown"
+      },
+      "heelL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "heelR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "hipL": {
+        "xy": [
+          226.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=hip_L"
+      },
+      "hipR": {
+        "xy": [
+          158.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=hip_R"
+      },
+      "jawL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "jawR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "kneeL": {
+        "xy": [
+          222.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=knee_L"
+      },
+      "kneeR": {
+        "xy": [
+          162.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=knee_R"
+      },
+      "neckBase": {
+        "xy": [
+          192.0,
+          212.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=neck_base"
+      },
+      "neckTop": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "shoulderL": {
+        "xy": [
+          262.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=shoulder_L"
+      },
+      "shoulderR": {
+        "xy": [
+          122.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=shoulder_R"
+      },
+      "toeL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "toeR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "waist": {
+        "xy": [
+          192,
+          392
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "declared centre-line x intersect waist guide y"
+      },
+      "wristL": {
+        "xy": [
+          286.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=wrist_L"
+      },
+      "wristR": {
+        "xy": [
+          98.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=wrist_R"
+      },
+      "pelvis": {
+        "xy": [
+          192.0,
+          480.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_front.svg",
+        "sourceSha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+        "element": "guides-front/joints/circle/title=pelvis_center"
+      }
+    },
+    "right": {
+      "ankleL": {
+        "xy": [
+          192.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=ankle_L"
+      },
+      "ankleR": {
+        "xy": [
+          192.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=ankle_R"
+      },
+      "ballL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "ballR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "chin": {
+        "xy": [
+          196.0,
+          184
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "generic head-centre x intersect chin guide y (not observed mandible)"
+      },
+      "elbowL": {
+        "xy": [
+          188.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=elbow_L"
+      },
+      "elbowR": {
+        "xy": [
+          188.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=elbow_R"
+      },
+      "footL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "footR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "headCenter": {
+        "xy": [
+          196.0,
+          124.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=head_center"
+      },
+      "headTop": {
+        "xy": [
+          192.0,
+          64.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=crown"
+      },
+      "heelL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "heelR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "hipL": {
+        "xy": [
+          192.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=hip_L"
+      },
+      "hipR": {
+        "xy": [
+          192.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=hip_R"
+      },
+      "jawL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "jawR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "kneeL": {
+        "xy": [
+          196.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=knee_L"
+      },
+      "kneeR": {
+        "xy": [
+          196.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=knee_R"
+      },
+      "neckBase": {
+        "xy": [
+          192.0,
+          212.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=neck_base"
+      },
+      "neckTop": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "shoulderL": {
+        "xy": [
+          192.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=shoulder_L"
+      },
+      "shoulderR": {
+        "xy": [
+          192.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=shoulder_R"
+      },
+      "toeL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "toeR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "waist": {
+        "xy": [
+          192,
+          392
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "declared centre-line x intersect waist guide y"
+      },
+      "wristL": {
+        "xy": [
+          196.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=wrist_L"
+      },
+      "wristR": {
+        "xy": [
+          196.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=wrist_R"
+      },
+      "pelvis": {
+        "xy": [
+          192.0,
+          480.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_right.svg",
+        "sourceSha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+        "element": "guides-right/joints/circle/title=pelvis_center"
+      }
+    },
+    "left": {
+      "ankleL": {
+        "xy": [
+          192.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=ankle_L"
+      },
+      "ankleR": {
+        "xy": [
+          192.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=ankle_R"
+      },
+      "ballL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "ballR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "chin": {
+        "xy": [
+          188.0,
+          184
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "generic head-centre x intersect chin guide y (not observed mandible)"
+      },
+      "elbowL": {
+        "xy": [
+          196.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=elbow_L"
+      },
+      "elbowR": {
+        "xy": [
+          196.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=elbow_R"
+      },
+      "footL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "footR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "headCenter": {
+        "xy": [
+          188.0,
+          124.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=head_center"
+      },
+      "headTop": {
+        "xy": [
+          192.0,
+          64.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=crown"
+      },
+      "heelL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "heelR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "hipL": {
+        "xy": [
+          192.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=hip_L"
+      },
+      "hipR": {
+        "xy": [
+          192.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=hip_R"
+      },
+      "jawL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "jawR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "kneeL": {
+        "xy": [
+          188.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=knee_L"
+      },
+      "kneeR": {
+        "xy": [
+          188.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=knee_R"
+      },
+      "neckBase": {
+        "xy": [
+          192.0,
+          212.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=neck_base"
+      },
+      "neckTop": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "shoulderL": {
+        "xy": [
+          192.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=shoulder_L"
+      },
+      "shoulderR": {
+        "xy": [
+          192.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=shoulder_R"
+      },
+      "toeL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "toeR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "waist": {
+        "xy": [
+          192,
+          392
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "declared centre-line x intersect waist guide y"
+      },
+      "wristL": {
+        "xy": [
+          188.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=wrist_L"
+      },
+      "wristR": {
+        "xy": [
+          188.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=wrist_R"
+      },
+      "pelvis": {
+        "xy": [
+          192.0,
+          480.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_left.svg",
+        "sourceSha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+        "element": "guides-left/joints/circle/title=pelvis_center"
+      }
+    },
+    "back": {
+      "ankleL": {
+        "xy": [
+          168.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=ankle_L"
+      },
+      "ankleR": {
+        "xy": [
+          216.0,
+          940.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=ankle_R"
+      },
+      "ballL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "ballR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "chin": {
+        "xy": [
+          192.0,
+          184
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "generic head-centre x intersect chin guide y (not observed mandible)"
+      },
+      "elbowL": {
+        "xy": [
+          108.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=elbow_L"
+      },
+      "elbowR": {
+        "xy": [
+          276.0,
+          392.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=elbow_R"
+      },
+      "footL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "footR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "handR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "headCenter": {
+        "xy": [
+          192.0,
+          124.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=head_center"
+      },
+      "headTop": {
+        "xy": [
+          192.0,
+          64.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=crown"
+      },
+      "heelL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "heelR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "hipL": {
+        "xy": [
+          158.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=hip_L"
+      },
+      "hipR": {
+        "xy": [
+          226.0,
+          488.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=hip_R"
+      },
+      "jawL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "jawR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "kneeL": {
+        "xy": [
+          162.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=knee_L"
+      },
+      "kneeR": {
+        "xy": [
+          222.0,
+          724.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=knee_R"
+      },
+      "neckBase": {
+        "xy": [
+          192.0,
+          212.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=neck_base"
+      },
+      "neckTop": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "shoulderL": {
+        "xy": [
+          122.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=shoulder_L"
+      },
+      "shoulderR": {
+        "xy": [
+          262.0,
+          240.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=shoulder_R"
+      },
+      "toeL": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "toeR": {
+        "xy": null,
+        "status": "UNRESOLVED",
+        "reason": "No labelled SVG joint or explicit unambiguous anatomical construction rule; silhouette/occlusion is insufficient"
+      },
+      "waist": {
+        "xy": [
+          192,
+          392
+        ],
+        "status": "DERIVED",
+        "source": "measurements/inputs/anchor_template.json",
+        "sourceSha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+        "basis": "declared centre-line x intersect waist guide y"
+      },
+      "wristL": {
+        "xy": [
+          98.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=wrist_L"
+      },
+      "wristR": {
+        "xy": [
+          286.0,
+          520.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=wrist_R"
+      },
+      "pelvis": {
+        "xy": [
+          192.0,
+          480.0
+        ],
+        "status": "MEASURED",
+        "basis": "Authored labelled SVG circle centre, not a pixel/anatomy inference",
+        "source": "measurements/inputs/anchor_template_back.svg",
+        "sourceSha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+        "element": "guides-back/joints/circle/title=pelvis_center"
+      }
+    }
+  },
+  "adoptionReady": false
+}

@@ -1,0 +1,250 @@
+{
+  "schema": "cas/anchor-rig-bridge-manifest/11",
+  "task": "ANCHOR-RIG-BRIDGE-11",
+  "baseCommit": "5366332a98ebec7ab027c8b5adea27b8cf29d4c8",
+  "status": "BLOCKED",
+  "adoptionReady": false,
+  "realWalkComplete": false,
+  "measurements": {
+    "MEASURED": 64,
+    "DERIVED": 8,
+    "UNRESOLVED": 52
+  },
+  "inputInventory": "qa/input_inventory.json",
+  "measurementEvidence": "measurements/joints.json",
+  "derivedMapping": "mappings/sheet_to_rig.json",
+  "qaSummary": "qa/summary.json",
+  "nativeInputFormat": "SVG/JSON",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "a4c6d17d31706003f6967fdd27926e450be0b33c2a4b4c75d1786e010422f08f",
+      "bytes": 7443
+    },
+    {
+      "path": "bridge11.py",
+      "sha256": "f945cfc820b47f3f8d7f5422ed45238dcb139ca8a47578558885eba02137f25b",
+      "bytes": 12202
+    },
+    {
+      "path": "mappings/sheet_to_rig.json",
+      "sha256": "f5b3d252dd3be916129f2c6e7bb7e5dc5f80f24d56d15ff1290da48e1c65632d",
+      "bytes": 26883
+    },
+    {
+      "path": "measurements/bridge10_input.json",
+      "sha256": "76d3a5f24bf74aa807062f72bf00fd80a02a9daf6d97eced1ad5c34e05ab978a",
+      "bytes": 5004
+    },
+    {
+      "path": "measurements/inputs/ANCHOR_RIG_BRIDGE_10.zip",
+      "sha256": "f40d7c1e2ef93cf633361792c1e378444dc4d61c5d27898ebef2f0d116d23c95",
+      "bytes": 25004
+    },
+    {
+      "path": "measurements/inputs/ANCHOR_TEMPLATE_v1.0.zip",
+      "sha256": "db55160b60bed09918cfae89337bd740b64698b2ea8410f07e0d98fb80e5f9d1",
+      "bytes": 12385
+    },
+    {
+      "path": "measurements/inputs/README.md",
+      "sha256": "66c14b1b4f095f3a66d7a354709fec0dd30c35340be4b012484c553e5f58dd7f",
+      "bytes": 643
+    },
+    {
+      "path": "measurements/inputs/REAL_FRAMES_EMPTY_TEMPLATE.json",
+      "sha256": "57103afb83297d34d1138d0c7d86f36080a10008374e035093fa9ca92cdb3db6",
+      "bytes": 303
+    },
+    {
+      "path": "measurements/inputs/anchor_template.json",
+      "sha256": "af991f7b24a8b849bb7258fa5ac4ff8671dcaf87111fb65e906747deecfc2dfc",
+      "bytes": 5470
+    },
+    {
+      "path": "measurements/inputs/anchor_template_back.svg",
+      "sha256": "475d09a28fe66ca33268196ebdc608c37fbb877a15a01860ae4c945c3a5811d9",
+      "bytes": 5256
+    },
+    {
+      "path": "measurements/inputs/anchor_template_front.svg",
+      "sha256": "7bdcb0ef3c6c9bfc26a3e12b473741b0beb051cf72c723b2081dcbbda34a9354",
+      "bytes": 5262
+    },
+    {
+      "path": "measurements/inputs/anchor_template_left.svg",
+      "sha256": "fb37b3dddca5e7803d28dc35777639eed963f1d4dec54c9fc6f658edebfa8f59",
+      "bytes": 4940
+    },
+    {
+      "path": "measurements/inputs/anchor_template_right.svg",
+      "sha256": "71224403d88d0d93c4bccbdeb12371290f8e91b2d12e6e5f029b57e3968e7531",
+      "bytes": 4946
+    },
+    {
+      "path": "measurements/inputs/anchor_template_sheet.svg",
+      "sha256": "b674aae39e8194d91317d55d0cdbfc31dadf318419ec0a5e5543a52cd6ec1f99",
+      "bytes": 19771
+    },
+    {
+      "path": "measurements/joints.json",
+      "sha256": "8316cee984d540affa5d7cdd78c983d47c0ce0cc1cd0e80fc6e0ab39943faf64",
+      "bytes": 41208
+    },
+    {
+      "path": "previews/SYNTHETIC_left.png",
+      "sha256": "08b7fdf811c9b56a91feed0a37b1a4324425c1282ff38034b6327ff8c677969d",
+      "bytes": 33174
+    },
+    {
+      "path": "previews/SYNTHETIC_left.svg",
+      "sha256": "948c3b1a0f632ea351c27b5d992988c24c1a0dd979f88552055019bec14a3f2c",
+      "bytes": 21707
+    },
+    {
+      "path": "previews/SYNTHETIC_right.png",
+      "sha256": "b6e910fc6d82653d73a19a5ea321778455ed5a4e01a9af000e755fb1f87f8233",
+      "bytes": 32974
+    },
+    {
+      "path": "previews/SYNTHETIC_right.svg",
+      "sha256": "dc05a70439bc1af1cc4679cb8ec1d4b0aa5bc2410a84dac5420c3bd82ccad932",
+      "bytes": 21627
+    },
+    {
+      "path": "previews/anchor_template_back.png",
+      "sha256": "82b26c24629fdde0a51e01d428505635b1b39b6779b5e7b45aafd116197f7f0d",
+      "bytes": 62931
+    },
+    {
+      "path": "previews/anchor_template_front.png",
+      "sha256": "c54ce0fc7029aa6aeb5da23676712d9334601cbbab56411589031f8804936727",
+      "bytes": 62865
+    },
+    {
+      "path": "previews/anchor_template_left.png",
+      "sha256": "949f25ef401d64ca1346581cc53577ed60c2236f4d1cad6656e26b433901d712",
+      "bytes": 49411
+    },
+    {
+      "path": "previews/anchor_template_right.png",
+      "sha256": "7cf065c38d7810715eef3b83975bab94ac9eb14c6f74c4726dc7fb2aba064a0b",
+      "bytes": 49771
+    },
+    {
+      "path": "previews/anchor_template_sheet.png",
+      "sha256": "0f88f480d6aba8dd84d50603a9826828e781c22a49a16a8872ed3f9122f6021b",
+      "bytes": 137672
+    },
+    {
+      "path": "previews/render_previews.py",
+      "sha256": "7b01c78d5756074e535894dbd228de45be35e2a8e72f62ea35dc5475986841f1",
+      "bytes": 1693
+    },
+    {
+      "path": "qa/REPORT.md",
+      "sha256": "13d099b3b5128edd157a773dbfe0b9e862ebaefc9688705755ef08c104e2dd47",
+      "bytes": 7088
+    },
+    {
+      "path": "qa/bridge10-tests.log",
+      "sha256": "61746a831bd2e4b8825264f4dffe4f3581729608270aabf34f3b1dccba2d101c",
+      "bytes": 516
+    },
+    {
+      "path": "qa/bridge11-tests.log",
+      "sha256": "444ea9de87753cb0db20910f02bdd4e8a08426be2c039ba9dabde20984daa615",
+      "bytes": 1550
+    },
+    {
+      "path": "qa/commands.json",
+      "sha256": "e14e70a70aa1dbe1c7e15f97da3c91be36a6562e6f20809af89e1f5b0bb1b475",
+      "bytes": 9677
+    },
+    {
+      "path": "qa/coordinate_consistency.json",
+      "sha256": "09a3d67ca90177d63456432a423d2f0a57a06dff7c43a625604ae53c359fa7e6",
+      "bytes": 699
+    },
+    {
+      "path": "qa/existing-qa.log",
+      "sha256": "e15ac21746a831c02a807967f5a59313209eb9ac1cec1deef63cb2b3d83ee883",
+      "bytes": 6467
+    },
+    {
+      "path": "qa/frame_inventory.json",
+      "sha256": "967b979eeaf3801e6ac233aa8cc55508e0ebbfccc2bf1e262c7f1488e7c5eb09",
+      "bytes": 3987
+    },
+    {
+      "path": "qa/input_inventory.json",
+      "sha256": "c90e592696b277d29075c1f2665c5db4182e2d32ce52f74379bc20ec0138816a",
+      "bytes": 2634
+    },
+    {
+      "path": "qa/png_previews.json",
+      "sha256": "9157d80383ed1cafb55e7c4c2e79cfcd66a33f9fdcf4667c9d9a3a3561c343cd",
+      "bytes": 3538
+    },
+    {
+      "path": "qa/real_contact.json",
+      "sha256": "fe72c7068367516fdf2c411498ef37bdc5456c495d2045cdbfbb959088b99afc",
+      "bytes": 1434
+    },
+    {
+      "path": "qa/regression_diff.json",
+      "sha256": "ac4d0cac24cee2798cbafc71b2edb4f28e47d84fb3108e7fbf724bfa2ede109b",
+      "bytes": 1721
+    },
+    {
+      "path": "qa/runtime_regression.json",
+      "sha256": "0702b03119e5b7d5610afa26bc2fcd553d51fead81c6cf3b4bd8c80cd57e3aaa",
+      "bytes": 35439
+    },
+    {
+      "path": "qa/source_integrity.json",
+      "sha256": "9d21ecdb4458f325c0cca06cfe01af94969a05f503d26773acc79a4a413284d5",
+      "bytes": 1414
+    },
+    {
+      "path": "qa/summary.json",
+      "sha256": "5b18ff254fcc75832533171f4616217b8b5779b92a06192432febced81d72809",
+      "bytes": 267
+    },
+    {
+      "path": "qa/synthetic_contact.json",
+      "sha256": "7faf7ef19a08829dcdf50a688b4d21d0f70f69b9379a530a4d2723eaffe4b323",
+      "bytes": 1876
+    },
+    {
+      "path": "qa/synthetic_frames.json",
+      "sha256": "00f3081c7a875e9868dd281298d9f9ca9ee383b3c7ee4692c406e937a0809000",
+      "bytes": 71949
+    },
+    {
+      "path": "qa/test_bridge11.py",
+      "sha256": "ed56ec6b8fd578fd3f65463394393e55a121ee765d8f7b9b0dd4c253adda81a4",
+      "bytes": 6049
+    },
+    {
+      "path": "qa/vendor/bridge08.py",
+      "sha256": "eecb21d98c51d2af3ae0820d2f46d4970f11e6eed0045e6d14fef20f39202d73",
+      "bytes": 3433
+    },
+    {
+      "path": "qa/vendor/bridge10.py",
+      "sha256": "b916a4e642c3cb1f2dd2fdb2f57c5beed3194757671ba6111a54d9a95b24dcaf",
+      "bytes": 2272
+    },
+    {
+      "path": "qa/vendor/contact_audit.py",
+      "sha256": "69c5401ae0e6dbfef95ab9dab3a98edac8a4441dd580d9631e85cc01e9d0b0aa",
+      "bytes": 3436
+    },
+    {
+      "path": "qa/vendor/test_bridge10.py",
+      "sha256": "5985208896bf43fe05acbd51783a00666766a66769393e9fd2aa59503ea6fc4f",
+      "bytes": 1834
+    }
+  ]
+}

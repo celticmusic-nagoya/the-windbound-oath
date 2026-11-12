@@ -1,0 +1,39 @@
+{
+  "checks": [
+    {
+      "path": "tools/character-asset-studio/layer0/morwen-master-v1.0/MASTER_BODY_SPEC.v1.0.candidate.json",
+      "expectedSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "actualSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/rig-integration/import_rig.py",
+      "expectedSha256": "0c096e8af0612c7e57068b5b9a76e0e93b5f4e34f29b6735edc3e048a7d6a96c",
+      "actualSha256": "0c096e8af0612c7e57068b5b9a76e0e93b5f4e34f29b6735edc3e048a7d6a96c",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/motion-source/generate_frame_data.py",
+      "expectedSha256": "17bc3ffab419112363eeda736726ed335710a0b457d3cb73aafcc581e37ad174",
+      "actualSha256": "17bc3ffab419112363eeda736726ed335710a0b457d3cb73aafcc581e37ad174",
+      "status": "PASS"
+    }
+  ],
+  "originalTrackedDiff": [],
+  "canonicalVerification": {
+    "overall": "PASS",
+    "adoptionReady": false,
+    "counts": {
+      "PASS": 17,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT_RUN": 0
+    },
+    "adoptionBlockers": [
+      "subject is not an adoption candidate (QA record of the tool, not an asset)",
+      "no human review checks in this report (automated QA alone cannot make anything adoptable)"
+    ],
+    "gate": "none"
+  },
+  "adoptionReady": false
+}
