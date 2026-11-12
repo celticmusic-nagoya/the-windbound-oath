@@ -51,6 +51,11 @@ with server(8814) as base,sync_playwright() as p:
        button['scrollReachable44']=reachable
    ctx.close()
  b.close()
+# UX-MOBILE-06: diagnostic occlusion review; not a gameplay failure.
+for row in rows:
+ row['occlusionThresholdPct'] = 20
+ row['occlusionReview'] = ('REVIEW' if row['expanded'] and
+  row['spriteCoveragePct'] is not None and row['spriteCoveragePct'] > 20 else 'OK')
 failures = []
 for row in rows:
  for button in row['buttons']:
