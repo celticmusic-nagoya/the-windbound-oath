@@ -56,7 +56,15 @@ for row in rows:
  row['occlusionThresholdPct'] = 20
  row['occlusionReview'] = ('REVIEW' if row['expanded'] and
   row['spriteCoveragePct'] is not None and row['spriteCoveragePct'] > 20 else 'OK')
+# UX-MOBILE-08: protect the verified portrait improvement from regressions.
+# Landscape is intentionally not gated until the dedicated split-stage layout exists.
+portrait_budget = {'portrait': 30.0, 'small': 56.5}
 failures = []
+for row in rows:
+ if row['expanded'] and row['kind'] == 'normal' and row['view'] in portrait_budget:
+  pct = row['spriteCoveragePct']
+  if pct is None or pct > portrait_budget[row['view']]:
+   failures.append(f"{row['view']}/normal: sprite occlusion {pct}% exceeds {portrait_budget[row['view']]}% budget")
 for row in rows:
  for button in row['buttons']:
   if not button['minimum44']:
