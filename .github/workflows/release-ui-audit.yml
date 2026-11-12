@@ -67,3 +67,21 @@ jobs:
             exit 1
           fi
           test ! -e "$tmp/output"
+      - name: Reject development hooks in external JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir "$tmp/source"
+          printf '%s\n' '<!doctype html><html><body>Game</body></html>' > "$tmp/source/index.html"
+          printf '%s\n' 'PrologueCombat.instantKill("normal");' > "$tmp/source/game.js"
+          if python tools/qa/check_release_ui.py "$tmp/source"; then
+            echo "::error::External JavaScript hook passed audit"
+            exit 1
+          fi
+          if python tools/qa/stage_release.py "$tmp/source" "$tmp/output"; then
+            echo "::error::External JavaScript hook was staged"
+            exit 1
+          fi
+          test ! -e "$tmp/output"
