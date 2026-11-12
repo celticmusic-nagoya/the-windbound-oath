@@ -39,3 +39,10 @@ Status: **BLOCKED — no approved production artifact generator or Pages source 
 - Direct GitHub Pages settings endpoint was unavailable through the connected GitHub fetch capability.
 - Actual Pages source remains `NOT_VERIFIED`. Do not infer source from `main` being the default branch.
 - Release generator implementation remains blocked until source and runtime/debug exclusion design are confirmed.
+
+## UX-MOBILE-30: expanded release audit
+- Audit scans `.html`, `.htm`, `.js`, and `.mjs` recursively, including nested directories.
+- Staging rejects known debug signatures in those files, symlinks, nested source/output directories, and existing output destinations.
+- CI exercises both clean nested JavaScript and a deliberately contaminated nested JavaScript fixture.
+- The audit remains signature-based; it does not establish full production-code isolation or inspect dynamic code generation.
+- **Do not interpret a green audit self-test as permission to deploy.**
