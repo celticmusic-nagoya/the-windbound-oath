@@ -18,8 +18,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
       - name: Validate Python
-        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py
-      - name: Generate MAP08 through MAP16 previews
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py
+      - name: Generate MAP08 through MAP17 previews
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
           LIBGL_ALWAYS_SOFTWARE: "1"
@@ -31,6 +31,7 @@ jobs:
           xvfb-run -a blender --background --python tools/map_blender/map_blender_14_ridge.py
           xvfb-run -a blender --background --python tools/map_blender/map_blender_15_blend.py
           xvfb-run -a blender --background --python tools/map_blender/map_blender_16_material.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_17_composition.py
       - name: Verify SHA-256, source chain, and occlusion
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
@@ -39,18 +40,18 @@ jobs:
           import json,os,hashlib
           from pathlib import Path
           p=Path(os.environ["MAP_OUTPUT"])
-          names=("build_report.json","detail_report.json","map12_report.json","map13_report.json","map14_report.json","map15_report.json","map16_report.json")
+          names=("build_report.json","detail_report.json","map12_report.json","map13_report.json","map14_report.json","map15_report.json","map16_report.json","map17_report.json")
           reports=[json.loads((p/name).read_text()) for name in names]
           for report in reports:
               for name,expected in report["files"].items():
                   assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
-          for i,name in enumerate(("rilde_blockout.blend","rilde_detail.blend","rilde_map12.blend","rilde_map13.blend","rilde_map14.blend","rilde_map15.blend"),1):
+          for i,name in enumerate(("rilde_blockout.blend","rilde_detail.blend","rilde_map12.blend","rilde_map13.blend","rilde_map14.blend","rilde_map15.blend","rilde_map16.blend"),1):
               assert reports[i]["source_sha256"]==reports[i-1]["files"][name],name
-          audit=reports[-1]["ray_test"]
-          assert reports[-1]["occlusion_acceptance"]=="PASS", "MAP16 occlusion regression"
+          audit=reports[-2]["ray_test"]
+          assert reports[-2]["occlusion_acceptance"]=="PASS", "MAP16 occlusion regression"
           assert audit["total"]==9
           print("SHA-256 chain: PASS")
-          print("Visibility audit:",audit["blocked"],"/",audit["total"],reports[-1]["occlusion_acceptance"])
+          print("Visibility audit:",audit["blocked"],"/",audit["total"],reports[-2]["occlusion_acceptance"])
           PY
       - name: Upload QA artifacts
         if: always()
