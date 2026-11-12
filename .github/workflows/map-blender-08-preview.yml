@@ -1,5 +1,9 @@
 name: Map Blender 08 Preview
 on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/map_blender_08.py'
+      - '.github/workflows/map-blender-08-preview.yml'
   workflow_dispatch:
 permissions:
   contents: read
