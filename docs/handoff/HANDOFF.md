@@ -1,6 +1,6 @@
 # CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
 
-- **モルウェンの公式年齢は18歳で固定。** エイダン17歳など他人物の年齢は変更しない。過去の誤設定を再採用しない。
+- **エイダン・フィオナ・モルウェンの公式年齢は全員18歳で固定。** 他人物の年齢は変更しない。過去の誤設定を再採用しない。
 - **唯一の現行正典参照先**: private `celticmusic-nagoya/the-windbound-oath-handoff/reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md` の **main最新版**、`reference/lore/CANON_ADDENDUM.md`、`CANON_STATUS.md`。年齢は18歳、同一人物の他設定は後発の正式採用を優先する。
 - Claudeを含むすべてのエージェントは**毎タスク開始時**に現行mainの `AGENTS.md` と本書を読み、正典のmain最新版と照合する。旧コミット・バックアップ・アーカイブ・PR・他ブランチ・過去会話・キャッシュの内容は**現行設定の根拠にしない**。履歴は差分調査・回帰確認に限って使用する。
 - 作業ブランチが古い場合は最新mainの正典変更を取り込み、同じ設定の再導入を禁止。正典が参照不能なら `CANON_SOURCE_UNAVAILABLE` として設定依存作業をBLOCKEDにし、推測で補完しない。
