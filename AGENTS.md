@@ -1,13 +1,13 @@
 # CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
 
-- **モルウェンの公式年齢は18歳で固定。** エイダン17歳など他人物の年齢は変更しない。過去の誤設定を再採用しない。
+- **エイダン・フィオナ・モルウェンの公式年齢は全員18歳で固定。** 他人物の年齢は変更しない。過去の誤設定を再採用しない。
 - **唯一の現行正典参照先**: private `celticmusic-nagoya/the-windbound-oath-handoff/reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md` の **main最新版**、`reference/lore/CANON_ADDENDUM.md`、`CANON_STATUS.md`。年齢は18歳、同一人物の他設定は後発の正式採用を優先する。
 - Claudeを含むすべてのエージェントは**毎タスク開始時**に現行mainの `AGENTS.md` と本書を読み、正典のmain最新版と照合する。旧コミット・バックアップ・アーカイブ・PR・他ブランチ・過去会話・キャッシュの内容は**現行設定の根拠にしない**。履歴は差分調査・回帰確認に限って使用する。
 - 作業ブランチが古い場合は最新mainの正典変更を取り込み、同じ設定の再導入を禁止。正典が参照不能なら `CANON_SOURCE_UNAVAILABLE` として設定依存作業をBLOCKEDにし、推測で補完しない。
 - 既存画像のSHAロック、採用・未採用区分、他キャラクター設定は保護。年齢訂正だけで未承認アセットを採用しない。ゲーム本体・公式サイトへの公開は個別のQAゲートに従う。
 
 ## 2026-11-12 ディレクター正式訂正：モルウェンの年齢
-- モルウェンは**18歳**。旧資料・過去の17歳表記は年齢についてのみ誤記として読み替える。エイダン17歳など他キャラクターの年齢は変更しない。
+- エイダン・フィオナ・モルウェンは全員**18歳**。旧年齢の記載は現行設定として使用しない。その他のキャラクター設定は変更しない。
 - 既存の衣装・表現に関する品質基準、正本ロック、画像SHA保護は継続する。年齢変更は過去画像の自動採用・本体組込みを意味しない。
 
 ## モルウェン正本ロック（2026-11-08）
@@ -100,14 +100,14 @@ Long-term roster: six controllable characters + Lou as support.
 
 ## 5. Canonical characters
 ### Aidan / エイダン
-17, human swordsman, knight commander's son.
+18, human swordsman, knight commander's son.
 Brown tousled hair, green eyes, forest/deep green + ivory + antique gold armor/clothing.
 Weapon: 誓いの剣.
 Physical / TP-oriented.
 Final battle art is the standalone transparent asset, not an old composite crop.
 
 ### Fiona / フィオナ
-~16, human healer from Rilde Village (リルド村).
+18, human healer from Rilde Village (リルド村).
 IMPORTANT:
 - ordinary HUMAN ears
 - NO elf ears
