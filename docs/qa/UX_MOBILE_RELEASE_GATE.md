@@ -25,3 +25,10 @@ Status: **BLOCKED — no approved production artifact generator or Pages source 
 - Approved production generator: NOT_IMPLEMENTED
 - Complete debug execution route inventory: NOT_VERIFIED
 - Release candidate runtime and Android physical-device QA: NOT_RUN
+
+## UX-MOBILE-26: repository metadata verification
+- Repository visibility: PUBLIC (this does not establish GitHub Pages configuration).
+- Default branch: `main`.
+- GitHub Pages source: still NOT_VERIFIED; repository metadata alone does not expose the configured Pages branch, directory, or Actions deployment.
+- **Do not assume** `main` root, `/docs`, or an Actions artifact is the active Pages source.
+- No release generation, deployment, or production asset changes are authorized by this audit.
