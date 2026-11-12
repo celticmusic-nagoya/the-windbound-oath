@@ -1,0 +1,36 @@
+name: PR Diff Review Report
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-diff-review-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests
+        run: python -m unittest discover -s tests -p 'test_pr_diff_review.py' -v
+      - name: Generate read-only report
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          BASE="${BASE_SHA:-$(git rev-parse HEAD^)}"
+          HEAD="${HEAD_SHA:-$(git rev-parse HEAD)}"
+          python scripts/pr_diff_review.py --base "$BASE" --head "$HEAD" --output "$RUNNER_TEMP/pr-review.md"
+          cat "$RUNNER_TEMP/pr-review.md" >> "$GITHUB_STEP_SUMMARY"
