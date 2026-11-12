@@ -1,0 +1,51 @@
+name: Morwen Blender 06 Registered Comparison
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_06/**'
+      - '.github/workflows/morwen-blender-06.yml'
+permissions:
+  contents: read
+jobs:
+  registered-comparison:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender and Pillow
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-pil
+      - name: Build neutral candidate
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Render 4 views
+        run: blender -b assets/candidates/morwen-blender-03/morwen_unified_neutral_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_05/render_projections.py
+      - name: Run raw and registered comparisons
+        run: |
+          python3 tools/blender/morwen_blender_05/compare_silhouettes.py
+          python3 tools/blender/morwen_blender_06/registered_compare.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('assets/candidates/morwen-blender-05')
+          report=json.loads((root/'registered_silhouette_diagnostics.json').read_text())
+          assert set(report['facings'])=={'front','right','back','left'}
+          assert report['art_approval']=='NOT_RUN'
+          for facing,data in report['facings'].items():
+              assert 0<=data['raw_iou']<=1 and 0<=data['registered_iou']<=1
+              with Image.open(root/(facing+'_registered_overlay.png')) as im:
+                  assert im.mode=='RGBA' and im.size==(384,1024)
+          print('MORWEN_06_TECHNICAL_PASS')
+          PY
+      - name: Upload QA candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-06-registered-qa
+          path: assets/candidates/morwen-blender-05/
+          if-no-files-found: warn
+          retention-days: 14
