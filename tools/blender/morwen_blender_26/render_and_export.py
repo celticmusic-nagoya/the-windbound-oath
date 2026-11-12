@@ -15,19 +15,26 @@ def main():
     assert target is not None,"Candidate torso object missing"
     OUT.mkdir(parents=True,exist_ok=True)
     scene=bpy.context.scene
-    scene.render.engine="CYCLES"\n    scene.cycles.device="CPU"\n    scene.cycles.samples=24
+    scene.render.engine="CYCLES"
+    scene.cycles.device="CPU"
+    scene.cycles.samples=24
     scene.render.resolution_x=512;scene.render.resolution_y=768
     scene.render.resolution_percentage=100
     scene.render.image_settings.file_format="PNG"
     scene.render.film_transparent=True
     mat=bpy.data.materials.new("QA_neutral_clay")
-    mat.diffuse_color=(.62,.65,.69,1)\n    mat.use_nodes=True\n    principled=mat.node_tree.nodes.get("Principled BSDF")\n    principled.inputs["Base Color"].default_value=(.62,.65,.69,1)\n    principled.inputs["Roughness"].default_value=.8
+    mat.diffuse_color=(.62,.65,.69,1)
+    mat.use_nodes=True
+    principled=mat.node_tree.nodes.get("Principled BSDF")
+    principled.inputs["Base Color"].default_value=(.62,.65,.69,1)
+    principled.inputs["Roughness"].default_value=.8
     target.data.materials.clear();target.data.materials.append(mat)
     for obj in bpy.context.selected_objects:obj.select_set(False)
     target.select_set(True);bpy.context.view_layer.objects.active=target
     center=sum((target.matrix_world@Vector(v.co) for v in target.data.vertices),Vector())/len(target.data.vertices)
     dims=target.dimensions
-    # Ortho scale is vertical coverage; fit projected bbox per view below.\n    scale=max(dims.x,dims.y,dims.z)*1.55
+    # Ortho scale is vertical coverage; fit projected bbox per view below.
+    scale=max(dims.x,dims.y,dims.z)*1.55
     camdata=bpy.data.cameras.new("QA_orthographic_camera")
     camera=bpy.data.objects.new("QA_orthographic_camera",camdata)
     scene.collection.objects.link(camera);scene.camera=camera
@@ -44,7 +51,18 @@ def main():
         direction=Vector(direction).normalized()
         camera.location=center+direction*2.0
         quat=(center-camera.location).to_track_quat("-Z","Y")
-        camera.rotation_euler=quat.to_euler()\n        # Fit actual transformed vertices to camera frame with a 15% margin.\n        q=camera.rotation_euler.to_quaternion().inverted()\n        projected=[q@(target.matrix_world@v.co-center) for v in target.data.vertices]\n        width=max(v.x for v in projected)-min(v.x for v in projected)\n        height=max(v.y for v in projected)-min(v.y for v in projected)\n        aspect=scene.render.resolution_x/scene.render.resolution_y\n        camdata.ortho_scale=max(height,width/aspect)*1.3\n        # Shift toward bounding-box center, not vertex-density center.\n        offset=Vector(((max(v.x for v in projected)+min(v.x for v in projected))/2,\n                       (max(v.y for v in projected)+min(v.y for v in projected))/2,0))\n        camera.location+=camera.rotation_euler.to_quaternion()@offset
+        camera.rotation_euler=quat.to_euler()
+        # Fit actual transformed vertices to camera frame with a 15% margin.
+        q=camera.rotation_euler.to_quaternion().inverted()
+        projected=[q@(target.matrix_world@v.co-center) for v in target.data.vertices]
+        width=max(v.x for v in projected)-min(v.x for v in projected)
+        height=max(v.y for v in projected)-min(v.y for v in projected)
+        aspect=scene.render.resolution_x/scene.render.resolution_y
+        camdata.ortho_scale=max(height,width/aspect)*1.3
+        # Shift toward bounding-box center, not vertex-density center.
+        offset=Vector(((max(v.x for v in projected)+min(v.x for v in projected))/2,
+                       (max(v.y for v in projected)+min(v.y for v in projected))/2,0))
+        camera.location+=camera.rotation_euler.to_quaternion()@offset
         scene.render.filepath=str(OUT/(name+".png"))
         bpy.ops.render.render(write_still=True)
         assert (OUT/(name+".png")).stat().st_size>1000
