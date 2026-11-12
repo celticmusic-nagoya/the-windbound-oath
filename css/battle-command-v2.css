@@ -1,0 +1,94 @@
+/* UX-MOBILE-02 — Tactical command deck.
+   Inspired by high-clarity JRPG command hierarchies (not copied artwork).
+   Presentation-only: existing button IDs, state machine and battle handlers own behavior. */
+:root{--bc2-gold:#d9bc77;--bc2-ink:#071812;--bc2-edge:rgba(225,198,129,.58);--bc2-text:#f8f0df}
+body.battleMode :is(#normalCommandToggle,#rbCommandToggle){
+  min-width:152px!important;width:152px!important;min-height:48px!important;height:48px!important;
+  padding:0 18px!important;border:1px solid var(--bc2-edge)!important;
+  border-radius:12px!important;background:linear-gradient(135deg,#204c3b,#0c251e)!important;
+  color:var(--bc2-text)!important;font:700 14px/1 system-ui,sans-serif!important;
+  letter-spacing:.12em!important;box-shadow:0 6px 20px #0009, inset 0 1px #ffffff22!important;
+  opacity:1!important;touch-action:manipulation!important;
+}
+body.battleMode :is(#normalCommandToggle,#rbCommandToggle):focus-visible{
+  outline:3px solid #f3dc9a!important;outline-offset:3px!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]){
+  /* Overlay is deliberately contained: battlefield remains visible. */
+  left:max(12px,env(safe-area-inset-left))!important;right:auto!important;
+  bottom:max(12px,env(safe-area-inset-bottom))!important;top:auto!important;
+  width:min(390px,calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)))!important;
+  max-width:none!important;height:auto!important;
+  max-height:min(74dvh,520px)!important;
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-auto-rows:minmax(52px,auto)!important;grid-template-rows:none!important;
+  align-content:start!important;gap:7px!important;
+  padding:12px!important;overflow-y:auto!important;overscroll-behavior:contain!important;
+  scroll-padding:12px!important;
+  background:linear-gradient(145deg,rgba(14,39,32,.97),rgba(5,17,15,.98))!important;
+  border:1px solid var(--bc2-edge)!important;border-radius:16px!important;
+  box-shadow:0 16px 42px #000b, inset 0 1px #ffffff1c!important;
+  scrollbar-color:#a78e56 #10291f;z-index:400!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button{
+  box-sizing:border-box!important;min-width:0!important;width:100%!important;
+  min-height:52px!important;height:auto!important;
+  padding:10px 9px!important;margin:0!important;
+  background:linear-gradient(180deg,#244a3b,#123025)!important;
+  border:1px solid rgba(225,198,129,.32)!important;border-radius:9px!important;
+  color:var(--bc2-text)!important;text-align:center!important;
+  font:600 clamp(12px,3.4vw,15px)/1.35 system-ui,sans-serif!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;
+  touch-action:manipulation!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button:is(:hover,:focus-visible),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button:is(:hover,:focus-visible){
+  background:#32614c!important;outline:2px solid #f3dc9a!important;outline-offset:0!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button:disabled,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button:disabled{opacity:.48!important}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) .drawerClose,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) .drawerClose{
+  grid-column:1/-1!important;min-height:48px!important;
+  background:rgba(255,255,255,.06)!important;text-align:center!important;
+  color:#e8d7b0!important;font-size:13px!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) :is(#nAtk,#nGuard),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) :is(#rbAtk,#rbGuard){
+  border-color:rgba(225,198,129,.7)!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) :is(#nSkill,#nWindDance,#nWindbloom,#nPrayer),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) :is(#rbSkill,#rbWindDance,#rbWindbloom,#rbRuneSkill,#rbWind){
+  background:linear-gradient(180deg,#234c52,#14343b)!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) :is(#nHeal,#nItem),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) :is(#rbHeal,#rbItem){
+  background:linear-gradient(180deg,#425039,#26372b)!important;
+}
+/* Preserve hidden/dev-only visibility from gameplay. */
+body.normalBattleMode #attackBattle #normalBattleCmd button[hidden],
+body.raiderBattleMode #raiderBattle #rbCmd button[hidden]{display:none!important}
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]),
+ body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]){
+   max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;
+   width:min(420px,54vw)!important;
+   grid-auto-rows:minmax(48px,auto)!important;
+   padding:9px!important;gap:6px!important;
+ }
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button,
+ body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button{min-height:48px!important}
+}
+@media (orientation:portrait){
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]),
+ body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]){
+   max-height:54dvh!important;
+   width:calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))!important;
+ }
+}
+@media (prefers-reduced-motion:reduce){
+ body.battleMode :is(#normalCommandToggle,#rbCommandToggle),
+ body.battleMode :is(#normalBattleCmd,#rbCmd) button{transition:none!important}
+}
