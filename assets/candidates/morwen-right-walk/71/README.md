@@ -30,7 +30,7 @@
 - 歩行・揺れはART-70Bと完全一致。接地行は全コマ124
 - ちらつき（48pxで隣り合うコマ間の変化画素数）：70Bとの差は数画素以内（`consecutive_change_48`）
 - 変更画素の位置：`CHANGED_PIXELS_71_vs_70B.json`
-- 案ごとの差分：`proposals/*/DIFF_MASK_F00.png`、`COMPARE_*_F00_71_vs_proposal_vs_diff.png`
+- 案ごとの差分：`proposals/*/DIFF_MASK_F00.png`を保持。旧COMPARE派生プレビュー4枚はMORWEN-CANON-CLEANUP-02で削除。元フレーム・生成スクリプト・判定記録は保持し、削除パス/SHAは `docs/qa/morwen-canon-cleanup-02/DELETED_PATHS.json` に記録。
 - 既存素材：正本のSHA-256は不変、66/67/68/70も変更なし
 - 第三者美術QA・Android実機：NOT_RUN
 
