@@ -1,6 +1,6 @@
 {
   "task_id": "LAYER0-MALE-TRIO-REGISTER-01",
-  "status": "SPEC_INSPECTED_ASSET_COMPATIBILITY_BLOCKED",
+  "status": "SPEC_INSPECTED_ASSET_CONNECTION_DEFERRED",
   "source_pr": 246,
   "source_commit": "a45ca2815675a4d186f08624de8d0329a6ed730c",
   "source_path": "tools/blender/rigs/humanoid_v1.json",
@@ -83,9 +83,9 @@
     "all_parent_references_resolve": "PASS"
   },
   "per_character_connection": {
-    "aidan": "BLOCKED_NO_SOURCE_BYTES_OR_MEASURED_ANCHORS",
-    "liam": "BLOCKED_NO_SOURCE_BYTES_OR_MEASURED_ANCHORS",
-    "bram": "BLOCKED_NO_SOURCE_BYTES_OR_MEASURED_ANCHORS"
+    "aidan": "DEFERRED_NO_MEASURED_ANCHORS_UNTIL_MORWEN_COMPLETE",
+    "liam": "DEFERRED_NO_MEASURED_ANCHORS_UNTIL_MORWEN_COMPLETE",
+    "bram": "DEFERRED_NO_MEASURED_ANCHORS_UNTIL_MORWEN_COMPLETE"
   },
   "notes": [
     "Do not reuse Morwen bone coordinates for these three body types.",

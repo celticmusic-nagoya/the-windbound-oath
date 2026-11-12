@@ -1,36 +1,39 @@
-# LAYER0-MALE-TRIO-REGISTER-01 — BLOCKED
+# LAYER0-MALE-TRIO-REGISTER-01 — 原本登録済み / 透過正本BLOCKED
 
-基準main: `cab9aa52da653198a712bd986992adc03ea4bfe2`。対象: エイダン・リアム・ブラム。目的: 添付四面図の原本保護と登録。
+基準main: `cab9aa52da653198a712bd986992adc03ea4bfe2`。Draft PR #267。
 
-## 現在の結果
+## 登録内容
 
-- BLOCKED: 添付画像は会話上で閲覧できるが、実行環境の `/workspace/library-files`、`/workspace/shared`、`/workspace/scratch` に原本ファイルがなく、ダウンロード可能な添付IDも提示されていない。
-- 原本PNGを受領していないため、SHA-256・実解像度・RGBA・透明度・輪郭保持・12方向の整合性を未検証。表示画像の再作成やスクリーンショットを原本として代用しない。
-- 背景処理0回（上限2回）。原本の保存・保護自体も未完了。加工後PNGなし。nullのSHAは未取得を示す。
-- エイダンのLayer 0デザイン正式採用はユーザー指定として記録。PNG技術QAのPASSとは区別。リアム・ブラムは候補を維持。
-- 現行main AGENTS.md、関連アセット規約、およびprivate handoff mainのv5.0・追補・状態表の対象設定を参照。正典本文はこのPRへ転載しない。
+原本3点を `assets/characters/{aidan,liam,bram}/layer0/originals/` にバイト無変更で保存。元添付とのSHA-256一致を確認。原本RGBA PNG2点も背景を含め全画素alpha255。リアムは今回受領したJPEG実体を保護し、PNG原本と偽らない。
 
-## 登録予定パス
+| 対象 | 原本 | 解像度 / mode | SHA-256 |
+|---|---|---|---|
+| エイダン | aidan_layer0_fourview_original.png | 1536×1024 / RGBA | 60baa676f6f9b2f5d7be957370fe1e7ec5d7c5b19edde1c06fb530ce95ed5716 |
+| リアム | liam_layer0_fourview_original.jpg | 1280×853 / RGB | 9b44529a744fd135d45ba2f4fa09c82b67d9135c9f813595ff8ed324e82c0259 |
+| ブラム | bram_layer0_fourview_original.png | 1536×1024 / RGBA | 28029eeb80ff5753c3dd40f8b6fbb620004fb3cfa3bcb796925111766d542831 |
 
-| 対象 | PNG（未登録） | 採用区分 |
-|---|---|---|
-| エイダン | assets/characters/aidan/layer0/aidan_layer0_fourview_master.png | Layer 0正式採用済み |
-| リアム | assets/characters/liam/layer0/liam_layer0_fourview_master.png | Layer 0採用候補 |
-| ブラム | assets/characters/bram/layer0/bram_layer0_fourview_master.png | Layer 0採用候補 |
+## 背景処理: 各2回、上限到達で停止
 
-各予定パスの隣のMANIFEST.jsonに未完了状態を記録。プレースホルダーPNGは作成しない。
+image_genへ背景のみalpha0・人物維持を指定。1回目の結果を検証後、2回目は背景完全除去・人物画素および解像度保護を再指定した。2回とも人物RGB差分があり、リアムは1536×1024に変更されたため不採用。RGB差分は原本と同座標かつ加工後alpha>0で算出し、マスク内の原本画素保持ができないことを確認した。alpha0の画素は存在するが、これは背景全域の正確な切り抜きや輪郭無欠損のPASSを意味しない。
 
-## 共通17ボーン
+| 対象 | 1回目: 可視RGB変更画素 | 2回目: 可視RGB変更画素 | 結果 |
+|---|---:|---:|---|
+| エイダン | 590017 | 593623 | 原本画素保持FAIL |
+| リアム | 解像度不一致で比較不可 | 解像度不一致で比較不可 | 解像度保持FAIL |
+| ブラム | 805172 | 846111 | 原本画素保持FAIL |
 
-PR #246の固定コミットの仕様を確認。17個の一意なボーン名・親参照はPASS。main採用とはみなさない。出典SHAと親子関係はCOMMON_17BONE_COMPATIBILITY.json参照。
-3名の関節アンカー計測、左右側面の人物基準での特定、体格別調整、接続・変形はBLOCKED/未実施。互換性PASSとしない。
+6点を `assets/candidates/layer0-male-trio-register-01/{character}/background_attempt_0{1,2}.png` に不採用証跡として保存。SHA・解像度・RGBA・alpha統計は各MANIFESTとRECEIVED_IMAGE_QA.jsonに記録。生成PNGの隠れたRGBに背景色が残っていても、alpha0部分は不透明背景として数えない。
 
-## 再開条件と検証
+停止理由: 背景除去と人物維持を同時に満たさず、指定の2回上限に到達。3回目の処理や別手法による追加加工は実施しない。今後の代替は原本RGBを固定した手動マスク制作、または背景除去専用セグメンテーション。ただし今回の上限を越えて継続しない。
 
-1. 原本PNG3枚をファイルとして取得し、人物との対応を確認する。
-2. バイト無変更で各layer0/originals/へ新規保存し、SHA・解像度・チャンネル・alpha統計を記録する。既存ファイルがあれば上書きせず照合する。
-3. 不透明背景の場合のみ背景アルファ処理を最大2回行い、原本と比較して髪・ひげ・指・足先・インナーと輪郭を確認する。未達なら原本保護のままBLOCKED。
-4. PNG・MANIFESTのSHAを再照合し、四方向の体格・髪型・インナーと共通リグ接続可能性を検証する。
+## 正本・採用・QA
 
-自己QA: JSONの構文、17ボーン参照、差分が新規メタデータのみであることを検証。独立画像QAはNOT_RUN。
+指定の `assets/characters/{character}/layer0/{character}_layer0_fourview_master.png` は3点とも未登録。失敗画像をmasterへ置かない。エイダンのLayer 0デザイン正式採用は維持、リアム・ブラムは候補のまま。既存正式デザインに変更なし。
+
+3枚とも正面、画面左向き側面、画面右向き側面、背面の4全身図を目視確認。エイダンの茶髪・緑黒金インナー、リアムの赤バンダナ・赤黒金インナー、ブラムの赤毛長髪・編みひげ・大型体格・茶黒金インナーを原本で確認。12方向の関節・体格・髪・衣装の測定整合性はNOT_RUN。人物基準の左右側面はアンカー計測時に確認する。切り抜き出力の輪郭無欠損・完全背景alpha0はNOT_PROVEN、原本画素保持はFAIL。独立画像QAはNOT_RUN。
+
+共通17ボーンはPR #246固定コミット `a45ca2815675a4d186f08624de8d0329a6ed730c` の名前・親子関係を確認。17個一意・親参照解決はPASS。main採用とはみなさず、モルウェンの座標を他体格へ流用しない。原本から人型の関節対応を検討できるが、未計測・未接続のため互換性PASSとはしない。髪・ひげ・バンダナの付着・遮蔽も未検証。
+
+再現検証: `python docs/qa/layer0-male-trio-register-01/verify_registration.py`。原本と不採用出力のSHA・実寸・mode・alpha極値、上限、master未作成、基準mainの既存ファイル無変更を確認。
+
 mainマージ・ゲーム組込・サイト公開なし。Blenderリグ制作はモルウェン完成後に再開する。

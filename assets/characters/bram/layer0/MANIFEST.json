@@ -7,36 +7,135 @@
   "adoption_status": "Layer 0採用候補",
   "adoption_basis": "User task instruction; design decision only, technical registration remains blocked.",
   "registration_status": "BLOCKED",
-  "blocker": "SOURCE_PNG_BYTES_UNAVAILABLE: inline images visible in chat, but no downloadable attachment ID or local source file supplied to executor.",
+  "blocker": "BACKGROUND_PROCESSING_LIMIT_REACHED_FOREGROUND_CHANGED",
   "original": {
-    "path": null,
-    "sha256": null,
-    "resolution": null,
-    "mode": null,
-    "rgba": null,
-    "preservation_status": "BLOCKED_SOURCE_NOT_RECEIVED"
+    "path": "assets/characters/bram/layer0/originals/bram_layer0_fourview_original.png",
+    "sha256": "28029eeb80ff5753c3dd40f8b6fbb620004fb3cfa3bcb796925111766d542831",
+    "format": "PNG",
+    "resolution": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "rgba": true,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "alpha_zero_pixels": 759185,
+    "alpha_partial_pixels": 813679,
+    "alpha_opaque_pixels": 0,
+    "preservation_status": "PASS_BYTE_IDENTICAL_TO_ATTACHMENT",
+    "file_present": true
   },
   "processed": {
-    "path": "assets/characters/bram/layer0/bram_layer0_fourview_master.png",
-    "file_present": false,
-    "sha256": null,
-    "resolution": null,
-    "mode": null,
-    "rgba": null
+    "path": "assets/candidates/layer0-male-trio-register-01/bram/background_attempt_02.png",
+    "sha256": "88ec21fc52fe38833fb844ba499c1a7da9834b503d904e7970c3cbc916103cdb",
+    "format": "PNG",
+    "resolution": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "rgba": true,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "alpha_zero_pixels": 726218,
+    "alpha_partial_pixels": 846646,
+    "alpha_opaque_pixels": 0,
+    "attempt": 2,
+    "method": "image_gen_background_removal",
+    "adoption": "REJECTED_NOT_MASTER",
+    "same_dimensions": true,
+    "visible_rgb_changed_pixels": 846111,
+    "background_probe_alpha": [
+      0,
+      0,
+      0
+    ],
+    "foreground_preservation": "FAIL",
+    "outline_intact": "NOT_PROVEN",
+    "background_complete_alpha_zero": "NOT_PROVEN",
+    "qa": "FAIL"
   },
   "background_processing": {
-    "attempts": 0,
+    "attempts": 2,
     "maximum_attempts": 2,
-    "status": "NOT_RUN",
-    "original_overwrite_allowed": false
+    "status": "STOPPED_LIMIT_REACHED",
+    "original_overwrite_allowed": false,
+    "outputs": [
+      {
+        "path": "assets/candidates/layer0-male-trio-register-01/bram/background_attempt_01.png",
+        "sha256": "afbca4f61bcb97eabdf3181f95873f494b6060c78a399bc2b1a71f8690c20118",
+        "format": "PNG",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "rgba": true,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 764503,
+        "alpha_partial_pixels": 808361,
+        "alpha_opaque_pixels": 0,
+        "attempt": 1,
+        "method": "image_gen_background_removal",
+        "adoption": "REJECTED",
+        "same_dimensions": true,
+        "visible_rgb_changed_pixels": 805172,
+        "background_probe_alpha": [
+          0,
+          1,
+          0
+        ],
+        "foreground_preservation": "FAIL",
+        "outline_intact": "NOT_PROVEN",
+        "background_complete_alpha_zero": "NOT_PROVEN",
+        "qa": "FAIL"
+      },
+      {
+        "path": "assets/candidates/layer0-male-trio-register-01/bram/background_attempt_02.png",
+        "sha256": "88ec21fc52fe38833fb844ba499c1a7da9834b503d904e7970c3cbc916103cdb",
+        "format": "PNG",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "rgba": true,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 726218,
+        "alpha_partial_pixels": 846646,
+        "alpha_opaque_pixels": 0,
+        "attempt": 2,
+        "method": "image_gen_background_removal",
+        "adoption": "REJECTED",
+        "same_dimensions": true,
+        "visible_rgb_changed_pixels": 846111,
+        "background_probe_alpha": [
+          0,
+          0,
+          0
+        ],
+        "foreground_preservation": "FAIL",
+        "outline_intact": "NOT_PROVEN",
+        "background_complete_alpha_zero": "NOT_PROVEN",
+        "qa": "FAIL"
+      }
+    ]
   },
   "qa": {
-    "three_characters_four_views_consistency": "BLOCKED",
-    "body_hair_inner_design_preservation": "BLOCKED",
-    "background_alpha_zero": "BLOCKED",
-    "outline_intact": "BLOCKED",
-    "sha256_matches": "BLOCKED",
-    "common_rig_connection": "BLOCKED"
+    "original_byte_preservation": "PASS",
+    "original_sha256_matches_attachment": "PASS",
+    "original_metadata": "PASS",
+    "four_view_visual_inventory": "PASS_FOUR_FULL_BODY_VIEWS_PRESENT",
+    "three_characters_four_views_consistency": "NOT_RUN_MEASURED_ANATOMY",
+    "body_hair_inner_design_preservation": "FAIL_PROCESSED_OUTPUTS_REJECTED",
+    "background_alpha_zero": "NOT_PROVEN_COMPLETE_MASK",
+    "outline_intact": "NOT_PROVEN",
+    "sha256_matches": "PASS_ARCHIVED_ORIGINALS_AND_REJECTED_OUTPUTS",
+    "common_rig_connection": "DEFERRED_UNTIL_MORWEN_COMPLETE",
+    "independent_visual_qa": "NOT_RUN"
   },
   "restrictions": {
     "preserve_existing_official_designs": true,
@@ -44,5 +143,12 @@
     "game_integration": false,
     "site_publication": false,
     "blender_rig_production": "DEFERRED_UNTIL_MORWEN_COMPLETE"
-  }
+  },
+  "master": {
+    "path": "assets/characters/bram/layer0/bram_layer0_fourview_master.png",
+    "file_present": false,
+    "sha256": null,
+    "status": "BLOCKED_NOT_REGISTERED"
+  },
+  "source_format_note": "PNG原本を無加工保存。"
 }
