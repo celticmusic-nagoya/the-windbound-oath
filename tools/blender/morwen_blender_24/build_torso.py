@@ -35,8 +35,8 @@ def main():
     # In Blender front is negative Y; back is positive Y.
     keys=[
       (pelvis-.045,hip*.42,.075,.090,.002),
-      (pelvis+.015,hip*.53,.081,.099,.006),
-      (pelvis+.065,hip*.51,.074,.094,.003),
+      (pelvis+.005,hip*.53,.081,.099,.006),
+      (pelvis+.025,hip*.51,.074,.094,.003),
       (waist-.025,hip*.43,.061,.078,-.002),
       (waist,hip*.42,.060,.076,-.004),
       (waist+.045,hip*.45,.066,.080,-.003),
