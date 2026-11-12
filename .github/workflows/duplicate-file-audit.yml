@@ -1,0 +1,31 @@
+name: Duplicate asset audit (read only)
+on:
+  pull_request:
+    paths:
+      - 'tools/audit_duplicate_files.py'
+      - '.github/workflows/duplicate-file-audit.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run read-only duplicate audit
+        run: |
+          python3 tools/audit_duplicate_files.py > duplicate-audit.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('duplicate-audit.json').read_text())
+          assert d['deletions'] == 0
+          print('Duplicate groups:', d['duplicate_groups'])
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write(f"### Duplicate audit\nGroups: {d['duplicate_groups']}\n\nDeleted: 0 (read-only)\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: duplicate-audit-report
+          path: duplicate-audit.json
+          retention-days: 14
