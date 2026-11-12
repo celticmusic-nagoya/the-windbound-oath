@@ -1,0 +1,95 @@
+{
+  "task_id": "LAYER0-MALE-TRIO-REGISTER-01",
+  "status": "SPEC_INSPECTED_ASSET_CONNECTION_DEFERRED",
+  "source_pr": 246,
+  "source_commit": "a45ca2815675a4d186f08624de8d0329a6ed730c",
+  "source_path": "tools/blender/rigs/humanoid_v1.json",
+  "source_sha256": "9c29847edfe02c7307c043995f066c558579f3cef244c4ca8bdacf1821e15859",
+  "source_in_current_main": false,
+  "source_status": "OPEN_PR_CANDIDATE_REFERENCE_NOT_FORMAL_ADOPTION",
+  "bone_count": 17,
+  "bones": [
+    {
+      "id": "root",
+      "parent": null
+    },
+    {
+      "id": "pelvis",
+      "parent": "root"
+    },
+    {
+      "id": "spine",
+      "parent": "pelvis"
+    },
+    {
+      "id": "neck",
+      "parent": "spine"
+    },
+    {
+      "id": "head",
+      "parent": "neck"
+    },
+    {
+      "id": "upper_arm.L",
+      "parent": "spine"
+    },
+    {
+      "id": "forearm.L",
+      "parent": "upper_arm.L"
+    },
+    {
+      "id": "hand.L",
+      "parent": "forearm.L"
+    },
+    {
+      "id": "upper_arm.R",
+      "parent": "spine"
+    },
+    {
+      "id": "forearm.R",
+      "parent": "upper_arm.R"
+    },
+    {
+      "id": "hand.R",
+      "parent": "forearm.R"
+    },
+    {
+      "id": "thigh.L",
+      "parent": "pelvis"
+    },
+    {
+      "id": "shin.L",
+      "parent": "thigh.L"
+    },
+    {
+      "id": "foot.L",
+      "parent": "shin.L"
+    },
+    {
+      "id": "thigh.R",
+      "parent": "pelvis"
+    },
+    {
+      "id": "shin.R",
+      "parent": "thigh.R"
+    },
+    {
+      "id": "foot.R",
+      "parent": "shin.R"
+    }
+  ],
+  "structural_checks": {
+    "unique_17_names": "PASS",
+    "all_parent_references_resolve": "PASS"
+  },
+  "per_character_connection": {
+    "aidan": "DEFERRED_NO_MEASURED_ANCHORS_UNTIL_MORWEN_COMPLETE",
+    "liam": "DEFERRED_NO_MEASURED_ANCHORS_UNTIL_MORWEN_COMPLETE",
+    "bram": "DEFERRED_NO_MEASURED_ANCHORS_UNTIL_MORWEN_COMPLETE"
+  },
+  "notes": [
+    "Do not reuse Morwen bone coordinates for these three body types.",
+    "No Blender rig produced or deformation tested; resume after Morwen completion.",
+    "Hair, beard and bandana attachment/occlusion need later individual QA."
+  ]
+}

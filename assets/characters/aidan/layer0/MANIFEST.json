@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "LAYER0-MALE-TRIO-REGISTER-01",
+  "character": "aidan",
+  "display_name": "エイダン",
+  "base_commit": "cab9aa52da653198a712bd986992adc03ea4bfe2",
+  "adoption_status": "Layer 0正式採用済み",
+  "adoption_basis": "User task instruction; design decision only, technical registration remains blocked.",
+  "registration_status": "BLOCKED",
+  "blocker": "BACKGROUND_PROCESSING_LIMIT_REACHED_FOREGROUND_CHANGED",
+  "original": {
+    "path": "assets/characters/aidan/layer0/originals/aidan_layer0_fourview_original.png",
+    "sha256": "60baa676f6f9b2f5d7be957370fe1e7ec5d7c5b19edde1c06fb530ce95ed5716",
+    "format": "PNG",
+    "resolution": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "rgba": true,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "alpha_zero_pixels": 966453,
+    "alpha_partial_pixels": 606411,
+    "alpha_opaque_pixels": 0,
+    "preservation_status": "PASS_BYTE_IDENTICAL_TO_ATTACHMENT",
+    "file_present": true
+  },
+  "processed": {
+    "path": "assets/candidates/layer0-male-trio-register-01/aidan/background_attempt_02.png",
+    "sha256": "4fda4f4815f204a555c1a9d76555ee86937fc14191ac891d987b78d9357a51c3",
+    "format": "PNG",
+    "resolution": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "rgba": true,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "alpha_zero_pixels": 978548,
+    "alpha_partial_pixels": 594316,
+    "alpha_opaque_pixels": 0,
+    "attempt": 2,
+    "method": "image_gen_background_removal",
+    "adoption": "REJECTED_NOT_MASTER",
+    "same_dimensions": true,
+    "visible_rgb_changed_pixels": 593623,
+    "background_probe_alpha": [
+      0,
+      0,
+      0
+    ],
+    "foreground_preservation": "FAIL",
+    "outline_intact": "NOT_PROVEN",
+    "background_complete_alpha_zero": "NOT_PROVEN",
+    "qa": "FAIL"
+  },
+  "background_processing": {
+    "attempts": 2,
+    "maximum_attempts": 2,
+    "status": "STOPPED_LIMIT_REACHED",
+    "original_overwrite_allowed": false,
+    "outputs": [
+      {
+        "path": "assets/candidates/layer0-male-trio-register-01/aidan/background_attempt_01.png",
+        "sha256": "31852a2911577627f5aa636606cc9fe57062f25230db9dc937b9d21b7757bdce",
+        "format": "PNG",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "rgba": true,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 981038,
+        "alpha_partial_pixels": 591826,
+        "alpha_opaque_pixels": 0,
+        "attempt": 1,
+        "method": "image_gen_background_removal",
+        "adoption": "REJECTED",
+        "same_dimensions": true,
+        "visible_rgb_changed_pixels": 590017,
+        "background_probe_alpha": [
+          0,
+          0,
+          0
+        ],
+        "foreground_preservation": "FAIL",
+        "outline_intact": "NOT_PROVEN",
+        "background_complete_alpha_zero": "NOT_PROVEN",
+        "qa": "FAIL"
+      },
+      {
+        "path": "assets/candidates/layer0-male-trio-register-01/aidan/background_attempt_02.png",
+        "sha256": "4fda4f4815f204a555c1a9d76555ee86937fc14191ac891d987b78d9357a51c3",
+        "format": "PNG",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "rgba": true,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 978548,
+        "alpha_partial_pixels": 594316,
+        "alpha_opaque_pixels": 0,
+        "attempt": 2,
+        "method": "image_gen_background_removal",
+        "adoption": "REJECTED",
+        "same_dimensions": true,
+        "visible_rgb_changed_pixels": 593623,
+        "background_probe_alpha": [
+          0,
+          0,
+          0
+        ],
+        "foreground_preservation": "FAIL",
+        "outline_intact": "NOT_PROVEN",
+        "background_complete_alpha_zero": "NOT_PROVEN",
+        "qa": "FAIL"
+      }
+    ]
+  },
+  "qa": {
+    "original_byte_preservation": "PASS",
+    "original_sha256_matches_attachment": "PASS",
+    "original_metadata": "PASS",
+    "four_view_visual_inventory": "PASS_FOUR_FULL_BODY_VIEWS_PRESENT",
+    "three_characters_four_views_consistency": "NOT_RUN_MEASURED_ANATOMY",
+    "body_hair_inner_design_preservation": "FAIL_PROCESSED_OUTPUTS_REJECTED",
+    "background_alpha_zero": "NOT_PROVEN_COMPLETE_MASK",
+    "outline_intact": "NOT_PROVEN",
+    "sha256_matches": "PASS_ARCHIVED_ORIGINALS_AND_REJECTED_OUTPUTS",
+    "common_rig_connection": "DEFERRED_UNTIL_MORWEN_COMPLETE",
+    "independent_visual_qa": "NOT_RUN"
+  },
+  "restrictions": {
+    "preserve_existing_official_designs": true,
+    "merge_main": false,
+    "game_integration": false,
+    "site_publication": false,
+    "blender_rig_production": "DEFERRED_UNTIL_MORWEN_COMPLETE"
+  },
+  "master": {
+    "path": "assets/characters/aidan/layer0/aidan_layer0_fourview_master.png",
+    "file_present": false,
+    "sha256": null,
+    "status": "BLOCKED_NOT_REGISTERED"
+  },
+  "source_format_note": "PNG原本を無加工保存。"
+}

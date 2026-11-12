@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "LAYER0-MALE-TRIO-REGISTER-01",
+  "character": "liam",
+  "display_name": "リアム",
+  "base_commit": "cab9aa52da653198a712bd986992adc03ea4bfe2",
+  "adoption_status": "Layer 0採用候補",
+  "adoption_basis": "User task instruction; design decision only, technical registration remains blocked.",
+  "registration_status": "BLOCKED",
+  "blocker": "BACKGROUND_PROCESSING_LIMIT_REACHED_FOREGROUND_CHANGED_AND_OUTPUT_RESIZED",
+  "original": {
+    "path": "assets/characters/liam/layer0/originals/liam_layer0_fourview_original.jpg",
+    "sha256": "9b44529a744fd135d45ba2f4fa09c82b67d9135c9f813595ff8ed324e82c0259",
+    "format": "JPEG",
+    "resolution": [
+      1280,
+      853
+    ],
+    "mode": "RGB",
+    "rgba": false,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "alpha_zero_pixels": 0,
+    "alpha_partial_pixels": 0,
+    "alpha_opaque_pixels": 1091840,
+    "preservation_status": "PASS_BYTE_IDENTICAL_TO_ATTACHMENT",
+    "file_present": true
+  },
+  "processed": {
+    "path": "assets/candidates/layer0-male-trio-register-01/liam/background_attempt_02.png",
+    "sha256": "472cb786ab588c417eb4a66252086dec94d012f7a26e85c84078e62724110f47",
+    "format": "PNG",
+    "resolution": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "rgba": true,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "alpha_zero_pixels": 960651,
+    "alpha_partial_pixels": 612213,
+    "alpha_opaque_pixels": 0,
+    "attempt": 2,
+    "method": "image_gen_background_removal",
+    "adoption": "REJECTED_NOT_MASTER",
+    "same_dimensions": false,
+    "visible_rgb_changed_pixels": null,
+    "background_probe_alpha": [
+      0,
+      0,
+      0
+    ],
+    "foreground_preservation": "FAIL_RESIZED_NOT_COMPARABLE",
+    "outline_intact": "NOT_PROVEN",
+    "background_complete_alpha_zero": "NOT_PROVEN",
+    "qa": "FAIL"
+  },
+  "background_processing": {
+    "attempts": 2,
+    "maximum_attempts": 2,
+    "status": "STOPPED_LIMIT_REACHED",
+    "original_overwrite_allowed": false,
+    "outputs": [
+      {
+        "path": "assets/candidates/layer0-male-trio-register-01/liam/background_attempt_01.png",
+        "sha256": "eca2ca9381d843ab537ee9497cb249079c5b416c062d581c67d7d31c67c97e59",
+        "format": "PNG",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "rgba": true,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 958424,
+        "alpha_partial_pixels": 614440,
+        "alpha_opaque_pixels": 0,
+        "attempt": 1,
+        "method": "image_gen_background_removal",
+        "adoption": "REJECTED",
+        "same_dimensions": false,
+        "visible_rgb_changed_pixels": null,
+        "background_probe_alpha": [
+          0,
+          0,
+          0
+        ],
+        "foreground_preservation": "FAIL_RESIZED_NOT_COMPARABLE",
+        "outline_intact": "NOT_PROVEN",
+        "background_complete_alpha_zero": "NOT_PROVEN",
+        "qa": "FAIL"
+      },
+      {
+        "path": "assets/candidates/layer0-male-trio-register-01/liam/background_attempt_02.png",
+        "sha256": "472cb786ab588c417eb4a66252086dec94d012f7a26e85c84078e62724110f47",
+        "format": "PNG",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "mode": "RGBA",
+        "rgba": true,
+        "alpha_min": 0,
+        "alpha_max": 254,
+        "alpha_zero_pixels": 960651,
+        "alpha_partial_pixels": 612213,
+        "alpha_opaque_pixels": 0,
+        "attempt": 2,
+        "method": "image_gen_background_removal",
+        "adoption": "REJECTED",
+        "same_dimensions": false,
+        "visible_rgb_changed_pixels": null,
+        "background_probe_alpha": [
+          0,
+          0,
+          0
+        ],
+        "foreground_preservation": "FAIL_RESIZED_NOT_COMPARABLE",
+        "outline_intact": "NOT_PROVEN",
+        "background_complete_alpha_zero": "NOT_PROVEN",
+        "qa": "FAIL"
+      }
+    ]
+  },
+  "qa": {
+    "original_byte_preservation": "PASS",
+    "original_sha256_matches_attachment": "PASS",
+    "original_metadata": "PASS",
+    "four_view_visual_inventory": "PASS_FOUR_FULL_BODY_VIEWS_PRESENT",
+    "three_characters_four_views_consistency": "NOT_RUN_MEASURED_ANATOMY",
+    "body_hair_inner_design_preservation": "FAIL_PROCESSED_OUTPUTS_REJECTED",
+    "background_alpha_zero": "NOT_PROVEN_COMPLETE_MASK",
+    "outline_intact": "NOT_PROVEN",
+    "sha256_matches": "PASS_ARCHIVED_ORIGINALS_AND_REJECTED_OUTPUTS",
+    "common_rig_connection": "DEFERRED_UNTIL_MORWEN_COMPLETE",
+    "independent_visual_qa": "NOT_RUN"
+  },
+  "restrictions": {
+    "preserve_existing_official_designs": true,
+    "merge_main": false,
+    "game_integration": false,
+    "site_publication": false,
+    "blender_rig_production": "DEFERRED_UNTIL_MORWEN_COMPLETE"
+  },
+  "master": {
+    "path": "assets/characters/liam/layer0/liam_layer0_fourview_master.png",
+    "file_present": false,
+    "sha256": null,
+    "status": "BLOCKED_NOT_REGISTERED"
+  },
+  "source_format_note": "JPEG原本を無加工保存。元PNG未提供。PNG原本と偽らず、解像度を拡大しない。"
+}
