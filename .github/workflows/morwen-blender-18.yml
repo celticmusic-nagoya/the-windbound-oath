@@ -1,0 +1,47 @@
+name: Morwen Blender 18 Monotonic Torso QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_18/**'
+      - '.github/workflows/morwen-blender-18.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Validate reference hashes
+        run: python3 tools/blender/morwen_blender_14/build_topology_contract.py
+      - name: Build anatomical torso
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_18/build_monotonic_torso.py
+      - name: Render clay orthographic views
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_18/render_monotonic_torso.py
+      - name: Verify render manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-blender-18')
+          d=json.loads((p/'render_report.json').read_text())
+          assert d['count']==4 and not d['production_use']
+          assert set(d['renders'])=={f'{v}_torso_clay.png' for v in ('front','right','back','left')}
+          assert all((p/n).stat().st_size>1000 for n in d['renders'])
+          print('MORWEN_18_RENDER_MANIFEST_PASS')
+          PY
+      - name: Upload clay renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-18-torso-clay
+          path: assets/candidates/morwen-blender-18/
+          if-no-files-found: warn
+          retention-days: 14
