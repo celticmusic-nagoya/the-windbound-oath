@@ -1,0 +1,50 @@
+name: Morwen Blender 32 Runtime Smoke
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_26/render_and_export.py'
+      - '.github/workflows/morwen-blender-32.yml'
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy python3-pil libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Syntax check
+        run: python3 -m py_compile tools/blender/morwen_blender_26/render_and_export.py
+      - name: Preflight and build
+        run: |
+          blender -b -noaudio --python tools/blender/morwen_blender_27/preflight.py
+          blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
+      - name: Render front smoke
+        env:
+          MORWEN_SMOKE_ONLY: '1'
+          MORWEN_RENDER_ONLY: '1'
+        run: blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
+      - name: Check front RGBA framing
+        run: |
+          /usr/bin/python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-blender-26/front.png')
+          im=Image.open(p).convert('RGBA')
+          assert im.size==(512,768)
+          a=im.getchannel('A')
+          bounds=a.getbbox()
+          assert bounds is not None, 'empty silhouette'
+          assert a.getextrema()[0]==0, 'background is not transparent'
+          x0,y0,x1,y1=bounds
+          assert 10<x0<x1<502 and 10<y0<y1<758, f'cropped: {bounds}'
+          print('MORWEN_32_SMOKE_PASS',bounds)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-32-front-smoke
+          path: assets/candidates/morwen-blender-26/front.png
+          if-no-files-found: warn
