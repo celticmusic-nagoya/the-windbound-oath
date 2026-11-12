@@ -1,0 +1,31 @@
+name: Morwen Blender 20 Canonical Contours QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_20/**'
+      - '.github/workflows/morwen-blender-20.yml'
+  workflow_dispatch:
+jobs:
+  contours:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract and verify canonical reference alpha contours
+        run: python3 tools/blender/morwen_blender_20/extract_reference_contours.py
+      - name: Verify report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("assets/candidates/morwen-blender-20/canonical_alpha_contours.json")
+          d=json.loads(p.read_text())
+          assert len(d["views"])==4
+          assert not d["anatomical_target"]
+          for view in d["views"].values():
+              assert len(view["rows"])>200
+          print("MORWEN_20_QA_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-20-canonical-contours
+          path: assets/candidates/morwen-blender-20/canonical_alpha_contours.json
