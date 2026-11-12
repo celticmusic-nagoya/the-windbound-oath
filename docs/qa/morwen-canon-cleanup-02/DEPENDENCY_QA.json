@@ -1,0 +1,30 @@
+{
+  "textVariantsScanned": 1894,
+  "method": "Current fetched related PR/main source variants and current website text; exact-path/basename consumer scan plus manual inspection of generated output families. Cleanup-01 inventory records excluded as immutable historical audit, not asset consumers.",
+  "generatorOnlyEvidence": [
+    {
+      "path": "assets/candidates/morwen-right-walk/70/art/qa_morwen70art.py",
+      "line": 65,
+      "operation": "save generated PROPOSAL_DIFF_F{f:02d}.png, no input read"
+    },
+    {
+      "path": "assets/candidates/morwen-right-walk/71/qa_morwen71.py",
+      "line": 113,
+      "operation": "save generated COMPARE_{p}_F00_71_vs_proposal_vs_diff.png, no input read"
+    },
+    {
+      "path": "assets/candidates/morwen-right-walk/71/make_qa_preview71.py",
+      "line": 40,
+      "operation": "retained generator embeds source frames; generated HTML is self-contained. Current 72 preview and its generator retained."
+    }
+  ],
+  "documentationReferencesResolved": [
+    "assets/candidates/morwen-right-walk/70/art/README_ART70.md",
+    "assets/candidates/morwen-right-walk/71/README.md"
+  ],
+  "priorAudit": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/241",
+  "limitations": [
+    "No general proof that arbitrary dynamic loaders cannot reference any image; all uncertain frame/mask/QA dependencies remain BLOCKED.",
+    "Historical branch copies of deleted previews remain on their original refs; no existing PR is changed."
+  ]
+}

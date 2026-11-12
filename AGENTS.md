@@ -1,3 +1,9 @@
+## MORWEN-CANON-CLEANUP-02 — 2026-11-12 director visual override
+
+- Issue #240 `issuecomment-6822050005` と `docs/design/MORWEN_CANONICAL_INDEX.md` をモルウェン制作参照の最新方針とする。受領ZIPのPNG12枚は `assets/references/morwen/reference_20261112/MANIFEST.json` でSHA保護する **REFERENCE_ONLY** セット。
+- 将来の高品質Blender完成版は **FUTURE_CANON_PENDING_APPROVAL**。審査とディレクターの明示承認まで正式採用・本番差替えを行わない。旧v5.61/v3/3方向/HD画像は配置名だけで新正式版にしない。下記の旧ビジュアル正本ロックは、この後発指示が変更した制作参照・保存方針について履歴扱い。
+- 設定・年齢・シナリオ・稼働中ゲーム/サイト・必要QA・共有ツールは保護。不要な旧派生物のみ検証して作業ブランチから削除する。mainマージ・公式サイト公開・自動採用・新規リグ生成は禁止。
+
 # CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
 
 - **エイダン・フィオナ・モルウェンの公式年齢は全員18歳で固定。** 他人物の年齢は変更しない。過去の誤設定を再採用しない。
