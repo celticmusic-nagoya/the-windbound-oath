@@ -37,6 +37,7 @@ jobs:
           a=im.getchannel('A')
           bounds=a.getbbox()
           assert bounds is not None, 'empty silhouette'
+          print('alpha extrema',a.getextrema(),'corners',[a.getpixel(p) for p in [(0,0),(511,0),(0,767),(511,767)]])
           assert a.getextrema()[0]==0, 'background is not transparent'
           x0,y0,x1,y1=bounds
           assert 10<x0<x1<502 and 10<y0<y1<758, f'cropped: {bounds}'
