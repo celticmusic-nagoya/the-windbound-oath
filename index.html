@@ -44,6 +44,18 @@
 .dev-only-command{border-color:#b88b45!important;color:#e6c987!important;background:rgba(70,38,12,.30)!important;font-size:.78rem!important}
 .dev-only-command::before{content:"⚙ ";opacity:.8}
 </style>
+<script id="ux-mobile-release-preview">
+/* UX-MOBILE-19: opt-in UI-only release preview; NOT a security boundary.
+   Existing development flow remains unchanged unless ?releasePreview=1. */
+if(new URLSearchParams(location.search).get('releasePreview')==='1'){
+ document.documentElement.classList.add('release-ui-preview');
+}
+</script>
+<style id="ux-mobile-release-preview-style">
+html.release-ui-preview #devBtn,
+html.release-ui-preview #devPanel,
+html.release-ui-preview .dev-only-command{display:none!important}
+</style>
 </head><body>
 <div id="game"><div id="world">
 <div class="road" style="left:80px;top:560px;width:1600px;height:150px"></div><div class="road" style="left:680px;top:100px;width:150px;height:1000px"></div>
