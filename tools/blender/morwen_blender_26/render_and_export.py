@@ -27,6 +27,8 @@ def main():
     scene.render.resolution_percentage=100
     scene.render.image_settings.file_format="PNG"
     scene.render.film_transparent=True
+    scene.render.image_settings.color_mode="RGBA"
+    scene.render.image_settings.color_depth="8"
     mat=bpy.data.materials.new("QA_neutral_clay")
     mat.diffuse_color=(.62,.65,.69,1)
     mat.use_nodes=True
