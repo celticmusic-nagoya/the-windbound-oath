@@ -36,6 +36,8 @@ def main():
       (chest.z+.018,shoulder_width*.48,.106,.100,-.004,'chest'),
       (chest.z+.052,shoulder_width*.40,.088,.086,.000,'shoulder'),
       (chest.z+.082,shoulder_width*.25,.062,.065,.002,'neck_base')]
+    # Anchor positions can compress adjacent regions; sort by measured height.
+    levels.sort(key=lambda ring: ring[0])
     assert all(levels[i][0]<levels[i+1][0] for i in range(len(levels)-1))
     n=24;verts=[];faces=[]
     for z,rx,front_depth,back_depth,offset,name in levels:
