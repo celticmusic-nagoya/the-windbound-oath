@@ -46,7 +46,8 @@ jobs:
                   assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
           for i,name in enumerate(("rilde_blockout.blend","rilde_detail.blend","rilde_map12.blend","rilde_map13.blend","rilde_map14.blend","rilde_map15.blend"),1):
               assert reports[i]["source_sha256"]==reports[i-1]["files"][name],name
-          audit=reports[-1]["ray_test"]\n          assert reports[-1]["occlusion_acceptance"]=="PASS", "MAP16 occlusion regression"
+          audit=reports[-1]["ray_test"]
+          assert reports[-1]["occlusion_acceptance"]=="PASS", "MAP16 occlusion regression"
           assert audit["total"]==9
           print("SHA-256 chain: PASS")
           print("Visibility audit:",audit["blocked"],"/",audit["total"],reports[-1]["occlusion_acceptance"])
