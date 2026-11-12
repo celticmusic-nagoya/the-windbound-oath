@@ -133,3 +133,34 @@ body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button{
    border:1px solid ButtonText!important;
  }
 }
+
+/* UX-MOBILE-04 — active actor and resource readability, no new combat state. */
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden])::before,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden])::before{
+  content:"行動選択  /  " attr(data-actor);
+  grid-column:1/-1;display:block;
+  color:#f2db9b;font:700 13px/1.4 system-ui,sans-serif;
+  letter-spacing:.07em;padding:2px 5px 5px;
+  border-bottom:1px solid rgba(225,198,129,.25);
+}
+body.normalBattleMode #attackBattle #normalBattleCmd[data-actor="aidan"]::before,
+body.raiderBattleMode #raiderBattle #rbCmd[data-actor="aidan"]::before{
+  content:"行動選択  /  エイダン";
+}
+body.normalBattleMode #attackBattle #normalBattleCmd[data-actor="fiona"]::before,
+body.raiderBattleMode #raiderBattle #rbCmd[data-actor="fiona"]::before{
+  content:"行動選択  /  フィオナ";
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button:disabled,
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button:disabled{
+  filter:saturate(.55);cursor:not-allowed!important;
+  border-style:dashed!important;
+}
+body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden]) button:not(:disabled),
+body.raiderBattleMode #raiderBattle #rbCmd:not([hidden]) button:not(:disabled){
+  cursor:pointer!important;
+}
+@media (max-width:380px){
+ body.normalBattleMode #attackBattle #normalBattleCmd:not([hidden])::before,
+ body.raiderBattleMode #raiderBattle #rbCmd:not([hidden])::before{font-size:12px}
+}
