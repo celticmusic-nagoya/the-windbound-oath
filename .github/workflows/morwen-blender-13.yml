@@ -1,0 +1,51 @@
+name: Morwen Blender 13 Pose Render QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_13/**'
+      - '.github/workflows/morwen-blender-13.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Build 03 source
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build 07 core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Build 09 core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_09/build_landmark_core.py
+      - name: Build 11 connected body
+        run: blender -b assets/candidates/morwen-blender-09/morwen_landmark_core_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_11/build_connected.py
+      - name: Render 12 comparison views
+        run: blender -b assets/candidates/morwen-blender-11/morwen_connected_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_13/render_pose_views.py
+      - name: Check report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('assets/candidates/morwen-blender-13')
+          report=json.loads((root/'render_report.json').read_text())
+          assert report['count']==12
+          assert all((root/f).stat().st_size>1000 for f in report['renders'])
+          assert report['production_use'] is False
+          print('MORWEN_13_RENDER_REPORT_PASS')
+          PY
+      - name: Upload pose comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-13-pose-comparisons
+          path: assets/candidates/morwen-blender-13/
+          if-no-files-found: warn
+          retention-days: 14
