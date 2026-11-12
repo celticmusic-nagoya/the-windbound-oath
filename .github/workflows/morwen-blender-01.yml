@@ -1,0 +1,60 @@
+name: Morwen Blender 01 Candidate QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/**'
+      - 'tests/blender/**'
+      - 'assets/references/morwen/reference_20261112/**'
+      - '.github/workflows/morwen-blender-01.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install headless Blender and image reader
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-pil
+          blender --version
+      - name: Verify source SHA and test candidate contracts
+        run: |
+          python3 tests/blender/test_morwen_blender_01.py
+          python3 tools/blender/morwen_blender_01/prepare.py --output /tmp/morwen-blender-01
+      - name: Build and render four direction candidates
+        run: |
+          blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_01/build.py -- --output /tmp/morwen-blender-01
+          blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_01/verify_blend.py -- --output /tmp/morwen-blender-01
+      - name: Assert actual outputs
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('/tmp/morwen-blender-01')
+          assert (root/'morwen_base_rig_candidate.blend').stat().st_size > 10000
+          for report in ('source_qa.json','blender_qa.json','reload_qa.json'):
+              assert json.loads((root/report).read_text())['status']=='PASS'
+          for facing in ('front','right','back','left'):
+              with Image.open(root/(facing+'_overlay.png')) as im:
+                  assert im.size == (384,1024)
+          with Image.open(root/'neutral_proxy_4views.png') as im:
+              assert im.size == (2048,1024)
+          PY
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-01-candidate
+          path: /tmp/morwen-blender-01/
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,1015 @@
+{
+  "schema_version": 2,
+  "task": "MORWEN-BLENDER-01",
+  "status": "PIXEL_REFINED_VISUAL_CANDIDATE_UNREVIEWED",
+  "source_status": "REFERENCE_ONLY",
+  "future_canon": "FUTURE_CANON_PENDING_APPROVAL",
+  "production_use": false,
+  "coordinate_system": "normalized_image_xy_top_left_origin",
+  "required_anchors": [
+    "head",
+    "shoulder.L",
+    "shoulder.R",
+    "elbow.L",
+    "elbow.R",
+    "wrist.L",
+    "wrist.R",
+    "pelvis",
+    "knee.L",
+    "knee.R",
+    "ankle.L",
+    "ankle.R"
+  ],
+  "asymmetry_policy": {
+    "mirror_between_facings": false,
+    "sides": "anatomical_not_screen"
+  },
+  "method": "Manual pixel-refined visual joint estimates; alpha bbox/ground measured only. Hidden depth and anatomy inferred.",
+  "facings": {
+    "front": {
+      "source": "assets/references/morwen/reference_20261112/REFERENCE_front.png",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "dimensions": [
+        384,
+        1024
+      ],
+      "alpha_threshold": 128,
+      "alpha_bbox": [
+        54,
+        17,
+        373,
+        1004
+      ],
+      "measured_ground_y": 1003,
+      "origin_x": 214,
+      "near_side": null,
+      "inferred_half_depth_px": 48,
+      "anchors": {
+        "head": {
+          "x": 0.5572916666666666,
+          "y": 0.109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            22.0,
+            7.0
+          ]
+        },
+        "shoulder.L": {
+          "x": 0.7291666666666666,
+          "y": 0.2294921875,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            133.0,
+            27.0
+          ]
+        },
+        "shoulder.R": {
+          "x": 0.3854166666666667,
+          "y": 0.2294921875,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -89.0,
+            27.0
+          ]
+        },
+        "elbow.L": {
+          "x": 0.8046875,
+          "y": 0.3505859375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            190.0,
+            24.0
+          ]
+        },
+        "elbow.R": {
+          "x": 0.3098958333333333,
+          "y": 0.3505859375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -146.0,
+            24.0
+          ]
+        },
+        "wrist.L": {
+          "x": 0.9036458333333334,
+          "y": 0.4892578125,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            251.0,
+            52.0
+          ]
+        },
+        "wrist.R": {
+          "x": 0.20572916666666666,
+          "y": 0.4892578125,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -207.0,
+            52.0
+          ]
+        },
+        "pelvis": {
+          "x": 0.5572916666666666,
+          "y": 0.458984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            21.0,
+            -23.0
+          ]
+        },
+        "knee.L": {
+          "x": 0.6354166666666666,
+          "y": 0.693359375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            86.0,
+            -18.001
+          ]
+        },
+        "knee.R": {
+          "x": 0.46875,
+          "y": 0.693359375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -47.0,
+            -18.001
+          ]
+        },
+        "ankle.L": {
+          "x": 0.6328125,
+          "y": 0.9287109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            86.0,
+            4.0
+          ]
+        },
+        "ankle.R": {
+          "x": 0.4713541666666667,
+          "y": 0.9287109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -47.0,
+            4.0
+          ]
+        }
+      },
+      "rig_points_pixels": {
+        "head": [
+          214,
+          112
+        ],
+        "neck": [
+          214,
+          195
+        ],
+        "head_top": [
+          214,
+          38
+        ],
+        "chest": [
+          214,
+          241
+        ],
+        "waist": [
+          214,
+          407
+        ],
+        "pelvis": [
+          214,
+          470
+        ],
+        "shoulder.L": [
+          280,
+          235
+        ],
+        "elbow.L": [
+          309,
+          359
+        ],
+        "wrist.L": [
+          347,
+          501
+        ],
+        "handtip.L": [
+          352,
+          550
+        ],
+        "hip.L": [
+          271,
+          478
+        ],
+        "knee.L": [
+          244,
+          710
+        ],
+        "ankle.L": [
+          243,
+          951
+        ],
+        "toe.L": [
+          247,
+          996
+        ],
+        "shoulder.R": [
+          148,
+          235
+        ],
+        "elbow.R": [
+          119,
+          359
+        ],
+        "wrist.R": [
+          79,
+          501
+        ],
+        "handtip.R": [
+          75,
+          550
+        ],
+        "hip.R": [
+          157,
+          478
+        ],
+        "knee.R": [
+          180,
+          710
+        ],
+        "ankle.R": [
+          181,
+          951
+        ],
+        "toe.R": [
+          177,
+          996
+        ]
+      }
+    },
+    "right": {
+      "source": "assets/references/morwen/reference_20261112/REFERENCE_profile_facing_right.png",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "dimensions": [
+        384,
+        1024
+      ],
+      "alpha_threshold": 128,
+      "alpha_bbox": [
+        93,
+        16,
+        314,
+        1003
+      ],
+      "measured_ground_y": 1002,
+      "origin_x": 211,
+      "near_side": "R",
+      "inferred_half_depth_px": 48,
+      "anchors": {
+        "head": {
+          "x": 0.5338541666666666,
+          "y": 0.1083984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            20.0,
+            2.0
+          ]
+        },
+        "shoulder.L": {
+          "x": 0.5052083333333334,
+          "y": 0.23046875,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            10.0,
+            22.0
+          ]
+        },
+        "shoulder.R": {
+          "x": 0.5052083333333334,
+          "y": 0.23046875,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -5.0,
+            21.0
+          ]
+        },
+        "elbow.L": {
+          "x": 0.5494791666666666,
+          "y": 0.3583984375,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            23.0,
+            30.0
+          ]
+        },
+        "elbow.R": {
+          "x": 0.5494791666666666,
+          "y": 0.3583984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            8.0,
+            31.0
+          ]
+        },
+        "wrist.L": {
+          "x": 0.5729166666666666,
+          "y": 0.50390625,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            37.0,
+            62.0
+          ]
+        },
+        "wrist.R": {
+          "x": 0.5729166666666666,
+          "y": 0.50390625,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            13.0,
+            65.0
+          ]
+        },
+        "pelvis": {
+          "x": 0.5494791666666666,
+          "y": 0.458984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            21.0,
+            -25.0
+          ]
+        },
+        "knee.L": {
+          "x": 0.53125,
+          "y": 0.693359375,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            16.0,
+            -18.001
+          ]
+        },
+        "knee.R": {
+          "x": 0.53125,
+          "y": 0.693359375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            3.0,
+            -18.001
+          ]
+        },
+        "ankle.L": {
+          "x": 0.4947916666666667,
+          "y": 0.9287109375,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            5.0,
+            -0.0
+          ]
+        },
+        "ankle.R": {
+          "x": 0.4947916666666667,
+          "y": 0.9287109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -17.0,
+            -0.0
+          ]
+        }
+      },
+      "rig_points_pixels": {
+        "head": [
+          205,
+          111
+        ],
+        "neck": [
+          191,
+          195
+        ],
+        "head_top": [
+          197,
+          38
+        ],
+        "chest": [
+          200,
+          241
+        ],
+        "waist": [
+          221,
+          407
+        ],
+        "pelvis": [
+          211,
+          470
+        ],
+        "shoulder.L": [
+          194,
+          236
+        ],
+        "elbow.L": [
+          211,
+          367
+        ],
+        "wrist.L": [
+          220,
+          516
+        ],
+        "handtip.L": [
+          220,
+          561
+        ],
+        "hip.L": [
+          209,
+          484
+        ],
+        "knee.L": [
+          204,
+          710
+        ],
+        "ankle.L": [
+          190,
+          951
+        ],
+        "toe.L": [
+          270,
+          992
+        ],
+        "shoulder.R": [
+          194,
+          236
+        ],
+        "elbow.R": [
+          211,
+          367
+        ],
+        "wrist.R": [
+          220,
+          516
+        ],
+        "handtip.R": [
+          220,
+          561
+        ],
+        "hip.R": [
+          209,
+          484
+        ],
+        "knee.R": [
+          204,
+          710
+        ],
+        "ankle.R": [
+          190,
+          951
+        ],
+        "toe.R": [
+          270,
+          992
+        ]
+      }
+    },
+    "back": {
+      "source": "assets/references/morwen/reference_20261112/REFERENCE_back.png",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "dimensions": [
+        384,
+        1024
+      ],
+      "alpha_threshold": 128,
+      "alpha_bbox": [
+        14,
+        16,
+        331,
+        1002
+      ],
+      "measured_ground_y": 1001,
+      "origin_x": 171,
+      "near_side": null,
+      "inferred_half_depth_px": 48,
+      "anchors": {
+        "head": {
+          "x": 0.4453125,
+          "y": 0.1083984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -19.0,
+            2.0
+          ]
+        },
+        "shoulder.L": {
+          "x": 0.2708333333333333,
+          "y": 0.2294921875,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -42.0,
+            26.0
+          ]
+        },
+        "shoulder.R": {
+          "x": 0.6223958333333334,
+          "y": 0.2294921875,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            2.0,
+            26.0
+          ]
+        },
+        "elbow.L": {
+          "x": 0.21875,
+          "y": 0.3505859375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -34.0,
+            23.0
+          ]
+        },
+        "elbow.R": {
+          "x": 0.6770833333333334,
+          "y": 0.3505859375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -6.0,
+            23.0
+          ]
+        },
+        "wrist.L": {
+          "x": 0.10416666666666667,
+          "y": 0.490234375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -59.0,
+            51.0
+          ]
+        },
+        "wrist.R": {
+          "x": 0.7916666666666666,
+          "y": 0.490234375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            19.0,
+            51.0
+          ]
+        },
+        "pelvis": {
+          "x": 0.4453125,
+          "y": 0.458984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -21.0,
+            -23.0
+          ]
+        },
+        "knee.L": {
+          "x": 0.34375,
+          "y": 0.693359375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -26.0,
+            -18.001
+          ]
+        },
+        "knee.R": {
+          "x": 0.546875,
+          "y": 0.693359375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -16.0,
+            -18.001
+          ]
+        },
+        "ankle.L": {
+          "x": 0.3567708333333333,
+          "y": 0.9287109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -18.0,
+            5.0
+          ]
+        },
+        "ankle.R": {
+          "x": 0.5260416666666666,
+          "y": 0.9287109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -28.0,
+            5.0
+          ]
+        }
+      },
+      "rig_points_pixels": {
+        "head": [
+          171,
+          111
+        ],
+        "neck": [
+          171,
+          195
+        ],
+        "head_top": [
+          171,
+          37
+        ],
+        "chest": [
+          171,
+          241
+        ],
+        "waist": [
+          171,
+          407
+        ],
+        "pelvis": [
+          171,
+          470
+        ],
+        "shoulder.L": [
+          104,
+          235
+        ],
+        "elbow.L": [
+          84,
+          359
+        ],
+        "wrist.L": [
+          40,
+          502
+        ],
+        "handtip.L": [
+          35,
+          548
+        ],
+        "hip.L": [
+          116,
+          478
+        ],
+        "knee.L": [
+          132,
+          710
+        ],
+        "ankle.L": [
+          137,
+          951
+        ],
+        "toe.L": [
+          134,
+          995
+        ],
+        "shoulder.R": [
+          239,
+          235
+        ],
+        "elbow.R": [
+          260,
+          359
+        ],
+        "wrist.R": [
+          304,
+          502
+        ],
+        "handtip.R": [
+          307,
+          548
+        ],
+        "hip.R": [
+          227,
+          478
+        ],
+        "knee.R": [
+          210,
+          710
+        ],
+        "ankle.R": [
+          202,
+          951
+        ],
+        "toe.R": [
+          205,
+          995
+        ]
+      }
+    },
+    "left": {
+      "source": "assets/references/morwen/reference_20261112/REFERENCE_profile_facing_left.png",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "dimensions": [
+        384,
+        1024
+      ],
+      "alpha_threshold": 128,
+      "alpha_bbox": [
+        63,
+        16,
+        281,
+        1003
+      ],
+      "measured_ground_y": 1002,
+      "origin_x": 168,
+      "near_side": "L",
+      "inferred_half_depth_px": 48,
+      "anchors": {
+        "head": {
+          "x": 0.4401041666666667,
+          "y": 0.1083984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -17.0,
+            2.0
+          ]
+        },
+        "shoulder.L": {
+          "x": 0.4375,
+          "y": 0.23046875,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -13.0,
+            22.0
+          ]
+        },
+        "shoulder.R": {
+          "x": 0.4375,
+          "y": 0.23046875,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -30.0,
+            21.0
+          ]
+        },
+        "elbow.L": {
+          "x": 0.40625,
+          "y": 0.3583984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -21.0,
+            30.0
+          ]
+        },
+        "elbow.R": {
+          "x": 0.40625,
+          "y": 0.3583984375,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -41.0,
+            31.0
+          ]
+        },
+        "wrist.L": {
+          "x": 0.40625,
+          "y": 0.50390625,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -19.0,
+            64.0
+          ]
+        },
+        "wrist.R": {
+          "x": 0.40625,
+          "y": 0.50390625,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -46.0,
+            65.0
+          ]
+        },
+        "pelvis": {
+          "x": 0.4375,
+          "y": 0.458984375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -20.0,
+            -25.0
+          ]
+        },
+        "knee.L": {
+          "x": 0.4739583333333333,
+          "y": 0.693359375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            3.0,
+            -19.0
+          ]
+        },
+        "knee.R": {
+          "x": 0.4739583333333333,
+          "y": 0.693359375,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -14.0,
+            -19.0
+          ]
+        },
+        "ankle.L": {
+          "x": 0.484375,
+          "y": 0.9287109375,
+          "visibility": "VISIBLE_VISUAL_ESTIMATE",
+          "uncertainty_px": 12,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            10.0,
+            -0.0
+          ]
+        },
+        "ankle.R": {
+          "x": 0.484375,
+          "y": 0.9287109375,
+          "visibility": "OCCLUDED_INFERRED",
+          "uncertainty_px": 30,
+          "silhouette_contains_candidate": true,
+          "delta_from_rough_px": [
+            -17.0,
+            -0.0
+          ]
+        }
+      },
+      "rig_points_pixels": {
+        "head": [
+          169,
+          111
+        ],
+        "neck": [
+          171,
+          195
+        ],
+        "head_top": [
+          172,
+          38
+        ],
+        "chest": [
+          162,
+          241
+        ],
+        "waist": [
+          146,
+          407
+        ],
+        "pelvis": [
+          168,
+          470
+        ],
+        "shoulder.L": [
+          168,
+          236
+        ],
+        "elbow.L": [
+          156,
+          367
+        ],
+        "wrist.L": [
+          156,
+          516
+        ],
+        "handtip.L": [
+          156,
+          561
+        ],
+        "hip.L": [
+          170,
+          484
+        ],
+        "knee.L": [
+          182,
+          710
+        ],
+        "ankle.L": [
+          186,
+          951
+        ],
+        "toe.L": [
+          101,
+          992
+        ],
+        "shoulder.R": [
+          168,
+          236
+        ],
+        "elbow.R": [
+          156,
+          367
+        ],
+        "wrist.R": [
+          156,
+          516
+        ],
+        "handtip.R": [
+          156,
+          561
+        ],
+        "hip.R": [
+          170,
+          484
+        ],
+        "knee.R": [
+          182,
+          710
+        ],
+        "ankle.R": [
+          186,
+          951
+        ],
+        "toe.R": [
+          101,
+          992
+        ]
+      }
+    }
+  },
+  "common_pixel_scale": 0.0010141987829614604,
+  "calibration": {
+    "shared_pixel_scale": true,
+    "image_resizing": false,
+    "per_view_translation_only": true,
+    "silhouette_heights_px": [
+      986,
+      986,
+      985,
+      986
+    ],
+    "height_spread_px": 1
+  }
+}

@@ -1,3 +1,9 @@
+## MORWEN-BLENDER-01 — Issue #243 priority override (2026-11-12)
+
+- 旧素材の削除・整理は後回し。Issue #243に従い、PR #239のBlender実装とPR #242の原本12枚から4方向素体・17ボーンの候補を制作する。整理待ちを制作の停止理由にしない。
+- `assets/references/morwen/reference_20261112/MANIFEST.json` の原本はREFERENCE_ONLY、制作物はFUTURE_CANON_PENDING_APPROVAL。概算/推定関節を実測済み・審査済みと呼ばない。原本・非対称性・既存設定/機能は保護する。
+- 本タスクで既存アセット削除、mainマージ、ゲーム統合、サイト公開、正式採用は行わない。候補の手順/QAは `tools/blender/morwen_blender_01/README.md`。
+
 # CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
 
 - **エイダン・フィオナ・モルウェンの公式年齢は全員18歳で固定。** 他人物の年齢は変更しない。過去の誤設定を再採用しない。

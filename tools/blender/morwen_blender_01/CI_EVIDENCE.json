@@ -1,0 +1,104 @@
+{
+  "status": "TECHNICAL_SELF_QA_AND_ACTIONS_PASS_NOT_VISUAL_APPROVAL",
+  "task": "MORWEN-BLENDER-01",
+  "baseline": "cab9aa52da653198a712bd986992adc03ea4bfe2",
+  "sourcePR239": "6374a9854e4b1e22fd7b180f656bf8f9b5f8f163",
+  "sourcePR242": "27dee80c34a568ba6657cd6683dd707beabfbed7",
+  "tests": {
+    "schema_unit": "8 PASS",
+    "python_syntax": "PASS",
+    "headless_blender_build": "PASS",
+    "saved_scene_reload_and_deformation": "PASS"
+  },
+  "githubActions": {
+    "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43212851624",
+    "runId": 43212851624,
+    "status": "completed",
+    "conclusion": "success",
+    "testedImplementationCommit": "c2d53418d47408b507889250da6c5cae9d70b89b",
+    "jobs": [
+      {
+        "completedAt": "2026-11-12T11:53:55Z",
+        "conclusion": "success",
+        "databaseId": 131164584607,
+        "name": "candidate-build",
+        "startedAt": "2026-11-12T11:52:20Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install headless Blender and image reader",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify source SHA and test candidate contracts",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Build and render four direction candidates",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Assert actual outputs",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Upload review artifacts",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 14,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 15,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43212851624/job/131164584607"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 13941094268,
+        "name": "morwen-blender-01-candidate",
+        "bytes": 5341136,
+        "sha256": "sha256:05e82c56078c1066114d935748fa33794b112126369ac65b90c8e556674c70d9",
+        "reviewURL": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43212851624/artifacts/13941094268"
+      }
+    ],
+    "rawRunnerLogDownload": "UNAVAILABLE: results receiver returned Forbidden; API run/job/step success and artifact metadata verified",
+    "ciBlenderVersion": "NOT_RETRIEVED_FROM_RAW_LOG"
+  },
+  "independentVisualQA": "NOT_RUN",
+  "androidDeviceQA": "NOT_RUN",
+  "productionUse": false,
+  "local_blender_version": "4.3.2",
+  "localBlendSha256": "e0ef8030c3ca2f46e6a7083fd9786bf96508abeebd4666c9e526548ca01e6d25",
+  "evidenceUpdate": "Evidence-only follow-up; tested scripts, inputs, scene and renders unchanged. No repeated CI needed for documentation."
+}
