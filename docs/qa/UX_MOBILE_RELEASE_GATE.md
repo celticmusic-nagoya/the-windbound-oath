@@ -32,3 +32,10 @@ Status: **BLOCKED — no approved production artifact generator or Pages source 
 - GitHub Pages source: still NOT_VERIFIED; repository metadata alone does not expose the configured Pages branch, directory, or Actions deployment.
 - **Do not assume** `main` root, `/docs`, or an Actions artifact is the active Pages source.
 - No release generation, deployment, or production asset changes are authorized by this audit.
+
+## UX-MOBILE-27: full workflow directory inventory
+- Inspected all 23 files under `.github/workflows/` on the working branch.
+- No workflow filename or inspected listing indicates a Pages deployment workflow; this does **not** prove GitHub Pages is disabled.
+- Direct GitHub Pages settings endpoint was unavailable through the connected GitHub fetch capability.
+- Actual Pages source remains `NOT_VERIFIED`. Do not infer source from `main` being the default branch.
+- Release generator implementation remains blocked until source and runtime/debug exclusion design are confirmed.
