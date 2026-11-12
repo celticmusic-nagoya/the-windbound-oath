@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract torso alpha span candidates from locked references
+      - name: Generate four-view contour review overlays
         run: python3 tools/blender/morwen_blender_22/create_review_overlays.py
       - name: Verify report
         run: |
@@ -28,4 +28,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: morwen-blender-22-review-overlays
-          path: assets/candidates/morwen-blender-22/torso_candidate_segments.json
+          path: assets/candidates/morwen-blender-22/
+          if-no-files-found: error
