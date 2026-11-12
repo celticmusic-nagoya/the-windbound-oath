@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Blender
-        run: sudo apt-get update && sudo apt-get install -y blender
+        run: sudo apt-get update && sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
       - name: Generate candidate mesh
         run: |
           blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
