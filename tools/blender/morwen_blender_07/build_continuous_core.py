@@ -66,8 +66,7 @@ def main():
     # Keep original ellipsoid body in source .blend; hide pelvis/spine surface
     # only in the new candidate scene to avoid two competing torso shells.
     # Other 14 segments remain as separate candidate pieces.
-    old.hide_render=True
-    old.hide_set(True)
+    # Preserve all original limb segments; temporary torso overlap is explicit.\n    old.hide_render=False
     core.hide_render=False
     OUT.mkdir(parents=True,exist_ok=True)
     target=OUT/"morwen_continuous_core_candidate.blend"
