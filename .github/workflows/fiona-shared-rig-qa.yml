@@ -1,0 +1,22 @@
+name: Fiona shared rig contract QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/shared_rig_adapter.py'
+      - 'tools/blender/shared_rig_topology.json'
+      - 'tools/blender/test_shared_rig_adapter.py'
+      - '.github/workflows/fiona-shared-rig-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate common rig topology and guardrails
+        run: python -m unittest discover -s tools/blender -p 'test_shared_rig_adapter.py' -v

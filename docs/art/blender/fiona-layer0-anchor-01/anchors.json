@@ -1,0 +1,3438 @@
+{
+  "schema": "fiona/layer0-anchor-candidate/01",
+  "task": "FIONA-BLENDER-ANCHOR-01",
+  "status": "PIXEL_ANNOTATED_CANDIDATE_NOT_VISUAL_APPROVAL",
+  "sourcePath": "assets/characters/fiona/layer0/fiona_layer0_fourview_master.png",
+  "sourceSha256": "faee95e9e4d9face0219318c7db3ec4847c0186b81dada9bf117d9726e70acb9",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "sourceMode": "RGBA",
+  "coordinateSystem": "original_sheet_pixels_xy_top_left_y_down",
+  "originalImageModified": false,
+  "sourceCroppedOrResampled": false,
+  "sourceRegistrationCommit": "5b3d6b973c8b3e3dae89dd75aedb33be36eea00e",
+  "commonRig": {
+    "path": "tools/blender/shared_rig_topology.json",
+    "schema": "cas/shared-topology/01",
+    "sha256": "1183744ec891babdbd4ba4f49ad0af4bfc5bea199a6f84b8ae2627b63e6abba2",
+    "jointCount": 31,
+    "settingsModified": false
+  },
+  "common17BoneContract": {
+    "status": "SHARED_NAMES_AND_PARENT_GRAPH_ONLY_NO_MORWEN_COORDINATES",
+    "sourcePR": 246,
+    "sourceCommit": "a45ca2815675a4d186f08624de8d0329a6ed730c",
+    "sourcePath": "tools/blender/rigs/humanoid_v1.json",
+    "sourceGitBlob": "beb89c0b771e0843f1ec276a536b9b55d1ca312a",
+    "sourceSha256": "9c29847edfe02c7307c043995f066c558579f3cef244c4ca8bdacf1821e15859",
+    "bones": [
+      {
+        "id": "root",
+        "parent": null
+      },
+      {
+        "id": "pelvis",
+        "parent": "root"
+      },
+      {
+        "id": "spine",
+        "parent": "pelvis"
+      },
+      {
+        "id": "neck",
+        "parent": "spine"
+      },
+      {
+        "id": "head",
+        "parent": "neck"
+      },
+      {
+        "id": "upper_arm.L",
+        "parent": "spine"
+      },
+      {
+        "id": "forearm.L",
+        "parent": "upper_arm.L"
+      },
+      {
+        "id": "hand.L",
+        "parent": "forearm.L"
+      },
+      {
+        "id": "upper_arm.R",
+        "parent": "spine"
+      },
+      {
+        "id": "forearm.R",
+        "parent": "upper_arm.R"
+      },
+      {
+        "id": "hand.R",
+        "parent": "forearm.R"
+      },
+      {
+        "id": "thigh.L",
+        "parent": "pelvis"
+      },
+      {
+        "id": "shin.L",
+        "parent": "thigh.L"
+      },
+      {
+        "id": "foot.L",
+        "parent": "shin.L"
+      },
+      {
+        "id": "thigh.R",
+        "parent": "pelvis"
+      },
+      {
+        "id": "shin.R",
+        "parent": "thigh.R"
+      },
+      {
+        "id": "foot.R",
+        "parent": "shin.R"
+      }
+    ]
+  },
+  "viewOrder": [
+    "front",
+    "right",
+    "left",
+    "back"
+  ],
+  "sideConvention": "Director view labels retained. Anatomical L/R follows screen-facing, not label text. No image mirroring.",
+  "views": {
+    "front": {
+      "label": "front",
+      "screenFacing": "toward_camera",
+      "nearAnatomicalSide": null,
+      "analysisRegion": [
+        0,
+        0,
+        448,
+        1024
+      ],
+      "alphaBBox": [
+        22,
+        13,
+        418,
+        1007
+      ],
+      "landmarks": {
+        "headCenter": {
+          "sheetPixels": [
+            224,
+            115
+          ],
+          "normalizedSheet": [
+            0.14583333333333334,
+            0.1123046875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "chin": {
+          "sheetPixels": [
+            224,
+            180
+          ],
+          "normalizedSheet": [
+            0.14583333333333334,
+            0.17578125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckTop": {
+          "sheetPixels": [
+            224,
+            192
+          ],
+          "normalizedSheet": [
+            0.14583333333333334,
+            0.1875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckBase": {
+          "sheetPixels": [
+            224,
+            218
+          ],
+          "normalizedSheet": [
+            0.14583333333333334,
+            0.212890625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "waist": {
+          "sheetPixels": [
+            224,
+            409
+          ],
+          "normalizedSheet": [
+            0.14583333333333334,
+            0.3994140625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "pelvis": {
+          "sheetPixels": [
+            224,
+            473
+          ],
+          "normalizedSheet": [
+            0.14583333333333334,
+            0.4619140625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawL": {
+          "sheetPixels": [
+            257,
+            166
+          ],
+          "normalizedSheet": [
+            0.16731770833333334,
+            0.162109375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawR": {
+          "sheetPixels": [
+            191,
+            166
+          ],
+          "normalizedSheet": [
+            0.12434895833333333,
+            0.162109375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderL": {
+          "sheetPixels": [
+            302,
+            237
+          ],
+          "normalizedSheet": [
+            0.19661458333333334,
+            0.2314453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowL": {
+          "sheetPixels": [
+            331,
+            366
+          ],
+          "normalizedSheet": [
+            0.21549479166666666,
+            0.357421875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristL": {
+          "sheetPixels": [
+            371,
+            516
+          ],
+          "normalizedSheet": [
+            0.24153645833333334,
+            0.50390625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handL": {
+          "sheetPixels": [
+            381,
+            558
+          ],
+          "normalizedSheet": [
+            0.248046875,
+            0.544921875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipL": {
+          "sheetPixels": [
+            285,
+            485
+          ],
+          "normalizedSheet": [
+            0.185546875,
+            0.4736328125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeL": {
+          "sheetPixels": [
+            254,
+            705
+          ],
+          "normalizedSheet": [
+            0.16536458333333334,
+            0.6884765625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleL": {
+          "sheetPixels": [
+            252,
+            950
+          ],
+          "normalizedSheet": [
+            0.1640625,
+            0.927734375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelL": {
+          "sheetPixels": [
+            257,
+            990
+          ],
+          "normalizedSheet": [
+            0.16731770833333334,
+            0.966796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballL": {
+          "sheetPixels": [
+            264,
+            996
+          ],
+          "normalizedSheet": [
+            0.171875,
+            0.97265625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeL": {
+          "sheetPixels": [
+            270,
+            1002
+          ],
+          "normalizedSheet": [
+            0.17578125,
+            0.978515625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footL": {
+          "sheetPixels": [
+            260,
+            999
+          ],
+          "normalizedSheet": [
+            0.16927083333333334,
+            0.9755859375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderR": {
+          "sheetPixels": [
+            146,
+            237
+          ],
+          "normalizedSheet": [
+            0.09505208333333333,
+            0.2314453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowR": {
+          "sheetPixels": [
+            116,
+            366
+          ],
+          "normalizedSheet": [
+            0.07552083333333333,
+            0.357421875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristR": {
+          "sheetPixels": [
+            77,
+            516
+          ],
+          "normalizedSheet": [
+            0.050130208333333336,
+            0.50390625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handR": {
+          "sheetPixels": [
+            74,
+            558
+          ],
+          "normalizedSheet": [
+            0.048177083333333336,
+            0.544921875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipR": {
+          "sheetPixels": [
+            163,
+            485
+          ],
+          "normalizedSheet": [
+            0.10611979166666667,
+            0.4736328125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeR": {
+          "sheetPixels": [
+            194,
+            705
+          ],
+          "normalizedSheet": [
+            0.12630208333333334,
+            0.6884765625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleR": {
+          "sheetPixels": [
+            195,
+            950
+          ],
+          "normalizedSheet": [
+            0.126953125,
+            0.927734375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelR": {
+          "sheetPixels": [
+            189,
+            990
+          ],
+          "normalizedSheet": [
+            0.123046875,
+            0.966796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballR": {
+          "sheetPixels": [
+            183,
+            996
+          ],
+          "normalizedSheet": [
+            0.119140625,
+            0.97265625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeR": {
+          "sheetPixels": [
+            178,
+            1002
+          ],
+          "normalizedSheet": [
+            0.11588541666666667,
+            0.978515625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footR": {
+          "sheetPixels": [
+            187,
+            999
+          ],
+          "normalizedSheet": [
+            0.12174479166666667,
+            0.9755859375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "headTop": {
+          "sheetPixels": [
+            222,
+            13
+          ],
+          "normalizedSheet": [
+            0.14453125,
+            0.0126953125
+          ],
+          "visibility": "MEASURED_SOURCE_FEATURE",
+          "method": "alpha>=128 hair silhouette top",
+          "uncertaintyPx": null,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        }
+      },
+      "contacts": {
+        "L": {
+          "sheetPixels": [
+            245,
+            1005
+          ],
+          "status": "MEASURED_ALPHA_SILHOUETTE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        },
+        "R": {
+          "sheetPixels": [
+            207,
+            1006
+          ],
+          "status": "MEASURED_ALPHA_SILHOUETTE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        }
+      },
+      "adapterPayload": {
+        "schema": "cas/blender-measured/01",
+        "characterId": "fiona_front",
+        "sourceSha256": "faee95e9e4d9face0219318c7db3ec4847c0186b81dada9bf117d9726e70acb9",
+        "rigSize": [
+          1536,
+          1024
+        ],
+        "joints": {
+          "headCenter": [
+            224,
+            115
+          ],
+          "chin": [
+            224,
+            180
+          ],
+          "neckTop": [
+            224,
+            192
+          ],
+          "neckBase": [
+            224,
+            218
+          ],
+          "waist": [
+            224,
+            409
+          ],
+          "pelvis": [
+            224,
+            473
+          ],
+          "jawL": [
+            257,
+            166
+          ],
+          "jawR": [
+            191,
+            166
+          ],
+          "shoulderL": [
+            302,
+            237
+          ],
+          "elbowL": [
+            331,
+            366
+          ],
+          "wristL": [
+            371,
+            516
+          ],
+          "handL": [
+            381,
+            558
+          ],
+          "hipL": [
+            285,
+            485
+          ],
+          "kneeL": [
+            254,
+            705
+          ],
+          "ankleL": [
+            252,
+            950
+          ],
+          "heelL": [
+            257,
+            990
+          ],
+          "ballL": [
+            264,
+            996
+          ],
+          "toeL": [
+            270,
+            1002
+          ],
+          "footL": [
+            260,
+            999
+          ],
+          "shoulderR": [
+            146,
+            237
+          ],
+          "elbowR": [
+            116,
+            366
+          ],
+          "wristR": [
+            77,
+            516
+          ],
+          "handR": [
+            74,
+            558
+          ],
+          "hipR": [
+            163,
+            485
+          ],
+          "kneeR": [
+            194,
+            705
+          ],
+          "ankleR": [
+            195,
+            950
+          ],
+          "heelR": [
+            189,
+            990
+          ],
+          "ballR": [
+            183,
+            996
+          ],
+          "toeR": [
+            178,
+            1002
+          ],
+          "footR": [
+            187,
+            999
+          ],
+          "headTop": [
+            222,
+            13
+          ]
+        },
+        "annotationStatus": "CANDIDATE_SOURCE_PIXEL_ANNOTATIONS_WITH_EXPLICIT_HIDDEN_INFERENCE"
+      },
+      "common17BoneMap": [
+        {
+          "id": "root",
+          "parent": null,
+          "headSheetPixels": [
+            224,
+            1006
+          ],
+          "tailSheetPixels": [
+            224,
+            976
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "pelvis",
+          "parent": "root",
+          "headSheetPixels": [
+            224,
+            473
+          ],
+          "tailSheetPixels": [
+            224,
+            409
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "spine",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            224,
+            409
+          ],
+          "tailSheetPixels": [
+            224,
+            218
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "neck",
+          "parent": "spine",
+          "headSheetPixels": [
+            224,
+            218
+          ],
+          "tailSheetPixels": [
+            224,
+            192
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "head",
+          "parent": "neck",
+          "headSheetPixels": [
+            224,
+            192
+          ],
+          "tailSheetPixels": [
+            222,
+            13
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.L",
+          "parent": "spine",
+          "headSheetPixels": [
+            302,
+            237
+          ],
+          "tailSheetPixels": [
+            331,
+            366
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.L",
+          "parent": "upper_arm.L",
+          "headSheetPixels": [
+            331,
+            366
+          ],
+          "tailSheetPixels": [
+            371,
+            516
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.L",
+          "parent": "forearm.L",
+          "headSheetPixels": [
+            371,
+            516
+          ],
+          "tailSheetPixels": [
+            381,
+            558
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.R",
+          "parent": "spine",
+          "headSheetPixels": [
+            146,
+            237
+          ],
+          "tailSheetPixels": [
+            116,
+            366
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.R",
+          "parent": "upper_arm.R",
+          "headSheetPixels": [
+            116,
+            366
+          ],
+          "tailSheetPixels": [
+            77,
+            516
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.R",
+          "parent": "forearm.R",
+          "headSheetPixels": [
+            77,
+            516
+          ],
+          "tailSheetPixels": [
+            74,
+            558
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.L",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            285,
+            485
+          ],
+          "tailSheetPixels": [
+            254,
+            705
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.L",
+          "parent": "thigh.L",
+          "headSheetPixels": [
+            254,
+            705
+          ],
+          "tailSheetPixels": [
+            252,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.L",
+          "parent": "shin.L",
+          "headSheetPixels": [
+            252,
+            950
+          ],
+          "tailSheetPixels": [
+            270,
+            1002
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.R",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            163,
+            485
+          ],
+          "tailSheetPixels": [
+            194,
+            705
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.R",
+          "parent": "thigh.R",
+          "headSheetPixels": [
+            194,
+            705
+          ],
+          "tailSheetPixels": [
+            195,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.R",
+          "parent": "shin.R",
+          "headSheetPixels": [
+            195,
+            950
+          ],
+          "tailSheetPixels": [
+            178,
+            1002
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        }
+      ]
+    },
+    "right": {
+      "label": "right",
+      "screenFacing": "left",
+      "nearAnatomicalSide": "L",
+      "analysisRegion": [
+        448,
+        0,
+        752,
+        1024
+      ],
+      "alphaBBox": [
+        472,
+        11,
+        738,
+        1003
+      ],
+      "landmarks": {
+        "headCenter": {
+          "sheetPixels": [
+            592,
+            115
+          ],
+          "normalizedSheet": [
+            0.3854166666666667,
+            0.1123046875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "chin": {
+          "sheetPixels": [
+            560,
+            177
+          ],
+          "normalizedSheet": [
+            0.3645833333333333,
+            0.1728515625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckTop": {
+          "sheetPixels": [
+            588,
+            192
+          ],
+          "normalizedSheet": [
+            0.3828125,
+            0.1875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckBase": {
+          "sheetPixels": [
+            589,
+            218
+          ],
+          "normalizedSheet": [
+            0.3834635416666667,
+            0.212890625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "waist": {
+          "sheetPixels": [
+            583,
+            410
+          ],
+          "normalizedSheet": [
+            0.3795572916666667,
+            0.400390625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "pelvis": {
+          "sheetPixels": [
+            589,
+            478
+          ],
+          "normalizedSheet": [
+            0.3834635416666667,
+            0.466796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawL": {
+          "sheetPixels": [
+            572,
+            165
+          ],
+          "normalizedSheet": [
+            0.3723958333333333,
+            0.1611328125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawR": {
+          "sheetPixels": [
+            572,
+            165
+          ],
+          "normalizedSheet": [
+            0.3723958333333333,
+            0.1611328125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderL": {
+          "sheetPixels": [
+            562,
+            237
+          ],
+          "normalizedSheet": [
+            0.3658854166666667,
+            0.2314453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowL": {
+          "sheetPixels": [
+            555,
+            374
+          ],
+          "normalizedSheet": [
+            0.361328125,
+            0.365234375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristL": {
+          "sheetPixels": [
+            566,
+            530
+          ],
+          "normalizedSheet": [
+            0.3684895833333333,
+            0.517578125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handL": {
+          "sheetPixels": [
+            565,
+            575
+          ],
+          "normalizedSheet": [
+            0.3678385416666667,
+            0.5615234375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipL": {
+          "sheetPixels": [
+            595,
+            491
+          ],
+          "normalizedSheet": [
+            0.3873697916666667,
+            0.4794921875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeL": {
+          "sheetPixels": [
+            577,
+            706
+          ],
+          "normalizedSheet": [
+            0.3756510416666667,
+            0.689453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleL": {
+          "sheetPixels": [
+            590,
+            950
+          ],
+          "normalizedSheet": [
+            0.3841145833333333,
+            0.927734375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelL": {
+          "sheetPixels": [
+            609,
+            990
+          ],
+          "normalizedSheet": [
+            0.396484375,
+            0.966796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballL": {
+          "sheetPixels": [
+            528,
+            995
+          ],
+          "normalizedSheet": [
+            0.34375,
+            0.9716796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeL": {
+          "sheetPixels": [
+            505,
+            996
+          ],
+          "normalizedSheet": [
+            0.3287760416666667,
+            0.97265625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footL": {
+          "sheetPixels": [
+            552,
+            998
+          ],
+          "normalizedSheet": [
+            0.359375,
+            0.974609375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderR": {
+          "sheetPixels": [
+            562,
+            237
+          ],
+          "normalizedSheet": [
+            0.3658854166666667,
+            0.2314453125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowR": {
+          "sheetPixels": [
+            555,
+            374
+          ],
+          "normalizedSheet": [
+            0.361328125,
+            0.365234375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristR": {
+          "sheetPixels": [
+            566,
+            530
+          ],
+          "normalizedSheet": [
+            0.3684895833333333,
+            0.517578125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handR": {
+          "sheetPixels": [
+            565,
+            575
+          ],
+          "normalizedSheet": [
+            0.3678385416666667,
+            0.5615234375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipR": {
+          "sheetPixels": [
+            595,
+            491
+          ],
+          "normalizedSheet": [
+            0.3873697916666667,
+            0.4794921875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeR": {
+          "sheetPixels": [
+            577,
+            706
+          ],
+          "normalizedSheet": [
+            0.3756510416666667,
+            0.689453125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleR": {
+          "sheetPixels": [
+            590,
+            950
+          ],
+          "normalizedSheet": [
+            0.3841145833333333,
+            0.927734375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelR": {
+          "sheetPixels": [
+            609,
+            990
+          ],
+          "normalizedSheet": [
+            0.396484375,
+            0.966796875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballR": {
+          "sheetPixels": [
+            528,
+            995
+          ],
+          "normalizedSheet": [
+            0.34375,
+            0.9716796875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeR": {
+          "sheetPixels": [
+            505,
+            996
+          ],
+          "normalizedSheet": [
+            0.3287760416666667,
+            0.97265625
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footR": {
+          "sheetPixels": [
+            552,
+            998
+          ],
+          "normalizedSheet": [
+            0.359375,
+            0.974609375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "headTop": {
+          "sheetPixels": [
+            586.5,
+            11
+          ],
+          "normalizedSheet": [
+            0.3818359375,
+            0.0107421875
+          ],
+          "visibility": "MEASURED_SOURCE_FEATURE",
+          "method": "alpha>=128 hair silhouette top",
+          "uncertaintyPx": null,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        }
+      },
+      "contacts": {
+        "L": {
+          "sheetPixels": [
+            525.5,
+            1002
+          ],
+          "status": "MEASURED_ALPHA_SILHOUETTE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        },
+        "R": {
+          "sheetPixels": [
+            525.5,
+            1002
+          ],
+          "status": "OCCLUDED_INFERRED_FROM_VISIBLE_PROFILE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        }
+      },
+      "adapterPayload": {
+        "schema": "cas/blender-measured/01",
+        "characterId": "fiona_right",
+        "sourceSha256": "faee95e9e4d9face0219318c7db3ec4847c0186b81dada9bf117d9726e70acb9",
+        "rigSize": [
+          1536,
+          1024
+        ],
+        "joints": {
+          "headCenter": [
+            592,
+            115
+          ],
+          "chin": [
+            560,
+            177
+          ],
+          "neckTop": [
+            588,
+            192
+          ],
+          "neckBase": [
+            589,
+            218
+          ],
+          "waist": [
+            583,
+            410
+          ],
+          "pelvis": [
+            589,
+            478
+          ],
+          "jawL": [
+            572,
+            165
+          ],
+          "jawR": [
+            572,
+            165
+          ],
+          "shoulderL": [
+            562,
+            237
+          ],
+          "elbowL": [
+            555,
+            374
+          ],
+          "wristL": [
+            566,
+            530
+          ],
+          "handL": [
+            565,
+            575
+          ],
+          "hipL": [
+            595,
+            491
+          ],
+          "kneeL": [
+            577,
+            706
+          ],
+          "ankleL": [
+            590,
+            950
+          ],
+          "heelL": [
+            609,
+            990
+          ],
+          "ballL": [
+            528,
+            995
+          ],
+          "toeL": [
+            505,
+            996
+          ],
+          "footL": [
+            552,
+            998
+          ],
+          "shoulderR": [
+            562,
+            237
+          ],
+          "elbowR": [
+            555,
+            374
+          ],
+          "wristR": [
+            566,
+            530
+          ],
+          "handR": [
+            565,
+            575
+          ],
+          "hipR": [
+            595,
+            491
+          ],
+          "kneeR": [
+            577,
+            706
+          ],
+          "ankleR": [
+            590,
+            950
+          ],
+          "heelR": [
+            609,
+            990
+          ],
+          "ballR": [
+            528,
+            995
+          ],
+          "toeR": [
+            505,
+            996
+          ],
+          "footR": [
+            552,
+            998
+          ],
+          "headTop": [
+            586.5,
+            11
+          ]
+        },
+        "annotationStatus": "CANDIDATE_SOURCE_PIXEL_ANNOTATIONS_WITH_EXPLICIT_HIDDEN_INFERENCE"
+      },
+      "common17BoneMap": [
+        {
+          "id": "root",
+          "parent": null,
+          "headSheetPixels": [
+            589,
+            1002
+          ],
+          "tailSheetPixels": [
+            589,
+            972
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "pelvis",
+          "parent": "root",
+          "headSheetPixels": [
+            589,
+            478
+          ],
+          "tailSheetPixels": [
+            583,
+            410
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "spine",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            583,
+            410
+          ],
+          "tailSheetPixels": [
+            589,
+            218
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "neck",
+          "parent": "spine",
+          "headSheetPixels": [
+            589,
+            218
+          ],
+          "tailSheetPixels": [
+            588,
+            192
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "head",
+          "parent": "neck",
+          "headSheetPixels": [
+            588,
+            192
+          ],
+          "tailSheetPixels": [
+            586.5,
+            11
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.L",
+          "parent": "spine",
+          "headSheetPixels": [
+            562,
+            237
+          ],
+          "tailSheetPixels": [
+            555,
+            374
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.L",
+          "parent": "upper_arm.L",
+          "headSheetPixels": [
+            555,
+            374
+          ],
+          "tailSheetPixels": [
+            566,
+            530
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.L",
+          "parent": "forearm.L",
+          "headSheetPixels": [
+            566,
+            530
+          ],
+          "tailSheetPixels": [
+            565,
+            575
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.R",
+          "parent": "spine",
+          "headSheetPixels": [
+            562,
+            237
+          ],
+          "tailSheetPixels": [
+            555,
+            374
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.R",
+          "parent": "upper_arm.R",
+          "headSheetPixels": [
+            555,
+            374
+          ],
+          "tailSheetPixels": [
+            566,
+            530
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.R",
+          "parent": "forearm.R",
+          "headSheetPixels": [
+            566,
+            530
+          ],
+          "tailSheetPixels": [
+            565,
+            575
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.L",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            595,
+            491
+          ],
+          "tailSheetPixels": [
+            577,
+            706
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.L",
+          "parent": "thigh.L",
+          "headSheetPixels": [
+            577,
+            706
+          ],
+          "tailSheetPixels": [
+            590,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.L",
+          "parent": "shin.L",
+          "headSheetPixels": [
+            590,
+            950
+          ],
+          "tailSheetPixels": [
+            505,
+            996
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.R",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            595,
+            491
+          ],
+          "tailSheetPixels": [
+            577,
+            706
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.R",
+          "parent": "thigh.R",
+          "headSheetPixels": [
+            577,
+            706
+          ],
+          "tailSheetPixels": [
+            590,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.R",
+          "parent": "shin.R",
+          "headSheetPixels": [
+            590,
+            950
+          ],
+          "tailSheetPixels": [
+            505,
+            996
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        }
+      ]
+    },
+    "left": {
+      "label": "left",
+      "screenFacing": "right",
+      "nearAnatomicalSide": "R",
+      "analysisRegion": [
+        752,
+        0,
+        1072,
+        1024
+      ],
+      "alphaBBox": [
+        768,
+        10,
+        1031,
+        1003
+      ],
+      "landmarks": {
+        "headCenter": {
+          "sheetPixels": [
+            909,
+            115
+          ],
+          "normalizedSheet": [
+            0.591796875,
+            0.1123046875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "chin": {
+          "sheetPixels": [
+            941,
+            177
+          ],
+          "normalizedSheet": [
+            0.6126302083333334,
+            0.1728515625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckTop": {
+          "sheetPixels": [
+            913,
+            192
+          ],
+          "normalizedSheet": [
+            0.5944010416666666,
+            0.1875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckBase": {
+          "sheetPixels": [
+            913,
+            218
+          ],
+          "normalizedSheet": [
+            0.5944010416666666,
+            0.212890625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "waist": {
+          "sheetPixels": [
+            912,
+            410
+          ],
+          "normalizedSheet": [
+            0.59375,
+            0.400390625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "pelvis": {
+          "sheetPixels": [
+            911,
+            478
+          ],
+          "normalizedSheet": [
+            0.5930989583333334,
+            0.466796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawL": {
+          "sheetPixels": [
+            929,
+            165
+          ],
+          "normalizedSheet": [
+            0.6048177083333334,
+            0.1611328125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawR": {
+          "sheetPixels": [
+            929,
+            165
+          ],
+          "normalizedSheet": [
+            0.6048177083333334,
+            0.1611328125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderL": {
+          "sheetPixels": [
+            939,
+            237
+          ],
+          "normalizedSheet": [
+            0.611328125,
+            0.2314453125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowL": {
+          "sheetPixels": [
+            939,
+            374
+          ],
+          "normalizedSheet": [
+            0.611328125,
+            0.365234375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristL": {
+          "sheetPixels": [
+            940,
+            530
+          ],
+          "normalizedSheet": [
+            0.6119791666666666,
+            0.517578125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handL": {
+          "sheetPixels": [
+            942,
+            575
+          ],
+          "normalizedSheet": [
+            0.61328125,
+            0.5615234375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipL": {
+          "sheetPixels": [
+            904,
+            491
+          ],
+          "normalizedSheet": [
+            0.5885416666666666,
+            0.4794921875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeL": {
+          "sheetPixels": [
+            920,
+            706
+          ],
+          "normalizedSheet": [
+            0.5989583333333334,
+            0.689453125
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleL": {
+          "sheetPixels": [
+            902,
+            950
+          ],
+          "normalizedSheet": [
+            0.5872395833333334,
+            0.927734375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelL": {
+          "sheetPixels": [
+            881,
+            990
+          ],
+          "normalizedSheet": [
+            0.5735677083333334,
+            0.966796875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballL": {
+          "sheetPixels": [
+            964,
+            995
+          ],
+          "normalizedSheet": [
+            0.6276041666666666,
+            0.9716796875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeL": {
+          "sheetPixels": [
+            986,
+            996
+          ],
+          "normalizedSheet": [
+            0.6419270833333334,
+            0.97265625
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footL": {
+          "sheetPixels": [
+            940,
+            998
+          ],
+          "normalizedSheet": [
+            0.6119791666666666,
+            0.974609375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderR": {
+          "sheetPixels": [
+            939,
+            237
+          ],
+          "normalizedSheet": [
+            0.611328125,
+            0.2314453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowR": {
+          "sheetPixels": [
+            939,
+            374
+          ],
+          "normalizedSheet": [
+            0.611328125,
+            0.365234375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristR": {
+          "sheetPixels": [
+            940,
+            530
+          ],
+          "normalizedSheet": [
+            0.6119791666666666,
+            0.517578125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handR": {
+          "sheetPixels": [
+            942,
+            575
+          ],
+          "normalizedSheet": [
+            0.61328125,
+            0.5615234375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipR": {
+          "sheetPixels": [
+            904,
+            491
+          ],
+          "normalizedSheet": [
+            0.5885416666666666,
+            0.4794921875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeR": {
+          "sheetPixels": [
+            920,
+            706
+          ],
+          "normalizedSheet": [
+            0.5989583333333334,
+            0.689453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleR": {
+          "sheetPixels": [
+            902,
+            950
+          ],
+          "normalizedSheet": [
+            0.5872395833333334,
+            0.927734375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelR": {
+          "sheetPixels": [
+            881,
+            990
+          ],
+          "normalizedSheet": [
+            0.5735677083333334,
+            0.966796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballR": {
+          "sheetPixels": [
+            964,
+            995
+          ],
+          "normalizedSheet": [
+            0.6276041666666666,
+            0.9716796875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeR": {
+          "sheetPixels": [
+            986,
+            996
+          ],
+          "normalizedSheet": [
+            0.6419270833333334,
+            0.97265625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footR": {
+          "sheetPixels": [
+            940,
+            998
+          ],
+          "normalizedSheet": [
+            0.6119791666666666,
+            0.974609375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "headTop": {
+          "sheetPixels": [
+            910.5,
+            10
+          ],
+          "normalizedSheet": [
+            0.5927734375,
+            0.009765625
+          ],
+          "visibility": "MEASURED_SOURCE_FEATURE",
+          "method": "alpha>=128 hair silhouette top",
+          "uncertaintyPx": null,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        }
+      },
+      "contacts": {
+        "L": {
+          "sheetPixels": [
+            971.5,
+            1002
+          ],
+          "status": "OCCLUDED_INFERRED_FROM_VISIBLE_PROFILE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        },
+        "R": {
+          "sheetPixels": [
+            971.5,
+            1002
+          ],
+          "status": "MEASURED_ALPHA_SILHOUETTE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        }
+      },
+      "adapterPayload": {
+        "schema": "cas/blender-measured/01",
+        "characterId": "fiona_left",
+        "sourceSha256": "faee95e9e4d9face0219318c7db3ec4847c0186b81dada9bf117d9726e70acb9",
+        "rigSize": [
+          1536,
+          1024
+        ],
+        "joints": {
+          "headCenter": [
+            909,
+            115
+          ],
+          "chin": [
+            941,
+            177
+          ],
+          "neckTop": [
+            913,
+            192
+          ],
+          "neckBase": [
+            913,
+            218
+          ],
+          "waist": [
+            912,
+            410
+          ],
+          "pelvis": [
+            911,
+            478
+          ],
+          "jawL": [
+            929,
+            165
+          ],
+          "jawR": [
+            929,
+            165
+          ],
+          "shoulderL": [
+            939,
+            237
+          ],
+          "elbowL": [
+            939,
+            374
+          ],
+          "wristL": [
+            940,
+            530
+          ],
+          "handL": [
+            942,
+            575
+          ],
+          "hipL": [
+            904,
+            491
+          ],
+          "kneeL": [
+            920,
+            706
+          ],
+          "ankleL": [
+            902,
+            950
+          ],
+          "heelL": [
+            881,
+            990
+          ],
+          "ballL": [
+            964,
+            995
+          ],
+          "toeL": [
+            986,
+            996
+          ],
+          "footL": [
+            940,
+            998
+          ],
+          "shoulderR": [
+            939,
+            237
+          ],
+          "elbowR": [
+            939,
+            374
+          ],
+          "wristR": [
+            940,
+            530
+          ],
+          "handR": [
+            942,
+            575
+          ],
+          "hipR": [
+            904,
+            491
+          ],
+          "kneeR": [
+            920,
+            706
+          ],
+          "ankleR": [
+            902,
+            950
+          ],
+          "heelR": [
+            881,
+            990
+          ],
+          "ballR": [
+            964,
+            995
+          ],
+          "toeR": [
+            986,
+            996
+          ],
+          "footR": [
+            940,
+            998
+          ],
+          "headTop": [
+            910.5,
+            10
+          ]
+        },
+        "annotationStatus": "CANDIDATE_SOURCE_PIXEL_ANNOTATIONS_WITH_EXPLICIT_HIDDEN_INFERENCE"
+      },
+      "common17BoneMap": [
+        {
+          "id": "root",
+          "parent": null,
+          "headSheetPixels": [
+            911,
+            1002
+          ],
+          "tailSheetPixels": [
+            911,
+            972
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "pelvis",
+          "parent": "root",
+          "headSheetPixels": [
+            911,
+            478
+          ],
+          "tailSheetPixels": [
+            912,
+            410
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "spine",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            912,
+            410
+          ],
+          "tailSheetPixels": [
+            913,
+            218
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "neck",
+          "parent": "spine",
+          "headSheetPixels": [
+            913,
+            218
+          ],
+          "tailSheetPixels": [
+            913,
+            192
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "head",
+          "parent": "neck",
+          "headSheetPixels": [
+            913,
+            192
+          ],
+          "tailSheetPixels": [
+            910.5,
+            10
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.L",
+          "parent": "spine",
+          "headSheetPixels": [
+            939,
+            237
+          ],
+          "tailSheetPixels": [
+            939,
+            374
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.L",
+          "parent": "upper_arm.L",
+          "headSheetPixels": [
+            939,
+            374
+          ],
+          "tailSheetPixels": [
+            940,
+            530
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.L",
+          "parent": "forearm.L",
+          "headSheetPixels": [
+            940,
+            530
+          ],
+          "tailSheetPixels": [
+            942,
+            575
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.R",
+          "parent": "spine",
+          "headSheetPixels": [
+            939,
+            237
+          ],
+          "tailSheetPixels": [
+            939,
+            374
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.R",
+          "parent": "upper_arm.R",
+          "headSheetPixels": [
+            939,
+            374
+          ],
+          "tailSheetPixels": [
+            940,
+            530
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.R",
+          "parent": "forearm.R",
+          "headSheetPixels": [
+            940,
+            530
+          ],
+          "tailSheetPixels": [
+            942,
+            575
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.L",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            904,
+            491
+          ],
+          "tailSheetPixels": [
+            920,
+            706
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.L",
+          "parent": "thigh.L",
+          "headSheetPixels": [
+            920,
+            706
+          ],
+          "tailSheetPixels": [
+            902,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.L",
+          "parent": "shin.L",
+          "headSheetPixels": [
+            902,
+            950
+          ],
+          "tailSheetPixels": [
+            986,
+            996
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.R",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            904,
+            491
+          ],
+          "tailSheetPixels": [
+            920,
+            706
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.R",
+          "parent": "thigh.R",
+          "headSheetPixels": [
+            920,
+            706
+          ],
+          "tailSheetPixels": [
+            902,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.R",
+          "parent": "shin.R",
+          "headSheetPixels": [
+            902,
+            950
+          ],
+          "tailSheetPixels": [
+            986,
+            996
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        }
+      ]
+    },
+    "back": {
+      "label": "back",
+      "screenFacing": "away_camera",
+      "nearAnatomicalSide": null,
+      "analysisRegion": [
+        1072,
+        0,
+        1536,
+        1024
+      ],
+      "alphaBBox": [
+        1107,
+        15,
+        1505,
+        1006
+      ],
+      "landmarks": {
+        "headCenter": {
+          "sheetPixels": [
+            1310,
+            115
+          ],
+          "normalizedSheet": [
+            0.8528645833333334,
+            0.1123046875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "chin": {
+          "sheetPixels": [
+            1310,
+            184
+          ],
+          "normalizedSheet": [
+            0.8528645833333334,
+            0.1796875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckTop": {
+          "sheetPixels": [
+            1310,
+            192
+          ],
+          "normalizedSheet": [
+            0.8528645833333334,
+            0.1875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "neckBase": {
+          "sheetPixels": [
+            1310,
+            218
+          ],
+          "normalizedSheet": [
+            0.8528645833333334,
+            0.212890625
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "waist": {
+          "sheetPixels": [
+            1310,
+            409
+          ],
+          "normalizedSheet": [
+            0.8528645833333334,
+            0.3994140625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "pelvis": {
+          "sheetPixels": [
+            1310,
+            473
+          ],
+          "normalizedSheet": [
+            0.8528645833333334,
+            0.4619140625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawL": {
+          "sheetPixels": [
+            1277,
+            166
+          ],
+          "normalizedSheet": [
+            0.8313802083333334,
+            0.162109375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "jawR": {
+          "sheetPixels": [
+            1343,
+            166
+          ],
+          "normalizedSheet": [
+            0.8743489583333334,
+            0.162109375
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderL": {
+          "sheetPixels": [
+            1228,
+            237
+          ],
+          "normalizedSheet": [
+            0.7994791666666666,
+            0.2314453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowL": {
+          "sheetPixels": [
+            1192,
+            366
+          ],
+          "normalizedSheet": [
+            0.7760416666666666,
+            0.357421875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristL": {
+          "sheetPixels": [
+            1160,
+            516
+          ],
+          "normalizedSheet": [
+            0.7552083333333334,
+            0.50390625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handL": {
+          "sheetPixels": [
+            1155,
+            558
+          ],
+          "normalizedSheet": [
+            0.751953125,
+            0.544921875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipL": {
+          "sheetPixels": [
+            1248,
+            485
+          ],
+          "normalizedSheet": [
+            0.8125,
+            0.4736328125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeL": {
+          "sheetPixels": [
+            1276,
+            705
+          ],
+          "normalizedSheet": [
+            0.8307291666666666,
+            0.6884765625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleL": {
+          "sheetPixels": [
+            1276,
+            950
+          ],
+          "normalizedSheet": [
+            0.8307291666666666,
+            0.927734375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelL": {
+          "sheetPixels": [
+            1268,
+            998
+          ],
+          "normalizedSheet": [
+            0.8255208333333334,
+            0.974609375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballL": {
+          "sheetPixels": [
+            1274,
+            1000
+          ],
+          "normalizedSheet": [
+            0.8294270833333334,
+            0.9765625
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeL": {
+          "sheetPixels": [
+            1274,
+            1003
+          ],
+          "normalizedSheet": [
+            0.8294270833333334,
+            0.9794921875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footL": {
+          "sheetPixels": [
+            1274,
+            1002
+          ],
+          "normalizedSheet": [
+            0.8294270833333334,
+            0.978515625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "shoulderR": {
+          "sheetPixels": [
+            1392,
+            237
+          ],
+          "normalizedSheet": [
+            0.90625,
+            0.2314453125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "elbowR": {
+          "sheetPixels": [
+            1420,
+            366
+          ],
+          "normalizedSheet": [
+            0.9244791666666666,
+            0.357421875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "wristR": {
+          "sheetPixels": [
+            1452,
+            516
+          ],
+          "normalizedSheet": [
+            0.9453125,
+            0.50390625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "handR": {
+          "sheetPixels": [
+            1457,
+            558
+          ],
+          "normalizedSheet": [
+            0.9485677083333334,
+            0.544921875
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "hipR": {
+          "sheetPixels": [
+            1372,
+            485
+          ],
+          "normalizedSheet": [
+            0.8932291666666666,
+            0.4736328125
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "kneeR": {
+          "sheetPixels": [
+            1343,
+            705
+          ],
+          "normalizedSheet": [
+            0.8743489583333334,
+            0.6884765625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ankleR": {
+          "sheetPixels": [
+            1335,
+            950
+          ],
+          "normalizedSheet": [
+            0.869140625,
+            0.927734375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "heelR": {
+          "sheetPixels": [
+            1344,
+            998
+          ],
+          "normalizedSheet": [
+            0.875,
+            0.974609375
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "ballR": {
+          "sheetPixels": [
+            1339,
+            1000
+          ],
+          "normalizedSheet": [
+            0.8717447916666666,
+            0.9765625
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "toeR": {
+          "sheetPixels": [
+            1339,
+            1003
+          ],
+          "normalizedSheet": [
+            0.8717447916666666,
+            0.9794921875
+          ],
+          "visibility": "OCCLUDED_INFERRED",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 30,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "footR": {
+          "sheetPixels": [
+            1339,
+            1002
+          ],
+          "normalizedSheet": [
+            0.8717447916666666,
+            0.978515625
+          ],
+          "visibility": "VISIBLE_PIXEL_ANNOTATION",
+          "method": "manual pixel annotation candidate",
+          "uncertaintyPx": 12,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        },
+        "headTop": {
+          "sheetPixels": [
+            1300.5,
+            15
+          ],
+          "normalizedSheet": [
+            0.8466796875,
+            0.0146484375
+          ],
+          "visibility": "MEASURED_SOURCE_FEATURE",
+          "method": "alpha>=128 hair silhouette top",
+          "uncertaintyPx": null,
+          "anatomicalAccuracy": "NOT_INDEPENDENTLY_VALIDATED"
+        }
+      },
+      "contacts": {
+        "L": {
+          "sheetPixels": [
+            1277,
+            1005
+          ],
+          "status": "MEASURED_ALPHA_SILHOUETTE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        },
+        "R": {
+          "sheetPixels": [
+            1337,
+            1005
+          ],
+          "status": "MEASURED_ALPHA_SILHOUETTE_CONTACT",
+          "alphaThreshold": 128,
+          "notPhysicalForcePlateMeasurement": true
+        }
+      },
+      "adapterPayload": {
+        "schema": "cas/blender-measured/01",
+        "characterId": "fiona_back",
+        "sourceSha256": "faee95e9e4d9face0219318c7db3ec4847c0186b81dada9bf117d9726e70acb9",
+        "rigSize": [
+          1536,
+          1024
+        ],
+        "joints": {
+          "headCenter": [
+            1310,
+            115
+          ],
+          "chin": [
+            1310,
+            184
+          ],
+          "neckTop": [
+            1310,
+            192
+          ],
+          "neckBase": [
+            1310,
+            218
+          ],
+          "waist": [
+            1310,
+            409
+          ],
+          "pelvis": [
+            1310,
+            473
+          ],
+          "jawL": [
+            1277,
+            166
+          ],
+          "jawR": [
+            1343,
+            166
+          ],
+          "shoulderL": [
+            1228,
+            237
+          ],
+          "elbowL": [
+            1192,
+            366
+          ],
+          "wristL": [
+            1160,
+            516
+          ],
+          "handL": [
+            1155,
+            558
+          ],
+          "hipL": [
+            1248,
+            485
+          ],
+          "kneeL": [
+            1276,
+            705
+          ],
+          "ankleL": [
+            1276,
+            950
+          ],
+          "heelL": [
+            1268,
+            998
+          ],
+          "ballL": [
+            1274,
+            1000
+          ],
+          "toeL": [
+            1274,
+            1003
+          ],
+          "footL": [
+            1274,
+            1002
+          ],
+          "shoulderR": [
+            1392,
+            237
+          ],
+          "elbowR": [
+            1420,
+            366
+          ],
+          "wristR": [
+            1452,
+            516
+          ],
+          "handR": [
+            1457,
+            558
+          ],
+          "hipR": [
+            1372,
+            485
+          ],
+          "kneeR": [
+            1343,
+            705
+          ],
+          "ankleR": [
+            1335,
+            950
+          ],
+          "heelR": [
+            1344,
+            998
+          ],
+          "ballR": [
+            1339,
+            1000
+          ],
+          "toeR": [
+            1339,
+            1003
+          ],
+          "footR": [
+            1339,
+            1002
+          ],
+          "headTop": [
+            1300.5,
+            15
+          ]
+        },
+        "annotationStatus": "CANDIDATE_SOURCE_PIXEL_ANNOTATIONS_WITH_EXPLICIT_HIDDEN_INFERENCE"
+      },
+      "common17BoneMap": [
+        {
+          "id": "root",
+          "parent": null,
+          "headSheetPixels": [
+            1310,
+            1005
+          ],
+          "tailSheetPixels": [
+            1310,
+            975
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "pelvis",
+          "parent": "root",
+          "headSheetPixels": [
+            1310,
+            473
+          ],
+          "tailSheetPixels": [
+            1310,
+            409
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "spine",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            1310,
+            409
+          ],
+          "tailSheetPixels": [
+            1310,
+            218
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "neck",
+          "parent": "spine",
+          "headSheetPixels": [
+            1310,
+            218
+          ],
+          "tailSheetPixels": [
+            1310,
+            192
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "head",
+          "parent": "neck",
+          "headSheetPixels": [
+            1310,
+            192
+          ],
+          "tailSheetPixels": [
+            1300.5,
+            15
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.L",
+          "parent": "spine",
+          "headSheetPixels": [
+            1228,
+            237
+          ],
+          "tailSheetPixels": [
+            1192,
+            366
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.L",
+          "parent": "upper_arm.L",
+          "headSheetPixels": [
+            1192,
+            366
+          ],
+          "tailSheetPixels": [
+            1160,
+            516
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.L",
+          "parent": "forearm.L",
+          "headSheetPixels": [
+            1160,
+            516
+          ],
+          "tailSheetPixels": [
+            1155,
+            558
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "upper_arm.R",
+          "parent": "spine",
+          "headSheetPixels": [
+            1392,
+            237
+          ],
+          "tailSheetPixels": [
+            1420,
+            366
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "forearm.R",
+          "parent": "upper_arm.R",
+          "headSheetPixels": [
+            1420,
+            366
+          ],
+          "tailSheetPixels": [
+            1452,
+            516
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "hand.R",
+          "parent": "forearm.R",
+          "headSheetPixels": [
+            1452,
+            516
+          ],
+          "tailSheetPixels": [
+            1457,
+            558
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.L",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            1248,
+            485
+          ],
+          "tailSheetPixels": [
+            1276,
+            705
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.L",
+          "parent": "thigh.L",
+          "headSheetPixels": [
+            1276,
+            705
+          ],
+          "tailSheetPixels": [
+            1276,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.L",
+          "parent": "shin.L",
+          "headSheetPixels": [
+            1276,
+            950
+          ],
+          "tailSheetPixels": [
+            1274,
+            1003
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "thigh.R",
+          "parent": "pelvis",
+          "headSheetPixels": [
+            1372,
+            485
+          ],
+          "tailSheetPixels": [
+            1343,
+            705
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "shin.R",
+          "parent": "thigh.R",
+          "headSheetPixels": [
+            1343,
+            705
+          ],
+          "tailSheetPixels": [
+            1335,
+            950
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        },
+        {
+          "id": "foot.R",
+          "parent": "shin.R",
+          "headSheetPixels": [
+            1335,
+            950
+          ],
+          "tailSheetPixels": [
+            1339,
+            1003
+          ],
+          "status": "FIONA_ANNOTATION_DERIVED_CANDIDATE"
+        }
+      ]
+    }
+  }
+}
