@@ -41,7 +41,16 @@ jobs:
                   assert im.getbbox() is not None
           print('MORWEN_05_4VIEW_TECHNICAL_PASS')
           PY
-      - name: Compare pinned reference silhouettes\n        run: |\n          python3 tools/blender/morwen_blender_05/compare_silhouettes.py\n          python3 - <<'PY'\n          import json\n          from pathlib import Path\n          q=json.loads(Path('assets/candidates/morwen-blender-05/reference_silhouette_diagnostics.json').read_text())\n          assert len(q['facings'])==4 and q['visual_approval']=='NOT_RUN'\n          PY\n      - name: Upload visual QA candidates
+      - name: Compare pinned reference silhouettes
+        run: |
+          python3 tools/blender/morwen_blender_05/compare_silhouettes.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          q=json.loads(Path('assets/candidates/morwen-blender-05/reference_silhouette_diagnostics.json').read_text())
+          assert len(q['facings'])==4 and q['visual_approval']=='NOT_RUN'
+          PY
+      - name: Upload visual QA candidates
         if: always()
         uses: actions/upload-artifact@v4
         with:
