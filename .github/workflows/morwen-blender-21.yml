@@ -1,0 +1,31 @@
+name: Morwen Blender 21 Torso Candidate Segments QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_21/**'
+      - '.github/workflows/morwen-blender-21.yml'
+  workflow_dispatch:
+jobs:
+  contours:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract and verify canonical reference alpha contours
+        run: python3 tools/blender/morwen_blender_21/segment_torso_candidates.py
+      - name: Verify report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("assets/candidates/morwen-blender-21/torso_candidate_segments.json")
+          d=json.loads(p.read_text())
+          assert len(d["views"])==4
+          assert not d["anatomical_target"] and d["review_required"]
+          for view in d["views"].values():
+              assert len(view["rows"])>210
+          print("MORWEN_21_QA_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-21-torso-segments
+          path: assets/candidates/morwen-blender-21/canonical_alpha_contours.json
