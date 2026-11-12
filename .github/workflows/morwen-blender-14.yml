@@ -1,0 +1,38 @@
+name: Morwen Blender 14 Topology Contract QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_14/**'
+      - '.github/workflows/morwen-blender-14.yml'
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate canonical reference SHA and joint-loop contract
+        run: python3 tools/blender/morwen_blender_14/build_topology_contract.py
+      - name: Validate report flags
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-blender-14/topology_contract.json')
+          d=json.loads(p.read_text())
+          assert len(d['reference_lock'])==4
+          assert len(d['join_contract'])==6
+          assert d['geometry_rules']['no_voxel_remesh']
+          assert not d['mesh_generated'] and not d['production_use']
+          print('MORWEN_14_CONTRACT_REPORT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-blender-14-topology-contract
+          path: assets/candidates/morwen-blender-14/topology_contract.json
+          if-no-files-found: warn
+          retention-days: 14
