@@ -20,8 +20,12 @@ def main() -> int:
     if src == dst or src in dst.parents or dst in src.parents:
         print("BLOCKED: source and output must be separate, non-nested directories", file=sys.stderr)
         return 2
-    if dst.exists():
+    if dst.exists() or dst.is_symlink():
         print("BLOCKED: output already exists; refusing overwrite", file=sys.stderr)
+        return 2
+    links = [p for p in src.rglob("*") if p.is_symlink()]
+    if links:
+        print("BLOCKED: symlinks are not allowed in release candidate: " + ", ".join(str(p.relative_to(src)) for p in links), file=sys.stderr)
         return 2
     hits = audit((src / "index.html").read_text(encoding="utf-8"))
     if hits:
