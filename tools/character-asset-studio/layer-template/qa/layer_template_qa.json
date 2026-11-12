@@ -1,0 +1,269 @@
+{
+  "schema": "cas/layer-template-qa/05",
+  "template": "tools/character-asset-studio/layer-template/morwen.layer-template.json",
+  "overall": "BLOCKED",
+  "counts": {
+    "FAIL": 0,
+    "BLOCKED": 20,
+    "NOT_RUN": 5,
+    "PASS": 26
+  },
+  "adoptionReady": false,
+  "checks": [
+    {
+      "name": "schema",
+      "status": "PASS",
+      "detail": "cas/layer-template/05"
+    },
+    {
+      "name": "canvas",
+      "status": "PASS",
+      "detail": "1200x1600"
+    },
+    {
+      "name": "views_complete",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "layers_L0_L3",
+      "status": "PASS",
+      "detail": "L0,L1,L2,L3"
+    },
+    {
+      "name": "no_mirroring",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "ground_source_sha",
+      "status": "PASS",
+      "detail": "tools/character-asset-studio/normalized/morwen-final-canon-20261111/view_transforms.json"
+    },
+    {
+      "name": "front:canon_sha",
+      "status": "PASS",
+      "detail": "a0f9bdbdfaf9"
+    },
+    {
+      "name": "front:canon_dims",
+      "status": "PASS",
+      "detail": "(1152, 1536) RGB"
+    },
+    {
+      "name": "front:transform_uniform_no_shear",
+      "status": "PASS",
+      "detail": "scale=1.041667"
+    },
+    {
+      "name": "front:ground_contact",
+      "status": "PASS",
+      "detail": "[599.75, 1540]"
+    },
+    {
+      "name": "back:canon_sha",
+      "status": "PASS",
+      "detail": "15c9d45283e0"
+    },
+    {
+      "name": "back:canon_dims",
+      "status": "PASS",
+      "detail": "(1152, 1536) RGB"
+    },
+    {
+      "name": "back:transform_uniform_no_shear",
+      "status": "PASS",
+      "detail": "scale=1.041667"
+    },
+    {
+      "name": "back:ground_contact",
+      "status": "PASS",
+      "detail": "[599.75, 1540]"
+    },
+    {
+      "name": "left:canon_sha",
+      "status": "PASS",
+      "detail": "cd1dbc8447de"
+    },
+    {
+      "name": "left:canon_dims",
+      "status": "PASS",
+      "detail": "(1152, 1536) RGB"
+    },
+    {
+      "name": "left:transform_uniform_no_shear",
+      "status": "PASS",
+      "detail": "scale=1.041667"
+    },
+    {
+      "name": "left:ground_contact",
+      "status": "PASS",
+      "detail": "[600, 1540]"
+    },
+    {
+      "name": "right:canon_sha",
+      "status": "PASS",
+      "detail": "f5b5787cce36"
+    },
+    {
+      "name": "right:canon_dims",
+      "status": "PASS",
+      "detail": "(1200, 1600) RGBA"
+    },
+    {
+      "name": "right:transform_uniform_no_shear",
+      "status": "PASS",
+      "detail": "scale=1"
+    },
+    {
+      "name": "right:ground_contact",
+      "status": "PASS",
+      "detail": "[600, 1540]"
+    },
+    {
+      "name": "L0:front:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L0:back:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L0:left:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L0:right:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L1:front:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L1:back:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L1:left:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L1:right:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L2:front:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L2:back:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L2:left:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L2:right:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L3:front:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L3:back:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L3:left:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "L3:right:image",
+      "status": "BLOCKED",
+      "detail": "NOT_DELIVERED"
+    },
+    {
+      "name": "joint_anchors",
+      "status": "BLOCKED",
+      "detail": "UNRESOLVED"
+    },
+    {
+      "name": "asym:right_garter:side_rule",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "asym:right_garter:canon_review",
+      "status": "BLOCKED",
+      "detail": "CONFLICT_REVIEW_REQUIRED"
+    },
+    {
+      "name": "asym:bag:side_rule",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "asym:bag:canon_review",
+      "status": "BLOCKED",
+      "detail": "CONFLICT_REVIEW_REQUIRED"
+    },
+    {
+      "name": "asym:hat_flower_ribbon:side_rule",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "asym:hat_flower_ribbon:canon_review",
+      "status": "BLOCKED",
+      "detail": "CONFLICT_REVIEW_REQUIRED"
+    },
+    {
+      "name": "asym:shoulder_emblem:canon_review",
+      "status": "NOT_RUN",
+      "detail": "REVIEW_REQUIRED"
+    },
+    {
+      "name": "asym:right_only_check_pattern:side_rule",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "asym:right_only_check_pattern:canon_review",
+      "status": "NOT_RUN",
+      "detail": "REVIEW_REQUIRED"
+    },
+    {
+      "name": "human:design_match",
+      "status": "NOT_RUN",
+      "detail": ""
+    },
+    {
+      "name": "human:age_appropriate_expression",
+      "status": "NOT_RUN",
+      "detail": ""
+    },
+    {
+      "name": "human:android_device",
+      "status": "NOT_RUN",
+      "detail": ""
+    }
+  ]
+}
