@@ -1,0 +1,51 @@
+name: Morwen Blender 11 Connected Body QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_11/**'
+      - '.github/workflows/morwen-blender-11.yml'
+permissions:
+  contents: read
+jobs:
+  connected:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Build source
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_03/build_unified.py
+      - name: Build previous core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_07/build_continuous_core.py
+      - name: Build calibrated core
+        run: blender -b -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_09/build_landmark_core.py
+      - name: Build and topology-test connected body
+        run: blender -b assets/candidates/morwen-blender-09/morwen_landmark_core_candidate.blend -t 1 --python-exit-code 1 --python tools/blender/morwen_blender_11/build_connected.py
+      - name: Verify report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-blender-11/build_report.json')
+          d=json.loads(p.read_text())
+          assert d['bones']==17
+          assert d['connected_components']==1
+          assert d['full_body_continuous'] is True
+          assert d['vertices']>100 and d['faces']>100
+          assert d['production_use'] is False
+          print('MORWEN_11_TOPOLOGY_PASS')
+          PY
+      - name: Upload topology candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-11-connected-body
+          path: assets/candidates/morwen-blender-11/
+          if-no-files-found: warn
+          retention-days: 14
