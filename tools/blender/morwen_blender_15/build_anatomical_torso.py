@@ -65,7 +65,6 @@ def main():
         components+=1;stack=[v];seen.add(v)
         while stack:
             for edge in stack.pop().link_edges:
-                other=edge.other_vert(edge.verts[0]) if False else None
                 for other in edge.verts:
                     if other not in seen:seen.add(other);stack.append(other)
     boundary=sum(e.is_boundary for e in bm.edges)
