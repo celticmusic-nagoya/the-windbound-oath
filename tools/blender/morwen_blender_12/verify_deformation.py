@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/"assets/candidates/morwen-blender-12"
 RIG="Morwen_unified_17_candidate"
 BODY="Morwen_11_voxel_union_candidate"
-POSES={"elbow.L":.30,"elbow.R":-.30,"shin.L":.22,"shin.R":-.22,
+POSES={"forearm.L":.30,"forearm.R":-.30,"shin.L":.22,"shin.R":-.22,
        "upper_arm.L":.25,"upper_arm.R":-.25,"thigh.L":.18,"thigh.R":-.18}
 
 def evaluated_points(obj):
