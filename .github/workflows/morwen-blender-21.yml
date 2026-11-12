@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract and verify canonical reference alpha contours
+      - name: Extract torso alpha span candidates from locked references
         run: python3 tools/blender/morwen_blender_21/segment_torso_candidates.py
       - name: Verify report
         run: |
@@ -22,10 +22,10 @@ jobs:
           assert len(d["views"])==4
           assert not d["anatomical_target"] and d["review_required"]
           for view in d["views"].values():
-              assert len(view["rows"])>210
+              assert len(view["samples"])>5
           print("MORWEN_21_QA_PASS")
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: morwen-blender-21-torso-segments
-          path: assets/candidates/morwen-blender-21/canonical_alpha_contours.json
+          path: assets/candidates/morwen-blender-21/torso_candidate_segments.json
