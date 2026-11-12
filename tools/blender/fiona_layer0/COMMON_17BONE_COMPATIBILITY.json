@@ -1,0 +1,78 @@
+{
+  "status": "SHARED_NAMES_AND_PARENT_GRAPH_ONLY_NO_MORWEN_COORDINATES",
+  "sourcePR": 246,
+  "sourceCommit": "a45ca2815675a4d186f08624de8d0329a6ed730c",
+  "sourcePath": "tools/blender/rigs/humanoid_v1.json",
+  "sourceGitBlob": "beb89c0b771e0843f1ec276a536b9b55d1ca312a",
+  "sourceSha256": "9c29847edfe02c7307c043995f066c558579f3cef244c4ca8bdacf1821e15859",
+  "bones": [
+    {
+      "id": "root",
+      "parent": null
+    },
+    {
+      "id": "pelvis",
+      "parent": "root"
+    },
+    {
+      "id": "spine",
+      "parent": "pelvis"
+    },
+    {
+      "id": "neck",
+      "parent": "spine"
+    },
+    {
+      "id": "head",
+      "parent": "neck"
+    },
+    {
+      "id": "upper_arm.L",
+      "parent": "spine"
+    },
+    {
+      "id": "forearm.L",
+      "parent": "upper_arm.L"
+    },
+    {
+      "id": "hand.L",
+      "parent": "forearm.L"
+    },
+    {
+      "id": "upper_arm.R",
+      "parent": "spine"
+    },
+    {
+      "id": "forearm.R",
+      "parent": "upper_arm.R"
+    },
+    {
+      "id": "hand.R",
+      "parent": "forearm.R"
+    },
+    {
+      "id": "thigh.L",
+      "parent": "pelvis"
+    },
+    {
+      "id": "shin.L",
+      "parent": "thigh.L"
+    },
+    {
+      "id": "foot.L",
+      "parent": "shin.L"
+    },
+    {
+      "id": "thigh.R",
+      "parent": "pelvis"
+    },
+    {
+      "id": "shin.R",
+      "parent": "thigh.R"
+    },
+    {
+      "id": "foot.R",
+      "parent": "shin.R"
+    }
+  ]
+}

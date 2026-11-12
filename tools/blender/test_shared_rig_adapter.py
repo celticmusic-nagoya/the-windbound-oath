@@ -19,13 +19,13 @@ def sample():
 
 class RigContractTests(unittest.TestCase):
     def test_source_topology(self):
-        self.assertEqual(len(TOPO["joints"]),30)
+        self.assertEqual(len(TOPO["joints"]),31)
         self.assertEqual(sum(v["parent"] is None for v in TOPO["joints"].values()),1)
         for name,entry in TOPO["joints"].items():
             if entry["parent"] is not None:
                 self.assertIn(entry["parent"],TOPO["joints"])
     def test_valid_synthetic(self):
-        self.assertEqual(len(adapter.validate(TOPO,sample())[0]),30)
+        self.assertEqual(len(adapter.validate(TOPO,sample())[0]),31)
     def test_missing_joint_blocks(self):
         data=sample();data["joints"].pop("pelvis")
         with self.assertRaises(ValueError):adapter.validate(TOPO,data)
