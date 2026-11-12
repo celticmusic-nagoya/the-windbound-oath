@@ -97,9 +97,17 @@ for row in rows:
    failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} tap target below 44 CSS px")
   if not button['visible44'] and not button.get('scrollReachable44',False):
    failures.append(f"{row['view']}/{row['kind']}/{row['expanded']}: {button['id']} visible target below 44 CSS px")
+# UX-MOBILE-18: explicit release-readiness audit, informational in development.
+# Never silently treat the current development build as production-ready.
+dev_controls = sorted({b['id'] for row in rows if row['expanded'] for b in row['buttons']
+                       if b.get('id') in ('nDevKill','rbDevKill')})
+release_audit = {'developmentCommandsVisible':dev_controls,
+                 'productionReady':not bool(dev_controls),
+                 'note':'Development commands are expected in this development build; block release until hidden or removed.'}
+print('RELEASE_UI_AUDIT',json.dumps(release_audit,ensure_ascii=False))
 try:
  baseline = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 except (OSError,subprocess.CalledProcessError):
  baseline = os.getenv('QA_BASE_SHA','UNKNOWN')
-(OUT/'results.json').write_text(json.dumps(dict(base=baseline,rows=rows,errors=errors,failures=failures,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
+(OUT/'results.json').write_text(json.dumps(dict(base=baseline,rows=rows,errors=errors,failures=failures,releaseAudit=release_audit,alphaThreshold=64,note='CSS-pixel alpha union of visible sprites; drawer rectangle overlap, translucent opacity ignored; cloud mobile emulation'),ensure_ascii=False,indent=2))
 print(json.dumps([dict(view=x['view'],kind=x['kind'],expanded=x['expanded'],spritePct=x['spriteCoveragePct'],viewportPct=x['panelViewportPct'],stage=x['stage'],stagePanelOverlapPct=x['stagePanelOverlapPct']) for x in rows],indent=2));print('FAILURES',*failures,sep='\n');print('PAGE_ERRORS',*errors,sep='\n');sys.exit(bool(errors or failures))
