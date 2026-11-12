@@ -14,7 +14,7 @@ jobs:
       - name: Install Blender runtime
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+          sudo apt-get install -y --no-install-recommends blender python3-numpy python3-pil libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
       - name: Preflight and build
         run: |
           blender -b -noaudio --python tools/blender/morwen_blender_27/preflight.py
@@ -25,26 +25,21 @@ jobs:
         run: blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
       - name: Validate transparency and occupied bounds
         run: |
-          python3 - <<'PY'
+          /usr/bin/python3 - <<'PY'
+          from PIL import Image
           from pathlib import Path
-          import struct,zlib
           base=Path('assets/candidates/morwen-blender-26')
           for name in ['front','left','right','back','three_quarter']:
-              p=base/(name+'.png')
-              data=p.read_bytes()
-              assert data[:8]==b'\x89PNG\r\n\x1a\n'
-              w,h,depth,color=struct.unpack('>IIBB',data[16:26])
-              assert w==512 and h==768 and color==6, (name,w,h,color)
-              chunks=[];i=8
-              while i<len(data):
-                  n=int.from_bytes(data[i:i+4],'big');typ=data[i+4:i+8]
-                  if typ==b'IDAT':chunks.append(data[i+8:i+8+n])
-                  i+=n+12
-                  if typ==b'IEND':break
-              raw=zlib.decompress(b''.join(chunks))
-              # Blender PNG may use all PNG row filters; alpha bytes are unchanged by filters
-              # only after unfiltering. Validate via Pillow on runner.
-              print(name,w,h,len(raw))
+              im=Image.open(base/(name+'.png')).convert('RGBA')
+              alpha=im.getchannel('A')
+              bounds=alpha.getbbox()
+              assert im.size==(512,768)
+              assert bounds is not None, f'{name}: empty silhouette'
+              assert alpha.getextrema()[0]==0, f'{name}: no transparent background'
+              x0,y0,x1,y1=bounds
+              assert 10<x0<x1<502 and 10<y0<y1<758, f'{name}: cropped {bounds}'
+              assert (x1-x0)>20 and (y1-y0)>60, f'{name}: too small {bounds}'
+              print(name,bounds)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
