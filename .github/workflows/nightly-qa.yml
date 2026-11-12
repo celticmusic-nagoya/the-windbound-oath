@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 8
     env:
       PYTHONDONTWRITEBYTECODE: '1'
-      QA_OUT: ${{ runner.temp }}/nightly-qa
+      QA_OUT: /tmp/windbound-nightly-qa
     steps:
       - name: Prepare report directory
         id: prepare
@@ -67,6 +67,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nightly-qa-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/nightly-qa/
+          path: ${{ env.QA_OUT }}/
           if-no-files-found: error
           retention-days: 7
