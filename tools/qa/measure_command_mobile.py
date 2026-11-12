@@ -80,6 +80,17 @@ for row in rows:
  for group in row['groups']:
   if group['coveragePct'] is not None and group['coveragePct']>10.0:
    failures.append(f"{row['view']}/normal: {group['selector']} occlusion exceeds 10% ({group['coveragePct']}%)")
+# UX-MOBILE-16: prevent overlapping normal-battle HP labels in landscape.
+for row in rows:
+ if not (row['expanded'] and row['kind']=='normal' and row['view'] in ('landscape','landscape-small')):
+  continue
+ huds=[h for h in row.get('huds',[]) if h.get('id') in ('hudAidan','hudFiona','hudGob')]
+ for i,a in enumerate(huds):
+  for b in huds[i+1:]:
+   x=max(0,min(a['rect']['x']+a['rect']['w'],b['rect']['x']+b['rect']['w'])-max(a['rect']['x'],b['rect']['x']))
+   y=max(0,min(a['rect']['y']+a['rect']['h'],b['rect']['y']+b['rect']['h'])-max(a['rect']['y'],b['rect']['y']))
+   if x*y>1:
+    failures.append(f"{row['view']}/normal: HP labels {a['id']} and {b['id']} overlap ({x*y:.1f}px2)")
 for row in rows:
  for button in row['buttons']:
   if not button['minimum44']:
