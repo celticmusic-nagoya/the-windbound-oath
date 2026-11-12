@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[2]
+ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"tools/blender"))
 from render_morwen_joint_overlays import svg_for
 from qa_morwen_anchors import validate
