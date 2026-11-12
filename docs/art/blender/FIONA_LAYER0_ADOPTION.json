@@ -17,12 +17,24 @@
     "back"
   ],
   "appearance": "Long light chestnut wavy hair, green eyes, no hair ornament, ivory/green/gold innerwear, upright head",
-  "binaryStatus": "PENDING_UPLOAD_TO_GITHUB",
+  "binaryStatus": "PENDING_UPLOAD_TO_GITHUB_VERIFIED_LOCAL_ORIGINAL",
   "plannedAssetPath": "assets/characters/fiona/layer0/fiona_layer0_fourview_master.png",
   "rules": [
     "Original PNG bytes must be preserved and SHA-256 verified",
     "No replacement with similar regenerated image",
     "Do not merge to main or integrate in runtime until binary uploaded and QA verified",
     "Director-approved visual composition does not imply measured joint alignment QA"
-  ]
+  ],
+  "localVerification": {
+    "sha256Match": true,
+    "dimensionsMatch": true,
+    "mode": "RGBA",
+    "cornerAlpha": 0,
+    "alphaRange": [
+      0,
+      254
+    ],
+    "method": "local PNG bytes inspected",
+    "binaryCommittedToGitHub": false
+  }
 }
