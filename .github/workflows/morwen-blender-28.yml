@@ -40,6 +40,8 @@ jobs:
           name: morwen-28-source-blend
           path: assets/candidates/morwen-blender-24/
       - name: Render five views
+        env:
+          MORWEN_RENDER_ONLY: '1'
         run: blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
       - uses: actions/upload-artifact@v4
         if: always()
