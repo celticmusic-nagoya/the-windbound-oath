@@ -256,3 +256,16 @@ body.raiderBattleMode #raiderBattle #rbEnemyHud small{
    right:max(10px,env(safe-area-inset-right))!important;
  }
 }
+
+/* UX-MOBILE-12: landscape command rail / battlefield boundary.
+   Retain the existing stage coordinate system and actor scale; constrain
+   only its outer box so the rail cannot overlap the stage rectangle. */
+@media (orientation:landscape) and (max-height:520px){
+ body.normalBattleMode #attackBattle .v2BattleStage{
+   box-sizing:border-box!important;
+   width:calc(100vw - 220px - min(340px,43vw) - 20px)!important;
+   max-width:none!important;
+   right:auto!important;
+   overflow:visible!important;
+ }
+}
