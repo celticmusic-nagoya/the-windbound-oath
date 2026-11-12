@@ -1,0 +1,1100 @@
+{
+  "schema": "cas/anchor-bridge/mappings-11",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "targetSize": [
+    1200,
+    1600
+  ],
+  "status": "BLOCKED",
+  "reason": "Registration geometry is derived; generic-to-Morwen anatomy fit and adoption are not established",
+  "views": {
+    "front": {
+      "crop": [
+        0,
+        0,
+        384,
+        1024
+      ],
+      "sourceSpace": "sheetPx (subtract crop origin first)",
+      "targetSpace": "rigPx",
+      "matrix": [
+        1.483695652173913,
+        0,
+        0,
+        1.483695652173913,
+        315.1304347826087,
+        80.0434782608695
+      ],
+      "classification": "DERIVED_CANDIDATE",
+      "basis": "uniform two-anchor registration (crown and ground); no measured body retarget fit",
+      "scale": 1.483695652173913,
+      "sourceGround": [
+        192,
+        984
+      ],
+      "targetGround": [
+        600,
+        1540
+      ],
+      "sourceCrown": [
+        192.0,
+        64.0
+      ],
+      "targetCrown": [
+        600,
+        175
+      ],
+      "registrationQA": "PASS",
+      "characterFitStatus": "BLOCKED",
+      "rigSourceSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "joints": {
+        "ankleL": {
+          "xy": [
+            635.608695652174,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ankleR": {
+          "xy": [
+            564.3913043478261,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ballL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "ballR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "chin": {
+          "xy": [
+            600.0,
+            353.0434782608695
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "elbowL": {
+          "xy": [
+            724.6304347826087,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "elbowR": {
+          "xy": [
+            475.3695652173913,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "footL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "footR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "headCenter": {
+          "xy": [
+            600.0,
+            264.02173913043475
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "headTop": {
+          "xy": [
+            600.0,
+            174.99999999999994
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "heelL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "heelR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "hipL": {
+          "xy": [
+            650.445652173913,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "hipR": {
+          "xy": [
+            549.554347826087,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "jawL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "jawR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "kneeL": {
+          "xy": [
+            644.5108695652174,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "kneeR": {
+          "xy": [
+            555.4891304347826,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckBase": {
+          "xy": [
+            600.0,
+            394.58695652173907
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckTop": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "shoulderL": {
+          "xy": [
+            703.858695652174,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "shoulderR": {
+          "xy": [
+            496.1413043478261,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "toeL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "toeR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "waist": {
+          "xy": [
+            600.0,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "wristL": {
+          "xy": [
+            739.4673913043478,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "wristR": {
+          "xy": [
+            460.53260869565213,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "pelvis": {
+          "xy": [
+            600.0,
+            792.2173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        }
+      },
+      "referenceRigResidualPx": {
+        "ankleL": 4.918283085245845,
+        "ankleR": 4.918283085245877,
+        "chin": 18.043478260869506,
+        "elbowL": 73.98558141346753,
+        "elbowR": 73.98558141346756,
+        "headCenter": 9.021739130434753,
+        "headTop": 5.684341886080802e-14,
+        "hipL": 60.088609152696165,
+        "hipR": 60.088609152696165,
+        "kneeL": 78.59882119228392,
+        "kneeR": 78.59882119228392,
+        "neckBase": 0.41304347826093135,
+        "shoulderL": 12.716559801876624,
+        "shoulderR": 12.716559801876723,
+        "waist": 11.652173913043384,
+        "wristL": 112.4991540610917,
+        "wristR": 112.49915406109162,
+        "pelvis": 48.21739130434776
+      }
+    },
+    "right": {
+      "crop": [
+        384,
+        0,
+        384,
+        1024
+      ],
+      "sourceSpace": "sheetPx (subtract crop origin first)",
+      "targetSpace": "rigPx",
+      "matrix": [
+        1.483695652173913,
+        0,
+        0,
+        1.483695652173913,
+        315.1304347826087,
+        80.0434782608695
+      ],
+      "classification": "DERIVED_CANDIDATE",
+      "basis": "uniform two-anchor registration (crown and ground); no measured body retarget fit",
+      "scale": 1.483695652173913,
+      "sourceGround": [
+        192,
+        984
+      ],
+      "targetGround": [
+        600,
+        1540
+      ],
+      "sourceCrown": [
+        192.0,
+        64.0
+      ],
+      "targetCrown": [
+        600,
+        175
+      ],
+      "registrationQA": "PASS",
+      "characterFitStatus": "BLOCKED",
+      "rigSourceSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "joints": {
+        "ankleL": {
+          "xy": [
+            600.0,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ankleR": {
+          "xy": [
+            600.0,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ballL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "ballR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "chin": {
+          "xy": [
+            605.9347826086956,
+            353.0434782608695
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "elbowL": {
+          "xy": [
+            594.0652173913044,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "elbowR": {
+          "xy": [
+            594.0652173913044,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "footL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "footR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "headCenter": {
+          "xy": [
+            605.9347826086956,
+            264.02173913043475
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "headTop": {
+          "xy": [
+            600.0,
+            174.99999999999994
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "heelL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "heelR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "hipL": {
+          "xy": [
+            600.0,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "hipR": {
+          "xy": [
+            600.0,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "jawL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "jawR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "kneeL": {
+          "xy": [
+            605.9347826086956,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "kneeR": {
+          "xy": [
+            605.9347826086956,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckBase": {
+          "xy": [
+            600.0,
+            394.58695652173907
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckTop": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "shoulderL": {
+          "xy": [
+            600.0,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "shoulderR": {
+          "xy": [
+            600.0,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "toeL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "toeR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "waist": {
+          "xy": [
+            600.0,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "wristL": {
+          "xy": [
+            605.9347826086956,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "wristR": {
+          "xy": [
+            605.9347826086956,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "pelvis": {
+          "xy": [
+            600.0,
+            792.2173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        }
+      },
+      "referenceRigResidualPx": {
+        "ankleL": 36.307764744174705,
+        "ankleR": 36.307764744174705,
+        "chin": 18.99444003815186,
+        "elbowL": 60.94183985564053,
+        "elbowR": 60.94183985564053,
+        "headCenter": 10.798769446103277,
+        "headTop": 5.684341886080802e-14,
+        "hipL": 60.086956521739125,
+        "hipR": 60.086956521739125,
+        "kneeL": 78.46389727641234,
+        "kneeR": 78.46389727641234,
+        "neckBase": 0.41304347826093135,
+        "shoulderL": 6.130434782608631,
+        "shoulderR": 6.130434782608631,
+        "waist": 11.652173913043384,
+        "wristL": 79.78624858418888,
+        "wristR": 79.78624858418888,
+        "pelvis": 48.21739130434776
+      }
+    },
+    "left": {
+      "crop": [
+        768,
+        0,
+        384,
+        1024
+      ],
+      "sourceSpace": "sheetPx (subtract crop origin first)",
+      "targetSpace": "rigPx",
+      "matrix": [
+        1.483695652173913,
+        0,
+        0,
+        1.483695652173913,
+        315.1304347826087,
+        80.0434782608695
+      ],
+      "classification": "DERIVED_CANDIDATE",
+      "basis": "uniform two-anchor registration (crown and ground); no measured body retarget fit",
+      "scale": 1.483695652173913,
+      "sourceGround": [
+        192,
+        984
+      ],
+      "targetGround": [
+        600,
+        1540
+      ],
+      "sourceCrown": [
+        192.0,
+        64.0
+      ],
+      "targetCrown": [
+        600,
+        175
+      ],
+      "registrationQA": "PASS",
+      "characterFitStatus": "BLOCKED",
+      "rigSourceSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "joints": {
+        "ankleL": {
+          "xy": [
+            600.0,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ankleR": {
+          "xy": [
+            600.0,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ballL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "ballR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "chin": {
+          "xy": [
+            594.0652173913044,
+            353.0434782608695
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "elbowL": {
+          "xy": [
+            605.9347826086956,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "elbowR": {
+          "xy": [
+            605.9347826086956,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "footL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "footR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "headCenter": {
+          "xy": [
+            594.0652173913044,
+            264.02173913043475
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "headTop": {
+          "xy": [
+            600.0,
+            174.99999999999994
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "heelL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "heelR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "hipL": {
+          "xy": [
+            600.0,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "hipR": {
+          "xy": [
+            600.0,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "jawL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "jawR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "kneeL": {
+          "xy": [
+            594.0652173913044,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "kneeR": {
+          "xy": [
+            594.0652173913044,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckBase": {
+          "xy": [
+            600.0,
+            394.58695652173907
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckTop": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "shoulderL": {
+          "xy": [
+            600.0,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "shoulderR": {
+          "xy": [
+            600.0,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "toeL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "toeR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "waist": {
+          "xy": [
+            600.0,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "wristL": {
+          "xy": [
+            594.0652173913044,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "wristR": {
+          "xy": [
+            594.0652173913044,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "pelvis": {
+          "xy": [
+            600.0,
+            792.2173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        }
+      },
+      "referenceRigResidualPx": {
+        "ankleL": 36.307764744174705,
+        "ankleR": 36.307764744174705,
+        "chin": 18.99444003815186,
+        "elbowL": 60.94183985564053,
+        "elbowR": 60.94183985564053,
+        "headCenter": 10.798769446103277,
+        "headTop": 5.684341886080802e-14,
+        "hipL": 60.086956521739125,
+        "hipR": 60.086956521739125,
+        "kneeL": 78.46389727641234,
+        "kneeR": 78.46389727641234,
+        "neckBase": 0.41304347826093135,
+        "shoulderL": 6.130434782608631,
+        "shoulderR": 6.130434782608631,
+        "waist": 11.652173913043384,
+        "wristL": 79.78624858418888,
+        "wristR": 79.78624858418888,
+        "pelvis": 48.21739130434776
+      }
+    },
+    "back": {
+      "crop": [
+        1152,
+        0,
+        384,
+        1024
+      ],
+      "sourceSpace": "sheetPx (subtract crop origin first)",
+      "targetSpace": "rigPx",
+      "matrix": [
+        1.483695652173913,
+        0,
+        0,
+        1.483695652173913,
+        315.1304347826087,
+        80.0434782608695
+      ],
+      "classification": "DERIVED_CANDIDATE",
+      "basis": "uniform two-anchor registration (crown and ground); no measured body retarget fit",
+      "scale": 1.483695652173913,
+      "sourceGround": [
+        192,
+        984
+      ],
+      "targetGround": [
+        600,
+        1540
+      ],
+      "sourceCrown": [
+        192.0,
+        64.0
+      ],
+      "targetCrown": [
+        600,
+        175
+      ],
+      "registrationQA": "PASS",
+      "characterFitStatus": "BLOCKED",
+      "rigSourceSha256": "2bec0ed7176fbf966f1e1955f23da17c4810781c16e65d31b29882a5c9083c66",
+      "joints": {
+        "ankleL": {
+          "xy": [
+            564.3913043478261,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ankleR": {
+          "xy": [
+            635.608695652174,
+            1474.7173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "ballL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "ballR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "chin": {
+          "xy": [
+            600.0,
+            353.0434782608695
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "elbowL": {
+          "xy": [
+            475.3695652173913,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "elbowR": {
+          "xy": [
+            724.6304347826087,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "footL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "footR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "handR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "headCenter": {
+          "xy": [
+            600.0,
+            264.02173913043475
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "headTop": {
+          "xy": [
+            600.0,
+            174.99999999999994
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "heelL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "heelR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "hipL": {
+          "xy": [
+            549.554347826087,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "hipR": {
+          "xy": [
+            650.445652173913,
+            804.0869565217391
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "jawL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "jawR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "kneeL": {
+          "xy": [
+            555.4891304347826,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "kneeR": {
+          "xy": [
+            644.5108695652174,
+            1154.2391304347825
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckBase": {
+          "xy": [
+            600.0,
+            394.58695652173907
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "neckTop": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "shoulderL": {
+          "xy": [
+            496.1413043478261,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "shoulderR": {
+          "xy": [
+            703.858695652174,
+            436.13043478260863
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "toeL": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "toeR": {
+          "xy": null,
+          "status": "UNRESOLVED",
+          "sourceStatus": "UNRESOLVED"
+        },
+        "waist": {
+          "xy": [
+            600.0,
+            661.6521739130434
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "DERIVED"
+        },
+        "wristL": {
+          "xy": [
+            460.53260869565213,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "wristR": {
+          "xy": [
+            739.4673913043478,
+            851.5652173913043
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        },
+        "pelvis": {
+          "xy": [
+            600.0,
+            792.2173913043478
+          ],
+          "status": "DERIVED",
+          "sourceStatus": "MEASURED"
+        }
+      },
+      "referenceRigResidualPx": {
+        "ankleL": 4.918283085245877,
+        "ankleR": 4.918283085245845,
+        "chin": 18.043478260869506,
+        "elbowL": 73.98558141346756,
+        "elbowR": 73.98558141346753,
+        "headCenter": 9.021739130434753,
+        "headTop": 5.684341886080802e-14,
+        "hipL": 60.088609152696165,
+        "hipR": 60.088609152696165,
+        "kneeL": 78.59882119228392,
+        "kneeR": 78.59882119228392,
+        "neckBase": 0.41304347826093135,
+        "shoulderL": 12.716559801876723,
+        "shoulderR": 12.716559801876624,
+        "waist": 11.652173913043384,
+        "wristL": 112.49915406109162,
+        "wristR": 112.4991540610917,
+        "pelvis": 48.21739130434776
+      }
+    }
+  },
+  "adoptionReady": false
+}

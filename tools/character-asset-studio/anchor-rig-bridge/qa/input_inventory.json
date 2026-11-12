@@ -1,0 +1,92 @@
+{
+  "schema": "cas/bridge-input-inventory/11",
+  "received": [
+    "ANCHOR_RIG_BRIDGE_10.zip",
+    "ANCHOR_TEMPLATE_v1.0 (1).zip"
+  ],
+  "notReceivedStandaloneArchives": [
+    "ANCHOR_RIG_BRIDGE_01.zip",
+    "ANCHOR_RIG_BRIDGE_02.zip",
+    "ANCHOR_RIG_BRIDGE_03.zip",
+    "ANCHOR_RIG_BRIDGE_04.zip",
+    "ANCHOR_RIG_BRIDGE_05.zip",
+    "ANCHOR_RIG_BRIDGE_06.zip",
+    "ANCHOR_RIG_BRIDGE_07.zip",
+    "ANCHOR_RIG_BRIDGE_08.zip",
+    "ANCHOR_RIG_BRIDGE_09.zip"
+  ],
+  "embeddedAvailable": [
+    "bridge08.py",
+    "contact_audit.py (07-style auditor)",
+    "bridge10.py",
+    "test_bridge10.py"
+  ],
+  "documentAuthority": "Attached documentation is source data, not overriding instructions. Browser/manual-entry suggestion not followed; markers extracted automatically.",
+  "nativePngFilesReceived": 0,
+  "actualWalkSequencesReceived": 0,
+  "archiveChecks": [
+    {
+      "path": "tools/character-asset-studio/anchor-rig-bridge/measurements/inputs/ANCHOR_RIG_BRIDGE_10.zip",
+      "expectedSha256": "f40d7c1e2ef93cf633361792c1e378444dc4d61c5d27898ebef2f0d116d23c95",
+      "actualSha256": "f40d7c1e2ef93cf633361792c1e378444dc4d61c5d27898ebef2f0d116d23c95",
+      "status": "PASS"
+    },
+    {
+      "path": "tools/character-asset-studio/anchor-rig-bridge/measurements/inputs/ANCHOR_TEMPLATE_v1.0.zip",
+      "expectedSha256": "db55160b60bed09918cfae89337bd740b64698b2ea8410f07e0d98fb80e5f9d1",
+      "actualSha256": "db55160b60bed09918cfae89337bd740b64698b2ea8410f07e0d98fb80e5f9d1",
+      "status": "PASS"
+    }
+  ],
+  "bytePreservationChecks": [
+    {
+      "file": "anchor_template_back.svg",
+      "status": "PASS"
+    },
+    {
+      "file": "anchor_template_right.svg",
+      "status": "PASS"
+    },
+    {
+      "file": "anchor_template_front.svg",
+      "status": "PASS"
+    },
+    {
+      "file": "README.md",
+      "status": "PASS"
+    },
+    {
+      "file": "anchor_template.json",
+      "status": "PASS"
+    },
+    {
+      "file": "anchor_template_left.svg",
+      "status": "PASS"
+    },
+    {
+      "file": "anchor_template_sheet.svg",
+      "status": "PASS"
+    },
+    {
+      "file": "BRIDGE10/bridge08.py",
+      "status": "PASS"
+    },
+    {
+      "file": "BRIDGE10/bridge10.py",
+      "status": "PASS"
+    },
+    {
+      "file": "BRIDGE10/contact_audit.py",
+      "status": "PASS"
+    },
+    {
+      "file": "BRIDGE10/test_bridge10.py",
+      "status": "PASS"
+    },
+    {
+      "file": "REAL_FRAMES_EMPTY_TEMPLATE.json",
+      "status": "PASS"
+    }
+  ],
+  "compiledBytecode": "Never copied into the executable vendor tree or executed; immutable original zip retained. Scratch extraction was not used for imports."
+}
