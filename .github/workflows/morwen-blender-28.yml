@@ -1,0 +1,73 @@
+name: Morwen Blender 28 Independent Render and GLB
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_28/**'
+      - '.github/workflows/morwen-blender-28.yml'
+  workflow_dispatch:
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Preflight
+        run: blender -b -noaudio --python tools/blender/morwen_blender_27/preflight.py
+      - name: Build torso
+        run: blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
+      - name: Upload prepared candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-28-source-blend
+          path: assets/candidates/morwen-blender-24/morwen_anatomical_torso_candidate.blend
+          if-no-files-found: error
+  render:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - uses: actions/download-artifact@v4
+        with:
+          name: morwen-28-source-blend
+          path: assets/candidates/morwen-blender-24/
+      - name: Render five views
+        env:
+          MORWEN_RENDER_ONLY: '1'
+        run: blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-28-render-diagnostics
+          path: assets/candidates/morwen-blender-26/
+          if-no-files-found: warn
+  export:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - uses: actions/download-artifact@v4
+        with:
+          name: morwen-28-source-blend
+          path: assets/candidates/morwen-blender-24/
+      - name: Export GLB independently
+        run: blender -b -noaudio --python tools/blender/morwen_blender_28/export_glb.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-28-glb-diagnostics
+          path: assets/candidates/morwen-blender-28/
+          if-no-files-found: warn

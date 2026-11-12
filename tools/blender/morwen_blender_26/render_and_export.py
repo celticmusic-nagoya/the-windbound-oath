@@ -1,7 +1,7 @@
 """Candidate-only orthographic render + glTF smoke test for Morwen Blender-24.
 Usage: blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
 """
-import json, math
+import json, math, os
 from pathlib import Path
 import bpy
 from mathutils import Vector
@@ -49,12 +49,13 @@ def main():
         bpy.ops.render.render(write_still=True)
         assert (OUT/(name+".png")).stat().st_size>1000
         files.append(name+".png")
-    bpy.ops.export_scene.gltf(filepath=str(OUT/"morwen_torso_candidate.glb"),
-       export_format="GLB",use_selection=True)
-    assert (OUT/"morwen_torso_candidate.glb").stat().st_size>1000
+    if os.environ.get("MORWEN_RENDER_ONLY") != "1":
+        bpy.ops.export_scene.gltf(filepath=str(OUT/"morwen_torso_candidate.glb"),
+           export_format="GLB",use_selection=True)
+        assert (OUT/"morwen_torso_candidate.glb").stat().st_size>1000
     report={"task":"MORWEN-BLENDER-26","art_approval":"NOT_RUN",
       "source_candidate":"BLENDER-24","render_views":files,
-      "glb":"morwen_torso_candidate.glb","production_use":False}
+      "glb":None if os.environ.get("MORWEN_RENDER_ONLY") == "1" else "morwen_torso_candidate.glb","production_use":False}
     (OUT/"report.json").write_text(json.dumps(report,indent=2)+"\n")
     print("MORWEN_26_RENDER_EXPORT_PASS")
 if __name__=="__main__":main()
