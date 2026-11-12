@@ -18,8 +18,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
       - name: Validate Python
-        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py
-      - name: Generate base, detail and refined previews
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py
+      - name: Generate MAP08 MAP11 MAP12 MAP13 previews
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
           LIBGL_ALWAYS_SOFTWARE: "1"
@@ -27,6 +27,7 @@ jobs:
           xvfb-run -a blender --background --python tools/map_blender/map_blender_08.py
           xvfb-run -a blender --background --python tools/map_blender/map_blender_11_detail.py
           xvfb-run -a blender --background --python tools/map_blender/map_blender_12_refine.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_13_cliff.py
       - name: Verify SHA-256 and predecessor preservation
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
@@ -35,14 +36,12 @@ jobs:
           import json,os,hashlib
           from pathlib import Path
           p=Path(os.environ["MAP_OUTPUT"])
-          base=json.loads((p/"build_report.json").read_text())
-          detail=json.loads((p/"detail_report.json").read_text())
-          refined=json.loads((p/"map12_report.json").read_text())
-          for report in (base,detail,refined):
+          reports=[json.loads((p/name).read_text()) for name in ("build_report.json","detail_report.json","map12_report.json","map13_report.json")]
+          for report in reports:
               for name,expected in report["files"].items():
                   assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
-          assert detail["source_sha256"]==base["files"]["rilde_blockout.blend"]
-          assert refined["source_sha256"]==detail["files"]["rilde_detail.blend"]
+          for i,name in enumerate(("rilde_blockout.blend","rilde_detail.blend","rilde_map12.blend"),1):
+              assert reports[i]["source_sha256"]==reports[i-1]["files"][name],name
           print("All SHA-256 and predecessor preservation checks: PASS")
           PY
       - name: Upload QA artifacts
