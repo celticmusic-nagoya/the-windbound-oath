@@ -1,0 +1,34 @@
+name: Morwen Blender 24 Anatomical Torso QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_24/**'
+      - '.github/workflows/morwen-blender-24.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Build and topology check
+        run: blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
+      - name: Verify candidate report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("assets/candidates/morwen-blender-24/build_report.json")
+          d=json.loads(p.read_text())
+          assert d["candidate_only"] and d["art_approval"]=="NOT_RUN"
+          assert d["boundary_edges"]==d["nonmanifold_edges"]==0
+          assert d["rings"]>=40 and d["vertices"]==d["rings"]*32
+          assert Path("assets/candidates/morwen-blender-24/morwen_anatomical_torso_candidate.blend").is_file()
+          print("MORWEN_24_BUILD_QA_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-24-candidate
+          path: assets/candidates/morwen-blender-24/
+          if-no-files-found: error
