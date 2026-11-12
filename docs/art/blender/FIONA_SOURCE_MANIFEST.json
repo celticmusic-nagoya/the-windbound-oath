@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "task": "FIONA-BLENDER-02",
+  "status": "REFERENCE_ONLY",
+  "canonicalLore": "celticmusic-nagoya/the-windbound-oath-handoff/reference/lore/ (main latest)",
+  "sourceAssets": [
+    {
+      "path": "assets/images/characters/portraits/fiona/fiona_normal.png",
+      "sha256": "89efd67352ac7f03882242d2363a2a2c8762bc0489e447a7d6089745a227094a",
+      "source": "docs/portraits/PHASE4_ADOPTED_NORMALS.md",
+      "role": "approved_portrait_not_full_body_master",
+      "verification": "sha_manifest_record_only_not_rehashed"
+    }
+  ],
+  "fullBodyMaster": "UNVERIFIED",
+  "views": [
+    {
+      "direction": "front",
+      "status": "BLOCKED_UNTIL_VISUAL_MASTER_MATCH"
+    },
+    {
+      "direction": "back",
+      "status": "BLOCKED_UNTIL_VISUAL_MASTER_MATCH"
+    },
+    {
+      "direction": "left",
+      "status": "BLOCKED_UNTIL_VISUAL_MASTER_MATCH"
+    },
+    {
+      "direction": "right",
+      "status": "BLOCKED_UNTIL_VISUAL_MASTER_MATCH"
+    }
+  ],
+  "modeling": {
+    "pose": "A-pose",
+    "parts": [
+      "body",
+      "hair_front",
+      "hair_back",
+      "blouse",
+      "corset",
+      "arms",
+      "hands",
+      "legs",
+      "boots",
+      "ornaments",
+      "staff",
+      "gem"
+    ],
+    "measurements": "PENDING_REFERENCE",
+    "asymmetry": "DO_NOT_INFER"
+  },
+  "protection": {
+    "overwriteApprovedAssets": false,
+    "productionIntegration": false,
+    "mainMerge": false,
+    "websitePublish": false
+  }
+}
