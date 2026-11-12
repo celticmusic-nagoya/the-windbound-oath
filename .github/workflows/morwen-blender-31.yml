@@ -1,0 +1,49 @@
+name: Morwen Blender 31 Framing QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_26/render_and_export.py'
+      - '.github/workflows/morwen-blender-31.yml'
+  workflow_dispatch:
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy python3-pil libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Preflight and build
+        run: |
+          blender -b -noaudio --python tools/blender/morwen_blender_27/preflight.py
+          blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
+      - name: Render only
+        env:
+          MORWEN_RENDER_ONLY: '1'
+        run: blender -b -noaudio --python tools/blender/morwen_blender_26/render_and_export.py
+      - name: Validate transparency and occupied bounds
+        run: |
+          /usr/bin/python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          base=Path('assets/candidates/morwen-blender-26')
+          for name in ['front','left','right','back','three_quarter']:
+              im=Image.open(base/(name+'.png')).convert('RGBA')
+              alpha=im.getchannel('A')
+              bounds=alpha.getbbox()
+              assert im.size==(512,768)
+              assert bounds is not None, f'{name}: empty silhouette'
+              assert alpha.getextrema()[0]==0, f'{name}: no transparent background'
+              x0,y0,x1,y1=bounds
+              assert 10<x0<x1<502 and 10<y0<y1<758, f'{name}: cropped {bounds}'
+              assert (x1-x0)>20 and (y1-y0)>60, f'{name}: too small {bounds}'
+              print(name,bounds)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-31-framed-five-views
+          path: assets/candidates/morwen-blender-26/
+          if-no-files-found: warn
