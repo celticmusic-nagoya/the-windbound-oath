@@ -76,11 +76,17 @@ jobs:
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)" fetch --depth=1 origin "$REF" || exit 1
           git show FETCH_HEAD:"${{ steps.request.outputs.packet }}" > agent-packet.md
           test -s agent-packet.md
+          sha256sum agent-packet.md > agent-packet.sha256
+          git rev-parse FETCH_HEAD > agent-packet-source-commit.txt
       - name: Write dry-run report
         if: steps.request.outputs.mode == 'dry_run'
         run: |
           printf 'DRY_RUN: request validated; no model API called.\n' > agent-output.txt
           cat agent-request-validated.json >> agent-output.txt
+          printf "\nSOURCE_COMMIT: " >> agent-output.txt
+          cat agent-packet-source-commit.txt >> agent-output.txt
+          printf "PACKET_SHA256: " >> agent-output.txt
+          cat agent-packet.sha256 >> agent-output.txt
       - name: Upload audit output
         if: always()
         uses: actions/upload-artifact@v4
@@ -89,6 +95,8 @@ jobs:
           path: |
             agent-request-validated.json
             agent-packet.md
+            agent-packet.sha256
+            agent-packet-source-commit.txt
             agent-output.txt
           retention-days: 7
           if-no-files-found: warn
