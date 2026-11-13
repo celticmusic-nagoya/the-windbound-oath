@@ -80,7 +80,7 @@ for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("left",(-1,0,0)),("three
  scene.render.filepath=str((out/(name+"_face_detail.png")).resolve())
  bpy.ops.render.render(write_still=True)
 # Mesh audit: record measurable geometry before any sculpt or style transfer.
-from collections import Counter
+from collections import Counter, defaultdict
 face_mesh=face.data
 edge_counts=Counter()
 for poly in face_mesh.polygons:
@@ -110,6 +110,7 @@ for e in face_mesh.edges:
  adj[a].add(b);adj[b].add(a)
 seen=set()
 components=[]
+vertex_component={}
 for seed in range(len(adj)):
  if seed in seen: continue
  todo=[seed];seen.add(seed);ids=[]
@@ -117,10 +118,19 @@ for seed in range(len(adj)):
   v=todo.pop();ids.append(v)
   for n in adj[v]:
    if n not in seen: seen.add(n);todo.append(n)
+ for v in ids: vertex_component[v]=len(components)
  coords=[face.matrix_world @ face_mesh.vertices[i].co for i in ids]
  lo=[min(v[k] for v in coords) for k in range(3)]
  hi=[max(v[k] for v in coords) for k in range(3)]
  components.append({"vertices":len(ids),"bounds_min":[round(x,5) for x in lo],"bounds_max":[round(x,5) for x in hi],"centroid":[round(sum(v[k] for v in coords)/len(coords),5) for k in range(3)]})
+material_counts=defaultdict(Counter)
+for poly in face_mesh.polygons:
+ cid=vertex_component[poly.vertices[0]]
+ mat=face_mesh.materials[poly.material_index].name if poly.material_index<len(face_mesh.materials) else "UNASSIGNED"
+ material_counts[cid][mat]+=1
+for cid,c in enumerate(components):
+ c["material_faces"]=dict(material_counts[cid])
+ c["material_role_hint"]="; ".join(material_counts[cid].keys())
 components.sort(key=lambda c:c["vertices"],reverse=True)
 face_audit["connected_components"]=components
 face_audit["component_count"]=len(components)
