@@ -40,7 +40,7 @@ def beam(name,a,b,thick,material):
  a,b=Vector(a),Vector(b)
  ob=cube(name,(a+b)/2,(thick,thick,(b-a).length),material)
  ob.rotation_euler=(b-a).to_track_quat("Z","Y").to_euler()
-cube("Foundation",(0,0,.12),(8.3,6.7,.35),stone[4],.10)
+cube("Foundation",(0,0,.075),(8.3,6.7,.55),stone[4],.10)
 # Irregular staggered stonework with genuine openings on front wall.
 for side in ("front","rear","left","right"):
  for row in range(11):
@@ -105,6 +105,11 @@ sc.world=world;world.use_nodes=True
 world.node_tree.nodes["Background"].inputs["Strength"].default_value=.8
 bpy.ops.object.light_add(type="AREA",location=(-6,-7,11))
 bpy.context.object.data.energy=1700;bpy.context.object.data.size=8
+# G0 runs on the generated geometry before any costly image rendering.
+import sys
+sys.path.insert(0,os.path.dirname(__file__))
+from aidan_g0_preflight import inspect
+inspect()
 views={"front":(11,-14,9),"rear":(-11,14,9),"left":(-14,-8,9),"right":(14,8,9),"game":(12,-15,18)}
 for name,location in views.items():
  bpy.ops.object.camera_add(location=location)
