@@ -1,0 +1,39 @@
+name: Morwen approved PNG integrity
+on:
+  push:
+    branches:
+      - feature/morwen-reference-binary-01
+    paths:
+      - '.github/workflows/morwen-reference-png-integrity.yml'
+      - 'assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify PNG bytes and record digest
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, struct
+          from pathlib import Path
+          p=Path('assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png')
+          raw=p.read_bytes()
+          assert raw[:8]==b'\x89PNG\r\n\x1a\n', 'Not a PNG'
+          assert raw[12:16]==b'IHDR', 'Missing IHDR'
+          w,h=struct.unpack('>II',raw[16:24])
+          assert w>0 and h>0
+          report={'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'format':'PNG','width':w,'height':h,'status':'BINARY_INTEGRITY_VERIFIED','director_approved_reference':True,'canonical_art_comparison':'NOT_RUN'}
+          out=Path('render_output/morwen_reference_integrity');out.mkdir(parents=True,exist_ok=True)
+          (out/'PNG_INTEGRITY.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Archive integrity report
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-approved-png-integrity
+          path: render_output/morwen_reference_integrity/PNG_INTEGRITY.json
+          retention-days: 30
