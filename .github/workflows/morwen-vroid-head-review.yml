@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/morwen-vroid-head-review.yml'
       - 'tools/blender/morwen_production/render_vroid_cc0_review.py'
+      - 'tools/blender/morwen_production/audit_canonical_views.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -35,6 +36,8 @@ jobs:
         run: |
           blender -b -t 2 --python tools/blender/morwen_production/render_vroid_cc0_review.py
           test -s render_output/morwen_vroid_review/QA.json
+      - name: Audit canonical four-view images
+        run: blender -b -t 2 --python tools/blender/morwen_production/audit_canonical_views.py
       - name: Validate
         run: |
           python3 - <<'PY'
@@ -43,6 +46,8 @@ jobs:
           p=Path("render_output/morwen_vroid_review")
           q=json.loads((p/"QA.json").read_text())
           assert q["production_approved"] is False
+          refs=json.loads((p/"CANONICAL_IMAGE_AUDIT.json").read_text())
+          assert len(refs["views"])==4 and refs["landmarks_approved"] is False
           topology=json.loads((p/"FACE_TOPOLOGY_AUDIT.json").read_text())
           assert topology["vertices"]>0 and topology["polygons"]>0
           assert topology["topology_deformation_approved"] is False
@@ -69,4 +74,5 @@ jobs:
             render_output/morwen_vroid_review/QA.json
             render_output/morwen_vroid_review/FACE_TOPOLOGY_AUDIT.json
             render_output/morwen_vroid_review/FACE_PROPORTION_CANDIDATE.json
+            render_output/morwen_vroid_review/CANONICAL_IMAGE_AUDIT.json
           retention-days: 14
