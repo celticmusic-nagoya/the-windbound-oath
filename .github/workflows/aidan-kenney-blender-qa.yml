@@ -1,0 +1,57 @@
+name: Aidan Kenney Blender Import QA
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_kenney_reference.py'
+      - '.github/workflows/aidan-kenney-blender-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  importer-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Validate importer syntax
+        run: python3 -m py_compile tools/map_blender/aidan_kenney_reference.py
+      - name: Generate synthetic GLB fixtures for importer QA (NOT Kenney assets)
+        run: |
+          mkdir -p "$RUNNER_TEMP/kenney-qa"
+          cat > "$RUNNER_TEMP/kenney-qa/make_fixture.py" <<'PY'
+          import bpy, pathlib, zipfile
+          base=pathlib.Path('/tmp/kenney-import-fixture')
+          base.mkdir(exist_ok=True)
+          for i in range(12):
+              bpy.ops.object.select_all(action='SELECT')
+              bpy.ops.object.delete(use_global=False)
+              bpy.ops.mesh.primitive_cube_add(size=1)
+              bpy.ops.export_scene.gltf(filepath=str(base/f'fixture-{i:02d}.glb'),export_format='GLB')
+          with zipfile.ZipFile('/tmp/kenney-import-fixture.zip','w') as z:
+              z.writestr('LICENSE_KENNEY.txt','CC0 - synthetic QA fixture, not actual Kenney assets')
+              for p in sorted(base.glob('*.glb')): z.write(p,'models/'+p.name)
+          PY
+          blender -b -t 2 --python "$RUNNER_TEMP/kenney-qa/make_fixture.py"
+      - name: Run importer smoke test on synthetic fixtures
+        run: |
+          blender -b -t 2 --python tools/map_blender/aidan_kenney_reference.py -- /tmp/kenney-import-fixture.zip "$RUNNER_TEMP/kenney-qa/output"
+          python3 - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'kenney-qa/output'
+          m=json.loads((p/'manifest.json').read_text())
+          assert len(m['parts'])==12
+          assert (p/'kenney_reference.blend').stat().st_size>1000
+          print('PASS: Blender imported 12 synthetic GLB fixtures')
+          PY
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-kenney-importer-smoke
+          path: ${{ runner.temp }}/kenney-qa/output/manifest.json
+          retention-days: 7
+          if-no-files-found: warn
