@@ -1,0 +1,43 @@
+name: Morwen Layer Diagnostic Render
+on:
+  push:
+    branches: [feature/mvp-blockout-01]
+    paths:
+      - 'tools/blender/production_mesh_08/**'
+      - '.github/workflows/morwen-layer-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender libegl1 libgl1 libopengl0
+      - name: Syntax check
+        run: python3 -m py_compile tools/blender/production_mesh_08/diagnostic_render.py
+      - name: Render 4 layers x 4 views
+        run: blender -b -noaudio -t 2 --python tools/blender/production_mesh_08/diagnostic_render.py
+      - name: Validate actual PNGs
+        run: |
+          python3 - <<'PY'
+          import pathlib,json
+          p=pathlib.Path("render_output")
+          files=list(p.glob("L[0-3]_*.png"))
+          assert len(files)==16, len(files)
+          assert all(f.read_bytes()[:8]==b'\x89PNG\r\n\x1a\n' for f in files)
+          assert json.loads((p/"QA.json").read_text())["render_success"]
+          print("16 diagnostic renders PASS; official design fidelity NOT_VERIFIED")
+          PY
+      - name: Upload renders even if QA fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer-diagnostic-16
+          path: render_output/
+          retention-days: 30
+          if-no-files-found: warn
