@@ -27,6 +27,8 @@ for asset in manifest["assets"]:
         parsed = urllib.parse.urlparse(url)
         if parsed.scheme != "https" or parsed.hostname not in ("dl.polyhaven.org", "polyhaven.com"):
             raise SystemExit("Untrusted download host: " + parsed.hostname.__str__())
+        if not asset["asset_id"].replace("_", "").replace("-", "").isalnum():
+            raise SystemExit("Unsafe asset ID")
         filename = asset["asset_id"] + "_" + channel.lower() + "." + entry["format"]
         target = out / filename
         req = urllib.request.Request(url, headers={"User-Agent": "TWO-Candidate-PBR/1.0"})
@@ -39,9 +41,13 @@ for asset in manifest["assets"]:
                     break
                 total += len(block)
                 if total > 12 * 1024 * 1024:
+                    target.unlink(missing_ok=True)
                     raise SystemExit("Texture exceeds 12MiB: " + filename)
                 digest.update(block)
                 dest.write(block)
+        if total == 0:
+            target.unlink(missing_ok=True)
+            raise SystemExit("Empty texture: " + filename)
         records.append({"asset_id": asset["asset_id"], "role": asset["role"],
                         "channel": channel, "path": filename, "source_url": url,
                         "bytes": total, "sha256": digest.hexdigest()})
