@@ -62,8 +62,10 @@ face_points=[face.matrix_world@v.co for v in face.data.vertices]
 face_min=Vector(tuple(min(v[i] for v in face_points) for i in range(3)))
 face_max=Vector(tuple(max(v[i] for v in face_points) for i in range(3)))
 face_center=(face_min+face_max)*.5
+# Include the lower jaw and neck in the review; head mesh bounds can be misleading.
 face_extent=max(face_max.x-face_min.x,face_max.y-face_min.y,face_max.z-face_min.z)
 assert face_extent>0
+face_center.z-=face_extent*.10
 for obj in wire:
  obj.hide_render=True
 for obj in meshes:
@@ -73,7 +75,7 @@ for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("left",(-1,0,0)),("three
  cam=bpy.context.object
  cam.rotation_euler=(face_center-cam.location).to_track_quat("-Z","Y").to_euler()
  cam.data.type="ORTHO"
- cam.data.ortho_scale=face_extent*1.3
+ cam.data.ortho_scale=face_extent*2.0
  scene.camera=cam
  scene.render.filepath=str((out/(name+"_face_detail.png")).resolve())
  bpy.ops.render.render(write_still=True)
