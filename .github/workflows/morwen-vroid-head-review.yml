@@ -54,6 +54,7 @@ jobs:
           comparison=json.loads((p/"COMPARISON_STATUS.json").read_text())
           assert comparison["canonical_match"]=="NOT_APPROVED"
           assert (p/"MORWEN_REFERENCE_VROID_COMPARISON.png").stat().st_size>1000
+          assert (p/"MORWEN_HEAD_FOCUSED_COMPARISON.png").stat().st_size>1000
           topology=json.loads((p/"FACE_TOPOLOGY_AUDIT.json").read_text())
           assert topology["vertices"]>0 and topology["polygons"]>0
           assert topology["topology_deformation_approved"] is False
@@ -83,4 +84,6 @@ jobs:
             render_output/morwen_vroid_review/CANONICAL_IMAGE_AUDIT.json
             render_output/morwen_vroid_review/COMPARISON_STATUS.json
             render_output/morwen_vroid_review/MORWEN_REFERENCE_VROID_COMPARISON.png
+            render_output/morwen_vroid_review/MORWEN_HEAD_FOCUSED_COMPARISON.png
+            render_output/morwen_vroid_review/HEAD_COMPARISON_STATUS.json
           retention-days: 14
