@@ -50,11 +50,12 @@ jobs:
         run: |
           xvfb-run -a blender --background --python tools/map_blender/blender_preflight.py
       - name: Fetch CC0 Poly Haven red slate PBR maps (optional)
-        continue-on-error: true
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
         run: |
-          python3 tools/map_blender/fetch_roof_cc0_material.py
+          if ! python3 tools/map_blender/fetch_roof_cc0_material.py; then
+            echo "::warning::Optional CC0 material unavailable; render with original procedural fallback and record material in manifest."
+          fi
       - name: Generate MAP08 through MAP23 and hero tile preview
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
