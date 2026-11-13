@@ -1,0 +1,37 @@
+{
+  "schema": "TWO_MORWEN_LAYER0_REFERENCE_V1",
+  "status": "SOURCE_IDENTIFIED_BINARY_NOT_IN_GITHUB",
+  "source_name": "モルウェン共通素体キャラクターシート.png",
+  "source_sha256": "7e122ceb205e502aad49dfa32ac463818e30a3da4d4bd43951f9263bcb08a150",
+  "image": {
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "contains": "front right left back and layer 0-3 design notes"
+  },
+  "measurements_from_sheet": {
+    "height_cm_approx": 163,
+    "heads_approx": 7.5,
+    "body_type": "slender slightly curvy",
+    "ground_origin": "foot sole center"
+  },
+  "model_coordinate_contract": {
+    "up": "+Z",
+    "front": "-Y",
+    "character_left": "+X",
+    "character_right": "-X"
+  },
+  "gates": {
+    "source_identified": "PASS",
+    "source_hash_computed": "PASS",
+    "source_binary_in_repo": "NOT_RUN",
+    "landmark_measurement": "NOT_RUN",
+    "body_mesh": "NOT_RUN",
+    "art_review": "NOT_RUN"
+  },
+  "warnings": [
+    "This is an RGB composition sheet, not a transparent standalone four-view PNG.",
+    "Do not treat 2D pixel coordinates as verified anatomical joints without review.",
+    "Layer 0 design supersedes clothing full-body art for underlying body proportions."
+  ]
+}
