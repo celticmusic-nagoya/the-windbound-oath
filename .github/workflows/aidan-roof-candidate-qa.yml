@@ -29,7 +29,9 @@ jobs:
       - name: Geometry preview only — NOT art approval
         env:
           AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-roof-qa
-        run: blender -b -t 2 --python tools/map_blender/aidan_roof_render_01.py
+        run: |
+          blender -b -t 2 --python tools/map_blender/aidan_roof_render_01.py
+          test -s "$AIDAN_ROOF_OUTPUT/manifest.json"
       - name: Verify five nonempty images and manifest
         env:
           AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-roof-qa
