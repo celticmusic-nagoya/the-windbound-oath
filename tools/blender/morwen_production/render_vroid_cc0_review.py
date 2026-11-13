@@ -135,6 +135,25 @@ components.sort(key=lambda c:c["vertices"],reverse=True)
 face_audit["connected_components"]=components
 face_audit["component_count"]=len(components)
 face_audit["component_labels"]="UNCLASSIFIED; skin, eyes and mouth require visual verification"
+# Relative face metrics only: do not claim correspondence to canonical artwork.
+skin_candidates=[c for c in components if any("face" in m.lower() or "skin" in m.lower() for m in c["material_faces"])]
+skin=max(skin_candidates,key=lambda c:c["vertices"]) if skin_candidates else None
+face_width=face_max.x-face_min.x
+face_height=face_max.z-face_min.z
+metrics={
+ "status":"CANDIDATE_GEOMETRY_ONLY",
+ "canonical_landmarks_measured":False,
+ "source_coordinate_system":"Blender world, imported VRM",
+ "face_mesh_bounds":{"width":round(face_width,6),"height":round(face_height,6),"depth":round(face_max.y-face_min.y,6)},
+ "face_width_to_height":round(face_width/face_height,6) if face_height else None,
+ "skin_component":{"vertices":skin["vertices"],"bounds_min":skin["bounds_min"],"bounds_max":skin["bounds_max"],"material_faces":skin["material_faces"]} if skin else None,
+ "material_component_groups":{},
+ "warnings":["Material labels and bounding boxes are not anatomical landmarks","Canonical front/profile landmark comparison requires explicit image annotation"]
+}
+for c in components:
+ for m in c["material_faces"]:
+  metrics["material_component_groups"].setdefault(m,[]).append({"vertices":c["vertices"],"centroid":c["centroid"],"bounds_min":c["bounds_min"],"bounds_max":c["bounds_max"]})
+(out/"FACE_PROPORTION_CANDIDATE.json").write_text(json.dumps(metrics,indent=2)+"\n")
 (out/"FACE_TOPOLOGY_AUDIT.json").write_text(json.dumps(face_audit,indent=2)+"\n")
 report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
