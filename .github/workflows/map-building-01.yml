@@ -51,6 +51,19 @@ jobs:
               if name.endswith('.png'):assert data.startswith(b'\x89PNG\r\n\x1a\n')
           print('MAP-BUILDING-01 TECH QA PASS')
           PY
+      - name: Render quality-first master
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-building
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a blender -b --python tools/map_blender/buildings/aidan_master_quality_first.py
+      - name: Upload quality-first master
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-quality-master-preview
+          path: ${{ runner.temp }}/map-building/aidan_master/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Upload previews
         if: always()
         uses: actions/upload-artifact@v4
