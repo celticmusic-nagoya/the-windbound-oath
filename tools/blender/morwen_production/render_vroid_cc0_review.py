@@ -79,5 +79,30 @@ for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("left",(-1,0,0)),("three
  scene.camera=cam
  scene.render.filepath=str((out/(name+"_face_detail.png")).resolve())
  bpy.ops.render.render(write_still=True)
+# Mesh audit: record measurable geometry before any sculpt or style transfer.
+from collections import Counter
+face_mesh=face.data
+edge_counts=Counter()
+for poly in face_mesh.polygons:
+ for k in range(len(poly.vertices)):
+  a,b=poly.vertices[k],poly.vertices[(k+1)%len(poly.vertices)]
+  edge_counts[tuple(sorted((a,b)))]+=1
+face_audit={
+ "object":face.name,
+ "vertices":len(face_mesh.vertices),
+ "edges":len(face_mesh.edges),
+ "polygons":len(face_mesh.polygons),
+ "triangles":sum(len(poly.vertices)==3 for poly in face_mesh.polygons),
+ "quads":sum(len(poly.vertices)==4 for poly in face_mesh.polygons),
+ "ngons":sum(len(poly.vertices)>4 for poly in face_mesh.polygons),
+ "boundary_edges":sum(n==1 for n in edge_counts.values()),
+ "nonmanifold_edges":sum(n>2 for n in edge_counts.values()),
+ "dimensions_world":[round(face_max[i]-face_min[i],6) for i in range(3)],
+ "source_materials":[mat.name if mat else None for mat in face_mesh.materials],
+ "topology_deformation_approved":False,
+ "canonical_proportions_matched":False,
+ "notes":"Descriptive geometry audit only. Requires independent inspection of eye/mouth edge loops."
+}
+(out/"FACE_TOPOLOGY_AUDIT.json").write_text(json.dumps(face_audit,indent=2)+"\\n")
 report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
