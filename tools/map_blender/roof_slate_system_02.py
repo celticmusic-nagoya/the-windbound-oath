@@ -74,10 +74,11 @@ def load_cc0_roof_material():
  links=mat.node_tree.links
  bs=nodes.get("Principled BSDF")
  bs.inputs["Roughness"].default_value=.87
- uv=nodes.new("ShaderNodeTexCoord")
+ uv=nodes.new("ShaderNodeNewGeometry")
  mapping=nodes.new("ShaderNodeMapping")
  # Object coordinates projected over full roof rather than repeating the entire roof image per slate.
- links.new(uv.outputs["Generated"],mapping.inputs["Vector"])
+ links.new(uv.outputs["Position"],mapping.inputs["Vector"])
+ mapping.inputs["Scale"].default_value=(.42,.42,1.0)
  normal=nodes.new("ShaderNodeNormalMap")
  normal.inputs["Strength"].default_value=.38
  for key,socket in (("Diffuse","Base Color"),("rough","Roughness"),("nor_gl","Color")):
