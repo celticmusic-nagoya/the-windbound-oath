@@ -1,0 +1,47 @@
+name: Aidan Home Blender Candidate Render
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_home_production_candidate.py'
+      - '.github/workflows/aidan-home-render.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+      - name: Validate Blender script syntax
+        run: python3 -m py_compile tools/map_blender/aidan_home_production_candidate.py
+      - name: Render five views and save .blend
+        env:
+          AIDAN_RENDER_OUTPUT: ${{ runner.temp }}/aidan-home
+        run: blender -b -t 2 --python tools/map_blender/aidan_home_production_candidate.py
+      - name: Validate outputs
+        env:
+          AIDAN_RENDER_OUTPUT: ${{ runner.temp }}/aidan-home
+        run: |
+          python3 - <<'PY'
+          import os,json
+          p=os.environ["AIDAN_RENDER_OUTPUT"]
+          d=json.load(open(os.path.join(p,"manifest.json")))
+          assert len(d["views"])==5
+          for n in d["views"]: assert os.path.getsize(os.path.join(p,"aidan_"+n+".png"))>1000
+          assert os.path.getsize(os.path.join(p,"aidan_candidate.blend"))>1000
+          print("PASS: five PNGs, blend, SHA manifest")
+          PY
+      - name: Upload artifacts even if rendering fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-home-candidate-render
+          path: ${{ runner.temp }}/aidan-home/
+          if-no-files-found: warn
+          retention-days: 7
