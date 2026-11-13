@@ -63,6 +63,12 @@ jobs:
           legend=json.loads((p/"FACE_COMPONENT_COLOR_LEGEND.json").read_text())
           assert legend["component_count"]==parts["component_count"]
           assert legend["source_mesh_modified"] is False
+          jaw=json.loads((p/"SKIN_JAW_ISOLATION_QA.json").read_text())
+          assert jaw["all_changed_vertices_within_skin_component"]
+          assert jaw["all_non_skin_vertices_unchanged"]
+          assert jaw["shape_key_reset"]
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_skin_jaw_isolated.png")).stat().st_size>1000
           for name in ("front","right","three_quarter"):
               assert (p/(name+"_component_ids.png")).stat().st_size>1000
           assert sum(c["vertices"] for c in parts["components"])==parts["source_vertices"]
@@ -96,6 +102,8 @@ jobs:
             render_output/morwen_vroid_review/FACE_TOPOLOGY_AUDIT.json
             render_output/morwen_vroid_review/FACE_COMPONENT_INDEX.json
             render_output/morwen_vroid_review/FACE_COMPONENT_COLOR_LEGEND.json
+            render_output/morwen_vroid_review/SKIN_JAW_ISOLATION_QA.json
+            render_output/morwen_vroid_review/*_skin_jaw_isolated.png
             render_output/morwen_vroid_review/*_component_ids.png
             render_output/morwen_vroid_review/FACE_PROPORTION_CANDIDATE.json
             render_output/morwen_vroid_review/CANONICAL_IMAGE_AUDIT.json
