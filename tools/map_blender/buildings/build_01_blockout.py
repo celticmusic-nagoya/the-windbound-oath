@@ -67,23 +67,23 @@ for sign in (-1,1):
    tile=block("roof tile",(-w/2+.35+i*.59,yy,zz),(.57,.48,.06),roof_light if (i+j)%4 else roof_dark,"L2")
    tile.rotation_euler.x=sign*slope
 # Chimney, door and window frames are coherent with the interior opening positions.
-trim("stone chimney",w*.27,d*.18,ridge+.22,.58,.65,1.22,stone)
-trim("chimney cap",w*.27,d*.18,ridge+.87,.76,.79,.13,stone)
-trim("oak door leaf",0,-d/2-.03,door["height"]/2,door["width"]-.10,.10,door["height"]-.06,wood_light)
+trim("stone chimney",(w*.27,d*.18,ridge+.22),.58,.65,1.22,stone)
+trim("chimney cap",(w*.27,d*.18,ridge+.87),.76,.79,.13,stone)
+trim("oak door leaf",(0,-d/2-.03,door["height"]/2),door["width"]-.10,.10,door["height"]-.06,wood_light)
 for win in (win_l,win_r):
  x=win["center_x"];wy=-d/2-.035
  trim("window lower frame",x,wy,1.17,win["width"]+.12,.14,.12)
  trim("window upper frame",x,wy,2.15,win["width"]+.12,.14,.12)
  for side in (-1,1):trim("window side frame",x+side*(win["width"]/2+.035),wy,1.66,.11,.14,1.04)
- trim("window glass",x,wy,1.66,win["width"]-.10,.04,.82,glass)
+ trim("window glass",(x,wy,1.66),win["width"]-.10,.04,.82,glass)
  trim("window mullion",x,wy-.08,1.66,.07,.08,.9)
 # Garden, firewood, stone doorstep, ground for exterior only.
 block("front stone doorstep",(0,-d/2-.85,.07),(1.7,.7,.17),stone,"L2")
 for i in range(7):
- trim("stacked firewood",-w/2-.45+i*.14,d/2-.35,.22,.12,.9,.17,wood_light)
+ trim("stacked firewood",(-w/2-.45+i*.14,d/2-.35,.22),.12,.9,.17,wood_light)
 for i in range(18):
  xx=-w/2-.7+(i%9)*.42;yy=-d/2-1.25+(i//9)*.33
- trim("garden grasses",xx,yy,.13,.13,.13,.27,grass)
+ trim("garden grasses",(xx,yy,.13),.13,.13,.27,grass)
 # Interior is deliberately empty until approved CG defines furniture locations.
 block("interior placeholder hearth footprint",(0,d/2-.6,.09),(1.0,.6,.08),stone,"L3")
 bpy.ops.object.camera_add(location=(10,-13,9));cam=bpy.context.object;scene.camera=cam
