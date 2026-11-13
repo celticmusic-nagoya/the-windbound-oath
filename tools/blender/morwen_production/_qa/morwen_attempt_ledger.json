@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "asset_id": "morwen",
+  "status": "HISTORICAL_ATTEMPTS_NOT_YET_RECONCILED",
+  "source_refs": [
+    "docs/art/MORWEN_TARGET_FIT_ASSESSMENT_01.md",
+    "tools/blender/morwen_production/MESH_QA_01_FINDINGS.md",
+    "tools/blender/morwen_production/MESH_QA_02_COMPONENT_FINDINGS.md",
+    "docs/art/MORWEN_3D_TARGET_SHEET_20261113.md"
+  ],
+  "known_gate_status": {
+    "G1": "BLOCKED",
+    "G2": "FAIL",
+    "G3": "PASS",
+    "G4": "NOT_RUN"
+  },
+  "known_issue": "Prior VRoid candidate topology audited; actual canonical visual fit unapproved. Historical individual failed attempts cannot be reconstructed without evidence. G3 PASS applies to topology audit only, not final asset.",
+  "attempts": []
+}
