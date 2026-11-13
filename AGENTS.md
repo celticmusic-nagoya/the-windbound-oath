@@ -1,3 +1,7 @@
+# 3D ASSET PRODUCTION — DIRECTOR-APPROVED PROCESS (2026-11-13)
+
+For all new 3D character, building, map and prop tasks, read [3D Production Policy & Loop Guard](docs/design/3D_PRODUCTION_POLICY_LOOP_GUARD.md) before starting. Hybrid licensed asset reuse and quality-first modeling are mandatory; Blender Python is an integration tool, not the exclusive modeling method. Preserve canonical designs and G1–G4 gates. Track attempts across chats/agents; after two failed attempts with one method, change the method instead of repeating. Do not auto-approve candidates or use paid AI APIs. This process rule does not supersede later director decisions or private canon.
+
 # CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
 
 - **エイダン・フィオナ・モルウェンの公式年齢は全員18歳で固定。** 他人物の年齢は変更しない。過去の誤設定を再採用しない。
