@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "asset_id": "aidan_home",
+  "status": "HISTORICAL_ATTEMPTS_NOT_YET_RECONCILED",
+  "source_refs": [
+    "tools/map_blender/aidan_pbr_shortlist.json",
+    "tools/map_blender/aidan_external_asset_sources.json"
+  ],
+  "known_gate_status": {
+    "G1": "BLOCKED",
+    "G2": "FAIL",
+    "G3": "PASS",
+    "G4": "NOT_RUN"
+  },
+  "known_issue": "Prior candidate renders lack production-quality roof, stone depth and timber structure; individual attempts not reconstructed without evidence.",
+  "attempts": []
+}
