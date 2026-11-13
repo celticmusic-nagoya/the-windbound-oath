@@ -1,0 +1,51 @@
+name: Morwen Blender 36 Candidate Refinement QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_36/**'
+      - '.github/workflows/morwen-blender-36.yml'
+  workflow_dispatch:
+jobs:
+  candidate-refinement:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and image QA
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-pil python3-numpy libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Build candidate only
+        run: |
+          python3 -m py_compile tools/blender/morwen_blender_36/*.py
+          blender -b -noaudio --python tools/blender/morwen_blender_36/build_torso.py
+      - name: Render five views
+        run: blender -b -noaudio --python tools/blender/morwen_blender_36/render_36.py
+      - name: Validate topology, transparency, framing and source protection
+        run: |
+          /usr/bin/python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          p=Path('assets/candidates/morwen-blender-36')
+          report=json.loads((p/'build_report.json').read_text())
+          assert report['boundary_edges']==0 and report['nonmanifold_edges']==0
+          assert report['source_refs_modified'] is False and report['candidate_only'] is True
+          for view in ('front','left','right','back','three_quarter'):
+              im=Image.open(p/'renders'/(view+'.png')).convert('RGBA')
+              a=im.getchannel('A')
+              bounds=a.getbbox()
+              assert im.size==(512,768) and a.getextrema()[0]==0 and bounds is not None
+              x0,y0,x1,y1=bounds
+              assert 10<x0<x1<502 and 10<y0<y1<758,(view,bounds)
+              print(view,bounds)
+          print('MORWEN_36_CANDIDATE_TECH_QA_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-36-candidate-five-views
+          path: assets/candidates/morwen-blender-36/
+          if-no-files-found: warn
