@@ -1,3 +1,4 @@
+# MORWEN_RENDER_16_TRIGGER: existing PR workflow includes this path; diagnostic outputs remain candidate-only.
 """MVP BLOCKOUT-01: candidate-only primitive Morwen character.
 Run: blender -b --python tools/blender/mvp_blockout_01/build.py
 No canonical assets are read or overwritten. ART approval is NOT_RUN.
