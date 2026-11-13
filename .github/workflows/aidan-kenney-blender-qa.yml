@@ -54,11 +54,54 @@ jobs:
           assert (p/'kenney_reference.blend').stat().st_size>1000
           print('PASS: Blender imported 12 synthetic GLB fixtures')
           PY
+      - name: Download and SHA-verify actual Kenney CC0 archive
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 1 --max-time 120 'https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip' --output "$RUNNER_TEMP/kenney-qa/source.zip"
+          echo '1a7530c09f4d2fa2cdee259876f089334f8b1f27fa86a0c4f54ef86cdd8676ef  '"$RUNNER_TEMP/kenney-qa/source.zip" | sha256sum -c -
+      - name: Extract exactly 12 verified real Kenney GLB modules
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, zipfile, hashlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'kenney-qa'
+          selected=['wall-block','wall-corner','wall-wood','pillar-wood','roof-gable','roof-gable-end','roof-gable-top','wall-window-shutters','wall-door','chimney','chimney-top','roof-high-gable']
+          with zipfile.ZipFile(p/'source.zip') as src,zipfile.ZipFile(p/'kenney-real-12.zip','w') as dst:
+              assert src.testzip() is None
+              names=src.namelist()
+              licenses=[n for n in names if pathlib.PurePosixPath(n).name.lower()=='license.txt']
+              assert licenses
+              license_data=src.read(licenses[0])
+              assert b'CC0' in license_data
+              dst.writestr('LICENSE_KENNEY.txt',license_data)
+              for model in selected:
+                  matches=[n for n in names if n.endswith('/'+model+'.glb') and 'GLB format/' in n]
+                  assert len(matches)==1,(model,matches)
+                  data=src.read(matches[0])
+                  assert data[:4]==b'glTF'
+                  dst.writestr('models/'+model+'.glb',data)
+          print('PASS: 12 actual Kenney GLBs extracted; original ZIP SHA verified')
+          PY
+      - name: Import actual Kenney GLBs into Blender and save reference
+        run: |
+          set -euo pipefail
+          blender -b -t 2 --python tools/map_blender/aidan_kenney_reference.py -- "$RUNNER_TEMP/kenney-qa/kenney-real-12.zip" "$RUNNER_TEMP/kenney-qa/real-output"
+          python3 - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'kenney-qa/real-output'
+          manifest=json.loads((p/'manifest.json').read_text())
+          assert len(manifest['parts'])==12
+          assert all(part['meshes']>0 for part in manifest['parts'])
+          assert (p/'kenney_reference.blend').stat().st_size>1000
+          print('PASS: 12 actual Kenney GLBs imported and saved as Blender reference')
+          PY
       - name: Upload QA evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: aidan-kenney-importer-smoke
-          path: ${{ runner.temp }}/kenney-qa/output/manifest.json
+          path: |
+            ${{ runner.temp }}/kenney-qa/output/manifest.json
+            ${{ runner.temp }}/kenney-qa/real-output/manifest.json
+            ${{ runner.temp }}/kenney-qa/real-output/kenney_reference.blend
           retention-days: 7
           if-no-files-found: warn
