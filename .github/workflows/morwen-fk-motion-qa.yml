@@ -1,0 +1,45 @@
+name: Morwen FK Motion Rig QA
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - 'tools/blender/morwen_production/validate_rig_motion.py'
+      - 'tools/blender/morwen_production/build_master_rig.py'
+      - '.github/workflows/morwen-fk-motion-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  motion-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
+      - name: Validate Python syntax
+        run: python3 -m py_compile tools/blender/morwen_production/validate_rig_motion.py
+      - name: Verify FK rig and cycle
+        run: blender -b -noaudio -t 2 --python tools/blender/morwen_production/validate_rig_motion.py
+      - name: Verify artifact metadata
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path("render_output/morwen_motion_qa")
+          q=json.loads((p/"QA.json").read_text())
+          assert q["bones"]==26 and q["fk_frames"]==8,q
+          assert q["parenting_checks"]==13,q
+          assert q["production_approved"] is False,q
+          assert (p/"MORWEN_FK_MOTION_TEMPLATE.blend").stat().st_size>1000
+          PY
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-fk-motion-template-qa
+          path: render_output/morwen_motion_qa/
+          retention-days: 30
+          if-no-files-found: warn
