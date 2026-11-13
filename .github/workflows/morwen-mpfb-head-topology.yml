@@ -1,0 +1,46 @@
+name: Morwen MPFB Head Topology Inspection
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - '.github/workflows/morwen-mpfb-head-topology.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: makehumancommunity/mpfb2
+          ref: d0a32e57a7f915cb2f2b95410e2117648c7bbb7e
+          path: _upstream_mpfb
+          persist-credentials: false
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender
+      - name: Build base and render head topology
+        run: |
+          blender -b -t 2 --python tools/blender/morwen_production/render_mpfb_base_review.py
+          blender -b -t 2 --python tools/blender/morwen_production/render_mpfb_head_topology.py
+      - name: Check output files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("render_output/morwen_mpfb_head_topology")
+          q=json.loads((p/"QA.json").read_text())
+          assert q["production_approved"] is False
+          for n in ["front_head","right_head","back_head","left_head","three_quarter_head","front_wire","right_wire","three_quarter_wire"]:
+              assert (p/(n+".png")).stat().st_size>1000,n
+          PY
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-mpfb-head-topology-inspection
+          path: render_output/morwen_mpfb_head_topology/
+          retention-days: 14
