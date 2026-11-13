@@ -24,6 +24,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - name: Verify 3D production anti-loop policy
+        run: python -m unittest discover -s tools/blender/morwen_production -p test_validate_attempt_log.py -v
       - name: Verify landmark review page and coordinate analysis (no Blender required)
         run: |
           python3 tools/blender/morwen_production/test_landmark_review.py
