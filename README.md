@@ -3,6 +3,10 @@
 
 Original Celtic-flavored browser JRPG / portfolio project.
 
+## Morwen Blender production progress
+
+[モルウェン制作進捗・レンダリングQA](docs/design/MORWEN_PROGRESS.md) — confirmed status, GitHub Actions and production references. Status is updated manually; the linked Actions page shows live runs.
+
 ## Current portraits / DEV
 
 Phase 4 and Phase 5A are COMPLETE. Approved portraits for Aidan/Fiona/Lou/Emma are connected to115production dialogue pages; user Android QA5/5PASS. Fiona brow repair is CLOSED.259formal PNGs remain SHA-protected.
