@@ -2,11 +2,23 @@
 Uses complete VRoid Face+Body and bounded, smooth, local-space edits.
 Source VRM remains unchanged. Candidate only; art gate stays BLOCKED.
 """
-import hashlib,json
+import hashlib,json,importlib.util,sys
 from pathlib import Path
 import bpy
 from mathutils import Vector
-from render_head_diagnostics import Scene, clay_mat, VIEWS, OUT, SRC
+# Blender --python does not consistently put the script directory on sys.path.
+# Load the pinned sibling module explicitly, independent of cwd and PYTHONPATH.
+module_path=Path(__file__).resolve().with_name("render_head_diagnostics.py")
+spec=importlib.util.spec_from_file_location("morwen_head_diagnostics",module_path)
+assert spec and spec.loader, f"Diagnostic module missing: {module_path}"
+diagnostics=importlib.util.module_from_spec(spec)
+sys.modules[spec.name]=diagnostics
+spec.loader.exec_module(diagnostics)
+Scene=diagnostics.Scene
+clay_mat=diagnostics.clay_mat
+VIEWS=diagnostics.VIEWS
+OUT=diagnostics.OUT
+SRC=diagnostics.SRC
 
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 
