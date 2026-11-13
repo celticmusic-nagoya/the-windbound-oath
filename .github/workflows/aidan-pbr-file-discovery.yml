@@ -41,12 +41,12 @@ jobs:
           import hashlib, json, os, pathlib
           base=pathlib.Path(os.environ['RUNNER_TEMP'])/'pbr-candidate'
           data=json.loads((base/'download-manifest.json').read_text())
-          assert len(data['textures']) == 15
+          assert len(data['textures']) == 18
           for row in data['textures']:
               p=base/row['path']
               assert p.is_file() and p.stat().st_size==row['bytes']
               assert hashlib.sha256(p.read_bytes()).hexdigest()==row['sha256']
-          print('PASS: 15 PBR candidate textures SHA-256 verified')
+          print('PASS: 18 PBR candidate textures SHA-256 verified')
           PY
       - name: Install Blender
         run: |
