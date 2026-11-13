@@ -217,3 +217,53 @@ component_index={
 assert sum(c["vertices"] for c in components)==len(face_mesh.vertices)
 assert sorted(i for c in components for i in c["vertex_indices"])==list(range(len(face_mesh.vertices)))
 (out/"FACE_COMPONENT_INDEX.json").write_text(json.dumps(component_index,indent=2)+"\n")
+
+# Component ID diagnostic: separate disposable mesh with per-face emission colors.
+# No source mesh, canonical art, or production asset is overwritten.
+from mathutils import Vector as _V
+from colorsys import hsv_to_rgb
+for obj in meshes:
+ obj.hide_render=True
+diagnostic=face.copy()
+diagnostic.data=face.data.copy()
+bpy.context.collection.objects.link(diagnostic)
+diagnostic.name="Face_Component_ID_Diagnostic"
+diagnostic.hide_render=False
+diagnostic.data.materials.clear()
+for ci in range(len(components)):
+ rgb=hsv_to_rgb((ci*.61803398875)%1.0,.78,.95)
+ mat=bpy.data.materials.new(name="DIAGNOSTIC_COMPONENT_%02d"%ci)
+ mat.diffuse_color=(*rgb,1)
+ mat.use_nodes=True
+ nodes=mat.node_tree.nodes
+ nodes.clear()
+ emission=nodes.new("ShaderNodeEmission")
+ emission.inputs["Color"].default_value=(*rgb,1)
+ emission.inputs["Strength"].default_value=1.0
+ output=nodes.new("ShaderNodeOutputMaterial")
+ mat.node_tree.links.new(emission.outputs[0],output.inputs["Surface"])
+ diagnostic.data.materials.append(mat)
+# Recompute original source component membership; component list was sorted by size.
+component_lookup={}
+for ci,c in enumerate(components):
+ for vi in c["vertex_indices"]:
+  component_lookup[vi]=ci
+for poly in diagnostic.data.polygons:
+ ci=component_lookup[poly.vertices[0]]
+ assert all(component_lookup[v]==ci for v in poly.vertices)
+ poly.material_index=ci
+for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("three_quarter",(.7,1,.15))]:
+ bpy.ops.object.camera_add(location=face_center+_V(delta).normalized()*face_extent*3)
+ cam=bpy.context.object
+ cam.rotation_euler=(face_center-cam.location).to_track_quat("-Z","Y").to_euler()
+ cam.data.type="ORTHO";cam.data.ortho_scale=face_extent*2.0
+ scene.camera=cam
+ scene.render.filepath=str((out/(name+"_component_ids.png")).resolve())
+ bpy.ops.render.render(write_still=True)
+(out/"FACE_COMPONENT_COLOR_LEGEND.json").write_text(json.dumps({
+ "status":"VISUAL_DIAGNOSTIC_ONLY","source_mesh_modified":False,
+ "source_vertex_count":len(face.data.vertices),"component_count":len(components),
+ "legend":[{"id":i,"rgb":list(hsv_to_rgb((i*.61803398875)%1.0,.78,.95)),
+ "vertices":c["vertices"],"materials":c["material_faces"],"role":"UNVERIFIED"}
+ for i,c in enumerate(components)]
+},indent=2)+"\n")
