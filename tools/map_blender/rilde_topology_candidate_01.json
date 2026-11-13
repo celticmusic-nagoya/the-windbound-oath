@@ -1,0 +1,130 @@
+{
+  "schema": "two.rilde.topology.candidate.v1",
+  "status": "CANDIDATE_NOT_CANON",
+  "orientation": "north_up",
+  "units": "normalized_concept_only",
+  "source": "tools/map_blender/RILDE_WORLD_GEOGRAPHY_MASTER_01.md",
+  "nodes": [
+    {
+      "id": "village",
+      "x": 0.5,
+      "y": 0.5,
+      "region": "center",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "aidan_home",
+      "x": 0.45,
+      "y": 0.55,
+      "region": "village",
+      "certainty": "candidate"
+    },
+    {
+      "id": "training",
+      "x": 0.55,
+      "y": 0.43,
+      "region": "village",
+      "certainty": "candidate"
+    },
+    {
+      "id": "hunt",
+      "x": 0.72,
+      "y": 0.38,
+      "region": "outskirts",
+      "certainty": "candidate"
+    },
+    {
+      "id": "coastal_cliff",
+      "x": 0.17,
+      "y": 0.24,
+      "region": "west_northwest",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "harbor",
+      "x": 0.16,
+      "y": 0.78,
+      "region": "southwest",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "farmland",
+      "x": 0.5,
+      "y": 0.19,
+      "region": "north",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "fortress_road",
+      "x": 0.58,
+      "y": 0.04,
+      "region": "north",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "bridge",
+      "x": 0.84,
+      "y": 0.47,
+      "region": "east",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "river_cliff",
+      "x": 0.89,
+      "y": 0.56,
+      "region": "east",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "moss_forest",
+      "x": 0.87,
+      "y": 0.9,
+      "region": "southeast",
+      "certainty": "canon_region"
+    },
+    {
+      "id": "altar",
+      "x": 0.93,
+      "y": 0.95,
+      "region": "southeast",
+      "certainty": "canon_region"
+    }
+  ],
+  "routes": {
+    "peaceful": [
+      "aidan_home",
+      "village",
+      "training",
+      "village",
+      "hunt",
+      "village",
+      "coastal_cliff",
+      "village"
+    ],
+    "raid_escape": [
+      "village",
+      "bridge",
+      "river_cliff",
+      "moss_forest",
+      "altar"
+    ],
+    "return_departure": [
+      "altar",
+      "moss_forest",
+      "bridge",
+      "village",
+      "farmland",
+      "fortress_road"
+    ]
+  },
+  "hydrology": [
+    "bridge",
+    "river_cliff",
+    "moss_forest"
+  ],
+  "notes": [
+    "Coastal cliff and river cliff are distinct.",
+    "All coordinates are illustrative and not game-map coordinates.",
+    "Burned and peaceful states share one topology."
+  ]
+}
