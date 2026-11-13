@@ -1,0 +1,40 @@
+name: Morwen Body 04 Candidate Geometry QA
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/mvp-blockout-01
+    paths:
+      - 'tools/blender/morwen_body_04/**'
+      - 'docs/design/MORWEN_LAYER0_LANDMARKS_CANDIDATE.json'
+      - '.github/workflows/morwen-body-04.yml'
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
+      - run: python3 -m py_compile tools/blender/morwen_body_04/build_candidate.py
+      - run: blender -b -noaudio --python tools/blender/morwen_body_04/build_candidate.py
+      - name: Validate candidate output
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("assets/candidates/morwen-body-04")
+          d=json.loads((p/"report.json").read_text())
+          assert d["status"]=="PARAMETRIC_CANDIDATE_ONLY"
+          assert d["canonical_modified"] is False
+          assert d["art_qa"]=="NOT_RUN"
+          assert (p/"morwen_body_04_candidate.blend").stat().st_size>1000
+          print("MORWEN_BODY_04_CANDIDATE_TECHNICAL_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-body-04-candidate
+          path: assets/candidates/morwen-body-04/
+          if-no-files-found: warn
