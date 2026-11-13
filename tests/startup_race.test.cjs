@@ -6,14 +6,18 @@ const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 function extractDevBlock(source){
  const start=/^function devResetScreens\s*\(/m.exec(source);
  assert.ok(start,'fixture: product devResetScreens declaration not found');
- const end=source.indexOf("$('#devGrid').innerHTML",start.index);
+ // DEV block ends where the #devGrid DOM wiring starts (current: `const devGridEl=$('#devGrid')`; legacy: `$('#devGrid').innerHTML`).
+ const rest=source.slice(start.index),m=/^(?:const devGridEl=\$\('#devGrid'\)|\$\('#devGrid'\)\.innerHTML)/m.exec(rest);
+ const end=m?start.index+m.index:-1;
  assert.ok(end>start.index,'fixture: product DEV block end not found');
  const block=source.slice(start.index,end);
  assert.match(block,/^function devJump\s*\(/m,'fixture: product devJump declaration not found');
  return block;
 }
 function setup(){
- const e=environment(),c=e.c;c.URLSearchParams=URLSearchParams;c.flags={};c.$=e.node;c.popObjective=()=>{};c.msg=e.node('#msg');
+ const e=environment(),c=e.c;c.URLSearchParams=URLSearchParams;c.flags={};
+ // Product top-level state read by saveGrowthData's save guard (index.html: `let rildeReturnIndex=0,rildeReturnActive=false;`).
+ c.rildeReturnActive=false;c.$=e.node;c.popObjective=()=>{};c.msg=e.node('#msg');
  Object.defineProperty(c.msg,'textContent',{configurable:true,get(){return this._text||this.children.map(n=>n.textContent).join('')},set(v){this._text=v;this.children=[]}});
  c.msg.querySelector=function(s){return this.children.find(n=>s[0]==='.'?n.className===s.slice(1):n.tagName===s.toUpperCase())||null;};
  const dialogue=dialogueBlock(html);vm.runInContext(dialogue,c);
