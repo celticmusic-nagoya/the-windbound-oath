@@ -48,3 +48,22 @@ GitHub Actions run 43371532700 success. Roof slate 02 generated as original proc
 - `js/field/lind-assets.js`: `lind_aidan_house` uses `img/field/lind/buildings/lind_aidan_house.png` and generic collision metadata; its header explicitly calls these DEV review positions, not final story/save coordinates. Preserve game integration behavior.
 - `docs/story/WORLD_STORY_BIBLE_v1.1.txt`: explicitly SUPERSEDED. Do not use as canonical architecture authority.
 - Current exterior architectural canon, approved house image, exact exterior dimensions and palette are NOT YET VERIFIED. Before production-grade geometry is approved, inspect `img/field/lind/buildings/lind_aidan_house.png` visually and retrieve the latest canonical v5.0 or approved exterior art. Do not convert unverified geometry into canon.
+
+## Director override — 2026-11-13: WORLD-FIRST MAP REBUILD
+The director explicitly releases the NEW map design from constraints of existing game-map layouts, map JSON, tile coordinates, building placements, collision shapes, and legacy camera geometry. Existing runtime files remain untouched and are not design authority. Design all NEW terrain, settlement layout and Aidan home placement from the LATEST APPROVED scenario/world geography and story beats. The old map coordinates listed above are historical audit notes only, not placement constraints.
+
+### Story-based location relationships to verify against latest canon
+- Aidan's home is the opening/home base in peaceful Rilde village.
+- Village exploration, training ground and initial monster-hunt routes must support the revised prologue sequence; the village is revisited after the raid.
+- The sunset promise takes place at a cliff; its route must allow believable departure, return and night raid timing.
+- The raid/destroyed village must share the same underlying geography as peaceful Rilde, with a controlled post-raid state change.
+- Escape leads toward Moss Forest and the ancient altar, then toward Dunvall fortress. Exact bearings, distances, river crossings and topography remain UNVERIFIED until the latest canon is inspected.
+- No legacy signposts, directions, minimap coordinates or old scenario documents may establish NEW canon by default.
+
+### New deliverable priority
+1. Latest canon geographic relationship matrix (confirmed / proposed / unknown) with source paths and version.
+2. World-to-village topology graph: home, square, training, hunting outskirts, cliff, river/bridge, forest route, fortress route; avoid assigning bearings where unsupported.
+3. Story route continuity check across peaceful/raid/escape/revisit states.
+4. Only then set master terrain coordinates and produce production-quality Aidan house scene, with new collision/navigation as separate integration work.
+
+**Do not change existing runtime maps or mark proposed geography as approved.**
