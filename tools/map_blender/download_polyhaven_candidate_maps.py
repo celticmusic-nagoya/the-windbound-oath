@@ -19,7 +19,8 @@ for asset in manifest["assets"]:
         raise SystemExit("Unverified source: " + asset["asset_id"])
     for channel in sorted(allowed):
         options = [m for m in asset["maps"] if m["channel"] == channel
-                   and m["resolution"] == "1k" and m["format"] in ("jpg", "png")]
+                   and m["resolution"] == "1k" and m["format"] in ("jpg", "png")
+                   and (channel != "Normal" or m.get("provider_channel") != "nor_dx")]
         if not options:
             raise SystemExit("Missing required 1K map: " + asset["asset_id"] + "/" + channel)
         entry = sorted(options, key=lambda m: (m["format"] != "jpg", m["url"]))[0]
