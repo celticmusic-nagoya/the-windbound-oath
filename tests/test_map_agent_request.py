@@ -18,6 +18,12 @@ class RequestValidationTests(unittest.TestCase):
     def test_invalid_mode_rejected(self):
         with self.assertRaises(ValueError):
             validate({"agent":"codex","task":"MAP-PIPELINE-01","mode":"unsafe"})
+    def test_execute_rejected_for_claude(self):
+        with self.assertRaises(ValueError):
+            validate({"agent":"claude","task":"MAP-ASSET-RESEARCH-01","mode":"execute"})
+    def test_execute_rejected_for_codex(self):
+        with self.assertRaises(ValueError):
+            validate({"agent":"codex","task":"MAP-PIPELINE-01","mode":"execute"})
     def test_non_object_rejected(self):
         with self.assertRaises(ValueError):
             validate(["claude","MAP-ASSET-RESEARCH-01"])
