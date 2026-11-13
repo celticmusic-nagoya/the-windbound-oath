@@ -1,0 +1,88 @@
+{
+ "schema_version": 1,
+ "task": "MAP-ASSET-PREP-01",
+ "asset": "aidan_home",
+ "status": "PROPOSED_PIN_NOT_YET_ADOPTED_BY_RENDER_PIPELINE",
+ "blender": {
+  "recommended": {
+   "version": "5.2.4",
+   "channel": "LTS (supported until 2028-07)",
+   "url": "https://download.blender.org/release/Blender5.2/blender-5.2.4-linux-x64.tar.xz",
+   "sha256": "2fd14c50987426897ba60237ee996edf2b4151f4b1a72a460ca20be58c1d2d86",
+   "sha256_source": "https://download.blender.org/release/Blender5.2/blender-5.2.4.sha256"
+  },
+  "current_ci_observed": {
+   "version": "4.0.2",
+   "source": "ubuntu-24.04 apt (unpinned)",
+   "issues": [
+    "apt build lacks OpenImageDenoise",
+    "4.0 series is out of support",
+    "version can drift with runner image"
+   ]
+  },
+  "migration_rule": "4.0.2→5.2.4移行時は同一シードで旧新5視点を比較し、差分をledgerに記録してから切替。ChatGPT側パイプラインの切替は担当合意後"
+ },
+ "determinism": {
+  "seed": 1311,
+  "seed_note": "既存candidate(aidan_home_production_candidate.py)のrandom.Random(1311)を継承。新方式は部品ごとに seed = 1311 + component_index を推奨",
+  "threads": 2,
+  "cycles": {
+   "samples": 64,
+   "denoise": false,
+   "seed": 0,
+   "use_animated_seed": false,
+   "device": "CPU"
+  },
+  "color_management": {
+   "view_transform": "AgX",
+   "look": "None",
+   "exposure": 0.0,
+   "gamma": 1.0,
+   "note": "5.xの既定。4.0.2(Filmic)との色差は移行比較で記録"
+  },
+  "units": "metric, 1 BU = 1 m, Z-up, front = -Y"
+ },
+ "cameras": {
+  "game_quarter_view": {
+   "type": "ORTHO",
+   "elevation_deg": [
+    25,
+    30
+   ],
+   "default_elevation_deg": 27,
+   "azimuth_deg": -45,
+   "note": "FIELD_VISUAL_OVERHAUL 25°〜30°。既存candidateのgameカメラは約38.4°で規約外"
+  },
+  "five_views": [
+   "front",
+   "rear",
+   "left",
+   "right",
+   "game"
+  ],
+  "detail_views": [
+   "roof_ridge_eave",
+   "front_door",
+   "chimney"
+  ]
+ },
+ "output": {
+  "resolution": [
+   1600,
+   1200
+  ],
+  "format": "PNG RGBA 8bit",
+  "film_transparent": true,
+  "game_size_previews_px": [
+   256,
+   384,
+   512
+  ]
+ },
+ "texture_budget": {
+  "default": "2k",
+  "mobile_lod": "1k",
+  "max_unique_materials": 8,
+  "atlas_or_bake": "required before runtime integration"
+ }
+}
