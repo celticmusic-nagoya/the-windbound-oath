@@ -28,6 +28,13 @@ with zipfile.ZipFile(archive) as z:
    objects=[o for o in bpy.data.objects if o not in before and o.type=='MESH']
    assert objects,name
    cache[name]=objects
+   # Kenney GLBs reference external/packed textures that render magenta in headless CI.
+   # Replace only copied-source appearance with deterministic procedural palettes.
+   for ob in objects:
+    for slot in ob.material_slots:
+     if 'roof' in name: slot.material=thatch
+     elif 'wood' in name or 'pillar' in name or 'door' in name or 'shutters' in name: slot.material=wood
+     else: slot.material=stone
    for ob in objects: ob.hide_render=True;ob.hide_set(True)
   def place(name,xyz,scale=(1,1,1),rotation=0):
    for src in cache[name]:
