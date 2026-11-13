@@ -25,7 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify 3D production anti-loop policy
-        run: python -m unittest discover -s tools/blender/morwen_production -p test_validate_attempt_log.py -v
+        run: |
+          python -m unittest discover -s tools/blender/morwen_production -p test_validate_attempt_log.py -v
           python -m unittest discover -s tools/blender/morwen_production -p test_validate_shared_attempt_ledger.py -v
       - name: Verify landmark review page and coordinate analysis (no Blender required)
         run: |
