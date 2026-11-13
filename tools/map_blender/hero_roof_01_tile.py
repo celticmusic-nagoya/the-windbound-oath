@@ -9,6 +9,8 @@ out=Path(os.environ.get("MAP_OUTPUT","/tmp/map-preview"));out.mkdir(parents=True
 bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene
 scene.render.engine="CYCLES";scene.cycles.samples=48
+scene.cycles.use_denoising=False
+bpy.context.view_layer.cycles.use_denoising=False
 scene.render.resolution_x=1200;scene.render.resolution_y=900
 scene.render.resolution_percentage=100
 scene.render.image_settings.file_format="PNG"
@@ -60,7 +62,7 @@ mesh=bpy.data.meshes.new("hand sculpted tile master");mesh.from_pydata(v,[],face
 obj=bpy.data.objects.new("ROOF_TILE_MASTER_high",mesh);bpy.context.collection.objects.link(obj)
 mesh.materials.append(mat)
 bevel=obj.modifiers.new("real bevel at chipped edges","BEVEL");bevel.width=.008;bevel.segments=3
-obj.modifiers.new("weighted normals","WEIGHTED_NORMAL")
+# Keep native mesh normals: Blender 4.0 runner lacks the legacy Auto Smooth prerequisite.
 # Tiny chipped corners via deterministic boundary vertex perturbation, not a duplicated model.
 for vertex in mesh.vertices:
  x,y,z=vertex.co
