@@ -1,5 +1,5 @@
 """Validate shortlist IDs against live provider APIs. Metadata only, no downloads."""
-import json,sys,pathlib,urllib.request,urllib.error,datetime
+import json,sys,pathlib,urllib.request,urllib.error,urllib.parse,datetime
 src=pathlib.Path(sys.argv[1]);dest=pathlib.Path(sys.argv[2]);dest.parent.mkdir(parents=True,exist_ok=True)
 items=json.loads(src.read_text())['shortlist']
 def fetch(url):
@@ -17,8 +17,8 @@ for item in items:
    row['categories']=data.get('categories')
    row['license_check']='PROVIDER_CC0_POLICY_NEEDS_PER_ASSET_REVIEW'
   elif item['provider']=='ambientcg':
-   data=fetch('https://ambientcg.com/api/v3/assets/'+item['asset_id'])
-   row['status']='FOUND' if data else 'UNVERIFIED'
+   data=fetch('https://ambientcg.com/api/v3/assets?id='+urllib.parse.quote(item['asset_id'])+'&limit=1')
+   row['status']='FOUND' if any(a.get('id')==item['asset_id'] for a in data.get('foundAssets',[])) else 'UNVERIFIED'
    row['license_check']='PROVIDER_CC0_POLICY_NEEDS_PER_ASSET_REVIEW'
  except urllib.error.HTTPError as e:row['status']='HTTP_'+str(e.code)
  except Exception as e:row['status']='ERROR';row['error']=str(e)
@@ -27,3 +27,4 @@ dest.write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')
 print(json.dumps({'statuses':[(a['asset_id'],a['status']) for a in report['assets']]},indent=2))
 if any(a['status'] in ('FOUND_NON_TEXTURE','HTTP_404','ERROR','UNVERIFIED') for a in report['assets']):
  print('WARNING: shortlist contains unresolved entries; do not import or approve')
+ sys.exit(1)
