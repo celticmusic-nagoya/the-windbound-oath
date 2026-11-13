@@ -10,6 +10,24 @@ def mat(name,color,rough=0.85):
  p=m.node_tree.nodes.get('Principled BSDF');p.inputs['Base Color'].default_value=(*color,1);p.inputs['Roughness'].default_value=rough
  return m
 stone=mat('warm weathered limestone',(0.46,0.43,0.35));wood=mat('dark hand-oiled oak',(0.19,0.115,0.075));thatch=mat('aged straw thatch',(0.48,0.32,0.13));earth=mat('earth',(0.25,0.29,0.20))
+# Procedural surface detail: no external texture dependencies.
+def textured(material,scale,strength,distance,light,dark):
+ nodes=material.node_tree.nodes;links=material.node_tree.links
+ bsdf=nodes.get('Principled BSDF')
+ tex=nodes.new('ShaderNodeTexNoise');tex.inputs['Scale'].default_value=scale
+ tex.inputs['Detail'].default_value=4.0;tex.inputs['Roughness'].default_value=.72
+ ramp=nodes.new('ShaderNodeValToRGB')
+ ramp.color_ramp.elements[0].position=.22;ramp.color_ramp.elements[0].color=(*dark,1)
+ ramp.color_ramp.elements[1].position=.78;ramp.color_ramp.elements[1].color=(*light,1)
+ bump=nodes.new('ShaderNodeBump');bump.inputs['Strength'].default_value=strength
+ bump.inputs['Distance'].default_value=distance
+ links.new(tex.outputs['Fac'],ramp.inputs['Fac'])
+ links.new(tex.outputs['Fac'],bump.inputs['Height'])
+ links.new(ramp.outputs['Color'],bsdf.inputs['Base Color'])
+ links.new(bump.outputs['Normal'],bsdf.inputs['Normal'])
+textured(stone,23,.35,.045,(.58,.54,.44),(.29,.28,.24))
+textured(wood,31,.22,.018,(.31,.19,.11),(.105,.061,.034))
+textured(thatch,78,.42,.055,(.65,.47,.22),(.27,.19,.075))
 def box(name,loc,scale,material,bevel=0.0):
  bpy.ops.mesh.primitive_cube_add(size=1,location=loc);o=bpy.context.object;o.name=name;o.dimensions=scale
  bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
@@ -85,6 +103,22 @@ with zipfile.ZipFile(archive) as z:
      piece=box('hand laid thatch %d %d %d'%(side,course,col),
        (x+jitter,y,z),(.39,.29,.085),thatch,.018)
      piece.rotation_euler.x=-side*math.radians(33.4)
+  # Broken eaves: dense loose straw ends along the roof lip, varied in length.
+  # The surface shader supplies micro-fibres; these curves supply silhouette detail.
+  straw_dark=mat('straw shadow tips',(.32,.23,.10))
+  for side in (-1,1):
+   for i in range(150):
+    x=-3.46+i*(6.92/149)+random.uniform(-.012,.012)
+    y=side*(2.40+random.uniform(-.025,.045))
+    z=2.62+random.uniform(-.065,.065)
+    length=random.uniform(.09,.27)
+    curve=bpy.data.curves.new('eave fibre','CURVE');curve.dimensions='3D'
+    curve.bevel_depth=.006;curve.bevel_resolution=1
+    spline=curve.splines.new('POLY');spline.points.add(1)
+    spline.points[0].co=(x,y,z,1)
+    spline.points[1].co=(x+random.uniform(-.03,.03),y+side*length,z-random.uniform(.07,.19),1)
+    obj=bpy.data.objects.new('loose straw tip',curve);bpy.context.collection.objects.link(obj)
+    obj.data.materials.append(straw_dark if i%5==0 else thatch)
   # Structural gate: roof substrates must be present on both pitches.
   substrates=[o for o in bpy.data.objects if o.name.startswith('continuous pitched roof substrate')]
   assert len(substrates)==2, 'Missing watertight roof substrate'
