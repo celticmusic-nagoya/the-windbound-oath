@@ -1,0 +1,42 @@
+name: Morwen Body 03 Reference Guides
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/mvp-blockout-01
+    paths:
+      - 'tools/blender/morwen_body_03/**'
+      - 'docs/design/MORWEN_LAYER0_*'
+      - '.github/workflows/morwen-body-03.yml'
+permissions:
+  contents: read
+jobs:
+  guide-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
+      - name: Compile and generate guides
+        run: |
+          python3 -m py_compile tools/blender/morwen_body_03/setup.py
+          blender -b -noaudio --python tools/blender/morwen_body_03/setup.py
+      - name: Check report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/morwen-body-03')
+          d=json.loads((p/'report.json').read_text())
+          assert d['stage']=='REFERENCE_GUIDES_ONLY'
+          assert d['body_mesh']=='NOT_BUILT'
+          assert d['canonical_modified'] is False
+          assert (p/'morwen_body_reference_guides.blend').stat().st_size>1000
+          print('MORWEN_BODY_03_GUIDES_QA_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-body-03-reference-guides
+          path: assets/candidates/morwen-body-03/
+          if-no-files-found: warn
