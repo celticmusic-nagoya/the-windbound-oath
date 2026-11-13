@@ -43,7 +43,9 @@ jobs:
       - name: Render reference comparison sheet
         run: blender -b -t 2 --python tools/blender/morwen_production/create_face_comparison.py
       - name: Verify canonical landmark review contract
-        run: python3 tools/blender/morwen_production/morwen_rebuild_01_landmarks.py
+        run: |
+          python3 -m pip install --user Pillow
+          python3 tools/blender/morwen_production/morwen_rebuild_01_landmarks.py
       - name: Validate
         run: |
           python3 - <<'PY'
@@ -53,6 +55,7 @@ jobs:
           lm=json.loads((Path("render_output/morwen_rebuild_01")/"LANDMARK_REVIEW_TEMPLATE.json").read_text())
           assert lm["status"]=="REFERENCE_VERIFIED_ANNOTATION_PENDING"
           assert len(lm["views"])==4 and not lm["landmark_positions_invented"]
+          assert (Path("render_output/morwen_rebuild_01")/"CANONICAL_FOUR_VIEW_LANDMARK_REVIEW.png").stat().st_size>1000
           q=json.loads((p/"QA.json").read_text())
           assert q["production_approved"] is False
           refs=json.loads((p/"CANONICAL_IMAGE_AUDIT.json").read_text())
@@ -106,6 +109,7 @@ jobs:
             render_output/morwen_vroid_review/*_face_detail.png
             render_output/morwen_vroid_review/QA.json
             render_output/morwen_rebuild_01/LANDMARK_REVIEW_TEMPLATE.json
+            render_output/morwen_rebuild_01/CANONICAL_FOUR_VIEW_LANDMARK_REVIEW.png
             render_output/morwen_vroid_review/FACE_TOPOLOGY_AUDIT.json
             render_output/morwen_vroid_review/FACE_COMPONENT_INDEX.json
             render_output/morwen_vroid_review/FACE_COMPONENT_COLOR_LEGEND.json
