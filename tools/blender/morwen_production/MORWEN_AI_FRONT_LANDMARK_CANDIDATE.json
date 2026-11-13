@@ -1,0 +1,67 @@
+{
+  "schema": "MORWEN-AI-LANDMARK-CANDIDATE-01",
+  "source": "tools/blender/production_mesh_08/references/7809.png",
+  "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+  "view": "front",
+  "image_size": [
+    384,
+    1024
+  ],
+  "coordinate_system": "image top-left, pixels",
+  "status": "AI_ESTIMATED_UNAPPROVED",
+  "points": {
+    "left_eye_center": {
+      "x": 180,
+      "y": 124,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    },
+    "right_eye_center": {
+      "x": 238,
+      "y": 124,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    },
+    "nose_tip": {
+      "x": 214,
+      "y": 143,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    },
+    "mouth_center": {
+      "x": 214,
+      "y": 159,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    },
+    "chin": {
+      "x": 214,
+      "y": 181,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    },
+    "left_jaw_edge": {
+      "x": 173,
+      "y": 149,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    },
+    "right_jaw_edge": {
+      "x": 254,
+      "y": 149,
+      "confidence": "VISUAL_ESTIMATE",
+      "review_status": "PENDING"
+    }
+  },
+  "unresolved": [
+    "head_top",
+    "left_ear_anchor",
+    "right_ear_anchor"
+  ],
+  "notes": [
+    "Jaw-edge points are estimated along lower cheek and require art review.",
+    "Head top is obscured by hair; no skull crown inference.",
+    "These positions are approximate and must not authorize 3D deformation.",
+    "Eye centers estimated from iris visual centers."
+  ]
+}
