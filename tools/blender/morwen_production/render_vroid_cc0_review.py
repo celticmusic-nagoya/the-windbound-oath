@@ -26,12 +26,34 @@ scene.render.image_settings.color_mode="RGBA"
 out=Path("render_output/morwen_vroid_review");out.mkdir(parents=True,exist_ok=True)
 bpy.ops.object.light_add(type="AREA",location=center+Vector((height,-height,height)))
 bpy.context.object.data.energy=900;bpy.context.object.data.size=height*2
-for name,delta in [("front",(0,-1,0)),("right",(1,0,0)),("back",(0,1,0)),("left",(-1,0,0)),("three_quarter",(.7,-1,.35))]:
+for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("back",(0,-1,0)),("left",(-1,0,0)),("three_quarter",(.7,1,.35))]:
  bpy.ops.object.camera_add(location=center+Vector(delta).normalized()*height*1.7)
  cam=bpy.context.object;cam.rotation_euler=(center-cam.location).to_track_quat("-Z","Y").to_euler()
- cam.data.type="ORTHO";cam.data.ortho_scale=height*.48
+ cam.data.type="ORTHO";cam.data.ortho_scale=height*.31
  scene.camera=cam
  scene.render.filepath=str((out/(name+"_head.png")).resolve())
  bpy.ops.render.render(write_still=True)
-report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_AND_RENDER","G4":"NOT_RUN","production_approved":False}
+# Wireframe diagnostics are separate temporary copies, not canonical meshes.
+for obj in meshes:
+ obj.hide_render=True
+wire=[]
+for obj in meshes:
+ duplicate=obj.copy()
+ duplicate.data=obj.data.copy()
+ bpy.context.collection.objects.link(duplicate)
+ duplicate.hide_render=False
+ modifier=duplicate.modifiers.new("Diagnostic_Wireframe","WIREFRAME")
+ modifier.thickness=height*.00025
+ modifier.use_replace=True
+ wire.append(duplicate)
+for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("three_quarter",(.7,1,.35))]:
+ bpy.ops.object.camera_add(location=center+Vector(delta).normalized()*height*1.7)
+ cam=bpy.context.object
+ cam.rotation_euler=(center-cam.location).to_track_quat("-Z","Y").to_euler()
+ cam.data.type="ORTHO"
+ cam.data.ortho_scale=height*.31
+ scene.camera=cam
+ scene.render.filepath=str((out/(name+"_wire.png")).resolve())
+ bpy.ops.render.render(write_still=True)
+report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
