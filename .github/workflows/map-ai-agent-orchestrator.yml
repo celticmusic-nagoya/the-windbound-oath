@@ -80,12 +80,11 @@ jobs:
           cat agent-request-validated.json >> agent-output.txt
       - name: Require matching API credential
         if: steps.request.outputs.mode == 'execute'
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         shell: bash
         env:
           AGENT: ${{ steps.request.outputs.agent }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/main" || "$GITHUB_EVENT_NAME" != "workflow_dispatch" ]]; then echo "EXECUTE_BLOCKED: default branch manual dispatch required after security review"; exit 4; fi
           if [[ "$AGENT" == claude && -z "$ANTHROPIC_API_KEY" ]]; then echo "ANTHROPIC_API_KEY secret missing"; exit 3; fi
