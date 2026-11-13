@@ -67,12 +67,15 @@ with zipfile.ZipFile(archive) as z:
    for side in (-1,1):
     y=side*2.16
     beam=box('roof rafter %d %d'%(x,side),(x,y/2,3.30),(.105,2.62,.16),wood,.025)
-    beam.rotation_euler.x=side*math.radians(35)
+    beam.rotation_euler.x=-side*math.radians(33.4)
   # Ridge and edge beams, independent of source mesh dimensions
   box('continuous oak ridge',(0,0,4.25),(6.9,.18,.20),wood,.035)
   for side in (-1,1):
    box('oak fascia',(0,side*2.35,2.58),(7.05,.20,.24),wood,.035)
   for side in (-1,1):
+   # A continuous watertight under-roof; individual thatch pieces are surface detail.
+   backing=box('continuous pitched roof substrate %d'%side,(0,side*1.23,3.395),(7.12,2.98,.16),thatch,.025)
+   backing.rotation_euler.x=-side*math.radians(33.4)
    for course in range(13):
     y=side*(.13+course*.19)
     z=4.21-(abs(y)/2.47)*1.63
@@ -81,7 +84,7 @@ with zipfile.ZipFile(archive) as z:
      jitter=random.uniform(-.025,.025)
      piece=box('hand laid thatch %d %d %d'%(side,course,col),
        (x+jitter,y,z),(.39,.29,.085),thatch,.018)
-     piece.rotation_euler.x=side*math.radians(34)
+     piece.rotation_euler.x=-side*math.radians(33.4)
   # chimney: coursed stone stack and cap with visible opening
   for course in range(11):
    z=2.65+course*.19
