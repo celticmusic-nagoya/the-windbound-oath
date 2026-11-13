@@ -22,6 +22,7 @@ jobs:
       - run: |
           python3 -m pip install --break-system-packages Pillow
           python3 tools/blender/mvp_blockout_01/qa_walk_frames.py
+          python3 tools/blender/mvp_blockout_01/package_walk.py
       - name: Candidate output QA
         run: |
           python3 - <<'PY'
@@ -46,7 +47,9 @@ jobs:
               for frame in range(1,9):
                   f=p/'walk_views'/direction/(f'{frame:02d}.png')
                   assert f.is_file() and f.stat().st_size>1000,str(f)
-          print('MORWEN_RIG_02_32_FRAMES_PASS')
+          assert (p/'MORWEN_RIG_02_VISUAL_QA.zip').stat().st_size>10000
+          assert (p/'MORWEN_WALK_4DIR_8F_CONTACT_SHEET.png').stat().st_size>10000
+          print('MORWEN_RIG_02_VISUAL_QA_PACKAGE_PASS')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
