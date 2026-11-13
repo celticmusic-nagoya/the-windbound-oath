@@ -1,5 +1,11 @@
 name: Aidan Kenney Blender Import QA
 on:
+  push:
+    branches:
+      - feature/aidan-home-quality-master-01
+    paths:
+      - 'tools/map_blender/aidan_kenney_reference.py'
+      - '.github/workflows/aidan-kenney-blender-qa.yml'
   pull_request:
     paths:
       - 'tools/map_blender/aidan_kenney_reference.py'
