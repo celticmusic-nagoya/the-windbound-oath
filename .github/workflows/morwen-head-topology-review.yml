@@ -1,5 +1,11 @@
 name: Morwen Head Topology Review
 on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - 'tools/blender/morwen_production/build_head_review.py'
+      - '.github/workflows/morwen-head-topology-review.yml'
   workflow_dispatch:
 permissions:
   contents: read
