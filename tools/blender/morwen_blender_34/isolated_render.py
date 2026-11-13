@@ -56,10 +56,10 @@ def main():
     camera=bpy.data.objects.new("Morwen_34_camera",camdata)
     scene.collection.objects.link(camera)
     scene.camera=camera
-    camera.location=center+Vector((0,-max((maxs-mins).length,1)*2,0))
-    camera.rotation_euler=(center-camera.location).to_track_quat("-Z","Y").to_euler()
     camdata.type="ORTHO"
-    camdata.ortho_scale=max((maxs.z-mins.z)*1.35,(maxs.x-mins.x)*1.35*768/512,0.1)
+    distance=max((maxs-mins).length,1)*2
+    views={"front":(0,-1,0),"left":(-1,0,0),"right":(1,0,0),
+           "back":(0,1,0),"three_quarter":(.8,-1,.35)}
 
     lightdata=bpy.data.lights.new("Morwen_34_area","AREA")
     light=bpy.data.objects.new("Morwen_34_area",lightdata)
@@ -69,15 +69,29 @@ def main():
     lightdata.size=4
 
     bpy.context.window.scene=scene
-    scene.render.filepath=str(OUT/"front_isolated.png")
-    bpy.ops.render.render(write_still=True,scene=scene.name)
-    output=OUT/"front_isolated.png"
-    assert output.is_file() and output.stat().st_size>1000
+    outputs=[]
+    for name, direction in views.items():
+        direction=Vector(direction).normalized()
+        camera.location=center+direction*distance
+        camera.rotation_euler=(center-camera.location).to_track_quat("-Z","Y").to_euler()
+        q=camera.rotation_euler.to_quaternion().inverted()
+        projected=[q@(v-center) for v in coords]
+        x0=min(v.x for v in projected);x1=max(v.x for v in projected)
+        y0=min(v.y for v in projected);y1=max(v.y for v in projected)
+        aspect=scene.render.resolution_x/scene.render.resolution_y
+        camdata.ortho_scale=max(y1-y0,(x1-x0)/aspect,.1)*1.3
+        offset=Vector(((x0+x1)/2,(y0+y1)/2,0))
+        camera.location+=camera.rotation_euler.to_quaternion()@offset
+        scene.render.filepath=str(OUT/(name+".png"))
+        bpy.ops.render.render(write_still=True,scene=scene.name)
+        output=OUT/(name+".png")
+        assert output.is_file() and output.stat().st_size>1000
+        outputs.append(output.name)
     report={"task":"BLENDER-34","source":str(SRC.relative_to(ROOT)),
             "source_objects":original,"isolated_objects":[o.name for o in scene.objects],
-            "render":output.name,"art_approval":"NOT_RUN","production_use":False}
+            "render_views":outputs,"art_approval":"NOT_RUN","production_use":False}
     (OUT/"report.json").write_text(json.dumps(report,indent=2)+"\n")
-    print("MORWEN_34_ISOLATED_RENDER_PASS")
+    print("MORWEN_35_ISOLATED_FIVE_VIEW_RENDER_PASS")
 
 if __name__=="__main__":
     main()
