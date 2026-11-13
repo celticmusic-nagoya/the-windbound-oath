@@ -8,27 +8,43 @@ random.seed(130113)
 out=Path(os.environ.get("MAP_OUTPUT","/tmp/map-preview"));out.mkdir(parents=True,exist_ok=True)
 bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene
-scene.render.engine="CYCLES";scene.cycles.samples=48
+scene.render.engine="CYCLES";scene.cycles.samples=64
 scene.cycles.use_denoising=False
 bpy.context.view_layer.cycles.use_denoising=False
-scene.render.resolution_x=1200;scene.render.resolution_y=900
+scene.render.resolution_x=1600;scene.render.resolution_y=1200
 scene.render.resolution_percentage=100
 scene.render.image_settings.file_format="PNG"
 world=bpy.data.worlds.new("neutral studio world");scene.world=world;world.use_nodes=True
 world.node_tree.nodes["Background"].inputs["Color"].default_value=(.38,.41,.45,1)
-world.node_tree.nodes["Background"].inputs["Strength"].default_value=.65
-mat=bpy.data.materials.new("Rilde warm red-brown hand fired slate")
-mat.diffuse_color=(.34,.13,.09,1);mat.use_nodes=True
+world.node_tree.nodes["Background"].inputs["Strength"].default_value=.35
+mat=bpy.data.materials.new("Rilde kiln fired iron-rich weathered terracotta")
+mat.diffuse_color=(.20,.065,.035,1);mat.use_nodes=True
 nodes=mat.node_tree.nodes;links=mat.node_tree.links
 bsdf=nodes.get("Principled BSDF")
-bsdf.inputs["Base Color"].default_value=(.34,.13,.09,1)
-bsdf.inputs["Roughness"].default_value=.79
-tex=nodes.new("ShaderNodeTexNoise");tex.inputs["Scale"].default_value=33
-tex.inputs["Detail"].default_value=5
-bump=nodes.new("ShaderNodeBump");bump.inputs["Strength"].default_value=.22
-bump.inputs["Distance"].default_value=.025
-links.new(tex.outputs["Fac"],bump.inputs["Height"])
+bsdf.inputs["Roughness"].default_value=.91
+coord=nodes.new("ShaderNodeTexCoord")
+macro=nodes.new("ShaderNodeTexNoise");macro.inputs["Scale"].default_value=4.5
+macro.inputs["Detail"].default_value=5.0
+micro=nodes.new("ShaderNodeTexNoise");micro.inputs["Scale"].default_value=115.0
+micro.inputs["Detail"].default_value=3.0
+links.new(coord.outputs["Generated"],macro.inputs["Vector"])
+links.new(coord.outputs["Generated"],micro.inputs["Vector"])
+ramp=nodes.new("ShaderNodeValToRGB")
+ramp.color_ramp.elements.remove(ramp.color_ramp.elements[1])
+for i,(pos,color) in enumerate([
+ (.0,(.075,.026,.019,1)),(.30,(.16,.050,.031,1)),
+ (.52,(.28,.095,.048,1)),(.72,(.38,.16,.077,1)),
+ (1.0,(.46,.25,.13,1))]):
+ element=ramp.color_ramp.elements[0] if i==0 else ramp.color_ramp.elements.new(pos)
+ element.position=pos;element.color=color
+links.new(macro.outputs["Fac"],ramp.inputs["Fac"])
+links.new(ramp.outputs["Color"],bsdf.inputs["Base Color"])
+bump=nodes.new("ShaderNodeBump")
+bump.inputs["Strength"].default_value=.30
+bump.inputs["Distance"].default_value=.012
+links.new(micro.outputs["Fac"],bump.inputs["Height"])
 links.new(bump.outputs["Normal"],bsdf.inputs["Normal"])
+
 r=34;c=26
 # Sculpted curved slate, irregular edge, nonzero thickness and edge bevel.
 v=[];faces=[]
@@ -72,7 +88,7 @@ for vertex in mesh.vertices:
 bpy.ops.object.camera_add(location=(2.1,-2.4,2.2));cam=bpy.context.object
 cam.rotation_euler=(Vector((0,0,0))-cam.location).to_track_quat("-Z","Y").to_euler()
 cam.data.type="ORTHO";cam.data.ortho_scale=2.4;scene.camera=cam
-for loc,power,size in [((-2,-1,4),750,3),((2,2,3),550,2.5)]:
+for loc,power,size in [((-2,-1,4),420,3),((2,2,3),250,2.5)]:
  bpy.ops.object.light_add(type="AREA",location=loc);light=bpy.context.object
  light.data.energy=power;light.data.shape="DISK";light.data.size=size
  light.rotation_euler=(Vector((0,0,0))-light.location).to_track_quat("-Z","Y").to_euler()
