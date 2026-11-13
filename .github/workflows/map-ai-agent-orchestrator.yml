@@ -78,6 +78,8 @@ jobs:
           test -s agent-packet.md
           sha256sum agent-packet.md > agent-packet.sha256
           git rev-parse FETCH_HEAD > agent-packet-source-commit.txt
+          sha256sum --check --status agent-packet.sha256
+          test "$(wc -c < agent-packet.md)" -gt 0
       - name: Write dry-run report
         if: steps.request.outputs.mode == 'dry_run'
         run: |
