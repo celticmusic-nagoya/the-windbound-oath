@@ -46,6 +46,9 @@ jobs:
           topology=json.loads((p/"FACE_TOPOLOGY_AUDIT.json").read_text())
           assert topology["vertices"]>0 and topology["polygons"]>0
           assert topology["topology_deformation_approved"] is False
+          metrics=json.loads((p/"FACE_PROPORTION_CANDIDATE.json").read_text())
+          assert metrics["canonical_landmarks_measured"] is False
+          assert metrics["face_width_to_height"]>0
           for name in ("front","right","back","left","three_quarter"):
               assert (p/(name+"_head.png")).stat().st_size>1000
           for name in ("front","right","three_quarter"):
@@ -65,4 +68,5 @@ jobs:
             render_output/morwen_vroid_review/*_face_detail.png
             render_output/morwen_vroid_review/QA.json
             render_output/morwen_vroid_review/FACE_TOPOLOGY_AUDIT.json
+            render_output/morwen_vroid_review/FACE_PROPORTION_CANDIDATE.json
           retention-days: 14
