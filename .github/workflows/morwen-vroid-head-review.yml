@@ -50,6 +50,7 @@ jobs:
               assert (p/(name+"_face_detail.png")).stat().st_size>1000
           PY
       - name: Upload images and QA only
+        # Keep full renders available for visual framing verification
         if: always()
         uses: actions/upload-artifact@v4
         with:
