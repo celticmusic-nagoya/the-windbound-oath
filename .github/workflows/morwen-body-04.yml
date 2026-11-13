@@ -19,6 +19,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
       - run: python3 -m py_compile tools/blender/morwen_body_04/build_candidate.py
       - run: blender -b -noaudio --python tools/blender/morwen_body_04/build_candidate.py
+      - run: blender -b -noaudio --python tools/blender/morwen_body_04/render_silhouettes.py
       - name: Validate candidate output
         run: |
           python3 - <<'PY'
@@ -30,6 +31,8 @@ jobs:
           assert d["canonical_modified"] is False
           assert d["art_qa"]=="NOT_RUN"
           assert (p/"morwen_body_04_candidate.blend").stat().st_size>1000
+          for direction in ("front","right","back","left"):
+              assert (p/("silhouette_"+direction+".png")).stat().st_size>1000
           print("MORWEN_BODY_04_CANDIDATE_TECHNICAL_PASS")
           PY
       - uses: actions/upload-artifact@v4
