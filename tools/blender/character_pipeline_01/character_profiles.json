@@ -1,0 +1,69 @@
+{
+  "schema": "TWO_CHARACTER_PIPELINE_01",
+  "status": "CANDIDATE_CONFIG_ONLY",
+  "rig": {
+    "base_bones": 22,
+    "extension_bones": 4,
+    "extension_status": "SPEC_ONLY_NOT_IMPLEMENTED",
+    "coordinate_system": {
+      "up": "+Z",
+      "front": "-Y",
+      "left": "+X"
+    },
+    "weights": "100_percent_rigid_part_assignment",
+    "animation": {
+      "mode": "FK",
+      "cycle_frames": 8
+    }
+  },
+  "render": {
+    "directions": [
+      "front",
+      "right",
+      "back",
+      "left"
+    ],
+    "frames_per_direction": 8,
+    "alpha": "RGBA",
+    "candidate_resolution": [
+      512,
+      768
+    ],
+    "spritesheet_layout": [
+      8,
+      4
+    ]
+  },
+  "characters": {
+    "morwen": {
+      "body_reference": "docs/design/MORWEN_LAYER0_REFERENCE_REGISTRY.json",
+      "body_mesh_status": "NOT_BUILT",
+      "art_qa": "NOT_RUN"
+    },
+    "aidan": {
+      "body_reference_status": "REQUIRES_CANONICAL_SOURCE_AUDIT",
+      "rig_retarget_status": "NOT_RUN"
+    },
+    "fiona": {
+      "body_reference_status": "REQUIRES_CANONICAL_SOURCE_AUDIT",
+      "rig_retarget_status": "NOT_RUN"
+    },
+    "lou": {
+      "rig_profile": "NON_HUMANOID_SPECIALIZED",
+      "retarget_status": "OUT_OF_SCOPE"
+    }
+  },
+  "gates": [
+    "reference_hash",
+    "rig_integrity",
+    "walk_cycle",
+    "32_frame_alpha",
+    "spritesheet_dimensions",
+    "director_art_qa"
+  ],
+  "protected": {
+    "canonical_assets": "READ_ONLY",
+    "main_merge": false,
+    "game_integration": false
+  }
+}
