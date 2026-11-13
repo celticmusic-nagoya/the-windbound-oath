@@ -1,0 +1,24 @@
+{
+  "id": "MORWEN_GARTER_RIGHT_ONLY",
+  "status": "DIRECTOR_APPROVED",
+  "coordinate_convention": {
+    "character_right": "-X",
+    "character_left": "+X",
+    "front_camera": "-Y",
+    "back_camera": "+Y"
+  },
+  "garter": {
+    "leg": "character_right",
+    "world_side": "-X",
+    "front_screen_side": "right",
+    "back_screen_side": "left",
+    "count": 1,
+    "mirror_prohibited": true
+  },
+  "qa": {
+    "front": "right side of image",
+    "back": "left side of image",
+    "left_leg": "no garter",
+    "duplicate": "FAIL"
+  }
+}
