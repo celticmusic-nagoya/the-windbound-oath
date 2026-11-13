@@ -1,5 +1,7 @@
 """Render isolated geometry QA preview, not production artwork."""
-import bpy, math, os, json, hashlib
+import bpy, math, os, json, hashlib, sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mathutils import Vector
 from aidan_roof_candidate_01 import build
 out=os.environ.get("AIDAN_ROOF_OUTPUT","/tmp/aidan-roof-qa")
@@ -8,7 +10,7 @@ bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
 result=build()
 scene=bpy.context.scene
-scene.render.engine="BLENDER_EEVEE_NEXT"
+scene.render.engine="BLENDER_EEVEE" if bpy.app.version < (4, 2, 0) else "BLENDER_EEVEE_NEXT"
 scene.render.resolution_x=1000
 scene.render.resolution_y=900
 scene.render.resolution_percentage=100
