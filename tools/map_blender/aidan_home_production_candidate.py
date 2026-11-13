@@ -167,6 +167,12 @@ for i in range(60):
  x,y=rng.uniform(-8,8),rng.uniform(-7,7)
  if abs(x)<4.4 and abs(y)<4.3:continue
  cube("Scattered_stone",(x,y,.02),(rng.uniform(.2,.6),rng.uniform(.2,.5),.15),rng.choice(stone),.05)
+# Optional isolated PBR candidate integration; original procedural render remains default.
+pbr_directory=os.environ.get("AIDAN_PBR_CANDIDATE_DIR")
+if pbr_directory:
+ from aidan_pbr_candidate_materials import apply_candidate_pbr
+ applied=apply_candidate_pbr(pbr_directory)
+ if applied<1:raise RuntimeError("No PBR materials assigned")
 world=bpy.data.worlds.new("Soft_daylight")
 sc.world=world;world.use_nodes=True
 world.node_tree.nodes["Background"].inputs["Strength"].default_value=.8
@@ -187,7 +193,7 @@ for name,location in views.items():
  sc.render.filepath=os.path.join(out,"aidan_"+name+".png")
  bpy.ops.render.render(write_still=True)
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(out,"aidan_candidate.blend"))
-report={"status":"CANDIDATE_NOT_CANON","seed":1311,"blender":bpy.app.version_string,"views":{},"qa":{"G1":"PENDING","G2":"PENDING","G3":"RENDERED_NOT_INDEPENDENTLY_VERIFIED","G4":"NOT_RUN"}}
+report={"pbr_candidate":bool(pbr_directory),"status":"CANDIDATE_NOT_CANON","seed":1311,"blender":bpy.app.version_string,"views":{},"qa":{"G1":"PENDING","G2":"PENDING","G3":"RENDERED_NOT_INDEPENDENTLY_VERIFIED","G4":"NOT_RUN"}}
 for name in views:
  p=os.path.join(out,"aidan_"+name+".png")
  report["views"][name]=hashlib.sha256(open(p,"rb").read()).hexdigest()
