@@ -10,6 +10,7 @@ import bpy
 
 ASSIGNMENTS = {
     "Limestone": "medieval_blocks_05",
+    "Ground": "forrest_ground_01",
     "Oak": "medieval_wood",
     "Solid_oak_door": "dark_wooden_planks",
     "Individual_roof_slate": "reed_roof_03",
@@ -64,7 +65,9 @@ def apply_candidate_pbr(texture_directory):
         if obj.type != "MESH":
             continue
         asset = None
-        if obj.name.startswith("Solid_oak_door"):
+        if obj.name == "Ground":
+            asset = ASSIGNMENTS["Ground"]
+        elif obj.name.startswith("Solid_oak_door"):
             asset = ASSIGNMENTS["Solid_oak_door"]
         elif obj.name.startswith("Individual_roof_slate") or obj.name.startswith("ROOF_UNDERLAY") or obj.name.startswith("Porch_canopy"):
             asset = ASSIGNMENTS["Individual_roof_slate"]
