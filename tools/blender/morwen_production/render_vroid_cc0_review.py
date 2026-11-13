@@ -103,6 +103,6 @@ face_audit={
  "canonical_proportions_matched":False,
  "notes":"Descriptive geometry audit only. Requires independent inspection of eye/mouth edge loops."
 }
-(out/"FACE_TOPOLOGY_AUDIT.json").write_text(json.dumps(face_audit,indent=2)+"\\n")
+(out/"FACE_TOPOLOGY_AUDIT.json").write_text(json.dumps(face_audit,indent=2)+"\n")
 report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
