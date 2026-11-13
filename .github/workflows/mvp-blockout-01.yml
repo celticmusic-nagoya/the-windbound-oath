@@ -16,6 +16,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends blender python3-numpy
       - run: python3 -m py_compile tools/blender/mvp_blockout_01/build.py
       - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/build.py
+      - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/render_views.py
       - name: Candidate output QA
         run: |
           python3 - <<'PY'
@@ -29,7 +30,10 @@ jobs:
               for ext in ('.blend','.glb'):
                   f=p/(name+ext)
                   assert f.is_file() and f.stat().st_size>100
-          print('MVP_BLOCKOUT_CANDIDATE_QA_PASS')
+          for view in ('front','left','right','back'):
+              f=p/'views'/(view+'.png')
+              assert f.is_file() and f.stat().st_size>1000,view
+          print('MORWEN_BLOCKOUT_FOUR_VIEWS_PASS')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
