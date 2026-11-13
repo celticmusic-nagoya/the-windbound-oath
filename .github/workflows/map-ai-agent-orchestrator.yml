@@ -1,0 +1,124 @@
+name: Map AI Agent Orchestrator
+on:
+  push:
+    branches: [feature/map-ai-actions-orchestrator-01]
+    paths:
+      - 'tools/map_blender/agent_request.json'
+      - '.github/workflows/map-ai-agent-orchestrator.yml'
+      - 'tools/map_blender/validate_agent_request.py'
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: "Agent"
+        type: choice
+        required: true
+        options: [claude, codex]
+      task:
+        description: "Allowlisted task ID (must match agent)"
+        type: choice
+        required: true
+        options: [MAP-ASSET-RESEARCH-01, MAP-PIPELINE-01, MAP-INTEGRATION-AUDIT-01]
+      mode:
+        description: "dry_run requires no API key; execute uses paid API"
+        type: choice
+        required: true
+        default: dry_run
+        options: [dry_run, execute]
+permissions:
+  contents: read
+concurrency:
+  group: map-ai-agent-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  agent:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      REQUEST_AGENT: ${{ inputs.agent }}
+      REQUEST_TASK: ${{ inputs.task }}
+      REQUEST_MODE: ${{ inputs.mode }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate request
+        id: request
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          from tools.map_blender.validate_agent_request import validate
+          if os.getenv('GITHUB_EVENT_NAME')=='workflow_dispatch':
+              request={'agent':os.environ['REQUEST_AGENT'],'task':os.environ['REQUEST_TASK'],'mode':os.environ['REQUEST_MODE']}
+          else:
+              request=json.loads(pathlib.Path('tools/map_blender/agent_request.json').read_text())
+          checked=validate(request)
+          pathlib.Path('agent-request-validated.json').write_text(json.dumps(checked,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              for key in ('agent','task','mode','packet'): f.write(f'{key}={checked[key]}\n')
+          print('Validated:',checked)
+          PY
+      - name: Read approved work packet from its isolated branch
+        shell: bash
+        env:
+          TASK: ${{ steps.request.outputs.task }}
+        run: |
+          case "$TASK" in
+            MAP-ASSET-RESEARCH-01) REF=feature/map-asset-research-01 ;;
+            MAP-PIPELINE-01) REF=feature/map-pipeline-01 ;;
+            MAP-INTEGRATION-AUDIT-01) REF=feature/map-integration-audit-01 ;;
+            *) exit 2 ;;
+          esac
+          git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)" fetch --depth=1 origin "$REF" || exit 1
+          git show FETCH_HEAD:"${{ steps.request.outputs.packet }}" > agent-packet.md
+          test -s agent-packet.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Write dry-run report
+        if: steps.request.outputs.mode == 'dry_run'
+        run: |
+          printf 'DRY_RUN: request validated; no model API called.\n' > agent-output.txt
+          cat agent-request-validated.json >> agent-output.txt
+      - name: Require matching API credential
+        if: steps.request.outputs.mode == 'execute'
+        shell: bash
+        env:
+          AGENT: ${{ steps.request.outputs.agent }}
+        run: |
+          if [[ "$AGENT" == claude && -z "$ANTHROPIC_API_KEY" ]]; then echo "ANTHROPIC_API_KEY secret missing"; exit 3; fi
+          if [[ "$AGENT" == codex && -z "$OPENAI_API_KEY" ]]; then echo "OPENAI_API_KEY secret missing"; exit 3; fi
+      - name: Install selected agent CLI
+        if: steps.request.outputs.mode == 'execute'
+        shell: bash
+        env:
+          AGENT: ${{ steps.request.outputs.agent }}
+        run: |
+          if [[ "$AGENT" == claude ]]; then npm install --global @anthropic-ai/claude-code; else npm install --global @openai/codex; fi
+      - name: Run read-only agent analysis
+        if: steps.request.outputs.mode == 'execute'
+        shell: bash
+        env:
+          AGENT: ${{ steps.request.outputs.agent }}
+        run: |
+          cat > agent-prompt.txt <<'EOF'
+          Read AGENTS.md and the following approved work packet. Produce a concrete audit and recommended patch plan only. Do not edit files, run destructive commands, reveal secrets, merge or publish. Distinguish verified facts from assumptions and include exact paths. Limit analysis to the assigned map development task.
+          EOF
+          cat agent-packet.md >> agent-prompt.txt
+          if [[ "$AGENT" == claude ]]; then
+            claude --print --permission-mode plan "$(cat agent-prompt.txt)" > agent-output.txt
+          else
+            codex exec --sandbox read-only --skip-git-repo-check --output-last-message agent-output.txt "$(cat agent-prompt.txt)"
+          fi
+      - name: Upload audit output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-ai-agent-audit-${{ github.run_id }}
+          path: |
+            agent-request-validated.json
+            agent-packet.md
+            agent-output.txt
+          retention-days: 7
+          if-no-files-found: warn
