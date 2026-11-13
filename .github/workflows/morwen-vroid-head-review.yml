@@ -61,6 +61,11 @@ jobs:
           metrics=json.loads((p/"FACE_PROPORTION_CANDIDATE.json").read_text())
           assert metrics["canonical_landmarks_measured"] is False
           assert metrics["face_width_to_height"]>0
+          candidate=json.loads((p/"FACE_CANDIDATE_QA.json").read_text())
+          assert candidate["topology_unchanged"] is True
+          assert candidate["source_shape_key_value_after_render"]==0.0
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_face_candidate.png")).stat().st_size>1000
           for name in ("front","right","back","left","three_quarter"):
               assert (p/(name+"_head.png")).stat().st_size>1000
           for name in ("front","right","three_quarter"):
@@ -86,4 +91,6 @@ jobs:
             render_output/morwen_vroid_review/MORWEN_REFERENCE_VROID_COMPARISON.png
             render_output/morwen_vroid_review/MORWEN_HEAD_FOCUSED_COMPARISON.png
             render_output/morwen_vroid_review/HEAD_COMPARISON_STATUS.json
+            render_output/morwen_vroid_review/*_face_candidate.png
+            render_output/morwen_vroid_review/FACE_CANDIDATE_QA.json
           retention-days: 14
