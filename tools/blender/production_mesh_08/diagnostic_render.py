@@ -31,7 +31,15 @@ for name,xyz in {"front":(0,-4,1),"right":(-4,0,1),"back":(0,4,1),"left":(4,0,1)
  d=bpy.data.cameras.new(name);o=bpy.data.objects.new("CAM_"+name,d);bpy.context.collection.objects.link(o);o.location=xyz
  o.rotation_euler=(Vector((0,0,1))-o.location).to_track_quat("-Z","Y").to_euler();d.type="ORTHO";d.ortho_scale=2.25
 scene=bpy.context.scene
-scene.render.engine="BLENDER_EEVEE_NEXT" if bpy.app.version>=(4,2,0) else "BLENDER_EEVEE"
+# Detect supported render-engine enum instead of assuming names by version.
+engine_options = {e.identifier for e in scene.render.bl_rna.properties["engine"].enum_items}
+for candidate in ("BLENDER_EEVEE", "BLENDER_EEVEE_NEXT", "CYCLES"):
+    if candidate in engine_options:
+        scene.render.engine = candidate
+        break
+else:
+    raise RuntimeError(f"No supported render engine: {sorted(engine_options)}")
+print(f"MORWEN_RENDER_ENGINE={scene.render.engine}; BLENDER_VERSION={bpy.app.version_string}")
 scene.render.resolution_x=384;scene.render.resolution_y=576;scene.render.resolution_percentage=100
 scene.render.film_transparent=True;scene.render.image_settings.file_format="PNG";scene.render.image_settings.color_mode="RGBA"
 world=scene.world;world.color=(.7,.7,.7)
