@@ -42,7 +42,7 @@ new.materials.append(mat)
 lo=Vector([min(v[i] for v in verts) for i in range(3)])
 hi=Vector([max(v[i] for v in verts) for i in range(3)])
 center=(lo+hi)*.5;extent=max(hi-lo)
-scene=bpy.context.scene;scene.render.engine="BLENDER_EEVEE"
+scene=bpy.context.scene;scene.render.engine="CYCLES";scene.cycles.samples=16
 scene.render.resolution_x=768;scene.render.resolution_y=768
 scene.render.resolution_percentage=100
 scene.render.film_transparent=True
