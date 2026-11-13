@@ -16,7 +16,7 @@ jobs:
       - name: Install Blender
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender
+          sudo apt-get install -y blender python3-numpy
       - name: Validate importer syntax
         run: python3 -m py_compile tools/map_blender/aidan_kenney_reference.py
       - name: Generate synthetic GLB fixtures for importer QA (NOT Kenney assets)
@@ -36,6 +36,7 @@ jobs:
               for p in sorted(base.glob('*.glb')): z.write(p,'models/'+p.name)
           PY
           blender -b -t 2 --python "$RUNNER_TEMP/kenney-qa/make_fixture.py"
+          test -s /tmp/kenney-import-fixture.zip
       - name: Run importer smoke test on synthetic fixtures
         run: |
           blender -b -t 2 --python tools/map_blender/aidan_kenney_reference.py -- /tmp/kenney-import-fixture.zip "$RUNNER_TEMP/kenney-qa/output"
