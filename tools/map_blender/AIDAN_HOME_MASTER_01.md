@@ -42,3 +42,9 @@ G4 Integration: game-camera placement, navigation and collision, performance on 
 
 ## Current verified baseline (2026-11-13)
 GitHub Actions run 43371532700 success. Roof slate 02 generated as original procedural fallback after Poly Haven HTTP 403. SHA256 and synthetic occlusion PASS. G2 art FAIL; G4 NOT_RUN.
+
+## Source audit — 2026-11-13 (repository default branch)
+- `data/maps/rilde_in_aidan.json`: game interior world 960x720, tile 8, unitScale 2.5; spawns default (250,330), from_village (480,532), from_bed (250,330); bed, fireplace, cupboard, window and tapestry. These are gameplay/map units, NOT exterior building dimensions.
+- `js/field/lind-assets.js`: `lind_aidan_house` uses `img/field/lind/buildings/lind_aidan_house.png` and generic collision metadata; its header explicitly calls these DEV review positions, not final story/save coordinates. Preserve game integration behavior.
+- `docs/story/WORLD_STORY_BIBLE_v1.1.txt`: explicitly SUPERSEDED. Do not use as canonical architecture authority.
+- Current exterior architectural canon, approved house image, exact exterior dimensions and palette are NOT YET VERIFIED. Before production-grade geometry is approved, inspect `img/field/lind/buildings/lind_aidan_house.png` visually and retrieve the latest canonical v5.0 or approved exterior art. Do not convert unverified geometry into canon.
