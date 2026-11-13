@@ -1,0 +1,1323 @@
+{
+  "task_id": "MORWEN-HEAD-LANDMARK-02",
+  "coordinate_frame": "image px, x right, y down",
+  "pixel_uncertainty_px": 1.0,
+  "views": {
+    "front": {
+      "source": {
+        "file": "7809.png",
+        "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "view": "front"
+      },
+      "landmarks": {
+        "eye_inner_R": {
+          "px": [
+            198.0,
+            124.0
+          ],
+          "status": "MEASURED",
+          "method": "sclera pixel nearest the centre line",
+          "uncertainty_px": 1.0
+        },
+        "eye_outer_R": {
+          "px": [
+            176.0,
+            124.0
+          ],
+          "status": "MEASURED",
+          "method": "sclera pixel farthest from the centre line",
+          "uncertainty_px": 1.0
+        },
+        "pupil_R": {
+          "px": [
+            187.31,
+            127.26
+          ],
+          "status": "MEASURED",
+          "method": "centroid of violet iris pixels in the eye box",
+          "uncertainty_px": 1.0
+        },
+        "eye_top_R": {
+          "px": [
+            178.0,
+            120.0
+          ],
+          "status": "MEASURED",
+          "method": "top of sclera+iris opening",
+          "uncertainty_px": 1.0
+        },
+        "eye_bottom_R": {
+          "px": [
+            185.0,
+            132.0
+          ],
+          "status": "MEASURED",
+          "method": "bottom of sclera+iris opening",
+          "uncertainty_px": 1.0
+        },
+        "eye_inner_L": {
+          "px": [
+            228.0,
+            124.0
+          ],
+          "status": "MEASURED",
+          "method": "sclera pixel nearest the centre line",
+          "uncertainty_px": 1.0
+        },
+        "eye_outer_L": {
+          "px": [
+            250.0,
+            124.0
+          ],
+          "status": "MEASURED",
+          "method": "sclera pixel farthest from the centre line",
+          "uncertainty_px": 1.0
+        },
+        "pupil_L": {
+          "px": [
+            238.26,
+            127.98
+          ],
+          "status": "MEASURED",
+          "method": "centroid of violet iris pixels in the eye box",
+          "uncertainty_px": 1.0
+        },
+        "eye_top_L": {
+          "px": [
+            229.0,
+            123.0
+          ],
+          "status": "MEASURED",
+          "method": "top of sclera+iris opening",
+          "uncertainty_px": 1.0
+        },
+        "eye_bottom_L": {
+          "px": [
+            235.0,
+            132.0
+          ],
+          "status": "MEASURED",
+          "method": "bottom of sclera+iris opening",
+          "uncertainty_px": 1.0
+        },
+        "menton": {
+          "px": [
+            214.0,
+            179.0
+          ],
+          "status": "MEASURED",
+          "method": "lowest pixel of the face skin region (jaw line separates neck)",
+          "uncertainty_px": 1.0
+        },
+        "stomion": {
+          "px": [
+            212.78,
+            159.0
+          ],
+          "status": "MEASURED",
+          "method": "darkest row of centre column between 0.55U below eye and 0.12U above chin",
+          "uncertainty_px": 1.0
+        },
+        "mouth_corner_R": {
+          "px": [
+            206.0,
+            159.0
+          ],
+          "status": "ESTIMATED",
+          "method": "low-contrast lip line: leftmost darker pixel on stomion row",
+          "uncertainty_px": null
+        },
+        "mouth_corner_L": {
+          "px": [
+            222.0,
+            159.0
+          ],
+          "status": "ESTIMATED",
+          "method": "low-contrast lip line: rightmost darker pixel on stomion row",
+          "uncertainty_px": null
+        },
+        "pronasale": {
+          "px": [
+            212.78,
+            145.0
+          ],
+          "status": "ESTIMATED",
+          "method": "drawn nose shade (no contour): darkest centre-column row 0.15U below eye line to 0.15U above mouth",
+          "uncertainty_px": null
+        },
+        "cheek_R": {
+          "px": [
+            178.0,
+            145.0
+          ],
+          "status": "MEASURED",
+          "method": "face outline at nose-mark row (image-left = character right); adjacent pixel is hair: OCCLUSION_POSSIBLE",
+          "uncertainty_px": 1.0
+        },
+        "cheek_L": {
+          "px": [
+            249.0,
+            145.0
+          ],
+          "status": "MEASURED",
+          "method": "face outline at nose-mark row; adjacent pixel is hair: OCCLUSION_POSSIBLE",
+          "uncertainty_px": 1.0
+        },
+        "temple_R": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "covered by bangs/side hair in front view"
+        },
+        "temple_L": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "covered by bangs/side hair in front view"
+        },
+        "ear_center_R": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "covered by hair in front view"
+        },
+        "ear_center_L": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "covered by hair in front view"
+        },
+        "vertex_skull": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "skull top hidden by hair"
+        },
+        "hair_top": {
+          "px": [
+            210.82,
+            17.0
+          ],
+          "status": "MEASURED",
+          "method": "topmost opaque pixel (hair silhouette)",
+          "uncertainty_px": 1.0
+        },
+        "neck_left_edge": {
+          "px": [
+            194.0,
+            194.0
+          ],
+          "status": "MEASURED",
+          "method": "skin run at chin+0.3U (image-left)",
+          "uncertainty_px": 1.0
+        },
+        "neck_right_edge": {
+          "px": [
+            234.0,
+            194.0
+          ],
+          "status": "MEASURED",
+          "method": "skin run at chin+0.3U (image-right)",
+          "uncertainty_px": 1.0
+        }
+      },
+      "U_px": 51.379999999999995,
+      "eye_line_y": 127.62,
+      "mid_pupil_x": 212.785,
+      "face_outline_rows": [
+        [
+          127,
+          170,
+          256,
+          true,
+          true
+        ],
+        [
+          128,
+          170,
+          256,
+          true,
+          true
+        ],
+        [
+          129,
+          171,
+          255,
+          true,
+          true
+        ],
+        [
+          130,
+          171,
+          255,
+          true,
+          true
+        ],
+        [
+          131,
+          171,
+          255,
+          true,
+          true
+        ],
+        [
+          132,
+          171,
+          255,
+          true,
+          true
+        ],
+        [
+          133,
+          172,
+          255,
+          true,
+          true
+        ],
+        [
+          134,
+          172,
+          254,
+          true,
+          true
+        ],
+        [
+          135,
+          172,
+          254,
+          true,
+          true
+        ],
+        [
+          136,
+          173,
+          254,
+          true,
+          true
+        ],
+        [
+          137,
+          173,
+          253,
+          true,
+          true
+        ],
+        [
+          138,
+          174,
+          253,
+          true,
+          true
+        ],
+        [
+          139,
+          174,
+          252,
+          true,
+          true
+        ],
+        [
+          140,
+          175,
+          252,
+          true,
+          true
+        ],
+        [
+          141,
+          175,
+          251,
+          true,
+          true
+        ],
+        [
+          142,
+          176,
+          251,
+          true,
+          true
+        ],
+        [
+          143,
+          176,
+          250,
+          true,
+          true
+        ],
+        [
+          144,
+          177,
+          249,
+          true,
+          true
+        ],
+        [
+          145,
+          178,
+          249,
+          true,
+          true
+        ],
+        [
+          146,
+          179,
+          247,
+          true,
+          true
+        ],
+        [
+          147,
+          180,
+          246,
+          true,
+          true
+        ],
+        [
+          148,
+          182,
+          250,
+          true,
+          true
+        ],
+        [
+          149,
+          178,
+          250,
+          true,
+          true
+        ],
+        [
+          150,
+          179,
+          249,
+          true,
+          true
+        ],
+        [
+          151,
+          180,
+          247,
+          true,
+          true
+        ],
+        [
+          152,
+          179,
+          248,
+          true,
+          true
+        ],
+        [
+          153,
+          179,
+          248,
+          true,
+          true
+        ],
+        [
+          154,
+          180,
+          248,
+          true,
+          true
+        ],
+        [
+          155,
+          180,
+          247,
+          true,
+          true
+        ],
+        [
+          156,
+          181,
+          247,
+          true,
+          true
+        ],
+        [
+          157,
+          181,
+          246,
+          true,
+          true
+        ],
+        [
+          158,
+          182,
+          245,
+          true,
+          true
+        ],
+        [
+          159,
+          183,
+          244,
+          true,
+          true
+        ],
+        [
+          160,
+          184,
+          243,
+          true,
+          true
+        ],
+        [
+          161,
+          185,
+          242,
+          true,
+          true
+        ],
+        [
+          162,
+          186,
+          241,
+          true,
+          true
+        ],
+        [
+          163,
+          187,
+          240,
+          true,
+          true
+        ],
+        [
+          164,
+          188,
+          239,
+          true,
+          true
+        ],
+        [
+          165,
+          189,
+          238,
+          true,
+          true
+        ],
+        [
+          166,
+          191,
+          237,
+          true,
+          true
+        ],
+        [
+          167,
+          192,
+          235,
+          true,
+          true
+        ],
+        [
+          168,
+          193,
+          234,
+          true,
+          true
+        ],
+        [
+          169,
+          195,
+          233,
+          true,
+          true
+        ],
+        [
+          170,
+          196,
+          231,
+          true,
+          true
+        ],
+        [
+          171,
+          198,
+          230,
+          true,
+          true
+        ],
+        [
+          172,
+          199,
+          228,
+          true,
+          true
+        ],
+        [
+          173,
+          201,
+          227,
+          true,
+          true
+        ],
+        [
+          174,
+          203,
+          225,
+          true,
+          true
+        ],
+        [
+          175,
+          204,
+          223,
+          true,
+          true
+        ],
+        [
+          176,
+          206,
+          221,
+          true,
+          true
+        ],
+        [
+          177,
+          208,
+          220,
+          true,
+          true
+        ],
+        [
+          178,
+          210,
+          218,
+          true,
+          true
+        ],
+        [
+          179,
+          212,
+          216,
+          true,
+          true
+        ]
+      ]
+    },
+    "right": {
+      "source": {
+        "file": "7807.png",
+        "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+        "view": "right"
+      },
+      "facing_image_direction": 1,
+      "landmarks": {
+        "pupil_R": {
+          "px": [
+            248.9,
+            123.1
+          ],
+          "status": "MEASURED",
+          "method": "centroid of violet iris pixels in the eye box",
+          "uncertainty_px": 1.0
+        },
+        "eye_outer_R": {
+          "px": [
+            239.0,
+            118.0
+          ],
+          "status": "MEASURED",
+          "method": "back-most sclera pixel (outer corner in profile)",
+          "uncertainty_px": 1.0
+        },
+        "menton": {
+          "px": [
+            256.0,
+            174.0
+          ],
+          "status": "MEASURED",
+          "method": "lowest face-skin rows (jaw line separates neck): front-most pixel",
+          "uncertainty_px": 1.0
+        },
+        "pronasale": {
+          "px": [
+            274.0,
+            135.0
+          ],
+          "status": "MEASURED",
+          "method": "front-most face-skin profile pixel 0.15U-0.7U below eye line",
+          "uncertainty_px": 1.0
+        },
+        "stomion": {
+          "px": [
+            257.0,
+            157.0
+          ],
+          "status": "ESTIMATED",
+          "method": "lip seam drawn as a short low-contrast line: darkest skin pixel 2-12 px behind profile",
+          "uncertainty_px": null
+        },
+        "nasion": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "profile above the eye line is covered by bangs"
+        },
+        "ear_center_R": {
+          "px": [
+            193.21,
+            124.9
+          ],
+          "status": "MEASURED",
+          "method": "centroid of skin island enclosed by hair",
+          "uncertainty_px": 1.0
+        },
+        "ear_top_R": {
+          "px": [
+            194.0,
+            109.0
+          ],
+          "status": "MEASURED",
+          "method": "ear island top",
+          "uncertainty_px": 1.0
+        },
+        "ear_bottom_R": {
+          "px": [
+            200.0,
+            142.0
+          ],
+          "status": "MEASURED",
+          "method": "ear island bottom",
+          "uncertainty_px": 1.0
+        },
+        "hair_top": {
+          "px": [
+            195.0,
+            16.0
+          ],
+          "status": "MEASURED",
+          "method": "topmost opaque pixel",
+          "uncertainty_px": 1.0
+        },
+        "hair_back": {
+          "px": [
+            103.0,
+            null
+          ],
+          "status": "MEASURED",
+          "uncertainty_px": 1.0,
+          "method": "back-most opaque column above the eye line (x only)"
+        }
+      },
+      "U_px": 50.897959183673464,
+      "eye_line_y": 123.10204081632654,
+      "profile_rows": [
+        [
+          123,
+          263
+        ],
+        [
+          124,
+          264
+        ],
+        [
+          125,
+          264
+        ],
+        [
+          126,
+          265
+        ],
+        [
+          127,
+          265
+        ],
+        [
+          128,
+          266
+        ],
+        [
+          129,
+          267
+        ],
+        [
+          130,
+          267
+        ],
+        [
+          131,
+          269
+        ],
+        [
+          132,
+          270
+        ],
+        [
+          133,
+          271
+        ],
+        [
+          134,
+          272
+        ],
+        [
+          135,
+          274
+        ],
+        [
+          136,
+          274
+        ],
+        [
+          137,
+          274
+        ],
+        [
+          138,
+          273
+        ],
+        [
+          139,
+          273
+        ],
+        [
+          140,
+          272
+        ],
+        [
+          141,
+          272
+        ],
+        [
+          142,
+          271
+        ],
+        [
+          143,
+          271
+        ],
+        [
+          144,
+          270
+        ],
+        [
+          145,
+          269
+        ],
+        [
+          146,
+          268
+        ],
+        [
+          147,
+          268
+        ],
+        [
+          148,
+          268
+        ],
+        [
+          149,
+          268
+        ],
+        [
+          150,
+          268
+        ],
+        [
+          151,
+          268
+        ],
+        [
+          152,
+          268
+        ],
+        [
+          153,
+          267
+        ],
+        [
+          154,
+          266
+        ],
+        [
+          155,
+          265
+        ],
+        [
+          156,
+          264
+        ],
+        [
+          157,
+          263
+        ],
+        [
+          158,
+          263
+        ],
+        [
+          159,
+          263
+        ],
+        [
+          160,
+          263
+        ],
+        [
+          161,
+          263
+        ],
+        [
+          162,
+          262
+        ],
+        [
+          163,
+          261
+        ],
+        [
+          164,
+          260
+        ],
+        [
+          165,
+          259
+        ],
+        [
+          166,
+          259
+        ],
+        [
+          167,
+          258
+        ],
+        [
+          168,
+          258
+        ],
+        [
+          169,
+          257
+        ],
+        [
+          170,
+          257
+        ],
+        [
+          171,
+          257
+        ],
+        [
+          172,
+          256
+        ],
+        [
+          173,
+          256
+        ],
+        [
+          174,
+          256
+        ],
+        [
+          175,
+          255
+        ],
+        [
+          176,
+          255
+        ],
+        [
+          177,
+          253
+        ]
+      ]
+    },
+    "left": {
+      "source": {
+        "file": "7808.png",
+        "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+        "view": "left"
+      },
+      "facing_image_direction": -1,
+      "landmarks": {
+        "pupil_L": {
+          "px": [
+            126.37,
+            122.26
+          ],
+          "status": "MEASURED",
+          "method": "centroid of violet iris pixels in the eye box",
+          "uncertainty_px": 1.0
+        },
+        "eye_outer_L": {
+          "px": [
+            135.0,
+            118.0
+          ],
+          "status": "MEASURED",
+          "method": "back-most sclera pixel (outer corner in profile)",
+          "uncertainty_px": 1.0
+        },
+        "menton": {
+          "px": [
+            118.0,
+            174.0
+          ],
+          "status": "MEASURED",
+          "method": "lowest face-skin rows (jaw line separates neck): front-most pixel",
+          "uncertainty_px": 1.0
+        },
+        "pronasale": {
+          "px": [
+            99.0,
+            135.0
+          ],
+          "status": "MEASURED",
+          "method": "front-most face-skin profile pixel 0.15U-0.7U below eye line",
+          "uncertainty_px": 1.0
+        },
+        "stomion": {
+          "px": [
+            114.0,
+            157.0
+          ],
+          "status": "ESTIMATED",
+          "method": "lip seam drawn as a short low-contrast line: darkest skin pixel 2-12 px behind profile",
+          "uncertainty_px": null
+        },
+        "nasion": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "profile above the eye line is covered by bangs"
+        },
+        "ear_center_L": {
+          "px": [
+            180.0,
+            125.27
+          ],
+          "status": "MEASURED",
+          "method": "centroid of skin island enclosed by hair",
+          "uncertainty_px": 1.0
+        },
+        "ear_top_L": {
+          "px": [
+            180.5,
+            109.0
+          ],
+          "status": "MEASURED",
+          "method": "ear island top",
+          "uncertainty_px": 1.0
+        },
+        "ear_bottom_L": {
+          "px": [
+            174.0,
+            142.0
+          ],
+          "status": "MEASURED",
+          "method": "ear island bottom",
+          "uncertainty_px": 1.0
+        },
+        "hair_top": {
+          "px": [
+            176.5,
+            16.0
+          ],
+          "status": "MEASURED",
+          "method": "topmost opaque pixel",
+          "uncertainty_px": 1.0
+        },
+        "hair_back": {
+          "px": [
+            270.0,
+            null
+          ],
+          "status": "MEASURED",
+          "uncertainty_px": 1.0,
+          "method": "back-most opaque column above the eye line (x only)"
+        }
+      },
+      "U_px": 51.74418604651163,
+      "eye_line_y": 122.25581395348837,
+      "profile_rows": [
+        [
+          122,
+          111
+        ],
+        [
+          123,
+          111
+        ],
+        [
+          124,
+          110
+        ],
+        [
+          125,
+          110
+        ],
+        [
+          126,
+          109
+        ],
+        [
+          127,
+          109
+        ],
+        [
+          128,
+          108
+        ],
+        [
+          129,
+          107
+        ],
+        [
+          130,
+          106
+        ],
+        [
+          131,
+          105
+        ],
+        [
+          132,
+          104
+        ],
+        [
+          133,
+          102
+        ],
+        [
+          134,
+          101
+        ],
+        [
+          135,
+          99
+        ],
+        [
+          136,
+          99
+        ],
+        [
+          137,
+          100
+        ],
+        [
+          138,
+          100
+        ],
+        [
+          139,
+          101
+        ],
+        [
+          140,
+          101
+        ],
+        [
+          141,
+          102
+        ],
+        [
+          142,
+          102
+        ],
+        [
+          143,
+          103
+        ],
+        [
+          144,
+          104
+        ],
+        [
+          145,
+          105
+        ],
+        [
+          146,
+          105
+        ],
+        [
+          147,
+          106
+        ],
+        [
+          148,
+          106
+        ],
+        [
+          149,
+          106
+        ],
+        [
+          150,
+          106
+        ],
+        [
+          151,
+          106
+        ],
+        [
+          152,
+          106
+        ],
+        [
+          153,
+          107
+        ],
+        [
+          154,
+          107
+        ],
+        [
+          155,
+          109
+        ],
+        [
+          156,
+          110
+        ],
+        [
+          157,
+          111
+        ],
+        [
+          158,
+          111
+        ],
+        [
+          159,
+          111
+        ],
+        [
+          160,
+          111
+        ],
+        [
+          161,
+          111
+        ],
+        [
+          162,
+          112
+        ],
+        [
+          163,
+          113
+        ],
+        [
+          164,
+          114
+        ],
+        [
+          165,
+          115
+        ],
+        [
+          166,
+          116
+        ],
+        [
+          167,
+          116
+        ],
+        [
+          168,
+          116
+        ],
+        [
+          169,
+          117
+        ],
+        [
+          170,
+          117
+        ],
+        [
+          171,
+          117
+        ],
+        [
+          172,
+          118
+        ],
+        [
+          173,
+          118
+        ],
+        [
+          174,
+          118
+        ],
+        [
+          175,
+          118
+        ],
+        [
+          176,
+          119
+        ],
+        [
+          177,
+          121
+        ]
+      ]
+    },
+    "back": {
+      "source": {
+        "file": "7810.png",
+        "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+        "view": "back"
+      },
+      "landmarks": {
+        "hair_top": {
+          "px": [
+            171.79,
+            17.0
+          ],
+          "status": "MEASURED",
+          "method": "topmost opaque pixel",
+          "uncertainty_px": 1.0
+        },
+        "hair_max_width_left": {
+          "px": [
+            73.0,
+            151.0
+          ],
+          "status": "MEASURED",
+          "method": "widest hair row, image-left (character left in back view)",
+          "uncertainty_px": 1.0
+        },
+        "hair_max_width_right": {
+          "px": [
+            270.0,
+            151.0
+          ],
+          "status": "MEASURED",
+          "method": "widest hair row, image-right",
+          "uncertainty_px": 1.0
+        },
+        "nape_hair_edge": {
+          "px": [
+            181.5,
+            192.0
+          ],
+          "status": "MEASURED",
+          "method": "top of visible neck skin under hair",
+          "uncertainty_px": 1.0
+        },
+        "ear_center_R": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "covered by hair in back view"
+        },
+        "ear_center_L": {
+          "px": null,
+          "status": "NOT_MEASURABLE",
+          "method": "covered by hair in back view"
+        }
+      }
+    }
+  },
+  "scale_consistency": {
+    "U_px_by_view": {
+      "front": 51.379999999999995,
+      "right": 50.897959183673464,
+      "left": 51.74418604651163
+    },
+    "max_relative_spread": 0.0165,
+    "note": "U = chin y - eye-line y in px; same sheet scale is assumed only if spread is small"
+  }
+}

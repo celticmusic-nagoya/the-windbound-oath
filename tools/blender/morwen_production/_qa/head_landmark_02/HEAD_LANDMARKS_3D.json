@@ -1,0 +1,1148 @@
+{
+  "task_id": "MORWEN-HEAD-LANDMARK-02",
+  "source_vrm_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+  "source_modified": false,
+  "measured_scene": "in-memory import of the pinned VRM (or in-memory candidate when called by fit_head_rbf.py)",
+  "blender_version": "5.3.0",
+  "python": "3.13.18",
+  "seed": 20261114,
+  "alpha_min": 0.5,
+  "texel_grid": 12,
+  "frame": "Blender world metres; +Y = face forward; +X = character right; +Z up",
+  "normalisation": {
+    "unit_U_m": 0.0915,
+    "definition": "U = eye-line z (mean pupil z) - menton z",
+    "eye_line_z": 1.44589,
+    "mid_pupil_x": 0.00026
+  },
+  "landmarks": {
+    "eye_inner_R": {
+      "position": [
+        0.02694,
+        0.07546,
+        1.44413
+      ],
+      "status": "MEASURED",
+      "method": "min |x| of front-visible eye-white+iris texels (ray occlusion by lids/lines)",
+      "views": [
+        "front"
+      ]
+    },
+    "eye_outer_R": {
+      "position": [
+        0.06354,
+        0.06112,
+        1.44639
+      ],
+      "status": "MEASURED",
+      "method": "max |x| of front-visible eye-white+iris texels",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "pupil_R": {
+      "position": [
+        0.04205,
+        0.07196,
+        1.44589
+      ],
+      "status": "MEASURED",
+      "method": "centroid of front-visible iris texels",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "eye_top_R": {
+      "position": [
+        0.04189,
+        0.07477,
+        1.45764
+      ],
+      "status": "MEASURED",
+      "method": "max z of front-visible eye opening",
+      "views": [
+        "front"
+      ]
+    },
+    "eye_bottom_R": {
+      "position": [
+        0.04676,
+        0.06183,
+        1.43257
+      ],
+      "status": "MEASURED",
+      "method": "min z of front-visible eye opening",
+      "views": [
+        "front"
+      ]
+    },
+    "brow_top_R": {
+      "position": [
+        0.05061,
+        0.08176,
+        1.485
+      ],
+      "status": "MEASURED",
+      "method": "max z of visible brow texels",
+      "views": [
+        "front"
+      ]
+    },
+    "eye_inner_L": {
+      "position": [
+        -0.02643,
+        0.07546,
+        1.44413
+      ],
+      "status": "MEASURED",
+      "method": "min |x| of front-visible eye-white+iris texels (ray occlusion by lids/lines)",
+      "views": [
+        "front"
+      ]
+    },
+    "eye_outer_L": {
+      "position": [
+        -0.06303,
+        0.06112,
+        1.44639
+      ],
+      "status": "MEASURED",
+      "method": "max |x| of front-visible eye-white+iris texels",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "pupil_L": {
+      "position": [
+        -0.04153,
+        0.07196,
+        1.44588
+      ],
+      "status": "MEASURED",
+      "method": "centroid of front-visible iris texels",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "eye_top_L": {
+      "position": [
+        -0.04138,
+        0.07477,
+        1.45764
+      ],
+      "status": "MEASURED",
+      "method": "max z of front-visible eye opening",
+      "views": [
+        "front"
+      ]
+    },
+    "eye_bottom_L": {
+      "position": [
+        -0.04625,
+        0.06183,
+        1.43257
+      ],
+      "status": "MEASURED",
+      "method": "min z of front-visible eye opening",
+      "views": [
+        "front"
+      ]
+    },
+    "brow_top_L": {
+      "position": [
+        -0.0501,
+        0.08176,
+        1.485
+      ],
+      "status": "MEASURED",
+      "method": "max z of visible brow texels",
+      "views": [
+        "front"
+      ]
+    },
+    "pronasale": {
+      "position": [
+        0.00026,
+        0.10661,
+        1.4114
+      ],
+      "status": "MEASURED",
+      "method": "max y on centre line below eye opening",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "nasion": {
+      "position": [
+        0.00026,
+        0.08712,
+        1.44076
+      ],
+      "status": "MEASURED",
+      "method": "min y on centre line between nose tip and brow top",
+      "views": [
+        "side"
+      ]
+    },
+    "menton": {
+      "position": [
+        0.00026,
+        0.07532,
+        1.35439
+      ],
+      "status": "MEASURED",
+      "method": "lowest centre-line skin point in front of nasion-30mm (front-view chin tip)",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "vertex_skull": {
+      "position": [
+        0.00026,
+        -0.02188,
+        1.59496
+      ],
+      "status": "MEASURED",
+      "method": "highest Face/Body skin vertex (skull, under hair)",
+      "views": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    "hair_cap_top": {
+      "position": [
+        0.00026,
+        -0.02186,
+        1.59763
+      ],
+      "status": "MEASURED",
+      "method": "highest HairBack vertex (stock texture cap; REBUILD)",
+      "views": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    "mouth_corner_R": {
+      "position": [
+        0.01272,
+        0.08715,
+        1.3872
+      ],
+      "status": "MEASURED",
+      "method": "max |x| of skin/mouth-interior junction ring (lip seam)",
+      "views": [
+        "front"
+      ]
+    },
+    "mouth_corner_L": {
+      "position": [
+        -0.01221,
+        0.08715,
+        1.3872
+      ],
+      "status": "MEASURED",
+      "method": "max |x| of skin/mouth-interior junction ring (lip seam)",
+      "views": [
+        "front"
+      ]
+    },
+    "stomion": {
+      "position": [
+        0.00026,
+        0.08896,
+        1.38668
+      ],
+      "status": "MEASURED",
+      "method": "centre of lip-seam ring points with |x|<3 mm",
+      "views": [
+        "front",
+        "side"
+      ]
+    },
+    "cheek_R": {
+      "position": [
+        0.07517,
+        0.02454,
+        1.41982
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "max |x| of skin with y>0 between nose-tip z and eye-bottom z",
+      "views": [
+        "front"
+      ]
+    },
+    "cheek_L": {
+      "position": [
+        -0.07466,
+        0.02454,
+        1.41982
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "max |x| of skin with y>0 between nose-tip z and eye-bottom z",
+      "views": [
+        "front"
+      ]
+    },
+    "temple_R": {
+      "position": [
+        0.09006,
+        0.00323,
+        1.48279
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "max |x| of skin with y>0 between eye-line z and brow-top z",
+      "views": [
+        "front"
+      ]
+    },
+    "temple_L": {
+      "position": [
+        -0.08955,
+        0.00323,
+        1.48279
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "max |x| of skin with y>0 between eye-line z and brow-top z",
+      "views": [
+        "front"
+      ]
+    },
+    "alar_R": {
+      "position": [
+        0.00521,
+        0.09922,
+        1.41063
+      ],
+      "status": "ESTIMATED",
+      "method": "VRoid nose has no modelled ala; max |x| within 6 mm of nose-tip z and 10 mm of its y",
+      "views": [
+        "front"
+      ]
+    },
+    "alar_L": {
+      "position": [
+        -0.0047,
+        0.09922,
+        1.41063
+      ],
+      "status": "ESTIMATED",
+      "method": "VRoid nose has no modelled ala; max |x| within 6 mm of nose-tip z and 10 mm of its y",
+      "views": [
+        "front"
+      ]
+    },
+    "ear_center_R": {
+      "position": [
+        0.10024,
+        -0.0303,
+        1.44415
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "centroid of skin with |x|>0.85*max head half-width behind the head joint",
+      "views": [
+        "side",
+        "front"
+      ]
+    },
+    "ear_top_R": {
+      "position": [
+        0.0971,
+        -0.02137,
+        1.46959
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "ear ROI max z",
+      "views": [
+        "side"
+      ]
+    },
+    "ear_bottom_R": {
+      "position": [
+        0.09653,
+        -0.02831,
+        1.41776
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "ear ROI min z",
+      "views": [
+        "side"
+      ]
+    },
+    "ear_center_L": {
+      "position": [
+        -0.09989,
+        -0.03043,
+        1.44367
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "centroid of skin with |x|>0.85*max head half-width behind the head joint",
+      "views": [
+        "side",
+        "front"
+      ]
+    },
+    "ear_top_L": {
+      "position": [
+        -0.09659,
+        -0.02137,
+        1.46959
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "ear ROI max z",
+      "views": [
+        "side"
+      ]
+    },
+    "ear_bottom_L": {
+      "position": [
+        -0.09602,
+        -0.02831,
+        1.41776
+      ],
+      "status": "MEASURED_IN_DEFINED_ROI",
+      "method": "ear ROI min z",
+      "views": [
+        "side"
+      ]
+    },
+    "neck_joint": {
+      "position": [
+        0.00026,
+        -0.01727,
+        1.31535
+      ],
+      "status": "MEASURED",
+      "method": "J_Bip_C_Neck head joint (rig)",
+      "views": [
+        "front",
+        "side",
+        "back"
+      ]
+    },
+    "chin_profile": {
+      "position": [
+        0.00026,
+        0.07852,
+        1.35646
+      ],
+      "status": "MEASURED",
+      "method": "side-view chin: front-most centre-slice point within 0.0054 m above menton (mirrors the 2D rule: front-most pixel of the lowest 3 face rows)",
+      "views": [
+        "side"
+      ]
+    }
+  },
+  "neck_section": {
+    "z": 1.31535,
+    "half_width_x": 0.06885,
+    "front_y": 0.02321,
+    "back_y": -0.03487
+  },
+  "rig": {
+    "head_joint": [
+      0.00026,
+      -0.00796,
+      1.38756
+    ],
+    "neck_joint": [
+      0.00026,
+      -0.01727,
+      1.31535
+    ]
+  },
+  "profiles": {
+    "front_half_width_by_z": [
+      [
+        1.355,
+        0.00317
+      ],
+      [
+        1.356,
+        0.0059
+      ],
+      [
+        1.357,
+        0.0081
+      ],
+      [
+        1.358,
+        0.01029
+      ],
+      [
+        1.359,
+        0.01249
+      ],
+      [
+        1.36,
+        0.01469
+      ],
+      [
+        1.361,
+        0.01669
+      ],
+      [
+        1.362,
+        0.0186
+      ],
+      [
+        1.363,
+        0.02051
+      ],
+      [
+        1.364,
+        0.02242
+      ],
+      [
+        1.365,
+        0.02434
+      ],
+      [
+        1.366,
+        0.02625
+      ],
+      [
+        1.367,
+        0.02804
+      ],
+      [
+        1.368,
+        0.02975
+      ],
+      [
+        1.369,
+        0.03145
+      ],
+      [
+        1.37,
+        0.03316
+      ],
+      [
+        1.371,
+        0.03487
+      ],
+      [
+        1.372,
+        0.03657
+      ],
+      [
+        1.373,
+        0.03807
+      ],
+      [
+        1.374,
+        0.03957
+      ],
+      [
+        1.375,
+        0.04106
+      ],
+      [
+        1.376,
+        0.04256
+      ],
+      [
+        1.377,
+        0.04406
+      ],
+      [
+        1.378,
+        0.04556
+      ],
+      [
+        1.379,
+        0.04701
+      ],
+      [
+        1.38,
+        0.04824
+      ],
+      [
+        1.381,
+        0.04947
+      ],
+      [
+        1.382,
+        0.0507
+      ],
+      [
+        1.383,
+        0.05193
+      ],
+      [
+        1.384,
+        0.05316
+      ],
+      [
+        1.385,
+        0.05439
+      ],
+      [
+        1.386,
+        0.05562
+      ],
+      [
+        1.387,
+        0.05681
+      ],
+      [
+        1.388,
+        0.05792
+      ],
+      [
+        1.389,
+        0.05903
+      ],
+      [
+        1.39,
+        0.06008
+      ],
+      [
+        1.391,
+        0.06084
+      ],
+      [
+        1.392,
+        0.06159
+      ],
+      [
+        1.393,
+        0.06234
+      ],
+      [
+        1.394,
+        0.06309
+      ],
+      [
+        1.395,
+        0.06384
+      ],
+      [
+        1.396,
+        0.06459
+      ],
+      [
+        1.397,
+        0.06535
+      ],
+      [
+        1.398,
+        0.0661
+      ],
+      [
+        1.399,
+        0.06685
+      ],
+      [
+        1.4,
+        0.06738
+      ],
+      [
+        1.401,
+        0.06784
+      ],
+      [
+        1.402,
+        0.06829
+      ],
+      [
+        1.403,
+        0.06875
+      ],
+      [
+        1.404,
+        0.07701
+      ],
+      [
+        1.405,
+        0.08024
+      ],
+      [
+        1.406,
+        0.08133
+      ],
+      [
+        1.407,
+        0.08242
+      ],
+      [
+        1.408,
+        0.08352
+      ],
+      [
+        1.409,
+        0.08461
+      ],
+      [
+        1.41,
+        0.08594
+      ],
+      [
+        1.411,
+        0.08727
+      ],
+      [
+        1.412,
+        0.08861
+      ],
+      [
+        1.413,
+        0.08994
+      ],
+      [
+        1.414,
+        0.09127
+      ],
+      [
+        1.415,
+        0.09261
+      ],
+      [
+        1.416,
+        0.09394
+      ],
+      [
+        1.417,
+        0.09527
+      ],
+      [
+        1.418,
+        0.09188
+      ],
+      [
+        1.419,
+        0.09054
+      ],
+      [
+        1.42,
+        0.0911
+      ],
+      [
+        1.421,
+        0.09166
+      ],
+      [
+        1.422,
+        0.09222
+      ],
+      [
+        1.423,
+        0.08758
+      ],
+      [
+        1.424,
+        0.09043
+      ],
+      [
+        1.425,
+        0.08897
+      ],
+      [
+        1.426,
+        0.09241
+      ],
+      [
+        1.427,
+        0.09225
+      ],
+      [
+        1.428,
+        0.09209
+      ],
+      [
+        1.429,
+        0.09193
+      ],
+      [
+        1.43,
+        0.09244
+      ],
+      [
+        1.431,
+        0.09162
+      ],
+      [
+        1.432,
+        0.09146
+      ],
+      [
+        1.433,
+        0.0913
+      ],
+      [
+        1.434,
+        0.0915
+      ],
+      [
+        1.435,
+        0.092
+      ],
+      [
+        1.436,
+        0.08892
+      ],
+      [
+        1.437,
+        0.09075
+      ],
+      [
+        1.438,
+        0.08927
+      ],
+      [
+        1.439,
+        0.09191
+      ],
+      [
+        1.44,
+        0.09182
+      ],
+      [
+        1.441,
+        0.09067
+      ],
+      [
+        1.442,
+        0.09189
+      ],
+      [
+        1.443,
+        0.09073
+      ],
+      [
+        1.444,
+        0.09202
+      ],
+      [
+        1.445,
+        0.0914
+      ],
+      [
+        1.446,
+        0.09104
+      ],
+      [
+        1.447,
+        0.09115
+      ],
+      [
+        1.448,
+        0.0921
+      ],
+      [
+        1.449,
+        0.09135
+      ],
+      [
+        1.45,
+        0.09146
+      ],
+      [
+        1.451,
+        0.09156
+      ],
+      [
+        1.452,
+        0.09231
+      ],
+      [
+        1.453,
+        0.09205
+      ],
+      [
+        1.454,
+        0.09218
+      ],
+      [
+        1.455,
+        0.0922
+      ],
+      [
+        1.456,
+        0.09165
+      ],
+      [
+        1.457,
+        0.09142
+      ],
+      [
+        1.458,
+        0.09154
+      ],
+      [
+        1.459,
+        0.09225
+      ],
+      [
+        1.46,
+        0.09177
+      ],
+      [
+        1.461,
+        0.09188
+      ],
+      [
+        1.462,
+        0.09199
+      ],
+      [
+        1.463,
+        0.09211
+      ],
+      [
+        1.464,
+        0.09222
+      ],
+      [
+        1.465,
+        0.09234
+      ],
+      [
+        1.466,
+        0.09245
+      ],
+      [
+        1.467,
+        0.09177
+      ],
+      [
+        1.468,
+        0.08767
+      ],
+      [
+        1.469,
+        0.08785
+      ],
+      [
+        1.47,
+        0.08799
+      ],
+      [
+        1.471,
+        0.08814
+      ],
+      [
+        1.472,
+        0.08828
+      ],
+      [
+        1.473,
+        0.08842
+      ],
+      [
+        1.474,
+        0.08856
+      ],
+      [
+        1.475,
+        0.0887
+      ],
+      [
+        1.476,
+        0.08885
+      ],
+      [
+        1.477,
+        0.08899
+      ],
+      [
+        1.478,
+        0.08913
+      ],
+      [
+        1.479,
+        0.08927
+      ],
+      [
+        1.48,
+        0.08941
+      ],
+      [
+        1.481,
+        0.08956
+      ],
+      [
+        1.482,
+        0.0897
+      ],
+      [
+        1.483,
+        0.08983
+      ],
+      [
+        1.484,
+        0.08994
+      ],
+      [
+        1.485,
+        0.09005
+      ]
+    ],
+    "front_half_width_rule": "Face skin plane-slice at each z (1 mm), max |x - MID_X| excluding the ear ROI",
+    "centre_profile_front_y_by_z": [
+      [
+        1.354,
+        0.07533
+      ],
+      [
+        1.355,
+        0.0692
+      ],
+      [
+        1.356,
+        0.07852
+      ],
+      [
+        1.357,
+        0.07852
+      ],
+      [
+        1.362,
+        0.0803
+      ],
+      [
+        1.367,
+        0.08209
+      ],
+      [
+        1.373,
+        0.08518
+      ],
+      [
+        1.381,
+        0.09058
+      ],
+      [
+        1.384,
+        0.09062
+      ],
+      [
+        1.386,
+        0.08898
+      ],
+      [
+        1.387,
+        0.08898
+      ],
+      [
+        1.388,
+        0.09324
+      ],
+      [
+        1.39,
+        0.09655
+      ],
+      [
+        1.398,
+        0.09799
+      ],
+      [
+        1.402,
+        0.09952
+      ],
+      [
+        1.407,
+        0.10362
+      ],
+      [
+        1.411,
+        0.10661
+      ],
+      [
+        1.412,
+        0.10661
+      ],
+      [
+        1.413,
+        0.10591
+      ],
+      [
+        1.417,
+        0.1
+      ],
+      [
+        1.422,
+        0.09387
+      ],
+      [
+        1.423,
+        0.09386
+      ],
+      [
+        1.429,
+        0.08963
+      ],
+      [
+        1.441,
+        0.08713
+      ],
+      [
+        1.456,
+        0.08779
+      ],
+      [
+        1.466,
+        0.09007
+      ],
+      [
+        1.477,
+        0.09283
+      ],
+      [
+        1.478,
+        0.09283
+      ],
+      [
+        1.488,
+        0.0953
+      ],
+      [
+        1.51,
+        0.09658
+      ],
+      [
+        1.535,
+        0.09171
+      ],
+      [
+        1.556,
+        0.07861
+      ],
+      [
+        1.576,
+        0.05847
+      ],
+      [
+        1.586,
+        0.03852
+      ],
+      [
+        1.587,
+        0.03852
+      ]
+    ],
+    "centre_profile_rule": "Face skin slice at x = MID_X, max y within 0.6 mm of z"
+  },
+  "mirror_deviation_abs_x_m": {
+    "eye_inner": 1e-05,
+    "eye_outer": 1e-05,
+    "pupil": 0.0,
+    "eye_top": 1e-05,
+    "eye_bottom": 1e-05,
+    "brow_top": 1e-05,
+    "mouth_corner": 1e-05,
+    "cheek": 1e-05,
+    "temple": 1e-05,
+    "alar": 1e-05,
+    "ear_center": 0.00017,
+    "ear_top": 1e-05,
+    "ear_bottom": 1e-05
+  }
+}

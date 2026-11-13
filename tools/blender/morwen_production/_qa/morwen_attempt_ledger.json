@@ -7,7 +7,9 @@
     "tools/blender/morwen_production/MESH_QA_01_FINDINGS.md",
     "tools/blender/morwen_production/MESH_QA_02_COMPONENT_FINDINGS.md",
     "docs/art/MORWEN_3D_TARGET_SHEET_20261113.md",
-    "tools/blender/morwen_production/HEAD_STRUCTURE_01_AUDIT.md"
+    "tools/blender/morwen_production/HEAD_STRUCTURE_01_AUDIT.md",
+    "tools/blender/morwen_production/_qa/MORWEN_HEAD_SCULPT_01_REVIEW.md",
+    "tools/blender/morwen_production/head_landmark/HEAD_LANDMARK_02_REPORT.md"
   ],
   "known_gate_status": {
     "G1": "BLOCKED",
@@ -87,7 +89,60 @@
         "G4": "NOT_RUN"
       },
       "next_action": "Hand off to ChatGPT art QA: face likeness on full-head clay renders; hair REBUILD."
+    },
+    {
+      "attempt_id": "MHL02-REC-43503356166",
+      "task_id": "MORWEN-HEAD-SCULPT-01",
+      "defect_id": "MORWEN-FACE-CANON-FIT",
+      "method_id": "VRM_LOCAL_JAW_TAPER",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "A bounded local jaw/cheek x-taper (4.5 % max) moves the stock VRoid face toward the canonical face.",
+      "evidence": "Recorded from PR #306 evidence: GitHub Actions run 43503356166 (artifact 14075955288) and _qa/MORWEN_HEAD_SCULPT_01_REVIEW.md (G2 FAIL, G3 partial pass). Commit 523bed1 mentions two earlier CI import failures without run IDs; they are not reconstructed here.",
+      "result": "FAIL",
+      "failure_category": "shape",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Stopped by PR #306 (1/2). Replaced by calibrated landmark measurement (MORWEN-HEAD-LANDMARK-02)."
+    },
+    {
+      "attempt_id": "MHL02-MEASURE-01",
+      "task_id": "MORWEN-HEAD-LANDMARK-02",
+      "defect_id": "HEAD-LANDMARK-CALIBRATION",
+      "method_id": "visible-texel+plane-slice+layer0-colour-rules",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Deterministic landmark rules on the complete Face+Body head and on SHA-verified Layer 0 views give a calibrated four-view comparison.",
+      "evidence": "head_landmark/*.py; U=91.5 mm; Layer 0 U spread 1.65 % across front/right/left; 34 3D landmarks (MEASURED / MEASURED_IN_DEFINED_ROI / ESTIMATED labelled), occluded 2D points NOT_MEASURABLE. Detection rules were revised during development (sclera grouping, bang-highlight rejection, chin_profile definition) before the recorded run; two local full runs byte-identical (24 files).",
+      "result": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Use as the measurement base for every later head candidate; v5.61 canon binary still not in GitHub (design-canon comparison BLOCKED)."
+    },
+    {
+      "attempt_id": "MHL02-FIT-01",
+      "task_id": "MORWEN-HEAD-LANDMARK-02",
+      "defect_id": "MORWEN-FACE-CANON-FIT",
+      "method_id": "landmark-constrained-rbf-warp",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "A topology-locked biharmonic RBF warp driven only by MEASURED calibrated deltas (pupils, lip seam, chin, nose tip) fits canonical proportions while preserving rig and 56 shape keys.",
+      "evidence": "FIT_CANDIDATE_REPORT.json: technical PASS (topology/shape keys/vertex groups unchanged, 0 flips, Face/Body seam gap 0.6 um, edge ratio p99 1.44). Side chin residual -0.067U->+0.007U, nose projection -0.11U->+0.017U. Own visual check of LANDMARK_COMPARE_CANDIDATE_*.png: nose becomes a spike in profile (2D side drawing exaggerates the nose; few nose-tip vertices). Handle definitions were refined before this recorded run (chin_profile added, nose height added); visual review happened on this final configuration only.",
+      "result": "FAIL",
+      "failure_category": "shape",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "1/2 for this method. Do NOT rerun the warp with nose handles. Next: hybrid - local nose/eye/mouth retopology + independent eye parts; warp only for low-frequency proportions after art direction fixes nose projection."
     }
   ],
-  "last_task": "MORWEN-HEAD-STRUCTURE-01"
+  "last_task": "MORWEN-HEAD-LANDMARK-02"
 }
