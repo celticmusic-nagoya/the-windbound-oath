@@ -74,6 +74,12 @@ jobs:
               print("View", view, "bytes", len(data), "header", repr(data[:8]), flush=True)
               assert data[:8]==bytes.fromhex("89504e470d0a1a0a") and len(data)>10000, "Invalid PNG: "+view
               assert hashlib.sha256(data).hexdigest()==manifest["views"][view], "Hash mismatch: "+view
+          manifest["qa"]["G3"]="PASS_RENDER_OUTPUT_HASHES"
+          manifest["qa"]["G3_evidence"]="Five PNG headers, nonempty Blender file, SHA-256 manifest matches"
+          manifest["qa"]["G1"]="PENDING_CANON_REVIEW"
+          manifest["qa"]["G2"]="PENDING_VISUAL_REVIEW"
+          manifest["qa"]["G4"]="NOT_RUN"
+          (root/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\\n")
           print("PASS: five PNG files, Blender scene and SHA-256 verified")
           PY
       - name: Save five-view PBR candidate render
