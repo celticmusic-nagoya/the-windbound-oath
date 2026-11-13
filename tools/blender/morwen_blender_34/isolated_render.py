@@ -86,6 +86,10 @@ def main():
         bpy.ops.render.render(write_still=True,scene=scene.name)
         output=OUT/(name+".png")
         assert output.is_file() and output.stat().st_size>1000
+        # Preserve BLENDER-34 front-only diagnostic contract for regression QA.
+        if name=="front":
+            import shutil
+            shutil.copyfile(output, OUT/"front_isolated.png")
         outputs.append(output.name)
     report={"task":"BLENDER-34","source":str(SRC.relative_to(ROOT)),
             "source_objects":original,"isolated_objects":[o.name for o in scene.objects],
