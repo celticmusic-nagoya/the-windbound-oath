@@ -52,7 +52,8 @@ def main():
       (chest+.070,shoulder*.28,.066,.070,.001),
       (chest+.083,shoulder*.19,.056,.060,.002),
     ]
-    assert all(keys[i][0]<keys[i+1][0] for i in range(len(keys)-1))
+    keys.sort(key=lambda row: row[0])
+    assert all(keys[i][0]<keys[i+1][0] for i in range(len(keys)-1)), "duplicate anatomical z levels"
     # Equal subdivisions within anatomical key intervals, smooth tangents.
     levels=[]
     for i in range(len(keys)-1):
