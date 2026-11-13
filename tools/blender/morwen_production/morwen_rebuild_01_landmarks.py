@@ -45,4 +45,21 @@ report={
 assert len(views)==4
 assert all(all(v is None for v in view["landmarks"].values()) for view in views.values())
 (out/"LANDMARK_REVIEW_TEMPLATE.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+# Produce a faithful contact sheet for human landmark annotation.
+# Only scales/crops image previews; no facial coordinate is inferred.
+try:
+ from PIL import Image, ImageDraw, ImageFont
+except ImportError as exc:
+ raise RuntimeError("Pillow is required for canonical landmark review sheet") from exc
+canvas=Image.new("RGB",(4*440,1120),(29,31,39))
+draw=ImageDraw.Draw(canvas)
+for i,(direction,(filename,_)) in enumerate(refs.items()):
+ source=Image.open(root/filename).convert("RGBA")
+ assert source.size==(384,1024),f"Unexpected canonical dimensions: {filename}: {source.size}"
+ panel=Image.new("RGBA",source.size,(55,57,64,255))
+ panel.alpha_composite(source)
+ canvas.paste(panel.convert("RGB"),(i*440+28,60))
+ draw.text((i*440+28,22),f"{direction.upper()} — {filename}",fill=(245,245,245))
+ draw.text((i*440+28,1090),"CANONICAL · UNANNOTATED",fill=(210,210,210))
+canvas.save(out/"CANONICAL_FOUR_VIEW_LANDMARK_REVIEW.png")
 print("MORWEN-REBUILD-01: 4 canonical SHA PASS; annotation pending")
