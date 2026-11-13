@@ -41,7 +41,7 @@ add("cape.R",(.14,.05,1.34),(.28,.11,.70),"chest")
 add("satchel",(.10,.05,1.10),(.23,.08,.85),"chest")
 bpy.ops.object.mode_set(mode="OBJECT")
 assert len(arm.bones)==26,len(arm.bones)
-assert set(arm.bones)=={"root","pelvis","spine_01","chest","neck","head",
+assert set(arm.bones.keys())=={"root","pelvis","spine_01","chest","neck","head",
 "clavicle.L","upper_arm.L","forearm.L","hand.L","clavicle.R","upper_arm.R","forearm.R","hand.R",
 "thigh.L","shin.L","foot.L","toe.L","thigh.R","shin.R","foot.R","toe.R","hat","cape.L","cape.R","satchel"}
 out=Path("render_output/morwen_rig_template");out.mkdir(parents=True,exist_ok=True)
