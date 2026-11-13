@@ -157,3 +157,42 @@ for c in components:
 (out/"FACE_TOPOLOGY_AUDIT.json").write_text(json.dumps(face_audit,indent=2)+"\n")
 report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
+
+# Non-destructive candidate: adjustable face shape key, NOT a canonical likeness claim.
+# Existing Face topology and material assignments remain intact.
+from mathutils import Vector as _Vector
+basis=face.shape_key_add(name="Source_Basis",from_mix=False)
+candidate=face.shape_key_add(name="Morwen_Face_Silhouette_CANDIDATE",from_mix=False)
+mid_x=(face_min.x+face_max.x)*.5
+z0,z1=face_min.z,face_max.z
+for v in face.data.vertices:
+ world=face.matrix_world@v.co
+ t=(world.z-z0)/max(1e-6,z1-z0)
+ # Restrict lower-jaw taper to the bottom half; smooth taper avoids a hard seam.
+ lower=max(0.,min(1.,(.57-t)/.45))
+ lower=lower*lower*(3-2*lower)
+ # Modest taper only; eye islands may be present in this mesh and must be inspected.
+ offset_x=(world.x-mid_x)*(-.055*lower)
+ new_world=world+_Vector((offset_x,0,0))
+ candidate.data[v.index].co=face.matrix_world.inverted()@new_world
+candidate.value=1.0
+bpy.context.view_layer.update()
+for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("three_quarter",(.7,1,.15))]:
+ bpy.ops.object.camera_add(location=face_center+_Vector(delta).normalized()*face_extent*3)
+ cam=bpy.context.object
+ cam.rotation_euler=(face_center-cam.location).to_track_quat("-Z","Y").to_euler()
+ cam.data.type="ORTHO";cam.data.ortho_scale=face_extent*2.0
+ scene.camera=cam
+ scene.render.filepath=str((out/(name+"_face_candidate.png")).resolve())
+ bpy.ops.render.render(write_still=True)
+candidate.value=0.0
+(out/"FACE_CANDIDATE_QA.json").write_text(json.dumps({
+ "status":"NON_DESTRUCTIVE_EXPERIMENT","shape_key":candidate.name,
+ "source_face_vertices":len(face.data.vertices),
+ "topology_unchanged":True,"maximum_lower_face_x_taper":0.055,
+ "source_shape_key_value_after_render":candidate.value,
+ "canonical_likeness":"NOT_ASSESSED","G1":"NOT_APPROVED","G2":"PENDING_ART_REVIEW",
+ "G3":"RENDERED_CANDIDATE","G4":"NOT_RUN",
+ "warnings":["Source Face includes multiple material islands; deformation needs independent facial review",
+             "Taper is exploratory and not measured from canonical landmarks"]
+},indent=2)+"\\n")
