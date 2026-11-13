@@ -1,0 +1,87 @@
+{
+  "schema": "MORWEN-FACE-CONSTRUCTION-01",
+  "status": "REFERENCE_GUIDED_UNAPPROVED",
+  "reference": {
+    "canonical": "tools/blender/production_mesh_08/references/{7809,7807,7810,7808}.png",
+    "supplemental_sha256": "d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b",
+    "supplemental_role": "costume and face visual guidance only"
+  },
+  "axis": {
+    "front": "-Y",
+    "right_leg": "+X",
+    "front_screen_right_leg": "LEFT",
+    "back_screen_right_leg": "RIGHT"
+  },
+  "geometry_modules": [
+    {
+      "id": "head_surface",
+      "method": "single continuous subdivision-ready quad surface with editable loops around eyes, nose, mouth, jaw and ears",
+      "requirements": [
+        "avoid capsule-shaped silhouette",
+        "independent front and profile proportions",
+        "preserve cheeks and jaw taper"
+      ]
+    },
+    {
+      "id": "eye_sockets",
+      "method": "paired recessed orbital loops and separate upper/lower eyelids",
+      "requirements": [
+        "symmetric eye placement",
+        "distinct eyelid volume",
+        "do not flatten eye area"
+      ]
+    },
+    {
+      "id": "nose",
+      "method": "integrated bridge, tip, nostril wings and underside with local quad flow",
+      "requirements": [
+        "nose visible in side profile",
+        "no free-floating primitive nose"
+      ]
+    },
+    {
+      "id": "mouth",
+      "method": "lip loops with defined corners and philtrum",
+      "requirements": [
+        "subtle neutral expression",
+        "no texture-only mouth"
+      ]
+    },
+    {
+      "id": "ears",
+      "method": "paired sculpted helix, antihelix, tragus and lobe",
+      "requirements": [
+        "align to official side view",
+        "preserve glasses clearance"
+      ]
+    },
+    {
+      "id": "hair",
+      "method": "separate directional bob hair clumps with parting and bangs",
+      "requirements": [
+        "purple color family",
+        "back silhouette",
+        "no solid helmet cap"
+      ]
+    },
+    {
+      "id": "glasses",
+      "method": "round thin frames, bridge and side temples",
+      "requirements": [
+        "align eyes and ears",
+        "avoid facial intersections"
+      ]
+    }
+  ],
+  "quality_gates": {
+    "G1": "compare to canonical Layer 0 and supplemental face close-up; manual approval required",
+    "G2": "five actual Blender renders; inspect face structure, expression and silhouette at in-game size",
+    "G3": "transparent PNG, dimensions, non-manifold/intersection checks, deterministic script",
+    "G4": "26-bone compatibility and runtime footprint after G1/G2 approval"
+  },
+  "disallowed": [
+    "promote provisional face to MORWEN_MASTER_APPROVED.blend",
+    "copy supplemental image over canonical references",
+    "mirror right-only garter to left"
+  ]
+}

@@ -404,3 +404,11 @@ Scope: character/background/UI assets, sprites, masks, reference sheets, and ima
 7. **Evidence.** Track asset ID, canonical reference, attempt count, structural analysis, observed delta, QA status, and next deliverable. Preserve originals. Report blocked/unrun work accurately.
 
 Precedence: this section governs asset-generation attempt counting and forward progress. It does not waive repository safety rules, canonical asset protection, task-specific prohibitions on publishing or merging, or existing approval gates.
+
+## Quality-first 3D production / no-loop policy (2026-11-13)
+
+For character, costume, prop, architecture, terrain and animation work, **read `docs/art/QUALITY_FIRST_3D_PIPELINE_V1.md` before production**. It is the mandatory production method: source hierarchy and SHA protection, legally reusable third-party game/VTuber/Vocaloid model research, Blender + Python + manual/sculpt/Geometry Nodes hybrid, topology and orthographic comparison, independent G1-G4 gates, and reproducible CI.
+
+**Hard stop:** maximum **two failed attempts per defect with the same technique**; stop and change the production method rather than micro-tweaking percentages or regenerating near-identical low-quality outputs. This newer 3D-specific two-failure rule supersedes any older three-attempt allowance for 3D production; it does not weaken other asset rules. Never classify low-quality primitives or an unsuitable VRoid base as finished art. Never use unverified third-party licensed assets as production geometry. Preserve accepted originals; use dedicated branch and Draft PR. No main merge, canonical overwrite, destructive deletion or publication without explicit approval.
+
+Morwen user-supplied 3D target sheet is documented at `docs/art/MORWEN_3D_TARGET_SHEET_20261113.md`. **The image binary is not yet registered in GitHub** until a byte-for-byte upload and SHA verification are completed; do not misreport this as done.

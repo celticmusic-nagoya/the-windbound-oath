@@ -1,0 +1,163 @@
+name: Morwen VRoid CC0 Head Review
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - '.github/workflows/morwen-vroid-head-review.yml'
+      - 'tools/blender/morwen_production/render_vroid_cc0_review.py'
+      - 'tools/blender/morwen_production/audit_canonical_views.py'
+      - 'tools/blender/morwen_production/morwen_rebuild_01_landmarks.py'
+      - 'tools/blender/morwen_production/landmark-review.html'
+      - 'tools/blender/morwen_production/test_landmark_review.py'
+      - 'tools/blender/morwen_production/analyze_landmarks.py'
+      - 'tools/blender/morwen_production/test_analyze_landmarks.py'
+      - 'tools/blender/morwen_production/mesh_topology_audit.py'
+      - 'tools/blender/morwen_production/run_mesh_audit_vroid.py'
+      - 'tools/blender/morwen_production/create_face_comparison.py'
+      - 'tools/blender/morwen_production/render_neutral_skin_head.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify 3D production anti-loop policy
+        run: |
+          python -m unittest discover -s tools/blender/morwen_production -p test_validate_attempt_log.py -v
+          python -m unittest discover -s tools/blender/morwen_production -p test_validate_shared_attempt_ledger.py -v
+      - name: Verify landmark review page and coordinate analysis (no Blender required)
+        run: |
+          python3 tools/blender/morwen_production/test_landmark_review.py
+          python3 tools/blender/morwen_production/test_analyze_landmarks.py
+      - name: Fetch pinned CC0 candidate and validate SHA
+        run: |
+          python3 - <<'PY'
+          import urllib.request,hashlib,zipfile
+          from pathlib import Path
+          url="https://opengameart.org/sites/default/files/base_female.zip"
+          out=Path("render_output/morwen_vroid_review");out.mkdir(parents=True,exist_ok=True)
+          req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0"})
+          with urllib.request.urlopen(req,timeout=90) as res:raw=res.read()
+          assert hashlib.sha256(raw).hexdigest()=="bf2717cff70b40a278df56e137dbb699c6499551096fa4c005e9aeca1de68eb3","Source hash changed"
+          (out/"Base_Female.vrm").write_bytes(zipfile.ZipFile(__import__("io").BytesIO(raw)).read("Base_Female.vrm"))
+          PY
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender python3-numpy
+      - name: Check Blender NumPy dependency
+        run: blender -b --python-expr 'import numpy; print("Blender NumPy", numpy.__version__)'
+      - name: Render VRM candidate
+        run: |
+          blender -b -t 2 --python tools/blender/morwen_production/render_vroid_cc0_review.py
+          test -s render_output/morwen_vroid_review/QA.json
+      - name: Render isolated neutral skin head four views
+        run: |
+          blender -b -t 2 --python tools/blender/morwen_production/render_neutral_skin_head.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('render_output/morwen_neutral_head')
+          q=json.loads((p/'QA.json').read_text())
+          assert q['skin_vertices']==588 and q['source_modified'] is False
+          for view in ('front','right','back','left'):
+              assert (p/(view+'_neutral_skin.png')).stat().st_size>1000
+          PY
+      - name: Audit VRoid mesh topology without modifying source
+        run: blender -b -t 2 --python tools/blender/morwen_production/run_mesh_audit_vroid.py
+      - name: Audit canonical four-view images
+        run: blender -b -t 2 --python tools/blender/morwen_production/audit_canonical_views.py
+      - name: Render reference comparison sheet
+        run: blender -b -t 2 --python tools/blender/morwen_production/create_face_comparison.py
+      - name: Verify canonical landmark review contract
+        run: |
+          python3 -m pip install --user Pillow
+          python3 tools/blender/morwen_production/morwen_rebuild_01_landmarks.py
+      - name: Validate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("render_output/morwen_vroid_review")
+          lm=json.loads((Path("render_output/morwen_rebuild_01")/"LANDMARK_REVIEW_TEMPLATE.json").read_text())
+          assert lm["status"]=="REFERENCE_VERIFIED_ANNOTATION_PENDING"
+          assert len(lm["views"])==4 and not lm["landmark_positions_invented"]
+          assert (Path("render_output/morwen_rebuild_01")/"CANONICAL_FOUR_VIEW_LANDMARK_REVIEW.png").stat().st_size>1000
+          mesh=json.loads((p/"MESH_TOPOLOGY_AUDIT.json").read_text())
+          assert mesh["source_modified"] is False
+          assert mesh["meshes"]
+          assert all(m["vertices"]>0 and m["faces"]>0 for m in mesh["meshes"].values())
+          q=json.loads((p/"QA.json").read_text())
+          assert q["production_approved"] is False
+          refs=json.loads((p/"CANONICAL_IMAGE_AUDIT.json").read_text())
+          assert len(refs["views"])==4 and refs["landmarks_approved"] is False
+          comparison=json.loads((p/"COMPARISON_STATUS.json").read_text())
+          assert comparison["canonical_match"]=="NOT_APPROVED"
+          assert (p/"MORWEN_REFERENCE_VROID_COMPARISON.png").stat().st_size>1000
+          assert (p/"MORWEN_HEAD_FOCUSED_COMPARISON.png").stat().st_size>1000
+          topology=json.loads((p/"FACE_TOPOLOGY_AUDIT.json").read_text())
+          assert topology["vertices"]>0 and topology["polygons"]>0
+          assert topology["topology_deformation_approved"] is False
+          parts=json.loads((p/"FACE_COMPONENT_INDEX.json").read_text())
+          assert parts["component_count"]==len(parts["components"])
+          legend=json.loads((p/"FACE_COMPONENT_COLOR_LEGEND.json").read_text())
+          assert legend["component_count"]==parts["component_count"]
+          assert legend["source_mesh_modified"] is False
+          jaw=json.loads((p/"SKIN_JAW_ISOLATION_QA.json").read_text())
+          assert jaw["all_changed_vertices_within_skin_component"]
+          assert jaw["all_non_skin_vertices_unchanged"]
+          assert jaw["shape_key_reset"]
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_skin_jaw_isolated.png")).stat().st_size>1000
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_component_ids.png")).stat().st_size>1000
+          assert sum(c["vertices"] for c in parts["components"])==parts["source_vertices"]
+          assert sorted(v for c in parts["components"] for v in c["vertex_indices"])==list(range(parts["source_vertices"]))
+          metrics=json.loads((p/"FACE_PROPORTION_CANDIDATE.json").read_text())
+          assert metrics["canonical_landmarks_measured"] is False
+          assert metrics["face_width_to_height"]>0
+          candidate=json.loads((p/"FACE_CANDIDATE_QA.json").read_text())
+          assert candidate["topology_unchanged"] is True
+          assert candidate["source_shape_key_value_after_render"]==0.0
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_face_candidate.png")).stat().st_size>1000
+          for name in ("front","right","back","left","three_quarter"):
+              assert (p/(name+"_head.png")).stat().st_size>1000
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_wire.png")).stat().st_size>1000
+          for name in ("front","right","left","three_quarter"):
+              assert (p/(name+"_face_detail.png")).stat().st_size>1000
+          PY
+      - name: Upload images and QA only
+        # Keep full renders available for visual framing verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-vroid-cc0-head-review
+          path: |
+            render_output/morwen_neutral_head/*.png
+            render_output/morwen_neutral_head/QA.json
+            render_output/morwen_vroid_review/*_head.png
+            render_output/morwen_vroid_review/*_wire.png
+            render_output/morwen_vroid_review/*_face_detail.png
+            render_output/morwen_vroid_review/QA.json
+            render_output/morwen_vroid_review/MESH_TOPOLOGY_AUDIT.json
+            render_output/morwen_rebuild_01/LANDMARK_REVIEW_TEMPLATE.json
+            render_output/morwen_rebuild_01/CANONICAL_FOUR_VIEW_LANDMARK_REVIEW.png
+            render_output/morwen_vroid_review/FACE_TOPOLOGY_AUDIT.json
+            render_output/morwen_vroid_review/FACE_COMPONENT_INDEX.json
+            render_output/morwen_vroid_review/FACE_COMPONENT_COLOR_LEGEND.json
+            render_output/morwen_vroid_review/SKIN_JAW_ISOLATION_QA.json
+            render_output/morwen_vroid_review/*_skin_jaw_isolated.png
+            render_output/morwen_vroid_review/*_component_ids.png
+            render_output/morwen_vroid_review/FACE_PROPORTION_CANDIDATE.json
+            render_output/morwen_vroid_review/CANONICAL_IMAGE_AUDIT.json
+            render_output/morwen_vroid_review/COMPARISON_STATUS.json
+            render_output/morwen_vroid_review/MORWEN_REFERENCE_VROID_COMPARISON.png
+            render_output/morwen_vroid_review/MORWEN_HEAD_FOCUSED_COMPARISON.png
+            render_output/morwen_vroid_review/HEAD_COMPARISON_STATUS.json
+            render_output/morwen_vroid_review/*_face_candidate.png
+            render_output/morwen_vroid_review/FACE_CANDIDATE_QA.json
+          retention-days: 14

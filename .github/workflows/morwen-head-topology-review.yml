@@ -1,0 +1,39 @@
+name: Morwen Head Topology Review
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - 'tools/blender/morwen_production/build_head_review.py'
+      - '.github/workflows/morwen-head-topology-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender
+      - name: Render five review angles
+        run: blender -b -t 2 --python tools/blender/morwen_production/build_head_review.py
+      - name: Verify review output
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('render_output/morwen_head_review')
+          q=json.loads((p/'QA.json').read_text())
+          assert len(q['images'])==5
+          assert all((p/n).stat().st_size>1000 for n in q['images'])
+          assert q['G2'].startswith('NOT_RUN')
+          PY
+      - name: Upload renders and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-head-topology-review-not-approved
+          path: render_output/morwen_head_review/
+          retention-days: 14

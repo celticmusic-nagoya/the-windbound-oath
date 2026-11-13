@@ -1,0 +1,34 @@
+name: Morwen Layer0 Measurement QA
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - 'tools/blender/morwen_production/measure_layer0.py'
+      - '.github/workflows/morwen-layer0-measure.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Pillow
+        run: python3 -m pip install --break-system-packages pillow
+      - name: Syntax and canonical-image measurements
+        run: |
+          python3 -m py_compile tools/blender/morwen_production/measure_layer0.py
+          python3 tools/blender/morwen_production/measure_layer0.py
+      - name: Validate measured views
+        run: |
+          python3 -c 'import json; d=json.load(open("render_output/morwen_layer0_measure/measurements.json")); assert set(d["views"])=={"front","right","back","left"}; assert all(v["alpha_128_height_px"]>0 for v in d["views"].values())'
+      - name: Upload QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-measurements
+          path: render_output/morwen_layer0_measure/
+          retention-days: 30
+          if-no-files-found: warn
