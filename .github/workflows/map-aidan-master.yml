@@ -38,7 +38,7 @@ jobs:
           for n,h in d["files"].items():
               b=(p/n).read_bytes()
               assert hashlib.sha256(b).hexdigest()==h
-              if n.endswith(".png"): assert b.startswith(b"\\x89PNG\\r\\n\\x1a\\n")
+              if n.endswith(".png"): assert b.startswith(bytes([137,80,78,71,13,10,26,10]))
           print("MASTER TECH QA PASS")
           PY
       - name: Upload artifacts
