@@ -1,0 +1,158 @@
+{
+  "schema": "two-map-geometry-anchor-v1",
+  "source": "data/maps/rilde_village_01_peace.json",
+  "source_state": "main at audit",
+  "status": "EXISTING_RUNTIME_GEOMETRY_REFERENCE_NOT_ART_CANON",
+  "world": {
+    "width": 2400,
+    "height": 1750,
+    "tile": 8,
+    "unitScale": 2.5
+  },
+  "coordinate_conversion": "Blender plan: x=(game_x-1200)/100, y=(875-game_y)/100; provisional 100 game units = 1 Blender meter",
+  "landmarks": [
+    {
+      "id": "b_lind_elder_house",
+      "asset": "rv_lind_elder_house",
+      "x": 610,
+      "y": 468,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_inn",
+      "asset": "rv_lind_inn",
+      "x": 975,
+      "y": 477,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_aidan_house",
+      "asset": "rv_lind_aidan_house",
+      "x": 1345,
+      "y": 543,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_item_shop",
+      "asset": "rv_lind_item_shop",
+      "x": 395,
+      "y": 789,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_house_01",
+      "asset": "rv_lind_house_01",
+      "x": 375,
+      "y": 1122,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_house_02",
+      "asset": "rv_lind_house_02",
+      "x": 685,
+      "y": 1304,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_house_03",
+      "asset": "rv_lind_house_03",
+      "x": 345,
+      "y": 1469,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_house_04",
+      "asset": "rv_lind_house_04",
+      "x": 665,
+      "y": 1057,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_barn",
+      "asset": "rv_lind_barn",
+      "x": 1195,
+      "y": 898,
+      "role": "building"
+    },
+    {
+      "id": "b_lind_storage",
+      "asset": "rv_lind_storage",
+      "x": 1415,
+      "y": 901,
+      "role": "building"
+    },
+    {
+      "id": "d_lind_field_wheat",
+      "asset": "rv_lind_field_wheat",
+      "x": 1095,
+      "y": 1272,
+      "role": "decal"
+    },
+    {
+      "id": "d_lind_field_vegetables",
+      "asset": "rv_lind_field_vegetables",
+      "x": 1285,
+      "y": 1275,
+      "role": "decal"
+    },
+    {
+      "id": "d_lind_field_flower",
+      "asset": "rv_lind_field_flower",
+      "x": 1445,
+      "y": 1253,
+      "role": "decal"
+    },
+    {
+      "id": "b_lind_orchard_apple",
+      "asset": "rv_lind_orchard_apple",
+      "x": 1155,
+      "y": 1542,
+      "role": "prop"
+    },
+    {
+      "id": "d_lind_bridge",
+      "asset": "rv_lind_bridge",
+      "x": 1640,
+      "y": 736,
+      "role": "decal"
+    },
+    {
+      "id": "b_train_shed",
+      "asset": "rv_train_shed",
+      "x": 2175,
+      "y": 838,
+      "role": "building"
+    },
+    {
+      "id": "b_wind_stone",
+      "asset": "rv_wind_stone_normal",
+      "x": 842.5,
+      "y": 714,
+      "role": "landmark"
+    }
+  ],
+  "entry_spawns": {
+    "from_cliff": {
+      "x": 830,
+      "y": 1552,
+      "facing": "up"
+    },
+    "from_fort": {
+      "x": 2212,
+      "y": 695,
+      "facing": "left"
+    },
+    "from_moss_forest": {
+      "x": 830,
+      "y": 190,
+      "facing": "down"
+    }
+  },
+  "guards": [
+    "Do not move existing gameplay props or event zones",
+    "Preserve wind stone and bridge geography",
+    "Use neutral scale proxy, not Morwen approved asset",
+    "Do not interpret event CG composition as an overhead map",
+    "Do not promote provisional Blender assets to canon"
+  ]
+}
