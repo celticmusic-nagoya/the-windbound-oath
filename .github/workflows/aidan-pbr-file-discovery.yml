@@ -1,0 +1,30 @@
+name: Aidan PBR File Manifest Discovery
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/discover_polyhaven_pbr_files.py'
+      - 'tools/map_blender/aidan_pbr_shortlist.json'
+      - '.github/workflows/aidan-pbr-file-discovery.yml'
+permissions:
+  contents: read
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate script
+        run: python -m py_compile tools/map_blender/discover_polyhaven_pbr_files.py
+      - name: Discover exact file URLs and map channels (no downloads)
+        run: python tools/map_blender/discover_polyhaven_pbr_files.py tools/map_blender/aidan_pbr_shortlist.json "${RUNNER_TEMP}/pbr-file-manifest.json"
+      - name: Save source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-pbr-file-manifest-candidate
+          path: ${{ runner.temp }}/pbr-file-manifest.json
+          if-no-files-found: warn
+          retention-days: 14
