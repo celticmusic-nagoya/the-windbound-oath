@@ -9,6 +9,7 @@ def audit(root, manifest):
     except (OSError, ValueError, KeyError, TypeError) as exc:
         return {"status":"FAIL","checked":[],"failures":[f"invalid manifest: {exc}"]}
     if not isinstance(entries,list):return {"status":"FAIL","checked":[],"failures":["assets must be an array"]}
+    if not entries:return {"status":"FAIL","checked":[],"failures":["assets list is empty; no files were verified"]}
     seen=set()
     for i,item in enumerate(entries):
         if not isinstance(item,dict):failures.append(f"assets[{i}]: not an object");continue
