@@ -1,0 +1,255 @@
+{
+  "schema": "two.rilde.layout-candidate.v1",
+  "status": "DESIGN_CANDIDATE_NOT_CANON_METRIC",
+  "coordinate_system": {
+    "origin": "northwest",
+    "x": "east",
+    "y": "south",
+    "extent": [
+      1000,
+      1000
+    ],
+    "units": "normalized_layout_units_NOT_METERS",
+    "north_up": true
+  },
+  "source": "WORLD_MAP_CANON_20261108.md and director 2026-11-14",
+  "anchors": [
+    {
+      "id": "windwatch_cliff",
+      "xy": [
+        95,
+        275
+      ],
+      "zone": "west_northwest",
+      "visible": [
+        "sea",
+        "natural_cliff",
+        "grass",
+        "wildflowers"
+      ],
+      "forbidden": [
+        "bench",
+        "fence",
+        "tower",
+        "banner",
+        "signpost",
+        "platform"
+      ]
+    },
+    {
+      "id": "harbor",
+      "xy": [
+        120,
+        825
+      ],
+      "zone": "southwest",
+      "type": "small_fishing_inlet"
+    },
+    {
+      "id": "village_plaza",
+      "xy": [
+        480,
+        520
+      ],
+      "zone": "center"
+    },
+    {
+      "id": "church_shelter",
+      "xy": [
+        390,
+        305
+      ],
+      "zone": "north_elevated",
+      "status": "approved_design_direction"
+    },
+    {
+      "id": "waterfall",
+      "xy": [
+        330,
+        255
+      ],
+      "zone": "northwest_village",
+      "status": "layout_candidate"
+    },
+    {
+      "id": "elder_house",
+      "xy": [
+        355,
+        390
+      ],
+      "zone": "northwest_village",
+      "status": "layout_candidate"
+    },
+    {
+      "id": "aidan_house",
+      "xy": [
+        620,
+        385
+      ],
+      "zone": "northeast_village",
+      "status": "layout_candidate"
+    },
+    {
+      "id": "stone_bridge",
+      "xy": [
+        760,
+        525
+      ],
+      "zone": "east"
+    },
+    {
+      "id": "training_yard",
+      "xy": [
+        890,
+        510
+      ],
+      "zone": "east_across_river",
+      "status": "approved_design_direction"
+    },
+    {
+      "id": "watermill_pasture",
+      "xy": [
+        855,
+        700
+      ],
+      "zone": "river_adjacent",
+      "status": "approved_design_direction"
+    },
+    {
+      "id": "farms_orchard",
+      "xy": [
+        570,
+        755
+      ],
+      "zone": "south"
+    },
+    {
+      "id": "moss_forest_entrance",
+      "xy": [
+        860,
+        930
+      ],
+      "zone": "southeast_downstream",
+      "visible": [
+        "forest_edge",
+        "dense_canopy"
+      ],
+      "forbidden": [
+        "ancient_altar",
+        "ruins",
+        "stone_circle"
+      ]
+    },
+    {
+      "id": "dunvar_road_exit",
+      "xy": [
+        540,
+        15
+      ],
+      "zone": "north"
+    }
+  ],
+  "river": {
+    "flow": "north_to_south",
+    "centerline": [
+      [
+        790,
+        0
+      ],
+      [
+        805,
+        180
+      ],
+      [
+        785,
+        350
+      ],
+      [
+        775,
+        525
+      ],
+      [
+        800,
+        720
+      ],
+      [
+        850,
+        1000
+      ]
+    ],
+    "riverbank_cliff": {
+      "xy": [
+        815,
+        850
+      ],
+      "distinct_from": "windwatch_cliff"
+    }
+  },
+  "connections": [
+    [
+      "village_plaza",
+      "dunvar_road_exit",
+      "main_road"
+    ],
+    [
+      "village_plaza",
+      "harbor",
+      "harbor_road"
+    ],
+    [
+      "village_plaza",
+      "windwatch_cliff",
+      "coastal_footpath"
+    ],
+    [
+      "village_plaza",
+      "stone_bridge",
+      "village_road"
+    ],
+    [
+      "stone_bridge",
+      "training_yard",
+      "bridge_access"
+    ],
+    [
+      "village_plaza",
+      "church_shelter",
+      "evacuation_route"
+    ],
+    [
+      "village_plaza",
+      "moss_forest_entrance",
+      "southeast_path"
+    ]
+  ],
+  "visibility_rules": {
+    "whole_village_view": {
+      "hide": [
+        "ancient_altar"
+      ],
+      "cliff_no_artificial_structures": true
+    },
+    "cliff_to_village": "line_of_sight_occluded_by_ridge_PENDING_3D_QA"
+  },
+  "separate_layers": [
+    "TERRAIN",
+    "ROADS",
+    "WATER",
+    "BRIDGES",
+    "BUILDINGS",
+    "CHURCH",
+    "WATERMILL_PASTURE",
+    "TRAINING_YARD",
+    "VEGETATION",
+    "PROPS",
+    "COLLISION",
+    "EVENTS",
+    "LIGHTING"
+  ],
+  "qa": {
+    "G1": "PARTIAL",
+    "G2": "NOT_RUN",
+    "G3": "STRUCTURE_ONLY",
+    "G4": "NOT_RUN"
+  }
+}
