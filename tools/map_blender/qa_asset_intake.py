@@ -17,13 +17,18 @@ def audit(root, manifest):
             failures.append(f"assets[{i}]: missing path, sha256, license or source_url");continue
         if pathlib.PurePath(name).is_absolute() or "\\" in name:
             failures.append(f"assets[{i}]: invalid relative path");continue
-        if name in seen:
+        normalized=pathlib.PurePosixPath(name).as_posix()
+        if normalized in seen:
             failures.append(f"assets[{i}]: duplicate asset path {name}");continue
-        seen.add(name)
+        seen.add(normalized)
         if not re.fullmatch(r"[0-9a-fA-F]{64}",digest):
             failures.append(f"assets[{i}]: invalid SHA-256 format");continue
-        parsed=urlsplit(source)
-        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+        try:
+            parsed=urlsplit(source)
+            valid_source=(parsed.scheme == "https" and bool(parsed.hostname) and not parsed.username and not parsed.password)
+        except ValueError:
+            valid_source=False
+        if not valid_source:
             failures.append(f"assets[{i}]: source_url must be a public HTTPS URL without credentials");continue
         p=(root/name).resolve()
         if not p.is_relative_to(root.resolve()):failures.append(f"assets[{i}]: path escapes asset root");continue
