@@ -5,7 +5,7 @@ Status: REVIEW CRITERIA ONLY / NO MODEL APPROVAL. Date: 2026-11-14.
 1. Approved visual master: `docs/design/MORWEN_V561_CANONICAL_20261108.md` references director-provided `7374.png` (actual JPEG; SHA-256 `47d58cbeb0f8ad41f51543716d872bfcc8c7d0dc91d45196c9c02b22402df638`), binary not yet stored in GitHub. Do not replace it with another similar image.
 2. Approved full-body master `assets/companions/morwen/master/morwen-full-body-v3.png` per `docs/lore/MORWEN_CANON_20261108.md`. Verify hash/contents before asset-level comparisons.
 3. Layer 0 four-view body reference: `tools/blender/production_mesh_08/references/{7809,7807,7810,7808}.png`, distinct from finished-costume sheet.
-4. `docs/art/MORWEN_3D_TARGET_SHEET_20261113.md`: director-supplied 3D target sheet (JPEG SHA `d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b`), GitHub binary pending. Treat as production target/interpretation, **not a replacement for canonical v5.61**. Where images disagree, block and request director decision.
+4. `docs/art/MORWEN_3D_TARGET_SHEET_20261113.md`: director-confirmed higher-quality PNG `assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png`, SHA-256 `7640822cfeb6c3de5b988a79e438babfaf7e3dafbdbc8433ae6cde78f3988957` (GitHub Actions #43459999519 PASS). The older JPEG is superseded and must not be used. Treat this PNG as the **3D production target**, not an unapproved replacement for canonical v5.61. Where images disagree, block and request director decision.
 
 ## Part-specific acceptance checks
 | Part | G1/G2 visual criteria | Evidence required |
@@ -32,7 +32,7 @@ Each part receives PASS / FAIL / BLOCKED with side-by-side evidence. PASS requir
 - Run #43453993945: Blender 4-view isolated skin mesh render SUCCESS, but 588-vertex island renders show holes and severe shading artifacts; **G2 FAIL**, diagnostic visualization integrity FAIL. This is not an approved head or valid basis for face-fitting.
 - Current candidate hair, uniform and face are NOT_APPROVED for Morwen.
 - Claude may investigate components, normals, material/alpha and build diagnostic renders on separate branch; ChatGPT handles independent visual QA. Avoid parallel edits to the same pipeline files.
-- G1 PARTIAL; G2 FAIL for existing candidate; G3 pipeline PASS, diagnostic quality FAIL; G4 NOT_RUN.
+- G1 PNG binary integrity PASS, canonical design comparison PENDING; G2 FAIL for existing candidate; G3 pipeline PASS, diagnostic quality FAIL; G4 NOT_RUN.
 
 ## Director decision needed only after evidence
 Approve/reject a complete reconstructed head and costume; any proposed change to canonical silhouette or asymmetric details requires explicit director approval. No source overwrite, main merge or publication.
