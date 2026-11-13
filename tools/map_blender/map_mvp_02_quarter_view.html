@@ -1,0 +1,32 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAP-MVP-02 quarter-view sandbox</title><style>
+body{margin:0;background:#151c1a;color:#eee8dc;font:15px system-ui}main{max-width:900px;margin:auto;padding:12px}h1{font-size:1.25rem}canvas{width:100%;height:auto;display:block;background:#6c8762;border:1px solid #849784;touch-action:none}button{min-width:55px;min-height:46px;font-size:21px;background:#30453b;color:white;border:1px solid #849784;border-radius:7px}#pad{display:grid;grid-template-columns:repeat(3,58px);gap:4px;justify-content:center;margin:10px}button[data-dir=up]{grid-column:2}button[data-dir=left]{grid-column:1;grid-row:2}button[data-dir=down]{grid-column:2;grid-row:2}button[data-dir=right]{grid-column:3;grid-row:2}small{color:#c3cfc1}output{display:block}</style></head><body><main><h1>MAP-MVP-02｜クォータービュー仮マップ</h1><p>独立した仮配置テスト。MAP21の正式座標やイベントCGを変更しません。PC：矢印/WASD、スマホ：方向ボタン。</p><canvas id="view" width="768" height="500"></canvas><div id="pad"><button data-dir="up">↑</button><button data-dir="left">←</button><button data-dir="down">↓</button><button data-dir="right">→</button></div><output id="status"></output><small>地面・壁・民家・木・岩の5モジュール。仮プレイヤーは正式キャラクター素材ではありません。</small></main><script>
+'use strict';
+const cv=document.querySelector('canvas'),ctx=cv.getContext('2d'),status=document.getElementById('status');
+const camera={angle:27,scale:1},P={x:0,y:2.8,r:.32,dir:'down',step:0},pressed=new Set();
+const objects=[{type:'house',x:-4.6,y:-3.1,w:3.4,d:3.0,h:3.2},{type:'wall',x:1.3,y:-3.8,w:5.2,d:.55,h:1.2},{type:'tree',x:4.5,y:1.3,w:1.3,d:1.3,h:3.5},{type:'tree',x:-5.7,y:2.3,w:1.3,d:1.3,h:3.4},{type:'rock',x:2.8,y:3.5,w:1.3,d:1.0,h:.8}];
+const tilt=Math.sin(camera.angle*Math.PI/180),cos=Math.cos(camera.angle*Math.PI/180);
+function project(x,y,z=0){return [384+(x-y)*30,240+(x+y)*30*tilt-z*30*cos]}
+function poly(points,c){ctx.fillStyle=c;ctx.beginPath();points.forEach((p,i)=>{const [x,y]=project(...p);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();ctx.fill()}
+function line(a,b,c,width=2){ctx.strokeStyle=c;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(...project(...a));ctx.lineTo(...project(...b));ctx.stroke()}
+function prism(x,y,w,d,h,side,top){poly([[x,y,0],[x+w,y,0],[x+w,y+d,0],[x,y+d,0]],'#445b42');poly([[x,y+d,0],[x+w,y+d,0],[x+w,y+d,h],[x,y+d,h]],side);poly([[x+w,y,0],[x+w,y+d,0],[x+w,y+d,h],[x+w,y,h]],'#555f58');poly([[x,y,h],[x+w,y,h],[x+w,y+d,h],[x,y+d,h]],top)}
+function drawObj(o){const {x,y,w,d,h,type}=o;
+ if(type==='house'){prism(x,y,w,d,h*.73,'#c1b18d','#d8c6a1');poly([[x-.2,y-.2,h*.73],[x+w+.2,y-.2,h*.73],[x+w/2,y+d/2,h],[x-.2,y+d+.2,h*.73]],'#805347');poly([[x+w+.2,y-.2,h*.73],[x+w+.2,y+d+.2,h*.73],[x+w/2,y+d/2,h]],'#6d453c');line([x+w*.35,y+d,h*.34],[x+w*.35,y+d,h*.64],'#493a30',8)}
+ if(type==='wall')prism(x,y,w,d,h,'#737c70','#92998a');
+ if(type==='tree'){line([x+w/2,y+d/2,0],[x+w/2-.3,y+d/2,h*.7],'#584a32',9);for(const [dx,dy,dz] of [[0,0,.8],[-.55,0,.65],[.3,.25,.72]]){const [sx,sy]=project(x+w/2+dx,y+d/2+dy,h*dz);ctx.fillStyle='#416646';ctx.beginPath();ctx.ellipse(sx,sy,24,18,0,0,Math.PI*2);ctx.fill()}}
+ if(type==='rock'){poly([[x,y,.1],[x+w*.2,y,h],[x+w*.8,y+d*.1,h*.8],[x+w,y+d,.15],[x,y+d,.12]],'#7e8982')}
+}
+function player(){const [sx,sy]=project(P.x,P.y,0);ctx.fillStyle='#304b38';ctx.beginPath();ctx.ellipse(sx,sy,13,5,0,0,Math.PI*2);ctx.fill();const bob=Math.sin(P.step)*2;ctx.fillStyle='#354f68';ctx.fillRect(sx-8,sy-35+bob,16,26);ctx.fillStyle='#e3c1a6';ctx.beginPath();ctx.arc(sx,sy-42+bob,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#44352b';ctx.fillRect(sx-11,sy-53+bob,22,7)}
+function draw(){ctx.clearRect(0,0,768,500);
+ for(let x=-8;x<9;x++)for(let y=-8;y<9;y++)poly([[x,y,0],[x+1,y,0],[x+1,y+1,0],[x,y+1,0]],(x+y)%2?'#6e875f':'#728d64');
+ for(let i=-6;i<7;i++)poly([[-.9,i,0],[.9,i,0],[.9,i+1,0],[-.9,i+1,0]],'#a68f6c');
+ const sorted=[...objects,{type:'player',x:P.x,y:P.y,w:0,d:0,h:1.4}].sort((a,b)=>(a.x+a.y+a.w/2+a.d/2)-(b.x+b.y+b.w/2+b.d/2));
+ for(const o of sorted)o.type==='player'?player():drawObj(o);
+ status.textContent='視角 '+camera.angle+'° / X '+P.x.toFixed(1)+' / Y '+P.y.toFixed(1)+' / 5 modules / '+P.dir;
+}
+function blocked(x,y){return objects.some(o=>x+P.r>o.x&&x-P.r<o.x+o.w&&y+P.r>o.y&&y-P.r<o.y+o.d)}
+function tick(){let dx=Number(pressed.has('right'))-Number(pressed.has('left')),dy=Number(pressed.has('down'))-Number(pressed.has('up'));if(dx||dy){const m=Math.hypot(dx,dy),nx=Math.max(-6.6,Math.min(6.6,P.x+dx/m*.06)),ny=Math.max(-6.6,Math.min(6.6,P.y+dy/m*.06));if(!blocked(nx,P.y))P.x=nx;if(!blocked(P.x,ny))P.y=ny;P.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');P.step+=.15}draw();requestAnimationFrame(tick)}
+const keys={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',a:'left',s:'down',d:'right'};
+window.addEventListener('keydown',e=>{const d=keys[e.key];if(d){e.preventDefault();pressed.add(d)}});window.addEventListener('keyup',e=>{if(keys[e.key])pressed.delete(keys[e.key])});window.addEventListener('blur',()=>pressed.clear());
+document.querySelectorAll('[data-dir]').forEach(b=>{const d=b.dataset.dir;b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);pressed.add(d)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,()=>pressed.delete(d))});
+requestAnimationFrame(tick);
+</script></body></html>
