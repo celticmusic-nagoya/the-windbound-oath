@@ -112,5 +112,35 @@
     "status": "SCHEMATIC_ONLY",
     "rule": "MAP21 coordinates are not production placement"
   },
-  "runtime_integration": false
+  "runtime_integration": false,
+  "production_strategy": {
+    "mode": "WORLD_TOPOLOGY_PLUS_ONE_MASTER_BUILDING",
+    "master_asset": "aidan_home",
+    "quality_gate": "APPROVED_CG_VISUAL_COMPARISON_REQUIRED",
+    "scope": "exterior first, then interior; reusable roof/wall/door/window/foundation modules",
+    "rule": "Do not mass-produce village houses before Aidan exterior art QA; do not assert final asset approval without rendered review",
+    "phases": [
+      {
+        "id": "01",
+        "target": "world terrain and road topology",
+        "deliverable": "terrain/route layout"
+      },
+      {
+        "id": "02",
+        "target": "Aidan home exterior",
+        "deliverable": "Blender 4-view and orthographic game view"
+      },
+      {
+        "id": "03",
+        "target": "approved shared architectural kit",
+        "deliverable": "modular library with dimensions and materials"
+      },
+      {
+        "id": "04",
+        "target": "village expansion",
+        "deliverable": "individualized inn/shop/elder house/homes"
+      }
+    ],
+    "rework_policy": "Max two similar failed render attempts; diagnose structural cause before further generation"
+  }
 }
