@@ -9,6 +9,10 @@ bpy.ops.object.delete(use_global=False)
 sc=bpy.context.scene
 sc.render.engine="CYCLES"
 sc.cycles.samples=24
+# Ubuntu apt Blender may be compiled without OpenImageDenoiser.
+# Explicitly disable denoising on all view layers to avoid render abort.
+for layer in sc.view_layers:
+ layer.cycles.use_denoising=False
 sc.render.resolution_x=1200
 sc.render.resolution_y=900
 sc.render.resolution_percentage=100
