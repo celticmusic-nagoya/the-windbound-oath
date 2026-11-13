@@ -45,7 +45,7 @@ bpy.ops.mesh.primitive_uv_sphere_add(segments=12,ring_count=8,radius=.28,locatio
 world=bpy.context.scene.world;world.use_nodes=True;world.node_tree.nodes["Background"].inputs["Color"].default_value=(.65,.72,.67,1);world.node_tree.nodes["Background"].inputs["Strength"].default_value=.75
 light=bpy.data.lights.new("Rilde warm sun","AREA");o=bpy.data.objects.new("Rilde warm sun",light);bpy.context.collection.objects.link(o);o.location=(-8,-7,16);light.energy=2300;light.shape="DISK";light.size=11
 cam=bpy.data.cameras.new("Quarter view camera");o=bpy.data.objects.new("Quarter view camera",cam);bpy.context.collection.objects.link(o);o.location=(26,-35,37);o.rotation_euler=(Vector((0,0,0))-o.location).to_track_quat("-Z","Y").to_euler();cam.type="ORTHO";cam.ortho_scale=37
-sc=bpy.context.scene;sc.camera=o;sc.render.engine="BLENDER_EEVEE_NEXT";sc.render.resolution_x=1280;sc.render.resolution_y=720;sc.render.resolution_percentage=100;sc.render.image_settings.file_format="PNG";sc.render.filepath=str(out/"rilde_base_game_view.png")
+sc=bpy.context.scene;sc.camera=o;sc.render.engine="BLENDER_EEVEE_NEXT" if bpy.app.version >= (4,2,0) else "BLENDER_EEVEE";sc.render.resolution_x=1280;sc.render.resolution_y=720;sc.render.resolution_percentage=100;sc.render.image_settings.file_format="PNG";sc.render.filepath=str(out/"rilde_base_game_view.png")
 bpy.ops.wm.save_as_mainfile(filepath=str(out/"rilde_base.blend"));bpy.ops.render.render(write_still=True)
 files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [out/"rilde_base.blend",out/"rilde_base_game_view.png"]}
 (out/"manifest.json").write_text(json.dumps({"status":"PROVISIONAL_NOT_CANON","camera":"provisional, not CG-calibrated","character":"neutral proxy","files":files},indent=2))
