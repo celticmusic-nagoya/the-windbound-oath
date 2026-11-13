@@ -1,0 +1,1786 @@
+{
+ "schema_version": 1,
+ "task": "MAP-ASSET-PREP-01",
+ "asset": "aidan_home",
+ "generated": "2026-11-14",
+ "status": "RESEARCH_CANDIDATES_NOT_APPROVED",
+ "canonical_reference": {
+  "path": "assets/approved/world/rilde_village.png",
+  "sha256": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "manifest": "docs/art/approved-world-event-sha256.json"
+ },
+ "roof_canon": {
+  "spec": "blue-gray natural slate (青灰色の石板葺き)",
+  "approved": "2026-11-14 director",
+  "source_pr": "#307 (draft)",
+  "forbidden": [
+   "red-brown roof",
+   "thatch",
+   "green shingle"
+  ]
+ },
+ "policy": [
+  "CANDIDATEは採用ではない",
+  "ライセンス不明素材は正式アセット登録しない",
+  "原素材は公開リポジトリへコミットしない（ハッシュと取得手順のみ）",
+  "CC-BY採用時はCREDITS登録必須"
+ ],
+ "statuses": [
+  "CANDIDATE",
+  "CANDIDATE_ATTRIBUTION_REQUIRED",
+  "REFERENCE_ONLY",
+  "REJECTED_FOR_AIDAN_HOME",
+  "BLOCKED_LICENSE_RESTRICTED"
+ ],
+ "assets": [
+  {
+   "id": "ph_roof_slates_03",
+   "role": "roof_slate",
+   "priority": 1,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "roof_slates_03",
+   "url": "https://polyhaven.com/a/roof_slates_03",
+   "name": "Roof Slates 03",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "3M x 3M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "6204617ef742eae58702d256650233ef5629d4ef",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_03/roof_slates_03_diff_2k.jpg",
+     "md5": "ac4940aeb369dd8c8919d3233cb42023",
+     "bytes": 2083015
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_03/roof_slates_03_nor_gl_2k.jpg",
+     "md5": "3d52d34312b0e44096ce0db7ad9ee3d2",
+     "bytes": 2741713
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_03/roof_slates_03_rough_2k.jpg",
+     "md5": "3e42485a10fe9ff894b2da4587146dc4",
+     "bytes": 49508
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_03/roof_slates_03_disp_2k.jpg",
+     "md5": "1a2c1383a37d3fb927e9cad925e54224",
+     "bytes": 588742
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_03/roof_slates_03_ao_2k.jpg",
+     "md5": "00bc520787ea55cef2062da8ffe2ed99",
+     "bytes": 2772007
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_03/roof_slates_03_arm_2k.jpg",
+     "md5": "bd5ccc76e0a5be82e53d7fb371128395",
+     "bytes": 3128318
+    }
+   },
+   "fit_score": 4,
+   "fit_note": "背景CGの青灰色天然スレートに最も近い。ややeven（均一）なのでスレート個別メッシュ側で不規則性を出す。テクスチャは表面ディテール専用"
+  },
+  {
+   "id": "ph_roof_slates_02",
+   "role": "roof_slate_variation",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "roof_slates_02",
+   "url": "https://polyhaven.com/a/roof_slates_02",
+   "name": "Roof Slates 02",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "3M x 3M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "747e15373011aa8372cdd7524f5da06130839f8f",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_02/roof_slates_02_diff_2k.jpg",
+     "md5": "2bd2c8593d8cbaea04878203be4bc7ad",
+     "bytes": 1838933
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_02/roof_slates_02_nor_gl_2k.jpg",
+     "md5": "1256041f95f300753b867934324c7b91",
+     "bytes": 2919261
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_02/roof_slates_02_rough_2k.jpg",
+     "md5": "925f6de5f84f351c8d061086a278c005",
+     "bytes": 1126001
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_02/roof_slates_02_disp_2k.jpg",
+     "md5": "983b20df75bca7f54c7c289340f7d551",
+     "bytes": 510235
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_02/roof_slates_02_ao_2k.jpg",
+     "md5": "4a42a9e9347034839bbfb653a61a54c0",
+     "bytes": 1701208
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/roof_slates_02/roof_slates_02_arm_2k.jpg",
+     "md5": "956eb0bc1bea3356195f298b8458ef4c",
+     "bytes": 788012
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "暖色寄りの灰褐色。屋根全体ではなく、苔・汚れ帯の色むらブレンド用"
+  },
+  {
+   "id": "ph_grey_roof_tiles_02",
+   "role": "roof_slate_alt",
+   "priority": 3,
+   "status": "REFERENCE_ONLY",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "grey_roof_tiles_02",
+   "url": "https://polyhaven.com/a/grey_roof_tiles_02",
+   "name": "Grey Roof Tiles 02",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "1.5M x 1.5M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "0d58629280076ff11838d7a458bcb24f2c105590",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grey_roof_tiles_02/grey_roof_tiles_02_diff_2k.jpg",
+     "md5": "2f49aaebd1b68926e76ddce57d27b6ff",
+     "bytes": 1530646
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grey_roof_tiles_02/grey_roof_tiles_02_nor_gl_2k.jpg",
+     "md5": "ec60f08e8819bfac34b71e04d354459b",
+     "bytes": 2553079
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grey_roof_tiles_02/grey_roof_tiles_02_rough_2k.jpg",
+     "md5": "9562363f4f595fdf26cd3c162e31a3c1",
+     "bytes": 1410010
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grey_roof_tiles_02/grey_roof_tiles_02_disp_2k.jpg",
+     "md5": "b680ca8cda3a8b3606245d2e7f63c6a1",
+     "bytes": 398755
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grey_roof_tiles_02/grey_roof_tiles_02_ao_2k.jpg",
+     "md5": "b2a7c3db51554a4a29f4e9c7a5355ef7",
+     "bytes": 1320080
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grey_roof_tiles_02/grey_roof_tiles_02_arm_2k.jpg",
+     "md5": "3e3c52768bb79f9e4d00fc0af74e66e2",
+     "bytes": 702157
+    }
+   },
+   "fit_score": 2,
+   "fit_note": "矩形が大きく整いすぎ（近代的）。採用非推奨、比較用"
+  },
+  {
+   "id": "ph_yellow_stone_wall",
+   "role": "stone_wall",
+   "priority": 1,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "yellow_stone_wall",
+   "url": "https://polyhaven.com/a/yellow_stone_wall",
+   "name": "Yellow Stone Wall",
+   "authors": [
+    "Sơn Nguyễn"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "8feda458011e745096a9cb141cc8927249c11a44",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_diff_2k.jpg",
+     "md5": "c180712e9ddbdb5bf09542b6fae7f012",
+     "bytes": 3916772
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_nor_gl_2k.jpg",
+     "md5": "67b08d1e7ea232a22ba9b875ab849278",
+     "bytes": 4450964
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_rough_2k.jpg",
+     "md5": "73489c781dfa64a196810c2e321db256",
+     "bytes": 2723344
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_disp_2k.jpg",
+     "md5": "31a407068f59b45d1873499b067207d5",
+     "bytes": 1176122
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_ao_2k.jpg",
+     "md5": "81e46a3e3b5746f6de481a99e86acf97",
+     "bytes": 2007227
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_arm_2k.jpg",
+     "md5": "ddb4fd5c42c125075650fc91a5c3316c",
+     "bytes": 3086340
+    }
+   },
+   "fit_score": 4,
+   "fit_note": "背景CGのクリーム〜黄土色の丸みある乱石積みに最も近い"
+  },
+  {
+   "id": "ph_castle_wall_slates",
+   "role": "stone_wall_variation",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "castle_wall_slates",
+   "url": "https://polyhaven.com/a/castle_wall_slates",
+   "name": "Castle Wall Slates",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "2.5M x 2.5M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "aed373c9c14d89c082783202d576ee49be2a5045",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_diff_2k.jpg",
+     "md5": "abec73c50e2f2052d9c92f7ac10b8dbd",
+     "bytes": 2381426
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_nor_gl_2k.jpg",
+     "md5": "2d0f79ec91411413d25b03cd81db8e6a",
+     "bytes": 4054865
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_rough_2k.jpg",
+     "md5": "b92cfe31c812710075c8405b0c5dd34f",
+     "bytes": 2005253
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_disp_2k.jpg",
+     "md5": "adcaefa9d54b27ba5940351b3ec7602e",
+     "bytes": 568574
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_ao_2k.jpg",
+     "md5": "796ae0e9ec4f723e35a655f8a0e24b2e",
+     "bytes": 1653941
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_arm_2k.jpg",
+     "md5": "0109e42dafa4e1675ac13e87e86e0466",
+     "bytes": 1149678
+    }
+   },
+   "fit_score": 4,
+   "fit_note": "扁平石の乱積み。煙突・破風・基礎の変化用"
+  },
+  {
+   "id": "ph_castle_wall_varriation",
+   "role": "stone_wall_alt",
+   "priority": 3,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "castle_wall_varriation",
+   "url": "https://polyhaven.com/a/castle_wall_varriation",
+   "name": "Castle Wall Variation",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "2M x 2M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "ee6d2ac06b3ffeddcc317661897db55d28b040fd",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_varriation/castle_wall_varriation_diff_2k.jpg",
+     "md5": "cfbd25a5724d449587079c65a7097afc",
+     "bytes": 2386019
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_varriation/castle_wall_varriation_nor_gl_2k.jpg",
+     "md5": "2cd29f8ff4ec186842b7219dc0495039",
+     "bytes": 3537669
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_varriation/castle_wall_varriation_rough_2k.jpg",
+     "md5": "944a90e65dfc8ca7da0764a0bfa9a935",
+     "bytes": 1643779
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_varriation/castle_wall_varriation_disp_2k.jpg",
+     "md5": "a4746e4e49e894c590e4c621f8432a93",
+     "bytes": 533905
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_varriation/castle_wall_varriation_ao_2k.jpg",
+     "md5": "e814d6da9f95bf6e2a78dd2f3337471b",
+     "bytes": 1600880
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_varriation/castle_wall_varriation_arm_2k.jpg",
+     "md5": "f9a02f854276847889fbcc0517371d26",
+     "bytes": 922380
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "灰色が強め。日陰側・基礎の色むら用"
+  },
+  {
+   "id": "ph_medieval_blocks_05",
+   "role": "stone_wall_existing_shortlist",
+   "priority": 3,
+   "status": "REFERENCE_ONLY",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "medieval_blocks_05",
+   "url": "https://polyhaven.com/a/medieval_blocks_05",
+   "name": "Medieval Blocks 05",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "7bd050096adb56e3882bc061f044a07fc66f78db",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_blocks_05/medieval_blocks_05_diff_2k.jpg",
+     "md5": "fa2191fcd11a80eb189a2e65de893760",
+     "bytes": 2461352
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_blocks_05/medieval_blocks_05_nor_gl_2k.jpg",
+     "md5": "908278d6e3094bcd7d251b02cfb43916",
+     "bytes": 3890074
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_blocks_05/medieval_blocks_05_rough_2k.jpg",
+     "md5": "a7c22c44826855f2721665dd1b352ce5",
+     "bytes": 754519
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_blocks_05/medieval_blocks_05_disp_2k.jpg",
+     "md5": "a38a0c3827d124d55d5dbc9351e07eea",
+     "bytes": 391099
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_blocks_05/medieval_blocks_05_ao_2k.jpg",
+     "md5": "070e0e942b15e92f1c23154695775a11",
+     "bytes": 1750431
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_blocks_05/medieval_blocks_05_arm_2k.jpg",
+     "md5": "da0e3759e318774429b88218e135265c",
+     "bytes": 667549
+    }
+   },
+   "fit_score": 2,
+   "fit_note": "既存shortlist(他ブランチ)のP1。整形ブロック寄りで橙が強く、背景CGの乱石積みと不一致"
+  },
+  {
+   "id": "ph_rough_wood",
+   "role": "timber_beam",
+   "priority": 1,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "rough_wood",
+   "url": "https://polyhaven.com/a/rough_wood",
+   "name": "Rough Wood",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "2d89c64601e620069e9caaf3ede0d7494d430138",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_diff_2k.jpg",
+     "md5": "f5f9c55696f047ceaa49dc97c5aa5526",
+     "bytes": 2223327
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_nor_gl_2k.jpg",
+     "md5": "62594f2d00eb246581b9d4fde30209f1",
+     "bytes": 2520021
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_rough_2k.jpg",
+     "md5": "832d6d549a8e76c16b9af2586f429d6c",
+     "bytes": 810338
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_disp_2k.jpg",
+     "md5": "4e04c41245146e21ca500ff72eac74d9",
+     "bytes": 418227
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_ao_2k.jpg",
+     "md5": "e75813ed06185a5f1cecd4b6e2c082f0",
+     "bytes": 1542203
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_arm_2k.jpg",
+     "md5": "2f6ee37ee8810aeeb72a14a7d345ba9f",
+     "bytes": 575486
+    }
+   },
+   "fit_score": 4,
+   "fit_note": "梁・柱・破風板用。粗い古材の割れ"
+  },
+  {
+   "id": "ph_weathered_brown_planks",
+   "role": "door_shutter",
+   "priority": 1,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "weathered_brown_planks",
+   "url": "https://polyhaven.com/a/weathered_brown_planks",
+   "name": "Weathered Brown Planks",
+   "authors": [
+    "Dimitrios Savva",
+    "Rico Cilliers"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    16384,
+    16384
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "bb75a87a3b6f3a9980acfd40bce5bdb4e89a5cf4",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/weathered_brown_planks/weathered_brown_planks_diff_2k.jpg",
+     "md5": "31317a56abbee4fbf7018d9f41180827",
+     "bytes": 911358
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/weathered_brown_planks/weathered_brown_planks_nor_gl_2k.jpg",
+     "md5": "d6720855901b27dbdd209942f327b795",
+     "bytes": 1029733
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/weathered_brown_planks/weathered_brown_planks_rough_2k.jpg",
+     "md5": "4dd58553f1d0f76bf883b71aa9fc89ea",
+     "bytes": 944154
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/weathered_brown_planks/weathered_brown_planks_disp_2k.jpg",
+     "md5": "18c5f810bb461bf82ed1f54b135a91c1",
+     "bytes": 374197
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/weathered_brown_planks/weathered_brown_planks_ao_2k.jpg",
+     "md5": "afbfe9f3308edd0d532badf095ce7ca9",
+     "bytes": 600648
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/weathered_brown_planks/weathered_brown_planks_arm_2k.jpg",
+     "md5": "81d1484978af6d86496418447ece786b",
+     "bytes": 824806
+    }
+   },
+   "fit_score": 4,
+   "fit_note": "扉・雨戸・花箱の板材"
+  },
+  {
+   "id": "ph_medieval_wood",
+   "role": "door_riveted",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "medieval_wood",
+   "url": "https://polyhaven.com/a/medieval_wood",
+   "name": "Medieval Wood",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "b8908557c616ef8ae1433ce664aaccbe3f9ed430",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_wood/medieval_wood_diff_2k.jpg",
+     "md5": "81a7282eec920b55d045f5200a5a2bb5",
+     "bytes": 3034644
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_wood/medieval_wood_nor_gl_2k.jpg",
+     "md5": "ee7c8fc47d1fea91797d3eb19bddbe46",
+     "bytes": 2928634
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_wood/medieval_wood_rough_2k.jpg",
+     "md5": "2a565dfb799bbc26e01252cbcc96f4b3",
+     "bytes": 1358722
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_wood/medieval_wood_disp_2k.jpg",
+     "md5": "44cc4d9ee341b79a393236d17edfe195",
+     "bytes": 500173
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_wood/medieval_wood_ao_2k.jpg",
+     "md5": "24b7031287494d5f37b6d9aca1e7d963",
+     "bytes": 1548023
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/medieval_wood/medieval_wood_arm_2k.jpg",
+     "md5": "6e0fc9263086ddd5f4b836317a9ff027",
+     "bytes": 733544
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "鋲打ち板。正面扉の差別化用。全面使用は不可"
+  },
+  {
+   "id": "ph_cobblestone_floor_04",
+   "role": "path_cobble",
+   "priority": 1,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "cobblestone_floor_04",
+   "url": "https://polyhaven.com/a/cobblestone_floor_04",
+   "name": "Cobblestone Floor 04",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "1.5M x 1.5M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "6e3f61fcc650eb9e004c0596cb35f87c4dcf9e1b",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_diff_2k.jpg",
+     "md5": "6fd3d5dbaca10c763d813f1b9d532f1b",
+     "bytes": 2261344
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_nor_gl_2k.jpg",
+     "md5": "051fb80cac9f261e1d21f10b2a664245",
+     "bytes": 2937425
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_rough_2k.jpg",
+     "md5": "1be55c1917663ff6bca05276a7915a56",
+     "bytes": 1697046
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_disp_2k.jpg",
+     "md5": "33a46de5772c9f71e8d82f3a7ead9fe1",
+     "bytes": 523398
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_ao_2k.jpg",
+     "md5": "262046a1e8d7160cef10a2549ef303ba",
+     "bytes": 1499291
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/cobblestone_floor_04/cobblestone_floor_04_arm_2k.jpg",
+     "md5": "d14169c7746411fe3216071da9b23f96",
+     "bytes": 899913
+    }
+   },
+   "fit_score": 4,
+   "fit_note": "背景CGの暖色丸石の小道に近い"
+  },
+  {
+   "id": "ph_grassy_cobblestone",
+   "role": "yard_flagstone",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "grassy_cobblestone",
+   "url": "https://polyhaven.com/a/grassy_cobblestone",
+   "name": "Grassy Cobblestone",
+   "authors": [
+    "Charlotte Baglioni",
+    "Dario Barresi"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "6093a2264b43e4fe5a7b6ab741894ae3e7b9163c",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grassy_cobblestone/grassy_cobblestone_diff_2k.jpg",
+     "md5": "e4f8ec87a0b0b793277119f0fff77f22",
+     "bytes": 3004490
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grassy_cobblestone/grassy_cobblestone_nor_gl_2k.jpg",
+     "md5": "9c1138bb9662b3248166778cd1afca6c",
+     "bytes": 3957719
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grassy_cobblestone/grassy_cobblestone_rough_2k.jpg",
+     "md5": "d4ad83937e66036bada919d39e1fba4a",
+     "bytes": 1933445
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grassy_cobblestone/grassy_cobblestone_disp_2k.jpg",
+     "md5": "93fdafeeb1dd94b79ff09d30d997319c",
+     "bytes": 1321939
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grassy_cobblestone/grassy_cobblestone_ao_2k.jpg",
+     "md5": "e54a4466883c1f3b85d1daa27d956d2c",
+     "bytes": 2875405
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/grassy_cobblestone/grassy_cobblestone_arm_2k.jpg",
+     "md5": "1a2ed863ba9ac083c9bb6f8eccc16357",
+     "bytes": 3042128
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "玄関前の不定形敷石"
+  },
+  {
+   "id": "ph_forrest_ground_01",
+   "role": "ground_grass_earth",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "forrest_ground_01",
+   "url": "https://polyhaven.com/a/forrest_ground_01",
+   "name": "Forest Ground 01",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": null,
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "ea3ef3539e362d9a9ffa409ecd467d08028569d5",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_diff_2k.jpg",
+     "md5": "18fa30c294be21805159ca6e73a5e5fa",
+     "bytes": 3077552
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_nor_gl_2k.jpg",
+     "md5": "7bb5186bd63bef99f6d21316718896f2",
+     "bytes": 5551101
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_rough_2k.jpg",
+     "md5": "a4c7ecc9cef47f5d097d4553e421ed6a",
+     "bytes": 920422
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_disp_2k.jpg",
+     "md5": "50750c4535f53817d141412e819f7aea",
+     "bytes": 1036491
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_ao_2k.jpg",
+     "md5": "be730523a039ab1171da81d43f1681c3",
+     "bytes": 2493578
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_arm_2k.jpg",
+     "md5": "bb5d791e2697b0b4b8703963c42a70d4",
+     "bytes": 1160819
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "既存shortlistの地面代替候補。草地はジオメトリ草と併用"
+  },
+  {
+   "id": "ph_mossy_rock",
+   "role": "moss_overlay_ref",
+   "priority": 3,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "mossy_rock",
+   "url": "https://polyhaven.com/a/mossy_rock",
+   "name": "Mossy Rock",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "3x3M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "75980c1e8b690dab1cad640407c18eac16307869",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_diff_2k.jpg",
+     "md5": "8e55bbeeef1db0d2d0cae85515812c46",
+     "bytes": 4535360
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_nor_gl_2k.jpg",
+     "md5": "e6b611c8a6f8e3276e7f5491c8e66a0f",
+     "bytes": 4033031
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_rough_2k.jpg",
+     "md5": "0b4bbecd6af36e343d05ed11914bb18f",
+     "bytes": 3205806
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_disp_2k.jpg",
+     "md5": "d22857010ae3d07e42c5548126cf386c",
+     "bytes": 644550
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_ao_2k.jpg",
+     "md5": "97386b4837e6d1a4782b10bc76f2dba5",
+     "bytes": 2253517
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_arm_2k.jpg",
+     "md5": "7aa8634ba2202439a413113c9e617b83",
+     "bytes": 3799947
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "苔ブレンドの色・粗さ参照"
+  },
+  {
+   "id": "ph_reed_roof_03",
+   "role": "thatch_existing_shortlist",
+   "priority": 9,
+   "status": "REJECTED_FOR_AIDAN_HOME",
+   "provider": "Poly Haven",
+   "kind": "pbr_texture",
+   "asset_id": "reed_roof_03",
+   "url": "https://polyhaven.com/a/reed_roof_03",
+   "name": "Reed Roof 03",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "JPG/PNG/EXR maps, .blend, glTF, MaterialX",
+   "max_resolution": [
+    8192,
+    8192
+   ],
+   "real_world_scale": "2.5M x 2.5M",
+   "planned_resolution": "2k (1k for LOD/mobile)",
+   "provider_files_hash": "c9d3085a4f2194f7996a65b2211fa5280319427e",
+   "planned_maps_2k": {
+    "Diffuse": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/reed_roof_03/reed_roof_03_diff_2k.jpg",
+     "md5": "1deda79ec4f475df0c0bd9035007ff73",
+     "bytes": 2542280
+    },
+    "nor_gl": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/reed_roof_03/reed_roof_03_nor_gl_2k.jpg",
+     "md5": "4472c780ebfff2527dcfa206e4a1b513",
+     "bytes": 4740364
+    },
+    "Rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/reed_roof_03/reed_roof_03_rough_2k.jpg",
+     "md5": "35139d2c2dfa5b3fe7e6add974547135",
+     "bytes": 1614290
+    },
+    "Displacement": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/reed_roof_03/reed_roof_03_disp_2k.jpg",
+     "md5": "027f0b45602a821abee4645175b1e3e6",
+     "bytes": 632910
+    },
+    "AO": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/reed_roof_03/reed_roof_03_ao_2k.jpg",
+     "md5": "033db1ffd3f5dfe0953873ebab16a86e",
+     "bytes": 2269468
+    },
+    "arm": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/reed_roof_03/reed_roof_03_arm_2k.jpg",
+     "md5": "da3ca09708ca8b4110252381110d291b",
+     "bytes": 1097697
+    }
+   },
+   "fit_score": 1,
+   "fit_note": "茅葺き。2026-11-14承認の青灰色石板屋根と矛盾"
+  },
+  {
+   "id": "ph_Barrel_01",
+   "role": "prop_barrel",
+   "priority": 9,
+   "status": "REJECTED_FOR_AIDAN_HOME",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "Barrel_01",
+   "url": "https://polyhaven.com/a/Barrel_01",
+   "name": "Barrel_01",
+   "authors": [
+    "Jorge Camacho"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 2682,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "45ce352c4416845813a00e478950b500796b0a60",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/Barrel_01/Barrel_01_1k.gltf",
+    "md5": "45c109401126ea3e5df2fe2c6b6f6d39",
+    "bytes": 2711
+   },
+   "fit_score": 1,
+   "fit_note": "目視確認でNG: 近代の金属ドラム缶（爆発物ラベル付き）。中世ケルト農漁村と不整合"
+  },
+  {
+   "id": "ph_wooden_bucket_01",
+   "role": "prop_bucket",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "wooden_bucket_01",
+   "url": "https://polyhaven.com/a/wooden_bucket_01",
+   "name": "Wooden Bucket 01",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 5116,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "8d260ae5188bca1ef50676560a2c7a4160c82100",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/wooden_bucket_01/wooden_bucket_01_1k.gltf",
+    "md5": "d3a6ff00895b69406b203dc417113d9a",
+    "bytes": 4248,
+    "include": {
+     "textures/wooden_bucket_01_arm_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_bucket_01/wooden_bucket_01_arm_1k.jpg",
+      "md5": "9f42842024b3117b557348ec265cfeee",
+      "bytes": 777463
+     },
+     "wooden_bucket_01.bin": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/wooden_bucket_01/wooden_bucket_01.bin",
+      "md5": "a93114e5fadd149de908464de7b42550",
+      "bytes": 158408
+     },
+     "textures/wooden_bucket_01_diff_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_bucket_01/wooden_bucket_01_diff_1k.jpg",
+      "md5": "d6296adf55e03bb1acc5de3e5fc8b10f",
+      "bytes": 698083
+     },
+     "textures/wooden_bucket_01_nor_gl_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_bucket_01/wooden_bucket_01_nor_gl_1k.jpg",
+      "md5": "68ad3de3f685798a8d46c070da840e5a",
+      "bytes": 693440
+     }
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "生活感小物"
+  },
+  {
+   "id": "ph_wooden_crate_01",
+   "role": "prop_crate",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "wooden_crate_01",
+   "url": "https://polyhaven.com/a/wooden_crate_01",
+   "name": "Wooden Crate 01",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 6576,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "1ac5d053ce4c72e3fbb4c3065e7979522bf1908e",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/wooden_crate_01/wooden_crate_01_1k.gltf",
+    "md5": "33df4d2ae00186d4b64e878466c9e22e",
+    "bytes": 5612,
+    "include": {
+     "textures/wooden_crate_01_diff_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_crate_01/wooden_crate_01_diff_1k.jpg",
+      "md5": "266e0462d06e77c5745f66e89820544f",
+      "bytes": 711292
+     },
+     "textures/wooden_crate_01_nor_gl_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_crate_01/wooden_crate_01_nor_gl_1k.jpg",
+      "md5": "e31626a1fcf6f7062c2ffd9fc982b942",
+      "bytes": 594076
+     },
+     "wooden_crate_01.bin": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/wooden_crate_01/wooden_crate_01.bin",
+      "md5": "8318f76b0c24b5538ce23051dbcb79a0",
+      "bytes": 189408
+     },
+     "textures/wooden_crate_01_arm_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wooden_crate_01/wooden_crate_01_arm_1k.jpg",
+      "md5": "67c4aeb1154af98f95516b21ef62291c",
+      "bytes": 776699
+     }
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "薪置き・物置周り"
+  },
+  {
+   "id": "ph_planter_box_01",
+   "role": "prop_flower_box_base",
+   "priority": 3,
+   "status": "REFERENCE_ONLY",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "planter_box_01",
+   "url": "https://polyhaven.com/a/planter_box_01",
+   "name": "Planter Box 01",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 8094,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "e3e14427dcd99e4141916fa2a581509036657015",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/planter_box_01/planter_box_01_1k.gltf",
+    "md5": "731d186af61b042dc4b4a2cd4744c35a",
+    "bytes": 2787
+   },
+   "fit_score": 2,
+   "fit_note": "目視確認: 内側にプラスチック製ライナーあり。そのままでは不可。箱形状の比率参照のみ"
+  },
+  {
+   "id": "ph_Lantern_01",
+   "role": "prop_lantern",
+   "priority": 9,
+   "status": "REJECTED_FOR_AIDAN_HOME",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "Lantern_01",
+   "url": "https://polyhaven.com/a/Lantern_01",
+   "name": "Lantern 01",
+   "authors": [
+    "Rajil Jose Macatangay"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 33902,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "e8a56bd66bee21140aa3272268bd207bac37a7e1",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/Lantern_01/Lantern_01_1k.gltf",
+    "md5": "61fbf9f6e215ab4ff1123d6cbfd337a6",
+    "bytes": 4866
+   },
+   "fit_score": 1,
+   "fit_note": "目視確認でNG: 近代のハリケーンランタン（灯油式）。時代不整合"
+  },
+  {
+   "id": "ph_tree_stump_01",
+   "role": "prop_chopping_stump",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "tree_stump_01",
+   "url": "https://polyhaven.com/a/tree_stump_01",
+   "name": "Tree Stump 01",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 41046,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "a61e4018508b545a75a5a705d54d5de8e9c8df9f",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/tree_stump_01/tree_stump_01_1k.gltf",
+    "md5": "fedfc620634a8dbaf6345413b13abe1a",
+    "bytes": 2793,
+    "include": {
+     "tree_stump_01.bin": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/tree_stump_01/tree_stump_01.bin",
+      "md5": "acb292727949126b92e58217fd50fca9",
+      "bytes": 965380
+     },
+     "textures/tree_stump_01_diff_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_stump_01/tree_stump_01_diff_1k.jpg",
+      "md5": "c71fe60400276a37b8847048cbec3720",
+      "bytes": 907451
+     },
+     "textures/tree_stump_01_nor_gl_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_stump_01/tree_stump_01_nor_gl_1k.jpg",
+      "md5": "cc2a3c6e4682a521b15cccc61a416bbf",
+      "bytes": 1238404
+     },
+     "textures/tree_stump_01_arm_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_stump_01/tree_stump_01_arm_1k.jpg",
+      "md5": "09b7aa228dccb93f5cf4188ba5530578",
+      "bytes": 825646
+     }
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "薪割り台"
+  },
+  {
+   "id": "ph_hatchet",
+   "role": "prop_hatchet",
+   "priority": 9,
+   "status": "REJECTED_FOR_AIDAN_HOME",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "hatchet",
+   "url": "https://polyhaven.com/a/hatchet",
+   "name": "Hatchet",
+   "authors": [
+    "James Ray Cock",
+    "Ulan Cabanilla"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 5250,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "ec44e3d885af1f2f12aea3535a8700930f52f265",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/hatchet/hatchet_1k.gltf",
+    "md5": "df2b0ec1772498e34029564dd4a69629",
+    "bytes": 2718
+   },
+   "fit_score": 1,
+   "fit_note": "目視確認でNG: ゴムグリップの近代手斧"
+  },
+  {
+   "id": "ph_wicker_basket_01",
+   "role": "prop_basket",
+   "priority": 3,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "wicker_basket_01",
+   "url": "https://polyhaven.com/a/wicker_basket_01",
+   "name": "Wicker Basket 01",
+   "authors": [
+    "Kuutti Siitonen"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 22276,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "49f624a285b5e5dc8fe4b75ad18cf5d18d8cdca1",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/wicker_basket_01/wicker_basket_01_1k.gltf",
+    "md5": "6910bb33f9b29c30e41c06342cba4f9b",
+    "bytes": 2792,
+    "include": {
+     "textures/wicker_basket_01_arm_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wicker_basket_01/wicker_basket_01_arm_1k.jpg",
+      "md5": "e456e1e051da9b8433162de9cb96cb61",
+      "bytes": 874111
+     },
+     "textures/wicker_basket_01_nor_gl_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wicker_basket_01/wicker_basket_01_nor_gl_1k.jpg",
+      "md5": "4cca87156e77045fd29562b09609b41d",
+      "bytes": 549218
+     },
+     "textures/wicker_basket_01_diff_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/wicker_basket_01/wicker_basket_01_diff_1k.jpg",
+      "md5": "54c05d9c5e4f92930cbbf67e4770fc61",
+      "bytes": 679110
+     },
+     "wicker_basket_01.bin": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/wicker_basket_01/wicker_basket_01.bin",
+      "md5": "154e2cd9157175591e3585e706925fa9",
+      "bytes": 624920
+     }
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "生活感小物"
+  },
+  {
+   "id": "ph_rock_moss_set_01",
+   "role": "yard_rocks",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "rock_moss_set_01",
+   "url": "https://polyhaven.com/a/rock_moss_set_01",
+   "name": "Rock Moss Set 01",
+   "authors": [
+    "Kless Gyzen"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 63127,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "3d61828e10ef81512a639c8064c9a51a75165b5a",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/rock_moss_set_01/rock_moss_set_01_1k.gltf",
+    "md5": "75113cc1c21806cca5d8badad4737af7",
+    "bytes": 9987,
+    "include": {
+     "textures/rock_moss_set_01_nor_gl_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/rock_moss_set_01/rock_moss_set_01_nor_gl_1k.jpg",
+      "md5": "eb7ebd31ad08e78d0497900652ff1568",
+      "bytes": 209975
+     },
+     "rock_moss_set_01.bin": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/rock_moss_set_01/rock_moss_set_01.bin",
+      "md5": "207a51c9f56d34732e9814bbf9cc07b1",
+      "bytes": 1466380
+     },
+     "textures/rock_moss_set_01_rough_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/rock_moss_set_01/rock_moss_set_01_rough_1k.jpg",
+      "md5": "ed9d8a2c863262f76f881346e8047c6a",
+      "bytes": 82624
+     },
+     "textures/rock_moss_set_01_diff_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/rock_moss_set_01/rock_moss_set_01_diff_1k.jpg",
+      "md5": "b8742301e6b4bc5683d2de712e83f772",
+      "bytes": 168099
+     }
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "敷地境界の苔石"
+  },
+  {
+   "id": "ph_moss_01",
+   "role": "moss_clumps",
+   "priority": 3,
+   "status": "CANDIDATE",
+   "provider": "Poly Haven",
+   "kind": "model",
+   "asset_id": "moss_01",
+   "url": "https://polyhaven.com/a/moss_01",
+   "name": "Moss 01",
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://polyhaven.com/license",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "glTF/.blend/FBX/USD",
+   "polycount": 246170,
+   "planned_resolution": "1k textures",
+   "provider_files_hash": "2b55f8db1e0e00e0aa2681ef0bccc7d1aec5bfab",
+   "planned_gltf_1k": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/moss_01/moss_01_1k.gltf",
+    "md5": "1baba498fd3936673609dda5ecfe960a",
+    "bytes": 18481,
+    "include": {
+     "textures/moss_01_nor_gl_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moss_01/moss_01_nor_gl_1k.jpg",
+      "md5": "faf161f708abe274db1b8087800fa08b",
+      "bytes": 388925
+     },
+     "textures/moss_01_diff_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moss_01/moss_01_diff_1k.jpg",
+      "md5": "5768f973a7d6d2846a2e76a6b0669a83",
+      "bytes": 170297
+     },
+     "textures/moss_01_arm_1k.jpg": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/moss_01/moss_01_arm_1k.jpg",
+      "md5": "e3b6adf32db7076885afe0e179cc1850",
+      "bytes": 336140
+     },
+     "moss_01.bin": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/moss_01/moss_01.bin",
+      "md5": "cdb092878a81b3208a162d79546892fe",
+      "bytes": 7260
+     }
+    }
+   },
+   "fit_score": 3,
+   "fit_note": "石の隙間の苔"
+  },
+  {
+   "id": "acg_Bricks098",
+   "role": "stone_wall_alt",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "ambientCG",
+   "kind": "pbr_texture",
+   "asset_id": "Bricks098",
+   "url": "https://ambientcg.com/a/Bricks098",
+   "name": "Bricks 098",
+   "authors": [
+    "ambientCG (Lennart Demes)"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://docs.ambientcg.com/license/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "ZIP (JPG/PNG maps, NormalGL/DX)",
+   "max_resolution": "8K-PNG",
+   "planned_resolution": "2K-JPG",
+   "release_date": "2024-01-30 12:00:00",
+   "planned_zip_2k": {
+    "url": "https://ambientcg.com/get?file=Bricks098_2K-JPG.zip",
+    "bytes": 14953991,
+    "md5": null
+   },
+   "fit_score": 4,
+   "fit_note": "灰〜ベージュ混在の不整形石積み。yellow_stone_wallとの比較候補"
+  },
+  {
+   "id": "acg_PavingStones138",
+   "role": "path_cobble_alt",
+   "priority": 3,
+   "status": "CANDIDATE",
+   "provider": "ambientCG",
+   "kind": "pbr_texture",
+   "asset_id": "PavingStones138",
+   "url": "https://ambientcg.com/a/PavingStones138",
+   "name": "Paving Stones 138",
+   "authors": [
+    "ambientCG (Lennart Demes)"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://docs.ambientcg.com/license/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "ZIP (JPG/PNG maps, NormalGL/DX)",
+   "max_resolution": "8K-PNG",
+   "planned_resolution": "2K-JPG",
+   "release_date": "2024-02-29 12:00:00",
+   "planned_zip_2k": {
+    "url": "https://ambientcg.com/get?file=PavingStones138_2K-JPG.zip",
+    "bytes": 15252287,
+    "md5": null
+   },
+   "fit_score": 3,
+   "fit_note": "灰色寄りの苔付き敷石"
+  },
+  {
+   "id": "acg_Moss002",
+   "role": "moss_surface",
+   "priority": 3,
+   "status": "CANDIDATE",
+   "provider": "ambientCG",
+   "kind": "pbr_texture",
+   "asset_id": "Moss002",
+   "url": "https://ambientcg.com/a/Moss002",
+   "name": "Moss 002",
+   "authors": [
+    "ambientCG (Lennart Demes)"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://docs.ambientcg.com/license/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "ZIP (JPG/PNG maps, NormalGL/DX)",
+   "max_resolution": "8K-PNG",
+   "planned_resolution": "2K-JPG",
+   "release_date": "2020-09-13 00:00:00",
+   "planned_zip_2k": {
+    "url": "https://ambientcg.com/get?file=Moss002_2K-JPG.zip",
+    "bytes": 39615085,
+    "md5": null
+   },
+   "fit_score": 3,
+   "fit_note": "苔表面"
+  },
+  {
+   "id": "acg_Ground111",
+   "role": "ground_existing_shortlist",
+   "priority": 9,
+   "status": "REFERENCE_ONLY",
+   "provider": "ambientCG",
+   "kind": "pbr_texture",
+   "asset_id": "Ground111",
+   "url": "https://ambientcg.com/a/Ground111",
+   "name": "Ground 111",
+   "authors": [
+    "ambientCG (Lennart Demes)"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://docs.ambientcg.com/license/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "ZIP (JPG/PNG maps, NormalGL/DX)",
+   "max_resolution": "8K-PNG",
+   "planned_resolution": "2K-JPG",
+   "release_date": "2026-09-12 14:00:00",
+   "planned_zip_2k": {
+    "url": "https://ambientcg.com/get?file=Ground111_2K-JPG.zip",
+    "bytes": 34401646,
+    "md5": null
+   },
+   "fit_score": 2,
+   "fit_note": "他ブランチではUNVERIFIEDだったが、API v2 full_json?id=Ground111 で存在を確認。瓦礫混じりの地面で平和な村の庭には不適"
+  },
+  {
+   "id": "acg_RoofingTiles003",
+   "role": "roof_slate_alt",
+   "priority": 3,
+   "status": "REFERENCE_ONLY",
+   "provider": "ambientCG",
+   "kind": "pbr_texture",
+   "asset_id": "RoofingTiles003",
+   "url": "https://ambientcg.com/a/RoofingTiles003",
+   "name": "Roofing Tiles 003",
+   "authors": [
+    "ambientCG (Lennart Demes)"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "https://docs.ambientcg.com/license/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "ZIP (JPG/PNG maps, NormalGL/DX)",
+   "max_resolution": "8K-PNG",
+   "planned_resolution": "2K-JPG",
+   "release_date": "2018-10-31 00:00:00",
+   "planned_zip_2k": {
+    "url": "https://ambientcg.com/get?file=RoofingTiles003_2K-JPG.zip",
+    "bytes": 24965807,
+    "md5": null
+   },
+   "fit_score": 2,
+   "fit_note": "正方形で均一すぎる"
+  },
+  {
+   "id": "kenney_fantasy_town_kit_2",
+   "role": "modular_massing_grid",
+   "priority": 2,
+   "status": "CANDIDATE",
+   "provider": "Kenney",
+   "kind": "model_pack",
+   "asset_id": "kenney_fantasy-town-kit_2.0",
+   "url": "https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip",
+   "name": "Fantasy Town Kit (2.0)",
+   "authors": [
+    "Kenney"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "archive:License.txt",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "GLB/FBX/OBJ + single colormap palette",
+   "archive_sha256": "1a7530c09f4d2fa2cdee259876f089334f8b1f27fa86a0c4f54ef86cdd8676ef",
+   "fit_score": 2,
+   "fit_note": "ローポリ・単色パレット。寸法グリッド/ブロックアウト/当たり判定の基準には有用だが、最終見た目には不足。roof系は赤系パレット前提のため流用不可"
+  },
+  {
+   "id": "sf_log_pile_meerschaum",
+   "role": "prop_firewood",
+   "priority": 2,
+   "status": "CANDIDATE_ATTRIBUTION_REQUIRED",
+   "provider": "Sketchfab",
+   "kind": "model",
+   "asset_id": "3f4205a30a7d4adda50c775fb8cce06c",
+   "url": "https://sketchfab.com/3d-models/log-pile-game-ready-2k-pbr-3f4205a30a7d4adda50c775fb8cce06c",
+   "name": "Log Pile (Game Ready / 2K PBR)",
+   "authors": [
+    "meerschaumdigital"
+   ],
+   "license": "CC-BY-4.0",
+   "license_evidence_url": "http://creativecommons.org/licenses/by/4.0/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": true,
+   "format": "Sketchfab download (要ログイン)",
+   "polycount_faces": 3858,
+   "fit_score": 4,
+   "fit_note": "薪の山。軽量。採用時はCREDITS登録が必須。ダウンロードはSketchfabアカウント認証が必要なためCI自動取得不可"
+  },
+  {
+   "id": "sf_firewood_hp",
+   "role": "prop_firewood_alt",
+   "priority": 3,
+   "status": "REFERENCE_ONLY",
+   "provider": "Sketchfab",
+   "kind": "model",
+   "asset_id": "b94b159be8c8480690a2ae40c8bd3a4a",
+   "url": "https://sketchfab.com/3d-models/firewood-hp-b94b159be8c8480690a2ae40c8bd3a4a",
+   "name": "Firewood_HP",
+   "authors": [
+    "ta.holovan"
+   ],
+   "license": "CC-BY-4.0",
+   "license_evidence_url": "http://creativecommons.org/licenses/by/4.0/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": true,
+   "format": "Sketchfab download",
+   "polycount_faces": 50618,
+   "fit_score": 2,
+   "fit_note": "高ポリ(50k面)。ベイク元としてのみ"
+  },
+  {
+   "id": "sf_village_cottage_avramania",
+   "role": "massing_reference",
+   "priority": 3,
+   "status": "REFERENCE_ONLY",
+   "provider": "Sketchfab",
+   "kind": "model",
+   "asset_id": "c5f4088ac04c45e491be44ff666474b6",
+   "url": "https://sketchfab.com/3d-models/village-cottage-low-poly-medieval-cc0-c5f4088ac04c45e491be44ff666474b6",
+   "name": "Village Cottage - Low Poly Medieval, CC0",
+   "authors": [
+    "Avramania"
+   ],
+   "license": "CC0-1.0",
+   "license_evidence_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": false,
+   "format": "Sketchfab download",
+   "polycount_faces": 14656,
+   "fit_score": 1,
+   "fit_note": "ローポリ様式で美術目標と不一致。比率比較のみ。エイダンの家の形状を借用しない"
+  },
+  {
+   "id": "quaternius_medieval_village_megakit",
+   "role": "props_architecture",
+   "priority": 9,
+   "status": "BLOCKED_LICENSE_RESTRICTED",
+   "provider": "Quaternius",
+   "kind": "model_pack",
+   "asset_id": "medievalvillagemegakit",
+   "url": "https://quaternius.com/packs/medievalvillagemegakit.html",
+   "name": "Medieval Village MegaKit",
+   "authors": [
+    "Quaternius"
+   ],
+   "license": "Quaternius Asset License (QAL) v1.0 (2026-08-28)",
+   "license_evidence_url": "https://quaternius.com/license.html",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": false,
+   "attribution_required": false,
+   "format": "FBX/GLTF",
+   "fit_score": 2,
+   "fit_note": "QALは素材単体の再配布を禁止。公開リポジトリへ原素材をコミットしない。ゲームビルド同梱可否は法務判断待ちで未採用"
+  },
+  {
+   "provider": "Sketchfab",
+   "kind": "model",
+   "license": "CC-BY-4.0",
+   "license_evidence_url": "http://creativecommons.org/licenses/by/4.0/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": true,
+   "format": "Sketchfab download (要ログイン)",
+   "id": "sf_barrels_toomanydemons",
+   "role": "prop_barrel",
+   "priority": 1,
+   "status": "CANDIDATE_ATTRIBUTION_REQUIRED",
+   "asset_id": "1009f5c51391437e9ed2b97f04b9af31",
+   "url": "https://sketchfab.com/3d-models/barrels-1009f5c51391437e9ed2b97f04b9af31",
+   "name": "Barrels!",
+   "authors": [
+    "toomanydemons"
+   ],
+   "polycount_faces": 18900,
+   "fit_score": 4,
+   "fit_note": "目視確認: 木製樽セット。背景CGの樽と整合。1〜2個に絞りLOD化。CREDITS必須"
+  },
+  {
+   "provider": "Sketchfab",
+   "kind": "model",
+   "license": "CC-BY-4.0",
+   "license_evidence_url": "http://creativecommons.org/licenses/by/4.0/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": true,
+   "format": "Sketchfab download (要ログイン)",
+   "id": "sf_old_lantern_apariciosilva",
+   "role": "prop_lantern",
+   "priority": 2,
+   "status": "CANDIDATE_ATTRIBUTION_REQUIRED",
+   "asset_id": "42d15b68713f4a9ba0554ea2ea7efed0",
+   "url": "https://sketchfab.com/3d-models/old-lantern-game-ready-asset-42d15b68713f4a9ba0554ea2ea7efed0",
+   "name": "Old Lantern (game ready asset)",
+   "authors": [
+    "apariciosilva3D"
+   ],
+   "polycount_faces": 12838,
+   "fit_score": 3,
+   "fit_note": "目視確認: 鉄製吊りランタン。装飾がやや西欧近世寄り。玄関灯候補。CREDITS必須"
+  },
+  {
+   "provider": "Sketchfab",
+   "kind": "model",
+   "license": "CC-BY-4.0",
+   "license_evidence_url": "http://creativecommons.org/licenses/by/4.0/",
+   "commercial_use": true,
+   "modification": true,
+   "redistribution": true,
+   "attribution_required": true,
+   "format": "Sketchfab download (要ログイン)",
+   "id": "sf_crates_barrels_jeandiz",
+   "role": "prop_barrel_alt",
+   "priority": 9,
+   "status": "REJECTED_FOR_AIDAN_HOME",
+   "asset_id": "5ae3c72285474862a89d69c2f2ad2246",
+   "url": "https://sketchfab.com/3d-models/crates-and-barrels-5ae3c72285474862a89d69c2f2ad2246",
+   "name": "Crates And Barrels",
+   "authors": [
+    "jeandiz"
+   ],
+   "polycount_faces": 7509,
+   "fit_score": 1,
+   "fit_note": "目視確認でNG: 金属ドラム＋防水シート。時代不整合"
+  }
+ ],
+ "references": [
+  {
+   "id": "pinterest_roof_board",
+   "kind": "visual_reference",
+   "provider": "Pinterest",
+   "status": "REFERENCE_ONLY_NOT_LICENSED_ASSET",
+   "source": "tools/map_blender/pinterest_roof_reference_selection.json (main)",
+   "note": "既存選定4ピンを再利用。画像の取込・トレース禁止。今回Claudeはピン画像を目視未確認"
+  },
+  {
+   "id": "commons_bridge_cottage",
+   "kind": "real_world_reference",
+   "provider": "Wikimedia Commons (geograph.org.uk)",
+   "status": "REFERENCE_ONLY",
+   "url": "https://commons.wikimedia.org/wiki/File:Bridge_Cottage_-_geograph.org.uk_-_6191145.jpg",
+   "license": "CC BY-SA 2.0",
+   "note": "ウェールズの石板葺き石造コテージ。軒・棟の納まり参照"
+  },
+  {
+   "id": "commons_tyddyn_bach",
+   "kind": "real_world_reference",
+   "provider": "Wikimedia Commons (geograph.org.uk)",
+   "status": "REFERENCE_ONLY",
+   "url": "https://commons.wikimedia.org/wiki/File:Tyddyn_Bach_-_geograph.org.uk_-_1405730.jpg",
+   "license": "CC BY-SA 2.0",
+   "note": "小規模農家の石積み・煙突参照"
+  }
+ ]
+}
