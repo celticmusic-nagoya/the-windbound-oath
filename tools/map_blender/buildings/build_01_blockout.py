@@ -72,11 +72,11 @@ trim("chimney cap",(w*.27,d*.18,ridge+.87),.76,.79,.13,stone)
 trim("oak door leaf",(0,-d/2-.03,door["height"]/2),door["width"]-.10,.10,door["height"]-.06,wood_light)
 for win in (win_l,win_r):
  x=win["center_x"];wy=-d/2-.035
- trim("window lower frame",x,wy,1.17,win["width"]+.12,.14,.12)
- trim("window upper frame",x,wy,2.15,win["width"]+.12,.14,.12)
- for side in (-1,1):trim("window side frame",x+side*(win["width"]/2+.035),wy,1.66,.11,.14,1.04)
+ trim("window lower frame",(x,wy,1.17),win["width"]+.12,.14,.12)
+ trim("window upper frame",(x,wy,2.15),win["width"]+.12,.14,.12)
+ for side in (-1,1):trim("window side frame",(x+side*(win["width"]/2+.035),wy,1.66),.11,.14,1.04)
  trim("window glass",(x,wy,1.66),win["width"]-.10,.04,.82,glass)
- trim("window mullion",x,wy-.08,1.66,.07,.08,.9)
+ trim("window mullion",(x,wy-.08,1.66),.07,.08,.9)
 # Garden, firewood, stone doorstep, ground for exterior only.
 block("front stone doorstep",(0,-d/2-.85,.07),(1.7,.7,.17),stone,"L2")
 for i in range(7):
