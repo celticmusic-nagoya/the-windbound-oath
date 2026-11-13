@@ -18,7 +18,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
       - name: Validate Python
-        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/hero_roof_01_tile.py tools/map_blender/blender_preflight.py tools/map_blender/roof_slate_system_02.py tools/map_blender/fetch_roof_cc0_material.py
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/hero_roof_01_tile.py tools/map_blender/blender_preflight.py tools/map_blender/roof_slate_system_02.py tools/map_blender/fetch_roof_cc0_material.py tools/map_blender/audit_pinterest_references.py
       - name: Validate curated Pinterest references and asset provenance
         run: |
           python3 - <<'PY'
@@ -32,6 +32,13 @@ jobs:
           assert data["asset_policy"]["canonical"]=="candidate_only"
           print("Curated Pinterest references: PASS; image reuse prohibited")
           PY
+      - name: Audit Pinterest board with read-only API when configured
+        if: github.event_name != 'pull_request'
+        env:
+          PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: |
+          python3 tools/map_blender/audit_pinterest_references.py
       - name: Validate MAP21 topology
         run: |
           python3 tools/map_blender/test_map21_topology.py
