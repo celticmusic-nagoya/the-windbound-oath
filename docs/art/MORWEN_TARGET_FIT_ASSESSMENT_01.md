@@ -3,7 +3,7 @@
 Status: **REFERENCE-BASED ANALYSIS ONLY — no new model or render approved**.
 
 ## Inputs
-- Director-supplied image (2026-11-13): 1536×1024 JPEG SHA-256 `d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b`, local upload `7855.png`; see `MORWEN_3D_TARGET_SHEET_20261113.md`.
+- Director-confirmed high-quality PNG: `assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png` on `feature/morwen-reference-binary-01` (2,543,634 bytes; SHA-256 pending verification). Former JPEG `7855.png` is superseded and must not be used. See `MORWEN_3D_TARGET_SHEET_20261113.md`.
 - Existing canonical Layer 0 references: `7809.png` front, `7807.png` right, `7810.png` back, `7808.png` left. These are **distinct images**.
 - VRoid candidate topology: `MESH_QA_01_FINDINGS.md`, `MESH_QA_02_COMPONENT_FINDINGS.md`. Topology measured, visual fit NOT APPROVED.
 
@@ -26,9 +26,9 @@ Status: **REFERENCE-BASED ANALYSIS ONLY — no new model or render approved**.
 ## QA plan
 G1: canonical reference SHA and approved asymmetry; G2: side-by-side full-body/head views and final-scale render; G3: topology, UV, texture/alpha, rig deformation and reproducibility; G4: browser/Android runtime budget and animation.
 
-**Current gates:** G1 reference identities known but target binary GitHub registration pending; G2 NOT_RUN for new target; G3 candidate topology PASS only; G4 NOT_RUN.
+**Current gates:** G1 director-approved PNG present in GitHub, byte-level SHA-256 and visual comparison pending; G2 NOT_RUN for new target; G3 candidate topology PASS only; G4 NOT_RUN.
 
 ## Next deliverables
-- Upload **exact JPEG bytes** to `assets/companions/morwen/reference/morwen_3d_target_sheet_20261113.jpg`; SHA check before declaring registration complete.
+- Verify SHA-256 of **existing director-approved PNG** via binary-capable GitHub Actions; update manifest. Do not upload the superseded JPEG.
 - Compare canonical 4-view images with VRoid renders at calibrated scale; produce a diagnostic sheet and per-view findings.
 - Select **reuse / reconstruct** on actual fit evidence. No repeated micro-adjustments.
