@@ -35,6 +35,16 @@ scene.render.engine="BLENDER_EEVEE_NEXT" if bpy.app.version>=(4,2,0) else "BLEND
 scene.render.resolution_x=384;scene.render.resolution_y=576;scene.render.resolution_percentage=100
 scene.render.film_transparent=True;scene.render.image_settings.file_format="PNG";scene.render.image_settings.color_mode="RGBA"
 world=scene.world;world.color=(.7,.7,.7)
+# Studio illumination is required for Eevee renders; world.color alone does not
+# reliably illuminate material surfaces in headless renders.
+for name,loc,power,size in (
+    ("KEY",(-2.0,-3.0,4.0),850,3.0),
+    ("FILL",(2.5,-1.0,2.0),400,2.5),
+    ("RIM",(0.0,2.0,3.5),700,2.0),
+):
+    data=bpy.data.lights.new(name,"AREA");data.energy=power;data.shape="DISK";data.size=size
+    obj=bpy.data.objects.new(name,data);bpy.context.collection.objects.link(obj)
+    obj.location=loc;obj.rotation_euler=(Vector((0,0,1.0))-obj.location).to_track_quat("-Z","Y").to_euler()
 out=Path("render_output");out.mkdir(exist_ok=True)
 for stage,visible in enumerate((1,2,3,4)):
  for i,objects in enumerate(layers.values()):
