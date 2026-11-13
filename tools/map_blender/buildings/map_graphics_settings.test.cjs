@@ -1,0 +1,16 @@
+const assert=require("node:assert/strict");
+const {create,KEY}=require("./map_graphics_settings.js");
+const store=new Map();
+const storage={getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v)};
+const events=[];
+const s=create(storage,c=>events.push(c.preset));
+assert.equal(s.read().preset,"high");
+assert.equal(s.set("low").renderScale,.5);
+assert.equal(JSON.parse(store.get(KEY)).preset,"low");
+assert.equal(create(storage).read().preset,"low");
+assert.equal(s.set("ultra",.65).renderScale,.65);
+assert.equal(create(storage).read().renderScale,.65);
+store.set(KEY,"invalid json");assert.equal(create(storage).read().preset,"high");
+store.set(KEY,JSON.stringify({preset:"unknown"}));assert.equal(create(storage).read().preset,"high");
+assert.ok(events.length>=3);
+console.log("MAP-GFX-02 PASS");
