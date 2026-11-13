@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Morwen canonical landmark review — unapproved</title>
+<style>body{background:#171b22;color:#f2f3f6;font:16px system-ui;margin:0;padding:16px}main{max-width:900px;margin:auto}button,select{font:inherit;padding:10px;margin:5px 4px;background:#343e52;color:white;border:1px solid #78839b;border-radius:6px}button:focus-visible,select:focus-visible{outline:3px solid gold}.wrap{position:relative;display:inline-block;max-width:100%;touch-action:manipulation}img{display:block;max-width:100%;height:auto;background:#444}canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:manipulation}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#242a36;padding:12px}small{color:#c7d0dd}</style></head>
+<body><main><h1>Morwen｜特徴点レビュー</h1><p>正式四面図を変更せず、確認できた位置のみタップして記録します。未確定座標は推測しません。保存・採用・GitHubへの送信は自動では行われません。</p>
+<label>方向 <select id="view"><option value="front">正面</option><option value="right">右側面</option><option value="back">背面</option><option value="left">左側面</option></select></label>
+<label>特徴点 <select id="point"></select></label>
+<div><button id="undo">選択点を取り消す</button><button id="export">JSONをコピー</button></div>
+<div class="wrap" id="wrap"><img id="ref" alt="正式四面図" width="384" height="1024"><canvas id="overlay" width="384" height="1024" aria-label="特徴点入力"></canvas></div>
+<p><small>黄色の点は未承認の手動注釈です。髪の輪郭を顎の輪郭として指定しないでください。画像に隠れた特徴点は空欄のままにしてください。</small></p><pre id="output"></pre></main>
+<script>
+"use strict";
+const paths={front:"../production_mesh_08/references/7809.png",right:"../production_mesh_08/references/7807.png",back:"../production_mesh_08/references/7810.png",left:"../production_mesh_08/references/7808.png"};
+const keys={front:["head_top","chin","left_eye_center","right_eye_center","nose_tip","mouth_center","left_jaw_edge","right_jaw_edge","left_ear_anchor","right_ear_anchor"],right:["head_top","chin","eye_center","nose_tip","mouth_center","jaw_edge","ear_anchor"],left:["head_top","chin","eye_center","nose_tip","mouth_center","jaw_edge","ear_anchor"],back:["head_top","neck_center","left_ear_anchor","right_ear_anchor"]};
+const annotations=Object.fromEntries(Object.keys(paths).map(k=>[k,{}]));
+const view=document.getElementById("view"),point=document.getElementById("point"),ref=document.getElementById("ref"),canvas=document.getElementById("overlay"),ctx=canvas.getContext("2d"),output=document.getElementById("output");
+function redraw(){ctx.clearRect(0,0,384,1024);ctx.lineWidth=2;ctx.font="14px system-ui";for(const [key,p] of Object.entries(annotations[view.value])){ctx.beginPath();ctx.arc(p.x,p.y,5,0,2*Math.PI);ctx.strokeStyle="#ffdb45";ctx.stroke();ctx.fillStyle="#ffdb45";ctx.fillText(key,p.x+8,p.y-8)}output.textContent=JSON.stringify({schema:"MORWEN-LANDMARK-REVIEW-UNAPPROVED",source:paths[view.value],coordinate_system:"image top-left; 384x1024",view:view.value,points:annotations[view.value]},null,2)}
+function switchView(){ref.src=paths[view.value];point.replaceChildren(...keys[view.value].map(k=>new Option(k,k)));redraw()}
+canvas.addEventListener("click",e=>{const rect=canvas.getBoundingClientRect();const x=Math.round((e.clientX-rect.left)*384/rect.width),y=Math.round((e.clientY-rect.top)*1024/rect.height);if(x<0||x>383||y<0||y>1023)return;annotations[view.value][point.value]={x,y,confidence:"MANUAL_UNREVIEWED"};redraw()});
+document.getElementById("undo").onclick=()=>{delete annotations[view.value][point.value];redraw()};
+document.getElementById("export").onclick=()=>{const payload={schema:"MORWEN-LANDMARK-REVIEW-UNAPPROVED",coordinate_system:"image top-left; 384x1024",views:annotations};const json=JSON.stringify(payload,null,2);output.textContent=json;if(navigator.clipboard?.writeText)navigator.clipboard.writeText(json).catch(()=>{});else output.textContent=json};
+view.addEventListener("change",switchView);switchView();
+</script></body></html>
