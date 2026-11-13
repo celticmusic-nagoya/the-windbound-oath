@@ -5,6 +5,10 @@ on:
     paths:
       - 'tools/map_blender/aidan_kenney_massing.py'
       - '.github/workflows/aidan-kenney-massing.yml'
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_kenney_massing.py'
+      - '.github/workflows/aidan-kenney-massing.yml'
   workflow_dispatch:
 permissions:
   contents: read
