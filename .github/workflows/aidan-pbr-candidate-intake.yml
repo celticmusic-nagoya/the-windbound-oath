@@ -1,0 +1,44 @@
+name: Aidan Candidate PBR 1K Intake
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/download_polyhaven_candidate_maps.py'
+      - 'tools/map_blender/discover_polyhaven_pbr_files.py'
+      - '.github/workflows/aidan-pbr-candidate-intake.yml'
+permissions:
+  contents: read
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate scripts
+        run: |
+          python -m py_compile tools/map_blender/discover_polyhaven_pbr_files.py
+          python -m py_compile tools/map_blender/download_polyhaven_candidate_maps.py
+      - name: Discover provider file manifest
+        run: python tools/map_blender/discover_polyhaven_pbr_files.py tools/map_blender/aidan_pbr_shortlist.json "${RUNNER_TEMP}/pbr-manifest.json"
+      - name: Download bounded candidate maps and record SHA-256
+        run: python tools/map_blender/download_polyhaven_candidate_maps.py "${RUNNER_TEMP}/pbr-manifest.json" "${RUNNER_TEMP}/pbr-candidate"
+      - name: Check candidate map manifest
+        run: |
+          python - <<'PY'
+          import json, os
+          p=os.path.join(os.environ['RUNNER_TEMP'],'pbr-candidate','download-manifest.json')
+          d=json.load(open(p))
+          assert len(d['textures'])==15, len(d['textures'])
+          assert all(x['bytes']>0 and len(x['sha256'])==64 for x in d['textures'])
+          print('PASS: 15 candidate map files, SHA-256 recorded; no canon approval')
+          PY
+      - name: Upload temporary candidate textures and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-pbr-1k-candidate-not-approved
+          path: ${{ runner.temp }}/pbr-candidate/
+          if-no-files-found: warn
+          retention-days: 3
