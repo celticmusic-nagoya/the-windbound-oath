@@ -1,0 +1,46 @@
+name: Morwen Blender 35 Five-View QA
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_blender_34/isolated_render.py'
+      - '.github/workflows/morwen-blender-35.yml'
+  workflow_dispatch:
+jobs:
+  five-views:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy python3-pil libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1
+      - name: Syntax and source build
+        run: |
+          python3 -m py_compile tools/blender/morwen_blender_34/isolated_render.py
+          blender -b -noaudio --python tools/blender/morwen_blender_24/build_torso.py
+      - name: Render isolated five views
+        run: blender -b -noaudio --python tools/blender/morwen_blender_34/isolated_render.py
+      - name: Alpha and framing QA
+        run: |
+          /usr/bin/python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          base=Path('assets/candidates/morwen-blender-34')
+          for name in ('front','left','right','back','three_quarter'):
+              im=Image.open(base/(name+'.png')).convert('RGBA')
+              alpha=im.getchannel('A')
+              bounds=alpha.getbbox()
+              print(name,'size',im.size,'alpha',alpha.getextrema(),'bbox',bounds,flush=True)
+              assert im.size==(512,768)
+              assert bounds is not None and alpha.getextrema()[0]==0
+              x0,y0,x1,y1=bounds
+              assert 10<x0<x1<502 and 10<y0<y1<758,f'{name} cropped: {bounds}'
+          print('MORWEN_35_FIVE_VIEW_QA_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-35-isolated-five-views
+          path: assets/candidates/morwen-blender-34/
+          if-no-files-found: warn
