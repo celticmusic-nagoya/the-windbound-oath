@@ -1,0 +1,23 @@
+name: MAP Graphics Policy QA
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/buildings/map_graphics_policy*'
+      - '.github/workflows/map-graphics-policy-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tools/map_blender/buildings/map_graphics_policy.test.cjs
+      - run: node tools/map_blender/buildings/map_graphics_settings.test.cjs
+      - run: node tools/map_blender/buildings/map_canvas_quality.test.cjs
+      - run: node tools/map_blender/buildings/map_dom_quality.test.cjs
+      - run: node tools/map_blender/buildings/map_graphics_integration.test.cjs
+

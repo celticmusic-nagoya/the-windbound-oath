@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "task": "MAP-MODULAR-01",
+  "status": "DESIGN_CANDIDATE",
+  "unit": "meter_provisional",
+  "coordinate_system": "Blender Z-up",
+  "canonical_art_rule": "approved CG and lore override all procedural defaults",
+  "categories": {
+    "architecture": [
+      "beam",
+      "plank",
+      "wall_panel",
+      "roof_tile",
+      "door",
+      "window",
+      "hinge"
+    ],
+    "furniture": [
+      "table",
+      "chair",
+      "bed",
+      "shelf",
+      "fireplace"
+    ],
+    "lighting": [
+      "lantern",
+      "candle",
+      "torch"
+    ],
+    "nature": [
+      "grass",
+      "flower",
+      "shrub",
+      "tree",
+      "rock",
+      "moss"
+    ],
+    "agriculture": [
+      "fence",
+      "wheat",
+      "vegetable",
+      "fruit_tree",
+      "hay"
+    ],
+    "household": [
+      "bottle",
+      "plate",
+      "pot",
+      "barrel",
+      "crate",
+      "bread"
+    ],
+    "metal": [
+      "nail",
+      "handle",
+      "chain",
+      "bracket"
+    ]
+  },
+  "asset_contract": {
+    "required": [
+      "id",
+      "category",
+      "source_master",
+      "pivot",
+      "dimensions",
+      "materials",
+      "render_strategy",
+      "collision",
+      "canon_status"
+    ],
+    "pivot": "bottom_center_by_default",
+    "dimensions": "positive numeric x,y,z",
+    "render_strategy": [
+      "baked_background",
+      "static_sprite",
+      "animated_sprite",
+      "runtime_object"
+    ],
+    "canon_status": [
+      "UNCONFIRMED",
+      "CG_ALIGNED_CANDIDATE",
+      "APPROVED"
+    ],
+    "source_master": "relative source asset path, not inferred",
+    "collision": "none|static|interactive"
+  },
+  "placement_contract": {
+    "required": [
+      "instance_id",
+      "asset_id",
+      "position",
+      "rotation_deg",
+      "scale",
+      "layer",
+      "visible_when"
+    ],
+    "position": "x,y,z numeric",
+    "layer": [
+      "ground",
+      "structure",
+      "prop",
+      "foreground",
+      "effects"
+    ],
+    "visible_when": [
+      "always",
+      "outdoor",
+      "indoor",
+      "event"
+    ]
+  },
+  "optimization": {
+    "editable_sources": "keep individual parts and reusable masters",
+    "static_render": "batch or bake immobile small details per chunk",
+    "dynamic_render": "keep animated, destructible and interactive elements separate",
+    "scatter": "seeded deterministic placement with density masks and exclusion zones",
+    "qa": [
+      "unique asset and instance IDs",
+      "valid source references",
+      "no unexpected overlap with walkable zones",
+      "correct render anchors and alpha",
+      "CG color and silhouette comparison",
+      "mobile draw-call and memory budget"
+    ]
+  },
+  "policy": {
+    "no_existing_overwrite": true,
+    "no_runtime_integration": true,
+    "no_main_merge": true
+  }
+}

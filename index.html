@@ -6,6 +6,10 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
+<script src="tools/map_blender/buildings/map_graphics_policy.js?v=mapgfx05"></script>
+<script src="tools/map_blender/buildings/map_graphics_settings.js?v=mapgfx05"></script>
+<script src="tools/map_blender/buildings/map_dom_quality.js?v=mapgfx05"></script>
+<script src="tools/map_blender/buildings/map_graphics_integration.js?v=mapgfx05"></script>
 <script src="js/field/field-movement.js?v=20261011-quality-g"></script>
 <script src="js/field/field-navigation.js"></script>
 <script src="js/field/field-height.js?v=20261012p1"></script>
@@ -1110,6 +1114,7 @@ function renderSystemTab(tab='status'){
    <p><small>${canFS?'縦向き・横向きのどちらでも切り替えできます。':'このブラウザではFullscreen APIを利用できません。'}</small></p></div>`;
    body.insertAdjacentHTML('beforeend',`<div class="charStatus"><b>音楽</b><p>村・屋内・襲撃後の村で流れる音楽です。ブラウザの仕様で、最初の操作のあとに鳴り始めます。</p><button id="toggleBgm" type="button">${window.FieldBgm&&FieldBgm.muted?'音楽をオンにする':'音楽をオフにする'}</button></div>`);
    $('#toggleBgm').onclick=()=>{if(window.FieldBgm){FieldBgm.toggle();renderSystemTab('settings');}};
+   if(window.TWOMapGraphicsMount)window.TWOMapGraphicsMount(body);
    if(canFS)$('#toggleFullscreen').onclick=async()=>{
      try{
        if(document.fullscreenElement)await document.exitFullscreen();

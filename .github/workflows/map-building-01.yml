@@ -1,0 +1,74 @@
+name: MAP Building 01 Blockout
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/buildings/**'
+      - '.github/workflows/map-building-01.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender xvfb libgl1 libegl1
+      - name: Validate schema and syntax
+        run: |
+          python3 -m py_compile tools/map_blender/buildings/build_01_blockout.py
+          python3 - <<'PY'
+          import json
+          p='tools/map_blender/buildings/aidan_home_candidate.json'
+          d=json.load(open(p))
+          assert d['status']=='PROVISIONAL_NOT_CANON'
+          assert {x['id'] for x in d['layers']}=={'L0','L1','L2','L3','L4'}
+          assert d['render_modes']['outside']==['L0','L1','L2']
+          assert d['render_modes']['inside']==['L0','L1','L3','L4']
+          assert not d['runtime_integration']
+          PY
+      - name: Render building
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-building
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a blender -b --python tools/map_blender/buildings/build_01_blockout.py
+      - name: Verify output
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-building
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ['MAP_OUTPUT'])/'building_01'
+          d=json.loads((root/'manifest.json').read_text())
+          assert set(d['files'])=={'aidan_home_outside_candidate.png','aidan_home_inside_candidate.png','aidan_home_candidate.blend'}
+          for name,sha in d['files'].items():
+              data=(root/name).read_bytes()
+              assert hashlib.sha256(data).hexdigest()==sha
+              if name.endswith('.png'):assert data.startswith(b'\x89PNG\r\n\x1a\n')
+          print('MAP-BUILDING-01 TECH QA PASS')
+          PY
+      - name: Render quality-first master
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-building
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a blender -b --python tools/map_blender/buildings/aidan_master_quality_first.py
+      - name: Upload quality-first master
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-quality-master-preview
+          path: ${{ runner.temp }}/map-building/aidan_master/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-building-01-candidate
+          path: ${{ runner.temp }}/map-building/building_01/
+          if-no-files-found: warn
+          retention-days: 14

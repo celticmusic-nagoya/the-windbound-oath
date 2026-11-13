@@ -1,0 +1,52 @@
+{
+  "schema": "two-world-geography-constraints-v1",
+  "status": "APPROVED_GEOGRAPHY_2026_11_08_LOCKED",
+  "sources": [
+    "docs/story/WORLD_STORY_BIBLE_v1.1.txt",
+    "docs/handoff/scenario_handoff_for_chatgpt.md",
+    "docs/field/m10-rilde-village.md",
+    "docs/art/rilde-cliff-raid-full-inventory-20261107.md"
+  ],
+  "priority": [
+    "user-approved world geography 2026-11-08",
+    "approved background CG",
+    "latest approved story sequence",
+    "older references only where nonconflicting"
+  ],
+  "confirmed": [
+    "Rilde village has river bridge waterfall and wind stone",
+    "Sea-facing cliff is reached on a village-side route; first sight of burning village is after a blind curve",
+    "Moss forest is on the prologue escape route toward Dunvar Fort",
+    "Dunvar Fort is the prologue destination",
+    "East road connects village toward Dunvar Fort",
+    "Water continues flowing when wind stops"
+  ],
+  "conflicts": [
+    {
+      "topic": "older north or south cliff labels",
+      "resolution": "superseded by approved west-to-northwest sea cliff layout"
+    },
+    {
+      "topic": "forest between village and fortress",
+      "resolution": "rejected; Moss Forest is southeast, fortress trade road is north; preserve story escape route separately"
+    }
+  ],
+  "do_not_assume": [
+    "Exact coastline geometry",
+    "Exact bridge placement within east river",
+    "Exact fortress absolute coordinate",
+    "Whether cliff route is NW or W within approved sector"
+  ],
+  "design_gate": "Map CG reconstruction must reconcile topological route graph before final geometry, and mark unseen spaces as inferred.",
+  "approved_topology": {
+    "center": "Rilde village",
+    "west_northwest": "sea and Windwatch cliff, walkable from Rilde",
+    "southwest": "fishing harbor",
+    "north": "farmland and fortress trade road",
+    "east": "river flowing north to south, stone bridge, riverside cliff",
+    "southeast": "Moss forest and ancient altar",
+    "economy": "farming and fishing, goods transported via Dunvar Fort toward capital",
+    "story_route": "raid -> escape -> Moss Forest -> Raider -> Dunvar Fort -> temporary return to Rilde",
+    "fort_road": "northbound trade road, exact fortress compass location and distance not yet fixed"
+  }
+}

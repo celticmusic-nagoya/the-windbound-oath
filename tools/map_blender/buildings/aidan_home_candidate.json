@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0",
+  "task": "MAP-BUILDING-01",
+  "status": "PROVISIONAL_NOT_CANON",
+  "building_id": "aidan_home",
+  "map21_landmark_id": "aidan_home",
+  "coordinate_system": {
+    "units": "meters_provisional",
+    "origin": "floor_center",
+    "x": "right",
+    "y": "rear",
+    "z": "up"
+  },
+  "dimensions": {
+    "width": 6,
+    "depth": 5,
+    "wall_height": 3,
+    "roof_ridge_height": 4.8
+  },
+  "layers": [
+    {
+      "id": "L0",
+      "name": "foundation_floor",
+      "collection": "BLD_L0_Foundation"
+    },
+    {
+      "id": "L1",
+      "name": "frame_openings",
+      "collection": "BLD_L1_Frame"
+    },
+    {
+      "id": "L2",
+      "name": "exterior_roof",
+      "collection": "BLD_L2_Exterior"
+    },
+    {
+      "id": "L3",
+      "name": "interior",
+      "collection": "BLD_L3_Interior"
+    },
+    {
+      "id": "L4",
+      "name": "lighting_collision",
+      "collection": "BLD_L4_Gameplay"
+    }
+  ],
+  "openings": [
+    {
+      "id": "main_door",
+      "wall": "front",
+      "center_x": 0,
+      "width": 1.15,
+      "height": 2.15,
+      "status": "PROVISIONAL"
+    },
+    {
+      "id": "front_window_left",
+      "wall": "front",
+      "center_x": -1.8,
+      "width": 0.8,
+      "height": 1,
+      "status": "PROVISIONAL"
+    },
+    {
+      "id": "front_window_right",
+      "wall": "front",
+      "center_x": 1.8,
+      "width": 0.8,
+      "height": 1,
+      "status": "PROVISIONAL"
+    }
+  ],
+  "interior_slots": [
+    {
+      "id": "hearth",
+      "kind": "fireplace",
+      "position": null,
+      "status": "UNCONFIRMED_PENDING_CG"
+    },
+    {
+      "id": "bed",
+      "kind": "furniture",
+      "position": null,
+      "status": "UNCONFIRMED_PENDING_CG"
+    },
+    {
+      "id": "table",
+      "kind": "furniture",
+      "position": null,
+      "status": "UNCONFIRMED_PENDING_CG"
+    }
+  ],
+  "render_modes": {
+    "outside": [
+      "L0",
+      "L1",
+      "L2"
+    ],
+    "inside": [
+      "L0",
+      "L1",
+      "L3",
+      "L4"
+    ]
+  },
+  "cg_alignment": {
+    "source_files": [],
+    "status": "CG_IF_VISIBLE_ONLY",
+    "rule": "Approved CG constrains only elements actually depicted. If Aidan home is not visible, design original vernacular house consistent with Rilde village, lore, and reference imagery. No false claim of CG match."
+  },
+  "topology_alignment": {
+    "status": "SCHEMATIC_ONLY",
+    "rule": "MAP21 coordinates are not production placement"
+  },
+  "runtime_integration": false,
+  "production_strategy": {
+    "mode": "WORLD_TOPOLOGY_PLUS_ONE_MASTER_BUILDING",
+    "master_asset": "aidan_home",
+    "quality_gate": "QUALITY_FIRST_PRODUCTION_MASTER_ART_QA_REQUIRED",
+    "scope": "exterior first, then interior; reusable roof/wall/door/window/foundation modules",
+    "rule": "Do not mass-produce village houses before Aidan exterior art QA; do not assert final asset approval without rendered review",
+    "phases": [
+      {
+        "id": "01",
+        "target": "world terrain and road topology",
+        "deliverable": "terrain/route layout"
+      },
+      {
+        "id": "02",
+        "target": "Aidan home exterior",
+        "deliverable": "Blender 4-view and orthographic game view"
+      },
+      {
+        "id": "03",
+        "target": "approved shared architectural kit",
+        "deliverable": "modular library with dimensions and materials"
+      },
+      {
+        "id": "04",
+        "target": "village expansion",
+        "deliverable": "individualized inn/shop/elder house/homes"
+      }
+    ],
+    "rework_policy": "Max two similar failed render attempts; diagnose structural cause before further generation"
+  },
+  "design_direction": {
+    "status": "ORIGINAL_PROPOSAL_PENDING_ART_QA",
+    "architecture": "modest rural Celtic-fantasy timber frame on stone foundation",
+    "roof": "weathered red-brown tile or wood shingles; choose one after visual comparison",
+    "walls": "warm lime plaster with timber structure",
+    "details": [
+      "wooden front door",
+      "stone entry step",
+      "small eave",
+      "wood-frame windows",
+      "firewood stack",
+      "simple fence",
+      "garden flowers",
+      "worn dirt path"
+    ],
+    "interior_exterior_consistency": [
+      "door and window openings align",
+      "chimney connects to fireplace if present",
+      "floor plan matches external dimensions"
+    ],
+    "avoid": [
+      "aristocratic mansion",
+      "copying reference image composition",
+      "inventing canonical CG visibility"
+    ]
+  },
+  "quality_first_policy": {
+    "status": "ADOPTED_DIRECTOR_INSTRUCTION_2026_11_13",
+    "principle": "Target production-ready art quality from the first authored master; do not iteratively polish primitive blockouts as default production method",
+    "master_before_variants": true,
+    "method_switch_trigger": "If quality fails after at most two comparable attempts, stop, diagnose structural limitations, and switch method",
+    "technical_qa_separate_from_art_qa": true,
+    "blockout_role": "SPATIAL_AND_PIPELINE_VALIDATION_ONLY_NOT_ART_APPROVAL",
+    "production_methods": [
+      "purpose-built silhouette and topology",
+      "UV/texturing with authored material variation",
+      "coherent architecture and detail kit",
+      "lighting and camera calibrated to game view",
+      "rendered visual review before duplication"
+    ],
+    "promotion_gate": "No village-wide asset multiplication or canonical approval until production master passes art QA"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "two-rilde-art-direction-v1",
+  "status": "REFERENCE_POLICY_NOT_ART_APPROVAL",
+  "primary": "approved in-game event CG (exact original binary and hashes must be verified before visual PASS)",
+  "secondary": [
+    "user supplied reference image 1: painterly farm village, winding dirt road, field fences, warm sunset, rolling hills",
+    "user supplied reference image 2: timber/stone farmhouses, pasture, road, rural density; castle skyline is not an approved Rilde landmark",
+    "user supplied reference image 3: weathered stone/plaster, cobbled square, ivy, planters, fountain-like masonry detailing; do not add a fountain/church unless canon supports"
+  ],
+  "external_technical_reference": [
+    "Historic England vernacular timber-framed houses: timber posts, plaster/wattle infill, stone foundations, thatch/tile/shingle roof variation"
+  ],
+  "implementation": {
+    "modules": [
+      "terrain_slope",
+      "road_spline",
+      "field_parcels",
+      "house_timber_plaster",
+      "house_stone",
+      "roof_tile",
+      "fence_weathered",
+      "bridge_stone",
+      "vegetation_seasonal",
+      "village_clutter"
+    ],
+    "style": "warm pastoral Celtic fantasy, hand-crafted irregularity, lived-in surfaces, no copied real-world composition",
+    "geography": "approved Nov 8 world_geography_constraints.json",
+    "guardrails": [
+      "do not replace official CG with Pinterest reference",
+      "do not assume reference church, fountain or castle exists in Rilde",
+      "do not overwrite approved geometry/CG",
+      "do not claim art PASS until side-by-side comparison with approved CG binary",
+      "only use external assets with checked licenses and attribution where required"
+    ]
+  },
+  "qa": [
+    "approved geography",
+    "CG scene geometry/architecture match",
+    "orthographic game-camera visibility",
+    "performance and asset modularity"
+  ]
+}
