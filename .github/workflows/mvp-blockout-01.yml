@@ -49,6 +49,7 @@ jobs:
                   assert f.is_file() and f.stat().st_size>1000,str(f)
           assert (p/'MORWEN_RIG_02_VISUAL_QA.zip').stat().st_size>10000
           assert (p/'MORWEN_WALK_4DIR_8F_CONTACT_SHEET.png').stat().st_size>10000
+          assert (p/'MORWEN_WALK_4DIR_8F_SPRITESHEET.png').stat().st_size>10000
           print('MORWEN_RIG_02_VISUAL_QA_PACKAGE_PASS')
           PY
       - uses: actions/upload-artifact@v4
