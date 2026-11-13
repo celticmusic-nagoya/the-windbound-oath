@@ -10,6 +10,8 @@ on:
       - 'tools/blender/morwen_production/morwen_rebuild_01_landmarks.py'
       - 'tools/blender/morwen_production/landmark-review.html'
       - 'tools/blender/morwen_production/test_landmark_review.py'
+      - 'tools/blender/morwen_production/analyze_landmarks.py'
+      - 'tools/blender/morwen_production/test_analyze_landmarks.py'
       - 'tools/blender/morwen_production/create_face_comparison.py'
   workflow_dispatch:
 permissions:
@@ -20,8 +22,10 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-      - name: Verify landmark review page (no Blender required)
-        run: python3 tools/blender/morwen_production/test_landmark_review.py
+      - name: Verify landmark review page and coordinate analysis (no Blender required)
+        run: |
+          python3 tools/blender/morwen_production/test_landmark_review.py
+          python3 tools/blender/morwen_production/test_analyze_landmarks.py
       - name: Fetch pinned CC0 candidate and validate SHA
         run: |
           python3 - <<'PY'
