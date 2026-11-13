@@ -5,6 +5,8 @@ on:
     paths:
       - 'tools/map_blender/discover_polyhaven_pbr_files.py'
       - 'tools/map_blender/download_polyhaven_candidate_maps.py'
+      - 'tools/map_blender/aidan_pbr_candidate_materials.py'
+      - 'tools/map_blender/aidan_home_production_candidate.py'
       - 'tools/map_blender/aidan_pbr_shortlist.json'
       - '.github/workflows/aidan-pbr-file-discovery.yml'
 permissions:
@@ -46,6 +48,23 @@ jobs:
               assert hashlib.sha256(p.read_bytes()).hexdigest()==row['sha256']
           print('PASS: 15 PBR candidate textures SHA-256 verified')
           PY
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+      - name: Render five candidate views with PBR
+        env:
+          AIDAN_PBR_CANDIDATE_DIR: ${{ runner.temp }}/pbr-candidate
+          AIDAN_RENDER_OUTPUT: ${{ runner.temp }}/aidan-pbr-render
+        run: blender -b -t 2 --python tools/map_blender/aidan_home_production_candidate.py
+      - name: Save five-view PBR candidate render
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-pbr-5view-render-candidate
+          path: ${{ runner.temp }}/aidan-pbr-render/
+          if-no-files-found: warn
+          retention-days: 7
       - name: Save temporary PBR candidate textures
         if: always()
         uses: actions/upload-artifact@v4
