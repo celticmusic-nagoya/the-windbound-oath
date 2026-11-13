@@ -267,3 +267,49 @@ for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("three_quarter",(.7,1,.1
  "vertices":c["vertices"],"materials":c["material_faces"],"role":"UNVERIFIED"}
  for i,c in enumerate(components)]
 },indent=2)+"\n")
+
+# MORWEN-FACE-23: skin-only jaw test, excluding all detached facial islands.
+# Source topology and non-skin components remain unchanged.
+skin_component=next((i for i,c in enumerate(components)
+ if c["vertices"]==588 and any("SKIN" in m.upper() for m in c["material_faces"])),None)
+assert skin_component is not None,"Skin candidate not found; do not deform unknown components"
+skin_ids=set(components[skin_component]["vertex_indices"])
+assert len(skin_ids)==588
+# Original candidate was generated earlier; restore source state and add separate shape key.
+candidate.value=0.0
+skin_key=face.shape_key_add(name="Morwen_SkinJaw_Isolated_CANDIDATE",from_mix=False)
+skin_key.value=0.0
+changed=[]
+for v in face.data.vertices:
+ if v.index not in skin_ids:
+  assert (skin_key.data[v.index].co-v.co).length<1e-6
+  continue
+ world=face.matrix_world@v.co
+ t=(world.z-z0)/max(1e-6,z1-z0)
+ lower=max(0.,min(1.,(.57-t)/.45))
+ lower=lower*lower*(3-2*lower)
+ offset_x=(world.x-mid_x)*(-.055*lower)
+ if abs(offset_x)>1e-8:
+  skin_key.data[v.index].co=face.matrix_world.inverted()@(world+_V((offset_x,0,0)))
+  changed.append(v.index)
+assert changed and set(changed)<=skin_ids
+skin_key.value=1.0
+for obj in meshes:obj.hide_render=False
+diagnostic.hide_render=True
+for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("three_quarter",(.7,1,.15))]:
+ bpy.ops.object.camera_add(location=face_center+_V(delta).normalized()*face_extent*3)
+ cam=bpy.context.object
+ cam.rotation_euler=(face_center-cam.location).to_track_quat("-Z","Y").to_euler()
+ cam.data.type="ORTHO";cam.data.ortho_scale=face_extent*2.0
+ scene.camera=cam
+ scene.render.filepath=str((out/(name+"_skin_jaw_isolated.png")).resolve())
+ bpy.ops.render.render(write_still=True)
+skin_key.value=0.0
+assert all((skin_key.data[i].co-face.data.vertices[i].co).length<1e-6 for i in range(len(face.data.vertices)) if i not in skin_ids)
+(out/"SKIN_JAW_ISOLATION_QA.json").write_text(json.dumps({
+ "status":"CANDIDATE_ONLY","source_mesh_vertices":len(face.data.vertices),
+ "skin_component_id":skin_component,"skin_component_vertices":len(skin_ids),
+ "changed_vertex_count":len(changed),"all_changed_vertices_within_skin_component":True,
+ "all_non_skin_vertices_unchanged":True,"shape_key_reset":skin_key.value==0,
+ "canonical_fidelity":"NOT_APPROVED","art_review":"PENDING","G4":"NOT_RUN"
+},indent=2)+"\n")
