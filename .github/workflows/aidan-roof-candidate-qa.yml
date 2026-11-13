@@ -24,13 +24,13 @@ jobs:
       - name: Install Blender for geometry QA
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender
+          sudo apt-get install -y blender libegl1 libgl1-mesa-dri libglx-mesa0 libopengl0 xvfb
           blender --version
       - name: Geometry preview only — NOT art approval
         env:
           AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-roof-qa
         run: |
-          blender -b -t 2 --python tools/map_blender/aidan_roof_render_01.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_roof_render_01.py
           test -s "$AIDAN_ROOF_OUTPUT/manifest.json"
       - name: Verify five nonempty images and manifest
         env:
