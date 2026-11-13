@@ -2,14 +2,15 @@
   "id": "MORWEN_GARTER_RIGHT_ONLY",
   "status": "DIRECTOR_APPROVED",
   "coordinate_convention": {
-    "character_right": "-X",
-    "character_left": "+X",
+    "character_right": "+X",
+    "character_left": "-X",
     "front_camera": "-Y",
-    "back_camera": "+Y"
+    "back_camera": "+Y",
+    "note": "Camera front at -Y, up +Z; image-right is world +X. Back at +Y reverses screen side."
   },
   "garter": {
     "leg": "character_right",
-    "world_side": "-X",
+    "world_side": "+X",
     "front_screen_side": "right",
     "back_screen_side": "left",
     "count": 1,
