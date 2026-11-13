@@ -16,3 +16,4 @@ jobs:
         with:
           node-version: '22'
       - run: node tools/map_blender/buildings/map_graphics_policy.test.cjs
+      - run: node tools/map_blender/buildings/map_graphics_settings.test.cjs
