@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'tools/map_blender/discover_polyhaven_pbr_files.py'
+      - 'tools/map_blender/download_polyhaven_candidate_maps.py'
       - 'tools/map_blender/aidan_pbr_shortlist.json'
       - '.github/workflows/aidan-pbr-file-discovery.yml'
 permissions:
@@ -11,13 +12,15 @@ permissions:
 jobs:
   discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - name: Validate script
-        run: python -m py_compile tools/map_blender/discover_polyhaven_pbr_files.py
+        run: |
+          python -m py_compile tools/map_blender/discover_polyhaven_pbr_files.py
+          python -m py_compile tools/map_blender/download_polyhaven_candidate_maps.py
       - name: Discover exact file URLs and map channels (no downloads)
         run: python tools/map_blender/discover_polyhaven_pbr_files.py tools/map_blender/aidan_pbr_shortlist.json "${RUNNER_TEMP}/pbr-file-manifest.json"
       - name: Save source evidence
@@ -28,3 +31,26 @@ jobs:
           path: ${{ runner.temp }}/pbr-file-manifest.json
           if-no-files-found: warn
           retention-days: 14
+      - name: Download 1K candidate textures with SHA-256 audit
+        run: python tools/map_blender/download_polyhaven_candidate_maps.py "${RUNNER_TEMP}/pbr-file-manifest.json" "${RUNNER_TEMP}/pbr-candidate"
+      - name: Verify 15 maps and their hashes
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, pathlib
+          base=pathlib.Path(os.environ['RUNNER_TEMP'])/'pbr-candidate'
+          data=json.loads((base/'download-manifest.json').read_text())
+          assert len(data['textures']) == 15
+          for row in data['textures']:
+              p=base/row['path']
+              assert p.is_file() and p.stat().st_size==row['bytes']
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==row['sha256']
+          print('PASS: 15 PBR candidate textures SHA-256 verified')
+          PY
+      - name: Save temporary PBR candidate textures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-pbr-1k-candidate-not-approved
+          path: ${{ runner.temp }}/pbr-candidate/
+          if-no-files-found: warn
+          retention-days: 3
