@@ -60,12 +60,51 @@ with zipfile.ZipFile(archive) as z:
    box('hand cut eave beam',(0,y,2.65),(6.7,.18,.20),wood,.035)
   for x in [-3,3]:
    box('gable tie beam',(x,0,2.65),(.18,4.4,.2),wood,.025)
-  # overlapping gable roof modules with visible pitched silhouette
+  # ARCHITECTURAL STRUCTURE V2: original timber trusses and individually
+  # staggered thatch courses. Kenney reference remains in the .blend but
+  # no longer dictates the roof geometry.
   for x in range(-3,4):
-   place('roof-high-gable',(x,0,2.7),(1.06,4.7,1.25))
-  # chimney and capped top
-  place('chimney',(1.8,0.9,2.5),(1.2,1.2,2.0))
-  place('chimney-top',(1.8,0.9,4.5),(1.2,1.2,1.0))
+   for side in (-1,1):
+    y=side*2.16
+    beam=box('roof rafter %d %d'%(x,side),(x,y/2,3.30),(.105,2.62,.16),wood,.025)
+    beam.rotation_euler.x=side*math.radians(35)
+  # Ridge and edge beams, independent of source mesh dimensions
+  box('continuous oak ridge',(0,0,4.25),(6.9,.18,.20),wood,.035)
+  for side in (-1,1):
+   box('oak fascia',(0,side*2.35,2.58),(7.05,.20,.24),wood,.035)
+  for side in (-1,1):
+   for course in range(13):
+    y=side*(.13+course*.19)
+    z=4.21-(abs(y)/2.47)*1.63
+    for col in range(20):
+     x=-3.38+col*.356+(course%2)*.13
+     jitter=random.uniform(-.025,.025)
+     piece=box('hand laid thatch %d %d %d'%(side,course,col),
+       (x+jitter,y,z),(.39,.29,.085),thatch,.018)
+     piece.rotation_euler.x=side*math.radians(34)
+  # chimney: coursed stone stack and cap with visible opening
+  for course in range(11):
+   z=2.65+course*.19
+   for face in range(4):
+    angle=face*math.pi/2
+    x=1.85+math.cos(angle)*.36
+    y=.95+math.sin(angle)*.36
+    block=box('chimney dressed stone %02d %d'%(course,face),
+      (x,y,z),(.78,.18,.19) if face%2 else (.18,.78,.19),stone,.025)
+  box('chimney lip',(1.85,.95,4.80),(1.06,1.06,.17),stone,.035)
+  box('chimney dark flue',(1.85,.95,4.90),(.61,.61,.025),wood,.008)
+  # Exposed structural timber grid across the facade
+  for x in (-2.5,-1.5,-.5,.5,1.5,2.5):
+   box('front timber stud %.1f'%x,(x,-2.21,1.57),(.115,.14,2.05),wood,.018)
+  for z in (.78,1.65,2.52):
+   box('front continuous timber rail %.2f'%z,(0,-2.22,z),(6.55,.15,.13),wood,.02)
+  # Door is a separate joinery assembly, not a painted wall rectangle.
+  box('recessed oak entrance',(0,-2.32,1.32),(1.03,.12,1.85),wood,.05)
+  for x in (-.35,-.12,.12,.35):
+   box('vertical door plank %.2f'%x,(x,-2.40,1.32),(.18,.05,1.76),wood,.012)
+  box('door stone lintel',(0,-2.47,2.34),(1.37,.34,.23),stone,.05)
+  for x in (-.57,.57):
+   box('door oak jamb %.2f'%x,(x,-2.43,1.33),(.13,.21,2.06),wood,.022)
   # handcrafted beams and entrance furniture
   for x in [-2.7,2.7]:
    box('exposed wall brace',(x,-2.15,1.55),(.14,.16,2.0),wood,.035)
