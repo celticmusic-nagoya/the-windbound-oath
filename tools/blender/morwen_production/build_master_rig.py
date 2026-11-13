@@ -22,8 +22,7 @@ def add(name,head,tail,parent=None,connected=False):
 add("root",(0,0,.05),(0,0,.15))
 add("pelvis",(0,0,.75),(0,0,.90),"root")
 add("spine_01",(0,0,.90),(0,0,1.08),"pelvis")
-add("spine_02",(0,0,1.08),(0,0,1.24),"spine_01",True)
-add("chest",(0,0,1.24),(0,0,1.39),"spine_02",True)
+add("chest",(0,0,1.08),(0,0,1.39),"spine_01",True)
 add("neck",(0,0,1.39),(0,0,1.49),"chest",True)
 add("head",(0,0,1.49),(0,0,1.76),"neck",True)
 for side,sign in (("L",-1),("R",1)):
@@ -42,7 +41,7 @@ add("cape.R",(.14,.05,1.34),(.28,.11,.70),"chest")
 add("satchel",(.10,.05,1.10),(.23,.08,.85),"chest")
 bpy.ops.object.mode_set(mode="OBJECT")
 assert len(arm.bones)==26,len(arm.bones)
-assert set(arm.bones)=={"root","pelvis","spine_01","spine_02","chest","neck","head",
+assert set(arm.bones)=={"root","pelvis","spine_01","chest","neck","head",
 "clavicle.L","upper_arm.L","forearm.L","hand.L","clavicle.R","upper_arm.R","forearm.R","hand.R",
 "thigh.L","shin.L","foot.L","toe.L","thigh.R","shin.R","foot.R","toe.R","hat","cape.L","cape.R","satchel"}
 out=Path("render_output/morwen_rig_template");out.mkdir(parents=True,exist_ok=True)
