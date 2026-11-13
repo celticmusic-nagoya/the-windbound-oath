@@ -2,14 +2,14 @@
   "schema": "two-map-geometry-anchor-v1",
   "source": "data/maps/rilde_village_01_peace.json",
   "source_state": "main at audit",
-  "status": "EXISTING_RUNTIME_GEOMETRY_REFERENCE_NOT_ART_CANON",
+  "status": "LEGACY_PROVISIONAL_COORDINATES_NON_AUTHORITATIVE",
   "world": {
     "width": 2400,
     "height": 1750,
     "tile": 8,
     "unitScale": 2.5
   },
-  "coordinate_conversion": "Blender plan: x=(game_x-1200)/100, y=(875-game_y)/100; provisional 100 game units = 1 Blender meter",
+  "coordinate_conversion": "Legacy comparison only; must not drive final Blender placements",
   "landmarks": [
     {
       "id": "b_lind_elder_house",
@@ -153,6 +153,8 @@
     "Preserve wind stone and bridge geography",
     "Use neutral scale proxy, not Morwen approved asset",
     "Do not interpret event CG composition as an overhead map",
-    "Do not promote provisional Blender assets to canon"
-  ]
+    "Do not promote provisional Blender assets to canon",
+    "Do not lock building placements from these coordinates; use only for migration impact and gameplay compatibility audit"
+  ],
+  "priority": "Approved background CG > approved lore and scene geography > legacy runtime map > procedural blockout"
 }
