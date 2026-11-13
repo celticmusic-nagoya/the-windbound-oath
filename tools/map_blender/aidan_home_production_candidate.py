@@ -18,6 +18,8 @@ sc.render.resolution_y=900
 sc.render.resolution_percentage=100
 sc.render.film_transparent=True
 sc.render.image_settings.file_format="PNG"
+sc.render.image_settings.color_mode="RGBA"
+sc.render.image_settings.color_depth="8"
 def mat(name,rgb):
  m=bpy.data.materials.new(name);m.diffuse_color=(*rgb,1);m.use_nodes=True
  m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value=(*rgb,1)
