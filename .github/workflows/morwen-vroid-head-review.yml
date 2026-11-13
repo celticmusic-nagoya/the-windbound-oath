@@ -15,6 +15,7 @@ on:
       - 'tools/blender/morwen_production/mesh_topology_audit.py'
       - 'tools/blender/morwen_production/run_mesh_audit_vroid.py'
       - 'tools/blender/morwen_production/create_face_comparison.py'
+      - 'tools/blender/morwen_production/render_neutral_skin_head.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -52,6 +53,18 @@ jobs:
         run: |
           blender -b -t 2 --python tools/blender/morwen_production/render_vroid_cc0_review.py
           test -s render_output/morwen_vroid_review/QA.json
+      - name: Render isolated neutral skin head four views
+        run: |
+          blender -b -t 2 --python tools/blender/morwen_production/render_neutral_skin_head.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('render_output/morwen_neutral_head')
+          q=json.loads((p/'QA.json').read_text())
+          assert q['skin_vertices']==588 and q['source_modified'] is False
+          for view in ('front','right','back','left'):
+              assert (p/(view+'_neutral_skin.png')).stat().st_size>1000
+          PY
       - name: Audit VRoid mesh topology without modifying source
         run: blender -b -t 2 --python tools/blender/morwen_production/run_mesh_audit_vroid.py
       - name: Audit canonical four-view images
@@ -124,6 +137,8 @@ jobs:
         with:
           name: morwen-vroid-cc0-head-review
           path: |
+            render_output/morwen_neutral_head/*.png
+            render_output/morwen_neutral_head/QA.json
             render_output/morwen_vroid_review/*_head.png
             render_output/morwen_vroid_review/*_wire.png
             render_output/morwen_vroid_review/*_face_detail.png
