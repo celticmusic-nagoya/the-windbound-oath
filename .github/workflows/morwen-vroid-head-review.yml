@@ -27,9 +27,11 @@ jobs:
           (out/"Base_Female.vrm").write_bytes(zipfile.ZipFile(__import__("io").BytesIO(raw)).read("Base_Female.vrm"))
           PY
       - name: Install Blender
-        run: sudo apt-get update -qq && sudo apt-get install -y blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender python3-numpy
       - name: Render VRM candidate
-        run: blender -b -t 2 --python tools/blender/morwen_production/render_vroid_cc0_review.py
+        run: |
+          blender -b -t 2 --python tools/blender/morwen_production/render_vroid_cc0_review.py
+          test -s render_output/morwen_vroid_review/QA.json
       - name: Validate
         run: |
           python3 - <<'PY'
