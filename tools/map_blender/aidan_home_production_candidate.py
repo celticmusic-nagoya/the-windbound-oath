@@ -55,9 +55,34 @@ def organic_stone(name,xyz,scale,material):
  ob["procedural_seed"]=1311
  return ob
 def beam(name,a,b,thick,material):
+ # Five-section swept timber mesh: anchored endpoints with protected overlap.
  a,b=Vector(a),Vector(b)
- ob=cube(name,(a+b)/2,(thick,thick,(b-a).length),material)
- ob.rotation_euler=(b-a).to_track_quat("Z","Y").to_euler()
+ direction=(b-a).normalized()
+ start=a-direction*.04;end=b+direction*.04
+ tangent=Vector((0,0,1))
+ if abs(direction.dot(tangent))>.95:tangent=Vector((1,0,0))
+ u=direction.cross(tangent).normalized();v=direction.cross(u).normalized()
+ verts=[]
+ bend=rng.uniform(-.016,.016)
+ for i in range(5):
+  t=i/4
+  center=start.lerp(end,t)+u*(bend*math.sin(math.pi*t))
+  width=thick*(1+rng.uniform(-.055,.055)) if 0<i<4 else thick
+  for dx,dy in ((-1,-1),(1,-1),(1,1),(-1,1)):
+   verts.append(tuple(center+u*dx*width/2+v*dy*width/2))
+ faces=[(3,2,1,0),(16,17,18,19)]
+ for i in range(4):
+  for j in range(4):
+   k=i*4+j;kn=i*4+(j+1)%4
+   faces.append((k,kn,kn+4,k+4))
+ mesh=bpy.data.meshes.new(name+"_organic");mesh.from_pydata(verts,[],faces);mesh.update()
+ ob=bpy.data.objects.new(name,mesh);bpy.context.collection.objects.link(ob)
+ ob.data.materials.append(material)
+ bevel=ob.modifiers.new("Hand_dressed_edges","BEVEL")
+ bevel.width=.012;bevel.segments=3
+ ob.modifiers.new("Weighted_normals","WEIGHTED_NORMAL")
+ ob["joint_overlap_m"]=.04
+ return ob
 cube("Foundation",(0,0,.075),(8.3,6.7,.55),stone[4],.10)
 # Structural roof/gable seam: solid triangular gables extend into roof skin.
 # This is a closed profile, not a decorative beam or a flat bounding box.
