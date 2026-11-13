@@ -23,7 +23,7 @@ for item in items:
         request = urllib.request.Request(url, headers={"User-Agent": "TWO-PBR-Intake/1.0"})
         with urllib.request.urlopen(request, timeout=30) as response:
             manifest = json.load(response)
-        for channel in ("Diffuse", "Normal", "Rough", "Displacement", "AO", "Metalness"):
+        for channel in ("Diffuse", "Normal", "nor_gl", "nor_dx", "Rough", "rough", "Displacement", "AO", "Metalness"):
             options = manifest.get(channel, {})
             if not isinstance(options, dict):
                 continue
@@ -35,7 +35,8 @@ for item in items:
                     entry = variants.get(fmt)
                     if isinstance(entry, dict) and entry.get("url"):
                         row["maps"].append({
-                            "channel": channel,
+                            "channel": ("Normal" if channel in ("nor_gl", "nor_dx") else "Rough" if channel == "rough" else channel),
+                            "provider_channel": channel,
                             "resolution": resolution,
                             "format": fmt,
                             "url": entry["url"],
