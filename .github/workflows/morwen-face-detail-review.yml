@@ -1,0 +1,38 @@
+name: Morwen Face Detail Review
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - 'tools/blender/morwen_production/build_face_detail_review.py'
+      - '.github/workflows/morwen-face-detail-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender
+      - name: Render five angles
+        run: blender -b -t 2 --python tools/blender/morwen_production/build_face_detail_review.py
+      - name: Verify files and non-approval
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("render_output/morwen_face_detail_review")
+          d=json.loads((p/"QA.json").read_text())
+          assert d["G2"].startswith("NOT_PASSED")
+          assert all((p/(name+".png")).stat().st_size>1000 for name in ["front","right","back","left","three_quarter"])
+          PY
+      - name: Upload render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-face-detail-review-not-approved
+          path: render_output/morwen_face_detail_review/
+          retention-days: 14
