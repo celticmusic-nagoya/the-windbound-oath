@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - name: Static QA
         run: |
-          python3 -m py_compile tools/map_blender/aidan_roof_candidate_01.py tools/map_blender/aidan_roof_render_01.py
+          python3 -m py_compile tools/map_blender/aidan_roof_vertex_first_v2.py tools/map_blender/aidan_roof_render_v2.py
           python3 tools/map_blender/test_aidan_roof_candidate_01.py
       - name: Install Blender for geometry QA
         run: |
@@ -30,7 +30,7 @@ jobs:
         env:
           AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-roof-qa
         run: |
-          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_roof_render_01.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_roof_render_v2.py
           test -s "$AIDAN_ROOF_OUTPUT/manifest.json"
       - name: Verify five nonempty images and manifest
         env:
