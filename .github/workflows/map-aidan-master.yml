@@ -1,0 +1,51 @@
+name: MAP Aidan Quality Master Render
+on:
+  push:
+    branches: [feature/map-building-01-interior-exterior]
+    paths:
+      - 'tools/map_blender/buildings/aidan_master_quality_first.py'
+      - '.github/workflows/map-aidan-master.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender xvfb libgl1 libegl1
+      - name: Python syntax
+        run: python3 -m py_compile tools/map_blender/buildings/aidan_master_quality_first.py
+      - name: Blender render
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-master
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a blender -b --python tools/map_blender/buildings/aidan_master_quality_first.py
+      - name: Verify render and manifest
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-master
+        run: |
+          python3 - <<'PY'
+          import os,json,hashlib
+          from pathlib import Path
+          p=Path(os.environ["MAP_OUTPUT"])/"aidan_master"
+          d=json.loads((p/"manifest.json").read_text())
+          assert len(d["files"])==5
+          for n,h in d["files"].items():
+              b=(p/n).read_bytes()
+              assert hashlib.sha256(b).hexdigest()==h
+              if n.endswith(".png"): assert b.startswith(b"\\x89PNG\\r\\n\\x1a\\n")
+          print("MASTER TECH QA PASS")
+          PY
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-quality-master-preview
+          path: ${{ runner.temp }}/map-master/aidan_master/
+          retention-days: 14
+          if-no-files-found: warn
