@@ -85,6 +85,10 @@ with zipfile.ZipFile(archive) as z:
      piece=box('hand laid thatch %d %d %d'%(side,course,col),
        (x+jitter,y,z),(.39,.29,.085),thatch,.018)
      piece.rotation_euler.x=-side*math.radians(33.4)
+  # Structural gate: roof substrates must be present on both pitches.
+  substrates=[o for o in bpy.data.objects if o.name.startswith('continuous pitched roof substrate')]
+  assert len(substrates)==2, 'Missing watertight roof substrate'
+  assert all(abs(o.rotation_euler.x)>0.4 for o in substrates), 'Roof slope not applied'
   # chimney: coursed stone stack and cap with visible opening
   for course in range(11):
    z=2.65+course*.19
