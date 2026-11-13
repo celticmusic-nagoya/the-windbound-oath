@@ -48,7 +48,7 @@ def morwen():
         ("head", "sphere", (0,-.015,2.02), (.37,.32,.45), "skin"),
         ("hair_cap", "sphere", (0,.04,2.22), (.39,.34,.21), "hair"),
     ]
-    for side, sign in (("L",-1),("R",1)):
+    for side, sign in (("L",1),("R",-1)):
         parts += [
             ("arm_"+side,"cylinder",(sign*.40,0,1.38),(.18,.19,.65),"uniform"),
             ("hand_"+side,"sphere",(sign*.40,-.01,1.02),(.16,.15,.17),"skin"),
