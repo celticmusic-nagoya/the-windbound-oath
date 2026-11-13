@@ -5,8 +5,8 @@ random.seed(41)
 out=Path(os.environ.get("MAP_OUTPUT","/tmp/map-preview"))/"rilde_phase1";out.mkdir(parents=True,exist_ok=True)
 bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
 def material(n,c):
- m=bpy.data.materials.new(n);m.diffuse_color=(*c,1);return m
-M={k:material(k,v) for k,v in {"earth":(.48,.37,.23),"grass":(.26,.40,.19),"stone":(.42,.43,.40),"wood":(.36,.22,.12),"wall":(.70,.63,.46),"roof":(.48,.22,.12),"water":(.13,.34,.43),"sand":(.59,.53,.36),"path":(.51,.43,.31),"moss":(.13,.29,.16),"leaves":(.21,.36,.17),"skin":(.72,.51,.37),"cloth":(.20,.32,.43)}.items()}
+ m=bpy.data.materials.new(n);m.diffuse_color=(*c,1);m.use_nodes=True;m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value=(*c,1);m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value=.9;return m
+M={k:material(k,v) for k,v in {"earth":(.48,.37,.23),"grass":(.26,.40,.19),"stone":(.42,.43,.40),"wood":(.36,.22,.12),"wall":(.70,.63,.46),"roof":(.48,.22,.12),"water":(.13,.34,.43),"sand":(.59,.53,.36),"path":(.51,.43,.31),"moss":(.13,.29,.16),"leaves":(.21,.36,.17),"skin":(.72,.51,.37),"cloth":(.20,.32,.43),"roof_light":(.61,.31,.19),"roof_dark":(.34,.15,.09),"wood_light":(.47,.31,.18),"wall_shadow":(.55,.51,.41),"crop":(.53,.57,.19),"flower":(.65,.35,.16)}.items()}
 def cube(n,loc,dims,mat):
  bpy.ops.mesh.primitive_cube_add(size=1,location=loc);o=bpy.context.object;o.name=n;o.dimensions=dims;bpy.ops.object.transform_apply(location=False,rotation=False,scale=True);o.data.materials.append(M[mat]);return o
 def cyl(n,loc,r,h,mat):
@@ -29,6 +29,14 @@ def house(x,y):
  for dx in [-1.3,1.3]:cube("rilde/house/window",(x+dx,y-1.75,1.7),(.55,.08,.65),"wood")
  for side in [-1,1]:
   o=cube("rilde/house/roof",(x,y+side*.9,3.13),(5.1,2.55,.18),"roof");o.rotation_euler.x=side*math.radians(28)
+  for i in range(8):
+   for j in range(4):
+    t=cube("rilde/house/roof_tile",(x-2.15+i*.61,y+side*(.27+j*.54),3.13+side*(j-1.5)*.015),(.58,.52,.045),"roof_light" if (i+j)%3 else "roof_dark");t.rotation_euler.x=side*math.radians(28)
+ for dx in [-1.85,0,1.85]:
+  cube("rilde/house/crossbeam",(x+dx,y-1.76,2.1),(.14,.12,1.05),"wood")
+ cube("rilde/house/lintel",(x,y-1.78,2.57),(4.1,.14,.15),"wood_light")
+ cube("rilde/house/chimney",(x+1.45,y+.65,3.66),(.55,.55,1.5),"stone")
+ cube("rilde/house/chimney_cap",(x+1.45,y+.65,4.47),(.76,.76,.13),"stone")
 # Approved geography (2026-11-08): west sea/cliff, SW harbor, center village,
 # north farmland/trade road, east north-to-south river, SE Moss Forest.
 # Coordinates are composition proxies; CG-verified shapes remain pending.
@@ -41,7 +49,8 @@ for x in range(-16,18,2):
    if (abs(x)<3 and -6<y<7) or (abs(y-1)<2 and -11<x<13) or (abs(x-1)<2 and y>5):kind="earth"
    if x>=12 and y>-8:kind="water"
    if x>=7 and y<=-6:kind="moss"
-   cube("world/ground/"+kind,(x,y,-.16),(2,2,.3),kind)
+   elevation=.12*math.sin(x*.32)+.11*math.cos(y*.38)+.08*math.sin((x+y)*.49)
+   cube("world/ground/"+kind,(x,y,-.22+elevation/2),(2,2,.44+elevation),kind)
 # West coastal cliff and southern fishing harbor: intentionally simplified silhouettes.
 for y in [-8,-6,-4,-2,0,2,4,6,8,10]:
  rock(-11,y)
@@ -56,7 +65,9 @@ cyl("rilde/windstone/plinth",(0,0,.28),.82,.56,"stone")
 cube("rilde/windstone/monolith",(0,0,1.25),(.85,.48,1.7),"stone")
 # North farmland and fortress trade route; route direction only, fort location not asserted.
 for x in [-8,-6,-4,4,6,8]:
- for y in [8,10]:cube("world/farmland/plot",(x,y,.025),(1.55,1.55,.07),"earth")
+ for y in [8,10]:
+  cube("world/farmland/plot",(x,y,.10),(1.55,1.55,.12),"earth")
+  for k in range(4):cube("world/farmland/crop_row",(x-.55+k*.36,y,.19),(.12,1.4,.12),"crop")
 for x in [-6,-4,4,6]:fence(x,7)
 # Southeast Moss Forest, distinct from the northern fortress trade road.
 for x,y in [(7,-7),(9,-9),(11,-7),(7,-11),(15,-10),(15,-6),(9,-5)]:tree(x,y)
@@ -65,6 +76,14 @@ for x,y in [(8,-10),(14,-8),(10,-11)]:rock(x,y)
 for x,y in [(-8,7),(-9,4),(7,5),(-8,-3)]:tree(x,y)
 for x,y in [(-7,-5),(8,6),(5,-5)]:rock(x,y)
 for x in [-8,-6,-4,4,6,8]:fence(x,-5)
+# Roadside wear, scattered stones and hand-built garden borders.
+for i in range(36):
+ x=random.uniform(-10,9);y=random.uniform(-5,7)
+ if abs(x)<2 and abs(y)<2:continue
+ if i%4==0:rock(x,y)
+ else:cube("rilde/clutter/ground_stone",(x,y,.09),(.17,.11,.09),"stone")
+for x,y in [(-5,1),(4,-4),(6,2),(-7,2)]:
+ for j in range(5):cube("rilde/garden/flower",(x+j*.21,y,.18),(.12,.12,.25),"flower")
 cyl("rilde/well/base",(2,2,.36),.78,.72,"stone")
 cyl("rilde/well/opening",(2,2,.76),.54,.10,"wood")
 for x in [1.3,2.7]:cube("rilde/well/post",(x,2,1.32),(.12,.12,1.35),"wood")
