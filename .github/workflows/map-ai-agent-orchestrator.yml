@@ -6,6 +6,7 @@ on:
       - 'tools/map_blender/agent_request.json'
       - '.github/workflows/map-ai-agent-orchestrator.yml'
       - 'tools/map_blender/validate_agent_request.py'
+      - 'tests/test_map_agent_request.py'
   workflow_dispatch:
     inputs:
       agent:
@@ -41,6 +42,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Test request allowlist and rejection rules
+        run: python3 -m unittest discover -s tests -p 'test_map_agent_request.py' -v
       - name: Validate request
         id: request
         shell: bash
