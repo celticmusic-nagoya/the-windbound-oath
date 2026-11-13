@@ -5,6 +5,7 @@ on:
       - feature/morwen-production-pipeline-01
     paths:
       - '.github/workflows/morwen-vroid-head-review.yml'
+      - 'tools/blender/morwen_production/render_vroid_cc0_review.py'
   workflow_dispatch:
 permissions:
   contents: read
