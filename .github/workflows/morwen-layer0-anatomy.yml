@@ -1,0 +1,52 @@
+name: Morwen Layer 0 Anatomy Review
+on:
+  push:
+    branches:
+      - feature/mvp-blockout-01
+    paths:
+      - 'tools/blender/production_mesh_08/build_layer0_body.py'
+      - 'tools/blender/production_mesh_08/references/**'
+      - 'tools/blender/production_mesh_08/layer0_reference_manifest.json'
+      - '.github/workflows/morwen-layer0-anatomy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render-anatomy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
+      - name: Check script syntax
+        run: python3 -m py_compile tools/blender/production_mesh_08/build_layer0_body.py
+      - name: Build and render Layer 0 anatomy review
+        run: blender -b -noaudio -t 2 --python tools/blender/production_mesh_08/build_layer0_body.py
+      - name: Validate render and metadata
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,struct
+          d=pathlib.Path("render_output/layer0_anatomy")
+          q=json.loads((d/"QA.json").read_text())
+          assert q["reference_sha256_verified"]==4,q
+          assert q["render_count"]==4,q
+          assert q["production_quality"] is False,q
+          assert q["mesh_vertices"]>1000,q
+          assert (d/"MORWEN_L0_ANATOMY_REVIEW.blend").stat().st_size>1000
+          for v in ("front","right","back","left"):
+              p=d/(v+".png");raw=p.read_bytes()
+              assert raw[:8]==b"\\x89PNG\\r\\n\\x1a\\n".decode("unicode_escape").encode("latin1"),p
+              assert struct.unpack(">II",raw[16:24])==(384,576),p
+          print("MORWEN_L0_ANATOMY_TECHNICAL_PASS_ART_QA_NOT_RUN")
+          PY
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-anatomy-review
+          path: render_output/layer0_anatomy/
+          retention-days: 30
+          if-no-files-found: warn
