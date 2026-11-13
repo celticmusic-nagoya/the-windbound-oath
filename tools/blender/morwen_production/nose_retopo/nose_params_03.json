@@ -1,0 +1,51 @@
+{
+  "schema": "MORWEN-NOSE-RETOPO-PARAMS-1",
+  "task_id": "MORWEN-LOCAL-RETOPO-03",
+  "method_id": "teardrop-ring-patch-local-retopo",
+  "method_family": "LOCAL_RETOPO_PARAMETRIC_RING_PATCH",
+  "status": "ONE TECHNICAL CANDIDATE - NOT AN ART APPROVAL",
+  "seed": 20261114,
+  "region": {
+    "note": "teardrop around the measured nose tip (pronasale) in the front (x,z) plane; Face skin triangles with all vertices inside are replaced",
+    "x_half_m": 0.0185,
+    "x_taper_toward_nasion": 0.45,
+    "z_above_tip_to_top_m_from_nasion": 0.008,
+    "z_below_tip_m": 0.0105,
+    "min_y_m": 0.06,
+    "notch_ratio": 0.88,
+    "notch_note": "boundary vertices nearer the tip than 0.88 x their neighbours' mean (normalised) are absorbed until the loop is notch-free"
+  },
+  "rings": {
+    "note": "fractions from the boundary (0) toward the tip (1); boundary is resampled by angle in normalised teardrop space",
+    "boundary_copy_s": 0.16,
+    "s": [0.34, 0.5, 0.64, 0.76, 0.86, 0.93, 0.975],
+    "vertices_per_ring": [16, 16, 16, 16, 16, 8, 8],
+    "smooth_blend": [0.3, 0.6, 0.85, 1.0, 1.0, 1.0, 1.0],
+    "smooth_rho_ref": 0.9,
+    "smooth_note": "inner rings follow a smooth teardrop (rho_ref * (1-s)) instead of copying the jagged boundary, removing pyramid creases"
+  },
+  "shape": {
+    "base_fill": "2D thin-plate (r^2 log r) fill of y over the boundary loop and its outer one-ring (slope continuity)",
+    "nose_profile": "A * smoothstep(s)^p: zero value and zero slope at the boundary, rounded tip",
+    "profile_power": 1.35,
+    "tip_y": "keep the measured baseline pronasale projection in the Basis shape"
+  },
+  "design_range": {
+    "note": "Nose depth is an ART DECISION (pending 3D target 3/4 evaluation). Exposed as one design shape key, rendered at 0, 0.5, 1.0. The 2D side drawing value (0.49-0.53U) is NOT used as a target.",
+    "shape_key_name": "MORWEN_DESIGN_NoseDepth",
+    "full_key_extra_projection_U": 0.07,
+    "render_values": [0.0, 0.5, 1.0]
+  },
+  "expression_checks": {
+    "vrm_preset_to_target_index": {"blink": 13, "blink_l": 15, "blink_r": 14, "joy": 3, "a": 37, "i": 38, "u": 39, "e": 40, "o": 41, "angry": 1, "fun": 2, "sorrow": 4, "surprised": 5},
+    "affected_threshold_m": 0.0002,
+    "render_presets": ["blink", "joy"]
+  },
+  "acceptance_technical_note": "RELATIVE technical acceptance: the candidate must not be worse than the ORIGINAL mesh on the same region (dihedral, folds) and under the same expression key; margins are provisional technical values, never art tolerances and never G2",
+  "acceptance_technical": {
+    "max_flipped_triangles": 0,
+    "relative_edge_ratio_margin": 1.10,
+    "relative_dihedral_margin_deg": 5.0,
+    "face_body_seam_max_gap_m": 0.0001
+  }
+}

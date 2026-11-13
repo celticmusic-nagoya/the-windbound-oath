@@ -1,0 +1,84 @@
+name: Morwen Local Retopo 03
+on:
+  push:
+    branches:
+      - feature/morwen-local-retopo-03
+    paths:
+      - '.github/workflows/morwen-local-retopo-03.yml'
+      - 'tools/blender/morwen_production/nose_retopo/**'
+      - 'tools/blender/morwen_production/head_landmark/*.py'
+      - 'tools/blender/morwen_production/_qa/morwen_attempt_ledger.json'
+      - 'tools/qa_3d_attempt_ledger.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+  MORWEN_OUT: render_output/morwen_local_retopo_03
+  MORWEN_TARGET_PNG: render_output/target/file_00000000301c8209af49625fd11d7670.png
+  PYTHONHASHSEED: '0'
+jobs:
+  nose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Approved 3D target PNG (read-only, separate branch)
+        uses: actions/checkout@v4
+        with:
+          ref: feature/morwen-reference-binary-01
+          path: _target
+          sparse-checkout: assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Anti-loop ledger (schema_version 1, two-failure guard)
+        run: |
+          python -m unittest discover -s tests -p 'test_qa_3d_attempt_ledger.py' -v
+          python tools/qa_3d_attempt_ledger.py tools/blender/morwen_production/_qa/morwen_attempt_ledger.json
+      - name: Pinned Blender runtime (bpy 5.3.0 wheel, SHA-256 verified)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "${BPY_WHEEL_SHA256}  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          grep -v '^bpy==' tools/blender/morwen_production/head_landmark/requirements-lock.txt > /tmp/req.txt
+          python -m pip install -r /tmp/req.txt
+      - name: Sources (pinned CC0 VRM, 3D target SHA)
+        run: |
+          mkdir -p render_output/target
+          cp _target/assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png "$MORWEN_TARGET_PNG"
+          echo "7640822cfeb6c3de5b988a79e438babfaf7e3dafbdbc8433ae6cde78f3988957  $MORWEN_TARGET_PNG" | sha256sum -c -
+          python - <<'PY'
+          import hashlib, io, urllib.request, zipfile
+          from pathlib import Path
+          url = "https://opengameart.org/sites/default/files/base_female.zip"
+          out = Path("render_output/morwen_vroid_review"); out.mkdir(parents=True, exist_ok=True)
+          req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+          with urllib.request.urlopen(req, timeout=90) as res:
+              raw = res.read()
+          assert hashlib.sha256(raw).hexdigest() == "bf2717cff70b40a278df56e137dbb699c6499551096fa4c005e9aeca1de68eb3"
+          vrm = zipfile.ZipFile(io.BytesIO(raw)).read("Base_Female.vrm")
+          assert hashlib.sha256(vrm).hexdigest() == "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
+          (out / "Base_Female.vrm").write_bytes(vrm)
+          PY
+      - name: Baseline landmarks (LANDMARK-02 calibration)
+        run: |
+          python tools/blender/morwen_production/head_landmark/measure_head_landmarks_3d.py
+          python tools/blender/morwen_production/head_landmark/measure_canonical_landmarks_2d.py
+      - name: Nose local retopology candidate, renders and technical QA
+        run: python tools/blender/morwen_production/nose_retopo/run_nose_retopo_03.py
+      - name: Validate evidence
+        run: python tools/blender/morwen_production/nose_retopo/validate_nose_evidence.py
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-local-retopo-03
+          path: render_output/morwen_local_retopo_03/
+          retention-days: 30
