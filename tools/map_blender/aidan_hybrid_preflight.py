@@ -1,0 +1,1 @@
+# G0 preflight source is provided in AIDAN-HOME-HYBRID-01 artifact; pending import.
