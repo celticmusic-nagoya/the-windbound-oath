@@ -1,0 +1,43 @@
+{
+  "schema": "MORWEN-HEAD-LANDMARK-CANDIDATES-01",
+  "status": "PROVISIONAL_VISUAL_ANNOTATION_NOT_APPROVED",
+  "source": "Official Layer 0 four-view PNGs; human visual inspection of 384x1024 originals",
+  "coordinate_system": "image pixels x right, y down",
+  "views": {
+    "front": {
+      "file": "7809.png",
+      "crown_y": 17,
+      "chin_y": 232,
+      "neck_base_y": 255,
+      "shoulder_line_y": 266
+    },
+    "right": {
+      "file": "7807.png",
+      "crown_y": 16,
+      "chin_y": 230,
+      "neck_base_y": 255,
+      "shoulder_line_y": 267
+    },
+    "back": {
+      "file": "7810.png",
+      "crown_y": 16,
+      "chin_y": null,
+      "neck_base_y": 253,
+      "shoulder_line_y": 267
+    },
+    "left": {
+      "file": "7808.png",
+      "crown_y": 16,
+      "chin_y": 231,
+      "neck_base_y": 254,
+      "shoulder_line_y": 266
+    }
+  },
+  "constraints": [
+    "Candidate landmarks are approximate and must be visually reviewed before using as production mesh coordinates.",
+    "Back chin cannot be seen; null is intentional.",
+    "Hair crown is not skull crown.",
+    "Do not change or replace canonical PNGs.",
+    "Anatomical right is +X; front screen left, back screen right."
+  ]
+}
