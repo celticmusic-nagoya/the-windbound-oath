@@ -1,0 +1,21 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAP-MVP-03 Blender sprites</title><style>body{background:#19231d;color:#eee9dc;font:15px system-ui;margin:0}main{max-width:820px;margin:auto;padding:12px}canvas{width:100%;height:auto;border:1px solid #9aaa90;background:#607c57}label{display:inline-block;margin:8px}input{max-width:170px}button{font-size:19px;min-height:44px;min-width:48px;background:#354a3c;color:white;border:1px solid #8ba08b}#pad{display:grid;grid-template-columns:repeat(3,55px);gap:4px;justify-content:center}button[data-d=up]{grid-column:2}button[data-d=left]{grid-column:1;grid-row:2}button[data-d=down]{grid-column:2;grid-row:2}button[data-d=right]{grid-column:3;grid-row:2}</style></head><body><main><h1>MAP-MVP-03｜Blender画像の仮配置</h1><p>Actionsで生成した house.png / tree.png / rock.png を選択すると仮モデルを画像に置き換えます。未選択時は簡易図形を表示します。</p><div><label>民家 <input type="file" accept="image/png" data-type="house"></label><label>木 <input type="file" accept="image/png" data-type="tree"></label><label>岩 <input type="file" accept="image/png" data-type="rock"></label></div><canvas id="scene" width="768" height="480"></canvas><div id="pad"><button data-d="up">↑</button><button data-d="left">←</button><button data-d="down">↓</button><button data-d="right">→</button></div><output id="status"></output></main><script>
+'use strict';
+const ctx=document.getElementById('scene').getContext('2d'),status=document.getElementById('status');
+const imgs={},pressed=new Set(),player={x:380,y:360,r:13};
+const things=[{type:'house',x:130,y:155,w:160,h:125},{type:'tree',x:585,y:160,w:90,h:100},{type:'tree',x:660,y:290,w:80,h:95},{type:'rock',x:250,y:340,w:75,h:55},{type:'rock',x:510,y:345,w:80,h:55}];
+function collision(x,y){return things.some(o=>x+player.r>o.x+12&&x-player.r<o.x+o.w-12&&y+player.r>o.y+o.h*.72&&y-player.r<o.y+o.h)}
+function draw(){ctx.clearRect(0,0,768,480);ctx.fillStyle='#647f57';ctx.fillRect(0,0,768,480);
+ for(let x=0;x<768;x+=48)for(let y=0;y<480;y+=48){ctx.strokeStyle='#76916a';ctx.strokeRect(x,y,48,48)}
+ ctx.fillStyle='#b39b73';ctx.fillRect(345,0,92,480);
+ const items=[...things,{type:'player',x:player.x-12,y:player.y-42,w:24,h:42}].sort((a,b)=>(a.y+a.h)-(b.y+b.h));
+ for(const o of items){if(o.type==='player'){ctx.fillStyle='#2f4559';ctx.fillRect(player.x-9,player.y-30,18,26);ctx.fillStyle='#dfb9a0';ctx.beginPath();ctx.arc(player.x,player.y-36,10,0,7);ctx.fill();continue}
+ if(imgs[o.type])ctx.drawImage(imgs[o.type],o.x,o.y,o.w,o.h);else{ctx.fillStyle={house:'#bcae91',tree:'#416846',rock:'#87918b'}[o.type];ctx.fillRect(o.x,o.y,o.w,o.h)}}
+ status.textContent='MAP-MVP-03 / sprites '+Object.keys(imgs).length+'/3 / X '+Math.round(player.x)+' Y '+Math.round(player.y);
+}
+function tick(){let dx=Number(pressed.has('right'))-Number(pressed.has('left')),dy=Number(pressed.has('down'))-Number(pressed.has('up'));if(dx||dy){const m=Math.hypot(dx,dy);let x=Math.max(20,Math.min(748,player.x+dx/m*2.5)),y=Math.max(48,Math.min(465,player.y+dy/m*2.5));if(!collision(x,player.y))player.x=x;if(!collision(player.x,y))player.y=y}draw();requestAnimationFrame(tick)}
+document.querySelectorAll('input[type=file]').forEach(el=>el.addEventListener('change',()=>{const f=el.files&&el.files[0];if(!f)return;const url=URL.createObjectURL(f),img=new Image();img.onload=()=>{imgs[el.dataset.type]=img;URL.revokeObjectURL(url)};img.onerror=()=>URL.revokeObjectURL(url);img.src=url}));
+const keys={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',a:'left',s:'down',d:'right'};
+window.addEventListener('keydown',e=>{if(keys[e.key]){e.preventDefault();pressed.add(keys[e.key])}});window.addEventListener('keyup',e=>{if(keys[e.key])pressed.delete(keys[e.key])});window.addEventListener('blur',()=>pressed.clear());
+document.querySelectorAll('button[data-d]').forEach(b=>{const d=b.dataset.d;b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);pressed.add(d)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,()=>pressed.delete(d))});
+requestAnimationFrame(tick);
+</script></body></html>
