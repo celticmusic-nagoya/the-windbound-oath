@@ -195,4 +195,4 @@ candidate.value=0.0
  "G3":"RENDERED_CANDIDATE","G4":"NOT_RUN",
  "warnings":["Source Face includes multiple material islands; deformation needs independent facial review",
              "Taper is exploratory and not measured from canonical landmarks"]
-},indent=2)+"\\n")
+},indent=2)+"\n")
