@@ -1,0 +1,1600 @@
+{
+  "task_id": "MORWEN-HEAD-STRUCTURE-01",
+  "source_file": "Base_Female.vrm",
+  "source_vrm_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+  "source_zip_sha256_pinned": "bf2717cff70b40a278df56e137dbb699c6499551096fa4c005e9aeca1de68eb3",
+  "source_modified": false,
+  "blender_version": "5.3.0",
+  "units": "Blender world metres after glTF import (Y-forward model faces +Y)",
+  "anchor": {
+    "neck": [
+      0.00026,
+      -0.01727,
+      1.31535
+    ],
+    "head": [
+      0.00026,
+      -0.00796,
+      1.38756
+    ],
+    "eye_mid": [
+      0.00026,
+      0.0204,
+      1.44971
+    ]
+  },
+  "objects": [
+    {
+      "name": "Armature",
+      "type": "ARMATURE",
+      "parent": null,
+      "collection": "Scene Collection",
+      "children": [
+        "Body",
+        "Face",
+        "Hairs",
+        "secondary"
+      ]
+    },
+    {
+      "name": "Face",
+      "type": "MESH",
+      "parent": "Armature",
+      "collection": "Scene Collection",
+      "children": []
+    },
+    {
+      "name": "Body",
+      "type": "MESH",
+      "parent": "Armature",
+      "collection": "Scene Collection",
+      "children": []
+    },
+    {
+      "name": "Hairs",
+      "type": "EMPTY",
+      "parent": "Armature",
+      "collection": "Scene Collection",
+      "children": []
+    },
+    {
+      "name": "secondary",
+      "type": "EMPTY",
+      "parent": "Armature",
+      "collection": "Scene Collection",
+      "children": []
+    },
+    {
+      "name": "Icosphere",
+      "type": "MESH",
+      "parent": null,
+      "collection": "glTF_not_exported",
+      "children": []
+    }
+  ],
+  "meshes": {
+    "Face": {
+      "raw_vertices": 2054,
+      "raw_faces": 3158,
+      "raw_edge_components": 34,
+      "welded_vertices": 1838,
+      "seam_duplicate_vertices": 216,
+      "welded_components": 18,
+      "duplicate_faces": 0,
+      "degenerate_faces": 0,
+      "boundary_edges": 482,
+      "non_manifold_edges_gt2": 0,
+      "winding_conflict_edges": 0,
+      "loose_vertices": 0,
+      "has_custom_split_normals": true,
+      "components": [
+        {
+          "vertices": 807,
+          "faces": 1574,
+          "materials": {
+            "F00_000_00_FaceMouth_00_FACE": 128,
+            "F00_000_00_Face_00_SKIN": 1350,
+            "F00_000_00_EyeWhite_00_EYE": 96
+          },
+          "bounds_min": [
+            -0.10798,
+            -0.0412,
+            1.35439
+          ],
+          "bounds_max": [
+            0.10849,
+            0.10661,
+            1.58652
+          ],
+          "in_head_region": true,
+          "boundary_edges": 38,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 210
+        },
+        {
+          "vertices": 107,
+          "faces": 192,
+          "materials": {
+            "F00_000_00_FaceMouth_00_FACE": 192
+          },
+          "bounds_min": [
+            -0.01528,
+            0.05219,
+            1.38181
+          ],
+          "bounds_max": [
+            0.01579,
+            0.08352,
+            1.39611
+          ],
+          "in_head_region": true,
+          "boundary_edges": 20,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 75,
+          "faces": 112,
+          "materials": {
+            "F00_000_00_FaceEyeline_00_FACE": 112
+          },
+          "bounds_min": [
+            0.01077,
+            0.04926,
+            1.42335
+          ],
+          "bounds_max": [
+            0.09428,
+            0.08826,
+            1.47283
+          ],
+          "in_head_region": true,
+          "boundary_edges": 36,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 78
+        },
+        {
+          "vertices": 75,
+          "faces": 112,
+          "materials": {
+            "F00_000_00_FaceEyeline_00_FACE": 112
+          },
+          "bounds_min": [
+            -0.09377,
+            0.04926,
+            1.42335
+          ],
+          "bounds_max": [
+            -0.01026,
+            0.08826,
+            1.47283
+          ],
+          "in_head_region": true,
+          "boundary_edges": 36,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 78
+        },
+        {
+          "vertices": 75,
+          "faces": 112,
+          "materials": {
+            "F00_000_00_FaceEyelash_00_FACE": 112
+          },
+          "bounds_min": [
+            0.01599,
+            0.06117,
+            1.42753
+          ],
+          "bounds_max": [
+            0.08719,
+            0.09331,
+            1.46828
+          ],
+          "in_head_region": true,
+          "boundary_edges": 36,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 112
+        },
+        {
+          "vertices": 75,
+          "faces": 112,
+          "materials": {
+            "F00_000_00_FaceEyelash_00_FACE": 112
+          },
+          "bounds_min": [
+            -0.08668,
+            0.06117,
+            1.42753
+          ],
+          "bounds_max": [
+            -0.01548,
+            0.09331,
+            1.46828
+          ],
+          "in_head_region": true,
+          "boundary_edges": 36,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 112
+        },
+        {
+          "vertices": 61,
+          "faces": 96,
+          "materials": {
+            "F00_000_00_EyeIris_00_EYE": 96
+          },
+          "bounds_min": [
+            -0.05758,
+            0.06468,
+            1.42937
+          ],
+          "bounds_max": [
+            -0.0249,
+            0.07749,
+            1.46305
+          ],
+          "in_head_region": true,
+          "boundary_edges": 24,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 60
+        },
+        {
+          "vertices": 61,
+          "faces": 96,
+          "materials": {
+            "F00_000_00_EyeIris_00_EYE": 96
+          },
+          "bounds_min": [
+            0.02541,
+            0.06468,
+            1.42937
+          ],
+          "bounds_max": [
+            0.05809,
+            0.07749,
+            1.46305
+          ],
+          "in_head_region": true,
+          "boundary_edges": 24,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 60
+        },
+        {
+          "vertices": 61,
+          "faces": 96,
+          "materials": {
+            "F00_000_00_EyeHighlight_00_EYE": 96
+          },
+          "bounds_min": [
+            -0.05767,
+            0.0648,
+            1.42935
+          ],
+          "bounds_max": [
+            -0.02514,
+            0.07819,
+            1.463
+          ],
+          "in_head_region": true,
+          "boundary_edges": 24,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 18
+        },
+        {
+          "vertices": 61,
+          "faces": 96,
+          "materials": {
+            "F00_000_00_EyeHighlight_00_EYE": 96
+          },
+          "bounds_min": [
+            0.02566,
+            0.0648,
+            1.42935
+          ],
+          "bounds_max": [
+            0.05818,
+            0.07819,
+            1.463
+          ],
+          "in_head_region": true,
+          "boundary_edges": 24,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 18
+        },
+        {
+          "vertices": 55,
+          "faces": 88,
+          "materials": {
+            "F00_000_00_FaceMouth_00_FACE": 88
+          },
+          "bounds_min": [
+            -0.02304,
+            0.06447,
+            1.38685
+          ],
+          "bounds_max": [
+            0.02355,
+            0.09191,
+            1.40408
+          ],
+          "in_head_region": true,
+          "boundary_edges": 20,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 38
+        },
+        {
+          "vertices": 55,
+          "faces": 88,
+          "materials": {
+            "F00_000_00_FaceMouth_00_FACE": 88
+          },
+          "bounds_min": [
+            -0.02304,
+            0.05792,
+            1.37713
+          ],
+          "bounds_max": [
+            0.02355,
+            0.08577,
+            1.39407
+          ],
+          "in_head_region": true,
+          "boundary_edges": 20,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 38
+        },
+        {
+          "vertices": 55,
+          "faces": 80,
+          "materials": {
+            "F00_000_00_FaceEyeline_00_FACE": 80
+          },
+          "bounds_min": [
+            -0.07419,
+            0.06171,
+            1.42563
+          ],
+          "bounds_max": [
+            -0.02088,
+            0.08899,
+            1.44153
+          ],
+          "in_head_region": true,
+          "boundary_edges": 28,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 80
+        },
+        {
+          "vertices": 55,
+          "faces": 80,
+          "materials": {
+            "F00_000_00_FaceEyeline_00_FACE": 80
+          },
+          "bounds_min": [
+            0.02139,
+            0.06171,
+            1.42563
+          ],
+          "bounds_max": [
+            0.0747,
+            0.08899,
+            1.44153
+          ],
+          "in_head_region": true,
+          "boundary_edges": 28,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 80
+        },
+        {
+          "vertices": 55,
+          "faces": 80,
+          "materials": {
+            "F00_000_00_FaceBrow_00_FACE": 80
+          },
+          "bounds_min": [
+            -0.07999,
+            0.06372,
+            1.46594
+          ],
+          "bounds_max": [
+            -0.01744,
+            0.09383,
+            1.50178
+          ],
+          "in_head_region": true,
+          "boundary_edges": 28,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 55,
+          "faces": 80,
+          "materials": {
+            "F00_000_00_FaceBrow_00_FACE": 80
+          },
+          "bounds_min": [
+            0.01795,
+            0.06372,
+            1.46594
+          ],
+          "bounds_max": [
+            0.0805,
+            0.09383,
+            1.50178
+          ],
+          "in_head_region": true,
+          "boundary_edges": 28,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 25,
+          "faces": 32,
+          "materials": {
+            "F00_000_00_EyeExtra_01_EYE": 32
+          },
+          "bounds_min": [
+            -0.05122,
+            0.04221,
+            1.43451
+          ],
+          "bounds_max": [
+            -0.02029,
+            0.05464,
+            1.45975
+          ],
+          "in_head_region": true,
+          "boundary_edges": 16,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 31
+        },
+        {
+          "vertices": 25,
+          "faces": 32,
+          "materials": {
+            "F00_000_00_EyeExtra_01_EYE": 32
+          },
+          "bounds_min": [
+            0.0208,
+            0.04221,
+            1.43451
+          ],
+          "bounds_max": [
+            0.05173,
+            0.05464,
+            1.45975
+          ],
+          "in_head_region": true,
+          "boundary_edges": 16,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 31
+        }
+      ],
+      "faces_per_material": {
+        "F00_000_00_FaceMouth_00_FACE": 496,
+        "F00_000_00_EyeWhite_00_EYE": 96,
+        "F00_000_00_FaceEyeline_00_FACE": 384,
+        "F00_000_00_FaceEyelash_00_FACE": 224,
+        "F00_000_00_FaceBrow_00_FACE": 160,
+        "F00_000_00_EyeIris_00_EYE": 192,
+        "F00_000_00_EyeHighlight_00_EYE": 192,
+        "F00_000_00_Face_00_SKIN": 1350,
+        "F00_000_00_EyeExtra_01_EYE": 64
+      }
+    },
+    "Body": {
+      "raw_vertices": 7797,
+      "raw_faces": 11646,
+      "raw_edge_components": 179,
+      "welded_vertices": 5943,
+      "seam_duplicate_vertices": 1854,
+      "welded_components": 17,
+      "duplicate_faces": 0,
+      "degenerate_faces": 0,
+      "boundary_edges": 178,
+      "non_manifold_edges_gt2": 1,
+      "winding_conflict_edges": 0,
+      "loose_vertices": 0,
+      "has_custom_split_normals": true,
+      "components": [
+        {
+          "vertices": 3949,
+          "faces": 7806,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 7412,
+            "F00_000_HairBack_00_HAIR": 394
+          },
+          "bounds_min": [
+            -0.69038,
+            -0.1188,
+            0.01581
+          ],
+          "bounds_max": [
+            0.69089,
+            0.12847,
+            1.59763
+          ],
+          "in_head_region": true,
+          "boundary_edges": 92,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 2276
+        },
+        {
+          "vertices": 1035,
+          "faces": 2066,
+          "materials": {
+            "F00_001_01_Tops_01_CLOTH": 2066
+          },
+          "bounds_min": [
+            -0.25875,
+            -0.10648,
+            0.88992
+          ],
+          "bounds_max": [
+            0.25926,
+            0.13795,
+            1.36906
+          ],
+          "in_head_region": true,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 346
+        },
+        {
+          "vertices": 381,
+          "faces": 700,
+          "materials": {
+            "F00_001_01_Bottoms_01_CLOTH": 700
+          },
+          "bounds_min": [
+            -0.199,
+            -0.15042,
+            0.72147
+          ],
+          "bounds_max": [
+            0.19492,
+            0.13742,
+            1.05098
+          ],
+          "in_head_region": false,
+          "boundary_edges": 60,
+          "boundary_loops": 1,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 43
+        },
+        {
+          "vertices": 137,
+          "faces": 270,
+          "materials": {
+            "F00_001_01_Shoes_01_CLOTH": 270
+          },
+          "bounds_min": [
+            -0.09405,
+            -0.08002,
+            -0.00018
+          ],
+          "bounds_max": [
+            -0.00566,
+            0.13824,
+            0.08964
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 26
+        },
+        {
+          "vertices": 137,
+          "faces": 270,
+          "materials": {
+            "F00_001_01_Shoes_01_CLOTH": 270
+          },
+          "bounds_min": [
+            0.00617,
+            -0.08002,
+            -0.00018
+          ],
+          "bounds_max": [
+            0.09456,
+            0.13824,
+            0.08964
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 26
+        },
+        {
+          "vertices": 98,
+          "faces": 166,
+          "materials": {
+            "F00_001_01_Accessory_Tie_01_CLOTH": 166
+          },
+          "bounds_min": [
+            -0.06488,
+            0.04805,
+            1.24379
+          ],
+          "bounds_max": [
+            0.06539,
+            0.0935,
+            1.31846
+          ],
+          "in_head_region": true,
+          "boundary_edges": 26,
+          "boundary_loops": 2,
+          "non_manifold_edges": 1,
+          "faces_pointing_toward_centroid": 44
+        },
+        {
+          "vertices": 26,
+          "faces": 48,
+          "materials": {
+            "F00_001_01_Accessory_Tie_01_CLOTH": 48
+          },
+          "bounds_min": [
+            -0.01143,
+            0.04893,
+            1.28415
+          ],
+          "bounds_max": [
+            0.01194,
+            0.07449,
+            1.31143
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            -0.6109,
+            0.09357,
+            1.24623
+          ],
+          "bounds_max": [
+            -0.60246,
+            0.10117,
+            1.25376
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            -0.68191,
+            0.0397,
+            1.26584
+          ],
+          "bounds_max": [
+            -0.66943,
+            0.04655,
+            1.26885
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            -0.69174,
+            0.01842,
+            1.26578
+          ],
+          "bounds_max": [
+            -0.67938,
+            0.02535,
+            1.26856
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 1
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            -0.68293,
+            -0.00069,
+            1.27107
+          ],
+          "bounds_max": [
+            -0.67013,
+            0.00569,
+            1.27342
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            -0.67272,
+            -0.01739,
+            1.26624
+          ],
+          "bounds_max": [
+            -0.66071,
+            -0.01184,
+            1.26863
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            0.60296,
+            0.09359,
+            1.24628
+          ],
+          "bounds_max": [
+            0.61139,
+            0.10119,
+            1.25381
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            0.66994,
+            0.0397,
+            1.26584
+          ],
+          "bounds_max": [
+            0.68242,
+            0.04655,
+            1.26885
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            0.67989,
+            0.01842,
+            1.26578
+          ],
+          "bounds_max": [
+            0.69225,
+            0.02535,
+            1.26857
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 1
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            0.67065,
+            -0.00069,
+            1.27107
+          ],
+          "bounds_max": [
+            0.68344,
+            0.00569,
+            1.27342
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        },
+        {
+          "vertices": 18,
+          "faces": 32,
+          "materials": {
+            "F00_001_01_Body_00_SKIN": 32
+          },
+          "bounds_min": [
+            0.66122,
+            -0.01739,
+            1.26624
+          ],
+          "bounds_max": [
+            0.67324,
+            -0.01184,
+            1.26864
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        }
+      ],
+      "faces_per_material": {
+        "F00_001_01_Body_00_SKIN": 7732,
+        "F00_001_01_Tops_01_CLOTH": 2066,
+        "F00_001_01_Accessory_Tie_01_CLOTH": 214,
+        "F00_001_01_Bottoms_01_CLOTH": 700,
+        "F00_001_01_Shoes_01_CLOTH": 540,
+        "F00_000_HairBack_00_HAIR": 394
+      }
+    },
+    "Icosphere": {
+      "raw_vertices": 42,
+      "raw_faces": 80,
+      "raw_edge_components": 1,
+      "welded_vertices": 42,
+      "seam_duplicate_vertices": 0,
+      "welded_components": 1,
+      "duplicate_faces": 0,
+      "degenerate_faces": 0,
+      "boundary_edges": 0,
+      "non_manifold_edges_gt2": 0,
+      "winding_conflict_edges": 0,
+      "loose_vertices": 0,
+      "has_custom_split_normals": false,
+      "components": [
+        {
+          "vertices": 42,
+          "faces": 80,
+          "materials": {
+            "<none>": 80
+          },
+          "bounds_min": [
+            -0.95106,
+            -1.0,
+            -1.0
+          ],
+          "bounds_max": [
+            0.95106,
+            1.0,
+            1.0
+          ],
+          "in_head_region": false,
+          "boundary_edges": 0,
+          "boundary_loops": 0,
+          "non_manifold_edges": 0,
+          "faces_pointing_toward_centroid": 0
+        }
+      ],
+      "faces_per_material": {
+        "<none>": 80
+      }
+    }
+  },
+  "materials": {
+    "F00_000_00_EyeExtra_01_EYE": {
+      "blend_method": "BLEND",
+      "surface_render_method": "BLENDED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_000_00_EyeExtra_01",
+          "size": [
+            512,
+            256
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_EyeHighlight_00_EYE": {
+      "blend_method": "BLEND",
+      "surface_render_method": "BLENDED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_000_00_EyeHighlight_00",
+          "size": [
+            1024,
+            512
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_EyeIris_00_EYE": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_000_00_EyeIris_00",
+          "size": [
+            1024,
+            512
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_EyeWhite_00_EYE": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_000_00_EyeWhite_00",
+          "size": [
+            1024,
+            512
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_Face_00_SKIN": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_000_00_Face_00",
+          "size": [
+            1024,
+            1024
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_FaceBrow_00_FACE": {
+      "blend_method": "BLEND",
+      "surface_render_method": "BLENDED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_000_00_FaceBrow_00",
+          "size": [
+            1024,
+            256
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_FaceEyelash_00_FACE": {
+      "blend_method": "BLEND",
+      "surface_render_method": "BLENDED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_000_00_FaceEyelash_00",
+          "size": [
+            1024,
+            256
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_FaceEyeline_00_FACE": {
+      "blend_method": "BLEND",
+      "surface_render_method": "BLENDED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_000_00_FaceEyeline_00",
+          "size": [
+            1024,
+            256
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_00_FaceMouth_00_FACE": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_000_00_FaceMouth_00",
+          "size": [
+            512,
+            512
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_000_HairBack_00_HAIR": {
+      "blend_method": "BLEND",
+      "surface_render_method": "BLENDED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_000_HairBack_00",
+          "size": [
+            1024,
+            1024
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_001_01_Accessory_Tie_01_CLOTH": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_001_01_Accessory_Tie_01",
+          "size": [
+            256,
+            256
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_001_01_Body_00_SKIN": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": true,
+      "images": [
+        {
+          "name": "F00_001_01_Body_00",
+          "size": [
+            2048,
+            2048
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_001_01_Bottoms_01_CLOTH": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_001_01_Bottoms_01",
+          "size": [
+            1024,
+            512
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_001_01_Shoes_01_CLOTH": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_001_01_Shoes_01",
+          "size": [
+            512,
+            512
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    },
+    "F00_001_01_Tops_01_CLOTH": {
+      "blend_method": "HASHED",
+      "surface_render_method": "DITHERED",
+      "backface_culling": false,
+      "images": [
+        {
+          "name": "F00_001_01_Tops_01",
+          "size": [
+            2048,
+            2048
+          ],
+          "alpha_mode": "CHANNEL_PACKED"
+        }
+      ],
+      "alpha_linked": false,
+      "base_color_factor": null
+    }
+  },
+  "skinning": {
+    "Face": {
+      "armature_modifiers": [
+        "Armature"
+      ],
+      "unweighted_vertices": 0,
+      "influence_histogram": {
+        "1": 2054
+      },
+      "dominant_bones_top10": [
+        [
+          "J_Bip_C_Head",
+          1810
+        ],
+        [
+          "J_Adj_L_FaceEye",
+          122
+        ],
+        [
+          "J_Adj_R_FaceEye",
+          122
+        ]
+      ],
+      "shape_keys": [
+        {
+          "name": "target_0",
+          "value": 0.0,
+          "max_displacement": 0.00334
+        },
+        {
+          "name": "target_1",
+          "value": 0.0,
+          "max_displacement": 0.02037
+        },
+        {
+          "name": "target_2",
+          "value": 0.0,
+          "max_displacement": 0.01551
+        },
+        {
+          "name": "target_3",
+          "value": 0.0,
+          "max_displacement": 0.02627
+        },
+        {
+          "name": "target_4",
+          "value": 0.0,
+          "max_displacement": 0.01872
+        },
+        {
+          "name": "target_5",
+          "value": 0.0,
+          "max_displacement": 0.0262
+        },
+        {
+          "name": "target_6",
+          "value": 0.0,
+          "max_displacement": 0.02037
+        },
+        {
+          "name": "target_7",
+          "value": 0.0,
+          "max_displacement": 0.01312
+        },
+        {
+          "name": "target_8",
+          "value": 0.0,
+          "max_displacement": 0.00712
+        },
+        {
+          "name": "target_9",
+          "value": 0.0,
+          "max_displacement": 0.01872
+        },
+        {
+          "name": "target_10",
+          "value": 0.0,
+          "max_displacement": 0.01215
+        },
+        {
+          "name": "target_11",
+          "value": 0.0,
+          "max_displacement": 0.0
+        },
+        {
+          "name": "target_12",
+          "value": 0.0,
+          "max_displacement": 0.00636
+        },
+        {
+          "name": "target_13",
+          "value": 0.0,
+          "max_displacement": 0.03201
+        },
+        {
+          "name": "target_14",
+          "value": 0.0,
+          "max_displacement": 0.03201
+        },
+        {
+          "name": "target_15",
+          "value": 0.0,
+          "max_displacement": 0.03201
+        },
+        {
+          "name": "target_16",
+          "value": 0.0,
+          "max_displacement": 0.0042
+        },
+        {
+          "name": "target_17",
+          "value": 0.0,
+          "max_displacement": 0.015
+        },
+        {
+          "name": "target_18",
+          "value": 0.0,
+          "max_displacement": 0.015
+        },
+        {
+          "name": "target_19",
+          "value": 0.0,
+          "max_displacement": 0.015
+        },
+        {
+          "name": "target_20",
+          "value": 0.0,
+          "max_displacement": 0.00643
+        },
+        {
+          "name": "target_21",
+          "value": 0.0,
+          "max_displacement": 0.00469
+        },
+        {
+          "name": "target_22",
+          "value": 0.0,
+          "max_displacement": 0.00472
+        },
+        {
+          "name": "target_23",
+          "value": 0.0,
+          "max_displacement": 0.04569
+        },
+        {
+          "name": "target_24",
+          "value": 0.0,
+          "max_displacement": 0.01828
+        },
+        {
+          "name": "target_25",
+          "value": 0.0,
+          "max_displacement": 0.02873
+        },
+        {
+          "name": "target_26",
+          "value": 0.0,
+          "max_displacement": 0.01079
+        },
+        {
+          "name": "target_27",
+          "value": 0.0,
+          "max_displacement": 0.01756
+        },
+        {
+          "name": "target_28",
+          "value": 0.0,
+          "max_displacement": 0.00631
+        },
+        {
+          "name": "target_29",
+          "value": 0.0,
+          "max_displacement": 0.00334
+        },
+        {
+          "name": "target_30",
+          "value": 0.0,
+          "max_displacement": 0.01551
+        },
+        {
+          "name": "target_31",
+          "value": 0.0,
+          "max_displacement": 0.02627
+        },
+        {
+          "name": "target_32",
+          "value": 0.0,
+          "max_displacement": 0.01484
+        },
+        {
+          "name": "target_33",
+          "value": 0.0,
+          "max_displacement": 0.0262
+        },
+        {
+          "name": "target_34",
+          "value": 0.0,
+          "max_displacement": 0.0035
+        },
+        {
+          "name": "target_35",
+          "value": 0.0,
+          "max_displacement": 0.0035
+        },
+        {
+          "name": "target_36",
+          "value": 0.0,
+          "max_displacement": 0.0035
+        },
+        {
+          "name": "target_37",
+          "value": 0.0,
+          "max_displacement": 0.01275
+        },
+        {
+          "name": "target_38",
+          "value": 0.0,
+          "max_displacement": 0.00989
+        },
+        {
+          "name": "target_39",
+          "value": 0.0,
+          "max_displacement": 0.01255
+        },
+        {
+          "name": "target_40",
+          "value": 0.0,
+          "max_displacement": 0.01531
+        },
+        {
+          "name": "target_41",
+          "value": 0.0,
+          "max_displacement": 0.02242
+        },
+        {
+          "name": "target_42",
+          "value": 0.0,
+          "max_displacement": 0.07268
+        },
+        {
+          "name": "target_43",
+          "value": 0.0,
+          "max_displacement": 0.00592
+        },
+        {
+          "name": "target_44",
+          "value": 0.0,
+          "max_displacement": 0.00514
+        },
+        {
+          "name": "target_45",
+          "value": 0.0,
+          "max_displacement": 0.00592
+        },
+        {
+          "name": "target_46",
+          "value": 0.0,
+          "max_displacement": 0.00637
+        },
+        {
+          "name": "target_47",
+          "value": 0.0,
+          "max_displacement": 0.00603
+        },
+        {
+          "name": "target_48",
+          "value": 0.0,
+          "max_displacement": 0.00637
+        },
+        {
+          "name": "target_49",
+          "value": 0.0,
+          "max_displacement": 0.00561
+        },
+        {
+          "name": "target_50",
+          "value": 0.0,
+          "max_displacement": 0.00461
+        },
+        {
+          "name": "target_51",
+          "value": 0.0,
+          "max_displacement": 0.00561
+        },
+        {
+          "name": "target_52",
+          "value": 0.0,
+          "max_displacement": 0.0054
+        },
+        {
+          "name": "target_53",
+          "value": 0.0,
+          "max_displacement": 0.0054
+        },
+        {
+          "name": "target_54",
+          "value": 0.0,
+          "max_displacement": 0.00524
+        },
+        {
+          "name": "target_55",
+          "value": 0.0,
+          "max_displacement": 0.04499
+        }
+      ],
+      "nonzero_shape_keys": []
+    },
+    "Body": {
+      "armature_modifiers": [
+        "Armature"
+      ],
+      "unweighted_vertices": 0,
+      "influence_histogram": {
+        "1": 2079,
+        "2": 2359,
+        "3": 1515,
+        "4": 1844
+      },
+      "dominant_bones_top10": [
+        [
+          "J_Bip_C_UpperChest",
+          851
+        ],
+        [
+          "J_Bip_C_Hips",
+          722
+        ],
+        [
+          "J_Bip_C_Head",
+          417
+        ],
+        [
+          "J_Bip_L_UpperArm",
+          363
+        ],
+        [
+          "J_Bip_R_UpperArm",
+          363
+        ],
+        [
+          "J_Bip_L_Foot",
+          347
+        ],
+        [
+          "J_Bip_R_Foot",
+          347
+        ],
+        [
+          "J_Bip_C_Neck",
+          299
+        ],
+        [
+          "J_Bip_C_Chest",
+          253
+        ],
+        [
+          "J_Bip_L_LowerLeg",
+          240
+        ]
+      ],
+      "shape_keys": [],
+      "nonzero_shape_keys": []
+    },
+    "Icosphere": {
+      "armature_modifiers": [],
+      "unweighted_vertices": 42,
+      "influence_histogram": {},
+      "dominant_bones_top10": [],
+      "shape_keys": [],
+      "nonzero_shape_keys": []
+    }
+  },
+  "skull_coverage_above_eye_line": {
+    "back|Body|F00_000_HairBack_00_HAIR": 144,
+    "back|Body|F00_001_01_Body_00_SKIN": 140,
+    "back|Face|F00_000_00_Face_00_SKIN": 84,
+    "front|Body|F00_000_HairBack_00_HAIR": 126,
+    "front|Body|F00_001_01_Body_00_SKIN": 36,
+    "front|Face|F00_000_00_EyeExtra_01_EYE": 24,
+    "front|Face|F00_000_00_EyeHighlight_00_EYE": 68,
+    "front|Face|F00_000_00_EyeIris_00_EYE": 72,
+    "front|Face|F00_000_00_EyeWhite_00_EYE": 34,
+    "front|Face|F00_000_00_FaceBrow_00_FACE": 160,
+    "front|Face|F00_000_00_FaceEyelash_00_FACE": 150,
+    "front|Face|F00_000_00_FaceEyeline_00_FACE": 152,
+    "front|Face|F00_000_00_Face_00_SKIN": 322
+  },
+  "face_body_seam": {
+    "face_skin_border_vertices": 38,
+    "nearest_body_vertex_distance_m": {
+      "min": 0.0,
+      "median": 0.0,
+      "p95": 1e-06,
+      "max": 1e-06
+    },
+    "coincident_within_0_1mm": 38,
+    "interpretation": "Face mask border meets Body head skin as separate unwelded objects"
+  }
+}
