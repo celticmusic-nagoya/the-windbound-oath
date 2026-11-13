@@ -74,7 +74,7 @@ with zipfile.ZipFile(archive) as z:
    direction=Vector((0,0,1.7))-o.location;o.rotation_euler=direction.to_track_quat('-Z','Y').to_euler()
    o.data.type='ORTHO';o.data.ortho_scale=11.8;return o
   bpy.ops.object.light_add(type='AREA',location=(-3,-4,9));bpy.context.object.data.energy=1600;bpy.context.object.data.shape='DISK';bpy.context.object.data.size=7
-  scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=32
+  scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=32;scene.cycles.use_denoising=False
   scene.render.resolution_x=960;scene.render.resolution_y=720;scene.render.resolution_percentage=100
   scene.render.image_settings.file_format='PNG';scene.render.film_transparent=True
   for name,loc in [('front',(8,-10,7)),('rear',(-8,10,7)),('left',(-10,-7,7)),('right',(10,7,7)),('top',(8,-8,13))]:
