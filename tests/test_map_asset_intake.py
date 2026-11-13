@@ -47,6 +47,8 @@ class IntakeTests(unittest.TestCase):
         self.assertEqual(self.check([self.entry,{**self.entry,"path":"./asset.png"}])["status"],"FAIL")
     def test_malformed_https_url(self):
         self.assertEqual(self.check([{**self.entry,"source_url":"https://[invalid/asset"}])["status"],"FAIL")
+    def test_empty_manifest_rejected(self):
+        self.assertEqual(self.check([])["status"],"FAIL")
     def test_bad_manifest(self):
         self.manifest.write_text("broken")
         self.assertEqual(audit(self.root,self.manifest)["status"],"FAIL")
