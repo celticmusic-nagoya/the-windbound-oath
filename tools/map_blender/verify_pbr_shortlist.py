@@ -24,5 +24,6 @@ for item in items:
  except Exception as e:row['status']='ERROR';row['error']=str(e)
  report['assets'].append(row)
 dest.write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')
-print(json.dumps({'statuses':[(a['asset_id'],a['status']) for a in report['assets']]},indent=2))\nif any(a['status'] in ('FOUND_NON_TEXTURE','HTTP_404','ERROR','UNVERIFIED') for a in report['assets']):
+print(json.dumps({'statuses':[(a['asset_id'],a['status']) for a in report['assets']]},indent=2))
+if any(a['status'] in ('FOUND_NON_TEXTURE','HTTP_404','ERROR','UNVERIFIED') for a in report['assets']):
  print('WARNING: shortlist contains unresolved entries; do not import or approve')
