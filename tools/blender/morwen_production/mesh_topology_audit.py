@@ -18,21 +18,26 @@ def audit(mesh):
  boundary=sum(v==1 for v in edge_faces.values())
  nonmanifold=sum(v>2 for v in edge_faces.values())
  loose_edges=sum(tuple(sorted(e.vertices)) not in edge_faces for e in mesh.edges)
- seen=set();components=[]
+ seen=set();components=[];component_details=[]
  for start in range(vertices):
   if start in seen:continue
-  queue=deque([start]);seen.add(start);size=0
+  queue=deque([start]);seen.add(start);size=0;members=[]
   while queue:
-   v=queue.popleft();size+=1
+   v=queue.popleft();size+=1;members.append(v)
    for neighbor in adjacency[v]:
     if neighbor not in seen:seen.add(neighbor);queue.append(neighbor)
   components.append(size)
+  coords=[mesh.vertices[i].co for i in members]
+  mins=[min(c[k] for c in coords) for k in range(3)]
+  maxs=[max(c[k] for c in coords) for k in range(3)]
+  component_details.append({"vertices":size,"min_xyz":[round(float(v),5) for v in mins],"max_xyz":[round(float(v),5) for v in maxs],"vertex_index_sample":members[:8]})
  return {"vertices":vertices,"edges":edges,"faces":faces,
  "triangles":sum(max(0,len(p.vertices)-2) for p in mesh.polygons),
  "face_sides":dict(sorted(counts.items())),
  "boundary_edges":boundary,"nonmanifold_edges":nonmanifold,
  "loose_edges":loose_edges,"connected_components":len(components),
  "component_vertex_counts":sorted(components,reverse=True),
+ "component_details":sorted(component_details,key=lambda x:x["vertices"],reverse=True),
  "uv_layers":len(mesh.uv_layers),"materials":len(mesh.materials),
  "qa_status":"MEASURED_NOT_ART_APPROVED"}
 
