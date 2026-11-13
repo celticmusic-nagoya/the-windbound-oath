@@ -105,8 +105,8 @@
   },
   "cg_alignment": {
     "source_files": [],
-    "status": "PENDING_APPROVED_CG_DISCOVERY",
-    "rule": "No detailed facade/interior canonicalization until approved CG comparison"
+    "status": "CG_IF_VISIBLE_ONLY",
+    "rule": "Approved CG constrains only elements actually depicted. If Aidan home is not visible, design original vernacular house consistent with Rilde village, lore, and reference imagery. No false claim of CG match."
   },
   "topology_alignment": {
     "status": "SCHEMATIC_ONLY",
@@ -116,7 +116,7 @@
   "production_strategy": {
     "mode": "WORLD_TOPOLOGY_PLUS_ONE_MASTER_BUILDING",
     "master_asset": "aidan_home",
-    "quality_gate": "APPROVED_CG_VISUAL_COMPARISON_REQUIRED",
+    "quality_gate": "ART_DIRECTION_AND_WORLD_COHERENCE_REVIEW; CG_MATCH_ONLY_FOR_VISIBLE_ELEMENTS",
     "scope": "exterior first, then interior; reusable roof/wall/door/window/foundation modules",
     "rule": "Do not mass-produce village houses before Aidan exterior art QA; do not assert final asset approval without rendered review",
     "phases": [
@@ -142,5 +142,31 @@
       }
     ],
     "rework_policy": "Max two similar failed render attempts; diagnose structural cause before further generation"
+  },
+  "design_direction": {
+    "status": "ORIGINAL_PROPOSAL_PENDING_ART_QA",
+    "architecture": "modest rural Celtic-fantasy timber frame on stone foundation",
+    "roof": "weathered red-brown tile or wood shingles; choose one after visual comparison",
+    "walls": "warm lime plaster with timber structure",
+    "details": [
+      "wooden front door",
+      "stone entry step",
+      "small eave",
+      "wood-frame windows",
+      "firewood stack",
+      "simple fence",
+      "garden flowers",
+      "worn dirt path"
+    ],
+    "interior_exterior_consistency": [
+      "door and window openings align",
+      "chimney connects to fireplace if present",
+      "floor plan matches external dimensions"
+    ],
+    "avoid": [
+      "aristocratic mansion",
+      "copying reference image composition",
+      "inventing canonical CG visibility"
+    ]
   }
 }
