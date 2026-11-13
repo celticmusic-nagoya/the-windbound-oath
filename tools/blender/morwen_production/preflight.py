@@ -12,10 +12,10 @@ for entry in manifest["images"]:
         errors.append("Canonical image missing or hash mismatch: "+entry["view"])
 rig=bpy.data.objects.get("MORWEN_MASTER_RIG")
 body=bpy.data.objects.get("MORWEN_PRODUCTION_MESH")
-expected=["root","pelvis","spine_01","spine_02","chest","neck","head",
+expected=["root","pelvis","spine_01","chest","neck","head",
 "clavicle.L","upper_arm.L","forearm.L","hand.L","clavicle.R","upper_arm.R","forearm.R","hand.R",
 "thigh.L","shin.L","foot.L","toe.L","thigh.R","shin.R","foot.R","toe.R",
-"hat","cape.L","cape.R"]
+"hat","cape.L","cape.R","satchel"]
 if not rig or rig.type!="ARMATURE":errors.append("MORWEN_MASTER_RIG armature missing")
 else:
     missing=set(expected)-set(rig.data.bones.keys())
