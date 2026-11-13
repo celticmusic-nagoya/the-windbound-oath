@@ -1,4 +1,4 @@
-"""Noncanonical layered diagnostic render. Does NOT claim official-art fidelity."""
+"""Noncanonical layered diagnostic render. Does NOT claim official-art fidelity.\nGitHub Actions run trigger: 2026-11-13.\n"""
 import bpy,math,json
 from pathlib import Path
 from mathutils import Vector
