@@ -14,7 +14,7 @@ def validate(request):
     if set(request)!={"agent","task","mode"}:raise ValueError("unexpected or missing keys")
     agent,task,mode=(request[k] for k in ("agent","task","mode"))
     if agent not in ALLOWED or task not in ALLOWED[agent]:raise ValueError("agent/task not allowlisted")
-    if mode not in ("dry_run","execute"):raise ValueError("mode not allowlisted")
+    if mode != "dry_run":raise ValueError("paid execution is disabled during safety verification")
     return {"agent":agent,"task":task,"mode":mode,"packet":ALLOWED[agent][task]}
 if __name__=="__main__":
     try:
