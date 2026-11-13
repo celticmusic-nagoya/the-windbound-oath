@@ -2,7 +2,9 @@
 
 - 対象: VRoid CC0 `Base_Female.vrm`（ZIP SHA-256 `bf2717cf…68eb3` / VRM SHA-256 `1995f174…8149b`）
 - 基点: `feature/morwen-production-pipeline-01` @ `165a6c6` → 作業ブランチ `feature/morwen-head-structure-01`
-- 証跡: `_qa/head_structure_01/`（ローカル bpy 5.3.0 で実行した結果）。CI での再現は `.github/workflows/morwen-head-structure-01.yml`（apt Blender、Cycles CPU）が行う。
+- 証跡: `_qa/head_structure_01/`（ローカル bpy 5.3.0 で実行した結果）。
+- CI再現: GitHub Actions [#43457599069](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43457599069) SUCCESS @ `083d6e4`（apt Blender 5.0.1、Cycles CPU）。成果物 `morwen-head-structure-01`（ID 14054612570、digest `sha256:b0b28993…0c5173`）。ローカルと同じ数値（78.81%、境界38/38一致、溶接後の成分数 18/17）を確認し、画像も目視で同等であることを確認した。
+- 先行CI失敗: #43457328177（`python3-numpy`不足のためglTFインポートが失敗。修正済みで、台帳に記録）。
 - 元データは変更していない。計測はすべてメモリ上のコピーで行い、実行前後でVRMのSHAが一致することをスクリプト内で検証している。
 
 ## 1. 結論（要約）
