@@ -36,6 +36,24 @@ def cube(name,xyz,scale,material,bevel=.025):
   mod=ob.modifiers.new("Weathered_edges","BEVEL");mod.width=bevel;mod.segments=2
   ob.modifiers.new("Weighted_normals","WEIGHTED_NORMAL")
  return ob
+def organic_stone(name,xyz,scale,material):
+ # Mesh vertex offsets are deterministic; retain an inward structural core.
+ sx,sy,sz=scale
+ verts=[]
+ for zsign in (-1,1):
+  for ysign in (-1,1):
+   for xsign in (-1,1):
+    verts.append((xsign*sx*.5+rng.uniform(-.035,.035),
+                  ysign*sy*.5+rng.uniform(-.022,.022),
+                  zsign*sz*.5+rng.uniform(-.014,.014)))
+ faces=[(0,2,3,1),(4,5,7,6),(0,1,5,4),(2,6,7,3),(0,4,6,2),(1,3,7,5)]
+ mesh=bpy.data.meshes.new(name);mesh.from_pydata(verts,[],faces);mesh.update()
+ ob=bpy.data.objects.new(name,mesh);bpy.context.collection.objects.link(ob)
+ ob.location=xyz;ob.data.materials.append(material)
+ bevel=ob.modifiers.new("Soft_rock_edges","BEVEL");bevel.width=.018;bevel.segments=3
+ ob.modifiers.new("Weighted_normals","WEIGHTED_NORMAL")
+ ob["procedural_seed"]=1311
+ return ob
 def beam(name,a,b,thick,material):
  a,b=Vector(a),Vector(b)
  ob=cube(name,(a+b)/2,(thick,thick,(b-a).length),material)
@@ -77,7 +95,7 @@ for side in ("front","rear","left","right"):
    if not opening:
     x,y=(mid,-3.1) if side=="front" else ((mid,3.1) if side=="rear" else ((-3.9,mid) if side=="left" else (3.9,mid)))
     dims=(span-.025,.32,.24) if side in ("front","rear") else (.32,span-.025,.24)
-    cube("Hand_set_stone",(x,y,z),dims,rng.choice(stone),.038)
+    organic_stone("Hand_set_stone",(x,y,z),dims,rng.choice(stone))
    cursor+=span
 # Timber frame, ridge and rafters.
 for x in (-3.72,3.72):
