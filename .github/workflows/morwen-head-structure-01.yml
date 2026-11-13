@@ -55,11 +55,11 @@ jobs:
           (out / "Base_Female.vrm").write_bytes(vrm)
           PY
       - name: Install Blender
-        run: sudo apt-get update -qq && sudo apt-get install -y blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender python3-numpy
       - name: Structural audit (read-only)
-        run: blender -b -t 2 --python tools/blender/morwen_production/audit_head_structure.py
+        run: blender -b -t 2 --python-exit-code 1 --python tools/blender/morwen_production/audit_head_structure.py
       - name: Diagnostic renders (Cycles CPU, fixed ortho camera)
-        run: blender -b -t 2 --python tools/blender/morwen_production/render_head_diagnostics.py
+        run: blender -b -t 2 --python-exit-code 1 --python tools/blender/morwen_production/render_head_diagnostics.py
       - name: Contact sheets
         run: |
           python3 -m pip install --user Pillow
