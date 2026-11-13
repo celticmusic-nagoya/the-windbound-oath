@@ -1,0 +1,47 @@
+name: Morwen Layer 0 Canonical Reference Setup
+on:
+  push:
+    branches:
+      - feature/mvp-blockout-01
+    paths:
+      - 'tools/blender/production_mesh_08/references/**'
+      - 'tools/blender/production_mesh_08/layer0_reference_manifest.json'
+      - 'tools/blender/production_mesh_08/prepare_layer0_references.py'
+      - '.github/workflows/morwen-layer0-reference-setup.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
+      - name: Validate Python syntax
+        run: python3 -m py_compile tools/blender/production_mesh_08/prepare_layer0_references.py
+      - name: Verify official PNG hashes and place reference images in Blender
+        run: blender -b -noaudio -t 2 --python tools/blender/production_mesh_08/prepare_layer0_references.py
+      - name: Check source validation and Blender output
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          out=pathlib.Path("render_output/layer0_reference_setup")
+          q=json.loads((out/"QA.json").read_text())
+          assert q["reference_count"]==4,q
+          assert q["G1"]=="REFERENCE_HASH_PASS_VISUAL_NOT_RUN",q
+          assert q["G3"]=="REFERENCE_PLANES_CREATED",q
+          assert (out/"MORWEN_LAYER0_REFERENCES.blend").stat().st_size>1000
+          print("CANONICAL_LAYER0_REFERENCE_HASH_AND_SETUP_PASS")
+          PY
+      - name: Upload verification artifact (also on failure)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-reference-setup
+          path: render_output/layer0_reference_setup/
+          retention-days: 30
+          if-no-files-found: warn
