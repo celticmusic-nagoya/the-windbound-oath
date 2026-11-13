@@ -122,7 +122,7 @@ for seed in range(len(adj)):
  coords=[face.matrix_world @ face_mesh.vertices[i].co for i in ids]
  lo=[min(v[k] for v in coords) for k in range(3)]
  hi=[max(v[k] for v in coords) for k in range(3)]
- components.append({"vertices":len(ids),"bounds_min":[round(x,5) for x in lo],"bounds_max":[round(x,5) for x in hi],"centroid":[round(sum(v[k] for v in coords)/len(coords),5) for k in range(3)]})
+ components.append({"vertex_indices":sorted(ids),"vertices":len(ids),"bounds_min":[round(x,5) for x in lo],"bounds_max":[round(x,5) for x in hi],"centroid":[round(sum(v[k] for v in coords)/len(coords),5) for k in range(3)]})
 material_counts=defaultdict(Counter)
 for poly in face_mesh.polygons:
  cid=vertex_component[poly.vertices[0]]
@@ -196,3 +196,24 @@ candidate.value=0.0
  "warnings":["Source Face includes multiple material islands; deformation needs independent facial review",
              "Taper is exploratory and not measured from canonical landmarks"]
 },indent=2)+"\n")
+
+# Exact connected-component indices for reproducible, selective mesh editing.
+# Material-derived labels are hints, not verified anatomy.
+component_index={
+ "status":"COMPONENT_INDEX_CANDIDATE_ONLY",
+ "source_mesh":face.name,
+ "source_vertices":len(face_mesh.vertices),
+ "component_count":len(components),
+ "components":[
+  {"id":i,"vertex_indices":c["vertex_indices"],
+   "vertices":c["vertices"],"materials":c["material_faces"],
+   "bounds_min":c["bounds_min"],"bounds_max":c["bounds_max"],
+   "anatomical_role":"UNVERIFIED"}
+  for i,c in enumerate(components)
+ ],
+ "source_modified":False,
+ "canonical_alignment":"NOT_DONE"
+}
+assert sum(c["vertices"] for c in components)==len(face_mesh.vertices)
+assert sorted(i for c in components for i in c["vertex_indices"])==list(range(len(face_mesh.vertices)))
+(out/"FACE_COMPONENT_INDEX.json").write_text(json.dumps(component_index,indent=2)+"\n")
