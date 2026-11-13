@@ -1,0 +1,88 @@
+name: Map Blender 08 Preview
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/**'
+      - '.github/workflows/map-blender-08-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and headless OpenGL runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
+      - name: Validate Python
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/map_blender_24_structural_kit.py
+      - name: Validate MAP21 topology
+        run: |
+          python3 tools/map_blender/test_map21_topology.py
+          python3 tools/map_blender/test_map21_terrain.py
+      - name: Generate MAP08 through MAP23 previews
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_08.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_11_detail.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_12_refine.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_13_cliff.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_14_ridge.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_15_blend.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_16_material.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_17_composition.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_18_visibility.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_19_integrate.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_20_unified.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_21_topology.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_21d_water_paths.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_22_carved.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_23_original_kit.py
+      - name: Generate isolated MAP24 structural candidate
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: xvfb-run -a blender --background --python tools/map_blender/map_blender_24_structural_kit.py
+      - name: Verify SHA-256, source chain, and occlusion
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: |
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["MAP_OUTPUT"])
+          names=("build_report.json","detail_report.json","map12_report.json","map13_report.json","map14_report.json","map15_report.json","map16_report.json","map17_report.json","map18_report.json","map19_report.json")
+          reports=[json.loads((p/name).read_text()) for name in names]
+          for report in reports:
+              for name,expected in report["files"].items():
+                  assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          for i,name in enumerate(("rilde_blockout.blend","rilde_detail.blend","rilde_map12.blend","rilde_map13.blend","rilde_map14.blend","rilde_map15.blend","rilde_map16.blend","rilde_map17.blend","rilde_map18.blend"),1):
+              assert reports[i]["source_sha256"]==reports[i-1]["files"][name],name
+          audit=reports[6]["ray_test"]
+          assert reports[6]["occlusion_acceptance"]=="PASS", "MAP16 occlusion regression"
+          assert audit["total"]==9
+          independent=json.loads((p/"map20_report.json").read_text())
+          for name,expected in independent["files"].items():
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          candidate=json.loads((p/"map24_manifest.json").read_text())
+          assert candidate["runtime_integration"] is False and candidate["canon_replacement"] is False
+          for name,expected in candidate["files"].items():
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          print("MAP24 SHA-256: PASS")
+          print("MAP20 synthetic occlusion:",independent["synthetic_occlusion"])
+          print("SHA-256 chain: PASS")
+          print("Visibility audit:",audit["blocked"],"/",audit["total"],reports[-2]["occlusion_acceptance"])
+          PY
+      - name: Upload QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-blender-08-preview
+          path: ${{ runner.temp }}/map-blender-08/
+          if-no-files-found: warn
+          retention-days: 14
