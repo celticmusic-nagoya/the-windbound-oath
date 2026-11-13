@@ -1,0 +1,104 @@
+name: Morwen Head Structure Diagnostics 01
+on:
+  push:
+    branches:
+      - feature/morwen-head-structure-01
+    paths:
+      - '.github/workflows/morwen-head-structure-01.yml'
+      - 'tools/blender/morwen_production/audit_head_structure.py'
+      - 'tools/blender/morwen_production/render_head_diagnostics.py'
+      - 'tools/blender/morwen_production/compose_head_diagnostics.py'
+      - 'tools/blender/morwen_production/_qa/morwen_attempt_ledger.json'
+      - 'tools/qa_3d_attempt_ledger.py'
+      - 'tests/test_qa_3d_attempt_ledger.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Anti-loop ledger (schema_version 1, two-failure guard)
+        run: |
+          python -m unittest discover -s tests -p 'test_qa_3d_attempt_ledger.py' -v
+          python tools/qa_3d_attempt_ledger.py tools/blender/morwen_production/_qa/morwen_attempt_ledger.json
+      - name: G1 original protection (Layer 0 SHA)
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          m = Path("tools/blender/production_mesh_08/layer0_reference_manifest.json")
+          man = json.loads(m.read_text())
+          for i in man["images"]:
+              f = m.parent / "references" / i["filename"]
+              h = hashlib.sha256(f.read_bytes()).hexdigest()
+              assert h == i["sha256"], f"{f} changed"
+              print("OK", f, h)
+          PY
+      - name: Fetch pinned CC0 source and validate SHA
+        run: |
+          python3 - <<'PY'
+          import hashlib, io, urllib.request, zipfile
+          from pathlib import Path
+          url = "https://opengameart.org/sites/default/files/base_female.zip"
+          out = Path("render_output/morwen_vroid_review"); out.mkdir(parents=True, exist_ok=True)
+          req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+          with urllib.request.urlopen(req, timeout=90) as res:
+              raw = res.read()
+          assert hashlib.sha256(raw).hexdigest() == "bf2717cff70b40a278df56e137dbb699c6499551096fa4c005e9aeca1de68eb3", "Source hash changed"
+          vrm = zipfile.ZipFile(io.BytesIO(raw)).read("Base_Female.vrm")
+          assert hashlib.sha256(vrm).hexdigest() == "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
+          (out / "Base_Female.vrm").write_bytes(vrm)
+          PY
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender
+      - name: Structural audit (read-only)
+        run: blender -b -t 2 --python tools/blender/morwen_production/audit_head_structure.py
+      - name: Diagnostic renders (Cycles CPU, fixed ortho camera)
+        run: blender -b -t 2 --python tools/blender/morwen_production/render_head_diagnostics.py
+      - name: Contact sheets
+        run: |
+          python3 -m pip install --user Pillow
+          python3 tools/blender/morwen_production/compose_head_diagnostics.py
+      - name: Validate evidence
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("render_output/morwen_head_structure")
+          a = json.loads((p / "HEAD_STRUCTURE_AUDIT.json").read_text())
+          q = json.loads((p / "HEAD_DIAGNOSTIC_RENDER_QA.json").read_text())
+          s = json.loads((p / "SHEETS.json").read_text())
+          assert a["source_modified"] is False and q["source_modified"] is False
+          assert a["source_vrm_sha256"] == q["source_vrm_sha256"] == "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
+          f = a["meshes"]["Face"]; b = a["meshes"]["Body"]
+          # facts the audit report relies on; a change here invalidates HEAD_STRUCTURE_01_AUDIT.md
+          assert f["winding_conflict_edges"] == 0 and b["winding_conflict_edges"] == 0
+          assert f["duplicate_faces"] == 0 and b["duplicate_faces"] == 0
+          assert f["non_manifold_edges_gt2"] == 0
+          assert f["has_custom_split_normals"] and b["has_custom_split_normals"]
+          assert all(k["value"] == 0 for k in a["skinning"]["Face"]["shape_keys"])
+          assert a["skinning"]["Face"]["unweighted_vertices"] == 0
+          seam = a["face_body_seam"]
+          assert seam["coincident_within_0_1mm"] == seam["face_skin_border_vertices"] > 0
+          leg = q["legacy_588_ab"]
+          assert leg["skin_faces_in_fragment"] < leg["skin_faces_total"]
+          assert q["camera"]["identical_for_all_passes"] and q["camera"]["type"] == "ORTHO"
+          assert len(q["renders"]) == 32
+          for r in q["renders"]:
+              assert (p / r["file"]).stat().st_size > 1000, r
+          assert all(c["match"] for c in s["canonical_layer0"].values())
+          print("evidence OK")
+          PY
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-head-structure-01
+          path: |
+            render_output/morwen_head_structure/
+          retention-days: 30

@@ -6,7 +6,8 @@
     "docs/art/MORWEN_TARGET_FIT_ASSESSMENT_01.md",
     "tools/blender/morwen_production/MESH_QA_01_FINDINGS.md",
     "tools/blender/morwen_production/MESH_QA_02_COMPONENT_FINDINGS.md",
-    "docs/art/MORWEN_3D_TARGET_SHEET_20261113.md"
+    "docs/art/MORWEN_3D_TARGET_SHEET_20261113.md",
+    "tools/blender/morwen_production/HEAD_STRUCTURE_01_AUDIT.md"
   ],
   "known_gate_status": {
     "G1": "BLOCKED",
@@ -15,5 +16,60 @@
     "G4": "NOT_RUN"
   },
   "known_issue": "Prior VRoid candidate topology audited; actual canonical visual fit unapproved. Historical individual failed attempts cannot be reconstructed without evidence. G3 PASS applies to topology audit only, not final asset.",
-  "attempts": []
+  "attempts": [
+    {
+      "attempt_id": "MHS01-REC-43453411057",
+      "task_id": "MORWEN-PRODUCTION-PIPELINE-01",
+      "defect_id": "HEADLESS-RENDER-ENV",
+      "method_id": "eevee-headless-ci",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Eevee renders the isolated head in headless GitHub Actions.",
+      "evidence": "GitHub Actions run 43453411057 FAILURE (Eevee needs EGL); fix commit 165a6c6 switched to Cycles. Recorded from repository evidence only.",
+      "result": "FAIL",
+      "failure_category": "tool",
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Use Cycles CPU in CI (done in 165a6c6). Do not retry Eevee headless."
+    },
+    {
+      "attempt_id": "MHS01-REC-43453993945",
+      "task_id": "MORWEN-PRODUCTION-PIPELINE-01",
+      "defect_id": "HEAD-NEUTRAL-RENDER-BLACK-AND-MISSING",
+      "method_id": "isolate-588-raw-island+flat-rebuild+single-area-light",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "The 588-vertex raw skin island is the complete neutral head and renders cleanly from four views.",
+      "evidence": "GitHub Actions run 43453993945 SUCCESS, but independent art QA (TASK MORWEN-HEAD-STRUCTURE-01 packet) found large black areas and missing side/back. Reproduced locally: render_output/morwen_head_structure/SHEET_legacy588_oldlight.png.",
+      "result": "FAIL",
+      "failure_category": "render",
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "FAIL",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Retire this method (count 1/2). Use full welded head (Face+Body skull) with fixed ortho camera and front-side lighting."
+    },
+    {
+      "attempt_id": "MHS01-DIAG-01",
+      "task_id": "MORWEN-HEAD-STRUCTURE-01",
+      "defect_id": "HEAD-NEUTRAL-RENDER-BLACK-AND-MISSING",
+      "method_id": "full-head-welded-structure-audit+fixed-ortho-cycles-diagnostics",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Black areas are caused by lighting/shading of the extraction, not by mesh normals or materials; side/back are missing because the skull lives in the Body mesh.",
+      "evidence": "HEAD_STRUCTURE_AUDIT.json (0 winding conflicts, 0 duplicate faces, 588-island = 78.81% of face skin, Face/Body border 38/38 vertices coincident) and legacy588_oldlight vs legacy588_relit A/B renders. Diagnostic only; no art approval.",
+      "result": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Hand off to ChatGPT art QA: face likeness on full-head clay renders; hair REBUILD."
+    }
+  ],
+  "last_task": "MORWEN-HEAD-STRUCTURE-01"
 }
