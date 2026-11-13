@@ -3,7 +3,13 @@
 Status: SPEC READY; FORMAL BODY NOT YET GENERATED OR ART-APPROVED.
 Scope: Morwen only. Do not alter official art, existing character sprites, or main.
 
-## Canonical sources
+## Latest Layer 0 canonical reference (director-selected, 2026-11-12)
+- Primary: `モルウェン共通素体キャラクターシート.png` (ChatGPT file Library; four-view sheet). This supersedes the earlier assumption that the clothing turnaround is the base-body reference.
+- Visible reference facts: approximately 163 cm (including boots in note), ~7.5 heads tall, front/right/left/back, foot-contact origin (0,0), front view and symmetric neutral pose. Reference sheet contains palette and anchor landmarks.
+- Keep the exact image bytes as canonical input. Library image is **not yet committed to GitHub**; do not invent a repo path or hash. Confirm source hash when transferring.
+- Layer 0 body silhouette is the shape source; Layers 1-3 are clothing/accessories and must not be baked into the shared body.
+
+## Earlier references (secondary)
 - Front full-body: `assets/companions/morwen/master/morwen-full-body-v3.png`.
 - Three approved views: `docs/design/MORWEN_OFFICIAL_3V_REGISTRATION_20261109.md`.
 - Approved side/back PNG binaries are not yet confirmed in GitHub. Treat those angles as **BLOCKED** until source hashes are verified.
@@ -16,7 +22,7 @@ Scope: Morwen only. Do not alter official art, existing character sprites, or ma
 - Use a single normalized coordinate system; avoid object-scale transforms on deforming mesh.
 
 ## Production stages
-1. Reference registration: validate the three view PNGs against SHA-256 in the design tracking document.
+1. Reference registration: preserve the latest Layer 0 four-view sheet unchanged and register its SHA-256. Earlier clothing side/back sources are secondary and must not block Layer 0 proportions.
 2. Proportion sheet: measure ratios from front and registered side/back images; do not invent numeric proportions.
 3. Reusable base mesh selection: confirm redistribution rights, topology, symmetric neutral pose, and deformation-ready joints. Keep license/source manifest.
 4. Whole-body primary forms: match front, sides, back silhouettes. No clothing detail polish until proportions pass.
@@ -24,7 +30,7 @@ Scope: Morwen only. Do not alter official art, existing character sprites, or ma
 6. Shared rig fit, weight QA, walk/idle tests, four-view sprite output.
 
 ## Stage gates
-- G0 references complete and verified: NOT_RUN / missing three view binaries.
+- G0 latest Layer 0 four-view identified and visually inspected: PASS; GitHub binary registration/hash verification: NOT_RUN.
 - G1 neutral full-body silhouette from four views: NOT_RUN.
 - G2 joint bending and topology: NOT_RUN.
 - G3 clothing/hair consistency with official art: NOT_RUN.
