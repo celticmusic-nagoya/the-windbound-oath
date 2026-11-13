@@ -43,6 +43,10 @@ class IntakeTests(unittest.TestCase):
         (self.root/"sub").mkdir()
         (self.root/"sub"/"asset.png").write_bytes(b"fixture")
         self.assertEqual(self.check([{**self.entry,"path":"sub/asset.png"}])["status"],"PASS")
+    def test_normalized_duplicate_path(self):
+        self.assertEqual(self.check([self.entry,{**self.entry,"path":"./asset.png"}])["status"],"FAIL")
+    def test_malformed_https_url(self):
+        self.assertEqual(self.check([{**self.entry,"source_url":"https://[invalid/asset"}])["status"],"FAIL")
     def test_bad_manifest(self):
         self.manifest.write_text("broken")
         self.assertEqual(audit(self.root,self.manifest)["status"],"FAIL")
