@@ -42,6 +42,11 @@ jobs:
           m=json.load(open(os.path.join(p,'manifest.json')))
           assert m['status']=='VERTEX_FIRST_V3_GEOMETRY_CANDIDATE_NOT_ART_APPROVED'
           assert len(m['views'])==5
+          assert m['roof']['slate_count'] >= 350
+          assert len(m['roof']['silhouette_families']) == 5
+          assert all(n > 0 for n in m['roof']['silhouette_families'])
+          assert m['roof']['ridge_cap_count'] == 17
+          assert m['roof']['minimum_clearance'] > 0
           for v in m['views']:
               path=os.path.join(p,v['file'])
               assert os.path.getsize(path)>1000
