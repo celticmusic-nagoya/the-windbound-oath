@@ -1,0 +1,21 @@
+name: Character Production Quality Gate
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/mvp-blockout-01]
+    paths:
+      - 'tools/blender/production_mesh_05/**'
+      - 'docs/design/MORWEN_BODY_04_PROMOTION_GATE.json'
+      - '.github/workflows/character-production-quality-gate.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax and deterministic gate tests
+        run: |
+          python3 -m py_compile tools/blender/production_mesh_05/preflight.py tools/blender/production_mesh_05/test_preflight.py
+          python3 tools/blender/production_mesh_05/test_preflight.py
