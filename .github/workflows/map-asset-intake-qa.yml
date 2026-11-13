@@ -1,0 +1,38 @@
+name: Map Asset Intake QA
+on:
+  push:
+    branches: [feature/map-pipeline-01]
+    paths:
+      - 'tools/map_blender/qa_asset_intake.py'
+      - 'tests/test_map_asset_intake.py'
+      - '.github/workflows/map-asset-intake-qa.yml'
+  pull_request:
+    paths:
+      - 'tools/map_blender/qa_asset_intake.py'
+      - 'tests/test_map_asset_intake.py'
+      - '.github/workflows/map-asset-intake-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run intake tests and preserve results
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p _qa/map-asset-intake
+          python3 -m unittest discover -s tests -p 'test_map_asset_intake.py' -v 2>&1 | tee _qa/map-asset-intake/unittest.log
+      - name: Upload intake QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-asset-intake-qa-${{ github.run_id }}
+          path: _qa/map-asset-intake/unittest.log
+          if-no-files-found: warn
+          retention-days: 7
