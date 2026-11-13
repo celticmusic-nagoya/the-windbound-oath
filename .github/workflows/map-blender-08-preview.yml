@@ -18,7 +18,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
       - name: Validate Python
-        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/hero_roof_01_tile.py tools/map_blender/blender_preflight.py tools/map_blender/roof_slate_system_02.py
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/hero_roof_01_tile.py tools/map_blender/blender_preflight.py tools/map_blender/roof_slate_system_02.py tools/map_blender/fetch_roof_cc0_material.py
       - name: Validate MAP21 topology
         run: |
           python3 tools/map_blender/test_map21_topology.py
@@ -29,6 +29,11 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
           xvfb-run -a blender --background --python tools/map_blender/blender_preflight.py
+      - name: Fetch CC0 Poly Haven red slate PBR maps
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: |
+          python3 tools/map_blender/fetch_roof_cc0_material.py
       - name: Generate MAP08 through MAP23 and hero tile preview
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
@@ -80,6 +85,7 @@ jobs:
           assert json.loads((p/"blender_preflight.json").read_text())["status"]=="PASS"
           slate=json.loads((p/"roof_slate_system_02_manifest.json").read_text())
           assert slate["status"]=="CANDIDATE_NOT_CANON"
+          assert slate["material"]=="Poly Haven CC0 red slate PBR", "CC0 PBR material not applied"
           for name,expected in slate["files"].items():
               assert (p/name).stat().st_size>1000,name
               assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
