@@ -44,6 +44,8 @@ jobs:
           assert q["production_approved"] is False
           for name in ("front","right","back","left","three_quarter"):
               assert (p/(name+"_head.png")).stat().st_size>1000
+          for name in ("front","right","three_quarter"):
+              assert (p/(name+"_wire.png")).stat().st_size>1000
           PY
       - name: Upload images and QA only
         if: always()
@@ -52,5 +54,6 @@ jobs:
           name: morwen-vroid-cc0-head-review
           path: |
             render_output/morwen_vroid_review/*_head.png
+            render_output/morwen_vroid_review/*_wire.png
             render_output/morwen_vroid_review/QA.json
           retention-days: 14
