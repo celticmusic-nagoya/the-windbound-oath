@@ -58,6 +58,10 @@ jobs:
           topology=json.loads((p/"FACE_TOPOLOGY_AUDIT.json").read_text())
           assert topology["vertices"]>0 and topology["polygons"]>0
           assert topology["topology_deformation_approved"] is False
+          parts=json.loads((p/"FACE_COMPONENT_INDEX.json").read_text())
+          assert parts["component_count"]==len(parts["components"])
+          assert sum(c["vertices"] for c in parts["components"])==parts["source_vertices"]
+          assert sorted(v for c in parts["components"] for v in c["vertex_indices"])==list(range(parts["source_vertices"]))
           metrics=json.loads((p/"FACE_PROPORTION_CANDIDATE.json").read_text())
           assert metrics["canonical_landmarks_measured"] is False
           assert metrics["face_width_to_height"]>0
@@ -85,6 +89,7 @@ jobs:
             render_output/morwen_vroid_review/*_face_detail.png
             render_output/morwen_vroid_review/QA.json
             render_output/morwen_vroid_review/FACE_TOPOLOGY_AUDIT.json
+            render_output/morwen_vroid_review/FACE_COMPONENT_INDEX.json
             render_output/morwen_vroid_review/FACE_PROPORTION_CANDIDATE.json
             render_output/morwen_vroid_review/CANONICAL_IMAGE_AUDIT.json
             render_output/morwen_vroid_review/COMPARISON_STATUS.json
