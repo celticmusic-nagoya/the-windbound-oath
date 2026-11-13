@@ -42,6 +42,9 @@ jobs:
           p=Path("render_output/morwen_vroid_review")
           q=json.loads((p/"QA.json").read_text())
           assert q["production_approved"] is False
+          topology=json.loads((p/"FACE_TOPOLOGY_AUDIT.json").read_text())
+          assert topology["vertices"]>0 and topology["polygons"]>0
+          assert topology["topology_deformation_approved"] is False
           for name in ("front","right","back","left","three_quarter"):
               assert (p/(name+"_head.png")).stat().st_size>1000
           for name in ("front","right","three_quarter"):
