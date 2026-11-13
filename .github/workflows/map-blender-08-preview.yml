@@ -18,12 +18,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
       - name: Validate Python
-        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/hero_roof_01_tile.py
       - name: Validate MAP21 topology
         run: |
           python3 tools/map_blender/test_map21_topology.py
           python3 tools/map_blender/test_map21_terrain.py
-      - name: Generate MAP08 through MAP23 previews
+      - name: Generate MAP08 through MAP23 and hero tile preview
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
           LIBGL_ALWAYS_SOFTWARE: "1"
@@ -43,6 +43,7 @@ jobs:
           xvfb-run -a blender --background --python tools/map_blender/map_blender_21d_water_paths.py
           xvfb-run -a blender --background --python tools/map_blender/map_blender_22_carved.py
           xvfb-run -a blender --background --python tools/map_blender/map_blender_23_original_kit.py
+          xvfb-run -a blender --background --python tools/map_blender/hero_roof_01_tile.py
       - name: Verify SHA-256, source chain, and occlusion
         env:
           MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
