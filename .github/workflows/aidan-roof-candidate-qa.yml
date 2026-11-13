@@ -1,5 +1,12 @@
 name: Aidan Roof Geometry Candidate QA
 on:
+  push:
+    branches:
+      - feature/aidan-roof-geometry-01
+    paths:
+      - 'tools/map_blender/aidan_roof_vertex_first_v3.py'
+      - 'tools/map_blender/aidan_roof_render_v3.py'
+      - '.github/workflows/aidan-roof-candidate-qa.yml'
   pull_request:
     paths:
       - 'tools/map_blender/aidan_roof_vertex_first_v3.py'
