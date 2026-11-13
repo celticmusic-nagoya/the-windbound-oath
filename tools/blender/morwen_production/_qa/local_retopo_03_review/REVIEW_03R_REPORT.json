@@ -1,0 +1,389 @@
+{
+  "task_id": "MORWEN-LOCAL-RETOPO-03-REVIEW",
+  "blender_version": "5.3.0",
+  "source_vrm_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+  "source_modified": false,
+  "candidate": {
+    "source_pr": 312,
+    "source_commit": "2955617761f9216d758a835e5488807dcede95fe",
+    "ci_run": 43521557206,
+    "ci_artifact_id": 14083331308,
+    "artifact_blend_sha256": "078117c0e9e1ce4f904a73953782c4dd4196657e27acebc8e8eb09aae79c13e4",
+    "face_geometry_hash": "7f9e3cdee41361339bd1dde95d976b189fc1c63df92b028d0f42997d5d89d88f",
+    "face_geometry_hash_rule": "sha256 over every shape key (name + coords rounded 1e-7) + polygon vertex indices + UVs rounded 1e-7",
+    "regenerate_nose": false,
+    "face_geometry_hash_rebuilt": "7f9e3cdee41361339bd1dde95d976b189fc1c63df92b028d0f42997d5d89d88f",
+    "identical_to_artifact": true
+  },
+  "nose_regenerated": false,
+  "expressions": {
+    "angry": {
+      "vrm_group_name": "Angry",
+      "binds": [
+        [
+          "Face.baked",
+          1,
+          100
+        ]
+      ],
+      "shape_key": "target_1",
+      "region_max_motion_mm": {
+        "eye_R": 20.37,
+        "eye_L": 20.37,
+        "brow_R": 20.08,
+        "brow_L": 20.08,
+        "mouth": 6.31,
+        "nose_patch": 0.68
+      },
+      "expected_regions": [
+        "eye_R",
+        "eye_L",
+        "brow_R",
+        "brow_L"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.1604,
+        "inner_dihedral_deg_max": 33.232
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "surprised": {
+      "vrm_group_name": "Surprised",
+      "binds": [
+        [
+          "Face.baked",
+          5,
+          100
+        ]
+      ],
+      "shape_key": "target_5",
+      "region_max_motion_mm": {
+        "eye_R": 11.88,
+        "eye_L": 11.88,
+        "brow_R": 12.15,
+        "brow_L": 12.15,
+        "mouth": 26.2,
+        "nose_patch": 1.54
+      },
+      "expected_regions": [
+        "eye_R",
+        "eye_L",
+        "brow_R",
+        "brow_L",
+        "mouth"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.3638,
+        "inner_dihedral_deg_max": 52.076
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "a": {
+      "vrm_group_name": "A",
+      "binds": [
+        [
+          "Face.baked",
+          37,
+          100
+        ]
+      ],
+      "shape_key": "target_37",
+      "region_max_motion_mm": {
+        "eye_R": 0.0,
+        "eye_L": 0.0,
+        "brow_R": 0.0,
+        "brow_L": 0.0,
+        "mouth": 12.75,
+        "nose_patch": 0.47
+      },
+      "expected_regions": [
+        "mouth"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.2303,
+        "inner_dihedral_deg_max": 32.837
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "o": {
+      "vrm_group_name": "O",
+      "binds": [
+        [
+          "Face.baked",
+          41,
+          100
+        ]
+      ],
+      "shape_key": "target_41",
+      "region_max_motion_mm": {
+        "eye_R": 0.0,
+        "eye_L": 0.0,
+        "brow_R": 0.0,
+        "brow_L": 0.0,
+        "mouth": 22.42,
+        "nose_patch": 0.51
+      },
+      "expected_regions": [
+        "mouth"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.3539,
+        "inner_dihedral_deg_max": 44.159
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "u": {
+      "vrm_group_name": "U",
+      "binds": [
+        [
+          "Face.baked",
+          39,
+          100
+        ]
+      ],
+      "shape_key": "target_39",
+      "region_max_motion_mm": {
+        "eye_R": 0.0,
+        "eye_L": 0.0,
+        "brow_R": 0.0,
+        "brow_L": 0.0,
+        "mouth": 12.55,
+        "nose_patch": 0.47
+      },
+      "expected_regions": [
+        "mouth"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.4785,
+        "inner_dihedral_deg_max": 50.462
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "blink_l": {
+      "vrm_group_name": "Blink_L",
+      "binds": [
+        [
+          "Face.baked",
+          15,
+          100
+        ]
+      ],
+      "shape_key": "target_15",
+      "region_max_motion_mm": {
+        "eye_R": 0.0,
+        "eye_L": 32.01,
+        "brow_R": 0.0,
+        "brow_L": 18.93,
+        "mouth": 0.0,
+        "nose_patch": 6.14
+      },
+      "expected_regions": [
+        "eye_L"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.2474,
+        "inner_dihedral_deg_max": 32.997
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "blink_r": {
+      "vrm_group_name": "Blink_R",
+      "binds": [
+        [
+          "Face.baked",
+          14,
+          100
+        ]
+      ],
+      "shape_key": "target_14",
+      "region_max_motion_mm": {
+        "eye_R": 32.01,
+        "eye_L": 0.0,
+        "brow_R": 18.93,
+        "brow_L": 0.0,
+        "mouth": 0.0,
+        "nose_patch": 6.14
+      },
+      "expected_regions": [
+        "eye_R"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.2475,
+        "inner_dihedral_deg_max": 32.997
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    },
+    "fun": {
+      "vrm_group_name": "Fun",
+      "binds": [
+        [
+          "Face.baked",
+          2,
+          100
+        ]
+      ],
+      "shape_key": "target_2",
+      "region_max_motion_mm": {
+        "eye_R": 12.65,
+        "eye_L": 12.65,
+        "brow_R": 13.12,
+        "brow_L": 13.12,
+        "mouth": 15.51,
+        "nose_patch": 2.51
+      },
+      "expected_regions": [
+        "eye_R",
+        "eye_L",
+        "mouth"
+      ],
+      "mapping_consistent": true,
+      "unexpected_motion": [],
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.4311,
+        "inner_dihedral_deg_max": 34.097
+      },
+      "visual_qa": "PENDING_REVIEW (see REVIEW_03R.md; automated evidence is not art QA)"
+    }
+  },
+  "pairwise_max_difference_mm": {
+    "angry|surprised": 30.674,
+    "angry|a": 20.151,
+    "angry|o": 20.151,
+    "angry|u": 20.151,
+    "angry|blink_l": 28.187,
+    "angry|blink_r": 28.187,
+    "angry|fun": 30.696,
+    "surprised|a": 12.98,
+    "surprised|o": 12.024,
+    "surprised|u": 21.017,
+    "surprised|blink_l": 33.531,
+    "surprised|blink_r": 33.531,
+    "surprised|fun": 23.311,
+    "a|o": 14.141,
+    "a|u": 14.558,
+    "a|blink_l": 31.951,
+    "a|blink_r": 31.951,
+    "a|fun": 14.511,
+    "o|u": 19.638,
+    "o|blink_l": 31.951,
+    "o|blink_r": 31.951,
+    "o|fun": 19.046,
+    "u|blink_l": 31.951,
+    "u|blink_r": 31.951,
+    "u|fun": 22.955,
+    "blink_l|blink_r": 31.951,
+    "blink_l|fun": 29.438,
+    "blink_r|fun": 29.438
+  },
+  "identical_pairs": [],
+  "still_blocked_unreviewed_keys": [
+    "target_12",
+    "target_16",
+    "target_17",
+    "target_18",
+    "target_19",
+    "target_20",
+    "target_21",
+    "target_22",
+    "target_25",
+    "target_26",
+    "target_27",
+    "target_28",
+    "target_30",
+    "target_31",
+    "target_32",
+    "target_33",
+    "target_4",
+    "target_40"
+  ],
+  "renders": [
+    "renders/depth_0.0/front_clay.png",
+    "renders/depth_0.0/front_toon.png",
+    "renders/depth_0.0/right_clay.png",
+    "renders/depth_0.0/right_toon.png",
+    "renders/depth_0.0/left_clay.png",
+    "renders/depth_0.0/left_toon.png",
+    "renders/depth_0.0/q3L_clay.png",
+    "renders/depth_0.0/q3L_toon.png",
+    "renders/depth_0.0/q3R_clay.png",
+    "renders/depth_0.0/q3R_toon.png",
+    "renders/depth_0.0/front_toon_face.png",
+    "renders/depth_0.0/q3L_toon_face.png",
+    "renders/depth_0.0/q3R_toon_face.png",
+    "renders/depth_0.5/front_clay.png",
+    "renders/depth_0.5/front_toon.png",
+    "renders/depth_0.5/right_clay.png",
+    "renders/depth_0.5/right_toon.png",
+    "renders/depth_0.5/left_clay.png",
+    "renders/depth_0.5/left_toon.png",
+    "renders/depth_0.5/q3L_clay.png",
+    "renders/depth_0.5/q3L_toon.png",
+    "renders/depth_0.5/q3R_clay.png",
+    "renders/depth_0.5/q3R_toon.png",
+    "renders/depth_0.5/front_toon_face.png",
+    "renders/depth_0.5/q3L_toon_face.png",
+    "renders/depth_0.5/q3R_toon_face.png",
+    "renders/expr_angry/front_toon_face.png",
+    "renders/expr_angry/q3L_toon_face.png",
+    "renders/expr_angry/front_clay.png",
+    "renders/expr_surprised/front_toon_face.png",
+    "renders/expr_surprised/q3L_toon_face.png",
+    "renders/expr_surprised/front_clay.png",
+    "renders/expr_a/front_toon_face.png",
+    "renders/expr_a/q3L_toon_face.png",
+    "renders/expr_a/front_clay.png",
+    "renders/expr_o/front_toon_face.png",
+    "renders/expr_o/q3L_toon_face.png",
+    "renders/expr_o/front_clay.png",
+    "renders/expr_u/front_toon_face.png",
+    "renders/expr_u/q3L_toon_face.png",
+    "renders/expr_u/front_clay.png",
+    "renders/expr_blink_l/front_toon_face.png",
+    "renders/expr_blink_l/q3L_toon_face.png",
+    "renders/expr_blink_l/front_clay.png",
+    "renders/expr_blink_r/front_toon_face.png",
+    "renders/expr_blink_r/q3L_toon_face.png",
+    "renders/expr_blink_r/front_clay.png",
+    "renders/expr_fun/front_toon_face.png",
+    "renders/expr_fun/q3L_toon_face.png",
+    "renders/expr_fun/front_clay.png"
+  ],
+  "sheets": {
+    "SHEET_DEPTH_0_VS_05.png": "82f5d3b54024d2779019a24436d35b3f5c110a9df170779c55024599e0827ad4",
+    "SHEET_PRIORITY_EXPRESSIONS.png": "8fa921d03bf672a8d5fcff3bd7ea768ff18dff0040936941250b755db198faaa",
+    "SHEET_TOON_FRONT_45.png": "1ea69f8f6622f00f6875d7cbe78d750dd0f498ff6daa055d485a11cf275c7808"
+  },
+  "technical_qa": {
+    "candidate_identical": true,
+    "mapping_consistent_all": true,
+    "nose_patch_no_folds_all": true,
+    "identical_expression_pairs": []
+  },
+  "art_qa": "NOT AUTOMATED - see REVIEW_03R.md (Claude self-review) and independent reviewer",
+  "G1": "PASS for source preservation only (v5.61 binary unavailable)",
+  "G2": "NOT_RUN (art review pending)",
+  "G3": "see technical_qa",
+  "G4": "NOT_RUN"
+}

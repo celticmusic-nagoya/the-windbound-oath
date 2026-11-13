@@ -1,0 +1,44 @@
+{
+  "schema": "MORWEN-NOSE-REVIEW-PARAMS-1",
+  "task_id": "MORWEN-LOCAL-RETOPO-03-REVIEW",
+  "candidate": {
+    "source_pr": 312,
+    "source_commit": "2955617761f9216d758a835e5488807dcede95fe",
+    "ci_run": 43521557206,
+    "ci_artifact_id": 14083331308,
+    "artifact_blend_sha256": "078117c0e9e1ce4f904a73953782c4dd4196657e27acebc8e8eb09aae79c13e4",
+    "face_geometry_hash": "7f9e3cdee41361339bd1dde95d976b189fc1c63df92b028d0f42997d5d89d88f",
+    "face_geometry_hash_rule": "sha256 over every shape key (name + coords rounded 1e-7) + polygon vertex indices + UVs rounded 1e-7",
+    "regenerate_nose": false
+  },
+  "depths": [0.0, 0.5],
+  "depth_status": {"0.5": "PROVISIONAL CANDIDATE (independent review 2026-11-14), not adopted", "1.0": "REJECTED CANDIDATE (not rendered)"},
+  "priority_presets": ["angry", "surprised", "a", "o", "u", "blink_l", "blink_r", "fun"],
+  "review_depth": 0.5,
+  "fixed_key_light_world_direction": [-0.45, 0.85, 0.75],
+  "world_ambient": 0.5,
+  "toon": {
+    "note": "VALIDATION LOOK ONLY (not the final game shader): Cycles Toon BSDF with texture colour + emissive ambient fill + inverted-hull outline",
+    "toon_size": 0.55,
+    "toon_smooth": 0.04,
+    "ambient": 0.32,
+    "outline_thickness_m": 0.0006,
+    "outline_rgb": [0.16, 0.09, 0.11]
+  },
+  "regions_world": {
+    "eye_R": {"x": [0.012, 1], "z": [1.425, 1.47]},
+    "eye_L": {"x": [-1, -0.012], "z": [1.425, 1.47]},
+    "brow_R": {"x": [0.012, 1], "z": [1.47, 1.51]},
+    "brow_L": {"x": [-1, -0.012], "z": [1.47, 1.51]},
+    "mouth": {"x": [-0.04, 0.04], "z": [1.36, 1.40]},
+    "nose_patch": {"x": [-0.02, 0.02], "z": [1.40, 1.45], "y_min": 0.08}
+  },
+  "expected_regions": {
+    "angry": ["eye_R", "eye_L", "brow_R", "brow_L"],
+    "surprised": ["eye_R", "eye_L", "brow_R", "brow_L", "mouth"],
+    "a": ["mouth"], "o": ["mouth"], "u": ["mouth"],
+    "blink_l": ["eye_L"], "blink_r": ["eye_R"],
+    "fun": ["eye_R", "eye_L", "mouth"]
+  },
+  "moving_threshold_mm": 1.0
+}

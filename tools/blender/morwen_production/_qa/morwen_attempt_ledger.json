@@ -178,7 +178,24 @@
         "G4": "NOT_RUN"
       },
       "next_action": "Art review of nose depth in the 0-0.5 design range against the 3D target; visual review of the 26 BLOCKED expression transfers. No further nose patch iterations before that decision."
+    },
+    {
+      "attempt_id": "MLR03R-REVIEW-01",
+      "task_id": "MORWEN-LOCAL-RETOPO-03-REVIEW",
+      "defect_id": "MORWEN-NOSE-CANDIDATE-EVALUATION",
+      "method_id": "existing-candidate-fixed-camera-toon-expression-review",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "The unchanged #312 nose candidate (depth 0 / provisional 0.5) stays clean under one world-fixed light, a validation toon look and the 8 priority expressions, and the VRM preset names match the observed motion.",
+      "evidence": "REVIEW_03R_REPORT.json: Face geometry hash identical to CI artifact 14083331308 (no regeneration); 8/8 presets mapping-consistent (Blink_L moves character-left eye only, Blink_R right only, A/O/U mouth only); nose patch 0 folds under all 8; no identical key pairs; 18 keys remain BLOCKED unreviewed. Claude self-review only; independent art QA pending.",
+      "result": "BLOCKED",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Independent art QA of depth 0.5 (provisional) and the 8 priority expressions; decide review of the 18 remaining keys. No nose regeneration."
     }
   ],
-  "last_task": "MORWEN-LOCAL-RETOPO-03"
+  "last_task": "MORWEN-LOCAL-RETOPO-03-REVIEW"
 }
