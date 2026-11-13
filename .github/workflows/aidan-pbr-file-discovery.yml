@@ -72,7 +72,7 @@ jobs:
               p=root/("aidan_"+view+".png")
               data=p.read_bytes()
               print("View", view, "bytes", len(data), "header", repr(data[:8]), flush=True)
-              assert data[:8]==b"\\x89PNG\\r\\n\\x1a\\n" and len(data)>10000, "Invalid PNG: "+view
+              assert data[:8]==bytes.fromhex("89504e470d0a1a0a") and len(data)>10000, "Invalid PNG: "+view
               assert hashlib.sha256(data).hexdigest()==manifest["views"][view], "Hash mismatch: "+view
           print("PASS: five PNG files, Blender scene and SHA-256 verified")
           PY
