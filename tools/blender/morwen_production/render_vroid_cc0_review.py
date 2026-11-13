@@ -55,5 +55,27 @@ for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("three_quarter",(.7,1,.3
  scene.camera=cam
  scene.render.filepath=str((out/(name+"_wire.png")).resolve())
  bpy.ops.render.render(write_still=True)
+# Dedicated facial inspection: derive camera target from the Face mesh, not whole-body bounds.
+face=next((o for o in meshes if o.name=="Face"),None)
+assert face is not None,"Expected source Face mesh missing"
+face_points=[face.matrix_world@v.co for v in face.data.vertices]
+face_min=Vector(tuple(min(v[i] for v in face_points) for i in range(3)))
+face_max=Vector(tuple(max(v[i] for v in face_points) for i in range(3)))
+face_center=(face_min+face_max)*.5
+face_extent=max(face_max.x-face_min.x,face_max.y-face_min.y,face_max.z-face_min.z)
+assert face_extent>0
+for obj in wire:
+ obj.hide_render=True
+for obj in meshes:
+ obj.hide_render=False
+for name,delta in [("front",(0,1,0)),("right",(1,0,0)),("left",(-1,0,0)),("three_quarter",(.7,1,.15))]:
+ bpy.ops.object.camera_add(location=face_center+Vector(delta).normalized()*face_extent*3)
+ cam=bpy.context.object
+ cam.rotation_euler=(face_center-cam.location).to_track_quat("-Z","Y").to_euler()
+ cam.data.type="ORTHO"
+ cam.data.ortho_scale=face_extent*1.3
+ scene.camera=cam
+ scene.render.filepath=str((out/(name+"_face_detail.png")).resolve())
+ bpy.ops.render.render(write_still=True)
 report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
