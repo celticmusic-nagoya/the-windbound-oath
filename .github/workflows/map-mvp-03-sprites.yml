@@ -1,0 +1,52 @@
+name: MAP MVP 03 Sprite Export
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/map_mvp_03_*'
+      - '.github/workflows/map-mvp-03-sprites.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sprites:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender xvfb libgl1 libegl1
+      - name: Validate Python
+        run: python3 -m py_compile tools/map_blender/map_mvp_03_export_sprites.py
+      - name: Render three sprites
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/mvp-sprites
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: xvfb-run -a blender -b --python tools/map_blender/map_mvp_03_export_sprites.py
+      - name: Validate PNG and SHA
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/mvp-sprites
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,struct
+          from pathlib import Path
+          root=Path(os.environ['MAP_OUTPUT'])/'map_mvp_03'
+          m=json.loads((root/'manifest.json').read_text())
+          assert set(m['files'])=={'house.png','tree.png','rock.png'}
+          for name,sha in m['files'].items():
+              data=(root/name).read_bytes()
+              assert data[:8]==b'\x89PNG\r\n\x1a\n'
+              assert struct.unpack('>II',data[16:24])==(256,256)
+              assert hashlib.sha256(data).hexdigest()==sha
+          assert m['runtime_integration'] is False
+          print('MAP-MVP-03 technical QA PASS')
+          PY
+      - name: Upload provisional sprite package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-mvp-03-sprites
+          path: ${{ runner.temp }}/mvp-sprites/map_mvp_03/
+          if-no-files-found: warn
+          retention-days: 14
