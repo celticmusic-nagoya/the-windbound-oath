@@ -1,0 +1,35 @@
+name: Pinterest Reference API Audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pinterest-reference-audit.yml'
+      - 'tools/map_blender/pinterest_api_probe.py'
+      - 'tools/map_blender/pinterest_roof_reference_selection.json'
+  schedule:
+    - cron: '17 3 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: pinterest-reference-api-audit
+  cancel-in-progress: false
+jobs:
+  pinterest-audit:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only Pinterest API probe
+        env:
+          PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+          PINTEREST_AUDIT_OUTPUT: ${{ runner.temp }}/pinterest-audit
+        run: python3 tools/map_blender/pinterest_api_probe.py
+      - name: Upload sanitized report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinterest-reference-api-audit
+          path: ${{ runner.temp }}/pinterest-audit/
+          if-no-files-found: warn
+          retention-days: 7
