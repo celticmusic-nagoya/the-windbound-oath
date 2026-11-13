@@ -46,6 +46,8 @@ jobs:
               assert (p/(name+"_head.png")).stat().st_size>1000
           for name in ("front","right","three_quarter"):
               assert (p/(name+"_wire.png")).stat().st_size>1000
+          for name in ("front","right","left","three_quarter"):
+              assert (p/(name+"_face_detail.png")).stat().st_size>1000
           PY
       - name: Upload images and QA only
         if: always()
@@ -55,5 +57,6 @@ jobs:
           path: |
             render_output/morwen_vroid_review/*_head.png
             render_output/morwen_vroid_review/*_wire.png
+            render_output/morwen_vroid_review/*_face_detail.png
             render_output/morwen_vroid_review/QA.json
           retention-days: 14
