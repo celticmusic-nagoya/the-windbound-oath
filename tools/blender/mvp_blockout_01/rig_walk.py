@@ -1,10 +1,11 @@
 """MORWEN-RIG-02: noncanonical rigid-weight FK walk, 8-frame cycle."""
-import bpy, json, math
+import bpy, json, math, sys
 from pathlib import Path
 from mathutils import Quaternion
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/"assets/candidates/mvp-blockout-01"
 bpy.ops.wm.open_mainfile(filepath=str(OUT/"morwen_blockout.blend"))
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from master_rig import create_rig
 rig=create_rig()
 mapping={"torso":"chest","pelvis":"pelvis","neck":"neck","head":"head","hair_cap":"head"}
