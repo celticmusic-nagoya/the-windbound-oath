@@ -1,0 +1,38 @@
+{
+  "schema": "MORWEN-HEAD-FIT-PARAMS-1",
+  "method_id": "landmark-constrained-rbf-warp",
+  "method_family": "LANDMARK_RBF_WARP_TOPOLOGY_LOCKED",
+  "status": "TECHNICAL CANDIDATE GENERATOR - NOT AN ART APPROVAL",
+  "kernel": "biharmonic r (3D) + linear polynomial",
+  "regularisation": 1e-9,
+  "seed": 20261114,
+  "handles": {
+    "pupil_R":   {"axes": {"x": "front", "z": "front"}, "why": "IPD and eye line, both measured"},
+    "pupil_L":   {"axes": {"x": "front", "z": "front"}, "why": "IPD and eye line, both measured"},
+    "stomion":   {"axes": {"x": "front", "z": "front"}, "why": "front lip seam measured; side value is ESTIMATED and not used"},
+    "pronasale": {"axes": {"y": "sides", "z": "sides"}, "why": "nose tip measured in both side profiles (projection and height); the front nose is a drawn shade under the tip (ESTIMATED) and is not used"},
+    "menton":    {"axes": {"x": "front"}, "why": "front chin tip x; z is the calibration anchor"},
+    "chin_profile": {"axes": {"y": "sides"}, "why": "side chin projection measured both sides (same rule as the drawing)"}
+  },
+  "zero_anchors": ["vertex_skull", "neck_joint", "ear_center_R", "ear_center_L", "temple_R", "temple_L"],
+  "zero_anchor_rings": {"neck_ring_z_offset_m": [0.0, 0.01], "back_of_head_samples": 8},
+  "excluded": {
+    "eye_inner/outer/top/bottom": "eye shape is texture-defined; handled by the independent eye-part rebuild, not by warping the plates",
+    "cheek_R/L": "canonical outline is hair-adjacent (OCCLUSION_POSSIBLE)",
+    "mouth_corner_R/L": "ESTIMATED on canonical (low-contrast lip line)",
+    "ear_top/bottom": "ROI extremes differ in definition between drawing and mesh"
+  },
+  "face_symmetry_mode": "measured",
+  "face_symmetry_note": "G1: canonical asymmetry is protected, so left/right handles keep their own measured deltas; set to mirror_average only by director decision",
+  "body_falloff": {"from": "neck_joint.z - 0.01 m", "to": "neck_joint.z + 0.02 m", "shape": "smoothstep"},
+  "acceptance_technical_note": "provisional TECHNICAL limits against stretching/flips only; they are not art tolerances and never imply G2",
+  "acceptance_technical": {
+    "topology_unchanged": true,
+    "shape_key_names_unchanged": true,
+    "vertex_groups_unchanged": true,
+    "max_flipped_triangles": 0,
+    "face_body_seam_max_gap_m": 0.0001,
+    "edge_length_ratio_p99_max": 1.6,
+    "edge_length_ratio_p1_min": 0.6
+  }
+}

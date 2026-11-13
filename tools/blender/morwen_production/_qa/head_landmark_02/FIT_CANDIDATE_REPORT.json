@@ -1,0 +1,692 @@
+{
+  "task_id": "MORWEN-HEAD-LANDMARK-02",
+  "method_id": "landmark-constrained-rbf-warp",
+  "method_family": "LANDMARK_RBF_WARP_TOPOLOGY_LOCKED",
+  "params_sha256": "01aea4750cc22bb069157ee558dc52c22bef07b2b0ca2ea96c52fa34cc22e286",
+  "seed": 20261114,
+  "blender_version": "5.3.0",
+  "source_vrm_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+  "source_modified": false,
+  "candidate_saved_to_disk": false,
+  "handles": {
+    "pupil_R": {
+      "displacement_m": [
+        0.00358,
+        0.0,
+        0.00064
+      ],
+      "from": {
+        "x": {
+          "source": "front",
+          "values_m": [
+            0.00358
+          ]
+        },
+        "z": {
+          "source": "front",
+          "values_m": [
+            0.00064
+          ]
+        }
+      }
+    },
+    "pupil_L": {
+      "displacement_m": [
+        -0.00358,
+        0.0,
+        -0.00062
+      ],
+      "from": {
+        "x": {
+          "source": "front",
+          "values_m": [
+            -0.00358
+          ]
+        },
+        "z": {
+          "source": "front",
+          "values_m": [
+            -0.00062
+          ]
+        }
+      }
+    },
+    "stomion": {
+      "displacement_m": [
+        0.0,
+        0.0,
+        0.00333
+      ],
+      "from": {
+        "x": {
+          "source": "front",
+          "values_m": [
+            0.0
+          ]
+        },
+        "z": {
+          "source": "front",
+          "values_m": [
+            0.00333
+          ]
+        }
+      }
+    },
+    "pronasale": {
+      "displacement_m": [
+        0.0,
+        0.01207,
+        0.01255
+      ],
+      "from": {
+        "y": {
+          "source": "sides",
+          "values_m": [
+            0.01004,
+            0.01409
+          ]
+        },
+        "z": {
+          "source": "sides",
+          "values_m": [
+            0.0133,
+            0.01179
+          ]
+        }
+      }
+    },
+    "menton": {
+      "displacement_m": [
+        -0.00217,
+        0.0,
+        0.0
+      ],
+      "from": {
+        "x": {
+          "source": "front",
+          "values_m": [
+            -0.00217
+          ]
+        }
+      }
+    },
+    "chin_profile": {
+      "displacement_m": [
+        0.0,
+        0.00722,
+        0.0
+      ],
+      "from": {
+        "y": {
+          "source": "sides",
+          "values_m": [
+            0.00609,
+            0.00835
+          ]
+        }
+      }
+    }
+  },
+  "zero_anchor_count": 30,
+  "max_shape_key_vertex_move_m": {
+    "Face": {
+      "Basis": 0.01254520740623688,
+      "target_0": 0.01254520740623688,
+      "target_1": 0.01254520740623688,
+      "target_2": 0.01254520740623688,
+      "target_3": 0.01254520740623688,
+      "target_4": 0.01254520740623688,
+      "target_5": 0.01254520740623688,
+      "target_6": 0.01254520740623688,
+      "target_7": 0.01254520740623688,
+      "target_8": 0.01254520740623688,
+      "target_9": 0.01254520740623688,
+      "target_10": 0.01254520740623688,
+      "target_11": 0.01254520740623688,
+      "target_12": 0.01254520740623688,
+      "target_13": 0.01254520740623688,
+      "target_14": 0.01254520740623688,
+      "target_15": 0.01254520740623688,
+      "target_16": 0.01254520740623688,
+      "target_17": 0.01254520740623688,
+      "target_18": 0.01254520740623688,
+      "target_19": 0.01254520740623688,
+      "target_20": 0.01254520740623688,
+      "target_21": 0.01254520740623688,
+      "target_22": 0.01254520740623688,
+      "target_23": 0.01254520740623688,
+      "target_24": 0.01254520740623688,
+      "target_25": 0.01254520740623688,
+      "target_26": 0.01254520740623688,
+      "target_27": 0.01254520740623688,
+      "target_28": 0.01254520740623688,
+      "target_29": 0.01254520740623688,
+      "target_30": 0.01254520740623688,
+      "target_31": 0.01254520740623688,
+      "target_32": 0.01254520740623688,
+      "target_33": 0.01254520740623688,
+      "target_34": 0.01254520740623688,
+      "target_35": 0.01254520740623688,
+      "target_36": 0.01254520740623688,
+      "target_37": 0.01254520740623688,
+      "target_38": 0.01254520740623688,
+      "target_39": 0.01254520740623688,
+      "target_40": 0.01254520740623688,
+      "target_41": 0.01254520740623688,
+      "target_42": 0.01254520740623688,
+      "target_43": 0.01254520740623688,
+      "target_44": 0.01254520740623688,
+      "target_45": 0.01254520740623688,
+      "target_46": 0.01254520740623688,
+      "target_47": 0.01254520740623688,
+      "target_48": 0.01254520740623688,
+      "target_49": 0.01254520740623688,
+      "target_50": 0.01254520740623688,
+      "target_51": 0.01254520740623688,
+      "target_52": 0.01254520740623688,
+      "target_53": 0.01254520740623688,
+      "target_54": 0.01254520740623688,
+      "target_55": 0.01254520740623688
+    },
+    "Body": {
+      "basis": 0.003643500709601788
+    }
+  },
+  "mesh_stats": {
+    "Face_skin": {
+      "triangles": 1350,
+      "flipped": 0,
+      "edge_ratio_p1": 0.947,
+      "edge_ratio_p50": 1.016,
+      "edge_ratio_p99": 1.4426,
+      "max_displacement_m": 0.01741
+    },
+    "Body": {
+      "triangles": 11646,
+      "flipped": 0,
+      "edge_ratio_p1": 0.9916,
+      "edge_ratio_p50": 1.0,
+      "edge_ratio_p99": 1.012,
+      "max_displacement_m": 0.0048
+    }
+  },
+  "technical_checks": {
+    "topology_unchanged": true,
+    "shape_key_names_unchanged": true,
+    "vertex_groups_unchanged": true,
+    "flipped_triangles": 0,
+    "face_body_seam_max_gap_m": 6e-07,
+    "seam_vertices_checked": 44,
+    "edge_ratio_p99": 1.4426,
+    "edge_ratio_p1": 0.947
+  },
+  "technical_result": "PASS",
+  "landmark_residuals": [
+    {
+      "view": "front",
+      "landmark": "pupil_R",
+      "status": "ANCHOR_PAIR",
+      "baseline_delta_U": [
+        0.0391,
+        0.007
+      ],
+      "candidate_delta_U": [
+        0.0054,
+        -0.0056
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "front",
+      "landmark": "pupil_L",
+      "status": "ANCHOR_PAIR",
+      "baseline_delta_U": [
+        -0.0391,
+        -0.0069
+      ],
+      "candidate_delta_U": [
+        -0.0051,
+        -0.0077
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "front",
+      "landmark": "eye_inner_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0038,
+        0.0897
+      ],
+      "candidate_delta_U": [
+        -0.0111,
+        0.0133
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_outer_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0244,
+        0.065
+      ],
+      "candidate_delta_U": [
+        -0.0056,
+        0.0572
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_inner_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0044,
+        0.0897
+      ],
+      "candidate_delta_U": [
+        0.0205,
+        0.075
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_outer_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0326,
+        0.065
+      ],
+      "candidate_delta_U": [
+        -0.0023,
+        0.0678
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_top_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.222,
+        0.0199
+      ],
+      "candidate_delta_U": [
+        0.1856,
+        0.0056
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_bottom_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0326,
+        0.0603
+      ],
+      "candidate_delta_U": [
+        -0.0049,
+        0.0462
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_top_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.1395,
+        -0.0385
+      ],
+      "candidate_delta_U": [
+        0.1754,
+        -0.0416
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "eye_bottom_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0759,
+        0.0603
+      ],
+      "candidate_delta_U": [
+        0.1147,
+        0.0565
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "pronasale",
+      "status": "ESTIMATED",
+      "baseline_delta_U": [
+        0.0001,
+        0.0387
+      ],
+      "candidate_delta_U": [
+        0.0001,
+        -0.0985
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "front",
+      "landmark": "stomion",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0001,
+        0.0364
+      ],
+      "candidate_delta_U": [
+        0.0002,
+        -0.0008
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "front",
+      "landmark": "mouth_corner_R",
+      "status": "ESTIMATED",
+      "baseline_delta_U": [
+        -0.0041,
+        0.0307
+      ],
+      "candidate_delta_U": [
+        -0.0085,
+        -0.0103
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "mouth_corner_L",
+      "status": "ESTIMATED",
+      "baseline_delta_U": [
+        -0.0431,
+        0.0307
+      ],
+      "candidate_delta_U": [
+        -0.0371,
+        -0.0084
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "menton",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0236,
+        -0.0
+      ],
+      "candidate_delta_U": [
+        -0.0035,
+        0.0007
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "front",
+      "landmark": "cheek_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.1417,
+        -0.0533
+      ],
+      "candidate_delta_U": [
+        -0.0525,
+        -0.1657
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "front",
+      "landmark": "cheek_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.114,
+        -0.0533
+      ],
+      "candidate_delta_U": [
+        0.0261,
+        -0.1555
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "right",
+      "landmark": "pupil_R",
+      "status": "ANCHOR",
+      "baseline_delta_U": [
+        0.0,
+        0.0
+      ],
+      "candidate_delta_U": [
+        0.0,
+        -0.0125
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "right",
+      "landmark": "eye_outer_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0742,
+        0.0938
+      ],
+      "candidate_delta_U": [
+        0.0716,
+        0.0861
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "right",
+      "landmark": "pronasale",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.1098,
+        0.1454
+      ],
+      "candidate_delta_U": [
+        0.0165,
+        0.0082
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "right",
+      "landmark": "stomion",
+      "status": "ESTIMATED",
+      "baseline_delta_U": [
+        0.0281,
+        -0.0126
+      ],
+      "candidate_delta_U": [
+        0.0258,
+        -0.0498
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "right",
+      "landmark": "chin_profile",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0665,
+        -0.0132
+      ],
+      "candidate_delta_U": [
+        0.0067,
+        -0.0132
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "right",
+      "landmark": "ear_center_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0337,
+        -0.016
+      ],
+      "candidate_delta_U": [
+        -0.0403,
+        -0.0154
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "right",
+      "landmark": "ear_top_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0485,
+        0.0154
+      ],
+      "candidate_delta_U": [
+        0.0429,
+        0.0154
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "right",
+      "landmark": "ear_bottom_R",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.1441,
+        -0.0604
+      ],
+      "candidate_delta_U": [
+        -0.1524,
+        -0.0587
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "left",
+      "landmark": "pupil_L",
+      "status": "ANCHOR",
+      "baseline_delta_U": [
+        0.0,
+        0.0
+      ],
+      "candidate_delta_U": [
+        0.0,
+        -0.0007
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "left",
+      "landmark": "eye_outer_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0495,
+        0.0774
+      ],
+      "candidate_delta_U": [
+        -0.0469,
+        0.0802
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "left",
+      "landmark": "pronasale",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.154,
+        0.1289
+      ],
+      "candidate_delta_U": [
+        0.0277,
+        -0.0083
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "left",
+      "landmark": "stomion",
+      "status": "ESTIMATED",
+      "baseline_delta_U": [
+        0.055,
+        -0.0291
+      ],
+      "candidate_delta_U": [
+        0.0573,
+        -0.0663
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "left",
+      "landmark": "chin_profile",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0912,
+        -0.0297
+      ],
+      "candidate_delta_U": [
+        0.018,
+        -0.0297
+      ],
+      "is_handle": true
+    },
+    {
+      "view": "left",
+      "landmark": "ear_center_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.0752,
+        -0.0344
+      ],
+      "candidate_delta_U": [
+        0.0817,
+        -0.0335
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "left",
+      "landmark": "ear_top_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        -0.0335,
+        -0.001
+      ],
+      "candidate_delta_U": [
+        -0.0279,
+        -0.001
+      ],
+      "is_handle": false
+    },
+    {
+      "view": "left",
+      "landmark": "ear_bottom_L",
+      "status": "MEASURED",
+      "baseline_delta_U": [
+        0.1688,
+        -0.0768
+      ],
+      "candidate_delta_U": [
+        0.1771,
+        -0.0743
+      ],
+      "is_handle": false
+    }
+  ],
+  "G1": "PASS (source and Layer 0 SHA verified; v5.61 canon binary not in GitHub -> design-canon comparison BLOCKED)",
+  "G2": "NOT_RUN - candidate is a warped stock VRoid face without canonical eyes, hair, hat or glasses; art review required",
+  "G3": "PASS",
+  "G4": "NOT_RUN"
+}
