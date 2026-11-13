@@ -1,15 +1,14 @@
 # Morwen 3D target sheet — user-supplied 2026-11-13
 
-**Status: REFERENCE SUBMITTED / IMAGE BINARY NOT YET STORED IN GITHUB.**
-This record does **not** assert the attachment has been uploaded or that it supersedes approved canonical assets.
+**Status: DIRECTOR-SELECTED PNG PRESENT IN GITHUB / BYTE-LEVEL SHA256 PENDING.**
+Director confirmed the uploaded PNG is the correct high-quality target. This reference does not silently supersede the separately approved canonical character master.
 
 ## Source / integrity
-- Proposed path: `assets/companions/morwen/reference/morwen_3d_target_sheet_20261113.jpg`
-- Original attachment: `7855.png` (actual file encoding **JPEG**, despite extension)
-- Size: 1536 × 1024 pixels
-- SHA-256: `d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b`
-- The supplied image should be committed **byte-for-byte** under the .jpg extension and SHA verified.
-- GitHub image binary status: **PENDING_UPLOAD**. Do not claim image is present until verified by Git tree and hash.
+- **Approved production target PNG**: `assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png` on `feature/morwen-reference-binary-01`.
+- GitHub directory listing confirms PNG exists and reports **2,543,634 bytes**. Director explicitly confirmed this PNG is correct on 2026-11-14.
+- **PNG SHA-256: NOT YET VERIFIED**. GitHub listing and Git blob SHA do not establish the file's SHA-256.
+- **Superseded low-quality JPEG**: former local attachment `7855.png` (JPEG encoding), proposed path `morwen_3d_target_sheet_20261113.jpg`, SHA-256 `d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b`. It was **never uploaded to the checked GitHub branch**, and must not be used or re-uploaded. Keep this metadata solely as historical identification.
+- No claim that the PNG is byte-identical to the former JPEG; it is a separately selected higher-quality source.
 
 ## Visual inventory
 - Full-costume front, right, back, left orthographic-inspired views
@@ -26,7 +25,9 @@ This record does **not** assert the attachment has been uploaded or that it supe
 - Do not assume all depicted accessories are already approved as production geometry.
 
 ## Registration completion gate
-1. Commit JPEG bytes to proposed path on feature branch.
-2. Verify SHA-256 equals the above.
-3. Link image and this metadata in model-reference manifest.
-4. Independently inspect visible match to supplied image; only then mark REGISTERED.
+1. PNG existence on feature branch: **PASS**.
+2. Director selection of PNG: **PASS**.
+3. Verify actual PNG bytes and SHA-256 using a binary-capable GitHub Actions workflow or trusted local download: **PENDING**.
+4. Update model-reference manifest with verified PNG SHA-256: **PENDING**.
+5. Independent visual review and comparison to separately approved canonical design: **PENDING**.
+Do not treat the superseded JPEG as a pending upload.
