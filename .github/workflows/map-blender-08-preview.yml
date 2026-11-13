@@ -106,7 +106,8 @@ jobs:
           assert json.loads((p/"blender_preflight.json").read_text())["status"]=="PASS"
           slate=json.loads((p/"roof_slate_system_02_manifest.json").read_text())
           assert slate["status"]=="CANDIDATE_NOT_CANON"
-          assert slate["material"] in ("Poly Haven CC0 red slate PBR","original procedural fallback"), "Unknown roof material"\n          print("Actual roof material:",slate["material"])
+          assert slate["material"] in ("Poly Haven CC0 red slate PBR","original procedural fallback"), "Unknown roof material"
+          print("Actual roof material:",slate["material"])
           for name,expected in slate["files"].items():
               assert (p/name).stat().st_size>1000,name
               assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
