@@ -9,7 +9,8 @@
     "docs/art/MORWEN_3D_TARGET_SHEET_20261113.md",
     "tools/blender/morwen_production/HEAD_STRUCTURE_01_AUDIT.md",
     "tools/blender/morwen_production/_qa/MORWEN_HEAD_SCULPT_01_REVIEW.md",
-    "tools/blender/morwen_production/head_landmark/HEAD_LANDMARK_02_REPORT.md"
+    "tools/blender/morwen_production/head_landmark/HEAD_LANDMARK_02_REPORT.md",
+    "tools/blender/morwen_production/nose_retopo/NOSE_RETOPO_03_REPORT.md"
   ],
   "known_gate_status": {
     "G1": "BLOCKED",
@@ -142,7 +143,42 @@
         "G4": "NOT_RUN"
       },
       "next_action": "1/2 for this method. Do NOT rerun the warp with nose handles. Next: hybrid - local nose/eye/mouth retopology + independent eye parts; warp only for low-frequency proportions after art direction fixes nose projection."
+    },
+    {
+      "attempt_id": "MLR03-DEV-01",
+      "task_id": "MORWEN-LOCAL-RETOPO-03",
+      "defect_id": "MORWEN-FACE-CANON-FIT",
+      "method_id": "teardrop-ring-patch-local-retopo",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Replacing the fan-tip nose triangles with concentric rings (boundary-resampled) gives a smooth nose that keeps rig and shape keys.",
+      "evidence": "Local development renders (not committed): 2 folded faces from index-ratio zipper on a non-uniform/notched boundary, pyramid creases from rings copying the jagged 12-vertex boundary, and static custom normals not following the design key. Recorded as a failure of the first build of this method family.",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Causal changes (not micro-tweaks): angle-aware zipper, notch-free region growth, boundary-copy first ring + smooth teardrop inner rings, auto normals on patch corners. Attempt 2/2 of this family; if it fails, switch technique."
+    },
+    {
+      "attempt_id": "MLR03-CAND-01",
+      "task_id": "MORWEN-LOCAL-RETOPO-03",
+      "defect_id": "MORWEN-FACE-CANON-FIT",
+      "method_id": "teardrop-ring-patch-local-retopo",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Notch-free teardrop ring patch (125 new vertices, 176 faces) with thin-plate base fill and zero-slope nose profile is smoother than the original fan tip and no worse under any expression key.",
+      "evidence": "NOSE_RETOPO_03_REPORT.json: technical PASS; untouched 3054 faces and Body bit-identical; seam gap 0.6 um; 0 winding conflicts / UV flips; patch inner dihedral max 33.0 deg vs original 76.0; tip corner -> rounded r=2.7 mm; all 28 affected expression keys no worse than original (26 BLOCKED_TRANSFER_UNREVIEWED, blink/joy rendered). Own visual check: depth 0 and 0.5 clean; depth 1.0 (+0.07U) too pointed with a deep underside. Art review not done.",
+      "result": "BLOCKED",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Art review of nose depth in the 0-0.5 design range against the 3D target; visual review of the 26 BLOCKED expression transfers. No further nose patch iterations before that decision."
     }
   ],
-  "last_task": "MORWEN-HEAD-LANDMARK-02"
+  "last_task": "MORWEN-LOCAL-RETOPO-03"
 }
