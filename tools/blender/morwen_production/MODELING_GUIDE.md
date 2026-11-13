@@ -17,3 +17,12 @@ Use the officially approved 4-view PNGs in `tools/blender/production_mesh_08/ref
 
 ## CI policy
 Manual dispatch only. No automatic 32-frame rendering until the actual approved model exists. This repository change is scripts and QA gates only, not completed art. Do not merge to main or publish without approval.
+
+## Additional user-provided costume reference (2026-11-13)
+The user supplied a 1536×1024 RGB costume/design sheet (local attachment `7855.png`, SHA-256 `d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b`). This is **supplementary visual guidance**, not a replacement for the canonical four Layer 0 PNGs. Its binary has **not** been uploaded to this repository; request the original attachment when reproducing image-based QA outside this conversation.
+
+Design cues visible in this sheet: violet bob hair with bangs; round glasses; wide asymmetrical purple witch hat with flowers, ribbons, gold embroidery and hanging gem; purple/gold academy insignia on mantle; structured fitted vest and white ruffled collar; layered skirt; asymmetric draped cape; satchel and potion vials; buckled heeled boots; violet-gold fabric embroidery. A lower-right inset shows four directions of the base body and innerwear; do not confuse it with the full costume.
+
+**Mandatory asymmetric constraint:** right-leg-only garter on the character's anatomical RIGHT (+X). From front camera this is screen LEFT; from back camera screen RIGHT. Never add a left garter or mirror the entire design. Preserve other canonical choices if the supplemental image differs.
+
+The supplied sheet is not proof of finished Blender geometry. The previously rendered capsule-shaped head failed G2 and must not be approved. Verify facial topology and proportions independently before creating hair, glasses, hat and clothing.
