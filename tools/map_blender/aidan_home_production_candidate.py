@@ -170,7 +170,13 @@ for i in range(60):
 # Optional isolated PBR candidate integration; original procedural render remains default.
 pbr_directory=os.environ.get("AIDAN_PBR_CANDIDATE_DIR")
 if pbr_directory:
- from aidan_pbr_candidate_materials import apply_candidate_pbr
+ import importlib.util
+ adapter=os.path.join(os.path.dirname(os.path.abspath(__file__)),"aidan_pbr_candidate_materials.py")
+ spec=importlib.util.spec_from_file_location("aidan_pbr_candidate_materials",adapter)
+ if spec is None or spec.loader is None:raise RuntimeError("PBR adapter missing")
+ module=importlib.util.module_from_spec(spec)
+ spec.loader.exec_module(module)
+ apply_candidate_pbr=module.apply_candidate_pbr
  applied=apply_candidate_pbr(pbr_directory)
  if applied<1:raise RuntimeError("No PBR materials assigned")
 world=bpy.data.worlds.new("Soft_daylight")
