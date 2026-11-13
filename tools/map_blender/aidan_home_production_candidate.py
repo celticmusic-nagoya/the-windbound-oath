@@ -41,6 +41,28 @@ def beam(name,a,b,thick,material):
  ob=cube(name,(a+b)/2,(thick,thick,(b-a).length),material)
  ob.rotation_euler=(b-a).to_track_quat("Z","Y").to_euler()
 cube("Foundation",(0,0,.075),(8.3,6.7,.55),stone[4],.10)
+# Structural roof/gable seam: solid triangular gables extend into roof skin.
+# This is a closed profile, not a decorative beam or a flat bounding box.
+def gable_mesh(name, y0, y1):
+ profile=[(-3.92,.35),(3.92,.35),(3.92,3.48),(0,5.69),(-3.92,3.48)]
+ verts=[(x,y,z) for y in (y0,y1) for x,z in profile]
+ n=len(profile)
+ faces=[tuple(range(n-1,-1,-1)),tuple(range(n,2*n))]
+ faces += [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
+ mesh=bpy.data.meshes.new(name);mesh.from_pydata(verts,[],faces);mesh.update()
+ ob=bpy.data.objects.new(name,mesh);bpy.context.collection.objects.link(ob)
+ ob.data.materials.append(stone[3]);ob["seam_overlap_m"]=.04
+ return ob
+gable_mesh("GABLE_FRONT",-3.17,-2.95)
+gable_mesh("GABLE_REAR",2.95,3.17)
+# Continuous roof substrate below the hand-laid slate tiles.
+for sign in (-1,1):
+ for i in range(12):
+  t=(i+.5)/12
+  x=sign*(.17+4.08*t);z=5.69-2.26*t
+  ob=cube("ROOF_UNDERLAY",(x,0,z),(0.47,6.78,.14),slate[0],.012)
+  ob.rotation_euler[1]=sign*.51
+  ob["seam_overlap_m"]=.04
 # Irregular staggered stonework with genuine openings on front wall.
 for side in ("front","rear","left","right"):
  for row in range(11):
