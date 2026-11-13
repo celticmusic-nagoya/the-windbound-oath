@@ -1,0 +1,43 @@
+{
+  "schema": "two-world-geography-constraints-v1",
+  "status": "REFERENCE_WITH_CONFLICTS_PENDING_CANON_RESOLUTION",
+  "sources": [
+    "docs/story/WORLD_STORY_BIBLE_v1.1.txt",
+    "docs/handoff/scenario_handoff_for_chatgpt.md",
+    "docs/field/m10-rilde-village.md",
+    "docs/art/rilde-cliff-raid-full-inventory-20261107.md"
+  ],
+  "priority": [
+    "approved background CG",
+    "latest approved scenario and geography",
+    "older story bible for non-conflicting constraints",
+    "provisional map coordinates"
+  ],
+  "confirmed": [
+    "Rilde village has river bridge waterfall and wind stone",
+    "Sea-facing cliff is reached on a village-side route; first sight of burning village is after a blind curve",
+    "Moss forest is on the prologue escape route toward Dunvar Fort",
+    "Dunvar Fort is the prologue destination",
+    "East road connects village toward Dunvar Fort",
+    "Water continues flowing when wind stops"
+  ],
+  "conflicts": [
+    {
+      "topic": "cliff direction",
+      "older_bible": "north: windwatch hill",
+      "scenario_handoff": "cliff south of village",
+      "resolution": "do not assert absolute compass until approved CG and current narrative are reconciled"
+    },
+    {
+      "topic": "forest and fort access",
+      "notes": "Moss Forest prologue route vs post-return east road; preserve both as distinct connections, do not collapse into a single corridor"
+    }
+  ],
+  "do_not_assume": [
+    "Exact coast bearing",
+    "Exact cliff altitude and river flow direction",
+    "Fort-to-village straight-line distance",
+    "Whether waterfall near village is same watershed as cliff"
+  ],
+  "design_gate": "Map CG reconstruction must reconcile topological route graph before final geometry, and mark unseen spaces as inferred."
+}
