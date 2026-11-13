@@ -1,0 +1,58 @@
+name: Morwen Head Sculpt Candidate 01
+on:
+  push:
+    branches: [feature/morwen-head-sculpt-01]
+    paths:
+      - '.github/workflows/morwen-head-sculpt-01.yml'
+      - 'tools/blender/morwen_production/render_head_sculpt_candidate_01.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch pinned CC0 source and verify SHA
+        run: |
+          python3 - <<'PY'
+          import hashlib,io,urllib.request,zipfile
+          from pathlib import Path
+          req=urllib.request.Request('https://opengameart.org/sites/default/files/base_female.zip',headers={'User-Agent':'Mozilla/5.0'})
+          with urllib.request.urlopen(req,timeout=90) as response: raw=response.read()
+          assert hashlib.sha256(raw).hexdigest()=='bf2717cff70b40a278df56e137dbb699c6499551096fa4c005e9aeca1de68eb3'
+          vrm=zipfile.ZipFile(io.BytesIO(raw)).read('Base_Female.vrm')
+          assert hashlib.sha256(vrm).hexdigest()=='1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b'
+          out=Path('render_output/morwen_vroid_review');out.mkdir(parents=True,exist_ok=True)
+          (out/'Base_Female.vrm').write_bytes(vrm)
+          PY
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender python3-numpy
+      - name: Render first sculpt candidate
+        run: blender -b -t 2 --python-exit-code 1 --python tools/blender/morwen_production/render_head_sculpt_candidate_01.py
+      - name: Validate candidate artifacts
+        run: |
+          python3 - <<'PY'
+          import json,struct
+          from pathlib import Path
+          root=Path('render_output/morwen_head_structure')
+          report=json.loads((root/'SCULPT_CANDIDATE_01.json').read_text())
+          assert report['source_modified'] is False
+          assert report['status']=='EXPERIMENTAL_UNAPPROVED'
+          for v in ('front','right','back','left'):
+              p=root/'sculpt_candidate_01_clay'/f'{v}.png'
+              data=p.read_bytes()
+              assert data[:8]==bytes([137,80,78,71,13,10,26,10]) and len(data)>1000
+              assert struct.unpack('>II',data[16:24])==(512,512)
+          print('G3 candidate render PASS; G2 NOT_RUN')
+          PY
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-head-sculpt-candidate-01
+          path: render_output/morwen_head_structure/
+          retention-days: 30
