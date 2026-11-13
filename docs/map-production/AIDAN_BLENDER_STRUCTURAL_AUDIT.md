@@ -13,7 +13,7 @@
 | D | 別系統 `buildings/aidan_master_quality_first.py`、`aidan_home_candidate.json` | `feature/map-building-01-interior-exterior` @ `886206a` | ソース読解のみ。コレクション: `03_Roof_Thatch` |
 | ref | 現行本番スプライト `img/field/lind/buildings/lind_aidan_house.png` | main | 1536×1024 RGBA, SHA-256 `82702675…ce040`。**緑の板葺き屋根**（新屋根正典と不一致。本番資産のため変更しない） |
 
-`.blend` の読取専用計測: [`tools/map_production/audit_blend_structure.py`](../../tools/map_production/audit_blend_structure.py)（`use_scripts=False` で開き保存しない）。結果JSON: [`evidence/`](evidence/)。計測環境は bpy 5.3.0（保存元 4.0.36 を前方互換で読込）。
+`.blend` の読取専用計測: [`tools/map_production/audit_blend_structure.py`](../../tools/map_production/audit_blend_structure.py)（`use_scripts=False` で開き保存しない）。結果JSON: [`evidence/`](evidence/)。計測環境は bpy 5.3.0（保存元 4.0.36 を前方互換で読込）、Aは Blender 5.2.4 LTS でも再計測し一致。
 
 ## 2. 計測値
 | 指標 | A 手続き生成 | B Kenneyマッシング |
@@ -84,5 +84,5 @@
 
 ## 7. 本監査の限界
 - C（屋根単体）と D（map-building系）はレンダ成果物を取得していない（ソース読解のみ）。
-- 計測は bpy 5.3.0 による読込。4.0.2 との評価差（修飾子の評価結果等）は未検証。
+- 計測は bpy 5.3.0 と固定候補 Blender 5.2.4 LTS の両方で実施し、Aの三角形数・UVなし数・非多様体数が一致。保存元 4.0.2 での評価差は未検証。
 - 背景CGとの比較は目視。数値的な形状一致の基準はまだ存在しない（G1未確定のため）。
