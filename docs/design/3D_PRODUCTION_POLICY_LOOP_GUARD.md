@@ -33,3 +33,10 @@ Every task handoff or agent packet must link this policy, canonical reference, s
 
 ## Immediate Aidan Home interpretation
 Reuse `aidan_external_asset_sources.json`, `aidan_pbr_shortlist.json`, `verify_pbr_shortlist.py` and current Blender render pipeline. Prioritize licensed high-quality stone, timber and thatch meshes/PBR; texture alone cannot fix flat geometry. Current G2 is FAIL; no production promotion.
+
+## Cross-team document ownership (2026-11-13)
+- This file is the **shared cross-asset production process** and loop-prevention authority. Do not create another competing general-purpose policy.
+- Character-specific technical guidance lives in `docs/art/QUALITY_FIRST_3D_PIPELINE_V1.md` on `feature/morwen-production-pipeline-01` until safely integrated. It supplements (does not supersede) this file: four-view canonical silhouette, facial landmarks, hair/costume layers, topology, rigging and motion.
+- Building-specific guidance lives in `tools/map_blender/AIDAN_HOME_HYBRID_PRODUCTION_01.md` and `tools/map_blender/AIDAN_HOME_PBR_INTAKE_PLAN_01.md` on this branch: five-view renders, structural roof/walls, external asset provenance and game-scale environment quality.
+- When the two branch documents disagree, **do not silently overwrite either**: apply the latest director-approved canon and task-specific constraints; record the conflict for review. Shared anti-loop threshold remains two failures per defect/method across branches and chats.
+- Before copying policies to main, reconcile both branch versions and review diff. No implicit merge or canonical asset replacement.
