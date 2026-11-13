@@ -1,0 +1,58 @@
+name: Morwen MPFB Base Asset Audit
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - '.github/workflows/morwen-mpfb-base-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch pinned MPFB upstream source
+        uses: actions/checkout@v4
+        with:
+          repository: makehumancommunity/mpfb2
+          ref: d0a32e57a7f915cb2f2b95410e2117648c7bbb7e
+          path: _upstream_mpfb
+          persist-credentials: false
+      - name: Inspect core asset files and licenses
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path("_upstream_mpfb")
+          files=list(root.rglob("*"))
+          license_files=[p for p in files if p.is_file() and ('license' in p.name.lower() or 'copying' in p.name.lower())]
+          assets=[p for p in files if p.is_file() and p.suffix.lower() in ('.obj','.mhclo','.target','.npz','.blend')]
+          report={
+            "schema":"MORWEN-MPFB-AUDIT-01",
+            "upstream":"makehumancommunity/mpfb2",
+            "pinned_commit":"d0a32e57a7f915cb2f2b95410e2117648c7bbb7e",
+            "licenses":[str(p.relative_to(root)) for p in license_files[:60]],
+            "mesh_and_target_candidates":[{"path":str(p.relative_to(root)),"bytes":p.stat().st_size} for p in assets[:100]],
+            "candidate_count":len(assets),
+            "core_mesh_found":any(p.suffix.lower()=='.obj' for p in assets),
+            "G1":"NOT_RUN_NO_CHARACTER_MESH",
+            "G2":"NOT_RUN_NO_CHARACTER_MESH",
+            "G3":"SOURCE_AUDIT_ONLY",
+            "G4":"NOT_RUN",
+            "production_approved":False,
+          }
+          out=Path("render_output/morwen_mpfb_audit");out.mkdir(parents=True,exist_ok=True)
+          (out/"audit.json").write_text(json.dumps(report,indent=2)+"\n")
+          print(json.dumps(report,indent=2))
+          assert license_files,"No license file found; abort."
+          PY
+      - name: Upload audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-mpfb-upstream-audit
+          path: render_output/morwen_mpfb_audit/
+          retention-days: 14
