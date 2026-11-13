@@ -64,6 +64,7 @@ jobs:
         shell: bash
         env:
           TASK: ${{ steps.request.outputs.task }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           case "$TASK" in
             MAP-ASSET-RESEARCH-01) REF=feature/map-asset-research-01 ;;
@@ -74,8 +75,6 @@ jobs:
           git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)" fetch --depth=1 origin "$REF" || exit 1
           git show FETCH_HEAD:"${{ steps.request.outputs.packet }}" > agent-packet.md
           test -s agent-packet.md
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
       - name: Write dry-run report
         if: steps.request.outputs.mode == 'dry_run'
         run: |
