@@ -35,6 +35,10 @@ def apply_candidate_pbr(texture_directory):
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
         bsdf = nodes.get("Principled BSDF")
+        coordinates = nodes.new("ShaderNodeTexCoord")
+        mapping = nodes.new("ShaderNodeMapping")
+        mapping.inputs["Scale"].default_value = (2.0, 2.0, 2.0)
+        links.new(coordinates.outputs["Generated"], mapping.inputs["Vector"])
         for channel in ("Diffuse", "Normal", "Rough"):
             path = indexed[(asset, channel)]
             image = bpy.data.images.load(str(path), check_existing=True)
@@ -43,6 +47,9 @@ def apply_candidate_pbr(texture_directory):
             node = nodes.new("ShaderNodeTexImage")
             node.label = channel
             node.image = image
+            node.projection = "BOX"
+            node.projection_blend = 0.25
+            links.new(mapping.outputs["Vector"], node.inputs["Vector"])
             if channel == "Diffuse":
                 links.new(node.outputs["Color"], bsdf.inputs["Base Color"])
             elif channel == "Rough":
