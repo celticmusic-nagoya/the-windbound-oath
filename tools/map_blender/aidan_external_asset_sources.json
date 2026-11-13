@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "project": "THE WINDBOUND OATH",
+  "asset": "Aidan Home",
+  "policy": "external assets are candidates until provenance, commercial use, modification, redistribution and G1-G4 pass",
+  "sources": [
+    {
+      "id": "kenney_fantasy_town_2",
+      "provider": "Kenney",
+      "source_url": "https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip",
+      "sha256": "1a7530c09f4d2fa2cdee259876f089334f8b1f27fa86a0c4f54ef86cdd8676ef",
+      "license": "CC0",
+      "license_evidence": "License.txt inside verified archive",
+      "status": "verified_reference_not_approved",
+      "allowed_use": "reference, remix and modeling base",
+      "models": [
+        "wall-block",
+        "wall-corner",
+        "wall-wood",
+        "pillar-wood",
+        "roof-gable",
+        "roof-gable-end",
+        "roof-gable-top",
+        "wall-window-shutters",
+        "wall-door",
+        "chimney",
+        "chimney-top",
+        "roof-high-gable"
+      ]
+    },
+    {
+      "id": "poly_haven",
+      "provider": "Poly Haven",
+      "source_url": "https://polyhaven.com/",
+      "license": "CC0 claimed by provider; verify per asset before intake",
+      "status": "discovery_only_no_asset_downloaded",
+      "intended_use": "stone, timber, thatch and earth PBR material candidates"
+    },
+    {
+      "id": "ambientcg",
+      "provider": "ambientCG",
+      "source_url": "https://ambientcg.com/",
+      "license": "CC0 claimed by provider; verify per asset before intake",
+      "status": "discovery_only_no_asset_downloaded",
+      "intended_use": "photogrammetric stone, timber, earth PBR candidates"
+    },
+    {
+      "id": "quaternius",
+      "provider": "Quaternius",
+      "source_url": "https://quaternius.com/",
+      "license": "verify per asset before intake",
+      "status": "discovery_only_no_asset_downloaded",
+      "intended_use": "doors, shutters, furnishings, props candidates"
+    }
+  ],
+  "acceptance": {
+    "G1": "canonical design and exact license evidence",
+    "G2": "5-view artistic review at game scale",
+    "G3": "geometry, UV, alpha, texture provenance and SHA256",
+    "G4": "browser and Android performance regression"
+  },
+  "restrictions": [
+    "do not overwrite canonical files",
+    "do not promote candidate assets automatically",
+    "no main merge or publication without approval"
+  ]
+}
