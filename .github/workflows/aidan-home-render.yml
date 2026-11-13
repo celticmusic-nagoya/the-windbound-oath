@@ -4,6 +4,7 @@ on:
     paths:
       - 'tools/map_blender/aidan_home_production_candidate.py'
       - '.github/workflows/aidan-home-render.yml'
+      - 'tools/map_blender/qa_aidan_render_artifact.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,6 +14,8 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Install Blender
         run: |
           sudo apt-get update -qq
@@ -37,6 +40,12 @@ jobs:
           assert os.path.getsize(os.path.join(p,"aidan_candidate.blend"))>1000
           print("PASS: five PNGs, blend, SHA manifest")
           PY
+      - name: Independent G3 artifact verification
+        if: success()
+        env:
+          AIDAN_RENDER_OUTPUT: ${{ runner.temp }}/aidan-home
+        run: |
+          python3 tools/map_blender/qa_aidan_render_artifact.py --folder "$AIDAN_RENDER_OUTPUT" --report "$AIDAN_RENDER_OUTPUT/g3-audit.json"
       - name: Upload artifacts even if rendering fails
         if: always()
         uses: actions/upload-artifact@v4
