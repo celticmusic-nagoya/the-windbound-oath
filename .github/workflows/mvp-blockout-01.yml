@@ -52,6 +52,33 @@ jobs:
           assert (p/'MORWEN_WALK_4DIR_8F_SPRITESHEET.png').stat().st_size>10000
           print('MORWEN_RIG_02_VISUAL_QA_PACKAGE_PASS')
           PY
+      - name: Syntax check Morwen Layer 0-3 diagnostic
+        run: python3 -m py_compile tools/blender/production_mesh_08/diagnostic_render.py
+      - name: Render Morwen 4 layers x 4 views
+        run: blender -b -noaudio -t 2 --python tools/blender/production_mesh_08/diagnostic_render.py
+      - name: Verify Morwen 16 PNG files
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('render_output')
+          files=list(p.glob('L[0-3]_*.png'))
+          assert len(files)==16, f'expected 16 PNGs, got {len(files)}'
+          for f in files:
+              assert f.stat().st_size>1000 and f.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a'), str(f)
+          qa=json.loads((p/'QA.json').read_text())
+          assert qa['render_success'] and qa['rendered_frames']==16
+          assert (p/'MORWEN_DIAGNOSTIC.blend').stat().st_size>1000
+          print('DIAGNOSTIC_16_PNG_PASS; ART_QUALITY_NOT_VERIFIED')
+          PY
+      - name: Upload Morwen Layer 0-3 diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer-diagnostic-16
+          path: render_output/
+          retention-days: 30
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v4
         if: always()
         with:
