@@ -57,6 +57,48 @@ def stone_material(name, base, seed):
  l.new(bump.outputs["Normal"],bs.inputs["Normal"])
  return m
 
+# PBR evaluation: real photographed CC0 maps, projected over the roof panel.
+# Keep procedural materials as a deterministic fallback when offline.
+def load_cc0_roof_material():
+ folder=out/"cc0_materials"/"red_slate_roof_tiles_01"
+ manifest_path=folder/"manifest.json"
+ if not manifest_path.exists():
+  print("CC0 texture missing: using procedural fallback")
+  return None
+ data=json.loads(manifest_path.read_text())
+ if data.get("license")!="CC0-1.0":
+  raise RuntimeError("Unverified texture license")
+ mat=bpy.data.materials.new("CC0 Poly Haven red slate roof PBR EVALUATION")
+ mat.use_nodes=True
+ nodes=mat.node_tree.nodes
+ links=mat.node_tree.links
+ bs=nodes.get("Principled BSDF")
+ bs.inputs["Roughness"].default_value=.87
+ uv=nodes.new("ShaderNodeTexCoord")
+ mapping=nodes.new("ShaderNodeMapping")
+ # Object coordinates projected over full roof rather than repeating the entire roof image per slate.
+ links.new(uv.outputs["Generated"],mapping.inputs["Vector"])
+ normal=nodes.new("ShaderNodeNormalMap")
+ normal.inputs["Strength"].default_value=.38
+ for key,socket in (("Diffuse","Base Color"),("rough","Roughness"),("nor_gl","Color")):
+  info=data["maps"][key]
+  p=Path(info["file"])
+  if hashlib.sha256(p.read_bytes()).hexdigest()!=info["sha256"]:
+   raise RuntimeError("PBR map SHA mismatch: "+key)
+  image=bpy.data.images.load(str(p),check_existing=True)
+  image.pack()
+  image.colorspace_settings.name="sRGB" if key=="Diffuse" else "Non-Color"
+  tex=nodes.new("ShaderNodeTexImage")
+  tex.image=image
+  links.new(mapping.outputs["Vector"],tex.inputs["Vector"])
+  if key=="nor_gl":
+   links.new(tex.outputs["Color"],normal.inputs["Color"])
+  else:
+   links.new(tex.outputs["Color"],bs.inputs[socket])
+ links.new(normal.outputs["Normal"],bs.inputs["Normal"])
+ return mat
+
+cc0_material=load_cc0_roof_material()
 materials=[
  stone_material("weathered ironstone umber",(.29,.12,.065),0),
  stone_material("deep fired burgundy",(.21,.075,.057),1),
@@ -115,7 +157,7 @@ def slate(name,center_x,center_y,z,scale,material,seed):
  mesh.update()
  obj=bpy.data.objects.new(name,mesh)
  bpy.context.collection.objects.link(obj)
- mesh.materials.append(material)
+ mesh.materials.append(cc0_material if cc0_material is not None else material)
  bevel=obj.modifiers.new("fine fractured edge highlights","BEVEL")
  bevel.width=.0025
  bevel.segments=2
@@ -167,7 +209,7 @@ bpy.ops.render.render(write_still=True)
 bpy.ops.wm.save_as_mainfile(filepath=str(out/"roof_slate_system_02.blend"))
 files=["roof_slate_system_02.png","roof_slate_system_02.blend"]
 report={"task":"RILDE-ROOF-SLATE-02","status":"CANDIDATE_NOT_CANON",
-        "material":"original iron-rich hand-split slate","seed":SEED,
+        "material":"Poly Haven CC0 red slate PBR" if cc0_material else "original procedural fallback", "material_source":"https://polyhaven.com/a/red_slate_roof_tiles_01" if cc0_material else None,"seed":SEED,
         "render_size":[1600,1200],"tile_width_m":.35,"tile_length_m":.51,
         "files":{name:hashlib.sha256((out/name).read_bytes()).hexdigest() for name in files}}
 (out/"roof_slate_system_02_manifest.json").write_text(json.dumps(report,indent=2))
