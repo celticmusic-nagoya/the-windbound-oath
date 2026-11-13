@@ -1,0 +1,54 @@
+name: Aidan Kenney Cottage Massing Render
+on:
+  push:
+    branches: [feature/aidan-home-quality-master-01]
+    paths:
+      - 'tools/map_blender/aidan_kenney_massing.py'
+      - '.github/workflows/aidan-kenney-massing.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and NumPy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy
+      - name: Download and verify CC0 source
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 1 --max-time 120 'https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip' -o "$RUNNER_TEMP/kenney.zip"
+          echo '1a7530c09f4d2fa2cdee259876f089334f8b1f27fa86a0c4f54ef86cdd8676ef  '"$RUNNER_TEMP/kenney.zip" | sha256sum -c -
+      - name: Extract 12 source GLBs
+        run: |
+          python3 - <<'PY'
+          import zipfile,os,pathlib
+          src=pathlib.Path(os.environ['RUNNER_TEMP'])/'kenney.zip'
+          dest=pathlib.Path(os.environ['RUNNER_TEMP'])/'base.zip'
+          names=['wall-block','wall-corner','wall-wood','pillar-wood','roof-gable','roof-gable-end','roof-gable-top','wall-window-shutters','wall-door','chimney','chimney-top','roof-high-gable']
+          with zipfile.ZipFile(src) as z,zipfile.ZipFile(dest,'w') as out:
+              assert z.testzip() is None
+              license=z.read('License.txt');assert b'CC0' in license
+              out.writestr('LICENSE_KENNEY.txt',license)
+              for n in names:
+                  matches=[p for p in z.namelist() if p.endswith('/'+n+'.glb') and 'GLB format/' in p]
+                  assert len(matches)==1,(n,matches)
+                  out.writestr('models/'+n+'.glb',z.read(matches[0]))
+          PY
+      - name: Render five architectural review views
+        run: |
+          mkdir -p "$RUNNER_TEMP/aidan-massing"
+          blender -b -t 2 --python tools/map_blender/aidan_kenney_massing.py -- "$RUNNER_TEMP/base.zip" "$RUNNER_TEMP/aidan-massing"
+          test "$(find "$RUNNER_TEMP/aidan-massing" -maxdepth 1 -name 'aidan_*.png' | wc -l)" -eq 5
+      - name: Upload renders and Blender source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-kenney-massing-review-not-approved
+          path: ${{ runner.temp }}/aidan-massing/
+          retention-days: 14
+          if-no-files-found: warn
