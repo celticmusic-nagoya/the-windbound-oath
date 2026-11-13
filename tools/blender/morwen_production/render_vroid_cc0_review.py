@@ -103,6 +103,28 @@ face_audit={
  "canonical_proportions_matched":False,
  "notes":"Descriptive geometry audit only. Requires independent inspection of eye/mouth edge loops."
 }
+# Connected-component audit separates detached facial islands without modifying geometry.
+adj=[set() for _ in face_mesh.vertices]
+for e in face_mesh.edges:
+ a,b=e.vertices
+ adj[a].add(b);adj[b].add(a)
+seen=set()
+components=[]
+for seed in range(len(adj)):
+ if seed in seen: continue
+ todo=[seed];seen.add(seed);ids=[]
+ while todo:
+  v=todo.pop();ids.append(v)
+  for n in adj[v]:
+   if n not in seen: seen.add(n);todo.append(n)
+ coords=[face.matrix_world @ face_mesh.vertices[i].co for i in ids]
+ lo=[min(v[k] for v in coords) for k in range(3)]
+ hi=[max(v[k] for v in coords) for k in range(3)]
+ components.append({"vertices":len(ids),"bounds_min":[round(x,5) for x in lo],"bounds_max":[round(x,5) for x in hi],"centroid":[round(sum(v[k] for v in coords)/len(coords),5) for k in range(3)]})
+components.sort(key=lambda c:c["vertices"],reverse=True)
+face_audit["connected_components"]=components
+face_audit["component_count"]=len(components)
+face_audit["component_labels"]="UNCLASSIFIED; skin, eyes and mouth require visual verification"
 (out/"FACE_TOPOLOGY_AUDIT.json").write_text(json.dumps(face_audit,indent=2)+"\n")
 report={"source":"Base_Female.vrm","objects":[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons)} for o in meshes],"bounds":{"min":mins,"max":maxs},"G1":"NOT_RUN","G2":"PENDING_ART_REVIEW","G3":"IMPORT_RENDER_AND_WIREFRAME","G4":"NOT_RUN","production_approved":False}
 (out/"QA.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
