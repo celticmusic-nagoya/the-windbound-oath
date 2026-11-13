@@ -29,7 +29,7 @@ jobs:
           p=pathlib.Path("render_output")
           files=list(p.glob("L[0-3]_*.png"))
           assert len(files)==16, len(files)
-          assert all(f.read_bytes()[:8]==b'\x89PNG\r\n\x1a\n' for f in files)
+          assert all(f.read_bytes()[:8] == bytes.fromhex('89504e470d0a1a0a') for f in files)
           assert json.loads((p/"QA.json").read_text())["render_success"]
           print("16 diagnostic renders PASS; official design fidelity NOT_VERIFIED")
           PY
