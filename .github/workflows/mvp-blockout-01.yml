@@ -19,6 +19,9 @@ jobs:
       - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/render_views.py
       - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/rig_walk.py
       - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/render_walk.py
+      - run: |
+          python3 -m pip install --break-system-packages Pillow
+          python3 tools/blender/mvp_blockout_01/qa_walk_frames.py
       - name: Candidate output QA
         run: |
           python3 - <<'PY'
