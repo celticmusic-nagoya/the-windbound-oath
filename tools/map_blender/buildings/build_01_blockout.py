@@ -50,7 +50,7 @@ for sign in (-1,1):
  o=block("roof half "+str(sign),(0,sign*d*.24,(h+ridge)/2+.2),(w+.5,d*.57,.18),roof,"L2")
  o.rotation_euler[0]=sign*math.atan2(ridge-h,d/2)
 # Authored reusable detail modules; dimensions remain candidate pending art QA.
-def trim(n,x,y,z,dx,dy,dz,mat=wood):return block(n,(x,y,z),(dx,dy,dz),mat,"L2")
+def trim(n,loc,dx,dy,dz,mat=wood):return block(n,loc,(dx,dy,dz),mat,"L2")
 # Exposed timber bracing and front facade: avoid hiding genuine window apertures.
 for x in (-w/2+.14,w/2-.14):
  for y in (-d/2+.14,d/2-.14):trim("corner post",(x,y,1.55),.20,.20,3.12)
