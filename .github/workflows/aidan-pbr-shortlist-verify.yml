@@ -1,0 +1,32 @@
+name: Aidan PBR Shortlist Verification
+on:
+  push:
+    branches: [feature/aidan-home-quality-master-01]
+    paths:
+      - 'tools/map_blender/verify_pbr_shortlist.py'
+      - 'tools/map_blender/aidan_pbr_shortlist.json'
+      - '.github/workflows/aidan-pbr-shortlist-verify.yml'
+  pull_request:
+    paths:
+      - 'tools/map_blender/verify_pbr_shortlist.py'
+      - 'tools/map_blender/aidan_pbr_shortlist.json'
+      - '.github/workflows/aidan-pbr-shortlist-verify.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact asset IDs against provider APIs
+        run: python3 tools/map_blender/verify_pbr_shortlist.py tools/map_blender/aidan_pbr_shortlist.json "$RUNNER_TEMP/aidan-pbr-verification.json"
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-pbr-shortlist-verification-not-approved
+          path: ${{ runner.temp }}/aidan-pbr-verification.json
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,31 @@
+name: Pinterest Reference API Audit
+on:
+  push:
+    branches:
+      - feature/aidan-home-quality-master-01
+    paths:
+      - '.github/workflows/pinterest-reference-audit.yml'
+      - 'tools/map_blender/pinterest_api_probe.py'
+      - 'tools/map_blender/pinterest_roof_reference_selection.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinterest-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only Pinterest API probe
+        env:
+          PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+          PINTEREST_AUDIT_OUTPUT: ${{ runner.temp }}/pinterest-audit
+        run: python3 tools/map_blender/pinterest_api_probe.py
+      - name: Upload sanitized report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinterest-reference-api-audit
+          path: ${{ runner.temp }}/pinterest-audit/
+          if-no-files-found: warn
+          retention-days: 7

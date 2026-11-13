@@ -1,0 +1,31 @@
+name: Aidan CC0 Material Candidate Discovery
+on:
+  push:
+    branches: [feature/aidan-home-quality-master-01]
+    paths:
+      - 'tools/map_blender/discover_cc0_materials.py'
+      - '.github/workflows/aidan-cc0-material-discovery.yml'
+  pull_request:
+    paths:
+      - 'tools/map_blender/discover_cc0_materials.py'
+      - '.github/workflows/aidan-cc0-material-discovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  discover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Discover external CC0 material candidates (metadata only)
+        run: |
+          python3 tools/map_blender/discover_cc0_materials.py "$RUNNER_TEMP/aidan-cc0-candidates.json"
+      - name: Upload candidate provenance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-cc0-material-candidates-not-approved
+          path: ${{ runner.temp }}/aidan-cc0-candidates.json
+          retention-days: 14
+          if-no-files-found: warn

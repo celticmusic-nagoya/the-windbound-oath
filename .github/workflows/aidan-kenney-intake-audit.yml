@@ -1,0 +1,59 @@
+name: Aidan Home CC0 Asset Intake Audit
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/aidan-kenney-intake-audit.yml'
+      - 'tools/map_blender/aidan_kenney_intake.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Kenney-authored OpenGameArt mirror and verify SHA256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/kenney-audit"
+          curl --fail --location --retry 1 --max-time 120 \
+            'https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip' \
+            --output "$RUNNER_TEMP/kenney-audit/source.zip"
+          echo '1a7530c09f4d2fa2cdee259876f089334f8b1f27fa86a0c4f54ef86cdd8676ef  '"$RUNNER_TEMP/kenney-audit/source.zip" | sha256sum -c -
+          sha256sum "$RUNNER_TEMP/kenney-audit/source.zip" | tee "$RUNNER_TEMP/kenney-audit/download.sha256"
+          file "$RUNNER_TEMP/kenney-audit/source.zip"
+          unzip -t "$RUNNER_TEMP/kenney-audit/source.zip" >/dev/null
+      - name: Inventory model formats and archive license
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import zipfile, pathlib, json, os, collections, hashlib
+          folder=pathlib.Path(os.environ['RUNNER_TEMP'])/'kenney-audit'
+          z=zipfile.ZipFile(folder/'source.zip')
+          names=z.namelist()
+          assert len(names)>50, 'Archive unexpectedly small'
+          assert all(not n.startswith('/') and '..' not in pathlib.PurePosixPath(n).parts for n in names), 'Unsafe path'
+          models=[n for n in names if pathlib.Path(n).suffix.lower() in {'.obj','.fbx','.glb','.gltf','.blend'}]
+          licenses=[n for n in names if 'license' in n.lower()]
+          assert models, 'No 3D models'
+          assert licenses, 'No license evidence in archive'
+          evidence='\\n'.join(z.read(n).decode('utf-8','replace')[:10000] for n in licenses if not n.endswith('/'))
+          assert 'CC0' in evidence or 'creativecommons.org/publicdomain/zero' in evidence, 'CC0 not found in license files'
+          counts=dict(collections.Counter(pathlib.Path(n).suffix.lower() for n in models))
+          report={'source':'https://kenney.nl/assets/fantasy-town-kit','license':'CC0 (archive checked)','sha256':hashlib.sha256((folder/'source.zip').read_bytes()).hexdigest(),'model_count':len(models),'formats':counts,'models':models,'license_files':licenses,'status':'PASS'}
+          (folder/'inventory.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+          (folder/'license_evidence.txt').write_text(evidence,encoding='utf-8')
+          print(json.dumps({k:v for k,v in report.items() if k!='models'},indent=2))
+          PY
+      - name: Upload audit only (no third-party asset redistribution)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-kenney-intake-audit
+          path: |
+            ${{ runner.temp }}/kenney-audit/inventory.json
+            ${{ runner.temp }}/kenney-audit/license_evidence.txt
+          retention-days: 14
+          if-no-files-found: warn
