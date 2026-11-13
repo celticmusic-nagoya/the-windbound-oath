@@ -20,11 +20,11 @@ on:
         required: true
         options: [MAP-ASSET-RESEARCH-01, MAP-PIPELINE-01, MAP-INTEGRATION-AUDIT-01]
       mode:
-        description: "dry_run requires no API key; execute uses paid API"
+        description: "Safety verification only; no AI API calls"
         type: choice
         required: true
         default: dry_run
-        options: [dry_run, execute]
+        options: [dry_run]
 permissions:
   contents: read
 concurrency:
@@ -81,41 +81,6 @@ jobs:
         run: |
           printf 'DRY_RUN: request validated; no model API called.\n' > agent-output.txt
           cat agent-request-validated.json >> agent-output.txt
-      - name: Require matching API credential
-        if: steps.request.outputs.mode == 'execute'
-        shell: bash
-        env:
-          AGENT: ${{ steps.request.outputs.agent }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          if [[ "$GITHUB_REF" != "refs/heads/main" || "$GITHUB_EVENT_NAME" != "workflow_dispatch" ]]; then echo "EXECUTE_BLOCKED: default branch manual dispatch required after security review"; exit 4; fi
-          if [[ "$AGENT" == claude && -z "$ANTHROPIC_API_KEY" ]]; then echo "ANTHROPIC_API_KEY secret missing"; exit 3; fi
-          if [[ "$AGENT" == codex && -z "$OPENAI_API_KEY" ]]; then echo "OPENAI_API_KEY secret missing"; exit 3; fi
-      - name: Install selected agent CLI
-        if: steps.request.outputs.mode == 'execute'
-        shell: bash
-        env:
-          AGENT: ${{ steps.request.outputs.agent }}
-        run: |
-          if [[ "$AGENT" == claude ]]; then npm install --global @anthropic-ai/claude-code; else npm install --global @openai/codex; fi
-      - name: Run read-only agent analysis
-        if: steps.request.outputs.mode == 'execute'
-        shell: bash
-        env:
-          AGENT: ${{ steps.request.outputs.agent }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          cat > agent-prompt.txt <<'EOF'
-          Read AGENTS.md and the following approved work packet. Produce a concrete audit and recommended patch plan only. Do not edit files, run destructive commands, reveal secrets, merge or publish. Distinguish verified facts from assumptions and include exact paths. Limit analysis to the assigned map development task.
-          EOF
-          cat agent-packet.md >> agent-prompt.txt
-          if [[ "$AGENT" == claude ]]; then
-            claude --print --permission-mode plan "$(cat agent-prompt.txt)" > agent-output.txt
-          else
-            codex exec --sandbox read-only --skip-git-repo-check --output-last-message agent-output.txt "$(cat agent-prompt.txt)"
-          fi
       - name: Upload audit output
         if: always()
         uses: actions/upload-artifact@v4
