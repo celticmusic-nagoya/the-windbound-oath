@@ -17,6 +17,7 @@ jobs:
       - run: python3 -m py_compile tools/blender/mvp_blockout_01/build.py
       - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/build.py
       - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/render_views.py
+      - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/rig_walk.py
       - name: Candidate output QA
         run: |
           python3 - <<'PY'
@@ -33,7 +34,11 @@ jobs:
           for view in ('front','left','right','back'):
               f=p/'views'/(view+'.png')
               assert f.is_file() and f.stat().st_size>1000,view
-          print('MORWEN_BLOCKOUT_FOUR_VIEWS_PASS')
+          rig=json.loads((p/'rig_report.json').read_text())
+          assert rig['core_bones']==22 and rig['weighted_parts']==15
+          assert rig['cycle_frames']==8 and not rig['canonical_modified']
+          assert (p/'morwen_rig_walk_candidate.blend').stat().st_size>1000
+          print('MORWEN_RIG_02_STRUCTURE_PASS')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
