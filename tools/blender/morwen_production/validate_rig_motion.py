@@ -37,7 +37,7 @@ scene=bpy.context.scene;scene.frame_start=1;scene.frame_end=8
 out=Path("render_output/morwen_motion_qa");out.mkdir(parents=True,exist_ok=True)
 bpy.ops.wm.save_as_mainfile(filepath=str((out/"MORWEN_FK_MOTION_TEMPLATE.blend").resolve()))
 (out/"QA.json").write_text(json.dumps({"bones":26,"fk_frames":8,
-"loop_boundary_frame":9,"parenting_checks":len(required),
+"loop_boundary_frame":9,"parenting_checks":len(required),"parenting_check_names":sorted(required),
 "art_qa":"NOT_RUN","skin_deformation_qa":"BLOCKED_NO_PRODUCTION_MESH",
 "foot_sliding_qa":"BLOCKED_NO_PRODUCTION_MESH",
 "technical_rig_qa":"PASS","production_approved":False},indent=2)+"\n")
