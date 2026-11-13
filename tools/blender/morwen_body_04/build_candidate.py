@@ -49,7 +49,7 @@ for sign,side in ((1,"L"),(-1,"R")):
     limb("CANDIDATE_UPPER_ARM_"+side,(sign*.17,0,shoulder),(sign*.205,0,elbow),.045,.032)
     limb("CANDIDATE_FOREARM_"+side,(sign*.205,0,elbow),(sign*.21,0,wrist),.032,.022)
 bpy.ops.mesh.primitive_uv_sphere_add(segments=32,ring_count=16,location=(0,0,(1.63+z(marks["chin_y_approx"]))/2))
-head=bpy.context.object;head.name="CANDIDATE_HEAD";head.scale=(.105,.092,(1.63-z(marks["chin_y_approx"]))/2)
+head=bpy.context.object;head.name="CANDIDATE_HEAD";head.scale=(.135,.105,(1.63-z(marks["chin_y_approx"]))/2)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/"morwen_body_04_candidate.blend"))
 report={"status":"PARAMETRIC_CANDIDATE_ONLY","source":"MORWEN_LAYER0_LANDMARKS_CANDIDATE.json","art_qa":"NOT_RUN","full_body_topology":"INCOMPLETE","reference_four_view_fit":"NOT_VERIFIED","canonical_modified":False}
 (OUT/"report.json").write_text(json.dumps(report,indent=2)+"\n")
