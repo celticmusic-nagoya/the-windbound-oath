@@ -65,13 +65,15 @@ jobs:
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ["AIDAN_RENDER_OUTPUT"])
           manifest=json.loads((root/"manifest.json").read_text())
-          assert manifest["pbr_candidate"] is True
-          assert (root/"aidan_candidate.blend").stat().st_size>0
+          print("Manifest:", manifest, flush=True)
+          assert manifest["pbr_candidate"] is True, "PBR candidate flag missing"
+          assert (root/"aidan_candidate.blend").stat().st_size>0, "Blend file missing"
           for view in ("front","rear","left","right","game"):
               p=root/("aidan_"+view+".png")
               data=p.read_bytes()
-              assert data[:8]==b"\\x89PNG\\r\\n\\x1a\\n" and len(data)>10000
-              assert hashlib.sha256(data).hexdigest()==manifest["views"][view]
+              print("View", view, "bytes", len(data), "header", repr(data[:8]), flush=True)
+              assert data[:8]==b"\\x89PNG\\r\\n\\x1a\\n" and len(data)>10000, "Invalid PNG: "+view
+              assert hashlib.sha256(data).hexdigest()==manifest["views"][view], "Hash mismatch: "+view
           print("PASS: five PNG files, Blender scene and SHA-256 verified")
           PY
       - name: Save five-view PBR candidate render
