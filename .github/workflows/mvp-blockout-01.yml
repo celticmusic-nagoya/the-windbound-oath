@@ -1,0 +1,39 @@
+name: MVP Blockout 01 Candidate Export
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/mvp_blockout_01/**'
+      - '.github/workflows/mvp-blockout-01.yml'
+jobs:
+  blockout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends blender
+      - run: python3 -m py_compile tools/blender/mvp_blockout_01/build.py
+      - run: blender -b -noaudio --python tools/blender/mvp_blockout_01/build.py
+      - name: Candidate output QA
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/candidates/mvp-blockout-01')
+          r=json.loads((p/'report.json').read_text())
+          assert r['candidate_only'] and not r['canonical_assets_modified']
+          assert r['morwen_parts']>=15 and len(r['map_modules'])==4
+          for name in ('morwen_blockout','test_map_blockout'):
+              for ext in ('.blend','.glb'):
+                  f=p/(name+ext)
+                  assert f.is_file() and f.stat().st_size>100
+          print('MVP_BLOCKOUT_CANDIDATE_QA_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mvp-blockout-01
+          path: assets/candidates/mvp-blockout-01/
+          if-no-files-found: warn
