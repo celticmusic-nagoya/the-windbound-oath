@@ -1,0 +1,31 @@
+name: Morwen MPFB Mesh Structure Audit
+on:
+  push:
+    branches:
+      - feature/morwen-production-pipeline-01
+    paths:
+      - '.github/workflows/morwen-mpfb-mesh-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: makehumancommunity/mpfb2
+          ref: d0a32e57a7f915cb2f2b95410e2117648c7bbb7e
+          path: _upstream_mpfb
+          persist-credentials: false
+      - name: Analyze original OBJ structure
+        run: python3 tools/blender/morwen_production/audit_mpfb_obj.py
+      - name: Upload structured report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-mpfb-mesh-structure-audit
+          path: render_output/morwen_mpfb_mesh_audit/
+          retention-days: 14
