@@ -33,6 +33,16 @@ class IntakeTests(unittest.TestCase):
         self.assertEqual(self.check([{**self.entry,"path":"/tmp/asset.png"}])["status"],"FAIL")
     def test_backslash_path_rejected(self):
         self.assertEqual(self.check([{**self.entry,"path":"sub\\\\asset.png"}])["status"],"FAIL")
+    def test_symlink_escape_rejected(self):
+        outside=Path(self.temp.name).parent / ("outside-map-qa-" + self.root.name)
+        outside.write_bytes(b"fixture")
+        self.addCleanup(lambda: outside.unlink(missing_ok=True))
+        (self.root/"linked.png").symlink_to(outside)
+        self.assertEqual(self.check([{**self.entry,"path":"linked.png"}])["status"],"FAIL")
+    def test_nested_valid_asset(self):
+        (self.root/"sub").mkdir()
+        (self.root/"sub"/"asset.png").write_bytes(b"fixture")
+        self.assertEqual(self.check([{**self.entry,"path":"sub/asset.png"}])["status"],"PASS")
     def test_bad_manifest(self):
         self.manifest.write_text("broken")
         self.assertEqual(audit(self.root,self.manifest)["status"],"FAIL")
