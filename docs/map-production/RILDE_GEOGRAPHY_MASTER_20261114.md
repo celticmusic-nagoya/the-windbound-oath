@@ -40,3 +40,10 @@ The ocean-facing cliff and the riverbank cliff are different places. The riverba
 
 ## Unresolved / no invention
 Exact compass azimuth of paths inside the village, building counts, building footprints, coast-to-village distances, harbor design and church name/capacity are not fixed by the world canon. Do not turn diagram approximations into canonical meters.
+
+## Director update — 2026-11-14: Moss Forest visibility and Windwatch Cliff
+- **Moss Forest ancient altar must NOT be visible in any whole-village overview.** Only the southeastern forest edge/entrance and dense canopy may appear. The altar is deep inside the forest and belongs to a separate interior forest map; avoid visible ruins, standing stones, magic circles or altar labels within the overview illustration.
+- **Windwatch Cliff** must match the director-provided adopted sunset-cliff CG (2026-11-14): natural coastal high grass, flowers, weathered cliffs, open sea and sunset. Remove the existing in-game bench from the redesign; no fences, watchtowers, banners, platforms, signposts or other surplus man-made structures on the cliff. Existing source CG remains protected.
+- Distinguish cliff visual art from gameplay navigation: accessible walking ground can be represented without adding a visible built overlook. Verify occlusion from the village at the actual scene camera angle.
+- This change affects new candidate map art and future replacement assets, NOT an immediate deletion of existing runtime bench or approved CG. Review exact asset references before changing runtime.
+- QA for overview candidates: reject if altar is visible, cliff has artificial objects, or the east riverbank cliff is confused with the coastal cliff. An automatically generated scale bar is not canon until dimensions are established.
