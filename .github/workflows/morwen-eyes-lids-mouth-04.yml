@@ -1,0 +1,72 @@
+name: Morwen Eyes Lids Mouth 04
+on:
+  push:
+    branches:
+      - feature/morwen-eyes-lids-mouth-04
+    paths:
+      - '.github/workflows/morwen-eyes-lids-mouth-04.yml'
+      - 'tools/blender/morwen_production/eyes_lids_mouth/**'
+      - 'tools/blender/morwen_production/nose_retopo/**'
+      - 'tools/blender/morwen_production/nose_retopo_review/**'
+      - 'tools/blender/morwen_production/head_landmark/*.py'
+      - 'tools/blender/morwen_production/_qa/morwen_attempt_ledger.json'
+      - 'tools/qa_3d_attempt_ledger.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+  MORWEN_OUT: render_output/morwen_eyes_lids_mouth_04
+  PYTHONHASHSEED: '0'
+jobs:
+  elm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Anti-loop ledger (schema_version 1, two-failure guard)
+        run: |
+          python -m unittest discover -s tests -p 'test_qa_3d_attempt_ledger.py' -v
+          python tools/qa_3d_attempt_ledger.py tools/blender/morwen_production/_qa/morwen_attempt_ledger.json
+      - name: Pinned Blender runtime (bpy 5.3.0 wheel, SHA-256 verified)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "${BPY_WHEEL_SHA256}  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          grep -v '^bpy==' tools/blender/morwen_production/head_landmark/requirements-lock.txt > /tmp/req.txt
+          python -m pip install -r /tmp/req.txt
+      - name: Source (pinned CC0 VRM)
+        run: |
+          python - <<'PY'
+          import hashlib, io, urllib.request, zipfile
+          from pathlib import Path
+          url = "https://opengameart.org/sites/default/files/base_female.zip"
+          out = Path("render_output/morwen_vroid_review"); out.mkdir(parents=True, exist_ok=True)
+          req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+          with urllib.request.urlopen(req, timeout=90) as res:
+              raw = res.read()
+          assert hashlib.sha256(raw).hexdigest() == "bf2717cff70b40a278df56e137dbb699c6499551096fa4c005e9aeca1de68eb3"
+          vrm = zipfile.ZipFile(io.BytesIO(raw)).read("Base_Female.vrm")
+          assert hashlib.sha256(vrm).hexdigest() == "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
+          (out / "Base_Female.vrm").write_bytes(vrm)
+          PY
+      - name: Evidence for the stopped annulus retopology method (2 configs)
+        run: python tools/blender/morwen_production/eyes_lids_mouth/trial_annulus_retopo_04.py
+      - name: Eyes / lids / mouth candidate on the locked #312 nose (renders + QA)
+        run: python tools/blender/morwen_production/eyes_lids_mouth/run_elm_04.py
+      - name: Validate evidence
+        run: python tools/blender/morwen_production/eyes_lids_mouth/validate_elm_04.py
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-eyes-lids-mouth-04
+          path: render_output/morwen_eyes_lids_mouth_04/
+          retention-days: 30
