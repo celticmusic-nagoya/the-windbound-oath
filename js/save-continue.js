@@ -49,9 +49,9 @@
   for(const id of ['cinema','returnScene','escapeScene','louIntroScene','altarScene','aftermathScene','fortScene','prologueEnd','attackBattle','raiderBattle','inside','forestScene']){const n=document.getElementById(id);if(n)n.style.display='none';}
   document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','villageAttack','northAssault','actionCinematic');
  }
- async function start(){
+ async function start(sourceRaw){
   if(phase!=='TITLE')return false;
-  const prepared=inspect();if(!prepared.ok){error=prepared.error;phase='TITLE';notify();return false;}
+  const prepared=inspect(sourceRaw);if(!prepared.ok){error=prepared.error;phase='TITLE';notify();return false;}
   phase='LOADING';error='';notify();let token,unsubscribe=()=>{},restore=null;
   const ok=await LoadCoordinator.boot(async owner=>{
    token=owner;const previous=capture();let applied=false;
