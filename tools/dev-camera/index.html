@@ -5,10 +5,10 @@
 <body><header><div><strong>THE WINDBOUND OATH｜開発用3Dカメラ</strong><small>ゲーム本体とは独立したQAビューア</small></div><div><input id="file" type="file" accept=".glb,.gltf" aria-label="GLBモデルを読み込む"><span id="status" role="status">モデル未読込</span></div></header>
 <main id="stage"><div id="drop">GLBファイルをここにドロップ</div></main>
 <aside><button data-view="game">27°俯瞰</button><button data-view="front">正面</button><button data-view="back">背面</button><button data-view="left">左</button><button data-view="right">右</button><button data-view="top">真上</button><button id="fit">全体表示</button><div id="layers"></div></aside>
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
-import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js';
-import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/loaders/GLTFLoader.js';
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script><script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 const stage=document.getElementById('stage'),status=document.getElementById('status'),layers=document.getElementById('layers');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x25313a);
 const camera=new THREE.PerspectiveCamera(45,1,.01,2000);
