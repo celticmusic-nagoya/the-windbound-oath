@@ -172,3 +172,48 @@ jobs:
           path: ${{ runner.temp }}/aidan-house-hd/
           if-no-files-found: warn
           retention-days: 7
+
+  high_detail_master_v2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Static syntax
+        run: python3 -m py_compile tools/map_blender/aidan_house_master_v2.py tools/map_blender/aidan_house_master_render_v2.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1-mesa-dri libglx-mesa0 libopengl0 xvfb
+      - name: Render high-detail master candidate
+        env:
+          AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-house-hd-v2
+        run: |
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_house_master_render_v2.py
+      - name: Validate geometry and five images
+        env:
+          AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-house-hd-v2
+        run: |
+          python3 - <<'PY'
+          import os,json,hashlib
+          p=os.environ['AIDAN_ROOF_OUTPUT'];m=json.load(open(os.path.join(p,'manifest.json')))
+          assert m['status']=='HIGH_DETAIL_MASTER_CANDIDATE_NOT_ART_APPROVED'
+          assert m['roof']['counts']['slates']>=1000
+          assert m['roof']['counts']['stones']>=100
+          assert m['roof']['counts']['ridge_caps']==30
+          assert len(m['views'])==5
+          for v in m['views']:
+              f=os.path.join(p,v['file'])
+              assert os.path.getsize(f)>1000
+              assert hashlib.sha256(open(f,'rb').read()).hexdigest()==v['sha256']
+          assert os.path.getsize(os.path.join(p,'aidan_house_master_v2.blend'))>1000
+          print('PASS: candidate geometry and render integrity; G2/G4 NOT APPROVED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aidan-house-high-detail-master-v2
+          path: ${{ runner.temp }}/aidan-house-hd-v2/
+          if-no-files-found: warn
+          retention-days: 7
