@@ -65,5 +65,19 @@
   confirmBox.remove();confirmBox=null;menu.removeAttribute('aria-hidden');refresh();
   if(restoreFocus&&!newButton.disabled)newButton.focus?.({preventScroll:true});
  }
- window.TitleScreen=Object.freeze({begin(cb){launch=cb;if(skip)return cb();show();},refresh,newGame,dismiss:hide,active:()=>active});
+ // A full reload is intentional: gameplay globals, pending timers and battle input
+ // must not survive a return to title. The save record is never modified.
+ function returnToTitle(){
+  if(typeof window==='undefined'||!window.location)return false;
+  try{
+   // Strip dev bypass flags (title=0 / legacyVillage=1) and fragments.
+   const target=new URL(window.location.href);
+   target.searchParams.delete('title');
+   target.searchParams.delete('legacyVillage');
+   target.hash='';
+   window.location.assign(target.href);
+   return true;
+  }catch(_){return false;}
+ }
+ window.TitleScreen=Object.freeze({begin(cb){launch=cb;if(skip)return cb();show();},refresh,newGame,dismiss:hide,returnToTitle,active:()=>active});
 })();
