@@ -22,3 +22,9 @@ test('twenty slots keep separate records',()=>{
  assert.equal(api.list().filter(x=>x.occupied&&!x.corrupt).length,20);
  for(let n=1;n<=20;n++)assert.equal(JSON.parse(api.payload(n)).prologue.storyStage,n%16);
 });
+
+test('legacy v1 save can be copied into a numbered slot without modifying original',()=>{
+ const {api,values}=env();const old=JSON.stringify({prologue:{version:1,storyStage:4},members:{aidan:{joined:true}},active:['aidan'],inventory:{}});
+ values.set('windbound_oath_v028',old);api.save(3,api.legacy());
+ assert.equal(api.payload(3),old);assert.equal(api.legacy(),old);assert.equal(api.list()[2].corrupt,false);
+});
