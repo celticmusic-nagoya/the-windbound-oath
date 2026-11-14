@@ -7,12 +7,18 @@ on:
       - 'tools/map_blender/aidan_roof_vertex_first_v3.py'
       - 'tools/map_blender/aidan_roof_render_v3.py'
       - '.github/workflows/aidan-roof-candidate-qa.yml'
+      - 'tools/map_blender/aidan_house_structural_cage_01.py'
+      - 'tools/map_blender/aidan_house_structure_render_01.py'
+      - 'tools/map_blender/test_aidan_house_structure_01.py'
   pull_request:
     paths:
       - 'tools/map_blender/aidan_roof_vertex_first_v3.py'
       - 'tools/map_blender/aidan_roof_render_v3.py'
       - 'tools/map_blender/test_aidan_roof_candidate_01.py'
       - '.github/workflows/aidan-roof-candidate-qa.yml'
+      - 'tools/map_blender/aidan_house_structural_cage_01.py'
+      - 'tools/map_blender/aidan_house_structure_render_01.py'
+      - 'tools/map_blender/test_aidan_house_structure_01.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -67,5 +73,53 @@ jobs:
         with:
           name: aidan-roof-vertex-first-v3-qa
           path: ${{ runner.temp }}/aidan-roof-qa/
+          if-no-files-found: warn
+          retention-days: 7
+
+  house_cage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Structural dimensional QA
+        run: |
+          python3 -m py_compile tools/map_blender/aidan_house_structural_cage_01.py tools/map_blender/aidan_house_structure_render_01.py
+          python3 tools/map_blender/test_aidan_house_structure_01.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1-mesa-dri libglx-mesa0 libopengl0 xvfb
+      - name: Render whole-house cage
+        env:
+          AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-house-cage
+        run: |
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_house_structure_render_01.py
+      - name: Verify five PNGs and Blender file
+        env:
+          AIDAN_ROOF_OUTPUT: ${{ runner.temp }}/aidan-house-cage
+        run: |
+          python3 - <<'PY'
+          import json,os,hashlib
+          p=os.environ['AIDAN_ROOF_OUTPUT']
+          m=json.load(open(os.path.join(p,'manifest.json')))
+          assert m['status']=='WHOLE_HOUSE_STRUCTURE_CANDIDATE_NOT_ART_APPROVED'
+          assert len(m['views'])==5
+          assert m['roof']['objects']>=15
+          assert m['roof']['dimensions_candidate']['door_width']>0
+          for v in m['views']:
+              q=os.path.join(p,v['file'])
+              assert os.path.getsize(q)>1000
+              assert hashlib.sha256(open(q,'rb').read()).hexdigest()==v['sha256']
+          assert os.path.getsize(os.path.join(p,'aidan_house_structural_cage_01.blend'))>1000
+          print('PASS: whole-house cage technical artifacts, G2/G4 NOT_RUN')
+          PY
+      - name: Upload whole-house QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-house-structure-cage-qa
+          path: ${{ runner.temp }}/aidan-house-cage/
           if-no-files-found: warn
           retention-days: 7
