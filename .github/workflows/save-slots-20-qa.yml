@@ -5,6 +5,8 @@ on:
       - 'js/save-slots.js'
       - 'js/save-continue.js'
       - 'tests/save-slots.test.js'
+      - 'tests/save-slots-integration.test.cjs'
+      - 'css/save-slots.css'
       - 'index.html'
       - '.github/workflows/save-slots-20-qa.yml'
   workflow_dispatch:
@@ -24,4 +26,4 @@ jobs:
           node --check js/save-slots.js
           node --check js/save-continue.js
       - name: Storage regression tests
-        run: node --test tests/save-slots.test.js
+        run: node --test tests/save-slots.test.js tests/save-slots-integration.test.cjs
