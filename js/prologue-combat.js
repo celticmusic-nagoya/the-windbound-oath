@@ -185,7 +185,7 @@
   }
   if(token!==generation)return;
   normalGuardA=normalGuardF=false;BattleActorState.endGuard(b);BattleActorState.endGuard(b,'fiona');
-  if(aahp<=0&&(normalFHP<=0||!activeAlly(b,'fiona'))&&window.GameOverPolicy?.gameOverEnabled({storyStage})){log(b,'パーティーは力尽きた……。');attackBattleBusy=true;normalActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setNormalCommandDrawer(false);window.GameOverScreen?.show({onContinue:()=>window.TitleScreen?.returnToTitle()??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
+  if(aahp<=0&&(normalFHP<=0||!activeAlly(b,'fiona'))&&window.GameOverPolicy?.gameOverEnabled({storyStage})){log(b,'パーティーは力尽きた……。');attackBattleBusy=true;normalActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setNormalCommandDrawer(false);window.GameOverScreen?.show({onLoad:()=>window.TitleScreen?.returnToTitle({openLoad:true})??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
   if(aahp<=0||normalFHP<=0){log(b,'態勢を立て直した……。');aahp=Math.max(35,aahp);normalFHP=Math.max(32,normalFHP);BattleActorState.recover(b);BattleActorState.recover(b,'fiona')}
   BattleStatus.tick(b,statusStart);roundNumber++;normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle();
  }
@@ -280,7 +280,7 @@
   if(token!==generation||rbBoss<=0)return;
   support();await situationalBanter('raider',token);if(token!==generation||rbBoss<=0)return;
   rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');BattleStatus.tick('raider',statusStart);
-  if(rbHP<=0&&rbFHP<=0){log('raider','パーティーは力尽きた……。');rbBusy=true;rbActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setRaiderCommandDrawer(false);window.GameOverScreen?.show({onContinue:()=>window.TitleScreen?.returnToTitle()??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
+  if(rbHP<=0&&rbFHP<=0){log('raider','パーティーは力尽きた……。');rbBusy=true;rbActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setRaiderCommandDrawer(false);window.GameOverScreen?.show({onLoad:()=>window.TitleScreen?.returnToTitle({openLoad:true})??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
   if(rbHP<=0||rbFHP<=0){log('raider','態勢を立て直した……。');rbHP=Math.max(35,rbHP);rbFHP=Math.max(32,rbFHP);BattleActorState.recover('raider');BattleActorState.recover('raider','fiona')}
   rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;updateRaider();
  }
