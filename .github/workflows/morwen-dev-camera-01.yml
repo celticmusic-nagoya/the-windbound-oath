@@ -27,6 +27,7 @@ jobs:
           python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
           echo "5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
           python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install "numpy>=2.0,<3.0"
       - name: Verify camera presets and asset non-interference
         run: python tools/blender/morwen_production/dev_camera/test_dev_camera_01.py
       - name: Upload QA report
