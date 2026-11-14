@@ -1,0 +1,11 @@
+/* SAVE-SLOTS-20: compact responsive slot selector */
+#systemBody .saveSlotGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px;max-height:min(54vh,440px);overflow-y:auto;overscroll-behavior:contain;padding:4px 2px 12px}
+#systemBody .saveSlotButton{display:block;width:100%;min-height:56px;padding:12px;text-align:left;line-height:1.45;white-space:normal;overflow-wrap:anywhere;border:1px solid #847a62;border-radius:8px;background:#26352e;color:#f4efe3;font:inherit;cursor:pointer}
+#systemBody .saveSlotButton:focus-visible{outline:3px solid #f1d18a;outline-offset:2px}
+#systemBody .saveSlotButton:disabled{opacity:.48;cursor:not-allowed}
+@media(max-width:480px){#systemBody .saveSlotGrid{grid-template-columns:1fr;max-height:48svh}}
+
+#systemBody .saveSlotDelete{min-height:40px;padding:8px;border:1px solid #a88d84;border-radius:6px;background:transparent;color:inherit;cursor:pointer}
+#systemBody .saveSlotDelete:focus-visible{outline:3px solid #f1d18a}
+.title-slot-picker .title-slot-list{display:grid;gap:8px;max-height:min(45svh,350px);overflow-y:auto;overscroll-behavior:contain;margin:10px 0}
+.title-slot-picker .title-slot-list button{min-height:44px;white-space:normal;text-align:left}
