@@ -1,0 +1,197 @@
+{
+  "candidate_hash": "7f9e3cdee41361339bd1dde95d976b189fc1c63df92b028d0f42997d5d89d88f",
+  "technical_qa": {
+    "candidate_identical": true,
+    "mapping_consistent_all": true,
+    "nose_patch_no_folds_all": true,
+    "identical_expression_pairs": []
+  },
+  "expressions": {
+    "angry": {
+      "shape_key": "target_1",
+      "motion": {
+        "eye_R": 20.37,
+        "eye_L": 20.37,
+        "brow_R": 20.08,
+        "brow_L": 20.08,
+        "mouth": 6.31,
+        "nose_patch": 0.68
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.1604,
+        "inner_dihedral_deg_max": 33.232
+      }
+    },
+    "surprised": {
+      "shape_key": "target_5",
+      "motion": {
+        "eye_R": 11.88,
+        "eye_L": 11.88,
+        "brow_R": 12.15,
+        "brow_L": 12.15,
+        "mouth": 26.2,
+        "nose_patch": 1.54
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.3638,
+        "inner_dihedral_deg_max": 52.076
+      }
+    },
+    "a": {
+      "shape_key": "target_37",
+      "motion": {
+        "eye_R": 0.0,
+        "eye_L": 0.0,
+        "brow_R": 0.0,
+        "brow_L": 0.0,
+        "mouth": 12.75,
+        "nose_patch": 0.47
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.2303,
+        "inner_dihedral_deg_max": 32.837
+      }
+    },
+    "o": {
+      "shape_key": "target_41",
+      "motion": {
+        "eye_R": 0.0,
+        "eye_L": 0.0,
+        "brow_R": 0.0,
+        "brow_L": 0.0,
+        "mouth": 22.42,
+        "nose_patch": 0.51
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.3539,
+        "inner_dihedral_deg_max": 44.159
+      }
+    },
+    "u": {
+      "shape_key": "target_39",
+      "motion": {
+        "eye_R": 0.0,
+        "eye_L": 0.0,
+        "brow_R": 0.0,
+        "brow_L": 0.0,
+        "mouth": 12.55,
+        "nose_patch": 0.47
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.4785,
+        "inner_dihedral_deg_max": 50.462
+      }
+    },
+    "blink_l": {
+      "shape_key": "target_15",
+      "motion": {
+        "eye_R": 0.0,
+        "eye_L": 32.01,
+        "brow_R": 0.0,
+        "brow_L": 18.93,
+        "mouth": 0.0,
+        "nose_patch": 6.14
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.2474,
+        "inner_dihedral_deg_max": 32.997
+      }
+    },
+    "blink_r": {
+      "shape_key": "target_14",
+      "motion": {
+        "eye_R": 32.01,
+        "eye_L": 0.0,
+        "brow_R": 18.93,
+        "brow_L": 0.0,
+        "mouth": 0.0,
+        "nose_patch": 6.14
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.2475,
+        "inner_dihedral_deg_max": 32.997
+      }
+    },
+    "fun": {
+      "shape_key": "target_2",
+      "motion": {
+        "eye_R": 12.65,
+        "eye_L": 12.65,
+        "brow_R": 13.12,
+        "brow_L": 13.12,
+        "mouth": 15.51,
+        "nose_patch": 2.51
+      },
+      "consistent": true,
+      "nose_patch": {
+        "folded": 0,
+        "edge_ratio_p99": 1.4311,
+        "inner_dihedral_deg_max": 34.097
+      }
+    }
+  },
+  "pairwise": {
+    "angry|surprised": 30.674,
+    "angry|a": 20.151,
+    "angry|o": 20.151,
+    "angry|u": 20.151,
+    "angry|blink_l": 28.187,
+    "angry|blink_r": 28.187,
+    "angry|fun": 30.696,
+    "surprised|a": 12.98,
+    "surprised|o": 12.024,
+    "surprised|u": 21.017,
+    "surprised|blink_l": 33.531,
+    "surprised|blink_r": 33.531,
+    "surprised|fun": 23.311,
+    "a|o": 14.141,
+    "a|u": 14.558,
+    "a|blink_l": 31.951,
+    "a|blink_r": 31.951,
+    "a|fun": 14.511,
+    "o|u": 19.638,
+    "o|blink_l": 31.951,
+    "o|blink_r": 31.951,
+    "o|fun": 19.046,
+    "u|blink_l": 31.951,
+    "u|blink_r": 31.951,
+    "u|fun": 22.955,
+    "blink_l|blink_r": 31.951,
+    "blink_l|fun": 29.438,
+    "blink_r|fun": 29.438
+  },
+  "still_blocked": [
+    "target_12",
+    "target_16",
+    "target_17",
+    "target_18",
+    "target_19",
+    "target_20",
+    "target_21",
+    "target_22",
+    "target_25",
+    "target_26",
+    "target_27",
+    "target_28",
+    "target_30",
+    "target_31",
+    "target_32",
+    "target_33",
+    "target_4",
+    "target_40"
+  ]
+}
