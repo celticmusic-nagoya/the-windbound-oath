@@ -1,0 +1,10 @@
+'use strict';
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');
+const html=fs.readFileSync('index.html','utf8');const css=fs.readFileSync('css/save-slots.css','utf8');
+function bodyOf(name,next){const a=html.indexOf(name),b=html.indexOf(next,a+name.length);assert(a>=0&&b>a,'missing runtime section: '+name);return html.slice(a,b)}
+test('MENU has independent SAVE and LOAD controls',()=>{assert.match(html,/data-stab="save">SAVE<\/button>/);assert.match(html,/data-stab="load">LOAD<\/button>/);assert.match(html,/js\/save-slots\.js/);assert.match(html,/css\/save-slots\.css/)});
+test('SAVE and LOAD share 20-slot view with accessible buttons',()=>{const s=bodyOf("}else if(tab==='save'||tab==='load')",'function saveGrowthData(');assert.match(s,/SaveSlots\?\.list\(\)/);assert.match(s,/saveSlotGrid/);assert.match(s,/aria-label/);assert.match(s,/btn\.disabled=!saving/);assert.match(s,/loadGrowthData\(info\.slot\)/)});
+test('save blocks battle and return-scene and confirms overwrite',()=>{const s=bodyOf('function saveGrowthData(', 'function restoreContinueLegacy(');assert.match(s,/rildeReturnActive/);assert.match(s,/battleMode/);assert.match(s,/window\.confirm\(/);assert.match(s,/SaveSlots\.save\(slot/)});
+test('load validates raw save and requires confirmation',()=>{const s=bodyOf('async function loadGrowthData(', 'function eraseGrowthData(');assert.match(s,/LoadCoordinator\.mayLoad\(\)/);assert.match(s,/SaveContinue\.inspect\(raw\)/);assert.match(s,/if\(!checked\.ok\)throw/);assert.match(s,/window\.confirm\(/);assert.match(s,/LoadCoordinator\.run\(/)});
+test('legacy import validates, uses free slot, preserves original',()=>{const s=bodyOf("}else if(tab==='save'||tab==='load')",'function saveGrowthData(');assert.match(s,/SaveContinue\.inspect\(source\)/);assert.match(s,/\.find\(x=>!x\.occupied&&!x\.corrupt\)/);assert.match(s,/SaveSlots\.save\(empty\.slot,source\)/);assert.doesNotMatch(s,/removeItem\(/)});
+test('mobile list scrolls and supports keyboard focus',()=>{assert.match(css,/overflow-y:auto/);assert.match(css,/:focus-visible/);assert.match(css,/@media\(max-width:480px\)/)});
