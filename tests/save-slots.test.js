@@ -8,3 +8,17 @@ test('save/read/overwrite require explicit confirmation',()=>{const {api}=env();
 test('delete is guarded and legacy is preserved',()=>{const {api,values}=env();values.set('windbound_oath_v028','legacy');api.save(20,raw);assert.throws(()=>api.remove(20));api.remove(20,{confirmed:true});assert.equal(api.payload(20),null);assert.equal(api.legacy(),'legacy')});
 test('out-of-range slot cannot be written',()=>{const {api}=env();for(const n of [0,21,1.2])assert.throws(()=>api.save(n,raw))});
 test('failed storage write preserves existing slot',()=>{const {api,failWrites}=env();api.save(1,raw);const before=api.payload(1);failWrites();assert.throws(()=>api.save(1,JSON.stringify({version:30,prologue:{version:2,storyStage:8}}),{overwrite:true}),/QuotaExceededError/);assert.equal(api.payload(1),before)});
+
+test('corrupt payload and mismatched metadata disable load without deleting bytes',()=>{
+ const {api,values}=env();api.save(2,raw);
+ const key=api.key(2),original=values.get(key),envelope=JSON.parse(original);
+ envelope.storyStage=8;values.set(key,JSON.stringify(envelope));
+ const row=api.list()[1];assert.equal(row.occupied,true);assert.equal(row.corrupt,true);
+ assert.throws(()=>api.payload(2));assert.equal(values.get(key),JSON.stringify(envelope));
+ values.set(key,original);assert.equal(api.list()[1].corrupt,false);
+});
+test('twenty slots keep separate records',()=>{
+ const {api}=env();for(let n=1;n<=20;n++)api.save(n,JSON.stringify({version:30,prologue:{version:2,storyStage:n%16}}));
+ assert.equal(api.list().filter(x=>x.occupied&&!x.corrupt).length,20);
+ for(let n=1;n<=20;n++)assert.equal(JSON.parse(api.payload(n)).prologue.storyStage,n%16);
+});
