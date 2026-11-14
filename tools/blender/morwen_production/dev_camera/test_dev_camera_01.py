@@ -41,6 +41,18 @@ def main():
         assert digest(face) == before
         assert [k.name for k in face.data.shape_keys.key_blocks] == original_keys
         observations.append({"preset": preset, "camera_xyz": [round(float(x), 6) for x in cam.location]})
+    for az, el in ((0, 0), (45, 15), (180, -20), (270, 45)):
+        cam = mod.orbit(azimuth_deg=az, elevation_deg=el, distance=0.7)
+        assert cam.get("preset") == "free_orbit"
+        assert bpy.context.scene.camera is production
+        assert digest(face) == before
+        assert [k.name for k in face.data.shape_keys.key_blocks] == original_keys
+    for invalid in ({"elevation_deg": 90}, {"azimuth_deg": float("nan")}, {"distance": 0}):
+        try:
+            mod.orbit(**invalid)
+            raise AssertionError("Invalid orbit accepted")
+        except ValueError:
+            pass
     try:
         mod.install(preset="invalid")
         raise AssertionError("Invalid preset was accepted")
@@ -53,7 +65,7 @@ def main():
         pass
     report = {"status": "HEADLESS_SYNTHETIC_PASS", "production_camera_preserved": True,
               "mesh_digest_preserved": True, "shape_keys_preserved": True,
-              "presets": observations, "real_morwen_art_qa": "NOT_RUN",
+              "presets": observations, "orbit_cases": 4, "real_morwen_art_qa": "NOT_RUN",
               "android_qa": "NOT_RUN"}
     out = HERE / "DEV_CAMERA_01_QA.json"
     out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
