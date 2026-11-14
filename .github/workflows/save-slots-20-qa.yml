@@ -4,6 +4,7 @@ on:
     paths:
       - 'js/save-slots.js'
       - 'js/save-continue.js'
+      - 'js/title-screen.js'
       - 'tests/save-slots.test.js'
       - 'tests/save-slots-integration.test.cjs'
       - 'css/save-slots.css'
@@ -25,5 +26,6 @@ jobs:
         run: |
           node --check js/save-slots.js
           node --check js/save-continue.js
+          node --check js/title-screen.js
       - name: Storage regression tests
         run: node --test tests/save-slots.test.js tests/save-slots-integration.test.cjs
