@@ -45,11 +45,7 @@ def main():
     attr = me.attributes["elm_patch"].data
     mw = face.matrix_world
     inv = mw.inverted()
-    scale = 561.5300546448087  # EYELID-05 calibration, pixels per meter
-    mid_x_px = 212.785
-    mid_x_m = 0.00026
-    eye_y_px = 127.62
-    eye_z_m = 1.44589
+    # Never use guessed projection constants: read the verified EYELID-05 calibration.\n    calibration = json.loads(Path(os.environ["EYELID_06_CALIBRATION_JSON"]).read_text(encoding="utf-8"))\n    required = ("pixels_per_meter", "mid_x_px", "mid_x_m", "eye_y_px", "eye_z_m")\n    if any(k not in calibration for k in required):\n        raise RuntimeError("Missing verified projection calibration; refusing to deform")\n    if calibration.get("source_sha256") != target["source_sha256"]:\n        raise RuntimeError("Calibration does not match Layer 0 source SHA")\n    scale = float(calibration["pixels_per_meter"])\n    mid_x_px = float(calibration["mid_x_px"])\n    mid_x_m = float(calibration["mid_x_m"])\n    eye_y_px = float(calibration["eye_y_px"])\n    eye_z_m = float(calibration["eye_z_m"])\n    if not 100 < scale < 10000:\n        raise RuntimeError("Implausible pixel-to-world calibration")
     # The 05 mesh's margin is the skin boundary against eye opening, not every patch vertex.
     # Identify margin vertices via skin-face boundary edges; no topology or Basis edits.
     edge_count = {}
@@ -95,7 +91,7 @@ def main():
                 deltas[idx] = Vector((0,0,dz*weight*envelope))
     if not deltas:
         raise RuntimeError("No mapped corrective vertices")
-    # New key only: never mutate existing 56 keys or Basis.
+    # A 2D arc alone does not determine upper/lower surface correspondence.\n    # Refuse producing an apparently usable .blend until independent geometric\n    # checks and upper/lower vertex correspondence have been implemented.\n    if os.environ.get("EYELID_06_ALLOW_UNVALIDATED_DEFORMATION") != "1":\n        raise RuntimeError("GATED: missing upper/lower correspondence and 3D fold/occlusion QA; no .blend saved")\n    # New key only: never mutate existing 56 keys or Basis.
     new_key = face.shape_key_add(name="EYELID06_CLOSED_ART_CANDIDATE", from_mix=False)
     for idx,dz_world in deltas.items():
         new_key.data[idx].co = keys[0].data[idx].co + inv.to_3x3() @ dz_world
