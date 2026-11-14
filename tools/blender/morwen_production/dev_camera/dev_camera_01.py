@@ -66,15 +66,18 @@ def install(preset="front", focus="face", distance=0.65):
     cam["dev_only"] = True
     cam["preset"] = preset
     cam["focus"] = focus
-    # Viewport camera is set only for the currently open 3D views.
+    # Use an independent viewport perspective. Setting SpaceView3D.camera can
+    # alter scene.camera in some Blender contexts, so never assign it.
     for screen in bpy.data.screens:
         for area in screen.areas:
             if area.type == "VIEW_3D":
                 space = area.spaces.active
-                if space.region_3d:
-                    space.region_3d.view_perspective = "CAMERA"
-                    space.region_3d.view_camera_zoom = 0
-                    space.camera = cam
+                region = space.region_3d
+                if region:
+                    region.view_perspective = "PERSP"
+                    region.view_location = target
+                    region.view_rotation = cam.rotation_euler.to_quaternion()
+                    region.view_distance = distance
     # Production scene camera is never reassigned.
     current_camera_ptr = scene.camera.as_pointer() if scene.camera else None
     if current_camera_ptr != original_camera_ptr:
