@@ -31,11 +31,12 @@ def main():
     production = bpy.data.objects.new("PRODUCTION_CAMERA", prod_data)
     bpy.context.scene.collection.objects.link(production)
     bpy.context.scene.camera = production
+    production_ptr = production.as_pointer()
     observations = []
     for preset in mod.PRESETS:
         cam = mod.install(preset=preset, focus="face", distance=0.7)
         assert cam is not production
-        assert bpy.context.scene.camera is production
+        assert bpy.context.scene.camera.as_pointer() == production_ptr
         assert cam.get("preset") == preset
         assert cam.get("dev_only") is True
         assert digest(face) == before
@@ -44,7 +45,7 @@ def main():
     for az, el in ((0, 0), (45, 15), (180, -20), (270, 45)):
         cam = mod.orbit(azimuth_deg=az, elevation_deg=el, distance=0.7)
         assert cam.get("preset") == "free_orbit"
-        assert bpy.context.scene.camera is production
+        assert bpy.context.scene.camera.as_pointer() == production_ptr
         assert digest(face) == before
         assert [k.name for k in face.data.shape_keys.key_blocks] == original_keys
     for invalid in ({"elevation_deg": 90}, {"azimuth_deg": float("nan")}, {"distance": 0}):
