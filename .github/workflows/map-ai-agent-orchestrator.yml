@@ -1,0 +1,104 @@
+name: Map AI Agent Orchestrator
+on:
+  push:
+    branches: [feature/map-ai-actions-orchestrator-01]
+    paths:
+      - 'tools/map_blender/agent_request.json'
+      - '.github/workflows/map-ai-agent-orchestrator.yml'
+      - 'tools/map_blender/validate_agent_request.py'
+      - 'tests/test_map_agent_request.py'
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: "Agent"
+        type: choice
+        required: true
+        options: [claude, codex]
+      task:
+        description: "Allowlisted task ID (must match agent)"
+        type: choice
+        required: true
+        options: [MAP-ASSET-RESEARCH-01, MAP-PIPELINE-01, MAP-INTEGRATION-AUDIT-01]
+      mode:
+        description: "Safety verification only; no AI API calls"
+        type: choice
+        required: true
+        default: dry_run
+        options: [dry_run]
+permissions:
+  contents: read
+concurrency:
+  group: map-ai-agent-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  agent:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      REQUEST_AGENT: ${{ inputs.agent }}
+      REQUEST_TASK: ${{ inputs.task }}
+      REQUEST_MODE: ${{ inputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test request allowlist and rejection rules
+        run: python3 -m unittest discover -s tests -p 'test_map_agent_request.py' -v
+      - name: Validate request
+        id: request
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          from tools.map_blender.validate_agent_request import validate
+          if os.getenv('GITHUB_EVENT_NAME')=='workflow_dispatch':
+              request={'agent':os.environ['REQUEST_AGENT'],'task':os.environ['REQUEST_TASK'],'mode':os.environ['REQUEST_MODE']}
+          else:
+              request=json.loads(pathlib.Path('tools/map_blender/agent_request.json').read_text())
+          checked=validate(request)
+          pathlib.Path('agent-request-validated.json').write_text(json.dumps(checked,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              for key in ('agent','task','mode','packet'): f.write(f'{key}={checked[key]}\n')
+          print('Validated:',checked)
+          PY
+      - name: Read approved work packet from its isolated branch
+        shell: bash
+        env:
+          TASK: ${{ steps.request.outputs.task }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          case "$TASK" in
+            MAP-ASSET-RESEARCH-01) REF=feature/map-asset-research-01 ;;
+            MAP-PIPELINE-01) REF=feature/map-pipeline-01 ;;
+            MAP-INTEGRATION-AUDIT-01) REF=feature/map-integration-audit-01 ;;
+            *) exit 2 ;;
+          esac
+          git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)" fetch --depth=1 origin "$REF" || exit 1
+          git show FETCH_HEAD:"${{ steps.request.outputs.packet }}" > agent-packet.md
+          test -s agent-packet.md
+          sha256sum agent-packet.md > agent-packet.sha256
+          git rev-parse FETCH_HEAD > agent-packet-source-commit.txt
+          sha256sum --check --status agent-packet.sha256
+          test "$(wc -c < agent-packet.md)" -gt 0
+      - name: Write dry-run report
+        if: steps.request.outputs.mode == 'dry_run'
+        run: |
+          printf 'DRY_RUN: request validated; no model API called.\n' > agent-output.txt
+          cat agent-request-validated.json >> agent-output.txt
+          printf "\nSOURCE_COMMIT: " >> agent-output.txt
+          cat agent-packet-source-commit.txt >> agent-output.txt
+          printf "PACKET_SHA256: " >> agent-output.txt
+          cat agent-packet.sha256 >> agent-output.txt
+      - name: Upload audit output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-ai-agent-audit-${{ github.run_id }}
+          path: |
+            agent-request-validated.json
+            agent-packet.md
+            agent-packet.sha256
+            agent-packet-source-commit.txt
+            agent-output.txt
+          retention-days: 7
+          if-no-files-found: warn
