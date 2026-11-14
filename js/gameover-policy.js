@@ -8,12 +8,10 @@
   return Number.isInteger(stage)&&stage>=5&&stage<=15;
  }
  // Defeat must be a complete active-party wipe, never a single ally reaching 0 HP.
- // Raider's scripted Lou rewind remains a separate explicit override until canon approval.
- function decideDefeat({progress,activeHp,raiderRewind=false}={}){
+ function decideDefeat({progress,activeHp}={}){
   if(!Array.isArray(activeHp)||!activeHp.length||!activeHp.every(h=>typeof h==='number'&&Number.isFinite(h)&&h>=0))return 'INVALID';
   if(activeHp.some(h=>h>0))return 'CONTINUE';
   if(!gameOverEnabled(progress))return 'RECOVER';
-  if(raiderRewind)return 'SCRIPTED_REWIND';
   return 'GAME_OVER';
  }
  const api=Object.freeze({gameOverEnabled,decideDefeat});
