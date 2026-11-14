@@ -183,7 +183,7 @@
 <button id="menuOpen" type="button">☰ MENU</button>
 <div id="systemMenu"><div class="sysPanel"><div class="tabs">
 <button data-stab="status">STATUS</button><button data-stab="skill">SKILL</button>
-<button data-stab="party">PARTY</button><button data-stab="items">ITEMS</button><button data-stab="equip">EQUIP</button><button data-stab="quest">QUEST</button><button data-stab="save">SAVE</button><button data-stab="settings">SETTINGS</button>
+<button data-stab="party">PARTY</button><button data-stab="items">ITEMS</button><button data-stab="equip">EQUIP</button><button data-stab="quest">QUEST</button><button data-stab="save">SAVE</button><button data-stab="load">LOAD</button><button data-stab="settings">SETTINGS</button>
 <button id="returnToTitle" type="button">タイトルへ戻る</button>
 <button id="systemClose">閉じる</button></div><div id="systemBody"></div></div></div>
 <div id="battleResult"><div class="resultPanel"><h2>VICTORY</h2><div class="reward"><span id="resultExp"></span><span id="resultGold"></span></div><div id="resultGrowth"></div><button id="resultContinue" type="button">次へ</button></div></div><div id="prologueEnd"><div><div>THE WINDBOUND OATH</div><h1>PROLOGUE END</h1><h2>Mionn na Gaoithe</h2><p>失った故郷。残された仲間。<br/>そして、風だけが知っていた真実。</p><button id="endReturn">タイトルへ戻る</button></div></div>
@@ -1073,6 +1073,7 @@ function showBattleResult(exp,goldGain,callback){
 }
 
 const SAVE_KEY='windbound_oath_v028';
+let selectedSaveSlot=1;
 function renderSystemTab(tab='status'){
  if(tab==='equip'&&!EquipmentManager.isUnlocked())tab='status';
  document.querySelectorAll('[data-stab]').forEach(b=>b.classList.toggle('active',b.dataset.stab===tab));
@@ -1117,18 +1118,31 @@ function renderSystemTab(tab='status'){
        renderSystemTab('settings');
      }catch(e){body.insertAdjacentHTML('beforeend','<p><small>フルスクリーンへの切り替えが許可されませんでした。</small></p>')}
    };
- }else{
-   const exists=!!localStorage.getItem(SAVE_KEY);
-   body.innerHTML=`<h3>SAVE DATA</h3><p>成長・パーティー・アイテム・進行と、森の討伐記録を保存します。戦闘中は保存できません。</p>
-   <button id="doSave" type="button">セーブ</button> <button id="doLoad" type="button" ${exists?'':'disabled'}>ロード</button>
-   <button id="eraseSave" type="button" ${exists?'':'disabled'}>セーブ削除</button><p id="saveMsg"><small>${exists?'セーブデータがあります。':'セーブデータはありません。'}</small></p>`;
-   $('#doSave').onclick=saveGrowthData;if(exists){$('#doLoad').onclick=loadGrowthData;$('#eraseSave').onclick=eraseGrowthData}
+ }else if(tab==='save'||tab==='load'){
+   const saving=tab==='save',slots=window.SaveSlots?.list()||[];
+   body.replaceChildren();
+   const heading=document.createElement('h3');heading.textContent=saving?'SAVE DATA — 20 SLOTS':'LOAD DATA — 20 SLOTS';body.append(heading);
+   const hint=document.createElement('p');hint.textContent=saving?'保存先を選択してください。上書き時には確認が必要です。':'復帰する記録を選択してください。';body.append(hint);
+   const grid=document.createElement('div');grid.className='saveSlotGrid';grid.setAttribute('role','group');grid.setAttribute('aria-label','セーブスロット一覧');
+   for(const info of slots){
+    const btn=document.createElement('button');btn.type='button';btn.className='saveSlotButton';
+    btn.textContent='SLOT '+String(info.slot).padStart(2,'0')+' — '+(info.corrupt?'破損した記録':info.occupied?'進行 '+info.storyStage+' / '+(info.savedAt?new Date(info.savedAt).toLocaleString('ja-JP'):'日時不明'):'空き');
+    btn.disabled=!saving&&(!info.occupied||info.corrupt);btn.setAttribute('aria-label',btn.textContent);
+    btn.onclick=()=>{selectedSaveSlot=info.slot;if(saving)saveGrowthData(info.slot);else void loadGrowthData(info.slot)};grid.append(btn);
+   }
+   body.append(grid);
+   const legacy=window.SaveSlots?.legacy();if(legacy){const note=document.createElement('p');note.textContent='旧形式のセーブデータがあります。既存の記録は保護されています。';body.append(note)}
+   const msg=document.createElement('p');msg.id='saveMsg';msg.setAttribute('role','status');body.append(msg);
+
  }
 }
-function saveGrowthData(){
+function saveGrowthData(slot=selectedSaveSlot){
  if(rildeReturnActive||window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
  const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
- localStorage.setItem(SAVE_KEY,JSON.stringify(data));if($('#doSave')){renderSystemTab('save');$('#doSave').focus({preventScroll:true})}const saveMsg=$('#saveMsg');if(saveMsg)saveMsg.innerHTML='<small>セーブしました。</small>';
+ try{
+  const old=SaveSlots.read(slot);if(old&&!window.confirm('スロット '+slot+' の記録を上書きしますか？'))return false;
+  SaveSlots.save(slot,JSON.stringify(data),{overwrite:!!old});renderSystemTab('save');const saveMsg=$('#saveMsg');if(saveMsg)saveMsg.textContent='スロット '+slot+' に保存しました。';return true;
+ }catch(e){const m=$('#saveMsg');if(m)m.textContent='保存できませんでした。容量や保存設定を確認してください。';return false;}
 }
 function restoreContinueLegacy(p){
  room=null;$('#inside').style.display='none';
@@ -1158,10 +1172,13 @@ async function applyGrowthData(d,route,checkpoint,token){
   // Missing optional item keys in an older SAVE mean zero, not the current session's stock.
   if(!Object.prototype.hasOwnProperty.call(d.battleItems||{},'antidote'))delete battleItems.antidote;
 }
-async function loadGrowthData(){
+async function loadGrowthData(slot=selectedSaveSlot){
  try{
   if(!LoadCoordinator.mayLoad()){LoadCoordinator.explainGuard();return false}
-  const raw=localStorage.getItem(SAVE_KEY),saved=JSON.parse(raw);if(!saved)throw 0;
+  const raw=SaveSlots.payload(slot);if(!raw)throw Error('空のスロットです。');
+  const checked=SaveContinue.inspect(raw);if(!checked.ok)throw Error(checked.error);
+  if(!window.confirm('スロット '+slot+' の記録をロードしますか？\n未保存の進行状況は失われます。'))return false;
+  const saved=JSON.parse(raw);
   const checkpoint=TrainingCheckpoint.prepare(saved,raw);
   const d=EquipmentManager.migrateStarterSword(checkpoint.data);
   const route=d.prologue?PrologueProgress.plan(d.prologue,checkpoint.restoreVillage):null;
@@ -1173,7 +1190,7 @@ async function loadGrowthData(){
   await applyGrowthData(d,route,checkpoint,token);
   renderSystemTab('status');notice(checkpoint.retry?'訓練前の状態に復帰しました。木人を調べて再挑戦してください。':d.prologue?'冒険の記録をロードしました':'成長データをロードしました');
   }catch(e){undoFlags();throw e;}finally{unwatch();}
-  },()=>loadGrowthData());
+  },()=>loadGrowthData(slot));
  }catch(e){const text=e.message?.includes('元のセーブ')?e.message:'ロードできませんでした。';const m=$('#saveMsg');if(m)m.textContent=text;notice(text);return false}
 }
 function eraseGrowthData(){if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave){notice('復帰が完了するまでセーブデータを保護しています。');return}localStorage.removeItem(SAVE_KEY);renderSystemTab('save')}
@@ -2224,7 +2241,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/dev/walk-test.js?v=20261103walk02"></script>
 <script src="js/input-manager.js?v=20261025input"></script>
 <script src="js/battle-loading.js?v=20261027rematch"></script>
-<script src="js/save-continue.js?v=20261025continue"></script>
+<script src="js/save-slots.js?v=20261114slots20"></script>
+<script src="js/save-continue.js?v=20261114slots20"></script>
 <script src="js/title-screen.js?v=20261027aidanv2"></script>
+<link rel="stylesheet" href="css/save-slots.css?v=20261114slots20">
 <link rel="stylesheet" href="css/title-screen.css?v=20261028portraitfinal">
 </body></html>
