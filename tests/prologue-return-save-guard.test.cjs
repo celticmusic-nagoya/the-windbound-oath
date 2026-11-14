@@ -5,7 +5,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const html=fs.readFileSync('index.html','utf8');
-const a=html.indexOf('function saveGrowthData(){');
+const a=html.indexOf('function saveGrowthData(');
 const b=html.indexOf('function restoreContinueLegacy(',a);
 assert(a>=0&&b>a,'saveGrowthData not found');
 const source=html.slice(a,b);
@@ -21,7 +21,8 @@ const context={
  rildeReturnActive:true,
  document:{body:{classList:{contains:()=>false}}},
  notice:msg=>notices.push(msg),
- localStorage:{setItem:(key,value)=>writes.push([key,value])},
+ SaveSlots:{read:()=>null,save:(slot,raw)=>{writes.push([slot,raw]);return true}},
+ selectedSaveSlot:1,
  SAVE_KEY:'test',
  Inventory:{serialize:()=>({})},
  EquipmentManager:{serialize:()=>({})},
@@ -40,6 +41,7 @@ assert.equal(notices.length,1,'user should be informed');
 context.rildeReturnActive=false;
 vm.runInContext('saveGrowthData()',context);
 assert.equal(writes.length,1,'SAVE should resume outside return scene');
+assert.equal(writes[0][0],1,'default slot is 1');
 assert.equal(JSON.parse(writes[0][1]).version,30,'SAVE schema unchanged');
 console.log('PASS return scene blocks SAVE and displays notice');
 console.log('PASS outside return scene SAVE succeeds with version 30');
