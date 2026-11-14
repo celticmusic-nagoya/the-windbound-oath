@@ -1,0 +1,20 @@
+name: Hidden checkpoints QA
+on:
+  pull_request:
+    paths:
+      - 'js/hidden-checkpoints.js'
+      - 'tests/hidden-checkpoints.test.cjs'
+      - '.github/workflows/hidden-checkpoints-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check js/hidden-checkpoints.js
+      - run: node --test tests/hidden-checkpoints.test.cjs
