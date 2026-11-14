@@ -11,4 +11,9 @@ assert values["ridge_z"]>values["wall_top"]
 assert values["door_width"]<values["length"]-2*values["wall_thickness"]
 assert values["roof_overhang"]>0
 assert any(isinstance(n,ast.FunctionDef) and n.name=="build" for n in tree.body)
-print("PASS: structural cage dimensional invariants (not mesh/render QA)")
+# Eave beams must run along the X ridge, not the gable ends.
+source=p.read_text()
+assert 'for y in (-W,W):' in source
+assert 'box(c,"eave beam %s"%y,-L-.30,L+.30' in source
+print("PASS: structural cage dimensions and eave/ridge alignment (not mesh/render QA)")
+
