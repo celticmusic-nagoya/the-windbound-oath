@@ -11,9 +11,9 @@ out.mkdir(parents=True,exist_ok=True)
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 data=build()
-# Export object transforms and named collections; GLB uses glTF Y-up.
+# Export object transforms and named collections; Preserve Blender Z-up for the viewer's Z-up camera.
 path=out/'aidan_house_master_v2.glb'
-bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',export_yup=True,export_apply=True,export_cameras=False,export_lights=False)
+bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',export_yup=False,export_apply=True,export_cameras=False,export_lights=False)
 assert path.exists() and path.stat().st_size>1000
 report={'status':'DEVELOPMENT_VIEWER_ONLY_NOT_ART_APPROVED','source':'aidan_house_master_v2.py','glb':path.name,'bytes':path.stat().st_size,'geometry':data}
 (out/'manifest.json').write_text(json.dumps(report,indent=2))
