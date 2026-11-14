@@ -30,8 +30,16 @@ jobs:
             --output /tmp/eyelid06_target_b.json
           cmp /tmp/eyelid06_target_a.json /tmp/eyelid06_target_b.json
           sha256sum /tmp/eyelid06_target_a.json
+          python tools/blender/morwen_production/eyelid_sculpt/render_curve_review_06.py \
+            --source tools/blender/morwen_production/_qa/eyelid_retopo_05/EYE_TARGETS_05.json \
+            --target /tmp/eyelid06_target_a.json \
+            --output /tmp/eyelid06_review.svg
+          python -c 'import xml.etree.ElementTree as ET; ET.parse("/tmp/eyelid06_review.svg")'
+          sha256sum /tmp/eyelid06_review.svg
       - uses: actions/upload-artifact@v4
         with:
           name: eyelid06-unreviewed-curve-proposal
-          path: /tmp/eyelid06_target_a.json
+          path: |
+            /tmp/eyelid06_target_a.json
+            /tmp/eyelid06_review.svg
           retention-days: 7
