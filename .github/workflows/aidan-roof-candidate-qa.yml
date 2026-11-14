@@ -4,6 +4,7 @@ on:
     branches:
       - feature/aidan-roof-geometry-01
     paths:
+      - 'tools/dev-camera/**'
       - 'tools/map_blender/aidan_roof_vertex_first_v3.py'
       - 'tools/map_blender/aidan_roof_render_v3.py'
       - '.github/workflows/aidan-roof-candidate-qa.yml'
@@ -266,5 +267,42 @@ jobs:
         with:
           name: aidan-dev-camera-glb-v2
           path: ${{ runner.temp }}/aidan-dev-camera/
+          if-no-files-found: warn
+          retention-days: 7
+
+  dev_camera_browser_qa:
+    needs: dev_camera_glb
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: aidan-dev-camera-glb-v2
+          path: ${{ runner.temp }}/dev-camera-model
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated QA dependencies
+        working-directory: tools/dev-camera/qa
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1 three@0.170.0
+          npx playwright install --with-deps chromium
+      - name: Chromium GLB display and camera interaction QA
+        working-directory: tools/dev-camera/qa
+        env:
+          AIDAN_GLB_PATH: ${{ runner.temp }}/dev-camera-model/aidan_house_master_v2.glb
+          AIDAN_QA_SCREENSHOT: ${{ runner.temp }}/dev-camera-browser-qa/screenshot.png
+        run: |
+          mkdir -p "$(dirname "$AIDAN_QA_SCREENSHOT")"
+          node browser-qa.cjs
+      - name: Upload browser QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-dev-camera-browser-qa
+          path: ${{ runner.temp }}/dev-camera-browser-qa/
           if-no-files-found: warn
           retention-days: 7
