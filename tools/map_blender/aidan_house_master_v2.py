@@ -85,11 +85,31 @@ def build():
  for i in range(30):
   x=-L-.30+(i+.5)*(D['length']+.60)/30
   box(roof,'ridge cap',(x,0,Z+.07),(.28,.34,.13),R.choice(slate));COUNT['ridge_caps']+=1
- # Separate pitched porch roof: actual gable faces and two inclined planes.
+ # Porch roof is a solid, framed gable assembly (not a paper-thin plane).
+ # No approved chimney location is inferred here.
+ porch_front=-W-1.45
+ porch_back=-W+.20
+ porch_ridge=3.82
+ porch_eave=2.82
  for side in (-1,1):
-  vertices=[(0,-W+.2,3.82),(side*1.48,-W+.2,2.82),(side*1.48,-W-1.45,2.82),(0,-W-1.45,3.82)]
-  mesh(detail,'porch roof slope',vertices,[(0,1,2,3)],R.choice(slate))
- box(detail,'porch ridge',(0,-W-.62,3.84),(.15,1.8,.16),wood)
+  upper=[(0,porch_back,porch_ridge),(side*1.48,porch_back,porch_eave),
+         (side*1.48,porch_front,porch_eave),(0,porch_front,porch_ridge)]
+  thickness=.115
+  lower=[(x,y,z-thickness) for x,y,z in upper]
+  vertices=upper+lower
+  faces=[(0,1,2,3),(7,6,5,4),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+  mesh(detail,'porch solid slate slope',vertices,faces,R.choice(slate))
+  # Continuous front fascia follows the pitched roof edge.
+  p0=(0,porch_front-.035,porch_ridge-.04)
+  p1=(side*1.48,porch_front-.035,porch_eave-.04)
+  width=.14
+  v=[(x,y+dy,z+dz) for x,y,z in (p0,p1) for dy,dz in ((-width/2,-width/2),(-width/2,width/2),(width/2,width/2),(width/2,-width/2))]
+  mesh(detail,'porch sloped fascia',v,[(0,1,2,3),(4,7,6,5),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)],wood)
+  # Structural rafter beneath each roof slope.
+  for y in (porch_front+.18,porch_back-.18):
+   x=side*.76;z=porch_ridge+(porch_eave-porch_ridge)*(.76/1.48)-.18
+   box(detail,'porch rafter support',(x,y,z),(.15,.17,.22),wood)
+ box(detail,'porch ridge',(0,(porch_front+porch_back)/2,porch_ridge+.04),(.17,1.82,.16),wood)
  for x in (-1.30,1.30):
   box(detail,'porch roof support',(x,-W-1.28,1.40),(.20,.20,2.80),wood)
  # Candidate porch control members, not final detailing.
