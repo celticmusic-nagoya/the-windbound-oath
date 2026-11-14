@@ -231,7 +231,8 @@ jobs:
       - name: Install Blender
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender libegl1 libgl1-mesa-dri libglx-mesa0 libopengl0 xvfb
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1-mesa-dri libglx-mesa0 libopengl0 xvfb
+          /usr/bin/blender -b --python-expr 'import numpy; print("BLENDER_NUMPY_VERSION="+numpy.__version__)'
       - name: Export GLB candidate
         env:
           AIDAN_GLTF_OUTPUT: ${{ runner.temp }}/aidan-dev-camera
