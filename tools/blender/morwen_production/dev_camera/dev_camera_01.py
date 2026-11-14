@@ -44,6 +44,7 @@ def install(preset="front", focus="face", distance=0.65):
         raise ValueError("Distance outside safe camera bounds")
     scene = bpy.context.scene
     original_camera = scene.camera
+    original_camera_ptr = original_camera.as_pointer() if original_camera else None
     coll = bpy.data.collections.get(COLLECTION)
     if coll is None:
         coll = bpy.data.collections.new(COLLECTION)
@@ -75,7 +76,9 @@ def install(preset="front", focus="face", distance=0.65):
                     space.region_3d.view_camera_zoom = 0
                     space.camera = cam
     # Production scene camera is never reassigned.
-    assert scene.camera == original_camera
+    current_camera_ptr = scene.camera.as_pointer() if scene.camera else None
+    if current_camera_ptr != original_camera_ptr:
+        raise RuntimeError("Production scene camera changed unexpectedly")
     return cam
 
 
