@@ -79,5 +79,14 @@
   confirmBox.remove();confirmBox=null;menu.removeAttribute('aria-hidden');refresh();
   if(restoreFocus&&!newButton.disabled)newButton.focus?.({preventScroll:true});
  }
- window.TitleScreen=Object.freeze({begin(cb){launch=cb;if(skip)return cb();show();},refresh,newGame,dismiss:hide,active:()=>active});
+ // Full reload is required to discard battle timers and active gameplay state.
+ // This does not alter either the numbered slots or the legacy save key.
+ function returnToTitle(){
+  try{
+   const target=new URL(window.location.href);
+   target.searchParams.delete('title');target.searchParams.delete('legacyVillage');target.hash='';
+   window.location.assign(target.href);return true;
+  }catch(_){return false}
+ }
+ window.TitleScreen=Object.freeze({begin(cb){launch=cb;if(skip)return cb();show();},refresh,newGame,dismiss:hide,returnToTitle,active:()=>active});
 })();
