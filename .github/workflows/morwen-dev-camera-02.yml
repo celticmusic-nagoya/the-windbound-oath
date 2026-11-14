@@ -49,6 +49,7 @@ jobs:
           (out / "Base_Female.vrm").write_bytes(vrm)
           PY
       - name: Rebuild source EYELID-05 model
+        id: rebuild
         run: |
           python tools/blender/morwen_production/eyelid_retopo/measure_eye_targets_05.py
           python tools/blender/morwen_production/eyelid_retopo/run_eyelid_05.py
@@ -66,7 +67,23 @@ jobs:
           runpy.run_path("tools/blender/morwen_production/eyelid_sculpt/inspect_lid_geometry_06.py", run_name="__main__")
           PY
       - name: Verify developer camera on real reconstructed Morwen mesh
+        id: integration
         run: python tools/blender/morwen_production/dev_camera/test_real_model_02.py
+      - name: Publish QA result in Actions summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## MORWEN-DEV-CAMERA-02 | Real-model QA"
+            echo
+            echo "- Commit: \`$GITHUB_SHA\`"
+            echo "- Branch: \`$GITHUB_REF_NAME\`"
+            echo "- Blender model rebuild: \`${{ steps.rebuild.outcome }}\`"
+            echo "- Camera integration QA: \`${{ steps.integration.outcome }}\`"
+            echo "- Full logs: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Evidence: download morwen-dev-camera-02-real-model-qa from this run"
+            echo "- Real-model art QA / Android QA: NOT_RUN"
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload read-only diagnostic evidence
         if: always()
         uses: actions/upload-artifact@v4
