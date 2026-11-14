@@ -13,7 +13,8 @@ bpy.ops.object.delete(use_global=False)
 data=build()
 # Export object transforms and named collections; Preserve Blender Z-up for the viewer's Z-up camera.
 path=out/'aidan_house_master_v2.glb'
-bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',export_yup=False,export_apply=True,export_cameras=False,export_lights=False)
+result=bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',export_yup=False,export_apply=True,export_cameras=False,export_lights=False,export_draco_mesh_compression_enable=False)
+assert 'FINISHED' in result, f'GLB exporter failed: {result}'
 assert path.exists() and path.stat().st_size>1000
 report={'status':'DEVELOPMENT_VIEWER_ONLY_NOT_ART_APPROVED','source':'aidan_house_master_v2.py','glb':path.name,'bytes':path.stat().st_size,'geometry':data}
 (out/'manifest.json').write_text(json.dumps(report,indent=2))
