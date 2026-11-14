@@ -1,3 +1,11 @@
+# DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
+
+**MANDATORY:** Claude, Codex, ChatGPT, Gemini and every automation/AI agent MUST read this section at each task start. Applies to game code, 2D/3D assets, Blender, maps, UI, QA, and cross-agent handoffs. See [docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md).
+
+**Two failures stop only the same ineffective method for the same root cause/defect; they do NOT stop the asset, task, project or a structurally different solution.** Analyze the actual failure and switch technique automatically within approved non-destructive scope. No global lifetime attempt cap. Do not reset counters through naming, prompt edits, minor parameter tweaks, branch changes or agents. Preserve cumulative attempt ledger and source hashes. New method requires documented causal/structural difference and measurable QA hypothesis. Preserve G1–G4 and human approval gates. Never call an unverified result PASS.
+
+**Precedence:** This later director-approved policy supersedes conflicting numeric retry limits in older Self-Retry (3 retries), Asset Generation Loop Prevention (3 attempts), Quality-first 3D (2 failures), and older policy documents **only for retry/stop semantics**. It does not authorize a main merge, canon overwrite, deletion or release. Existing automated ledger validators may still reject a third same-family failure: that is intentional; switch method family and record why, do not disable validators. Existing historical failures remain recorded.
+
 # CURRENT CANON LOCK — 2026-11-12 (Claude / Codex / ChatGPT)
 
 - **エイダン・フィオナ・モルウェンの公式年齢は全員18歳で固定。** 他人物の年齢は変更しない。過去の誤設定を再採用しない。
