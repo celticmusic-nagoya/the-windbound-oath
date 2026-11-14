@@ -1,0 +1,3674 @@
+{
+  "task_id": "MORWEN-EYELID-RETOPO-05",
+  "method_id": "canthus-anchored-curve-constrained-quad-strip",
+  "method_family": "CANTHUS_ANCHORED_CURVE_CONSTRAINED_QUAD_RETOPO",
+  "params_sha256": "fcf285c24133c1268325e43830f9b8fcb4f2ba6e15f398d079d695f412152a58",
+  "elm04_params_sha256": "0a13daad67fabded33ee42d735739923266112dc20296eb63f1e65694877f9a1",
+  "blender_version": "5.3.0",
+  "source_vrm_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+  "source_modified": false,
+  "layer0_front_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+  "targets": {
+    "symmetry_decision": {
+      "upper_margin_max_abs_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY",
+      "lower_margin_max_abs_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY",
+      "width_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY",
+      "canthus_inner_y_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY",
+      "canthus_outer_y_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY",
+      "inner_canthus_offset_from_mid_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY",
+      "pupil_y_diff_px": "SYMMETRIC_WITHIN_UNCERTAINTY"
+    },
+    "mirror_comparison_px": {
+      "upper_margin_max_abs_diff_px": 0.5,
+      "lower_margin_max_abs_diff_px": 0.841,
+      "width_diff_px": 0.0,
+      "canthus_inner_y_diff_px": 0.5,
+      "canthus_outer_y_diff_px": -0.5,
+      "inner_canthus_offset_from_mid_diff_px": -0.4300000000000068,
+      "pupil_y_diff_px": -0.72
+    },
+    "canthi_shared": true,
+    "eye_targets_sha256": "76d51b3a823e7019dc9719bbf176e1188c0948cf4eadecc8b6fc1c8a24bc0bb5"
+  },
+  "build": {
+    "nose": {
+      "hash_verified": true,
+      "design_value": 0.5
+    },
+    "lid_R": {
+      "region_faces": 124,
+      "removed_vertices": 65,
+      "outer_loop": 18,
+      "old_rim_loop": 24,
+      "outer_columns": {
+        "upper": 6,
+        "lower": 14
+      },
+      "margin_columns": {
+        "upper": 16,
+        "lower": 14
+      },
+      "reduction": {
+        "upper": "3:1",
+        "lower": "1:1"
+      },
+      "rows": 5,
+      "new_vertices": 140,
+      "new_faces": 135,
+      "old_winding_forward": false,
+      "canthus_vertex_world": {
+        "inner": [
+          0.026973,
+          0.075463,
+          1.450111
+        ],
+        "outer": [
+          0.066151,
+          0.061116,
+          1.450111
+        ]
+      },
+      "canthus_target_xz": {
+        "inner": [
+          0.02697272868820553,
+          1.4501106111327364
+        ],
+        "outer": [
+          0.06615139743090696,
+          1.4501106111327364
+        ]
+      },
+      "wall_vertices": 28
+    },
+    "lid_L": {
+      "region_faces": 124,
+      "removed_vertices": 65,
+      "outer_loop": 18,
+      "old_rim_loop": 24,
+      "outer_columns": {
+        "upper": 6,
+        "lower": 14
+      },
+      "margin_columns": {
+        "upper": 16,
+        "lower": 14
+      },
+      "reduction": {
+        "upper": "3:1",
+        "lower": "1:1"
+      },
+      "rows": 5,
+      "new_vertices": 140,
+      "new_faces": 135,
+      "old_winding_forward": false,
+      "canthus_vertex_world": {
+        "inner": [
+          -0.026453,
+          0.075463,
+          1.450111
+        ],
+        "outer": [
+          -0.065631,
+          0.061116,
+          1.450111
+        ]
+      },
+      "canthus_target_xz": {
+        "inner": [
+          -0.02645272868820553,
+          1.4501106111327364
+        ],
+        "outer": [
+          -0.06563139743090697,
+          1.4501106111327364
+        ]
+      },
+      "wall_vertices": 28
+    },
+    "mouth": {
+      "built": false,
+      "status": "OUT_OF_SCOPE (separate task)"
+    },
+    "cards_retarget": {
+      "card_vertices": 460,
+      "max_displacement_mm": 6.952
+    },
+    "lid_keys": {
+      "R": {
+        "close_keys": [
+          "target_1",
+          "target_2",
+          "target_3",
+          "target_4",
+          "target_5",
+          "target_12",
+          "target_13",
+          "target_14",
+          "target_16",
+          "target_17",
+          "target_18",
+          "target_20",
+          "target_21",
+          "target_22",
+          "target_25"
+        ],
+        "D1_mm": 16.0,
+        "D2_mm": 22.0,
+        "vertices": 562,
+        "theta_full_deg_max": 66.063
+      },
+      "L": {
+        "close_keys": [
+          "target_1",
+          "target_2",
+          "target_3",
+          "target_4",
+          "target_5",
+          "target_12",
+          "target_13",
+          "target_15",
+          "target_16",
+          "target_17",
+          "target_19",
+          "target_20",
+          "target_21",
+          "target_22",
+          "target_25"
+        ],
+        "D1_mm": 16.0,
+        "D2_mm": 22.0,
+        "vertices": 562,
+        "theta_full_deg_max": 66.063
+      }
+    },
+    "removed_eye_plate_faces": 480,
+    "eyes": {
+      "object": "MORWEN_Eyes",
+      "vertices": 1122,
+      "faces": 1120,
+      "material": "MORWEN_EYE_PROCEDURAL",
+      "edge_clipped_samples": 168,
+      "pupil_target_xz": {
+        "R": [
+          0.04562711755546905,
+          1.44589
+        ],
+        "L": [
+          -0.04510711755546904,
+          1.44589
+        ]
+      }
+    },
+    "cards": {
+      "card_vertices": 410,
+      "opaque_samples": 7776,
+      "max_lift_mm_by_state": {
+        "Basis": 0.55,
+        "target_3": 1.95,
+        "target_4": 0.54,
+        "target_5": 0.229,
+        "target_13": 2.079,
+        "target_14": 2.071,
+        "target_15": 2.079,
+        "target_17": 1.95,
+        "target_18": 1.942,
+        "target_19": 1.95,
+        "target_20": 0.54,
+        "target_21": 0.227,
+        "target_22": 0.26,
+        "target_25": 2.663
+      }
+    }
+  },
+  "opening": {
+    "target": {
+      "R": {
+        "width_px": 22.0,
+        "height_px": 10.4
+      },
+      "L": {
+        "width_px": 22.0,
+        "height_px": 10.4
+      }
+    },
+    "candidate_margin": {
+      "R": {
+        "width_px": 22.0,
+        "height_px": 10.81
+      },
+      "L": {
+        "width_px": 22.0,
+        "height_px": 10.81
+      }
+    },
+    "candidate_visible_eye": {
+      "R": {
+        "width_px": 20.66,
+        "height_px": 9.71
+      },
+      "L": {
+        "width_px": 20.66,
+        "height_px": 9.71
+      }
+    },
+    "baseline316_visible_eye": {
+      "R": {
+        "width_px": 19.43,
+        "height_px": 13.34
+      },
+      "L": {
+        "width_px": 19.63,
+        "height_px": 13.54
+      }
+    },
+    "pupil_world": {
+      "R": [
+        0.04563,
+        0.06297,
+        1.44589
+      ],
+      "L": [
+        -0.04511,
+        0.06297,
+        1.44589
+      ]
+    },
+    "pupil_target_xz": {
+      "R": [
+        0.04562711755546905,
+        1.44589
+      ],
+      "L": [
+        -0.04510711755546904,
+        1.44589
+      ]
+    },
+    "ipd_U": 0.9917,
+    "ipd_target_U": 0.9916,
+    "baseline316_ipd_U": 0.9642
+  },
+  "canthus_corner_metrics": {
+    "R": {
+      "neutral": {
+        "faces": 28,
+        "flipped_vs_basis": 0,
+        "inner_dihedral_deg_max": 44.33
+      },
+      "blink": {
+        "faces": 28,
+        "flipped_vs_basis": 1,
+        "inner_dihedral_deg_max": 170.622
+      },
+      "blink_l": {
+        "faces": 28,
+        "flipped_vs_basis": 0,
+        "inner_dihedral_deg_max": 44.33
+      },
+      "blink_r": {
+        "faces": 28,
+        "flipped_vs_basis": 1,
+        "inner_dihedral_deg_max": 170.622
+      },
+      "joy": {
+        "faces": 28,
+        "flipped_vs_basis": 1,
+        "inner_dihedral_deg_max": 160.843
+      },
+      "surprised": {
+        "faces": 28,
+        "flipped_vs_basis": 0,
+        "inner_dihedral_deg_max": 56.481
+      }
+    },
+    "L": {
+      "neutral": {
+        "faces": 28,
+        "flipped_vs_basis": 0,
+        "inner_dihedral_deg_max": 44.424
+      },
+      "blink": {
+        "faces": 28,
+        "flipped_vs_basis": 1,
+        "inner_dihedral_deg_max": 170.527
+      },
+      "blink_l": {
+        "faces": 28,
+        "flipped_vs_basis": 1,
+        "inner_dihedral_deg_max": 170.527
+      },
+      "blink_r": {
+        "faces": 28,
+        "flipped_vs_basis": 0,
+        "inner_dihedral_deg_max": 44.424
+      },
+      "joy": {
+        "faces": 28,
+        "flipped_vs_basis": 1,
+        "inner_dihedral_deg_max": 160.752
+      },
+      "surprised": {
+        "faces": 28,
+        "flipped_vs_basis": 0,
+        "inner_dihedral_deg_max": 56.42
+      }
+    }
+  },
+  "baseline316_intersections": {
+    "neutral": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 32,
+          "overlay_faces": 16,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 4,
+          "overlay_faces": 4,
+          "skin_faces": 2
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    },
+    "blink": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 78,
+          "overlay_faces": 38,
+          "skin_faces": 44
+        },
+        "eyelash": {
+          "pairs": 12,
+          "overlay_faces": 6,
+          "skin_faces": 10
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 0,
+        "L": 0
+      },
+      "eye_visible_extent_m": {
+        "R": null,
+        "L": null
+      }
+    },
+    "blink_l": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 55,
+          "overlay_faces": 27,
+          "skin_faces": 33
+        },
+        "eyelash": {
+          "pairs": 8,
+          "overlay_faces": 5,
+          "skin_faces": 6
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 0
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": null
+      }
+    },
+    "blink_r": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 55,
+          "overlay_faces": 27,
+          "skin_faces": 33
+        },
+        "eyelash": {
+          "pairs": 8,
+          "overlay_faces": 5,
+          "skin_faces": 6
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 0,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": null,
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    },
+    "joy": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 112,
+          "overlay_faces": 52,
+          "skin_faces": 57
+        },
+        "eyelash": {
+          "pairs": 21,
+          "overlay_faces": 16,
+          "skin_faces": 10
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 0,
+        "L": 0
+      },
+      "eye_visible_extent_m": {
+        "R": null,
+        "L": null
+      }
+    },
+    "angry": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 62,
+          "overlay_faces": 36,
+          "skin_faces": 32
+        },
+        "eyelash": {
+          "pairs": 6,
+          "overlay_faces": 4,
+          "skin_faces": 4
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 191,
+        "L": 198
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02734,
+          0.06186,
+          1.43264,
+          1.45361
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45436
+        ]
+      }
+    },
+    "surprised": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 38,
+          "overlay_faces": 18,
+          "skin_faces": 28
+        },
+        "eyelash": {
+          "pairs": 6,
+          "overlay_faces": 4,
+          "skin_faces": 4
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 217,
+        "L": 219
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06254,
+          1.43264,
+          1.45977
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45938
+        ]
+      }
+    },
+    "fun": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 26,
+          "overlay_faces": 12,
+          "skin_faces": 20
+        },
+        "eyelash": {
+          "pairs": 6,
+          "overlay_faces": 4,
+          "skin_faces": 4
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 165,
+        "L": 172
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02734,
+          0.06186,
+          1.43659,
+          1.45408
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43683,
+          1.45436
+        ]
+      }
+    },
+    "sorrow": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 24,
+          "skin_faces": 26
+        },
+        "eyelash": {
+          "pairs": 6,
+          "overlay_faces": 4,
+          "skin_faces": 4
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 161,
+        "L": 165
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43589,
+          1.45206
+        ],
+        "L": [
+          -0.06083,
+          -0.02671,
+          1.43557,
+          1.45208
+        ]
+      }
+    },
+    "a": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 32,
+          "overlay_faces": 16,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 4,
+          "overlay_faces": 4,
+          "skin_faces": 2
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    },
+    "i": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 32,
+          "overlay_faces": 16,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 4,
+          "overlay_faces": 4,
+          "skin_faces": 2
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    },
+    "u": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 32,
+          "overlay_faces": 16,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 4,
+          "overlay_faces": 4,
+          "skin_faces": 2
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    },
+    "e": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 32,
+          "overlay_faces": 16,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 4,
+          "overlay_faces": 4,
+          "skin_faces": 2
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    },
+    "o": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 32,
+          "overlay_faces": 16,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 4,
+          "overlay_faces": 4,
+          "skin_faces": 2
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 204,
+        "L": 210
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02726,
+          0.06186,
+          1.43264,
+          1.45639
+        ],
+        "L": [
+          -0.06167,
+          -0.02671,
+          1.43281,
+          1.45693
+        ]
+      }
+    }
+  },
+  "candidate_intersections": {
+    "neutral": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 22,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 14,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    },
+    "blink": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 76,
+          "overlay_faces": 36,
+          "skin_faces": 34
+        },
+        "eyelash": {
+          "pairs": 12,
+          "overlay_faces": 8,
+          "skin_faces": 6
+        },
+        "brow": {
+          "pairs": 36,
+          "overlay_faces": 24,
+          "skin_faces": 14
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 3,
+        "L": 3
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.03169,
+          0.03444,
+          1.44019,
+          1.44368
+        ],
+        "L": [
+          -0.03392,
+          -0.03117,
+          1.44019,
+          1.44368
+        ]
+      }
+    },
+    "blink_l": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 59,
+          "overlay_faces": 29,
+          "skin_faces": 25
+        },
+        "eyelash": {
+          "pairs": 13,
+          "overlay_faces": 6,
+          "skin_faces": 7
+        },
+        "brow": {
+          "pairs": 18,
+          "overlay_faces": 12,
+          "skin_faces": 7
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 3
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.03392,
+          -0.03117,
+          1.44019,
+          1.44368
+        ]
+      }
+    },
+    "blink_r": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 59,
+          "overlay_faces": 29,
+          "skin_faces": 25
+        },
+        "eyelash": {
+          "pairs": 13,
+          "overlay_faces": 6,
+          "skin_faces": 7
+        },
+        "brow": {
+          "pairs": 18,
+          "overlay_faces": 12,
+          "skin_faces": 7
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 3,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.03169,
+          0.03444,
+          1.44019,
+          1.44368
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    },
+    "joy": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 66,
+          "overlay_faces": 34,
+          "skin_faces": 26
+        },
+        "eyelash": {
+          "pairs": 20,
+          "overlay_faces": 14,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 10,
+          "overlay_faces": 6,
+          "skin_faces": 6
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 3,
+        "L": 3
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.03169,
+          0.03518,
+          1.44589,
+          1.4481
+        ],
+        "L": [
+          -0.03466,
+          -0.03117,
+          1.44589,
+          1.4481
+        ]
+      }
+    },
+    "angry": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 44,
+          "overlay_faces": 22,
+          "skin_faces": 18
+        },
+        "eyelash": {
+          "pairs": 10,
+          "overlay_faces": 4,
+          "skin_faces": 6
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 186,
+        "L": 186
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45456
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45456
+        ]
+      }
+    },
+    "surprised": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 40,
+          "overlay_faces": 22,
+          "skin_faces": 14
+        },
+        "eyelash": {
+          "pairs": 16,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 209,
+        "L": 209
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45802
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45802
+        ]
+      }
+    },
+    "fun": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 56,
+          "overlay_faces": 30,
+          "skin_faces": 22
+        },
+        "eyelash": {
+          "pairs": 10,
+          "overlay_faces": 4,
+          "skin_faces": 6
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 171,
+        "L": 171
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.44151,
+          1.455
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.44151,
+          1.455
+        ]
+      }
+    },
+    "sorrow": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 46,
+          "overlay_faces": 26,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 18,
+          "overlay_faces": 8,
+          "skin_faces": 10
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 164,
+        "L": 164
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.44034,
+          1.45312
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.44034,
+          1.45312
+        ]
+      }
+    },
+    "a": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 22,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 14,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    },
+    "i": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 22,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 14,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    },
+    "u": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 22,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 14,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    },
+    "e": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 22,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 14,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    },
+    "o": {
+      "tri_intersections": {
+        "eyeline": {
+          "pairs": 42,
+          "overlay_faces": 22,
+          "skin_faces": 16
+        },
+        "eyelash": {
+          "pairs": 14,
+          "overlay_faces": 4,
+          "skin_faces": 8
+        },
+        "brow": {
+          "pairs": 0,
+          "overlay_faces": 0,
+          "skin_faces": 0
+        }
+      },
+      "line_penetration": {
+        "eyeline": {
+          "opaque_samples": 4828,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        },
+        "eyelash": {
+          "opaque_samples": 2948,
+          "penetrating_samples": 0,
+          "penetrating_ratio": 0.0,
+          "max_depth_mm": 0.0,
+          "worst_position_m": null
+        }
+      },
+      "eye_visible_samples": {
+        "R": 200,
+        "L": 200
+      },
+      "eye_visible_extent_m": {
+        "R": [
+          0.02821,
+          0.065,
+          1.43934,
+          1.45663
+        ],
+        "L": [
+          -0.06448,
+          -0.02769,
+          1.43934,
+          1.45663
+        ]
+      }
+    }
+  },
+  "socket_show_through": {
+    "baseline316": {
+      "neutral": {
+        "R": {
+          "front": {
+            "eye_rays": 1186,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 713,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 1566,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 1117,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1260,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 603,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 1302,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1186,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1566,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 713,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 1118,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1260,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1325,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 603,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "blink": {
+        "R": {
+          "front": {
+            "eye_rays": 3,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 2,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 3,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 2,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "blink_l": {
+        "R": {
+          "front": {
+            "eye_rays": 1186,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 713,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 1566,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 1117,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1260,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 603,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 1302,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 3,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 2,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "blink_r": {
+        "R": {
+          "front": {
+            "eye_rays": 3,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 2,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 7,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 5,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1186,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1566,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 713,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 1118,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1260,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1325,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 603,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "joy": {
+        "R": {
+          "front": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 2,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 1,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 2,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 0,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "surprised": {
+        "R": {
+          "front": {
+            "eye_rays": 1308,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 783,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 1726,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 1239,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1360,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 674,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 1464,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1308,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1726,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 783,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 1239,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1360,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1487,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 674,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "angry": {
+        "R": {
+          "front": {
+            "eye_rays": 1049,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 619,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 1390,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 996,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1111,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 532,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 1161,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1049,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1390,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 619,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 996,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1111,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1176,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 532,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "sorrow": {
+        "R": {
+          "front": {
+            "eye_rays": 833,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 507,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 1080,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 772,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 899,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 410,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 879,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 833,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1080,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 507,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 772,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 899,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 897,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 410,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "fun": {
+        "R": {
+          "front": {
+            "eye_rays": 913,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 546,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 1204,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 843,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 979,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 445,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 998,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 913,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1204,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 546,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 842,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 979,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1019,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 446,
+            "show_through_rays": 0
+          }
+        }
+      }
+    },
+    "candidate": {
+      "neutral": {
+        "R": {
+          "front": {
+            "eye_rays": 1115,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 595,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 1317,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 842,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1101,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 282,
+            "show_through_rays": 11
+          },
+          "q3R_up30": {
+            "eye_rays": 1002,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1115,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1317,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 595,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 842,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1101,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1002,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 282,
+            "show_through_rays": 11
+          }
+        }
+      },
+      "blink": {
+        "R": {
+          "front": {
+            "eye_rays": 41,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 44,
+            "show_through_rays": 5
+          },
+          "q3R": {
+            "eye_rays": 11,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 3
+          },
+          "down30": {
+            "eye_rays": 64,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 13,
+            "show_through_rays": 1
+          },
+          "q3R_up30": {
+            "eye_rays": 0,
+            "show_through_rays": 1
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 40,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 11,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 44,
+            "show_through_rays": 5
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 3
+          },
+          "down30": {
+            "eye_rays": 64,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 0,
+            "show_through_rays": 1
+          },
+          "q3R_up30": {
+            "eye_rays": 13,
+            "show_through_rays": 1
+          }
+        }
+      },
+      "blink_l": {
+        "R": {
+          "front": {
+            "eye_rays": 1115,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 595,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 1317,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 842,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1101,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 282,
+            "show_through_rays": 11
+          },
+          "q3R_up30": {
+            "eye_rays": 1002,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 40,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 11,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 44,
+            "show_through_rays": 5
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 3
+          },
+          "down30": {
+            "eye_rays": 64,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 0,
+            "show_through_rays": 1
+          },
+          "q3R_up30": {
+            "eye_rays": 13,
+            "show_through_rays": 1
+          }
+        }
+      },
+      "blink_r": {
+        "R": {
+          "front": {
+            "eye_rays": 41,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 44,
+            "show_through_rays": 5
+          },
+          "q3R": {
+            "eye_rays": 11,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 4,
+            "show_through_rays": 3
+          },
+          "down30": {
+            "eye_rays": 64,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 13,
+            "show_through_rays": 1
+          },
+          "q3R_up30": {
+            "eye_rays": 0,
+            "show_through_rays": 1
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1115,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1317,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 595,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 842,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1101,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1002,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 282,
+            "show_through_rays": 11
+          }
+        }
+      },
+      "joy": {
+        "R": {
+          "front": {
+            "eye_rays": 62,
+            "show_through_rays": 2
+          },
+          "q3L": {
+            "eye_rays": 60,
+            "show_through_rays": 4
+          },
+          "q3R": {
+            "eye_rays": 20,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 18,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 70,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 23,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 3,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 62,
+            "show_through_rays": 2
+          },
+          "q3L": {
+            "eye_rays": 19,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 60,
+            "show_through_rays": 4
+          },
+          "up30": {
+            "eye_rays": 18,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 70,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 3,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 23,
+            "show_through_rays": 0
+          }
+        }
+      },
+      "surprised": {
+        "R": {
+          "front": {
+            "eye_rays": 1197,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 639,
+            "show_through_rays": 2
+          },
+          "q3R": {
+            "eye_rays": 1424,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 964,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1151,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 361,
+            "show_through_rays": 9
+          },
+          "q3R_up30": {
+            "eye_rays": 1122,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 1197,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1424,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 639,
+            "show_through_rays": 2
+          },
+          "up30": {
+            "eye_rays": 964,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1152,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 1122,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 361,
+            "show_through_rays": 9
+          }
+        }
+      },
+      "angry": {
+        "R": {
+          "front": {
+            "eye_rays": 989,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 523,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 1176,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 692,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1026,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 180,
+            "show_through_rays": 9
+          },
+          "q3R_up30": {
+            "eye_rays": 810,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 989,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 1176,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 523,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 692,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 1026,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 810,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 180,
+            "show_through_rays": 9
+          }
+        }
+      },
+      "sorrow": {
+        "R": {
+          "front": {
+            "eye_rays": 830,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 469,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 968,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 576,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 856,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 192,
+            "show_through_rays": 2
+          },
+          "q3R_up30": {
+            "eye_rays": 661,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 830,
+            "show_through_rays": 0
+          },
+          "q3L": {
+            "eye_rays": 968,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 469,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 576,
+            "show_through_rays": 0
+          },
+          "down30": {
+            "eye_rays": 856,
+            "show_through_rays": 1
+          },
+          "q3L_up30": {
+            "eye_rays": 661,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 192,
+            "show_through_rays": 2
+          }
+        }
+      },
+      "fun": {
+        "R": {
+          "front": {
+            "eye_rays": 903,
+            "show_through_rays": 4
+          },
+          "q3L": {
+            "eye_rays": 503,
+            "show_through_rays": 1
+          },
+          "q3R": {
+            "eye_rays": 1067,
+            "show_through_rays": 0
+          },
+          "up30": {
+            "eye_rays": 694,
+            "show_through_rays": 1
+          },
+          "down30": {
+            "eye_rays": 872,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 237,
+            "show_through_rays": 11
+          },
+          "q3R_up30": {
+            "eye_rays": 819,
+            "show_through_rays": 0
+          }
+        },
+        "L": {
+          "front": {
+            "eye_rays": 903,
+            "show_through_rays": 4
+          },
+          "q3L": {
+            "eye_rays": 1067,
+            "show_through_rays": 0
+          },
+          "q3R": {
+            "eye_rays": 503,
+            "show_through_rays": 1
+          },
+          "up30": {
+            "eye_rays": 694,
+            "show_through_rays": 2
+          },
+          "down30": {
+            "eye_rays": 872,
+            "show_through_rays": 0
+          },
+          "q3L_up30": {
+            "eye_rays": 819,
+            "show_through_rays": 0
+          },
+          "q3R_up30": {
+            "eye_rays": 237,
+            "show_through_rays": 11
+          }
+        }
+      }
+    }
+  },
+  "eye_surface_protrusion": {
+    "baseline316": {
+      "neutral": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "blink": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "blink_l": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "blink_r": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "joy": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "surprised": {
+        "uncovered_outside_rim": 23,
+        "uncovered_max_dist_outside_rim_mm": 2.338,
+        "worst": [
+          [
+            2.34,
+            [
+              -0.051,
+              0.0606,
+              1.4586
+            ],
+            null
+          ],
+          [
+            2.29,
+            [
+              0.0527,
+              0.0602,
+              1.4581
+            ],
+            null
+          ],
+          [
+            1.97,
+            [
+              0.042,
+              0.0602,
+              1.4598
+            ],
+            null
+          ],
+          [
+            1.87,
+            [
+              0.0574,
+              0.0601,
+              1.4552
+            ],
+            null
+          ],
+          [
+            1.81,
+            [
+              -0.0557,
+              0.0605,
+              1.456
+            ],
+            null
+          ],
+          [
+            1.67,
+            [
+              -0.0435,
+              0.0609,
+              1.4594
+            ],
+            null
+          ]
+        ]
+      },
+      "angry": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "sorrow": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "fun": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      }
+    },
+    "candidate": {
+      "neutral": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "blink": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "blink_l": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "blink_r": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "joy": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "surprised": {
+        "uncovered_outside_rim": 16,
+        "uncovered_max_dist_outside_rim_mm": 0.916,
+        "worst": [
+          [
+            0.92,
+            [
+              0.0418,
+              0.0619,
+              1.4576
+            ],
+            null
+          ],
+          [
+            0.92,
+            [
+              -0.0413,
+              0.0619,
+              1.4576
+            ],
+            null
+          ],
+          [
+            0.91,
+            [
+              0.0578,
+              0.0608,
+              1.458
+            ],
+            null
+          ],
+          [
+            0.91,
+            [
+              -0.0572,
+              0.0608,
+              1.458
+            ],
+            null
+          ],
+          [
+            0.86,
+            [
+              0.0398,
+              0.0618,
+              1.4574
+            ],
+            null
+          ],
+          [
+            0.86,
+            [
+              -0.0392,
+              0.0618,
+              1.4574
+            ],
+            null
+          ]
+        ]
+      },
+      "angry": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "sorrow": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      },
+      "fun": {
+        "uncovered_outside_rim": 0,
+        "uncovered_max_dist_outside_rim_mm": 0.0,
+        "worst": []
+      }
+    }
+  },
+  "patch_relative": {
+    "lid_R": {
+      "neutral": {
+        "baseline316": {
+          "faces": 124,
+          "inner_dihedral_deg_max": 43.256,
+          "inner_dihedral_deg_p95": 30.451,
+          "non_manifold_edges": 0
+        },
+        "candidate": {
+          "faces": 107,
+          "inner_dihedral_deg_max": 44.33,
+          "inner_dihedral_deg_p95": 30.261,
+          "non_manifold_edges": 0
+        },
+        "ok": true
+      },
+      "blink": {
+        "baseline316": {
+          "folded_vs_basis": 2,
+          "edge_ratio_p99": 1.4826,
+          "inner_dihedral_deg_max": 168.298
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 2.4782,
+          "inner_dihedral_deg_max": 170.622
+        },
+        "ok": false,
+        "required": true
+      },
+      "blink_l": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.33
+        },
+        "ok": true,
+        "required": true
+      },
+      "blink_r": {
+        "baseline316": {
+          "folded_vs_basis": 2,
+          "edge_ratio_p99": 1.4826,
+          "inner_dihedral_deg_max": 168.298
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 2.4782,
+          "inner_dihedral_deg_max": 170.622
+        },
+        "ok": false,
+        "required": true
+      },
+      "joy": {
+        "baseline316": {
+          "folded_vs_basis": 4,
+          "edge_ratio_p99": 2.4915,
+          "inner_dihedral_deg_max": 149.361
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.7879,
+          "inner_dihedral_deg_max": 160.843
+        },
+        "ok": false,
+        "required": true
+      },
+      "angry": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0381,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.1161,
+          "inner_dihedral_deg_max": 96.175
+        },
+        "ok": false,
+        "required": false
+      },
+      "surprised": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.1711,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.1406,
+          "inner_dihedral_deg_max": 56.481
+        },
+        "ok": false,
+        "required": true
+      },
+      "fun": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.3703,
+          "inner_dihedral_deg_max": 35.021
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.1671,
+          "inner_dihedral_deg_max": 113.041
+        },
+        "ok": false,
+        "required": false
+      },
+      "sorrow": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.2452,
+          "inner_dihedral_deg_max": 35.998
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.1941,
+          "inner_dihedral_deg_max": 133.925
+        },
+        "ok": false,
+        "required": false
+      },
+      "a": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.33
+        },
+        "ok": true,
+        "required": false
+      },
+      "i": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.33
+        },
+        "ok": true,
+        "required": false
+      },
+      "u": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.33
+        },
+        "ok": true,
+        "required": false
+      },
+      "e": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.33
+        },
+        "ok": true,
+        "required": false
+      },
+      "o": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.256
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.33
+        },
+        "ok": true,
+        "required": false
+      }
+    },
+    "lid_L": {
+      "neutral": {
+        "baseline316": {
+          "faces": 124,
+          "inner_dihedral_deg_max": 43.255,
+          "inner_dihedral_deg_p95": 30.451,
+          "non_manifold_edges": 0
+        },
+        "candidate": {
+          "faces": 107,
+          "inner_dihedral_deg_max": 44.424,
+          "inner_dihedral_deg_p95": 30.225,
+          "non_manifold_edges": 0
+        },
+        "ok": true
+      },
+      "blink": {
+        "baseline316": {
+          "folded_vs_basis": 2,
+          "edge_ratio_p99": 1.4826,
+          "inner_dihedral_deg_max": 168.298
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 2.4759,
+          "inner_dihedral_deg_max": 170.527
+        },
+        "ok": false,
+        "required": true
+      },
+      "blink_l": {
+        "baseline316": {
+          "folded_vs_basis": 2,
+          "edge_ratio_p99": 1.4826,
+          "inner_dihedral_deg_max": 168.298
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 2.4759,
+          "inner_dihedral_deg_max": 170.527
+        },
+        "ok": false,
+        "required": true
+      },
+      "blink_r": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.424
+        },
+        "ok": true,
+        "required": true
+      },
+      "joy": {
+        "baseline316": {
+          "folded_vs_basis": 4,
+          "edge_ratio_p99": 2.4914,
+          "inner_dihedral_deg_max": 149.374
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.788,
+          "inner_dihedral_deg_max": 160.752
+        },
+        "ok": false,
+        "required": true
+      },
+      "angry": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0381,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.1159,
+          "inner_dihedral_deg_max": 95.88
+        },
+        "ok": false,
+        "required": false
+      },
+      "surprised": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.1711,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.1406,
+          "inner_dihedral_deg_max": 56.42
+        },
+        "ok": false,
+        "required": true
+      },
+      "fun": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.3703,
+          "inner_dihedral_deg_max": 35.021
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.1671,
+          "inner_dihedral_deg_max": 112.873
+        },
+        "ok": false,
+        "required": false
+      },
+      "sorrow": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.2452,
+          "inner_dihedral_deg_max": 35.999
+        },
+        "candidate": {
+          "folded_vs_basis": 1,
+          "edge_ratio_p99": 1.194,
+          "inner_dihedral_deg_max": 133.814
+        },
+        "ok": false,
+        "required": false
+      },
+      "a": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.424
+        },
+        "ok": true,
+        "required": false
+      },
+      "i": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.424
+        },
+        "ok": true,
+        "required": false
+      },
+      "u": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.424
+        },
+        "ok": true,
+        "required": false
+      },
+      "e": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.424
+        },
+        "ok": true,
+        "required": false
+      },
+      "o": {
+        "baseline316": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 43.255
+        },
+        "candidate": {
+          "folded_vs_basis": 0,
+          "edge_ratio_p99": 1.0,
+          "inner_dihedral_deg_max": 44.424
+        },
+        "ok": true,
+        "required": false
+      }
+    }
+  },
+  "patch_relative_ok_all_states": {
+    "lid_R": {
+      "neutral": true,
+      "blink": false,
+      "blink_l": true,
+      "blink_r": false,
+      "joy": false,
+      "angry": false,
+      "surprised": false,
+      "fun": false,
+      "sorrow": false,
+      "a": true,
+      "i": true,
+      "u": true,
+      "e": true,
+      "o": true
+    },
+    "lid_L": {
+      "neutral": true,
+      "blink": false,
+      "blink_l": false,
+      "blink_r": true,
+      "joy": false,
+      "angry": false,
+      "surprised": false,
+      "fun": false,
+      "sorrow": false,
+      "a": true,
+      "i": true,
+      "u": true,
+      "e": true,
+      "o": true
+    }
+  },
+  "technical_checks": {
+    "canthus_error_mm": {
+      "R": {
+        "inner": 0.0005,
+        "outer": 0.0006
+      },
+      "L": {
+        "inner": 0.0005,
+        "outer": 0.0006
+      }
+    },
+    "canthus_ok": true,
+    "opening_within_1px": true,
+    "ipd_within_1px": true,
+    "corner_no_flip_required_states": false,
+    "patch_relative_required_states_ok": false,
+    "line_penetration_zero_all_states": true,
+    "eyes_hidden_when_closed": false,
+    "socket_show_through_zero": false,
+    "eye_surface_protrusion_neutral": 0,
+    "nose_locked_geometry_unchanged": true,
+    "body_mesh_unchanged": true,
+    "mouth_unchanged_vs_316": true,
+    "eye_material_unchanged_vs_316": true,
+    "face_body_seam_vertices": 44,
+    "face_body_seam_max_gap_m": 6e-07,
+    "winding_conflicts": 0,
+    "uv_flipped_faces": 0,
+    "uv_out_of_range_loops": 0,
+    "non_quad_patch_faces": 0,
+    "weights_sum_min": 1.0,
+    "weights_sum_max": 1.0,
+    "shape_keys_preserved": true
+  },
+  "technical_result": "FAIL",
+  "renders": [
+    "renders/cand_neutral/front_toon_face.png",
+    "renders/cand_neutral/front_clay_face.png",
+    "renders/cand_neutral/front_wire_face.png",
+    "renders/cand_neutral/q3L_toon_face.png",
+    "renders/cand_neutral/q3L_clay_face.png",
+    "renders/cand_neutral/q3L_wire_face.png",
+    "renders/cand_neutral/q3R_toon_face.png",
+    "renders/cand_neutral/q3R_clay_face.png",
+    "renders/cand_neutral/q3R_wire_face.png",
+    "renders/cand_neutral/right_toon_face.png",
+    "renders/cand_neutral/right_clay_face.png",
+    "renders/cand_neutral/right_wire_face.png",
+    "renders/cand_neutral/left_toon_face.png",
+    "renders/cand_neutral/left_clay_face.png",
+    "renders/cand_neutral/left_wire_face.png",
+    "renders/cand_blink/front_toon_face.png",
+    "renders/cand_blink/q3L_toon_face.png",
+    "renders/cand_blink_l/front_toon_face.png",
+    "renders/cand_blink_l/q3L_toon_face.png",
+    "renders/cand_blink_r/front_toon_face.png",
+    "renders/cand_blink_r/q3L_toon_face.png",
+    "renders/cand_joy/front_toon_face.png",
+    "renders/cand_joy/q3L_toon_face.png",
+    "renders/cand_surprised/front_toon_face.png",
+    "renders/cand_surprised/q3L_toon_face.png",
+    "renders/cand_eyeR_neutral/front_clay_face.png",
+    "renders/cand_eyeR_blink/front_clay_face.png",
+    "renders/cand_eyeR_blink_l/front_clay_face.png",
+    "renders/cand_eyeR_blink_r/front_clay_face.png",
+    "renders/cand_eyeR_joy/front_clay_face.png",
+    "renders/cand_eyeR_surprised/front_clay_face.png",
+    "renders/cand_eyeR_neutral/q3L_clay_face.png",
+    "renders/cand_eyeR_neutral/q3L_toon_face.png",
+    "renders/cand_eyeR_neutral/q3R_clay_face.png",
+    "renders/cand_eyeR_neutral/q3R_toon_face.png",
+    "renders/cand_eyeR_neutral/front_wire_face.png",
+    "renders/cand_eyeR_blink/front_wire_face.png",
+    "renders/cand_eyeL_neutral/front_clay_face.png",
+    "renders/cand_eyeL_blink/front_clay_face.png",
+    "renders/cand_eyeL_blink_l/front_clay_face.png",
+    "renders/cand_eyeL_blink_r/front_clay_face.png",
+    "renders/cand_eyeL_joy/front_clay_face.png",
+    "renders/cand_eyeL_surprised/front_clay_face.png",
+    "renders/cand_eyeL_neutral/q3L_clay_face.png",
+    "renders/cand_eyeL_neutral/q3L_toon_face.png",
+    "renders/cand_eyeL_neutral/q3R_clay_face.png",
+    "renders/cand_eyeL_neutral/q3R_toon_face.png",
+    "renders/cand_eyeL_neutral/front_wire_face.png",
+    "renders/cand_eyeL_blink/front_wire_face.png",
+    "renders/cand_l0_neutral/front_toon_face.png"
+  ],
+  "sheets": {
+    "SHEET_EYELID_STATES_TOON.png": "b50f3f7d296bcae9343031a166a91a604d3d8cd63a71999356917ea67ee20431",
+    "SHEET_EYE_CLOSEUPS.png": "baccedab6f0240904b4002bedf3dc593a2ba01b21e912c91c22a45c03fd96872",
+    "SHEET_GAME_SIZE_64_32.png": "d7329b2673ab16c3eb2d54d30b767f5f11503e344630c9dcfcb5e2e59f5f1f1f",
+    "SHEET_LAYER0_FIT.png": "47ffe1fbf73d1ab7f88c96f1598d2afea2fe36dcceae316453d5bf81b49f7d74",
+    "SHEET_VIEWS_316_VS_05.png": "32f8f51032323fe269679fadef1387711e7a393bdc10aa8f59a7d84c5d025d8d"
+  },
+  "G1": "PASS for source preservation only (Layer 0 front SHA verified; v5.61 binary unavailable -> full canon BLOCKED)",
+  "G2": "NOT_RUN - independent art review mandatory",
+  "G3": "FAIL",
+  "G4": "NOT_RUN"
+}

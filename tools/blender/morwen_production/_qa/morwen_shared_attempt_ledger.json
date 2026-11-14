@@ -1,0 +1,205 @@
+{
+  "schema": "TWO-3D-SHARED-LEDGER-01",
+  "asset": "morwen-head",
+  "note": "Cumulative eyelid/mouth topology attempts carried from MORWEN-EYES-LIDS-MOUTH-04 (PR #316) into MORWEN-EYELID-RETOPO-05. Counts are by (asset_id, defect_id, method_family).",
+  "attempts": [
+    {
+      "task_id": "MORWEN-EYES-LIDS-MOUTH-04",
+      "attempt_id": "MELM04-ANNULUS-01",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-LID-MOUTH-TOPOLOGY",
+      "method_id": "lid-mouth-concentric-annulus-ring-patch-local-retopo",
+      "method_family": "LOCAL_RETOPO_ANNULUS_RING_PATCH",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
+      ],
+      "output_sha256": [],
+      "canonical_references": [
+        "front:7809.png sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "morwen-canon:v5.61 comparison sheet (binary unavailable -> full canon BLOCKED)"
+      ],
+      "visual_defects": [
+        "lid UV flips 3/3",
+        "mouth 10 corner folds"
+      ],
+      "root_cause": "structure",
+      "next_action": "relax once",
+      "stop_reason": "",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYES-LIDS-MOUTH-04",
+      "attempt_id": "MELM04-ANNULUS-02",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-LID-MOUTH-TOPOLOGY",
+      "method_id": "lid-mouth-concentric-annulus-ring-patch-local-retopo",
+      "method_family": "LOCAL_RETOPO_ANNULUS_RING_PATCH",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
+      ],
+      "output_sha256": [],
+      "canonical_references": [
+        "front:7809.png sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "morwen-canon:v5.61 comparison sheet (binary unavailable -> full canon BLOCKED)"
+      ],
+      "visual_defects": [
+        "folds 18/15/16 after relax"
+      ],
+      "root_cause": "structure",
+      "next_action": "canthus-anchored constrained quad retopology",
+      "stop_reason": "Stopped after 2 failures (polar angle sampling + zippers at the corners)",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "attempt_id": "MELR05-A1",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+key-transfer-from-vroid-lid",
+      "method_family": "EYELID_KEY_TRANSFER_FROM_VROID",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+        "sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+      ],
+      "output_sha256": [],
+      "canonical_references": [
+        "front:7809.png sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "morwen-canon:v5.61 comparison sheet (binary unavailable -> full canon BLOCKED)"
+      ],
+      "visual_defects": [
+        "Joy corner flips 4",
+        "Blink eye visible",
+        "inner canthus depth spike",
+        "socket show-through"
+      ],
+      "root_cause": "structure",
+      "next_action": "Same family once more: depth by (u,t) correspondence, keys as fraction of the old gap applied to the new gap.",
+      "stop_reason": "",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "attempt_id": "MELR05-A2",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+key-transfer-from-vroid-lid",
+      "method_family": "EYELID_KEY_TRANSFER_FROM_VROID",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+        "sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+      ],
+      "output_sha256": [],
+      "canonical_references": [
+        "front:7809.png sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "morwen-canon:v5.61 comparison sheet (binary unavailable -> full canon BLOCKED)"
+      ],
+      "visual_defects": [
+        "Blink corner flips 10",
+        "Joy folds 9",
+        "socket show-through 28"
+      ],
+      "root_cause": "structure",
+      "next_action": "STOP key transfer (2 failures). Switch to analytic lid keys (rotation) + lid-thickness wall.",
+      "stop_reason": "Stopped after 2 failures: inherited VRoid blink motion is built around the old canthi",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "attempt_id": "MELR05-B1",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+analytic-eyeball-pivot-lid-keys+lid-wall",
+      "method_family": "EYELID_ANALYTIC_PIVOT_KEYS_WITH_WALL",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+        "sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+      ],
+      "output_sha256": [],
+      "canonical_references": [
+        "front:7809.png sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "morwen-canon:v5.61 comparison sheet (binary unavailable -> full canon BLOCKED)"
+      ],
+      "visual_defects": [
+        "62 folds (surface pivot)",
+        "cards buried 2.76 mm",
+        "mouth area changed"
+      ],
+      "root_cause": "structure",
+      "next_action": "Same family once more: pivot at the eyeball centre (12 mm back), bounded range 16/22 mm, mouth guard.",
+      "stop_reason": "",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "attempt_id": "MELR05-B2",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+analytic-eyeball-pivot-lid-keys+lid-wall",
+      "method_family": "EYELID_ANALYTIC_PIVOT_KEYS_WITH_WALL",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+        "sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+      ],
+      "output_sha256": [
+        "sha256:661a5731b23972422c5fb416e4bc7d3d141199074e891a2710eddf5d1c5a7287"
+      ],
+      "canonical_references": [
+        "front:7809.png sha256:b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+        "morwen-canon:v5.61 comparison sheet (binary unavailable -> full canon BLOCKED)"
+      ],
+      "visual_defects": [
+        "1 corner flip",
+        "Blink stretch 2.48",
+        "V-shaped faceted closed lid",
+        "outer-corner gap",
+        "lash cards lift at 45 deg"
+      ],
+      "root_cause": "structure",
+      "next_action": "STOP (2 failures of this family). Next method: hand-authored corrective lid shape keys / lid bone rig on the new strips, with an art decision on the closed-lid line. Static strip topology may be reused.",
+      "stop_reason": "Stopped after 2 failures: procedural lid closure cannot reach production quality without an art-defined closed-lid line",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    }
+  ]
+}

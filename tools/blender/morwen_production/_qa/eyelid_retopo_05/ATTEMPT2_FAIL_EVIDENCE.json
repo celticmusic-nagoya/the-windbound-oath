@@ -1,0 +1,446 @@
+{
+ "attempt": "MELR05-A2",
+ "status": "FAIL (technical)",
+ "note": "local run of attempt 2 (depth by (u,t) correspondence; keys: old margin motion as a fraction of the old gap applied to the new gap). Second failure of the key-transfer deformation family -> stopped; method 3 replaces the deformation.",
+ "report_sha256": "48361fa50a52ca6dfc67754eebc2cd1f76f89b0f9b5dbdfae489ecf4c8c9a147",
+ "technical_checks": {
+  "canthus_error_mm": {
+   "R": {
+    "inner": 0.0005,
+    "outer": 0.0006
+   },
+   "L": {
+    "inner": 0.0005,
+    "outer": 0.0006
+   }
+  },
+  "canthus_ok": true,
+  "opening_within_1px": true,
+  "ipd_within_1px": true,
+  "corner_no_flip_required_states": false,
+  "patch_relative_required_states_ok": false,
+  "line_penetration_zero_all_states": true,
+  "eyes_hidden_when_closed": false,
+  "socket_show_through_zero": false,
+  "eye_surface_protrusion_neutral": 0,
+  "nose_locked_geometry_unchanged": true,
+  "body_mesh_unchanged": true,
+  "mouth_unchanged_vs_316": true,
+  "eye_material_unchanged_vs_316": true,
+  "face_body_seam_vertices": 44,
+  "face_body_seam_max_gap_m": 6e-07,
+  "winding_conflicts": 0,
+  "uv_flipped_faces": 0,
+  "uv_out_of_range_loops": 0,
+  "non_quad_patch_faces": 0,
+  "weights_sum_min": 1.0,
+  "weights_sum_max": 1.0,
+  "shape_keys_preserved": true
+ },
+ "opening": {
+  "target": {
+   "R": {
+    "width_px": 22.0,
+    "height_px": 10.4
+   },
+   "L": {
+    "width_px": 22.0,
+    "height_px": 10.4
+   }
+  },
+  "candidate_margin": {
+   "R": {
+    "width_px": 22.0,
+    "height_px": 10.81
+   },
+   "L": {
+    "width_px": 22.0,
+    "height_px": 10.81
+   }
+  },
+  "candidate_visible_eye": {
+   "R": {
+    "width_px": 20.66,
+    "height_px": 9.71
+   },
+   "L": {
+    "width_px": 20.66,
+    "height_px": 9.71
+   }
+  },
+  "baseline316_visible_eye": {
+   "R": {
+    "width_px": 19.43,
+    "height_px": 13.34
+   },
+   "L": {
+    "width_px": 19.63,
+    "height_px": 13.54
+   }
+  },
+  "pupil_world": {
+   "R": [
+    0.04563,
+    0.06297,
+    1.44589
+   ],
+   "L": [
+    -0.04511,
+    0.06297,
+    1.44589
+   ]
+  },
+  "pupil_target_xz": {
+   "R": [
+    0.04562711755546905,
+    1.44589
+   ],
+   "L": [
+    -0.04510711755546904,
+    1.44589
+   ]
+  },
+  "ipd_U": 0.9917,
+  "ipd_target_U": 0.9916,
+  "baseline316_ipd_U": 0.9642
+ },
+ "canthus_corner_metrics": {
+  "R": {
+   "neutral": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.33
+   },
+   "blink": {
+    "faces": 28,
+    "flipped_vs_basis": 10,
+    "inner_dihedral_deg_max": 175.815
+   },
+   "blink_l": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.33
+   },
+   "blink_r": {
+    "faces": 28,
+    "flipped_vs_basis": 10,
+    "inner_dihedral_deg_max": 175.815
+   },
+   "joy": {
+    "faces": 28,
+    "flipped_vs_basis": 7,
+    "inner_dihedral_deg_max": 172.378
+   },
+   "surprised": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.2
+   }
+  },
+  "L": {
+   "neutral": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.424
+   },
+   "blink": {
+    "faces": 28,
+    "flipped_vs_basis": 10,
+    "inner_dihedral_deg_max": 175.649
+   },
+   "blink_l": {
+    "faces": 28,
+    "flipped_vs_basis": 10,
+    "inner_dihedral_deg_max": 175.649
+   },
+   "blink_r": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.424
+   },
+   "joy": {
+    "faces": 28,
+    "flipped_vs_basis": 7,
+    "inner_dihedral_deg_max": 172.378
+   },
+   "surprised": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.328
+   }
+  }
+ },
+ "candidate_eye_visible_closed": {
+  "blink": {
+   "R": 2,
+   "L": 1
+  },
+  "blink_l": {
+   "R": 200,
+   "L": 1
+  },
+  "blink_r": {
+   "R": 2,
+   "L": 200
+  },
+  "joy": {
+   "R": 0,
+   "L": 0
+  }
+ },
+ "socket_show_through_candidate": {
+  "neutral": {
+   "R": {
+    "q3L": 8,
+    "up30": 5,
+    "q3L_up30": 28
+   },
+   "L": {
+    "q3R": 8,
+    "up30": 5,
+    "q3R_up30": 28
+   }
+  },
+  "blink": {
+   "R": {
+    "front": 1,
+    "q3L_up30": 9,
+    "q3R_up30": 4
+   },
+   "L": {
+    "front": 1,
+    "q3L_up30": 4,
+    "q3R_up30": 9
+   }
+  },
+  "blink_l": {
+   "R": {
+    "q3L": 8,
+    "up30": 5,
+    "q3L_up30": 28
+   },
+   "L": {
+    "front": 1,
+    "q3L_up30": 4,
+    "q3R_up30": 9
+   }
+  },
+  "blink_r": {
+   "R": {
+    "front": 1,
+    "q3L_up30": 9,
+    "q3R_up30": 4
+   },
+   "L": {
+    "q3R": 8,
+    "up30": 5,
+    "q3R_up30": 28
+   }
+  },
+  "joy": {
+   "R": {
+    "q3L": 5,
+    "q3L_up30": 6
+   },
+   "L": {
+    "q3R": 4,
+    "q3R_up30": 6
+   }
+  },
+  "surprised": {
+   "R": {
+    "q3L": 7,
+    "up30": 5,
+    "q3L_up30": 28
+   },
+   "L": {
+    "q3R": 7,
+    "up30": 5,
+    "q3R_up30": 28
+   }
+  },
+  "angry": {
+   "R": {
+    "q3L": 7,
+    "up30": 6,
+    "q3L_up30": 26
+   },
+   "L": {
+    "q3R": 7,
+    "up30": 6,
+    "q3R_up30": 26
+   }
+  },
+  "sorrow": {
+   "R": {
+    "q3L": 1,
+    "up30": 1,
+    "q3L_up30": 24
+   },
+   "L": {
+    "q3R": 1,
+    "up30": 1,
+    "q3R_up30": 24
+   }
+  },
+  "fun": {
+   "R": {
+    "q3L_up30": 18
+   },
+   "L": {
+    "q3R": 1,
+    "q3R_up30": 18
+   }
+  }
+ },
+ "patch_relative_failures": {
+  "lid_R": {
+   "blink": {
+    "baseline316": {
+     "folded_vs_basis": 2,
+     "edge_ratio_p99": 1.5277,
+     "inner_dihedral_deg_max": 168.298
+    },
+    "candidate": {
+     "folded_vs_basis": 13,
+     "edge_ratio_p99": 2.058,
+     "inner_dihedral_deg_max": 175.815
+    }
+   },
+   "blink_r": {
+    "baseline316": {
+     "folded_vs_basis": 2,
+     "edge_ratio_p99": 1.5277,
+     "inner_dihedral_deg_max": 168.298
+    },
+    "candidate": {
+     "folded_vs_basis": 13,
+     "edge_ratio_p99": 2.058,
+     "inner_dihedral_deg_max": 175.815
+    }
+   },
+   "joy": {
+    "baseline316": {
+     "folded_vs_basis": 4,
+     "edge_ratio_p99": 2.4688,
+     "inner_dihedral_deg_max": 149.361
+    },
+    "candidate": {
+     "folded_vs_basis": 9,
+     "edge_ratio_p99": 2.158,
+     "inner_dihedral_deg_max": 172.378
+    }
+   },
+   "angry": {
+    "baseline316": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.0342,
+     "inner_dihedral_deg_max": 43.256
+    },
+    "candidate": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.099,
+     "inner_dihedral_deg_max": 54.669
+    }
+   },
+   "fun": {
+    "baseline316": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.3703,
+     "inner_dihedral_deg_max": 35.021
+    },
+    "candidate": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.315,
+     "inner_dihedral_deg_max": 52.239
+    }
+   },
+   "sorrow": {
+    "baseline316": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.2453,
+     "inner_dihedral_deg_max": 35.998
+    },
+    "candidate": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.2276,
+     "inner_dihedral_deg_max": 52.082
+    }
+   }
+  },
+  "lid_L": {
+   "blink": {
+    "baseline316": {
+     "folded_vs_basis": 2,
+     "edge_ratio_p99": 1.5277,
+     "inner_dihedral_deg_max": 168.298
+    },
+    "candidate": {
+     "folded_vs_basis": 13,
+     "edge_ratio_p99": 2.0544,
+     "inner_dihedral_deg_max": 175.649
+    }
+   },
+   "blink_l": {
+    "baseline316": {
+     "folded_vs_basis": 2,
+     "edge_ratio_p99": 1.5277,
+     "inner_dihedral_deg_max": 168.298
+    },
+    "candidate": {
+     "folded_vs_basis": 13,
+     "edge_ratio_p99": 2.0544,
+     "inner_dihedral_deg_max": 175.649
+    }
+   },
+   "joy": {
+    "baseline316": {
+     "folded_vs_basis": 4,
+     "edge_ratio_p99": 2.4686,
+     "inner_dihedral_deg_max": 149.374
+    },
+    "candidate": {
+     "folded_vs_basis": 9,
+     "edge_ratio_p99": 2.2052,
+     "inner_dihedral_deg_max": 172.378
+    }
+   },
+   "angry": {
+    "baseline316": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.0342,
+     "inner_dihedral_deg_max": 43.255
+    },
+    "candidate": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.0987,
+     "inner_dihedral_deg_max": 54.711
+    }
+   },
+   "fun": {
+    "baseline316": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.3703,
+     "inner_dihedral_deg_max": 35.021
+    },
+    "candidate": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.3148,
+     "inner_dihedral_deg_max": 52.216
+    }
+   },
+   "sorrow": {
+    "baseline316": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.2454,
+     "inner_dihedral_deg_max": 35.999
+    },
+    "candidate": {
+     "folded_vs_basis": 0,
+     "edge_ratio_p99": 1.2275,
+     "inner_dihedral_deg_max": 52.162
+    }
+   }
+  }
+ }
+}
