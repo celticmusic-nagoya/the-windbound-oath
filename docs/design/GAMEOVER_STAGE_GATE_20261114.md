@@ -29,3 +29,14 @@ The currently implemented Raider rewind is incompatible with unconditional GAME 
 
 ## Gates
 G1 canon and scenario compatibility; G2 UI quality; G3 save/load and state integrity; G4 browser and Android behavior. Do not merge or publish until PASS.
+
+## 2026-11-14 follow-up: save/title API audit (verified)
+- `js/save-continue.js`: `SaveContinue.start()` only works in `phase==='TITLE'`. Calling it directly from an active GAME OVER battle returns false. A transition to title or a dedicated transactional reload API is mandatory.
+- `js/title-screen.js`: `TitleScreen.begin(cb)` initializes the title UI and `TitleScreen.dismiss()` hides it. No public `show()` or `returnToTitle()` API exists; do not call private functions from the battle layer.
+- `SaveContinue.inspect()` checks existing save validity without overwriting it. It does not itself create an autosave.
+- `js/prologue-combat.js`: normal recovery currently fires when **either** ally is at HP 0, not when the whole party is wiped. New GAME OVER must test both allies down, respecting the solo `attackGob1` encounter.
+- Raider defeat currently rewinds on either ally at HP 0; director-approved GAME OVER requires an explicit precedence rule and regression test. Do not silently remove Lou's canonical support/faint narrative.
+- `js/gameover-screen.js` and CSS exist as isolated components but are not loaded by `index.html`. No live UI claim is justified.
+
+## Safe next implementation gate
+Implement a public, tested title-return/reload transaction first. Only then wire the game-over UI and normal/Raider defeat paths, with battle-generation cancellation, input locking, no-save fallback, and a pre-attack save checkpoint. No destructive save rewrite or speculative title API.
