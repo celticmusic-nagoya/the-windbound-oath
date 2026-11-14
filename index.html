@@ -1131,7 +1131,19 @@ function renderSystemTab(tab='status'){
     btn.onclick=()=>{selectedSaveSlot=info.slot;if(saving)saveGrowthData(info.slot);else void loadGrowthData(info.slot)};grid.append(btn);
    }
    body.append(grid);
-   const legacy=window.SaveSlots?.legacy();if(legacy){const note=document.createElement('p');note.textContent='旧形式のセーブデータがあります。既存の記録は保護されています。';body.append(note)}
+   const legacy=window.SaveSlots?.legacy();if(legacy){
+    const note=document.createElement('p');note.textContent='旧形式のセーブデータがあります。元の記録は削除しません。';body.append(note);
+    if(saving){const importButton=document.createElement('button');importButton.type='button';importButton.textContent='旧セーブを空きスロットへコピー';
+     importButton.onclick=()=>{
+      const source=SaveSlots.legacy(),check=SaveContinue.inspect(source);
+      if(!check.ok){const m=$('#saveMsg');if(m)m.textContent='旧セーブの検証に失敗しました: '+check.error;return}
+      const empty=SaveSlots.list().find(x=>!x.occupied&&!x.corrupt);
+      if(!empty){const m=$('#saveMsg');if(m)m.textContent='空きスロットがありません。';return}
+      if(!window.confirm('旧セーブを空きスロット '+empty.slot+' にコピーしますか？ 元の記録は保持します。'))return;
+      try{SaveSlots.save(empty.slot,source);renderSystemTab('save');const m=$('#saveMsg');if(m)m.textContent='旧セーブをスロット '+empty.slot+' にコピーしました。'}
+      catch(_){const m=$('#saveMsg');if(m)m.textContent='コピーできませんでした。元のセーブは保持されています。'}
+     };body.append(importButton)}
+   }
    const msg=document.createElement('p');msg.id='saveMsg';msg.setAttribute('role','status');body.append(msg);
 
  }
