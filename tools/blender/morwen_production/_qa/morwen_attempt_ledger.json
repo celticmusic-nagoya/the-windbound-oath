@@ -10,7 +10,8 @@
     "tools/blender/morwen_production/HEAD_STRUCTURE_01_AUDIT.md",
     "tools/blender/morwen_production/_qa/MORWEN_HEAD_SCULPT_01_REVIEW.md",
     "tools/blender/morwen_production/head_landmark/HEAD_LANDMARK_02_REPORT.md",
-    "tools/blender/morwen_production/nose_retopo/NOSE_RETOPO_03_REPORT.md"
+    "tools/blender/morwen_production/nose_retopo/NOSE_RETOPO_03_REPORT.md",
+    "tools/blender/morwen_production/eyes_lids_mouth/ELM_04_REPORT.md"
   ],
   "known_gate_status": {
     "G1": "BLOCKED",
@@ -195,7 +196,60 @@
         "G4": "NOT_RUN"
       },
       "next_action": "Independent art QA of depth 0.5 (provisional) and the 8 priority expressions; decide review of the 18 remaining keys. No nose regeneration."
+    },
+    {
+      "attempt_id": "MELM04-ANNULUS-01",
+      "task_id": "MORWEN-EYES-LIDS-MOUTH-04",
+      "defect_id": "MORWEN-LID-MOUTH-TOPOLOGY",
+      "method_id": "lid-mouth-concentric-annulus-ring-patch-local-retopo",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Replacing each lid region with 3 concentric loops and the mouth with 4 (polar construction in ellipse-normalised angles, zippers to the junction ring and the outer boundary, relax 0) gives a cleaner deformation than the VRoid fan topology on the locked #312 nose @0.5.",
+      "evidence": "eyes_lids_mouth/trial_annulus_retopo_04.py -> ANNULUS_RETOPO_TRIAL.json config polar_relax0: lid_R/lid_L 176 faces, 0 folds but 3 UV orientation flips each; mouth 264 faces, 10 folded faces (dihedral > 120 deg) + 3 UV flips at the corners; original regions 0/0. Corner arc-length pinning and inflated-ellipse inner reference did not remove the corner fold.",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "One more attempt of the same method with relaxation only; if it fails, stop the method."
+    },
+    {
+      "attempt_id": "MELM04-ANNULUS-02",
+      "task_id": "MORWEN-EYES-LIDS-MOUTH-04",
+      "defect_id": "MORWEN-LID-MOUTH-TOPOLOGY",
+      "method_id": "lid-mouth-concentric-annulus-ring-patch-local-retopo",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "The same annulus patches with 5 Laplacian relax iterations remove the residual corner folds and UV flips.",
+      "evidence": "ANNULUS_RETOPO_TRIAL.json config polar_relax5: folds lid_R 18 / lid_L 15 / mouth 16, UV flips 8 / 9 / 13 (worse than relax0). Second failure of the same method for the same defect.",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "STOP this method (2-failure rule). Lids and mouth stay on the original VRoid topology in the candidate. Switch to corner-aware manual/sculpt retopology or an artist-reviewed constrained quad remesh."
+    },
+    {
+      "attempt_id": "MELM04-EYES-CARDS-01",
+      "task_id": "MORWEN-EYES-LIDS-MOUTH-04",
+      "defect_id": "MORWEN-EYE-CARD-INTERSECTION",
+      "method_id": "procedural-violet-eye-surface-and-per-state-card-rebind",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Replacing the stretched VRoid eye plates with an independent procedural violet eye surface behind the rim and lifting buried eyeliner/eyelash texels per state removes card/skin penetration and eye show-through without touching the locked nose.",
+      "evidence": "ELM_04_REPORT.json: technical PASS. Opaque card texels buried in skin: 0 in all 14 states (baseline joy 1106+524 samples, max 2.48/2.58 mm; blink 332 / 1.31 mm). Eyes hidden on Blink/Blink_L/Blink_R (baseline 14 samples showed). Socket show-through 0 rays in 7 views x 7 states (eye surface R 0.022 m showed the head interior at +/-45 deg; 0.07 m chosen after a 0.03/0.045/0.07 sweep), eye surface outside the head 0 at neutral. Locked nose hash identical, Body unchanged, seam 0.6 um. Eye opening unchanged from VRoid socket: width -11.7/-10.8 %, height R +11.1 % / L +50.5 %, IPD -2.8 % vs canon. Card/skin triangle intersection pairs remain (transparent card areas). Claude self-review only.",
+      "result": "BLOCKED",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "PASS",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Independent art QA of the eye surface, colours and card rebind; socket/lid shape rework with a new method; 16 unreviewed keys stay BLOCKED."
     }
   ],
-  "last_task": "MORWEN-LOCAL-RETOPO-03-REVIEW"
+  "last_task": "MORWEN-EYES-LIDS-MOUTH-04"
 }

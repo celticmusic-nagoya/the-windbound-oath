@@ -1,0 +1,167 @@
+{
+ "schema": "MORWEN-ELM-PARAMS-1",
+ "task_id": "MORWEN-EYES-LIDS-MOUTH-04",
+ "seed": 20261114,
+ "locked_nose": {
+  "source_pr": 312,
+  "face_geometry_hash": "7f9e3cdee41361339bd1dde95d976b189fc1c63df92b028d0f42997d5d89d88f",
+  "design_key": "MORWEN_DESIGN_NoseDepth",
+  "design_value": 0.5,
+  "note": "conditional local art acceptance only; exact #312 geometry, never regenerated"
+ },
+ "lids": {
+  "method_id": "annulus-ring-lid-retopo-shrinkwrap",
+  "method_family": "LOCAL_RETOPO_ANNULUS_RING_PATCH",
+  "inner": "skin vertices coincident with EyeWhite (rim junction loop)",
+  "ellipse_scale_x": 1.38,
+  "ellipse_scale_z_up": 1.85,
+  "ellipse_scale_z_down": 1.75,
+  "ring_t": [
+   0.22,
+   0.48,
+   0.74
+  ],
+  "ring_note": "three concentric loops between the rim junction (t=0) and the outer boundary (t=1); same vertex count as the rim -> quads; zipper to the outer boundary",
+  "notch_ratio": 0.75,
+  "relax_iterations": 0,
+  "enabled": false
+ },
+ "mouth": {
+  "method_id": "annulus-ring-mouth-retopo-shrinkwrap",
+  "method_family": "LOCAL_RETOPO_ANNULUS_RING_PATCH",
+  "inner": "skin vertices coincident with FaceMouth (lip seam ring)",
+  "half_width_scale": 1.9,
+  "z_up_m": 0.0105,
+  "z_down_m": 0.0145,
+  "ring_t": [
+   0.15,
+   0.36,
+   0.58,
+   0.8
+  ],
+  "ring_note": "four concentric loops (lip seam, lip edge, lip outer, orbicularis outer) between the lip seam and the outer boundary",
+  "notch_ratio": 0.0,
+  "relax_iterations": 0,
+  "notch_note": "no growth: the lip band (faces fully inside the ellipse) is already star-shaped; growing reaches the locked nose patch and breaks star-shapedness",
+  "enabled": false
+ },
+ "cards": {
+  "method_id": "skin-relative-clearance-projection",
+  "materials": [
+   "FaceEyeline",
+   "FaceEyelash"
+  ],
+  "min_clearance_m": 0.00015,
+  "iterations": 3,
+  "note": "per state (Basis and every shape key) only opaque-texel samples buried under front-facing skin (front ray within 3 mm) are lifted along the covering skin normal by depth + clearance, least-norm distributed to the card triangle vertices; no blanket offset"
+ },
+ "eyes": {
+  "method_id": "procedural-violet-eye-surface",
+  "remove_face_materials": [
+   "EyeWhite",
+   "EyeIris",
+   "EyeHighlight"
+  ],
+  "keep_face_materials": [
+   "EyeExtra"
+  ],
+  "surface_radius_m": 0.07,
+  "gap_behind_rim_m": 0.0012,
+  "margin_m": 0.004,
+  "oblique_cover_deg": 60,
+  "oblique_cover_note": "margin grows by (rim depth in front of the surface) x tan(60 deg) so +/-45 deg and 30 deg up/down views do not see past the surface edge",
+  "rings": 14,
+  "segments": 40,
+  "canonical_iris_width_U": 0.292,
+  "canonical_iris_aspect": 1.0,
+  "canonical_iris_aspect_status": "ESTIMATED (lids clip the drawn iris; circle assumed)",
+  "pupil_frac_from_inner_corner": {
+   "R": 0.486,
+   "L": 0.466
+  },
+  "pupil_frac_from_top": {
+   "R": 0.605,
+   "L": 0.553
+  },
+  "pupil_frac_note": "measured on Layer 0 front per side (1 px uncertainty, asymmetry kept as measured, unresolved)",
+  "colours": {
+   "sclera": [
+    0.93,
+    0.92,
+    0.95
+   ],
+   "sclera_shadow": [
+    0.66,
+    0.64,
+    0.74
+   ],
+   "iris_top": [
+    0.2,
+    0.07,
+    0.36
+   ],
+   "iris_bottom": [
+    0.74,
+    0.42,
+    0.93
+   ],
+   "limbal": [
+    0.13,
+    0.04,
+    0.22
+   ],
+   "pupil": [
+    0.07,
+    0.02,
+    0.12
+   ],
+   "highlight": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "colour_note": "violet per canon (紫眼) and the 3D target close-up; values are evaluation colours, not a locked palette",
+  "surface_radius_note": "0.022 m (eyeball-like) let 45 deg views look past the far edge into the head interior (106-159 rays per eye); swept 0.03/0.045/0.07 -> 0.07 m is the first with 0 show-through in all 7 socket views. Flatter surface, closer to the VRoid plate curvature.",
+  "edge_cover_rule": "edge is extended by the oblique cover but clipped where the opaque front skin stops covering it (no eye surface outside the head)"
+ },
+ "states": {
+  "neutral": null,
+  "blink": "target_13",
+  "blink_l": "target_15",
+  "blink_r": "target_14",
+  "joy": "target_3",
+  "angry": "target_1",
+  "surprised": "target_5",
+  "fun": "target_2",
+  "sorrow": "target_4",
+  "a": "target_37",
+  "i": "target_38",
+  "u": "target_39",
+  "e": "target_40",
+  "o": "target_41"
+ },
+ "acceptance_technical_note": "relative to the #312 baseline at nose depth 0.5; margins are provisional technical values, never art tolerances",
+ "acceptance_technical": {
+  "relative_edge_ratio_margin": 1.1,
+  "relative_dihedral_margin_deg": 5.0,
+  "max_line_penetration_mm": 0.05,
+  "max_line_penetrating_ratio": 0.002
+ },
+ "retopo_status": {
+  "method_family": "LOCAL_RETOPO_ANNULUS_RING_PATCH",
+  "status": "STOPPED_AFTER_2_FAILURES",
+  "reason": "both evaluated configurations (polar rings, relax 0 / relax 5) create folds absent from the original mesh near the inner eye corner and mouth corners (see trial_annulus_retopo_04.py evidence)",
+  "next": "switch method: corner-aware manual/sculpt retopology of lids and lips in Blender (or a constrained quad-remesh) reviewed by an artist; not auto-generated loops"
+ },
+ "trial_configs": [
+  {
+   "name": "polar_relax0",
+   "relax_iterations": 0
+  },
+  {
+   "name": "polar_relax5",
+   "relax_iterations": 5
+  }
+ ]
+}
