@@ -1129,6 +1129,12 @@ function renderSystemTab(tab='status'){
     btn.textContent='SLOT '+String(info.slot).padStart(2,'0')+' — '+(info.corrupt?'破損した記録':info.occupied?'進行 '+info.storyStage+' / '+(info.savedAt?new Date(info.savedAt).toLocaleString('ja-JP'):'日時不明'):'空き');
     btn.disabled=!saving&&(!info.occupied||info.corrupt);btn.setAttribute('aria-label',btn.textContent);
     btn.onclick=()=>{selectedSaveSlot=info.slot;if(saving)saveGrowthData(info.slot);else void loadGrowthData(info.slot)};grid.append(btn);
+    if(saving&&info.occupied){const erase=document.createElement('button');erase.type='button';erase.className='saveSlotDelete';erase.textContent='SLOT '+String(info.slot).padStart(2,'0')+' を削除';erase.onclick=()=>{
+     if(window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave){notice('復帰中は削除できません。');return}
+     if(!window.confirm('スロット '+info.slot+' を削除しますか？ この操作は元に戻せません。'))return;
+     try{SaveSlots.remove(info.slot,{confirmed:true});renderSystemTab('save');const m=$('#saveMsg');if(m)m.textContent='スロット '+info.slot+' を削除しました。'}
+     catch(_){const m=$('#saveMsg');if(m)m.textContent='削除できませんでした。'}
+    };grid.append(erase)}
    }
    body.append(grid);
    const legacy=window.SaveSlots?.legacy();if(legacy){
