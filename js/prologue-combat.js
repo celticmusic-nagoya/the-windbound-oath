@@ -185,6 +185,7 @@
   }
   if(token!==generation)return;
   normalGuardA=normalGuardF=false;BattleActorState.endGuard(b);BattleActorState.endGuard(b,'fiona');
+  if(aahp<=0&&(normalFHP<=0||!activeAlly(b,'fiona'))&&window.GameOverPolicy?.gameOverEnabled({storyStage})){log(b,'パーティーは力尽きた……。');attackBattleBusy=true;normalActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setNormalCommandDrawer(false);window.GameOverScreen?.show({onContinue:()=>window.TitleScreen?.returnToTitle()??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
   if(aahp<=0||normalFHP<=0){log(b,'態勢を立て直した……。');aahp=Math.max(35,aahp);normalFHP=Math.max(32,normalFHP);BattleActorState.recover(b);BattleActorState.recover(b,'fiona')}
   BattleStatus.tick(b,statusStart);roundNumber++;normalActor='aidan';normalActs=[];attackBattleBusy=false;updateAttackBattle();
  }
