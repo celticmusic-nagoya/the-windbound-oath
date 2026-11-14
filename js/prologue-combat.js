@@ -281,6 +281,7 @@
   support();await situationalBanter('raider',token);if(token!==generation||rbBoss<=0)return;
   rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');BattleStatus.tick('raider',statusStart);
   if(rbHP<=0&&rbFHP<=0){log('raider','パーティーは力尽きた……。');rbBusy=true;rbActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setRaiderCommandDrawer(false);window.GameOverScreen?.show({onContinue:()=>window.TitleScreen?.returnToTitle()??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
+  if(rbHP<=0||rbFHP<=0){log('raider','態勢を立て直した……。');rbHP=Math.max(35,rbHP);rbFHP=Math.max(32,rbFHP);BattleActorState.recover('raider');BattleActorState.recover('raider','fiona')}
   rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;updateRaider();
  }
 
