@@ -3,7 +3,6 @@
  'use strict';
  const KEY='two_battle_checkpoint_v1';
  const VALID_KINDS=new Set(['normal','raider']);
- const slotPrefix='windbound_oath_slot_v1_';
  function store(){if(!root?.sessionStorage)throw Error('Session storage unavailable');return root.sessionStorage}
  function capture(kind,encounterId,raw){
   if(!VALID_KINDS.has(kind)||typeof encounterId!=='string'||!encounterId||typeof raw!=='string')return false;
@@ -16,7 +15,7 @@
   try{const raw=store().getItem(KEY);if(!raw)return {ok:false,reason:'missing'};
    const snapshot=JSON.parse(raw);if(!snapshot||snapshot.schema!==1||!VALID_KINDS.has(snapshot.kind)||typeof snapshot.encounterId!=='string'||!snapshot.encounterId||typeof snapshot.payload!=='string')return {ok:false,reason:'invalid'};
    const data=JSON.parse(snapshot.payload);
-   if(data.version!==30||!data.prologue||data.prologue.storyStage!==snapshot.storyStage)return {ok:false,reason:'invalid'};
+   if(!data||data.version!==30||!data.prologue||!Number.isInteger(data.prologue.storyStage)||data.prologue.storyStage<0||data.prologue.storyStage>15||data.prologue.storyStage!==snapshot.storyStage)return {ok:false,reason:'invalid'};
    return {ok:true,snapshot};
   }catch{return {ok:false,reason:'unavailable'}}
  }
