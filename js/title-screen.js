@@ -11,7 +11,7 @@
   const checked=SaveContinue.inspect(),slots=validSlots();
   // While the NEW GAME confirmation is open the two menu buttons are disabled, so pointer, Tab and Enter cannot reach them.
   for(const button of root.querySelectorAll('button'))button.disabled=loading||(Boolean(confirmBox||slotBox)&&!(confirmBox||slotBox).contains?.(button));
-  newButton.disabled=loading||Boolean(confirmBox);continueButton.disabled=loading||(!checked.ok&&!slots.length)||Boolean(confirmBox||slotBox);
+  newButton.disabled=loading||Boolean(confirmBox||slotBox);continueButton.disabled=loading||(!checked.ok&&!slots.length)||Boolean(confirmBox||slotBox);
   let hasSave=false;try{hasSave=Boolean(localStorage.getItem(SAVE_KEY));}catch{}
   message.textContent=SaveContinue.error||(slots.length&&!loading?'冒険の記録が '+slots.length+' スロットあります。':hasSave&&!checked.ok?checked.error:checked.ok&&!loading?'冒険の記録があります。':'');
   if(SaveContinue.phase==='READY')hide();
