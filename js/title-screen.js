@@ -84,8 +84,8 @@
  // This does not alter either the numbered slots or the legacy save key.
  function returnToTitle({openLoad=false}={}){
   try{
-   if(openLoad)sessionStorage.setItem('two_gameover_open_load','1');
-   else sessionStorage.removeItem('two_gameover_open_load');
+   try{if(openLoad)sessionStorage.setItem('two_gameover_open_load','1');
+   else sessionStorage.removeItem('two_gameover_open_load');}catch(_){}
    const target=new URL(window.location.href);
    target.searchParams.delete('title');target.searchParams.delete('legacyVillage');target.hash='';
    window.location.assign(target.href);return true;
