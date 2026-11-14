@@ -10,5 +10,5 @@ const {decideDefeat}=require('../js/gameover-policy.js');
 test('one fallen ally is not a party wipe',()=>{assert.equal(decideDefeat({progress:{storyStage:10},activeHp:[0,35]}),'CONTINUE');assert.equal(decideDefeat({progress:{storyStage:10},activeHp:[50,0]}),'CONTINUE')});
 test('pre-attack full wipe recovers, attack full wipe ends game',()=>{assert.equal(decideDefeat({progress:{storyStage:4},activeHp:[0,0]}),'RECOVER');assert.equal(decideDefeat({progress:{storyStage:5},activeHp:[0,0]}),'GAME_OVER')});
 test('solo combat requires only the active ally to fall',()=>{assert.equal(decideDefeat({progress:{storyStage:3},activeHp:[0]}),'RECOVER');assert.equal(decideDefeat({progress:{storyStage:9},activeHp:[0]}),'GAME_OVER')});
-test('Raider scripted rewind is explicitly preserved',()=>{assert.equal(decideDefeat({progress:{storyStage:12},activeHp:[0,0],raiderRewind:true}),'SCRIPTED_REWIND');assert.equal(decideDefeat({progress:{storyStage:12},activeHp:[0,0],raiderRewind:false}),'GAME_OVER')});
+test('Raider party wipe is GAME OVER without a rewind exception',()=>{assert.equal(decideDefeat({progress:{storyStage:12},activeHp:[0,0]}),'GAME_OVER')});
 test('invalid HP input cannot trigger game over',()=>{for(const activeHp of [[],[NaN,0],[-1,0],null])assert.equal(decideDefeat({progress:{storyStage:12},activeHp}),'INVALID')});
