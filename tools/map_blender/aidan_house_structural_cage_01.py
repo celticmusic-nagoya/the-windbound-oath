@@ -41,8 +41,9 @@ def build():
  for x in (-L,L):
   for y in (-W,W):
    box(c,"timber corner %s %s"%(x,y),x-.13,x+.13,y-.13,y+.13,0,H+.18,wood)
- for x in (-L,L):
-  box(c,"eave beam %s"%x,x-.13,x+.13,-W-.30,W+.30,H-.17,H+.10,wood)
+ # Eave beams run along the ridge (X), under the two long roof edges (Y).
+ for y in (-W,W):
+  box(c,"eave beam %s"%y,-L-.30,L+.30,y-.13,y+.13,H-.17,H+.10,wood)
  # Roof cage: two continuous pitched deck surfaces with deliberate overhang.
  oh=D["roof_overhang"];yr=W+oh
  for side in (-1,1):
