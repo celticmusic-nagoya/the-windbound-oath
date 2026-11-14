@@ -7,7 +7,7 @@
   if(!actions||typeof actions.onContinue!=='function'||typeof actions.onTitle!=='function')return false;
   active=true;previousFocus=document.activeElement;
   overlay=document.createElement('section');overlay.id='twoGameOver';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','twoGameOverHeading');
-  overlay.innerHTML='<div class="twoGameOverPanel"><p class="twoGameOverEyebrow">THE WINDBOUND OATH</p><h2 id="twoGameOverHeading">GAME OVER</h2><p>風の誓いは、まだ果たされていない。</p><div class="twoGameOverActions"><button type="button" data-action="continue">最後のセーブから再開</button><button type="button" data-action="title">タイトルへ戻る</button></div><p role="status" class="twoGameOverStatus"></p></div>';
+  overlay.innerHTML='<div class="twoGameOverPanel"><p class="twoGameOverEyebrow">THE WINDBOUND OATH</p><h2 id="twoGameOverHeading">GAME OVER</h2><p>風の誓いは、まだ果たされていない。</p><div class="twoGameOverActions"><button type="button" data-action="continue">タイトルでセーブを選んで再開</button><button type="button" data-action="title">タイトルへ戻る</button></div><p role="status" class="twoGameOverStatus"></p></div>';
   const status=overlay.querySelector('[role=status]');
   async function invoke(callback){
    overlay.querySelectorAll('button').forEach(b=>b.disabled=true);
