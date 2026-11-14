@@ -37,6 +37,7 @@
    message=document.createElement('p');message.className='title-message';message.setAttribute('role','status');root.append(backdrop,hero,foreground,title,menu,message);document.body.append(root);
   }
   refresh();newButton.focus?.({preventScroll:true});
+  try{if(sessionStorage.getItem('two_gameover_open_load')==='1'){sessionStorage.removeItem('two_gameover_open_load');if(!continueButton.disabled)openSlotSelector();}}catch(_){}
  }
  async function newGame(confirmed=false){
   if(!launch)return false;
@@ -81,8 +82,10 @@
  }
  // Full reload is required to discard battle timers and active gameplay state.
  // This does not alter either the numbered slots or the legacy save key.
- function returnToTitle(){
+ function returnToTitle({openLoad=false}={}){
   try{
+   if(openLoad)sessionStorage.setItem('two_gameover_open_load','1');
+   else sessionStorage.removeItem('two_gameover_open_load');
    const target=new URL(window.location.href);
    target.searchParams.delete('title');target.searchParams.delete('legacyVillage');target.hash='';
    window.location.assign(target.href);return true;
