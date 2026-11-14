@@ -1,0 +1,39 @@
+name: Morwen Developer Camera 01 QA
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/morwen-dev-camera-01
+    paths:
+      - '.github/workflows/morwen-dev-camera-01.yml'
+      - 'tools/blender/morwen_production/dev_camera/**'
+permissions:
+  contents: read
+jobs:
+  camera-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install verified Blender Python runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+      - name: Verify camera presets and asset non-interference
+        run: python tools/blender/morwen_production/dev_camera/test_dev_camera_01.py
+      - name: Upload QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-dev-camera-01-qa
+          path: tools/blender/morwen_production/dev_camera/DEV_CAMERA_01_QA.json
+          if-no-files-found: warn
+          retention-days: 7
