@@ -279,7 +279,7 @@
   if(token!==generation||rbBoss<=0)return;
   support();await situationalBanter('raider',token);if(token!==generation||rbBoss<=0)return;
   rbGuardA=rbGuardF=false;BattleActorState.endGuard('raider');BattleActorState.endGuard('raider','fiona');BattleStatus.tick('raider',statusStart);
-  if(rbHP<=0||rbFHP<=0){log('raider','パーティーが崩れた……。ルーの風が時間を巻き戻す。');BattleActorState.action('lou','blessing',{battle:'raider'});setTimeout(()=>{if(token===generation&&!(window.BattleLoading?BattleLoading.rematch():startRaiderBattle()))console.warn('[PrologueCombat] Raider rematch refused')},1200);return}
+  if(rbHP<=0&&rbFHP<=0){log('raider','パーティーは力尽きた……。');rbBusy=true;rbActs=[];generation++;window.BattlePresentation?.cancel();BattleTargetSelector.cancel();setRaiderCommandDrawer(false);window.GameOverScreen?.show({onContinue:()=>window.TitleScreen?.returnToTitle()??false,onTitle:()=>window.TitleScreen?.returnToTitle()??false});return}
   rbRound++;rbActor='aidan';rbActs=[];rbBusy=false;updateRaider();
  }
 
