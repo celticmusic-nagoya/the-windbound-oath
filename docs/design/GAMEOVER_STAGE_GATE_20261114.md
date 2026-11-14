@@ -1,6 +1,6 @@
 # GAMEOVER-01 — Stage-gated defeat handling (director-approved design, implementation pending)
 
-Status: DESIGN ONLY / NOT IMPLEMENTED / QA NOT RUN
+Status: PARTIAL RUNTIME INTEGRATION in Draft PR #314 / CI and Android QA NOT VERIFIED
 Date: 2026-11-14
 
 ## Director-approved behavior
@@ -40,3 +40,11 @@ G1 canon and scenario compatibility; G2 UI quality; G3 save/load and state integ
 
 ## Safe next implementation gate
 Implement a public, tested title-return/reload transaction first. Only then wire the game-over UI and normal/Raider defeat paths, with battle-generation cancellation, input locking, no-save fallback, and a pre-attack save checkpoint. No destructive save rewrite or speculative title API.
+
+## 2026-11-14 director correction and implementation
+- Director explicitly rejected Lou's time-rewind/rematch on Raider defeat. The Raider rematch API and rewind sequence have been removed from this branch.
+- A full Raider party wipe now shows GAME OVER; a single ally KO recovers and combat continues. Normal battles use full-party wipe with stage >=5; earlier stages retain recovery.
+- `js/gameover-policy.js`, `js/gameover-screen.js`, and `css/gameover-screen.css` are loaded in `index.html` on this branch.
+- Both GAME OVER actions currently navigate to title via full page reload, where a saved record may be selected. Numbered-slot title selection resides in separate Draft PR #315 and is NOT integrated here.
+- No-save recovery, actual browser battle tests, mobile tests, and cross-PR integration remain NOT RUN. GitHub Actions result for latest branch commit not verified.
+- Do not restore the Lou rewind exception without a new director instruction.
