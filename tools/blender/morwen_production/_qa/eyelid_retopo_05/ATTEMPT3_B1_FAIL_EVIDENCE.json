@@ -1,0 +1,444 @@
+{
+ "attempt": "MELR05-B1",
+ "status": "FAIL (technical)",
+ "note": "method 3 attempt 1: analytic lid keys rotating about the canthal (surface) axis + 3.5 mm lid wall; falloff range from the patch extent (30.7 mm) reached the mouth area. Superseded by B2 (eyeball-centre pivot, bounded range).",
+ "report_sha256": "26690cc105eb109d8f3939bcc36828d366d28f490b00eb4618ce6664f4d32942",
+ "lid_keys": {
+  "R": {
+   "close_keys": [
+    "target_1",
+    "target_2",
+    "target_3",
+    "target_4",
+    "target_5",
+    "target_12",
+    "target_13",
+    "target_14",
+    "target_16",
+    "target_17",
+    "target_18",
+    "target_20",
+    "target_21",
+    "target_22",
+    "target_25"
+   ],
+   "D1_mm": 30.692,
+   "D2_mm": 36.692,
+   "vertices": 642,
+   "theta_full_deg_max": 166.445
+  },
+  "L": {
+   "close_keys": [
+    "target_1",
+    "target_2",
+    "target_3",
+    "target_4",
+    "target_5",
+    "target_12",
+    "target_13",
+    "target_15",
+    "target_16",
+    "target_17",
+    "target_19",
+    "target_20",
+    "target_21",
+    "target_22",
+    "target_25"
+   ],
+   "D1_mm": 30.696,
+   "D2_mm": 36.696,
+   "vertices": 642,
+   "theta_full_deg_max": 166.445
+  }
+ },
+ "technical_checks": {
+  "canthus_error_mm": {
+   "R": {
+    "inner": 0.0005,
+    "outer": 0.0006
+   },
+   "L": {
+    "inner": 0.0005,
+    "outer": 0.0006
+   }
+  },
+  "canthus_ok": true,
+  "opening_within_1px": true,
+  "ipd_within_1px": true,
+  "corner_no_flip_required_states": false,
+  "patch_relative_required_states_ok": false,
+  "line_penetration_zero_all_states": false,
+  "eyes_hidden_when_closed": false,
+  "socket_show_through_zero": false,
+  "eye_surface_protrusion_neutral": 0,
+  "nose_locked_geometry_unchanged": true,
+  "body_mesh_unchanged": true,
+  "mouth_unchanged_vs_316": false,
+  "eye_material_unchanged_vs_316": true,
+  "face_body_seam_vertices": 44,
+  "face_body_seam_max_gap_m": 6e-07,
+  "winding_conflicts": 0,
+  "uv_flipped_faces": 0,
+  "uv_out_of_range_loops": 0,
+  "non_quad_patch_faces": 0,
+  "weights_sum_min": 1.0,
+  "weights_sum_max": 1.0,
+  "shape_keys_preserved": true
+ },
+ "canthus_corner_metrics": {
+  "R": {
+   "neutral": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.33
+   },
+   "blink": {
+    "faces": 28,
+    "flipped_vs_basis": 11,
+    "inner_dihedral_deg_max": 171.632
+   },
+   "blink_l": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.33
+   },
+   "blink_r": {
+    "faces": 28,
+    "flipped_vs_basis": 11,
+    "inner_dihedral_deg_max": 171.632
+   },
+   "joy": {
+    "faces": 28,
+    "flipped_vs_basis": 9,
+    "inner_dihedral_deg_max": 157.157
+   },
+   "surprised": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 82.132
+   }
+  },
+  "L": {
+   "neutral": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.424
+   },
+   "blink": {
+    "faces": 28,
+    "flipped_vs_basis": 11,
+    "inner_dihedral_deg_max": 171.868
+   },
+   "blink_l": {
+    "faces": 28,
+    "flipped_vs_basis": 11,
+    "inner_dihedral_deg_max": 171.868
+   },
+   "blink_r": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 44.424
+   },
+   "joy": {
+    "faces": 28,
+    "flipped_vs_basis": 9,
+    "inner_dihedral_deg_max": 157.975
+   },
+   "surprised": {
+    "faces": 28,
+    "flipped_vs_basis": 0,
+    "inner_dihedral_deg_max": 82.033
+   }
+  }
+ },
+ "candidate_eye_visible_closed": {
+  "blink": {
+   "R": 1,
+   "L": 1
+  },
+  "blink_l": {
+   "R": 200,
+   "L": 1
+  },
+  "blink_r": {
+   "R": 1,
+   "L": 200
+  },
+  "joy": {
+   "R": 0,
+   "L": 0
+  }
+ },
+ "candidate_line_penetration": {
+  "neutral": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "blink": {
+   "eyeline": [
+    127,
+    0.87
+   ],
+   "eyelash": [
+    144,
+    2.758
+   ]
+  },
+  "blink_l": {
+   "eyeline": [
+    59,
+    0.87
+   ],
+   "eyelash": [
+    72,
+    2.758
+   ]
+  },
+  "blink_r": {
+   "eyeline": [
+    68,
+    0.784
+   ],
+   "eyelash": [
+    72,
+    2.754
+   ]
+  },
+  "joy": {
+   "eyeline": [
+    457,
+    2.253
+   ],
+   "eyelash": [
+    96,
+    1.656
+   ]
+  },
+  "angry": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "surprised": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "fun": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "sorrow": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "a": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "i": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "u": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "e": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  },
+  "o": {
+   "eyeline": [
+    0,
+    0.0
+   ],
+   "eyelash": [
+    0,
+    0.0
+   ]
+  }
+ },
+ "socket_show_through_candidate": {
+  "neutral": {
+   "R": {
+    "q3L": 1,
+    "q3L_up30": 11
+   },
+   "L": {
+    "q3R": 1,
+    "q3R_up30": 11
+   }
+  },
+  "blink": {
+   "R": {
+    "q3L": 2,
+    "q3R": 2,
+    "down30": 6,
+    "q3L_up30": 3
+   },
+   "L": {
+    "front": 1,
+    "q3L": 1,
+    "q3R": 3,
+    "down30": 7,
+    "q3R_up30": 3
+   }
+  },
+  "blink_l": {
+   "R": {
+    "q3L": 1,
+    "q3L_up30": 11
+   },
+   "L": {
+    "front": 1,
+    "q3L": 1,
+    "q3R": 3,
+    "down30": 7,
+    "q3R_up30": 3
+   }
+  },
+  "blink_r": {
+   "R": {
+    "q3L": 2,
+    "q3R": 2,
+    "down30": 6,
+    "q3L_up30": 3
+   },
+   "L": {
+    "q3R": 1,
+    "q3R_up30": 11
+   }
+  },
+  "joy": {
+   "R": {
+    "front": 1,
+    "q3L": 2,
+    "q3R": 1,
+    "up30": 2,
+    "down30": 1,
+    "q3L_up30": 5,
+    "q3R_up30": 3
+   },
+   "L": {
+    "q3L": 1,
+    "q3R": 2,
+    "up30": 2,
+    "q3L_up30": 1,
+    "q3R_up30": 6
+   }
+  },
+  "surprised": {
+   "R": {
+    "q3L": 5,
+    "down30": 4,
+    "q3L_up30": 17
+   },
+   "L": {
+    "q3R": 5,
+    "down30": 4,
+    "q3R_up30": 16
+   }
+  },
+  "angry": {
+   "R": {
+    "up30": 2,
+    "q3L_up30": 8,
+    "q3R_up30": 2
+   },
+   "L": {
+    "up30": 3,
+    "q3L_up30": 2,
+    "q3R_up30": 8
+   }
+  },
+  "sorrow": {
+   "R": {
+    "front": 2,
+    "q3L": 3,
+    "q3R": 3,
+    "up30": 5,
+    "down30": 1,
+    "q3L_up30": 2,
+    "q3R_up30": 6
+   },
+   "L": {
+    "front": 3,
+    "q3L": 3,
+    "q3R": 3,
+    "up30": 5,
+    "down30": 1,
+    "q3L_up30": 5,
+    "q3R_up30": 1
+   }
+  },
+  "fun": {
+   "R": {
+    "q3L": 8,
+    "q3R": 3,
+    "up30": 8,
+    "q3L_up30": 11,
+    "q3R_up30": 3
+   },
+   "L": {
+    "q3L": 3,
+    "q3R": 8,
+    "up30": 8,
+    "q3L_up30": 3,
+    "q3R_up30": 11
+   }
+  }
+ }
+}

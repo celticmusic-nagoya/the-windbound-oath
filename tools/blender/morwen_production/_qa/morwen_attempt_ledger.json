@@ -11,7 +11,8 @@
     "tools/blender/morwen_production/_qa/MORWEN_HEAD_SCULPT_01_REVIEW.md",
     "tools/blender/morwen_production/head_landmark/HEAD_LANDMARK_02_REPORT.md",
     "tools/blender/morwen_production/nose_retopo/NOSE_RETOPO_03_REPORT.md",
-    "tools/blender/morwen_production/eyes_lids_mouth/ELM_04_REPORT.md"
+    "tools/blender/morwen_production/eyes_lids_mouth/ELM_04_REPORT.md",
+    "tools/blender/morwen_production/eyelid_retopo/EYELID_05_REPORT.md"
   ],
   "known_gate_status": {
     "G1": "BLOCKED",
@@ -249,7 +250,79 @@
         "G4": "NOT_RUN"
       },
       "next_action": "Independent art QA of the eye surface, colours and card rebind; socket/lid shape rework with a new method; 16 unreviewed keys stay BLOCKED."
+    },
+    {
+      "attempt_id": "MELR05-A1",
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+key-transfer-from-vroid-lid",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Canthus-anchored quad strips (outer row = existing boundary, 3:1 all-quad reduction, no zipper) fitted to the Layer 0 lid margins, depth from skin hits / rim interpolation, keys reproducing the old closed lid by a closure factor, give a clean lid under Blink/Joy/Surprised.",
+      "evidence": "Static fit (all attempts): canthi 0.0005 mm from the Layer 0 targets, opening 22.0 x 10.81 px vs 22.0 x 10.4 px target (+/-1 px), IPD 0.9917U vs 0.9916U, 0 winding / UV flips, quads only; nose, Body, keys, eye material protected. FAIL: Joy 4 corner faces flipped (dihedral 143 deg), Blink eye visible 1 sample, rest dihedral 58.6 vs 43.3 (#316), socket show-through 11-21 rays at 45 deg (inner-canthus depth spike). _qa/eyelid_retopo_05/ATTEMPT1_FAIL_EVIDENCE.json",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Same family once more: depth by (u,t) correspondence, keys as fraction of the old gap applied to the new gap."
+    },
+    {
+      "attempt_id": "MELR05-A2",
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+key-transfer-from-vroid-lid",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Depth taken from the old lid at the same (u,t) and lid key motion re-expressed as a fraction of the gap remove the spike and the corner flips.",
+      "evidence": "Static fit (all attempts): canthi 0.0005 mm from the Layer 0 targets, opening 22.0 x 10.81 px vs 22.0 x 10.4 px target (+/-1 px), IPD 0.9917U vs 0.9916U, 0 winding / UV flips, quads only; nose, Body, keys, eye material protected. Rest dihedral fixed (44.3). FAIL: Blink 10 corner faces flipped (13 in the lid region vs 2 on #316), Joy 9, eye visible 1-2 samples on Blink, socket show-through up to 28 rays. Root cause: the untouched surrounding skin keeps VRoid blink motion built around the old (6 mm lower) canthi. _qa/eyelid_retopo_05/ATTEMPT2_FAIL_EVIDENCE.json",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "STOP key transfer (2 failures). Switch to analytic lid keys (rotation) + lid-thickness wall."
+    },
+    {
+      "attempt_id": "MELR05-B1",
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+analytic-eyeball-pivot-lid-keys+lid-wall",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Lid-moving keys re-authored as a rotation about the canthal axis (canthi fixed) with smooth falloff replacing the inherited motion, plus a 3.5 mm lid wall against show-through.",
+      "evidence": "FAIL: pivot on the surface line gave 166 deg sweeps -> 62 folded faces on Blink, cards buried up to 2.76 mm, falloff range from the patch extent (30.7 mm) changed the mouth area. _qa/eyelid_retopo_05/ATTEMPT3_B1_FAIL_EVIDENCE.json",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "Same family once more: pivot at the eyeball centre (12 mm back), bounded range 16/22 mm, mouth guard."
+    },
+    {
+      "attempt_id": "MELR05-B2",
+      "task_id": "MORWEN-EYELID-RETOPO-05",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "canthus-anchored-quad-strip+analytic-eyeball-pivot-lid-keys+lid-wall",
+      "input_sha256": "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "hypothesis": "Rotation about an eyeball-centre axis with a bounded falloff closes the new opening without folds or leaks.",
+      "evidence": "Static fit (all attempts): canthi 0.0005 mm from the Layer 0 targets, opening 22.0 x 10.81 px vs 22.0 x 10.4 px target (+/-1 px), IPD 0.9917U vs 0.9916U, 0 winding / UV flips, quads only; nose, Body, keys, eye material protected. Best state (delivered as evidence, EYELID_05_REPORT.json sha256 661a5731b23972422c5fb416e4bc7d3d141199074e891a2710eddf5d1c5a7287): lid-region folds Blink 1 / Joy 1 (#316: 2 / 4), card penetration 0, mouth unchanged. FAIL: 1 corner face flipped on Blink/Joy, Blink edge ratio p99 2.48 (limit 1.63), Joy dihedral 160.8 (limit 154.4), eye visible 3 samples on Blink/Joy, socket show-through 1-11 rays; visual: V-shaped faceted closed lid, gap at the outer corner, lash cards lifting at 45 deg. Claude self-review only.",
+      "result": "FAIL",
+      "failure_category": "structure",
+      "gates": {
+        "G1": "PASS",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "next_action": "STOP (2 failures of this family). Next method: hand-authored corrective lid shape keys / lid bone rig on the new strips, with an art decision on the closed-lid line. Static strip topology may be reused."
     }
   ],
-  "last_task": "MORWEN-EYES-LIDS-MOUTH-04"
+  "last_task": "MORWEN-EYELID-RETOPO-05"
 }

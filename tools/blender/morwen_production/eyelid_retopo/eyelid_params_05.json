@@ -1,0 +1,91 @@
+{
+ "schema": "MORWEN-EYELID-RETOPO-05-PARAMS",
+ "task_id": "MORWEN-EYELID-RETOPO-05",
+ "base_candidate": "PR #316 (MORWEN-EYES-LIDS-MOUTH-04): locked #312 nose @0.5, procedural violet eyes, card rebind; lids/mouth on VRoid topology",
+ "method_id": "canthus-anchored-curve-constrained-quad-strip",
+ "method_family": "CANTHUS_ANCHORED_CURVE_CONSTRAINED_QUAD_RETOPO",
+ "method_difference_from_stopped_family": "LOCAL_RETOPO_ANNULUS_RING_PATCH (stopped after 2 failures) sampled rings by polar angle around an ellipse centre and zipped them to the rim and the outer boundary; the corner folds came from the angle sampling at the corners and the zippers. Here the two canthi are fixed landmarks, each lid is an independent structured quad strip parametrised by arc length from canthus to canthus, the outer row IS the existing boundary (no zipper) and the strips share only the canthus column.",
+ "region": {
+  "source": "ELM-04 lid ellipses (elm_params_04.json lids: scale 1.38 / 1.85 / 1.75, notch 0.75) on the VRoid landmarks",
+  "note": "the region is only used to choose which original skin faces are replaced; its outer loop stays untouched"
+ },
+ "rows_t": [
+  0.0,
+  0.2,
+  0.42,
+  0.68,
+  1.0
+ ],
+ "rows_note": "t = 0 lid margin (new opening), 1 = existing outer boundary; three loops between them",
+ "min_margin_segments": 10,
+ "reduction_note": "a strip whose outer arc has fewer than 10 segments gets 3x margin columns and an all-quad 3:1 transition between t=0.42 and t=0.68 (no zipper, no triangles, outer vertices untouched)",
+ "depth": {
+  "rule": "attempt 2: every new vertex takes the depth (y) of the old lid skin at the corresponding (u, t) point (margin = old rim depth). Attempt 1 mixed front-ray skin hits with rim depths -> inner-canthus spike and lower-lid shelf (58.6 deg rest dihedral, socket show-through 11-21 rays at 45 deg)."
+ },
+ "closure": {
+  "u_range": [
+   0.12,
+   0.88
+  ],
+  "rule": "attempt 2: per column the old upper (lower) margin key offset is split into alpha x old gap (upper->lower) + the rest; the new margin offset = alpha x NEW gap + the rest (alpha from u clamped to u_range; canthus columns keep the old canthus motion). Interior rows: old offset at (u, t) + smoothstep(1 - t) x (new - old margin offset). Attempt 1 (reproduce the old closed lid, c_k) flipped 4 corner faces on Joy and left a 1-sample gap on Blink.",
+  "method3": "keys whose mid-column |alpha_U|+|alpha_L| > key_alpha_threshold are re-authored around the eye: rotation about the canthal axis (through both new canthi) by alpha x the new upper-lower margin angle, falloff F = 1 - smoothstep(0, D2, distance to the margin); old motion fully replaced within D1 (= the lid patch extent) and blended back between D1 and D2",
+  "key_alpha_threshold": 0.1,
+  "closed_sum": 1.03,
+  "blend_width_m": 0.006,
+  "skip_materials": [
+   "Brow",
+   "FaceMouth"
+  ],
+  "pivot_back_m": 0.012,
+  "D1_m": 0.016,
+  "mouth_guard_m": 0.02,
+  "attempt_B2": "pivot axis = canthal axis moved 12 mm back (eyeball centre); old motion replaced within 16 mm of the margin, blended back until 22 mm; nothing below (lower margin - 20 mm) is touched"
+ },
+ "cards": {
+  "materials": [
+   "Eyeline",
+   "Eyelash",
+   "EyeExtra"
+  ],
+  "rule": "card vertex moves by the rest margin displacement at its nearest old-margin parameter; per key it also gets the margin key-motion difference (new - old) at that parameter",
+  "rebind_iterations": 6
+ },
+ "eyes": {
+  "keep_material_and_colours_from": "elm_params_04.json eyes (PR #316)",
+  "surface_radius_m": 0.07,
+  "pupil": "Layer 0 target (EYE_TARGETS_05) - placed exactly, not by fractions of the VRoid opening"
+ },
+ "acceptance_technical": {
+  "canthus_error_max_mm": 0.3,
+  "opening_tolerance_px": 1.0,
+  "corner_radius_m": 0.004,
+  "states_required": [
+   "neutral",
+   "blink",
+   "blink_l",
+   "blink_r",
+   "joy",
+   "surprised"
+  ],
+  "relative_edge_ratio_margin": 1.1,
+  "relative_dihedral_margin_deg": 5.0
+ },
+ "method_history": {
+  "attempt_1_2_deformation_family": "KEY_TRANSFER_FROM_VROID_LID_UT_CORRESPONDENCE (failed twice: corner folds on Blink/Joy, eye visible on Blink)",
+  "attempt_3_deformation_family": "ANALYTIC_CANTHAL_AXIS_LID_ROTATION_KEYS + LID_THICKNESS_WALL"
+ },
+ "wall": {
+  "depth_m": 0.0035,
+  "uv_extrapolation": 0.15,
+  "rule": "lid thickness: one quad row from each margin vertex 3.5 mm straight back (-Y), same weights and key motion as the margin vertex; UV extrapolated beyond the margin so the winding stays consistent"
+ },
+ "status": {
+  "result": "TECHNICAL_FAIL - NOT ADOPTED",
+  "static_retopology": "canthus-anchored quad strips: canthi exact (0.0005 mm), opening and IPD within 1 px of Layer 0, 0 winding/UV issues, all quads",
+  "deformation_families": {
+   "KEY_TRANSFER_FROM_VROID_LID_UT_CORRESPONDENCE": "STOPPED_AFTER_2_FAILURES (A1, A2)",
+   "ANALYTIC_EYEBALL_PIVOT_LID_KEYS_WITH_LID_WALL": "STOPPED_AFTER_2_FAILURES (B1, B2) - B2 is the delivered evidence state"
+  },
+  "next_method": "hand-authored corrective lid shape keys (Blender sculpt on the new strips, artist-reviewed) or a lid bone rig (upper/lower lid bones around the eyeball centre) replacing VRoid blink/joy keys inside the periocular area; requires an art decision on the closed-lid line"
+ }
+}
