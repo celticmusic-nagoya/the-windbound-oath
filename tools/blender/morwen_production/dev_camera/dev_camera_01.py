@@ -6,6 +6,7 @@ materials, armatures, shape keys, or the scene's production camera.
 Blender 4.x/5.x. Save a copy of the project for interactive inspection.
 """
 import bpy
+import math
 from mathutils import Vector
 
 COLLECTION = "DEV_CAMERA_01"
@@ -75,6 +76,27 @@ def install(preset="front", focus="face", distance=0.65):
                     space.camera = cam
     # Production scene camera is never reassigned.
     assert scene.camera == original_camera
+    return cam
+
+
+def orbit(azimuth_deg=0.0, elevation_deg=0.0, distance=0.65, focus="face"):
+    """Position the developer camera at arbitrary orbit angles; no scene-camera swap."""
+    if not all(math.isfinite(float(v)) for v in (azimuth_deg, elevation_deg, distance)):
+        raise ValueError("Orbit parameters must be finite")
+    if not -89 <= elevation_deg <= 89:
+        raise ValueError("Elevation must be within [-89, 89] degrees")
+    if not 0.08 <= distance <= 10:
+        raise ValueError("Distance outside safe bounds")
+    cam = install(preset="front", focus=focus, distance=distance)
+    az = math.radians(azimuth_deg)
+    el = math.radians(elevation_deg)
+    direction = Vector((math.sin(az)*math.cos(el), -math.cos(az)*math.cos(el), math.sin(el)))
+    target = _target_point(focus)
+    cam.location = target + direction * distance
+    cam.rotation_euler = (target-cam.location).to_track_quat("-Z", "Y").to_euler()
+    cam["preset"] = "free_orbit"
+    cam["azimuth_deg"] = float(azimuth_deg)
+    cam["elevation_deg"] = float(elevation_deg)
     return cam
 
 
