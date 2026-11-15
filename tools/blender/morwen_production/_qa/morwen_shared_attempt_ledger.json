@@ -200,6 +200,73 @@
         "G4": "NOT_RUN"
       },
       "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-07",
+      "attempt_id": "M07-HARMONIC-01",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "dirichlet-harmonic-independent-upper-lower-modifier",
+      "method_family": "DIRICHLET_HARMONIC_INDEPENDENT_LID_FIELDS",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:e373361904443570609797a0daf099f212f22a88027a9b0c4a84cb805a15bdd2"
+      ],
+      "output_sha256": [
+        "sha256:f8b3a252e2e0df70520bf4e1061df818ccb496f34a6b20ea7cfaa968db5f2843"
+      ],
+      "canonical_references": [
+        "Layer0 front SHA b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed; verified",
+        "v5.61 binary unavailable; full canon BLOCKED"
+      ],
+      "visual_defects": [
+        "Blink 38 flipped faces; Blink+Joy 68 flipped faces"
+      ],
+      "root_cause": "structure",
+      "next_action": "Fix cancellation boundary condition once",
+      "stop_reason": "",
+      "gates": {
+        "G1": "BLOCKED",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-07",
+      "attempt_id": "M07-HARMONIC-02",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "dirichlet-harmonic-independent-upper-lower-modifier",
+      "method_family": "DIRICHLET_HARMONIC_INDEPENDENT_LID_FIELDS",
+      "source_sha256": "sha256:1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b",
+      "input_sha256": [
+        "sha256:e373361904443570609797a0daf099f212f22a88027a9b0c4a84cb805a15bdd2"
+      ],
+      "output_sha256": [
+        "sha256:64f436a0745863b6c541b94708ac9181b7abed3c21a1ca45c5640a0faeb5bd49"
+      ],
+      "canonical_references": [
+        "Layer0 front SHA b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed; verified",
+        "v5.61 binary unavailable; full canon BLOCKED"
+      ],
+      "visual_defects": [
+        "Half Blink: 2 flipped faces",
+        "Full Blink: 124 proper noncoplanar triangle crossing pairs",
+        "Wink: 850 backface first-hit rays across raw per-eye view grids",
+        "Blink+Joy: 2 backface first-hit rays"
+      ],
+      "root_cause": "structure",
+      "next_action": "Switch to ARTIST_MULTI_STATE_CONTACT_CAGE; authored intermediate states and contact topology required; authoring setup delivered",
+      "stop_reason": "STOP after two failures: endpoint displacement fields do not constrain intermediate Jacobians or contact-compatible seam/wall topology; no further parameter variants",
+      "gates": {
+        "G1": "BLOCKED",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
     }
   ]
 }
