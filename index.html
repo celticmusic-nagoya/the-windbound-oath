@@ -1165,6 +1165,9 @@ function inspectHiddenCheckpointField(){
     document.body.classList.contains('battleMode')||rildeReturnActive)return {ok:false,reason:'field-not-ready'};
  const hazard=typeof m.checkpointHazards==='function'?m.checkpointHazards():null;
  if(!hazard||hazard.clear!==true)return {ok:false,reason:hazard?.reason||'hazards-unverified'};
+ // Recoverability is a separate gate: a clear tile alone cannot authorize SLOT 21.
+ const recovery=typeof m.checkpointRecovery==='function'?m.checkpointRecovery():null;
+ if(!recovery||recovery.canEscape!==true||recovery.canRecover!==true)return {ok:false,reason:recovery?.reason||'recovery-unverified'};
  const snapshot=m.snapshot();
  if(!snapshot||!snapshot.map||snapshot.map!==m.mapId||
     !Number.isFinite(snapshot.x)||!Number.isFinite(snapshot.y))return {ok:false,reason:'invalid-position'};
