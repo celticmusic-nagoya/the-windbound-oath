@@ -29,7 +29,7 @@ m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value=.96
 # Previous backing face y=-0.065 left a 150 mm cavity and dark joints.
 mortar_face=-.20
 cube("continuous lime mortar backing",(0,-.08,.87),(2.1,.24,1.74),m)
-cube("right-hand mortar return",(1.105,.20,.87),(.16,.50,1.74),m)
+cube("right-hand mortar return",(1.105,.38,.87),(.16,.90,1.74),m)
 stones=[]
 course_ends=[]
 for row in range(6):
@@ -70,6 +70,31 @@ for row in range(6):
     loc,dims,
     stone_material(sid,low_course=row<2),col,seed=SEED+sid,cuts=5)
  quoins.append(stone)
+# Side elevation: real courses beyond the quoin, not a flat dark return.
+# Nominal side stone face x=1.20; mortar face x=1.185 (15 mm recess).
+side_stones=[]
+side_course_starts=[]
+for row in range(6):
+ z=.145+row*.285
+ # Quoin extent on return: even .320 m; odd .210 m.
+ # Begin the next stone 12 mm past the corresponding quoin.
+ start=(.332 if row%2==0 else .222)
+ side_course_starts.append(start)
+ y=start
+ while y<.80-.01:
+  length=min(.80-y,rng.uniform(.24,.38))
+  if .80-(y+length)<.12:length=.80-y
+  sid=2000+len(side_stones)
+  obj=create_dressed_stone_v2("return wall stone %03d"%len(side_stones),
+      (1.105,y+length/2,z+rng.uniform(-.004,.004)),
+      (.19,length-.012,.265),stone_material(sid,low_course=row<2),col,
+      seed=SEED+sid,cuts=5,chip=.055,relief=.025)
+  side_stones.append(obj)
+  y+=length
+assert len(side_stones)>=6
+assert all(abs(side_course_starts[r]-(.332 if r%2==0 else .222))<1e-7 for r in range(6))
+# Side mortar front x=1.185, side stone face x=1.200.
+assert abs((1.105+.16/2)-1.185)<1e-7
 # Alternating corner headers and stretchers form a candidate corner bond.
 # Physical contact and mesh-level intersections still require render review.
 # Beam is physically seated across the wall, not floating above it.
@@ -115,7 +140,7 @@ joint_recess=mortar_face-nominal_stone_face
 assert .010<=joint_recess<=.020,("mortar joint depth",joint_recess)
 assert abs((-.08-.24/2)-mortar_face)<1e-8
 manifest={"status":"CANDIDATE_NOT_ART_APPROVED","stones":len(stones),
- "return_quoins":len(quoins),"mortar_backing":True,"timber_seated":True,
+ "return_quoins":len(quoins),"side_stones":len(side_stones),"mortar_backing":True,"timber_seated":True,
  "seed":SEED,"mortar_joint_recess_m":joint_recess,
  "corner_interlocking":"ALTERNATING_HEADER_STRETCHER_CANDIDATE", "blender":bpy.app.version_string,
  "image":"wall_section.png","sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
