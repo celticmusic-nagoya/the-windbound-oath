@@ -1,0 +1,216 @@
+{
+  "status": "DISABLED_FAILED_CANDIDATE",
+  "attempt_id": "M08-PSLG-02",
+  "method_family": "CONSTRAINED_PSLG_CONTACT_SHELL_050",
+  "source_sha256": "a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7",
+  "candidate_input_sha256": "db597ea895ceb719bf901ac2f000f253ed78013896f34701850d27bf3e1e4f7c",
+  "blender": "5.3.0",
+  "neutral_to_half_animation": "NOT_RUN_STATIC_HALF_TARGET",
+  "sides": {
+    "R": {
+      "basis_pose": "EXPLICIT_STATIC_HALF_050_NOT_NEUTRAL",
+      "vertices": 672,
+      "polygons": 1178,
+      "triangles": 1344,
+      "euler_characteristic": 0,
+      "boundary_or_nonmanifold_edges": 0,
+      "inconsistent_edge_directions": 0,
+      "edge_count": 1850,
+      "signed_volume_m3": 9.155275300263466e-07,
+      "degenerate_triangles": 0,
+      "flipped_triangles_vs_basis": 0,
+      "front_nonanterior_triangles": 0,
+      "rear_nonposterior_triangles": 0,
+      "front_uv_orientation_disagreements": 0,
+      "degenerate_uv_triangles": 0,
+      "thickness_anterior_m": {
+        "min": 0.0005999952554702759,
+        "max": 0.0006000027060508728
+      },
+      "minimum_projected_normal_thickness_m": 1.736141323957457e-05,
+      "self_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "attachment_surface_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "gap_ratio_min_max": [
+        0.49999999999998496,
+        0.5000000000000638
+      ],
+      "fixed_canthus_max_error_m": 0.0
+    },
+    "L": {
+      "basis_pose": "EXPLICIT_STATIC_HALF_050_NOT_NEUTRAL",
+      "vertices": 674,
+      "polygons": 1182,
+      "triangles": 1348,
+      "euler_characteristic": 0,
+      "boundary_or_nonmanifold_edges": 0,
+      "inconsistent_edge_directions": 0,
+      "edge_count": 1856,
+      "signed_volume_m3": 9.155291404586007e-07,
+      "degenerate_triangles": 0,
+      "flipped_triangles_vs_basis": 0,
+      "front_nonanterior_triangles": 0,
+      "rear_nonposterior_triangles": 0,
+      "front_uv_orientation_disagreements": 0,
+      "degenerate_uv_triangles": 0,
+      "thickness_anterior_m": {
+        "min": 0.0005999952554702759,
+        "max": 0.0006000027060508728
+      },
+      "minimum_projected_normal_thickness_m": 2.289471612018472e-05,
+      "self_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "attachment_surface_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "gap_ratio_min_max": [
+        0.4999999999999572,
+        0.5000000000000427
+      ],
+      "fixed_canthus_max_error_m": 0.0
+    }
+  },
+  "renders": [
+    {
+      "file": "half_050_front.png",
+      "sha256": "b61d526a4b3495c7b8d3c11849b39576a9bb5e2f8f9e573853044ea4047e36f7"
+    },
+    {
+      "file": "half_050_q3L.png",
+      "sha256": "f09742374bada29094038e2e82b605cd30346a7da300e97069ce6982be5d46e4"
+    },
+    {
+      "file": "half_050_q3R.png",
+      "sha256": "a67995e6c79f424e1ea18745bf9cff048d006d88449dbd08d17ce82fa601874a"
+    },
+    {
+      "file": "half_050_left.png",
+      "sha256": "4860be7182a08ed83f7bf86b7d724fcb2d7a287821697bf559e9e1282eaf10c1"
+    },
+    {
+      "file": "half_050_right.png",
+      "sha256": "57184b94236fe9505390e886da07e78134b4c045c298435df4b7c8a07ae1c89e"
+    }
+  ],
+  "G1": "PARTIAL_FULL_CANON_BLOCKED",
+  "G2": "NOT_RUN",
+  "G3": "FAIL",
+  "G4": "NOT_RUN",
+  "socket_rays": {
+    "R": {
+      "front": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 248,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3L": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 193,
+        "background_misses": 90,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3R": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 245,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "left": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 4,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "right": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 5,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      }
+    },
+    "L": {
+      "front": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 248,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3L": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 244,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3R": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 193,
+        "background_misses": 84,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "left": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 4,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "right": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 5,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      }
+    }
+  },
+  "failures": [
+    "R: 45 opaque card samples inside cage",
+    "L: 23 opaque card samples inside cage"
+  ],
+  "protected_fingerprints_unchanged": true,
+  "protected_key_order_unchanged": true,
+  "protected_face_key_count": 58,
+  "input_file_unchanged": true,
+  "delivery_verification": {
+    "source_sha256": "a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7",
+    "candidate_sha256": "9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4",
+    "protected_face_signature": "1a796bb8f22473f0f9a4d274a8b3719f0bd5a63aa8627878889cb86ed6d335c6",
+    "protected_face_data_unchanged": true,
+    "protected_face_key_count": 58,
+    "cage_eye_intersections": {
+      "R": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "L": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      }
+    },
+    "opaque_card_sample_count": 2753,
+    "unclassified_card_triangles": 0,
+    "opaque_card_samples_inside_cage": {
+      "R": 45,
+      "L": 23
+    },
+    "sampling_note": "15 barycentric samples per card triangle, alpha>=0.5; finite sampling, not continuous collision proof"
+  },
+  "continuous_card_collision": "NOT_RUN_FINITE_ALPHA_SAMPLES_ONLY"
+}
