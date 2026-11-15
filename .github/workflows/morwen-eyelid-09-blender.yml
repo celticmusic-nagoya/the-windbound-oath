@@ -1,0 +1,23 @@
+name: Morwen EYELID-09 Blender synthetic smoke
+on:
+  push:
+    branches:
+      - feature/morwen-eyelid-09-lash-architecture
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/**'
+      - '.github/workflows/morwen-eyelid-09-blender.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blender-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Run Python unit tests
+        run: python -m unittest discover -s tools/blender/morwen_production/eyelid_lash -p 'test_*.py' -v
+      - name: Blender synthetic evaluated-mesh smoke
+        run: blender -b --factory-startup --python tools/blender/morwen_production/eyelid_lash/blender_smoke_09.py
