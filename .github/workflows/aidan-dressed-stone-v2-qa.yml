@@ -1,0 +1,151 @@
+name: Aidan Dressed Stone V2 QA
+on:
+  push:
+    branches: [feature/aidan-architecture-v3-01]
+    paths:
+      - 'tools/map_blender/aidan_dressed_stone_v2.py'
+      - 'tools/map_blender/aidan_dressed_stone_v2_qa.py'
+      - 'tools/map_blender/aidan_material_variation_v1.py'
+      - 'tools/map_blender/aidan_material_variation_qa.py'
+      - 'tools/map_blender/aidan_wall_section_v1.py'
+      - 'tools/map_blender/aidan_corner_bond_v2.py'
+      - '.github/workflows/aidan-dressed-stone-v2-qa.yml'
+  pull_request:
+    branches: [feature/aidan-roof-geometry-01]
+    paths:
+      - 'tools/map_blender/aidan_dressed_stone_v2.py'
+      - 'tools/map_blender/aidan_dressed_stone_v2_qa.py'
+      - 'tools/map_blender/aidan_material_variation_v1.py'
+      - 'tools/map_blender/aidan_material_variation_qa.py'
+      - 'tools/map_blender/aidan_wall_section_v1.py'
+      - 'tools/map_blender/aidan_corner_bond_v2.py'
+      - '.github/workflows/aidan-dressed-stone-v2-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  dressed-stone:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python syntax
+        run: python3 -m py_compile tools/map_blender/aidan_dressed_stone_v2.py tools/map_blender/aidan_dressed_stone_v2_qa.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender xvfb libegl1 libgl1-mesa-dri libglx-mesa0
+          blender --version
+      - name: Generate and verify dressed stone candidates
+        env:
+          AIDAN_DRESSED_OUTPUT: ${{ runner.temp }}/aidan-dressed-qa
+        run: |
+          set -o pipefail
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_dressed_stone_v2_qa.py 2>&1 | tee dressed-stone.log
+          test -s "${AIDAN_DRESSED_OUTPUT}/manifest.json"
+          python3 - <<'PY'
+          import json,hashlib,os
+          from pathlib import Path
+          p=Path(os.environ["AIDAN_DRESSED_OUTPUT"])
+          m=json.loads((p/"manifest.json").read_text())
+          assert m["status"]=="CANDIDATE_NOT_ART_APPROVED"
+          assert len(m["samples"])==3
+          assert all(x["volume_m3"]>0 for x in m["samples"])
+          assert hashlib.sha256((p/m["image"]).read_bytes()).hexdigest()==m["sha256"]
+          print("PASS: independent geometry and image checks, art not approved")
+          PY
+      - name: Render and validate material variation study
+        env:
+          AIDAN_MATERIAL_OUTPUT: ${{ runner.temp }}/aidan-material-study
+        run: |
+          set -o pipefail
+          python3 -m py_compile tools/map_blender/aidan_material_variation_v1.py tools/map_blender/aidan_material_variation_qa.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_material_variation_qa.py 2>&1 | tee material-study.log
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["AIDAN_MATERIAL_OUTPUT"])
+          m=json.loads((p/"manifest.json").read_text())
+          assert m["stones"]==25 and m["timber"]==1
+          assert hashlib.sha256((p/"material_study.png").read_bytes()).hexdigest()==m["png_sha256"]
+          print("PASS: material study evidence verified; art approval pending")
+          PY
+      - name: Render wall section with mortar and seated timber
+        env:
+          AIDAN_SECTION_OUTPUT: ${{ runner.temp }}/aidan-wall-section
+        run: |
+          set -o pipefail
+          python3 -m py_compile tools/map_blender/aidan_wall_section_v1.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_wall_section_v1.py 2>&1 | tee wall-section.log
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["AIDAN_SECTION_OUTPUT"])
+          m=json.loads((p/"manifest.json").read_text())
+          assert m["status"]=="CANDIDATE_NOT_ART_APPROVED"
+          assert m["stones"]>20 and m["return_quoins"]==6
+          assert m["mortar_backing"] and m["timber_seated"]
+          assert hashlib.sha256((p/m["image"]).read_bytes()).hexdigest()==m["sha256"]
+          print("PASS: wall section evidence; independent art QA pending")
+          PY
+      - name: Render and verify integrated L-corner v2 candidate
+        env:
+          AIDAN_CORNER_V2_OUTPUT: ${{ runner.temp }}/aidan-corner-v2
+        run: |
+          set -o pipefail
+          python3 -m py_compile tools/map_blender/aidan_corner_bond_v2.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_corner_bond_v2.py 2>&1 | tee corner-bond-v2.log
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["AIDAN_CORNER_V2_OUTPUT"])
+          m=json.loads((p/"manifest.json").read_text())
+          assert m["status"]=="CANDIDATE_NOT_ART_APPROVED"
+          assert m["construction"]=="ONE_L_PRISM_PER_COURSE"
+          assert m["quoins"]==6 and m["front_stones"]>18
+          assert len(m["courses"])==6
+          assert hashlib.sha256((p/m["image"]).read_bytes()).hexdigest()==m["sha256"]
+          print("PASS: corner bond v2 evidence; art QA pending")
+          PY
+      - name: Upload corner bond v2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-corner-bond-v2-candidate
+          path: |
+            ${{ runner.temp }}/aidan-corner-v2/
+            corner-bond-v2.log
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Upload wall section evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-wall-section-candidate
+          path: |
+            ${{ runner.temp }}/aidan-wall-section/
+            wall-section.log
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Upload material study evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-material-study-candidate
+          path: |
+            ${{ runner.temp }}/aidan-material-study/
+            material-study.log
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-dressed-stone-v2-candidate
+          path: |
+            ${{ runner.temp }}/aidan-dressed-qa/
+            dressed-stone.log
+          if-no-files-found: warn
+          retention-days: 7

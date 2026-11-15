@@ -1,0 +1,50 @@
+name: Aidan Material Variation Study QA
+on:
+  push:
+    branches: [feature/aidan-architecture-v3-01]
+    paths:
+      - 'tools/map_blender/aidan_material_variation_v1.py'
+      - 'tools/map_blender/aidan_material_variation_qa.py'
+      - 'tools/map_blender/aidan_dressed_stone_v2.py'
+      - '.github/workflows/aidan-material-study-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  material-study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate scripts
+        run: python3 -m py_compile tools/map_blender/aidan_material_variation_v1.py tools/map_blender/aidan_material_variation_qa.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender xvfb libegl1 libgl1-mesa-dri libglx-mesa0
+      - name: Render material study
+        env:
+          AIDAN_MATERIAL_OUTPUT: ${{ runner.temp }}/aidan-material-study
+        run: |
+          set -o pipefail
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_material_variation_qa.py 2>&1 | tee material-study.log
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["AIDAN_MATERIAL_OUTPUT"])
+          m=json.loads((p/"manifest.json").read_text())
+          assert m["stones"]==25 and m["timber"]==1
+          assert hashlib.sha256((p/"material_study.png").read_bytes()).hexdigest()==m["png_sha256"]
+          print("PASS: material study generated; art approval pending")
+          PY
+      - name: Save evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-material-study-candidate
+          path: |
+            ${{ runner.temp }}/aidan-material-study/
+            material-study.log
+          retention-days: 7
