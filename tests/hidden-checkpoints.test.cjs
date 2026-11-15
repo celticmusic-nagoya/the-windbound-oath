@@ -41,3 +41,5 @@ test('live roaming clearance rejects nearby, charging, and unknown monsters',()=
 });
 
 test('checkpoint probe rejects queued movement, encounter latches and auto-firing interact events',()=>{const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');const a=source.indexOf('function checkpointHazards()');const b=source.indexOf('window.MossForest=Object.freeze(',a);assert.ok(a>=0&&b>a);const body=source.slice(a,b);assert.match(body,/S\.battleLatch\|\|S\.transitionLatch\|\|S\.target\|\|S\.pending\|\|S\.hold\|\|S\.keys\.size/);assert.match(body,/z\.type===\x27interact\x27&&z\.eventId/)});
+
+test('checkpoint event hazard resolves ref-based event geometry like gameplay',()=>{const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');const a=source.indexOf('function checkpointHazards()');const b=source.indexOf('window.MossForest=Object.freeze(',a);assert.ok(a>=0&&b>a);assert.match(source.slice(a,b),/inShape\(zoneShape\(z\),fx,fy\)/);assert.match(source,/function zoneShape\(z\)/)});
