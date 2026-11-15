@@ -47,6 +47,28 @@ boundary_errors={
  "window_bottom":edge_error("east",window_band,1.12,False),
  "window_top":edge_error("east",window_band,2.47,True),
 }
+# Corner bond diagnostic: sample stone extents near each nominal wall corner.
+# Coverage here is only a first-order measure; it does not certify proper
+# interlocking quoins, mortar continuity or mesh non-intersection.
+corner_probe_radius=spec.wall_thickness*.75
+corners={}
+for name,cx,cy in (("southwest",-spec.length/2,-spec.width/2),
+                   ("southeast",spec.length/2,-spec.width/2),
+                   ("northwest",-spec.length/2,spec.width/2),
+                   ("northeast",spec.length/2,spec.width/2)):
+ adjacent=[]
+ for o in stones:
+  x,y,z=o.location;sx,sy,sz=o.dimensions
+  dx=max(abs(x-cx)-sx/2,0)
+  dy=max(abs(y-cy)-sy/2,0)
+  if dx<=corner_probe_radius and dy<=corner_probe_radius:
+   adjacent.append(o)
+ sides={o.name.split(" course ")[0] for o in adjacent}
+ expected={"south" if cy<0 else "north","west" if cx<0 else "east"}
+ corners[name]={"nearby_stones":len(adjacent),"sides":sorted(sides),
+                "both_adjacent_faces_present":expected.issubset(sides)}
+ assert expected.issubset(sides), (name,corners[name])
+report["corner_diagnostic"]=corners
 # Diagnostic coverage audit: measure largest uncovered run at each course mid-height.
 # Deliberately report-only until the baseline is assessed; do not claim this is a gate.
 def longest_uncovered_run(side, z, start, stop, opening):
