@@ -8,6 +8,8 @@ on:
       - '.github/workflows/morwen-dev-camera-02.yml'
       - 'tools/blender/morwen_production/dev_camera/**'
       - 'tools/blender/morwen_production/eyelid_sculpt/audit_margin_topology_07.py'
+      - 'tools/blender/morwen_production/eyelid_sculpt/split_lid_loop_07.py'
+      - 'tools/blender/morwen_production/eyelid_sculpt/test_split_lid_loop_07.py'
       - 'tools/blender/morwen_production/eyelid_sculpt/audit_margin_topology_07.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -74,6 +76,9 @@ jobs:
           bpy.ops.wm.open_mainfile(filepath=str(p))
           runpy.run_path("tools/blender/morwen_production/eyelid_sculpt/inspect_lid_geometry_06.py", run_name="__main__")
           PY
+      - name: Test guarded single-loop split (no Blender mutation)
+        run: |
+          python -m unittest discover -s tools/blender/morwen_production/eyelid_sculpt -p 'test_split_lid_loop_07.py' -v
       - name: Read-only EYELID-07 margin graph audit
         env:
           EYELID_07_TOPOLOGY_JSON: render_output/morwen_eyelid_retopo_05/EYELID_07_TOPOLOGY_MAP.json
