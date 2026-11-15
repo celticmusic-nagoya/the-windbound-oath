@@ -13,7 +13,13 @@ class LashStripTests(unittest.TestCase):
         self.assertEqual(len(m["uv"]),10)
     def test_tip_tapers(self):
         m=build_lash_strip(self.frame,.01,.002)
-        self.assertEqual(m["vertices"][-1],m["vertices"][-2])
+        self.assertGreater(sum((a-b)**2 for a,b in zip(m["vertices"][-1],m["vertices"][-2])),0)
+    def test_all_quads_non_degenerate(self):
+        from lash_attachment_09 import cross, sub, dot
+        m=build_lash_strip(self.frame,.01,.002,samples=9)
+        for a,b,c,d in m["faces"]:
+            area=cross(sub(m["vertices"][b],m["vertices"][a]),sub(m["vertices"][d],m["vertices"][a]))
+            self.assertGreater(dot(area,area),1e-24)
     def test_root_offset(self):
         m=build_lash_strip(self.frame,.01,.002,root_offset_m=.0002)
         self.assertAlmostEqual(m["vertices"][0][1],self.frame["position"][1]+.0002)
