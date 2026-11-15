@@ -88,3 +88,16 @@ test('recovery probe checks rest path but never treats it as proof of healing',(
  S.forest.height={level:0};
  assert.equal(context.checkpointRecovery().reason,'height-route-unverified');
 });
+
+test('BATTLE-DEFEAT-01 boundary: defeat callbacks never cold-load from the active battle',()=>{
+ const combat=fs.readFileSync('js/prologue-combat.js','utf8');
+ const screen=fs.readFileSync('js/gameover-screen.js','utf8');
+ const loader=fs.readFileSync('js/save-continue.js','utf8');
+ assert.match(combat,/GameOverScreen\?\.show/);
+ assert.doesNotMatch(combat,/SaveContinue\.start\(/);
+ assert.match(combat,/onLoad:\(\)=>window\.TitleScreen\?\.returnToTitle\(\{openLoad:true\}\)/);
+ assert.match(screen,/typeof actions\.onRetry!=='function'/);
+ assert.match(screen,/typeof actions\.onContinue!=='function'/);
+ assert.match(loader,/if\(phase!=='TITLE'\)return false/);
+ assert.match(loader,/rollback\(previous,owner\)/);
+});
