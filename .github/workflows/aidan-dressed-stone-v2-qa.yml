@@ -8,6 +8,7 @@ on:
       - 'tools/map_blender/aidan_material_variation_v1.py'
       - 'tools/map_blender/aidan_material_variation_qa.py'
       - 'tools/map_blender/aidan_wall_section_v1.py'
+      - 'tools/map_blender/aidan_corner_bond_v2.py'
       - '.github/workflows/aidan-dressed-stone-v2-qa.yml'
   pull_request:
     branches: [feature/aidan-roof-geometry-01]
@@ -17,6 +18,7 @@ on:
       - 'tools/map_blender/aidan_material_variation_v1.py'
       - 'tools/map_blender/aidan_material_variation_qa.py'
       - 'tools/map_blender/aidan_wall_section_v1.py'
+      - 'tools/map_blender/aidan_corner_bond_v2.py'
       - '.github/workflows/aidan-dressed-stone-v2-qa.yml'
   workflow_dispatch:
 permissions:
@@ -88,6 +90,35 @@ jobs:
           assert hashlib.sha256((p/m["image"]).read_bytes()).hexdigest()==m["sha256"]
           print("PASS: wall section evidence; independent art QA pending")
           PY
+      - name: Render and verify integrated L-corner v2 candidate
+        env:
+          AIDAN_CORNER_V2_OUTPUT: ${{ runner.temp }}/aidan-corner-v2
+        run: |
+          set -o pipefail
+          python3 -m py_compile tools/map_blender/aidan_corner_bond_v2.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_corner_bond_v2.py 2>&1 | tee corner-bond-v2.log
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["AIDAN_CORNER_V2_OUTPUT"])
+          m=json.loads((p/"manifest.json").read_text())
+          assert m["status"]=="CANDIDATE_NOT_ART_APPROVED"
+          assert m["construction"]=="ONE_L_PRISM_PER_COURSE"
+          assert m["quoins"]==6 and m["front_stones"]>18
+          assert len(m["courses"])==6
+          assert hashlib.sha256((p/m["image"]).read_bytes()).hexdigest()==m["sha256"]
+          print("PASS: corner bond v2 evidence; art QA pending")
+          PY
+      - name: Upload corner bond v2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-corner-bond-v2-candidate
+          path: |
+            ${{ runner.temp }}/aidan-corner-v2/
+            corner-bond-v2.log
+          if-no-files-found: warn
+          retention-days: 7
       - name: Upload wall section evidence
         if: always()
         uses: actions/upload-artifact@v4
