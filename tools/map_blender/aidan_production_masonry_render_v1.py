@@ -47,7 +47,35 @@ boundary_errors={
  "window_bottom":edge_error("east",window_band,1.12,False),
  "window_top":edge_error("east",window_band,2.47,True),
 }
-report["qa"]={"stone_mesh_count":len(stones),"door_intrusions":0,"window_intrusions":0,"opening_boundary_error_m":boundary_errors}
+# Diagnostic coverage audit: measure largest uncovered run at each course mid-height.
+# Deliberately report-only until the baseline is assessed; do not claim this is a gate.
+def longest_uncovered_run(side, z, start, stop, opening):
+ relevant=[]
+ for o in stones:
+  if not o.name.startswith(side):continue
+  x,y,cz=o.location; sx,sy,sz=o.dimensions
+  if not (cz-sz/2 <= z <= cz+sz/2):continue
+  center=x if side in ("south","north") else y
+  extent=sx if side in ("south","north") else sy
+  relevant.append((center-extent/2,center+extent/2))
+ step=.01; current=0; longest=0; position=start
+ while position<=stop:
+  inside_opening=opening(position,z)
+  covered=inside_opening or any(a-.002<=position<=b+.002 for a,b in relevant)
+  current=0 if covered else current+1
+  longest=max(longest,current)
+  position+=step
+ return round(longest*step,3)
+L=spec.length/2; W=spec.width/2;t=spec.wall_thickness
+coverage={}
+for side,start,stop in (("south",-L,L),("north",-L,L),("west",-W+t/2,W-t/2),("east",-W+t/2,W-t/2)):
+ results=[]
+ for row in range(report["course_count"]):
+  z=min(spec.eaves-.002,(row+.5)*spec.course_height)
+  opening=(lambda p,h: abs(p)<.785 and h<2.20) if side=="south" else ((lambda p,h: -.495<p<1.395 and 1.12<h<2.47) if side=="east" else (lambda p,h: False))
+  results.append(longest_uncovered_run(side,z,start,stop,opening))
+ coverage[side]={"max_gap_m":max(results),"per_course_gap_m":results}
+report["qa"]={"stone_mesh_count":len(stones),"door_intrusions":0,"window_intrusions":0,"opening_boundary_error_m":boundary_errors,"coverage_diagnostic_only":coverage}
 world=bpy.context.scene.world or bpy.data.worlds.new("masonry world")
 bpy.context.scene.world=world
 world.use_nodes=True
