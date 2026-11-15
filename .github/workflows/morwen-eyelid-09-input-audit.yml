@@ -8,6 +8,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/match_upper_margin_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/select_candidate_anchors_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
     branches: [feature/morwen-eyelid-08-contact-cage]
@@ -52,6 +53,9 @@ jobs:
       - name: Build isolated candidate lash strips
         run: |
           python tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
+      - name: Check candidate surface intersections against real model
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend --out render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
