@@ -1,0 +1,89 @@
+"""Isolated architectural wall-section candidate: bonded limestone, lime mortar and timber.
+
+2.1m x 1.8m wall with return at the right corner. No canonical changes.
+"""
+import bpy,random,math,json,os,hashlib
+from pathlib import Path
+from mathutils import Vector
+from aidan_dressed_stone_v2 import create_dressed_stone_v2
+from aidan_material_variation_v1 import stone_material,timber_material
+SEED=141127
+rng=random.Random(SEED)
+out=Path(os.environ.get("AIDAN_SECTION_OUTPUT","/tmp/aidan-wall-section"))
+out.mkdir(parents=True,exist_ok=True)
+bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
+col=bpy.data.collections.new("ISOLATED_WALL_SECTION_CANDIDATE")
+bpy.context.scene.collection.children.link(col)
+def cube(name,loc,dim,mat):
+ bpy.ops.mesh.primitive_cube_add(size=1,location=loc)
+ o=bpy.context.object;o.name=name;o.dimensions=dim
+ bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+ o.data.materials.append(mat)
+ return o
+m=bpy.data.materials.new("warm lime mortar")
+m.diffuse_color=(.53,.49,.40,1);m.use_nodes=True
+m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value=(.53,.49,.40,1)
+m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value=.96
+# Recessed wall core: stones project .035m beyond mortar, without black voids.
+cube("continuous lime mortar backing",(0,.035,.87),(2.1,.20,1.74),m)
+cube("right-hand mortar return",(1.015,.20,.87),(.16,.50,1.74),m)
+stones=[]
+for row in range(6):
+ z=.145+row*.285
+ # Alternating coursing; each row tiles full wall width with variable blocks.
+ widths=[];remaining=2.06
+ while remaining>.01:
+  w=min(remaining,rng.uniform(.29,.54))
+  if remaining-w<.17:w=remaining
+  widths.append(w);remaining-=w
+ x=-1.03
+ for j,w in enumerate(widths):
+  sid=len(stones)
+  gap=.012
+  center=(x+w/2,-.09,z+rng.uniform(-.006,.006))
+  size=(w-gap,.25,.27+rng.uniform(-.008,.008))
+  stone=create_dressed_stone_v2("bonded stone %03d"%sid,center,size,
+       stone_material(sid,low_course=row<2,exposure=.45),col,
+       seed=SEED+sid,cuts=5,chip=.07,relief=.035)
+  stones.append(stone)
+  x+=w
+# Return-face quoin candidates: offset by course, with backing.
+quoins=[]
+for row in range(6):
+ sid=1000+row
+ z=.145+row*.285
+ depth=.40 if row%2 else .31
+ stone=create_dressed_stone_v2("corner return quoin %02d"%row,
+    (1.035,.16,z),(.16,depth,.265),
+    stone_material(sid,low_course=row<2),col,seed=SEED+sid,cuts=5)
+ quoins.append(stone)
+# Beam is physically seated across the wall, not floating above it.
+wood=timber_material(3)
+beam=cube("seated timber wall plate",(0,-.03,1.775),(2.19,.31,.19),wood)
+# End grain and two restrained wooden pegs.
+pegmat=timber_material(4)
+for i,x in enumerate((-.77,.76)):
+ cube("timber peg %d"%i,(x,-.192,1.775),(.042,.015,.042),pegmat)
+# Camera/light
+world=bpy.context.scene.world or bpy.data.worlds.new("neutral study world")
+bpy.context.scene.world=world;world.use_nodes=True
+world.node_tree.nodes["Background"].inputs["Strength"].default_value=.7
+bpy.ops.object.light_add(type="AREA",location=(-3,-4,5))
+bpy.context.object.data.energy=850;bpy.context.object.data.size=4
+bpy.ops.object.camera_add(location=(3,-6,2.9))
+cam=bpy.context.object;cam.data.type="ORTHO";cam.data.ortho_scale=3.25
+cam.rotation_euler=(Vector((0,.02,.9))-cam.location).to_track_quat("-Z","Y").to_euler()
+scene=bpy.context.scene;scene.camera=cam
+scene.render.engine="BLENDER_EEVEE_NEXT" if bpy.app.version>=(4,2,0) else "BLENDER_EEVEE"
+scene.render.resolution_x=1000;scene.render.resolution_y=800
+scene.render.resolution_percentage=100;scene.render.image_settings.file_format="PNG"
+p=out/"wall_section.png";scene.render.filepath=str(p)
+bpy.ops.render.render(write_still=True)
+assert p.stat().st_size>1000
+assert len(stones)>20 and len(quoins)==6
+manifest={"status":"CANDIDATE_NOT_ART_APPROVED","stones":len(stones),
+ "return_quoins":len(quoins),"mortar_backing":True,"timber_seated":True,
+ "seed":SEED,"blender":bpy.app.version_string,
+ "image":"wall_section.png","sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
+(out/"manifest.json").write_text(json.dumps(manifest,indent=2))
+print("AIDAN_SECTION_QA="+json.dumps(manifest))
