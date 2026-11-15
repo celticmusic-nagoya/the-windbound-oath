@@ -83,7 +83,12 @@ for side,start,stop in (("south",-L,L),("north",-L,L),("west",-W+t/2,W-t/2),("ea
   opening=(lambda p,h: abs(p)<.785 and h<2.20) if side=="south" else ((lambda p,h: -.495<p<1.395 and 1.12<h<2.47) if side=="east" else (lambda p,h: False))
   results.append(longest_uncovered_run(side,z,start,stop,opening))
  coverage[side]={"max_gap_m":max(results),"per_course_gap_m":results}
-report["qa"]={"stone_mesh_count":len(stones),"door_intrusions":0,"window_intrusions":0,"opening_boundary_error_m":boundary_errors,"coverage_diagnostic_only":coverage}
+# Measured baseline: 0.02m across all four faces. Gate only large
+# uncovered runs; retain raw diagnostics to detect regressions.
+coverage_limit_m=0.03
+for side, measurement in coverage.items():
+ assert measurement["max_gap_m"]<=coverage_limit_m, (side,measurement)
+report["qa"]={"stone_mesh_count":len(stones),"door_intrusions":0,"window_intrusions":0,"opening_boundary_error_m":boundary_errors,"coverage_max_gap_limit_m":coverage_limit_m,"coverage":coverage}
 world=bpy.context.scene.world or bpy.data.worlds.new("masonry world")
 bpy.context.scene.world=world
 world.use_nodes=True
