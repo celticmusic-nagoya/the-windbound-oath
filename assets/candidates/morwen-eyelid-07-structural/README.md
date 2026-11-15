@@ -9,7 +9,7 @@
 - **All mesh vertex counts and every stored Shape Key coordinate hash exactly match the latest diagnostic**, including Face's 58 keys: Basis, target_0 through target_55, MORWEN_DESIGN_NoseDepth. Rebuilt .blend file SHA differs due to serialization; geometry equivalence is checked separately.
 - Original source file, all 58 key coordinates/order, UV coordinates unchanged after candidate evaluation. Modifier disabled: exact zero evaluated-coordinate difference against modifier-off across all 56 isolated targets. Key values are intentionally exercised in memory and restored; no input save.
 - Four Layer 0 image hashes verified against manifest. Full v5.61 canonical binary remains unavailable; do not infer design conformity from this CC0 engineering baseline's hair/face/material appearance. No formal artwork or asset edited.
-- Both boundary graphs: 28 vertices, 28 edges, connected cycle. Source-authoring coordinate matches give R 1397 -> 1351, L 1264 -> 1207, with six-decimal rounding bound. Anatomical/art adoption remains pending. The candidate uses model-declared +Z superior and +Y anterior, not a reviewed universal eye calibration.
+- Fresh extraction from the saved baseline exactly matches all latest vertex IDs, edge IDs and rounded world coordinates (`qa/ACTUAL_BASELINE_TOPOLOGY_07.json`). Both boundary graphs: 28 vertices, 28 edges, connected cycle. Source-authoring coordinate matches give R 1397 -> 1351, L 1264 -> 1207, with six-decimal rounding bound. Anatomical/art adoption remains pending. The candidate uses model-declared +Z superior and +Y anterior, not a reviewed universal eye calibration.
 
 ## Method and structural findings
 
