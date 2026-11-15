@@ -1,5 +1,5 @@
 """Isolated v2 corner-bond study. Candidate only; no canonical house assets changed."""
-import bpy, random, json, hashlib, os, sys
+import bpy, bmesh, random, json, hashlib, os, sys
 from pathlib import Path
 from mathutils import Vector
 from math import radians
@@ -131,6 +131,39 @@ for q in quoins:
  assert q.modifiers[1].subdivision_type=="SIMPLE"
  assert abs(q.modifiers[2].strength-.003)<1e-9
  assert all(mod.object and mod.object.hide_render for mod in q.modifiers if mod.type=="BOOLEAN")
+# Audit the EVALUATED result after bevel, subdivision, displacement and Booleans.
+# Report failures without asserting approval: CI success alone is insufficient.
+depsgraph=bpy.context.evaluated_depsgraph_get()
+evaluated_geometry=[]
+for q in quoins:
+ evaluated=q.evaluated_get(depsgraph)
+ mesh=evaluated.to_mesh()
+ bm=bmesh.new()
+ try:
+  bm.from_mesh(mesh)
+  bm.verts.ensure_lookup_table()
+  boundary=sum(1 for e in bm.edges if e.is_boundary)
+  nonmanifold=sum(1 for e in bm.edges if not e.is_manifold)
+  unseen=set(bm.verts)
+  components=0
+  while unseen:
+   components+=1
+   start=unseen.pop()
+   stack=[start]
+   while stack:
+    v=stack.pop()
+    for edge in v.link_edges:
+     neighbor=edge.other_vert(v)
+     if neighbor in unseen:
+      unseen.remove(neighbor)
+      stack.append(neighbor)
+  volume=bm.calc_volume(signed=True) if bm.faces else 0
+  evaluated_geometry.append(dict(name=q.name,vertices=len(bm.verts),
+   faces=len(bm.faces),boundary_edges=boundary,nonmanifold_edges=nonmanifold,
+   components=components,signed_volume=round(volume,9)))
+ finally:
+  bm.free()
+  evaluated.to_mesh_clear()
 assert len(front)>18 and len(side)>=6 and len(quoins)==6
 assert len(set((r["xstart"],r["yend"]) for r in records))==2
 # Camera: 3/4 view with neutral fill on the right-hand return.
@@ -154,7 +187,9 @@ manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "construction":"ONE_L_PRISM_PER_COURSE","front_stones":len(front),
  "side_stones":len(side),"quoins":len(quoins),"courses":records,
  "g1":"BLOCKED","g2":"NOT_RUN","g3":"GEOMETRY_ASSERTIONS_PASS",
- "g4":"NOT_RUN","quoin_edge_wear_m":.007,
+ "g4":"NOT_RUN","evaluated_geometry":evaluated_geometry,
+ "evaluated_topology_pass":all(r["nonmanifold_edges"]==0 and r["components"]==1 and r["signed_volume"]>0 for r in evaluated_geometry),
+ "quoin_edge_wear_m":.007,
  "quoin_material":"shared procedural limestone family",
  "quoin_plan_wear_max_m":.004,
  "quoin_surface_relief_m":.003,
