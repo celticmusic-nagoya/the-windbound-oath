@@ -51,7 +51,7 @@ test('recovery proof executes and rejects rest metadata without a healing action
  const a=source.indexOf('function checkpointRecovery()'),b=source.indexOf('window.MossForest=Object.freeze(',a);
  assert.ok(a>=0&&b>a);
  const S={active:true,busy:false,map:{eventZones:[{type:'rest',id:'camp'}]},forest:{}};
- const sandbox={S,entry:null,recoveryRequired:false,reqOk:()=>true,lvOk:()=>true};
+ const sandbox={S,entry:null,recoveryRequired:false,reqOk:()=>true,lvOk:()=>true,window:{}};
  vm.createContext(sandbox);vm.runInContext(source.slice(a,b),sandbox);
  assert.equal(sandbox.checkpointRecovery().reason,'route-probe-unavailable');
  assert.equal(sandbox.checkpointRecovery().canRecover,false);
@@ -82,7 +82,7 @@ test('recovery probe checks rest path but never treats it as proof of healing',(
  vm.createContext(context);vm.runInContext(src.slice(a,b),context);
  assert.equal(context.checkpointRecovery().reason,'recovery-action-and-exit-unverified');
  assert.equal(context.checkpointRecovery().canRecover,false);
- assert.equal(calls.length,1);
+ assert.equal(calls.length,2);
  context.window.FieldNavigation.probeRoute=()=>({reachable:false});
  assert.equal(context.checkpointRecovery().reason,'rest-route-unverified');
  S.forest.height={level:0};
