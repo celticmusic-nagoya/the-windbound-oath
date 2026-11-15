@@ -164,6 +164,13 @@ for q in quoins:
  finally:
   bm.free()
   evaluated.to_mesh_clear()
+topology_pass=all(r["boundary_edges"]==0 and r["nonmanifold_edges"]==0
+                  and r["components"]==1 and r["signed_volume"]>0
+                  for r in evaluated_geometry)
+if not topology_pass:
+ print("AIDAN_EVALUATED_TOPOLOGY_FAIL="+json.dumps(
+  [r for r in evaluated_geometry if r["boundary_edges"] or r["nonmanifold_edges"]
+   or r["components"]!=1 or r["signed_volume"]<=0]))
 assert len(front)>18 and len(side)>=6 and len(quoins)==6
 assert len(set((r["xstart"],r["yend"]) for r in records))==2
 # Camera: 3/4 view with neutral fill on the right-hand return.
@@ -186,9 +193,9 @@ assert p.stat().st_size>1000
 manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "construction":"ONE_L_PRISM_PER_COURSE","front_stones":len(front),
  "side_stones":len(side),"quoins":len(quoins),"courses":records,
- "g1":"BLOCKED","g2":"NOT_RUN","g3":"GEOMETRY_ASSERTIONS_PASS",
+ "g1":"BLOCKED","g2":"NOT_RUN","g3":"EVALUATED_TOPOLOGY_PASS" if topology_pass else "EVALUATED_TOPOLOGY_FAIL",
  "g4":"NOT_RUN","evaluated_geometry":evaluated_geometry,
- "evaluated_topology_pass":all(r["nonmanifold_edges"]==0 and r["components"]==1 and r["signed_volume"]>0 for r in evaluated_geometry),
+ "evaluated_topology_pass":topology_pass,
  "quoin_edge_wear_m":.007,
  "quoin_material":"shared procedural limestone family",
  "quoin_plan_wear_max_m":.004,
@@ -199,3 +206,4 @@ manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "image":p.name,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
 print("AIDAN_CORNER_V2_QA="+json.dumps(manifest))
+assert topology_pass, "Evaluated Boolean mesh topology failed; see manifest and diagnostic output"
