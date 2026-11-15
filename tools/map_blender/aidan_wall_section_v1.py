@@ -26,7 +26,7 @@ m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value=(.53,.49
 m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value=.96
 # Recessed wall core: stones project .035m beyond mortar, without black voids.
 cube("continuous lime mortar backing",(0,.035,.87),(2.1,.20,1.74),m)
-cube("right-hand mortar return",(1.015,.20,.87),(.16,.50,1.74),m)
+cube("right-hand mortar return",(1.105,.20,.87),(.16,.50,1.74),m)
 stones=[]
 for row in range(6):
  z=.145+row*.285
@@ -54,7 +54,7 @@ for row in range(6):
  z=.145+row*.285
  depth=.40 if row%2 else .31
  stone=create_dressed_stone_v2("corner return quoin %02d"%row,
-    (1.025,.165,z),(.14,depth,.265),
+    (1.105,.165,z),(.14,depth,.265),
     stone_material(sid,low_course=row<2),col,seed=SEED+sid,cuts=5)
  quoins.append(stone)
 # Quoins occupy the return wall; maintain a small mortar joint to the front
