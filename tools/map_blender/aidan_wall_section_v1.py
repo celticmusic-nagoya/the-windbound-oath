@@ -25,8 +25,10 @@ m=bpy.data.materials.new("warm lime mortar")
 m.diffuse_color=(.53,.49,.40,1);m.use_nodes=True
 m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value=(.53,.49,.40,1)
 m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value=.96
-# Recessed wall core: stones project .035m beyond mortar, without black voids.
-cube("continuous lime mortar backing",(0,.035,.87),(2.1,.20,1.74),m)
+# Mortar face y=-0.20, nominal stone face y=-0.215: 15 mm recess.
+# Previous backing face y=-0.065 left a 150 mm cavity and dark joints.
+mortar_face=-.20
+cube("continuous lime mortar backing",(0,-.08,.87),(2.1,.24,1.74),m)
 cube("right-hand mortar return",(1.105,.20,.87),(.16,.50,1.74),m)
 stones=[]
 for row in range(6):
@@ -96,9 +98,14 @@ for q in quoins:
    omax=o.location.x+o.dimensions.x/2
    assert omax<=qxmin+.002,(o.name,q.name,omax,qxmin)
 assert all(o.dimensions.x>0 and o.dimensions.z>0 for o in stones)
+nominal_stone_face=-.09-.25/2
+joint_recess=mortar_face-nominal_stone_face
+assert .010<=joint_recess<=.020,("mortar joint depth",joint_recess)
+assert abs((-.08-.24/2)-mortar_face)<1e-8
 manifest={"status":"CANDIDATE_NOT_ART_APPROVED","stones":len(stones),
  "return_quoins":len(quoins),"mortar_backing":True,"timber_seated":True,
- "seed":SEED,"blender":bpy.app.version_string,
+ "seed":SEED,"mortar_joint_recess_m":joint_recess,
+ "corner_interlocking":"NOT_IMPLEMENTED", "blender":bpy.app.version_string,
  "image":"wall_section.png","sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
 print("AIDAN_SECTION_QA="+json.dumps(manifest))
