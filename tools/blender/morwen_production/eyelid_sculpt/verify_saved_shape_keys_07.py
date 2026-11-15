@@ -24,9 +24,14 @@ for obj in sorted((o for o in bpy.data.objects if o.type == "MESH"), key=lambda 
             record["shape_keys"][key.name] = digest.hexdigest()
     result["objects"][obj.name] = record
 face_keys = list(result["objects"].get("Face", {}).get("shape_keys", {}))
-assert len(face_keys) == 57 and "Basis" in face_keys and all(f"target_{i}" in face_keys for i in range(56)), "Expected Basis + target_0..target_55 (57 key blocks)"
+result["face_key_inventory"] = face_keys
+result["face_key_count"] = len(face_keys)
+result["expected_targets_present"] = [f"target_{i}" for i in range(56) if f"target_{i}" in face_keys]
+result["status"] = "PASS" if len(face_keys) == 57 and all(f"target_{i}" in face_keys for i in range(56)) else "FAIL_INVENTORY_MISMATCH"
 assert hashlib.sha256(model.read_bytes()).hexdigest() == before, "Input blend changed"
 out = Path(os.environ.get("MORWEN_SHAPEKEY_AUDIT_OUT", "render_output/morwen_eyelid_retopo_05/SHAPE_KEY_FINGERPRINTS_07.json"))
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-print(json.dumps({"status": result["status"], "face_shape_key_count_including_basis": len(result["objects"]["Face"]["shape_keys"]), "input_blend_sha256": before, "note": "Saved-model inventory only; no cross-version equivalence asserted"}))
+print(json.dumps({"status": result["status"], "face_shape_key_count_including_basis": len(face_keys), "face_key_inventory": face_keys, "input_blend_sha256": before, "note": "Saved-model inventory only; no cross-version equivalence asserted"}))
+if result["status"] != "PASS":
+    raise SystemExit("Shape Key inventory mismatch; full diagnostic JSON saved")
