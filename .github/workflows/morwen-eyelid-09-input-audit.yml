@@ -7,6 +7,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/survey_lid_triangles_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/match_upper_margin_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/select_candidate_anchors_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
     branches: [feature/morwen-eyelid-08-contact-cage]
@@ -48,10 +49,15 @@ jobs:
       - name: Derive candidate-only lash root anchors
         run: |
           python tools/blender/morwen_production/eyelid_lash/select_candidate_anchors_09.py --match render_output/morwen_eyelid_09/UPPER_MARGIN_MATCH_09.json --out render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json
+      - name: Build isolated candidate lash strips
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: morwen-eyelid-09-input-audit
-          path: render_output/morwen_eyelid_09/*.json
+          path: |
+            render_output/morwen_eyelid_09/*.json
+            render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
           if-no-files-found: warn
           retention-days: 7
