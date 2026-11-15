@@ -27,7 +27,7 @@ face_keys = list(result["objects"].get("Face", {}).get("shape_keys", {}))
 result["face_key_inventory"] = face_keys
 result["face_key_count"] = len(face_keys)
 result["expected_targets_present"] = [f"target_{i}" for i in range(56) if f"target_{i}" in face_keys]
-result["status"] = "PASS" if len(face_keys) == 57 and all(f"target_{i}" in face_keys for i in range(56)) else "FAIL_INVENTORY_MISMATCH"
+result["status"] = "PASS" if len(face_keys) == 58 and "Basis" in face_keys and "MORWEN_DESIGN_NoseDepth" in face_keys and all(f"target_{i}" in face_keys for i in range(56)) else "FAIL_INVENTORY_MISMATCH"
 assert hashlib.sha256(model.read_bytes()).hexdigest() == before, "Input blend changed"
 out = Path(os.environ.get("MORWEN_SHAPEKEY_AUDIT_OUT", "render_output/morwen_eyelid_retopo_05/SHAPE_KEY_FINGERPRINTS_07.json"))
 out.parent.mkdir(parents=True, exist_ok=True)
