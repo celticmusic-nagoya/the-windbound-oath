@@ -3,6 +3,7 @@ Blender 3.x/4.x; deterministic seed, metres, Z up. No canonical assets touched.
 """
 import bpy, math, json, os, random, hashlib
 from pathlib import Path
+from mathutils import Vector
 
 SEED=141127
 R=random.Random(SEED)
