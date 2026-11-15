@@ -4,6 +4,7 @@ on:
     branches: [feature/morwen-eyelid-09-lash-architecture]
     paths:
       - 'tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/survey_lid_triangles_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
     branches: [feature/morwen-eyelid-08-contact-cage]
@@ -36,10 +37,13 @@ jobs:
       - name: Audit real saved model without modifications
         run: |
           python tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py --source assets/candidates/morwen-eyelid-07-structural/inspection/SCULPT_SETUP_07.blend --candidate assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/INPUT_AUDIT_09.json
+      - name: Survey actual anterior lid triangles read-only
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/survey_lid_triangles_09.py --candidate assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/TRIANGLE_SURVEY_09.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: morwen-eyelid-09-input-audit
-          path: render_output/morwen_eyelid_09/INPUT_AUDIT_09.json
+          path: render_output/morwen_eyelid_09/*.json
           if-no-files-found: warn
           retention-days: 7
