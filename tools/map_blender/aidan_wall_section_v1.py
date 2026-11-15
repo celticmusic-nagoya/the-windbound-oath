@@ -54,12 +54,17 @@ for row in range(6):
  z=.145+row*.285
  depth=.40 if row%2 else .31
  stone=create_dressed_stone_v2("corner return quoin %02d"%row,
-    (1.035,.16,z),(.16,depth,.265),
+    (1.025,.165,z),(.14,depth,.265),
     stone_material(sid,low_course=row<2),col,seed=SEED+sid,cuts=5)
  quoins.append(stone)
+# Quoins occupy the return wall; maintain a small mortar joint to the front
+# stone face. This candidate does not claim structural interlocking.
 # Beam is physically seated across the wall, not floating above it.
 wood=timber_material(3)
 beam=cube("seated timber wall plate",(0,-.03,1.775),(2.19,.31,.19),wood)
+# Nominal top of stone course 6: z=1.57+.135=1.705.
+# Plate bottom 1.68, so there is 25 mm of seating, not a visible air gap.
+assert beam.location.z-beam.dimensions.z/2 < .145+5*.285+.27/2
 # End grain and two restrained wooden pegs.
 pegmat=timber_material(4)
 for i,x in enumerate((-.77,.76)):
@@ -81,6 +86,15 @@ p=out/"wall_section.png";scene.render.filepath=str(p)
 bpy.ops.render.render(write_still=True)
 assert p.stat().st_size>1000
 assert len(stones)>20 and len(quoins)==6
+# Check nominal corner clearance and that every front-row stone stays
+# inside its course envelope. These are AABB checks, not art approval.
+for q in quoins:
+ for o in stones:
+  if abs(q.location.z-o.location.z)<.14:
+   qxmin=q.location.x-q.dimensions.x/2
+   omax=o.location.x+o.dimensions.x/2
+   assert omax<=qxmin+.002,(o.name,q.name,omax,qxmin)
+assert all(o.dimensions.x>0 and o.dimensions.z>0 for o in stones)
 manifest={"status":"CANDIDATE_NOT_ART_APPROVED","stones":len(stones),
  "return_quoins":len(quoins),"mortar_backing":True,"timber_seated":True,
  "seed":SEED,"blender":bpy.app.version_string,
