@@ -25,10 +25,11 @@ def build_lash_strip(frame, length_m, width_m, root_offset_m=0.0001,
         t=i/(samples-1)
         center=add(add(p,mul(binormal,length_m*t)),
                    mul(normal,root_offset_m+curl*length_m*t*t))
-        half_width=width_m*(1-t)**1.3/2
+        half_width=width_m*max(0.02,(1-t)**1.3)/2
         for sign in (-1,1):
             verts.append(add(center,mul(tangent,sign*half_width)))
             uv.append(((sign+1)/2,t))
+    # Keep a narrow finite tip; a collapsed tip creates a zero-area quad.
     faces=[]
     for i in range(samples-1):
         a=2*i
