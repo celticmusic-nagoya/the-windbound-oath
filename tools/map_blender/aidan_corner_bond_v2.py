@@ -2,6 +2,7 @@
 import bpy, random, json, hashlib, os, sys
 from pathlib import Path
 from mathutils import Vector
+from math import radians
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aidan_dressed_stone_v2 import create_dressed_stone_v2
 from aidan_material_variation_v1 import stone_material
@@ -49,6 +50,21 @@ def extruded_plan(name,polygon,z0,z1,material,seed):
  displace=obj.modifiers.new("quoin real surface relief","DISPLACE")
  displace.texture=tex;displace.texture_coords="GLOBAL"
  displace.strength=.003;displace.mid_level=.5
+ # Independent fractured corner geometry: cut the exposed exterior arris,
+ # never the bonded inner faces. Keep cutters as separate QA-inspectable objects.
+ for index,zz in enumerate((z1,z0)):
+  chip_rng=random.Random(seed+index*37)
+  chip_size=chip_rng.uniform(.037,.052)
+  bpy.ops.mesh.primitive_cube_add(size=1,location=(1.19,-.215,zz))
+  cutter=bpy.context.object
+  cutter.name=name+" chip cutter "+str(index)
+  cutter.dimensions=(chip_size,chip_size,chip_size)
+  cutter.rotation_euler=(radians(23),radians(18),radians(33+index*17))
+  bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+  cutter.hide_render=True
+  cutter.hide_set(True)
+  chip=obj.modifiers.new("quoin fracture "+str(index),"BOOLEAN")
+  chip.operation="DIFFERENCE";chip.solver="EXACT";chip.object=cutter
  normals=obj.modifiers.new("quoin weighted face normals","WEIGHTED_NORMAL")
  normals.keep_sharp=True
  return obj
@@ -110,10 +126,11 @@ for q in quoins:
  assert len(q.data.vertices)==12
  assert all(.776<=v.co.x<=1.194 and -.219<=v.co.y<=.314 for v in q.data.vertices)
  assert all(len(e.vertices)==2 for e in q.data.edges)
- assert [mod.type for mod in q.modifiers]==["BEVEL","SUBSURF","DISPLACE","WEIGHTED_NORMAL"]
+ assert [mod.type for mod in q.modifiers]==["BEVEL","SUBSURF","DISPLACE","BOOLEAN","BOOLEAN","WEIGHTED_NORMAL"]
  assert abs(q.modifiers[0].width-.007)<1e-9
  assert q.modifiers[1].subdivision_type=="SIMPLE"
  assert abs(q.modifiers[2].strength-.003)<1e-9
+ assert all(mod.object and mod.object.hide_render for mod in q.modifiers if mod.type=="BOOLEAN")
 assert len(front)>18 and len(side)>=6 and len(quoins)==6
 assert len(set((r["xstart"],r["yend"]) for r in records))==2
 # Camera: 3/4 view with neutral fill on the right-hand return.
@@ -142,6 +159,7 @@ manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "quoin_plan_wear_max_m":.004,
  "quoin_surface_relief_m":.003,
  "quoin_surface_method":"SIMPLE subdivision + procedural CLOUDS displacement",
+ "quoin_chips":"two separate exterior corner boolean fractures per stone",
  "blender":bpy.app.version_string,
  "image":p.name,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
