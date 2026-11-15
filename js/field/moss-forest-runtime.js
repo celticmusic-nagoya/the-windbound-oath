@@ -726,6 +726,7 @@
   // Conservative read-only checkpoint hazard probe. Never alters encounter/transition latches.
   function checkpointHazards(){
     if(!S.active||S.busy||entry||recoveryRequired||!S.map||!S.forest)return {clear:false,reason:'not-ready'};
+    if(S.battleLatch||S.transitionLatch||S.target||S.pending||S.hold||S.keys.size)return {clear:false,reason:'field-action-pending'};
     const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
     if(S.forest.blocked(S.x,S.y))return {clear:false,reason:'blocked'};
     for(const sy of S.symbols){
@@ -739,7 +740,7 @@
     if(!monsters||monsters.clear!==true)return {clear:false,reason:monsters?.reason||'dynamic-enemies-unverified'};
     if(!enc.off&&(S.map.encounterZones||[]).some(z=>z.enabled!==false&&z.style==='step'&&!z.noEncounter&&inShape(z.shape,fx,fy)))return {clear:false,reason:'random-encounter-zone'};
     for(const z of S.map.eventZones||[]){
-      if(reqOk(z)&&lvOk(z)&&['trigger','locationCard'].includes(z.type)&&z.shape&&inShape(z.shape,fx,fy))return {clear:false,reason:'event-zone'};
+      if(reqOk(z)&&lvOk(z)&&(z.type==='trigger'||z.type==='locationCard'||(z.type==='interact'&&z.eventId))&&z.shape&&inShape(z.shape,fx,fy))return {clear:false,reason:'event-zone'};
     }
     return {clear:true,reason:'no-static-hazard'};
   }
