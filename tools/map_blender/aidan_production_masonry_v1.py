@@ -58,6 +58,13 @@ def _intervals(total, nominal, course, rng):
         x += nominal * rng.uniform(.91, 1.09)
     edges.append(total)
     edges.sort()
+    # Absorb tiny end stones into the neighbouring block rather than leaving
+    # unsupported chips at wall ends. Preserve total span and deterministic seed.
+    min_end = min(nominal * .35, total * .25)
+    if len(edges) > 2 and edges[1] - edges[0] < min_end:
+        edges.pop(1)
+    if len(edges) > 2 and edges[-1] - edges[-2] < min_end:
+        edges.pop(-2)
     return [(a,b) for a,b in zip(edges, edges[1:]) if b-a > 1e-5]
 
 def _subtract(open_intervals, holes):
