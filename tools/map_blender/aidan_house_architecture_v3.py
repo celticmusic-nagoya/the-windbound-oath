@@ -10,6 +10,22 @@ P={'length':8.4,'width':7.1,'eaves':3.05,'ridge':6.60,
    'door_width':1.25,'door_height':2.20,'window_width':1.65,
    'window_height':1.35,'porch_projection':1.55}
 COUNT={'wall_segments':0,'roof_slates':0,'joinery':0}
+# Shared roof datum: all components are offset along the actual slope normal.
+def roof_z(t):return P['ridge']+(P['eaves']-.06-P['ridge'])*t
+def roof_normal(side):
+ from mathutils import Vector
+ slope=(P['eaves']-.06-P['ridge'])/(P['width']/2+.34)
+ return Vector((0,-side*slope,1)).normalized()
+def roof_point(x,side,t,normal_offset=0):
+ n=roof_normal(side)
+ p=Vector((x,side*(P['width']/2+.34)*t,roof_z(t)))+n*normal_offset
+ return tuple(p)
+def orient_faces(vertices,faces,expected):
+ from mathutils import Vector
+ a,b,c=[Vector(vertices[i]) for i in faces[0][:3]]
+ if (b-a).cross(c-a).dot(Vector(expected))<0:
+  return [tuple(reversed(face)) for face in faces]
+ return faces
 def material(name,color,roughness=0.85):
  m=bpy.data.materials.new(name);m.diffuse_color=(*color,1);m.use_nodes=True
  bs=m.node_tree.nodes.get('Principled BSDF')
@@ -59,53 +75,63 @@ def build():
   prism(name,lo,hi,stone,walls,.022);COUNT['wall_segments']+=1
  # Front -Y: centered door with proper structural lintel
  dw=P['door_width']/2+.16;dh=P['door_height']
- wall('front left',(-L,-W-.16,0),(-dw,-W+.16,H))
- wall('front right',(dw,-W-.16,0),(L,-W+.16,H))
+ wall('front left',(-L-.16,-W-.16,0),(-dw,-W+.16,H))
+ wall('front right',(dw,-W-.16,0),(L+.16,-W+.16,H))
  wall('front lintel wall',(-dw,-W-.16,dh),(dw,-W+.16,H))
- wall('rear',(-L,W-.16,0),(L,W+.16,H))
- wall('left',(-L-.16,-W+.16,0),(-L+.16,W-.16,H))
+ wall('rear',(-L-.16,W-.16,0),(L+.16,W+.16,H))
+ wall('left',(-L-.16,-W-.16,0),(-L+.16,W+.16,H))
  # Right wall: real window void, separate lower, upper and side piers
  wy=.45; ww=P['window_width']/2+.12; z0=1.12;z1=z0+P['window_height']
- wall('right below window',(L-.16,-W+.16,0),(L+.16,W-.16,z0))
- wall('right above window',(L-.16,-W+.16,z1),(L+.16,W-.16,H))
- wall('right front pier',(L-.16,-W+.16,z0),(L+.16,wy-ww,z1))
- wall('right rear pier',(L-.16,wy+ww,z0),(L+.16,W-.16,z1))
+ wall('right below window',(L-.16,-W-.16,0),(L+.16,W+.16,z0))
+ wall('right above window',(L-.16,-W-.16,z1),(L+.16,W+.16,H))
+ wall('right front pier',(L-.16,-W-.16,z0),(L+.16,wy-ww,z1))
+ wall('right rear pier',(L-.16,wy+ww,z0),(L+.16,W+.16,z1))
  # Exposed structural timber frame and braces.
  for x in (-L,L):
   for y in (-W,W):
    prism('corner post',(x-.14,y-.14,0),(x+.14,y+.14,H+.12),wood,joinery,.025);COUNT['joinery']+=1
  for y in (-W,W):
   prism('wall plate',(-L-.2,y-.13,H-.12),(L+.2,y+.13,H+.13),wood,joinery,.02)
- beam('ridge structural beam',(-L-.38,0,Z),(L+.38,0,Z),.22,.20,wood,roof)
- for x in (-L-.2,0,L+.2):
-  for side in (-1,1):
-   beam('principal rafter',(x,0,Z),(x,side*(W+.34),H-.06),.16,.22,wood,roof)
- # Structural continuous roof deck. Separate from individually modelled slates.
+ # Gable infill: triangulated stone faces close both attic ends.
+ for x,normal in ((-L,-1),(L,1)):
+  verts=[(x,-W,H),(x,W,H),(x,0,Z)]
+  faces=orient_faces(verts,[(0,1,2)],(normal,0,0))
+  obj('stone gable end',verts,faces,stone,walls)
+  COUNT['wall_segments']+=1
+ # Shared roof plane: slate top is above the deck, rafters below it.
  for side in (-1,1):
-  a=[(-L-.34,0,Z-.12),(L+.34,0,Z-.12),
-     (L+.34,side*(W+.34),H-.16),(-L-.34,side*(W+.34),H-.16)]
-  b=[(x,y,z-.11) for x,y,z in a]
-  obj('roof structural deck',a+b,[(0,1,2,3),(7,6,5,4),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)],wood,roof)
- # Slates with actual thickness and stagger; no material-only pseudo-detail.
+  n=roof_normal(side)
+  beam('ridge structural beam',(-L-.38,0,Z-.27),(L+.38,0,Z-.27),.20,.18,wood,roof) if side==1 else None
+  for x in (-L-.2,0,L+.2):
+   beam('principal rafter',roof_point(x,side,0,-.28),
+        roof_point(x,side,1,-.28),.15,.16,wood,roof)
+  a=[roof_point(-L-.34,side,0,-.12),roof_point(L+.34,side,0,-.12),
+     roof_point(L+.34,side,1,-.12),roof_point(-L-.34,side,1,-.12)]
+  b=[roof_point(x,side,t,-.22) for x,t in ((-L-.34,0),(L+.34,0),(L+.34,1),(-L-.34,1))]
+  faces=[(0,1,2,3),(7,6,5,4),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+  obj('roof structural deck',a+b,orient_faces(a+b,faces,n),wood,roof)
+ # Slates run from eaves toward ridge, with course-to-course height variation.
  rows=18;columns=26
  for side in (-1,1):
+  n=roof_normal(side)
   for row in range(rows):
-   t=row/rows;u=min(1,(row+1.18)/rows)
+   # Each upper course overlaps the preceding course at its downslope edge.
+   t=max(0,1-(row+1.20)/rows);u=1-row/rows
    for col in range(columns):
     stagger=.5 if row%2 else 0
     x=-L-.30+(col+stagger)*(P['length']+.60)/columns
     X=min(x+(P['length']+.60)/columns*.98,L+.30)
     if X-x<.08:continue
-    jitter=R.uniform(-.010,.010)
-    def at(xx,v,offset=0):
-     return (xx,side*(W+.34)*v,Z+(H-.06-Z)*v+jitter+offset)
-    q=[at(x,t,.025),at(X,t,.025),at(X,u,.025),at(x,u,.025)]
+    jitter=R.uniform(-.004,.004)
+    def at(xx,v,offset=0):return roof_point(xx,side,v,offset+jitter)
+    q=[at(x,t,.015),at(X,t,.015),at(X,u,.015),at(x,u,.015)]
     q+= [at(x,t,-.035),at(X,t,-.035),at(X,u,-.035),at(x,u,-.035)]
-    obj('slate_%04d'%COUNT['roof_slates'],q,[(0,1,2,3),(7,6,5,4),
-       (0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)],slate[R.randrange(len(slate))],tiles)
+    faces=[(0,1,2,3),(7,6,5,4),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+    obj('slate_%04d'%COUNT['roof_slates'],q,orient_faces(q,faces,n),
+        slate[R.randrange(len(slate))],tiles)
     COUNT['roof_slates']+=1
  # Joinery: leaf in actual door opening; window in actual void.
- prism('inset front door',(-.59,-W+.03,.06),(.59,-W+.02,2.15),wood,joinery,.02)
+ prism('inset front door',(-.59,-W+.02,.06),(.59,-W+.12,2.15),wood,joinery,.02)
  for x in (-dw,dw):
   prism('door jamb',(x-.07,-W-.22,0),(x+.07,-W-.08,dh+.15),wood,joinery,.012)
  prism('door header',(-dw-.10,-W-.23,dh),(dw+.10,-W-.07,dh+.18),wood,joinery,.012)
@@ -115,22 +141,23 @@ def build():
  for z in (z0,z1):
   prism('window horizontal frame',(L-.22,wy-ww,z-.065),(L+.22,wy+ww,z+.065),wood,joinery,.008)
  prism('window mullion',(L-.23,wy-.05,z0),(L+.23,wy+.05,z1),wood,joinery)
- # Porch has posts, a ridge, true solid roof planes and diagonal rafters.
- pf=-W-P['porch_projection'];pb=-W+.12;pr=3.85;pe=2.78
+ # Approved A: detached gabled porch roof fully below the main eaves.
+ # Back edge meets the front wall; no valley cut through the main roof.
+ pf=-W-P['porch_projection'];pb=-W-.19;pr=2.96;pe=2.49
  for x in (-1.34,1.34):
   prism('porch post',(x-.11,pf-.10,0),(x+.11,pf+.10,pe+.05),wood,porch,.014)
  for side in (-1,1):
   a=[(0,pb,pr),(side*1.58,pb,pe),(side*1.58,pf,pe),(0,pf,pr)]
   b=[(x,y,z-.13) for x,y,z in a]
-  obj('porch solid roof',a+b,[(0,1,2,3),(7,6,5,4),(0,4,5,1),
-      (1,5,6,2),(2,6,7,3),(3,7,4,0)],slate[1],porch)
+  faces=[(0,1,2,3),(7,6,5,4),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+  obj('porch solid roof',a+b,orient_faces(a+b,faces,(0,side,1)),slate[1],porch)
   for y in (pf+.12,pb-.12):
-   beam('porch sloped rafter',(0,y,pr-.16),(side*1.58,y,pe-.16),.13,.16,wood,porch)
- beam('porch ridge',(0,pf,pr),(0,pb,pr),.16,.16,wood,porch)
+   beam('porch sloped rafter',(0,y,pr-.19),(side*1.58,y,pe-.19),.13,.16,wood,porch)
+ beam('porch ridge',(0,pf,pr-.17),(0,pb,pr-.17),.16,.16,wood,porch)
  # Explicitly unresolved features must not be guessed into canon.
  return {'status':'V3_ARCHITECTURE_DIAGNOSTIC_NOT_ART_APPROVED',
          'seed':SEED,'dimensions':P,'counts':COUNT,
-         'chimney':'UNRESOLVED','ivy':'NOT_MODELLED',
+         'porch_type':'A_BELOW_EAVES','chimney':'UNRESOLVED','ivy':'NOT_MODELLED',
          'uv':'NOT_APPLIED','pbr_textures':'NOT_APPLIED'}
 if __name__=='__main__':
  bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
