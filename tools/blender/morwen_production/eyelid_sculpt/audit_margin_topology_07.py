@@ -77,12 +77,70 @@ def audit():
             "upper_lower_correspondence": "NOT_ESTABLISHED", "canthi_semantics": "NOT_ESTABLISHED",
             "G1": "PARTIAL", "G2": "NOT_RUN", "G3": "DIAGNOSTIC_ONLY", "G4": "NOT_RUN"}
 
+def build_correspondence(report):
+    """Candidate vertex-ID correspondence. No unverified anatomical labels."""
+    import math
+    output = {}
+    for side, info in report["sides"].items():
+        comps = info["components"]
+        chains = [c for c in comps if c["graph_valid"] and not c["closed_loop"]
+                  and len(c["endpoint_ids"]) == 2 and len(c["ordered_vertex_ids"]) >= 2]
+        output[side] = {"status": "BLOCKED_AMBIGUOUS_TOPOLOGY", "candidate_chains": [],
+                        "paired_samples": [], "semantic_upper_lower": "UNASSIGNED",
+                        "medial_lateral_canthi": "UNASSIGNED"}
+        for chain in chains:
+            ids = chain["ordered_vertex_ids"]
+            coords = chain["world_xyz_m"]
+            distances = [0.0]
+            for a, b in zip(ids, ids[1:]):
+                pa, pb = coords[str(a)], coords[str(b)]
+                distances.append(distances[-1] + math.dist(pa, pb))
+            if distances[-1] <= 1e-10:
+                continue
+            output[side]["candidate_chains"].append({
+                "vertex_ids": ids, "endpoint_ids": [ids[0], ids[-1]],
+                "length_m": distances[-1],
+                "normalized_arc_u": [round(d / distances[-1], 9) for d in distances]})
+        # A single closed ring, or an unclassified number of open chains, is
+        # insufficient to establish upper/lower or canthus correspondence.
+        if len(output[side]["candidate_chains"]) != 2:
+            continue
+        a, b = output[side]["candidate_chains"]
+        # Match endpoint direction by minimizing world-space endpoint distance.
+        xyz = lambda chain, idx: comps[next(i for i, comp in enumerate(comps)
+                           if comp["ordered_vertex_ids"] == chain["vertex_ids"])]["world_xyz_m"][str(idx)]
+        forward = math.dist(xyz(a, a["vertex_ids"][0]), xyz(b, b["vertex_ids"][0])) + math.dist(
+                  xyz(a, a["vertex_ids"][-1]), xyz(b, b["vertex_ids"][-1]))
+        reverse = math.dist(xyz(a, a["vertex_ids"][0]), xyz(b, b["vertex_ids"][-1])) + math.dist(
+                  xyz(a, a["vertex_ids"][-1]), xyz(b, b["vertex_ids"][0]))
+        if abs(forward - reverse) < 1e-8:
+            output[side]["status"] = "BLOCKED_ENDPOINT_ORIENTATION_TIE"
+            continue
+        if reverse < forward:
+            b = {"vertex_ids": list(reversed(b["vertex_ids"])),
+                 "normalized_arc_u": [round(1-u, 9) for u in reversed(b["normalized_arc_u"])],
+                 "endpoint_ids": list(reversed(b["endpoint_ids"])), "length_m": b["length_m"]}
+        def at(chain, u):
+            us = chain["normalized_arc_u"]
+            ids = chain["vertex_ids"]
+            for i in range(len(us)-1):
+                if us[i] <= u <= us[i+1]:
+                    t = (u-us[i]) / (us[i+1]-us[i]) if us[i+1] > us[i] else 0
+                    return {"edge_vertex_ids": [ids[i], ids[i+1]], "edge_t": round(t, 9)}
+            return {"edge_vertex_ids": [ids[-2], ids[-1]], "edge_t": 1.0}
+        output[side]["paired_samples"] = [{"u": round(i/32, 9), "chain_A": at(a,i/32),
+                                           "chain_B": at(b,i/32)} for i in range(33)]
+        output[side]["status"] = "PROVISIONAL_ARC_LENGTH_PAIRS_NOT_ANATOMICAL_APPROVAL"
+    return output
+
+
 def main():
     dest = Path(os.environ["EYELID_07_TOPOLOGY_JSON"]).resolve()
     if dest.exists():
         raise RuntimeError("Refusing to overwrite diagnostic")
     dest.parent.mkdir(parents=True, exist_ok=True)
     report = audit()
+    report["correspondence_candidates"] = build_correspondence(report)
     dest.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({side: {"components": info["component_count"], "edges": info["edge_count"],
                             "valid": [c["graph_valid"] for c in info["components"]]}
