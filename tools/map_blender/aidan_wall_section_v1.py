@@ -97,7 +97,7 @@ assert len(side_stones)>=6
 assert all(abs(side_course_starts[r]-(.332 if r%2==0 else .222))<1e-7 for r in range(6))
 assert all(abs(end-.80)<1e-7 for end in side_course_ends)
 assert all(o.dimensions.y>0.10 for o in side_stones)
-assert all(abs(o.location.x+o.dimensions.x/2-1.01)<1e-6 for o in side_stones)
+assert all(abs(o.location.x-o.dimensions.x/2-1.01)<1e-6 for o in side_stones)
 # Quoin-to-side-stone nominal joint is 12 mm in both alternating courses.
 assert all(abs(side_course_starts[r]-(.32 if r%2==0 else .21)-.012)<1e-7 for r in range(6))
 # Side mortar front x=1.185, side stone face x=1.200.
