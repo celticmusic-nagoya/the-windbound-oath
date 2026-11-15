@@ -74,6 +74,7 @@ for row in range(6):
 # Nominal side stone face x=1.20; mortar face x=1.185 (15 mm recess).
 side_stones=[]
 side_course_starts=[]
+side_course_ends=[]
 for row in range(6):
  z=.145+row*.285
  # Quoin extent on return: even .320 m; odd .210 m.
@@ -91,8 +92,14 @@ for row in range(6):
       seed=SEED+sid,cuts=5,chip=.055,relief=.025)
   side_stones.append(obj)
   y+=length
+ side_course_ends.append(y)
 assert len(side_stones)>=6
 assert all(abs(side_course_starts[r]-(.332 if r%2==0 else .222))<1e-7 for r in range(6))
+assert all(abs(end-.80)<1e-7 for end in side_course_ends)
+assert all(o.dimensions.y>0.10 for o in side_stones)
+assert all(abs(o.location.x+o.dimensions.x/2-1.01)<1e-6 for o in side_stones)
+# Quoin-to-side-stone nominal joint is 12 mm in both alternating courses.
+assert all(abs(side_course_starts[r]-(.32 if r%2==0 else .21)-.012)<1e-7 for r in range(6))
 # Side mortar front x=1.185, side stone face x=1.200.
 assert abs((1.105+.16/2)-1.185)<1e-7
 # Alternating corner headers and stretchers form a candidate corner bond.
@@ -140,7 +147,7 @@ joint_recess=mortar_face-nominal_stone_face
 assert .010<=joint_recess<=.020,("mortar joint depth",joint_recess)
 assert abs((-.08-.24/2)-mortar_face)<1e-8
 manifest={"status":"CANDIDATE_NOT_ART_APPROVED","stones":len(stones),
- "return_quoins":len(quoins),"side_stones":len(side_stones),"mortar_backing":True,"timber_seated":True,
+ "return_quoins":len(quoins),"side_stones":len(side_stones),"side_course_count":len(side_course_ends),"side_joint_m":.012,"mortar_backing":True,"timber_seated":True,
  "seed":SEED,"mortar_joint_recess_m":joint_recess,
  "corner_interlocking":"ALTERNATING_HEADER_STRETCHER_CANDIDATE", "blender":bpy.app.version_string,
  "image":"wall_section.png","sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
