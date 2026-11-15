@@ -1,0 +1,24 @@
+name: Morwen EYELID-07 captured topology replay
+on:
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_production/eyelid_sculpt/**'
+      - '.github/workflows/morwen-eyelid-07-correspondence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  captured-topology:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s tools/blender/morwen_production/eyelid_sculpt -p test_split_lid_loop_07.py -v
+      - name: Reproduce captured-model correspondence (no deformation)
+        run: |
+          python tools/blender/morwen_production/eyelid_sculpt/correspondence_audit_07.py tools/blender/morwen_production/eyelid_sculpt/evidence_07/EYELID_07_TOPOLOGY_MAP.json /tmp/correspondence.json --baseline tools/blender/morwen_production/eyelid_sculpt/evidence_07/EYELID_05_REPORT.json
+          cmp /tmp/correspondence.json tools/blender/morwen_production/eyelid_sculpt/evidence_07/CORRESPONDENCE_07.json
