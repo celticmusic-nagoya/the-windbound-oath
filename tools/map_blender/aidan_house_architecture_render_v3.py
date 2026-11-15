@@ -32,6 +32,10 @@ bpy.ops.object.camera_add()
 cam=bpy.context.object;cam.data.type='ORTHO';cam.data.ortho_scale=15
 scene=bpy.context.scene;scene.camera=cam
 scene.render.engine='CYCLES';scene.cycles.samples=16
+# Ubuntu apt Blender 4.0.2 may be compiled without OpenImageDenoiser.
+scene.cycles.use_denoising=False
+for layer in scene.view_layers:
+ if hasattr(layer,'cycles'):layer.cycles.use_denoising=False
 scene.render.resolution_x=800;scene.render.resolution_y=800;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format='PNG'
 target=Vector((0,0,2.4))
