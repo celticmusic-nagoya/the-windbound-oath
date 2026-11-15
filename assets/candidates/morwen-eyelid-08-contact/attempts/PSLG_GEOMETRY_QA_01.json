@@ -1,0 +1,188 @@
+{
+  "status": "DISABLED_CANDIDATE_PENDING_REMAINING_QA",
+  "attempt_id": "M08-PSLG-01",
+  "method_family": "CONSTRAINED_PSLG_CONTACT_SHELL_050",
+  "source_sha256": "a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7",
+  "candidate_input_sha256": "bf7998fd8a80c61c23a8f063330914450e8c2ec52b819ade5716061fed7630ff",
+  "blender": "5.3.0",
+  "neutral_to_half_animation": "NOT_RUN_STATIC_HALF_TARGET",
+  "sides": {
+    "R": {
+      "basis_pose": "EXPLICIT_STATIC_HALF_050_NOT_NEUTRAL",
+      "vertices": 672,
+      "polygons": 1178,
+      "triangles": 1344,
+      "euler_characteristic": 0,
+      "boundary_or_nonmanifold_edges": 0,
+      "inconsistent_edge_directions": 0,
+      "edge_count": 1850,
+      "signed_volume_m3": 9.155274685586756e-07,
+      "degenerate_triangles": 0,
+      "flipped_triangles_vs_basis": 0,
+      "front_nonanterior_triangles": 0,
+      "rear_nonposterior_triangles": 0,
+      "front_uv_orientation_disagreements": 0,
+      "degenerate_uv_triangles": 0,
+      "thickness_anterior_m": {
+        "min": 0.0005999952554702759,
+        "max": 0.0006000027060508728
+      },
+      "minimum_projected_normal_thickness_m": 1.736141323957457e-05,
+      "self_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "attachment_surface_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "gap_ratio_min_max": [
+        0.49999999999998496,
+        0.5000000000000638
+      ],
+      "fixed_canthus_max_error_m": 0.0
+    },
+    "L": {
+      "basis_pose": "EXPLICIT_STATIC_HALF_050_NOT_NEUTRAL",
+      "vertices": 674,
+      "polygons": 1182,
+      "triangles": 1348,
+      "euler_characteristic": 0,
+      "boundary_or_nonmanifold_edges": 0,
+      "inconsistent_edge_directions": 0,
+      "edge_count": 1856,
+      "signed_volume_m3": 9.155291683984971e-07,
+      "degenerate_triangles": 0,
+      "flipped_triangles_vs_basis": 0,
+      "front_nonanterior_triangles": 0,
+      "rear_nonposterior_triangles": 0,
+      "front_uv_orientation_disagreements": 0,
+      "degenerate_uv_triangles": 0,
+      "thickness_anterior_m": {
+        "min": 0.0005999952554702759,
+        "max": 0.0006000027060508728
+      },
+      "minimum_projected_normal_thickness_m": 2.289471612018472e-05,
+      "self_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "attachment_surface_intersections": {
+        "proper_crossing_pairs": [],
+        "coplanar_positive_area_pairs": []
+      },
+      "gap_ratio_min_max": [
+        0.4999999999999572,
+        0.5000000000000427
+      ],
+      "fixed_canthus_max_error_m": 0.0
+    }
+  },
+  "renders": [
+    {
+      "file": "half_050_front.png",
+      "sha256": "685dfa66567228708289c67d26ad54e9c28cb1de652acc5284a710431d974161"
+    },
+    {
+      "file": "half_050_q3L.png",
+      "sha256": "ec3f35e4700d79248e9e5e6f1214765b84bce938625c45be594c16f8751afa4b"
+    },
+    {
+      "file": "half_050_q3R.png",
+      "sha256": "8416b25bf4da1a9e8360af83665383ce6a528f145f8fb66df690c24f1d392c29"
+    },
+    {
+      "file": "half_050_left.png",
+      "sha256": "a6ceca09ee23f80d1e615202b19f301001130aa379241adbf78c79ab26080b78"
+    },
+    {
+      "file": "half_050_right.png",
+      "sha256": "86fe635026ca56cfe30b7539798cb7fe50873c4177b377785e70541c9314e77d"
+    }
+  ],
+  "G1": "PARTIAL_FULL_CANON_BLOCKED",
+  "G2": "NOT_RUN",
+  "G3": "PARTIAL_CAGE_CHECKS_PASS_CARD_AND_GLOBAL_QA_PENDING",
+  "G4": "NOT_RUN",
+  "socket_rays": {
+    "R": {
+      "front": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 248,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3L": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 193,
+        "background_misses": 96,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3R": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 245,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "left": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 4,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "right": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 5,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      }
+    },
+    "L": {
+      "front": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 248,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3L": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 244,
+        "background_misses": 0,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "q3R": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 193,
+        "background_misses": 91,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "left": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 4,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      },
+      "right": {
+        "rays": 1089,
+        "backface_first_hits": 0,
+        "eye_first_hits_expected_in_half_aperture": 5,
+        "background_misses": 155,
+        "sampling": "camera-plane orthographic grid, no degenerate profile projection"
+      }
+    }
+  },
+  "failures": [],
+  "protected_fingerprints_unchanged": true,
+  "protected_key_order_unchanged": true,
+  "protected_face_key_count": 58,
+  "input_file_unchanged": true
+}

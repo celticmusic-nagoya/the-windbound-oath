@@ -1,0 +1,79 @@
+name: Morwen EYELID-08 disabled cage replay QA
+on:
+  push:
+    branches: [feature/morwen-eyelid-08-contact-cage]
+    paths:
+      - '.github/workflows/morwen-eyelid-08-contact.yml'
+      - 'tools/blender/morwen_production/eyelid_contact/**'
+      - 'tools/blender/morwen_production/_qa/morwen_shared_attempt_ledger.json'
+      - 'assets/candidates/morwen-eyelid-08-contact/**'
+  pull_request:
+    paths:
+      - 'tools/blender/morwen_production/eyelid_contact/**'
+      - 'assets/candidates/morwen-eyelid-08-contact/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+  PYTHONHASHSEED: '0'
+jobs:
+  static-half-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Pinned Blender runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "${BPY_WHEEL_SHA256}  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install triangle==20250106
+          grep -v '^bpy==' tools/blender/morwen_production/head_landmark/requirements-lock.txt > /tmp/req.txt
+          python -m pip install -r /tmp/req.txt
+          python -m pip install numpy==2.5.4 pillow==13.0.0
+      - name: Tests and cumulative retry ledger
+        run: |
+          python -m unittest discover -s tools/blender/morwen_production/eyelid_contact -p 'test_*08.py' -v
+          python tools/blender/morwen_production/validate_shared_attempt_ledger.py tools/blender/morwen_production/_qa/morwen_shared_attempt_ledger.json
+      - name: Verify delivered evidence hashes
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root=Path('assets/candidates/morwen-eyelid-08-contact')
+          for filename, digest in json.loads((root/'qa/ARTIFACT_SHA256.json').read_text()).items():
+              assert hashlib.sha256((root/filename).read_bytes()).hexdigest()==digest, filename
+          PY
+      - name: Replay saved disabled target without rebuilding stopped methods
+        run: |
+          python tools/blender/morwen_production/eyelid_contact/qa_contact_cage_08.py --candidate assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --design assets/candidates/morwen-eyelid-08-contact/qa/CONTACT_CAGE_DESIGN_08.json --out render_output/morwen_contact_08_replay --renders
+          python tools/blender/morwen_production/eyelid_contact/verify_delivery_08.py --source assets/candidates/morwen-eyelid-07-structural/inspection/SCULPT_SETUP_07.blend --candidate render_output/morwen_contact_08_replay/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_contact_08_replay/DELIVERY_VERIFICATION_08.json
+          python tools/blender/morwen_production/eyelid_contact/combine_qa_08.py render_output/morwen_contact_08_replay/CONTACT_CAGE_QA_08.json render_output/morwen_contact_08_replay/DELIVERY_VERIFICATION_08.json render_output/morwen_contact_08_replay/COMPLETE_QA_08.json
+      - name: Preserve actual failed gate in summary
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          q=json.loads(Path('render_output/morwen_contact_08_replay/COMPLETE_QA_08.json').read_text())
+          assert q['G3']=='FAIL', 'Residual card penetration must not be promoted'
+          assert q['delivery_verification']['protected_face_data_unchanged']
+          assert q['delivery_verification']['protected_face_key_count']==58
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('EYELID-08: evidence replay complete. G1 protected Face/58 keys unchanged; full canon BLOCKED. G2 NOT_RUN. G3 FAIL (opaque cards). G4 NOT_RUN. No new cage build.\n')
+              f.write(json.dumps(q['delivery_verification']['opaque_card_samples_inside_cage'])+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-eyelid-08-disabled-cage-replay
+          path: render_output/morwen_contact_08_replay/*
+          if-no-files-found: error
+          retention-days: 7

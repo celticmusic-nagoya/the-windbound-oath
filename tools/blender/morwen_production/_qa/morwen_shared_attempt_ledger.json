@@ -267,6 +267,105 @@
         "G4": "NOT_RUN"
       },
       "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-08",
+      "attempt_id": "M08-CONTACT-01",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "matched_column_thick_contact_cage_050",
+      "method_family": "MATCHED_COLUMN_THICK_CONTACT_CAGE_050",
+      "source_sha256": "sha256:a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7",
+      "input_sha256": [
+        "sha256:a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7"
+      ],
+      "output_sha256": [
+        "sha256:3ccf364c82c74f143483c5f01b470ea75cf551bb6cfa5bd2f31f505001a0c5d4"
+      ],
+      "canonical_references": [
+        "Layer0 SHA b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed; no edits",
+        "v5.61 binary unavailable; full design comparison BLOCKED"
+      ],
+      "visual_defects": [
+        "R/L self-crossings 13/6; attachment crossings 106/114",
+        "Incorrect front normals 1/2; UV orientation disagreements 8/10",
+        "5 socket backface rays"
+      ],
+      "root_cause": "structure",
+      "next_action": "Ruled outer/inner correspondence crosses concave canthal geometry; switch to constrained PSLG triangulation",
+      "stop_reason": "",
+      "gates": {
+        "G1": "BLOCKED",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-08",
+      "attempt_id": "M08-PSLG-01",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "constrained_pslg_contact_shell_050",
+      "method_family": "CONSTRAINED_PSLG_CONTACT_SHELL_050",
+      "source_sha256": "sha256:a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7",
+      "input_sha256": [
+        "sha256:a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7"
+      ],
+      "output_sha256": [
+        "sha256:397272810baa337dab63232c4dced052b5beec605827eccd4a0dfed6825f4da0"
+      ],
+      "canonical_references": [
+        "Layer0 SHA b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed; no edits",
+        "v5.61 binary unavailable; full design comparison BLOCKED"
+      ],
+      "visual_defects": [
+        "Cage/eye crossings R15 L23",
+        "Opaque card samples inside cage R70 L71"
+      ],
+      "root_cause": "structure",
+      "next_action": "Add anterior eye-obstacle inequalities and bounded preview card clearance once",
+      "stop_reason": "",
+      "gates": {
+        "G1": "BLOCKED",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
+    },
+    {
+      "task_id": "MORWEN-EYELID-08",
+      "attempt_id": "M08-PSLG-02",
+      "asset_id": "morwen-head",
+      "defect_id": "MORWEN-EYELID-OPENING-RETOPO",
+      "method_id": "constrained_pslg_contact_shell_050",
+      "method_family": "CONSTRAINED_PSLG_CONTACT_SHELL_050",
+      "source_sha256": "sha256:a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7",
+      "input_sha256": [
+        "sha256:a30b05af5369864578aea85b72f6c8e5100630d2ceb638c8a9a52add6e5defd7"
+      ],
+      "output_sha256": [
+        "sha256:9db9173ac681bdb335e8a58bf68eeeb9d2c2f800bc92fc989a2c65adfca74454"
+      ],
+      "canonical_references": [
+        "Layer0 SHA b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed; no edits",
+        "v5.61 binary unavailable; full design comparison BLOCKED"
+      ],
+      "visual_defects": [
+        "Opaque card samples still inside cage R45 L23; finite-sample per-vertex lift moves additional samples through the shell"
+      ],
+      "root_cause": "structure",
+      "next_action": "STOP this cage/preview binding family. Next work requires triangle-attached lash geometry with continuous alpha-aware clearance; retain static cage as disabled reference",
+      "stop_reason": "Stopped after two failures; no third adjustment. Static cage checks pass but inherited card topology/binding remains invalid",
+      "gates": {
+        "G1": "BLOCKED",
+        "G2": "NOT_RUN",
+        "G3": "FAIL",
+        "G4": "NOT_RUN"
+      },
+      "outcome": "FAIL"
     }
   ]
 }
