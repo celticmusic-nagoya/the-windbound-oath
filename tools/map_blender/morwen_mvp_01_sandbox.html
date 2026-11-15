@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MORWEN-MVP-01 provisional movement sandbox</title>
+<style>body{margin:0;background:#171d20;color:#e9e5da;font:16px system-ui;text-align:center}main{max-width:740px;margin:auto;padding:12px}canvas{display:block;width:100%;height:auto;background:#334039;border:1px solid #708070;touch-action:none}button{font-size:20px;min-width:55px;min-height:48px;margin:3px}small{display:block;color:#c9c5bb}</style></head><body><main><h1>MORWEN-MVP-01 仮モデル</h1><small>正式アセットではありません。PC: 矢印/WASD、スマホ: 方向ボタン。四方向表示・歩行・接地のみを検証。</small><canvas id="view" width="640" height="400" aria-label="仮キャラクター移動テスト"></canvas><div id="controls"><button data-dir="up">↑</button><div><button data-dir="left">←</button><button data-dir="down">↓</button><button data-dir="right">→</button></div></div><output id="status" aria-live="polite"></output></main>
+<script>
+'use strict';
+const canvas=document.getElementById('view'),ctx=canvas.getContext('2d'),status=document.getElementById('status');
+const player={x:320,y:210,facing:'down',step:0};const pressed=new Set();
+const keymap={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',a:'left',s:'down',d:'right'};
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
+function rectangle(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
+function ellipse(x,y,rx,ry,color){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill()}
+function morwen(x,y,face,phase){
+ ctx.save();ctx.translate(x,y);const swing=Math.sin(phase)*3;
+ ellipse(0,0,17,5,'#202922'); // contact shadow
+ rectangle(-9,-22+swing,7,21,'#24233a');rectangle(2,-22-swing,7,21,'#24233a');
+ rectangle(-10,-38,20,20,'#25243b');rectangle(-10,-38,20,4,'#a88750');
+ rectangle(-15,-37,5,17,'#27233e');rectangle(10,-37,5,17,'#27233e');
+ ellipse(0,-48,12,13,'#19172a');ellipse(0,-48,9,10,'#d6b6a0');
+ if(face==='down'){ellipse(-3,-48,1.3,1.8,'#624a91');ellipse(3,-48,1.3,1.8,'#624a91')}
+ if(face==='left')ellipse(-6,-48,1.3,1.8,'#624a91');
+ if(face==='right')ellipse(6,-48,1.3,1.8,'#624a91');
+ rectangle(-12,-60,24,8,'#342454');rectangle(-8,-69,16,11,'#342454');
+ rectangle(-3,-69,6,5,'#a88750');
+ ctx.restore();
+}
+function draw(){ctx.clearRect(0,0,640,400);
+ for(let y=0;y<400;y+=40)for(let x=0;x<640;x+=40)rectangle(x,y,39,39,(x/40+y/40)%2?'#394b3c':'#40533f');
+ rectangle(30,45,580,14,'#74766d');rectangle(30,59,14,300,'#74766d');rectangle(596,59,14,300,'#74766d');
+ ellipse(515,130,31,17,'#2b4930');ellipse(120,310,30,18,'#56605a');
+ morwen(player.x,player.y,player.facing,player.step);
+ status.textContent='Facing: '+player.facing+' / X: '+Math.round(player.x)+' / Y: '+Math.round(player.y);
+}
+function update(){let dx=0,dy=0;if(pressed.has('left'))dx--;if(pressed.has('right'))dx++;if(pressed.has('up'))dy--;if(pressed.has('down'))dy++;
+ if(dx||dy){const m=Math.hypot(dx,dy);player.x=clamp(player.x+dx/m*2.5,60,580);player.y=clamp(player.y+dy/m*2.5,90,350);player.facing=Math.abs(dx)>Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');player.step+=.28}
+ draw();requestAnimationFrame(update)}
+window.addEventListener('keydown',e=>{const d=keymap[e.key];if(d){e.preventDefault();pressed.add(d)}});
+window.addEventListener('keyup',e=>{const d=keymap[e.key];if(d)pressed.delete(d)});
+window.addEventListener('blur',()=>pressed.clear());
+document.querySelectorAll('[data-dir]').forEach(b=>{const d=b.dataset.dir;b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);pressed.add(d)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,()=>pressed.delete(d))});
+requestAnimationFrame(update);
+</script></body></html>
