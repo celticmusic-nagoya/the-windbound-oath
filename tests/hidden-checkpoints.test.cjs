@@ -25,3 +25,17 @@ test('runtime hazard probe rejects unverified roaming monsters and active random
 test('roaming monster clearance uses current positions and alert states',()=>{const source=fs.readFileSync('js/field/field-monsters.js','utf8');assert.match(source,/function checkpointClearance\(x,y,radius=280\)/);assert.match(source,/Math\.hypot\(x-m\.x,y-m\.y\)<=radius/);assert.match(source,/\['engage','engaged','alert','chase','windup','rush'\]/);assert.match(source,/monster-context-unavailable/)});
 
 test('roaming checkpoint clearance accounts for goblin detection and boar charge',()=>{const source=fs.readFileSync('js/field/field-monsters.js','utf8');assert.match(source,/Math\.max\(radius,Number\.isFinite\(m\.t\?\.detect\)\?m\.t\.detect\+64:Infinity\)/);assert.match(source,/\['engage','engaged','alert','chase','windup','rush'\]/)});
+
+test('live roaming clearance rejects nearby, charging, and unknown monsters',()=>{
+ const src=fs.readFileSync('js/field/field-monsters.js','utf8');
+ const a=src.indexOf('function checkpointClearance('),b=src.indexOf('window.FieldMonsters = Object.freeze(',a);
+ assert.ok(a>=0&&b>a);
+ const monsters=[{state:'wander',x:450,y:0,lv:0,t:{detect:420}}];
+ const context={ctx:{level:()=>0},list:monsters};
+ vm.createContext(context);vm.runInContext(src.slice(a,b),context);
+ assert.equal(context.checkpointClearance(0,0).clear,false);
+ monsters[0].x=600;assert.equal(context.checkpointClearance(0,0).clear,true);
+ monsters[0].state='rush';assert.equal(context.checkpointClearance(0,0).clear,false);
+ monsters[0].state='wander';monsters[0].t.detect=undefined;assert.equal(context.checkpointClearance(0,0).clear,false);
+ context.ctx=null;assert.equal(context.checkpointClearance(0,0).clear,false);
+});
