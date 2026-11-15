@@ -33,7 +33,10 @@ jobs:
       - name: Render architecture diagnostics
         env:
           AIDAN_V3_OUTPUT: ${{ runner.temp }}/aidan-architecture-v3
-        run: LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_house_architecture_render_v3.py
+        run: |
+          set -o pipefail
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_house_architecture_render_v3.py 2>&1 | tee blender-v3.log
+          test -s "${AIDAN_V3_OUTPUT}/manifest.json"
       - name: Verify evidence without claiming art approval
         env:
           AIDAN_V3_OUTPUT: ${{ runner.temp }}/aidan-architecture-v3
@@ -61,6 +64,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: aidan-architecture-v3-diagnostics
-          path: ${{ runner.temp }}/aidan-architecture-v3/
+          path: |
+            ${{ runner.temp }}/aidan-architecture-v3/
+            blender-v3.log
           if-no-files-found: warn
           retention-days: 7
