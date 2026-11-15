@@ -1,0 +1,56 @@
+name: Aidan Architecture V3 Diagnostic
+on:
+  push:
+    branches: [feature/aidan-architecture-v3-01]
+    paths:
+      - 'tools/map_blender/aidan_house_architecture_v3.py'
+      - 'tools/map_blender/aidan_house_architecture_render_v3.py'
+      - '.github/workflows/aidan-architecture-v3-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  architecture_v3:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Static Python validation
+        run: python3 -m py_compile tools/map_blender/aidan_house_architecture_v3.py tools/map_blender/aidan_house_architecture_render_v3.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1-mesa-dri libglx-mesa0 libopengl0 xvfb
+          blender --version
+      - name: Render architecture diagnostics
+        env:
+          AIDAN_V3_OUTPUT: ${{ runner.temp }}/aidan-architecture-v3
+        run: LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a blender -b -t 2 --python tools/map_blender/aidan_house_architecture_render_v3.py
+      - name: Verify evidence without claiming art approval
+        env:
+          AIDAN_V3_OUTPUT: ${{ runner.temp }}/aidan-architecture-v3
+        run: |
+          python3 - <<'PY'
+          import os,json,hashlib
+          from pathlib import Path
+          p=Path(os.environ['AIDAN_V3_OUTPUT']);m=json.loads((p/'manifest.json').read_text())
+          assert m['status']=='V3_ARCHITECTURE_DIAGNOSTIC_NOT_ART_APPROVED'
+          assert m['counts']['wall_segments']>=9
+          assert m['counts']['roof_slates']>=800
+          assert len(m['views'])==5
+          for v in m['views']:
+              q=p/v['file'];assert q.stat().st_size>1000
+              assert hashlib.sha256(q.read_bytes()).hexdigest()==v['sha256']
+          assert (p/'aidan_v3_diagnostic.blend').stat().st_size>1000
+          print('PASS: v3 technical diagnostics; G2/G4 NOT_APPROVED')
+          PY
+      - name: Upload diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-architecture-v3-diagnostics
+          path: ${{ runner.temp }}/aidan-architecture-v3/
+          if-no-files-found: warn
+          retention-days: 7
