@@ -5,6 +5,11 @@ on:
     paths:
       - 'tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
+  pull_request:
+    branches: [feature/morwen-eyelid-08-contact-cage]
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py'
+      - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   workflow_dispatch:
 permissions:
   contents: read
