@@ -10,13 +10,15 @@ on:
       - 'tools/blender/morwen_production/eyelid_sculpt/audit_margin_topology_07.py'
       - 'tools/blender/morwen_production/eyelid_sculpt/split_lid_loop_07.py'
       - 'tools/blender/morwen_production/eyelid_sculpt/test_split_lid_loop_07.py'
-      - 'tools/blender/morwen_production/eyelid_sculpt/audit_margin_topology_07.py'
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [feature/morwen-eyelid-sculpt-06]
     paths:
       - '.github/workflows/morwen-dev-camera-02.yml'
       - 'tools/blender/morwen_production/dev_camera/**'
+      - 'tools/blender/morwen_production/eyelid_sculpt/audit_margin_topology_07.py'
+      - 'tools/blender/morwen_production/eyelid_sculpt/split_lid_loop_07.py'
+      - 'tools/blender/morwen_production/eyelid_sculpt/test_split_lid_loop_07.py'
 permissions:
   contents: read
 env:
