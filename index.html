@@ -1156,6 +1156,22 @@ function renderSystemTab(tab='status'){
  }
 }
 // Hidden checkpoints reuse the exact manual-save schema; this function never writes a slot.
+// Read-only eligibility probe. A loaded map alone is not proof of a recoverable safe point.
+// No hidden slot is written until escape/recovery and encounter checks are independently verified.
+function inspectHiddenCheckpointField(){
+ const m=window.MossForest;
+ if(!m||!forestActive||!m.active||m.busy||m.entering||m.recoveryRequired||!m.canSave||
+    window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||
+    document.body.classList.contains('battleMode')||rildeReturnActive)return {ok:false,reason:'field-not-ready'};
+ const snapshot=m.snapshot();
+ if(!snapshot||!snapshot.map||snapshot.map!==m.mapId||
+    !Number.isFinite(snapshot.x)||!Number.isFinite(snapshot.y))return {ok:false,reason:'invalid-position'};
+ const progress=PrologueProgress.serialize();
+ if(progress.version!==2||progress.storyStage!==storyStage||
+    progress.moss?.map!==snapshot.map||progress.moss.x!==snapshot.x||
+    progress.moss.y!==snapshot.y)return {ok:false,reason:'snapshot-mismatch'};
+ return {ok:true,mapId:snapshot.map,x:snapshot.x,y:snapshot.y,storyStage};
+}
 function serializeCheckpointGrowthData(){
  return JSON.stringify({version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems});
 }
