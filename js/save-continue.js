@@ -7,9 +7,9 @@
  const key=()=>typeof SAVE_KEY==='string'?SAVE_KEY:'windbound_oath_v028';
  const notify=()=>window.TitleScreen?.refresh();
  function checkKeys(x){if(!x||typeof x!=='object')return;for(const [k,v]of Object.entries(x)){if(['__proto__','constructor','prototype'].includes(k))throw Error('未対応の記録です。');checkKeys(v);}}
- function inspect(){
+ function inspect(sourceRaw){
   try{
-   const raw=localStorage.getItem(key());if(!raw)return {ok:false,error:'セーブデータがありません。'};
+   const raw=sourceRaw===undefined?localStorage.getItem(key()):sourceRaw;if(!raw)return {ok:false,error:'セーブデータがありません。'};
    const saved=JSON.parse(raw);checkKeys(saved);const p=saved?.prologue;
    if(!object(saved)||!object(p)||![1,2].includes(p.version)||!Number.isInteger(p.storyStage)||p.storyStage<0||p.storyStage>15||!(saved.version===30||(saved.version===undefined&&p.version===1)))throw Error('未対応または不完全な記録です。');
    if(!object(saved.inventory)||!object(saved.members)||!object(saved.members.aidan)||!Array.isArray(saved.active))throw Error('復帰に必要な情報が不足しています。');
@@ -49,9 +49,9 @@
   for(const id of ['cinema','returnScene','escapeScene','louIntroScene','altarScene','aftermathScene','fortScene','prologueEnd','attackBattle','raiderBattle','inside','forestScene']){const n=document.getElementById(id);if(n)n.style.display='none';}
   document.body.classList.remove('battleMode','normalBattleMode','raiderBattleMode','villageAttack','northAssault','actionCinematic');
  }
- async function start(){
+ async function start(sourceRaw){
   if(phase!=='TITLE')return false;
-  const prepared=inspect();if(!prepared.ok){error=prepared.error;phase='TITLE';notify();return false;}
+  const prepared=inspect(sourceRaw);if(!prepared.ok){error=prepared.error;phase='TITLE';notify();return false;}
   phase='LOADING';error='';notify();let token,unsubscribe=()=>{},restore=null;
   const ok=await LoadCoordinator.boot(async owner=>{
    token=owner;const previous=capture();let applied=false;

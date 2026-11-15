@@ -1,0 +1,12 @@
+/* GAMEOVER-01: isolated, opt-in overlay */
+#twoGameOver{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:clamp(16px,4vw,48px);background:rgba(8,14,16,.94);color:#f0ead9;box-sizing:border-box;font-family:inherit}
+#twoGameOver *{box-sizing:border-box}
+#twoGameOver .twoGameOverPanel{width:min(100%,460px);text-align:center;border:1px solid #786d4e;border-radius:12px;padding:clamp(24px,5vw,44px);background:#141c1b;box-shadow:0 18px 65px #0009}
+#twoGameOver .twoGameOverEyebrow{font-size:.75rem;letter-spacing:.18em;color:#c7b68b}
+#twoGameOver h2{font-size:clamp(2rem,7vw,3.5rem);letter-spacing:.12em;margin:20px 0}
+#twoGameOver p{line-height:1.65}
+#twoGameOver .twoGameOverActions{display:grid;gap:12px;margin-top:28px}
+#twoGameOver button{min-height:48px;border-radius:7px;border:1px solid #ad996b;background:#2c3a32;color:#f5f1e6;font:inherit;cursor:pointer;padding:12px}
+#twoGameOver button:hover,#twoGameOver button:focus-visible{background:#435548;outline:2px solid #e4c98e;outline-offset:2px}
+#twoGameOver button:disabled{opacity:.5;cursor:wait}
+#twoGameOver .twoGameOverStatus{min-height:1.5em;color:#f2c8a5;font-size:.85rem}

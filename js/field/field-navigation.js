@@ -53,6 +53,20 @@
       smooth.push(result[j]);from=result[j];i=j+1;}
     return smooth;
   }
+  // Read-only route query for checkpoint QA. Never cancels or replaces live navigation.
+  function probeRoute(start,goal,blocked){
+    if(!start||!goal||typeof blocked!=='function'||![start.x,start.y,goal.x,goal.y].every(Number.isFinite))
+      return {reachable:false,reason:'invalid-input'};
+    if([start,goal].some(p=>p.x<0||p.y<0||p.x>bounds.width||p.y>bounds.height))
+      return {reachable:false,reason:'out-of-bounds'};
+    try{
+      if(blocked(start.x,start.y)||blocked(goal.x,goal.y))return {reachable:false,reason:'blocked-endpoint'};
+      const previous={...statistics};
+      let route;
+      try{route=plan(start,goal,blocked)}finally{statistics=previous}
+      return route?{reachable:true,reason:'route-found'}:{reachable:false,reason:'no-route'};
+    }catch{return {reachable:false,reason:'route-unverified'}}
+  }
   function destination(x,y,blocked,wantLevel) {
     clear();
     const staticBlocked=blocked.staticBlocked||blocked;
@@ -135,7 +149,7 @@
     bounds={width:options.width??defaults.width,height:options.height??defaults.height};
     maxNodes=options.maxNodes??defaults.maxNodes;baseGrid=options.grid??defaults.grid;clear();
   }
-  window.FieldNavigation=Object.freeze({destination,follow,cancel:clear,configure,
+  window.FieldNavigation=Object.freeze({destination,follow,probeRoute,cancel:clear,configure,
     get bounds(){return {...bounds};},
     get status(){return {...statistics,blockedFrames,actorWaitFrames,replans,waypoints:path.length,active:Boolean(current)};}});
 })();
