@@ -751,7 +751,15 @@
       return {canEscape:false,canRecover:false,reason:'not-ready'};
     const restZones=(S.map.eventZones||[]).filter(z=>z.type==='rest'&&reqOk(z)&&lvOk(z));
     if(!restZones.length)return {canEscape:false,canRecover:false,reason:'no-rest-zone'};
-    return {canEscape:false,canRecover:false,reason:'recovery-action-and-route-unverified'};
+    // Route proof uses current map geometry, but does not infer that a rest zone heals.
+    if(typeof window.FieldNavigation?.probeRoute!=='function')
+      return {canEscape:false,canRecover:false,reason:'route-probe-unavailable'};
+    if(S.forest.height)return {canEscape:false,canRecover:false,reason:'height-route-unverified'};
+    const start={x:S.x,y:S.y},blocked=(x,y)=>S.forest.blocked(x,y);
+    const targets=restZones.map(z=>zoneShape(z)).filter(Boolean).map(centerOf);
+    const routeFound=targets.some(p=>window.FieldNavigation.probeRoute(start,{x:p.x-FOOT.ax,y:p.y-FOOT.ay},blocked).reachable===true);
+    if(!routeFound)return {canEscape:false,canRecover:false,reason:'rest-route-unverified'};
+    return {canEscape:false,canRecover:false,reason:'recovery-action-and-exit-unverified'};
   }
   window.MossForest=Object.freeze({walkStride(actor,dir){return actor==='aidan'?aidanStride(dir):Walk.STRIDE;},cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
     checkpointHazards,checkpointRecovery,get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy||Boolean(entry)||recoveryRequired;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
