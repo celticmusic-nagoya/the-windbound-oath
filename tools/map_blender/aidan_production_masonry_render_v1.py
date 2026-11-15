@@ -71,7 +71,15 @@ coverage={}
 for side,start,stop in (("south",-L,L),("north",-L,L),("west",-W+t/2,W-t/2),("east",-W+t/2,W-t/2)):
  results=[]
  for row in range(report["course_count"]):
-  z=min(spec.eaves-.002,(row+.5)*spec.course_height)
+  z0=row*spec.course_height
+  z1=min(spec.eaves,(row+1)*spec.course_height)
+  z=(z0+z1)/2
+  # The window upper edge can fall inside a course. Avoid sampling its
+  # mortar band: inspect the larger uninterrupted vertical stone interval.
+  if side=="east" and z0<2.47<z1:
+   intervals=[(z0,2.47),(2.47,z1)]
+   lo,hi=max(intervals,key=lambda pair:pair[1]-pair[0])
+   z=(lo+hi)/2
   opening=(lambda p,h: abs(p)<.785 and h<2.20) if side=="south" else ((lambda p,h: -.495<p<1.395 and 1.12<h<2.47) if side=="east" else (lambda p,h: False))
   results.append(longest_uncovered_run(side,z,start,stop,opening))
  coverage[side]={"max_gap_m":max(results),"per_course_gap_m":results}
