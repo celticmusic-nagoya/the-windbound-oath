@@ -1163,6 +1163,8 @@ function inspectHiddenCheckpointField(){
  if(!m||!forestActive||!m.active||m.busy||m.entering||m.recoveryRequired||!m.canSave||
     window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||
     document.body.classList.contains('battleMode')||rildeReturnActive)return {ok:false,reason:'field-not-ready'};
+ const hazard=typeof m.checkpointHazards==='function'?m.checkpointHazards():null;
+ if(!hazard||hazard.clear!==true)return {ok:false,reason:hazard?.reason||'hazards-unverified'};
  const snapshot=m.snapshot();
  if(!snapshot||!snapshot.map||snapshot.map!==m.mapId||
     !Number.isFinite(snapshot.x)||!Number.isFinite(snapshot.y))return {ok:false,reason:'invalid-position'};
