@@ -47,8 +47,33 @@ jobs:
           assert hashlib.sha256(vrm).hexdigest() == "1995f174f6c8f2211f3c56c9e5fe4f9daf27ee5e648f129479582a259238149b"
           (out / "Base_Female.vrm").write_bytes(vrm)
           PY
+      - name: Unit tests and cumulative attempt guard
+        run: |
+          python -m unittest discover -s tools/blender/morwen_production/eyelid_sculpt -p 'test_*07.py' -v
+          python tools/blender/morwen_production/validate_shared_attempt_ledger.py tools/blender/morwen_production/_qa/morwen_shared_attempt_ledger.json
+      - name: Verify delivered evidence hashes
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root=Path('assets/candidates/morwen-eyelid-07-structural')
+          for filename, expected in json.loads((root/'qa/ARTIFACT_SHA256.json').read_text()).items():
+              assert hashlib.sha256((root/filename).read_bytes()).hexdigest()==expected, filename
+          report=json.loads((root/'qa/STRUCTURAL_QA_07.json').read_text())
+          assert report['G3']=='FAIL', 'Known failed method must not be promoted'
+          assert len(report['renders'])==35
+          PY
       - name: Rebuild saved baseline without deformation retries
         run: python tools/blender/morwen_production/eyelid_sculpt/rebuild_baseline_07.py
+      - name: Compare rebuilt protected keys to latest diagnostic
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          actual=json.loads(Path('render_output/morwen_eyelid_structural_07/BASELINE_FINGERPRINTS_07.json').read_text())
+          expected=json.loads(Path('assets/candidates/morwen-eyelid-07-structural/qa/SHAPE_KEY_FINGERPRINTS_07.json').read_text())
+          assert actual['objects']==expected['objects']
+          PY
       - name: Export baseline for structural audit
         uses: actions/upload-artifact@v4
         with:
