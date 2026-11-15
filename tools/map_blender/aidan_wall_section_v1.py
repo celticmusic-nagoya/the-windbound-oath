@@ -31,10 +31,14 @@ mortar_face=-.20
 cube("continuous lime mortar backing",(0,-.08,.87),(2.1,.24,1.74),m)
 cube("right-hand mortar return",(1.105,.20,.87),(.16,.50,1.74),m)
 stones=[]
+course_ends=[]
 for row in range(6):
  z=.145+row*.285
  # Alternating coursing; each row tiles full wall width with variable blocks.
- widths=[];remaining=2.06
+ # On odd courses, reserve a 170 mm front corner seat for a header quoin.
+ # On even courses, front stones run to the outside corner (stretcher course).
+ course_width=1.89 if row%2 else 2.06
+ widths=[];remaining=course_width
  while remaining>.01:
   w=min(remaining,rng.uniform(.29,.54))
   if remaining-w<.17:w=remaining
@@ -50,18 +54,24 @@ for row in range(6):
        seed=SEED+sid,cuts=5,chip=.07,relief=.035)
   stones.append(stone)
   x+=w
-# Return-face quoin candidates: offset by course, with backing.
+ course_ends.append(x)
+# Alternating corner bond: odd rows expose a front-facing header that
+# occupies the reserved seat; even rows use a narrow return-face stretcher.
 quoins=[]
 for row in range(6):
  sid=1000+row
  z=.145+row*.285
- depth=.40 if row%2 else .31
+ if row%2:
+  # Header projects into the front elevation and continues around the return.
+  loc=(.995,-.005,z);dims=(.22,.43,.265)
+ else:
+  loc=(1.105,.165,z);dims=(.14,.31,.265)
  stone=create_dressed_stone_v2("corner return quoin %02d"%row,
-    (1.105,.165,z),(.14,depth,.265),
+    loc,dims,
     stone_material(sid,low_course=row<2),col,seed=SEED+sid,cuts=5)
  quoins.append(stone)
-# Quoins occupy the return wall; maintain a small mortar joint to the front
-# stone face. This candidate does not claim structural interlocking.
+# Alternating corner headers and stretchers form a candidate corner bond.
+# Physical contact and mesh-level intersections still require render review.
 # Beam is physically seated across the wall, not floating above it.
 wood=timber_material(3)
 beam=cube("seated timber wall plate",(0,-.03,1.775),(2.19,.31,.19),wood)
@@ -98,6 +108,8 @@ for q in quoins:
    omax=o.location.x+o.dimensions.x/2
    assert omax<=qxmin+.002,(o.name,q.name,omax,qxmin)
 assert all(o.dimensions.x>0 and o.dimensions.z>0 for o in stones)
+assert all(abs(end-(.86 if row%2 else 1.03))<.0001 for row,end in enumerate(course_ends))
+assert all(quoins[row].location.x-quoins[row].dimensions.x/2>=course_ends[row]+.006 for row in range(6))
 nominal_stone_face=-.09-.25/2
 joint_recess=mortar_face-nominal_stone_face
 assert .010<=joint_recess<=.020,("mortar joint depth",joint_recess)
@@ -105,7 +117,7 @@ assert abs((-.08-.24/2)-mortar_face)<1e-8
 manifest={"status":"CANDIDATE_NOT_ART_APPROVED","stones":len(stones),
  "return_quoins":len(quoins),"mortar_backing":True,"timber_seated":True,
  "seed":SEED,"mortar_joint_recess_m":joint_recess,
- "corner_interlocking":"NOT_IMPLEMENTED", "blender":bpy.app.version_string,
+ "corner_interlocking":"ALTERNATING_HEADER_STRETCHER_CANDIDATE", "blender":bpy.app.version_string,
  "image":"wall_section.png","sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
 print("AIDAN_SECTION_QA="+json.dumps(manifest))
