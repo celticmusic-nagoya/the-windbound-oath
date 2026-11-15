@@ -734,6 +734,9 @@
     for(const t of S.map.transitions||[]){
       if(t.enabled&&lvOk(t)&&inShape(t.rect,fx,fy))return {clear:false,reason:'transition-zone'};
     }
+    // Dynamic roaming monsters lack a verified proximity snapshot. Fail closed until exposed.
+    if(window.FieldMonsters&&window.FieldMonsters.active!==false)return {clear:false,reason:'dynamic-enemies-unverified'};
+    if(!enc.off&&(S.map.encounterZones||[]).some(z=>z.enabled!==false&&z.style==='step'&&!z.noEncounter&&inShape(z.shape,fx,fy)))return {clear:false,reason:'random-encounter-zone'};
     for(const z of S.map.eventZones||[]){
       if(reqOk(z)&&lvOk(z)&&['trigger','locationCard'].includes(z.type)&&z.shape&&inShape(z.shape,fx,fy))return {clear:false,reason:'event-zone'};
     }
