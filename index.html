@@ -1155,12 +1155,16 @@ function renderSystemTab(tab='status'){
 
  }
 }
+// Hidden checkpoints reuse the exact manual-save schema; this function never writes a slot.
+function serializeCheckpointGrowthData(){
+ return JSON.stringify({version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems});
+}
 function saveGrowthData(slot=selectedSaveSlot){
  if(rildeReturnActive||window.BattleLoading?.canSave===false||!LoadCoordinator.canSave||!MossForest.canSave||(forestActive&&(!MossForest.active||MossForest.busy))||storyStage===2||document.body.classList.contains('battleMode')){notice('現在はセーブできません。復帰または戦闘の完了を待ってください。');return}
- const data={version:30,inventory:Inventory.serialize(),equipment:EquipmentManager.serialize(),quests:Quest.serialize(),talk:window.FieldTalk&&FieldTalk.serialize?FieldTalk.serialize():undefined,prologue:PrologueProgress.serialize(),members:PartyManager.members,active:PartyManager.active,reserve:PartyManager.reserve,squads:PartyManager.squads,support:PartyManager.support,gold,battleItems};
+ const raw=serializeCheckpointGrowthData();
  try{
   const old=SaveSlots.read(slot);if(old&&!window.confirm('スロット '+slot+' の記録を上書きしますか？'))return false;
-  SaveSlots.save(slot,JSON.stringify(data),{overwrite:!!old});renderSystemTab('save');const saveMsg=$('#saveMsg');if(saveMsg)saveMsg.textContent='スロット '+slot+' に保存しました。';return true;
+  SaveSlots.save(slot,raw,{overwrite:!!old});renderSystemTab('save');const saveMsg=$('#saveMsg');if(saveMsg)saveMsg.textContent='スロット '+slot+' に保存しました。';return true;
  }catch(e){const m=$('#saveMsg');if(m)m.textContent='保存できませんでした。容量や保存設定を確認してください。';return false;}
 }
 function restoreContinueLegacy(p){
