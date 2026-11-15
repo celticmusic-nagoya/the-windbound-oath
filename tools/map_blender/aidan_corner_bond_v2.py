@@ -28,6 +28,12 @@ def extruded_plan(name,polygon,z0,z1,material):
  mesh=bpy.data.meshes.new(name+"_mesh");mesh.from_pydata(verts,[],faces);mesh.update()
  obj=bpy.data.objects.new(name,mesh);col.objects.link(obj)
  obj.data.materials.append(material)
+ # Small, inward edge wear; preserve the watertight L prism and mortar gaps.
+ bevel=obj.modifiers.new("quoin worn arrises 7mm","BEVEL")
+ bevel.width=.007;bevel.segments=3;bevel.affect="EDGES"
+ bevel.loop_slide=True
+ normals=obj.modifiers.new("quoin weighted face normals","WEIGHTED_NORMAL")
+ normals.keep_sharp=True
  return obj
 m=bpy.data.materials.new("lime mortar v2")
 m.diffuse_color=(.53,.49,.41,1);m.use_nodes=True
@@ -86,6 +92,8 @@ for q in quoins:
  assert len(q.data.polygons)==8,("L prism faces",q.name)
  assert len(q.data.vertices)==12
  assert all(len(e.vertices)==2 for e in q.data.edges)
+ assert [mod.type for mod in q.modifiers]==["BEVEL","WEIGHTED_NORMAL"]
+ assert abs(q.modifiers[0].width-.007)<1e-9
 assert len(front)>18 and len(side)>=6 and len(quoins)==6
 assert len(set((r["xstart"],r["yend"]) for r in records))==2
 # Camera: 3/4 view with neutral fill on the right-hand return.
@@ -109,7 +117,9 @@ manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "construction":"ONE_L_PRISM_PER_COURSE","front_stones":len(front),
  "side_stones":len(side),"quoins":len(quoins),"courses":records,
  "g1":"BLOCKED","g2":"NOT_RUN","g3":"GEOMETRY_ASSERTIONS_PASS",
- "g4":"NOT_RUN","blender":bpy.app.version_string,
+ "g4":"NOT_RUN","quoin_edge_wear_m":.007,
+ "quoin_material":"shared procedural limestone family",
+ "blender":bpy.app.version_string,
  "image":p.name,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
 print("AIDAN_CORNER_V2_QA="+json.dumps(manifest))
