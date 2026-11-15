@@ -19,10 +19,18 @@ def cuboid(name,center,dim,material):
  bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
  obj.data.materials.append(material)
  return obj
-def extruded_plan(name,polygon,z0,z1,material):
+def extruded_plan(name,polygon,z0,z1,material,seed):
  """One watertight L-shaped stone, not two overlapping quoin cubes."""
  n=len(polygon)
- verts=[(x,y,z) for z in (z0,z1) for x,y in polygon]
+ # Deterministic inward-only corner wear, bounded to 4 mm.
+ wear_rng=random.Random(seed)
+ cx=sum(x for x,y in polygon)/n
+ cy=sum(y for x,y in polygon)/n
+ worn=[]
+ for x,y in polygon:
+  d=wear_rng.uniform(.001,.004)
+  worn.append((x+(d if x<cx else -d),y+(d if y<cy else -d)))
+ verts=[(x,y,z) for z in (z0,z1) for x,y in worn]
  faces=[tuple(reversed(range(n))),tuple(range(n,2*n))]
  faces += [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
  mesh=bpy.data.meshes.new(name+"_mesh");mesh.from_pydata(verts,[],faces);mesh.update()
@@ -52,7 +60,7 @@ for row in range(6):
  polygon=[(xstart,-.215),(1.19,-.215),(1.19,yend),
           (.94,yend),(.94,.035),(xstart,.035)]
  q=extruded_plan("integral L quoin %02d"%row,polygon,z0,z1,
-                 stone_material(1000+row,low_course=row<2))
+                 stone_material(1000+row,low_course=row<2),SEED+row*7919)
  quoins.append(q)
  # Front and side infill terminate at the SAME quoin's footprint.
  x=-1.03
@@ -91,6 +99,7 @@ for row in range(6):
 for q in quoins:
  assert len(q.data.polygons)==8,("L prism faces",q.name)
  assert len(q.data.vertices)==12
+ assert all(.776<=v.co.x<=1.194 and -.219<=v.co.y<=.314 for v in q.data.vertices)
  assert all(len(e.vertices)==2 for e in q.data.edges)
  assert [mod.type for mod in q.modifiers]==["BEVEL","WEIGHTED_NORMAL"]
  assert abs(q.modifiers[0].width-.007)<1e-9
@@ -119,6 +128,7 @@ manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "g1":"BLOCKED","g2":"NOT_RUN","g3":"GEOMETRY_ASSERTIONS_PASS",
  "g4":"NOT_RUN","quoin_edge_wear_m":.007,
  "quoin_material":"shared procedural limestone family",
+ "quoin_plan_wear_max_m":.004,
  "blender":bpy.app.version_string,
  "image":p.name,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
