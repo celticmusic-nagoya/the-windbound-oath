@@ -2,8 +2,9 @@
 
 2.1m x 1.8m wall with return at the right corner. No canonical changes.
 """
-import bpy,random,math,json,os,hashlib
+import bpy,random,math,json,os,hashlib,sys
 from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from mathutils import Vector
 from aidan_dressed_stone_v2 import create_dressed_stone_v2
 from aidan_material_variation_v1 import stone_material,timber_material
