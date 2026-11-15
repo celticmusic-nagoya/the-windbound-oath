@@ -26,7 +26,28 @@ for o in stones:
   if y+sy/2>-.495 and y-sy/2<1.395:window_violations.append(o.name)
 assert not door_violations, "Door intrusion: "+str(door_violations[:5])
 assert not window_violations, "Window intrusion: "+str(window_violations[:5])
-report["qa"]={"stone_mesh_count":len(stones),"door_intrusions":0,"window_intrusions":0}
+# Opening boundary stones must be within a mortar gap of exact architectural heights.
+def edge_error(side, horizontal_test, target_z, above):
+ candidates=[]
+ for o in stones:
+  if not o.name.startswith(side): continue
+  x,y,z=o.location; sx,sy,sz=o.dimensions
+  if not horizontal_test(x,y,sx,sy):continue
+  edge=z-sz/2 if above else z+sz/2
+  if (above and edge>=target_z-0.001) or (not above and edge<=target_z+0.001):
+   candidates.append(abs(edge-target_z))
+ assert candidates, "Missing boundary stones: "+side+str(target_z)
+ err=min(candidates)
+ assert err<=spec.mortar_gap+0.002, (side,target_z,err)
+ return round(err,5)
+window_band=lambda x,y,sx,sy: .0<y<.85
+south_band=lambda x,y,sx,sy: .0<x<1.2
+boundary_errors={
+ "door_top":edge_error("south",south_band,2.20,True),
+ "window_bottom":edge_error("east",window_band,1.12,False),
+ "window_top":edge_error("east",window_band,2.47,True),
+}
+report["qa"]={"stone_mesh_count":len(stones),"door_intrusions":0,"window_intrusions":0,"opening_boundary_error_m":boundary_errors}
 world=bpy.context.scene.world or bpy.data.worlds.new("masonry world")
 bpy.context.scene.world=world
 world.use_nodes=True
