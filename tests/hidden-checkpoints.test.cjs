@@ -23,3 +23,5 @@ test('hazard probe blocks unknown and dangerous field states',()=>{const html=fs
 test('runtime hazard probe rejects unverified roaming monsters and active random encounters',()=>{const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');assert.match(source,/dynamic-enemies-unverified/);assert.match(source,/random-encounter-zone/);assert.match(source,/!enc\.off/);assert.match(source,/FieldMonsters\?\.checkpointClearance\?\./)});
 
 test('roaming monster clearance uses current positions and alert states',()=>{const source=fs.readFileSync('js/field/field-monsters.js','utf8');assert.match(source,/function checkpointClearance\(x,y,radius=280\)/);assert.match(source,/Math\.hypot\(x-m\.x,y-m\.y\)<=radius/);assert.match(source,/\['engage','engaged','alert','chase'\]/);assert.match(source,/monster-context-unavailable/)});
+
+test('roaming checkpoint clearance accounts for goblin detection and boar charge',()=>{const source=fs.readFileSync('js/field/field-monsters.js','utf8');assert.match(source,/Math\.max\(radius,Number\.isFinite\(m\.t\?\.detect\)\?m\.t\.detect\+64:Infinity\)/);assert.match(source,/\['engage','engaged','alert','chase','windup','rush'\]/)});
