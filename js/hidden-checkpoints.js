@@ -9,12 +9,15 @@
   let data;try{data=JSON.parse(raw)}catch{return null}
   if(!data||data.version!==30||!data.prologue||!Number.isInteger(data.prologue.storyStage)||data.prologue.storyStage<0||data.prologue.storyStage>15)return null;
   if(!Number.isInteger(context.storyStage)||context.storyStage!==data.prologue.storyStage)return null;
+  if(data.prologue.version!==2||!data.prologue.moss||data.prologue.moss.map!==context.mapId||!Number.isFinite(data.prologue.moss.x)||!Number.isFinite(data.prologue.moss.y))return null;
+  if(Math.abs(data.prologue.moss.x-context.x)>0.001||Math.abs(data.prologue.moss.y-context.y)>0.001)return null;
   if(typeof context.mapId!=='string'||!context.mapId||!Number.isFinite(context.x)||!Number.isFinite(context.y))return null;
   if(kind==='safe'){
    if(context.inBattle!==false||context.transitioning!==false||context.forcedEncounter!==false||context.canEscape!==true||context.canRecover!==true)return null;
   }else if(kind==='retry'){
    if(context.inBattle!==false||context.transitioning!==false||typeof context.encounterId!=='string'||!context.encounterId||context.canAvoidEncounter!==true)return null;
   }else return null;
+  if(!data.inventory||!data.members||!data.members.aidan||!Array.isArray(data.active)||!data.active.length)return null;
   return {schema:1,slot:KINDS[kind],kind,storyStage:data.prologue.storyStage,context:{...context},payload:raw};
  }
  function read(kind){
