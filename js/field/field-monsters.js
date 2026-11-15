@@ -252,8 +252,10 @@
       if(m.state==='gone')continue;
       if(!Number.isFinite(m.x)||!Number.isFinite(m.y))return {clear:false,reason:'monster-position-invalid'};
       if(level!=null&&m.lv!==level)continue;
-      if(['engage','engaged','alert','chase'].includes(m.state))return {clear:false,reason:'monster-alert'};
-      if(Math.hypot(x-m.x,y-m.y)<=radius)return {clear:false,reason:'monster-nearby'};
+      if(['engage','engaged','alert','chase','windup','rush'].includes(m.state))return {clear:false,reason:'monster-alert'};
+      // Detect radius plus reaction margin: 280px alone misses goblins (detect 420px).
+      const safeRadius=Math.max(radius,Number.isFinite(m.t?.detect)?m.t.detect+64:Infinity);
+      if(Math.hypot(x-m.x,y-m.y)<=safeRadius)return {clear:false,reason:'monster-nearby'};
     }
     return {clear:true,reason:'monster-clear'};
   }
