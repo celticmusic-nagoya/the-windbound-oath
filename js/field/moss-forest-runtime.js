@@ -723,8 +723,24 @@
   }
   function reset(){cancelPendingEnter();S.opened.clear();S.fired.clear();S.map&&unmount();S.flags.moss_a3_seal_open=S.flags.moss_a3_lou_found=S.flags.moss_a3_lou_rescued=false;S.active=false;S.busy=false;}
 
+  // Conservative read-only checkpoint hazard probe. Never alters encounter/transition latches.
+  function checkpointHazards(){
+    if(!S.active||S.busy||entry||recoveryRequired||!S.map||!S.forest)return {clear:false,reason:'not-ready'};
+    const fx=S.x+FOOT.ax,fy=S.y+FOOT.ay;
+    if(S.forest.blocked(S.x,S.y))return {clear:false,reason:'blocked'};
+    for(const sy of S.symbols){
+      if(sy.alive&&lvOk(sy)&&dist(fx,fy,sy.x,sy.y)<=(sy.touchRadius||90)+48)return {clear:false,reason:'enemy-nearby'};
+    }
+    for(const t of S.map.transitions||[]){
+      if(t.enabled&&lvOk(t)&&inShape(t.rect,fx,fy))return {clear:false,reason:'transition-zone'};
+    }
+    for(const z of S.map.eventZones||[]){
+      if(reqOk(z)&&lvOk(z)&&['trigger','locationCard'].includes(z.type)&&z.shape&&inShape(z.shape,fx,fy))return {clear:false,reason:'event-zone'};
+    }
+    return {clear:true,reason:'no-static-hazard'};
+  }
   window.MossForest=Object.freeze({walkStride(actor,dir){return actor==='aidan'?aidanStride(dir):Walk.STRIDE;},cancelPendingEnter,get canSave(){return !entry&&!recoveryRequired},get entering(){return Boolean(entry)},get recoveryRequired(){return recoveryRequired},get enterCount(){return enterCount},interactNearest,facing:faceVec,actor,blocked:(x,y)=>Boolean(S.forest&&S.forest.blocked(x-FOOT.ax,y-FOOT.ay)),shake,pan,focus,release,vista:(id,on,o)=>window.FieldVista?FieldVista.set(id,on,o):false,lock(on){externalLock=Boolean(on);S.busy=Boolean(on)||Boolean(entry)||recoveryRequired;if(on){S.target=null;S.keys.clear();FieldNavigation.cancel();}},fade:(o,ms)=>setFade(o,ms),setTimeOfDay:(n,o)=>window.FieldTimeOfDay?FieldTimeOfDay.set(n,o):false,configure,enter,show,hide,resume,setFlag,syncSymbols,snapshot,restoreState,reset,toast,
-    get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy||Boolean(entry)||recoveryRequired;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
+    checkpointHazards,get battleLatch(){return S.battleLatch;},    get active(){return S.active;},get busy(){return S.busy||Boolean(entry)||recoveryRequired;},get mapId(){return S.mapId;},get map(){return S.map;},get flags(){return {...S.flags};},
     get feet(){return {x:S.x+FOOT.ax,y:S.y+FOOT.ay};},get zones(){return {...S.zones};},get opened(){return [...S.opened];},
     get symbolsAlive(){return S.symbols.filter(s=>s.alive).length;},get forest(){return S.forest;},get frames(){return S.frames;},
     get sealNodes(){return el.world?el.world.querySelectorAll('.forest-seal').length:0;},
