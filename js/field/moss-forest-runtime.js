@@ -740,7 +740,7 @@
     if(!monsters||monsters.clear!==true)return {clear:false,reason:monsters?.reason||'dynamic-enemies-unverified'};
     if(!enc.off&&(S.map.encounterZones||[]).some(z=>z.enabled!==false&&z.style==='step'&&!z.noEncounter&&inShape(z.shape,fx,fy)))return {clear:false,reason:'random-encounter-zone'};
     for(const z of S.map.eventZones||[]){
-      if(reqOk(z)&&lvOk(z)&&(z.type==='trigger'||z.type==='locationCard'||(z.type==='interact'&&z.eventId))&&z.shape&&inShape(z.shape,fx,fy))return {clear:false,reason:'event-zone'};
+      if(reqOk(z)&&lvOk(z)&&(z.type==='trigger'||z.type==='locationCard'||(z.type==='interact'&&z.eventId))&&inShape(zoneShape(z),fx,fy))return {clear:false,reason:'event-zone'};
     }
     return {clear:true,reason:'no-static-hazard'};
   }
