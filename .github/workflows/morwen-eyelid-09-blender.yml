@@ -6,6 +6,12 @@ on:
     paths:
       - 'tools/blender/morwen_production/eyelid_lash/**'
       - '.github/workflows/morwen-eyelid-09-blender.yml'
+  pull_request:
+    branches:
+      - feature/morwen-eyelid-08-contact-cage
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/**'
+      - '.github/workflows/morwen-eyelid-09-blender.yml'
   workflow_dispatch:
 permissions:
   contents: read
