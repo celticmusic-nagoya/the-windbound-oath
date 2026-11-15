@@ -45,3 +45,16 @@ test('checkpoint probe rejects queued movement, encounter latches and auto-firin
 test('checkpoint event hazard resolves ref-based event geometry like gameplay',()=>{const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');const a=source.indexOf('function checkpointHazards()');const b=source.indexOf('window.MossForest=Object.freeze(',a);assert.ok(a>=0&&b>a);assert.match(source.slice(a,b),/inShape\(zoneShape\(z\),fx,fy\)/);assert.match(source,/function zoneShape\(z\)/)});
 
 test('recovery proof explicitly fails closed without verified healing and exit route',()=>{const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');const a=source.indexOf('function checkpointRecovery()'),b=source.indexOf('window.MossForest=Object.freeze(',a);assert.ok(a>=0&&b>a);const part=source.slice(a,b);assert.match(part,/reason:'no-rest-zone'/);assert.match(part,/reason:'recovery-action-and-route-unverified'/);assert.match(source.slice(b,b+1800),/checkpointHazards,checkpointRecovery/);assert.doesNotMatch(part,/canEscape:true|canRecover:true/)});
+
+test('recovery proof executes and rejects rest metadata without a healing action',()=>{
+ const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');
+ const a=source.indexOf('function checkpointRecovery()'),b=source.indexOf('window.MossForest=Object.freeze(',a);
+ assert.ok(a>=0&&b>a);
+ const S={active:true,busy:false,map:{eventZones:[{type:'rest',id:'camp'}]},forest:{}};
+ const sandbox={S,entry:null,recoveryRequired:false,reqOk:()=>true,lvOk:()=>true};
+ vm.createContext(sandbox);vm.runInContext(source.slice(a,b),sandbox);
+ assert.equal(sandbox.checkpointRecovery().reason,'recovery-action-and-route-unverified');
+ assert.equal(sandbox.checkpointRecovery().canRecover,false);
+ S.map.eventZones=[];assert.equal(sandbox.checkpointRecovery().reason,'no-rest-zone');
+ S.active=false;assert.equal(sandbox.checkpointRecovery().reason,'not-ready');
+});
