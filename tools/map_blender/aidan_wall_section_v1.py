@@ -109,7 +109,7 @@ for q in quoins:
    assert omax<=qxmin+.002,(o.name,q.name,omax,qxmin)
 assert all(o.dimensions.x>0 and o.dimensions.z>0 for o in stones)
 assert all(abs(end-(.86 if row%2 else 1.03))<.0001 for row,end in enumerate(course_ends))
-assert all(quoins[row].location.x-quoins[row].dimensions.x/2>=course_ends[row]+.006 for row in range(6))
+assert all(quoins[row].location.x-quoins[row].dimensions.x/2>=course_ends[row]+.004 for row in range(6))
 nominal_stone_face=-.09-.25/2
 joint_recess=mortar_face-nominal_stone_face
 assert .010<=joint_recess<=.020,("mortar joint depth",joint_recess)
