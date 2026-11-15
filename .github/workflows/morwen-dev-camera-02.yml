@@ -7,6 +7,12 @@ on:
     paths:
       - '.github/workflows/morwen-dev-camera-02.yml'
       - 'tools/blender/morwen_production/dev_camera/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - '.github/workflows/morwen-dev-camera-02.yml'
+      - 'tools/blender/morwen_production/dev_camera/**'
 permissions:
   contents: read
 env:
