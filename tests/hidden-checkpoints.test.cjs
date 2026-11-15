@@ -58,3 +58,17 @@ test('recovery proof executes and rejects rest metadata without a healing action
  S.map.eventZones=[];assert.equal(sandbox.checkpointRecovery().reason,'no-rest-zone');
  S.active=false;assert.equal(sandbox.checkpointRecovery().reason,'not-ready');
 });
+
+test('read-only route probe detects clear, blocked and invalid paths without mutating navigation',()=>{
+ const source=fs.readFileSync('js/field/field-navigation.js','utf8');
+ const context={window:{},performance:{now:()=>0}};
+ vm.createContext(context);vm.runInContext(source,context);
+ const nav=context.window.FieldNavigation;
+ nav.configure({width:96,height:96,grid:16,maxNodes:1000});
+ const before=JSON.stringify(nav.status);
+ assert.equal(nav.probeRoute({x:4,y:4},{x:90,y:90},()=>false).reachable,true);
+ assert.equal(nav.probeRoute({x:4,y:4},{x:90,y:90},()=>true).reachable,false);
+ assert.equal(nav.probeRoute({x:4,y:4},{x:120,y:90},()=>false).reason,'out-of-bounds');
+ assert.equal(nav.probeRoute({x:NaN,y:4},{x:90,y:90},()=>false).reason,'invalid-input');
+ assert.equal(JSON.stringify(nav.status),before);
+});
