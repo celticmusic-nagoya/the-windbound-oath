@@ -40,6 +40,15 @@ def extruded_plan(name,polygon,z0,z1,material,seed):
  bevel=obj.modifiers.new("quoin worn arrises 7mm","BEVEL")
  bevel.width=.007;bevel.segments=3;bevel.affect="EDGES"
  bevel.loop_slide=True
+ # Geometry-based relief, not shader bump: dense mesh with bounded 3 mm
+ # procedural displacement. Applied after bevel to preserve the L bond.
+ subdiv=obj.modifiers.new("quoin surface tessellation","SUBSURF")
+ subdiv.subdivision_type="SIMPLE";subdiv.levels=3;subdiv.render_levels=3
+ tex=bpy.data.textures.new(name+" limestone relief",type="CLOUDS")
+ tex.noise_scale=.085;tex.noise_depth=2
+ displace=obj.modifiers.new("quoin real surface relief","DISPLACE")
+ displace.texture=tex;displace.texture_coords="GLOBAL"
+ displace.strength=.003;displace.mid_level=.5
  normals=obj.modifiers.new("quoin weighted face normals","WEIGHTED_NORMAL")
  normals.keep_sharp=True
  return obj
@@ -101,8 +110,10 @@ for q in quoins:
  assert len(q.data.vertices)==12
  assert all(.776<=v.co.x<=1.194 and -.219<=v.co.y<=.314 for v in q.data.vertices)
  assert all(len(e.vertices)==2 for e in q.data.edges)
- assert [mod.type for mod in q.modifiers]==["BEVEL","WEIGHTED_NORMAL"]
+ assert [mod.type for mod in q.modifiers]==["BEVEL","SUBSURF","DISPLACE","WEIGHTED_NORMAL"]
  assert abs(q.modifiers[0].width-.007)<1e-9
+ assert q.modifiers[1].subdivision_type=="SIMPLE"
+ assert abs(q.modifiers[2].strength-.003)<1e-9
 assert len(front)>18 and len(side)>=6 and len(quoins)==6
 assert len(set((r["xstart"],r["yend"]) for r in records))==2
 # Camera: 3/4 view with neutral fill on the right-hand return.
@@ -129,6 +140,8 @@ manifest={"status":"CANDIDATE_NOT_ART_APPROVED","seed":SEED,
  "g4":"NOT_RUN","quoin_edge_wear_m":.007,
  "quoin_material":"shared procedural limestone family",
  "quoin_plan_wear_max_m":.004,
+ "quoin_surface_relief_m":.003,
+ "quoin_surface_method":"SIMPLE subdivision + procedural CLOUDS displacement",
  "blender":bpy.app.version_string,
  "image":p.name,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
 (out/"manifest.json").write_text(json.dumps(manifest,indent=2))
