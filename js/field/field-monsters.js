@@ -243,5 +243,19 @@
     list = list.filter(m => m.state !== 'gone');
   }
   function clear() { list = []; ctx = null; worldEl = null; if (layer) { layer.remove(); layer = null; } }
-  window.FieldMonsters = Object.freeze({MONSTER_TYPES, mount, clear, update, resolve, add, removeAll, setFrozen, get frozen() { return frozen; }, get list() { return list; }});
+  // Read-only proximity check; use current monster positions, not spawn/home positions.
+  // Unknown coordinates or an unmounted context fail closed.
+  function checkpointClearance(x,y,radius=280){
+    if(!ctx||!Number.isFinite(x)||!Number.isFinite(y)||!Number.isFinite(radius)||radius<0)return {clear:false,reason:'monster-context-unavailable'};
+    const level=ctx.level?ctx.level():null;
+    for(const m of list){
+      if(m.state==='gone')continue;
+      if(!Number.isFinite(m.x)||!Number.isFinite(m.y))return {clear:false,reason:'monster-position-invalid'};
+      if(level!=null&&m.lv!==level)continue;
+      if(['engage','engaged','alert','chase'].includes(m.state))return {clear:false,reason:'monster-alert'};
+      if(Math.hypot(x-m.x,y-m.y)<=radius)return {clear:false,reason:'monster-nearby'};
+    }
+    return {clear:true,reason:'monster-clear'};
+  }
+  window.FieldMonsters = Object.freeze({MONSTER_TYPES, mount, clear, update, resolve, add, removeAll, setFrozen, checkpointClearance, get frozen() { return frozen; }, get list() { return list; }});
 })();
