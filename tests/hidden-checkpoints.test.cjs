@@ -39,3 +39,5 @@ test('live roaming clearance rejects nearby, charging, and unknown monsters',()=
  monsters[0].state='wander';monsters[0].t.detect=undefined;assert.equal(context.checkpointClearance(0,0).clear,false);
  context.ctx=null;assert.equal(context.checkpointClearance(0,0).clear,false);
 });
+
+test('checkpoint probe rejects queued movement, encounter latches and auto-firing interact events',()=>{const source=fs.readFileSync('js/field/moss-forest-runtime.js','utf8');const a=source.indexOf('function checkpointHazards()');const b=source.indexOf('window.MossForest=Object.freeze(',a);assert.ok(a>=0&&b>a);const body=source.slice(a,b);assert.match(body,/S\.battleLatch\|\|S\.transitionLatch\|\|S\.target\|\|S\.pending\|\|S\.hold\|\|S\.keys\.size/);assert.match(body,/z\.type===\x27interact\x27&&z\.eventId/)});
