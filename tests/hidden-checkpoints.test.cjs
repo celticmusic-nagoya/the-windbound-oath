@@ -11,3 +11,5 @@ test('retry requires avoidable encounter and prebattle state',()=>{const {api}=s
 test('rejects corrupt and inconsistent checkpoint',()=>{const {api,data}=setup();assert.equal(api.write('safe',payload,safe),true);const record=JSON.parse(data.get(api.key('safe')));record.storyStage=10;data.set(api.key('safe'),JSON.stringify(record));assert.equal(api.read('safe').ok,false)});
 
 test('browser loads hidden storage module but never exposes unverified restore',()=>{const html=fs.readFileSync('index.html','utf8'),combat=fs.readFileSync('js/prologue-combat.js','utf8');assert.match(html,/src="js\/hidden-checkpoints\.js/);assert.match(html,/src="js\/battle-checkpoint\.js/);assert.doesNotMatch(combat,/onRetry:\(\)=>|onContinue:\(\)=>/)});
+
+test('manual save and hidden checkpoints share one v30 serializer without automatic writes',()=>{const html=fs.readFileSync('index.html','utf8');assert.match(html,/function serializeCheckpointGrowthData\(\)/);assert.match(html,/const raw=serializeCheckpointGrowthData\(\)/);assert.match(html,/SaveSlots\.save\(slot,raw,\{overwrite:!!old\}\)/);assert.doesNotMatch(html,/HiddenCheckpoints\.write\(/)});
