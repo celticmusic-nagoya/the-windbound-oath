@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const source=fs.readFileSync('js/hidden-checkpoints.js','utf8');
 function setup(){const data=new Map([['windbound_oath_slot_v1_01','manual']]);const window={localStorage:{getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)}};vm.runInNewContext(source,{window});return {api:window.HiddenCheckpoints,data}}
-const payload=JSON.stringify({version:30,prologue:{storyStage:9},battleItems:{potion:1}});
+const payload=JSON.stringify({version:30,prologue:{version:2,storyStage:9,moss:{map:'forest',x:4,y:5}},inventory:{},members:{aidan:{joined:true}},active:['aidan'],battleItems:{potion:1}});
 const safe={storyStage:9,mapId:'forest',x:4,y:5,inBattle:false,transitioning:false,forcedEncounter:false,canEscape:true,canRecover:true};
 const retry={storyStage:9,mapId:'forest',x:4,y:5,inBattle:false,transitioning:false,encounterId:'fieldGob1',canAvoidEncounter:true};
 test('safe slot 21 and retry slot 22 are separate from manual slots',()=>{const {api,data}=setup();assert.equal(api.write('safe',payload,safe),true);assert.equal(api.write('retry',payload,retry),true);assert.equal(api.read('safe').ok,true);assert.equal(api.read('retry').ok,true);assert.equal(data.get('windbound_oath_slot_v1_01'),'manual');assert.equal(data.size,3)});
@@ -13,3 +13,5 @@ test('rejects corrupt and inconsistent checkpoint',()=>{const {api,data}=setup()
 test('browser loads hidden storage module but never exposes unverified restore',()=>{const html=fs.readFileSync('index.html','utf8'),combat=fs.readFileSync('js/prologue-combat.js','utf8');assert.match(html,/src="js\/hidden-checkpoints\.js/);assert.match(html,/src="js\/battle-checkpoint\.js/);assert.doesNotMatch(combat,/onRetry:\(\)=>|onContinue:\(\)=>/)});
 
 test('manual save and hidden checkpoints share one v30 serializer without automatic writes',()=>{const html=fs.readFileSync('index.html','utf8');assert.match(html,/function serializeCheckpointGrowthData\(\)/);assert.match(html,/const raw=serializeCheckpointGrowthData\(\)/);assert.match(html,/SaveSlots\.save\(slot,raw,\{overwrite:!!old\}\)/);assert.doesNotMatch(html,/HiddenCheckpoints\.write\(/)});
+
+test('rejects mismatched map coordinates and incomplete party data',()=>{const {api}=setup();assert.equal(api.write('safe',payload,{...safe,x:100}),false);assert.equal(api.write('safe',JSON.stringify({version:30,prologue:{version:2,storyStage:9,moss:{map:'forest',x:4,y:5}}}),safe),false)});
