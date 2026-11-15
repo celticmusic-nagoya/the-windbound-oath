@@ -106,24 +106,30 @@ def build_masonry(spec=MasonrySpec(), parent=None):
             z0=row*spec.course_height
             z1=min(spec.eaves,(row+1)*spec.course_height)
             if z1-z0 <= g*2:continue
-            holes=[(a-start[0] if axis[0] else a+W-t/2,
-                    b-start[0] if axis[0] else b+W-t/2)
-                   for a,b,h0,h1 in openings if z0 < h1 and z1 > h0]
+            active_openings=[(a-start[0] if axis[0] else a+W-t/2,
+                              b-start[0] if axis[0] else b+W-t/2,h0,h1)
+                             for a,b,h0,h1 in openings if z0 < h1 and z1 > h0]
+            # Preserve exact opening heights: split intersecting courses vertically.
+            z_edges=sorted(set([z0,z1]+[max(z0,min(z1,z)) for _,_,h0,h1 in active_openings for z in (h0,h1)]))
             # Intersecting opening boundaries are split explicitly per stone.
             for a,b in _intervals(span,spec.stone_length,row,rng):
-                for aa,bb in _subtract([(a,b)],holes):
-                    if bb-aa < .07:continue
-                    relief=rng.uniform(-spec.depth_relief,spec.depth_relief)
-                    cx=start[0]+axis[0]*(aa+bb)/2+outward[0]*relief
-                    cy=start[1]+axis[1]*(aa+bb)/2+outward[1]*relief
-                    sx=(bb-aa-g) if axis[0] else t
-                    sy=(bb-aa-g) if axis[1] else t
-                    if sx <= 0 or sy <= 0:continue
-                    _stone("%s course %02d ashlar %04d"%(side,row,total),
-                           (cx,cy,(z0+z1)/2),
-                           (sx,sy,z1-z0-g),
-                           rng.choice(limestone),group)
-                    total+=1
+                for low,high in zip(z_edges,z_edges[1:]):
+                    if high-low <= g*1.1:continue
+                    holes=[(ha,hb) for ha,hb,h0,h1 in active_openings
+                           if low < h1 and high > h0]
+                    for aa,bb in _subtract([(a,b)],holes):
+                        if bb-aa <= g:continue
+                        relief=rng.uniform(-spec.depth_relief,spec.depth_relief)
+                        cx=start[0]+axis[0]*(aa+bb)/2+outward[0]*relief
+                        cy=start[1]+axis[1]*(aa+bb)/2+outward[1]*relief
+                        sx=(bb-aa-g) if axis[0] else t
+                        sy=(bb-aa-g) if axis[1] else t
+                        if sx <= 0 or sy <= 0:continue
+                        _stone("%s course %02d ashlar %04d"%(side,row,total),
+                               (cx,cy,(low+high)/2),
+                               (sx,sy,high-low-g),
+                               rng.choice(limestone),group)
+                        total+=1
     return {"status":"CANDIDATE_NOT_ART_APPROVED","seed":spec.seed,
             "stone_count":total,"course_count":course_count,
             "collection":group.name,"openings":"DOOR_SOUTH_WINDOW_EAST",
