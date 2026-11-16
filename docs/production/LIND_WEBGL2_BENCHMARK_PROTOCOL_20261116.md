@@ -23,3 +23,10 @@ G1 BLOCKED (world physical scale, camera and private canon reconciliation); G2 N
 - Engine dependency URLs are pinned by version but not yet pinned by content hash. Browser CDN import and Android compatibility are NOT_RUN; network availability and CORS may block loads.
 - Do not compare results unless the same device, browser, resolution, warmup and thermal state are recorded. Babylon and Three may internally batch/optimize differently; geometry equivalence is not a guarantee of equal GPU work.
 - Run each engine twice, discard warmup, compare p95 frame time, mean frame time, context loss, loading failure and available render statistics. Actual engine adoption remains BLOCKED pending real GLB and game integration testing.
+
+## Phase 2 local GLB handoff preflight (implemented, not executed)
+- Open `tools/map_blender/runtime_benchmark/glb-inspect.html` in a secure context (HTTPS or localhost) on Android Chrome or PC. Choose a **local** `.glb` using the file picker; no file bytes are uploaded by the page.
+- Inspect GLB magic/version/file size/chunk alignment, JSON glTF 2.0 metadata, bufferView and accessor references, mesh/node/material/texture/skin/animation counts, external URI declarations, and calculate SHA-256 with Web Crypto.
+- `STRUCTURE_PASS` means **only basic container/reference checks**. It is NOT full glTF schema validation, semantic PBR QA, proof of GLB import into Three.js/Babylon.js, animation rig integrity, visual QA or game QA.
+- External URIs, extensions, glTF semantics, geometry bounds and renderer compatibility need independent validation. The tool is not yet run on any actual candidate GLB.
+- Report status: G1 BLOCKED, G2 NOT_RUN, G3 PARTIAL only for the checks actually performed, G4 NOT_RUN.
