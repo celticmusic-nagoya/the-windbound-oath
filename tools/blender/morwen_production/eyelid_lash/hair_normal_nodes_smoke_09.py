@@ -24,7 +24,12 @@ def main():
     normal=group.nodes.new("ShaderNodeCombineXYZ")
     normal.inputs["Z"].default_value=1.0
     group.links.new(inp.outputs["Geometry"],set_normal.inputs["Mesh"])
-    group.links.new(normal.outputs["Vector"],set_normal.inputs["Normal"])
+    available=[{"name":s.name,"identifier":s.identifier,"enabled":s.enabled} for s in set_normal.inputs]
+    print("M09_SET_MESH_NORMAL_INPUTS="+json.dumps(available,sort_keys=True))
+    normal_socket=next((s for s in set_normal.inputs if s.name=="Normal" and s.enabled),None)
+    if normal_socket is None:
+        raise RuntimeError("GeometryNodeSetMeshNormal has no enabled Normal socket; inspect reported interface")
+    group.links.new(normal.outputs["Vector"],normal_socket)
     group.links.new(set_normal.outputs["Mesh"],out.inputs["Geometry"])
     mod=obj.modifiers.new("M09_TEST_NORMALS","NODES")
     mod.node_group=group
