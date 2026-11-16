@@ -1,6 +1,6 @@
 # LIND ARCHITECTURE KIT CONTRACT v1 (HOME → BUILD / WORLD / INTEGRATION)
 
-Status: **CONTRACT_V1_CANDIDATE_NOT_DIRECTOR_LOCKED**. Machine-readable twin: `arch-kit-contract.v1.json` (authoritative if the two differ). Owner: HOME lane (LIND-HOME-01). Canon gives no building dimensions; every number here is a production candidate. Footprints are **not locked** (`PROVISIONAL_PENDING_MASTER_IMAGE`).
+Status: **CONTRACT_V1 (version 1.1) CANDIDATE, PROVISIONAL, NOT_DIRECTOR_LOCKED**. Machine-readable twin: `arch-kit-contract.v1.json` (authoritative if the two differ). Owner: HOME lane (LIND-HOME-01). Canon gives no building dimensions; every number here is a production candidate. Footprints are **not locked** (PROVISIONAL). The world-map master `abbb3997…0620` is now registered (repo dc17dd4) and SHA-verified; it is a composition master, not to scale, and agrees with this kit's 1.5-storey side-gabled cream-stone + blue-gray slate cottage type.
 
 ## 1. Units, axes, pivots
 - Metres, 1 BU = 1 m, Z-up, main entrance facade faces **-Y**, ridge / long axis along **X**.
@@ -40,8 +40,8 @@ Plan ≈ 0.90 × 0.75, ≥ 0.6 above ridge, cap slab with 0.06 drip, 1–2 terra
 ## 7. Materials (IDs fixed; full PBR ranges in JSON)
 `MAT_STONE_RUBBLE_LIMESTONE_A`, `MAT_STONE_QUOIN_DRESSED_A`, `MAT_MORTAR_LIME_A`, `MAT_SLATE_BLUEGRAY_A`, `MAT_SLATE_RIDGE_A`, `MAT_TIMBER_OAK_WEATHERED_A`, `MAT_PLANK_FLOOR_A`, `MAT_DOOR_PLANK_A`, `MAT_PLASTER_LIME_INT_A`, `MAT_GLASS_CROWN_A`, `MAT_IRON_WROUGHT_A`, `MAT_TERRACOTTA_A`, `MAT_LEAD_FLASHING_A`, `MAT_FABRIC_WOOL_GREEN_A`, `MAT_LINEN_A`. Max 16 unique materials per building. Image maps: CC0 Poly Haven 1k (`rock_boulder_dry`, `rough_wood`, `weathered_brown_planks`; MD5 verified against provider API, SHA-256 in `tools/map_blender/lind/home/texture_sources.json`), else procedural fallback recorded in the build manifest.
 
-## 8. Texel density / UV
-LOD0 512 px/m ±25 % (1k map per 2 m), LOD1 256 px/m. Every render mesh has UV map `UVMap`.
+## 8. Texel density / UV (revised v1.1)
+LOD0 **569 px/m ±25 %** (1k map over the CC0 rock scan's real 1.8 m extent), LOD1 256 px/m. Tile per material: stone surface on modeled stones 1.8 m, rough_wood 2.0 m, planks 2.5 m. For a masonry **pattern** texture on flat LOD1 walls: tile_m = courses-in-texture × 0.24 m (an 8-course pattern → ~1.9 m). Judge stone size by modeled course height (measured in HOME f9_c01: mean 0.242 m, range 0.18–0.34, plinth 0.34; ~11–13 stones/m²), not by texture tiling. Every render mesh has UV map `UVMap`.
 
 ## 9. Naming / collections
 `<PREFIX>_<BLDG>_<PART>[_<VARIANT>][_LOD<n>]`, prefixes `GEO` / `COL` / `ANC` / `LGT` / `CAM` / `STG` (staging, never exported). BLDG ids: `AIDANHOUSE`, `INN`, `SHOP`, `ELDERHOME`, `DWELL<nn>`, `BARN<nn>`. Collections: FOUNDATION, WALL_SHELL, MASONRY, TIMBER, ROOF_STRUCT, ROOF_SLATE, OPENINGS, CHIMNEY, PORCH, INTERIOR, PROPS_EXT, COLLISION, ANCHORS, STAGING.
@@ -59,4 +59,6 @@ Empties, z at FFL or grade, local +Y = facing on arrival. Door pair `ANC_<BLDG>_
 Game camera ortho 27° elevation (25–30°), azimuth -45°; previews ≤ 1280 px; game-scale checks at 48 and 96 px; Cycles ≤ 64 spp + denoise; AgX.
 
 ## 14. Change control
+- 1.0 (2026-11-16) initial. 1.1 (2026-11-17): master PNG registered note; texel density 512→569 px/m + tile_m per material + LOD1 pattern rule (BUILD request); measured scale targets; openings snap to courses (clear size ±0.15 m, actual sizes in build manifest). Footprint/opening/roof values unchanged.
+
 HOME bumps to v2 only with a changelog entry; BUILD must not fork values silently. Variants (burning/ruined) keep footprint and openings: NOT_RUN.
