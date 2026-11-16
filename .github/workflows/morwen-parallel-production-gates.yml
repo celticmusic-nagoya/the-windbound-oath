@@ -27,6 +27,7 @@ on:
       - 'tools/character_blender/inventory_morwen_legacy_face.py'
       - 'tools/qa/production_loop_gate.py'
       - 'tools/qa/test_production_loop_gate.py'
+      - 'tools/qa/create_render_contact_sheet.py'
   workflow_dispatch:
     inputs:
       audit_basemesh:
@@ -157,6 +158,10 @@ jobs:
       - name: Verify candidate remains unchanged
         if: always() && (matrix.role == 'rig' || matrix.role == 'render')
         run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Generate render preview thumbnails and provenance manifest
+        if: always() && matrix.role == 'render'
+        run: |
+          python tools/qa/create_render_contact_sheet.py qa_output/render qa_output/render/previews
       - name: Upload per-role QA evidence
         if: always()
         uses: actions/upload-artifact@v4
