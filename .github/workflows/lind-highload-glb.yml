@@ -24,7 +24,7 @@ jobs:
       matrix:
         objects: [100, 1000, 3000]
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -71,13 +71,13 @@ jobs:
         env:
           LIND_GLB: /tmp/lind-glb-benchmark/technical-scene.glb
           LIND_FULL_MEASURE: '1'
-          LIND_REPETITIONS: '1'
+          LIND_REPETITIONS: '5'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Upload reproducible benchmark asset and QA evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lind-highload-${{ matrix.objects }}
+          name: lind-highload-five-runs-${{ matrix.objects }}
           path: /tmp/lind-glb-benchmark/
           if-no-files-found: warn
           retention-days: 7
