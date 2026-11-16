@@ -42,3 +42,9 @@ After two effective failures of the same method for the same root cause, stop th
 `python3 -m unittest discover -s tests -p 'test_lind_new_world_topology.py' -v`
 `blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/build_lind_source_review.py -- --image /path/to/verified/original.png --output /tmp/lind-source-review.blend`
 These commands verify source-review infrastructure only, not completed terrain.
+
+## Explicit current QA state (2026-11-16)
+- G1: BLOCKED (private canon and approved metric/placement reconciliation).
+- G2: NOT_RUN (actual WORLD geometry art review).
+- G3: SOURCE_REVIEW_PASS only; production terrain technical QA NOT_RUN.
+- G4: NOT_RUN (game integration and Android device QA).
