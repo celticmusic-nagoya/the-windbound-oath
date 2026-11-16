@@ -3,9 +3,10 @@ blender -b candidate.blend --python tools/map_blender/aidan_art02_degenerate_ins
 """
 import argparse,json,math,pathlib,sys
 import bpy
+import bmesh
 from mathutils import Vector
 argv=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
-p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--object",default="stone_32_B_c4");p.add_argument("--threshold-m2",type=float,default=1e-12);a=p.parse_args(argv)
+p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--object",default="stone_32_B_c4");p.add_argument("--threshold-m2",type=float,default=1e-10);a=p.parse_args(argv)
 obj=bpy.data.objects.get(a.object)
 if obj is None or obj.type!="MESH":raise RuntimeError("Missing mesh: "+a.object)
 deps=bpy.context.evaluated_depsgraph_get()
@@ -13,6 +14,17 @@ ev=obj.evaluated_get(deps);mesh=ev.to_mesh()
 try:
     mesh.calc_loop_triangles()
     problems=[]
+    bm=bmesh.new()
+    bm.from_mesh(mesh)
+    bm.faces.ensure_lookup_table()
+    source_faces=[]
+    for f in bm.faces:
+        area=f.calc_area()
+        if area<a.threshold_m2:
+            source_faces.append({"face_index":f.index,"area_local_m2":area,
+                                 "vertex_indices":[v.index for v in f.verts],
+                                 "vertices_local_m":[list(v.co) for v in f.verts]})
+    bm.free()
     for tri in mesh.loop_triangles:
         pts=[obj.matrix_world @ mesh.vertices[i].co for i in tri.vertices]
         area=(pts[1]-pts[0]).cross(pts[2]-pts[0]).length*.5
@@ -25,9 +37,11 @@ try:
     result={"task":"AIDAN-MASONRY-ART-02","object":a.object,
             "blend":bpy.data.filepath,"blender":bpy.app.version_string,
             "triangle_count":len(mesh.loop_triangles),"threshold_m2":a.threshold_m2,
-            "degenerate_count":len(problems),"triangles":problems,
+            "producer_matching_degenerate_face_count":len(source_faces),
+            "producer_matching_degenerate_faces":source_faces,
+            "small_triangle_count":len(problems),"triangles":problems,
             "caveat":"Triangle inspection only; does not determine Boolean/scan/bevel causal stage or certify G3."}
 finally:ev.to_mesh_clear()
 out=pathlib.Path(a.out);out.parent.mkdir(parents=True,exist_ok=True)
 out.write_text(json.dumps(result,indent=2))
-print("AIDAN_DEGENERATE_INSPECTION="+json.dumps({k:result[k] for k in ("object","triangle_count","degenerate_count")}))
+print("AIDAN_DEGENERATE_INSPECTION="+json.dumps({k:result[k] for k in ("object","triangle_count","producer_matching_degenerate_face_count","small_triangle_count")}))
