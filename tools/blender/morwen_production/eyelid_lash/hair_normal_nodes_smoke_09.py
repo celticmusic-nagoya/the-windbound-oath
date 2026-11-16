@@ -22,7 +22,7 @@ def main():
     shade=group.nodes.new("GeometryNodeSetShadeSmooth")
     sockets=[{"name":s.name,"identifier":s.identifier,"enabled":s.enabled} for s in shade.inputs]
     print("M09_SHADE_SMOOTH_INPUTS="+json.dumps(sockets,sort_keys=True),flush=True)
-    geometry=next((s for s in shade.inputs if s.name=="Geometry" and s.enabled),None)
+    geometry=next((s for s in shade.inputs if s.identifier=="Geometry" and s.enabled),None)
     smooth=next((s for s in shade.inputs if s.name=="Shade Smooth" and s.enabled),None)
     if geometry is None or smooth is None:
         raise RuntimeError("Set Shade Smooth API unsupported: inspect reported inputs")
