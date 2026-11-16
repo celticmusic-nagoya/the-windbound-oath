@@ -4,9 +4,14 @@
   "source_contract": {
     "private_canon": "the-windbound-oath-handoff/main reference/lore/{THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md,CANON_ADDENDUM.md,CANON_STATUS.md,WORLD_MAP_CANON_20261108.md}",
     "approved_visual_map_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
-    "approved_visual_map_github_registration": "BLOCKED_BINARY_PENDING",
+    "approved_visual_map_github_registration": "PASS",
     "legacy_map_status": "SUPERSEDED_DO_NOT_USE_FOR_LAYOUT",
-    "spatial_contract_approved": false
+    "spatial_contract_approved": false,
+    "approved_visual_map_path": "assets/sources/lind-world-20261116/original.png",
+    "approved_visual_map_source_commit": "dc17dd4846f35ea1f5dea25168eec9ddb50a3838",
+    "approved_visual_map_blob_sha1": "5abfe58fd4ba4b08a3ddce0181a9978190b0186f",
+    "registration_evidence": "docs/qa/lind/source-registration-verification-20261116.json",
+    "full_G1": "BLOCKED_REMAINING_CG_AND_SPATIAL_REVIEW"
   },
   "lanes": [
     {
@@ -181,7 +186,6 @@
     "result": "THREE_CODEX_SUBAGENTS_EXECUTED_AND_EVIDENCE_PUSHED",
     "source_document": "docs/production/LIND_3D_WORLD_MASTER_APPROVED_20261116.md",
     "blocking_items": [
-      "exact approved PNG absent: 2470 local image hashes scanned, zero match",
       "remaining approved event CG provenance/usage classification discrepancy",
       "director-approved new metric spatial contract absent",
       "legacy assembler uses superseded map SHA/pixel contract; production Blender unpinned",
@@ -193,7 +197,7 @@
     "followup_repairs": {
       "source_branch": "feature/lind-source-register-01",
       "source_pr": 344,
-      "original_png_registration": "BLOCKED_ORIGINAL_BYTES_NOT_EXPOSED",
+      "original_png_registration": "PASS_ZIP_MANIFEST_AND_GITHUB_BLOB_MATCH",
       "pipeline_branch": "feature/lind-pipeline-repair-01",
       "pipeline_pr": 345,
       "implementation_commit": "8c84c63546d9aee045eb7630495e46fa48ad7986",
@@ -206,6 +210,14 @@
       ],
       "independent_qa": "EXECUTED_NO_BLOCKING_REPAIR_FINDING",
       "production_status": "NO_MAIN_MERGE_NO_RELEASE"
+    },
+    "source_registration_update": {
+      "pr": 344,
+      "source_commit": "dc17dd4846f35ea1f5dea25168eec9ddb50a3838",
+      "documentation_commit": "3cfb6266cf5982e9189efae125db86d88862f751",
+      "G1_original_registration": "PASS",
+      "github_blob_readback": "EXACT_BYTES_MATCH",
+      "full_G1": "BLOCKED_REMAINING_CG_AND_SPATIAL_REVIEW"
     }
   }
 }
