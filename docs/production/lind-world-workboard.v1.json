@@ -189,6 +189,23 @@
       "remote Actions ZIP retrieval Forbidden; metadata only",
       "new-world art, mesh/material/collision/runtime and physical Android QA not executed"
     ],
-    "notes": "STORY #340, INTEGRATION #341, independent QA #342. Existing Claude production lanes not launched by this execution. Browser regression subset and technical fixture pass are not full-world G1-G4 PASS. All sessions ended after this audit; no background continuation implied."
+    "notes": "STORY #340, INTEGRATION #341, independent QA #342. Existing Claude production lanes not launched by this execution. Browser regression subset and technical fixture pass are not full-world G1-G4 PASS. All sessions ended after this audit; no background continuation implied.",
+    "followup_repairs": {
+      "source_branch": "feature/lind-source-register-01",
+      "source_pr": 344,
+      "original_png_registration": "BLOCKED_ORIGINAL_BYTES_NOT_EXPOSED",
+      "pipeline_branch": "feature/lind-pipeline-repair-01",
+      "pipeline_pr": 345,
+      "implementation_commit": "8c84c63546d9aee045eb7630495e46fa48ad7986",
+      "legacy_assembly": "ISOLATED_HISTORICAL_ONLY",
+      "blender_pin": "4.0.2+dfsg-1ubuntu8 binary+data SHA verified and installed/rendered in CI",
+      "save_fixture": "FIXED_91_ASSERTIONS_PASS_ON_FEATURE_BRANCH",
+      "ci_runs": [
+        43838057623,
+        43838058006
+      ],
+      "independent_qa": "EXECUTED_NO_BLOCKING_REPAIR_FINDING",
+      "production_status": "NO_MAIN_MERGE_NO_RELEASE"
+    }
   }
 }
