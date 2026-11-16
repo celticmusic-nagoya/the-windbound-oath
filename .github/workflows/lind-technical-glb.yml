@@ -1,5 +1,11 @@
 name: LIND isolated GLB technical export
 on:
+  pull_request:
+    branches:
+      - feature/lind-agent-blender-handoff-01
+    paths:
+      - 'tools/map_blender/runtime_benchmark/**'
+      - '.github/workflows/lind-technical-glb.yml'
   push:
     branches:
       - feature/lind-webgl-runtime-benchmark-01
