@@ -1,5 +1,7 @@
 """Negative controls for four-view candidate artifacts; synthetic PNG headers only."""
 import hashlib
+import struct
+import zlib
 import json
 import pathlib
 import sys
@@ -7,6 +9,15 @@ import tempfile
 import unittest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from verify_morwen_four_views import verify, DIRECTIONS
+
+def chunk(tag, data):
+    return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xffffffff)
+
+def fixture_png(width=512, height=768):
+    # One valid 8-bit grayscale PNG; compressed scanlines are tiny.
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0)
+    rows = (b"\\x00" + b"\\x00" * width) * height
+    return b"\\x89PNG\\r\\n\\x1a\\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b"")
 
 class FourViewTests(unittest.TestCase):
     def setUp(self):
@@ -45,9 +56,17 @@ class FourViewTests(unittest.TestCase):
     def test_forged_art_approval(self):
         self.report["artistic_qa"] = "PASS"; self.save()
         self.assertEqual(verify(self.root)["status"], "BLOCKED")
+    def test_truncated_png_rejected(self):
+        p = self.root/"MORWEN_QA_FRONT.png"
+        raw = p.read_bytes()[:24]
+        p.write_bytes(raw)
+        self.report["views"][0]["sha256"] = hashlib.sha256(raw).hexdigest()
+        self.report["views"][0]["bytes"] = len(raw)
+        self.save()
+        self.assertEqual(verify(self.root)["status"], "BLOCKED")
     def test_wrong_dimensions(self):
         p=self.root/"MORWEN_QA_FRONT.png"
-        raw=p.read_bytes(); raw=raw[:16]+(256).to_bytes(4,"big")+raw[20:]
+        raw=fixture_png(width=256)
         p.write_bytes(raw)
         self.report["views"][0]["sha256"]=hashlib.sha256(raw).hexdigest()
         self.save()
