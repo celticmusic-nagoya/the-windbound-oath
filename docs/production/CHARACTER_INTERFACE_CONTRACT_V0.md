@@ -17,7 +17,7 @@ Target Morwen first. Fiona and Aidan require independent per-character manifests
 |---|---|---|
 | character_id | CONFIRMED | morwen |
 | design reference SHA | CONFIRMED_METADATA_ONLY | 47d58cbeb0f8ad41f51543716d872bfcc8c7d0dc91d45196c9c02b22402df638 |
-| head/body ratio | PROVISIONAL | 2.8 heads is field presentation target, not measured 3D seam geometry |
+| head/body ratio | DIRECTOR_APPROVED_TARGET | 7.5–8.0 heads for new anime-style 3D character models; exact per-character ratio must be matched to the accepted Layer 0 source, not invented |
 | world unit and origin | BLOCKED | derive from approved Layer 0 blend, verify actual object transforms |
 | coordinate axes / 4 directions | BLOCKED | derive from source rig and game camera, no axis guessing |
 | camera / framing | BLOCKED | derive from current field renderer |
@@ -43,6 +43,14 @@ G1 source-image/canon comparison BLOCKED; G2 independent artistic review NOT_RUN
 
 ## Isolation
 FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs/rig candidate collections; COSTUME owns clothes/accessories/occlusion candidate collections. INTEGRATION consumes frozen reviewed outputs only. Each branch writes assets/candidates/<task_id>/<candidate_id>, tools/character_blender/, docs/qa/. No canonical overwrite, main merge, publication or destructive deletion.
+
+## Director-approved proportion and style override — 2026-11-16
+- New 3D character production uses **approximately 7.5–8 heads**, with high-quality anime-style modeling informed by Genshin Impact and Neverness to Everness (NTE). This replaces the 2.8-head target **for new 3D character models and their future in-game presentation**.
+- Preserve the exact approved character identity, face, asymmetry, costume, equipment and Layer 0. Visual references are style/technique inspiration only; do not copy third-party character assets or designs.
+- Legacy 2D field sprites, their sizes, animations and code remain untouched pending a separate approved migration. The earlier 2.8-head specifications are historical/legacy compatibility references, not the new 3D production target.
+- Design the new character at production-quality 3D proportions; validate silhouette and face at actual future gameplay camera and resolution. 48px/96px legacy previews are diagnostic only and do not define the new 3D character's proportion.
+- Target is a range, not proof of measured canon geometry. Exact height, head length, neck seam, shoulder and hip positions, bone names and axes remain BLOCKED until verified from accepted Layer 0 and rig.
+- This later explicit director decision supersedes conflicting 2.8-head statements in the character work packages and the PR #332 draft **for new 3D modeling only**.
 
 ## Source audit 2026-11-16 — critical conflict
 - docs/design/MORWEN_LAYER0_REFERENCE_REGISTRY.json (on PR #326 branch) records Layer 0 sheet SHA 7e122ceb205e502aad49dfa32ac463818e30a3da4d4bd43951f9263bcb08a150, dimensions 1536x1024, approximate 163 cm and 7.5 heads; these are **unverified source metadata**, not the field sprite's 2.8-head target.
