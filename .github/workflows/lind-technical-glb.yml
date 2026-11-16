@@ -6,6 +6,8 @@ on:
     paths:
       - 'tools/map_blender/runtime_benchmark/export_technical_glb.py'
       - '.github/workflows/lind-technical-glb.yml'
+      - 'tools/map_blender/runtime_benchmark/browser-smoke.cjs'
+      - 'tools/map_blender/runtime_benchmark/same-glb-compare.html'
   workflow_dispatch:
 permissions:
   contents: read
@@ -47,6 +49,14 @@ jobs:
           assert m['qa']['G2']=='NOT_RUN' and m['qa']['G4']=='NOT_RUN'
           print('PASS: technical GLB, 100+ nodes, exact SHA, not production')
           PY
+      - name: Install browser test runner
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test Blender-exported GLB in both engines
+        env:
+          LIND_GLB: /tmp/lind-glb-benchmark/technical-scene.glb
+        run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Upload reproducible benchmark asset and QA evidence
         if: always()
         uses: actions/upload-artifact@v4
