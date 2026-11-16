@@ -20,7 +20,13 @@ def main():
     for ob in dst.objects:
         if ob is None:raise ValueError("Missing lash")
         if not ob.users_collection:bpy.context.collection.objects.link(ob)
+        ob.hide_set(False)
+        ob.hide_viewport=False
+        ob.hide_render=False
     lash=bpy.data.objects["M09_L_LASH_CANDIDATE_00"]
+    for collection in lash.users_collection:
+        collection.hide_render=False
+    lash.hide_render=False
     for ob in bpy.data.objects:
         if ob.type=="MESH":ob.hide_render=ob!=lash
     world=[lash.matrix_world@v.co for v in lash.data.vertices]
@@ -56,6 +62,11 @@ def main():
         scene.render.filepath=str(path.resolve())
         bpy.ops.render.render(write_still=True)
         if not path.is_file() or path.stat().st_size==0:raise ValueError("Missing "+label)
+        image=bpy.data.images.load(str(path.resolve()),check_existing=False)
+        try:
+            alpha=image.pixels[3::4]
+            if max(alpha,default=0.0)<=0.001:raise ValueError("Fully transparent render "+label)
+        finally:bpy.data.images.remove(image)
         outputs.append({"view":label,"sha256":hashlib.sha256(path.read_bytes()).hexdigest()})
     report={"status":"DIAGNOSTIC_ONLY_UNAPPROVED","rendered_views":outputs,
         "eye_and_cage_hidden":True,"lash_object":"M09_L_LASH_CANDIDATE_00",
