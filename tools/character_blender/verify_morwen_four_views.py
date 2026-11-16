@@ -7,11 +7,50 @@ import hashlib
 import json
 import pathlib
 import sys
+import struct
+import zlib
 
 DIRECTIONS = ("front", "back", "facing_right", "facing_left")
 PREFIX = "MORWEN_QA_"
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def png_dimensions(raw):
+    """Validate PNG signature, chunk framing/CRC, IHDR, IDAT and IEND."""
+    if not raw.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+        raise ValueError("bad PNG signature")
+    pos = 8
+    width = height = None
+    seen_idat = seen_iend = False
+    first = True
+    while pos + 12 <= len(raw):
+        n = int.from_bytes(raw[pos:pos+4], "big")
+        tag = raw[pos+4:pos+8]
+        end = pos + 12 + n
+        if end > len(raw):
+            raise ValueError("truncated PNG chunk")
+        data = raw[pos+8:pos+8+n]
+        crc = int.from_bytes(raw[pos+8+n:end], "big")
+        if zlib.crc32(tag + data) & 0xffffffff != crc:
+            raise ValueError("PNG CRC mismatch")
+        if first:
+            if tag != b"IHDR" or n != 13:
+                raise ValueError("missing IHDR")
+            width, height = struct.unpack(">II", data[:8])
+            if width == 0 or height == 0:
+                raise ValueError("invalid PNG dimensions")
+            first = False
+        if tag == b"IDAT":
+            seen_idat = True
+        if tag == b"IEND":
+            if n != 0 or end != len(raw):
+                raise ValueError("invalid PNG end")
+            seen_iend = True
+            break
+        pos = end
+    if not (seen_idat and seen_iend):
+        raise ValueError("missing PNG data or end")
+    return width, height
 
 def verify(folder):
     root = pathlib.Path(folder)
