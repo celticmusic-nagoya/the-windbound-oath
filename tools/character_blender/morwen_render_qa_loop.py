@@ -41,7 +41,15 @@ try:
  cam.location=center+Vector((0,-max(height,width)*2,0))
  direction=center-cam.location
  cam.rotation_euler=direction.to_track_quat("-Z","Y").to_euler()
- scale=max(height*1.18,width*768/512*1.18)
+ # Fit BOTH projected axes using the actual portrait camera aspect ratio.
+ inv=cam.rotation_euler.to_matrix().inverted()
+ projected=[inv@(v-center) for v in pts]
+ extent_x=max(v.x for v in projected)-min(v.x for v in projected)
+ extent_y=max(v.y for v in projected)-min(v.y for v in projected)
+ aspect=scene.render.resolution_x/scene.render.resolution_y
+ scale=max(extent_y,extent_x/aspect)/0.82
+ report["projected_bounds"]={"width":round(extent_x,6),"height":round(extent_y,6),"aspect":aspect}
+ report["method"]="projected_bounding_box_aspect_fit"
  for attempt in range(1,3):
   cam_data.ortho_scale=scale
   path=os.path.join(out,"MORWEN_QA_FRONT_%02d.png"%attempt)
@@ -68,7 +76,14 @@ try:
   if attempt==1:
    # Deterministic bounded correction, never mesh editing or unrestricted prompt loop.
    target=0.83
-   scale*=max(0.7,min(1.4,occupancy/target))
+   # One bounded correction based on BOTH image axes.
+   observed_width=(right-left+4)/w
+   observed_height=(top-bottom+4)/h
+   if clipped:
+    scale*=1.15
+   else:
+    scale*=max(observed_width,observed_height)/target
+   report["correction_reason"]="clipping" if clipped else "two_axis_occupancy"
  else:
   report["status"]="FAIL_MAX_ATTEMPTS"
  if report["status"]=="BLOCKED":report["status"]="FAIL_MAX_ATTEMPTS"
