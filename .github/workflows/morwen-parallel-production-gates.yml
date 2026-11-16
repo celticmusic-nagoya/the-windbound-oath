@@ -29,6 +29,8 @@ on:
       - 'tools/qa/test_production_loop_gate.py'
       - 'tools/qa/create_render_contact_sheet.py'
       - 'tools/qa/test_create_render_contact_sheet.py'
+      - 'tools/qa/discover_workflow_run.py'
+      - 'tools/qa/test_discover_workflow_run.py'
   workflow_dispatch:
     inputs:
       audit_basemesh:
@@ -193,6 +195,8 @@ jobs:
           persist-credentials: false
       - name: Install Pillow for preview unit tests
         run: python -m pip install 'Pillow>=10,<12'
+      - name: Unit-test run discovery filtering
+        run: python -m unittest discover -s tools/qa -p 'test_discover_workflow_run.py' -v
       - name: Unit-test thumbnail manifest and idempotence
         run: python -m unittest discover -s tools/qa -p 'test_create_render_contact_sheet.py' -v
       - name: Unit-test cross-team production loop safety gate
