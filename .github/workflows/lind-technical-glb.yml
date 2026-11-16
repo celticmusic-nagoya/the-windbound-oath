@@ -20,7 +20,7 @@ permissions:
 jobs:
   export:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,6 +66,7 @@ jobs:
         env:
           LIND_GLB: /tmp/lind-glb-benchmark/technical-scene.glb
           LIND_FULL_MEASURE: '1'
+          LIND_REPETITIONS: '5'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Upload reproducible benchmark asset and QA evidence
         if: always()
