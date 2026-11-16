@@ -85,3 +85,11 @@ FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs
 - The script's `nonmanifold_edges` counts only edges with >2 adjacent faces; **boundary edges themselves are also non-manifold in Blender's broader topology terminology**. Thus 0 is NOT proof of watertight or manifold meshes. Mesh segmentation, loose edges, inverted normals, skin seam and material appearance remain unverified.
 - Existing candidate contains both dithered and blended surface render methods, but material alpha appearance, textures and export compatibility are not evaluated.
 - Candidate-only basic weight coverage PASS; **G3 PARTIAL**, not full technical acceptance. G1 BLOCKED, G2 NOT_RUN, G4 NOT_RUN. Approved 7.5–8-head model proportions not yet measured.
+
+## Executed boundary spatial audit — 2026-11-16
+- GitHub Actions run 43823804372: SUCCESS; artifact 14205502586 downloaded and `PR326_BOUNDARY_REGIONS.json` inspected.
+- Body: 3,594 boundary edges, **181 connected boundary components**. Largest component 194 edges, world bbox min (-0.152377,-0.070535,0.817992), max (0.152887,0.079972,1.410416) m; next 160 edges, bbox (-0.157619,-0.106483,0.889923) to (0.158130,0.134552,1.335301) m.
+- Face: 756 boundary edges, **33 connected boundary components**. Largest 74 edges / 73 vertices (one degree-4 vertex), bbox (-0.012910,0.058429,1.382223) to (0.013421,0.088985,1.399932) m.
+- Components with vertex degree >2 are not simple closed loops. Neither boundaries nor disconnected regions prove defects without canonical part classification.
+- Important: the Body's two largest boundary-component bounding boxes span much of the torso and cannot be labeled 'neck seam' without explicit approved seam markers. Do not infer skin continuity or 7.5–8-head compliance from this audit.
+- G1 BLOCKED (source image and handedness); G2 NOT_RUN; G3 PARTIAL; G4 NOT_RUN. Next: read-only Body–Face closest-boundary-distance distribution, restrict to anatomically reviewed neck region, verify against 4-view canon, then render visual seam checks.
