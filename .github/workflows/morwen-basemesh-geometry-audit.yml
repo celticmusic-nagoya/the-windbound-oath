@@ -8,6 +8,7 @@ on:
       - 'tools/character_blender/inspect_human_basemesh_geometry.py'
       - 'tools/character_blender/shortlist_female_basemesh.py'
       - 'tools/character_blender/render_basemesh_comparison.py'
+      - 'tools/character_blender/export_basemesh_landmark_evidence.py'
 permissions:
   contents: read
 jobs:
@@ -80,6 +81,9 @@ jobs:
       - name: Render neutral orthographic basemesh comparisons (diagnostic only)
         run: |
           python tools/character_blender/render_basemesh_comparison.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/diagnostic_renders
+      - name: Export source-indexed coordinate evidence for human landmark review
+        run: |
+          python tools/character_blender/export_basemesh_landmark_evidence.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/landmark_vertex_evidence.json
       - name: Remove binary sources from uploaded report
         if: always()
         run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
