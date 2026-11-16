@@ -68,3 +68,12 @@ FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs
 - Rig includes `Root`, `J_Bip_C_Hips`, `J_Bip_C_Spine`, `J_Bip_C_Chest`, `J_Bip_C_UpperChest`, `J_Bip_C_Neck`, `J_Bip_C_Head`, `J_Adj_L_FaceEye`, `J_Adj_R_FaceEye` and left/right limbs, fingers, feet, skirt and secondary bones. Full bone hierarchy and bind matrices are in artifact, NOT duplicated in this contract.
 - These are **candidate observations**, not approved seam or anatomical measurements. The candidate includes experimental eye and lid meshes and an unrelated Icosphere; do not derive approved height, head ratio or full production assembly from all object bounds.
 - Head/body interface alignment, axis handedness, approved reference match and game-camera G4 remain BLOCKED/NOT_RUN.
+
+## Verified bone-review run — 2026-11-16
+- GitHub Actions run 43812208625: **SUCCESS**, artifact 14201031871; downloaded and inspected both PR326_BONE_REVIEW.json and PR326_CANDIDATE_INVENTORY.json.
+- Bone-review schema TWO_CHARACTER_INTERFACE_BONE_REVIEW_V1; status CANDIDATE_DIAGNOSTIC_ONLY; problems=[]; 83 bones.
+- Root -> Hips -> Spine -> Chest -> UpperChest -> Neck -> Head parent links all verified. Neck tail local (0.00025548,-0.01727151,1.38815856), Head root local (0.00025545,-0.00796455,1.38756120). Euclidean distance 0.009326111 m; this is **not** a mesh gap.
+- Face mesh bbox height 0.23213279 m, Body mesh bbox height 1.59781727 m; **do not calculate 7.5–8 head compliance from these**, because Face mesh bounding box is not verified anatomical head length.
+- Blender scene METRIC, scale_length 1.0; candidate read-only and hash-verified.
+- G1 BLOCKED (official reference image bytes unavailable and axis conflict), G2 NOT_RUN, G3 PARTIAL_MEASUREMENT_ONLY, G4 NOT_RUN.
+- Next non-destructive QA: evaluate neck skin seam, bone weights, material and UV properties, source-image camera handedness. Do not freeze interface until source and art review agree.
