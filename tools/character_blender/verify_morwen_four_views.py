@@ -87,10 +87,10 @@ def verify(folder):
         if not image.is_file():
             errors.append("missing " + filename); continue
         raw = image.read_bytes()
-        if not raw.startswith(b"\x89PNG\r\n\x1a\n") or len(raw) < 24:
-            errors.append("not PNG " + filename); continue
-        width = int.from_bytes(raw[16:20], "big")
-        height = int.from_bytes(raw[20:24], "big")
+        try:
+            width, height = png_dimensions(raw)
+        except ValueError as exc:
+            errors.append("invalid PNG " + filename + ": " + str(exc)); continue
         if (width, height) != (512, 768):
             errors.append("incorrect dimensions " + filename)
         if sha(image) != view.get("sha256") or len(raw) != view.get("bytes"):
