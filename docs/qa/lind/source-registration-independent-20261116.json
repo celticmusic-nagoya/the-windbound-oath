@@ -1,0 +1,36 @@
+{
+  "reviewer": "/root/qa",
+  "source_commit": "dc17dd4846f35ea1f5dea25168eec9ddb50a3838",
+  "scope": "G1 source registration subset only",
+  "result": "PASS_LOCAL_COMMITTED_BYTES",
+  "checks": {
+    "zip_member": "TWO_Rilde_WorldMap_Approved_20261116.png",
+    "zip_png_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "registered_png_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "committed_blob_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "all_png_bytes_identical": true,
+    "zip_upload_manifest_matches_registered_bytes": true,
+    "png_bytes": 3586379,
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "registration_manifest_matches": true,
+    "upload_manifest_matches": true,
+    "commit_changes": [
+      "A\tassets/sources/lind-world-20261116/manifest.json",
+      "A\tassets/sources/lind-world-20261116/original.png",
+      "A\tassets/sources/lind-world-20261116/source-upload-manifest.json"
+    ],
+    "existing_assets_changed": false
+  },
+  "remote_readback": "NOT_RUN by independent reviewer; coordinator conducting separately",
+  "gates": {
+    "G1_source_registration_subset": "PASS_LOCAL_COMMITTED_BYTES",
+    "G1_overall": "BLOCKED_PENDING_CANON_CG_VISUAL_CONCORDANCE",
+    "G2": "NOT_RUN",
+    "G3_world": "NOT_RUN",
+    "G4_world": "NOT_RUN"
+  }
+}
