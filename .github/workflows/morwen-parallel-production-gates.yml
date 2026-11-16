@@ -16,6 +16,7 @@ on:
       - 'tools/character_blender/test_verify_morwen_four_views.py'
       - 'tools/character_blender/measure_morwen_reference_silhouettes.py'
       - 'tools/character_blender/test_measure_morwen_reference_silhouettes.py'
+      - 'tools/character_blender/build_morwen_reference_scene.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -113,6 +114,10 @@ jobs:
         run: |
           mkdir -p qa_output/render
           python tools/character_blender/morwen_render_qa_loop.py -- "$CANDIDATE_PATH" qa_output/render
+      - name: Build packed Layer0 modelling reference scene
+        if: matrix.role == 'render'
+        run: |
+          python -m bpy -b --python tools/character_blender/build_morwen_reference_scene.py -- qa_output/render/MORWEN_LAYER0_REFERENCE_SCENE.blend
       - name: Capture four independent orthographic views for visual review
         if: matrix.role == 'render'
         run: |
