@@ -10,6 +10,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/diagnose_lash_collision_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -61,9 +62,15 @@ jobs:
       - name: Classify collision sources before enforcing failure gate
         run: |
           python tools/blender/morwen_production/eyelid_lash/diagnose_lash_collision_09.py --intersections render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/COLLISION_DIAGNOSIS_09.json
-      - name: Gate real surface collision QA (expected FAIL for current candidate)
+      - name: Build redesigned surface-frame candidate in separate blend
         run: |
-          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json
+          python tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
+      - name: Evaluate redesigned candidate independently
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend --out render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json
+      - name: Gate redesigned candidate collision QA
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -71,5 +78,6 @@ jobs:
           path: |
             render_output/morwen_eyelid_09/*.json
             render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
+            render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
           if-no-files-found: warn
           retention-days: 7
