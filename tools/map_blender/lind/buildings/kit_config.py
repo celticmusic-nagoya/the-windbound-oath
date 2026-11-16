@@ -17,8 +17,12 @@ import copy
 import json
 import os
 
+# Pinned HOME contract v1 (vendored byte-identical, read-only). Loader accepts a file only if its
+# SHA-256 equals the pin; otherwise FALLBACK is used and QA must report CONTRACT_LOAD=FAIL.
+HOME_CONTRACT_SHA256_PIN = "a415170dfac2d03a71dc973905f5a0ddf707392f10af1c7a755e3f0f37e3c651"
 HOME_CONTRACT_CANDIDATES = [
     os.environ.get("LIND_HOME_ARCH_CONTRACT", ""),
+    "docs/production/lind/buildings/vendor/arch-kit-contract.v1.json",
     "docs/production/lind/home/arch-kit-contract.v1.json",
     "/home/claude/wt-home/docs/production/lind/home/arch-kit-contract.v1.json",
 ]
@@ -58,7 +62,7 @@ BUILD_EXTRA = {
     "slate_gauge": 0.18,              # inside 0.15-0.20
     "batten_section": [0.05, 0.03],
     "ridge_piece_len": [0.30, 0.40],
-    "wall_texture_tile_m": 2.0,       # 1k map / 2 m = 512 px/m (contract texel density)
+    "wall_texture_tile_m": 3.2,       # DEVIATION: 320 px/m (contract 512 +-25%); 2.0 m tile rendered stones ~0.15 m (brick-like) vs CG ~0.3-0.5 m
     "dressed_texture_tile_m": 1.0,
     "plinth_height": 0.32,            # inside 0.28-0.40
     "quoin_course_h": [0.22, 0.32],   # inside course_height 0.15-0.32
@@ -102,18 +106,28 @@ def load_config(repo_root=None):
     global HOME_CONTRACT_SHA256_SEEN
     import hashlib
     contract, src = None, None
+    tried = []
     for cand in HOME_CONTRACT_CANDIDATES:
         if not cand:
             continue
         path = cand if (os.path.isabs(cand) or repo_root is None) else os.path.join(repo_root, cand)
         if os.path.isfile(path):
             raw = open(path, "rb").read()
-            contract = json.loads(raw)
-            src = path
-            HOME_CONTRACT_SHA256_SEEN = hashlib.sha256(raw).hexdigest()
-            break
+            sha = hashlib.sha256(raw).hexdigest()
+            tried.append({"path": path, "sha256": sha, "pin_match": sha == HOME_CONTRACT_SHA256_PIN})
+            if sha == HOME_CONTRACT_SHA256_PIN:
+                contract = json.loads(raw)
+                src = path
+                HOME_CONTRACT_SHA256_SEEN = sha
+                break
+        else:
+            tried.append({"path": path, "missing": True})
     status = "HOME_CONTRACT_V1_APPLIED" if contract else "FALLBACK_SNAPSHOT_OF_HOME_CONTRACT_V1"
     c = contract or copy.deepcopy(FALLBACK_CONTRACT)
+    if contract is not None:
+        info_materials = sorted(contract.get("materials", {}).keys())
+    else:
+        info_materials = []
     lv, wl, op, rf = c["levels"], c["walls"], c["openings"], c["roof"]
     ss = rf["slate_spec"]
     hsv = ss["colour_hsv_candidate"]
@@ -150,8 +164,12 @@ def load_config(repo_root=None):
         "render": BUILD_EXTRA["render"],
         "max_materials": c.get("max_unique_materials_per_building", 16),
     }
-    info = {"status": status, "home_contract_path": src, "home_contract_sha256": HOME_CONTRACT_SHA256_SEEN,
-            "home_contract_status": c.get("status"), "build_extra": BUILD_EXTRA}
+    info = {"status": status, "fallback_used": contract is None, "pin_sha256": HOME_CONTRACT_SHA256_PIN,
+            "candidates_tried": tried,
+            "home_contract_path": src, "home_contract_sha256": HOME_CONTRACT_SHA256_SEEN,
+            "home_contract_status": c.get("status"), "build_extra": BUILD_EXTRA,
+            "contract_material_ids": info_materials}
+    cfg["contract_raw"] = c
     return cfg, info
 
 

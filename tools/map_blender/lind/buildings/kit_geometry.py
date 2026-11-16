@@ -33,6 +33,12 @@ class MeshBuilder:
         self.mats = []
         self.M = Matrix.Identity(4)
         self.uv_scale = uv_scale
+        self.seg = 0
+        self.vert_seg = []
+
+    def new_segment(self):
+        """Start a new weld island (vertices are only merged within one segment)."""
+        self.seg += 1
 
     def _mat_index(self, mat):
         if mat not in self.mats:
@@ -46,6 +52,7 @@ class MeshBuilder:
             return
         base = len(self.verts)
         self.verts.extend(wp)
+        self.vert_seg.extend([self.seg] * len(wp))
         self.faces.append(tuple(range(base, base + len(wp))))
         self.face_mat.append(self._mat_index(mat))
         if uvs is None:
@@ -57,7 +64,18 @@ class MeshBuilder:
         if not self.faces:
             return None
         me = bpy.data.meshes.new(self.name)
-        me.from_pydata([tuple(v) for v in self.verts], [], self.faces)
+        verts, faces = self.verts, self.faces
+        if merge:
+            key_to_new, remap, nv = {}, [], []
+            for i, v in enumerate(self.verts):
+                key = (self.vert_seg[i], round(v.x, 5), round(v.y, 5), round(v.z, 5))
+                if key not in key_to_new:
+                    key_to_new[key] = len(nv)
+                    nv.append(v)
+                remap.append(key_to_new[key])
+            verts = nv
+            faces = [tuple(remap[i] for i in f) for f in self.faces]
+        me.from_pydata([tuple(v) for v in verts], [], faces)
         uv = me.uv_layers.new(name="UVMap")
         li = 0
         for fi, poly in enumerate(me.polygons):
@@ -68,8 +86,6 @@ class MeshBuilder:
         attr.data.foreach_set("value", self.face_rand)
         bm = bmesh.new()
         bm.from_mesh(me)
-        if merge:
-            bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-4)
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         bm.to_mesh(me)
         bm.free()
@@ -233,6 +249,7 @@ def wall_with_openings(mb, frame, length, profile, thickness, openings, mat, mat
     Grid decomposition keeps every edge shared, so merging vertices yields a closed mesh.
     """
     mat_reveal = mat_reveal or mat
+    mb.new_segment()
     us = sorted({round(p[0], 6) for p in profile} | {round(o[k], 6) for o in openings for k in (0, 1)})
     zs = sorted({round(p[1], 6) for p in profile} | {round(o[k], 6) for o in openings for k in (2, 3)})
     cells = []
@@ -245,38 +262,71 @@ def wall_with_openings(mb, frame, length, profile, thickness, openings, mat, mat
             c = clip_convex(rect, profile)
             if len(c) >= 3:
                 cells.append(c)
-    pts2d = set()
+    # snap shared points to identical floats (tolerance hash), then emit caps
+    table = {}
+
+    def snap(p):
+        kx, ky = int(math.floor(p[0] / 1e-4)), int(math.floor(p[1] / 1e-4))
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                for q in table.get((kx + dx, ky + dy), ()):
+                    if abs(q[0] - p[0]) < 2e-5 and abs(q[1] - p[1]) < 2e-5:
+                        return q
+        q = (p[0], p[1])
+        table.setdefault((kx, ky), []).append(q)
+        return q
+
+    snapped = []
     for c in cells:
+        sc = []
+        for p in c:
+            q = snap(p)
+            if not sc or sc[-1] != q:
+                sc.append(q)
+        if len(sc) > 1 and sc[0] == sc[-1]:
+            sc.pop()
+        if len(sc) >= 3:
+            snapped.append(sc)
+    # T-junction removal: insert any snapped vertex lying on a cell edge into that edge
+    allpts = list({q for c in snapped for q in c})
+    fixed = []
+    for c in snapped:
+        out = []
+        for i in range(len(c)):
+            a, b = c[i], c[(i + 1) % len(c)]
+            out.append(a)
+            ex, ey = b[0] - a[0], b[1] - a[1]
+            L2 = ex * ex + ey * ey
+            if L2 < 1e-12:
+                continue
+            mids = []
+            for q in allpts:
+                if q == a or q == b:
+                    continue
+                t = ((q[0] - a[0]) * ex + (q[1] - a[1]) * ey) / L2
+                if 1e-6 < t < 1 - 1e-6:
+                    cr = abs(ex * (q[1] - a[1]) - ey * (q[0] - a[0])) / math.sqrt(L2)
+                    if cr < 2e-5:
+                        mids.append((t, q))
+            out.extend(q for _, q in sorted(mids))
+        fixed.append(out)
+    edge_use = {}
+    for c in fixed:
         mb.poly([frame.p(u, z, 0.0) for (u, z) in c], mat)
         mb.poly([frame.p(u, z, -thickness) for (u, z) in reversed(c)], mat)
-        for p in c:
-            pts2d.add((round(p[0], 6), round(p[1], 6)))
-
-    def edge_strip(a, b, m):
-        ax, ay = a
-        bx, by = b
-        L2 = (bx - ax) ** 2 + (by - ay) ** 2
-        on = []
-        for (x, y) in pts2d:
-            cross = (bx - ax) * (y - ay) - (by - ay) * (x - ax)
-            if abs(cross) < 1e-5 * math.sqrt(L2):
-                t = ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / L2
-                if -1e-6 <= t <= 1 + 1e-6:
-                    on.append((t, (x, y)))
-        on.sort()
-        for k in range(len(on) - 1):
-            p, q = on[k][1], on[k + 1][1]
-            if (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 < 1e-10:
-                continue
-            mb.poly([frame.p(p[0], p[1], 0), frame.p(p[0], p[1], -thickness),
-                     frame.p(q[0], q[1], -thickness), frame.p(q[0], q[1], 0)], m)
-
-    for i in range(len(profile)):
-        edge_strip(profile[i], profile[(i + 1) % len(profile)], mat)
-    for (u0, u1, z0, z1) in openings:
-        ring = [(u0, z0), (u0, z1), (u1, z1), (u1, z0)]  # reversed winding: reveal faces inward
-        for i in range(4):
-            edge_strip(ring[i], ring[(i + 1) % 4], mat_reveal)
+        for i in range(len(c)):
+            a, b = c[i], c[(i + 1) % len(c)]
+            k = (a, b) if a < b else (b, a)
+            edge_use.setdefault(k, []).append((a, b))
+    for k, uses in edge_use.items():
+        if len(uses) != 1:
+            continue
+        a, b = uses[0]
+        on_open = any(abs(a[0] - b[0]) < 1e-9 and o[0] - 1e-6 <= a[0] <= o[1] + 1e-6 and o[2] - 1e-6 <= min(a[1], b[1])
+                      and max(a[1], b[1]) <= o[3] + 1e-6 or abs(a[1] - b[1]) < 1e-9 and o[2] - 1e-6 <= a[1] <= o[3] + 1e-6
+                      and o[0] - 1e-6 <= min(a[0], b[0]) and max(a[0], b[0]) <= o[1] + 1e-6 for o in openings)
+        mb.poly([frame.p(a[0], a[1], 0), frame.p(a[0], a[1], -thickness), frame.p(b[0], b[1], -thickness),
+                 frame.p(b[0], b[1], 0)], mat_reveal if on_open else mat)
 
 
 def irregular_outline(u0, u1, z0, z1, rng, chip=0.04, wobble=0.012):

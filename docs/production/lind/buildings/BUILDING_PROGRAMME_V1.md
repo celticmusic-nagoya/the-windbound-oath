@@ -1,8 +1,8 @@
 # LIND-BUILD-01 — Rilde village building programme v1 (inn / shop / dwellings / storage)
 
 Status: **PRODUCTION SPEC CANDIDATE — NOT CANON, NOT ART-APPROVED.** Lane BUILD, branch `feature/lind-buildings-01`.
-Spatial status: footprints, orientations and positions are **not locked** (WORLD contract not yet published). Buildings are authored isolated, origin at front-door threshold centre, front = -Y, Z-up, 1 BU = 1 m.
-Interface status: HOME arch-kit contract **not yet published** → all dimensions live in `tools/map_blender/lind/buildings/kit_config.py` and the proposal `arch-kit-contract.PROPOSAL.json` (`PENDING_HOME_ALIGNMENT`).
+Spatial status: footprints, orientations and positions are **not locked**. The WORLD lane was stopped and handed to Codex (Draft PR #352); any terrain-dependent placement is provisional. Buildings are authored isolated with the HOME contract origin: **centre of the exterior footprint bbox at grade z = 0**, Z-up, main entrance facade -Y, 1 BU = 1 m.
+Interface status: HOME arch-kit contract v1 (`CONTRACT_V1_CANDIDATE_NOT_DIRECTOR_LOCKED`, SHA-256 `a415170d…3c651`) is vendored byte-identical at `docs/production/lind/buildings/vendor/` and SHA-pinned by `kit_config.py`. Deviations and requested additions: `HOME_CONTRACT_ALIGNMENT.md`.
 
 ## 1. Sources (G1 inputs)
 | Source | Class | SHA-256 / revision | Use here |
@@ -11,6 +11,7 @@ Interface status: HOME arch-kit contract **not yet published** → all dimension
 | private `WORLD_MAP_CANON_20261108.md` | canon text (確定) | private | village centre = housing + storage/collection facilities; agricultural/fishing village, **not** a trade port |
 | AGENTS.md §13 | repo rule | branch head `c0223b5` | inn, shop are important locations; peaceful buildings enterable; burning versions keep layout continuity |
 | PR #307 | director-approved design decision | open PR | blue-gray slate roofs for all Rilde buildings |
+| master world-map illustration `assets/sources/lind-world-20261116/original.png` (repo commit dc17dd4; read-only local copy used, not committed here) | director-adopted visual composition master, not to scale | `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620` (verified by lead) | village = tight cluster of steep dark blue-gray roofs with one larger central block; no metric or placement values taken |
 | `assets/approved/world/rilde_village.png` | approved CG (village day) | `c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a` (matches `docs/art/approved-world-event-sha256.json`) | architecture language (primary) |
 | `assets/approved/game/rilde_story/raid/attack_background_only.png` | approved CG (burning) | `a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e` | burning-state continuity |
 | `assets/approved/game/rilde_story/aftermath/ruins_background_only.png` | approved CG (aftermath) | `78b0801f10b6a763c66aa44265ab381edc398f3b5adfb1b3d3dee0e6c6d917b2` | ruin state: stone shells survive, roofs reduced to charred rafters |
@@ -73,3 +74,7 @@ Gameplay: during the raid buildings are inaccessible — doors in burning/ruin s
 - No primitive massing presented as art; blockouts must be named `*_blockout*` / `STRUCTURAL_BLOCKOUT_NOT_ART`.
 - Individual slates with per-slate dimension/tilt/colour variance; real wall apertures; UV on every mesh; PBR (CC0 Poly Haven, ledgered in PR #309) + procedural variation.
 - Evidence: 27° ortho 3/4 render per building, lineup, 48/96 px downsamples, inspected with Read before any claim. G2 never self-approved.
+
+## 7. As-built v1 (supersedes §3 sizes where they differ)
+Authoritative dimensions are `tools/map_blender/lind/buildings/kit_config.py` (`BUILDINGS`, derived from HOME contract v1) and the per-run `build_manifest.json`. v1 footprints (W × D, m): inn 12.0 × 8.0 + front cross-gable wing 4.4 × 1.5, 2 storeys, eave 6.05; shop 6.6 × 8.4 gable-front, 1½ storeys, eave 3.30; house A 7.4 × 5.6 (eaves-front, pent porch, dormer); house B 5.8 × 7.2 (gable-front, gabled porch, external side stack); house C 7.6 × 5.4 + 2.4 m lean-to; storage 6.6 × 7.6 gable-front, boarded gables, loft door + hoist beam, cart doors. Roof pitch 44° (contract range 38–48). The barn variant (§3.4) is **not built in v1**.
+The "harp-sign" building in the approved CG remains an open G1 question; v1 uses emblem parameters weathercock (inn) and pouch-leaf (shop), no text.

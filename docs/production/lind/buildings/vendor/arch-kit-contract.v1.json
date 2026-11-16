@@ -1,0 +1,126 @@
+{
+  "schema": "lind.arch-kit-contract.v1",
+  "task_id": "LIND-HOME-01",
+  "owner_lane": "HOME",
+  "consumers": ["BUILD", "WORLD", "INTEGRATION", "STORY"],
+  "status": "CONTRACT_V1_CANDIDATE_NOT_DIRECTOR_LOCKED",
+  "note": "All numeric values are production candidates. Canon contains no building dimensions. Values marked PROVISIONAL_PENDING_MASTER_IMAGE depend on the unregistered 2026-11-16 world-map image.",
+  "units": {"length": "m", "blender_unit": 1.0, "up_axis": "Z", "front_axis": "-Y", "handedness": "right", "angle": "deg"},
+  "origin_pivot": {
+    "building_origin": "centre of exterior footprint bounding box at finished exterior grade (z=0) in front of the main door",
+    "grade_z": 0.0,
+    "rule": "X = ridge / long axis, -Y = main entrance facade. No rotation or scale baked into mesh data except identity; placement transform is applied by WORLD/INTEGRATION only.",
+    "module_pivot": "kit modules (wall panel, window, door) pivot at bottom-left-exterior corner of the module on the wall face plane",
+    "footprint_lock": "NOT_LOCKED (PROVISIONAL_PENDING_MASTER_IMAGE)"
+  },
+  "levels": {
+    "finished_floor_above_grade": [0.15, 0.30, 0.25],
+    "storey_floor_to_floor": [2.6, 3.0, 2.75],
+    "clear_ceiling_height_ground": [2.4, 2.7, 2.55],
+    "knee_wall_above_loft_floor": [0.0, 0.6, 0.3],
+    "wall_plate_top_z_one_and_half_storey": 3.3,
+    "comment": "[min, max, default]"
+  },
+  "walls": {
+    "exterior_stone_thickness": [0.45, 0.65, 0.55],
+    "interior_partition_timber_thickness": [0.10, 0.15, 0.12],
+    "interior_plaster_lining": 0.02,
+    "mortar_recess_behind_stone_face": [0.015, 0.035, 0.025],
+    "joint_width": [0.008, 0.022],
+    "plinth_course_height": [0.28, 0.40],
+    "course_height": [0.15, 0.32],
+    "stone_length": [0.20, 0.65],
+    "quoin_long": [0.48, 0.62], "quoin_short": [0.28, 0.36],
+    "corner_square_tolerance_deg": 1.5,
+    "hand_built_rules": "footprint corners may deviate <= 0.04 m from rectangle; ridge sag <= 0.04 m; no two adjacent courses with equal stone joint positions within 0.06 m"
+  },
+  "openings": {
+    "door_main_ext": {"clear_w": 1.00, "clear_h": 2.05, "frame": 0.08, "sill": "threshold stone 0.10 proud"},
+    "door_secondary": {"clear_w": 0.90, "clear_h": 2.00, "frame": 0.08},
+    "window_W1_ground": {"clear_w": 0.80, "clear_h": 1.05, "sill_above_ffl": 0.95, "panes": "2x3"},
+    "window_W2_gable_loft": {"clear_w": 0.60, "clear_h": 0.75, "panes": "2x2"},
+    "window_W3_small": {"clear_w": 0.45, "clear_h": 0.55, "panes": "1x2"},
+    "frame_setback_from_exterior_face": 0.14,
+    "lintel": {"type": "oak timber", "height": 0.18, "bearing_each_side": 0.20},
+    "jamb_stones": "alternating long/short dressed stones each side",
+    "min_pier_between_openings": 0.6,
+    "min_distance_opening_to_corner": 0.7
+  },
+  "roof": {
+    "type_default": "double-pitched gable, slate",
+    "pitch_deg": [38, 48, 42],
+    "eave_overhang": [0.35, 0.45, 0.40],
+    "verge_overhang": [0.25, 0.35, 0.30],
+    "rafter": {"w": 0.08, "h": 0.15, "spacing": 0.60},
+    "bargeboard": {"w": 0.05, "h": 0.22},
+    "slate_spec": {
+      "canon": "blue-gray natural slate (PR #307, director-approved 2026-11-14)",
+      "colour_hsv_candidate": {"h_deg": [200, 215], "s": [0.08, 0.15], "v_srgb": [0.32, 0.45]},
+      "exposed_gauge": [0.15, 0.20],
+      "length": [0.34, 0.44],
+      "width": [0.18, 0.32],
+      "thickness": [0.010, 0.020],
+      "headlap_min": 0.06,
+      "side_bond_min_offset": 0.06,
+      "tilt_on_course_below": "bottom edge lifted by ~2 x thickness",
+      "edge": "per-slate chipped corners, no two adjacent slates with identical outline",
+      "eave": "double first course",
+      "ridge": "angled slate/stone saddle pieces 0.30-0.40 long, overlapping",
+      "verge": "bargeboard + slates projecting 0.03-0.06 past board",
+      "weathering": "lichen/moss biased to lower courses and north slope; never a uniform band"
+    }
+  },
+  "chimney": {"plan": [0.9, 0.75], "above_ridge_min": 0.6, "cap_slab_overhang": 0.06, "pots": [1, 2], "flashing": "lead, MAT_LEAD_FLASHING_A"},
+  "materials": {
+    "MAT_STONE_RUBBLE_LIMESTONE_A": {"albedo_srgb_value": [0.55, 0.80], "hue_deg": [30, 48], "sat": [0.10, 0.28], "roughness": [0.75, 0.95], "metallic": 0, "maps": "CC0 Poly Haven rock_boulder_dry 1k (diff/nor_gl/rough) or procedural fallback"},
+    "MAT_STONE_QUOIN_DRESSED_A": {"albedo_srgb_value": [0.60, 0.82], "roughness": [0.70, 0.90], "metallic": 0},
+    "MAT_MORTAR_LIME_A": {"albedo_srgb_value": [0.35, 0.55], "roughness": [0.88, 0.98], "metallic": 0},
+    "MAT_SLATE_BLUEGRAY_A": {"albedo": "see roof.slate_spec.colour_hsv_candidate", "roughness": [0.55, 0.80], "metallic": 0},
+    "MAT_SLATE_RIDGE_A": {"albedo_srgb_value": [0.28, 0.40], "roughness": [0.6, 0.85], "metallic": 0},
+    "MAT_TIMBER_OAK_WEATHERED_A": {"albedo_srgb_value": [0.18, 0.40], "roughness": [0.60, 0.85], "metallic": 0, "maps": "CC0 Poly Haven rough_wood 1k"},
+    "MAT_PLANK_FLOOR_A": {"albedo_srgb_value": [0.25, 0.45], "roughness": [0.55, 0.80], "maps": "CC0 Poly Haven weathered_brown_planks 1k"},
+    "MAT_DOOR_PLANK_A": {"albedo_srgb_value": [0.20, 0.40], "roughness": [0.55, 0.80], "maps": "CC0 Poly Haven weathered_brown_planks 1k"},
+    "MAT_PLASTER_LIME_INT_A": {"albedo_srgb_value": [0.70, 0.86], "roughness": [0.85, 0.95]},
+    "MAT_GLASS_CROWN_A": {"ior": 1.5, "roughness": [0.02, 0.10], "tint": "slight green"},
+    "MAT_IRON_WROUGHT_A": {"metallic": 1, "albedo_srgb_value": [0.08, 0.16], "roughness": [0.45, 0.70]},
+    "MAT_TERRACOTTA_A": {"albedo_srgb_value": [0.40, 0.60], "hue_deg": [12, 25], "roughness": [0.7, 0.9]},
+    "MAT_LEAD_FLASHING_A": {"metallic": 0.6, "albedo_srgb_value": [0.30, 0.42], "roughness": [0.5, 0.7]},
+    "MAT_FABRIC_WOOL_GREEN_A": {"albedo_srgb_value": [0.18, 0.35], "roughness": [0.85, 1.0]},
+    "MAT_LINEN_A": {"albedo_srgb_value": [0.70, 0.85], "roughness": [0.8, 0.95]}
+  },
+  "max_unique_materials_per_building": 16,
+  "texel_density": {"lod0_px_per_m": 512, "tolerance": 0.25, "lod1_px_per_m": 256, "texture_res_default": "1k", "uv": "every render mesh must have a UV map named UVMap; box projection in metres x (1/tile_m) allowed for LOD0"},
+  "naming": {
+    "objects": "<PREFIX>_<BLDG>_<PART>[_<VARIANT>][_LOD<n>]",
+    "prefixes": {"GEO": "render geometry", "COL": "collision proxy", "ANC": "event/door/spawn anchor empty", "LGT": "light", "CAM": "camera", "STG": "staging only, never exported"},
+    "bldg_ids": {"aidan_house": "AIDANHOUSE", "inn": "INN", "shop": "SHOP", "elder_home": "ELDERHOME", "dwelling": "DWELL<nn>", "barn": "BARN<nn>"},
+    "collections": ["FOUNDATION", "WALL_SHELL", "MASONRY", "TIMBER", "ROOF_STRUCT", "ROOF_SLATE", "OPENINGS", "CHIMNEY", "PORCH", "INTERIOR", "PROPS_EXT", "COLLISION", "ANCHORS", "STAGING"]
+  },
+  "lod_budgets_tris": {
+    "LOD0_master_house_shell": 450000,
+    "LOD0_props_ext": 60000,
+    "LOD0_interior": 80000,
+    "LOD1_game": 60000,
+    "LOD2_far": 8000,
+    "collision": 300,
+    "dwelling_LOD0_shell_for_BUILD": 300000
+  },
+  "collision": {
+    "shape": "axis-aligned or oriented boxes only, convex, no render, display WIRE",
+    "height": 2.5,
+    "door_gap": "clear_w of door, centred on ANC door anchor",
+    "naming": "COL_<BLDG>_<part>",
+    "furniture": "one box per furniture item in interior, matching footprint"
+  },
+  "anchors": {
+    "type": "Blender EMPTY (PLAIN_AXES), z at finished floor or grade",
+    "facing": "local +Y = direction the player faces on arrival",
+    "door_pair": "ANC_<BLDG>_DOOR_<id>_EXT (0.6 m outside facade, grade) and ANC_<BLDG>_DOOR_<id>_INT (0.6 m inside, FFL)",
+    "spawn": "ANC_<BLDG>_SPAWN_<id>",
+    "save": "ANC_<BLDG>_SAVE_<id> (candidate; SAVE adapter G4 NOT_RUN)",
+    "event": "ANC_<BLDG>_EVENT_<id>",
+    "custom_props": {"anchor_kind": "door|spawn|save|event", "links_to": "paired anchor or runtime id", "runtime_map": "e.g. rilde_in_aidan", "runtime_id": "e.g. tr_exit / from_bed / ev_bed_04"}
+  },
+  "render_standards": {"game_camera": {"type": "ORTHO", "elevation_deg": 27, "range": [25, 30], "azimuth_deg": -45}, "preview_max_px": 1280, "game_scale_px": [48, 96], "engine": "Cycles <=64 spp + denoise", "color_management": "AgX"},
+  "variants": {"peaceful": "this contract", "burning": "same footprint/openings; NOT_RUN", "ruined": "same footprint; NOT_RUN"}
+}

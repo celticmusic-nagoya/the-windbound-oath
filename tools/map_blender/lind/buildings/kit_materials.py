@@ -10,7 +10,9 @@ import os
 
 import bpy
 
-TEX_DIR = os.environ.get("LIND_BUILD_TEX", os.path.expanduser("~/.cache/lind_buildings_tex"))
+_TEX_CANDIDATES = [os.environ.get("LIND_BUILD_TEX", ""), os.path.expanduser("~/.cache/lind_buildings_tex"),
+                   "/home/claude/.cache/lind_buildings_tex"]
+TEX_DIR = next((d for d in _TEX_CANDIDATES if d and os.path.isdir(d)), _TEX_CANDIDATES[1])
 REPORT = {"tex_dir": TEX_DIR, "loaded": [], "missing": []}
 
 
@@ -303,8 +305,8 @@ def build_materials(cfg, state="peaceful"):
     base, jit = slate_base_linear(cfg["roof"]["slate_hsv"])
     M = {}
     # wall field: wall-pattern map (yellow_stone_wall) desaturated into the contract albedo range
-    M["stone_wall"] = _pbr_textured("MAT_STONE_RUBBLE_LIMESTONE_A", "yellow_stone_wall", (0.97, 0.96, 0.94),
-                                    uv_mult=1.0, vary=0.05, hue_vary=0.01, soot=soot, desat=0.25, ext="png")
+    M["stone_wall"] = _pbr_textured("MAT_STONE_RUBBLE_LIMESTONE_A", "yellow_stone_wall", (1.0, 0.93, 0.80),
+                                    uv_mult=1.0, vary=0.05, hue_vary=0.01, soot=soot, desat=0.15, ext="png")
     # dressed quoins/jambs/sills/caps: same CC0 maps as HOME (rock_boulder_dry)
     M["stone_dressed"] = _pbr_textured("MAT_STONE_QUOIN_DRESSED_A", "rock_boulder_dry", (1.05, 1.02, 0.96),
                                        uv_mult=1.0, vary=0.14, hue_vary=0.02, desat=0.2,
@@ -322,10 +324,9 @@ def build_materials(cfg, state="peaceful"):
     M["glass"] = _flat("MAT_GLASS_CROWN_A", (0.07, 0.10, 0.08), rough=0.06,
                        emit=(1.0, 0.62, 0.30), emit_strength=0.0 if burning else 0.5)
     M["clay"] = _flat("MAT_TERRACOTTA_A", (0.36, 0.13, 0.065), rough=0.8)
-    M["lead"] = _flat("MAT_LEAD_FLASHING_A", (0.11, 0.115, 0.13), rough=0.6, metal=0.6)
-    M["linen"] = _pbr_textured("MAT_LINEN_A", "rough_wood", (1.0, 0.92, 0.75), uv_mult=3.0, vary=0.15,
-                               normal_strength=0.2, desat=0.85)
-    M["canvas"] = _canvas("MAT_FABRIC_AWNING_STRIPE_A", (0.80, 0.72, 0.55), (0.06, 0.20, 0.12))
+    M["lead"] = _flat("MAT_LEAD_FLASHING_A", (0.16, 0.17, 0.19), rough=0.6, metal=0.6)
+    M["linen"] = _flat("MAT_LINEN_A", (0.62, 0.55, 0.42), rough=0.9)
+    M["wool_green"] = _flat("MAT_FABRIC_WOOL_GREEN_A", (0.03, 0.10, 0.06), rough=0.92)
     M["sign_paint"] = _flat("MAT_PAINT_SIGN_GREEN_A", (0.035, 0.11, 0.065), rough=0.7)
     M["gold"] = _flat("MAT_PAINT_GILT_A", (0.62, 0.40, 0.12), rough=0.38, metal=0.7)
     M["prop"] = _palette("MAT_PROP_PAINTED_A", PALETTE_RGB)
@@ -335,7 +336,7 @@ def build_materials(cfg, state="peaceful"):
         M["lamp"] = M["glass"]
         M["charred"] = M["timber"]
     else:
-        M["lamp"] = _flat("MAT_LANTERN_GLOW_A", (0.9, 0.7, 0.4), rough=0.2, emit=(1.0, 0.68, 0.32), emit_strength=4.0)
+        M["lamp"] = M["glass"]
         M["glow"] = M["glass"]
         M["charred"] = M["timber"]
     return M

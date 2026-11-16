@@ -1,0 +1,36 @@
+{
+ "schema": "lind-attempt-ledger-v1",
+ "task_id": "LIND-BUILD-01",
+ "branch": "feature/lind-buildings-01",
+ "policy": "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md (max 2 failed attempts per defect x method family; history never reset)",
+ "imported_history": [
+  {"id": "H-A", "source": "PR #309 audit", "method_family": "primitive duplication + flat colour (identical slate cubes / chimney stones, equal courses, no UV)", "status": "STOPPED (G2 FAIL)"},
+  {"id": "H-B", "source": "PR #309 audit", "method_family": "Kenney kit massing with thatch", "status": "REJECTED (canon: roof must be blue-gray slate)"},
+  {"id": "H-C", "source": "PR #309 audit", "method_family": "per-slate chips with red slate material", "status": "colour REJECTED"},
+  {"id": "H-D", "source": "PR #323", "method_family": "uniform box architecture polished as final", "status": "G2 FAIL"},
+  {"id": "H-E", "source": "PR #323", "method_family": "bevelled/displaced cube quoins + two-chip", "status": "STOPPED after 2 failures"},
+  {"id": "H-F", "source": "PR #323", "method_family": "per-row masonry with whole-row opening exclusion", "status": "audit open; not reused"},
+  {"id": "HOME-F1..F5,F7", "source": "HOME PRIOR_HISTORY.md (#329/#331)", "method_family": "Boolean-chip blocks / broad-plane rings / faceted perturbed cubes / raw scans / planar rings / primitive+noise relief", "status": "STOPPED; not reused by BUILD"}
+ ],
+ "method_families_in_use": [
+  {"id": "BUILD-KIT-A", "scope": "wall field", "description": "solid wall shell with real rectangular apertures from grid decomposition; rubble pattern via CC0 PBR (yellow_stone_wall)", "causal_difference": "no per-stone primitives (H-A/H-F/F7); apertures are real holes with reveal faces"},
+  {"id": "BUILD-DRESS-A", "scope": "quoins, jambs, sills, plinth, slit heads", "description": "irregular 2D outline (chipped corners, wobbling edges) extruded normal to the wall, crowned centroid fan with per-vertex depth jitter", "causal_difference": "macro outline authored in 2D (not cube bevel/displacement H-E/F1/F3); compatible in spirit with HOME F9 but not counted against F9"},
+  {"id": "BUILD-ROOF-A", "scope": "roofs", "description": "rafters + battens + individual slates each with own width/length/thickness/tilt/rotation/chipped corners/colour value, lifted on the course below; saddle ridge pieces; skip predicates for chimneys, dormers, valleys", "causal_difference": "fixes H-A identical-slate defect; colour from contract blue-gray HSV (fixes H-C)"}
+ ],
+ "attempts": [
+  {"defect_id": "BLD-G3-WALL-NM", "defect": "non-manifold wall edges", "method_family": "WELD-ROUND (merge vertices by rounded coordinates)", "attempt": 1,
+   "hypothesis": "global remove_doubles makes each wall watertight", "result": "FAIL: 18 non-manifold edges on inn (separate wall solids welded at corner contact seams)", "evidence": "/tmp probe, not committed"},
+  {"defect_id": "BLD-G3-WALL-NM", "defect": "non-manifold wall edges", "method_family": "WELD-ROUND", "attempt": 2,
+   "hypothesis": "per-wall weld islands + 1e-5 / 1e-4 rounding", "result": "FAIL: 56-64 edges on inn (clip-intersection points straddle rounding boundaries; T-junctions on gable slopes)", "evidence": "probe output recorded here", "family_status": "STOPPED after 2 failures"},
+  {"defect_id": "BLD-G3-WALL-NM", "defect": "non-manifold wall edges", "method_family": "WALL-BOUNDARY-DERIVED (new)", "attempt": 1,
+   "causal_difference": "points snapped through a tolerance hash so shared vertices are identical floats; T-junctions removed by inserting on-edge vertices; side/reveal faces generated from the cells' own once-used edges instead of re-sampling the profile",
+   "hypothesis": "closed 2-manifold wall per wall island", "result": "PASS: 0 non-manifold edges on all 6 buildings (G3 technical only)"},
+  {"defect_id": "BLD-VIS-01", "defect": "walls render as pastel noise", "method_family": "config (texture path)", "attempt": 1,
+   "root_cause": "texture cache under /home/claude/.cache while $HOME=/root; materials fell back to procedural noise (reported in manifest textures.missing)",
+   "result": "FIXED: cache path candidates; QA check pbr_textures_loaded added", "render_sha256_before": "8d17b5fe18c7d96e0cd6f2012c90fafce78d7f49667726ea61f2a97aa3080c10", "render_sha256_after": "bae1afa4e67b140b9f1bca23d498427345c3ae80c23d711b315fd743b0ffb711"},
+  {"defect_id": "BLD-VIS-02", "defect": "rubble reads brick-small and pale; lighting flat (sun from back-left)", "method_family": "BUILD-KIT-A parameter", "attempt": 1,
+   "hypothesis": "3.2 m wall tile + warmer tint + sun from front-right brings stone scale/colour toward approved CG", "result": "SELF-OBSERVED IMPROVEMENT (not a PASS; G2 independent review pending)", "render_sha256": "e6be689cc5b2b45ac37f1c41648ccd1a1459373623e9b5b77577fa9ecabeecf9", "note": "creates contract deviation DEV-1 (texel density)"},
+  {"defect_id": "BLD-VIS-03", "defect": "thin vertical dark line on inn W gable centreline (apex to eave height)", "method_family": "investigation", "attempt": 0,
+   "result": "OPEN: not a crack (walls manifold); persists after wall rebuild; cause undiagnosed (candidate: shading/normal-map seam at u=L/2)"}
+ ]
+}

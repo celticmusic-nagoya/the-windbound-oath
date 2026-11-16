@@ -568,7 +568,7 @@ class Building:
             c0 = Vector((cx, 0.0, self.he - 0.3))
             size = (pd, pw)
             zbot = self.he - 0.3
-            KG.box(cm, (cx, 0, (zbot + ztop) / 2), (pd, pw, ztop - zbot), m["stone_wall"], rand=rng.random(), uv_scale=1.3)
+            KG.box(cm, (cx, 0, (zbot + ztop) / 2), (pd, pw, ztop - zbot), m["stone_wall"], rand=rng.random(), uv_scale=2.4)
             flash_z = self.ridge_z + top_off - 0.05
         else:
             sy = -1 if where == "side_right" else 1
@@ -576,11 +576,11 @@ class Building:
             cy = sy * (D + pd / 2 - 0.02)
             # lower stack wider up to the eave, shoulder, then flue stack
             KG.box(cm, (cx, cy + sy * 0.04, self.he / 2), (pw + 0.3, pd + 0.08, self.he), m["stone_wall"],
-                   rand=rng.random(), uv_scale=1.3)
+                   rand=rng.random(), uv_scale=2.4)
             KG.box(cm, (cx, cy + sy * 0.04, self.he + 0.06), (pw + 0.36, pd + 0.16, 0.12), m["stone_dressed"],
                    rand=rng.random())
             KG.box(cm, (cx, cy, (self.he + ztop) / 2), (pw, pd, ztop - self.he), m["stone_wall"], rand=rng.random(),
-                   uv_scale=1.3)
+                   uv_scale=2.4)
             c0 = Vector((cx, cy, 0))
             size = (pw, pd)
             flash_z = None
@@ -600,7 +600,7 @@ class Building:
             KG.lathe(cm, [(0.115, 0), (0.125, 0.04), (0.105, hgt * 0.75), (0.125, hgt * 0.9), (0.125, hgt),
                           (0.09, hgt), (0.09, hgt * 0.5)], pos, m["clay"], segments=14, rand=rng.random(), cap_top=False)
         if flash_z is not None:
-            KG.box(cm, (c0.x, 0, flash_z), (pd + 0.06, pw + 0.06, 0.16), m["lead"])
+            KG.box(cm, (c0.x, 0, flash_z), (pd + 0.04, pw + 0.04, 0.07), m["lead"])
         lo = Vector((c0.x - size[0] / 2 - 0.05, c0.y - size[1] / 2 - 0.05, -1))
         hi = Vector((c0.x + size[0] / 2 + 0.05, c0.y + size[1] / 2 + 0.05, ztop + 1))
         if where not in ("left", "right"):
@@ -628,7 +628,7 @@ class Building:
         self._opening(Fo, 2 * yl, self.op("W3", 0.0, z0=1.2))
         Ls = lw - tl
         Fs = KG.WallFrame((W, -yl, 0), (1, 0, 0), (0, -1, 0))
-        dop = self.op("door2", 0.0, h=1.85)
+        dop = self.op("door2", 0.0)
         KG.wall_with_openings(self.parts["walls"], Fs, Ls, [(0, 0), (Ls, 0), (Ls, zu(Ls)), (0, zu(0))], tl,
                               [self._rect(Ls, dop)], m["stone_wall"])
         self._opening(Fs, Ls, dop)
@@ -745,7 +745,8 @@ class Building:
                 grid[i, j] = F.p(uu, zz, dd + 0.05)
         for i in range(nu):
             for j in range(nd):
-                am.poly([grid[i, j], grid[i + 1, j], grid[i + 1, j + 1], grid[i, j + 1]], m["canvas"],
+                am.poly([grid[i, j], grid[i + 1, j], grid[i + 1, j + 1], grid[i, j + 1]],
+                        m["linen"] if i % 2 == 0 else m["wool_green"],
                         uvs=[(i / nu, j / nd), ((i + 1) / nu, j / nd), ((i + 1) / nu, (j + 1) / nd), (i / nu, (j + 1) / nd)])
         # scalloped valance
         nsc = 9
@@ -754,7 +755,7 @@ class Building:
             ub = a0 + (a1 - a0) * (i + 1) / nsc
             dz = dep + 0.05
             am.poly([F.p(ua, zf, dz), F.p(ub, zf, dz), F.p(ub, zf - 0.13, dz), F.p((ua + ub) / 2, zf - 0.22, dz),
-                     F.p(ua, zf - 0.13, dz)], m["canvas"],
+                     F.p(ua, zf - 0.13, dz)], m["linen"] if (i * 14 // nsc) % 2 == 0 else m["wool_green"],
                     uvs=[(i / nsc, 0), ((i + 1) / nsc, 0), ((i + 1) / nsc, 0.1), ((i + 0.5) / nsc, 0.15), (i / nsc, 0.1)])
         beam(am, F.p(a0, zf - 0.02, dep + 0.06), F.p(a1, zf - 0.02, dep + 0.06), 0.035, 0.035, m["timber"], up=F.N)
         for uu in (a0 + 0.02, a1 - 0.02):
@@ -877,9 +878,9 @@ class Building:
         F, L, _, _ = fr[self.front_id()]
         if k == "inn":
             Fs, Ls, _, _ = fr["S"]
-            self._bench(Fs, Ls / 2 + 2.8, 0.45)
-            self._barrel(Fs.p(Ls / 2 - 1.6, 0, 0.45))
-            self._barrel(Fs.p(Ls / 2 - 1.95, 0, 0.75), 0.92)
+            self._bench(Fs, Ls / 2 + 4.3, 0.45)
+            self._barrel(Fs.p(Ls / 2 + 2.75, 0, 0.45))
+            self._barrel(Fs.p(Ls / 2 + 2.6, 0, 1.05), 0.92)
             self._woodpile(fr["E"][0], 0.5, 1.8, 0.35)
             self._lantern(Fw, Lw / 2 - 0.95, 2.55)
             self._flower_box(Fs, Ls / 2 - 3.7 - 0.4, Ls / 2 - 3.7 + 0.4, self.ffl + 0.95)
@@ -969,6 +970,9 @@ class Building:
         facing_in = (self.M.to_3x3() @ (-F.N)).normalized()
         rmap = self.spec["runtime_maps"][0]
         blocked = self.burning
+        self.anchor_offsets = {"ext_from_facade_m": round((F.p(uc, 0.0, 0.6) - F.p(uc, 0.0, 0.0)).dot(F.N), 4),
+                               "int_from_inner_face_m": round((F.p(uc, 0, -self.t) - F.p(uc, 0, -self.t - 0.6)).dot(F.N), 4),
+                               "ext_z": round(ext.z, 4), "int_z": round(intp.z, 4), "ffl": self.ffl}
         self.anchors.append((f"ANC_{self.bid}_DOOR_MAIN_EXT", ext, facing_in,
                              {"anchor_kind": "door", "links_to": f"ANC_{self.bid}_DOOR_MAIN_INT", "runtime_map": rmap,
                               "runtime_id": "CANDIDATE_UNMAPPED", "door_state": "blocked" if blocked else "open"}))
@@ -1015,8 +1019,8 @@ class Building:
             for kk, vv in props.items():
                 e[kk] = vv
             colls["ANCHORS"].objects.link(e)
-        for kind, p in self.fx:
-            e = bpy.data.objects.new(f"ANC_{self.bid}_EVENT_FX_{kind}", None)
+        for n_fx, (kind, p) in enumerate(self.fx):
+            e = bpy.data.objects.new(f"ANC_{self.bid}_EVENT_FX{kind}{n_fx + 1:02d}", None)
             e.location = self.M @ p
             e["anchor_kind"] = "event"
             e["runtime_id"] = f"fx_{kind.lower()}_candidate"
@@ -1119,8 +1123,8 @@ def setup_render(cfg, res_x, res_y, samples):
 def add_lighting(state):
     sun = bpy.data.lights.new("LGT_SUN", "SUN")
     if state == "peaceful":
-        sun.energy = 4.2
-        sun.color = (1.0, 0.93, 0.82)
+        sun.energy = 4.6
+        sun.color = (1.0, 0.88, 0.72)
     else:
         sun.energy = 0.9
         sun.color = (0.85, 0.55, 0.45)
@@ -1128,7 +1132,7 @@ def add_lighting(state):
         bpy.context.scene.world.node_tree.nodes["Background"].inputs[1].default_value = 0.5
     sun.angle = math.radians(2.0)
     so = bpy.data.objects.new("LGT_SUN", sun)
-    so.rotation_euler = (math.radians(50), 0, math.radians(-128))
+    so.rotation_euler = (math.radians(48), 0, math.radians(35))  # sun from front-right, ~42 deg high
     bpy.context.scene.collection.objects.link(so)
     me = bpy.data.meshes.new("STG_ground")
     me.from_pydata([(-80, -80, 0), (80, -80, 0), (80, 80, 0), (-80, 80, 0)], [], [(0, 1, 2, 3)])
@@ -1236,7 +1240,14 @@ def main(argv):
         entry = {"building": bk, "bldg_id": B.bid, "state": st, "build_s": round(time.time() - t0, 1),
                  "dims": {"footprint_w": B.spec["w"], "footprint_d": B.spec["d"], "eave_z": round(B.he, 3),
                           "ridge_z": round(B.ridge_z, 3), "pitch_deg": B.pitch, "front": B.spec["front"]},
-                 "stats": B.stats, "mesh": mesh_stats(objs), "anchors": [x[0] for x in B.anchors],
+                 "stats": {k: v for k, v in B.stats.items() if not k.startswith("_")},
+                 "slate_unique_dims": len(B.stats.get("_slate_dims", ())),
+                 "mesh": mesh_stats(objs),
+                 "anchors": [o.name for o in bpy.data.objects if o.name.startswith("ANC_")],
+                 "anchor_offsets": B.anchor_offsets,
+                 "walls": {w: {"L": round(v[1], 4), "corner_offset": (B.t if v[3] == "eaves" else 0.0),
+                               "outer_len": round(v[1] + (2 * B.t if v[3] == "eaves" else 0.0), 4)}
+                           for w, v in B.frames().items()},
                  "textures": {"loaded": list(KM.REPORT["loaded"]), "missing": list(KM.REPORT["missing"])},
                  "layout": {w: [{k: (round(v, 3) if isinstance(v, float) else v) for k, v in o.items()} for o in ol]
                             for w, ol in B.layout_cache.items()}}

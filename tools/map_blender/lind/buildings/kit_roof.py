@@ -128,6 +128,7 @@ def gable_roof(parts, ML, x0, x1, s, he, pitch_deg, eave, verge, cfg, rng, mats,
                     mb.poly([pts_lo[i], pts_lo[j], pts_hi[j], pts_hi[i]], mats["slate"],
                             uvs=[uv[i], uv[j], (uv[j][0], uv[j][1] + 0.02), (uv[i][0], uv[i][1] + 0.02)], rand=pr)
                 stats["slates"] = stats.get("slates", 0) + 1
+                stats.setdefault("_slate_dims", set()).add((round(sx1 - sx0, 3), round(a1 - a0, 3), round(t, 4)))
             k += 1
             a_low = k * gauge - 0.02
         # ---------------------------------------------------------- verge boards
