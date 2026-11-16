@@ -65,6 +65,7 @@ jobs:
       - name: Test Blender-exported GLB in both engines
         env:
           LIND_GLB: /tmp/lind-glb-benchmark/technical-scene.glb
+          LIND_FULL_MEASURE: '1'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Upload reproducible benchmark asset and QA evidence
         if: always()
