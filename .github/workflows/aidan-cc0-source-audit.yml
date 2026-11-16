@@ -1,0 +1,31 @@
+name: Aidan CC0 source acquisition audit
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_polyhaven_source_audit.py'
+      - '.github/workflows/aidan-cc0-source-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate Python
+        run: python3 -m py_compile tools/map_blender/aidan_polyhaven_source_audit.py
+      - name: Fetch CC0 source and record hashes
+        env:
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/aidan-cc0-source
+        run: python3 tools/map_blender/aidan_polyhaven_source_audit.py
+      - name: Preserve source audit and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-cc0-source-audit
+          path: ${{ runner.temp }}/aidan-cc0-source/
+          if-no-files-found: warn
+          retention-days: 7
