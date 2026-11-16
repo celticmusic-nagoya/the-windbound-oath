@@ -16,3 +16,10 @@ Records availability of WebGL2, vendor/renderer label, max texture size, viewpor
 
 ## QA state
 G1 BLOCKED (world physical scale, camera and private canon reconciliation); G2 NOT_RUN; G3 NOT_RUN for Android benchmark; G4 NOT_RUN.
+
+## Phase 1 engine-comparison candidate
+- `tools/map_blender/runtime_benchmark/engine-compare.html` now contains independently selectable Three.js 0.170.0 and Babylon.js 7.40.3 runs, each rendering 100 shared box meshes, one directional and one ambient light, rotating for 30 seconds.
+- This is a **technical-only, nonproduction** comparison. No GLB, textures, skinning, shadows, map geometry, SAVE adapter or mobile QA. Numeric metrics are not available until actual runs.
+- Engine dependency URLs are pinned by version but not yet pinned by content hash. Browser CDN import and Android compatibility are NOT_RUN; network availability and CORS may block loads.
+- Do not compare results unless the same device, browser, resolution, warmup and thermal state are recorded. Babylon and Three may internally batch/optimize differently; geometry equivalence is not a guarantee of equal GPU work.
+- Run each engine twice, discard warmup, compare p95 frame time, mean frame time, context loss, loading failure and available render statistics. Actual engine adoption remains BLOCKED pending real GLB and game integration testing.
