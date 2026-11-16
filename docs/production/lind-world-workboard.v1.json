@@ -1,6 +1,6 @@
 {
   "schema": "lind-world-workboard-v1",
-  "status": "TEAM_AUDITED_NOT_LAUNCHED",
+  "status": "CODEX_AUDITS_EXECUTED_WORLD_PRODUCTION_BLOCKED",
   "source_contract": {
     "private_canon": "the-windbound-oath-handoff/main reference/lore/{THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md,CANON_ADDENDUM.md,CANON_STATUS.md,WORLD_MAP_CANON_20261108.md}",
     "approved_visual_map_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
@@ -14,11 +14,11 @@
       "owner": "ChatGPT + Codex",
       "scope": "reference and event CG/source inventory",
       "depends_on": [],
-      "status": "NOT_LAUNCHED",
-      "branch": null,
+      "status": "SOURCE_AUDIT_EXECUTED_BINARY_BLOCKED",
+      "branch": "feature/lind-codex-audit-20261116",
       "pr": null,
       "gates": {
-        "G1": "NOT_RUN",
+        "G1": "BLOCKED",
         "G2": "NOT_RUN",
         "G3": "NOT_RUN",
         "G4": "NOT_RUN"
@@ -101,30 +101,36 @@
       "depends_on": [
         "LIND-REF-01"
       ],
-      "status": "NOT_LAUNCHED",
-      "branch": null,
-      "pr": null,
+      "status": "AUDIT_EXECUTED_BLOCKED",
+      "branch": "feature/lind-story-staging-01",
+      "pr": 340,
       "gates": {
-        "G1": "NOT_RUN",
+        "G1": "BLOCKED",
         "G2": "NOT_RUN",
         "G3": "NOT_RUN",
-        "G4": "NOT_RUN"
-      }
+        "G4": "BLOCKED"
+      },
+      "commit": "dd55331eb81aacc2c0989c1d6503853001b9133b",
+      "execution_session": "Codex sub-agent STORY",
+      "session_status": "COMPLETED_AUDIT_ONLY"
     },
     {
       "task_id": "LIND-RENDER-01",
       "owner": "Codex INTEGRATION",
       "scope": "safe Blender render pipeline",
       "depends_on": [],
-      "status": "NOT_LAUNCHED",
-      "branch": null,
-      "pr": null,
+      "status": "TECHNICAL_FIXTURE_EXECUTED_WORLD_NOT_RUN",
+      "branch": "feature/lind-integration-01",
+      "pr": 341,
       "gates": {
-        "G1": "NOT_RUN",
+        "G1": "BLOCKED",
         "G2": "NOT_RUN",
         "G3": "NOT_RUN",
         "G4": "NOT_RUN"
-      }
+      },
+      "commit": "993c75fb64be67680982f7096be3f3743495fb53",
+      "execution_session": "Codex sub-agent INTEGRATION",
+      "session_status": "COMPLETED_AUDIT_ONLY"
     },
     {
       "task_id": "LIND-ASSEMBLY-01",
@@ -147,17 +153,42 @@
         "G3": "NOT_RUN",
         "G4": "NOT_RUN"
       }
+    },
+    {
+      "task_id": "LIND-QA-01",
+      "owner": "Codex independent QA",
+      "scope": "independent source/event/SAVE/render audit; no producer self-approval",
+      "depends_on": [
+        "LIND-STORY-01",
+        "LIND-RENDER-01"
+      ],
+      "status": "INDEPENDENT_AUDIT_EXECUTED_WORLD_BLOCKED",
+      "branch": "feature/lind-independent-qa-01",
+      "pr": 342,
+      "commit": "a2c7284473589c20718411b09190332e7b3d214f",
+      "execution_session": "Codex sub-agent QA",
+      "session_status": "COMPLETED_AUDIT_ONLY",
+      "gates": {
+        "G1": "BLOCKED",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "BLOCKED"
+      }
     }
   ],
   "team_audit": {
     "date": "2026-11-16",
-    "result": "ROLE_DEFINITION_PASS_EXTERNAL_AGENT_EXECUTION_NOT_CONFIRMED",
+    "result": "THREE_CODEX_SUBAGENTS_EXECUTED_AND_EVIDENCE_PUSHED",
     "source_document": "docs/production/LIND_3D_WORLD_MASTER_APPROVED_20261116.md",
     "blocking_items": [
-      "register exact approved image in GitHub and verify SHA",
-      "direct visual review of approved event CG sources",
-      "approve new world-scale spatial interface"
+      "exact approved PNG absent: 2470 local image hashes scanned, zero match",
+      "remaining approved event CG provenance/usage classification discrepancy",
+      "director-approved new metric spatial contract absent",
+      "legacy assembler uses superseded map SHA/pixel contract; production Blender unpinned",
+      "Node SAVE suite fixture extraction failure; browser alternative 25 assertions PASS",
+      "remote Actions ZIP retrieval Forbidden; metadata only",
+      "new-world art, mesh/material/collision/runtime and physical Android QA not executed"
     ],
-    "notes": "Prior CI technical PASS is not a lane production completion; old map geometry excluded."
+    "notes": "STORY #340, INTEGRATION #341, independent QA #342. Existing Claude production lanes not launched by this execution. Browser regression subset and technical fixture pass are not full-world G1-G4 PASS. All sessions ended after this audit; no background continuation implied."
   }
 }
