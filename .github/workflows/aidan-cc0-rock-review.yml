@@ -1,0 +1,48 @@
+name: Aidan CC0 stone silhouette review
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_cc0_rock_silhouette_review.py'
+      - '.github/workflows/aidan-cc0-rock-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate script
+        run: python3 -m py_compile tools/map_blender/aidan_cc0_rock_silhouette_review.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Acquire fixed-hash CC0 source
+        env:
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/source
+        run: |
+          python3 tools/map_blender/aidan_polyhaven_source_audit.py
+          python3 - <<'PY'
+          import hashlib,os,pathlib
+          p=pathlib.Path(os.environ["AIDAN_SOURCE_OUT"])/"rock_moss_set_01_8k.blend"
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="23d6220c6c7613c4d7006d902ac99acebc7e7859f1368ba6dc0ae4123551cdc6"
+          PY
+      - name: Render isolated clay views
+        env:
+          AIDAN_RENDER_OUT: ${{ runner.temp }}/rock-review
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/source
+        run: |
+          mkdir -p "$AIDAN_RENDER_OUT"
+          blender -b "$AIDAN_SOURCE_OUT/rock_moss_set_01_8k.blend" -t 2 --python tools/map_blender/aidan_cc0_rock_silhouette_review.py
+      - name: Preserve review images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-cc0-rock-silhouettes
+          path: ${{ runner.temp }}/rock-review/
+          if-no-files-found: warn
+          retention-days: 7
