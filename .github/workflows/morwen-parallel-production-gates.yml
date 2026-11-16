@@ -12,6 +12,8 @@ on:
       - 'tools/character_blender/morwen_four_view_capture.py'
       - 'tools/character_blender/validate_character_world_bridge.py'
       - 'tools/character_blender/test_character_world_bridge.py'
+      - 'tools/character_blender/verify_morwen_four_views.py'
+      - 'tools/character_blender/test_verify_morwen_four_views.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -132,6 +134,8 @@ jobs:
         run: python -m unittest discover -s tools/character_blender -p 'test_solve_morwen_framing.py' -v
       - name: Unit-test full-3D character/world bridge negative controls
         run: python -m unittest discover -s tools/character_blender -p 'test_character_world_bridge.py' -v
+      - name: Unit-test four-view evidence validation
+        run: python -m unittest discover -s tools/character_blender -p 'test_verify_morwen_four_views.py' -v
       - name: Download independent lane reports
         uses: actions/download-artifact@v4
         with:
@@ -152,6 +156,8 @@ jobs:
           if test -f qa_lanes/render/MORWEN_RENDER_QA_REPORT.json; then
             python tools/character_blender/diagnose_morwen_framing.py qa_lanes/render/MORWEN_RENDER_QA_REPORT.json --output qa_output/integration/framing_diagnosis.json
           fi
+      - name: Validate four-view artifact hashes and provenance
+        run: python tools/character_blender/verify_morwen_four_views.py qa_lanes/render
       - name: Validate each lane evidence fail closed
         run: python tools/character_blender/integrate_morwen_parallel_qa.py --root qa_lanes --out qa_output/integration/report.json
       - name: Summarize integration
