@@ -222,6 +222,7 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  # An AI-authored tagged push can request this independent read-only source audit.
   basemesh-source-audit:
     name: CC0 basemesh source audit (opt-in or AI push)
     if: ${{ (github.event_name == 'workflow_dispatch' && inputs.audit_basemesh == true) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[audit-basemesh]')) }}
