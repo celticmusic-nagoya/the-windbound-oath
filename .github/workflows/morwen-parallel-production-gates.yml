@@ -20,6 +20,7 @@ on:
       - 'tools/character_blender/audit_morwen_layer0_alpha.py'
       - 'tools/character_blender/build_morwen_silhouette_envelope.py'
       - 'tools/character_blender/qa_morwen_envelope_mesh.py'
+      - 'tools/character_blender/build_morwen_production_guides.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -124,6 +125,7 @@ jobs:
           python -m pip install 'Pillow>=10,<12'
           python tools/character_blender/build_morwen_silhouette_envelope.py -- qa_output/render/MORWEN_SILHOUETTE_ENVELOPE_QA.blend
           python tools/character_blender/qa_morwen_envelope_mesh.py -- qa_output/render/MORWEN_SILHOUETTE_ENVELOPE_QA.blend qa_output/render/MORWEN_ENVELOPE_TOPOLOGY_QA.json
+          python tools/character_blender/build_morwen_production_guides.py -- qa_output/render/MORWEN_SCULPTING_GUIDES.blend
       - name: Build packed Layer0 modelling reference scene
         if: matrix.role == 'render'
         run: |
