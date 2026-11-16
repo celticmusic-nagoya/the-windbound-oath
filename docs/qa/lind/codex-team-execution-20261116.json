@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-16",
+  "baseline": "c0223b538c3a8b20329ea847c7237b424ccfac4a",
+  "coordinator": "ChatGPT/Codex",
+  "private_canon": {
+    "repository": "celticmusic-nagoya/the-windbound-oath-handoff",
+    "retrieval": "SUCCESS",
+    "references": [
+      {
+        "path": "reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md",
+        "ref": "main",
+        "blob_sha": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+      },
+      {
+        "path": "reference/lore/CANON_ADDENDUM.md",
+        "ref": "main",
+        "blob_sha": "e1000869aaf232d989761d15c982ed798378b49d"
+      },
+      {
+        "path": "reference/lore/CANON_STATUS.md",
+        "ref": "main",
+        "blob_sha": "ec5940c2ca6466150810f93c7fc6a463ef7ebec3"
+      },
+      {
+        "path": "reference/lore/WORLD_MAP_CANON_20261108.md",
+        "ref": "main",
+        "blob_sha": "5a3cd66e4131a34de363782a2af8f0e4bb145464"
+      }
+    ],
+    "scenario_blob_sha": "74a1a9dedfeb08a22efa34eb0b083981c092bd1b",
+    "note": "Read current main. Private text not reproduced. Later scenario/geography addenda take precedence."
+  },
+  "sessions": [
+    {
+      "session": "/root/story",
+      "status": "AUDIT_COMPLETED",
+      "number": 340,
+      "head": "feature/lind-story-staging-01",
+      "head_sha": "dd55331eb81aacc2c0989c1d6503853001b9133b",
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/340"
+    },
+    {
+      "session": "/root/integration",
+      "status": "AUDIT_COMPLETED",
+      "number": 341,
+      "head": "feature/lind-integration-01",
+      "head_sha": "993c75fb64be67680982f7096be3f3743495fb53",
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/341"
+    },
+    {
+      "session": "/root/qa",
+      "status": "AUDIT_COMPLETED",
+      "number": 342,
+      "head": "feature/lind-independent-qa-01",
+      "head_sha": "a2c7284473589c20718411b09190332e7b3d214f",
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/342"
+    }
+  ],
+  "claude_scope": "WORLD/HOME/BUILD/ECO and adjacent #331/#337/#339 untouched; no external Claude session launched or contacted",
+  "production_gate": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "BLOCKED"
+  },
+  "delivery": "Only documentation, JSON, logs and technical fixture PNGs. No main merge, publication, runtime change or accepted asset overwrite."
+}

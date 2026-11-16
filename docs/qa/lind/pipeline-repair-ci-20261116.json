@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-16",
+  "implementation_commit": "8c84c63546d9aee045eb7630495e46fa48ad7986",
+  "documentation_head": "6dfbc5283b22029faaa84d03bef4ee16f71eed5b",
+  "pull_requests": {
+    "source_registration": 344,
+    "pipeline_repair": 345
+  },
+  "actual_registration": {
+    "status": "BLOCKED_ORIGINAL_BYTES_NOT_EXPOSED",
+    "expected_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "png_committed": false,
+    "attachment_sha_computed": false,
+    "note": "Visible chat preview supplied, but no downloadable file ID or local attachment path was made available. Never substitute a screenshot or re-encode."
+  },
+  "ci_runs": [
+    {
+      "id": 43838057623,
+      "job_id": 133199536930,
+      "conclusion": "success",
+      "scope": "Pinned Blender 4.0.2 package/data SHA and installed versions; source/isolation tests5 + guard8; fixture generation + actual 2 render processes; source SHA unchanged"
+    },
+    {
+      "id": 43838058006,
+      "job_id": 133199537030,
+      "conclusion": "success",
+      "scope": "startup20 + CONTINUE37 + SAVEcompat34 = 91 assertions"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 14212635029,
+      "name": "lind-ai-technical-render-evidence",
+      "size_in_bytes": 122203,
+      "url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14212635029",
+      "archive_download_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14212635029/zip",
+      "expired": false,
+      "created_at": "2026-11-16T09:17:18Z",
+      "expires_at": "2026-11-23T09:17:17Z",
+      "updated_at": "2026-11-16T09:17:18Z",
+      "digest": "sha256:1fd169d1fdd742c474c6ee925cfe1927a8d6f564c54b091b6dca2be2e21c57f2",
+      "workflow_run": {
+        "id": 43838057623,
+        "repository_id": 1408120919,
+        "head_repository_id": 1408120919,
+        "head_branch": "feature/lind-pipeline-repair-01",
+        "head_sha": "8c84c63546d9aee045eb7630495e46fa48ad7986"
+      }
+    }
+  ],
+  "render_log_excerpt": "2026-11-16T09:16:17.6472822Z blender_4.0.2+dfsg-1ubuntu8_amd64.deb: OK\n2026-11-16T09:16:17.6700279Z blender-data_4.0.2+dfsg-1ubuntu8_all.deb: OK\n2026-11-16T09:17:03.5456598Z Ran 5 tests in 0.048s\n2026-11-16T09:17:03.6858445Z Ran 8 tests in 0.002s\n2026-11-16T09:17:03.6992493Z sha256sum /tmp/lind-ai-technical/fixture.blend | tee /tmp/lind-ai-technical/source-before.sha256\n2026-11-16T09:17:04.9447854Z Blender 4.0.2\n2026-11-16T09:17:05.0206776Z sha256sum -c /tmp/lind-ai-technical/source-before.sha256\n2026-11-16T09:17:05.0210158Z print('TECHNICAL_RENDER_LOOP_PASS')\n2026-11-16T09:17:15.1959654Z   \"source_sha256\": \"f2c2ebdef8d3b56dca9dc16b0e50eaa997d72a67495131543ecc654ea5ccf0db\",\n2026-11-16T09:17:15.1963190Z   \"stdout_tail\": \"Blender 4.0.2\\nRead blend: \\\"/tmp/lind-ai-technical/fixture.blend\\\"\\nFra:1 Mem:11.66M (Peak 12.75M) | Time:00:06.79 | Syncing TECHNICAL_FIXTURE_NOT_ART\\nFra:1 Mem:11.69M (Peak 12.75M) | Time:00:07.39 | Syncing Area\\nFra:1 Mem:11.69M (Peak 12.75M) | Time:00:07.39 | Syncing Camera\\nFra:1 Mem:11.69M (Peak 12.75M) | Time:00:07.39 | Rendering 1 / 64 samples\\nFra:1 Mem:11.70M (Peak 12.75M) | Time:00:09.20 | Rendering 26 / 64 samples\\nFra:1 Mem:11.70M (Peak 12.75M) | Time:00:09.24 | Rendering 51 / 64 samples\\nFra:1 Mem:11.70M (Peak 12.75M) | Time:00:09.26 | Rendering 64 / 64 samples\\nSaved: '/tmp/lind-ai-technical/baseline.png'\\nTime: 00:09.37 (Saving: 00:00.11)\\n\\n\\nBlender quit\\n\",\n2026-11-16T09:17:17.0797808Z   \"source_sha256\": \"f2c2ebdef8d3b56dca9dc16b0e50eaa997d72a67495131543ecc654ea5ccf0db\",\n2026-11-16T09:17:17.0803182Z   \"stdout_tail\": \"Blender 4.0.2\\nRead blend: \\\"/tmp/lind-ai-technical/fixture.blend\\\"\\nFra:1 Mem:11.66M (Peak 12.75M) | Time:00:00.14 | Syncing TECHNICAL_FIXTURE_NOT_ART\\nFra:1 Mem:11.69M (Peak 12.75M) | Time:00:00.16 | Syncing Area\\nFra:1 Mem:11.69M (Peak 12.75M) | Time:00:00.16 | Syncing Camera\\nFra:1 Mem:11.69M (Peak 12.75M) | Time:00:00.16 | Rendering 1 / 64 samples\\nFra:1 Mem:11.70M (Peak 12.75M) | Time:00:00.94 | Rendering 26 / 64 samples\\nFra:1 Mem:11.70M (Peak 12.75M) | Time:00:00.98 | Rendering 51 / 64 samples\\nFra:1 Mem:11.70M (Peak 12.75M) | Time:00:01.00 | Rendering 64 / 64 samples\\nSaved: '/tmp/lind-ai-technical/corrected.png'\\nTime: 00:01.11 (Saving: 00:00.10)\\n\\n\\nBlender quit\\n\",\n2026-11-16T09:17:17.0869369Z /tmp/lind-ai-technical/fixture.blend: OK\n2026-11-16T09:17:17.1046346Z baseline.png 6194 2c8da9f9d5e96d26c74fe60293ded28a8bdec1a01f975f8a6146ff0e690e34d6\n2026-11-16T09:17:17.1047216Z corrected.png 6706 dfa9b5ff917ff9a3c725161ef39bd70b9280adde53b56d6090d34989a802ba02\n2026-11-16T09:17:17.1047747Z TECHNICAL_RENDER_LOOP_PASS",
+  "package_source": "https://archive.ubuntu.com/ubuntu/dists/noble/universe/binary-amd64/Packages.gz",
+  "package_version": "4.0.2+dfsg-1ubuntu8",
+  "runtime_version": "4.0.2",
+  "image_verification_scope": "CI reports source SHA and output sizes/SHA, PNG signature/different outputs. Coordinator read job logs; archive contents not downloaded or independently decoded.",
+  "independent_qa": "PR #345 docs/qa/lind/pipeline-repair-independent-20261116.md/json",
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_FULL_WORLD",
+    "G4": "BLOCKED_FULL_WORLD"
+  },
+  "runtime_or_canon_changed": false
+}
