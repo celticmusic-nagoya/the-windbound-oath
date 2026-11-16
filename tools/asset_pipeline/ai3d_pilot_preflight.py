@@ -17,6 +17,9 @@ SOURCES = {
                     "repo": "https://github.com/TencentARC/InstantMesh"},
 }
 MAX_INPUT_BYTES = 10 * 1024 * 1024
+# SHA obtained from actual offline GitHub Actions run 43785600015. A caller's
+# source-class assertion cannot establish provenance without a fixed digest.
+VERIFIED_SYNTHETIC_CANARY_SHA256 = "caefcde40cf34d09dcc9dc56fedee573a76a4658dbf5949aebdc93e5bc3da580"
 
 def assess(image: Path, *, model: str, source_class: str, external_upload: bool,
            expected_sha256: str | None = None) -> dict:
@@ -40,6 +43,8 @@ def assess(image: Path, *, model: str, source_class: str, external_upload: bool,
             content_sha = hashlib.sha256(image.read_bytes()).hexdigest()
         if image.suffix.lower() != ".png":
             blockers.append("Only PNG technical canaries supported")
+        if source_class == "project-generated-synthetic-canary" and content_sha != VERIFIED_SYNTHETIC_CANARY_SHA256:
+            blockers.append("Unrecognized image: synthetic source claim not proven by pinned SHA256")
         if expected_sha256 and expected_sha256 != content_sha:
             blockers.append("Input SHA256 mismatch")
     metadata = SOURCES.get(model)
