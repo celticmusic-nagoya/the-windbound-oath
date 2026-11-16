@@ -1,0 +1,67 @@
+name: Aidan organic scan shell candidate v2
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_organic_scan_shell_v2.py'
+      - '.github/workflows/aidan-organic-scan-shell-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Syntax
+        run: python3 -m py_compile tools/map_blender/aidan_organic_scan_shell_v2.py
+      - name: Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Acquire and verify pinned CC0 source
+        env:
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/source
+        run: |
+          python3 tools/map_blender/aidan_polyhaven_source_audit.py
+          python3 - <<'PY'
+          import os,pathlib,hashlib
+          p=pathlib.Path(os.environ["AIDAN_SOURCE_OUT"])/"rock_moss_set_01_8k.blend"
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="23d6220c6c7613c4d7006d902ac99acebc7e7859f1368ba6dc0ae4123551cdc6"
+          PY
+      - name: Generate organic scan shells
+        env:
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/source
+          AIDAN_SCAN_SHELL_OUT: ${{ runner.temp }}/scan-shell
+        run: |
+          mkdir -p "$AIDAN_SCAN_SHELL_OUT"
+          blender -b "$AIDAN_SOURCE_OUT/rock_moss_set_01_8k.blend" -t 2 --python tools/map_blender/aidan_organic_scan_shell_v2.py
+      - name: Validate output and measured alignment
+        env:
+          AIDAN_SCAN_SHELL_OUT: ${{ runner.temp }}/scan-shell
+        run: |
+          python3 - <<'PY'
+          import pathlib,os,json,struct
+          p=pathlib.Path(os.environ["AIDAN_SCAN_SHELL_OUT"])
+          a=json.loads((p/"scan_shell_audit.json").read_text())
+          assert len(a["meshes"])==3
+          assert abs(a["measured_upper_bottom_gap"])<1e-5
+          for x in a["meshes"]:
+              assert x["boundary_edges"]==0 and x["nonmanifold_edges"]==0,x
+          for v in ("three_quarter","front","top","48px","96px"):
+              raw=(p/("scan_shell_"+v+".png")).read_bytes()
+              assert raw[:8]==bytes((137,80,78,71,13,10,26,10))
+              if v.endswith("px"):
+                  dim=int(v[:-2]);assert struct.unpack(">II",raw[16:24])==(dim,dim)
+          print("G3 bounded scan topology/Z/PNG gate PASS; G2 NOT_RUN; contact penetration NOT_RUN")
+          PY
+      - name: Save source-derived candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-organic-scan-shell-v2
+          path: ${{ runner.temp }}/scan-shell/
+          if-no-files-found: warn
+          retention-days: 7
