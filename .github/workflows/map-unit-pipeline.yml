@@ -1,0 +1,119 @@
+name: Map units - readonly WORLD ROUTE evidence
+on:
+  push:
+    branches: ['feature/map-deterministic-pipeline-world-route-01']
+    paths: ['tools/map_pipeline/**', 'tests/test_map_pipeline.py', '.github/workflows/map-unit-pipeline.yml']
+  pull_request:
+    paths: ['tools/map_pipeline/**', 'tests/test_map_pipeline.py', '.github/workflows/map-unit-pipeline.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: map-units-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tests -p test_map_pipeline.py -v
+  unit:
+    needs: contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        unit: [WORLD, ROUTE]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fingerprint protected input, code, configuration and history
+        id: key
+        run: echo "sha=$(python3 tools/map_pipeline/pipeline.py key --unit ${{ matrix.unit }})" >> "$GITHUB_OUTPUT"
+      - name: Restore exact success or failure (no prefix fallback)
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .map-pipeline/${{ matrix.unit }}
+          key: map-unit-v1-${{ matrix.unit }}-${{ steps.key.outputs.sha }}
+      - name: Install existing pinned Blender only for changed input
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p .map-pipeline/${{ matrix.unit }}
+          exec > >(tee .map-pipeline/${{ matrix.unit }}/install.log) 2>&1
+          sudo apt-get update -qq
+          mkdir -p /tmp/lind-blender-pinned
+          cd /tmp/lind-blender-pinned
+          apt-get download 'blender=4.0.2+dfsg-1ubuntu8' 'blender-data=4.0.2+dfsg-1ubuntu8'
+          sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
+          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
+      - name: Build or verify cached evidence; failure never retries automatically
+        run: python3 tools/map_pipeline/pipeline.py run --unit ${{ matrix.unit }}
+      - name: Record infrastructure failure and minimal handoff
+        if: always()
+        env:
+          UNIT: ${{ matrix.unit }}
+          INPUT_SHA: ${{ steps.key.outputs.sha }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          python3 - <<'PYTHON'
+          import json, os
+          from pathlib import Path
+          u = os.environ['UNIT']
+          out = Path('.map-pipeline') / u
+          out.mkdir(parents=True, exist_ok=True)
+          if os.environ['JOB_STATUS'] == 'failure' and not (out / 'state.json').exists():
+              state = {'unit': u, 'input_sha256': os.environ['INPUT_SHA'], 'status': 'FAIL'}
+              (out / 'state.json').write_text(json.dumps(state))
+              log = out / 'install.log'
+              (out / 'failure.json').write_text(json.dumps({'cause': 'workflow setup/input verification failed; inspect failed step', 'related_log_tail': log.read_text(errors='replace').splitlines()[-35:] if log.exists() else [], 'automatic_retry': False}))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write(f"{u}: {os.environ['JOB_STATUS']}; artifact `map-{u}-{os.environ['INPUT_SHA']}`; image `preview.png` on success, `failure.json` on failure.\n")
+          PYTHON
+      - name: Preserve success, failure or interrupted attempt marker
+        if: always() && steps.key.outcome == 'success' && steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .map-pipeline/${{ matrix.unit }}
+          key: map-unit-v1-${{ matrix.unit }}-${{ steps.key.outputs.sha }}
+      - name: Save images, hashes, QA and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-${{ matrix.unit }}-${{ steps.key.outputs.sha }}
+          path: .map-pipeline/${{ matrix.unit }}
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+  evidence-integration:
+    needs: unit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: map-WORLD-*
+          path: .map-pipeline/WORLD
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: map-ROUTE-*
+          path: .map-pipeline/ROUTE
+          merge-multiple: true
+      - name: Verify both limited technical gates and approved next stage
+        run: python3 tools/map_pipeline/pipeline.py integrate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: map-handoff-${{ github.sha }}
+          path: |
+            .map-pipeline/handoff.json
+            .map-pipeline/references.md
+          retention-days: 14
