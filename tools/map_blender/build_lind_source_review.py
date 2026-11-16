@@ -59,6 +59,9 @@ def build(image, graph, output):
     # terrain plane. This prevents mistaking illustration pixels for meters.
     ref = bpy.data.images.load(str(image.resolve()), check_existing=True)
     ref.pack()
+    # A reference image has no material/editor users in a background build.
+    # Preserve it when saving/reopening the .blend instead of dropping an orphan.
+    ref.use_fake_user = True
     ref["source_sha256"] = APPROVED_SHA
     ref["role"] = "APPROVED_VISUAL_REFERENCE_NOT_METRIC"
     for node in data["nodes"]:
