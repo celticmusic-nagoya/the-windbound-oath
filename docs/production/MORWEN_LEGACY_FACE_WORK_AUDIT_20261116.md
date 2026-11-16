@@ -31,3 +31,10 @@ Director decision (2026-11-16): **FULLY ADOPT** full-body design-first, sculpt-r
 - Current changes: policy/handoff documentation only; **no new sculpt, no legacy asset deletion, no main merge**.
 
 See `AGENTS.md` and `docs/production/MORWEN_PRODUCTION_METHOD_RESET_20261116.md`.
+
+## Repository search evidence (2026-11-16, main-indexed code search)
+- `docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md` explicitly records **Morwen eyelid AND mouth polar annulus/zipper two failed trials** (face folding, UV inversion). The next method suggested there is corner-anchored, curve-constrained local quad topology; it is a **proposal, not a verified implementation**.
+- The same policy explicitly preserves **nose candidate depth 0.5** and source hashes. This corrects the generic NOT_VERIFIED row above: **nose parameter evidence exists**, but nose mesh, appearance and integration remain NOT_VERIFIED.
+- Search results for `eyelid` also include `docs/qa/EYELID_CORRECTION_20E.md` and `tools/assets/eyelid-revision/README.md`, which concern **Fiona/Lou 2D portraits**. They are **not Morwen 3D eyelid evidence** and must not be counted as Morwen work.
+- The repository search did not establish the precise location of the legacy Morwen eyelash mesh or a production-ready nose mesh. These remain BLOCKED for physical reuse pending exact source file and SHA.
+- Search covers default branch; branch-only artifacts or other historical commits may not be indexed. This inventory is **partial**; do not report full legacy inventory PASS.
