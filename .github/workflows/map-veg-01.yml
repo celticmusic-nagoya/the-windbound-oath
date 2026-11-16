@@ -22,7 +22,8 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1 libxkbcommon0 libsm6
-          curl -fsSL -o "$RUNNER_TEMP/blender.tar.xz" https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz
+          curl -sSL --retry 3 --retry-delay 4 -o "$RUNNER_TEMP/blender.tar.xz" https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz
+          xz -t "$RUNNER_TEMP/blender.tar.xz"
           tar xf "$RUNNER_TEMP/blender.tar.xz" -C "$RUNNER_TEMP"
       - name: Generate candidate grass clumps and three views
         run: |
