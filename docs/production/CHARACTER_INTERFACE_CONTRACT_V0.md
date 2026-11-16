@@ -43,3 +43,11 @@ G1 source-image/canon comparison BLOCKED; G2 independent artistic review NOT_RUN
 
 ## Isolation
 FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs/rig candidate collections; COSTUME owns clothes/accessories/occlusion candidate collections. INTEGRATION consumes frozen reviewed outputs only. Each branch writes assets/candidates/<task_id>/<candidate_id>, tools/character_blender/, docs/qa/. No canonical overwrite, main merge, publication or destructive deletion.
+
+## Source audit 2026-11-16 — critical conflict
+- docs/design/MORWEN_LAYER0_REFERENCE_REGISTRY.json (on PR #326 branch) records Layer 0 sheet SHA 7e122ceb205e502aad49dfa32ac463818e30a3da4d4bd43951f9263bcb08a150, dimensions 1536x1024, approximate 163 cm and 7.5 heads; these are **unverified source metadata**, not the field sprite's 2.8-head target.
+- tools/blender/production_mesh_08/layer0_reference_manifest.json lists four source panels 7809/7807/7810/7808 with hashes, but explicitly says their image bytes are not in GitHub.
+- The reference registry specifies character-left +X, right -X; docs/design/MORWEN_LAYER0_PRODUCTION_GATE.md states local +X is character-right. **AXIS_CONFLICT: BLOCKED** until checked against the accepted image, actual rig, and rendering transforms. Neither statement is silently promoted.
+- Existing CONTACT_CAGE_DISABLED_08.blend is a *candidate diagnostic*, not a verified accepted Layer 0 master. Its mesh transforms can be measured for a provisional geometry interface, not promoted to canonical scale or seam.
+- docs/design/MORWEN_LAYER0_LANDMARKS_CANDIDATE.json labels pixel landmarks approximate and not art-approved; barefoot and booted heights must not be equated.
+- The face/body/costume branches remain preproduction; no independently running Claude or Codex session was launched.
