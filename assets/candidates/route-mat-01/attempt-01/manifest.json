@@ -1,0 +1,93 @@
+{
+  "schema": "lind.material-handoff.v1",
+  "asset_id": "route-mat-01-weathered-stone-surface-candidate-01",
+  "reference_sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+  "producer": "Codex IMAGE PRODUCER",
+  "tool_version": "OpenAI image_gen.imagegen; model/backend version not exposed by tool",
+  "seed": "NOT_EXPOSED_BY_IMAGE_GEN_TOOL; no invented seed",
+  "license": "Original AI-generated candidate for THE WINDBOUND OATH; applicable OpenAI service terms; no third-party stock, CC0 or exclusive copyright claim",
+  "rights": {
+    "generator": "OpenAI image_gen.imagegen",
+    "terms_url": "https://openai.com/policies/terms-of-use/",
+    "reference_use": "Project-approved CG used for semantic art direction only; not provided as image-generator input; no CG pixels copied",
+    "external_stock": "NONE"
+  },
+  "issue": "https://github.com/celticmusic-nagoya/the-windbound-oath/issues/359",
+  "method_pr": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/358",
+  "baseline_commit": "9eb4d796d67789d3eea24aef7e5018ef088dae25",
+  "target": "NEW individually formed full-thickness bridge abutment stones by Claude, not old PR351 facing or a flat shell",
+  "geometry_owner": "Claude; not executed by image producer",
+  "generation_record": "assets/candidates/route-mat-01/attempt-01/generation.json",
+  "generation_record_sha256": "57140928f6c5cddbc09b1e47e747420b253d8093e458d64a2e42c3387849f13c",
+  "maps": [
+    {
+      "type": "base_color",
+      "color_space": "sRGB",
+      "path": "assets/candidates/route-mat-01/attempt-01/stone_basecolor.png",
+      "sha256": "d3d78f4aa591308bed39eee557ca2db7300f435e1303ea03e22ee58b50f23e55",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "PNG",
+      "channels": "RGB",
+      "scalar_channel": null,
+      "derivation": "original AI generation"
+    },
+    {
+      "type": "roughness",
+      "color_space": "Non-Color",
+      "path": "assets/candidates/route-mat-01/attempt-01/stone_roughness.png",
+      "sha256": "48e92725a307e6a9e406c1a24253d824faee2561f5889c1bb784419224f73d35",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "PNG",
+      "channels": "RGB",
+      "scalar_channel": "R",
+      "derivation": "artist-estimated image-to-image roughness from the original basecolor; not a physical measurement"
+    }
+  ],
+  "references": [
+    {
+      "path": "assets/approved/game/rilde_story/raid/attack_background_only.png",
+      "sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+      "role": "approved CG appearance; not a metric layout"
+    },
+    {
+      "path": "assets/sources/lind-world-20261116/original.png",
+      "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+      "role": "official geography visual; dimensions not inferred"
+    },
+    {
+      "path": "assets/candidates/lind-geology-route-production-01/route/route.blend",
+      "sha256": "99f83e08faf8b7661049cb3c195f9ad85b821af6b5b07f54b3886a9dd2e22443",
+      "role": "read-only failed model and support context; DO NOT reuse automatic facing"
+    }
+  ],
+  "uv": {
+    "layout": "non-repeating stone-face surface",
+    "extension": "CLIP",
+    "paired_transform": "Use the same UVs/rotation/scale for both maps",
+    "repeat_seam_acceptance": "NOT_RUN; not advertised seamless",
+    "physical_footprint_m": null,
+    "instruction": "Assign varied in-bounds UV islands to new stone geometry; do not stamp the whole image as a masonry wall"
+  },
+  "shader": {
+    "metallic": 0,
+    "base_color": "sRGB Color to Principled Base Color",
+    "roughness": "Non-Color -> Separate Color Red -> Principled Roughness",
+    "normal_height": "not supplied; retain geometry normals; Claude may bake justified relief from actual geometry",
+    "mortar": "separate modeled joints/material, no baked mortar mask in this stone-surface image"
+  },
+  "qa": {
+    "G1": "REFERENCE_SHA_AND_PROVENANCE_SUBSET_CHECKED; no scale/placement adoption",
+    "G2": "PRODUCER_IMAGE_REVIEW_ONLY; independent integrated material review NOT_RUN",
+    "G3": "PNG/SHA/registration/node-loading subset; geometry/UV/contact NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "adoption": false,
+  "stopped_method_history": "assets/candidates/lind-geology-route-production-01/route/attempt-ledger.json",
+  "new_method_causal_difference": "Generative continuous stone-surface images, no automatic rectangular/cellular stone mesh facing, no baked brick layout; Claude separately authors new full-thickness geometry"
+}
