@@ -37,6 +37,22 @@ jobs:
               with z.open(matches[0]) as f,(root/'source'/'human_base_meshes_bundle.blend').open('wb') as o:
                   import shutil;shutil.copyfileobj(f,o)
           PY
+      - name: Decompress official Zstandard-wrapped .blend and verify Blender header
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y zstd
+          mv qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/source/human_base_meshes_bundle.blend.zst
+          zstd -dc qa_output/basemesh/source/human_base_meshes_bundle.blend.zst > qa_output/basemesh/source/human_base_meshes_bundle.blend
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('qa_output/basemesh/source/human_base_meshes_bundle.blend')
+          header=p.open('rb').read(12)
+          if header != b'BLENDER-v402': raise SystemExit('BLOCKED unexpected Blender file header '+repr(header))
+          r={'status':'PASS_HEADER_ONLY','header':header.decode(),'decompressed_bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'geometry_qa':'NOT_RUN','art_qa':'NOT_RUN'}
+          Path('qa_output/basemesh/blend_header.json').write_text(json.dumps(r,indent=2))
+          PY
       - name: Install pinned Blender Python runtime
         run: |
           set -euo pipefail
