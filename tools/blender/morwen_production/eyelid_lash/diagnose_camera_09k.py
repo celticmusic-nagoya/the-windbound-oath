@@ -25,6 +25,7 @@ def main():
     direction=Vector((0,-1,0.2)).normalized()
     camera.location=target+direction*max(extent,0.015)*3
     camera.rotation_euler=(target-camera.location).to_track_quat("-Z","Y").to_euler()
+    bpy.context.view_layer.update()
     depths=[-(camera.matrix_world.inverted()@v).z for v in coords]
     clip_start=camera.data.clip_start
     clip_end=camera.data.clip_end
