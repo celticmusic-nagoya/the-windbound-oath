@@ -39,10 +39,11 @@ jobs:
           python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
           echo "$BPY_WHEEL_SHA256  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
           python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install 'numpy>=1.26,<3'
       - name: Run non-destructive rig pose smoke test
         run: |
           mkdir -p render_output/morwen_pose_smoke
-          python tools/character_blender/morwen_rig_pose_smoke.py "$CANDIDATE_PATH" render_output/morwen_pose_smoke
+          python tools/character_blender/morwen_rig_pose_smoke.py -- "$CANDIDATE_PATH" render_output/morwen_pose_smoke
       - name: Upload pose measurements
         if: always()
         uses: actions/upload-artifact@v4
