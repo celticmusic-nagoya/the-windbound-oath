@@ -26,3 +26,10 @@ D. HOME-MASTER: high-quality Aidan house architecture from approved visual sourc
 E. MIGRATION: adapters preserving save/event semantics; G1-G4 and Android QA.
 
 G1=BLOCKED pending direct latest-world-map and CG crosscheck; G2/G3/G4 for new world NOT_RUN. No Claude/Codex session automatically launched.
+
+## Canon source verified directly (2026-11-16)
+**Authoritative source retrieved:** private `celticmusic-nagoya/the-windbound-oath-handoff/main/reference/lore/WORLD_MAP_CANON_20261108.md`; corroborated by `CANON_ADDENDUM.md` ADD-004 and `CANON_STATUS.md` item 12. Geography is **CONFIRMED CANON**; precise coordinates, distances and local route junctions remain undetermined. Do not copy the private document verbatim to public repo.
+
+Confirmed relationships: Rilde = western coastal Alveria agricultural/fishing village; west–northwest Windward Cliffs overlook ocean sunset; southwest separate inlet and small fishing port; village center housing/storage; north farmland and main road toward Dunvall Fort (half-day to one-day walk design guideline); east north-to-south flowing river, bridge and riverside cliff used for voluntary escape jump; southeast/downstream Moss Forest and ancient altar. The two cliffs are distinct. Regional trade road leads from Rilde via Dunvall toward Caerdin. World-scale precise distances and names of new regions are not approved.
+
+**Correction to prior blocker:** latest official world-map **text source G1 provenance PASS**; 3D placement G1 remains BLOCKED until approved CG images, world-scale camera and metric geometry are checked. No legacy field coordinate can be promoted to canon. Previous tentative source lookup is resolved.
