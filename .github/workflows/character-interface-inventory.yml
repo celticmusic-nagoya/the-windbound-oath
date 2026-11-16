@@ -8,6 +8,7 @@ on:
       - 'tools/character_blender/review_bone_interface.py'
       - 'tools/character_blender/audit_candidate_surface.py'
       - 'tools/character_blender/classify_boundary_regions.py'
+      - 'tools/character_blender/measure_boundary_proximity.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -50,6 +51,9 @@ jobs:
       - name: Classify candidate mesh boundary components by world position
         run: |
           python tools/character_blender/classify_boundary_regions.py --input candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --expected-sha256 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 --out render_output/character_interface/PR326_BOUNDARY_REGIONS.json
+      - name: Measure candidate Body Face boundary proximity without modifying model
+        run: |
+          python tools/character_blender/measure_boundary_proximity.py --input candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --expected-sha256 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 --out render_output/character_interface/PR326_BOUNDARY_PROXIMITY.json
       - name: Upload reproducible diagnostic
         if: always()
         uses: actions/upload-artifact@v4
