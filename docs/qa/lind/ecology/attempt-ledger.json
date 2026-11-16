@@ -3,32 +3,202 @@
  "policy": "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md",
  "note": "Cumulative. Imported history from PR #337 is carried, not reset (see PRIOR_HISTORY.md). 'self' = author self-review (never G2). G2 verdicts come only from independent reviews copied unchanged into docs/qa/lind/ecology/independent/. Renders marked NOT_PRESERVED were overwritten before the first commit (honest gap).",
  "entries": [
-  {"defect": "grass clump sparse / narrow, no layered mass", "method_family": "VEG-F1 single-centre radial per-blade objects", "attempt": 1, "source": "PR #337 candidate A", "result": "G2 FAIL (independent, #337)", "render_sha256": "CI artifact 14200905243", "status": "STOPPED"},
-  {"defect": "same", "method_family": "VEG-F1", "attempt": 2, "source": "PR #337 candidate B (parameter split only)", "result": "unreviewed same-family variant; treated as exhausted", "status": "STOPPED"},
-  {"defect": "grass clump sparse; tall_lax blades collapse flat; tillers separate into tufts; muted colour", "method_family": "ECO-G1 off-centre tillers + droop + V-fold blades + vertex gradient", "attempt": 1, "hypothesis": "tiller architecture gives layered mass and darker core / lighter crown at 96 px", "result": "self FAIL (sparse, tall_lax flat) + G2_REVIEW_01 FAIL (hypothesis not met at 96/48 px)", "render_sha256": "955d78b5314a72eee9a434d125984353fa22e3775a91cf013b4ffc4270d8d96f"},
-  {"defect": "same", "method_family": "ECO-G1", "attempt": "1b (code only)", "hypothesis": "sag clamp + per-tiller sheaths + more blades", "result": "NOT_RENDERED; superseded before execution by the structural switch below (not counted as a failed execution)"},
-  {"defect": "tillers read as separate tufts; no fused core; spaghetti droop; grey-olive colour", "method_family": "ECO-G2 fused basal ring (44-60 short wide outward-arching blades) + tillers packed 0.6x + clump-level AO + warm saturated tip ramp + droop capped by height", "attempt": 1, "causal_difference": "adds a continuous basal mass layer that physically occupies the gaps between tillers, and a clump-scale (not blade-scale) value structure; droop cap ties sag to upright height", "measurable_hypothesis": "at 96 px each clump is one connected silhouette (single alpha component on icon render) with core luminance < crown luminance", "result": "PENDING (render batch 2026-11-17)"},
-  {"defect": "tree crown see-through / sparse", "method_family": "TREE-L1 single-leaf geometry (8-tri leaves along twigs)", "attempt": 1, "result": "self FAIL", "render_sha256": "NOT_PRESERVED", "status": "OPEN (1 fail) - not pursued"},
-  {"defect": "tree crown spiky frond starburst, visible card rims, near-black interior", "method_family": "TREE-L2 pinnate leaf-spray alpha cards along branches", "attempt": 1, "result": "self FAIL (radial fronds)", "render_sha256": "NOT_PRESERVED"},
-  {"defect": "same", "method_family": "TREE-L2", "attempt": 2, "hypothesis": "twig-following orientation + density", "result": "G2_REVIEW_01 FAIL (deciduous, apple, forest_tall)", "render_sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4", "status": "STOPPED (2 failures)"},
-  {"defect": "same + species repetition + binary alpha + flat clip-art leaves", "method_family": "TREE-L3 lobed cluster-volume crown: ellipsoid lobes grown around sub-trees, cupped round cluster cards on the union's outer shell facing lobe normals, custom split normals transferred from lobe/crown proxy, sparse dark inner fill, species-specific painterly cluster textures (oak/apple/beech) 2x2 supersampled soft alpha, warm key light, bark grain shader", "attempt": 1, "causal_difference": "silhouette is defined by lobe volumes, not branch directions; cards face outward so rims are edge-hidden; shading normal from crown proxy removes per-card faceting/black interior", "measurable_hypothesis": "crown green value p5 >= 0.10 and p95 >= 0.45 (G2-01 measured 0.03/0.39); no radial frond spikes in silhouette", "result": "PENDING"},
-  {"defect": "apple tree reads as bush; fruit invisible at 96 px", "method_family": "TREE-L3 (apple preset: bare trunk below 1.75 m, low rounded lobes, fruit clusters 2-4 on shell, apple spur texture with painted fruit)", "attempt": 1, "result": "PENDING"},
-  {"defect": "hedge box silhouette, stubs, flat bright tiny leaves", "method_family": "HEDGE-F1 geometry leaves scattered in sine-topped box", "attempt": 1, "result": "G2_REVIEW_01 FAIL", "render_sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4"},
-  {"defect": "same", "method_family": "HEDGE-F2 cluster-card shell (wandering plan curve, height noise, rounded ends, tree palette + normals, inner fill, stems inside volume, grass skirt)", "attempt": 1, "result": "PENDING"},
-  {"defect": "wheat pale, hazy, hard rectangle, unreadable ears", "method_family": "WHEAT-F1 seeded stalk scatter", "attempt": 1, "result": "G2_REVIEW_01 FAIL", "render_sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4"},
-  {"defect": "same", "method_family": "WHEAT-F1", "attempt": 2, "hypothesis": "warm golden albedo + 1.4x ear volume + noise-modulated boundary with density taper + 6% lodging", "result": "PENDING; if FAIL -> STOP family, switch to ear-card/shell field"},
-  {"defect": "vegetable bed board-game tile, grid repetition, grey dots, hard tray edge", "method_family": "VEGROW-F1 ridged grid + crops on strict rows", "attempt": 1, "result": "G2_REVIEW_01 FAIL"},
-  {"defect": "same", "method_family": "VEGROW-F1", "attempt": 2, "hypothesis": "wandering rows, jitter, 3 crop types and size spread, deeper furrows, soil-to-turf edge blend, weed border", "result": "PENDING"},
-  {"defect": "flowers sparse, floating, poppy-dominated", "method_family": "FLOWER-F1 colony scatter on bare ground", "attempt": 1, "result": "G2_REVIEW_01 FAIL"},
-  {"defect": "same", "method_family": "FLOWER-F1", "attempt": 2, "hypothesis": "900-blade grass bed + basal rosettes + larger/more spikes and daisies", "result": "PENDING"},
-  {"defect": "fence round dowel rails, clean tan, overhangs", "method_family": "FENCE-F1 round tube rails", "attempt": 1, "result": "G2_REVIEW_01 FAIL"},
-  {"defect": "same", "method_family": "FENCE-F2 split quad-section rails seated in hewn 6-sided posts, dark weathered timber with grain shader, moss foot", "attempt": 1, "result": "PENDING"},
-  {"defect": "river module bank/ground gaps", "method_family": "WATER-BANK straight ground hole", "attempt": 1, "result": "self FAIL (sky through gaps)", "render_sha256": "NOT_PRESERVED"},
-  {"defect": "bank/ground tone seam", "method_family": "WATER-BANK-F1 vertex-colour matching across separate meshes", "attempt": 2, "result": "self FAIL x2", "status": "STOPPED"},
-  {"defect": "bank/ground tone seam", "method_family": "WATER-BANK-F2 shared world-space procedural ground material on bank tops + unified palette", "attempt": 1, "result": "PENDING"},
-  {"defect": "renders not tied to build (provenance)", "method_family": "PROV-F1 renders.json without build hashes", "attempt": 1, "result": "G2_REVIEW_01 provenance finding", "status": "STOPPED"},
-  {"defect": "same", "method_family": "PROV-F2 per-render build combined hash + render script hash + .blend hash; registry-level script/texture hashes; full re-render after each build", "attempt": 1, "result": "PENDING"},
-  {"defect": "livestock (cow, hen) not art", "method_family": "metaball blockout", "attempt": 0, "result": "labelled STRUCTURAL_BLOCKOUT_NOT_ART; no art attempt yet; excluded from art vignettes"},
-  {"defect": "haystack", "method_family": "beehive revolve + strands", "attempt": 1, "result": "G2_REVIEW_01 PASS (form/readability only)"}
+  {
+   "defect": "grass clump sparse / narrow, no layered mass",
+   "method_family": "VEG-F1 single-centre radial per-blade objects",
+   "attempt": 1,
+   "source": "PR #337 candidate A",
+   "result": "G2 FAIL (independent, #337)",
+   "render_sha256": "CI artifact 14200905243",
+   "status": "STOPPED"
+  },
+  {
+   "defect": "same",
+   "method_family": "VEG-F1",
+   "attempt": 2,
+   "source": "PR #337 candidate B (parameter split only)",
+   "result": "unreviewed same-family variant; treated as exhausted",
+   "status": "STOPPED"
+  },
+  {
+   "defect": "grass clump sparse; tall_lax blades collapse flat; tillers separate into tufts; muted colour",
+   "method_family": "ECO-G1 off-centre tillers + droop + V-fold blades + vertex gradient",
+   "attempt": 1,
+   "hypothesis": "tiller architecture gives layered mass and darker core / lighter crown at 96 px",
+   "result": "self FAIL (sparse, tall_lax flat) + G2_REVIEW_01 FAIL (hypothesis not met at 96/48 px)",
+   "render_sha256": "955d78b5314a72eee9a434d125984353fa22e3775a91cf013b4ffc4270d8d96f"
+  },
+  {
+   "defect": "same",
+   "method_family": "ECO-G1",
+   "attempt": "1b (code only)",
+   "hypothesis": "sag clamp + per-tiller sheaths + more blades",
+   "result": "NOT_RENDERED; superseded before execution by the structural switch below (not counted as a failed execution)"
+  },
+  {
+   "defect": "tillers read as separate tufts; no fused core; spaghetti droop; grey-olive colour",
+   "method_family": "ECO-G2 fused basal ring (44-60 short wide outward-arching blades) + tillers packed 0.6x + clump-level AO + warm saturated tip ramp + droop capped by height",
+   "attempt": 1,
+   "causal_difference": "adds a continuous basal mass layer that physically occupies the gaps between tillers, and a clump-scale (not blade-scale) value structure; droop cap ties sag to upright height",
+   "measurable_hypothesis": "at 96 px each clump is one connected silhouette (single alpha component on icon render) with core luminance < crown luminance",
+   "result": "self: clumps read as one fused tuft with darker core in lineup_small/closeup; G2 pending",
+   "render_sha256": "d068c9ee47f800e8d2bcb10793fb4d57b85d0dd32db6a565c1e957ed38d53b4a"
+  },
+  {
+   "defect": "tree crown see-through / sparse",
+   "method_family": "TREE-L1 single-leaf geometry (8-tri leaves along twigs)",
+   "attempt": 1,
+   "result": "self FAIL",
+   "render_sha256": "NOT_PRESERVED",
+   "status": "OPEN (1 fail) - not pursued"
+  },
+  {
+   "defect": "tree crown spiky frond starburst, visible card rims, near-black interior",
+   "method_family": "TREE-L2 pinnate leaf-spray alpha cards along branches",
+   "attempt": 1,
+   "result": "self FAIL (radial fronds)",
+   "render_sha256": "NOT_PRESERVED"
+  },
+  {
+   "defect": "same",
+   "method_family": "TREE-L2",
+   "attempt": 2,
+   "hypothesis": "twig-following orientation + density",
+   "result": "G2_REVIEW_01 FAIL (deciduous, apple, forest_tall)",
+   "render_sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4",
+   "status": "STOPPED (2 failures)"
+  },
+  {
+   "defect": "same + species repetition + binary alpha + flat clip-art leaves",
+   "method_family": "TREE-L3 lobed cluster-volume crown: ellipsoid lobes grown around sub-trees, cupped round cluster cards on the union's outer shell facing lobe normals, custom split normals transferred from lobe/crown proxy, sparse dark inner fill, species-specific painterly cluster textures (oak/apple/beech) 2x2 supersampled soft alpha, warm key light, bark grain shader",
+   "attempt": 1,
+   "causal_difference": "silhouette is defined by lobe volumes, not branch directions; cards face outward so rims are edge-hidden; shading normal from crown proxy removes per-card faceting/black interior",
+   "measurable_hypothesis": "crown green value p5 >= 0.10 and p95 >= 0.45 (G2-01 measured 0.03/0.39); no radial frond spikes in silhouette",
+   "result": "self: rounded lobed crowns, no radial fronds, species distinct, interior dark-green not black; G2 pending",
+   "render_sha256": "81b06eeecce916b07045901b55f05a128fe7b98a494879aef534eb4f7987b119"
+  },
+  {
+   "defect": "apple tree reads as bush; fruit invisible at 96 px",
+   "method_family": "TREE-L3 (apple preset: bare trunk below 1.75 m, low rounded lobes, fruit clusters 2-4 on shell, apple spur texture with painted fruit)",
+   "attempt": 1,
+   "result": "self: bare trunk + rounded low crown, fruit visible at 96 px icon; G2 pending",
+   "render_sha256": "372b406a90927ec8e246dcdcffb205673dc5c4fd616e6daba8d43e2214869e46"
+  },
+  {
+   "defect": "hedge box silhouette, stubs, flat bright tiny leaves",
+   "method_family": "HEDGE-F1 geometry leaves scattered in sine-topped box",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 FAIL",
+   "render_sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4"
+  },
+  {
+   "defect": "same",
+   "method_family": "HEDGE-F2 cluster-card shell (wandering plan curve, height noise, rounded ends, tree palette + normals, inner fill, stems inside volume, grass skirt)",
+   "attempt": 1,
+   "result": "self: rounded ends, irregular top, tree palette; G2 pending",
+   "render_sha256": "81b06eeecce916b07045901b55f05a128fe7b98a494879aef534eb4f7987b119"
+  },
+  {
+   "defect": "wheat pale, hazy, hard rectangle, unreadable ears",
+   "method_family": "WHEAT-F1 seeded stalk scatter",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 FAIL",
+   "render_sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4"
+  },
+  {
+   "defect": "same",
+   "method_family": "WHEAT-F1",
+   "attempt": 2,
+   "hypothesis": "warm golden albedo + 1.4x ear volume + noise-modulated boundary with density taper + 6% lodging",
+   "result": "self: golden, ears readable in closeup; REMAINING DEFECT: visible seams where identical patches tile edge-to-edge in vignette/gameview; G2 pending",
+   "render_sha256": "be39a1dd14beb071c9977c66b6c08b6819a53f5b37712eefb6fe3d37b98ddaf7"
+  },
+  {
+   "defect": "vegetable bed board-game tile, grid repetition, grey dots, hard tray edge",
+   "method_family": "VEGROW-F1 ridged grid + crops on strict rows",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 FAIL"
+  },
+  {
+   "defect": "same",
+   "method_family": "VEGROW-F1",
+   "attempt": 2,
+   "hypothesis": "wandering rows, jitter, 3 crop types and size spread, deeper furrows, soil-to-turf edge blend, weed border",
+   "result": "self: mixed crops, weed border; still reads somewhat tile-like at distance; G2 pending",
+   "render_sha256": "a37b334c64692b5cf547598e3496ed8260b91cee77e88a29e9b832725a3320d9"
+  },
+  {
+   "defect": "flowers sparse, floating, poppy-dominated",
+   "method_family": "FLOWER-F1 colony scatter on bare ground",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 FAIL"
+  },
+  {
+   "defect": "same",
+   "method_family": "FLOWER-F1",
+   "attempt": 2,
+   "hypothesis": "900-blade grass bed + basal rosettes + larger/more spikes and daisies",
+   "result": "self: flowers in grass bed, purple spikes visible at 48 px; G2 pending",
+   "render_sha256": "7cc3d7d33506f2cd9f127e124d2540d87d2ce4d251a512a02f621501def23523"
+  },
+  {
+   "defect": "fence round dowel rails, clean tan, overhangs",
+   "method_family": "FENCE-F1 round tube rails",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 FAIL"
+  },
+  {
+   "defect": "same",
+   "method_family": "FENCE-F2 split quad-section rails seated in hewn 6-sided posts, dark weathered timber with grain shader, moss foot",
+   "attempt": 1,
+   "result": "self: dark split rails seated in posts; G2 pending",
+   "render_sha256": "e4d22cc52309f3224c027f8fabe2a57b012cb0fb9868e23bd5a6d4d11f071db0"
+  },
+  {
+   "defect": "river module bank/ground gaps",
+   "method_family": "WATER-BANK straight ground hole",
+   "attempt": 1,
+   "result": "self FAIL (sky through gaps)",
+   "render_sha256": "NOT_PRESERVED"
+  },
+  {
+   "defect": "bank/ground tone seam",
+   "method_family": "WATER-BANK-F1 vertex-colour matching across separate meshes",
+   "attempt": 2,
+   "result": "self FAIL x2",
+   "status": "STOPPED"
+  },
+  {
+   "defect": "bank/ground tone seam",
+   "method_family": "WATER-BANK-F2 shared world-space procedural ground material on bank tops + unified palette",
+   "attempt": 1,
+   "result": "self: no ground seam in water shot; REMAINING DEFECT: open far end of the module visible in the vignette (staging); G2 pending",
+   "render_sha256": "f88686abd4ea85954215f7fb129e0cbf93970af4c56ba2601207f5e12b239fe6"
+  },
+  {
+   "defect": "renders not tied to build (provenance)",
+   "method_family": "PROV-F1 renders.json without build hashes",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 provenance finding",
+   "status": "STOPPED"
+  },
+  {
+   "defect": "same",
+   "method_family": "PROV-F2 per-render build combined hash + render script hash + .blend hash; registry-level script/texture hashes; full re-render after each build",
+   "attempt": 1,
+   "result": "tech QA render_registry PASS; every render carries build/script/blend hashes"
+  },
+  {
+   "defect": "livestock (cow, hen) not art",
+   "method_family": "metaball blockout",
+   "attempt": 0,
+   "result": "labelled STRUCTURAL_BLOCKOUT_NOT_ART; no art attempt yet; excluded from art vignettes"
+  },
+  {
+   "defect": "haystack",
+   "method_family": "beehive revolve + strands",
+   "attempt": 1,
+   "result": "G2_REVIEW_01 PASS (form/readability only)"
+  }
  ]
 }

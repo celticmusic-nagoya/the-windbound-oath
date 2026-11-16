@@ -10,13 +10,51 @@
    "sha256": "be39a1dd14beb071c9977c66b6c08b6819a53f5b37712eefb6fe3d37b98ddaf7",
    "shot": "closeup"
   },
-  "eco_lineup_large_wind0.png": {
-   "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+  "eco_farmland_vignette_wind1_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
    "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
-   "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 48,
+   "sha256": "9793706ba003cbf6eaa89578c6ae75b41b751d758760f953b3a445e4d025464c",
+   "shot": "vignette"
+  },
+  "eco_gameview_28deg_ortho_wind1_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
    "samples": 40,
-   "sha256": "2cf72e59f551093ecc4913efe90fb833c55bab7e641a92e6ff58aa0d04c250f3",
+   "sha256": "a37b334c64692b5cf547598e3496ed8260b91cee77e88a29e9b832725a3320d9",
+   "shot": "gameview"
+  },
+  "eco_gameview_figure48px.png": {
+   "engine": "PIL",
+   "sha256": "d6678f271ffeb5424cbd00f7295efe2ee41d0e68ad77a45ce59fe44d4282488f",
+   "shot": "postprocess"
+  },
+  "eco_icons_48px_sheet.png": {
+   "engine": "PIL",
+   "sha256": "a618a8e6a380548e3c750d257afd4a595016b8dbe36c2eadecde4c8d8837bde5",
+   "shot": "postprocess"
+  },
+  "eco_icons_96px_sheet.png": {
+   "engine": "PIL",
+   "sha256": "41f4a4d8e88b7a895b54d45af3101ac2344af5e8fa250cc44d45ca8a87bf0c2f",
+   "shot": "postprocess"
+  },
+  "eco_lineup_large_labeled.png": {
+   "engine": "PIL",
+   "sha256": "850c79fd2ce61fcdd18f8034d0aaf5373196a84fc420a0d84e356d926952d9a1",
+   "shot": "postprocess"
+  },
+  "eco_lineup_large_wind0.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 40,
+   "sha256": "81b06eeecce916b07045901b55f05a128fe7b98a494879aef534eb4f7987b119",
    "shot": "lineup_large"
   },
   "eco_lineup_small_wind0.png": {
@@ -27,10 +65,313 @@
    "samples": 48,
    "sha256": "d068c9ee47f800e8d2bcb10793fb4d57b85d0dd32db6a565c1e957ed38d53b4a",
    "shot": "lineup_small"
+  },
+  "eco_vignette_gamescale_48.png": {
+   "engine": "PIL",
+   "sha256": "fb3b444f3fbe9f64444d15047a5286720989d0a0748c78cd28817f2aa84896cf",
+   "shot": "postprocess"
+  },
+  "eco_water_module_diff_wind0.png": {
+   "engine": "PIL",
+   "sha256": "bb96c07d5b4ccecacc59856199d1e74d63a42bf49635d1f26bc9bc17dfb31595",
+   "shot": "postprocess"
+  },
+  "eco_water_module_wind0_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 32,
+   "sha256": "f88686abd4ea85954215f7fb129e0cbf93970af4c56ba2601207f5e12b239fe6",
+   "shot": "water"
+  },
+  "eco_water_module_wind0_f30.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 32,
+   "sha256": "8513a50fb6e664cbe9d5c18a84ec6fcaf893f31f5c83527cca8663ba88e81ed5",
+   "shot": "water"
+  },
+  "eco_windpair_diff_wind0.png": {
+   "engine": "PIL",
+   "sha256": "f1de9c9b84b1dc25815849e39596f4e9904ae4d7623a0e76c646e208c3c71f3c",
+   "shot": "postprocess"
+  },
+  "eco_windpair_diff_wind1.png": {
+   "engine": "PIL",
+   "sha256": "cb6d7ab1bd7fe776e14fb763ab8c6b67eba367bb9ef439a8b71078147234d8d0",
+   "shot": "postprocess"
+  },
+  "eco_windpair_sheet.png": {
+   "engine": "PIL",
+   "sha256": "0700245e9a75bbcb3c88c534c28e45ca2462eb6010c2ea00e95da96e2b3e60ef",
+   "shot": "postprocess"
+  },
+  "eco_windpair_wind0_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "92d7ab018ff20904210d81e4cb42ebbaf40b109b1dfa0b95da9076b46e64af29",
+   "shot": "windpair"
+  },
+  "eco_windpair_wind0_f30.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "abd15528bac7bbb7d57217f271cbea60c6e1ac924c8e06356da1a0a4cc0b01f0",
+   "shot": "windpair"
+  },
+  "eco_windpair_wind1_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "360bdf78fcb43e12d92469de35350a8d4bb134c777ce398718dfd17c934ff1b7",
+   "shot": "windpair"
+  },
+  "eco_windpair_wind1_f30.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "9c83c35a46c4df6bb8126427b8ad20d4d6fd1776b37d34d3ae00cbccc4f8d8b1",
+   "shot": "windpair"
+  },
+  "icon256_eco_chicken_hen_blockout.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "537e5937949bd3720ee6c87b0fa1e87a124a70ff6ca30dda255ce869553dc2f7",
+   "shot": "icons"
+  },
+  "icon256_eco_cow_blockout.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "cae7bcc11bded1b76c9c453e69ce0eed4622b28c2e2b72f87b6fd17f4c238c9a",
+   "shot": "icons"
+  },
+  "icon256_eco_fence_post_rail.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "e4d22cc52309f3224c027f8fabe2a57b012cb0fb9868e23bd5a6d4d11f071db0",
+   "shot": "icons"
+  },
+  "icon256_eco_flower_patch.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "7cc3d7d33506f2cd9f127e124d2540d87d2ce4d251a512a02f621501def23523",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_coastal_dune.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "689cda6d9f611210624dbd1276f75ca305fbf1b1257e0e6ec1f2a98658845f46",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_meadow.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "e9c3616c2d5416e2eb62f45c0a76382e1867fb2cc3da4effd4d943a7df2ee305",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_tall_lax.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "1589f91a17404e369172fcb632c3f369bc805e0e78e9f244137d3e67e234707f",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_tuft_short.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "17dbba689ae3e08cd8e4779f329840127967cf86f77d407c60d86a1d58d520ae",
+   "shot": "icons"
+  },
+  "icon256_eco_haystack.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "937b0eddc93f4741cfd33481e7f01b196bda02876081b5602a89c99112ae725f",
+   "shot": "icons"
+  },
+  "icon256_eco_hedgerow.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "2c21aeaf8c0cbc57f16d44a8f2f58f4559c69917b0e3b54022e1944aedcc3d21",
+   "shot": "icons"
+  },
+  "icon256_eco_reed_riverside.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "8026df9e9d861af142a8d3ba5eed1b0d721177d8358ccc76c7365ad1d4ae34ad",
+   "shot": "icons"
+  },
+  "icon256_eco_rocks_coastal.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "00e6db114dc7c3bed69e0ae3c547965364f39a46882b116820f5973f210c7c1e",
+   "shot": "icons"
+  },
+  "icon256_eco_rocks_river.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "81b3fbce7c5beff33fcd471b4908c0698b268a50b04e55561c9c355563b585fd",
+   "shot": "icons"
+  },
+  "icon256_eco_sedge_bank.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "82cb75ad136ad1dc335009030e20a5bb540c00544e8de242fba0cb2553c35f78",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_apple_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "372b406a90927ec8e246dcdcffb205673dc5c4fd616e6daba8d43e2214869e46",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_conifer_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "5c0e33af5ae954eb9c6957802323bb610a74653f0600217ebec8359daa174b5e",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_deciduous_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "4c74426d3ea30c60bd6e8527cda1c76ae4f3e1c009f0681074d58b2f4bb6c348",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_forest_tall_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "82af43ab18b9ad2bdb5e39cf4df142c68317c60f9cb1e9393a0f4ed7f8d36268",
+   "shot": "icons"
+  },
+  "icon256_eco_vegetable_rows.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "8401edde49add1ed54e6416aacbedc33fdb4cd21691b924266d094ed159a6db1",
+   "shot": "icons"
+  },
+  "icon256_eco_wheat_patch.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "dea4c05b7900c1070db88234a72825bc49a8d6b84d61e48f3b80b9bd91964d71",
+   "shot": "icons"
+  }
+ },
+ "postprocess_stats": {
+  "gameview_figure96px": "SKIPPED_UPSAMPLE (native ~75 px per 1.75 m figure)",
+  "icon_order": [
+   "eco_chicken_hen_blockout",
+   "eco_cow_blockout",
+   "eco_fence_post_rail",
+   "eco_flower_patch",
+   "eco_grass_coastal_dune",
+   "eco_grass_meadow",
+   "eco_grass_tall_lax",
+   "eco_grass_tuft_short",
+   "eco_haystack",
+   "eco_hedgerow",
+   "eco_reed_riverside",
+   "eco_rocks_coastal",
+   "eco_rocks_river",
+   "eco_sedge_bank",
+   "eco_tree_apple_a",
+   "eco_tree_conifer_a",
+   "eco_tree_deciduous_a",
+   "eco_tree_forest_tall_a",
+   "eco_vegetable_rows",
+   "eco_wheat_patch"
+  ],
+  "vignette_gamescale_96": "SKIPPED_UPSAMPLE",
+  "water_module_diff_wind0": {
+   "changed_frac_gt8": 0.0218,
+   "changed_px_gt8": 20090,
+   "max": 184,
+   "mean": 0.8796
+  },
+  "windpair_diff_wind0": {
+   "changed_frac_gt8": 0.02273,
+   "changed_px_gt8": 11784,
+   "max": 140,
+   "mean": 0.8561
+  },
+  "windpair_diff_wind1": {
+   "changed_frac_gt8": 0.29092,
+   "changed_px_gt8": 150813,
+   "max": 185,
+   "mean": 9.0634
   }
  },
  "provenance": {
-  "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+  "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
   "build_script_sha256": {
    "build_eco_assets.py": "08fdefbd5756c5fd85a8d21e6dc31517b4768ac41c2adb70280ab431ce9cca88",
@@ -41,7 +382,7 @@
    "render_eco.py": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
    "write_manifest.py": "03a3fa0f29cf9584629f62a10f83d04d1ef338a3675fbd941d5e5bb8edc97572"
   },
-  "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+  "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
   "textures_sha256": {
    "grass_card_lod1.png": "a7c04540c4611d66324a8ccbe5dc0ea2b62fe61f91bd28952a4aad8f23b7b290",
    "leaf_cluster_apple.png": "b1c3ff3a57dc15d2b155ac53b3f32d730ba21262f6e91c479ebac7535e0de763",

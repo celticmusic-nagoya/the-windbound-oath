@@ -286,7 +286,7 @@ def shot_lineup_large(samples):
     scale_proxy(stage, (-1.4, -3.0, 0))
     lights(sc)
     setup_render(sc, 1280, 720, samples)
-    camera(sc, (3.0, -27.0, 8.0), (3.0, 1.0, 2.4), 30.0)
+    camera(sc, (2.6, -30.0, 8.5), (2.6, 1.0, 2.4), 26.0)
     L.set_channel(sc, wind=0.0)
     return [render(sc, "eco_lineup_large_wind0")]
 

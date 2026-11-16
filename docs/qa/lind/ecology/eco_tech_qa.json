@@ -1,0 +1,884 @@
+{
+ "task_id": "LIND-ECO-01",
+ "scope": "G3 technical only; G2 art NOT judged here",
+ "blender_version": "5.3.0",
+ "seed": 20261116,
+ "combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+ "script_sha256": {
+  "build_eco_assets.py": "08fdefbd5756c5fd85a8d21e6dc31517b4768ac41c2adb70280ab431ce9cca88",
+  "eco_assets.py": "72f5abd615f64cb2188b8cc14dc06b4bb2862f1f560b513cd27c5fe983b52084",
+  "eco_lib.py": "bae17b06ff4bd54a8b524793ba7f329b28c877efb070e1771df6bde0eb12f3ff",
+  "postprocess_eco.py": "9a5142a4f1c02abaca84a055660df040b737a41f20aab1de25e75f53deac591d",
+  "qa_eco.py": "d2e12d4af3627a9d79ad916dae999eab514e80322379cae23ba4e4f4fed14bea",
+  "render_eco.py": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+  "write_manifest.py": "03a3fa0f29cf9584629f62a10f83d04d1ef338a3675fbd941d5e5bb8edc97572"
+ },
+ "motion": {
+  "eco_tree_deciduous_a": {
+   "wind1_f12_vs_f30_max_m": 0.11798,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_tree_apple_a": {
+   "wind1_f12_vs_f30_max_m": 0.09119,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_tree_forest_tall_a": {
+   "wind1_f12_vs_f30_max_m": 0.16429,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_tree_conifer_a": {
+   "wind1_f12_vs_f30_max_m": 0.09998,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_grass_tuft_short": {
+   "wind1_f12_vs_f30_max_m": 0.0369,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_grass_meadow": {
+   "wind1_f12_vs_f30_max_m": 0.03501,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_grass_tall_lax": {
+   "wind1_f12_vs_f30_max_m": 0.08752,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_grass_coastal_dune": {
+   "wind1_f12_vs_f30_max_m": 0.04484,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_reed_riverside": {
+   "wind1_f12_vs_f30_max_m": 0.0983,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_sedge_bank": {
+   "wind1_f12_vs_f30_max_m": 0.0448,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_wheat_patch": {
+   "wind1_f12_vs_f30_max_m": 0.07021,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_vegetable_rows": {
+   "wind1_f12_vs_f30_max_m": 0.02252,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_flower_patch": {
+   "wind1_f12_vs_f30_max_m": 0.04276,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_hedgerow": {
+   "wind1_f12_vs_f30_max_m": 0.03764,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_haystack": {
+   "wind1_f12_vs_f30_max_m": 0.00807,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  },
+  "eco_grass_card_lod1": {
+   "wind1_f12_vs_f30_max_m": 0.05295,
+   "wind0_f12_vs_f30_max_m": 0.0,
+   "wind0_vs_rest_max_m": 0.0
+  }
+ },
+ "water": {
+  "eco_river_water": {
+   "wind0_water1_f12_vs_f30_max_m": 0.03814,
+   "wind_change_effect_m": 0.0,
+   "water0_f12_vs_f30_max_m": 0.0
+  }
+ },
+ "overall": "PASS",
+ "checks": [
+  {
+   "check": "determinism_two_builds",
+   "status": "PASS",
+   "detail": {
+    "combined_1": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+    "combined_2": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+    "mismatch": []
+   }
+  },
+  {
+   "check": "determinism_vs_render_build",
+   "status": "PASS",
+   "detail": {
+    "render_build": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+    "qa_build": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3"
+   }
+  },
+  {
+   "check": "tri_budget_lod0",
+   "status": "PASS",
+   "detail": {
+    "over": [],
+    "missing_budget": [],
+    "tris": {
+     "eco_tree_deciduous_a": 10647,
+     "eco_tree_apple_a": 7829,
+     "eco_tree_forest_tall_a": 12539,
+     "eco_tree_conifer_a": 19122,
+     "eco_grass_tuft_short": 2652,
+     "eco_grass_meadow": 3838,
+     "eco_grass_tall_lax": 4840,
+     "eco_grass_coastal_dune": 4132,
+     "eco_reed_riverside": 2510,
+     "eco_sedge_bank": 3002,
+     "eco_rocks_river": 8960,
+     "eco_rocks_coastal": 17920,
+     "eco_river_water": 3840,
+     "eco_river_bank": 3360,
+     "eco_wheat_patch": 59902,
+     "eco_vegetable_rows": 19122,
+     "eco_flower_patch": 44952,
+     "eco_hedgerow": 5016,
+     "eco_fence_post_rail": 592,
+     "eco_haystack": 7218,
+     "eco_chicken_hen_blockout": 5232,
+     "eco_cow_blockout": 6897,
+     "eco_grass_card_lod1": 6
+    }
+   }
+  },
+  {
+   "check": "channel_plumbing",
+   "status": "PASS",
+   "detail": {
+    "drivers": {
+     "LIND_WIND_CTRL": [
+      "[\"lind_wind_strength\"]"
+     ],
+     "LIND_WATER_CTRL": [
+      "[\"lind_water_flow\"]"
+     ]
+    },
+    "wind_world_space": true
+   }
+  },
+  {
+   "check": "wind_modifier_and_weights",
+   "status": "PASS",
+   "detail": {
+    "wind_assets": 16,
+    "missing_modifier": [],
+    "bad_wind_weight": []
+   }
+  },
+  {
+   "check": "wind1_moves",
+   "status": "PASS",
+   "detail": {
+    "eco_tree_deciduous_a": 0.11798,
+    "eco_tree_apple_a": 0.09119,
+    "eco_tree_forest_tall_a": 0.16429,
+    "eco_tree_conifer_a": 0.09998,
+    "eco_grass_tuft_short": 0.0369,
+    "eco_grass_meadow": 0.03501,
+    "eco_grass_tall_lax": 0.08752,
+    "eco_grass_coastal_dune": 0.04484,
+    "eco_reed_riverside": 0.0983,
+    "eco_sedge_bank": 0.0448,
+    "eco_wheat_patch": 0.07021,
+    "eco_vegetable_rows": 0.02252,
+    "eco_flower_patch": 0.04276,
+    "eco_hedgerow": 0.03764,
+    "eco_haystack": 0.00807,
+    "eco_grass_card_lod1": 0.05295
+   }
+  },
+  {
+   "check": "wind0_halts_exactly",
+   "status": "PASS",
+   "detail": {
+    "eco_tree_deciduous_a": [
+     0.0,
+     0.0
+    ],
+    "eco_tree_apple_a": [
+     0.0,
+     0.0
+    ],
+    "eco_tree_forest_tall_a": [
+     0.0,
+     0.0
+    ],
+    "eco_tree_conifer_a": [
+     0.0,
+     0.0
+    ],
+    "eco_grass_tuft_short": [
+     0.0,
+     0.0
+    ],
+    "eco_grass_meadow": [
+     0.0,
+     0.0
+    ],
+    "eco_grass_tall_lax": [
+     0.0,
+     0.0
+    ],
+    "eco_grass_coastal_dune": [
+     0.0,
+     0.0
+    ],
+    "eco_reed_riverside": [
+     0.0,
+     0.0
+    ],
+    "eco_sedge_bank": [
+     0.0,
+     0.0
+    ],
+    "eco_wheat_patch": [
+     0.0,
+     0.0
+    ],
+    "eco_vegetable_rows": [
+     0.0,
+     0.0
+    ],
+    "eco_flower_patch": [
+     0.0,
+     0.0
+    ],
+    "eco_hedgerow": [
+     0.0,
+     0.0
+    ],
+    "eco_haystack": [
+     0.0,
+     0.0
+    ],
+    "eco_grass_card_lod1": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  {
+   "check": "water_flows_during_wind_stop_and_is_independent",
+   "status": "PASS",
+   "detail": {
+    "eco_river_water": {
+     "wind0_water1_f12_vs_f30_max_m": 0.03814,
+     "wind_change_effect_m": 0.0,
+     "water0_f12_vs_f30_max_m": 0.0
+    }
+   }
+  },
+  {
+   "check": "geometry_sanity",
+   "status": "PASS",
+   "detail": {
+    "eco_tree_deciduous_a": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_tree_apple_a": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_tree_forest_tall_a": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_tree_conifer_a": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_grass_tuft_short": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_grass_meadow": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_grass_tall_lax": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_grass_coastal_dune": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_reed_riverside": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_sedge_bank": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_rocks_river": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_rocks_coastal": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_river_water": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_river_bank": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_wheat_patch": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_vegetable_rows": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_flower_patch": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_hedgerow": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_fence_post_rail": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_haystack": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_chicken_hen_blockout": {
+     "zero_area_ratio": 0.00319,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_cow_blockout": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    },
+    "eco_grass_card_lod1": {
+     "zero_area_ratio": 0.0,
+     "nan": false,
+     "materials_ok": true,
+     "uv_ok": true
+    }
+   }
+  },
+  {
+   "check": "alpha",
+   "status": "PASS",
+   "detail": {
+    "textures_and_icons": {
+     "grass_card_lod1.png": {
+      "mode": "RGBA",
+      "size": [
+       256,
+       512
+      ],
+      "transparent": 0.624,
+      "opaque": 0.199,
+      "partial": 0.177,
+      "white_fringe_texels": 0.0,
+      "sha256": "a7c04540c4611d66324a8ccbe5dc0ea2b62fe61f91bd28952a4aad8f23b7b290"
+     },
+     "leaf_cluster_apple.png": {
+      "mode": "RGBA",
+      "size": [
+       512,
+       512
+      ],
+      "transparent": 0.767,
+      "opaque": 0.159,
+      "partial": 0.0739,
+      "white_fringe_texels": 0.0,
+      "sha256": "b1c3ff3a57dc15d2b155ac53b3f32d730ba21262f6e91c479ebac7535e0de763"
+     },
+     "leaf_cluster_beech.png": {
+      "mode": "RGBA",
+      "size": [
+       512,
+       512
+      ],
+      "transparent": 0.706,
+      "opaque": 0.203,
+      "partial": 0.0903,
+      "white_fringe_texels": 0.0,
+      "sha256": "ddf57989e4414b446bd16cf60796f9f52bebee539c63ceae37a5282a8cd8365c"
+     },
+     "leaf_cluster_oak.png": {
+      "mode": "RGBA",
+      "size": [
+       512,
+       512
+      ],
+      "transparent": 0.711,
+      "opaque": 0.224,
+      "partial": 0.0653,
+      "white_fringe_texels": 0.0,
+      "sha256": "b757ed344c4ad164acf2b975f0b376d396a2630d6654d301bb9a52081fc99323"
+     },
+     "leaf_spray_needle.png": {
+      "mode": "RGBA",
+      "size": [
+       512,
+       512
+      ],
+      "transparent": 0.71,
+      "opaque": 0.103,
+      "partial": 0.1871,
+      "white_fringe_texels": 0.0,
+      "sha256": "d5fefff7bfb40a4cfde12d94bf2295af32b76f1f8c976b926c667bc04cd01d14"
+     },
+     "icon256_eco_chicken_hen_blockout.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.157
+     },
+     "icon256_eco_cow_blockout.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.087
+     },
+     "icon256_eco_fence_post_rail.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.023
+     },
+     "icon256_eco_flower_patch.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.14
+     },
+     "icon256_eco_grass_coastal_dune.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.081
+     },
+     "icon256_eco_grass_meadow.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.068
+     },
+     "icon256_eco_grass_tall_lax.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.072
+     },
+     "icon256_eco_grass_tuft_short.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.125
+     },
+     "icon256_eco_haystack.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.289
+     },
+     "icon256_eco_hedgerow.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.127
+     },
+     "icon256_eco_reed_riverside.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.078
+     },
+     "icon256_eco_rocks_coastal.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.199
+     },
+     "icon256_eco_rocks_river.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.116
+     },
+     "icon256_eco_sedge_bank.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.084
+     },
+     "icon256_eco_tree_apple_a.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.25
+     },
+     "icon256_eco_tree_conifer_a.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.326
+     },
+     "icon256_eco_tree_deciduous_a.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.368
+     },
+     "icon256_eco_tree_forest_tall_a.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.334
+     },
+     "icon256_eco_vegetable_rows.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.208
+     },
+     "icon256_eco_wheat_patch.png": {
+      "mode": "RGBA",
+      "corner_alpha_max": 0.0,
+      "subject_coverage": 0.123
+     }
+    },
+    "icons_found": 20
+   }
+  },
+  {
+   "check": "render_registry",
+   "status": "PASS",
+   "detail": {
+    "eco_closeup_grass_wheat_wind1_f12.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_farmland_vignette_wind1_f12.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_gameview_28deg_ortho_wind1_f12.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_gameview_figure48px.png": {
+     "sha_match": true,
+     "size": [
+      823,
+      463
+     ]
+    },
+    "eco_icons_48px_sheet.png": {
+     "sha_match": true,
+     "size": [
+      438,
+      168
+     ]
+    },
+    "eco_icons_96px_sheet.png": {
+     "sha_match": true,
+     "size": [
+      822,
+      312
+     ]
+    },
+    "eco_lineup_large_labeled.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_lineup_large_wind0.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_lineup_small_wind0.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      560
+     ]
+    },
+    "eco_vignette_gamescale_48.png": {
+     "sha_match": true,
+     "size": [
+      877,
+      493
+     ]
+    },
+    "eco_water_module_diff_wind0.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_water_module_wind0_f12.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_water_module_wind0_f30.png": {
+     "sha_match": true,
+     "size": [
+      1280,
+      720
+     ]
+    },
+    "eco_windpair_diff_wind0.png": {
+     "sha_match": true,
+     "size": [
+      960,
+      540
+     ]
+    },
+    "eco_windpair_diff_wind1.png": {
+     "sha_match": true,
+     "size": [
+      960,
+      540
+     ]
+    },
+    "eco_windpair_sheet.png": {
+     "sha_match": true,
+     "size": [
+      966,
+      546
+     ]
+    },
+    "eco_windpair_wind0_f12.png": {
+     "sha_match": true,
+     "size": [
+      960,
+      540
+     ]
+    },
+    "eco_windpair_wind0_f30.png": {
+     "sha_match": true,
+     "size": [
+      960,
+      540
+     ]
+    },
+    "eco_windpair_wind1_f12.png": {
+     "sha_match": true,
+     "size": [
+      960,
+      540
+     ]
+    },
+    "eco_windpair_wind1_f30.png": {
+     "sha_match": true,
+     "size": [
+      960,
+      540
+     ]
+    },
+    "icon256_eco_chicken_hen_blockout.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_cow_blockout.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_fence_post_rail.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_flower_patch.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_grass_coastal_dune.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_grass_meadow.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_grass_tall_lax.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_grass_tuft_short.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_haystack.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_hedgerow.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_reed_riverside.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_rocks_coastal.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_rocks_river.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_sedge_bank.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_tree_apple_a.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_tree_conifer_a.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_tree_deciduous_a.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_tree_forest_tall_a.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_vegetable_rows.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    },
+    "icon256_eco_wheat_patch.png": {
+     "sha_match": true,
+     "size": [
+      256,
+      256
+     ]
+    }
+   }
+  }
+ ]
+}

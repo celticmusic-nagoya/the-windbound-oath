@@ -64,6 +64,9 @@ def main():
         im = Image.open(gv).convert("RGB")
         for tgt in (48, 96):
             f = tgt / (1.75 * 1280 / 30.0)
+            if f > 1.0:  # would be an upsample (no information): skip, native render is ~75 px/figure
+                stats["gameview_figure%dpx" % tgt] = "SKIPPED_UPSAMPLE (native ~75 px per 1.75 m figure)"
+                continue
             im.resize((max(1, round(im.width * f)), max(1, round(im.height * f))), Image.LANCZOS).save(
                 R / ("eco_gameview_figure%dpx.png" % tgt))
     v = R / "eco_farmland_vignette_wind1_f12.png"
@@ -73,6 +76,9 @@ def main():
             # vignette camera: a 1.7 m figure at the fence line spans ~70 px at 1280 wide (measured from
             # the 1.1 m fence posts ~45 px). Scale so that figure would be tgt px tall.
             f = tgt / 70.0
+            if f > 1.0:
+                stats["vignette_gamescale_%d" % tgt] = "SKIPPED_UPSAMPLE"
+                continue
             im.resize((max(1, int(im.width * f)), max(1, int(im.height * f))), Image.LANCZOS).save(
                 R / ("eco_vignette_gamescale_%d.png" % tgt))
 
@@ -102,6 +108,9 @@ def main():
 
     reg_p = R / "renders.json"
     reg = json.loads(reg_p.read_text()) if reg_p.exists() else {"files": {}}
+    for stale in ("eco_gameview_figure96px.png", "eco_vignette_gamescale_96.png"):
+        (R / stale).unlink(missing_ok=True)
+        reg["files"].pop(stale, None)
     for f in sorted(R.glob("*.png")):
         if f.name in reg["files"] and reg["files"][f.name].get("shot") != "postprocess":
             continue

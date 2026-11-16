@@ -13,15 +13,15 @@ Full machine-readable table with tris, budgets, seeds, hashes and wind parameter
 
 | Group | Assets | Method |
 | --- | --- | --- |
-| Trees | `eco_tree_deciduous_a`, `eco_tree_apple_a` (open-centre orchard, 90 apples), `eco_tree_forest_tall_a`, `eco_tree_conifer_a` | Recursive branching skeleton (golden-angle azimuth, pipe-model radii, gravitropism/droop, root flare, buttress roots) swept as parallel-transport tubes. Crown = painted RGBA leaf-spray alpha cards (TREE-L2). Conifer = whorled branches + needle-spray cards. |
-| Grass | `eco_grass_tuft_short`, `eco_grass_meadow`, `eco_grass_tall_lax`, `eco_grass_coastal_dune`, `eco_sedge_bank`, `eco_grass_card_lod1` | ECO-G1 tiller architecture: off-centre tillers with own lean, V-folded blades with length-dependent droop (clamped), basal sheath layer, dry blades, seed panicles, vertex-colour base→tip gradient. LOD1 = 3 crossed alpha cards. |
+| Trees | `eco_tree_deciduous_a`, `eco_tree_apple_a` (open-centre orchard, 90 apples), `eco_tree_forest_tall_a`, `eco_tree_conifer_a` | Recursive branching skeleton (golden-angle azimuth, pipe-model radii, gravitropism/droop, root flare, buttress roots) swept as parallel-transport tubes with a bark-grain shader. Crown = **TREE-L3** lobed cluster volumes: ellipsoid lobes around the sub-trees, cupped cluster cards only on the outer shell facing the lobe normals, custom normals transferred from the lobe/crown proxy, and a dark inner fill. Textures are species-specific painterly clusters (oak, apple with painted fruit, beech) with 2×2 supersampled soft alpha. TREE-L2 (pinnate sprays) is STOPPED after G2-01. Conifer = whorled branches + needle-spray cards (AA re-raster). |
+| Grass | `eco_grass_tuft_short`, `eco_grass_meadow`, `eco_grass_tall_lax`, `eco_grass_coastal_dune`, `eco_sedge_bank`, `eco_grass_card_lod1` | **ECO-G2** (after the G2-01 FAIL of ECO-G1): a fused basal ring of 44–60 short wide arching blades, tillers packed 0.6×, droop capped by upright height, clump-level AO (dark core to warm crown) and a saturated warm tip ramp. LOD1 = 3 crossed alpha cards with an AA re-raster. |
 | Riverside / coastal | `eco_reed_riverside` (cattails), `eco_sedge_bank`, `eco_rocks_river`, `eco_rocks_coastal` | Rocks: icosphere, 5-octave Perlin plus cleavage-plane clamps. River rocks have wet bases and moss tops. Coastal rocks have sedimentary banding, tide line, lichen and a turf cap. |
 | Water module | `eco_river_water`, `eco_river_bank` | Meandering ribbon with `flow_u`/`flow_v` attributes, deep/shallow vertex colour and its own flow channel. Bank = module-local preview terrain (bed, mud, slopes). |
 | Fields | `eco_wheat_patch` (seeded jittered drill rows, ~600 stalks, ears+awns+leaves), `eco_vegetable_rows` (ridged soil, cabbages, carrot tops), `eco_flower_patch` (colony-clumped daisy/poppy/spike forms + turf) | Seeded python scatter |
-| Boundaries / props | `eco_hedgerow`, `eco_fence_post_rail` (split rails, sag, irregular posts), `eco_haystack` (beehive stack, 2200 straw strands, skirt, pole) | Procedural |
-| Livestock | `eco_chicken_hen_a` (metaball body/neck/head + comb, wattles, beak, eyes, folded wings, sickle tail, legs, toes); `eco_cow_blockout` | Hen: **PROCEDURAL_FORM_CANDIDATE_NO_GROOM_NO_RIG**. Cow: **STRUCTURAL_BLOCKOUT_NOT_ART** (do not place). Pig: NOT_STARTED. |
+| Boundaries / props | `eco_hedgerow` (HEDGE-F2 cluster-card shell, wandering plan, rounded ends, grass skirt), `eco_fence_post_rail` (FENCE-F2 split quad-section rails seated in hewn posts, dark weathered grain, moss foot), `eco_haystack` (beehive stack, 2200 straw strands, skirt, pole; G2-01 PASS) | Procedural |
+| Livestock | `eco_chicken_hen_blockout` (metaball form, 0.41 m), `eco_cow_blockout` | Both **STRUCTURAL_BLOCKOUT_NOT_ART**. They are excluded from art vignettes and shown labelled in the lineup. Pig: NOT_STARTED. |
 
-Species are generic temperate forms. None of them is claimed as canon.
+The wheat is golden with larger ears, a noise-modulated soft boundary and 6 % lodging. The vegetables sit in wandering rows of mixed crops (cabbage, carrot, lettuce) with a soil-to-turf edge blend and a weed border. The flowers grow from a 900-blade grass bed with basal rosettes. Species are generic temperate forms. None of them is claimed as canon.
 
 ## 3. LOD / instance budgets
 - LOD0 triangle budgets per asset are listed in the manifest (`budget_tris_lod0`): trees ≤25k (apple ≤20k), grass clumps ≤6–7k, wheat patch (6.4 m²) ≤80k, hedgerow (4 m) ≤40k, hen ≤8k. The QA script enforces them.
@@ -58,3 +58,6 @@ flock /tmp/blender.lock timeout 900 python3 tools/map_blender/lind/ecology/qa_ec
 python3 tools/map_blender/lind/ecology/write_manifest.py
 ```
 Blender binary: `blender -b --python <script> -- <args>`. Scripts guard 5.x-only APIs (modifier input API, rotation nodes, `surface_render_method`) so they can run on Blender 4.0.2 CI; that path is NOT_RUN locally.
+
+## 9. Evidence setup (after G2_REVIEW_01)
+All shots use a warm key (sun colour 1.0/0.86/0.66, 34°) with cool sky fill and include a 1.75 m grey scale proxy where relevant. `eco_gameview_28deg_ortho_*` is an orthographic 28° quarter view; postprocess derives 48/96 px figure-scale downsamples from it. The wind pair renders wind=1 and wind=0 at f12/f30, with diffs. Every render entry in `renders.json` carries the build combined geometry hash, the render script hash and the .blend hash; the registry also lists the build-script and texture hashes.

@@ -12,18 +12,22 @@
  },
  "blender_version": "5.3.0",
  "seed": 20261116,
- "combined_geometry_sha256": "2f2bee5c2fed6a77eee72eed43573266807068abe00e5f997fbe9a935fd3ac2d",
+ "combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
  "script_sha256": {
-  "build_eco_assets.py": "af51c5d84767a06cb148a71fdfe85ad39ebeac2c3bcf7ff6e6e20697b722f9d7",
-  "eco_assets.py": "f000838d4b5fa2c1b56c034af6c960dbc2fb079650dee4645cb56d4369cfd612",
-  "eco_lib.py": "7593e1e968f7aec8cec620056b077c709b20d5506376e80cacb648ac9619fc84",
-  "render_eco.py": "e1b3585ad636be70a28fd101e1179a8cf2a8bbb12a308f2210d2c95ac9df8631"
+  "build_eco_assets.py": "08fdefbd5756c5fd85a8d21e6dc31517b4768ac41c2adb70280ab431ce9cca88",
+  "eco_assets.py": "72f5abd615f64cb2188b8cc14dc06b4bb2862f1f560b513cd27c5fe983b52084",
+  "eco_lib.py": "bae17b06ff4bd54a8b524793ba7f329b28c877efb070e1771df6bde0eb12f3ff",
+  "postprocess_eco.py": "77c0c332d6af80e21b6b1d6547fcb986973b0049ea2b3284df4f350cd4fb15e1",
+  "qa_eco.py": "d2e12d4af3627a9d79ad916dae999eab514e80322379cae23ba4e4f4fed14bea",
+  "render_eco.py": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+  "write_manifest.py": "03a3fa0f29cf9584629f62a10f83d04d1ef338a3675fbd941d5e5bb8edc97572"
  },
  "textures_sha256": {
-  "leaf_spray_broadleaf.png": "2a86eb8b029d8bb7e887fedfd7ea457036d0fabd14f559cf4078478e47de3e44",
-  "leaf_spray_apple.png": "03ddbc141a75a57da57f7fd84ec330b20cf144f55e9acb38752d9a0c37cb6277",
-  "leaf_spray_needle.png": "4dfc24ff3a9b6a78d9195207abfbf3b35b5ed6428c6769a5af5eb8d5922e818b",
-  "grass_card_lod1.png": "fe11cba8211fd92e72422c9548babe0988d1f5ebba96f3e578b108e7457fd7b7"
+  "leaf_cluster_oak.png": "b757ed344c4ad164acf2b975f0b376d396a2630d6654d301bb9a52081fc99323",
+  "leaf_cluster_apple.png": "b1c3ff3a57dc15d2b155ac53b3f32d730ba21262f6e91c479ebac7535e0de763",
+  "leaf_cluster_beech.png": "ddf57989e4414b446bd16cf60796f9f52bebee539c63ceae37a5282a8cd8365c",
+  "leaf_spray_needle.png": "d5fefff7bfb40a4cfde12d94bf2295af32b76f1f8c976b926c667bc04cd01d14",
+  "grass_card_lod1.png": "a7c04540c4611d66324a8ccbe5dc0ea2b62fe61f91bd28952a4aad8f23b7b290"
  },
  "channels": {
   "wind_property": "scene['lind_wind_strength']",
@@ -41,33 +45,333 @@
  },
  "blend": {
   "path": "assets/candidates/LIND-ECO-01/eco_kit_v1/eco_kit_v1.blend",
-  "sha256": "0f1a67557894bc397f730cda9a8a623032b7428807ab333d750271ed25385115",
-  "bytes": 6766355
+  "sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+  "bytes": 6202750
  },
  "renders": {
-  "eco_lineup_large_wind0.png": {
+  "eco_closeup_grass_wheat_wind1_f12.png": {
+   "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
-   "samples": 24,
-   "sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4",
+   "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "samples": 48,
+   "sha256": "be39a1dd14beb071c9977c66b6c08b6819a53f5b37712eefb6fe3d37b98ddaf7",
+   "shot": "closeup"
+  },
+  "eco_farmland_vignette_wind1_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 48,
+   "sha256": "9793706ba003cbf6eaa89578c6ae75b41b751d758760f953b3a445e4d025464c",
+   "shot": "vignette"
+  },
+  "eco_gameview_28deg_ortho_wind1_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 40,
+   "sha256": "a37b334c64692b5cf547598e3496ed8260b91cee77e88a29e9b832725a3320d9",
+   "shot": "gameview"
+  },
+  "eco_gameview_figure48px.png": {
+   "engine": "PIL",
+   "sha256": "d6678f271ffeb5424cbd00f7295efe2ee41d0e68ad77a45ce59fe44d4282488f",
+   "shot": "postprocess"
+  },
+  "eco_icons_48px_sheet.png": {
+   "engine": "PIL",
+   "sha256": "a618a8e6a380548e3c750d257afd4a595016b8dbe36c2eadecde4c8d8837bde5",
+   "shot": "postprocess"
+  },
+  "eco_icons_96px_sheet.png": {
+   "engine": "PIL",
+   "sha256": "41f4a4d8e88b7a895b54d45af3101ac2344af5e8fa250cc44d45ca8a87bf0c2f",
+   "shot": "postprocess"
+  },
+  "eco_lineup_large_labeled.png": {
+   "engine": "PIL",
+   "sha256": "850c79fd2ce61fcdd18f8034d0aaf5373196a84fc420a0d84e356d926952d9a1",
+   "shot": "postprocess"
+  },
+  "eco_lineup_large_wind0.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 40,
+   "sha256": "81b06eeecce916b07045901b55f05a128fe7b98a494879aef534eb4f7987b119",
    "shot": "lineup_large"
   },
   "eco_lineup_small_wind0.png": {
+   "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
-   "samples": 24,
-   "sha256": "955d78b5314a72eee9a434d125984353fa22e3775a91cf013b4ffc4270d8d96f",
+   "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "samples": 48,
+   "sha256": "d068c9ee47f800e8d2bcb10793fb4d57b85d0dd32db6a565c1e957ed38d53b4a",
    "shot": "lineup_small"
   },
+  "eco_vignette_gamescale_48.png": {
+   "engine": "PIL",
+   "sha256": "fb3b444f3fbe9f64444d15047a5286720989d0a0748c78cd28817f2aa84896cf",
+   "shot": "postprocess"
+  },
+  "eco_water_module_diff_wind0.png": {
+   "engine": "PIL",
+   "sha256": "bb96c07d5b4ccecacc59856199d1e74d63a42bf49635d1f26bc9bc17dfb31595",
+   "shot": "postprocess"
+  },
   "eco_water_module_wind0_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
    "samples": 32,
-   "sha256": "f8f0817e115ac669f4d2ac108622e79debc761d002e3b671e33fa9316a007320",
+   "sha256": "f88686abd4ea85954215f7fb129e0cbf93970af4c56ba2601207f5e12b239fe6",
    "shot": "water"
   },
   "eco_water_module_wind0_f30.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
    "samples": 32,
-   "sha256": "65f07b675b28762972d4972d531c3129d33f4598c7c12fceecd3c7b8dd5ff7e7",
+   "sha256": "8513a50fb6e664cbe9d5c18a84ec6fcaf893f31f5c83527cca8663ba88e81ed5",
    "shot": "water"
+  },
+  "eco_windpair_diff_wind0.png": {
+   "engine": "PIL",
+   "sha256": "f1de9c9b84b1dc25815849e39596f4e9904ae4d7623a0e76c646e208c3c71f3c",
+   "shot": "postprocess"
+  },
+  "eco_windpair_diff_wind1.png": {
+   "engine": "PIL",
+   "sha256": "cb6d7ab1bd7fe776e14fb763ab8c6b67eba367bb9ef439a8b71078147234d8d0",
+   "shot": "postprocess"
+  },
+  "eco_windpair_sheet.png": {
+   "engine": "PIL",
+   "sha256": "0700245e9a75bbcb3c88c534c28e45ca2462eb6010c2ea00e95da96e2b3e60ef",
+   "shot": "postprocess"
+  },
+  "eco_windpair_wind0_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "92d7ab018ff20904210d81e4cb42ebbaf40b109b1dfa0b95da9076b46e64af29",
+   "shot": "windpair"
+  },
+  "eco_windpair_wind0_f30.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "abd15528bac7bbb7d57217f271cbea60c6e1ac924c8e06356da1a0a4cc0b01f0",
+   "shot": "windpair"
+  },
+  "eco_windpair_wind1_f12.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "360bdf78fcb43e12d92469de35350a8d4bb134c777ce398718dfd17c934ff1b7",
+   "shot": "windpair"
+  },
+  "eco_windpair_wind1_f30.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "9c83c35a46c4df6bb8126427b8ad20d4d6fd1776b37d34d3ae00cbccc4f8d8b1",
+   "shot": "windpair"
+  },
+  "icon256_eco_chicken_hen_blockout.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "537e5937949bd3720ee6c87b0fa1e87a124a70ff6ca30dda255ce869553dc2f7",
+   "shot": "icons"
+  },
+  "icon256_eco_cow_blockout.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "cae7bcc11bded1b76c9c453e69ce0eed4622b28c2e2b72f87b6fd17f4c238c9a",
+   "shot": "icons"
+  },
+  "icon256_eco_fence_post_rail.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "e4d22cc52309f3224c027f8fabe2a57b012cb0fb9868e23bd5a6d4d11f071db0",
+   "shot": "icons"
+  },
+  "icon256_eco_flower_patch.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "7cc3d7d33506f2cd9f127e124d2540d87d2ce4d251a512a02f621501def23523",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_coastal_dune.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "689cda6d9f611210624dbd1276f75ca305fbf1b1257e0e6ec1f2a98658845f46",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_meadow.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "e9c3616c2d5416e2eb62f45c0a76382e1867fb2cc3da4effd4d943a7df2ee305",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_tall_lax.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "1589f91a17404e369172fcb632c3f369bc805e0e78e9f244137d3e67e234707f",
+   "shot": "icons"
+  },
+  "icon256_eco_grass_tuft_short.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "17dbba689ae3e08cd8e4779f329840127967cf86f77d407c60d86a1d58d520ae",
+   "shot": "icons"
+  },
+  "icon256_eco_haystack.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "937b0eddc93f4741cfd33481e7f01b196bda02876081b5602a89c99112ae725f",
+   "shot": "icons"
+  },
+  "icon256_eco_hedgerow.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "2c21aeaf8c0cbc57f16d44a8f2f58f4559c69917b0e3b54022e1944aedcc3d21",
+   "shot": "icons"
+  },
+  "icon256_eco_reed_riverside.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "8026df9e9d861af142a8d3ba5eed1b0d721177d8358ccc76c7365ad1d4ae34ad",
+   "shot": "icons"
+  },
+  "icon256_eco_rocks_coastal.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "00e6db114dc7c3bed69e0ae3c547965364f39a46882b116820f5973f210c7c1e",
+   "shot": "icons"
+  },
+  "icon256_eco_rocks_river.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "81b3fbce7c5beff33fcd471b4908c0698b268a50b04e55561c9c355563b585fd",
+   "shot": "icons"
+  },
+  "icon256_eco_sedge_bank.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "82cb75ad136ad1dc335009030e20a5bb540c00544e8de242fba0cb2553c35f78",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_apple_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "372b406a90927ec8e246dcdcffb205673dc5c4fd616e6daba8d43e2214869e46",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_conifer_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "5c0e33af5ae954eb9c6957802323bb610a74653f0600217ebec8359daa174b5e",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_deciduous_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "4c74426d3ea30c60bd6e8527cda1c76ae4f3e1c009f0681074d58b2f4bb6c348",
+   "shot": "icons"
+  },
+  "icon256_eco_tree_forest_tall_a.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "82af43ab18b9ad2bdb5e39cf4df142c68317c60f9cb1e9393a0f4ed7f8d36268",
+   "shot": "icons"
+  },
+  "icon256_eco_vegetable_rows.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "8401edde49add1ed54e6416aacbedc33fdb4cd21691b924266d094ed159a6db1",
+   "shot": "icons"
+  },
+  "icon256_eco_wheat_patch.png": {
+   "blend_sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "d0195c50628c2f6086c1e94239c0e4e15a4f57f12b242aa6f528fc5d736e4925",
+   "samples": 24,
+   "sha256": "dea4c05b7900c1070db88234a72825bc49a8d6b84d61e48f3b80b9bd91964d71",
+   "shot": "icons"
   }
  },
  "assets": [
@@ -80,7 +384,7 @@
     "preset": "deciduous"
    },
    "seed": 20261116,
-   "triangles_lod0": 10237,
+   "triangles_lod0": 10647,
    "budget_tris_lod0": 25000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 40,
@@ -92,7 +396,7 @@
    "lod1_plan": "impostor billboard",
    "materials": [
     "M_eco_bark",
-    "M_eco_leafcard_broadleaf"
+    "M_eco_leafcard_oak"
    ],
    "wind": {
     "amplitude_m": 0.22,
@@ -103,19 +407,20 @@
    },
    "water": null,
    "dimensions_m": [
-    8.142,
-    5.681,
-    6.03
+    7.001,
+    7.195,
+    6.003
    ],
-   "geometry_sha256": "669fceece8deed88f77aa8c03b3658240c99b46e6405c92202e6a7c85c8a5c9f",
+   "geometry_sha256": "46e21961d43b53dcf586fe154bb44472b5527153746c2b83d64899040d2a476a",
    "info": {
-    "branches": 171,
-    "leaf_cards": 1141,
+    "branches": 175,
+    "leaf_cards": 1191,
     "apples": 0,
+    "lobes": 12,
     "max_depth": 4,
-    "leaf_mode": "alpha_spray_cards",
-    "leaf_texture": "broadleaf",
-    "height_m": 5.977
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
+    "leaf_texture": "oak",
+    "height_m": 5.949
    }
   },
   {
@@ -127,7 +432,7 @@
     "preset": "apple"
    },
    "seed": 20261116,
-   "triangles_lod0": 14070,
+   "triangles_lod0": 7829,
    "budget_tris_lod0": 20000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 30,
@@ -149,19 +454,20 @@
    },
    "water": null,
    "dimensions_m": [
-    5.596,
-    5.079,
-    4.516
+    5.634,
+    4.601,
+    3.889
    ],
-   "geometry_sha256": "2ce622952e17a821b6f352dca4417a88372361f05ff2c595ca862a45c6c560ec",
+   "geometry_sha256": "e7b3331b97e8cb178d3bba9a16722ef5bd38c60663fab9c0a62040851cce3047",
    "info": {
-    "branches": 149,
-    "leaf_cards": 898,
-    "apples": 90,
+    "branches": 133,
+    "leaf_cards": 482,
+    "apples": 34,
+    "lobes": 8,
     "max_depth": 4,
-    "leaf_mode": "alpha_spray_cards",
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
     "leaf_texture": "apple",
-    "height_m": 4.096
+    "height_m": 3.84
    }
   },
   {
@@ -173,7 +479,7 @@
     "preset": "forest_tall"
    },
    "seed": 20261116,
-   "triangles_lod0": 14086,
+   "triangles_lod0": 12539,
    "budget_tris_lod0": 25000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 60,
@@ -183,7 +489,7 @@
    "lod1_plan": "impostor billboard",
    "materials": [
     "M_eco_bark",
-    "M_eco_leafcard_broadleaf"
+    "M_eco_leafcard_beech"
    ],
    "wind": {
     "amplitude_m": 0.28,
@@ -194,19 +500,20 @@
    },
    "water": null,
    "dimensions_m": [
-    7.64,
-    6.521,
-    7.823
+    6.454,
+    6.286,
+    7.908
    ],
-   "geometry_sha256": "6a30832a9069541da17671811626df6fb48529a4ae52f8484521a89e03aae8b8",
+   "geometry_sha256": "e6b25246f116b59b5f52f143e6bee96180de9c8f1ed8bdaa9210a73b47e7e6ae",
    "info": {
-    "branches": 208,
-    "leaf_cards": 1498,
+    "branches": 248,
+    "leaf_cards": 1160,
     "apples": 0,
+    "lobes": 8,
     "max_depth": 4,
-    "leaf_mode": "alpha_spray_cards",
-    "leaf_texture": "broadleaf",
-    "height_m": 7.767
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
+    "leaf_texture": "beech",
+    "height_m": 7.851
    }
   },
   {
@@ -260,7 +567,7 @@
     "preset": "tuft_short"
    },
    "seed": 20261116,
-   "triangles_lod0": 2378,
+   "triangles_lod0": 2652,
    "budget_tris_lod0": 6000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 600,
@@ -281,18 +588,19 @@
    },
    "water": null,
    "dimensions_m": [
-    0.385,
-    0.488,
-    0.254
+    0.388,
+    0.367,
+    0.233
    ],
-   "geometry_sha256": "cb5be38e0877381516874d86650ad372d0512a1eb7c537b8f0c1d27e4ba33829",
+   "geometry_sha256": "48fc6ae892ad0cdfb20b9f8910c9dc59e7979bc5a82d160b4f9db0769a6c9513",
    "info": {
     "tillers": 6,
-    "blades": 89,
+    "blades": 90,
     "seed_stems": 0,
-    "dry_blades": 6,
-    "sheaths": 42,
-    "height_m": 0.254
+    "dry_blades": 8,
+    "basal_ring": 48,
+    "height_m": 0.232,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
    }
   },
   {
@@ -304,7 +612,7 @@
     "preset": "meadow"
    },
    "seed": 20261116,
-   "triangles_lod0": 3486,
+   "triangles_lod0": 3838,
    "budget_tris_lod0": 6000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 500,
@@ -325,18 +633,19 @@
    },
    "water": null,
    "dimensions_m": [
-    0.672,
-    0.65,
-    0.732
+    0.57,
+    0.806,
+    0.735
    ],
-   "geometry_sha256": "2780d9fea06331ca16e2827fd0bdfc2a7dc37c67096dc335ebd75d37ac8a891f",
+   "geometry_sha256": "05b16ce9a5b59f0464d3fa823d82134d9155e5f0e1dd51f6341f63c927eac325",
    "info": {
     "tillers": 6,
     "blades": 98,
     "seed_stems": 5,
-    "dry_blades": 13,
-    "sheaths": 46,
-    "height_m": 0.731
+    "dry_blades": 19,
+    "basal_ring": 58,
+    "height_m": 0.734,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
    }
   },
   {
@@ -348,7 +657,7 @@
     "preset": "tall_lax"
    },
    "seed": 20261116,
-   "triangles_lod0": 4472,
+   "triangles_lod0": 4840,
    "budget_tris_lod0": 7000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 300,
@@ -369,18 +678,19 @@
    },
    "water": null,
    "dimensions_m": [
-    0.943,
-    1.116,
-    1.045
+    1.035,
+    1.193,
+    1.049
    ],
-   "geometry_sha256": "b44dd7fa2bfdd2f305fa61754776682c05f01b4aaa37ef175d3d329d79e0c0d4",
+   "geometry_sha256": "c3fb3f6b66c9f10b5f36129e5adb1f390af01b986a4ffef5f3305758153277bb",
    "info": {
     "tillers": 4,
-    "blades": 165,
+    "blades": 160,
     "seed_stems": 3,
-    "dry_blades": 37,
-    "sheaths": 32,
-    "height_m": 1.044
+    "dry_blades": 39,
+    "basal_ring": 57,
+    "height_m": 1.048,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
    }
   },
   {
@@ -392,7 +702,7 @@
     "preset": "coastal_dune"
    },
    "seed": 20261116,
-   "triangles_lod0": 3338,
+   "triangles_lod0": 4132,
    "budget_tris_lod0": 6000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 400,
@@ -412,18 +722,19 @@
    },
    "water": null,
    "dimensions_m": [
-    0.881,
-    0.665,
-    0.813
+    0.895,
+    0.677,
+    0.808
    ],
-   "geometry_sha256": "c88076717c9c0470bb3dd1efd934a2f4efec284d26f56480b1997d1485f3ba36",
+   "geometry_sha256": "ddd894eb1d605cdc1c8fc8e5cdaa65ab6b7137cf153ca6e4431217c13d5d6221",
    "info": {
     "tillers": 4,
-    "blades": 106,
+    "blades": 118,
     "seed_stems": 4,
-    "dry_blades": 26,
-    "sheaths": 31,
-    "height_m": 0.813
+    "dry_blades": 34,
+    "basal_ring": 60,
+    "height_m": 0.808,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
    }
   },
   {
@@ -435,7 +746,7 @@
     "preset": "reed"
    },
    "seed": 20261116,
-   "triangles_lod0": 2358,
+   "triangles_lod0": 2510,
    "budget_tris_lod0": 4000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 200,
@@ -455,18 +766,19 @@
    },
    "water": null,
    "dimensions_m": [
-    1.472,
-    1.885,
-    1.345
+    1.44,
+    1.332,
+    1.556
    ],
-   "geometry_sha256": "dcf185cbfa8d42d95e3bd48f8d4183d0b65eb94c2c0b7d7bed3219545271116d",
+   "geometry_sha256": "b101271920b2a6006908ce62f2817edb9a78d7a95941deb1802000dae104fffc",
    "info": {
     "tillers": 4,
-    "blades": 70,
+    "blades": 62,
     "seed_stems": 4,
     "dry_blades": 11,
-    "sheaths": 33,
-    "height_m": 1.345
+    "basal_ring": 47,
+    "height_m": 1.555,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
    }
   },
   {
@@ -478,7 +790,7 @@
     "preset": "sedge"
    },
    "seed": 20261116,
-   "triangles_lod0": 2710,
+   "triangles_lod0": 3002,
    "budget_tris_lod0": 5000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 300,
@@ -499,18 +811,19 @@
    },
    "water": null,
    "dimensions_m": [
-    1.012,
-    1.122,
-    0.991
+    1.027,
+    0.969,
+    0.988
    ],
-   "geometry_sha256": "01c5b60abb6704a03c3aa08f2b01462dad4253dabd151fac027811320f594776",
+   "geometry_sha256": "9ef1d0bb27e44bb4215d1512171d954729af05915c00c225e79e35525fc2c7d8",
    "info": {
     "tillers": 6,
-    "blades": 86,
+    "blades": 92,
     "seed_stems": 2,
-    "dry_blades": 5,
-    "sheaths": 47,
-    "height_m": 0.989
+    "dry_blades": 6,
+    "basal_ring": 45,
+    "height_m": 0.987,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
    }
   },
   {
@@ -647,7 +960,7 @@
     17.161,
     0.927
    ],
-   "geometry_sha256": "97bbe25d9f406eea20279ae114f0cb47b8e1da63bb5ec971e5ec7d64d4b59c51",
+   "geometry_sha256": "ac2c1eeff3a50c4848bd14b6ca1c5bb68b98a40f1dd5d4509747fc58537cad63",
    "info": {
     "length_m": 14.0,
     "status_note": "module-local preview banks; not world terrain"
@@ -660,7 +973,7 @@
    "generator": "build_wheat_patch",
    "params": {},
    "seed": 20261116,
-   "triangles_lod0": 73200,
+   "triangles_lod0": 59902,
    "budget_tris_lod0": 80000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 40,
@@ -680,19 +993,19 @@
    },
    "water": null,
    "dimensions_m": [
-    3.479,
-    2.19,
-    1.284
+    3.445,
+    2.094,
+    1.274
    ],
-   "geometry_sha256": "e85228bea9a4424b604e030d990d0a7af51c6640b1ad32e8bb0f925ec7c8a174",
+   "geometry_sha256": "18eb8059a04cc3735de6f64c14f1c50fd71a86fb7496e99871661360e7bda8ca",
    "info": {
-    "stalks": 600,
+    "stalks": 491,
     "size_m": [
      3.2,
      2.0
     ],
     "density_per_m2": 110.0,
-    "height_m": 1.283
+    "height_m": 1.273
    }
   },
   {
@@ -702,7 +1015,7 @@
    "generator": "build_vegetable_rows",
    "params": {},
    "seed": 20261116,
-   "triangles_lod0": 18362,
+   "triangles_lod0": 19122,
    "budget_tris_lod0": 22000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 20,
@@ -724,15 +1037,17 @@
    },
    "water": null,
    "dimensions_m": [
-    3.0,
-    2.246,
-    0.264
+    3.356,
+    2.406,
+    0.291
    ],
-   "geometry_sha256": "a391320c5278fb03ae24d2b11fbf58495da01987e83a3e31687403863c4d883e",
+   "geometry_sha256": "c37f5e937628fef0436805499a8608673fe0acbe6a521b20231ca26cb85b939e",
    "info": {
     "rows": 5,
-    "cabbage": 16,
-    "carrot": 41,
+    "cabbage": 11,
+    "carrot": 33,
+    "lettuce": 8,
+    "weeds": 160,
     "size_m": [
      3.0,
      2.0
@@ -746,8 +1061,8 @@
    "generator": "build_flower_patch",
    "params": {},
    "seed": 20261116,
-   "triangles_lod0": 30002,
-   "budget_tris_lod0": 34000,
+   "triangles_lod0": 44952,
+   "budget_tris_lod0": 50000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 20,
    "zones_provisional": [
@@ -767,16 +1082,16 @@
    },
    "water": null,
    "dimensions_m": [
-    2.712,
-    1.609,
-    0.679
+    2.403,
+    1.625,
+    0.866
    ],
-   "geometry_sha256": "ed7c056b463d4e1cf730f43cb69a78307beafc4cbcf2662978455d102e83f2bd",
+   "geometry_sha256": "d070dac8744a258dcb01448924d96bb138edb70ad76b04808e1c875a21ea8e59",
    "info": {
-    "daisy": 64,
-    "poppy": 56,
-    "spike": 43,
-    "turf_blades": 260,
+    "daisy": 52,
+    "poppy": 55,
+    "spike": 81,
+    "turf_blades": 900,
     "size_m": [
      2.4,
      1.4
@@ -790,7 +1105,7 @@
    "generator": "build_hedgerow",
    "params": {},
    "seed": 20261116,
-   "triangles_lod0": 34788,
+   "triangles_lod0": 5016,
    "budget_tris_lod0": 40000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 40,
@@ -800,7 +1115,7 @@
    "lod1_plan": "card shell (todo)",
    "materials": [
     "M_eco_bark",
-    "M_eco_leaf"
+    "M_eco_leafcard_oak"
    ],
    "wind": {
     "amplitude_m": 0.06,
@@ -811,15 +1126,16 @@
    },
    "water": null,
    "dimensions_m": [
-    4.746,
-    0.911,
-    1.316
+    4.95,
+    1.617,
+    1.693
    ],
-   "geometry_sha256": "bd5d5ff512a3cb971122c3e30950fe4016e54f081650341c6d3fb5ab500d2c38",
+   "geometry_sha256": "a7cd6468bdf91b7b41289cdf0349fcb4224828c48683fef0df1388f10397d778",
    "info": {
     "length_m": 4.0,
-    "height_m": 1.25,
-    "leaves": 4200
+    "height_m": 1.3,
+    "leaf_cards": 322,
+    "method": "cluster-card shell"
    }
   },
   {
@@ -829,7 +1145,7 @@
    "generator": "build_fence",
    "params": {},
    "seed": 20261116,
-   "triangles_lod0": 684,
+   "triangles_lod0": 592,
    "budget_tris_lod0": 2000,
    "within_budget": true,
    "instance_budget_per_50m_tile": 80,
@@ -839,19 +1155,21 @@
    ],
    "lod1_plan": "same",
    "materials": [
-    "M_eco_wood"
+    "M_eco_wood_post",
+    "M_eco_wood_rail"
    ],
    "wind": null,
    "water": null,
    "dimensions_m": [
-    6.779,
-    0.223,
-    1.158
+    6.629,
+    0.236,
+    1.204
    ],
-   "geometry_sha256": "993a865503508b21337ab49780fc0b60e308afd7ec7c75219d72e4d6df96df25",
+   "geometry_sha256": "c15890de6e36e7f09e5dc1f79ab3d7d7f922383e187989059ddac27f027a55be",
    "info": {
     "posts": 4,
-    "length_m": 6.6
+    "length_m": 6.6,
+    "rail_section": "split quad ~11x7 cm"
    }
   },
   {
@@ -895,35 +1213,34 @@
    }
   },
   {
-   "id": "eco_chicken_hen_a",
+   "id": "eco_chicken_hen_blockout",
    "category": "livestock",
-   "status": "PROCEDURAL_FORM_CANDIDATE_NO_GROOM_NO_RIG",
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART",
    "generator": "build_chicken",
    "params": {},
    "seed": 20261116,
    "triangles_lod0": 5232,
    "budget_tris_lod0": 8000,
    "within_budget": true,
-   "instance_budget_per_50m_tile": 20,
+   "instance_budget_per_50m_tile": 0,
    "zones_provisional": [
-    "coops",
-    "village"
+    "coops (blockout only, do not place)"
    ],
-   "lod1_plan": "sprite",
+   "lod1_plan": "n/a",
    "materials": [
     "M_eco_plumage"
    ],
    "wind": null,
    "water": null,
    "dimensions_m": [
-    0.257,
-    0.588,
-    0.478
+    0.218,
+    0.5,
+    0.406
    ],
-   "geometry_sha256": "7e553aeb545c841549cf8688e6b6f1860d9c69668c3ae5a8514a167f367c161f",
+   "geometry_sha256": "474ad60c94f5f59417c98d85bd8fd7c39e0b6728dd8c72b2b6d21a5888878ce7",
    "info": {
-    "height_m": 0.479,
-    "status_note": "procedural form; no groom/rig"
+    "height_m": 0.407,
+    "status_note": "STRUCTURAL_BLOCKOUT_NOT_ART (metaball form; slab wings/tail, no plumage, no rig)"
    }
   },
   {
