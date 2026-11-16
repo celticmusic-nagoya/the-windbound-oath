@@ -12,4 +12,5 @@ function productBlock(source,start,end,label,names){
 }
 const dialogueBlock=source=>productBlock(source,/^function say\s*\(/m,'\nfunction camera(','dialogue',['say','closeDialogue']);
 const portraitBlock=source=>productBlock(source,/^function storyPortraitPage\s*\(/m,'\nconst hillLines=','story portrait',['storyPortraitPage']);
-module.exports={dialogueBlock,portraitBlock};
+const returnSceneBlock=source=>productBlock(source,/^const rildeReturnLines\s*=/m,'\nconst fortLines=','Rilde return scene',['startRildeReturnScene','advanceRildeReturnScene']);
+module.exports={dialogueBlock,portraitBlock,returnSceneBlock};
