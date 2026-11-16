@@ -1,0 +1,72 @@
+name: Aidan scan-carved rubble corner (ART-02) reproducible build + technical QA
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_scan_carved_rubble_corner_v1.py'
+      - 'tools/map_blender/aidan_masonry_game_scale.py'
+      - 'assets/candidates/aidan-masonry-art-02/sources.sha256'
+      - '.github/workflows/aidan-scan-carved-corner.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python syntax
+        run: |
+          python3 -m py_compile tools/map_blender/aidan_scan_carved_rubble_corner_v1.py
+          python3 -m py_compile tools/map_blender/aidan_masonry_game_scale.py
+      - name: Install pinned Blender 4.2.3 LTS
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1 libxkbcommon0 libsm6
+          curl -sSL -o "$RUNNER_TEMP/blender.tar.xz" https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz
+          tar xf "$RUNNER_TEMP/blender.tar.xz" -C "$RUNNER_TEMP"
+      - name: Fetch CC0 sources and verify pinned SHA-256
+        run: |
+          S="$RUNNER_TEMP/src"; mkdir -p "$S"; cd "$S"
+          curl -sSL -O https://dl.polyhaven.org/file/ph-assets/Models/blend/8k/rock_moss_set_01/rock_moss_set_01_8k.blend
+          for f in diff rough disp nor_gl ao; do curl -sSL -O https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_boulder_dry/rock_boulder_dry_${f}_2k.jpg; done
+          for f in diff rough disp; do curl -sSL -O https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_${f}_2k.jpg; done
+          sha256sum -c "$GITHUB_WORKSPACE/assets/candidates/aidan-masonry-art-02/sources.sha256"
+      - name: Build, QA and render (seed 20261116)
+        run: |
+          "$RUNNER_TEMP/blender-4.2.3-linux-x64/blender" -b -t 0 --python tools/map_blender/aidan_scan_carved_rubble_corner_v1.py -- \
+            --src "$RUNNER_TEMP/src/rock_moss_set_01_8k.blend" --tex "$RUNNER_TEMP/src" --out "$RUNNER_TEMP/out" \
+            --seed 20261116 --samples 32 --res 800
+          pip install pillow
+          python3 tools/map_blender/aidan_masonry_game_scale.py "$RUNNER_TEMP/out/corner_game_src_768.png" "$RUNNER_TEMP/out/game"
+      - name: Assert technical invariants (G3 only — never G2)
+        run: |
+          python3 - <<'PY'
+          import json, os
+          m = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "out", "aidan_scan_carved_corner_v1_manifest.json")))
+          s = m["qa"]["summary"]
+          assert s["unfilled"] == 0, s
+          assert s["stones_watertight_single_component"], s
+          assert s["stone_stone_bvh_overlaps"] == 0, s
+          assert s["mortar_watertight"], s
+          assert s["min_bed_support_ratio"] >= 0.5, s
+          for st in m["stones"]:
+              q = st["qa"]
+              assert q["inside_cell"] and q["degenerate_faces"] == 0 and q["max_protrusion_m"] <= 0.0325, (st["name"], q)
+          assert s["through_wall_misses"] == 0, s
+          print("G3 mesh/contact invariants PASS", s)
+          print("G2=NOT_RUN by CI (human art review required); G1=BLOCKED(dimensions); G4=NOT_RUN")
+          PY
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-scan-carved-corner-art-02
+          path: |
+            ${{ runner.temp }}/out/*.png
+            ${{ runner.temp }}/out/*.json
+            ${{ runner.temp }}/out/game/
+          if-no-files-found: warn
+          retention-days: 14
