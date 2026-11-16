@@ -1,0 +1,60 @@
+{
+  "task_id": "LIND-QA-01",
+  "agent": "/root/qa",
+  "baseline_commit": "c0223b538c3a8b20329ea847c7237b424ccfac4a",
+  "independence": "Separate QA agent; did not author STORY or INTEGRATION deliverables; production files unchanged.",
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_FULL_WORLD",
+    "G4": "BLOCKED_FULL_WORLD"
+  },
+  "scoped_results": {
+    "existing_event_save_node_tests": {
+      "pass": 10,
+      "fail": 1,
+      "failure": "save_compatibility.test.cjs fixture DEV block delimiter absent; SAVE assertions did not run"
+    },
+    "guard_unit_tests": {
+      "pass": 8,
+      "fail": 0
+    },
+    "browser_save_continue_lifecycle": {
+      "assertions_pass": 25,
+      "exit_code": 0,
+      "platform": "Chromium desktop and responsive viewport, not physical Android"
+    },
+    "story_asset_hashes": {
+      "checked": 20,
+      "matched_report": 20
+    },
+    "local_approved_image_search": {
+      "images_hashed": 2304,
+      "matches": 0
+    },
+    "independent_blender_fixture": {
+      "blender": "4.3.2",
+      "runner_exit": 0,
+      "source_unchanged": true,
+      "png_decode": "96x96 RGBA",
+      "same_pixels_as_producer": true,
+      "same_png_bytes_as_producer": false,
+      "scope": "technical fixture only; no world geometry or art acceptance"
+    }
+  },
+  "findings": [
+    "Assembler hardcodes superseded map SHA 83dd4ad1… and units_per_world_px. Do not use for new world.",
+    "Actions installs unpinned distro Blender; printed version is not a production version pin.",
+    "Approved source world PNG unavailable locally; G1 source/visual review BLOCKED.",
+    "Legacy save test fixture parsing fails before SAVE assertions; browser alternate passes do not erase this failure.",
+    "Remote artifact ZIP download blocked per root evidence; QA did not inspect remote ZIP bytes.",
+    "Independent render decodes identically to producer pixels, but PNG bytes and separately generated blend bytes differ; byte determinism not established."
+  ],
+  "not_run": [
+    "New world source CG visual concordance",
+    "New world G2 art QA",
+    "World UV/normals/collision/LOD/budget/license acceptance",
+    "New world event/navigation/save adapter runtime",
+    "Physical Android performance and input"
+  ]
+}
