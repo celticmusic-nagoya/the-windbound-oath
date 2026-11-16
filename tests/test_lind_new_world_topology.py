@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import unittest
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "tools/map_blender/validate_lind_new_world_topology.py"
 GRAPH = ROOT / "docs/production/lind-new-world-topology.v1.json"
 spec = importlib.util.spec_from_file_location("lind_topology_validator", SCRIPT)
