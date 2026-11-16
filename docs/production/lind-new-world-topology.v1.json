@@ -1,0 +1,125 @@
+{
+  "schema": "lind-new-world-topology-v1",
+  "status": "PROPOSED_UNSCALED",
+  "source": {
+    "image_path": "assets/sources/lind-world-20261116/original.png",
+    "source_commit": "dc17dd4846f35ea1f5dea25168eec9ddb50a3838",
+    "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "lore": "the-windbound-oath-handoff/main/reference/lore/WORLD_MAP_CANON_20261108.md"
+  },
+  "metric": {
+    "origin": null,
+    "meters_per_unit": null,
+    "camera": null,
+    "elevation_map": null
+  },
+  "nodes": [
+    {
+      "id": "village_center",
+      "zone": "center"
+    },
+    {
+      "id": "harbor_sw",
+      "zone": "southwest"
+    },
+    {
+      "id": "windward_cliffs_wnw",
+      "zone": "west_northwest"
+    },
+    {
+      "id": "north_farms",
+      "zone": "north"
+    },
+    {
+      "id": "road_to_dunvall",
+      "zone": "north"
+    },
+    {
+      "id": "east_river_bridge",
+      "zone": "east"
+    },
+    {
+      "id": "east_training_area",
+      "zone": "east",
+      "status": "LOCATION_REVIEW_REQUIRED"
+    },
+    {
+      "id": "raid_riverside_cliff",
+      "zone": "east"
+    },
+    {
+      "id": "downstream_landing",
+      "zone": "southeast"
+    },
+    {
+      "id": "moss_forest",
+      "zone": "southeast"
+    },
+    {
+      "id": "ancient_altar",
+      "zone": "southeast"
+    }
+  ],
+  "edges": [
+    {
+      "from": "harbor_sw",
+      "to": "village_center",
+      "kind": "walk",
+      "bidirectional": true
+    },
+    {
+      "from": "village_center",
+      "to": "windward_cliffs_wnw",
+      "kind": "walk",
+      "bidirectional": true
+    },
+    {
+      "from": "village_center",
+      "to": "north_farms",
+      "kind": "walk",
+      "bidirectional": true
+    },
+    {
+      "from": "north_farms",
+      "to": "road_to_dunvall",
+      "kind": "walk",
+      "bidirectional": true
+    },
+    {
+      "from": "village_center",
+      "to": "east_river_bridge",
+      "kind": "walk",
+      "bidirectional": true
+    },
+    {
+      "from": "east_river_bridge",
+      "to": "east_training_area",
+      "kind": "candidate_walk",
+      "bidirectional": true
+    },
+    {
+      "from": "village_center",
+      "to": "raid_riverside_cliff",
+      "kind": "story",
+      "bidirectional": false
+    },
+    {
+      "from": "raid_riverside_cliff",
+      "to": "downstream_landing",
+      "kind": "story_jump",
+      "bidirectional": false
+    },
+    {
+      "from": "downstream_landing",
+      "to": "moss_forest",
+      "kind": "story",
+      "bidirectional": false
+    },
+    {
+      "from": "moss_forest",
+      "to": "ancient_altar",
+      "kind": "story",
+      "bidirectional": false
+    }
+  ]
+}
