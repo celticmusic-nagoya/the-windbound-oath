@@ -23,6 +23,7 @@ on:
       - 'tools/character_blender/build_morwen_production_guides.py'
       - 'tools/character_blender/build_morwen_head_candidate.py'
       - 'tools/character_blender/render_morwen_head_review.py'
+      - 'tools/character_blender/audit_morwen_render_visibility.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -130,6 +131,7 @@ jobs:
           python tools/character_blender/build_morwen_production_guides.py -- qa_output/render/MORWEN_SCULPTING_GUIDES.blend
           python tools/character_blender/build_morwen_head_candidate.py -- qa_output/render/MORWEN_HEAD_HAIR_CANDIDATE.blend
           python tools/character_blender/render_morwen_head_review.py -- qa_output/render/MORWEN_HEAD_HAIR_CANDIDATE.blend qa_output/render/head_review
+          python tools/character_blender/audit_morwen_render_visibility.py qa_output/render/head_review qa_output/render/MORWEN_HEAD_VISIBILITY_QA.json
       - name: Build packed Layer0 modelling reference scene
         if: matrix.role == 'render'
         run: |
