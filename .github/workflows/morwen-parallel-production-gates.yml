@@ -1,0 +1,114 @@
+name: Morwen parallel production gates
+on:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/morwen-parallel-production-gates.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: morwen-parallel-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  parallel-qa:
+    name: QA ${{ matrix.role }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [canonical, rig, render]
+    env:
+      BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+      CANDIDATE_SHA256: 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4
+      CANDIDATE_PATH: candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout frozen candidate for technical lanes
+        if: matrix.role != 'canonical'
+        uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: bca7d1d4cfd4b5e8a4f6c03656e148ed8485370c
+          path: candidate_source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        if: matrix.role != 'canonical'
+        with:
+          python-version: '3.13'
+      - name: Check frozen candidate
+        if: matrix.role != 'canonical'
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Install pinned Blender Python for technical lanes
+        if: matrix.role != 'canonical'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "$BPY_WHEEL_SHA256  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Check canonical Morwen reference hashes
+        if: matrix.role == 'canonical'
+        run: |
+          mkdir -p qa_output/canonical
+          python - <<'PY'
+          import hashlib,json,pathlib,sys
+          root=pathlib.Path("assets/canonical/morwen/2026-11-16")
+          expected={
+          "MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg":"d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b",
+          "LAYER0_FRONT.png":"b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+          "LAYER0_BACK.png":"b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+          "LAYER0_PROFILE_FACING_RIGHT.png":"9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+          "LAYER0_PROFILE_FACING_LEFT.png":"69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"}
+          rows=[]
+          for name,digest in expected.items():
+           p=root/name
+           actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+           rows.append({"name":name,"expected":digest,"actual":actual,"status":"PASS" if actual==digest else "BLOCKED"})
+          report={"role":"canonical","results":rows,"status":"PASS" if all(x["status"]=="PASS" for x in rows) else "BLOCKED"}
+          pathlib.Path("qa_output/canonical/report.json").write_text(json.dumps(report,indent=2))
+          print(json.dumps(report))
+          if report["status"]!="PASS":sys.exit(1)
+          PY
+      - name: Rig deformation technical measurements
+        if: matrix.role == 'rig'
+        run: |
+          mkdir -p qa_output/rig
+          python tools/character_blender/morwen_rig_pose_smoke.py -- "$CANDIDATE_PATH" qa_output/rig
+      - name: Render and framing QA (fail closed)
+        if: matrix.role == 'render'
+        run: |
+          mkdir -p qa_output/render
+          python tools/character_blender/morwen_render_qa_loop.py -- "$CANDIDATE_PATH" qa_output/render
+      - name: Verify candidate remains unchanged
+        if: always() && matrix.role != 'canonical'
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Upload per-role QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-qa-${{ matrix.role }}
+          path: qa_output/${{ matrix.role }}/*
+          retention-days: 7
+          if-no-files-found: warn
+  integration:
+    name: Integration gate (all independent lanes)
+    needs: [parallel-qa]
+    if: always()
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Report independent QA gate
+        env:
+          RESULT: ${{ needs.parallel-qa.result }}
+        run: |
+          echo "Parallel QA result: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          echo "Artistic QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
+          echo "Android game QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
+          echo "Canonical promotion/main merge: BLOCKED" >> "$GITHUB_STEP_SUMMARY"
+          test "$RESULT" = success
