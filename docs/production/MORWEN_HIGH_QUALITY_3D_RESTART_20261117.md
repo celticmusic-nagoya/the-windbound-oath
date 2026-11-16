@@ -24,3 +24,10 @@ Canonical SHA check: NOT_RUN for new readiness workflow; G1 BLOCKED until new me
 
 ## Next authorized non-destructive actions
 Verify readiness Actions run and artifact; verify basemesh source and licensing, create separate working mesh candidate only if evidence permits, inspect actual geometry and produce measured full-body neutral turntable. If source or licensing cannot be verified, stop with BLOCKED and request no canon promotion.
+
+## Verified official basemesh distribution evidence (2026-11-17)
+- Blender official demo-files catalog lists **Human Base Meshes v1.4.1**, Blender Studio/community, **CC0**, compatible with Blender 4.2 LTS or newer: https://www.blender.org/download/demo-files/
+- Official v1.4.1 download landing page confirms direct mirror URL: https://www.blender.org/download/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip/ ; direct ZIP: https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip
+- Blender project's own CC0 provenance record identifies source authors, license and six named meshes, including `Body Female - Stylized` and `Body Female - Realistic`: https://projects.blender.org/blender/blender/commit/4c4293010c2e21122b54681cd22556b727efbb11
+- **PASS**: source identity, public availability listing, version, CC0 rights. **NOT_RUN**: actual ZIP download, SHA/CRC, Blender import, topology, visual comparison and model adoption. The existing source-audit workflow URL matches the official mirror URL; do not replace it without evidence.
+- Prioritize inspection of `GEO-body_female_stylized` and `GEO-body_female_realistic`, preserving source as immutable and deriving separate candidate only after geometry QA. The CC0 license of the mesh bundle does **not** extend to unrelated assets in the same demo-files catalog.
