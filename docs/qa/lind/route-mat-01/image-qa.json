@@ -1,0 +1,55 @@
+{
+  "status": "PASS_IMAGE_HANDOFF_SUBSET",
+  "maps": {
+    "base_color": {
+      "file": "stone_basecolor.png",
+      "sha256": "d3d78f4aa591308bed39eee557ca2db7300f435e1303ea03e22ee58b50f23e55",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "std_8bit": 29.061993483498426,
+      "lr_edge_mean_abs_delta_8bit": 19.076023391812864,
+      "tb_edge_mean_abs_delta_8bit": 18.914673046251995
+    },
+    "roughness": {
+      "file": "stone_roughness.png",
+      "sha256": "48e92725a307e6a9e406c1a24253d824faee2561f5889c1bb784419224f73d35",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "std_8bit": 18.931132489334587,
+      "lr_edge_mean_abs_delta_8bit": 15.402977139819246,
+      "tb_edge_mean_abs_delta_8bit": 15.559276980329612
+    }
+  },
+  "roughness_R_quantiles": {
+    "min": 0.23137254901960785,
+    "p01": 0.5019607843137255,
+    "p05": 0.5647058823529412,
+    "median": 0.6941176470588235,
+    "p95": 0.807843137254902,
+    "p99": 0.8509803921568627,
+    "max": 0.9803921568627451
+  },
+  "roughness_RGB_max_channel_difference_8bit": 9,
+  "roughness_scalar_policy": "Use R only, Non-Color; channels are not numerically identical",
+  "registration": {
+    "global_phase_shift_yx_pixels": [
+      0,
+      0
+    ],
+    "phase_peak": 0.17974429677174125,
+    "raw_luminance_correlation": 0.6651806124551681,
+    "sigma2_lowfrequency_correlation": 0.8202054733573806,
+    "limit": "Global alignment check only; semantic micro-feature correspondence is inferred, not measured geometry"
+  },
+  "tiling": "NOT_VALIDATED_SEAMLESS; use CLIP and UV islands inside image; no whole-wall stamped repeat",
+  "normal_height_mortar_mask": "NOT_DELIVERED: author from actual geometry/mortar ownership in Claude phase, not grayscale albedo",
+  "G2_independent_final_material": "NOT_RUN",
+  "G3_masonry_UV_support": "NOT_RUN",
+  "G4": "NOT_RUN"
+}

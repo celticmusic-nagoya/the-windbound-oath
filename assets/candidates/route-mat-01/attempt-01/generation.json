@@ -1,0 +1,29 @@
+{
+  "schema": "route-mat-image-generation-record/v1",
+  "provider": "OpenAI image_gen.imagegen",
+  "model": "not exposed by tool",
+  "backend_version": "not exposed by tool",
+  "seed": "not exposed by tool",
+  "requested_resolution": [
+    2048,
+    2048
+  ],
+  "actual_resolution": [
+    1254,
+    1254
+  ],
+  "basecolor": {
+    "prompt": "Create one original production-quality PBR BASE COLOR texture image for individually modelled full-thickness weathered stone blocks of an ancient Celtic riverside bridge abutment, for THE WINDBOUND OATH. Square 2048 by 2048 requested. Entire canvas is one continuous natural stone face, photographed orthographically straight-on, edge-to-edge, with no borders, text, labels, panels or objects. Artistic target: warm neutral grey to muted buff limestone/granite masonry, subtle olive weathering in microscopic sheltered pores, iron ochre mineral flecks, pale worn grains and tiny mica/quartz inclusions; rich physically credible multiscale granular structure, irregular softened microfractures, shallow eroded pits, gently worn mineral veins. Premium scanned-material appearance but an ORIGINAL authored image. Unlit diffuse/albedo only: perfectly even broad neutral illumination, remove all directional lighting, cast shadows, ambient-occlusion creases, glossy highlights, vignette and perspective. No firelight or orange lighting. No broad dark crevices, no large decorative crack network. Nonmetallic dry stone. No masonry wall, brick courses, rectangles, stamped tiles, cellular/Voronoi polygons, identical stones, seams, mortar, moss clumps, growing plants, rock silhouette or stylized low-poly facets. Natural stochastic variation across the full image without motifs or repeating clusters. Quiet broad color variation with excellent fine pore detail. Make opposite canvas edges visually compatible for eventual UV repeat, but do not repeat motifs within the image. This is stone-surface albedo for real geometry, never a picture of a wall. Output only the material image.",
+    "operation": "text-to-image; no input images",
+    "original_output": "/workspace/generated_images/exec-c5b6ae25-add9-498c-9ac1-a5e51f20a9ff.png"
+  },
+  "roughness": {
+    "prompt": "Create the perfectly registered PBR ROUGHNESS companion map for the attached original stone albedo texture. This is a technical material-map edit, not a new stone surface. Preserve the EXACT composition, grain shapes, pore positions, mineral boundaries, scale, camera, orientation and square canvas of the source. No crop, no rescale, no rotated or new features, no added objects, no border, no text. Output pure neutral grayscale RGB, with all three channels equal, interpretable as LINEAR NON-COLOR roughness: 0 black = smooth, 1 white = rough. Dry weathered limestone/granite has broad roughness about 0.78 (200/255), chalky/eroded mineral matrix and open pits 0.86–0.92 (219–235), slightly worn dense mineral/quartz grains about 0.58–0.69 (148–176), with soft natural variations. Keep overall high roughness; no black cracks and no white glare. The original brown/grey mineral colors are NOT roughness and should not simply be desaturated into the output. Interpret the SAME pits and grains into a subtle physically plausible artist-estimated roughness field; replace lighting and color with scalar roughness while preserving every feature position. Never invent masonry blocks, mortar, rectangles, tile joints or Voronoi cells. One full-frame aligned map only. This is an inferred artistic candidate, not a physically measured scan.",
+    "operation": "image-to-image material-map edit of original basecolor",
+    "input": "stone_basecolor.png",
+    "original_output": "/workspace/generated_images/exec-1e80e464-042a-4a06-9d15-fb51fec36621.png"
+  },
+  "pixel_postprocessing": "NONE; original generated PNG bytes copied unchanged",
+  "external_stock_assets": "NONE",
+  "retry_method": "original continuous stone surface + registered artistic roughness; not PR351 automatic geometry facing"
+}
