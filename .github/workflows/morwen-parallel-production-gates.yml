@@ -311,6 +311,11 @@ jobs:
           print(json.dumps({'zip_crc':report['zip_crc'],'entries':len(entries),'sha256':report['sha256']}))
           if bad:raise SystemExit(1)
           PY
+      - name: Validate ZIP paths and inventory .blend candidates (read-only)
+        run: |
+          python tools/character_blender/inspect_human_basemesh_bundle.py \
+            qa_output/basemesh/source.zip \
+            --output qa_output/basemesh/safe_inventory.json
       - name: Exclude ZIP from artifact
         if: always()
         run: rm -f qa_output/basemesh/source.zip
