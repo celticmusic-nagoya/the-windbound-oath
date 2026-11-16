@@ -16,8 +16,8 @@ def chunk(tag, data):
 def fixture_png(width=512, height=768):
     # One valid 8-bit grayscale PNG; compressed scanlines are tiny.
     ihdr = struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0)
-    rows = (b"\\x00" + b"\\x00" * width) * height
-    return b"\\x89PNG\\r\\n\\x1a\\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b"")
+    rows = (b"\x00" + b"\x00" * width) * height
+    return b"\x89PNG\\r\\n\x1a\\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b"")
 
 class FourViewTests(unittest.TestCase):
     def setUp(self):
