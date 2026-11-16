@@ -12,6 +12,7 @@ def main():
     parser.add_argument("--output", required=True)
     opt = parser.parse_args(args)
     # Defense in depth; Blender ships with the same small validation logic.
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
     from validate_patch import validate
     safe = validate(json.loads(pathlib.Path(opt.patch).read_text(encoding="utf-8")))
     adjustments = safe["adjustments"]
@@ -21,7 +22,6 @@ def main():
             raise ValueError("orthographic camera required")
         scene.camera.data.ortho_scale *= adjustments["camera_ortho_multiplier"]
     if "exposure_delta" in adjustments:
-        scene.view_settings.look = "Medium High Contrast" if False else scene.view_settings.look
         scene.view_settings.exposure += adjustments["exposure_delta"]
     lights = [obj for obj in scene.objects if obj.type == "LIGHT"]
     if "light_energy_multiplier" in adjustments:
