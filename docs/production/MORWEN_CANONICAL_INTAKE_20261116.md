@@ -32,3 +32,7 @@ Target directory after upload: `assets/canonical/morwen/2026-11-16/`. ZIP stores
 - Five upload files inspected in local container; format, dimensions, SHA256 recorded.
 - GitHub image binary upload: NOT_RUN (GitHub connector only accepts text content or blobs passed as strings; no container-to-connector binary transfer used).
 - G1 BLOCKED / G2 NOT_RUN for new model / G3 NOT_RUN for new model / G4 NOT_RUN.
+
+## 2026-11-17 status reconciliation (append-only)
+
+The opening **ORIGINAL BYTES PENDING GITHUB UPLOAD** status above describes the historical intake stage, **not the current state**. The five source files and `MANIFEST.json` are now committed at `assets/canonical/morwen/2026-11-16/`; registration and GitHub re-fetch verification are recorded in `docs/design/MORWEN_CANONICAL_20261116_REGISTRATION.md` and `REGISTRATION_VERIFY.json`. Preserve this intake record for provenance; use the newer registration document for current source status and precedence. `docs/production/MORWEN_3D_TURNAROUND_01_BRIEF.md` already reflects the new precedence. A new 7.5–8-head four-view illustration and production-ready Morwen 3D model are **NOT_RUN / NOT_APPROVED**. Blender CC0 basemesh geometry inventory PASS does not imply art or canonical-model G1 PASS. Do not replace canonical assets, merge main, or publish without explicit authorization.
