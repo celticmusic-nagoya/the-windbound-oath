@@ -33,7 +33,7 @@ jobs:
           verts=struct.pack('<9f',-1,0,0,1,0,0,0,1,0)
           doc={"asset":{"version":"2.0"},"buffers":[{"byteLength":len(verts)}],"bufferViews":[{"buffer":0,"byteOffset":0,"byteLength":len(verts),"target":34962}],"accessors":[{"bufferView":0,"componentType":5126,"count":3,"type":"VEC3","min":[-1,0,0],"max":[1,1,0]}],"meshes":[{"primitives":[{"attributes":{"POSITION":0}}]}],"nodes":[{"mesh":0}],"scenes":[{"nodes":[0]}],"scene":0}
           j=json.dumps(doc,separators=(',',':')).encode();j+=b' ' * (-len(j)%4)
-          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(verts))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(verts),b'BIN\\x00')+verts
+          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(verts))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(verts),bytes([66,73,78,0]))+verts
           p=Path('/tmp/lind-glb-benchmark/technical-scene.glb');p.write_bytes(blob)
           print('fixture SHA256',hashlib.sha256(blob).hexdigest())
           PY
