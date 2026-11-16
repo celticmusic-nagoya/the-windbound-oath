@@ -21,25 +21,147 @@ def _perp(v):
 
 # =============================================================================== TREES
 TREE_PRESETS = {
-    # generic broadleaf village / forest-edge tree
-    "deciduous": dict(trunk_len=2.6, trunk_r=0.19, lean=0.06, scaffolds=4, scaffold_at=(0.55, 1.0),
-                      scaffold_len=(1.7, 2.3), angle=(28, 48), depth=4, len_decay=(0.62, 0.78), gravi=0.10,
-                      card_size=(0.45, 0.62), card_spacing=0.09, tex="broadleaf",
-                      tint_in=0.55, tint_out=1.08, bark=(0.20, 0.17, 0.14), apples=0, side_shoots=3,
-                      droop=0.0, sides0=12),
-    # open-centre orchard apple: short trunk, wide low scaffolds, drooping fruiting wood
-    "apple": dict(trunk_len=1.3, trunk_r=0.14, lean=0.05, scaffolds=5, scaffold_at=(0.75, 1.0),
-                  scaffold_len=(1.5, 1.9), angle=(48, 64), depth=4, len_decay=(0.6, 0.74), gravi=0.02,
-                  card_size=(0.34, 0.46), card_spacing=0.08, tex="apple",
-                  tint_in=0.6, tint_out=1.1, bark=(0.24, 0.19, 0.15), apples=90, side_shoots=0,
-                  droop=0.16, sides0=10),
-    # taller forest tree toward Moss Forest (SE)
-    "forest_tall": dict(trunk_len=3.6, trunk_r=0.24, lean=0.03, scaffolds=5, scaffold_at=(0.45, 1.0),
-                        scaffold_len=(2.2, 3.0), angle=(24, 42), depth=4, len_decay=(0.62, 0.76), gravi=0.14,
-                        card_size=(0.5, 0.7), card_spacing=0.1, tex="broadleaf",
-                        tint_in=0.45, tint_out=0.95, bark=(0.17, 0.15, 0.13), apples=0, side_shoots=5,
-                        droop=0.0, sides0=12),
+    # generic broadleaf village tree (rounded oak-like cloud crown)
+    "deciduous": dict(trunk_len=2.4, trunk_r=0.21, lean=0.05, scaffolds=4, scaffold_at=(0.6, 1.0),
+                      scaffold_len=(1.8, 2.4), angle=(30, 50), depth=4, len_decay=(0.62, 0.76), gravi=0.12,
+                      tex="oak", card_size=(0.75, 1.0), card_density=7.0, lobe_merge=1.0, lobe_pad=0.55,
+                      lobe_depth=2, lobe_zscale=0.82, tint=(0.7, 1.2), bark=(0.24, 0.17, 0.11), apples=0,
+                      side_shoots=2, droop=0.0, sides0=12, bare_below=2.0),
+    # open-centre orchard apple: visible trunk + scaffolds under a low rounded crown, fruit clusters
+    "apple": dict(trunk_len=1.35, trunk_r=0.15, lean=0.06, scaffolds=4, scaffold_at=(0.8, 1.0),
+                  scaffold_len=(1.3, 1.7), angle=(42, 58), depth=4, len_decay=(0.6, 0.72), gravi=0.06,
+                  tex="apple", card_size=(0.55, 0.75), card_density=8.0, lobe_merge=0.8, lobe_pad=0.42,
+                  lobe_depth=2, lobe_zscale=0.72, tint=(0.75, 1.2), bark=(0.27, 0.19, 0.13), apples=46,
+                  side_shoots=0, droop=0.12, sides0=10, bare_below=1.75),
+    # taller forest tree toward Moss Forest (SE): tall ovoid stacked crown, darker smaller leaves
+    "forest_tall": dict(trunk_len=4.0, trunk_r=0.26, lean=0.03, scaffolds=6, scaffold_at=(0.4, 1.0),
+                        scaffold_len=(1.6, 2.2), angle=(20, 34), depth=4, len_decay=(0.6, 0.72), gravi=0.22,
+                        tex="beech", card_size=(0.7, 0.95), card_density=7.5, lobe_merge=1.1, lobe_pad=0.5,
+                        lobe_depth=2, lobe_zscale=1.15, tint=(0.6, 1.05), bark=(0.20, 0.17, 0.14), apples=0,
+                        side_shoots=4, droop=0.0, sides0=12, bare_below=2.6),
 }
+
+LEAF_KINDS = {
+    # leaf shape (length px at 1024, width ratio, lobed?), base colour, n leaves, twig origins, extra
+    "oak": dict(L=(70, 105), wr=0.55, lobes=3, base=(0.11, 0.25, 0.045), warm=(0.32, 0.40, 0.08), n=150, twigs=4),
+    "apple": dict(L=(62, 88), wr=0.5, lobes=0, base=(0.12, 0.27, 0.05), warm=(0.30, 0.42, 0.10), n=125, twigs=5, fruit=7),
+    "beech": dict(L=(52, 74), wr=0.5, lobes=0, base=(0.07, 0.19, 0.04), warm=(0.20, 0.32, 0.07), n=270, twigs=4),
+}
+
+
+def _soft_save(path, rgb, a, ss):
+    """Downsample a supersampled straight-alpha canvas with premultiplied LANCZOS -> soft AA alpha.
+    Transparent texels get the mean leaf colour (bleed) so filtering never halos."""
+    import numpy as np
+    from PIL import Image
+    H, W = a.shape
+    pm = np.dstack([rgb * a[..., None], a])
+    out = []
+    for c in range(4):
+        ch = Image.fromarray(pm[..., c].astype(np.float32), "F").resize((W // ss, H // ss), Image.LANCZOS)
+        out.append(np.asarray(ch))
+    pr, pg, pb, al = [np.clip(x, 0, 1) for x in out]
+    alc = np.maximum(al, 1e-6)
+    col = np.dstack([pr / alc, pg / alc, pb / alc])
+    mean = col[al > 0.5].mean(axis=0)
+    col[al < 0.02] = mean
+    col = np.clip(col, 0, 1)
+    img = np.dstack([col ** (1 / 2.2) * 255, al * 255]).round().astype(np.uint8)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.fromarray(img, "RGBA").save(path, optimize=False)
+    return path
+
+
+def paint_leaf_cluster(path, seed, kind):
+    """Painterly round leaf-cluster card (species-specific), 4x supersampled -> soft alpha edges.
+    Leaves radiate from several twig origins inside a rounded cluster; back leaves darker/cooler,
+    front/top leaves lighter/warmer; per-leaf hue jitter, midrib, edge darkening."""
+    import numpy as np
+    K = LEAF_KINDS[kind]
+    rng = new_rng(seed, "cluster:" + kind)
+    ss, S = 2, 1024  # paint at 1024 -> 512 output (2x supersample per axis = 4x samples)
+    rgb = np.zeros((S, S, 3), np.float32)
+    a = np.zeros((S, S), np.float32)
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32)
+    cx, cy, R = S * 0.5, S * 0.5, S * 0.40
+    twigs = []
+    for t in range(K["twigs"]):
+        ang = rng.uniform(0, math.tau)
+        r = R * rng.uniform(0.0, 0.45)
+        twigs.append((cx + math.cos(ang) * r, cy + math.sin(ang) * r * 0.9 + R * 0.1))
+    # twig sticks first
+    for (tx, ty) in twigs:
+        bx, by = cx + rng.uniform(-30, 30), cy + R * 0.55  # twig stays inside the cluster
+        for j in range(60):
+            f = j / 59
+            px, py = bx + (tx - bx) * f, by + (ty - by) * f
+            m = (xx - px) ** 2 + (yy - py) ** 2 <= (7 - 4 * f) ** 2
+            rgb[m] = (0.16, 0.11, 0.07)
+            a[m] = 1
+    leaves = []
+    for k in range(K["n"]):
+        tx, ty = twigs[rng.randrange(len(twigs))]
+        ang = rng.uniform(0, math.tau)
+        dist = R * (rng.random() ** 0.6)
+        x0 = cx + math.cos(ang) * dist * 0.95
+        y0 = cy + math.sin(ang) * dist * 0.88
+        # direction: away from the twig origin with jitter (radiating rosettes)
+        d = math.atan2(y0 - ty, x0 - tx) + rng.uniform(-0.6, 0.6)
+        depth = rng.random()  # 0 back .. 1 front
+        leaves.append((depth, x0, y0, d))
+    leaves.sort()
+    for depth, x0, y0, d in leaves:
+        L = rng.uniform(*K["L"])
+        W = L * K["wr"] * rng.uniform(0.85, 1.15)
+        ca, sa = math.cos(d), math.sin(d)
+        x_lo, x_hi = int(max(0, x0 - L - 4)), int(min(S, x0 + L + 4))
+        y_lo, y_hi = int(max(0, y0 - L - 4)), int(min(S, y0 + L + 4))
+        if x_lo >= x_hi or y_lo >= y_hi:
+            continue
+        X = xx[y_lo:y_hi, x_lo:x_hi] - x0
+        Y = yy[y_lo:y_hi, x_lo:x_hi] - y0
+        u = X * ca + Y * sa + L * 0.5
+        v = -X * sa + Y * ca
+        un = np.clip(u / L, 0, 1)
+        half = W * 0.5 * np.maximum(np.sin(np.pi * un ** 0.8), 0) ** 0.8
+        if K["lobes"]:
+            half = half * (0.82 + 0.18 * np.abs(np.sin(un * np.pi * K["lobes"] * 1.5)))
+        inside = (u > 0) & (u < L) & (np.abs(v) < half)
+        if not inside.any():
+            continue
+        topf = 1.0 - (y0 / S)  # upper leaves catch more light
+        light = 0.55 + 0.55 * depth * (0.6 + 0.4 * topf)
+        base = np.array(K["base"]) * rng.uniform(0.85, 1.15)
+        warm = np.array(K["warm"])
+        c = base + (warm - base) * min(1.0, max(0.0, light - 0.55) * 1.1)
+        c = c * light
+        hv = rng.uniform(-0.05, 0.05)
+        c = c * np.array((1 + hv, 1.0, 1 - hv))
+        side = np.where(v > 0, 1.06, 0.93)[..., None]
+        grad = (0.85 + 0.25 * un)[..., None]
+        col = c[None, None, :] * side * grad
+        rib = inside & (np.abs(v) < 1.8)
+        edge = inside & (np.abs(v) > half - 3.0)
+        sub_rgb = rgb[y_lo:y_hi, x_lo:x_hi]
+        sub_a = a[y_lo:y_hi, x_lo:x_hi]
+        sub_rgb[inside] = col[inside]
+        sub_rgb[rib] = col[rib] * 1.3
+        sub_rgb[edge] = col[edge] * 0.78
+        sub_a[inside] = 1
+    for k in range(K.get("fruit", 0)):
+        ang = rng.uniform(0, math.tau)
+        r = R * rng.uniform(0.25, 0.8)
+        fx, fy = cx + math.cos(ang) * r, cy + math.sin(ang) * r * 0.8 + R * 0.15
+        fr = rng.uniform(22, 30)
+        d2 = (xx - fx) ** 2 + (yy - fy) ** 2
+        m = d2 <= fr * fr
+        shade = np.clip(1.15 - np.sqrt(d2) / fr * 0.5 - (yy - fy) / fr * 0.25, 0.5, 1.3)[..., None]
+        red = np.array((0.62, 0.05, 0.03)) if rng.random() < 0.8 else np.array((0.68, 0.40, 0.06))
+        rgb[m] = (red[None, None, :] * shade)[m]
+        a[m] = 1
+        hl = (xx - fx + fr * 0.35) ** 2 + (yy - fy + fr * 0.35) ** 2 <= (fr * 0.22) ** 2
+        rgb[hl] = (0.9, 0.55, 0.45)
+    return _soft_save(path, rgb, a, ss)
 
 
 def paint_leaf_spray(path, seed, kind="broadleaf"):
@@ -49,10 +171,12 @@ def paint_leaf_spray(path, seed, kind="broadleaf"):
     from PIL import Image
     rng = new_rng(seed, "leafspray:" + kind)
     S = 512
+    if kind == "needle":
+        return _paint_needle_spray(path, rng, S)
     rgb = np.zeros((S, S, 3), np.float32)
     a = np.zeros((S, S), np.float32)
     yy, xx = np.mgrid[0:S, 0:S].astype(np.float32)
-    base_c = np.array((0.075, 0.17, 0.035)) if kind == "broadleaf" else np.array((0.09, 0.19, 0.04))
+    base_c = np.array((0.10, 0.25, 0.04)) if kind == "broadleaf" else np.array((0.12, 0.27, 0.05))
     # twig path
     bend = 30 * (1 if rng.random() < 0.5 else -1)
     tw = [(256 + bend * math.sin(t * 2.2) * t, 505 - 360 * t) for t in [i / 40 for i in range(41)]]
@@ -104,6 +228,108 @@ def paint_leaf_spray(path, seed, kind="broadleaf"):
     path.parent.mkdir(parents=True, exist_ok=True)
     Image.fromarray(img, "RGBA").save(path, optimize=False)
     return path
+
+
+def _paint_needle_spray(path, rng, S):
+    """Conifer spray: flat frond of side twiglets densely set with short needles."""
+    import numpy as np
+    from PIL import Image
+    rgb = np.zeros((S, S, 3), np.float32)
+    a = np.zeros((S, S), np.float32)
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32)
+
+    def stroke(x0, y0, x1, y1, r, col):
+        n = max(2, int(math.hypot(x1 - x0, y1 - y0) / max(0.8, r)))
+        for j in range(n + 1):
+            f = j / n
+            cx, cy = x0 + (x1 - x0) * f, y0 + (y1 - y0) * f
+            x_lo, x_hi = int(max(0, cx - r - 1)), int(min(S, cx + r + 2))
+            y_lo, y_hi = int(max(0, cy - r - 1)), int(min(S, cy + r + 2))
+            sub = (xx[y_lo:y_hi, x_lo:x_hi] - cx) ** 2 + (yy[y_lo:y_hi, x_lo:x_hi] - cy) ** 2 <= r * r
+            rgb[y_lo:y_hi, x_lo:x_hi][sub] = col
+            a[y_lo:y_hi, x_lo:x_hi][sub] = 1
+
+    S = 1024  # 2x supersampled canvas -> 512 soft-alpha output
+    rgb = np.zeros((S, S, 3), np.float32)
+    a = np.zeros((S, S), np.float32)
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32)
+    axis = [(512 + 24 * math.sin(t * 3), 1010 - 940 * t) for t in [i / 30 for i in range(31)]]
+    for i in range(30):
+        stroke(*axis[i], *axis[i + 1], 8.0 * (1 - i / 34), (0.17, 0.11, 0.07))
+    for k in range(16):
+        t = 0.08 + 0.9 * k / 15
+        x0, y0 = axis[int(t * 30)]
+        for side in (-1, 1):
+            ang = math.radians(-90 + side * rng.uniform(50, 65))
+            L = 400 * (1 - 0.75 * t) * rng.uniform(0.85, 1.1)
+            x1, y1 = x0 + math.cos(ang) * L, y0 + math.sin(ang) * L
+            stroke(x0, y0, x1, y1, 4.0, (0.13, 0.10, 0.06))
+            nn = int(L / 10)
+            for j in range(nn):
+                f = j / max(1, nn)
+                px, py = x0 + (x1 - x0) * f, y0 + (y1 - y0) * f
+                for sd in (-1, 1):
+                    na = ang + sd * math.radians(rng.uniform(45, 70))
+                    nl = rng.uniform(28, 44) * (1 - 0.4 * f)
+                    sh = rng.uniform(0.8, 1.2) * (1.15 if sd < 0 else 0.9)
+                    col = (0.05 * sh, 0.15 * sh, 0.055 * sh)
+                    stroke(px, py, px + math.cos(na) * nl, py + math.sin(na) * nl, 2.6, col)
+    return _soft_save(path, rgb, a, 2)
+
+
+def build_conifer(seed, height=8.0):
+    """Whorled conifer (fir/spruce form): straight tapered trunk, whorls of drooping-then-upturned
+    branches, cone-shaped envelope, needle-spray alpha cards held near-horizontal."""
+    rng = new_rng(seed, "conifer")
+    acc = MeshAcc()
+    bark = (0.18, 0.13, 0.10)
+    tr = [Vector((0, 0, height * i / 12)) for i in range(13)]
+    acc.tube(tr, [0.22 * (1 - i / 12) ** 0.9 + 0.01 for i in range(13)], 10,
+             [jitter_col(rng, bark, 0.05) for _ in tr], [(i / 12) ** 2 for i in range(13)], cap_tip=True)
+    n_cards = 0
+    z = 1.1
+    whorl = 0
+    while z < height - 0.3:
+        hf = z / height
+        Lb = (height - z) * 0.42 * rng.uniform(0.85, 1.1) + 0.25
+        nb = rng.randint(6, 8)
+        az0 = rng.uniform(0, math.tau)
+        for b in range(nb):
+            az = az0 + math.tau * b / nb + rng.uniform(-0.25, 0.25)
+            d = Vector((math.cos(az), math.sin(az), 0))
+            pts = []
+            for i in range(6):
+                t = i / 5
+                p = Vector((0, 0, z)) + d * Lb * t + UP * (-0.16 * Lb * math.sin(math.pi * t * 0.8) + 0.10 * Lb * t ** 2)
+                pts.append(p)
+            ww0 = hf ** 1.6
+            acc.tube(pts, [0.045 * (1 - hf) + 0.012, 0.03, 0.022, 0.015, 0.009, 0.004], 4,
+                     [bark] * 6, [min(1, ww0 + 0.5 * t ** 1.5) for t in [i / 5 for i in range(6)]])
+            nc = max(3, int(Lb / 0.09))
+            for c in range(nc):
+                t = 0.15 + 0.85 * (c + rng.random()) / nc
+                fi = t * 5
+                i0 = min(4, int(fi))
+                q = pts[i0].lerp(pts[i0 + 1], fi - i0)
+                bd = (pts[i0 + 1] - pts[i0]).normalized()
+                side = bd.cross(UP).normalized() * rng.choice((-1, 1))
+                up = (bd * 0.8 + side * 0.6 + UP * 0.05).normalized()
+                nrm = (UP + side * 0.2).normalized()
+                lf = 0.6 + 0.6 * t * (0.6 + 0.4 * hf)
+                tint = (lf * 0.95, lf, lf * 0.95)
+                _leaf_card(acc, q, up, nrm, rng.uniform(0.55, 0.75) * (0.75 + 0.25 * (1 - hf)), tint,
+                           min(1.0, ww0 + 0.6 * t ** 1.5), 1)
+                n_cards += 1
+        whorl += 1
+        z += rng.uniform(0.26, 0.36)
+    # leader tuft
+    for k in range(6):
+        a = math.tau * k / 6
+        _leaf_card(acc, Vector((0, 0, height - 0.5)), (UP * 1.5 + Vector((math.cos(a), math.sin(a), 0))).normalized(),
+                   Vector((math.cos(a), math.sin(a), 0.3)).normalized(), 0.55, (1.0, 1.05, 1.0), 1.0, 1)
+        n_cards += 1
+    return acc, {"whorls": whorl, "leaf_cards": n_cards, "height_m": round(max(v[2] for v in acc.v), 3),
+                 "leaf_mode": "alpha_spray_cards", "leaf_texture": "needle"}
 
 
 def _leaf_card(acc, base, up, normal, size, tint, ww, mat):
@@ -173,11 +399,124 @@ def _apple(acc, c, r, col, ww, mat):
     acc.tube(stalk, [0.004, 0.003], 3, [(0.25, 0.18, 0.08)] * 2, [ww, ww], mat=0, cap_tip=False)
 
 
+def _cluster_card(acc, centre, n, up, size, tint, ww, mat, shade_n):
+    """Cupped square cluster card (4 tris) facing n; custom shading normal = shade_n (crown proxy)."""
+    sd = up.cross(n).normalized()
+    up = n.cross(sd).normalized()
+    h = size * 0.5
+    C = centre - n * (0.12 * size)
+    P_ = [centre - sd * h - up * h, centre + sd * h - up * h, centre + sd * h + up * h, centre - sd * h + up * h]
+    uvs = [(0, 0), (1, 0), (1, 1), (0, 1)]
+    ids = [acc.vert(q, tint, ww) for q in P_]
+    ci = acc.vert(C, tuple(x * 0.85 for x in tint), ww)
+    for i in range(4):
+        j = (i + 1) % 4
+        acc.face((ids[i], ids[j], ci), mat, uv=[uvs[i], uvs[j], (0.5, 0.5)])
+    for vi in ids + [ci]:
+        acc.vn[vi] = shade_n
+
+
+def _lobed_crown(acc, P, branches, wwf, rng, stats, seed, preset):
+    """TREE-L3: crown = union of ellipsoid lobes grown around the sub-trees of the lobe_depth
+    branches; cluster cards only on the outer shell of the union (+ a sparse dark inner fill),
+    facing the lobe normal, shaded with a blended lobe/crown normal (normal transfer)."""
+    terms = [b for b in branches if b[2] == P["depth"]]
+    seeds = [b[0][-1] for b in branches if b[2] == P["lobe_depth"]]
+    centres = []
+    for q in seeds:  # greedy merge of nearby sub-tree ends
+        for c in centres:
+            if (c[0] / c[1] - q).length < P["lobe_merge"]:
+                c[0] += q
+                c[1] += 1
+                break
+        else:
+            centres.append([q.copy(), 1])
+    centres = [c[0] / c[1] for c in centres]
+    groups = {i: [] for i in range(len(centres))}
+    for b in terms:
+        tp = b[0][-1]
+        i = min(range(len(centres)), key=lambda k: (centres[k] - tp).length)
+        groups[i].append(tp)
+    lobes = []
+    for i, c in enumerate(centres):
+        pts = groups[i] or [c]
+        cc = sum(pts, Vector()) / len(pts)
+        cc = cc.lerp(c, 0.3)
+        r = max((p - cc).length for p in pts) * 0.8 + P["lobe_pad"]
+        lobes.append((cc, max(0.55, min(2.1, r)), P["lobe_zscale"]))
+    stats["lobes"] = len(lobes)
+    crown_c = sum((l[0] for l in lobes), Vector()) / len(lobes)
+    top = max(l[0].z + l[1] * l[2] for l in lobes)
+
+    def inside_other(q, skip):
+        for j, (c, r, zs) in enumerate(lobes):
+            if j == skip:
+                continue
+            d = q - c
+            if (d.x / r) ** 2 + (d.y / r) ** 2 + (d.z / (r * zs)) ** 2 < 0.72:
+                return True
+        return False
+    golden = math.pi * (3 - math.sqrt(5))
+    lo_t, hi_t = P["tint"]
+    for li, (c, r, zs) in enumerate(lobes):
+        area = 4 * math.pi * r * r * (0.5 + 0.5 * zs)
+        n = int(area * P["card_density"])
+        for k in range(n):
+            zz = 1 - 2 * (k + rng.random()) / n
+            rad = math.sqrt(max(0.0, 1 - zz * zz))
+            th = golden * k + rng.uniform(-0.2, 0.2)
+            dvec = Vector((math.cos(th) * rad, math.sin(th) * rad, zz))
+            if dvec.z < -0.45 and rng.random() < 0.35:
+                continue
+            q = c + Vector((dvec.x * r, dvec.y * r, dvec.z * r * zs)) * rng.uniform(0.82, 1.0)
+            if q.z < P["bare_below"] or inside_other(q, li):
+                continue
+            nl = Vector((dvec.x / r, dvec.y / r, dvec.z / (r * zs))).normalized()
+            ncrown = (q - crown_c).normalized()
+            shade = (nl * 0.55 + ncrown * 0.45).normalized()
+            face = (nl + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1))) * 0.3).normalized()
+            upv = Matrix.Rotation(rng.uniform(-0.7, 0.7), 3, face) @ (UP - face * face.dot(UP) if abs(face.z) < 0.97 else Vector((0, 1, 0)))
+            lt = 0.5 + 0.5 * shade.z
+            tv = lo_t + (hi_t - lo_t) * lt
+            warm = max(0.0, shade.z) * 0.12
+            hue = rng.uniform(-0.05, 0.05)
+            tint = (tv * (1 + warm + hue), tv * (1 + warm * 0.6), tv * (1 - warm * 1.4 - hue))
+            ww = min(1.0, (q.z / top) ** 1.2 + 0.1)
+            _cluster_card(acc, q, face, upv.normalized(), rng.uniform(*P["card_size"]), tint, ww, 1, shade)
+            stats["leaf_cards"] += 1
+        # sparse inner fill: dark-green (not black) depth so gaps never show a void
+        for k in range(int(n * 0.18)):
+            dvec = Vector((rng.gauss(0, 1), rng.gauss(0, 1), rng.gauss(0, 1))).normalized()
+            q = c + Vector((dvec.x * r, dvec.y * r, dvec.z * r * zs)) * rng.uniform(0.45, 0.7)
+            if q.z < P["bare_below"]:
+                continue
+            face = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.2, 1))).normalized()
+            tv = lo_t * 0.85
+            _cluster_card(acc, q, face, _perp(face), rng.uniform(*P["card_size"]), (tv, tv, tv * 0.95),
+                          min(1.0, (q.z / top) ** 1.2 + 0.05), 1, (q - crown_c).normalized())
+            stats["leaf_cards"] += 1
+    # fruit clusters on the outer shell (apple), readable at 96 px
+    if P["apples"]:
+        ap = new_rng(seed, "apples:" + preset)
+        for k in range(P["apples"] // 3):
+            c, r, zs = lobes[ap.randrange(len(lobes))]
+            dvec = Vector((ap.uniform(-1, 1), ap.uniform(-1, 1), ap.uniform(-0.7, 0.35))).normalized()
+            q = c + Vector((dvec.x * r, dvec.y * r, dvec.z * r * zs)) * 0.97
+            if q.z < P["bare_below"] - 0.2:
+                continue
+            base = (0.66, 0.05, 0.035) if ap.random() < 0.8 else (0.72, 0.42, 0.06)
+            for m in range(ap.randint(2, 4)):
+                off = Vector((ap.uniform(-1, 1), ap.uniform(-1, 1), ap.uniform(-1, 0.3))) * 0.07
+                rr = ap.uniform(0.045, 0.06)
+                _apple(acc, q + dvec * 0.06 + off, rr, jitter_col(ap, base, 0.1), min(1.0, (q.z / top) ** 1.2 + 0.1), 2)
+                stats["apples"] += 1
+
+
 def build_tree(seed, preset="deciduous"):
     P = TREE_PRESETS[preset]
     rng = new_rng(seed, "tree:" + preset)
     acc = MeshAcc()
-    stats = {"branches": 0, "leaf_cards": 0, "apples": 0, "max_depth": P["depth"], "leaf_mode": "alpha_spray_cards", "leaf_texture": P["tex"]}
+    stats = {"branches": 0, "leaf_cards": 0, "apples": 0, "lobes": 0, "max_depth": P["depth"], "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer", "leaf_texture": P["tex"]}
     bark = P["bark"]
     # first pass: collect branch skeletons (so we can normalise wind weights by path length)
     branches = []  # (pts, radii, depth, path0)
@@ -245,19 +584,12 @@ def build_tree(seed, preset="deciduous"):
         return min(1.0, (path / max_path)) ** 1.6
 
     leaf_rng = new_rng(seed, "leaves:" + preset)
-    crown_c = Vector((0, 0, 0))
-    tips = [b[0][-1] for b in branches if b[2] >= P["depth"] - 1]
-    for tp in tips:
-        crown_c += tp
-    crown_c /= max(1, len(tips))
-    crown_r = max((tp - crown_c).length for tp in tips) if tips else 1.0
     for pts, radii, depth, path0, step in branches:
         stats["branches"] += 1
         sides = max(3, P["sides0"] - depth * 3) if depth < 3 else 3
         cols, wws = [], []
         rj = []
         for i, p in enumerate(pts):
-            # bark: darker at base, a touch of green/lichen on upper sides
             sh = 0.8 + 0.25 * min(1.0, p.z / 3.0)
             cols.append(jitter_col(leaf_rng, tuple(c * sh for c in bark), 0.06))
             wws.append(wwf(path0 + step * i))
@@ -265,51 +597,10 @@ def build_tree(seed, preset="deciduous"):
                        for s in range(sides)])
         rr = list(radii)
         if depth == 0:
-            # root flare
             for i in range(min(3, len(rr))):
                 rr[i] *= 1.0 + 0.55 * (1 - i / 3.0) ** 2
         acc.tube(pts, rr, sides, cols, wws, mat=0, cap_tip=depth >= 2, rjit=rj)
-        # leaf-spray alpha cards along the outer two orders (method TREE-L2; single-leaf
-        # geometry TREE-L1 gave a see-through crown: 1 self-review FAIL, see attempt ledger)
-        if depth >= P["depth"] - 2:
-            length = step * (len(pts) - 1)
-            dens = {P["depth"]: 1.0, P["depth"] - 1: 0.7}.get(depth, 0.3)
-            ncard = max(1, int(length / P["card_spacing"] * dens))
-            for li in range(ncard):
-                t = leaf_rng.uniform(0.2, 1.0) if li else 1.0
-                fi = t * (len(pts) - 1)
-                i0 = min(len(pts) - 2, int(fi))
-                a = pts[i0].lerp(pts[i0 + 1], fi - i0)
-                bd = (pts[i0 + 1] - pts[i0]).normalized()
-                rel = (a - crown_c)
-                outw = rel.normalized() if rel.length > 1e-3 else UP
-                roll = Matrix.Rotation(leaf_rng.uniform(0, math.tau), 3, bd) @ _perp(bd)
-                # attempt 2: sprays follow the twig and lift upward; only a small outward component
-                # (attempt 1 pointed cards radially -> spiky frond silhouette)
-                up = (bd * 0.6 + UP * 0.55 + roll * 0.45 + outw * 0.2).normalized()
-                nrm = (UP * 0.7 + outw * 0.5 + roll * 0.3).normalized()
-                lightf = max(0.0, min(1.0, 0.35 + 0.65 * rel.length / max(0.01, crown_r))) * \
-                    (0.8 + 0.2 * max(-1.0, min(1.0, rel.z / max(0.01, crown_r))))
-                tv = P["tint_in"] + (P["tint_out"] - P["tint_in"]) * lightf
-                hue = leaf_rng.uniform(-0.06, 0.06)
-                tint = (tv * (1 + hue), tv, tv * (1 - hue))
-                ww = min(1.0, wwf(path0 + step * fi) + 0.08)
-                _leaf_card(acc, a, up, nrm, leaf_rng.uniform(*P["card_size"]), tint, ww, 1)
-                stats["leaf_cards"] += 1
-    # apples hang beneath fruiting wood
-    if P["apples"]:
-        ap_rng = new_rng(seed, "apples")
-        fruiting = [b for b in branches if b[2] >= P["depth"] - 1]
-        for k in range(P["apples"]):
-            pts, radii, depth, path0, step = ap_rng.choice(fruiting)
-            fi = ap_rng.uniform(0.3, 0.95) * (len(pts) - 1)
-            i0 = min(len(pts) - 2, int(fi))
-            a = pts[i0].lerp(pts[i0 + 1], fi - i0)
-            r = ap_rng.uniform(0.035, 0.045)
-            base = (0.62, 0.06, 0.04) if ap_rng.random() < 0.75 else (0.70, 0.45, 0.08)
-            _apple(acc, a + Vector((0, 0, -r * 1.3)), r, jitter_col(ap_rng, base, 0.12),
-                   min(1.0, wwf(path0 + step * fi) + 0.05), 2)
-            stats["apples"] += 1
+    _lobed_crown(acc, P, branches, wwf, leaf_rng, stats, seed, preset)
     # surface roots (buttress) to seat the trunk
     rr_rng = new_rng(seed, "roots")
     for k in range(5):
@@ -327,16 +618,19 @@ def build_tree(seed, preset="deciduous"):
 GRASS_PRESETS = {
     # short dense tuft (village verge)
     "tuft_short": dict(tillers=(4, 6), blades=(14, 20), L=(0.12, 0.34), w=(0.006, 0.011), spread=0.07,
-                       droop=0.45, seedheads=0, dry=0.12, base=(0.035, 0.07, 0.018), tip=(0.26, 0.40, 0.10)),
+                       droop=0.45, seedheads=0, dry=0.12, base=(0.03, 0.07, 0.015), tip=(0.36, 0.52, 0.10)),
     # meadow clump with a few seed stems
     "meadow": dict(tillers=(5, 7), blades=(16, 24), L=(0.16, 0.55), w=(0.006, 0.012), spread=0.10,
-                   droop=0.4, seedheads=5, dry=0.15, base=(0.03, 0.065, 0.016), tip=(0.30, 0.42, 0.12)),
+                   droop=0.4, seedheads=5, dry=0.15, base=(0.03, 0.065, 0.014), tip=(0.42, 0.54, 0.12)),
     # tall lax clump that flops over (field margins)
     "tall_lax": dict(tillers=(3, 5), blades=(18, 26), L=(0.30, 0.80), w=(0.007, 0.013), spread=0.08,
-                     droop=0.55, seedheads=3, dry=0.2, base=(0.03, 0.06, 0.015), tip=(0.34, 0.44, 0.14)),
+                     droop=0.4, seedheads=3, dry=0.2, base=(0.03, 0.06, 0.014), tip=(0.46, 0.52, 0.14)),
     # SW coastal dune grass: stiff, blue-grey, rolled leaves
     "coastal_dune": dict(tillers=(4, 6), blades=(14, 20), L=(0.25, 0.62), w=(0.004, 0.007), spread=0.12,
                          droop=0.25, seedheads=4, dry=0.25, base=(0.07, 0.09, 0.06), tip=(0.40, 0.46, 0.33)),
+    # lush arching bank sedge (east river banks, ditches)
+    "sedge": dict(tillers=(4, 6), blades=(14, 20), L=(0.35, 0.75), w=(0.009, 0.015), spread=0.1,
+                  droop=0.5, seedheads=2, dry=0.08, base=(0.025, 0.075, 0.015), tip=(0.30, 0.50, 0.08)),
     # riverside reeds / rush with cattail heads (east river banks)
     "reed": dict(tillers=(3, 4), blades=(8, 12), L=(0.6, 1.25), w=(0.007, 0.012), spread=0.09,
                  droop=0.3, seedheads=0, cattails=4, dry=0.18, base=(0.05, 0.08, 0.03), tip=(0.30, 0.38, 0.14)),
@@ -354,7 +648,8 @@ def _blade(acc, rng, base, lean, L, w, droop, col_b, col_t, ww_scale, mat=0, nse
     roll = rng.uniform(-0.6, 0.6)
     # attempt 2 (ECO-G1): clamp sag so tips keep >= ~40% of their height (attempt 1 blades
     # collapsed onto the ground and vanished from the game camera)
-    sag = min(droop * (L / 0.5) ** 1.5, 0.6 * max(0.2, d0.z))
+    # ECO-G2: droop capped by height so the tip keeps >= ~half of its upright height
+    sag = min(droop * (L / 0.5) ** 1.5, 0.5 * max(0.2, d0.z))
     pts, widths, sides, folds, cols, wws = [], [], [], [], [], []
     prev = None
     for i in range(nseg + 1):
@@ -386,20 +681,13 @@ def build_grass(seed, preset="meadow"):
     stats = {"tillers": nt, "blades": 0, "seed_stems": 0, "dry_blades": 0}
     clump_lean = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.25
     for ti in range(nt):
-        # off-centre tillers (not a single radial disc: VEG-F1 stopped)
+        # off-centre tillers (not a single radial disc: VEG-F1 stopped); ECO-G2 packs them
+        # tighter (0.6x) so they fuse over the basal ring into one silhouette
         a = rng.uniform(0, math.tau)
-        r = P["spread"] * (0.35 + 0.65 * rng.random())
+        r = P["spread"] * 0.6 * (0.35 + 0.65 * rng.random())
         tb = Vector((math.cos(a) * r, math.sin(a) * r, 0))
         tlean = (UP + Vector((math.cos(a), math.sin(a), 0)) * rng.uniform(0.15, 0.45) + clump_lean).normalized()
         nb = int(rng.randint(*P["blades"]) * 1.8) // max(1, nt // 3)
-        # basal sheath layer: short, wide, upright, dark leaves that give the clump a solid core
-        for si in range(rng.randint(6, 9)):
-            phi = si * 2.39996
-            lean = (UP + Vector((math.cos(phi), math.sin(phi), 0)) * rng.uniform(0.1, 0.35)).normalized()
-            Ls = rng.uniform(0.05, 0.10) * (Lmax / 0.5) ** 0.5
-            _blade(acc, rng, tb, lean, Ls, P["w"][1] * 1.4, 0.1, tuple(c * 0.9 for c in P["base"]),
-                   lerp(P["base"], P["tip"], 0.55), 0.15, nseg=3)
-            stats["sheaths"] = stats.get("sheaths", 0) + 1
         hue = rng.uniform(-0.08, 0.08)
         for bi in range(nb):
             # skewed height: many short, few tall
@@ -419,6 +707,19 @@ def build_grass(seed, preset="meadow"):
             _blade(acc, rng, tb + off, lean, L, rng.uniform(*P["w"]) * 1.3 * (1.2 if dry else 1.0),
                    P["droop"] * rng.uniform(0.7, 1.3), cb, ct, (L / Lmax) ** 0.5)
             stats["blades"] += 1
+    # ECO-G2 fused basal mass: a dense ring of short, wide, outward-arching blades around the clump
+    # crown so separate tillers read as one tuft (G2 review 01: tillers separated into tufts)
+    Lmean = 0.5 * (P["L"][0] + P["L"][1])
+    nring = rng.randint(44, 60)
+    for k in range(nring):
+        phi = math.tau * k / nring + rng.uniform(-0.08, 0.08)
+        rr = P["spread"] * rng.uniform(0.2, 0.55)
+        b0 = Vector((math.cos(phi) * rr, math.sin(phi) * rr, 0))
+        lean = (UP + Vector((math.cos(phi), math.sin(phi), 0)) * rng.uniform(0.45, 0.9)).normalized()
+        Lr = Lmean * rng.uniform(0.35, 0.6)
+        _blade(acc, rng, b0, lean, Lr, P["w"][1] * 1.6, 0.25, P["base"], lerp(P["base"], P["tip"], 0.6),
+               0.3 * (Lr / Lmax) ** 0.5, nseg=4)
+        stats["basal_ring"] = stats.get("basal_ring", 0) + 1
     # flowering stems with open panicle of spikelets
     for k in range(P["seedheads"]):
         a = rng.uniform(0, math.tau)
@@ -453,13 +754,21 @@ def build_grass(seed, preset="meadow"):
         hp = [hb.lerp(ht, j / 4) for j in range(5)]
         acc.tube(hp, [0.008, 0.016, 0.017, 0.016, 0.008], 6, [(0.24, 0.13, 0.06)] * 5, [0.9, 0.93, 0.95, 0.97, 1.0])
         stats["seed_stems"] += 1
-    stats["height_m"] = round(max(v[2] for v in acc.v), 3)
+    # ECO-G2 clump-level AO: darker low core, light warm crown (applied to all clump vertices)
+    hmax = max(v[2] for v in acc.v)
+    for i, v in enumerate(acc.v):
+        rad = math.hypot(v[0], v[1]) / max(0.01, P["spread"] * 1.5)
+        ao = 0.45 + 0.55 * min(1.0, max(0.0, v[2]) / (0.45 * hmax)) ** 0.7 * (0.75 + 0.25 * min(1.0, rad))
+        c = acc.col[i]
+        acc.col[i] = (c[0] * ao, c[1] * ao, c[2] * ao, 1.0)
+    stats["height_m"] = round(hmax, 3)
+    stats["method"] = "ECO-G2 fused basal ring + tillers + clump AO"
     return acc, stats
 
 
 # =============================================================================== WHEAT FIELD (seeded scatter)
 def _wheat_stalk(acc, rng, base, H, ripe):
-    lean = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.06
+    lean = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * (0.06 if rng.random() > 0.06 else 0.55)  # 6% lodged
     d = (UP + lean).normalized()
     nod = rng.uniform(0.02, 0.07)  # heavy ear nods
     nseg = 5
@@ -469,21 +778,21 @@ def _wheat_stalk(acc, rng, base, H, ripe):
         p = base + d * H * t
         p.x += nod * t ** 3
         pts.append(p)
-    stem_c = lerp((0.30, 0.36, 0.10), (0.68, 0.55, 0.26), ripe)
+    stem_c = lerp((0.36, 0.42, 0.12), (0.80, 0.58, 0.20), ripe)
     acc.tube(pts, [0.0032, 0.003, 0.0028, 0.0026, 0.0024, 0.002], 3,
              [jitter_col(rng, lerp(tuple(c * 0.7 for c in stem_c), stem_c, i / nseg), 0.05) for i in range(nseg + 1)],
              [(i / nseg) ** 1.5 for i in range(nseg + 1)], cap_tip=False)
     # ear: spindle with alternating grain bulges
     top = pts[-1]
     ed = (pts[-1] - pts[-2]).normalized()
-    eL = rng.uniform(0.075, 0.1)
+    eL = rng.uniform(0.09, 0.12)
     epts = [top + ed * eL * j / 8 for j in range(9)]
-    erad = [0.0045 + 0.0035 * math.sin(math.pi * min(1, j / 7.0)) * (1.0 if j % 2 == 0 else 0.82) for j in range(9)]
+    erad = [0.006 + 0.0045 * math.sin(math.pi * min(1, j / 7.0)) * (1.0 if j % 2 == 0 else 0.8) for j in range(9)]
     erad[-1] = 0.001
-    ear_c = lerp((0.36, 0.42, 0.13), (0.78, 0.60, 0.27), ripe)
+    ear_c = lerp((0.42, 0.48, 0.14), (0.88, 0.60, 0.19), ripe)
     acc.tube(epts, erad, 4, [jitter_col(rng, ear_c, 0.08)] * 9, [1.0] * 9, cap_tip=True)
     # awns: thin slivers fanning up from the ear
-    awn_c = lerp((0.42, 0.46, 0.18), (0.86, 0.72, 0.40), ripe)
+    awn_c = lerp((0.46, 0.50, 0.18), (0.94, 0.76, 0.40), ripe)
     for k in range(4):
         q = epts[2 + k * 2 if 2 + k * 2 < 9 else 8]
         out = Matrix.Rotation(k * 1.9 + rng.uniform(-0.3, 0.3), 3, ed) @ _perp(ed)
@@ -515,9 +824,11 @@ def build_wheat_patch(seed, size=(3.2, 2.0), density=110.0):
             x = -sx / 2 + (ix + rng.uniform(0.1, 0.9)) * cell
             y = -sy / 2 + (iy + 0.5) * cell + rng.uniform(-0.25, 0.25) * cell
             edge = min(x + sx / 2, sx / 2 - x, y + sy / 2, sy / 2 - y)
+            # irregular, soft field boundary (not a hard rectangle)
+            edge += 0.12 * math.sin(x * 3.1 + y * 1.7) + 0.07 * math.sin(x * 7.3 - y * 5.1) - 0.1
             if edge < 0.0:
                 continue
-            edgef = min(1.0, edge / 0.35)
+            edgef = min(1.0, edge / 0.45)
             if rng.random() > 0.55 + 0.45 * edgef:
                 continue
             H = rng.gauss(0.92, 0.07) * (0.82 + 0.18 * edgef)
@@ -536,19 +847,21 @@ def _soil_bed(acc, sx, sy, rows, rng):
         for j in range(ny + 1):
             x = -sx / 2 + sx * i / nx
             y = -sy / 2 + sy * j / ny
-            ridge = 0.5 + 0.5 * math.cos(math.tau * (y + sy / 2) / (sy / rows))
-            z = 0.06 * ridge ** 1.5 + 0.008 * math.sin(x * 23.1 + y * 7.7) + rng.uniform(-0.004, 0.004)
-            edge = min(1.0, min(x + sx / 2, sx / 2 - x) / 0.25)
-            z *= edge
-            c = lerp((0.10, 0.065, 0.04), (0.20, 0.14, 0.09), ridge * 0.7 + rng.uniform(0, 0.3))
+            wob = 0.05 * math.sin(x * 1.9 + j * 0.0)  # rows are hand-dug: slight wander
+            ridge = 0.5 + 0.5 * math.cos(math.tau * (y + wob + sy / 2) / (sy / rows))
+            z = 0.09 * ridge ** 1.5 + 0.012 * math.sin(x * 23.1 + y * 7.7) + rng.uniform(-0.008, 0.008)
+            edge = min(1.0, min(x + sx / 2, sx / 2 - x, y + sy / 2, sy / 2 - y) / 0.3)
+            z = z * edge - 0.02 * (1 - edge)
+            c = lerp((0.09, 0.055, 0.035), (0.21, 0.145, 0.09), ridge * 0.7 + rng.uniform(0, 0.3))
+            c = lerp((0.10, 0.18, 0.04), c, edge ** 0.5)  # blend soil into turf at the bed edge
             vid[i, j] = acc.vert((x, y, z), c, 0.0)
     for i in range(nx):
         for j in range(ny):
             acc.face((vid[i, j], vid[i + 1, j], vid[i + 1, j + 1], vid[i, j + 1]), 0)
 
 
-def _cabbage(acc, rng, c):
-    head_r = rng.uniform(0.07, 0.095)
+def _cabbage(acc, rng, c, lettuce=False):
+    head_r = rng.uniform(0.06, 0.11) * (0.55 if lettuce else 1.0)
     # inner head: lumpy sphere
     rings, segs = 6, 10
     rows = []
@@ -574,7 +887,7 @@ def _cabbage(acc, rng, c):
         out = Vector((math.cos(a), math.sin(a), 0))
         side = out.cross(UP)
         grid = {}
-        col = jitter_col(rng, (0.16, 0.30, 0.17), 0.12)
+        col = jitter_col(rng, (0.30, 0.48, 0.14) if lettuce else (0.16, 0.30, 0.17), 0.12)
         for u in range(5):
             for v in range(4):
                 s = (v / 3 - 0.5)
@@ -618,59 +931,71 @@ def build_vegetable_rows(seed, size=(3.0, 2.0), rows=5):
     _soil_bed(acc, size[0], size[1], rows, rng)
     soil_faces = len(acc.f)
     pitch = size[1] / rows
-    counts = {"cabbage": 0, "carrot": 0}
+    counts = {"cabbage": 0, "carrot": 0, "lettuce": 0, "weeds": 0}
+    crops = ["cabbage", "carrot", "lettuce", "carrot", "cabbage"]
     for r in range(rows):
         y = -size[1] / 2 + pitch * (r + 0.0) + 0.0
         y = -size[1] / 2 + pitch * r + pitch * 0.0
         yc = -size[1] / 2 + pitch * r  # ridge crest (cos maximum)
-        crop = "cabbage" if r % 2 == 0 else "carrot"
-        step = 0.42 if crop == "cabbage" else 0.12
-        x = -size[0] / 2 + 0.25
-        while x < size[0] / 2 - 0.25:
-            if rng.random() > 0.06:  # a few gaps (harvested / failed)
-                c = Vector((x + rng.uniform(-0.03, 0.03), yc + rng.uniform(-0.03, 0.03) + (pitch if r == 0 else 0) * 0, 0.055))
-                if crop == "cabbage":
-                    _cabbage(acc, rng, c)
+        crop = crops[r % len(crops)]
+        step = {"cabbage": 0.42, "carrot": 0.12, "lettuce": 0.3}[crop]
+        x = -size[0] / 2 + 0.35 + rng.uniform(0, 0.1)
+        while x < size[0] / 2 - 0.35:
+            if rng.random() > 0.1:  # gaps (harvested / failed)
+                wob = 0.05 * math.sin(x * 1.9)
+                c = Vector((x + rng.uniform(-0.05, 0.05), yc - wob + rng.uniform(-0.05, 0.05), 0.08))
+                if crop in ("cabbage", "lettuce"):
+                    _cabbage(acc, rng, c, lettuce=(crop == "lettuce"))
                 else:
                     _carrot_top(acc, rng, c)
                 counts[crop] += 1
-            x += step * rng.uniform(0.9, 1.1)
+            x += step * rng.uniform(0.8, 1.25)
+    # weeds / edge grass around the bed border
+    for k in range(160):
+        side = rng.randrange(4)
+        t = rng.uniform(-0.5, 0.5)
+        x = t * size[0] if side < 2 else (-0.5 if side == 2 else 0.5) * size[0] + rng.uniform(-0.15, 0.15)
+        y = (-0.5 if side == 0 else 0.5) * size[1] + rng.uniform(-0.15, 0.15) if side < 2 else t * size[1]
+        a = rng.uniform(0, math.tau)
+        _blade(acc, rng, Vector((x, y, 0)), (UP + Vector((math.cos(a), math.sin(a), 0)) * 0.5).normalized(),
+               rng.uniform(0.08, 0.2), 0.006, 0.4, (0.03, 0.07, 0.015), (0.32, 0.48, 0.10), 0.6, nseg=3)
+        counts["weeds"] += 1
     for i in range(soil_faces):
-        acc.mi[i] = 1  # soil material slot
+        acc.mi[i] = 1  # soil material slot (crops/weeds use slot 0)
     return acc, {"rows": rows, **counts, "size_m": list(size)}
 
 
 # =============================================================================== FLOWERS
 def _flower(acc, rng, base, kind):
-    H = {"daisy": rng.uniform(0.22, 0.34), "poppy": rng.uniform(0.35, 0.5), "spike": rng.uniform(0.35, 0.55)}[kind]
+    H = {"daisy": rng.uniform(0.25, 0.38), "poppy": rng.uniform(0.35, 0.5), "spike": rng.uniform(0.45, 0.7)}[kind]
     lean = (UP + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.15).normalized()
     pts = [base + lean * H * i / 5 for i in range(6)]
     for i, p in enumerate(pts):
         p.x += 0.02 * (i / 5) ** 2
     acc.tube(pts, [0.0025] * 6, 3, [(0.16, 0.30, 0.09)] * 6, [(i / 5) ** 1.5 for i in range(6)], cap_tip=False)
-    for k in range(2):
-        a = rng.uniform(0, math.tau)
-        _blade(acc, rng, base + UP * 0.01, (UP * 0.4 + Vector((math.cos(a), math.sin(a), 0))).normalized(),
-               rng.uniform(0.08, 0.14), 0.008, 0.6, (0.10, 0.22, 0.06), (0.20, 0.36, 0.10), 0.4, nseg=3)
+    for k in range(5):  # basal leaf rosette: flowers grow out of foliage, not bare ground
+        a = math.tau * k / 5 + rng.uniform(-0.3, 0.3)
+        _blade(acc, rng, base + UP * 0.01, (UP * 0.5 + Vector((math.cos(a), math.sin(a), 0))).normalized(),
+               rng.uniform(0.10, 0.18), 0.014, 0.5, (0.04, 0.12, 0.03), (0.22, 0.42, 0.09), 0.4, nseg=3)
     top = pts[-1]
     fd = (pts[-1] - pts[-2]).normalized()
     if kind == "spike":
-        col = jitter_col(rng, (0.30, 0.18, 0.55), 0.15)
-        for s in range(14):
-            t = s / 13
-            q = top + fd * (t * 0.12)
+        col = jitter_col(rng, (0.36, 0.16, 0.62), 0.15)
+        for s in range(26):
+            t = s / 25
+            q = top + fd * (t * 0.2 - 0.05)
             a = s * 2.4
             out = Vector((math.cos(a), math.sin(a), 0))
-            r = 0.016 * (1 - 0.7 * t)
+            r = 0.03 * (1 - 0.65 * t)
             i0 = acc.vert(q, col, 1.0)
             i1 = acc.vert(q + out * r + fd * 0.01, tuple(min(1, x * 1.25) for x in col), 1.0)
             i2 = acc.vert(q + Matrix.Rotation(0.9, 3, UP) @ out * r + fd * 0.006, col, 1.0)
-            i3 = acc.vert(q + fd * 0.014, col, 1.0)
+            i3 = acc.vert(q + fd * 0.022, col, 1.0)
             acc.face((i0, i1, i3), 0)
             acc.face((i0, i3, i2), 0)
         return
     if kind == "daisy":
-        np_, pl, pw, cup = rng.randint(11, 14), 0.03, 0.0075, -0.05
+        np_, pl, pw, cup = rng.randint(13, 16), 0.04, 0.009, -0.05
         pc, dc, dr = (0.92, 0.92, 0.86), (0.80, 0.58, 0.06), 0.009
     else:
         np_, pl, pw, cup = 5, 0.045, 0.028, 0.55
@@ -705,87 +1030,143 @@ def build_flower_patch(seed, size=(2.4, 1.4), n_clusters=7):
         # clumped colonies, each dominated by one kind (not uniform confetti)
         cx = rng.uniform(-size[0] / 2 + 0.2, size[0] / 2 - 0.2)
         cy = rng.uniform(-size[1] / 2 + 0.2, size[1] / 2 - 0.2)
-        main = kinds[c % 3]
-        for k in range(rng.randint(18, 28)):
+        main = ["spike", "daisy", "spike", "poppy", "daisy", "spike", "poppy"][c % 7]
+        for k in range(rng.randint(22, 32)):
             r = abs(rng.gauss(0, 0.18))
             a = rng.uniform(0, math.tau)
             kind = main if rng.random() < 0.8 else rng.choice(kinds)
             _flower(acc, rng, Vector((cx + math.cos(a) * r, cy + math.sin(a) * r, 0)), kind)
             counts[kind] += 1
     # interstitial short grass blades so flowers sit in turf
-    for k in range(260):
-        b = Vector((rng.uniform(-size[0] / 2, size[0] / 2), rng.uniform(-size[1] / 2, size[1] / 2), 0))
+    for k in range(900):  # lush grass bed the flowers grow in (soft irregular boundary)
+        while True:
+            b = Vector((rng.uniform(-size[0] / 2, size[0] / 2), rng.uniform(-size[1] / 2, size[1] / 2), 0))
+            e = (b.x / (size[0] / 2)) ** 2 + (b.y / (size[1] / 2)) ** 2
+            if e < 1.0 - 0.25 * rng.random():
+                break
         a = rng.uniform(0, math.tau)
         _blade(acc, rng, b, (UP + Vector((math.cos(a), math.sin(a), 0)) * 0.4).normalized(),
-               rng.uniform(0.06, 0.16), 0.004, 0.5, (0.04, 0.08, 0.02), (0.24, 0.38, 0.10), 0.6, nseg=3)
-    return acc, {**counts, "turf_blades": 260, "size_m": list(size)}
+               rng.uniform(0.08, 0.22), 0.007, 0.45, (0.03, 0.08, 0.015), (0.34, 0.50, 0.10), 0.6, nseg=3)
+    return acc, {**counts, "turf_blades": 900, "size_m": list(size)}
 
 
 # =============================================================================== FENCE + HEDGEROW
 def build_fence(seed, length=6.6, post_gap=2.2):
+    """Rough-hewn post-and-rail: irregular 6-sided hewn posts with slanted tops, split rails with
+    an irregular quadrilateral section (~11x7 cm), rail ends seated into the posts (no overhang),
+    dark weathered timber with grey streaks, moss/dirt at the post foot."""
     rng = new_rng(seed, "fence")
     acc = MeshAcc()
     n_posts = int(round(length / post_gap)) + 1
     posts = []
-    wood = (0.30, 0.22, 0.15)
+    wood = (0.15, 0.11, 0.08)
     for i in range(n_posts):
-        x = -length / 2 + i * post_gap + rng.uniform(-0.06, 0.06)
-        lean = Vector((rng.uniform(-0.04, 0.04), rng.uniform(-0.04, 0.04), 1)).normalized()
-        H = rng.uniform(1.02, 1.12)
-        base = Vector((x, 0, -0.05))
-        pts = [base + lean * H * k / 4 for k in range(5)]
-        rj = [[1.0 + 0.12 * math.sin(s * 2.1 + i * 1.7) + rng.uniform(-0.05, 0.05) for s in range(7)] for _ in pts]
-        cols = [jitter_col(rng, tuple(c * (0.75 + 0.06 * k) for c in wood), 0.05) for k in range(5)]
-        acc.tube(pts, [0.07, 0.068, 0.066, 0.064, 0.05], 7, cols, [0] * 5, cap_tip=True, rjit=rj)
-        posts.append(pts)
-    # two split rails per bay, sagging, slightly twisted, overhanging the posts
+        x = -length / 2 + i * post_gap + rng.uniform(-0.08, 0.08)
+        lean = Vector((rng.uniform(-0.07, 0.07), rng.uniform(-0.07, 0.07), 1)).normalized()
+        H = rng.uniform(1.0, 1.25)
+        base = Vector((x, 0, -0.08))
+        pts = [base + lean * H * k / 5 for k in range(6)]
+        pts[-1] = pts[-1] + Vector((0, 0, rng.uniform(-0.04, 0.04)))
+        rj = [[1.0 + 0.18 * math.sin(s * 2.7 + i * 1.3) + rng.uniform(-0.08, 0.08) for s in range(6)] for _ in pts]
+        cols = []
+        for k in range(6):
+            c = jitter_col(rng, wood, 0.1)
+            if k == 0:
+                c = (0.10, 0.13, 0.05)  # moss / damp soil at the foot
+            elif rng.random() < 0.3:
+                c = lerp(c, (0.30, 0.29, 0.26), 0.5)  # silvered weathering streak
+            cols.append(c)
+        acc.tube(pts, [0.085, 0.08, 0.078, 0.076, 0.074, 0.07], 6, cols, [0] * 6, mat=0, cap_tip=False,
+                 cap_base=False, rjit=rj)
+        top = pts[-1]
+        acc.face([acc.vert(top + Vector((math.cos(math.tau * s / 6), math.sin(math.tau * s / 6), 0)) * 0.07,
+                           (0.22, 0.20, 0.16), 0) for s in range(6)], 0)
+        posts.append((pts, H))
     for i in range(n_posts - 1):
-        for hgt in (0.45, 0.88):
-            a = posts[i][0] + (posts[i][-1] - posts[i][0]) * (hgt / 1.07)
-            b = posts[i + 1][0] + (posts[i + 1][-1] - posts[i + 1][0]) * (hgt / 1.07)
-            a = a + Vector((-0.12, 0.075, 0))
-            b = b + Vector((0.12, 0.075, 0))
+        for hgt in (0.42 + rng.uniform(-0.04, 0.04), 0.86 + rng.uniform(-0.04, 0.04)):
+            pa, Ha = posts[i]
+            pb, Hb = posts[i + 1]
+            a = pa[0] + (pa[-1] - pa[0]) * (hgt / Ha) + Vector((0.02, 0, 0))
+            b = pb[0] + (pb[-1] - pb[0]) * (hgt / Hb) - Vector((0.02, 0, 0))
             pts = []
-            for k in range(7):
-                t = k / 6
+            for k in range(8):
+                t = k / 7
                 p = a.lerp(b, t)
-                p.z -= 0.035 * math.sin(math.pi * t)
+                p.z -= 0.03 * math.sin(math.pi * t) + rng.uniform(-0.005, 0.005)
+                p.y += 0.012 * math.sin(t * 5 + i)
                 pts.append(p)
-            rj = [[(1.25 if s in (0, 3) else 0.85) + rng.uniform(-0.06, 0.06) for s in range(6)] for _ in pts]
-            cols = [jitter_col(rng, wood, 0.08) for _ in pts]
-            acc.tube(pts, [0.038] * 7, 6, cols, [0] * 7, cap_tip=False, cap_base=False, rjit=rj)
-    return acc, {"posts": n_posts, "length_m": length}
+            sec = [1.45, 0.75, 1.3, 0.8]  # split (wedge/quad) section
+            rj = [[sec[s] * (1 + rng.uniform(-0.1, 0.1)) for s in range(4)] for _ in pts]
+            cols = [jitter_col(rng, lerp(wood, (0.28, 0.26, 0.22), rng.random() * 0.4), 0.1) for _ in pts]
+            acc.tube(pts, [0.045] * 8, 4, cols, [0] * 8, mat=1, cap_tip=False, cap_base=False, rjit=rj)
+    return acc, {"posts": n_posts, "length_m": length, "rail_section": "split quad ~11x7 cm"}
 
 
-def build_hedgerow(seed, length=4.0, height=1.25, depth=0.9):
+def build_hedgerow(seed, length=4.0, height=1.3, depth=1.0):
+    """Hedge = elongated shell volume with an irregular plan curve, varying height and rounded ends;
+    oak cluster cards on the shell (same palette/shading as trees) + dark inner fill, woody stems kept
+    inside the volume, grass skirt along the base."""
     rng = new_rng(seed, "hedge")
     acc = MeshAcc()
-    leaves = 0
-    stems = 9
-    for s in range(stems):
-        x = -length / 2 + length * (s + 0.5) / stems + rng.uniform(-0.15, 0.15)
-        base = Vector((x, rng.uniform(-0.1, 0.1), 0))
-        for k in range(3):
-            d = (UP + Vector((rng.uniform(-0.6, 0.6), rng.uniform(-0.4, 0.4), 0))).normalized()
-            L = height * rng.uniform(0.6, 0.95)
-            pts = [base + d * L * i / 5 for i in range(6)]
-            acc.tube(pts, [0.02, 0.017, 0.014, 0.01, 0.007, 0.004], 4, [(0.20, 0.16, 0.12)] * 6,
-                     [(i / 5) ** 1.5 * 0.6 for i in range(6)])
-    # foliage volume: irregular hedge profile (noise-modulated top), denser at the surface
-    for k in range(4200):
-        x = rng.uniform(-length / 2, length / 2)
-        top = height * (0.82 + 0.12 * math.sin(x * 2.3 + 1.1) + 0.06 * math.sin(x * 6.1))
-        z = top * (rng.random() ** 0.55)
-        half = depth / 2 * (0.6 + 0.4 * math.sin(math.pi * min(1.0, z / top)))
-        y = rng.choice((-1, 1)) * half * (rng.random() ** 0.35)
-        p = Vector((x, y, z))
-        out = Vector((0, 1 if y > 0 else -1, (z / top - 0.5) * 1.4)).normalized()
-        d = Matrix.Rotation(rng.uniform(0, math.tau), 3, out) @ _perp(out)
-        lightf = min(1.0, z / top) * (0.6 + 0.4 * abs(y) / max(0.01, half))
-        col = jitter_col(rng, lerp((0.05, 0.12, 0.03), (0.16, 0.29, 0.07), lightf), 0.15)
-        _leaf(acc, p, d, out, rng.uniform(0.06, 0.09), 0.045, col, 0.35 + 0.65 * (z / top) ** 1.5, 1)
-        leaves += 1
-    return acc, {"length_m": length, "height_m": height, "leaves": leaves}
+    half_l = length / 2
+    ph = rng.uniform(0, 6)
+
+    def yc(x):
+        return 0.16 * math.sin(x * 0.9 + ph)
+
+    def hx(x):
+        e = max(0.0, 1 - (abs(x) / half_l) ** 4) ** 0.5
+        return height * (0.85 + 0.1 * math.sin(x * 1.7 + ph) + 0.06 * math.sin(x * 4.3)) * e, e
+    cards = 0
+    for s_ in range(9):
+        x = -half_l * 0.75 + 1.5 * half_l * s_ / 8 + rng.uniform(-0.1, 0.1)
+        h, e = hx(x)
+        base = Vector((x, yc(x), 0))
+        for k in range(2):
+            d = (UP + Vector((rng.uniform(-0.3, 0.3), rng.uniform(-0.3, 0.3), 0))).normalized()
+            L = h * rng.uniform(0.45, 0.7)
+            pts = [base + d * L * i / 4 for i in range(5)]
+            acc.tube(pts, [0.025, 0.02, 0.015, 0.01, 0.006], 4, [(0.20, 0.15, 0.10)] * 5, [0.05 * i for i in range(5)])
+    n = int(length * height * 52)
+    for k in range(n):
+        x = rng.uniform(-half_l, half_l)
+        h, e = hx(x)
+        if h < 0.15:
+            continue
+        phi = rng.uniform(-0.15 * math.pi, 1.15 * math.pi)  # cross-section arc from ground to ground
+        wy = depth / 2 * (0.55 + 0.45 * e)
+        rr = rng.uniform(0.85, 1.0)
+        y = math.cos(phi) * wy * rr
+        z = max(0.05, math.sin(phi) * h * rr)
+        # rounded ends: push shell outward along x near the ends
+        xe = x + (math.copysign(0.25 * (1 - e), x) if e < 0.6 else 0.0)
+        q = Vector((xe, yc(x) + y, z))
+        nl = Vector((0.6 * (1 - e) * math.copysign(1, x), math.cos(phi) / wy, math.sin(phi) / max(0.2, h))).normalized()
+        face = (nl + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1))) * 0.3).normalized()
+        upv = (UP - face * face.dot(UP)) if abs(face.z) < 0.97 else Vector((1, 0, 0))
+        upv = Matrix.Rotation(rng.uniform(-0.7, 0.7), 3, face) @ upv
+        lt = 0.5 + 0.5 * nl.z
+        tv = 0.62 + 0.55 * lt * min(1.0, z / (0.6 * height))
+        warm = max(0.0, nl.z) * 0.1
+        tint = (tv * (1 + warm), tv * (1 + warm * 0.6), tv * (1 - warm * 1.4))
+        _cluster_card(acc, q, face, upv.normalized(), rng.uniform(0.42, 0.58), tint,
+                      min(1.0, 0.25 + 0.75 * (z / height) ** 1.5), 1, nl)
+        cards += 1
+    for k in range(int(n * 0.2)):
+        x = rng.uniform(-half_l * 0.85, half_l * 0.85)
+        h, e = hx(x)
+        q = Vector((x, yc(x) + rng.uniform(-0.25, 0.25) * depth, rng.uniform(0.15, 0.7) * h))
+        face = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.3, 1))).normalized()
+        _cluster_card(acc, q, face, _perp(face), 0.5, (0.5, 0.5, 0.48), 0.3, 1, Vector((0, 0, 1)))
+        cards += 1
+    for k in range(220):  # grass skirt: the hedge base sits in long grass
+        x = rng.uniform(-half_l - 0.2, half_l + 0.2)
+        sd = rng.choice((-1, 1))
+        b0 = Vector((x, yc(x) + sd * (depth / 2 * rng.uniform(0.6, 1.05)), 0))
+        a_ = rng.uniform(0, math.tau)
+        _blade(acc, rng, b0, (UP + Vector((math.cos(a_), math.sin(a_), 0)) * 0.5).normalized(),
+               rng.uniform(0.15, 0.4), 0.007, 0.45, (0.03, 0.07, 0.015), (0.38, 0.50, 0.11), 0.7, nseg=4)
+    return acc, {"length_m": length, "height_m": height, "leaf_cards": cards, "method": "cluster-card shell"}
 
 
 # =============================================================================== HAYSTACK
@@ -903,8 +1284,8 @@ def build_chicken(seed):
         ("BALL", (0, 0.135, 0.37), 0.058, None, None),           # neck hackles
         ("BALL", (0, 0.155, 0.415), 0.052, None, None),          # head
     ], 0.011)
-    plum = (0.42, 0.20, 0.08)
-    plum_light = (0.62, 0.36, 0.15)
+    plum = (0.30, 0.12, 0.045)
+    plum_light = (0.50, 0.25, 0.09)
 
     def body_col(co):
         f = max(0.0, min(1.0, (co.z - 0.15) / 0.28))
@@ -978,7 +1359,9 @@ def build_chicken(seed):
             L = 0.035 if a == math.pi else 0.055
             toe = [foot, foot + d * L * 0.6 + Vector((0, 0, -0.006)), foot + d * L + Vector((0, 0, -0.008))]
             acc.tube(toe, [0.006, 0.005, 0.0025], 5, [leg_c] * 3, [0] * 3, cap_tip=True)
-    return acc, {"height_m": round(max(v[2] for v in acc.v), 3), "status_note": "procedural form; no groom/rig"}
+    acc.v = [(x * 0.85, y * 0.85, z * 0.85) for (x, y, z) in acc.v]  # hen ~0.41 m (G2-01: 0.48 too tall)
+    return acc, {"height_m": round(max(v[2] for v in acc.v), 3),
+                 "status_note": "STRUCTURAL_BLOCKOUT_NOT_ART (metaball form; slab wings/tail, no plumage, no rig)"}
 
 
 def build_cow_blockout(seed):
@@ -1002,7 +1385,9 @@ def build_cow_blockout(seed):
     def col(co):
         # black-and-white patches as flat colour fields (blockout read only)
         v = math.sin(co.x * 7 + 1.3) * math.sin(co.y * 4.2) + math.sin(co.z * 5.1 + co.y * 2)
-        return (0.06, 0.05, 0.05) if v > 0.6 else (0.82, 0.80, 0.76)
+        if co.y > 1.3 or (co.z < 0.75 and abs(co.x) < 0.2 and abs(co.y) < 0.6):
+            return (0.80, 0.76, 0.68)  # pale muzzle / belly
+        return (0.32, 0.17, 0.08) if v < 0.9 else (0.80, 0.76, 0.68)  # brown with white patches
     acc.add_mesh(me, Matrix.Identity(4), col, lambda co: 0.0)
     bpy.data.meshes.remove(me)
     for sx in (-1, 1):  # horns
@@ -1011,3 +1396,165 @@ def build_cow_blockout(seed):
     acc.tube([Vector((0, -0.95, 1.12)), Vector((0, -1.05, 0.8)), Vector((0, -1.07, 0.5))], [0.03, 0.02, 0.035], 5,
              [(0.1, 0.1, 0.1)] * 3, [0, 0.2, 0.4])
     return acc, {"height_m": round(max(v[2] for v in acc.v), 3), "status_note": "STRUCTURAL_BLOCKOUT_NOT_ART"}
+
+
+# =============================================================================== ROCKS (river / coastal)
+def _rock(acc, rng, centre, size, squash, kind, subdiv=3):
+    import bmesh
+    from mathutils import noise
+    bm = bmesh.new()
+    bmesh.ops.create_icosphere(bm, subdivisions=subdiv, radius=1.0)
+    off = Vector((rng.uniform(-50, 50), rng.uniform(-50, 50), rng.uniform(-50, 50)))
+    planes = []
+    for k in range(3 if kind == "river" else 5):
+        pn = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.3, 1))).normalized()
+        planes.append((pn, rng.uniform(0.75, 0.95)))
+    vids = {}
+    for vx in bm.verts:
+        n = vx.co.normalized()
+        q = n * 1.3 + off
+        d = 0.0
+        amp, fr = 0.42, 1.0
+        for o in range(5):
+            d += amp * noise.noise(q * fr, noise_basis="PERLIN_ORIGINAL")
+            amp *= 0.48
+            fr *= 2.2
+        # cleavage planes: clamp against 3 random planes for angular river cobbles / boulders
+        for pl in planes:
+            d = min(d, (pl[1] - n.dot(pl[0])) * 1.4)
+        if kind == "coastal":
+            # sedimentary layering: terraced bands + cleaved flat faces
+            z = n.z
+            d += 0.07 * math.sin(z * 14 + noise.noise(q * 0.5) * 2) - 0.05 * abs(math.sin(z * 7))
+            facet = max(abs(n.x), abs(n.y)) ** 6 * 0.25
+            d -= facet
+        r = 1.0 + d
+        p = Vector((n.x * r * size[0], n.y * r * size[1], n.z * r * size[2] * squash))
+        if p.z < -0.15 * size[2]:
+            p.z = -0.15 * size[2] - (p.z + 0.15 * size[2]) * 0.1  # buried flat base
+        top = max(0.0, n.z)
+        if kind == "river":
+            base = (0.17, 0.16, 0.145)
+            wet = (0.05, 0.048, 0.045)
+            moss = (0.10, 0.20, 0.04)
+            c = lerp(wet, base, min(1.0, (p.z + 0.05 * size[2]) / (0.35 * size[2]) + 0.2))
+            mf = max(0.0, top - 0.55) * 2.2 * (0.5 + 0.5 * noise.noise(q * 3.0))
+            c = lerp(c, moss, max(0.0, min(1.0, mf)))
+        else:
+            base = (0.36, 0.33, 0.28)
+            band = 0.85 + 0.15 * math.sin(n.z * 14)
+            c = tuple(x * band for x in base)
+            if n.z < -0.05:
+                c = lerp(c, (0.10, 0.09, 0.08), min(1.0, -n.z * 3))  # wet tide line
+            lich = noise.noise(q * 6.0)
+            if lich > 0.35 and top > 0.2:
+                c = lerp(c, (0.55, 0.50, 0.25), 0.6)  # yellow lichen spots
+            if top > 0.75:
+                c = lerp(c, (0.20, 0.27, 0.10), 0.5)  # thin turf on the top
+        c = jitter_col(rng, c, 0.04)
+        vids[vx.index] = acc.vert(centre + p, c, 0.0)
+    for f in bm.faces:
+        acc.face([vids[v.index] for v in f.verts], 0)
+    bm.free()
+
+
+def build_rock_set(seed, kind="river"):
+    rng = new_rng(seed, "rocks:" + kind)
+    acc = MeshAcc()
+    if kind == "river":
+        spec = [((0, 0, 0), (0.55, 0.42, 0.35), 0.8), ((0.75, 0.25, 0), (0.32, 0.26, 0.24), 0.8),
+                ((-0.6, 0.35, 0), (0.28, 0.24, 0.2), 0.75), ((0.3, -0.55, 0), (0.22, 0.2, 0.16), 0.7),
+                ((-0.25, -0.5, 0), (0.14, 0.12, 0.1), 0.7), ((1.15, -0.2, 0), (0.16, 0.13, 0.11), 0.7),
+                ((-1.0, -0.15, 0), (0.12, 0.1, 0.09), 0.7)]
+        for c, sz, sq in spec:
+            _rock(acc, rng, Vector(c), sz, sq, "river", subdiv=4)
+    else:
+        spec = [((0, 0, 0), (1.6, 1.1, 1.4), 1.0), ((1.9, 0.6, 0), (0.9, 0.8, 1.1), 1.0),
+                ((-1.5, 0.8, 0), (0.8, 0.7, 0.6), 1.0), ((0.9, -1.2, 0), (0.45, 0.4, 0.3), 0.9),
+                ((-0.8, -1.1, 0), (0.3, 0.28, 0.22), 0.9)]
+        for c, sz, sq in spec:
+            _rock(acc, rng, Vector(c), sz, sq, "coastal", subdiv=5 if sz[0] > 0.7 else 4)
+    return acc, {"kind": kind, "rocks": len(spec), "height_m": round(max(v[2] for v in acc.v), 3)}
+
+
+# =============================================================================== RIVER MODULE (water + banks)
+RIVER_LEN, RIVER_W = 14.0, 3.0
+
+
+def river_centre_world(y, x0=0.0, y_scale=1.0, length=RIVER_LEN):
+    """World x of the module centreline at world y (module placed at x0, scaled in y)."""
+    s = y / y_scale + length / 2
+    return x0 + 1.1 * math.sin(s / length * math.pi * 1.4)
+
+
+def _river_centre(s, length):
+    return Vector((1.1 * math.sin(s / length * math.pi * 1.4), s - length / 2, 0))
+
+
+def build_river_water(seed, length=14.0, width=3.0, nu=16, nv=120):
+    """Water surface ribbon following a meandering centreline. Attributes flow_u (m along) and
+    flow_v (-1..1 across) feed LIND_WaterFlow; colour = deep centre / shallow edge."""
+    acc = MeshAcc()
+    fu, fv = [], []
+    grid = {}
+    for j in range(nv + 1):
+        s = length * j / nv
+        c = _river_centre(s, length)
+        t = (_river_centre(min(length, s + 0.05), length) - _river_centre(max(0, s - 0.05), length)).normalized()
+        side = t.cross(UP).normalized()
+        w = width * (1 + 0.12 * math.sin(s * 0.9))
+        for i in range(nu + 1):
+            v = -1 + 2 * i / nu
+            p = c + side * (v * w / 2)
+            p.z = -0.48
+            depth = 1 - v * v
+            col = lerp((0.10, 0.22, 0.22), (0.02, 0.07, 0.09), depth)
+            grid[i, j] = acc.vert(p, col, 0.0)
+            fu.append(s)
+            fv.append(v)
+    for j in range(nv):
+        for i in range(nu):
+            acc.face((grid[i, j], grid[i + 1, j], grid[i + 1, j + 1], grid[i, j + 1]), 0)
+    acc.extra["flow_u"] = fu
+    acc.extra["flow_v"] = fv
+    return acc, {"length_m": length, "width_m": width, "flow_attrs": ["flow_u", "flow_v"]}
+
+
+def build_river_bank(seed, length=14.0, width=3.0, nv=120):
+    """Static channel: submerged bed + sloped muddy banks rising to a grassy top (preview terrain
+    for the module only; WORLD/Codex owns real terrain)."""
+    rng = new_rng(seed, "bank")
+    acc = MeshAcc()
+    # cross-section offsets (fraction of half-width beyond centre) and heights
+    prof = [(o, h - 0.42) for o, h in [(-4.6, 0.42), (-2.4, 0.42), (-1.7, 0.40), (-1.35, 0.28), (-1.1, 0.10), (-1.0, -0.05),
+                                         (-0.7, -0.32), (0.0, -0.45), (0.7, -0.32), (1.0, -0.05), (1.1, 0.10),
+                                         (1.35, 0.28), (1.7, 0.40), (2.4, 0.42), (4.6, 0.42)]]
+    grid = {}
+    for j in range(nv + 1):
+        s = length * j / nv
+        c = _river_centre(s, length)
+        t = (_river_centre(min(length, s + 0.05), length) - _river_centre(max(0, s - 0.05), length)).normalized()
+        side = t.cross(UP).normalized()
+        w = width * (1 + 0.12 * math.sin(s * 0.9))
+        for i, (o, h) in enumerate(prof):
+            ext = o if abs(o) <= 1.0 else math.copysign(1.0 + (abs(o) - 1.0) * (1.6 / w * 2), o)
+            p = c + side * (ext * w / 2)
+            p.z = h + (0.03 * math.sin(s * 2.3 + i) + rng.uniform(-0.01, 0.01)) * (0.0 if abs(o) > 2.3 else 1.0)
+            p.z -= 0.004 if abs(o) > 4.0 else 0.0
+            h += 0.42
+            if h < -0.1:
+                col = lerp((0.12, 0.10, 0.07), (0.20, 0.19, 0.16), rng.random())  # gravel bed
+            elif h < 0.2:
+                col = (0.10, 0.075, 0.05)  # wet mud
+            elif h < 0.35:
+                col = lerp((0.14, 0.12, 0.07), (0.09, 0.18, 0.04), 0.5)
+            else:
+                # blend toward the preview ground tone at the outer edge (no visible seam)
+                col = lerp((0.09, 0.19, 0.04), (0.11, 0.20, 0.045), min(1.0, (abs(o) - 1.7) / 0.7))
+            grid[i, j] = acc.vert(p, col, 0.0)
+    n = len(prof)
+    for j in range(nv):
+        for i in range(n - 1):
+            top = abs(prof[i][0]) >= 2.4 and abs(prof[i + 1][0]) >= 2.4
+            acc.face((grid[i, j], grid[i + 1, j], grid[i + 1, j + 1], grid[i, j + 1]), 1 if top else 0)
+    return acc, {"length_m": length, "status_note": "module-local preview banks; not world terrain"}

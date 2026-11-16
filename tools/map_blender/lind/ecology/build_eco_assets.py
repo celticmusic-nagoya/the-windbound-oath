@@ -30,10 +30,11 @@ PKG = REPO / "assets" / "candidates" / "LIND-ECO-01" / "eco_kit_v1"
 
 def mats():
     return {
-        "bark": L.mat_vcol("M_eco_bark", rough=0.9, noise_mod=0.55, noise_scale=28.0, spec=0.2),
+        "bark": L.mat_vcol("M_eco_bark", rough=0.9, noise_mod=0.8, noise_scale=9.0, spec=0.2, stretch=(4.0, 4.0, 0.35)),
         "leaf": L.mat_vcol("M_eco_leaf", rough=0.55, translucent=0.3, spec=0.4),
-        "leafcard": L.mat_leafcard("M_eco_leafcard_broadleaf", str(PKG / "textures" / "leaf_spray_broadleaf.png")),
-        "leafcard_apple": L.mat_leafcard("M_eco_leafcard_apple", str(PKG / "textures" / "leaf_spray_apple.png")),
+        "leafcard": L.mat_leafcard("M_eco_leafcard_oak", str(PKG / "textures" / "leaf_cluster_oak.png")),
+        "leafcard_apple": L.mat_leafcard("M_eco_leafcard_apple", str(PKG / "textures" / "leaf_cluster_apple.png")),
+        "leafcard_beech": L.mat_leafcard("M_eco_leafcard_beech", str(PKG / "textures" / "leaf_cluster_beech.png")),
         "apple": L.mat_vcol("M_eco_apple", rough=0.32, spec=0.55),
         "grass": L.mat_vcol("M_eco_grass", rough=0.6, translucent=0.3, spec=0.35),
         "wheat": L.mat_vcol("M_eco_wheat", rough=0.55, translucent=0.2, spec=0.4),
@@ -41,9 +42,16 @@ def mats():
         "soil": L.mat_vcol("M_eco_soil", rough=0.96, noise_mod=0.6, noise_scale=18.0, spec=0.15),
         "flower": L.mat_vcol("M_eco_flower", rough=0.5, translucent=0.25, spec=0.35),
         "wood": L.mat_vcol("M_eco_wood", rough=0.85, noise_mod=0.7, noise_scale=55.0, spec=0.2),
+        "wood_post": L.mat_vcol("M_eco_wood_post", rough=0.9, noise_mod=0.85, noise_scale=14.0, spec=0.15, stretch=(3.0, 3.0, 0.25)),
+        "wood_rail": L.mat_vcol("M_eco_wood_rail", rough=0.9, noise_mod=0.85, noise_scale=14.0, spec=0.15, stretch=(0.2, 3.0, 3.0)),
         "hay": L.mat_vcol("M_eco_hay", rough=0.9, noise_mod=0.45, noise_scale=90.0, spec=0.25),
-        "plumage": L.mat_vcol("M_eco_plumage", rough=0.78, sheen=0.5, spec=0.3),
+        "plumage": L.mat_vcol("M_eco_plumage", rough=0.75, sheen=0.15, spec=0.3),
         "blockout": L.mat_vcol("M_eco_blockout", rough=0.8, spec=0.3),
+        "needlecard": L.mat_leafcard("M_eco_leafcard_needle", str(PKG / "textures" / "leaf_spray_needle.png")),
+        "rock": L.mat_vcol("M_eco_rock", rough=0.85, noise_mod=0.5, noise_scale=12.0, spec=0.3),
+        "bank": L.mat_vcol("M_eco_bank", rough=0.95, noise_mod=0.5, noise_scale=8.0, spec=0.2),
+        "water": L.mat_water(),
+        "preview_ground": L.mat_ground(),
     }
 
 
@@ -51,56 +59,62 @@ def mats():
 ASSETS = [
     ("eco_tree_deciduous_a", A.build_tree, {"preset": "deciduous"}, ["bark", "leafcard"], (0.22, 0.32, 0.30), "tree", "PROCEDURAL_CANDIDATE"),
     ("eco_tree_apple_a", A.build_tree, {"preset": "apple"}, ["bark", "leafcard_apple", "apple"], (0.16, 0.36, 0.30), "tree", "PROCEDURAL_CANDIDATE"),
-    ("eco_tree_forest_tall_a", A.build_tree, {"preset": "forest_tall"}, ["bark", "leafcard"], (0.28, 0.28, 0.30), "tree", "PROCEDURAL_CANDIDATE_UNREVIEWED_VARIANT"),
+    ("eco_tree_forest_tall_a", A.build_tree, {"preset": "forest_tall"}, ["bark", "leafcard_beech"], (0.28, 0.28, 0.30), "tree", "PROCEDURAL_CANDIDATE_UNREVIEWED_VARIANT"),
+    ("eco_tree_conifer_a", A.build_conifer, {}, ["bark", "needlecard"], (0.20, 0.25, 0.25), "tree", "PROCEDURAL_CANDIDATE"),
     ("eco_grass_tuft_short", A.build_grass, {"preset": "tuft_short"}, ["grass"], (0.05, 0.7, 0.35), "grass", "PROCEDURAL_CANDIDATE"),
     ("eco_grass_meadow", A.build_grass, {"preset": "meadow"}, ["grass"], (0.08, 0.6, 0.35), "grass", "PROCEDURAL_CANDIDATE"),
     ("eco_grass_tall_lax", A.build_grass, {"preset": "tall_lax"}, ["grass"], (0.12, 0.55, 0.3), "grass", "PROCEDURAL_CANDIDATE"),
     ("eco_grass_coastal_dune", A.build_grass, {"preset": "coastal_dune"}, ["grass"], (0.09, 0.6, 0.3), "grass", "PROCEDURAL_CANDIDATE_UNREVIEWED_VARIANT"),
     ("eco_reed_riverside", A.build_grass, {"preset": "reed"}, ["grass"], (0.14, 0.5, 0.3), "riverside", "PROCEDURAL_CANDIDATE"),
+    ("eco_sedge_bank", A.build_grass, {"preset": "sedge"}, ["grass"], (0.10, 0.5, 0.3), "riverside", "PROCEDURAL_CANDIDATE"),
+    ("eco_rocks_river", A.build_rock_set, {"kind": "river"}, ["rock"], None, "riverside", "PROCEDURAL_CANDIDATE"),
+    ("eco_rocks_coastal", A.build_rock_set, {"kind": "coastal"}, ["rock"], None, "coastal", "PROCEDURAL_CANDIDATE"),
+    ("eco_river_water", A.build_river_water, {}, ["water"], "WATER", "water", "PROCEDURAL_CANDIDATE"),
+    ("eco_river_bank", A.build_river_bank, {}, ["bank", "preview_ground"], None, "water", "MODULE_PREVIEW_TERRAIN_NOT_WORLD"),
     ("eco_wheat_patch", A.build_wheat_patch, {}, ["wheat"], (0.10, 0.5, 0.25), "field", "PROCEDURAL_CANDIDATE"),
     ("eco_vegetable_rows", A.build_vegetable_rows, {}, ["crop", "soil"], (0.03, 0.6, 0.4), "field", "PROCEDURAL_CANDIDATE"),
     ("eco_flower_patch", A.build_flower_patch, {}, ["flower"], (0.06, 0.6, 0.35), "field", "PROCEDURAL_CANDIDATE"),
-    ("eco_hedgerow", A.build_hedgerow, {}, ["bark", "leaf"], (0.06, 0.45, 0.35), "boundary", "PROCEDURAL_CANDIDATE"),
-    ("eco_fence_post_rail", A.build_fence, {}, ["wood"], None, "boundary", "PROCEDURAL_CANDIDATE"),
+    ("eco_hedgerow", A.build_hedgerow, {}, ["bark", "leafcard"], (0.06, 0.45, 0.35), "boundary", "PROCEDURAL_CANDIDATE"),
+    ("eco_fence_post_rail", A.build_fence, {}, ["wood_post", "wood_rail"], None, "boundary", "PROCEDURAL_CANDIDATE"),
     ("eco_haystack", A.build_haystack, {}, ["hay", "wood"], (0.05, 0.5, 0.2), "farm_prop", "PROCEDURAL_CANDIDATE"),
-    ("eco_chicken_hen_a", A.build_chicken, {}, ["plumage"], None, "livestock", "PROCEDURAL_FORM_CANDIDATE_NO_GROOM_NO_RIG"),
+    ("eco_chicken_hen_blockout", A.build_chicken, {}, ["plumage"], None, "livestock", "STRUCTURAL_BLOCKOUT_NOT_ART"),
     ("eco_cow_blockout", A.build_cow_blockout, {}, ["blockout"], None, "livestock", "STRUCTURAL_BLOCKOUT_NOT_ART"),
 ]
 
 
 def make_grass_card_texture(path, seed):
-    """LOD1 alpha card: painted blades in straight alpha; transparent texels carry a dark
-    green colour (bleed) so mip/filtering never produces white fringes."""
+    """LOD1 alpha card: continuous blade strokes painted on a 2x canvas and downsampled with
+    premultiplied LANCZOS (soft AA alpha; G2-01: stippled binary blades). Bleed colour under alpha=0."""
     import numpy as np
-    from PIL import Image
     rng = L.new_rng(seed, "grasscard")
-    W, H = 256, 512
+    W, H = 512, 1024
     rgb = np.zeros((H, W, 3), np.float32)
     a = np.zeros((H, W), np.float32)
-    yy, xx = np.mgrid[0:H, 0:W]
-    for k in range(46):
-        x0 = W * (0.5 + rng.gauss(0, 0.16))
-        lean = rng.uniform(-0.5, 0.5)
-        Lb = H * (0.35 + 0.6 * rng.random() ** 1.5)
-        w0 = rng.uniform(3.0, 6.0)
-        cb = np.array([0.04, 0.08, 0.02]) * rng.uniform(0.8, 1.2)
-        ct = np.array([0.30, 0.42, 0.12]) * rng.uniform(0.8, 1.15)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    for k in range(54):
+        x0 = W * (0.5 + rng.gauss(0, 0.14))
+        lean = rng.uniform(-0.45, 0.45)
+        Lb = H * (0.3 + 0.62 * rng.random() ** 1.5)
+        w0 = rng.uniform(7.0, 12.0)
+        cb = np.array([0.03, 0.07, 0.015]) * rng.uniform(0.8, 1.2)
+        ct = np.array([0.40, 0.52, 0.11]) * rng.uniform(0.8, 1.1)
         if rng.random() < 0.12:
-            ct = np.array([0.48, 0.40, 0.20])
-        for s in range(60):
-            t = s / 59
-            cx = x0 + lean * Lb * t + lean * 40 * t * t
+            ct = np.array([0.52, 0.44, 0.20])
+        nst = int(Lb / 1.5)
+        for s_ in range(nst):
+            t = s_ / (nst - 1)
+            cx = x0 + lean * Lb * t + lean * 80 * t * t
             cy = H - 1 - Lb * t + (abs(lean) * 0.4 * Lb * t * t)
-            r = max(0.6, w0 * (1 - t) ** 0.9)
-            m = (xx - cx) ** 2 + (yy - cy) ** 2 <= r * r
+            r = max(1.2, w0 * (1 - t) ** 0.9)
+            x_lo, x_hi = int(max(0, cx - r - 1)), int(min(W, cx + r + 2))
+            y_lo, y_hi = int(max(0, cy - r - 1)), int(min(H, cy + r + 2))
+            if x_lo >= x_hi or y_lo >= y_hi:
+                continue
+            m = (xx[y_lo:y_hi, x_lo:x_hi] - cx) ** 2 + (yy[y_lo:y_hi, x_lo:x_hi] - cy) ** 2 <= r * r
             c = cb + (ct - cb) * t ** 0.8
-            rgb[m] = c
-            a[m] = 1.0
-    bleed = np.array([0.06, 0.11, 0.03], np.float32)
-    rgb[a == 0] = bleed
-    img = np.dstack([np.clip(rgb ** (1 / 2.2), 0, 1) * 255, a * 255]).astype(np.uint8)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    Image.fromarray(img, "RGBA").save(path, optimize=False)
+            rgb[y_lo:y_hi, x_lo:x_hi][m] = c
+            a[y_lo:y_hi, x_lo:x_hi][m] = 1.0
+    A._soft_save(path, rgb, a, 2)
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
@@ -133,9 +147,11 @@ def build(out_dir, seed=MASTER_SEED, save=True):
     sc.render.fps = 24
     L.ensure_channels(sc, wind=1.0, water=1.0)
     textures = {}
-    for kind in ("broadleaf", "apple"):
-        pth = A.paint_leaf_spray(PKG / "textures" / ("leaf_spray_%s.png" % kind), seed, kind)
+    for kind in ("oak", "apple", "beech"):
+        pth = A.paint_leaf_cluster(PKG / "textures" / ("leaf_cluster_%s.png" % kind), seed, kind)
         textures[pth.name] = hashlib.sha256(pth.read_bytes()).hexdigest()
+    pth = A.paint_leaf_spray(PKG / "textures" / "leaf_spray_needle.png", seed, "needle")
+    textures[pth.name] = hashlib.sha256(pth.read_bytes()).hexdigest()
     M = mats()
     lib = bpy.data.collections.new("ECO_LIBRARY")
     sc.collection.children.link(lib)
@@ -147,7 +163,9 @@ def build(out_dir, seed=MASTER_SEED, save=True):
         ob["lind_asset_id"] = aid
         ob["lind_status"] = status
         ob["lind_seed"] = seed
-        if wind:
+        if wind == "WATER":
+            L.add_water(ob)
+        elif wind:
             L.add_wind(ob, *wind)
         dims = ob.dimensions
         ob.location.x = x + dims.x / 2
@@ -158,7 +176,9 @@ def build(out_dir, seed=MASTER_SEED, save=True):
             "triangles": L.tri_count(ob), "vertices": len(ob.data.vertices),
             "dimensions_m": [round(d, 3) for d in dims],
             "wind": ({"amplitude_m": wind[0], "frequency_hz": wind[1], "flutter": wind[2],
-                      "modifier": "LIND_Wind", "node_group": L.WIND_GROUP} if wind else None),
+                      "modifier": "LIND_Wind", "node_group": L.WIND_GROUP} if wind and wind != "WATER" else None),
+            "water": ({"modifier": "LIND_Water", "node_group": L.WATER_GROUP, "channel": L.WATER_PROP}
+                      if wind == "WATER" else None),
             "geometry_sha256": L.geometry_hash(ob), "info": info,
         })
     tex = PKG / "textures" / "grass_card_lod1.png"

@@ -1,17 +1,53 @@
 {
  "blender_version": "5.3.0",
  "files": {
-  "eco_lineup_large_wind0.png": {
+  "eco_closeup_grass_wheat_wind1_f12.png": {
+   "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
-   "samples": 24,
-   "sha256": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4",
+   "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "samples": 48,
+   "sha256": "be39a1dd14beb071c9977c66b6c08b6819a53f5b37712eefb6fe3d37b98ddaf7",
+   "shot": "closeup"
+  },
+  "eco_lineup_large_wind0.png": {
+   "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+   "engine": "CYCLES_CPU+OIDN",
+   "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "samples": 40,
+   "sha256": "2cf72e59f551093ecc4913efe90fb833c55bab7e641a92e6ff58aa0d04c250f3",
    "shot": "lineup_large"
   },
   "eco_lineup_small_wind0.png": {
+   "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+   "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
    "engine": "CYCLES_CPU+OIDN",
-   "samples": 24,
-   "sha256": "955d78b5314a72eee9a434d125984353fa22e3775a91cf013b4ffc4270d8d96f",
+   "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "samples": 48,
+   "sha256": "d068c9ee47f800e8d2bcb10793fb4d57b85d0dd32db6a565c1e957ed38d53b4a",
    "shot": "lineup_small"
+  }
+ },
+ "provenance": {
+  "blend_sha256": "9a019811702a1455873f28b84498553927763ecea17f39c07a8b24f968ccd8c3",
+  "build_combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+  "build_script_sha256": {
+   "build_eco_assets.py": "08fdefbd5756c5fd85a8d21e6dc31517b4768ac41c2adb70280ab431ce9cca88",
+   "eco_assets.py": "72f5abd615f64cb2188b8cc14dc06b4bb2862f1f560b513cd27c5fe983b52084",
+   "eco_lib.py": "bae17b06ff4bd54a8b524793ba7f329b28c877efb070e1771df6bde0eb12f3ff",
+   "postprocess_eco.py": "77c0c332d6af80e21b6b1d6547fcb986973b0049ea2b3284df4f350cd4fb15e1",
+   "qa_eco.py": "d2e12d4af3627a9d79ad916dae999eab514e80322379cae23ba4e4f4fed14bea",
+   "render_eco.py": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+   "write_manifest.py": "03a3fa0f29cf9584629f62a10f83d04d1ef338a3675fbd941d5e5bb8edc97572"
+  },
+  "render_script_sha256": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+  "textures_sha256": {
+   "grass_card_lod1.png": "a7c04540c4611d66324a8ccbe5dc0ea2b62fe61f91bd28952a4aad8f23b7b290",
+   "leaf_cluster_apple.png": "b1c3ff3a57dc15d2b155ac53b3f32d730ba21262f6e91c479ebac7535e0de763",
+   "leaf_cluster_beech.png": "ddf57989e4414b446bd16cf60796f9f52bebee539c63ceae37a5282a8cd8365c",
+   "leaf_cluster_oak.png": "b757ed344c4ad164acf2b975f0b376d396a2630d6654d301bb9a52081fc99323",
+   "leaf_spray_needle.png": "d5fefff7bfb40a4cfde12d94bf2295af32b76f1f8c976b926c667bc04cd01d14"
   }
  }
 }

@@ -50,6 +50,8 @@ class MeshAcc:
         self.ww = []
         self.mi = []
         self.fuv = []  # per-face corner UVs or None
+        self.extra = {}  # name -> per-vertex float list (e.g. flow_u / flow_v for water)
+        self.vn = {}  # vertex index -> custom shading normal (normal transfer for foliage cards)
 
     def vert(self, co, col, ww):
         self.v.append((co[0], co[1], co[2]))
@@ -156,6 +158,9 @@ class MeshAcc:
         at = me.attributes.new("wind_weight", "FLOAT", "POINT")
         at.data.foreach_set("value", self.ww)
         me.polygons.foreach_set("material_index", self.mi)
+        for nm, vals in self.extra.items():
+            ea = me.attributes.new(nm, "FLOAT", "POINT")
+            ea.data.foreach_set("value", vals)
         if any(u is not None for u in self.fuv):
             uvl = me.uv_layers.new(name="UVMap")
             flat_uv = []
@@ -165,6 +170,15 @@ class MeshAcc:
         me.polygons.foreach_set("use_smooth", [smooth] * len(self.f))
         for m in materials:
             me.materials.append(m)
+        if self.vn:
+            try:
+                me.use_auto_smooth = True  # Blender < 4.1 only
+            except AttributeError:
+                pass
+            normals = [tuple(vx.normal) for vx in me.vertices]
+            for vi, nv in self.vn.items():
+                normals[vi] = (nv[0], nv[1], nv[2])
+            me.normals_split_custom_set_from_vertices(normals)
         ob = bpy.data.objects.new(name, me)
         (collection or bpy.context.scene.collection).objects.link(ob)
         return ob
@@ -178,6 +192,8 @@ def geometry_hash(ob):
         h.update(("%.5f,%.5f,%.5f;" % tuple(vx.co)).encode())
     for p in me.polygons:
         h.update((",".join(str(i) for i in p.vertices) + "|%d;" % p.material_index).encode())
+    if "Col" in me.color_attributes:
+        h.update(",".join("%.3f" % c for d in me.color_attributes["Col"].data for c in d.color[:3]).encode())
     if "wind_weight" in me.attributes:
         h.update(",".join("%.4f" % d.value for d in me.attributes["wind_weight"].data).encode())
     return h.hexdigest()
@@ -192,7 +208,8 @@ def _principled(nt):
     return next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
 
 
-def mat_vcol(name, rough=0.7, translucent=0.0, sheen=0.0, noise_mod=0.0, noise_scale=40.0, spec=0.35):
+def mat_vcol(name, rough=0.7, translucent=0.0, sheen=0.0, noise_mod=0.0, noise_scale=40.0, spec=0.35,
+             stretch=None):
     """Vertex-colour material (attribute 'Col'); optional translucency for leaves and
     low-amplitude noise modulation for bark/straw grain."""
     m = bpy.data.materials.get(name)
@@ -210,6 +227,12 @@ def mat_vcol(name, rough=0.7, translucent=0.0, sheen=0.0, noise_mod=0.0, noise_s
         tex = nt.nodes.new("ShaderNodeTexNoise")
         tex.inputs["Scale"].default_value = noise_scale
         tex.inputs["Detail"].default_value = 6.0
+        if stretch:  # anisotropic grain: bark furrows / timber grain along object Z or X
+            tc = nt.nodes.new("ShaderNodeTexCoord")
+            mp = nt.nodes.new("ShaderNodeMapping")
+            mp.inputs["Scale"].default_value = stretch
+            nt.links.new(tc.outputs["Object"], mp.inputs["Vector"])
+            nt.links.new(mp.outputs["Vector"], tex.inputs["Vector"])
         mix = nt.nodes.new("ShaderNodeMix")
         mix.data_type = "RGBA"
         mix.blend_type = "MULTIPLY"
@@ -295,7 +318,7 @@ def mat_leafcard(name, image_path):
     tr = nt.nodes.new("ShaderNodeBsdfTranslucent")
     nt.links.new(mix.outputs["Result"], tr.inputs["Color"])
     mx = nt.nodes.new("ShaderNodeMixShader")
-    mx.inputs["Fac"].default_value = 0.3
+    mx.inputs["Fac"].default_value = 0.4
     nt.links.new(bs.outputs["BSDF"], mx.inputs[1])
     nt.links.new(tr.outputs["BSDF"], mx.inputs[2])
     tsp = nt.nodes.new("ShaderNodeBsdfTransparent")
@@ -319,7 +342,7 @@ def mat_soil(name="M_eco_soil"):
     return m
 
 
-def mat_ground(name="M_eco_preview_ground", base=(0.16, 0.22, 0.07), alt=(0.24, 0.26, 0.10)):
+def mat_ground(name="M_eco_preview_ground", base=(0.075, 0.17, 0.035), alt=(0.15, 0.24, 0.06)):
     """Preview ground only (not an ECO deliverable; WORLD owns terrain materials)."""
     m = bpy.data.materials.get(name)
     if m:
@@ -329,8 +352,10 @@ def mat_ground(name="M_eco_preview_ground", base=(0.16, 0.22, 0.07), alt=(0.24, 
     nt = m.node_tree
     bs = _principled(nt)
     tex = nt.nodes.new("ShaderNodeTexNoise")
-    tex.inputs["Scale"].default_value = 3.0
+    tex.inputs["Scale"].default_value = 0.12
     tex.inputs["Detail"].default_value = 8.0
+    geo = nt.nodes.new("ShaderNodeNewGeometry")  # world-space coords: seamless across objects
+    nt.links.new(geo.outputs["Position"], tex.inputs["Vector"])
     ramp = nt.nodes.new("ShaderNodeValToRGB")
     ramp.color_ramp.elements[0].color = (*base, 1)
     ramp.color_ramp.elements[1].color = (*alt, 1)
@@ -340,17 +365,24 @@ def mat_ground(name="M_eco_preview_ground", base=(0.16, 0.22, 0.07), alt=(0.24, 
     return m
 
 
-def mat_water(name="M_eco_preview_water"):
+def mat_water(name="M_eco_water"):
+    """River water: vertex colour (deep centre / shallow edge) + glossy surface + mild transmission."""
     m = bpy.data.materials.get(name)
     if m:
         return m
     m = bpy.data.materials.new(name)
     m.use_nodes = True
-    bs = _principled(m.node_tree)
-    bs.inputs["Base Color"].default_value = (0.03, 0.09, 0.10, 1)
-    bs.inputs["Roughness"].default_value = 0.06
+    nt = m.node_tree
+    bs = _principled(nt)
+    attr = nt.nodes.new("ShaderNodeAttribute")
+    attr.attribute_name = "Col"
+    attr.attribute_type = "GEOMETRY"
+    nt.links.new(attr.outputs["Color"], bs.inputs["Base Color"])
+    bs.inputs["Roughness"].default_value = 0.05
     if "Transmission Weight" in bs.inputs:
-        bs.inputs["Transmission Weight"].default_value = 0.3
+        bs.inputs["Transmission Weight"].default_value = 0.25
+    if "Coat Weight" in bs.inputs:
+        bs.inputs["Coat Weight"].default_value = 0.3
     return m
 
 
@@ -492,12 +524,16 @@ def ensure_wind_group():
     off = b.comb(ox, oy, oz)
     # offset is authored in world space (+X downwind); rotate into object space so that
     # rotated instances of one asset all bend the same world direction
-    inv = b.n.new("FunctionNodeInvertRotation")
-    b.l.new(oself.outputs["Rotation"], inv.inputs[0])
-    rv = b.n.new("FunctionNodeRotateVector")
-    b.l.new(off, rv.inputs["Vector"])
-    b.l.new(inv.outputs[0], rv.inputs["Rotation"])
-    off = rv.outputs[0]
+    try:  # Blender >= 4.1 rotation sockets; on 4.0 fall back to object-local wind direction
+        inv = b.n.new("FunctionNodeInvertRotation")
+        rv = b.n.new("FunctionNodeRotateVector")
+        b.l.new(oself.outputs["Rotation"], inv.inputs[0])
+        b.l.new(off, rv.inputs["Vector"])
+        b.l.new(inv.outputs[0], rv.inputs["Rotation"])
+        off = rv.outputs[0]
+        ng["lind_world_space_wind"] = True
+    except Exception:
+        ng["lind_world_space_wind"] = False
     sp = b.n.new("GeometryNodeSetPosition")
     b.l.new(gi.outputs["Geometry"], sp.inputs["Geometry"])
     b.l.new(off, sp.inputs["Offset"])
@@ -506,21 +542,32 @@ def ensure_wind_group():
 
 
 def ensure_water_group():
-    """Water ripple driven ONLY by LIND_WATER_CTRL (scene['lind_water_flow'])."""
+    """Water ripple travelling downstream, driven ONLY by LIND_WATER_CTRL (scene['lind_water_flow']).
+    Uses per-vertex flow_u (metres along the channel) and flow_v (-1..1 across). No wind input."""
     ng = bpy.data.node_groups.get(WATER_GROUP)
     if ng:
         return ng
-    ng, gi, go = _new_gn(WATER_GROUP, [("Height", 0.012), ("Speed", 1.4)])
+    ng, gi, go = _new_gn(WATER_GROUP, [("Height", 0.02), ("Speed", 1.0)])
     b = _NB(ng)
     oi = b.n.new("GeometryNodeObjectInfo")
     oi.inputs["Object"].default_value = bpy.data.objects[WATER_CTRL]
     F = b.sep(oi.outputs["Location"])[0]
-    px, py, _ = b.sep(b.n.new("GeometryNodeInputPosition").outputs[0])
+
+    def attr(nm):
+        na = b.n.new("GeometryNodeInputNamedAttribute")
+        na.data_type = "FLOAT"
+        na.inputs["Name"].default_value = nm
+        return na.outputs["Attribute"]
+    u, v = attr("flow_u"), attr("flow_v")
     t = b.n.new("GeometryNodeInputSceneTime").outputs["Seconds"]
     tt = b.math("MULTIPLY", b.math("MULTIPLY", t, gi.outputs["Speed"]), F)
-    a1 = b.math("SINE", b.math("SUBTRACT", b.math("MULTIPLY", py, 9.0), b.math("MULTIPLY", tt, 6.0)))
-    a2 = b.math("SINE", b.math("ADD", b.math("MULTIPLY", px, 13.0), b.math("SUBTRACT", b.math("MULTIPLY", py, 5.0), b.math("MULTIPLY", tt, 4.0))))
-    z = b.math("MULTIPLY", b.math("ADD", a1, b.math("MULTIPLY", a2, 0.6)), gi.outputs["Height"])
+    a1 = b.math("SINE", b.math("SUBTRACT", b.math("MULTIPLY", u, 3.1), b.math("MULTIPLY", tt, 7.0)))
+    a2 = b.math("SINE", b.math("ADD", b.math("MULTIPLY", v, 5.3), b.math("SUBTRACT", b.math("MULTIPLY", u, 7.7), b.math("MULTIPLY", tt, 11.0))))
+    a3 = b.math("SINE", b.math("SUBTRACT", b.math("MULTIPLY", u, 13.0), b.math("ADD", b.math("MULTIPLY", v, 2.0), b.math("MULTIPLY", tt, 17.0))))
+    # flow is faster/rougher mid-channel: scale by (1 - v^2)
+    mid = b.math("SUBTRACT", 1.0, b.math("MULTIPLY", v, v))
+    zsum = b.math("ADD", b.math("ADD", a1, b.math("MULTIPLY", a2, 0.55)), b.math("MULTIPLY", a3, 0.3))
+    z = b.math("MULTIPLY", b.math("MULTIPLY", zsum, gi.outputs["Height"]), b.math("MULTIPLY_ADD", mid, 0.7, 0.3))
     sp = b.n.new("GeometryNodeSetPosition")
     b.l.new(gi.outputs["Geometry"], sp.inputs["Geometry"])
     b.l.new(b.comb(0.0, 0.0, z), sp.inputs["Offset"])
@@ -546,9 +593,19 @@ def add_wind(ob, amplitude, frequency=0.45, flutter=0.25):
     return mod
 
 
-def add_water(ob):
+def add_water(ob, height=0.02, speed=1.0):
+    ng = ensure_water_group()
     mod = ob.modifiers.new("LIND_Water", "NODES")
-    mod.node_group = ensure_water_group()
+    mod.node_group = ng
+    for item in ng.interface.items_tree:
+        if getattr(item, "in_out", None) != "INPUT" or item.socket_type != "NodeSocketFloat":
+            continue
+        val = {"Height": height, "Speed": speed}[item.name]
+        props = getattr(mod, "properties", None)
+        if props is not None and hasattr(props, "inputs"):
+            getattr(props.inputs, item.identifier).value = float(val)
+        else:
+            mod[item.identifier] = float(val)
     ob["lind_water_channel"] = True
     return mod
 
