@@ -1,0 +1,46 @@
+name: Aidan ART-02 targeted degenerate face diagnostic
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_art02_degenerate_inspect.py'
+      - '.github/workflows/aidan-art02-degenerate-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify inputs
+        run: |
+          test -f assets/candidates/aidan-masonry-art-02/candidate_a/aidan_scan_carved_corner_v1.blend
+          test -f tools/map_blender/aidan_art02_degenerate_inspect.py
+          python3 -m py_compile tools/map_blender/aidan_art02_degenerate_inspect.py
+      - name: Install pinned Blender 4.2.3 LTS
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1 libxkbcommon0 libsm6
+          curl -fsSL -o "$RUNNER_TEMP/blender.tar.xz" https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz
+          tar xf "$RUNNER_TEMP/blender.tar.xz" -C "$RUNNER_TEMP"
+      - name: Diagnose exact candidate A without modification
+        run: |
+          "$RUNNER_TEMP/blender-4.2.3-linux-x64/blender" -b assets/candidates/aidan-masonry-art-02/candidate_a/aidan_scan_carved_corner_v1.blend --python tools/map_blender/aidan_art02_degenerate_inspect.py -- --object stone_32_B_c4 --out "$RUNNER_TEMP/aidan-art02-degenerate.json"
+          python3 - <<'PY'
+          import json,os
+          p=os.path.join(os.environ["RUNNER_TEMP"],"aidan-art02-degenerate.json")
+          x=json.load(open(p))
+          print("Producer-matching degenerate polygons:",x["producer_matching_degenerate_face_count"])
+          print("Triangle detail records:",x["small_triangle_count"])
+          PY
+      - name: Upload diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-art02-degenerate-evidence
+          path: ${{ runner.temp }}/aidan-art02-degenerate.json
+          if-no-files-found: warn
+          retention-days: 14
