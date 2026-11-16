@@ -48,9 +48,9 @@ async function babylonSession(bytes,dims){
  const camera=new B.FreeCamera('camera',new B.Vector3(0,1,5),scene);camera.fov=55*Math.PI/180;camera.minZ=.1;camera.maxZ=1000;scene.activeCamera=camera;
  new B.HemisphericLight('ambient',new B.Vector3(0,1,0),scene).intensity=.7;
  const light=new B.DirectionalLight('key',new B.Vector3(-3,-5,-4),scene);light.intensity=2;
- const url=URL.createObjectURL(new Blob([bytes],{type:'model/gltf-binary'}));
+ const glbFile=new File([bytes],'benchmark.glb',{type:'model/gltf-binary'});
  try{
-  const loaded=await B.SceneLoader.ImportMeshAsync('',url,'',scene,undefined,'.glb');
+  const loaded=await B.SceneLoader.ImportMeshAsync('','',glbFile,scene,undefined,'.glb');
   const meshes=loaded.meshes.filter(m=>m.getTotalVertices&&m.getTotalVertices()>0);
   const vectors=meshes.map(m=>m.getBoundingInfo().boundingBox);
   const lo=new B.Vector3(Infinity,Infinity,Infinity),hi=new B.Vector3(-Infinity,-Infinity,-Infinity);
@@ -61,7 +61,7 @@ async function babylonSession(bytes,dims){
   if(loaded.animationGroups.length)loaded.animationGroups[0].start(true);
   return {meta:{meshes:meshes.length,skinned:meshes.filter(m=>m.skeleton).length,animations:loaded.animationGroups.length,triangles:meshes.reduce((n,m)=>n+(m.getTotalIndices?.()||0)/3,0),materials:scene.materials.length},
    draw(){scene.render()},stats(){return {drawCalls:null,triangles:null}},dispose(){scene.dispose();engine.dispose()}};
- }catch(e){scene.dispose();engine.dispose();throw e}finally{URL.revokeObjectURL(url)}
+ }catch(e){scene.dispose();engine.dispose();throw e}
 }
 run.onclick=async()=>{
  cancel('STOPPED_EARLY');const id=token;const f=file.files?.[0];if(!f){result={status:'NO_FILE'};show();return}
