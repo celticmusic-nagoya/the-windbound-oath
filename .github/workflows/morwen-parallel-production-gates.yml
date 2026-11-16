@@ -25,6 +25,8 @@ on:
       - 'tools/character_blender/render_morwen_head_review.py'
       - 'tools/character_blender/audit_morwen_render_visibility.py'
       - 'tools/character_blender/inventory_morwen_legacy_face.py'
+      - 'tools/qa/production_loop_gate.py'
+      - 'tools/qa/test_production_loop_gate.py'
   workflow_dispatch:
     inputs:
       audit_basemesh:
@@ -174,6 +176,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Unit-test cross-team production loop safety gate
+        run: python -m unittest discover -s tools/qa -p 'test_production_loop_gate.py' -v
       - name: Unit-test no-render framing solver
         run: python -m unittest discover -s tools/character_blender -p 'test_solve_morwen_framing.py' -v
       - name: Unit-test full-3D character/world bridge negative controls
