@@ -138,6 +138,9 @@ jobs:
       - name: Check 09N surface intersections
         run: |
           python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/ROOT_WINDING_INTERSECTIONS_09N.json
+      - name: Render 09N corrected winding with eyelid contact and 48px preview
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/render_contact_09l.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --outdir render_output/morwen_eyelid_09/RENDERS_09N
       - name: Render three diagnostic views of 09G candidate
         run: |
           python tools/blender/morwen_production/eyelid_lash/render_root_fan_09i.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --outdir render_output/morwen_eyelid_09/RENDERS_09I
@@ -182,6 +185,8 @@ jobs:
             render_output/morwen_eyelid_09/RENDERS_09J/*.json
             render_output/morwen_eyelid_09/RENDERS_09L/*.png
             render_output/morwen_eyelid_09/RENDERS_09L/*.json
+            render_output/morwen_eyelid_09/RENDERS_09N/*.png
+            render_output/morwen_eyelid_09/RENDERS_09N/*.json
             render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
             render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
             render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
