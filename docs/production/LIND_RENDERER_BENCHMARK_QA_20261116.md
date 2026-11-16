@@ -37,3 +37,10 @@ Status: TECHNICAL CANDIDATE ONLY. No renderer adoption, game integration, or off
 - G4 NOT_RUN: Android, gameplay, SAVE/collision regression, performance on actual assets.
 
 This record is not a substitute for the source manifests, workflow logs or independent QA.
+
+## Repeated run verification (2026-11-16)
+- Commit `60a57ef596e93045aefb13066fd1f4149a22fed0`; CI https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43872820534 SUCCESS.
+- 5 alternating-order runs per engine; 10/10 COMPLETED, each 1,801 frames in ~30.015 seconds, matching input GLB SHA-256, zero page errors.
+- Mean frame intervals near 16.666 ms for both engines; this **does not resolve comparative GPU performance** due to browser frame pacing and low workload.
+- CI artifact `lind-technical-glb` ID `14229550237`; previous CDN-dependent navigation timeouts were avoided by serving pinned local packages in CI. The standalone smoke workflow also passed: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43872820618.
+- G3 PASS for repeated headless technical GLB render; G1 BLOCKED, G2 NOT_RUN, G4 NOT_RUN remain unchanged. High-load tiers NOT_RUN.
