@@ -77,3 +77,11 @@ FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs
 - Blender scene METRIC, scale_length 1.0; candidate read-only and hash-verified.
 - G1 BLOCKED (official reference image bytes unavailable and axis conflict), G2 NOT_RUN, G3 PARTIAL_MEASUREMENT_ONLY, G4 NOT_RUN.
 - Next non-destructive QA: evaluate neck skin seam, bone weights, material and UV properties, source-image camera handedness. Do not freeze interface until source and art review agree.
+
+## Verified candidate surface audit — GitHub Actions run 43822625160
+- Run SUCCESS, artifact 14205705177; downloaded and independently inspected `PR326_SURFACE_AUDIT.json`, `PR326_BONE_REVIEW.json`, `PR326_CANDIDATE_INVENTORY.json`.
+- Body: 7,797 vertices, 11,646 polygons, 1 active UVMap, 6 node-based materials, Armature modifier, 0 unweighted vertices, 0 vertices with >4 influences, 0 unknown bone groups, 3,594 boundary edges, 0 edges with >2 adjacent polygons.
+- Face: 1,972 vertices, 2,772 polygons, 1 active UVMap, 9 node-based materials, Armature modifier, 0 unweighted vertices, 0 vertices with >4 influences, 0 unknown bone groups, 756 boundary edges, 0 edges with >2 adjacent polygons.
+- The script's `nonmanifold_edges` counts only edges with >2 adjacent faces; **boundary edges themselves are also non-manifold in Blender's broader topology terminology**. Thus 0 is NOT proof of watertight or manifold meshes. Mesh segmentation, loose edges, inverted normals, skin seam and material appearance remain unverified.
+- Existing candidate contains both dithered and blended surface render methods, but material alpha appearance, textures and export compatibility are not evaluated.
+- Candidate-only basic weight coverage PASS; **G3 PARTIAL**, not full technical acceptance. G1 BLOCKED, G2 NOT_RUN, G4 NOT_RUN. Approved 7.5–8-head model proportions not yet measured.
