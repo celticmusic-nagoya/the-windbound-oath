@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/morwen-parallel-production-gates.yml'
       - 'tools/character_blender/integrate_morwen_parallel_qa.py'
+      - 'tools/character_blender/diagnose_morwen_framing.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -121,6 +122,12 @@ jobs:
               cp -R "qa_evidence/morwen-qa-$role" "qa_lanes/$role"
             fi
           done
+      - name: Diagnose render failure without additional rendering
+        if: always()
+        run: |
+          if test -f qa_lanes/render/MORWEN_RENDER_QA_REPORT.json; then
+            python tools/character_blender/diagnose_morwen_framing.py qa_lanes/render/MORWEN_RENDER_QA_REPORT.json --output qa_output/integration/framing_diagnosis.json
+          fi
       - name: Validate each lane evidence fail closed
         run: python tools/character_blender/integrate_morwen_parallel_qa.py --root qa_lanes --out qa_output/integration/report.json
       - name: Summarize integration
@@ -137,6 +144,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: morwen-qa-integration
-          path: qa_output/integration/report.json
+          path: qa_output/integration/*
           retention-days: 7
           if-no-files-found: warn
