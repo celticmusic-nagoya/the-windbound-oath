@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LIND same-GLB runtime comparison</title>
+<style>body{margin:0;background:#101923;color:#eef4f8;font:14px system-ui}header{padding:14px}button,input,select{padding:9px;margin:5px}button:disabled{opacity:.5}canvas{display:block;width:100%;height:52vh}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px}label{display:block}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+</head><body><header><strong>LIND｜同一GLB比較（独立技術検証）</strong>
+<p>同じローカルGLBを両エンジンへ読み込みます。CDNライブラリのハッシュ固定・正式アセット照合は未完了です。結果は正式採用判定ではありません。</p>
+<label>GLB <input id="file" type="file" accept=".glb,model/gltf-binary"></label>
+<label>エンジン <select id="engine"><option value="three">Three.js 0.170.0</option><option value="babylon">Babylon.js (CDN版・実行時バージョン記録)</option></select></label>
+<button id="run">3秒準備＋30秒測定</button><button id="stop">停止</button><button id="copy">結果コピー</button></header>
+<canvas id="view"></canvas><pre id="report">NOT_RUN</pre>
+<script type="module">
+const canvas=document.querySelector('#view'),file=document.querySelector('#file'),selector=document.querySelector('#engine'),report=document.querySelector('#report'),run=document.querySelector('#run');
+let token=0,active=null,result={status:'NOT_RUN'};
+const show=()=>report.textContent=JSON.stringify(result,null,2);
+const percentile=a=>{const s=[...a].sort((a,b)=>a-b);return s.length?s[Math.ceil(s.length*.95)-1]:null};
+const dimensions=()=>{const dpr=Math.min(devicePixelRatio,2);return {width:Math.max(1,Math.round(canvas.clientWidth*dpr)),height:Math.max(1,Math.round(canvas.clientHeight*dpr)),dpr}};
+function cleanup(){if(active){active.dispose();active=null}}
+function cancel(status){token++;cleanup();if(result.status==='LOADING'||result.status==='WARMUP'||result.status==='RUNNING'){result.status=status;show()}}
+document.querySelector('#stop').onclick=()=>cancel('STOPPED_EARLY');
+document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(JSON.stringify(result,null,2)).catch(e=>{result.copyError=String(e);show()});
+async function sha(buffer){const b=await crypto.subtle.digest('SHA-256',buffer);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function threeSession(THREE,GLTFLoader,bytes,dims){
+ const renderer=new THREE.WebGLRenderer({canvas,antialias:false});renderer.setPixelRatio(1);renderer.setSize(dims.width,dims.height,false);
+ const scene=new THREE.Scene();scene.background=new THREE.Color(0x132033);
+ const camera=new THREE.PerspectiveCamera(55,dims.width/dims.height,.1,1000);
+ scene.add(new THREE.HemisphereLight(0xffffff,0x555555,0.7));
+ const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(3,5,4);scene.add(light);
+ const loader=new GLTFLoader(),mixerState={mixer:null};
+ return new Promise((resolve,reject)=>loader.parse(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'',gltf=>{
+  const root=gltf.scene;scene.add(root);
+  const bounds=new THREE.Box3().setFromObject(root),center=bounds.getCenter(new THREE.Vector3()),size=bounds.getSize(new THREE.Vector3()),radius=Math.max(size.length(),1);
+  camera.position.copy(center).add(new THREE.Vector3(0,radius*.25,radius*1.5));camera.lookAt(center);camera.far=Math.max(1000,radius*10);camera.updateProjectionMatrix();
+  if(gltf.animations.length){mixerState.mixer=new THREE.AnimationMixer(root);gltf.animations[0]&&mixerState.mixer.clipAction(gltf.animations[0]).play()}
+  let meshes=0,skinned=0,triangles=0;root.traverse(o=>{if(o.isMesh){meshes++;if(o.isSkinnedMesh)skinned++;const g=o.geometry;const n=g.index?g.index.count:g.attributes.position?.count||0;triangles+=Math.floor(n/3)}});
+  resolve({meta:{meshes,skinned,animations:gltf.animations.length,triangles,materials:gltf.parser.json.materials?.length||0},
+   draw(dt){mixerState.mixer?.update(dt);renderer.render(scene,camera)},
+   stats(){return {drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}},
+   dispose(){root.traverse(o=>{if(o.geometry)o.geometry.dispose();const m=o.material;if(m)(Array.isArray(m)?m:[m]).forEach(x=>x.dispose())});renderer.dispose()}});
+ },reject));
+}
+async function babylonSession(bytes,dims){
+ const B=window.BABYLON;if(!B?.SceneLoader)throw Error('Babylon loader unavailable');
+ const engine=new B.Engine(canvas,false,{preserveDrawingBuffer:false,stencil:false},false);engine.setSize(dims.width,dims.height);
+ const scene=new B.Scene(engine);scene.clearColor=new B.Color4(.075,.125,.2,1);
+ const camera=new B.FreeCamera('camera',new B.Vector3(0,1,5),scene);camera.fov=55*Math.PI/180;camera.minZ=.1;camera.maxZ=1000;scene.activeCamera=camera;
+ new B.HemisphericLight('ambient',new B.Vector3(0,1,0),scene).intensity=.7;
+ const light=new B.DirectionalLight('key',new B.Vector3(-3,-5,-4),scene);light.intensity=2;
+ const url=URL.createObjectURL(new Blob([bytes],{type:'model/gltf-binary'}));
+ try{
+  const loaded=await B.SceneLoader.ImportMeshAsync('',url,'',scene,undefined,'.glb');
+  const meshes=loaded.meshes.filter(m=>m.getTotalVertices&&m.getTotalVertices()>0);
+  const vectors=meshes.map(m=>m.getBoundingInfo().boundingBox);
+  const lo=new B.Vector3(Infinity,Infinity,Infinity),hi=new B.Vector3(-Infinity,-Infinity,-Infinity);
+  vectors.forEach(b=>{lo.minimizeInPlace(b.minimumWorld);hi.maximizeInPlace(b.maximumWorld)});
+  const center=vectors.length?lo.add(hi).scale(.5):B.Vector3.Zero();
+  const radius=vectors.length?Math.max(hi.subtract(lo).length(),1):1;
+  camera.position=center.add(new B.Vector3(0,radius*.25,radius*1.5));camera.setTarget(center);camera.maxZ=Math.max(1000,radius*10);
+  if(loaded.animationGroups.length)loaded.animationGroups[0].start(true);
+  return {meta:{meshes:meshes.length,skinned:meshes.filter(m=>m.skeleton).length,animations:loaded.animationGroups.length,triangles:meshes.reduce((n,m)=>n+(m.getTotalIndices?.()||0)/3,0),materials:scene.materials.length},
+   draw(){scene.render()},stats(){return {drawCalls:null,triangles:null}},dispose(){scene.dispose();engine.dispose()}};
+ }catch(e){scene.dispose();engine.dispose();throw e}finally{URL.revokeObjectURL(url)}
+}
+run.onclick=async()=>{
+ cancel('STOPPED_EARLY');const id=token;const f=file.files?.[0];if(!f){result={status:'NO_FILE'};show();return}
+ run.disabled=true;const engine=selector.value;
+ result={status:'LOADING',engine,filename:f.name,bytes:f.size,userAgent:navigator.userAgent,dimensions:dimensions(),warmupMs:3000,measurementMs:30000,warning:'Technical-only. No engine adoption, G2 or Android G4 PASS'};show();
+ try{
+  const buffer=await f.arrayBuffer();if(id!==token)return;
+  result.sha256=await sha(buffer);if(id!==token)return;
+  const t0=performance.now(),bytes=new Uint8Array(buffer);
+  if(engine==='three'){const [THREE,addon]=await Promise.all([import('three'),import('three/addons/loaders/GLTFLoader.js')]);if(id!==token)return;active=await threeSession(THREE,addon.GLTFLoader,bytes,result.dimensions)}
+  else active=await babylonSession(bytes,result.dimensions);
+  if(id!==token){cleanup();return}
+  result.loadMs=performance.now()-t0;result.asset=active.meta;result.status='WARMUP';show();
+  let phaseStart=0,last=0,samples=[],elapsed=0;
+  const tick=t=>{
+   if(id!==token)return;
+   if(!phaseStart){phaseStart=t;last=t}
+   const dt=t-last;last=t;
+   try{active.draw(Math.min(dt/1000,.1))}catch(e){result.status='FAIL_RENDER';result.error=String(e);cleanup();show();run.disabled=false;return}
+   elapsed=t-phaseStart;
+   if(result.status==='WARMUP'&&elapsed>=3000){result.status='RUNNING';phaseStart=t;last=t;samples=[];show()}
+   else if(result.status==='RUNNING'){
+    if(dt>0&&dt<1000)samples.push(dt);
+    if(elapsed>=30000){result.status='COMPLETED';result.frames=samples.length;result.meanFrameMs=samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null;result.p95FrameMs=percentile(samples);result.elapsedMs=elapsed;result.renderInfo=active.stats();cleanup();show();run.disabled=false;return}
+   }
+   requestAnimationFrame(tick);
+  };requestAnimationFrame(tick);
+ }catch(e){if(id===token){result.status='FAIL_LOAD';result.error=String(e);cleanup();show()}}finally{run.disabled=false}
+};
+</script></body></html>
