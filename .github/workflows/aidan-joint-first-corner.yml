@@ -1,0 +1,51 @@
+name: Aidan joint-first stone corner technical gate
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_joint_first_corner_v1.py'
+      - '.github/workflows/aidan-joint-first-corner.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Syntax QA
+        run: python3 -m py_compile tools/map_blender/aidan_joint_first_corner_v1.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Render isolated joint-first candidate
+        env:
+          AIDAN_JOINT_OUT: ${{ runner.temp }}/joint-first
+        run: |
+          mkdir -p "$AIDAN_JOINT_OUT"
+          blender -b -t 2 --python tools/map_blender/aidan_joint_first_corner_v1.py
+      - name: Assert structural audit invariants
+        env:
+          AIDAN_JOINT_OUT: ${{ runner.temp }}/joint-first
+        run: |
+          python3 - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path(os.environ['AIDAN_JOINT_OUT'])
+          a=json.loads((p/'joint_first_audit.json').read_text())
+          assert len(a['stones'])==3
+          assert all(x['boundary_edges']==0 and x['nonmanifold_edges']==0 for x in a['stones'])
+          assert a['bearing_z_gap']==0
+          assert a['joint_x_difference']==0
+          assert all((p/('joint_first_'+v+'.png')).stat().st_size>1000 for v in ['three_quarter','front','top'])
+          PY
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-joint-first-corner-v1
+          path: ${{ runner.temp }}/joint-first/
+          if-no-files-found: warn
+          retention-days: 7

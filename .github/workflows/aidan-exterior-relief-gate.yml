@@ -1,0 +1,56 @@
+name: Aidan exterior-only stone relief technical render
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_exterior_relief_gate_v1.py'
+      - '.github/workflows/aidan-exterior-relief-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python syntax
+        run: python3 -m py_compile tools/map_blender/aidan_exterior_relief_gate_v1.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Blender exterior-only relief
+        env:
+          AIDAN_RELIEF_OUT: ${{ runner.temp }}/aidan-relief
+        run: |
+          mkdir -p "$AIDAN_RELIEF_OUT"
+          blender -b -t 2 --python tools/map_blender/aidan_exterior_relief_gate_v1.py
+      - name: Validate watertightness and output size
+        env:
+          AIDAN_RELIEF_OUT: ${{ runner.temp }}/aidan-relief
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib,struct
+          p=pathlib.Path(os.environ["AIDAN_RELIEF_OUT"])
+          a=json.loads((p/"relief_qa.json").read_text())
+          assert len(a["objects"])==3
+          assert all(x["boundary_edges"]==0 and x["nonmanifold_edges"]==0 for x in a["objects"])
+          assert all(x["displaced_vertices"]>0 and x["frozen_cap_vertices"]>0 for x in a["objects"])
+          for name in ("three_quarter","front","top","48px"):
+              f=p/("relief_"+name+".png")
+              assert f.stat().st_size>500
+          raw=(p/"relief_48px.png").read_bytes()
+          assert raw[:8]==bytes((137,80,78,71,13,10,26,10))
+          assert struct.unpack(">II",raw[16:24])==(48,48)
+          print("G3_MESH_AND_RENDER=PASS; G2=NOT_RUN; G1=BLOCKED; G4=NOT_RUN")
+          PY
+      - name: Save rendered evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-exterior-relief-gate-v1
+          path: ${{ runner.temp }}/aidan-relief/
+          if-no-files-found: warn
+          retention-days: 7

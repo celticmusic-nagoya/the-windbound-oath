@@ -1,0 +1,48 @@
+name: Aidan scan-derived fitted stone corner study
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_fitted_scan_corner_v1.py'
+      - '.github/workflows/aidan-fitted-scan-corner.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python syntax QA
+        run: python3 -m py_compile tools/map_blender/aidan_fitted_scan_corner_v1.py
+      - name: Install Blender and runtime libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Acquire source and verify exact SHA
+        env:
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/source
+        run: |
+          python3 tools/map_blender/aidan_polyhaven_source_audit.py
+          python3 - <<'PY'
+          import hashlib,os,pathlib
+          p=pathlib.Path(os.environ["AIDAN_SOURCE_OUT"])/"rock_moss_set_01_8k.blend"
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="23d6220c6c7613c4d7006d902ac99acebc7e7859f1368ba6dc0ae4123551cdc6"
+          PY
+      - name: Render scan-derived fitted corner
+        env:
+          AIDAN_SOURCE_OUT: ${{ runner.temp }}/source
+          AIDAN_FITTED_OUT: ${{ runner.temp }}/fitted-corner
+        run: |
+          mkdir -p "$AIDAN_FITTED_OUT"
+          blender -b "$AIDAN_SOURCE_OUT/rock_moss_set_01_8k.blend" -t 2 --python tools/map_blender/aidan_fitted_scan_corner_v1.py
+      - name: Upload render and audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-fitted-scan-corner-v1
+          path: ${{ runner.temp }}/fitted-corner/
+          if-no-files-found: warn
+          retention-days: 7

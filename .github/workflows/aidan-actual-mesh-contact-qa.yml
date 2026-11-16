@@ -1,0 +1,38 @@
+name: Aidan actual-mesh bearing and BVH diagnostic
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_actual_mesh_contact_qa_v1.py'
+      - 'tools/map_blender/aidan_shared_surface_contact_v1.py'
+      - '.github/workflows/aidan-actual-mesh-contact-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Syntax
+        run: python3 -m py_compile tools/map_blender/aidan_actual_mesh_contact_qa_v1.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Inspect actual evaluated meshes
+        env:
+          AIDAN_CONTACT_OUT: ${{ runner.temp }}/contact
+        run: |
+          mkdir -p "$AIDAN_CONTACT_OUT"
+          blender -b -t 2 --python tools/map_blender/aidan_actual_mesh_contact_qa_v1.py
+      - name: Save geometry and render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-actual-mesh-contact-qa-v1
+          path: ${{ runner.temp }}/contact/
+          if-no-files-found: warn
+          retention-days: 7

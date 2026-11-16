@@ -1,0 +1,56 @@
+name: Aidan shared-surface bearing contact QA
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_shared_surface_contact_v1.py'
+      - '.github/workflows/aidan-shared-surface-contact.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python syntax
+        run: python3 -m py_compile tools/map_blender/aidan_shared_surface_contact_v1.py
+      - name: Blender runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+      - name: Render and measure shared contact
+        env:
+          AIDAN_SHARED_OUT: ${{ runner.temp }}/aidan-shared
+        run: |
+          mkdir -p "$AIDAN_SHARED_OUT"
+          blender -b -t 2 --python tools/map_blender/aidan_shared_surface_contact_v1.py
+      - name: Validate actual bearing coverage
+        env:
+          AIDAN_SHARED_OUT: ${{ runner.temp }}/aidan-shared
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ["AIDAN_SHARED_OUT"])
+          a=json.loads((p/"shared_contact_audit.json").read_text())
+          b=a["bearing"]
+          assert len(a["meshes"])==3
+          assert all(x["boundary_edges"]==0 and x["nonmanifold_edges"]==0 for x in a["meshes"])
+          assert b["z_gap"]==0 and b["coplanar_joint_x"]
+          assert b["lower_xy_overlap_area"]==0
+          assert b["support_ratio"]==1.0
+          assert b["supported_west"]>0 and b["supported_east"]>0
+          for view in ("front","top","three_quarter"):
+              assert (p/("shared_"+view+".png")).stat().st_size>1000
+          print("G3_SHARED_BEARING_FACE=PASS; G2=NOT_RUN; G1=BLOCKED; G4=NOT_RUN")
+          PY
+      - name: Save QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-shared-surface-contact-v1
+          path: ${{ runner.temp }}/aidan-shared/
+          if-no-files-found: warn
+          retention-days: 7
