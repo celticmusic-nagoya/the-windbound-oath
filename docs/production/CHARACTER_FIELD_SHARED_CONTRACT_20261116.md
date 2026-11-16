@@ -39,3 +39,13 @@ Character export must declare:
 2. Reconcile reference precedence using explicit director approval evidence and actual original image SHA; until then, create no final-design PASS or canonical replacements.
 3. Produce candidate-only field adapter schema/tests from measured runtime values; preserve game behavior and the map team's separate geometry/QA.
 4. For future outputs, write machine-readable provenance manifest, production log, per-gate QA and cumulative method-family failure ledger. No main merge, publication, destructive cleanup or source overwrite.
+
+## Director decision — 2026-11-16: field 2.8-head style retired
+**Status: DIRECTOR-APPROVED PRODUCTION DIRECTION; implementation NOT_RUN.** The director explicitly withdraws the 2.8-head field-character production target and selects the new high-proportion character asset direction for eventual in-game use. This later explicit approval supersedes the 2.8-head field-sprite target in older public design documents **for future character production only**. Do not rewrite historical documents or destroy existing sprites.
+
+- Current character modeling target is 7.5–8 heads, subject to character-specific canonical design and director visual approval. A 3D candidate, a four-view render, or a CI PASS is **not** itself an approved final in-game asset.
+- Stop starting new 2.8-head field sprites and do not silently convert old 12-frame or directional sprite candidates into production assets. Preserve their sources, ledgers, and history for regression comparison.
+- Plan new character-to-field projection, camera angle, anchor/ground contact, directional movement and transitions, shadow, bridge/cliff occlusion, collision, depth ordering, mobile performance, SAVE and accessibility contracts against the new high-proportion character presentation.
+- Keep current runtime character assets and movement/height/collision JSON unchanged until new adapter and character assets pass G1–G4, including Android device QA and an explicit final adoption decision.
+- Existing conflicts in Morwen v5.61 vs later five-file reference remain **G1 BLOCKED** pending source/approval precedence review. This direction decision does not resolve them.
+- Map/world geometry and QA ownership remain separate; no map source SHA may be used as a character source hash.
