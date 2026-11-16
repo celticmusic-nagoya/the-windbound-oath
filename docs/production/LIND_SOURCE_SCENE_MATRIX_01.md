@@ -34,3 +34,19 @@ Status: PARTIAL; exact map-image geometry and CG scene frames still require visu
 - INTEGRATION/Codex: visually inspect actual render PNG artifact and validate render output before applying the workflow to any accepted building.
 
 Gate: G1 PARTIAL/BLOCKED on map and CG; G2 NOT_RUN; G3 PASS **technical fixture only**; G4 NOT_RUN.
+
+## Follow-up audit — scene CG and wind/birds implementation (2026-11-16)
+Directly inspected main/docs/qa/rilde-cg-runtime-01-event-audit.md, main/js/field/lind-birds.js and main/js/event-cg.js. The 2026-11-07 CG audit is historical and does not establish current implementation completeness; recheck source and PR before G1/G4 PASS.
+
+| Scene | Event-to-place relationship | Asset or source | Caveat |
+| --- | --- | --- | --- |
+| Sunset promise | bench choice -> FieldScene cliff_sunset_to_fire -> scene_cliff_sunset | assets/approved/game/cliff/sunset_two_characters_back_view.png | Historical audit calls cue Draft PR; no village footprint inferred |
+| Night sky | same FieldScene, after TOD night -> scene_cliff_night | assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png | Camera viewpoint reference, not a terrain height measurement |
+| Distant village fire | village_fire vista -> scene_cliff_fire | no separate approved distant-view background cue in audit | Do not invent CG |
+| Return route | cliffRunHome -> startReturnScene -> returnScene | road/curve_reveal_APPROVED_user_reference.jpg | Reference-only composite; no runtime injection |
+| Attack | enterBurningVillage stage 5, atk_enter | raid/attack_background_only.png | HUD integration unverified |
+| Attack composite | same stage | raid/attack_with_characters_APPROVED_user_reference.jpg | Reference-only, not gameplay layer |
+| Ruins | stage >= 5 -> rilde_village_01_ruin | aftermath/ruins_background_only.png | No independently verified standalone cue |
+| Recovery | startEscapeScene -> enterMossForest | recovery/relief_with_characters_APPROVED_user_reference.jpg | Exact scene beat requires approval |
+
+Wind/bird runtime: main/js/field/lind-birds.js is DEV-gated by WINDBOUND_DEV and listens to lind-wind-change. It uses wind state and two prototype perching positions (575,750) and (1320,1175), which are NOT canonical coordinates. It does not own water or livestock timelines. The separate main/js/event-cg.js focuses on Lou/altar scenes rather than establishing village CG spatial coordinates. Keep village CG event layer inventory separate from unrelated altar CG. Next step is image-binary review and full runtime event code inspection; G1 and G4 remain BLOCKED/NOT_RUN as appropriate.
