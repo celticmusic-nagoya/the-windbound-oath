@@ -45,10 +45,10 @@ jobs:
         with:
           python-version: '3.13'
       - name: Check frozen candidate
-        if: matrix.role != 'canonical'
+        if: matrix.role == 'rig' || matrix.role == 'render'
         run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
       - name: Install pinned Blender Python for technical lanes
-        if: matrix.role != 'canonical'
+        if: matrix.role == 'rig' || matrix.role == 'render'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
@@ -100,7 +100,7 @@ jobs:
           mkdir -p qa_output/render
           python tools/character_blender/morwen_render_qa_loop.py -- "$CANDIDATE_PATH" qa_output/render
       - name: Verify candidate remains unchanged
-        if: always() && matrix.role != 'canonical'
+        if: always() && (matrix.role == 'rig' || matrix.role == 'render')
         run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
       - name: Upload per-role QA evidence
         if: always()
