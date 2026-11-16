@@ -1,0 +1,79 @@
+{
+  "schema": "lind-production-work-orders/v1",
+  "baseline": {
+    "pr": 350,
+    "commit": "59b6eda768d480202b598c27f58229bbfc2d2543",
+    "reference_pr": 346,
+    "reference_candidate": "D",
+    "immutable": true
+  },
+  "status": "READY_FOR_CODEX_NOT_EXECUTED",
+  "shared": {
+    "units": "candidate units, not meters",
+    "canon_metric_gate": "BLOCKED",
+    "blender_ci": "4.0.2",
+    "ai_concurrency_limit": 2,
+    "never": [
+      "overwrite candidate D",
+      "auto-merge main",
+      "publish",
+      "auto-pass G2"
+    ],
+    "retry_policy": "max 2 effective same-cause same-method repairs"
+  },
+  "work_orders": [
+    {
+      "id": "WORLD-GEO-02",
+      "owner": "WORLD",
+      "method": "joint-constrained fractured cliff sculpt and erosion volumes; prohibit periodic band shader and smooth heightfield retry",
+      "input_sha_required": true,
+      "output_prefix": "assets/candidates/lind-geology-route-production-01/world/",
+      "outputs": [
+        "world.blend",
+        "overview.png",
+        "detail.png",
+        "gameplay-distance.png",
+        "settings.json",
+        "manifest.json",
+        "qa.json"
+      ],
+      "acceptance": [
+        "independent source/reference comparison",
+        "reopen blend and packed source SHA",
+        "no invalid/degenerate geometry",
+        "visual G2 independently reviewed; no automatic PASS"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "ROUTE-SUPPORT-01",
+      "owner": "ROUTE",
+      "method": "abutment + embankment + joint-constrained support mesh, derive route from actual bridge surface",
+      "input_sha_required": true,
+      "output_prefix": "assets/candidates/lind-geology-route-production-01/route/",
+      "outputs": [
+        "route.blend",
+        "overview.png",
+        "junction-detail.png",
+        "support-measurements.json",
+        "manifest.json",
+        "qa.json"
+      ],
+      "acceptance": [
+        "BVH clearance center edges and interiors",
+        "support gap and unsupported spans reported, not hidden",
+        "junction continuity and bridge abutment intersection measured",
+        "collision and traversability remain NOT_RUN unless tested"
+      ],
+      "dependencies": [
+        "WORLD interface contract SHA; may use immutable D context until new WORLD interface exists"
+      ]
+    }
+  ],
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "FAIL_EXISTING_NOT_REASSESSED",
+    "G3": "NOT_RUN_NEW_WORK",
+    "G4": "NOT_RUN"
+  }
+}
