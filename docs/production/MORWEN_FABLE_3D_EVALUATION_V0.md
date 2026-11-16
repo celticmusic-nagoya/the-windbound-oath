@@ -34,3 +34,14 @@ G1 canon/axes, G2 visual quality, G3 mesh/rig/UV/materials/render, G4 game-scale
 
 ## Immediate action
 Wait for verified Fable access and approved source image. Meanwhile continue read-only Blender QA in the existing Draft PR; do not claim the Fable trial has run.
+
+## Decision update — 2026-11-16: Fable access and Tripo path
+- Director confirms Claude Code Fable is accessible. This is **user-reported availability**, not verification that the current GitHub Actions runner can invoke it.
+- Add **Tripo Smart Mesh P2.0 → GLB/FBX → Fable-controlled Blender** as priority candidate comparison, not automatically the production pipeline.
+- Tripo supports multiview 2–4 images, Smart Mesh quad topology, texturing, rigging and GLB/FBX export (https://www.tripo3d.ai/help/getting-started/what-features-does-tripo-have ; https://www.tripo3d.ai/features/smart-mesh).
+- Vendor-published case study describes Tripo for textured organic mesh/rig and Fable for Blender cleanup, attachments, animation and render; results are not an independent Morwen benchmark (https://note.com/tripoaijp/n/nd35c915948a2).
+- **Rights gate**: Tripo's commercial-use help says free-plan generated inputs/outputs are owned by Tripo; paid users get commercial rights subject to Terms and platform license (https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially). Do not upload canonical artwork or spend credits until rights, visibility, privacy, plan and explicit user consent are checked.
+- User's Fable availability does not establish Tripo account access, subscription or API key. No Tripo generation, paid action or Fable execution has occurred.
+- Before any external image upload: obtain canonical Layer 0 source bytes and verify SHA; check source-rights and confidentiality, request consent for specific service and costs.
+- Controlled comparison: A frozen Blender candidate; B Tripo P2.0 multiview quad/textured humanoid in neutral pose, with Fable Blender rig/material/animation finishing; optional C alternative provider only if justified. Preserve source and outputs independently. Same camera, lights, pose and render resolution.
+- G1 source image/canon alignment BLOCKED, G2 NOT_RUN, G3 existing candidate PARTIAL, G4 NOT_RUN. No source replacement or main merge.
