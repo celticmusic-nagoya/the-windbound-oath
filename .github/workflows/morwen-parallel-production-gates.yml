@@ -8,6 +8,7 @@ on:
       - 'tools/character_blender/diagnose_morwen_framing.py'
       - 'tools/character_blender/solve_morwen_framing.py'
       - 'tools/character_blender/test_solve_morwen_framing.py'
+      - 'tools/character_blender/morwen_team_contracts.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        role: [canonical, rig, render]
+        role: [canonical, design, rig, render, art-review]
     env:
       BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
       CANDIDATE_SHA256: 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4
@@ -32,7 +33,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Checkout frozen candidate for technical lanes
-        if: matrix.role != 'canonical'
+        if: matrix.role == 'rig' || matrix.role == 'render'
         uses: actions/checkout@v4
         with:
           repository: celticmusic-nagoya/the-windbound-oath
@@ -78,6 +79,16 @@ jobs:
           print(json.dumps(report))
           if report["status"]!="PASS":sys.exit(1)
           PY
+      - name: Design contract evidence
+        if: matrix.role == 'design'
+        run: |
+          mkdir -p qa_output/design
+          python tools/character_blender/morwen_team_contracts.py --role design --output qa_output/design/report.json
+      - name: Independent artistic review readiness
+        if: matrix.role == 'art-review'
+        run: |
+          mkdir -p qa_output/art-review
+          python tools/character_blender/morwen_team_contracts.py --role art-review --output qa_output/art-review/report.json
       - name: Rig deformation technical measurements
         if: matrix.role == 'rig'
         run: |
@@ -121,7 +132,7 @@ jobs:
       - name: Normalize artifact directories by role
         run: |
           mkdir -p qa_lanes
-          for role in canonical rig render; do
+          for role in canonical design rig render art-review; do
             if test -d "qa_evidence/morwen-qa-$role"; then
               cp -R "qa_evidence/morwen-qa-$role" "qa_lanes/$role"
             fi
