@@ -14,7 +14,7 @@ const types = { '.html':'text/html; charset=utf-8', '.js':'text/javascript', '.g
 const server = createServer((req,res)=>{
   const p = path.resolve(root, '.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));
   if(!p.startsWith(root+path.sep)){res.writeHead(403).end();return}
-  fs.readFile(p,(e,data)=>{if(e){res.writeHead(404).end('not found');return}res.writeHead(200,{'Content-Type':types[path.extname(p)]||'application/octet-stream'}).end(data)});
+  fs.readFile(p,(e,data)=>{if(e){res.writeHead(404).end('not found');return}res.writeHead(200,{'Content-Type':types[path.extname(p)]||'application/octet-stream'}).end(path.extname(p)==='.html'?Buffer.from(data.toString('utf8').replaceAll('https://cdn.jsdelivr.net/npm/three@0.170.0/','/node_modules/three/').replaceAll('https://cdn.jsdelivr.net/npm/babylonjs@7.40.3/','/node_modules/babylonjs/').replaceAll('https://cdn.jsdelivr.net/npm/babylonjs-loaders@7.40.3/','/node_modules/babylonjs-loaders/')):data)});
 });
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
