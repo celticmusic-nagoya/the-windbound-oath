@@ -2,6 +2,18 @@
 Status: USER DIRECTIVE; governs all subsequent village spatial design on this branch. Supersedes the **design-source priority** of LIND_SPATIAL_LAYOUT_HANDOFF_02.md, LIND_CANON_MAP_VISUAL_AUDIT_01.md, and lind-visual-anchor-review.v1.json. These older files are retained as audit history, NOT approved layout or a source for future placement.
 
 ## Mandatory source hierarchy
+
+**Registered visual composition master:** `assets/sources/lind-world-20261116/original.png`
+at source commit `dc17dd4846f35ea1f5dea25168eec9ddb50a3838` (PR #344),
+SHA-256 `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620`.
+This is the adopted 2026-11-16 world-map original for WORLD/HOME/BUILD/ECO,
+verified unchanged against the supplied ZIP manifest and GitHub blob readback.
+It supersedes old village map images, pixel overlays and DOM/CSS geometry as
+the whole-region visual composition source. Formal geography and later director
+decisions retain priority for geographical relationships; approved event CGs
+govern detailed event staging. Reconcile unknowns without inventing coordinates.
+See [immutable source handoff](LIND_APPROVED_WORLD_MAP_SOURCE_20261116.md).
+
 1. Latest formally adopted world-map geography and its authoritative version in private handoff repo. Confirm current canon status and revision, not merely a file name or old chat.
 2. Formally approved event CGs, including cliff vista, sunset, night, village fire, return route, attack, river-side escape and Aidan home architectural references. Treat approved background-only art differently from reference-only composites.
 3. Current official bible, canon addendum/status and adopted prologue script.
@@ -33,3 +45,8 @@ G1=BLOCKED pending direct latest-world-map and CG crosscheck; G2/G3/G4 for new w
 Confirmed relationships: Rilde = western coastal Alveria agricultural/fishing village; west–northwest Windward Cliffs overlook ocean sunset; southwest separate inlet and small fishing port; village center housing/storage; north farmland and main road toward Dunvall Fort (half-day to one-day walk design guideline); east north-to-south flowing river, bridge and riverside cliff used for voluntary escape jump; southeast/downstream Moss Forest and ancient altar. The two cliffs are distinct. Regional trade road leads from Rilde via Dunvall toward Caerdin. World-scale precise distances and names of new regions are not approved.
 
 **Correction to prior blocker:** latest official world-map **text source G1 provenance PASS**; 3D placement G1 remains BLOCKED until approved CG images, world-scale camera and metric geometry are checked. No legacy field coordinate can be promoted to canon. Previous tentative source lookup is resolved.
+
+**2026-11-16 ZIP registration update:** G1 original PNG registration is now PASS
+after exact-byte GitHub readback. Earlier binary-pending statements are historical.
+Full G1 remains BLOCKED pending the remaining CG/spatial reconciliation. No G2–G4
+or runtime integration approval follows from registration.

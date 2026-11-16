@@ -2,7 +2,7 @@
 Date 2026-11-16. Status: DIRECTOR-APPROVED VISUAL MASTER / 3D PRODUCTION PREPARATION. Supersedes all legacy village geometry and the 15-anchor pixel overlay as placement authority.
 
 ## Approved image master
-Generated and explicitly adopted in conversation 2026-11-16: fantasy world overview of Rilde coastal area, 1536x1024 RGB PNG, SHA-256 `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620`. This exact image is a canonical **visual composition**. **Binary has not yet been committed to GitHub**; register without modification and verify SHA before G1 source asset PASS. Do not substitute a lookalike or web image. Preserve original source unaltered.
+Generated and explicitly adopted in conversation 2026-11-16: fantasy world overview of Rilde coastal area, 1536x1024 RGB PNG, SHA-256 `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620`. This exact image is a canonical **visual composition**. **Original registered unchanged and GitHub blob bytes verified** at `assets/sources/lind-world-20261116/original.png`, source commit `dc17dd4846f35ea1f5dea25168eec9ddb50a3838` on PR #344. PNG is 3,586,379 bytes; ZIP/upload manifest, local file, committed blob and GitHub API readback all match. See [source handoff](LIND_APPROVED_WORLD_MAP_SOURCE_20261116.md). Do not substitute a lookalike or web image. Preserve original source unaltered.
 
 ## Canonical geography (private WORLD_MAP_CANON_20261108.md, directly verified)
 Rilde village: western coastal agricultural/fishing settlement. West/northwest: Windward Cliffs, sunset over sea. Southwest: separate inlet and small fishing port. Village center: housing and storage. North: farmland and road toward Dunvall Fort (walking half-day to one day design guideline). East: river flowing north to south, bridge, distinct riverside cliff used in raid escape. Southeast/downstream: Moss Forest and ancient altar. Long-distance transport is not teleportation. Keep private lore private.
@@ -30,7 +30,7 @@ Cliff event location `windward_cliffs_wnw` and `raid_riverside_cliff` MUST NOT m
 | --- | --- |
 | User approval of illustration | PASS |
 | PNG local pixel dimensions / SHA | PASS |
-| PNG stored and hash verified in GitHub | BLOCKED — binary upload pending |
+| PNG stored and hash verified in GitHub | PASS — original bytes registered at `dc17dd4846f35ea1f5dea25168eec9ddb50a3838`; API readback SHA matches |
 | Private adopted world-map geography | PASS |
 | Event CG files direct visual comparison | NOT_RUN |
 | New metric map, camera, elevation, navigation | NOT_RUN |
@@ -38,7 +38,7 @@ Cliff event location `windward_cliffs_wnw` and `raid_riverside_cliff` MUST NOT m
 | Browser/Android QA | NOT_RUN |
 
 ## First production gate
-1. Register original PNG unchanged in a dedicated source directory on PR branch; record SHA and original prompt provenance.
+1. DONE: original PNG registered unchanged on PR #344; ZIP and user-supplied manifest provenance preserved. Original generation prompt was not included in the upload and is not reconstructed. This resolves the G1 original-registration item only, not full G1 concordance.
 2. Collect **approved** event CGs and house visual references; record exact file paths and SHAs, reject reference-only images as canon.
 3. Produce separate terrain and architecture **design sheets**, including visual horizons, river flow, sightlines and walking routes, for director approval.
 4. Implement modular Blender scene with terrain/architecture independently and automated technical QA; no cubes as accepted final art.
