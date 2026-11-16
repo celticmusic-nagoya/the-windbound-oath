@@ -4,6 +4,7 @@ on:
     branches: [feature/morwen-fable-eval-01]
     paths:
       - '.github/workflows/morwen-parallel-production-gates.yml'
+      - 'tools/character_blender/integrate_morwen_parallel_qa.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -103,12 +104,39 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Report independent QA gate
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download independent lane reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: morwen-qa-*
+          path: qa_evidence
+          merge-multiple: false
+      - name: Normalize artifact directories by role
+        run: |
+          mkdir -p qa_lanes
+          for role in canonical rig render; do
+            if test -d "qa_evidence/morwen-qa-$role"; then
+              cp -R "qa_evidence/morwen-qa-$role" "qa_lanes/$role"
+            fi
+          done
+      - name: Validate each lane evidence fail closed
+        run: python tools/character_blender/integrate_morwen_parallel_qa.py --root qa_lanes --out qa_output/integration/report.json
+      - name: Summarize integration
+        if: always()
         env:
           RESULT: ${{ needs.parallel-qa.result }}
         run: |
-          echo "Parallel QA result: $RESULT" >> "$GITHUB_STEP_SUMMARY"
-          echo "Artistic QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
+          echo "Parallel jobs: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          echo "Independent artistic QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
           echo "Android game QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
           echo "Canonical promotion/main merge: BLOCKED" >> "$GITHUB_STEP_SUMMARY"
-          test "$RESULT" = success
+      - name: Upload integration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-qa-integration
+          path: qa_output/integration/report.json
+          retention-days: 7
+          if-no-files-found: warn
