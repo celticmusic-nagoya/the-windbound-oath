@@ -17,6 +17,7 @@ on:
       - 'tools/character_blender/measure_morwen_reference_silhouettes.py'
       - 'tools/character_blender/test_measure_morwen_reference_silhouettes.py'
       - 'tools/character_blender/build_morwen_reference_scene.py'
+      - 'tools/character_blender/audit_morwen_layer0_alpha.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -94,6 +95,7 @@ jobs:
           python -m unittest discover -s tools/character_blender -p 'test_measure_morwen_reference_silhouettes.py' -v
           mkdir -p qa_output/design
           python tools/character_blender/measure_morwen_reference_silhouettes.py qa_output/design/MORWEN_REFERENCE_SILHOUETTES.json
+          python tools/character_blender/audit_morwen_layer0_alpha.py qa_output/design/MORWEN_LAYER0_ALPHA_AUDIT.json
       - name: Design contract evidence
         if: matrix.role == 'design'
         run: |
