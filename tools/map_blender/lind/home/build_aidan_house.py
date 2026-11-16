@@ -59,7 +59,14 @@ CHIM_X = (L / 2 - 0.75, L / 2 + 0.02)
 CHIM_Y = (-0.38, 0.37)
 CHIM_TOP = Z_RIDGE + 0.85
 
-TEX_DIR = os.environ.get("LIND_TEX_CACHE", os.path.expanduser("~/.cache/lind_home_tex"))
+def _tex_dir():
+    for d in (os.environ.get("LIND_TEX_CACHE", ""), "/home/claude/.cache/lind_home_tex", os.path.expanduser("~/.cache/lind_home_tex")):
+        if d and os.path.isdir(d):
+            return d
+    return os.path.expanduser("~/.cache/lind_home_tex")
+
+
+TEX_DIR = _tex_dir()
 
 
 def srgb(c):
@@ -387,6 +394,9 @@ def add_stone(mb, face, outline, rng, mat, kind, depth=STONE_BACK, crown=(0.012,
     f2 = [rng.uniform(0.36, 0.50) for _ in range(n)]
     ring1 = [(cx + f1[i] * (outline[i][0] - cx), cz + f1[i] * (outline[i][1] - cz)) for i in range(n)]
     ring2 = [(cx + f2[i] * (outline[i][0] - cx), cz + f2[i] * (outline[i][1] - cz)) for i in range(n)]
+    perim = [0.0]
+    for i in range(n - 1):
+        perim.append(perim[-1] + math.hypot(outline[i + 1][0] - outline[i][0], outline[i + 1][1] - outline[i][1]))
     e_ids = [mb.vert(face.P(u, z, d)) for u, z, d in edge]
     r1 = [mb.vert(face.P(u, z, dd(u, z, H * rng.uniform(0.52, 0.70)))) for u, z in ring1]
     r2 = [mb.vert(face.P(u, z, dd(u, z, H * rng.uniform(0.86, 0.98)))) for u, z in ring2]
@@ -398,9 +408,10 @@ def add_stone(mb, face, outline, rng, mat, kind, depth=STONE_BACK, crown=(0.012,
         mb.poly([r1[i], r1[j], r2[j], r2[i]], [uv(*ring1[i]), uv(*ring1[j]), uv(*ring2[j]), uv(*ring2[i])], mat, r, kind)
         mb.poly([r2[i], r2[j], c_id], [uv(*ring2[i]), uv(*ring2[j]), uv(cx, cz)], mat, r, kind)
         lu = math.hypot(outline[j][0] - outline[i][0], outline[j][1] - outline[i][1])
+        s0 = perim[i] / tex_tile + uo
+        s1 = s0 + lu / tex_tile
         mb.poly([e_ids[i], b_ids[i], b_ids[j], e_ids[j]],
-                [uv(*outline[i]), (uv(*outline[i])[0], uv(*outline[i])[1] - depth / tex_tile),
-                 (uv(*outline[j])[0], uv(*outline[j])[1] - depth / tex_tile), uv(*outline[j])], mat, r, kind)
+                [(s0, vo), (s0, vo - depth / tex_tile), (s1, vo - depth / tex_tile), (s1, vo)], mat, r, kind)
     mb.poly(b_ids[::-1], [uv(*p) for p in outline[::-1]], mat, r, kind)
     return 1
 
@@ -545,6 +556,19 @@ def build_wall_masonry(mb, mb_timber, face, rng, zs, top_clip, openings, quoin_e
                         cells.append((u + ls, cut, z0, z1))
                         zm = z0 + (z1 - z0) * rng.uniform(0.4, 0.6)
                         cells += [(u, u + ls, z0, zm), (u, u + ls, zm, z1)]
+                elif (not span2) and (not plinth) and (z1 - z0) > 0.19 and (cut - u) > 0.30 and rng.random() < 0.38:
+                    # brought-to-course: lower main stone + a row of 1-3 small levelling stones above it
+                    zm = z0 + (z1 - z0) * rng.uniform(0.58, 0.74)
+                    if rng.random() < 0.5:
+                        cells.append((u, cut, z0, zm))
+                        top0, top1 = zm, z1
+                    else:
+                        cells.append((u, cut, z1 - (zm - z0), z1))
+                        top0, top1 = z0, z1 - (zm - z0)
+                    npc = 1 if (cut - u) < 0.4 else rng.choice((2, 2, 3))
+                    xs = sorted([u, cut] + [u + (cut - u) * (i + rng.uniform(0.3, 0.7)) / npc for i in range(npc - 1)])
+                    for x0_, x1_ in zip(xs[:-1], xs[1:]):
+                        cells.append((x0_, x1_, top0, top1))
                 else:
                     cells.append((u, cut, z0, ztop))
                 for c0, c1, cz0, cz1 in cells:
@@ -557,7 +581,7 @@ def build_wall_masonry(mb, mb_timber, face, rng, zs, top_clip, openings, quoin_e
                     if not ins or abs(poly_area(ins)) < 0.008:
                         continue
                     big = min(c1 - c0, cz1 - cz0)
-                    out = round_outline(ins, rng, 0.03 * (big / 0.25) ** 0.5, 0.085 * (big / 0.25) ** 0.5, jitter=0.012)
+                    out = round_outline(ins, rng, 0.05 * (big / 0.25) ** 0.5, 0.13 * (big / 0.25) ** 0.5, jitter=0.018)
                     nst += add_stone(mb, face, out, rng, field_mat, 4 if plinth else 0,
                                      depth=STONE_BACK + (0.04 if plinth else 0.0), crown=crown,
                                      proud=0.012 if plinth else rng.uniform(-0.004, 0.006), seed_off=rng.random() * 10)
@@ -717,9 +741,9 @@ def make_materials():
 
     # --- stone rubble (CC0 rock_boulder_dry, tinted toward approved CG cream/greige) ---
     for name, stops, sat, valmul in (
-        ("MAT_STONE_RUBBLE_LIMESTONE_A", [(0.0, (0.80, 0.74, 0.62)), (0.3, (0.86, 0.80, 0.68)), (0.55, (0.74, 0.70, 0.62)),
-                                          (0.8, (0.88, 0.83, 0.72)), (1.0, (0.70, 0.62, 0.50))], 0.55, 1.0),
-        ("MAT_STONE_QUOIN_DRESSED_A", [(0.0, (0.86, 0.81, 0.70)), (0.5, (0.82, 0.77, 0.66)), (1.0, (0.90, 0.85, 0.74))], 0.4, 1.0)):
+        ("MAT_STONE_RUBBLE_LIMESTONE_A", [(0.0, (0.86, 0.77, 0.62)), (0.3, (0.92, 0.84, 0.70)), (0.55, (0.80, 0.74, 0.64)),
+                                          (0.8, (0.94, 0.87, 0.74)), (1.0, (0.78, 0.68, 0.52))], 0.22, 1.0),
+        ("MAT_STONE_QUOIN_DRESSED_A", [(0.0, (0.92, 0.85, 0.72)), (0.5, (0.88, 0.80, 0.68)), (1.0, (0.95, 0.89, 0.77))], 0.2, 1.0)):
         m, nt = new(name)
         mp = uvmap(nt)
         pd = tex_path("rock_boulder_dry_diff_1k.jpg")
@@ -736,18 +760,18 @@ def make_materials():
             mixc = nt.mix("MULTIPLY", None, None, hs, "Color", tint, "Color", fac_val=1.0)
         else:
             nz = nt.noise(6.0, 6.0, 0.6, vec=(mp, "Vector"))
-            mixc = nt.mix("MULTIPLY", None, None, nz, "Color", tint, "Color", fac_val=0.25)
+            mixc = nt.mix("MULTIPLY", None, None, nz, "Fac", tint, "Color", fac_val=0.25)
         # weathering: darker, slightly greenish toward ground (object z) — not a uniform band (noise-modulated)
         geo = nt.n("ShaderNodeNewGeometry")
         sep = nt.n("ShaderNodeSeparateXYZ")
         nt.link(geo, "Position", sep, "Vector")
         nzw = nt.noise(1.3, 4.0, 0.6, vec=(geo, "Position"))
-        ground = nt.maprange(sep, "Z", 0.0, 1.1, 1.0, 0.0)
+        ground = nt.maprange(sep, "Z", 0.0, 0.8, 0.75, 0.0)
         mulw = nt.n("ShaderNodeMath", operation="MULTIPLY")
         nt.link(ground, "Result", mulw, 0)
         nt.link(nzw, "Fac", mulw, 1)
         grime = nt.mix("MIX", mulw, "Value", mixc, "Result_Color", None, None)
-        sock(grime, "B_Color").default_value = srgb((0.38, 0.40, 0.30))
+        sock(grime, "B_Color").default_value = srgb((0.46, 0.44, 0.34))
         nt.link(grime, "Result_Color", nt.bsdf, "Base Color")
         if pr:
             ri = nt.img(pr, True, mp)
@@ -979,7 +1003,7 @@ def build(out_dir):
     stats = {}
     faces = faces_house()
     # ------------------------------------------------------------------ course grid (shared at corners)
-    zs_main = course_grid(R(1), FOUND_TOP, WALL_TOP, first=0.34, hmin=0.19, hmax=0.30)
+    zs_main = course_grid(R(1), FOUND_TOP, WALL_TOP, first=0.34, hmin=0.17, hmax=0.34)
     zs_gable_up = course_grid(R(2), WALL_TOP, Z_RIDGE, hmin=0.17, hmax=0.27)
     zs_gable = zs_main + zs_gable_up[1:]
     ops = opening_plan(zs_main)
@@ -1487,7 +1511,7 @@ def build_porch(M, C, rng):
             n = len(pts)
             for i in range(n):
                 j = (i + 1) % n
-                sl.poly([tp[j], bt[j], bt[i], tp[i]], [uvs[j], uvs[j], uvs[i], uvs[i]], "MAT_SLATE_BLUEGRAY_A", r, 5)
+                sl.poly([tp[i], bt[i], bt[j], tp[j]], [uvs[i], uvs[i], uvs[j], uvs[j]], "MAT_SLATE_BLUEGRAY_A", r, 5)
                 sl.low.append(0.6)
             joints.append(x + w)
             x += w
@@ -1622,7 +1646,7 @@ def add_barrel(mb, base, r, h, rng, mat="MAT_DOOR_PLANK_A"):
                 rfun=lambda t, a: 1.0 + 0.10 * math.sin(t * math.pi) + 0.006 * math.sin(a * 16), rings=6)
     for t in (0.12, 0.88):
         rr = r * (1.0 + 0.10 * math.sin(t * math.pi)) + 0.004
-        mb.cylinder((base[0], base[1], base[2] + h * t - 0.02), (0, 0, 1), rr, 0.04, 16, "MAT_IRON_WROUGHT_A", 0.3, cap=False)
+        mb.cylinder((base[0], base[1], base[2] + h * t - 0.02), (0, 0, 1), rr, 0.04, 16, "MAT_IRON_WROUGHT_A", 0.3, cap=True)
 
 
 def build_props(M, C, rng):
@@ -1669,7 +1693,7 @@ def build_props(M, C, rng):
     # washing line on the west side (wind motif): posts, line, three cloths with wind sag
     for yy in (-2.2, 2.2):
         mb.aabb((-L / 2 - 1.75, yy - 0.05, 0.0), (-L / 2 - 1.65, yy + 0.05, 2.05), W, 1.0, rng=rng)
-    mb.cylinder((-L / 2 - 1.70, -2.2, 1.95), (0, 1, 0), 0.006, 4.4, 6, "MAT_LINEN_A", 0.3, cap=False)
+    mb.cylinder((-L / 2 - 1.70, -2.2, 1.95), (0, 1, 0), 0.006, 4.4, 6, "MAT_LINEN_A", 0.3, cap=True)
     cl = MB("GEO_AIDANHOUSE_PROPS_LAUNDRY")
     for i, (yc, wdt, hgt, mat) in enumerate(((-1.2, 0.8, 0.9, "MAT_LINEN_A"), (0.05, 0.6, 0.55, "MAT_FABRIC_WOOL_GREEN_A"), (1.05, 0.9, 1.0, "MAT_LINEN_A"))):
         nu, nv = 8, 6
@@ -1688,7 +1712,6 @@ def build_props(M, C, rng):
             for k in range(nu):
                 q = [grid[j][k], grid[j + 1][k], grid[j + 1][k + 1], grid[j][k + 1]]
                 cl.poly(q, [(k / nu, j / nv), (k / nu, (j + 1) / nv), ((k + 1) / nu, (j + 1) / nv), ((k + 1) / nu, j / nv)], mat, 0.5)
-                cl.poly(q[::-1], [((k + 1) / nu, j / nv), ((k + 1) / nu, (j + 1) / nv), (k / nu, (j + 1) / nv), (k / nu, j / nv)], mat, 0.5)
     # low shrubs at foundation corners
     for (px, py) in ((-L / 2 - 0.3, D / 2 - 0.6), (L / 2 + 0.35, D / 2 - 0.4), (-L / 2 + 0.8, -D / 2 - 0.35), (L / 2 - 0.7, D / 2 + 0.35)):
         for i in range(5):
@@ -1912,7 +1935,7 @@ def set_camera(scene, view):
     return cam
 
 
-def render(out_dir, views, samples=48):
+def render(out_dir, views, samples=48, pct=100):
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
@@ -1934,6 +1957,7 @@ def render(out_dir, views, samples=48):
     out = {}
     for v in views:
         set_camera(scene, v)
+        scene.render.resolution_percentage = pct
         interior = VIEWS[v].get("interior", False)
         scene.cycles.samples = 64 if interior else samples
         scene.view_settings.exposure = 0.6 if interior else 0.0
@@ -1960,6 +1984,7 @@ def main(argv):
     ap.add_argument("--out", required=True)
     ap.add_argument("--render", default="none", help="none | all | comma list of " + ",".join(VIEWS))
     ap.add_argument("--samples", type=int, default=48)
+    ap.add_argument("--pct", type=int, default=100, help="resolution percentage (previews)")
     ap.add_argument("--blend", default="", help="optional path to save the .blend")
     a = ap.parse_args(argv)
     man = build(a.out)
@@ -1969,7 +1994,7 @@ def main(argv):
         man["blend_path_uncommitted"] = os.path.abspath(a.blend)
     views = [] if a.render == "none" else (list(VIEWS) if a.render == "all" else a.render.split(","))
     if views:
-        r = render(a.out, views, a.samples)
+        r = render(a.out, views, a.samples, a.pct)
         man["renders"] = {k: {"path": os.path.relpath(p, a.out), "sha256": hashlib.sha256(open(p, "rb").read()).hexdigest()} for k, p in r.items()}
         man["render_settings"] = {"engine": "CYCLES", "samples_ext": a.samples, "samples_int": 64, "denoise": "OIDN", "view_transform": "AgX",
                                   "cameras": VIEWS}

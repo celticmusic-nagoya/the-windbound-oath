@@ -18,7 +18,7 @@ Roof canon: blue-gray slate (PR #307 `FIELD_VISUAL_OVERHAUL_20261108.md` line 44
 | Item | Status |
 |---|---|
 | Aidan house visual target "V11" (`a_highly_detailed_cinematic_3d_rendered_scene_of.png`), SHA `bafade8ce4220bdbf1e09a4b9eeeb9b0fd168ce27fb7a910164e1538e86266a8` | User-approved quality target (#311 record). **Binary not in any repo → not inspected by this lane.** Characteristics used only via #311/#331 text. |
-| 2026-11-16 world-map PNG `abbb3997…0620` | not in any repo; G1 image concordance BLOCKED (packet) |
+| 2026-11-16 world-map master `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620` | **Registered 2026-11-17** (repo dc17dd4 `assets/sources/lind-world-20261116/original.png`, 1536×1024; lead-verified). Inspected via local read-only copy `/home/claude/refs/lind_world_master_abbb3997.png` (SHA re-verified by `qa_aidan_house.py`; not copied into this branch). Composition master, not to scale. Village cluster: 1.5-storey side-gabled cottages, cream/greige rubble walls, gable-end chimneys with smoke, small dormers on some houses. **Roof colour observation:** foreground roofs read blue-gray slate, but several mid/back roofs in the master read warm brown/ochre. This lane keeps the director-approved blue-gray slate canon (#307); the mixed roof colour in the master is flagged to COORD, not resolved here. Which cottage is Aidan's is not labelled. |
 | `data/maps/rilde_in_aidan.json` | current runtime **prototype** interior (single room; bed west near back wall, fireplace back wall east, window back wall, door bottom-centre, spawn `from_bed`). Used as layout hint only; not geometry authority; not modified. |
 
 ## Canon facts used (paraphrased, private bible v5.0 §8 + scenario canon, handoff `af0d068`)

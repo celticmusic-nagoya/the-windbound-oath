@@ -1,0 +1,449 @@
+{
+ "blender": "5.3.0",
+ "collections": {
+  "ANCHORS": {
+   "objects": [
+    "ANC_AIDANHOUSE_DOOR_MAIN_EXT",
+    "ANC_AIDANHOUSE_DOOR_MAIN_INT",
+    "ANC_AIDANHOUSE_EVENT_BED",
+    "ANC_AIDANHOUSE_EVENT_CUPBOARD",
+    "ANC_AIDANHOUSE_EVENT_FIREPLACE",
+    "ANC_AIDANHOUSE_EVENT_JAR",
+    "ANC_AIDANHOUSE_EVENT_SHELF",
+    "ANC_AIDANHOUSE_EVENT_TABLE",
+    "ANC_AIDANHOUSE_SAVE_BED",
+    "ANC_AIDANHOUSE_SPAWN_BEDSIDE"
+   ],
+   "tris": 0
+  },
+  "CHIMNEY": {
+   "objects": [
+    "GEO_AIDANHOUSE_CHIMNEY",
+    "GEO_AIDANHOUSE_FLASHING"
+   ],
+   "tris": 4518
+  },
+  "COLLISION": {
+   "objects": [
+    "COL_AIDANHOUSE_barrel_ext",
+    "COL_AIDANHOUSE_bed",
+    "COL_AIDANHOUSE_chest",
+    "COL_AIDANHOUSE_cupboard",
+    "COL_AIDANHOUSE_fireplace",
+    "COL_AIDANHOUSE_porch_posts",
+    "COL_AIDANHOUSE_shelf",
+    "COL_AIDANHOUSE_table",
+    "COL_AIDANHOUSE_wall_east",
+    "COL_AIDANHOUSE_wall_front_e",
+    "COL_AIDANHOUSE_wall_front_w",
+    "COL_AIDANHOUSE_wall_rear",
+    "COL_AIDANHOUSE_wall_west",
+    "COL_AIDANHOUSE_woodpile"
+   ],
+   "tris": 168
+  },
+  "FOUNDATION": {
+   "objects": [
+    "GEO_AIDANHOUSE_FOUNDATION"
+   ],
+   "tris": 24
+  },
+  "INTERIOR": {
+   "objects": [
+    "GEO_AIDANHOUSE_INT_CEILING",
+    "GEO_AIDANHOUSE_INT_FLOOR",
+    "GEO_AIDANHOUSE_INT_FURNITURE",
+    "GEO_AIDANHOUSE_INT_SOFT",
+    "LGT_CANDLE",
+    "LGT_FIRE",
+    "LGT_INT_FILL"
+   ],
+   "tris": 5508
+  },
+  "MASONRY": {
+   "objects": [
+    "GEO_AIDANHOUSE_MASONRY_EAST",
+    "GEO_AIDANHOUSE_MASONRY_FRONT",
+    "GEO_AIDANHOUSE_MASONRY_REAR",
+    "GEO_AIDANHOUSE_MASONRY_WEST"
+   ],
+   "tris": 156116
+  },
+  "OPENINGS": {
+   "objects": [
+    "GEO_AIDANHOUSE_GLASS",
+    "GEO_AIDANHOUSE_OPENINGS"
+   ],
+   "tris": 1096
+  },
+  "PORCH": {
+   "objects": [
+    "GEO_AIDANHOUSE_PORCH",
+    "GEO_AIDANHOUSE_PORCH_FLASHING",
+    "GEO_AIDANHOUSE_PORCH_SLATES"
+   ],
+   "tris": 1680
+  },
+  "PROPS_EXT": {
+   "objects": [
+    "GEO_AIDANHOUSE_PROPS_EXT",
+    "GEO_AIDANHOUSE_PROPS_LAUNDRY",
+    "GEO_AIDANHOUSE_PROPS_PLANTS"
+   ],
+   "tris": 4980
+  },
+  "ROOF_SLATE": {
+   "objects": [
+    "GEO_AIDANHOUSE_RIDGE",
+    "GEO_AIDANHOUSE_SLATES_FRONT",
+    "GEO_AIDANHOUSE_SLATES_REAR"
+   ],
+   "tris": 51724
+  },
+  "ROOF_STRUCT": {
+   "objects": [
+    "GEO_AIDANHOUSE_ROOFDECK"
+   ],
+   "tris": 2096
+  },
+  "STAGING": {
+   "objects": [
+    "LGT_SUN",
+    "STG_AIDANHOUSE_GROUND",
+    "STG_AIDANHOUSE_PATH"
+   ],
+   "tris": 4652
+  },
+  "TIMBER": {
+   "objects": [
+    "GEO_AIDANHOUSE_TIMBER"
+   ],
+   "tris": 648
+  },
+  "WALL_SHELL": {
+   "objects": [
+    "GEO_AIDANHOUSE_PLASTER_INT",
+    "GEO_AIDANHOUSE_WALLCORE"
+   ],
+   "tris": 704
+  }
+ },
+ "course_grid_gable": [
+  0.06,
+  0.4,
+  0.601,
+  0.89,
+  1.112,
+  1.406,
+  1.686,
+  1.883,
+  2.134,
+  2.454,
+  2.661,
+  2.844,
+  3.164,
+  3.3,
+  3.559,
+  3.749,
+  4.009,
+  4.192,
+  4.438,
+  4.608,
+  4.852,
+  5.087,
+  5.263,
+  5.49,
+  5.682,
+  5.947,
+  6.157,
+  6.341,
+  6.471
+ ],
+ "course_grid_main": [
+  0.06,
+  0.4,
+  0.601,
+  0.89,
+  1.112,
+  1.406,
+  1.686,
+  1.883,
+  2.134,
+  2.454,
+  2.661,
+  2.844,
+  3.164,
+  3.3
+ ],
+ "dimensions_m": {
+  "D": 6.6,
+  "FFL": 0.25,
+  "L": 9.0,
+  "T": 0.55,
+  "chimney_top": 7.321,
+  "eave_oh": 0.4,
+  "pitch_deg": 42.0,
+  "ridge_z": 6.471,
+  "verge_oh": 0.3,
+  "wall_top": 3.3
+ },
+ "geometry_sha256": "eb2283bdc20115748609225e3ed5895bb6835c6b2d807077e48b5e39db0e70a4",
+ "masonry_family": "F9 layout-outline pillowed rubble",
+ "materials": [
+  "MAT_DOOR_PLANK_A",
+  "MAT_FABRIC_WOOL_GREEN_A",
+  "MAT_FIRE_EMIT_A",
+  "MAT_FLOWER_RED_A",
+  "MAT_FOLIAGE_A",
+  "MAT_GLASS_CROWN_A",
+  "MAT_IRON_WROUGHT_A",
+  "MAT_LEAD_FLASHING_A",
+  "MAT_LINEN_A",
+  "MAT_MORTAR_LIME_A",
+  "MAT_PLANK_FLOOR_A",
+  "MAT_PLASTER_LIME_INT_A",
+  "MAT_SLATE_BLUEGRAY_A",
+  "MAT_SLATE_RIDGE_A",
+  "MAT_SOOT_A",
+  "MAT_STONE_QUOIN_DRESSED_A",
+  "MAT_STONE_RUBBLE_LIMESTONE_A",
+  "MAT_TERRACOTTA_A",
+  "MAT_TIMBER_OAK_WEATHERED_A",
+  "STG_MAT_GRASS"
+ ],
+ "openings": {
+  "east": [
+   {
+    "clear": [
+     0.44,
+     0.317
+    ],
+    "id": "W_EAST_SMALL",
+    "kind": "window",
+    "u0": 1.2,
+    "u1": 1.8,
+    "z": [
+     1.406,
+     1.883
+    ]
+   }
+  ],
+  "front": [
+   {
+    "clear": [
+     1.0,
+     2.314
+    ],
+    "id": "DOOR_MAIN",
+    "kind": "door",
+    "u0": 3.92,
+    "u1": 5.08,
+    "z": [
+     0.06,
+     2.454
+    ]
+   },
+   {
+    "clear": [
+     0.8,
+     1.182
+    ],
+    "id": "W_FRONT_W",
+    "kind": "window",
+    "u0": 1.52,
+    "u1": 2.48,
+    "z": [
+     1.112,
+     2.454
+    ]
+   },
+   {
+    "clear": [
+     0.8,
+     1.182
+    ],
+    "id": "W_FRONT_E",
+    "kind": "window",
+    "u0": 6.52,
+    "u1": 7.48,
+    "z": [
+     1.112,
+     2.454
+    ]
+   }
+  ],
+  "rear": [
+   {
+    "clear": [
+     0.8,
+     1.182
+    ],
+    "id": "W_REAR",
+    "kind": "window",
+    "u0": 3.82,
+    "u1": 4.779999999999999,
+    "z": [
+     1.112,
+     2.454
+    ]
+   }
+  ],
+  "west": [
+   {
+    "clear": [
+     0.72,
+     1.182
+    ],
+    "id": "W_WEST_BED",
+    "kind": "window",
+    "u0": 3.36,
+    "u1": 4.24,
+    "z": [
+     1.112,
+     2.454
+    ]
+   },
+   {
+    "clear": [
+     0.56,
+     0.439
+    ],
+    "id": "W_WEST_LOFT",
+    "kind": "window",
+    "u0": 2.94,
+    "u1": 3.6599999999999997,
+    "z": [
+     4.009,
+     4.608
+    ]
+   }
+  ]
+ },
+ "render_settings": {
+  "cameras": {
+   "closeup_masonry_roof": {
+    "lens": 42,
+    "loc": [
+     7.6,
+     -6.6,
+     2.3
+    ],
+    "res": [
+     1280,
+     800
+    ],
+    "tgt": [
+     4.0,
+     -3.2,
+     3.2
+    ]
+   },
+   "front_three_quarter": {
+    "lens": 40,
+    "loc": [
+     -11.5,
+     -15.5,
+     5.2
+    ],
+    "res": [
+     1280,
+     800
+    ],
+    "tgt": [
+     0.3,
+     0,
+     2.9
+    ]
+   },
+   "game_27deg": {
+    "azim": -45,
+    "elev": 27,
+    "ortho": true,
+    "res": [
+     768,
+     768
+    ],
+    "scale": 17.0
+   },
+   "interior_bedside": {
+    "interior": true,
+    "lens": 17,
+    "loc": [
+     1.6,
+     -2.15,
+     1.65
+    ],
+    "res": [
+     1280,
+     800
+    ],
+    "tgt": [
+     -3.0,
+     1.9,
+     0.75
+    ]
+   },
+   "rear_three_quarter": {
+    "lens": 40,
+    "loc": [
+     12.5,
+     15.0,
+     6.0
+    ],
+    "res": [
+     1280,
+     800
+    ],
+    "tgt": [
+     0.0,
+     0,
+     3.0
+    ]
+   }
+  },
+  "denoise": "OIDN",
+  "engine": "CYCLES",
+  "samples_ext": 32,
+  "samples_int": 64,
+  "view_transform": "AgX"
+ },
+ "renders": {
+  "interior_bedside": {
+   "path": "interior_bedside.png",
+   "sha256": "2afa0818f35ad50be5bdc0ad871cf6482b6c5fb905626075d7878c1a23b90d0c"
+  }
+ },
+ "script": "lind-home-01/build_aidan_house.py v1.0",
+ "seed": 20261116,
+ "slate_count": 2023,
+ "status": "CANDIDATE_NOT_ART_APPROVED",
+ "stone_cells_by_kind": {
+  "field": 1162,
+  "jamb": 68,
+  "plinth": 47,
+  "quoin": 76,
+  "sill": 6
+ },
+ "stone_counts_by_face": {
+  "chim_east": 10,
+  "chim_front": 9,
+  "chim_rear": 9,
+  "chim_west": 9,
+  "east": 375,
+  "front": 255,
+  "rear": 316,
+  "west": 376
+ },
+ "task_id": "LIND-HOME-01",
+ "textures": {
+  "rock_boulder_dry_diff_1k.jpg": "OK sha256=20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c",
+  "rock_boulder_dry_nor_gl_1k.jpg": "OK sha256=5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595",
+  "rock_boulder_dry_rough_1k.jpg": "OK sha256=cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130",
+  "rough_wood_diff_1k.jpg": "OK sha256=abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98",
+  "rough_wood_nor_gl_1k.jpg": "OK sha256=3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011",
+  "rough_wood_rough_1k.jpg": "OK sha256=4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09",
+  "weathered_brown_planks_diff_1k.jpg": "OK sha256=94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29",
+  "weathered_brown_planks_nor_gl_1k.jpg": "OK sha256=8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393",
+  "weathered_brown_planks_rough_1k.jpg": "OK sha256=b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9"
+ }
+}
