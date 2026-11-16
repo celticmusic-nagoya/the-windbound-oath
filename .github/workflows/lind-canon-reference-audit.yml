@@ -5,6 +5,9 @@ on:
       - feature/lind-spatial-masterplan-01
     paths:
       - '.github/workflows/lind-canon-reference-audit.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/lind-canon-reference-audit.yml'
   workflow_dispatch:
 permissions:
   contents: read
