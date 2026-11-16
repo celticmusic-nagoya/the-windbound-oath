@@ -33,7 +33,10 @@ jobs:
           cd /tmp/lind-blender-pinned
           apt-get download 'blender=4.0.2+dfsg-1ubuntu8' 'blender-data=4.0.2+dfsg-1ubuntu8'
           sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
-          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
+          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6 python3-numpy
+      - name: Verify Blender Python NumPy dependency
+        run: |
+          blender -b --factory-startup --python-expr "import numpy; print('PASS: Blender Python NumPy', numpy.__version__)"
           test "$(blender --version | head -n 1)" = 'Blender 4.0.2'
       - name: Export GLB technical test asset
         run: |
