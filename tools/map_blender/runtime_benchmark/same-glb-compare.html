@@ -3,12 +3,12 @@
 <title>LIND same-GLB runtime comparison</title>
 <style>body{margin:0;background:#101923;color:#eef4f8;font:14px system-ui}header{padding:14px}button,input,select{padding:9px;margin:5px}button:disabled{opacity:.5}canvas{display:block;width:100%;height:52vh}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px}label{display:block}</style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script src="https://cdn.babylonjs.com/babylon.js"></script>
-<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babylonjs@7.40.3/babylon.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babylonjs-loaders@7.40.3/babylonjs.loaders.min.js"></script>
 </head><body><header><strong>LIND｜同一GLB比較（独立技術検証）</strong>
-<p>同じローカルGLBを両エンジンへ読み込みます。CDNライブラリのハッシュ固定・正式アセット照合は未完了です。結果は正式採用判定ではありません。</p>
+<p>同じローカルGLBを両エンジンへ読み込みます。CDNライブラリのバージョンは固定済みですが、SRI・正式アセット照合は未完了です。結果は正式採用判定ではありません。</p>
 <label>GLB <input id="file" type="file" accept=".glb,model/gltf-binary"></label>
-<label>エンジン <select id="engine"><option value="three">Three.js 0.170.0</option><option value="babylon">Babylon.js (CDN版・実行時バージョン記録)</option></select></label>
+<label>エンジン <select id="engine"><option value="three">Three.js 0.170.0</option><option value="babylon">Babylon.js 7.40.3</option></select></label>
 <button id="run">3秒準備＋30秒測定</button><button id="stop">停止</button><button id="copy">結果コピー</button></header>
 <canvas id="view"></canvas><pre id="report">NOT_RUN</pre>
 <script type="module">
@@ -18,7 +18,7 @@ const show=()=>report.textContent=JSON.stringify(result,null,2);
 const percentile=a=>{const s=[...a].sort((a,b)=>a-b);return s.length?s[Math.ceil(s.length*.95)-1]:null};
 const dimensions=()=>{const dpr=Math.min(devicePixelRatio,2);return {width:Math.max(1,Math.round(canvas.clientWidth*dpr)),height:Math.max(1,Math.round(canvas.clientHeight*dpr)),dpr}};
 function cleanup(){if(active){active.dispose();active=null}}
-function cancel(status){token++;cleanup();if(result.status==='LOADING'||result.status==='WARMUP'||result.status==='RUNNING'){result.status=status;show()}}
+function cancel(status){token++;run.disabled=false;cleanup();if(result.status==='LOADING'||result.status==='WARMUP'||result.status==='RUNNING'){result.status=status;show()}}
 document.querySelector('#stop').onclick=()=>cancel('STOPPED_EARLY');
 document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(JSON.stringify(result,null,2)).catch(e=>{result.copyError=String(e);show()});
 async function sha(buffer){const b=await crypto.subtle.digest('SHA-256',buffer);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -74,7 +74,7 @@ run.onclick=async()=>{
   if(engine==='three'){const [THREE,addon]=await Promise.all([import('three'),import('three/addons/loaders/GLTFLoader.js')]);if(id!==token)return;active=await threeSession(THREE,addon.GLTFLoader,bytes,result.dimensions)}
   else active=await babylonSession(bytes,result.dimensions);
   if(id!==token){cleanup();return}
-  result.loadMs=performance.now()-t0;result.asset=active.meta;result.status='WARMUP';show();
+  result.loadMs=performance.now()-t0;result.asset=active.meta;result.engineVersion=engine==='babylon'?window.BABYLON?.Engine?.Version:'0.170.0';result.status='WARMUP';show();
   let phaseStart=0,last=0,samples=[],elapsed=0;
   const tick=t=>{
    if(id!==token)return;
@@ -89,6 +89,6 @@ run.onclick=async()=>{
    }
    requestAnimationFrame(tick);
   };requestAnimationFrame(tick);
- }catch(e){if(id===token){result.status='FAIL_LOAD';result.error=String(e);cleanup();show()}}finally{run.disabled=false}
+ }catch(e){if(id===token){result.status='FAIL_LOAD';result.error=String(e);cleanup();show()}}finally{if(result.status!=='WARMUP'&&result.status!=='RUNNING')run.disabled=false}
 };
 </script></body></html>
