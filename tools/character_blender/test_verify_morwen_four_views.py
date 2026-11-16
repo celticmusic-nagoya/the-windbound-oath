@@ -28,8 +28,8 @@ class FourViewTests(unittest.TestCase):
                        "canonical_design_match": "BLOCKED", "artistic_qa": "NOT_RUN", "views": []}
         for direction in DIRECTIONS:
             name = "MORWEN_QA_" + direction.upper() + ".png"
-            # Header fixture checks evidence structure; not a rendered or valid decoded image.
-            raw = b"\x89PNG\r\n\x1a\n" + b"\x00"*8 + (512).to_bytes(4,"big") + (768).to_bytes(4,"big")
+            # Synthetic valid PNG for technical checks only, not an art render.
+            raw = fixture_png()
             (self.root/name).write_bytes(raw)
             self.report["views"].append({"direction": direction, "filename": name,
                 "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw),
