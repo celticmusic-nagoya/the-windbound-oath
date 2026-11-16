@@ -1,0 +1,61 @@
+name: Morwen CC0 basemesh Blender geometry audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/morwen-basemesh-geometry-audit.yml'
+      - 'tools/character_blender/inspect_human_basemesh_geometry.py'
+permissions:
+  contents: read
+jobs:
+  geometry-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch official CC0 bundle (isolated)
+        run: |
+          set -euo pipefail
+          mkdir -p qa_output/basemesh/source
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 240 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            -o qa_output/basemesh/source.zip
+          sha256sum qa_output/basemesh/source.zip > qa_output/basemesh/source_sha256.txt
+      - name: Safe ZIP inventory and extract single .blend
+        run: |
+          python tools/character_blender/inspect_human_basemesh_bundle.py qa_output/basemesh/source.zip --output qa_output/basemesh/archive_inventory.json
+          python - <<'PY'
+          import pathlib,zipfile
+          root=pathlib.Path('qa_output/basemesh')
+          with zipfile.ZipFile(root/'source.zip') as z:
+              matches=[i for i in z.infolist() if i.filename.endswith('/human_base_meshes_bundle.blend')]
+              if len(matches)!=1:raise SystemExit('BLOCKED expected exactly one .blend')
+              with z.open(matches[0]) as f,(root/'source'/'human_base_meshes_bundle.blend').open('wb') as o:
+                  import shutil;shutil.copyfileobj(f,o)
+          PY
+      - name: Install pinned Blender Python runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Inspect actual Blender geometry without edits
+        run: |
+          python -m bpy -b --python tools/character_blender/inspect_human_basemesh_geometry.py -- qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/geometry_inventory.json
+      - name: Remove binary sources from uploaded report
+        if: always()
+        run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
+      - name: Upload evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-basemesh-blender-geometry-inventory
+          path: qa_output/basemesh/
+          retention-days: 14
+          if-no-files-found: warn
