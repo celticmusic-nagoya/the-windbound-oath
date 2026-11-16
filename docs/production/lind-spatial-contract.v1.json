@@ -1,0 +1,214 @@
+{
+  "schema": "lind-spatial-contract-v1",
+  "status": "DRAFT_BLOCKED_MAP_VISUAL_AUDIT",
+  "canonical_map": {
+    "path": "docs/art/reference/lind/リルド村RPGアセット全体マップ.png",
+    "sha256": "83dd4ad1eb10103fdb7eb569e8b1b22cc92920d4c94d4eae85735125de87fe6c",
+    "image_pixels_verified": false
+  },
+  "coordinates": {
+    "world_origin": null,
+    "axes": null,
+    "unit_scale": null,
+    "map_to_world_transform": null,
+    "north_axis": null,
+    "camera_type": null,
+    "camera_ortho_scale": null
+  },
+  "relative_rules": [
+    {
+      "id": "north_wind_hill",
+      "region": "north",
+      "source": "official bible section 8"
+    },
+    {
+      "id": "northwest_waterfall_elder",
+      "region": "northwest",
+      "source": "official bible section 8"
+    },
+    {
+      "id": "south_southeast_farms",
+      "region": "south_southeast",
+      "source": "official bible section 8"
+    },
+    {
+      "id": "east_training_across_river",
+      "region": "east_across_river",
+      "source": "official bible section 8"
+    }
+  ],
+  "anchors": [
+    {
+      "id": "aidan_home_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "central_square",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "wind_stone",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "well",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "inn_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "shop_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "elder_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "bridge_west",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "bridge_east",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "training_ground",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "river",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "waterfall",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "north_hill",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "south_farms",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "fishing_spot",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "cliff_vista",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "village_return",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "attack_scene",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "escape_river_route",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    }
+  ],
+  "runtime_preservation": {
+    "door_room_ids": [
+      "home",
+      "inn",
+      "shop",
+      "elder"
+    ],
+    "wind_stop_does_not_stop_water": true,
+    "prototype_coordinates_are_not_canonical": true,
+    "save_migration_authorized": false
+  },
+  "approval": {
+    "director_spatial_lock": false,
+    "gates": {
+      "G1": "BLOCKED",
+      "G2": "NOT_RUN",
+      "G3": "NOT_RUN",
+      "G4": "NOT_RUN"
+    }
+  }
+}
