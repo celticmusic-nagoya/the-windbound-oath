@@ -18,8 +18,10 @@ jobs:
       - name: Install distro Blender (test-only; version recorded)
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
           blender --version | head -n 3
+          ldconfig -p | grep -F libEGL.so.1
+          ldconfig -p | grep -F libGL.so.1
       - name: Generate isolated technical fixture
         run: |
           mkdir -p /tmp/lind-ai-technical
