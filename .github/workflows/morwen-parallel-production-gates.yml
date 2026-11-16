@@ -26,6 +26,12 @@ on:
       - 'tools/character_blender/audit_morwen_render_visibility.py'
       - 'tools/character_blender/inventory_morwen_legacy_face.py'
   workflow_dispatch:
+    inputs:
+      audit_basemesh:
+        description: 'Download and inventory official CC0 basemesh ZIP (independent QA only)'
+        required: false
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -214,4 +220,48 @@ jobs:
           name: morwen-qa-integration
           path: qa_output/integration/*
           retention-days: 7
+          if-no-files-found: warn
+
+  basemesh-source-audit:
+    name: Optional CC0 basemesh source audit
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit_basemesh == true }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download official CC0 source
+        run: |
+          set -euo pipefail
+          mkdir -p qa_output/basemesh
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 240 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            --output qa_output/basemesh/source.zip
+          sha256sum qa_output/basemesh/source.zip | tee qa_output/basemesh/source.sha256
+      - name: Inventory archive safely
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,zipfile
+          p=pathlib.Path('qa_output/basemesh/source.zip')
+          with zipfile.ZipFile(p) as z:
+            bad=z.testzip()
+            entries=[{'name':i.filename,'size':i.file_size} for i in z.infolist()]
+          report={'bundle':'Blender Studio Human Base Meshes v1.4.1','license':'CC0 (official listing)','sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'zip_crc':'PASS' if bad is None else 'FAIL','entries':entries,'mesh_qa':'NOT_RUN','art_qa':'NOT_RUN'}
+          pathlib.Path('qa_output/basemesh/report.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps({'zip_crc':report['zip_crc'],'entries':len(entries),'sha256':report['sha256']}))
+          if bad:raise SystemExit(1)
+          PY
+      - name: Exclude ZIP from artifact
+        if: always()
+        run: rm -f qa_output/basemesh/source.zip
+      - name: Upload source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-cc0-basemesh-source-audit
+          path: qa_output/basemesh/
+          retention-days: 14
           if-no-files-found: warn
