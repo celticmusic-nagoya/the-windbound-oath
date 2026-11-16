@@ -49,7 +49,7 @@ try:
  aspect=scene.render.resolution_x/scene.render.resolution_y
  scale=max(extent_y,extent_x/aspect)/0.82
  report["projected_bounds"]={"width":round(extent_x,6),"height":round(extent_y,6),"aspect":aspect}
- report["method"]="projected_bounding_box_aspect_fit"
+ report["method"]="alpha_silhouette_recenter_and_two_axis_fit"
  for attempt in range(1,3):
   cam_data.ortho_scale=scale
   path=os.path.join(out,"MORWEN_QA_FRONT_%02d.png"%attempt)
@@ -79,11 +79,20 @@ try:
    # One bounded correction based on BOTH image axes.
    observed_width=(right-left+4)/w
    observed_height=(top-bottom+4)/h
-   if clipped:
-    scale*=1.15
-   else:
-    scale*=max(observed_width,observed_height)/target
-   report["correction_reason"]="clipping" if clipped else "two_axis_occupancy"
+   # Previous attempts exposed a systematic ~110px vertical offset.
+   # Center the *visible alpha silhouette* rather than the unfiltered
+   # object bounding boxes, then fit both axes with an 8% safety margin.
+   local_right=cam.rotation_euler.to_matrix()@Vector((1,0,0))
+   local_up=cam.rotation_euler.to_matrix()@Vector((0,1,0))
+   dx=((left+right)/2-(w-1)/2)/w*scale*aspect
+   dy=((bottom+top)/2-(h-1)/2)/h*scale
+   cam.location+=local_right*dx+local_up*dy
+   desired_width=0.84
+   desired_height=0.84
+   factor=max(observed_width/desired_width,observed_height/desired_height)
+   scale*=max(0.5,min(1.6,factor))
+   report["correction_reason"]="alpha_silhouette_recenter_and_two_axis_fit"
+   report["recenter_local"]=[round(dx,6),round(dy,6)]
  else:
   report["status"]="FAIL_MAX_ATTEMPTS"
  if report["status"]=="BLOCKED":report["status"]="FAIL_MAX_ATTEMPTS"
