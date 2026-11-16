@@ -26,6 +26,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/diagnose_camera_09k.py'
       - 'tools/blender/morwen_production/eyelid_lash/render_contact_09l.py'
       - 'tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py'
+      - 'tools/blender/morwen_production/eyelid_lash/repair_root_winding_09n.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -128,6 +129,15 @@ jobs:
       - name: Audit 09G root triangulation and face normals read only
         run: |
           python tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_AUDIT_09M.json
+      - name: Build separate 09N corrected root winding candidate
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/repair_root_winding_09n.py --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --report render_output/morwen_eyelid_09/ROOT_WINDING_BUILD_09N.json
+      - name: Independently measure 09N root normals
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_AUDIT_09N.json
+      - name: Check 09N surface intersections
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/ROOT_WINDING_INTERSECTIONS_09N.json
       - name: Render three diagnostic views of 09G candidate
         run: |
           python tools/blender/morwen_production/eyelid_lash/render_root_fan_09i.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --outdir render_output/morwen_eyelid_09/RENDERS_09I
@@ -177,6 +187,7 @@ jobs:
             render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
             render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend
             render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend
+            render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend
           if-no-files-found: warn
           retention-days: 7
       - name: Enforce failed geometric gates after uploading all evidence
