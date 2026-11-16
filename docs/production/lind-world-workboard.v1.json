@@ -1,0 +1,151 @@
+{
+  "schema": "lind-world-workboard-v1",
+  "status": "PROPOSED_NOT_LAUNCHED",
+  "source_contract": {
+    "private_canon": "the-windbound-oath-handoff/main reference/lore/{THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md,CANON_ADDENDUM.md,CANON_STATUS.md}",
+    "map_path": "docs/art/reference/lind/リルド村RPGアセット全体マップ.png",
+    "map_sha256": "83dd4ad1eb10103fdb7eb569e8b1b22cc92920d4c94d4eae85735125de87fe6c",
+    "spatial_contract_approved": false
+  },
+  "lanes": [
+    {
+      "task_id": "LIND-REF-01",
+      "owner": "ChatGPT + Codex",
+      "scope": "reference and event CG/source inventory",
+      "depends_on": [],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-WORLD-01",
+      "owner": "Claude WORLD",
+      "scope": "terrain river bridge height and roads",
+      "depends_on": [
+        "LIND-REF-01"
+      ],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-HOME-01",
+      "owner": "Claude HOME",
+      "scope": "Aidan home modular master",
+      "depends_on": [
+        "LIND-REF-01"
+      ],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-ECO-01",
+      "owner": "Claude ECO",
+      "scope": "plants crops and wind-responsive details",
+      "depends_on": [
+        "LIND-REF-01",
+        "LIND-WORLD-01"
+      ],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-BUILD-01",
+      "owner": "Claude BUILD",
+      "scope": "other village buildings",
+      "depends_on": [
+        "LIND-REF-01",
+        "LIND-HOME-01"
+      ],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-STORY-01",
+      "owner": "Codex STORY",
+      "scope": "event CG staging and anchor map",
+      "depends_on": [
+        "LIND-REF-01"
+      ],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-RENDER-01",
+      "owner": "Codex INTEGRATION",
+      "scope": "safe Blender render pipeline",
+      "depends_on": [],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    },
+    {
+      "task_id": "LIND-ASSEMBLY-01",
+      "owner": "Codex INTEGRATION",
+      "scope": "candidate-only integrated Blender scene",
+      "depends_on": [
+        "LIND-WORLD-01",
+        "LIND-HOME-01",
+        "LIND-ECO-01",
+        "LIND-BUILD-01",
+        "LIND-STORY-01",
+        "LIND-RENDER-01"
+      ],
+      "status": "NOT_STARTED",
+      "branch": null,
+      "pr": null,
+      "gates": {
+        "G1": "NOT_RUN",
+        "G2": "NOT_RUN",
+        "G3": "NOT_RUN",
+        "G4": "NOT_RUN"
+      }
+    }
+  ]
+}
