@@ -1,0 +1,65 @@
+{
+  "schema": "route-support-interface-v1",
+  "shared_contract_sha256": "ef37ad78ae3f4a39c22dacca61650180d1cf26186dfaed17a48cdf0d840ad715",
+  "input_world_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+  "units": "CANDIDATE_UNSCALED",
+  "local_origin": null,
+  "bounding_box_m": null,
+  "world_transform": null,
+  "elevation_reference": null,
+  "candidate_scene_anchor": [
+    0,
+    0,
+    5.865149974822998
+  ],
+  "support_prefix": "ROUTE_SUPPORT__",
+  "abutment_prefix": "ROUTE_ABUTMENT__",
+  "parapet_prefix": "ROUTE_PARAPET__",
+  "road_names": [
+    "Village_to_coastal_promontory",
+    "Village_to_east_bridge",
+    "Village_to_harbor_access",
+    "Village_to_north_farmland"
+  ],
+  "context_meshes": [
+    "CONTINUOUS_TERRAIN_coast_river_upland",
+    "East_bridge_candidate_single_arch"
+  ],
+  "ownership": "new structural supports + abutments + parapets; contextual WORLD shape remains immutable",
+  "junction_status": "single plane constrained by D terrain and local route fit; independent overlap/intersection QA REQUIRED",
+  "road_output_geometry_hashes": {
+    "Village_to_coastal_promontory": "acee898ce87c34c7374f39e84355ee4377fd70b9a512f70f24fe7cd8be695cbe",
+    "Village_to_east_bridge": "3d0043b4ae7e604a979b77d7a5be7ce2cce22d343e7df2c431a977dacd91e542",
+    "Village_to_harbor_access": "e9337518bba6928cb0b3a9c523a347cec4f35d6338fe16a75d8d8fbd2d9b1a5d",
+    "Village_to_north_farmland": "ef11f3355c3cb0b997c29fffcf1c703ef125ec8f720d6c37373e307f7628f6a4"
+  },
+  "junction_plane": [
+    -0.01568487472832203,
+    0.15428468585014343,
+    5.89777135848999
+  ],
+  "junction_edits": [
+    {
+      "route": "Village_to_coastal_promontory",
+      "min_z_delta": -0.06689643859863281,
+      "max_z_delta": 0.0778207778930664
+    },
+    {
+      "route": "Village_to_east_bridge",
+      "min_z_delta": -0.025770187377929688,
+      "max_z_delta": 0.09148502349853516
+    },
+    {
+      "route": "Village_to_harbor_access",
+      "min_z_delta": -0.021378040313720703,
+      "max_z_delta": 0.36864280700683594
+    },
+    {
+      "route": "Village_to_north_farmland",
+      "min_z_delta": -0.04243659973144531,
+      "max_z_delta": 0.3367776870727539
+    }
+  ],
+  "junction_radius": 1.45,
+  "transition_radius": 3.4
+}

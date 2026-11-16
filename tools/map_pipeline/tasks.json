@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "method": "readonly-candidate-partition-render-v1",
+  "source": "assets/candidates/lind-spatial-codex-01/world/candidate-d/world.blend",
+  "source_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+  "original": "assets/sources/lind-world-20261116/original.png",
+  "original_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "history": "docs/qa/lind/spatial-codex-world/attempt-ledger.json",
+  "render": {"width": 640, "height": 400, "samples": 8, "camera": "overview"},
+  "units": {
+    "WORLD": {"enabled": true, "dependencies": [], "next": "evidence-integration"},
+    "ROUTE": {"enabled": true, "dependencies": [], "context": "immutable WORLD support from candidate D", "next": "evidence-integration"},
+    "HOME": {"enabled": false, "dependencies": ["WORLD", "ROUTE"], "reason": "adapter and approved inputs required"},
+    "ECO": {"enabled": false, "dependencies": ["WORLD"], "reason": "adapter and approved inputs required"}
+  },
+  "approval": {"evidence-integration": true, "adoption": false, "publish": false},
+  "limits": {"grade_degrees": 25, "burial_tolerance": 0.015}
+}

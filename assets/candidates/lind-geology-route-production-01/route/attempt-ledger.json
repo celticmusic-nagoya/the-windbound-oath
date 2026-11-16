@@ -1,0 +1,75 @@
+{
+  "task": "ROUTE-SUPPORT-01",
+  "source_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+  "historical_ledger": "docs/qa/lind/spatial-codex-world/attempt-ledger.json",
+  "historical_failures_preserved": true,
+  "attempts": [
+    {
+      "id": "support-01",
+      "family": "actual_surface_downward_bearing_volumes",
+      "result": "FAIL_INDEPENDENT_G3",
+      "root_cause": "mutually inconsistent D crossing ribbon heights let another route support protrude by up to 0.10293 candidate units; ray boundary misses at five samples",
+      "method_failure_count": 1,
+      "evidence": "attempt-01/qa.json",
+      "art_observed": "bridge core reads as smooth monolithic concrete; no G2 acceptance"
+    },
+    {
+      "id": "support-02-repair-1",
+      "family": "actual_surface_downward_bearing_volumes",
+      "causal_change": "reconstruct a single terrain-constrained junction cross-slope plane plus graded transitions; derive each support top from actual left/right road heights, extend endpoints 0.035",
+      "result": "INDEPENDENT_GEOMETRY_SUBSET_PASS",
+      "independent_measurements": "10300 triangle vertex/edge/interior samples; missing support 0; support gap 0.003764 to 0.004214; terrain burial 0; max grade 24.5001 degrees; junction threshold violations 0",
+      "evidence": "attempt-02-core-pass/qa.json",
+      "effective_repairs_this_root_cause": 1,
+      "geometry_status": "FROZEN_FOR_MASONRY_OVERLAY; frozen-geometry.json records hashes"
+    },
+    {
+      "id": "art-02-arch-facing",
+      "family": "arch_specific_voussoir_and_bonded_spandrel_modules",
+      "causal_change": "preserve verified road/support geometry and add actual curved arch wedge stones, bonded spandrel face modules and parapet coping; follows measured bridge crown rather than analytic support assumption",
+      "result": "FAIL_INDEPENDENT_G2",
+      "prior_same_family_failures": 0,
+      "difference_from_historical_masonry_failures": "architectural arch wedge topology constrained to the existing opening, not scattered perturbed cubes, periodic cliff bands or geological ring masses",
+      "self_observed_delta": "Arch wedge joints, spandrel masonry and coping now legible; regular veneer and smooth parapet faces remain below reference CG weathering/detail.",
+      "root_cause": "regular flat rectangular veneer, concrete parapet/abutment surfaces; insufficient weathered thick stone compared with approved CG",
+      "method_failure_count": 1,
+      "evidence": "attempt-03-masonry-fail/junction-detail.png"
+    },
+    {
+      "id": "art-03-polygon-bond-repair-1",
+      "family": "arch_specific_voussoir_and_bonded_spandrel_modules",
+      "causal_change": "replace regular rectangular veneer by chart-clipped polygon stone bonds with physically broken front corners/faceted depth; extend construction to parapets/abutments/coping while preserving verified bearing geometry",
+      "effective_repairs_this_root_cause": 1,
+      "result": "FAIL_INDEPENDENT_G2",
+      "prior_same_family_failures": 1,
+      "method_failure_count": 2,
+      "root_cause": "large polygon facets and deep uniform dark joints create a strong artificial stone pattern, still unlike the thick weathered masonry in approved CG",
+      "method_status": "STOP_AUTOMATIC_FACING_FAMILY",
+      "next_structural_method": "Design a full-thickness load-bearing rubble-bond bridge body with curated large stones, interlocking interior bonds and individually fitted arch voussoirs; approve metric/abutment interfaces before broad rollout. This is NOT_IMPLEMENTED."
+    },
+    {
+      "id": "junction-surface-ownership-01",
+      "family": "single_owner_convex_junction_fan",
+      "root_cause": "coplanar overlapping road ribbons cause visible Z-fighting despite height continuity PASS",
+      "causal_change": "delete duplicate leading road faces; construct one closed fan junction plus terrain-bonded bearing volume, reusing unchanged road vertices/support meshes",
+      "result": "INDEPENDENT_GEOMETRY_SUBSET_PASS",
+      "prior_same_family_failures": 0,
+      "independent_measurements": "coplanar interior overlaps 0; shared junction contacts all four roads; maximum height delta .0000248 candidate units"
+    },
+    {
+      "id": "occluded-folded-decoration-removal-01",
+      "family": "minimal_invalid_occluded_cell_exclusion",
+      "root_cause": "abutment surface chart reverses its v-axis locally where immutable terrain exceeds the bridge deck, yielding one inward closed decorative cell",
+      "repair": "reject nonpositive-volume cell only if dense actual triangle samples are all >.01 below immutable terrain; remove just that invisible cell, hard fail for any visible invalid cell",
+      "result": "TECHNICAL_CORRECTION_COMPLETE_DENSE_TERRAIN_OCCLUSION_PROVED",
+      "not_an_art_retry": true,
+      "removed_object": "ROUTE_MASONRY__polygon_abutment_east_-1_3",
+      "actual_samples": 128,
+      "min_terrain_cover": 0.04077911376953125
+    }
+  ],
+  "G1": "BLOCKED_METRIC_AND_SPATIAL_REVIEW",
+  "G2": "FAIL_FACING_FAMILY_STOP_AFTER_TWO_EFFECTIVE_FAILURES",
+  "G4": "NOT_RUN",
+  "G3": "LIMITED_INDEPENDENT_PASS_EXCEPT_FINAL_SINGLE_CELL_RECHECK_PENDING"
+}

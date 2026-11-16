@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/workspace/the-windbound-oath/tools/map_pipeline/production_world.py", line 218, in <module>
+    if __name__=='__main__': main()
+                             ~~~~^^
+  File "/workspace/the-windbound-oath/tools/map_pipeline/production_world.py", line 209, in main
+    build(out)
+    ~~~~~^^^^^
+  File "/workspace/the-windbound-oath/tools/map_pipeline/production_world.py", line 126, in build
+    bpy.context.scene.collection.name='WORLD_GEO_02_CANDIDATE_SECTOR'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: bpy_struct: attribute "name" from "Collection" is read-only
+
+Error: script failed, file: 'tools/map_pipeline/production_world.py', exiting.
+Blender 4.3.2
+
+Blender quit

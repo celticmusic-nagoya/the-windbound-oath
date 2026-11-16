@@ -1,0 +1,48 @@
+{
+  "method": "actual_surface_downward_bearing_volume",
+  "scope": "all four immutable D road ribbons + bounded east bridge abutments/parapets",
+  "routes": [
+    {
+      "route": "Village_to_coastal_promontory",
+      "stations": 141,
+      "road_vertices_unchanged": true,
+      "max_previous_void": 0.16008949279785156,
+      "new_support_name": "ROUTE_SUPPORT__Village_to_coastal_promontory",
+      "design_road_base_gap": 0.004,
+      "actual_surface_bearing": "bottom intersects highest immutable terrain/bridge by >=0.18 at cross-section vertices",
+      "interior_independent_qa": "REQUIRED"
+    },
+    {
+      "route": "Village_to_east_bridge",
+      "stations": 141,
+      "road_vertices_unchanged": true,
+      "max_previous_void": 0.444854736328125,
+      "new_support_name": "ROUTE_SUPPORT__Village_to_east_bridge",
+      "design_road_base_gap": 0.004,
+      "actual_surface_bearing": "bottom intersects highest immutable terrain/bridge by >=0.18 at cross-section vertices",
+      "interior_independent_qa": "REQUIRED"
+    },
+    {
+      "route": "Village_to_harbor_access",
+      "stations": 141,
+      "road_vertices_unchanged": true,
+      "max_previous_void": 0.1955122947692871,
+      "new_support_name": "ROUTE_SUPPORT__Village_to_harbor_access",
+      "design_road_base_gap": 0.004,
+      "actual_surface_bearing": "bottom intersects highest immutable terrain/bridge by >=0.18 at cross-section vertices",
+      "interior_independent_qa": "REQUIRED"
+    },
+    {
+      "route": "Village_to_north_farmland",
+      "stations": 96,
+      "road_vertices_unchanged": true,
+      "max_previous_void": 0.22093677520751953,
+      "new_support_name": "ROUTE_SUPPORT__Village_to_north_farmland",
+      "design_road_base_gap": 0.004,
+      "actual_surface_bearing": "bottom intersects highest immutable terrain/bridge by >=0.18 at cross-section vertices",
+      "interior_independent_qa": "REQUIRED"
+    }
+  ],
+  "G3": "PRODUCER_SUBSET_ONLY_INDEPENDENT_REQUIRED",
+  "collision_nav": "NOT_RUN"
+}

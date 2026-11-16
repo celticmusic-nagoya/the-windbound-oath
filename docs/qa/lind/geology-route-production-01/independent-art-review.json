@@ -1,0 +1,55 @@
+{
+  "schema": "lind-independent-image-review/v1",
+  "reviewer": "root; separate from WORLD and ROUTE producer workers",
+  "method": "direct view_image inspection of all six final PNGs; compared with protected formal map, sunset cliff and raid bridge CG",
+  "G2": "FAIL",
+  "adoption": false,
+  "units": {
+    "WORLD": {
+      "G2": "FAIL",
+      "images": {
+        "assets/candidates/lind-geology-route-production-01/world/attempt-04-technical/overview.png": "ea5ad98859f560f0b8423834a47640901396b3438045f29178299077de42d363",
+        "assets/candidates/lind-geology-route-production-01/world/attempt-04-technical/detail.png": "919ccec1df8c422832f4ffc91f1d0ea0739bfc5662ee2e42ab31b942684bdfb7",
+        "assets/candidates/lind-geology-route-production-01/world/attempt-04-technical/gameplay-distance.png": "98d04189107280b6ae6b6768b4527761cff8201a6da99c6fd0ade0f1464f83c8"
+      },
+      "actually_viewed": true,
+      "criteria": {
+        "silhouette": "FAIL: smoothed pillar cluster and cut-off plateau tops remain artificial",
+        "rock_naturalness": "FAIL: missing geological macro/meso joint and erosion articulation",
+        "soil_grass_visual_connection": "FAIL: physically attached patches still read as flat lids, not continuous rooted coastal grassland",
+        "material_color": "FAIL: uniform grey fine-noise surface lacks source rock/soil variation",
+        "detail": "FAIL: large smooth faces dominate near view",
+        "official_CG_fit": "FAIL: source has broad weathered irregular cliff faces and continuous grassy crest",
+        "display_distance": "FAIL: artificial pillars remain legible even at study gameplay distance"
+      },
+      "same_art_defect_failure_count": 2,
+      "method_status": "STOP",
+      "scope": "bounded local cliff sector"
+    },
+    "ROUTE": {
+      "G2": "FAIL",
+      "images": {
+        "assets/candidates/lind-geology-route-production-01/route/overview.png": "7ab761bdf382accc36d5bedd377f20e70643f0f45202c55904537ae99de607b0",
+        "assets/candidates/lind-geology-route-production-01/route/junction-detail.png": "ecba2201f860eef1d11f72bf7b3277196e55df641b4b88cbcc8349fb2181a653",
+        "assets/candidates/lind-geology-route-production-01/route/gameplay-distance.png": "284e6213fda04e8e4608da57a8aa0969a2f1aea82bbf7c281d23e416e4cc0cd9"
+      },
+      "actually_viewed": true,
+      "criteria": {
+        "silhouette": "PARTIAL: abutment and arch-bearing forms visible; earth/road profile is candidate only",
+        "stone_naturalness": "FAIL: large faceted cellular facing and dark uniform joints remain procedural",
+        "material_color": "FAIL: cement-like grey surface and weak material/soil transitions",
+        "detail": "FAIL: geometry exists but stone bond and weathering are not convincing at near view",
+        "official_CG_fit": "FAIL: thick naturally weathered masonry in raid CG is not matched",
+        "display_distance": "PARTIAL: bridge and junction readable, z-fighting removed; context bank sawtooth is D and still unaccepted"
+      },
+      "same_art_defect_failure_count": 2,
+      "method_status": "STOP",
+      "scope": "road support/junction/bridge sector on immutable D context"
+    }
+  },
+  "reference_hashes": {
+    "assets/sources/lind-world-20261116/original.png": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "assets/approved/game/cliff/sunset_background.png": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+    "assets/approved/game/rilde_story/raid/attack_background_only.png": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e"
+  }
+}

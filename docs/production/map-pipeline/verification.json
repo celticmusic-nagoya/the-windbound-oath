@@ -1,0 +1,164 @@
+{
+  "implementation_commit": "6f84418f3a46aca5c9fff472ff3eab43da77bdd6",
+  "baseline": "d94b43361f360cbdc448b0a3ffdb15d9dd23e02f",
+  "tests": "6 PASS",
+  "local": {
+    "WORLD": {
+      "state": {
+        "unit": "WORLD",
+        "input_sha256": "7ffb72f177153b845d356a24085e191decb005a0fc32caa3c7c7b7f63e9fa216",
+        "dependencies": [],
+        "method": "readonly-candidate-partition-render-v1",
+        "status": "PASS",
+        "G2": "FAIL_INHERITED",
+        "G4": "NOT_RUN",
+        "outputs": {
+          "unit.blend": "edcfa77a9cf87b4d9bde52b30904ce0a1ce26e73b17399bfbb8f371487b99f17",
+          "preview.png": "37e210582e922c2bc6919106246193693b5797bc1da61035a00fee60ca7c2c43",
+          "qa.json": "7113da3d974e0fcb2fc9af5ddbf2fc4197529fba60e33696c399248a43fdd476"
+        },
+        "output_sha256": "bdc0b26682ab35febab6256980f62e26b35379533671f13c7b8cb90ec019b595"
+      },
+      "qa": {
+        "unit": "WORLD",
+        "blender": "4.3.2",
+        "G1": "SOURCE_BYTES_PASS_FULL_REVIEW_BLOCKED",
+        "G2": "FAIL_INHERITED_CANDIDATE_D_NO_NEW_IMAGE_EVALUATION",
+        "G3": "PASS",
+        "G3_scope": "finite mesh, packed source, render; ROUTE sampled clearance and provisional grade only",
+        "G4": "NOT_RUN",
+        "owned_objects": [
+          "CONTINUOUS_TERRAIN_coast_river_upland",
+          "Ocean_tidal_surface",
+          "North_to_south_river",
+          "East_bridge_candidate_single_arch",
+          "Harbor_deck_plank_00",
+          "Harbor_deck_plank_01",
+          "Harbor_deck_plank_02",
+          "Harbor_deck_plank_03",
+          "Harbor_deck_plank_04",
+          "Harbor_deck_plank_05",
+          "Harbor_deck_plank_06",
+          "Harbor_deck_plank_07",
+          "Harbor_deck_plank_08",
+          "Harbor_deck_plank_09",
+          "Harbor_deck_plank_10",
+          "Harbor_deck_plank_11",
+          "Harbor_deck_plank_12",
+          "Harbor_deck_plank_13",
+          "North_field_furrow_00",
+          "North_field_furrow_01",
+          "North_field_furrow_02",
+          "North_field_furrow_03",
+          "North_field_furrow_04"
+        ],
+        "routes": [],
+        "limits": [
+          "unscaled candidate",
+          "support engineering, junctions, unsampled interiors, collision/navmesh unverified",
+          "ROUTE blend includes immutable WORLD context; do not append both complete scenes"
+        ]
+      },
+      "second_run": "REUSED without Blender",
+      "reopen": "PASS: packed source SHA and expected 0/4 route objects"
+    },
+    "ROUTE": {
+      "state": {
+        "unit": "ROUTE",
+        "input_sha256": "2f1d285d4376cbc71c037d4c14c0b58502364cb66d76231ac70569ea8b114142",
+        "dependencies": [],
+        "method": "readonly-candidate-partition-render-v1",
+        "status": "PASS",
+        "G2": "FAIL_INHERITED",
+        "G4": "NOT_RUN",
+        "outputs": {
+          "unit.blend": "0d0fc73f022183b7778cf16ed75e866da08e3f6078c54c327a33ca26f686db30",
+          "preview.png": "d9949790220b878236db0eeac104758153b1b51443f207fe44f220decad61824",
+          "qa.json": "85a4b63afae4857c60460b9e02540432524fc11a449962ad818d6ed46e8ceeb3"
+        },
+        "output_sha256": "6bacd49eebb21c8eaa665368a5c6131db3e32e5308ae94ed4381d1c03fe129ab"
+      },
+      "qa": {
+        "unit": "ROUTE",
+        "blender": "4.3.2",
+        "G1": "SOURCE_BYTES_PASS_FULL_REVIEW_BLOCKED",
+        "G2": "FAIL_INHERITED_CANDIDATE_D_NO_NEW_IMAGE_EVALUATION",
+        "G3": "PASS",
+        "G3_scope": "finite mesh, packed source, render; ROUTE sampled clearance and provisional grade only",
+        "G4": "NOT_RUN",
+        "owned_objects": [
+          "Village_to_coastal_promontory",
+          "Village_to_east_bridge",
+          "Village_to_harbor_access",
+          "Village_to_north_farmland"
+        ],
+        "routes": [
+          {
+            "route": "Village_to_coastal_promontory",
+            "samples": 423,
+            "min_gap": 0.07969427108764648,
+            "max_gap": 0.16791820526123047,
+            "max_grade_degrees": 9.006794308191779
+          },
+          {
+            "route": "Village_to_east_bridge",
+            "samples": 423,
+            "min_gap": 0.04991626739501953,
+            "max_gap": 0.444854736328125,
+            "max_grade_degrees": 24.50018641999441
+          },
+          {
+            "route": "Village_to_harbor_access",
+            "samples": 423,
+            "min_gap": 0.03988361358642578,
+            "max_gap": 0.1971449851989746,
+            "max_grade_degrees": 24.500240917909796
+          },
+          {
+            "route": "Village_to_north_farmland",
+            "samples": 288,
+            "min_gap": 0.03637409210205078,
+            "max_gap": 0.22134876251220703,
+            "max_grade_degrees": 18.311111726285592
+          }
+        ],
+        "limits": [
+          "unscaled candidate",
+          "support engineering, junctions, unsampled interiors, collision/navmesh unverified",
+          "ROUTE blend includes immutable WORLD context; do not append both complete scenes"
+        ]
+      },
+      "second_run": "REUSED without Blender",
+      "reopen": "PASS: packed source SHA and expected 0/4 route objects"
+    }
+  },
+  "ci_run": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43889857395",
+  "ci": {
+    "conclusion": "SUCCESS",
+    "blender": "4.0.2 (existing exact package SHA pin)",
+    "jobs": {
+      "contract": "SUCCESS",
+      "WORLD": "SUCCESS",
+      "ROUTE": "SUCCESS",
+      "evidence-integration": "SUCCESS"
+    },
+    "artifacts": {
+      "WORLD": {
+        "id": 14236152197,
+        "input_sha256": "738b4512b1c77cb90eece6602ebeac507c522a014c018c22cf12cc6fc808ba97"
+      },
+      "ROUTE": {
+        "id": 14237435053,
+        "input_sha256": "a24e256c0e4a63879380648db9cca1771e3c40f449f7db2dbe61042909c85bd6"
+      },
+      "handoff": {
+        "id": 14236102598
+      }
+    },
+    "retrieval": "GitHub connector returned reusable ZIP references; shell download redirect was network-denied. CI integration downloaded both artifacts and verified output hashes."
+  },
+  "image_inspection": {
+    "local_previews": "Viewed both 640x400 actual PNGs; candidate terrain/route composition visible; no new G2 PASS assigned",
+    "ci_previews": "Artifacts generated; no independent CI image-art evaluation claimed"
+  }
+}
