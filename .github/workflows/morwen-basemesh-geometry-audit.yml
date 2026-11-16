@@ -71,7 +71,7 @@ jobs:
           python -c 'import bpy; print("Blender runtime:", bpy.app.version_string)'
       - name: Inspect actual Blender geometry without edits
         run: |
-          python tools/character_blender/inspect_human_basemesh_geometry.py qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/geometry_inventory.json
+          python tools/character_blender/inspect_human_basemesh_geometry.py -- qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/geometry_inventory.json
       - name: Remove binary sources from uploaded report
         if: always()
         run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
