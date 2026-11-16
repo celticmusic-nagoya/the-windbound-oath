@@ -43,6 +43,15 @@ class TestOfflineCanary(unittest.TestCase):
                              external_upload=False)
         self.assertEqual(result["status"], "PASS_INPUT_ONLY_NOT_MODEL_EXECUTION")
 
+    def test_blocks_falsely_claimed_synthetic_image(self):
+        wrong = self.image.read_bytes() + b"tampered"
+        self.image.write_bytes(wrong)
+        result = gate.assess(self.image, model="TripoSR",
+                             source_class="project-generated-synthetic-canary",
+                             external_upload=False)
+        self.assertEqual(result["status"], "BLOCKED")
+        self.assertTrue(any("pinned SHA256" in msg for msg in result["blockers"]))
+
     def test_blocks_cloud_transfer(self):
         result = gate.assess(self.image, model="TripoSR",
                              source_class="project-generated-synthetic-canary",
