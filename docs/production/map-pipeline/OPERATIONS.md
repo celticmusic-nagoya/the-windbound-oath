@@ -21,7 +21,7 @@ Input SHA covers unit ID, source/original bytes, runtime, scripts, settings, pin
 
 ## Run and inspect
 
-Push on the assigned feature branch or PR path changes starts CI; workflow_dispatch becomes available after the workflow exists on default branch. While it is unmerged, use a new in-scope commit to trigger the branch workflow. No schedule polling or AI service is required. Actions executes the entire approved deterministic graph while Codex is stopped. It cannot invent changes, restart Codex, evaluate art or repair failures.
+Push on the assigned feature branch with pipeline path changes starts CI (also attached to the Draft PR commit); push and pull_request are not both subscribed, avoiding duplicate rendering; workflow_dispatch becomes available after the workflow exists on default branch. While it is unmerged, use a new in-scope commit to trigger the branch workflow. No schedule polling or AI service is required. Actions executes the entire approved deterministic graph while Codex is stopped. It cannot invent changes, restart Codex, evaluate art or repair failures.
 
 Local verification (existing Blender 4.3.2):
 

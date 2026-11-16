@@ -3,8 +3,6 @@ on:
   push:
     branches: ['feature/map-deterministic-pipeline-world-route-01']
     paths: ['tools/map_pipeline/**', 'tests/test_map_pipeline.py', '.github/workflows/map-unit-pipeline.yml']
-  pull_request:
-    paths: ['tools/map_pipeline/**', 'tests/test_map_pipeline.py', '.github/workflows/map-unit-pipeline.yml']
   workflow_dispatch:
 permissions:
   contents: read
