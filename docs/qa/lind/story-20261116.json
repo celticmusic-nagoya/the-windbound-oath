@@ -1,0 +1,884 @@
+{
+  "task_id": "LIND-STORY-01",
+  "date": "2026-11-16",
+  "agent": "/root/story",
+  "baseline_commit": "c0223b538c3a8b20329ea847c7237b424ccfac4a",
+  "scope": "read-only code/provenance audit; no game changes",
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "BLOCKED"
+  },
+  "assets": [
+    {
+      "path": "img/events/cg01_rue_encounter_landscape_16x9.png",
+      "scene": "lou_first",
+      "orientation": "landscape",
+      "sha256": "becb8dacda43cbf7fa31a7a30cc8cc60ad08e8126cb1555da8c222b9c354a63d",
+      "expected_sha256": "becb8dacda43cbf7fa31a7a30cc8cc60ad08e8126cb1555da8c222b9c354a63d",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg01_rue_encounter_portrait_9x16.png",
+      "scene": "lou_first",
+      "orientation": "portrait",
+      "sha256": "60d4054c633d92ce01ca56c77cb6dda742ef3e83b14f1f03be246941b58748b2",
+      "expected_sha256": "60d4054c633d92ce01ca56c77cb6dda742ef3e83b14f1f03be246941b58748b2",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg02_fathers_sword_break_landscape_16x9.png",
+      "scene": "altar_cg01",
+      "orientation": "landscape",
+      "sha256": "0d06307140ae0cca2bb9aeb014e72a705161bf51ce7cf1fd676da87e11239e70",
+      "expected_sha256": "0d06307140ae0cca2bb9aeb014e72a705161bf51ce7cf1fd676da87e11239e70",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg02_fathers_sword_break_portrait_9x16.png",
+      "scene": "altar_cg01",
+      "orientation": "portrait",
+      "sha256": "9e89dba7ad80f821931394286ef0acb68dceff296a05445f00515d6f59cb9aeb",
+      "expected_sha256": "9e89dba7ad80f821931394286ef0acb68dceff296a05445f00515d6f59cb9aeb",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg03_fiona_wind_dance_landscape_16x9.png",
+      "scene": "altar_cg02",
+      "orientation": "landscape",
+      "sha256": "378bc551a2da6f190f6589ba5dc40586aa43c42ce6f83f5cd89dbc73bcff8249",
+      "expected_sha256": "378bc551a2da6f190f6589ba5dc40586aa43c42ce6f83f5cd89dbc73bcff8249",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg03_fiona_wind_dance_portrait_9x16.png",
+      "scene": "altar_cg02",
+      "orientation": "portrait",
+      "sha256": "3cd29724d8c36a25afc40d2cd7fc1cc2a3d45824b41de1ceabfa5725d55187a8",
+      "expected_sha256": "3cd29724d8c36a25afc40d2cd7fc1cc2a3d45824b41de1ceabfa5725d55187a8",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg04_rue_intervention_landscape_16x9.png",
+      "scene": "altar_cg03",
+      "orientation": "landscape",
+      "sha256": "210f002332e1040f668a90635aabc7de6fe65c21dee9201e4bbe0ea400ab56b5",
+      "expected_sha256": "210f002332e1040f668a90635aabc7de6fe65c21dee9201e4bbe0ea400ab56b5",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg04_rue_intervention_portrait_9x16.png",
+      "scene": "altar_cg03",
+      "orientation": "portrait",
+      "sha256": "7f3f7bcc9d41050df6f6734f41dfd5d432b058aae42c3173f923a0de3e9943ac",
+      "expected_sha256": "7f3f7bcc9d41050df6f6734f41dfd5d432b058aae42c3173f923a0de3e9943ac",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg05_oath_sword_contract_landscape_16x9.png",
+      "scene": "altar_cg04",
+      "orientation": "landscape",
+      "sha256": "f496069efcde96a0c2dadff513f11ba9013598d1424f4bdfb77ba78f18ca1a0e",
+      "expected_sha256": "f496069efcde96a0c2dadff513f11ba9013598d1424f4bdfb77ba78f18ca1a0e",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "img/events/cg05_oath_sword_contract_portrait_9x16.png",
+      "scene": "altar_cg04",
+      "orientation": "portrait",
+      "sha256": "a8f8de42135de9d709e8cd6248eeefb79e9971b896219b458c3e33884eb0dda0",
+      "expected_sha256": "a8f8de42135de9d709e8cd6248eeefb79e9971b896219b458c3e33884eb0dda0",
+      "hash_status": "PASS",
+      "adoption_evidence": "img/events/adopted-cg.json",
+      "provenance_commit": "09e5a4d44a619ce954788dc56f731ae2778f8882"
+    },
+    {
+      "path": "assets/approved/game/cliff/stargazing_seated.png",
+      "sha256": "a0a52220d2b846cf8f3ec2be1c3680f2611f86982e83e6068d03fef3e92b5d16",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/cliff/stargazing_standing_final.png",
+      "sha256": "370b40af6fee48d56419376e2e773b1860a6a88a9b7ec893fd86104c6d29a41d",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/cliff/sunset_background.png",
+      "sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/cliff/sunset_two_characters_back_view.png",
+      "sha256": "f7e2c3a7ee782d29df6b9a97449ae4fd9c0cdb44116c26fe033ebc07acfdeea9",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/aftermath/ruins_background_only.png",
+      "sha256": "78b0801f10b6a763c66aa44265ab381edc398f3b5adfb1b3d3dee0e6c6d917b2",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png",
+      "sha256": "2d500df62460e7843dbb8226d017eda8331afe9f86ce18d2d8c4973734018ce0",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/raid/attack_background_only.png",
+      "sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+      "matching_original_uploads": [],
+      "adoption_status": "SOURCE_EQUIVALENCE_UNRESOLVED",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/raid/attack_with_characters_APPROVED_user_reference.jpg",
+      "sha256": "57099c16d62ada6f5808229618ea4e2a499672bd2cdd75885c4616c5f646ddc7",
+      "matching_original_uploads": [
+        "7246.png"
+      ],
+      "adoption_status": "MATCHES_APPROVED_UPLOAD_MANIFEST",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/recovery/relief_with_characters_APPROVED_user_reference.jpg",
+      "sha256": "564bf45da05f9bc1d64a5e83986d1ce8eee0ab2e6dea82dd3d62d2a0cc15cda5",
+      "matching_original_uploads": [
+        "7248.png"
+      ],
+      "adoption_status": "MATCHES_APPROVED_UPLOAD_MANIFEST",
+      "visual_comparison": "NOT_RUN"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/road/curve_reveal_APPROVED_user_reference.jpg",
+      "sha256": "7989bca750f66ade1935c31fd1f15189505f7c8b481b3839d86cb5ab26c4c60b",
+      "matching_original_uploads": [
+        "7249.png"
+      ],
+      "adoption_status": "MATCHES_APPROVED_UPLOAD_MANIFEST",
+      "visual_comparison": "NOT_RUN"
+    }
+  ],
+  "legacy_runtime_inventory": [
+    {
+      "id": "rilde_village_01_peace",
+      "path": "data/maps/rilde_village_01_peace.json",
+      "sha256": "b2554fa3e9786186c2e23b3c93b420dfede29e7f8c68f29e454ac472c9b467be",
+      "spawn_ids": [
+        "from_aidan",
+        "from_elder",
+        "from_inn",
+        "from_shop",
+        "from_house_01",
+        "from_house_02",
+        "from_house_03",
+        "from_house_04",
+        "from_barn",
+        "from_storage",
+        "default",
+        "from_moss_forest",
+        "from_cliff",
+        "from_fort",
+        "from_plaza",
+        "from_training",
+        "from_sunset"
+      ],
+      "transitions": [
+        {
+          "id": "tr_v_lind_aidan_house",
+          "toMap": "rilde_in_aidan",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_elder_house",
+          "toMap": "rilde_in_elder",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_inn",
+          "toMap": "rilde_in_inn_1f",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_item_shop",
+          "toMap": "rilde_in_shop",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_house_01",
+          "toMap": "rilde_in_house_01",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_house_02",
+          "toMap": "rilde_in_house_02",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_house_03",
+          "toMap": "rilde_in_house_03",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_house_04",
+          "toMap": "rilde_in_house_04",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_barn",
+          "toMap": "rilde_in_barn",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_lind_storage",
+          "toMap": "rilde_in_storage",
+          "toSpawn": "from_village"
+        },
+        {
+          "id": "tr_v_to_cliff",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        },
+        {
+          "id": "tr_v_to_moss",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        },
+        {
+          "id": "tr_v_to_fort",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_wind_stone",
+          "hook": "rilde_wind_stone"
+        },
+        {
+          "id": "ev_sign_east"
+        },
+        {
+          "id": "ev_sign_south"
+        },
+        {
+          "id": "ev_farmer_male",
+          "npc": "farmer_male"
+        },
+        {
+          "id": "ev_farmer_female",
+          "npc": "farmer_female"
+        },
+        {
+          "id": "ev_young_man",
+          "npc": "young_man"
+        },
+        {
+          "id": "ev_young_woman",
+          "npc": "young_woman"
+        },
+        {
+          "id": "ev_elder_man",
+          "npc": "elder_man"
+        },
+        {
+          "id": "ev_elder_woman",
+          "npc": "elder_woman"
+        },
+        {
+          "id": "ev_caretaker",
+          "npc": "caretaker"
+        },
+        {
+          "id": "ev_emma",
+          "npc": "emma"
+        },
+        {
+          "id": "ev_boy",
+          "npc": "boy"
+        },
+        {
+          "id": "ev_girl",
+          "npc": "girl"
+        },
+        {
+          "id": "ev_boy_swordsman",
+          "npc": "boy_swordsman"
+        },
+        {
+          "id": "ev_fisherman",
+          "npc": "fisherman"
+        },
+        {
+          "id": "ev_hill_old",
+          "npc": "hill_old"
+        },
+        {
+          "id": "ev_fiona_wait",
+          "hook": "rilde_fiona"
+        },
+        {
+          "id": "ev_training_dummy",
+          "hook": "rilde_dummy"
+        },
+        {
+          "id": "ev_training_dummy_old"
+        },
+        {
+          "id": "ev_trainsign",
+          "hook": "rilde_text:trainingSign"
+        },
+        {
+          "id": "ev_well",
+          "hook": "rilde_text:well"
+        },
+        {
+          "id": "ev_balloon_tree",
+          "hook": "rilde_balloon_tree"
+        },
+        {
+          "id": "ev_sq_catowner",
+          "hook": "rilde_catowner"
+        },
+        {
+          "id": "ev_cat",
+          "hook": "rilde_cat"
+        },
+        {
+          "id": "ev_sq_kid",
+          "hook": "rilde_kid"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    },
+    {
+      "id": "rilde_village_01_ruin",
+      "path": "data/maps/rilde_village_01_ruin.json",
+      "sha256": "efb073c7d945ba25de3d3c7cb95239c170347ac79e9f83fc89a9a1e8254744ec",
+      "spawn_ids": [
+        "from_aidan",
+        "from_elder",
+        "from_inn",
+        "from_shop",
+        "from_house_01",
+        "from_house_02",
+        "from_house_03",
+        "from_house_04",
+        "from_barn",
+        "from_storage",
+        "default",
+        "from_moss_forest",
+        "from_cliff",
+        "from_fort",
+        "from_plaza",
+        "from_training",
+        "from_sunset"
+      ],
+      "transitions": [
+        {
+          "id": "tr_v_to_cliff",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        },
+        {
+          "id": "tr_v_to_moss",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        },
+        {
+          "id": "tr_v_to_fort",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_wind_stone",
+          "hook": "rilde_wind_stone"
+        },
+        {
+          "id": "ev_sign_east",
+          "hook": "rilde_sign_east"
+        },
+        {
+          "id": "ev_sign_south"
+        },
+        {
+          "id": "ev_door_lind_aidan_house"
+        },
+        {
+          "id": "ev_door_lind_elder_house"
+        },
+        {
+          "id": "ev_door_lind_inn"
+        },
+        {
+          "id": "ev_door_lind_item_shop"
+        },
+        {
+          "id": "ev_door_lind_house_01"
+        },
+        {
+          "id": "ev_door_lind_house_02"
+        },
+        {
+          "id": "ev_door_lind_house_03"
+        },
+        {
+          "id": "ev_door_lind_house_04"
+        },
+        {
+          "id": "ev_door_lind_barn"
+        },
+        {
+          "id": "ev_door_lind_storage"
+        },
+        {
+          "id": "ev_rr_elder",
+          "npc": "rr_elder"
+        },
+        {
+          "id": "ev_rr_oldwoman",
+          "npc": "rr_oldwoman"
+        },
+        {
+          "id": "ev_rr_woman",
+          "npc": "rr_woman"
+        },
+        {
+          "id": "ev_rr_farmer",
+          "npc": "rr_farmer"
+        },
+        {
+          "id": "ev_rr_boy",
+          "npc": "rr_boy"
+        },
+        {
+          "id": "ev_rr_knight",
+          "npc": "rr_knight"
+        },
+        {
+          "id": "ev_rr_knight2",
+          "npc": "rr_knight2"
+        },
+        {
+          "id": "ev_trainsign"
+        },
+        {
+          "id": "ev_well"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    },
+    {
+      "id": "rilde_in_aidan",
+      "path": "data/maps/rilde_in_aidan.json",
+      "sha256": "9969fcc5e201661c940417360143996aa06c4a6128d725153c67ff97f7a262e1",
+      "spawn_ids": [
+        "default",
+        "from_village",
+        "from_bed"
+      ],
+      "transitions": [
+        {
+          "id": "tr_exit",
+          "toMap": "rilde_village",
+          "toSpawn": "from_aidan"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_bed_04"
+        },
+        {
+          "id": "ev_cupboard_06",
+          "hook": "rilde_drawer"
+        },
+        {
+          "id": "ev_fireplace_08"
+        },
+        {
+          "id": "ev_shelf_books_10"
+        },
+        {
+          "id": "ev_table_round_13"
+        },
+        {
+          "id": "ev_jar_19",
+          "hook": "rilde_pot"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    },
+    {
+      "id": "cliff_moher_01_spiral_ascent",
+      "path": "data/maps/cliff_moher_01_spiral_ascent.json",
+      "sha256": "e6f92e7500ff7722a8fc431444fe46e2cdbe73fd3b47b914565efffad7003dc2",
+      "spawn_ids": [
+        "from_lind",
+        "summit"
+      ],
+      "transitions": [
+        {
+          "id": "tr_c1_to_lind",
+          "toMap": "lind_village",
+          "toSpawn": "from_cliff"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_c1_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_c1_sign"
+        },
+        {
+          "id": "ev_c1_summit",
+          "eventId": "prologue_sunset_hill"
+        },
+        {
+          "id": "ev_c1_view_bench",
+          "hook": "cliff_time_cycle"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    },
+    {
+      "id": "moss_forest_01_sunlit_path",
+      "path": "data/maps/moss_forest_01_sunlit_path.json",
+      "sha256": "0df2274bbbaff6aa62d7b9093bb1e7e5cbc0f692bc730e49f5f8424350452841",
+      "spawn_ids": [
+        "from_lind",
+        "from_area2",
+        "from_cliff_fall"
+      ],
+      "transitions": [
+        {
+          "id": "tr_to_lind",
+          "toMap": "lind_village",
+          "toSpawn": "from_moss_forest"
+        },
+        {
+          "id": "tr_to_area2",
+          "toMap": "moss_forest_02_mossy_ravine",
+          "toSpawn": "from_area1"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_a1_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_a1_sign_lind"
+        },
+        {
+          "id": "ev_a1_sign_fork"
+        },
+        {
+          "id": "ev_a1_camp_trace"
+        },
+        {
+          "id": "ev_a1_rest_clearing",
+          "hook": "future_rest"
+        },
+        {
+          "id": "ev_a1_rest_ford",
+          "hook": "future_rest"
+        },
+        {
+          "id": "ev_a1_ambience_shift",
+          "hook": "a1_exit_grade"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    },
+    {
+      "id": "moss_forest_02_mossy_ravine",
+      "path": "data/maps/moss_forest_02_mossy_ravine.json",
+      "sha256": "d4bbca966ee65b89d520701f48c831dd146edb4de061807dc749ce51a3ffac88",
+      "spawn_ids": [
+        "from_area1",
+        "from_area3"
+      ],
+      "transitions": [
+        {
+          "id": "tr_to_area1",
+          "toMap": "moss_forest_01_sunlit_path",
+          "toSpawn": "from_area2"
+        },
+        {
+          "id": "tr_to_area3",
+          "toMap": "moss_forest_03_ancient_grove",
+          "toSpawn": "from_area2"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_a2_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_a2_rest_ramp"
+        },
+        {
+          "id": "ev_a2_rest_bridge"
+        },
+        {
+          "id": "ev_a2_rest_marker"
+        },
+        {
+          "id": "ev_a2_old_marker",
+          "hook": "a2_marker_crack_glint"
+        },
+        {
+          "id": "ev_a2_ambience_marker",
+          "hook": "a2_marker_birds_thin"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    },
+    {
+      "id": "moss_forest_03_ancient_grove",
+      "path": "data/maps/moss_forest_03_ancient_grove.json",
+      "sha256": "7d4835207cf5ba06484fb57681990f393d38b172cb73a4f7770296ce87db06e7",
+      "spawn_ids": [
+        "from_area2",
+        "dev_sanctuary"
+      ],
+      "transitions": [
+        {
+          "id": "tr_to_area2",
+          "toMap": "moss_forest_02_mossy_ravine",
+          "toSpawn": "from_area3"
+        },
+        {
+          "id": "tr_to_deep",
+          "toMap": "TBD",
+          "toSpawn": "TBD"
+        }
+      ],
+      "events": [
+        {
+          "id": "ev_a3_arrival",
+          "once": true
+        },
+        {
+          "id": "ev_a3_threshold",
+          "hook": "a3_threshold_birds_off"
+        },
+        {
+          "id": "ev_a3_rune_stone",
+          "eventId": "prologue_rune_stone"
+        },
+        {
+          "id": "ev_a3_rest_sentinel",
+          "hook": "future_rest"
+        },
+        {
+          "id": "ev_a3_clearing_reveal",
+          "hook": "camera_reveal_clearing",
+          "once": true
+        },
+        {
+          "id": "ev_a3_lou_intro",
+          "eventId": "prologue_lou_intro"
+        },
+        {
+          "id": "ev_a3_altar_trigger",
+          "eventId": "prologue_altar_scene",
+          "once": true
+        },
+        {
+          "id": "ev_a3_rest_spring",
+          "hook": "future_rest"
+        }
+      ],
+      "geometry_authority": "EXCLUDED_FOR_NEW_LAYOUT"
+    }
+  ],
+  "proposed_semantic_anchors": [
+    {
+      "anchor_id": "aidan_house_bed",
+      "existing_binding": "rilde_in_aidan/from_bed",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "aidan_house_door",
+      "existing_binding": "rilde_in_aidan <-> rilde_village_01_peace",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "east_training_area",
+      "existing_binding": "startTraining/TrainingCheckpoint",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "windward_cliffs_wnw",
+      "existing_binding": "prologue_sunset_hill/cliff_time_cycle/cliff_sunset_to_fire",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "village_road_reveal",
+      "existing_binding": "cliffRunHome/startReturnScene pages5,6,8",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "village_raid",
+      "existing_binding": "enterBurningVillage/atk_enter",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "east_river_bridge",
+      "existing_binding": "new blocked-bridge staging unresolved",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "raid_riverside_cliff",
+      "existing_binding": "startEscapeScene/atk_escaped; voluntary jump",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "downstream_landing",
+      "existing_binding": "enterMossForest/MossForestStory.enterFromStart/from_cliff_fall",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    },
+    {
+      "anchor_id": "ancient_altar",
+      "existing_binding": "prologue_altar_scene/louFound gate",
+      "world_position": null,
+      "spatial_status": "BLOCKED_UNAPPROVED_SPATIAL_CONTRACT"
+    }
+  ],
+  "tests": [
+    {
+      "command": "node tests/save_compatibility.test.cjs",
+      "exit_code": 1,
+      "status": "FAIL",
+      "output": "FAIL AssertionError [ERR_ASSERTION]: fixture: product DEV block end not found\n    at extractDevBlock (/workspace/the-windbound-oath/tests/startup_race.test.cjs:10:9)\n    at setup (/workspace/the-windbound-oath/tests/startup_race.test.cjs:25:17)\n    at env (/workspace/the-windbound-oath/tests/continue_restore.test.cjs:8:10)\n    at ready (/workspace/the-windbound-oath/tests/save_compatibility.test.cjs:4:32)\n    at /workspace/the-windbound-oath/tests/save_compatibility.test.cjs:8:17\n    at test (/workspace/the-windbound-oath/tests/save_compatibility.test.cjs:3:48)\n    at /workspace/the-windbound-oath/tests/save_compatibility.test.cjs:7:72\n    at Object.<anonymous> (/workspace/the-windbound-oath/tests/save_compatibility.test.cjs:50:3)\n    at Module._compile (node:internal/modules/cjs/loader:1872:14)\n    at Object..js (node:internal/modules/cjs/loader:2003:10)"
+    },
+    {
+      "command": "node tests/prologue-save-route.test.cjs",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "PASS SAVE v1 stage 13 → AFTERMATH\nPASS SAVE v2 stage 13 → AFTERMATH\nPASS SAVE v1 stage 14 → FORT_FINALE\nPASS SAVE v2 stage 14 → FORT_FINALE\nPASS SAVE v1 stage 15 → PROLOGUE_END\nPASS SAVE v2 stage 15 → PROLOGUE_END\nPASS invalid stage14 with missing victories falls back to stage10\n7/7 SAVE routing cases passed"
+    },
+    {
+      "command": "node tests/prologue-return-save-guard.test.cjs",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "PASS return scene blocks SAVE and displays notice\nPASS outside return scene SAVE succeeds with version 30"
+    },
+    {
+      "command": "node tests/prologue-return-flow.test.cjs",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "PASS: aftermath → Lou join → 15-page Rilde return → fort once"
+    },
+    {
+      "command": "node tests/prologue-escape-return-static.test.cjs",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "PASS 12 escape pages\nPASS 12 escape portraits\nPASS approved river jump\nPASS jump visual cue\nPASS Moss Forest riverbank\nPASS no old cliff arrival\nPASS 15 return pages\nPASS 15 return portraits\nPASS Emma reunion\nPASS return click routing\nPASS return save guard\nPASS fort after return\nPASS legacy stage14 fort restore\nPASS legacy stage13 aftermath restore\nPASS equipment grant unchanged\n15/15 static integration checks passed"
+    },
+    {
+      "command": "node tests/moss/approved_story_cg_sequence.test.js",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "Approved CG sequence static QA PASS"
+    },
+    {
+      "command": "node tests/moss/rilde_cg_registry.test.js",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "Rilde CG registry/renderer policy PASS"
+    },
+    {
+      "command": "node tests/moss/portrait_event_cg.test.js",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "Portrait CG full-frame and reveal portrait suppression PASS"
+    }
+  ],
+  "private_canon_review": {
+    "reviewer": "/root",
+    "status": "coordinator reports latest main checked; no private text copied",
+    "scenario_blob": "74a1a9dedfeb08a22efa34eb0b083981c092bd1b",
+    "world_blob": "5a3cd66e4131a34de363782a2af8f0e4bb145464"
+  },
+  "save_contract": {
+    "storage_key": "windbound_oath_v028",
+    "outer_version": 30,
+    "prologue_versions_read": [
+      1,
+      2
+    ],
+    "prologue_version_write": 2,
+    "preserve": [
+      "storyStage",
+      "attackStep",
+      "northPhase",
+      "forestStoneSeen",
+      "louFound",
+      "defeated stable IDs",
+      "legacyEvents including unknown history",
+      "moss map/x/y/opened/fired/facing/level",
+      "FieldTalk flags",
+      "Quest state",
+      "Inventory claimed IDs"
+    ],
+    "new_geometry_migration": "NOT_IMPLEMENTED; explicit versioned semantic checkpoints required; never reinterpret old coordinates as new meters",
+    "new_map_ids": "stage-specific save allowlists require explicit migration design"
+  }
+}
