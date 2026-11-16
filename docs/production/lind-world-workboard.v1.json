@@ -1,10 +1,11 @@
 {
   "schema": "lind-world-workboard-v1",
-  "status": "PROPOSED_NOT_LAUNCHED",
+  "status": "TEAM_AUDITED_NOT_LAUNCHED",
   "source_contract": {
-    "private_canon": "the-windbound-oath-handoff/main reference/lore/{THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md,CANON_ADDENDUM.md,CANON_STATUS.md}",
-    "map_path": "docs/art/reference/lind/リルド村RPGアセット全体マップ.png",
-    "map_sha256": "83dd4ad1eb10103fdb7eb569e8b1b22cc92920d4c94d4eae85735125de87fe6c",
+    "private_canon": "the-windbound-oath-handoff/main reference/lore/{THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md,CANON_ADDENDUM.md,CANON_STATUS.md,WORLD_MAP_CANON_20261108.md}",
+    "approved_visual_map_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "approved_visual_map_github_registration": "BLOCKED_BINARY_PENDING",
+    "legacy_map_status": "SUPERSEDED_DO_NOT_USE_FOR_LAYOUT",
     "spatial_contract_approved": false
   },
   "lanes": [
@@ -13,7 +14,7 @@
       "owner": "ChatGPT + Codex",
       "scope": "reference and event CG/source inventory",
       "depends_on": [],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -30,7 +31,7 @@
       "depends_on": [
         "LIND-REF-01"
       ],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -47,7 +48,7 @@
       "depends_on": [
         "LIND-REF-01"
       ],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -65,7 +66,7 @@
         "LIND-REF-01",
         "LIND-WORLD-01"
       ],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -83,7 +84,7 @@
         "LIND-REF-01",
         "LIND-HOME-01"
       ],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -100,7 +101,7 @@
       "depends_on": [
         "LIND-REF-01"
       ],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -115,7 +116,7 @@
       "owner": "Codex INTEGRATION",
       "scope": "safe Blender render pipeline",
       "depends_on": [],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -137,7 +138,7 @@
         "LIND-STORY-01",
         "LIND-RENDER-01"
       ],
-      "status": "NOT_STARTED",
+      "status": "NOT_LAUNCHED",
       "branch": null,
       "pr": null,
       "gates": {
@@ -147,5 +148,16 @@
         "G4": "NOT_RUN"
       }
     }
-  ]
+  ],
+  "team_audit": {
+    "date": "2026-11-16",
+    "result": "ROLE_DEFINITION_PASS_EXTERNAL_AGENT_EXECUTION_NOT_CONFIRMED",
+    "source_document": "docs/production/LIND_3D_WORLD_MASTER_APPROVED_20261116.md",
+    "blocking_items": [
+      "register exact approved image in GitHub and verify SHA",
+      "direct visual review of approved event CG sources",
+      "approve new world-scale spatial interface"
+    ],
+    "notes": "Prior CI technical PASS is not a lane production completion; old map geometry excluded."
+  }
 }
