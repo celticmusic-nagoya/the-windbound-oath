@@ -10,6 +10,8 @@ on:
       - 'tools/character_blender/test_solve_morwen_framing.py'
       - 'tools/character_blender/morwen_team_contracts.py'
       - 'tools/character_blender/morwen_four_view_capture.py'
+      - 'tools/character_blender/validate_character_world_bridge.py'
+      - 'tools/character_blender/test_character_world_bridge.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -128,6 +130,8 @@ jobs:
           persist-credentials: false
       - name: Unit-test no-render framing solver
         run: python -m unittest discover -s tools/character_blender -p 'test_solve_morwen_framing.py' -v
+      - name: Unit-test full-3D character/world bridge negative controls
+        run: python -m unittest discover -s tools/character_blender -p 'test_character_world_bridge.py' -v
       - name: Download independent lane reports
         uses: actions/download-artifact@v4
         with:
