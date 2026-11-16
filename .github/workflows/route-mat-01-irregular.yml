@@ -1,0 +1,35 @@
+name: ROUTE-MAT-01 irregular method B render
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/route_mat_01/build_irregular.py'
+      - '.github/workflows/route-mat-01-irregular.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+      - name: Validate Codex source and regression tests
+        run: |
+          python3 tools/material_pipeline/validate_material_handoff.py assets/candidates/route-mat-01/attempt-01/manifest.json --root .
+          python3 -m unittest discover -s tests -p test_material_handoff.py -v
+      - name: Render irregular full-thickness masonry candidate
+        run: |
+          mkdir -p "$RUNNER_TEMP/route-mat-01-irregular"
+          blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/route_mat_01/build_irregular.py -- --root "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/route-mat-01-irregular"
+      - name: Upload images blend and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: route-mat-01-irregular-${{ github.run_id }}
+          path: ${{ runner.temp }}/route-mat-01-irregular/
+          retention-days: 7
+          if-no-files-found: warn
