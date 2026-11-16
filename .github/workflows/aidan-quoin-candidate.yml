@@ -24,7 +24,8 @@ jobs:
       - name: Install Blender
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+          ldconfig -p | grep -F 'libEGL.so.1'
           blender --version
       - name: Render and topology validation
         env:
