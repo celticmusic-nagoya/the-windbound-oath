@@ -75,6 +75,7 @@ def main():
         sc.render.film_transparent=True
         sc.render.image_settings.file_format="PNG"
         sc.view_settings.view_transform="Standard"
+        center=(low+high)*0.5
         # Lighting is rebuilt after each source-file reload; the first pass had no lamps.
         qa_world=bpy.data.worlds.new("QA_world_"+name)
         qa_world.use_nodes=True
