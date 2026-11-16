@@ -1,0 +1,133 @@
+{
+  "schema": "lind-cumulative-causal-production-ledger/v1",
+  "protected_history": {
+    "path": "docs/qa/lind/spatial-codex-world/attempt-ledger.json",
+    "sha256": "8ff988dcfbc793fd86719f180b5dbc368128fa2967a2288d41592007b3e82ffe",
+    "counts_reset": false
+  },
+  "preflight": {
+    "main_AGENTS_matches_branch": true,
+    "HANDOFF": "docs/handoff/HANDOFF.md",
+    "Blender.md": "NOT_FOUND: workspace case-insensitive filename search and GitHub main root 404; LIND_BLENDER_SCENE_INTERFACE_V1.md read as available interface, not a replacement claim",
+    "formal_original_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "candidate_D_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+    "private_main_reference_headers": "Bible + addendum + canon status reachable; no private text copied; physical coordinates/metrics remain unapproved"
+  },
+  "attempts": [
+    {
+      "unit": "WORLD",
+      "id": "joint-cell-01",
+      "family": "anisotropic-3d-halfspace-joint-cells-with-weathered-skin-v1",
+      "G2": "FAIL",
+      "root_cause": "common clipped outer envelope creates concrete pillar silhouette and flat turf slab",
+      "G3": "FAIL_CLOSED_TOPOLOGY",
+      "geometry_cause": "unwelded/degenerate clipped polygon soup",
+      "evidence": "world/attempt-01 + world-initial-qa.json",
+      "same_art_cause_failure_count": 1
+    },
+    {
+      "unit": "WORLD",
+      "id": "joint-cell-02",
+      "family": "anisotropic-3d-halfspace-joint-cells-with-weathered-skin-v1",
+      "G2": "FAIL",
+      "root_cause": "common envelope, continuous turf slab and broad smooth faces persist after erosion remap",
+      "G3": "GEOMETRY_SUBSET_PASS_PENDING_COMPLETE_RENDER_QA",
+      "geometry_repair": "convex-hull reconstruction, welding and valid subdivision repaired manifold/degenerate defects",
+      "same_art_cause_failure_count": 2,
+      "method_status": "STOP_FOR_CONCRETE_PILLAR_ART_DEFECT",
+      "evidence": "world/attempt-02"
+    },
+    {
+      "unit": "ROUTE",
+      "id": "bearing-01",
+      "family": "actual_surface_downward_bearing_volume",
+      "G2": "FAIL_CONCRETE_BRIDGE",
+      "G3": "FAIL_JUNCTION_SUPPORT",
+      "root_cause": "separate D ribbon profiles create .104516 junction discontinuity and up to .102931 support protrusion",
+      "same_geometry_cause_failure_count": 1,
+      "evidence": "route/attempt-01 + route-initial-qa.json"
+    },
+    {
+      "unit": "ROUTE",
+      "id": "bearing-repair-01",
+      "family": "actual_surface_downward_bearing_volume",
+      "geometry_repair": "fit common cross-slope junction plane; solve graded approaches; matching left/right support surfaces and extended bearing ends, not uniform road lifting",
+      "G3": "10300_TRIANGLE_SAMPLES_SUBSET_PASS_PENDING_FINAL_ART_GEOMETRY",
+      "samples": 10300,
+      "missing_support": 0,
+      "support_gap_range": [
+        0.0037641525,
+        0.00421381
+      ],
+      "new_masonry": "image evaluation pending; do not count geometry-only verification as artistic pass"
+    },
+    {
+      "unit": "WORLD",
+      "id": "authored-outcrops-01",
+      "family": "authored-inclined-bedrock-outcrops-with-bvh-rooted-soil-pockets-v1",
+      "causal_difference": "shared clipped envelope and continuous cap removed; distinct inclined rock volumes with independent soil pockets",
+      "G2": "FAIL",
+      "root_cause": "pointed artificial low-poly pillars and plate-like soil patches conflict with broad weathered outcrops and rooted grass in official CG",
+      "G3": "FAIL_SOIL_INTERIOR_SUPPORT",
+      "max_unsupported_soil_gap": 5.9404649734,
+      "same_art_cause_failure_count": 1,
+      "same_soil_cause_failure_count": 1,
+      "evidence": "world/attempt-03/qa.json and actual overview/detail/gameplay-distance images"
+    },
+    {
+      "unit": "ROUTE",
+      "id": "masonry-facing-01",
+      "family": "actual-arch-voussoir-and-spandrel-facing-v1",
+      "causal_difference": "explicit load-shaped arch wedges and spandrel modules instead of monolithic slab; old organic-rock cube/ring failure is not being reused as accepted material",
+      "G2": "FAIL",
+      "root_cause": "smooth regular rectangular veneer; concrete abutment/parapet remains and source weathering/detail absent",
+      "same_art_cause_failure_count": 1,
+      "geometry": "154 owned meshes valid; 10300 bearing samples pass; subsequent image reveals coplanar center-road z-fighting",
+      "evidence": "route/attempt-02-core-pass and protected initial masonry images"
+    },
+    {
+      "unit": "WORLD",
+      "id": "authored-outcrops-02",
+      "family": "authored-inclined-bedrock-outcrops-with-bvh-rooted-soil-pockets-v1",
+      "G2": "FAIL",
+      "root_cause": "smooth pillar grouping and flat grass lids persist despite repaired contact and wider crest",
+      "same_art_cause_failure_count": 2,
+      "method_status": "STOP_FOR_ART_DEFECT",
+      "soil_repair": "actual named rock triangles extruded; 9 rooted volumes pass independent contact; 7 exact-edge ray misses corroborated by nearest triangle offset correspondence",
+      "G3_before_local_repair": "FAIL_VISIBLE_SELF_INTERSECTING_TALUS00",
+      "evidence": "world/attempt-04"
+    },
+    {
+      "unit": "WORLD",
+      "id": "talus-technical-repair",
+      "family": "existing-vertex-convex-hull-topology-repair",
+      "cause": "one small talus skin folded under absolute displacement",
+      "scope": "only talus00; 21 nonadjacent intersection pairs diagnosed; volume -.18409 to +.24472; 463 other mesh hashes unchanged",
+      "G3": "PARTIAL_TESTED_SUBSETS_PASS",
+      "G2": "FAIL_INHERITED_METHOD_STOPPED",
+      "evidence": "world/attempt-04-technical/technical-repair.json"
+    },
+    {
+      "unit": "ROUTE",
+      "id": "masonry-facing-repair-01",
+      "family": "actual-arch-voussoir-and-spandrel-facing-v1",
+      "G2": "FAIL",
+      "root_cause": "same artificial stone pattern: cellular faceted veneer with deep uniform joints",
+      "same_art_cause_failure_count": 2,
+      "method_status": "STOP_FOR_ART_DEFECT",
+      "G3": "PARTIAL_TESTED_SUBSETS_PASS",
+      "junction_repair": "single shared fan and surface ownership; coplanar duplicates removed",
+      "technical_exclusion": "one folded decorative cell entirely behind terrain at 128 actual triangle samples; visible fold hard-fails; no support replacement",
+      "evidence": "route/qa.json + frozen-geometry.json + occluded-decoration-exclusion.json"
+    }
+  ],
+  "continuation": "Only structural alternatives for stopped causes; no approval/adoption/world expansion. CI deterministic reproduction is not a new AI corrective trial.",
+  "final": {
+    "G1": "BLOCKED_FULL_METRIC_SPATIAL_EVENT_REVIEW",
+    "G2": "FAIL",
+    "G3": "PARTIAL_TESTED_SUBSETS_PASS_BOTH",
+    "G4": "NOT_RUN",
+    "art_expansion": "BLOCKED",
+    "new_artistic_trials": "NOT_IMPLEMENTED beyond stopped families; next method requires causal design and approved interfaces"
+  }
+}

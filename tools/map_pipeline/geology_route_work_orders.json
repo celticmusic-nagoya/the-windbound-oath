@@ -7,7 +7,7 @@
     "reference_candidate": "D",
     "immutable": true
   },
-  "status": "READY_FOR_CODEX_NOT_EXECUTED",
+  "status": "EXECUTED_BOUNDED_CANDIDATES_G2_FAIL_FAMILIES_STOPPED",
   "shared": {
     "units": "candidate units, not meters",
     "canon_metric_gate": "BLOCKED",
@@ -71,9 +71,10 @@
     }
   ],
   "qa": {
-    "G1": "BLOCKED",
-    "G2": "FAIL_EXISTING_NOT_REASSESSED",
-    "G3": "NOT_RUN_NEW_WORK",
+    "G1": "BLOCKED_FULL_METRIC_SPATIAL_EVENT_REVIEW",
+    "G2": "FAIL_INDEPENDENT_IMAGES_REVIEWED",
+    "G3": "PARTIAL_TESTED_SUBSETS_PASS",
     "G4": "NOT_RUN"
-  }
+  },
+  "execution_evidence": "docs/qa/lind/geology-route-production-01/report.md"
 }

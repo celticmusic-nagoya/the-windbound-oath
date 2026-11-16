@@ -1,0 +1,21 @@
+{
+  "method": "actual_surface_downward_bearing_volume",
+  "seed": 0,
+  "blender": "4.3.2",
+  "input_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+  "original_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "units": "candidate scene units; no metric approval",
+  "scope": "four road bases and east arch bridge abutments/parapets",
+  "road_z_change": "shared joint plane + grade-constrained transition, not simple upward translation",
+  "base_gap": 0.004,
+  "bearing_overlap": 0.18,
+  "shoulder_width": 0.15,
+  "samples": 32,
+  "render_size": [
+    960,
+    640
+  ],
+  "external_assets": "NONE; procedural Principled PBR only",
+  "history_reference": "docs/qa/lind/spatial-codex-world/attempt-ledger.json",
+  "causal_difference": "adds actual downward bearing volumes, bank abutments and crown-following parapets, rather than raising a ribbon or repeating terrain cut/fill"
+}

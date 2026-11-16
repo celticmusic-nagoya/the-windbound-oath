@@ -1,0 +1,24 @@
+{
+  "tests": "9 PASS",
+  "local_blender": "4.3.2",
+  "independent_technical": {
+    "WORLD": {
+      "qa_path": "assets/candidates/lind-geology-route-production-01/world/attempt-04-technical/qa.json",
+      "qa_sha256": "b83fd6bd5dbc0d2eb382d64a7f67180c799d246ebe053cec4ec263ce143e425d",
+      "blend_sha256": "d9d21ff3edc001907232fac5b60786dad61a3fcac7a4931f4b7ef2ce36524af6",
+      "mesh_count": 464,
+      "G3": "PARTIAL_TESTED_SUBSETS_PASS",
+      "G2": "FAIL_METHOD_FAMILY_STOPPED"
+    },
+    "ROUTE": {
+      "qa_path": "assets/candidates/lind-geology-route-production-01/route/qa.json",
+      "qa_sha256": "6122d17b0b67c0d31d21aa1af07f7a94090daa2759bd36ac460442e410915c24",
+      "blend_sha256": "99f83e08faf8b7661049cb3c195f9ad85b821af6b5b07f54b3886a9dd2e22443",
+      "mesh_count": 214,
+      "G3": "PARTIAL_TESTED_SUBSETS_PASS",
+      "G2": "FAIL_METHOD_FAMILY_STOPPED"
+    }
+  },
+  "G2": "FAIL_INDEPENDENT_IMAGE_REVIEW",
+  "CI": "see verified run links on PR #351; deterministic reproduction only"
+}

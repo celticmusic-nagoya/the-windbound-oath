@@ -1,6 +1,6 @@
 # LIND GEOLOGY / ROUTE — production handoff 01
 
-Status: AUTHORIZED NON-DESTRUCTIVE WORK; IMPLEMENTATION NOT YET RUN. Base: PR #350 head 59b6eda768d480202b598c27f58229bbfc2d2543. Preserve PR #346 candidate D and failure history. This document is not an asset, render, or QA PASS.
+Status: EXECUTED BOUNDED CANDIDATES; G2 FAIL / SAME-METHOD CIRCUIT BREAKERS REACHED. Actual assets, renders and independent QA: `docs/qa/lind/geology-route-production-01/report.md`. Base: PR #350 head 59b6eda768d480202b598c27f58229bbfc2d2543. Preserve PR #346 candidate D and failure history. This directive itself is not a QA PASS; execution evidence is stored separately. No formal adoption occurred.
 
 ## Shared contract and ownership
 - WORLD owns cliff geological structure and terrain interfaces; ROUTE owns engineered road support, abutments and junctions. Never concurrently edit the same .blend or asset path.

@@ -1,0 +1,96 @@
+{
+  "task": "WORLD-GEO-02",
+  "protected_history": "docs/qa/lind/spatial-codex-world/attempt-ledger.json",
+  "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "candidate_D_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+  "stopped_prior_family": {
+    "family": "continuous_signed_distance_heightfield_geological_art",
+    "cumulative_G2_failures": 2,
+    "status": "STOP_PRESERVED_NOT_RETRIED"
+  },
+  "attempts": [
+    {
+      "id": "environment-01",
+      "family": "Blender_API_collection_name",
+      "result": "FAIL_BEFORE_GEOMETRY",
+      "cause": "root scene collection name is read-only",
+      "fix": "remove unsupported rename; no art counter reset",
+      "log": "attempt-01/environment-failure.log"
+    },
+    {
+      "id": "WORLD-01",
+      "family": "anisotropic-3d-halfspace-joint-cells-with-weathered-skin-v1",
+      "G2": "FAIL_INDEPENDENT",
+      "G3": "FAIL_TOPOLOGY",
+      "cause": "common exterior plane makes concrete prism; flat cap; collinear clipping topology creates degenerate/nonmanifold faces",
+      "evidence": "attempt-01/overview.png",
+      "generator_snapshot": "attempt-01/generator.py"
+    },
+    {
+      "id": "WORLD-02",
+      "family": "anisotropic-3d-halfspace-joint-cells-with-weathered-skin-v1",
+      "G2": "FAIL_INDEPENDENT",
+      "G3": "GEOMETRY_SUBSET_PASS_INDEPENDENT",
+      "cause": "erosion deformation improves concavities and topology but shared hull and cap still read as cut block with broad smooth planes",
+      "cumulative_G2_failures": 2,
+      "family_status": "STOP",
+      "evidence": "attempt-02/overview.png",
+      "generator_snapshot": "attempt-02/generator.py"
+    },
+    {
+      "id": "WORLD-03",
+      "family": "authored-inclined-bedrock-outcrops-with-bvh-rooted-soil-pockets-v1",
+      "family_attempt": 1,
+      "causal_difference": "discard shared clipping hull and cap; separate authored sloping rock volumes define noncoplanar contact/silhouette; actual-triangle BVH anchors multiple soil pockets",
+      "hypothesis": "independent crag silhouettes, inclined contacts and uneven rooted crest remain visible at close and gameplay distance",
+      "G2": "FAIL_INDEPENDENT",
+      "G3": "GEOMETRY_SUBSET_PASS_SOIL_CONTACT_FAIL",
+      "evidence": "attempt-03/overview.png",
+      "remaining_limits": [
+        "rock contact intersections intentional but detailed geological audit NOT_RUN",
+        "soil pocket center/boundary BVH only; full interior support QA NOT_RUN",
+        "candidate units, official metric/placement not approved",
+        "runtime/Android NOT_RUN"
+      ],
+      "cause": "height-proportional roof offset made pointed lowpoly pillars; sparse soil fans bridge different crag heights and float",
+      "soil_max_gap_candidate_units": {
+        "00": 1.3196,
+        "01": 3.1962,
+        "02": 0.7528,
+        "03": 5.94046,
+        "04": 1.5601,
+        "05": 1.2845,
+        "06": 1.2401,
+        "07": 1.1739
+      },
+      "generator_snapshot": "attempt-03/generator.py"
+    },
+    {
+      "id": "WORLD-04",
+      "family": "authored-inclined-bedrock-outcrops-with-bvh-rooted-soil-pockets-v1",
+      "family_attempt": 2,
+      "G2": "FAIL_INDEPENDENT",
+      "G3": "FAIL_VISIBLE_FOLDED_TALUS_00_SOIL_BOUNDARY_RAY_DIAGNOSIS_PENDING",
+      "causal_repair": "remove height-proportional roof spikes for broad shoulders; replace sparse inter-crag soil interpolation with exact actual bedrock triangles extruded into closed rooted soil",
+      "evidence": "attempt-04/overview.png",
+      "stop_condition": "if same artistic/support root cause FAIL again, STOP family; no minor tweaking third attempt",
+      "cumulative_family_G2_failures": 2,
+      "family_status": "STOP",
+      "cause": "smooth pillars and cut grass roofs remain art mismatch; talus00 has 21 nonadjacent triangle overlap pairs and negative volume",
+      "generator_snapshot": "attempt-04/generator.py"
+    },
+    {
+      "id": "WORLD-04-technical",
+      "scope": "targeted topology repair only, not an artistic correction or a new geology trial",
+      "family": "authored-inclined-bedrock-outcrops-with-bvh-rooted-soil-pockets-v1",
+      "family_G2_failures": 2,
+      "family_status": "STOP_UNCHANGED",
+      "G2": "FAIL_INHERITED_NO_ART_REGENERATION",
+      "repair_method": "talus00 existing-vertex convex hull replaces folded skin; neither sign flip nor deletion",
+      "unchanged_other_meshes": 463,
+      "evidence": "attempt-04-technical/technical-repair.json",
+      "G3": "INDEPENDENT_QA_PENDING",
+      "G4": "NOT_RUN"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "route-support-interface-v1",
+  "input_world_sha256": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+  "units": "CANDIDATE_UNSCALED",
+  "local_origin": null,
+  "bounding_box_m": null,
+  "world_transform": null,
+  "elevation_reference": null,
+  "candidate_scene_anchor": [
+    0,
+    0,
+    5.852571964263916
+  ],
+  "support_prefix": "ROUTE_SUPPORT__",
+  "abutment_prefix": "ROUTE_ABUTMENT__",
+  "parapet_prefix": "ROUTE_PARAPET__",
+  "road_names": [
+    "Village_to_coastal_promontory",
+    "Village_to_east_bridge",
+    "Village_to_harbor_access",
+    "Village_to_north_farmland"
+  ],
+  "context_meshes": [
+    "CONTINUOUS_TERRAIN_coast_river_upland",
+    "East_bridge_candidate_single_arch"
+  ],
+  "ownership": "new structural supports + abutments + parapets; contextual WORLD shape remains immutable",
+  "junction_status": "existing D overlapping ribbon profiles retained; independent intersection height QA REQUIRED",
+  "road_geometry_hashes": {
+    "Village_to_coastal_promontory": "2b88bf6ce5125b08608e5dc23b41169312fe6ae4da1989729408fd6cd617b67d",
+    "Village_to_east_bridge": "d19757dc1b4a5fdaddeeaa434ac8381d8e68862300e2175e5a840b77f425cfce",
+    "Village_to_harbor_access": "69f990e04a1a503ea7a5f232c6a188b2d27fb0153b1d2ad314a9271e86c8249d",
+    "Village_to_north_farmland": "aa739dd426411d0f91282ecf9d9306d9d1fd7925e74b0f7f3b5a7e5cfe4c720a"
+  },
+  "shared_contract_sha256": "ef37ad78ae3f4a39c22dacca61650180d1cf26186dfaed17a48cdf0d840ad715"
+}

@@ -1,0 +1,252 @@
+{
+  "schema": "lind-independent-production-qa/v1",
+  "reviewer": "root (not either producer worker)",
+  "unit": "ROUTE",
+  "blender": "4.3.2",
+  "blend_sha256": "3c502930fd61f4633ea711500948abf0d70ebf0446b9c1bc20018bbaccca7dac",
+  "G1": "BLOCKED_FULL_SPATIAL_METRIC_EVENT_REVIEW",
+  "source_bytes": "PASS",
+  "G2": "NOT_RUN_IMAGE_REVIEW_REQUIRED",
+  "G3": "FAIL",
+  "technical_gate": "FAIL",
+  "G4": "NOT_RUN",
+  "errors": [
+    "missing image: gameplay-distance.png",
+    "road support continuity fails: Village_to_north_farmland",
+    "road support continuity fails: Village_to_harbor_access",
+    "road support continuity fails: Village_to_coastal_promontory",
+    "road support continuity fails: Village_to_east_bridge",
+    "junction overlap height discontinuity > provisional .03"
+  ],
+  "meshes": [
+    {
+      "name": "ROUTE_SUPPORT__Village_to_coastal_promontory",
+      "vertices": 1128,
+      "faces": 1126,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 2.452387105498709,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_SUPPORT__Village_to_east_bridge",
+      "vertices": 1128,
+      "faces": 1126,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 2.9922386861020347,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_SUPPORT__Village_to_harbor_access",
+      "vertices": 1128,
+      "faces": 1126,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 2.8245865383912254,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_SUPPORT__Village_to_north_farmland",
+      "vertices": 768,
+      "faces": 766,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 4.6045785240928625,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_ABUTMENT__west",
+      "vertices": 8,
+      "faces": 6,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 1.4512008818691609,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_ABUTMENT__east",
+      "vertices": 8,
+      "faces": 6,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 1.324488486204009,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_PARAPET__north",
+      "vertices": 348,
+      "faces": 346,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 0.20308609391137666,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    },
+    {
+      "name": "ROUTE_PARAPET__south",
+      "vertices": 348,
+      "faces": 346,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "nonmanifold_edges": 0,
+      "inconsistent_winding_edges": 0,
+      "signed_volume": 0.2030860939113766,
+      "material_slots": 1,
+      "intentional_open_surface": false
+    }
+  ],
+  "images": {
+    "overview.png": {
+      "sha256": "6a76c547d85f2d3806a0b3c44ebf0b81d1ca734fe7c5293381bc996cd9144cc8",
+      "size": [
+        960,
+        640
+      ]
+    },
+    "junction-detail.png": {
+      "sha256": "43e4882f82c044cc8cb471c48cfc92c9b13a222ed45e0cc2ada415d26ea74a58",
+      "size": [
+        960,
+        640
+      ]
+    }
+  },
+  "measurements": {
+    "road_triangle_samples": [
+      {
+        "name": "Village_to_north_farmland",
+        "samples": 1900,
+        "missing_support": 1,
+        "min_support_gap": -0.031206607818603516,
+        "max_support_gap": 0.004162788391113281,
+        "max_terrain_burial": -0.03889179229736328,
+        "max_candidate_grade_degrees": 18.311111726285592
+      },
+      {
+        "name": "Village_to_harbor_access",
+        "samples": 2800,
+        "missing_support": 0,
+        "min_support_gap": -0.10293149948120117,
+        "max_support_gap": 0.004137516021728516,
+        "max_terrain_burial": -0.03715848922729492,
+        "max_candidate_grade_degrees": 24.500240917909796
+      },
+      {
+        "name": "Village_to_coastal_promontory",
+        "samples": 2800,
+        "missing_support": 0,
+        "min_support_gap": -0.07432746887207031,
+        "max_support_gap": 0.004213809967041016,
+        "max_terrain_burial": -0.07298612594604492,
+        "max_candidate_grade_degrees": 9.006794308191779
+      },
+      {
+        "name": "Village_to_east_bridge",
+        "samples": 2800,
+        "missing_support": 4,
+        "min_support_gap": -0.07827520370483398,
+        "max_support_gap": 0.004197597503662109,
+        "max_terrain_burial": -0.04668426513671875,
+        "max_candidate_grade_degrees": 24.50018641999441
+      }
+    ],
+    "junction_overlaps": [
+      {
+        "routes": [
+          "Village_to_north_farmland",
+          "Village_to_harbor_access"
+        ],
+        "overlap_samples": 4,
+        "max_height_discontinuity": 0.10451650619506836
+      },
+      {
+        "routes": [
+          "Village_to_north_farmland",
+          "Village_to_coastal_promontory"
+        ],
+        "overlap_samples": 28,
+        "max_height_discontinuity": 0.07637834548950195
+      },
+      {
+        "routes": [
+          "Village_to_north_farmland",
+          "Village_to_east_bridge"
+        ],
+        "overlap_samples": 18,
+        "max_height_discontinuity": 0.08242034912109375
+      },
+      {
+        "routes": [
+          "Village_to_harbor_access",
+          "Village_to_coastal_promontory"
+        ],
+        "overlap_samples": 27,
+        "max_height_discontinuity": 0.07674741744995117
+      },
+      {
+        "routes": [
+          "Village_to_harbor_access",
+          "Village_to_east_bridge"
+        ],
+        "overlap_samples": 15,
+        "max_height_discontinuity": 0.029628276824951172
+      },
+      {
+        "routes": [
+          "Village_to_coastal_promontory",
+          "Village_to_east_bridge"
+        ],
+        "overlap_samples": 11,
+        "max_height_discontinuity": 0.019895553588867188
+      }
+    ],
+    "abutment_bridge_surface_intersections": [
+      {
+        "name": "ROUTE_ABUTMENT__west",
+        "intersecting_triangle_pairs": 30
+      },
+      {
+        "name": "ROUTE_ABUTMENT__east",
+        "intersecting_triangle_pairs": 28
+      }
+    ],
+    "abutment_engineering_acceptance": "NOT_RUN; intersection is not engineering approval",
+    "tolerances": {
+      "support_gap": 0.02,
+      "burial": 0.015,
+      "junction_step": 0.03,
+      "grade_degrees": 25,
+      "units": "unapproved candidate scene units"
+    }
+  },
+  "NOT_RUN": [
+    "formal metric/source placement acceptance",
+    "global unintended mesh intersection search",
+    "geotechnical/structural loading",
+    "collision/navmesh",
+    "runtime traversal",
+    "performance/Android"
+  ],
+  "interface_sha256": "ef37ad78ae3f4a39c22dacca61650180d1cf26186dfaed17a48cdf0d840ad715"
+}

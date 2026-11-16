@@ -1,9 +1,11 @@
-name: Map units - readonly WORLD ROUTE evidence
+name: Map units - WORLD ROUTE production and evidence
 on:
   push:
-    branches: ['feature/map-deterministic-pipeline-world-route-01']
+    branches: ['feature/map-deterministic-pipeline-world-route-01', 'feature/lind-geology-route-production-01']
     paths: ['tools/map_pipeline/**', 'tests/test_map_pipeline.py', '.github/workflows/map-unit-pipeline.yml']
   workflow_dispatch:
+env:
+  MAP_PROFILE: ${{ github.ref_name == 'feature/lind-geology-route-production-01' && 'production' || 'evidence' }}
 permissions:
   contents: read
 concurrency:
@@ -32,7 +34,7 @@ jobs:
           persist-credentials: false
       - name: Fingerprint protected input, code, configuration and history
         id: key
-        run: echo "sha=$(python3 tools/map_pipeline/pipeline.py key --unit ${{ matrix.unit }})" >> "$GITHUB_OUTPUT"
+        run: echo "sha=$(python3 tools/map_pipeline/pipeline.py key --profile "$MAP_PROFILE" --unit ${{ matrix.unit }})" >> "$GITHUB_OUTPUT"
       - name: Restore exact success or failure (no prefix fallback)
         id: cache
         uses: actions/cache/restore@v4
@@ -51,7 +53,7 @@ jobs:
           sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
           sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
       - name: Build or verify cached evidence; failure never retries automatically
-        run: python3 tools/map_pipeline/pipeline.py run --unit ${{ matrix.unit }}
+        run: python3 tools/map_pipeline/pipeline.py run --profile "$MAP_PROFILE" --unit ${{ matrix.unit }}
       - name: Record infrastructure failure and minimal handoff
         if: always()
         env:
@@ -71,7 +73,7 @@ jobs:
               log = out / 'install.log'
               (out / 'failure.json').write_text(json.dumps({'cause': 'workflow setup/input verification failed; inspect failed step', 'related_log_tail': log.read_text(errors='replace').splitlines()[-35:] if log.exists() else [], 'automatic_retry': False}))
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
-              f.write(f"{u}: {os.environ['JOB_STATUS']}; artifact `map-{u}-{os.environ['INPUT_SHA']}`; image `preview.png` on success, `failure.json` on failure.\n")
+              f.write(f"{u}: {os.environ['JOB_STATUS']}; artifact `map-{u}-{os.environ['INPUT_SHA']}`; images `overview.png` / detail / gameplay-distance for production (or `preview.png` for evidence), `failure.json` on failure.\n")
           PYTHON
       - name: Preserve success, failure or interrupted attempt marker
         if: always() && steps.key.outcome == 'success' && steps.cache.outputs.cache-hit != 'true'
@@ -107,7 +109,7 @@ jobs:
           path: .map-pipeline/ROUTE
           merge-multiple: true
       - name: Verify both limited technical gates and approved next stage
-        run: python3 tools/map_pipeline/pipeline.py integrate
+        run: python3 tools/map_pipeline/pipeline.py integrate --profile "$MAP_PROFILE"
       - uses: actions/upload-artifact@v4
         with:
           name: map-handoff-${{ github.sha }}

@@ -1,49 +1,50 @@
-# WORLD / ROUTE deterministic evidence pipeline
+# WORLD / ROUTE: evidence and production profiles
 
-Implementation baseline: PR #346 head `d94b43361f360cbdc448b0a3ffdb15d9dd23e02f`.
-Branch: `feature/map-deterministic-pipeline-world-route-01`. This is a new orchestration method, **not new geology or new AI sculpting**. No approved assets, candidate D, historical scripts/logs or production maps are modified. PR base is #346's branch to keep the automation diff separate; never merge this PR automatically.
+The existing PR #350 runner/workflow is extended, not replaced. `evidence` retains its read-only D partition. `production` builds actual independent bounded WORLD/ROUTE geometry from the two authored Blender recipes, reopens saved blends in a separate process, renders three views, verifies hashes and measured technical subsets, and retains all artifacts. No AI API, main merge, adoption, publication or deletion is automated.
 
-## Prior evidence inspected
+## Current execution
 
-- Existing `lind-source-review.yml`: source PNG SHA, pinned Blender 4.0.2 package SHA, source-review only. Existing run 43848206576 was confirmed success at b60ae5c. Reuse its exact Blender package verification; do not run the source-review generator again here.
-- Formal visual source `assets/sources/lind-world-20261116/original.png`: SHA `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620`. Packed original must match too. No lore, approved dimensions or scale are inferred. Formal full spatial review remains BLOCKED.
-- D blend SHA `2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72`.
-- `docs/qa/lind/spatial-codex-world/attempt-ledger.json`, PRODUCTION.md, independent/report.md: A/B geology family stopped after two G2 failures; C cut/fill failed actual BVH clearance; D has sampled clearance only. Original missing-file and denoiser failures retained. These are not reset by the new branch/pipeline.
-- Existing `lind_spatial_assemble.py` requires approved placement/scale. It is deliberately not invoked: those approvals are missing. Evidence integration is not game/scene integration.
+Branch `feature/lind-geology-route-production-01`, Draft PR #351. WORLD and ROUTE ran as two independent producer workers; root reviewed saved blends and actual images. The bounded candidates are **not final-quality deliveries**: two WORLD art families and the ROUTE automatic-facing family reached their same-defect two-failure stop. G2 remains FAIL. See `docs/qa/lind/geology-route-production-01/report.md`, exact-image review JSON and the cumulative ledger. Earlier #346 failures are preserved byte-for-byte and linked by SHA; no historical counts are reset.
 
-## Task graph and cache
+Formal original PNG SHA: `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620`.
+Immutable D blend SHA: `2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72`.
+The original, approved event CGs, main AGENTS, HANDOFF and scene interface were checked. `Blender.md` was not found in the workspace or GitHub main root (404); this missing document is recorded, not claimed read. Private main reference headers/status were checked without copying private lore. Physical coordinates, scale and scene placement remain unapproved.
 
-`tools/map_pipeline/tasks.json` is the explicit task/approval registry. WORLD and ROUTE have no live build dependency and run concurrently from immutable D. WORLD removes route objects **in memory**, saves a new artifact and renders; ROUTE owns four road meshes and retains immutable terrain/bridge as QA/render context. Do not append both complete blends together. Their new output paths are CI artifacts, never original files.
+## Ownership and dependencies
 
-Both PASS -> approved `evidence-integration` validates exact input/output hashes -> small handoff packet. A unit FAIL skips integration. HOME/ECO are registered but disabled until approved input adapters and meaningful QA exist. Their future dependency lists are proposals, not active jobs.
+- WORLD: `production_world.py`, `world/attempt-*`. Final selection: `world/attempt-04-technical/`. The large shared clipped envelope was stopped; independent inclined outcrops and actual bedrock-triangle soil volumes are separate candidates. Last technical repair changes one folded talus skin only; all other 463 mesh vertex/face hashes remain unchanged.
+- ROUTE: `production_route.py`, `route/`. D terrain/bridge is the fixed SHA WORLD interface. Actual road-bearing bodies, abutments, shoulders and a shared junction were produced. Existing supports remain frozen through the stone-facing changes. A named fully buried invalid decoration cell was excluded after dense occlusion measurements; a visible invalid cell hard-fails the generator.
+- `production_interface.json`: candidate Z-up frame, immutable D surface objects, no adopted metric transform, no scene-assembly authorization. The new WORLD cliff is a local sector, not silently inserted into D; ROUTE must not consume it until an approved common interface exists.
+- HOME/ECO remain disabled. No one edits the same blend concurrently. Do not append both contextual scenes wholesale.
 
-Input SHA covers unit ID, source/original bytes, runtime, scripts, settings, pinned package ledger and historical attempt ledger. Output SHA covers sorted hashes of blend, preview and QA. State records dependencies, method and gate results. Exact cache hits validate output hashes and do not install/run Blender or render again. No prefix fallback. Shared code/settings changes intentionally invalidate both units. Runtime 4.3.2 local and 4.0.2 CI have different keys; pixel/byte reproducibility across Blender versions is not claimed.
+The same workflow runs WORLD/ROUTE in parallel, then `evidence-integration` **only when both tested technical subsets pass**. Integration verifies artifact hashes and packages references; it is not scene assembly, full G3, art acceptance or game integration. G1 remains full-review BLOCKED and G4 NOT_RUN. G2 cannot be set to PASS by deterministic config. CI inherits the known family FAIL and does not pretend to evaluate its own new images.
 
-## Run and inspect
-
-Push on the assigned feature branch with pipeline path changes starts CI (also attached to the Draft PR commit); push and pull_request are not both subscribed, avoiding duplicate rendering; workflow_dispatch becomes available after the workflow exists on default branch. While it is unmerged, use a new in-scope commit to trigger the branch workflow. No schedule polling or AI service is required. Actions executes the entire approved deterministic graph while Codex is stopped. It cannot invent changes, restart Codex, evaluate art or repair failures.
-
-Local verification (existing Blender 4.3.2):
+## Run / resume
 
 ```sh
 python3 -m unittest discover -s tests -p test_map_pipeline.py -v
-python3 tools/map_pipeline/pipeline.py run --unit WORLD --runtime 4.3.2 --base /tmp/wind-map-evidence
-python3 tools/map_pipeline/pipeline.py run --unit ROUTE --runtime 4.3.2 --base /tmp/wind-map-evidence
-python3 tools/map_pipeline/pipeline.py integrate --runtime 4.3.2 --base /tmp/wind-map-evidence
+python3 tools/map_pipeline/pipeline.py key --profile production --unit WORLD --runtime 4.3.2
+python3 tools/map_pipeline/pipeline.py run --profile production --unit WORLD --runtime 4.3.2 --base /tmp/lind-production-evidence
+python3 tools/map_pipeline/pipeline.py run --profile production --unit ROUTE --runtime 4.3.2 --base /tmp/lind-production-evidence
+python3 tools/map_pipeline/pipeline.py integrate --profile production --runtime 4.3.2 --base /tmp/lind-production-evidence
 ```
 
-The two `run` commands can execute concurrently. Repeat them unchanged to see `REUSED` without Blender. Use a fresh output directory only after retaining failed evidence and diagnosing the cause; directory renaming is never a new method family.
+The two `run` commands may run concurrently. These commands reproduce **already authored, failed art candidates for technical evidence**, not new artistic correction trials. Never use CI or a renamed output directory to resume a stopped modelling method. Before a new creative trial, consult both the original and new cumulative ledgers, document a genuinely different causal method and measurable acceptance checks, and remain within approved non-destructive scope.
 
-Run summary links to the run and gives exact `map-WORLD-<inputSHA>` / `map-ROUTE-<inputSHA>` artifact names. Download `preview.png`, `qa.json`, `state.json`, `unit.blend`; the handoff artifact has `references.md` and `handoff.json`. Authenticated GitHub artifact links require repository access and expire after 14 days. Download images into the chat workspace and inspect them with image tools; there is no claim that a run link embeds an image in chat. Failed jobs still upload failure evidence; integration does not run. Upload/download GitHub service outages can prevent artifact preservation.
+Pushes touching the pipeline/tests on this production branch select the production profile; the existing #350 branch selects evidence. Only push is subscribed, avoiding duplicate PR/push builds. Workflow dispatch is usable once the workflow is available on default; no automatic workflow dispatch or rerun loop exists. While Codex is stopped, an already-triggered deterministic graph continues to its gates. It cannot author new shapes, repair art, restart Codex or approve placement.
 
-## Failure and resumption
+Input keys cover protected bytes, runtime, unit-specific producer, independent QA/runner code, settings, fixed interface and original history. WORLD code-only changes do not invalidate ROUTE (tested). Shared runtime/QA changes intentionally invalidate shared evidence. Successful exact caches verify blend/PNG/JSON output hashes and skip Blender; failed exact caches refuse another Blender execution. No prefix fallback. GitHub cache eviction and 14-day artifact expiration remain limits; download evidence before expiry and never manually repeat a known unchanged failure after eviction. No permanent cross-branch failure database is claimed.
 
-No automatic rerun, retry loop or recursive workflow dispatch. The exact failed-input cache restores FAIL and exits without launching Blender. Interrupted attempts are blocked. Preserve `failure.json` (cause + last 35 relevant log lines), state, full log artifact and original historical ledger. Cache storage is opportunistic and may be evicted by GitHub; it is not a permanent cross-branch attempt database. Do not manually rerun an unchanged known failure after eviction. Download evidence before artifact expiry. Infrastructure failures need a causal environment fix; asset method counters remain cumulative in the historical ledger.
+Each unit artifact contains its blend, `overview.png`, detail (`detail.png` or `junction-detail.png`), `gameplay-distance.png`, `settings.json`, `interface.json`, producer manifest, independent `qa.json`, state and logs. `gameplay-distance` is a Blender composition at a study display distance, **not a tested game camera or actual runtime image**. Run summary and handoff artifact name exact unit artifacts and image paths. Use authenticated `https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/<RUN>/artifacts/<ID>` links; preview/download requires repository access. GitHub connector ZIP download works when a shell redirect host is blocked. Never claim a CI image visually checked merely because an artifact exists.
 
-Codex resumes with only: task/unit IDs, git diff paths/snippets, input/output SHA, necessary changed settings, QA JSON, failure cause/tail, artifact/run references and images. Do not feed the repository, full blend or full logs into prompts. Look up full logs only if the tail cannot diagnose the cause. No AI job/API/token is invoked by CI. Cache hits and deterministic QA/rendering consume no AI tokens; no numeric token saving is claimed without measurements.
+## QA limits and token use
 
-## Gates and next work
+Independent QA uses evaluated saved geometry, closed/manifold/winding/area checks, packed original SHA, actual manifest hashes, road triangle vertices/edge midpoints/centroids/interiors, support/burial/grade, coplanar-road overlap and shared-junction contacts. WORLD soil root tests preserve raw vertical-ray misses; a boundary miss is corroborated only by an exact .025Z-offset correspondence to the named actual bedrock triangles within .0001 candidate units. This addresses numerical triangle-edge misses, not real unsupported interiors. Both before/after diagnostics are retained.
 
-G3 PASS means only finite nonempty meshes, original packed bytes, a rendered PNG, and ROUTE sampled left/center/right BVH clearance plus a **provisional** <25 degree grade. It does not certify support construction, junctions, triangle interiors, collision/navigation, budgets or gameplay. G1 full spatial/event review remains BLOCKED, G2 remains inherited FAIL (even after these preview images are inspected), G4 NOT_RUN. No code path sets G2 PASS. Image-specific independent review and evidence binding would be required in a future change.
+Global unintended intersections, geotechnical/structural loading, collision/navmesh, runtime movement, performance and actual Android are NOT_RUN. Image reviewers separately evaluate silhouette, naturalness, material/detail, CG fit and display distance; technical PASS never promotes these gates.
 
-Not implemented: unattended AI modelling, automatic art judgement, new joint-constrained cliff/support geometry, independent production from approved new WORLD/ROUTE designs, geometry assembly, runtime/Android QA, durable cross-branch failure database, HOME/ECO adapters. Next: review CI images, approve a structurally different geology/support task with measurable acceptance checks, implement it separately while preserving D, then expand the validated runner to HOME/ECO. main merge, formal adoption, publication and destructive deletion are absent and remain human actions.
+Hand off only task IDs, changed paths/diff, necessary settings, input/output SHA, QA summary, diagnosed cause plus last 35 relevant log lines, image hashes and image/artifact references. Full logs and all mesh rows remain evidence artifacts and should be read only for a specific diagnosis. Preserve approved geometry SHA rather than regenerate it. No numerical token-saving claim is made without measurements.
+
+## Next boundary
+
+Do not expand these failed art families to the whole village. Next safe autonomous work is to validate a structurally different reference-driven sculpt/load-bearing masonry recipe and shared boundary contract, then execute one bounded trial with independent image QA. No credible new art method is represented as implemented here. Metric/camera/placement adoption still requires the missing design decision; G1/G2/G3/G4 and director adoption gates remain intact.
