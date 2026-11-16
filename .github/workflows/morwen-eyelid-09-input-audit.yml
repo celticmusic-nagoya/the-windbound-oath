@@ -15,6 +15,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/diagnose_left_endpoint_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09b.py'
       - 'tools/blender/morwen_production/eyelid_lash/inspect_residual_pairs_09c.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_surface_clearance_09d.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -90,6 +91,17 @@ jobs:
       - name: Inspect exact residual triangle pairs in 09B
         run: |
           python tools/blender/morwen_production/eyelid_lash/inspect_residual_pairs_09c.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/RESIDUAL_TRIANGLE_PAIRS_09C.json
+      - name: Build surface-constrained root candidate 09D from real cage
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_surface_clearance_09d.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend --report render_output/morwen_eyelid_09/SURFACE_CLEARANCE_BUILD_09D.json
+      - name: Evaluate 09D against real contact cage
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend --out render_output/morwen_eyelid_09/SURFACE_CLEARANCE_INTERSECTIONS_09D.json
+      - name: Gate 09D geometry (do not claim full G3)
+        id: gate_09d
+        continue-on-error: true
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/SURFACE_CLEARANCE_INTERSECTIONS_09D.json
       - name: Gate endpoint candidate 09b (expected FAIL, preserve evidence)
         id: gate_endpoint
         continue-on-error: true
@@ -109,6 +121,7 @@ jobs:
             render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
             render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
             render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
+            render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend
           if-no-files-found: warn
           retention-days: 7
       - name: Enforce failed geometric gates after uploading all evidence
@@ -116,7 +129,9 @@ jobs:
         env:
           ENDPOINT_GATE: ${{ steps.gate_endpoint.outcome }}
           FRAME_GATE: ${{ steps.gate_frame.outcome }}
+          CANDIDATE_09D_GATE: ${{ steps.gate_09d.outcome }}
         run: |
           echo "Endpoint 09B gate: ${ENDPOINT_GATE}"
           echo "Frame 09 gate: ${FRAME_GATE}"
-          test "${ENDPOINT_GATE}" = "success" && test "${FRAME_GATE}" = "success"
+          echo "09D surface gate: ${CANDIDATE_09D_GATE}"
+          test "${CANDIDATE_09D_GATE}" = "success"
