@@ -163,6 +163,15 @@ jobs:
         if: always() && matrix.role == 'render'
         run: |
           python tools/qa/create_render_contact_sheet.py qa_output/render qa_output/render/previews
+      - name: Summarize render preview availability
+        if: always() && matrix.role == 'render'
+        run: |
+          if test -f qa_output/render/previews/RENDER_PREVIEW_CONTACT_SHEET.png; then
+            echo 'Render contact sheet: available in morwen-qa-render artifact (previews/RENDER_PREVIEW_CONTACT_SHEET.png)' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Independent artistic review: NOT_RUN; thumbnails are not proof of G2 PASS.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Render contact sheet: BLOCKED_NO_IMAGES or generation failed; inspect job logs.' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Upload per-role QA evidence
         if: always()
         uses: actions/upload-artifact@v4
