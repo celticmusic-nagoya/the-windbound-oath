@@ -93,3 +93,12 @@ FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs
 - Components with vertex degree >2 are not simple closed loops. Neither boundaries nor disconnected regions prove defects without canonical part classification.
 - Important: the Body's two largest boundary-component bounding boxes span much of the torso and cannot be labeled 'neck seam' without explicit approved seam markers. Do not infer skin continuity or 7.5–8-head compliance from this audit.
 - G1 BLOCKED (source image and handedness); G2 NOT_RUN; G3 PARTIAL; G4 NOT_RUN. Next: read-only Body–Face closest-boundary-distance distribution, restrict to anatomically reviewed neck region, verify against 4-view canon, then render visual seam checks.
+
+## Executed candidate Body–Face boundary proximity audit — run 43828573905
+- GitHub Actions SUCCESS; downloaded artifact 14207353408 and read `PR326_BOUNDARY_PROXIMITY.json`.
+- Body -> Face: 3,590 boundary vertices; nearest-distance min 0.00000012 m, median 0.51505530 m, p95 1.33614886 m; 51 within 1 mm, 69 within 5 mm, 71 within 10 mm.
+- Face -> Body: 755 boundary vertices; nearest-distance min 0.00000012 m, median 0.04349666 m, p95 0.06792841 m; 56 within 1 mm, 62 within 5 mm, 72 within 10 mm.
+- Body Z [1.40,1.45) m: 38 boundary vertices, 18 within 1 mm, median 0.00138740 m. Face Z [1.40,1.45) m: 220 vertices, 22 within 1 mm, median 0.04089216 m.
+- Boundary vertex counts differ from boundary edge counts by design. Asymmetry is expected because nearest-neighbor queries are directional and the Body has many unrelated boundaries.
+- These are vertex-to-vertex distances in **candidate world space**, not mesh-surface distances, a neck seam map, watertightness, welded topology, or skin-deformation QA. Tiny distances do not constitute G3 PASS.
+- G1 BLOCKED (approved original binary and conflicting handedness), G2 NOT_RUN, G3 PARTIAL, G4 NOT_RUN. No production mesh changed.
