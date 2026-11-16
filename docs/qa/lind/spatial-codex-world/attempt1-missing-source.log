@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/workspace/lind-spatial-codex/tools/map_blender/lind_world_codex_01.py", line 7, in <module>
+    root=Path(__file__).resolve().parents[2];source=root/'assets/sources/lind-world-20261116/original.png';expected='abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620';assert hashlib.sha256(source.read_bytes()).hexdigest()==expected
+                                                                                                                                                                                                             ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 625, in read_bytes
+    with self.open(mode='rb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/lind-spatial-codex/assets/sources/lind-world-20261116/original.png'
+Blender 4.3.2
+
+Blender quit

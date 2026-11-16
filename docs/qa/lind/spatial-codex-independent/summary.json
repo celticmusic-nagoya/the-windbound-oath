@@ -1,0 +1,482 @@
+{
+  "task_id": "LIND-SPATIAL-CODEX-01",
+  "reviewer": "/root/qa",
+  "independence": "No production or generation code authored/edited by reviewer. Separate reopen, mesh inspection and render.",
+  "gates": {
+    "G1_source_integrity_subset": "PASS_FIXED_PRIMARY_FILES",
+    "G1_spatial_event_concordance": "BLOCKED",
+    "G2_final_art": "FAIL",
+    "G3_render_subset": "PASS",
+    "G3_world_geometry_navigation": "FAIL_CANDIDATE_C_BURIED_ROUTE",
+    "G4_game_android": "NOT_RUN"
+  },
+  "source_review": {
+    "initial_packed_original": "FAIL_IMAGE_DATABLOCK_DROPPED",
+    "fixed_packed_original": "PASS_SHA_AND_BYTES",
+    "semantic_anchors": 11,
+    "modular_collections": 7,
+    "mesh_objects": 0
+  },
+  "world": {
+    "primary": "assets/candidates/lind-spatial-codex-01/world/world-renderable.blend",
+    "primary_sha256": "afb5636f82e6133c31c2e50eea14fa13a77ab5b1833beda0cad5dc74acfac148",
+    "initial_world_blend_packed_source": "ABSENT_HISTORICAL_FAILURE_PRESERVED",
+    "primary_packed_source": "PASS_abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "terrain_vertices": 58081,
+    "terrain_faces": 57600,
+    "mesh_objects": 27,
+    "finite_vertices": "PASS",
+    "zero_area_faces": "NONE_IN_INSPECTED_MESHES",
+    "bridge_closed_manifold": "PASS",
+    "uv_layers": "NONE",
+    "independent_render_exit_code": 0,
+    "independent_render_size": [
+      391,
+      293
+    ],
+    "independent_render_mode": "RGBA",
+    "independent_render_sha256": "ba0b0014d9f8bb8a30a9bb94c6b888a5bfa9c3924c1990533c53527d132faa5f",
+    "producer_views": "3 decoded/visually inspected, all SHA match manifest"
+  },
+  "route_findings": [
+    {
+      "name": "Village_to_coastal_promontory",
+      "start": [
+        0.0,
+        0.0,
+        5.919388771057129
+      ],
+      "end": [
+        -11.0,
+        7.0,
+        -1.0883182287216187
+      ],
+      "max_grade": 6.753362554788972,
+      "max_angle_degrees": 81.57716663123414
+    },
+    {
+      "name": "Village_to_east_bridge",
+      "start": [
+        0.0,
+        0.0,
+        5.90550422668457
+      ],
+      "end": [
+        6.900000095367432,
+        0.0,
+        1.090116024017334
+      ],
+      "max_grade": 4.738269850655172,
+      "max_angle_degrees": 78.08275072228943
+    },
+    {
+      "name": "Village_to_harbor_access",
+      "start": [
+        0.0,
+        0.0,
+        5.918713569641113
+      ],
+      "end": [
+        -7.132131576538086,
+        -10.0,
+        -0.50551837682724
+      ],
+      "max_grade": 4.539955311883407,
+      "max_angle_degrees": 77.5780186823448
+    },
+    {
+      "name": "Village_to_north_farmland",
+      "start": [
+        0.0,
+        0.0,
+        5.927453517913818
+      ],
+      "end": [
+        -0.48948633670806885,
+        19.0,
+        5.9025139808654785
+      ],
+      "max_grade": 0.38232643922518994,
+      "max_angle_degrees": 20.92317695724672
+    }
+  ],
+  "art_findings": [
+    "Cliff rock is smooth repetitive sinusoidal bands, not source-like fractured and weathered geology.",
+    "Terrain material boundary has obvious sawtooth mesh silhouette.",
+    "Road ribbons conform over near-vertical cliffs; harbor/coastal paths terminate below ocean surface.",
+    "Bridge approach falls into river rather than meeting deck; no continuous traversal across river.",
+    "Straight cut study boundary, unfinished water/shore transitions, no estuary.",
+    "No production ecology/architecture or close-up/final-size art evidence."
+  ],
+  "method_hypothesis": "Current surface-conforming paths inherit cliff discontinuities. Use dedicated grade-constrained road profile and terrain cut/fill, plus explicit bridge abutments. Use authored geological fracture/slope/material segmentation rather than parameter tuning of repeated bands.",
+  "tests": "8 topology tests PASS; symbolic graph correctness does not validate actual physical routes",
+  "protection": "No branch switch, commit, push, main merge, source overwrite or production code change by reviewer.",
+  "candidate_c": {
+    "primary": "assets/candidates/lind-spatial-codex-01/world/candidate-c/world.blend",
+    "method": "route_driven_cut_fill_with_arched_bridge_grade",
+    "method_switch": "structurally distinct from surface-follow ribbons; dedicated road profile changes terrain",
+    "reopen": "EXECUTED",
+    "packed_source": [
+      {
+        "name": "original.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "bytes": 3586379
+      }
+    ],
+    "files": [
+      {
+        "name": "coast.png",
+        "sha256": "0f9487c209fba4154a073270bc51e5245e381bbb6e2de5c104df69e06b73afa1",
+        "matches_manifest": true,
+        "size": [
+          1152,
+          864
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "name": "world.blend",
+        "sha256": "6a1409955ea5b1ba7801e94b6d8e40c9d2826edf6d087991a8ed58dc68ba08ad",
+        "matches_manifest": true
+      },
+      {
+        "name": "river.png",
+        "sha256": "28d543d1abed53c3193092c13b96d295e1d36c97a9754272bfd8abfed70b3590",
+        "matches_manifest": true,
+        "size": [
+          1152,
+          864
+        ],
+        "mode": "RGBA"
+      },
+      {
+        "name": "overview.png",
+        "sha256": "364063c07a02f1d67c8f2797eca520aea58fca98fd27ad3dd76af61aecd4bdd7",
+        "matches_manifest": true,
+        "size": [
+          1152,
+          864
+        ],
+        "mode": "RGBA"
+      }
+    ],
+    "grades": [
+      {
+        "name": "Village_to_coastal_promontory",
+        "start": [
+          0.0,
+          0.0,
+          5.852571964263916
+        ],
+        "end": [
+          -8.439453125,
+          7.0,
+          7.590522766113281
+        ],
+        "max_grade": 0.15850600038713972,
+        "max_angle_degrees": 9.006794308191779
+      },
+      {
+        "name": "Village_to_east_bridge",
+        "start": [
+          0.0,
+          0.0,
+          5.852571964263916
+        ],
+        "end": [
+          14.0,
+          0.0,
+          6.503750801086426
+        ],
+        "max_grade": 0.21854898314379037,
+        "max_angle_degrees": 12.328095358206763
+      },
+      {
+        "name": "Village_to_harbor_access",
+        "start": [
+          0.0,
+          0.0,
+          5.852571964263916
+        ],
+        "end": [
+          -7.700516223907471,
+          -10.0,
+          1.7000000476837158
+        ],
+        "max_grade": 0.32901787847463343,
+        "max_angle_degrees": 18.212129860132332
+      },
+      {
+        "name": "Village_to_north_farmland",
+        "start": [
+          0.0,
+          0.0,
+          5.927453517913818
+        ],
+        "end": [
+          -0.48948633670806885,
+          19.0,
+          5.9025139808654785
+        ],
+        "max_grade": 0.38232643922518994,
+        "max_angle_degrees": 20.92317695724672
+      }
+    ],
+    "surface_occlusion": [
+      {
+        "route": "Village_to_coastal_promontory",
+        "samples": 423,
+        "buried_samples": 0,
+        "buried_center_samples": 0,
+        "max_burial": -0.07969427108764648,
+        "max_gap": 0.16791820526123047,
+        "buried_station_range": null,
+        "worst_samples": [
+          {
+            "station": 129,
+            "sample": "right",
+            "road_z": 7.453969478607178,
+            "highest_surface": "terrain",
+            "surface_z": 7.374275207519531,
+            "burial": -0.07969427108764648
+          },
+          {
+            "station": 128,
+            "sample": "right",
+            "road_z": 7.441555500030518,
+            "highest_surface": "terrain",
+            "surface_z": 7.361808776855469,
+            "burial": -0.07974672317504883
+          },
+          {
+            "station": 130,
+            "sample": "right",
+            "road_z": 7.466383457183838,
+            "highest_surface": "terrain",
+            "surface_z": 7.386589050292969,
+            "burial": -0.07979440689086914
+          },
+          {
+            "station": 104,
+            "sample": "right",
+            "road_z": 7.14362096786499,
+            "highest_surface": "terrain",
+            "surface_z": 7.063751220703125,
+            "burial": -0.07986974716186523
+          },
+          {
+            "station": 131,
+            "sample": "right",
+            "road_z": 7.478797435760498,
+            "highest_surface": "terrain",
+            "surface_z": 7.398918151855469,
+            "burial": -0.0798792839050293
+          },
+          {
+            "station": 105,
+            "sample": "right",
+            "road_z": 7.15603494644165,
+            "highest_surface": "terrain",
+            "surface_z": 7.076148986816406,
+            "burial": -0.07988595962524414
+          }
+        ]
+      },
+      {
+        "route": "Village_to_east_bridge",
+        "samples": 423,
+        "buried_samples": 42,
+        "buried_center_samples": 14,
+        "max_burial": 0.03780412673950195,
+        "max_gap": 0.43482255935668945,
+        "buried_station_range": [
+          60,
+          100
+        ],
+        "worst_samples": [
+          {
+            "station": 98,
+            "sample": "center",
+            "road_z": 5.925879955291748,
+            "highest_surface": "bridge",
+            "surface_z": 5.96368408203125,
+            "burial": 0.03780412673950195
+          },
+          {
+            "station": 62,
+            "sample": "left",
+            "road_z": 5.925879955291748,
+            "highest_surface": "bridge",
+            "surface_z": 5.963676452636719,
+            "burial": 0.0377964973449707
+          },
+          {
+            "station": 62,
+            "sample": "center",
+            "road_z": 5.925879955291748,
+            "highest_surface": "bridge",
+            "surface_z": 5.963676452636719,
+            "burial": 0.0377964973449707
+          },
+          {
+            "station": 62,
+            "sample": "right",
+            "road_z": 5.925879955291748,
+            "highest_surface": "bridge",
+            "surface_z": 5.963676452636719,
+            "burial": 0.0377964973449707
+          },
+          {
+            "station": 98,
+            "sample": "right",
+            "road_z": 5.925879955291748,
+            "highest_surface": "bridge",
+            "surface_z": 5.963676452636719,
+            "burial": 0.0377964973449707
+          },
+          {
+            "station": 98,
+            "sample": "left",
+            "road_z": 5.925879955291748,
+            "highest_surface": "bridge",
+            "surface_z": 5.9636688232421875,
+            "burial": 0.03778886795043945
+          }
+        ]
+      },
+      {
+        "route": "Village_to_harbor_access",
+        "samples": 423,
+        "buried_samples": 27,
+        "buried_center_samples": 9,
+        "max_burial": 0.15551376342773438,
+        "max_gap": 0.13701176643371582,
+        "buried_station_range": [
+          4,
+          12
+        ],
+        "worst_samples": [
+          {
+            "station": 9,
+            "sample": "center",
+            "road_z": 5.585620880126953,
+            "highest_surface": "terrain",
+            "surface_z": 5.7411346435546875,
+            "burial": 0.15551376342773438
+          },
+          {
+            "station": 8,
+            "sample": "right",
+            "road_z": 5.61528205871582,
+            "highest_surface": "terrain",
+            "surface_z": 5.763031005859375,
+            "burial": 0.1477489471435547
+          },
+          {
+            "station": 8,
+            "sample": "center",
+            "road_z": 5.61528205871582,
+            "highest_surface": "terrain",
+            "surface_z": 5.75830078125,
+            "burial": 0.1430187225341797
+          },
+          {
+            "station": 9,
+            "sample": "right",
+            "road_z": 5.585620880126953,
+            "highest_surface": "terrain",
+            "surface_z": 5.7270355224609375,
+            "burial": 0.14141464233398438
+          },
+          {
+            "station": 10,
+            "sample": "center",
+            "road_z": 5.555959701538086,
+            "highest_surface": "terrain",
+            "surface_z": 5.6884765625,
+            "burial": 0.13251686096191406
+          },
+          {
+            "station": 9,
+            "sample": "left",
+            "road_z": 5.585620880126953,
+            "highest_surface": "terrain",
+            "surface_z": 5.714569091796875,
+            "burial": 0.12894821166992188
+          }
+        ]
+      },
+      {
+        "route": "Village_to_north_farmland",
+        "samples": 288,
+        "buried_samples": 1,
+        "buried_center_samples": 0,
+        "max_burial": 0.019314289093017578,
+        "max_gap": 0.23970937728881836,
+        "buried_station_range": [
+          6,
+          6
+        ],
+        "worst_samples": [
+          {
+            "station": 6,
+            "sample": "left",
+            "road_z": 5.835376262664795,
+            "highest_surface": "terrain",
+            "surface_z": 5.8546905517578125,
+            "burial": 0.019314289093017578
+          },
+          {
+            "station": 7,
+            "sample": "left",
+            "road_z": 5.824275970458984,
+            "highest_surface": "terrain",
+            "surface_z": 5.8266448974609375,
+            "burial": 0.002368927001953125
+          },
+          {
+            "station": 5,
+            "sample": "left",
+            "road_z": 5.852653503417969,
+            "highest_surface": "terrain",
+            "surface_z": 5.8527374267578125,
+            "burial": 8.392333984375e-05
+          },
+          {
+            "station": 6,
+            "sample": "center",
+            "road_z": 5.803835868835449,
+            "highest_surface": "terrain",
+            "surface_z": 5.7915191650390625,
+            "burial": -0.012316703796386719
+          },
+          {
+            "station": 5,
+            "sample": "right",
+            "road_z": 5.779388427734375,
+            "highest_surface": "terrain",
+            "surface_z": 5.765228271484375,
+            "burial": -0.01416015625
+          },
+          {
+            "station": 5,
+            "sample": "center",
+            "road_z": 5.816020965576172,
+            "highest_surface": "terrain",
+            "surface_z": 5.800140380859375,
+            "burial": -0.015880584716796875
+          }
+        ]
+      }
+    ],
+    "grade_subset": "PASS_CANDIDATE_LIMIT_25_DEGREES",
+    "route_continuity": "FAIL_BURIED_ROAD",
+    "G2": "FAIL_FINAL_ART",
+    "G3": "FAIL_ROUTE_CONTINUITY",
+    "G4": "NOT_RUN"
+  }
+}

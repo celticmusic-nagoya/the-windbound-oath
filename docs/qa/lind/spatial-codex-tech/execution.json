@@ -1,0 +1,45 @@
+{
+  "baseline_commit": "d18f7a5bdc7da997cace386f7b516c1a62c5366e",
+  "blender_version": "4.3.2",
+  "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "files": {
+    "tools/map_blender/build_lind_source_review.py": "9aa955002da3c79b114959ee8d6fa4f8fad304dfc130becb1082090486e79b35",
+    "tools/map_blender/verify_lind_source_review.py": "9692b280c3c78ff2bb0250eb57a4a3706acaeeaa46c63897a4cf28b259b6e8c3",
+    "tools/map_blender/validate_lind_new_world_topology.py": "539b770fe199c0069e69658c27e105157d3a2f83fd7ff020bac489e1a834359a",
+    "tests/test_lind_new_world_topology.py": "e8aa4a1c07634ec9a4776f117c0e6b8e81902d82d77ab34267793f0ba3d82f90",
+    ".github/workflows/lind-source-review.yml": "8cbe964ea83a1f1e66c028585833c3a0564e98e9b9ec1686ef9e6fa61a12845d",
+    "tools/map_blender/lind/blender-ubuntu24.04.sha256": "47903f6fd1f6dd51c2e66ab1f8f2291e1f65ac0b384f1f9b6c76723cbd88036c",
+    "assets/candidates/lind-spatial-codex-01/source-review/lind-source-review.blend": "701149fa5183e8d61da3cad4a5a07684c23fea88f73b83fbcbf37dd6a3c1e8f5",
+    "assets/candidates/lind-spatial-codex-01/source-review/failed-unretained-image.blend": "5570fe8df61005da3516af83f4528eb067652c8e0b465f25d5cc2e62c46f59dc"
+  },
+  "test_count": 8,
+  "status": "TECHNICAL_SOURCE_REVIEW_PASS",
+  "attempt_ledger": [
+    {
+      "method": "existing-source-review-packed-image-without-user",
+      "defect": "packed reference lost on save/reopen",
+      "local_failed_count": 1,
+      "artifact": "failed-unretained-image.blend",
+      "cause": "Unreferenced image datablock lacked fake user; pack alone does not guarantee saving"
+    },
+    {
+      "method": "existing-source-review-persistent-packed-reference",
+      "causal_change": "use_fake_user retains image datablock in saved blend; verify packed bytes after reopening",
+      "local_failed_count": 0,
+      "result": "PASS"
+    }
+  ],
+  "ci_failures": {
+    "test_path": "d18f7a5 already corrected repository root test resolution; 8 local mutation tests pass",
+    "next_failure": "fixed SHA manifest absent on branch; imported byte-identical file from existing PR345",
+    "false_success_risk": "Blender Python exception can exit0; build and verify now use --python-exit-code 1"
+  },
+  "gates": {
+    "G1_source_subset": "PASS",
+    "G1_full": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3_source_review_subset": "PASS",
+    "G3_world": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "sources": [
+    {
+      "path": "/workspace/lind-source-registration/assets/sources/lind-world-20261116/original.png",
+      "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+      "visual_review": "EXECUTED",
+      "classification": "ADOPTED_WORLD_VISUAL_COMPOSITION"
+    },
+    {
+      "path": "assets/approved/game/cliff/sunset_background.png",
+      "sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+      "visual_review": "EXECUTED",
+      "classification": "APPROVED_BACKGROUND_NOT_METRIC_LAYOUT"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/cliff/stargazing_dialogue_background.png",
+      "sha256": "2d500df62460e7843dbb8226d017eda8331afe9f86ce18d2d8c4973734018ce0",
+      "visual_review": "EXECUTED",
+      "classification": "APPROVED_BACKGROUND_NOT_METRIC_LAYOUT"
+    },
+    {
+      "path": "assets/approved/game/rilde_story/raid/attack_background_only.png",
+      "sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+      "visual_review": "EXECUTED",
+      "classification": "APPROVED_BACKGROUND_NOT_METRIC_LAYOUT"
+    }
+  ],
+  "visual_findings": [
+    "Adopted map: west ocean/coastal cliffs, separate southwest inlet, northern farmland/road, east river bridge and raid cliff, southeast forest/altar.",
+    "Sunset and night cliff backgrounds show grassy cliff tops with exposed angular rock face and sea horizon; camera-space left/right cannot infer world north.",
+    "Raid background shows stone arched bridge, rocky river and burning village masonry; this does not authorize using image scale or current DOM coordinates."
+  ],
+  "history": [
+    "LIND_SPATIAL_01_CHECKPOINT explicitly excludes G2-failed stone/grass as approved assets. No cumulative stone/grass generation ledger is present in current branch; past failures must not be reset or assumed resolved.",
+    "Source scene matrix and master approved doc contain older pre-registration status text. Latest continuation and independent registered-source evidence supersede binary-unavailable status, not metric approval."
+  ],
+  "acceptance_constraints": [
+    "No illustrated scale bar engineering dimensions",
+    "Two cliffs remain distinct",
+    "North-to-south downstream topology",
+    "Metric positions/dimensions remain candidate only",
+    "Final art requires ground detail/material/vegetation/coast/river visual coherence beyond technical mesh counts"
+  ]
+}

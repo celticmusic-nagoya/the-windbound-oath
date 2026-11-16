@@ -1,0 +1,52 @@
+{
+  "status": "CANDIDATE_NOT_FINAL_ART",
+  "method_family": "route_driven_cut_fill_with_bridge_profile",
+  "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "blender_version": "4.3.2",
+  "routes": [
+    {
+      "id": "Village_to_harbor_access",
+      "endpoint_z": 1.7000000000000002,
+      "min_z": 1.7000000000000002,
+      "max_grade_degrees": 18.211839156234177,
+      "candidate_grade_limit_degrees": 25,
+      "grade_limit_pass": true,
+      "bridge_surface_clearance": null
+    },
+    {
+      "id": "Village_to_coastal_promontory",
+      "endpoint_z": 7.590522766113281,
+      "min_z": 5.852571964263916,
+      "max_grade_degrees": 9.00670271818947,
+      "candidate_grade_limit_degrees": 25,
+      "grade_limit_pass": true,
+      "bridge_surface_clearance": null
+    },
+    {
+      "id": "Village_to_east_bridge",
+      "endpoint_z": 6.503750801086426,
+      "min_z": 5.850021982600546,
+      "max_grade_degrees": 12.328017314275094,
+      "candidate_grade_limit_degrees": 25,
+      "grade_limit_pass": true,
+      "bridge_surface_clearance": 0.05
+    }
+  ],
+  "meters_per_unit": null,
+  "technical_limits": [
+    "grade and geometric support only; no navmesh/collision test",
+    "harbor landing below cliff graded but dock piles/material art unfinished",
+    "regional estuary outside study extent",
+    "CG geological detail not final quality"
+  ],
+  "G1": "BLOCKED_METRIC_EVENT_REVIEW",
+  "G2": "INDEPENDENT_REVIEW_REQUIRED",
+  "G3": "PARTIAL_ROUTE_GRADES_AND_RENDER",
+  "G4": "NOT_RUN",
+  "files": {
+    "coast.png": "0f9487c209fba4154a073270bc51e5245e381bbb6e2de5c104df69e06b73afa1",
+    "world.blend": "6a1409955ea5b1ba7801e94b6d8e40c9d2826edf6d087991a8ed58dc68ba08ad",
+    "river.png": "28d543d1abed53c3193092c13b96d295e1d36c97a9754272bfd8abfed70b3590",
+    "overview.png": "364063c07a02f1d67c8f2797eca520aea58fca98fd27ad3dd76af61aecd4bdd7"
+  }
+}

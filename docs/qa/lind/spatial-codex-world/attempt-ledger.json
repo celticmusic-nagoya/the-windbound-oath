@@ -1,0 +1,42 @@
+{
+  "task": "LIND-SPATIAL-CODEX-01",
+  "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "attempts": [
+    {
+      "id": "environment-1",
+      "root_cause": "source PNG missing from current worktree",
+      "result": "FAIL",
+      "fix": "copy exact registered bytes",
+      "log": "attempt1-missing-source.log"
+    },
+    {
+      "id": "environment-2",
+      "root_cause": "OpenImageDenoise unsupported in installed build",
+      "result": "FAIL",
+      "fix": "preserve geometry; reopen and disable denoise",
+      "log": "attempt2-denoiser-unavailable.log"
+    },
+    {
+      "id": "terrain-A",
+      "family": "continuous_signed_distance_heightfield_geological_art",
+      "result": "G2_FAIL",
+      "observed": "smooth striped walls, draped paths submerged/disconnected"
+    },
+    {
+      "id": "terrain-B",
+      "family": "continuous_signed_distance_heightfield_geological_art",
+      "result": "G2_FAIL",
+      "observed": "river visibility improves but final geological articulation and route grading absent",
+      "cumulative_art_failures": 2,
+      "method_status": "STOP_GEOLOGICAL_ART_FAMILY"
+    },
+    {
+      "id": "route-C",
+      "family": "route_driven_cut_fill_with_bridge_profile",
+      "geological_art_status": "inherits B FAIL, not a third geological-art correction",
+      "causal_difference": "grade centerline first, sculpt surrounding terrain, bridge crown profile instead of surface drape",
+      "hypothesis": "remove submerged endpoint and approach fall, continuous grade <=25 candidate degrees",
+      "result": "see candidate-c manifest and independent QA"
+    }
+  ]
+}
