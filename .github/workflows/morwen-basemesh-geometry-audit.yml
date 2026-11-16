@@ -44,6 +44,7 @@ jobs:
           sudo apt-get install -y zstd
           mv qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/source/human_base_meshes_bundle.blend.zst
           zstd -dc qa_output/basemesh/source/human_base_meshes_bundle.blend.zst > qa_output/basemesh/source/human_base_meshes_bundle.blend
+          echo 'e5e9d30a7e6bb385fed21459dce68d1ad0d06e7bde4f9626696dbfda07cd541a  qa_output/basemesh/source/human_base_meshes_bundle.blend' | sha256sum -c -
           python - <<'PY'
           from pathlib import Path
           import hashlib,json
