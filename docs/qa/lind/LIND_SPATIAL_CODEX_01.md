@@ -43,6 +43,16 @@ G2 final art FAIL. G3 source-review/render subsets PASS; full-world/route result
 must be read from the final independent report, with failures retained. G4 NOT_RUN.
 No real Android, navmesh/collision, game integration or final art approval.
 
+Final delivered route study D is under `world/candidate-d/`: saved Blender 4.3.2
+blend SHA-256 `2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72`,
+plus an actual overview render, script and manifest. Independent QA measured
+1,557 center/edge samples with zero burial and grades below the proposed 25°
+study limit. This is G3 sampled nonburial/grade PASS only. The nominal 0.05
+clearance floor is not independently confirmed; positive measured minima range
+from 0.0364 to 0.0797. The maximum gap to support is 0.4449 candidate units,
+so engineered support, junctions, unsampled interiors and traversability remain
+unverified. G2 final art FAIL and full-world G3 nonacceptance remain unchanged.
+
 Next geological method: explicit cross-section/joint-constrained rock sculpt and
 erosion topology, with independently reviewed material/scan intake; do not rerun
 the exhausted smooth-heightfield/striped-rock family. Estuary continuation,

@@ -55,3 +55,22 @@ Actual mesh measurements confirm substantial grade improvements: coastal route 9
 Measurements use a 0.015 candidate-unit burial reporting threshold, retain raw worst samples and station ranges, and do not infer meters. C's harbor issue is consistent with independently applied route earthworks overlapping and overwriting a shared junction. Bridge top is generated as a function of circular arch parameter, whereas road crown uses sine of linear X; the distinct profiles intersect despite the nominal offset. A maximum-grade assertion cannot detect either failure. See `candidate-c-route-occlusion.json` and rerunnable `inspect_route_occlusion.py`.
 
 C overview visibly improves grade and waterway breadth, but keeps stylized smooth geology, sawtooth material boundary, incomplete shore/habitat/architecture and abrupt study edges. G2 final art remains FAIL. G3 grade subset PASS; G3 physical route continuity FAIL; G4 NOT_RUN. Repair requires a combined junction grading surface and road heights derived from the actual bridge deck surface, with independent burial/support tests; merely raising the nominal clearance does not establish joined routes.
+
+## Candidate D — sampled clearance reassessment
+
+Independently reopened saved D `world.blend`, SHA-256 `2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72`. Packed original is intact at exact approved SHA/bytes/1536×1024. D blend and overview hashes match manifest. Overview PNG decoded as 1152×864 RGBA and directly inspected. A/B/C failures remain recorded above; D does not retroactively pass them.
+
+Reran independent geometry scripts against D, rather than trusting producer metrics. All **1,557 sampled points** (423 each for coastal/harbor/bridge; 288 for north farmland) are above actual terrain/bridge triangle surfaces:
+
+| Route | Samples | Buried points | Minimum clearance | Maximum gap | Maximum grade |
+| --- | --- | --- | --- | --- | --- |
+| Coastal | 423 | 0 | 0.079694 | 0.167918 | 9.0068° |
+| Harbor | 423 | 0 | 0.039884 | 0.197145 | 24.5002° |
+| Bridge | 423 | 0 | 0.049916 | **0.444855** | 24.5002° |
+| North farmland | 288 | 0 | 0.036374 | 0.221349 | 18.3111° |
+
+Values are unapproved candidate units, not meters. Independent BVH uses stored polygon lists; producer uses evaluated `FromObject`. The independent minimum clearance is positive but differs from the producer's nominal +0.05 floor; exact +0.05 is **not confirmed**. This does not change nonburial PASS. Small floating-point grade deviations above 24.5° remain below the proposed 25° threshold. Global maximum gap is ~0.4449 at the bridge, **not ~0.22**.
+
+D therefore earns **G3 sampled center/edge nonburial PASS** and **G3 sampled grade PASS**, confined to vertices and center stations. Road support, intersections between routes, unsampled triangle interiors, collision, navmesh and traversability are **not verified**. Raising a ribbon above terrain can remove burial while leaving a floating road; the remaining gaps and overview shadows require a designed supporting surface/road thickness and junction verification before full G3 acceptance.
+
+G2 final art remains **FAIL**: unfinished cliff geology/material boundaries, sparse terrain study, missing production buildings/ecology and engineered road/shore detail. G1 full spatial/event review remains BLOCKED. G4 gameplay/Android remains NOT_RUN. No production file was edited by reviewer.

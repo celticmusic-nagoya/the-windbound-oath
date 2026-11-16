@@ -1,0 +1,75 @@
+{
+  "status": "CANDIDATE_NOT_FINAL_ART",
+  "blender_version": "4.3.2",
+  "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "method_family": "actual_support_BVH_clearance_and_slope_bounded_envelope",
+  "meters_per_unit": null,
+  "routes": [
+    {
+      "route": "Village_to_harbor_access",
+      "stations": 141,
+      "samples": 423,
+      "buried_samples": 0,
+      "max_penetration": 0,
+      "min_clearance": 0.05000019073486328,
+      "max_gap": 0.19551992416381836,
+      "max_lift": 0.1953971862792967,
+      "max_grade_degrees": 24.50000000000021,
+      "grade_limit_provisional": 25,
+      "surface_occlusion_check": "PASS_ONLY_AT_SAMPLED_STATIONS"
+    },
+    {
+      "route": "Village_to_coastal_promontory",
+      "stations": 141,
+      "samples": 423,
+      "buried_samples": 0,
+      "max_penetration": 0,
+      "min_clearance": 0.07544898986816406,
+      "max_gap": 0.16791057586669922,
+      "max_lift": 0.0,
+      "max_grade_degrees": 9.006794308191779,
+      "grade_limit_provisional": 25,
+      "surface_occlusion_check": "PASS_ONLY_AT_SAMPLED_STATIONS"
+    },
+    {
+      "route": "Village_to_east_bridge",
+      "stations": 141,
+      "samples": 423,
+      "buried_samples": 0,
+      "max_penetration": 0,
+      "min_clearance": 0.05000019073486328,
+      "max_gap": 0.44481658935546875,
+      "max_lift": 0.08780412673950178,
+      "max_grade_degrees": 24.50000000000007,
+      "grade_limit_provisional": 25,
+      "surface_occlusion_check": "PASS_ONLY_AT_SAMPLED_STATIONS"
+    },
+    {
+      "route": "Village_to_north_farmland",
+      "stations": 96,
+      "samples": 288,
+      "buried_samples": 0,
+      "max_penetration": 0,
+      "min_clearance": 0.05000019073486328,
+      "max_gap": 0.22089862823486328,
+      "max_lift": 0.0991304397583006,
+      "max_grade_degrees": 18.311111726285592,
+      "grade_limit_provisional": 25,
+      "surface_occlusion_check": "PASS_ONLY_AT_SAMPLED_STATIONS"
+    }
+  ],
+  "G1": "BLOCKED_METRIC_EVENT_REVIEW",
+  "G2": "FAIL_FINAL_ART",
+  "G3": "PARTIAL_SAMPLED_SURFACE_CLEARANCE_ONLY",
+  "G4": "NOT_RUN",
+  "limits": [
+    "raising road envelope does not prove engineered support or collision/navmesh continuity",
+    "center+edges sampled at vertices; unsampled triangle interiors not verified",
+    "geological art remains B failure and was not regenerated",
+    "no metric/camera/dimension approval"
+  ],
+  "files": {
+    "world.blend": "2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72",
+    "overview.png": "b3f25012eb0f16cee2cd12925637472e0d970ef6662f5dba7f49fbfae12a4b63"
+  }
+}
