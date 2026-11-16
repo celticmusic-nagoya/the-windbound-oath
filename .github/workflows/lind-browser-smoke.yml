@@ -1,5 +1,11 @@
 name: LIND same-GLB browser smoke
 on:
+  pull_request:
+    branches:
+      - feature/lind-agent-blender-handoff-01
+    paths:
+      - 'tools/map_blender/runtime_benchmark/**'
+      - '.github/workflows/lind-browser-smoke.yml'
   workflow_dispatch:
   push:
     branches:
