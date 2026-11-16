@@ -1,0 +1,58 @@
+name: Aidan broad-plane candidate render
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_quoin_broadplane_v1.py'
+      - '.github/workflows/aidan-quoin-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: aidan-quoin-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  render:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Syntax preflight
+        run: python3 -m py_compile tools/map_blender/aidan_quoin_broadplane_v1.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+      - name: Render and topology validation
+        env:
+          AIDAN_QUOIN_BROADPLANE_OUT: ${{ runner.temp }}/aidan-quoin
+        run: |
+          mkdir -p "$AIDAN_QUOIN_BROADPLANE_OUT"
+          blender -b -t 2 --python tools/map_blender/aidan_quoin_broadplane_v1.py
+      - name: Verify generated evidence
+        if: success()
+        env:
+          AIDAN_QUOIN_BROADPLANE_OUT: ${{ runner.temp }}/aidan-quoin
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['AIDAN_QUOIN_BROADPLANE_OUT'])
+          manifest=json.loads((root/'manifest.json').read_text())
+          png=root/manifest['image']
+          assert png.exists() and png.stat().st_size>1000
+          assert hashlib.sha256(png.read_bytes()).hexdigest()==manifest['image_sha256']
+          assert manifest['topology_pass'] is True
+          assert manifest['g1']=='BLOCKED' and manifest['g2']=='NOT_RUN'
+          print('Evidence verified:',png.stat().st_size,'bytes')
+          PY
+      - name: Upload evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-quoin-broadplane-evidence
+          path: ${{ runner.temp }}/aidan-quoin/
+          if-no-files-found: warn
+          retention-days: 7
