@@ -45,3 +45,14 @@ Wait for verified Fable access and approved source image. Meanwhile continue rea
 - Before any external image upload: obtain canonical Layer 0 source bytes and verify SHA; check source-rights and confidentiality, request consent for specific service and costs.
 - Controlled comparison: A frozen Blender candidate; B Tripo P2.0 multiview quad/textured humanoid in neutral pose, with Fable Blender rig/material/animation finishing; optional C alternative provider only if justified. Preserve source and outputs independently. Same camera, lights, pose and render resolution.
 - G1 source image/canon alignment BLOCKED, G2 NOT_RUN, G3 existing candidate PARTIAL, G4 NOT_RUN. No source replacement or main merge.
+
+## Director decision — avoid paid Tripo; evaluate free alternatives (2026-11-16)
+- Director prefers not to rely on Tripo if free use is inadequate. Tripo is DEPRIORITIZED; do not request a paid Tripo subscription or upload canonical art to its free/public tier.
+- Candidate A: existing read-only Blender candidate, Fable-assisted retopology/cleanup/rigging/rendering. This is the zero-external-generation baseline and first production-safe route.
+- Candidate B: Microsoft TRELLIS.2 open weights + Fable/Blender, if a no-cost suitable GPU runtime and permitted reference-image upload exist. MIT model/code claimed by upstream; audit third-party dependencies and hosted demo terms before commercial use. GPU approximately 24GB VRAM, not suitable for ordinary GitHub-hosted CPU runners.
+- Candidate C: Tencent Hunyuan3D 2.1 + Fable/Blender if a free compatible GPU runtime exists and community-license territory/terms permit the intended Japan-based project. GPU roughly 10GB for geometry, higher for PBR textures. Check official license and actual host privacy before use.
+- Optional lighter technical benchmark: TripoSR (MIT) or InstantMesh (Apache 2.0) only if B/C blocked and shape fidelity can plausibly meet the 7.5–8-head anime character brief. Do not equate license of code/weights with license of hosting services or all dependencies.
+- Cloud inference and hosted Hugging Face Spaces may be subject to quotas, public visibility, service changes and upload terms. Never upload approved nonpublic art without explicit approval. Do not assert free GPU availability without checking live service.
+- Fable available according to director, but no Fable process has been executed from this ChatGPT session. Provide reproducible task handoff rather than claim remote execution.
+- Stop/go criteria: canon reference image and SHA verified; legal rights for every input/model/output; no unapproved spend; 7.5–8-head design match and G1–G4 gates. Preserve candidate artifacts on separate branches.
+- Current status: DOCUMENTED ONLY; model generation NOT_RUN; Fable-assisted run NOT_RUN; G1 BLOCKED.
