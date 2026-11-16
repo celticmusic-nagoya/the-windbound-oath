@@ -33,7 +33,7 @@ async function makeThree(){
  return {draw(t){for(let i=0;i<meshes.length;i++)meshes[i].rotation.y=t*.0005;renderer.render(scene,camera)},dispose(){geometry.dispose();material.dispose();renderer.dispose()},details(){return {drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}};
 }
 async function makeBabylon(){
- const BABYLON=await import('https://cdn.jsdelivr.net/npm/@babylonjs/core@7.40.3/index.js');
+ const BABYLON=await import('https://esm.sh/@babylonjs/core@7.40.3?bundle');
  const engine=new BABYLON.Engine(canvas,false,{preserveDrawingBuffer:false,stencil:false,disableWebGL2Support:false},false);
  engine.setHardwareScalingLevel(Math.max(1,devicePixelRatio/2));
  const scene=new BABYLON.Scene(engine);scene.clearColor=new BABYLON.Color4(.075,.125,.2,1);
