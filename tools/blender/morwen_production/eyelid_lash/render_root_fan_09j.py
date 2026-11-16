@@ -45,6 +45,7 @@ def main():
     bpy.ops.object.camera_add()
     camera=bpy.context.object
     camera.data.type="ORTHO"
+    camera.data.clip_start=0.0001
     scene.camera=camera
     a.outdir.mkdir(parents=True)
     outputs=[]
@@ -58,6 +59,7 @@ def main():
         camera.location=target+direction*max(extent,0.015)*3
         camera.rotation_euler=(target-camera.location).to_track_quat("-Z","Y").to_euler()
         camera.data.ortho_scale=max(scale*1.5,0.001)
+        bpy.context.view_layer.update()
         path=a.outdir/(label+".png")
         scene.render.filepath=str(path.resolve())
         bpy.ops.render.render(write_still=True)
