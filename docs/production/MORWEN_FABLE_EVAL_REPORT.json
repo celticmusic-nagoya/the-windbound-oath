@@ -1,0 +1,216 @@
+{
+ "schema": "TWO_MORWEN_FABLE_EVAL_REPORT_V1",
+ "task_id": "MORWEN-FABLE-01",
+ "status": "PHASE_A_DONE / PHASE_B_DECISION_PROPOSED / PHASE_C-E_NOT_RUN",
+ "executed_at": "2026-11-16 (Asia/Tokyo)",
+ "agent": {
+  "model_id": "claude-fable-5-2",
+  "self_reported": true,
+  "note": "Model identifier is reported by the session itself; not independently verified."
+ },
+ "environment": {
+  "blender": "bpy 5.3.0 (PyPI wheel, headless)",
+  "gpu": "none",
+  "cpu_cores": 2,
+  "render": "Cycles CPU"
+ },
+ "branch": "feature/morwen-fable-eval-01",
+ "base": "feature/char-interface-01 (Draft PR #333)",
+ "inputs": {
+  "candidate_blend": {
+   "branch": "feature/morwen-eyelid-08-contact-cage",
+   "path": "assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend",
+   "sha256_expected": "9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4",
+   "sha256_actual": "9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4",
+   "match": true,
+   "unmodified_after_run": true
+  },
+  "reference_png_in_repo": {
+   "branch": "feature/morwen-reference-binary-01",
+   "path": "assets/companions/morwen/reference/file_00000000301c8209af49625fd11d7670.png",
+   "sha256_actual": "7640822cfeb6c3de5b988a79e438babfaf7e3dafbdbc8433ae6cde78f3988957",
+   "matches_UPLOAD_CHECKSUM_20261113": true,
+   "size": "1536x1024 RGB PNG"
+  },
+  "canonical_sha_on_record": {
+   "v5.61_comparison_sheet (AGENTS.md lock 2026-11-08)": "47d58cbe...2df638 — bytes NOT in GitHub",
+   "layer0_sheet (LAYER0_REFERENCE_REGISTRY)": "7e122ceb...b08a150 — bytes NOT in GitHub",
+   "3d_target_sheet_png (reference-binary-01)": "7640822c...988957 — bytes present, verified",
+   "3d_target_sheet_jpeg (superseded)": "d9730dad...7113b"
+  },
+  "private_canon_repo": "NOT_ACCESSED in this run (CANON_SOURCE not re-verified; no lore-dependent change made)"
+ },
+ "findings": {
+  "F1_existing_candidate_is_stock_vroid_base": "Visible meshes are the OpenGameArt 'base_female' VRoid beta CC0 avatar (F00_* materials, J_Bip_* 83-bone rig): teal slick-back hair, navy school vest/skirt, loafers, T-pose. No Morwen hair, hat, cape, costume, glasses or accessories exist as geometry. Only added Morwen-specific part is MORWEN_Eyes (procedural).",
+  "F2_proportion": {
+   "candidate_heads_tall_silhouette": 6.569,
+   "candidate_stature_m": 1.59782,
+   "target": "7.5-8.0",
+   "approved_png_layer0_front_estimate": "~6.1 (+-0.3) heads incl. hair, visual pixel estimate on a non-calibrated 90px-wide thumbnail; NOT a certified measurement",
+   "conflict": "Director target 7.5-8 vs approved target-sheet figure (~6-6.5) vs registry note 'approx 7.5 heads / 163 cm' for a different sheet whose bytes are unavailable. Needs director decision."
+  },
+  "F3_axes": {
+   "measured_candidate": {
+    "left_arm_bone_x_sign": "-X",
+    "face_front_axis": "+Y",
+    "geometric_left_for_this_front": "-X",
+    "bone_L_matches_geometric_left": true
+   },
+   "statement": "Candidate faces +Y; character-left is -X and bone L/R naming agrees with geometry (no mirror). LAYER0_REFERENCE_REGISTRY (front -Y, left +X) is the same right-handed frame rotated 180 deg about Z. The real inconsistency is in MORWEN_GARTER_RIGHT_ONLY_CANON.json: with the camera at -Y the character's right is -X and appears screen-LEFT, yet the file says character_right=+X and front_screen_side=right.",
+   "approved_png_observation": "Layer 0 front view shows the garter on screen-left (anatomical right leg); back view shows none; BOTH side views show a strap. The sheet is internally inconsistent, so side cannot be certified from it."
+  },
+  "F4_technical_baseline": {
+   "triangles_visible": 16948,
+   "body": "7,797 v / 11,646 tris, all triangles, 3,594 boundary edges, single UV, no shape keys",
+   "face": "1,972 v / 3,142 tris, 58 shape keys",
+   "materials": "15 unlit emission (MToon-converted) + 1 procedural; no normal maps, no toon ramp/outline, no PBR",
+   "pose": "T-pose"
+  },
+  "F5_agents_md_conflict": "AGENTS.md section 5 says 'long dark hair'; the 2026-11-08 lock in the same file and the approved PNG require a short blunt bob + large purple witch hat. Treated the later lock as governing; flagged for cleanup."
+ },
+ "method_comparison": {
+  "A_existing_blend_plus_fable": {
+   "verdict": "NOT_SUFFICIENT_ALONE",
+   "reuse": [
+    "83-bone VRM humanoid skeleton naming as rig template",
+    "58 facial shape-key names as expression checklist"
+   ],
+   "rebuild": [
+    "face (2 same-family failure stops already logged on eyelid/lid topology)",
+    "hair",
+    "hat",
+    "all costume layers",
+    "accessories",
+    "materials/shading",
+    "body proportions (6.57 heads, all-tri 11.6k mesh)"
+   ]
+  },
+  "B_free_3d_generation": {
+   "TRELLIS.2": {
+    "license": "MIT (model card)",
+    "vram": "~24 GB NVIDIA, Linux",
+    "status": "NOT_RUN — no GPU in this session; hosted demos would upload the approved sheet (needs explicit approval)"
+   },
+   "Hunyuan3D-2.1": {
+    "license": "Tencent Hunyuan 3D 2.1 Community License; excludes EU/UK/South Korea territory, attribution notice, extra commercial terms",
+    "vram": "10 GB shape / 21 GB texture / 29 GB both",
+    "status": "NOT_RUN — territory clause conflicts with a worldwide GitHub Pages release; legal review required before use"
+   },
+   "expected_role": "sculpt/silhouette reference only; single-image generators do not yield anime-grade face topology, separated hair clumps, layered cloth or rig-ready quads"
+  },
+  "C_blender_modular": {
+   "verdict": "RECOMMENDED_CORE",
+   "note": "Purpose-built quad base body at the decided head ratio, separate face/hair/hat/costume/accessory modules, toon shader + inverted-hull outline, VRM-compatible rig. Script-only (headless Python) modelling has repeatedly stalled on organic face forms in this repo; reaching the stated commercial bar realistically needs interactive sculpt/retopo passes by an artist or Blender GUI session, with Fable used for scripting, rig, QA and render automation."
+  },
+  "selected": "C as core, A as rig/expression template only, B optional as reference after rights + upload approval"
+ },
+ "gates": {
+  "G1": "BLOCKED",
+  "G1_reason": "Canon priority among three reference sheets unresolved; two of three byte sources unavailable; head-ratio target conflicts with approved sheet; garter side inconsistent in docs and sheet.",
+  "G2": "FAIL (baseline A vs approved PNG: self-assessed, obvious non-match; independent art QA NOT_RUN)",
+  "G3": "PARTIAL (inspection + deterministic render PASS for baseline only; no production mesh exists)",
+  "G4": "NOT_RUN"
+ },
+ "qa_executed": {
+  "source_hash_check": "PASS",
+  "source_unmodified_after_inspection": "PASS",
+  "render_rerun_pixel_identity": "PASS (2 runs, pixel-identical; PNG file SHA differs only by embedded metadata)",
+  "android_device": "NOT_RUN",
+  "rig_deformation": "NOT_RUN",
+  "game_integration_regression": "NOT_RUN (no game code or asset touched)"
+ },
+ "renders": {
+  "front": {
+   "path": "assets/candidates/morwen-fable-eval-01/baseline_A/A_baseline_front.png",
+   "file_sha256": "00279a76ca8f226aadc1ac4d4e7992781e1c4d8cc44b15547d6c3cea890a57ec",
+   "pixel_sha256": "f1620d33e45449f870bd562e14cbfcda208265946bb8016f47b4119a1eb7ae06",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565
+  },
+  "back": {
+   "path": "assets/candidates/morwen-fable-eval-01/baseline_A/A_baseline_back.png",
+   "file_sha256": "305e9d0704756d6f022f080baa64e7ee18b204ef1518065bde4c47da82bed1df",
+   "pixel_sha256": "58eb104eb0dd83fe3465fc39f9f49dfe3ac5c8da62e086fa30447fa9862283c0",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565
+  },
+  "left": {
+   "path": "assets/candidates/morwen-fable-eval-01/baseline_A/A_baseline_left.png",
+   "file_sha256": "98d055f407c4508f9bdc8840cc2350dbb5147033993cad6c78cc35a74d70ef5a",
+   "pixel_sha256": "672f49bcb022fed14de36cbdd760a5c200e05d1d43b64c545b74e9fc5daaadf6",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565
+  },
+  "right": {
+   "path": "assets/candidates/morwen-fable-eval-01/baseline_A/A_baseline_right.png",
+   "file_sha256": "b0e22183497ef60b942d3521d926b840c97f41ddb392c05ea835807f881440ea",
+   "pixel_sha256": "a84113d84dee564815d83a207b0e344e5de431bd5e0dfde91482a9571f87293d",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565
+  },
+  "face_front": {
+   "path": "assets/candidates/morwen-fable-eval-01/baseline_A/A_baseline_face_front.png",
+   "file_sha256": "b59a7b11d3e5877bd0200a5b75a38c3ad7854790fe175b45bb5e2e7bc49e32ab",
+   "pixel_sha256": "ca8209d55af32b0c8b2171e21c49db6c2baab054cffb7877aa57ed64134fbd6c",
+   "resolution": [
+    1024,
+    1024
+   ],
+   "ortho_scale": 0.32837
+  },
+  "face_q3": {
+   "path": "assets/candidates/morwen-fable-eval-01/baseline_A/A_baseline_face_q3.png",
+   "file_sha256": "5a6c742ab7238aad31e1e12cc9edbe891abac70881f5520bb3a176e3f3afdb3b",
+   "pixel_sha256": "403542ab478fbb4c783a0d23deb3317e192614187d0ccfa86ed31c5aa45929f0",
+   "resolution": [
+    1024,
+    1024
+   ],
+   "ortho_scale": 0.32837
+  }
+ },
+ "render_settings": {
+  "engine": "CYCLES",
+  "device": "CPU",
+  "samples": 16,
+  "seed": 0,
+  "denoise": false,
+  "film_transparent": true,
+  "view_transform": "Standard",
+  "world": "black",
+  "scene_lights": "disabled (materials are unlit emission)",
+  "camera": "orthographic, distance 5 m"
+ },
+ "commands": [
+  "pip install bpy==5.3.0",
+  "python3 -I tools/character_blender/morwen_fable_eval_inspect_render.py -- <CONTACT_CAGE_DISABLED_08.blend> <out_dir> --samples 16",
+  "python3 tools/character_blender/morwen_fable_eval_make_sheet.py <out_dir>"
+ ],
+ "elapsed_s_inspection_and_6_renders": 13.4,
+ "attempt_ledger": "No modelling attempt made; no ledger entry added or reset.",
+ "approvals_required": [
+  "Which reference governs 3D G1: v5.61 sheet (47d58...), Layer 0 sheet (7e122...) or the 3D target PNG (7640...)? Provide missing bytes if the first two apply.",
+  "Head ratio: keep 7.5-8 (re-proportion relative to the approved sheet) or follow the sheet (~6-6.5)?",
+  "Garter: anatomical right leg, or screen-right in front view?",
+  "External upload of the approved sheet to any hosted generator (TRELLIS.2 demo etc.) — yes/no.",
+  "Who performs interactive sculpt/retopo passes (artist / Blender GUI session)."
+ ],
+ "not_done": [
+  "Phase C modelling",
+  "Phase D rig/animation",
+  "Phase E full render set (costume close-ups, game-size)",
+  "G4 Android"
+ ]
+}

@@ -1,0 +1,777 @@
+{
+ "schema": "TWO_MORWEN_FABLE_EVAL_INSPECT_V1",
+ "source": "CONTACT_CAGE_DISABLED_08.blend",
+ "source_sha256": "9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4",
+ "blender": "5.3.0",
+ "unit": {
+  "system": "METRIC",
+  "scale_length": 1.0
+ },
+ "objects": [
+  {
+   "name": "Armature",
+   "type": "ARMATURE",
+   "hide_render": false,
+   "parent": null
+  },
+  {
+   "name": "Face",
+   "type": "MESH",
+   "hide_render": false,
+   "parent": "Armature",
+   "verts": 1972,
+   "faces": 2772,
+   "tris": 3142,
+   "quads": 370,
+   "ngons": 0,
+   "boundary_edges": 756,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_000_00_FaceMouth_00_FACE",
+    "F00_000_00_EyeWhite_00_EYE",
+    "F00_000_00_FaceEyeline_00_FACE",
+    "F00_000_00_FaceEyelash_00_FACE",
+    "F00_000_00_FaceBrow_00_FACE",
+    "F00_000_00_EyeIris_00_EYE",
+    "F00_000_00_EyeHighlight_00_EYE",
+    "F00_000_00_Face_00_SKIN",
+    "F00_000_00_EyeExtra_01_EYE"
+   ],
+   "shape_keys": 58,
+   "vertex_groups": 83,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.10798,
+     -0.0412,
+     1.35439
+    ],
+    [
+     0.10849,
+     0.10665,
+     1.58652
+    ]
+   ]
+  },
+  {
+   "name": "Body",
+   "type": "MESH",
+   "hide_render": false,
+   "parent": "Armature",
+   "verts": 7797,
+   "faces": 11646,
+   "tris": 11646,
+   "quads": 0,
+   "ngons": 0,
+   "boundary_edges": 3594,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_001_01_Body_00_SKIN",
+    "F00_001_01_Tops_01_CLOTH",
+    "F00_001_01_Accessory_Tie_01_CLOTH",
+    "F00_001_01_Bottoms_01_CLOTH",
+    "F00_001_01_Shoes_01_CLOTH",
+    "F00_000_HairBack_00_HAIR"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 83,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.69174,
+     -0.15042,
+     -0.00018
+    ],
+    [
+     0.69225,
+     0.13824,
+     1.59763
+    ]
+   ]
+  },
+  {
+   "name": "Hairs",
+   "type": "EMPTY",
+   "hide_render": false,
+   "parent": "Armature"
+  },
+  {
+   "name": "secondary",
+   "type": "EMPTY",
+   "hide_render": false,
+   "parent": "Armature"
+  },
+  {
+   "name": "MORWEN_Eyes",
+   "type": "MESH",
+   "hide_render": false,
+   "parent": "Armature",
+   "verts": 1122,
+   "faces": 1120,
+   "tris": 2160,
+   "quads": 1040,
+   "ngons": 0,
+   "boundary_edges": 80,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "MORWEN_EYE_PROCEDURAL"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 2,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.07428,
+     0.04258,
+     1.41531
+    ],
+    [
+     0.0748,
+     0.06297,
+     1.48674
+    ]
+   ]
+  },
+  {
+   "name": "M07_SCULPT_025_UNAUTHORED",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": "Armature",
+   "verts": 1972,
+   "faces": 2772,
+   "tris": 3142,
+   "quads": 370,
+   "ngons": 0,
+   "boundary_edges": 756,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_000_00_FaceMouth_00_FACE",
+    "F00_000_00_EyeWhite_00_EYE",
+    "F00_000_00_FaceEyeline_00_FACE",
+    "F00_000_00_FaceEyelash_00_FACE",
+    "F00_000_00_FaceBrow_00_FACE",
+    "F00_000_00_EyeIris_00_EYE",
+    "F00_000_00_EyeHighlight_00_EYE",
+    "F00_000_00_Face_00_SKIN",
+    "F00_000_00_EyeExtra_01_EYE"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 87,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.10798,
+     -0.0412,
+     1.35439
+    ],
+    [
+     0.10849,
+     0.10984,
+     1.58652
+    ]
+   ]
+  },
+  {
+   "name": "M07_SCULPT_050_UNAUTHORED",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": "Armature",
+   "verts": 1972,
+   "faces": 2772,
+   "tris": 3142,
+   "quads": 370,
+   "ngons": 0,
+   "boundary_edges": 756,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_000_00_FaceMouth_00_FACE",
+    "F00_000_00_EyeWhite_00_EYE",
+    "F00_000_00_FaceEyeline_00_FACE",
+    "F00_000_00_FaceEyelash_00_FACE",
+    "F00_000_00_FaceBrow_00_FACE",
+    "F00_000_00_EyeIris_00_EYE",
+    "F00_000_00_EyeHighlight_00_EYE",
+    "F00_000_00_Face_00_SKIN",
+    "F00_000_00_EyeExtra_01_EYE"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 87,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.10798,
+     -0.0412,
+     1.35439
+    ],
+    [
+     0.10849,
+     0.10984,
+     1.58652
+    ]
+   ]
+  },
+  {
+   "name": "M07_SCULPT_075_UNAUTHORED",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": "Armature",
+   "verts": 1972,
+   "faces": 2772,
+   "tris": 3142,
+   "quads": 370,
+   "ngons": 0,
+   "boundary_edges": 756,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_000_00_FaceMouth_00_FACE",
+    "F00_000_00_EyeWhite_00_EYE",
+    "F00_000_00_FaceEyeline_00_FACE",
+    "F00_000_00_FaceEyelash_00_FACE",
+    "F00_000_00_FaceBrow_00_FACE",
+    "F00_000_00_EyeIris_00_EYE",
+    "F00_000_00_EyeHighlight_00_EYE",
+    "F00_000_00_Face_00_SKIN",
+    "F00_000_00_EyeExtra_01_EYE"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 87,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.10798,
+     -0.0412,
+     1.35439
+    ],
+    [
+     0.10849,
+     0.10984,
+     1.58652
+    ]
+   ]
+  },
+  {
+   "name": "M07_SCULPT_100_UNAUTHORED",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": "Armature",
+   "verts": 1972,
+   "faces": 2772,
+   "tris": 3142,
+   "quads": 370,
+   "ngons": 0,
+   "boundary_edges": 756,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_000_00_FaceMouth_00_FACE",
+    "F00_000_00_EyeWhite_00_EYE",
+    "F00_000_00_FaceEyeline_00_FACE",
+    "F00_000_00_FaceEyelash_00_FACE",
+    "F00_000_00_FaceBrow_00_FACE",
+    "F00_000_00_EyeIris_00_EYE",
+    "F00_000_00_EyeHighlight_00_EYE",
+    "F00_000_00_Face_00_SKIN",
+    "F00_000_00_EyeExtra_01_EYE"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 87,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.10798,
+     -0.0412,
+     1.35439
+    ],
+    [
+     0.10849,
+     0.10984,
+     1.58652
+    ]
+   ]
+  },
+  {
+   "name": "M08_R_CONTACT_CAGE_050",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": null,
+   "verts": 672,
+   "faces": 1178,
+   "tris": 1344,
+   "quads": 166,
+   "ngons": 0,
+   "boundary_edges": 0,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "M08_IndependentSkinChart"
+   ],
+   "materials": [
+    "F00_000_00_Face_00_SKIN"
+   ],
+   "shape_keys": 1,
+   "vertex_groups": 0,
+   "modifiers": [],
+   "world_bbox": [
+    [
+     0.02506,
+     0.04497,
+     1.4131
+    ],
+    [
+     0.07742,
+     0.08117,
+     1.46467
+    ]
+   ]
+  },
+  {
+   "name": "M08_L_CONTACT_CAGE_050",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": null,
+   "verts": 674,
+   "faces": 1182,
+   "tris": 1348,
+   "quads": 166,
+   "ngons": 0,
+   "boundary_edges": 0,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "M08_IndependentSkinChart"
+   ],
+   "materials": [
+    "F00_000_00_Face_00_SKIN"
+   ],
+   "shape_keys": 1,
+   "vertex_groups": 0,
+   "modifiers": [],
+   "world_bbox": [
+    [
+     -0.07691,
+     0.04497,
+     1.4131
+    ],
+    [
+     -0.02455,
+     0.08117,
+     1.46467
+    ]
+   ]
+  },
+  {
+   "name": "M08_ATTACHMENT_PREVIEW_ONLY",
+   "type": "MESH",
+   "hide_render": true,
+   "parent": "Armature",
+   "verts": 1972,
+   "faces": 2502,
+   "tris": 2602,
+   "quads": 100,
+   "ngons": 0,
+   "boundary_edges": 736,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [
+    "F00_000_00_FaceMouth_00_FACE",
+    "F00_000_00_EyeWhite_00_EYE",
+    "F00_000_00_FaceEyeline_00_FACE",
+    "F00_000_00_FaceEyelash_00_FACE",
+    "F00_000_00_FaceBrow_00_FACE",
+    "F00_000_00_EyeIris_00_EYE",
+    "F00_000_00_EyeHighlight_00_EYE",
+    "F00_000_00_Face_00_SKIN",
+    "F00_000_00_EyeExtra_01_EYE"
+   ],
+   "shape_keys": 0,
+   "vertex_groups": 83,
+   "modifiers": [
+    "ARMATURE"
+   ],
+   "world_bbox": [
+    [
+     -0.10798,
+     -0.0412,
+     1.35439
+    ],
+    [
+     0.10849,
+     0.10984,
+     1.58652
+    ]
+   ]
+  },
+  {
+   "name": "M07_KEY",
+   "type": "LIGHT",
+   "hide_render": false,
+   "parent": null
+  },
+  {
+   "name": "M07_REVIEW_CAMERA",
+   "type": "CAMERA",
+   "hide_render": false,
+   "parent": null
+  },
+  {
+   "name": "Icosphere",
+   "type": "MESH",
+   "hide_render": false,
+   "parent": null,
+   "verts": 42,
+   "faces": 80,
+   "tris": 80,
+   "quads": 0,
+   "ngons": 0,
+   "boundary_edges": 0,
+   "multi_face_edges": 0,
+   "loose_verts": 0,
+   "uv_layers": [
+    "UVMap"
+   ],
+   "materials": [],
+   "shape_keys": 0,
+   "vertex_groups": 0,
+   "modifiers": [],
+   "world_bbox": [
+    [
+     -0.95106,
+     -1.0,
+     -1.0
+    ],
+    [
+     0.95106,
+     1.0,
+     1.0
+    ]
+   ]
+  }
+ ],
+ "notes": [],
+ "armature": {
+  "name": "Armature",
+  "bone_count": 83,
+  "naming": "VRoid/VRM (J_Bip_*)"
+ },
+ "orientation_measured": {
+  "left_arm_bone_x_sign": "-X",
+  "face_front_axis": "+Y",
+  "geometric_left_for_this_front": "-X",
+  "bone_L_matches_geometric_left": true
+ },
+ "proportions_candidate": {
+  "floor_z": -0.00018,
+  "top_incl_hair_z": 1.59763,
+  "stature_incl_hair_and_soles_m": 1.59782,
+  "chin_z_method": "lowest Face vertex with |x|<15mm within 45mm of the frontmost face point",
+  "chin_z": 1.35439,
+  "head_len_chin_to_hair_top_m": 0.24324,
+  "heads_tall_chin_to_hair_top": 6.569,
+  "pose": "T-pose",
+  "caveat": "Hair volume and shoe soles are included; skull vertex is not exposed, so this is a silhouette head count, not an anatomical one.",
+  "bone_J_Bip_C_Hips_z": 0.90973,
+  "bone_J_Bip_C_Neck_z": 1.31535,
+  "bone_J_Bip_C_Head_z": 1.38756,
+  "bone_J_Bip_L_UpperLeg_z": 0.86978,
+  "bone_J_Bip_L_LowerLeg_z": 0.51759,
+  "bone_J_Bip_L_Foot_z": 0.10294,
+  "bone_J_Bip_L_UpperArm_z": 1.27313,
+  "bone_J_Bip_L_Hand_z": 1.26247,
+  "leg_len_hipjoint_to_floor_over_stature": 0.544
+ },
+ "materials": [
+  {
+   "name": "F00_000_00_EyeExtra_01_EYE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_EyeExtra_01 512x256"
+   ]
+  },
+  {
+   "name": "F00_000_00_EyeHighlight_00_EYE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_EyeHighlight_00 1024x512"
+   ]
+  },
+  {
+   "name": "F00_000_00_EyeIris_00_EYE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_EyeIris_00 1024x512"
+   ]
+  },
+  {
+   "name": "F00_000_00_EyeWhite_00_EYE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_EyeWhite_00 1024x512"
+   ]
+  },
+  {
+   "name": "F00_000_00_Face_00_SKIN",
+   "users": 8,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_Face_00 1024x1024"
+   ]
+  },
+  {
+   "name": "F00_000_00_FaceBrow_00_FACE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_FaceBrow_00 1024x256"
+   ]
+  },
+  {
+   "name": "F00_000_00_FaceEyelash_00_FACE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_FaceEyelash_00 1024x256"
+   ]
+  },
+  {
+   "name": "F00_000_00_FaceEyeline_00_FACE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_FaceEyeline_00 1024x256"
+   ]
+  },
+  {
+   "name": "F00_000_00_FaceMouth_00_FACE",
+   "users": 6,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_00_FaceMouth_00 512x512"
+   ]
+  },
+  {
+   "name": "F00_000_HairBack_00_HAIR",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_000_HairBack_00 1024x1024"
+   ]
+  },
+  {
+   "name": "F00_001_01_Accessory_Tie_01_CLOTH",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_001_01_Accessory_Tie_01 256x256"
+   ]
+  },
+  {
+   "name": "F00_001_01_Body_00_SKIN",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_001_01_Body_00 2048x2048"
+   ]
+  },
+  {
+   "name": "F00_001_01_Bottoms_01_CLOTH",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_001_01_Bottoms_01 1024x512"
+   ]
+  },
+  {
+   "name": "F00_001_01_Shoes_01_CLOTH",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_001_01_Shoes_01 512x512"
+   ]
+  },
+  {
+   "name": "F00_001_01_Tops_01_CLOTH",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": [
+    "F00_001_01_Tops_01 2048x2048"
+   ]
+  },
+  {
+   "name": "MORWEN_EYE_PROCEDURAL",
+   "users": 1,
+   "shading": "unlit-emission",
+   "has_normal_map": false,
+   "textures": []
+  }
+ ],
+ "visible_render_objects": [
+  "Face",
+  "Body",
+  "MORWEN_Eyes"
+ ],
+ "triangle_total_visible": 16948,
+ "render_settings": {
+  "engine": "CYCLES",
+  "device": "CPU",
+  "samples": 16,
+  "seed": 0,
+  "denoise": false,
+  "film_transparent": true,
+  "view_transform": "Standard",
+  "world": "black",
+  "scene_lights": "disabled (materials are unlit emission)",
+  "camera": "orthographic, distance 5 m"
+ },
+ "renders": {
+  "front": {
+   "file": "A_baseline_front.png",
+   "sha256": "00279a76ca8f226aadc1ac4d4e7992781e1c4d8cc44b15547d6c3cea890a57ec",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565,
+   "camera_location": [
+    0.0,
+    5.0,
+    0.7987
+   ]
+  },
+  "back": {
+   "file": "A_baseline_back.png",
+   "sha256": "305e9d0704756d6f022f080baa64e7ee18b204ef1518065bde4c47da82bed1df",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565,
+   "camera_location": [
+    0.0,
+    -5.0,
+    0.7987
+   ]
+  },
+  "left": {
+   "file": "A_baseline_left.png",
+   "sha256": "98d055f407c4508f9bdc8840cc2350dbb5147033993cad6c78cc35a74d70ef5a",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565,
+   "camera_location": [
+    -5.0,
+    0.0,
+    0.7987
+   ]
+  },
+  "right": {
+   "file": "A_baseline_right.png",
+   "sha256": "b0e22183497ef60b942d3521d926b840c97f41ddb392c05ea835807f881440ea",
+   "resolution": [
+    900,
+    1200
+   ],
+   "ortho_scale": 1.72565,
+   "camera_location": [
+    5.0,
+    0.0,
+    0.7987
+   ]
+  },
+  "face_front": {
+   "file": "A_baseline_face_front.png",
+   "sha256": "b59a7b11d3e5877bd0200a5b75a38c3ad7854790fe175b45bb5e2e7bc49e32ab",
+   "resolution": [
+    1024,
+    1024
+   ],
+   "ortho_scale": 0.32837,
+   "camera_location": [
+    0.0,
+    5.0,
+    1.476
+   ]
+  },
+  "face_q3": {
+   "file": "A_baseline_face_q3.png",
+   "sha256": "5a6c742ab7238aad31e1e12cc9edbe891abac70881f5520bb3a176e3f3afdb3b",
+   "resolution": [
+    1024,
+    1024
+   ],
+   "ortho_scale": 0.32837,
+   "camera_location": [
+    3.0,
+    4.0,
+    1.476
+   ]
+  }
+ },
+ "source_sha256_after": "9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4",
+ "source_unmodified": true,
+ "elapsed_s": 13.4
+}
