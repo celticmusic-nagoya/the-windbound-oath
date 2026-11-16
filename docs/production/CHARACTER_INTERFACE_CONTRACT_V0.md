@@ -59,3 +59,12 @@ FACE owns head/face/hair/expression candidate collections; BODY owns torso/limbs
 - Existing CONTACT_CAGE_DISABLED_08.blend is a *candidate diagnostic*, not a verified accepted Layer 0 master. Its mesh transforms can be measured for a provisional geometry interface, not promoted to canonical scale or seam.
 - docs/design/MORWEN_LAYER0_LANDMARKS_CANDIDATE.json labels pixel landmarks approximate and not art-approved; barefoot and booted heights must not be equated.
 - The face/body/costume branches remain preproduction; no independently running Claude or Codex session was launched.
+
+## Executed Blender candidate inventory — GitHub Actions run 43811035214
+- Job SUCCESS, artifact 14200312401, `PR326_CANDIDATE_INVENTORY.json`; source SHA 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 verified by script. Artifact inspected independently.
+- Blender 5.3.0, METRIC scale_length 1.0; 16 scene objects, one armature with 83 bones.
+- `Body` 7,797 vertices, world bbox min (-0.69174314,-0.15041634,-0.0001845), max (0.69225442,0.13823646,1.59763277) meters.
+- `Face` 1,972 vertices, world bbox min (-0.10798285,-0.04119926,1.35438931), max (0.10849377,0.10665022,1.58652210) meters.
+- Rig includes `Root`, `J_Bip_C_Hips`, `J_Bip_C_Spine`, `J_Bip_C_Chest`, `J_Bip_C_UpperChest`, `J_Bip_C_Neck`, `J_Bip_C_Head`, `J_Adj_L_FaceEye`, `J_Adj_R_FaceEye` and left/right limbs, fingers, feet, skirt and secondary bones. Full bone hierarchy and bind matrices are in artifact, NOT duplicated in this contract.
+- These are **candidate observations**, not approved seam or anatomical measurements. The candidate includes experimental eye and lid meshes and an unrelated Icosphere; do not derive approved height, head ratio or full production assembly from all object bounds.
+- Head/body interface alignment, axis handedness, approved reference match and game-camera G4 remain BLOCKED/NOT_RUN.
