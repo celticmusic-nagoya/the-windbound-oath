@@ -5,6 +5,7 @@ Usage: python morwen_render_qa_loop.py -- source.blend output_dir
 """
 import bpy, sys, os, json, hashlib, math
 from mathutils import Vector
+from solve_morwen_framing import solve_framing
 src,out=sys.argv[sys.argv.index("--")+1:][:2]
 os.makedirs(out,exist_ok=True)
 def sha(path):
@@ -74,24 +75,21 @@ try:
   if good:
    report["status"]="PASS_TECHNICAL_FRAMING_ONLY";break
   if attempt==1:
-   # Deterministic bounded correction, never mesh editing or unrestricted prompt loop.
-   target=0.83
-   # One bounded correction based on BOTH image axes.
+   # Feasibility-checked one-time correction based on the actual alpha silhouette.
    observed_width=(right-left+4)/w
    observed_height=(top-bottom+4)/h
-   # Previous attempts exposed a systematic ~110px vertical offset.
-   # Center the *visible alpha silhouette* rather than the unfiltered
-   # object bounding boxes, then fit both axes with an 8% safety margin.
+   solution=solve_framing(observed_width,observed_height)
+   report["framing_solver"]=solution
+   if solution["status"]!="FEASIBLE":
+    report["status"]=solution["status"]
+    break
    local_right=cam.rotation_euler.to_matrix()@Vector((1,0,0))
    local_up=cam.rotation_euler.to_matrix()@Vector((0,1,0))
    dx=((left+right)/2-(w-1)/2)/w*scale*aspect
    dy=((bottom+top)/2-(h-1)/2)/h*scale
    cam.location+=local_right*dx+local_up*dy
-   desired_width=0.84
-   desired_height=0.84
-   factor=max(observed_width/desired_width,observed_height/desired_height)
-   scale*=max(0.5,min(1.6,factor))
-   report["correction_reason"]="alpha_silhouette_recenter_and_two_axis_fit"
+   scale/=solution["zoom"]
+   report["correction_reason"]="feasibility_solver_and_alpha_centering"
    report["recenter_local"]=[round(dx,6),round(dy,6)]
  else:
   report["status"]="FAIL_MAX_ATTEMPTS"
