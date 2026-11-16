@@ -26,7 +26,7 @@ const server = createServer((req,res)=>{
    await page.locator('#file').setInputFiles(glb);
    await page.locator('#engine').selectOption(engine);
    await page.locator('#run').click();
-   try{await page.waitForFunction(()=>(fullMeasure ? ['COMPLETED','FAIL_LOAD','FAIL_RENDER'] : ['RUNNING','COMPLETED','FAIL_LOAD','FAIL_RENDER']).includes(JSON.parse(document.querySelector('#report').textContent).status),null,{timeout:fullMeasure?150000:120000});}
+   try{await page.waitForFunction((measure)=>(measure ? ['COMPLETED','FAIL_LOAD','FAIL_RENDER'] : ['RUNNING','COMPLETED','FAIL_LOAD','FAIL_RENDER']).includes(JSON.parse(document.querySelector('#report').textContent).status),fullMeasure,{timeout:fullMeasure?150000:120000});}
    catch(e){errors.push('Timed out awaiting runtime: '+String(e))}
    const result=await page.locator('#report').textContent().then(JSON.parse);
    results.engines[engine]={status:result.status,sha256:result.sha256,asset:result.asset,loadMs:result.loadMs,frames:result.frames,meanFrameMs:result.meanFrameMs,p95FrameMs:result.p95FrameMs,elapsedMs:result.elapsedMs,renderInfo:result.renderInfo,error:result.error,pageErrors:errors};
