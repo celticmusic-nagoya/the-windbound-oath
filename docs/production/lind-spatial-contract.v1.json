@@ -1,10 +1,13 @@
 {
   "schema": "lind-spatial-contract-v1",
-  "status": "DRAFT_BLOCKED_MAP_VISUAL_AUDIT",
+  "status": "DRAFT_VISUAL_MAP_VERIFIED_METRIC_LAYOUT_BLOCKED",
   "canonical_map": {
     "path": "docs/art/reference/lind/リルド村RPGアセット全体マップ.png",
     "sha256": "83dd4ad1eb10103fdb7eb569e8b1b22cc92920d4c94d4eae85735125de87fe6c",
-    "image_pixels_verified": false
+    "image_pixels_verified": true,
+    "visual_audit": "docs/production/LIND_CANON_MAP_VISUAL_AUDIT_01.md",
+    "evidence_run_id": 43828092892,
+    "evidence_artifact_id": 14207437553
   },
   "coordinates": {
     "world_origin": null,
@@ -205,10 +208,60 @@
   "approval": {
     "director_spatial_lock": false,
     "gates": {
-      "G1": "BLOCKED",
+      "G1": "BLOCKED_METRIC_LAYOUT",
       "G2": "NOT_RUN",
       "G3": "NOT_RUN",
       "G4": "NOT_RUN"
     }
-  }
+  },
+  "authoring_zones": [
+    {
+      "id": "ZONE_WEST_ENTRY",
+      "scope": "village entrance and western homes",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_CENTRAL_PLAZA",
+      "scope": "wind stone, well and shop vicinity",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_NW_WATERFALL_ELDER",
+      "scope": "waterfall and elder house",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_NORTH_INN_AIDAN",
+      "scope": "inn and Aidan house",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_EAST_TRAINING",
+      "scope": "separate training ground across river",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_SOUTHEAST_FARMS",
+      "scope": "fields, orchard, barns and livestock",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_RIVER_CROSSINGS",
+      "scope": "main river, tributary and candidate crossings",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_FISHING_DOCK",
+      "scope": "river fishing spot",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    }
+  ]
 }
