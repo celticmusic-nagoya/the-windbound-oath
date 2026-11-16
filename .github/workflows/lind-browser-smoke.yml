@@ -1,0 +1,49 @@
+name: LIND same-GLB browser smoke
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/lind-webgl-runtime-benchmark-01
+    paths:
+      - 'tools/map_blender/runtime_benchmark/browser-smoke.cjs'
+      - 'tools/map_blender/runtime_benchmark/same-glb-compare.html'
+      - '.github/workflows/lind-browser-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install browser runner
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Create isolated GLB fixture
+        run: |
+          mkdir -p /tmp/lind-glb-benchmark
+          python3 - <<'PY'
+          import json,struct,hashlib
+          from pathlib import Path
+          # Minimal standards-compliant GLB: one triangle mesh, no production art.
+          import base64
+          verts=struct.pack('<9f',-1,0,0,1,0,0,0,1,0)
+          doc={"asset":{"version":"2.0"},"buffers":[{"byteLength":len(verts)}],"bufferViews":[{"buffer":0,"byteOffset":0,"byteLength":len(verts),"target":34962}],"accessors":[{"bufferView":0,"componentType":5126,"count":3,"type":"VEC3","min":[-1,0,0],"max":[1,1,0]}],"meshes":[{"primitives":[{"attributes":{"POSITION":0}}]}],"nodes":[{"mesh":0}],"scenes":[{"nodes":[0]}],"scene":0}
+          j=json.dumps(doc,separators=(',',':')).encode();j+=b' ' * (-len(j)%4)
+          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(verts))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(verts),b'BIN\\x00')+verts
+          p=Path('/tmp/lind-glb-benchmark/technical-scene.glb');p.write_bytes(blob)
+          print('fixture SHA256',hashlib.sha256(blob).hexdigest())
+          PY
+      - name: Browser import smoke (two engines)
+        run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
+      - name: Upload evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-browser-smoke
+          path: /tmp/lind-glb-benchmark/
+          if-no-files-found: warn
+          retention-days: 7
