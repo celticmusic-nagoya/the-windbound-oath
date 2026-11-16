@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LIND engine comparison — technical scene</title>
+<style>body{margin:0;background:#111820;color:#f5f5f5;font:14px system-ui}header{padding:12px}canvas{display:block;width:100%;height:55vh}button,select{padding:10px;margin:4px}pre{white-space:pre-wrap;padding:12px;overflow-wrap:anywhere}</style></head>
+<body><header><strong>LIND｜Three.js / Babylon.js 同条件技術比較</strong><p>正式マップ・キャラクター素材ではありません。外部CDNへの接続が必要です。</p>
+<label>Engine <select id="engine"><option value="three">Three.js 0.170.0</option><option value="babylon">Babylon.js 7.40.3</option></select></label>
+<button id="start">30秒測定</button><button id="stop">停止</button><button id="copy">JSONコピー</button></header>
+<canvas id="view"></canvas><pre id="result">NOT_RUN</pre>
+<script type="module">
+const canvas=document.querySelector('#view'),out=document.querySelector('#result'),selector=document.querySelector('#engine');
+const VERSION={three:'0.170.0',babylon:'7.40.3'};
+let session=null,frame=0,start=0,last=0,samples=[],result={status:'NOT_RUN'};
+function percentile(a,p){const s=[...a].sort((x,y)=>x-y);return s.length?s[Math.ceil(s.length*p)-1]:null}
+function output(){out.textContent=JSON.stringify(result,null,2)}
+function stop(){
+ cancelAnimationFrame(frame);
+ if(session){session.dispose();session=null}
+ result.frames=samples.length;result.meanFrameMs=samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null;
+ result.p95FrameMs=percentile(samples,.95);result.elapsedMs=last&&start?last-start:0;
+ if(result.status==='RUNNING')result.status='COMPLETED';
+ output();
+}
+async function makeThree(){
+ const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js');
+ const renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'default'});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(canvas.clientWidth,canvas.clientHeight,false);
+ const scene=new THREE.Scene();scene.background=new THREE.Color(0x132033);
+ const camera=new THREE.PerspectiveCamera(55,canvas.clientWidth/canvas.clientHeight,.1,100);camera.position.set(0,3,10);camera.lookAt(0,0,0);
+ const geometry=new THREE.BoxGeometry(.38,.38,.38),material=new THREE.MeshStandardMaterial({color:0x59a7bd,roughness:.7});
+ const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(3,5,4);scene.add(light);scene.add(new THREE.AmbientLight(0xffffff,.7));
+ const meshes=[];
+ for(let i=0;i<100;i++){const mesh=new THREE.Mesh(geometry,material);mesh.position.set((i%10-4.5)*.7,(Math.floor(i/10)-4.5)*.5,0);scene.add(mesh);meshes.push(mesh)}
+ return {draw(t){for(let i=0;i<meshes.length;i++)meshes[i].rotation.y=t*.0005;renderer.render(scene,camera)},dispose(){geometry.dispose();material.dispose();renderer.dispose()},details(){return {drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}};
+}
+async function makeBabylon(){
+ const BABYLON=await import('https://cdn.jsdelivr.net/npm/@babylonjs/core@7.40.3/index.js');
+ const engine=new BABYLON.Engine(canvas,false,{preserveDrawingBuffer:false,stencil:false,disableWebGL2Support:false},false);
+ engine.setHardwareScalingLevel(Math.max(1,devicePixelRatio/2));
+ const scene=new BABYLON.Scene(engine);scene.clearColor=new BABYLON.Color4(.075,.125,.2,1);
+ const camera=new BABYLON.FreeCamera('camera',new BABYLON.Vector3(0,3,-10),scene);camera.setTarget(BABYLON.Vector3.Zero());camera.fov=55*Math.PI/180;
+ const light=new BABYLON.HemisphericLight('ambient',new BABYLON.Vector3(0,1,0),scene);light.intensity=.7;
+ const directional=new BABYLON.DirectionalLight('key',new BABYLON.Vector3(-3,-5,-4),scene);directional.intensity=2;
+ const material=new BABYLON.PBRMaterial('pbr',scene);material.albedoColor=new BABYLON.Color3(.35,.65,.74);material.roughness=.7;material.metallic=0;
+ const base=BABYLON.MeshBuilder.CreateBox('base',{size:.38},scene);base.material=material;const meshes=[base];
+ for(let i=1;i<100;i++)meshes.push(base.clone('box'+i));
+ meshes.forEach((m,i)=>{m.position.set((i%10-4.5)*.7,(Math.floor(i/10)-4.5)*.5,0)});
+ return {draw(t){for(const m of meshes)m.rotation.y=t*.0005;scene.render()},dispose(){scene.dispose();engine.dispose()},details(){return {drawCalls:null,triangles:null}}};
+}
+document.querySelector('#start').onclick=async()=>{
+ stop();samples=[];start=0;last=0;const engine=selector.value;
+ result={status:'LOADING',engine,version:VERSION[engine],browser:navigator.userAgent,dpr:devicePixelRatio,viewport:[innerWidth,innerHeight],objects:100,geometry:'100 box meshes, shared geometry/material, 1 directional and 1 ambient light',assets:'technical geometry only',warning:'No GLB, skinning, textures, shadow, world art or game adapter; no Android PASS'};
+ output();
+ try{
+ session=await (engine==='three'?makeThree():makeBabylon());result.status='RUNNING';output();
+ const tick=t=>{
+  if(!session)return;
+  if(!start){start=t;last=t}
+  const dt=t-last;if(dt>0&&dt<1000)samples.push(dt);last=t;
+  try{session.draw(t);result.renderInfo=session.details()}catch(e){result.status='FAIL_RENDER';result.error=String(e);stop();return}
+  if(t-start>=30000){stop();return}frame=requestAnimationFrame(tick);
+ };frame=requestAnimationFrame(tick);
+ }catch(e){result.status='FAIL_LOAD';result.error=String(e);stop()}
+};
+document.querySelector('#stop').onclick=()=>{if(result.status==='RUNNING')result.status='STOPPED_EARLY';stop()};
+document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(JSON.stringify(result,null,2)).catch(e=>{out.textContent='Copy failed: '+e.message});
+</script></body></html>
