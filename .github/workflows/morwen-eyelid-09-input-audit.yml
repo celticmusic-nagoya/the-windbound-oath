@@ -19,6 +19,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/inspect_root_topology_09e.py'
       - 'tools/blender/morwen_production/eyelid_lash/summarize_root_topology_09e.py'
       - 'tools/blender/morwen_production/eyelid_lash/inspect_cage_adjacency_09f.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_root_fan_09g.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -109,6 +110,17 @@ jobs:
       - name: Inspect actual cage topology and winding 09F (read only)
         run: |
           python tools/blender/morwen_production/eyelid_lash/inspect_cage_adjacency_09f.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/CAGE_ADJACENCY_09F.json
+      - name: Build structurally distinct root-fan candidate 09G
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_root_fan_09g.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --report render_output/morwen_eyelid_09/ROOT_FAN_BUILD_09G.json
+      - name: Test 09G real-model surface intersections
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/ROOT_FAN_INTERSECTIONS_09G.json
+      - name: Gate 09G surface geometry (limited)
+        id: gate_09g
+        continue-on-error: true
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/ROOT_FAN_INTERSECTIONS_09G.json
       - name: Gate 09D geometry (do not claim full G3)
         id: gate_09d
         continue-on-error: true
@@ -134,6 +146,7 @@ jobs:
             render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
             render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
             render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend
+            render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend
           if-no-files-found: warn
           retention-days: 7
       - name: Enforce failed geometric gates after uploading all evidence
@@ -142,8 +155,10 @@ jobs:
           ENDPOINT_GATE: ${{ steps.gate_endpoint.outcome }}
           FRAME_GATE: ${{ steps.gate_frame.outcome }}
           CANDIDATE_09D_GATE: ${{ steps.gate_09d.outcome }}
+          CANDIDATE_09G_GATE: ${{ steps.gate_09g.outcome }}
         run: |
           echo "Endpoint 09B gate: ${ENDPOINT_GATE}"
           echo "Frame 09 gate: ${FRAME_GATE}"
           echo "09D surface gate: ${CANDIDATE_09D_GATE}"
-          test "${CANDIDATE_09D_GATE}" = "success"
+          echo "09G root-fan gate: ${CANDIDATE_09G_GATE}"
+          test "${CANDIDATE_09G_GATE}" = "success"
