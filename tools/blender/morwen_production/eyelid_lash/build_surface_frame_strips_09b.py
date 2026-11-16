@@ -11,11 +11,11 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 
-def frame(roots,index):
+def frame(roots,index,side):
     root=roots[index]
     p=Vector(root["root_world_m"])
     normal=Vector(root["normal_world"])
-    if index==0 and len(roots)>1:
+    if side=="L" and index==0 and len(roots)>1:
         # Structural endpoint normal continuity, not a global offset tweak.
         # Recompute only the first strip using the adjacent cage normal.
         neighbor=Vector(roots[1]["normal_world"])
@@ -55,7 +55,7 @@ def main():
         roots=data["sides"][side]
         if len(roots)!=9:raise ValueError("Expected 9 anchors per side")
         for j in range(9):
-            p,normal,tangent,growth=frame(roots,j)
+            p,normal,tangent,growth=frame(roots,j,side)
             verts=[]
             for k in range(6):
                 t=k/5
