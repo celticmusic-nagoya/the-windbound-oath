@@ -44,3 +44,12 @@ This record is not a substitute for the source manifests, workflow logs or indep
 - Mean frame intervals near 16.666 ms for both engines; this **does not resolve comparative GPU performance** due to browser frame pacing and low workload.
 - CI artifact `lind-technical-glb` ID `14229550237`; previous CDN-dependent navigation timeouts were avoided by serving pinned local packages in CI. The standalone smoke workflow also passed: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43872820618.
 - G3 PASS for repeated headless technical GLB render; G1 BLOCKED, G2 NOT_RUN, G4 NOT_RUN remain unchanged. High-load tiers NOT_RUN.
+
+## High-load synthetic mesh-count tiers (2026-11-16)
+- CI https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43874818839 SUCCESS, all three Blender export/browser jobs PASS. Source commit `4d01bd25068a1ae0fa5fabff72ea3a1d9db21f50`.
+- 100 objects: Three mean 16.666 ms / p95 16.7 ms; Babylon mean 16.666 ms / p95 16.7 ms.
+- 1,000 objects: Three mean 18.291 ms / p95 33.3 ms; Babylon mean 18.280 ms / p95 33.3 ms.
+- 3,000 objects: Three mean 37.708 ms / p95 50.1 ms; Babylon mean 41.688 ms / p95 50.1 ms.
+- Each tier has one 30-second measurement per engine; **not statistically sufficient to rank engines**. Synthetic cube geometry, headless Chromium SwiftShader, no production textures/animation or Android hardware. No formal renderer selection.
+- Artifacts: `lind-highload-100` ID 14228864044, `lind-highload-1000` ID 14228704701, `lind-highload-3000` ID 14230261635.
+- G3 PASS limited to CI technical GLB export/render; G1 BLOCKED, G2 NOT_RUN, G4 NOT_RUN. Next: repeated high-load runs and Android real-device measurement; protect main and production assets.
