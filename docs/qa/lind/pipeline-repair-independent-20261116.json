@@ -1,0 +1,95 @@
+{
+  "baseline": "993c75fb64be67680982f7096be3f3743495fb53",
+  "tests": [
+    {
+      "command": [
+        "node",
+        "tests/startup_race.test.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS NEW GAME commits initial map, opens narration, close restores normal dialogue state\nPASS real FieldTalk begun during narration delay is never overwritten and last-page tap closes it\nPASS a newer conversation that already ended also cancels old narration\nPASS plain say dialogue has priority over startup narration\nPASS real devJump invalidates old boot fetch and coordinator owner, latest destination wins\nPASS new boot supersedes older boot without stale map/dialogue/FAILED state\nPASS LOAD during boot is rejected without touching original save bytes\nPASS normal LOAD invalidates an already scheduled startup narration and preserves save/flags\nPASS late initial fetch cannot overwrite a DEV destination followed by actual LOAD\nPASS pagehide/reload invalidates old realm; fresh realm starts independently\nPASS startup failure stays protected, explicit retry succeeds; stale token cannot start events\nPASS fixture extraction is exact, argument-independent and rejects missing declarations\nPASS LOAD internal reset preserves the current token; stale internal reset is rejected before mutations\nPASS NEW GAME during LOAD supersedes the pending LOAD and discards its late map response\nPASS second LOAD while LOADING is rejected; the latest accepted owner alone commits\nPASS goto via actual DEV navigation during LOAD wins over an out-of-order LOAD response\nPASS reload during LOAD invalidates old owner; a new realm is unaffected by the late reply\nPASS failed LOAD preserves source bytes and stable map flags; explicit retry recovers safely\nPASS actual DOMContentLoaded boot path commits NEW GAME without a test-only ready gate\nPASS DEV destination before DOMContentLoaded cancels the scheduled initial boot\n20 PASS; real product code, simulated DOM/network/timers; browser NOT_RUN\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/save_compatibility.test.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS legacy v1 stage0 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage1 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage3 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage4 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage5 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage6 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage7 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v1 stage8 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage0 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage1 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage3 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage4 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage5 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage6 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage7 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS legacy v2 stage8 LOAD/SAVE/LOAD normalizes hidden map and keeps history\nPASS active field stage0 exact map/coordinates/events roundtrip\nPASS active field stage1 exact map/coordinates/events roundtrip\nPASS active field stage3 exact map/coordinates/events roundtrip\nPASS active field stage9 exact map/coordinates/events roundtrip\nPASS active field stage10 exact map/coordinates/events roundtrip\nPASS active field stage11 exact map/coordinates/events roundtrip\nPASS active field stage12 exact map/coordinates/events roundtrip\nPASS active field stage15 exact map/coordinates/events roundtrip\nPASS inactive snapshot drops only destination/position/height, never mutates runtime history\nPASS forest fallback v1 stage9 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v1 stage10 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v1 stage11 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v1 stage12 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v2 stage9 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v2 stage10 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v2 stage11 null/legacy coordinates restores safe map and chest history\nPASS forest fallback v2 stage12 null/legacy coordinates restores safe map and chest history\nPASS actual SAVE outside menu keeps data and does not require feedback DOM\n34 PASS; actual SAVE/LOAD; simulated DOM/network\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/continue_restore.test.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS no save disables CONTINUE; valid current save enables it without mutation\nPASS cold CONTINUE restores field coordinates, facing, flags and once-only events; source bytes unchanged\nPASS legacy early stage 0 uses explicit safe checkpoint, never guessed legacy coordinates\nPASS legacy early stage 1 uses explicit safe checkpoint, never guessed legacy coordinates\nPASS legacy early stage 3 uses explicit safe checkpoint, never guessed legacy coordinates\nPASS story stage 4 restores its defined legacy/atomic scene checkpoint\nPASS story stage 5 restores its defined legacy/atomic scene checkpoint\nPASS story stage 6 restores its defined legacy/atomic scene checkpoint\nPASS story stage 7 restores its defined legacy/atomic scene checkpoint\nPASS story stage 8 restores its defined legacy/atomic scene checkpoint\nPASS current stage2 checkpoint uses actual validated retry; v1 stage2 stays read-only refused\nPASS forest checkpoint restores through existing shared runtime\nPASS invalid/incomplete save is refused safely: {broken\nPASS invalid/incomplete save is refused safely: {}\nPASS invalid/incomplete save is refused safely: {\"version\":99}\nPASS invalid/incomplete save is refused safely: {\"version\":30,\"prologue\":{\"ver\nPASS duplicate CONTINUE is rejected while actual map promise is pending\nPASS NEW GAME supersedes CONTINUE, rolls back provisional model and rejects the late response\nPASS failure rolls model and map back to title, keeps SAVE bytes, and allows explicit retry\nPASS real SAVE preserves consumed one-time Rilde events across cold CONTINUE\nPASS new SAVE drawer explicit false restores exactly and executes at most once\nPASS new SAVE drawer explicit true restores exactly and executes at most once\nPASS new SAVE pot explicit false restores exactly and executes at most once\nPASS new SAVE pot explicit true restores exactly and executes at most once\nPASS actual drawer acquisition then SAVE/cold CONTINUE never replays its event\nPASS actual pot acquisition then SAVE/cold CONTINUE never replays its event\nPASS old missing history blocks only drawer/pot, preserves inventory/progress/source and does not fabricate quest completion\nPASS new explicit false survives actual SAVE and incomplete event profile is refused without mutation\nPASS NEW GAME resets acquisition restrictions to genuinely unclaimed state\nPASS failed CONTINUE and normal LOAD never partially commit acquisition flags\nPASS current new-village stage 1 retains its recorded coordinates\nPASS current new-village stage 3 retains its recorded coordinates\nPASS unknown map and invalid acquisition boolean are read-only refused\nPASS legitimate old free-roam SAVE retains actual inventory and progression\nPASS only proven old subquest states restore completion, while new flags preserve partial quest state\nPASS explicitly saving an old unknown history preserves restriction provenance without inventing collection\nPASS malformed party, item or map-event records are refused before mutation\n37 PASS; actual restore modules; simulated DOM/network; browser NOT_RUN\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/map_blender/lind",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_explicit_legacy_call_cannot_overwrite_an_existing_file (test_legacy_gateway.LegacyIsolationTests.test_explicit_legacy_call_cannot_overwrite_an_existing_file) ... ok\ntest_new_world_call_is_blocked_before_loading_blender_or_writing (test_legacy_gateway.LegacyIsolationTests.test_new_world_call_is_blocked_before_loading_blender_or_writing) ... ok\ntest_integrity_check_returns_original_bytes_without_decoding (test_register_source.SourceIntegrityTests.test_integrity_check_returns_original_bytes_without_decoding) ... ok\ntest_mismatch_preserves_input_and_creates_no_registered_image (test_register_source.SourceIntegrityTests.test_mismatch_preserves_input_and_creates_no_registered_image) ... ok\ntest_non_png_rejected_even_when_digest_matches (test_register_source.SourceIntegrityTests.test_non_png_rejected_even_when_digest_matches) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.048s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/map_blender/ai_guard",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_env_excludes_secrets_and_preserves_source (test_run_blender_safe.RunnerTest.test_env_excludes_secrets_and_preserves_source) ... ok\ntest_reject_existing_output (test_run_blender_safe.RunnerTest.test_reject_existing_output) ... ok\ntest_clamp (test_validate_patch.GuardTest.test_clamp) ... ok\ntest_reject_code (test_validate_patch.GuardTest.test_reject_code) ... ok\ntest_reject_geometry (test_validate_patch.GuardTest.test_reject_geometry) ... ok\ntest_reject_many (test_validate_patch.GuardTest.test_reject_many) ... ok\ntest_reject_nan (test_validate_patch.GuardTest.test_reject_nan) ... ok\ntest_valid (test_validate_patch.GuardTest.test_valid) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.002s\n\nOK\n"
+    }
+  ],
+  "checks": {
+    "legacy_exactly_preserved": true,
+    "legacy_sha256": "54e3f49d92b62965517f5d9822a76244086561a098499823b6d536343241506e",
+    "packages": [
+      {
+        "file": "blender_4.0.2+dfsg-1ubuntu8_amd64.deb",
+        "sha256": "c9ca6054d19684a08d992d0566c5af2fe124f18abc77d967c6175db5bb53d8a1",
+        "matches": true
+      },
+      {
+        "file": "blender-data_4.0.2+dfsg-1ubuntu8_all.deb",
+        "sha256": "134093e5293bc599c403ec293085c1b573ea23f353a6b5078c4f7c0ce52427bd",
+        "matches": true
+      }
+    ]
+  },
+  "independent_negative_controls": {
+    "registration_mocked_synthetic_bytes": [
+      "main branch refusal creates no directory",
+      "synthetic registration retains exact bytes",
+      "second registration refuses overwrite"
+    ],
+    "return_scene_extraction": "4 missing-declaration/boundary variants rejected; actual rildeReturnActive lexical state included",
+    "qa_harness_correction": "Initial reviewer check mistakenly named state rildeReturnRunning; corrected to actual rildeReturnActive after source inspection. Initial check failed; no product failure or code change."
+  },
+  "limits": [
+    "Exact adopted PNG registration NOT_RUN: original bytes unavailable",
+    "Blender 4.0.2 actual CI rendering NOT_RUN by QA; pinned deb hashes independently checked",
+    "Source registration positive path used mocked verification and synthetic bytes in temporary fake repository only; no adopted asset was registered",
+    "Full G1-G4/new-world/Android approval not established"
+  ]
+}
