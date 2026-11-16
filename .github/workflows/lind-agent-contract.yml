@@ -7,6 +7,8 @@ on:
       - Blender.md
       - 'docs/production/LIND_*20261116.md'
       - 'tools/map_blender/validate_lind_new_world_topology.py'
+      - 'tools/map_blender/validate_lind_handoff.py'
+      - 'tests/test_lind_handoff.py'
       - 'docs/production/lind-new-world-topology.v1.json'
       - '.github/workflows/lind-agent-contract.yml'
   workflow_dispatch:
@@ -43,3 +45,5 @@ jobs:
           PY
       - name: Validate spatial graph
         run: python3 tools/map_blender/validate_lind_new_world_topology.py
+      - name: Run cross-agent handoff manifest negative tests
+        run: python3 -m unittest discover -s tests -p 'test_lind_handoff.py' -v

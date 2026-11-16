@@ -48,3 +48,9 @@ These commands verify source-review infrastructure only, not completed terrain.
 - G2: NOT_RUN (actual WORLD geometry art review).
 - G3: SOURCE_REVIEW_PASS only; production terrain technical QA NOT_RUN.
 - G4: NOT_RUN (game integration and Android device QA).
+
+## Machine-readable AI-to-Blender artifact handoff
+- Every producing lane submits a JSON manifest per candidate collection with the keys defined in `docs/production/LIND_BLENDER_SCENE_INTERFACE_V1.md`.
+- Validate it using `python3 tools/map_blender/validate_lind_handoff.py /path/to/manifest.json`. Paths in `output_hashes` are relative to the manifest directory, and SHA-256 is checked against actual bytes.
+- CI runs `tests/test_lind_handoff.py` negative tests. Invalid source hashes, forged G1 PASS, cross-lane ownership, unapproved metric coordinates, path traversal, and missing outputs are rejected.
+- The validator does NOT generate art, verify private lore, or replace independent G2/G4 review. No candidate manifest is presented as an approved scene.
