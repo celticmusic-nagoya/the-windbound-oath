@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'tools/map_blender/ai_guard/**'
+      - 'tools/map_blender/lind/**'
+      - 'tools/map_blender/legacy/**'
+      - 'tools/map_blender/lind_spatial_assemble.py'
       - '.github/workflows/lind-blender-integration.yml'
 permissions:
   contents: read
@@ -11,21 +14,36 @@ jobs:
   technical-render:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    env:
+      BLENDER_PACKAGE_VERSION: 4.0.2+dfsg-1ubuntu8
+      BLENDER_RUNTIME_VERSION: 4.0.2
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Install distro Blender (test-only; version recorded)
+      - name: Install exact Blender package and verify binary/data SHA
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
-          blender --version | head -n 3
+          mkdir -p /tmp/lind-blender-pinned
+          cd /tmp/lind-blender-pinned
+          apt-get download "blender=${BLENDER_PACKAGE_VERSION}" "blender-data=${BLENDER_PACKAGE_VERSION}"
+          sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
+          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
+          test "$(dpkg-query -W -f='${Version}' blender)" = "${BLENDER_PACKAGE_VERSION}"
+          test "$(dpkg-query -W -f='${Version}' blender-data)" = "${BLENDER_PACKAGE_VERSION}"
+          test "$(blender --version | head -n 1)" = "Blender ${BLENDER_RUNTIME_VERSION}"
           ldconfig -p | grep -F libEGL.so.1
           ldconfig -p | grep -F libGL.so.1
           python3 -c 'import sys; print("CI_PYTHON",sys.version)'
+      - name: Verify source and legacy isolation guards
+        run: |
+          python3 -m unittest discover -s tools/map_blender/lind -p 'test_*.py' -v
+          python3 -m unittest discover -s tools/map_blender/ai_guard -p 'test_*.py' -v
       - name: Generate isolated technical fixture
         run: |
           mkdir -p /tmp/lind-ai-technical
+          blender --version > /tmp/lind-ai-technical/blender-version.txt
+          cp tools/map_blender/lind/blender-ubuntu24.04.sha256 /tmp/lind-ai-technical/
           blender -b --factory-startup --disable-autoexec --python tools/map_blender/ai_guard/create_fixture.py -- --out /tmp/lind-ai-technical/fixture.blend
           sha256sum /tmp/lind-ai-technical/fixture.blend | tee /tmp/lind-ai-technical/source-before.sha256
       - name: Prepare allowlisted feedback

@@ -1,0 +1,27 @@
+name: LIND SAVE fixture compatibility
+on:
+  pull_request:
+    paths:
+      - 'tests/startup_race.test.cjs'
+      - 'tests/continue_restore.test.cjs'
+      - 'tests/save_compatibility.test.cjs'
+      - 'tests/helpers/product-block.cjs'
+      - '.github/workflows/lind-save-fixture-qa.yml'
+permissions:
+  contents: read
+jobs:
+  save-fixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run exact product startup and SAVE restoration tests
+        run: |
+          node tests/startup_race.test.cjs
+          node tests/continue_restore.test.cjs
+          node tests/save_compatibility.test.cjs

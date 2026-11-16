@@ -1,12 +1,14 @@
 // Real coordinator, RildeVillage, S2 runtime, FieldTalk, HTML say/dev/LOAD. Network/rendering adapters only.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {environment,deferred,flush}=require('./s2_transition_recovery.test.cjs');
-const {dialogueBlock}=require('./helpers/product-block.cjs');
+const {dialogueBlock,returnSceneBlock}=require('./helpers/product-block.cjs');
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 function extractDevBlock(source){
  const start=/^function devResetScreens\s*\(/m.exec(source);
  assert.ok(start,'fixture: product devResetScreens declaration not found');
- const end=source.indexOf("$('#devGrid').innerHTML",start.index);
+ // Stop before the current DEV menu setup; it no longer writes innerHTML directly.
+ const boundary=/^const\s+devGridEl\s*=/m.exec(source.slice(start.index));
+ const end=boundary?start.index+boundary.index:-1;
  assert.ok(end>start.index,'fixture: product DEV block end not found');
  const block=source.slice(start.index,end);
  assert.match(block,/^function devJump\s*\(/m,'fixture: product devJump declaration not found');
@@ -17,6 +19,8 @@ function setup(){
  Object.defineProperty(c.msg,'textContent',{configurable:true,get(){return this._text||this.children.map(n=>n.textContent).join('')},set(v){this._text=v;this.children=[]}});
  c.msg.querySelector=function(s){return this.children.find(n=>s[0]==='.'?n.className===s.slice(1):n.tagName===s.toUpperCase())||null;};
  const dialogue=dialogueBlock(html);vm.runInContext(dialogue,c);
+ // SAVE reads this lexical scene state. Execute the shipped scene, not a false stub.
+ vm.runInContext(returnSceneBlock(html),c);
  for(const name of ['say','closeDialogue'])assert.ok(dialogue.includes(c[name].toString()),'fixture must execute exact product '+name);
  e.load('js/load-coordinator.js');e.load('js/prologue-progress.js');e.load('js/field/moss-forest-story.js');e.load('js/field/rilde-village.js');e.load('js/field/talk-conditions.js');e.load('js/field/field-talk.js');
  c.FieldTalk.loadTable({npc:'other',entries:[{id:'other1',when:{},lines:[['別の会話']]}]});
@@ -54,6 +58,8 @@ else (async()=>{
   assert.ok(extractDevBlock(html.replace('devResetScreens(ownerToken)','devResetScreens(a,b,c)')).includes('devResetScreens(a,b,c)'));
   assert.throws(()=>extractDevBlock(''),/declaration not found/);
   assert.throws(()=>extractDevBlock(html.replace('function devJump(key)','function omitted(key)')),/devJump declaration not found/);
+  assert.throws(()=>extractDevBlock(html.replace('const devGridEl=', 'const omittedGrid=')),/DEV block end not found/);
+  assert.ok(!block.includes('const devGridEl='),'fixture excludes menu setup, not product function code');
  });
  await test('LOAD internal reset preserves the current token; stale internal reset is rejected before mutations',async()=>{
   const e=setup();await e.complete(e.c.RildeVillage.startOpening());loadSave(e);await e.complete(e.c.TrainingCheckpoint.ready);
