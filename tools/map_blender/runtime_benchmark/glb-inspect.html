@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LIND GLB integrity inspection</title><style>body{font:15px system-ui;background:#101923;color:#f1f5f9;margin:0;padding:18px;max-width:850px}input,button{padding:10px;margin:6px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere}label{display:block}</style></head>
+<body><h2>LIND / CHARACTER GLB検証</h2><p>ローカルファイルのみ解析します。アップロード・ゲーム本体変更は行いません。</p>
+<label>GLBファイル <input id="file" type="file" accept=".glb,model/gltf-binary"></label>
+<button id="copy">JSONをコピー</button><pre id="report">NOT_RUN</pre>
+<script type="module">
+const input=document.querySelector('#file'),out=document.querySelector('#report');
+let result={status:'NOT_RUN'};
+const decoder=new TextDecoder('utf-8',{fatal:true});
+function fail(msg){throw Error(msg)}
+function inspect(buf){
+ const view=new DataView(buf);if(buf.byteLength<20)fail('GLB header truncated');
+ const magic=view.getUint32(0,true),version=view.getUint32(4,true),declared=view.getUint32(8,true);
+ if(magic!==0x46546c67)fail('Invalid GLB magic');
+ if(version!==2)fail('Unsupported GLB version '+version);
+ if(declared!==buf.byteLength)fail('GLB length mismatch');
+ let offset=12,json=null,binaryBytes=0,chunks=[];
+ while(offset<buf.byteLength){
+  if(offset+8>buf.byteLength)fail('Truncated chunk header');
+  const length=view.getUint32(offset,true),type=view.getUint32(offset+4,true);offset+=8;
+  if(length%4!==0)fail('Chunk length not 4-byte aligned');
+  if(length>buf.byteLength-offset)fail('Chunk exceeds file bounds');
+  if(type===0x4e4f534a){
+   if(json!==null||chunks.length!==0)fail('JSON chunk must be first and unique');
+   json=JSON.parse(decoder.decode(new Uint8Array(buf,offset,length)).replace(/[ \t\r\n\0]+$/g,''));
+  }else if(type===0x004e4942){if(binaryBytes)fail('Multiple BIN chunks');binaryBytes=length}
+  chunks.push({type:'0x'+type.toString(16),length});offset+=length;
+ }
+ if(!json||json.asset?.version!=='2.0')fail('Missing glTF 2.0 JSON');
+ const arr=k=>Array.isArray(json[k])?json[k]:[];
+ const buffers=arr('buffers'),views=arr('bufferViews'),accessors=arr('accessors');
+ if(buffers.length&&buffers[0].uri===undefined&&buffers[0].byteLength>binaryBytes)fail('BIN chunk shorter than declared buffer');
+ for(const b of views){if(!Number.isInteger(b.buffer)||!buffers[b.buffer])fail('Invalid bufferView buffer index');if((b.byteOffset||0)+b.byteLength>buffers[b.buffer].byteLength)fail('bufferView out of declared buffer bounds')}
+ for(const a of accessors){if(a.bufferView!==undefined&&!views[a.bufferView])fail('Invalid accessor bufferView index')}
+ const externalUris=[...buffers,...arr('images')].filter(x=>typeof x.uri==='string').map(x=>x.uri);
+ const animations=arr('animations').map((a,i)=>({index:i,name:a.name||null,channels:(a.channels||[]).length}));
+ return {status:'STRUCTURE_PASS',format:'GLB',version,bytes:buf.byteLength,chunks,meshes:arr('meshes').length,nodes:arr('nodes').length,scenes:arr('scenes').length,materials:arr('materials').length,textures:arr('textures').length,images:arr('images').length,skins:arr('skins').length,animations,accessors:accessors.length,bufferViews:views.length,extensionsUsed:arr('extensionsUsed'),extensionsRequired:arr('extensionsRequired'),externalUris,externalDependencyStatus:externalUris.length?'REQUIRES_REVIEW':'NONE',qa:{G1:'BLOCKED',G2:'NOT_RUN',G3:'PARTIAL',G4:'NOT_RUN'},note:'Structure only. Does not certify source authority, render, rig compatibility, engine import or Android performance'};
+}
+input.onchange=async()=>{
+ const file=input.files?.[0];if(!file)return;
+ result={status:'READING',fileName:file.name,fileSize:file.size};out.textContent=JSON.stringify(result,null,2);
+ try{const buffer=await file.arrayBuffer();const hash=await crypto.subtle.digest('SHA-256',buffer);const sha256=Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
+ result={...inspect(buffer),fileName:file.name,sha256};}catch(e){result={status:'FAIL',fileName:file.name,error:String(e),qa:{G1:'BLOCKED',G2:'NOT_RUN',G3:'FAIL',G4:'NOT_RUN'}}}
+ out.textContent=JSON.stringify(result,null,2);
+};
+document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(JSON.stringify(result,null,2)).catch(e=>out.textContent='Copy failed: '+e.message);
+</script></body></html>

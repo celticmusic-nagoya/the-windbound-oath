@@ -1,0 +1,83 @@
+name: LIND high-load GLB comparison
+on:
+  pull_request:
+    branches:
+      - feature/lind-agent-blender-handoff-01
+    paths:
+      - 'tools/map_blender/runtime_benchmark/**'
+      - '.github/workflows/lind-highload-glb.yml'
+  push:
+    branches:
+      - feature/lind-webgl-runtime-benchmark-01
+    paths:
+      - 'tools/map_blender/runtime_benchmark/export_technical_glb.py'
+      - '.github/workflows/lind-highload-glb.yml'
+      - 'tools/map_blender/runtime_benchmark/browser-smoke.cjs'
+      - 'tools/map_blender/runtime_benchmark/same-glb-compare.html'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    strategy:
+      fail-fast: false
+      matrix:
+        objects: [100, 1000, 3000]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Blender package
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          mkdir -p /tmp/lind-blender-pinned
+          cd /tmp/lind-blender-pinned
+          apt-get download 'blender=4.0.2+dfsg-1ubuntu8' 'blender-data=4.0.2+dfsg-1ubuntu8'
+          sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
+          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6 python3-numpy
+      - name: Verify Blender Python NumPy dependency
+        run: |
+          blender -b --factory-startup --python-expr "import numpy; print('PASS: Blender Python NumPy', numpy.__version__)"
+          test "$(blender --version | head -n 1)" = 'Blender 4.0.2'
+      - name: Export GLB technical test asset
+        run: |
+          blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/runtime_benchmark/export_technical_glb.py -- /tmp/lind-glb-benchmark/technical-scene.glb ${{ matrix.objects }}
+      - name: Verify GLB structure, checksum and provenance
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,struct
+          from pathlib import Path
+          p=Path('/tmp/lind-glb-benchmark/technical-scene.glb')
+          b=p.read_bytes()
+          assert b[:4]==b'glTF' and struct.unpack_from('<II',b,4)==(2,len(b))
+          n=struct.unpack_from('<I',b,12)[0]
+          assert b[16:20]==b'JSON'
+          doc=json.loads(b[20:20+n].decode('utf-8'))
+          assert len(doc['nodes'])>=int('${{ matrix.objects }}')
+          m=json.loads(p.with_name('manifest.json').read_text())
+          assert m['output_sha256']==hashlib.sha256(b).hexdigest()
+          assert m['objects']==int('${{ matrix.objects }}')
+          assert m['qa']['G2']=='NOT_RUN' and m['qa']['G4']=='NOT_RUN'
+          print('PASS: technical GLB, 100+ nodes, exact SHA, not production')
+          PY
+      - name: Install browser test runner
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1 three@0.170.0 babylonjs@7.40.3 babylonjs-loaders@7.40.3
+          npx playwright install --with-deps chromium
+      - name: Test Blender-exported GLB in both engines
+        env:
+          LIND_GLB: /tmp/lind-glb-benchmark/technical-scene.glb
+          LIND_FULL_MEASURE: '1'
+          LIND_REPETITIONS: '5'
+        run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
+      - name: Upload reproducible benchmark asset and QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-highload-five-runs-${{ matrix.objects }}
+          path: /tmp/lind-glb-benchmark/
+          if-no-files-found: warn
+          retention-days: 7
