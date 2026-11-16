@@ -60,7 +60,7 @@ jobs:
           PY
       - name: Install browser test runner
         run: |
-          npm install --no-save --no-package-lock playwright@1.56.1
+          npm install --no-save --no-package-lock playwright@1.56.1 three@0.170.0 babylonjs@7.40.3 babylonjs-loaders@7.40.3
           npx playwright install --with-deps chromium
       - name: Test Blender-exported GLB in both engines
         env:
