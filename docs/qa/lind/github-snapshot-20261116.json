@@ -1,0 +1,162 @@
+{
+  "baseline": "c0223b538c3a8b20329ea847c7237b424ccfac4a",
+  "checked_at": "2026-11-16",
+  "runs": [
+    {
+      "id": 43832788654,
+      "name": "LIND canonical visual reference audit export",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 10,
+      "jobs_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/runs/43832788654/jobs",
+      "logs_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/runs/43832788654/logs",
+      "workflow_id": 419866834
+    },
+    {
+      "id": 43832788636,
+      "name": "LIND AI render loop guard tests",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 19,
+      "jobs_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/runs/43832788636/jobs",
+      "logs_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/runs/43832788636/logs",
+      "workflow_id": 419827858
+    },
+    {
+      "id": 43832788657,
+      "name": "LIND Blender render loop technical integration",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 17,
+      "jobs_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/runs/43832788657/jobs",
+      "logs_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/runs/43832788657/logs",
+      "workflow_id": 419834492
+    }
+  ],
+  "artifacts": [
+    {
+      "run_id": 43832788654,
+      "artifacts": [
+        {
+          "id": 14209351785,
+          "name": "lind-canon-map-audit",
+          "size_in_bytes": 3619599,
+          "url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14209351785",
+          "archive_download_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14209351785/zip",
+          "expired": false,
+          "created_at": "2026-11-16T08:38:18Z",
+          "expires_at": "2026-11-23T08:38:17Z",
+          "updated_at": "2026-11-16T08:38:18Z",
+          "digest": "sha256:ba3c630821c539085fdd1a6d43f356303c3e993a36f7a730acda67ebeaadd461",
+          "workflow_run": {
+            "id": 43832788654,
+            "repository_id": 1408120919,
+            "head_repository_id": 1408120919,
+            "head_branch": "feature/lind-spatial-masterplan-01",
+            "head_sha": "c0223b538c3a8b20329ea847c7237b424ccfac4a"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": 43832788636,
+      "artifacts": []
+    },
+    {
+      "run_id": 43832788657,
+      "artifacts": [
+        {
+          "id": 14210061212,
+          "name": "lind-ai-technical-render-evidence",
+          "size_in_bytes": 121807,
+          "url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14210061212",
+          "archive_download_url": "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14210061212/zip",
+          "expired": false,
+          "created_at": "2026-11-16T08:39:34Z",
+          "expires_at": "2026-11-23T08:39:33Z",
+          "updated_at": "2026-11-16T08:39:34Z",
+          "digest": "sha256:db387f5cecd24bc576fa55976c3f51f5cc8018f9fc87b0fef42ff693de128f3f",
+          "workflow_run": {
+            "id": 43832788657,
+            "repository_id": 1408120919,
+            "head_repository_id": 1408120919,
+            "head_branch": "feature/lind-spatial-masterplan-01",
+            "head_sha": "c0223b538c3a8b20329ea847c7237b424ccfac4a"
+          }
+        }
+      ]
+    }
+  ],
+  "artifact_content_verification": {
+    "status": "BLOCKED",
+    "attempts": [
+      {
+        "method": "connector file reference then signed file URL",
+        "result": "HTTP 403; no ZIP bytes obtained"
+      },
+      {
+        "method": "gh api authenticated GitHub artifact endpoint",
+        "result": "redirect storage Forbidden; no ZIP bytes obtained"
+      }
+    ],
+    "note": "Listing and digest are GitHub metadata only. Do not claim archive SHA or image content verified."
+  },
+  "adjacent_prs": [
+    {
+      "number": 339,
+      "title": "[Draft] MORWEN-FABLE-01: Phase A audit, baseline renders and method selection",
+      "head": "feature/morwen-fable-eval-01",
+      "head_sha": "5f5608c874e569cbc19b4edf1e06c9711bbd8ff4",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/339"
+    },
+    {
+      "number": 338,
+      "title": "LIND-SPATIAL-01: village-wide high-quality spatial production masterplan",
+      "head": "feature/lind-spatial-masterplan-01",
+      "head_sha": "c0223b538c3a8b20329ea847c7237b424ccfac4a",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/338"
+    },
+    {
+      "number": 337,
+      "title": "[Draft] MAP-VEG-01 vegetation master work order and manifest QA",
+      "head": "feature/map-vegetation-master-01",
+      "head_sha": "e0a62a4b76c838a8c4c88b2f13a5d598c0d3b010",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/337"
+    },
+    {
+      "number": 331,
+      "title": "[Draft] AIDAN-MASONRY-ART-02: scan-carved coursed-rubble corner (F8) candidates",
+      "head": "feature/aidan-masonry-art-02",
+      "head_sha": "028afdeadf2e3e1dcab935736271b98d7843e38b",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/331"
+    },
+    {
+      "number": 330,
+      "title": "Render production: Claude/Codex handoff and QA safeguards",
+      "head": "feature/render-ai-review-handoff-01",
+      "head_sha": "ff7dd697a540550975af06a75f8c9db599b1ccb0",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/330"
+    },
+    {
+      "number": 315,
+      "title": "SAVE-SLOTS-20: 20-slot foundation and MENU SAVE/LOAD design",
+      "head": "feature/save-slots-20-menu-load-01",
+      "head_sha": "e49c3a8e81989abe6cf07c086a063ea44818031e",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/315"
+    },
+    {
+      "number": 314,
+      "title": "GAMEOVER-01: stage-gated defeat behavior (design and QA plan)",
+      "head": "feature/gameover-stage-gate-01",
+      "head_sha": "8421c41578948d4216dd3c4240de9feff386b007",
+      "draft": true,
+      "url": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/314"
+    }
+  ]
+}

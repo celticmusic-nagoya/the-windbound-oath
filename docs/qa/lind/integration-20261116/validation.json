@@ -1,0 +1,55 @@
+{
+  "schema": "lind-integration-technical-evidence-v1",
+  "baseline_commit": "c0223b538c3a8b20329ea847c7237b424ccfac4a",
+  "blender_version": "4.3.2",
+  "guard_tests": 8,
+  "guard_result": "PASS",
+  "fixture_render_result": "PASS",
+  "source_unchanged": true,
+  "pixel_delta_bbox": [
+    0,
+    0,
+    96,
+    96
+  ],
+  "mean_absolute_rgb_delta": [
+    2.6507161458333335,
+    2.6478949652777777,
+    2.648220486111111
+  ],
+  "renders": [
+    {
+      "file": "baseline.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "19e6a3da8c8e01eba116a0e8bd925fe24e5eeaa63943dfbba0f751759789f223",
+      "source_sha256": "4d9c5a27c9733c0b98e076141db552b6df83ec856ac2a610e3b338c750ce1f45"
+    },
+    {
+      "file": "corrected.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "f590234519af94d06053f69e020b7a35d49a72fa8af8017cc4c30aa289bfe169",
+      "source_sha256": "4d9c5a27c9733c0b98e076141db552b6df83ec856ac2a610e3b338c750ce1f45"
+    }
+  ],
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_FULL_WORLD",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Technical cube fixture only; not art or new world assembly",
+    "EGL_BAD_MATCH emitted but exit 0 and decoded PNGs produced",
+    "Pinned production Blender version absent from Actions",
+    "Legacy assembler old source hash and pixel scale cannot be used for new world",
+    "UV normals collision LOD alpha and license validation not implemented for world packages"
+  ]
+}
