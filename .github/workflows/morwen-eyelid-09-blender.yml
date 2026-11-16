@@ -47,3 +47,12 @@ jobs:
           python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
       - name: Synthetic hair Geometry Nodes normal-control test
         run: python tools/blender/morwen_production/eyelid_lash/hair_normal_nodes_smoke_09.py
+      - name: Render synthetic flat-vs-smooth hair clumps
+        run: python tools/blender/morwen_production/eyelid_lash/hair_shading_compare_09.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-hair-shading-09
+          path: render_output/morwen_hair_shading_09/
+          if-no-files-found: warn
+          retention-days: 7
