@@ -1,0 +1,21 @@
+name: LIND AI render loop guard tests
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/ai_guard/**'
+      - '.github/workflows/lind-ai-guard.yml'
+permissions:
+  contents: read
+jobs:
+  unit-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile trusted Python
+        run: python3 -m compileall -q tools/map_blender/ai_guard
+      - name: Validate untrusted feedback and credential isolation
+        run: python3 -m unittest discover -s tools/map_blender/ai_guard -p 'test_*.py' -v

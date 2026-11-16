@@ -1,0 +1,65 @@
+name: LIND Blender render loop technical integration
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/ai_guard/**'
+      - '.github/workflows/lind-blender-integration.yml'
+permissions:
+  contents: read
+jobs:
+  technical-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install distro Blender (test-only; version recorded)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
+          blender --version | head -n 3
+          ldconfig -p | grep -F libEGL.so.1
+          ldconfig -p | grep -F libGL.so.1
+          python3 -c 'import sys; print("CI_PYTHON",sys.version)'
+      - name: Generate isolated technical fixture
+        run: |
+          mkdir -p /tmp/lind-ai-technical
+          blender -b --factory-startup --disable-autoexec --python tools/map_blender/ai_guard/create_fixture.py -- --out /tmp/lind-ai-technical/fixture.blend
+          sha256sum /tmp/lind-ai-technical/fixture.blend | tee /tmp/lind-ai-technical/source-before.sha256
+      - name: Prepare allowlisted feedback
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/lind-ai-technical')
+          base = dict(schema='two-render-patch-v1', asset_id='technical-fixture',
+                      method_family='lighting-fixture', root_cause='test-exposure')
+          (root/'baseline.json').write_text(json.dumps({**base, 'adjustments': {'exposure_delta': 0.0}}))
+          (root/'corrected.json').write_text(json.dumps({**base, 'adjustments': {'exposure_delta': 0.1}}))
+          PY
+      - name: Render baseline and corrected candidate
+        run: |
+          python3 tools/map_blender/ai_guard/run_blender_safe.py --blender /usr/bin/blender --source /tmp/lind-ai-technical/fixture.blend --proposal /tmp/lind-ai-technical/baseline.json --output /tmp/lind-ai-technical/baseline.png --timeout 240
+          python3 tools/map_blender/ai_guard/run_blender_safe.py --blender /usr/bin/blender --source /tmp/lind-ai-technical/fixture.blend --proposal /tmp/lind-ai-technical/corrected.json --output /tmp/lind-ai-technical/corrected.png --timeout 240
+          sha256sum -c /tmp/lind-ai-technical/source-before.sha256
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root = Path('/tmp/lind-ai-technical')
+          for name in ('baseline.png','corrected.png'):
+              p = root/name
+              assert p.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), name
+              print(name, p.stat().st_size, hashlib.sha256(p.read_bytes()).hexdigest())
+          assert (root/'baseline.png').read_bytes() != (root/'corrected.png').read_bytes(), 'correction did not change output'
+          print('TECHNICAL_RENDER_LOOP_PASS')
+          PY
+      - name: Upload evidence regardless of failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-ai-technical-render-evidence
+          path: /tmp/lind-ai-technical/
+          retention-days: 7
+          if-no-files-found: warn

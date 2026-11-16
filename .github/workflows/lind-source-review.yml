@@ -1,0 +1,73 @@
+name: LIND source-review Blender scene (non-metric)
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/build_lind_source_review.py'
+      - 'docs/production/lind-new-world-topology.v1.json'
+      - 'tests/test_lind_new_world_topology.py'
+      - '.github/workflows/lind-source-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      BLENDER_PACKAGE_VERSION: 4.0.2+dfsg-1ubuntu8
+      BLENDER_RUNTIME_VERSION: 4.0.2
+      SOURCE_COMMIT: dc17dd4846f35ea1f5dea25168eec9ddb50a3838
+      SOURCE_SHA256: abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run topology contract and mutation tests
+        run: |
+          python3 tools/map_blender/validate_lind_new_world_topology.py
+          python3 -m unittest discover -s tests -p 'test_lind_new_world_topology.py' -v
+      - name: Download immutable approved PNG and verify exact bytes
+        run: |
+          mkdir -p /tmp/lind-source-review
+          curl --fail --location --retry 3 --silent --show-error \
+            "https://raw.githubusercontent.com/celticmusic-nagoya/the-windbound-oath/${SOURCE_COMMIT}/assets/sources/lind-world-20261116/original.png" \
+            --output /tmp/lind-source-review/original.png
+          echo "${SOURCE_SHA256}  /tmp/lind-source-review/original.png" | sha256sum -c -
+      - name: Install exact pinned Blender
+        run: |
+          sudo apt-get update -qq
+          mkdir -p /tmp/lind-blender-pinned
+          cd /tmp/lind-blender-pinned
+          apt-get download "blender=${BLENDER_PACKAGE_VERSION}" "blender-data=${BLENDER_PACKAGE_VERSION}"
+          sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
+          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
+          test "$(blender --version | head -n 1)" = "Blender ${BLENDER_RUNTIME_VERSION}"
+      - name: Build source-review scene (no world geometry)
+        run: |
+          blender -b --factory-startup --disable-autoexec --python tools/map_blender/build_lind_source_review.py -- \
+            --image /tmp/lind-source-review/original.png \
+            --output /tmp/lind-source-review/lind-source-review.blend
+      - name: Verify packed image, semantic markers and absence of geometry
+        run: |
+          blender -b /tmp/lind-source-review/lind-source-review.blend --disable-autoexec --python-expr '
+          import bpy,hashlib
+          s=bpy.context.scene
+          assert s["approved_source_sha256"]=="abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+          assert s["metric_approval"]=="BLOCKED"
+          assert len([x for x in bpy.data.objects if x.name.startswith("SEMANTIC_")])==11
+          assert not any(x.type=="MESH" for x in bpy.data.objects)
+          imgs=[x for x in bpy.data.images if x.get("role")=="APPROVED_VISUAL_REFERENCE_NOT_METRIC"]
+          assert len(imgs)==1 and imgs[0].packed_file is not None
+          print("PASS: 11 semantic markers, 7 empty collections, packed image, no meshes")
+          '
+          sha256sum /tmp/lind-source-review/lind-source-review.blend > /tmp/lind-source-review/output.sha256
+      - name: Save review scene and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-source-review-blender
+          path: |
+            /tmp/lind-source-review/lind-source-review.blend
+            /tmp/lind-source-review/output.sha256
+          if-no-files-found: warn
+          retention-days: 7
