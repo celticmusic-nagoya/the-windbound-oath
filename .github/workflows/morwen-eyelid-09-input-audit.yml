@@ -18,6 +18,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/build_surface_clearance_09d.py'
       - 'tools/blender/morwen_production/eyelid_lash/inspect_root_topology_09e.py'
       - 'tools/blender/morwen_production/eyelid_lash/summarize_root_topology_09e.py'
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_cage_adjacency_09f.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -105,6 +106,9 @@ jobs:
       - name: Summarize measured root clearance and cage winding in logs
         run: |
           python tools/blender/morwen_production/eyelid_lash/summarize_root_topology_09e.py --input render_output/morwen_eyelid_09/ROOT_TOPOLOGY_09E.json --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_SUMMARY_09E.json
+      - name: Inspect actual cage topology and winding 09F (read only)
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/inspect_cage_adjacency_09f.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/CAGE_ADJACENCY_09F.json
       - name: Gate 09D geometry (do not claim full G3)
         id: gate_09d
         continue-on-error: true
