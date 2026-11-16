@@ -75,6 +75,24 @@ def main():
         sc.render.film_transparent=True
         sc.render.image_settings.file_format="PNG"
         sc.view_settings.view_transform="Standard"
+        # Lighting is rebuilt after each source-file reload; the first pass had no lamps.
+        qa_world=bpy.data.worlds.new("QA_world_"+name)
+        qa_world.use_nodes=True
+        qa_world.node_tree.nodes["Background"].inputs["Color"].default_value=(0.55,0.55,0.55,1)
+        qa_world.node_tree.nodes["Background"].inputs["Strength"].default_value=0.8
+        sc.world=qa_world
+        for light_name,offset,power in (
+            ("key", (1.5,-2.5,2.5), 650),
+            ("fill", (-2.0,-1.0,1.2), 350),
+            ("rim", (0.0,2.5,2.2), 550)):
+            ld=bpy.data.lights.new("QA_"+light_name,"AREA")
+            ld.energy=power
+            ld.shape="DISK"
+            ld.size=3.0
+            lo=bpy.data.objects.new("QA_"+light_name,ld)
+            sc.collection.objects.link(lo)
+            lo.location=center+Vector(offset)*max(size.z,1)
+            lo.rotation_euler=(center-lo.location).to_track_quat("-Z","Y").to_euler()
         cam_data=bpy.data.cameras.new("QA_orthographic")
         cam=bpy.data.objects.new("QA_orthographic",cam_data)
         sc.collection.objects.link(cam)
