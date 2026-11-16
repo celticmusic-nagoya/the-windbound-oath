@@ -12,6 +12,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/diagnose_lash_collision_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/diagnose_surface_frame_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/diagnose_left_endpoint_09.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -72,6 +73,9 @@ jobs:
       - name: Compare redesigned candidate with baseline per strip
         run: |
           python tools/blender/morwen_production/eyelid_lash/diagnose_surface_frame_09.py --baseline render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json --candidate render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json --out render_output/morwen_eyelid_09/SURFACE_FRAME_COMPARISON_09.json
+      - name: Diagnose left endpoint without modifying geometry
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/diagnose_left_endpoint_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --comparison render_output/morwen_eyelid_09/SURFACE_FRAME_COMPARISON_09.json --out render_output/morwen_eyelid_09/LEFT_ENDPOINT_DIAGNOSIS_09.json
       - name: Gate redesigned candidate collision QA
         run: |
           python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json
