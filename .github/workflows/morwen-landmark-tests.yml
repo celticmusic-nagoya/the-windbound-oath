@@ -1,0 +1,21 @@
+name: Morwen anatomical landmark calculator tests
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/measure_basemesh_landmarks.py'
+      - 'tools/character_blender/test_measure_basemesh_landmarks.py'
+      - '.github/workflows/morwen-landmark-tests.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test evidence gates with synthetic landmarks only
+        run: python -m unittest discover -s tools/character_blender -p 'test_measure_basemesh_landmarks.py' -v
