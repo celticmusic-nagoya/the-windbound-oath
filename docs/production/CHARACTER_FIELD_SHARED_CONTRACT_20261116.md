@@ -49,3 +49,14 @@ Character export must declare:
 - Keep current runtime character assets and movement/height/collision JSON unchanged until new adapter and character assets pass G1–G4, including Android device QA and an explicit final adoption decision.
 - Existing conflicts in Morwen v5.61 vs later five-file reference remain **G1 BLOCKED** pending source/approval precedence review. This direction decision does not resolve them.
 - Map/world geometry and QA ownership remain separate; no map source SHA may be used as a character source hash.
+
+## Director clarification — full-game 3D graphics renewal (2026-11-16)
+**Status: APPROVED DIRECTION / NOT YET IMPLEMENTED.** The director states that map/environment production is also underway in 3D in a separate development chat and that the game's graphics will be comprehensively renewed. Treat this as a full 3D visual migration target, not a character-only sprite replacement.
+
+- CHARACTER: high-quality high-proportion 3D assets, skeletal animation, materials, attachments and shadow/contact points.
+- WORLD/HOME/BUILD/ECO: independently owned 3D terrain, buildings, props, lighting and environmental VFX. Preserve each team's candidate and canonical provenance.
+- INTEGRATION: negotiate one **proposed** coordinate system, unit scale, camera/projection, depth/occlusion, ground-height/collision, lighting/color management, asset export/runtime format, animation state mapping and mobile performance budgets. These values are **BLOCKED_UNTIL_CROSS_TEAM_APPROVAL**; do not import Lind's illustration geometry or assume approved metric scale.
+- Browser renderer choice (WebGL/WebGPU/engine), runtime 3D asset format, mobile LOD/texture budgets, fallback behavior and field camera are **NOT_DECIDED** by this statement alone. Compare options against existing vanilla JS game architecture before selection.
+- Existing DOM field movement, JSON height/collision, story/battle/SAVE and approved 2D assets remain intact until an isolated feature-flagged 3D adapter is validated; no irreversible 2D deletion or automatic main merge.
+- G1: canonical character and world source authority must each pass independently; G2: independently review final character and world art; G3: 3D asset and browser renderer technical QA; G4: game/runtime and Android device QA. CI/Blender render success alone is not final adoption.
+- Historical 2.8-head/2.5D plans are retained as provenance but no longer the intended final graphics production target.
