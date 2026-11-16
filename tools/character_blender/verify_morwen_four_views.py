@@ -17,7 +17,7 @@ def sha(path):
 
 def png_dimensions(raw):
     """Validate PNG signature, chunk framing/CRC, IHDR, IDAT and IEND."""
-    if not raw.startswith(b"\x89PNG\\r\\n\x1a\\n"):
+    if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError("bad PNG signature")
     pos = 8
     width = height = None
