@@ -1,0 +1,534 @@
+{
+ "schema": "lind-world-build-manifest-v1",
+ "task_id": "LIND-WORLD-01",
+ "candidate_id": "lind-world-terrain-c01",
+ "status": "CANDIDATE_PROPOSED_NOT_LOCKED",
+ "g2": "NOT_RUN (independent review pending)",
+ "build_version": "lind-world-build-1.0",
+ "fields_version": "lind-world-fields-1.0",
+ "blender_version": "5.3.0",
+ "numpy_version": "2.5.3",
+ "seed": 20261116,
+ "interface_json": "docs/production/lind/world/lind-world-terrain.v1.json",
+ "interface_json_sha256": "22a0b30a628784548c110923fced1f5e4ae87c2632e06823dae19f061c970e83",
+ "script_sha256": {
+  "build_terrain.py": "6ad45b3ed53a28ebfd0ad1a1a3ce243ccf312bff7ab2dae82dc1ddf219fd7607",
+  "terrain_fields.py": "deb76dbd15ae6af509d43ab31bba3a121625c6bc4aa008aaa6a0919bf8b117d5"
+ },
+ "heightfield": {
+  "sha256": "cd0807530be0f493b2df444ebdf330afe538f08d41617d8600b4316e48f346de",
+  "shape": [
+   421,
+   421
+  ],
+  "cell_m": 5.0,
+  "z_min": -21.503,
+  "z_max": 103.73
+ },
+ "blend": {
+  "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/lind-world-terrain-c01.blend",
+  "bytes": 6708662,
+  "sha256": "19dbb1ed72de6230295d6eb7a19adba0097b26473659c93caddefa4e2f4acdcb",
+  "commit_policy": "commit only if <= 40 MB"
+ },
+ "objects": [
+  {
+   "name": "ANCHOR_CLIFF_raid_riverside_cliff",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_CLIFF_windward_cliffs_wnw",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROVISIONAL_PENDING_MASTER_IMAGE"
+  },
+  {
+   "name": "ANCHOR_EVENT_sunset_viewpoint_hill",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_EVENT_village_center_wind_stone",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_EVENT_village_well",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_downstream_landing",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_east_river_bridge",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_east_training_area",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_harbor_sw",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_moss_forest",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_north_farms",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_raid_riverside_cliff",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_road_to_dunvall",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_village_center",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ANCHOR_windward_cliffs_wnw",
+   "type": "EMPTY",
+   "collection": "LIND_WORLD_INTERFACE",
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_ELDER_NW",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_HARBOR_PORT",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 6,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_LIVESTOCK_N_EDGE",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_PLAZA_CORE",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_PLAZA_FRONTAGE_N",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_PLAZA_FRONTAGE_SW",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_RESIDENTIAL_S",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_RESIDENTIAL_W",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_RIVERSIDE_NE",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "OPEN_DECISION"
+  },
+  {
+   "name": "ZONE_Z_STORAGE_CENTRAL_N",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_Z_TRAINING_EAST",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "OPEN_DECISION"
+  },
+  {
+   "name": "ZONE_cliff_heath_wnw",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 8,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_coastal_sw",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_farm_north",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 5,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_forest_se",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 5,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_upland_ne",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "ZONE_village_green",
+   "type": "MESH",
+   "collection": "LIND_WORLD_INTERFACE",
+   "verts": 4,
+   "faces": 0,
+   "status": "PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "bridge_abutment_E_blockout",
+   "type": "MESH",
+   "collection": "LIND_WORLD_BLOCKOUT",
+   "verts": 8,
+   "faces": 6,
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART"
+  },
+  {
+   "name": "bridge_abutment_W_blockout",
+   "type": "MESH",
+   "collection": "LIND_WORLD_BLOCKOUT",
+   "verts": 8,
+   "faces": 6,
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART"
+  },
+  {
+   "name": "bridge_deck_footprint_blockout",
+   "type": "MESH",
+   "collection": "LIND_WORLD_BLOCKOUT",
+   "verts": 8,
+   "faces": 6,
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART"
+  },
+  {
+   "name": "far_vista_hills_proxy_blockout",
+   "type": "MESH",
+   "collection": "LIND_WORLD_BLOCKOUT",
+   "verts": 19481,
+   "faces": 19159,
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART"
+  },
+  {
+   "name": "river_water_surface",
+   "type": "MESH",
+   "collection": "LIND_WORLD_WATER",
+   "verts": 3100,
+   "faces": 2476
+  },
+  {
+   "name": "road_path_riverside_south",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 768,
+   "faces": 573,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "road_path_training_east",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 332,
+   "faces": 246,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "road_path_windward",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 1816,
+   "faces": 1359,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "road_road_bridge_east",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 116,
+   "faces": 84,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "road_road_harbor",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 1112,
+   "faces": 831,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "road_road_main_north_1",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 904,
+   "faces": 675,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "road_road_main_north_2",
+   "type": "MESH",
+   "collection": "LIND_WORLD_ROADS",
+   "verts": 1308,
+   "faces": 978,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  },
+  {
+   "name": "sea_plane",
+   "type": "MESH",
+   "collection": "LIND_WORLD_WATER",
+   "verts": 4,
+   "faces": 1
+  },
+  {
+   "name": "sea_surface_region",
+   "type": "MESH",
+   "collection": "LIND_WORLD_WATER",
+   "verts": 32110,
+   "faces": 31468
+  },
+  {
+   "name": "terrain_edge_skirt",
+   "type": "MESH",
+   "collection": "LIND_WORLD_TERRAIN",
+   "verts": 3362,
+   "faces": 1680
+  },
+  {
+   "name": "terrain_heightfield",
+   "type": "MESH",
+   "collection": "LIND_WORLD_TERRAIN",
+   "verts": 177241,
+   "faces": 176400,
+   "status": "CANDIDATE_PROPOSED_NOT_LOCKED"
+  }
+ ],
+ "renders": [
+  {
+   "name": "map_topdown",
+   "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/renders/map_topdown.png",
+   "preset": "map",
+   "camera": {
+    "type": "ORTHO",
+    "centre_xy": [
+     -50,
+     50
+    ],
+    "ortho_scale_m": 2100
+   },
+   "res": [
+    1280,
+    1280
+   ],
+   "render_s": 39.9,
+   "sha256": "dee9015ff968ea7cf29449f7d4faa37cb7ba1e375becb46f3788b8dff7164b8c"
+  },
+  {
+   "name": "overview_3q",
+   "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/renders/overview_3q.png",
+   "preset": "day",
+   "camera": {
+    "type": "PERSP",
+    "location": [
+     1400,
+     -1500,
+     900
+    ],
+    "look_at": [
+     -150,
+     50,
+     10
+    ],
+    "lens_mm": 30,
+    "res": [
+     1280,
+     720
+    ]
+   },
+   "res": [
+    1280,
+    720
+   ],
+   "render_s": 39.2,
+   "sha256": "fe5a7d2ecd58a666c8540e80b131249fd621237abafc3e13e65c28e513b781b3"
+  },
+  {
+   "name": "cam_sunset_cliff_cg",
+   "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/renders/cam_sunset_cliff_cg.png",
+   "preset": "sunset",
+   "camera": {
+    "id": "cam_sunset_cliff_cg",
+    "cgs": [
+     "sunset_background.png",
+     "sunset_two_characters_back_view.png",
+     "stargazing_*.png"
+    ],
+    "location": [
+     -610,
+     430,
+     null
+    ],
+    "eye_height_m": 1.6,
+    "heading_deg": 242,
+    "pitch_deg": -6,
+    "hfov_deg": 62,
+    "status": "PROVISIONAL_PENDING_MASTER_IMAGE",
+    "resolved_z": 65.536
+   },
+   "res": [
+    1280,
+    720
+   ],
+   "render_s": 29.5,
+   "sha256": "1a51fbe62cd411f17f5af6930c58834ed039886654d0803fb35c08bc4c3dafe4"
+  },
+  {
+   "name": "cam_village_plaza_cg",
+   "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/renders/cam_village_plaza_cg.png",
+   "preset": "village",
+   "camera": {
+    "id": "cam_village_plaza_cg",
+    "cgs": [
+     "rilde_village.png",
+     "attack_background_only.png",
+     "ruins_background_only.png",
+     "relief_with_characters_*.jpg"
+    ],
+    "location": [
+     5,
+     -70,
+     null
+    ],
+    "eye_height_m": 2.0,
+    "heading_deg": 15,
+    "pitch_deg": 1,
+    "hfov_deg": 75,
+    "status": "PROPOSED_NOT_LOCKED",
+    "resolved_z": 19.963
+   },
+   "res": [
+    1280,
+    720
+   ],
+   "render_s": 30.7,
+   "sha256": "4e0d7899781432aecf4461abf760073a8cf3f3dffac6314303e458369deed765"
+  },
+  {
+   "name": "cam_raid_riverside_cliff",
+   "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/renders/cam_raid_riverside_cliff.png",
+   "preset": "dusk",
+   "camera": {
+    "id": "cam_raid_riverside_cliff",
+    "cgs": [],
+    "note": "no approved CG depicts the raid cliff directly; framed from scenario text (bridge blocked, east riverside cliff, jump into river)",
+    "location": [
+     360,
+     -430,
+     null
+    ],
+    "eye_height_m": 1.7,
+    "heading_deg": 312,
+    "pitch_deg": 1,
+    "hfov_deg": 65,
+    "status": "PROPOSED_NOT_LOCKED",
+    "resolved_z": 11.89
+   },
+   "res": [
+    1280,
+    720
+   ],
+   "render_s": 34.5,
+   "sha256": "364fc0c07a69a5559ca39a7cda30630d91260245025447f6aa1ec10645127314"
+  },
+  {
+   "name": "map_topdown_annotated",
+   "path": "assets/candidates/LIND-WORLD-01/lind-world-terrain-c01/renders/map_topdown_annotated.png",
+   "derived_from": "map_topdown.png (PIL overlay of interface JSON)",
+   "sha256": "63dd35a6f4f7bc9e0c8c702af2be5f41de7ea31dcac70ebe93c058afd7d8448b"
+  }
+ ],
+ "timings": {
+  "build_s": 6.78
+ },
+ "materials": "procedural only (Noise/ColorRamp/Principled); no external textures; no third-party assets"
+}
