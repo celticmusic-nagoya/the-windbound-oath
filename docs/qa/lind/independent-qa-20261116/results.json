@@ -1,0 +1,117 @@
+[
+  {
+    "command": [
+      "node",
+      "tests/save_compatibility.test.cjs"
+    ],
+    "exit_code": 1,
+    "seconds": 0.075,
+    "log": "docs/qa/lind/independent-qa-20261116/save_compatibility.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/prologue-save-route.test.cjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.057,
+    "log": "docs/qa/lind/independent-qa-20261116/prologue-save-route.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/prologue-return-save-guard.test.cjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.027,
+    "log": "docs/qa/lind/independent-qa-20261116/prologue-return-save-guard.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/prologue-return-flow.test.cjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.027,
+    "log": "docs/qa/lind/independent-qa-20261116/prologue-return-flow.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/prologue-escape-return-static.test.cjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.028,
+    "log": "docs/qa/lind/independent-qa-20261116/prologue-escape-return-static.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/scene_lifecycle_ownership.test.cjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.081,
+    "log": "docs/qa/lind/independent-qa-20261116/scene_lifecycle_ownership.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/moss/wind_stop_landscape_cg.test.cjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.039,
+    "log": "docs/qa/lind/independent-qa-20261116/wind_stop_landscape_cg.test.cjs.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/moss/rilde_cg_registry.test.js"
+    ],
+    "exit_code": 0,
+    "seconds": 0.027,
+    "log": "docs/qa/lind/independent-qa-20261116/rilde_cg_registry.test.js.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/moss/rilde_cg_scene_cue.test.js"
+    ],
+    "exit_code": 0,
+    "seconds": 0.028,
+    "log": "docs/qa/lind/independent-qa-20261116/rilde_cg_scene_cue.test.js.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/moss/rilde_raid_cg_cue.test.js"
+    ],
+    "exit_code": 0,
+    "seconds": 0.029,
+    "log": "docs/qa/lind/independent-qa-20261116/rilde_raid_cg_cue.test.js.log"
+  },
+  {
+    "command": [
+      "node",
+      "tests/moss/rilde_ruins_cg.test.js"
+    ],
+    "exit_code": 0,
+    "seconds": 0.028,
+    "log": "docs/qa/lind/independent-qa-20261116/rilde_ruins_cg.test.js.log"
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/map_blender/ai_guard",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "seconds": 0.102,
+    "log": "docs/qa/lind/independent-qa-20261116/ai_guard_unittest.log"
+  }
+]
