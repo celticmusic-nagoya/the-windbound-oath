@@ -1,0 +1,1011 @@
+{
+ "task_id": "LIND-HOME-01",
+ "blender": "5.3.0",
+ "blend": "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/aidan_house_f9_c01.blend",
+ "blend_sha256": "3a18c72842a5e998881d4b8cf39860499a48f3d87dad4f7ce99bb0ef026fb4e9",
+ "checks": {
+  "uv_present": {
+   "result": "PASS",
+   "detail": []
+  },
+  "material_slots_valid": {
+   "result": "PASS",
+   "detail": []
+  },
+  "degenerate_faces_zero": {
+   "result": "PASS",
+   "detail": {}
+  },
+  "nonmanifold_gt2_zero": {
+   "result": "PASS",
+   "detail": {}
+  },
+  "closed_shells_where_required": {
+   "result": "PASS",
+   "detail": {}
+  },
+  "open_boundaries_by_design_listed": {
+   "result": "PASS",
+   "detail": {
+    "GEO_AIDANHOUSE_ROOFDECK": 100,
+    "STG_AIDANHOUSE_GROUND": 160,
+    "GEO_AIDANHOUSE_PROPS_LAUNDRY": 84
+   }
+  },
+  "normals_outward_closed_components": {
+   "result": "FAIL",
+   "detail": {
+    "GEO_AIDANHOUSE_PORCH_SLATES": 94
+   }
+  },
+  "tri_budgets": {
+   "result": "PASS",
+   "detail": {
+    "LOD0_master_house_shell": {
+     "tris": 218606,
+     "budget": 450000
+    },
+    "LOD0_props_ext": {
+     "tris": 4980,
+     "budget": 60000
+    },
+    "LOD0_interior": {
+     "tris": 5508,
+     "budget": 80000
+    },
+    "collision": {
+     "tris": 168,
+     "budget": 300
+    }
+   }
+  },
+  "lod1_lod2": {
+   "result": "NOT_RUN",
+   "detail": "LOD1/LOD2 not generated in candidate c01"
+  },
+  "material_count_le_contract": {
+   "result": "PASS",
+   "detail": {
+    "count": 19,
+    "contract_max": 16,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FABRIC_WOOL_GREEN_A",
+     "MAT_FIRE_EMIT_A",
+     "MAT_FLOWER_RED_A",
+     "MAT_FOLIAGE_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_LINEN_A",
+     "MAT_MORTAR_LIME_A",
+     "MAT_PLANK_FLOOR_A",
+     "MAT_PLASTER_LIME_INT_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_SOOT_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "note": "contract max 16 for the house; +4 tolerance covers prop-only materials (fire/foliage/flowers/soot) -- flagged in report"
+   }
+  },
+  "contract_material_ids_present": {
+   "result": "PASS",
+   "detail": {
+    "missing": []
+   }
+  },
+  "naming_prefixes": {
+   "result": "PASS",
+   "detail": []
+  },
+  "required_anchors": {
+   "result": "PASS",
+   "detail": {
+    "present": [
+     "ANC_AIDANHOUSE_DOOR_MAIN_EXT",
+     "ANC_AIDANHOUSE_DOOR_MAIN_INT",
+     "ANC_AIDANHOUSE_EVENT_BED",
+     "ANC_AIDANHOUSE_EVENT_CUPBOARD",
+     "ANC_AIDANHOUSE_EVENT_FIREPLACE",
+     "ANC_AIDANHOUSE_EVENT_JAR",
+     "ANC_AIDANHOUSE_EVENT_SHELF",
+     "ANC_AIDANHOUSE_EVENT_TABLE",
+     "ANC_AIDANHOUSE_SAVE_BED",
+     "ANC_AIDANHOUSE_SPAWN_BEDSIDE"
+    ]
+   }
+  },
+  "collision_nonrender": {
+   "result": "PASS",
+   "detail": {
+    "count": 14
+   }
+  },
+  "source_sha_unchanged": {
+   "result": "PASS",
+   "detail": {
+    "assets/approved/world/rilde_village.png": {
+     "sha256": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+     "expected": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+     "ok": true
+    },
+    "assets/approved/game/rilde_story/raid/attack_background_only.png": {
+     "sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+     "expected": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+     "ok": true
+    },
+    "assets/approved/game/rilde_story/aftermath/ruins_background_only.png": {
+     "sha256": "78b0801f10b6a763c66aa44265ab381edc398f3b5adfb1b3d3dee0e6c6d917b2",
+     "expected": "78b0801f10b6a763c66aa44265ab381edc398f3b5adfb1b3d3dee0e6c6d917b2",
+     "ok": true
+    },
+    "data/maps/rilde_in_aidan.json": {
+     "sha256": "9969fcc5e201661c940417360143996aa06c4a6128d725153c67ff97f7a262e1",
+     "expected": "9969fcc5e201661c940417360143996aa06c4a6128d725153c67ff97f7a262e1",
+     "ok": true
+    },
+    "world_master(local ref copy)": {
+     "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+     "expected": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+     "ok": true
+    },
+    "tex:rock_boulder_dry_diff_1k.jpg": {
+     "sha256": "20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c",
+     "expected": "20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c",
+     "ok": true
+    },
+    "tex:rock_boulder_dry_nor_gl_1k.jpg": {
+     "sha256": "5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595",
+     "expected": "5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595",
+     "ok": true
+    },
+    "tex:rock_boulder_dry_rough_1k.jpg": {
+     "sha256": "cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130",
+     "expected": "cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130",
+     "ok": true
+    },
+    "tex:rough_wood_diff_1k.jpg": {
+     "sha256": "abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98",
+     "expected": "abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98",
+     "ok": true
+    },
+    "tex:rough_wood_nor_gl_1k.jpg": {
+     "sha256": "3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011",
+     "expected": "3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011",
+     "ok": true
+    },
+    "tex:rough_wood_rough_1k.jpg": {
+     "sha256": "4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09",
+     "expected": "4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09",
+     "ok": true
+    },
+    "tex:weathered_brown_planks_diff_1k.jpg": {
+     "sha256": "94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29",
+     "expected": "94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29",
+     "ok": true
+    },
+    "tex:weathered_brown_planks_nor_gl_1k.jpg": {
+     "sha256": "8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393",
+     "expected": "8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393",
+     "ok": true
+    },
+    "tex:weathered_brown_planks_rough_1k.jpg": {
+     "sha256": "b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9",
+     "expected": "b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9",
+     "ok": true
+    }
+   }
+  },
+  "renders_size_nonblank": {
+   "result": "PASS",
+   "detail": {
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/closeup_masonry_roof.png": {
+     "size": [
+      1280,
+      800
+     ],
+     "mode": "RGB",
+     "std": 42.7,
+     "sha256": "017e4d8612c18b720ae79c49cdecc28b1acba9c6e2eafe80f21298dd69829dba",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/front_three_quarter.png": {
+     "size": [
+      1280,
+      800
+     ],
+     "mode": "RGB",
+     "std": 36.3,
+     "sha256": "54181640c23c97656df5a5f259c27500a6ae4450894857225cc4a8a99fd69f8b",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game/game_48px.png": {
+     "size": [
+      48,
+      44
+     ],
+     "mode": "RGBA",
+     "std": 60.88,
+     "sha256": "0f4147dedd53173b56faabec61c122526aa7cc262dbb22cd37bd2a1e351e20f6",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game/game_48px_on_ground.png": {
+     "size": [
+      64,
+      56
+     ],
+     "mode": "RGBA",
+     "std": 16.46,
+     "sha256": "f788be157f7ae50888d6a5a9fea01fc1dfbbe04ace41738a1ac2813d985257ba",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game/game_48px_on_ground_x8_nearest.png": {
+     "size": [
+      512,
+      448
+     ],
+     "mode": "RGBA",
+     "std": 16.46,
+     "sha256": "9fd7b6eb4d8ec2ddfe578f07ca76c37509a4db1f12b550436cf2c507a4dae10b",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game/game_96px.png": {
+     "size": [
+      96,
+      89
+     ],
+     "mode": "RGBA",
+     "std": 61.76,
+     "sha256": "3746c045f8613e0c7f46be2772b6f3c0e55c2b03f178ad3a4c7ee17f6090cc34",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game/game_96px_on_ground.png": {
+     "size": [
+      112,
+      101
+     ],
+     "mode": "RGBA",
+     "std": 19.51,
+     "sha256": "b5101c56922a399c1332082bbb2921fb21adbd5e1015f6a5916b2e09b460afa9",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game/game_96px_on_ground_x4_nearest.png": {
+     "size": [
+      448,
+      404
+     ],
+     "mode": "RGBA",
+     "std": 19.51,
+     "sha256": "c00db410cf526bf472ed27af677a218cbb4878ad569b8248412c12e776223dd6",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/game_27deg.png": {
+     "size": [
+      768,
+      768
+     ],
+     "mode": "RGBA",
+     "std": 54.78,
+     "sha256": "ce11c226f04ed5338668b9e26cfafc9718ee0a58015bb4f9842cc88b044e0f97",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/interior_bedside.png": {
+     "size": [
+      1280,
+      800
+     ],
+     "mode": "RGB",
+     "std": 38.21,
+     "sha256": "2afa0818f35ad50be5bdc0ad871cf6482b6c5fb905626075d7878c1a23b90d0c",
+     "ok": true
+    },
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/rear_three_quarter.png": {
+     "size": [
+      1280,
+      800
+     ],
+     "mode": "RGB",
+     "std": 47.01,
+     "sha256": "aa3713c0ec5c442c41bc0b6e70277349cd2234f03ba20ffcc1699c7bdbd82848",
+     "ok": true
+    }
+   }
+  },
+  "deterministic_geometry_across_runs": {
+   "result": "PASS",
+   "detail": {
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/run_manifests/closeup_masonry_roof.build_manifest.json": "eb2283bdc20115748609225e3ed5895bb6835c6b2d807077e48b5e39db0e70a4",
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/run_manifests/front_three_quarter.build_manifest.json": "eb2283bdc20115748609225e3ed5895bb6835c6b2d807077e48b5e39db0e70a4",
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/run_manifests/game_27deg.build_manifest.json": "eb2283bdc20115748609225e3ed5895bb6835c6b2d807077e48b5e39db0e70a4",
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/run_manifests/interior_bedside.build_manifest.json": "eb2283bdc20115748609225e3ed5895bb6835c6b2d807077e48b5e39db0e70a4",
+    "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/run_manifests/rear_three_quarter.build_manifest.json": "eb2283bdc20115748609225e3ed5895bb6835c6b2d807077e48b5e39db0e70a4"
+   }
+  }
+ },
+ "objects": {
+  "COL_AIDANHOUSE_barrel_ext": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_bed": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_chest": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_cupboard": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_fireplace": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_porch_posts": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_shelf": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_table": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_wall_east": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_wall_front_e": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_wall_front_w": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_wall_rear": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_wall_west": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "COL_AIDANHOUSE_woodpile": {
+   "tris": 12,
+   "faces": 6,
+   "uv": false,
+   "materials": [],
+   "material_slots_ok": false,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_CHIMNEY": {
+   "tris": 4422,
+   "faces": 2265,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_STONE_RUBBLE_LIMESTONE_A",
+    "MAT_MORTAR_LIME_A",
+    "MAT_TERRACOTTA_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 41,
+   "closed_components": 41,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_FLASHING": {
+   "tris": 96,
+   "faces": 48,
+   "uv": true,
+   "materials": [
+    "MAT_LEAD_FLASHING_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 8,
+   "closed_components": 8,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_FOUNDATION": {
+   "tris": 24,
+   "faces": 12,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_MORTAR_LIME_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 2,
+   "closed_components": 2,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_GLASS": {
+   "tris": 72,
+   "faces": 36,
+   "uv": true,
+   "materials": [
+    "MAT_GLASS_CROWN_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 6,
+   "closed_components": 6,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_INT_CEILING": {
+   "tris": 180,
+   "faces": 90,
+   "uv": true,
+   "materials": [
+    "MAT_TIMBER_OAK_WEATHERED_A",
+    "MAT_PLANK_FLOOR_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 15,
+   "closed_components": 15,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_INT_FLOOR": {
+   "tris": 1296,
+   "faces": 648,
+   "uv": true,
+   "materials": [
+    "MAT_PLANK_FLOOR_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 108,
+   "closed_components": 108,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_INT_FURNITURE": {
+   "tris": 2332,
+   "faces": 1056,
+   "uv": true,
+   "materials": [
+    "MAT_TIMBER_OAK_WEATHERED_A",
+    "MAT_IRON_WROUGHT_A",
+    "MAT_LINEN_A",
+    "MAT_FABRIC_WOOL_GREEN_A",
+    "MAT_DOOR_PLANK_A",
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_SOOT_A",
+    "MAT_FIRE_EMIT_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 105,
+   "closed_components": 105,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_INT_SOFT": {
+   "tris": 1700,
+   "faces": 992,
+   "uv": true,
+   "materials": [
+    "MAT_LINEN_A",
+    "MAT_FABRIC_WOOL_GREEN_A",
+    "MAT_TERRACOTTA_A",
+    "MAT_DOOR_PLANK_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 9,
+   "closed_components": 9,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_MASONRY_EAST": {
+   "tris": 44322,
+   "faces": 22911,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_STONE_RUBBLE_LIMESTONE_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 375,
+   "closed_components": 375,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_MASONRY_FRONT": {
+   "tris": 30426,
+   "faces": 15723,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_STONE_RUBBLE_LIMESTONE_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 255,
+   "closed_components": 255,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_MASONRY_REAR": {
+   "tris": 37472,
+   "faces": 19368,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_STONE_RUBBLE_LIMESTONE_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 316,
+   "closed_components": 316,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_MASONRY_WEST": {
+   "tris": 43896,
+   "faces": 22700,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_STONE_RUBBLE_LIMESTONE_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 376,
+   "closed_components": 376,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_OPENINGS": {
+   "tris": 1024,
+   "faces": 496,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_TIMBER_OAK_WEATHERED_A",
+    "MAT_DOOR_PLANK_A",
+    "MAT_IRON_WROUGHT_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 80,
+   "closed_components": 80,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_PLASTER_INT": {
+   "tris": 288,
+   "faces": 144,
+   "uv": true,
+   "materials": [
+    "MAT_PLASTER_LIME_INT_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 24,
+   "closed_components": 24,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_PORCH": {
+   "tris": 344,
+   "faces": 192,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A",
+    "MAT_TIMBER_OAK_WEATHERED_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 14,
+   "closed_components": 14,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_PORCH_FLASHING": {
+   "tris": 12,
+   "faces": 6,
+   "uv": true,
+   "materials": [
+    "MAT_LEAD_FLASHING_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 1,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_PORCH_SLATES": {
+   "tris": 1324,
+   "faces": 613,
+   "uv": true,
+   "materials": [
+    "MAT_SLATE_BLUEGRAY_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 94,
+   "closed_components": 94,
+   "inverted_closed_components": 94
+  },
+  "GEO_AIDANHOUSE_PROPS_EXT": {
+   "tris": 1832,
+   "faces": 702,
+   "uv": true,
+   "materials": [
+    "MAT_TIMBER_OAK_WEATHERED_A",
+    "MAT_DOOR_PLANK_A",
+    "MAT_IRON_WROUGHT_A",
+    "MAT_GLASS_CROWN_A",
+    "MAT_LINEN_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 68,
+   "closed_components": 68,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_PROPS_LAUNDRY": {
+   "tris": 288,
+   "faces": 144,
+   "uv": true,
+   "materials": [
+    "MAT_LINEN_A",
+    "MAT_FABRIC_WOOL_GREEN_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 84,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 3,
+   "closed_components": 0,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_PROPS_PLANTS": {
+   "tris": 2860,
+   "faces": 1800,
+   "uv": true,
+   "materials": [
+    "MAT_FOLIAGE_A",
+    "MAT_FLOWER_RED_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 55,
+   "closed_components": 55,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_RIDGE": {
+   "tris": 696,
+   "faces": 348,
+   "uv": true,
+   "materials": [
+    "MAT_SLATE_RIDGE_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 58,
+   "closed_components": 58,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_ROOFDECK": {
+   "tris": 2096,
+   "faces": 1048,
+   "uv": true,
+   "materials": [
+    "MAT_TIMBER_OAK_WEATHERED_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 100,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 2,
+   "closed_components": 0,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_SLATES_FRONT": {
+   "tris": 25748,
+   "faces": 9494,
+   "uv": true,
+   "materials": [
+    "MAT_SLATE_BLUEGRAY_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1019,
+   "closed_components": 1019,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_SLATES_REAR": {
+   "tris": 25280,
+   "faces": 9332,
+   "uv": true,
+   "materials": [
+    "MAT_SLATE_BLUEGRAY_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1004,
+   "closed_components": 1004,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_TIMBER": {
+   "tris": 648,
+   "faces": 324,
+   "uv": true,
+   "materials": [
+    "MAT_TIMBER_OAK_WEATHERED_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 54,
+   "closed_components": 54,
+   "inverted_closed_components": 0
+  },
+  "GEO_AIDANHOUSE_WALLCORE": {
+   "tris": 416,
+   "faces": 206,
+   "uv": true,
+   "materials": [
+    "MAT_MORTAR_LIME_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 34,
+   "closed_components": 34,
+   "inverted_closed_components": 0
+  },
+  "STG_AIDANHOUSE_GROUND": {
+   "tris": 3200,
+   "faces": 1600,
+   "uv": true,
+   "materials": [
+    "STG_MAT_GRASS"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 160,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 1,
+   "closed_components": 0,
+   "inverted_closed_components": 0
+  },
+  "STG_AIDANHOUSE_PATH": {
+   "tris": 1452,
+   "faces": 966,
+   "uv": true,
+   "materials": [
+    "MAT_STONE_QUOIN_DRESSED_A"
+   ],
+   "material_slots_ok": true,
+   "degenerate_faces": 0,
+   "boundary_edges": 0,
+   "nonmanifold_edges_gt2": 0,
+   "wire_edges": 0,
+   "components": 25,
+   "closed_components": 25,
+   "inverted_closed_components": 0
+  }
+ },
+ "summary": {
+  "fail": [
+   "normals_outward_closed_components"
+  ],
+  "result": "FAIL",
+  "note": "G3 technical scope only; not art (G2) or runtime (G4)"
+ }
+}

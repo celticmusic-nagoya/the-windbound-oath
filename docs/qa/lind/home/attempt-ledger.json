@@ -1,0 +1,82 @@
+{
+  "task_id": "LIND-HOME-01",
+  "asset": "Aidan house (エイダンの家) modular master",
+  "policy": "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md",
+  "note": "Cumulative. Imported families keep their counters (see PRIOR_HISTORY.md). Cross-branch ledger sync NOT_IMPLEMENTED; history carried explicitly here.",
+  "imported_history": {
+    "masonry": {
+      "F1": "STOPPED (G2 FAIL) Boolean-chip rectangular blocks",
+      "F2": "STOPPED (G2 FAIL) broad-plane horizontal rings, run 43781482098",
+      "F3": "STOPPED (G2 FAIL) faceted perturbed cubes, run 43782248901",
+      "F4": "STOPPED (G2 FAIL, G3 FAIL) raw scan boulders at guessed offsets, run 43786045981",
+      "F5": "STOPPED (G2 FAIL) planar joint-first + silhouette rings, run 43786940632",
+      "F6": "TECHNICAL_BASELINE only",
+      "F7": "STOPPED (G2 FAIL) primitive blocks + noise relief, run 43789139055",
+      "F8": "ACTIVE_CANDIDATE in PR #331 (not used here: ~150k tris per corner, per-stone exact Boolean, open self-G2 defects D-F8-3/4)"
+    },
+    "whole_house_and_roof": {
+      "H-A": "STOPPED (G2 FAIL) legacy identical-primitive candidate A",
+      "H-B": "STOPPED (G1 FAIL) thatched candidate B",
+      "R-V1..V3": "STOPPED (3x G2 FAIL) standalone vertex-first slate roof",
+      "A-V3": "STOPPED (G2 FAIL) architecture v3 uniform boxes",
+      "C-BOND-V2": "STOPPED (G2 FAIL) corner bond v2 prisms + chips"
+    }
+  },
+  "families": [
+    {
+      "id": "F9",
+      "domain": "masonry",
+      "name": "layout-outline pillowed rubble",
+      "status": "ACTIVE_CANDIDATE",
+      "generator": "tools/map_blender/lind/home/build_aidan_house.py (build_wall_masonry, add_stone)",
+      "causal_difference": "macro outline of each stone = rounded irregular 2D outline derived from a wall-plane snecked-rubble layout cell (jumpers, snecks, brought-to-course levelling stones), extruded perpendicular to the wall so beds/perpends are shared planes by construction (vs F5 ring scaling); crowned exposed face; no cube/ring/noise perturbation (F1/F2/F3/F7); no scan at guessed offsets (F4); no per-stone Boolean (F8 cost). Openings and quoins are layout constraints, mortar = recessed core prisms around real apertures.",
+      "attempts": [
+        {
+          "n": 0,
+          "defect": "ENV-1 texture cache path ($HOME=/root, cache under /home/claude) -> CC0 maps MISSING, fallback fed noise Color (rainbow stones)",
+          "method_family": "environment (not counted against F9)",
+          "hypothesis": "resolve cache path explicitly; fallback must use noise Fac",
+          "result": "FIXED; TEX_STATUS now OK sha256 for all 9 maps",
+          "render": "/tmp/home_prev1 (preview, not committed)"
+        },
+        {
+          "n": 1,
+          "defect": "D-F9-1 over-regular coursing: stones read as squared ashlar blocks in level courses (self-review of preview 1, 640px 16spp)",
+          "hypothesis": "layout grammar lacks height variation inside a course; corner radii too small for rubble",
+          "result": "SELF_G2_FAIL",
+          "render": "/tmp/home_prev1/front_three_quarter.png (preview, not committed)"
+        },
+        {
+          "n": 2,
+          "defect": "D-F9-1",
+          "change": "layout grammar: brought-to-course split (main stone 58-74% of course + 1-3 levelling stones), course heights 0.17-0.34, corner radius 0.05-0.13 x sqrt(size/0.25), edge irregularity 18 mm; plus quoin side-face UVs by perimeter (fix stretched streaks)",
+          "fix_type": "layout grammar change (structural), not a parameter-only retune of the same grammar",
+          "hypothesis": "variable stone heights within a course + rounder outlines read as snecked rubble like the approved CG",
+          "result": "SELF_REVIEW_IMPROVED (reads as snecked rubble); independent G2 NOT_RUN",
+          "render": "assets/candidates/LIND-HOME-01/aidan_house_f9_c01/*.png (SHA in build/QA manifests)"
+        }
+      ],
+      "same_family_failures_per_defect": {"D-F9-1": 1},
+      "g2_independent": "NOT_RUN"
+    },
+    {
+      "id": "RF1",
+      "domain": "roof",
+      "name": "integrated framed roof with individually placed tilted slates",
+      "status": "ACTIVE_CANDIDATE",
+      "causal_difference": "slates lie on the course below (bottom edge lifted ~2.5t), per-slate chipped/ragged outline and yaw, staggered bond with min side-lap check, double eave course, saddle ridge, verge past bargeboard, chimney cut-out + lead flashing, ridge sag; built on a real rafter/deck/wall-plate frame of the whole house (R-V1..V3 were standalone roof patches)",
+      "attempts": [
+        {"n": 1, "defect": "none recorded yet", "result": "SELF_REVIEW notes only; independent G2 NOT_RUN"}
+      ]
+    },
+    {
+      "id": "G3-W1",
+      "domain": "technical",
+      "name": "porch slate side-face winding",
+      "attempts": [
+        {"n": 1, "defect": "QA normals_outward FAIL: 94 inverted closed components in GEO_AIDANHOUSE_PORCH_SLATES (side quads wound clockwise)",
+         "fix": "side quad order [tp_i, bt_i, bt_j, tp_j]", "result": "re-rendered all views after fix; see tech_qa_f9_c01.json"}
+      ]
+    }
+  ]
+}
