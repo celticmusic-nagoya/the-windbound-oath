@@ -9,6 +9,7 @@ on:
       - 'tools/character_blender/solve_morwen_framing.py'
       - 'tools/character_blender/test_solve_morwen_framing.py'
       - 'tools/character_blender/morwen_team_contracts.py'
+      - 'tools/character_blender/morwen_four_view_capture.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -99,6 +100,10 @@ jobs:
         run: |
           mkdir -p qa_output/render
           python tools/character_blender/morwen_render_qa_loop.py -- "$CANDIDATE_PATH" qa_output/render
+      - name: Capture four independent orthographic views for visual review
+        if: matrix.role == 'render'
+        run: |
+          python tools/character_blender/morwen_four_view_capture.py -- "$CANDIDATE_PATH" qa_output/render
       - name: Verify candidate remains unchanged
         if: always() && (matrix.role == 'rig' || matrix.role == 'render')
         run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
