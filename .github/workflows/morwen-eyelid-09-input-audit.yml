@@ -28,6 +28,7 @@ on:
       - 'tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py'
       - 'tools/blender/morwen_production/eyelid_lash/repair_root_winding_09n.py'
       - 'tools/blender/morwen_production/eyelid_lash/compare_occlusion_09o.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_clearance_09p.py'
       - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
       - '.github/workflows/morwen-eyelid-09-input-audit.yml'
   pull_request:
@@ -142,6 +143,15 @@ jobs:
       - name: Render 09N corrected winding with eyelid contact and 48px preview
         run: |
           python tools/blender/morwen_production/eyelid_lash/render_contact_09l.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --outdir render_output/morwen_eyelid_09/RENDERS_09N
+      - name: Build separate 09P cage-aware clearance candidate
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_clearance_09p.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --report render_output/morwen_eyelid_09/CLEARANCE_BUILD_09P.json
+      - name: Independently check 09P surface intersections
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --out render_output/morwen_eyelid_09/CLEARANCE_INTERSECTIONS_09P.json
+      - name: Render controlled 09P occlusion comparison
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/compare_occlusion_09o.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --outdir render_output/morwen_eyelid_09/RENDERS_09P
       - name: Render 09O controlled cage-occlusion comparison
         run: |
           python tools/blender/morwen_production/eyelid_lash/compare_occlusion_09o.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --outdir render_output/morwen_eyelid_09/RENDERS_09O
@@ -193,6 +203,9 @@ jobs:
             render_output/morwen_eyelid_09/RENDERS_09N/*.json
             render_output/morwen_eyelid_09/RENDERS_09O/*.png
             render_output/morwen_eyelid_09/RENDERS_09O/*.json
+            render_output/morwen_eyelid_09/RENDERS_09P/*.png
+            render_output/morwen_eyelid_09/RENDERS_09P/*.json
+            render_output/morwen_eyelid_09/*09P.json
             render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
             render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
             render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
