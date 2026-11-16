@@ -242,6 +242,21 @@ jobs:
         run: python tools/character_blender/verify_morwen_four_views.py qa_lanes/render
       - name: Validate each lane evidence fail closed
         run: python tools/character_blender/integrate_morwen_parallel_qa.py --root qa_lanes --out qa_output/integration/report.json
+      - name: Summarize prior run discovery
+        if: always()
+        run: |
+          if test -f qa_output/integration/latest_prior_run.json; then
+            python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path("qa_output/integration/latest_prior_run.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("Previous completed run discovery: "+r.get("status","BLOCKED")+"\n")
+              if r.get("run_id"): f.write("Previous run ID: "+str(r["run_id"])+"\n")
+          PY
+          else
+            echo 'Previous completed run discovery: BLOCKED (no report)' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Summarize integration
         if: always()
         env:
