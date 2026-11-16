@@ -1,0 +1,57 @@
+name: LIND isolated GLB technical export
+on:
+  push:
+    branches:
+      - feature/lind-webgl-runtime-benchmark-01
+    paths:
+      - 'tools/map_blender/runtime_benchmark/export_technical_glb.py'
+      - '.github/workflows/lind-technical-glb.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Blender package
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          mkdir -p /tmp/lind-blender-pinned
+          cd /tmp/lind-blender-pinned
+          apt-get download 'blender=4.0.2+dfsg-1ubuntu8' 'blender-data=4.0.2+dfsg-1ubuntu8'
+          sha256sum --check "${GITHUB_WORKSPACE}/tools/map_blender/lind/blender-ubuntu24.04.sha256"
+          sudo apt-get install -y --no-install-recommends ./blender_*.deb ./blender-data_*.deb libegl1 libgl1 libopengl0 libx11-6 libxext6 libxrender1 libsm6 libice6
+          test "$(blender --version | head -n 1)" = 'Blender 4.0.2'
+      - name: Export GLB technical test asset
+        run: |
+          blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/runtime_benchmark/export_technical_glb.py -- /tmp/lind-glb-benchmark/technical-scene.glb
+      - name: Verify GLB structure, checksum and provenance
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,struct
+          from pathlib import Path
+          p=Path('/tmp/lind-glb-benchmark/technical-scene.glb')
+          b=p.read_bytes()
+          assert b[:4]==b'glTF' and struct.unpack_from('<II',b,4)==(2,len(b))
+          n=struct.unpack_from('<I',b,12)[0]
+          assert b[16:20]==b'JSON'
+          doc=json.loads(b[20:20+n].decode('utf-8'))
+          assert len(doc['nodes'])>=100
+          m=json.loads(p.with_name('manifest.json').read_text())
+          assert m['output_sha256']==hashlib.sha256(b).hexdigest()
+          assert m['qa']['G2']=='NOT_RUN' and m['qa']['G4']=='NOT_RUN'
+          print('PASS: technical GLB, 100+ nodes, exact SHA, not production')
+          PY
+      - name: Upload reproducible benchmark asset and QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-technical-glb
+          path: /tmp/lind-glb-benchmark/
+          if-no-files-found: warn
+          retention-days: 7
