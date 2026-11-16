@@ -34,11 +34,11 @@ jobs:
           for f in diff rough disp nor_gl ao; do curl -sSL -O https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_boulder_dry/rock_boulder_dry_${f}_2k.jpg; done
           for f in diff rough disp; do curl -sSL -O https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_wood/rough_wood_${f}_2k.jpg; done
           sha256sum -c "$GITHUB_WORKSPACE/assets/candidates/aidan-masonry-art-02/sources.sha256"
-      - name: Build, QA and render (seed 20261116)
+      - name: Build, QA and render (seed 20261116, profile v11b = candidate B)
         run: |
           "$RUNNER_TEMP/blender-4.2.3-linux-x64/blender" -b -t 0 --python tools/map_blender/aidan_scan_carved_rubble_corner_v1.py -- \
             --src "$RUNNER_TEMP/src/rock_moss_set_01_8k.blend" --tex "$RUNNER_TEMP/src" --out "$RUNNER_TEMP/out" \
-            --seed 20261116 --samples 32 --res 800
+            --seed 20261116 --profile v11b --samples 32 --res 800
           pip install pillow
           python3 tools/map_blender/aidan_masonry_game_scale.py "$RUNNER_TEMP/out/corner_game_src_768.png" "$RUNNER_TEMP/out/game"
       - name: Assert technical invariants (G3 only — never G2)

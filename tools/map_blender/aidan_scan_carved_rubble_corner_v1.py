@@ -46,8 +46,24 @@ QUOIN_LONG = (0.44, 0.58)
 QUOIN_SHORT = (0.26, 0.34)
 STONE_D = (0.30, 0.48)
 MIN_STAGGER = 0.075
+# look profile ("a" = candidate A defaults). "v11b" = D-F8-3 attempt: V11 scale/tone/weathering match.
+TONE = dict(stone_scale=1.0, stone_desat=0.78, ao_min=0.45, mortar_lo=(0.13, 0.12, 0.10), mortar_hi=(0.30, 0.28, 0.24),
+            moss_lo=0.25, moss_hi=0.36, moss_height=0.55, sun_energy=3.4, sun_color=(1.0, 0.86, 0.68),
+            sky_strength=0.35, exposure=-0.55, pitch_scale=1.0)
+PROFILES = {
+    "a": {},
+    "v11b": dict(COURSE_H=(0.09, 0.17), STONE_L=(0.14, 0.34), QUOIN_LONG=(0.34, 0.46), QUOIN_SHORT=(0.20, 0.27),
+                 JOINT_RANGE=(0.010, 0.024), SKEW=0.018, MIN_STAGGER=0.05, WALL_ROUNDS=10,
+                 DEPTH_FLOOR=True,
+                 TONE=dict(stone_scale=0.80, stone_desat=0.70, ao_min=0.28, mortar_lo=(0.075, 0.07, 0.058),
+                           mortar_hi=(0.19, 0.18, 0.155), moss_lo=0.215, moss_hi=0.30, moss_height=0.75,
+                           sun_energy=4.3, sun_color=(1.0, 0.80, 0.58), sky_strength=0.24, exposure=-0.35,
+                           pitch_scale=0.8)),
+}
 ROCKS = ["rock01", "rock02", "rock03", "rock05", "rock06"]  # rock04 excluded: 18 boundary edges
 N_CAND = 120
+WALL_ROUNDS = 4
+DEPTH_FLOOR = False   # v11b: rock depth >= cell depth + 8 cm (short, deep end stones)
 FAR = 0.30
 FRONT_CAP = 0.032             # max allowed stone protrusion in front of the face plane (m)
 
@@ -70,6 +86,7 @@ def parse():
     p.add_argument("--samples", type=int, default=96)
     p.add_argument("--res", type=int, default=1200)
     p.add_argument("--no-render", action="store_true")
+    p.add_argument("--profile", default="a", choices=sorted(PROFILES))
     p.add_argument("--reuse", action="store_true", help="look-dev: re-render saved geometry with rebuilt materials")
     return p.parse_args(argv)
 
@@ -287,9 +304,13 @@ def fit_cell(cell, rocks, rng):
         elif cell["wall"] == "A":
             base = cover * max(x1 - x0, h)
             S = [base / ext[0], kd * base / ext[1], base * rng.uniform(0.75, 1.0) / ext[2]]
+            if DEPTH_FLOOR:
+                S[1] = max(S[1], (cell["d_target"] + 0.08) / ext[1])
         else:
             base = cover * max(y1 - y0, h)
             S = [kd * base / ext[0], base / ext[1], base * rng.uniform(0.75, 1.0) / ext[2]]
+            if DEPTH_FLOOR:
+                S[0] = max(S[0], (cell["d_target"] + 0.08) / ext[0])
         sv = [Vector((v.x * S[0], v.y * S[1], v.z * S[2])) for v in rv]
         mn = [min(v[i] for v in sv) for i in range(3)]
         mx = [max(v[i] for v in sv) for i in range(3)]
@@ -428,7 +449,7 @@ def pitch_planes(cell, rng):
         for u, anchor in edges:
             for phi_rng, c_rng in (((24, 40), (0.006, 0.016)), ((55, 70), (0.000, 0.008))):
                 phi = math.radians(rng.uniform(*phi_rng))
-                c = rng.uniform(*c_rng)
+                c = rng.uniform(*c_rng) * TONE["pitch_scale"]
                 n = (o * math.cos(phi) + u * math.sin(phi)).normalized()
                 n = Matrix.Rotation(math.radians(rng.uniform(-4, 4)), 3, u) @ n
                 if abs(u.z) > 0.9:   # bed edge: anchor on the bed plane, centred along the face
@@ -460,6 +481,18 @@ def apply_boolean(ob, operand, op, collection=None):
         o.select_set(False)
     ob.select_set(True)
     bpy.ops.object.modifier_apply(modifier=mod.name)
+
+
+def cleanup_degenerate(ob):
+    """Remove micro-slivers left by exact Booleans (CI found them in candidate A: stone_32_B_c4;
+    measured as ~1e-5 m edge triangles, area <1e-10 m^2). Merge <0.03 mm, then dissolve degenerates."""
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts[:], dist=3e-5)
+    bmesh.ops.dissolve_degenerate(bm, dist=3e-5, edges=bm.edges[:])
+    bm.to_mesh(ob.data)
+    bm.free()
+    ob.data.update()
 
 
 def topology(ob):
@@ -549,12 +582,14 @@ def stone_material(tex):
     ramp = N.new("ShaderNodeValToRGB")
     cr = ramp.color_ramp
     cr.interpolation = "CONSTANT"
-    cr.elements[0].color = (0.50, 0.50, 0.48, 1)
-    cr.elements[1].color = (0.90, 0.78, 0.60, 1)
-    for pos, col in ((0.18, (0.66, 0.65, 0.62, 1)), (0.40, (0.80, 0.76, 0.68, 1)), (0.62, (0.72, 0.70, 0.66, 1)),
-                     (0.80, (0.84, 0.72, 0.55, 1)), (0.93, (0.58, 0.56, 0.52, 1))):
+    k = TONE["stone_scale"]
+    sc_ = lambda c: (c[0] * k, c[1] * k, c[2] * k, 1)
+    cr.elements[0].color = sc_((0.50, 0.50, 0.48))
+    cr.elements[1].color = sc_((0.90, 0.78, 0.60))
+    for pos, col in ((0.18, (0.66, 0.65, 0.62)), (0.40, (0.80, 0.76, 0.68)), (0.62, (0.72, 0.70, 0.66)),
+                     (0.80, (0.84, 0.72, 0.55)), (0.93, (0.58, 0.56, 0.52))):
         e = cr.elements.new(pos)
-        e.color = col
+        e.color = sc_(col)
     L.new(oi.outputs["Random"], ramp.inputs[0])
     tint = N.new("ShaderNodeMix")
     tint.data_type = "RGBA"
@@ -568,7 +603,7 @@ def stone_material(tex):
     aor = N.new("ShaderNodeMapRange")
     aor.inputs[1].default_value = 0.0
     aor.inputs[2].default_value = 1.0
-    aor.inputs[3].default_value = 0.45
+    aor.inputs[3].default_value = TONE["ao_min"]
     aor.inputs[4].default_value = 1.0
     L.new(ao.outputs["AO"], aor.inputs[0])
     dirt = N.new("ShaderNodeMix")
@@ -583,7 +618,7 @@ def stone_material(tex):
     L.new(geo.outputs["Position"], sep_p.inputs[0])
     low = N.new("ShaderNodeMapRange")
     low.inputs[1].default_value = 0.0
-    low.inputs[2].default_value = 0.55
+    low.inputs[2].default_value = TONE["moss_height"]
     low.inputs[3].default_value = 1.0
     low.inputs[4].default_value = 0.0
     L.new(sep_p.outputs[2], low.inputs[0])
@@ -619,8 +654,8 @@ def stone_material(tex):
     L.new(m2.outputs[0], m3.inputs[0])
     L.new(noise.outputs["Fac"], m3.inputs[1])
     moss_k = N.new("ShaderNodeMapRange")
-    moss_k.inputs[1].default_value = 0.25
-    moss_k.inputs[2].default_value = 0.36
+    moss_k.inputs[1].default_value = TONE["moss_lo"]
+    moss_k.inputs[2].default_value = TONE["moss_hi"]
     L.new(m3.outputs[0], moss_k.inputs[0])
     moss_col = N.new("ShaderNodeMix")
     moss_col.data_type = "RGBA"
@@ -655,7 +690,7 @@ def stone_material(tex):
     L.new(lich_mix.outputs[2], final.inputs[6])
     L.new(moss_col.outputs[2], final.inputs[7])
     hsv = N.new("ShaderNodeHueSaturation")
-    hsv.inputs["Saturation"].default_value = 0.78
+    hsv.inputs["Saturation"].default_value = TONE["stone_desat"]
     L.new(final.outputs[2], hsv.inputs["Color"])
     L.new(hsv.outputs[0], bsdf.inputs["Base Color"])
     rmix = N.new("ShaderNodeMix")
@@ -683,8 +718,8 @@ def mortar_material():
     n.inputs["Detail"].default_value = 10.0
     L.new(tc.outputs["Object"], n.inputs[0])
     ramp = N.new("ShaderNodeValToRGB")
-    ramp.color_ramp.elements[0].color = (0.13, 0.12, 0.10, 1)
-    ramp.color_ramp.elements[1].color = (0.30, 0.28, 0.24, 1)
+    ramp.color_ramp.elements[0].color = TONE["mortar_lo"] + (1,)
+    ramp.color_ramp.elements[1].color = TONE["mortar_hi"] + (1,)
     L.new(n.outputs["Fac"], ramp.inputs[0])
     ao = N.new("ShaderNodeAmbientOcclusion")
     ao.inputs["Distance"].default_value = 0.04
@@ -763,7 +798,7 @@ def setup_render(args):
     sc.render.image_settings.color_mode = "RGBA"
     sc.view_settings.view_transform = "AgX"
     sc.view_settings.look = "AgX - Medium High Contrast"
-    sc.view_settings.exposure = -0.55
+    sc.view_settings.exposure = TONE["exposure"]
     world = bpy.data.worlds.new("W")
     sc.world = world
     world.use_nodes = True
@@ -773,12 +808,12 @@ def setup_render(args):
     sky.sun_rotation = math.radians(215)
     sky.sun_intensity = 0.25
     bg = world.node_tree.nodes["Background"]
-    bg.inputs["Strength"].default_value = 0.35
+    bg.inputs["Strength"].default_value = TONE["sky_strength"]
     world.node_tree.links.new(sky.outputs[0], bg.inputs[0])
     sun = bpy.data.lights.new("Sun", "SUN")
-    sun.energy = 3.4
+    sun.energy = TONE["sun_energy"]
     sun.angle = math.radians(1.5)
-    sun.color = (1.0, 0.86, 0.68)
+    sun.color = TONE["sun_color"]
     so = bpy.data.objects.new("Sun", sun)
     to_sun = Vector((-0.80, -0.42, 0.52)).normalized()  # low raking light from camera-left (V11 afternoon key)
     so.rotation_euler = (-to_sun).to_track_quat("-Z", "Y").to_euler()
@@ -800,6 +835,15 @@ def camera(name, loc, target, lens=50):
 
 
 # --------------------------------------------------------------------- main
+def apply_profile(name):
+    g = globals()
+    for k, v in PROFILES[name].items():
+        if k == "TONE":
+            g["TONE"] = dict(g["TONE"], **v)
+        else:
+            g[k] = v
+
+
 def lookdev(args):
     blend = os.path.join(args.out, "aidan_scan_carved_corner_v1.blend")
     bpy.ops.wm.open_mainfile(filepath=os.path.abspath(blend))
@@ -858,6 +902,7 @@ def render_all(args, manifest, H):
 
 def main():
     args = parse()
+    apply_profile(args.profile)
     t_start = time.time()
     os.makedirs(args.out, exist_ok=True)
     if args.reuse:
@@ -879,45 +924,60 @@ def main():
     records = []
     for i, cell in enumerate(cells):
         name = "stone_%02d_%s_c%d" % (i, cell["wall"], cell["course"])
-        fits = []
-        ntry = 0
-        if cell["kind"] == "quoin":
-            x0, x1, y0, y1, z0, z1 = cell["box"]
-            x1 = min(p[0] for p in cell["pts"] if p[0] > 0)
-            y1 = min(p[1] for p in cell["pts"] if p[1] > 0)
-            pa = dict(kind="wall", wall="A", course=cell["course"], box=(0.0, x1, -FAR, y1, z0, z1), ext=["-y"], d_target=y1)
-            pb = dict(kind="wall", wall="B", course=cell["course"], box=(-FAR, x1, 0.0, y1, z0, z1), ext=["-x"], d_target=x1)
-            for pc in (pa, pb):
-                for _round in range(5):
-                    b, n = fit_cell(pc, rocks, rng)
-                    ntry += n
+        rock_ob, fits, ntry_total, empty_retries = None, [], 0, 0
+        for _build in range(3):
+            fits = []
+            ntry = 0
+            if cell["kind"] == "quoin":
+                x0, x1, y0, y1, z0, z1 = cell["box"]
+                x1 = min(p[0] for p in cell["pts"] if p[0] > 0)
+                y1 = min(p[1] for p in cell["pts"] if p[1] > 0)
+                pa = dict(kind="wall", wall="A", course=cell["course"], box=(0.0, x1, -FAR, y1, z0, z1), ext=["-y"], d_target=y1)
+                pb = dict(kind="wall", wall="B", course=cell["course"], box=(-FAR, x1, 0.0, y1, z0, z1), ext=["-x"], d_target=x1)
+                for pc in (pa, pb):
+                    for _round in range(5):
+                        b, n = fit_cell(pc, rocks, rng)
+                        ntry += n
+                        if b is not None:
+                            break
+                    fits.append(b)
+            else:
+                b, ntry = fit_cell(cell, rocks, rng)
+                for _round in range(WALL_ROUNDS):
                     if b is not None:
                         break
+                    b, n2 = fit_cell(cell, rocks, rng)
+                    ntry += n2
                 fits.append(b)
-        else:
-            b, ntry = fit_cell(cell, rocks, rng)
-            for _round in range(4):
-                if b is not None:
-                    break
-                b, n2 = fit_cell(cell, rocks, rng)
-                ntry += n2
-            fits.append(b)
-        if any(f is None for f in fits):
-            records.append(dict(name=name, status="UNFILLED", cell=cell["box"]))
+            if any(f is None for f in fits):
+                break
+            cpts = [(max(p[0], -FRONT_CAP), max(p[1], -FRONT_CAP), p[2]) for p in cell["pts"]]
+            cut = prism_object(name + "_cell", cpts)
+            clip_convex(cut, pitch_planes(cell, rng))
+            rock_ob = None
+            for f in fits:
+                ob = mesh_from_fit(name if rock_ob is None else name + "_b", rocks[f[1]["rock"]], f[1])
+                if rock_ob is None:
+                    rock_ob = ob
+                    apply_boolean(rock_ob, cut, "INTERSECT")
+                else:
+                    apply_boolean(rock_ob, ob, "INTERSECT")
+                    bpy.data.objects.remove(ob)
+            bpy.data.objects.remove(cut)
+            cleanup_degenerate(rock_ob)
+            ntry_total += ntry
+            nv = len(rock_ob.data.vertices)
+            vol = topology(rock_ob)["signed_volume_m3"] if nv else 0.0
+            if nv >= 8 and vol > 1e-6:
+                break
+            empty_retries += 1
+            print("EMPTY_BOOLEAN_RETRY", name, nv, vol)
+            bpy.data.objects.remove(rock_ob)
+            rock_ob = None
+        if rock_ob is None:
+            records.append(dict(name=name, status="UNFILLED", cell=cell["box"], empty_boolean_retries=empty_retries))
             continue
-        cpts = [(max(p[0], -FRONT_CAP), max(p[1], -FRONT_CAP), p[2]) for p in cell["pts"]]
-        cut = prism_object(name + "_cell", cpts)
-        clip_convex(cut, pitch_planes(cell, rng))
-        rock_ob = None
-        for f in fits:
-            ob = mesh_from_fit(name if rock_ob is None else name + "_b", rocks[f[1]["rock"]], f[1])
-            if rock_ob is None:
-                rock_ob = ob
-                apply_boolean(rock_ob, cut, "INTERSECT")
-            else:
-                apply_boolean(rock_ob, ob, "INTERSECT")
-                bpy.data.objects.remove(ob)
-        bpy.data.objects.remove(cut)
+        ntry = ntry_total
         info = fits[0][1]
         rock_ob.data.materials.clear()
         rock_ob.data.materials.append(smat)
@@ -931,7 +991,7 @@ def main():
         cells_col.objects.link(cb)
         records.append(dict(name=name, kind=cell["kind"], wall=cell["wall"], course=cell["course"],
                             cell=list(cell["box"]), pts=[list(p) for p in cell["pts"]], exterior=cell["ext"],
-                            candidates=ntry,
+                            candidates=ntry, empty_boolean_retries=empty_retries,
                             source_rocks=[rocks[f[1]["rock"]]["src_obj"] for f in fits],
                             cover=[round(f[1]["cover"], 3) for f in fits],
                             relief_k=[round(f[1]["kd"], 3) for f in fits],
@@ -945,6 +1005,7 @@ def main():
     bpy.data.objects.remove(env2)
     cells_col.hide_render = True
     apply_boolean(env, None, "DIFFERENCE", collection=cells_col)
+    cleanup_degenerate(env)
     env.data.materials.append(mmat)
     for ob in list(cells_col.objects):
         bpy.data.objects.remove(ob)
@@ -1022,6 +1083,7 @@ def main():
                                   miss_points=miss_pts[:400])
     unfilled = [r for r in records if r.get("status") == "UNFILLED"]
     st_ok = all(r["qa"]["boundary_edges"] == 0 and r["qa"]["nonmanifold_edges"] == 0 and r["qa"]["inside_cell"]
+                and r["qa"]["degenerate_faces"] == 0
                 and r["qa"]["signed_volume_m3"] > 0 and r["qa"]["components"] == 1
                 for r in records if "qa" in r)
     support = [r["qa"]["bed_support_ratio"] for r in records if "qa" in r]
@@ -1036,10 +1098,12 @@ def main():
                       and qa["summary"]["mortar_watertight"] and min(support) >= 0.5)
 
     manifest = dict(task="AIDAN-MASONRY-ART-02", method_family="F8 scan-carved coursed rubble",
-                    canonical=False, blender=bpy.app.version_string, seed=args.seed,
+                    canonical=False, blender=bpy.app.version_string, seed=args.seed, profile=args.profile, tone=TONE,
                     params=dict(LA=LA, LB=LB, T=T, H=H, joint_range=JOINT_RANGE, skew=SKEW, point_recess=POINT_RECESS,
                                 course_h=COURSE_H, stone_l=STONE_L, quoin_long=QUOIN_LONG,
-                                quoin_short=QUOIN_SHORT, stone_d=STONE_D, n_candidates=N_CAND),
+                                quoin_short=QUOIN_SHORT, stone_d=STONE_D, n_candidates=N_CAND,
+                                min_stagger=MIN_STAGGER, wall_rounds=WALL_ROUNDS,
+                                depth_floor=DEPTH_FLOOR),
                     sources=dict(scan=dict(file=os.path.basename(args.src), sha256=src_sha,
                                            url="https://polyhaven.com/a/rock_moss_set_01", license="CC0 1.0",
                                            used="geometry only (rock01/02/03/05/06); scan textures NOT used"),
