@@ -1,0 +1,131 @@
+{
+  "status": "CANDIDATE_UNSCALED_NOT_APPROVED",
+  "method_family": "continuous_signed_distance_terrain_plus_channel_incision",
+  "geometry_parameters": {
+    "grid_segments": 240,
+    "x_extent": [
+      -23,
+      23
+    ],
+    "y_extent": [
+      -20,
+      20
+    ],
+    "sea_z": 0,
+    "river_water_z": "0.65+0.026*(y+20)",
+    "noise": "mathutils.noise.fractal(Vector(x*.17,y*.17,2.13),1.1,2.1,4)",
+    "meters_per_unit": null,
+    "source_image_scale_bar_used": false,
+    "old_game_coordinates_used": false
+  },
+  "render_parameters": {
+    "engine": "CYCLES",
+    "samples": 20,
+    "denoise": false,
+    "resolution": [
+      1152,
+      864
+    ],
+    "cameras": {
+      "overview": {
+        "location": [
+          46,
+          -62,
+          53
+        ],
+        "target": [
+          0,
+          0,
+          1
+        ],
+        "ortho_scale": 67
+      },
+      "coast": {
+        "location": [
+          -34,
+          -24,
+          20
+        ],
+        "target": [
+          -8,
+          3,
+          2
+        ],
+        "ortho_scale": 38
+      },
+      "river": {
+        "location": [
+          29,
+          -19,
+          23
+        ],
+        "target": [
+          8,
+          2,
+          3
+        ],
+        "ortho_scale": 32
+      }
+    }
+  },
+  "materials": {
+    "license": "Self-authored procedural materials; no external textures/models downloaded or embedded",
+    "external_material_intake": "NOT_RUN; scanned/PBR intake remains next stage"
+  },
+  "refs": {
+    "assets/sources/lind-world-20261116/original.png": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "assets/approved/game/cliff/sunset_background.png": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+    "assets/approved/game/rilde_story/raid/attack_background_only.png": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e"
+  },
+  "candidate_b": {
+    "x_extent": [
+      -30,
+      40
+    ],
+    "y_extent": [
+      -36,
+      36
+    ],
+    "river_z": "3.55+0.012*(y+20)",
+    "river_width": 4.0,
+    "method": "broadened signed distance and raised incision water",
+    "final_G2": "FAIL"
+  },
+  "candidate_c": {
+    "method": "route-driven longitudinal grade plus terrain cut/fill",
+    "shoulder_radius": 1.4,
+    "road_half_width": 0.3,
+    "harbor_endpoint_z": 1.7,
+    "coast_endpoint": "coast(7)+1.4,7",
+    "bridge_profile": "crown height plus .05",
+    "grade_limit_degrees": 25,
+    "grade_limit_status": "proposed technical study only"
+  },
+  "candidate_d": {
+    "input": "world/candidate-c/world.blend",
+    "method": "actual_support_BVH_clearance_and_slope_bounded_envelope",
+    "target_min_clearance": 0.05,
+    "fit_grade_bound_degrees": 24.5,
+    "provisional_acceptance_grade_bound_degrees": 25,
+    "station_count_per_route": [
+      141,
+      141,
+      141,
+      96
+    ],
+    "samples_per_station": [
+      "left",
+      "center",
+      "right"
+    ],
+    "query_supports": [
+      "CONTINUOUS_TERRAIN_coast_river_upland",
+      "East_bridge_candidate_single_arch"
+    ],
+    "render_views": [
+      "overview"
+    ],
+    "render_settings": "same as B/C",
+    "scope_limit": "sampled occlusion only; grade/nav/collision/junction/earth-support engineering distinct"
+  }
+}

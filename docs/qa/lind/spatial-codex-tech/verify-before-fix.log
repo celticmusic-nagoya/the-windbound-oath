@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/workspace/lind-spatial-codex/tools/map_blender/verify_lind_source_review.py", line 42, in <module>
+    main()
+    ~~~~^^
+  File "/workspace/lind-spatial-codex/tools/map_blender/verify_lind_source_review.py", line 30, in main
+    assert len(refs) == 1 and refs[0].packed_file is not None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Blender 4.3.2
+Read blend: "/workspace/lind-spatial-codex/assets/candidates/lind-spatial-codex-01/source-review/lind-source-review.blend"
+
+Blender quit

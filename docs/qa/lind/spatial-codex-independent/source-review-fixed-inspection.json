@@ -1,0 +1,310 @@
+{
+  "blender_version": "4.3.2",
+  "blend": "/workspace/lind-spatial-codex/assets/candidates/lind-spatial-codex-01/source-review/lind-source-review.blend",
+  "scene_properties": {
+    "asset_status": "SOURCE_REVIEW_ONLY_NOT_PRODUCTION",
+    "approved_source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "metric_approval": "BLOCKED",
+    "art_qa": "NOT_RUN",
+    "game_qa": "NOT_RUN",
+    "topology_schema": "lind-new-world-topology-v1",
+    "blender_version": "4.3.2",
+    "directed_edges_json": "[{\"from\": \"harbor_sw\", \"to\": \"village_center\", \"kind\": \"walk\", \"bidirectional\": true}, {\"from\": \"village_center\", \"to\": \"windward_cliffs_wnw\", \"kind\": \"walk\", \"bidirectional\": true}, {\"from\": \"village_center\", \"to\": \"north_farms\", \"kind\": \"walk\", \"bidirectional\": true}, {\"from\": \"north_farms\", \"to\": \"road_to_dunvall\", \"kind\": \"walk\", \"bidirectional\": true}, {\"from\": \"village_center\", \"to\": \"east_river_bridge\", \"kind\": \"walk\", \"bidirectional\": true}, {\"from\": \"east_river_bridge\", \"to\": \"east_training_area\", \"kind\": \"candidate_walk\", \"bidirectional\": true}, {\"from\": \"village_center\", \"to\": \"raid_riverside_cliff\", \"kind\": \"story\", \"bidirectional\": false}, {\"from\": \"raid_riverside_cliff\", \"to\": \"downstream_landing\", \"kind\": \"story_jump\", \"bidirectional\": false}, {\"from\": \"downstream_landing\", \"to\": \"moss_forest\", \"kind\": \"story\", \"bidirectional\": false}, {\"from\": \"moss_forest\", \"to\": \"ancient_altar\", \"kind\": \"story\", \"bidirectional\": false}]"
+  },
+  "collections": [
+    {
+      "name": "Collection",
+      "properties": {},
+      "objects": 0
+    },
+    {
+      "name": "LIND_BUILDINGS",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 0
+    },
+    {
+      "name": "LIND_ECOLOGY",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 0
+    },
+    {
+      "name": "LIND_HERO_HOME",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 0
+    },
+    {
+      "name": "LIND_ROADS",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 0
+    },
+    {
+      "name": "LIND_STORY_MARKERS",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 11
+    },
+    {
+      "name": "LIND_TERRAIN",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 0
+    },
+    {
+      "name": "LIND_WATER",
+      "properties": {
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+        "geometry_status": "NOT_STARTED"
+      },
+      "objects": 0
+    }
+  ],
+  "packed_images": [
+    {
+      "name": "original.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+      "bytes": 3586379
+    }
+  ],
+  "objects": [
+    {
+      "name": "SEMANTIC_ancient_altar",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "ancient_altar",
+        "zone": "southeast",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_downstream_landing",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "downstream_landing",
+        "zone": "southeast",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_east_river_bridge",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "east_river_bridge",
+        "zone": "east",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_east_training_area",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "east_training_area",
+        "zone": "east",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_harbor_sw",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "harbor_sw",
+        "zone": "southwest",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_moss_forest",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "moss_forest",
+        "zone": "southeast",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_north_farms",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "north_farms",
+        "zone": "north",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_raid_riverside_cliff",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "raid_riverside_cliff",
+        "zone": "east",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_road_to_dunvall",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "road_to_dunvall",
+        "zone": "north",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_village_center",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "village_center",
+        "zone": "center",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    },
+    {
+      "name": "SEMANTIC_windward_cliffs_wnw",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "properties": {
+        "node_id": "windward_cliffs_wnw",
+        "zone": "west_northwest",
+        "world_transform_approved": false,
+        "position_status": "UNPLACED",
+        "source_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+      },
+      "hide_render": true,
+      "hide_viewport": true,
+      "vertices": null,
+      "polygons": null
+    }
+  ]
+}

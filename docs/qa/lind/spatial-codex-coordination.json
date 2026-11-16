@@ -1,0 +1,20 @@
+{
+  "task": "LIND-SPATIAL-CODEX-01",
+  "base_commit": "d18f7a5bdc7da997cace386f7b516c1a62c5366e",
+  "branch": "feature/lind-spatial-codex-01",
+  "scope": "source-review repair and isolated WORLD terrain candidate; no HOME/BUILD/ECO asset edits",
+  "remote_survey": {
+    "dedicated_claude_lind_world_home_build_ecology_refs": "NO_MATCH",
+    "masonry_art_02": "028afdeadf2e3e1dcab935736271b98d7843e38b",
+    "vegetation": "e0a62a4b76c838a8c4c88b2f13a5d598c0d3b010"
+  },
+  "existing_ci": {
+    "run": 43847407669,
+    "result": "failure",
+    "path_fix_d18f": "topology tests passed",
+    "actual_next_cause": "missing tools/map_blender/lind/blender-ubuntu24.04.sha256"
+  },
+  "legacy_geometry": "EXCLUDED",
+  "dimensions_and_positions": "UNAPPROVED_CANDIDATE_ONLY",
+  "main_merge_release_canon_overwrite": false
+}

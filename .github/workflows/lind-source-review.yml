@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'tools/map_blender/build_lind_source_review.py'
+      - 'tools/map_blender/verify_lind_source_review.py'
+      - 'tools/map_blender/validate_lind_new_world_topology.py'
+      - 'tools/map_blender/lind/blender-ubuntu24.04.sha256'
       - 'docs/production/lind-new-world-topology.v1.json'
       - 'tests/test_lind_new_world_topology.py'
       - '.github/workflows/lind-source-review.yml'
@@ -44,22 +47,13 @@ jobs:
           test "$(blender --version | head -n 1)" = "Blender ${BLENDER_RUNTIME_VERSION}"
       - name: Build source-review scene (no world geometry)
         run: |
-          blender -b --factory-startup --disable-autoexec --python tools/map_blender/build_lind_source_review.py -- \
+          blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/build_lind_source_review.py -- \
             --image /tmp/lind-source-review/original.png \
-            --output /tmp/lind-source-review/lind-source-review.blend
+            --output /tmp/lind-source-review/lind-source-review.blend 2>&1 | tee /tmp/lind-source-review/build.log
       - name: Verify packed image, semantic markers and absence of geometry
         run: |
-          blender -b /tmp/lind-source-review/lind-source-review.blend --disable-autoexec --python-expr '
-          import bpy,hashlib
-          s=bpy.context.scene
-          assert s["approved_source_sha256"]=="abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
-          assert s["metric_approval"]=="BLOCKED"
-          assert len([x for x in bpy.data.objects if x.name.startswith("SEMANTIC_")])==11
-          assert not any(x.type=="MESH" for x in bpy.data.objects)
-          imgs=[x for x in bpy.data.images if x.get("role")=="APPROVED_VISUAL_REFERENCE_NOT_METRIC"]
-          assert len(imgs)==1 and imgs[0].packed_file is not None
-          print("PASS: 11 semantic markers, 7 empty collections, packed image, no meshes")
-          '
+          blender -b /tmp/lind-source-review/lind-source-review.blend --disable-autoexec --python-exit-code 1 --python tools/map_blender/verify_lind_source_review.py -- --report /tmp/lind-source-review/verification.json 2>&1 | tee /tmp/lind-source-review/verify.log
+          echo "${SOURCE_SHA256}  /tmp/lind-source-review/original.png" | sha256sum -c -
           sha256sum /tmp/lind-source-review/lind-source-review.blend > /tmp/lind-source-review/output.sha256
       - name: Save review scene and evidence
         if: always()
@@ -69,5 +63,7 @@ jobs:
           path: |
             /tmp/lind-source-review/lind-source-review.blend
             /tmp/lind-source-review/output.sha256
+            /tmp/lind-source-review/*.log
+            /tmp/lind-source-review/verification.json
           if-no-files-found: warn
           retention-days: 7

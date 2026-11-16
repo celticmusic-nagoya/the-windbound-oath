@@ -1,0 +1,60 @@
+{
+  "ref": "feature/aidan-masonry-art-02",
+  "blob_sha": "e294bd324aa145e8b4329f2a3d01c83db1e98407",
+  "scope": "REFERENCE_ONLY_DIFFERENT_ASSET_HISTORY_NOT_RESET_OR_MODIFIED",
+  "families": [
+    {
+      "id": "F1",
+      "name": "Boolean-chip rectangular blocks",
+      "status": "STOPPED",
+      "g2": "FAIL",
+      "root_cause": "box silhouette; chips/bevels too small"
+    },
+    {
+      "id": "F2",
+      "name": "broad-plane horizontal rings (quoin_broadplane_v1)",
+      "status": "STOPPED",
+      "g2": "FAIL",
+      "root_cause": "same plan vertices across rings -> periodic belts; exposed backing"
+    },
+    {
+      "id": "F3",
+      "name": "faceted perturbed cubes (facet v2)",
+      "status": "STOPPED",
+      "g2": "FAIL",
+      "root_cause": "triangulation changes shading not macro outline; fixed grid, unverified joints"
+    },
+    {
+      "id": "F4",
+      "name": "raw scan boulders clipped + arbitrary offsets (fitted scan corner v1)",
+      "status": "STOPPED",
+      "g2": "FAIL",
+      "root_cause": "no coupled contact geometry; whole boulders read as piled rocks"
+    },
+    {
+      "id": "F5",
+      "name": "planar joint-first + independent silhouette rings",
+      "status": "STOPPED",
+      "g2": "FAIL",
+      "root_cause": "ring scaling bevels bearing faces away from shared plane"
+    },
+    {
+      "id": "F6",
+      "name": "shared-surface contact feasibility (technical only)",
+      "status": "TECHNICAL_BASELINE",
+      "g2": "NOT_APPLICABLE"
+    },
+    {
+      "id": "F7",
+      "name": "primitive blocks + exterior-only procedural noise relief",
+      "status": "STOPPED",
+      "g2": "FAIL",
+      "root_cause": "noise cannot change rectangular silhouette; flat caps"
+    },
+    {
+      "id": "F8",
+      "name": "scan-carved coursed rubble (stone quarried from a scored window of a CC0 photogrammetry surface, cut by exact Boolean to a layout-solver cell; mortar = envelope minus cells)",
+      "status": "ACTIVE_CANDIDATE (B leads)"
+    }
+  ]
+}
