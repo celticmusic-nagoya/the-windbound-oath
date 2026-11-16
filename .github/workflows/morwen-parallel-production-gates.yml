@@ -117,7 +117,7 @@ jobs:
       - name: Build packed Layer0 modelling reference scene
         if: matrix.role == 'render'
         run: |
-          python -m bpy -b --python tools/character_blender/build_morwen_reference_scene.py -- qa_output/render/MORWEN_LAYER0_REFERENCE_SCENE.blend
+          python tools/character_blender/build_morwen_reference_scene.py -- qa_output/render/MORWEN_LAYER0_REFERENCE_SCENE.blend
       - name: Capture four independent orthographic views for visual review
         if: matrix.role == 'render'
         run: |
