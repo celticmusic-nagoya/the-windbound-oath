@@ -24,6 +24,7 @@ jobs:
             'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
             -o qa_output/basemesh/source.zip
           sha256sum qa_output/basemesh/source.zip > qa_output/basemesh/source_sha256.txt
+          echo '811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515  qa_output/basemesh/source.zip' | sha256sum -c -
       - name: Safe ZIP inventory and extract single .blend
         run: |
           python tools/character_blender/inspect_human_basemesh_bundle.py qa_output/basemesh/source.zip --output qa_output/basemesh/archive_inventory.json
