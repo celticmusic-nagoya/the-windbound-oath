@@ -23,3 +23,9 @@ Neutral pose and deformation views, bone-name match, skin weight sums, non-manif
 
 ## Current gates
 G1 BLOCKED (official image binary not verified); G2 NOT_RUN; G3 NOT_RUN; G4 NOT_RUN. Claude/Codex sessions are NOT STARTED by this document.
+
+## Director-approved 3D visual target — 2026-11-16
+- **New 3D characters: approximately 7.5–8 heads**, high-quality anime-style visual language comparable in production ambition to Genshin Impact and Neverness to Everness (NTE). Supersedes 2.8-head field-sprite proportions for this new 3D work package.
+- Preserve approved official face, Layer 0, costume, colors and asymmetry. Do not replicate copyrighted third-party character meshes or artwork.
+- Exact neck/rig/scale/axis measurements are still BLOCKED pending approved source inspection. Do not generate incompatible final geometry while interface is unlocked.
+- Existing 2D sprites remain unchanged; 48px/96px previews are optional legacy diagnostics, not a new 3D head-ratio requirement. Final game-camera QA and Android performance must be independently tested.
