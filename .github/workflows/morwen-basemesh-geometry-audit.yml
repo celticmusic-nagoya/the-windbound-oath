@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/morwen-basemesh-geometry-audit.yml'
       - 'tools/character_blender/inspect_human_basemesh_geometry.py'
+      - 'tools/character_blender/shortlist_female_basemesh.py'
 permissions:
   contents: read
 jobs:
@@ -72,6 +73,9 @@ jobs:
       - name: Inspect actual Blender geometry without edits
         run: |
           python tools/character_blender/inspect_human_basemesh_geometry.py -- qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/geometry_inventory.json
+      - name: Identify named female basemesh candidates (review only)
+        run: |
+          python tools/character_blender/shortlist_female_basemesh.py qa_output/basemesh/geometry_inventory.json --output qa_output/basemesh/female_basemesh_candidates.json
       - name: Remove binary sources from uploaded report
         if: always()
         run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
