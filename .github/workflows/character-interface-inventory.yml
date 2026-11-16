@@ -1,0 +1,64 @@
+name: Character candidate Blender interface inventory
+on:
+  push:
+    branches: [feature/char-interface-01]
+    paths:
+      - 'tools/character_blender/inspect_candidate_interface.py'
+      - '.github/workflows/character-interface-inventory.yml'
+      - 'tools/character_blender/review_bone_interface.py'
+      - 'tools/character_blender/audit_candidate_surface.py'
+      - 'tools/character_blender/classify_boundary_regions.py'
+      - 'tools/character_blender/measure_boundary_proximity.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+jobs:
+  inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Read frozen Morwen candidate from PR 326 without editing it
+        uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: bca7d1d4cfd4b5e8a4f6c03656e148ed8485370c
+          path: candidate_source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned bpy 5.3.0
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "${BPY_WHEEL_SHA256}  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+      - name: Measure frozen candidate transforms bones and material slots
+        run: |
+          python tools/character_blender/inspect_candidate_interface.py --input candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --expected-sha256 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 --out render_output/character_interface/PR326_CANDIDATE_INVENTORY.json
+      - name: Review candidate rig chain and neck landmarks
+        run: |
+          python tools/character_blender/review_bone_interface.py --inventory render_output/character_interface/PR326_CANDIDATE_INVENTORY.json --out render_output/character_interface/PR326_BONE_REVIEW.json
+      - name: Audit candidate surface weights UV and topology read-only
+        run: |
+          python tools/character_blender/audit_candidate_surface.py --input candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --expected-sha256 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 --out render_output/character_interface/PR326_SURFACE_AUDIT.json
+      - name: Classify candidate mesh boundary components by world position
+        run: |
+          python tools/character_blender/classify_boundary_regions.py --input candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --expected-sha256 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 --out render_output/character_interface/PR326_BOUNDARY_REGIONS.json
+      - name: Measure candidate Body Face boundary proximity without modifying model
+        run: |
+          python tools/character_blender/measure_boundary_proximity.py --input candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --expected-sha256 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4 --out render_output/character_interface/PR326_BOUNDARY_PROXIMITY.json
+      - name: Upload reproducible diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: character-interface-inventory
+          path: render_output/character_interface/*.json
+          retention-days: 7
+          if-no-files-found: warn

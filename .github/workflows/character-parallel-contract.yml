@@ -1,0 +1,30 @@
+name: Character parallel contract preflight
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'docs/production/CHARACTER_INTERFACE_CONTRACT_V0.md'
+      - 'tools/character_blender/validate_parallel_manifest.py'
+      - 'assets/candidates/**/manifest.json'
+      - '.github/workflows/character-parallel-contract.yml'
+permissions:
+  contents: read
+jobs:
+  metadata:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate manifest metadata when candidates exist
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,sys
+          paths=sorted(Path("assets/candidates").glob("**/manifest.json")) if Path("assets/candidates").exists() else []
+          if not paths:
+              print("NO_CANDIDATE_MANIFESTS: metadata validator installed; no Blender, art, or game QA executed")
+              sys.exit(0)
+          sys.exit(subprocess.call([sys.executable,"tools/character_blender/validate_parallel_manifest.py",*[str(p) for p in paths]]))
+          PY
