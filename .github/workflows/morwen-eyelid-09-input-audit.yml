@@ -1,0 +1,234 @@
+name: Morwen EYELID-09 real input read-only audit
+on:
+  push:
+    branches: [feature/morwen-eyelid-09-lash-architecture]
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/survey_lid_triangles_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/match_upper_margin_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/select_candidate_anchors_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/diagnose_lash_collision_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/diagnose_surface_frame_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/diagnose_left_endpoint_09.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09b.py'
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_residual_pairs_09c.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_surface_clearance_09d.py'
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_root_topology_09e.py'
+      - 'tools/blender/morwen_production/eyelid_lash/summarize_root_topology_09e.py'
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_cage_adjacency_09f.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_root_fan_09g.py'
+      - 'tools/blender/morwen_production/eyelid_lash/verify_root_fan_preservation_09h.py'
+      - 'tools/blender/morwen_production/eyelid_lash/render_root_fan_09i.py'
+      - 'tools/blender/morwen_production/eyelid_lash/render_root_fan_09j.py'
+      - 'tools/blender/morwen_production/eyelid_lash/diagnose_camera_09k.py'
+      - 'tools/blender/morwen_production/eyelid_lash/render_contact_09l.py'
+      - 'tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py'
+      - 'tools/blender/morwen_production/eyelid_lash/repair_root_winding_09n.py'
+      - 'tools/blender/morwen_production/eyelid_lash/compare_occlusion_09o.py'
+      - 'tools/blender/morwen_production/eyelid_lash/build_clearance_09p.py'
+      - 'tools/blender/morwen_production/eyelid_lash/localize_collision_09q.py'
+      - 'tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py'
+      - '.github/workflows/morwen-eyelid-09-input-audit.yml'
+  pull_request:
+    branches: [feature/morwen-eyelid-08-contact-cage]
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py'
+      - '.github/workflows/morwen-eyelid-09-input-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+jobs:
+  input-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned Blender 5.3.0 Python runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "${BPY_WHEEL_SHA256}  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+      - name: Audit real saved model without modifications
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/inspect_morwen_input_09.py --source assets/candidates/morwen-eyelid-07-structural/inspection/SCULPT_SETUP_07.blend --candidate assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/INPUT_AUDIT_09.json
+      - name: Survey actual anterior lid triangles read-only
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/survey_lid_triangles_09.py --candidate assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/TRIANGLE_SURVEY_09.json
+      - name: Match saved upper margin to nearest cage triangles
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/match_upper_margin_09.py --candidate assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --design assets/candidates/morwen-eyelid-08-contact/qa/CONTACT_CAGE_DESIGN_08.json --out render_output/morwen_eyelid_09/UPPER_MARGIN_MATCH_09.json
+      - name: Derive candidate-only lash root anchors
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/select_candidate_anchors_09.py --match render_output/morwen_eyelid_09/UPPER_MARGIN_MATCH_09.json --out render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json
+      - name: Build isolated candidate lash strips
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_candidate_strips_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
+      - name: Check candidate surface intersections against real model
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend --out render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json
+      - name: Classify collision sources before enforcing failure gate
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/diagnose_lash_collision_09.py --intersections render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/COLLISION_DIAGNOSIS_09.json
+      - name: Build redesigned surface-frame candidate in separate blend
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
+      - name: Evaluate redesigned candidate independently
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend --out render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json
+      - name: Compare redesigned candidate with baseline per strip
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/diagnose_surface_frame_09.py --baseline render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json --candidate render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json --out render_output/morwen_eyelid_09/SURFACE_FRAME_COMPARISON_09.json
+      - name: Diagnose left endpoint without modifying geometry
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/diagnose_left_endpoint_09.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --comparison render_output/morwen_eyelid_09/SURFACE_FRAME_COMPARISON_09.json --out render_output/morwen_eyelid_09/LEFT_ENDPOINT_DIAGNOSIS_09.json
+      - name: Build isolated left-endpoint continuity candidate 09b
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_surface_frame_strips_09b.py --anchors render_output/morwen_eyelid_09/ROOT_CANDIDATES_09.json --out render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
+      - name: Evaluate isolated left-endpoint candidate 09b
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/ENDPOINT_INTERSECTIONS_09B.json
+      - name: Compare endpoint candidate against original baseline
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/diagnose_surface_frame_09.py --baseline render_output/morwen_eyelid_09/SURFACE_INTERSECTIONS_09.json --candidate render_output/morwen_eyelid_09/ENDPOINT_INTERSECTIONS_09B.json --out render_output/morwen_eyelid_09/ENDPOINT_COMPARISON_09B.json
+      - name: Inspect exact residual triangle pairs in 09B
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/inspect_residual_pairs_09c.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/RESIDUAL_TRIANGLE_PAIRS_09C.json
+      - name: Build surface-constrained root candidate 09D from real cage
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_surface_clearance_09d.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend --report render_output/morwen_eyelid_09/SURFACE_CLEARANCE_BUILD_09D.json
+      - name: Evaluate 09D against real contact cage
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend --out render_output/morwen_eyelid_09/SURFACE_CLEARANCE_INTERSECTIONS_09D.json
+      - name: Inspect 09B and 09D root topology without edits
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/inspect_root_topology_09e.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --before render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --after render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_09E.json
+      - name: Summarize measured root clearance and cage winding in logs
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/summarize_root_topology_09e.py --input render_output/morwen_eyelid_09/ROOT_TOPOLOGY_09E.json --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_SUMMARY_09E.json
+      - name: Inspect actual cage topology and winding 09F (read only)
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/inspect_cage_adjacency_09f.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --out render_output/morwen_eyelid_09/CAGE_ADJACENCY_09F.json
+      - name: Build structurally distinct root-fan candidate 09G
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_root_fan_09g.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --out render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --report render_output/morwen_eyelid_09/ROOT_FAN_BUILD_09G.json
+      - name: Independently verify 09G preserves 17 other strips and distal vertices
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/verify_root_fan_preservation_09h.py --before render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend --after render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/ROOT_FAN_PRESERVATION_09H.json
+      - name: Test 09G real-model surface intersections
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/ROOT_FAN_INTERSECTIONS_09G.json
+      - name: Audit 09G root triangulation and face normals read only
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_AUDIT_09M.json
+      - name: Build separate 09N corrected root winding candidate
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/repair_root_winding_09n.py --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --report render_output/morwen_eyelid_09/ROOT_WINDING_BUILD_09N.json
+      - name: Independently measure 09N root normals
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/audit_root_topology_09m.py --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/ROOT_TOPOLOGY_AUDIT_09N.json
+      - name: Check 09N surface intersections
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/ROOT_WINDING_INTERSECTIONS_09N.json
+      - name: Render 09N corrected winding with eyelid contact and 48px preview
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/render_contact_09l.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --outdir render_output/morwen_eyelid_09/RENDERS_09N
+      - name: Build separate 09P cage-aware clearance candidate
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/build_clearance_09p.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --out render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --report render_output/morwen_eyelid_09/CLEARANCE_BUILD_09P.json
+      - name: Independently check 09P surface intersections
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/check_strip_intersections_09.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --out render_output/morwen_eyelid_09/CLEARANCE_INTERSECTIONS_09P.json
+      - name: Localize 09P failed triangle pairs without mesh changes
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/localize_collision_09q.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --out render_output/morwen_eyelid_09/COLLISION_LOCALIZATION_09Q.json
+      - name: Render controlled 09P occlusion comparison
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/compare_occlusion_09o.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_CLEARANCE_09P.blend --outdir render_output/morwen_eyelid_09/RENDERS_09P
+      - name: Render 09O controlled cage-occlusion comparison
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/compare_occlusion_09o.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend --outdir render_output/morwen_eyelid_09/RENDERS_09O
+      - name: Render three diagnostic views of 09G candidate
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/render_root_fan_09i.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --outdir render_output/morwen_eyelid_09/RENDERS_09I
+      - name: Diagnose 09J camera near clipping before attempting render
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/diagnose_camera_09k.py --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --out render_output/morwen_eyelid_09/CAMERA_DIAGNOSIS_09K.json
+      - name: Render isolated 09J root closeups without cage occlusion
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/render_root_fan_09j.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --outdir render_output/morwen_eyelid_09/RENDERS_09J
+      - name: Render 09L eyelid-to-lash contact and 48px diagnostic
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/render_contact_09l.py --model assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend --strips render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend --outdir render_output/morwen_eyelid_09/RENDERS_09L
+      - name: Gate 09G surface geometry (limited)
+        id: gate_09g
+        continue-on-error: true
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/ROOT_FAN_INTERSECTIONS_09G.json
+      - name: Gate 09D geometry (do not claim full G3)
+        id: gate_09d
+        continue-on-error: true
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/SURFACE_CLEARANCE_INTERSECTIONS_09D.json
+      - name: Gate endpoint candidate 09b (expected FAIL, preserve evidence)
+        id: gate_endpoint
+        continue-on-error: true
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/ENDPOINT_INTERSECTIONS_09B.json
+      - name: Gate redesigned candidate 09 (expected FAIL, preserve evidence)
+        id: gate_frame
+        continue-on-error: true
+        run: |
+          python tools/blender/morwen_production/eyelid_lash/gate_surface_qa_09.py --report render_output/morwen_eyelid_09/SURFACE_FRAME_INTERSECTIONS_09.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-eyelid-09-input-audit
+          path: |
+            render_output/morwen_eyelid_09/*.json
+            render_output/morwen_eyelid_09/RENDERS_09I/*.png
+            render_output/morwen_eyelid_09/RENDERS_09I/*.json
+            render_output/morwen_eyelid_09/RENDERS_09J/*.png
+            render_output/morwen_eyelid_09/RENDERS_09J/*.json
+            render_output/morwen_eyelid_09/RENDERS_09L/*.png
+            render_output/morwen_eyelid_09/RENDERS_09L/*.json
+            render_output/morwen_eyelid_09/RENDERS_09N/*.png
+            render_output/morwen_eyelid_09/RENDERS_09N/*.json
+            render_output/morwen_eyelid_09/RENDERS_09O/*.png
+            render_output/morwen_eyelid_09/RENDERS_09O/*.json
+            render_output/morwen_eyelid_09/RENDERS_09P/*.png
+            render_output/morwen_eyelid_09/RENDERS_09P/*.json
+            render_output/morwen_eyelid_09/*09P.json
+            render_output/morwen_eyelid_09/COLLISION_LOCALIZATION_09Q.json
+            render_output/morwen_eyelid_09/LASH_CANDIDATES_09.blend
+            render_output/morwen_eyelid_09/LASH_SURFACE_FRAME_09.blend
+            render_output/morwen_eyelid_09/LASH_ENDPOINT_09B.blend
+            render_output/morwen_eyelid_09/LASH_SURFACE_CLEARANCE_09D.blend
+            render_output/morwen_eyelid_09/LASH_ROOT_FAN_09G.blend
+            render_output/morwen_eyelid_09/LASH_ROOT_WINDING_09N.blend
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Enforce failed geometric gates after uploading all evidence
+        if: always()
+        env:
+          ENDPOINT_GATE: ${{ steps.gate_endpoint.outcome }}
+          FRAME_GATE: ${{ steps.gate_frame.outcome }}
+          CANDIDATE_09D_GATE: ${{ steps.gate_09d.outcome }}
+          CANDIDATE_09G_GATE: ${{ steps.gate_09g.outcome }}
+        run: |
+          echo "Endpoint 09B gate: ${ENDPOINT_GATE}"
+          echo "Frame 09 gate: ${FRAME_GATE}"
+          echo "09D surface gate: ${CANDIDATE_09D_GATE}"
+          echo "09G root-fan gate: ${CANDIDATE_09G_GATE}"
+          test "${CANDIDATE_09G_GATE}" = "success"

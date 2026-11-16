@@ -1,0 +1,41 @@
+name: AI3D offline rights canary (no inference)
+on:
+  push:
+    branches: [feature/morwen-eyelid-09-lash-architecture]
+    paths:
+      - 'tools/asset_pipeline/ai3d_pilot_preflight.py'
+      - 'tools/asset_pipeline/create_ai3d_synthetic_canary.py'
+      - 'tests/test_ai3d_pilot_preflight.py'
+      - '.github/workflows/ai3d-offline-canary.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-provenance-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Run offline safety unit tests
+        run: python -m unittest discover -s tests -p test_ai3d_pilot_preflight.py -v
+      - name: Create synthetic test-only PNG without images, reference assets, or downloads
+        run: |
+          python tools/asset_pipeline/create_ai3d_synthetic_canary.py --out render_output/ai3d_pilot/SYNTHETIC_STONE_INPUT.png
+      - name: Preflight TripoSR candidate input without loading model or transmitting data
+        run: |
+          python tools/asset_pipeline/ai3d_pilot_preflight.py --image render_output/ai3d_pilot/SYNTHETIC_STONE_INPUT.png --model TripoSR --source-class project-generated-synthetic-canary --out render_output/ai3d_pilot/TRIPOSR_PREFLIGHT.json
+      - name: Preflight InstantMesh candidate input without loading model or transmitting data
+        run: |
+          python tools/asset_pipeline/ai3d_pilot_preflight.py --image render_output/ai3d_pilot/SYNTHETIC_STONE_INPUT.png --model InstantMesh --source-class project-generated-synthetic-canary --out render_output/ai3d_pilot/INSTANTMESH_PREFLIGHT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ai3d-offline-canary-input-and-rights-preflight
+          path: render_output/ai3d_pilot/
+          if-no-files-found: warn
+          retention-days: 7

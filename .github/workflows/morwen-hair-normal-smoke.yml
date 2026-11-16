@@ -1,0 +1,32 @@
+name: Morwen hair Geometry Nodes isolated smoke
+on:
+  push:
+    branches: [feature/morwen-eyelid-09-lash-architecture]
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/hair_normal_nodes_smoke_09.py'
+      - '.github/workflows/morwen-hair-normal-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+jobs:
+  synthetic-normal-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned Blender 5.3.0 Python runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "${BPY_WHEEL_SHA256}  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+      - name: Run synthetic Geometry Nodes normal-control smoke
+        run: python tools/blender/morwen_production/eyelid_lash/hair_normal_nodes_smoke_09.py

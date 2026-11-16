@@ -1,0 +1,58 @@
+name: Morwen EYELID-09 Blender synthetic smoke
+on:
+  push:
+    branches:
+      - feature/morwen-eyelid-09-lash-architecture
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/**'
+      - '.github/workflows/morwen-eyelid-09-blender.yml'
+  pull_request:
+    branches:
+      - feature/morwen-eyelid-08-contact-cage
+    paths:
+      - 'tools/blender/morwen_production/eyelid_lash/**'
+      - '.github/workflows/morwen-eyelid-09-blender.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blender-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Run Python unit tests
+        run: python -m unittest discover -s tools/blender/morwen_production/eyelid_lash -p 'test_*.py' -v
+      - name: Blender synthetic evaluated-mesh smoke
+        run: blender -b --factory-startup --python tools/blender/morwen_production/eyelid_lash/blender_smoke_09.py
+
+  hair-normal-geometry-nodes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned Blender 5.3.0 Python runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+      - name: Synthetic hair Geometry Nodes normal-control test
+        run: python tools/blender/morwen_production/eyelid_lash/hair_normal_nodes_smoke_09.py
+      - name: Render synthetic flat-vs-smooth hair clumps
+        run: python tools/blender/morwen_production/eyelid_lash/hair_shading_compare_09.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-hair-shading-09
+          path: render_output/morwen_hair_shading_09/
+          if-no-files-found: warn
+          retention-days: 7
