@@ -1,0 +1,56 @@
+name: Aidan faceted masonry candidate v2
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/aidan_facet_stones_v2.py'
+      - '.github/workflows/aidan-facet-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: aidan-facet-v2-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Syntax check
+        run: python3 -m py_compile tools/map_blender/aidan_facet_stones_v2.py
+      - name: Install Blender and EGL
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libx11-6 libxrender1 libxfixes3 libxi6 libxxf86vm1
+          ldconfig -p | grep -F libEGL.so.1
+          blender --version
+      - name: Render candidate and test geometry
+        env:
+          AIDAN_FACET_OUT: ${{ runner.temp }}/aidan-facet-v2
+        run: |
+          mkdir -p "$AIDAN_FACET_OUT"
+          blender -b -t 2 --python tools/map_blender/aidan_facet_stones_v2.py
+      - name: Verify evidence
+        env:
+          AIDAN_FACET_OUT: ${{ runner.temp }}/aidan-facet-v2
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,hashlib,os
+          p=pathlib.Path(os.environ['AIDAN_FACET_OUT'])
+          m=json.loads((p/'manifest.json').read_text())
+          img=p/m['image']
+          assert img.stat().st_size>1000
+          assert hashlib.sha256(img.read_bytes()).hexdigest()==m['image_sha256']
+          assert m['topology_pass'] and len(m['qa'])==6
+          assert m['g2']=='NOT_RUN'
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-facet-v2-evidence
+          path: ${{ runner.temp }}/aidan-facet-v2/
+          if-no-files-found: warn
+          retention-days: 7
