@@ -24,6 +24,7 @@ on:
       - 'tools/character_blender/build_morwen_head_candidate.py'
       - 'tools/character_blender/render_morwen_head_review.py'
       - 'tools/character_blender/audit_morwen_render_visibility.py'
+      - 'tools/character_blender/inventory_morwen_legacy_face.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -112,6 +113,11 @@ jobs:
         run: |
           mkdir -p qa_output/art-review
           python tools/character_blender/morwen_team_contracts.py --role art-review --output qa_output/art-review/report.json
+      - name: Inventory frozen legacy face objects without modifying source
+        if: matrix.role == 'rig'
+        run: |
+          mkdir -p qa_output/rig
+          python tools/character_blender/inventory_morwen_legacy_face.py -- "$CANDIDATE_PATH" qa_output/rig/MORWEN_LEGACY_FACE_INVENTORY.json
       - name: Rig deformation technical measurements
         if: matrix.role == 'rig'
         run: |
