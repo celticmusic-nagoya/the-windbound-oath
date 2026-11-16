@@ -1,0 +1,136 @@
+{
+ "asset": "AIDAN-HOUSE masonry corner (exterior stone wall)",
+ "task": "AIDAN-MASONRY-ART-02",
+ "policy": "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md",
+ "note": "Cumulative ledger. F1-F7 copied from PR #329 QA records (branch feature/aidan-masonry-pbr-study-01 @ 22360a2); counts are not reset. Cross-branch ledger sync is NOT_IMPLEMENTED; this file carries history explicitly.",
+ "families": [
+  {
+   "id": "F1",
+   "name": "Boolean-chip rectangular blocks",
+   "status": "STOPPED",
+   "g2": "FAIL",
+   "evidence": "docs/aidan-masonry-hybrid-production-gate-2026-11-16.md",
+   "root_cause": "box silhouette; chips/bevels too small"
+  },
+  {
+   "id": "F2",
+   "name": "broad-plane horizontal rings (quoin_broadplane_v1)",
+   "status": "STOPPED",
+   "g2": "FAIL",
+   "evidence": "docs/aidan-quoin-independent-art-qa-2026-11-16.md",
+   "run": 43781482098,
+   "root_cause": "same plan vertices across rings -> periodic belts; exposed backing"
+  },
+  {
+   "id": "F3",
+   "name": "faceted perturbed cubes (facet v2)",
+   "status": "STOPPED",
+   "g2": "FAIL",
+   "evidence": "docs/aidan-facet-v2-independent-art-qa-2026-11-16.md",
+   "run": 43782248901,
+   "root_cause": "triangulation changes shading not macro outline; fixed grid, unverified joints"
+  },
+  {
+   "id": "F4",
+   "name": "raw scan boulders clipped + arbitrary offsets (fitted scan corner v1)",
+   "status": "STOPPED",
+   "g2": "FAIL",
+   "g3": "FAIL (0.15 m float)",
+   "evidence": "docs/qa/aidan-fitted-scan-corner-v1-art-fail-2026-11-16.md",
+   "run": 43786045981,
+   "root_cause": "no coupled contact geometry; whole boulders read as piled rocks"
+  },
+  {
+   "id": "F5",
+   "name": "planar joint-first + independent silhouette rings",
+   "status": "STOPPED",
+   "g2": "FAIL",
+   "evidence": "docs/qa/aidan-joint-first-v1-independent-art-qa-2026-11-16.md",
+   "run": 43786940632,
+   "root_cause": "ring scaling bevels bearing faces away from shared plane"
+  },
+  {
+   "id": "F6",
+   "name": "shared-surface contact feasibility (technical only)",
+   "status": "TECHNICAL_BASELINE",
+   "g2": "NOT_APPLICABLE",
+   "evidence": "docs/qa/aidan-shared-surface-v1-qa-2026-11-16.md"
+  },
+  {
+   "id": "F7",
+   "name": "primitive blocks + exterior-only procedural noise relief",
+   "status": "STOPPED",
+   "g2": "FAIL",
+   "evidence": "docs/qa/aidan-exterior-relief-v1-independent-art-fail-2026-11-16.md",
+   "run": 43789139055,
+   "root_cause": "noise cannot change rectangular silhouette; flat caps"
+  },
+  {
+   "id": "F8",
+   "name": "scan-carved coursed rubble (stone quarried from a scored window of a CC0 photogrammetry surface, cut by exact Boolean to a layout-solver cell; mortar = envelope minus cells)",
+   "status": "ACTIVE_CANDIDATE (B leads)",
+   "causal_difference": "macro silhouette and face relief come from measured real scan surface windows (not perturbed primitives); joints/beds are exact shared planes by construction (cell subset), unlike F4 which placed whole boulders at guessed offsets",
+   "generator": "tools/map_blender/aidan_scan_carved_rubble_corner_v1.py",
+   "attempts": [
+    {
+     "n": 1,
+     "defect": "D-F8-0 fit: whole-boulder scaling (cover 1.25-1.9x)",
+     "result": "FAIL (pre-render): 0/64 cells fitted; relief std 5-17 cm, hidden-face solidity 0.2-0.8",
+     "fix": "quarry from a 2.5-5x surface window, ray-measured window placement",
+     "counted_as": "fit-stage failure 1 of D-F8-0"
+    },
+    {
+     "n": 2,
+     "defect": "D-F8-0",
+     "result": "PASS: 55/64 then 64/64 with quoin double-intersection (cell ∩ rockA ∩ rockB)",
+     "fix_type": "structural (two-surface pitched quoin)"
+    },
+    {
+     "n": 3,
+     "defect": "D-F8-1 over-regular coursing (ashlar/brick read)",
+     "result": "SELF G2 FAIL (Claude self-review of out_v1 render)",
+     "observed": "uniform 2 cm joints, square perpends, continuous beds; mortar-core slab on top"
+    },
+    {
+     "n": 4,
+     "defect": "D-F8-1",
+     "result": "SELF G2 improved: skewed perpends +-2.5 cm, joint 1.2-3.2 cm per bed/perpend, edge-coverage target 0.40-0.78, oak wall plate",
+     "fix_type": "layout grammar change (not stone-parameter tweak)"
+    },
+    {
+     "n": 5,
+     "defect": "D-F8-2 sawn bed shelves (flat sharp ledge where stone is proud of joint)",
+     "result": "SELF G2 FAIL (out_v3, 128spp)"
+    },
+    {
+     "n": 6,
+     "defect": "D-F8-2",
+     "result": "SELF G2 improved (out_v4/out_final): pitched arrises, 2 chamfer planes per exposed edge, varied set-back/angle/yaw; technical QA PASS",
+     "fix_type": "structural cell clipping in front of mortar recess only"
+    },
+    {
+     "n": 7,
+     "defect": "G3-D1 Boolean micro-slivers (degenerate faces)",
+     "result": "FAIL found by independent CI run 43801873112 on candidate A (stone_32_B_c4; local recheck also stone_47_corner_c7)",
+     "fix": "remove_doubles 0.03 mm + dissolve_degenerate after every Boolean; degenerate=0 added to local pass gate",
+     "note": "candidate A files are pre-fix and keep the 2 slivers"
+    },
+    {
+     "n": 8,
+     "defect": "D-F8-3 scale/tone/weathering mismatch to V11 (stones ~1.6-2x too large, pale cream, light joints, weak moss)",
+     "result": "candidate B (profile v11b): course 9-17 cm, stones 14-34 cm, darker greige + darker mortar + stronger AO, patchy base moss, golden raking key; empty-Boolean guard and depth floor for short deep end stones; technical QA PASS (142 stones, 0 degenerate)",
+     "fix_type": "profile change of layout scale and look-dev (attempt 1 for D-F8-3)",
+     "g2_self": "candidate-quality; independent G2 NOT_RUN"
+    }
+   ],
+   "same_family_failures_per_defect": {
+    "D-F8-0": 1,
+    "D-F8-1": 1,
+    "D-F8-2": 1,
+    "G3-D1": 1,
+    "D-F8-3": 0
+   },
+   "g2_independent": "NOT_RUN"
+  }
+ ]
+}
