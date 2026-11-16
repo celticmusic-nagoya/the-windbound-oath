@@ -99,7 +99,8 @@ def main():
         sc.collection.objects.link(cam)
         sc.camera=cam
         cam_data.type="ORTHO"
-        cam_data.ortho_scale=max(size.z*1.18,max(size.x,size.y)*1.6)
+        # Both models share the same orthographic scale for honest side-by-side comparison.
+        cam_data.ortho_scale=2.05
         center=(low+high)*0.5
         dist=max(size)*3.0
         for view,direction in VIEWS.items():
@@ -108,7 +109,7 @@ def main():
             dest=out/(name+"_"+view+".png")
             sc.render.filepath=str(dest)
             bpy.ops.render.render(write_still=True)
-            result["views"].append({"object":name,"view":view,"file":dest.name,
+            result["views"].append({"object":name,"view":view,"camera_ortho_scale":2.05,"file":dest.name,
                 "sha256":hashlib.sha256(dest.read_bytes()).hexdigest(),
                 "bytes":dest.stat().st_size,
                 "bounds_xyz":[[round(low[i],6),round(high[i],6)] for i in range(3)]})
