@@ -1,0 +1,59 @@
+name: HairHarpy v2 pinned binary inspection (no execution)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download author release to temporary directory only
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/hairharpy" qa_output/hairharpy
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 180 \
+            https://github.com/Rackta/HairHarpy/releases/download/v2.0.0/HairHarpy-2.0.0-linux-x86_64.tar.gz \
+            -o "$RUNNER_TEMP/hairharpy/release.tar.gz"
+          echo 'f8e6f398a2faa2e252e01d6e201c2aa8737fff456bfedabebe13be63e7ca2b3c  '"$RUNNER_TEMP"'/hairharpy/release.tar.gz' | sha256sum -c -
+          sha256sum "$RUNNER_TEMP/hairharpy/release.tar.gz" > qa_output/hairharpy/release_sha256.txt
+      - name: Inspect tar members without extracting or running third-party code
+        run: |
+          python - <<'PY'
+          import tarfile,os,json,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'hairharpy'
+          records=[]
+          with tarfile.open(root/'release.tar.gz','r:gz') as tar:
+              for m in tar:
+                  p=pathlib.PurePosixPath(m.name)
+                  if p.is_absolute() or '..' in p.parts or m.issym() or m.islnk() or m.isdev() or m.isfifo():
+                      raise SystemExit('BLOCKED unsafe archive member '+m.name)
+                  records.append({'name':m.name,'bytes':m.size,'type':m.type.decode('latin1')})
+          out={'status':'PASS_ARCHIVE_INVENTORY_ONLY','release':'v2.0.0','archive_entries':len(records),
+               'executable_launched':False,'vulkan_test':'NOT_RUN','cli_test':'NOT_RUN',
+               'integration_qa':'NOT_RUN','license':'SOURCE_AVAILABLE_NOT_OPEN_SOURCE',
+               'members':records}
+          pathlib.Path('qa_output/hairharpy/archive_inventory.json').write_text(json.dumps(out,indent=2)+'\n')
+          print('PASS safe archive inspection',len(records))
+          PY
+      - name: Inspect runner GPU and display capability (no HairHarpy launch)
+        run: |
+          {
+            echo 'GPU PCI:'
+            (lspci | grep -Ei 'vga|3d|display' || true)
+            echo 'DISPLAY:' "${DISPLAY:-unset}"
+            echo 'WAYLAND_DISPLAY:' "${WAYLAND_DISPLAY:-unset}"
+            echo 'Vulkan tooling:'
+            (command -v vulkaninfo || true)
+          } > qa_output/hairharpy/runner_capability.txt
+      - name: Upload text-only verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hairharpy-v2-security-and-compatibility-audit
+          path: qa_output/hairharpy/
+          retention-days: 14
+          if-no-files-found: warn
