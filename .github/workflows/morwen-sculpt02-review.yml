@@ -2,7 +2,7 @@ name: Morwen sculpt02 saved-source review
 on:
   push:
     branches: [feature/morwen-art-directed-sculpt-02]
-    paths: ['tools/morwen_sculpt02/**', 'assets/candidates/morwen-sculpt02/**', '.github/workflows/morwen-sculpt02-review.yml']
+    paths: ['tools/morwen_sculpt02/render_review.py', 'tools/morwen_sculpt02/qa_review.py', 'assets/candidates/morwen-sculpt02/**', '.github/workflows/morwen-sculpt02-review.yml']
   workflow_dispatch:
 permissions:
   contents: read
