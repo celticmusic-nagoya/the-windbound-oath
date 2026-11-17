@@ -1,0 +1,36 @@
+name: ROUTE-MAT-01 bounded Blender candidate
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/route_mat_01/**'
+      - 'assets/candidates/route-mat-01/attempt-01/**'
+      - '.github/workflows/route-mat-01-candidate.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and Python validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+      - name: Verify material source and tests
+        run: |
+          python3 tools/material_pipeline/validate_material_handoff.py assets/candidates/route-mat-01/attempt-01/manifest.json --root .
+          python3 -m unittest discover -s tests -p test_material_handoff.py -v
+      - name: Generate bounded real mesh, Blender and renders
+        run: |
+          mkdir -p "$RUNNER_TEMP/route-mat-01"
+          blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/route_mat_01/build_sample.py -- --root "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/route-mat-01"
+      - name: Upload actual candidate and QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: route-mat-01-candidate-${{ github.run_id }}
+          path: ${{ runner.temp }}/route-mat-01/
+          retention-days: 7
+          if-no-files-found: warn
