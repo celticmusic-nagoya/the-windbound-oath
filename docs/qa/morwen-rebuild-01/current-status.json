@@ -1,162 +1,25 @@
 {
-  "task": "MORWEN-REBUILD-01-LAYER0",
-  "blender": "4.3.2",
-  "reference_source_commit": "8cc6687ce4498b6f0ea5bd59f0ebe2d7017629f1",
+  "task": "MORWEN-REBUILD-01",
+  "scope": "Actual full-body vertex edit v02; not final art",
+  "reference_preparation": "COMPLETE_NOT_RERUN",
   "G1_body_reference": "PASS",
   "G1_final_design": "BLOCKED",
   "G2": "FAIL",
-  "G3_reference_scene": "PASS",
   "G3_character": "NOT_RUN",
-  "G4": "NOT_RUN",
-  "scope": "Reference scene only; zero character meshes",
-  "canvas_height": 2.0,
-  "canvas_is_metric_body_height": false,
-  "ground_and_landmark_registration": "NOT_RUN",
-  "checks": [
-    {
-      "view": "front",
-      "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
-      "packed": true,
-      "image_size": [
-        384,
-        1024
-      ],
-      "projected_corners": [
-        [
-          0.0,
-          1.1920928955078125e-07
-        ],
-        [
-          1.0,
-          1.1920928955078125e-07
-        ],
-        [
-          1.0,
-          1.0000001192092896
-        ],
-        [
-          0.0,
-          1.0000001192092896
-        ]
-      ],
-      "max_corner_error": 1.1920928955078125e-07,
-      "unmirrored_upright": true,
-      "transform_locks": true,
-      "visibility_toggle": "PASS"
-    },
-    {
-      "view": "right",
-      "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
-      "packed": true,
-      "image_size": [
-        384,
-        1024
-      ],
-      "projected_corners": [
-        [
-          -2.7815499947791977e-07,
-          -5.960464477539063e-08
-        ],
-        [
-          0.9999997019767761,
-          -5.960464477539063e-08
-        ],
-        [
-          0.9999997019767761,
-          0.9999998807907104
-        ],
-        [
-          -2.7815499947791977e-07,
-          0.9999998807907104
-        ]
-      ],
-      "max_corner_error": 2.980232238769531e-07,
-      "unmirrored_upright": true,
-      "transform_locks": true,
-      "visibility_toggle": "PASS"
-    },
-    {
-      "view": "back",
-      "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
-      "packed": true,
-      "image_size": [
-        384,
-        1024
-      ],
-      "projected_corners": [
-        [
-          4.3710073782676773e-07,
-          8.940696716308594e-08
-        ],
-        [
-          1.0000004768371582,
-          1.1920928955078125e-07
-        ],
-        [
-          1.000000238418579,
-          1.0000001192092896
-        ],
-        [
-          2.384185791015625e-07,
-          1.0000001192092896
-        ]
-      ],
-      "max_corner_error": 4.76837158203125e-07,
-      "unmirrored_upright": true,
-      "transform_locks": true,
-      "visibility_toggle": "PASS"
-    },
-    {
-      "view": "left",
-      "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
-      "packed": true,
-      "image_size": [
-        384,
-        1024
-      ],
-      "projected_corners": [
-        [
-          2.7815499947791977e-07,
-          -5.960464477539063e-08
-        ],
-        [
-          1.000000238418579,
-          -5.960464477539063e-08
-        ],
-        [
-          1.000000238418579,
-          0.9999998807907104
-        ],
-        [
-          2.7815499947791977e-07,
-          0.9999998807907104
-        ]
-      ],
-      "max_corner_error": 2.7815499947791977e-07,
-      "unmirrored_upright": true,
-      "transform_locks": true,
-      "visibility_toggle": "PASS"
-    }
-  ],
-  "reopened_with_scripts_disabled": true,
-  "blend_sha256": "fb200e866da4c546d3d81feb4b1d7106aaef829ecb83336207d7b70198c1f877",
-  "status": "BODY_REFERENCE_UNBLOCKED; CHARACTER_NOT_BUILT",
-  "historical_preflight": "preflight.json (superseded state, preserved evidence)",
-  "base_intake": "SOURCE_ACQUIRED_RENDERED_REOPENED_NOT_FITTED",
-  "latest_run": 44149109934,
-  "latest_run_conclusion": "success",
-  "reference_artifact": 14357757704,
-  "base_artifact": 14358710788,
-  "G3_base_production": "NOT_RUN",
-  "base_blocker": null,
-  "independent_art_qa": "FAIL",
-  "actual_body_sculpt": "ACTUAL_VERTEX_EDIT_SAVED",
-  "driver_cleanup": "PASS_IN_SEPARATE_WORKSPACE_SOURCE_PRESERVED",
-  "body_workspace": "assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend",
-  "body_fit": "body-fit-v02",
   "G3_local_screen": "FAIL",
+  "G4": "NOT_RUN",
+  "actual_body_sculpt": "ACTUAL_VERTEX_EDIT_SAVED_NOT_MANUAL_SCULPT",
+  "changed_vertices": 12502,
+  "faces": 12500,
+  "independent_art_qa": "FAIL",
+  "independent_review": "body-fit-v02/INDEPENDENT_ART_QA.md",
+  "candidate": "assets/candidates/morwen-rebuild-01/body-fit-v02/MORWEN_BODY_FIT_V02_UNAPPROVED.blend",
   "method_family": "semantic_full_body_landmark_cage",
   "method_family_failures": 2,
   "method_family_status": "STOP",
-  "latest_body_blend": "assets/candidates/morwen-rebuild-01/body-fit-v02/MORWEN_BODY_FIT_V02_UNAPPROVED.blend"
+  "body_edit_run": 44153685026,
+  "body_edit_run_result": "success_evidence_packaging_not_art_acceptance",
+  "body_edit_artifact": 14358964067,
+  "next_method": "Authored local anatomical quad-flow/sculpt at shoulder/axilla and knee/shin; no third cage threshold iteration",
+  "G1_final_design_scope": "v5.61 final outfit/appearance only; does not block body edits"
 }
