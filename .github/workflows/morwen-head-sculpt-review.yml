@@ -1,0 +1,36 @@
+name: Morwen head sculpt review
+on:
+  push:
+    branches: [feature/morwen-head-sculpt-20261117]
+    paths: ['tools/morwen_head/**', '.github/workflows/morwen-head-sculpt-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Obtain preserved stage from specified artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p input output/stage output/evidence
+          gh api repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14298561244/zip > input/stage.zip
+          python tools/morwen_head/extract_stage.py input/stage.zip output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-head-source-stage
+          path: output/stage/
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-head-source-evidence
+          path: output/evidence/
+          retention-days: 14
+          if-no-files-found: error
