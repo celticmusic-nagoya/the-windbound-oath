@@ -1,11 +1,7 @@
 name: Morwen rebuild01 saved source and QA evidence
+# Prior preparation is complete; do not rerun/repackage it on body-edit pushes.
 on:
-  push:
-    branches: [feature/morwen-rebuild-01]
-    paths:
-      - docs/production/MORWEN_REBUILD_01.md
-      - docs/qa/morwen-rebuild-01/**
-      - .github/workflows/morwen-rebuild01-preflight.yml
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

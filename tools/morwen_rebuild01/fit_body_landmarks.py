@@ -7,8 +7,8 @@ import numpy as np
 import bpy
 from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
-OUT=ROOT/'assets/candidates/morwen-rebuild-01/body-fit-v01'
-QA=ROOT/'docs/qa/morwen-rebuild-01/body-fit-v01'
+OUT=ROOT/'assets/candidates/morwen-rebuild-01/body-fit-v02'
+QA=ROOT/'docs/qa/morwen-rebuild-01/body-fit-v02'
 OUT.mkdir(parents=True,exist_ok=True);QA.mkdir(parents=True,exist_ok=True)
 source=ROOT/'assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend'
 bpy.ops.wm.open_mainfile(filepath=str(source),load_ui=False,use_scripts=False)
@@ -36,8 +36,8 @@ def smooth(a,b,x):
     t=np.clip((x-a)/(b-a),0,1);return t*t*(3-2*t)
 x,y,z=v.T;ax=np.abs(x)
 # Separate arms from torso by source anatomical envelope, feathered at shoulder.
-threshold=np.interp(z,[0,.40,.50,.60,.68,.73,.78,.81,1],[.13,.13,.13,.105,.105,.085,.055,.055,.10])
-arm=smooth(threshold,threshold+.025,ax)*(1-smooth(.78,.815,z))
+threshold=np.interp(z,[0,.40,.50,.60,.68,.73,.78,.81,1],[.13,.13,.125,.095,.095,.075,.045,.045,.10])
+arm=smooth(threshold,threshold+.008,ax)*(1-smooth(.78,.815,z))
 arm*=smooth(.38,.43,z)
 # Torso/hip/knee/ankle front half-widths in registered source and target.
 # Targets measured from visible front outline, not underwear trim.
@@ -66,7 +66,7 @@ after=body*(1-arm[:,None])+arms*arm[:,None]
 # No mirroring: source left/right differences and source topology are retained.
 inv=o.matrix_world.inverted()
 for vert,p in zip(o.data.vertices,after):vert.co=inv@Vector(tuple(p))
-o.data.update();o.name='MORWEN_BODY_FIT_V01_UNAPPROVED'
+o.data.update();o.name='MORWEN_BODY_FIT_V02_UNAPPROVED'
 o['method']='Measured full-body semantic cage; direct vertex edits'
 o['reference_scope']='Approved Layer0 body structure only'
 o['head_crown']='INFERRED pixel y57 ±20; head-count confidence limited'
@@ -80,13 +80,13 @@ for view in ('front','back','right','left'):
     scene.camera=bpy.data.objects['SOURCE_REVIEW_'+view]
     scene.render.filepath=str(OUT/(view+'.png'))
     bpy.ops.render.render(write_still=True)
-blend=OUT/'MORWEN_BODY_FIT_V01_UNAPPROVED.blend'
+blend=OUT/'MORWEN_BODY_FIT_V02_UNAPPROVED.blend'
 bpy.ops.wm.save_as_mainfile(filepath=str(blend))
 delta=np.linalg.norm(after-before,axis=1)
 landmarks=[]
 for name,sz,py,kind in [('sole',0,1003,'visible outline'),('ankle',.05,955,'joint center inferred'),('knee',.29,695,'joint center inferred from contour'),('crotch',.4887,499,'clothed outline; underlying joint inferred'),('pelvis',.53,460,'contour station'),('waist',.6,383,'visible silhouette'),('chest',.7,285,'garment-covered silhouette'),('shoulder',.775,225,'joint inferred from visible shoulder'),('neck',.8,207,'visible contour'),('chin',.8254,183,'visible contour'),('skull_crown',1,57,'INFERRED hidden by hair')]:
     target=Z(py);pred=float(pchip(np.array([sz]),zsrc,ztgt)[0]);landmarks.append({'landmark':name,'reference_y_px':py,'measurement_type':kind,'source_z':sz,'target_z':target,'cage_after_z':pred,'before_error_px':abs(sz-target)*H,'after_cage_error_px':abs(pred-target)*H})
-report={'task':'MORWEN-REBUILD-01-ACTUAL-BODY-FIT','method':'RB01-SEMANTIC-FULLBODY-CAGE-01','source':str(source.relative_to(ROOT)),'vertex_count':len(v),'faces':len(o.data.polygons),'changed_vertices':int((delta>1e-7).sum()),'max_vertex_delta_normalized':float(delta.max()),'mean_vertex_delta_normalized':float(delta.mean()),'finite':bool(np.isfinite(after).all()),'topology_preserved':True,'skull_head_count_before':1/(1-.8254),'skull_head_count_after_estimate':1/(1-Z(183)),'skull_head_count_after_is_inferred':True,'crown_uncertainty_px':20,'landmarks':landmarks,'warning':'Cage-station error is not independent silhouette accuracy. Head crown and anatomical joint centers are inferred; drawing views are not calibrated orthographic scans.','G1_body_reference':'PASS','G1_final_design':'BLOCKED','G2':'NOT_RUN','G3':'NOT_RUN','G4':'NOT_RUN','independent_art_qa':'PENDING_HANDOFF'}
+report={'task':'MORWEN-REBUILD-01-ACTUAL-BODY-FIT','method':'RB01-SEMANTIC-FULLBODY-CAGE-02','source':str(source.relative_to(ROOT)),'vertex_count':len(v),'faces':len(o.data.polygons),'changed_vertices':int((delta>1e-7).sum()),'max_vertex_delta_normalized':float(delta.max()),'mean_vertex_delta_normalized':float(delta.mean()),'finite':bool(np.isfinite(after).all()),'topology_preserved':True,'skull_head_count_before':1/(1-.8254),'skull_head_count_after_estimate':1/(1-Z(183)),'skull_head_count_after_is_inferred':True,'crown_uncertainty_px':20,'landmarks':landmarks,'warning':'Cage-station error is not independent silhouette accuracy. Head crown and anatomical joint centers are inferred; drawing views are not calibrated orthographic scans.','G1_body_reference':'PASS','G1_final_design':'BLOCKED','G2':'NOT_RUN','G3':'NOT_RUN','G4':'NOT_RUN','independent_art_qa':'PENDING_HANDOFF'}
 (QA/'mesh-edit.json').write_text(json.dumps(report,indent=2)+'\n')
 np.savez(QA/'vertex-delta.npz',before_world=before,after_world=after)
 print('ACTUAL_BODY_VERTEX_EDIT_SAVED',report['changed_vertices'],report['max_vertex_delta_normalized'])

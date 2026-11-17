@@ -25,3 +25,14 @@ Local mirror HTTP403 was bypassed by neither credentials nor proxy changes; the 
 Technical issues detected after first source intake: incorrect normalized translation shifts the body in the render; apt chose Blender5.0.1, whose new header cannot reopen in local4.3.2. Neither is an art fitting attempt. Correct translation as (original_location - world_center)/height and assert all evaluated vertices lie within the frame. Pin CI to Python3.11+bpy4.3.0 for compatible editing. Preserve v01 artifact and local failed reopen log.
 
 No head/face/hair/rig/costume was regenerated, and no claim of manual sculpting or retopology is made. Next: reviewed anatomical targets and actual full-body authored geometry; do not revive automatic facial fitting or primitive lofts to fit this new source. G2 independent review remains NOT_RUN.
+
+## RB01-BODY-CAGE-01 / 02 — actual full-body edits (2026-11-17)
+
+The director explicitly authorized measured full-body vertex editing of the existing workspace, replacing preparation-only work. This is not another face-feature-fit or coarse-hair trial: the causal scope is whole-body height/width/depth and arm pose, with the original facial feature topology retained. Earlier stopped counters remain unchanged.
+
+Method family: `semantic_full_body_landmark_cage`.
+
+- Trial01, commit6b01e6f: all12,502 control vertices edited. Changed head/neck/body/leg proportions, torso width/depth and arm/hand placement. Four actual after renders and .blend saved. Self and independent visual findings: FAIL, severe upper-arm/shoulder pinch because the arm/torso membership transition cut across an arm cross section. Candidate and logs retained in body-fit-v01.
+- Trial02: narrower classification feather and adjusted anatomical envelope; same method, not a reset. All12,502 vertices edited, maximum world delta0.07817015 and mean0.04034859 relative to the original normalized-height body. Surface connectivity remains12,500 faces. Four real PNGs and new editable.blend saved. v01 upper-arm pinch improves; independent G2 FAIL remains for shoulder/axilla attachment, knee–shin, gluteal bands and stance. Shoulder/knee widths regress even though waist/chest/pelvis improve. Limited technical screen finds38 face-normal direction changes>90°; these are diagnostic concerns, not by themselves proven inverted manifold faces. **Second same-family G2 FAIL: STOP this cage/classification family. Do not make a third width/threshold variation.**
+
+Next structurally different method: authored local anatomical quad flow/sculpt through shoulder–axilla–upper arm and knee–shin regions, preserving useful global proportion changes and original references. No source reacquisition, source repack, reference-scene rebuild or unrelated face/rig work. This checkpoint satisfies the actual-edit evidence milestone, not final body/art acceptance.

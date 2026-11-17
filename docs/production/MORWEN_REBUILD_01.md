@@ -131,3 +131,7 @@ GitHub connector経由で素体ZIPを取得し実画像を確認した。初回�
 編集可能な作業原本: `assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend`。
 QA: BODY_WORKSPACE_QA.json、BODY_WORKSPACE.log。source再open時の警告はlog前半に残るが、cleanup後の再openでは再発せず、driver数0をassertした。
 これによりdriver障害は解除。全キャラクターG3はBLOCKEDからNOT_RUNへ更新（UV／rig等の全体認定は行わない）。身体G1 PASS／最終外観G1 BLOCKED／G2 NOT_RUN／G3 NOT_RUN／G4 NOT_RUN、限定技術screen PASS。新しい身体形状はまだsculptしていない。元の任意人体形状やA-poseを正式採用と誤認しない。
+
+## 最新工程: 実全身形状変更（準備工程は再実行しない）
+
+[実造形v02報告](MORWEN_REBUILD_01_BODY_EDIT.md)を最新実績とする。既存原本の12,502頂点を実編集しafter4viewを保存、独立QAも実施。G2 FAIL、限定技術screen FAIL。準備の繰り返しではなく、実形状変更と改善／悪化の証跡を納品した。v01/v02同cagefamilyは2回失敗で停止し、今後は局所解剖surface手法へ切替える。

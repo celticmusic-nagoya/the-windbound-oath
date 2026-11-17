@@ -4,7 +4,7 @@
   "reference_source_commit": "8cc6687ce4498b6f0ea5bd59f0ebe2d7017629f1",
   "G1_body_reference": "PASS",
   "G1_final_design": "BLOCKED",
-  "G2": "NOT_RUN",
+  "G2": "FAIL",
   "G3_reference_scene": "PASS",
   "G3_character": "NOT_RUN",
   "G4": "NOT_RUN",
@@ -149,8 +149,14 @@
   "base_artifact": 14358710788,
   "G3_base_production": "NOT_RUN",
   "base_blocker": null,
-  "independent_art_qa": "NOT_RUN",
-  "actual_body_sculpt": "NOT_RUN",
+  "independent_art_qa": "FAIL",
+  "actual_body_sculpt": "ACTUAL_VERTEX_EDIT_SAVED",
   "driver_cleanup": "PASS_IN_SEPARATE_WORKSPACE_SOURCE_PRESERVED",
-  "body_workspace": "assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend"
+  "body_workspace": "assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend",
+  "body_fit": "body-fit-v02",
+  "G3_local_screen": "FAIL",
+  "method_family": "semantic_full_body_landmark_cage",
+  "method_family_failures": 2,
+  "method_family_status": "STOP",
+  "latest_body_blend": "assets/candidates/morwen-rebuild-01/body-fit-v02/MORWEN_BODY_FIT_V02_UNAPPROVED.blend"
 }
