@@ -15,6 +15,7 @@ on:
       - 'tools/character_blender/sample_basemesh_render_contours.py'
       - 'tools/character_blender/verify_head_landmark_hypotheses.py'
       - 'tools/character_blender/build_morwen_proportion_stage.py'
+      - 'tools/character_blender/pack_morwen_canonical_references.py'
 permissions:
   contents: read
 jobs:
@@ -108,6 +109,9 @@ jobs:
       - name: Build actual renderable Blender proportion stage and four-view PNGs
         run: |
           python tools/character_blender/build_morwen_proportion_stage.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/proportion_stage
+      - name: Pack SHA-verified Morwen references into editable stage (viewport-only)
+        run: |
+          python tools/character_blender/pack_morwen_canonical_references.py --stage qa_output/basemesh/proportion_stage/morwen_proportion_stage_UNAPPROVED.blend --canonical assets/canonical/morwen/2026-11-16 --output qa_output/basemesh/proportion_stage/morwen_proportion_stage_WITH_CANONICAL_REFERENCES_UNAPPROVED.blend
       - name: Remove binary sources from uploaded report
         if: always()
         run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
