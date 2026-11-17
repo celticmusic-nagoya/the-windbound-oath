@@ -67,3 +67,14 @@ Verified by reading the **actual branch files**, not by assuming a workflow ran:
 
 ### Updated gates
 G1 BLOCKED (private canon + reference binary + metric/camera approval); G2 NOT_RUN; G3 NOT_RUN for actual production geometry (source-review evidence documented); G4 NOT_RUN. No real Blender render or Android execution in this follow-up.
+
+## Verified CI evidence (2026-11-17)
+- PR #411 candidate contract workflow run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44090169589
+- Commit under test: `d0d5bdf8b3e2e7d98dc69e3305366173132dd207` (PR merge ref checkout).
+- Job ID `134062920209`, conclusion `success`. Fetched job logs confirm `Ran 7 tests in 0.002s / OK`.
+- Negative controls exercised: reject adopted status, forged PASS, wrong SHA, missing output, path traversal, and unapproved metric scale; positive candidate case passed.
+- CI logs include a non-failing `actions/checkout@v4` Node 20 deprecation warning; evaluate upgrading checkout to a supported major after checking compatibility. This is not a failed test.
+- Scope is ONLY candidate-manifest contract tests. No Blender process, .blend reopen, GLB parser, renderer, independent art review or Android device ran in this workflow.
+- This establishes **contract test PASS (7/7)**, not G1/G2/G3/G4 production acceptance.
+
+Next: inspect existing PR artifacts and canonical hashes, then design a bounded Blender export/reopen test that uses real model bytes. Do not fabricate a sample GLB as production art.
