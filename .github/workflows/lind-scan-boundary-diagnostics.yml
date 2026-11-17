@@ -1,0 +1,64 @@
+name: LIND Scan Boundary Diagnostic
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/diagnose_scan_surface_boundary.py'
+      - '.github/workflows/lind-scan-boundary-diagnostics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  boundary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exact previously verified scan-led scene
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/boundary
+          python3 -m py_compile tools/map_blender/lind/diagnose_scan_surface_boundary.py
+          gh run download 44036452900 -R ${{ github.repository }} -n lind-scan-led-irregular-surface-study -D out/source
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/source')
+          m=json.loads((d/'scan_led_manifest.json').read_text())
+          p=d/'scan_led_irregular_surface.png'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['render_sha256']
+          assert m['source_open'] if 'source_open' in m else m['surface_open']
+          print('SOURCE_RENDER_SHA_PASS')
+          PY
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Inspect boundary and render diagnostic
+        timeout-minutes: 4
+        run: |
+          set -o pipefail
+          timeout 180s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/diagnose_scan_surface_boundary.py -- --source-blend out/source/scan_led_irregular_surface.blend --out out/boundary 2>&1 | tee out/boundary/blender.log
+      - name: Verify boundary PNG and metrics
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path('out/boundary')
+          m=json.loads((d/'scan_boundary_metrics.json').read_text())
+          p=d/'scan_boundary_diagnostic.png'
+          assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['render_sha256']
+          assert m['boundary_edges']>0 and m['boundary_components']>=1
+          assert m['source_mesh_modified'] is False
+          print('BOUNDARY_QA_PASS')
+          PY
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-scan-open-boundary-diagnostic
+          path: out/boundary/
+          retention-days: 14
+          if-no-files-found: warn
