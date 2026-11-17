@@ -1,0 +1,62 @@
+name: LIND Scanned Cliff PBR Closeup
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/render_scan_pbr_closeup.py'
+      - '.github/workflows/lind-scan-pbr-closeup.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pbr-closeup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and required NumPy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-exit-code 1 --python-expr "import numpy; print('NUMPY_OK')"
+      - name: Preflight syntax
+        run: python3 -m py_compile tools/map_blender/lind/download_polyhaven_cliff_scan.py tools/map_blender/lind/render_scan_pbr_closeup.py
+      - name: Download verified publisher scan
+        run: python3 tools/map_blender/lind/download_polyhaven_cliff_scan.py --asset coastal_cliff_04 --out out/lind-scan-pbr-closeup
+      - name: Render full and 25% closeup with original PBR maps
+        run: |
+          set -euo pipefail
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/render_scan_pbr_closeup.py -- --out out/lind-scan-pbr-closeup 2>&1 | tee out/lind-scan-pbr-closeup/blender.log
+      - name: Verify source and render hashes
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('out/lind-scan-pbr-closeup')
+          source=json.loads((root/'source_manifest.json').read_text())
+          m=json.loads((root/'pbr_closeup_qa.json').read_text())
+          assert m['source_triangles']>1000000
+          assert 0<m['lod25_triangles']<m['source_triangles']
+          assert m['uv_source']>=1 and m['uv_lod']>=1
+          for f in source['files']:
+              p=Path(f['path'])
+              assert p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256']
+          for name,v in m['images'].items():
+              p=root/v['file']
+              b=p.read_bytes()
+              assert b[:8]==bytes([137,80,78,71,13,10,26,10]),name
+              assert hashlib.sha256(b).hexdigest()==v['sha256']
+          p=root/m['blend']['file']
+          assert p.read_bytes()[:7]==b'BLENDER'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['blend']['sha256']
+          print('PBR_CLOSEUP_FILE_QA_PASS')
+          PY
+      - name: Reopen actual Blender source
+        run: |
+          blender --background --factory-startup --disable-autoexec out/lind-scan-pbr-closeup/scan_pbr_closeup_study.blend --python-exit-code 1 --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==2; print('PBR_CLOSEUP_BLEND_REOPEN_PASS')"
+      - name: Upload PBR closeup and protected source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cliff-04-pbr-closeup
+          path: out/lind-scan-pbr-closeup/
+          retention-days: 14
