@@ -31,6 +31,15 @@ jobs:
             p=d/a['file']
             assert hashlib.sha256(p.read_bytes()).hexdigest()==a['sha256']
             assert p.stat().st_size==a['size_bytes']
+            if p.suffix=='.gltf':
+              model=json.loads(p.read_text())
+              expected={x['uri'] for group in ('buffers','images') for x in model.get(group,[]) if 'uri' in x and not x['uri'].startswith('data:')}
+              assert expected and expected=={x['uri'] for x in a['dependencies']}
+              for dep in a['dependencies']:
+                q=d/dep['file']
+                assert q.is_file() and q.stat().st_size==dep['size_bytes']
+                assert hashlib.sha256(q.read_bytes()).hexdigest()==dep['sha256']
+                assert (p.parent/dep['uri']).resolve()==q.resolve()
           print('CC0_SOURCE_ACQUISITION_SHA_PASS')
           PY
       - name: Preserve candidate assets and provenance
