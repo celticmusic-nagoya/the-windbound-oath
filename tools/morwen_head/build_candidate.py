@@ -50,15 +50,28 @@ def sphere(name,loc,scale,mat):
     return ob
 
 def wire(name,pts,r,mat,closed=False):
-    cu=bpy.data.curves.new(name,'CURVE');cu.dimensions='3D';cu.bevel_depth=r;cu.bevel_resolution=4;cu.use_fill_caps=True
-    s=cu.splines.new('POLY');s.points.add(len(pts)-1)
-    for q,p in zip(s.points,pts):q.co=(*p,1)
-    s.use_cyclic_u=closed
-    ob=bpy.data.objects.new(name,cu);bpy.context.scene.collection.objects.link(ob)
-    bpy.context.view_layer.objects.active=ob;ob.select_set(True);bpy.ops.object.convert(target='MESH');ob.select_set(False)
-    ob.data.materials.append(mat)
-    for p in ob.data.polygons:p.use_smooth=True
-    return ob
+    # Direct indexed solid rings replace Curve conversion: Blender cap conversion
+    # duplicates endpoint vertices and left nonmanifold boundaries in two trials.
+    points=list(map(Vector,pts));verts=[];segments=12
+    for i,p in enumerate(points):
+        before=points[(i-1)%len(points)] if closed or i else p
+        after=points[(i+1)%len(points)] if closed or i<len(points)-1 else p
+        tangent=(after-before).normalized()
+        axis=Vector((0,0,1)) if abs(tangent.z)<.9 else Vector((0,1,0))
+        u=tangent.cross(axis).normalized();v=tangent.cross(u).normalized()
+        for j in range(segments):
+            verts.append(tuple(p+r*(u*math.cos(j*math.tau/segments)+v*math.sin(j*math.tau/segments))))
+    faces=[]
+    count=len(points) if closed else len(points)-1
+    for i in range(count):
+        ni=(i+1)%len(points)
+        for j in range(segments):
+            nj=(j+1)%segments
+            faces.append((i*segments+j,ni*segments+j,ni*segments+nj,i*segments+nj))
+    if not closed:
+        faces.append(tuple(reversed(range(segments))))
+        faces.append(tuple((len(points)-1)*segments+j for j in range(segments)))
+    return mesh(name,verts,faces,mat)
 
 def interp(ctrl,t):
     u=t*(len(ctrl)-1);i=min(len(ctrl)-2,int(u));v=u-i
