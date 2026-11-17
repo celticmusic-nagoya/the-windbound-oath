@@ -87,3 +87,11 @@ Next: inspect existing PR artifacts and canonical hashes, then design a bounded 
 - `method-c-02/BLOCKED.json` records no second generated model/renders; exact scan-domain Boolean fitting is stopped for the documented defects. Next eligible structurally different method is controlled manual closed-mesh stone sculpt and explicit bedding/joint topology, or rights-cleared full masonry scan.
 - Artifact report states Blender 4.3.2 saved/reopened the candidate, but **this audit did not itself execute Blender or GLB export**. No Android QA.
 - G1 BLOCKED, G2 FAIL, G3 FAIL, G4 NOT_RUN. Do not adopt, repackage as production, or repeat the failed scan-domain Boolean method.
+
+## Additional direct archive inspection (2026-11-17)
+- Opened downloaded ZIP locally, resolved SHA256SUMS paths relative to `assets/candidates/route-mat-01/`, and independently hashed actual ZIP entries: **25/25 MATCH**.
+- `abutment.blend` is 1,548,302 bytes; header-only inspection is not a valid reopen check because compressed Blender streams are possible. Existing `mesh-audit.json` reports saved-file reopen, but independent Blender reopen in this session remains NOT_RUN.
+- Directly read `mesh-audit.json`: `mesh_count=55`, `triangles=44712`; three failed meshes: `Far_F02`, `Near_F05`, `RadialVoussoir_07`.
+- The **technical audit JSON** says G1=`BLOCKED_UNAPPROVED_METRICS`, G2=`NOT_RUN_INDEPENDENT`, G3=`FAIL`, G4=`NOT_RUN`. Separate `INDEPENDENT_ART_QA.md` / art review records should be treated separately, not overwritten by the technical JSON.
+- The visually inspected oblique render is an actual candidate render; the large flat end plane, fractured cap edges and implausible irregular joint/bedding are visible. No new render was produced in this session.
+- Current local runtime has no `blender` executable; further independent geometry/reopen/render checks require the approved GitHub Actions Blender runner or equivalent pinned environment. Do not claim they were executed here.
