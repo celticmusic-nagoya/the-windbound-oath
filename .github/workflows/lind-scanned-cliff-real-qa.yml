@@ -17,8 +17,9 @@ jobs:
       - name: Install Blender and OpenGL dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
           blender --version
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python-expr "import numpy; print('NUMPY_BLENDER_OK',numpy.__version__)"
       - name: Verify scripts parse before downloading the heavy scan
         run: |
           python3 -m py_compile tools/map_blender/lind/download_polyhaven_cliff_scan.py
