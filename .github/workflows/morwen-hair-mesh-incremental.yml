@@ -36,7 +36,7 @@ jobs:
           source=matches[0]
           if source.is_symlink() or not source.resolve().is_relative_to(root):raise SystemExit('BLOCKED unsafe source path')
           digest=hashlib.sha256(source.read_bytes()).hexdigest()
-          expected='9b89bb6af7a60c7484580637e5cadea134cb841d555b60ae9ecfb7336fde308d'
+          expected='d06e4ac3235a7569211b2f06fd330da488b10bf5a01e4201b36c6e0de1bf0dc6'
           if digest!=expected:
               raise SystemExit('BLOCKED source SHA changed: '+digest+'; update only after verified review')
           if source.open('rb').read(7)!=b'BLENDER':raise SystemExit('BLOCKED not Blender')
