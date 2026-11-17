@@ -1,0 +1,36 @@
+name: Morwen sculpt03 editable workspace (NOT a sculpt)
+on:
+  push:
+    branches: [feature/morwen-sculpt03-retopo-plan]
+    paths:
+      - 'tools/morwen_sculpt03/prepare_workspace.py'
+      - '.github/workflows/morwen-sculpt03-workspace.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Blender Python runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip install 'bpy==4.3.0' 'numpy<3'
+      - name: Prepare editable candidate without altering original
+        run: python tools/morwen_sculpt03/prepare_workspace.py
+      - name: Upload candidate workspace and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-sculpt03-workspace-${{ github.sha }}
+          path: qa_output/morwen-sculpt03/
+          retention-days: 14
+          if-no-files-found: warn
