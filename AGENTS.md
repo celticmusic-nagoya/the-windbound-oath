@@ -1,3 +1,7 @@
+# HIGH-END 3D PRODUCTION POLICY v1.1 (DIRECTOR APPROVED)
+
+All agents, including Codex, must read [the high-end 3D production policy](docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md) for character and environment work. Character and map teams have separate ownership. Preserve canonical source hashes, prior PRs and G1–G4. Existing causal-retry v2 policy remains authoritative. No unapproved canon overwrite, destructive deletion or publication.
+
 # DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
 
 **MANDATORY:** Claude, Codex, ChatGPT, Gemini and every automation/AI agent MUST read this section at each task start. Applies to game code, 2D/3D assets, Blender, maps, UI, QA, and cross-agent handoffs. See [docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md).
