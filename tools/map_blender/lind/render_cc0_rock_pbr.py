@@ -35,7 +35,10 @@ def main():
    # Standalone bpy.data.images.load was independently proven to decode all six JPEGs.
    # Replace only the image datablock reference, preserving every existing shader link.
    fresh=bpy.data.images.load(str(disk),check_existing=False)
-   ok=bool(fresh.has_data and fresh.size[0]>0 and fresh.size[1]>0 and len(fresh.pixels[:4])==4)
+   # Blender lazily decodes FILE images: evaluate pixels before checking has_data.
+   # Independent diagnostic #44092016791 did pixels[:4] before has_data.
+   decoded_pixels=list(fresh.pixels[:4])
+   ok=bool(len(decoded_pixels)==4 and fresh.has_data and fresh.size[0]>0 and fresh.size[1]>0)
    assert ok,"Verified image cannot be decoded independently: "+uri
    nodes=[node for mat in used if mat.use_nodes for node in mat.node_tree.nodes if node.type=="TEX_IMAGE" and node.image==img]
    assert nodes,"Imported image has no material node: "+img.name
@@ -60,6 +63,10 @@ def main():
    obj=bpy.data.objects.new(name,data);bpy.context.collection.objects.link(obj)
    obj.location=center+Vector(pos)*span;obj.rotation_euler=(center-obj.location).to_track_quat("-Z","Y").to_euler()
   scene.render.engine="CYCLES";scene.cycles.samples=24
+  # Ubuntu Blender 4.0.2 package lacks OpenImageDenoiser; disable it explicitly.
+  scene.cycles.use_denoising=False
+  for layer in scene.view_layers:
+   layer.cycles.use_denoising=False
   scene.render.resolution_x=1100;scene.render.resolution_y=760;scene.render.resolution_percentage=100
   scene.render.image_settings.file_format="PNG";scene.render.film_transparent=False
   scene.render.filepath=str(out/(item["id"]+"_PBR_lit_preview.png"))
