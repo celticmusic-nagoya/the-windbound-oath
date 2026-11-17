@@ -1,0 +1,50 @@
+name: LIND Jointed Cliff Candidate
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/build_jointed_cliff_candidate.py'
+      - '.github/workflows/lind-jointed-cliff-candidate.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender
+          blender --version | head -n 2
+      - name: Render actual jointed cliff study
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/lind-jointed-cliff
+          blender -b --factory-startup --disable-autoexec --python-exit-code 1 \
+            --python tools/map_blender/lind/build_jointed_cliff_candidate.py \
+            -- --out /tmp/lind-jointed-cliff 2>&1 | tee /tmp/lind-jointed-cliff/blender.log
+      - name: Verify outputs and manifest hashes
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('/tmp/lind-jointed-cliff')
+          m=json.loads((root/'manifest.json').read_text())
+          assert len(m['output_sha256'])==4
+          for name,expected in m['output_sha256'].items():
+              f=root/name
+              assert f.is_file() and f.stat().st_size>1000,name
+              assert hashlib.sha256(f.read_bytes()).hexdigest()==expected,name
+          assert m['qa']['G2']=='NOT_RUN'
+          print('G3 output-byte integrity PASS; G2 art review NOT_RUN')
+          PY
+      - name: Save Blender and three-view renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-jointed-cliff-candidate
+          path: /tmp/lind-jointed-cliff/
+          retention-days: 7
+          if-no-files-found: warn
