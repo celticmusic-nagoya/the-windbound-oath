@@ -1,0 +1,60 @@
+name: LIND Scan Rock Transition Mesh
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/build_scan_rock_transition_study.py'
+      - '.github/workflows/lind-scan-rock-transition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  transition:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve verified scan-led scene
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/transition
+          python3 -m py_compile tools/map_blender/lind/build_scan_rock_transition_study.py
+          gh run download 44036452900 -R ${{ github.repository }} -n lind-scan-led-irregular-surface-study -D out/source
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('out/source/scan_led_irregular_surface.blend')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='37a95b7bfe2580159d5a27125c8388c06e048c30a585fb191b627704e513006a'
+          print('SOURCE_BLEND_SHA_PASS')
+          PY
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Build separate scan-to-rock transition and render
+        timeout-minutes: 4
+        run: |
+          set -o pipefail
+          timeout 180s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_scan_rock_transition_study.py -- --source-blend out/source/scan_led_irregular_surface.blend --out out/transition 2>&1 | tee out/transition/blender.log
+      - name: Verify produced Blender scene and PNG
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path('out/transition');m=json.loads((d/'rock_transition_metrics.json').read_text())
+          assert m['source_unchanged'] and m['separate_transition_object'] and m['not_production']
+          assert m['boundary_edges']==462 and m['transition_quads']==924
+          for f,key in [('rock_transition_study.png','render_sha256'),('rock_transition_study.blend','blend_sha256')]:
+            assert hashlib.sha256((d/f).read_bytes()).hexdigest()==m[key]
+          assert (d/'rock_transition_study.png').read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+          print('ROCK_TRANSITION_TECH_QA_PASS')
+          PY
+      - name: Upload transition study
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-scan-rock-transition-mesh-study
+          path: out/transition/
+          retention-days: 14
+          if-no-files-found: warn
