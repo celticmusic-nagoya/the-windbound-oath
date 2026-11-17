@@ -1,0 +1,42 @@
+name: LIND Pure Python Macro Topology
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/build_cliff_macro_topology_stdlib.py'
+      - '.github/workflows/lind-macro-stdlib-topology.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  topology:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate syntax and generate OBJ without Blender
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/map_blender/lind/build_cliff_macro_topology_stdlib.py
+          python3 tools/map_blender/lind/build_cliff_macro_topology_stdlib.py --out out/lind-stdlib-topology
+      - name: Independent reproducibility and SHA
+        run: |
+          python3 tools/map_blender/lind/build_cliff_macro_topology_stdlib.py --out out/lind-stdlib-topology-repeat
+          cmp out/lind-stdlib-topology/lind_macro_support_normalized.obj out/lind-stdlib-topology-repeat/lind_macro_support_normalized.obj
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path('out/lind-stdlib-topology')
+          m=json.loads((d/'topology_metrics.json').read_text())
+          assert m['boundary_edges']==0 and m['nonmanifold_edges']==0
+          assert m['production_ready'] is False and m['G2']=='NOT_RUN'
+          assert hashlib.sha256((d/'lind_macro_support_normalized.obj').read_bytes()).hexdigest()==m['obj_sha256']
+          print('DETERMINISTIC_TOPOLOGY_PASS')
+          PY
+      - name: Upload actual OBJ and metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-stdlib-macro-topology
+          path: out/lind-stdlib-topology/
+          retention-days: 14
+          if-no-files-found: warn
