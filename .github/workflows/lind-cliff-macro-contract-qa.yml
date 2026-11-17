@@ -1,0 +1,33 @@
+name: LIND Cliff Macro Interface Contract QA
+on:
+  pull_request:
+    paths:
+      - 'docs/production/lind-cliff-macro-support.contract.v1.json'
+      - 'tools/map_blender/lind/validate_cliff_macro_contract.py'
+      - 'tools/map_blender/lind/test_cliff_macro_contract.py'
+      - '.github/workflows/lind-cliff-macro-contract-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate semantic interface
+        run: |
+          set -euo pipefail
+          mkdir -p out/lind-cliff-contract
+          python3 tools/map_blender/lind/validate_cliff_macro_contract.py docs/production/lind-cliff-macro-support.contract.v1.json | tee out/lind-cliff-contract/validation.json
+      - name: Run negative tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tools/map_blender/lind -p 'test_cliff_macro_contract.py' -v 2>&1 | tee out/lind-cliff-contract/tests.log
+      - name: Upload reproducible QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cliff-macro-interface-contract-qa
+          path: out/lind-cliff-contract/
+          retention-days: 14
