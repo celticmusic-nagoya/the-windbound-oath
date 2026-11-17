@@ -1,6 +1,6 @@
 """Reopen edited .blend and compare stored control vertices/topology to source."""
 from pathlib import Path
-import bpy,json,math
+import bpy,json,math,os
 import numpy as np
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'docs/qa/morwen-rebuild-01/body-fit-v02'
 source=ROOT/'assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend'
@@ -19,4 +19,4 @@ ca=np.array([cross(a,f) for f in fa]);cb=np.array([cross(b,f) for f in fb]);area
 oldareas=np.linalg.norm(ca,axis=1);valid=(oldareas>1e-12)&(areas>1e-12)
 reversal=int(((ca[valid]*cb[valid]).sum(1)<0).sum())
 report={'task':'RB01-EDITED-MESH-REOPEN-QA','blender':bpy.app.version_string,'source_vertices':len(a),'candidate_vertices':len(b),'faces':len(fb),'topology_preserved':fa==fb,'changed_vertices':int((d>1e-7).sum()),'max_world_delta':float(d.max()),'mean_world_delta':float(d.mean()),'finite':True,'reopened_stored_geometry_matches_saved_delta':bool(np.max(abs(b-np.load(OUT/'vertex-delta.npz')['after_world']))<1e-6),'new_zero_area_first_triangles':int(((areas<1e-12)&(oldareas>=1e-12)).sum()),'large_face_normal_changes_over_90_deg':reversal,'normal_change_is_not_a_self_intersection_test':True,'G3_local_screen':'PASS' if reversal==0 else 'FAIL','G3_character':'NOT_RUN','not_tested':['self-intersections','anatomical correctness','UV distortion','rig deformation','runtime'],'original_reference_not_reverified':True}
-(OUT/'reopen-technical-qa.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+Path(os.environ.get('MORWEN_EDIT_QA_OUTPUT',str(OUT/'reopen-technical-qa.json'))).write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

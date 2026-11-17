@@ -24,12 +24,12 @@ jobs:
       - name: Verify real stored vertex edits without rebuilding source or rerendering
         run: |
           set -o pipefail
-          python tools/morwen_rebuild01/qa_edited_body.py 2>&1 | tee docs/qa/morwen-rebuild-01/body-fit-v02/ci-reopen.log
+          MORWEN_EDIT_QA_OUTPUT=docs/qa/morwen-rebuild-01/body-fit-v02/ci-technical-qa.json python tools/morwen_rebuild01/qa_edited_body.py 2>&1 | tee docs/qa/morwen-rebuild-01/body-fit-v02/ci-reopen.log
           python - <<'PY'
           from pathlib import Path
           import json,os
           p=Path('docs/qa/morwen-rebuild-01/body-fit-v02')
-          q=json.loads((p/'reopen-technical-qa.json').read_text())
+          q=json.loads((p/'ci-technical-qa.json').read_text())
           assert q['changed_vertices']==12502 and q['topology_preserved'] and q['finite']
           assert q['reopened_stored_geometry_matches_saved_delta']
           assert all((Path('assets/candidates/morwen-rebuild-01/body-fit-v02')/(v+'.png')).stat().st_size>1000 for v in ('front','back','right','left'))
