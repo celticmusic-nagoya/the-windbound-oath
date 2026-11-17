@@ -71,10 +71,16 @@ def main():
  # Four orthographic preview renders of actual mesh surfaces.
  camera=bpy.context.scene.camera
  if camera is None or camera.type!="CAMERA":raise SystemExit("BLOCKED camera missing")
+ camera.data.type="ORTHO"
+ bpy.context.scene.render.resolution_x=768
+ bpy.context.scene.render.resolution_y=1024
+ bpy.context.scene.render.resolution_percentage=100
  coords=[body.matrix_world@v.co for v in body.data.vertices]
  lo=Vector(tuple(min(v[i] for v in coords) for i in range(3)))
  hi=Vector(tuple(max(v[i] for v in coords) for i in range(3)))
  center=(lo+hi)*.5
+ camera.data.ortho_scale=max((hi.z-lo.z)*1.2,(hi.x-lo.x)*1.6,(hi.y-lo.y)*1.6)
+ if camera.data.ortho_scale<=0:raise SystemExit("BLOCKED invalid body bounds")
  previews=[]
  for label,direction in (("front",(0,-1,0)),("back",(0,1,0)),("left",(-1,0,0)),("right",(1,0,0))):
   camera.location=center+Vector(direction)*max(hi-lo)*3
@@ -82,12 +88,14 @@ def main():
   png=out.parent/("morwen_hair_mesh_candidate_"+label+".png")
   bpy.context.scene.render.filepath=str(png)
   bpy.ops.render.render(write_still=True)
+  if not png.is_file() or png.stat().st_size<1000 or png.open("rb").read(8)!=bytes.fromhex("89504e470d0a1a0a"):
+   raise SystemExit("FAIL invalid PNG "+str(png))
   previews.append({"view":label,"file":png.name,"sha256":hashlib.sha256(png.read_bytes()).hexdigest()})
  if hashlib.sha256(src.read_bytes()).hexdigest()!=sha:raise SystemExit("FAIL source mutated")
  report={"status":"PASS_MESH_CONSTRUCTION_ONLY","hair_mesh_count":len(meshes),
  "total_vertices":sum(len(o.data.vertices) for o in meshes),
  "input_sha256":sha,"output_sha256":hashlib.sha256(out.read_bytes()).hexdigest(),
- "canonical_art_qa":"NOT_RUN","render_qa":"NOT_RUN","game_qa":"NOT_RUN",
+ "canonical_art_qa":"NOT_RUN","render_qa":"PASS_FILE_VALIDATION_ONLY","game_qa":"NOT_RUN",
  "source_unchanged":True,"meshes":records,"previews":previews}
  (out.parent/"hair_mesh_manifest.json").write_text(json.dumps(report,indent=2)+"\n")
  print(json.dumps({"status":report["status"],"meshes":len(meshes)}))
