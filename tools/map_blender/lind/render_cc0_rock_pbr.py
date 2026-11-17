@@ -18,10 +18,10 @@ def main():
   textures={img for mat in used if mat.use_nodes for node in mat.node_tree.nodes if node.type=="TEX_IMAGE" and node.image for img in [node.image]}
   image_report=[]
   for img in sorted(textures,key=lambda x:x.name):
-   try:img.reload()
-   except Exception:pass
+   # glTF importer may pack textures into Blender; reload() can discard packed data.
    ok=bool(img.has_data and img.size[0]>0 and img.size[1]>0)
    image_report.append({"name":img.name,"width":int(img.size[0]),"height":int(img.size[1]),"loaded":ok})
+  print("PBR_IMAGE_DIAGNOSTIC",item["id"],json.dumps({"materials":[m.name for m in used],"images":image_report}),flush=True)
   assert len(image_report)>=3 and all(x["loaded"] for x in image_report),"PBR textures missing or invalid"
   allpts=[o.matrix_world @ Vector(c) for o in meshes for c in o.bound_box]
   lo=Vector([min(v[k] for v in allpts) for k in range(3)]);hi=Vector([max(v[k] for v in allpts) for k in range(3)])
