@@ -16,11 +16,23 @@ def main():
   meshes=[o for o in bpy.context.scene.objects if o.type=="MESH"];assert meshes
   used={m for o in meshes for m in o.data.materials if m}
   textures={img for mat in used if mat.use_nodes for node in mat.node_tree.nodes if node.type=="TEX_IMAGE" and node.image for img in [node.image]}
+  # Different pipeline from importer auto-resolution: bind verified dependency files explicitly.
+  gltf=json.loads(model.read_text())
+  source_images=[x for x in gltf.get("images",[]) if "uri" in x]
+  assert len(source_images)>=3,"Source glTF has fewer than three image declarations"
+  dependency_by_uri={d["uri"]:source/d["file"] for d in item["dependencies"]}
+  material_images=sorted(textures,key=lambda x:x.name)
+  assert len(material_images)==len(source_images),"Cannot map imported images one-to-one; stop rather than guess"
   image_report=[]
-  for img in sorted(textures,key=lambda x:x.name):
-   # glTF importer may pack textures into Blender; reload() can discard packed data.
+  for img,decl in zip(material_images,source_images):
+   uri=decl["uri"];disk=dependency_by_uri.get(uri)
+   assert disk and disk.is_file(),"Unverified source image: "+uri
+   # Name-based mapping is mandatory; ordering alone cannot justify changing a normal map into diffuse.
+   assert img.name.lower().split(".")[0] in (Path(uri).stem.lower(),decl.get("name","").lower()) or Path(uri).stem.lower() in img.name.lower(),"Image binding mismatch: "+img.name+" / "+uri
+   assert sha(disk)==next(d["sha256"] for d in item["dependencies"] if d["uri"]==uri)
+   img.filepath=str(disk);img.source="FILE";img.reload()
    ok=bool(img.has_data and img.size[0]>0 and img.size[1]>0)
-   image_report.append({"name":img.name,"width":int(img.size[0]),"height":int(img.size[1]),"loaded":ok})
+   image_report.append({"name":img.name,"source_uri":uri,"sha256":sha(disk),"width":int(img.size[0]),"height":int(img.size[1]),"loaded":ok})
   print("PBR_IMAGE_DIAGNOSTIC",item["id"],json.dumps({"materials":[m.name for m in used],"images":image_report}),flush=True)
   assert len(image_report)>=3 and all(x["loaded"] for x in image_report),"PBR textures missing or invalid"
   allpts=[o.matrix_world @ Vector(c) for o in meshes for c in o.bound_box]
