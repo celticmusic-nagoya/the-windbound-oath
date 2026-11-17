@@ -7,11 +7,12 @@ This is NOT an art-quality or canon approval.
 import argparse
 import json
 import sys
+import os
 
 import bpy
 
 
-def inspect(expected_min_meshes, expected_min_triangles):
+def inspect(expected_min_meshes, expected_min_triangles, expected_version=None):
     scene = bpy.context.scene
     meshes = [obj for obj in bpy.data.objects if obj.type == "MESH"]
     triangles = sum(sum(len(poly.vertices) - 2 for poly in obj.data.polygons)
@@ -36,9 +37,14 @@ def inspect(expected_min_meshes, expected_min_triangles):
         errors.append("triangle_count_below_expected")
     if nonmanifold:
         errors.append("mesh_without_edges")
+    if expected_version and bpy.app.version_string != expected_version:
+        errors.append("blender_version_mismatch")
+    if missing_images:
+        errors.append("missing_image_data_candidates")
     return {
         "status": "FAIL" if errors else "PASS",
         "blender_version": bpy.app.version_string,
+        "expected_blender_version": expected_version,
         "scene": scene.name,
         "mesh_count": len(meshes),
         "triangles": triangles,
@@ -56,8 +62,9 @@ def main():
     parser.add_argument("--min-meshes", type=int, default=1)
     parser.add_argument("--min-triangles", type=int, default=1)
     parser.add_argument("--report", required=True)
+    parser.add_argument("--expected-blender-version")
     parsed = parser.parse_args(args)
-    result = inspect(parsed.min_meshes, parsed.min_triangles)
+    result = inspect(parsed.min_meshes, parsed.min_triangles, parsed.expected_blender_version)
     with open(parsed.report, "w", encoding="utf-8") as handle:
         json.dump(result, handle, ensure_ascii=False, indent=2)
     print(json.dumps(result, ensure_ascii=False))
