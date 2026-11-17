@@ -23,6 +23,31 @@ jobs:
           sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
           python -m pip install bpy==4.3.0 'numpy<3' Pillow
           python -c 'import bpy; import bmesh; print(bpy.app.version_string)'
+      - name: Independent read-only source topology inventory
+        run: |
+          mkdir -p qa_output/mesh-audit
+          python - <<'PY'
+          import bpy, runpy, sys
+          source='assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend'
+          bpy.ops.wm.open_mainfile(filepath=source)
+          sys.argv=['inspect_mesh_structure.py','--','qa_output/mesh-audit/mesh_inventory.json']
+          runpy.run_path('tools/morwen_sculpt02/inspect_mesh_structure.py',run_name='__main__')
+          PY
+          python - <<'PY'
+          import json
+          d=json.load(open('qa_output/mesh-audit/mesh_inventory.json'))
+          assert d['source_sha256']=='90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b'
+          assert d['mesh_count']>0
+          assert all(m['finite_coordinates'] for m in d['meshes'])
+          print('MORWEN_INVENTORY_PASS',d['mesh_count'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-sculpt02-mesh-inventory-${{ github.sha }}
+          path: qa_output/mesh-audit/
+          retention-days: 14
+          if-no-files-found: warn
       - name: Render actual GUI-sculpted saved source
         run: |
           python tools/morwen_sculpt02/render_review.py -- assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend qa_output/review 48
