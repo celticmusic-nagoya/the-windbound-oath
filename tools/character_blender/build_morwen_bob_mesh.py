@@ -64,6 +64,8 @@ def main():
  out.parent.mkdir(parents=True,exist_ok=True)
  bpy.ops.wm.save_as_mainfile(filepath=str(out),compress=True)
  bpy.ops.wm.open_mainfile(filepath=str(out),load_ui=False)
+ body=bpy.data.objects.get("MORWEN_PROPORTION_STAGE_UNAPPROVED")
+ if body is None or body.type!="MESH":raise SystemExit("BLOCKED body missing after reopen")
  meshes=[o for o in bpy.data.objects if o.name.startswith(("bob_mesh_","fringe_mesh_"))]
  if len(meshes)!=33:raise SystemExit("FAIL hair meshes missing on reopen")
  # Four orthographic preview renders of actual mesh surfaces.
