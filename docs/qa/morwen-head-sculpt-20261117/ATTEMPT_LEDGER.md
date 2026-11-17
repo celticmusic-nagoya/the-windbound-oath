@@ -6,7 +6,7 @@ Historical counters remain preserved in PR #339 and CAUSAL_RETRY_AND_METHOD_SWIT
 Cycles build lacks OpenImageDenoise. Initial render aborted before any PNG. Removed the optional denoiser dependency; CPU Cycles works. This is a runtime capability failure, not a new art-method attempt.
 
 ## Trial 01 — CC0 facial-topology fit + closed broad hair surfaces
-Source stage SHA256 d47d140586ba27ca2bc83dabbe3620b39a4d3e91dae57a65874d42defc60836e. First executed art study of this method family. Ten PNGs, editable .blend and reopen evidence exist locally; Actions reproduction preserves the corresponding implementation.
+Source stage SHA256 d47d140586ba27ca2bc83dabbe3620b39a4d3e91dae57a65874d42defc60836e. First executed art study of this method family. Ten PNGs, editable .blend and reopen evidence exist locally; the corresponding implementation is preserved in git. CI for that commit stopped before rendering because standalone bpy requires importing bpy before bmesh. Local trial artifacts remain under /workspace/morwen-candidate; they are not claimed to be present in CI artifacts.
 
 Self visual QA FAIL: eyeballs project beyond supporting lids because their center is in front of the cavity; lip material selection paints neighboring skin; illumination clips pale highlights and loses the canonical deep-purple hair. Technical screening also detects uncapped glasses bridge/temples. Full-body views fit the frame; head close-ups deliberately crop shoulders, so whole-alpha framing is not the correct head-only test.
 
@@ -19,3 +19,6 @@ Next structurally different art method: interactively sculpt canonical facial pl
 
 ### Separate glasses technical defect and method switch
 Trial 01 curve-to-mesh bridge/temples had open ends. Trial 02 enabled curve caps, but converted caps retained duplicate/disconnected endpoint vertices (48 nonmanifold edges per affected object). Curve-conversion closure method has failed twice: STOP. Switch to explicit indexed polygon-ring sweeps with shared endpoint indices and unique cap polygons. Hypothesis: all edges become manifold without changing the reviewed head/hair/face design. This is a technical topology correction, not a third art-fit attempt. Rerendering identical art to verify the structural correction does not reset either art or historical eyelid counters.
+
+## CI source/runtime corrections (separate from art attempts)
+Official source ZIP hash matched, but the first source verifier decoded only the first Zstandard frame. The exact pinned Blender hash check correctly failed closed. Replaced one-shot decompression with an across-frame stream reader; official Blender hash and exact source/stage geometry comparison then PASS in run 44063524660. That run next stopped because the standalone bpy wheel registers bmesh only after importing bpy. Import order fixed and preflight added. These failures did not render new art candidates and do not reset the art counters.

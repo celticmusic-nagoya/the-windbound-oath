@@ -8,8 +8,8 @@ import json
 import math
 import pathlib
 import sys
-import bmesh
 import bpy
+import bmesh
 from mathutils import Vector
 
 STAGE_SHA = 'd47d140586ba27ca2bc83dabbe3620b39a4d3e91dae57a65874d42defc60836e'
@@ -194,7 +194,7 @@ def main():
                 verts.append(tuple(p+Vector((u*width,-.0025*(1-u*u),.007*u*u*smooth(.7,1,t)))))
         faces=[(j*(m+1)+k,(j+1)*(m+1)+k,(j+1)*(m+1)+k+1,j*(m+1)+k+1) for j in range(n) for k in range(m)]
         ob=mesh('Fringe_%02d'%i,verts,faces,hair if i%2 else hair2);solid(ob,.002)
-    sc=bpy.context.scene;sc.render.engine='CYCLES';sc.cycles.samples=a.samples;sc.cycles.seed=0;sc.cycles.use_denoising=False
+    sc=bpy.context.scene;sc.render.engine='CYCLES';sc.cycles.samples=a.samples;sc.cycles.seed=0;sc.cycles.device='CPU';sc.cycles.use_denoising=False
     sc.render.film_transparent=True;sc.render.resolution_x=768;sc.render.resolution_y=768;sc.render.resolution_percentage=100
     sc.render.image_settings.file_format='PNG';sc.render.image_settings.color_mode='RGBA';sc.render.image_settings.color_depth='8'
     sc.view_settings.view_transform='AgX';sc.view_settings.look='AgX - Medium High Contrast';sc.view_settings.exposure=-.3;sc.view_settings.gamma=1

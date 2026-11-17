@@ -35,6 +35,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
           python -m pip install bpy==4.2.0 'numpy<3' Pillow zstandard
+          python -c 'import bpy; import bmesh; print(bpy.app.version_string)'
       - name: Verify original official source topology and provenance
         run: |
           curl --fail --location --retry 2 --max-time 240 'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' -o input/official.zip
@@ -43,7 +44,10 @@ jobs:
         run: |
           python tools/morwen_head/build_candidate.py -- --stage output/stage/morwen_head_landmark_review_UNAPPROVED.blend --canonical reference_checkout/assets/canonical/morwen/2026-11-16 --output output/candidate --samples 48
       - name: Screen technical QA (art acceptance remains separate)
-        run: python tools/morwen_head/qa_candidate.py output/candidate
+        run: |
+          cp docs/production/MORWEN_HEAD_SCULPT_REVIEW_20261117.md output/candidate/QA_REPORT.md
+          cp docs/qa/morwen-head-sculpt-20261117/ATTEMPT_LEDGER.md output/candidate/ATTEMPT_LEDGER.md
+          python tools/morwen_head/qa_candidate.py output/candidate
       - uses: actions/upload-artifact@v4
         if: always()
         with:

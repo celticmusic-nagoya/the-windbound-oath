@@ -25,7 +25,7 @@ def main():
         rows.append(row)
     bad=[r for r in e['mesh_stats'] if r['nonmanifold_edges'] or r['degenerate_faces']]
     ratio=e['landmarks']['head_count']
-    checks={'source_unchanged':e['source_unchanged'],'reopen':e['reopen_pass'],'mesh_nonempty':all(r['vertices']>0 and r['faces']>0 for r in e['mesh_stats']),'closed_nondegenerate_base_meshes':not bad,'five_or_more_views':len(rows)>=5,'anatomical_ratio_self_review':7.5<=ratio<=8,'rgba_frame_visibility':all(r['pass'] for r in rows)}
+    checks={'source_unchanged':e['source_unchanged'],'reopen':e['reopen_pass'],'mesh_nonempty':all(r['vertices']>0 and r['faces']>0 for r in e['mesh_stats']),'closed_nondegenerate_base_meshes':not bad,'outward_signed_volume_screen':all(r.get('signed_volume',0)>0 for r in e['mesh_stats']),'five_or_more_views':len(rows)>=5,'anatomical_ratio_self_review':7.5<=ratio<=8,'rgba_frame_visibility':all(r['pass'] for r in rows)}
     report={'status':'PASS_TECHNICAL_SCREEN' if all(checks.values()) else 'FAIL_TECHNICAL_SCREEN','checks':checks,'head_count':ratio,'mesh_defects':bad,'renders':rows,'scope_limitations':['Self-reviewed anatomical vertices; independent confirmation pending','Normals recalculated; manifold screen is not a self-intersection or rigging test','Eyeball/socket, glasses/skin and hair intersections require visual review','No independent art acceptance or game/Android test'],'gates':{'G1':'BLOCKED: source SHA PASS, candidate fidelity not accepted','G2':'NOT_RUN: independent art QA; self visual findings in report','G3':'PASS_TECHNICAL_SCREEN' if all(checks.values()) else 'FAIL','G4':'NOT_RUN'}}
     (root/'technical_qa.json').write_text(json.dumps(report,indent=2)+'\n')
     thumbs=[]
@@ -35,6 +35,21 @@ def main():
     sheet=Image.new('RGB',(1152,832))
     for i,im in enumerate(thumbs):sheet.paste(im,((i%3)*384,(i//3)*416))
     sheet.save(root/'head_contact_sheet.png')
+    # Project the exact geometry-derived landmarks into the saved camera views.
+    # This overlays measurements on actual renders; it does not invent a chin from the target ratio.
+    for view_name in ['body_front','body_character_left','character_left']:
+        v=next(v for v in e['views'] if v['name']==view_name)
+        im=Image.open(root/v['file']).convert('RGBA');bg=Image.new('RGBA',im.size,(42,43,49,255));bg.alpha_composite(im)
+        draw=ImageDraw.Draw(bg);cam=np.array(v['camera']);target=np.array(v['target']);forward=target-cam;forward/=np.linalg.norm(forward)
+        right=np.cross(forward,[0,0,1]);right/=np.linalg.norm(right);up=np.cross(right,forward)
+        def project(point):
+            d=np.array(point)-cam
+            return (im.width/2+np.dot(d,right)*im.height/v['ortho_scale'],im.height/2-np.dot(d,up)*im.height/v['ortho_scale'])
+        for key,label,color in [('crown','CROWN vertex 8063',(255,180,60)),('chin_underside','CHIN underside vertex 8064',(60,220,255))]:
+            x,y=project(e['landmarks'][key]);draw.line([(12,y),(im.width-12,y)],fill=color,width=1);draw.ellipse((x-4,y-4,x+4,y+4),outline=color,width=2);draw.text((12,y+5),label,fill=color)
+        draw.text((12,12),'SELF-MEASURED %.6f anatomical heads'%ratio,fill='white')
+        draw.text((12,28),'Independent anatomy review pending',fill='white')
+        bg.save(root/('landmarks_'+view_name+'.png'))
     # The manifest includes every deliverable except itself; no circular hashes.
     files=[p for p in root.rglob('*') if p.is_file() and p.name not in {'SHA256SUMS','artifact_manifest.json'} and not p.name.endswith('.blend1')]
     (root/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+str(p.relative_to(root))+'\n' for p in sorted(files)))
