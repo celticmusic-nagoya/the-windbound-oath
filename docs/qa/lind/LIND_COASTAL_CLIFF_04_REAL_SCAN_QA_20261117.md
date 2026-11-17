@@ -15,10 +15,11 @@
 
 ## Independent GLTF topology audit
 An independent script parsed the binary glTF primitive position/index accessors directly from the verified original artifact (not from rendered images). It computed connected components by undirected triangle adjacency and edge incidence across all indexed triangles:
-- 789,032 vertices; 1,537,926 indexed triangles; **143 connected components** in one mesh object.
-- Largest component 102,190 triangles (~6.64%); 134 components have at least 100 triangles.
-- **39,894 open boundary edges** (edge incidence 1); zero >2-face nonmanifold edges; zero triangles with repeated indices. These results do not prove all face areas or intersections are valid.
-- Topology demonstrates that `mesh_objects=1` does **not** mean one continuous watertight rock mass. A direct walkable/collision cliff acceptance is impossible without separate authored terrain/collision and integration QA.
+- Raw indexed-vertex graph: 789,032 source vertices; 1,537,926 indexed triangles; **143 index-connected components** and **39,894 one-face indexed edges**. This overcounts physical gaps because UV seams duplicate vertex positions; do NOT describe these 143 components as 143 physically detached rocks.
+- After **exact-position welding** (771,255 unique positions, no tolerance needed), geometry has **3 spatially connected components**, containing 1,378,010 (89.60%), 103,342 (6.72%) and 56,574 (3.68%) triangles.
+- Welded geometric edge incidence: **4,578 open boundary edges**; zero edges incident to >2 faces; zero triangles collapsed by welding. Quantized welding at 1e-5 and 1e-4 gave the same counts.
+- The scanned formation is therefore mostly contiguous geometry but **not watertight**, with two additional disconnected groups and open cut/scan boundaries. It is an excellent source candidate for rock-surface dressing; a directly collidable unified map still requires authored continuity, topology treatment and independent collision/nav QA.
+- Both audits operated on the same verified glTF source binary, and full geometric self-intersection/volume tests remain NOT_RUN.
 
 ## QA gates (finished LIND map requirement)
 - G1 **BLOCKED**: source hashes/license provenance checked, but official CG/approved scale/placement/Irish geography alignment not checked.
