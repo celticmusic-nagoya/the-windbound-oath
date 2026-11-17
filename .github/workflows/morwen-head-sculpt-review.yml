@@ -22,13 +22,40 @@ jobs:
           mkdir -p input output/stage output/evidence
           gh api repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/14298561244/zip > input/stage.zip
           python tools/morwen_head/extract_stage.py input/stage.zip output
+      - uses: actions/checkout@v4
+        with:
+          ref: c75fee253358b1ef864ae7cdc8131b5d25084e49
+          path: reference_checkout
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU Blender runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip install bpy==4.2.0 'numpy<3' Pillow
+      - name: Build editable candidate and render ten views
+        run: |
+          python tools/morwen_head/build_candidate.py -- --stage output/stage/morwen_head_landmark_review_UNAPPROVED.blend --canonical reference_checkout/assets/canonical/morwen/2026-11-16 --output output/candidate --samples 48
+      - name: Screen technical QA (art acceptance remains separate)
+        run: python tools/morwen_head/qa_candidate.py output/candidate
       - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-head-candidate-${{ github.sha }}
+          path: output/candidate/
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: morwen-head-source-stage
           path: output/stage/
           retention-days: 14
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: morwen-head-source-evidence
           path: output/evidence/

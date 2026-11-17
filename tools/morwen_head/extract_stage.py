@@ -28,7 +28,7 @@ with zipfile.ZipFile(src) as archive:
         dest.write_bytes(archive.read(info))
         records[-1]['sha256'] = hashlib.sha256(dest.read_bytes()).hexdigest()
     assert len(list((out/'stage').glob('*.blend'))) == 1
-(out/'evidence'/'archive_inventory.json').write_text(json.dumps({
+(out/'evidence'/'recovery_archive_inventory.json').write_text(json.dumps({
     'source_artifact': 14298561244,
     'zip_sha256': hashlib.sha256(src.read_bytes()).hexdigest(),
     'entries': records,
