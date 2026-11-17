@@ -40,7 +40,7 @@ jobs:
           d=Path('out/lind-imported-workbench')
           p=d/'lind_macro_technical_clay.png'
           m=json.loads((d/'render_metrics.json').read_text())
-          assert p.read_bytes()[:8]==b'\\x89PNG\\r\\n\\x1a\\n'
+          assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
           assert hashlib.sha256(p.read_bytes()).hexdigest()==m['png_sha256']
           assert m['production_ready'] is False and m['technical_only'] is True
           print('PNG_SHA_PASS',p.stat().st_size)
