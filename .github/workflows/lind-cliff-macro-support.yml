@@ -1,0 +1,53 @@
+name: LIND Macro Cliff Support Blender Geometry QA
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/build_cliff_macro_support.py'
+      - '.github/workflows/lind-cliff-macro-support.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macro-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Validate candidate semantic contract
+        run: python3 tools/map_blender/lind/validate_cliff_macro_contract.py docs/production/lind-cliff-macro-support.contract.v1.json
+      - name: Generate actual closed macro support and render
+        run: |
+          set -euo pipefail
+          mkdir -p out/lind-macro-support
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
+      - name: Verify candidate topology and hashes
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path('out/lind-macro-support')
+          m=json.loads((d/'macro_support_metrics.json').read_text())
+          assert m['units']=='NORMALIZED_NON_METRIC' and m['approved_world_scale'] is None
+          assert m['source_scan_embedded'] is False and m['production_ready'] is False
+          assert m['boundary_edges']==0 and m['nonmanifold_edges']==0
+          assert m['closed_volume']>0 and m['G2']=='NOT_RUN'
+          for n,h in m['outputs'].items():
+           p=d/n
+           assert hashlib.sha256(p.read_bytes()).hexdigest()==h
+           if n.endswith('.png'):assert p.read_bytes()[:8]==bytes([137,80,78,71,13,10,26,10])
+          print('MACRO_TOPOLOGY_QA_PASS')
+          PY
+      - name: Reopen generated Blender file
+        run: |
+          blender --background --factory-startup --disable-autoexec out/lind-macro-support/macro_support_candidate.blend --python-exit-code 1 --python-expr "import bpy; assert bpy.data.objects.get('CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON') is not None; print('BLEND_REOPEN_PASS')"
+      - name: Upload source and render
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-macro-support-blender-candidate
+          path: out/lind-macro-support/
+          retention-days: 14
