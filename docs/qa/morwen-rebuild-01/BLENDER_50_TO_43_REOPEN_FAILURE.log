@@ -1,0 +1,11 @@
+Blender 4.3.2
+Error: Cannot read blend file '/tmp/morwen-cc0-intake/CC0_STYLIZED_BASE_INTAKE_NOT_MORWEN.blend', incomplete header, may be from a newer version of Blender
+Traceback (most recent call last):
+  File "/workspace/the-windbound-oath/tools/morwen_rebuild01/intake_cc0_stylized_base.py", line 29, in <module>
+    with bpy.data.libraries.load(str(source), link=False) as (available, requested):
+         ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: Error: Cannot read blend file '/tmp/morwen-cc0-intake/CC0_STYLIZED_BASE_INTAKE_NOT_MORWEN.blend', incomplete header, may be from a newer version of Blender
+
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/4.3/extensions').
+
+Blender quit

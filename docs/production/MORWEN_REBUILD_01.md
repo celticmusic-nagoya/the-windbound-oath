@@ -111,3 +111,15 @@ Run 44148074813は両job success。参照Artifact 14356469200（3,865,981 bytes�
 GitHub connector経由で素体ZIPを取得し実画像を確認した。初回の全身表示が横にずれており、表示transform式の誤り（元object位置も高さで除算する必要）が原因。形状変更なしで修正し、評価後mesh全頂点の画面内検査を追加。これは参照fitや新しい美術candidate生成ではなく、source intakeの表示不具合修正。
 
 またaptの非固定Blenderが5.0.1を導入しており、local4.3.2でその.blendを開けなかった。旧Artifactを消さず保持し、新workflowはPython3.11＋bpy4.3.0に固定して再実行する。local4.3.2との完全な同等性を暗黙に認定せず、取得後の再openを検査する。旧source intakeのG3は未認定のまま。CI成功をモデル／美術完成と解釈しない。
+
+### 固定runtime再検証・納品済み状態
+
+[Run44149109934](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44149109934)、code d9f0c08101be02190551bf8cd6fcc85cb752bac1、verify-reference / cc0-base-intakeともsuccess。
+参照Artifact14357757704（3,871,939 bytes）／素体Artifact14358710788（2,522,919 bytes）は2026-12-17 UTCまで保持。両ZIPをGitHub connector→workspace経由で取得し、local Blender4.3.2で実際に再openした。CLIからの旧ZIP403はconnector取得で解消。素体の表示移動を修正し、6方向の評価後全頂点がフレーム内に収まることを確認。元control geometry SHA606a5cbed38aa3318626a48185bde66d3ce9f9c1f39d2fe9b6e66783f9740c4cは不変。
+
+取得済み素体 `.blend` と6 PNGは `assets/candidates/morwen-rebuild-01/base-source-intake/` に保存。QA／取得・Blender logは `docs/qa/morwen-rebuild-01/base-source-intake/`、ローカル再openはCI_LOCAL_REOPEN.json/logに保存。編集可能ファイルはBlender4.3系。初回5.0.1のArtifactは失敗証跡として保持し置換しない。
+
+未解決: ソース素材のmask_arms／mask_legs表示切替driverが参照先を欠き、再open時にinvalid driver警告2件。元sourceを改変せず保存したため、本体制作前に別working copyで不要driverを整理しviewport／render parityを検証する必要がある。原素材の顔形状・A-pose・頭身はLayer0へfitしておらず、元素材の見た目をモルウェンとして採用しない。ノイズのある低サンプルclayは取り込み検査用で商業品質rendererではない。
+
+判定: 身体参照G1 PASS／最終外観G1 BLOCKED（v5.61未取得）。G2 NOT_RUN（新しいMorwen造形なし・独立美術QAなし）。参照scene G3限定PASS、素体sourceは再open／有限座標／原形状／6方向framingの限定screen PASSだがdriver・UV・rig等の本体G3は未完了。G4 NOT_RUN。
+次は別working copyでdriver整理、Layer0ランドマークと直接観測／推定を分けた全身設計、7.5〜8頭身targetの手動sculpt／retopo。全身シルエットの独立美術QAが未PASSのため精密顔・髪・衣装・rigへ進まない。高品質素体の調達・編集可能source取り込みまでは実行したが、正式形状の素体制作は未完了。
