@@ -18,7 +18,7 @@ def audit(path, expected=None):
     sha = hashlib.sha256(raw).hexdigest()
     if expected and sha != expected:
         raise ValueError(f"source SHA mismatch: {sha}")
-    if raw.startswith(b"\\x28\\xb5\\x2f\\xfd"):
+    if raw.startswith(bytes.fromhex("28b52ffd")):
         if not shutil.which("zstd"):
             raise RuntimeError("zstd executable required to inspect compressed .blend")
         blob = subprocess.run(["zstd", "-dc", str(path)], check=True, capture_output=True).stdout
