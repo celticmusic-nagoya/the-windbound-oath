@@ -1,5 +1,6 @@
 """Verify official CC0 source mesh against preserved stage, without editing either."""
 import hashlib
+import io
 import json
 import pathlib
 import sys
@@ -14,7 +15,9 @@ with zipfile.ZipFile(archive) as z:
     names=z.namelist();matches=[n for n in names if n.endswith('/human_base_meshes_bundle.blend')];assert len(matches)==1
     data=z.read(matches[0]);texts={n:z.read(n).decode('utf-8',errors='replace') for n in names if n.lower().endswith(('.txt','.md')) and z.getinfo(n).file_size<100000}
 if not data.startswith(b'BLENDER'):
-    data=zstandard.ZstdDecompressor().decompress(data,max_output_size=500_000_000)
+    with zstandard.ZstdDecompressor().stream_reader(io.BytesIO(data), read_across_frames=True) as reader:
+        data=reader.read(500_000_001)
+    assert len(data)<=500_000_000, 'decompressed source exceeds cap'
 assert hashlib.sha256(data).hexdigest()=='e5e9d30a7e6bb385fed21459dce68d1ad0d06e7bde4f9626696dbfda07cd541a'
 source=archive.parent/'verified_official_source.blend';source.write_bytes(data)
 def signature(ob):
