@@ -44,6 +44,7 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument("--source",required=True)
     p.add_argument("--output",required=True)
+    p.add_argument("--contours")
     a=p.parse_args()
     src=pathlib.Path(a.source).resolve();out=pathlib.Path(a.output).resolve()
     if not src.is_file() or src==out:raise SystemExit("BLOCKED invalid paths")
@@ -54,10 +55,19 @@ def main():
         "landmark_identification":"BLOCKED","reviewer_confirmed":False,"views":[]}
     # A small fixed diagnostic grid across upper portion of frame; points are not anatomy labels.
     pixels=[(x,y) for y in (80,120,160,200,240) for x in (192,256,320)]
+    contour_data=json.loads(pathlib.Path(a.contours).read_text()) if a.contours else None
+    if contour_data and (contour_data.get("status")!="PASS_RENDER_CONTOUR_CANDIDATES_ONLY" or contour_data.get("reviewer_confirmed") is not False):
+        raise SystemExit("BLOCKED invalid contour candidate input")
     for name in NAMES:
         ob=bpy.data.objects.get(name)
         if ob is None or ob.type!="MESH":raise SystemExit("BLOCKED missing mesh "+name)
-        for view in VIEWS:result["views"].append(raycast(ob,view,pixels))
+        for view in VIEWS:
+            chosen=next((v for v in contour_data["views"] if v["object"]==name and v["view"]==view),None) if contour_data else None
+            if contour_data and chosen is None:raise SystemExit("BLOCKED contour view missing")
+            points=[s["pixel"] for s in chosen["samples"]] if chosen else pixels
+            view_result=raycast(ob,view,points)
+            view_result["sample_source"]="render_alpha_contour" if chosen else "fixed_diagnostic_grid"
+            result["views"].append(view_result)
     result["source_unchanged"]=hashlib.sha256(src.read_bytes()).hexdigest()==sha
     if not result["source_unchanged"]:raise SystemExit("FAIL source modified")
     out.parent.mkdir(parents=True,exist_ok=True)
