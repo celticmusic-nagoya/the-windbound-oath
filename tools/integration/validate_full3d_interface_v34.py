@@ -87,7 +87,7 @@ def validate(data, root):
         need(COLLECTION_OWNERS.get(collection) == lane, "cross-lane collection ownership")
 
     approval = data.get("interface_approval")
-    need(approval in {"BLOCKED", "APPROVED"}, "interface_approval missing")
+    need(approval == "BLOCKED", "candidate-only validator cannot certify interface approval")
     if approval != "APPROVED":
         for field in UNAPPROVED_FIELDS:
             need(field in data and data[field] is None, field + " must be explicit null before approval")
