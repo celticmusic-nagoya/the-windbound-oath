@@ -9,6 +9,7 @@ on:
       - 'tools/character_blender/shortlist_female_basemesh.py'
       - 'tools/character_blender/render_basemesh_comparison.py'
       - 'tools/character_blender/export_basemesh_landmark_evidence.py'
+      - 'tools/character_blender/build_basemesh_height_overlays.py'
 permissions:
   contents: read
 jobs:
@@ -81,6 +82,9 @@ jobs:
       - name: Render neutral orthographic basemesh comparisons (diagnostic only)
         run: |
           python tools/character_blender/render_basemesh_comparison.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/diagnostic_renders
+      - name: Generate calibrated world-Z overlay guides for diagnostic PNGs
+        run: |
+          python tools/character_blender/build_basemesh_height_overlays.py --manifest qa_output/basemesh/diagnostic_renders/diagnostic_manifest.json --output qa_output/basemesh/diagnostic_renders
       - name: Export source-indexed coordinate evidence for human landmark review
         run: |
           python tools/character_blender/export_basemesh_landmark_evidence.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/landmark_vertex_evidence.json
