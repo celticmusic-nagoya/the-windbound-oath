@@ -38,3 +38,9 @@ blender -b SCRATCH/abutment.blend --threads 2 --python-exit-code 1 --python tool
 The auditor writes explicit FAIL/subset states; do not equate an executed audit or packaging CI success with QA acceptance. Workflow uploads already executed local outputs and evidence with 14-day retention; it does not claim a new Blender production run.
 
 Next eligible production work: manual closed-mesh stone sculpt/retopology with independently designed bedding and through-bonds, or an appropriately licensed complete high-quality masonry scan. Review actual clay geometry before PBR. G1 metric approval is additionally needed before placement/adoption. No official asset changes, failed-candidate deletion, main merge, adoption or publication.
+
+## GitHub evidence delivery
+
+Executed packaging run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43989537216 . Actual 13,046,277-byte artifact: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/43989537216/artifacts/14286882505 (14 days). Source commit `0af629c7536be36da48b17d448e60c75a44c27a6`. This successful run validates bytes/PNG headers and uploads executed outputs; G2/G3 remain FAIL.
+
+Legacy A workflow was inadvertently triggered by its broad PR path filter on the first evidence push; run 43989536839 was cancelled during dependency installation; the Generate step was verified SKIPPED, so no old model was regenerated. A/B jobs are now explicitly skipped to enforce their stopped state without deleting recipes or history.

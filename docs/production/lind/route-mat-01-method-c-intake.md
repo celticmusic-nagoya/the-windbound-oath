@@ -1,6 +1,6 @@
 # ROUTE-MAT-01 / method C: curated stone geometry intake
 
-**Status: BLOCKED — no approved sculpted geometry supplied.** This is a new source-geometry method, not a third tweak of failed block generators A/B. Keep old candidate PNG/.blend and source hashes unchanged.
+**Status update: actual candidate BLEND + three clay PNGs now exist, independently G2 FAIL / G3 FAIL; see `docs/qa/lind/route-mat-01/method-c/REPORT.md`. No approved sculpted geometry supplied.** This is a new source-geometry method, not a third tweak of failed block generators A/B. Keep old candidate PNG/.blend and source hashes unchanged.
 
 ## Input needed
 - One genuinely hand-sculpted or rights-cleared photogrammetry/3D asset (GLB, OBJ, BLEND) with individual irregular stone geometry, plausible structural contact and a real masonry wall depth. Avoid flat wall-photo planes and procedural cuboid arrays.
