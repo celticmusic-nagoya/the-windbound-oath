@@ -1,0 +1,35 @@
+name: Morwen rebuild01 blocked preflight evidence
+on:
+  push:
+    branches: [feature/morwen-rebuild-01]
+    paths:
+      - docs/production/MORWEN_REBUILD_01.md
+      - docs/qa/morwen-rebuild-01/**
+      - .github/workflows/morwen-rebuild01-preflight.yml
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify checkpoint integrity (not art acceptance)
+        run: |
+          sha256sum -c docs/qa/morwen-rebuild-01/SHA256SUMS
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('docs/qa/morwen-rebuild-01/preflight.json').read_text())
+          assert d['gates'] == {'G1': 'BLOCKED', 'G2': 'NOT_RUN', 'G3': 'NOT_RUN', 'G4': 'NOT_RUN'}
+          assert not d['new_geometry_created']
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('G1 BLOCKED: canonical binary unavailable. No new mesh or art QA. Evidence packaging only.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-rebuild01-BLOCKED-preflight-only
+          path: |
+            docs/production/MORWEN_REBUILD_01.md
+            docs/qa/morwen-rebuild-01/
+          retention-days: 14
+          if-no-files-found: error

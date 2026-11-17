@@ -1,0 +1,54 @@
+# MORWEN-REBUILD-01 — G1 BLOCKED checkpoint
+
+2026-11-17 UTC. Base main: `539d76d8d7b644998b0bc7c5ca9b23e1b521993a`.
+Branch: `feature/morwen-rebuild-01`. No geometry produced; Phase A–B are not complete.
+
+## 正本調査（実行済み）
+
+最新mainのAGENTS.md、HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1、CAUSAL_RETRY_AND_METHOD_SWITCH_V2、MORWEN_V561_CANONICAL_20261108、morwen-design-canonical.jsonを確認。
+正本はJPEG実体1536×1024、SHA-256 `47d58cbeb0f8ad41f51543716d872bfcc8c7d0dc91d45196c9c02b22402df638`。
+文書・JSONともバイナリ未登録。workspace画像2,468件をSHA照合、一致0。
+非公開handoff mainの再帰ツリーにも7374/v561/Morwen画像の候補なし（該当はシナリオ文書のみ）。
+
+非公開正典はAPIで取得し、Bible §36、ADD-002、AGE-CORRECTION、CANON_STATUSの関連箇所を照合。18歳・学院首席・研究院の関係を保護。全文を本PRに転載しない。
+取得時Git blob: Bible `c20fc9b7ea7aaa0de7449e110463225dab07573e`、addendum `e1000869aaf232d989761d15c982ed798378b49d`、status `ec5940c2ca6466150810f93c7fc6a463ef7ebec3`。
+旧本文の長髪記述と旧SCULPT仕様の7.749997頭身を新造形の根拠にしない。後発の指定v5.61を優先する。
+
+PR #407 HEAD `062b9f0753aa1bf0a5dc6536d52ed9a81be18541`、#417 HEAD `932590522bcef219eb26526b794ce35b6d13862f`を取得。
+#417のBlenderを4.3.2でスクリプト無効・背景モードで開き、埋め込み画像7件をハッシュ検査。比較シートは `d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b` で指定正本と不一致。4方向Layer0と重複2件も指定SHAでない。旧承認表記は今回の正本承認に流用しない。
+
+## 過去PRとの関係・累積履歴
+
+既存PRと原本は変更しない。履歴は各固定HEADの以下を参照する。
+
+- #417 `docs/qa/morwen-head-sculpt-20261117/ATTEMPT_LEDGER.md`: 自動顔fit＋放射髪2 FAIL、annulus/zipper2 FAIL、停止。楕円体顔／管髪は却下。
+- #407 `docs/qa/morwen-sculpt02/ATTEMPT_LEDGER_02.md`: broad Grab2回取り消し・停止、局所Grab＋低密度髪mass2美術FAIL・停止。
+- #417 `docs/qa/morwen-sculpt03/ATTEMPT_LEDGER_03.md`: corner quadまぶた初回局所試作。64 quadの技術成果は保持するが、浮いた眼輪・旧写実顔・厚いヘルメット髪が残る。全身造形の基礎に固定しない。
+- #417 `docs/qa/morwen-sculpt03/INDEPENDENT_REVIEW_20261117.md`: G2 FAIL、限定局所技術screenのみPASS。実際の独立レビューを参照した。REBUILDの独立QAは未実施。
+- Blender仕様 `docs/production/CODEX_MORWEN_ART_DIRECTED_SCULPT_02_20261117.md` と `MORWEN_SCULPT03_RETOTOPO_PLAN.md` は技術履歴として確認。コピー／旧比率保持の指示は今回の全身再構築指示で置換する。
+
+## 方式比較・暫定選定（未実行）
+
+| 方式 | 品質・総工数・適法性・再現性 | 今回の判断 |
+|---|---|---|
+| 画像計測→手動全身control mesh→スカルプト→retopo | シルエットと非対称性を直接制御。作業時間は必要だが不一致基盤の補正を避けられる。自作形状として来歴管理可能 | 第一候補。正本取得後に計測し採否を確定 |
+| Geometry Nodes | カメラ、診断、反復部品に再現性あり。人体identityの決定を代行しない | 補助のみ |
+| 適法な既存人体base | 時間短縮可能。ライセンスと正式比率の確認・全面変更が必要 | 比較候補。既存SCULPT形状は採用しない |
+| AI 3D補助 | 非対称／見えない面の捏造とretopo工数、出力ライセンスの確認が必要 | 未選定・未実行・課金なし |
+| 旧局所Grab／primitive組立／Python人体推定 | 既知identity欠陥を継承、停止済み方式の再試行になる | 使用禁止 |
+
+外部制作研究・素材ライセンス調査は未完了。新規素材導入なし。Blenderは利用可能であり、今回の阻害要因はソフト不足ではなく正本バイナリ不足。
+
+## Phase A 計測とPhase Bの解除条件
+
+正本取得後にSHA・JPEG・1536×1024を検証し、原本を変更せず参照登録する。
+頭頂（帽子と頭蓋を区別）、顎、肩、胸郭、腰、股、膝、足底、手足端、衣装外周、左右の非対称装備を画面座標で記録。直接観測と遮蔽／奥行き推定を分け、寸法と色は未取得のまま捏造しない。斜め絵を正投影測定図にしない。正面／側面／背面の根拠と不確実性を明示してから頭身と世界座標を決める。
+
+全身control meshと主要衣装外形を新規制作し、固定正投影カメラ・同一照明・同一スケールで正面、左右側面、背面、左右斜めを保存。対応する正投影資料がある場合のみ輪郭／ランドマーク差を計測する。斜め絵は並列美術照合に限定。顔拡大と想定ゲーム表示も比較する。
+独立美術QAで全身が成立するまで顔精密化、UV／リグ／アニメへ進まない。制作原本とゲーム最適化版は別ディレクトリにする。
+
+## 実績と未実行
+
+G1 BLOCKED: CANONICAL_BINARY_UNAVAILABLE。G2/G3/G4 NOT_RUN（REBUILD候補がない）。
+全身設計の数値確定、ベースmesh、.blend新作、レンダー、シルエット比較、顔比較、独立美術QAはすべて未実行。旧Blenderを新作成果物として提出しない。
+正本取得前に不一致モデルを増やさない。解除には指定SHAと一致する元画像そのものが必要。
