@@ -23,9 +23,6 @@ def raycast(ob,view,pixels):
     forward=rotation@Vector((0,0,-1))
     # BVH in world space; transform vertices rather than relying on object.ray_cast local coordinates.
     triangles=[]
-    for p in ob.data.polygons:
-        for tri in p.loop_triangles if hasattr(p,"loop_triangles") else []:
-            pass
     ob.data.calc_loop_triangles()
     for tri in ob.data.loop_triangles:triangles.append(tuple(tri.vertices))
     tree=BVHTree.FromPolygons(coords,triangles,all_triangles=True)
