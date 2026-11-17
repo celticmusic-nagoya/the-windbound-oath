@@ -1,0 +1,54 @@
+name: LIND Jointed Cliff Clay Study
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/build_jointed_cliff_study.py'
+      - '.github/workflows/lind-jointed-cliff-study.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  clay-study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          ldconfig -p | grep 'libEGL.so.1'
+          blender --version
+      - name: Build clay model and three views
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out/lind-jointed-cliff
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_jointed_cliff_study.py -- --out out/lind-jointed-cliff 2>&1 | tee out/lind-jointed-cliff/blender.log
+      - name: Verify real PNG, blend and manifest
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('out/lind-jointed-cliff')
+          m=json.loads((root/'manifest.json').read_text())
+          assert m['joint_cells'] >= 30
+          assert len(m['renders'])==3
+          for entry in m['renders'].values():
+              p=root/entry['path']
+              data=p.read_bytes()
+              assert data[:8]==b'\x89PNG\r\n\x1a\n'
+              assert hashlib.sha256(data).hexdigest()==entry['sha256']
+          blend=root/'jointed_cliff_study.blend'
+          assert blend.read_bytes()[:7]==b'BLENDER'
+          assert hashlib.sha256(blend.read_bytes()).hexdigest()==m['model_sha256']
+          print('PASS: 3 actual PNGs, blend, manifest, hashes')
+          PY
+      - name: Reopen saved Blender source
+        run: blender --background --factory-startup --disable-autoexec out/lind-jointed-cliff/jointed_cliff_study.blend --python-exit-code 1 --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.name.startswith('GEO_JOINT_')]) >= 30; print('REOPEN_OK')"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lind-jointed-cliff-clay-study
+          path: out/lind-jointed-cliff/
+          retention-days: 7
