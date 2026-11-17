@@ -64,7 +64,8 @@ def main():
  src_bvh=BVHTree.FromObject(src,bpy.context.evaluated_depsgraph_get())
  step=max(1,len(dst.data.vertices)//3000)
  distances=[]
- for v in dst.data.vertices[::step]:
+ for vi in range(0,len(dst.data.vertices),step):
+  v=dst.data.vertices[vi]
   co=dst.matrix_world@v.co
   hit=src_bvh.find_nearest(src.matrix_world.inverted()@co)
   if hit[0] is not None:
