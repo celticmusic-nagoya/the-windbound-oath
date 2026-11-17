@@ -1,0 +1,70 @@
+name: Morwen low-glare full-body comparison
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/render_basemesh_lowglare.py'
+      - '.github/workflows/morwen-basemesh-lowglare.yml'
+permissions:
+  contents: read
+jobs:
+  lowglare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download SHA-pinned official CC0 basemesh archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/morwen"
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 240 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            -o "$RUNNER_TEMP/morwen/source.zip"
+          echo "811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515  $RUNNER_TEMP/morwen/source.zip" | sha256sum -c -
+      - name: Verify archive and extract only official source blend
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/character_blender/inspect_human_basemesh_bundle.py "$RUNNER_TEMP/morwen/source.zip" --output "$RUNNER_TEMP/morwen/inventory.json"
+          python - <<'PY'
+          import os,zipfile,pathlib,shutil
+          root=pathlib.Path(os.environ["RUNNER_TEMP"])/"morwen"
+          with zipfile.ZipFile(root/"source.zip") as z:
+            matches=[i for i in z.infolist() if i.filename.endswith("/human_base_meshes_bundle.blend")]
+            if len(matches)!=1:raise SystemExit("BLOCKED source count")
+            with z.open(matches[0]) as f,(root/"source.blend.zst").open("wb") as o:shutil.copyfileobj(f,o)
+          PY
+          sudo apt-get update -qq
+          sudo apt-get install -y zstd libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          zstd -dc "$RUNNER_TEMP/morwen/source.blend.zst" > "$RUNNER_TEMP/morwen/source.blend"
+          echo "e5e9d30a7e6bb385fed21459dce68d1ad0d06e7bde4f9626696dbfda07cd541a  $RUNNER_TEMP/morwen/source.blend" | sha256sum -c -
+      - name: Install pinned Blender Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/wheels"
+          python -m pip download --no-deps --only-binary=:all: bpy==4.2.0 -d "$RUNNER_TEMP/wheels"
+          echo "a8217c2bd7b3424d1f51ce0698c0bf65439de352f7f6ed7b9942e2a9e5eb121b  $RUNNER_TEMP/wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl" | sha256sum -c -
+          python -m pip install --no-deps "$RUNNER_TEMP/wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl"
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Render both candidate basemeshes in four orthographic views
+        shell: bash
+        run: |
+          python tools/character_blender/render_basemesh_lowglare.py \
+            --source "$RUNNER_TEMP/morwen/source.blend" \
+            --output qa_output/morwen_lowglare
+      - name: Upload only eight PNGs and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-lowglare-basemesh-8views
+          path: qa_output/morwen_lowglare/
+          retention-days: 14
+          if-no-files-found: warn

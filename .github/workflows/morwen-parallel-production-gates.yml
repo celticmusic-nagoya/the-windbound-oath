@@ -1,0 +1,329 @@
+name: Morwen parallel production gates
+on:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/morwen-parallel-production-gates.yml'
+      - 'tools/character_blender/integrate_morwen_parallel_qa.py'
+      - 'tools/character_blender/diagnose_morwen_framing.py'
+      - 'tools/character_blender/solve_morwen_framing.py'
+      - 'tools/character_blender/test_solve_morwen_framing.py'
+      - 'tools/character_blender/morwen_team_contracts.py'
+      - 'tools/character_blender/morwen_four_view_capture.py'
+      - 'tools/character_blender/validate_character_world_bridge.py'
+      - 'tools/character_blender/test_character_world_bridge.py'
+      - 'tools/character_blender/verify_morwen_four_views.py'
+      - 'tools/character_blender/test_verify_morwen_four_views.py'
+      - 'tools/character_blender/measure_morwen_reference_silhouettes.py'
+      - 'tools/character_blender/test_measure_morwen_reference_silhouettes.py'
+      - 'tools/character_blender/build_morwen_reference_scene.py'
+      - 'tools/character_blender/audit_morwen_layer0_alpha.py'
+      - 'tools/character_blender/build_morwen_silhouette_envelope.py'
+      - 'tools/character_blender/qa_morwen_envelope_mesh.py'
+      - 'tools/character_blender/build_morwen_production_guides.py'
+      - 'tools/character_blender/build_morwen_head_candidate.py'
+      - 'tools/character_blender/render_morwen_head_review.py'
+      - 'tools/character_blender/audit_morwen_render_visibility.py'
+      - 'tools/character_blender/inventory_morwen_legacy_face.py'
+      - 'tools/qa/production_loop_gate.py'
+      - 'tools/qa/test_production_loop_gate.py'
+      - 'tools/qa/create_render_contact_sheet.py'
+      - 'tools/qa/test_create_render_contact_sheet.py'
+      - 'tools/qa/discover_workflow_run.py'
+      - 'tools/qa/test_discover_workflow_run.py'
+  workflow_dispatch:
+    inputs:
+      audit_basemesh:
+        description: 'Download and inventory official CC0 basemesh ZIP (independent QA only)'
+        required: false
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: morwen-parallel-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  parallel-qa:
+    name: QA ${{ matrix.role }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [canonical, design, rig, render, art-review]
+    env:
+      BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+      CANDIDATE_SHA256: 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4
+      CANDIDATE_PATH: candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout frozen candidate for technical lanes
+        if: matrix.role == 'rig' || matrix.role == 'render'
+        uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: bca7d1d4cfd4b5e8a4f6c03656e148ed8485370c
+          path: candidate_source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        if: matrix.role != 'canonical'
+        with:
+          python-version: '3.13'
+      - name: Check frozen candidate
+        if: matrix.role == 'rig' || matrix.role == 'render'
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Install pinned Blender Python for technical lanes
+        if: matrix.role == 'rig' || matrix.role == 'render'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "$BPY_WHEEL_SHA256  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Check canonical Morwen reference hashes
+        if: matrix.role == 'canonical'
+        run: |
+          mkdir -p qa_output/canonical
+          python - <<'PY'
+          import hashlib,json,pathlib,sys
+          root=pathlib.Path("assets/canonical/morwen/2026-11-16")
+          expected={
+          "MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg":"d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b",
+          "LAYER0_FRONT.png":"b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+          "LAYER0_BACK.png":"b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+          "LAYER0_PROFILE_FACING_RIGHT.png":"9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+          "LAYER0_PROFILE_FACING_LEFT.png":"69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"}
+          rows=[]
+          for name,digest in expected.items():
+           p=root/name
+           actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+           rows.append({"name":name,"expected":digest,"actual":actual,"status":"PASS" if actual==digest else "BLOCKED"})
+          report={"role":"canonical","results":rows,"status":"PASS" if all(x["status"]=="PASS" for x in rows) else "BLOCKED"}
+          pathlib.Path("qa_output/canonical/report.json").write_text(json.dumps(report,indent=2))
+          print(json.dumps(report))
+          if report["status"]!="PASS":sys.exit(1)
+          PY
+      - name: Measure immutable Layer0 reference silhouettes
+        if: matrix.role == 'design'
+        run: |
+          python -m pip install 'Pillow>=10,<12'
+          python -m unittest discover -s tools/character_blender -p 'test_measure_morwen_reference_silhouettes.py' -v
+          mkdir -p qa_output/design
+          python tools/character_blender/measure_morwen_reference_silhouettes.py qa_output/design/MORWEN_REFERENCE_SILHOUETTES.json
+          python tools/character_blender/audit_morwen_layer0_alpha.py qa_output/design/MORWEN_LAYER0_ALPHA_AUDIT.json
+      - name: Design contract evidence
+        if: matrix.role == 'design'
+        run: |
+          mkdir -p qa_output/design
+          python tools/character_blender/morwen_team_contracts.py --role design --output qa_output/design/report.json
+      - name: Independent artistic review readiness
+        if: matrix.role == 'art-review'
+        run: |
+          mkdir -p qa_output/art-review
+          python tools/character_blender/morwen_team_contracts.py --role art-review --output qa_output/art-review/report.json
+      - name: Inventory frozen legacy face objects without modifying source
+        if: matrix.role == 'rig'
+        run: |
+          mkdir -p qa_output/rig
+          python tools/character_blender/inventory_morwen_legacy_face.py -- "$CANDIDATE_PATH" qa_output/rig/MORWEN_LEGACY_FACE_INVENTORY.json
+      - name: Rig deformation technical measurements
+        if: matrix.role == 'rig'
+        run: |
+          mkdir -p qa_output/rig
+          python tools/character_blender/morwen_rig_pose_smoke.py -- "$CANDIDATE_PATH" qa_output/rig
+      - name: Render and framing QA (fail closed)
+        if: matrix.role == 'render'
+        run: |
+          mkdir -p qa_output/render
+          python tools/character_blender/morwen_render_qa_loop.py -- "$CANDIDATE_PATH" qa_output/render
+      - name: Build four-view non-anatomical silhouette envelope
+        if: matrix.role == 'render'
+        run: |
+          python -m pip install 'Pillow>=10,<12'
+          python tools/character_blender/build_morwen_silhouette_envelope.py -- qa_output/render/MORWEN_SILHOUETTE_ENVELOPE_QA.blend
+          python tools/character_blender/qa_morwen_envelope_mesh.py -- qa_output/render/MORWEN_SILHOUETTE_ENVELOPE_QA.blend qa_output/render/MORWEN_ENVELOPE_TOPOLOGY_QA.json
+          python tools/character_blender/build_morwen_production_guides.py -- qa_output/render/MORWEN_SCULPTING_GUIDES.blend
+          python tools/character_blender/build_morwen_head_candidate.py -- qa_output/render/MORWEN_HEAD_HAIR_CANDIDATE.blend
+          python tools/character_blender/render_morwen_head_review.py -- qa_output/render/MORWEN_HEAD_HAIR_CANDIDATE.blend qa_output/render/head_review
+          python tools/character_blender/audit_morwen_render_visibility.py qa_output/render/head_review qa_output/render/MORWEN_HEAD_VISIBILITY_QA.json
+      - name: Build packed Layer0 modelling reference scene
+        if: matrix.role == 'render'
+        run: |
+          python tools/character_blender/build_morwen_reference_scene.py -- qa_output/render/MORWEN_LAYER0_REFERENCE_SCENE.blend
+      - name: Capture four independent orthographic views for visual review
+        if: matrix.role == 'render'
+        run: |
+          python tools/character_blender/morwen_four_view_capture.py -- "$CANDIDATE_PATH" qa_output/render
+      - name: Verify candidate remains unchanged
+        if: always() && (matrix.role == 'rig' || matrix.role == 'render')
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Generate render preview thumbnails and provenance manifest
+        if: always() && matrix.role == 'render'
+        run: |
+          python tools/qa/create_render_contact_sheet.py qa_output/render qa_output/render/previews
+      - name: Summarize render preview availability
+        if: always() && matrix.role == 'render'
+        run: |
+          if test -f qa_output/render/previews/RENDER_PREVIEW_CONTACT_SHEET.png; then
+            echo 'Render contact sheet: available in morwen-qa-render artifact (previews/RENDER_PREVIEW_CONTACT_SHEET.png)' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Independent artistic review: NOT_RUN; thumbnails are not proof of G2 PASS.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Render contact sheet: BLOCKED_NO_IMAGES or generation failed; inspect job logs.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload per-role QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-qa-${{ matrix.role }}
+          path: qa_output/${{ matrix.role }}/*
+          retention-days: 7
+          if-no-files-found: warn
+  integration:
+    name: Integration gate (all independent lanes)
+    needs: [parallel-qa]
+    if: always()
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Pillow for preview unit tests
+        run: python -m pip install 'Pillow>=10,<12'
+      - name: Discover latest completed prior workflow run (read-only)
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p qa_output/integration
+          python tools/qa/discover_workflow_run.py \
+            --repo "${{ github.repository }}" \
+            --branch "${{ github.ref_name }}" \
+            --workflow morwen-parallel-production-gates.yml \
+            --exclude-run-id "${{ github.run_id }}" \
+            --output qa_output/integration/latest_prior_run.json
+      - name: Unit-test run discovery filtering
+        run: python -m unittest discover -s tools/qa -p 'test_discover_workflow_run.py' -v
+      - name: Unit-test thumbnail manifest and idempotence
+        run: python -m unittest discover -s tools/qa -p 'test_create_render_contact_sheet.py' -v
+      - name: Unit-test cross-team production loop safety gate
+        run: python -m unittest discover -s tools/qa -p 'test_production_loop_gate.py' -v
+      - name: Unit-test no-render framing solver
+        run: python -m unittest discover -s tools/character_blender -p 'test_solve_morwen_framing.py' -v
+      - name: Unit-test full-3D character/world bridge negative controls
+        run: python -m unittest discover -s tools/character_blender -p 'test_character_world_bridge.py' -v
+      - name: Unit-test four-view evidence validation
+        run: python -m unittest discover -s tools/character_blender -p 'test_verify_morwen_four_views.py' -v
+      - name: Download independent lane reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: morwen-qa-*
+          path: qa_evidence
+          merge-multiple: false
+      - name: Normalize artifact directories by role
+        run: |
+          mkdir -p qa_lanes
+          for role in canonical design rig render art-review; do
+            if test -d "qa_evidence/morwen-qa-$role"; then
+              cp -R "qa_evidence/morwen-qa-$role" "qa_lanes/$role"
+            fi
+          done
+      - name: Diagnose render failure without additional rendering
+        if: always()
+        run: |
+          if test -f qa_lanes/render/MORWEN_RENDER_QA_REPORT.json; then
+            python tools/character_blender/diagnose_morwen_framing.py qa_lanes/render/MORWEN_RENDER_QA_REPORT.json --output qa_output/integration/framing_diagnosis.json
+          fi
+      - name: Validate four-view artifact hashes and provenance
+        run: python tools/character_blender/verify_morwen_four_views.py qa_lanes/render
+      - name: Validate each lane evidence fail closed
+        run: python tools/character_blender/integrate_morwen_parallel_qa.py --root qa_lanes --out qa_output/integration/report.json
+      - name: Summarize prior run discovery
+        if: always()
+        run: |
+          if test -f qa_output/integration/latest_prior_run.json; then
+            python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path("qa_output/integration/latest_prior_run.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("Previous completed run discovery: "+r.get("status","BLOCKED")+"\n")
+              if r.get("run_id"): f.write("Previous run ID: "+str(r["run_id"])+"\n")
+          PY
+          else
+            echo 'Previous completed run discovery: BLOCKED (no report)' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Summarize integration
+        if: always()
+        env:
+          RESULT: ${{ needs.parallel-qa.result }}
+        run: |
+          echo "Parallel jobs: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          echo "Independent artistic QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
+          echo "Android game QA: NOT_RUN" >> "$GITHUB_STEP_SUMMARY"
+          echo "Canonical promotion/main merge: BLOCKED" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload integration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-qa-integration
+          path: qa_output/integration/*
+          retention-days: 7
+          if-no-files-found: warn
+
+  # Official CC0 Human Base Meshes v1.4.1 distribution and license verified from Blender sources on 2026-11-17.
+  # An AI-authored tagged push can request this independent read-only source audit.
+  basemesh-source-audit:
+    name: CC0 basemesh source audit (opt-in or AI push)
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.audit_basemesh == true) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[audit-basemesh]')) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download official CC0 source
+        run: |
+          set -euo pipefail
+          mkdir -p qa_output/basemesh
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 240 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            --output qa_output/basemesh/source.zip
+          sha256sum qa_output/basemesh/source.zip | tee qa_output/basemesh/source.sha256
+      - name: Inventory archive safely
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,zipfile
+          p=pathlib.Path('qa_output/basemesh/source.zip')
+          with zipfile.ZipFile(p) as z:
+            bad=z.testzip()
+            entries=[{'name':i.filename,'size':i.file_size} for i in z.infolist()]
+          report={'bundle':'Blender Studio Human Base Meshes v1.4.1','license':'CC0 (official listing)','sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'zip_crc':'PASS' if bad is None else 'FAIL','entries':entries,'mesh_qa':'NOT_RUN','art_qa':'NOT_RUN'}
+          pathlib.Path('qa_output/basemesh/report.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps({'zip_crc':report['zip_crc'],'entries':len(entries),'sha256':report['sha256']}))
+          if bad:raise SystemExit(1)
+          PY
+      - name: Validate ZIP paths and inventory .blend candidates (read-only)
+        run: |
+          python tools/character_blender/inspect_human_basemesh_bundle.py \
+            qa_output/basemesh/source.zip \
+            --output qa_output/basemesh/safe_inventory.json
+      - name: Exclude ZIP from artifact
+        if: always()
+        run: rm -f qa_output/basemesh/source.zip
+      - name: Upload source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-cc0-basemesh-source-audit
+          path: qa_output/basemesh/
+          retention-days: 14
+          if-no-files-found: warn

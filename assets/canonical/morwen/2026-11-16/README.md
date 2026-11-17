@@ -1,0 +1,15 @@
+# Morwen canonical reference set — 2026-11-16
+Status: DIRECTOR_APPROVED_REFERENCE_SOURCE（MORWEN-CANONICAL-REGISTER-01）。バイト列は添付ZIPから無加工で保存。**編集・再圧縮・上書き禁止。**
+
+| File | Role | Format | Size | SHA-256 |
+|---|---|---|---|---|
+| MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg | 顔・髪・帽子・衣装・装飾品・配色の基準 | JPEG 1536x1024 RGB | 486165 | d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b |
+| LAYER0_FRONT.png | 身体構造・髪型・インナー・脚部装備（正面） | PNG 384x1024 RGBA | 488380 | b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed |
+| LAYER0_BACK.png | 同（背面） | PNG 384x1024 RGBA | 473843 | b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f |
+| LAYER0_PROFILE_FACING_RIGHT.png | 同（右向き側面＝本人の右側が見える） | PNG 384x1024 RGBA | 440281 | 9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737 |
+| LAYER0_PROFILE_FACING_LEFT.png | 同（左向き側面＝本人の左側が見える） | PNG 384x1024 RGBA | 437362 | 69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa |
+| MANIFEST.json | 添付マニフェスト（無加工） | JSON | 2295 | 3dd1f42afea27cdea5450127216f2bb0249ab954fe5691a73f5cfe469b7b10e5 |
+
+Source ZIP SHA-256: c0071a16014bf215941751e03b689499c80773982fdbef097aba6092dbff1f37
+
+管理資料: `docs/design/MORWEN_CANONICAL_20261116_REGISTRATION.md`

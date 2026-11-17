@@ -1,0 +1,24 @@
+{
+  "task_id": "MORWEN-FRONT-ONLY-01",
+  "status": "BLOCKED_PENDING_LANDMARK_ART_REVIEW",
+  "method_family": "measured-single-view-orthographic-construction",
+  "exhausted_method_family": "unconstrained-composite-image-generation",
+  "previous_failures": [
+    {"id": "MORWEN-TURNAROUND-V1.0", "cause": "composite layout instead of calibrated production reference"},
+    {"id": "MORWEN-TURNAROUND-V1.1", "cause": "same composite-generation root cause"}
+  ],
+  "view": "front",
+  "views": ["front"],
+  "output_count": 1,
+  "layout": "single_character",
+  "canonical_design_sha256": "d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b",
+  "canonical_sources": "assets/canonical/morwen/2026-11-16/",
+  "target_heads": 7.75,
+  "garter_leg": "anatomical_right",
+  "garter_front_screen_side": "left",
+  "landmarks_reviewed_by_artist": false,
+  "independent_art_qa_required": true,
+  "prompt": "Front orthographic full-body single character on neutral background, neutral pose, identical bilateral body alignment, preserve exact canonical Morwen design. Anatomical right-leg garter appears on screen-left. Exactly one front view; no additional illustrations.",
+  "geometry_policy": "Holistic anatomy adjustment; do not merely shrink the head. Do not invent unverified shoulder, bust, knee or ankle landmarks.",
+  "output_policy": "Candidate only; no canonical promotion, main merge or publication."
+}

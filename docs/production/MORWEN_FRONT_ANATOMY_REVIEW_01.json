@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "task": "MORWEN-FRONT-ANATOMY-REVIEW-01",
+  "status": "AWAITING_INDEPENDENT_ANATOMY_REVIEW",
+  "source": {
+    "path": "assets/canonical/morwen/2026-11-16/LAYER0_FRONT.png",
+    "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+    "dimensions_px": [384, 1024]
+  },
+  "reference_measurement": {
+    "crown_y": 17,
+    "chin_y_estimate": 178,
+    "chin_uncertainty_px": 4,
+    "floor_y_estimate": 1003,
+    "source_total_height_estimate_px": 986,
+    "target_heads": 7.75,
+    "target_head_unit_at_fixed_height_px": 127.2258064516129,
+    "absolute_height_cm": null,
+    "caution": "Reference image is ~6.1 heads; target 7.75 requires holistic redesign, not head-only scaling."
+  },
+  "review_items": [
+    {"name": "shoulder_joint_left_and_right", "source_y_guess": 257, "approved": false, "reviewer_coordinates": null},
+    {"name": "elbow_joint_left_and_right", "source_y_guess": 419, "approved": false, "reviewer_coordinates": null},
+    {"name": "wrist_joint_left_and_right", "source_y_guess": 537, "approved": false, "reviewer_coordinates": null},
+    {"name": "pelvis_hip_joint_left_and_right", "source_y_guess": 527, "approved": false, "reviewer_coordinates": null},
+    {"name": "knee_joint_left_and_right", "source_y_guess": 766, "approved": false, "reviewer_coordinates": null},
+    {"name": "ankle_joint_left_and_right", "source_y_guess": 964, "approved": false, "reviewer_coordinates": null}
+  ],
+  "non_joint_reference": [{"name": "bust_contour", "source_y_guess": 330, "approved_as_joint": false}],
+  "design_rules": {
+    "garter_leg": "anatomical_right",
+    "front_screen_side": "left",
+    "rear_visible": true,
+    "canonical_costume_source": "assets/canonical/morwen/2026-11-16/MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg"
+  },
+  "release_conditions": [
+    "independent human or qualified anatomy review with documented landmark coordinates",
+    "holistic 7.75-head body proportion plan",
+    "front-only preflight PASS",
+    "single front orthographic candidate art independently reviewed"
+  ],
+  "gate_status": {"G1": "BLOCKED", "G2": "NOT_RUN", "G3": "PARTIAL", "G4": "NOT_RUN"},
+  "stopped_method": "unconstrained-composite-image-generation"
+}

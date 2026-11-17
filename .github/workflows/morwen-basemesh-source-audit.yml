@@ -1,0 +1,47 @@
+name: Morwen CC0 basemesh source audit
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download official Blender Studio CC0 source (no repo mutation)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa_output/basemesh
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 240 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            --output qa_output/basemesh/source.zip
+          sha256sum qa_output/basemesh/source.zip | tee qa_output/basemesh/source.sha256
+      - name: Inspect archive paths, formats and sizes without extracting
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,pathlib,zipfile,hashlib
+          p=pathlib.Path('qa_output/basemesh/source.zip')
+          with zipfile.ZipFile(p) as z:
+              bad=z.testzip()
+              rows=[{"name":i.filename,"size":i.file_size,"compressed":i.compress_size} for i in z.infolist()]
+          report={"source":"https://www.blender.org/download/demo-files/","bundle_version":"1.4.1","source_license_claim":"CC0 (Blender official listing)","archive_sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"zip_crc_status":"PASS" if bad is None else "FAIL","entries":rows,"mesh_topology_qa":"NOT_RUN","art_qa":"NOT_RUN","production_approval":False}
+          pathlib.Path('qa_output/basemesh/report.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps({"archive_sha256":report["archive_sha256"],"entries":len(rows),"zip_crc_status":report["zip_crc_status"]}))
+          if bad:raise SystemExit(1)
+          PY
+      - name: Remove source binary from evidence upload
+        if: always()
+        run: rm -f qa_output/basemesh/source.zip
+      - name: Upload immutable-source inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-cc0-basemesh-source-audit
+          path: qa_output/basemesh/
+          retention-days: 14
+          if-no-files-found: warn

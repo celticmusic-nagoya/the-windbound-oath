@@ -1,0 +1,54 @@
+name: Morwen candidate rig pose smoke
+on:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/morwen-rig-pose-smoke.yml'
+      - 'tools/character_blender/morwen_rig_pose_smoke.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+      CANDIDATE_SHA256: 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4
+      CANDIDATE_PATH: candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout frozen diagnostic candidate
+        uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: bca7d1d4cfd4b5e8a4f6c03656e148ed8485370c
+          path: candidate_source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify frozen candidate SHA256
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Install pinned Blender Python
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "$BPY_WHEEL_SHA256  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Run non-destructive rig pose smoke test
+        run: |
+          mkdir -p render_output/morwen_pose_smoke
+          python tools/character_blender/morwen_rig_pose_smoke.py -- "$CANDIDATE_PATH" render_output/morwen_pose_smoke
+      - name: Upload pose measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-rig-pose-smoke
+          path: render_output/morwen_pose_smoke/*.json
+          retention-days: 7
+          if-no-files-found: warn

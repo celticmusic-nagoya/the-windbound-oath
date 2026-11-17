@@ -1,0 +1,43 @@
+name: Morwen silhouette constraint evidence
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/audit_morwen_silhouette_constraints.py'
+      - '.github/workflows/morwen-silhouette-constraint-evidence.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'Pillow==11.3.0'
+      - name: Reuse candidate 01 render artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/candidate"
+          gh run download 44036495955 --repo "${{ github.repository }}" --name morwen-editable-body-candidate-01 --dir "$RUNNER_TEMP/candidate"
+      - name: Build four-view constraint evidence
+        run: |
+          python tools/character_blender/audit_morwen_silhouette_constraints.py \
+            --canonical assets/canonical/morwen/2026-11-16 \
+            --candidate "$RUNNER_TEMP/candidate/morwen_body_candidate_01_renders" \
+            --output qa_output/morwen_silhouette_constraints
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-silhouette-constraint-evidence
+          path: qa_output/morwen_silhouette_constraints/
+          retention-days: 14
+          if-no-files-found: warn

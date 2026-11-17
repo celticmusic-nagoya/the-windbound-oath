@@ -1,0 +1,135 @@
+name: Morwen CC0 basemesh Blender geometry audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/inspect_human_basemesh_geometry.py'
+      - 'tools/character_blender/shortlist_female_basemesh.py'
+      - 'tools/character_blender/render_basemesh_comparison.py'
+      - 'tools/character_blender/export_basemesh_landmark_evidence.py'
+      - 'tools/character_blender/build_basemesh_height_overlays.py'
+      - 'tools/character_blender/analyze_basemesh_head_sections.py'
+      - 'tools/character_blender/raycast_basemesh_surface.py'
+      - 'tools/character_blender/sample_basemesh_render_contours.py'
+      - 'tools/character_blender/verify_head_landmark_hypotheses.py'
+      - 'tools/character_blender/build_morwen_proportion_stage.py'
+      - 'tools/character_blender/pack_morwen_canonical_references.py'
+      - 'tools/character_blender/add_morwen_head_landmark_rig.py'
+      - 'tools/character_blender/build_morwen_hair_guides.py'
+permissions:
+  contents: read
+jobs:
+  geometry-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch official CC0 bundle (isolated)
+        run: |
+          set -euo pipefail
+          mkdir -p qa_output/basemesh/source
+          curl --fail --location --retry 2 --connect-timeout 20 --max-time 240 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            -o qa_output/basemesh/source.zip
+          sha256sum qa_output/basemesh/source.zip > qa_output/basemesh/source_sha256.txt
+          echo '811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515  qa_output/basemesh/source.zip' | sha256sum -c -
+      - name: Safe ZIP inventory and extract single .blend
+        run: |
+          python tools/character_blender/inspect_human_basemesh_bundle.py qa_output/basemesh/source.zip --output qa_output/basemesh/archive_inventory.json
+          python - <<'PY'
+          import pathlib,zipfile
+          root=pathlib.Path('qa_output/basemesh')
+          with zipfile.ZipFile(root/'source.zip') as z:
+              matches=[i for i in z.infolist() if i.filename.endswith('/human_base_meshes_bundle.blend')]
+              if len(matches)!=1:raise SystemExit('BLOCKED expected exactly one .blend')
+              with z.open(matches[0]) as f,(root/'source'/'human_base_meshes_bundle.blend').open('wb') as o:
+                  import shutil;shutil.copyfileobj(f,o)
+          PY
+      - name: Decompress official Zstandard-wrapped .blend and verify Blender header
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y zstd
+          mv qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/source/human_base_meshes_bundle.blend.zst
+          zstd -dc qa_output/basemesh/source/human_base_meshes_bundle.blend.zst > qa_output/basemesh/source/human_base_meshes_bundle.blend
+          echo 'e5e9d30a7e6bb385fed21459dce68d1ad0d06e7bde4f9626696dbfda07cd541a  qa_output/basemesh/source/human_base_meshes_bundle.blend' | sha256sum -c -
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('qa_output/basemesh/source/human_base_meshes_bundle.blend')
+          header=p.open('rb').read(12)
+          if header != b'BLENDER-v402': raise SystemExit('BLOCKED unexpected Blender file header '+repr(header))
+          r={'status':'PASS_HEADER_ONLY','header':header.decode(),'decompressed_bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'geometry_qa':'NOT_RUN','art_qa':'NOT_RUN'}
+          Path('qa_output/basemesh/blend_header.json').write_text(json.dumps(r,indent=2))
+          PY
+      - name: Set up Blender 4.2-compatible Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'tools/character_blender/inspect_human_basemesh_geometry.py'
+      - name: Install verified Blender 4.2 Python runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==4.2.0 -d wheels
+          echo "a8217c2bd7b3424d1f51ce0698c0bf65439de352f7f6ed7b9942e2a9e5eb121b  wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl
+          python -m pip install 'numpy>=1.26,<3'
+          python -c 'import bpy; print("Blender runtime:", bpy.app.version_string)'
+      - name: Inspect actual Blender geometry without edits
+        run: |
+          python tools/character_blender/inspect_human_basemesh_geometry.py -- qa_output/basemesh/source/human_base_meshes_bundle.blend qa_output/basemesh/geometry_inventory.json
+      - name: Identify named female basemesh candidates (review only)
+        run: |
+          python tools/character_blender/shortlist_female_basemesh.py qa_output/basemesh/geometry_inventory.json --output qa_output/basemesh/female_basemesh_candidates.json
+      - name: Render neutral orthographic basemesh comparisons (diagnostic only)
+        run: |
+          python tools/character_blender/render_basemesh_comparison.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/diagnostic_renders
+      - name: Generate calibrated world-Z overlay guides for diagnostic PNGs
+        run: |
+          python tools/character_blender/build_basemesh_height_overlays.py --manifest qa_output/basemesh/diagnostic_renders/diagnostic_manifest.json --output qa_output/basemesh/diagnostic_renders
+      - name: Export source-indexed coordinate evidence for human landmark review
+        run: |
+          python tools/character_blender/export_basemesh_landmark_evidence.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/landmark_vertex_evidence.json
+      - name: Analyze actual Blender mesh height sections (hypotheses only)
+        run: |
+          python tools/character_blender/analyze_basemesh_head_sections.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/head_section_evidence.json --sections 80
+      - name: Extract verified render alpha contour samples
+        run: |
+          python tools/character_blender/sample_basemesh_render_contours.py --manifest qa_output/basemesh/diagnostic_renders/diagnostic_manifest.json --output qa_output/basemesh/render_contour_candidates.json
+      - name: Raycast actual render contour pixels onto mesh triangles
+        run: |
+          python tools/character_blender/raycast_basemesh_surface.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --contours qa_output/basemesh/render_contour_candidates.json --output qa_output/basemesh/raycast_surface_evidence.json
+      - name: Cross-check candidate head scanlines against actual geometry
+        run: |
+          python tools/character_blender/verify_head_landmark_hypotheses.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --manifest qa_output/basemesh/diagnostic_renders/diagnostic_manifest.json --output qa_output/basemesh/head_landmark_crossview_evidence.json
+      - name: Build actual renderable Blender proportion stage and four-view PNGs
+        run: |
+          python tools/character_blender/build_morwen_proportion_stage.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/proportion_stage
+      - name: Pack SHA-verified Morwen references into editable stage (viewport-only)
+        run: |
+          python tools/character_blender/pack_morwen_canonical_references.py --stage qa_output/basemesh/proportion_stage/morwen_proportion_stage_UNAPPROVED.blend --canonical assets/canonical/morwen/2026-11-16 --output qa_output/basemesh/proportion_stage/morwen_proportion_stage_WITH_CANONICAL_REFERENCES_UNAPPROVED.blend
+      - name: Add editable anatomical measurement markers to referenced Blender stage
+        run: |
+          python tools/character_blender/add_morwen_head_landmark_rig.py --stage qa_output/basemesh/proportion_stage/morwen_proportion_stage_WITH_CANONICAL_REFERENCES_UNAPPROVED.blend --output qa_output/basemesh/proportion_stage/morwen_head_landmark_review_UNAPPROVED.blend
+      - name: Create editable hair curve guides in isolated Blender copy
+        run: |
+          python tools/character_blender/build_morwen_hair_guides.py --stage qa_output/basemesh/proportion_stage/morwen_head_landmark_review_UNAPPROVED.blend --output qa_output/basemesh/proportion_stage/morwen_hair_guides_UNAPPROVED.blend
+      - name: Build actual editable hair mesh and four-view preview PNGs
+        run: |
+          python tools/character_blender/build_morwen_bob_mesh.py --stage qa_output/basemesh/proportion_stage/morwen_hair_guides_UNAPPROVED.blend --output qa_output/basemesh/proportion_stage/morwen_hair_mesh_candidate_UNAPPROVED.blend
+      - name: Remove binary sources from uploaded report
+        if: always()
+        run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
+      - name: Upload evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-basemesh-blender-geometry-inventory
+          path: qa_output/basemesh/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,45 @@
+name: Morwen high-quality 3D production readiness
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/morwen-production-readiness.yml'
+      - 'tools/qa/verify_morwen_production_readiness.py'
+      - 'tools/qa/test_verify_morwen_production_readiness.py'
+      - 'docs/production/MORWEN_HIGH_QUALITY_3D_RESTART_20261117.md'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Canonical source integrity (read-only)
+        run: python tools/qa/verify_morwen_production_readiness.py --output qa_output/morwen_readiness/canonical.json
+      - name: Preflight unit tests
+        if: always()
+        run: python -m unittest discover -s tools/qa -p 'test_verify_morwen_production_readiness.py' -v
+      - name: Report readiness without approving artistic quality
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('qa_output/morwen_readiness/canonical.json')
+          r=json.loads(p.read_text()) if p.exists() else {'status':'BLOCKED','reason':'missing preflight report'}
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Morwen canonical SHA preflight: '+r['status']+'\n\n')
+              f.write('Sculpt basemesh: BLOCKED (license/topology not verified)\n\n')
+              f.write('G1: BLOCKED (design-to-geometry not approved), G2: NOT_RUN, G3: NOT_RUN, G4: NOT_RUN\n')
+          PY
+      - name: Upload readiness evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-high-quality-3d-readiness
+          path: qa_output/morwen_readiness/
+          retention-days: 14
+          if-no-files-found: warn

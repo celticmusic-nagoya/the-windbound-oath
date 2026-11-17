@@ -1,0 +1,26 @@
+name: Morwen head-height target arithmetic
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/compute_morwen_head_height_targets.py'
+      - '.github/workflows/morwen-head-height-targets.yml'
+permissions:
+  contents: read
+jobs:
+  targets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Calculate target intervals, never infer actual head landmarks
+        run: python tools/character_blender/compute_morwen_head_height_targets.py --output qa_output/morwen_head_targets.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-head-height-target-arithmetic
+          path: qa_output/morwen_head_targets.json
+          retention-days: 14

@@ -1,0 +1,44 @@
+name: Morwen canonical vs basemesh visual review board
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/compare_morwen_canonical_basemesh.py'
+      - '.github/workflows/morwen-canonical-basemesh-board.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  board:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image tools
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Retrieve existing successful eight-view neutral renders
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/morwen-renders"
+          gh run download 44032196306 --repo "${{ github.repository }}" --name morwen-lowglare-basemesh-8views --dir "$RUNNER_TEMP/morwen-renders"
+      - name: Verify canonical references and generate comparison board
+        run: |
+          python tools/character_blender/compare_morwen_canonical_basemesh.py \
+            --canonical assets/canonical/morwen/2026-11-16 \
+            --render-dir "$RUNNER_TEMP/morwen-renders" \
+            --output qa_output/morwen_canonical_comparison
+      - name: Preserve comparison and audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-canonical-vs-basemesh-board
+          path: qa_output/morwen_canonical_comparison/
+          retention-days: 14
+          if-no-files-found: warn

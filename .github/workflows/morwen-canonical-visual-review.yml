@@ -1,0 +1,40 @@
+name: Morwen canonical visual review package
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/morwen-fable-eval-01
+    paths:
+      - .github/workflows/morwen-canonical-visual-review.yml
+permissions:
+  contents: read
+jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify canonical originals and prepare view-only bundle
+        run: |
+          python - <<'PY'
+          import json,hashlib,pathlib,shutil
+          root=pathlib.Path('assets/canonical/morwen/2026-11-16')
+          manifest=json.loads((root/'MANIFEST.json').read_text())
+          output=pathlib.Path('morwen-canonical-visual-review')
+          output.mkdir()
+          report=[]
+          for item in manifest['files']:
+              source=root/item['filename']
+              content=source.read_bytes()
+              digest=hashlib.sha256(content).hexdigest()
+              if digest!=item['sha256'] or len(content)!=item['bytes']:
+                  raise SystemExit('FAIL canonical hash or byte length: '+item['filename'])
+              shutil.copyfile(source,output/item['filename'])
+              report.append({'name':item['filename'],'sha256':digest,'bytes':len(content),'status':'PASS'})
+          (output/'SOURCE_VERIFY.json').write_text(json.dumps({'status':'PASS','files':report},indent=2)+'\n')
+          print('Verified canonical originals',len(report))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-canonical-visual-review-five-originals
+          path: morwen-canonical-visual-review/
+          retention-days: 7

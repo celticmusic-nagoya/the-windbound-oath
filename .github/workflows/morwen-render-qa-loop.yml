@@ -1,0 +1,60 @@
+name: Morwen autonomous bounded Blender render QA
+on:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/morwen-render-qa-loop.yml'
+      - 'tools/character_blender/morwen_render_qa_loop.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: morwen-render-qa-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  render-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      BPY_WHEEL_SHA256: 5850cd39369e4cd8c67ed067d39ec1e57426103ddc709436e13209b56665c6a0
+      CANDIDATE_SHA256: 9bff525ea293886f0aafdc79509f57d761d4a22a5f52e2700decae05c84ea9c4
+      CANDIDATE_PATH: candidate_source/assets/candidates/morwen-eyelid-08-contact/inspection/CONTACT_CAGE_DISABLED_08.blend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout frozen candidate read-only
+        uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath
+          ref: bca7d1d4cfd4b5e8a4f6c03656e148ed8485370c
+          path: candidate_source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify input SHA256
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Install pinned bpy and dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==5.3.0 -d wheels
+          echo "$BPY_WHEEL_SHA256  $(ls wheels/bpy-5.3.0-*.whl)" | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-5.3.0-*.whl
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Render and bounded automatic framing correction
+        run: |
+          mkdir -p render_output/morwen_render_qa
+          python tools/character_blender/morwen_render_qa_loop.py -- "$CANDIDATE_PATH" render_output/morwen_render_qa
+      - name: Verify immutable original
+        if: always()
+        run: echo "$CANDIDATE_SHA256  $CANDIDATE_PATH" | sha256sum -c -
+      - name: Upload images, QA report, failed attempts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-render-qa-loop
+          path: render_output/morwen_render_qa/*
+          retention-days: 7
+          if-no-files-found: warn

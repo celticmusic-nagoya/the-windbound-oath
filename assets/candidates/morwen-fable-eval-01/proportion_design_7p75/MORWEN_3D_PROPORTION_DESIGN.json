@@ -1,0 +1,56 @@
+{
+ "schema": "TWO_MORWEN_3D_PROPORTION_DESIGN_V1",
+ "status": "CANDIDATE_DESIGN_AID / NOT_ART / NOT_APPROVED",
+ "source": "LAYER0_FRONT.png",
+ "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+ "source_px": {
+  "crown_hair_top": 17,
+  "waist_narrowest": 353,
+  "crotch": 500,
+  "stocking_top": 553,
+  "floor": 1003,
+  "chin_visual_estimate": 178,
+  "chin_uncertainty_px": 4
+ },
+ "source_heads_incl_hair": 6.12,
+ "source_heads_range": [
+  5.98,
+  6.28
+ ],
+ "target_heads": 7.75,
+ "target_range": [
+  7.5,
+  8.0
+ ],
+ "rule": "Preserve all Layer 0 body ratios below the chin; scale the head (crown-to-chin, hair included) to 1/7.75 of stature.",
+ "head_scale_relative_to_body": 0.759,
+ "target_landmarks_height_in_heads_from_floor": {
+  "crown_hair_top": 7.75,
+  "chin": 6.75,
+  "waist_narrowest": 5.318,
+  "crotch": 4.115,
+  "stocking_top": 3.682,
+  "floor": 0.0
+ },
+ "leg_length_crotch_to_floor_over_stature": {
+  "source": 0.51,
+  "target": 0.531
+ },
+ "garter": {
+  "leg": "anatomical right",
+  "front_view": "screen-left",
+  "back_view": "screen-right",
+  "facing_right_profile": "visible",
+  "facing_left_profile": "hidden behind left leg"
+ },
+ "not_measured": [
+  "shoulder line",
+  "bust",
+  "knee",
+  "ankle",
+  "elbow",
+  "wrist: need artist-placed landmarks; not guessed"
+ ],
+ "stature_cm": null,
+ "stature_note": "163 cm appears only in an older unverified registry note; not adopted here."
+}

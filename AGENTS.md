@@ -1,3 +1,13 @@
+# MORWEN 3D PRODUCTION RESET — DIRECTOR APPROVED (2026-11-16)
+
+**Mandatory before ANY Morwen Blender/head/face/eyelid/eyelash/nose/hair work:** read [docs/production/MORWEN_PRODUCTION_METHOD_RESET_20261116.md](docs/production/MORWEN_PRODUCTION_METHOD_RESET_20261116.md) and [docs/production/MORWEN_LEGACY_FACE_WORK_AUDIT_20261116.md](docs/production/MORWEN_LEGACY_FACE_WORK_AUDIT_20261116.md). The director explicitly approved full-body design-first + high-quality sculpt-ready base + modular sculpt/retopo/rig workflow. This is a production-method decision, **not** approval of an existing mesh.
+
+- **STOP** attempting to promote procedural ellipsoid head + thin tubular hair or previously twice-failed eyelid annulus/zipper method to final art. Changing parameters, prompts, names, agents, or branches is NOT a new method. Preserve evidence and cumulative failed-attempt history.
+- Prior eyes, eyelids, eyelashes, and nose work is **NOT automatically discarded nor approved**. Inventory actual source .blend, scripts, screenshots, input hashes, licensing, QA, rig/topology compatibility. Classify as REUSE_VERIFIED / REFERENCE_ONLY / REJECTED / NOT_FOUND. Never claim reusable geometry until directly inspected and tested against the new base mesh.
+- Lock 2026-11-16 canonical Morwen five-image manifest SHA and director-approved 7.5–8-head proportion decision. Preserve asymmetry, hat, bob, glasses, outfit, socks, right-leg garter and other official details. Full G1 remains BLOCKED until model-to-source review.
+- First prove render visibility (neutral-lit exposure, nontransparent pixel clipping, camera coverage) before art comparison. Green Actions/5 PNG outputs = **technical delivery only**; 2026-11-16 candidate art G2 FAIL. G4 NOT_RUN. Never infer G2 PASS from CI.
+- Required stage order: reference/hash & full-body silhouette/landmarks → licensed sculpt-ready anatomical base → modular face/hair/costume → independent visual QA → retopo/UV/bake → rig/deformation → WebGL/Android QA. Keep candidates isolated on feature branch/Draft PR. No main merge, original overwrite, deletion, or release without explicit authorization.
+
 # DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
 
 **MANDATORY:** Claude, Codex, ChatGPT, Gemini and every automation/AI agent MUST read this section at each task start. Applies to game code, 2D/3D assets, Blender, maps, UI, QA, and cross-agent handoffs. See [docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md).
