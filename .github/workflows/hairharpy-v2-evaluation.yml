@@ -33,9 +33,13 @@ jobs:
           with tarfile.open(root/'release.tar.gz','r:gz') as tar:
               for m in tar:
                   p=pathlib.PurePosixPath(m.name)
-                  if p.is_absolute() or '..' in p.parts or m.issym() or m.islnk() or m.isdev() or m.isfifo():
+                  if p.is_absolute() or '..' in p.parts or m.islnk() or m.isdev() or m.isfifo():
                       raise SystemExit('BLOCKED unsafe archive member '+m.name)
-                  records.append({'name':m.name,'bytes':m.size,'type':m.type.decode('latin1')})
+                  if m.issym():
+                      target=pathlib.PurePosixPath(m.linkname)
+                      if target.is_absolute() or '..' in target.parts:
+                          raise SystemExit('BLOCKED unsafe symlink '+m.name+' -> '+m.linkname)
+                  records.append({'name':m.name,'bytes':m.size,'type':m.type.decode('latin1'),'link_target':m.linkname if m.issym() else None})
           out={'status':'PASS_ARCHIVE_INVENTORY_ONLY','release':'v2.0.0','archive_entries':len(records),
                'executable_launched':False,'vulkan_test':'NOT_RUN','cli_test':'NOT_RUN',
                'integration_qa':'NOT_RUN','license':'SOURCE_AVAILABLE_NOT_OPEN_SOURCE',
