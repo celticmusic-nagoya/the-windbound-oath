@@ -19,6 +19,8 @@ jobs:
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
       - name: Validate candidate semantic contract
         run: python3 tools/map_blender/lind/validate_cliff_macro_contract.py docs/production/lind-cliff-macro-support.contract.v1.json
+      - name: Preflight Blender Python syntax
+        run: python3 -m py_compile tools/map_blender/lind/build_cliff_macro_support.py
       - name: Generate actual closed macro support and render
         run: |
           set -euo pipefail
