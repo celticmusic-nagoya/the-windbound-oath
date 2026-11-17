@@ -95,3 +95,13 @@ Next: inspect existing PR artifacts and canonical hashes, then design a bounded 
 - The **technical audit JSON** says G1=`BLOCKED_UNAPPROVED_METRICS`, G2=`NOT_RUN_INDEPENDENT`, G3=`FAIL`, G4=`NOT_RUN`. Separate `INDEPENDENT_ART_QA.md` / art review records should be treated separately, not overwritten by the technical JSON.
 - The visually inspected oblique render is an actual candidate render; the large flat end plane, fractured cap edges and implausible irregular joint/bedding are visible. No new render was produced in this session.
 - Current local runtime has no `blender` executable; further independent geometry/reopen/render checks require the approved GitHub Actions Blender runner or equivalent pinned environment. Do not claim they were executed here.
+
+## Independent Blender reopen evidence (2026-11-17)
+- GitHub Actions run `44093120494`, job `134073177701`: **SUCCESS**, read-only `blender -b ... --disable-autoexec --python-exit-code 1` executed and opened `abutment.blend`.
+- Runner Blender **4.0.2**; original artifact produced with **4.3.2**. Blender explicitly warned `File written by newer Blender binary (403.34), expect loss of data!`. The file was NOT saved by this audit.
+- Inventory output: `mesh_count=56`, `triangles=44724`; historical source audit reported 55 / 44712. Difference of +1 mesh / +12 triangles must be reconciled; threshold-only PASS is insufficient for G3.
+- Six images reported as missing data candidates: `boulder_01_diff.png`, `boulder_01_nor_gl.png`, `boulder_01_rough.png`, `rock_07_diff.png`, `rock_07_nor_gl.png`, `rock_07_rough.png`. May be external and not packed; actual dependency-resolution QA remains blocked.
+- JSON evidence Artifact `14332566659`: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44093120494/artifacts/14332566659
+- Separate contract workflow run `44093120370` SUCCESS: candidate contract tests + artifact ZIP negative controls.
+- The audit script has now been strengthened to FAIL on missing-image-data candidates and optionally on explicit Blender version mismatch. A previous PASS means only basic file opening and minimum mesh inventory; **G3 remains FAIL**.
+- Do not infer that 4.0.2 and 4.3.2 are equivalent, that external textures are correctly packed, or that G2/G4 passed. Next action: pinned Blender 4.3.2 plus exact mesh inventory and texture dependency check; avoid modifying source blend.
