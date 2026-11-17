@@ -18,6 +18,20 @@ def download(url,dest,max_bytes):
    if size>max_bytes:raise ValueError("Asset exceeds download budget")
    h.update(data);f.write(data)
  return size,h.hexdigest()
+def file_url_index(tree):
+ index={}
+ def walk(node):
+  if isinstance(node,dict):
+   u=node.get("url")
+   if isinstance(u,str) and u.startswith("https://"):
+    name=pathlib.PurePosixPath(urllib.parse.urlsplit(u).path).name.lower()
+    if name:index.setdefault(name,[]).append(u)
+   for v in node.values():walk(v)
+  elif isinstance(node,list):
+   for v in node:walk(v)
+ walk(tree)
+ return index
+
 def choose(tree):
  candidates=[]
  def walk(node,path=()):
@@ -46,6 +60,7 @@ def main():
    metadata=fetch_json(API+ident);selected=choose(metadata)
    if not selected:raise ValueError("No supported downloadable model in API response")
    _,url,path,entry=selected
+   url_index=file_url_index(metadata)
    ext=pathlib.PurePosixPath(urllib.parse.urlsplit(url).path).suffix.lower()
    dest=out/(ident+ext)
    size,digest=download(url,dest,a.max_mb*1024*1024)
@@ -58,7 +73,9 @@ def main():
      if parsed.scheme or parsed.netloc or uri.startswith("/") or ".." in pathlib.PurePosixPath(parsed.path).parts:raise ValueError("Unsafe glTF dependency URI: "+uri)
      dependency=out/ident/parsed.path
      dependency.parent.mkdir(parents=True,exist_ok=True)
-     dep_url=urllib.parse.urljoin(url,uri)
+     name=pathlib.PurePosixPath(parsed.path).name.lower()
+     candidates=url_index.get(name,[])
+     dep_url=candidates[0] if len(set(candidates))==1 else urllib.parse.urljoin(url,uri)
      dep_size,dep_sha=download(dep_url,dependency,a.max_mb*1024*1024)
      dependencies.append({"uri":uri,"file":str(dependency.relative_to(out)),"size_bytes":dep_size,"sha256":dep_sha,"source_url":dep_url})
     # glTF expects dependencies relative to its own directory; put the JSON there too.
