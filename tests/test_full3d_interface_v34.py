@@ -77,6 +77,11 @@ class Full3DInterfaceContractTests(unittest.TestCase):
         del d["projection_id"]
         self.assert_rejected(d)
 
+    def test_cannot_self_approve_interface(self):
+        d = candidate()
+        d["interface_approval"] = "APPROVED"
+        self.assert_rejected(d)
+
     def test_fake_g1_pass(self):
         d = candidate()
         d["qa_gates"]["G1"] = "PASS"
