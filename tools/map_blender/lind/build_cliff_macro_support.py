@@ -87,15 +87,15 @@ def main():
  bpy.context.scene.camera=cam
  bpy.ops.object.light_add(type="AREA",location=(-2.0,-2.4,4.0))
  light=bpy.context.object;light.name="QA_AREA_NON_CANON";light.data.energy=650;light.data.shape="DISK";light.data.size=5
- scene=bpy.context.scene;scene.render.engine="CYCLES";scene.cycles.samples=32
+ scene=bpy.context.scene;scene.render.engine="BLENDER_WORKBENCH"\n scene.display.shading.light="STUDIO"\n scene.display.shading.color_type="MATERIAL"\n scene.display.shading.show_cavity=True\n scene.display.shading.cavity_type="BOTH"\n print("GEOMETRY_CLOSED",verts_n,faces_n,boundary,nonmanifold,volume,flush=True)
  scene.render.resolution_x=1200;scene.render.resolution_y=800;scene.render.resolution_percentage=100
  scene.world.color=(0.20,0.20,0.20)
  scene.render.image_settings.file_format="PNG"
  scene.render.filepath=str(out/"macro_support_clay.png")
- bpy.ops.render.render(write_still=True)
- blend=out/"macro_support_candidate.blend";bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+ print("RENDER_START_WORKBENCH",flush=True)\n bpy.ops.render.render(write_still=True)\n print("RENDER_FINISHED_WORKBENCH",flush=True)
+ blend=out/"macro_support_candidate.blend";bpy.ops.wm.save_as_mainfile(filepath=str(blend))\n print("BLEND_SAVED",flush=True)
  metrics={"method":"AUTHORED_NORMALIZED_CONNECTED_MACRO_SUPPORT","seed":SEED,"units":"NORMALIZED_NON_METRIC","approved_world_scale":None,"approved_camera":None,
- "source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
+ "render_engine":"BLENDER_WORKBENCH","source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
  "vertices":verts_n,"faces":faces_n,"boundary_edges":boundary,"nonmanifold_edges":nonmanifold,"closed_volume":volume,
  "G1":"BLOCKED","G2":"NOT_RUN","G3":"PASS_TOPOLOGY_ONLY","G4":"NOT_RUN",
  "outputs":{p.name:h(p) for p in (out/"macro_support_clay.png",blend)}}
