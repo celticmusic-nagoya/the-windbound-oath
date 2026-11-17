@@ -36,7 +36,7 @@ def main():
  cx=(minx+maxx)/2;cy=(miny+maxy)/2
  rx=(maxx-minx)*.44;ry=(maxy-miny)*.44
  assert rx>0 and ry>0
- controls=[(.83,.92,.76,.95,.87,.79,.96,.82,.90,.75,.94,.84,.88)]
+ controls=(.83,.92,.76,.95,.87,.79,.96,.82,.90,.75,.94,.84,.88)
  def threshold(theta):
   pos=(theta%(2*math.pi))/(2*math.pi)*len(controls)
   k=int(pos);t=pos-k;t=t*t*(3-2*t)
