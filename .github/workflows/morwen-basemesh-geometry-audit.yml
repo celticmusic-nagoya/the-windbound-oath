@@ -18,6 +18,7 @@ on:
       - 'tools/character_blender/pack_morwen_canonical_references.py'
       - 'tools/character_blender/add_morwen_head_landmark_rig.py'
       - 'tools/character_blender/build_morwen_hair_guides.py'
+      - 'tools/character_blender/build_morwen_bob_mesh.py'
 permissions:
   contents: read
 jobs:
@@ -120,6 +121,9 @@ jobs:
       - name: Create editable hair curve guides in isolated Blender copy
         run: |
           python tools/character_blender/build_morwen_hair_guides.py --stage qa_output/basemesh/proportion_stage/morwen_head_landmark_review_UNAPPROVED.blend --output qa_output/basemesh/proportion_stage/morwen_hair_guides_UNAPPROVED.blend
+      - name: Build actual editable hair mesh and four-view preview PNGs
+        run: |
+          python tools/character_blender/build_morwen_bob_mesh.py --stage qa_output/basemesh/proportion_stage/morwen_hair_guides_UNAPPROVED.blend --output qa_output/basemesh/proportion_stage/morwen_hair_mesh_candidate_UNAPPROVED.blend
       - name: Remove binary sources from uploaded report
         if: always()
         run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
