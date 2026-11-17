@@ -5,6 +5,7 @@ Usage:
 No file saving, scene edits, or mesh regeneration.
 """
 import bpy
+import bmesh
 import hashlib
 import json
 import math
@@ -24,6 +25,29 @@ def mesh_record(obj):
     keys = mesh.shape_keys
     vertices = mesh.vertices
     polygons = mesh.polygons
+    bm = bmesh.new()
+    try:
+        bm.from_mesh(mesh)
+        topology = {
+            'boundary_edges': sum(e.is_boundary for e in bm.edges),
+            'non_manifold_edges': sum(not e.is_manifold for e in bm.edges),
+            'wire_edges': sum(e.is_wire for e in bm.edges),
+            'loose_vertices': sum(not v.link_edges for v in bm.verts),
+        }
+    finally:
+        bm.free()
+    key_deltas = {}
+    if keys and len(keys.key_blocks) > 1:
+        basis = keys.key_blocks[0]
+        for key in keys.key_blocks[1:]:
+            changed = 0
+            max_displacement = 0.0
+            for index in range(len(vertices)):
+                distance = (key.data[index].co - basis.data[index].co).length
+                if distance > 1e-6:
+                    changed += 1
+                    max_displacement = max(max_displacement, distance)
+            key_deltas[key.name] = {'changed_vertices': changed, 'max_displacement': max_displacement}
     return {
         "name": obj.name,
         "mesh_name": mesh.name,
@@ -34,6 +58,9 @@ def mesh_record(obj):
         "all_quad_faces": sum(len(face.vertices) == 4 for face in polygons),
         "ngon_faces": sum(len(face.vertices) > 4 for face in polygons),
         "uv_layers": [layer.name for layer in mesh.uv_layers],
+        "topology": topology,
+        "shape_key_deltas_from_basis": key_deltas,
+        "armature_modifiers": [{"name": mod.name, "target": mod.object.name if mod.object else None} for mod in obj.modifiers if mod.type == "ARMATURE"],
         "shape_keys": [key.name for key in keys.key_blocks] if keys else [],
         "vertex_groups": [group.name for group in obj.vertex_groups],
         "modifiers": [{"name": mod.name, "type": mod.type} for mod in obj.modifiers],
