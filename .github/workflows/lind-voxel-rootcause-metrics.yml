@@ -41,6 +41,7 @@ jobs:
       - name: Read-only Blender inspection of saved candidate
         run: |
           mkdir -p out/lind-voxel-rootcause
+          set -o pipefail
           blender --background --factory-startup --disable-autoexec input/voxel_retopo_bake_study.blend --python-exit-code 1 --python tools/map_blender/lind/inspect_failed_voxel_candidate.py -- --out out/lind-voxel-rootcause | tee out/lind-voxel-rootcause/inspection.log
       - name: Validate metrics
         run: |
