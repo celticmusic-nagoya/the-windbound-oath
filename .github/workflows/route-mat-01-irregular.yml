@@ -9,6 +9,8 @@ permissions:
   contents: read
 jobs:
   render:
+    # STOPPED by actual G2 failures in PR361. Preserve recipe; never auto-regenerate.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

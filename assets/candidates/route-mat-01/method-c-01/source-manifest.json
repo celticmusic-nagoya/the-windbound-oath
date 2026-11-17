@@ -1,0 +1,106 @@
+{
+  "asset_status": "candidate",
+  "formal_adoption": false,
+  "method": "curated CC0 real volumetric scans, explicit joint network, cut bearing surfaces",
+  "source_assets": [
+    {
+      "source_url": "https://polyhaven.com/a/boulder_01",
+      "author": "Rico Cilliers",
+      "license": "CC0-1.0",
+      "license_evidence_url": "https://polyhaven.com/license",
+      "original_file": "sources/boulder_01_1k.blend",
+      "source_sha256": "8f8004fb52ebd00c4702a50873ac799e7bd7a0bea3415f2d8bc9986e1c58e371",
+      "file_bytes": 5370351,
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/boulder_01/boulder_01_1k.blend",
+      "api_md5": "8841af39e9ee00855f47187c86f30fda",
+      "actual_md5": "8841af39e9ee00855f47187c86f30fda",
+      "irish_provenance": "NOT_ESTABLISHED; not claimed",
+      "asset_status": "candidate",
+      "source_file_unchanged": true,
+      "textures": "not downloaded/not used; geometry-only clay study"
+    },
+    {
+      "source_url": "https://polyhaven.com/a/rock_07",
+      "author": "Jenelle van Heerden",
+      "license": "CC0-1.0",
+      "license_evidence_url": "https://polyhaven.com/license",
+      "original_file": "sources/rock_07_1k.blend",
+      "source_sha256": "da8010774291c5d0acfbcc3b82b367be06c5ed0926640147de5f17371ef227d1",
+      "file_bytes": 1061620,
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/rock_07/rock_07_1k.blend",
+      "api_md5": "8b9908a42bebf102ea390d96e66e1219",
+      "actual_md5": "8b9908a42bebf102ea390d96e66e1219",
+      "irish_provenance": "NOT_ESTABLISHED; not claimed",
+      "asset_status": "candidate",
+      "source_file_unchanged": true,
+      "textures": "not downloaded/not used; geometry-only clay study"
+    }
+  ],
+  "historical_references": [
+    {
+      "url": "https://nationalinventoryich.ccs.gov.ie/dry-stone-construction/",
+      "role": "Irish craft context only; no images reused"
+    },
+    {
+      "url": "https://teagasc.ie/rural-economy/rural-development/diversification/dry-stone-wall-building/",
+      "role": "bonding, pinning, hearting, batter principles; no Irish source provenance asserted"
+    },
+    {
+      "url": "https://www.clarecoco.ie/planning-and-building/architectural-conservation/guidelines-and-advice",
+      "role": "through-stones and conservation guidance; reference only"
+    }
+  ],
+  "rejected_sources": [
+    {
+      "url": "https://grab3d.com/models/props/stone-wall/",
+      "reason": "CC0 but explicitly procedural five-course modular rounded stones; too close to stopped art defect"
+    },
+    {
+      "url": "https://www.innerscene.com/tools/library/3d-parts/dry-stone-wall-section-f63adad9",
+      "reason": "CC0 claimed but no verified suitable structural stone geometry acquired; not used"
+    },
+    {
+      "url": "https://polyhaven.com/a/stone_wall",
+      "reason": "PBR texture only; not structural geometry"
+    }
+  ],
+  "canon": [
+    {
+      "path": "assets/approved/game/rilde_story/raid/attack_background_only.png",
+      "sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+      "viewed": true
+    },
+    {
+      "path": "assets/sources/lind-world-20261116/original.png",
+      "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+      "viewed": true
+    }
+  ],
+  "metrics": "study coordinates only; canonical world origin/footprint/transform remain null",
+  "baseline_PR363": "42fc98f0300ebd4bf6d82db89ad4c4a6f60358e3",
+  "baseline_main": "5365e5f799e8212544ec1ab439b844bf1a093e52",
+  "main_AGENTS_sha256": "6a5019577530bd837decbd4491552181836f21c8c30a029415e69290302371cf",
+  "main_AGENTS_matches_branch": true,
+  "private_canon_read": {
+    "Bible_git_blob": "c20fc9b7ea7aaa0de7449e110463225dab07573e",
+    "addendum_git_blob": "e1000869aaf232d989761d15c982ed798378b49d",
+    "status_git_blob": "ec5940c2ca6466150810f93c7fc6a463ef7ebec3",
+    "private_text_copied": false
+  },
+  "source_rights_review": {
+    "license_evidence_url": "https://polyhaven.com/license",
+    "license_legalcode": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+    "checked": "2026-11-17",
+    "author_and_dedication_verified": true,
+    "commercial_derivatives_redistribution": "permitted under CC0; asset-license section verified; site preview images excluded"
+  },
+  "G1": "BLOCKED_METRIC_ALIGNMENT",
+  "G2": "FAIL",
+  "G3": "FAIL",
+  "G4": "NOT_RUN",
+  "actual_generated_source_objects": [
+    "boulder_01_LOD3: 4134 source vertices",
+    "rock_07_LOD3: 929 source vertices"
+  ],
+  "source_selection_disclosure": "Initial library API chose first mesh (both LOD3); explicit object-name selection is required. Source file contains all LODs. Do not claim initial candidate used highest LOD."
+}

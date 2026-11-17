@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 162, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 117, in main
+    o=scanned_stone(('Near_' if side==-1 else 'Far_')+name,poly,front,back,i+(7 if side==1 else 0),scans,clay)
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 91, in scanned_stone
+    o['role']='load_bearing_scan_stone';o['scan_source']=src.name;o['bond_domain']=name;o['adoption']='CANDIDATE';unwrap(o)
+                                                                                                                  ~~~~~~^^^
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 62, in unwrap
+    if not len(o.data.polygons):raise RuntimeError('Empty Boolean result: '+o.name+' source '+str(o.get('scan_source')))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Empty Boolean result: Far_F12 source boulder_01_1k.blend_LOD0_verified
+
+Error: script failed, file: 'work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py', exiting.
+Blender 4.3.2
+
+Blender quit

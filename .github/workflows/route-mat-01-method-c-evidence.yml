@@ -1,0 +1,52 @@
+name: ROUTE-MAT-01 Method C evidence (not art approval)
+on:
+  pull_request:
+    paths:
+      - 'assets/candidates/route-mat-01/method-c-*/**'
+      - 'assets/candidates/route-mat-01/SHA256SUMS'
+      - 'docs/qa/lind/route-mat-01/method-c/**'
+      - '.github/workflows/route-mat-01-method-c-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            assets/candidates/route-mat-01
+            docs/qa/lind/route-mat-01/method-c
+            tools/map_blender/lind/route_mat_01
+      - name: Verify executed outputs and immutable hashes (not G2 PASS)
+        run: |
+          cd assets/candidates/route-mat-01
+          sha256sum --check SHA256SUMS
+          python3 - <<'PY'
+          import json,struct,pathlib
+          p=pathlib.Path('method-c-01/render')
+          for name in ['front','oblique','side']:
+              data=(p/(name+'.png')).read_bytes()
+              assert data[:8]==b'\x89PNG\r\n\x1a\n'
+              assert struct.unpack('>II',data[16:24])==(1280,1024)
+          assert (p/'abutment.blend').stat().st_size>100000
+          qa=json.loads((p/'independent-art-review.json').read_text())
+          print('Evidence verified. Independent G2 remains FAIL; G3 FAIL; G1 BLOCKED; G4 NOT_RUN.')
+          PY
+          echo 'Packaging of actual local Blender outputs only. G1 BLOCKED / G2 FAIL / G3 FAIL / G4 NOT_RUN. No adoption or production release.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: route-mat-01-method-c-review-${{ github.run_id }}
+          path: |
+            assets/candidates/route-mat-01/method-c-01/
+            assets/candidates/route-mat-01/method-c-02/
+            assets/candidates/route-mat-01/SHA256SUMS
+            docs/qa/lind/route-mat-01/method-c/
+            tools/map_blender/lind/route_mat_01/build_curated.py
+            tools/map_blender/lind/route_mat_01/render_curated.py
+            tools/map_blender/lind/route_mat_01/audit_candidate.py
+            tools/map_blender/lind/route_mat_01/fit_bearing_contacts.py
+          retention-days: 14
+          if-no-files-found: error
