@@ -94,3 +94,19 @@ python tools/morwen_head/qa_candidate.py /path/to/new-output
 1. 商業品質の顔・髪への到達は未完了。次は**対話的スカルプト＋手動リトポ／髪面のアートディレクション**へ方式変更する。座標式を再調整する方法には戻らない。
 2. 正式画像を各カメラに重ね、鼻・眼裂・頬・顎の面を実際にスカルプトし、髪をシルエットに基づく大きな非均等の面として手配置する。短い一部分で正式画像との一致を美術レビューしてから全体へ進む。
 3. G2独立レビュー、眼球/髪/眼鏡の交差検査、首肩の解剖レビュー、顔リグ変形、衣装、ゲーム・Android QAを実施する。正式原本置換・mainマージ・公開は行わない。
+
+## 最終納品・取得後の照合
+
+- Draft PR: https://github.com/celticmusic-nagoya/the-windbound-oath/pull/399
+- 成功したActions: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44064066566
+- 候補Artifact（.blend、10方向PNG、測定図3枚、コンタクトシート、比較レポート、来歴、QA、SHA）: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44064066566/artifacts/14319881962
+- 元ステージの分割保存: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44064066566/artifacts/14319502706
+- 元検査証跡: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44064066566/artifacts/14320625815
+- 上記Artifactsは14日保持、2026-12-01 UTCに期限。未承認候補の本番配布ではない。
+- 実行コードコミット: `c88a3130e73ccc873cc0f0a096d68eab83dbdfd8`。以後の差分は納品確認・レポートのみ。
+- CI候補 `.blend` SHA-256: `4e818c24d9d05258bd0c4f5a1cc6116826807a234aa7819f65fc49cc01f307d7`。
+- Artifact ZIP 23,147,617 bytesを取得し直し、SHA256SUMSに記録された全20ファイルを照合。取得したBlenderファイルもローカル4.3.2で再オープン、34メッシュ・2形状キー・3測定点を確認。ファイル不変。
+- 34メッシュ、制御メッシュ計34,300頂点／34,606面（Subdivision適用前）。非多様体・退化面ゼロ、全メッシュの符号付き体積正、10PNGのRGBA・可視性・クリッピング・フレーム検査PASS。顔アップ6方向と全身4方向を出力。頭身7.749997。
+- **最終G3: PASS_TECHNICAL_SCREEN（限定範囲）**。独立美術・交差・変形・UV完成・ゲーム適性を認定するものではない。**G1 BLOCKED / G2 自己美術FAIL・独立NOT_RUN / G4 NOT_RUN**は継続。
+
+機械可読結果・来歴は `docs/qa/morwen-head-sculpt-20261117/ci_final_*.json`、取得後確認は `delivery_verification.json` を参照。高品質な正式頭部・顔・髪の完成は未達であり、この検討候補を完成品として扱わない。
