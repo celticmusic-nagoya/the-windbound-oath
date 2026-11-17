@@ -1,0 +1,59 @@
+name: LIND CC0 Packed Blender Candidate Sources
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/package_cc0_editable_sources.py'
+      - '.github/workflows/lind-cc0-editable-sources.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch immutable CC0 glTF evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/editable
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
+      - name: Install pinned Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-expr 'import numpy; print("NUMPY_OK")'
+      - name: Create packed candidate blend files
+        timeout-minutes: 8
+        run: |
+          set -o pipefail
+          timeout 440s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/package_cc0_editable_sources.py -- --source out/source --out out/editable 2>&1 | tee out/editable/package.log
+      - name: Verify source manifests and reopenable scenes
+        timeout-minutes: 5
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path("out/editable")
+          report=json.loads((d/"editable_source_manifest.json").read_text())
+          assert len(report["candidates"])==2
+          for x in report["candidates"]:
+              p=d/x["blend"]
+              assert p.read_bytes()[:7]==b"BLENDER-"
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x["blend_sha256"]
+              assert len(x["verified_packed_nodes"])>=3
+          print("PACKED_SOURCE_MANIFEST_PASS")
+          PY
+          for scene in out/editable/*_candidate_source.blend; do
+            timeout 90s blender --background --factory-startup --disable-autoexec "$scene" --python-exit-code 1 --python-expr 'import bpy; meshes=[o for o in bpy.data.objects if o.type=="MESH"]; imgs=[n.image for m in bpy.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=="TEX_IMAGE" and n.image]; assert meshes and len(imgs)>=3; assert all(im.packed_file for im in imgs); print("PACKED_SCENE_REOPEN_PASS",bpy.data.filepath,len(meshes),len(imgs))'
+          done
+      - name: Upload editable source scenes and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cc0-editable-packed-blender-sources
+          path: out/editable/
+          retention-days: 14
+          if-no-files-found: warn
