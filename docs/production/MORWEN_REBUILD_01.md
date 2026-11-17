@@ -67,3 +67,40 @@ G1 BLOCKED: CANONICAL_BINARY_UNAVAILABLE。G2/G3/G4 NOT_RUN（REBUILD候補が�
 担当確認: open PR #407（SCULPT02）、#417（SCULPT03）、#419（本REBUILD）、#411（AI制作調査）、#362（v3.4整合提案）を照会した。#419はCHARACTERの再構築調査を担当し、他PRの造形・MAP作業を変更しない。open PRだけでは他担当者の実行中状態は確定できないため、造形着手時に再照会する。
 
 現時点ではLayer 0参照シーン自体も未生成／QA未実施。追加指示は特定の画像バイト列や所在を示していないため、旧埋め込み7画像と指定v5.61との正本相違は未解決。解除には正式採用四方向の実ファイル／取得先と、その正本指定（v5.61 SHAロックとの関係を含む）が必要。上位規約原文の所在も取得して内容を照合する。未確認部分を推測して制作規則に加えない。
+
+## BLOCKED解除実行 — 正式Layer 0の取得・参照シーン完成
+
+本節が上記の旧BLOCKED checkpointを更新する。旧preflight.jsonは当時の証跡として保持。
+最新指示で正式参照の用途が分離された: v5.61（11月8日）は外観デザイン、四方向Layer 0（11月16日）は身体構造・プロポーション。両画像群のSHA相違は競合ではない。身体構造作業にv5.61の未取得を全体停止条件として課さない。
+
+参照ブランチ `feature/morwen-reference-binary-01` の固定HEAD `8cc6687ce4498b6f0ea5bd59f0ebe2d7017629f1` から4 PNGと既存manifest・setup script・workflowを取得。既存mainにはQUALITY_FIRST_3D_PIPELINE_V1が無いため、指定参照ブランチの同文書を読み、mainのAGENTS・Autonomous v1.0・高品質v1.1・causal retry v2と照合。ユーザー追加指示により参照の用途分離と7.5〜8頭身目標を適用。原規約の書換え・他PRのマージなし。
+
+| 方向 | 原ファイル | 確認SHA-256 |
+|---|---|---|
+| 正面 | 7809.png | b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed |
+| 右 | 7807.png | 9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737 |
+| 背面 | 7810.png | b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f |
+| 左 | 7808.png | 69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa |
+
+4/4 PNG、RGBA、384×1024、manifest一致。元PNGとmanifestのバイトを変更しない（manifest内の未upload記述は歴史情報であり現在の取得実績とは分ける）。実画像も目視し、正面・右向きprofile・背面・左向きprofileの対応を確認。明示された身体参照用途でG1 PASS。
+
+既存run 43380121634（feature/mvp-blockout-01、ea33594af49d2a51643820600f887135b71aae8e）はsuccess。Artifact 14016615602はexpired=false／92,633 bytes。ただしworkspace ZIP取得は配布先403で失敗した。既存スクリプトが未梱包画像を保存することも確認したため、既存処理を本ブランチで実行して補完する。
+
+### 実制作済みの参照シーン
+
+- `assets/candidates/morwen-rebuild-01/reference-scene/MORWEN_LAYER0_REFERENCES.blend`
+- `tools/blender/production_mesh_08/prepare_layer0_references.py`: 既存生成処理を変更せず使用。
+- `tools/morwen_rebuild01/finalize_reference_scene.py`: 4画像をpack、4正投影camera追加、独立再open、投影四隅・upright・左右非反転・元SHA・寸法・lock・hide切替検証。
+- `docs/qa/morwen-rebuild-01/reference-scene/`: 両段階のQA JSON、実行log、SHA256SUMS。
+
+Blender4.3.2でローカル実行済み。画像4件をpackした自己完結原本。人体meshは0件でありモデル完成ではない。2.0は画像キャンバスの正規化高であり、公式身長2mや接地登録を意味しない。画像内の頭頂／足底余白はそのまま保持。骨格landmark・接地・頭身測定は未実行。G3参照シーンの限定検査PASSは、人体G3認定とは区別する。
+
+### 次の高品質素体工程へ着手
+
+#335のbody担当PRはcoordination only／造形未実施と確認。#407/#417の累積停止方式と独立美術FAILを再読。旧局所Grab・自動realistic顔fit・放射髪・annulus/zipper・primitive人体loftを再実行しない。
+
+参照QAの後、Blender公式Human Base Meshes 1.4.1のCC0 **stylized female**素体の取得・原本検証・別ファイル取り込みへ進む。旧SCULPTのrealistic形状とは別の素材。取り込みは新しいモルウェン形状の完成や正本適合を意味しない。旧PRで検証済みのarchive SHA／展開後Blender SHAと照合し、原頂点・面は変更せず、正規化表示だけ行う。
+
+ローカル公式mirrorアクセスはHTTP403で取得不可。Actionsの独立jobで公式取得を試し、成功時に6方向render・編集可能source intake・QA・log・SHAをArtifactsへ保存する。失敗時は技術障害として記録し、primitive推定生成で代替しない。
+
+次の造形はLayer0の観測landmarkと姿勢差を明示した全身target、手動sculpt／retopoによる身体形状編集。source intakeは未加工のため素体美術QAを合格扱いしない。全身G2が未PASSなら精密顔・髪・衣装・rigへ進めない。v5.61未取得は最終外観デザイン照合のみに残るBLOCKED。

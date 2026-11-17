@@ -1,0 +1,146 @@
+{
+  "task": "MORWEN-REBUILD-01-LAYER0",
+  "blender": "4.3.2",
+  "reference_source_commit": "8cc6687ce4498b6f0ea5bd59f0ebe2d7017629f1",
+  "G1_body_reference": "PASS",
+  "G1_final_design": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G3_reference_scene": "PASS",
+  "G3_character": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "scope": "Reference scene only; zero character meshes",
+  "canvas_height": 2.0,
+  "canvas_is_metric_body_height": false,
+  "ground_and_landmark_registration": "NOT_RUN",
+  "checks": [
+    {
+      "view": "front",
+      "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "packed": true,
+      "image_size": [
+        384,
+        1024
+      ],
+      "projected_corners": [
+        [
+          0.0,
+          1.1920928955078125e-07
+        ],
+        [
+          1.0,
+          1.1920928955078125e-07
+        ],
+        [
+          1.0,
+          1.0000001192092896
+        ],
+        [
+          0.0,
+          1.0000001192092896
+        ]
+      ],
+      "max_corner_error": 1.1920928955078125e-07,
+      "unmirrored_upright": true,
+      "transform_locks": true,
+      "visibility_toggle": "PASS"
+    },
+    {
+      "view": "right",
+      "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "packed": true,
+      "image_size": [
+        384,
+        1024
+      ],
+      "projected_corners": [
+        [
+          -2.7815499947791977e-07,
+          -5.960464477539063e-08
+        ],
+        [
+          0.9999997019767761,
+          -5.960464477539063e-08
+        ],
+        [
+          0.9999997019767761,
+          0.9999998807907104
+        ],
+        [
+          -2.7815499947791977e-07,
+          0.9999998807907104
+        ]
+      ],
+      "max_corner_error": 2.980232238769531e-07,
+      "unmirrored_upright": true,
+      "transform_locks": true,
+      "visibility_toggle": "PASS"
+    },
+    {
+      "view": "back",
+      "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "packed": true,
+      "image_size": [
+        384,
+        1024
+      ],
+      "projected_corners": [
+        [
+          4.3710073782676773e-07,
+          8.940696716308594e-08
+        ],
+        [
+          1.0000004768371582,
+          1.1920928955078125e-07
+        ],
+        [
+          1.000000238418579,
+          1.0000001192092896
+        ],
+        [
+          2.384185791015625e-07,
+          1.0000001192092896
+        ]
+      ],
+      "max_corner_error": 4.76837158203125e-07,
+      "unmirrored_upright": true,
+      "transform_locks": true,
+      "visibility_toggle": "PASS"
+    },
+    {
+      "view": "left",
+      "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "packed": true,
+      "image_size": [
+        384,
+        1024
+      ],
+      "projected_corners": [
+        [
+          2.7815499947791977e-07,
+          -5.960464477539063e-08
+        ],
+        [
+          1.000000238418579,
+          -5.960464477539063e-08
+        ],
+        [
+          1.000000238418579,
+          0.9999998807907104
+        ],
+        [
+          2.7815499947791977e-07,
+          0.9999998807907104
+        ]
+      ],
+      "max_corner_error": 2.7815499947791977e-07,
+      "unmirrored_upright": true,
+      "transform_locks": true,
+      "visibility_toggle": "PASS"
+    }
+  ],
+  "reopened_with_scripts_disabled": true,
+  "blend_sha256": "fb200e866da4c546d3d81feb4b1d7106aaef829ecb83336207d7b70198c1f877",
+  "status": "BODY_REFERENCE_UNBLOCKED; CHARACTER_NOT_BUILT",
+  "historical_preflight": "preflight.json (superseded state, preserved evidence)",
+  "base_intake": "ACTIONS_PENDING"
+}
