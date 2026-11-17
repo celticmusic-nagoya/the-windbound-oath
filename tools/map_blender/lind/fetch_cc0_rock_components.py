@@ -1,7 +1,7 @@
 """Fetch licensed Poly Haven rock models with immutable provenance and SHA.
 Separate study inputs, never replace official source assets.
 """
-import argparse,hashlib,json,urllib.request,urllib.parse,pathlib,datetime
+import argparse,hashlib,json,urllib.request,urllib.parse,pathlib,datetime,posixpath
 API="https://api.polyhaven.com/files/"
 IDS=("rock_face_01","boulder_01")
 def fetch_json(url):
@@ -49,7 +49,22 @@ def main():
    ext=pathlib.PurePosixPath(urllib.parse.urlsplit(url).path).suffix.lower()
    dest=out/(ident+ext)
    size,digest=download(url,dest,a.max_mb*1024*1024)
-   item.update({"status":"DOWNLOADED_UNREVIEWED","file":dest.name,"size_bytes":size,"sha256":digest,"api_path":list(map(str,path)),"source_url":url,"declared_api_hash":entry.get("md5"),"license":"CC0","geometry_qa":"NOT_RUN","art_qa":"NOT_RUN"})
+   dependencies=[]
+   if ext==".gltf":
+    model=json.loads(dest.read_text())
+    uris=[x["uri"] for group in ("buffers","images") for x in model.get(group,[]) if "uri" in x and not x["uri"].startswith("data:")]
+    for uri in sorted(set(uris)):
+     parsed=urllib.parse.urlsplit(uri)
+     if parsed.scheme or parsed.netloc or uri.startswith("/") or ".." in pathlib.PurePosixPath(parsed.path).parts:raise ValueError("Unsafe glTF dependency URI: "+uri)
+     dependency=out/ident/parsed.path
+     dependency.parent.mkdir(parents=True,exist_ok=True)
+     dep_url=urllib.parse.urljoin(url,uri)
+     dep_size,dep_sha=download(dep_url,dependency,a.max_mb*1024*1024)
+     dependencies.append({"uri":uri,"file":str(dependency.relative_to(out)),"size_bytes":dep_size,"sha256":dep_sha,"source_url":dep_url})
+    # glTF expects dependencies relative to its own directory; put the JSON there too.
+    relocated=out/ident/dest.name
+    relocated.write_bytes(dest.read_bytes());dest.unlink();dest=relocated
+   item.update({"dependencies":dependencies,"status":"DOWNLOADED_UNREVIEWED","file":str(dest.relative_to(out)),"size_bytes":size,"sha256":digest,"api_path":list(map(str,path)),"source_url":url,"declared_api_hash":entry.get("md5"),"license":"CC0","geometry_qa":"NOT_RUN","art_qa":"NOT_RUN"})
   except Exception as e:
    item["status"]="BLOCKED";item["error"]=str(e)
   result["assets"].append(item)
