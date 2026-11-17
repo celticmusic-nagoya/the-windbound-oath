@@ -24,7 +24,7 @@ jobs:
       - name: Render irregular full-thickness masonry candidate
         run: |
           mkdir -p "$RUNNER_TEMP/route-mat-01-irregular"
-          blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/route_mat_01/build_irregular.py -- --root "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/route-mat-01-irregular"
+          blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/route_mat_01/build_irregular.py -- --root "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/route-mat-01-irregular" --clay
       - name: Upload images blend and QA
         if: always()
         uses: actions/upload-artifact@v4
