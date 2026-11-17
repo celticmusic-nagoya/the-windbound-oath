@@ -97,11 +97,13 @@ def main():
  scene.world.color=(0.20,0.20,0.20)
  scene.render.image_settings.file_format="PNG"
  scene.render.filepath=str(out/"macro_support_clay.png")
+ blend=out/"macro_support_candidate.blend"
+ bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+ print("BLEND_CHECKPOINT_SAVED",flush=True)
  print("RENDER_START_WORKBENCH",flush=True)
  bpy.ops.render.render(write_still=True)
  print("RENDER_FINISHED_WORKBENCH",flush=True)
- blend=out/"macro_support_candidate.blend";bpy.ops.wm.save_as_mainfile(filepath=str(blend))
- print("BLEND_SAVED",flush=True)
+ print("RENDER_COMPLETE_MODEL_ALREADY_SAVED",flush=True)
  metrics={"method":"AUTHORED_NORMALIZED_CONNECTED_MACRO_SUPPORT","seed":SEED,"units":"NORMALIZED_NON_METRIC","approved_world_scale":None,"approved_camera":None,
  "render_engine":"BLENDER_WORKBENCH","source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
  "vertices":verts_n,"faces":faces_n,"boundary_edges":boundary,"nonmanifold_edges":nonmanifold,"closed_volume":volume,
