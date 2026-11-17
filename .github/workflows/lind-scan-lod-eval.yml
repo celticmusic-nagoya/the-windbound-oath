@@ -1,0 +1,65 @@
+name: LIND Scanned Cliff LOD Comparison
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/evaluate_scan_lods.py'
+      - '.github/workflows/lind-scan-lod-eval.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lod-study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-exit-code 1 --python-expr "import numpy; print(numpy.__version__)"
+      - name: Check scripts before download
+        run: |
+          python3 -m py_compile tools/map_blender/lind/download_polyhaven_cliff_scan.py tools/map_blender/lind/evaluate_scan_lods.py
+      - name: Download official original glTF and verify publisher checksums
+        run: |
+          python3 tools/map_blender/lind/download_polyhaven_cliff_scan.py --asset coastal_cliff_04 --out out/lind-scan-lod
+      - name: Blender LODs and clay comparison
+        run: |
+          set -euo pipefail
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/evaluate_scan_lods.py -- --out out/lind-scan-lod 2>&1 | tee out/lind-scan-lod/blender.log
+      - name: Verify source and LOD outputs
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('out/lind-scan-lod')
+          s=json.loads((root/'source_manifest.json').read_text())
+          m=json.loads((root/'lod_qa.json').read_text())
+          for f in s['files']:
+              p=Path(f['path'])
+              assert p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256']
+          assert m['source_triangles']>1000000 and len(m['lods'])==2
+          assert m['lods'][0]['triangles']>m['lods'][1]['triangles']
+          for x in m['lods']:
+              assert x['uv_layers']>=1
+          for name,x in m['views'].items():
+              p=root/x['file']
+              b=p.read_bytes()
+              assert b[:8]==bytes([137,80,78,71,13,10,26,10]),name
+              assert hashlib.sha256(b).hexdigest()==x['sha256']
+          p=root/m['blend']['file']
+          assert p.read_bytes()[:7]==b'BLENDER'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['blend']['sha256']
+          print('PASS source+LOD hashes, UVs, three clay PNGs')
+          PY
+      - name: Reopen saved comparison Blender file
+        run: |
+          blender --background --factory-startup --disable-autoexec out/lind-scan-lod/scan_lod_comparison.blend --python-exit-code 1 --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==3; print('LOD_BLEND_REOPEN_PASS')"
+      - name: Upload actual scan and LOD comparison
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lind-real-cliff-04-lod-comparison
+          path: out/lind-scan-lod/
+          retention-days: 14
