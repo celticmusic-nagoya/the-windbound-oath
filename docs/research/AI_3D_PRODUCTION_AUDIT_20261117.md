@@ -78,3 +78,12 @@ G1 BLOCKED (private canon + reference binary + metric/camera approval); G2 NOT_R
 - This establishes **contract test PASS (7/7)**, not G1/G2/G3/G4 production acceptance.
 
 Next: inspect existing PR artifacts and canonical hashes, then design a bounded Blender export/reopen test that uses real model bytes. Do not fabricate a sample GLB as production art.
+
+## Real artifact byte audit (2026-11-17)
+- Retrieved run `43989787109` artifact `14287655545` (13,046,646-byte ZIP; not expired) and run `43848242090` artifact `14217185043` (107,313-byte ZIP; source-review only).
+- Method C archive contains actual `render/abutment.blend` and front/oblique/side PNGs, source scans and QA evidence. Independently recomputed SHA-256 for **all 25** entries of `assets/candidates/route-mat-01/SHA256SUMS`: **25/25 MATCH**. This proves archive byte integrity, not model quality.
+- Actual oblique PNG inspected: flat oversized planar cut surfaces, pointed/faceted stone forms and unconvincing coping/bedding are visible. Consistent with recorded independent art G2 FAIL.
+- Read saved `mesh-audit.json`: 55 meshes, 44,712 triangles; 3 mesh/volume/UV inspection failures (`Far_F02`, `Near_F05`, `RadialVoussoir_07`); stone surface crossings require investigation. Existing G3 FAIL remains.
+- `method-c-02/BLOCKED.json` records no second generated model/renders; exact scan-domain Boolean fitting is stopped for the documented defects. Next eligible structurally different method is controlled manual closed-mesh stone sculpt and explicit bedding/joint topology, or rights-cleared full masonry scan.
+- Artifact report states Blender 4.3.2 saved/reopened the candidate, but **this audit did not itself execute Blender or GLB export**. No Android QA.
+- G1 BLOCKED, G2 FAIL, G3 FAIL, G4 NOT_RUN. Do not adopt, repackage as production, or repeat the failed scan-domain Boolean method.
