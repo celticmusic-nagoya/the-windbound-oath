@@ -26,9 +26,10 @@ def main():
  height=high.z-low.z;cx=(low.x+high.x)*.5;cy=(low.y+high.y)*.5
  # Explicit first-pass shape decisions. Smooth deformation retains original topology.
  # No head/chin landmarks are claimed; vertical regions are approximate body zones.
- for obj in list(bpy.data.objects):bpy.data.objects.remove(obj,do_unlink=True)
- mesh=original.data.copy();obj=bpy.data.objects.new("MORWEN_BODY_CANDIDATE_01_UNAPPROVED",mesh);bpy.context.scene.collection.objects.link(obj)
- obj.matrix_world=original.matrix_world.copy()
+ mesh=original.data.copy();original_transform=original.matrix_world.copy()
+ for old in list(bpy.data.objects):bpy.data.objects.remove(old,do_unlink=True)
+ obj=bpy.data.objects.new("MORWEN_BODY_CANDIDATE_01_UNAPPROVED",mesh);bpy.context.scene.collection.objects.link(obj)
+ obj.matrix_world=original_transform
  inv=obj.matrix_world.inverted()
  changed=0
  for vert in mesh.vertices:
