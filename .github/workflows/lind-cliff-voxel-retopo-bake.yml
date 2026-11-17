@@ -1,0 +1,58 @@
+name: LIND Cliff Voxel Retopo and Normal Bake
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/voxel_retopo_bake_scan.py'
+      - '.github/workflows/lind-cliff-voxel-retopo-bake.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rebuild-bake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Syntax preflight
+        run: python3 -m py_compile tools/map_blender/lind/download_polyhaven_cliff_scan.py tools/map_blender/lind/voxel_retopo_bake_scan.py
+      - name: Verify official scan original
+        run: python3 tools/map_blender/lind/download_polyhaven_cliff_scan.py --asset coastal_cliff_04 --out out/lind-voxel-retopo-bake
+      - name: Execute Blender voxel topology rebuild and tangent normal bake
+        run: |
+          set -euo pipefail
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/voxel_retopo_bake_scan.py -- --out out/lind-voxel-retopo-bake 2>&1 | tee out/lind-voxel-retopo-bake/blender.log
+      - name: Verify outputs and hashes
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('out/lind-voxel-retopo-bake')
+          m=json.loads((root/'retopo_bake_qa.json').read_text())
+          s=json.loads((root/'source_manifest.json').read_text())
+          assert m['source_triangles']>1000000
+          assert 1000<m['rebuilt_triangles']<m['source_triangles']
+          assert m['uv_layers']>=1
+          for f in s['files']:
+              p=Path(f['path'])
+              assert p.exists() and hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256']
+          for name,h in m['outputs'].items():
+              p=root/name
+              assert p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==h
+              if name.endswith('.png'):assert p.read_bytes()[:8]==bytes([137,80,78,71,13,10,26,10])
+              if name.endswith('.blend'):assert p.read_bytes()[:7]==b'BLENDER'
+          print('RETOPO_BAKE_FILE_QA_PASS')
+          PY
+      - name: Reopen saved Blender scene
+        run: |
+          blender --background --factory-startup --disable-autoexec out/lind-voxel-retopo-bake/voxel_retopo_bake_study.blend --python-exit-code 1 --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==2; print('RETOPO_REOPEN_PASS')"
+      - name: Upload actual candidate and QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cliff-voxel-retopo-bake-eval
+          path: out/lind-voxel-retopo-bake/
+          retention-days: 14
