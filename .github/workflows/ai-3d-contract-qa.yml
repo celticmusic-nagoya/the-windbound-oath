@@ -4,6 +4,7 @@ on:
     paths:
       - 'tools/ai_3d/**'
       - 'tests/test_ai_3d_candidate_handoff.py'
+      - 'tests/test_ai_3d_artifact_zip.py'
       - '.github/workflows/ai-3d-contract-qa.yml'
   workflow_dispatch:
 permissions:
@@ -20,3 +21,5 @@ jobs:
         run: python3 -m py_compile tools/ai_3d/audit_blend_readonly.py
       - name: Run candidate contract negative controls
         run: python3 -m unittest discover -s tests -p 'test_ai_3d_candidate_handoff.py' -v
+      - name: Run artifact ZIP negative controls
+        run: python3 -m unittest discover -s tests -p 'test_ai_3d_artifact_zip.py' -v
