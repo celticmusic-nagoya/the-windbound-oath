@@ -24,8 +24,10 @@ def main():
   material_images=sorted(textures,key=lambda x:x.name)
   assert len(material_images)==len(source_images),"Cannot map imported images one-to-one; stop rather than guess"
   image_report=[]
-  for img,decl in zip(material_images,source_images):
-   uri=decl["uri"];disk=dependency_by_uri.get(uri)
+  for img in material_images:
+   matches=[d for d in source_images if img.name.lower().split(".")[0] in (Path(d["uri"]).stem.lower(),d.get("name","").lower()) or Path(d["uri"]).stem.lower() in img.name.lower()]
+   assert len(matches)==1,"Ambiguous source image match: "+img.name
+   decl=matches[0];uri=decl["uri"];disk=dependency_by_uri.get(uri)
    assert disk and disk.is_file(),"Unverified source image: "+uri
    # Name-based mapping is mandatory; ordering alone cannot justify changing a normal map into diffuse.
    assert img.name.lower().split(".")[0] in (Path(uri).stem.lower(),decl.get("name","").lower()) or Path(uri).stem.lower() in img.name.lower(),"Image binding mismatch: "+img.name+" / "+uri
