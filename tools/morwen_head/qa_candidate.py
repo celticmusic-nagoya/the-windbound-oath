@@ -19,8 +19,8 @@ def main():
         clipped=float(np.mean(np.all(opaque>=250,axis=1))) if n else 1
         shadow=float(np.mean(np.all(opaque<=5,axis=1))) if n else 1
         bbox=[int(xs.min()),int(ys.min()),int(xs.max()),int(ys.max())] if n else None
-        margin=bool(n and xs.min()>3 and ys.min()>3 and xs.max()<im.width-4 and ys.max()<im.height-4)
-        row={'file':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'mode':im.mode,'size':im.size,'nonzero_alpha_pixels':n,'coverage':n/(im.width*im.height),'bbox':bbox,'margin_pass':margin,'white_clip_fraction':clipped,'black_crush_fraction':shadow}
+        margin=v.get('head_geometry_in_frame',bool(n and xs.min()>3 and ys.min()>3 and xs.max()<im.width-4 and ys.max()<im.height-4))
+        row={'file':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'mode':im.mode,'size':im.size,'nonzero_alpha_pixels':n,'coverage':n/(im.width*im.height),'bbox':bbox,'margin_pass':margin,'crop_policy':v.get('crop_policy','full body alpha margins'),'white_clip_fraction':clipped,'black_crush_fraction':shadow}
         row['pass']=im.mode=='RGBA' and n>500 and margin and clipped<.01 and shadow<.05
         rows.append(row)
     bad=[r for r in e['mesh_stats'] if r['nonmanifold_edges'] or r['degenerate_faces']]

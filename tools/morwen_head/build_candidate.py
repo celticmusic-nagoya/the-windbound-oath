@@ -50,7 +50,7 @@ def sphere(name,loc,scale,mat):
     return ob
 
 def wire(name,pts,r,mat,closed=False):
-    cu=bpy.data.curves.new(name,'CURVE');cu.dimensions='3D';cu.bevel_depth=r;cu.bevel_resolution=4
+    cu=bpy.data.curves.new(name,'CURVE');cu.dimensions='3D';cu.bevel_depth=r;cu.bevel_resolution=4;cu.use_fill_caps=True
     s=cu.splines.new('POLY');s.points.add(len(pts)-1)
     for q,p in zip(s.points,pts):q.co=(*p,1)
     s.use_cyclic_u=closed
@@ -125,33 +125,33 @@ def main():
     for p in body.data.polygons:
         p.use_smooth=True
         center=sum((coords[i] for i in p.vertices),Vector())/len(p.vertices)
-        p.material_index=int(abs(center.x)<.023 and 1.439<center.z<1.454 and center.y<-.134)
+        p.material_index=0  # Local lip sculpt/material painting remains pending; no face-coordinate mask.
     sub=body.modifiers.new('sculpt_ready_subdivision','SUBSURF');sub.levels=2;sub.render_levels=2
     for label,point,index in [('CROWN',crown,CROWN_INDEX),('CHIN_UNDERSIDE',chin,CHIN_INDEX),('SOLE',min(coords,key=lambda p:p.z),None)]:
         e=bpy.data.objects.new('ANATOMY_'+label,None);bpy.context.scene.collection.objects.link(e);e.location=point;e.empty_display_type='SPHERE';e.empty_display_size=.004;e['source_vertex_index']=index if index is not None else -1;e.hide_render=True
-    ez=neck+(1.533-neck)*scale-sole0;ey=-.055+(-.128+.055)*scale
+    ez=neck+(1.533-neck)*scale-sole0;ey=-.055+(-.107+.055)*scale
     # Separate real eyeball and curved iris/pupil meshes. Eye-socket fit is reviewed visually.
     for sign in (-1,1):
         x=sign*.032*scale
-        sphere('Eye_'+str(sign),(x,ey,ez),(.0175,.0175,.0175),white)
-        sphere('Iris_'+str(sign),(x,ey-.0164,ez),(.0088,.002,.0095),iris)
-        sphere('Pupil_'+str(sign),(x,ey-.0181,ez),(.0037,.0008,.0061),dark)
-        sphere('Catchlight_'+str(sign),(x-.0027,ey-.0187,ez+.004),(.0017,.0007,.0017),white)
+        sphere('Eye_'+str(sign),(x,ey,ez),(.0205,.0205,.0205),white)
+        sphere('Iris_'+str(sign),(x,ey-.0195,ez),(.0088,.002,.0095),iris)
+        sphere('Pupil_'+str(sign),(x,ey-.0212,ez),(.0037,.0008,.0061),dark)
+        sphere('Catchlight_'+str(sign),(x-.0027,ey-.0218,ez+.004),(.0017,.0007,.0017),white)
         # Eyebrow is a closed thin sculpt surface, not a generated eyelid.
         verts=[]
         for j in range(17):
             t=j/16;xx=x+sign*(t-.5)*.040;zz=ez+.025+.004*math.sin(math.pi*t)
             for d in (-1,1):verts.append((xx,-.137,zz+d*.0014*(.4+.6*math.sin(math.pi*t))))
         ob=mesh('Brow_'+str(sign),verts,[(j*2,j*2+1,j*2+3,j*2+2) for j in range(16)],hair);solid(ob,.0007)
-        pts=[(x+.026*math.cos(t*math.tau/96),ey-.026-.003*math.cos(t*math.tau/96),ez+.022*math.sin(t*math.tau/96)-.001) for t in range(96)]
+        pts=[(x+.026*math.cos(t*math.tau/96),ey-.047-.003*math.cos(t*math.tau/96),ez+.022*math.sin(t*math.tau/96)-.001) for t in range(96)]
         wire('Glasses_rim_'+str(sign),pts,.0009,gold,True)
-        wire('Glasses_temple_'+str(sign),[(sign*.057,ey-.025,ez+.003),(sign*.075,-.105,ez+.006),(sign*.077,-.045,ez+.005),(sign*.074,-.024,ez-.008)],.0008,gold)
-    wire('Glasses_bridge',[(-.006,ey-.027,ez+.002),(0,ey-.030,ez+.006),(.006,ey-.027,ez+.002)],.00085,gold)
+        wire('Glasses_temple_'+str(sign),[(sign*.057,ey-.046,ez+.003),(sign*.075,-.105,ez+.006),(sign*.077,-.045,ez+.005),(sign*.074,-.024,ez-.008)],.0008,gold)
+    wire('Glasses_bridge',[(-.006,ey-.048,ez+.002),(0,ey-.051,ez+.006),(.006,ey-.048,ez+.002)],.00085,gold)
     # Broad bob locks: two-dimensional sculpted quad surfaces with closed thickness.
     # Width is angular surface coverage; this is not a circular strand sweep.
     top=crown.z;cy=-.043
     def lock(name,theta,width,endz,tip_shift,mat):
-        controls=[(.009,.011,top+.008),(.052,.071,top-.012),(.078,.102,top-.065),(.084,.105,top-.135),(.078,.095,endz)]
+        controls=[(.009,.011,top+.008),(.052,.071,top-.012),(.078,.102,top-.065),(.087,.108,top-.135),(.073,.087,endz)]
         verts=[];n,m=28,12
         for i in range(n+1):
             t=i/n;rx,ry,z=interp(controls,t)
@@ -165,9 +165,9 @@ def main():
         faces=[(i*(m+1)+j,(i+1)*(m+1)+j,(i+1)*(m+1)+j+1,i*(m+1)+j+1) for i in range(n) for j in range(m)]
         ob=mesh(name,verts,faces,mat);solid(ob,.0024);ob['method']='broad_quad_surface_closed_thickness';ob['not_tubular']=True
     # Back and side masses intentionally overlap and vary in termination length.
-    for i in range(15):
-        th=.93+i*(math.tau-1.86)/14
-        lock('Bob_layer_%02d'%i,th,.39,chin.z-.014+.006*math.cos(i*1.7),.035*math.sin(i),hair if i%3 else hair2)
+    for i in range(11):
+        th=.93+i*(math.tau-1.86)/10
+        lock('Bob_layer_%02d'%i,th,.53,chin.z-.014+.006*math.cos(i*1.7),.035*math.sin(i),hair if i%3 else hair2)
     # Curved front fringe lobes, following the scalp before falling to the brow.
     for i in range(7):
         theta=-.86+i*.286
@@ -184,19 +184,27 @@ def main():
     sc=bpy.context.scene;sc.render.engine='CYCLES';sc.cycles.samples=a.samples;sc.cycles.seed=0;sc.cycles.use_denoising=False
     sc.render.film_transparent=True;sc.render.resolution_x=768;sc.render.resolution_y=768;sc.render.resolution_percentage=100
     sc.render.image_settings.file_format='PNG';sc.render.image_settings.color_mode='RGBA';sc.render.image_settings.color_depth='8'
-    sc.view_settings.view_transform='AgX';sc.view_settings.look='AgX - Medium High Contrast';sc.view_settings.exposure=0;sc.view_settings.gamma=1
-    sc.world.use_nodes=True;sc.world.node_tree.nodes['Background'].inputs['Color'].default_value=(.45,.45,.45,1);sc.world.node_tree.nodes['Background'].inputs['Strength'].default_value=.35
+    sc.view_settings.view_transform='AgX';sc.view_settings.look='AgX - Medium High Contrast';sc.view_settings.exposure=-.3;sc.view_settings.gamma=1
+    sc.world.use_nodes=True;sc.world.node_tree.nodes['Background'].inputs['Color'].default_value=(.45,.45,.45,1);sc.world.node_tree.nodes['Background'].inputs['Strength'].default_value=.18
     target=Vector((0,-.04,(crown.z+chin.z)/2))
-    for name,offset,energy,size in [('Key',(-.5,-.65,.65),45,.65),('Fill',(.6,-.35,.25),25,.7),('Rim',(.2,.5,.6),50,.5)]:
+    for name,offset,energy,size in [('Key',(-.5,-.65,.65),10,.65),('Fill',(.6,-.35,.25),6,.7),('Rim',(.2,.5,.6),10,.5)]:
         ld=bpy.data.lights.new(name,'AREA');ld.energy=energy;ld.shape='DISK';ld.size=size
         ob=bpy.data.objects.new(name,ld);sc.collection.objects.link(ob);ob.location=target+Vector(offset);ob.rotation_euler=(target-ob.location).to_track_quat('-Z','Y').to_euler()
     cd=bpy.data.cameras.new('Review_camera');cam=bpy.data.objects.new('Review_camera',cd);sc.collection.objects.link(cam);sc.camera=cam;cd.type='ORTHO'
-    evidence={'status':'UNAPPROVED_HEAD_STUDY','source_sha256':STAGE_SHA,'references':integrity,'blender':bpy.app.version_string,'engine':'CYCLES CPU','samples':a.samples,'seed':0,'view_transform':'AgX','landmarks':{'source_crown_vertex':CROWN_INDEX,'source_chin_underside_vertex':CHIN_INDEX,'source_crown':list(original[CROWN_INDEX]),'source_chin':list(original[CHIN_INDEX]),'source_ratio':(crown0-sole0)/(crown0-chin0),'head_scale':scale,'crown':list(crown),'chin_underside':list(chin),'sole_z':sole,'head_count':ratio,'classification':'SELF_REVIEWED_VERTEX_LANDMARKS; independent anatomy review pending'},'views':[]}
+    evidence={'status':'UNAPPROVED_HEAD_STUDY','source_sha256':STAGE_SHA,'references':integrity,'blender':bpy.app.version_string,'engine':'CYCLES CPU','samples':a.samples,'seed':0,'view_transform':'AgX','landmarks':{'source_crown_vertex':CROWN_INDEX,'source_chin_underside_vertex':CHIN_INDEX,'source_crown':list(original[CROWN_INDEX]),'source_chin':list(original[CHIN_INDEX]),'source_ratio':(crown0-sole0)/(crown0-chin0),'head_scale':scale,'crown':list(crown),'chin_underside':list(chin),'sole_z':sole,'head_count':ratio,'classification':'SELF_REVIEWED_VERTEX_LANDMARKS; independent anatomy review pending'},'views':[], 'denoising':False, 'independent_anatomy_review':'NOT_RUN'}
     views=[('front',(0,-1,0)),('back',(0,1,0)),('character_left',(1,0,0)),('character_right',(-1,0,0)),('three_quarter',(.65,-1,.10)),('three_quarter_other',(-.65,-1,.10))]
     for name,d in views:
         cd.ortho_scale=.37;cam.location=target+Vector(d).normalized()*1.5;cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler()
         sc.render.filepath=str(out/(name+'.png'));bpy.ops.render.render(write_still=True)
-        evidence['views'].append({'name':name,'camera':list(cam.location),'target':list(target),'ortho_scale':cd.ortho_scale,'file':name+'.png'})
+        from bpy_extras.object_utils import world_to_camera_view
+        bpy.context.view_layer.update()
+        head_points=[p for p in coords if p.z>=chin.z-.005]
+        for ob in bpy.data.objects:
+            if ob.type=='MESH' and ob!=body:
+                head_points.extend(ob.matrix_world@v.co for v in ob.data.vertices)
+        projected=[world_to_camera_view(sc,cam,p) for p in head_points]
+        frame=[min(p.x for p in projected),min(p.y for p in projected),max(p.x for p in projected),max(p.y for p in projected)]
+        evidence['views'].append({'name':name,'camera':list(cam.location),'target':list(target),'ortho_scale':cd.ortho_scale,'file':name+'.png','head_bounds_uv':frame,'head_geometry_in_frame':all(.01<v<.99 for v in frame),'crop_policy':'head fully in frame; shoulders intentionally cropped'})
     # Full body proportion proof at identical four-view scale; kept separate from head art.
     for name,d in views[:4]:
         center=Vector((0,-.02,crown.z/2));cd.ortho_scale=1.9;cam.location=center+Vector(d)*3;cam.rotation_euler=(center-cam.location).to_track_quat('-Z','Y').to_euler()
@@ -212,7 +220,7 @@ def main():
     for ob in bpy.data.objects:
         if ob.type!='MESH':continue
         bm=bmesh.new();bm.from_mesh(ob.data)
-        stats.append({'object':ob.name,'vertices':len(bm.verts),'faces':len(bm.faces),'boundary_edges':sum(e.is_boundary for e in bm.edges),'nonmanifold_edges':sum(not e.is_manifold for e in bm.edges),'degenerate_faces':sum(f.calc_area()<1e-12 for f in bm.faces)})
+        stats.append({'object':ob.name,'vertices':len(bm.verts),'faces':len(bm.faces),'boundary_edges':sum(e.is_boundary for e in bm.edges),'nonmanifold_edges':sum(not e.is_manifold for e in bm.edges),'degenerate_faces':sum(f.calc_area()<1e-12 for f in bm.faces),'signed_volume':bm.calc_volume(signed=True)})
         bm.free()
     evidence['mesh_stats']=stats;evidence['reopen_pass']=True;evidence['source_unchanged']=sha(src)==STAGE_SHA
     for f in integrity:assert sha(canon/f['file'])==f['sha256']
