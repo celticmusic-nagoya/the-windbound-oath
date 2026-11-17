@@ -104,3 +104,10 @@ Blender4.3.2でローカル実行済み。画像4件をpackした自己完結原
 ローカル公式mirrorアクセスはHTTP403で取得不可。Actionsの独立jobで公式取得を試し、成功時に6方向render・編集可能source intake・QA・log・SHAをArtifactsへ保存する。失敗時は技術障害として記録し、primitive推定生成で代替しない。
 
 次の造形はLayer0の観測landmarkと姿勢差を明示した全身target、手動sculpt／retopoによる身体形状編集。source intakeは未加工のため素体美術QAを合格扱いしない。全身G2が未PASSなら精密顔・髪・衣装・rigへ進めない。v5.61未取得は最終外観デザイン照合のみに残るBLOCKED。
+
+### CI実行の実績と技術修正
+
+Run 44148074813は両job success。参照Artifact 14356469200（3,865,981 bytes）、素体Artifact 14357033627（1,762,949 bytes）が実在。素体は公式archive／展開後source SHA一致、stylized female 12,502頂点／12,500面、原座標不変、6 PNGを実生成した。
+GitHub connector経由で素体ZIPを取得し実画像を確認した。初回の全身表示が横にずれており、表示transform式の誤り（元object位置も高さで除算する必要）が原因。形状変更なしで修正し、評価後mesh全頂点の画面内検査を追加。これは参照fitや新しい美術candidate生成ではなく、source intakeの表示不具合修正。
+
+またaptの非固定Blenderが5.0.1を導入しており、local4.3.2でその.blendを開けなかった。旧Artifactを消さず保持し、新workflowはPython3.11＋bpy4.3.0に固定して再実行する。local4.3.2との完全な同等性を暗黙に認定せず、取得後の再openを検査する。旧source intakeのG3は未認定のまま。CI成功をモデル／美術完成と解釈しない。

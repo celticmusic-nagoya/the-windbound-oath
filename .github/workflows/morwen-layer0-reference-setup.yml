@@ -18,17 +18,18 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-      - name: Install Blender
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender Python runtime
+        run: python -m pip install bpy==4.3.0
       - name: Validate Python syntax
         run: python3 -m py_compile tools/blender/production_mesh_08/prepare_layer0_references.py
       - name: Verify official PNG hashes and place reference images in Blender
         run: |
           set -o pipefail
           mkdir -p render_output/layer0_reference_setup
-          blender -b -noaudio -t 2 --python tools/blender/production_mesh_08/prepare_layer0_references.py 2>&1 | tee render_output/layer0_reference_setup/setup.log
+          python tools/blender/production_mesh_08/prepare_layer0_references.py 2>&1 | tee render_output/layer0_reference_setup/setup.log
       - name: Check source validation and Blender output
         run: |
           python3 - <<'PY'
@@ -44,7 +45,7 @@ jobs:
       - name: Pack images and verify reopened cameras and orientation
         run: |
           set -o pipefail
-          blender -b -noaudio -t 2 --python tools/morwen_rebuild01/finalize_reference_scene.py 2>&1 | tee render_output/layer0_reference_setup/reopen.log
+          python tools/morwen_rebuild01/finalize_reference_scene.py 2>&1 | tee render_output/layer0_reference_setup/reopen.log
           sha256sum render_output/layer0_reference_setup/*.blend render_output/layer0_reference_setup/*.json > render_output/layer0_reference_setup/SHA256SUMS
       - name: Upload verification artifact (also on failure)
         if: always()
@@ -64,10 +65,11 @@ jobs:
         with:
           name: morwen-layer0-reference-setup
           path: render_output/layer0_reference_setup
-      - name: Install Blender and source decompressor
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends blender python3-numpy python3-zstandard libegl1 libgl1 libopengl0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender runtime and source decompressor
+        run: python -m pip install bpy==4.3.0 zstandard
       - name: Acquire and verify official CC0 source (no legacy Morwen geometry)
         run: |
           set -o pipefail
@@ -92,7 +94,7 @@ jobs:
       - name: Intake and render unmodified stylized anatomy source
         run: |
           set -o pipefail
-          blender -b -noaudio -t 2 --python tools/morwen_rebuild01/intake_cc0_stylized_base.py 2>&1 | tee render_output/rebuild01_base_intake/blender.log
+          python tools/morwen_rebuild01/intake_cc0_stylized_base.py 2>&1 | tee render_output/rebuild01_base_intake/blender.log
           python3 - <<'PY'
           import json,pathlib
           out=pathlib.Path('render_output/rebuild01_base_intake')
