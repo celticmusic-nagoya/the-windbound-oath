@@ -1,0 +1,163 @@
+{
+  "independent_reviewer": "separate QA agent",
+  "blender": "4.3.2",
+  "candidate_sha256": "a04decd5d2b87a86725550fb545b8b118125a07d7c1010f82aaa6aeb54df3353",
+  "packed_references": [
+    {
+      "filename": "MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg",
+      "sha256": "d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b",
+      "match": true
+    },
+    {
+      "filename": "LAYER0_FRONT.png",
+      "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "match": true
+    },
+    {
+      "filename": "LAYER0_BACK.png",
+      "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "match": true
+    },
+    {
+      "filename": "LAYER0_PROFILE_FACING_RIGHT.png",
+      "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "match": true
+    },
+    {
+      "filename": "LAYER0_PROFILE_FACING_LEFT.png",
+      "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "match": true
+    }
+  ],
+  "patches": [
+    {
+      "name": "SCULPT03_EYELID_L_LOCAL_PROTOTYPE",
+      "control_vertices": 48,
+      "control_faces": 32,
+      "all_quads": true,
+      "boundary_components_edge_counts": [
+        16,
+        16
+      ],
+      "wire_edges": 0,
+      "non_boundary_nonmanifold": 0,
+      "uv_signed_area_range": [
+        -0.011550002780556845,
+        -0.0006000000104308123
+      ],
+      "samples": [
+        {
+          "blink": 0,
+          "vertices": 576,
+          "faces": 512,
+          "finite": true,
+          "degenerate_faces": 0,
+          "min_face_area": 4.617452589172899e-07,
+          "nonfront_normals": 0
+        },
+        {
+          "blink": 0.5,
+          "vertices": 576,
+          "faces": 512,
+          "finite": true,
+          "degenerate_faces": 0,
+          "min_face_area": 2.645653296440287e-07,
+          "nonfront_normals": 0
+        },
+        {
+          "blink": 1,
+          "vertices": 576,
+          "faces": 512,
+          "finite": true,
+          "degenerate_faces": 0,
+          "min_face_area": 6.846556743766996e-08,
+          "nonfront_normals": 0
+        }
+      ]
+    },
+    {
+      "name": "SCULPT03_EYELID_R_LOCAL_PROTOTYPE",
+      "control_vertices": 48,
+      "control_faces": 32,
+      "all_quads": true,
+      "boundary_components_edge_counts": [
+        16,
+        16
+      ],
+      "wire_edges": 0,
+      "non_boundary_nonmanifold": 0,
+      "uv_signed_area_range": [
+        0.0006000000104308123,
+        0.011550002780556845
+      ],
+      "samples": [
+        {
+          "blink": 0,
+          "vertices": 576,
+          "faces": 512,
+          "finite": true,
+          "degenerate_faces": 0,
+          "min_face_area": 4.6176728574209847e-07,
+          "nonfront_normals": 0
+        },
+        {
+          "blink": 0.5,
+          "vertices": 576,
+          "faces": 512,
+          "finite": true,
+          "degenerate_faces": 0,
+          "min_face_area": 2.6462689106665493e-07,
+          "nonfront_normals": 0
+        },
+        {
+          "blink": 1,
+          "vertices": 576,
+          "faces": 512,
+          "finite": true,
+          "degenerate_faces": 0,
+          "min_face_area": 6.846486400036156e-08,
+          "nonfront_normals": 0
+        }
+      ]
+    }
+  ],
+  "not_checked": [
+    "eyeball/skin intersections",
+    "self-intersection full 3D",
+    "closed blink contact",
+    "production UV atlas",
+    "rig deformation",
+    "WebGL/Android runtime",
+    "landmark acceptance"
+  ],
+  "source_integrity": {
+    "source_sha256": "90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b",
+    "source_meshes": 57,
+    "candidate_meshes": 59,
+    "all_source_control_mesh_fingerprints_preserved": true,
+    "all_source_shape_key_delta_records_preserved": true,
+    "new_meshes": [
+      "SCULPT03_EYELID_L_LOCAL_PROTOTYPE",
+      "SCULPT03_EYELID_R_LOCAL_PROTOTYPE"
+    ],
+    "scope_limit": "Fingerprint comparison covers stored coordinates/connectivity and shape-key delta summaries, not every material or scene property."
+  },
+  "gates": {
+    "G1": "BLOCKED_REGISTRATION",
+    "G2": "FAIL",
+    "G3": "INCOMPLETE_LOCAL_TOPOLOGY_SCREEN_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "uv_interpretation": "Left island has consistently mirrored orientation, right island positive; no local sign reversal in either control patch. Not production UV acceptance.",
+  "reviewed_images": [
+    "baseline/MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg",
+    "baseline/color_front.png",
+    "review/color_front.png",
+    "review/color_character_left.png",
+    "review/isolated_blink_open.png",
+    "review/isolated_blink_half.png",
+    "review/isolated_blink_closed.png",
+    "review/isolated_control_wire_front.png",
+    "review/isolated_control_wire_three_quarter.png"
+  ]
+}

@@ -2,6 +2,8 @@
 
 Status: DESIGN_ONLY / UNAPPROVED. Source branch: feature/morwen-art-directed-sculpt-02 (Draft PR #407). Do not merge or replace canon.
 
+Execution update: [partial eyelid topology checkpoint](MORWEN_SCULPT03_EXECUTION_CHECKPOINT.md) now contains actual new Blender quad geometry and renders. This plan's full face/hair deliverables and exit criteria are **not completed** by that local prototype.
+
 ## Source lock
 - Input: assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend
 - Expected SHA-256: 90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b
