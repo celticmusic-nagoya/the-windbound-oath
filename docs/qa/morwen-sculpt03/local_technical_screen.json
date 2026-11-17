@@ -1,0 +1,361 @@
+{
+  "candidate_sha256": "a04decd5d2b87a86725550fb545b8b118125a07d7c1010f82aaa6aeb54df3353",
+  "source_sha256": "90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b",
+  "status": "LOCAL_PROTOTYPE_SCREEN_NOT_FULL_G3",
+  "blender": "4.3.2",
+  "G1": "BLOCKED_REGISTRATION",
+  "G2": "PENDING_INDEPENDENT_REVIEW",
+  "G3": "INCOMPLETE_LOCAL_SCREEN_ONLY",
+  "G4": "NOT_RUN",
+  "source_face_hair_retained": true,
+  "meshes": [
+    {
+      "name": "SCULPT03_EYELID_L_LOCAL_PROTOTYPE",
+      "vertices": 48,
+      "quads": 32,
+      "faces": 32,
+      "boundary_edges": 32,
+      "non_boundary_nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "control_min_face_area": 6.184456651681103e-06,
+      "boundary_policy": "32 expected: open lid and open socket; not a watertight character",
+      "uv_status": "LOCAL_PLANAR_STUDY_NOT_FINAL_ATLAS",
+      "blink": [
+        {
+          "value": 0.0,
+          "finite": true,
+          "evaluated_vertices": 576,
+          "degenerate_faces": 0,
+          "minimum_face_area": 4.617452589172899e-07,
+          "front_normal_faces": 512,
+          "back_normal_faces": 0,
+          "collision_and_self_intersection": "NOT_CERTIFIED_BY_AREA_SCREEN"
+        },
+        {
+          "value": 0.5,
+          "finite": true,
+          "evaluated_vertices": 576,
+          "degenerate_faces": 0,
+          "minimum_face_area": 2.645653296440287e-07,
+          "front_normal_faces": 512,
+          "back_normal_faces": 0,
+          "collision_and_self_intersection": "NOT_CERTIFIED_BY_AREA_SCREEN"
+        },
+        {
+          "value": 1.0,
+          "finite": true,
+          "evaluated_vertices": 576,
+          "degenerate_faces": 0,
+          "minimum_face_area": 6.846556743766996e-08,
+          "front_normal_faces": 512,
+          "back_normal_faces": 0,
+          "collision_and_self_intersection": "NOT_CERTIFIED_BY_AREA_SCREEN"
+        }
+      ]
+    },
+    {
+      "name": "SCULPT03_EYELID_R_LOCAL_PROTOTYPE",
+      "vertices": 48,
+      "quads": 32,
+      "faces": 32,
+      "boundary_edges": 32,
+      "non_boundary_nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "control_min_face_area": 6.184456651681103e-06,
+      "boundary_policy": "32 expected: open lid and open socket; not a watertight character",
+      "uv_status": "LOCAL_PLANAR_STUDY_NOT_FINAL_ATLAS",
+      "blink": [
+        {
+          "value": 0.0,
+          "finite": true,
+          "evaluated_vertices": 576,
+          "degenerate_faces": 0,
+          "minimum_face_area": 4.6176728574209847e-07,
+          "front_normal_faces": 512,
+          "back_normal_faces": 0,
+          "collision_and_self_intersection": "NOT_CERTIFIED_BY_AREA_SCREEN"
+        },
+        {
+          "value": 0.5,
+          "finite": true,
+          "evaluated_vertices": 576,
+          "degenerate_faces": 0,
+          "minimum_face_area": 2.6462689106665493e-07,
+          "front_normal_faces": 512,
+          "back_normal_faces": 0,
+          "collision_and_self_intersection": "NOT_CERTIFIED_BY_AREA_SCREEN"
+        },
+        {
+          "value": 1.0,
+          "finite": true,
+          "evaluated_vertices": 576,
+          "degenerate_faces": 0,
+          "minimum_face_area": 6.846486400036156e-08,
+          "front_normal_faces": 512,
+          "back_normal_faces": 0,
+          "collision_and_self_intersection": "NOT_CERTIFIED_BY_AREA_SCREEN"
+        }
+      ]
+    }
+  ],
+  "renders": [
+    {
+      "file": "color_front.png",
+      "camera": "SCULPT02_front",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        0.0,
+        -1.5399999618530273,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        1.5707964897155762,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "color_character_left.png",
+      "camera": "SCULPT02_character_left",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        1.5,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        1.5707963705062866,
+        -0.0,
+        1.5707963705062866
+      ]
+    },
+    {
+      "file": "color_character_right.png",
+      "camera": "SCULPT02_character_right",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        -1.5,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        1.5707963705062866,
+        -0.0,
+        -1.5707963705062866
+      ]
+    },
+    {
+      "file": "color_back.png",
+      "camera": "SCULPT02_back",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        0.0,
+        1.4600000381469727,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        -1.570796251296997,
+        3.141592502593994,
+        -0.0
+      ]
+    },
+    {
+      "file": "color_three_quarter.png",
+      "camera": "SCULPT02_three_quarter",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        0.8146241903305054,
+        -1.2932679653167725,
+        1.6447073221206665
+      ],
+      "camera_rotation": [
+        1.4871476888656616,
+        4.870142333857075e-08,
+        0.5763752460479736
+      ]
+    },
+    {
+      "file": "color_three_quarter_other.png",
+      "camera": "SCULPT02_three_quarter_other",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        -0.8146241903305054,
+        -1.2932679653167725,
+        1.6447073221206665
+      ],
+      "camera_rotation": [
+        1.4871476888656616,
+        -4.870142333857075e-08,
+        -0.5763752460479736
+      ]
+    },
+    {
+      "file": "clay_front.png",
+      "camera": "SCULPT02_front",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        0.0,
+        -1.5399999618530273,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        1.5707964897155762,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "clay_character_left.png",
+      "camera": "SCULPT02_character_left",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        1.5,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        1.5707963705062866,
+        -0.0,
+        1.5707963705062866
+      ]
+    },
+    {
+      "file": "clay_character_right.png",
+      "camera": "SCULPT02_character_right",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        -1.5,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        1.5707963705062866,
+        -0.0,
+        -1.5707963705062866
+      ]
+    },
+    {
+      "file": "clay_back.png",
+      "camera": "SCULPT02_back",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        0.0,
+        1.4600000381469727,
+        1.5193805694580078
+      ],
+      "camera_rotation": [
+        -1.570796251296997,
+        3.141592502593994,
+        -0.0
+      ]
+    },
+    {
+      "file": "clay_three_quarter.png",
+      "camera": "SCULPT02_three_quarter",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        0.8146241903305054,
+        -1.2932679653167725,
+        1.6447073221206665
+      ],
+      "camera_rotation": [
+        1.4871476888656616,
+        4.870142333857075e-08,
+        0.5763752460479736
+      ]
+    },
+    {
+      "file": "clay_three_quarter_other.png",
+      "camera": "SCULPT02_three_quarter_other",
+      "ortho_scale": 0.3700000047683716,
+      "camera_location": [
+        -0.8146241903305054,
+        -1.2932679653167725,
+        1.6447073221206665
+      ],
+      "camera_rotation": [
+        1.4871476888656616,
+        -4.870142333857075e-08,
+        -0.5763752460479736
+      ]
+    },
+    {
+      "file": "isolated_blink_open.png",
+      "camera": "SCULPT03_LOCAL_REVIEW_CAMERA",
+      "ortho_scale": 0.1899999976158142,
+      "camera_location": [
+        0.0,
+        -0.6499999761581421,
+        1.5219999551773071
+      ],
+      "camera_rotation": [
+        1.5707964897155762,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "isolated_blink_half.png",
+      "camera": "SCULPT03_LOCAL_REVIEW_CAMERA",
+      "ortho_scale": 0.1899999976158142,
+      "camera_location": [
+        0.0,
+        -0.6499999761581421,
+        1.5219999551773071
+      ],
+      "camera_rotation": [
+        1.5707964897155762,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "isolated_blink_closed.png",
+      "camera": "SCULPT03_LOCAL_REVIEW_CAMERA",
+      "ortho_scale": 0.1899999976158142,
+      "camera_location": [
+        0.0,
+        -0.6499999761581421,
+        1.5219999551773071
+      ],
+      "camera_rotation": [
+        1.5707964897155762,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "isolated_control_wire_front.png",
+      "camera": "SCULPT03_LOCAL_REVIEW_CAMERA",
+      "ortho_scale": 0.1899999976158142,
+      "camera_location": [
+        0.0,
+        -0.6499999761581421,
+        1.5219999551773071
+      ],
+      "camera_rotation": [
+        1.5707964897155762,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "isolated_control_wire_three_quarter.png",
+      "camera": "SCULPT03_LOCAL_REVIEW_CAMERA",
+      "ortho_scale": 0.1899999976158142,
+      "camera_location": [
+        0.1599999964237213,
+        -0.550000011920929,
+        1.559999942779541
+      ],
+      "camera_rotation": [
+        1.486448049545288,
+        9.396753597457064e-09,
+        0.36397895216941833
+      ]
+    }
+  ],
+  "reopen_pass": true,
+  "candidate_unchanged": true,
+  "source_unchanged": true
+}

@@ -1,3 +1,7 @@
+# 3D PRODUCTION DIRECTOR POLICY — PR CANDIDATE (2026-11-18)
+
+For all agents and Codex, read [High-end 3D production policy v1.1](docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md) before character/map 3D work. Character work includes sculpt/retopo, face/hair/clothes/equipment, materials, rigging, animation and QA; map/architecture belongs to the separate environment team. Respect current main canon, SHA-locked assets, existing PRs, and G1–G4. **This addition is a branch-only candidate until approved integration into main; do not claim global deployment.** The existing causal-retry v2 policy remains authoritative. No automatic main merge, canon replacement, deletion or publication.
+
 # DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
 
 **MANDATORY:** Claude, Codex, ChatGPT, Gemini and every automation/AI agent MUST read this section at each task start. Applies to game code, 2D/3D assets, Blender, maps, UI, QA, and cross-agent handoffs. See [docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md).
