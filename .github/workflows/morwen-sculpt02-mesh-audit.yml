@@ -1,0 +1,53 @@
+name: Morwen sculpt02 read-only mesh inventory
+on:
+  push:
+    branches: [feature/morwen-art-directed-sculpt-02]
+    paths:
+      - 'tools/morwen_sculpt02/inspect_mesh_structure.py'
+      - '.github/workflows/morwen-sculpt02-mesh-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mesh-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing Blender Python runtime
+        run: |
+          python -m pip install bpy==4.3.0 'numpy<3'
+      - name: Read original saved Blender scene and inventory topology
+        run: |
+          mkdir -p qa_output/mesh-audit
+          python - <<'PY'
+          import bpy
+          import runpy
+          import sys
+          source='assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend'
+          bpy.ops.wm.open_mainfile(filepath=source)
+          sys.argv=['inspect_mesh_structure.py','--','qa_output/mesh-audit/mesh_inventory.json']
+          runpy.run_path('tools/morwen_sculpt02/inspect_mesh_structure.py',run_name='__main__')
+          PY
+          python - <<'PY'
+          import json
+          p='qa_output/mesh-audit/mesh_inventory.json'
+          d=json.load(open(p))
+          assert d['mesh_count'] > 0
+          assert all(x['finite_coordinates'] for x in d['meshes'])
+          print('PASS mesh_count',d['mesh_count'])
+          print('armatures',len(d['armatures']))
+          print('source_sha256',d['source_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-sculpt02-mesh-inventory-${{ github.sha }}
+          path: qa_output/mesh-audit/
+          retention-days: 14
+          if-no-files-found: warn
