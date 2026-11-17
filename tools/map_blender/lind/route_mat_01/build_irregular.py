@@ -49,11 +49,16 @@ def aim(cam,target):
     cam.rotation_euler=(Vector(target)-cam.location).to_track_quat("-Z","Y").to_euler()
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--root",type=Path,required=True);ap.add_argument("--out",type=Path,required=True)
+    ap=argparse.ArgumentParser();ap.add_argument("--root",type=Path,required=True);ap.add_argument("--out",type=Path,required=True);ap.add_argument("--clay",action="store_true")
     a=ap.parse_args(sys.argv[sys.argv.index("--")+1:]);root=a.root.resolve();out=a.out.resolve();out.mkdir(parents=True,exist_ok=True)
     rng=random.Random(SEED)
     bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
     mat,loaded=material(root)
+    if a.clay:
+        clay=bpy.data.materials.new("NeutralClay_GeometryOnly");clay.diffuse_color=(.53,.49,.44,1);clay.use_nodes=True
+        clay.node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value=(.53,.49,.44,1)
+        clay.node_tree.nodes.get("Principled BSDF").inputs["Roughness"].default_value=.82
+        mat=clay
     mortar=bpy.data.materials.new("Recessed_Lime_Mortar")
     mortar.diffuse_color=(.28,.265,.22,1)
     mortar.use_nodes=True
@@ -99,7 +104,7 @@ def main():
     bpy.ops.file.pack_all()
     blend=out/"route-mat-01-irregular-candidate.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(blend))
-    report={"status":"CANDIDATE_NOT_ART_APPROVED","method":"B_irregular_polygon_solid_not_box",
+    report={"status":"CANDIDATE_NOT_ART_APPROVED","method":"B_irregular_polygon_solid_not_box","render_mode":"CLAY" if a.clay else "PBR",
             "seed":SEED,"blender":bpy.app.version_string,"stone_count":len(stones),
             "source_commit":"62f5d8d6db43e9078a71688f9c6bdee8d1d94304",
             "material_maps":loaded,"G1":"PARTIAL","G2":"NOT_RUN_INDEPENDENT",
