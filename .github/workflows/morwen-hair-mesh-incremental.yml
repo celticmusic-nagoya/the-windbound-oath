@@ -1,0 +1,92 @@
+name: Morwen hair incremental mesh and 4-view QA
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - 'tools/character_blender/build_morwen_bob_mesh.py'
+      - '.github/workflows/morwen-hair-mesh-incremental.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  hair-mesh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Restore previous verified hair-guide Blender stage
+        uses: actions/download-artifact@v4
+        with:
+          name: morwen-basemesh-blender-geometry-inventory
+          run-id: 44024103733
+          github-token: ${{ github.token }}
+          path: input_artifact
+      - name: Verify input stage identity, Blender header and non-destructive paths
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root=Path('input_artifact').resolve()
+          matches=list(root.rglob('morwen_hair_guides_UNAPPROVED.blend'))
+          if len(matches)!=1:raise SystemExit('BLOCKED expected exactly one guide stage')
+          source=matches[0]
+          if source.is_symlink() or not source.resolve().is_relative_to(root):raise SystemExit('BLOCKED unsafe source path')
+          digest=hashlib.sha256(source.read_bytes()).hexdigest()
+          expected='9b89bb6af7a60c7484580637e5cadea134cb841d555b60ae9ecfb7336fde308d'
+          if digest!=expected:
+              raise SystemExit('BLOCKED source SHA changed: '+digest+'; update only after verified review')
+          if source.open('rb').read(7)!=b'BLENDER':raise SystemExit('BLOCKED not Blender')
+          Path('qa_output/hair').mkdir(parents=True,exist_ok=True)
+          Path('qa_output/hair/source_sha256.txt').write_text(digest+'  '+str(source)+'\n')
+          Path('qa_output/hair/source_path.txt').write_text(str(source)+'\n')
+          print('PASS verified input',digest)
+          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender 4.2 runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip download --no-deps --only-binary=:all: bpy==4.2.0 -d wheels
+          echo 'a8217c2bd7b3424d1f51ce0698c0bf65439de352f7f6ed7b9942e2a9e5eb121b  wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl' | sha256sum -c -
+          python -m pip install --no-deps wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl
+          python -m pip install 'numpy>=1.26,<3'
+      - name: Validate script syntax before expensive Blender execution
+        run: python -m py_compile tools/character_blender/build_morwen_bob_mesh.py
+      - name: Build and render hair candidate only (do not rebuild basemesh)
+        run: |
+          set -euo pipefail
+          python tools/character_blender/build_morwen_bob_mesh.py \
+            --stage "$(cat qa_output/hair/source_path.txt)" \
+            --output qa_output/hair/morwen_hair_mesh_candidate_UNAPPROVED.blend
+      - name: Verify saved evidence and all four PNGs
+        run: |
+          python - <<'PY'
+          import json,pathlib,hashlib
+          root=pathlib.Path('qa_output/hair')
+          m=json.loads((root/'hair_mesh_manifest.json').read_text())
+          assert m['hair_mesh_count']==33 and len(m['previews'])==4
+          assert {p['view'] for p in m['previews']}=={'front','back','left','right'}
+          for p in m['previews']:
+              f=root/p['file']
+              assert f.is_file() and f.stat().st_size>1000
+              assert hashlib.sha256(f.read_bytes()).hexdigest()==p['sha256']
+          blend=root/'morwen_hair_mesh_candidate_UNAPPROVED.blend'
+          assert hashlib.sha256(blend.read_bytes()).hexdigest()==m['output_sha256']
+          assert m['source_unchanged'] and m['canonical_art_qa']=='NOT_RUN'
+          print('PASS technical evidence only; art QA NOT_RUN')
+          PY
+      - name: Upload partial or completed evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-hair-mesh-incremental-evidence
+          path: qa_output/hair/
+          retention-days: 14
+          if-no-files-found: warn
