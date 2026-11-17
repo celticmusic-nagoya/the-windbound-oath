@@ -1,0 +1,56 @@
+name: LIND CC0 Rock PBR Lit Previews
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/render_cc0_rock_pbr.py'
+      - '.github/workflows/lind-cc0-rock-pbr.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch immutable source evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/pbr
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
+      - name: Install Blender with NumPy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-expr 'import numpy; print("NUMPY_OK")'
+      - name: Render PBR-lit candidate images
+        timeout-minutes: 12
+        run: |
+          set -o pipefail
+          timeout 700s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/render_cc0_rock_pbr.py -- --source out/source --out out/pbr 2>&1 | tee out/pbr/blender.log
+      - name: Verify real PBR render evidence
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,struct
+          from pathlib import Path
+          d=Path('out/pbr');r=json.loads((d/'candidate_pbr_report.json').read_text())
+          assert len(r['candidates'])==2
+          for x in r['candidates']:
+            assert x['PBR_texture_loading']=='PASS' and len(x['texture_images'])>=3
+            assert all(i['loaded'] for i in x['texture_images'])
+            p=d/x['preview'];data=p.read_bytes()
+            assert data[:8]==bytes.fromhex('89504e470d0a1a0a')
+            assert struct.unpack('>II',data[16:24])==(1100,760)
+            assert hashlib.sha256(data).hexdigest()==x['preview_sha256']
+          print('PBR_EVIDENCE_PASS')
+          PY
+      - name: Upload actual material-lit previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cc0-rock-pbr-lit-previews
+          path: out/pbr/
+          retention-days: 14
+          if-no-files-found: warn
