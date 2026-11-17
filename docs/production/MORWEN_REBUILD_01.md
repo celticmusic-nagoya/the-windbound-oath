@@ -123,3 +123,11 @@ GitHub connector経由で素体ZIPを取得し実画像を確認した。初回�
 
 判定: 身体参照G1 PASS／最終外観G1 BLOCKED（v5.61未取得）。G2 NOT_RUN（新しいMorwen造形なし・独立美術QAなし）。参照scene G3限定PASS、素体sourceは再open／有限座標／原形状／6方向framingの限定screen PASSだがdriver・UV・rig等の本体G3は未完了。G4 NOT_RUN。
 次は別working copyでdriver整理、Layer0ランドマークと直接観測／推定を分けた全身設計、7.5〜8頭身targetの手動sculpt／retopo。全身シルエットの独立美術QAが未PASSのため精密顔・髪・衣装・rigへ進まない。高品質素体の調達・編集可能source取り込みまでは実行したが、正式形状の素体制作は未完了。
+
+### 最終追補 — sourceの表示driver障害を作業用copyで解除
+
+調査するとmask修飾子自体は存在せず、2本のdriverだけが残った孤立参照だった。元CC0 intakeは変更せず保持し、`tools/morwen_rebuild01/prepare_sculpt_workspace.py` で別working copyから2本を除去。初回調査で修飾子の存在assertが失敗したlogも保持。修飾子欠落を確認した後、該当driverのみ除去して再保存・再openし、control頂点／面のSHA不変を検証した。
+
+編集可能な作業原本: `assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend`。
+QA: BODY_WORKSPACE_QA.json、BODY_WORKSPACE.log。source再open時の警告はlog前半に残るが、cleanup後の再openでは再発せず、driver数0をassertした。
+これによりdriver障害は解除。全キャラクターG3はBLOCKEDからNOT_RUNへ更新（UV／rig等の全体認定は行わない）。身体G1 PASS／最終外観G1 BLOCKED／G2 NOT_RUN／G3 NOT_RUN／G4 NOT_RUN、限定技術screen PASS。新しい身体形状はまだsculptしていない。元の任意人体形状やA-poseを正式採用と誤認しない。

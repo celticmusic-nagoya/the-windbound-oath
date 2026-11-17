@@ -1,4 +1,4 @@
-name: Morwen rebuild01 blocked preflight evidence
+name: Morwen rebuild01 saved source and QA evidence
 on:
   push:
     branches: [feature/morwen-rebuild-01]
@@ -19,17 +19,19 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          d = json.loads(Path('docs/qa/morwen-rebuild-01/preflight.json').read_text())
-          assert d['gates'] == {'G1': 'BLOCKED', 'G2': 'NOT_RUN', 'G3': 'NOT_RUN', 'G4': 'NOT_RUN'}
-          assert not d['new_geometry_created']
+          d = json.loads(Path('docs/qa/morwen-rebuild-01/current-status.json').read_text())
+          assert d['G1_body_reference'] == 'PASS'
+          assert d['G3_reference_scene'] == 'PASS'
+          assert d['actual_body_sculpt'] == 'NOT_RUN'
           with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as f:
-              f.write('G1 BLOCKED: canonical binary unavailable. No new mesh or art QA. Evidence packaging only.\n')
+              f.write('Layer 0 reference source PASS; sculpt and independent art QA NOT_RUN. Source/workspace evidence packaging only.\n')
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: morwen-rebuild01-BLOCKED-preflight-only
+          name: morwen-rebuild01-editable-sources-and-QA-NOT-FINISHED
           path: |
             docs/production/MORWEN_REBUILD_01.md
             docs/qa/morwen-rebuild-01/
+            assets/candidates/morwen-rebuild-01/
           retention-days: 14
           if-no-files-found: error
