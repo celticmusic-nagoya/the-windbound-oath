@@ -41,7 +41,8 @@ jobs:
           assert len(report["candidates"])==2
           for x in report["candidates"]:
               p=d/x["blend"]
-              assert p.read_bytes()[:7]==b"BLENDER"
+              # Compressed .blend files have a Zstandard header, not BLENDER.
+              # Verify SHA here; the Blender reopen check below validates the format.
               assert hashlib.sha256(p.read_bytes()).hexdigest()==x["blend_sha256"]
               assert len(x["verified_packed_nodes"])>=3
           print("PACKED_SOURCE_MANIFEST_PASS")
