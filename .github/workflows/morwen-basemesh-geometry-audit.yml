@@ -11,6 +11,7 @@ on:
       - 'tools/character_blender/export_basemesh_landmark_evidence.py'
       - 'tools/character_blender/build_basemesh_height_overlays.py'
       - 'tools/character_blender/analyze_basemesh_head_sections.py'
+      - 'tools/character_blender/raycast_basemesh_surface.py'
 permissions:
   contents: read
 jobs:
@@ -92,6 +93,9 @@ jobs:
       - name: Analyze actual Blender mesh height sections (hypotheses only)
         run: |
           python tools/character_blender/analyze_basemesh_head_sections.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/head_section_evidence.json --sections 80
+      - name: Raycast diagnostic pixels onto actual mesh triangles
+        run: |
+          python tools/character_blender/raycast_basemesh_surface.py --source qa_output/basemesh/source/human_base_meshes_bundle.blend --output qa_output/basemesh/raycast_surface_evidence.json
       - name: Remove binary sources from uploaded report
         if: always()
         run: rm -rf qa_output/basemesh/source qa_output/basemesh/source.zip
