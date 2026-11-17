@@ -121,6 +121,11 @@ ld.size=9
 scene=bpy.context.scene
 scene.render.engine="CYCLES"
 scene.cycles.samples=16
+# Ubuntu packaged Blender may be built without OpenImageDenoiser.
+# Disable compositor/view-layer denoising to keep CPU clay renders portable.
+scene.cycles.use_denoising=False
+for layer in scene.view_layers:
+    layer.cycles.use_denoising=False
 scene.render.resolution_x=960
 scene.render.resolution_y=720
 scene.render.resolution_percentage=100
