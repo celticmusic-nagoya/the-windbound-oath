@@ -1,0 +1,40 @@
+name: LIND WORLD D Visual QA Render
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/render_world_d_existing_camera.py'
+      - '.github/workflows/lind-world-d-visual-render.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender
+      - name: Download immutable D scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out/render
+          curl -fLsS --retry 2 --max-time 150 'https://raw.githubusercontent.com/celticmusic-nagoya/the-windbound-oath/feature/map-deterministic-pipeline-world-route-01/assets/candidates/lind-spatial-codex-01/world/candidate-d/world.blend' -o out/render/source.blend
+          echo '2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72  out/render/source.blend' | sha256sum -c -
+      - name: Render from stored camera, no geometry changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          blender -b out/render/source.blend --python-exit-code 1 --python tools/map_blender/lind/render_world_d_existing_camera.py -- out/render > out/render/blender.log 2>&1
+      - name: Preserve render and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-world-d-existing-camera-render
+          path: |
+            out/render/*.png
+            out/render/*.json
+            out/render/*.log
+          retention-days: 14
+          if-no-files-found: warn
