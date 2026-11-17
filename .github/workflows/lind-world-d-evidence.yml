@@ -1,0 +1,30 @@
+name: LIND Candidate D Route Evidence
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/validate_world_d_route_evidence.py'
+      - 'docs/qa/lind/fixtures/world-d/**'
+      - '.github/workflows/lind-world-d-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate frozen independent route evidence and negative controls
+        run: |
+          python3 tools/map_blender/lind/validate_world_d_route_evidence.py \
+            --occlusion docs/qa/lind/fixtures/world-d/occlusion.json \
+            --grades docs/qa/lind/fixtures/world-d/grades.json \
+            --output out/qa/world-d-evidence.json
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-world-d-independent-evidence
+          path: out/qa/
+          retention-days: 14
+          if-no-files-found: warn

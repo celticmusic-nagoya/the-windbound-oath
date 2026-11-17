@@ -1,0 +1,27 @@
+name: LIND Proposed Topology Guardrails
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/validate_proposed_topology.py'
+      - 'docs/production/lind-new-world-topology.v1.json'
+      - '.github/workflows/lind-topology-guardrails.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  topology:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify unscaled topology and six negative controls
+        run: |
+          python3 tools/map_blender/lind/validate_proposed_topology.py --input docs/production/lind-new-world-topology.v1.json --output out/qa/lind_topology_guardrails.json
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-topology-negative-controls
+          path: out/qa/
+          retention-days: 14
+          if-no-files-found: warn
