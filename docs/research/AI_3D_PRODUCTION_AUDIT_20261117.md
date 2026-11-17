@@ -105,3 +105,10 @@ Next: inspect existing PR artifacts and canonical hashes, then design a bounded 
 - Separate contract workflow run `44093120370` SUCCESS: candidate contract tests + artifact ZIP negative controls.
 - The audit script has now been strengthened to FAIL on missing-image-data candidates and optionally on explicit Blender version mismatch. A previous PASS means only basic file opening and minimum mesh inventory; **G3 remains FAIL**.
 - Do not infer that 4.0.2 and 4.3.2 are equivalent, that external textures are correctly packed, or that G2/G4 passed. Next action: pinned Blender 4.3.2 plus exact mesh inventory and texture dependency check; avoid modifying source blend.
+
+## Dependency diagnosis and fail-closed QA (2026-11-17)
+- Verified `44093120494` runner reopened actual Method C .blend using Blender **4.0.2**, while original build audit reports **4.3.2**. The runner warned newer-file compatibility and listed six missing texture data candidates. This is NOT G3 PASS.
+- Inspected actual archived Method C ZIP: contains `method-c-01/sources/boulder_01_1k.blend` and `rock_07_1k.blend` and `*-files.json` Poly Haven source manifests, but **no separately packaged PNGs** matching the six names `boulder_01_{diff,nor_gl,rough}.png` and `rock_07_{diff,nor_gl,rough}.png`. Those images may be packed inside source .blend files; no assertion about embedded image bytes until same-version Blender inspects them.
+- This explains why a reopened render scene can inventory mesh geometry yet fail to resolve material texture images: archive does not itself demonstrate the external PNG dependencies are distributable.
+- Strengthened `tools/ai_3d/audit_blend_readonly.py` to mark `missing_image_data_candidates` as a FAIL and to support an expected Blender version. Do not run the same Blender 4.0.2 cross-version pass repeatedly as a purported 4.3.2 certification.
+- Required next *different* method: pinned 4.3.2 Blender in GitHub Actions, enumerate `bpy.data.images` including packed status/filepath/library, compare scene object names to original `mesh-audit.json`, and verify material-node image references; package only license-cleared dependencies with hashes.
