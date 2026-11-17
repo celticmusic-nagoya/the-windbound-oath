@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/workspace/work/test-f12.py", line 6, in <module>
+    o=m.scanned_stone('Far_F12',m.DOMAINS[11][1],.05,.79,18,[me],m.mat('clay',.48));print('F12',len(o.data.vertices),len(o.data.polygons))
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 92, in scanned_stone
+    o['role']='load_bearing_scan_stone';o['scan_source']=src.name;o['bond_domain']=name;o['adoption']='CANDIDATE';unwrap(o)
+                                                                                                                  ~~~~~~^^^
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 62, in unwrap
+    if not len(o.data.polygons):raise RuntimeError('Empty Boolean result: '+o.name+' source '+str(o.get('scan_source')))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Empty Boolean result: Far_F12 source rock_PROXY_5m.001
+
+Error: script failed, file: 'work/test-f12.py', exiting.
+Blender 4.3.2
+
+Blender quit

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/fit_bearing_contacts.py", line 34, in <module>
+    mod.unwrap(o)
+    ~~~~~~~~~~^^^
+  File "/workspace/work/method-c/tools/map_blender/lind/route_mat_01/build_curated.py", line 62, in unwrap
+    if not len(o.data.polygons):raise RuntimeError('Empty Boolean result: '+o.name+' source '+str(o.get('scan_source')))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Empty Boolean result: Near_F16 source realCap_Model_3.003
+
+Error: script failed, file: 'work/method-c/tools/map_blender/lind/route_mat_01/fit_bearing_contacts.py', exiting.
+Blender 4.3.2
+Read blend: "/workspace/work/method-c/assets/candidates/route-mat-01/method-c-01/render/abutment.blend"
+
+Blender quit

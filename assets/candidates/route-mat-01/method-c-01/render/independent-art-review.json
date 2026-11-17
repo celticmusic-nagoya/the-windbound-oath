@@ -1,0 +1,117 @@
+{
+  "schema": "route-mat-01-independent-art-review/v1",
+  "candidate": "method-c-01",
+  "reviewer": "ChatGPT independent_art_qa subagent; no production-code or geometry edits",
+  "reviewed_at_utc": "2026-11-17T00:37:13.121749+00:00",
+  "G1": "BLOCKED",
+  "G2": "FAIL",
+  "G3": "FAIL",
+  "G4": "NOT_RUN",
+  "G3_basis": "Producer saved-file audit independently read: 3 per-mesh failures and 49 surface-crossing pairs; not independently reexecuted by art reviewer. Images alone do not certify structure.",
+  "reference": {
+    "file": "assets/approved/game/rilde_story/raid/attack_background_only.png",
+    "sha256": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+    "actually_opened_by_reviewer": true
+  },
+  "evidence": [
+    {
+      "file": "front.png",
+      "sha256": "f671eef710d3e42fb550b4c346f3e670cddba6e3011356d9b05c1dd4bb182d21",
+      "bytes": 1197365,
+      "actually_opened_by_reviewer": true,
+      "dimensions": [
+        1280,
+        1024
+      ]
+    },
+    {
+      "file": "oblique.png",
+      "sha256": "4a6c0c9b0d13eb4d561b36741c26893554c507bb92c6016a90f071b54b2c94f9",
+      "bytes": 1158049,
+      "actually_opened_by_reviewer": true,
+      "dimensions": [
+        1280,
+        1024
+      ]
+    },
+    {
+      "file": "side.png",
+      "sha256": "a1896c9260e80d9c8bf11fbf31efb33a536da6138ce397d0f8a480f5df39ea9a",
+      "bytes": 1163717,
+      "actually_opened_by_reviewer": true,
+      "dimensions": [
+        1280,
+        1024
+      ]
+    },
+    {
+      "file": "abutment.blend",
+      "sha256": "24e8cb159ed1727e34e1e7b67956c9f73894f910d29590b4be56d1bb15a39602",
+      "bytes": 1548302,
+      "actually_opened_by_reviewer": false
+    }
+  ],
+  "findings": [
+    {
+      "id": "C01-G2-01",
+      "severity": "blocking",
+      "views": [
+        "front.png",
+        "oblique.png",
+        "side.png"
+      ],
+      "finding": "Broad planar quarry cuts dominate the exposed stone faces. Abrupt transitions between nearly featureless planes and concentrated rough facets read as cut-and-fitted scan fragments, rather than coherently weathered masonry.",
+      "canonical_delta": "The approved CG shows weathered stone faces with moderate, consistent relief and softened irregular outlines."
+    },
+    {
+      "id": "C01-G2-02",
+      "severity": "blocking",
+      "views": [
+        "front.png",
+        "oblique.png"
+      ],
+      "finding": "Several stones terminate in acute triangular points and strong planar diagonals. The wall reads as a polygon puzzle with alternating smooth wedges and jagged patches; nonrectangular domains alone do not establish a natural stone bond."
+    },
+    {
+      "id": "C01-G2-03",
+      "severity": "blocking",
+      "views": [
+        "oblique.png",
+        "side.png"
+      ],
+      "finding": "Coping stones have very broad flat upper surfaces, razor-like rims and apparent undercut/lifted corners. Their bearing against the body is visually inconsistent; the intended abutment and arch are not yet convincing as a unified masonry construction."
+    },
+    {
+      "id": "C01-G2-04",
+      "severity": "major",
+      "views": [
+        "front.png",
+        "side.png"
+      ],
+      "finding": "Joints vary from hairline seams to conspicuous dark openings, and the footing looks like several thin cut slabs with a dark underside gap. Recessed mortar/bedding does not read consistently at the exposed interfaces."
+    },
+    {
+      "id": "C01-G2-05",
+      "severity": "limitation",
+      "views": [
+        "oblique.png",
+        "side.png"
+      ],
+      "finding": "Large flat left/rear/end surfaces are declared cutaway planes by the producer. Their presence is not counted as a facade defect, but these views do not establish finished external return-face or terrain/road integration quality."
+    }
+  ],
+  "positive_observations": [
+    "Actual three neutral-clay PNGs and a Blender candidate exist; this is a real generated model, not a plan.",
+    "Nonrectangular stone outlines and an explicit radial half-arch differ visibly from the failed five-course rounded-block layout.",
+    "Cutaway profile makes the intended abutment/arch relationship inspectable, without claiming completed full-bridge placement."
+  ],
+  "game_scale_review": "NOT_RUN: supplied camera renders are 1280x1024 close/study views, not verified final-display-size game captures. Native-size review already finds blocking G2 defects.",
+  "structural_certification": "NOT_RUN: visual thickness/contact cannot replace closed-mesh, volumetric overlap and support checks.",
+  "disposition": "CANDIDATE_REJECTED_FOR_ADOPTION; preserve all files and hashes. Do not claim CI or high source LOD implies G2 PASS.",
+  "root_cause_hypothesis": "Oversized scan solids intersected with authored 2D bond prisms create dominant planar cut faces and acute seam corners; low source LOD further exposes faceting. Source-LOD selection and contact repair can be tested, but high LOD alone is not evidence of a solved art defect.",
+  "next_review_conditions": [
+    "Inspect actual corrected three-view clay PNGs before a new G2 decision.",
+    "Demonstrate improved exposed-face relief/edge transitions and credible coping/bedding, rather than only increased vertex count.",
+    "Keep formal coordinates/scale G1 BLOCKED and game/Android G4 NOT_RUN."
+  ]
+}
