@@ -21,6 +21,8 @@ jobs:
           python-version: '3.11'
       - name: Install existing Blender Python runtime
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
           python -m pip install bpy==4.3.0 'numpy<3'
       - name: Read original saved Blender scene and inventory topology
         run: |
@@ -38,6 +40,7 @@ jobs:
           import json
           p='qa_output/mesh-audit/mesh_inventory.json'
           d=json.load(open(p))
+          assert d['source_sha256'] == '90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b', 'Source SHA mismatch'
           assert d['mesh_count'] > 0
           assert all(x['finite_coordinates'] for x in d['meshes'])
           print('PASS mesh_count',d['mesh_count'])
