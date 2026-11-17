@@ -1,0 +1,58 @@
+name: Morwen sculpt02 saved-source review
+on:
+  push:
+    branches: [feature/morwen-art-directed-sculpt-02]
+    paths: ['tools/morwen_sculpt02/**', 'assets/candidates/morwen-sculpt02/**', '.github/workflows/morwen-sculpt02-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install render runtime (no sculpt/fit generator)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip install bpy==4.3.0 'numpy<3' Pillow
+          python -c 'import bpy; import bmesh; print(bpy.app.version_string)'
+      - name: Render actual GUI-sculpted saved source
+        run: |
+          python tools/morwen_sculpt02/render_review.py -- assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend qa_output/review 48
+      - name: Scoped QA, overlays and display previews
+        run: |
+          cp docs/production/MORWEN_SCULPT02_EXECUTION_20261117.md qa_output/review/QA_REPORT.md
+          cp docs/qa/morwen-sculpt02/geometry_difference.json qa_output/review/
+          cp docs/qa/morwen-sculpt02/reference_registration.json qa_output/review/
+          cp docs/qa/morwen-sculpt02/gui_session_actions.json qa_output/review/
+          cp docs/qa/morwen-head-sculpt-20261117/ci_final_provenance.json qa_output/review/CC0_SOURCE_PROVENANCE.json
+          python tools/morwen_sculpt02/qa_review.py qa_output/review
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-sculpt02-review-${{ github.sha }}
+          path: qa_output/review/
+          retention-days: 14
+          if-no-files-found: error
+      - name: Assemble exact editable sculpt source and SHA
+        if: always()
+        run: |
+          mkdir -p qa_output/source
+          cp assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend qa_output/source/
+          cp docs/qa/morwen-sculpt02/geometry_difference.json qa_output/source/
+          cd qa_output/source
+          sha256sum *.blend > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-sculpt02-editable-source-${{ github.sha }}
+          path: qa_output/source/
+          retention-days: 14
+          if-no-files-found: error
