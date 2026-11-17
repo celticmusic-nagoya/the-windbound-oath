@@ -63,6 +63,10 @@ def main():
    obj=bpy.data.objects.new(name,data);bpy.context.collection.objects.link(obj)
    obj.location=center+Vector(pos)*span;obj.rotation_euler=(center-obj.location).to_track_quat("-Z","Y").to_euler()
   scene.render.engine="CYCLES";scene.cycles.samples=24
+  # Ubuntu Blender 4.0.2 package lacks OpenImageDenoiser; disable it explicitly.
+  scene.cycles.use_denoising=False
+  for layer in scene.view_layers:
+   layer.cycles.use_denoising=False
   scene.render.resolution_x=1100;scene.render.resolution_y=760;scene.render.resolution_percentage=100
   scene.render.image_settings.file_format="PNG";scene.render.film_transparent=False
   scene.render.filepath=str(out/(item["id"]+"_PBR_lit_preview.png"))
