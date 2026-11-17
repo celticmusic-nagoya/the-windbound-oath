@@ -1,14 +1,14 @@
 """Read already-generated normalized OBJ and save .blend; no procedural geometry.
 Technical display only; not a production cliff asset.
 """
-import argparse, bpy, json, hashlib
+import argparse, bpy, json, hashlib, sys
 from pathlib import Path
 
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--obj",required=True)
     p.add_argument("--out",required=True)
-    a=p.parse_args()
+    a=p.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
     source=Path(a.obj);out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
     assert source.exists() and source.stat().st_size>1000
     bpy.ops.object.select_all(action="SELECT")
