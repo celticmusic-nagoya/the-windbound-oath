@@ -17,7 +17,7 @@ def h(path):
 
 def main():
  import argparse
- p=argparse.ArgumentParser();p.add_argument("--out",required=True)
+ p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--geometry-only",action="store_true")
  a=p.parse_args(sys.argv[sys.argv.index("--")+1:])
  out=Path(a.out).resolve();out.mkdir(parents=True,exist_ok=True)
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
@@ -100,15 +100,18 @@ def main():
  blend=out/"macro_support_candidate.blend"
  bpy.ops.wm.save_as_mainfile(filepath=str(blend))
  print("BLEND_CHECKPOINT_SAVED",flush=True)
- print("RENDER_START_WORKBENCH",flush=True)
- bpy.ops.render.render(write_still=True)
- print("RENDER_FINISHED_WORKBENCH",flush=True)
+ if not a.geometry_only:
+  print("RENDER_START_WORKBENCH",flush=True)
+  bpy.ops.render.render(write_still=True)
+  print("RENDER_FINISHED_WORKBENCH",flush=True)
+ else:
+  print("RENDER_SKIPPED_GEOMETRY_ONLY",flush=True)
  print("RENDER_COMPLETE_MODEL_ALREADY_SAVED",flush=True)
  metrics={"method":"AUTHORED_NORMALIZED_CONNECTED_MACRO_SUPPORT","seed":SEED,"units":"NORMALIZED_NON_METRIC","approved_world_scale":None,"approved_camera":None,
- "render_engine":"BLENDER_WORKBENCH","source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
+ "geometry_only":a.geometry_only,"render_engine":"BLENDER_WORKBENCH","source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
  "vertices":verts_n,"faces":faces_n,"boundary_edges":boundary,"nonmanifold_edges":nonmanifold,"closed_volume":volume,
  "G1":"BLOCKED","G2":"NOT_RUN","G3":"PASS_TOPOLOGY_ONLY","G4":"NOT_RUN",
- "outputs":{p.name:h(p) for p in (out/"macro_support_clay.png",blend)}}
+ "outputs":{p.name:h(p) for p in (([blend] if a.geometry_only else [out/"macro_support_clay.png",blend]))}}
  (out/"macro_support_metrics.json").write_text(json.dumps(metrics,indent=2)+"\n")
  print("MACRO_SUPPORT_QA",json.dumps({k:metrics[k] for k in ("vertices","faces","boundary_edges","nonmanifold_edges","closed_volume")}))
 if __name__=="__main__":main()
