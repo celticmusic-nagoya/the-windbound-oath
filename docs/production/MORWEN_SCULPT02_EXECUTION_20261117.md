@@ -71,3 +71,21 @@ Blender 4.3.2はGPLアプリ、素体は既存の公式CC0 Human Base Meshes。�
 次は、顔の目標面を正面・側面で美術担当者が先に確定し、眼窩・鼻・口・顎の大きな関係を局所リトポとスカルプトで作り直す。単純な局所Grab反復だけでは同一性の不足を解消できていない。髪は今回の非均等な大形状を基礎に、面の厚み・重なり・分け目を手で再設計する。独立美術レビューを経てから、細かな毛束や装飾に進む。
 
 mainマージ・旧成果物削除・正式原本置換・公開は行わない。
+
+## 検証済みの納品先と最終判定
+
+- 新Draft PR: https://github.com/celticmusic-nagoya/the-windbound-oath/pull/407 （base: PR #399のブランチ）
+- Actions成功: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44076487693
+- 編集可能ソース `.blend`: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44076487693/artifacts/14325870825
+- 色付き／クレイ12PNG、64px／128px、コンタクトシート、仮登録オーバーレイ、原画像5点、QA・操作ログ・SHA: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44076487693/artifacts/14324029891
+- 両Artifactsは14日保持、2026-12-01 UTC期限。
+- 実行コードコミット: `472111364a2a9ee3790ba6ee7d9e6a871da07068`。以後は検証結果・納品リンクの記録のみ。
+- ソースSHA-256: `90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b`。
+
+CIはBlender 4.3.0で実行。表示対象22メッシュ、制御頂点25,114／面25,444、評価後193,590頂点／193,910面。評価後メッシュの非多様体・退化面ゼロ、有限座標・正の符号付き体積、RGBA・可視性・白飛び・投影範囲を含む全スクリーニング項目PASS。
+
+Artifactを取得し直し、ソース`.blend`のSHAとレビュー側40ペイロードのSHAを照合。ソース内の形状キーを再確認し、顔1,067頂点の変位と8個の表示対象髪メッシュ、旧候補の非破壊保持を確認。Blender 4.3.2でも再オープンし、ソースが不変であることを確認した。
+
+**最終: G1 BLOCKED / G2 自己美術FAIL・新候補の独立レビューNOT_RUN / G3 PASS_TECHNICAL_SCREEN（限定範囲） / G4 NOT_RUN。**
+
+実際のGUI造形・レンダリング・検査は実行済みだが、モルウェンの完成した正式頭部・髪ではない。形状の同一性と美術品質の不足は次工程へ持ち越す。

@@ -1,0 +1,182 @@
+{
+  "status": "PASS_TECHNICAL_SCREEN",
+  "checks": {
+    "source_unchanged": true,
+    "reopen": true,
+    "canonical_packed_bytes": true,
+    "new_face_geometry": true,
+    "closed_nondegenerate_evaluated_meshes": true,
+    "finite_and_outward_volume": true,
+    "rgba_visibility_frame": true,
+    "twelve_color_clay_views": true,
+    "anatomical_ratio": true
+  },
+  "renders": [
+    {
+      "file": "color_front.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 264233,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.03834873009805739,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "color_character_left.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 248029,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0010039148647940361,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "color_character_right.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 248024,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0215825887817308,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "color_back.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 264239,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.004885728450380148,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "color_three_quarter.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 281872,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.02726769597547823,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "color_three_quarter_other.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 274087,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.03517496269432698,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "clay_front.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 264233,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.021783804445319094,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "clay_character_left.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 248029,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.00033867007487027725,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "clay_character_right.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 248024,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.002007870206109086,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "clay_back.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 264239,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0018089683960354074,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "clay_three_quarter.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 281872,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.011544247034114776,
+      "head_framed": true,
+      "pass": true
+    },
+    {
+      "file": "clay_three_quarter_other.png",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "visible_pixels": 274087,
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.008745398358915236,
+      "head_framed": true,
+      "pass": true
+    }
+  ],
+  "G1": "BLOCKED_PROVISIONAL_REFERENCE_REGISTRATION",
+  "G2": "NOT_APPROVED; independent new-candidate visual QA NOT_RUN; self findings in report",
+  "G3": "PASS_TECHNICAL_SCREEN",
+  "G4": "NOT_RUN",
+  "limitations": [
+    "No self-intersection or lens/skin support certification",
+    "No facial rig/deformation/UV/game or actual Android test",
+    "Projected bounds exclude intentionally cropped shoulders",
+    "Two-point hair-crown proxy does not establish anatomical image calibration"
+  ]
+}
