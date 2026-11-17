@@ -32,9 +32,18 @@ def main():
    # Name-based mapping is mandatory; ordering alone cannot justify changing a normal map into diffuse.
    assert img.name.lower().split(".")[0] in (Path(uri).stem.lower(),decl.get("name","").lower()) or Path(uri).stem.lower() in img.name.lower(),"Image binding mismatch: "+img.name+" / "+uri
    assert sha(disk)==next(d["sha256"] for d in item["dependencies"] if d["uri"]==uri)
-   img.filepath=str(disk);img.source="FILE";img.reload()
-   ok=bool(img.has_data and img.size[0]>0 and img.size[1]>0)
-   image_report.append({"name":img.name,"source_uri":uri,"sha256":sha(disk),"width":int(img.size[0]),"height":int(img.size[1]),"loaded":ok})
+   # Standalone bpy.data.images.load was independently proven to decode all six JPEGs.
+   # Replace only the image datablock reference, preserving every existing shader link.
+   fresh=bpy.data.images.load(str(disk),check_existing=False)
+   ok=bool(fresh.has_data and fresh.size[0]>0 and fresh.size[1]>0 and len(fresh.pixels[:4])==4)
+   assert ok,"Verified image cannot be decoded independently: "+uri
+   nodes=[node for mat in used if mat.use_nodes for node in mat.node_tree.nodes if node.type=="TEX_IMAGE" and node.image==img]
+   assert nodes,"Imported image has no material node: "+img.name
+   for node in nodes:
+    fresh.colorspace_settings.name=img.colorspace_settings.name
+    node.image=fresh
+    assert node.image==fresh
+   image_report.append({"name":img.name,"replacement":fresh.name,"node_count":len(nodes),"source_uri":uri,"sha256":sha(disk),"width":int(fresh.size[0]),"height":int(fresh.size[1]),"loaded":ok})
   print("PBR_IMAGE_DIAGNOSTIC",item["id"],json.dumps({"materials":[m.name for m in used],"images":image_report}),flush=True)
   assert len(image_report)>=3 and all(x["loaded"] for x in image_report),"PBR textures missing or invalid"
   allpts=[o.matrix_world @ Vector(c) for o in meshes for c in o.bound_box]
