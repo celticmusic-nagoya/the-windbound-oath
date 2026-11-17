@@ -1,3 +1,15 @@
+# DIRECTOR-APPROVED FULL-3D TARGET — v3.4 ALIGNMENT (2026-11-17)
+
+**Scope:** This is a non-destructive clarification of the latest director-approved final visual direction. THE WINDBOUND OATH targets high-quality **fully 3D characters and world/maps**. The old 2.8-head sprite / 2.5D map prescriptions below remain as **historical implementation and rollback references**, NOT the final production-art target. Preserve the currently working 2D runtime, SAVE, events, collision, UI and assets until an approved, independently QA-verified 3D migration. Do not silently replace the renderer or infer world meters/camera/scale from illustrations.
+
+**Quality benchmarks:** Learn production craft from Genshin Impact (color/landscape), Neverness to Everness (spatial/city presentation), Arknights: Endfield (geometry/materials) and NIKKE (character presentation), while protecting original Celtic-fantasy canon. No copying proprietary designs or assets. Source research from https://3dnchu.com/, official documentation, papers, GitHub, Pinterest and user-supplied videos; verify licenses, compatibility, cost and actual quality benefit. Approved non-destructive technology trials may progress through implementation and independent QA; research alone is not adoption.
+
+**Authority and coordination:** Latest explicit director approvals and accessible private canon take precedence for canon; existing source hashes and provenance remain protected. Follow [Causal Retry & Method Switch v2](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md): two same-root-cause/same-method-family failures stop **that method only**, not the entire task. Character, MAP WORLD/HOME/BUILD/ECO and INTEGRATION maintain separate ownership and Draft PRs. Resolve shared coordinate/camera/contact/shadow/occlusion/collision/runtime interface before game integration. See [v3.4 alignment proposal](docs/policy/FULL_3D_V34_ALIGNMENT_PROPOSAL_20261117.md) for evidence and unresolved items; that proposal is not a canon source.
+
+**Safety and QA:** No main merge, canonical overwrite, destructive deletion or publication without explicit approval. G1 source/canon, G2 independent visual art, G3 technical geometry/render, G4 game/Android runtime must each PASS for formal adoption. Character reference precedence and unapproved 3D metrics remain BLOCKED, not inferred. GitHub Actions success alone does not prove art or game readiness. When older sections below conflict **only on final visual target**, this newer director-approved full-3D target governs; other historical gameplay and safety rules remain in force.
+
+---
+
 # DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
 
 **MANDATORY:** Claude, Codex, ChatGPT, Gemini and every automation/AI agent MUST read this section at each task start. Applies to game code, 2D/3D assets, Blender, maps, UI, QA, and cross-agent handoffs. See [docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md).
