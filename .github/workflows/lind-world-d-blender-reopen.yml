@@ -1,0 +1,53 @@
+name: LIND WORLD D Blender Reopen
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/independent_world_d_*.py'
+      - '.github/workflows/lind-world-d-blender-reopen.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reopen-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update -qq && sudo apt-get install -y blender
+      - name: Retrieve immutable candidate D and check SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out/qa
+          curl -fLsS --retry 2 --max-time 150 \
+            'https://raw.githubusercontent.com/celticmusic-nagoya/the-windbound-oath/feature/map-deterministic-pipeline-world-route-01/assets/candidates/lind-spatial-codex-01/world/candidate-d/world.blend' \
+            -o out/qa/world-d.blend
+          echo '2bc9dabd7baaf7da017821d31b82649170d0f65998da56b8e00bbdffcbb09e72  out/qa/world-d.blend' | sha256sum -c -
+      - name: Reopen candidate D and inspect scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          blender -b out/qa/world-d.blend --python tools/map_blender/lind/independent_world_d_inspect_blend.py -- out/qa/scene.json > out/qa/scene.log 2>&1
+          blender -b out/qa/world-d.blend --python tools/map_blender/lind/independent_world_d_inspect_geometry.py -- out/qa/geometry.json > out/qa/geometry.log 2>&1
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          scene=json.loads(Path('out/qa/scene.json').read_text())
+          meshes=[o for o in scene['objects'] if o['type']=='MESH']
+          geo=json.loads(Path('out/qa/geometry.json').read_text())
+          assert meshes and geo, 'No mesh geometry'
+          assert all(x['nonfinite_vertices']==0 and x['zero_area_faces']==0 for x in geo)
+          assert any(i['sha256']=='abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620' for i in scene['packed_images']), 'Official CG not packed'
+          print('PASS: source SHA, Blender reopen, official packed CG, finite geometry')
+          PY
+      - name: Preserve audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-world-d-blender-reopen-qa
+          path: |
+            out/qa/*.json
+            out/qa/*.log
+          retention-days: 14
+          if-no-files-found: warn
