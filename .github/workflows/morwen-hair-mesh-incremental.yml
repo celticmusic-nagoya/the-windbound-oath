@@ -4,7 +4,7 @@ on:
   push:
     branches: [feature/morwen-fable-eval-01]
     paths:
-      - 'tools/character_blender/build_morwen_bob_mesh.py'
+      - 'tools/character_blender/build_morwen_bob_shell.py'
       - '.github/workflows/morwen-hair-mesh-incremental.yml'
 permissions:
   contents: read
@@ -60,28 +60,28 @@ jobs:
           python -m pip install --no-deps wheels/bpy-4.2.0-cp311-cp311-manylinux_2_28_x86_64.whl
           python -m pip install 'numpy>=1.26,<3'
       - name: Validate script syntax before expensive Blender execution
-        run: python -m py_compile tools/character_blender/build_morwen_bob_mesh.py
+        run: python -m py_compile tools/character_blender/build_morwen_bob_shell.py
       - name: Build and render hair candidate only (do not rebuild basemesh)
         run: |
           set -euo pipefail
-          python tools/character_blender/build_morwen_bob_mesh.py \
+          python tools/character_blender/build_morwen_bob_shell.py \
             --stage "$(cat qa_output/hair/source_path.txt)" \
-            --output qa_output/hair/morwen_hair_mesh_candidate_UNAPPROVED.blend
+            --output qa_output/hair/morwen_bob_shell_candidate_UNAPPROVED.blend
       - name: Verify saved evidence and all four PNGs
         run: |
           python - <<'PY'
           import json,pathlib,hashlib
           root=pathlib.Path('qa_output/hair')
-          m=json.loads((root/'hair_mesh_manifest.json').read_text())
-          assert m['hair_mesh_count']==33 and len(m['previews'])==4
+          m=json.loads((root/'hair_shell_manifest.json').read_text())
+          assert m['shell_vertices']>=1000 and m['fringe_count']==5 and len(m['previews'])==4
           assert {p['view'] for p in m['previews']}=={'front','back','left','right'}
           for p in m['previews']:
               f=root/p['file']
               assert f.is_file() and f.stat().st_size>1000
               assert hashlib.sha256(f.read_bytes()).hexdigest()==p['sha256']
-          blend=root/'morwen_hair_mesh_candidate_UNAPPROVED.blend'
+          blend=root/'morwen_bob_shell_candidate_UNAPPROVED.blend'
           assert hashlib.sha256(blend.read_bytes()).hexdigest()==m['output_sha256']
-          assert m['source_unchanged'] and m['canonical_art_qa']=='NOT_RUN'
+          assert m['source_unchanged'] and m['art_qa']=='NOT_RUN'
           print('PASS technical evidence only; art QA NOT_RUN')
           PY
       - name: Upload partial or completed evidence
