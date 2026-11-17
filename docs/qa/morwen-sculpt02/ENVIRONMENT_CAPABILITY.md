@@ -1,0 +1,13 @@
+# Sculpt02 capability investigation — actual observations
+
+Environment `ccarenv_b64_Y2NhcmVudl82MThiYjFhMjQwYTg4MTkxYWEwZWQwNTczNzZmY2UwNw`, 2026-11-17.
+
+- Managed desktop capability declares enabled, state unknown. No desktop NodeREPL/CUA/Sky/mouse/keyboard/viewer tool is exposed in this turn. This alone was not treated as proof that all GUI work is impossible.
+- Blender 4.3.2 installed; DISPLAY/WAYLAND_DISPLAY absent, no running display server, Xvfb/xdotool/PyAutoGUI absent. Initial actual Blender GUI launch fails with GHOST unable to open X11 display.
+- Xorg and its dummy driver, ImageMagick screen capture, libX11 and libXtst are installed. First default-sandbox dummy-server probe could not bind its socket. With task-local X11 socket directory and permitted local socket access, a user-owned dummy Xorg display :99 starts, software GL initializes. TCP listening disabled. No root/system package installation or managed configuration change.
+- Actual Blender GUI window (1280x1024) opened on this private display. XTest pointer/keyboard events and screen captures work. Blender Sculpt Mode starts; packaged Essentials assets are absent, but a locally created native sculpt brush activates successfully.
+- A real pointer stroke on a disposable non-Morwen sphere changes 11 vertices, max displacement 0.062329 units. This verifies actual brush execution, not just operator availability. Evidence: capability_brush_probe.json and gui/capability_probe.png.
+- Therefore result is **EXPERIMENTAL_LOCAL_GUI_SCULPT_VERIFIED**, not BLOCKED_SCULPT_CAPABILITY. This is a private locally controlled GUI, not the managed shared desktop viewer. No human sculpt artist or independent art reviewer is present.
+- Software: Blender 4.3.2 (GPL application); anatomical asset source remains Blender CC0 Human Base Meshes. No paid API, new software purchase, or external image/model generation used. Rendering uses Cycles CPU, not a GPU requirement.
+
+Tool comparison (not used for generation): native Blender desktop + artist is the most direct continuation because this .blend, shape keys and cameras remain editable. Nomad Sculpt offers tablet/desktop sculpting, but requires a separately available app/license and return through a mesh format; it does not preserve Blender-specific shape keys/scene automatically. ZBrush offers native sculpt/layer/retopo workflows but also requires an available licensed environment and mesh/scene reintegration. Official capability sources checked 2026-11-17: https://nomadsculpt.com/ and https://www.maxon.net/en/zbrush . Neither was purchased or invoked. Headless Actions is used only to render/inspect the saved sculpt, not as a claimed sculpt artist.

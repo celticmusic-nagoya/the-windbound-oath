@@ -1,0 +1,74 @@
+name: Morwen sculpt02 read-only mesh inventory
+on:
+  push:
+    branches: [feature/morwen-art-directed-sculpt-02]
+    paths:
+      - 'tools/morwen_sculpt02/inspect_mesh_structure.py'
+      - '.github/workflows/morwen-sculpt02-mesh-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mesh-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing Blender Python runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxxf86vm1 libxfixes3 libxi6 libxkbcommon0 libsm6 libgl1 libegl1
+          python -m pip install bpy==4.3.0 'numpy<3'
+      - name: Read original saved Blender scene and inventory topology
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p qa_output/mesh-audit
+          python - <<'PY' 2>&1 | tee qa_output/mesh-audit/blender_open_and_audit.log
+          import bpy
+          import runpy
+          import sys
+          source='assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend'
+          bpy.ops.wm.open_mainfile(filepath=source)
+          sys.argv=['inspect_mesh_structure.py','--','qa_output/mesh-audit/mesh_inventory.json']
+          runpy.run_path('tools/morwen_sculpt02/inspect_mesh_structure.py',run_name='__main__')
+          PY
+          python - <<'PY'
+          import json
+          p='qa_output/mesh-audit/mesh_inventory.json'
+          d=json.load(open(p))
+          assert d['source_sha256'] == '90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b', 'Source SHA mismatch'
+          assert d['mesh_count'] > 0
+          assert all(x['finite_coordinates'] for x in d['meshes'])
+          print('PASS mesh_count',d['mesh_count'])
+          print('armatures',len(d['armatures']))
+          print('source_sha256',d['source_sha256'])
+          PY
+      - name: Record workflow outcome and environment
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p qa_output/mesh-audit
+          {
+            echo "commit=${GITHUB_SHA}"
+            echo "workflow=${GITHUB_WORKFLOW}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "job_status=${{ job.status }}"
+            echo "utc=$(date -u +%FT%TZ)"
+            python --version
+          } > qa_output/mesh-audit/execution_metadata.txt
+          if [ -f qa_output/mesh-audit/mesh_inventory.json ]; then
+            sha256sum qa_output/mesh-audit/mesh_inventory.json > qa_output/mesh-audit/OUTPUT_SHA256SUMS
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-sculpt02-mesh-inventory-${{ github.sha }}
+          path: qa_output/mesh-audit/
+          retention-days: 14
+          if-no-files-found: warn

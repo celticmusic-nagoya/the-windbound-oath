@@ -1,0 +1,329 @@
+{
+  "status": "EXECUTED_IN_LIVE_GUI",
+  "software": "Blender 4.3.2 / Xorg 1.21.1.16 dummy / software OpenGL",
+  "input": "agent-directed XTest pointer and keyboard; not a human artist",
+  "display": ":99, 1280x1024; private local display, not managed shared desktop",
+  "source": "PR399 artifact 14319881962, SHA256 4e818c24d9d05258bd0c4f5a1cc6116826807a234aa7819f65fc49cc01f307d7",
+  "face_preparation": "copy delivered mixed shape unchanged; retain PR399 original in hidden collection; add separate sculpt shape key; mask original crown and body",
+  "capability": {
+    "probe_object": "CAPABILITY_PROBE_NOT_MORWEN",
+    "changed_vertices": 11,
+    "max_displacement": 0.06232888738670547
+  },
+  "discarded_exploration": [
+    {
+      "brush": "Grab 180px strength 0.75 smooth",
+      "view": "front",
+      "drag": [
+        [
+          529,
+          450
+        ],
+        [
+          529,
+          464
+        ],
+        [
+          529,
+          478
+        ],
+        [
+          529,
+          493
+        ],
+        [
+          529,
+          508
+        ],
+        [
+          529,
+          520
+        ]
+      ],
+      "decision": "UNDO: eye cavity distortion"
+    },
+    {
+      "brush": "Grab 145px strength 0.75 custom constant curve",
+      "view": "front",
+      "drag": [
+        [
+          529,
+          450
+        ],
+        [
+          529,
+          460
+        ],
+        [
+          529,
+          470
+        ],
+        [
+          529,
+          480
+        ],
+        [
+          529,
+          492
+        ],
+        [
+          529,
+          505
+        ]
+      ],
+      "decision": "UNDO: orbital distortion and abrupt transition; STOP broad central face drag approach"
+    }
+  ],
+  "retained_face_strokes": [
+    {
+      "view": "character_left profile",
+      "brush": "Grab 65px strength 0.65 smooth",
+      "purpose": "reduce nasal tip projection",
+      "drag": [
+        [
+          272,
+          547
+        ],
+        [
+          277,
+          547
+        ],
+        [
+          282,
+          547
+        ],
+        [
+          288,
+          547
+        ]
+      ]
+    },
+    {
+      "view": "character_left profile",
+      "brush": "Grab 65px strength 0.65 smooth",
+      "purpose": "soften nasal bridge",
+      "drag": [
+        [
+          312,
+          488
+        ],
+        [
+          316,
+          488
+        ],
+        [
+          320,
+          488
+        ]
+      ]
+    },
+    {
+      "view": "front",
+      "brush": "Grab 42px strength 0.5 smooth, X symmetry",
+      "purpose": "small upper-aperture lift",
+      "drag": [
+        [
+          600,
+          458
+        ],
+        [
+          600,
+          455
+        ],
+        [
+          600,
+          451
+        ]
+      ]
+    },
+    {
+      "view": "front",
+      "brush": "Grab 42px strength 0.5 smooth, X symmetry",
+      "purpose": "small lower-aperture opening",
+      "drag": [
+        [
+          600,
+          482
+        ],
+        [
+          600,
+          485
+        ],
+        [
+          600,
+          489
+        ]
+      ]
+    }
+  ],
+  "hair_construction": "8 individually authored nonuniform control nets, subdivision refinement and closed thickness; see authored_hair_control_nets.json. No old radial hair geometry reused.",
+  "retained_hair_strokes": [
+    {
+      "object": "Left_face_framing_sweep",
+      "brush": "Grab 90px strength 0.7; symmetry OFF",
+      "view": "front",
+      "drag": [
+        [
+          350,
+          710
+        ],
+        [
+          356,
+          708
+        ],
+        [
+          363,
+          706
+        ],
+        [
+          370,
+          702
+        ]
+      ]
+    },
+    {
+      "object": "Occipital_continuous_mass",
+      "brush": "Grab 80px strength 0.7; symmetry OFF",
+      "view": "back",
+      "drag": [
+        [
+          618,
+          680
+        ],
+        [
+          615,
+          688
+        ],
+        [
+          610,
+          696
+        ],
+        [
+          605,
+          702
+        ]
+      ]
+    },
+    {
+      "object": "Occipital_continuous_mass",
+      "brush": "Draw Sharp SUBTRACT 24px strength 0.22",
+      "view": "back",
+      "drag": [
+        [
+          486,
+          300
+        ],
+        [
+          477,
+          342
+        ],
+        [
+          464,
+          385
+        ],
+        [
+          451,
+          428
+        ],
+        [
+          443,
+          472
+        ],
+        [
+          444,
+          516
+        ],
+        [
+          450,
+          559
+        ],
+        [
+          460,
+          603
+        ],
+        [
+          464,
+          652
+        ]
+      ]
+    },
+    {
+      "object": "Occipital_continuous_mass",
+      "brush": "Draw Sharp SUBTRACT 24px strength 0.22",
+      "view": "back",
+      "drag": [
+        [
+          566,
+          340
+        ],
+        [
+          584,
+          382
+        ],
+        [
+          600,
+          425
+        ],
+        [
+          610,
+          469
+        ],
+        [
+          615,
+          513
+        ],
+        [
+          613,
+          556
+        ],
+        [
+          607,
+          600
+        ],
+        [
+          597,
+          646
+        ]
+      ]
+    },
+    {
+      "object": "Occipital_continuous_mass",
+      "brush": "Draw Sharp SUBTRACT 24px strength 0.22",
+      "view": "back",
+      "drag": [
+        [
+          389,
+          392
+        ],
+        [
+          375,
+          434
+        ],
+        [
+          361,
+          478
+        ],
+        [
+          353,
+          520
+        ],
+        [
+          354,
+          564
+        ],
+        [
+          365,
+          613
+        ]
+      ]
+    }
+  ],
+  "reproducibility": "Saved .blend is authoritative editable geometry; fixed-camera rendering is reproducible. Replaying raw GUI drags requires identical UI layout, view matrices, brush state and version; bit-identical brush replay is not claimed.",
+  "art_approval": false,
+  "v02_coverage_correction": {
+    "status": "EXECUTED_IN_GUI",
+    "method": "separate individually authored continuous crown volume; no face change",
+    "rejected_bridge": "retained, hide_render=true",
+    "new_source_sha256": "90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b"
+  }
+}
