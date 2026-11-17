@@ -1,6 +1,10 @@
 name: HairHarpy v2 pinned binary inspection (no execution)
 on:
   workflow_dispatch:
+  push:
+    branches: [feature/morwen-fable-eval-01]
+    paths:
+      - '.github/workflows/hairharpy-v2-evaluation.yml'
 permissions:
   contents: read
 jobs:
