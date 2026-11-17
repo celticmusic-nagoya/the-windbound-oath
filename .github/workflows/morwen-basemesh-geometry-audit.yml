@@ -4,7 +4,6 @@ on:
   push:
     branches: [feature/morwen-fable-eval-01]
     paths:
-      - '.github/workflows/morwen-basemesh-geometry-audit.yml'
       - 'tools/character_blender/inspect_human_basemesh_geometry.py'
       - 'tools/character_blender/shortlist_female_basemesh.py'
       - 'tools/character_blender/render_basemesh_comparison.py'
@@ -18,7 +17,6 @@ on:
       - 'tools/character_blender/pack_morwen_canonical_references.py'
       - 'tools/character_blender/add_morwen_head_landmark_rig.py'
       - 'tools/character_blender/build_morwen_hair_guides.py'
-      - 'tools/character_blender/build_morwen_bob_mesh.py'
 permissions:
   contents: read
 jobs:
