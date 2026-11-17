@@ -16,7 +16,7 @@ def main():
  sha=hashlib.sha256(src.read_bytes()).hexdigest()
  bpy.ops.wm.open_mainfile(filepath=str(src),load_ui=False)
  body=bpy.data.objects.get("MORWEN_PROPORTION_STAGE_UNAPPROVED")
- guides=sorted([o for o in bpy.data.objects if o.name.startswith(("bob_guide_","fringe_guide_"))])
+ guides=sorted((o for o in bpy.data.objects if o.name.startswith(("bob_guide_","fringe_guide_"))),key=lambda o:o.name)
  if body is None or body.type!="MESH" or len(guides)!=33:raise SystemExit("BLOCKED missing source stage/guides")
  collection=bpy.data.collections.new("MORWEN_HAIR_MESH_CANDIDATE_UNAPPROVED")
  bpy.context.scene.collection.children.link(collection)
