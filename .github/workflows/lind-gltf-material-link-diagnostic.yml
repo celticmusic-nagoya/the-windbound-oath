@@ -1,0 +1,38 @@
+name: LIND glTF Material Link Diagnosis
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/diagnose_gltf_material_links.py'
+      - '.github/workflows/lind-gltf-material-link-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download immutable source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/diagnostic
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy
+      - name: Inspect glTF material links and separately decoded images
+        run: |
+          set -o pipefail
+          timeout 240s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/diagnose_gltf_material_links.py -- --source out/source --out out/diagnostic 2>&1 | tee out/diagnostic/blender.log
+      - name: Save diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-gltf-material-link-diagnostic
+          path: out/diagnostic/
+          retention-days: 14
+          if-no-files-found: warn
