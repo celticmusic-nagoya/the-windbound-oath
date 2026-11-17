@@ -1,0 +1,47 @@
+name: Morwen quad patch trial — required quality gate FAIL
+on:
+  push:
+    branches: [feature/morwen-rebuild-01]
+    paths:
+      - assets/candidates/morwen-rebuild-01/body-quad-v01/**
+      - docs/qa/morwen-rebuild-01/body-quad-v01/**
+      - tools/morwen_rebuild01/qa_quad_saved_mesh.py
+      - .github/workflows/morwen-quad-patch-review.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preserve-and-report-failed-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender QA runtime
+        run: python -m pip install bpy==4.3.0
+      - name: Reopen the saved candidate and check preserved exterior
+        run: |
+          set -o pipefail
+          MORWEN_QUAD_SAVED_QA_OUTPUT=docs/qa/morwen-rebuild-01/body-quad-v01/ci-saved-mesh-qa.json python tools/morwen_rebuild01/qa_quad_saved_mesh.py 2>&1 | tee docs/qa/morwen-rebuild-01/body-quad-v01/ci-reopen.log
+      - name: Required acceptance gate (must remain failed)
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path('docs/qa/morwen-rebuild-01/body-quad-v01')
+          q=json.loads((p/'quality-gates.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Quad reconstruction was executed and saved, but required conditions FAIL. 2/15 warning regions remain; patch intersections/folds and independent G2 FAIL. No regeneration or rendering in CI. Artifacts retained for failure analysis.\n')
+          assert q['required_completion_met'], q['unmet_conditions']
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-quad-patch-v01-FAILED-NOT-APPROVED
+          path: |
+            assets/candidates/morwen-rebuild-01/body-quad-v01/
+            docs/qa/morwen-rebuild-01/body-quad-v01/
+          retention-days: 30
+          if-no-files-found: error

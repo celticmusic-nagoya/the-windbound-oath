@@ -135,3 +135,7 @@ QA: BODY_WORKSPACE_QA.json、BODY_WORKSPACE.log。source再open時の警告はlo
 ## 最新工程: 実全身形状変更（準備工程は再実行しない）
 
 [実造形v02報告](MORWEN_REBUILD_01_BODY_EDIT.md)を最新実績とする。既存原本の12,502頂点を実編集しafter4viewを保存、独立QAも実施。G2 FAIL、限定技術screen FAIL。準備の繰り返しではなく、実形状変更と改善／悪化の証跡を納品した。v01/v02同cagefamilyは2回失敗で停止し、今後は局所解剖surface手法へ切替える。
+
+## 最新停止記録 — quad patch再構築01
+
+MORWEN_QUAD_PATCH_01_FAILED.mdを最新の実行結果とする。747面を740新面に置換し、旧15警告を新patch上で追跡したが2件が残った。自己交差・quad折れ・屈曲・独立G2もFAIL。保護9,080頂点と外部11,753面は維持。必須完了条件未達のためこの候補を採用せず、指示に従って追加造形を停止した。原本と失敗比較証跡を保持する。

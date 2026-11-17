@@ -44,3 +44,13 @@ Source: saved body-fit-v02; no cage rerun, source download or reference scene re
 Actual3422 vertex edits, fixed9080 exact,12500 quads retained. Shoulder-width error18.58→2.33px, knee26.94→4.27px. Central chest346 and waist/pelvis protected. The104-vertex chest band has34 edited lateral/axillary supports but identical bounding dimensions. Do not claim the entire chest is unchanged.
 
 Discontinuity improvement narrowly PASS; independent local canonical anatomy G2 FAIL and whole-body G2 FAIL. Root cause: generic curvature minimization with the old axilla boundary rounds the cap but leaves a deep groove and does not author patella/tendon anatomy. Normal diagnostic38→36 includes17 resolved/15 new; technical cleanliness NOT accepted. First local trial; stopped cage counters remain2/STOP. Do not rename strength/iteration tuning as a new family. Next credible method is an authored anatomical surface/quad patch with the same protected torso, not repeated generic fairing/preparations.
+
+## QUAD-REST-RAIL-01 — actual topology replacement, FAIL / STOP
+
+New method family harmonic_domain_rest_rail_quad_reconstruction; first production geometry attempt. Source body-local-v01 preserved. Four conforming disks replace747 faces with740 (622quad/118tri), retire601 interior vertices/create535 new, protected9080 vertices and exterior11753 face connectivity/UV unchanged. This is new topology, not another old cage/fairing run.
+
+Old15 normal warnings tracked via4 old-triangle UV samples each:13 threshold-clear,2 unresolved(3859/10002). Not deletion-ID counting. Shoulder width preserved, knee correspondence difference0.05px. Exact fixed-fan source-region crossings56→candidate patch89, adjacent patch penetrations9, newquad fold flags27. Independent local/whole G2 FAIL; rest shoulder/knee surface worsens. Diagnostic bend tests alsoFAIL.
+
+Root cause: warped thin 3D axilla boundary + harmonic disk/rest-displacement interpolation do not constrain anatomical edge flow or3D Jacobian; convex2D paired quads can fold under the alternate3D diagonal. Knee grid is not deliberately aligned to patella/tendon anatomy. No parameter retry. Stop after this first candidate because the current user explicitly requires stopping on quality failure. Old cage2FAIL/STOP and local fairing retry prohibition retained.
+
+Technical setup corrections are not new art attempts: NumPy int JSON serialization fixed before mesh creation; initial diagnostic arm weights accidentally included pelvis, corrected in shape-key test fixture only while preserving rest mesh and retaining initial results. Geometry was not retried after the failed quality gate.
