@@ -19,6 +19,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
           blender --version
+      - name: Verify scripts parse before downloading the heavy scan
+        run: |
+          python3 -m py_compile tools/map_blender/lind/download_polyhaven_cliff_scan.py
+          python3 -m py_compile tools/map_blender/lind/render_polyhaven_cliff_scan.py
       - name: Acquire real official CC0 scan with SHA-256 evidence
         run: |
           set -euo pipefail
