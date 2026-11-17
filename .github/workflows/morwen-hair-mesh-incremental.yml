@@ -39,7 +39,9 @@ jobs:
           expected='d06e4ac3235a7569211b2f06fd330da488b10bf5a01e4201b36c6e0de1bf0dc6'
           if digest!=expected:
               raise SystemExit('BLOCKED source SHA changed: '+digest+'; update only after verified review')
-          if source.open('rb').read(7)!=b'BLENDER':raise SystemExit('BLOCKED not Blender')
+          header=source.open('rb').read(8)
+          if not (header.startswith(b'BLENDER') or header[:4]==bytes.fromhex('28b52ffd')):
+              raise SystemExit('BLOCKED unexpected Blender or Zstandard header '+header.hex())
           Path('qa_output/hair').mkdir(parents=True,exist_ok=True)
           Path('qa_output/hair/source_sha256.txt').write_text(digest+'  '+str(source)+'\n')
           Path('qa_output/hair/source_path.txt').write_text(str(source)+'\n')
