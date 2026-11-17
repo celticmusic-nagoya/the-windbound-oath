@@ -108,7 +108,7 @@ def main():
     light_data.size=span*0.7
     light.rotation_euler=(target-light.location).to_track_quat("-Z","Y").to_euler()
     engine="BLENDER_EEVEE_NEXT" if bpy.app.version>=(4,2,0) else "BLENDER_EEVEE"
-    scene.eevee.taa_render_samples=16 if hasattr(scene,"eevee") else 16
+    if hasattr(scene,"eevee"):\n        scene.eevee.taa_render_samples=16
     renders["pbr_oblique"]=view(scene,"pbr_oblique",views["oblique"][0],target,views["oblique"][1],out,engine)
     for o in meshes:
         o["scan_candidate_only"]=True
