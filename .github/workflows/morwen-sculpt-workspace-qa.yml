@@ -83,6 +83,35 @@ jobs:
           assert all(o.data and o.data.packed_file for o in refs)
           print("WORKSPACE_REOPEN_QA_PASS: 4 packed references, 6 cameras, 0 meshes")
           '
+      - name: Produce four-view visual review sheet (2D only)
+        run: |
+          python3 -m pip install --disable-pip-version-check --user Pillow==11.3.0
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          src = Path("tools/blender/production_mesh_08/references")
+          entries = [
+              ("FRONT", "7809.png", "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"),
+              ("RIGHT", "7807.png", "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737"),
+              ("BACK", "7810.png", "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f"),
+              ("LEFT", "7808.png", "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"),
+          ]
+          sheet = Image.new("RGB", (384 * 4, 1080), (44, 48, 55))
+          draw = ImageDraw.Draw(sheet)
+          for index, (view, filename, expected) in enumerate(entries):
+              data = (src / filename).read_bytes()
+              assert hashlib.sha256(data).hexdigest() == expected
+              with Image.open(src / filename) as source:
+                  assert source.size == (384, 1024) and source.mode == "RGBA"
+                  background = Image.new("RGBA", source.size, (80, 80, 80, 255))
+                  background.alpha_composite(source)
+                  sheet.paste(background.convert("RGB"), (index * 384, 40))
+              draw.text((index * 384 + 12, 12), f"{view} | {filename} | SHA VERIFIED", fill="white")
+          output = Path("/tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png")
+          sheet.save(output)
+          print("FOUR_VIEW_CONTACT_SHEET_CREATED", output)
+          PY
       - name: Upload QA evidence (no canonical files)
         if: always()
         uses: actions/upload-artifact@v4
@@ -91,5 +120,6 @@ jobs:
           path: |
             /tmp/morwen-landmarks-qa.json
             /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
+            /tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png
           if-no-files-found: warn
           retention-days: 7
