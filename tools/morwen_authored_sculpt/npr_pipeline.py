@@ -24,6 +24,8 @@ for ob in meshes:
 preview=bpy.data.collections.new('NPR_PREVIEW_ONLY_NOT_FOR_EXPORT');bpy.context.scene.collection.children.link(preview)
 for ob in meshes:
  dup=ob.copy();dup.data=ob.data.copy();preview.objects.link(dup);dup.name='NPR_'+ob.name
+ if not dup.material_slots:
+  dup.data.materials.append(None)
  for mat_slot in dup.material_slots:
   original=mat_slot.material
   color=tuple(original.diffuse_color[:3]) if original else (.65,.6,.75)
