@@ -1,10 +1,6 @@
 name: LIND CC0 Rock Art Study 3-View Render
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/render_cc0_rock_art_study.py'
-      - '.github/workflows/lind-cc0-rock-art-study.yml'
 permissions:
   contents: read
   actions: read
