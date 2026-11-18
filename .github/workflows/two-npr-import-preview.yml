@@ -77,7 +77,7 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/two-npr-candidate/npr
           /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/npr_pipeline.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate/npr
-          for f in front.png three_quarter.png back.png portable_original_materials.glb NPR_REVIEW_UNAPPROVED.blend manifest.json; do
+          for f in front.png right.png back.png left.png face_closeup.png portable_original_materials.glb NPR_REVIEW_UNAPPROVED.blend manifest.json; do
             test -s "/tmp/two-npr-candidate/npr/$f"
           done
       - name: Fallback to CPU Cycles PBR-only review
@@ -87,7 +87,7 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/two-npr-candidate/pbr_fallback
           /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/npr_pipeline.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate/pbr_fallback --pbr-fallback
-          for f in front.png three_quarter.png back.png portable_original_materials.glb manifest.json; do
+          for f in front.png right.png back.png left.png face_closeup.png portable_original_materials.glb manifest.json; do
             test -s "/tmp/two-npr-candidate/pbr_fallback/$f"
           done
       - name: Reimport and compare portable GLB
@@ -107,7 +107,7 @@ jobs:
           root=pathlib.Path('/tmp/two-npr-candidate');root.mkdir(parents=True,exist_ok=True)
           e=os.environ.get('EEVEE_OUTCOME','unknown')
           p=root/('npr' if e=='success' else 'pbr_fallback')
-          required=('front.png','three_quarter.png','back.png','portable_original_materials.glb','manifest.json')
+          required=('front.png','right.png','back.png','left.png','face_closeup.png','portable_original_materials.glb','manifest.json')
           files={f:(p/f).is_file() and (p/f).stat().st_size>0 for f in required}
           qa={'npr':'RENDERED_UNVERIFIED' if e=='success' else 'SKIPPED_HEADLESS_EGL_OR_RENDER_FAILURE',
               'pbr_fallback':'NOT_RUN' if e=='success' else ('RENDERED_UNVERIFIED' if all(files.values()) else 'FAIL'),
