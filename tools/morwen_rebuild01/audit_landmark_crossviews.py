@@ -21,7 +21,16 @@ def main():
     observations = []
     for left, right in PAIRS:
         for feature in FEATURES:
-            # Opposite profile views expose opposite anatomical sides. Match homologous\n            # features, not the same side suffix (R vs L) across profiles.\n            counterpart = feature\n            if (left, right) == ("right", "left") and feature.endswith(("_R", "_L")):\n                counterpart = feature[:-2] + ("_L" if feature.endswith("_R") else "_R")\n            # Do not report the hidden anatomical side as a missing annotation.\n            if (left, right) == ("right", "left") and feature.endswith("_L"):\n                observations.append({"pair": [left, right], "feature": feature, "status": "NOT_APPLICABLE_PROFILE_SIDE", "reason": "right profile annotates subject R; left profile annotates subject L"})\n                continue\n            p, q = views[left].get(feature), views[right].get(counterpart)
+            # Opposite profile views expose opposite anatomical sides. Match homologous
+            # features, not the same side suffix (R vs L) across profiles.
+            counterpart = feature
+            if (left, right) == ("right", "left") and feature.endswith(("_R", "_L")):
+                counterpart = feature[:-2] + ("_L" if feature.endswith("_R") else "_R")
+            # Do not report the hidden anatomical side as a missing annotation.
+            if (left, right) == ("right", "left") and feature.endswith("_L"):
+                observations.append({"pair": [left, right], "feature": feature, "status": "NOT_APPLICABLE_PROFILE_SIDE", "reason": "right profile annotates subject R; left profile annotates subject L"})
+                continue
+            p, q = views[left].get(feature), views[right].get(counterpart)
             if p is None or q is None:
                 observations.append({"pair": [left, right], "feature": feature, "counterpart": counterpart, "status": "MISSING", "missing": [v for v, obj in ((left,p),(right,q)) if obj is None]})
                 continue
