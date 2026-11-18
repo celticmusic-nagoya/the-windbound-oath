@@ -3,7 +3,7 @@
 **Director scope revision:** BOTH character and environment assets will be rebuilt. **Do not test old candidate .blend compatibility as a prerequisite to resuming production.** Preserve old files and QA/failed-method records as reference evidence, but do not migrate or repair old topology merely for backward compatibility.
 
 ## Version decision
-- Blender **5.2.4 LTS** is the selected *candidate* for one common character/map production runtime; installation and execution are NOT_RUN. Do not call it operational until a real GitHub Actions run succeeds.
+- Blender **5.2.4 LTS** is the qualified shared character/map CI runtime: official SHA-256 verification, startup, isolated .blend save/reopen, and artifact upload are PASS. This does not authorize new geometry production or certify G1–G4.
 - Version pin + official SHA-256 archive verification required. No unverified apt fallback. One bounded install attempt per distinct root cause, stop repeated failed method.
 - Other versions may open legacy files only when there is a specific recovery need, **not** as a migration gate.
 
