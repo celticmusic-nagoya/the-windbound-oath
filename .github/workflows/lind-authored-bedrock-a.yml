@@ -1,5 +1,11 @@
 name: LIND authored bedrock A production render
 on:
+  push:
+    branches:
+      - feature/lind-cliff-rock-art-study-20261118
+    paths:
+      - 'tools/map_blender/lind/build_authored_bedrock_A.py'
+      - '.github/workflows/lind-authored-bedrock-a.yml'
   workflow_dispatch:
 permissions:
   contents: read
