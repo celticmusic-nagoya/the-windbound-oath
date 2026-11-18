@@ -47,23 +47,36 @@ def surface(name,levels,segments=80,material=None):
 face=surface('Face_Sculpt_Study',[(1.20,.055,.065,.005),(1.23,.09,.09,.005),(1.28,.13,.115,0),(1.35,.17,.145,0),(1.43,.205,.166,.005),(1.51,.222,.175,.01),(1.59,.219,.173,.012),(1.67,.205,.162,.017),(1.74,.18,.144,.018),(1.80,.135,.112,.02),(1.83,.055,.05,.02)],material=skin)
 # Dark straight bob with crown, cheek-length sides and independently shaped front bangs.
 bob=surface('Hair_Crown_and_Bob_Study',[(1.34,.215,.18,.035),(1.40,.245,.199,.041),(1.52,.253,.208,.045),(1.64,.246,.202,.045),(1.74,.227,.186,.046),(1.82,.179,.148,.047),(1.86,.095,.083,.047)],material=hair)
-# Two individual frontal hair curtains, separated by central fringe gap.
-def hair_curtain(name,sign):
+# Independently authored tapered fringe strands; face forward is negative Y.
+# Provisional metre-like coordinates: 0.002 corresponds to nominal 2 mm only.
+def hair_strand(name,sign,inner,outer,tip_z):
  v=[];f=[]
- for i in range(15):
-  z=1.48+i*.021
-  for j in range(13):
-   u=j/12
-   x=sign*(.045+.165*u)*(1-.05*i/14)
-   y=-.177-.033*math.sin(math.pi*u)-.006*math.sin(i*.55)
+ for i in range(12):
+  t=i/11
+  z=tip_z+(1.795-tip_z)*t
+  width=(outer-inner)*(.62+.38*t)
+  for j in range(5):
+   u=j/4
+   x=sign*(inner+width*u+(.014*t*t))
+   y=-.198-.011*math.sin(math.pi*u)-.005*t
    v.append((x,y,z))
- for i in range(14):
-  for j in range(12):
-   a=i*13+j;f.append((a,a+1,a+14,a+13))
+ for i in range(11):
+  for j in range(4):
+   k=i*5+j;f.append((k,k+1,k+6,k+5))
  mesh=bpy.data.meshes.new(name);mesh.from_pydata(v,[],f);mesh.update()
  ob=bpy.data.objects.new(name,mesh);scene.collection.objects.link(ob);mesh.materials.append(hair)
- for p in mesh.polygons:p.use_smooth=True
-hair_curtain('Straight_Fringe_Left',-1);hair_curtain('Straight_Fringe_Right',1)
+ for poly in mesh.polygons:poly.use_smooth=True
+for sign,side in [(-1,'Left'),(1,'Right')]:
+ hair_strand('Refined_Fringe_'+side+'_Inner',sign,.018,.060,1.625)
+ hair_strand('Refined_Fringe_'+side+'_Outer',sign,.075,.126,1.606)
+# Distinct readable eye and brow proxies, still UNAPPROVED design studies.
+for sign in (-1,1):
+ def ellipsoid(name,loc,scale,material):
+  bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,location=loc)
+  ob=bpy.context.object;ob.name=name;ob.scale=scale;ob.data.materials.append(material)
+ ellipsoid('Eye_White_'+str(sign),(sign*.091,-.170,1.573),(.038,.011,.024),skin)
+ ellipsoid('Iris_'+str(sign),(sign*.091,-.182,1.572),(.014,.008,.016),iris)
+ ellipsoid('Brow_'+str(sign),(sign*.091,-.179,1.625),(.040,.005,.006),hair)
 # Glasses are geometric placement guides, not finished optical frames.
 def tube(name,points,radius,material):
  curve=bpy.data.curves.new(name,'CURVE');curve.dimensions='3D';curve.bevel_depth=radius;curve.bevel_resolution=3
@@ -71,9 +84,9 @@ def tube(name,points,radius,material):
  for p,co in zip(spl.points,points):p.co=(*co,1)
  ob=bpy.data.objects.new(name,curve);scene.collection.objects.link(ob);curve.materials.append(material)
 for sign in (-1,1):
- pts=[(sign*(.105+.064*math.cos(t)), -.173-.018*math.sin(t),1.535+.063*math.sin(t)) for t in [2*math.pi*i/64 for i in range(65)]]
+ pts=[(sign*(.105+.064*math.cos(t)), -.188-.018*math.sin(t),1.535+.063*math.sin(t)) for t in [2*math.pi*i/64 for i in range(65)]]
  tube('Gold_Round_Glasses_Guide_'+str(sign),pts,.003,gold)
-tube('Glasses_Bridge_Guide',[(-.042,-.195,1.548),(0,-.21,1.555),(.042,-.195,1.548)],.003,gold)
+tube('Glasses_Bridge_Guide',[(-.042,-.205,1.548),(0,-.22,1.555),(.042,-.205,1.548)],.003,gold)
 # Three review lights.
 for pos,power,size in [((2,-3,4),850,3),((-2,-1,3),500,2),((0,2,3),900,2)]:
  d=bpy.data.lights.new('Review_Area','AREA');d.energy=power;d.shape='DISK';d.size=size
