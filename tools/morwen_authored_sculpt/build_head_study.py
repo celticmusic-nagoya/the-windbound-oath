@@ -12,7 +12,7 @@ bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=Fal
 scene=bpy.context.scene
 scene['asset']='MORWEN'; scene['status']='UNAPPROVED_ORIGINAL_HEAD_SURFACE_STUDY'
 scene['unit_status']='PROVISIONAL_NOT_CANONICAL'; scene['forward']='-Y'; scene['up']='Z'
-scene.render.engine='BLENDER_EEVEE'; scene.render.resolution_x=640;scene.render.resolution_y=800;scene.render.resolution_percentage=100
+scene.render.engine='CYCLES'; scene.cycles.device='CPU'; scene.cycles.samples=16; scene.render.threads_mode='FIXED'; scene.render.threads=2; scene.render.resolution_x=640;scene.render.resolution_y=800;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format='PNG'
 scene.world.color=(0.18,0.18,0.18)
 def mat(name,c,metal=0,rough=.65):
