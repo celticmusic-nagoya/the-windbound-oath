@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - .github/workflows/two-blender-524-qualification.yml
+      - tools/production_qa/install_blender_524.sh
   push:
     branches:
       - feature/morwen-rebuild-01
     paths:
       - .github/workflows/two-blender-524-qualification.yml
+      - tools/production_qa/install_blender_524.sh
 permissions:
   contents: read
 concurrency:
@@ -28,29 +30,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p /tmp/two-blender /tmp/two-blender-output
-          base=https://mirror.blender.org/release/Blender5.2
-          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.2.4.sha256" -o /tmp/two-blender/checksums
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          rows=Path('/tmp/two-blender/checksums').read_text().splitlines()
-          target='blender-5.2.4-linux-x64.tar.xz'
-          hits=[]
-          for row in rows:
-              if target in row:
-                  hashes=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',row)
-                  if len(hashes)!=1: raise SystemExit('Invalid checksum row')
-                  hits.append(hashes[0].lower())
-          if len(hits)!=1: raise SystemExit('Expected exactly one official checksum')
-          Path('/tmp/two-blender/expected.sha256').write_text(hits[0]+'  '+target+'\n')
-          PY
-          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/blender-5.2.4-linux-x64.tar.xz" -o /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz
-          (cd /tmp/two-blender && sha256sum -c expected.sha256)
-          mkdir -p /tmp/two-blender/app
-          tar -xJf /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz -C /tmp/two-blender/app --strip-components=1
-          /tmp/two-blender/app/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,2,4); print("TWO_BLENDER_524_RUNTIME_PASS")' | tee /tmp/two-blender-output/runtime.txt
-          sha256sum /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz > /tmp/two-blender-output/archive.sha256
+          mkdir -p /tmp/two-blender-output
+          bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app | tee /tmp/two-blender-output/runtime.txt
       - name: Test real editable blend create and reopen (isolated smoke only)
         shell: bash
         run: |
