@@ -24,6 +24,16 @@
 ## Existing failure context
 - LIND run 44233677269 failed APT dependency mirror HTTP 404, not a modeling error.
 - Previous Morwen official tarball HTTP 530 is a different acquisition failure.
-- Current 5.2.4 qualification workflow: `.github/workflows/two-blender-524-qualification.yml`, manual dispatch, not yet observed running.
+- Current 5.2.4 qualification workflow: `.github/workflows/two-blender-524-qualification.yml`, PR/push-triggered execution verified in run 44287739095.
 
-**Status:** runtime NOT_RUN; branch ownership consolidation PARTIAL; G1/G2/G3/G4 new production NOT_RUN. **NO-GO for new character/map modeling.** No main merge or original replacement.
+**Status:** runtime PASS (2026-11-18; see verification below); branch ownership consolidation PARTIAL; G1/G2/G3/G4 new production NOT_RUN. **NO-GO for new character/map modeling.** No main merge or original replacement.
+
+## Verified runtime qualification — 2026-11-18
+- GitHub Actions run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44287739095
+- Commit: `f8ec6712ee293987cf6ea2cd27944a1d1206bc18`; branch: `feature/morwen-rebuild-01` (Draft PR #419).
+- Official `mirror.blender.org` SHA-256 manifest download, archive verification, Blender 5.2.4 LTS startup, isolated temporary `.blend` save/reopen, and evidence upload: **PASS**.
+- Runtime output: `TWO_BLENDER_524_RUNTIME_PASS`; reopen output: `SMOKE_REOPEN_PASS`; scene audit `version_pass=true`, `source_opened=true`, `meshes=2`, `missing_external_images=[]`.
+- Artifact: `two-blender-524-runtime-smoke`, ID `14418778908`, expires 2026-12-02; artifact ZIP digest `sha256:af619bd07efb1e203885cdbf08b0bc3fdced1760cd36ba42cf4856ef991aa298`.
+- Initial `download.blender.org` HTTP 403 in run 44280556396 was resolved by one official-mirror change. No further retries required.
+- **Scope:** This qualifies Blender 5.2.4 as an executable shared CI runtime. It does NOT qualify actual game character/map art, materials, rig, traversal, WebGL/Android performance, or legacy compatibility (not required).
+- **Decision:** Runtime gate PASS. New 3D geometry production remains NO-GO pending explicit director resume and other relevant readiness/QA gates.
