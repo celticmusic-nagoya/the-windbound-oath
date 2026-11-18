@@ -34,6 +34,7 @@ jobs:
         run: |
           set -euxo pipefail
           export DEBIAN_FRONTEND=noninteractive
+          timeout 90s sudo apt-get update -qq
           timeout --signal=TERM --kill-after=15s 300s sudo -E apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
           blender --background --factory-startup --python-expr 'import bpy; print("BLENDER_VERSION", bpy.app.version_string)'
       - name: Render actual packed source study
