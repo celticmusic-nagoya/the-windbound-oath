@@ -25,6 +25,9 @@ def main():
             if p is None or q is None:
                 observations.append({"pair": [left, right], "feature": feature, "status": "MISSING", "missing": [v for v, obj in ((left,p),(right,q)) if obj is None]})
                 continue
+            if p.get("v_px") is None or q.get("v_px") is None or p.get("bounds_px") is None or q.get("bounds_px") is None:
+                observations.append({"pair": [left, right], "feature": feature, "status": "UNMEASURABLE", "statuses": [p["status"], q["status"]]})
+                continue
             delta = q["v_px"] - p["v_px"]
             intervals_overlap = max(p["bounds_px"][1], q["bounds_px"][1]) <= min(p["bounds_px"][3], q["bounds_px"][3])
             observations.append({"pair": [left,right], "feature": feature, "status": "COMPARABLE_2D_ONLY" if p["status"] == q["status"] == "observed" else "INFERRED_OR_MIXED", "v_px": [p["v_px"],q["v_px"]], "delta_v_px": delta, "vertical_intervals_overlap": intervals_overlap, "statuses": [p["status"],q["status"]]})
