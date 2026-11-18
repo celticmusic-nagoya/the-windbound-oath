@@ -1,0 +1,61 @@
+name: Morwen sculpt workspace verification (candidate only)
+
+on:
+  push:
+    branches:
+      - feature/morwen-rebuild-01
+    paths:
+      - "tools/morwen_rebuild01/**"
+      - ".github/workflows/morwen-sculpt-workspace-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-reference-workspace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify annotation metadata
+        run: |
+          python3 tools/morwen_rebuild01/validate_layer0_landmarks.py --output /tmp/morwen-landmarks-qa.json
+      - name: Install Blender from Ubuntu packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version | head -n 2
+      - name: Generate isolated unapproved workspace
+        run: |
+          mkdir -p /tmp/morwen-workspace
+          blender -b --python tools/morwen_rebuild01/create_sculpt_workspace.py -- --output /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
+      - name: Reopen and verify workspace invariants
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python-expr '
+          import bpy
+          scene=bpy.context.scene
+          assert scene.get("status")=="UNAPPROVED_TEMPLATE_NOT_A_SCULPT"
+          assert scene.get("projection_calibrated") is False
+          names={c.name for c in bpy.data.collections}
+          assert {"00_CANONICAL_LAYER0_LOCKED","01_LANDMARK_GUIDES_UNCALIBRATED","02_AUTHOR_SCULPT_EMPTY","03_FIXED_REVIEW_CAMERAS"} <= names
+          assert len(bpy.data.cameras)==6
+          assert len(bpy.data.meshes)==0
+          refs=bpy.data.collections["00_CANONICAL_LAYER0_LOCKED"].objects
+          assert len(refs)==4
+          assert all(o.hide_select and o.get("reference_sha256") for o in refs)
+          assert all(o.data and o.data.packed_file for o in refs)
+          print("WORKSPACE_REOPEN_QA_PASS: 4 packed references, 6 cameras, 0 meshes")
+          '
+      - name: Upload QA evidence (no canonical files)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-sculpt-workspace-qa
+          path: |
+            /tmp/morwen-landmarks-qa.json
+            /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
+          if-no-files-found: warn
+          retention-days: 7
