@@ -1,0 +1,36 @@
+name: TWO read-only production PR inventory
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/two-production-pr-inventory.yml"
+      - "tools/production_qa/pr_workstream_guard.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+jobs:
+  inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Inventory all open PRs (read-only, no cleanup)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/pr_workstream_guard.py --repo "$REPO" --output /tmp/two-production-pr-inventory.json
+          python3 -m json.tool /tmp/two-production-pr-inventory.json >/dev/null
+      - name: Save reviewable inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-production-pr-inventory
+          path: /tmp/two-production-pr-inventory.json
+          if-no-files-found: warn
+          retention-days: 14
