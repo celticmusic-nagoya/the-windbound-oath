@@ -1,0 +1,43 @@
+name: LIND authored bedrock A production render
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SHA-verified shared Blender 5.2.4
+        timeout-minutes: 12
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Build editable bedrock and four views
+        timeout-minutes: 14
+        run: |
+          mkdir -p out/lind-bedrock-a
+          set -o pipefail
+          timeout 780s /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/build_authored_bedrock_A.py -- --out out/lind-bedrock-a 2>&1 | tee out/lind-bedrock-a/build.log
+      - name: Verify files and Blender reopen
+        timeout-minutes: 3
+        run: |
+          timeout 90s /tmp/two-blender/app/blender -b out/lind-bedrock-a/windwaiting_bedrock_A_UNAPPROVED.blend --disable-autoexec --python-exit-code 2 --python-expr 'import bpy; s=bpy.context.scene; assert s.get("coordinate_space")=="asset-local-provisional"; assert s.get("unit_scale_status")=="UNAPPROVED"; assert any(o.name.startswith("AUTHORED_BEDROCK_A") for o in bpy.data.objects); print("BEDROCK_REOPEN_PASS")'
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path("out/lind-bedrock-a")
+          manifest=json.loads((root/"manifest.json").read_text())
+          assert manifest["G2"]=="NOT_RUN" and manifest["G4"]=="NOT_RUN"
+          for name,digest in manifest["files"].items():
+              assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
+          assert len([n for n in manifest["files"] if n.endswith(".png")])==4
+          print("BEDROCK_OUTPUT_SHA_PASS")
+          PY
+      - name: Upload source and render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-authored-bedrock-a-unapproved
+          path: out/lind-bedrock-a/
+          retention-days: 14
+          if-no-files-found: warn
