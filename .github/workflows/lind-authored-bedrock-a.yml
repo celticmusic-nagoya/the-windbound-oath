@@ -9,9 +9,15 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch canonical shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
       - name: Install SHA-verified shared Blender 5.2.4
         timeout-minutes: 12
-        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
       - name: Build editable bedrock and four views
         timeout-minutes: 14
         run: |
