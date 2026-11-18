@@ -1,37 +1,30 @@
-name: Morwen official CC0 base mesh intake (candidate only)
+name: Morwen CC0 base mesh provenance gate (no redundant download)
 on:
   push:
     branches: [feature/morwen-rebuild-01]
     paths:
       - ".github/workflows/morwen-official-basemesh-intake.yml"
-      - "tools/morwen_rebuild01/inspect_official_basemesh.py"
+      - "docs/production/MORWEN_CC0_BASEMESH_SOURCE_LOCK_20261118.json"
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  inspect-source:
+  check-provenance:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Download Blender Studio CC0 source archive
-        shell: bash
+      - name: Confirm already provided archive and prohibit redundant retrieval
         run: |
-          set -euo pipefail
-          mkdir -p /tmp/morwen-cc0
-          curl --fail --location --retry 1 --connect-timeout 15 --max-time 180 --proto '=https' --tlsv1.2 \
-            'https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
-            -o /tmp/morwen-cc0/human-base-meshes-bundle-v1.4.1.zip
-          python3 tools/morwen_rebuild01/inspect_official_basemesh.py \
-            /tmp/morwen-cc0/human-base-meshes-bundle-v1.4.1.zip \
-            /tmp/morwen-cc0/source-inventory.json
-      - name: Upload source inventory only (do not redistribute 49 MB source)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: morwen-official-cc0-base-intake
-          path: /tmp/morwen-cc0/source-inventory.json
-          if-no-files-found: warn
-          retention-days: 7
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          lock=json.loads(Path("docs/production/MORWEN_CC0_BASEMESH_SOURCE_LOCK_20261118.json").read_text())
+          assert lock["sha256"] == "811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515"
+          assert lock["status"] == "SOURCE_AVAILABLE_IN_CONVERSATION_NOT_IN_GITHUB"
+          print("SOURCE_ALREADY_PROVIDED: external download skipped")
+          print("GITHUB_ACTIONS_MESH_INSPECTION_BLOCKED: attachment not in runner workspace")
+          print("NEXT: inspect existing uploaded archive locally; transfer to runner only if needed and authorized")
+          PY
