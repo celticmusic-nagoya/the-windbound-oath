@@ -23,11 +23,17 @@ jobs:
       - name: Verify annotation metadata
         run: |
           python3 tools/morwen_rebuild01/validate_layer0_landmarks.py --output /tmp/morwen-landmarks-qa.json
-      - name: Install Blender from Ubuntu packages
+      - name: Install Blender 4.3.2 (version-checked)
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y blender
-          blender --version | head -n 2
+          set -euo pipefail
+          curl --fail --location --retry 2 --proto '=https' --tlsv1.2 \
+            https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz \
+            -o /tmp/blender-4.3.2.tar.xz
+          mkdir -p /tmp/blender-4.3.2
+          tar -xJf /tmp/blender-4.3.2.tar.xz -C /tmp/blender-4.3.2 --strip-components=1
+          echo /tmp/blender-4.3.2 >> "$GITHUB_PATH"
+          /tmp/blender-4.3.2/blender --version | head -n 2
+          /tmp/blender-4.3.2/blender --version | head -n 1 | grep -Fx 'Blender 4.3.2'
       - name: Generate isolated unapproved workspace
         run: |
           mkdir -p /tmp/morwen-workspace
