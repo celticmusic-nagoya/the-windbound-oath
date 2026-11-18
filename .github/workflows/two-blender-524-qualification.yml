@@ -1,6 +1,11 @@
-name: TWO Blender 5.2.4 LTS runtime qualification (manual, no model creation)
+name: TWO Blender 5.2.4 LTS runtime qualification (single branch-push smoke)
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/morwen-rebuild-01
+    paths:
+      - .github/workflows/two-blender-524-qualification.yml
 permissions:
   contents: read
 concurrency:
