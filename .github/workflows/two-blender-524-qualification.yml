@@ -9,7 +9,7 @@ on:
       - tools/production_qa/install_blender_524.sh
   push:
     branches:
-      - feature/morwen-rebuild-01
+      - feature/two-shared-infra-isolated-01
     paths:
       - .github/workflows/two-blender-524-qualification.yml
       - tools/production_qa/install_blender_524.sh
