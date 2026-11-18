@@ -29,8 +29,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/two-blender /tmp/two-blender-output
-          base=https://download.blender.org/release/Blender5.2
-          curl --fail --location --retry 1 --connect-timeout 20 --max-time 540 "$base/blender-5.2.4.sha256" -o /tmp/two-blender/checksums
+          base=https://mirror.blender.org/release/Blender5.2
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.2.4.sha256" -o /tmp/two-blender/checksums
           python3 - <<'PY'
           from pathlib import Path
           import re
@@ -45,7 +45,7 @@ jobs:
           if len(hits)!=1: raise SystemExit('Expected exactly one official checksum')
           Path('/tmp/two-blender/expected.sha256').write_text(hits[0]+'  '+target+'\n')
           PY
-          curl --fail --location --retry 1 --connect-timeout 20 --max-time 540 "$base/blender-5.2.4-linux-x64.tar.xz" -o /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/blender-5.2.4-linux-x64.tar.xz" -o /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz
           (cd /tmp/two-blender && sha256sum -c expected.sha256)
           mkdir -p /tmp/two-blender/app
           tar -xJf /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz -C /tmp/two-blender/app --strip-components=1
