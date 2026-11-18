@@ -21,9 +21,10 @@ jobs:
           mkdir -p out/source out/editable
           gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
       - name: Install pinned Blender
+        timeout-minutes: 7
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          timeout 90s sudo apt-get update -qq
+          timeout --signal=TERM --kill-after=15s 300s sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
           blender --background --factory-startup --python-expr 'import numpy; print("NUMPY_OK")'
       - name: Create packed candidate blend files
         timeout-minutes: 8
