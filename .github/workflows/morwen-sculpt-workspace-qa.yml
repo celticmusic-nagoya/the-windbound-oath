@@ -38,8 +38,9 @@ jobs:
           curl --fail --location --retry 1 --proto '=https' --tlsv1.2 \
             https://mirror.blender.org/release/Blender4.3/blender-4.3.2.sha256 \
             -o /tmp/blender-4.3.2.sha256
-          (cd /tmp && grep -F 'blender-4.3.2-linux-x64.tar.xz' blender-4.3.2.sha256 | sha256sum --check --status)
-          test "$(stat -c %s /tmp/blender-4.3.2.tar.xz)" -eq 368852356
+          expected_hash="$(awk '/blender-4\\.3\\.2-linux-x64\\.tar\\.xz/ {print $1; exit}' /tmp/blender-4.3.2.sha256)"
+          [[ "$expected_hash" =~ ^[0-9a-fA-F]{64}$ ]]
+          printf '%s  %s\\n' "$expected_hash" /tmp/blender-4.3.2.tar.xz | sha256sum --check --status
           mkdir -p /tmp/blender-4.3.2
           tar -xJf /tmp/blender-4.3.2.tar.xz -C /tmp/blender-4.3.2 --strip-components=1
           echo /tmp/blender-4.3.2 >> "$GITHUB_PATH"
