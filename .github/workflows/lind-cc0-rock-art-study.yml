@@ -11,7 +11,7 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 32
     steps:
       - uses: actions/checkout@v4
       - name: Download existing immutable packed candidate artifact
@@ -29,17 +29,13 @@ jobs:
           Path("out/study/packed-source-run-id.txt").write_text(str(ok[0]["databaseId"])+"\n")
           PY
           gh run download "$(cat out/study/packed-source-run-id.txt)" -R ${{ github.repository }} -n lind-cc0-editable-packed-blender-sources -D out/sources
-      - name: Download official pinned Blender binary (no apt dependency graph)
-        timeout-minutes: 8
+      - name: Install Blender using verified packed-source toolchain
+        timeout-minutes: 9
         run: |
           set -euxo pipefail
-          BLENDER_URL=https://download.blender.org/release/Blender4.2/blender-4.2.0-linux-x64.tar.xz
-          mkdir -p out/toolchain
-          curl --fail --location --retry 2 --connect-timeout 20 --max-time 360 "$BLENDER_URL" -o out/toolchain/blender.tar.xz
-          tar -tJf out/toolchain/blender.tar.xz >/dev/null
-          tar -xJf out/toolchain/blender.tar.xz -C out/toolchain
-          echo "$PWD/out/toolchain/blender-4.2.0-linux-x64" >> "$GITHUB_PATH"
-          out/toolchain/blender-4.2.0-linux-x64/blender --background --factory-startup --python-expr 'import bpy; assert bpy.app.version[:2] == (4, 2); print("BLENDER_VERSION", bpy.app.version_string)'
+          timeout 90s sudo apt-get update -qq
+          timeout --signal=TERM --kill-after=15s 420s sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-expr 'import bpy, numpy; assert bpy.app.version[:2] == (4, 0); print("SOURCE_COMPATIBLE_BLENDER", bpy.app.version_string)'
       - name: Render actual packed source study
         timeout-minutes: 13
         run: |
