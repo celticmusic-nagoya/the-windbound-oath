@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/two-shared-infra-isolation.yml"
       - "tools/production_qa/isolate_shared_infrastructure.py"
+      - "tools/production_qa/audit_shared_infrastructure_bundle.py"
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,6 +21,10 @@ jobs:
         run: |
           set -euo pipefail
           python3 tools/production_qa/isolate_shared_infrastructure.py /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
+      - name: Independently audit bundle allowlist, SHA and dependency references
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/audit_shared_infrastructure_bundle.py /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
       - name: Upload isolated non-canonical review bundle
         uses: actions/upload-artifact@v4
         with:
