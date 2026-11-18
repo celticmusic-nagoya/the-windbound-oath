@@ -85,7 +85,7 @@ def render(name,loc):
  cam.data.type='ORTHO';cam.data.ortho_scale=.94;scene.camera=cam
  scene.render.filepath=str(out/(name+'.png'));bpy.ops.render.render(write_still=True)
  bpy.data.objects.remove(cam,do_unlink=True)
-for name,loc in [('front',(0,-4,1.54)),('back',(0,4,1.54)),('left',(-4,0,1.54)),('right',(4,0,1.54)),('three_quarter',(3,-3,1.8))]:render(name,loc)
+if '--export-only' not in sys.argv:\n for name,loc in [('front',(0,-4,1.54)),('back',(0,4,1.54)),('left',(-4,0,1.54)),('right',(4,0,1.54)),('three_quarter',(3,-3,1.8))]:render(name,loc)
 # Temporary technical input only: no official artwork or production meshes are overwritten.
 bpy.ops.object.select_all(action='DESELECT')
 export_objects=[o for o in scene.objects if o.type in {'MESH','CURVE'} and not o.name.startswith('Review_')]
