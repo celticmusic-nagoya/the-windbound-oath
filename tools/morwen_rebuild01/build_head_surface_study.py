@@ -83,7 +83,6 @@ def main():
     head = make_head("MORWEN_HEAD_CONTINUOUS_QUAD_STUDY", coll)
     assert len(head.data.vertices) == 96 * 65
     assert len(head.data.polygons) == 96 * 64 + 2
-    assert all(len(e.link_faces) == 2 for e in [])  # manifold verified below by edge counts
     edge_counts = {}
     for poly in head.data.polygons:
         ids = list(poly.vertices)
