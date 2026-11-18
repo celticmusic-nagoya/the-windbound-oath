@@ -38,9 +38,25 @@ jobs:
           curl --fail --location --retry 1 --proto '=https' --tlsv1.2 \
             https://mirror.blender.org/release/Blender4.3/blender-4.3.2.sha256 \
             -o /tmp/blender-4.3.2.sha256
-          expected_hash="$(awk '/blender-4\\.3\\.2-linux-x64\\.tar\\.xz/ {print $1; exit}' /tmp/blender-4.3.2.sha256)"
-          [[ "$expected_hash" =~ ^[0-9a-fA-F]{64}$ ]]
-          printf '%s  %s\\n' "$expected_hash" /tmp/blender-4.3.2.tar.xz | sha256sum --check --status
+          python3 - <<'PY'
+          import hashlib, pathlib, re
+          archive = pathlib.Path("/tmp/blender-4.3.2.tar.xz")
+          checksum = pathlib.Path("/tmp/blender-4.3.2.sha256")
+          content = checksum.read_text(encoding="utf-8")
+          name = "blender-4.3.2-linux-x64.tar.xz"
+          entries = []
+          for line in content.splitlines():
+              if name not in line:
+                  continue
+              hashes = re.findall(r"(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])", line)
+              entries.extend(hashes)
+          if len(set(entries)) != 1:
+              raise RuntimeError(f"Expected one unambiguous checksum for {name}; matching lines={len(entries)}")
+          digest = hashlib.file_digest(archive.open("rb"), "sha256").hexdigest()
+          if digest.lower() != entries[0].lower():
+              raise RuntimeError(f"SHA-256 mismatch for {name}")
+          print("BLENDER_ARCHIVE_SHA256_PASS", digest)
+          PY
           mkdir -p /tmp/blender-4.3.2
           tar -xJf /tmp/blender-4.3.2.tar.xz -C /tmp/blender-4.3.2 --strip-components=1
           echo /tmp/blender-4.3.2 >> "$GITHUB_PATH"
