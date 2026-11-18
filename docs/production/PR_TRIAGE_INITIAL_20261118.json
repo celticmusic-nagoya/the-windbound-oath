@@ -89,6 +89,26 @@
     "allowlisted_files": 7,
     "excluded_tracked_files": 4661,
     "expires_at": "2026-12-02T11:05:18Z",
-    "limitations": "Zip archive inner bytes not independently downloaded; CI script validates inner manifest and hashes. No PR isolation merge performed."
+    "limitations": "Zip archive inner bytes not independently downloaded; CI script validates inner manifest and hashes. No PR isolation merge performed.",
+    "static_dependency_audit": {
+      "status": "PASS_STATIC_BUNDLE_AUDIT",
+      "run": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44295750479",
+      "artifact_id": 14423178597,
+      "artifact_digest": "sha256:144df474279cfa18744dbac53f072be6ddf9d2eb2a5e155a69829b0b154b2433",
+      "checks": [
+        "allowlist",
+        "manifest_hashes",
+        "python_syntax",
+        "installer_sha",
+        "runtime_dependency_edges",
+        "inventory_read_permissions",
+        "no_3d_assets"
+      ],
+      "limitations": [
+        "No clean-branch install test",
+        "Not approved for merge",
+        "No independent G1-G4 asset approval"
+      ]
+    }
   }
 }
