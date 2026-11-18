@@ -1,0 +1,578 @@
+{
+  "status": "UNAPPROVED_HEAD_STUDY",
+  "source_sha256": "d47d140586ba27ca2bc83dabbe3620b39a4d3e91dae57a65874d42defc60836e",
+  "references": [
+    {
+      "file": "MORWEN_DESIGN_SHEET_APPROVED_SOURCE.jpg",
+      "sha256": "d9730dad8b1791204bb39f52697a176d4556e82a33442fdc0c101059bcc7113b",
+      "bytes": 486165
+    },
+    {
+      "file": "LAYER0_FRONT.png",
+      "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "bytes": 488380
+    },
+    {
+      "file": "LAYER0_BACK.png",
+      "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "bytes": 473843
+    },
+    {
+      "file": "LAYER0_PROFILE_FACING_RIGHT.png",
+      "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "bytes": 440281
+    },
+    {
+      "file": "LAYER0_PROFILE_FACING_LEFT.png",
+      "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "bytes": 437362
+    }
+  ],
+  "blender": "4.2.0",
+  "engine": "CYCLES CPU",
+  "samples": 48,
+  "seed": 0,
+  "view_transform": "AgX",
+  "landmarks": {
+    "source_crown_vertex": 8063,
+    "source_chin_underside_vertex": 8064,
+    "source_crown": [
+      -1.3394137620925903,
+      -0.03396732360124588,
+      1.641334056854248
+    ],
+    "source_chin": [
+      -1.340065598487854,
+      -0.10963881015777588,
+      1.4193670749664307
+    ],
+    "source_ratio": 7.385422148790826,
+    "head_scale": 0.9441481925389483,
+    "crown": [
+      0.0006342261913232505,
+      -0.03514203801751137,
+      1.624165415763855
+    ],
+    "chin_underside": [
+      1.8656372049008496e-05,
+      -0.10658706724643707,
+      1.414595603942871
+    ],
+    "sole_z": 0.0,
+    "head_count": 7.749997013650178,
+    "classification": "SELF_REVIEWED_VERTEX_LANDMARKS; independent anatomy review pending"
+  },
+  "views": [
+    {
+      "name": "front",
+      "camera": [
+        0.0,
+        -1.5399999618530273,
+        1.5193805694580078
+      ],
+      "target": [
+        0.0,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "ortho_scale": 0.3700000047683716,
+      "file": "front.png",
+      "head_bounds_uv": [
+        0.25811389088630676,
+        0.16263288259506226,
+        0.7422177791595459,
+        0.8128200173377991
+      ],
+      "head_geometry_in_frame": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped"
+    },
+    {
+      "name": "back",
+      "camera": [
+        0.0,
+        1.4600000381469727,
+        1.5193805694580078
+      ],
+      "target": [
+        0.0,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "ortho_scale": 0.3700000047683716,
+      "file": "back.png",
+      "head_bounds_uv": [
+        0.25778260827064514,
+        0.16263286769390106,
+        0.7418864965438843,
+        0.8128200173377991
+      ],
+      "head_geometry_in_frame": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped"
+    },
+    {
+      "name": "character_left",
+      "camera": [
+        1.5,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "target": [
+        0.0,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "ortho_scale": 0.3700000047683716,
+      "file": "character_left.png",
+      "head_bounds_uv": [
+        0.1866328865289688,
+        0.1626335084438324,
+        0.7953667640686035,
+        0.8128206133842468
+      ],
+      "head_geometry_in_frame": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped"
+    },
+    {
+      "name": "character_right",
+      "camera": [
+        -1.5,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "target": [
+        0.0,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "ortho_scale": 0.3700000047683716,
+      "file": "character_right.png",
+      "head_bounds_uv": [
+        0.20463325083255768,
+        0.16263355314731598,
+        0.8133671283721924,
+        0.8128206133842468
+      ],
+      "head_geometry_in_frame": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped"
+    },
+    {
+      "name": "three_quarter",
+      "camera": [
+        0.8146241903305054,
+        -1.2932679653167725,
+        1.6447073221206665
+      ],
+      "target": [
+        0.0,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "ortho_scale": 0.3700000047683716,
+      "file": "three_quarter.png",
+      "head_bounds_uv": [
+        0.2030046135187149,
+        0.1589938998222351,
+        0.7582358121871948,
+        0.8102806210517883
+      ],
+      "head_geometry_in_frame": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped"
+    },
+    {
+      "name": "three_quarter_other",
+      "camera": [
+        -0.8146241903305054,
+        -1.2932679653167725,
+        1.6447073221206665
+      ],
+      "target": [
+        0.0,
+        -0.03999999910593033,
+        1.5193805694580078
+      ],
+      "ortho_scale": 0.3700000047683716,
+      "file": "three_quarter_other.png",
+      "head_bounds_uv": [
+        0.24175798892974854,
+        0.1515946239233017,
+        0.797866940498352,
+        0.8102766871452332
+      ],
+      "head_geometry_in_frame": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped"
+    },
+    {
+      "name": "body_front",
+      "camera": [
+        0.0,
+        -3.0199999809265137,
+        0.8120827078819275
+      ],
+      "target": [
+        0.0,
+        -0.019999999552965164,
+        0.8120827078819275
+      ],
+      "ortho_scale": 1.899999976158142,
+      "file": "body_front.png"
+    },
+    {
+      "name": "body_back",
+      "camera": [
+        0.0,
+        2.9800000190734863,
+        0.8120827078819275
+      ],
+      "target": [
+        0.0,
+        -0.019999999552965164,
+        0.8120827078819275
+      ],
+      "ortho_scale": 1.899999976158142,
+      "file": "body_back.png"
+    },
+    {
+      "name": "body_character_left",
+      "camera": [
+        3.0,
+        -0.019999999552965164,
+        0.8120827078819275
+      ],
+      "target": [
+        0.0,
+        -0.019999999552965164,
+        0.8120827078819275
+      ],
+      "ortho_scale": 1.899999976158142,
+      "file": "body_character_left.png"
+    },
+    {
+      "name": "body_character_right",
+      "camera": [
+        -3.0,
+        -0.019999999552965164,
+        0.8120827078819275
+      ],
+      "target": [
+        0.0,
+        -0.019999999552965164,
+        0.8120827078819275
+      ],
+      "ortho_scale": 1.899999976158142,
+      "file": "body_character_right.png"
+    }
+  ],
+  "denoising": false,
+  "independent_anatomy_review": "NOT_RUN",
+  "candidate_sha256": "4e818c24d9d05258bd0c4f5a1cc6116826807a234aa7819f65fc49cc01f307d7",
+  "mesh_stats": [
+    {
+      "object": "Bob_layer_00",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.6136516935744066e-05
+    },
+    {
+      "object": "Bob_layer_01",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.8226888901414844e-05
+    },
+    {
+      "object": "Bob_layer_02",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.8597354536361224e-05
+    },
+    {
+      "object": "Bob_layer_03",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.6281668601054883e-05
+    },
+    {
+      "object": "Bob_layer_04",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.412384011155087e-05
+    },
+    {
+      "object": "Bob_layer_05",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.391926369770788e-05
+    },
+    {
+      "object": "Bob_layer_06",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.4885513507386664e-05
+    },
+    {
+      "object": "Bob_layer_07",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.610210541017277e-05
+    },
+    {
+      "object": "Bob_layer_08",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.776451063817962e-05
+    },
+    {
+      "object": "Bob_layer_09",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.8673114445938208e-05
+    },
+    {
+      "object": "Bob_layer_10",
+      "vertices": 754,
+      "faces": 752,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.6897632735852076e-05
+    },
+    {
+      "object": "Brow_-1",
+      "vertices": 68,
+      "faces": 66,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 6.121003657773367e-08
+    },
+    {
+      "object": "Brow_1",
+      "vertices": 68,
+      "faces": 66,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 6.12100365778206e-08
+    },
+    {
+      "object": "Catchlight_-1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 8.413609374096412e-09
+    },
+    {
+      "object": "Catchlight_1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 8.413609374096415e-09
+    },
+    {
+      "object": "Eye_-1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 3.58301049355735e-05
+    },
+    {
+      "object": "Eye_1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 3.5830104935573496e-05
+    },
+    {
+      "object": "Fringe_00",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 6.308528703083651e-06
+    },
+    {
+      "object": "Fringe_01",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.170279689500781e-06
+    },
+    {
+      "object": "Fringe_02",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.712039131301472e-06
+    },
+    {
+      "object": "Fringe_03",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.733256775531224e-06
+    },
+    {
+      "object": "Fringe_04",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.72498392234378e-06
+    },
+    {
+      "object": "Fringe_05",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.1800535186412796e-06
+    },
+    {
+      "object": "Fringe_06",
+      "vertices": 572,
+      "faces": 570,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 6.315314592361298e-06
+    },
+    {
+      "object": "Glasses_bridge",
+      "vertices": 36,
+      "faces": 26,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.98495054405624e-08
+    },
+    {
+      "object": "Glasses_rim_-1",
+      "vertices": 1152,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 3.6339754404549363e-07
+    },
+    {
+      "object": "Glasses_rim_1",
+      "vertices": 1152,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 3.6339754317349227e-07
+    },
+    {
+      "object": "Glasses_temple_-1",
+      "vertices": 48,
+      "faces": 38,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.5238397765070597e-07
+    },
+    {
+      "object": "Glasses_temple_1",
+      "vertices": 48,
+      "faces": 38,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 2.5204502613695765e-07
+    },
+    {
+      "object": "Iris_-1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 6.953808777236347e-07
+    },
+    {
+      "object": "Iris_1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 6.953808777236346e-07
+    },
+    {
+      "object": "Morwen_anatomical_body_head_UNAPPROVED",
+      "vertices": 10582,
+      "faces": 10590,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 0.05205736805071532
+    },
+    {
+      "object": "Pupil_-1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.509447526472618e-08
+    },
+    {
+      "object": "Pupil_1",
+      "vertices": 1106,
+      "faces": 1152,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "degenerate_faces": 0,
+      "signed_volume": 7.50944752647262e-08
+    }
+  ],
+  "reopen_pass": true,
+  "source_unchanged": true
+}

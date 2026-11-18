@@ -1,0 +1,276 @@
+{
+  "status": "FAIL_TECHNICAL_SCREEN",
+  "checks": {
+    "source_unchanged": true,
+    "reopen": true,
+    "mesh_nonempty": true,
+    "closed_nondegenerate_base_meshes": false,
+    "five_or_more_views": true,
+    "anatomical_ratio_self_review": true,
+    "rgba_frame_visibility": true
+  },
+  "head_count": 7.749997013650178,
+  "mesh_defects": [
+    {
+      "object": "Glasses_bridge",
+      "vertices": 60,
+      "faces": 44,
+      "boundary_edges": 48,
+      "nonmanifold_edges": 48,
+      "degenerate_faces": 0,
+      "signed_volume": 2.9933793498636754e-08
+    },
+    {
+      "object": "Glasses_temple_-1",
+      "vertices": 72,
+      "faces": 56,
+      "boundary_edges": 48,
+      "nonmanifold_edges": 48,
+      "degenerate_faces": 0,
+      "signed_volume": 2.5187362135937575e-07
+    },
+    {
+      "object": "Glasses_temple_1",
+      "vertices": 72,
+      "faces": 56,
+      "boundary_edges": 48,
+      "nonmanifold_edges": 48,
+      "degenerate_faces": 0,
+      "signed_volume": 2.514361342834141e-07
+    }
+  ],
+  "renders": [
+    {
+      "file": "front.png",
+      "sha256": "cc375e61a5b0ea28ebd7c51ea2c8a226be17582a4fd38314d46cc4337c8c57fe",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 226165,
+      "coverage": 0.3834448920355903,
+      "bbox": [
+        0,
+        144,
+        767,
+        767
+      ],
+      "margin_pass": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.004638206619061305,
+      "pass": true
+    },
+    {
+      "file": "back.png",
+      "sha256": "b1d363a70f1691cf82730aedbe5c8a5f03c16a3c73a2244d3492e30593b0f3c8",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 226159,
+      "coverage": 0.3834347195095486,
+      "bbox": [
+        0,
+        144,
+        767,
+        767
+      ],
+      "margin_pass": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0019809072378282537,
+      "pass": true
+    },
+    {
+      "file": "character_left.png",
+      "sha256": "cc25e1bda1c481f39fe7dcbfdf6441a8b9a71a0c956e86ed2a5aaba3fe202d3e",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 224433,
+      "coverage": 0.3805084228515625,
+      "bbox": [
+        143,
+        144,
+        613,
+        767
+      ],
+      "margin_pass": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0030521358267277983,
+      "pass": true
+    },
+    {
+      "file": "character_right.png",
+      "sha256": "40e039778c65162bfece364bcabfacff1cd0a8aa9a00559926ffa89bb48f6015",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 224437,
+      "coverage": 0.3805152045355903,
+      "bbox": [
+        154,
+        144,
+        624,
+        767
+      ],
+      "margin_pass": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.012284070808289187,
+      "pass": true
+    },
+    {
+      "file": "three_quarter.png",
+      "sha256": "cee18bb34a84a7c53f26ad506ebd7b827579ea0d2ac5bb5998b30e5e62213e94",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 238335,
+      "coverage": 0.4040781656901042,
+      "bbox": [
+        68,
+        146,
+        767,
+        767
+      ],
+      "margin_pass": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.017437640296221704,
+      "pass": true
+    },
+    {
+      "file": "three_quarter_other.png",
+      "sha256": "8c9f7f1685e2ea4fde42a61a74d906cb3857bff4f3aec8fa7c77ce2b2828d544",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 238338,
+      "coverage": 0.404083251953125,
+      "bbox": [
+        0,
+        146,
+        699,
+        767
+      ],
+      "margin_pass": true,
+      "crop_policy": "head fully in frame; shoulders intentionally cropped",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.013761968297124252,
+      "pass": true
+    },
+    {
+      "file": "body_front.png",
+      "sha256": "cf22adf0ac5a2343ad8e1a923cab1b0b982a7d513fbac9c65ede3778d6c411fa",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 117272,
+      "coverage": 0.19087239583333335,
+      "bbox": [
+        107,
+        64,
+        532,
+        890
+      ],
+      "margin_pass": true,
+      "crop_policy": "full body alpha margins",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.00013643495463537759,
+      "pass": true
+    },
+    {
+      "file": "body_back.png",
+      "sha256": "3f39d1802fbe4b74c6f76fa9029f7e10e66a2e7183711883a079a14a7c513efc",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 117264,
+      "coverage": 0.190859375,
+      "bbox": [
+        107,
+        64,
+        532,
+        890
+      ],
+      "margin_pass": true,
+      "crop_policy": "full body alpha margins",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0001620275617410288,
+      "pass": true
+    },
+    {
+      "file": "body_character_left.png",
+      "sha256": "d818c230e04a9fd1fcf5eb7a9361bf3d325151a61ec90e657c223bd9114d4ecd",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 67286,
+      "coverage": 0.10951497395833333,
+      "bbox": [
+        251,
+        64,
+        387,
+        890
+      ],
+      "margin_pass": true,
+      "crop_policy": "full body alpha margins",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.000297238652914425,
+      "pass": true
+    },
+    {
+      "file": "body_character_right.png",
+      "sha256": "b06c91735c676aba4d6fb6d6297c06e580d3a03908a6e0dd621236c3130eafee",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 67277,
+      "coverage": 0.10950032552083333,
+      "bbox": [
+        252,
+        64,
+        388,
+        890
+      ],
+      "margin_pass": true,
+      "crop_policy": "full body alpha margins",
+      "white_clip_fraction": 0.0,
+      "black_crush_fraction": 0.0017836704966035942,
+      "pass": true
+    }
+  ],
+  "scope_limitations": [
+    "Self-reviewed anatomical vertices; independent confirmation pending",
+    "Normals recalculated; manifold screen is not a self-intersection or rigging test",
+    "Eyeball/socket, glasses/skin and hair intersections require visual review",
+    "No independent art acceptance or game/Android test"
+  ],
+  "gates": {
+    "G1": "BLOCKED: source SHA PASS, candidate fidelity not accepted",
+    "G2": "NOT_RUN: independent art QA; self visual findings in report",
+    "G3": "FAIL",
+    "G4": "NOT_RUN"
+  }
+}
