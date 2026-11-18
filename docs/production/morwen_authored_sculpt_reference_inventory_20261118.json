@@ -1,0 +1,25 @@
+{
+  "asset": "Morwen",
+  "stage": "reference_discovery",
+  "date": "2026-11-18",
+  "branch": "feature/morwen-authored-sculpt-20261118",
+  "verified_repo_file": {
+    "path": "assets/companions/morwen/master/morwen-full-body-v3.png",
+    "git_blob_sha1": "c1f128d8bf43d75b14942882a3d14ebb198a6b55",
+    "classification": "official_full_body_master",
+    "source": "main",
+    "sha256": null,
+    "sha256_status": "NOT_RUN: GitHub connector did not expose image bytes",
+    "pixel_visual_review": "NOT_RUN in this production pass"
+  },
+  "approved_layer0_four_views": {
+    "paths": [],
+    "status": "BLOCKED: not yet located or pixel-verified",
+    "policy": "prioritize formally adopted four-view Layer 0; do not substitute full-body master without comparison"
+  },
+  "reference_facts_from": "docs/qa/MORWEN_PIXEL_MASTER_AUDIT_20261108.md",
+  "known_features": ["short straight near-black-purple bob with straight bangs", "purple eyes and thin gold round glasses", "oversized dark-purple witch hat with flowers and gold botanical embroidery", "white high-collar blouse", "black-purple and gold uniform and pleated skirt", "long embroidered cape", "gold magic-circle book", "leather shoulder bag", "knee socks and buckle lace-up boots"],
+  "new_mesh": "NOT_CREATED",
+  "new_render": "NOT_CREATED",
+  "gates": {"G1":"BLOCKED","G2":"NOT_RUN","G3":"NOT_RUN","G4":"NOT_RUN"}
+}
