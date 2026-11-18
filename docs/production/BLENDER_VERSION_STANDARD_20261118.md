@@ -37,3 +37,12 @@
 - Initial `download.blender.org` HTTP 403 in run 44280556396 was resolved by one official-mirror change. No further retries required.
 - **Scope:** This qualifies Blender 5.2.4 as an executable shared CI runtime. It does NOT qualify actual game character/map art, materials, rig, traversal, WebGL/Android performance, or legacy compatibility (not required).
 - **Decision:** Runtime gate PASS. New 3D geometry production remains NO-GO pending explicit director resume and other relevant readiness/QA gates.
+
+## Shared installer integration QA — 2026-11-18
+- Canonical installer: `tools/production_qa/install_blender_524.sh` (read-only with respect to repository and system packages).
+- Existing qualification workflow calls canonical installer: `.github/workflows/two-blender-524-qualification.yml`.
+- PASS: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44289286470 (commit `9f7582823f0c45fb0f3982b523b201afa8c9c194`).
+- All qualification steps succeeded, including upstream checksum verification, Blender launch, temporary `.blend` save/reopen and evidence upload.
+- Artifact: `two-blender-524-runtime-smoke`, ID `14420437768`, expires 2026-12-02, zip SHA-256 `828efcd96dee8b896a6f1eaf0af01addf1c08b097f71c23d2285bdbf9ddd64dc`.
+- Existing character/map workflows are NOT automatically migrated; apply installer only to workflows selected for active new production. Legacy asset compatibility is explicitly out of scope.
+- Runtime/installer QA PASS does not constitute G1–G4 production asset approval or authorize restarting modeling.
