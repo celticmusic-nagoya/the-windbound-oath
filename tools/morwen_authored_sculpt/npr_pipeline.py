@@ -73,10 +73,18 @@ for loc,power in [((2,-3,4),1100),((-3,-1,2),550)]:
  ld=bpy.data.lights.new('NPR_Review_Light','AREA');ld.energy=power;ld.size=4
  obj=bpy.data.objects.new('NPR_Review_Light',ld);scene.collection.objects.link(obj)
  obj.location=center+Vector(loc)*extent;obj.rotation_euler=(center-obj.location).to_track_quat('-Z','Y').to_euler()
-for name,offset in [('front',(0,-3,1)),('three_quarter',(2.5,-2.5,1.4)),('back',(0,3,1))]:
- bpy.ops.object.camera_add(location=center+Vector(offset)*extent)
- cam=bpy.context.object;cam.rotation_euler=(center-cam.location).to_track_quat('-Z','Y').to_euler()
- cam.data.type='ORTHO';cam.data.ortho_scale=extent*1.7;scene.camera=cam
+# Canonical review directions in provisional asset-local coordinates (-Y front, Z up).
+# Perspective 50mm for four orthogonal views, 85mm for face detail.
+views=[('front',(0,-3,0),50,1.0),('right',(3,0,0),50,1.0),
+       ('back',(0,3,0),50,1.0),('left',(-3,0,0),50,1.0),
+       ('face_closeup',(0,-2.2,.10),85,.64)]
+for name,offset,lens,framing in views:
+ target=center+Vector((0,0,.025*extent if name=='face_closeup' else 0))
+ bpy.ops.object.camera_add(location=target+Vector(offset)*extent*framing)
+ cam=bpy.context.object;cam.name='Review_'+name
+ cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler()
+ cam.data.type='PERSP';cam.data.lens=lens
+ scene.camera=cam
  scene.render.filepath=str(out/(name+'.png'));bpy.ops.render.render(write_still=True)
  bpy.data.objects.remove(cam,do_unlink=True)
 # Export only ORIGINAL imported geometry and materials; no preview-only ShaderToRGB or hull.
