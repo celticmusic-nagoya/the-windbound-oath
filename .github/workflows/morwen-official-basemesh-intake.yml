@@ -1,0 +1,37 @@
+name: Morwen official CC0 base mesh intake (candidate only)
+on:
+  push:
+    branches: [feature/morwen-rebuild-01]
+    paths:
+      - ".github/workflows/morwen-official-basemesh-intake.yml"
+      - "tools/morwen_rebuild01/inspect_official_basemesh.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download Blender Studio CC0 source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-cc0
+          curl --fail --location --retry 1 --connect-timeout 15 --max-time 180 --proto '=https' --tlsv1.2 \
+            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            -o /tmp/morwen-cc0/human-base-meshes-bundle-v1.4.1.zip
+          python3 tools/morwen_rebuild01/inspect_official_basemesh.py \
+            /tmp/morwen-cc0/human-base-meshes-bundle-v1.4.1.zip \
+            /tmp/morwen-cc0/source-inventory.json
+      - name: Upload source inventory only (do not redistribute 49 MB source)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-official-cc0-base-intake
+          path: /tmp/morwen-cc0/source-inventory.json
+          if-no-files-found: warn
+          retention-days: 7
