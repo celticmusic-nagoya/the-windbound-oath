@@ -28,9 +28,9 @@ def main():
     assert scene.get("projection_calibrated") is False
     assert len(bpy.data.meshes) == 0
     checks = {}
-    for view, outward in VIEWS.items():
+    for view, (camera_name, outward) in VIEWS.items():
         ref = bpy.data.objects[f"REF_{view}_DO_NOT_EDIT"]
-        camera = bpy.data.objects[VIEWS[view][0]]
+        camera = bpy.data.objects[camera_name]
         assert ref.type == "EMPTY" and ref.empty_display_type == "IMAGE"
         assert camera.type == "CAMERA" and camera.data.type == "ORTHO"
         assert ref.data.packed_file and ref.get("reference_sha256")
