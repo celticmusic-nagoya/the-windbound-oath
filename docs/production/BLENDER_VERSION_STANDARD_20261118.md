@@ -46,3 +46,9 @@
 - Artifact: `two-blender-524-runtime-smoke`, ID `14420437768`, expires 2026-12-02, zip SHA-256 `828efcd96dee8b896a6f1eaf0af01addf1c08b097f71c23d2285bdbf9ddd64dc`.
 - Existing character/map workflows are NOT automatically migrated; apply installer only to workflows selected for active new production. Legacy asset compatibility is explicitly out of scope.
 - Runtime/installer QA PASS does not constitute G1–G4 production asset approval or authorize restarting modeling.
+
+## Full open-PR inventory evidence — 2026-11-18
+- Read-only GitHub Actions run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44290316165 (PASS).
+- API pagination inventory: **202 open PRs**. Heuristic labels: **LIND 70**, **Morwen 75**. These categories are not necessarily disjoint and are NOT verified duplicate counts.
+- Artifact `two-production-pr-inventory`, ID `14421276223`, ZIP SHA-256 `0b54b5d31d910ce98ebaafea2f2fe5a6dd8a90b8fe5fb5cfc8b67dff676e69e6`, expires 2026-12-02.
+- No PR closures, merges, deletions or main modifications. Prioritize human-reviewed reuse and ownership assignment; avoid automated cleanup based solely on keywords.
