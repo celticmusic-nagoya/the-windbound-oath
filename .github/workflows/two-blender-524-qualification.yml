@@ -1,0 +1,64 @@
+name: TWO Blender 5.2.4 LTS runtime qualification (manual, no model creation)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: two-blender-524-qualification
+  cancel-in-progress: false
+jobs:
+  runtime-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch official Blender 5.2.4 and verify official checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-blender /tmp/two-blender-output
+          base=https://download.blender.org/release/Blender5.2
+          curl --fail --location --retry 1 --connect-timeout 20 --max-time 540 "$base/blender-5.2.4.sha256" -o /tmp/two-blender/checksums
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          rows=Path('/tmp/two-blender/checksums').read_text().splitlines()
+          target='blender-5.2.4-linux-x64.tar.xz'
+          hits=[]
+          for row in rows:
+              if target in row:
+                  hashes=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',row)
+                  if len(hashes)!=1: raise SystemExit('Invalid checksum row')
+                  hits.append(hashes[0].lower())
+          if len(hits)!=1: raise SystemExit('Expected exactly one official checksum')
+          Path('/tmp/two-blender/expected.sha256').write_text(hits[0]+'  '+target+'\n')
+          PY
+          curl --fail --location --retry 1 --connect-timeout 20 --max-time 540 "$base/blender-5.2.4-linux-x64.tar.xz" -o /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz
+          (cd /tmp/two-blender && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender/app
+          tar -xJf /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz -C /tmp/two-blender/app --strip-components=1
+          /tmp/two-blender/app/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,2,4); print("TWO_BLENDER_524_RUNTIME_PASS")' | tee /tmp/two-blender-output/runtime.txt
+          sha256sum /tmp/two-blender/blender-5.2.4-linux-x64.tar.xz > /tmp/two-blender-output/archive.sha256
+      - name: Test real editable blend create and reopen (isolated smoke only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python-expr 'import bpy; bpy.ops.mesh.primitive_cube_add(); bpy.ops.wm.save_as_mainfile(filepath="/tmp/two-blender-output/SMOKE_ONLY_UNAPPROVED.blend")'
+          /tmp/two-blender/app/blender -b /tmp/two-blender-output/SMOKE_ONLY_UNAPPROVED.blend --python tools/production_qa/validate_blender_runtime.py -- --output /tmp/two-blender-output/reopen.json
+          python3 - <<'PY'
+          import json
+          p='/tmp/two-blender-output/reopen.json'
+          d=json.load(open(p))
+          assert d['version_pass'] and d['source_opened'] and d['meshes']>=1
+          print('SMOKE_REOPEN_PASS')
+          PY
+      - name: Upload reproducible smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-blender-524-runtime-smoke
+          path: /tmp/two-blender-output/
+          if-no-files-found: warn
+          retention-days: 14
