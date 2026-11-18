@@ -92,6 +92,9 @@ jobs:
         run: |
           blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/build_head_surface_study.py -- --output /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend
           blender -b /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend --python-expr 'import bpy; assert bpy.context.scene.get("status")=="UNAPPROVED_HEAD_SURFACE_STUDY_NOT_A_CHARACTER"; assert len(bpy.data.meshes)==1; assert len(bpy.data.meshes[0].vertices)==6240; print("HEAD_STUDY_REOPEN_PASS")'
+      - name: Render four actual head-study mesh views (not reference images)
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend --python tools/morwen_rebuild01/render_head_study.py -- --output-dir /tmp/morwen-workspace/head-study-renders
       - name: Independently verify reference camera orientations
         run: |
           blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/verify_reference_cameras.py -- /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
@@ -140,5 +143,6 @@ jobs:
             /tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png
             /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
             /tmp/morwen-workspace/camera-renders/*.png
+            /tmp/morwen-workspace/head-study-renders/*.png
           if-no-files-found: warn
           retention-days: 7
