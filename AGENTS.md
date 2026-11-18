@@ -1,3 +1,7 @@
+## Session continuity / persistent handoff (2026-11-18)
+
+At every new session or agent handoff, read [SESSION_CONTINUITY_INDEX.md](docs/production/SESSION_CONTINUITY_INDEX.md) and verify its pointers against live main, private canon, current PRs, Actions and artifacts before resuming. This index is navigation, not a replacement for the private canonical Bible. Do not recreate completed work or rerun stopped method families. Preserve exact QA status and distinguish Draft/merged/proposed. This directive does not authorize main merge, destructive changes or publication.
+
 ## 2026-11-18 モルウェン参照画像の同一デザイン運用（ディレクター承認）
 
 制作参照はSHA-256の完全一致に限定しない。同一デザインを視覚照合できた既存画像を使用可能とする。原本の既知SHA・来歴・採用区分は保護し、同一バイト列と偽らない。Layer 0正式四方向画像を身体造形の優先参照とし、未一致の部位のみBLOCKED。詳細は [MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md](docs/policy/MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md)。この後発承認は下記の「唯一の正本」記載に対して**制作参照の利用条件のみ**優先し、原本置換・候補正式採用・G1〜G4免除を認めない。
