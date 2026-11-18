@@ -1,0 +1,29 @@
+name: TWO isolated shared infrastructure review bundle
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/two-shared-infra-isolation.yml"
+      - "tools/production_qa/isolate_shared_infrastructure.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify explicit source-only allowlist and export committed bytes
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/isolate_shared_infrastructure.py /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
+      - name: Upload isolated non-canonical review bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-shared-infrastructure-review-only
+          path: /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
+          if-no-files-found: error
+          retention-days: 14
