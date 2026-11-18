@@ -1,0 +1,83 @@
+{
+  "schema": "two-pr-triage-v1",
+  "date": "2026-11-18",
+  "scope": "Read-only PR metadata and descriptions; no artifact revalidation",
+  "policy": "Keep all PRs open. No main merge, asset adoption, or deletion. Keyword classification is not duplication proof.",
+  "items": [
+    {
+      "pr": 419,
+      "area": "character",
+      "classification": "FAILURE_EVIDENCE_AND_SHARED_COORDINATION",
+      "reason": "Quad patch G2 FAIL; current coordination branch contains shared CI; do not treat geometry as approved",
+      "next": "Separate coordination from failed geometry before any future merge"
+    },
+    {
+      "pr": 417,
+      "area": "character",
+      "classification": "TECHNICAL_REFERENCE_ONLY",
+      "reason": "Partial eyelid quad prototype, not finished face/hair",
+      "next": "Retain method evidence; no old mesh migration"
+    },
+    {
+      "pr": 407,
+      "area": "character",
+      "classification": "FAILED_ART_STUDY",
+      "reason": "GUI sculpt and bob art QA FAIL",
+      "next": "Retain as negative-method evidence"
+    },
+    {
+      "pr": 399,
+      "area": "character",
+      "classification": "FAILED_ART_STUDY",
+      "reason": "Editable head and ten-view QA but art fidelity FAIL",
+      "next": "Retain provenance and method failure evidence"
+    },
+    {
+      "pr": 421,
+      "area": "map",
+      "classification": "REUSABLE_SOURCE_STUDY",
+      "reason": "CC0 rock three-view study; G1 BLOCKED, G2 NOT_RUN",
+      "next": "Reuse only license-verified source and evidence, not final cliff geometry"
+    },
+    {
+      "pr": 416,
+      "area": "map",
+      "classification": "REUSABLE_GUARDRAILS",
+      "reason": "Unscaled topology constraints and six negative controls; physical metric/camera approval missing",
+      "next": "Reuse independent validation without inventing dimensions"
+    },
+    {
+      "pr": 415,
+      "area": "map",
+      "classification": "REUSABLE_CC0_CANDIDATES",
+      "reason": "Packed editable CC0 rock sources, not assembled cliff",
+      "next": "Reuse source/texture provenance after current hash checks"
+    },
+    {
+      "pr": 403,
+      "area": "map",
+      "classification": "REUSABLE_QA_METHOD",
+      "reason": "Independent provenance, mesh and render evidence jobs",
+      "next": "Adapt read-only QA to new production only"
+    },
+    {
+      "pr": 353,
+      "area": "shared",
+      "classification": "REFERENCE_CONTRACT",
+      "reason": "Cross-team interface contract is documentation only",
+      "next": "Reconcile with current director-approved interfaces"
+    }
+  ],
+  "summary": {
+    "reviewed": 9,
+    "closed": 0,
+    "merged": 0,
+    "deleted": 0,
+    "adopted_assets": 0
+  },
+  "unverified": [
+    "Current changed-file contents and artifact bytes not revalidated",
+    "Exact overlap/duplication and branch ancestry not established",
+    "No new model G1-G4 verdict"
+  ]
+}
