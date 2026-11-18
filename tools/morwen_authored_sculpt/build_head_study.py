@@ -46,37 +46,59 @@ def surface(name,levels,segments=80,material=None):
 # Independent ring-sculpt, not a repaired old cage; deliberate cranial, cheek, jaw and chin sections.
 face=surface('Face_Sculpt_Study',[(1.20,.055,.065,.005),(1.23,.09,.09,.005),(1.28,.13,.115,0),(1.35,.17,.145,0),(1.43,.205,.166,.005),(1.51,.222,.175,.01),(1.59,.219,.173,.012),(1.67,.205,.162,.017),(1.74,.18,.144,.018),(1.80,.135,.112,.02),(1.83,.055,.05,.02)],material=skin)
 # Dark straight bob with crown, cheek-length sides and independently shaped front bangs.
-bob=surface('Hair_Crown_and_Bob_Study',[(1.34,.215,.18,.035),(1.40,.245,.199,.041),(1.52,.253,.208,.045),(1.64,.246,.202,.045),(1.74,.227,.186,.046),(1.82,.179,.148,.047),(1.86,.095,.083,.047)],material=hair)
-# Independently authored tapered fringe strands; face forward is negative Y.
-# Provisional metre-like coordinates: 0.002 corresponds to nominal 2 mm only.
-def hair_strand(name,sign,inner,outer,tip_z):
- v=[];f=[]
- for i in range(12):
-  t=i/11
-  z=tip_z+(1.795-tip_z)*t
-  width=(outer-inner)*(.62+.38*t)
-  for j in range(5):
-   u=j/4
-   x=sign*(inner+width*u+(.014*t*t))
-   y=-.198-.011*math.sin(math.pi*u)-.005*t
-   v.append((x,y,z))
- for i in range(11):
-  for j in range(4):
-   k=i*5+j;f.append((k,k+1,k+6,k+5))
- mesh=bpy.data.meshes.new(name);mesh.from_pydata(v,[],f);mesh.update()
- ob=bpy.data.objects.new(name,mesh);scene.collection.objects.link(ob);mesh.materials.append(hair)
- for poly in mesh.polygons:poly.use_smooth=True
-for sign,side in [(-1,'Left'),(1,'Right')]:
- hair_strand('Refined_Fringe_'+side+'_Inner',sign,.018,.060,1.625)
- hair_strand('Refined_Fringe_'+side+'_Outer',sign,.075,.126,1.606)
-# Distinct readable eye and brow proxies, still UNAPPROVED design studies.
+bob=surface('Hair_Crown_and_Bob_Study',[(1.36,.188,.171,.048),(1.40,.218,.205,.053),(1.52,.248,.223,.061),(1.64,.253,.227,.060),(1.74,.234,.211,.058),(1.82,.186,.163,.052),(1.86,.095,.083,.047)],material=hair)
+# Volumetric Bezier hair strands: root embedded into crown, tips curve onto forehead.
+# Local dimensions are provisional; no canonical millimetre scale asserted.
+def tapered_lock(name,points,r0,r1,material):
+ curve=bpy.data.curves.new(name,'CURVE');curve.dimensions='3D'
+ curve.resolution_u=20;curve.bevel_depth=r0;curve.bevel_resolution=4
+ spline=curve.splines.new('BEZIER');spline.bezier_points.add(len(points)-1)
+ for i,(co,rad) in enumerate(points):
+  pt=spline.bezier_points[i];pt.co=co;pt.handle_left_type='AUTO';pt.handle_right_type='AUTO';pt.radius=rad
+ ob=bpy.data.objects.new(name,curve);scene.collection.objects.link(ob);curve.materials.append(material)
+ return ob
+# Layered short fringe: eye and brow zone stays clear below z=1.64.
+for sign,side in [(-1,'L'),(1,'R')]:
+ for k,(x,tip) in enumerate(((.035,1.675),(.090,1.650),(.148,1.642))):
+  tapered_lock('Bangs_'+side+'_'+str(k),[
+   ((sign*(x+.018),-.095,1.853),1.05),
+   ((sign*(x+.013),-.176,1.781),1.0),
+   ((sign*x,-.205,1.712),.66),
+   ((sign*(x-.006),-.199,tip),.05)],.014,.002,hair)
+ # Curved side-locks, rooted into the bob instead of hanging as detached lines.
+ for k in range(3):
+  x=.172+.021*k
+  tapered_lock('Side_'+side+'_'+str(k),[
+   ((sign*(x-.022),-.075,1.805),1.2),
+   ((sign*x,-.146,1.690),1.0),
+   ((sign*(x+.012),-.142,1.535),.72),
+   ((sign*(x+.005),-.098,1.435),.08)],.019,.002,hair)
+# Overlapping back locks, wrapping inwards toward the nape.
+for k in range(13):
+ angle=math.pi*(k/12)
+ x=.220*math.cos(angle);y=.045+.185*math.sin(angle)
+ tapered_lock('Back_Lock_'+str(k),[
+  ((x*.70,y*.60,1.830),1.05),
+  ((x,y,1.715),1.1),
+  ((x*1.05,y+.025,1.530),.85),
+  ((x*.85,y-.006,1.395),.08)],.018,.002,hair)
+# Eye sockets, lids and highlights are separate authored geometry, not texture decals.
+lid=mat('eyelid_dark_provisional',(.085,.047,.10))
+white=mat('eye_sclera_provisional',(.88,.78,.77))
+shine=mat('eye_highlight_provisional',(.96,.92,.95))
 for sign in (-1,1):
  def ellipsoid(name,loc,scale,material):
   bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,location=loc)
   ob=bpy.context.object;ob.name=name;ob.scale=scale;ob.data.materials.append(material)
- ellipsoid('Eye_White_'+str(sign),(sign*.091,-.170,1.573),(.038,.011,.024),skin)
- ellipsoid('Iris_'+str(sign),(sign*.091,-.182,1.572),(.014,.008,.016),iris)
- ellipsoid('Brow_'+str(sign),(sign*.091,-.179,1.625),(.040,.005,.006),hair)
+ ellipsoid('Eye_'+str(sign),(sign*.091,-.178,1.580),(.039,.012,.021),white)
+ ellipsoid('Iris_'+str(sign),(sign*.091,-.190,1.579),(.015,.006,.017),iris)
+ ellipsoid('Highlight_'+str(sign),(sign*.086,-.196,1.586),(.004,.003,.005),shine)
+ ellipsoid('Upper_Lid_'+str(sign),(sign*.091,-.183,1.604),(.042,.006,.006),lid)
+ ellipsoid('Brow_'+str(sign),(sign*.091,-.180,1.639),(.038,.006,.006),hair)
+ ellipsoid('Cheek_'+str(sign),(sign*.126,-.153,1.474),(.070,.018,.042),skin)
+ellipsoid('Nose_Bridge',(0,-.182,1.527),(.021,.026,.077),skin)
+ellipsoid('Nose_Tip',(0,-.208,1.483),(.028,.025,.021),skin)
+ellipsoid('Mouth',(0,-.159,1.403),(.038,.009,.005),lid)
 # Glasses are geometric placement guides, not finished optical frames.
 def tube(name,points,radius,material):
  curve=bpy.data.curves.new(name,'CURVE');curve.dimensions='3D';curve.bevel_depth=radius;curve.bevel_resolution=3
