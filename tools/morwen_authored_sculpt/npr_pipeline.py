@@ -6,6 +6,8 @@ import bpy,sys,json,hashlib,math
 from pathlib import Path
 from mathutils import Vector
 args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
+fallback='--pbr-fallback' in args
+args=[a for a in args if a!='--pbr-fallback']
 if len(args)!=2: raise SystemExit('Usage: -- INPUT.glb|fbx OUTPUT_DIR')
 src=Path(args[0]).resolve();out=Path(args[1]).resolve()
 if not src.is_file() or src.suffix.lower() not in ('.glb','.gltf','.fbx'):
@@ -26,7 +28,7 @@ for ob in meshes:
  dup=ob.copy();dup.data=ob.data.copy();preview.objects.link(dup);dup.name='NPR_'+ob.name
  if not dup.material_slots:
   dup.data.materials.append(None)
- for mat_slot in dup.material_slots:
+ for mat_slot in ([] if fallback else dup.material_slots):
   original=mat_slot.material
   color=tuple(original.diffuse_color[:3]) if original else (.65,.6,.75)
   m=bpy.data.materials.new('EEVEE_TOON_'+(original.name if original else 'default'))
@@ -49,7 +51,7 @@ outline_mat=bpy.data.materials.new('NPR_OUTLINE_BACKFACE_ONLY')
 outline_mat.diffuse_color=(.018,.012,.028,1);outline_mat.use_nodes=True
 bsdf=outline_mat.node_tree.nodes.get('Principled BSDF');bsdf.inputs['Base Color'].default_value=(.018,.012,.028,1)
 outline_mat.use_backface_culling=True
-for ob in list(preview.objects):
+for ob in ([] if fallback else list(preview.objects)):
  if ob.type!='MESH':continue
  edge=ob.copy();edge.data=ob.data.copy();preview.objects.link(edge);edge.name='OUTLINE_'+ob.name
  edge.data.materials.clear();edge.data.materials.append(outline_mat)
@@ -58,7 +60,9 @@ for ob in list(preview.objects):
 for o in base.objects:o.hide_render=True
 for o in preview.objects:o.hide_render=False
 scene=bpy.context.scene
-scene.render.engine='BLENDER_EEVEE'
+scene.render.engine='CYCLES' if fallback else 'BLENDER_EEVEE'
+if fallback:
+ scene.cycles.device='CPU';scene.cycles.samples=12;scene.render.threads_mode='FIXED';scene.render.threads=2
 scene.render.resolution_x=720;scene.render.resolution_y=720;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format='PNG'
 bbox=[o.matrix_world @ Vector(corner) for o in meshes for corner in o.bound_box]
@@ -81,6 +85,6 @@ for o in base.objects:o.select_set(True)
 bpy.context.view_layer.objects.active=meshes[0]
 bpy.ops.export_scene.gltf(filepath=str(out/'portable_original_materials.glb'),export_format='GLB',use_selection=True)
 bpy.ops.wm.save_as_mainfile(filepath=str(out/'NPR_REVIEW_UNAPPROVED.blend'))
-report={'source':str(src),'source_sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'mesh_count':len(meshes),'status':'TECHNICAL_CANDIDATE_NOT_CANONICAL','preview_engine':'EEVEE','glb_shader':'original_imported_materials_not_NPR','G1':'BLOCKED_CANONICAL_MATCH','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_IMPORT_EXPORT_PARITY','G4':'NOT_RUN_GAME_ENGINE'}
+report={'source':str(src),'source_sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'mesh_count':len(meshes),'status':'TECHNICAL_CANDIDATE_NOT_CANONICAL','preview_engine':'CYCLES_PBR_FALLBACK' if fallback else 'EEVEE_NPR','glb_shader':'original_imported_materials_not_NPR','npr_status':'SKIPPED_HEADLESS_EGL' if fallback else 'RENDERED_UNVERIFIED', 'pbr_fallback_status':'RENDERED_UNVERIFIED' if fallback else 'NOT_RUN','G1':'BLOCKED_CANONICAL_MATCH','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_IMPORT_EXPORT_PARITY','G4':'NOT_RUN_GAME_ENGINE'}
 (out/'manifest.json').write_text(json.dumps(report,indent=2)+'\n')
 print('NPR_PIPELINE_OUTPUT_CREATED',len(meshes))
