@@ -4,6 +4,7 @@ on:
     paths:
       - 'tools/map_blender/lind/package_cc0_editable_sources.py'
       - '.github/workflows/lind-cc0-editable-sources.yml'
+      - 'tools/map_blender/lind/render_cc0_rock_art_study.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -11,7 +12,7 @@ permissions:
 jobs:
   package:
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 32
     steps:
       - uses: actions/checkout@v4
       - name: Fetch immutable CC0 glTF evidence
@@ -51,6 +52,35 @@ jobs:
           for scene in out/editable/*_candidate_source.blend; do
             timeout 90s blender --background --factory-startup --disable-autoexec "$scene" --python-exit-code 1 --python-expr 'import bpy; meshes=[o for o in bpy.data.objects if o.type=="MESH"]; imgs=[n.image for m in bpy.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=="TEX_IMAGE" and n.image]; assert meshes and len(imgs)>=3; assert all(im.packed_file for im in imgs); print("PACKED_SCENE_REOPEN_PASS",bpy.data.filepath,len(meshes),len(imgs))'
           done
+      - name: Render three CC0 studio views in the already running Blender environment
+        timeout-minutes: 13
+        run: |
+          mkdir -p out/study
+          set -o pipefail
+          timeout 720s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/render_cc0_rock_art_study.py -- --source out/editable --out out/study 2>&1 | tee out/study/render.log
+      - name: Verify studio scene reopen and SHA-256
+        timeout-minutes: 4
+        run: |
+          timeout 100s blender --background --factory-startup --disable-autoexec out/study/cc0_rock_art_study.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.context.scene.get("official_world_metric")=="UNAPPROVED"; assert len([o for o in bpy.data.objects if o.type=="MESH"])>=3; print("REOPEN_PASS")'
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path("out/study")
+          j=json.loads((d/"art_study_manifest.json").read_text())
+          assert j["G1"]=="BLOCKED" and j["no_cliff_geometry_created"]
+          assert len(j["source_candidates"])==2
+          for name,expected in j["files"].items():
+              assert hashlib.sha256((d/name).read_bytes()).hexdigest()==expected
+          print("STUDY_ARTIFACT_SHA_PASS")
+          PY
+      - name: Upload three views and reopen QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cc0-rock-art-study-three-views
+          path: out/study/
+          retention-days: 14
+          if-no-files-found: warn
       - name: Upload editable source scenes and QA
         if: always()
         uses: actions/upload-artifact@v4
