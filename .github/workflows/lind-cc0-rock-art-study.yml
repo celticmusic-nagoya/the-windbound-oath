@@ -19,7 +19,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p out/sources out/study
-          gh run download 44100054813 -R ${{ github.repository }} -D out/pbr-reference
           gh run list -R ${{ github.repository }} --workflow lind-cc0-editable-sources.yml --limit 10 --json databaseId,conclusion > out/study/source-runs.json
           python3 - <<'PY'
           import json
