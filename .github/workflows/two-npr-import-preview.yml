@@ -6,6 +6,11 @@ on:
     paths:
       - tools/morwen_authored_sculpt/**
       - .github/workflows/two-npr-import-preview.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/two-npr-import-preview.yml
   workflow_dispatch:
     inputs:
       input_model:
