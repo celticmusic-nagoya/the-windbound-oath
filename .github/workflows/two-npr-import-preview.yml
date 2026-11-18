@@ -90,6 +90,12 @@ jobs:
           for f in front.png three_quarter.png back.png portable_original_materials.glb manifest.json; do
             test -s "/tmp/two-npr-candidate/pbr_fallback/$f"
           done
+      - name: Reimport and compare portable GLB
+        if: steps.eevee.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/qa_glb_roundtrip.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate/npr/portable_original_materials.glb /tmp/two-npr-candidate/roundtrip_QA.json
       - name: Record separate QA outcomes
         if: always()
         shell: bash
