@@ -12,10 +12,10 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--output-dir", type=Path, required=True)
     a = p.parse_args(argv)
-    if bpy.context.scene.get("status") != "UNAPPROVED_HEAD_SURFACE_STUDY_NOT_A_CHARACTER":
+    if bpy.context.scene.get("status") not in ("UNAPPROVED_HEAD_SURFACE_STUDY_NOT_A_CHARACTER", "UNAPPROVED_FACIAL_PLANES_BLOCKOUT_NOT_A_CHARACTER"):
         raise RuntimeError("Expected the unapproved head study scene")
     meshes = [o for o in bpy.data.objects if o.type == "MESH"]
-    if len(meshes) != 1 or meshes[0].name != "MORWEN_HEAD_CONTINUOUS_QUAD_STUDY":
+    if len(meshes) != 1 or meshes[0].name not in ("MORWEN_HEAD_CONTINUOUS_QUAD_STUDY", "MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED"):
         raise RuntimeError("Expected exactly one authored head study mesh")
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
