@@ -1,0 +1,30 @@
+name: Morwen CC0 base mesh provenance gate (no redundant download)
+on:
+  push:
+    branches: [feature/morwen-rebuild-01]
+    paths:
+      - ".github/workflows/morwen-official-basemesh-intake.yml"
+      - "docs/production/MORWEN_CC0_BASEMESH_SOURCE_LOCK_20261118.json"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Confirm already provided archive and prohibit redundant retrieval
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          lock=json.loads(Path("docs/production/MORWEN_CC0_BASEMESH_SOURCE_LOCK_20261118.json").read_text())
+          assert lock["sha256"] == "811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515"
+          assert lock["status"] == "SOURCE_AVAILABLE_IN_CONVERSATION_NOT_IN_GITHUB"
+          print("SOURCE_ALREADY_PROVIDED: external download skipped")
+          print("GITHUB_ACTIONS_MESH_INSPECTION_BLOCKED: attachment not in runner workspace")
+          print("NEXT: inspect existing uploaded archive locally; transfer to runner only if needed and authorized")
+          PY

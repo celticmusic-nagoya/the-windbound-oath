@@ -1,0 +1,181 @@
+{
+  "schema": "morwen-crossview-reviewed-v1",
+  "source": "docs/qa/morwen-rebuild-01/layer0-landmark-review/layer0-landmarks.json",
+  "source_blob_sha": "a6c9661564924a4c6a6d61ed9d74547904101c9c",
+  "projection_calibrated": false,
+  "independent_qa": "BLOCKED",
+  "physical_scale": "BLOCKED",
+  "scope": "Existing annotations, 2D row comparison only",
+  "summary": {
+    "OBSERVED_2D": 6,
+    "UNMEASURABLE": 2,
+    "INFERRED_OR_MIXED": 4,
+    "MISSING": 6
+  },
+  "observations": [
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "hair",
+      "status": "OBSERVED_2D",
+      "delta_v_px": -1,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "chin",
+      "status": "UNMEASURABLE"
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "crotch",
+      "status": "OBSERVED_2D",
+      "delta_v_px": 8,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "knee_R",
+      "status": "INFERRED_OR_MIXED",
+      "delta_v_px": 3,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "knee_L",
+      "status": "INFERRED_OR_MIXED",
+      "delta_v_px": 1,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "ankle_R",
+      "status": "INFERRED_OR_MIXED",
+      "delta_v_px": 1,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "ankle_L",
+      "status": "INFERRED_OR_MIXED",
+      "delta_v_px": 1,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "sole_R",
+      "status": "OBSERVED_2D",
+      "delta_v_px": -3,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "front",
+        "back"
+      ],
+      "feature": "sole_L",
+      "status": "OBSERVED_2D",
+      "delta_v_px": -3,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "hair",
+      "status": "OBSERVED_2D",
+      "delta_v_px": 0,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "chin",
+      "status": "OBSERVED_2D",
+      "delta_v_px": 0,
+      "intervals_overlap": true
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "crotch",
+      "status": "UNMEASURABLE"
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "knee_R",
+      "status": "MISSING"
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "knee_L",
+      "status": "MISSING"
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "ankle_R",
+      "status": "MISSING"
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "ankle_L",
+      "status": "MISSING"
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "sole_R",
+      "status": "MISSING"
+    },
+    {
+      "pair": [
+        "right",
+        "left"
+      ],
+      "feature": "sole_L",
+      "status": "MISSING"
+    }
+  ]
+}

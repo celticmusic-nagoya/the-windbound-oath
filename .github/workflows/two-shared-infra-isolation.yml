@@ -1,0 +1,71 @@
+name: TWO isolated shared infrastructure review bundle
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/two-shared-infra-isolation.yml"
+      - "tools/production_qa/isolate_shared_infrastructure.py"
+      - "tools/production_qa/audit_shared_infrastructure_bundle.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify explicit source-only allowlist and export committed bytes
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/isolate_shared_infrastructure.py /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
+      - name: Independently audit bundle allowlist, SHA and dependency references
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/audit_shared_infrastructure_bundle.py /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
+      - name: Test extracted infrastructure in isolated clean main worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin main
+          git worktree add --detach /tmp/two-clean-main FETCH_HEAD
+          python3 - <<'PY'
+          import hashlib, json, zipfile
+          from pathlib import Path
+          zpath = '/tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip'
+          root = Path('/tmp/two-clean-main')
+          with zipfile.ZipFile(zpath) as z:
+              manifest = json.loads(z.read('ISOLATION_MANIFEST.json'))
+              assert manifest['status'] == 'REVIEW_ONLY_NOT_APPROVED_FOR_MERGE'
+              assert len(manifest['entries']) == 7
+              for entry in manifest['entries']:
+                  name = entry['path']
+                  assert not name.startswith('/') and '..' not in Path(name).parts
+                  data = z.read(name)
+                  assert hashlib.sha256(data).hexdigest() == entry['sha256']
+                  target = root / name
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(data)
+          print('CLEAN_MAIN_EXTRACT_PASS')
+          PY
+          (cd /tmp/two-clean-main && bash -n tools/production_qa/install_blender_524.sh)
+          (cd /tmp/two-clean-main && python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          for name in ('tools/production_qa/validate_blender_runtime.py',
+                       'tools/production_qa/pr_workstream_guard.py'):
+              ast.parse(Path(name).read_text(), filename=name)
+          print('CLEAN_MAIN_DEPENDENCY_SYNTAX_PASS')
+          PY
+          )
+          test ! -e /tmp/two-clean-main/tools/production_qa/isolate_shared_infrastructure.py
+          echo CLEAN_MAIN_NO_FAILED_GEOMETRY_COPIED_PASS
+      - name: Upload isolated non-canonical review bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-shared-infrastructure-review-only
+          path: /tmp/two-isolation/shared-infrastructure-REVIEW-ONLY.zip
+          if-no-files-found: error
+          retention-days: 14

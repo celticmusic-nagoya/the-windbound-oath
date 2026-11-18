@@ -1,0 +1,136 @@
+{
+  "task": "MORWEN-REBUILD-01-ACTUAL-BODY-FIT",
+  "method": "RB01-SEMANTIC-FULLBODY-CAGE-02",
+  "source": "assets/candidates/morwen-rebuild-01/body-workspace/MORWEN_BODY_SCULPT_WORKSPACE_UNAPPROVED.blend",
+  "vertex_count": 12502,
+  "faces": 12500,
+  "changed_vertices": 12502,
+  "max_vertex_delta_normalized": 0.07817017110117924,
+  "mean_vertex_delta_normalized": 0.04034854675218564,
+  "finite": true,
+  "topology_preserved": true,
+  "skull_head_count_before": 5.727376861397481,
+  "skull_head_count_after_estimate": 7.507936507936511,
+  "skull_head_count_after_is_inferred": true,
+  "crown_uncertainty_px": 20,
+  "landmarks": [
+    {
+      "landmark": "sole",
+      "reference_y_px": 1003,
+      "measurement_type": "visible outline",
+      "source_z": 0,
+      "target_z": 0.0,
+      "cage_after_z": 0.0,
+      "before_error_px": 0.0,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "ankle",
+      "reference_y_px": 955,
+      "measurement_type": "joint center inferred",
+      "source_z": 0.05,
+      "target_z": 0.0507399577167019,
+      "cage_after_z": 0.0507399577167019,
+      "before_error_px": 0.6999999999999961,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "knee",
+      "reference_y_px": 695,
+      "measurement_type": "joint center inferred from contour",
+      "source_z": 0.29,
+      "target_z": 0.32558139534883723,
+      "cage_after_z": 0.32558139534883723,
+      "before_error_px": 33.66000000000004,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "crotch",
+      "reference_y_px": 499,
+      "measurement_type": "clothed outline; underlying joint inferred",
+      "source_z": 0.4887,
+      "target_z": 0.53276955602537,
+      "cage_after_z": 0.53276955602537,
+      "before_error_px": 41.68980000000001,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "pelvis",
+      "reference_y_px": 460,
+      "measurement_type": "contour station",
+      "source_z": 0.53,
+      "target_z": 0.5739957716701902,
+      "cage_after_z": 0.5739957716701902,
+      "before_error_px": 41.619999999999926,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "waist",
+      "reference_y_px": 383,
+      "measurement_type": "visible silhouette",
+      "source_z": 0.6,
+      "target_z": 0.6553911205073996,
+      "cage_after_z": 0.6553911205073996,
+      "before_error_px": 52.400000000000006,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "chest",
+      "reference_y_px": 285,
+      "measurement_type": "garment-covered silhouette",
+      "source_z": 0.7,
+      "target_z": 0.758985200845666,
+      "cage_after_z": 0.758985200845666,
+      "before_error_px": 55.80000000000008,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "shoulder",
+      "reference_y_px": 225,
+      "measurement_type": "joint inferred from visible shoulder",
+      "source_z": 0.775,
+      "target_z": 0.8224101479915433,
+      "cage_after_z": 0.8224101479915433,
+      "before_error_px": 44.849999999999966,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "neck",
+      "reference_y_px": 207,
+      "measurement_type": "visible contour",
+      "source_z": 0.8,
+      "target_z": 0.8414376321353065,
+      "cage_after_z": 0.8414376321353065,
+      "before_error_px": 39.19999999999994,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "chin",
+      "reference_y_px": 183,
+      "measurement_type": "visible contour",
+      "source_z": 0.8254,
+      "target_z": 0.8668076109936576,
+      "cage_after_z": 0.8668076109936576,
+      "before_error_px": 39.17160000000002,
+      "after_cage_error_px": 0.0
+    },
+    {
+      "landmark": "skull_crown",
+      "reference_y_px": 57,
+      "measurement_type": "INFERRED hidden by hair",
+      "source_z": 1,
+      "target_z": 1.0,
+      "cage_after_z": 1.0,
+      "before_error_px": 0.0,
+      "after_cage_error_px": 0.0
+    }
+  ],
+  "warning": "Cage-station error is not independent silhouette accuracy. Head crown and anatomical joint centers are inferred; drawing views are not calibrated orthographic scans.",
+  "G1_body_reference": "PASS",
+  "G1_final_design": "BLOCKED",
+  "G2": "FAIL",
+  "G3": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "independent_art_qa": "FAIL",
+  "method_family_status": "STOP_AFTER_TWO_G2_FAILURES"
+}

@@ -1,0 +1,33 @@
+name: Morwen rebuild01 saved source and QA evidence
+# Prior preparation is complete; do not rerun/repackage it on body-edit pushes.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify checkpoint integrity (not art acceptance)
+        run: |
+          sha256sum -c docs/qa/morwen-rebuild-01/SHA256SUMS
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('docs/qa/morwen-rebuild-01/current-status.json').read_text())
+          assert d['G1_body_reference'] == 'PASS'
+          assert d['G3_reference_scene'] == 'PASS'
+          assert d['actual_body_sculpt'] == 'NOT_RUN'
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('Layer 0 reference source PASS; sculpt and independent art QA NOT_RUN. Source/workspace evidence packaging only.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morwen-rebuild01-editable-sources-and-QA-NOT-FINISHED
+          path: |
+            docs/production/MORWEN_REBUILD_01.md
+            docs/qa/morwen-rebuild-01/
+            assets/candidates/morwen-rebuild-01/
+          retention-days: 14
+          if-no-files-found: error

@@ -1,0 +1,157 @@
+name: Morwen sculpt workspace verification (candidate only)
+
+on:
+  push:
+    branches:
+      - feature/morwen-rebuild-01
+    paths:
+      - "tools/morwen_rebuild01/**"
+      - ".github/workflows/morwen-sculpt-workspace-qa.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "tools/morwen_rebuild01/**"
+      - ".github/workflows/morwen-sculpt-workspace-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-reference-workspace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify annotation metadata
+        run: |
+          python3 tools/morwen_rebuild01/validate_layer0_landmarks.py --output /tmp/morwen-landmarks-qa.json
+      - name: Audit cross-view landmark row differences (2D only)
+        run: |
+          python3 tools/morwen_rebuild01/audit_landmark_crossviews.py --output /tmp/morwen-landmark-crossview-qa.json
+          python3 -m json.tool /tmp/morwen-landmark-crossview-qa.json >/dev/null
+          python3 tools/morwen_rebuild01/test_crossview_audit.py
+      - name: Install Blender 4.3.2 (version-checked)
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 1 --proto '=https' --tlsv1.2 \
+            https://mirror.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz \
+            -o /tmp/blender-4.3.2.tar.xz
+          curl --fail --location --retry 1 --proto '=https' --tlsv1.2 \
+            https://mirror.blender.org/release/Blender4.3/blender-4.3.2.sha256 \
+            -o /tmp/blender-4.3.2.sha256
+          python3 - <<'PY'
+          import hashlib, pathlib, re
+          archive = pathlib.Path("/tmp/blender-4.3.2.tar.xz")
+          checksum = pathlib.Path("/tmp/blender-4.3.2.sha256")
+          content = checksum.read_text(encoding="utf-8")
+          name = "blender-4.3.2-linux-x64.tar.xz"
+          entries = []
+          for line in content.splitlines():
+              if name not in line:
+                  continue
+              hashes = re.findall(r"(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])", line)
+              entries.extend(hashes)
+          if len(set(entries)) != 1:
+              raise RuntimeError(f"Expected one unambiguous checksum for {name}; matching lines={len(entries)}")
+          digest = hashlib.file_digest(archive.open("rb"), "sha256").hexdigest()
+          if digest.lower() != entries[0].lower():
+              raise RuntimeError(f"SHA-256 mismatch for {name}")
+          print("BLENDER_ARCHIVE_SHA256_PASS", digest)
+          PY
+          mkdir -p /tmp/blender-4.3.2
+          tar -xJf /tmp/blender-4.3.2.tar.xz -C /tmp/blender-4.3.2 --strip-components=1
+          echo /tmp/blender-4.3.2 >> "$GITHUB_PATH"
+          /tmp/blender-4.3.2/blender --version | head -n 2
+          /tmp/blender-4.3.2/blender --version | head -n 1 | grep -Fx 'Blender 4.3.2'
+      - name: Generate isolated unapproved workspace
+        run: |
+          mkdir -p /tmp/morwen-workspace
+          blender -b --python tools/morwen_rebuild01/create_sculpt_workspace.py -- --output /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
+      - name: Reopen and verify workspace invariants
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python-expr '
+          import bpy
+          scene=bpy.context.scene
+          assert scene.get("status")=="UNAPPROVED_TEMPLATE_NOT_A_SCULPT"
+          assert scene.get("projection_calibrated") is False
+          names={c.name for c in bpy.data.collections}
+          assert {"00_CANONICAL_LAYER0_LOCKED","01_LANDMARK_GUIDES_UNCALIBRATED","02_AUTHOR_SCULPT_EMPTY","03_FIXED_REVIEW_CAMERAS"} <= names
+          assert len(bpy.data.cameras)==6
+          assert len(bpy.data.meshes)==0
+          refs=bpy.data.collections["00_CANONICAL_LAYER0_LOCKED"].objects
+          assert len(refs)==4
+          assert all(o.hide_select and o.get("reference_sha256") for o in refs)
+          assert all(o.data and o.data.packed_file for o in refs)
+          print("WORKSPACE_REOPEN_QA_PASS: 4 packed references, 6 cameras, 0 meshes")
+          '
+      - name: Generate separate unapproved continuous-quad head surface study
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/build_head_surface_study.py -- --output /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend
+          blender -b /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend --python-expr 'import bpy; assert bpy.context.scene.get("status")=="UNAPPROVED_HEAD_SURFACE_STUDY_NOT_A_CHARACTER"; assert len(bpy.data.meshes)==1; assert len(bpy.data.meshes[0].vertices)==6240; print("HEAD_STUDY_REOPEN_PASS")'
+      - name: Render four actual head-study mesh views (not reference images)
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend --python tools/morwen_rebuild01/render_head_study.py -- --output-dir /tmp/morwen-workspace/head-study-renders
+      - name: Build and reopen separate facial-plane blockout method B
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/build_facial_planes_blockout.py -- --output /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend
+          blender -b /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend --python-expr 'import bpy; assert bpy.context.scene.get("status")=="UNAPPROVED_FACIAL_PLANES_BLOCKOUT_NOT_A_CHARACTER"; assert len(bpy.data.meshes)==1; print("FACIAL_PLANES_REOPEN_PASS")'
+      - name: Render actual facial-plane blockout four views
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend --python tools/morwen_rebuild01/render_head_study.py -- --output-dir /tmp/morwen-workspace/facial-planes-renders
+      - name: Independently verify reference camera orientations
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/verify_reference_cameras.py -- /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
+      - name: Render four orthographic camera QA images (uncalibrated)
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/render_reference_views.py -- /tmp/morwen-workspace/camera-renders
+      - name: Produce four-view visual review sheet (2D only)
+        run: |
+          python3 -m pip install --disable-pip-version-check --user Pillow==11.3.0
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          src = Path("tools/blender/production_mesh_08/references")
+          entries = [
+              ("FRONT", "7809.png", "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"),
+              ("RIGHT", "7807.png", "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737"),
+              ("BACK", "7810.png", "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f"),
+              ("LEFT", "7808.png", "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"),
+          ]
+          sheet = Image.new("RGB", (384 * 4, 1080), (44, 48, 55))
+          draw = ImageDraw.Draw(sheet)
+          for index, (view, filename, expected) in enumerate(entries):
+              data = (src / filename).read_bytes()
+              assert hashlib.sha256(data).hexdigest() == expected
+              with Image.open(src / filename) as source:
+                  assert source.size == (384, 1024) and source.mode == "RGBA"
+                  background = Image.new("RGBA", source.size, (80, 80, 80, 255))
+                  background.alpha_composite(source)
+                  sheet.paste(background.convert("RGB"), (index * 384, 40))
+              draw.text((index * 384 + 12, 12), f"{view} | {filename} | SHA VERIFIED", fill="white")
+          output = Path("/tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png")
+          sheet.save(output)
+          print("FOUR_VIEW_CONTACT_SHEET_CREATED", output)
+          PY
+      - name: Upload QA evidence (no canonical files)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-sculpt-workspace-qa
+          path: |
+            /tmp/morwen-landmarks-qa.json
+            /tmp/morwen-landmark-crossview-qa.json
+            /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
+            /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend
+            /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend
+            /tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png
+            /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
+            /tmp/morwen-workspace/camera-renders/*.png
+            /tmp/morwen-workspace/head-study-renders/*.png
+            /tmp/morwen-workspace/facial-planes-renders/*.png
+          if-no-files-found: warn
+          retention-days: 7

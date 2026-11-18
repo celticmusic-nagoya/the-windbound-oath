@@ -1,0 +1,33 @@
+{
+  "task": "MORWEN-ANATOMICAL-QUAD-PATCH-01",
+  "production_attempts": 1,
+  "method_family": "harmonic_domain_rest_rail_quad_reconstruction",
+  "status": "FAILED_STOPPED",
+  "required_completion_met": false,
+  "G1_body_reference": "PASS",
+  "G2_local_anatomy": "FAIL",
+  "G2_character": "FAIL",
+  "G3_patch": "FAIL",
+  "G3_full_character": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "unmet_conditions": [
+    "2 tracked warning regions remain (3859/10002)",
+    "89 nonadjacent patch-related penetration pairs and9 adjacent face interior penetration pairs",
+    "27 new quad fold flags under both-diagonal test",
+    "diagnostic bend validation fails",
+    "independent anatomy/art review FAIL; shoulder/knee shape regresses"
+  ],
+  "met_conditions": [
+    "Real local topology replacement saved",
+    "9080 protected vertices exact",
+    "11753 exterior face connectivity andUV preserved",
+    "Shoulder accuracy unchanged; knee error difference0.05px below reference uncertainty",
+    "Four-view/local/wire/bend images saved",
+    "Independent art QA performed"
+  ],
+  "warning15_resolved": 13,
+  "warning15_remaining": 2,
+  "geometry_retried_after_failure": false,
+  "diagnostic_setup_correction_only": true,
+  "formal_adoption": false
+}

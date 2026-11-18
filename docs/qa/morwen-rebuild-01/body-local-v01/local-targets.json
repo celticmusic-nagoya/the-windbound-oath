@@ -1,0 +1,22 @@
+{
+  "method": "Pinned-boundary differential local surface sculpt (adjacency bi-Laplacian)",
+  "manual_GUI_sculpt": false,
+  "retopology": false,
+  "full_body_cage_executed": false,
+  "source": "body-fit-v02/MORWEN_BODY_FIT_V02_UNAPPROVED.blend",
+  "free_vertices": 3422,
+  "shoulder_patch_vertices": 1034,
+  "leg_patch_vertices": 2388,
+  "hard_fixed_vertices": 9080,
+  "all_fixed_vertices_exactly_preserved": true,
+  "pinned_chest_band_extrema": [
+    10142,
+    3986,
+    3811,
+    3978,
+    3900,
+    3740
+  ],
+  "reference_notes": "Source Layer0 views have uncalibrated perspective/pose; joint centers inferred. Knee and shoulder target extents use existing measurement table, not new source SHA checks.",
+  "solve": "min 6||L X||^2 + sum local_handle_weights||X-target||^2 with hard exterior boundary"
+}

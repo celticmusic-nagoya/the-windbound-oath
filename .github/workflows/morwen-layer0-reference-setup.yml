@@ -1,0 +1,112 @@
+name: Morwen Layer 0 Canonical Reference Setup
+on:
+  push:
+    branches:
+      - feature/morwen-rebuild-01
+    paths:
+      - 'tools/blender/production_mesh_08/references/**'
+      - 'tools/blender/production_mesh_08/layer0_reference_manifest.json'
+      - 'tools/blender/production_mesh_08/prepare_layer0_references.py'
+      - '.github/workflows/morwen-layer0-reference-setup.yml'
+      - 'tools/morwen_rebuild01/finalize_reference_scene.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender Python runtime
+        run: python -m pip install bpy==4.3.0
+      - name: Validate Python syntax
+        run: python3 -m py_compile tools/blender/production_mesh_08/prepare_layer0_references.py
+      - name: Verify official PNG hashes and place reference images in Blender
+        run: |
+          set -o pipefail
+          mkdir -p render_output/layer0_reference_setup
+          python tools/blender/production_mesh_08/prepare_layer0_references.py 2>&1 | tee render_output/layer0_reference_setup/setup.log
+      - name: Check source validation and Blender output
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          out=pathlib.Path("render_output/layer0_reference_setup")
+          q=json.loads((out/"QA.json").read_text())
+          assert q["reference_count"]==4,q
+          assert q["G1"]=="REFERENCE_HASH_PASS_VISUAL_NOT_RUN",q
+          assert q["G3"]=="REFERENCE_PLANES_CREATED",q
+          assert (out/"MORWEN_LAYER0_REFERENCES.blend").stat().st_size>1000
+          print("CANONICAL_LAYER0_REFERENCE_HASH_AND_SETUP_PASS")
+          PY
+      - name: Pack images and verify reopened cameras and orientation
+        run: |
+          set -o pipefail
+          python tools/morwen_rebuild01/finalize_reference_scene.py 2>&1 | tee render_output/layer0_reference_setup/reopen.log
+          sha256sum render_output/layer0_reference_setup/*.blend render_output/layer0_reference_setup/*.json > render_output/layer0_reference_setup/SHA256SUMS
+      - name: Upload verification artifact (also on failure)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-reference-setup
+          path: render_output/layer0_reference_setup/
+          retention-days: 30
+          if-no-files-found: warn
+  cc0-base-intake:
+    needs: verify-reference
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: morwen-layer0-reference-setup
+          path: render_output/layer0_reference_setup
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender runtime and source decompressor
+        run: python -m pip install bpy==4.3.0 zstandard
+      - name: Acquire and verify official CC0 source (no legacy Morwen geometry)
+        run: |
+          set -o pipefail
+          mkdir -p _cc0_source render_output/rebuild01_base_intake
+          curl -fL --retry 1 --max-time 180 -o _cc0_source/bundle.zip https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip 2>&1 | tee render_output/rebuild01_base_intake/acquisition.log
+          python3 - <<'PY'
+          import hashlib, io, pathlib, zipfile, zstandard
+          root=pathlib.Path('_cc0_source')
+          archive=root/'bundle.zip'
+          assert hashlib.sha256(archive.read_bytes()).hexdigest()=='811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515'
+          with zipfile.ZipFile(archive) as z:
+              names=[n for n in z.namelist() if n.endswith('/human_base_meshes_bundle.blend')]
+              assert len(names)==1
+              raw=z.read(names[0])
+          if not raw.startswith(b'BLENDER'):
+              with zstandard.ZstdDecompressor().stream_reader(io.BytesIO(raw), read_across_frames=True) as reader:
+                  raw=reader.read(500_000_001)
+          assert len(raw)<=500_000_000
+          assert hashlib.sha256(raw).hexdigest()=='e5e9d30a7e6bb385fed21459dce68d1ad0d06e7bde4f9626696dbfda07cd541a'
+          (root/'official_source.blend').write_bytes(raw)
+          PY
+      - name: Intake and render unmodified stylized anatomy source
+        run: |
+          set -o pipefail
+          python tools/morwen_rebuild01/intake_cc0_stylized_base.py 2>&1 | tee render_output/rebuild01_base_intake/blender.log
+          python3 - <<'PY'
+          import json,pathlib
+          out=pathlib.Path('render_output/rebuild01_base_intake')
+          q=json.loads((out/'QA.json').read_text())
+          assert q['source_coordinates_unchanged'] and not q['morwen_fit_performed']
+          assert len(list(out.glob('*.png')))==6
+          PY
+          sha256sum render_output/rebuild01_base_intake/*.blend render_output/rebuild01_base_intake/*.json render_output/rebuild01_base_intake/*.png > render_output/rebuild01_base_intake/SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-rebuild01-cc0-base-source-intake-NOT-FITTED
+          path: render_output/rebuild01_base_intake/
+          retention-days: 30
+          if-no-files-found: error

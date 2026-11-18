@@ -1,0 +1,1286 @@
+{
+  "schema": "morwen-layer0-landmarks-v1",
+  "reference_commit": "8cc6687ce4498b6f0ea5bd59f0ebe2d7017629f1",
+  "audit_parent": "e3bf487490c8f10d0808a691092dd03f3b8f8b20",
+  "canvas_px": [
+    384,
+    1024
+  ],
+  "coordinates": "integer pixel centers; u right, v down; bounds inclusive; subject R/L",
+  "projection": "unknown; no validated common scale or camera model",
+  "quantization_half_width_px": 0.5,
+  "bounds_method": "operator review intervals, not statistical CI; quantization is additional; pose/projection and occlusion systematic errors unquantified",
+  "headgear": "absent in Layer 0; v5.61 required for formal appearance/hat",
+  "independent_annotation": {
+    "status": "BLOCKED",
+    "reason": "only one human-readable image interpretation from the authoring agent; no second independently collected anatomical annotation set",
+    "position_delta_px": null,
+    "resolution": "second reviewer records original-pixel points and intervals without seeing set A; then compare by ID/view, publish du,dv, Euclidean differences and union bounds, and adjudicate disagreements"
+  },
+  "automated_pixel_qa": {
+    "status": "LIMITED_PASS",
+    "method": "independent of manual point locations along v; scan full source canvas for first/last row with >=8 pixels at alpha >=128; checks upper/lower visible silhouette extent only, not anatomical annotation or floor",
+    "views": {
+      "front": {
+        "hair_mask_row_px": 17,
+        "foot_mask_row_px": 1003,
+        "hair_mask_minus_manual_v_px": 0,
+        "foot_mask_minus_manual_v_px": {
+          "sole_R": 2,
+          "sole_L": 2
+        }
+      },
+      "right": {
+        "hair_mask_row_px": 16,
+        "foot_mask_row_px": 1002,
+        "hair_mask_minus_manual_v_px": 1,
+        "foot_mask_minus_manual_v_px": {
+          "sole_R": 4
+        }
+      },
+      "back": {
+        "hair_mask_row_px": 16,
+        "foot_mask_row_px": 1001,
+        "hair_mask_minus_manual_v_px": 0,
+        "foot_mask_minus_manual_v_px": {
+          "sole_L": 3,
+          "sole_R": 3
+        }
+      },
+      "left": {
+        "hair_mask_row_px": 16,
+        "foot_mask_row_px": 1002,
+        "hair_mask_minus_manual_v_px": 1,
+        "foot_mask_minus_manual_v_px": {
+          "sole_L": 3
+        }
+      }
+    }
+  },
+  "views": {
+    "front": {
+      "source": "7809.png",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "display_anchor_uv_px": [
+        213,
+        1001
+      ],
+      "points": [
+        {
+          "marker": 1,
+          "feature_id": "hair",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 210,
+          "v_px": 17,
+          "bounds_px": [
+            200,
+            14,
+            220,
+            20
+          ],
+          "notes": "visible hair upper silhouette; horizontal range covers the rounded crest"
+        },
+        {
+          "marker": 2,
+          "feature_id": "crown",
+          "subject_side": null,
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 212,
+          "v_px": 57,
+          "bounds_px": [
+            196,
+            37,
+            228,
+            77
+          ],
+          "notes": "legacy front cranium estimate (v=57 ±20); covered by hair. Provisional horizontal center"
+        },
+        {
+          "marker": 3,
+          "feature_id": "chin",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 213,
+          "v_px": 180,
+          "bounds_px": [
+            209,
+            176,
+            217,
+            184
+          ],
+          "notes": "visible inferior chin contour"
+        },
+        {
+          "marker": 4,
+          "feature_id": "shoulder_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 130,
+          "v_px": 231,
+          "bounds_px": [
+            125,
+            221,
+            135,
+            241
+          ],
+          "notes": "lateral deltoid surface transition, not acromion"
+        },
+        {
+          "marker": 5,
+          "feature_id": "shoulder_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 299,
+          "v_px": 232,
+          "bounds_px": [
+            294,
+            222,
+            304,
+            242
+          ],
+          "notes": "lateral deltoid surface transition, not acromion"
+        },
+        {
+          "marker": 6,
+          "feature_id": "axilla_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 149,
+          "v_px": 276,
+          "bounds_px": [
+            144,
+            264,
+            154,
+            288
+          ],
+          "notes": "visible arm-to-torso crease or junction on this view, not joint center"
+        },
+        {
+          "marker": 7,
+          "feature_id": "axilla_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 279,
+          "v_px": 276,
+          "bounds_px": [
+            274,
+            264,
+            284,
+            288
+          ],
+          "notes": "visible arm-to-torso crease or junction on this view, not joint center"
+        },
+        {
+          "marker": 8,
+          "feature_id": "rib_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 153,
+          "v_px": 332,
+          "bounds_px": [
+            147,
+            322,
+            159,
+            342
+          ],
+          "notes": "visible torso/outfit contour at marked row, not bony or unclothed rib cage"
+        },
+        {
+          "marker": 9,
+          "feature_id": "rib_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 275,
+          "v_px": 332,
+          "bounds_px": [
+            269,
+            322,
+            281,
+            342
+          ],
+          "notes": "visible torso/outfit contour at marked row, not bony or unclothed rib cage"
+        },
+        {
+          "marker": 10,
+          "feature_id": "pelvis_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 143,
+          "v_px": 421,
+          "bounds_px": [
+            135,
+            409,
+            151,
+            433
+          ],
+          "notes": "visible outer pelvis-region skin/garment edge, not the iliac crest"
+        },
+        {
+          "marker": 11,
+          "feature_id": "pelvis_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 283,
+          "v_px": 421,
+          "bounds_px": [
+            275,
+            409,
+            291,
+            433
+          ],
+          "notes": "visible outer pelvis-region skin/garment edge, not the iliac crest"
+        },
+        {
+          "marker": 12,
+          "feature_id": "hip_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 169,
+          "v_px": 456,
+          "bounds_px": [
+            154,
+            434,
+            184,
+            478
+          ],
+          "notes": "approximate hip joint region, without anatomical depth evidence"
+        },
+        {
+          "marker": 13,
+          "feature_id": "hip_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 258,
+          "v_px": 455,
+          "bounds_px": [
+            243,
+            433,
+            273,
+            477
+          ],
+          "notes": "approximate hip joint region, without anatomical depth evidence"
+        },
+        {
+          "marker": 14,
+          "feature_id": "crotch",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 212,
+          "v_px": 500,
+          "bounds_px": [
+            206,
+            493,
+            218,
+            507
+          ],
+          "notes": "visible groin garment junction, not the hip joint"
+        },
+        {
+          "marker": 15,
+          "feature_id": "knee_R_out",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 151,
+          "v_px": 698,
+          "bounds_px": [
+            146,
+            690,
+            156,
+            706
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 16,
+          "feature_id": "knee_L_out",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 273,
+          "v_px": 699,
+          "bounds_px": [
+            268,
+            691,
+            278,
+            707
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 17,
+          "feature_id": "knee_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 180,
+          "v_px": 696,
+          "bounds_px": [
+            170,
+            678,
+            190,
+            714
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 18,
+          "feature_id": "knee_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 245,
+          "v_px": 697,
+          "bounds_px": [
+            235,
+            679,
+            255,
+            715
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 19,
+          "feature_id": "ankle_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 181,
+          "v_px": 920,
+          "bounds_px": [
+            173,
+            905,
+            189,
+            935
+          ],
+          "notes": "approximate covered ankle joint region, not the malleolus"
+        },
+        {
+          "marker": 20,
+          "feature_id": "ankle_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 243,
+          "v_px": 920,
+          "bounds_px": [
+            235,
+            905,
+            251,
+            935
+          ],
+          "notes": "approximate covered ankle joint region, not the malleolus"
+        },
+        {
+          "marker": 21,
+          "feature_id": "sole_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 181,
+          "v_px": 1001,
+          "bounds_px": [
+            167,
+            998,
+            195,
+            1004
+          ],
+          "notes": "lowest visible foot/stocking contour near contact; not verified common ground"
+        },
+        {
+          "marker": 22,
+          "feature_id": "sole_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 244,
+          "v_px": 1001,
+          "bounds_px": [
+            230,
+            998,
+            258,
+            1004
+          ],
+          "notes": "lowest visible foot/stocking contour near contact; not verified common ground"
+        }
+      ],
+      "independent_points": null
+    },
+    "right": {
+      "source": "7807.png",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "display_anchor_uv_px": [
+        241,
+        998
+      ],
+      "points": [
+        {
+          "marker": 1,
+          "feature_id": "hair",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 198,
+          "v_px": 15,
+          "bounds_px": [
+            184,
+            12,
+            212,
+            18
+          ],
+          "notes": "visible hair upper silhouette; horizontal range covers the rounded crest"
+        },
+        {
+          "marker": 2,
+          "feature_id": "chin",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 253,
+          "v_px": 176,
+          "bounds_px": [
+            247,
+            171,
+            259,
+            181
+          ],
+          "notes": "visible inferior chin contour"
+        },
+        {
+          "marker": 3,
+          "feature_id": "shoulder_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 177,
+          "v_px": 228,
+          "bounds_px": [
+            170,
+            218,
+            184,
+            238
+          ],
+          "notes": "lateral deltoid surface transition, not acromion"
+        },
+        {
+          "marker": 4,
+          "feature_id": "rib_front",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 311,
+          "v_px": 286,
+          "bounds_px": [
+            305,
+            277,
+            317,
+            295
+          ],
+          "notes": "visible torso/outfit contour at marked row, not bony or unclothed rib cage"
+        },
+        {
+          "marker": 5,
+          "feature_id": "pelvis_back",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 151,
+          "v_px": 437,
+          "bounds_px": [
+            144,
+            425,
+            158,
+            449
+          ],
+          "notes": "visible outer pelvis-region skin/garment edge, not the iliac crest"
+        },
+        {
+          "marker": 6,
+          "feature_id": "hip_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 200,
+          "v_px": 462,
+          "bounds_px": [
+            183,
+            439,
+            217,
+            485
+          ],
+          "notes": "approximate hip joint region, without anatomical depth evidence"
+        },
+        {
+          "marker": 7,
+          "feature_id": "crotch",
+          "subject_side": null,
+          "status": "unmeasurable",
+          "surface": "subsurface or occluded",
+          "u_px": null,
+          "v_px": null,
+          "bounds_px": null,
+          "notes": "visible groin garment junction, not the hip joint"
+        },
+        {
+          "marker": 8,
+          "feature_id": "axilla_R",
+          "subject_side": "R",
+          "status": "unmeasurable",
+          "surface": "subsurface or occluded",
+          "u_px": null,
+          "v_px": null,
+          "bounds_px": null,
+          "notes": "visible arm-to-torso crease or junction on this view, not joint center"
+        },
+        {
+          "marker": 9,
+          "feature_id": "knee_R_back",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 178,
+          "v_px": 693,
+          "bounds_px": [
+            173,
+            685,
+            183,
+            701
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 10,
+          "feature_id": "knee_R_front",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 245,
+          "v_px": 693,
+          "bounds_px": [
+            240,
+            685,
+            250,
+            701
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 11,
+          "feature_id": "knee_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 212,
+          "v_px": 692,
+          "bounds_px": [
+            199,
+            674,
+            225,
+            710
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 12,
+          "feature_id": "ankle_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 185,
+          "v_px": 920,
+          "bounds_px": [
+            177,
+            905,
+            193,
+            935
+          ],
+          "notes": "approximate covered ankle joint region, not the malleolus"
+        },
+        {
+          "marker": 13,
+          "feature_id": "sole_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 241,
+          "v_px": 998,
+          "bounds_px": [
+            221,
+            994,
+            261,
+            1002
+          ],
+          "notes": "lowest visible foot/stocking contour near contact; not verified common ground"
+        }
+      ],
+      "independent_points": null
+    },
+    "back": {
+      "source": "7810.png",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "display_anchor_uv_px": [
+        171,
+        998
+      ],
+      "points": [
+        {
+          "marker": 1,
+          "feature_id": "hair",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 173,
+          "v_px": 16,
+          "bounds_px": [
+            162,
+            13,
+            184,
+            19
+          ],
+          "notes": "visible hair upper silhouette; horizontal range covers the rounded crest"
+        },
+        {
+          "marker": 2,
+          "feature_id": "chin",
+          "subject_side": null,
+          "status": "unmeasurable",
+          "surface": "subsurface or occluded",
+          "u_px": null,
+          "v_px": null,
+          "bounds_px": null,
+          "notes": "visible inferior chin contour"
+        },
+        {
+          "marker": 3,
+          "feature_id": "shoulder_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 84,
+          "v_px": 231,
+          "bounds_px": [
+            79,
+            221,
+            89,
+            241
+          ],
+          "notes": "lateral deltoid surface transition, not acromion"
+        },
+        {
+          "marker": 4,
+          "feature_id": "shoulder_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 260,
+          "v_px": 231,
+          "bounds_px": [
+            255,
+            221,
+            265,
+            241
+          ],
+          "notes": "lateral deltoid surface transition, not acromion"
+        },
+        {
+          "marker": 5,
+          "feature_id": "axilla_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 111,
+          "v_px": 284,
+          "bounds_px": [
+            105,
+            272,
+            117,
+            296
+          ],
+          "notes": "visible arm-to-torso crease or junction on this view, not joint center"
+        },
+        {
+          "marker": 6,
+          "feature_id": "axilla_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 233,
+          "v_px": 284,
+          "bounds_px": [
+            227,
+            272,
+            239,
+            296
+          ],
+          "notes": "visible arm-to-torso crease or junction on this view, not joint center"
+        },
+        {
+          "marker": 7,
+          "feature_id": "rib_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 113,
+          "v_px": 332,
+          "bounds_px": [
+            107,
+            322,
+            119,
+            342
+          ],
+          "notes": "visible torso/outfit contour at marked row, not bony or unclothed rib cage"
+        },
+        {
+          "marker": 8,
+          "feature_id": "rib_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 230,
+          "v_px": 332,
+          "bounds_px": [
+            224,
+            322,
+            236,
+            342
+          ],
+          "notes": "visible torso/outfit contour at marked row, not bony or unclothed rib cage"
+        },
+        {
+          "marker": 9,
+          "feature_id": "pelvis_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 94,
+          "v_px": 420,
+          "bounds_px": [
+            86,
+            408,
+            102,
+            432
+          ],
+          "notes": "visible outer pelvis-region skin/garment edge, not the iliac crest"
+        },
+        {
+          "marker": 10,
+          "feature_id": "pelvis_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 248,
+          "v_px": 420,
+          "bounds_px": [
+            240,
+            408,
+            256,
+            432
+          ],
+          "notes": "visible outer pelvis-region skin/garment edge, not the iliac crest"
+        },
+        {
+          "marker": 11,
+          "feature_id": "hip_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 120,
+          "v_px": 459,
+          "bounds_px": [
+            105,
+            436,
+            135,
+            482
+          ],
+          "notes": "approximate hip joint region, without anatomical depth evidence"
+        },
+        {
+          "marker": 12,
+          "feature_id": "hip_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 224,
+          "v_px": 459,
+          "bounds_px": [
+            209,
+            436,
+            239,
+            482
+          ],
+          "notes": "approximate hip joint region, without anatomical depth evidence"
+        },
+        {
+          "marker": 13,
+          "feature_id": "crotch",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 171,
+          "v_px": 508,
+          "bounds_px": [
+            165,
+            499,
+            177,
+            517
+          ],
+          "notes": "visible groin garment junction, not the hip joint"
+        },
+        {
+          "marker": 14,
+          "feature_id": "knee_L_out",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 114,
+          "v_px": 699,
+          "bounds_px": [
+            109,
+            691,
+            119,
+            707
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 15,
+          "feature_id": "knee_R_out",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 235,
+          "v_px": 700,
+          "bounds_px": [
+            230,
+            692,
+            240,
+            708
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 16,
+          "feature_id": "knee_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 139,
+          "v_px": 698,
+          "bounds_px": [
+            129,
+            680,
+            149,
+            716
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 17,
+          "feature_id": "knee_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 207,
+          "v_px": 699,
+          "bounds_px": [
+            197,
+            681,
+            217,
+            717
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 18,
+          "feature_id": "ankle_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 135,
+          "v_px": 921,
+          "bounds_px": [
+            127,
+            906,
+            143,
+            936
+          ],
+          "notes": "approximate covered ankle joint region, not the malleolus"
+        },
+        {
+          "marker": 19,
+          "feature_id": "ankle_R",
+          "subject_side": "R",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 208,
+          "v_px": 921,
+          "bounds_px": [
+            200,
+            906,
+            216,
+            936
+          ],
+          "notes": "approximate covered ankle joint region, not the malleolus"
+        },
+        {
+          "marker": 20,
+          "feature_id": "sole_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 137,
+          "v_px": 998,
+          "bounds_px": [
+            123,
+            994,
+            151,
+            1002
+          ],
+          "notes": "lowest visible foot/stocking contour near contact; not verified common ground"
+        },
+        {
+          "marker": 21,
+          "feature_id": "sole_R",
+          "subject_side": "R",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 204,
+          "v_px": 998,
+          "bounds_px": [
+            190,
+            994,
+            218,
+            1002
+          ],
+          "notes": "lowest visible foot/stocking contour near contact; not verified common ground"
+        }
+      ],
+      "independent_points": null
+    },
+    "left": {
+      "source": "7808.png",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "display_anchor_uv_px": [
+        137,
+        999
+      ],
+      "points": [
+        {
+          "marker": 1,
+          "feature_id": "hair",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 183,
+          "v_px": 15,
+          "bounds_px": [
+            170,
+            12,
+            196,
+            18
+          ],
+          "notes": "visible hair upper silhouette; horizontal range covers the rounded crest"
+        },
+        {
+          "marker": 2,
+          "feature_id": "chin",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 123,
+          "v_px": 176,
+          "bounds_px": [
+            117,
+            171,
+            129,
+            181
+          ],
+          "notes": "visible inferior chin contour"
+        },
+        {
+          "marker": 3,
+          "feature_id": "shoulder_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "visible surface",
+          "u_px": 203,
+          "v_px": 229,
+          "bounds_px": [
+            196,
+            219,
+            210,
+            239
+          ],
+          "notes": "lateral deltoid surface transition, not acromion"
+        },
+        {
+          "marker": 4,
+          "feature_id": "rib_front",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 65,
+          "v_px": 284,
+          "bounds_px": [
+            59,
+            275,
+            71,
+            293
+          ],
+          "notes": "visible torso/outfit contour at marked row, not bony or unclothed rib cage"
+        },
+        {
+          "marker": 5,
+          "feature_id": "pelvis_back",
+          "subject_side": null,
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 220,
+          "v_px": 435,
+          "bounds_px": [
+            212,
+            423,
+            228,
+            447
+          ],
+          "notes": "visible outer pelvis-region skin/garment edge, not the iliac crest"
+        },
+        {
+          "marker": 6,
+          "feature_id": "hip_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 193,
+          "v_px": 460,
+          "bounds_px": [
+            176,
+            437,
+            210,
+            483
+          ],
+          "notes": "approximate hip joint region, without anatomical depth evidence"
+        },
+        {
+          "marker": 7,
+          "feature_id": "crotch",
+          "subject_side": null,
+          "status": "unmeasurable",
+          "surface": "subsurface or occluded",
+          "u_px": null,
+          "v_px": null,
+          "bounds_px": null,
+          "notes": "visible groin garment junction, not the hip joint"
+        },
+        {
+          "marker": 8,
+          "feature_id": "axilla_L",
+          "subject_side": "L",
+          "status": "unmeasurable",
+          "surface": "subsurface or occluded",
+          "u_px": null,
+          "v_px": null,
+          "bounds_px": null,
+          "notes": "visible arm-to-torso crease or junction on this view, not joint center"
+        },
+        {
+          "marker": 9,
+          "feature_id": "knee_L_front",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 129,
+          "v_px": 694,
+          "bounds_px": [
+            123,
+            686,
+            135,
+            702
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 10,
+          "feature_id": "knee_L_back",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 200,
+          "v_px": 694,
+          "bounds_px": [
+            194,
+            686,
+            206,
+            702
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 11,
+          "feature_id": "knee_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 166,
+          "v_px": 693,
+          "bounds_px": [
+            153,
+            675,
+            179,
+            711
+          ],
+          "notes": "covered knee surface contour when tagged out/front/back; otherwise approximate joint region"
+        },
+        {
+          "marker": 12,
+          "feature_id": "ankle_L",
+          "subject_side": "L",
+          "status": "inferred",
+          "surface": "subsurface or occluded",
+          "u_px": 194,
+          "v_px": 920,
+          "bounds_px": [
+            186,
+            905,
+            202,
+            935
+          ],
+          "notes": "approximate covered ankle joint region, not the malleolus"
+        },
+        {
+          "marker": 13,
+          "feature_id": "sole_L",
+          "subject_side": "L",
+          "status": "observed",
+          "surface": "covered contour",
+          "u_px": 137,
+          "v_px": 999,
+          "bounds_px": [
+            117,
+            995,
+            157,
+            1003
+          ],
+          "notes": "lowest visible foot/stocking contour near contact; not verified common ground"
+        }
+      ],
+      "independent_points": null
+    }
+  },
+  "derived_quantities": {
+    "front_legacy_head_ratio_sensitivity": {
+      "crown_v_interval_px": [
+        37,
+        77
+      ],
+      "chin_v_px": 180,
+      "foot_v_px": 1001,
+      "bounds_heads": [
+        6.74,
+        8.97
+      ],
+      "status": "illustrative; hidden crown precludes confirmation"
+    },
+    "camera_or_world_dimensions": {
+      "status": "BLOCKED",
+      "value": null
+    },
+    "apparent_station_widths_px": {
+      "front": [
+        {
+          "endpoints": [
+            "rib_R",
+            "rib_L"
+          ],
+          "v_px": 332,
+          "point_difference_px": 122,
+          "bounds_px": [
+            109,
+            135
+          ]
+        },
+        {
+          "endpoints": [
+            "pelvis_R",
+            "pelvis_L"
+          ],
+          "v_px": 421,
+          "point_difference_px": 140,
+          "bounds_px": [
+            123,
+            157
+          ]
+        }
+      ],
+      "back": [
+        {
+          "endpoints": [
+            "rib_L",
+            "rib_R"
+          ],
+          "v_px": 332,
+          "point_difference_px": 117,
+          "bounds_px": [
+            104,
+            130
+          ]
+        },
+        {
+          "endpoints": [
+            "pelvis_L",
+            "pelvis_R"
+          ],
+          "v_px": 420,
+          "point_difference_px": 154,
+          "bounds_px": [
+            137,
+            171
+          ]
+        }
+      ],
+      "right": [
+        {
+          "endpoints": [
+            "knee_R_back",
+            "knee_R_front"
+          ],
+          "v_px": 693,
+          "point_difference_px": 67,
+          "bounds_px": [
+            56,
+            78
+          ]
+        }
+      ],
+      "left": [
+        {
+          "endpoints": [
+            "knee_L_front",
+            "knee_L_back"
+          ],
+          "v_px": 694,
+          "point_difference_px": 71,
+          "bounds_px": [
+            58,
+            84
+          ]
+        }
+      ]
+    }
+  }
+}

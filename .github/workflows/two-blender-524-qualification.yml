@@ -1,0 +1,55 @@
+name: TWO Blender 5.2.4 LTS runtime qualification (single branch-push smoke)
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/two-blender-524-qualification.yml
+      - tools/production_qa/install_blender_524.sh
+  push:
+    branches:
+      - feature/morwen-rebuild-01
+    paths:
+      - .github/workflows/two-blender-524-qualification.yml
+      - tools/production_qa/install_blender_524.sh
+permissions:
+  contents: read
+concurrency:
+  group: two-blender-524-qualification
+  cancel-in-progress: false
+jobs:
+  runtime-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch official Blender 5.2.4 and verify official checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-blender-output
+          bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app | tee /tmp/two-blender-output/runtime.txt
+      - name: Test real editable blend create and reopen (isolated smoke only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python-expr 'import bpy; bpy.ops.mesh.primitive_cube_add(); bpy.ops.wm.save_as_mainfile(filepath="/tmp/two-blender-output/SMOKE_ONLY_UNAPPROVED.blend")'
+          /tmp/two-blender/app/blender -b /tmp/two-blender-output/SMOKE_ONLY_UNAPPROVED.blend --python tools/production_qa/validate_blender_runtime.py -- --output /tmp/two-blender-output/reopen.json
+          python3 - <<'PY'
+          import json
+          p='/tmp/two-blender-output/reopen.json'
+          d=json.load(open(p))
+          assert d['version_pass'] and d['source_opened'] and d['meshes']>=1
+          print('SMOKE_REOPEN_PASS')
+          PY
+      - name: Upload reproducible smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-blender-524-runtime-smoke
+          path: /tmp/two-blender-output/
+          if-no-files-found: warn
+          retention-days: 14

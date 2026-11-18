@@ -1,0 +1,49 @@
+name: Morwen local surface edit evidence (G2 FAIL retained)
+on:
+  push:
+    branches: [feature/morwen-rebuild-01]
+    paths:
+      - assets/candidates/morwen-rebuild-01/body-local-v01/**
+      - docs/qa/morwen-rebuild-01/body-local-v01/**
+      - tools/morwen_rebuild01/qa_local_surface.py
+      - .github/workflows/morwen-local-surface-review.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  saved-local-mesh-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender read-only QA runtime
+        run: python -m pip install bpy==4.3.0
+      - name: Reopen saved local edit and validate protected geometry
+        run: |
+          set -o pipefail
+          MORWEN_LOCAL_QA_OUTPUT=docs/qa/morwen-rebuild-01/body-local-v01/ci-local-qa.json python tools/morwen_rebuild01/qa_local_surface.py 2>&1 | tee docs/qa/morwen-rebuild-01/body-local-v01/ci-reopen.log
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path('docs/qa/morwen-rebuild-01/body-local-v01')
+          q=json.loads((p/'ci-local-qa.json').read_text())
+          assert q['changed_vertices']==3422 and q['topology_preserved']
+          assert all(v['exact_local_coordinates_preserved'] for v in q['protected_regions'].values())
+          assert q['chest_bbox_max_delta']<1e-6
+          assert len(list(Path('assets/candidates/morwen-rebuild-01/body-local-v01').glob('*.png')))==16
+          assert (p/'INDEPENDENT_ART_QA.md').is_file()
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('3422 actual local edits, 9080 hard-fixed vertices. Independent G2 FAIL and normal diagnostic FAIL retained. No source acquisition, cage execution or rendering in this job.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-local-surface-v01-ACTUAL-EDIT-G2-FAIL
+          path: |
+            assets/candidates/morwen-rebuild-01/body-local-v01/
+            docs/qa/morwen-rebuild-01/body-local-v01/
+          retention-days: 30
+          if-no-files-found: error
