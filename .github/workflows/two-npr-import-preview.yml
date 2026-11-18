@@ -1,0 +1,60 @@
+name: TWO NPR import preview and portable glTF candidate
+on:
+  workflow_dispatch:
+    inputs:
+      input_model:
+        description: 'Repository-relative path to an existing licensed .glb/.gltf/.fbx'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify input and prevent path traversal
+        shell: bash
+        env:
+          INPUT_MODEL: ${{ inputs.input_model }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,pathlib
+          root=pathlib.Path.cwd().resolve()
+          raw=os.environ['INPUT_MODEL']
+          p=(root/raw).resolve()
+          assert p.is_relative_to(root) and p.is_file(), 'BLOCKED: input must exist inside checked-out repository'
+          assert p.suffix.lower() in ('.glb','.gltf','.fbx'), 'BLOCKED: unsupported model format'
+          with open(os.environ['GITHUB_ENV'],'a') as f:f.write('TWO_INPUT_MODEL='+str(p)+'\n')
+          print('INPUT_MODEL_VERIFIED',p.relative_to(root))
+          PY
+      - name: Install checksum-verified Blender 5.2.4
+        shell: bash
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Install headless EGL/OpenGL libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0
+      - name: Process source asset and render NPR views
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-npr-candidate
+          LIBGL_ALWAYS_SOFTWARE=1 /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/npr_pipeline.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate
+          for f in front.png three_quarter.png back.png portable_original_materials.glb NPR_REVIEW_UNAPPROVED.blend manifest.json; do
+            test -s "/tmp/two-npr-candidate/$f"
+          done
+      - name: Upload candidate and QA manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-npr-unapproved-preview
+          path: /tmp/two-npr-candidate/
+          if-no-files-found: warn
+          retention-days: 14
