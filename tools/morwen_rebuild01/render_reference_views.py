@@ -48,11 +48,17 @@ def main():
         emission.inputs["Strength"].default_value = 1.0
         mat.node_tree.links.new(tex.outputs["Color"], emission.inputs["Color"])
         output = nodes.new("ShaderNodeOutputMaterial")
-        mat.node_tree.links.new(emission.outputs[0], output.inputs["Surface"])
+        transparent = nodes.new("ShaderNodeBsdfTransparent")
+        mix = nodes.new("ShaderNodeMixShader")
+        mat.node_tree.links.new(tex.outputs["Alpha"], mix.inputs[0])
+        mat.node_tree.links.new(transparent.outputs[0], mix.inputs[1])
+        mat.node_tree.links.new(emission.outputs[0], mix.inputs[2])
+        mat.node_tree.links.new(mix.outputs[0], output.inputs["Surface"])
         mesh.materials.append(mat)
         obj.hide_render = True
     scene.render.image_settings.file_format = "PNG"
-    scene.render.film_transparent = False
+    scene.render.film_transparent = True
+    scene.render.image_settings.color_mode = "RGBA"
     scene.render.resolution_x = 768
     scene.render.resolution_y = 1024
     scene.render.resolution_percentage = 100
