@@ -21,12 +21,12 @@ jobs:
         run: |
           set -euo pipefail
           bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
-      - name: Install Linux EGL runtime needed by headless Eevee\n        shell: bash\n        run: |\n          set -euo pipefail\n          sudo apt-get update -qq\n          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0\n          ldconfig -p | grep -F 'libEGL.so.1'\n      - name: Generate real editable candidate head study and 5 rendered views
+      - name: Install Linux EGL runtime needed by headless Eevee\n        shell: bash\n        run: |\n          set -euo pipefail\n          sudo apt-get update -qq\n          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0\n          ldconfig -p | grep -F 'libEGL.so.1'\n          ldconfig -p | grep -F 'libGL.so.1'\n      - name: Generate real editable candidate head study and 5 rendered views
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/morwen-authored-head
-          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_head_study.py -- /tmp/morwen-authored-head
+          LIBGL_ALWAYS_SOFTWARE=1 /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_head_study.py -- /tmp/morwen-authored-head
           test -s /tmp/morwen-authored-head/MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend
           test -s /tmp/morwen-authored-head/QA.json
       - name: Reopen actual .blend and audit outputs
