@@ -86,6 +86,14 @@ def render(name,loc):
  scene.render.filepath=str(out/(name+'.png'));bpy.ops.render.render(write_still=True)
  bpy.data.objects.remove(cam,do_unlink=True)
 for name,loc in [('front',(0,-4,1.54)),('back',(0,4,1.54)),('left',(-4,0,1.54)),('right',(4,0,1.54)),('three_quarter',(3,-3,1.8))]:render(name,loc)
+# Temporary technical input only: no official artwork or production meshes are overwritten.
+bpy.ops.object.select_all(action='DESELECT')
+export_objects=[o for o in scene.objects if o.type in {'MESH','CURVE'} and not o.name.startswith('Review_')]
+for o in export_objects:o.select_set(True)
+bpy.context.view_layer.objects.active=face
+bpy.ops.export_scene.gltf(filepath=str(out/'morwen_head_study.glb'),export_format='GLB',use_selection=True)
+assert (out/'morwen_head_study.glb').stat().st_size>0
+bpy.ops.object.select_all(action='DESELECT')
 blend=out/'MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend';bpy.ops.wm.save_as_mainfile(filepath=str(blend))
 report={'asset':'Morwen','status':'UNAPPROVED_HEAD_STUDY_ONLY','method':'new independently authored ring sculpt with separate bob and fringe; no failed geometry reused','blender':bpy.app.version_string,'mesh_objects':{o.name:len(o.data.vertices) for o in scene.objects if o.type=='MESH'},'blend_sha256':hashlib.sha256(blend.read_bytes()).hexdigest(),'renders':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.png')},'G1':'BLOCKED_VISUAL_CALIBRATION','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_TOPOLOGY_UV_RIG','G4':'NOT_RUN'}
 (out/'QA.json').write_text(json.dumps(report,indent=2)+'\n')
