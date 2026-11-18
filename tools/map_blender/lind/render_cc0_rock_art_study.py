@@ -57,6 +57,7 @@ def main():
     scene.render.resolution_y = 768
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "PNG"
+    scene.world = bpy.data.worlds.new("Neutral studio world")
     scene.world.color = (0.16, 0.16, 0.16)
     scene["official_world_metric"] = "UNAPPROVED"
     scene["official_placement"] = "NOT_RUN"
