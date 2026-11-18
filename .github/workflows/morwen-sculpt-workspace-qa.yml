@@ -7,6 +7,12 @@ on:
     paths:
       - "tools/morwen_rebuild01/**"
       - ".github/workflows/morwen-sculpt-workspace-qa.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "tools/morwen_rebuild01/**"
+      - ".github/workflows/morwen-sculpt-workspace-qa.yml"
   workflow_dispatch:
 
 permissions:
