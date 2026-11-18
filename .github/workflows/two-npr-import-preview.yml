@@ -112,7 +112,7 @@ jobs:
           qa={'npr':'RENDERED_UNVERIFIED' if e=='success' else 'SKIPPED_HEADLESS_EGL_OR_RENDER_FAILURE',
               'pbr_fallback':'NOT_RUN' if e=='success' else ('RENDERED_UNVERIFIED' if all(files.values()) else 'FAIL'),
               'output_files':files,'G1':'BLOCKED_CANONICAL_MATCH','G2':'NOT_RUN_INDEPENDENT_ART',
-              'G3':'NOT_RUN_ROUNDTRIP','G4':'NOT_RUN_GAME_ENGINE'}
+              'G3':('PARTIAL_PASS_SEE_ROUNDTRIP_QA' if (root/'roundtrip_QA.json').is_file() else 'NOT_RUN_ROUNDTRIP'),'G4':'NOT_RUN_GAME_ENGINE'}
           (root/'pipeline_QA.json').write_text(json.dumps(qa,indent=2)+'\n')
           print(json.dumps(qa))
           PY
