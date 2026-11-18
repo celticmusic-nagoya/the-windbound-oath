@@ -47,41 +47,55 @@ def surface(name,levels,segments=80,material=None):
 face=surface('Face_Sculpt_Study',[(1.20,.055,.065,.005),(1.23,.09,.09,.005),(1.28,.13,.115,0),(1.35,.17,.145,0),(1.43,.205,.166,.005),(1.51,.222,.175,.01),(1.59,.219,.173,.012),(1.67,.205,.162,.017),(1.74,.18,.144,.018),(1.80,.135,.112,.02),(1.83,.055,.05,.02)],material=skin)
 # Dark straight bob with crown, cheek-length sides and independently shaped front bangs.
 bob=surface('Hair_Crown_and_Bob_Study',[(1.36,.188,.171,.048),(1.40,.218,.205,.053),(1.52,.248,.223,.061),(1.64,.253,.227,.060),(1.74,.234,.211,.058),(1.82,.186,.163,.052),(1.86,.095,.083,.047)],material=hair)
-# Volumetric Bezier hair strands: root embedded into crown, tips curve onto forehead.
-# Local dimensions are provisional; no canonical millimetre scale asserted.
-def tapered_lock(name,points,r0,r1,material):
- curve=bpy.data.curves.new(name,'CURVE');curve.dimensions='3D'
- curve.resolution_u=20;curve.bevel_depth=r0;curve.bevel_resolution=4
- spline=curve.splines.new('BEZIER');spline.bezier_points.add(len(points)-1)
- for i,(co,rad) in enumerate(points):
-  pt=spline.bezier_points[i];pt.co=co;pt.handle_left_type='AUTO';pt.handle_right_type='AUTO';pt.radius=rad
- ob=bpy.data.objects.new(name,curve);scene.collection.objects.link(ob);curve.materials.append(material)
+# Sculpted solid hair clumps with explicit elliptical cross-sections.
+# Structural method switch: no Bezier bevel strands or floating flat cards.
+def hair_clump(name,stations,material,sides=10):
+ verts=[];faces=[]
+ for x,y,z,wx,wy in stations:
+  for j in range(sides):
+   theta=2*math.pi*j/sides
+   verts.append((x+wx*math.cos(theta),y+wy*math.sin(theta),z))
+ for i in range(len(stations)-1):
+  for j in range(sides):
+   k=i*sides+j;n=i*sides+(j+1)%sides
+   faces.append((k,n,n+sides,k+sides))
+ faces.append(tuple(reversed(range(sides))))
+ q=(len(stations)-1)*sides
+ faces.append(tuple(q+j for j in range(sides)))
+ mesh=bpy.data.meshes.new(name+'_mesh');mesh.from_pydata(verts,[],faces);mesh.update()
+ ob=bpy.data.objects.new(name,mesh);scene.collection.objects.link(ob)
+ mesh.materials.append(material)
+ for poly in mesh.polygons:poly.use_smooth=True
  return ob
-# Layered short fringe: eye and brow zone stays clear below z=1.64.
+# Inner and outer frontal locks arch along the forehead; tips end above eyebrows.
 for sign,side in [(-1,'L'),(1,'R')]:
- for k,(x,tip) in enumerate(((.035,1.675),(.090,1.650),(.148,1.642))):
-  tapered_lock('Bangs_'+side+'_'+str(k),[
-   ((sign*(x+.018),-.095,1.853),1.05),
-   ((sign*(x+.013),-.176,1.781),1.0),
-   ((sign*x,-.205,1.712),.66),
-   ((sign*(x-.006),-.199,tip),.05)],.014,.002,hair)
- # Curved side-locks, rooted into the bob instead of hanging as detached lines.
+ for layer in range(2):
+  for k,x in enumerate((.035,.087,.139)):
+   tip=1.675-.008*k+.012*layer
+   hair_clump('Sculpt_Bangs_'+side+'_'+str(layer)+'_'+str(k),[
+    (sign*(x+.016),-.105+.008*layer,1.836,.025,.020),
+    (sign*(x+.009),-.164-.006*layer,1.784,.027,.017),
+    (sign*x,-.193-.007*layer,1.727,.022,.013),
+    (sign*(x-.005),-.198-.006*layer,tip,.003,.003)],hair)
+ # Side hair starts inside crown and hugs the temples.
  for k in range(3):
-  x=.172+.021*k
-  tapered_lock('Side_'+side+'_'+str(k),[
-   ((sign*(x-.022),-.075,1.805),1.2),
-   ((sign*x,-.146,1.690),1.0),
-   ((sign*(x+.012),-.142,1.535),.72),
-   ((sign*(x+.005),-.098,1.435),.08)],.019,.002,hair)
-# Overlapping back locks, wrapping inwards toward the nape.
-for k in range(13):
- angle=math.pi*(k/12)
- x=.220*math.cos(angle);y=.045+.185*math.sin(angle)
- tapered_lock('Back_Lock_'+str(k),[
-  ((x*.70,y*.60,1.830),1.05),
-  ((x,y,1.715),1.1),
-  ((x*1.05,y+.025,1.530),.85),
-  ((x*.85,y-.006,1.395),.08)],.018,.002,hair)
+  x=.184+.017*k
+  hair_clump('Sculpt_Side_'+side+'_'+str(k),[
+   (sign*(x-.024),-.036,1.821,.035,.032),
+   (sign*x,-.114,1.727,.033,.027),
+   (sign*(x+.007),-.141,1.591,.029,.025),
+   (sign*(x-.007),-.104,1.443,.004,.005)],hair)
+# Back bob: two staggered overlapping layers and tucked nape ends.
+for layer in range(2):
+ for k in range(11):
+  theta=math.pi*(k+.25*layer)/10
+  x=.205*math.cos(theta);y=.070+.179*math.sin(theta)
+  hair_clump('Sculpt_Back_'+str(layer)+'_'+str(k),[
+   (x*.68,y*.62,1.832,.033,.032),
+   (x,y,1.746,.036,.034),
+   (x*1.06,y+.013+.009*layer,1.586,.036,.032),
+   (x*.96,y+.015,1.457,.026,.026),
+   (x*.80,y-.009,1.390+.009*layer,.003,.004)],hair)
 # Eye sockets, lids and highlights are separate authored geometry, not texture decals.
 lid=mat('eyelid_dark_provisional',(.085,.047,.10))
 white=mat('eye_sclera_provisional',(.88,.78,.77))
@@ -96,9 +110,12 @@ for sign in (-1,1):
  ellipsoid('Upper_Lid_'+str(sign),(sign*.091,-.183,1.604),(.042,.006,.006),lid)
  ellipsoid('Brow_'+str(sign),(sign*.091,-.180,1.639),(.038,.006,.006),hair)
  ellipsoid('Cheek_'+str(sign),(sign*.126,-.153,1.474),(.070,.018,.042),skin)
-ellipsoid('Nose_Bridge',(0,-.182,1.527),(.021,.026,.077),skin)
+ellipsoid('Nose_Bridge',(0,-.183,1.527),(.017,.022,.073),skin)
 ellipsoid('Nose_Tip',(0,-.208,1.483),(.028,.025,.021),skin)
-ellipsoid('Mouth',(0,-.159,1.403),(.038,.009,.005),lid)
+ellipsoid('Philtrum',(0,-.166,1.446),(.014,.009,.019),skin)
+ellipsoid('Upper_Lip',(0,-.167,1.419),(.036,.012,.009),skin)
+ellipsoid('Lower_Lip',(0,-.165,1.403),(.032,.011,.008),skin)
+ellipsoid('Mouth_Seam',(0,-.179,1.411),(.032,.004,.0025),lid)
 # Glasses are geometric placement guides, not finished optical frames.
 def tube(name,points,radius,material):
  curve=bpy.data.curves.new(name,'CURVE');curve.dimensions='3D';curve.bevel_depth=radius;curve.bevel_resolution=3
@@ -131,6 +148,6 @@ bpy.ops.export_scene.gltf(filepath=str(out/'morwen_head_study.glb'),export_forma
 assert (out/'morwen_head_study.glb').stat().st_size>0
 bpy.ops.object.select_all(action='DESELECT')
 blend=out/'MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend';bpy.ops.wm.save_as_mainfile(filepath=str(blend))
-report={'asset':'Morwen','status':'UNAPPROVED_HEAD_STUDY_ONLY','method':'new independently authored ring sculpt with separate bob and fringe; no failed geometry reused','blender':bpy.app.version_string,'mesh_objects':{o.name:len(o.data.vertices) for o in scene.objects if o.type=='MESH'},'blend_sha256':hashlib.sha256(blend.read_bytes()).hexdigest(),'renders':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.png')},'G1':'BLOCKED_VISUAL_CALIBRATION','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_TOPOLOGY_UV_RIG','G4':'NOT_RUN'}
+report={'asset':'Morwen','status':'UNAPPROVED_HEAD_STUDY_ONLY','method':'solid cross-section sculpted clumps and facial form study; unapproved','blender':bpy.app.version_string,'mesh_objects':{o.name:len(o.data.vertices) for o in scene.objects if o.type=='MESH'},'blend_sha256':hashlib.sha256(blend.read_bytes()).hexdigest(),'renders':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.png')},'G1':'BLOCKED_VISUAL_CALIBRATION','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_TOPOLOGY_UV_RIG','G4':'NOT_RUN'}
 (out/'QA.json').write_text(json.dumps(report,indent=2)+'\n')
 print('MORWEN_HEAD_STUDY_CREATED',report['mesh_objects'])
