@@ -29,6 +29,10 @@ jobs:
       - name: Verify annotation metadata
         run: |
           python3 tools/morwen_rebuild01/validate_layer0_landmarks.py --output /tmp/morwen-landmarks-qa.json
+      - name: Audit cross-view landmark row differences (2D only)
+        run: |
+          python3 tools/morwen_rebuild01/audit_landmark_crossviews.py --output /tmp/morwen-landmark-crossview-qa.json
+          python3 -m json.tool /tmp/morwen-landmark-crossview-qa.json >/dev/null
       - name: Install Blender 4.3.2 (version-checked)
         run: |
           set -euo pipefail
@@ -125,6 +129,7 @@ jobs:
           name: morwen-sculpt-workspace-qa
           path: |
             /tmp/morwen-landmarks-qa.json
+            /tmp/morwen-landmark-crossview-qa.json
             /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
             /tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png
             /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
