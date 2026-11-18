@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-18",
+  "scope": "Direct Zstandard decompression and BHead stream parsing; bpy not run; no source mutation",
+  "results": [
+    {
+      "pr": 316,
+      "file": "MORWEN_ELM_04_CANDIDATE.blend",
+      "status": "NONSTANDARD_HEADER_BLOCKED",
+      "header_prefix_hex": "424c454e44455231372d3031763035303352454e",
+      "note": "Decompressed starts BLENDER17-01v0503, not standard 12-byte Blender header; Blender reopen required"
+    },
+    {
+      "pr": 318,
+      "file": "MORWEN_EYELID_05_CANDIDATE.blend",
+      "status": "NONSTANDARD_HEADER_BLOCKED",
+      "header_prefix_hex": "424c454e44455231372d3031763035303352454e",
+      "note": "Same nonstandard header; do not infer corruption"
+    },
+    {
+      "pr": 399,
+      "file": "morwen_head_study_UNAPPROVED.blend",
+      "status": "BINARY_CONTAINER_PASS",
+      "version": "402",
+      "counts": {
+        "ME": 34,
+        "OB": 46,
+        "KE": 1,
+        "MA": 8,
+        "IM": 6,
+        "CA": 1
+      }
+    },
+    {
+      "pr": 399,
+      "file": "morwen_head_landmark_review_UNAPPROVED.blend",
+      "status": "BINARY_CONTAINER_PASS",
+      "version": "402",
+      "counts": {
+        "ME": 1,
+        "OB": 13,
+        "KE": 0,
+        "MA": 1,
+        "IM": 6,
+        "CA": 1
+      }
+    },
+    {
+      "pr": 407,
+      "file": "morwen_sculpt02_v02_UNAPPROVED.blend",
+      "status": "BINARY_CONTAINER_PASS",
+      "version": "403",
+      "counts": {
+        "ME": 57,
+        "OB": 77,
+        "KE": 11,
+        "MA": 9,
+        "IM": 8,
+        "CA": 7
+      }
+    }
+  ],
+  "qa": {
+    "binary_stream": "3 PASS / 2 BLOCKED",
+    "blender_reopen": "NOT_RUN",
+    "mesh_quality": "NOT_RUN",
+    "independent_art": "existing FAIL remains",
+    "game": "NOT_RUN"
+  }
+}
