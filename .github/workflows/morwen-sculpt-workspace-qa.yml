@@ -33,6 +33,7 @@ jobs:
         run: |
           python3 tools/morwen_rebuild01/audit_landmark_crossviews.py --output /tmp/morwen-landmark-crossview-qa.json
           python3 -m json.tool /tmp/morwen-landmark-crossview-qa.json >/dev/null
+          python3 tools/morwen_rebuild01/test_crossview_audit.py
       - name: Install Blender 4.3.2 (version-checked)
         run: |
           set -euo pipefail
