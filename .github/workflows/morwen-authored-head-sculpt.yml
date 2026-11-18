@@ -27,6 +27,8 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/morwen-authored-head
           /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_head_study.py -- /tmp/morwen-authored-head
+          test -s /tmp/morwen-authored-head/MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend
+          test -s /tmp/morwen-authored-head/QA.json
       - name: Reopen actual .blend and audit outputs
         shell: bash
         run: |
