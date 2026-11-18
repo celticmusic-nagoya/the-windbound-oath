@@ -79,5 +79,16 @@
     "Current changed-file contents and artifact bytes not revalidated",
     "Exact overlap/duplication and branch ancestry not established",
     "No new model G1-G4 verdict"
-  ]
+  ],
+  "shared_infrastructure_isolation": {
+    "status": "PASS_IN_GITHUB_ACTIONS",
+    "run": "https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44291343251",
+    "artifact_id": 14420529929,
+    "artifact_name": "two-shared-infrastructure-review-only",
+    "artifact_zip_sha256": "4992121d45819386903ecce7515ae32693dc7bdb7befe972b65e98fc43c3c67c",
+    "allowlisted_files": 7,
+    "excluded_tracked_files": 4661,
+    "expires_at": "2026-12-02T11:05:18Z",
+    "limitations": "Zip archive inner bytes not independently downloaded; CI script validates inner manifest and hashes. No PR isolation merge performed."
+  }
 }
