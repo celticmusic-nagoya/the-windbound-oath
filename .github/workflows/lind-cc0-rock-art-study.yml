@@ -29,10 +29,13 @@ jobs:
           Path("out/study/packed-source-run-id.txt").write_text(str(ok[0]["databaseId"])+"\n")
           PY
           gh run download "$(cat out/study/packed-source-run-id.txt)" -R ${{ github.repository }} -n lind-cc0-editable-packed-blender-sources -D out/sources
-      - name: Install Blender
+      - name: Install Blender (bounded package step)
+        timeout-minutes: 6
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          set -euxo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          timeout --signal=TERM --kill-after=15s 300s sudo -E apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-expr 'import bpy; print("BLENDER_VERSION", bpy.app.version_string)'
       - name: Render actual packed source study
         timeout-minutes: 13
         run: |
