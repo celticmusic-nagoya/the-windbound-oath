@@ -95,6 +95,13 @@ jobs:
       - name: Render four actual head-study mesh views (not reference images)
         run: |
           blender -b /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend --python tools/morwen_rebuild01/render_head_study.py -- --output-dir /tmp/morwen-workspace/head-study-renders
+      - name: Build and reopen separate facial-plane blockout method B
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/build_facial_planes_blockout.py -- --output /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend
+          blender -b /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend --python-expr 'import bpy; assert bpy.context.scene.get("status")=="UNAPPROVED_FACIAL_PLANES_BLOCKOUT_NOT_A_CHARACTER"; assert len(bpy.data.meshes)==1; print("FACIAL_PLANES_REOPEN_PASS")'
+      - name: Render actual facial-plane blockout four views
+        run: |
+          blender -b /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend --python tools/morwen_rebuild01/render_head_study.py -- --output-dir /tmp/morwen-workspace/facial-planes-renders
       - name: Independently verify reference camera orientations
         run: |
           blender -b /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend --python tools/morwen_rebuild01/verify_reference_cameras.py -- /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
@@ -140,9 +147,11 @@ jobs:
             /tmp/morwen-landmark-crossview-qa.json
             /tmp/morwen-workspace/MORWEN_SCULPT_WORKSPACE_UNAPPROVED.blend
             /tmp/morwen-workspace/MORWEN_HEAD_STUDY_UNAPPROVED.blend
+            /tmp/morwen-workspace/MORWEN_FACIAL_PLANES_BLOCKOUT_UNAPPROVED.blend
             /tmp/morwen-workspace/MORWEN_LAYER0_4VIEW_REVIEW_UNCALIBRATED.png
             /tmp/morwen-workspace/MORWEN_CAMERA_ORIENTATION_QA.json
             /tmp/morwen-workspace/camera-renders/*.png
             /tmp/morwen-workspace/head-study-renders/*.png
+            /tmp/morwen-workspace/facial-planes-renders/*.png
           if-no-files-found: warn
           retention-days: 7
