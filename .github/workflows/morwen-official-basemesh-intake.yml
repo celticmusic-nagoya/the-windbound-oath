@@ -22,7 +22,7 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/morwen-cc0
           curl --fail --location --retry 1 --connect-timeout 15 --max-time 180 --proto '=https' --tlsv1.2 \
-            'https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
+            'https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip' \
             -o /tmp/morwen-cc0/human-base-meshes-bundle-v1.4.1.zip
           python3 tools/morwen_rebuild01/inspect_official_basemesh.py \
             /tmp/morwen-cc0/human-base-meshes-bundle-v1.4.1.zip \
