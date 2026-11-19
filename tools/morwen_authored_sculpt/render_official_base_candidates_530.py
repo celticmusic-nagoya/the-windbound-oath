@@ -8,7 +8,7 @@ from mathutils import Vector
 out=Path(sys.argv[sys.argv.index("--")+1]);out.mkdir(parents=True,exist_ok=True)
 targets=("STYLIZED_Head","STYLIZED_Body_Female.001")
 audit={"status":"CANDIDATE_ONLY_NOT_ADOPTED","blender":bpy.app.version_string,"objects":[]}
-for name,original in source.items():
+for name in targets:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     # Append a specific mesh object from the verified source .blend (not a linked dependency).
     sourcefile=Path(sys.argv[sys.argv.index("--")+2]) if len(sys.argv)>sys.argv.index("--")+2 else None
