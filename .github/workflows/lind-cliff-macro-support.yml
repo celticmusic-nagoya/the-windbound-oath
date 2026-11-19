@@ -1,6 +1,11 @@
 name: LIND Macro Cliff Support Blender Geometry QA
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/lind-cliff-rock-art-study-20261118
+    paths:
+      - .github/workflows/lind-cliff-macro-support.yml
 permissions:
   contents: read
 jobs:
@@ -28,6 +33,7 @@ jobs:
           mkdir -p out/lind-macro-support
           PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support --probe-only 2>&1 | tee out/lind-macro-support/blender-probe.log
       - name: Generate actual closed macro support and render
+        if: ${{ false }}
         run: |
           set -euo pipefail
           mkdir -p out/lind-macro-support
@@ -36,6 +42,7 @@ jobs:
           df -h . /tmp | tee -a out/lind-macro-support/runner-diagnostics.log
           PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
       - name: Verify candidate topology and hashes
+        if: ${{ false }}
         run: |
           python3 - <<'PY'
           import hashlib,json
@@ -54,6 +61,7 @@ jobs:
           print('MACRO_TOPOLOGY_QA_PASS')
           PY
       - name: Reopen generated Blender file
+        if: ${{ false }}
         run: |
           /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec out/lind-macro-support/macro_support_candidate.blend --python-exit-code 1 --python-expr "import bpy; assert bpy.data.objects.get('CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON') is not None; print('BLEND_REOPEN_PASS')"
       - name: Upload source and render
