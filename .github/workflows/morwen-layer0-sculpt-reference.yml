@@ -7,6 +7,7 @@ on:
       - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
       - tools/production_qa/install_blender_530.sh
       - tools/morwen_authored_sculpt/build_face_surface_530.py
+      - tools/morwen_authored_sculpt/render_official_base_candidates_530.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -157,6 +158,23 @@ jobs:
           PY
           /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python-expr 'import bpy,json,pathlib; p=pathlib.Path("/tmp/morwen-base-audit"); meshes=[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons),"dimensions":[round(float(x),4) for x in o.dimensions],"hidden":o.hide_render} for o in bpy.data.objects if o.type=="MESH"]; data={"blender_version":bpy.app.version_string,"mesh_objects":len(meshes),"meshes":meshes[:400],"collections":[c.name for c in bpy.data.collections],"text_blocks":[t.name for t in bpy.data.texts],"candidate_matches":[x for x in meshes if any(k in x["name"].lower() for k in ("female","stylized","head"))]}; (p/"blender_mesh_audit.json").write_text(json.dumps(data,indent=2)); print("SOURCE_MESH_AUDIT_PASS",len(meshes),len(data["candidate_matches"]))'
           test -s /tmp/morwen-base-audit/blender_mesh_audit.json
+      - name: Render untouched official stylized head and female body candidates in four views
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/render_official_base_candidates_530.py
+          mkdir -p /tmp/morwen-base-audit/candidate-renders
+          /tmp/two-blender-530/audit-app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/render_official_base_candidates_530.py -- /tmp/morwen-base-audit/candidate-renders /tmp/morwen-base-audit/source.blend
+          test -s /tmp/morwen-base-audit/candidate-renders/head_front.png
+          test -s /tmp/morwen-base-audit/candidate-renders/body_female_front.png
+      - name: Upload independent source candidate render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-official-cc0-base-candidate-four-view-not-adopted
+          path: /tmp/morwen-base-audit/candidate-renders/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Preserve source audit evidence
         if: always()
         uses: actions/upload-artifact@v4
