@@ -1,15 +1,5 @@
 name: LIND source-review Blender scene (non-metric)
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/build_lind_source_review.py'
-      - 'tools/map_blender/package_lind_source_handoff.py'
-      - 'tools/map_blender/validate_lind_handoff.py'
-      - 'tools/map_blender/emit_lind_source_review_handoff.py'
-      - 'tools/map_blender/validate_lind_handoff.py'
-      - 'docs/production/lind-new-world-topology.v1.json'
-      - 'tests/test_lind_new_world_topology.py'
-      - '.github/workflows/lind-source-review.yml'
   workflow_dispatch:
 permissions:
   contents: read
