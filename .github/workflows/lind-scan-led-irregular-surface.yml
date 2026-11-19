@@ -1,9 +1,5 @@
 name: LIND Scan-Led Irregular Surface Study
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/build_scan_led_irregular_surface.py'
-      - '.github/workflows/lind-scan-led-irregular-surface.yml'
   workflow_dispatch:
 permissions:
   contents: read
