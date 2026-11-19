@@ -20,5 +20,8 @@ Status: PROPOSED / NOT ENABLED / NOT MERGED. Owner: shared CI coordination; map 
 ## Cross-chat startup message
 Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and the latest character PR #425/#427. Actions are intentionally disabled. Before any CI or Blender run, check the shared job ledger, source SHA, stage, owner PR, existing runs and artifacts; do not recreate completed work. Character and map production are independent but share the same CI orchestration policy. Continue only approved non-destructive tasks; no Actions re-enable or main merge without director approval.
 
-## Current QA
-Policy file created: configuration proposal only. No scheduler, classifier, ledger, watchdog, or runtime test has been implemented or executed. No guarantee of duplicate suppression until those are implemented and verified.
+## Current implementation and QA (2026-11-19)
+- Offline classifier: `tools/production_qa/classify_actions_jobs.py` (no network, dispatch, cancellation or side effects); deterministic input identity and fail-closed duplicate/overlap decisions.
+- Unit test source: `tools/production_qa/test_classify_actions_jobs.py` (9 test cases covering verified reuse, semantic overlap, independent work, invalid inputs and prerequisites).
+- Emergency bulk-cancel workflow `lind-one-shot-cancel-actions.yml` changed to manual dispatch with explicit confirmation input; no automatic push trigger.
+- These changes are committed to Draft PR #421 only; GitHub Actions remain disabled. Runtime unit tests, orchestration dispatch integration, persistent ledger, watchdog and actual deduplication under concurrent runners are NOT_RUN. Do not claim end-to-end deduplication until verified.
