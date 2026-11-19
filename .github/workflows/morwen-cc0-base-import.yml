@@ -1,0 +1,51 @@
+name: Morwen CC0 MakeHuman base mesh Blender import
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - tools/morwen_authored_sculpt/import_cc0_makehuman_base.py
+      - .github/workflows/morwen-cc0-base-import.yml
+  pull_request:
+    branches: [feature/morwen-authored-sculpt-20261118]
+    paths:
+      - tools/morwen_authored_sculpt/import_cc0_makehuman_base.py
+      - .github/workflows/morwen-cc0-base-import.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  import-verified-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch only upstream CC0 base mesh and verify upstream Git blob
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-cc0-base
+          curl --fail --location --retry 2 --max-time 120 --output /tmp/morwen-cc0-base/base.obj https://raw.githubusercontent.com/makehumancommunity/mpfb2/master/src/mpfb/data/3dobjs/base.obj
+          test "$(git hash-object /tmp/morwen-cc0-base/base.obj)" = "d26635e9326e3cca30778fd7b9c00062b03cce09"
+          sha256sum /tmp/morwen-cc0-base/base.obj > /tmp/morwen-cc0-base/SOURCE_SHA256SUMS
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Import source and save actual editable Blender file
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/import_cc0_makehuman_base.py -- /tmp/morwen-cc0-base/base.obj /tmp/morwen-cc0-base/out
+          test -s /tmp/morwen-cc0-base/out/MAKEHUMAN_CC0_UNMODIFIED_BASE_IMPORT_CANDIDATE.blend
+          test -s /tmp/morwen-cc0-base/out/source_import_qa.json
+          /tmp/two-blender/app/blender -b --python-exit-code 1 /tmp/morwen-cc0-base/out/MAKEHUMAN_CC0_UNMODIFIED_BASE_IMPORT_CANDIDATE.blend --python-expr 'import bpy; assert bpy.context.scene.get("asset_status")=="CC0_SOURCE_IMPORT_NOT_CHARACTER_SCULPT"; assert sum(len(o.data.vertices) for o in bpy.data.objects if o.type=="MESH")>10000; print("CC0_BASE_REOPEN_PASS")'
+      - name: Upload verified base and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-cc0-base-source-import-not-sculpt
+          path: |
+            /tmp/morwen-cc0-base/SOURCE_SHA256SUMS
+            /tmp/morwen-cc0-base/out/
+          retention-days: 14
+          if-no-files-found: warn
