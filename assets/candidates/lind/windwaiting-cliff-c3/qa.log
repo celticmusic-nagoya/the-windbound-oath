@@ -1,0 +1,340 @@
+00:00.609  blend            | Read blend: "/workspace/two-rock-c3/final/windwaiting_cliff_C3_UNAPPROVED.blend"
+{
+  "blender": "5.2.4 LTS",
+  "runtime": "PyPI bpy wheel, CPU Cycles",
+  "coordinate_space": "asset-local-provisional",
+  "unit_scale_status": "UNAPPROVED",
+  "source_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "producer_script_sha256": "813aade5efd982271b8ebf5aa225ccc67154712c7878d7a7d415ab82eb14cfb8",
+  "mesh": {
+    "vertices": 51935,
+    "edges": 103785,
+    "faces": 51852,
+    "connected_components": 1,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "inconsistent_edges": 0,
+    "zero_area_faces": 0,
+    "signed_volume": 5502.421868587436,
+    "triangles": 103866,
+    "intersecting_nonadjacent_triangle_pairs": 0,
+    "bounds": {
+      "min": [
+        -17.0,
+        -4.079833507537842,
+        -1.649999976158142
+      ],
+      "max": [
+        23.0,
+        32.47996520996094,
+        6.924709796905518
+      ]
+    }
+  },
+  "coast": {
+    "headlands": [
+      {
+        "x": -6.3,
+        "width": 6.3,
+        "radius": 2.3725070214822845,
+        "height": 6.160014453505267
+      },
+      {
+        "x": 2.6,
+        "width": 5.55,
+        "radius": 2.551067915586206,
+        "height": 5.617284129373036
+      },
+      {
+        "x": 10.6,
+        "width": 4.8,
+        "radius": 2.4677541672094416,
+        "height": 5.129189303070503
+      }
+    ],
+    "surface_area": {
+      "exposed": 1332.568195512489,
+      "downward": 93.69804063464973,
+      "total": 3000.26290176608,
+      "downward_total": 1390.930362784442,
+      "inland_steep": 0.0,
+      "coast_steep": 141.1974191405251,
+      "inland_steep_over_coast_steep": 0.0,
+      "exposed_downward_fraction": 0.07031388033286705,
+      "whole_solid_downward_fraction": 0.4636028269274943
+    },
+    "principal_facet_widths_local": [
+      1.9000000000000004,
+      2.8999999999999995,
+      1.8000000000000003,
+      1.95,
+      1.75,
+      1.55,
+      1.7499999999999996,
+      2.75,
+      1.6500000000000004,
+      1.8000000000000007,
+      2.0999999999999996,
+      1.5999999999999996
+    ],
+    "minimum_facet_width_over_cliff_height": 0.22383609500757085,
+    "deep_joint_fraction": 0.2727272727272727,
+    "deep_joint_spacing_cv_population": 0.5986159169550175,
+    "cove_recession": 1.0130777905219825,
+    "highest_cap_z": -0.62,
+    "maximum_foreshore_projection": 0.2549999999999999
+  },
+  "module_contacts": {
+    "Detached stack 01": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.540058943674323
+    },
+    "Detached stack 02": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.4638732168727688
+    },
+    "Talus 01": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10173486173152924,
+      "support_normal_z": 0.8024079203605652,
+      "min_z": 0.046734847128391266,
+      "max_z": 0.32839635014533997
+    },
+    "Talus 02": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.16107866168022156,
+      "support_normal_z": 0.9175347685813904,
+      "min_z": 0.10607869178056717,
+      "max_z": 0.38754695653915405
+    },
+    "Talus 03": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10389479249715805,
+      "support_normal_z": 0.8633235096931458,
+      "min_z": 0.048894770443439484,
+      "max_z": 0.30812937021255493
+    },
+    "Talus 04": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10460071265697479,
+      "support_normal_z": 0.8562480211257935,
+      "min_z": 0.04960072785615921,
+      "max_z": 0.2854572832584381
+    },
+    "Talus 05": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10407125949859619,
+      "support_normal_z": 0.8064650297164917,
+      "min_z": 0.04907122999429703,
+      "max_z": 0.37007826566696167
+    },
+    "Talus 06": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.16227760910987854,
+      "support_normal_z": 0.9087302088737488,
+      "min_z": 0.10727757960557938,
+      "max_z": 0.2914404571056366
+    },
+    "Talus 07": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09831179678440094,
+      "support_normal_z": 0.8644798994064331,
+      "min_z": 0.043311841785907745,
+      "max_z": 0.21486085653305054
+    },
+    "Talus 08": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09547600150108337,
+      "support_normal_z": 0.8414017558097839,
+      "min_z": 0.0404760017991066,
+      "max_z": 0.28782162070274353
+    },
+    "Talus 09": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10412639379501343,
+      "support_normal_z": 0.6676930785179138,
+      "min_z": 0.04912639409303665,
+      "max_z": 0.32797813415527344
+    },
+    "Talus 10": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.08667691051959991,
+      "support_normal_z": 0.5137595534324646,
+      "min_z": 0.03167692571878433,
+      "max_z": 0.20444107055664062
+    },
+    "Talus 11": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09527607262134552,
+      "support_normal_z": 0.8655860424041748,
+      "min_z": 0.04027608782052994,
+      "max_z": 0.36144736409187317
+    },
+    "Talus 12": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10450053215026855,
+      "support_normal_z": 0.8435719609260559,
+      "min_z": 0.04950053244829178,
+      "max_z": 0.49069124460220337
+    },
+    "Talus 13": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10265663266181946,
+      "support_normal_z": 0.6676930785179138,
+      "min_z": 0.047656603157520294,
+      "max_z": 0.5072610974311829
+    },
+    "Talus 14": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.15808141231536865,
+      "support_normal_z": 0.9183580875396729,
+      "min_z": 0.10308141261339188,
+      "max_z": 0.5497182607650757
+    },
+    "Talus 15": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10680662095546722,
+      "support_normal_z": 0.7096745371818542,
+      "min_z": 0.051806606352329254,
+      "max_z": 0.2249705195426941
+    },
+    "Reef 01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.3358541429042816
+    },
+    "Reef 02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.25940752029418945
+    },
+    "Reef 03": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.16472753882408142
+    },
+    "Reef 04": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.22648179531097412
+    },
+    "Reef 05": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.3323448598384857
+    },
+    "Reef 06": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.15650290250778198
+    },
+    "Reef 07": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.3345886170864105
+    },
+    "Reef 08": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.3646899163722992
+    },
+    "Reef 09": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.19485652446746826
+    },
+    "Reef 10": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.41442224383354187
+    },
+    "Reef 11": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.3805769383907318
+    },
+    "Reef 12": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.2256343960762024
+    }
+  },
+  "shape_families": [
+    5,
+    7,
+    9
+  ],
+  "separate_module_counts": {
+    "02 | Detached sea stacks": 2,
+    "03 | Talus modules": 15,
+    "05 | Waterline reef modules": 12
+  },
+  "files": {
+    "windwaiting_cliff_C3_UNAPPROVED.blend": {
+      "bytes": 1564608,
+      "sha256": "3838f85959815fd9745ece57cf6078c07eb22c63cb4f691a3aa2f5df226da147"
+    },
+    "front.png": {
+      "bytes": 1001255,
+      "sha256": "f3d66309a022252052c790c0654b87fb652de94302c0b3e240f0c0bc966d0d8b",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "left.png": {
+      "bytes": 1001407,
+      "sha256": "941f279b4d881f0e47bf5d93609018790b0e1f5d10465e58576485e152cbf0e7",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "right.png": {
+      "bytes": 987690,
+      "sha256": "5f11ab6b7d5e648d88b3f65ed26e546e0bc49cc8fe104be9483638206b148100",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "elevated.png": {
+      "bytes": 1071112,
+      "sha256": "70b5cc19ef36aa215ab7fa6b52874a211c47b6b88d976d9fdeef09b246e377ac",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "sunset.png": {
+      "bytes": 1162591,
+      "sha256": "77471ad8dadb6c87ed903785d748f2ed5675f86313dc1727e7d52f998b27c627",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "comparison.png": {
+      "bytes": 2163938,
+      "sha256": "39db24e2263678d7d9a574e4c923de704d06905a373b9bd0efd62a71df336976",
+      "size": [
+        1920,
+        1330
+      ]
+    }
+  },
+  "reopen": "PASS",
+  "png_decode": "PASS",
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "art_numeric_proxies": {
+    "inland_steep_below_ten_percent": true,
+    "exposed_downward_at_most_fifteen_percent": true,
+    "whole_solid_downward_at_most_fifteen_percent": false
+  },
+  "G3_structural_subset": "PASS",
+  "G3": "NOT_RUN"
+}
