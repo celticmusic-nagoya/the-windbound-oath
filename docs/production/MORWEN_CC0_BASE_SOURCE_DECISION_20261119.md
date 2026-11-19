@@ -43,3 +43,11 @@ G1 **PARTIAL** (Layer 0 body/hair reference SHA confirmed, final accessories pen
 - **Correction:** prior note mentioning v1.2.0 as preferred is superseded by this verified v1.4.1 exact source.
 - **Not yet inspected:** license text / terms inside .blend, individual mesh topology, female sculpt editability, render against Morwen four-view. Archive was audited in memory and not retained as a production source artifact. Source **candidate only**, no canonical adoption.
 - Next non-destructive step: SHA-verified reacquisition on runner, inspect .blend with Blender 5.3.0 and render a clean female stylized base candidate for independent G2. Avoid repeating old face candidate renders in the new source-audit job.
+
+## Blender 5.3 direct mesh audit — verified (2026-11-20)
+- Workflow https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44630228845 **SUCCESS**, artifact **14581153511** includes `audit.json` and `blender_mesh_audit.json`. Both examined.
+- Verified source SHA256: `811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515`. Blender **5.3.0** successfully opened `human_base_meshes_bundle.blend`.
+- Source contains **15 mesh objects**, including `STYLIZED_Body_Female.001` (**13,020 vertices, 12,894 faces**, object dimensions **1.7333 × 0.9089 × 1.5744** in source units), `STYLIZED_Body_Female_Eye` (**1,022 vertices, 1,024 faces**), `PRIMITIVE_Body_Female` (**3,594 vertices, 3,548 faces**), `REALISTIC_Head_Sculpt` (**29,873 vertices, 29,780 faces**), `STYLIZED_Head` (**4,410 vertices, 4,408 faces**).
+- Candidate priority: `STYLIZED_Head` (head anatomy candidate), `STYLIZED_Body_Female.001` (body candidate), separately assess eye. The realistic head is a comparison candidate, **not automatically Morwen's source**. Source object dimensions and counts are measurements, not accepted Morwen dimensions.
+- License text **not** found as a separate ZIP entry; confirm official CC0 provenance in authoritative Blender Studio documentation and preserve license statement before redistribution.
+- G3 source Blender open/mesh inventory **PASS**. G1 Morwen silhouette **NOT_RUN**, G2 visual art **NOT_RUN**, G4 game **NOT_RUN**. Do not claim source selection or sculpt completion yet.
