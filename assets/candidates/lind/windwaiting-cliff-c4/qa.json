@@ -1,0 +1,450 @@
+{
+  "blender": "5.2.4 LTS",
+  "runtime": "PyPI bpy wheel, CPU Cycles",
+  "coordinate_space": "asset-local-provisional",
+  "unit_scale_status": "UNAPPROVED",
+  "source_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "producer_script_sha256": "fdff6393967e14ba55b8022734699a0c01d2d0a09e70210a143d4e69f831f044",
+  "mesh": {
+    "vertices": 51935,
+    "edges": 103785,
+    "faces": 51852,
+    "connected_components": 1,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "inconsistent_edges": 0,
+    "zero_area_faces": 0,
+    "signed_volume": 9569.133089332907,
+    "triangles": 103866,
+    "intersecting_nonadjacent_triangle_pairs": 0,
+    "bounds": {
+      "min": [
+        -17.0,
+        -4.092784881591797,
+        -1.649999976158142
+      ],
+      "max": [
+        23.0,
+        32.47999954223633,
+        7.225221633911133
+      ]
+    }
+  },
+  "coast": {
+    "headlands": [
+      {
+        "x": -6.3,
+        "width": 6.3,
+        "radius": 2.3725070214822845,
+        "height": 6.160014453505267
+      },
+      {
+        "x": 2.6,
+        "width": 5.55,
+        "radius": 2.551067915586206,
+        "height": 5.617284129373036
+      },
+      {
+        "x": 10.6,
+        "width": 4.8,
+        "radius": 2.4677541672094416,
+        "height": 5.129189303070503
+      }
+    ],
+    "surface_area": {
+      "exposed": 2216.4598286485907,
+      "downward": 146.01461963698196,
+      "total": 3713.245386669212,
+      "downward_total": 1449.513565771049,
+      "inland_steep": 296.7931650878495,
+      "coast_steep": 604.3768683736365,
+      "inland_steep_over_coast_steep": 0.49107300530298703,
+      "exposed_downward_fraction": 0.06587740402496232,
+      "whole_solid_downward_fraction": 0.3903629883914742
+    },
+    "principal_facet_widths_local": [
+      1.9000000000000004,
+      2.8999999999999995,
+      1.8000000000000003,
+      1.95,
+      1.75,
+      1.55,
+      1.7499999999999996,
+      2.75,
+      1.6500000000000004,
+      1.8000000000000007,
+      2.0999999999999996,
+      1.5999999999999996
+    ],
+    "minimum_facet_width_over_cliff_height": 0.21452629116941832,
+    "deep_joint_fraction": 0.2727272727272727,
+    "deep_joint_spacing_cv_population": 0.5986159169550175,
+    "cove_recession": 3.5630777905219824,
+    "highest_cap_z": 6.393188986322303,
+    "maximum_foreshore_projection": 0.2549999999999999,
+    "end_slope_geometric_proxy_fraction": 0.03803680495030103,
+    "shelf_height_design_samples": [
+      [
+        0.8621635536754981,
+        2.362163553675498
+      ],
+      [
+        1.399910665605622,
+        2.459910665605622
+      ],
+      [
+        1.702676345254632,
+        3.312676345254632
+      ],
+      [
+        1.4290707102436042,
+        3.5590707102436046
+      ],
+      [
+        1.0692880923105839,
+        2.569288092310584
+      ],
+      [
+        1.7507008629303544,
+        2.8107008629303545
+      ],
+      [
+        1.445081289148806,
+        3.055081289148806
+      ],
+      [
+        1.2611412183193569,
+        3.391141218319357
+      ],
+      [
+        2.027700242047619,
+        3.087700242047619
+      ],
+      [
+        1.3008521045309305,
+        2.8008521045309305
+      ],
+      [
+        1.1471510641153775,
+        2.757151064115378
+      ],
+      [
+        1.0858364446551931,
+        3.2158364446551935
+      ]
+    ],
+    "shelf_height_design_range": [
+      1.165536688372121,
+      1.1969071565681064
+    ]
+  },
+  "module_boundary": {
+    "paired_vertices": 85,
+    "positions": "PASS",
+    "positive_x_tangent": [
+      1,
+      0,
+      0
+    ],
+    "maximum_corner_normal_delta_degrees": 0.0,
+    "periodic_u_delta": 1,
+    "neighbor_translations_x": [
+      -40.0,
+      40.0
+    ],
+    "cap_policy": "Closed asset caps contact opaque neighbor caps internally; rear closure covered by inland context"
+  },
+  "camera_closure_visibility": {
+    "front": {
+      "body_hits": 1947,
+      "closure_hits": 0,
+      "closure_fraction_sampled": 0.0
+    },
+    "left": {
+      "body_hits": 2109,
+      "closure_hits": 0,
+      "closure_fraction_sampled": 0.0
+    },
+    "right": {
+      "body_hits": 1881,
+      "closure_hits": 1,
+      "closure_fraction_sampled": 0.000531632110579479
+    },
+    "elevated": {
+      "body_hits": 3050,
+      "closure_hits": 0,
+      "closure_fraction_sampled": 0.0
+    },
+    "shore_detail": {
+      "body_hits": 4073,
+      "closure_hits": 0,
+      "closure_fraction_sampled": 0.0
+    },
+    "sunset": {
+      "body_hits": 3182,
+      "closure_hits": 0,
+      "closure_fraction_sampled": 0.0
+    }
+  },
+  "module_contacts": {
+    "Detached stack 01": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.5175967807846525
+    },
+    "Detached stack 02": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.44457977514831326
+    },
+    "Talus 01": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10676626116037369,
+      "support_normal_z": 0.7686353325843811,
+      "min_z": 0.0517662838101387,
+      "max_z": 0.3334277868270874
+    },
+    "Talus 02": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.1037687137722969,
+      "support_normal_z": 0.7784396409988403,
+      "min_z": 0.04876870661973953,
+      "max_z": 0.3302369713783264
+    },
+    "Talus 03": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09983183443546295,
+      "support_normal_z": 0.8429643511772156,
+      "min_z": 0.04483184963464737,
+      "max_z": 0.3040664494037628
+    },
+    "Talus 04": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10525478422641754,
+      "support_normal_z": 0.8331574201583862,
+      "min_z": 0.05025476962327957,
+      "max_z": 0.28611132502555847
+    },
+    "Talus 05": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09493162482976913,
+      "support_normal_z": 0.7738708853721619,
+      "min_z": 0.039931632578372955,
+      "max_z": 0.3609386682510376
+    },
+    "Talus 06": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10569758713245392,
+      "support_normal_z": 0.8238297700881958,
+      "min_z": 0.050697602331638336,
+      "max_z": 0.23486047983169556
+    },
+    "Talus 07": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10460087656974792,
+      "support_normal_z": 0.8442440629005432,
+      "min_z": 0.04960087686777115,
+      "max_z": 0.22114989161491394
+    },
+    "Talus 08": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10347713530063629,
+      "support_normal_z": 0.8550379276275635,
+      "min_z": 0.04847715049982071,
+      "max_z": 0.29582276940345764
+    },
+    "Talus 09": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10124416649341583,
+      "support_normal_z": 0.7388643622398376,
+      "min_z": 0.046244122087955475,
+      "max_z": 0.32509586215019226
+    },
+    "Talus 10": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.0948534607887268,
+      "support_normal_z": 0.6823963522911072,
+      "min_z": 0.03985346108675003,
+      "max_z": 0.21261760592460632
+    },
+    "Talus 11": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10089878737926483,
+      "support_normal_z": 0.846265971660614,
+      "min_z": 0.04589883238077164,
+      "max_z": 0.36707010865211487
+    },
+    "Talus 12": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10096070170402527,
+      "support_normal_z": 0.8572483658790588,
+      "min_z": 0.045960672199726105,
+      "max_z": 0.4871513843536377
+    },
+    "Talus 13": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10098403692245483,
+      "support_normal_z": 0.7388643622398376,
+      "min_z": 0.04598403722047806,
+      "max_z": 0.5055885314941406
+    },
+    "Talus 14": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09982945024967194,
+      "support_normal_z": 0.7550267577171326,
+      "min_z": 0.044829435646533966,
+      "max_z": 0.4914662837982178
+    },
+    "Talus 15": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.10472351312637329,
+      "support_normal_z": 0.8536696434020996,
+      "min_z": 0.049723513424396515,
+      "max_z": 0.22288742661476135
+    },
+    "Reef 01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.0960739254951477
+    },
+    "Reef 02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.12091201543807983
+    },
+    "Reef 03": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.006262481212615967
+    },
+    "Reef 04": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.21609848737716675
+    },
+    "Reef 05": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.03942571580410004
+    },
+    "Reef 06": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.09195953607559204
+    },
+    "Reef 07": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.002514272928237915
+    },
+    "Reef 08": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.15896567702293396
+    },
+    "Reef 09": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.017890408635139465
+    },
+    "Reef 10": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.11281165480613708
+    },
+    "Reef 11": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.24360325932502747
+    },
+    "Reef 12": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.05696302652359009
+    }
+  },
+  "shape_families": [
+    5,
+    7,
+    9
+  ],
+  "separate_module_counts": {
+    "02 | Detached sea stacks": 2,
+    "03 | Talus modules": 15,
+    "05 | Waterline reef modules": 12
+  },
+  "files": {
+    "windwaiting_cliff_C4_UNAPPROVED.blend": {
+      "bytes": 1976098,
+      "sha256": "f5b8bf9d8b6aabee256fae27e9ed2d27450e975cc33d39d57d5175757f95854f"
+    },
+    "front.png": {
+      "bytes": 1193396,
+      "sha256": "29f3c7cc7feddc1abe22f8cf99b9fb4e27e115c887169c07c13df07dcfa01c5a",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "left.png": {
+      "bytes": 1199873,
+      "sha256": "b8a1627344031e299476034a64b9f61e69beb0d4486db14e59a761459c44aa01",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "right.png": {
+      "bytes": 1220539,
+      "sha256": "5879bcd55e95ba51fa3c5a0e28e393829d7a738892b4999072f2336ac391537c",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "elevated.png": {
+      "bytes": 1223587,
+      "sha256": "fc82f4f39a9b33a96d03243bb1a0cb7ca418894278302393ce57fd1618f9eab1",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "sunset.png": {
+      "bytes": 1091885,
+      "sha256": "1d4337c2bc1e603c0a3a42298d2ebc85a11a407d17198ab8412bb0d956db54fd",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "shore_detail.png": {
+      "bytes": 1207077,
+      "sha256": "eedddb4d9c2748dac02f4199ed4a87963b2e6b384072bb715ff9e23f04bdbdff",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "comparison.png": {
+      "bytes": 2514099,
+      "sha256": "2ad9abecb514a8564405ec922f7cdaba9cd7b522c5c62e3f6a4e419747d735c7",
+      "size": [
+        1920,
+        1560
+      ]
+    }
+  },
+  "reopen": "PASS",
+  "png_decode": "PASS",
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "art_numeric_proxies": {
+    "inland_steep_below_ten_percent": false,
+    "exposed_downward_at_most_fifteen_percent": true,
+    "end_slope_geometric_proxy_at_most_five_percent": true
+  },
+  "G3_structural_subset": "PASS",
+  "G3": "NOT_RUN"
+}
