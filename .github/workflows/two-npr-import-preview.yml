@@ -50,7 +50,9 @@ jobs:
           root=pathlib.Path.cwd().resolve()
           raw=os.environ.get('INPUT_MODEL','').strip()
           if not raw:
-              if os.environ.get('TWO_INSPECTION_ONLY') == '1':\n                  with open(os.environ['GITHUB_ENV'],'a') as f:f.write('TWO_INSPECTION_ONLY=1\\n')\n                  raise SystemExit(0)\n              raise SystemExit('BLOCKED: existing source model required; procedural head generation prohibited')
+              if os.environ.get('TWO_INSPECTION_ONLY') == '1':
+                  raise SystemExit(0)
+              raise SystemExit('BLOCKED: existing source model required; procedural head generation prohibited')
           else:
               p=(root/raw).resolve()
               assert p.is_relative_to(root) and p.is_file(), 'BLOCKED: input must exist in repository'
