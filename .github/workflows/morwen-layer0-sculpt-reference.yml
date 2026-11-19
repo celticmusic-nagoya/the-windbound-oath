@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/morwen-layer0-sculpt-reference.yml
       - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
+      - tools/production_qa/install_blender_530.sh
   workflow_dispatch:
   pull_request:
     paths:
@@ -42,6 +43,26 @@ jobs:
           /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_layer0_reference_scene.py -- /tmp/morwen-ref /tmp/morwen-ref-out
           /tmp/two-blender/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==0; assert len([o for o in bpy.data.objects if o.type=='EMPTY' and o.data])==4; assert all(o.data.packed_file for o in bpy.data.objects if o.type=='EMPTY' and o.data)"
           sha256sum /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend > /tmp/morwen-ref-out/SHA256SUMS
+      - name: Install verified Blender 5.3.0 independently
+        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
+      - name: Verify packed canonical Layer 0 reference opens in Blender 5.3.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-exit-code 1 --python-expr '
+          import bpy,hashlib,json,pathlib
+          expected={"REF_FRONT":"b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed","REF_RIGHT":"9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737","REF_BACK":"b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f","REF_LEFT":"69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"}
+          assert tuple(bpy.app.version)==(5,3,0)
+          for name,sha in expected.items():
+           ob=bpy.data.objects.get(name)
+           assert ob and ob.type=="EMPTY" and ob.data and ob.data.packed_file
+           assert ob.get("source_sha256")==sha
+           assert tuple(ob.data.size)==(384,1024)
+          assert not any(o.type=="MESH" for o in bpy.data.objects)
+          out=pathlib.Path("/tmp/morwen-ref-out")
+          (out/"blender530_reference_compat_qa.json").write_text(json.dumps({"blender":bpy.app.version_string,"canonical_reference_count":4,"mesh_count":0,"status":"REFERENCE_ONLY_COMPAT_PASS_NOT_SCULPT"},indent=2))
+          print("MORWEN_LAYER0_BLENDER_530_REFERENCE_PASS")
+          '
       - name: Preserve Blender source artifact
         if: always()
         uses: actions/upload-artifact@v4
