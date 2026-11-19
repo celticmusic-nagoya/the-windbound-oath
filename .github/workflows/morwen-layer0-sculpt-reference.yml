@@ -35,17 +35,15 @@ jobs:
           echo '9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737  /tmp/morwen-ref/7807.png' | sha256sum -c -
           echo 'b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f  /tmp/morwen-ref/7810.png' | sha256sum -c -
           echo '69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa  /tmp/morwen-ref/7808.png' | sha256sum -c -
-      - name: Install pinned Blender 5.2.4
-        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Install verified Blender 5.3.0 independently
+        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
       - name: Create and reopen packed reference blend
         shell: bash
         run: |
           set -euo pipefail
-          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_layer0_reference_scene.py -- /tmp/morwen-ref /tmp/morwen-ref-out
-          /tmp/two-blender/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==0; assert len([o for o in bpy.data.objects if o.type=='EMPTY' and o.data])==4; assert all(o.data.packed_file for o in bpy.data.objects if o.type=='EMPTY' and o.data)"
+          /tmp/two-blender-530/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_layer0_reference_scene.py -- /tmp/morwen-ref /tmp/morwen-ref-out
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==0; assert len([o for o in bpy.data.objects if o.type=='EMPTY' and o.data])==4; assert all(o.data.packed_file for o in bpy.data.objects if o.type=='EMPTY' and o.data)"
           sha256sum /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend > /tmp/morwen-ref-out/SHA256SUMS
-      - name: Install verified Blender 5.3.0 independently
-        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
       - name: Verify packed canonical Layer 0 reference opens in Blender 5.3.0
         shell: bash
         run: |
