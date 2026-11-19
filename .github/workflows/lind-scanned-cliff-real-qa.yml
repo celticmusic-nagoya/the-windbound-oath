@@ -1,10 +1,5 @@
 name: LIND Actual CC0 Scanned Cliff Blender QA
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/download_polyhaven_cliff_scan.py'
-      - 'tools/map_blender/lind/render_polyhaven_cliff_scan.py'
-      - '.github/workflows/lind-scanned-cliff-real-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read
