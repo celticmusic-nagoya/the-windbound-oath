@@ -6,7 +6,7 @@ import bpy, math, sys, json
 from pathlib import Path
 from mathutils import Vector
 out=Path(sys.argv[sys.argv.index("--")+1]);out.mkdir(parents=True,exist_ok=True)
-targets=("STYLIZED_Head","STYLIZED_Body_Female.001")
+targets=("GEO-head_stylized","GEO-body_female_stylized")
 audit={"status":"CANDIDATE_ONLY_NOT_ADOPTED","blender":bpy.app.version_string,"objects":[]}
 for name in targets:
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -43,7 +43,7 @@ for name in targets:
     sc=bpy.context.scene;sc.render.engine="CYCLES";sc.cycles.samples=20
     sc.render.resolution_x=512;sc.render.resolution_y=640;sc.render.resolution_percentage=100
     sc.render.image_settings.file_format="PNG"
-    slug="head" if name=="STYLIZED_Head" else "body_female"
+    slug="head" if name=="GEO-head_stylized" else "body_female"
     bpy.ops.wm.save_as_mainfile(filepath=str(out/(slug+"_source_candidate.blend")))
     for view,pos in [("front",(0,-5,0)),("right",(5,0,0)),("back",(0,5,0)),("three_quarter",(3,-4,0))]:
         cam.location=pos;cam.rotation_euler=(Vector((0,0,0))-cam.location).to_track_quat("-Z","Y").to_euler()
