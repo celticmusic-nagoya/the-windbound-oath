@@ -27,7 +27,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p out/lind-scan-c out/lind-scan-sources
-          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-editable-packed-blender-sources -D out/lind-scan-sources
+          gh run list -R ${{ github.repository }} --workflow lind-cc0-editable-sources.yml --limit 20 --json databaseId,conclusion > out/lind-scan-c/source-runs.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          runs=json.loads(Path("out/lind-scan-c/source-runs.json").read_text())
+          ok=[x for x in runs if x["conclusion"]=="success"]
+          if not ok: raise SystemExit("BLOCKED: no successful PR415 packed-source run")
+          Path("out/lind-scan-c/source-run-id.txt").write_text(str(ok[0]["databaseId"])+"\n")
+          PY
+          gh run download "$(cat out/lind-scan-c/source-run-id.txt)" -R ${{ github.repository }} -n lind-cc0-editable-packed-blender-sources -D out/lind-scan-sources
           test -s out/lind-scan-sources/editable_source_manifest.json
       - name: Install shared SHA-verified Blender 5.2.4
         timeout-minutes: 12
