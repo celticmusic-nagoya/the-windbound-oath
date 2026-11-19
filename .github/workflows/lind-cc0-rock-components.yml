@@ -1,9 +1,5 @@
 name: LIND CC0 Rock Components Acquisition
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/fetch_cc0_rock_components.py'
-      - '.github/workflows/lind-cc0-rock-components.yml'
   workflow_dispatch:
 permissions:
   contents: read
