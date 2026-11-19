@@ -65,7 +65,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/morwen-face-parts-render
-          /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/render_isolated_face_parts.py -- /tmp/morwen-face-parts-render
+          /tmp/two-blender/app/blender -b --python-exit-code 1 /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/render_isolated_face_parts.py -- /tmp/morwen-face-parts-render
+          test -s /tmp/morwen-face-parts-render/front.png
+          test -s /tmp/morwen-face-parts-render/three_quarter.png
+          test -s /tmp/morwen-face-parts-render/render_manifest.json
       - name: Upload facial part visual QA
         if: always()
         uses: actions/upload-artifact@v4
