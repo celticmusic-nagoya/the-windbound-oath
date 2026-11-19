@@ -1,9 +1,5 @@
 name: LIND Isolated PBR Image Decode Diagnosis
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/diagnose_pbr_image_decode.py'
-      - '.github/workflows/lind-image-decode-diagnostic.yml'
   workflow_dispatch:
 permissions:
   contents: read
