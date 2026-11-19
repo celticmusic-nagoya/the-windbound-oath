@@ -5,6 +5,7 @@ on:
       - feature/lind-cliff-rock-art-study-20261118
     paths:
       - 'tools/map_blender/lind/build_windwaiting_cliff_C.py'
+      - 'tools/map_blender/lind/audit_windwaiting_cliff_C_contact.py'
       - '.github/workflows/lind-scan-cliff-c.yml'
   workflow_dispatch:
 permissions:
@@ -46,6 +47,12 @@ jobs:
         run: |
           set -o pipefail
           timeout 800s /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/build_windwaiting_cliff_C.py -- --source out/lind-scan-sources --out out/lind-scan-c 2>&1 | tee out/lind-scan-c/build.log
+      - name: Audit saved cliff C spatial continuity (non-adoption evidence)
+        if: success()
+        timeout-minutes: 3
+        run: |
+          timeout 120s /tmp/two-blender/app/blender -b out/lind-scan-c/windwaiting_cc0_scan_assembly_C_UNAPPROVED.blend --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/audit_windwaiting_cliff_C_contact.py -- out/lind-scan-c/contact_audit.json
+          test -s out/lind-scan-c/contact_audit.json
       - name: Reopen blend and validate hashes
         timeout-minutes: 3
         run: |
