@@ -1,0 +1,52 @@
+name: Blender Setup Smoke QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/smoke_test.py'
+      - '.github/workflows/blender-setup-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  blender-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Blender from Ubuntu repository
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+      - name: Validate script syntax
+        run: python3 -m py_compile tools/blender/smoke_test.py
+      - name: Run Blender headless
+        run: blender -b -t 1 --python tools/blender/smoke_test.py
+      - name: Verify output
+        run: |
+          test -s /tmp/blender-setup-01/smoke.blend
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('/tmp/blender-setup-01/qa.json').read_text())
+          assert d['status'] == 'PASS'
+          assert d['objects'] == 0
+          assert d['resolution'] == [48, 64]
+          assert d['film_transparent'] is True
+          assert d['production_assets_modified'] is False
+          print('SMOKE_QA_PASS')
+          PY
+      - name: Upload smoke-test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blender-setup-01-smoke
+          path: |
+            /tmp/blender-setup-01/smoke.blend
+            /tmp/blender-setup-01/qa.json
+          if-no-files-found: warn
+          retention-days: 7

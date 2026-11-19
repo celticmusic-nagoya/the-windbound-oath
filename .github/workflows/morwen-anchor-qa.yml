@@ -1,0 +1,34 @@
+name: Morwen Anchor Schema QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/profiles/morwen_anchors_v1.json'
+      - 'tools/blender/qa_morwen_anchors.py'
+      - '.github/workflows/morwen-anchor-qa.yml'
+permissions:
+  contents: read
+jobs:
+  anchor-schema:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m py_compile tools/blender/qa_morwen_anchors.py
+      - run: python3 tools/blender/qa_morwen_anchors.py tools/blender/profiles/morwen_anchors_v1.json
+      - name: Negative tests
+        run: |
+          python3 - <<'PY'
+          import importlib.util, json
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location("qa", "tools/blender/qa_morwen_anchors.py")
+          mod = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+          p = json.loads(Path("tools/blender/profiles/morwen_anchors_v1.json").read_text())
+          assert not mod.validate(p)
+          assert mod.validate(p, require_measured=True)
+          p["asymmetry_policy"]["mirror_between_facings"] = True
+          assert mod.validate(p)
+          print("ANCHOR_SCHEMA_QA_PASS")
+          PY

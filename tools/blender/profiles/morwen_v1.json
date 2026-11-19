@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "profile_id": "morwen-prototype-v1",
+  "status": "CANDIDATE_ONLY",
+  "common_rig": "tools/blender/rigs/humanoid_v1.json",
+  "reference_policy": {
+    "canonical_v561_source_sha256": "47d58cbeb0f8ad41f51543716d872bfcc8c7d0dc91d45196c9c02b22402df638",
+    "canonical_binary_available": false,
+    "turnaround_images": "REFERENCE_ONLY_UNTIL_CANONICAL_MAPPING",
+    "proportion_images": "ANATOMY_REFERENCE_ONLY",
+    "do_not_mirror_asymmetric_details": true
+  },
+  "scale": {
+    "height": 1.0,
+    "head_scale": 1.0,
+    "torso_scale": 1.0,
+    "leg_scale": 1.0,
+    "status": "PLACEHOLDER_NOT_MEASURED"
+  },
+  "attachments": [
+    {"id":"hat","bone":"head","status":"PIVOT_PENDING"},
+    {"id":"hair_front","bone":"head","status":"PIVOT_PENDING"},
+    {"id":"hair_back","bone":"head","status":"PIVOT_PENDING"},
+    {"id":"cape","bone":"spine","status":"PIVOT_PENDING"},
+    {"id":"satchel","bone":"pelvis","status":"FACING_SPECIFIC_UNVERIFIED"},
+    {"id":"glasses","bone":"head","status":"PIVOT_PENDING"},
+    {"id":"book","bone":"hand.L","status":"HANDEDNESS_UNVERIFIED"}
+  ],
+  "facings": ["front","left","right","back"],
+  "render": {"width":48,"height":64,"alpha":true,"status":"PROTOTYPE_ONLY"}
+}

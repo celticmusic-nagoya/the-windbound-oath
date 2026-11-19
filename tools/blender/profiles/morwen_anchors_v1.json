@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task": "MORWEN-RIG-06",
+  "status": "MEASUREMENT_PENDING",
+  "coordinate_system": "normalized_image_xy_top_left_origin",
+  "ground_anchor": {"x": 0.5, "y": 1.0, "status": "PROVISIONAL_GUIDE_ONLY"},
+  "facings": {
+    "front": {"source": "7694.png", "anchors": {}},
+    "left": {"source": "7693.png", "anchors": {}},
+    "right": {"source": "7684.png", "anchors": {}},
+    "back": {"source": "7776.png", "anchors": {}}
+  },
+  "required_anchors": ["head", "shoulder.L", "shoulder.R", "elbow.L", "elbow.R", "wrist.L", "wrist.R", "pelvis", "knee.L", "knee.R", "ankle.L", "ankle.R"],
+  "asymmetry_policy": {
+    "mirror_between_facings": false,
+    "left_shoulder_crest": "EXCLUDE_PENDING_CANON_CONFIRMATION",
+    "left_hat_ornament": "EXCLUDE_PENDING_CANON_CONFIRMATION",
+    "left_satchel": "EXCLUDE_PENDING_CANON_CONFIRMATION"
+  },
+  "production_use": false
+}

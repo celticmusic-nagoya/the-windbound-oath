@@ -1,0 +1,21 @@
+name: Morwen Joint Overlay QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/blender/render_morwen_joint_overlays.py'
+      - 'tools/blender/qa_morwen_anchors.py'
+      - 'tools/blender/profiles/morwen_anchors_v1.json'
+      - 'tests/test_morwen_joint_overlays.py'
+      - '.github/workflows/morwen-joint-overlay-qa.yml'
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m py_compile tools/blender/render_morwen_joint_overlays.py
+      - run: python3 -m unittest discover -s tests -p test_morwen_joint_overlays.py -v

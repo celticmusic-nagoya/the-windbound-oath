@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Morwen Joint Marker — candidate only</title>
+<style>
+:root{color-scheme:dark}body{margin:0;background:#101720;color:#f3f5f8;font:15px system-ui,sans-serif}
+main{max-width:860px;margin:auto;padding:14px}h1{font-size:1.3rem}p{line-height:1.5;color:#c5ced7}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}button,select,input{font:inherit;padding:9px;border-radius:7px;border:1px solid #738394;background:#23313d;color:white}
+button:disabled{opacity:.45}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #e7bf67}
+#stage{position:relative;width:min(100%,500px);margin:auto;background:#26323c;border:1px solid #5e7284;touch-action:manipulation}
+#photo{display:block;width:100%;height:auto;user-select:none}#overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#status{min-height:2em}#list{font-size:13px;line-height:1.7}small{color:#c5ced7}
+</style></head><body><main>
+<h1>Morwen 関節アンカー測定 — 候補専用</h1>
+<p>端末内の原本画像を選択し、指定された関節を順番にタップしてください。画像は外部送信されません。方向ごとに12点を測定するとJSONを保存できます。正式採用には別途デザイン確認が必要です。</p>
+<div class="controls"><label>方向 <select id="facing"><option value="front">正面</option><option value="left">左</option><option value="right">右</option><option value="back">背面</option></select></label>
+<label>画像 <input id="file" type="file" accept="image/png,image/jpeg,image/*"></label></div>
+<div class="controls"><button id="undo" type="button">1点戻す</button><button id="reset" type="button">現在の方向をリセット</button><button id="export" type="button" disabled>JSONを保存</button></div>
+<div id="status" role="status" aria-live="polite">画像を選択してください</div>
+<div id="stage"><img id="photo" alt="選択した参照画像"><svg id="overlay" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+<p id="list"></p><small>座標は画像左上原点の0〜1正規化値。左右反転・画像加工なし。作業中の座標はブラウザを閉じると消えます。</small>
+</main><script>
+'use strict';
+const names=['head','shoulder.L','shoulder.R','elbow.L','elbow.R','wrist.L','wrist.R','pelvis','knee.L','knee.R','ankle.L','ankle.R'];
+const sources={front:'7694.png',left:'7693.png',right:'7684.png',back:'7776.png'};
+const anchors=Object.fromEntries(Object.keys(sources).map(k=>[k,{}]));
+const $=id=>document.getElementById(id);
+let url=null,loaded=false;
+function face(){return $('facing').value}
+function points(){return anchors[face()]}
+function next(){return names.find(n=>!Object.hasOwn(points(),n))}
+function render(){
+ const count=names.filter(n=>Object.hasOwn(points(),n)).length;
+ $('status').textContent=(loaded?'現在: '+face()+' ／ ':'画像未選択 ／ ')+count+'/12点。'+(next()?'次: '+next():'この方向は測定済み');
+ $('list').textContent=names.map(n=>(Object.hasOwn(points(),n)?'● ':'○ ')+n).join('　');
+ $('undo').disabled=count===0;$('reset').disabled=count===0;
+ $('export').disabled=!Object.keys(anchors).every(k=>names.every(n=>Object.hasOwn(anchors[k],n)));
+ const ns='http://www.w3.org/2000/svg',svg=$('overlay');svg.replaceChildren();
+ for(const n of names){const p=points()[n];if(!p)continue;const c=document.createElementNS(ns,'circle');c.setAttribute('cx',p.x*1000);c.setAttribute('cy',p.y*1000);c.setAttribute('r','9');c.setAttribute('fill','#ffb764');c.setAttribute('stroke','#14202b');c.setAttribute('stroke-width','3');svg.append(c)}
+}
+function clearImage(){if(url)URL.revokeObjectURL(url);url=null;loaded=false;$('photo').removeAttribute('src')}
+$('file').addEventListener('change',e=>{clearImage();const f=e.target.files[0];if(!f){render();return}if(!f.type.startsWith('image/')){alert('画像を選択してください');render();return}url=URL.createObjectURL(f);$('photo').onload=()=>{loaded=true;render()};$('photo').onerror=()=>{clearImage();render()};$('photo').src=url});
+$('facing').addEventListener('change',()=>{clearImage();$('file').value='';render()});
+$('stage').addEventListener('click',e=>{if(!loaded||!next())return;const r=$('photo').getBoundingClientRect();if(!r.width||!r.height||e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return;points()[next()]={x:+((e.clientX-r.left)/r.width).toFixed(6),y:+((e.clientY-r.top)/r.height).toFixed(6)};render()});
+$('undo').addEventListener('click',()=>{const last=[...names].reverse().find(n=>Object.hasOwn(points(),n));if(last)delete points()[last];render()});
+$('reset').addEventListener('click',()=>{if(confirm('この方向の測定点をすべて消去しますか？')){anchors[face()]={};render()}});
+$('export').addEventListener('click',()=>{if($('export').disabled)return;const data={schema_version:1,task:'MORWEN-RIG-06',status:'MEASURED_CANDIDATE_UNREVIEWED',coordinate_system:'normalized_image_xy_top_left_origin',ground_anchor:{x:0.5,y:1,status:'PROVISIONAL_GUIDE_ONLY'},facings:Object.fromEntries(Object.entries(sources).map(([k,source])=>[k,{source,anchors:anchors[k]}])),required_anchors:names,asymmetry_policy:{mirror_between_facings:false,left_shoulder_crest:'EXCLUDE_PENDING_CANON_CONFIRMATION',left_hat_ornament:'EXCLUDE_PENDING_CANON_CONFIRMATION',left_satchel:'EXCLUDE_PENDING_CANON_CONFIRMATION'},production_use:false};const blob=new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='morwen_anchors_candidate.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)});
+render();
+</script></body></html>
