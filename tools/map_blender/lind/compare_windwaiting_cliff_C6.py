@@ -1,0 +1,41 @@
+"""Produce an ungraded contact sheet for independent cliff C art review."""
+import argparse
+import hashlib
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont, ImageOps
+
+CG_SHA = "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07"
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--reference", type=Path, required=True)
+    args = parser.parse_args()
+    assert hashlib.sha256(args.reference.read_bytes()).hexdigest() == CG_SHA
+    sheet = Image.new("RGB", (1920, 1560), "#15202a")
+    draw = ImageDraw.Draw(sheet)
+    title = ImageFont.truetype("DejaVuSans.ttf", 38)
+    label = ImageFont.truetype("DejaVuSans.ttf", 23)
+    draw.text((30, 22), "Windwaiting Cliff C6 | independent review", font=title, fill="#f1ece1")
+
+    def panel(path, caption, box):
+        x, y, width, height = box
+        draw.text((x, y), caption, font=label, fill="#d6dce2")
+        with Image.open(path) as image:
+            fitted = ImageOps.contain(image.convert("RGB"), (width, height), Image.Resampling.LANCZOS)
+            sheet.paste(fitted, (x + (width - fitted.width) // 2, y + 37))
+
+    panel(args.reference, "Approved CG | full composition", (30, 95, 1030, 583))
+    panel(args.out / "cg_review.png", "Candidate | low CG review", (1090, 95, 800, 583))
+    for index, (file, name) in enumerate((("front", "front"), ("left", "left"), ("right", "right"), ("elevated", "elevated"))):
+        panel(args.out / (file + ".png"), f"Candidate | {name}", (30 + index * 472, 782, 450, 320))
+    panel(args.out / "shore_detail.png", "Candidate | shore detail", (32, 1150, 550, 354))
+    panel(args.out / "sunset.png", "Candidate | sunset", (620,1150,550,354))
+    draw.text((1190, 1450), "Provisional scale and review cameras.", font=label, fill="#b2bdc8")
+    sheet.save(args.out / "comparison.png")
+
+
+if __name__ == "__main__":
+    main()
