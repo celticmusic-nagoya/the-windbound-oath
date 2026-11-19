@@ -1,6 +1,11 @@
 name: LIND Macro Cliff Support Blender Geometry QA
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/lind-cliff-rock-art-study-20261118
+    paths:
+      - .github/workflows/lind-cliff-macro-support.yml
 permissions:
   contents: read
 jobs:
