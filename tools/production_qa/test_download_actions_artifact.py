@@ -86,6 +86,19 @@ class DownloadTests(unittest.TestCase):
             self.run_download()
         self.assertEqual(self.out.read_bytes(), b"keep")
 
+    def test_race_does_not_delete_other_process_file(self):
+        output = self.out
+
+        class RacingOpener(FakeOpener):
+            def open(self, request, timeout=None):
+                if len(self.calls) == 1:
+                    output.write_bytes(b"another-process")
+                return super().open(request, timeout=timeout)
+
+        with self.assertRaises(FileExistsError):
+            self.run_download(RacingOpener())
+        self.assertEqual(self.out.read_bytes(), b"another-process")
+
     def test_invalid_digest(self):
         with self.assertRaises(ValueError):
             self.run_download(digest="not-a-digest")
