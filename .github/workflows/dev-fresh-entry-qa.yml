@@ -7,6 +7,7 @@ on:
       - 'tests/moss/dev_fresh_entry.test.js'
       - '.github/workflows/dev-fresh-entry-qa.yml'
   push:
+    branches: [main]
     paths:
       - 'dev-fresh-20261108.html'
       - 'index.html'
