@@ -1,9 +1,5 @@
 name: LIND Local Cliff Scan Patch Source QA
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/extract_local_cliff_scan_patch.py'
-      - '.github/workflows/lind-local-cliff-scan-patch.yml'
   workflow_dispatch:
 permissions:
   contents: read
