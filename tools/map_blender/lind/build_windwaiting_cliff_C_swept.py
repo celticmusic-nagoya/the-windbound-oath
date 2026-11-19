@@ -241,7 +241,7 @@ def build_scene():
     cameras = {}
     for name, position, scale in (
         ("front", (0,-27,8), 21), ("left", (-20,-24,10), 20.5),
-        ("right", (22,-25,9), 20.5), ("elevated", (12,-18,24), 22),
+        ("right", (22,-25,9), 20.5), ("elevated", (12,-18,24), 25.5),
     ):
         data = bpy.data.cameras.new(name)
         data.type, data.ortho_scale = "ORTHO", scale
