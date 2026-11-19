@@ -1,0 +1,66 @@
+name: C10 cliff candidate render (manual stage)
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - '.github/workflows/lind-cliff-c10-render.yml'
+      - 'assets/candidates/lind/windwaiting-cliff-c10/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lind-cliff-c10-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Blender Python
+        run: python -m pip install --disable-pip-version-check bpy==5.2.4
+      - name: Verify source and create C10 Blender original
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/c10-render
+          SOURCE="assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend"
+          test -s "$SOURCE"
+          file "$SOURCE"
+          python assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py "$SOURCE" /tmp/c10-render
+      - name: Render fixed C10 camera views
+        run: |
+          python - <<'PY'
+          import bpy
+          from pathlib import Path
+          source=Path('/tmp/c10-render/windwaiting_cliff_C10_UNAPPROVED.blend')
+          bpy.ops.wm.open_mainfile(filepath=str(source))
+          scene=bpy.context.scene
+          scene.render.engine='BLENDER_EEVEE_NEXT'
+          scene.render.resolution_percentage=65
+          scene.render.image_settings.file_format='PNG'
+          scene.render.threads=4
+          for name in ('cg_review','front','left','right','elevated','shore_detail','sunset'):
+              camera=bpy.data.objects.get(name)
+              if camera is None or camera.type!='CAMERA':
+                  raise RuntimeError('Missing camera: '+name)
+              scene.camera=camera
+              scene.render.filepath='/tmp/c10-render/'+name+'.png'
+              bpy.ops.render.render(write_still=True)
+          PY
+      - name: Verify render files
+        run: |
+          set -euo pipefail
+          for view in cg_review front left right elevated shore_detail sunset; do test -s "/tmp/c10-render/$view.png"; done
+          sha256sum /tmp/c10-render/* > /tmp/c10-render/SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lind-cliff-c10-unapproved-${{ github.sha }}
+          path: /tmp/c10-render/
+          retention-days: 7
+          if-no-files-found: warn
