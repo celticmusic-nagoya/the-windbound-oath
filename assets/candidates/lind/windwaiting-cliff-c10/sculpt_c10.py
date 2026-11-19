@@ -1,4 +1,4 @@
-"""C10 experimental independent rock masses. Blender 5.3.0 candidate runtime.
+"""C10 experimental tapered fractured rock masses. Blender 5.3.0 candidate runtime.
 Input: C9-B/C_UNAPPROVED.blend. No mutation of source or C9 files.
 This stage creates editable, closed, independently authored cliff blocks;
 it does NOT certify visual fit, intersections, or seam preservation.
@@ -46,33 +46,46 @@ def make_locator(obj):
     return locate
 
 def build_mass(collection, name, spec, locate):
-    cx,low,high,half,projection,inset,rake=spec
-    coords=[]
-    n=len(OUTLINE)
-    for side in (0,1):
-        for i,(u,v) in enumerate(OUTLINE):
-            z=low+(high-low)*v
-            x=cx+half*u+rake*(z-(low+high)*.5)
-            y0=locate(x,z)
-            # Depth variation is tied to the rock's independent facets.
-            facet=.10*math.sin(i*2.17+cx)+.07*math.cos(i*.89)
-            y=y0+(inset if side else -projection+facet)
+    """Three-ring sculpt study: a shallow carrier-side perimeter and a deeper,
+    inset fractured face. Keeps the C9 mesh untouched and remains UNAPPROVED.
+    """
+    cx, low, high, half, projection, inset, rake = spec
+    n = len(OUTLINE)
+    mid = (low + high) * .5
+    coords = []
+    # Outer front seam, inset/front sculpt face, then rear carrier-side ring.
+    # Vary inset ring per feature to avoid a uniformly extruded silhouette.
+    for ring in ("outer", "inner", "rear"):
+        for i, (u, v) in enumerate(OUTLINE):
+            if ring == "inner":
+                scale = .67 + .035 * math.sin(i * 1.71 + cx)
+                x = cx + half * u * scale + rake * (high-low) * (v-.5) * .68
+                z = mid + (high-low) * (v-.5) * scale
+            else:
+                z = low + (high-low) * v
+                x = cx + half * u + rake * (z-mid)
+            y0 = locate(x, z)
+            facet = .10 * math.sin(i*2.17+cx) + .07*math.cos(i*.89)
+            if ring == "outer":
+                y = y0 - .09 + facet * .22
+            elif ring == "inner":
+                y = y0 - projection + facet
+            else:
+                y = y0 + inset
             coords.append((x,y,z))
-    faces=[]
-    # Reverse front winding relative to rear; validate after actual Blender run.
-    faces.append(tuple(reversed(range(n))))
-    faces.append(tuple(range(n,2*n)))
+    faces = [tuple(reversed(range(n, 2*n))), tuple(range(2*n, 3*n))]
     for i in range(n):
-        j=(i+1)%n
-        faces.append((i,j,n+j,n+i))
-    mesh=bpy.data.meshes.new(name+" mesh")
-    mesh.from_pydata(coords,[],faces)
+        j = (i+1) % n
+        faces.append((i, j, n+j, n+i))
+        faces.append((2*n+i, 2*n+j, j, i))
+    mesh = bpy.data.meshes.new(name+" mesh")
+    mesh.from_pydata(coords, [], faces)
     mesh.update()
-    obj=bpy.data.objects.new(name,mesh)
+    obj = bpy.data.objects.new(name, mesh)
     collection.objects.link(obj)
-    obj["status"]="UNAPPROVED_C10_GEOMETRY_STUDY"
-    obj["construction"]="independent closed fracture mass"
-    obj["source"]="C9 B carrier world-space projection"
+    obj["status"] = "UNAPPROVED_C10_GEOMETRY_STUDY"
+    obj["construction"] = "carrier-adjacent perimeter and sculpted inner fracture ring"
+    obj["source"] = "C9 B carrier world-space projection"
     return obj
 
 def main():
