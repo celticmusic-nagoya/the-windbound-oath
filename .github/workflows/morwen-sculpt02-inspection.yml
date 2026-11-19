@@ -1,0 +1,41 @@
+name: Morwen SCULPT02 read-only source inspection
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - tools/morwen_authored_sculpt/inspect_sculpt02.py
+      - .github/workflows/morwen-sculpt02-inspection.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Fetch existing SCULPT02 source without modifying repository
+        run: |
+          set -euo pipefail
+          git -c protocol.version=2 fetch --no-tags --depth=1 origin 062b9f0753aa1bf0a5dc6536d52ed9a81be18541
+          mkdir -p /tmp/two-sculpt02-source
+          git show FETCH_HEAD:assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend > /tmp/two-sculpt02-source/source.blend
+          test -s /tmp/two-sculpt02-source/source.blend
+          echo '90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b  /tmp/two-sculpt02-source/source.blend' | sha256sum -c -
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Inspect source with Blender (no source save)
+        run: |
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/inspect_sculpt02.py -- /tmp/two-sculpt02-source/source.blend /tmp/two-sculpt02-inspection
+          test -s /tmp/two-sculpt02-inspection/sculpt02_inspection.json
+      - name: Upload inspection evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-sculpt02-readonly-inspection
+          path: /tmp/two-sculpt02-inspection/
+          if-no-files-found: warn
+          retention-days: 14
