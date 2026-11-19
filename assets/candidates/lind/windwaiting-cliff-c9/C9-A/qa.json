@@ -1,0 +1,265 @@
+{
+  "blender": "5.2.4 LTS",
+  "reopen": "PASS",
+  "tiles": {
+    "A": {
+      "geometry_sha256": "379f82beeeb9c04289287b4df3548ceef9c2ed95ffad5aed009378ef5cacbc42",
+      "max_8_unit_transition_slope_degrees_at_y10": 3.7049860222867754,
+      "classification": "unapproved review candidate",
+      "mesh": {
+        "vertices": 37485,
+        "edges": 74885,
+        "faces": 37402,
+        "connected_components": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_edges": 0,
+        "zero_area_faces": 0,
+        "signed_volume": 9480.390283926132,
+        "triangles": 74966,
+        "intersecting_nonadjacent_triangle_pairs": 0,
+        "bounds": {
+          "min": [
+            -17.0,
+            -4.012155532836914,
+            -1.649999976158142
+          ],
+          "max": [
+            23.0,
+            33.245723724365234,
+            6.923722743988037
+          ]
+        }
+      }
+    },
+    "B": {
+      "geometry_sha256": "a0875e072d5366a75e84acd6d322f71bd9fd99cb50380c94326e8555bebb355d",
+      "max_8_unit_transition_slope_degrees_at_y10": 3.2700179792723367,
+      "classification": "unapproved review candidate",
+      "mesh": {
+        "vertices": 37485,
+        "edges": 74885,
+        "faces": 37402,
+        "connected_components": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_edges": 0,
+        "zero_area_faces": 0,
+        "signed_volume": 9399.078202427423,
+        "triangles": 74966,
+        "intersecting_nonadjacent_triangle_pairs": 0,
+        "bounds": {
+          "min": [
+            -17.0,
+            -5.114861011505127,
+            -1.649999976158142
+          ],
+          "max": [
+            23.0,
+            33.13060760498047,
+            7.273603439331055
+          ]
+        }
+      }
+    },
+    "C": {
+      "geometry_sha256": "c5aef78397d466472232c7bf78d174072b0920b4c0447943553843414109cd7b",
+      "max_8_unit_transition_slope_degrees_at_y10": 3.172518529197852,
+      "classification": "unapproved review candidate",
+      "mesh": {
+        "vertices": 37485,
+        "edges": 74885,
+        "faces": 37402,
+        "connected_components": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_edges": 0,
+        "zero_area_faces": 0,
+        "signed_volume": 9340.876501155924,
+        "triangles": 74966,
+        "intersecting_nonadjacent_triangle_pairs": 0,
+        "bounds": {
+          "min": [
+            -17.0,
+            -3.73596453666687,
+            -1.649999976158142
+          ],
+          "max": [
+            23.0,
+            32.47999954223633,
+            6.502223491668701
+          ]
+        }
+      }
+    }
+  },
+  "seams": {
+    "A-B": {
+      "paired_vertices": 85,
+      "max_normal_delta_degrees": 0.03426402083239251,
+      "u_period": 1
+    },
+    "B-C": {
+      "paired_vertices": 85,
+      "max_normal_delta_degrees": 0.03426402083239251,
+      "u_period": 1
+    }
+  },
+  "visibility": [
+    {
+      "zone": "near",
+      "x": -6.8,
+      "face_samples": 20,
+      "in_frame": 20,
+      "unoccluded_face_samples": 10
+    },
+    {
+      "zone": "middle",
+      "x": 2.6,
+      "face_samples": 20,
+      "in_frame": 20,
+      "unoccluded_face_samples": 4
+    },
+    {
+      "zone": "far",
+      "x": 9.2,
+      "face_samples": 20,
+      "in_frame": 20,
+      "unoccluded_face_samples": 13
+    }
+  ],
+  "debris": {
+    "C9 Scar 01 debris 01": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.26006531715393066,
+      "scar_x": -10.2
+    },
+    "C9 Scar 01 debris 02": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5203872919082642,
+      "scar_x": -10.2
+    },
+    "C9 Scar 01 debris 03": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.10413019359111786,
+      "scar_x": -10.2
+    },
+    "C9 Scar 03 debris 01": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.25488483905792236,
+      "scar_x": -4.15
+    },
+    "C9 Scar 03 debris 02": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5387508869171143,
+      "scar_x": -4.15
+    },
+    "C9 Scar 03 debris 03": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.10671339929103851,
+      "scar_x": -4.15
+    },
+    "C9 Scar 04 debris 01": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.2541574239730835,
+      "scar_x": 4.36
+    },
+    "C9 Scar 04 debris 02": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5418466925621033,
+      "scar_x": 4.36
+    },
+    "C9 Scar 04 debris 03": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.10566593706607819,
+      "scar_x": 4.36
+    },
+    "C9 Scar 05 debris 01": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.24808911979198456,
+      "scar_x": 10.12
+    },
+    "C9 Scar 05 debris 02": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5233809947967529,
+      "scar_x": 10.12
+    },
+    "C9 Scar 05 debris 03": {
+      "min_z": -0.23999999463558197,
+      "max_z": 0.10525424778461456,
+      "scar_x": 10.12
+    }
+  },
+  "files": {
+    "cg_review.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "d6bbb5e95ce0480817f782d6bdc69173986977eefee3b600c790d1331b0c033f"
+    },
+    "cg_review_clay.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "fc9c10c662a51a81a97a7a5279edb92110ff4bd6406e81416741eb4c05df44b1"
+    },
+    "comparison.png": {
+      "size": [
+        1200,
+        800
+      ],
+      "sha256": "147d2ab5ac54a7c6e7c1af7a8187fc0aab82bf0837fa4400af1c7ce969a1ee59"
+    },
+    "elevated.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "5df992b41f2a4dc7120ce8fcee578ddcfb97e342295e6c4d0ebc98615e0b8de4"
+    },
+    "front.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "d463f9dffc1145ea84f14bca411f03ffb2785d73fe4db213ec44826f85ca4c3e"
+    },
+    "left.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "2a940fe006922402dfc340ed95aad6a0168fd2f3895f1285343e70922b075b72"
+    },
+    "right.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "fc9b2b665815424f5ed3eab38214c6d02a5ee4dcf2a112010e5d86361533b8cb"
+    },
+    "shore_detail.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "94a86413956b9e7d1f84e5b313ea9b8e96c9c8f3880b2412ae1986dcb03c15db"
+    },
+    "sunset.png": {
+      "size": [
+        960,
+        608
+      ],
+      "sha256": "a13af0b3fceae05fdda8c68e18af7a07d95d66a3ec2e3c9657971182fa10eeb0"
+    },
+    "windwaiting_cliff_C9-A_UNAPPROVED.blend": {
+      "sha256": "9bce42749be72d06155543dc9ba758479c3c597f233aec67936d0ff88dfd4037"
+    }
+  },
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G3_structural_subset": "PASS",
+  "G4": "NOT_RUN"
+}

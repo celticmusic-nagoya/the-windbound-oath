@@ -1,0 +1,93 @@
+{
+  "source": "Poly Haven public asset API",
+  "license": "CC0 per https://polyhaven.com/license",
+  "assets": [
+    {
+      "id": "rock_face_01",
+      "asset_page": "https://polyhaven.com/a/rock_face_01",
+      "license": "CC0",
+      "author": "Dario Barresi",
+      "provider": "Poly Haven",
+      "maps": [
+        {
+          "uri": "textures/rock_face_01_arm_1k.jpg",
+          "file": "rock_face_01/textures/rock_face_01_arm_1k.jpg",
+          "size_bytes": 693610,
+          "sha256": "59128c79d207a50a69a38002986135ade3b19642d26158cec141eca41578c9ca",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/rock_face_01/rock_face_01_arm_1k.jpg",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "blender_settings": "World-position box projection, scale (0.29, 0.31, 0.37), blend 0.24. Non-color. Red AO, green roughness, blue unused."
+        },
+        {
+          "uri": "textures/rock_face_01_diff_1k.jpg",
+          "file": "rock_face_01/textures/rock_face_01_diff_1k.jpg",
+          "size_bytes": 853749,
+          "sha256": "41bd26ed2db1332b1ebb4b1326fd8af4d21f0f0eb57b8ea385033115c722cfdb",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/rock_face_01/rock_face_01_diff_1k.jpg",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "blender_settings": "World-position box projection, scale (0.29, 0.31, 0.37), blend 0.24. sRGB base color."
+        },
+        {
+          "uri": "textures/rock_face_01_nor_gl_1k.jpg",
+          "file": "rock_face_01/textures/rock_face_01_nor_gl_1k.jpg",
+          "size_bytes": 1023400,
+          "sha256": "9a9d85b9a01f4e24fc9ceec8baf96c019f552bca69591ff544c7a725e28b1d97",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/rock_face_01/rock_face_01_nor_gl_1k.jpg",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "blender_settings": "Tangent-space GL normal, non-color, strength 0.20, UV scale (8, 3)"
+        }
+      ]
+    },
+    {
+      "id": "boulder_01",
+      "asset_page": "https://polyhaven.com/a/boulder_01",
+      "license": "CC0",
+      "author": "Rico Cilliers",
+      "provider": "Poly Haven",
+      "maps": [
+        {
+          "uri": "textures/boulder_01_arm_1k.jpg",
+          "file": "boulder_01/textures/boulder_01_arm_1k.jpg",
+          "size_bytes": 659386,
+          "sha256": "c57187c5746b6be913fa53846cb44ff78743e7ca5000f131c9627b99563c2b87",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/boulder_01/boulder_01_arm_1k.jpg",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "blender_settings": "World-position box projection, scale (0.29, 0.31, 0.37), blend 0.24. Non-color. Red AO, green roughness, blue unused. Red also controls subtle shader bump."
+        },
+        {
+          "uri": "textures/boulder_01_diff_1k.jpg",
+          "file": "boulder_01/textures/boulder_01_diff_1k.jpg",
+          "size_bytes": 987467,
+          "sha256": "c38f0e918f6dc16b8d386ba3cdd89805c78320c119a1ceec85856f82b09a65b8",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/boulder_01/boulder_01_diff_1k.jpg",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "blender_settings": "World-position box projection, scale (0.29, 0.31, 0.37), blend 0.24. sRGB base color."
+        }
+      ]
+    }
+  ],
+  "generated_utc": "2026-11-17T10:45:39.590473+00:00",
+  "artifact": {
+    "id": 14320622629,
+    "run": 44067700909,
+    "sha256": "e19efb710e8e4ac19ba1e11ffaeb2764aca3b9a547b19058f52fafc42cec71c0"
+  },
+  "height_displacement": "No geometry displacement. Carrier uses tangent normal; loose rock uses low-strength shader bump.",
+  "wet_zone": "Height mask in provisional coordinates blends darker base and roughness 0.34 below Z 0.12, fading to dry by Z 0.91.",
+  "grass": "Inherited procedural C8 turf color and slope mask, with new low-frequency soil patch blend and roughness variation 0.77\u20130.94. External grass/soil textures unavailable."
+}
