@@ -3,6 +3,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: two-manual-lind-cc0-rock-components-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   fetch:
     runs-on: ubuntu-24.04
