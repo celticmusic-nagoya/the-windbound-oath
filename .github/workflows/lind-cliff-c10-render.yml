@@ -176,7 +176,7 @@ jobs:
               ref="run:44627719888:artifact:14580687938:commit:5c1d70c6a25248cd705ac7c028e27446327080a9"
             fi
             dest="$root/$candidate"
-            scratch="$(mktemp -d)"
+            scratch="$(mktemp -d)/blueprint"
             for output in "$dest" "$scratch"; do
               "$bpy" -b --disable-autoexec "$src" --python-exit-code 1 \
                 --python "$scripts/export_blueprint.py" -- "$output" --source-sha "$expected" --input-ref "$ref"

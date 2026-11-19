@@ -214,6 +214,18 @@ def main():
                                "custom attribute payloads are not reconstructed",
                                "intersection and texel density coverage pending"]})
     write(root / "qa.json", qa)
+    for kind in ("base", "evaluated"):
+        subset = [row for name, row in checks.items() if name.endswith(f"/{kind}")]
+        print("BLUEPRINT_MESH", kind, json.dumps({
+            "counts": {key: sum(row[key] for row in subset) for key in ("vertices", "edges", "faces", "loops")},
+            "max_deltas": {key: max((row[key] for row in subset if row[key] is not None), default=None)
+                           for key in ("max_local_xyz_delta", "max_world_xyz_delta", "max_uv_delta",
+                                       "max_corner_normal_delta")},
+        }, sort_keys=True), flush=True)
+    print("BLUEPRINT_ROUND_TRIP", json.dumps({"source_sha256": manifest["source_sha256"],
+              "determinism": qa["rerun"], "mesh_checks": len(checks), "round_trip": qa["round_trip"],
+              "pixels": pixel, "material_match": material_match, "scene_differences": scene_fail,
+              "failures": failures}, sort_keys=True), flush=True)
     if failures:
         raise RuntimeError(f"Round-trip failures: {failures}")
 
