@@ -1,14 +1,14 @@
-# DIRECTOR-APPROVED FULL-3D TARGET — v3.4 ALIGNMENT (2026-11-17)
+## Session continuity / persistent handoff (2026-11-18)
 
-**Scope:** This is a non-destructive clarification of the latest director-approved final visual direction. THE WINDBOUND OATH targets high-quality **fully 3D characters and world/maps**. The old 2.8-head sprite / 2.5D map prescriptions below remain as **historical implementation and rollback references**, NOT the final production-art target. Preserve the currently working 2D runtime, SAVE, events, collision, UI and assets until an approved, independently QA-verified 3D migration. Do not silently replace the renderer or infer world meters/camera/scale from illustrations.
+At every new session or agent handoff, read [SESSION_CONTINUITY_INDEX.md](docs/production/SESSION_CONTINUITY_INDEX.md) and verify its pointers against live main, private canon, current PRs, Actions and artifacts before resuming. This index is navigation, not a replacement for the private canonical Bible. Do not recreate completed work or rerun stopped method families. Preserve exact QA status and distinguish Draft/merged/proposed. This directive does not authorize main merge, destructive changes or publication.
 
-**Quality benchmarks:** Learn production craft from Genshin Impact (color/landscape), Neverness to Everness (spatial/city presentation), Arknights: Endfield (geometry/materials) and NIKKE (character presentation), while protecting original Celtic-fantasy canon. No copying proprietary designs or assets. Source research from https://3dnchu.com/, official documentation, papers, GitHub, Pinterest and user-supplied videos; verify licenses, compatibility, cost and actual quality benefit. Approved non-destructive technology trials may progress through implementation and independent QA; research alone is not adoption.
+## 2026-11-18 モルウェン参照画像の同一デザイン運用（ディレクター承認）
 
-**Authority and coordination:** Latest explicit director approvals and accessible private canon take precedence for canon; existing source hashes and provenance remain protected. Follow [Causal Retry & Method Switch v2](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md): two same-root-cause/same-method-family failures stop **that method only**, not the entire task. Character, MAP WORLD/HOME/BUILD/ECO and INTEGRATION maintain separate ownership and Draft PRs. Resolve shared coordinate/camera/contact/shadow/occlusion/collision/runtime interface before game integration. See [v3.4 alignment proposal](docs/policy/FULL_3D_V34_ALIGNMENT_PROPOSAL_20261117.md) for evidence and unresolved items; that proposal is not a canon source.
+制作参照はSHA-256の完全一致に限定しない。同一デザインを視覚照合できた既存画像を使用可能とする。原本の既知SHA・来歴・採用区分は保護し、同一バイト列と偽らない。Layer 0正式四方向画像を身体造形の優先参照とし、未一致の部位のみBLOCKED。詳細は [MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md](docs/policy/MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md)。この後発承認は下記の「唯一の正本」記載に対して**制作参照の利用条件のみ**優先し、原本置換・候補正式採用・G1〜G4免除を認めない。
 
-**Safety and QA:** No main merge, canonical overwrite, destructive deletion or publication without explicit approval. G1 source/canon, G2 independent visual art, G3 technical geometry/render, G4 game/Android runtime must each PASS for formal adoption. Character reference precedence and unapproved 3D metrics remain BLOCKED, not inferred. GitHub Actions success alone does not prove art or game readiness. When older sections below conflict **only on final visual target**, this newer director-approved full-3D target governs; other historical gameplay and safety rules remain in force.
+# HIGH-END 3D PRODUCTION POLICY v1.1 (DIRECTOR APPROVED)
 
----
+All agents, including Codex, must read [the high-end 3D production policy](docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md) for character and environment work. Character and map teams have separate ownership. Preserve canonical source hashes, prior PRs and G1–G4. Existing causal-retry v2 policy remains authoritative. No unapproved canon overwrite, destructive deletion or publication.
 
 # DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
 
@@ -393,7 +393,7 @@ This section supersedes any earlier auto-merge, retry-count, branch-creation or 
 - **アセット:** [CHARACTER_ASSET_GENERATION_GUIDE_v1.2.md](docs/policy/CHARACTER_ASSET_GENERATION_GUIDE_v1.2.md) を参照。素体とアンカー固定→全身マスターキャンバス→衣装レイヤリング→独立QA。原本を上書きしない。
 - **タスクパケット:** TASK ID、対象Issue/PR、基準コミット、参照仕様ID、変更対象、成功条件、保護対象、検証方法、停止条件を短く記述。差分中心・小さな機能単位で実装し、実際のソースと仕様を必ず照合する。
 - **自律QA:** テスト→原因分析→最小パッチ→再テスト。自己QAと独立QAを区別し、未実施をPASSと記録しない。失敗の無限反復は禁止。
-- **既存規約との整合:** この節は上記2026-11-19のAI共通運用規則に従う。mainマージの自動許可はなく、同一方式の有効な失敗は2回で停止する。タスク固有の明示的な禁止（例: PR #221の正式アセット採用・公開・本番統合保留）は維持する。
+- **既存規約との整合:** この節は上記2026-11-19のAI共通運用規則に従う。mainマージの自動許可はなく、同一方式の有効な失敗は2回で停止する。タスク固有の禁止と正式設定・SAVE保護は維持する。
 - **成果物:** 変更ファイル、検証証拠、既知のFAIL/BLOCKED/NOT_RUN、次の推奨タスクを記録。実際に実施していないpush・マージ・Android実機確認を完了と報告しない。
 
 
