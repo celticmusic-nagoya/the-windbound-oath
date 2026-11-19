@@ -1,16 +1,17 @@
 name: LIND one-shot stop queued and running Actions
 on:
-  push:
-    branches:
-      - feature/lind-cliff-rock-art-study-20261118
-    paths:
-      - '.github/workflows/lind-one-shot-cancel-actions.yml'
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type CANCEL_ACTIVE_RUNS to authorize emergency cancellation'
+        required: true
+        type: string
 permissions:
   contents: read
   actions: write
 jobs:
   cancel:
+    if: ${{ inputs.confirmation == 'CANCEL_ACTIVE_RUNS' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
