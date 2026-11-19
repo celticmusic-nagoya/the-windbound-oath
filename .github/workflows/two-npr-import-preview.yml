@@ -30,10 +30,11 @@ jobs:
         with:
           persist-credentials: false
       - name: Inspect immutable SCULPT02 source on art-directed branch
-        if: github.ref_name == 'feature/morwen-artdirected-sculpt-20261119'
+        if: (github.ref_name == 'feature/morwen-artdirected-sculpt-20261119' || github.head_ref == 'feature/morwen-artdirected-sculpt-20261119')
         shell: bash
         run: |
           set -euo pipefail
+          echo 'TWO_INSPECTION_ONLY=1' >> "$GITHUB_ENV"
           mkdir -p /tmp/two-sculpt02-source /tmp/two-npr-candidate/sculpt02
           git -c protocol.version=2 fetch --no-tags --depth=1 origin 062b9f0753aa1bf0a5dc6536d52ed9a81be18541
           git show FETCH_HEAD:assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend > /tmp/two-sculpt02-source/source.blend
@@ -49,7 +50,7 @@ jobs:
           root=pathlib.Path.cwd().resolve()
           raw=os.environ.get('INPUT_MODEL','').strip()
           if not raw:
-              if os.environ.get('GITHUB_REF_NAME') == 'feature/morwen-artdirected-sculpt-20261119':\n                  with open(os.environ['GITHUB_ENV'],'a') as f:f.write('TWO_INSPECTION_ONLY=1\\n')\n                  raise SystemExit(0)\n              raise SystemExit('BLOCKED: existing source model required; procedural head generation prohibited')
+              if os.environ.get('TWO_INSPECTION_ONLY') == '1':\n                  with open(os.environ['GITHUB_ENV'],'a') as f:f.write('TWO_INSPECTION_ONLY=1\\n')\n                  raise SystemExit(0)\n              raise SystemExit('BLOCKED: existing source model required; procedural head generation prohibited')
           else:
               p=(root/raw).resolve()
               assert p.is_relative_to(root) and p.is_file(), 'BLOCKED: input must exist in repository'
