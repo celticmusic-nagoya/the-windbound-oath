@@ -1,10 +1,5 @@
 name: LIND CC0 Packed Blender Candidate Sources
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/package_cc0_editable_sources.py'
-      - '.github/workflows/lind-cc0-editable-sources.yml'
-      - 'tools/map_blender/lind/render_cc0_rock_art_study.py'
   workflow_dispatch:
 permissions:
   contents: read
