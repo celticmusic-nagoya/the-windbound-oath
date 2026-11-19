@@ -8,6 +8,7 @@ on:
       - 'tests/moss/wind_stop_landscape_cg.test.cjs'
       - '.github/workflows/wind-stop-landscape-cg-qa.yml'
   push:
+    branches: [main]
     paths:
       - 'js/field/scene-data.js'
       - 'js/field/talk-data-scenes.js'
