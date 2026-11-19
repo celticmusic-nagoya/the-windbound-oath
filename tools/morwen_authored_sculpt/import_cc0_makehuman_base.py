@@ -63,6 +63,5 @@ for name,direction in views.items():
 blend=out/"MAKEHUMAN_CC0_UNMODIFIED_BASE_IMPORT_CANDIDATE.blend"
 bpy.ops.wm.save_as_mainfile(filepath=str(blend),compress=True)
 report={"status":"SOURCE_IMPORT_ONLY_NOT_SCULPT","source_sha256":sha,"source_size":src.stat().st_size,"blender":bpy.app.version_string,"meshes":len(meshes),"vertices":verts,"faces":faces,"blend_sha256":hashlib.sha256(blend.read_bytes()).hexdigest(),"source_bounds":{"min":list(minv),"max":list(maxv)},"source_views":list(views),"G1":"NOT_RUN_MORWEN_FIT","G2":"NOT_RUN","G3":"PARTIAL_IMPORT_ONLY","G4":"NOT_RUN"}
-(out/"source_import_qa.json").write_text(json.dumps(report,indent=2)+"
-")
+(out/"source_import_qa.json").write_text(json.dumps(report,indent=2)+chr(10))
 print("MAKEHUMAN_CC0_SOURCE_IMPORT",json.dumps(report))
