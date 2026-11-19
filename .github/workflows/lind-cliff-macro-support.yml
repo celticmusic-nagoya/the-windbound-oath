@@ -32,7 +32,8 @@ jobs:
           assert m['units']=='NORMALIZED_NON_METRIC' and m['approved_world_scale'] is None
           assert m['source_scan_embedded'] is False and m['production_ready'] is False
           assert m['boundary_edges']==0 and m['nonmanifold_edges']==0
-          assert m['closed_volume']>0 and m['G2']=='NOT_RUN'\n          assert m['render_engine']=='BLENDER_WORKBENCH'
+          assert m['closed_volume']>0 and m['G2']=='NOT_RUN'
+          assert m['render_engine']=='BLENDER_WORKBENCH'
           for n,h in m['outputs'].items():
            p=d/n
            assert hashlib.sha256(p.read_bytes()).hexdigest()==h
