@@ -1,5 +1,8 @@
 # FULL3D-INTERFACE-v3.4 — CHARACTER ↔ MAP ↔ INTEGRATION
 
+## 2026-11-19 interpretation — independent production vs integration
+This document is a **historical candidate cross-team integration contract**, not an independent-asset production gate. Following the director-approved 2026-11-18 provisional-local-coordinate policy, CHARACTER and MAP may create editable Blender assets and render/QA them using documented provisional local origin, axes, scale and transforms. `BLOCKED_UNAPPROVED` and null fields in this candidate contract apply to **approved shared world metrics, scene placement, joint camera/ground interfaces and game integration**, not to the independent asset's internal provisional modeling coordinates. Do not misrepresent provisional values as approved world values, or change the candidate schema to bypass validation. Use the current shared Blender 5.2.4 infrastructure where applicable; the older 4.0.2/5.3.0 notes below are historical evidence, not current prescribed versions. G1–G4 all PASS is required for formal integrated adoption; independent G2/G3 can progress while G4 is NOT_RUN.
+
 **Status: CANDIDATE / NON-CANONICAL / CONTRACT-ONLY.** No 3D renderer, camera, metric scale, character design, world geometry, engine, or budget is approved by this document. Do not infer approval from a passing schema or CI.
 
 ## Source reconciliation (read-only, 2026-11-17)
