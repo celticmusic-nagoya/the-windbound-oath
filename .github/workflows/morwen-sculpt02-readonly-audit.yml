@@ -1,5 +1,11 @@
 name: Morwen SCULPT02 source read-only inventory
 on:
+  push:
+    branches:
+      - feature/morwen-artdirected-sculpt-20261119
+    paths:
+      - .github/workflows/morwen-sculpt02-readonly-audit.yml
+      - tools/morwen_authored_sculpt/audit_sculpt02_source.py
   workflow_dispatch:
 permissions:
   contents: read
