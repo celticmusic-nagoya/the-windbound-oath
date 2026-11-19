@@ -27,7 +27,9 @@ def get_json(url, token):
 
 
 def collect(repo, token, pages=2, get=get_json):
-    if not REPO_PATTERN.fullmatch(repo):
+    if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo) or any(
+        part in (".", "..") for part in repo.split("/")
+    ):
         raise ValueError("invalid owner/repository")
     if not token:
         raise ValueError("GH_TOKEN is required; do not use unauthenticated polling")
