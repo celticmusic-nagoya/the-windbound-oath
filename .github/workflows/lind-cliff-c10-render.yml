@@ -57,6 +57,12 @@ jobs:
           test -s "$SOURCE"
           file "$SOURCE"
           /tmp/two-blender53/blender -b --factory-startup --python assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py -- "$SOURCE" /tmp/c10-render
+      - name: Install headless EGL and Mesa runtime for EEVEE
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libegl1 libgl1-mesa-dri libopengl0 libgl1 xvfb
+          ldconfig -p | grep -F libEGL.so.1
       - name: Render fixed C10 camera views
         run: |
           cat > /tmp/c10-render/render_views.py <<'PY'
@@ -77,7 +83,7 @@ jobs:
               scene.render.filepath='/tmp/c10-render/'+name+'.png'
               bpy.ops.render.render(write_still=True)
           PY
-          /tmp/two-blender53/blender -b --python /tmp/c10-render/render_views.py
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a /tmp/two-blender53/blender -b --python /tmp/c10-render/render_views.py
       - name: Verify render files
         run: |
           set -euo pipefail
