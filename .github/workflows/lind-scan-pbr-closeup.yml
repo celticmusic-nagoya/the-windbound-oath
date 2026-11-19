@@ -1,9 +1,5 @@
 name: LIND Scanned Cliff PBR Closeup
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/render_scan_pbr_closeup.py'
-      - '.github/workflows/lind-scan-pbr-closeup.yml'
   workflow_dispatch:
 permissions:
   contents: read
