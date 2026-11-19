@@ -29,6 +29,30 @@ for ob in meshes:
  clay.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value=(0.65,0.59,0.53,1)
  ob.data.materials.clear()
  ob.data.materials.append(clay)
+# Structural source audit: geometry components and imported material slots.
+# This distinguishes a genuine single-body source from detached clothing/hair
+# without treating a render impression as proof.
+source_audit=[]
+for ob in meshes:
+ n=len(ob.data.vertices)
+ parent=list(range(n))
+ def root(i):
+  while parent[i]!=i:
+   parent[i]=parent[parent[i]]
+   i=parent[i]
+  return i
+ for edge in ob.data.edges:
+  a,b=edge.vertices
+  ra,rb=root(a),root(b)
+  if ra!=rb: parent[ra]=rb
+ sizes={}
+ for i in range(n):
+  r=root(i);sizes[r]=sizes.get(r,0)+1
+ source_audit.append({"object":ob.name,"vertices":n,"faces":len(ob.data.polygons),
+                      "connected_components":len(sizes),
+                      "largest_component_vertices":max(sizes.values()) if sizes else 0,
+                      "small_component_vertices":sorted(sizes.values())[:16],
+                      "material_slots":len(ob.material_slots)})
 scene=bpy.context.scene
 scene["asset_status"]="CC0_SOURCE_IMPORT_NOT_CHARACTER_SCULPT"
 scene["source_sha256"]=sha
@@ -62,6 +86,6 @@ for name,direction in views.items():
  assert pathlib.Path(scene.render.filepath).stat().st_size>2000
 blend=out/"MAKEHUMAN_CC0_UNMODIFIED_BASE_IMPORT_CANDIDATE.blend"
 bpy.ops.wm.save_as_mainfile(filepath=str(blend),compress=True)
-report={"status":"SOURCE_IMPORT_ONLY_NOT_SCULPT","source_sha256":sha,"source_size":src.stat().st_size,"blender":bpy.app.version_string,"meshes":len(meshes),"vertices":verts,"faces":faces,"blend_sha256":hashlib.sha256(blend.read_bytes()).hexdigest(),"source_bounds":{"min":list(minv),"max":list(maxv)},"source_views":list(views),"G1":"NOT_RUN_MORWEN_FIT","G2":"NOT_RUN","G3":"PARTIAL_IMPORT_ONLY","G4":"NOT_RUN"}
+report={"status":"SOURCE_IMPORT_ONLY_NOT_SCULPT","source_sha256":sha,"source_size":src.stat().st_size,"blender":bpy.app.version_string,"meshes":len(meshes),"vertices":verts,"faces":faces,"blend_sha256":hashlib.sha256(blend.read_bytes()).hexdigest(),"source_bounds":{"min":list(minv),"max":list(maxv)},"source_views":list(views),"source_geometry_audit":source_audit,"G1":"NOT_RUN_MORWEN_FIT","G2":"NOT_RUN","G3":"PARTIAL_IMPORT_ONLY","G4":"NOT_RUN"}
 (out/"source_import_qa.json").write_text(json.dumps(report,indent=2)+chr(10))
 print("MAKEHUMAN_CC0_SOURCE_IMPORT",json.dumps(report))
