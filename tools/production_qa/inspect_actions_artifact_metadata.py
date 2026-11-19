@@ -11,6 +11,7 @@ import re
 from urllib.request import Request, urlopen
 
 REPO = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\Z")
+SHA40 = re.compile(r"[0-9a-f]{40}\Z")
 
 
 def get_json(url, token):
@@ -39,7 +40,11 @@ def inspect(repo, run_id, artifact_name, token, get=get_json):
         raise ValueError("run identity/repository mismatch")
     if run.get("status") != "completed" or run.get("conclusion") != "success":
         raise ValueError("run is not completed successfully")
-    if not isinstance(run.get("head_sha"), str) or SHA40.fullmatch(run["head_sha"]) is None:\n        raise ValueError("invalid run commit SHA")\n    if not isinstance(run.get("head_branch"), str) or not run["head_branch"]:\n        raise ValueError("missing run branch")\n    found = []
+    if not isinstance(run.get("head_sha"), str) or SHA40.fullmatch(run["head_sha"]) is None:
+        raise ValueError("invalid run commit SHA")
+    if not isinstance(run.get("head_branch"), str) or not run["head_branch"]:
+        raise ValueError("missing run branch")
+    found = []
     page = 1
     while page <= 5:
         payload = get(base + "/actions/runs/" + str(run_id) +
@@ -61,7 +66,9 @@ def inspect(repo, run_id, artifact_name, token, get=get_json):
     artifact = found[0]
     if artifact.get("expired") is not False or type(artifact.get("size_in_bytes")) is not int or artifact["size_in_bytes"] <= 0:
         raise ValueError("artifact expired or empty")
-    if type(artifact.get("id")) is not int or artifact["id"] <= 0:\n        raise ValueError("invalid artifact ID")\n    if artifact.get("workflow_run", {}).get("id") != run_id:
+    if type(artifact.get("id")) is not int or artifact["id"] <= 0:
+        raise ValueError("invalid artifact ID")
+    if artifact.get("workflow_run", {}).get("id") != run_id:
         raise ValueError("artifact workflow run ID mismatch")
     return {
         "read_only": True,
