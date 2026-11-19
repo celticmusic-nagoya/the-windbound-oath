@@ -7,6 +7,7 @@ on:
       - tools/morwen_authored_sculpt/audit_legacy_face_modules.py
       - tools/morwen_authored_sculpt/isolate_legacy_face_parts.py
       - tools/morwen_authored_sculpt/verify_isolated_face_integrity.py
+      - tools/morwen_authored_sculpt/render_isolated_face_parts.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -59,6 +60,20 @@ jobs:
         run: |
           set -euo pipefail
           /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/verify_isolated_face_integrity.py -- /tmp/morwen-face-parts
+      - name: Render actual isolated face parts for visual review
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-face-parts-render
+          /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/render_isolated_face_parts.py -- /tmp/morwen-face-parts-render
+      - name: Upload facial part visual QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-isolated-face-parts-render
+          path: /tmp/morwen-face-parts-render/
+          retention-days: 14
+          if-no-files-found: warn
       - name: Upload isolated face parts QA
         if: always()
         uses: actions/upload-artifact@v4
