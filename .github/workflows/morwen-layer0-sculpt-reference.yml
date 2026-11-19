@@ -1,0 +1,48 @@
+name: Morwen Layer 0 packed Blender sculpt reference scene
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - .github/workflows/morwen-layer0-sculpt-reference.yml
+      - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-reference-scene:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch and verify source PNG bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin feature/morwen-rebuild-01
+          mkdir -p /tmp/morwen-ref
+          for n in 7809 7807 7810 7808; do
+            git show FETCH_HEAD:tools/blender/production_mesh_08/references/${n}.png > /tmp/morwen-ref/${n}.png
+          done
+          echo 'b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed  /tmp/morwen-ref/7809.png' | sha256sum -c -
+          echo '9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737  /tmp/morwen-ref/7807.png' | sha256sum -c -
+          echo 'b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f  /tmp/morwen-ref/7810.png' | sha256sum -c -
+          echo '69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa  /tmp/morwen-ref/7808.png' | sha256sum -c -
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Create and reopen packed reference blend
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_layer0_reference_scene.py -- /tmp/morwen-ref /tmp/morwen-ref-out
+          /tmp/two-blender/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==0; assert len([o for o in bpy.data.objects if o.type=='EMPTY' and o.data])==4; assert all(o.data.packed_file for o in bpy.data.objects if o.type=='EMPTY' and o.data)"
+          sha256sum /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend > /tmp/morwen-ref-out/SHA256SUMS
+      - name: Preserve Blender source artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-packed-reference-blend
+          path: /tmp/morwen-ref-out/
+          retention-days: 14
+          if-no-files-found: warn
