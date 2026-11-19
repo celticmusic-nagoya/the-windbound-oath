@@ -1,12 +1,5 @@
 name: LIND scan-first cliff C Blender 5.2.4
 on:
-  push:
-    branches:
-      - feature/lind-cliff-rock-art-study-20261118
-    paths:
-      - 'tools/map_blender/lind/build_windwaiting_cliff_C.py'
-      - 'tools/map_blender/lind/audit_windwaiting_cliff_C_contact.py'
-      - '.github/workflows/lind-scan-cliff-c.yml'
   workflow_dispatch:
 permissions:
   contents: read
