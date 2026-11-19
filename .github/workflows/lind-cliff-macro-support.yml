@@ -46,7 +46,18 @@ jobs:
           mkdir -p out/lind-macro-support
           set -o pipefail
           PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support --probe-only 2>&1 | tee out/lind-macro-support/blender-probe.log
+      - name: Install headless Workbench EGL dependencies
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          {
+            sudo apt-get update &&
+              sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri &&
+              dpkg-query -W libegl1 libegl-mesa0 libgl1-mesa-dri
+          } 2>&1 | tee out/lind-macro-support/workbench-dependencies.log
       - name: Generate actual closed macro support and render
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
           set -euo pipefail
           mkdir -p out/lind-macro-support
