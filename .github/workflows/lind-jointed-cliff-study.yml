@@ -1,30 +1,29 @@
 name: LIND Jointed Cliff Clay Study
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/build_jointed_cliff_study.py'
-      - '.github/workflows/lind-jointed-cliff-study.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   clay-study:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Install Blender
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
-          ldconfig -p | grep 'libEGL.so.1'
-          blender --version
+      - name: Fetch shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Install SHA-verified Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
       - name: Build clay model and three views
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p out/lind-jointed-cliff
-          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_jointed_cliff_study.py -- --out out/lind-jointed-cliff 2>&1 | tee out/lind-jointed-cliff/blender.log
+          /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_jointed_cliff_study.py -- --out out/lind-jointed-cliff 2>&1 | tee out/lind-jointed-cliff/blender.log
       - name: Verify real PNG, blend and manifest
         run: |
           python3 - <<'PY'
@@ -45,7 +44,7 @@ jobs:
           print('PASS: 3 actual PNGs, blend, manifest, hashes')
           PY
       - name: Reopen saved Blender source
-        run: blender --background --factory-startup --disable-autoexec out/lind-jointed-cliff/jointed_cliff_study.blend --python-exit-code 1 --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.name.startswith('GEO_JOINT_')]) >= 30; print('REOPEN_OK')"
+        run: /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec out/lind-jointed-cliff/jointed_cliff_study.blend --python-exit-code 1 --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.name.startswith('GEO_JOINT_')]) >= 30; print('REOPEN_OK')"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
