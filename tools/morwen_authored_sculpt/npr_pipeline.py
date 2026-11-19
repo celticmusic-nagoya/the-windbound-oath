@@ -77,7 +77,7 @@ for loc,power in [((2,-3,4),1100),((-3,-1,2),550)]:
 # True orthographic front/right/back/left for reproducible silhouette comparisons; perspective 85mm face detail.
 views=[('front',(0,-3,0),50,1.0),('right',(3,0,0),50,1.0),
        ('back',(0,3,0),50,1.0),('left',(-3,0,0),50,1.0),
-       ('face_closeup',(0,-2.2,.10),85,.64)]
+       ('face_closeup',(0,-2.2,.10),70,1.15)]
 for name,offset,lens,framing in views:
  target=center+Vector((0,0,.025*extent if name=='face_closeup' else 0))
  bpy.ops.object.camera_add(location=target+Vector(offset)*extent*framing)
