@@ -101,7 +101,7 @@ jobs:
           mkdir -p /tmp/morwen-base-audit
           python3 - <<'PY'
           import urllib.request,zipfile,hashlib,json,pathlib,sys
-          url="https://www.blender.org/download/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.2.0.zip"
+          url="https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip"
           out=pathlib.Path("/tmp/morwen-base-audit")
           result={"source_url":url,"status":"NOT_VERIFIED","source_role":"CANDIDATE_ONLY"}
           try:
