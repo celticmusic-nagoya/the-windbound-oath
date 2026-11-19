@@ -15,7 +15,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compare import write_views
 
 SCHEMA = 1
-DECIMALS = 9
 TOLERANCE = 1e-6
 
 
@@ -26,7 +25,7 @@ def sha(path):
 
 def clean(value):
     if isinstance(value, float):
-        return round(value, DECIMALS) or 0.0
+        return value or 0.0
     if isinstance(value, (str, int, bool)) or value is None:
         return value
     if isinstance(value, dict):
@@ -311,7 +310,7 @@ def main():
                             "junction_intersections": junction_intersections(exported, scene_data)})
     write(out / "manifest.json", {
         "candidate": "UNAPPROVED", "measurement_scope": "candidate geometry, provisional scale",
-        "axes": "+X along coast; -Y seaward; +Z up", "decimal_places": DECIMALS,
+        "axes": "+X along coast; -Y seaward; +Z up", "float_encoding": "shortest round-trip decimal for Blender RNA values as Python binary64",
         "blender": bpy.app.version_string, "production_runtime": bpy.app.version == (5, 3, 0),
         "source_name": source.name, "source_sha256": args.source_sha, "input_ref": args.input_ref,
         "dependencies": material_data["images"],
