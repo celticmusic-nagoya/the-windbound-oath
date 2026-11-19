@@ -35,10 +35,10 @@ class ReconcileTests(unittest.TestCase):
         self.assertEqual(check(job={**JOB, "status": "SUCCESS"},
                                run={**RUN, "status": "completed", "conclusion": "success"}), "REVIEW_REQUIRED")
 
-    def test_verified_success(self):
+    def test_untrusted_ledger_success_flags_do_not_verify_artifact(self):
         job = {**JOB, "status": "SUCCESS", "artifact_sha256_verified": True,
                "artifact_accessible": True, "output_contract_verified": True}
-        self.assertEqual(check(job=job, run={**RUN, "status": "completed", "conclusion": "success"}), "CONSISTENT")
+        self.assertEqual(check(job=job, run={**RUN, "status": "completed", "conclusion": "success"}), "REVIEW_REQUIRED")
 
     def test_duplicate_ledger_run_rejected(self):
         with self.assertRaises(ValueError):
