@@ -61,6 +61,18 @@ class MetadataTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             check(fake(artifacts=[]))
 
+    def test_invalid_run_sha(self):
+        with self.assertRaises(ValueError):
+            check(fake(run={**RUN, "head_sha": "z"*40}))
+
+    def test_missing_run_branch(self):
+        with self.assertRaises(ValueError):
+            check(fake(run={**RUN, "head_branch": None}))
+
+    def test_invalid_artifact_id(self):
+        with self.assertRaises(ValueError):
+            check(fake(artifacts=[{**ARTIFACT, "id": True}]))
+
     def test_missing_token(self):
         with self.assertRaises(ValueError):
             inspect(REPO, 123, "sculpt-views", "", get=fake())
