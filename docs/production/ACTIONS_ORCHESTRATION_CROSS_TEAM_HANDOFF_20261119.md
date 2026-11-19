@@ -38,3 +38,9 @@ Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and
 - Added `tools/production_qa/collect_actions_snapshot.py` and `test_collect_actions_snapshot.py` (5 unit tests). The collector reads GitHub REST workflow-run pages with GH_TOKEN, bounded to 1–5 pages, de-duplicates run IDs, and emits JSON. It performs no GitHub writes, cancellation or dispatch. It has NOT been run against the live API, and test execution is NOT_RUN.
 - Combined authored unit tests: classifier 9 + offline watchdog 9 + snapshot collector 5 = 23. Authored does not mean executed.
 - Important: run snapshots alone do not prove identical work or artifact validity; a durable, atomic cross-run ledger/lock, verified artifact manifest, actual notification and narrowly scoped scheduler are still NOT_IMPLEMENTED. Do not turn on automatic production jobs based solely on these utilities.
+
+
+## Explicit run identity reconciliation (2026-11-19)
+- Added `tools/production_qa/reconcile_actions_snapshot.py`: read-only join of explicitly linked ledger run_id and GitHub snapshot, checking HEAD, branch, run status, and the existing artifact verification flags. Missing bounded-snapshot entries are REVIEW_REQUIRED, never assumed absent. Inconsistent or duplicate run IDs fail closed.
+- Added `tools/production_qa/test_reconcile_actions_snapshot.py`: 10 authored test cases; total authored tests now 33. Execution NOT_RUN. The collector/reconciler do not themselves validate artifact bytes or acquire atomic locks.
+- Next blocker: cross-run atomic reservation and durable ledger persistence with safe concurrency, plus artifact provenance checks, notification routing, scoped trigger audit and runtime tests. No automatic dispatch until these gates are verified and the director separately authorizes Actions re-enablement.
