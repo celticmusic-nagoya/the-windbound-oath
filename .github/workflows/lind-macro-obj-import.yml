@@ -1,9 +1,5 @@
 name: LIND Import Precomputed Cliff OBJ
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/import_macro_obj_diagnostic.py'
-      - '.github/workflows/lind-macro-obj-import.yml'
   workflow_dispatch:
 permissions:
   contents: read
