@@ -4,6 +4,10 @@ on:
 permissions:
   contents: read
   actions: read
+concurrency:
+  group: two-manual-lind-scan-cliff-c-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-24.04
