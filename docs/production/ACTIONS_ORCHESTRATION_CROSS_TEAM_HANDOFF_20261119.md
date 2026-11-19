@@ -143,3 +143,10 @@ Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and
 - Actual logs confirm ten distinct offline test modules run once each, counts `9+9+6+10+9+10+10+10+12+9 = 94 PASS`, **0 FAIL / 0 ERROR**. Python compilation passed. The nine new `review_actions_reservation_snapshot` tests passed. Previous 85/85 success remains historical evidence, not a new run at this commit.
 - Non-fatal warning: `actions/checkout@v4` Node.js 20 deprecation / forced Node.js 24. Keep as a targeted follow-up; do not treat as test failure.
 - Scope: offline mock tests only. No live Git-ref reservation, authenticated snapshot-to-ledger end-to-end integration, verified Artifact ZIP reuse, actual contention experiment, dispatch, Blender, or 3D G1–G4. No authorization to merge this broad Draft PR #421 or activate heavy Actions. **No rerun needed at identical SHA.**
+
+
+## Offline QA verification at 96 tests (2026-11-19)
+- GitHub Actions run [#44471983698](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44471983698) / job [#135383424420](https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44471983698/job/135383424420) was `completed/success`, `workflow_dispatch`, attempt 1 on branch `feature/lind-cliff-rock-art-study-20261118` and tested SHA `0a66c24a76cc10176f206e8bc3da1f87babfb537`. This matched PR #421 HEAD before this documentation commit.
+- Log evidence: ten offline modules, `9+9+6+10+9+10+10+10+12+11 = 96 PASS`, `0 FAIL`, `0 ERROR`; compilation PASS. Both new nonhex/uppercase SHA rejection tests PASS. No repeat at the same input SHA needed.
+- Non-fatal deprecation warning: `actions/checkout@v4` (Node.js 20 target forced to Node.js 24). Separate compatibility maintenance; do not conflate with test failure.
+- Scope remains offline/mock unit tests, not a live atomic Git ref reservation, ledger ownership proof, artifact verification, crash recovery or controlled production orchestration. These live gates remain **NOT_RUN/BLOCKED**. No refs created, no Blender/3D job started, no main merge.
