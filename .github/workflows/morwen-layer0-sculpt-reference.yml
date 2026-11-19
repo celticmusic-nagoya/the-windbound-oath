@@ -8,6 +8,7 @@ on:
       - tools/production_qa/install_blender_530.sh
       - tools/morwen_authored_sculpt/build_face_surface_530.py
       - tools/morwen_authored_sculpt/render_official_base_candidates_530.py
+      - tools/morwen_authored_sculpt/export_precision_blueprint_530.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -156,6 +157,24 @@ jobs:
           /tmp/two-blender-530/audit-app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/render_official_base_candidates_530.py -- /tmp/morwen-base-audit/candidate-renders /tmp/morwen-base-audit/source.blend
           test -s /tmp/morwen-base-audit/candidate-renders/head_front.png
           test -s /tmp/morwen-base-audit/candidate-renders/body_female_front.png
+      - name: Export numeric mesh blueprint and verify round-trip geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/export_precision_blueprint_530.py
+          mkdir -p /tmp/morwen-base-audit/precision-blueprint
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/export_precision_blueprint_530.py -- /tmp/morwen-base-audit/precision-blueprint
+          test -s /tmp/morwen-base-audit/precision-blueprint/blueprint.json
+          test -s /tmp/morwen-base-audit/precision-blueprint/head_mesh_geometry.json.gz
+          test -s /tmp/morwen-base-audit/precision-blueprint/body_female_mesh_geometry.json.gz
+      - name: Upload precision numeric blueprint evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-precision-mesh-blueprint-candidate-not-adopted
+          path: /tmp/morwen-base-audit/precision-blueprint/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Upload independent source candidate render evidence
         if: always()
         uses: actions/upload-artifact@v4
