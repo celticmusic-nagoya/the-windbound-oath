@@ -6,6 +6,7 @@ on:
       - .github/workflows/morwen-legacy-face-audit.yml
       - tools/morwen_authored_sculpt/audit_legacy_face_modules.py
       - tools/morwen_authored_sculpt/isolate_legacy_face_parts.py
+      - tools/morwen_authored_sculpt/verify_isolated_face_integrity.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -53,6 +54,11 @@ jobs:
           mkdir -p /tmp/morwen-face-parts
           /tmp/two-blender/app/blender -b /tmp/morwen-legacy/MORWEN_ELM_04_CANDIDATE.blend --python tools/morwen_authored_sculpt/isolate_legacy_face_parts.py -- /tmp/morwen-face-parts
           /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python-expr "import bpy; o=bpy.data.objects.get('MORWEN_LegacyFaceParts_316_CANDIDATE'); assert o and len(o.data.shape_keys.key_blocks)==58 and len(o.data.polygons)==768; print('REOPEN_FACE_PARTS_PASS')"
+      - name: Verify isolated geometry, UV, weights and all 58 shape keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/verify_isolated_face_integrity.py -- /tmp/morwen-face-parts
       - name: Upload isolated face parts QA
         if: always()
         uses: actions/upload-artifact@v4
