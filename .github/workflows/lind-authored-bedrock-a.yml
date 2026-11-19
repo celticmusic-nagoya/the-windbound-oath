@@ -3,6 +3,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: two-manual-lind-authored-bedrock-a-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-24.04
