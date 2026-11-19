@@ -5,6 +5,8 @@ on:
     paths:
       - tools/morwen_authored_sculpt/import_cc0_makehuman_base.py
       - .github/workflows/morwen-cc0-base-import.yml
+      - tools/production_qa/install_blender_530.sh
+      - .github/workflows/morwen-blender-530-compat.yml
   pull_request:
     branches: [feature/morwen-authored-sculpt-20261118]
     paths:
@@ -51,3 +53,52 @@ jobs:
             /tmp/morwen-cc0-base/out/
           retention-days: 14
           if-no-files-found: warn
+
+  blender-530-isolated-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify installer syntax before download
+        run: bash -n tools/production_qa/install_blender_530.sh
+      - name: Install official Blender 5.3.0 separately from 5.2.4
+        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
+      - name: Test editable scene save reopen and CPU Cycles render
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-blender-530
+          /tmp/two-blender-530/app/blender -b --factory-startup --python-exit-code 1 --python-expr '
+          import bpy,pathlib,json
+          out=pathlib.Path("/tmp/morwen-blender-530")
+          bpy.ops.mesh.primitive_monkey_add()
+          bpy.context.object.name="VERSION_SMOKE_NOT_MORWEN"
+          bpy.ops.object.camera_add(location=(0,-7,2))
+          camera=bpy.context.object
+          camera.rotation_euler=(-camera.location).to_track_quat("-Z","Y").to_euler()
+          bpy.context.scene.camera=camera
+          bpy.ops.object.light_add(type="AREA",location=(2,-4,5))
+          bpy.context.object.data.energy=700
+          sc=bpy.context.scene
+          sc.render.engine="CYCLES"
+          sc.cycles.samples=8
+          sc.render.resolution_x=256
+          sc.render.resolution_y=256
+          sc.render.resolution_percentage=100
+          bpy.ops.wm.save_as_mainfile(filepath=str(out/"smoke.blend"))
+          sc.render.filepath=str(out/"smoke.png")
+          bpy.ops.render.render(write_still=True)
+          assert (out/"smoke.png").stat().st_size>2000
+          (out/"qa.json").write_text(json.dumps({"blender":bpy.app.version_string,"status":"VERSION_SMOKE_ONLY"}))
+          '
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-blender-530/smoke.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.data.objects.get("VERSION_SMOKE_NOT_MORWEN"); print("BLENDER_530_REOPEN_PASS")'
+      - name: Upload isolated version smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-530-isolated-smoke
+          path: /tmp/morwen-blender-530/
+          if-no-files-found: warn
+          retention-days: 14
