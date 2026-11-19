@@ -17,10 +17,13 @@ def h(path):
 
 def main():
  import argparse
- p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--geometry-only",action="store_true")
+ p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--geometry-only",action="store_true");p.add_argument("--probe-only",action="store_true")
  a=p.parse_args(sys.argv[sys.argv.index("--")+1:])
  out=Path(a.out).resolve();out.mkdir(parents=True,exist_ok=True)
  print('STAGE_00_BOOTSTRAP',flush=True)
+ if a.probe_only:
+  print('PROBE_ONLY_BLENDER_PYTHON_PASS',bpy.app.version_string,flush=True)
+  return
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
  for c in list(bpy.data.collections):
   if c.name=="Collection":c.name="LIND_TERRAIN"
