@@ -1,9 +1,5 @@
 name: LIND Macro Cliff Support Blender Geometry QA
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/build_cliff_macro_support.py'
-      - '.github/workflows/lind-cliff-macro-support.yml'
   workflow_dispatch:
 permissions:
   contents: read
