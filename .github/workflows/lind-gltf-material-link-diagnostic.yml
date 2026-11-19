@@ -1,9 +1,5 @@
 name: LIND glTF Material Link Diagnosis
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/diagnose_gltf_material_links.py'
-      - '.github/workflows/lind-gltf-material-link-diagnostic.yml'
   workflow_dispatch:
 permissions:
   contents: read
