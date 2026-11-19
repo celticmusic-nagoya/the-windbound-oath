@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       C10_ARTIFACT_ID: '14580687938'
+      C10_SHA: 8d0618ddd9db7562492e94477503ed53b621e908d88ab34c7bd07afb0c159223
       C10_ARCHIVE_SHA: adeb71d2924a899ea82e906763a09394765d53b4ca8a87f71da19974477be8cb
       C9_SHA: 886ad8d4d49b3951da84bf2b728505767bef2f8b4288d9472ac0c129a018d12a
       C9_SOURCE: assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend
@@ -53,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/lind-blueprint-package
-          key: lind-blueprint-530-${{ env.C10_ARCHIVE_SHA }}-${{ hashFiles('assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend', 'assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_cg_review.png', 'assets/approved/game/cliff/sunset_background.png', 'tools/production_qa/lind_blueprint/*.py', '.github/workflows/lind-cliff-c10-render.yml') }}
+          key: lind-blueprint-530-${{ env.C10_ARCHIVE_SHA }}-${{ hashFiles('assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend', 'assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_cg_review.png', 'assets/approved/game/cliff/sunset_background.png', 'tools/production_qa/lind_blueprint/*.py', 'assets/candidates/lind/windwaiting-cliff-c9/C9-B/cc0_manifest.json', '.github/workflows/lind-cliff-c10-render.yml') }}
       - name: Install official Blender 5.3.0 candidate with upstream SHA-256 verification
         if: steps.blueprint_cache.outputs.cache-hit != 'true'
         shell: bash
@@ -172,14 +173,15 @@ jobs:
             ref="$GITHUB_SHA:git:C9-B/C_UNAPPROVED.blend"
             if [[ "$candidate" == C10 ]]; then
               src=/tmp/lind-c10-source/windwaiting_cliff_C10_UNAPPROVED.blend
-              expected="$(sha256sum "$src" | cut -d ' ' -f 1)"
+              expected="$C10_SHA"
               ref="run:44627719888:artifact:14580687938:commit:5c1d70c6a25248cd705ac7c028e27446327080a9"
             fi
             dest="$root/$candidate"
             scratch="$(mktemp -d)/blueprint"
             for output in "$dest" "$scratch"; do
               "$bpy" -b --disable-autoexec "$src" --python-exit-code 1 \
-                --python "$scripts/export_blueprint.py" -- "$output" --source-sha "$expected" --input-ref "$ref"
+                --python "$scripts/export_blueprint.py" -- "$output" --source-sha "$expected" --input-ref "$ref" \
+                --texture-register "$(dirname "$C9_SOURCE")/cc0_manifest.json"
             done
             diff -qr "$dest" "$scratch"
             xvfb-run -a "$bpy" -b --disable-autoexec --python-exit-code 1 \
@@ -187,6 +189,45 @@ jobs:
           done
           (cd "$root" && find C9 C10 archived-c10 review -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
           exit "$candidate_status"
+      - name: Verify diagram files and package compact QA
+        if: always() && env.BLUEPRINT == 'true'
+        run: |
+          python - <<'PYREPORT'
+          from pathlib import Path
+          import shutil
+          import xml.etree.ElementTree as ET
+
+          root = Path("/tmp/lind-blueprint-package")
+          summary = Path("/tmp/lind-blueprint-qa")
+          for entry in ("C9", "C10"):
+              source = root / entry
+              if not source.exists():
+                  continue
+              dest = summary / entry
+              dest.mkdir(parents=True, exist_ok=True)
+              for name in ("manifest.json", "qa.json", "landmarks.json", "scene.json", "materials.json"):
+                  if (source / name).is_file():
+                      shutil.copyfile(source / name, dest / name)
+              for name in ("front", "back", "left", "right", "top", "bottom", "oblique45", "rock_detail", "section"):
+                  svg = source / "views" / f"{name}.svg"
+                  tag = "polyline" if name == "section" else "polygon"
+                  count = sum(element.tag.endswith("}" + tag)
+                              for _, element in ET.iterparse(svg))
+                  if not count:
+                      raise ValueError(f"{entry} {name}: no projected geometry")
+                  print(f"{entry} {name}: {count} SVG {tag} elements")
+                  if name in {"rock_detail", "section"}:
+                      shutil.copyfile(svg, dest / svg.name)
+          if (root / "review").is_dir():
+              shutil.copytree(root / "review", summary / "review")
+          PYREPORT
+      - uses: actions/upload-artifact@v4
+        if: always() && env.BLUEPRINT == 'true'
+        with:
+          name: lind-cliff-blueprint-qa-${{ github.sha }}
+          path: /tmp/lind-blueprint-qa/
+          retention-days: 14
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v4
         if: always() && env.BLUEPRINT == 'true'
         with:

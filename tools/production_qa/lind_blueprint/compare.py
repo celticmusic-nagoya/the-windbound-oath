@@ -25,8 +25,9 @@ def unit(vector):
 def write_views(path, objects, scene):
     path.mkdir(exist_ok=True)
     records = {name: data["evaluated"] for name, data in objects.items()
-               if not scene["objects"][name]["render_hidden"] and data["evaluated"]["xyz_world"]}
-    carriers = [n for n in records if "cliff" in n.lower() and "rock" not in n.lower()]
+               if not scene["objects"][name]["render_hidden"] and data["evaluated"]["xyz_world"]
+               and name != "Provisional sea at Z=0"}
+    carriers = [n for n in records if scene["objects"][n]["cliff_variant"] == "B"]
     rocks = [n for n in records if "C10 large rock" in n]
     targets = rocks or carriers or list(records)
     if not targets:
@@ -51,7 +52,7 @@ def write_views(path, objects, scene):
     for view, axes in {**VIEWS, "rock_detail": VIEWS["oblique45"],
                        "section": VIEWS["left"]}.items():
         u, v, w = map(unit, axes)
-        selected = {center: records[center]} if view == "rock_detail" else records
+        selected = {name: records[name] for name in targets} if view == "rock_detail" else records
         shapes = []
         for name, data in selected.items():
             points = data["xyz_world"]
@@ -64,8 +65,10 @@ def write_views(path, objects, scene):
                             t = (cut-a[0])/(b[0]-a[0])
                             crossings.append(tuple(x+t*(y-x) for x,y in zip(a,b)))
                     if len(crossings) == 2 and crossings[0] != crossings[1]:
-                        section.append({"object": name, "face_id": face_id, "endpoints": crossings})
-                        shapes.append((0, name, face_id, crossings, 0))
+                        slot = data["faces"][face_id]["material_slot"]
+                        section.append({"object": name, "face_id": face_id, "endpoints": crossings,
+                                        "material_slot": slot})
+                        shapes.append((0, name, face_id, crossings, slot))
             else:
                 for i, face in enumerate(data["faces"]):
                     xyz = [points[j] for j in face["vertices"]]
@@ -90,8 +93,9 @@ def write_views(path, objects, scene):
         for _, name, i, xyz, slot in sorted(shapes):
             coords = " ".join(f"{x:.2f},{y:.2f}" for x,y in map(to_screen, xyz))
             kind = "polyline" if view == "section" else "polygon"
-            fill = "none" if kind == "polyline" else palette[slot % len(palette)]
-            svg.append(f'<{kind} points="{coords}" fill="{fill}" stroke="#344a57" stroke-width=".45">'
+            color = palette[slot % len(palette)]
+            fill, stroke, width = ("none", color, "1.5") if kind == "polyline" else (color, "#344a57", ".45")
+            svg.append(f'<{kind} points="{coords}" fill="{fill}" stroke="{stroke}" stroke-width="{width}">'
                        f'<title>{escape(name)} | face {i} | slot {slot}</title></{kind}>')
         if view != "section":
             for i, name in enumerate(n for n in targets if n in selected):
@@ -105,6 +109,7 @@ def write_views(path, objects, scene):
         svg.append("</svg>")
         (path / f"{view}.svg").write_text("\n".join(svg)+"\n", encoding="utf-8")
     return {"measured": landmarks, "section": {"x": cut, "segments": section},
+            "display_omissions": ["Provisional sea at Z=0"],
             "grass_rock_contact": {"status": "NOT_RUN"},
             "canonical_targets": {"status": "BLOCKED"}, "scale": "provisional"}
 
