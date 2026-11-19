@@ -70,10 +70,10 @@ def reconcile(ledger, snapshot):
         if expected is None:
             decision = "REVIEW_REQUIRED"
         if decision == "CONSISTENT" and status == "SUCCESS":
-            if not (entry.get("artifact_sha256_verified") is True
-                    and entry.get("artifact_accessible") is True
-                    and entry.get("output_contract_verified") is True):
-                decision = "REVIEW_REQUIRED"
+            # Ledger flags are self-reported and do not establish provenance.
+            # An independently authenticated artifact proof is required before
+            # a completed run can be considered reusable or consistent.
+            decision = "REVIEW_REQUIRED"
         decisions.append({"fingerprint": key, "run_id": run_id,
                           "decision": decision, "ledger_status": status,
                           "observed_status": gh_status, "observed_conclusion": conclusion})
