@@ -1,9 +1,5 @@
 name: LIND Macro Scan Side-by-Side Reference
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/render_macro_scan_reference_comparison.py'
-      - '.github/workflows/lind-macro-scan-reference.yml'
   workflow_dispatch:
 permissions:
   contents: read
