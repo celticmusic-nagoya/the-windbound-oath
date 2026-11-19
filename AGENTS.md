@@ -424,3 +424,8 @@ Scope: character/background/UI assets, sprites, masks, reference sheets, and ima
 7. **Evidence.** Track asset ID, canonical reference, attempt count, structural analysis, observed delta, QA status, and next deliverable. Preserve originals. Report blocked/unrun work accurately.
 
 Precedence: this section governs asset-generation attempt counting and forward progress. It does not waive repository safety rules, canonical asset protection, task-specific prohibitions on publishing or merging, or existing approval gates.
+
+
+## LIND cross-agent shared production entrypoints (2026-11-16; proposal branch)
+
+For village WORLD/HOME/BUILD/ECO, environment art, Blender and VFX tasks, read `HANDOFF.md` and `Blender.md` after the current main `AGENTS.md` and the current private canon. Detailed working records: `docs/production/LIND_CHATGPT_TAKEOVER_20261116.md`, `docs/production/LIND_ENVIRONMENT_VFX_TECH_RESEARCH_20261116.md`, `docs/production/LIND_BROWSER_RENDERER_FEASIBILITY_20261116.md`. The approved visual source is PR #344, SHA-256 `abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620`. This image is non-metric. Keep WORLD Codex PR #346 and Claude candidates untouched. Source-review CI #43848242090 PASS does not mean completed WORLD geometry, G2 art QA or Android G4 PASS. Existing canon, retry policy, main-merge and publication gates above take precedence. These documents only become shared default instructions on main after explicit review/merge approval.

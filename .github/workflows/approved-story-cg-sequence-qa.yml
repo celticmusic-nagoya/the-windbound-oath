@@ -9,6 +9,7 @@ on:
       - 'tests/moss/approved_story_cg_sequence.test.js'
       - '.github/workflows/approved-story-cg-sequence-qa.yml'
   push:
+    branches: [main]
     paths:
       - 'index.html'
       - 'dev-fresh-20261108.html'

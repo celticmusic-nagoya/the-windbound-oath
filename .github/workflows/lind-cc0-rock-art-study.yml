@@ -1,0 +1,62 @@
+name: LIND CC0 Rock Art Study 3-View Render
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download existing immutable packed candidate artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/sources out/study
+          gh run list -R ${{ github.repository }} --workflow lind-cc0-editable-sources.yml --limit 10 --json databaseId,conclusion > out/study/source-runs.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          runs=json.loads(Path("out/study/source-runs.json").read_text())
+          ok=[r for r in runs if r["conclusion"]=="success"]
+          if not ok: raise SystemExit("BLOCKED: no successful packed source run")
+          Path("out/study/packed-source-run-id.txt").write_text(str(ok[0]["databaseId"])+"\n")
+          PY
+          gh run download "$(cat out/study/packed-source-run-id.txt)" -R ${{ github.repository }} -n lind-cc0-editable-packed-blender-sources -D out/sources
+      - name: Install Blender using verified packed-source toolchain
+        timeout-minutes: 9
+        run: |
+          set -euxo pipefail
+          timeout 90s sudo apt-get update -qq
+          timeout --signal=TERM --kill-after=15s 420s sudo apt-get install -y --no-install-recommends blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-expr 'import bpy, numpy; assert bpy.app.version[:2] == (4, 0); print("SOURCE_COMPATIBLE_BLENDER", bpy.app.version_string)'
+      - name: Render actual packed source study
+        timeout-minutes: 13
+        run: |
+          set -o pipefail
+          timeout 720s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/render_cc0_rock_art_study.py -- --source out/sources --out out/study 2>&1 | tee out/study/render.log
+      - name: Independent reopen and output hash verification
+        timeout-minutes: 4
+        run: |
+          timeout 100s blender --background --factory-startup --disable-autoexec out/study/cc0_rock_art_study.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.context.scene.get("official_world_metric")=="UNAPPROVED"; assert len([o for o in bpy.data.objects if o.type=="MESH"])>=3; print("REOPEN_PASS")'
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path("out/study")
+          j=json.loads((d/"art_study_manifest.json").read_text())
+          assert j["G1"]=="BLOCKED" and j["no_cliff_geometry_created"]
+          assert len(j["source_candidates"])==2
+          for name,expected in j["files"].items():
+              assert hashlib.sha256((d/name).read_bytes()).hexdigest()==expected
+          print("STUDY_ARTIFACT_SHA_PASS")
+          PY
+      - name: Upload Blender and three PNG views
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cc0-rock-art-study-three-views
+          path: out/study/
+          retention-days: 14
+          if-no-files-found: warn

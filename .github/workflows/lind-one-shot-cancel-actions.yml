@@ -1,0 +1,61 @@
+name: LIND one-shot stop queued and running Actions
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type CANCEL_ACTIVE_RUNS to authorize emergency cancellation'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: write
+jobs:
+  cancel:
+    if: ${{ inputs.confirmation == 'CANCEL_ACTIVE_RUNS' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Cancel active runs (excluding this controller)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SELF_RUN: ${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, time, urllib.request, urllib.error
+          repo = os.environ["REPO"]
+          own = int(os.environ["SELF_RUN"])
+          token = os.environ["GH_TOKEN"]
+          base = "https://api.github.com/repos/" + repo + "/actions/runs"
+          headers = {"Authorization":"Bearer "+token,"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"}
+          active = {"queued","in_progress","waiting","pending","requested"}
+          attempted = set()
+          for sweep in range(3):
+              targets = []
+              for page in range(1, 11):
+                  req = urllib.request.Request(base+f"?per_page=100&page={page}",headers=headers)
+                  with urllib.request.urlopen(req, timeout=25) as res:
+                      data = json.load(res)
+                  runs = data.get("workflow_runs", [])
+                  for run in runs:
+                      ident = int(run["id"])
+                      if ident != own and run["status"] in active and ident not in attempted:
+                          targets.append((ident, run["status"], run["name"]))
+                  if len(runs) < 100:
+                      break
+              if not targets:
+                  print("No further uncancelled active runs found")
+                  break
+              for ident, status, name in targets:
+                  attempted.add(ident)
+                  req = urllib.request.Request(base+f"/{ident}/cancel",data=b"",headers=headers,method="POST")
+                  try:
+                      with urllib.request.urlopen(req,timeout=25) as res:
+                          print("CANCEL_REQUESTED", ident, status, name, res.status, flush=True)
+                  except urllib.error.HTTPError as exc:
+                      print("CANCEL_FAILED", ident, status, name, exc.code, exc.read().decode()[:250], flush=True)
+              time.sleep(4)
+          print("ONE_SHOT_CONTROLLER_FINISHED; SELF_RUN_LEFT_ACTIVE",own)
+          PY

@@ -1,0 +1,51 @@
+name: LIND Render Imported Cliff Workbench
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preflight and reproduce exact OBJ
+        run: |
+          python3 -m py_compile tools/map_blender/lind/render_imported_macro_workbench.py tools/map_blender/lind/import_macro_obj_diagnostic.py
+          python3 tools/map_blender/lind/build_cliff_macro_topology_stdlib.py --out out/lind-obj-input
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Import and save scene without rendering
+        timeout-minutes: 2
+        run: |
+          set -o pipefail
+          mkdir -p out/lind-imported-workbench
+          timeout 90s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/import_macro_obj_diagnostic.py -- --obj out/lind-obj-input/lind_macro_support_normalized.obj --out out/lind-imported-workbench 2>&1 | tee out/lind-imported-workbench/import.log
+      - name: Render existing saved scene only
+        timeout-minutes: 3
+        run: |
+          set -o pipefail
+          timeout 150s blender --background --factory-startup --disable-autoexec out/lind-imported-workbench/lind_macro_import_diagnostic.blend --python-exit-code 1 --python tools/map_blender/lind/render_imported_macro_workbench.py -- --out out/lind-imported-workbench 2>&1 | tee out/lind-imported-workbench/render.log
+      - name: Verify actual PNG
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-imported-workbench')
+          p=d/'lind_macro_technical_clay.png'
+          m=json.loads((d/'render_metrics.json').read_text())
+          assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['png_sha256']
+          assert m['production_ready'] is False and m['technical_only'] is True
+          print('PNG_SHA_PASS',p.stat().st_size)
+          PY
+      - name: Upload technical render and Blender scene
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-macro-imported-workbench-render
+          path: out/lind-imported-workbench/
+          if-no-files-found: warn
+          retention-days: 14

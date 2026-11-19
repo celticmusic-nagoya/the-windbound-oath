@@ -1,0 +1,61 @@
+name: LIND Failed Voxel Read-Only Root Cause Metrics
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and NumPy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Download previous failed candidate, no reconstruction
+        uses: actions/download-artifact@v4
+        with:
+          name: lind-cliff-voxel-retopo-bake-eval
+          run-id: 44006786285
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: input/
+      - name: Verify exact previous .blend hash
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('input')
+          m=json.loads((root/'retopo_bake_qa.json').read_text())
+          p=root/'voxel_retopo_bake_study.blend'
+          assert p.is_file()
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['outputs'][p.name]
+          assert m['source_triangles']==1537926
+          print('SAVED_CANDIDATE_VERIFIED')
+          PY
+      - name: Read-only Blender inspection of saved candidate
+        run: |
+          mkdir -p out/lind-voxel-rootcause
+          set -o pipefail
+          blender --background --factory-startup --disable-autoexec input/voxel_retopo_bake_study.blend --python-exit-code 1 --python tools/map_blender/lind/inspect_failed_voxel_candidate.py -- --out out/lind-voxel-rootcause | tee out/lind-voxel-rootcause/inspection.log
+      - name: Validate metrics
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('out/lind-voxel-rootcause/voxel_rootcause_metrics.json').read_text())
+          assert m['scope']=='READ_ONLY_SAVED_BLEND_DIAGNOSTIC_NO_ASSET_CHANGE'
+          assert m['source']['triangles']==1537926
+          assert m['candidate']['triangles']>1000
+          assert 0<=m['uv']['atlas_occupancy_256']<=1
+          assert m['surface_fit']['samples']>100
+          print('READ_ONLY_METRICS_PASS')
+          PY
+      - name: Upload diagnostic JSON only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-voxel-rootcause-metrics
+          path: out/lind-voxel-rootcause/
+          retention-days: 14

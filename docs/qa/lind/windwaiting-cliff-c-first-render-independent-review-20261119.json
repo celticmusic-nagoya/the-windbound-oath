@@ -1,0 +1,72 @@
+{
+  "asset": "Windwaiting Cliff scan-first assembly C",
+  "review_date": "2026-11-19",
+  "reviewer": "ChatGPT independent visual QA",
+  "source_run_id": 44431905769,
+  "artifact_id": 14490442331,
+  "source_commit": "2c46279f",
+  "source_artifact_sha256": "3c0604ea3c46b04d4b3d44e09272ae16fbe92a6d7fc693156bf2a2645423ad79",
+  "views": [
+    "front.png",
+    "left.png",
+    "right.png",
+    "elevated.png"
+  ],
+  "gate_status": {
+    "G1": "BLOCKED",
+    "G2": "FAIL",
+    "G3": "PARTIAL_PASS",
+    "G4": "NOT_RUN"
+  },
+  "observations": [
+    {
+      "id": "C01",
+      "severity": "critical",
+      "finding": "Multiple scan meshes appear detached from one another; no continuous cliff wall in front, left, right or elevated views.",
+      "evidence": [
+        "front.png",
+        "elevated.png"
+      ]
+    },
+    {
+      "id": "C02",
+      "severity": "critical",
+      "finding": "Upper scan pieces are visibly unsupported/floating in side views; no terrain contact mesh is rendered.",
+      "evidence": [
+        "left.png",
+        "right.png"
+      ]
+    },
+    {
+      "id": "C03",
+      "severity": "major",
+      "finding": "Repeated scan shapes remain recognizable and geological strata do not form one coherent large-scale cliff silhouette.",
+      "evidence": [
+        "front.png",
+        "right.png"
+      ]
+    },
+    {
+      "id": "C04",
+      "severity": "major",
+      "finding": "Official PR344 CG silhouette comparison is not verified; visual composition cannot be declared canon-aligned.",
+      "evidence": [
+        "front.png"
+      ]
+    }
+  ],
+  "technical_evidence": {
+    "blender": "5.2.4 LTS",
+    "render_views": 4,
+    "blend_saved": true,
+    "blend_reopen": "PASS",
+    "sha256_manifest": "PASS",
+    "artifact_upload": "PASS",
+    "mesh_contact_or_boolean_validation": "NOT_RUN",
+    "uv_material_validation": "NOT_RUN",
+    "webgl_android": "NOT_RUN"
+  },
+  "root_cause_hypothesis": "Seven small scan instances placed by target centers and bottom-aligned independently; bounding-box contact does not ensure geological surface continuity, support, or cohesive silhouette.",
+  "next_implementation": "Preserve CC0 source mesh collections and original A/B/C artifacts. Before a further render, compare PR344 official CG; establish explicit local cliff outline, continuous scan-derived load-bearing rear bedrock and contact surfaces; reject isolated floating pieces. Run objective mesh-contact checks and four-view art QA. Avoid random scatter or repeated minor offsets.",
+  "limitations": "Art QA based on four raster renders; no direct Blender topology inspection in this review. G3 partial means only reopen/render/hash checks passed. No formal adoption."
+}

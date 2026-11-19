@@ -1,0 +1,53 @@
+name: LIND Blender Runner Isolation
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Environment fingerprint
+        run: |
+          mkdir -p out/lind-runner-isolation
+          date -u | tee out/lind-runner-isolation/utc.txt
+          uname -a | tee out/lind-runner-isolation/kernel.txt
+          free -m | tee out/lind-runner-isolation/memory.txt
+          python3 -m py_compile tools/map_blender/lind/build_cliff_macro_support.py
+      - name: Fetch shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Install SHA-verified Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Blender startup only (no scene or rendering)
+        timeout-minutes: 1
+        run: |
+          set -o pipefail
+          timeout 45s /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python-expr "import bpy; print('BLENDER_STARTUP_PASS',bpy.app.version_string,flush=True)" 2>&1 | tee out/lind-runner-isolation/startup.log
+      - name: Blender single-mesh save only (no rendering)
+        timeout-minutes: 2
+        run: |
+          set -o pipefail
+          timeout 90s /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python-expr "import bpy; bpy.ops.mesh.primitive_cube_add(); bpy.ops.wm.save_as_mainfile(filepath='out/lind-runner-isolation/diagnostic_cube.blend'); print('SAVE_PASS',flush=True)" 2>&1 | tee out/lind-runner-isolation/save.log
+      - name: Check diagnostic evidence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('out/lind-runner-isolation/diagnostic_cube.blend')
+          assert p.exists() and p.stat().st_size>1000
+          print('MINIMAL_BLENDER_SAVE_PASS',p.stat().st_size)
+          PY
+      - name: Upload runner diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-blender-runner-isolation
+          path: out/lind-runner-isolation/
+          if-no-files-found: warn
+          retention-days: 14

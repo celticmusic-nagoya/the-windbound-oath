@@ -1,0 +1,64 @@
+name: LIND Cliff Interior Core Source QA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  interior:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Fetch verified local source patch
+        uses: actions/download-artifact@v4
+        with:
+          name: lind-local-cliff-scan-patch-reference
+          run-id: 44010858412
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: input/
+      - name: Verify exact prior Blender source
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          r=Path('input')
+          m=json.loads((r/'local_patch_manifest.json').read_text())
+          assert m['source_gltf_sha256']=='645cadf494f60e247434451af6a88291d3be3019aa0973d635596810b0fe2d11'
+          p=r/'local_source_patch_reference.blend'
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['outputs'][p.name]
+          print('SOURCE_PATCH_VERIFIED')
+          PY
+      - name: Select connected interior and render source detail
+        run: |
+          set -euo pipefail
+          mkdir -p out/lind-cliff-interior
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 input/local_source_patch_reference.blend --python tools/map_blender/lind/extract_cliff_interior_core.py -- --out out/lind-cliff-interior 2>&1 | tee out/lind-cliff-interior/blender.log
+      - name: Verify structural QA and files
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          r=Path('out/lind-cliff-interior')
+          m=json.loads((r/'interior_core_metrics.json').read_text())
+          assert m['selected_core_faces']>1000
+          assert m['selected_core_faces']<m['input_source_faces']
+          assert m['source_uv']=='PRESERVED_EXACT_LOOP_VALUES'
+          assert m['retopology']=='NOT_RUN' and m['normal_bake']=='NOT_RUN'
+          for n,h in m['outputs'].items():
+           p=r/n
+           assert hashlib.sha256(p.read_bytes()).hexdigest()==h
+           if n.endswith('.png'):assert p.read_bytes()[:8]==bytes([137,80,78,71,13,10,26,10])
+          print('INTERIOR_CORE_TECH_QA_PASS')
+          PY
+      - name: Upload interior core candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cliff-interior-core-source
+          path: out/lind-cliff-interior/
+          retention-days: 14

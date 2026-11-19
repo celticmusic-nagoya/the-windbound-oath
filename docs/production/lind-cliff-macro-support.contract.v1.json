@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0-candidate",
+  "status": "CANDIDATE_NON_CANONICAL",
+  "lane": "WORLD",
+  "source_image_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "scan_source_sha256": "645cadf494f60e247434451af6a88291d3be3019aa0973d635596810b0fe2d11",
+  "scene_collection": "LIND_TERRAIN",
+  "local_origin": null,
+  "bounding_box_m": null,
+  "world_transform": null,
+  "elevation_reference": null,
+  "camera_projection": null,
+  "game_renderer": null,
+  "character_nominal_height": null,
+  "lod_budgets": null,
+  "collision_contract": null,
+  "source_scan_is_collision": false,
+  "story_jump_is_walkable": false,
+  "regions": [
+    {
+      "id": "windward_cliffs_wnw",
+      "kind": "ocean_cliff",
+      "source_scan_usage": "surface_dressing_only",
+      "macro_support": "REQUIRED",
+      "contact_zone_qa": "NOT_RUN"
+    },
+    {
+      "id": "raid_riverside_cliff",
+      "kind": "river_cliff",
+      "source_scan_usage": "surface_dressing_only",
+      "macro_support": "REQUIRED",
+      "contact_zone_qa": "NOT_RUN"
+    },
+    {
+      "id": "downstream_landing",
+      "kind": "story_landing",
+      "source_scan_usage": "NOT_ASSIGNED",
+      "macro_support": "REQUIRED",
+      "contact_zone_qa": "NOT_RUN"
+    }
+  ],
+  "directed_story_edges": [
+    {
+      "from": "raid_riverside_cliff",
+      "to": "downstream_landing",
+      "type": "STORY_JUMP",
+      "walkable": false
+    }
+  ],
+  "art_status": "REFERENCE_ONLY",
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "stopped_method_families": [
+    "GLOBAL_DECIMATE",
+    "GLOBAL_VOXEL_REMESH_SMART_UV",
+    "BLIND_FACE_RING_EROSION"
+  ]
+}

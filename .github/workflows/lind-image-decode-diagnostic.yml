@@ -1,0 +1,66 @@
+name: LIND Isolated PBR Image Decode Diagnosis
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnostic:
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [external-jpeg, blender-image]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download immutable source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/diagnostic
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
+      - name: External JPEG full decode and source SHA
+        if: matrix.check == 'external-jpeg'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y python3-pil
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          from PIL import Image
+          source=Path('out/source')
+          manifest=json.loads((source/'source_provenance.json').read_text())
+          rows=[]
+          for asset in manifest['assets']:
+            assert asset['status']=='DOWNLOADED_UNREVIEWED'
+            for dep in asset['dependencies']:
+              if not dep['uri'].lower().endswith(('.jpg','.jpeg','.png')):continue
+              path=source/dep['file']
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==dep['sha256']
+              with Image.open(path) as im:
+                im.load()
+                assert im.width>0 and im.height>0
+                rows.append({'asset':asset['id'],'uri':dep['uri'],'format':im.format,'size':[im.width,im.height],'sha256':dep['sha256'],'full_decode':'PASS'})
+          assert len(rows)>=6
+          (Path('out/diagnostic')/'external_jpeg_decode.json').write_text(json.dumps({'results':rows,'status':'PASS'},indent=2)+'\n')
+          print('EXTERNAL_JPEG_DECODE_PASS',len(rows))
+          PY
+      - name: Install Blender with NumPy
+        if: matrix.check == 'blender-image'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy
+      - name: Blender standalone image decode (no glTF import)
+        if: matrix.check == 'blender-image'
+        run: |
+          set -o pipefail
+          timeout 240s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/diagnose_pbr_image_decode.py -- --source out/source --out out/diagnostic 2>&1 | tee out/diagnostic/blender.log
+      - name: Save diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-image-decode-${{ matrix.check }}
+          path: out/diagnostic/
+          retention-days: 14
+          if-no-files-found: warn

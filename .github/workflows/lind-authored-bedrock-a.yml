@@ -1,0 +1,53 @@
+name: LIND authored bedrock production render (B sculpt)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: two-manual-lind-authored-bedrock-a-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch canonical shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Install SHA-verified shared Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Build editable voxel-sculpted cliff B and four views
+        timeout-minutes: 14
+        run: |
+          mkdir -p out/lind-cliff-b
+          set -o pipefail
+          timeout 780s /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/sculpt_windwaiting_cliff_B.py -- --out out/lind-cliff-b 2>&1 | tee out/lind-cliff-b/build.log
+      - name: Verify files and Blender reopen
+        timeout-minutes: 3
+        run: |
+          timeout 90s /tmp/two-blender/app/blender -b out/lind-cliff-b/windwaiting_sculpted_cliff_B_UNAPPROVED.blend --disable-autoexec --python-exit-code 2 --python-expr 'import bpy; s=bpy.context.scene; assert s.get("coordinate_space")=="asset-local-provisional"; assert s.get("unit_scale_status")=="UNAPPROVED"; assert any(o.name.startswith("WINDBOUND_SCULPTED_CLIFF_B") for o in bpy.data.objects); print("BEDROCK_REOPEN_PASS")'
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path("out/lind-cliff-b")
+          manifest=json.loads((root/"manifest.json").read_text())
+          assert manifest["G2"]=="NOT_RUN" and manifest["G4"]=="NOT_RUN"
+          for name,digest in manifest["files"].items():
+              assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
+          assert len([n for n in manifest["files"] if n.endswith(".png")])==4
+          print("BEDROCK_OUTPUT_SHA_PASS")
+          PY
+      - name: Upload source and render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-sculpted-cliff-b-unapproved
+          path: out/lind-cliff-b/
+          retention-days: 14
+          if-no-files-found: warn

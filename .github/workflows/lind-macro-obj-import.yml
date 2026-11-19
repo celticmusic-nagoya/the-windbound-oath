@@ -1,0 +1,48 @@
+name: LIND Import Precomputed Cliff OBJ
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  import-obj:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate reproducible OBJ without Blender
+        run: |
+          python3 -m py_compile tools/map_blender/lind/build_cliff_macro_topology_stdlib.py tools/map_blender/lind/import_macro_obj_diagnostic.py
+          python3 tools/map_blender/lind/build_cliff_macro_topology_stdlib.py --out out/lind-obj-input
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Import OBJ and save Blender file
+        timeout-minutes: 2
+        run: |
+          set -o pipefail
+          mkdir -p out/lind-obj-import
+          timeout 90s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/import_macro_obj_diagnostic.py -- --obj out/lind-obj-input/lind_macro_support_normalized.obj --out out/lind-obj-import 2>&1 | tee out/lind-obj-import/import.log
+      - name: Verify import SHA and reopen
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-obj-import')
+          m=json.loads((d/'import_metrics.json').read_text())
+          assert m['production_ready'] is False and m['rendered'] is False
+          assert hashlib.sha256((d/'lind_macro_import_diagnostic.blend').read_bytes()).hexdigest()==m['blend_sha256']
+          assert hashlib.sha256(Path('out/lind-obj-input/lind_macro_support_normalized.obj').read_bytes()).hexdigest()==m['source_obj_sha256']
+          print('IMPORT_SHA_PASS')
+          PY
+          timeout 45s blender --background --factory-startup --disable-autoexec out/lind-obj-import/lind_macro_import_diagnostic.blend --python-exit-code 1 --python-expr "import bpy; o=bpy.data.objects.get('LIND_MACRO_CLIFF_OBJ_DIAGNOSTIC_NOT_CANON'); assert o and len(o.data.polygons)>1000; print('REOPEN_PASS',len(o.data.polygons))"
+      - name: Upload OBJ and Blender evidence even if interrupted
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-precomputed-obj-import
+          path: |
+            out/lind-obj-input/
+            out/lind-obj-import/
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,52 @@
+name: LIND Continuous Cliff Sculpt QA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sculpt:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Install SHA-verified Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Generate and render continuous sculpt
+        run: |
+          set -euo pipefail
+          mkdir -p out/lind-continuous-cliff
+          /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_continuous_cliff_study.py -- --out out/lind-continuous-cliff 2>&1 | tee out/lind-continuous-cliff/blender.log
+      - name: Independent file and topology evidence
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-continuous-cliff')
+          m=json.loads((d/'manifest.json').read_text())
+          assert m['geometry']['boundary_or_nonmanifold_edges']==0
+          assert m['geometry']['vertices']>5000
+          assert len(m['renders'])==3
+          for x in m['renders'].values():
+              b=(d/x['path']).read_bytes()
+              assert b[:8]==b'\x89PNG\r\n\x1a\n'
+              assert hashlib.sha256(b).hexdigest()==x['sha256']
+          blend=(d/'continuous_cliff_study.blend').read_bytes()
+          assert blend.startswith(b'BLENDER')
+          assert hashlib.sha256(blend).hexdigest()==m['blend_sha256']
+          print('TECH_PASS: watertight mesh, PNG hashes and .blend')
+          PY
+      - name: Reopen Blender source
+        run: /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec out/lind-continuous-cliff/continuous_cliff_study.blend --python-exit-code 1 --python-expr "import bpy; assert bpy.data.objects.get('GEO_CONTINUOUS_CLIFF_CANDIDATE'); print('REOPEN_OK')"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lind-continuous-cliff-study
+          path: out/lind-continuous-cliff/
+          retention-days: 7

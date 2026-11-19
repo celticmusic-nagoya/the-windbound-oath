@@ -1,0 +1,75 @@
+name: LIND Parallel Independent Candidate QA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-manual-lind-parallel-independent-qa-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  independent-qa:
+    name: QA / ${{ matrix.check }}
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [provenance, geometry, render]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download immutable input artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/preview out/qa
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
+          gh run download 44068824053 -R ${{ github.repository }} -n lind-cc0-rock-blender-geometry-previews -D out/preview
+      - name: Independent evidence QA
+        env:
+          QA_CHECK: ${{ matrix.check }}
+        run: |
+          python3 - <<'PY'
+          import os,json,hashlib,struct
+          from pathlib import Path
+          check=os.environ['QA_CHECK'];src=Path('out/source');preview=Path('out/preview')
+          manifest=json.loads((src/'source_provenance.json').read_text())
+          report=json.loads((preview/'candidate_geometry_report.json').read_text())
+          assert len(manifest['assets'])==2 and len(report['candidates'])==2
+          byid={x['id']:x for x in report['candidates']}
+          def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+          for asset in manifest['assets']:
+            ident=asset['id'];candidate=byid[ident]
+            if check=='provenance':
+              assert asset['status']=='DOWNLOADED_UNREVIEWED'
+              p=src/asset['file'];assert p.is_file() and digest(p)==asset['sha256']
+              model=json.loads(p.read_text())
+              uris={x['uri'] for group in ('buffers','images') for x in model.get(group,[]) if 'uri' in x and not x['uri'].startswith('data:')}
+              assert uris=={x['uri'] for x in asset['dependencies']}
+              for dep in asset['dependencies']:
+                q=src/dep['file']
+                assert q.is_file() and digest(q)==dep['sha256'] and q.stat().st_size==dep['size_bytes']
+                assert (p.parent/dep['uri']).resolve()==q.resolve()
+            elif check=='geometry':
+              assert candidate['geometry_import']=='PASS'
+              assert candidate['meshes']>=1 and candidate['vertices']>100 and candidate['faces']>100
+              assert candidate['source_sha256']==asset['sha256']
+            elif check=='render':
+              p=preview/candidate['preview'];data=p.read_bytes()
+              assert data[:8]==bytes.fromhex('89504e470d0a1a0a')
+              assert struct.unpack('>II',data[16:24])==(1100,760)
+              assert digest(p)==candidate['preview_sha256']
+            else:raise ValueError(check)
+          result={'check':check,'status':'PASS','asset_ids':sorted(byid),'production_G1':'BLOCKED','production_G2':'NOT_RUN','production_G4':'NOT_RUN','note':'Automated evidence checks are not independent aesthetic review'}
+          (Path('out/qa')/(check+'.json')).write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result))
+          PY
+      - name: Save independent QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-independent-qa-${{ matrix.check }}
+          path: out/qa/
+          retention-days: 14
+          if-no-files-found: warn

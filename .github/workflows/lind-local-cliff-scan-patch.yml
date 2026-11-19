@@ -1,0 +1,51 @@
+name: LIND Local Cliff Scan Patch Source QA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  extract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Syntax preflight
+        run: python3 -m py_compile tools/map_blender/lind/extract_local_cliff_scan_patch.py tools/map_blender/lind/download_polyhaven_cliff_scan.py
+      - name: Retrieve verified original publisher scan
+        run: python3 tools/map_blender/lind/download_polyhaven_cliff_scan.py --asset coastal_cliff_04 --out out/lind-local-scan-patch
+      - name: Extract local patch preserving original surface UV
+        run: |
+          set -euo pipefail
+          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/extract_local_cliff_scan_patch.py -- --out out/lind-local-scan-patch 2>&1 | tee out/lind-local-scan-patch/blender.log
+      - name: Validate manifest and PNG/Blend hashes
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('out/lind-local-scan-patch')
+          m=json.loads((root/'local_patch_manifest.json').read_text())
+          assert m['source_gltf_sha256']=='645cadf494f60e247434451af6a88291d3be3019aa0973d635596810b0fe2d11'
+          assert m['selection_faces']>=3000 and m['patch_vertices']>=1000
+          assert m['uv_source']=='publisher UV loop values preserved'
+          assert m['bake_status']=='NOT_RUN' and m['retopology_status']=='NOT_RUN'
+          for name,h in m['outputs'].items():
+           p=root/name
+           assert hashlib.sha256(p.read_bytes()).hexdigest()==h
+           if name.endswith('.png'):assert p.read_bytes()[:8]==bytes([137,80,78,71,13,10,26,10])
+           if name.endswith('.blend'):assert p.read_bytes()[:7]==b'BLENDER'
+          print('LOCAL_PATCH_TECHNICAL_QA_PASS')
+          PY
+      - name: Reopen patch .blend
+        run: |
+          blender --background --factory-startup --disable-autoexec out/lind-local-scan-patch/local_source_patch_reference.blend --python-exit-code 1 --python-expr "import bpy; assert 'LOCAL_PATCH_UNOPTIMIZED_SOURCE_GEOMETRY' in bpy.data.objects; print('LOCAL_PATCH_REOPEN_PASS')"
+      - name: Upload patch source QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-local-cliff-scan-patch-reference
+          path: out/lind-local-scan-patch/
+          retention-days: 14

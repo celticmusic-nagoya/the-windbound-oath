@@ -1,0 +1,52 @@
+name: LIND CC0 Rock Components Acquisition
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: two-manual-lind-cc0-rock-components-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch two CC0 scanned rock models with SHA provenance
+        run: |
+          mkdir -p out/lind-cc0-rock-components
+          python3 -m py_compile tools/map_blender/lind/fetch_cc0_rock_components.py
+          timeout 420s python3 tools/map_blender/lind/fetch_cc0_rock_components.py --out out/lind-cc0-rock-components --max-mb 100
+      - name: Verify immutable acquisition evidence
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-cc0-rock-components')
+          m=json.loads((d/'source_provenance.json').read_text())
+          assert len(m['assets'])==2
+          for a in m['assets']:
+            assert a['license']=='CC0' and a['status']=='DOWNLOADED_UNREVIEWED'
+            p=d/a['file']
+            assert hashlib.sha256(p.read_bytes()).hexdigest()==a['sha256']
+            assert p.stat().st_size==a['size_bytes']
+            if p.suffix=='.gltf':
+              model=json.loads(p.read_text())
+              expected={x['uri'] for group in ('buffers','images') for x in model.get(group,[]) if 'uri' in x and not x['uri'].startswith('data:')}
+              assert expected and expected=={x['uri'] for x in a['dependencies']}
+              for dep in a['dependencies']:
+                q=d/dep['file']
+                assert q.is_file() and q.stat().st_size==dep['size_bytes']
+                assert hashlib.sha256(q.read_bytes()).hexdigest()==dep['sha256']
+                assert (p.parent/dep['uri']).resolve()==q.resolve()
+          print('CC0_SOURCE_ACQUISITION_SHA_PASS')
+          PY
+      - name: Preserve candidate assets and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cc0-rock-component-candidates
+          path: out/lind-cc0-rock-components/
+          retention-days: 14
+          if-no-files-found: warn

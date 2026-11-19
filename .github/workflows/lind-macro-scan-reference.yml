@@ -1,0 +1,65 @@
+name: LIND Macro Scan Side-by-Side Reference
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate scripts and recreate macro OBJ
+        run: |
+          python3 -m py_compile tools/map_blender/lind/render_macro_scan_reference_comparison.py tools/map_blender/lind/import_macro_obj_diagnostic.py
+          python3 tools/map_blender/lind/build_cliff_macro_topology_stdlib.py --out out/lind-macro-source
+      - name: Retrieve verified original scan patch from successful QA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/lind-scan-reference
+          gh run download 44010858412 -R ${{ github.repository }} -n lind-local-cliff-scan-patch-reference -D out/lind-scan-reference
+          test -s out/lind-scan-reference/local_source_patch_reference.blend
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('out/lind-scan-reference/local_source_patch_reference.blend')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='8c86b29c1d28c0aad0a5a07873ce40c5ff3b64b18c8d64819bd98151c5a7781a'
+          print('VERIFIED_SCAN_BLEND_PASS')
+          PY
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Import macro OBJ and save technical .blend
+        run: |
+          mkdir -p out/lind-comparison
+          timeout 90s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/import_macro_obj_diagnostic.py -- --obj out/lind-macro-source/lind_macro_support_normalized.obj --out out/lind-comparison
+      - name: Render side-by-side, not world-aligned
+        timeout-minutes: 4
+        run: |
+          set -o pipefail
+          timeout 180s blender --background --factory-startup --disable-autoexec out/lind-comparison/lind_macro_import_diagnostic.blend --python-exit-code 1 --python tools/map_blender/lind/render_macro_scan_reference_comparison.py -- --scan-blend out/lind-scan-reference/local_source_patch_reference.blend --out out/lind-comparison 2>&1 | tee out/lind-comparison/comparison.log
+      - name: Verify comparison PNG and disclaimers
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-comparison')
+          p=d/'macro_vs_scan_side_by_side.png'
+          m=json.loads((d/'comparison_manifest.json').read_text())
+          assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['render_sha256']
+          assert m['production_ready'] is False and m['world_alignment']=='NOT_DEFINED'
+          assert m['G1']=='BLOCKED' and m['G2']=='NOT_RUN'
+          print('COMPARISON_PNG_PASS')
+          PY
+      - name: Upload reference only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-macro-scan-reference-comparison
+          path: out/lind-comparison/
+          retention-days: 14
+          if-no-files-found: warn

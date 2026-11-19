@@ -1,0 +1,51 @@
+name: LIND CC0 Rock Candidate Blender Previews
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve fully verified CC0 candidate source package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/source out/preview
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-rock-component-candidates -D out/source
+          python3 -m py_compile tools/map_blender/lind/render_cc0_rock_candidates.py
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy libegl1 libgl1 libopengl0 libgl1-mesa-dri
+          blender --background --factory-startup --python-expr 'import numpy; print("BLENDER_NUMPY_IMPORT_PASS",numpy.__version__)'
+      - name: Render both imported 3D rock candidates
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          timeout 240s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/render_cc0_rock_candidates.py -- --source out/source --out out/preview 2>&1 | tee out/preview/blender.log
+      - name: Verify actual PNG previews and imported mesh counts
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/preview');m=json.loads((d/'candidate_geometry_report.json').read_text())
+          assert len(m['candidates'])==2
+          for x in m['candidates']:
+            assert x['vertices']>100 and x['faces']>100
+            p=d/x['preview']
+            assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+            assert hashlib.sha256(p.read_bytes()).hexdigest()==x['preview_sha256']
+          print('TWO_CC0_ROCK_PREVIEW_QA_PASS')
+          PY
+      - name: Upload candidate PNGs and mesh inspection report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-cc0-rock-blender-geometry-previews
+          path: out/preview/
+          retention-days: 14
+          if-no-files-found: warn

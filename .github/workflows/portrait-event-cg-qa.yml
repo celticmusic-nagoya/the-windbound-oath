@@ -9,6 +9,7 @@ on:
       - 'tests/moss/portrait_event_cg.test.js'
       - '.github/workflows/portrait-event-cg-qa.yml'
   push:
+    branches: [main]
     paths:
       - 'index.html'
       - 'dev-fresh-20261108.html'

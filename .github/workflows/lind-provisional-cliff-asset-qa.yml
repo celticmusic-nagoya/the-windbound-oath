@@ -1,0 +1,70 @@
+name: LIND provisional cliff asset QA (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      asset_artifact_run:
+        description: "Successful Actions run ID containing the authored .blend (not a source study)"
+        required: true
+        type: string
+      artifact_name:
+        description: "Exact artifact name containing authored .blend and dependencies"
+        required: true
+        type: string
+      blend_path:
+        description: "Relative .blend path within downloaded artifact"
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate user inputs (fail closed)
+        env:
+          RUN_ID: ${{ inputs.asset_artifact_run }}
+          ARTIFACT_NAME: ${{ inputs.artifact_name }}
+          BLEND_PATH: ${{ inputs.blend_path }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, re
+          assert re.fullmatch(r"[0-9]+", os.environ["RUN_ID"])
+          assert re.fullmatch(r"[a-zA-Z0-9_.-]+", os.environ["ARTIFACT_NAME"])
+          p=pathlib.PurePosixPath(os.environ["BLEND_PATH"])
+          assert not p.is_absolute() and ".." not in p.parts and p.suffix==".blend"
+          PY
+      - name: Download existing authored asset artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.asset_artifact_run }}
+          ARTIFACT_NAME: ${{ inputs.artifact_name }}
+        run: |
+          mkdir -p out/asset out/qa
+          gh run download "$RUN_ID" -R "${{ github.repository }}" -n "$ARTIFACT_NAME" -D out/asset
+      - name: Fetch canonical shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Install shared SHA-verified Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Audit authored Blender file (G1-G4 remain independent)
+        env:
+          BLEND_PATH: ${{ inputs.blend_path }}
+        run: |
+          set -o pipefail
+          test -f "out/asset/$BLEND_PATH"
+          timeout 360s /tmp/two-blender/app/blender -b "out/asset/$BLEND_PATH" --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/qa_provisional_cliff_asset.py -- --out out/qa/asset-preflight.json 2>&1 | tee out/qa/blender.log
+      - name: Upload QA evidence (including failures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-provisional-cliff-preflight
+          path: out/qa/
+          retention-days: 14
+          if-no-files-found: warn

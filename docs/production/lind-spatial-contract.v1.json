@@ -1,0 +1,267 @@
+{
+  "schema": "lind-spatial-contract-v1",
+  "status": "DRAFT_VISUAL_MAP_VERIFIED_METRIC_LAYOUT_BLOCKED",
+  "canonical_map": {
+    "path": "docs/art/reference/lind/リルド村RPGアセット全体マップ.png",
+    "sha256": "83dd4ad1eb10103fdb7eb569e8b1b22cc92920d4c94d4eae85735125de87fe6c",
+    "image_pixels_verified": true,
+    "visual_audit": "docs/production/LIND_CANON_MAP_VISUAL_AUDIT_01.md",
+    "evidence_run_id": 43828092892,
+    "evidence_artifact_id": 14207437553
+  },
+  "coordinates": {
+    "world_origin": null,
+    "axes": null,
+    "unit_scale": null,
+    "map_to_world_transform": null,
+    "north_axis": null,
+    "camera_type": null,
+    "camera_ortho_scale": null
+  },
+  "relative_rules": [
+    {
+      "id": "north_wind_hill",
+      "region": "north",
+      "source": "official bible section 8"
+    },
+    {
+      "id": "northwest_waterfall_elder",
+      "region": "northwest",
+      "source": "official bible section 8"
+    },
+    {
+      "id": "south_southeast_farms",
+      "region": "south_southeast",
+      "source": "official bible section 8"
+    },
+    {
+      "id": "east_training_across_river",
+      "region": "east_across_river",
+      "source": "official bible section 8"
+    }
+  ],
+  "anchors": [
+    {
+      "id": "aidan_home_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "central_square",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "wind_stone",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "well",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "inn_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "shop_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "elder_entrance",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "bridge_west",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "bridge_east",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "training_ground",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "river",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "waterfall",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "north_hill",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "south_farms",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "fishing_spot",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "cliff_vista",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "village_return",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "attack_scene",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    },
+    {
+      "id": "escape_river_route",
+      "position": null,
+      "elevation": null,
+      "orientation": null,
+      "source_image_evidence": null,
+      "canon_status": "UNVERIFIED_PLACEMENT"
+    }
+  ],
+  "runtime_preservation": {
+    "door_room_ids": [
+      "home",
+      "inn",
+      "shop",
+      "elder"
+    ],
+    "wind_stop_does_not_stop_water": true,
+    "prototype_coordinates_are_not_canonical": true,
+    "save_migration_authorized": false
+  },
+  "approval": {
+    "director_spatial_lock": false,
+    "gates": {
+      "G1": "BLOCKED_METRIC_LAYOUT",
+      "G2": "NOT_RUN",
+      "G3": "NOT_RUN",
+      "G4": "NOT_RUN"
+    }
+  },
+  "authoring_zones": [
+    {
+      "id": "ZONE_WEST_ENTRY",
+      "scope": "village entrance and western homes",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_CENTRAL_PLAZA",
+      "scope": "wind stone, well and shop vicinity",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_NW_WATERFALL_ELDER",
+      "scope": "waterfall and elder house",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_NORTH_INN_AIDAN",
+      "scope": "inn and Aidan house",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_EAST_TRAINING",
+      "scope": "separate training ground across river",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_SOUTHEAST_FARMS",
+      "scope": "fields, orchard, barns and livestock",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_RIVER_CROSSINGS",
+      "scope": "main river, tributary and candidate crossings",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    },
+    {
+      "id": "ZONE_FISHING_DOCK",
+      "scope": "river fishing spot",
+      "status": "PROPOSED_NOT_CANON",
+      "footprint": null
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+name: LIND Nonperiodic Cliff Silhouette Candidate QA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate nonperiodic candidate and check topology
+        run: |
+          python3 -m py_compile tools/map_blender/lind/build_nonperiodic_cliff_silhouette.py
+          python3 tools/map_blender/lind/build_nonperiodic_cliff_silhouette.py --out out/lind-nonperiodic
+          python3 tools/map_blender/lind/validate_oriented_cliff_obj.py --obj out/lind-nonperiodic/lind_nonperiodic_silhouette_candidate.obj --out out/lind-nonperiodic/oriented_metrics.json
+          cp out/lind-nonperiodic/lind_nonperiodic_silhouette_candidate.obj out/lind-nonperiodic/lind_macro_support_normalized.obj
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Import and save new candidate
+        timeout-minutes: 2
+        run: |
+          timeout 90s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/import_macro_obj_diagnostic.py -- --obj out/lind-nonperiodic/lind_macro_support_normalized.obj --out out/lind-nonperiodic
+      - name: Render actual candidate clay PNG
+        timeout-minutes: 3
+        run: |
+          timeout 150s blender --background --factory-startup --disable-autoexec out/lind-nonperiodic/lind_macro_import_diagnostic.blend --python-exit-code 1 --python tools/map_blender/lind/render_imported_macro_workbench.py -- --out out/lind-nonperiodic
+      - name: Verify PNG signature and SHA
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-nonperiodic')
+          p=d/'lind_macro_technical_clay.png'
+          m=json.loads((d/'render_metrics.json').read_text())
+          assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['png_sha256']
+          assert json.loads((d/'candidate_manifest.json').read_text())['production_ready'] is False
+          print('CANDIDATE_PNG_PASS')
+          PY
+      - name: Upload candidate render and metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-nonperiodic-cliff-silhouette-candidate
+          path: out/lind-nonperiodic/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,32 @@
+{
+  "asset": "Windwaiting Cliff C",
+  "run_id": 44443246895,
+  "commit": "a3c410b2d95a94f5c73dffef084504250dadf421",
+  "artifact_id": 14493350120,
+  "artifact_sha256": "c125b553f41b602431f9e54fc22c74b7500e6125608699bb31ef79ad99162787",
+  "artifact_size_bytes": 31492107,
+  "blender_render_reopen_workflow": "PASS",
+  "spatial_audit": {
+    "source_file": "contact_audit.json",
+    "scan_instances": 7,
+    "connected_components_aabb": 3,
+    "overlap_candidate_pairs": 4,
+    "isolated_instances": [
+      "ART_DIRECTED_SCAN_ROOT_00",
+      "ART_DIRECTED_SCAN_ROOT_03"
+    ],
+    "floor_aabb_candidates": 4,
+    "aabb_connectivity": "FAIL",
+    "actual_mesh_contact": "NOT_RUN",
+    "physical_support": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "FAIL",
+    "G3": "PARTIAL_PASS_WITH_AABB_CONNECTIVITY_FAIL",
+    "G4": "NOT_RUN"
+  },
+  "root_cause": "Independently placed scan groups do not form a continuous structural cliff even at broad-phase bounding-box level.",
+  "next_action": "Replace separate placement-only assembly with scan-derived contiguous structural support, preserve editable source instances, run contact validation and four-view independent art QA; no formal adoption or integration.",
+  "notes": "This report is transcribed from the completed run's contact_audit.json. AABB overlap is not proof of physical mesh contact."
+}

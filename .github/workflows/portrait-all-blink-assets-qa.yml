@@ -8,6 +8,7 @@ on:
       - 'tests/moss/portrait_all_blink_assets.test.cjs'
       - '.github/workflows/portrait-all-blink-assets-qa.yml'
   push:
+    branches: [main]
     paths:
       - 'css/style.css'
       - 'js/field/talk-data.js'

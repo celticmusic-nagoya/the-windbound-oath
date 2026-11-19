@@ -1,0 +1,58 @@
+name: LIND Scan-Led Irregular Surface Study
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  scan-surface:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preflight and retrieve SHA-verified source scan reference
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m py_compile tools/map_blender/lind/build_scan_led_irregular_surface.py
+          mkdir -p out/lind-scan-source out/lind-scan-led
+          gh run download 44010858412 -R ${{ github.repository }} -n lind-local-cliff-scan-patch-reference -D out/lind-scan-source
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('out/lind-scan-source/local_source_patch_reference.blend')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='8c86b29c1d28c0aad0a5a07873ce40c5ff3b64b18c8d64819bd98151c5a7781a'
+          print('SOURCE_IMMUTABLE_SHA_PASS')
+          PY
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Build and render source-led irregular footprint
+        timeout-minutes: 4
+        run: |
+          set -o pipefail
+          timeout 180s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_scan_led_irregular_surface.py -- --scan-blend out/lind-scan-source/local_source_patch_reference.blend --out out/lind-scan-led 2>&1 | tee out/lind-scan-led/blender.log
+      - name: Verify scan-led evidence
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path('out/lind-scan-led')
+          m=json.loads((d/'scan_led_manifest.json').read_text())
+          p=d/'scan_led_irregular_surface.png'
+          assert p.read_bytes()[:8]==bytes.fromhex('89504e470d0a1a0a')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['render_sha256']
+          assert m['surface_open'] is True and m['uv_preserved'] is True
+          assert m['production_ready'] is False and m['G1']=='BLOCKED'
+          assert m['selected_faces']>5000 and m['boundary_edges']>0
+          print('SCAN_LED_REFERENCE_QA_PASS')
+          PY
+      - name: Upload scan-led study
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-scan-led-irregular-surface-study
+          path: out/lind-scan-led/
+          retention-days: 14
+          if-no-files-found: warn

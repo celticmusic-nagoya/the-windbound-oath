@@ -1,0 +1,51 @@
+name: LIND Macro Geometry-Only Isolation
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax and semantic contract
+        run: |
+          python3 -m py_compile tools/map_blender/lind/build_cliff_macro_support.py
+          python3 tools/map_blender/lind/validate_cliff_macro_contract.py docs/production/lind-cliff-macro-support.contract.v1.json
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Geometry only with bounded Blender runtime
+        timeout-minutes: 3
+        run: |
+          set -o pipefail
+          mkdir -p out/lind-macro-geometry
+          timeout 150s blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-geometry --geometry-only 2>&1 | tee out/lind-macro-geometry/geometry.log
+      - name: Verify topology and file hash
+        run: |
+          python3 - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=Path('out/lind-macro-geometry')
+          m=json.loads((d/'macro_support_metrics.json').read_text())
+          assert m['geometry_only'] is True and m['production_ready'] is False
+          assert m['boundary_edges']==0 and m['nonmanifold_edges']==0 and m['closed_volume']>0
+          assert len(m['outputs'])==1
+          for n,h in m['outputs'].items():
+           assert n.endswith('.blend')
+           assert hashlib.sha256((d/n).read_bytes()).hexdigest()==h
+          print('MACRO_GEOMETRY_ONLY_PASS')
+          PY
+      - name: Reopen actual generated macro .blend
+        run: |
+          timeout 45s blender --background --factory-startup --disable-autoexec out/lind-macro-geometry/macro_support_candidate.blend --python-exit-code 1 --python-expr "import bpy; o=bpy.data.objects.get('CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON'); assert o and len(o.data.polygons)>0; print('MACRO_REOPEN_PASS',len(o.data.polygons))"
+      - name: Upload diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-macro-geometry-only
+          path: out/lind-macro-geometry/
+          if-no-files-found: warn
+          retention-days: 14

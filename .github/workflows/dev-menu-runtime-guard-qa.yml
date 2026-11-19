@@ -7,6 +7,7 @@ on:
       - 'tests/moss/dev_menu_runtime_guard.test.js'
       - '.github/workflows/dev-menu-runtime-guard-qa.yml'
   push:
+    branches: [main]
     paths:
       - 'index.html'
       - 'dev-fresh-20261108.html'
