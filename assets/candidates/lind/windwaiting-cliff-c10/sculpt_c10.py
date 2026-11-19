@@ -1,4 +1,4 @@
-"""C10 experimental independent rock masses. Blender 5.2.4.
+"""C10 experimental independent rock masses. Blender 5.3.0 candidate runtime.
 Input: C9-B/C_UNAPPROVED.blend. No mutation of source or C9 files.
 This stage creates editable, closed, independently authored cliff blocks;
 it does NOT certify visual fit, intersections, or seam preservation.
@@ -79,8 +79,8 @@ def main():
     p.add_argument("source",type=Path)
     p.add_argument("output",type=Path)
     args=p.parse_args()
-    if tuple(bpy.app.version)!=(5,2,4):
-        raise RuntimeError("Blender 5.2.4 required")
+    if tuple(bpy.app.version)!=(5,3,0):
+        raise RuntimeError("Blender 5.3.0 required")
     if not args.source.is_file():
         raise FileNotFoundError(args.source)
     args.output.mkdir(parents=True,exist_ok=True)
