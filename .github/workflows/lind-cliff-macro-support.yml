@@ -26,7 +26,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p out/lind-macro-support
-          /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
+          date -u '+RUN_START_UTC=%Y-%m-%dT%H:%M:%SZ' | tee out/lind-macro-support/runner-diagnostics.log
+          free -m | tee -a out/lind-macro-support/runner-diagnostics.log
+          df -h . /tmp | tee -a out/lind-macro-support/runner-diagnostics.log
+          PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
       - name: Verify candidate topology and hashes
         run: |
           python3 - <<'PY'
