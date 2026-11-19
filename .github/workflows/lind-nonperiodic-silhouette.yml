@@ -1,9 +1,5 @@
 name: LIND Nonperiodic Cliff Silhouette Candidate QA
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/build_nonperiodic_cliff_silhouette.py'
-      - '.github/workflows/lind-nonperiodic-silhouette.yml'
   workflow_dispatch:
 permissions:
   contents: read
