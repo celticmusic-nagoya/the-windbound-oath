@@ -1,6 +1,11 @@
 name: LIND Macro Cliff Support Blender Geometry QA
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/lind-cliff-rock-art-study-20261118
+    paths:
+      - .github/workflows/lind-cliff-macro-support.yml
 permissions:
   contents: read
 jobs:
@@ -29,7 +34,7 @@ jobs:
           date -u '+RUN_START_UTC=%Y-%m-%dT%H:%M:%SZ' | tee out/lind-macro-support/runner-diagnostics.log
           free -m | tee -a out/lind-macro-support/runner-diagnostics.log
           df -h . /tmp | tee -a out/lind-macro-support/runner-diagnostics.log
-          PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
+          PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support --geometry-only 2>&1 | tee out/lind-macro-support/blender.log
       - name: Verify candidate topology and hashes
         run: |
           python3 - <<'PY'
