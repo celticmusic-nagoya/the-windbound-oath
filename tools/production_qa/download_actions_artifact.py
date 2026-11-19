@@ -18,8 +18,15 @@ SHA = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class NoRedirect(HTTPRedirectHandler):
-    def redirect_request(self, req, fp, code, msg, headers, newurl):
-        return None
+    def http_error_302(self, req, fp, code, msg, headers):
+        fp.status = code
+        fp.headers = headers
+        return fp
+
+    http_error_301 = http_error_302
+    http_error_303 = http_error_302
+    http_error_307 = http_error_302
+    http_error_308 = http_error_302
 
 
 def download(repo, artifact_id, token, output, expected_zip_sha256,
