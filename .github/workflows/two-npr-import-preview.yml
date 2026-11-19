@@ -18,6 +18,11 @@ on:
         required: false
         type: string
         default: ''
+# Preserve the running asset job; coalesce redundant pending runs per ref.
+concurrency:
+  group: morwen-npr-preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
 jobs:
