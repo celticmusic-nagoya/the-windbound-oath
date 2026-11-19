@@ -1,9 +1,5 @@
 name: LIND Cliff Interior Core Source QA
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/extract_cliff_interior_core.py'
-      - '.github/workflows/lind-cliff-interior-core.yml'
   workflow_dispatch:
 permissions:
   contents: read
