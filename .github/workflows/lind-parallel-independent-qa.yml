@@ -1,8 +1,5 @@
 name: LIND Parallel Independent Candidate QA
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/lind-parallel-independent-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read
