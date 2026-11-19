@@ -4,9 +4,12 @@ This is NOT a final art asset and does not encode approved metric scale.
 Creates a continuous, watertight sculpting substrate, not a box blockout.
 No scan geometry is modified. Normalized units are arbitrary local coordinates.
 """
-import bpy,math,random,sys,json,hashlib,bmesh
+import argparse
+import hashlib
+import json
+import math
+import sys
 from pathlib import Path
-from mathutils import Vector
 
 SEED=20261117
 def h(path):
@@ -15,19 +18,7 @@ def h(path):
   for chunk in iter(lambda:f.read(1048576),b""):x.update(chunk)
  return x.hexdigest()
 
-def main():
- import argparse
- p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--geometry-only",action="store_true");p.add_argument("--probe-only",action="store_true")
- a=p.parse_args(sys.argv[sys.argv.index("--")+1:])
- out=Path(a.out).resolve();out.mkdir(parents=True,exist_ok=True)
- print('STAGE_00_BOOTSTRAP',flush=True)
- if a.probe_only:
-  print('PROBE_ONLY_BLENDER_PYTHON_PASS',bpy.app.version_string,flush=True)
-  return
- bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
- for c in list(bpy.data.collections):
-  if c.name=="Collection":c.name="LIND_TERRAIN"
- rng=random.Random(SEED)
+def build_geometry():
  # Closed grid surface loft: x runs along coast, y is a landward cross-section,
  # z rises from wave-cut foot to the irregular inland top. This substrate has
  # a continuous physical back and underside. All units are non-metric.
@@ -51,17 +42,59 @@ def main():
    top_faces.append((idx(i,j),idx(i+1,j),idx(i+1,j+1),idx(i,j+1)))
  # Close all four sidewalls to a single shared bottom plane.
  n=len(verts)
- verts.extend((x,y,-0.24) for x,y,z in verts)
+ verts.extend([(x,y,-0.24) for x,y,z in verts])
  faces=list(top_faces)
  faces.extend(tuple(reversed(tuple(n+k for k in f))) for f in top_faces)
  for i in range(nx-1):
   for j in (0,ny-1):
-   a,b=idx(i,j),idx(i+1,j)
-   faces.append((a,n+a,n+b,b) if j==0 else (b,n+b,n+a,a))
+   left,right=idx(i,j),idx(i+1,j)
+   faces.append((left,n+left,n+right,right) if j==0 else (right,n+right,n+left,left))
  for j in range(ny-1):
   for i in (0,nx-1):
-   a,b=idx(i,j),idx(i,j+1)
-   faces.append((b,n+b,n+a,a) if i==0 else (a,n+a,n+b,b))
+   left,right=idx(i,j),idx(i,j+1)
+   faces.append((right,n+right,n+left,left) if i==0 else (left,n+left,n+right,right))
+ return verts, faces
+
+
+def preflight():
+    import resource
+
+    # Limit the pure-Python process before running the production geometry code.
+    limit = 512 * 1024 * 1024
+    _, hard = resource.getrlimit(resource.RLIMIT_AS)
+    if hard != resource.RLIM_INFINITY:
+        limit = min(limit, hard)
+    resource.setrlimit(resource.RLIMIT_AS, (limit, hard))
+    try:
+        vertices, faces = build_geometry()
+    except MemoryError:
+        print(f"MACRO_PREFLIGHT_MEMORY_LIMIT: geometry exceeded {limit} bytes", file=sys.stderr)
+        return 3
+
+    counts = (len(vertices), len(faces))
+    if counts != (4290, 4288):
+        print(f"MACRO_PREFLIGHT_COUNTS: expected (4290, 4288), got {counts}", file=sys.stderr)
+        return 4
+    print(f"MACRO_PREFLIGHT_PASS vertices={counts[0]} faces={counts[1]} memory_limit_bytes={limit}")
+    return 0
+
+
+def main():
+ import bpy
+ import bmesh
+ from mathutils import Vector
+
+ p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--geometry-only",action="store_true");p.add_argument("--probe-only",action="store_true")
+ args=p.parse_args(sys.argv[sys.argv.index("--")+1:])
+ out=Path(args.out).resolve();out.mkdir(parents=True,exist_ok=True)
+ print('STAGE_00_BOOTSTRAP',flush=True)
+ if args.probe_only:
+  print('PROBE_ONLY_BLENDER_PYTHON_PASS',bpy.app.version_string,flush=True)
+  return
+ bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
+ for c in list(bpy.data.collections):
+  if c.name=="Collection":c.name="LIND_TERRAIN"
+ verts,faces=build_geometry()
  print('STAGE_10_GRID_BUILT',len(verts),len(faces),flush=True)
  mesh=bpy.data.meshes.new("NORMALIZED_MACRO_SUPPORT_CLOSED");mesh.from_pydata(verts,[],faces);mesh.update()
  ob=bpy.data.objects.new("CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON",mesh)
@@ -108,7 +141,7 @@ def main():
  blend=out/"macro_support_candidate.blend"
  bpy.ops.wm.save_as_mainfile(filepath=str(blend))
  print("BLEND_CHECKPOINT_SAVED",flush=True)
- if not a.geometry_only:
+ if not args.geometry_only:
   print("RENDER_START_WORKBENCH",flush=True)
   bpy.ops.render.render(write_still=True)
   print("RENDER_FINISHED_WORKBENCH",flush=True)
@@ -116,10 +149,13 @@ def main():
   print("RENDER_SKIPPED_GEOMETRY_ONLY",flush=True)
  print("RENDER_COMPLETE_MODEL_ALREADY_SAVED",flush=True)
  metrics={"method":"AUTHORED_NORMALIZED_CONNECTED_MACRO_SUPPORT","seed":SEED,"units":"NORMALIZED_NON_METRIC","approved_world_scale":None,"approved_camera":None,
- "geometry_only":a.geometry_only,"render_engine":"BLENDER_WORKBENCH","source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
+ "geometry_only":args.geometry_only,"render_engine":"BLENDER_WORKBENCH","source_scan_used":False,"source_scan_embedded":False,"production_ready":False,
  "vertices":verts_n,"faces":faces_n,"boundary_edges":boundary,"nonmanifold_edges":nonmanifold,"closed_volume":volume,
  "G1":"BLOCKED","G2":"NOT_RUN","G3":"PASS_TOPOLOGY_ONLY","G4":"NOT_RUN",
- "outputs":{p.name:h(p) for p in (([blend] if a.geometry_only else [out/"macro_support_clay.png",blend]))}}
+ "outputs":{p.name:h(p) for p in (([blend] if args.geometry_only else [out/"macro_support_clay.png",blend]))}}
  (out/"macro_support_metrics.json").write_text(json.dumps(metrics,indent=2)+"\n")
  print("MACRO_SUPPORT_QA",json.dumps({k:metrics[k] for k in ("vertices","faces","boundary_edges","nonmanifold_edges","closed_volume")}))
-if __name__=="__main__":main()
+if __name__ == "__main__":
+ if sys.argv[1:] == ["--preflight"]:
+  raise SystemExit(preflight())
+ main()
