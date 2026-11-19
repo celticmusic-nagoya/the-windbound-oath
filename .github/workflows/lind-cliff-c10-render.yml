@@ -5,25 +5,57 @@ on:
     paths:
       - '.github/workflows/lind-cliff-c10-render.yml'
       - 'assets/candidates/lind/windwaiting-cliff-c10/**'
+      - 'tools/production_qa/lind_blueprint/**'
   pull_request:
     paths:
       - '.github/workflows/lind-cliff-c10-render.yml'
       - 'assets/candidates/lind/windwaiting-cliff-c10/**'
   workflow_dispatch:
+    inputs:
+      blueprint:
+        description: Analyze the SHA-verified C9 and archived C10 candidates
+        type: boolean
+        default: true
 permissions:
   contents: read
+  actions: read
 concurrency:
-  group: lind-cliff-c10-${{ github.ref }}
+  group: lind-cliff-c10-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: false
 jobs:
   render:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-24.04
+    env:
+      C10_ARTIFACT_ID: '14580687938'
+      C10_ARCHIVE_SHA: adeb71d2924a899ea82e906763a09394765d53b4ca8a87f71da19974477be8cb
+      C9_SHA: 886ad8d4d49b3951da84bf2b728505767bef2f8b4288d9472ac0c129a018d12a
+      C9_SOURCE: assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend
+      BLUEPRINT: ${{ github.event_name == 'push' || inputs.blueprint == true }}
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
+          fetch-depth: 2
+      - name: Select blueprint or C10 render
+        if: github.event_name == 'push'
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if git cat-file -e "$BEFORE^{commit}" 2>/dev/null &&
+             ! git diff --quiet "$BEFORE" HEAD -- assets/candidates/lind/windwaiting-cliff-c10; then
+            echo "BLUEPRINT=false" >> "$GITHUB_ENV"
+          fi
+      - name: Reuse verified blueprint evidence
+        id: blueprint_cache
+        if: env.BLUEPRINT == 'true'
+        uses: actions/cache@v4
+        with:
+          path: /tmp/lind-blueprint-package
+          key: lind-blueprint-530-${{ env.C10_ARCHIVE_SHA }}-${{ hashFiles('assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend', 'assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_cg_review.png', 'assets/approved/game/cliff/sunset_background.png', 'tools/production_qa/lind_blueprint/*.py', '.github/workflows/lind-cliff-c10-render.yml') }}
       - name: Install official Blender 5.3.0 candidate with upstream SHA-256 verification
+        if: steps.blueprint_cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -50,6 +82,7 @@ jobs:
           /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0); print("TWO_BLENDER_530_RUNTIME_PASS")'
           rm -rf "$work"
       - name: Verify source and create C10 Blender original
+        if: env.BLUEPRINT != 'true'
         run: |
           set -euo pipefail
           mkdir -p /tmp/c10-render
@@ -58,15 +91,18 @@ jobs:
           file "$SOURCE"
           /tmp/two-blender53/blender -b --factory-startup --python assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py -- "$SOURCE" /tmp/c10-render
       - name: Install headless EGL and Mesa runtime for EEVEE
+        if: steps.blueprint_cache.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
           sudo apt-get update -qq
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libegl1 libgl1-mesa-dri libopengl0 libgl1 xvfb
           ldconfig -p | grep -F libEGL.so.1
       - name: Independent C10 topology audit (non-destructive)
+        if: env.BLUEPRINT != 'true'
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python tools/production_qa/audit_lind_c10_mesh.py -- /tmp/c10-render/windwaiting_cliff_C10_UNAPPROVED.blend /tmp/c10-render/C10_TOPOLOGY_QA.json
       - name: Render fixed C10 camera views
+        if: env.BLUEPRINT != 'true'
         run: |
           cat > /tmp/c10-render/render_views.py <<'PY'
           import bpy
@@ -88,12 +124,79 @@ jobs:
           PY
           LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a /tmp/two-blender53/blender -b --python /tmp/c10-render/render_views.py
       - name: Verify render files
+        if: env.BLUEPRINT != 'true'
         run: |
           set -euo pipefail
           for view in cg_review front left right elevated shore_detail sunset; do test -s "/tmp/c10-render/$view.png"; done
           sha256sum /tmp/c10-render/* > /tmp/c10-render/SHA256SUMS
+      - name: Extract and verify archived cliff candidates
+        if: env.BLUEPRINT == 'true' && steps.blueprint_cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          root=/tmp/lind-blueprint-package
+          mkdir -p "$root" /tmp/lind-c10-source
+          exec > >(tee "$root/execution.log") 2>&1
+          trap 'echo "Blueprint stopped at line $LINENO (exit $?). Inspect execution.log and generated QA."' ERR
+          python tools/production_qa/download_actions_artifact.py \
+            --repo "$GITHUB_REPOSITORY" --artifact-id "$C10_ARTIFACT_ID" \
+            --expected-zip-sha256 "$C10_ARCHIVE_SHA" --output /tmp/lind-c10.zip
+          python - <<'PYZIP'
+          import hashlib
+          from pathlib import Path
+          from zipfile import ZipFile
+          names = ("windwaiting_cliff_C10_UNAPPROVED.blend", "cg_review.png", "front.png",
+                   "left.png", "right.png", "elevated.png", "shore_detail.png", "sunset.png",
+                   "C10_TOPOLOGY_QA.json")
+          with ZipFile("/tmp/lind-c10.zip") as archive:
+              checks = {Path(name).name: digest for digest, name in
+                        (line.split(maxsplit=1) for line in archive.read("SHA256SUMS").decode().splitlines())}
+              for name in names:
+                  content = archive.read(name)
+                  if hashlib.sha256(content).hexdigest() != checks.get(name):
+                      raise ValueError(f"C10 artifact member checksum mismatch: {name}")
+                  (Path("/tmp/lind-c10-source") / name).write_bytes(content)
+          PYZIP
+          bpy=/tmp/two-blender53/blender
+          scripts=tools/production_qa/lind_blueprint
+          export LIBGL_ALWAYS_SOFTWARE=1
+          cp -r /tmp/lind-c10-source "$root/archived-c10"
+          python "$scripts/compare.py" assets/approved/game/cliff/sunset_background.png \
+            "$(dirname "$C9_SOURCE")/C_cg_review.png" "$root/archived-c10/cg_review.png" \
+            "$root/review"
+          candidate_status=0
+          for candidate in C9 C10; do
+            src="$C9_SOURCE"
+            expected="$C9_SHA"
+            ref="$GITHUB_SHA:git:C9-B/C_UNAPPROVED.blend"
+            if [[ "$candidate" == C10 ]]; then
+              src=/tmp/lind-c10-source/windwaiting_cliff_C10_UNAPPROVED.blend
+              expected="$(sha256sum "$src" | cut -d ' ' -f 1)"
+              ref="run:44627719888:artifact:14580687938:commit:5c1d70c6a25248cd705ac7c028e27446327080a9"
+            fi
+            dest="$root/$candidate"
+            scratch="$(mktemp -d)"
+            for output in "$dest" "$scratch"; do
+              "$bpy" -b --disable-autoexec "$src" --python-exit-code 1 \
+  \
+              --python "$scripts/export_blueprint.py" -- "$output" --source-sha "$expected" --input-ref "$ref"
+            done
+            diff -qr "$dest" "$scratch"
+            xvfb-run -a "$bpy" -b --disable-autoexec --python-exit-code 1 \
+              --python "$scripts/rebuild.py" -- "$dest" --render --determinism-verified || candidate_status=1
+          done
+          (cd "$root" && find C9 C10 archived-c10 review -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+          exit "$candidate_status"
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && env.BLUEPRINT == 'true'
+        with:
+          name: lind-cliff-blueprint-unapproved-${{ github.sha }}
+          path: /tmp/lind-blueprint-package/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always() && env.BLUEPRINT != 'true'
         with:
           name: lind-cliff-c10-unapproved-${{ github.sha }}
           path: /tmp/c10-render/
