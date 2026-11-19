@@ -55,8 +55,12 @@ def main():
     s['art_status']='UNAPPROVED_SCAN_ASSEMBLY_C'
     s['source_manifest_sha256']=sha(src/'editable_source_manifest.json')
     s['source_license']='CC0_CANDIDATE_FROM_PR415_REVERIFY_BEFORE_ADOPTION'
-    s['producer_commit']='UNSET_AT_GENERATION'
+    s['producer_commit']=__import__('os').environ.get('GITHUB_SHA','LOCAL_UNVERIFIED')
     s['design_reference']='PR344 LIND official CG; visual silhouette QA REQUIRED'
+    s['spatial_unit']='WINDWAITING_CLIFF_LOCAL_SPACE_01'
+    s['production_stage']='STEP_1_SPATIAL_SKELETON_ONLY'
+    s['world_integration']='BLOCKED'
+    s['lod_export']='NOT_RUN'
     # Deliberate arrangement: 3 lower supporting rock masses, 2 upper interlocking
     # masses, and one scan-derived rear buttress. NOT random scatter.
     layout=[
@@ -83,14 +87,22 @@ def main():
             visible.append(obj)
         root.rotation_euler.z=yaw
         root.scale=(factor,)*3
-        # Scan-derived mass bottoms are on/within lower masses. Only base row touches Z0.
-        zbase=0.0 if i<4 else target[2]
-        root.location=Vector((target[0],target[1],zbase))-Vector((center.x,center.y,low.z))*factor
+        # Convert source geometry bounds to the desired provisional local contact plane.
+        # Evaluate actual transformed corners after parenting, scaling and yaw.
+        bpy.context.view_layer.update()
+        instance_low,instance_high=bounds(objs)
+        root.location.x += target[0]-(instance_low.x+instance_high.x)*0.5
+        root.location.y += target[1]-(instance_low.y+instance_high.y)*0.5
+        bpy.context.view_layer.update()
+        instance_low,instance_high=bounds(objs)
+        root.location.z += (0.0 if i<4 else target[2])-instance_low.z
+        bpy.context.view_layer.update()
         root['source_sha256']=item['blend_sha256']
         root['source_id']=item['id']
         placements.append({'source_id':item['id'],'source_sha256':item['blend_sha256'],
                            'position':list(root.location),'rotation_z':yaw,'scale':factor,
                            'lower_support':i<4})
+    # Source objects remain in separate editable local collections for future LOD splits.
     # No invented cube, plane, heightfield or procedural cliff primary geometry.
     # Keep scans editable and separate to preserve their PBR/scan detail.
     # The seam and geological cohesion must pass visual QA, not presumed by code.
@@ -119,6 +131,8 @@ def main():
             'status':'UNAPPROVED_ART_CANDIDATE','source_manifest_sha256':sha(src/'editable_source_manifest.json'),
             'source_candidates':candidates,'placements':placements,
             'source_mesh_count':len(visible),'blender_version':bpy.app.version_string,
+            'spatial_unit':s['spatial_unit'],'production_stage':s['production_stage'],
+            'script_sha256':sha(Path(__file__)),
             'G1':'BLOCKED','G2':'NOT_RUN','G3':'NOT_RUN','G4':'NOT_RUN',
             'qa_notes':'G2 must inspect overlaps, seam visibility, source scan repetition, geological layering, overhang and PR344 visual reference. This is not a fused sculpt.',
             'files':{p.name:sha(p) for p in files}}
