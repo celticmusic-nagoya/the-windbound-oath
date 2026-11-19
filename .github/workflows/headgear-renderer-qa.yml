@@ -1,6 +1,7 @@
 name: Headgear renderer candidate QA
 on:
   push:
+    branches: [main]
     paths:
       - 'js/field/field-headgear-renderer.js'
       - 'dev/headgear-preview/**'
