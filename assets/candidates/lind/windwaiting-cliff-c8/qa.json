@@ -1,0 +1,1260 @@
+{
+  "blender": "5.2.4 LTS",
+  "runtime": "PyPI bpy wheel, CPU Cycles",
+  "coordinate_space": "asset-local-provisional",
+  "unit_scale_status": "UNAPPROVED",
+  "source_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "producer_script_sha256": "86a4cef2c43d6c788c138a2140b94c0d64abc338a49e3248afd0b4e89f4bdd93",
+  "mesh": {
+    "vertices": 37485,
+    "edges": 74885,
+    "faces": 37402,
+    "connected_components": 1,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "inconsistent_edges": 0,
+    "zero_area_faces": 0,
+    "signed_volume": 9416.704929241701,
+    "triangles": 74966,
+    "intersecting_nonadjacent_triangle_pairs": 0,
+    "bounds": {
+      "min": [
+        -17.0,
+        -5.114861011505127,
+        -1.649999976158142
+      ],
+      "max": [
+        23.0,
+        33.13060760498047,
+        7.273603439331055
+      ]
+    }
+  },
+  "coast": {
+    "headlands": [
+      {
+        "x": -6.3,
+        "width": 6.3,
+        "radius": 1.3853127463597013,
+        "height": 7.2075788020959095
+      },
+      {
+        "x": 2.6,
+        "width": 5.55,
+        "radius": 2.2536886621369283,
+        "height": 5.812929006823486
+      },
+      {
+        "x": 10.6,
+        "width": 4.8,
+        "radius": 4.727759460931191,
+        "height": 5.51648691480271
+      }
+    ],
+    "surface_area": {
+      "exposed": 2284.0469971461994,
+      "downward": 187.8317756117785,
+      "total": 3796.1785080585687,
+      "downward_total": 1497.726619797526,
+      "inland_steep": 317.31376842149876,
+      "coast_steep": 606.5468152629122,
+      "inland_steep_over_coast_steep": 0.52314802491207,
+      "exposed_downward_fraction": 0.0822363882382739,
+      "whole_solid_downward_fraction": 0.3945353509109584
+    },
+    "principal_facet_widths_local": [
+      1.9000000000000004,
+      2.8999999999999995,
+      1.8000000000000003,
+      1.95,
+      1.75,
+      1.55,
+      1.7499999999999996,
+      2.75,
+      1.6500000000000004,
+      1.8000000000000007,
+      2.0999999999999996,
+      1.5999999999999996
+    ],
+    "minimum_facet_width_over_cliff_height": 0.21309932730434253,
+    "deep_joint_fraction": 0.2727272727272727,
+    "deep_joint_spacing_cv_population": 0.5986159169550175,
+    "cove_recession": 4.7453141792850335,
+    "highest_cap_z": 6.158585114169465,
+    "maximum_foreshore_projection": 0.2549999999999999,
+    "end_slope_geometric_proxy_fraction": 0.0011515338843886504
+  },
+  "sculpt_samples": [
+    {
+      "headland_x": -6.3,
+      "reopened_ray_levels": [
+        {
+          "z": 1.05,
+          "face_offsets_local": [
+            -0.03824110008901105,
+            -0.05140228445335415,
+            0.3684026255789892,
+            0.41085978709250703,
+            0.3453525482462094,
+            0.8188271109492415,
+            0.6661268156141649,
+            0.6502573586713911,
+            0.8707646155365403,
+            0.18811647395330144,
+            0.4029302430531567,
+            0.5922576934346924,
+            0.46110937631994053,
+            0.32718777997996584,
+            0.22340767674321826,
+            0.23249352506890686,
+            0.1632183716089881
+          ],
+          "relief_range_local": 0.9221668999898944
+        },
+        {
+          "z": 2.15,
+          "face_offsets_local": [
+            -0.12954969383901105,
+            -0.16514511282249478,
+            -0.03266129348839364,
+            -0.004209792985617966,
+            -0.24793778073328276,
+            0.007420021715843106,
+            0.10351618939346174,
+            0.2635214425336958,
+            0.47398460149845434,
+            1.4112705419464655,
+            0.5758962464711255,
+            0.5051090270528564,
+            0.3619367841568546,
+            0.36286282880809084,
+            0.34277527623052295,
+            0.784453516523985,
+            0.8162602112085975
+          ],
+          "relief_range_local": 1.6592083226797483
+        },
+        {
+          "z": 3.35,
+          "face_offsets_local": [
+            0.02413682959848895,
+            -0.07511444265647915,
+            -0.5511435017403468,
+            -0.5886729124924539,
+            -0.25466690670984526,
+            -0.20166353541306314,
+            0.3029237669081102,
+            0.07903505337353955,
+            0.42239654302677465,
+            0.5320305059357233,
+            0.5742101502797192,
+            -0.016081616257690445,
+            0.02719328440099522,
+            0.35404706342723147,
+            0.3919429092871636,
+            1.0408145242144147,
+            1.0585163757593787
+          ],
+          "relief_range_local": 1.6471892882518326
+        },
+        {
+          "z": 4.35,
+          "face_offsets_local": [
+            -0.007055949942526674,
+            -0.3413726824025729,
+            -0.7902487263497218,
+            -0.9588625792405008,
+            -0.4674430907918765,
+            -0.32640795069626627,
+            -0.22265187090927263,
+            0.910766849638188,
+            0.8649262213715012,
+            0.5493282506866999,
+            0.6322030854603833,
+            0.35612221064660643,
+            0.06902525461583897,
+            0.09330296857859866,
+            -0.08542067713861767,
+            -0.30319487519964783,
+            0.1371544525416053
+          ],
+          "relief_range_local": 1.8696294288786888
+        }
+      ]
+    },
+    {
+      "headland_x": 2.6,
+      "reopened_ray_levels": [
+        {
+          "z": 1.05,
+          "face_offsets_local": [
+            0.2975901828967191,
+            0.21248745643107458,
+            0.20730751721132146,
+            0.3562458125388175,
+            0.36562156524463374,
+            0.47157361168146616,
+            0.6851041279762389,
+            0.8748119986389544,
+            0.6998639567584584,
+            0.7980485139143032,
+            0.8189788589963705,
+            0.9030972334777103,
+            0.8694029187482046,
+            0.7390929008790907,
+            0.47481767167326394,
+            0.3203254852747768,
+            0.24928343902457106
+          ],
+          "relief_range_local": 0.6957897162663889
+        },
+        {
+          "z": 2.15,
+          "face_offsets_local": [
+            0.6661147342883207,
+            0.3400528403422074,
+            0.09260147778261052,
+            0.17426567948217686,
+            0.36211204376025874,
+            0.5078628267693568,
+            0.7599542103736998,
+            0.7912262595032122,
+            0.8039288981647084,
+            0.23343898632641258,
+            0.2731033096799642,
+            0.36558350056755406,
+            0.4805593823712515,
+            0.4575472618410048,
+            0.4003166340756077,
+            0.20781289677380022,
+            0.120367652281407
+          ],
+          "relief_range_local": 0.7113274203820978
+        },
+        {
+          "z": 3.35,
+          "face_offsets_local": [
+            1.0763968692980863,
+            0.9096729727884965,
+            0.7403065559076105,
+            0.5039680568015128,
+            0.4961509689311572,
+            0.5882346834588099,
+            0.6764333210914732,
+            0.4249447501037982,
+            0.2766232951373646,
+            0.31342365124340477,
+            -0.1488365401735514,
+            -0.010246196087719373,
+            0.11393264286929838,
+            0.1253634239503798,
+            0.12969056596037332,
+            0.09160386662243303,
+            0.07037222991812575
+          ],
+          "relief_range_local": 1.2252334094716377
+        },
+        {
+          "z": 4.35,
+          "face_offsets_local": [
+            1.3494986759387113,
+            1.4131748648783402,
+            1.339973151366595,
+            1.0241439906394034,
+            0.5312709793071337,
+            0.3522269930291224,
+            0.2251489125221373,
+            0.18289267185672786,
+            0.19624380905338024,
+            0.25360538342113914,
+            0.34630544285867515,
+            0.09069069356071813,
+            0.17668822758609526,
+            0.247614934570497,
+            0.25861779679533425,
+            0.24023782353161272,
+            0.21761954437125075
+          ],
+          "relief_range_local": 1.322484171317622
+        }
+      ]
+    },
+    {
+      "headland_x": 10.6,
+      "reopened_ray_levels": [
+        {
+          "z": 1.05,
+          "face_offsets_local": [
+            -0.21440752196156287,
+            -0.16783088428218962,
+            0.21301706560307299,
+            0.2863882247842948,
+            0.44663183939906936,
+            0.5220389499787066,
+            0.5910445670095092,
+            0.6121252409092759,
+            0.7877006530389647,
+            0.8138405812961924,
+            0.6610897512249723,
+            0.4460781668656417,
+            0.45834741598364426,
+            0.4086332995908444,
+            0.36848174913272125,
+            0.3367306284630043,
+            0.31105490170651573
+          ],
+          "relief_range_local": 1.0282481032577553
+        },
+        {
+          "z": 2.15,
+          "face_offsets_local": [
+            0.31358281922496056,
+            0.5549302698926151,
+            0.6240526033227995,
+            1.0034654800333183,
+            0.9442056919381319,
+            0.8432364597443316,
+            0.6182109335866577,
+            0.5911653867832993,
+            0.4835109710321288,
+            0.6845032705051768,
+            1.0508984060101285,
+            0.9873283957474777,
+            0.8729592323898943,
+            0.4889155108945553,
+            0.34229003770694,
+            0.25529256388780897,
+            0.26941938840085167
+          ],
+          "relief_range_local": 0.7956058421223196
+        },
+        {
+          "z": 3.35,
+          "face_offsets_local": [
+            0.5797895605579684,
+            0.5861669184521854,
+            0.47456224687748705,
+            0.31691152495519326,
+            0.6641248966500459,
+            0.6818270816925738,
+            0.6097213248220092,
+            0.5536898008457993,
+            0.5083160400018554,
+            0.4689595235569346,
+            0.5332687825970426,
+            0.8586872672074386,
+            1.2623024941086443,
+            1.221676893951196,
+            1.1456309495721744,
+            0.6619450144493324,
+            0.4116503759496798
+          ],
+          "relief_range_local": 0.945390969153451
+        },
+        {
+          "z": 4.35,
+          "face_offsets_local": [
+            0.5192522223011324,
+            0.5549359919385135,
+            0.5405202699487761,
+            0.4341390792764823,
+            0.3764051700875459,
+            0.3891387119415972,
+            0.37579073705345456,
+            0.37125762616318214,
+            0.3620033263788085,
+            0.3899628652317393,
+            0.4234550924114957,
+            0.6630848502152511,
+            1.0348950386643083,
+            1.0825758655088131,
+            0.9736758409295962,
+            0.6930996470176918,
+            0.4531561895483126
+          ],
+          "relief_range_local": 0.7205725391300046
+        }
+      ]
+    }
+  ],
+  "panel_debris_alignment": {
+    "Panel debris 01-01": {
+      "scar_x": -6.33,
+      "rock_x": -6.682799816131592,
+      "alongshore_delta": 0.3527998161315917,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 01-02": {
+      "scar_x": -6.33,
+      "rock_x": -6.192800045013428,
+      "alongshore_delta": 0.13719995498657234,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 01-03": {
+      "scar_x": -6.33,
+      "rock_x": -5.859600067138672,
+      "alongshore_delta": 0.4703999328613282,
+      "water_state": "reef_submerged"
+    },
+    "Panel debris 02-01": {
+      "scar_x": -4.68,
+      "rock_x": -4.982399940490723,
+      "alongshore_delta": 0.30239994049072294,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 02-02": {
+      "scar_x": -4.68,
+      "rock_x": -4.562399864196777,
+      "alongshore_delta": 0.11760013580322237,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 02-03": {
+      "scar_x": -4.68,
+      "rock_x": -4.276800155639648,
+      "alongshore_delta": 0.4031998443603513,
+      "water_state": "reef_submerged"
+    },
+    "Panel debris 03-01": {
+      "scar_x": -1.47,
+      "rock_x": -1.7508000135421753,
+      "alongshore_delta": 0.2808000135421753,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 03-02": {
+      "scar_x": -1.47,
+      "rock_x": -1.36080002784729,
+      "alongshore_delta": 0.10919997215270993,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 03-03": {
+      "scar_x": -1.47,
+      "rock_x": -1.0956000089645386,
+      "alongshore_delta": 0.3743999910354614,
+      "water_state": "reef_submerged"
+    },
+    "Panel debris 04-01": {
+      "scar_x": 8.72,
+      "rock_x": 8.460800170898438,
+      "alongshore_delta": 0.25919982910156314,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 04-02": {
+      "scar_x": 8.72,
+      "rock_x": 8.820799827575684,
+      "alongshore_delta": 0.10079982757568295,
+      "water_state": "reef_crosses_provisional_sea_datum"
+    },
+    "Panel debris 04-03": {
+      "scar_x": 8.72,
+      "rock_x": 9.065600395202637,
+      "alongshore_delta": 0.3456003952026361,
+      "water_state": "reef_submerged"
+    }
+  },
+  "fracture_panel_sections": [
+    {
+      "x": -8.12,
+      "z": 2.8150000000000004,
+      "local_width": 1.74,
+      "authored_offset": -0.66,
+      "saved_face_offsets_relative_to_coast": [
+        0.26707480240579073,
+        0.2476315641013067,
+        0.13743880485141657,
+        -0.10284909227744965,
+        -0.22972890324015438
+      ],
+      "saved_relief_range": 0.4968037056459451
+    },
+    {
+      "x": -7.03,
+      "z": 3.8,
+      "local_width": 1.36,
+      "authored_offset": -0.92,
+      "saved_face_offsets_relative_to_coast": [
+        -0.13533124428468257,
+        -0.9260279734919115,
+        -0.3512420108621628,
+        0.392005381383453,
+        0.5111345955332016
+      ],
+      "saved_relief_range": 1.437162569025113
+    },
+    {
+      "x": -6.33,
+      "z": 3.185,
+      "local_width": 1.06,
+      "authored_offset": 0.73,
+      "saved_face_offsets_relative_to_coast": [
+        -0.1937187936076148,
+        0.3077488597517837,
+        0.29684279094974286,
+        0.5938049549009534,
+        0.018966417146804915
+      ],
+      "saved_relief_range": 0.7875237485085682
+    },
+    {
+      "x": -5.6,
+      "z": 4.04,
+      "local_width": 1.82,
+      "authored_offset": -0.62,
+      "saved_face_offsets_relative_to_coast": [
+        -0.24658996857702675,
+        0.5160002987787697,
+        0.25077261974568765,
+        0.18617859538021442,
+        0.2848639935105868
+      ],
+      "saved_relief_range": 0.7625902673557965
+    },
+    {
+      "x": -4.68,
+      "z": 2.58,
+      "local_width": 1.06,
+      "authored_offset": 0.63,
+      "saved_face_offsets_relative_to_coast": [
+        -0.33953496956113227,
+        0.8647214437490156,
+        0.9113849147573676,
+        0.7100914072542648,
+        -0.16471256546034718
+      ],
+      "saved_relief_range": 1.2509198843184999
+    },
+    {
+      "x": -3.98,
+      "z": 2.1350000000000002,
+      "local_width": 1.46,
+      "authored_offset": -0.38,
+      "saved_face_offsets_relative_to_coast": [
+        0.6808696076813456,
+        0.6475921621558607,
+        -0.054861110737358665,
+        0.078963909126192,
+        0.30233061374022663
+      ],
+      "saved_relief_range": 0.7357307184187043
+    },
+    {
+      "x": -1.47,
+      "z": 2.065,
+      "local_width": 1.16,
+      "authored_offset": 0.47,
+      "saved_face_offsets_relative_to_coast": [
+        0.4652460077389833,
+        1.1395964054537102,
+        1.379639500694795,
+        1.4894703388436419,
+        1.2844023145131138
+      ],
+      "saved_relief_range": 1.0242243311046586
+    },
+    {
+      "x": 0.14,
+      "z": 2.6950000000000003,
+      "local_width": 1.44,
+      "authored_offset": -0.43,
+      "saved_face_offsets_relative_to_coast": [
+        1.4118142226395078,
+        0.9027545315901722,
+        1.1956719771877795,
+        1.0179872298626356,
+        0.7265338018558691
+      ],
+      "saved_relief_range": 0.6852804207836387
+    },
+    {
+      "x": 2.27,
+      "z": 2.755,
+      "local_width": 1.32,
+      "authored_offset": 0.34,
+      "saved_face_offsets_relative_to_coast": [
+        0.40117097404003843,
+        0.48457625768415546,
+        0.7506531071818405,
+        0.4576097975134692,
+        0.15367908609729852
+      ],
+      "saved_relief_range": 0.596974021084542
+    },
+    {
+      "x": 8.72,
+      "z": 2.0300000000000002,
+      "local_width": 1.1,
+      "authored_offset": -0.44,
+      "saved_face_offsets_relative_to_coast": [
+        0.6146836192848011,
+        0.048121898589524204,
+        0.1963465902998247,
+        0.309469828915931,
+        0.7602200671478521
+      ],
+      "saved_relief_range": 0.7120981685583279
+    },
+    {
+      "x": 10.16,
+      "z": 2.8400000000000003,
+      "local_width": 1.28,
+      "authored_offset": 0.31,
+      "saved_face_offsets_relative_to_coast": [
+        0.5091394019586604,
+        0.7012274899789461,
+        0.5818610440180887,
+        0.5192876475500441,
+        0.7564489281218796
+      ],
+      "saved_relief_range": 0.24730952616321922
+    }
+  ],
+  "cg_review_visibility_samples": [
+    {
+      "zone": "near",
+      "x": -6.8,
+      "face_samples": 20,
+      "in_frame": 20,
+      "unoccluded_face_samples": 10
+    },
+    {
+      "zone": "middle",
+      "x": 2.6,
+      "face_samples": 20,
+      "in_frame": 20,
+      "unoccluded_face_samples": 4
+    },
+    {
+      "zone": "far",
+      "x": 9.2,
+      "face_samples": 20,
+      "in_frame": 20,
+      "unoccluded_face_samples": 13
+    }
+  ],
+  "module_boundary": {
+    "A-B": {
+      "paired_vertices": 85,
+      "max_normal_delta_degrees": 0.03426402083239251,
+      "u_period": 1
+    },
+    "B-C": {
+      "paired_vertices": 85,
+      "max_normal_delta_degrees": 0.03426402083239251,
+      "u_period": 1
+    }
+  },
+  "variants": {
+    "A": {
+      "geometry_sha256": "379f82beeeb9c04289287b4df3548ceef9c2ed95ffad5aed009378ef5cacbc42",
+      "max_8_unit_transition_slope_degrees_at_y10": 3.7049860222867754,
+      "classification": "unapproved review candidate",
+      "mesh": {
+        "vertices": 37485,
+        "edges": 74885,
+        "faces": 37402,
+        "connected_components": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_edges": 0,
+        "zero_area_faces": 0,
+        "signed_volume": 9480.390283926132,
+        "triangles": 74966,
+        "intersecting_nonadjacent_triangle_pairs": 0,
+        "bounds": {
+          "min": [
+            -17.0,
+            -4.012155532836914,
+            -1.649999976158142
+          ],
+          "max": [
+            23.0,
+            33.245723724365234,
+            6.923722743988037
+          ]
+        }
+      }
+    },
+    "B": {
+      "geometry_sha256": "c4e551ecc56a9c90ad6f9d9fabeb5676cc69e17d9f5ef876704310600b431971",
+      "max_8_unit_transition_slope_degrees_at_y10": 3.2700179792723367,
+      "classification": "unapproved review candidate",
+      "mesh": {
+        "vertices": 37485,
+        "edges": 74885,
+        "faces": 37402,
+        "connected_components": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_edges": 0,
+        "zero_area_faces": 0,
+        "signed_volume": 9416.704929241701,
+        "triangles": 74966,
+        "intersecting_nonadjacent_triangle_pairs": 0,
+        "bounds": {
+          "min": [
+            -17.0,
+            -5.114861011505127,
+            -1.649999976158142
+          ],
+          "max": [
+            23.0,
+            33.13060760498047,
+            7.273603439331055
+          ]
+        }
+      }
+    },
+    "C": {
+      "geometry_sha256": "c5aef78397d466472232c7bf78d174072b0920b4c0447943553843414109cd7b",
+      "max_8_unit_transition_slope_degrees_at_y10": 3.172518529197852,
+      "classification": "unapproved review candidate",
+      "mesh": {
+        "vertices": 37485,
+        "edges": 74885,
+        "faces": 37402,
+        "connected_components": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_edges": 0,
+        "zero_area_faces": 0,
+        "signed_volume": 9340.876501155924,
+        "triangles": 74966,
+        "intersecting_nonadjacent_triangle_pairs": 0,
+        "bounds": {
+          "min": [
+            -17.0,
+            -3.73596453666687,
+            -1.649999976158142
+          ],
+          "max": [
+            23.0,
+            32.47999954223633,
+            6.502223491668701
+          ]
+        }
+      }
+    }
+  },
+  "inland_and_view": {
+    "inland_40_unit_shift_rms_by_y_52_70_90": [
+      0.6537961795343924,
+      0.5854497604579811,
+      0.6862350826788846
+    ],
+    "cg_projected_cliff_heights": [
+      {
+        "x": -6.3,
+        "cliff_screen_height_fraction": 0.6108879689127207,
+        "crest_in_frame": true
+      },
+      {
+        "x": 2.6,
+        "cliff_screen_height_fraction": 0.3355545699596405,
+        "crest_in_frame": true
+      },
+      {
+        "x": 10.6,
+        "cliff_screen_height_fraction": 0.25001662969589233,
+        "crest_in_frame": true
+      }
+    ],
+    "shelf_designed_window_lengths_local": [
+      11.4,
+      12.5,
+      13.3,
+      11.1,
+      14.7,
+      16.1
+    ],
+    "shelf_nominal_projection_local": 0.225,
+    "shelf_legibility": "INDEPENDENT_REVIEW_PENDING"
+  },
+  "module_contacts": {
+    "Detached stack 01": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.5141538838845428
+    },
+    "Detached stack 02": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.44162256523794774
+    },
+    "Talus 01": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.6325145959854126,
+      "support_normal_z": 0.5560452342033386,
+      "min_z": 0.5775145888328552,
+      "max_z": 0.8591760993003845
+    },
+    "Talus 02": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.1843992918729782,
+      "support_normal_z": 0.5417424440383911,
+      "min_z": 0.12939924001693726,
+      "max_z": 0.41086751222610474
+    },
+    "Talus 03": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.18476766347885132,
+      "support_normal_z": 0.8451065421104431,
+      "min_z": 0.12976747751235962,
+      "max_z": 0.38900208473205566
+    },
+    "Talus 04": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.17043465375900269,
+      "support_normal_z": 0.6716413497924805,
+      "min_z": 0.11543463915586472,
+      "max_z": 0.3512911796569824
+    },
+    "Talus 05": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.1852782964706421,
+      "support_normal_z": 0.5203036069869995,
+      "min_z": 0.13027822971343994,
+      "max_z": 0.4512852728366852
+    },
+    "Talus 06": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.18270543217658997,
+      "support_normal_z": 0.6368447542190552,
+      "min_z": 0.1277053952217102,
+      "max_z": 0.311868280172348
+    },
+    "Talus 07": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.17582401633262634,
+      "support_normal_z": 0.8555968403816223,
+      "min_z": 0.12082404643297195,
+      "max_z": 0.29237306118011475
+    },
+    "Talus 08": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.1799830198287964,
+      "support_normal_z": 0.7851958274841309,
+      "min_z": 0.12498307973146439,
+      "max_z": 0.3723286986351013
+    },
+    "Talus 09": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.6335009336471558,
+      "support_normal_z": 0.6177465915679932,
+      "min_z": 0.5785009264945984,
+      "max_z": 0.8573526740074158
+    },
+    "Talus 10": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.17917245626449585,
+      "support_normal_z": 0.5127527117729187,
+      "min_z": 0.12417244166135788,
+      "max_z": 0.29693660140037537
+    },
+    "Talus 11": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.18096429109573364,
+      "support_normal_z": 0.8769453167915344,
+      "min_z": 0.1259642243385315,
+      "max_z": 0.4471355080604553
+    },
+    "Talus 12": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.1855928599834442,
+      "support_normal_z": 0.7851958274841309,
+      "min_z": 0.13059282302856445,
+      "max_z": 0.5717835426330566
+    },
+    "Talus 13": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.6328198313713074,
+      "support_normal_z": 0.6177465915679932,
+      "min_z": 0.5778198838233948,
+      "max_z": 1.0374243259429932
+    },
+    "Talus 14": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.18021124601364136,
+      "support_normal_z": 0.5127527117729187,
+      "min_z": 0.1252112239599228,
+      "max_z": 0.5718480944633484
+    },
+    "Talus 15": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.18180575966835022,
+      "support_normal_z": 0.872684895992279,
+      "min_z": 0.12680572271347046,
+      "max_z": 0.2999696433544159
+    },
+    "Reef 01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.0960739254951477
+    },
+    "Reef 02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.12091201543807983
+    },
+    "Reef 03": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.006262481212615967
+    },
+    "Reef 04": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.21609848737716675
+    },
+    "Reef 05": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.03942571580410004
+    },
+    "Reef 06": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.09195953607559204
+    },
+    "Reef 07": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.002514272928237915
+    },
+    "Reef 08": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.15896567702293396
+    },
+    "Reef 09": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.017890408635139465
+    },
+    "Reef 10": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.11281165480613708
+    },
+    "Reef 11": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.24360325932502747
+    },
+    "Reef 12": {
+      "mode": "reef_submerged",
+      "min_z": -0.2199999988079071,
+      "max_z": -0.05696302652359009
+    },
+    "Reef 13": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.11390841007232666
+    },
+    "Reef 14": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.09553778171539307
+    },
+    "Reef 15": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.1191757321357727
+    },
+    "Reef 16": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.00821945071220398
+    },
+    "Reef 17": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.10438200831413269
+    },
+    "Reef 18": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.2199999988079071,
+      "max_z": 0.07176285982131958
+    },
+    "Collapse reef 01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.46637624502182007
+    },
+    "Collapse reef 02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.2064705342054367
+    },
+    "Collapse reef 03": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.10803340375423431
+    },
+    "Collapse reef 04": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.019006475806236267
+    },
+    "Collapse reef 05": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.31067734956741333
+    },
+    "Collapse reef 06": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.0634385198354721
+    },
+    "Collapse reef 07": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.35848331451416016
+    },
+    "Collapse reef 08": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.17366661131381989
+    },
+    "Collapse reef 09": {
+      "mode": "reef_submerged",
+      "min_z": -0.23999999463558197,
+      "max_z": -0.04600967466831207
+    },
+    "Collapse reef 10": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.6044341325759888
+    },
+    "Collapse reef 11": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.23992322385311127
+    },
+    "Collapse reef 12": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.11866284906864166
+    },
+    "Regional debris 01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.24275097250938416
+    },
+    "Regional debris 02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.5913965702056885
+    },
+    "Regional debris 03": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.175917387008667
+    },
+    "Regional debris 04": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.500407338142395
+    },
+    "Regional debris 05": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.14724376797676086
+    },
+    "Regional debris 06": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.40490487217903137
+    },
+    "Regional debris 07": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.2011239230632782
+    },
+    "Regional debris 08": {
+      "mode": "reef_submerged",
+      "min_z": -0.28999999165534973,
+      "max_z": -0.06298518180847168
+    },
+    "Regional debris 09": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.19725093245506287
+    },
+    "Regional debris 10": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.1393822729587555
+    },
+    "Regional debris 11": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.3896085321903229
+    },
+    "Regional debris 12": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.3450324237346649
+    },
+    "Regional debris 13": {
+      "mode": "reef_submerged",
+      "min_z": -0.28999999165534973,
+      "max_z": -0.08448326587677002
+    },
+    "Regional debris 14": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.28999999165534973,
+      "max_z": 0.5390288829803467
+    },
+    "Panel debris 01-01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5404346585273743
+    },
+    "Panel debris 01-02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.2826541066169739
+    },
+    "Panel debris 01-03": {
+      "mode": "reef_submerged",
+      "min_z": -0.23999999463558197,
+      "max_z": -0.07741419970989227
+    },
+    "Panel debris 02-01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5117007493972778
+    },
+    "Panel debris 02-02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.2827033996582031
+    },
+    "Panel debris 02-03": {
+      "mode": "reef_submerged",
+      "min_z": -0.23999999463558197,
+      "max_z": -0.07788780331611633
+    },
+    "Panel debris 03-01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5330802798271179
+    },
+    "Panel debris 03-02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.2730500102043152
+    },
+    "Panel debris 03-03": {
+      "mode": "reef_submerged",
+      "min_z": -0.23999999463558197,
+      "max_z": -0.07660560309886932
+    },
+    "Panel debris 04-01": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.5424543023109436
+    },
+    "Panel debris 04-02": {
+      "mode": "reef_crosses_provisional_sea_datum",
+      "min_z": -0.23999999463558197,
+      "max_z": 0.28151535987854004
+    },
+    "Panel debris 04-03": {
+      "mode": "reef_submerged",
+      "min_z": -0.23999999463558197,
+      "max_z": -0.08224572241306305
+    }
+  },
+  "shape_families": [
+    5,
+    7,
+    9
+  ],
+  "separate_module_counts": {
+    "02 | Detached sea stacks": 2,
+    "03 | Talus modules": 15,
+    "05 | Waterline reef modules": 56
+  },
+  "files": {
+    "windwaiting_cliff_C8_UNAPPROVED.blend": {
+      "bytes": 4062644,
+      "sha256": "4df39e97f2d216ba92408e0d881dedb59afef5bb00cfd5592af34a6a1895c3bc"
+    },
+    "front.png": {
+      "bytes": 1228732,
+      "sha256": "91b2f2ef770b35cea13a64c5dc7d79c4a926c86b84c13b5a076fe5240598e65f",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "left.png": {
+      "bytes": 1250925,
+      "sha256": "4ebda602b80a1c3bd03f16e9719bc6d272c4db5d7173e1969c5afde87ed7097c",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "right.png": {
+      "bytes": 1254351,
+      "sha256": "4785e8b1dcb469d97c304b5cc316f3e4e49114ebc0023efaaee8b115cb7a9819",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "elevated.png": {
+      "bytes": 1279046,
+      "sha256": "653d5d02b18a6bff3d66dac98d17a390e458f4fe330d8b2ad426a6520e8e9057",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "sunset.png": {
+      "bytes": 1163834,
+      "sha256": "6125567162d3a2563e578a5b00a45f3a7f7ed58d561665434b8691437e892f1a",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "shore_detail.png": {
+      "bytes": 1257381,
+      "sha256": "87882558faf78921217020a5e7cd9ba9c3bd9d2a1bdd433d80ce94dd074cfee3",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "cg_review.png": {
+      "bytes": 1097579,
+      "sha256": "3cbc6ba95f328625d5dc5ec9c8f3f40b39079716d8c43c409252c019ef5a966a",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "comparison.png": {
+      "bytes": 2785269,
+      "sha256": "5e32296e3137f9d5fdee4d084495162fa766a82759472e26dd3a9fd482f3386d",
+      "size": [
+        1920,
+        1560
+      ]
+    }
+  },
+  "reopen": "PASS",
+  "png_decode": "PASS",
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "art_numeric_proxies": {
+    "inland_steep_below_ten_percent": false,
+    "exposed_downward_at_most_fifteen_percent": true,
+    "end_slope_geometric_proxy_at_most_five_percent": true
+  },
+  "G3_structural_subset": "PASS",
+  "G3": "NOT_RUN"
+}
