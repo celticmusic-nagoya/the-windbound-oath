@@ -12,6 +12,11 @@ on:
     paths:
       - tools/morwen_authored_sculpt/**
       - .github/workflows/morwen-authored-head-sculpt.yml
+# Preserve the running asset job; coalesce redundant pending runs per ref.
+concurrency:
+  group: morwen-head-sculpt-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
 jobs:
