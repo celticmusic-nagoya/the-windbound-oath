@@ -27,7 +27,15 @@ jobs:
         run: |
           set -euo pipefail
           bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
-      - name: Install Linux rendering libraries for CPU Cycles\n        shell: bash\n        run: |\n          set -euo pipefail\n          sudo apt-get update -qq\n          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0\n          ldconfig -p | grep -F 'libEGL.so.1'\n          ldconfig -p | grep -F 'libGL.so.1'\n      - name: Generate real editable candidate head study and 5 rendered views
+      - name: Install Linux rendering libraries for CPU Cycles
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0
+          ldconfig -p | grep -F 'libEGL.so.1'
+          ldconfig -p | grep -F 'libGL.so.1'
+      - name: Generate real editable candidate head study and 5 rendered views
         shell: bash
         run: |
           set -euo pipefail
