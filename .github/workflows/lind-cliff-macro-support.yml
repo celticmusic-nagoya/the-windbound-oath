@@ -22,6 +22,11 @@ jobs:
         run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
       - name: Validate candidate semantic contract
         run: python3 tools/map_blender/lind/validate_cliff_macro_contract.py docs/production/lind-cliff-macro-support.contract.v1.json
+      - name: Isolate Blender Python startup without geometry
+        timeout-minutes: 2
+        run: |
+          mkdir -p out/lind-macro-support
+          PYTHONUNBUFFERED=1 /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support --probe-only 2>&1 | tee out/lind-macro-support/blender-probe.log
       - name: Generate actual closed macro support and render
         run: |
           set -euo pipefail
