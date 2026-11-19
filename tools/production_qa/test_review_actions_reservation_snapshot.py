@@ -41,6 +41,18 @@ class SnapshotReviewTests(unittest.TestCase):
     def test_wrong_sha_blocked(self):
         self.assertEqual(self.check([{**RUN, "head_sha": "c"*40}]), "BLOCKED")
 
+    def test_nonhex_sha_blocked_even_when_matching(self):
+        invalid = "z" * 40
+        entry = {**LEDGER, "head_sha": invalid}
+        run = {**RUN, "head_sha": invalid}
+        self.assertEqual(self.check([run], entry), "BLOCKED")
+
+    def test_uppercase_sha_blocked_even_when_matching(self):
+        upper = "A" * 40
+        entry = {**LEDGER, "head_sha": upper}
+        run = {**RUN, "head_sha": upper}
+        self.assertEqual(self.check([run], entry), "BLOCKED")
+
     def test_terminal_failure_review(self):
         self.assertEqual(self.check([{**RUN, "status": "completed",
                                       "conclusion": "failure"}]), "REVIEW_REQUIRED")
