@@ -1,11 +1,5 @@
 name: LIND authored bedrock production render (B sculpt)
 on:
-  push:
-    branches:
-      - feature/lind-cliff-rock-art-study-20261118
-    paths:
-      - 'tools/map_blender/lind/sculpt_windwaiting_cliff_B.py'
-      - '.github/workflows/lind-authored-bedrock-a.yml'
   workflow_dispatch:
 permissions:
   contents: read
