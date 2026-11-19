@@ -5,7 +5,10 @@ A bounded list response is not proof of completeness or absence. Only a
 uniquely matched run with explicit ledger head/branch may be reviewed.
 No dispatch or reservation mutation is permitted.
 """
+import re
 from classify_actions_jobs import fingerprint
+
+SHA40 = re.compile(r"[0-9a-f]{40}\\Z")
 from assess_actions_reservation_recovery import assess
 
 
@@ -24,7 +27,7 @@ def review(request, reservation, ledger_entry, snapshot, now):
         return _blocked(key, ledger_entry, "missing or duplicate exact run in bounded snapshot")
     run = matches[0]
     if (not isinstance(ledger_entry.get("head_sha"), str)
-            or len(ledger_entry["head_sha"]) != 40
+            or SHA40.fullmatch(ledger_entry["head_sha"]) is None
             or run.get("head_sha") != ledger_entry["head_sha"]
             or not isinstance(ledger_entry.get("branch"), str)
             or run.get("head_branch") != ledger_entry["branch"]):
