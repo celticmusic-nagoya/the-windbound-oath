@@ -1,7 +1,11 @@
-name: C10 cliff candidate render (manual stage)
+name: C10 cliff candidate render
 on:
   push:
     branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - '.github/workflows/lind-cliff-c10-render.yml'
+      - 'assets/candidates/lind/windwaiting-cliff-c10/**'
+  pull_request:
     paths:
       - '.github/workflows/lind-cliff-c10-render.yml'
       - 'assets/candidates/lind/windwaiting-cliff-c10/**'
