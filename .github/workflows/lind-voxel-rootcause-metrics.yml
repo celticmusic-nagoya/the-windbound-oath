@@ -1,9 +1,5 @@
 name: LIND Failed Voxel Read-Only Root Cause Metrics
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/inspect_failed_voxel_candidate.py'
-      - '.github/workflows/lind-voxel-rootcause-metrics.yml'
   workflow_dispatch:
 permissions:
   contents: read
