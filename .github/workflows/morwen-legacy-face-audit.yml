@@ -1,0 +1,51 @@
+name: Morwen legacy face Blender reopen audit
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - .github/workflows/morwen-legacy-face-audit.yml
+      - tools/morwen_authored_sculpt/audit_legacy_face_modules.py
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect-legacy-face:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Recover exact preserved source .blend artifacts
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-legacy
+          for id in 14106227834 14111116241; do
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}/zip" > "/tmp/morwen-legacy/${id}.zip"
+            unzip -q "/tmp/morwen-legacy/${id}.zip" '*.blend' -d /tmp/morwen-legacy
+          done
+          echo '6c5a9919fd6733a0a1ec8d261fb647e5825cb3dfbc4092ed12c0e7baab26de5c  /tmp/morwen-legacy/MORWEN_ELM_04_CANDIDATE.blend' | sha256sum -c -
+          echo 'db9576531f7da777bc8a67af791af4b39b4975bf8d82adb3082c46742a556ff9  /tmp/morwen-legacy/MORWEN_EYELID_05_CANDIDATE.blend' | sha256sum -c -
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Reopen source and extract read-only structural evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in MORWEN_ELM_04_CANDIDATE MORWEN_EYELID_05_CANDIDATE; do
+            mkdir -p "/tmp/morwen-legacy-report/${name}"
+            /tmp/two-blender/app/blender -b "/tmp/morwen-legacy/${name}.blend" --python tools/morwen_authored_sculpt/audit_legacy_face_modules.py -- "/tmp/morwen-legacy-report/${name}"
+          done
+          sha256sum /tmp/morwen-legacy-report/*/structure.json > /tmp/morwen-legacy-report/SHA256SUMS
+      - name: Upload source structure QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-legacy-face-reopen-qa
+          path: /tmp/morwen-legacy-report/
+          retention-days: 14
+          if-no-files-found: warn
