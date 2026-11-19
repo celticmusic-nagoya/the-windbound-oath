@@ -452,6 +452,8 @@ def build_scene():
         data = bpy.data.cameras.new(name)
         data.type, data.ortho_scale = "ORTHO", scale
         data.clip_end = 1500
+        if name == "cg_review":
+            data.type, data.lens = "PERSP", 43
         camera = bpy.data.objects.new(name, data)
         review.objects.link(camera)
         camera.location = position

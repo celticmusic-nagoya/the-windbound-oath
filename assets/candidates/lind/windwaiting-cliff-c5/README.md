@@ -12,7 +12,7 @@ The inland context matches each coastal back edge at the join. Its height field 
 
 ## Staging and checks
 
-The low CG camera looks along the coast from near plateau height. Its projected cliff-height metric is an orthographic geometric measurement at three authored stations. Review light uses a cool fill and brighter sky. The sunset and low CG cameras use warm review lighting. The sea is a separate staging collection. Reef groups include submerged pieces, and talus contact and detached stack datum tests use the reopened scene. Standalone production water and seabed are separate work.
+The low CG camera looks along the coast from near plateau height. Its projected cliff-height metric is a geometric projection measurement at three authored stations. Review light uses a cool fill and brighter sky. The sunset and low CG cameras use warm review lighting. The sea is a separate staging collection. Reef groups include submerged pieces, and talus contact and detached stack datum tests use the reopened scene. Standalone production water and seabed are separate work.
 
 The production CG at [sunset_background.png](../../../approved/game/cliff/sunset_background.png) is the visual source. Its SHA-256 is `db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07`. The stage uses original geometry and procedural preview materials. Production PBR, official world placement, game-camera QA and performance remain pending. G1 BLOCKED, independent G2 NOT_RUN, full game G3 NOT_RUN, G4 NOT_RUN. The structural subset is reported for the three individual closed tiles.
 
