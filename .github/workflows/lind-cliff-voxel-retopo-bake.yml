@@ -1,9 +1,5 @@
 name: LIND Cliff Voxel Retopo and Normal Bake
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/voxel_retopo_bake_scan.py'
-      - '.github/workflows/lind-cliff-voxel-retopo-bake.yml'
   workflow_dispatch:
 permissions:
   contents: read
