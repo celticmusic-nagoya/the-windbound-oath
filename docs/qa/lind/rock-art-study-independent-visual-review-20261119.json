@@ -1,0 +1,35 @@
+{
+  "schema": "two-lind-artifact-independent-review-v1",
+  "date": "2026-11-19",
+  "scope": "PR #421 existing 3-view source-study artifact only, not new bedrock A",
+  "artifact": {
+    "actions_artifact_id": 14405840481,
+    "archive": "github-actions-artifact-14405840481.zip",
+    "source_blend_sha256": "33bce5456e37d83ab0c75abfc1c20e957becc53ca4d22f2e98f7747f1635583f",
+    "png_sha256": {
+      "front.png": "136087b5cc0d579b621b789ea3e0bec9075dc11b24edae2becb75b35c031089f",
+      "side.png": "25ac0c80b138db6f2077a217c4de43fdbe3f6f41af00363d2780db665a933687",
+      "elevated.png": "e9c44756c4ea3ee009f0853634ec8b30efa38f2355dafc5140f9a254be4003d1"
+    },
+    "sha_verification": "PASS: manifest PNG hashes match extracted PNGs",
+    "blend_reopen": "NOT_RUN",
+    "provenance": "Manifest identifies rock_face_01 and boulder_01 CC0 candidates; license evidence not independently reverified"
+  },
+  "observed_visuals": [
+    "Two disconnected, isolated rock meshes on a neutral studio background",
+    "Both objects visibly float above the floor, with separated soft shadows",
+    "No contiguous cliff mass, terrain connection, traversable upper surface or sculpted junction",
+    "Source rock material detail is present; visual quality of the source scans is not the quality of an assembled cliff"
+  ],
+  "judgment": {
+    "G1": "BLOCKED",
+    "G2_as_cliff_asset": "FAIL",
+    "G2_as_source_study": "NOT_APPLICABLE",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "reusable": "Retain original scanned rock source assets, packed blend, texture provenance and render pipeline as source-study evidence",
+    "not_reusable_as_final": "Floating two-rock arrangement, non-contact presentation, unconnected geometry"
+  },
+  "next_required_production": "Create a genuinely connected, sculpted or precise-mesh cliff mass with real recessed cracks and rock-ground contact; retain source asset hashes. Do not iterate the already-failed single-section profile extrusion family.",
+  "qa_separation": "This is an independent review of existing source-study imagery; no new Blender run or new bedrock render is claimed."
+}
