@@ -131,11 +131,36 @@ jobs:
           print(json.dumps({k:v for k,v in result.items() if k!="entries"},indent=2))
           if result["status"]!="ZIP_STRUCTURE_PASS_SOURCE_LICENSE_PENDING":sys.exit(1)
           PY
+      - name: Inspect actual Blender Studio source mesh datablocks with Blender 5.3
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/audit-app
+          python3 - <<'PY'
+          import urllib.request,hashlib,pathlib,zipfile
+          url="https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip"
+          dest=pathlib.Path("/tmp/morwen-base-audit")
+          with urllib.request.urlopen(url,timeout=100) as response:
+              data=response.read(70_000_000)
+          assert hashlib.sha256(data).hexdigest()=="811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515", "SOURCE_SHA_MISMATCH"
+          zpath=dest/"source.zip";zpath.write_bytes(data)
+          with zipfile.ZipFile(zpath) as z:
+              matches=[n for n in z.namelist() if n.endswith("human_base_meshes_bundle.blend")]
+              assert len(matches)==1,matches
+              with z.open(matches[0]) as src,open(dest/"source.blend","wb") as out:
+                  import shutil;shutil.copyfileobj(src,out)
+          zpath.unlink()
+          PY
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python-expr 'import bpy,json,pathlib; p=pathlib.Path("/tmp/morwen-base-audit"); meshes=[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons),"dimensions":[round(float(x),4) for x in o.dimensions],"hidden":o.hide_render} for o in bpy.data.objects if o.type=="MESH"]; data={"blender_version":bpy.app.version_string,"mesh_objects":len(meshes),"meshes":meshes[:400],"collections":[c.name for c in bpy.data.collections],"text_blocks":[t.name for t in bpy.data.texts],"candidate_matches":[x for x in meshes if any(k in x["name"].lower() for k in ("female","stylized","head"))]}; (p/"blender_mesh_audit.json").write_text(json.dumps(data,indent=2)); print("SOURCE_MESH_AUDIT_PASS",len(meshes),len(data["candidate_matches"]))'
+          test -s /tmp/morwen-base-audit/blender_mesh_audit.json
       - name: Preserve source audit evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: morwen-blender-studio-human-base-source-audit
-          path: /tmp/morwen-base-audit/audit.json
+          path: |
+            /tmp/morwen-base-audit/audit.json
+            /tmp/morwen-base-audit/blender_mesh_audit.json
           if-no-files-found: warn
           retention-days: 14
