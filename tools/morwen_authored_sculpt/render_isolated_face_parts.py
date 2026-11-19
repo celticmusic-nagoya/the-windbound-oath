@@ -8,7 +8,11 @@ for o in bpy.data.objects:
     if o.type=="MESH":o.hide_render=o!=obj
 obj.hide_render=False
 scene=bpy.context.scene
-scene.render.engine="BLENDER_EEVEE"
+scene.render.engine="CYCLES"
+scene.cycles.device="CPU"
+scene.cycles.samples=24
+scene.render.threads_mode="FIXED"
+scene.render.threads=4
 scene.render.resolution_x=960
 scene.render.resolution_y=960
 scene.render.resolution_percentage=100
