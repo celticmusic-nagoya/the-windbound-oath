@@ -7,9 +7,9 @@ No dispatch or reservation mutation is permitted.
 """
 import re
 from classify_actions_jobs import fingerprint
-
-SHA40 = re.compile(r"[0-9a-f]{40}\\Z")
 from assess_actions_reservation_recovery import assess
+
+SHA40 = re.compile(r"[0-9a-f]{40}\Z")
 
 
 def review(request, reservation, ledger_entry, snapshot, now):
