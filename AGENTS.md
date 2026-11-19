@@ -1,3 +1,7 @@
+## Shared high-end 3D character research (2026-11-19)
+
+All AI agents (ChatGPT, Codex, Claude, Gemini) doing character modeling must consult [HIGH_END_3D_CHARACTER_RESEARCH_SHARED_20261119.md](docs/production/HIGH_END_3D_CHARACTER_RESEARCH_SHARED_20261119.md) alongside current canonical policies and source assets. This is technical research, not canon or an asset G1–G4 approval. Preserve approved designs and source SHA; do not treat legacy Morwen face or ring-based head study as G2-approved. Continue actual sculpt production on its owning branch; do not merge unfinished asset work merely because this research is on main.
+
 ## Session continuity / persistent handoff (2026-11-18)
 
 At every new session or agent handoff, read [SESSION_CONTINUITY_INDEX.md](docs/production/SESSION_CONTINUITY_INDEX.md) and verify its pointers against live main, private canon, current PRs, Actions and artifacts before resuming. This index is navigation, not a replacement for the private canonical Bible. Do not recreate completed work or rerun stopped method families. Preserve exact QA status and distinguish Draft/merged/proposed. This directive does not authorize main merge, destructive changes or publication.
