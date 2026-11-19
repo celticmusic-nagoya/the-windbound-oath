@@ -5,6 +5,7 @@ it does NOT certify visual fit, intersections, or seam preservation.
 """
 import argparse
 import math
+import sys
 from pathlib import Path
 import bpy
 from mathutils import Vector
@@ -78,7 +79,7 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument("source",type=Path)
     p.add_argument("output",type=Path)
-    args=p.parse_args()
+    args=p.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else None)
     if tuple(bpy.app.version)!=(5,3,0):
         raise RuntimeError("Blender 5.3.0 required")
     if not args.source.is_file():
