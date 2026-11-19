@@ -76,3 +76,9 @@ Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and
 - Added `tools/production_qa/verify_actions_artifact.py` and 9 tests. It verifies a declared output contract and SHA-256 of each extracted local artifact file, rejecting absolute/parent paths and symlink files. It does not certify PNG/Blender semantics, canonical provenance, license, remote GitHub Artifact availability, or G1–G4.
 - Extended the existing manual-only `two-actions-orchestration-offline-qa.yml` to compile and test the verifier. Authored tests now 42 (9 classifier + 9 watchdog + 5 snapshot + 10 reconciliation + 9 artifact verifier); execution still NOT_RUN while Actions is disabled.
 - For safe cache reuse, a separate authenticated remote Artifact download, immutable run-to-manifest binding, byte-level verification and an atomic reservation store are still required. Never set `artifact_accessible` or production QA PASS from this offline verification alone.
+
+
+## Explicit GitHub Artifact metadata inspection (2026-11-19)
+- Added `tools/production_qa/inspect_actions_artifact_metadata.py` (read-only GitHub REST): requires explicit repository, run ID, artifact name and token. Verifies run repository/ID, successful completion, exact artifact-name uniqueness, unexpired nonzero size and artifact-to-run binding; bounded pagination (five pages). It never selects the latest success implicitly, dispatches, cancels or writes.
+- Added ten mock-API tests `test_inspect_actions_artifact_metadata.py`, and extended the manual-only offline QA workflow compile step. **52 authored tests total; runtime NOT_RUN** while Actions disabled.
+- Metadata accessibility is not ZIP download success, byte-level SHA verification, trusted manifest provenance, canonical adoption or safe cache reuse. The inspector intentionally returns `safe_to_reuse: false`. A separate authenticated download, content verification and cross-run atomic reservation remain blockers to automation.
