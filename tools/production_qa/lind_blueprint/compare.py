@@ -143,9 +143,10 @@ if __name__ == "__main__":
     parser.add_argument("c9", type=Path)
     parser.add_argument("c10", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--c9-label", default="C9-B C · low view")
+    parser.add_argument("--c10-label", default="C10 · low view")
     args = parser.parse_args()
     expected = "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07"
     if hashlib.sha256(args.reference.read_bytes()).hexdigest() != expected:
         raise ValueError("Official CG SHA-256 mismatch")
-    comparison_sheet(args.reference, [("C9-B C · low view", args.c9),
-                                        ("C10 · low view", args.c10)], args.output)
+    comparison_sheet(args.reference, [(args.c9_label, args.c9), (args.c10_label, args.c10)], args.output)

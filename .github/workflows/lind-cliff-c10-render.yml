@@ -33,6 +33,7 @@ jobs:
       C9_SHA: 886ad8d4d49b3951da84bf2b728505767bef2f8b4288d9472ac0c129a018d12a
       C9_SOURCE: assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend
       BLUEPRINT: ${{ github.event_name == 'push' || inputs.blueprint == true }}
+      SCULPT: 'false'
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
@@ -44,9 +45,13 @@ jobs:
         env:
           BEFORE: ${{ github.event.before }}
         run: |
-          if git cat-file -e "$BEFORE^{commit}" 2>/dev/null &&
-             ! git diff --quiet "$BEFORE" HEAD -- assets/candidates/lind/windwaiting-cliff-c10; then
-            echo "BLUEPRINT=false" >> "$GITHUB_ENV"
+          if git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            if ! git diff --quiet "$BEFORE" HEAD -- assets/candidates/lind/windwaiting-cliff-c10; then
+              echo "BLUEPRINT=false" >> "$GITHUB_ENV"
+            elif ! git diff --quiet "$BEFORE" HEAD -- tools/production_qa/lind_blueprint/sculpt_junction.py; then
+              echo "BLUEPRINT=false" >> "$GITHUB_ENV"
+              echo "SCULPT=true" >> "$GITHUB_ENV"
+            fi
           fi
       - name: Reuse verified blueprint evidence
         id: blueprint_cache
@@ -83,7 +88,7 @@ jobs:
           /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0); print("TWO_BLENDER_530_RUNTIME_PASS")'
           rm -rf "$work"
       - name: Verify source and create C10 Blender original
-        if: env.BLUEPRINT != 'true'
+        if: env.BLUEPRINT != 'true' && env.SCULPT != 'true'
         run: |
           set -euo pipefail
           mkdir -p /tmp/c10-render
@@ -99,11 +104,11 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libegl1 libgl1-mesa-dri libopengl0 libgl1 xvfb
           ldconfig -p | grep -F libEGL.so.1
       - name: Independent C10 topology audit (non-destructive)
-        if: env.BLUEPRINT != 'true'
+        if: env.BLUEPRINT != 'true' && env.SCULPT != 'true'
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python tools/production_qa/audit_lind_c10_mesh.py -- /tmp/c10-render/windwaiting_cliff_C10_UNAPPROVED.blend /tmp/c10-render/C10_TOPOLOGY_QA.json
       - name: Render fixed C10 camera views
-        if: env.BLUEPRINT != 'true'
+        if: env.BLUEPRINT != 'true' && env.SCULPT != 'true'
         run: |
           cat > /tmp/c10-render/render_views.py <<'PY'
           import bpy
@@ -125,21 +130,18 @@ jobs:
           PY
           LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a /tmp/two-blender53/blender -b --python /tmp/c10-render/render_views.py
       - name: Verify render files
-        if: env.BLUEPRINT != 'true'
+        if: env.BLUEPRINT != 'true' && env.SCULPT != 'true'
         run: |
           set -euo pipefail
           for view in cg_review front left right elevated shore_detail sunset; do test -s "/tmp/c10-render/$view.png"; done
           sha256sum /tmp/c10-render/* > /tmp/c10-render/SHA256SUMS
-      - name: Extract and verify archived cliff candidates
-        if: env.BLUEPRINT == 'true' && steps.blueprint_cache.outputs.cache-hit != 'true'
+      - name: Verify archived C10 source and reuse its reference renders
+        if: env.SCULPT == 'true' || (env.BLUEPRINT == 'true' && steps.blueprint_cache.outputs.cache-hit != 'true')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          root=/tmp/lind-blueprint-package
-          mkdir -p "$root" /tmp/lind-c10-source
-          exec > >(tee "$root/execution.log") 2>&1
-          trap 'echo "Blueprint stopped at line $LINENO (exit $?). Inspect execution.log and generated QA."' ERR
+          mkdir -p /tmp/lind-c10-source
           python tools/production_qa/download_actions_artifact.py \
             --repo "$GITHUB_REPOSITORY" --artifact-id "$C10_ARTIFACT_ID" \
             --expected-zip-sha256 "$C10_ARCHIVE_SHA" --output /tmp/lind-c10.zip
@@ -159,6 +161,35 @@ jobs:
                       raise ValueError(f"C10 artifact member checksum mismatch: {name}")
                   (Path("/tmp/lind-c10-source") / name).write_bytes(content)
           PYZIP
+      - name: Carve and render the unapproved C10 junction
+        if: env.SCULPT == 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/lind-junction/{baseline,candidate,review}
+          cp /tmp/lind-c10-source/{cg_review,front,shore_detail}.png /tmp/lind-junction/baseline/
+          exec > >(tee /tmp/lind-junction/execution.log) 2>&1
+          set +e
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a /tmp/two-blender53/blender -b --disable-autoexec \
+            --python-exit-code 1 --python tools/production_qa/lind_blueprint/sculpt_junction.py -- \
+            /tmp/lind-c10-source/windwaiting_cliff_C10_UNAPPROVED.blend /tmp/lind-junction/candidate "$PWD"
+          status=$?
+          set -e
+          if [[ -s /tmp/lind-junction/candidate/cg_review.png ]]; then
+            python tools/production_qa/lind_blueprint/compare.py assets/approved/game/cliff/sunset_background.png \
+              /tmp/lind-junction/baseline/cg_review.png /tmp/lind-junction/candidate/cg_review.png \
+              /tmp/lind-junction/review --c9-label "C10 baseline" --c10-label "C10 junction candidate"
+          fi
+          (cd /tmp/lind-junction && find baseline candidate review -type f -print0 2>/dev/null |
+            sort -z | xargs -0 sha256sum > SHA256SUMS)
+          exit "$status"
+      - name: Extract and verify archived cliff candidates
+        if: env.BLUEPRINT == 'true' && steps.blueprint_cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          root=/tmp/lind-blueprint-package
+          mkdir -p "$root"
+          exec > >(tee "$root/execution.log") 2>&1
+          trap 'echo "Blueprint stopped at line $LINENO (exit $?). Inspect execution.log and generated QA."' ERR
           bpy=/tmp/two-blender53/blender
           scripts=tools/production_qa/lind_blueprint
           export LIBGL_ALWAYS_SOFTWARE=1
@@ -236,7 +267,14 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
       - uses: actions/upload-artifact@v4
-        if: always() && env.BLUEPRINT != 'true'
+        if: always() && env.SCULPT == 'true'
+        with:
+          name: lind-cliff-junction-unapproved-${{ github.sha }}
+          path: /tmp/lind-junction/
+          retention-days: 14
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always() && env.BLUEPRINT != 'true' && env.SCULPT != 'true'
         with:
           name: lind-cliff-c10-unapproved-${{ github.sha }}
           path: /tmp/c10-render/
