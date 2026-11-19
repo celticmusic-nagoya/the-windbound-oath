@@ -1,9 +1,5 @@
 name: LIND Macro Geometry-Only Isolation
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/build_cliff_macro_support.py'
-      - '.github/workflows/lind-macro-geometry-only.yml'
   workflow_dispatch:
 permissions:
   contents: read
