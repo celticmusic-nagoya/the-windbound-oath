@@ -1,0 +1,45 @@
+name: Full3D interface v3.4 candidate validation
+
+on:
+  pull_request:
+    paths:
+      - 'tools/integration/validate_full3d_interface_v34.py'
+      - 'tests/test_full3d_interface_v34.py'
+      - '.github/workflows/full3d-interface-v34.yml'
+      - 'docs/production/FULL3D_CHARACTER_MAP_INTERFACE_V34_CANDIDATE_20261117.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full3d-v34-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  candidate-contract-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout tested ref
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python version
+        run: python3 --version
+      - name: Compile candidate validator and tests
+        run: |
+          python3 -m py_compile tools/integration/validate_full3d_interface_v34.py tests/test_full3d_interface_v34.py
+      - name: Run negative and positive contract tests
+        run: |
+          mkdir -p qa-output
+          set -o pipefail
+          python3 -m unittest discover -s tests -p 'test_full3d_interface_v34.py' -v 2>&1 | tee qa-output/full3d-interface-v34-tests.log
+      - name: Save test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full3d-interface-v34-test-evidence
+          path: qa-output/
+          retention-days: 7
+          if-no-files-found: warn
