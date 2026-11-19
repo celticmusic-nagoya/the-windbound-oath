@@ -5,6 +5,11 @@ on:
     paths:
       - 'tools/map_blender/ai_guard/**'
       - '.github/workflows/lind-blender-integration.yml'
+# Keep only the latest run for each PR/branch; avoid queued render-test duplication.
+concurrency:
+  group: lind-blender-integration-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 jobs:
