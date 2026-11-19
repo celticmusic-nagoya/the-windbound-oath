@@ -78,12 +78,15 @@ def hair_clump(name,stations,material,sides=10):
 for sign,side in [(-1,'L'),(1,'R')]:
  for layer in range(2):
   for k,x in enumerate((.035,.087,.139)):
+   # Staggered translucent-looking gaps are geometry, not alpha tricks.
+   # Wider root and tapered solid tips; outer layer fans away from the part.
    tip=1.675-.008*k+.012*layer
+   spread=(.012 if layer else 0.0)*(k+1)
    hair_clump('Sculpt_Bangs_'+side+'_'+str(layer)+'_'+str(k),[
-    (sign*(x+.016),-.105+.008*layer,1.836,.025,.020),
-    (sign*(x+.009),-.164-.006*layer,1.784,.027,.017),
-    (sign*x,-.193-.007*layer,1.727,.022,.013),
-    (sign*(x-.005),-.198-.006*layer,tip,.003,.003)],hair)
+    (sign*(x+.016),-.123+.006*layer,1.836,.029,.020),
+    (sign*(x+.009+spread*.4),-.171-.005*layer,1.784,.030,.019),
+    (sign*(x+spread),-.199-.007*layer,1.727,.020,.013),
+    (sign*(x+spread+.007),-.201-.006*layer,tip,.0015,.002)],hair)
  # Side hair starts inside crown and hugs the temples.
  for k in range(3):
   x=.184+.017*k
