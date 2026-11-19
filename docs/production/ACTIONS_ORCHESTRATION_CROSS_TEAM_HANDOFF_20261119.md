@@ -1,0 +1,24 @@
+# TWO | Cross-team Actions orchestration and recovery proposal (2026-11-19)
+
+Status: PROPOSED / NOT ENABLED / NOT MERGED. Owner: shared CI coordination; map PR #421; character PRs #425 and #427. This document is not canonical lore and does not authorize GitHub Actions re-enablement, main merge, destructive deletion, or publication.
+
+## Immediate operational state
+- Director has temporarily disabled repository Actions in Settings. Admin setting and all active-run cancellations are NOT independently verified by this document. Do not dispatch runs or re-enable Actions until workflow inventory, ownership and safeguards are reviewed and the director explicitly approves re-enablement.
+- main AGENTS.md and docs/production/SESSION_CONTINUITY_INDEX.md must be re-read on each session; compare private canon and current PR HEAD/Artifacts. Shared Blender installer: main:tools/production_qa/install_blender_524.sh (5.2.4, checksum verified).
+- Map: Draft PR #421 feature/lind-cliff-rock-art-study-20261118; CC0 rock study is input only, not a completed cliff. Method B actual Blender sculpt render and G2/G3 still require verification.
+- Character: Draft PR #425 feature/morwen-authored-sculpt-20261118; Draft PR #427 feature/morwen-artdirected-sculpt-20261119 is based on #425. Both are handoff/pre-production; do not claim finished sculpt or G2 PASS. Prior failures #407/#417/#419 preserved.
+
+## Intended architecture (design, not yet implemented)
+1. One small, centrally owned orchestration workflow, triggered by narrowly scoped push/pull_request paths, plus optional manual dispatch. All expensive Blender jobs must be reusable workflows (workflow_call) or controlled workers; no uncontrolled broad PR triggers. Do not create a new PR for this design if a safe existing CI ownership PR exists.
+2. Preflight computes an idempotency key from asset ID, stage, source SHA-256, exact script/config/tool version, canonical reference identity, and output contract. Query existing successful run/manifest before launching. A matching SUCCESS artifact may be reused only if still accessible, SHA-verified, and satisfies the same output contract; expired/missing artifacts are not a cache hit.
+3. Define ownership: character Morwen sculpt vs map cliff sculpt are separate concurrency groups. Use concurrency.cancel-in-progress only for superseded *identical disposable* validation runs, never for independent art work or unsaved artifacts. Limit parallel runners and avoid triggering every historical workflow on each PR edit.
+4. Distinguish exact duplicate (SKIP/REUSE), probable semantic overlap (REVIEW_REQUIRED, no automatic cancellation), independent stages (RUN_PARALLEL if resources allow), prerequisite missing (BLOCKED), and stale/failed jobs (ESCALATE). Maintain a durable job ledger: owner PR, stage, branch, HEAD, inputs/hashes, run ID, artifact ID/expiry, QA gate, failure count, next action, timestamp.
+5. A lightweight watchdog on a bounded schedule checks queued/in_progress age, completed-but-no-artifact, failed/timed-out/cancelled jobs and owner inactivity; report to existing owner PR/Issue, not new PR spam. It must not silently restart costly Blender work; bounded retries (max two same root-cause/method), structural switch after two failures, explicit escalation. If Actions are disabled, watchdog is also disabled; external manual/ChatGPT review is needed until re-enabled.
+6. Guardrails: least-privilege GITHUB_TOKEN, no third-party paid APIs, pinned action versions as feasible, checksum-verified Blender, bounded timeouts, per-stage concurrency, artifact retention, no canonical overwrite or auto-merge, manual approval for changes to official design or destructive operations.
+7. Rollout: (A) read-only inventory and duplicate trigger audit; (B) implement dry-run classifier and unit tests without dispatch; (C) enable only a pilot (one map and one character independent workflow) after director approval; (D) verify duplicate suppression, semantic-review gate, watchdog alert, Artifact provenance and cancellation safety; (E) expand selectively. G1–G4 remain independent quality gates.
+
+## Cross-chat startup message
+Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and the latest character PR #425/#427. Actions are intentionally disabled. Before any CI or Blender run, check the shared job ledger, source SHA, stage, owner PR, existing runs and artifacts; do not recreate completed work. Character and map production are independent but share the same CI orchestration policy. Continue only approved non-destructive tasks; no Actions re-enable or main merge without director approval.
+
+## Current QA
+Policy file created: configuration proposal only. No scheduler, classifier, ledger, watchdog, or runtime test has been implemented or executed. No guarantee of duplicate suppression until those are implemented and verified.
