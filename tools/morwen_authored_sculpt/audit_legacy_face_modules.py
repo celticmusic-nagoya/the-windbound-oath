@@ -23,6 +23,27 @@ for o in bpy.data.objects:
             shape_keys=[k.name for k in me.shape_keys.key_blocks] if me.shape_keys else [],
             modifiers=[{"name":m.name,"type":m.type} for m in o.modifiers],
             vertex_groups=len(o.vertex_groups))
+        # Per-region reproducible fingerprints; distinguish same counts from identical geometry.
+        regions = {}
+        for i in sorted(set(p.material_index for p in me.polygons)):
+            mat_name = me.materials[i].name if i < len(me.materials) and me.materials[i] else "UNASSIGNED_"+str(i)
+            faces = [p for p in me.polygons if p.material_index == i]
+            vertex_ids = sorted({v for p in faces for v in p.vertices})
+            payload = {
+                "faces": [(p.index, list(p.vertices), p.loop_start, p.loop_total) for p in faces],
+                "vertices": [(v, [round(float(c), 8) for c in me.vertices[v].co]) for v in vertex_ids],
+                "uv": [(p.index, [[round(float(c), 8) for c in me.uv_layers.active.data[li].uv] for li in p.loop_indices]) for p in faces] if me.uv_layers.active else [],
+            }
+            def digest(value):
+                return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",",":")).encode()).hexdigest()
+            regions[mat_name] = {
+                "faces": len(faces), "vertices": len(vertex_ids),
+                "topology_sha256": digest(payload["faces"]),
+                "positions_sha256": digest(payload["vertices"]),
+                "uv_sha256": digest(payload["uv"]),
+                "shared_vertices_with_other_regions": sum(1 for v in vertex_ids if any(p.material_index != i for p in me.polygons if v in p.vertices)),
+            }
+        item["regions"] = regions
         report["mesh_count"] += 1
     report["objects"].append(item)
 with open(os.path.join(outdir,"structure.json"),"w") as f:
