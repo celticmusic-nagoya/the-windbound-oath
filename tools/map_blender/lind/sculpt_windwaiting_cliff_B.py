@@ -36,7 +36,7 @@ def main():
         'coordinate_space':'asset-local-provisional','unit_scale_status':'UNAPPROVED',
         'origin_convention':'XY center of rock assembly, Z=0 provisional ground',
         'ground_contact_convention':'rock base at provisional Z=0, game placement BLOCKED',
-        'source_manifest_sha256':'NO_EXTERNAL_SOURCE; ORIGINAL_GEOMETRY',
+        'source_manifest_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'source_license':'original in-repository Blender authored source',
         'producer_commit':'UNSET_AT_GENERATION',
         'canonical_world_placement':'BLOCKED_FOR_INTEGRATION',
@@ -87,6 +87,11 @@ def main():
                 fault_depth+=0.19*math.exp(-((distance/width)**2))*visibility
         v.co=p+n*(relief-fault_depth)
     rock.data.update()
+    # Align actual lowest evaluated mesh vertex with the provisional ground plane.
+    # The initial fusion volumes can extend below Z=0; do not falsely claim contact.
+    minimum_z=min(v.co.z for v in rock.data.vertices)
+    rock.location.z=-minimum_z
+    rock['ground_contact_adjustment_local_z']=-minimum_z
     rock.data.materials.append(rockmat)
     uv=rock.data.uv_layers.new(name='PROVISIONAL_TRI_PLANAR_PREVIEW')
     for poly in rock.data.polygons:
@@ -108,6 +113,8 @@ def main():
     s.render.engine='CYCLES';s.cycles.samples=20
     s.render.resolution_x=1100;s.render.resolution_y=780;s.render.resolution_percentage=100
     s.render.image_settings.file_format='PNG'
+    cam.location=(0,-13,5.5)
+    aim(cam,(0,0,2.1))
     bpy.ops.file.pack_all()
     blend=out/'windwaiting_sculpted_cliff_B_UNAPPROVED.blend'
     bpy.ops.wm.save_as_mainfile(filepath=str(blend),compress=True)
@@ -122,6 +129,8 @@ def main():
         'method':'fused-volume voxel sculpt; geometric fault carving',
         'blender':bpy.app.version_string,
         'mesh_vertices':len(rock.data.vertices),'mesh_polygons':len(rock.data.polygons),
+        'ground_contact_adjustment_local_z':rock['ground_contact_adjustment_local_z'],
+        'source_script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'coordinate_space':'asset-local-provisional','unit_scale_status':'UNAPPROVED',
         'G1':'NOT_RUN','G2':'NOT_RUN','G3':'NOT_RUN','G4':'NOT_RUN',
         'integration':'BLOCKED_FOR_INTEGRATION',
