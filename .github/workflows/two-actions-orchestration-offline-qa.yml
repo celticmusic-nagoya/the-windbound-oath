@@ -16,9 +16,10 @@ jobs:
           persist-credentials: false
       - name: Compile read-only orchestration utilities
         run: |
-          python3 -m py_compile tools/production_qa/classify_actions_jobs.py tools/production_qa/audit_actions_ledger.py tools/production_qa/collect_actions_snapshot.py tools/production_qa/reconcile_actions_snapshot.py tools/production_qa/verify_actions_artifact.py tools/production_qa/inspect_actions_artifact_metadata.py tools/production_qa/download_actions_artifact.py
-      - name: Run offline deterministic tests (no network access required)
+          python3 -m py_compile tools/production_qa/classify_actions_jobs.py tools/production_qa/audit_actions_ledger.py tools/production_qa/collect_actions_snapshot.py tools/production_qa/reconcile_actions_snapshot.py tools/production_qa/verify_actions_artifact.py tools/production_qa/inspect_actions_artifact_metadata.py tools/production_qa/download_actions_artifact.py tools/production_qa/reserve_actions_job_ref.py tools/production_qa/assess_actions_reservation_recovery.py
+      - name: Run exactly nine offline unit test modules once each
         run: |
-          python3 -m unittest discover -s tools/production_qa -p 'test_*actions*.py' -v
-          python3 -m unittest discover -s tools/production_qa -p 'test_audit_actions_ledger.py' -v
-          python3 -m unittest discover -s tools/production_qa -p 'test_verify_actions_artifact.py' -v
+          set -euo pipefail
+          for name in classify_actions_jobs audit_actions_ledger collect_actions_snapshot reconcile_actions_snapshot verify_actions_artifact inspect_actions_artifact_metadata download_actions_artifact reserve_actions_job_ref assess_actions_reservation_recovery; do
+            python3 -m unittest discover -s tools/production_qa -p "test_${name}.py" -v
+          done
