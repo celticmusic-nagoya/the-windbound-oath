@@ -6,6 +6,10 @@ on:
       - .github/workflows/morwen-layer0-sculpt-reference.yml
       - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
   workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/morwen-layer0-sculpt-reference.yml
+      - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
 permissions:
   contents: read
 jobs:
