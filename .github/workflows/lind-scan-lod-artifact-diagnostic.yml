@@ -1,9 +1,5 @@
 name: LIND LOD25 PBR Artifact Diagnosis
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/diagnose_scan_lod_artifacts.py'
-      - '.github/workflows/lind-scan-lod-artifact-diagnostic.yml'
   workflow_dispatch:
 permissions:
   contents: read
