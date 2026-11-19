@@ -372,31 +372,17 @@ This section applies to ChatGPT, Claude, Codex and other agents when working on 
 - 既存の承認範囲・正式採用素材／確定シナリオの保護・main変更／マージの個別承認・FAST-TRACK方針を厳守する。リトライは権限拡張や作業範囲の無断変更を認めない。
 - 今後のClaude/Codex向け全タスクパケットおよびChatGPTによる実作業に本原則を適用する。
 
-## 🤖 Autonomous Execution & Auto-Merge Policy (自律実行・自動マージ規約)
+## AI-wide current production governance (director revision 2026-11-19)
 
-本プロジェクトにおいて、Claude/Codexエージェントは、速度と効率を最大化するため、原則として**「事前承認なしの自律進行（Auto-Pilot）」**で作業を完結させます。
+This section supersedes any earlier auto-merge, retry-count, branch-creation or asset-readiness language in this file or older policy documents. Retain older material only as historical context, never as executable permission.
 
-### 1. 基本原則（Default Autonomy）
-- ユーザーからの指示・バグ報告・機能追加の依頼に対し、途中で「こう進めても良いですか？」といった**確認や許可を求める質問を禁止**します。
-- 示された要件に基づき、思考・実装・コード修正・テストの実行までをワンストップで自律的にやり切ってください。
-
-### 2. 自動マージのスコープ（Auto-Merge to Main）
-- 実装が完了し、静的解析（TypeScriptコンパイル等）およびテスト（存在する場合）をパスした成果物は、ローカルでの検証を経て、**原則として `main` ブランチへのコミットおよびマージまでを自動的に完了**させてください。
-- 作業完了時の報告は、「何を確認したか」の長い解説を省き、**「修正完了・mainマージ済み（変更ファイルの概要と次の推奨タスク1点）」**のみを簡潔に出力してください。
-
-### 3. セルフリトライの義務（Self-Correction on Failure）
-- ビルドエラー、テスト失敗、または採用品質に至らない不具合に直面した場合でも、**途中で作業を止めてユーザーに途中経過を報告せず、ログを解析して自律的に原因を修正・再試行**してください。
-- 試行を重ねても解決しない場合や、次項の「例外」に該当する場合にのみ、作業を中断して質問を許可します。
-
-### 4. 例外：確認を必須とするケース（Stop & Ask Triggers）
-以下の「致命的な破壊リスク」に該当する場合のみ、自動進行をストップし、ユーザーに確認を求めてください。
-1. **不可逆的なデータ損失のリスク:** データベースの破壊、既存データの消失、不可逆なファイル構造の全削除。
-2. **セキュリティ上の重大な懸念:** APIキーや認証情報のハードコード、外部への意図しないデータ送信の危険性。
-3. **仕様上の重大な二択:** アーキテクチャの根幹に関わるトレードオフが発生し、どちらを選ぶかでゲームの基本設計が完全に変わってしまう場合。
-
-### 適用優先順位
-- 本節はディレクターの最新の明示指示として、上記の旧「mainへの個別承認」「承認後マージ」「リトライ時の逐次報告」規定と抵触する場合に優先する。
-- 既存の正式採用素材・確定シナリオ・SAVE互換性の保護義務は維持する。変更範囲外の破壊的操作を許可するものではない。
+- Before work, read current main AGENTS.md, docs/production/SESSION_CONTINUITY_INDEX.md, the private handoff canon (if accessible), live owning PR, HEAD, artifacts and failure history. Follow later explicit director decisions; do not infer missing canon.
+- `c` means continue the existing approved non-destructive work in its owning branch/PR. `ok` approves only the immediately preceding non-destructive step. Neither authorizes new PRs, merging main, official adoption, deletion or publication.
+- Prefer one asset × one production stage × one owner PR. Search existing PRs/branches and reuse them. Open a new PR only for an independently necessary, conflict-free scope and record the reason. Put QA, research and handoff updates into existing PRs/issues rather than multiplying PRs.
+- No automatic merge to main. Main commits/merges, canon replacement, destructive deletion, publication and paid API use require separate explicit director approval. Closing a redundant PR is permitted only after verifying preservation or transfer of all unique code, editable Blender sources, images, QA evidence and dependencies; branch/file deletion requires explicit approval.
+- Same root cause/method: at most two effective failed attempts, then STOP that method family and document a structural change. Do not restart counts by renaming a branch or worker. Continue independent safe production.
+- Blender 5.2.4 shared qualified runtime is reusable. Director-approved provisional asset-local 3D production may proceed now; record provisional axes, origin, scale and transforms. World placement and G4 integration remain separate gates. G1–G4 PASS is required for official adoption.
+- Prefer actual editable .blend, rendered PNGs, provenance/SHA, independent G2/G3 evidence and eventual game integration over plans, PR count or CI-only smoke tests. Do not claim unrun QA as PASS.
 
 ## 🤖 Autonomous Game Development Protocol v1.0 — 全領域統合参照（2026-11-11）
 
@@ -407,7 +393,7 @@ This section applies to ChatGPT, Claude, Codex and other agents when working on 
 - **アセット:** [CHARACTER_ASSET_GENERATION_GUIDE_v1.2.md](docs/policy/CHARACTER_ASSET_GENERATION_GUIDE_v1.2.md) を参照。素体とアンカー固定→全身マスターキャンバス→衣装レイヤリング→独立QA。原本を上書きしない。
 - **タスクパケット:** TASK ID、対象Issue/PR、基準コミット、参照仕様ID、変更対象、成功条件、保護対象、検証方法、停止条件を短く記述。差分中心・小さな機能単位で実装し、実際のソースと仕様を必ず照合する。
 - **自律QA:** テスト→原因分析→最小パッチ→再テスト。自己QAと独立QAを区別し、未実施をPASSと記録しない。失敗の無限反復は禁止。
-- **既存規約との整合:** この節は既存のAuto-Pilot／Auto-Merge Policy、2026-11-08優先変更、Self-Retry Policyを上書きしない。マージ判断は既存の最新Auto-Merge Policyに従い、同ポリシーに列挙された停止条件および正式設定・素材・SAVE保護を守る。再試行は既存のソフトリミット（原則最大3回）を優先し、2回は推奨早期レビューの目安とする。タスク固有の明示的な禁止（例: PR #221の正式アセット採用・公開・本番統合保留）は維持する。
+- **既存規約との整合:** この節は上記2026-11-19のAI共通運用規則に従う。mainマージの自動許可はなく、同一方式の有効な失敗は2回で停止する。タスク固有の明示的な禁止（例: PR #221の正式アセット採用・公開・本番統合保留）は維持する。
 - **成果物:** 変更ファイル、検証証拠、既知のFAIL/BLOCKED/NOT_RUN、次の推奨タスクを記録。実際に実施していないpush・マージ・Android実機確認を完了と報告しない。
 
 
