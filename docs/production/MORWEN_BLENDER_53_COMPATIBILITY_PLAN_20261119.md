@@ -25,3 +25,10 @@ Official Blender Foundation release: **Blender 5.3.0 released November 10, 2026*
 - 5.3 headless Cycles / EEVEE: NOT_RUN.
 - 5.3 compatibility / performance: NOT_RUN.
 - Production default remains 5.2.4, no paid API.
+
+## Actual GitHub Actions results (2026-11-20)
+- Blender 5.3 isolated CPU Cycles smoke, save and reopen: **PASS**, run https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44553193163, artifact 14544321964. This is a technical test monkey, **not** Morwen sculpt.
+- Official Layer 0 four-view packed reference opened with Blender 5.3.0: **PASS**, run https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44554802279, artifact 14545315896. Four verified PNG SHA values retained; 0 sculpt meshes.
+- Decision: **Blender 5.3.0 GO for new, isolated Morwen authoring scenes**. Existing 5.2.4 source remains unchanged. Do not claim existing sculpt/rig/animation/glTF/Android migration PASS.
+- HairHarpy actual GUI/Vulkan execution and export remain **NOT_RUN**. No hair asset or G2 art pass.
+- Avoid repeating the proven version smoke or reference-only tests. Next useful action is a true authored facial sculpt with independent render/art QA, and separate HairHarpy graphical-capability check.
