@@ -1,0 +1,23 @@
+name: TWO Actions orchestration offline unit QA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: two-actions-offline-qa-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  offline-unit-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile read-only orchestration utilities
+        run: |
+          python3 -m py_compile tools/production_qa/classify_actions_jobs.py tools/production_qa/audit_actions_ledger.py tools/production_qa/collect_actions_snapshot.py tools/production_qa/reconcile_actions_snapshot.py
+      - name: Run offline deterministic tests (no network access required)
+        run: |
+          python3 -m unittest discover -s tools/production_qa -p 'test_*actions*.py' -v
+          python3 -m unittest discover -s tools/production_qa -p 'test_audit_actions_ledger.py' -v
