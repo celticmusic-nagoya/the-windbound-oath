@@ -1,5 +1,8 @@
 # v3.4 Full-3D Policy Alignment — proposed additive guidance
 
+## 2026-11-19 status reconciliation (historical proposal)
+This v3.4 document remains **proposal/history**, not the operative policy. The director's v3.7 instructions, latest main `AGENTS.md`, `docs/production/SESSION_CONTINUITY_INDEX.md`, later approved policy and private canon govern current work. PR #362 updates `AGENTS.md` but does not itself authorize a main merge. The 2026-11-18 provisional-local-coordinate approval permits independent character and environment sculpting, geometry, materials, rigs and real renders **now** with explicitly provisional origin/axes/scale/transform. Unapproved *shared world placement, metric contracts and game integration* remain BLOCKED; they do not block independent asset production. The historical 'conflicts to resolve' section below records 2026-11-17 status and is not a current work queue. Prefer existing owner branches/PRs; new PRs only when safe continuation is impossible. No automatic main merge, canonical overwrite, destructive deletion or publication.
+
 **Status:** PROPOSAL / NON-CANONICAL. This file supplements but does not replace current main `AGENTS.md`, private canon, or director-approved retry policy. It does not authorize canon replacement, main merge, deletion, or publication.
 
 ## Evidence and authority (2026-11-17)
