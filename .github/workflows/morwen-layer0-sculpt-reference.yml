@@ -9,6 +9,7 @@ on:
       - tools/morwen_authored_sculpt/build_face_surface_530.py
       - tools/morwen_authored_sculpt/render_official_base_candidates_530.py
       - tools/morwen_authored_sculpt/export_precision_blueprint_530.py
+      - tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -37,6 +38,21 @@ jobs:
           echo '9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737  /tmp/morwen-ref/7807.png' | sha256sum -c -
           echo 'b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f  /tmp/morwen-ref/7810.png' | sha256sum -c -
           echo '69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa  /tmp/morwen-ref/7808.png' | sha256sum -c -
+      - name: Measure verified Layer 0 silhouettes for precision blueprint
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user 'Pillow==11.3.0'
+          python3 tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py /tmp/morwen-ref /tmp/morwen-landmark-out
+          test -s /tmp/morwen-landmark-out/reference_silhouette_landmarks.json
+      - name: Upload measured four-view silhouette evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-sha-verified-silhouette-landmarks
+          path: /tmp/morwen-landmark-out/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Install verified Blender 5.3.0 independently
         run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
       - name: Create and reopen packed reference blend
