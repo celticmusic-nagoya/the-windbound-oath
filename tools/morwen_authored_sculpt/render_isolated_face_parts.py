@@ -8,7 +8,7 @@ for o in bpy.data.objects:
     if o.type=="MESH":o.hide_render=o!=obj
 obj.hide_render=False
 scene=bpy.context.scene
-scene.render.engine="BLENDER_EEVEE_NEXT"
+scene.render.engine="BLENDER_EEVEE"
 scene.render.resolution_x=960
 scene.render.resolution_y=960
 scene.render.resolution_percentage=100
