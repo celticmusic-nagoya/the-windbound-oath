@@ -1,9 +1,5 @@
 name: LIND Render Imported Cliff Workbench
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/render_imported_macro_workbench.py'
-      - '.github/workflows/lind-macro-imported-workbench.yml'
   workflow_dispatch:
 permissions:
   contents: read
