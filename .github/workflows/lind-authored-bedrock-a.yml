@@ -1,10 +1,10 @@
-name: LIND authored bedrock A production render
+name: LIND authored bedrock production render (B sculpt)
 on:
   push:
     branches:
       - feature/lind-cliff-rock-art-study-20261118
     paths:
-      - 'tools/map_blender/lind/build_authored_bedrock_A.py'
+      - 'tools/map_blender/lind/sculpt_windwaiting_cliff_B.py'
       - '.github/workflows/lind-authored-bedrock-a.yml'
   workflow_dispatch:
 permissions:
@@ -24,20 +24,20 @@ jobs:
       - name: Install SHA-verified shared Blender 5.2.4
         timeout-minutes: 12
         run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
-      - name: Build editable bedrock and four views
+      - name: Build editable voxel-sculpted cliff B and four views
         timeout-minutes: 14
         run: |
-          mkdir -p out/lind-bedrock-a
+          mkdir -p out/lind-cliff-b
           set -o pipefail
-          timeout 780s /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/build_authored_bedrock_A.py -- --out out/lind-bedrock-a 2>&1 | tee out/lind-bedrock-a/build.log
+          timeout 780s /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/sculpt_windwaiting_cliff_B.py -- --out out/lind-cliff-b 2>&1 | tee out/lind-cliff-b/build.log
       - name: Verify files and Blender reopen
         timeout-minutes: 3
         run: |
-          timeout 90s /tmp/two-blender/app/blender -b out/lind-bedrock-a/windwaiting_bedrock_A_UNAPPROVED.blend --disable-autoexec --python-exit-code 2 --python-expr 'import bpy; s=bpy.context.scene; assert s.get("coordinate_space")=="asset-local-provisional"; assert s.get("unit_scale_status")=="UNAPPROVED"; assert any(o.name.startswith("AUTHORED_BEDROCK_A") for o in bpy.data.objects); print("BEDROCK_REOPEN_PASS")'
+          timeout 90s /tmp/two-blender/app/blender -b out/lind-cliff-b/windwaiting_sculpted_cliff_B_UNAPPROVED.blend --disable-autoexec --python-exit-code 2 --python-expr 'import bpy; s=bpy.context.scene; assert s.get("coordinate_space")=="asset-local-provisional"; assert s.get("unit_scale_status")=="UNAPPROVED"; assert any(o.name.startswith("WINDBOUND_SCULPTED_CLIFF_B") for o in bpy.data.objects); print("BEDROCK_REOPEN_PASS")'
           python3 - <<'PY'
           import json,hashlib
           from pathlib import Path
-          root=Path("out/lind-bedrock-a")
+          root=Path("out/lind-cliff-b")
           manifest=json.loads((root/"manifest.json").read_text())
           assert manifest["G2"]=="NOT_RUN" and manifest["G4"]=="NOT_RUN"
           for name,digest in manifest["files"].items():
@@ -49,7 +49,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lind-authored-bedrock-a-unapproved
-          path: out/lind-bedrock-a/
+          name: lind-sculpted-cliff-b-unapproved
+          path: out/lind-cliff-b/
           retention-days: 14
           if-no-files-found: warn
