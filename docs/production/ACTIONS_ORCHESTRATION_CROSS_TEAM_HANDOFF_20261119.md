@@ -32,3 +32,9 @@ Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and
 - `tools/production_qa/test_audit_actions_ledger.py`: 9 test cases committed. Existing classifier has 9 tests; total 18 test cases authored, execution NOT_RUN. Local container could not resolve raw.githubusercontent.com, so GitHub-hosted code was not fetched for local test execution.
 - Durable ledger *storage and population*, live GitHub status polling, automated notification and controlled dispatch remain NOT_IMPLEMENTED. An offline report is not a functioning background watchdog.
 - Before Actions re-enable: implement the ledger writer with atomic concurrency protection, reconcile live runs/artifacts, test dry-run routing, avoid unbounded pull_request triggers, and verify one-shot cancel workflow is manual-only.
+
+
+## Read-only GitHub observation increment (2026-11-19)
+- Added `tools/production_qa/collect_actions_snapshot.py` and `test_collect_actions_snapshot.py` (5 unit tests). The collector reads GitHub REST workflow-run pages with GH_TOKEN, bounded to 1–5 pages, de-duplicates run IDs, and emits JSON. It performs no GitHub writes, cancellation or dispatch. It has NOT been run against the live API, and test execution is NOT_RUN.
+- Combined authored unit tests: classifier 9 + offline watchdog 9 + snapshot collector 5 = 23. Authored does not mean executed.
+- Important: run snapshots alone do not prove identical work or artifact validity; a durable, atomic cross-run ledger/lock, verified artifact manifest, actual notification and narrowly scoped scheduler are still NOT_IMPLEMENTED. Do not turn on automatic production jobs based solely on these utilities.
