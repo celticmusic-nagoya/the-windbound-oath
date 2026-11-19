@@ -94,6 +94,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Download official Blender Studio human base meshes bundle and audit contents
         shell: bash
         run: |
