@@ -8,6 +8,7 @@ on:
       - tools/morwen_authored_sculpt/isolate_legacy_face_parts.py
       - tools/morwen_authored_sculpt/verify_isolated_face_integrity.py
       - tools/morwen_authored_sculpt/render_isolated_face_parts.py
+      - tools/morwen_authored_sculpt/render_combined_face_candidate.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -69,6 +70,23 @@ jobs:
           test -s /tmp/morwen-face-parts-render/front.png
           test -s /tmp/morwen-face-parts-render/three_quarter.png
           test -s /tmp/morwen-face-parts-render/render_manifest.json
+      - name: Render combined legacy face and eyes candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-combined-face-render
+          /tmp/two-blender/app/blender -b --python-exit-code 1 /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/render_combined_face_candidate.py -- /tmp/morwen-combined-face-render
+          test -s /tmp/morwen-combined-face-render/front.png
+          test -s /tmp/morwen-combined-face-render/three_quarter.png
+          test -s /tmp/morwen-combined-face-render/combined_face_manifest.json
+      - name: Upload combined legacy face visual QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-combined-face-render-candidate
+          path: /tmp/morwen-combined-face-render/
+          retention-days: 14
+          if-no-files-found: warn
       - name: Upload facial part visual QA
         if: always()
         uses: actions/upload-artifact@v4
