@@ -20,6 +20,7 @@ def main():
  p=argparse.ArgumentParser();p.add_argument("--out",required=True);p.add_argument("--geometry-only",action="store_true")
  a=p.parse_args(sys.argv[sys.argv.index("--")+1:])
  out=Path(a.out).resolve();out.mkdir(parents=True,exist_ok=True)
+ print('STAGE_00_BOOTSTRAP',flush=True)
  bpy.ops.object.select_all(action="SELECT");bpy.ops.object.delete(use_global=False)
  for c in list(bpy.data.collections):
   if c.name=="Collection":c.name="LIND_TERRAIN"
@@ -58,13 +59,16 @@ def main():
   for i in (0,nx-1):
    a,b=idx(i,j),idx(i,j+1)
    faces.append((b,n+b,n+a,a) if i==0 else (a,n+a,n+b,b))
+ print('STAGE_10_GRID_BUILT',len(verts),len(faces),flush=True)
  mesh=bpy.data.meshes.new("NORMALIZED_MACRO_SUPPORT_CLOSED");mesh.from_pydata(verts,[],faces);mesh.update()
  ob=bpy.data.objects.new("CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON",mesh)
  bpy.context.collection.objects.link(ob)
  # Correct face winding with bmesh recalc and check manifold/volume.
+ print('STAGE_20_MESH_CREATED',flush=True)
  bm=bmesh.new();bm.from_mesh(mesh)
  bmesh.ops.recalc_face_normals(bm,faces=bm.faces)
  bm.to_mesh(mesh);bm.free()
+ print('STAGE_30_NORMALS_RECALCULATED',flush=True)
  check=bmesh.new();check.from_mesh(mesh)
  boundary=sum(e.is_boundary for e in check.edges)
  nonmanifold=sum(not e.is_manifold for e in check.edges)
@@ -72,6 +76,7 @@ def main():
  faces_n=len(check.faces);verts_n=len(check.verts)
  check.free()
  if boundary or nonmanifold or volume<=0:raise RuntimeError(f"invalid macro support {boundary=} {nonmanifold=} {volume=}")
+ print('STAGE_40_TOPOLOGY_CHECKED',verts_n,faces_n,flush=True)
  mat=bpy.data.materials.new("Neutral stone sculpt substrate - candidate")
  mat.diffuse_color=(0.28,0.32,0.30,1)
  mat.use_nodes=True
