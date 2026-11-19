@@ -79,7 +79,7 @@ views=[('front',(0,-3,0),50,1.0),('right',(3,0,0),50,1.0),
        ('back',(0,3,0),50,1.0),('left',(-3,0,0),50,1.0),
        ('face_closeup',(0,-2.2,.10),70,1.15)]
 for name,offset,lens,framing in views:
- target=center+Vector((0,0,.025*extent if name=='face_closeup' else 0))
+ target=center+Vector((0,0,-.035*extent if name=='face_closeup' else 0))
  bpy.ops.object.camera_add(location=target+Vector(offset)*extent*framing)
  cam=bpy.context.object;cam.name='Review_'+name
  cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler()
