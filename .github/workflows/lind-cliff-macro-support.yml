@@ -11,17 +11,22 @@ jobs:
       - uses: actions/checkout@v4
       - name: Preflight Blender Python syntax
         run: python3 -m py_compile tools/map_blender/lind/build_cliff_macro_support.py
-      - name: Install Blender
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libgl1-mesa-dri
+      - name: Fetch shared Blender installer from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Install SHA-verified Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
       - name: Validate candidate semantic contract
         run: python3 tools/map_blender/lind/validate_cliff_macro_contract.py docs/production/lind-cliff-macro-support.contract.v1.json
       - name: Generate actual closed macro support and render
         run: |
           set -euo pipefail
           mkdir -p out/lind-macro-support
-          blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
+          /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/lind/build_cliff_macro_support.py -- --out out/lind-macro-support 2>&1 | tee out/lind-macro-support/blender.log
       - name: Verify candidate topology and hashes
         run: |
           python3 - <<'PY'
@@ -42,7 +47,7 @@ jobs:
           PY
       - name: Reopen generated Blender file
         run: |
-          blender --background --factory-startup --disable-autoexec out/lind-macro-support/macro_support_candidate.blend --python-exit-code 1 --python-expr "import bpy; assert bpy.data.objects.get('CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON') is not None; print('BLEND_REOPEN_PASS')"
+          /tmp/two-blender/app/blender --background --factory-startup --disable-autoexec out/lind-macro-support/macro_support_candidate.blend --python-exit-code 1 --python-expr "import bpy; assert bpy.data.objects.get('CLIFF_MACRO_SUPPORT_CANDIDATE_NOT_CANON') is not None; print('BLEND_REOPEN_PASS')"
       - name: Upload source and render
         if: always()
         uses: actions/upload-artifact@v4
