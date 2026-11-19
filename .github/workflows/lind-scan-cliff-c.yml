@@ -1,0 +1,61 @@
+name: LIND scan-first cliff C Blender 5.2.4
+on:
+  push:
+    branches:
+      - feature/lind-cliff-rock-art-study-20261118
+    paths:
+      - 'tools/map_blender/lind/build_windwaiting_cliff_C.py'
+      - '.github/workflows/lind-scan-cliff-c.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 34
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch main verified Blender installer
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: shared-main
+          persist-credentials: false
+      - name: Download immutable PR415 source artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p out/lind-scan-c out/lind-scan-sources
+          gh run download 44067700909 -R ${{ github.repository }} -n lind-cc0-editable-packed-blender-sources -D out/lind-scan-sources
+          test -s out/lind-scan-sources/editable_source_manifest.json
+      - name: Install shared SHA-verified Blender 5.2.4
+        timeout-minutes: 12
+        run: bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Build source-derived editable cliff C and four actual PNG views
+        timeout-minutes: 15
+        run: |
+          set -o pipefail
+          timeout 800s /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 2 --python tools/map_blender/lind/build_windwaiting_cliff_C.py -- --source out/lind-scan-sources --out out/lind-scan-c 2>&1 | tee out/lind-scan-c/build.log
+      - name: Reopen blend and validate hashes
+        timeout-minutes: 3
+        run: |
+          timeout 100s /tmp/two-blender/app/blender -b out/lind-scan-c/windwaiting_cc0_scan_assembly_C_UNAPPROVED.blend --disable-autoexec --python-exit-code 2 --python-expr 'import bpy; s=bpy.context.scene; assert s["coordinate_space"]=="asset-local-provisional"; assert s["unit_scale_status"]=="UNAPPROVED"; assert len([o for o in bpy.data.objects if o.type=="MESH"])>=7; print("REOPEN_PASS")'
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path("out/lind-scan-c")
+          j=json.loads((d/"manifest_C.json").read_text())
+          assert len(j["placements"])==7 and j["G2"]=="NOT_RUN"
+          for filename,expected in j["files"].items():
+              assert hashlib.sha256((d/filename).read_bytes()).hexdigest()==expected
+          print("SCAN_C_HASH_PASS")
+          PY
+      - name: Preserve Blender, four renders, manifest and logs even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-scan-first-cliff-c-unapproved
+          path: out/lind-scan-c/
+          retention-days: 14
+          if-no-files-found: warn
