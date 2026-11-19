@@ -1,9 +1,5 @@
 name: LIND Scanned Cliff LOD Comparison
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/evaluate_scan_lods.py'
-      - '.github/workflows/lind-scan-lod-eval.yml'
   workflow_dispatch:
 permissions:
   contents: read
