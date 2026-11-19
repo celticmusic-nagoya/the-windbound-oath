@@ -55,7 +55,7 @@
 
 **旧歩行アニメーション候補PR #139/#140/#144/#145/#153/#154は保留。** 新方式の品質・互換性検証が完了するまで、マージ・削除・正式採用への格上げをしない。不要になった場合のみ証跡と依存関係を確認して整理する。現行本番スプライトを即時撤去しない。
 
-**実行方針:** 通常の実装・テスト・マージはAuto-Pilot。停止確認は不可逆データ損失・重大なセキュリティ問題・根幹仕様の重大な二択に限る。品質ゲートが未PASSなら自律修正またはBLOCKED報告とし、成功を偽らない。古い「3回で必ず停止」「mainへの個別承認」などの記載より、この最新ディレクター方針を優先する。
+**履歴注記（2026-11-19更新）:** 旧Auto-Pilotの自動マージ判断は失効。実装・QAは承認済み非破壊範囲で自律継続するが、mainマージ・正式採用・削除・公開は別途明示承認が必要。現在の判断は「AI-wide current production governance」を優先。
 
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
@@ -70,7 +70,7 @@
 - Superseded: `docs/story/WORLD_STORY_BIBLE_v1.1.txt` (history only; not canon).
 
 ## 1. Mission
-You are implementing an existing original 2D browser JRPG, not redesigning it from scratch.
+You are evolving an existing original browser JRPG toward director-approved high-quality fully 3D characters and environments. Preserve the working 2D runtime until the 3D replacement passes QA and integration gates.
 Preserve confirmed behavior unless the user explicitly requests a change. Prefer root-cause fixes and maintainable systems over layers of CSS/JS patches.
 
 Current development baseline: v0.66 "Impact Effects".
@@ -366,8 +366,8 @@ This section applies to ChatGPT, Claude, Codex and other agents when working on 
 
 ## 自律リトライ原則（Self-Retry Policy）— ソフトリミット版（2026-11-03 ディレクター承認）
 - 対象：全ワーカー（Claude/Codex等）およびディレクター補佐（ChatGPT）。アセット制作・コード実装・検証などでエラーや品質未達が発生した場合、報告のみで直ちに停止せず、原因分析・修正・再検証を自律的に行い、採用水準の成果物を目指す。
-- **内部リトライのソフトリミットは原則最大3回。** 同一問題に対する初回試行後の再試行を数え、各回で原因・修正・検証結果を確認する。無意味な同一操作の反復は禁止。
-- 3回のリトライでも解決しない場合は、無理に継続せず、発生している問題の具体内容・試した対処・残る障害・次の選択肢を簡潔に報告し、人間の判断を仰ぐ。未達の成果をPASSや完了と偽らない。
+- **現行規則:** 同一根本原因・同一方式の有効な失敗は最大2回。原因分析後、その方式を停止して構造的に異なる方式へ移行する。
+- 無意味な同一方式の再試行は禁止。未達成果をPASSとせず、原因・試行履歴・代替方式・解除条件を記録する。
 - **仕様判断不能・承認必須事項・権限不足・安全上の問題がある場合は、リトライ回数にかかわらず直ちに停止し、必要事項のみピンポイントで質問する。**
 - 既存の承認範囲・正式採用素材／確定シナリオの保護・main変更／マージの個別承認・FAST-TRACK方針を厳守する。リトライは権限拡張や作業範囲の無断変更を認めない。
 - 今後のClaude/Codex向け全タスクパケットおよびChatGPTによる実作業に本原則を適用する。
@@ -403,10 +403,10 @@ Scope: character/background/UI assets, sprites, masks, reference sheets, and ima
 
 1. **No blind repetition.** Every generation must be followed by an inspection of the actual result and a concise record of the delta from the canonical design. Never repeat a nearly identical prompt without an identified changed condition.
 2. **Analyze after two failed attempts.** Before a third attempt on the same asset/defect, document the structural cause (orientation, occlusion, layers, anatomy, anchors, palette, or model limitations) and change the method rather than merely rewording the prompt.
-3. **Three attempts maximum for the same defect.** Count the initial generation and subsequent corrections together. After three unsuccessful attempts, STOP that generation approach. Offer at least two alternatives such as component-level editing and manual retouching. This asset-specific cap is stricter than the general retry soft limit. Do not reset the counter through trivial prompt changes.
+3. **Current rule:** After two effective failures of the same root cause and method family, STOP that method family and switch to a structurally different method. Do not reset the counter through minor edits, branch changes or agent changes.
 4. **Lock approved design decisions.** Explicit director approval marks the specified *design decision* DONE/LOCKED. A later explicit director change supersedes it. Design approval does not imply that the PNG has passed transparency, anchor, hash, independent QA, or device testing.
 5. **Forward-only deliverables.** Prioritize the next real output (individual transparent PNG, comparison against original, QA evidence, integration) over recreating overview sheets. Fix minor visual discrepancies as part of the next production step without reopening accepted design decisions.
 6. **Emergency recovery.** On detecting a loop, state STOP, show the expected-versus-actual delta and attempt count, identify the cause, provide two actionable alternative approaches, and proceed only with a changed method. Do not silently resume the same generation.
 7. **Evidence.** Track asset ID, canonical reference, attempt count, structural analysis, observed delta, QA status, and next deliverable. Preserve originals. Report blocked/unrun work accurately.
 
-Precedence: this section governs asset-generation attempt counting and forward progress. It does not waive repository safety rules, canonical asset protection, task-specific prohibitions on publishing or merging, or existing approval gates.
+Precedence: 2026-11-19 AI-wide governance and 2026-11-14 causal-retry policy govern attempt counting, main merge approval and forward progress. Older three-attempt language is historical only.
