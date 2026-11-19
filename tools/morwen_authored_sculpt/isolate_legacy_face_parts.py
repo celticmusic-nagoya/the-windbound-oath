@@ -28,11 +28,17 @@ bpy.ops.object.duplicate()
 copy = bpy.context.object
 copy.name = "MORWEN_LegacyFaceParts_316_CANDIDATE"
 # Enter edit mode and remove all faces outside target material slots.
+bpy.ops.object.mode_set(mode="EDIT")
+bpy.ops.mesh.select_all(action="DESELECT")
+bpy.ops.mesh.select_mode(type="FACE")
 bpy.ops.object.mode_set(mode="OBJECT")
+for vert in copy.data.vertices:
+    vert.select = False
+for edge in copy.data.edges:
+    edge.select = False
 for poly in copy.data.polygons:
     poly.select = poly.material_index not in selected
 bpy.ops.object.mode_set(mode="EDIT")
-bpy.ops.mesh.select_mode(type="FACE")
 bpy.ops.mesh.delete(type="FACE")
 bpy.ops.object.mode_set(mode="OBJECT")
 assert copy.data.polygons and len(copy.data.polygons) < original_face_count
