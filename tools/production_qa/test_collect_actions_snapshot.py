@@ -21,6 +21,14 @@ class SnapshotTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             collect("../bad", "token")
 
+    def test_reject_dot_segments_before_network(self):
+        for repo in ("./repo", "owner/..", "owner/.", "../bad"):
+            with self.subTest(repo=repo):
+                def never_called(url, token):
+                    self.fail("invalid repository must be rejected before network")
+                with self.assertRaises(ValueError):
+                    collect(repo, "token", get=never_called)
+
     def test_reject_missing_token(self):
         with self.assertRaises(ValueError):
             collect("owner/repo", "")
