@@ -179,8 +179,7 @@ jobs:
             scratch="$(mktemp -d)"
             for output in "$dest" "$scratch"; do
               "$bpy" -b --disable-autoexec "$src" --python-exit-code 1 \
-  \
-              --python "$scripts/export_blueprint.py" -- "$output" --source-sha "$expected" --input-ref "$ref"
+                --python "$scripts/export_blueprint.py" -- "$output" --source-sha "$expected" --input-ref "$ref"
             done
             diff -qr "$dest" "$scratch"
             xvfb-run -a "$bpy" -b --disable-autoexec --python-exit-code 1 \
