@@ -50,6 +50,7 @@ def download(repo, artifact_id, token, output, expected_zip_sha256,
     api = "https://api.github.com/repos/" + repo + "/actions/artifacts/" + str(artifact_id) + "/zip"
     headers = {"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
                "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "TWO-artifact-read-only"}
+    created_output = False
     try:
         redirect = opener.open(Request(api, headers=headers), timeout=30)
         try:
@@ -73,6 +74,7 @@ def download(repo, artifact_id, token, output, expected_zip_sha256,
             if response.status != 200:
                 raise ValueError("archive download failed")
             with output.open("xb") as handle:
+                created_output = True
                 while True:
                     chunk = response.read(1024 * 1024)
                     if not chunk:
@@ -90,7 +92,8 @@ def download(repo, artifact_id, token, output, expected_zip_sha256,
                 "bytes": count, "path": str(output),
                 "zip_extracted": False, "safe_to_reuse": False}
     except BaseException:
-        output.unlink(missing_ok=True)
+        if created_output:
+            output.unlink(missing_ok=True)
         raise
 
 
