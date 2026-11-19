@@ -64,3 +64,9 @@ Read main AGENTS.md, main SESSION_CONTINUITY_INDEX.md, this PR #421 proposal and
 - Retained narrowly path-filtered lightweight `lind-agent-contract.yml` and `lind-ai-guard.yml` PR QA; indiscriminate disabling would weaken essential contract checks.
 - A manual-only workflow can still be launched by an authorized person once Actions is enabled; manual-only does NOT imply idempotency, locking or verified reuse. Any manual production run must be preceded by explicit artifact/input review.
 - Follow-up: audit remaining path-filtered LIND workflows for overlap, implement atomic reservation with optimistic concurrency and a durable store, validate test execution, then request explicit approval for staged re-enablement. The current 33 authored tests remain NOT_RUN.
+
+
+## Manual high-cost workflow concurrency guard (2026-11-19)
+- Inspected remaining path-filtered LIND lightweight tests and retained their PR triggers; no blanket disabling. Added workflow-level `concurrency` with group per workflow + ref and `cancel-in-progress: false` to five manual-only high-cost workflows: scan-cliff-C, CC0 rock components, parallel independent QA, CC0 editable sources, and authored bedrock B. This prevents simultaneous **running** copies of the same workflow/ref; it does NOT prevent duplicate requests or ensure artifact reuse.
+- GitHub Actions concurrency permits at most one running and one pending run per group; a newer pending run can replace an older pending run even when `cancel-in-progress: false`. Do not use this as an authoritative lossless queue, durable ledger, or atomic idempotency key. Different workflow/ref groups can still run in parallel, as intended for independent map/character stages.
+- All five workflows remain manual-only. No workflow was dispatched, no existing runs were cancelled by these code changes, and no runtime QA was performed while Actions is disabled. Explicit approval is still required before re-enabling Actions.
