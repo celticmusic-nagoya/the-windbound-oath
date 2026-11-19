@@ -6,6 +6,11 @@ on:
       - tools/morwen_authored_sculpt/build_voxel_head_sculpt.py
       - .github/workflows/morwen-voxel-head-sculpt.yml
   workflow_dispatch:
+  pull_request:
+    branches: [feature/morwen-authored-sculpt-20261118]
+    paths:
+      - tools/morwen_authored_sculpt/build_voxel_head_sculpt.py
+      - .github/workflows/morwen-voxel-head-sculpt.yml
 permissions:
   contents: read
 concurrency:
