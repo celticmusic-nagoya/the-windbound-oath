@@ -4,6 +4,10 @@ on:
 permissions:
   contents: read
   actions: read
+concurrency:
+  group: two-manual-lind-parallel-independent-qa-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   independent-qa:
     name: QA / ${{ matrix.check }}
