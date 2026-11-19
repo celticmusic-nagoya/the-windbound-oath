@@ -1,9 +1,5 @@
 name: LIND CC0 Rock PBR Lit Previews
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/render_cc0_rock_pbr.py'
-      - '.github/workflows/lind-cc0-rock-pbr.yml'
   workflow_dispatch:
 permissions:
   contents: read
