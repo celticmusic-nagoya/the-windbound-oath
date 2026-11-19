@@ -1,0 +1,243 @@
+00:00.547  blend            | Read blend: "/workspace/two-rock-c2/delivery/windwaiting_cliff_C2_UNAPPROVED.blend"
+{
+  "blender": "5.2.4 LTS",
+  "runtime": "PyPI bpy wheel, CPU Cycles",
+  "coordinate_space": "asset-local-provisional",
+  "unit_scale_status": "UNAPPROVED",
+  "source_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "producer_script_sha256": "8fe04570d642d7d8f92329cdbb6e73161a55167cdb2066b4394f809e45927103",
+  "mesh": {
+    "vertices": 28652,
+    "edges": 57252,
+    "faces": 28602,
+    "connected_components": 1,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "inconsistent_edges": 0,
+    "zero_area_faces": 0,
+    "signed_volume": 883.289535683526,
+    "triangles": 57300,
+    "intersecting_nonadjacent_triangle_pairs": 0,
+    "bounds": {
+      "min": [
+        -12.0,
+        -4.141177654266357,
+        -1.399999976158142
+      ],
+      "max": [
+        17.399999618530273,
+        6.729957103729248,
+        6.2412614822387695
+      ]
+    }
+  },
+  "coast": {
+    "principal_facet_widths_local": [
+      1.9000000000000004,
+      2.8999999999999995,
+      1.8000000000000003,
+      1.95,
+      1.75,
+      1.55,
+      1.7499999999999996,
+      2.75,
+      1.6500000000000004,
+      1.8000000000000007,
+      2.0999999999999996,
+      1.5999999999999996
+    ],
+    "minimum_facet_width_over_cliff_height": 0.24834722986866556,
+    "deep_joint_fraction": 0.2727272727272727,
+    "deep_joint_spacing_cv_population": 0.5986159169550175,
+    "cove_recession": 4.98,
+    "highest_cap_z": -0.524384850762485,
+    "maximum_foreshore_projection": 0.33901008360404994
+  },
+  "module_contacts": {
+    "Detached stack 01": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.5527728550217536
+    },
+    "Detached stack 02": {
+      "mode": "crosses_provisional_sea_datum",
+      "min_z": -0.6200000047683716,
+      "height_ratio": 0.47266084538670017
+    },
+    "Talus 01": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.0884927436709404,
+      "support_normal_z": 0.5321763753890991,
+      "min_z": 0.03349275141954422,
+      "max_z": 0.3173101544380188
+    },
+    "Talus 02": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.08601263165473938,
+      "support_normal_z": 0.4202635586261749,
+      "min_z": 0.031012602150440216,
+      "max_z": 0.29208579659461975
+    },
+    "Talus 03": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.0981975644826889,
+      "support_normal_z": 0.17077670991420746,
+      "min_z": 0.04319757968187332,
+      "max_z": 0.2810705006122589
+    },
+    "Talus 04": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09833648800849915,
+      "support_normal_z": 0.4097384512424469,
+      "min_z": 0.04333645850419998,
+      "max_z": 0.27651938796043396
+    },
+    "Talus 05": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11391288042068481,
+      "support_normal_z": 0.5313728451728821,
+      "min_z": 0.058912910521030426,
+      "max_z": 0.3575619161128998
+    },
+    "Talus 06": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11028870195150375,
+      "support_normal_z": 0.3817674219608307,
+      "min_z": 0.05528867989778519,
+      "max_z": 0.2259008288383484
+    },
+    "Talus 07": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.08719206601381302,
+      "support_normal_z": 0.1815556287765503,
+      "min_z": 0.032192058861255646,
+      "max_z": 0.1944434940814972
+    },
+    "Talus 08": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11364495754241943,
+      "support_normal_z": 0.5105319023132324,
+      "min_z": 0.058644987642765045,
+      "max_z": 0.2871384620666504
+    },
+    "Talus 09": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11069729924201965,
+      "support_normal_z": 0.4655449688434601,
+      "min_z": 0.055697329342365265,
+      "max_z": 0.3116293251514435
+    },
+    "Talus 10": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11582639813423157,
+      "support_normal_z": 0.39007729291915894,
+      "min_z": 0.06082639843225479,
+      "max_z": 0.22100117802619934
+    },
+    "Talus 11": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.08471846580505371,
+      "support_normal_z": 0.4229285717010498,
+      "min_z": 0.029718466103076935,
+      "max_z": 0.32489830255508423
+    },
+    "Talus 12": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.09679611027240753,
+      "support_normal_z": 0.4893690049648285,
+      "min_z": 0.04179612547159195,
+      "max_z": 0.4504142701625824
+    },
+    "Talus 13": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11099684983491898,
+      "support_normal_z": 0.4506165087223053,
+      "min_z": 0.0559968426823616,
+      "max_z": 0.48773011565208435
+    },
+    "Talus 14": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.0868416577577591,
+      "support_normal_z": 0.4102070927619934,
+      "min_z": 0.03184161335229874,
+      "max_z": 0.4570068418979645
+    },
+    "Talus 15": {
+      "mode": "body_ray_hit_inside_vertical_rock_span",
+      "support_z": 0.11521753668785095,
+      "support_normal_z": 0.4331555962562561,
+      "min_z": 0.06021750718355179,
+      "max_z": 0.2211843729019165
+    }
+  },
+  "shape_families": [
+    5,
+    7,
+    9
+  ],
+  "separate_module_counts": {
+    "02 | Detached sea stacks": 2,
+    "03 | Talus modules": 15
+  },
+  "files": {
+    "windwaiting_cliff_C2_UNAPPROVED.blend": {
+      "bytes": 869912,
+      "sha256": "968c59abbc8dd360805ef1b07f474e851bfdd56735e722d1e34a3560767affd9"
+    },
+    "front.png": {
+      "bytes": 1031454,
+      "sha256": "98595bccc33aa7d8baea83463f88c3741597411480b4119f0cc34461897fb43f",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "left.png": {
+      "bytes": 1004563,
+      "sha256": "6f6f93401ec657da1a57c9b62c6f55dca62231304927f6517f3b6bdca2c2ad6a",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "right.png": {
+      "bytes": 983712,
+      "sha256": "da27829fb3aaf8f7cdf01417b6e56a9f22bd1394955d9df7c1d5d6a39c4446d0",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "elevated.png": {
+      "bytes": 1047870,
+      "sha256": "a5f838b8f3712cc470433afd24ab32b20e5deab4c4027e729a8decbb36855df2",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "sunset.png": {
+      "bytes": 1048049,
+      "sha256": "577019f6c87072611a2a71698799868a5de22c11aef73d07e4b1be007801bb28",
+      "size": [
+        1200,
+        760
+      ]
+    },
+    "comparison.png": {
+      "bytes": 2075969,
+      "sha256": "2dd6087d82349befb620712f271b9a6ef5ede9703dace4627796728f29282182",
+      "size": [
+        1920,
+        1330
+      ]
+    }
+  },
+  "reopen": "PASS",
+  "png_decode": "PASS",
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "G3_structural_subset": "PASS",
+  "G3": "NOT_RUN"
+}
