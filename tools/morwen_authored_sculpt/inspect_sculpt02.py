@@ -19,7 +19,7 @@ for obj in bpy.data.objects:
   for p in mesh.polygons:
    vs=list(p.vertices)
    for i in range(len(vs)):incidence[tuple(sorted((vs[i],vs[(i+1)%len(vs)])))]+=1
-  d.update(vertices=len(mesh.vertices),faces=len(mesh.polygons),triangles=sum(max(0,len(p.vertices)-2) for p in mesh.polygons),quads=counts[4],quad_ratio=round(counts[4]/max(1,len(mesh.polygons)),4),nonmanifold_edges=sum(v!=2 for v in incidence.values()),wire_edges=sum(k not in incidence for k in edges),uv_layers=len(mesh.uv_layers),uv_names=[u.name for u in mesh.uv_layers],shape_keys=[k.name for k in mesh.shape_keys.key_blocks] if mesh.shape_keys else [],vertex_groups=len(obj.vertex_groups),armature_modifiers=[m.object.name if m.object else None for m in obj.modifiers if m.type=='ARMATURE'],materials=[m.name if m else None for m in mesh.materials])
+  d.update(vertices=len(mesh.vertices),faces=len(mesh.polygons),triangles=sum(max(0,len(p.vertices)-2) for p in mesh.polygons),quads=counts[4],quad_ratio=round(counts[4]/max(1,len(mesh.polygons)),4),nonmanifold_edges=sum(v!=2 for v in incidence.values()),wire_edges=sum(k not in incidence for k in edges),zero_area_faces=sum(p.area<1e-12 for p in mesh.polygons),unweighted_vertices=sum(not v.groups for v in mesh.vertices),uv_layers=len(mesh.uv_layers),uv_names=[u.name for u in mesh.uv_layers],shape_keys=[k.name for k in mesh.shape_keys.key_blocks] if mesh.shape_keys else [],vertex_groups=len(obj.vertex_groups),armature_modifiers=[m.object.name if m.object else None for m in obj.modifiers if m.type=='ARMATURE'],materials=[m.name if m else None for m in mesh.materials])
  elif obj.type=='ARMATURE':
   d.update(bones=len(obj.data.bones),bone_names=[x.name for x in obj.data.bones])
  objects.append(d)
