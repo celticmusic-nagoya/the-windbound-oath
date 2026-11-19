@@ -1,9 +1,5 @@
 name: LIND Scan Boundary Diagnostic
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/diagnose_scan_surface_boundary.py'
-      - '.github/workflows/lind-scan-boundary-diagnostics.yml'
   workflow_dispatch:
 permissions:
   contents: read
