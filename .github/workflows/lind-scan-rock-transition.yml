@@ -1,9 +1,5 @@
 name: LIND Scan Rock Transition Mesh
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/build_scan_rock_transition_study.py'
-      - '.github/workflows/lind-scan-rock-transition.yml'
   workflow_dispatch:
 permissions:
   contents: read
