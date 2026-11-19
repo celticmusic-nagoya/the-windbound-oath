@@ -1,13 +1,5 @@
 name: LIND canonical visual reference audit export
 on:
-  push:
-    branches:
-      - feature/lind-spatial-masterplan-01
-    paths:
-      - '.github/workflows/lind-canon-reference-audit.yml'
-  pull_request:
-    paths:
-      - '.github/workflows/lind-canon-reference-audit.yml'
   workflow_dispatch:
 permissions:
   contents: read
