@@ -35,3 +35,11 @@ G1 **PARTIAL** (Layer 0 body/hair reference SHA confirmed, final accessories pen
 - **Reject/avoid:** prior MakeHuman 154-component import as Morwen neutral base; old failed ring/voxel/flat-quad studies; realistic male textured bust without demonstrated clean editability; CC-BY or noncommercial meshes unless separately approved and tracked.
 - **Acceptance gate for candidate:** retrieve original bytes, record SHA256, archive original license, inspect editable topology (head cranium/face/ears/neck, non-manifold and disconnected components), render neutral 4-view against canonical Layer 0, and require independent G2 review. If the bundle has multiple meshes, choose by visual QA rather than guessing names. Do not auto-sculpt or auto-adopt before evidence.
 - **Current status:** research lead only, **NOT_DOWNLOADED / NOT_RUN**. Existing Blender 5.3 reference compatibility and failed face renders are preserved.
+
+## Official Blender Studio v1.4.1 bundle: first actual source audit (2026-11-20)
+- Run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44629009040, inspect-human-base-bundle **PASS**. Evidence artifact ID **14580522574**, JSON extracted and reviewed.
+- Exact source: https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip
+- ZIP bytes **50,643,039**, SHA-256 **811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515**, integrity test PASS; one packed `human_base_meshes_bundle.blend` (**49,420,489 bytes**) and PNG thumbnails including `primitive_body_female_stylized.png`, `stylized_body_female.png`, `realistic_head_sculpt.png`, `stylized_eye.png`.
+- **Correction:** prior note mentioning v1.2.0 as preferred is superseded by this verified v1.4.1 exact source.
+- **Not yet inspected:** license text / terms inside .blend, individual mesh topology, female sculpt editability, render against Morwen four-view. Archive was audited in memory and not retained as a production source artifact. Source **candidate only**, no canonical adoption.
+- Next non-destructive step: SHA-verified reacquisition on runner, inspect .blend with Blender 5.3.0 and render a clean female stylized base candidate for independent G2. Avoid repeating old face candidate renders in the new source-audit job.
