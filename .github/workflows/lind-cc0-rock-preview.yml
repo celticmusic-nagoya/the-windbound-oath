@@ -1,9 +1,5 @@
 name: LIND CC0 Rock Candidate Blender Previews
 on:
-  pull_request:
-    paths:
-      - 'tools/map_blender/lind/render_cc0_rock_candidates.py'
-      - '.github/workflows/lind-cc0-rock-preview.yml'
   workflow_dispatch:
 permissions:
   contents: read
