@@ -8,8 +8,6 @@ from mathutils import Vector
 out=Path(sys.argv[sys.argv.index("--")+1]);out.mkdir(parents=True,exist_ok=True)
 targets=("STYLIZED_Head","STYLIZED_Body_Female.001")
 audit={"status":"CANDIDATE_ONLY_NOT_ADOPTED","blender":bpy.app.version_string,"objects":[]}
-source={n:bpy.data.objects.get(n) for n in targets}
-if not all(source.values()):raise RuntimeError("MISSING_EXPECTED_SOURCE_OBJECT")
 for name,original in source.items():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     # Append a specific mesh object from the verified source .blend (not a linked dependency).
