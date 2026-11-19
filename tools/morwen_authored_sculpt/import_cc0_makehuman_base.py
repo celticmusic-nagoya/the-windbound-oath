@@ -22,8 +22,32 @@ scene["asset_status"]="CC0_SOURCE_IMPORT_NOT_CHARACTER_SCULPT"
 scene["source_sha256"]=sha
 scene["design_reference"]="MORWEN_LAYER0_NOT_YET_ALIGNED"
 scene["license"]="CC0_BUNDLED_MAKEHUMAN_BASE_VERIFY_UPSTREAM"
+# Neutral orthographic source-mesh views, not Morwen art renders.
+from mathutils import Vector
+worldpts=[ob.matrix_world @ v.co for ob in meshes for v in ob.data.vertices]
+minv=Vector(tuple(min(v[i] for v in worldpts) for i in range(3)))
+maxv=Vector(tuple(max(v[i] for v in worldpts) for i in range(3)))
+center=(minv+maxv)/2
+span=maxv-minv
+assert min(span)>0.001,(minv,maxv)
+camdata=bpy.data.cameras.new("CC0_SOURCE_ORTHO");cam=bpy.data.objects.new("CC0_SOURCE_ORTHO",camdata);scene.collection.objects.link(cam)
+scene.camera=cam;camdata.type="ORTHO";camdata.ortho_scale=max(span.x,span.z)*1.22
+ld=bpy.data.lights.new("CC0_SOURCE_LIGHT","AREA");lo=bpy.data.objects.new("CC0_SOURCE_LIGHT",ld);scene.collection.objects.link(lo)
+lo.location=center+Vector((span.x*1.5,-span.y*2,span.z*1.5))
+ld.energy=450;ld.size=max(span)*1.5
+lo.rotation_euler=(center-lo.location).to_track_quat("-Z","Y").to_euler()
+scene.render.engine="CYCLES";scene.cycles.device="CPU";scene.cycles.samples=12
+scene.render.resolution_x=480;scene.render.resolution_y=640;scene.render.resolution_percentage=100
+scene.render.film_transparent=True
+views={"front":(0,-1,0),"right":(1,0,0),"back":(0,1,0),"left":(-1,0,0)}
+for name,direction in views.items():
+ cam.location=center+Vector(direction)*max(span)*2.5
+ cam.rotation_euler=(center-cam.location).to_track_quat("-Z","Y").to_euler()
+ scene.render.filepath=str(out/("source_"+name+".png"))
+ bpy.ops.render.render(write_still=True)
+ assert pathlib.Path(scene.render.filepath).stat().st_size>2000
 blend=out/"MAKEHUMAN_CC0_UNMODIFIED_BASE_IMPORT_CANDIDATE.blend"
 bpy.ops.wm.save_as_mainfile(filepath=str(blend),compress=True)
-report={"status":"SOURCE_IMPORT_ONLY_NOT_SCULPT","source_sha256":sha,"source_size":src.stat().st_size,"blender":bpy.app.version_string,"meshes":len(meshes),"vertices":verts,"faces":faces,"blend_sha256":hashlib.sha256(blend.read_bytes()).hexdigest(),"G1":"NOT_RUN_MORWEN_FIT","G2":"NOT_RUN","G3":"PARTIAL_IMPORT_ONLY","G4":"NOT_RUN"}
+report={"status":"SOURCE_IMPORT_ONLY_NOT_SCULPT","source_sha256":sha,"source_size":src.stat().st_size,"blender":bpy.app.version_string,"meshes":len(meshes),"vertices":verts,"faces":faces,"blend_sha256":hashlib.sha256(blend.read_bytes()).hexdigest(),"source_bounds":{"min":list(minv),"max":list(maxv)},"source_views":list(views),"G1":"NOT_RUN_MORWEN_FIT","G2":"NOT_RUN","G3":"PARTIAL_IMPORT_ONLY","G4":"NOT_RUN"}
 (out/"source_import_qa.json").write_text(json.dumps(report,indent=2)+"\n")
 print("MAKEHUMAN_CC0_SOURCE_IMPORT",json.dumps(report))
