@@ -36,7 +36,17 @@ for o in bpy.data.objects:
             }
             def digest(value):
                 return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",",":")).encode()).hexdigest()
+            keys = {}
+            if me.shape_keys:
+                for key in me.shape_keys.key_blocks:
+                    coords = [(v, [round(float(c), 8) for c in key.data[v].co]) for v in vertex_ids]
+                    keys[key.name] = digest(coords)
+            groups = {}
+            for v in vertex_ids:
+                groups[str(v)] = [(o.vertex_groups[g.group].name, round(float(g.weight), 8)) for g in me.vertices[v].groups if g.group < len(o.vertex_groups)]
             regions[mat_name] = {
+                "shape_key_position_sha256": keys,
+                "weights_sha256": digest(groups),
                 "faces": len(faces), "vertices": len(vertex_ids),
                 "topology_sha256": digest(payload["faces"]),
                 "positions_sha256": digest(payload["vertices"]),
