@@ -23,11 +23,32 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install pinned Blender Python
-        run: python -m pip install --disable-pip-version-check bpy==5.2.4
+      - name: Install official Blender 5.3.0 candidate with upstream SHA-256 verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          python3 - "$work/checksums" "$work/expected.sha256" "$name" <<'PY'
+          import re,sys
+          from pathlib import Path
+          matches=[]
+          for line in Path(sys.argv[1]).read_text().splitlines():
+              if sys.argv[3] in line:
+                  hashes=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',line)
+                  if len(hashes)!=1: raise SystemExit('Invalid upstream SHA row')
+                  matches.append(hashes[0].lower())
+          if len(matches)!=1: raise SystemExit('Expected exactly one upstream SHA')
+          Path(sys.argv[2]).write_text(f'{matches[0]}  {sys.argv[3]}\n')
+          PY
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0); print("TWO_BLENDER_530_RUNTIME_PASS")'
+          rm -rf "$work"
       - name: Verify source and create C10 Blender original
         run: |
           set -euo pipefail
@@ -35,16 +56,16 @@ jobs:
           SOURCE="assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend"
           test -s "$SOURCE"
           file "$SOURCE"
-          python assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py "$SOURCE" /tmp/c10-render
+          /tmp/two-blender53/blender -b --factory-startup --python assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py -- "$SOURCE" /tmp/c10-render
       - name: Render fixed C10 camera views
         run: |
-          python - <<'PY'
+          cat > /tmp/c10-render/render_views.py <<'PY'
           import bpy
           from pathlib import Path
           source=Path('/tmp/c10-render/windwaiting_cliff_C10_UNAPPROVED.blend')
           bpy.ops.wm.open_mainfile(filepath=str(source))
           scene=bpy.context.scene
-          scene.render.engine='BLENDER_EEVEE_NEXT'
+          scene.render.engine='BLENDER_EEVEE'
           scene.render.resolution_percentage=65
           scene.render.image_settings.file_format='PNG'
           scene.render.threads=4
@@ -56,6 +77,7 @@ jobs:
               scene.render.filepath='/tmp/c10-render/'+name+'.png'
               bpy.ops.render.render(write_still=True)
           PY
+          /tmp/two-blender53/blender -b --python /tmp/c10-render/render_views.py
       - name: Verify render files
         run: |
           set -euo pipefail
