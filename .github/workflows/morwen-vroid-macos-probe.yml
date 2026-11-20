@@ -170,7 +170,56 @@ jobs:
                         sleep 8
                         screencapture -x evidence/vrm-native-save.png
                         swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-native-save.png > evidence/vrm-native-save-text.txt
-                        if grep -Fxq Documents evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
+                        if grep -Eq '^(E |[[:space:]]*)Documents && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
+                          if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-native-save.png Save 'Save As:' > evidence/vrm-save-click.txt; then
+                            sleep 30
+                            find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -type f -print > evidence/vrm-saved-files.txt
+                            while IFS= read -r v; do test -s "$v" && cp "$v" evidence/model.vrm; done < evidence/vrm-saved-files.txt
+                            if [ -s evidence/model.vrm ]; then
+                              shasum -a 256 evidence/model.vrm > evidence/vrm-sha256.txt
+                              python3 -c 'import struct,json; f=open("evidence/model.vrm","rb"); magic,ver,total=struct.unpack("<4sII",f.read(12)); n,t=struct.unpack("<I4s",f.read(8)); assert magic==b"glTF" and ver==2 and t==b"JSON"; d=json.loads(f.read(n)); m=d["extensions"]["VRMC_vrm"]["meta"]; print(json.dumps(m,indent=2)); assert m["name"]=="TWO_Morwen_Base_M00" and m["authors"]==["Glendalough_jp"]; assert m["allowRedistribution"] is False and m["modification"]=="allowModification"' > evidence/vrm-validation.txt 2>&1 && echo VRM_METADATA_PASS > evidence/vrm-status.txt || echo VRM_REVIEW_REQUIRED > evidence/vrm-status.txt
+                            fi
+                          fi
+                        fi
+                      fi
+                    fi
+                  fi
+                fi
+              fi
+            fi
+          fi
+          pid="$(pgrep -x "$exe" | head -n 1 || true)"
+          if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
+            cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
+          fi
+          ps -axo pid,comm > evidence/processes.txt
+          if [ -d "$HOME/Library/Logs" ]; then
+            find "$HOME/Library/Logs" -maxdepth 4 -name Player.log -exec cp {} evidence/ \;
+          fi
+          screencapture -x evidence/screen.png || true
+          if [ -d "$HOME/Library/Logs/DiagnosticReports" ]; then
+            find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -iname '*vroid*' -exec cp {} evidence/ \;
+          fi
+          if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+            echo PROCESS_ALIVE > evidence/status.txt
+            kill "$pid" || true
+          else
+            set +e
+            false
+            rc=$?
+            set -e
+            echo "PROCESS_EXITED $rc" > evidence/status.txt
+            exit 1
+          fi
+          test -s evidence/screen.png
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vroid-macos-probe-evidence
+          path: evidence/
+          retention-days: 7
+ evidence/vrm-native-save-text.txt && grep -Fxq TWO_Morwen_Base_M00 evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
                           if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-native-save.png Save 'Save As:' > evidence/vrm-save-click.txt; then
                             sleep 30
                             find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -type f -print > evidence/vrm-saved-files.txt
