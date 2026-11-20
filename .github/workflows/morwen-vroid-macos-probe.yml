@@ -197,6 +197,20 @@ jobs:
             fi
           fi
           screencapture -x evidence/final-recovery-screen.png || true
+          # Inspect actual editor controls in one session, before any irreversible edit.
+          if grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt; then
+            for tab in face hair body outfit; do
+              "$gui" vroid-shortcut "$tab" || continue
+              sleep 3
+              capture_state "editor-$tab" || true
+            done
+            "$gui" vroid-shortcut face || true
+            sleep 3
+            capture_state editor-face-return || true
+            echo TAB_NAVIGATION_REVIEW_REQUIRED > evidence/authoring-status.txt
+          else
+            echo BLOCKED_NATIVE_REOPEN > evidence/authoring-status.txt
+          fi
           # Native editor checkpoint only; VRM export deferred until director-approved art gate.
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
