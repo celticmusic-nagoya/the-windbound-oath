@@ -70,3 +70,6 @@ Check expiration before handoff; preserve needed binaries via existing authorize
 
 ## Autonomous GUI production — 2026-11-21
 Read the director-approved autonomous GUI production section in AGENTS.md. PR #427 owns native checkpoint restoration, app-specific shortcuts and recovery QA; run 44812638361 / artifact 14668767481 is the reopen evidence pointer. Shortcut/Undo/Redo execution remains individually unqualified; no asset adoption. Other agents reuse verified procedures only and qualify application-specific controls before integration.
+
+## Continuous deliverable-first production — 2026-11-21
+Read the latest director-approved continuous deliverable-first production section in AGENTS.md. All agents integrate QA and recovery into actual production rather than stopping after individual operation tests. Morwen #427: meaningful intermediate and pre-VRM screenshots directly visible in chat, native editable checkpoints preserved, routine reports suppressed. Authenticated artifact transport remains required for cross-agent handoff; formal adoption gates unchanged.
