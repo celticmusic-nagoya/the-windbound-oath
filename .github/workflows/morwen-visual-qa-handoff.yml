@@ -44,6 +44,7 @@ jobs:
           assert d['inputs'][0]['sha256']==hashlib.sha256(p.read_bytes()).hexdigest()
           assert d['gates']['G2']=='NOT_RUN'
           assert d['scope']=='EVIDENCE_ONLY_NO_ARTISTIC_PASS'
+          assert len(d['input_fingerprint_sha256'])==64
           print('SYNTHETIC_HANDOFF_SMOKE_PASS_NOT_RENDER')
           PY
   package-evidence:
