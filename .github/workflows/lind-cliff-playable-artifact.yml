@@ -1,5 +1,4 @@
 name: Lind cliff playable candidate archive
-
 on:
   push:
     branches: [feature/lind-cliff-rock-art-study-20261118]
@@ -11,11 +10,9 @@ on:
       - tests/field/windwaiting-cliff-*
       - tools/map_blender/lind/build_windwaiting_*.py
       - tools/map_blender/shared/vegetation_placement.py
-
 permissions:
   contents: read
   actions: read
-
 jobs:
   archive:
     runs-on: ubuntu-24.04
@@ -31,11 +28,11 @@ jobs:
             tests/field
             tools/map_blender/lind
             tools/map_blender/shared
-      - name: Verify candidate files and navigation
+      - name: Verify protected baseline
         run: |
-          # Preserve historical evidence; only these three reviewed runtime files changed.
           manifest=assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
-          grep -Ev '  dev/windwaiting-cliff/(play|sunset|surface)\.mjs
+          python3 -c 'import sys; skip={"dev/windwaiting-cliff/"+n+".mjs" for n in ("play","sunset","surface")}; print("".join(line for line in open(sys.argv[1]) if line.split(maxsplit=1)[-1].strip() not in skip),end="")' "$manifest" > /tmp/protected-sha
+          sha256sum -c /tmp/protected-sha
           node tests/field/windwaiting-cliff-nav.test.mjs
           node tests/field/windwaiting-cliff-eco.test.mjs
       - name: Reuse verified photo material artifact
@@ -45,86 +42,16 @@ jobs:
           run-id: 44735960468
           github-token: ${{ github.token }}
           path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
-      - name: Verify photo candidate and runtime syntax
+      - name: Verify and archive candidate hashes
         run: |
-          (cd assets/candidates/lind/windwaiting-cliff-playable/photo-pbr && sha256sum -c SHA256SUMS)
-          node --check dev/windwaiting-cliff/surface.mjs
-          node --check dev/windwaiting-cliff/play.mjs
-          manifest=assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
-          cp "$manifest" "${manifest}.baseline"
-          { grep -Ev '  dev/windwaiting-cliff/(play|sunset|surface)\.mjs
-      - uses: actions/upload-artifact@v4
-        with:
-          name: windwaiting-cliff-playable-${{ github.sha }}
-          path: |
-            assets/candidates/lind/windwaiting-cliff-playable/
-            dev/windwaiting-cliff/
-            dev/shared/vegetation.mjs
-            tests/field/windwaiting-cliff-*
-            tools/map_blender/lind/build_windwaiting_*.py
-            tools/map_blender/shared/vegetation_placement.py
-          if-no-files-found: error
-          retention-days: 14
- "$manifest" | sha256sum -c -
-          sha256sum dev/windwaiting-cliff/{play,sunset,surface}.mjs > /tmp/runtime-sha
-          cat /tmp/runtime-sha
-          node tests/field/windwaiting-cliff-nav.test.mjs
-          node tests/field/windwaiting-cliff-eco.test.mjs
-      - name: Reuse verified photo material artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: lind-photo-material-3330d3bcdfc05df9801acaebc17c8abd624f4391
-          run-id: 44735960468
-          github-token: ${{ github.token }}
-          path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
-      - name: Verify photo candidate and runtime syntax
-        run: |
-          (cd assets/candidates/lind/windwaiting-cliff-playable/photo-pbr && sha256sum -c SHA256SUMS)
-          node --check dev/windwaiting-cliff/surface.mjs
-          node --check dev/windwaiting-cliff/play.mjs
-      - uses: actions/upload-artifact@v4
-        with:
-          name: windwaiting-cliff-playable-${{ github.sha }}
-          path: |
-            assets/candidates/lind/windwaiting-cliff-playable/
-            dev/windwaiting-cliff/
-            dev/shared/vegetation.mjs
-            tests/field/windwaiting-cliff-*
-            tools/map_blender/lind/build_windwaiting_*.py
-            tools/map_blender/shared/vegetation_placement.py
-          if-no-files-found: error
-          retention-days: 14
- "${manifest}.baseline"; cat /tmp/runtime-sha; sha256sum "${manifest}.baseline"; } > "$manifest"
-          sha256sum -c "$manifest"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: windwaiting-cliff-playable-${{ github.sha }}
-          path: |
-            assets/candidates/lind/windwaiting-cliff-playable/
-            dev/windwaiting-cliff/
-            dev/shared/vegetation.mjs
-            tests/field/windwaiting-cliff-*
-            tools/map_blender/lind/build_windwaiting_*.py
-            tools/map_blender/shared/vegetation_placement.py
-          if-no-files-found: error
-          retention-days: 14
- "$manifest" | sha256sum -c -
-          sha256sum dev/windwaiting-cliff/{play,sunset,surface}.mjs > /tmp/runtime-sha
-          cat /tmp/runtime-sha
-          node tests/field/windwaiting-cliff-nav.test.mjs
-          node tests/field/windwaiting-cliff-eco.test.mjs
-      - name: Reuse verified photo material artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: lind-photo-material-3330d3bcdfc05df9801acaebc17c8abd624f4391
-          run-id: 44735960468
-          github-token: ${{ github.token }}
-          path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
-      - name: Verify photo candidate and runtime syntax
-        run: |
-          (cd assets/candidates/lind/windwaiting-cliff-playable/photo-pbr && sha256sum -c SHA256SUMS)
-          node --check dev/windwaiting-cliff/surface.mjs
-          node --check dev/windwaiting-cliff/play.mjs
+          root=assets/candidates/lind/windwaiting-cliff-playable
+          (cd "$root/photo-pbr" && sha256sum -c SHA256SUMS)
+          for file in play sunset surface; do node --check "dev/windwaiting-cliff/$file.mjs"; done
+          cp "$root/SHA256SUMS" "$root/SHA256SUMS.baseline"
+          cp /tmp/protected-sha "$root/SHA256SUMS"
+          sha256sum dev/windwaiting-cliff/{play,sunset,surface}.mjs "$root/SHA256SUMS.baseline" >> "$root/SHA256SUMS"
+          find "$root/photo-pbr" -type f -print0 | sort -z | xargs -0 sha256sum >> "$root/SHA256SUMS"
+          sha256sum -c "$root/SHA256SUMS"
       - uses: actions/upload-artifact@v4
         with:
           name: windwaiting-cliff-playable-${{ github.sha }}
