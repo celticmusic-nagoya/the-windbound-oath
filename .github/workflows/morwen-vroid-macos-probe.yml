@@ -47,11 +47,18 @@ jobs:
           exe="$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")"
           file "$app/Contents/MacOS/$exe" > evidence/binary.txt
           test "$(uname -m)" = arm64
-          # Prior ARM64 run exited 127: Unity could not open custom log path.
-          # Use Unity standard output logging; no workspace path dependency.
-          "$app/Contents/MacOS/$exe" -logFile - > evidence/stdout.txt 2>&1 &
-          pid=$!
+          # LaunchServices registers the app with the GUI session.
+          stat -f '%Su' /dev/console > evidence/console-user.txt
+          open -a "$app" --args -logFile "$RUNNER_TEMP/vroid-player.log"
+          sleep 15
+          osascript -e "tell application id \"net.pixiv.vroid.macosx\" to activate" > evidence/activate.txt 2>&1 || true
           sleep 45
+          screencapture -x evidence/screen-60s.png || true
+          sleep 30
+          pid="$(pgrep -x "$exe" | head -n 1 || true)"
+          if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
+            cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
+          fi
           ps -axo pid,comm > evidence/processes.txt
           if [ -d "$HOME/Library/Logs" ]; then
             find "$HOME/Library/Logs" -maxdepth 4 -name Player.log -exec cp {} evidence/ \;
@@ -60,12 +67,12 @@ jobs:
           if [ -d "$HOME/Library/Logs/DiagnosticReports" ]; then
             find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -iname '*vroid*' -exec cp {} evidence/ \;
           fi
-          if kill -0 "$pid" 2>/dev/null; then
+          if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
             echo PROCESS_ALIVE > evidence/status.txt
             kill "$pid" || true
           else
             set +e
-            wait "$pid"
+            false
             rc=$?
             set -e
             echo "PROCESS_EXITED $rc" > evidence/status.txt
