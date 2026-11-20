@@ -71,6 +71,12 @@ jobs:
           else
             echo INPUT_ACCESS_OR_DISPLAY_BLOCKED > evidence/gui-action.txt
           fi
+          # Director explicitly authorized the agreement on 2026-11-20.
+          if [ -s evidence/after-get-started.png ] && grep -qx true evidence/input-access.txt; then
+            swift -e 'import Vision; import Foundation; import CoreGraphics; let r = VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); let a = r.results ?? []; let strings = a.compactMap { $0.topCandidates(1).first?.string }; print(strings.joined(separator:" | ")); guard strings.contains(where:{$0.contains("Terms of Use")}), strings.contains(where:{$0.contains("Privacy Policy")}), strings.contains(where:{$0.contains("Guidelines")}), let o = a.first(where:{$0.topCandidates(1).first?.string == "Agree"}) else { print("AGREEMENT_SCREEN_NOT_VERIFIED"); exit(0) }; let p = CGPoint(x:o.boundingBox.midX * CGFloat(CGDisplayPixelsWide(CGMainDisplayID())),y:(1-o.boundingBox.midY)*CGFloat(CGDisplayPixelsHigh(CGMainDisplayID()))); let s = CGEventSource(stateID:.combinedSessionState); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(500000); for t in [CGEventType.leftMouseDown,.leftMouseUp] { if let e = CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left) { e.setIntegerValueField(.mouseEventClickState,value:1); e.post(tap:.cgSessionEventTap) }; usleep(250000) }; print("AGREEMENT_CLICK_SENT_REVIEW_REQUIRED")' evidence/after-get-started.png > evidence/agreement-status.txt
+            sleep 25
+            screencapture -x evidence/after-agreement.png
+          fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
             cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
