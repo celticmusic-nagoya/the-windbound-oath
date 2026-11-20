@@ -40,7 +40,11 @@ def main():
         files.append({"path": f.relative_to(source).as_posix(), "bytes": f.stat().st_size, "sha256": sha256(f)})
     if not files:
         parser.error("No supported input evidence found")
+    # Stable across machines, timestamps and directory locations; changes with evidence bytes or paths.
+    fingerprint_payload = json.dumps({"asset": args.asset, "inputs": files}, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    input_fingerprint_sha256 = hashlib.sha256(fingerprint_payload).hexdigest()
     result = {
+        "input_fingerprint_sha256": input_fingerprint_sha256,
         "schema": "two.visual_qa_handoff.v1",
         "asset": args.asset,
         "scope": "EVIDENCE_ONLY_NO_ARTISTIC_PASS",
