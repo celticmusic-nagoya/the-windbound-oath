@@ -1,0 +1,253 @@
+{
+  "status": "CANDIDATE_ONLY",
+  "method": "E_individual_polyhedral_block_sculpt",
+  "d4_source_sha256": "0e560afc031f2356ade277e7b4f89eb01a2e62acdcda780c1c366112b90d99ff",
+  "d4_geometry_sha256": "ec2af2d59f922157de5a6f336c5c99208102e648a67b140a2f8eb994c42e0274",
+  "method_c_sha256": "d0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545",
+  "candidate_sha256": "7d4c4067c2e9118a5ccc2395b843fc64fff737b5a69dd1ed2dcdf515917c7d9d",
+  "carrier_geometry_sha256": "e226cb7a007a33da76541298af582a996ed12bbba84534a79a8f094397f893c3",
+  "before": {
+    "vertices": 38830,
+    "faces": 40634,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0
+  },
+  "after": {
+    "vertices": 39468,
+    "faces": 41910,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0
+  },
+  "local_self_contacts": {
+    "before": 0,
+    "after": 0
+  },
+  "protected_vertices": 37076,
+  "protected_vertices_missing": 0,
+  "old_loop_normal_max_dev_deg": 0.0198,
+  "skipped_small_components_faces": [],
+  "islands": {
+    "island_0_west_fracture": {
+      "rail": "west_fracture",
+      "main_fracture_from_rail": true,
+      "projection_normal": [
+        -0.19537,
+        -0.91916,
+        0.34202
+      ],
+      "perimeter_squeeze_fraction": 0.0137,
+      "perimeter_vertices_locked": 126,
+      "old_faces_removed": 2162,
+      "old_interior_vertices_removed": 1019,
+      "blocks": 28,
+      "block_planes": 211,
+      "fold_planes": 15,
+      "chip_planes": 10,
+      "block_footprint_area_min_med_max": [
+        0.2591,
+        0.4108,
+        1.5359
+      ],
+      "block_footprint_sides_hist": {
+        "4": 3,
+        "5": 8,
+        "6": 13,
+        "7": 4
+      },
+      "crease_polylines": 401,
+      "crease_constraint_edges": 511,
+      "longest_straight_crease_run": 0.7496,
+      "new_vertices": 1350,
+      "new_faces": 2824,
+      "faces_flipped_by_winding": 0,
+      "crease_edges": 604,
+      "sharp_crease_edges": 459,
+      "crease_dihedral_median_p90": [
+        29.88,
+        70.94
+      ],
+      "visible_facet_regions": 60,
+      "facet_region_area_median": 0.05058,
+      "floor_face_fraction": 0.0464,
+      "relief_vs_massform_min_max": [
+        -0.383,
+        0.4258
+      ],
+      "contact_relax_passes": 1,
+      "uv": {
+        "uv_method": "exact_boundary_mean_value_harmonic_map_with_untangle",
+        "residual_weight": 1.0,
+        "affine_det": -0.0022145001221095476,
+        "perimeter_affine_residual_rms": 0.010987052992712715,
+        "perimeter_uv_mismatch_max": 0.0,
+        "harmonic_flips_before_untangle": 0,
+        "untangle_passes": 1,
+        "perimeter_ears_rotated": 1,
+        "perimeter_old_uv_spread_max": 0.0,
+        "perimeter_edges_reversed_vs_affine": 0,
+        "perimeter_edges_angle_gt45_vs_affine": 20,
+        "perimeter_edges": 126
+      }
+    },
+    "island_1_central_fracture": {
+      "rail": "central_fracture",
+      "main_fracture_from_rail": true,
+      "projection_normal": [
+        0.42262,
+        -0.90631,
+        0.0
+      ],
+      "perimeter_squeeze_fraction": 0.0108,
+      "perimeter_vertices_locked": 111,
+      "old_faces_removed": 1541,
+      "old_interior_vertices_removed": 716,
+      "blocks": 21,
+      "block_planes": 166,
+      "fold_planes": 9,
+      "chip_planes": 13,
+      "block_footprint_area_min_med_max": [
+        0.2407,
+        0.3684,
+        1.2272
+      ],
+      "block_footprint_sides_hist": {
+        "5": 8,
+        "6": 9,
+        "7": 3,
+        "8": 1
+      },
+      "crease_polylines": 453,
+      "crease_constraint_edges": 357,
+      "longest_straight_crease_run": 0.5974,
+      "new_vertices": 1013,
+      "new_faces": 2135,
+      "faces_flipped_by_winding": 0,
+      "crease_edges": 488,
+      "sharp_crease_edges": 400,
+      "crease_dihedral_median_p90": [
+        30.86,
+        72.11
+      ],
+      "visible_facet_regions": 61,
+      "facet_region_area_median": 0.04159,
+      "floor_face_fraction": 0.0122,
+      "relief_vs_massform_min_max": [
+        -0.2669,
+        0.2315
+      ],
+      "contact_relax_passes": 1,
+      "uv": {
+        "uv_method": "exact_boundary_mean_value_harmonic_map_with_untangle",
+        "residual_weight": 1.0,
+        "affine_det": -0.0014315346782676618,
+        "perimeter_affine_residual_rms": 0.009465818555423814,
+        "perimeter_uv_mismatch_max": 0.0,
+        "harmonic_flips_before_untangle": 0,
+        "untangle_passes": 1,
+        "perimeter_ears_rotated": 0,
+        "perimeter_old_uv_spread_max": 0.0,
+        "perimeter_edges_reversed_vs_affine": 2,
+        "perimeter_edges_angle_gt45_vs_affine": 22,
+        "perimeter_edges": 111
+      }
+    },
+    "island_2_west_fracture": {
+      "rail": "west_fracture",
+      "main_fracture_from_rail": false,
+      "projection_normal": [
+        -0.20791,
+        -0.97815,
+        0.0
+      ],
+      "perimeter_squeeze_fraction": 0.0,
+      "perimeter_vertices_locked": 16,
+      "old_faces_removed": 52,
+      "old_interior_vertices_removed": 19,
+      "blocks": 2,
+      "block_planes": 13,
+      "fold_planes": 0,
+      "chip_planes": 1,
+      "block_footprint_area_min_med_max": [
+        0.2396,
+        0.2865,
+        0.3333
+      ],
+      "block_footprint_sides_hist": {
+        "5": 2
+      },
+      "crease_polylines": 8,
+      "crease_constraint_edges": 3,
+      "longest_straight_crease_run": 0.1411,
+      "new_vertices": 29,
+      "new_faces": 72,
+      "faces_flipped_by_winding": 0,
+      "crease_edges": 7,
+      "sharp_crease_edges": 1,
+      "crease_dihedral_median_p90": [
+        6.21,
+        9.51
+      ],
+      "visible_facet_regions": 2,
+      "facet_region_area_median": 0.14243,
+      "floor_face_fraction": 0.0,
+      "relief_vs_massform_min_max": [
+        -0.0468,
+        0.0255
+      ],
+      "contact_relax_passes": 1,
+      "uv": {
+        "uv_method": "exact_boundary_mean_value_harmonic_map_with_untangle",
+        "residual_weight": 1.0,
+        "affine_det": -0.0018344217212073657,
+        "perimeter_affine_residual_rms": 0.0004216195107365817,
+        "perimeter_uv_mismatch_max": 0.0,
+        "harmonic_flips_before_untangle": 0,
+        "untangle_passes": 1,
+        "perimeter_ears_rotated": 0,
+        "perimeter_old_uv_spread_max": 0.0,
+        "perimeter_edges_reversed_vs_affine": 0,
+        "perimeter_edges_angle_gt45_vs_affine": 0,
+        "perimeter_edges": 16
+      }
+    }
+  },
+  "uv_audit": {
+    "faces": 5031,
+    "ring_faces": 531,
+    "zero_area_uv": 0,
+    "flipped_uv": 0,
+    "overlap_pairs": 0,
+    "overlap_pairs_repair_internal": 0,
+    "overlap_pairs_repair_vs_ring": 0,
+    "texel_scale_ratio_median": 0.8692,
+    "texel_scale_ratio_p5_p95": [
+      0.5817,
+      1.1314
+    ],
+    "anisotropy_median": 9.386,
+    "anisotropy_p95": 17.5332,
+    "ring_anisotropy_median": 6.9739,
+    "ring_anisotropy_p95": 27.2239
+  },
+  "checks": {
+    "closed_manifold": true,
+    "no_degenerate_faces": true,
+    "no_new_local_self_contacts": true,
+    "protected_vertices_unchanged": true,
+    "consistent_winding": true,
+    "old_loop_normals_preserved_deg_lt_0.5": true,
+    "every_loop_has_normal": true,
+    "no_straight_crease_longer_than_0.9": true,
+    "sources_sha_intact": true,
+    "uv_no_flipped_triangles": true,
+    "uv_no_zero_area_triangles": true,
+    "uv_no_overlaps_repair_and_ring": true,
+    "uv_perimeter_continuous": true
+  },
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G3": "PARTIAL_LOCAL",
+  "G4": "NOT_RUN"
+}
