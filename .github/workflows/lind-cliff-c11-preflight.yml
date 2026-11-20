@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/production_qa/lind_blueprint/c11_recess_patch.py'
       - '.github/workflows/lind-cliff-c11-preflight.yml'
+      - 'tools/production_qa/lind_blueprint/write_c11_handoff.py'
 permissions:
   contents: read
 concurrency:
@@ -19,6 +20,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Validate C11 script syntax and fail-closed source contract
+        id: static_gate
         shell: bash
         run: |
           set -euo pipefail
@@ -41,3 +43,24 @@ jobs:
               assert gate in text, f"missing expected safety gate: {gate}"
           print("C11_PREFLIGHT_PASS_STATIC_ONLY_NOT_RENDERED")
           PY
+      - name: Write resumable C11 checkpoint even after failure
+        if: always()
+        shell: bash
+        env:
+          COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          GATE: ${{ steps.static_gate.outcome }}
+        run: |
+          set -euo pipefail
+          if [[ "$GATE" == success ]]; then state=success; else state=failure; fi
+          python3 tools/production_qa/lind_blueprint/write_c11_handoff.py \
+            --commit "$COMMIT" --run-id "$RUN_ID" --preflight "$state" \
+            --output /tmp/c11-checkpoint/c11_handoff.json
+      - name: Preserve checkpoint for next AI session
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c11-handoff-${{ github.sha }}
+          path: /tmp/c11-checkpoint/c11_handoff.json
+          if-no-files-found: warn
+          retention-days: 30
