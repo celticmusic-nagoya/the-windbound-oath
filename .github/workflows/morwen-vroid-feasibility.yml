@@ -258,7 +258,7 @@ jobs:
           print(json.dumps(report,indent=2))
           "
       - name: Import, render and roundtrip rights-cleared VRM fixture
-        if: ${{ inputs.validation_target == 'vrm_fixture' }}
+        if: ${{ inputs.validation_target == 'vrm_fixture' || inputs.validation_target == 'vrm_upstream_fixture' }}
         shell: bash
         env:
           VRM_FIXTURE_URL: ${{ inputs.vrm_fixture_url }}
@@ -295,7 +295,7 @@ jobs:
           if expected and actual!=expected:
               raise SystemExit('BLOCKED: fixture SHA-256 mismatch')
           if expected_git_blob:
-              git_sha=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\\0'+data).hexdigest()
+              git_sha=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
               if git_sha!=expected_git_blob:
                   raise SystemExit('BLOCKED: pinned upstream fixture Git blob mismatch')
               print('UPSTREAM_FIXTURE_PIN_VERIFIED',git_sha)
@@ -308,7 +308,7 @@ jobs:
           export TWO_VRM_QA_DIR=/tmp/morwen-vrm-qa
           /tmp/two-blender-530/vrm-app/blender -b --python-exit-code 1 --python tools/production_qa/vrm_fixture_roundtrip_qa.py
       - uses: actions/upload-artifact@v4
-        if: ${{ always() && inputs.validation_target == 'vrm_fixture' }}
+        if: ${{ always() && inputs.validation_target == 'vrm_fixture' || inputs.validation_target == 'vrm_upstream_fixture' }}
         with:
           name: morwen-vrm-fixture-roundtrip-qa-not-adopted
           path: |
