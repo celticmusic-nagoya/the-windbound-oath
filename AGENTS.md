@@ -1,3 +1,11 @@
+## Mandatory cross-AI binary artifact sharing — director approved 2026-11-20
+
+For all asset and game workstreams, use the owning PR and authenticated GitHub Actions artifact ZIP as the shared binary transport. Record producing commit, run ID, artifact ID, expiration, exact relative paths, SHA256SUMS (and manifest SHA-256), editable source, previews, QA, geometry hash when applicable, and candidate/approved status. Reuse matching outputs; never rerender solely to transfer files.
+
+ChatGPT: use GitHub connector **download_workflow_artifact** to retrieve ZIP into the working environment; extract safely (reject traversal/symlinks, bound size), verify hashes, open actual PNG/JPG bytes. GitHub text fetch is not binary transport (UTF-8 failure). Claude/Codex/Gemini: use authenticated GitHub CLI/API or supported file download; verify each client's access independently. A link or text description is not visual inspection. ACCESS_BLOCKED if unavailable; never mark G2 PASS on that basis. Use fixed-camera previews, clay and comparison sheets as applicable. Record actual retrieval and QA separately.
+
+Check expiration before handoff; preserve needed binaries via existing authorized storage and retention processes, flag at-risk artifacts in owning PR. Never expose signed URLs, tokens or private canon; no new public release, paid storage or unauthorized external transfer. No duplicate CI, no asset adoption or merge implied. Verified ChatGPT transport pilot: [PR #421](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/421#issuecomment-7037011453), run 44713884694, artifact 14617769408; other clients and durable retention remain unverified.
+
 ## Director-approved adaptive retry v3 — 2026-11-20 (authoritative)
 
 Read [Causal Retry v3](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md). Two failures trigger reassessment, not automatic termination. Continue evidence-supported bounded iterations; stop or switch only when further work is reasonably wasteful. Preserve cumulative history, G1–G4 and approval gates. This supersedes all conflicting retry/stop semantics below; legacy validators are technical blockers until tested alignment, never bypassed.
