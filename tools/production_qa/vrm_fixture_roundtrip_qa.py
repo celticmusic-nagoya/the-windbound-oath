@@ -41,7 +41,7 @@ try:
         direction = -cam.location
         cam.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
         bpy.context.scene.camera = cam
-        bpy.context.scene.render.engine = "BLENDER_EEVEE_NEXT"
+        bpy.context.scene.render.engine = "BLENDER_EEVEE"
         bpy.context.scene.render.resolution_x = 512
         bpy.context.scene.render.resolution_y = 512
         bpy.context.scene.render.resolution_percentage = 100
