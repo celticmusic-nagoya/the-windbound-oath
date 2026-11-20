@@ -73,8 +73,12 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       float side=dot(p-a,vec2(-axis.y,axis.x));
       float edge=min(side-routeWidth.x,routeWidth.y-side);
       float endMask=smoothstep(-.45,.2,along)*(1.-smoothstep(length(b-a)-.2,length(b-a)+.45,along));
-      float irregular=.10*sin(p.x*8.3+p.y*4.7)+.06*sin(p.y*19.);
-      return smoothstep(-.45,.15,edge+irregular)*endMask;
+      // Keep the navigable strip fixed; vary only the visible soil shoulder.
+      float drift=.14*sin(along*.61)+.08*sin(along*1.47+1.2);
+      float widthVariation=.13*sin(along*.91+2.1)+.06*sin(along*2.7);
+      float shiftedSide=side-drift;
+      float softEdge=min(shiftedSide-routeWidth.x,routeWidth.y-shiftedSide)+widthVariation;
+      return smoothstep(-.55,.24,softEdge)*endMask;
     }
   `;
   const stone = photo?.rock_boulder_dry ?? [...terrain].find((material) => material.map)?.map;
@@ -137,7 +141,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
           float exposed = smoothstep(.68,.88,grain(coastPoint.xz*.39 + vec2(11.2,4.1))) * .22;
           grass *= clamp(.83 + grassLight * .95, .85, 1.22);
           grass = mix(grass, dirtPhoto * vec3(.65,.78,.55), exposed);
-          ${roadMeshes.length ? 'grass = mix(grass, dirtPhoto * vec3(1.05,1.02,.90), routeShoulder(coastPoint.xz)*.75);' : ''}
+          ${roadMeshes.length ? 'grass = mix(grass, dirtPhoto * vec3(1.20,1.14,1.02), routeShoulder(coastPoint.xz)*.90);' : ''}
         ` : ''}
         float cover = smoothstep(.55,.86,surfaceNormal.y + (pattern-.5)*.20) *
                       smoothstep(3.3,5.0,coastPoint.y);
@@ -160,7 +164,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         addRockPhotoResponse(shader, photo, 'coastPoint', 'surfaceNormal', moss ? '(1.0-cover)*(1.0-mossMask)' : '1.0-cover');
       }
     };
-    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-meadow-coherent-v13' : '');
+    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-meadow-shoulder-v14' : '');
   }
   for (const material of road) {
     material.onBeforeCompile = (shader) => {
@@ -169,10 +173,10 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       shader.uniforms.roadNormal = { value: photo.stony_dirt_path_normal };
       shader.uniforms.roadRough = { value: photo.stony_dirt_path_roughness };
       shader.vertexShader = 'varying vec3 roadPoint;\n' + shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n roadPoint = (modelMatrix * vec4(position,1.0)).xyz;');
-      shader.fragmentShader = shoulderGLSL + 'varying vec3 roadPoint; uniform sampler2D roadPhoto, roadNormal, roadRough;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n float edgeCoverage = routeShoulder(roadPoint.xz);\n if (edgeCoverage < fract(52.9829189 * fract(dot(gl_FragCoord.xy,vec2(.06711056,.00583715))))) discard;\n diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(roadPhoto,roadPoint.xz*.75).rgb * vec3(1.18,1.12,.98), .85);');
+      shader.fragmentShader = shoulderGLSL + 'varying vec3 roadPoint; uniform sampler2D roadPhoto, roadNormal, roadRough;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n float edgeCoverage = routeShoulder(roadPoint.xz);\n if (edgeCoverage < fract(52.9829189 * fract(dot(gl_FragCoord.xy,vec2(.06711056,.00583715))))) discard;\n vec3 roadSoil = texture2D(roadPhoto,roadPoint.xz*.75).rgb * vec3(1.20,1.14,1.02);\n diffuseColor.rgb = roadSoil;');
       addPhotoResponse(shader, 'roadPoint', '1.0', 'roadNormal', 'roadRough');
     };
-    material.customProgramCacheKey = () => 'cliff-photo-road-v3';
+    material.customProgramCacheKey = () => 'cliff-photo-road-v14';
   }
   for (const material of rock) bindRockMoss(material, moss, photo);
   for (const material of bark) {
