@@ -1,0 +1,98 @@
+name: TWO ChatGPT context export
+on:
+  push:
+    branches: [export/claude-character-context-20261120]
+    paths: ['.github/workflows/chatgpt-context-export.yml']
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: c513f9420f4a99a9b8d61f53f1e3d0b5217c680b
+          path: game
+      - uses: actions/checkout@v4
+        with:
+          repository: celticmusic-nagoya/the-windbound-oath-website
+          ref: d34e430b6cd6107637c9cea395fb80f913953f05
+          path: website
+          persist-credentials: false
+      - run: |
+          set -euo pipefail
+          mkdir -p /tmp/context
+          mkdir -p /tmp/context/01_Management
+          cp 'game/AGENTS.md' /tmp/context/01_Management/
+          cp 'game/docs/production/SESSION_CONTINUITY_INDEX.md' /tmp/context/01_Management/
+          cp 'game/docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md' /tmp/context/01_Management/
+          cp 'game/docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md' /tmp/context/01_Management/
+          cp 'game/docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md' /tmp/context/01_Management/
+          cp 'game/docs/policy/PROVISIONAL_LOCAL_3D_PRODUCTION_APPROVAL_20261118.md' /tmp/context/01_Management/
+          cp 'game/docs/production/BLENDER_VERSION_STANDARD_20261118.md' /tmp/context/01_Management/
+          cp 'game/docs/ROADMAP.md' /tmp/context/01_Management/
+          mkdir -p /tmp/context/02_Character
+          cp 'game/AGENTS.md' /tmp/context/02_Character/
+          cp 'game/docs/production/SESSION_CONTINUITY_INDEX.md' /tmp/context/02_Character/
+          cp 'game/docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md' /tmp/context/02_Character/
+          cp 'game/docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md' /tmp/context/02_Character/
+          cp 'game/docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md' /tmp/context/02_Character/
+          cp 'game/docs/policy/PROVISIONAL_LOCAL_3D_PRODUCTION_APPROVAL_20261118.md' /tmp/context/02_Character/
+          cp 'game/docs/production/BLENDER_VERSION_STANDARD_20261118.md' /tmp/context/02_Character/
+          cp 'game/docs/policy/MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md' /tmp/context/02_Character/
+          cp 'game/docs/policy/MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md' /tmp/context/02_Character/
+          cp 'game/docs/production/HIGH_END_3D_CHARACTER_RESEARCH_SHARED_20261119.md' /tmp/context/02_Character/
+          mkdir -p /tmp/context/03_Map
+          cp 'game/AGENTS.md' /tmp/context/03_Map/
+          cp 'game/docs/production/SESSION_CONTINUITY_INDEX.md' /tmp/context/03_Map/
+          cp 'game/docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md' /tmp/context/03_Map/
+          cp 'game/docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md' /tmp/context/03_Map/
+          cp 'game/docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md' /tmp/context/03_Map/
+          cp 'game/docs/policy/PROVISIONAL_LOCAL_3D_PRODUCTION_APPROVAL_20261118.md' /tmp/context/03_Map/
+          cp 'game/docs/production/BLENDER_VERSION_STANDARD_20261118.md' /tmp/context/03_Map/
+          cp 'game/assets/approved/game/cliff/sunset_background.png' /tmp/context/03_Map/
+          cp 'game/docs/field/m7-cliff-map.md' /tmp/context/03_Map/
+          mkdir -p /tmp/context/04_Game
+          cp 'game/AGENTS.md' /tmp/context/04_Game/
+          cp 'game/docs/production/SESSION_CONTINUITY_INDEX.md' /tmp/context/04_Game/
+          cp 'game/docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md' /tmp/context/04_Game/
+          cp 'game/docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md' /tmp/context/04_Game/
+          cp 'game/docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md' /tmp/context/04_Game/
+          cp 'game/docs/GAME_DESIGN.md' /tmp/context/04_Game/
+          cp 'game/docs/ROADMAP.md' /tmp/context/04_Game/
+          cp 'game/docs/policy/AUTONOMOUS_GAME_DEVELOPMENT_PROTOCOL_v1.0.md' /tmp/context/04_Game/
+          mkdir /tmp/context/05_Website
+          cp website/README.md /tmp/context/05_Website/
+          cp game/docs/production/SESSION_CONTINUITY_INDEX.md /tmp/context/05_Website/
+          for d in /tmp/context/*; do (cd "$d" && sha256sum * > SHA256SUMS.txt); done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TWO_01_Management_Context
+          path: /tmp/context/01_Management/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TWO_02_Character_Context
+          path: /tmp/context/02_Character/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TWO_03_Map_Context
+          path: /tmp/context/03_Map/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TWO_04_Game_Context
+          path: /tmp/context/04_Game/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TWO_05_Website_Context
+          path: /tmp/context/05_Website/
+          if-no-files-found: error
+          retention-days: 7
