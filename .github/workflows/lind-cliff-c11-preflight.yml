@@ -1,0 +1,43 @@
+name: C11 cliff local patch preflight (no render)
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - 'tools/production_qa/lind_blueprint/c11_recess_patch.py'
+      - '.github/workflows/lind-cliff-c11-preflight.yml'
+permissions:
+  contents: read
+concurrency:
+  group: lind-cliff-c11-preflight-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate C11 script syntax and fail-closed source contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/production_qa/lind_blueprint/c11_recess_patch.py
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          p=Path("tools/production_qa/lind_blueprint/c11_recess_patch.py")
+          tree=ast.parse(p.read_text())
+          values={}
+          for node in tree.body:
+              if isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name):
+                  try: values[node.targets[0].id]=ast.literal_eval(node.value)
+                  except (ValueError,TypeError): pass
+          assert len(values.get("SOURCE_SHA",""))==64, "missing pinned source SHA"
+          assert values.get("TARGET")=="C9 B carrier", "carrier contract changed"
+          assert values.get("DEPTH",0)>0, "patch depth must be positive"
+          text=p.read_text()
+          for gate in ("changed_original_vertex_count", "nonmanifold_edges", "boundary_edges", "C11_RECESS_PATCH_UNAPPROVED"):
+              assert gate in text, f"missing expected safety gate: {gate}"
+          print("C11_PREFLIGHT_PASS_STATIC_ONLY_NOT_RENDERED")
+          PY
