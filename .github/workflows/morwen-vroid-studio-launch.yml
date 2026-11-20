@@ -39,13 +39,46 @@ jobs:
             if($sig.SignerCertificate.Thumbprint -ine '9E6FAFADF17FDAA9DC89ED0BB0EADCC21CCC2DA7'){throw 'Signer certificate differs from verified source'}
             $report.pinnedSourceMatch='PASS'
             if(-not [Environment]::UserInteractive -or (Get-Process -Id $PID).SessionId -eq 0){throw 'No interactive desktop'}
+            # Attempt 2: identify installer engine before choosing documented arguments.
+            $report.os=(Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,BuildNumber)
+            $report.graphics=@(Get-CimInstance Win32_VideoController | Select-Object Name,DriverVersion)
+            $report.installerMetadata=(Get-Item $installer).VersionInfo | Select-Object ProductName,ProductVersion,FileDescription,CompanyName,OriginalFilename
+            $raw=[Text.Encoding]::ASCII.GetString([IO.File]::ReadAllBytes($installer))
+            $isInno=$raw.Contains('Inno Setup Setup Data') -or $raw.Contains('Inno Setup')
+            $isNsis=$raw.Contains('NullsoftInst') -or $raw.Contains('Nullsoft Install System')
+            Remove-Variable raw
+            $report.engineMarkers=@{inno=$isInno;nsis=$isNsis}
+            $report.engine='UNKNOWN'
+            if($isInno -and -not $isNsis){$report.engine='INNO'}
+            if($isNsis -and -not $isInno){$report.engine='NSIS'}
+            if($report.engine -eq 'UNKNOWN'){throw 'Installer engine ambiguous; stop without speculative arguments'}
             $dest=Join-Path $env:RUNNER_TEMP 'vroid-studio'
-            $args=@('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/DIR="'+$dest+'"')
-            $p=Start-Process -FilePath $installer -ArgumentList $args -PassThru
-            if(-not $p.WaitForExit(240000)){Stop-Process -Id $p.Id -Force;throw 'Installer timeout'}
-            if($p.ExitCode -ne 0){throw "Installer exit $($p.ExitCode)"}
+            $log=Join-Path (Get-Location) 'evidence/installer.log'
+            if($report.engine -eq 'INNO'){
+              $args=@('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/LOG="'+$log+'"','/DIR="'+$dest+'"')
+            } else {
+              # NSIS /D must be last, unquoted; /S is case-sensitive.
+              $args=@('/S',('/D='+$dest))
+            }
+            $report.installArguments=$args
+            $started=Get-Date
+            $report.installation='ATTEMPTED'
+            try {
+              $p=Start-Process -FilePath $installer -ArgumentList $args -PassThru
+              if(-not $p.WaitForExit(240000)){Stop-Process -Id $p.Id -Force;$report.installation='FAIL';throw 'Installer timeout'}
+              $report.installerExitCode=$p.ExitCode
+              if($p.ExitCode -ne 0){$report.installation='FAIL';throw "Installer exit $($p.ExitCode)"}
+            } finally {
+              @(Get-WinEvent -FilterHashtable @{LogName='Application';StartTime=$started} -ErrorAction SilentlyContinue | Select-Object -First 25 TimeCreated,Id,ProviderName,LevelDisplayName,Message) | ConvertTo-Json -Depth 4 | Set-Content -Encoding utf8 evidence/install-events.json
+              Add-Type -AssemblyName System.Windows.Forms
+              Add-Type -AssemblyName System.Drawing
+              $r=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+              $b=New-Object Drawing.Bitmap($r.Width,$r.Height)
+              $gfx=[Drawing.Graphics]::FromImage($b)
+              try {$gfx.CopyFromScreen($r.Location,[Drawing.Point]::Empty,$r.Size);$b.Save((Join-Path (Get-Location) 'evidence/installer-screen.png'),[Drawing.Imaging.ImageFormat]::Png)} finally {$gfx.Dispose();$b.Dispose()}
+            }
             $exe=Join-Path $dest 'VRoidStudio.exe'
-            if(-not (Test-Path $exe)){throw 'Installed executable absent'}
+            if(-not (Test-Path $exe)){$report.installation='FAIL';throw 'Installed executable absent'}
             $report.installation='PASS'
             $app=Start-Process -FilePath $exe -PassThru
             Start-Sleep -Seconds 45
