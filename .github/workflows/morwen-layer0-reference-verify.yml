@@ -2,7 +2,10 @@ name: Morwen Layer 0 four-view source verification
 on:
   push:
     branches: [feature/morwen-artdirected-sculpt-20261119]
-    paths: [.github/workflows/morwen-layer0-reference-verify.yml]
+    paths:
+      - .github/workflows/morwen-layer0-reference-verify.yml
+      - tools/morwen_authored_sculpt/render_layer0_landmarks.py
+      - tools/morwen_authored_sculpt/layer0_landmarks_v1.json
   workflow_dispatch:
 permissions:
   contents: read
@@ -81,6 +84,9 @@ jobs:
               assert all(x['measured'] and x['anatomical_identity']=='UNDETERMINED' for x in measured['silhouette_scanlines'])
           print('MORWEN_FOUR_VIEW_ALPHA_MEASUREMENT_QA_PASS')
           PY
+      - name: Render registered 2D landmark overlays
+        run: |
+          python3 tools/morwen_authored_sculpt/render_layer0_landmarks.py /tmp/morwen-layer0 /tmp/morwen-layer0/registered
       - name: Preserve immutable reference QA evidence
         if: always()
         uses: actions/upload-artifact@v4
