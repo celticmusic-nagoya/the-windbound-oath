@@ -44,7 +44,7 @@ jobs:
                   if len(h)!=1: raise SystemExit("Invalid official checksum row")
                   rows.append(h[0].lower())
           if len(rows)!=1: raise SystemExit("Official checksum missing or ambiguous")
-          Path(sys.argv[2]).write_text(f"{rows[0]}  {sys.argv[3]}\\n")
+          Path(sys.argv[2]).write_text(f"{rows[0]}  {sys.argv[3]}\n")
           PY
           curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
           (cd "$work" && sha256sum -c expected.sha256)
