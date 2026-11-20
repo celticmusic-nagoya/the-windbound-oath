@@ -117,6 +117,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Preflight compile all Blender production scripts before downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            tools/morwen_authored_sculpt/render_geometry_masks_530.py \
+            tools/morwen_authored_sculpt/render_official_base_candidates_530.py \
+            tools/morwen_authored_sculpt/export_precision_blueprint_530.py \
+            tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
+          node --check tools/morwen_authored_sculpt/pose_viewer/viewer.js
       - name: Download official Blender Studio human base meshes bundle and audit contents
         shell: bash
         run: |
