@@ -58,3 +58,23 @@ for mode in ("all","carrier_only","without_carrier"):
         o.hide_render=original[o.name] or (mode=="carrier_only" and o!=obj) or (mode=="without_carrier" and o==obj)
     scene.render.filepath=str(out/(mode+".png"))
     bpy.ops.render.render(write_still=True)
+
+# Highlight candidate faces only in memory; never save over the source.
+if hashlib.sha256(src.read_bytes()).hexdigest()=="d0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545":
+    ids=[10159,10154,10235,10308,37656,37378,37745,37376,37588]
+    scene.view_layers[0].material_override=None
+    red=bpy.data.materials.new("SuspectFace")
+    red.use_nodes=True
+    shader=red.node_tree.nodes.get("Principled BSDF")
+    shader.inputs["Base Color"].default_value=(1,0.02,0.01,1)
+    shader.inputs["Emission Color"].default_value=(1,0.02,0.01,1)
+    shader.inputs["Emission Strength"].default_value=0.8
+    obj.data.materials.clear()
+    obj.data.materials.append(mat)
+    obj.data.materials.append(red)
+    for p in obj.data.polygons:
+        p.material_index=int(p.index in ids)
+    for o in meshes:
+        o.hide_render=original[o.name] or o!=obj
+    scene.render.filepath=str(out/"suspect_faces.png")
+    bpy.ops.render.render(write_still=True)
