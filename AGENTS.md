@@ -1,3 +1,7 @@
+## Mandatory Morwen 3D blueprint-first base selection — director approved 2026-11-20
+
+**ALL AI AGENTS (ChatGPT, Codex, Claude, Gemini, automation):** Before Morwen head/face/hair/body sculpt or base selection, read [MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md](docs/policy/MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md) from latest main. Audit official Layer 0 four views, create measured/assumption-labeled precise blueprint, then fairly compare VRoid/VRM anime-styled base, new stylized sculpt and licensed realistic CC0 base using matched actual geometry/renders and independent QA. **Past candidate G2 failures do not disqualify VRoid-derived bases as a class; do not automatically prefer a realistic base.** Preserve original references/hashes and past failure evidence. This production-method approval is NOT formal adoption of any candidate or a waiver of G1–G4.
+
 ## Shared high-end 3D character research (2026-11-19)
 
 All AI agents (ChatGPT, Codex, Claude, Gemini) doing character modeling must consult [HIGH_END_3D_CHARACTER_RESEARCH_SHARED_20261119.md](docs/production/HIGH_END_3D_CHARACTER_RESEARCH_SHARED_20261119.md) alongside current canonical policies and source assets. This is technical research, not canon or an asset G1–G4 approval. Preserve approved designs and source SHA; do not treat legacy Morwen face or ring-based head study as G2-approved. Continue actual sculpt production on its owning branch; do not merge unfinished asset work merely because this research is on main.

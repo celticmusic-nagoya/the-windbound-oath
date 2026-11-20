@@ -34,3 +34,6 @@ Each owning PR should have a short machine-readable or Markdown record of:
 - Preserve accepted source hashes, private lore, and current shipped game; no unapproved main merge, deletion, canon rewrite or publication.
 - When user says `c` or `ok`, continue only within existing approved non-destructive scope. Explicit approval remains required for main merge and irreversible actions.
 - This index cannot itself make a ChatGPT session remember: persistent handoff works only when future agents actually retrieve the repository and inspect its current evidence.
+
+## Director decision — Morwen blueprint-first base evaluation (2026-11-20)
+- Mandatory for all AI agents: [Morwen blueprint-first base selection policy](../policy/MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md). Prior VRoid-based candidate G2 failures are **not** a categorical VRoid/VRM rejection; a well-planned anime-styled base may be preferable to an unmodified realistic CC0 base. Audit official Layer 0 references and create measured/assumption-labeled precise 3D blueprint before a matched VRoid/new sculpt/realistic CC0 comparison. No base is adopted yet; actual comparison renders and G1–G4 remain NOT_RUN. Continue assets on existing Morwen owning PRs (#425/#427 as of this decision), not this policy-only branch.
