@@ -18,6 +18,7 @@ on:
           - lineup_large
           - closeup
           - coastal_sward
+          - coastal_sward_v2
           - all
 permissions:
   contents: read
@@ -79,7 +80,7 @@ jobs:
           rm -rf /tmp/lind-eco-current-run
       - name: Render selected evidence views
         env:
-          SHOT: ${{ inputs.shot || 'coastal_sward' }}
+          SHOT: ${{ inputs.shot || 'coastal_sward_v2' }}
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/render_eco.py -- --shot "$SHOT"
       - name: Verify rendered PNG hashes against manifest
