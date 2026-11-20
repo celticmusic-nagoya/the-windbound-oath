@@ -186,6 +186,22 @@ def main():
             a, b = pair
             bm.faces.new((a, b, duplicate[b], duplicate[a]))
         bmesh.ops.delete(bm, geom=region, context="FACES_ONLY")
+        # FACES_ONLY intentionally leaves orphaned old interior edges.
+        # These caused 582 nonmanifold edges in run 44680771747.
+        # Remove only the original interior vertices that no longer support
+        # any surviving face; protected exterior/boundary vertices stay intact.
+        orphan_interior = [v for v in source_vertices
+                           if v.is_valid and v.index not in boundary
+                           and not any(face.is_valid for face in v.link_faces)]
+        protected = [(v, tuple(v.co)) for v in bm.verts
+                     if v not in orphan_interior and v in source_vertices]
+        if any(v in boundary for v in (vertex.index for vertex in orphan_interior)):
+            raise RuntimeError("Protected boundary would be removed; STOP")
+        bmesh.ops.delete(bm, geom=orphan_interior, context="VERTS")
+        if any(not vertex.is_valid or tuple(vertex.co) != old
+               for vertex, old in protected):
+            raise RuntimeError("Protected source vertex changed; STOP")
+        removed_interior_count = len(orphan_interior)
         diagnostic["decision"] = "BOUNDARY_LOCKED_FACE_REPLACEMENT"
         diagnostic["replacement_faces"] = len(source_faces)
         diagnostic["bridge_faces"] = len(perimeter_edges)
@@ -198,12 +214,15 @@ def main():
     finally:
         bm.free()
     after = topology(obj)
-    if len(obj.data.vertices) < original_count:
-        raise RuntimeError("Original vertex count decreased; STOP")
-    moved_original = [
-        i for i, (v, old) in enumerate(zip(obj.data.vertices, original))
-        if tuple(v.co) != old
-    ]
+    # Original vertex indices are not stable after deleting the replaced
+    # interior; compare the protected coordinates as a multiset instead.
+    from collections import Counter
+    protected_original = Counter(original[i] for i in range(original_count)
+                                 if i not in interior_original)
+    final_coords = Counter(tuple(v.co) for v in obj.data.vertices)
+    missing_protected = sum(max(0, count - final_coords[coord])
+                            for coord, count in protected_original.items())
+    moved_original = [] if missing_protected == 0 else ["PROTECTED_COORDINATES_MISSING"]
     report = {
         "status": "CANDIDATE_ONLY", "source_sha256": SOURCE_SHA,
         "before": before, "after": after,
@@ -214,12 +233,14 @@ def main():
         "changed_original_vertex_count": len(moved_original),
         "original_vertex_count": original_count,
         "final_vertex_count": len(obj.data.vertices),
+        "removed_replaced_interior_vertices": removed_interior_count,
+        "missing_protected_original_coordinates": missing_protected,
         "G1": "BLOCKED", "G2": "NOT_RUN", "G3": "NOT_RUN", "G4": "NOT_RUN",
     }
     (output / "c11_patch_report.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8")
     # Refuse save until full original vertex lock and topology checks pass.
-    if moved_original or after["boundary_edges"] or after["nonmanifold_edges"]:
+    if missing_protected or after["boundary_edges"] or after["nonmanifold_edges"]:
         raise RuntimeError("C11 topology/boundary gate failed; JSON saved, blend rejected")
     bpy.context.scene["candidate"] = "C11_RECESS_PATCH_UNAPPROVED"
     destination = output / "c11_recess_patch_UNAPPROVED.blend"
