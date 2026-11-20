@@ -7,6 +7,7 @@ on:
       - 'tools/production_qa/lind_blueprint/**'
       - '!tools/production_qa/lind_blueprint/c11_recess_patch.py'
       - '!tools/production_qa/lind_blueprint/write_c11_handoff.py'
+      - '!tools/production_qa/lind_blueprint/c11_*.py'
       - 'tools/production_qa/junction_contact_faces.py'
   workflow_dispatch:
     inputs:
