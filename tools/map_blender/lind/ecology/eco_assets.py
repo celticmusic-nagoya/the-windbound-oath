@@ -679,7 +679,7 @@ def build_grass(seed, preset="meadow"):
     nt = rng.randint(*P["tillers"])
     Lmax = P["L"][1]
     stats = {"tillers": nt, "blades": 0, "seed_stems": 0, "dry_blades": 0}
-    clump_lean = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.25
+    # Atlantic cliff-edge grass: shorter, wind-combed canopy, without changing inland species.\n    coastal = preset == "coastal_dune"\n    clump_lean = (Vector((0.85, -0.25, 0)) * 0.36 +\n                  Vector((rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12), 0))\n                  if coastal else Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.25)
     for ti in range(nt):
         # off-centre tillers (not a single radial disc: VEG-F1 stopped); ECO-G2 packs them
         # tighter (0.6x) so they fuse over the basal ring into one silhouette
@@ -691,10 +691,10 @@ def build_grass(seed, preset="meadow"):
         hue = rng.uniform(-0.08, 0.08)
         for bi in range(nb):
             # skewed height: many short, few tall
-            u = rng.random() ** 1.8
+            u = rng.random() ** (2.5 if coastal else 1.8)
             L = P["L"][0] + (P["L"][1] - P["L"][0]) * u
             phi = bi * 2.39996 + rng.uniform(-0.3, 0.3)
-            cone = rng.uniform(0.05, 0.35) + 0.25 * (1 - u)
+            cone = rng.uniform(0.08, 0.24) + (0.12 if coastal else 0.25) * (1 - u)
             lean = (tlean + Vector((math.cos(phi), math.sin(phi), 0)) * cone).normalized()
             dry = rng.random() < P["dry"]
             cb = P["base"]
@@ -710,13 +710,13 @@ def build_grass(seed, preset="meadow"):
     # ECO-G2 fused basal mass: a dense ring of short, wide, outward-arching blades around the clump
     # crown so separate tillers read as one tuft (G2 review 01: tillers separated into tufts)
     Lmean = 0.5 * (P["L"][0] + P["L"][1])
-    nring = rng.randint(44, 60)
+    nring = rng.randint(64, 86) if coastal else rng.randint(44, 60)
     for k in range(nring):
         phi = math.tau * k / nring + rng.uniform(-0.08, 0.08)
         rr = P["spread"] * rng.uniform(0.2, 0.55)
         b0 = Vector((math.cos(phi) * rr, math.sin(phi) * rr, 0))
         lean = (UP + Vector((math.cos(phi), math.sin(phi), 0)) * rng.uniform(0.45, 0.9)).normalized()
-        Lr = Lmean * rng.uniform(0.35, 0.6)
+        Lr = Lmean * rng.uniform(0.27, 0.48) if coastal else Lmean * rng.uniform(0.35, 0.6)
         _blade(acc, rng, b0, lean, Lr, P["w"][1] * 1.6, 0.25, P["base"], lerp(P["base"], P["tip"], 0.6),
                0.3 * (Lr / Lmax) ** 0.5, nseg=4)
         stats["basal_ring"] = stats.get("basal_ring", 0) + 1
@@ -762,7 +762,7 @@ def build_grass(seed, preset="meadow"):
         c = acc.col[i]
         acc.col[i] = (c[0] * ao, c[1] * ao, c[2] * ao, 1.0)
     stats["height_m"] = round(hmax, 3)
-    stats["method"] = "ECO-G2 fused basal ring + tillers + clump AO"
+    stats["method"] = ("ECO-G2 coastal wind-combed dense basal sward" if coastal\n                       else "ECO-G2 fused basal ring + tillers + clump AO")
     return acc, stats
 
 
