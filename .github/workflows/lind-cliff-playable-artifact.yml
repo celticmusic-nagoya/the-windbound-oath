@@ -7,8 +7,10 @@ on:
       - .github/workflows/lind-cliff-playable-artifact.yml
       - assets/candidates/lind/windwaiting-cliff-playable/**
       - dev/windwaiting-cliff/**
+      - dev/shared/vegetation.mjs
       - tests/field/windwaiting-cliff-*
-      - tools/map_blender/lind/build_windwaiting_playable.py
+      - tools/map_blender/lind/build_windwaiting_*.py
+      - tools/map_blender/shared/vegetation_placement.py
 
 permissions:
   contents: read
@@ -24,19 +26,24 @@ jobs:
           sparse-checkout: |
             assets/candidates/lind/windwaiting-cliff-playable
             dev/windwaiting-cliff
+            dev/shared
             tests/field
             tools/map_blender/lind
+            tools/map_blender/shared
       - name: Verify candidate files and navigation
         run: |
           sha256sum -c assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
           node tests/field/windwaiting-cliff-nav.test.mjs
+          node tests/field/windwaiting-cliff-eco.test.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: windwaiting-cliff-playable-${{ github.sha }}
           path: |
             assets/candidates/lind/windwaiting-cliff-playable/
             dev/windwaiting-cliff/
+            dev/shared/vegetation.mjs
             tests/field/windwaiting-cliff-*
-            tools/map_blender/lind/build_windwaiting_playable.py
+            tools/map_blender/lind/build_windwaiting_*.py
+            tools/map_blender/shared/vegetation_placement.py
           if-no-files-found: error
           retention-days: 14

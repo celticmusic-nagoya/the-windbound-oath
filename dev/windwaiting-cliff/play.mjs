@@ -1,12 +1,16 @@
 import * as T from 'three';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { sunset } from './sunset.mjs';
-import { adaptSurfaces } from './surface.mjs';
+import { createVegetation } from '../shared/vegetation.mjs';
+import { adaptSurfaces, loadMossTextures } from './surface.mjs';
 import { makeNavigation, groundStep } from './navigation.mjs';
 
 const canvas = document.querySelector('canvas');
 const status = document.querySelector('#status');
 const asset = new URL('../../assets/candidates/lind/windwaiting-cliff-playable/', import.meta.url);
+const query = new URLSearchParams(location.search);
+const legacy = query.get('eco') === 'legacy';
+const ecoRoot = new URL('eco-v2/', asset);
 const ray = new T.Raycaster();
 const down = new T.Vector3(0, -1, 0);
 
@@ -14,7 +18,7 @@ function batchMeadow(root, nodes) {
   const meadow = new Map();
   root.updateMatrixWorld(true);
   for (const [name, object] of nodes) {
-    if (!name.startsWith('eco_')) continue;
+    if (!name.startsWith('eco_') || !object.visible) continue;
     object.traverse((mesh) => {
       if (!mesh.isMesh) return;
       const key = mesh.geometry.uuid + mesh.material.uuid;
@@ -37,10 +41,16 @@ function batchMeadow(root, nodes) {
 }
 
 async function play() {
-  const [gltf, data] = await Promise.all([
-    new GLTFLoader().loadAsync(new URL('cliff.glb', asset).href),
+  const loader = new GLTFLoader();
+  const [gltf, data, moss, placement] = await Promise.all([
+    loader.loadAsync(new URL('cliff.glb', asset).href),
     fetch(new URL('navigation.json', asset)).then((response) => {
       if (!response.ok) throw new Error('Navigation HTTP ' + response.status);
+      return response.json();
+    }),
+    legacy ? null : loadMossTextures(ecoRoot),
+    legacy ? null : fetch(new URL('placement.json', ecoRoot)).then((response) => {
+      if (!response.ok) throw new Error('Vegetation placement HTTP ' + response.status);
       return response.json();
     }),
   ]);
@@ -52,7 +62,7 @@ async function play() {
   scene.background = new T.Color(0xc2a1a1);
   scene.fog = new T.FogExp2(0xa79bae, 0.010);
   scene.add(gltf.scene);
-  adaptSurfaces(gltf.scene, renderer);
+  adaptSurfaces(gltf.scene, renderer, moss);
   scene.add(new T.HemisphereLight(0xffddd1, 0x616c75, 2.15));
   const sun = new T.DirectionalLight(0xffbb78, 2.2);
   sun.position.fromArray(data.sun);
@@ -71,6 +81,24 @@ async function play() {
   const ground = data.ground.flatMap(meshes);
   if (data.ground.some((name) => meshes(name).length === 0)) throw new Error('Missing ground mesh');
   const blockers = ground.concat(data.cameraBlockers.flatMap(meshes));
+  let vegetation;
+  if (!legacy) {
+    for (const [name, object] of nodes) {
+      if (/^eco_(grass|flower|tree)_/.test(name)) object.visible = false;
+    }
+    vegetation = await createVegetation({ loader, base: ecoRoot, placement, root: scene,
+      initialStrength: query.get('wind') === '0' ? 0 : 0.65 });
+    const windButton = document.querySelector('#wind-toggle');
+    function setWind(strength) {
+      vegetation.setStrength(strength);
+      windButton.textContent = vegetation.strength === 0 ? '風を戻す' : '風を止める';
+      windButton.setAttribute('aria-pressed', String(vegetation.strength === 0));
+    }
+    setWind(vegetation.strength);
+    windButton.hidden = false;
+    windButton.addEventListener('click', () => setWind(vegetation.strength === 0 ? 0.65 : 0));
+    addEventListener('lind-wind-strength', (event) => setWind(event.detail));
+  }
   batchMeadow(gltf.scene, nodes);
   const camera = new T.PerspectiveCamera(49, 1, 0.08, 200);
   const player = new T.Group();
@@ -102,7 +130,7 @@ async function play() {
     ray.set(new T.Vector3(x, data.rayTop, z), down);
     return ray.intersectObjects(ground, false)[0]?.point.y ?? null;
   }
-  document.querySelector('button').addEventListener('click', () => {
+  document.querySelector('#reset').addEventListener('click', () => {
     reset();
     canvas.focus();
   });
@@ -161,7 +189,7 @@ async function play() {
     camera.position.copy(aim).addScaledVector(arm, clear);
     camera.lookAt(aim);
   }
-  const measure = new URLSearchParams(location.search).has('qa');
+  const measure = query.has('qa');
   const connectedCells = data.levels.filter((value) => value !== null).length;
   let previous = performance.now();
   const frameTimes = [];
@@ -194,7 +222,8 @@ async function play() {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
     }
-    updateSunset(camera, now);
+    updateSunset(camera, measure && query.has('fixed-water') ? 0 : now);
+    vegetation?.update(camera, now / 1000);
     renderer.render(scene, camera);
     if (capture) {
       capture(canvas.toDataURL('image/png'));
@@ -204,7 +233,7 @@ async function play() {
       if (frameTimes.length >= 180) frameTimes.shift();
       frameTimes.push(milliseconds);
       window.cliffQA = { position: position.toArray(), yaw, camera: camera.position.toArray(),
-        connectedCells, remainingWaypoints: route.length, groundHeight: cast(position.x, position.z),
+        connectedCells, wind: vegetation?.strength ?? 0, remainingWaypoints: route.length, groundHeight: cast(position.x, position.z),
         drawCalls: renderer.info.render.calls, triangles: renderer.info.render.triangles, frameTimes };
     }
     requestAnimationFrame(frame);

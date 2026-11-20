@@ -1,0 +1,1258 @@
+{
+  "schema": "vegetation-placement-v1",
+  "units": "candidate BU; glTF metre authored as 1 BU before instance scale",
+  "surface": "Z-up right-handed Blender; runtime copies X,Z,-Y",
+  "assets": {
+    "eco_flower_daisy_clump": {
+      "path": "glb/eco_flower_daisy_clump_LOD1.glb",
+      "triangles": 2844,
+      "lod": 1
+    },
+    "eco_flower_violet_cushion": {
+      "path": "glb/eco_flower_violet_cushion_LOD1.glb",
+      "triangles": 2025,
+      "lod": 1
+    },
+    "eco_grass_coastal_dune": {
+      "path": "glb/eco_grass_coastal_dune_LOD1.glb",
+      "triangles": 1862,
+      "lod": 1
+    },
+    "eco_grass_tuft_short": {
+      "path": "glb/eco_grass_tuft_short_LOD1.glb",
+      "triangles": 1240,
+      "lod": 1
+    },
+    "eco_shrub_round_a": {
+      "path": "glb/eco_shrub_round_a_LOD1.glb",
+      "triangles": 621,
+      "lod": 1
+    },
+    "eco_tree_deciduous_a": {
+      "path": "glb/eco_tree_deciduous_a_LOD1.glb",
+      "triangles": 2446,
+      "lod": 1
+    },
+    "eco_turf_meadow_a": {
+      "path": "glb/eco_turf_meadow_a_LOD1.glb",
+      "triangles": 1850,
+      "lod": 1
+    }
+  },
+  "instances": [
+    {
+      "asset": "eco_tree_deciduous_a",
+      "role": "tree",
+      "xy": [
+        -8.5,
+        7.199999809265137
+      ],
+      "height": 6.228912830352783,
+      "normal": [
+        -0.052216388285160065,
+        -0.019542954862117767,
+        0.9984445571899414
+      ],
+      "align": 0,
+      "radius": 0.38,
+      "scale": 1.0,
+      "sink": 0,
+      "yaw": 4.111966609954834,
+      "cluster": null,
+      "replaces": "eco_tree_deciduous_a.001"
+    },
+    {
+      "asset": "eco_tree_deciduous_a",
+      "role": "tree",
+      "xy": [
+        -13.0,
+        9.0
+      ],
+      "height": 6.022744655609131,
+      "normal": [
+        -0.043968938291072845,
+        -0.025127029046416283,
+        0.9987168908119202
+      ],
+      "align": 0,
+      "radius": 0.3268000054359436,
+      "scale": 0.8600000143051147,
+      "sink": 0,
+      "yaw": 3.8409407138824463,
+      "cluster": null,
+      "replaces": "eco_tree_deciduous_a.002"
+    },
+    {
+      "asset": "eco_tree_deciduous_a",
+      "role": "tree",
+      "xy": [
+        -12.0,
+        20.0
+      ],
+      "height": 6.20829439163208,
+      "normal": [
+        -0.040789276361465454,
+        -0.005788498558104038,
+        0.9991509914398193
+      ],
+      "align": 0,
+      "radius": 0.3534000027179718,
+      "scale": 0.9300000071525574,
+      "sink": 0,
+      "yaw": 5.439921855926514,
+      "cluster": null,
+      "replaces": "eco_tree_deciduous_a.003"
+    },
+    {
+      "asset": "eco_tree_deciduous_a",
+      "role": "tree",
+      "xy": [
+        11.0,
+        15.0
+      ],
+      "height": 5.666026592254639,
+      "normal": [
+        -0.0038101044483482838,
+        -0.008361388929188251,
+        0.9999578595161438
+      ],
+      "align": 0,
+      "radius": 0.27360001087188723,
+      "scale": 0.7200000286102295,
+      "sink": 0,
+      "yaw": 3.103677749633789,
+      "cluster": null,
+      "replaces": "eco_tree_deciduous_a.004"
+    },
+    {
+      "asset": "eco_tree_deciduous_a",
+      "role": "tree",
+      "xy": [
+        17.0,
+        24.0
+      ],
+      "height": 5.94607400894165,
+      "normal": [
+        -0.04611421748995781,
+        -0.0040001156739890575,
+        0.9989281296730042
+      ],
+      "align": 0,
+      "radius": 0.341999990940094,
+      "scale": 0.8999999761581421,
+      "sink": 0,
+      "yaw": 3.069143533706665,
+      "cluster": null,
+      "replaces": "eco_tree_deciduous_a.005"
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "foreground",
+      "xy": [
+        3.5922726864909627,
+        16.29836875119508
+      ],
+      "height": 5.970942497253418,
+      "normal": [
+        0.06683235615491867,
+        -0.005780368577688932,
+        0.9977474212646484
+      ],
+      "align": 0.86,
+      "radius": 0.853118502865647,
+      "scale": 1.0798968390704393,
+      "sink": 0.008,
+      "yaw": 3.1451422280229058,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "foreground",
+      "xy": [
+        8.192014005789403,
+        13.622244367933554
+      ],
+      "height": 5.706151962280273,
+      "normal": [
+        0.025048745796084404,
+        -0.008358824998140335,
+        0.9996512532234192
+      ],
+      "align": 0.86,
+      "radius": 0.7671003535221478,
+      "scale": 0.9710131057242377,
+      "sink": 0.008,
+      "yaw": 5.539132839928901,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "foreground",
+      "xy": [
+        -0.40002208389889,
+        11.899499848277113
+      ],
+      "height": 6.148982048034668,
+      "normal": [
+        0.020053083077073097,
+        -0.019565492868423462,
+        0.9996074438095093
+      ],
+      "align": 0.86,
+      "radius": 0.7462535831218847,
+      "scale": 0.9446247887618794,
+      "sink": 0.008,
+      "yaw": 4.000107990667858,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -9.235897141002296,
+        1.9444811785144644
+      ],
+      "height": 6.054435729980469,
+      "normal": [
+        -0.07241863757371902,
+        -0.038155727088451385,
+        0.9966441988945007
+      ],
+      "align": 0.86,
+      "radius": 0.8080902131029658,
+      "scale": 1.0228990039278048,
+      "sink": 0.008,
+      "yaw": 3.0518629725946442,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -12.573353094268612,
+        4.414560471048221
+      ],
+      "height": 5.9197845458984375,
+      "normal": [
+        -0.057313162833452225,
+        -0.04497097060084343,
+        0.9973428845405579
+      ],
+      "align": 0.86,
+      "radius": 0.8358029222062766,
+      "scale": 1.0579783825395905,
+      "sink": 0.008,
+      "yaw": 3.994373140881964,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -12.630699334743182,
+        2.1285310920045815
+      ],
+      "height": 5.805242538452148,
+      "normal": [
+        -0.09287670254707336,
+        -0.0579349659383297,
+        0.9939906597137451
+      ],
+      "align": 0.86,
+      "radius": 0.7340603255629705,
+      "scale": 0.9291902855227474,
+      "sink": 0.008,
+      "yaw": 3.2240271661942015,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -12.672164694396063,
+        3.536072958628319
+      ],
+      "height": 5.87407112121582,
+      "normal": [
+        -0.06107093021273613,
+        -0.045689042657613754,
+        0.9970871806144714
+      ],
+      "align": 0.86,
+      "radius": 0.7685085572057725,
+      "scale": 0.9727956420326234,
+      "sink": 0.008,
+      "yaw": 5.487515701347171,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -10.455475426887693,
+        4.652338543480823
+      ],
+      "height": 6.066803932189941,
+      "normal": [
+        -0.06707270443439484,
+        -0.031215982511639595,
+        0.9972596168518066
+      ],
+      "align": 0.86,
+      "radius": 0.805216361571106,
+      "scale": 1.019261217178615,
+      "sink": 0.008,
+      "yaw": 5.527952055613238,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -10.328732652004618,
+        3.0887199349260612
+      ],
+      "height": 6.017050743103027,
+      "normal": [
+        -0.07389888167381287,
+        -0.03815187141299248,
+        0.9965356588363647
+      ],
+      "align": 0.86,
+      "radius": 0.7472296210430099,
+      "scale": 0.9458602798012784,
+      "sink": 0.008,
+      "yaw": 1.853381675457815,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -11.37825678121625,
+        3.484018078301268
+      ],
+      "height": 5.955331802368164,
+      "normal": [
+        -0.07319667190313339,
+        -0.04693608731031418,
+        0.9962124228477478
+      ],
+      "align": 0.86,
+      "radius": 0.8311950504727661,
+      "scale": 1.0521456335098305,
+      "sink": 0.008,
+      "yaw": 4.031170453133465,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -11.792997596779843,
+        2.2350054034645552
+      ],
+      "height": 5.857052803039551,
+      "normal": [
+        -0.03328871354460716,
+        -0.0610661618411541,
+        0.9975784420967102
+      ],
+      "align": 0.86,
+      "radius": 0.810033444208744,
+      "scale": 1.0253587901376506,
+      "sink": 0.008,
+      "yaw": 1.8578555119885625,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -11.661604453979333,
+        4.744903147341236
+      ],
+      "height": 5.98708438873291,
+      "normal": [
+        -0.06407906860113144,
+        -0.038177553564310074,
+        0.9972143769264221
+      ],
+      "align": 0.86,
+      "radius": 0.7402406963407838,
+      "scale": 0.9370135396718783,
+      "sink": 0.008,
+      "yaw": 5.7921654927707324,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -9.030208324476119,
+        3.3777532503888112
+      ],
+      "height": 6.123068809509277,
+      "normal": [
+        -0.06481903791427612,
+        -0.03122035413980484,
+        0.9974085092544556
+      ],
+      "align": 0.86,
+      "radius": 0.7299622932788237,
+      "scale": 0.9240029028845869,
+      "sink": 0.008,
+      "yaw": 2.3950896571711136,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -6.705108829024173,
+        4.564636902371604
+      ],
+      "height": 6.285408020019531,
+      "normal": [
+        -0.018744125962257385,
+        -0.019565990194678307,
+        0.9996328949928284
+      ],
+      "align": 0.86,
+      "radius": 0.776045203671198,
+      "scale": 0.9823357008496176,
+      "sink": 0.008,
+      "yaw": 4.002125339661802,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -7.7153402661638175,
+        4.964675611932915
+      ],
+      "height": 6.248430252075195,
+      "normal": [
+        -0.05794127658009529,
+        -0.025109095498919487,
+        0.998004138469696
+      ],
+      "align": 0.86,
+      "radius": 0.7487860991761902,
+      "scale": 0.9478305052863166,
+      "sink": 0.008,
+      "yaw": 4.895449058566806,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -7.644787175836586,
+        2.258246120749796
+      ],
+      "height": 6.176996231079102,
+      "normal": [
+        -0.06526351720094681,
+        -0.031219448894262314,
+        0.9973795413970947
+      ],
+      "align": 0.86,
+      "radius": 0.8279510324978611,
+      "scale": 1.048039281642862,
+      "sink": 0.008,
+      "yaw": 1.4172061602369472,
+      "cluster": null
+    },
+    {
+      "asset": "eco_turf_meadow_a",
+      "role": "landmark",
+      "xy": [
+        -7.866973609532253,
+        3.7471872536905435
+      ],
+      "height": 6.208982467651367,
+      "normal": [
+        -0.05804147571325302,
+        -0.025108955800533295,
+        0.9979984164237976
+      ],
+      "align": 0.86,
+      "radius": 0.8474482039626136,
+      "scale": 1.0727192455222956,
+      "sink": 0.008,
+      "yaw": 3.591739285453378,
+      "cluster": null
+    },
+    {
+      "asset": "eco_flower_daisy_clump",
+      "role": "landmark",
+      "xy": [
+        -11.33486174541144,
+        3.0891126505909092
+      ],
+      "height": 5.940278053283691,
+      "normal": [
+        -0.08569777011871338,
+        -0.04688919708132744,
+        0.9952172040939331
+      ],
+      "align": 0.3,
+      "radius": 0.44647869323832085,
+      "scale": 1.240218592328669,
+      "sink": 0.012,
+      "yaw": 3.6827865107667206,
+      "cluster": 0
+    },
+    {
+      "asset": "eco_flower_daisy_clump",
+      "role": "landmark",
+      "xy": [
+        -10.699628418032747,
+        3.8582549368378283
+      ],
+      "height": 6.019309997558594,
+      "normal": [
+        -0.07226797193288803,
+        -0.03815614432096481,
+        0.9966551065444946
+      ],
+      "align": 0.3,
+      "radius": 0.40463484245125764,
+      "scale": 1.1239856734757157,
+      "sink": 0.012,
+      "yaw": 4.1432445869686605,
+      "cluster": 0
+    },
+    {
+      "asset": "eco_flower_daisy_clump",
+      "role": "landmark",
+      "xy": [
+        -11.568211099857605,
+        4.036802595833502
+      ],
+      "height": 5.96604061126709,
+      "normal": [
+        -0.06498970091342926,
+        -0.038175299763679504,
+        0.997155487537384
+      ],
+      "align": 0.3,
+      "radius": 0.4060382461574178,
+      "scale": 1.1278840171039384,
+      "sink": 0.012,
+      "yaw": 3.4750042184396333,
+      "cluster": 0
+    },
+    {
+      "asset": "eco_flower_violet_cushion",
+      "role": "landmark",
+      "xy": [
+        -8.960448240986224,
+        3.7904101477836254
+      ],
+      "height": 6.140494346618652,
+      "normal": [
+        -0.06418987363576889,
+        -0.031221633777022362,
+        0.9974491596221924
+      ],
+      "align": 0.3,
+      "radius": 0.40418621575228403,
+      "scale": 1.122739488200789,
+      "sink": 0.012,
+      "yaw": 0.61763293342003,
+      "cluster": 1
+    },
+    {
+      "asset": "eco_flower_violet_cushion",
+      "role": "landmark",
+      "xy": [
+        -8.079257534337122,
+        4.251940420286492
+      ],
+      "height": 6.2093505859375,
+      "normal": [
+        -0.0579129122197628,
+        -0.02510913833975792,
+        0.9980058670043945
+      ],
+      "align": 0.3,
+      "radius": 0.4389705326319722,
+      "scale": 1.2193625906443673,
+      "sink": 0.012,
+      "yaw": 4.090762269622995,
+      "cluster": 1
+    },
+    {
+      "asset": "eco_flower_violet_cushion",
+      "role": "landmark",
+      "xy": [
+        -8.826293084861696,
+        4.791384536364872
+      ],
+      "height": 6.179780960083008,
+      "normal": [
+        -0.05823598802089691,
+        -0.025108667090535164,
+        0.9979870319366455
+      ],
+      "align": 0.3,
+      "radius": 0.4212812370529306,
+      "scale": 1.1702256584803628,
+      "sink": 0.012,
+      "yaw": 6.238336766553556,
+      "cluster": 1
+    },
+    {
+      "asset": "eco_flower_daisy_clump",
+      "role": "flower",
+      "xy": [
+        2.4636828502300476,
+        14.583958760409807
+      ],
+      "height": 6.0381269454956055,
+      "normal": [
+        0.07118618488311768,
+        -0.008340236730873585,
+        0.9974281787872314
+      ],
+      "align": 0.3,
+      "radius": 0.4071247759954466,
+      "scale": 1.1309021555429073,
+      "sink": 0.012,
+      "yaw": 0.05779254325409148,
+      "cluster": 2
+    },
+    {
+      "asset": "eco_flower_daisy_clump",
+      "role": "flower",
+      "xy": [
+        1.560513899789675,
+        13.936184912468613
+      ],
+      "height": 6.093147277832031,
+      "normal": [
+        0.062451064586639404,
+        -0.008345128037035465,
+        0.9980131387710571
+      ],
+      "align": 0.3,
+      "radius": 0.4407778378555514,
+      "scale": 1.2243828829320873,
+      "sink": 0.012,
+      "yaw": 6.123914219752714,
+      "cluster": 2
+    },
+    {
+      "asset": "eco_flower_violet_cushion",
+      "role": "flower",
+      "xy": [
+        4.451538653885876,
+        9.701370442584397
+      ],
+      "height": 5.844516754150391,
+      "normal": [
+        0.06498739123344421,
+        -0.014889822341501713,
+        0.9977749586105347
+      ],
+      "align": 0.3,
+      "radius": 0.396247169914481,
+      "scale": 1.1006865830957806,
+      "sink": 0.012,
+      "yaw": 0.8574661547476268,
+      "cluster": 3
+    },
+    {
+      "asset": "eco_flower_violet_cushion",
+      "role": "flower",
+      "xy": [
+        3.5320192139437863,
+        9.25005579948411
+      ],
+      "height": 5.898592948913574,
+      "normal": [
+        0.07220295071601868,
+        -0.014882637187838554,
+        0.9972788691520691
+      ],
+      "align": 0.3,
+      "radius": 0.4290220534327103,
+      "scale": 1.191727926201973,
+      "sink": 0.012,
+      "yaw": 1.158332237174171,
+      "cluster": 3
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        -2.655930839027768,
+        9.619130716980608
+      ],
+      "height": 6.253243446350098,
+      "normal": [
+        0.10137967765331268,
+        -0.019468601793050766,
+        0.9946572184562683
+      ],
+      "align": 0.3,
+      "radius": 0.23106857269152847,
+      "scale": 0.8887252795828018,
+      "sink": 0.01,
+      "yaw": 5.21723395432291,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        8.56313418532165,
+        13.840159747001016
+      ],
+      "height": 5.699517250061035,
+      "normal": [
+        0.019778450950980186,
+        -0.008359813131392002,
+        0.999769389629364
+      ],
+      "align": 0.3,
+      "radius": 0.25743693484194746,
+      "scale": 0.9901420570844133,
+      "sink": 0.01,
+      "yaw": 1.415801373320392,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        1.6261874959359053,
+        7.084271269045631
+      ],
+      "height": 5.999231338500977,
+      "normal": [
+        0.05639831721782684,
+        -0.019538497552275658,
+        0.9982171654701233
+      ],
+      "align": 0.3,
+      "radius": 0.2566621861019208,
+      "scale": 0.9871622542381571,
+      "sink": 0.01,
+      "yaw": 4.777575873681711,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        -0.5906931755480075,
+        16.379848508702928
+      ],
+      "height": 6.216098785400391,
+      "normal": [
+        0.039069000631570816,
+        -0.011368300765752792,
+        0.999171793460846
+      ],
+      "align": 0.3,
+      "radius": 0.22919640688630924,
+      "scale": 0.8815246418704201,
+      "sink": 0.01,
+      "yaw": 3.0198427603709628,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        -4.938343582122537,
+        16.225264372311617
+      ],
+      "height": 6.422324180603027,
+      "normal": [
+        0.008106876164674759,
+        -0.005793283693492413,
+        0.9999504089355469
+      ],
+      "align": 0.3,
+      "radius": 0.20273594162597977,
+      "scale": 0.7797536216383837,
+      "sink": 0.01,
+      "yaw": 2.89992207578713,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        3.84299226220396,
+        9.734811304061694
+      ],
+      "height": 5.884426116943359,
+      "normal": [
+        0.06580684334039688,
+        -0.014889239333570004,
+        0.997721254825592
+      ],
+      "align": 0.3,
+      "radius": 0.2441965925101806,
+      "scale": 0.9392176635006946,
+      "sink": 0.01,
+      "yaw": 4.844302140287758,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        1.6155704737802037,
+        14.227358271095273
+      ],
+      "height": 6.092135429382324,
+      "normal": [
+        0.06245105713605881,
+        -0.008345128037035465,
+        0.9980131387710571
+      ],
+      "align": 0.3,
+      "radius": 0.2303329043202878,
+      "scale": 0.8858957858472607,
+      "sink": 0.01,
+      "yaw": 0.7981408132119998,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        -5.143506429316247,
+        11.79256509995609
+      ],
+      "height": 6.388063430786133,
+      "normal": [
+        0.009765129536390305,
+        -0.011376671493053436,
+        0.9998876452445984
+      ],
+      "align": 0.3,
+      "radius": 0.20674551686084877,
+      "scale": 0.7951750648494184,
+      "sink": 0.01,
+      "yaw": 4.8887245675682545,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_tuft_short",
+      "role": "accent",
+      "xy": [
+        -0.4147960230225595,
+        14.11172532824755
+      ],
+      "height": 6.1830854415893555,
+      "normal": [
+        0.029974689707159996,
+        -0.014914878644049168,
+        0.9994393587112427
+      ],
+      "align": 0.3,
+      "radius": 0.2105475638391507,
+      "scale": 0.8097983224582719,
+      "sink": 0.01,
+      "yaw": 4.135431482587219,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_coastal_dune",
+      "role": "accent",
+      "xy": [
+        -8.959173979162395,
+        2.6214144949687723
+      ],
+      "height": 6.100214004516602,
+      "normal": [
+        -0.07038164138793945,
+        -0.03813008591532707,
+        0.9967910647392273
+      ],
+      "align": 0.45,
+      "radius": 0.3663589026021535,
+      "scale": 1.0176636183393153,
+      "sink": 0.01,
+      "yaw": -0.28599498600688306,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_coastal_dune",
+      "role": "accent",
+      "xy": [
+        -7.310215705331709,
+        1.322057210945343
+      ],
+      "height": 6.174931526184082,
+      "normal": [
+        0.010384383611381054,
+        0.029094887897372246,
+        0.9995227456092834
+      ],
+      "align": 0.45,
+      "radius": 0.38289838960085226,
+      "scale": 1.0636066377801452,
+      "sink": 0.01,
+      "yaw": -0.28599498600688306,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_coastal_dune",
+      "role": "accent",
+      "xy": [
+        -9.214818526340498,
+        1.4770605185020058
+      ],
+      "height": 6.026182174682617,
+      "normal": [
+        -0.10424371808767319,
+        -0.07279601693153381,
+        0.9918841123580933
+      ],
+      "align": 0.45,
+      "radius": 0.3853608288680591,
+      "scale": 1.0704467468557197,
+      "sink": 0.01,
+      "yaw": -0.28599498600688306,
+      "cluster": null
+    },
+    {
+      "asset": "eco_grass_coastal_dune",
+      "role": "accent",
+      "xy": [
+        -10.64890276767339,
+        2.5894503026154
+      ],
+      "height": 5.974609375,
+      "normal": [
+        -0.07195982336997986,
+        -0.037797220051288605,
+        0.996691107749939
+      ],
+      "align": 0.45,
+      "radius": 0.3658182809318094,
+      "scale": 1.0161618914772483,
+      "sink": 0.01,
+      "yaw": -0.28599498600688306,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        -8.013474948347282,
+        19.015753361435976
+      ],
+      "height": 6.395265579223633,
+      "normal": [
+        -0.035094253718853,
+        -0.004002077039331198,
+        0.9993759989738464
+      ],
+      "align": 0.3,
+      "radius": 0.5028875007408168,
+      "scale": 0.7857617199075262,
+      "sink": 0.01,
+      "yaw": 5.4474694074037195,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        1.5172667875526153,
+        23.60023251234052
+      ],
+      "height": 6.143401145935059,
+      "normal": [
+        0.06432131677865982,
+        -0.002871780190616846,
+        0.9979251027107239
+      ],
+      "align": 0.3,
+      "radius": 0.4331862141706604,
+      "scale": 0.6768534596416569,
+      "sink": 0.01,
+      "yaw": 3.1855734041386246,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        -7.8699728475111685,
+        10.021811881247306
+      ],
+      "height": 6.331132888793945,
+      "normal": [
+        -0.04234408214688301,
+        -0.011367009952664375,
+        0.9990385174751282
+      ],
+      "align": 0.3,
+      "radius": 0.4998576087101714,
+      "scale": 0.7810275136096427,
+      "sink": 0.01,
+      "yaw": 3.7538228794502926,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        -3.400243438336982,
+        23.851964760504366
+      ],
+      "height": 6.4197492599487305,
+      "normal": [
+        0.03795270621776581,
+        -0.002875473815947771,
+        0.9992753863334656
+      ],
+      "align": 0.3,
+      "radius": 0.47352317117534426,
+      "scale": 0.7398799549614754,
+      "sink": 0.01,
+      "yaw": 1.0218159961132092,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        1.405725072053297,
+        19.10507213668534
+      ],
+      "height": 6.135092735290527,
+      "normal": [
+        0.061974164098501205,
+        -0.003996849060058594,
+        0.998069703578949
+      ],
+      "align": 0.3,
+      "radius": 0.47365222892931824,
+      "scale": 0.7400816077020598,
+      "sink": 0.01,
+      "yaw": 2.5999686888805758,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        -3.1259401396157207,
+        9.913224642106812
+      ],
+      "height": 6.300554275512695,
+      "normal": [
+        0.06982371211051941,
+        -0.014884947799146175,
+        0.9974483847618103
+      ],
+      "align": 0.3,
+      "radius": 0.4762844366603088,
+      "scale": 0.7441944322817324,
+      "sink": 0.01,
+      "yaw": 5.683885252959664,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        5.873449239367264,
+        19.327020963584403
+      ],
+      "height": 5.847182273864746,
+      "normal": [
+        0.0562155544757843,
+        -0.005784158129245043,
+        0.9984018206596375
+      ],
+      "align": 0.3,
+      "radius": 0.4649030758760594,
+      "scale": 0.7264110560563428,
+      "sink": 0.01,
+      "yaw": 2.267185640436621,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        -12.617581630848262,
+        23.573863392912997
+      ],
+      "height": 6.226970672607422,
+      "normal": [
+        -0.036808550357818604,
+        -0.004001659341156483,
+        0.9993143081665039
+      ],
+      "align": 0.3,
+      "radius": 0.5065015654425914,
+      "scale": 0.7914086960040491,
+      "sink": 0.01,
+      "yaw": 1.4792309612383532,
+      "cluster": null
+    },
+    {
+      "asset": "eco_shrub_round_a",
+      "role": "middle",
+      "xy": [
+        10.334079132672843,
+        10.101123756672214
+      ],
+      "height": 5.641173362731934,
+      "normal": [
+        0.009898490272462368,
+        -0.014920634217560291,
+        0.999839723110199
+      ],
+      "align": 0.3,
+      "radius": 0.48859453556162974,
+      "scale": 0.7634289618150465,
+      "sink": 0.01,
+      "yaw": 1.31130012742437,
+      "cluster": null
+    }
+  ],
+  "protected_geometry_sha256": {
+    "Setting sun disk": "92fdf5fdf843e92be9ed03beb570cbc27cb19c8649d1d5e592148aa5f7e0aed7",
+    "Cliff C8 A | joinable coastal segment": "00ea792363a24cf025380a2e46d4e2de1942f740cb65d9ca0240fc2c6fd312d9",
+    "Cliff C8 B | joinable coastal segment": "602644a564ecd5096ee7c60e73702d3b3ec8614bedc8c53ed1985072d61edb8c",
+    "Cliff C8 C | joinable coastal segment": "4808752c55d204e2483a464c50988f72d73ca085dd97bdef6bf36942ab628220",
+    "Independent inland heightfield": "2bdc1eb1995f6c99ef14d0edb367b50128059bbc8c0b422f671b29ff924bfdd4",
+    "Detached stack 01": "f6991759a54e00dc4a9eebdc51e1a91dcc9d4bf7fb3688102bda6b9df1d455e9",
+    "Detached stack 02": "f684db88ff70392bdf7b9c2e715621ae7e9699898f327bf8d7c78c82547498f5",
+    "Talus 01": "478fb8a9be6cde56cd7397c3ad6f1268e323defebe843fccaef3d9e1de402cc5",
+    "Talus 02": "d924e64228fdbc9bd566d151c49a852eb5e0fec8f550b97495739c2571e51f03",
+    "Talus 03": "825386d497f2c8f5086967302946f2d73532ee8ab22e83709abab5f91d2e996a",
+    "Talus 04": "6f81fed9593ade7edfa7e86f0ef7592ea0a3fac193fd31fbba3d6a4e79933762",
+    "Talus 05": "17cb9d3bb040812d02439b4828090889b619036595b57dfbcfc12b717b0d3f5e",
+    "Talus 06": "e207fbda45dc8961d2dd179263496f61c46962ad33286c6e6aadbad1412ef342",
+    "Talus 07": "6fc7c3828b499541981e0ca727d468aabe411b708651f94ef82c35903ba4d055",
+    "Talus 08": "bfe108fdb24a004434702e10ea6ecf3a6d1711b4f970cb9d6f9b928530004a04",
+    "Talus 09": "c182a2793eb194c9444518d2d4c9a35a3cce36635cda637ca396e149e5aa2cb2",
+    "Talus 10": "5989a8d8c37ccae60c5c9edff46282aa53bea72718d8fcb6acbd991ce32a37d4",
+    "Talus 11": "1be830b1a3a018d0d85108fd02392684a40f78d90eee37aad6a8e12a77cf8d43",
+    "Talus 12": "45bbe7a4b53ce0c6142af1dd6fec73d65212bd7efaf5c2bb0fa5d725846d663c",
+    "Talus 13": "c20da520c095e21782c6ac0ea9d60320fe43ae690b8159c597e0f781eb0dfb94",
+    "Talus 14": "4df0ff3af89495e33e3f8eddaf336674968db0f373edaddcc0bc523612782473",
+    "Talus 15": "b94f986f954a3937ee04e6af9f4dd226e0f32b8cf90e266e0b8870142ee6eac8",
+    "Reef 01": "ec4159b55572127e883792a407b98321a445c312cc8f9c84354943193440d0d8",
+    "Reef 02": "a3be0058658b25217e619855b253a578e3080223b1accc9041b0f20603491631",
+    "Reef 03": "c013b0010c2d7bd0f896532e5f07af1de24b50cc4d61bf1237f4156c7020126b",
+    "Reef 04": "903947b9694b54355381bc4cffb3c45d6cc9ca54b71068530e79e7a0016193fb",
+    "Reef 05": "56f793f2e9964433d21c930c1ab35cf0a2268de28398f93f5ef897749427cb66",
+    "Reef 06": "57be826058be863b48f9e68bf4c79caa0279f87ab5133c15bb81ae4de0dd4c84",
+    "Reef 07": "dead4eb505e323de465593174b2b7ec7bfff7b7b702240bbba94c1a4de143003",
+    "Reef 08": "b615c2b9f1a515641e00c13e01ea72e5a7489ef874686718f68ff608a49ab553",
+    "Reef 09": "473707f220b3e1e12302ae61f180b9500820a32ba05f5704f3b3c904bf8f1c32",
+    "Reef 10": "b6625f8de41bd1eb56ba6e3114fd1f4112654227ef2fc08a3b1aef7f8f3b4634",
+    "Reef 11": "b086c58104e03aecbfa26a9930e4730ddcbb941e3113010b4cb4b27c91bf78d6",
+    "Reef 12": "6c45309c1f543bdfdde691becd1a3a887736405d917a0ae1225c6ba19ac6659e",
+    "Reef 13": "bb3284e37ab73e1ea67adc09ff42811c2f6997c236fd5dee2f8d230ffb47a2db",
+    "Reef 14": "521069222d114e7fd5d6c8db57359dc9657b0c2cfa135fc7f6d19ba920298242",
+    "Reef 15": "1c77c574497d7b74db0bf19da4dca2fa5d8cf27b2b442ca62a1ae0052937a918",
+    "Reef 16": "c3ae3fbae042bc6e1ba134d675cd940b38c30b8abb11efc26c705d9425ae0e77",
+    "Reef 17": "beebcd739c25c6bfa1a6671bc1f0b0bda8c2714cd079892bcc3e3197930711e5",
+    "Reef 18": "8d115ba82b7efb8833a378e1b624b447ef68de0ec9349422c908a63a432efc26",
+    "Collapse reef 01": "bacb97e8d6c118f1c065c5e1e29b3eb6514b03093e73bb3602d3178ad8cf6d83",
+    "Collapse reef 02": "cfc2e251ec9d609996889ccb0997b28062c6bfabcf6b2a71ea5dad285dd12e5e",
+    "Collapse reef 03": "6de4032dbb437e1b1706fbf041ae6e486a85d4b21cd415b28f4c74093c62a206",
+    "Collapse reef 04": "3678a42090e1815e4003d7ff6d45d64cf99fc7eb34e5ec34dc1bac26574552ee",
+    "Collapse reef 05": "b5dbaa9be212ae90347c8943422da06bdb2b354ee0ad6409d243b33a039a246f",
+    "Collapse reef 06": "ed1ed06003f914d9fba7fff5b4081046f7434fe6a4d098f299f0b44d7b948df0",
+    "Collapse reef 07": "e8ca222a7b203cc7fbeb17117ef2ac3ef213bd7e03326d2b8116ee64753156f7",
+    "Collapse reef 08": "1a9138d6c468ac38f5b8c5696d21fb54b6f9f19dd1fd3312fa509b1d52a4c876",
+    "Collapse reef 09": "1a9cdc2590f60f31d80563ddac675e7d3767f09ffd31e163c73d0446e7876eb7",
+    "Collapse reef 10": "5dafbe5475e3c5ca0f792029af94473d7a5375778550aea1d1a0f4d6dc879855",
+    "Collapse reef 11": "5660c43f351ae689edc2f65f909551f8dda716e858a628aa48c5b27201867170",
+    "Collapse reef 12": "d608a83ed18357323d91f3bab2bd10d99853ca6685b2d2b07306559c3be10a82",
+    "Regional debris 01": "e2d7ff13ffbb91eb051c2c1ec3918fc20eb3027a798945f10ad900b5229ae904",
+    "Regional debris 02": "5dea338b4525b4f5c90c2cf3aaeed276557b732318ee9dd0fe6be8afefc59fe4",
+    "Regional debris 03": "56dd7fffc3b11fbce6874dc3fc0057518f46d987f5cad9ebc86c92153fedaae8",
+    "Regional debris 04": "cab48480d7e91874efbb257cbe64a1ec3ad2478669c95629c58a917da18b2358",
+    "Regional debris 05": "8506f9ed481466417ae7abe02d27af5dc08eb23658bef80d89be10cdf5e0d4aa",
+    "Regional debris 06": "407269694b4618f92e5f977b64d32d3d66dcd348b1ae519a2ccdccc984014c5e",
+    "Regional debris 07": "16f33620879cc33c44643d5118efd6d66e42bf451a910536492f684448b8ddd4",
+    "Regional debris 08": "e0869512177984893ecbb1120f30b23d17ec2b2caf6873a4d3b178953732a50c",
+    "Regional debris 09": "0a4037c93619c4b5e0f442acba3fdf2d6d96d04f04d43a8e86c5f28362cdbf7d",
+    "Regional debris 10": "2148de6e4dc4bd358163515beccc4a4cad22f28c83c5961a6abc58453bebfbe0",
+    "Regional debris 11": "86d676b6a5e24cc8b1409beb0c4c85254cc2cb554455fd93286329915c585c45",
+    "Regional debris 12": "6346aa3d35689efd9175d83f08481aa2078f662338e9ba61abafc7c9291648ed",
+    "Regional debris 13": "19967bb5c2990fec4d5e606cc24ce8cf66db190f2d8fb40af69cbc8e10cc1902",
+    "Regional debris 14": "d95b1c0376647cf96540a545ba49fb44ef5f824baba10b0ced79390bd6c2a440",
+    "Panel debris 01-01": "f790a78b31fdd57585baf9c9d1a55ef7b268ad533ebc8f1b25ab76ffe0370e5d",
+    "Panel debris 01-02": "e5d86f46d422f936d9478f76f4755d75a65318cc9dc734ac2fa522a1e580ccea",
+    "Panel debris 01-03": "d6b78c3ad791d0b0ed3dbb3edf9d2f578e842d7b9d085d40dbe01aea2a3a3fc2",
+    "Panel debris 02-01": "c0a7ad925e0494f39df0ae7eb9c18ac7db71f17ca1dd4a8b7331642f7002f01d",
+    "Panel debris 02-02": "79d4f8130dbe9f8d97b85df5df7c7d8e853811a8214fb5c4777e8019b805b3de",
+    "Panel debris 02-03": "d72cabb31c12abf707f74ab178b2e0366715bad322748ab8669ece54af2d7ee3",
+    "Panel debris 03-01": "6f39874c60a1c3eff808421d945b09020edd2456810aa3b6fe160cdbdc7ce21e",
+    "Panel debris 03-02": "561750a384167e3c35c9b574702e7187fbd63bee1494a819b15646c738949ec6",
+    "Panel debris 03-03": "70b564304ab9e50e2541f77b3b5bba4107aab8c68b059a0e427035be238284ef",
+    "Panel debris 04-01": "e3457699ffde38c2b356876634f8706bc37ad742e02dbec5fb8a9743693675ed",
+    "Panel debris 04-02": "a168771f6c9b765ce1c0dd4b9d7e9fc2f4bb3edbbde55aacb1550da1e32bc144",
+    "Panel debris 04-03": "9f12677dda37feaeeacc3083f86d12a1c10764523cfeebe4f784cb3859b96504",
+    "Provisional sea at Z=0": "f4ed14a2fd0316f1b85b9de08bc17f1ce8ab7ff12fddf534474b78f4617c9cf8",
+    "C9 Scar 01 debris 01": "2c0ac4eefad38a08b8a7b0ba3a459e97e3770d2fb6539b95b057c575f62a551e",
+    "C9 Scar 01 debris 02": "520bf5d5cd8e33aca2c4413a0c1e9fe49765baba91f8f27644da10c2da23b47b",
+    "C9 Scar 01 debris 03": "ee3e37158a01234ca5da00fe8452f1f95cc1d0cb07d219e29f17eab0d6a0fa4e",
+    "C9 Scar 03 debris 01": "00e93fdb1f378987bfd4bdafaa508aea7607b61e2631774e4994e07172ca5e19",
+    "C9 Scar 03 debris 02": "31468733e5d442975f163176d3f0f7a0c568f2e270c59a85faa3f045383ec89b",
+    "C9 Scar 03 debris 03": "eba99042aa0d93eef659269131b46386056b9d6076e9f7e487d4ff96ea959acf",
+    "C9 Scar 04 debris 01": "7a1a4b5b67c7e0366a202581c56735593a1f4f53e017204c411cf7e213ad5e84",
+    "C9 Scar 04 debris 02": "9af71de6c39a74c8643f19602385782d5bf2c910aff84e6dc8535a7ba254eb76",
+    "C9 Scar 04 debris 03": "7d1fcb4d97ab6629158bf03653947ed9576e58310203175de836c1a5b4f5dc5c",
+    "C9 Scar 05 debris 01": "cd6a28af43b2c2867c58741b9856f2a67cf39ae3e971d16aa03415977035eedb",
+    "C9 Scar 05 debris 02": "86e9e2d5c2e9a67bab5d368c2895ca0aa5a983ee8d1e4414e802519159bb312d",
+    "C9 Scar 05 debris 03": "2850a3fa615ae3b78a96c8d9ee4c608b17b6e2f654f5157fa931462694385132",
+    "C10 large rock 01": "7a73e597ca96741d8aa753a0d56fa733dce023078ebc14cdbe8852a7f9eb2ef9",
+    "C10 large rock 02": "b21688db4dfa632fdcf86a78641c721416b7e8b507fde7b4e1acc5107dae90a4",
+    "C10 large rock 03": "0d1813013002b054847bf5c2a849389ca28d4fed42dea4480bcd3b2719d97c07",
+    "C10 large rock 04": "20540c783ee5d22a0f1787b6a9db590fc8d39189665120c98de3c1494f170c39",
+    "Coastal footpath": "2d347ceef02bde95923b8476f2511d8a122b60ffe7a56f9179fcf42e085818ad",
+    "eco_rocks_coastal.001": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.002": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.003": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.004": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.005": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.006": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.007": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.008": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.009": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297",
+    "eco_rocks_coastal.010": "0a37c1d55da1ed11fcc8a76a03bd07203c29e20b58484d9f2db2cf56e92d4297"
+  },
+  "roles": {
+    "foreground": {
+      "range": 10
+    },
+    "landmark": {
+      "range": 20
+    },
+    "flower": {
+      "range": 15
+    },
+    "accent": {
+      "range": 14
+    },
+    "middle": {
+      "range": 32
+    },
+    "tree": {
+      "range": 55
+    }
+  },
+  "full_overlay_triangles": 92222
+}

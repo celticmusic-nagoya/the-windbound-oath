@@ -29,3 +29,7 @@ python tests/field/windwaiting-cliff-browser.py http://127.0.0.1:8621 /tmp/windw
 ```
 
 再生成は Blender 5.3.0 を使用。`build_windwaiting_playable.py` の引数は SHA 固定のEファイル、#351 `route.blend`、#357 `eco_kit_v1.blend`、出力ディレクトリの順で、ECOテクスチャは ECO blend と同じ階層の `textures/` に置く。C12／C13と参照CGは既存ブランチから読み込む。ビルドは原本に書き戻さない。
+
+## ECO v2
+
+試遊の既定はECO v2。URLに `?eco=legacy` を付けると統合前の植生へ切り替わる。「風を止める」で植生の揺れが0になり、「風を戻す」で再開する。水面の状態は独立。出典、前後比較、再利用手順は [ECO v2 のQA](eco-v2/README.md) に記録。
