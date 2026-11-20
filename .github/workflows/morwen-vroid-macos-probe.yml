@@ -232,29 +232,44 @@ jobs:
             "$gui" click 0.095 0.099
             sleep 3
             capture_state pre-save
-            if grep -Fq 'Morwen-resume.vroid*' evidence/pre-save.txt; then
-              "$gui" click 0.027 0.100
-              sleep 2
-              capture_state save-menu
-              if grep -Eiq "Save As|Save" evidence/save-menu.txt; then
-                "$gui" click-label evidence/save-menu.png "Save As" "Save" || "$gui" click-label evidence/save-menu.png "Save" "Save" || true
-              fi
-              sleep 3
-              capture_state save-dialog
-              if grep -Eiq 'Save As|Save Name|Save' evidence/save-dialog.txt && grep -Fqi 'Documents' evidence/save-dialog.txt; then
-                "$gui" key 0 cmd
-                "$gui" text 'Morwen-M02-authoring'
-                "$gui" key 36
-                sleep 8
-                capture_state after-save
-                if [ -s "$HOME/Documents/Morwen-M02-authoring.vroid" ]; then
-                  cp "$HOME/Documents/Morwen-M02-authoring.vroid" evidence/model.vroid
+            # The Documents file is a disposable working copy, not the immutable input.
+            recover_saved_copy() {
+              local candidate
+              for candidate in "$HOME/Documents/Morwen-resume.vroid" "$HOME/Documents/Morwen-M02-authoring.vroid"; do
+                if [ -s "$candidate" ] && ! cmp -s "$candidate" evidence/input-model.vroid; then
+                  cp "$candidate" evidence/model.vroid
                   shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
                   echo NATIVE_CANDIDATE_SAVED_REOPEN_REQUIRED > evidence/authoring-status.txt
+                  return 0
                 fi
+              done
+              return 1
+            }
+            for attempt in 1 2 3; do
+              if recover_saved_copy; then break; fi
+              capture_state "save-before-$attempt"
+              if ! grep -Fqi 'Morwen-resume.vroid' "evidence/save-before-$attempt.txt"; then
+                echo "SAVE_CONTEXT_UNVERIFIED attempt=$attempt" >> evidence/save-retry.txt
+                break
               fi
-            fi
-            if [ ! -s evidence/model.vroid ]; then
+              if grep -Eiq 'Cancel|Replace|Overwrite' "evidence/save-before-$attempt.txt"; then
+                echo "SAVE_DIALOG_UNVERIFIED attempt=$attempt" >> evidence/save-retry.txt
+                break
+              fi
+              if [ "$attempt" -le 2 ]; then
+                "$gui" key 1 cmd
+              else
+                "$gui" click 0.027 0.100
+                sleep 2
+                capture_state "save-menu-$attempt"
+                "$gui" click-label "evidence/save-menu-$attempt.png" "Save" "Save" || true
+              fi
+              sleep 8
+              capture_state "save-after-$attempt"
+              if recover_saved_copy; then break; fi
+              echo "SAVE_FILE_UNCHANGED attempt=$attempt" >> evidence/save-retry.txt
+            done
+            if ! recover_saved_copy; then
               echo AUTHORING_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
             fi
           else
@@ -286,6 +301,7 @@ jobs:
             exit 1
           fi
           test -s evidence/screen.png
+          test -s evidence/model.vroid
       - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v4
