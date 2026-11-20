@@ -35,20 +35,19 @@ for name in names:
     scene.render.resolution_x=384;scene.render.resolution_y=1024;scene.render.resolution_percentage=100
     scene.render.film_transparent=True;scene.render.image_settings.file_format="PNG";scene.render.image_settings.color_mode="RGBA"
     scene.render.image_settings.color_depth="8"
-    # Object Index pass + compositor alpha avoids dependence on material or lighting.
-    scene.view_layers[0].use_pass_object_index=True
-    ob.pass_index=1
-    scene.use_nodes=True;nodes=scene.node_tree.nodes;nodes.clear()
-    render=nodes.new("CompositorNodeRLayers")
-    output=nodes.new("CompositorNodeComposite")
-    threshold=nodes.new("CompositorNodeMath");threshold.operation="GREATER_THAN";threshold.inputs[1].default_value=0.5
-    nodes.new("CompositorNodeSetAlpha")
-    white=nodes.new("CompositorNodeRGB");white.outputs[0].default_value=(1,1,1,1)
-    setalpha=next(n for n in nodes if n.bl_idname=="CompositorNodeSetAlpha")
-    scene.node_tree.links.new(render.outputs["IndexOB"],threshold.inputs[0])
-    scene.node_tree.links.new(white.outputs[0],setalpha.inputs["Image"])
-    scene.node_tree.links.new(threshold.outputs[0],setalpha.inputs["Alpha"])
-    scene.node_tree.links.new(setalpha.outputs[0],output.inputs["Image"])
+    # Blender 5.3 compositor API differs; use an emission override material
+    # with film transparency, avoiding legacy Scene.node_tree entirely.
+    scene.use_nodes=False
+    white_mat=bpy.data.materials.get("MORWEN_MASK_WHITE") or bpy.data.materials.new("MORWEN_MASK_WHITE")
+    white_mat.use_nodes=True
+    mat_nodes=white_mat.node_tree.nodes
+    mat_nodes.clear()
+    output_node=mat_nodes.new("ShaderNodeOutputMaterial")
+    emission=mat_nodes.new("ShaderNodeEmission")
+    emission.inputs["Color"].default_value=(1,1,1,1)
+    emission.inputs["Strength"].default_value=1.0
+    white_mat.node_tree.links.new(emission.outputs[0],output_node.inputs["Surface"])
+    scene.view_layers[0].material_override=white_mat
     slug="head" if "head" in name else "body_female"
     record={"name":name,"bounds_world":[list(map(float,center)),extent],"views":{}}
     for view,direction in views.items():
