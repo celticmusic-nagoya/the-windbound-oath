@@ -2,6 +2,15 @@ name: Morwen VRoid Studio and Hub feasibility (manual, no adoption)
 on:
   workflow_dispatch:
     inputs:
+      validation_target:
+        description: 'Select only the necessary verification jobs to avoid repeated downloads'
+        required: true
+        type: choice
+        default: vrm_only
+        options:
+          - vrm_only
+          - studio_only
+          - all
       studio_installer_url:
         description: 'Official HTTPS direct Windows installer URL (leave empty to mark download BLOCKED)'
         required: false
@@ -17,6 +26,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   studio-windows:
+    if: ${{ inputs.validation_target == 'studio_only' || inputs.validation_target == 'all' }}
     runs-on: windows-2022
     timeout-minutes: 18
     steps:
@@ -64,6 +74,7 @@ jobs:
           path: evidence/studio.json
           retention-days: 7
   studio-gui-readiness:
+    if: ${{ inputs.validation_target == 'studio_only' || inputs.validation_target == 'all' }}
     runs-on: windows-2022
     timeout-minutes: 5
     steps:
@@ -82,6 +93,7 @@ jobs:
           retention-days: 7
 
   studio-drive-provenance:
+    if: ${{ inputs.validation_target == 'studio_only' || inputs.validation_target == 'all' }}
     runs-on: windows-2022
     timeout-minutes: 20
     steps:
@@ -127,6 +139,7 @@ jobs:
           path: evidence/drive_installer_provenance.json
           retention-days: 7
   hub-api:
+    if: ${{ inputs.validation_target == 'studio_only' || inputs.validation_target == 'all' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -154,6 +167,7 @@ jobs:
           path: evidence/hub.json
           retention-days: 7
   vrm-addon-blender53:
+    if: ${{ inputs.validation_target == 'vrm_only' || inputs.validation_target == 'all' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
