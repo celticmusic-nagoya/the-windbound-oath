@@ -25,7 +25,7 @@ jobs:
           from pathlib import Path
           sys.path.insert(0, 'tools/qa')
           from two_task_key import task_key
-          paths = ['tools/qa/two_task_key.py', 'tools/qa/two_task_lock.py']
+          paths = sorted(str(p) for p in Path('tools/qa').glob('two_task_*.py'))
           hashes = {p: hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths}
           workflow = Path('.github/workflows/two-production-task-contract.yml')
           key = task_key(dict(asset='production-os', stage='contract-test', method='stdlib', inputs=hashes, toolchain={'python': hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest()}, settings={'workflow': hashlib.sha256(workflow.read_bytes()).hexdigest()}))
