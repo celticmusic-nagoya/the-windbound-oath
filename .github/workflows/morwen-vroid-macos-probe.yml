@@ -13,7 +13,7 @@ concurrency:
 jobs:
   probe:
     runs-on: macos-15
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Compile shared GUI controls
@@ -197,41 +197,58 @@ jobs:
             fi
           fi
           screencapture -x evidence/final-recovery-screen.png || true
-          # Inspect actual editor controls in one session, before any irreversible edit.
+          # Continuous authoring on a verified copy; retain evidence even if save is blocked.
           if grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt; then
-            for tab in face hair body outfit; do
-              "$gui" vroid-shortcut "$tab" || continue
-              sleep 3
-              capture_state "editor-$tab" || true
-            done
-            "$gui" vroid-shortcut face || true
+            "$gui" vroid-shortcut face
             sleep 3
-            capture_state editor-face-return || true
-            # Reversible eye-width trial on the restored copy, not a canonical value.
-            if grep -Fq 'Eye Size X' evidence/editor-face-return.txt && grep -Fq '0.634' evidence/editor-face-return.txt; then
-              "$gui" slider 0.919 0.236 0.869 0.236 0.6
+            capture_state face-before
+            if grep -Fq 'Eye Size X' evidence/face-before.txt && grep -Fq '0.634' evidence/face-before.txt; then
+              "$gui" slider 0.919 0.236 0.899 0.236 0.6
               sleep 2
-              capture_state eye-trial
-              "$gui" vroid-shortcut undo
+              capture_state face-authored
+            fi
+            "$gui" vroid-shortcut hair
+            sleep 3
+            capture_state hair-before
+            if grep -Fq 'Main Color' evidence/hair-before.txt && grep -Fq '#825A46' evidence/hair-before.txt; then
+              "$gui" click 0.895 0.206
               sleep 2
-              capture_state eye-undo
-              if grep -Fq '0.634' evidence/eye-undo.txt && ! grep -Fq '0.634' evidence/eye-trial.txt; then
-                "$gui" vroid-shortcut redo
-                sleep 2
-                capture_state eye-redo
-                "$gui" vroid-shortcut undo
-                sleep 2
-                capture_state eye-restored
+              capture_state hair-color-control
+              if grep -Fq 'Main Color' evidence/hair-color-control.txt && grep -Fq '#825A46' evidence/hair-color-control.txt; then
+                "$gui" key 0 cmd
+                "$gui" text '#6B426B'
+                "$gui" key 36
+                sleep 3
+                capture_state hair-authored
               fi
-              # When native Undo does not restore a slider, restore using the same verified control.
-              if grep -Fq '0.194' evidence/eye-undo.txt; then
-                "$gui" slider 0.869 0.236 0.919 0.236 0.6
-                sleep 2
-                capture_state eye-inverse
+            fi
+            for tab in body outfit; do
+              "$gui" vroid-shortcut "$tab"
+              sleep 3
+              capture_state "authoring-$tab"
+            done
+            "$gui" vroid-shortcut face
+            sleep 3
+            capture_state pre-save
+            if grep -Fq 'Morwen-resume.vroid*' evidence/pre-save.txt; then
+              "$gui" vroid-shortcut save-copy
+              sleep 3
+              capture_state save-dialog
+              if grep -Eiq 'Save As|Save Name' evidence/save-dialog.txt && grep -Fqi 'Documents' evidence/save-dialog.txt; then
+                "$gui" key 0 cmd
+                "$gui" text 'Morwen-M02-authoring'
+                "$gui" key 36
+                sleep 8
+                capture_state after-save
+                if [ -s "$HOME/Documents/Morwen-M02-authoring.vroid" ]; then
+                  cp "$HOME/Documents/Morwen-M02-authoring.vroid" evidence/model.vroid
+                  shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
+                  echo NATIVE_CANDIDATE_SAVED_REOPEN_REQUIRED > evidence/authoring-status.txt
+                fi
               fi
-              echo EYE_TRIAL_REVIEW_REQUIRED > evidence/authoring-status.txt
-            else
-              echo BLOCKED_EYE_CONTROL_STATE > evidence/authoring-status.txt
+            fi
+            if [ ! -s evidence/model.vroid ]; then
+              echo AUTHORING_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
             fi
           else
             echo BLOCKED_NATIVE_REOPEN > evidence/authoring-status.txt
