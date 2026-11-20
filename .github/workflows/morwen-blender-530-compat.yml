@@ -1,0 +1,67 @@
+name: Morwen Blender 5.3 isolated compatibility
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - tools/production_qa/install_blender_530.sh
+      - .github/workflows/morwen-blender-530-compat.yml
+permissions:
+  contents: read
+concurrency:
+  group: morwen-blender-530-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  runtime-and-file-roundtrip:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check isolated installer syntax
+        run: bash -n tools/production_qa/install_blender_530.sh
+      - name: Install official Blender 5.3.0 with upstream SHA256 verification
+        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
+      - name: Test editable blend roundtrip and CPU Cycles render
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-blender-530
+          /tmp/two-blender-530/app/blender -b --factory-startup --python-exit-code 1 --python-expr '
+          import bpy, pathlib, hashlib, json
+          out=pathlib.Path("/tmp/morwen-blender-530")
+          bpy.ops.mesh.primitive_monkey_add()
+          obj=bpy.context.object
+          obj.name="BLENDER_530_COMPAT_TEST_NOT_MORWEN"
+          verts=len(obj.data.vertices)
+          faces=len(obj.data.polygons)
+          bpy.ops.object.camera_add(location=(0,-7,2))
+          cam=bpy.context.object
+          cam.rotation_euler=(obj.location-cam.location).to_track_quat("-Z","Y").to_euler()
+          bpy.context.scene.camera=cam
+          bpy.ops.object.light_add(type="AREA",location=(2,-4,5))
+          bpy.context.object.data.energy=650
+          scene=bpy.context.scene
+          scene.render.engine="CYCLES"
+          scene.cycles.samples=8
+          scene.render.resolution_x=256
+          scene.render.resolution_y=256
+          scene.render.resolution_percentage=100
+          blend=out/"blender530_compat_test.blend"
+          bpy.ops.wm.save_as_mainfile(filepath=str(blend))
+          scene.render.filepath=str(out/"blender530_compat_render.png")
+          bpy.ops.render.render(write_still=True)
+          assert (out/"blender530_compat_render.png").stat().st_size>2000
+          report={"blender":bpy.app.version_string,"vertices":verts,"faces":faces,"blend_sha256":hashlib.sha256(blend.read_bytes()).hexdigest(),"status":"RUNTIME_TEST_NOT_MORWEN"}
+          (out/"qa.json").write_text(json.dumps(report,indent=2))
+          '
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-blender-530/blender530_compat_test.blend --python-exit-code 1 --python-expr 'import bpy; assert any(o.name=="BLENDER_530_COMPAT_TEST_NOT_MORWEN" for o in bpy.data.objects); print("BLENDER_530_REOPEN_PASS")'
+      - name: Upload reproducible technical test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-530-compat-not-character
+          path: /tmp/morwen-blender-530/
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,45 @@
+name: Morwen SCULPT02 source read-only inventory
+on:
+  push:
+    branches:
+      - feature/morwen-artdirected-sculpt-20261119
+    paths:
+      - .github/workflows/morwen-sculpt02-readonly-audit.yml
+      - tools/morwen_authored_sculpt/audit_sculpt02_source.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout preserved SCULPT02 source at PR 417 HEAD
+        uses: actions/checkout@v4
+        with:
+          ref: 932590522bcef219eb26526b794ce35b6d13862f
+          path: preserved-source
+          persist-credentials: false
+          lfs: true
+      - name: Verify source SHA256 before Blender
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b  preserved-source/assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend' | sha256sum -c -
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Run source-only inventory without saving blend
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/audit_sculpt02_source.py -- preserved-source/assets/candidates/morwen-sculpt02/morwen_sculpt02_v02_UNAPPROVED.blend 90eaf546a4737cd249a59709271b06053d375fe2edf66b7204e944af072c6b0b /tmp/morwen-audit/sculpt02_inventory.json
+      - name: Upload inventory evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-sculpt02-readonly-inventory
+          path: /tmp/morwen-audit/
+          if-no-files-found: warn
+          retention-days: 14

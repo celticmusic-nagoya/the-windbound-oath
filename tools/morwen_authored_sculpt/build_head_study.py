@@ -28,9 +28,16 @@ def surface(name,levels,segments=80,material=None):
    # Face is -Y: subtly flatter back, tapered jaw and sculpted cheeks
    x=rx*math.cos(t)
    y=cy+ry*math.sin(t)
-   if name=='Face_Sculpt_Study' and math.sin(t)<-.45:
-    cheek=math.exp(-((z-1.48)/.115)**2)
-    y-=.018*cheek*(.5+.5*abs(math.cos(t)))
+   if name=='Face_Sculpt_Study' and math.sin(t)<-.30:
+    # Continuous front-surface relief: cheek volume, recessed eye sockets,
+    # brow ridge and a narrow nose bridge. No detached cheek spheres.
+    front=max(0.0,-math.sin(t))
+    cheek=math.exp(-((z-1.48)/.085)**2)*math.exp(-((abs(x)-.115)/.060)**2)
+    socket=math.exp(-((z-1.585)/.037)**2)*math.exp(-((abs(x)-.093)/.050)**2)
+    brow=math.exp(-((z-1.638)/.030)**2)*math.exp(-((abs(x)-.090)/.064)**2)
+    bridge=math.exp(-((z-1.53)/.075)**2)*math.exp(-(x/.033)**2)
+    chin=math.exp(-((z-1.30)/.040)**2)*math.exp(-(x/.067)**2)
+    y+=front*(-.025*cheek+.016*socket-.011*brow-.026*bridge-.010*chin)
    verts.append((x,y,z))
  for i in range(len(levels)-1):
   for j in range(segments):
@@ -71,12 +78,15 @@ def hair_clump(name,stations,material,sides=10):
 for sign,side in [(-1,'L'),(1,'R')]:
  for layer in range(2):
   for k,x in enumerate((.035,.087,.139)):
+   # Staggered translucent-looking gaps are geometry, not alpha tricks.
+   # Wider root and tapered solid tips; outer layer fans away from the part.
    tip=1.675-.008*k+.012*layer
+   spread=(.012 if layer else 0.0)*(k+1)
    hair_clump('Sculpt_Bangs_'+side+'_'+str(layer)+'_'+str(k),[
-    (sign*(x+.016),-.105+.008*layer,1.836,.025,.020),
-    (sign*(x+.009),-.164-.006*layer,1.784,.027,.017),
-    (sign*x,-.193-.007*layer,1.727,.022,.013),
-    (sign*(x-.005),-.198-.006*layer,tip,.003,.003)],hair)
+    (sign*(x+.016),-.123+.006*layer,1.836,.029,.020),
+    (sign*(x+.009+spread*.4),-.171-.005*layer,1.784,.030,.019),
+    (sign*(x+spread),-.199-.007*layer,1.727,.020,.013),
+    (sign*(x+spread+.007),-.201-.006*layer,tip,.0015,.002)],hair)
  # Side hair starts inside crown and hugs the temples.
  for k in range(3):
   x=.184+.017*k
@@ -109,8 +119,6 @@ for sign in (-1,1):
  ellipsoid('Highlight_'+str(sign),(sign*.086,-.196,1.586),(.004,.003,.005),shine)
  ellipsoid('Upper_Lid_'+str(sign),(sign*.091,-.183,1.604),(.042,.006,.006),lid)
  ellipsoid('Brow_'+str(sign),(sign*.091,-.180,1.639),(.038,.006,.006),hair)
- ellipsoid('Cheek_'+str(sign),(sign*.126,-.153,1.474),(.070,.018,.042),skin)
-ellipsoid('Nose_Bridge',(0,-.183,1.527),(.017,.022,.073),skin)
 ellipsoid('Nose_Tip',(0,-.208,1.483),(.028,.025,.021),skin)
 ellipsoid('Philtrum',(0,-.166,1.446),(.014,.009,.019),skin)
 ellipsoid('Upper_Lip',(0,-.167,1.419),(.036,.012,.009),skin)
@@ -148,6 +156,6 @@ bpy.ops.export_scene.gltf(filepath=str(out/'morwen_head_study.glb'),export_forma
 assert (out/'morwen_head_study.glb').stat().st_size>0
 bpy.ops.object.select_all(action='DESELECT')
 blend=out/'MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend';bpy.ops.wm.save_as_mainfile(filepath=str(blend))
-report={'asset':'Morwen','status':'UNAPPROVED_HEAD_STUDY_ONLY','method':'solid cross-section sculpted clumps and facial form study; unapproved','blender':bpy.app.version_string,'mesh_objects':{o.name:len(o.data.vertices) for o in scene.objects if o.type=='MESH'},'blend_sha256':hashlib.sha256(blend.read_bytes()).hexdigest(),'renders':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.png')},'G1':'BLOCKED_VISUAL_CALIBRATION','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_TOPOLOGY_UV_RIG','G4':'NOT_RUN'}
+report={'asset':'Morwen','status':'UNAPPROVED_HEAD_STUDY_ONLY','method':'continuous facial surface relief (cheeks, sockets, brow, nose bridge, chin) with existing sectioned hair; unapproved','blender':bpy.app.version_string,'mesh_objects':{o.name:len(o.data.vertices) for o in scene.objects if o.type=='MESH'},'blend_sha256':hashlib.sha256(blend.read_bytes()).hexdigest(),'renders':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.png')},'G1':'BLOCKED_VISUAL_CALIBRATION','G2':'NOT_RUN_INDEPENDENT_ART','G3':'NOT_RUN_TOPOLOGY_UV_RIG','G4':'NOT_RUN'}
 (out/'QA.json').write_text(json.dumps(report,indent=2)+'\n')
 print('MORWEN_HEAD_STUDY_CREATED',report['mesh_objects'])

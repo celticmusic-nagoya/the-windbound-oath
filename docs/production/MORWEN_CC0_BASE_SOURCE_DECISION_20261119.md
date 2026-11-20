@@ -1,0 +1,53 @@
+# MORWEN — zero-cost CC0 base-mesh sourcing decision (2026-11-19)
+
+Status: **SOURCE IDENTIFIED / IMPORT NOT_RUN / SCULPT NOT_RUN**. Scope: PR #427, Issue #426. This is not a model acceptance or G2 pass.
+
+## Verified source and licensing
+- Official MakeHuman Community license: https://www.makehumancommunity.org/about/license.html
+- Source license: https://github.com/makehumancommunity/makehuman/blob/master/LICENSE.md
+- Blender-native MPFB2 license: https://github.com/makehumancommunity/mpfb2/blob/master/LICENSE.md
+- System/target asset packs: https://www.makehumancommunity.org/assets/assetpacks/index.html
+- Core MakeHuman and MPFB2 **graphical base meshes, targets and bundled assets** are **CC0**; application/add-on code is GPL/AGPL, separately. The MakeHuman project does not claim ownership of exported models. **Third-party community asset packs can have other licenses**: inspect every exact asset before importing. Do not assume all MakeHuman community assets are CC0.
+- **Avoid MB-Lab AGPL model/database** as an unreviewed base for a proprietary game: its generated meshes may carry AGPL obligations. Source: https://github-wiki-see.page/m/animate1978/MB-Lab/wiki/Asset-Licensing
+
+## Proposed no-charge production experiment (not yet executed)
+1. Pin MPFB2 version, source URL, exact bundled CC0 base mesh file, SHA256 and Blender 5.2.4 compatibility; do not install arbitrary GitHub code without reviewing dependencies.
+2. Import an **unmodified** CC0 human base into a separate collection of the existing four-view reference .blend. Record source license and hashes. No paid API, credit usage, GPU rental or external account requirement.
+3. Compare silhouette and landmarks against the four Layer 0 views before any artistic deformation. Record front/side/back differences; check orthographic alignment and image offset. This is a **technical candidate**, not the Morwen design.
+4. Only after compatibility and reference fit, perform actual authored sculpt for facial planes, bob, eyes, glasses, clothing and equipment as distinct modules. A default MakeHuman model, automated morph slider changes, procedural hair tubes or UV spheres **cannot** be declared G2 PASS.
+5. Independent art QA on renders and editable .blend; topology/UV/rig G3 later; game G4 separately.
+
+## Gate
+G1 **PARTIAL** (Layer 0 body/hair reference SHA confirmed, final accessories pending); CC0 source **license research PASS**, exact downloaded mesh SHA **NOT_RUN**; Blender import **NOT_RUN**; actual design sculpt **BLOCKED pending sculpt-capable production**; G2/G3/G4 **NOT_RUN**. Do not create a new PR or merge main.
+
+## 2026-11-19 actual Blender evidence — unsuitable as neutral sculpt base
+- Workflow run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44550645526 (SUCCESS, Blender 5.2.4)
+- Artifact ID: 14543691271; source OBJ SHA256: 8e761e6624b8f54536409135d1636da63b32486a90d4897f84e121d144f6fb4c
+- Editable source import .blend SHA256: 7219eef7c284a166a686758ddb9149d87996d2dfcba9dae33d249ae0123b693f
+- Geometry: 19,158 vertices, 18,486 faces, 154 disconnected components, largest 13,380 vertices; 1 material slot.
+- Four actual orthographic render PNGs show a long-haired figure wearing a long dress/skirt and shoes, with an isolated square below the feet. This is **not** a neutral nude human sculpt base. The OBJ name `base.obj` was misleading; visual and geometry evidence supersede the prior source suitability assumption.
+- Decision: **REJECT as Morwen production sculpt base (G2 FAIL source suitability)**; retain as provenance-marked technical import only. Do not reuse its geometry for Morwen or continue adjusting this source. Import/save/reopen/render pipeline G3 PARTIAL PASS; Morwen-specific G1 BLOCKED, G2 NOT_RUN on any authored replacement, G4 NOT_RUN.
+- Next: locate and validate a truly neutral, separately licensed CC0 body source **before** any further Blender import, or use actual independent sculpt tooling. No new PR, no formal adoption, no main merge.
+
+## New source lead after 5.3 facial surface G2 FAIL (2026-11-20)
+- **Preferred source to independently validate:** Blender Studio's **Human Base Meshes v1.2.0**, official demo bundle: https://www.blender.org/download/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.2.0.zip . Third-party Wikimedia metadata attributes the head sculpt to Blender Studio and states CC0: https://commons.wikimedia.org/wiki/File:Head_(Sculpting)_-_Realistic_by_Dan_Ulrich_(CC0).stl . The zip's own license and provenance must still be checked; do not claim downloaded or audited.
+- **Alternate source:** OpenGameArt `2 Human Head Basemeshes` by pistachio (CC0; female OBJ 760 triangles): https://opengameart.org/content/2-human-head-basemeshes . Small lightweight sculpt base, but facial detail and topology quality unknown.
+- **Reject/avoid:** prior MakeHuman 154-component import as Morwen neutral base; old failed ring/voxel/flat-quad studies; realistic male textured bust without demonstrated clean editability; CC-BY or noncommercial meshes unless separately approved and tracked.
+- **Acceptance gate for candidate:** retrieve original bytes, record SHA256, archive original license, inspect editable topology (head cranium/face/ears/neck, non-manifold and disconnected components), render neutral 4-view against canonical Layer 0, and require independent G2 review. If the bundle has multiple meshes, choose by visual QA rather than guessing names. Do not auto-sculpt or auto-adopt before evidence.
+- **Current status:** research lead only, **NOT_DOWNLOADED / NOT_RUN**. Existing Blender 5.3 reference compatibility and failed face renders are preserved.
+
+## Official Blender Studio v1.4.1 bundle: first actual source audit (2026-11-20)
+- Run: https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44629009040, inspect-human-base-bundle **PASS**. Evidence artifact ID **14580522574**, JSON extracted and reviewed.
+- Exact source: https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip
+- ZIP bytes **50,643,039**, SHA-256 **811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515**, integrity test PASS; one packed `human_base_meshes_bundle.blend` (**49,420,489 bytes**) and PNG thumbnails including `primitive_body_female_stylized.png`, `stylized_body_female.png`, `realistic_head_sculpt.png`, `stylized_eye.png`.
+- **Correction:** prior note mentioning v1.2.0 as preferred is superseded by this verified v1.4.1 exact source.
+- **Not yet inspected:** license text / terms inside .blend, individual mesh topology, female sculpt editability, render against Morwen four-view. Archive was audited in memory and not retained as a production source artifact. Source **candidate only**, no canonical adoption.
+- Next non-destructive step: SHA-verified reacquisition on runner, inspect .blend with Blender 5.3.0 and render a clean female stylized base candidate for independent G2. Avoid repeating old face candidate renders in the new source-audit job.
+
+## Blender 5.3 direct mesh audit — verified (2026-11-20)
+- Workflow https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/44630228845 **SUCCESS**, artifact **14581153511** includes `audit.json` and `blender_mesh_audit.json`. Both examined.
+- Verified source SHA256: `811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515`. Blender **5.3.0** successfully opened `human_base_meshes_bundle.blend`.
+- Source contains **15 mesh objects**, including `STYLIZED_Body_Female.001` (**13,020 vertices, 12,894 faces**, object dimensions **1.7333 × 0.9089 × 1.5744** in source units), `STYLIZED_Body_Female_Eye` (**1,022 vertices, 1,024 faces**), `PRIMITIVE_Body_Female` (**3,594 vertices, 3,548 faces**), `REALISTIC_Head_Sculpt` (**29,873 vertices, 29,780 faces**), `STYLIZED_Head` (**4,410 vertices, 4,408 faces**).
+- Candidate priority: `STYLIZED_Head` (head anatomy candidate), `STYLIZED_Body_Female.001` (body candidate), separately assess eye. The realistic head is a comparison candidate, **not automatically Morwen's source**. Source object dimensions and counts are measurements, not accepted Morwen dimensions.
+- License text **not** found as a separate ZIP entry; confirm official CC0 provenance in authoritative Blender Studio documentation and preserve license statement before redistribution.
+- G3 source Blender open/mesh inventory **PASS**. G1 Morwen silhouette **NOT_RUN**, G2 visual art **NOT_RUN**, G4 game **NOT_RUN**. Do not claim source selection or sculpt completion yet.

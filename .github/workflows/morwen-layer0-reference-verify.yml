@@ -1,0 +1,71 @@
+name: Morwen Layer 0 four-view source verification
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths: [.github/workflows/morwen-layer0-reference-verify.yml]
+  workflow_dispatch:
+  pull_request:
+    paths: [.github/workflows/morwen-layer0-reference-verify.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retrieve preserved PR 419 reference bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin feature/morwen-rebuild-01
+          mkdir -p /tmp/morwen-layer0
+          for name in 7809 7807 7810 7808; do
+            git show FETCH_HEAD:tools/blender/production_mesh_08/references/${name}.png > /tmp/morwen-layer0/${name}.png
+            test -s /tmp/morwen-layer0/${name}.png
+          done
+      - name: Check original hashes and PNG dimensions, create contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check pillow==11.3.0
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          from PIL import Image,ImageOps,ImageDraw
+          root=pathlib.Path('/tmp/morwen-layer0')
+          sources=[
+            ('front','7809.png','b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed'),
+            ('right','7807.png','9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737'),
+            ('back','7810.png','b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f'),
+            ('left','7808.png','69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa')]
+          sheet=Image.new('RGB',(4*384,1080),'#dedede')
+          draw=ImageDraw.Draw(sheet)
+          report=[]
+          for i,(view,filename,expected) in enumerate(sources):
+            data=(root/filename).read_bytes()
+            actual=hashlib.sha256(data).hexdigest()
+            with Image.open(root/filename) as im:
+              im.load()
+              size=list(im.size)
+              tile=ImageOps.contain(im.convert('RGBA'),(384,1024))
+              bg=Image.new('RGBA',(384,1024),'white')
+              bg.alpha_composite(tile,((384-tile.width)//2,(1024-tile.height)//2))
+              sheet.paste(bg.convert('RGB'),(i*384,40))
+            draw.text((i*384+12,12),view+' | '+filename,fill='black')
+            report.append(dict(view=view,file=filename,sha256=actual,expected_sha256=expected,hash_match=actual==expected,dimensions=size))
+          sheet.save(root/'four_view_contact_sheet.png')
+          passed=all(x['hash_match'] and x['dimensions']==[384,1024] for x in report)
+          (root/'reference_verification.json').write_text(json.dumps(dict(status='PASS' if passed else 'FAIL',visual_equivalence='NOT_RUN_INDEPENDENT_REVIEW',source_branch='feature/morwen-rebuild-01',sources=report),indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          if not passed: raise SystemExit('Reference hash or dimensions mismatch')
+          PY
+      - name: Preserve immutable reference QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-four-view-verification
+          path: /tmp/morwen-layer0/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Morwen silhouette alignment QA</title>
+<style>
+body{font:15px system-ui,sans-serif;background:#161c27;color:#eef3fa;margin:20px}main{max-width:1000px;margin:auto}canvas{background:repeating-conic-gradient(#ddd 0 25%,#aaa 0 50%) 50%/18px 18px;width:384px;max-width:100%;height:auto;touch-action:none;border:2px solid #8aa}label{display:inline-block;margin:8px}button,input{font:inherit}pre{white-space:pre-wrap;overflow-wrap:anywhere}small{color:#c4cfde}
+</style><main><h1>Morwen silhouette alignment QA</h1>
+<p>自作レンダーと利用許諾済みの参考画像のみ読み込んでください。DessinPoseの画像はGitHubへ保存・転載しません。画像はブラウザ内でのみ処理されます。</p>
+<label>3Dレンダー <input id="render" type="file" accept="image/png,image/webp"></label>
+<label>参考画像 <input id="reference" type="file" accept="image/png,image/webp"></label>
+<label>参考画像の透明度 <input id="opacity" type="range" min="0" max="100" value="45"></label>
+<label>参考画像の拡大率 <input id="scale" type="range" min="50" max="150" value="100"></label>
+<label>X移動 <input id="offsetX" type="range" min="-180" max="180" value="0"></label>
+<label>Y移動 <input id="offsetY" type="range" min="-300" max="300" value="0"></label>
+<div><canvas id="canvas" width="384" height="1024" aria-label="画像重ね合わせ"></canvas></div>
+<p><button id="reset">位置を初期化</button> <button id="export">ランドマークJSONを保存</button></p>
+<small>キャンバスをタップして関節・輪郭の対応点を記録します。正確な3D位置の復元ではありません。</small>
+<pre id="output"></pre>
+<script src="./viewer.js"></script></main></html>

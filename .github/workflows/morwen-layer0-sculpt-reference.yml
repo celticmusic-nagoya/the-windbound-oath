@@ -1,0 +1,274 @@
+name: Morwen Layer 0 packed Blender sculpt reference scene
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - .github/workflows/morwen-layer0-sculpt-reference.yml
+      - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
+      - tools/production_qa/install_blender_530.sh
+      - tools/morwen_authored_sculpt/build_face_surface_530.py
+      - tools/morwen_authored_sculpt/render_official_base_candidates_530.py
+      - tools/morwen_authored_sculpt/export_precision_blueprint_530.py
+      - tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py
+      - tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
+      - tools/morwen_authored_sculpt/render_geometry_masks_530.py
+      - tools/morwen_authored_sculpt/validate_geometry_masks.py
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/morwen-layer0-sculpt-reference.yml
+      - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
+permissions:
+  contents: read
+jobs:
+  build-reference-scene:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch and verify source PNG bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin feature/morwen-rebuild-01
+          mkdir -p /tmp/morwen-ref
+          for n in 7809 7807 7810 7808; do
+            git show FETCH_HEAD:tools/blender/production_mesh_08/references/${n}.png > /tmp/morwen-ref/${n}.png
+          done
+          echo 'b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed  /tmp/morwen-ref/7809.png' | sha256sum -c -
+          echo '9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737  /tmp/morwen-ref/7807.png' | sha256sum -c -
+          echo 'b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f  /tmp/morwen-ref/7810.png' | sha256sum -c -
+          echo '69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa  /tmp/morwen-ref/7808.png' | sha256sum -c -
+      - name: Measure verified Layer 0 silhouettes for precision blueprint
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user 'Pillow==11.3.0'
+          python3 tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py /tmp/morwen-ref /tmp/morwen-landmark-out
+          test -s /tmp/morwen-landmark-out/reference_silhouette_landmarks.json
+      - name: Upload measured four-view silhouette evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-sha-verified-silhouette-landmarks
+          path: /tmp/morwen-landmark-out/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Install verified Blender 5.3.0 independently
+        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
+      - name: Create and reopen packed reference blend
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender-530/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_layer0_reference_scene.py -- /tmp/morwen-ref /tmp/morwen-ref-out
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-expr "import bpy; assert len([o for o in bpy.data.objects if o.type=='MESH'])==0; assert len([o for o in bpy.data.objects if o.type=='EMPTY' and o.data])==4; assert all(o.data.packed_file for o in bpy.data.objects if o.type=='EMPTY' and o.data)"
+          sha256sum /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend > /tmp/morwen-ref-out/SHA256SUMS
+      - name: Verify packed canonical Layer 0 reference opens in Blender 5.3.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend --python-exit-code 1 --python-expr '
+          import bpy,hashlib,json,pathlib
+          expected={"REF_FRONT":"b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed","REF_RIGHT":"9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737","REF_BACK":"b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f","REF_LEFT":"69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"}
+          assert tuple(bpy.app.version)==(5,3,0)
+          for name,sha in expected.items():
+           ob=bpy.data.objects.get(name)
+           assert ob and ob.type=="EMPTY" and ob.data and ob.data.packed_file
+           assert ob.get("source_sha256")==sha
+           assert tuple(ob.data.size)==(384,1024)
+          assert not any(o.type=="MESH" for o in bpy.data.objects)
+          out=pathlib.Path("/tmp/morwen-ref-out")
+          (out/"blender530_reference_compat_qa.json").write_text(json.dumps({"blender":bpy.app.version_string,"canonical_reference_count":4,"mesh_count":0,"status":"REFERENCE_ONLY_COMPAT_PASS_NOT_SCULPT"},indent=2))
+          print("MORWEN_LAYER0_BLENDER_530_REFERENCE_PASS")
+          '
+      - name: Create editable new quad-grid facial sculpt candidate in Blender 5.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/build_face_surface_530.py
+          /tmp/two-blender-530/app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/build_face_surface_530.py -- /tmp/morwen-ref-out/morwen_layer0_sculpt_reference_setup.blend /tmp/morwen-face-out
+          test -s /tmp/morwen-face-out/morwen_face_surface_530_candidate.blend
+          test -s /tmp/morwen-face-out/face_front.png
+          test -s /tmp/morwen-face-out/face_right.png
+          test -s /tmp/morwen-face-out/face_three_quarter.png
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-face-out/morwen_face_surface_530_candidate.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.data.objects.get("MORWEN_FACE_PLANES_CANDIDATE_NOT_ADOPTED"); print("MORWEN_NEW_FACE_REOPEN_PASS")'
+      - name: Upload actual editable facial study and renders
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-new-face-surface-study-unapproved
+          path: /tmp/morwen-face-out/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve Blender source artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-layer0-packed-reference-blend
+          path: /tmp/morwen-ref-out/
+          retention-days: 14
+          if-no-files-found: warn
+
+  inspect-human-base-bundle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Preflight compile all Blender production scripts before downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            tools/morwen_authored_sculpt/render_geometry_masks_530.py \
+            tools/morwen_authored_sculpt/render_official_base_candidates_530.py \
+            tools/morwen_authored_sculpt/export_precision_blueprint_530.py \
+            tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
+          node --check tools/morwen_authored_sculpt/pose_viewer/viewer.js
+      - name: Download official Blender Studio human base meshes bundle and audit contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-base-audit
+          python3 - <<'PY'
+          import urllib.request, zipfile, hashlib, json, pathlib, sys, io
+          out=pathlib.Path("/tmp/morwen-base-audit")
+          expected="811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515"
+          sources=[
+              ("official","https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip"),
+              ("user_shared_drive","https://drive.usercontent.google.com/download?id=1ecJJEPYl6sFafc2gklbKKlsz3EDzNAKf&export=download&confirm=t")
+          ]
+          result={"status":"BLOCKED_DOWNLOAD_OR_FORMAT","source_role":"CANDIDATE_ONLY","expected_sha256":expected,"attempts":[]}
+          for label,url in sources:
+              try:
+                  req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; TWO-source-verification/1.0)"})
+                  with urllib.request.urlopen(req,timeout=90) as response:
+                      length=int(response.headers.get("Content-Length","0"))
+                      if length>70_000_000:raise ValueError("SOURCE_OVER_SIZE_LIMIT")
+                      raw=response.read(70_000_001)
+                  if len(raw)>70_000_000:raise ValueError("SOURCE_OVER_SIZE_LIMIT")
+                  digest=hashlib.sha256(raw).hexdigest()
+                  if digest!=expected:raise ValueError("SOURCE_SHA_MISMATCH:"+digest)
+                  with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                      bad=z.testzip()
+                      if bad:raise ValueError("ZIP_CORRUPT:"+bad)
+                      entries=z.infolist()
+                      matches=[n for n in z.namelist() if n.endswith("human_base_meshes_bundle.blend")]
+                      if len(matches)!=1:raise ValueError("SOURCE_BLEND_ENTRY_MISSING_OR_DUPLICATED")
+                      with z.open(matches[0]) as src,open(out/"source.blend","wb") as dst:
+                          import shutil;shutil.copyfileobj(src,dst)
+                  result.update(status="ZIP_STRUCTURE_PASS_SOURCE_LICENSE_PENDING",source_label=label,source_url=url,sha256=digest,download_bytes=len(raw),entry_count=len(entries),blend_count=sum(i.filename.lower().endswith(".blend") for i in entries),license_candidates=[i.filename for i in entries if any(k in i.filename.lower() for k in ("license","licence","copying","readme"))])
+                  break
+              except Exception as exc:
+                  result["attempts"].append({"source_label":label,"error":str(exc)})
+          (out/"audit.json").write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2))
+          if result["status"]!="ZIP_STRUCTURE_PASS_SOURCE_LICENSE_PENDING":sys.exit(1)
+          PY
+      - name: Inspect actual Blender Studio source mesh datablocks with Blender 5.3
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/audit-app
+          test -s /tmp/morwen-base-audit/source.blend
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python-expr 'import bpy,json,pathlib; p=pathlib.Path("/tmp/morwen-base-audit"); meshes=[{"name":o.name,"vertices":len(o.data.vertices),"faces":len(o.data.polygons),"dimensions":[round(float(x),4) for x in o.dimensions],"hidden":o.hide_render} for o in bpy.data.objects if o.type=="MESH"]; data={"blender_version":bpy.app.version_string,"mesh_objects":len(meshes),"meshes":meshes[:400],"collections":[c.name for c in bpy.data.collections],"text_blocks":[t.name for t in bpy.data.texts],"candidate_matches":[x for x in meshes if any(k in x["name"].lower() for k in ("female","stylized","head"))]}; (p/"blender_mesh_audit.json").write_text(json.dumps(data,indent=2)); print("SOURCE_MESH_AUDIT_PASS",len(meshes),len(data["candidate_matches"]))'
+          test -s /tmp/morwen-base-audit/blender_mesh_audit.json
+      - name: Render untouched official stylized head and female body candidates in four views
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/render_official_base_candidates_530.py
+          mkdir -p /tmp/morwen-base-audit/candidate-renders
+          /tmp/two-blender-530/audit-app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/render_official_base_candidates_530.py -- /tmp/morwen-base-audit/candidate-renders /tmp/morwen-base-audit/source.blend
+          test -s /tmp/morwen-base-audit/candidate-renders/head_front.png
+          test -s /tmp/morwen-base-audit/candidate-renders/body_female_front.png
+      - name: Export numeric mesh blueprint and verify round-trip geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/export_precision_blueprint_530.py
+          mkdir -p /tmp/morwen-base-audit/precision-blueprint
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/export_precision_blueprint_530.py -- /tmp/morwen-base-audit/precision-blueprint
+          test -s /tmp/morwen-base-audit/precision-blueprint/blueprint.json
+          test -s /tmp/morwen-base-audit/precision-blueprint/head_mesh_geometry.json.gz
+          test -s /tmp/morwen-base-audit/precision-blueprint/body_female_mesh_geometry.json.gz
+      - name: Compare measured Layer 0 silhouette with source vertex envelopes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin feature/morwen-rebuild-01
+          mkdir -p /tmp/morwen-projection-refs
+          for n in 7809 7807 7810 7808; do
+            git show FETCH_HEAD:tools/blender/production_mesh_08/references/${n}.png > /tmp/morwen-projection-refs/${n}.png
+          done
+          python3 -m pip install --user 'Pillow==11.3.0'
+          python3 tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py /tmp/morwen-projection-refs /tmp/morwen-base-audit/precision-blueprint
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py -- /tmp/morwen-base-audit/precision-blueprint/reference_silhouette_landmarks.json /tmp/morwen-base-audit/precision-blueprint
+          test -s /tmp/morwen-base-audit/precision-blueprint/projection_diagnostic.json
+      - name: Upload precision numeric blueprint evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-precision-mesh-blueprint-candidate-not-adopted
+          path: /tmp/morwen-base-audit/precision-blueprint/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Render actual source mesh silhouette masks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/render_geometry_masks_530.py
+          mkdir -p /tmp/morwen-base-audit/geometry-masks
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/render_geometry_masks_530.py -- /tmp/morwen-base-audit/geometry-masks
+          test -s /tmp/morwen-base-audit/geometry-masks/geometry_mask_contract.json
+      - name: Validate actual geometry mask alpha and frame margins
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/validate_geometry_masks.py
+          python3 tools/morwen_authored_sculpt/validate_geometry_masks.py /tmp/morwen-base-audit/geometry-masks
+          test -s /tmp/morwen-base-audit/geometry-masks/geometry_mask_qa.json
+      - name: Validate JavaScript pose overlay viewer
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check tools/morwen_authored_sculpt/pose_viewer/viewer.js
+          test -s tools/morwen_authored_sculpt/pose_viewer/index.html
+      - name: Upload local-only JavaScript pose viewer
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-local-pose-overlay-viewer
+          path: tools/morwen_authored_sculpt/pose_viewer/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload actual geometry silhouette masks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-source-geometry-mask-diagnostics-not-adopted
+          path: /tmp/morwen-base-audit/geometry-masks/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload independent source candidate render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-official-cc0-base-candidate-four-view-not-adopted
+          path: /tmp/morwen-base-audit/candidate-renders/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve source audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-studio-human-base-source-audit
+          path: |
+            /tmp/morwen-base-audit/audit.json
+            /tmp/morwen-base-audit/blender_mesh_audit.json
+          if-no-files-found: warn
+          retention-days: 14

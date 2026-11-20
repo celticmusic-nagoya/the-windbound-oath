@@ -1,0 +1,50 @@
+name: Morwen new voxel head sculpt candidate
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - tools/morwen_authored_sculpt/build_voxel_head_sculpt.py
+      - .github/workflows/morwen-voxel-head-sculpt.yml
+  workflow_dispatch:
+  pull_request:
+    branches: [feature/morwen-authored-sculpt-20261118]
+    paths:
+      - tools/morwen_authored_sculpt/build_voxel_head_sculpt.py
+      - .github/workflows/morwen-voxel-head-sculpt.yml
+permissions:
+  contents: read
+concurrency:
+  group: morwen-voxel-head-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  sculpt-and-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Create actual sculpt mesh and render five views
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-voxel-head
+          /tmp/two-blender/app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/build_voxel_head_sculpt.py -- /tmp/morwen-voxel-head
+          for n in front right back left three_quarter; do test -s /tmp/morwen-voxel-head/${n}.png; done
+          test -s /tmp/morwen-voxel-head/MORWEN_VOXEL_HEAD_FIRST_SCULPT_CANDIDATE.blend
+          test -s /tmp/morwen-voxel-head/QA.json
+      - name: Reopen saved Blender sculpt
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --python-exit-code 1 /tmp/morwen-voxel-head/MORWEN_VOXEL_HEAD_FIRST_SCULPT_CANDIDATE.blend --python-expr 'import bpy; h=bpy.data.objects.get("MORWEN_Head_VoxelSculpt_CANDIDATE"); assert h and h.type=="MESH" and len(h.data.vertices)>1000 and len(h.data.polygons)>1000; print("NEW_VOXEL_HEAD_REOPEN_PASS")'
+      - name: Upload real candidate, renders and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-new-voxel-head-sculpt-candidate
+          path: /tmp/morwen-voxel-head/
+          if-no-files-found: warn
+          retention-days: 14

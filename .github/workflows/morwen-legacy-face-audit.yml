@@ -1,0 +1,113 @@
+name: Morwen legacy face Blender reopen audit
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - .github/workflows/morwen-legacy-face-audit.yml
+      - tools/morwen_authored_sculpt/audit_legacy_face_modules.py
+      - tools/morwen_authored_sculpt/isolate_legacy_face_parts.py
+      - tools/morwen_authored_sculpt/verify_isolated_face_integrity.py
+      - tools/morwen_authored_sculpt/render_isolated_face_parts.py
+      - tools/morwen_authored_sculpt/render_combined_face_candidate.py
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/morwen-legacy-face-audit.yml
+      - tools/morwen_authored_sculpt/audit_legacy_face_modules.py
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect-legacy-face:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Recover exact preserved source .blend artifacts
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-legacy
+          for id in 14106227834 14111116241; do
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}/zip" > "/tmp/morwen-legacy/${id}.zip"
+            unzip -q "/tmp/morwen-legacy/${id}.zip" '*.blend' -d /tmp/morwen-legacy
+          done
+          echo '6c5a9919fd6733a0a1ec8d261fb647e5825cb3dfbc4092ed12c0e7baab26de5c  /tmp/morwen-legacy/MORWEN_ELM_04_CANDIDATE.blend' | sha256sum -c -
+          echo 'db9576531f7da777bc8a67af791af4b39b4975bf8d82adb3082c46742a556ff9  /tmp/morwen-legacy/MORWEN_EYELID_05_CANDIDATE.blend' | sha256sum -c -
+      - name: Install pinned Blender 5.2.4
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Reopen source and extract read-only structural evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in MORWEN_ELM_04_CANDIDATE MORWEN_EYELID_05_CANDIDATE; do
+            mkdir -p "/tmp/morwen-legacy-report/${name}"
+            /tmp/two-blender/app/blender -b "/tmp/morwen-legacy/${name}.blend" --python tools/morwen_authored_sculpt/audit_legacy_face_modules.py -- "/tmp/morwen-legacy-report/${name}"
+          done
+          sha256sum /tmp/morwen-legacy-report/*/structure.json > /tmp/morwen-legacy-report/SHA256SUMS
+      - name: Extract face part candidate without modifying original source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-face-parts
+          /tmp/two-blender/app/blender -b /tmp/morwen-legacy/MORWEN_ELM_04_CANDIDATE.blend --python tools/morwen_authored_sculpt/isolate_legacy_face_parts.py -- /tmp/morwen-face-parts
+          /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python-expr "import bpy; o=bpy.data.objects.get('MORWEN_LegacyFaceParts_316_CANDIDATE'); assert o and len(o.data.shape_keys.key_blocks)==58 and len(o.data.polygons)==768; print('REOPEN_FACE_PARTS_PASS')"
+      - name: Verify isolated geometry, UV, weights and all 58 shape keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/verify_isolated_face_integrity.py -- /tmp/morwen-face-parts
+      - name: Render actual isolated face parts for visual review
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-face-parts-render
+          /tmp/two-blender/app/blender -b --python-exit-code 1 /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/render_isolated_face_parts.py -- /tmp/morwen-face-parts-render
+          test -s /tmp/morwen-face-parts-render/front.png
+          test -s /tmp/morwen-face-parts-render/three_quarter.png
+          test -s /tmp/morwen-face-parts-render/render_manifest.json
+      - name: Render combined legacy face and eyes candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-combined-face-render
+          /tmp/two-blender/app/blender -b --python-exit-code 1 /tmp/morwen-face-parts/MORWEN_FACE_PARTS_316_ISOLATED_CANDIDATE.blend --python tools/morwen_authored_sculpt/render_combined_face_candidate.py -- /tmp/morwen-combined-face-render
+          test -s /tmp/morwen-combined-face-render/front.png
+          test -s /tmp/morwen-combined-face-render/three_quarter.png
+          test -s /tmp/morwen-combined-face-render/combined_face_manifest.json
+      - name: Upload combined legacy face visual QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-combined-face-render-candidate
+          path: /tmp/morwen-combined-face-render/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload facial part visual QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-isolated-face-parts-render
+          path: /tmp/morwen-face-parts-render/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload isolated face parts QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-face-parts-isolation-candidate
+          path: /tmp/morwen-face-parts/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload source structure QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-legacy-face-reopen-qa
+          path: /tmp/morwen-legacy-report/
+          retention-days: 14
+          if-no-files-found: warn
