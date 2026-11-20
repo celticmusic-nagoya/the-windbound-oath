@@ -73,7 +73,7 @@ function distantCoast(scene, sunDirection) {
   scene.add(mesh);
 }
 
-export function sunset(scene, sea, sun) {
+export function sunset(scene, sea, sun, allowLegacyVista = true) {
   const direction = sun.clone().normalize();
   const sky = new T.Mesh(new T.SphereGeometry(125, 40, 22), new T.ShaderMaterial({
     side: T.BackSide,
@@ -112,7 +112,7 @@ export function sunset(scene, sea, sun) {
   }));
   sky.renderOrder = -1;
   scene.add(sky);
-  if (new URLSearchParams(location.search).get('vista') === '1') distantCoast(scene, direction);
+  if (allowLegacyVista && new URLSearchParams(location.search).get('vista') === '1') distantCoast(scene, direction);
   if (sea?.isMesh) {
     sea.material = new T.ShaderMaterial({
       uniforms: { sun: { value: direction }, time: { value: 0 } },

@@ -1,0 +1,191 @@
+{
+  "status": "UNAPPROVED",
+  "blender": "5.3.0",
+  "inputs_sha256": {
+    "assets/candidates/lind/windwaiting-cliff-playable/eco-v2/cliff_eco_v2_UNAPPROVED.blend": "461f2cade19038e266cf23e99ef01ebcaf08844106fde9863412c2e0e7e9a74d",
+    "assets/candidates/lind/windwaiting-cliff-playable/eco-v2/glb/eco_tree_deciduous_a_LOD1.glb": "9d2c284a54645900e309e69ffe5e6a831680b8913227b502a9f9beca45616aae",
+    "assets/approved/game/cliff/sunset_background.png": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07"
+  },
+  "terrain": {
+    "coordinates": "provisional Z-up, sea is -Y, glTF (X,Z,-Y)",
+    "crest_sections": [
+      [
+        [
+          -78,
+          -46,
+          2.4
+        ],
+        [
+          -68,
+          -43,
+          3.1
+        ],
+        [
+          -58,
+          -42,
+          4.8
+        ],
+        [
+          -48,
+          -43,
+          5.1
+        ],
+        [
+          -37,
+          -46,
+          4.5
+        ],
+        [
+          -31,
+          -48,
+          2.7
+        ],
+        [
+          -27,
+          -51,
+          1.2
+        ]
+      ],
+      [
+        [
+          -47,
+          -73,
+          2.5
+        ],
+        [
+          -33,
+          -69,
+          4.4
+        ],
+        [
+          -15,
+          -64,
+          6.3
+        ],
+        [
+          -8,
+          -64,
+          6.9
+        ],
+        [
+          3,
+          -65,
+          6.1
+        ],
+        [
+          8,
+          -68,
+          5.3
+        ],
+        [
+          12,
+          -71,
+          3.6
+        ],
+        [
+          14,
+          -72,
+          1.1
+        ]
+      ],
+      [
+        [
+          16,
+          -73,
+          1.7
+        ],
+        [
+          19,
+          -71,
+          3.1
+        ],
+        [
+          21,
+          -72,
+          2.6
+        ],
+        [
+          22.5,
+          -74,
+          1.0
+        ]
+      ],
+      [
+        [
+          24,
+          -75,
+          0.7
+        ],
+        [
+          25,
+          -74,
+          1.6
+        ],
+        [
+          27,
+          -75,
+          1.2
+        ],
+        [
+          28,
+          -77,
+          0.4
+        ]
+      ]
+    ],
+    "triangles": 838
+  },
+  "old_road": {
+    "triangles": 4000,
+    "samples": 16000,
+    "gap_bu": [
+      0.024561405181884766,
+      0.02844381332397461
+    ],
+    "below_terrain_samples": 0,
+    "road_face_normal_z": [
+      0.9620729684829712,
+      0.9996898174285889
+    ],
+    "uv_layers": 0
+  },
+  "tree": {
+    "bark_faces": 174,
+    "uv_density_multiplier": [
+      1.5,
+      2.4
+    ],
+    "wind_attribute": true,
+    "bark_source": {
+      "asset_status": "candidate",
+      "source_url": "https://polyhaven.com/a/bark_brown_02",
+      "author": {
+        "Rob Tuytel": "All"
+      },
+      "license": "CC0",
+      "license_evidence_url": "https://polyhaven.com/license",
+      "capture_location_claim": "unknown",
+      "textures": {
+        "basecolor": {
+          "path": "basecolor.jpg",
+          "sha256": "920fa0bed0c9d78c1d530e99795113afd532d7db746de440f4a85d7c83ed0f1a",
+          "color_space": "sRGB",
+          "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_brown_02/bark_brown_02_diff_1k.jpg"
+        },
+        "normal": {
+          "path": "normal.jpg",
+          "sha256": "0d5e691e8ad8bcd093a3587887fda2a6b4a948b5708a4f256f7919584c6eb857",
+          "color_space": "Non-Color",
+          "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_brown_02/bark_brown_02_nor_gl_1k.jpg"
+        },
+        "roughness": {
+          "path": "roughness.jpg",
+          "sha256": "68125592de36e15bae7aa6db85c4d135aeb7e5653199ba226483a70f6d69837d",
+          "color_space": "Non-Color",
+          "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_brown_02/bark_brown_02_rough_1k.jpg"
+        }
+      }
+    }
+  },
+  "independent_art_qa": "NOT_RUN"
+}

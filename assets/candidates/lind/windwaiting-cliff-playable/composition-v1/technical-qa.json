@@ -1,0 +1,170 @@
+{
+  "road": {
+    "controlled_change": "disabled only vertexColors on the original road PBR material via local Playwright routing",
+    "coordinates_px": [
+      [
+        600,
+        220
+      ],
+      [
+        580,
+        245
+      ],
+      [
+        553,
+        270
+      ],
+      [
+        633,
+        190
+      ]
+    ],
+    "mean_srgb_7x7": {
+      "baseline": [
+        [
+          35.285714285714285,
+          14.46938775510204,
+          5.918367346938775
+        ],
+        [
+          37.673469387755105,
+          14.857142857142858,
+          5.387755102040816
+        ],
+        [
+          25.73469387755102,
+          8.061224489795919,
+          2.3877551020408165
+        ],
+        [
+          44.44897959183673,
+          23.959183673469386,
+          10.693877551020408
+        ]
+      ],
+      "vertex-color-off": [
+        [
+          72.38775510204081,
+          38.59183673469388,
+          19.06122448979592
+        ],
+        [
+          79.93877551020408,
+          42.10204081632653,
+          20.979591836734695
+        ],
+        [
+          62.734693877551024,
+          31.183673469387756,
+          14.16326530612245
+        ],
+        [
+          71.40816326530613,
+          41.48979591836735,
+          20.857142857142858
+        ]
+      ],
+      "candidate": [
+        [
+          72.81632653061224,
+          40.0,
+          19.53061224489796
+        ],
+        [
+          82.08163265306122,
+          46.285714285714285,
+          22.20408163265306
+        ],
+        [
+          59.183673469387756,
+          28.979591836734695,
+          12.83673469387755
+        ],
+        [
+          72.3265306122449,
+          42.6530612244898,
+          21.306122448979593
+        ]
+      ]
+    }
+  },
+  "trees": {
+    "input": {
+      "sha256": "9d2c284a54645900e309e69ffe5e6a831680b8913227b502a9f9beca45616aae",
+      "wind": {
+        "amplitude_m": 0.22,
+        "frequency_hz": 0.32,
+        "flutter": 0.3,
+        "channel": "lind_wind_strength"
+      },
+      "primitives": [
+        {
+          "attributes": [
+            "COLOR_0",
+            "NORMAL",
+            "POSITION",
+            "TANGENT",
+            "TEXCOORD_0",
+            "_WIND_WEIGHT"
+          ],
+          "triangles": 174
+        },
+        {
+          "attributes": [
+            "COLOR_0",
+            "NORMAL",
+            "POSITION",
+            "TANGENT",
+            "TEXCOORD_0",
+            "_WIND_WEIGHT"
+          ],
+          "triangles": 2272
+        }
+      ]
+    },
+    "candidate": {
+      "sha256": "276ed527cb115690a09a9b86604468d9b2883957419104c6b0268ab952e23936",
+      "wind": {
+        "amplitude_m": 0.22,
+        "frequency_hz": 0.32,
+        "flutter": 0.3,
+        "channel": "lind_wind_strength"
+      },
+      "primitives": [
+        {
+          "attributes": [
+            "COLOR_0",
+            "NORMAL",
+            "POSITION",
+            "TANGENT",
+            "TEXCOORD_0",
+            "_WIND_WEIGHT"
+          ],
+          "triangles": 174
+        },
+        {
+          "attributes": [
+            "COLOR_0",
+            "NORMAL",
+            "POSITION",
+            "TANGENT",
+            "TEXCOORD_0",
+            "_WIND_WEIGHT"
+          ],
+          "triangles": 2272
+        }
+      ]
+    }
+  },
+  "artifacts": {
+    "photo_input": 14670447492,
+    "photo_sha256": "4edaab28ebde25b29537edd86aa4a6f284d062fa7e71a6b7fa2c900818014b6e",
+    "blender_reopen": "PASS, candidate mesh present, all used external images packed; 3 Cycles PNGs saved"
+  },
+  "gates": {
+    "G1": "reference SHA verified; formal transforms and dimensions BLOCKED",
+    "G2": "independent QA NOT_RUN",
+    "G3": "scoped geometry, native reopen, GLB attributes and desktop WebGL checks PASS",
+    "G4": "desktop WebGL movement and wind PASS within isolated playtest; shipped game and Android device NOT_RUN"
+  }
+}

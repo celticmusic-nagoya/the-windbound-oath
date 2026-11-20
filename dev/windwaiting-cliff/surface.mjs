@@ -34,7 +34,7 @@ export async function loadPhotoSurfaces(base) {
   return result;
 }
 
-export function adaptSurfaces(root, renderer, moss = null, photo = null) {
+export function adaptSurfaces(root, renderer, moss = null, photo = null, integratedRoad = false) {
   const terrain = new Set();
   const bark = new Set();
   const rock = new Set();
@@ -44,7 +44,11 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
     if (!mesh.isMesh || !mesh.material) return;
     const name = mesh.material.name;
     if (/Slate and weathered limestone|Windward olive turf/.test(name)) terrain.add(mesh.material);
-    if (photo && name === 'Weathered ochre footpath') { road.add(mesh.material); roadMeshes.push(mesh); }
+    if ((photo || integratedRoad) && name === 'Weathered ochre footpath') {
+      roadMeshes.push(mesh);
+      if (integratedRoad) mesh.visible = false;
+      else road.add(mesh.material);
+    }
     if (name === 'M_eco_bark') bark.add(mesh.material);
     if (moss && /Damp lower bedrock|Wet boulders and talus|Moss over loose/.test(name)) rock.add(mesh.material);
   });
@@ -89,8 +93,8 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
     material.color.setRGB(1, 1, 1);
     material.onBeforeCompile = (shader) => {
       shader.uniforms.coastStone = { value: stone };
+      if (roadMeshes.length) shader.uniforms.routeWidth = { value: routeWidth };
       if (photo) {
-        shader.uniforms.routeWidth = { value: routeWidth };
         shader.uniforms.photoGrass = { value: photo.sparse_grass };
         shader.uniforms.photoDirt = { value: photo.stony_dirt_path };
         shader.uniforms.photoNormal = { value: photo.sparse_grass_normal };
@@ -105,7 +109,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         uniform sampler2D coastStone;
         ${photo ? 'uniform sampler2D photoGrass, photoDirt, photoNormal, photoRough;' : ''}
         ${moss ? mossGLSL : ""}
-        ${photo && roadMeshes.length ? shoulderGLSL : ''}
+        ${roadMeshes.length ? shoulderGLSL : ''}
         float grainHash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
         float grain(vec2 p) {
           vec2 i = floor(p), f = fract(p);
@@ -141,7 +145,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
           float exposed = smoothstep(.68,.88,grain(coastPoint.xz*.39 + vec2(11.2,4.1))) * .22;
           grass *= clamp(.83 + grassLight * .95, .85, 1.22);
           grass = mix(grass, dirtPhoto * vec3(.65,.78,.55), exposed);
-          ${roadMeshes.length ? 'grass = mix(grass, dirtPhoto * vec3(1.20,1.14,1.02), routeShoulder(coastPoint.xz)*.90);' : ''}
+          ${roadMeshes.length && !integratedRoad ? 'grass = mix(grass, dirtPhoto * vec3(1.20,1.14,1.02), routeShoulder(coastPoint.xz)*.90);' : ''}
         ` : ''}
         float cover = smoothstep(.55,.86,surfaceNormal.y + (pattern-.5)*.20) *
                       smoothstep(3.3,5.0,coastPoint.y);
@@ -156,6 +160,12 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
             if (mossMask > .01) stoneColor = mix(stoneColor, texture2D(ecoMossColor, mossUV).rgb, mossMask);
           }
         ` : 'vec3 stoneColor = coastRock(surfaceNormal);'}
+        ${integratedRoad && roadMeshes.length ? `
+          float shoulder = routeShoulder(coastPoint.xz + vec2(grain(coastPoint.xz*3.)-.5)*.16);
+          vec3 tread = ${photo ? 'dirtPhoto * vec3(1.2,1.14,1.02)' :
+            'mix(vec3(.16,.095,.043), vec3(.33,.23,.115), pattern)'};
+          grass = mix(grass, tread, shoulder);
+        ` : ''}
         diffuseColor.rgb *= mix(stoneColor, grass, cover);
       `);
       if (moss) addMossResponse(shader, 'mix(1.0, .94 + pattern * .10, cover)');
@@ -164,7 +174,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         addRockPhotoResponse(shader, photo, 'coastPoint', 'surfaceNormal', moss ? '(1.0-cover)*(1.0-mossMask)' : '1.0-cover');
       }
     };
-    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-meadow-shoulder-v14' : '');
+    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-meadow-shoulder-v14' : '') + (integratedRoad ? '-single-surface' : '');
   }
   for (const material of road) {
     material.onBeforeCompile = (shader) => {

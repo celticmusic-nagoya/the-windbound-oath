@@ -10,6 +10,8 @@ const status = document.querySelector('#status');
 const asset = new URL('../../assets/candidates/lind/windwaiting-cliff-playable/', import.meta.url);
 const query = new URLSearchParams(location.search);
 const legacy = query.get('eco') === 'legacy';
+const composition = query.get('composition') === '1';
+const compositionRoot = new URL('composition-v1/', asset);
 const ecoRoot = new URL('eco-v2/', asset);
 const ray = new T.Raycaster();
 const down = new T.Vector3(0, -1, 0);
@@ -95,7 +97,22 @@ async function play() {
   scene.background = new T.Color(0xc2a1a1);
   scene.fog = new T.FogExp2(0xa79bae, 0.010);
   scene.add(gltf.scene);
-  adaptSurfaces(gltf.scene, renderer, moss, photo);
+  adaptSurfaces(gltf.scene, renderer, moss, photo, composition);
+  if (composition) {
+    const coast = await loader.loadAsync(new URL('distant-coast.glb', compositionRoot).href);
+    coast.scene.traverse((object) => {
+      if (!object.isMesh) return;
+      const material = object.material;
+      material.fog = false;
+      material.color.multiplyScalar(.36);
+      material.onBeforeCompile = (shader) => {
+        shader.fragmentShader = shader.fragmentShader.replace('#include <opaque_fragment>',
+          'outgoingLight = mix(outgoingLight, vec3(.077,.082,.110), smoothstep(25.,130.,length(vViewPosition))*.72);\n' +
+          '#include <opaque_fragment>');
+      };
+    });
+    scene.add(coast.scene);
+  }
   scene.add(new T.HemisphereLight(0xffddd1, 0x616c75, 2.15));
   const sun = new T.DirectionalLight(0xffbb78, 2.2);
   sun.position.fromArray(data.sun);
@@ -103,7 +120,7 @@ async function play() {
   const nodes = new Map();
   gltf.scene.traverse((object) => { if (object.userData.name) nodes.set(object.userData.name, object); });
   const sea = nodes.get('Provisional sea at Z=0');
-  const updateSunset = sunset(scene, sea, sun.position);
+  const updateSunset = sunset(scene, sea, sun.position, !composition);
   function meshes(name) {
     const list = [];
     nodes.get(name)?.traverse((object) => {
@@ -121,11 +138,16 @@ async function play() {
     }
     scene.updateMatrixWorld(true);
     const selectedPlacement = query.get('meadow') === '1' ? densifyMeadow(placement, ground, data) : placement;
+    if (composition) {
+      selectedPlacement.assets = { ...selectedPlacement.assets, eco_tree_deciduous_a: {
+        ...selectedPlacement.assets.eco_tree_deciduous_a, path: '../composition-v1/tree.glb',
+      } };
+    }
     vegetation = await createVegetation({ loader, base: ecoRoot, placement: selectedPlacement, root: scene,
       initialStrength: query.get('wind') === '0' ? 0 : 0.65 });
     // ECO materials are cloned and instantiated after adaptSurfaces executes.
     // Preserve wind shader hooks; only bind maps on confirmed UV-bearing bark.
-    if (photo) {
+    if (photo && !composition) {
       const applied = new Set();
       scene.getObjectByName('Vegetation overlays')?.traverse(mesh => {
         if (!mesh.isMesh || !/bark/i.test(mesh.material?.name || '') || !mesh.geometry.hasAttribute('uv')) return;
