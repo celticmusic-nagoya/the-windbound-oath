@@ -79,3 +79,6 @@ Mandatory for all AI and workstreams: follow the latest AGENTS.md milestone-base
 
 ## Continuous visual progress evidence — 2026-11-21
 All AI follow the latest AGENTS.md visual evidence policy: unrestricted useful captures, incremental authorized artifact publishing during long jobs where supported, direct actual image display on status requests, and no screenshot-only job termination. #427/#421 owners implement and verify on their branches; policy alone does not establish live screenshot availability.
+
+## Recoverable save failures — 2026-11-21
+All AI follow AGENTS.md recoverable save failure policy. Preserve originals, retry based on observed state, switch methods when appropriate, verify saved bytes and reopen, retain evidence, continue safe work. Initial #427 implementation cc486266b895c21fae6e93535053a8faa6e76c7e; run 44826202327 pending verification. No unfinished asset adoption.
