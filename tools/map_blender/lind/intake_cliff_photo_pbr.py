@@ -5,7 +5,7 @@ import pathlib
 import urllib.request
 import argparse
 
-ASSETS = {"sparse_grass": "Amal Kumar", "stony_dirt_path": "eye-candy.xyz"}
+ASSETS = ("sparse_grass", "stony_dirt_path", "rock_boulder_dry", "bark_brown_02")
 CHANNELS = {"basecolor": ("diff", "diffuse", "albedo", "basecolor", "color"), "normal": ("nor_gl", "normal_gl", "normal"), "roughness": ("rough", "roughness")}
 
 def get(url):
@@ -16,12 +16,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("output", type=pathlib.Path)
     args = parser.parse_args()
-    for asset, author in ASSETS.items():
+    catalog = json.loads(get('https://api.polyhaven.com/assets?t=textures'))
+    for asset in ASSETS:
+        if asset not in catalog:
+            raise ValueError('Asset not found in provider catalog: ' + asset)
+        author = catalog[asset].get('authors', {})
+        if not author:
+            raise ValueError('Missing provider attribution: ' + asset)
         dst = args.output / asset
         dst.mkdir(parents=True, exist_ok=True)
         files = json.loads(get("https://api.polyhaven.com/files/" + asset))
         manifest = {"asset_status": "candidate", "source_url": "https://polyhaven.com/a/" + asset,
-                    "author": author, "license": "CC0", "license_evidence_url": "https://polyhaven.com/a/" + asset,
+                    "author": author, "license": "CC0", "license_evidence_url": "https://polyhaven.com/license",
                     "capture_location_claim": "unknown", "textures": {}}
         print(asset, "available channels:", sorted(files), flush=True)
         for role, aliases in CHANNELS.items():
