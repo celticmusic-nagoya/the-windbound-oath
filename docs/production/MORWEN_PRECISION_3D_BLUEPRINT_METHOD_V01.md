@@ -39,3 +39,18 @@ F. Only after G1/G2/G3 PASS, evaluate game integration, WebGL/Android and G4. Ne
 
 ## Current QA at authoring
 G1 PARTIAL (approved reference is known, full current source inventory not reproduced in this document); G2 NOT_RUN for new blueprint method; G3 NOT_RUN for new method; G4 NOT_RUN. Existing source candidate render success does not imply Morwen sculpt success.
+
+## Director-approved method correction and bounded next execution (2026-11-20)
+
+**Mandatory main references:** `docs/policy/MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md` and `docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md`. This section supersedes the older assumption that a realistic Blender Studio Human Base Mesh is the default input for the first experiment. A VRoid-derived anime-style base is an **equal, high-priority candidate**; old G2 failures are evidence against specific *outputs/methods*, not the VRoid base family.
+
+**New order of operations:**
+1. Read current main and obtain the actual official Layer 0 four-direction reference. Extract measurable landmarks and camera/scale uncertainties. Do **not** use candidate mesh vertex positions as substitute design targets.
+2. Build a versioned reference-only blueprint before modeling: orthographic registration, normalized landmark table with source view and confidence, silhouette targets, front/side/three-quarter diagnostics, provisional coordinate contract, topology/rig/UV/material requirements and explicitly estimated areas. Confirm that the design blueprint is adequate for candidate selection; avoid premature multi-million-vertex geometry dumps.
+3. Inventory *existing* VRoid/VRM candidate, current stylized sculpt and licensed CC0 candidate. Record per-source origin, redistribution rights, actual file hash, editable mesh and rig/Shape Key capabilities. If a candidate is absent, mark that arm BLOCKED rather than fabricate it or rerun failed old face repairs.
+4. Compare all available candidates under identical cameras, neutral clay shading and scale. Record normalized landmark error, silhouette agreement, face-plane quality, topology/weights, expected correction effort and independent G2. Do not auto-select a realistic CC0 base or a new sculpt without this comparison.
+5. Only then author the selected actual head/face/hair/clothing modules and proceed to G3/G4 when justified. Keep all experiments on the existing owning PR and preserve original files.
+
+**Failure evidence already available:** `docs/qa/MORWEN_FACE_SURFACE_530_VISUAL_QA_20261120.md` (Blender 5.3 actual render, 5,525 vertices / 5,376 quads, G2 FAIL: flat facial slab) and `docs/qa/MORWEN_VOXEL_HEAD_VISUAL_QA_20261119.md` (22,772-vertex voxel head, G2 FAIL: disconnected-sphere anatomy). These establish why **flat quad-grid** and **generic sphere/voxel** families should not be repeated, not why VRoid is unsuitable.
+
+**Current gate:** blueprint-first re-evaluation NOT_RUN; comparison NOT_RUN; no winning base formally adopted. Blender 5.3 independent smoke and official reference opening previously passed; do not repeat them. The next single executable task is reference landmark extraction and reference-only blueprint QA on this owning branch. Stop if required official reference provenance is missing; continue on verified subviews only.
