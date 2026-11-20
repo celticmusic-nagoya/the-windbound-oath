@@ -33,19 +33,53 @@ func key(_ k: CGKeyCode,_ flags: CGEventFlags) {
         e.flags=flags; e.post(tap:.cgSessionEventTap); usleep(60000)
     }
 }
+// Official VRoid desktop shortcuts; context must be checked by the caller.
+let shortcuts: [String:(CGKeyCode,CGEventFlags)] = [
+    "undo":(6,.maskCommand), "redo":(6,[.maskCommand,.maskShift]),
+    "save-copy":(1,[.maskCommand,.maskShift]), "cancel":(53,[]),
+    "front":(18,[]), "tilt-down":(19,[]), "front-right":(20,[]),
+    "turn-left":(21,[]), "projection":(23,[]), "turn-right":(22,[]),
+    "top":(26,[]), "tilt-up":(28,[]), "invert":(25,[]),
+    "zoom-in":(41,.maskCommand), "zoom-out":(27,.maskCommand),
+    "preset":(18,.maskCommand), "custom":(19,.maskCommand),
+    "face":(122,[]), "hair":(120,[]), "body":(99,[]), "outfit":(118,[]),
+    "accessories":(96,[]), "looks":(97,[]), "photo":(98,[]),
+    "hair-select":(9,[]), "hair-brush":(11,[]), "hair-retouch":(3,[]),
+    "hair-control":(8,[]), "hair-move":(13,[]), "hair-rotate":(14,[]),
+    "hair-scale":(15,[]), "hair-smooth":(1,[]),
+    "texture-brush":(11,[]), "texture-eraser":(14,[]), "texture-fill":(5,[]),
+    "texture-blur":(15,[]), "brush-smaller":(33,[]), "brush-larger":(30,[]),
+    "opacity-down":(33,.maskShift), "opacity-up":(30,.maskShift),
+    "layer-duplicate":(2,.maskCommand), "layer-visibility":(4,.maskCommand),
+    "layer-lock":(37,.maskCommand), "layer-rename":(15,.maskCommand),
+    "layer-import":(34,[.maskCommand,.maskShift]), "layer-export":(14,[.maskCommand,.maskShift]),
+    "layer-up":(30,.maskCommand), "layer-down":(33,.maskCommand),
+    "texture-panel":(25,.maskCommand), "parameter-panel":(29,.maskCommand),
+    "accessory-axis":(7,[])
+]
 switch op {
+case "vroid-shortcut":
+    guard a.count==2,let binding=shortcuts[a[1]] else { fail("unknown or gated shortcut") }
+    key(binding.0,binding.1)
+case "list-vroid-shortcuts":
+    print(shortcuts.keys.sorted().joined(separator:"\n"))
 case "move": mouse(.mouseMoved,point(1))
 case "click","right-click","double-click": click(point(1),op=="right-click",op=="double-click" ? 2 : 1)
-case "drag","slider","rotate":
+case "drag","slider","rotate","pan":
     let p=point(1), q=point(3), seconds=number(5,0.2,10)
     let steps=Int(seconds*60)
-    mouse(.mouseMoved,p); mouse(.leftMouseDown,p)
+    let right = op=="rotate"
+    mouse(.mouseMoved,p)
+    let held = op=="pan" ? CGEvent(keyboardEventSource:s,virtualKey:49,keyDown:true) : nil
+    held?.post(tap:.cgSessionEventTap)
+    mouse(right ? .rightMouseDown : .leftMouseDown,p,right ? .right : .left)
     for i in 1...steps {
         let t=CGFloat(i)/CGFloat(steps)
-        mouse(.leftMouseDragged,CGPoint(x:p.x+(q.x-p.x)*t,y:p.y+(q.y-p.y)*t))
+        mouse(right ? .rightMouseDragged : .leftMouseDragged,CGPoint(x:p.x+(q.x-p.x)*t,y:p.y+(q.y-p.y)*t),right ? .right : .left)
         usleep(16667)
     }
-    mouse(.leftMouseUp,q)
+    mouse(right ? .rightMouseUp : .leftMouseUp,q,right ? .right : .left)
+    if op=="pan" { CGEvent(keyboardEventSource:s,virtualKey:49,keyDown:false)?.post(tap:.cgSessionEventTap) }
 case "scroll","zoom":
     let p=point(1), vertical=Int32(number(3,-100,100)), horizontal=Int32(number(4,-100,100))
     mouse(.mouseMoved,p)
