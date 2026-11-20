@@ -19,7 +19,8 @@ def render_view(source, view, annotation, expected_size, output):
             raise ValueError(f"{view}: unexpected reference size or missing alpha")
         image = original.convert("RGBA")
 
-    bounds = image.getchannel("A").point(lambda value: 255 if value >= 128 else 0).getbbox()
+    alpha = image.getchannel("A")
+    bounds = alpha.point(lambda value: 255 if value >= 128 else 0).getbbox()
     if bounds is None or bounds[3] - bounds[1] < 2:
         raise ValueError(f"{view}: insufficient subject silhouette")
     ground = bounds[3] - 1
@@ -62,6 +63,8 @@ def render_view(source, view, annotation, expected_size, output):
             if (state == "occluded" or not (0 <= x < image.width and 0 <= y < image.height)
                     or not math.isfinite(uncertainty) or uncertainty <= 0):
                 raise ValueError(f"{view}/{name}: invalid point")
+            if state == "visible" and alpha.getpixel((x, y)) < 128:
+                raise ValueError(f"{view}/{name}: visible landmark outside silhouette")
             row["registered_normalized_xy"] = [round((x - center) / height, 7),
                                                 round((ground - y) / height, 7)]
             u = origin_x + (x - center) * scale
