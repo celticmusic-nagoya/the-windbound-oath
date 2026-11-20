@@ -114,6 +114,15 @@ jobs:
             fi
           fi
           if [ -s evidence/fem-editor-text.txt ] && grep -Fq 'Untitled*' evidence/fem-editor-text.txt && grep -Fxq 'Face Sets' evidence/fem-editor-text.txt; then
+            # M01 exploratory face preset, chosen from verified M00 editor screenshot.
+            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+120*d.width/1024,y:d.minY+378*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
+            sleep 5
+            screencapture -x evidence/m01-face.png
+            swift "$RUNNER_TEMP/vroid-click.swift" evidence/m01-face.png Hairstyle 'Face Sets' > evidence/m01-hair-tab.txt
+            sleep 5
+            screencapture -x evidence/m01-hair-options.png
+            # Save actual edited candidate; hair selection awaits screenshot verification.
+            echo 'M01 exploratory face preset row 2 column 1; hair NOT_RUN' > evidence/candidate.txt
             # Verified editor screenshot: hamburger at (28,77) on 1024x768 logical display.
             swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let p=CGPoint(x:d.minX+28*d.width/1024,y:d.minY+77*d.height/768); let s=CGEventSource(stateID:.combinedSessionState); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(500000); for t in [CGEventType.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(250000) }'
             sleep 5
@@ -155,10 +164,10 @@ jobs:
                   screencapture -x evidence/vrm-metadata.png
                   swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-metadata.png > evidence/vrm-metadata-text.txt
                   if grep -Fq 'VRM Settings' evidence/vrm-metadata-text.txt && grep -Fq 'Avatar Name' evidence/vrm-metadata-text.txt && grep -Fq 'Creators' evidence/vrm-metadata-text.txt; then
-                    swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); for (y,v) in [(451.0,"TWO_Morwen_Base_M00"),(545.0,"0.1"),(639.0,"Glendalough_jp")] { let p=CGPoint(x:d.minX+500*d.width/1024,y:d.minY+y*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(200000) }; let k=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:true); let u=Array(v.utf16); u.withUnsafeBufferPointer { k?.keyboardSetUnicodeString(stringLength:u.count,unicodeString:$0.baseAddress!) }; k?.post(tap:.cgSessionEventTap); usleep(400000) }'
+                    swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); for (y,v) in [(451.0,"TWO_Morwen_Base_M01"),(545.0,"0.1"),(639.0,"Glendalough_jp")] { let p=CGPoint(x:d.minX+500*d.width/1024,y:d.minY+y*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(200000) }; let k=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:true); let u=Array(v.utf16); u.withUnsafeBufferPointer { k?.keyboardSetUnicodeString(stringLength:u.count,unicodeString:$0.baseAddress!) }; k?.post(tap:.cgSessionEventTap); usleep(400000) }'
                     screencapture -x evidence/vrm-metadata-filled.png
                     swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-metadata-filled.png > evidence/vrm-metadata-filled-text.txt
-                    if grep -Fq TWO_Morwen_Base_M00 evidence/vrm-metadata-filled-text.txt && grep -Fq Glendalough_jp evidence/vrm-metadata-filled-text.txt; then
+                    if grep -Fq TWO_Morwen_Base_M01 evidence/vrm-metadata-filled-text.txt && grep -Fq Glendalough_jp evidence/vrm-metadata-filled-text.txt; then
                       swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+650*d.width/1024,y:d.minY+650*d.height/768); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); for _ in 0..<12 { CGEvent(scrollWheelEvent2Source:s,units:.line,wheelCount:1,wheel1:-12,wheel2:0,wheel3:0)?.post(tap:.cgSessionEventTap); usleep(150000) }'
                       sleep 2
                       screencapture -x evidence/vrm-metadata-bottom.png
@@ -170,14 +179,14 @@ jobs:
                         sleep 8
                         screencapture -x evidence/vrm-native-save.png
                         swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-native-save.png > evidence/vrm-native-save-text.txt
-                        if grep -Eq '^(E |[[:space:]]*)Documents$' evidence/vrm-native-save-text.txt && grep -Fxq TWO_Morwen_Base_M00 evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
+                        if grep -Eq '^(E |[[:space:]]*)Documents$' evidence/vrm-native-save-text.txt && grep -Fxq TWO_Morwen_Base_M01 evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
                           if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-native-save.png Save 'Save As:' > evidence/vrm-save-click.txt; then
                             sleep 30
                             find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -type f -print > evidence/vrm-saved-files.txt
                             while IFS= read -r v; do test -s "$v" && cp "$v" evidence/model.vrm; done < evidence/vrm-saved-files.txt
                             if [ -s evidence/model.vrm ]; then
                               shasum -a 256 evidence/model.vrm > evidence/vrm-sha256.txt
-                              python3 -c 'import struct,json; f=open("evidence/model.vrm","rb"); magic,ver,total=struct.unpack("<4sII",f.read(12)); n,t=struct.unpack("<I4s",f.read(8)); assert magic==b"glTF" and ver==2 and t==b"JSON"; d=json.loads(f.read(n)); m=d["extensions"]["VRMC_vrm"]["meta"]; print(json.dumps(m,indent=2)); assert m["name"]=="TWO_Morwen_Base_M00" and m["authors"]==["Glendalough_jp"]; assert m["allowRedistribution"] is False and m["modification"]=="allowModification"' > evidence/vrm-validation.txt 2>&1 && echo VRM_METADATA_PASS > evidence/vrm-status.txt || echo VRM_REVIEW_REQUIRED > evidence/vrm-status.txt
+                              python3 -c 'import struct,json; f=open("evidence/model.vrm","rb"); magic,ver,total=struct.unpack("<4sII",f.read(12)); n,t=struct.unpack("<I4s",f.read(8)); assert magic==b"glTF" and ver==2 and t==b"JSON"; d=json.loads(f.read(n)); m=d["extensions"]["VRMC_vrm"]["meta"]; print(json.dumps(m,indent=2)); assert m["name"]=="TWO_Morwen_Base_M01" and m["authors"]==["Glendalough_jp"]; assert m["allowRedistribution"] is False and m["modification"]=="allowModification"' > evidence/vrm-validation.txt 2>&1 && echo VRM_METADATA_PASS > evidence/vrm-status.txt || echo VRM_REVIEW_REQUIRED > evidence/vrm-status.txt
                             fi
                           fi
                         fi
@@ -216,6 +225,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vroid-macos-probe-evidence
+          name: morwen-m01-face-candidate-not-adopted
           path: evidence/
           retention-days: 7
