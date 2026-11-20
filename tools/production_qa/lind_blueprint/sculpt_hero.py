@@ -11,6 +11,7 @@ from mathutils import Matrix, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from sculpt_bedrock import TARGET, crest_height, headland_visibility, scene_record, sha, shoreline, smooth, write
+import junction_contact_faces
 import sculpt_junction
 
 SOURCE_SHA = "a88fd51546a31242e2e63a423988548ed253e4831c501aae430713eac406d334"
@@ -82,6 +83,40 @@ def sculpt_delta(point, anchors):
     return .83*weight*delta_y, weight*crest_weight*(tip_lowering+notch)
 
 
+def fit_without_contacts(obj, original, offsets):
+    """Constrain only the contact neighborhoods, measuring after every solve."""
+    mesh = obj.data
+    junction_contact_faces.GUARD = GUARD
+    weights = [1.0] * len(original)
+    neighbors = [set() for _ in original]
+    for edge in mesh.edges:
+        a,b = edge.vertices
+        neighbors[a].add(b)
+        neighbors[b].add(a)
+    trace = []
+    for _ in range(7):
+        for vertex, base, (dy,dz), weight in zip(mesh.vertices,original,offsets,weights):
+            if dy or dz:
+                vertex.co = (base[0],base[1]+weight*dy,base[2]+weight*dz)
+        mesh.update()
+        bpy.context.view_layer.update()
+        result = junction_contact_faces.audit(obj)
+        trace.append({"pairs":result["nonadjacent_bvh_pairs"],
+                      "face_ids": [item["face_ids"] for item in result["pairs"] if "face_ids" in item]})
+        if not result["pairs"]:
+            break
+        core = set()
+        for pair in result["pairs"]:
+            for face_id in pair["face_ids"]:
+                core.update(mesh.polygons[face_id].vertices)
+        ring = set().union(*(neighbors[i] for i in core)) - core
+        outer = set().union(*(neighbors[i] for i in ring)) - core - ring
+        for ids, cap in ((core,0.0),(ring,.22),(outer,.60)):
+            for i in ids:
+                weights[i] = min(weights[i],cap)
+    return trace, weights
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("source", type=Path)
@@ -107,21 +142,27 @@ def main():
         if not hit:
             raise RuntimeError(f"Source plane anchor did not hit at X={center}")
         anchors.append(point.y)
+    offsets = [sculpt_delta(v,anchors) for v in original]
+    # Check the source triangulation alone before applying any deformation.
+    native = mesh.copy()
     fixed_triangles, retained_faces = freeze_faces(mesh)
     if original != [tuple(v.co) for v in mesh.vertices]:
         raise ValueError("Source tessellation did not preserve vertex correspondence")
+    pinned_baseline,_ = sculpt_junction.mesh_stats(obj)
+    if pinned_baseline["local_self_contacts"]:
+        original_name = mesh.name
+        mesh.name = original_name + " (rejected tessellation check)"
+        obj.data = native
+        mesh = obj.data
+        mesh.name = original_name
+        fixed_triangles = []
+    trace, weights = fit_without_contacts(obj, original, offsets)
     protected, changed = [], []
-    for vertex in mesh.vertices:
-        dy,dz = sculpt_delta(vertex.co, anchors)
-        if not (dy or dz):
+    for vertex, base in zip(mesh.vertices,original):
+        if tuple(vertex.co) == base:
             protected.append(vertex.index)
-            continue
-        vertex.co.y += dy
-        vertex.co.z += dz
-        if tuple(vertex.co) != original[vertex.index]:
-            changed.append({"vertex_id":vertex.index,"before_local":original[vertex.index],"after_local":list(vertex.co)})
-    mesh.update()
-    bpy.context.view_layer.update()
+        else:
+            changed.append({"vertex_id":vertex.index,"before_local":base,"after_local":list(vertex.co)})
     after,_ = sculpt_junction.mesh_stats(obj)
     try:
         visibility = headland_visibility(scene,obj)
@@ -129,13 +170,14 @@ def main():
         visibility = error.args[0]
     visible = [row["unoccluded_face_samples"] for row in visibility]
     checks = {
-        "scope_and_original_collar_preserved": all(tuple(mesh.vertices[i].co) == original[i] for i in protected),
+        "scope_and_original_collar_preserved": all(tuple(v.co) == original[v.index]
+                    for v in mesh.vertices if not GUARD[0] < original[v.index][0] < GUARD[1]),
         "local_self_contacts_zero": after["local_self_contacts"] == 0,
         "valid_closed_carrier": not any(after[k] for k in ("boundary_edges","degenerate_faces","nonmanifold_edges")),
         "visibility_at_least_10_4_13": len(visible)==3 and all(x>=y for x,y in zip(visible,(10,4,13))),
         "scene_settings_unchanged": before_scene==scene_record(scene),
         "source_sha_preserved": sha(source)==SOURCE_SHA,
-        "geometry_changed": bool(changed),
+        "at_least_60_percent_of_target_vertices_changed": len(changed) >= .60*sum(bool(y or z) for y,z in offsets),
     }
     scene["candidate"] = "C10_HERO_FRACTURE_UNAPPROVED"
     scene["hero_source_sha256"] = SOURCE_SHA
@@ -147,6 +189,8 @@ def main():
           "native_faces_with_shared_tessellation":retained_faces,"vertices":changed})
     write(out/"local_qa.json",{"source_sha256":SOURCE_SHA,"candidate_sha256":sha(destination),
           "checks":checks,"before":before,"after":after,"visibility":visibility,
+          "pinned_source_mesh_check":pinned_baseline,"contact_solver_trace":trace,
+          "constrained_vertices":sum(w<1 for w in weights),
           "changed_vertices":len(changed),"protected_vertices":len(protected),
           "G1":"BLOCKED","G2":"NOT_RUN","G3":"BLOCKED" if all(checks.values()) else "FAIL","G4":"NOT_RUN"})
     print("HERO_QA",json.dumps(checks,sort_keys=True),flush=True)
