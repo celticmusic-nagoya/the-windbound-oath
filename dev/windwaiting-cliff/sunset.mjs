@@ -9,6 +9,36 @@ void main() {
 }
 `;
 
+// Provisional non-traversable offshore silhouettes. No world placement claim.
+function distantCoast(scene) {
+  const positions=[], indices=[];
+  const islands=[
+    {x:-49,z:47,w:24,d:9,h:5.8,phase:1.2},
+    {x:-8,z:78,w:31,d:12,h:7.2,phase:3.7},
+    {x:39,z:65,w:18,d:8,h:4.6,phase:5.1}
+  ];
+  const n=48, m=8;
+  for (const island of islands) {
+    const start=positions.length/3;
+    for (let j=0;j<=m;j++) for(let i=0;i<=n;i++){
+      const u=2*i/n-1, v=2*j/m-1;
+      const envelope=Math.max(0,1-u*u-v*v);
+      const profile=.72+.17*Math.sin(u*9+island.phase)+.11*Math.cos(u*21+v*4);
+      const y=-.18+island.h*Math.pow(envelope,.72)*profile;
+      positions.push(island.x+u*island.w,y,island.z+v*island.d);
+      if(i<n&&j<m){const k=start+j*(n+1)+i;indices.push(k,k+n+1,k+1,k+1,k+n+1,k+n+2);}
+    }
+  }
+  const geometry=new T.BufferGeometry();
+  geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  const material=new T.MeshStandardMaterial({color:0x646b79,roughness:1});
+  const mesh=new T.Mesh(geometry,material);
+  mesh.name='PROVISIONAL distant coastal silhouettes';
+  scene.add(mesh);
+}
+
 export function sunset(scene, sea, sun) {
   const direction = sun.clone().normalize();
   const sky = new T.Mesh(new T.SphereGeometry(125, 40, 22), new T.ShaderMaterial({
@@ -48,6 +78,7 @@ export function sunset(scene, sea, sun) {
   }));
   sky.renderOrder = -1;
   scene.add(sky);
+  if (new URLSearchParams(location.search).get('vista') === '1') distantCoast(scene);
   if (sea?.isMesh) {
     sea.material = new T.ShaderMaterial({
       uniforms: { sun: { value: direction }, time: { value: 0 } },
