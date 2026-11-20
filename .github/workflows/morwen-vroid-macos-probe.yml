@@ -154,6 +154,16 @@ jobs:
                   sleep 8
                   screencapture -x evidence/vrm-metadata.png
                   swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-metadata.png > evidence/vrm-metadata-text.txt
+                  if grep -Fq 'VRM Settings' evidence/vrm-metadata-text.txt && grep -Fq 'Avatar Name' evidence/vrm-metadata-text.txt && grep -Fq 'Creators' evidence/vrm-metadata-text.txt; then
+                    swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); for (y,v) in [(451.0,"TWO_Morwen_Base_M00"),(545.0,"0.1"),(639.0,"Glendalough_jp")] { let p=CGPoint(x:d.minX+500*d.width/1024,y:d.minY+y*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(200000) }; let k=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:true); let u=Array(v.utf16); u.withUnsafeBufferPointer { k?.keyboardSetUnicodeString(stringLength:u.count,unicodeString:$0.baseAddress!) }; k?.post(tap:.cgSessionEventTap); usleep(400000) }'
+                    screencapture -x evidence/vrm-metadata-filled.png
+                    swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-metadata-filled.png > evidence/vrm-metadata-filled-text.txt
+                    if grep -Fq TWO_Morwen_Base_M00 evidence/vrm-metadata-filled-text.txt && grep -Fq Glendalough_jp evidence/vrm-metadata-filled-text.txt; then
+                      swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+650*d.width/1024,y:d.minY+650*d.height/768); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); for _ in 0..<12 { CGEvent(scrollWheelEvent2Source:s,units:.line,wheelCount:1,wheel1:-12,wheel2:0,wheel3:0)?.post(tap:.cgSessionEventTap); usleep(150000) }'
+                      sleep 2
+                      screencapture -x evidence/vrm-metadata-bottom.png
+                    fi
+                  fi
                 fi
               fi
             fi
