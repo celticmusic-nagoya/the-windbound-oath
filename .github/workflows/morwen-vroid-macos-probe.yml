@@ -126,7 +126,13 @@ jobs:
             swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+223*d.width/1024,y:d.minY+378*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
             sleep 15
             screencapture -x evidence/m01-bob.png
-            # Capture selected hair and available controls before tone adjustment.
+            # Open verified Main Color control; inspect picker before changing values.
+            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+760*d.width/1024,y:d.minY+158*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
+            sleep 3
+            screencapture -x evidence/m01-color-picker.png
+            # Record picker evidence and close without changing unverified controls.
+            swift -e 'import CoreGraphics; let s=CGEventSource(stateID:.combinedSessionState); for down in [true,false] { CGEvent(keyboardEventSource:s,virtualKey:53,keyDown:down)?.post(tap:.cgSessionEventTap) }'
+            sleep 2
             echo 'M01 face preset row 2 column 1; bob row 2 column 2; visual review required' > evidence/candidate.txt
             # Verified editor screenshot: hamburger at (28,77) on 1024x768 logical display.
             swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let p=CGPoint(x:d.minX+28*d.width/1024,y:d.minY+77*d.height/768); let s=CGEventSource(stateID:.combinedSessionState); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(500000); for t in [CGEventType.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(250000) }'
@@ -184,7 +190,56 @@ jobs:
                         sleep 8
                         screencapture -x evidence/vrm-native-save.png
                         swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-native-save.png > evidence/vrm-native-save-text.txt
-                        if grep -Eq '^(E |[[:space:]]*)Documents$' evidence/vrm-native-save-text.txt && grep -Fxq TWO_Morwen_Base_M01B evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
+                        if grep -Eq '^(E |[[:space:]]*)Documents$' evidence/vrm-native-save-text.txt && grep -Eq '^TWO_Morwen_Base_M[0O]1B && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
+                          if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-native-save.png Save 'Save As:' > evidence/vrm-save-click.txt; then
+                            sleep 30
+                            find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -type f -print > evidence/vrm-saved-files.txt
+                            while IFS= read -r v; do test -s "$v" && cp "$v" evidence/model.vrm; done < evidence/vrm-saved-files.txt
+                            if [ -s evidence/model.vrm ]; then
+                              shasum -a 256 evidence/model.vrm > evidence/vrm-sha256.txt
+                              python3 -c 'import struct,json; f=open("evidence/model.vrm","rb"); magic,ver,total=struct.unpack("<4sII",f.read(12)); n,t=struct.unpack("<I4s",f.read(8)); assert magic==b"glTF" and ver==2 and t==b"JSON"; d=json.loads(f.read(n)); m=d["extensions"]["VRMC_vrm"]["meta"]; print(json.dumps(m,indent=2)); assert m["name"]=="TWO_Morwen_Base_M01B" and m["authors"]==["Glendalough_jp"]; assert m["allowRedistribution"] is False and m["modification"]=="allowModification"' > evidence/vrm-validation.txt 2>&1 && echo VRM_METADATA_PASS > evidence/vrm-status.txt || echo VRM_REVIEW_REQUIRED > evidence/vrm-status.txt
+                            fi
+                          fi
+                        fi
+                      fi
+                    fi
+                  fi
+                fi
+              fi
+            fi
+          fi
+          pid="$(pgrep -x "$exe" | head -n 1 || true)"
+          if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
+            cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
+          fi
+          ps -axo pid,comm > evidence/processes.txt
+          if [ -d "$HOME/Library/Logs" ]; then
+            find "$HOME/Library/Logs" -maxdepth 4 -name Player.log -exec cp {} evidence/ \;
+          fi
+          screencapture -x evidence/screen.png || true
+          if [ -d "$HOME/Library/Logs/DiagnosticReports" ]; then
+            find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -iname '*vroid*' -exec cp {} evidence/ \;
+          fi
+          if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+            echo PROCESS_ALIVE > evidence/status.txt
+            kill "$pid" || true
+          else
+            set +e
+            false
+            rc=$?
+            set -e
+            echo "PROCESS_EXITED $rc" > evidence/status.txt
+            exit 1
+          fi
+          test -s evidence/screen.png
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-m01b-bob-candidate-not-adopted
+          path: evidence/
+          retention-days: 7
+ evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
                           if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-native-save.png Save 'Save As:' > evidence/vrm-save-click.txt; then
                             sleep 30
                             find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -type f -print > evidence/vrm-saved-files.txt
