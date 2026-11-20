@@ -127,7 +127,19 @@ jobs:
               sleep 5
               screencapture -x evidence/home.png
               # Open a verified copy of the existing native source, never regenerate it.
-              open -a "$app" "$RUNNER_TEMP/Morwen-resume.vroid"
+              # Use Studio's own native file chooser; OS document association rejected this format.
+              swift "$RUNNER_TEMP/vroid-click.swift" evidence/home.png Open 'Recently Edited' > evidence/open-click.txt
+              sleep 4
+              screencapture -x evidence/open-dialog.png
+              # macOS Go to Folder dialog, enter verified absolute path.
+              osascript -e 'tell application "System Events" to keystroke "g" using {command down, shift down}'
+              sleep 2
+              printf '%s' "$RUNNER_TEMP/Morwen-resume.vroid" | pbcopy
+              osascript -e 'tell application "System Events" to keystroke "v" using command down'
+              osascript -e 'tell application "System Events" to key code 36'
+              sleep 3
+              screencapture -x evidence/open-selected.png
+              osascript -e 'tell application "System Events" to key code 36'
               sleep 35
               screencapture -x evidence/resumed-editor.png
               swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/resumed-editor.png > evidence/resumed-editor-text.txt
