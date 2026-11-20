@@ -1,5 +1,6 @@
 """Replace the foreground shelf profile with joined rock planes on C10."""
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 import sys
@@ -28,6 +29,12 @@ def freeze_faces(mesh):
     for tri in mesh.loop_triangles:
         if tri.polygon_index in targets:
             triangles[tri.polygon_index].append(tuple(tri.vertices))
+    # A native shared triangle can occur across more than one polygon in the
+    # input tessellation. Keep those polygons native to retain both UV loops.
+    uses = Counter(frozenset(tri.vertices) for tri in mesh.loop_triangles)
+    retained = {i for i, faces in triangles.items()
+                if any(uses[frozenset(ids)] > 1 for ids in faces)}
+    targets -= retained
     bm = bmesh.new()
     try:
         bm.from_mesh(mesh)
@@ -50,7 +57,7 @@ def freeze_faces(mesh):
         mesh.update()
     finally:
         bm.free()
-    return sorted(targets)
+    return sorted(targets), sorted(retained)
 
 
 def sculpt_delta(point, anchors):
@@ -100,7 +107,7 @@ def main():
         if not hit:
             raise RuntimeError(f"Source plane anchor did not hit at X={center}")
         anchors.append(point.y)
-    fixed_triangles = freeze_faces(mesh)
+    fixed_triangles, retained_faces = freeze_faces(mesh)
     if original != [tuple(v.co) for v in mesh.vertices]:
         raise ValueError("Source tessellation did not preserve vertex correspondence")
     protected, changed = [], []
@@ -136,7 +143,8 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=str(destination), compress=True)
     write(out/"hero_vertex_diff.json",{"scope_x":GUARD,"units":"provisional local BU",
           "source_front_y":anchors,"planes":PLANES,"protected_count":len(protected),
-          "source_faces_with_locked_tessellation":fixed_triangles,"vertices":changed})
+          "source_faces_with_locked_tessellation":fixed_triangles,
+          "native_faces_with_shared_tessellation":retained_faces,"vertices":changed})
     write(out/"local_qa.json",{"source_sha256":SOURCE_SHA,"candidate_sha256":sha(destination),
           "checks":checks,"before":before,"after":after,"visibility":visibility,
           "changed_vertices":len(changed),"protected_vertices":len(protected),
