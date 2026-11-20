@@ -1,0 +1,66 @@
+name: TWO Muse zero-cost feasibility (offline only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: two-muse-free-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Offline feasibility and zero-billing gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/muse-feasibility
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/muse-feasibility')
+          report={
+            'schema':'two.muse.zero_cost_feasibility.v1',
+            'mode':'OFFLINE_ONLY_NO_META_API',
+            'status':'BLOCKED_FOR_LIVE_MUSE_INFERENCE',
+            'reason':'Meta Model API pay-as-you-go; no verified zero-charge quota or credential authorized',
+            'confirmed_offline':[
+              'GitHub Actions can run Python without local PC setup',
+              'Workflow requires no Meta credentials or paid API',
+              'Existing AGENTS.md and continuity policy are available in checkout',
+            ],
+            'not_tested':['Muse API authentication','Muse model inference','Muse Code installation','AI review quality','account-specific GitHub Actions free quota'],
+            'approval_required':['verified genuinely free Muse access','explicit authorization before any API calls'],
+            'privacy':'Never send private canon or proprietary game assets to Contributor training mode',
+            'next_step':'If free access is independently confirmed, add a separately gated read-only smoke test to an existing infrastructure PR',
+          }
+          assert Path('AGENTS.md').is_file()
+          assert Path('docs/production/SESSION_CONTINUITY_INDEX.md').is_file()
+          (root/'feasibility.json').write_text(json.dumps(report,ensure_ascii=False,indent=2,sort_keys=True)+'\n')
+          (root/'report.md').write_text(
+            '# TWO Muse zero-cost feasibility\n\n'
+            '**OFFLINE QA PASS; LIVE MUSE BLOCKED (no confirmed zero-cost API allowance).**\n\n'
+            'No Muse request, API key, paid service, third-party action, or model invocation was used.\n'
+            'GitHub Actions runner usage is subject to account/repository quotas.\n'
+          )
+          print('TWO_MUSE_OFFLINE_AUDIT_PASS_LIVE_BLOCKED')
+          PY
+      - name: Publish readable summary
+        if: always()
+        shell: bash
+        run: |
+          if test -f /tmp/muse-feasibility/report.md; then
+            cat /tmp/muse-feasibility/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Preserve zero-cost feasibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-muse-zero-cost-feasibility-${{ github.run_id }}
+          path: /tmp/muse-feasibility/
+          if-no-files-found: warn
+          retention-days: 14
