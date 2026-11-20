@@ -10,37 +10,65 @@ void main() {
 `;
 
 // Provisional non-traversable offshore silhouettes. No world placement claim.
-function distantCoast(scene) {
+function distantCoast(scene, sunDirection) {
   const positions=[], indices=[], colors=[];
   const islands=[
     {x:-49,z:47,w:24,d:9,h:5.8,phase:1.2},
     {x:-8,z:78,w:31,d:12,h:7.2,phase:3.7},
     {x:39,z:65,w:18,d:8,h:4.6,phase:5.1}
   ];
-  const n=48, m=8;
+  const n=96, rings=18;
   for (const island of islands) {
     const start=positions.length/3;
-    for (let j=0;j<=m;j++) for(let i=0;i<=n;i++){
-      const u=2*i/n-1, v=2*j/m-1;
-      const envelope=Math.max(0,1-u*u-v*v);
-      const profile=.72+.17*Math.sin(u*9+island.phase)+.11*Math.cos(u*21+v*4);
-      const y=-.18+island.h*Math.pow(envelope,.72)*profile;
-      positions.push(island.x+u*island.w,y,island.z+v*island.d);
-      const coastal=new T.Color(0x536374);
-      const ridge=new T.Color(0x77818a);
-      coastal.lerp(ridge,T.MathUtils.clamp(y/island.h,0,1));
-      colors.push(coastal.r,coastal.g,coastal.b);
-      if(i<n&&j<m){const k=start+j*(n+1)+i;indices.push(k,k+n+1,k+1,k+1,k+n+1,k+n+2);}
+    for(let j=0;j<=rings;j++) for(let i=0;i<=n;i++){
+      const a=2*Math.PI*i/n, t=j/rings;
+      const rim=1+.13*Math.sin(a*3+island.phase)+.08*Math.cos(a*7-island.phase)+.035*Math.sin(a*17);
+      const radius=(1-t)*rim*(1-.12*Math.sin(Math.PI*t));
+      const ridge=.73+.15*Math.sin(a*3+island.phase)+.09*Math.cos(a*5);
+      const cliff=1-Math.exp(-t*19);
+      const top=Math.pow(t,.65);
+      const y=-.20+island.h*(.40*cliff+.60*top)*(1+(ridge-1)*(1-t));
+      positions.push(island.x+Math.cos(a)*radius*island.w,y,island.z+Math.sin(a)*radius*island.d);
+      const rock=new T.Color(0x596273), turf=new T.Color(0x68796b);
+      rock.lerp(turf,T.MathUtils.smoothstep(t,.13,.42)*(.78+.22*Math.cos(a*5)));
+      colors.push(rock.r,rock.g,rock.b);
+      if(i<n&&j<rings){const k=start+j*(n+1)+i;indices.push(k,k+1,k+n+1);if(j<rings-1)indices.push(k+1,k+n+2,k+n+1);}
     }
   }
   const geometry=new T.BufferGeometry();
   geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));
-  geometry.setIndex(indices);
   geometry.setAttribute('color',new T.Float32BufferAttribute(colors,3));
+  geometry.setIndex(indices);
   geometry.computeVertexNormals();
-  const material=new T.MeshBasicMaterial({vertexColors:true});
+  const material=new T.ShaderMaterial({
+    uniforms:{sun:{value:sunDirection}},
+    side:T.DoubleSide,
+    vertexColors:true,
+    vertexShader:`
+      varying vec3 p,n,c;
+      void main(){
+        p=(modelMatrix*vec4(position,1.)).xyz;
+        n=normalize(mat3(modelMatrix)*normal);
+        c=color;
+        gl_Position=projectionMatrix*viewMatrix*vec4(p,1.);
+      }
+    `,
+    fragmentShader:`
+      uniform vec3 sun;
+      varying vec3 p,n,c;
+      void main(){
+        vec3 normal=normalize(n)*(gl_FrontFacing?1.:-1.);
+        float lit=.48+.52*max(dot(normal,sun),0.);
+        vec3 stone=c*lit+vec3(.09,.055,.035)*max(dot(normal,sun),0.);
+        float haze=1.-exp(-distance(p,cameraPosition)*.010);
+        gl_FragColor=vec4(mix(stone,vec3(.31,.25,.27),haze*.77),1.);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `
+  });
   const mesh=new T.Mesh(geometry,material);
-  mesh.name='PROVISIONAL distant coastal silhouettes';
+  mesh.name='PROVISIONAL offshore cliff relief and atmospheric perspective';
   scene.add(mesh);
 }
 
@@ -83,7 +111,7 @@ export function sunset(scene, sea, sun) {
   }));
   sky.renderOrder = -1;
   scene.add(sky);
-  if (new URLSearchParams(location.search).get('vista') === '1') distantCoast(scene);
+  if (new URLSearchParams(location.search).get('vista') === '1') distantCoast(scene, direction);
   if (sea?.isMesh) {
     sea.material = new T.ShaderMaterial({
       uniforms: { sun: { value: direction }, time: { value: 0 } },
