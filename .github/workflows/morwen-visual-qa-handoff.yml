@@ -54,7 +54,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Restore cached handoff for identical source and generator
+        id: reuse
+        uses: actions/cache@v4
+        with:
+          path: /tmp/two-visual-qa-handoff
+          key: morwen-visual-qa-v2-${{ inputs.source_run_id || '44671624893' }}-${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}-${{ hashFiles('tools/production_qa/build_visual_qa_handoff.py') }}
       - name: Validate supplied source identifiers
+        if: steps.reuse.outputs.cache-hit != 'true'
         env:
           SOURCE_RUN: ${{ inputs.source_run_id || '44671624893' }}
           SOURCE_ARTIFACT: ${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}
@@ -64,6 +71,7 @@ jobs:
           [[ "$SOURCE_RUN" =~ ^[0-9]{5,20}$ ]] || { echo 'Invalid run ID'; exit 2; }
           [[ "$SOURCE_ARTIFACT" =~ ^[a-zA-Z0-9_.-]{3,120}$ ]] || { echo 'Invalid artifact name'; exit 2; }
       - name: Download previously generated render evidence (read-only)
+        if: steps.reuse.outputs.cache-hit != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           SOURCE_RUN: ${{ inputs.source_run_id || '44671624893' }}
@@ -75,12 +83,20 @@ jobs:
           gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" --name "$SOURCE_ARTIFACT" --dir /tmp/two-existing-render
           test -n "$(find /tmp/two-existing-render -type f -print -quit)"
       - name: Generate deterministic Claude/Codex evidence handoff
+        if: steps.reuse.outputs.cache-hit != 'true'
         shell: bash
         run: |
           set -euo pipefail
           python3 tools/production_qa/build_visual_qa_handoff.py --input /tmp/two-existing-render --output /tmp/two-visual-qa-handoff --asset morwen
           python3 -m json.tool /tmp/two-visual-qa-handoff/visual_qa_handoff.json >/dev/null
+      - name: Verify reused or newly generated handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s /tmp/two-visual-qa-handoff/visual_qa_handoff.json
+          python3 -m json.tool /tmp/two-visual-qa-handoff/visual_qa_handoff.json >/dev/null
       - name: Upload QA handoff only (no AI API or rerender)
+        if: steps.reuse.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: morwen-visual-qa-handoff-${{ inputs.source_run_id || '44671624893' }}
