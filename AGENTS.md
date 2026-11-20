@@ -1,3 +1,7 @@
+## Director-approved adaptive retry v3 — 2026-11-20 (authoritative)
+
+Read [Causal Retry v3](docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md). Two failures trigger reassessment, not automatic termination. Continue evidence-supported bounded iterations; stop or switch only when further work is reasonably wasteful. Preserve cumulative history, G1–G4 and approval gates. This supersedes all conflicting retry/stop semantics below; legacy validators are technical blockers until tested alignment, never bypassed.
+
 ## Adaptive cross-agent production and handoff — director approved 2026-11-20
 
 All chats, AI agents (Claude, Codex, ChatGPT, Gemini) and automations must use current main and [SESSION_CONTINUITY_INDEX.md](docs/production/SESSION_CONTINUITY_INDEX.md) as shared entry points. Assign work by demonstrated task-specific capability, quality, availability, cost and reproducibility, not fixed model stereotypes. Claude may own detailed art-directed sculpting and vertex/face adjustments; Codex may own implementation, geometry validation, CI and tests; ChatGPT may own specification integration and independent art QA. Swap roles when evidence favors it. Do not claim any external agent was invoked unless actually verified.
@@ -28,7 +32,7 @@ At every new session or agent handoff, read [SESSION_CONTINUITY_INDEX.md](docs/p
 
 # HIGH-END 3D PRODUCTION POLICY v1.1 (DIRECTOR APPROVED)
 
-All agents, including Codex, must read [the high-end 3D production policy](docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md) for character and environment work. Character and map teams have separate ownership. Preserve canonical source hashes, prior PRs and G1–G4. Existing causal-retry v2 policy remains authoritative. No unapproved canon overwrite, destructive deletion or publication.
+All agents, including Codex, must read [the high-end 3D production policy](docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md) for character and environment work. Character and map teams have separate ownership. Preserve canonical source hashes, prior PRs and G1–G4. Causal-retry v3 is authoritative. No unapproved canon overwrite, destructive deletion or publication.
 
 # DIRECTOR POLICY UPDATE — CAUSAL RETRY v2 (2026-11-14, ALL AI AGENTS)
 
