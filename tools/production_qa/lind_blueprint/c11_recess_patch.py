@@ -65,11 +65,13 @@ def main():
     obj = candidates[0]
     before = topology(obj)
     original = [tuple(v.co) for v in obj.data.vertices]
+    original_count = len(original)
     bm = bmesh.new()
     try:
         bm.from_mesh(obj.data)
         bm.faces.ensure_lookup_table()
         bm.verts.ensure_lookup_table()
+        bm.verts.index_update()
         # Only fully interior faces qualify. The selection is intentionally
         # narrow to preserve a complete, fixed perimeter collar.
         region = []
@@ -85,6 +87,18 @@ def main():
                     for v in e.verts}
         if len(boundary) < 6:
             raise RuntimeError("Patch boundary invalid; STOP")
+        # A bounded cavity requires a single connected face island and one perimeter.
+        pending = set(region)
+        stack = [pending.pop()]
+        while stack:
+            face = stack.pop()
+            for edge in face.edges:
+                for neighbor in edge.link_faces:
+                    if neighbor in pending:
+                        pending.remove(neighbor)
+                        stack.append(neighbor)
+        if pending:
+            raise RuntimeError("Disjoint patch islands; STOP")
         # Preserve all original vertices. Inset makes a new inner ring;
         # this is a structural change from the rejected two-plane deformation.
         inset = bmesh.ops.inset_region(
@@ -108,6 +122,8 @@ def main():
     finally:
         bm.free()
     after = topology(obj)
+    if len(obj.data.vertices) < original_count:
+        raise RuntimeError("Original vertex count decreased; STOP")
     moved_original = [
         i for i, (v, old) in enumerate(zip(obj.data.vertices, original))
         if tuple(v.co) != old
@@ -119,6 +135,8 @@ def main():
         "boundary_original_vertices": len(boundary),
         "changed_original_vertex_ids": moved_original[:40],
         "changed_original_vertex_count": len(moved_original),
+        "original_vertex_count": original_count,
+        "final_vertex_count": len(obj.data.vertices),
         "G1": "BLOCKED", "G2": "NOT_RUN", "G3": "NOT_RUN", "G4": "NOT_RUN",
     }
     (output / "c11_patch_report.json").write_text(
