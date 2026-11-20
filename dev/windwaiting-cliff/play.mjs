@@ -10,7 +10,8 @@ const status = document.querySelector('#status');
 const asset = new URL('../../assets/candidates/lind/windwaiting-cliff-playable/', import.meta.url);
 const query = new URLSearchParams(location.search);
 const legacy = query.get('eco') === 'legacy';
-const composition = query.get('composition') === '1';
+const heroCliff = query.get('hero-cliff') === '1';
+const composition = heroCliff || query.get('composition') === '1';
 const compositionRoot = new URL('composition-v1/', asset);
 const ecoRoot = new URL('eco-v2/', asset);
 const ray = new T.Raycaster();
@@ -97,6 +98,16 @@ async function play() {
   scene.background = new T.Color(0xc2a1a1);
   scene.fog = new T.FogExp2(0xa79bae, 0.010);
   scene.add(gltf.scene);
+  const nodes = new Map();
+  gltf.scene.traverse((object) => { if (object.userData.name) nodes.set(object.userData.name, object); });
+  if (heroCliff) {
+    const url = new URL('hero-cliff-v1/hero-cliff.glb', asset);
+    const candidate = await loader.loadAsync(url.href);
+    const carrier = nodes.get(data.ground[0]);
+    if (!carrier) throw new Error('Missing baseline cliff carrier');
+    carrier.visible = false;
+    gltf.scene.add(candidate.scene);
+  }
   adaptSurfaces(gltf.scene, renderer, moss, photo, composition);
   if (composition) {
     const coast = await loader.loadAsync(new URL('distant-coast.glb', compositionRoot).href);
@@ -117,8 +128,6 @@ async function play() {
   const sun = new T.DirectionalLight(0xffbb78, 2.2);
   sun.position.fromArray(data.sun);
   scene.add(sun);
-  const nodes = new Map();
-  gltf.scene.traverse((object) => { if (object.userData.name) nodes.set(object.userData.name, object); });
   const sea = nodes.get('Provisional sea at Z=0');
   const updateSunset = sunset(scene, sea, sun.position, !composition);
   function meshes(name) {

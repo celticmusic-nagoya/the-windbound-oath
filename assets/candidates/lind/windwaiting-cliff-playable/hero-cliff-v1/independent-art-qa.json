@@ -1,0 +1,23 @@
+{
+  "gate": "G2",
+  "verdict": "FAIL",
+  "review_mode": "read-only independent agent; verified and inspected actual render files",
+  "reviewed_sha256": {
+    "comparison.png": "0547a50daa5415fb2fef1d1a1cecc34c31ef486b12f76ac49e71d156d8a90c8c",
+    "hero-cliff-photo-spawn.png": "03432e8abc5586c3d8b98dde102714662b55bc3b1a1c3e5126deced90337864b",
+    "native-oblique.png": "3ea01c415ae84644b627392aa24920a8b00da681f6bfa18a22871263e85fc230",
+    "native-route.png": "9765b7306ca50a6368b494992d409592325a0563a4827ec16bdd1d6b078cbead",
+    "native-sunset.png": "7d92a202d945391e60afaa17155a0595e3ffbdad38878a482c2ed16c1b2f9375",
+    "principal-cliff-sections.png": "72c84dfec3bd6030d63e193ae63f4e740a64ef1b46d94351c39144ca9b22b426",
+    "hero-cliff_UNAPPROVED.blend": "414a79c0468dd8688abf388fbff1bb07941a86ea288801b6109df67f268c4966",
+    "hero-cliff.glb": "0d358d5c224882d0f1c5384c7183bc9cad20c10dc72b80607487229244aebe75",
+    "geometry-qa.json": "d46109be0c13e5a7e012732e9fbf8bd526c77729a76effb50fe6ec214c2de974"
+  },
+  "observations": [
+    "夕景は草地の縁が前に重なり、主岩壁の露出が少ない。",
+    "斜め視点では局所的な岩の起伏が増えたが、草地の下の長い壁が続く。",
+    "正式CGで見える幅のある三四分の露岩面と、低くなる岩肩の分離が不足。",
+    "固定WebGL視点では変化が小さい。"
+  ],
+  "next_method": "遮蔽する草地の肩を陸側へ引き、主岬を夕景中央へ張り出させ、二つの海側岩肩を凹地で分離する。固定カメラのクレイで確認。"
+}

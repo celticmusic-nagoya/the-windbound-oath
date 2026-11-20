@@ -22,8 +22,9 @@ def run(browser, url, out, mode):
             route.fulfill(response=response, body=source.replace(needle, needle + "\n    material.vertexColors = false;"))
         page.route("**/surface.mjs", remove_vertex_color)
 
-    composition = int(mode == "candidate")
-    page.goto(f"{url}/dev/windwaiting-cliff/?qa&fixed-water&wind=0&photo=1&vista=1&composition={composition}",
+    hero = int(mode == "hero-cliff")
+    composition = int(mode in ("candidate", "hero-cliff"))
+    page.goto(f"{url}/dev/windwaiting-cliff/?qa&fixed-water&wind=0&photo=1&vista=1&composition={composition}&hero-cliff={hero}",
               wait_until="domcontentloaded")
     try:
         page.wait_for_function("window.cliffQA?.frameTimes.length > 3", timeout=90_000)
@@ -40,11 +41,11 @@ def run(browser, url, out, mode):
     stopped = frame(f"{mode}-photo-spawn.png")
     state = page.evaluate("cliffQA")
     result = {key: state[key] for key in ("position", "camera", "groundHeight", "triangles", "drawCalls")}
-    if mode == "candidate":
+    if composition:
         assert stopped == frame()
         page.get_by_role("button", name="風を戻す").click()
         page.wait_for_function("cliffQA.wind > 0")
-        assert frame("candidate-photo-wind.png") != frame()
+        assert frame(f"{mode}-photo-wind.png") != frame()
         page.get_by_role("button", name="風を止める").click()
         page.wait_for_function("cliffQA.wind === 0")
         assert stopped == frame()
@@ -62,7 +63,7 @@ def run(browser, url, out, mode):
         result["movement"] = moved["position"]
         result["movement_ground_error_bu"] = abs(moved["position"][1] - moved["groundHeight"])
         result["wind"] = "animated frames differ and stopped pose matches original PNG"
-        frame("candidate-photo-traversal.png")
+        frame(f"{mode}-photo-traversal.png")
     assert not errors, errors
     page.close()
     return result
@@ -80,13 +81,14 @@ def main():
             "--disable-dev-shm-usage", "--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--no-sandbox",
         ])
         results = {mode: run(browser, args.base_url, args.output, mode)
-                   for mode in ("baseline", "vertex-color-off", "candidate")}
+                   for mode in ("baseline", "vertex-color-off", "candidate", "hero-cliff")}
         browser.close()
     for key in ("position", "camera", "groundHeight"):
         assert len({json.dumps(result[key]) for result in results.values()}) == 1, key
     for key in ("triangles", "drawCalls"):
         assert results["baseline"][key] == results["vertex-color-off"][key], key
     assert results["candidate"]["triangles"] <= results["baseline"]["triangles"]
+    assert results["hero-cliff"]["triangles"] == results["candidate"]["triangles"]
     (args.output / "webgl-photo-qa.json").write_text(json.dumps(results, indent=2) + "\n")
 
 
