@@ -130,6 +130,27 @@ def main():
                 stack.extend(perimeter_neighbors[current] - seen)
         if seen != boundary:
             raise RuntimeError("Multiple perimeter loops; STOP")
+        # Persist a deterministic geometry diagnosis before any destructive edit.
+        # A single selected island does not prove that inset will create a
+        # cavity: diagnose interior vertices, face sizes and perimeter first.
+        interior_original = {v.index for face in region for v in face.verts} - boundary
+        diagnostic = {
+            "stage": "BEFORE_INSET", "selected_faces": len(region),
+            "component_sizes": [len(group) for group in components],
+            "perimeter_edges": len(perimeter_edges),
+            "perimeter_vertices": len(boundary),
+            "interior_original_vertices": len(interior_original),
+            "face_vertex_counts": {
+                str(n): sum(len(face.verts) == n for face in region)
+                for n in sorted({len(face.verts) for face in region})
+            },
+            "source_sha256": SOURCE_SHA,
+            "G2": "NOT_RUN", "G3": "NOT_RUN",
+        }
+        (output / "c11_geometry_diagnostic.json").write_text(
+            json.dumps(diagnostic, indent=2), encoding="utf-8")
+        if len(region) < 16 or len(interior_original) < 3:
+            raise RuntimeError("Patch lacks adequate interior topology; diagnose before another inset")
         # Preserve all original vertices. Inset makes a new inner ring;
         # this is a structural change from the rejected two-plane deformation.
         inset = bmesh.ops.inset_region(
