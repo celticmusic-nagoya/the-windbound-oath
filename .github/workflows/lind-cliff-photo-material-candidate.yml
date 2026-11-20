@@ -1,0 +1,32 @@
+name: Lind cliff photo material candidate
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - .github/workflows/lind-cliff-photo-material-candidate.yml
+      - tools/map_blender/lind/intake_cliff_photo_pbr.py
+permissions:
+  contents: read
+concurrency:
+  group: lind-cliff-photo-material-intake
+  cancel-in-progress: false
+jobs:
+  intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: |
+          python3 tools/map_blender/lind/intake_cliff_photo_pbr.py candidate-pbr
+          cd candidate-pbr
+          find . -type f -print0 | sort -z | xargs -0 sha256sum > /tmp/photo-sha
+          mv /tmp/photo-sha SHA256SUMS
+          sha256sum -c SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lind-photo-material-${{ github.sha }}
+          path: candidate-pbr/
+          retention-days: 14
+          if-no-files-found: error
