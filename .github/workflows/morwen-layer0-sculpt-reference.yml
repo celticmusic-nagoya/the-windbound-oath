@@ -62,6 +62,20 @@ jobs:
           retention-days: 14
       - name: Install verified Blender 5.3.0 independently
         run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
+      - name: Smoke-test actual Blender 5.3 runtime and temporary scene roundtrip
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-blender-preflight
+          /tmp/two-blender-530/app/blender -b --factory-startup --python-exit-code 1 --python-expr '
+          import bpy
+          assert tuple(bpy.app.version)==(5,3,0), bpy.app.version_string
+          bpy.ops.mesh.primitive_cube_add()
+          bpy.context.object.name="PREFLIGHT_CUBE_NOT_MORWEN"
+          bpy.ops.wm.save_as_mainfile(filepath="/tmp/morwen-blender-preflight/smoke.blend")
+          '
+          test -s /tmp/morwen-blender-preflight/smoke.blend
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-blender-preflight/smoke.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.data.objects.get("PREFLIGHT_CUBE_NOT_MORWEN"); print("BLENDER_RUNTIME_ROUNDTRIP_PASS")'
       - name: Create and reopen packed reference blend
         shell: bash
         run: |
