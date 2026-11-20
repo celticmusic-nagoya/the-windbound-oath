@@ -306,6 +306,7 @@ jobs:
           export BLENDER_USER_CONFIG=/tmp/morwen-vrm-addon/user-config
           export BLENDER_USER_SCRIPTS=/tmp/morwen-vrm-addon/user-scripts
           export TWO_VRM_QA_DIR=/tmp/morwen-vrm-qa
+          export PYTHONFAULTHANDLER=1
           /tmp/two-blender-530/vrm-app/blender -b --python-exit-code 1 --python tools/production_qa/vrm_fixture_roundtrip_qa.py
       - uses: actions/upload-artifact@v4
         if: ${{ always() && (inputs.validation_target == 'vrm_fixture' || inputs.validation_target == 'vrm_upstream_fixture') }}
