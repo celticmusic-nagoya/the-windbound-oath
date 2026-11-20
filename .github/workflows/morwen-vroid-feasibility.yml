@@ -1,5 +1,8 @@
 name: Morwen VRoid Studio and Hub feasibility (manual, no adoption)
 on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths: [.github/workflows/morwen-vroid-feasibility.yml]
   workflow_dispatch:
     inputs:
       studio_installer_url:
