@@ -124,7 +124,20 @@ jobs:
               sleep 5
               screencapture -x evidence/native-save.png
               swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/native-save.png > evidence/native-save-text.txt
-              echo NATIVE_SAVE_REVIEW_REQUIRED > evidence/save-status.txt
+              if grep -Fxq model evidence/native-save-text.txt && grep -Fxq Documents evidence/native-save-text.txt && [ ! -e "$HOME/Documents/model.vroid" ]; then
+                if swift "$RUNNER_TEMP/vroid-click.swift" evidence/native-save.png Save 'Save As:' > evidence/native-save-click.txt; then
+                  sleep 15
+                  screencapture -x evidence/after-native-save.png
+                  find "$HOME/Documents" -maxdepth 3 -type f -iname '*.vroid' -print > evidence/saved-files.txt
+                  if [ -s "$HOME/Documents/model.vroid" ]; then
+                    cp "$HOME/Documents/model.vroid" evidence/model.vroid
+                    shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
+                    echo SOURCE_CANDIDATE_SAVED > evidence/save-status.txt
+                  else
+                    echo SOURCE_FILE_NOT_FOUND > evidence/save-status.txt
+                  fi
+                fi
+              fi
             fi
           fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
