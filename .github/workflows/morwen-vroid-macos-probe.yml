@@ -15,6 +15,13 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 20
     steps:
+      - uses: actions/checkout@v4
+      - name: Compile shared GUI controls
+        run: |
+          mkdir -p evidence
+          swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
+          "$RUNNER_TEMP/two-gui" screenshot evidence/gui-compile-screen.png
+          "$RUNNER_TEMP/two-gui" ocr evidence/gui-compile-screen.png > evidence/gui-compile-ocr.txt
       - name: Environment
         run: |
           mkdir -p evidence
@@ -130,7 +137,7 @@ jobs:
             local attempt
             for attempt in 1 2; do
               screencapture -x "evidence/home-attempt-$attempt.png" || return 1
-              if swift "$RUNNER_TEMP/vroid-click.swift" "evidence/home-attempt-$attempt.png" Open 'Recently Edited' > "evidence/open-click-$attempt.txt"; then
+              if "$RUNNER_TEMP/two-gui" click-label "evidence/home-attempt-$attempt.png" Open 'Recently Edited' > "evidence/open-click-$attempt.txt"; then
                 return 0
               fi
               sleep 5
