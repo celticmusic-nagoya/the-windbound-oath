@@ -11,6 +11,7 @@ on:
       - tools/morwen_authored_sculpt/export_precision_blueprint_530.py
       - tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py
       - tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
+      - tools/morwen_authored_sculpt/render_geometry_masks_530.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -203,6 +204,22 @@ jobs:
         with:
           name: morwen-530-precision-mesh-blueprint-candidate-not-adopted
           path: /tmp/morwen-base-audit/precision-blueprint/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Render actual source mesh silhouette masks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/render_geometry_masks_530.py
+          mkdir -p /tmp/morwen-base-audit/geometry-masks
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/render_geometry_masks_530.py -- /tmp/morwen-base-audit/geometry-masks
+          test -s /tmp/morwen-base-audit/geometry-masks/geometry_mask_contract.json
+      - name: Upload actual geometry silhouette masks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-source-geometry-mask-diagnostics-not-adopted
+          path: /tmp/morwen-base-audit/geometry-masks/
           if-no-files-found: warn
           retention-days: 14
       - name: Upload independent source candidate render evidence
