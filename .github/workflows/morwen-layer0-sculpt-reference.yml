@@ -184,14 +184,6 @@ jobs:
           test -s /tmp/morwen-base-audit/precision-blueprint/blueprint.json
           test -s /tmp/morwen-base-audit/precision-blueprint/head_mesh_geometry.json.gz
           test -s /tmp/morwen-base-audit/precision-blueprint/body_female_mesh_geometry.json.gz
-      - name: Upload precision numeric blueprint evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: morwen-530-precision-mesh-blueprint-candidate-not-adopted
-          path: /tmp/morwen-base-audit/precision-blueprint/
-          if-no-files-found: warn
-          retention-days: 14
       - name: Compare measured Layer 0 silhouette with source vertex envelopes
         shell: bash
         run: |
@@ -205,6 +197,14 @@ jobs:
           python3 tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py /tmp/morwen-projection-refs /tmp/morwen-base-audit/precision-blueprint
           /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py -- /tmp/morwen-base-audit/precision-blueprint/reference_silhouette_landmarks.json /tmp/morwen-base-audit/precision-blueprint
           test -s /tmp/morwen-base-audit/precision-blueprint/projection_diagnostic.json
+      - name: Upload precision numeric blueprint evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-precision-mesh-blueprint-candidate-not-adopted
+          path: /tmp/morwen-base-audit/precision-blueprint/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Upload independent source candidate render evidence
         if: always()
         uses: actions/upload-artifact@v4
