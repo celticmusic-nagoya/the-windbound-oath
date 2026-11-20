@@ -19,3 +19,6 @@ GitHub Actions continues an already running job without ChatGPT/Claude/Codex cha
 
 ## 2026-11-20 Claude — Method D (latest pointer)
 Blade root cause traced to the junction-stage boolean slits (`sculpt_junction.py`), not C11 B/C. Method D candidate, evidence, attempt ledger and next tasks: [LIND_C11_METHOD_D_HANDOFF_20261120.md](LIND_C11_METHOD_D_HANDOFF_20261120.md). CI reproduction: `.github/workflows/lind-cliff-c11-method-d.yml`. G2 NOT_RUN (independent), G3 PARTIAL_LOCAL, G4 NOT_RUN.
+
+## 2026-11-20 Claude — Method D4 (latest pointer)
+D3b G2 FAIL (soft west relief, central pits, crest notch) and Codex UV FAIL (D3a 77 flips / 598 internal overlaps) addressed inside the Method D islands only: planar joint facets, continuous fracture riser, exact-boundary fold-free UV (0 flips / 0 overlaps / 0 perimeter mismatch). Geometry SHA `ec2af2d5…`. Handoff: [LIND_C11_METHOD_D4_HANDOFF_20261120.md](LIND_C11_METHOD_D4_HANDOFF_20261120.md). CI: `.github/workflows/lind-cliff-c11-method-d4.yml`. C8 fault panels / shore_band / staircase remain Codex-owned. G2 NOT_RUN (independent), G3 PARTIAL_LOCAL, G4 NOT_RUN.

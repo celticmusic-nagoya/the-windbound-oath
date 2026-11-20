@@ -1,0 +1,86 @@
+name: C11 Method D4 joint facets + fold-free UV (UNAPPROVED candidate)
+# Reproduces Claude's local Method D4 run: re-tessellates the Method D3b repair
+# islands with planar joint facets, a continuous fracture riser and an
+# exact-boundary fold-free UV map. Candidate only; no adoption, merge or canon change.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - '.github/workflows/lind-cliff-c11-method-d4.yml'
+      - 'tools/production_qa/lind_blueprint/c11_method_d4_joint_facets.py'
+      - 'tools/production_qa/lind_blueprint/c11_uv_qa.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: lind-cliff-c11-blender-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  method-d4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download SHA-pinned D3b candidate and Method C reference
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/in /tmp/c11-d4
+          gh api repos/${{ github.repository }}/actions/artifacts/14613506757/zip > /tmp/in/d3b.zip
+          unzip -p /tmp/in/d3b.zip c11_method_d_channel_UNAPPROVED.blend > /tmp/in/d3b.blend
+          gh api repos/${{ github.repository }}/actions/artifacts/14606190629/zip > /tmp/in/c.zip
+          unzip -p /tmp/in/c.zip c11_recess_patch_UNAPPROVED.blend > /tmp/in/c.blend
+          printf '%s  %s\n%s  %s\n' \
+            a6813fe0d65874b04c46106c49dfdbac67b980ff90e67128375ebcad911484ce /tmp/in/d3b.blend \
+            d0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545 /tmp/in/c.blend | sha256sum -c -
+      - name: Install SHA-verified official Blender 5.3.0
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          grep -F "$name" "$work/checksums" | awk '{print $1"  '"$name"'"}' > "$work/expected.sha256"
+          test "$(wc -l < "$work/expected.sha256")" -eq 1
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Run Method D4 (fail-closed geometry + UV checks)
+        run: |
+          set -euo pipefail
+          timeout 900 /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 \
+            --python tools/production_qa/lind_blueprint/c11_method_d4_joint_facets.py -- \
+            /tmp/in/d3b.blend /tmp/in/c.blend /tmp/c11-d4
+          python3 - <<'PY'
+          import json
+          ci = json.load(open('/tmp/c11-d4/c11_method_d4_report.json'))
+          local = json.load(open('assets/candidates/lind/windwaiting-cliff-c11/method-d4/c11_method_d4_report.json'))
+          assert all(ci['checks'].values()), ci['checks']
+          ci['reproduces_claude_local_geometry'] = ci['carrier_geometry_sha256'] == local['carrier_geometry_sha256']
+          ci['reproduces_claude_local_uv_audit'] = ci['uv_audit'] == local['uv_audit']
+          json.dump(ci, open('/tmp/c11-d4/c11_method_d4_report.json', 'w'), indent=2)
+          print('REPRO', ci['reproduces_claude_local_geometry'], ci['reproduces_claude_local_uv_audit'])
+          PY
+      - name: Fixed-camera review, clay, close-ups, UV checker, sections
+        run: |
+          set -euo pipefail
+          blend=/tmp/c11-d4/c11_method_d4_joint_facets_UNAPPROVED.blend
+          timeout 900 /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 \
+            --python tools/production_qa/lind_blueprint/c11_render_review.py -- "$blend" /tmp/c11-d4/review
+          timeout 1200 /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 \
+            --python tools/production_qa/lind_blueprint/c11_clay_closeup_review.py -- "$blend" /tmp/c11-d4/clay d4
+          (cd /tmp/c11-d4 && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve candidate, report and renders, even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c11-method-d4-${{ github.sha }}
+          path: /tmp/c11-d4/
+          if-no-files-found: warn
+          retention-days: 30
