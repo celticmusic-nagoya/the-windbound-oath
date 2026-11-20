@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Blender-side isolated VRM fixture import/render/export QA; no canonical assets."""
+"""Blender-side isolated VRM fixture import/render QA; no canonical assets."""
 import bpy
 import hashlib
 import json
@@ -12,7 +12,7 @@ source = root / "basic_armature_vrm1.vrm"
 report = {
     "fixture": "saturday06/VRM-Addon-for-Blender v4.10.5 tests/resources/vrm/2.93/out/basic_armature_vrm1.vrm",
     "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest() if source.is_file() else None,
-    "source_license": "UPSTREAM_REPOSITORY_MIT; INDIVIDUAL_FIXTURE_RIGHTS_REVIEW_REQUIRED",
+    "source_license": "UPSTREAM_LICENSE_MAIN_MIT_OR_GPL_3_0_OR_LATER; FIXTURE_RIGHTS_NOT_INDEPENDENTLY_VERIFIED",
     "blender": bpy.app.version_string,
     "import": "NOT_RUN", "render": "NOT_RUN", "export": "NOT_RUN",
     "reimport": "NOT_RUN", "status": "BLOCKED",
@@ -22,7 +22,7 @@ def save():
 try:
     if not source.is_file():
         raise RuntimeError("Missing fixture")
-    if not bpy.ops.import_scene.vrm.poll():
+    if not hasattr(bpy.ops.import_scene, "vrm") or not bpy.ops.import_scene.vrm.poll():
         raise RuntimeError("VRM import operator unavailable")
     result = bpy.ops.import_scene.vrm(filepath=str(source))
     if "FINISHED" not in result:
