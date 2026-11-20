@@ -1,0 +1,400 @@
+{
+ "schema": "two.lind.eco.integration.v2.manifest",
+ "task_id": "LIND-ECO-01",
+ "status": "CANDIDATE_FOR_INTEGRATION_TEST \u2014 not adopted, no WORLD placement",
+ "editable_source": "eco_integration_v2.blend (+ tools/map_blender/lind/ecology/*.py, deterministic)",
+ "files": {
+  "eco_integration_v2.blend": {
+   "sha256": "63bd3a08c8450351cbd1e80334f4ca18facd14e438755bbe94039154a05900d7",
+   "bytes": 9494445
+  },
+  "glb/eco_flower_daisy_clump_LOD0.glb": {
+   "sha256": "1749cd77e03ca3c3e127c55092dd95dfbc0b23abdf18d60b1fee947780f3abeb",
+   "bytes": 198620
+  },
+  "glb/eco_flower_daisy_clump_LOD1.glb": {
+   "sha256": "4e34411dbaa6ad40f87a4f8fc966c7bf3536cae04317723867f8334e09740dba",
+   "bytes": 122000
+  },
+  "glb/eco_flower_daisy_clump_LOD2.glb": {
+   "sha256": "ade24a44dd4de473d6be8f5abbc36297daa0dab6937f41887be7150892c09778",
+   "bytes": 402540
+  },
+  "glb/eco_flower_spike_clump_LOD0.glb": {
+   "sha256": "bfbade0f85e69afb407ee98fc920a64bac10c06db3fe4c30cf41b89d86f0e114",
+   "bytes": 72556
+  },
+  "glb/eco_flower_spike_clump_LOD1.glb": {
+   "sha256": "0aa769b87e6678dcd17eabd3e54f449bd10a82f91bc53ea4f6b51df68eaba457",
+   "bytes": 40988
+  },
+  "glb/eco_flower_spike_clump_LOD2.glb": {
+   "sha256": "e621b30969d01b39991439466a9043bbaa97ed39456ceb49dea039f0a19f0efa",
+   "bytes": 254576
+  },
+  "glb/eco_flower_violet_cushion_LOD0.glb": {
+   "sha256": "54aee8f799aca2ccb346df1b1f29b1c5c004572ef4c1b38808c235f747ee1a9b",
+   "bytes": 133144
+  },
+  "glb/eco_flower_violet_cushion_LOD1.glb": {
+   "sha256": "15298519eb40f8e418777479787dd32e7c187f6a1c675fbaef1107182cfc4e41",
+   "bytes": 78764
+  },
+  "glb/eco_flower_violet_cushion_LOD2.glb": {
+   "sha256": "3dbf715100cefac9dfc694a55adb70646453b7ffcd4ee6f25f5544d74ede9ada",
+   "bytes": 399580
+  },
+  "glb/eco_grass_coastal_dune_LOD0.glb": {
+   "sha256": "d14bff063d4ca506a2105c22a388f2f7079bd873e6276292993ebff5a61e740c",
+   "bytes": 162524
+  },
+  "glb/eco_grass_coastal_dune_LOD1.glb": {
+   "sha256": "7764571091de0fcc406fa8318f953c809116d4fb6b46f07794ebf2f6ec61e603",
+   "bytes": 68772
+  },
+  "glb/eco_grass_coastal_dune_LOD2.glb": {
+   "sha256": "d943d92dcc56c11879e18b48756fdd13779dc6ac324e1a0675f143d7ebd0f0d8",
+   "bytes": 170836
+  },
+  "glb/eco_grass_meadow_LOD0.glb": {
+   "sha256": "816fbfd60788faba09cc8f09551fc7c6ba591ec9d2e06c5dbcb37a397dc03391",
+   "bytes": 139096
+  },
+  "glb/eco_grass_meadow_LOD1.glb": {
+   "sha256": "f8aa30605e75118197c56430888780f73c86d745659d64c5b0c7e518b7bdbaae",
+   "bytes": 57920
+  },
+  "glb/eco_grass_meadow_LOD2.glb": {
+   "sha256": "b3566621d7471d70d3985bc6d014e1774b867b780ad8332dd6c906679b1c2987",
+   "bytes": 172820
+  },
+  "glb/eco_grass_tall_lax_LOD0.glb": {
+   "sha256": "324ff13a9bb77a81ed0f95a7ff1c360c92c1c4f9a1f115860c94b69939d7e17a",
+   "bytes": 178992
+  },
+  "glb/eco_grass_tall_lax_LOD1.glb": {
+   "sha256": "affdaf0af61308abeafc0a900c86d469c07fed5ec07f6531fa6f54d00ee70c1a",
+   "bytes": 80848
+  },
+  "glb/eco_grass_tall_lax_LOD2.glb": {
+   "sha256": "770919a3988c76b690023b010af69526bdc2b17e527f4b170832beab03893371",
+   "bytes": 159056
+  },
+  "glb/eco_grass_tuft_short_LOD0.glb": {
+   "sha256": "4608513735c63a2d56d543a27cebad3f4a674cdf51bc541dfbb43acf071d2e77",
+   "bytes": 101680
+  },
+  "glb/eco_grass_tuft_short_LOD1.glb": {
+   "sha256": "e3511f45bbe988f57fbf6c5e09ec602828dec136cfe0a249acd7b99b79a3bc6c",
+   "bytes": 48420
+  },
+  "glb/eco_grass_tuft_short_LOD2.glb": {
+   "sha256": "2b307bbf9f1992094872ee3813618770e7a4320ec3141e359fb208a1c82088c7",
+   "bytes": 151144
+  },
+  "glb/eco_hedgerow_LOD0.glb": {
+   "sha256": "028abf29dbabd4d7ffa53217ae09502ec99380610865f25214dcaae718773a76",
+   "bytes": 673280
+  },
+  "glb/eco_hedgerow_LOD1.glb": {
+   "sha256": "d454e35d07f6aaf53d2c4200b9e120e5c971901bdef1647f9297288a0ce20e08",
+   "bytes": 475684
+  },
+  "glb/eco_hedgerow_LOD2.glb": {
+   "sha256": "afe09b1c86e75fc59fde6d9d94a96518e9ef899c82cf5385e2ef2a058958c3e6",
+   "bytes": 175108
+  },
+  "glb/eco_moss_cushion_a_LOD0.glb": {
+   "sha256": "d074175139e19ab93ff872fb381aadf1404169e761b0fe14f144a8d8ded079c1",
+   "bytes": 656256
+  },
+  "glb/eco_moss_mat_b_LOD0.glb": {
+   "sha256": "4d13cee09611da0ea095e89eaf5fd18bd679516b8341340c919f8d63d7ce6f81",
+   "bytes": 652480
+  },
+  "glb/eco_reed_riverside_LOD0.glb": {
+   "sha256": "c234f048d7f070ed038ce847ec4bc46e8f6cd6dddb2132de902db034ea2eec7d",
+   "bytes": 90988
+  },
+  "glb/eco_reed_riverside_LOD1.glb": {
+   "sha256": "65c90bf90c0058cda39b01d25fb6717655d56d3b5aa98f57f50320a19ee4bf21",
+   "bytes": 40896
+  },
+  "glb/eco_reed_riverside_LOD2.glb": {
+   "sha256": "4b09ad3fdf67751b6be5f2ba37700b69d41cddec60e368e353367a445c90746d",
+   "bytes": 145968
+  },
+  "glb/eco_sedge_bank_LOD0.glb": {
+   "sha256": "c1fad9588a7db825122b6548f10bd1f216b970f3e5b56493edcdda276b74e7d7",
+   "bytes": 111784
+  },
+  "glb/eco_sedge_bank_LOD1.glb": {
+   "sha256": "182c8bf96ee7215f5c913ebde5578299613f5257efd38e75f4f2e8dc6376df0a",
+   "bytes": 52124
+  },
+  "glb/eco_sedge_bank_LOD2.glb": {
+   "sha256": "fe9cc4af9a16860124d7f123e3d07c0c74315061e85a3b852c521d4b3b6d02bc",
+   "bytes": 147024
+  },
+  "glb/eco_shrub_round_a_LOD0.glb": {
+   "sha256": "f569350d4b041fee039869e3872e0e566b595cfcf5abe149a647b918dcb98081",
+   "bytes": 553552
+  },
+  "glb/eco_shrub_round_a_LOD1.glb": {
+   "sha256": "1e48208182a5b4f54c01c42bfb3bbeedd99e1ab9e1ab358a07d400d96f7d55c3",
+   "bytes": 468320
+  },
+  "glb/eco_shrub_round_a_LOD2.glb": {
+   "sha256": "f510ca27b640d0cab38467d2e3357db61d4281276b1c7a356906d280a9a95e32",
+   "bytes": 454772
+  },
+  "glb/eco_tree_apple_a_LOD0.glb": {
+   "sha256": "3cdc2216291ea23651f67fa55a898455638f309c8c621100ce1e4f1be1ea138a",
+   "bytes": 745612
+  },
+  "glb/eco_tree_apple_a_LOD1.glb": {
+   "sha256": "d221f1c9c68ef61cef21e12aebca5d3dda2ab4a771a88a79ed246fda91b3edf3",
+   "bytes": 487524
+  },
+  "glb/eco_tree_apple_a_LOD2.glb": {
+   "sha256": "2daa079e456d744b11c9dca9a961530dd316f7095000cb9eb0b34d01197984dd",
+   "bytes": 424428
+  },
+  "glb/eco_tree_conifer_a_LOD0.glb": {
+   "sha256": "5db30236f7aa63182630d12f12a48ef9dba3d2d86ddcf7b189faeb0f3ce6fad6",
+   "bytes": 1974176
+  },
+  "glb/eco_tree_conifer_a_LOD1.glb": {
+   "sha256": "1b9d13f3053bf8fd76aa69eef9002877a49f3af69cd623d95c463be2143d4c8b",
+   "bytes": 1108548
+  },
+  "glb/eco_tree_conifer_a_LOD2.glb": {
+   "sha256": "5a0dfb78c3b6e5f49adb2b7ad0f3c95e7adf7ac3cfea2bbab6b1ea3632b5efb2",
+   "bytes": 549788
+  },
+  "glb/eco_tree_deciduous_a_LOD0.glb": {
+   "sha256": "8f53449dd6ce5b98bfe5cc826de54f8593945a081508b431bf2b3378fbe51285",
+   "bytes": 980928
+  },
+  "glb/eco_tree_deciduous_a_LOD1.glb": {
+   "sha256": "0ea43b74c3b2a0c6f66a2b49ebbea3d45f8a1ab723988163360b504f174e398e",
+   "bytes": 550572
+  },
+  "glb/eco_tree_deciduous_a_LOD2.glb": {
+   "sha256": "e4fc9dcc96ad991b130d3f3dcfbf648f474e735ceb64206fe6c3a3159cc99df6",
+   "bytes": 588192
+  },
+  "glb/eco_tree_forest_tall_a_LOD0.glb": {
+   "sha256": "6bd878f904a7887ea9998de90696b2c15e612bbb64a2570f025cc04ef6606e2e",
+   "bytes": 1121752
+  },
+  "glb/eco_tree_forest_tall_a_LOD1.glb": {
+   "sha256": "2db976fccadb81673c79bbadd04acb2eb9dad140bee847dfb5b87bc51c4fe579",
+   "bytes": 667372
+  },
+  "glb/eco_tree_forest_tall_a_LOD2.glb": {
+   "sha256": "08949852446c94b5c984c50b805d382a0ddbd58e4b92fbbdad7fa9794d625112",
+   "bytes": 589744
+  },
+  "glb/eco_turf_meadow_a_LOD0.glb": {
+   "sha256": "bd42fb0fcf3380b269dbe216b5767cdcdd6607e728fe2192a06745244d7e2cce",
+   "bytes": 373244
+  },
+  "glb/eco_turf_meadow_a_LOD1.glb": {
+   "sha256": "58dbc43c05316a9aa3b0468fbedfd97c6570c2c277a6609698203f3b05258ee5",
+   "bytes": 105900
+  },
+  "glb/eco_turf_meadow_a_LOD2.glb": {
+   "sha256": "d3e58c3faa961074b11b5b1e64f504d86c2f2b606701286b3ca3dde457e69201",
+   "bytes": 936240
+  },
+  "impostors/eco_flower_daisy_clump_LOD2_atlas.png": {
+   "sha256": "82fed6b71697d779dc546ac180b00bba15df6145874e9d7d385ae3cf763bc946",
+   "bytes": 399530
+  },
+  "impostors/eco_flower_spike_clump_LOD2_atlas.png": {
+   "sha256": "6d9a095d41d368decf3ece65de23bc6180ef86f7e0fe6fb58037caa1a4bdb659",
+   "bytes": 251561
+  },
+  "impostors/eco_flower_violet_cushion_LOD2_atlas.png": {
+   "sha256": "4f9d60625cda4c83cc57947d51d7d61a674e76c455e78aa8d9dded8f6d26cc21",
+   "bytes": 396558
+  },
+  "impostors/eco_grass_coastal_dune_LOD2_atlas.png": {
+   "sha256": "bf5da69a182000fa305cf9eff7573e9b2b6124572df44a1062898fa109876340",
+   "bytes": 167831
+  },
+  "impostors/eco_grass_meadow_LOD2_atlas.png": {
+   "sha256": "8fa1f0b44b809ea3419e89a06d894b149b87a9bdc3cc6fd8f2b5539bcec30554",
+   "bytes": 169833
+  },
+  "impostors/eco_grass_tall_lax_LOD2_atlas.png": {
+   "sha256": "a7e620cbef392fa865fa0fe4635f5e9f08c5f353911c101790c5225c3707391a",
+   "bytes": 156068
+  },
+  "impostors/eco_grass_tuft_short_LOD2_atlas.png": {
+   "sha256": "633c881ce94f0b3d444e0327c6ab0b45efef8ac73546a016e4861a43a29f6ba7",
+   "bytes": 148143
+  },
+  "impostors/eco_hedgerow_LOD2_atlas.png": {
+   "sha256": "09605f06602700cf2d179797f913d3a39ffbfe4c73f60b3dc7a042fcd3e2a8bc",
+   "bytes": 172137
+  },
+  "impostors/eco_reed_riverside_LOD2_atlas.png": {
+   "sha256": "6b793d1aa938d7fec14a61a01e1aba301ea6204b637c765f82feb6f6808cd164",
+   "bytes": 142980
+  },
+  "impostors/eco_sedge_bank_LOD2_atlas.png": {
+   "sha256": "c401e3d19b0bcfcab6227067ddddb12ced4cfeab195c2af24a678a8265757e5c",
+   "bytes": 144050
+  },
+  "impostors/eco_shrub_round_a_LOD2_atlas.png": {
+   "sha256": "313b6bea3053646c42a230c010facc2714a6f8287b1cfb6f84c61f6b4596aa3c",
+   "bytes": 451784
+  },
+  "impostors/eco_tree_apple_a_LOD2_atlas.png": {
+   "sha256": "49f8733c3c7b9b6cd7e6389a942926c9ff00e44002fcfce7dd7d3c40ddf49b59",
+   "bytes": 421448
+  },
+  "impostors/eco_tree_conifer_a_LOD2_atlas.png": {
+   "sha256": "3700a7e35ef1759d67a6947acd94618d943ce9e8b2cf0e21836647b8431d195d",
+   "bytes": 546802
+  },
+  "impostors/eco_tree_deciduous_a_LOD2_atlas.png": {
+   "sha256": "514c9dfdae960a0320490d737abd12737048435dfe12f305042d8a7789f46c48",
+   "bytes": 585195
+  },
+  "impostors/eco_tree_forest_tall_a_LOD2_atlas.png": {
+   "sha256": "2708152e835cc68ac0990b0b4896eaba7dac90fff412700899697cab8b58c813",
+   "bytes": 586743
+  },
+  "impostors/eco_turf_meadow_a_LOD2_top.png": {
+   "sha256": "e0af686035b94d07bf8cd9f779a6c31bbe0fb247b8ab4dfa7224a53644b29f7a",
+   "bytes": 933488
+  },
+  "impostors/flat_normal.png": {
+   "sha256": "5cf6a04873c681f66cecbd3306a2cc4282001d74164c247d7ad3d2025fb6779c",
+   "bytes": 77
+  },
+  "impostors/flat_orm_r075.png": {
+   "sha256": "5a6614f5e3b8cf00c9ef3a44ae59b914e0f92030218f6fd1ea2513e9103f9506",
+   "bytes": 76
+  },
+  "integration_build.json": {
+   "sha256": "5ddec8fdb1e309f887e32370a64214a3cdfcab3d70b366edae1b272ad55d9c08",
+   "bytes": 50974
+  },
+  "placement_rules.v2.json": {
+   "sha256": "d3517aee281f178f50be648ea694f68c1297905e82da08381001579ceb3d673e",
+   "bytes": 6790
+  },
+  "renders/renders_v2.json": {
+   "sha256": "b398eecd69ae057919e31331ed385e8ccb00e8ac66bf0e46f7faa1f7cd827c14",
+   "bytes": 4808
+  },
+  "renders/v2_cliffmeadow_sunset_lod0.png": {
+   "sha256": "1e7fbbb1bbc721ba7807d4a6a416472e092035e5985e58aa860035b7efda91c6",
+   "bytes": 1400138
+  },
+  "renders/v2_closeup_small_lod0_day.png": {
+   "sha256": "74b00a9c20ded391b0910f6c077e2f3f4284ee48b5c513b129a994df6a2174c4",
+   "bytes": 937799
+  },
+  "renders/v2_compare_cg_cliff_vs_v2.png": {
+   "sha256": "83ce5ec4c711be4b5cb16a4b7f2c6305fda3bba9098289e4885f09a99b5d559c",
+   "bytes": 1195637
+  },
+  "renders/v2_gameview_28deg_ortho_fig48px_turflod1.png": {
+   "sha256": "ae84b520a27fc925e6b4f077c73435994aa2ea684a98fcf4d67b096359c16f0c",
+   "bytes": 1617762
+  },
+  "renders/v2_gameview_28deg_ortho_fig48px_turflod2.png": {
+   "sha256": "acb48e4776d113a9ff36befd62c5851bddb1eeb9557395e01466d646bd73f0bb",
+   "bytes": 1204007
+  },
+  "renders/v2_lineup_lod0_day.png": {
+   "sha256": "e5abda69decab6a47f29861c60d0392343ae66c2a1741a2aebc6ee0d7fc51b5b",
+   "bytes": 1157861
+  },
+  "renders/v2_lod_ladder_lod0.png": {
+   "sha256": "a3cbdf205768149629500a88a3d6f118f11e463e3248764b071f60bc2aaee447",
+   "bytes": 620634
+  },
+  "renders/v2_lod_ladder_lod1.png": {
+   "sha256": "cb85119134398855e467900f70c56286acab95103405441066e24fc4dc8f2945",
+   "bytes": 616731
+  },
+  "renders/v2_lod_ladder_lod2.png": {
+   "sha256": "990f4e01806959f4371c6445a06a9d89d74cf09e3b67979ae8603a029b81d02d",
+   "bytes": 590365
+  },
+  "tech_qa_v2.json": {
+   "sha256": "5131ad9caa9182d30431510edc15abd45e4564ef193c9ce611ecb95c58bfe95c",
+   "bytes": 16400
+  },
+  "textures/leaf_cluster_apple_basecolor.png": {
+   "sha256": "b3c5be03ac93997e12bfb787a294aa63287b3e29f487e33b8d37bc88cdbd9e8c",
+   "bytes": 133951
+  },
+  "textures/leaf_cluster_apple_normal.png": {
+   "sha256": "b61fce44225f6b69fa3f07b61b2c034e728cc20f76ac297004cc940d12f974fb",
+   "bytes": 132473
+  },
+  "textures/leaf_cluster_apple_orm.png": {
+   "sha256": "63c81e534c4c724270e39203497de7118c040828d83bf5e8cd705aed4d5a05a7",
+   "bytes": 72052
+  },
+  "textures/leaf_cluster_beech_basecolor.png": {
+   "sha256": "fe5370c8db9f2631339c2d1de31c59f97471bdf28deca937dd39ebb0f36d3ac5",
+   "bytes": 165691
+  },
+  "textures/leaf_cluster_beech_normal.png": {
+   "sha256": "80485743770d4b778832d5eeeaf7d7656ccee7874a4244848fa5a5cfe2749992",
+   "bytes": 160380
+  },
+  "textures/leaf_cluster_beech_orm.png": {
+   "sha256": "53c9d593b4df8d48f5af84c80927ceeb2a359a51b7bedbb6bd823086fbed84ed",
+   "bytes": 88193
+  },
+  "textures/leaf_cluster_oak_basecolor.png": {
+   "sha256": "9761a7526a7ccc861e06f6e22b9a89f963bbaa71e97b0d8ec10f8df44e08f32d",
+   "bytes": 142567
+  },
+  "textures/leaf_cluster_oak_normal.png": {
+   "sha256": "bdc386eca242e6be31280bc6653204a03d26e444c78f66b9dd4628d5ce8ef5f7",
+   "bytes": 133456
+  },
+  "textures/leaf_cluster_oak_orm.png": {
+   "sha256": "84727de6bbcc9b862b4f1bedb6e9755d7c49af32ef2cf2630d067f6601ee1a2a",
+   "bytes": 72347
+  },
+  "textures/leaf_spray_needle_basecolor.png": {
+   "sha256": "927f0b72021bc2e6b8c6d7d133854e1f54c481ddba753d52f9a4e382ab36e21e",
+   "bytes": 223175
+  },
+  "textures/leaf_spray_needle_normal.png": {
+   "sha256": "f6e13706f55f02f47f8ead73e283e9fd83006e0359db4f07272dfee1bab9fe50",
+   "bytes": 199453
+  },
+  "textures/leaf_spray_needle_orm.png": {
+   "sha256": "01e2d039e5a796d3525bb2d3db3d07cb786fdec549e91eba55deca8c6ee3f396",
+   "bytes": 110275
+  },
+  "textures/moss_tile_basecolor.png": {
+   "sha256": "373b5ae08a21a717fafd03abdf1aa581b7dd438430154489ccada8a226e9ff0d",
+   "bytes": 149890
+  },
+  "textures/moss_tile_height.png": {
+   "sha256": "316eae4d6a36a560a5fb3a9b28960117c3f0b8ed3c17a75ed4a26f6a22d07368",
+   "bytes": 99778
+  },
+  "textures/moss_tile_normal.png": {
+   "sha256": "43fb2fa658907b42f0aa3c8482ddf96073e1239b2265fc9fed1fb11efd058762",
+   "bytes": 344162
+  },
+  "textures/moss_tile_orm.png": {
+   "sha256": "4db2b03f3c0979c0d104721be0a4b0b3307943ba239fbbc1ba25af74f764f452",
+   "bytes": 134163
+  }
+ }
+}

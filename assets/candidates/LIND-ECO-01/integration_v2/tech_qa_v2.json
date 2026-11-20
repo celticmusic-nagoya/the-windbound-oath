@@ -1,0 +1,521 @@
+{
+ "schema": "two.lind.eco.integration.v2.tech_qa",
+ "scope": "self / technical QA only",
+ "checks": [
+  {
+   "check": "reused kit geometry matches kit build hashes",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "kit combined geometry hash equals CI-verified 344e3229…",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "eco_tree_deciduous_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "10647 tris, 980928 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_deciduous_a LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2446 tris, 550572 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_deciduous_a LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 588192 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_deciduous_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[10647, 2446, 4]"
+  },
+  {
+   "check": "eco_tree_forest_tall_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "12539 tris, 1121752 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_forest_tall_a LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "3051 tris, 667372 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_forest_tall_a LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 589744 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_forest_tall_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[12539, 3051, 4]"
+  },
+  {
+   "check": "eco_tree_apple_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "7829 tris, 745612 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_apple_a LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2030 tris, 487524 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_apple_a LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 424428 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_apple_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[7829, 2030, 4]"
+  },
+  {
+   "check": "eco_tree_conifer_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "19122 tris, 1974176 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_conifer_a LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "5988 tris, 1108548 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_conifer_a LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 549788 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_tree_conifer_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[19122, 5988, 4]"
+  },
+  {
+   "check": "eco_hedgerow LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "5016 tris, 673280 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_hedgerow LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1317 tris, 475684 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_hedgerow LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 175108 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_hedgerow LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[5016, 1317, 4]"
+  },
+  {
+   "check": "eco_shrub_round_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2473 tris, 553552 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_shrub_round_a LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "621 tris, 468320 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_shrub_round_a LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 454772 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_shrub_round_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[2473, 621, 4]"
+  },
+  {
+   "check": "eco_grass_tuft_short LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2652 tris, 101680 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_tuft_short LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1240 tris, 48420 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_tuft_short LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 151144 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_tuft_short LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[2652, 1240, 4]"
+  },
+  {
+   "check": "eco_grass_meadow LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "3838 tris, 139096 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_meadow LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1571 tris, 57920 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_meadow LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 172820 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_meadow LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[3838, 1571, 4]"
+  },
+  {
+   "check": "eco_grass_tall_lax LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4840 tris, 178992 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_tall_lax LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2152 tris, 80848 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_tall_lax LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 159056 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_tall_lax LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[4840, 2152, 4]"
+  },
+  {
+   "check": "eco_grass_coastal_dune LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4412 tris, 162524 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_coastal_dune LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1862 tris, 68772 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_coastal_dune LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 170836 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_grass_coastal_dune LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[4412, 1862, 4]"
+  },
+  {
+   "check": "eco_sedge_bank LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "3002 tris, 111784 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_sedge_bank LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1369 tris, 52124 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_sedge_bank LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 147024 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_sedge_bank LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[3002, 1369, 4]"
+  },
+  {
+   "check": "eco_reed_riverside LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2510 tris, 90988 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_reed_riverside LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1110 tris, 40896 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_reed_riverside LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 145968 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_reed_riverside LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[2510, 1110, 4]"
+  },
+  {
+   "check": "eco_turf_meadow_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "6590 tris, 373244 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_turf_meadow_a LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1850 tris, 105900 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_turf_meadow_a LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2 tris, 936240 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_turf_meadow_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[6590, 1850, 2]"
+  },
+  {
+   "check": "eco_flower_daisy_clump LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4718 tris, 198620 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_daisy_clump LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2844 tris, 122000 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_daisy_clump LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 402540 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_daisy_clump LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[4718, 2844, 4]"
+  },
+  {
+   "check": "eco_flower_violet_cushion LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "3390 tris, 133144 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_violet_cushion LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "2025 tris, 78764 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_violet_cushion LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 399580 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_violet_cushion LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[3390, 2025, 4]"
+  },
+  {
+   "check": "eco_flower_spike_clump LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "1330 tris, 72556 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_spike_clump LOD1 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "750 tris, 40988 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_spike_clump LOD2 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "4 tris, 254576 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_flower_spike_clump LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[1330, 750, 4]"
+  },
+  {
+   "check": "eco_moss_cushion_a LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "680 tris, 656256 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_moss_cushion_a LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[680]"
+  },
+  {
+   "check": "eco_moss_mat_b LOD0 glb attributes/alpha",
+   "result": "PASS",
+   "detail": "572 tris, 652480 B, attrs ['COLOR_0', 'NORMAL', 'POSITION', 'TANGENT', 'TEXCOORD_0', '_WIND_WEIGHT']"
+  },
+  {
+   "check": "eco_moss_mat_b LOD tris strictly decreasing",
+   "result": "PASS",
+   "detail": "[572]"
+  },
+  {
+   "check": "render v2_lineup_lod0_day.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lineup_lod0_day.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_closeup_small_lod0_day.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_closeup_small_lod0_day.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lod_ladder_lod0.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lod_ladder_lod0.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lod_ladder_lod1.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lod_ladder_lod1.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lod_ladder_lod2.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_lod_ladder_lod2.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_cliffmeadow_sunset_lod0.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_cliffmeadow_sunset_lod0.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_gameview_28deg_ortho_fig48px_turflod1.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_gameview_28deg_ortho_fig48px_turflod1.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_gameview_28deg_ortho_fig48px_turflod2.png sha matches registry",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "render v2_gameview_28deg_ortho_fig48px_turflod2.png built from current integration_build.json",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "approved CG sunset_background.png unchanged",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "approved CG rilde_village.png unchanged",
+   "result": "PASS",
+   "detail": ""
+  }
+ ],
+ "summary": {
+  "PASS": 88,
+  "FAIL": 0
+ },
+ "colour_vs_approved_cg": {
+  "cg_cliff_meadow_foreground": {
+   "green_fraction": 0.088,
+   "hue_med": 61.9,
+   "sat_med": 0.49,
+   "val_p5": 0.082,
+   "val_p50": 0.227,
+   "val_p95": 0.388,
+   "n": 3687
+  },
+  "cg_rilde_trees_and_verges": {
+   "green_fraction": 0.23,
+   "hue_med": 72.6,
+   "sat_med": 0.437,
+   "val_p5": 0.141,
+   "val_p50": 0.349,
+   "val_p95": 0.773,
+   "n": 9314
+  },
+  "v2_cliffmeadow_sunset_lod0": {
+   "green_fraction": 0.198,
+   "hue_med": 56.8,
+   "sat_med": 0.926,
+   "val_p5": 0.133,
+   "val_p50": 0.235,
+   "val_p95": 0.384,
+   "n": 8227
+  },
+  "v2_gameview_turflod1": {
+   "green_fraction": 0.984,
+   "hue_med": 77.1,
+   "sat_med": 0.483,
+   "val_p5": 0.208,
+   "val_p50": 0.447,
+   "val_p95": 0.573,
+   "n": 41570
+  },
+  "v2_gameview_turflod2": {
+   "green_fraction": 0.984,
+   "hue_med": 78.1,
+   "sat_med": 0.427,
+   "val_p5": 0.22,
+   "val_p50": 0.478,
+   "val_p95": 0.529,
+   "n": 41545
+  },
+  "v2_lineup_tree_crowns": {
+   "green_fraction": 0.621,
+   "hue_med": 94.0,
+   "sat_med": 0.55,
+   "val_p5": 0.078,
+   "val_p50": 0.275,
+   "val_p95": 0.529,
+   "n": 44073
+  },
+  "g2_review_01_tree_crowns_reference": {
+   "hue_med": 97,
+   "sat_med": 0.47,
+   "val_p5": 0.03,
+   "val_p50": 0.18,
+   "val_p95": 0.39,
+   "note": "copied from G2_REVIEW_01 §4 (eco_kit_v1, Cycles materials)"
+  }
+ },
+ "comparison_sheet": "v2_compare_cg_cliff_vs_v2.png",
+ "gates": {
+  "G1": "NOT_RUN (no canonical vegetation spec; CG used as art reference only)",
+  "G2": "NOT_RUN for v2 assets — independent reviewer required",
+  "G3": "PARTIAL: export/attribute/LOD/hash checks below; no in-engine validation",
+  "G4": "NOT_RUN (WebGL/Android owned by Codex runtime integration)"
+ }
+}

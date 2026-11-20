@@ -199,6 +199,63 @@
    "method_family": "beehive revolve + strands",
    "attempt": 1,
    "result": "G2_REVIEW_01 PASS (form/readability only)"
+  },
+  {
+   "date": "2026-11-20",
+   "defect": "coastal/meadow ground cover reads as isolated tuft footprints, no continuous turf (G2 FAIL on coastal sward v1/v2)",
+   "method_family": "TURF-T1 stratified continuous turf tile: no clump centroid, swell height field, patchiness colour field, feathered noisy superellipse, jittered 30% overlapping tiles",
+   "attempt": 1,
+   "causal_difference": "coverage comes from area-stratified cheap 5-tri blades over the whole tile instead of instanced ECO-G2 clumps; edges interleave between tiles",
+   "measurable_hypothesis": "at the 28 deg game camera the meadow reads as one carpet with lit/shade patches (green fraction > 0.95 inside the scattered area; val p95 >= 0.45)",
+   "result": "self: continuous carpet in cliffmeadow and game view; measured green fraction 0.984, val p5/p50/p95 0.208/0.447/0.573 (game view LOD1). G2 NOT_RUN (independent)",
+   "render_sha256": [
+    "1e7fbbb1bbc721ba7807d4a6a416472e092035e5985e58aa860035b7efda91c6",
+    "ae84b520a27fc925e6b4f077c73435994aa2ea684a98fcf4d67b096359c16f0c"
+   ],
+   "geometry_sha256": "8686e6ad0edb70ae7a1caee0beb355e967e11dc0fc61e54e6bc0498035b1dc09"
+  },
+  {
+   "date": "2026-11-20",
+   "defect": "turf geometry budget too high for the fixed ortho game camera on Android",
+   "method_family": "TURF-LOD2-D1 single flat quad with top-down ortho bake of LOD0",
+   "attempt": 1,
+   "result": "self FAIL: washed, compressed value range (p95 0.529 vs 0.573 LOD1), no blade breakup; reads as smeared paint. Do not use as in-game carpet.",
+   "render_sha256": "acb48e4776d113a9ff36befd62c5851bddb1eeb9557395e01466d646bd73f0bb",
+   "status": "OPEN (1 fail)"
+  },
+  {
+   "date": "2026-11-20",
+   "defect": "flower patch: red poppies absent from both approved CGs; flowers tiny at game scale",
+   "method_family": "FLOWER-F2 single-species clumps (daisy colony, violet globular cushion, spike colony) each with rosette + turf skirt",
+   "attempt": 1,
+   "causal_difference": "species set taken from the approved CGs, one species per clump so placement controls mix; skirt seats clumps into turf",
+   "result": "self: daisy/violet/spike read in closeup; at 48 px only as light specks (same as CG scale intent requires scale 1.0-1.4). G2 NOT_RUN",
+   "render_sha256": "74b00a9c20ded391b0910f6c077e2f3f4284ee48b5c513b129a994df6a2174c4"
+  },
+  {
+   "date": "2026-11-20",
+   "defect": "no moss asset existed",
+   "method_family": "MOSS-M1 displaced dome/mat + tileable moss PBR set (also usable as rock-shader blend)",
+   "attempt": 1,
+   "result": "self: reads as moss cushion in closeup; mat on proxy rocks not distinguishable at vignette scale. G2 NOT_RUN",
+   "render_sha256": "74b00a9c20ded391b0910f6c077e2f3f4284ee48b5c513b129a994df6a2174c4"
+  },
+  {
+   "date": "2026-11-20",
+   "defect": "no low shrub existed",
+   "method_family": "TREE-L3 lobed cluster crown, runtime preset shrub_round (eco_assets.py not edited)",
+   "attempt": 1,
+   "result": "self: rounded low bush, consistent with hedge/tree palette. G2 NOT_RUN",
+   "render_sha256": "e5abda69decab6a47f29861c60d0392343ae66c2a1741a2aebc6ee0d7fc51b5b"
+  },
+  {
+   "date": "2026-11-20",
+   "defect": "kit not game-exportable (Cycles-only node trees), no LODs, crowns too dark (G2-01 §4)",
+   "method_family": "GAME-MAT-1 glTF Principled (COLOR_0 x baseColor, card normal+ORM derived, MASK 0.5) + per-material albedo gain; LOD1 island thinning + bark collapse; LOD2 crossed-quad impostor",
+   "attempt": 1,
+   "result": "tech QA 88/88 PASS (attributes, alpha, LOD monotonic, render provenance, CG hashes). Crown value p5/p50/p95 0.078/0.275/0.529 vs G2-01 0.03/0.18/0.39 (p95 target met, p5 target 0.10 not met). LOD2 impostor shows crossed planes at oblique views: far/background only.",
+   "render_sha256": "e5abda69decab6a47f29861c60d0392343ae66c2a1741a2aebc6ee0d7fc51b5b"
   }
- ]
+ ],
+ "notes_2026_11_20": "Cliff-local moss/grass sculpt work frozen by director instruction 2026-11-20; vegetation integration v2 packaged instead. PR #421 rock source untouched."
 }
