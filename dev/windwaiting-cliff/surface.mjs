@@ -124,13 +124,19 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         vec3 grass = mix(vec3(.058,.092,.020), vec3(.25,.28,.055), pattern);
         ${photo ? `
           vec3 grassPhoto = texture2D(photoGrass, coastPoint.xz * .75).rgb;
+          // Broad, irregular meadow patches retain photographic microdetail.
+          float meadowPatch = grain(coastPoint.xz * .18 + vec2(7.1,2.8));
+          float meadowEdge = grain(coastPoint.xz * .52);
+          float meadowMix = smoothstep(.25,.78,meadowPatch*.78+meadowEdge*.22);
+          grass = mix(vec3(.037,.102,.031), vec3(.21,.30,.085), meadowMix);
+          grass *= .84 + pattern*.32;
           vec3 dirtPhoto = texture2D(photoDirt, coastPoint.xz * .75).rgb;
           // Preserve art-directed green chroma; borrow photographic luminance/detail.
           float grassLight = dot(grassPhoto, vec3(.2126,.7152,.0722));
-          float exposed = smoothstep(.76,.93,pattern) * .22;
-          grass *= clamp(.55 + grassLight * 2.2, .65, 1.5);
+          float exposed = smoothstep(.76,.93,pattern) * .12;
+          grass *= clamp(.83 + grassLight * .95, .85, 1.22);
           grass = mix(grass, dirtPhoto * vec3(.65,.78,.55), exposed);
-          ${roadMeshes.length ? 'grass = mix(grass, dirtPhoto * vec3(.85,.79,.66), routeShoulder(coastPoint.xz)*.85);' : ''}
+          ${roadMeshes.length ? 'grass = mix(grass, dirtPhoto * vec3(1.05,1.02,.90), routeShoulder(coastPoint.xz)*.75);' : ''}
         ` : ''}
         float cover = smoothstep(.55,.86,surfaceNormal.y + (pattern-.5)*.20) *
                       smoothstep(3.3,5.0,coastPoint.y);
@@ -159,7 +165,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       shader.uniforms.roadNormal = { value: photo.stony_dirt_path_normal };
       shader.uniforms.roadRough = { value: photo.stony_dirt_path_roughness };
       shader.vertexShader = 'varying vec3 roadPoint;\n' + shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n roadPoint = (modelMatrix * vec4(position,1.0)).xyz;');
-      shader.fragmentShader = shoulderGLSL + 'varying vec3 roadPoint; uniform sampler2D roadPhoto, roadNormal, roadRough;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n float edgeCoverage = routeShoulder(roadPoint.xz);\n if (edgeCoverage < fract(52.9829189 * fract(dot(gl_FragCoord.xy,vec2(.06711056,.00583715))))) discard;\n diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(roadPhoto,roadPoint.xz*.75).rgb * vec3(.85,.79,.66), .85);');
+      shader.fragmentShader = shoulderGLSL + 'varying vec3 roadPoint; uniform sampler2D roadPhoto, roadNormal, roadRough;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n float edgeCoverage = routeShoulder(roadPoint.xz);\n if (edgeCoverage < fract(52.9829189 * fract(dot(gl_FragCoord.xy,vec2(.06711056,.00583715))))) discard;\n diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(roadPhoto,roadPoint.xz*.75).rgb * vec3(1.18,1.12,.98), .85);');
       addPhotoResponse(shader, 'roadPoint', '1.0', 'roadNormal', 'roadRough');
     };
     material.customProgramCacheKey = () => 'cliff-photo-road-v3';
