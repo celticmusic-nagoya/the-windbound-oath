@@ -2,7 +2,7 @@ import * as T from 'three';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { sunset } from './sunset.mjs';
 import { createVegetation } from '../shared/vegetation.mjs';
-import { adaptSurfaces, loadMossTextures } from './surface.mjs';
+import { adaptSurfaces, loadMossTextures, loadPhotoSurfaces } from './surface.mjs';
 import { makeNavigation, groundStep } from './navigation.mjs';
 
 const canvas = document.querySelector('canvas');
@@ -42,13 +42,14 @@ function batchMeadow(root, nodes) {
 
 async function play() {
   const loader = new GLTFLoader();
-  const [gltf, data, moss, placement] = await Promise.all([
+  const [gltf, data, moss, placement, photo] = await Promise.all([
     loader.loadAsync(new URL('cliff.glb', asset).href),
     fetch(new URL('navigation.json', asset)).then((response) => {
       if (!response.ok) throw new Error('Navigation HTTP ' + response.status);
       return response.json();
     }),
     legacy ? null : loadMossTextures(ecoRoot),
+    query.get('photo') === '1' ? loadPhotoSurfaces(new URL('photo-pbr/', asset)) : null,
     legacy ? null : fetch(new URL('placement.json', ecoRoot)).then((response) => {
       if (!response.ok) throw new Error('Vegetation placement HTTP ' + response.status);
       return response.json();
@@ -62,7 +63,7 @@ async function play() {
   scene.background = new T.Color(0xc2a1a1);
   scene.fog = new T.FogExp2(0xa79bae, 0.010);
   scene.add(gltf.scene);
-  adaptSurfaces(gltf.scene, renderer, moss);
+  adaptSurfaces(gltf.scene, renderer, moss, photo);
   scene.add(new T.HemisphereLight(0xffddd1, 0x616c75, 2.15));
   const sun = new T.DirectionalLight(0xffbb78, 2.2);
   sun.position.fromArray(data.sun);
