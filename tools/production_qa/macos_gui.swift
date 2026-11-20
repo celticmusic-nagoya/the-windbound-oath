@@ -75,10 +75,23 @@ case "ocr","click-label":
     print(labels.joined(separator:" | "))
     if op=="click-label" {
         guard a.count==4,labels.contains(where:{$0.contains(a[3])}) else { fail("screen anchor missing") }
-        func norm(_ t:String)->String { t.trimmingCharacters(in:CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn:"•"))) }
-        let matches=observations.filter{norm($0.topCandidates(1).first?.string ?? "")==a[2]}
-        guard matches.count==1,let o=matches.first else { fail("label not unique") }
-        click(CGPoint(x:d.minX+o.boundingBox.midX*d.width,y:d.minY+(1-o.boundingBox.midY)*d.height))
+        // Vision may group adjacent controls in one observation. Locate exact word ranges.
+        var boxes: [CGRect] = []
+        for observation in observations {
+            guard let candidate = observation.topCandidates(1).first else { continue }
+            let t = candidate.string
+            if t.trimmingCharacters(in: .whitespacesAndNewlines) == a[2] {
+                boxes.append(observation.boundingBox)
+                continue
+            }
+            // Only allow known combined home controls, never arbitrary substring clicks.
+            let normalized = t.replacingOccurrences(of:"•",with:" ").split(whereSeparator:{$0.isWhitespace}).joined(separator:" ")
+            guard a[2]=="Open", a[3]=="Recently Edited", ["New Open","Open"].contains(normalized),
+                  let range=t.range(of:"Open"), let box=try candidate.boundingBox(for:range) else { continue }
+            boxes.append(box.boundingBox)
+        }
+        guard boxes.count==1,let box=boxes.first else { fail("label not unique") }
+        click(CGPoint(x:d.minX+box.midX*d.width,y:d.minY+(1-box.midY)*d.height))
     }
 case "screenshot":
     guard a.count==2,a[1].hasSuffix(".png") else { fail("invalid output") }
