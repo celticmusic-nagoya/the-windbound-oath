@@ -10,6 +10,7 @@ on:
       - tools/morwen_authored_sculpt/render_official_base_candidates_530.py
       - tools/morwen_authored_sculpt/export_precision_blueprint_530.py
       - tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py
+      - tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
   workflow_dispatch:
   pull_request:
     paths:
@@ -191,6 +192,19 @@ jobs:
           path: /tmp/morwen-base-audit/precision-blueprint/
           if-no-files-found: warn
           retention-days: 14
+      - name: Compare measured Layer 0 silhouette with source vertex envelopes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin feature/morwen-rebuild-01
+          mkdir -p /tmp/morwen-projection-refs
+          for n in 7809 7807 7810 7808; do
+            git show FETCH_HEAD:tools/blender/production_mesh_08/references/${n}.png > /tmp/morwen-projection-refs/${n}.png
+          done
+          python3 -m pip install --user 'Pillow==11.3.0'
+          python3 tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py /tmp/morwen-projection-refs /tmp/morwen-base-audit/precision-blueprint
+          /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py -- /tmp/morwen-base-audit/precision-blueprint/reference_silhouette_landmarks.json /tmp/morwen-base-audit/precision-blueprint
+          test -s /tmp/morwen-base-audit/precision-blueprint/projection_diagnostic.json
       - name: Upload independent source candidate render evidence
         if: always()
         uses: actions/upload-artifact@v4
