@@ -679,7 +679,14 @@ def build_grass(seed, preset="meadow"):
     nt = rng.randint(*P["tillers"])
     Lmax = P["L"][1]
     stats = {"tillers": nt, "blades": 0, "seed_stems": 0, "dry_blades": 0}
-    # Atlantic cliff-edge grass: shorter, wind-combed canopy, without changing inland species.\n    coastal = preset == "coastal_dune"\n    clump_lean = (Vector((0.85, -0.25, 0)) * 0.36 +\n                  Vector((rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12), 0))\n                  if coastal else Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.25)
+    # Atlantic cliff-edge grass: wind-combed canopy, without changing inland species.
+    coastal = preset == "coastal_dune"
+    clump_lean = (
+        Vector((0.85, -0.25, 0)) * 0.36
+        + Vector((rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12), 0))
+        if coastal
+        else Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.25
+    )
     for ti in range(nt):
         # off-centre tillers (not a single radial disc: VEG-F1 stopped); ECO-G2 packs them
         # tighter (0.6x) so they fuse over the basal ring into one silhouette
