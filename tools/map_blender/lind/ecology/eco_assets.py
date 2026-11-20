@@ -762,7 +762,8 @@ def build_grass(seed, preset="meadow"):
         c = acc.col[i]
         acc.col[i] = (c[0] * ao, c[1] * ao, c[2] * ao, 1.0)
     stats["height_m"] = round(hmax, 3)
-    stats["method"] = ("ECO-G2 coastal wind-combed dense basal sward" if coastal\n                       else "ECO-G2 fused basal ring + tillers + clump AO")
+    stats["method"] = ("ECO-G2 coastal wind-combed dense basal sward" if coastal
+                       else "ECO-G2 fused basal ring + tillers + clump AO")
     return acc, stats
 
 
