@@ -1,10 +1,5 @@
 name: Morwen new voxel head sculpt candidate
 on:
-  push:
-    branches: [feature/morwen-artdirected-sculpt-20261119]
-    paths:
-      - tools/morwen_authored_sculpt/build_voxel_head_sculpt.py
-      - .github/workflows/morwen-voxel-head-sculpt.yml
   workflow_dispatch:
 permissions:
   contents: read
