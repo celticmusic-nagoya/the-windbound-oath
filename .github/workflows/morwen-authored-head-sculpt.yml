@@ -7,11 +7,6 @@ on:
       - tools/morwen_authored_sculpt/**
       - .github/workflows/morwen-authored-head-sculpt.yml
   workflow_dispatch:
-  pull_request:
-    branches: [main]
-    paths:
-      - tools/morwen_authored_sculpt/**
-      - .github/workflows/morwen-authored-head-sculpt.yml
 permissions:
   contents: read
 jobs:
