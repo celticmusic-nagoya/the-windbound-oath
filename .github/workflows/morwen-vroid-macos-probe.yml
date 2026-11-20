@@ -104,6 +104,12 @@ jobs:
               fi
             fi
           fi
+          if [ -s evidence/new-model.png ] && grep -qx true evidence/input-access.txt; then
+            if swift "$RUNNER_TEMP/vroid-click.swift" evidence/new-model.png Fem 'Select a base to start with' > evidence/fem-status.txt; then
+              sleep 45
+              screencapture -x evidence/fem-editor.png
+            fi
+          fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
             cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
