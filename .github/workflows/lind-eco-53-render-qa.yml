@@ -4,6 +4,7 @@ on:
     branches: [feature/lind-ecology-01]
     paths:
       - '.github/workflows/lind-eco-53-render-qa.yml'
+      - 'tools/map_blender/lind/ecology/eco_assets.py'
   workflow_dispatch:
     inputs:
       shot:
@@ -64,6 +65,7 @@ jobs:
           # The checkout is ephemeral. Keep tracked historical evidence untouched in Git;
           # do not mix old geometry SHA records with a freshly rebuilt candidate.
           rm -f assets/candidates/LIND-ECO-01/eco_kit_v1/renders/renders.json
+          rm -rf /tmp/lind-eco-current-run
       - name: Render selected evidence views
         env:
           SHOT: ${{ inputs.shot || 'lineup_small' }}
@@ -81,7 +83,7 @@ jobs:
           out=pathlib.Path("/tmp/lind-eco-current-run")
           out.mkdir(exist_ok=True)
           reg=root/"renders.json"
-          if reg.is_file():
+          if reg.is_file() and pathlib.Path('/tmp/lind_eco/eco_kit_build.json').is_file():
               shutil.copy2(reg,out/reg.name)
               for name in json.loads(reg.read_text()).get("files",{}):
                   p=root/name
