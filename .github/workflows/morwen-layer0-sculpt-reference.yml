@@ -1,23 +1,31 @@
 name: Morwen Layer 0 packed Blender sculpt reference scene
 on:
-  push:
-    branches: [feature/morwen-artdirected-sculpt-20261119]
-    paths:
-      - .github/workflows/morwen-layer0-sculpt-reference.yml
-      - tools/morwen_authored_sculpt/build_layer0_reference_scene.py
-      - tools/production_qa/install_blender_530.sh
-      - tools/morwen_authored_sculpt/build_face_surface_530.py
-      - tools/morwen_authored_sculpt/render_official_base_candidates_530.py
-      - tools/morwen_authored_sculpt/export_precision_blueprint_530.py
-      - tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py
-      - tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
-      - tools/morwen_authored_sculpt/render_geometry_masks_530.py
-      - tools/morwen_authored_sculpt/validate_geometry_masks.py
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check Blender installer and scene builder syntax before costly render
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n tools/production_qa/install_blender_530.sh
+          python3 -m py_compile tools/morwen_authored_sculpt/build_layer0_reference_scene.py
+          python3 -m py_compile tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py
+          python3 -m py_compile tools/morwen_authored_sculpt/build_face_surface_530.py
+          python3 -m py_compile tools/morwen_authored_sculpt/render_official_base_candidates_530.py
+          python3 -m py_compile tools/morwen_authored_sculpt/export_precision_blueprint_530.py
+          python3 -m py_compile tools/morwen_authored_sculpt/compare_reference_vertex_envelopes_530.py
+          python3 -m py_compile tools/morwen_authored_sculpt/render_geometry_masks_530.py
+          python3 -m py_compile tools/morwen_authored_sculpt/validate_geometry_masks.py
   build-reference-scene:
+    needs: preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
