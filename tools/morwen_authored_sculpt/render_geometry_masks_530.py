@@ -31,7 +31,7 @@ for name in names:
     bpy.context.scene.camera=cam
     cam_data.type="ORTHO";cam_data.ortho_scale=extent*1.25
     scene=bpy.context.scene
-    scene.render.engine="BLENDER_EEVEE_NEXT"
+    scene.render.engine="BLENDER_EEVEE"
     scene.render.resolution_x=384;scene.render.resolution_y=1024;scene.render.resolution_percentage=100
     scene.render.film_transparent=True;scene.render.image_settings.file_format="PNG";scene.render.image_settings.color_mode="RGBA"
     scene.render.image_settings.color_depth="8"
