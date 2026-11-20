@@ -29,17 +29,80 @@ def digest(path):
     return h.hexdigest()
 
 
+def triangle_crossing(first, second, epsilon=1e-7):
+    """Intersect the two triangle/plane sections in world units."""
+    def sub(a, b):
+        return tuple(x-y for x,y in zip(a,b))
+
+    def dot(a, b):
+        return sum(x*y for x,y in zip(a,b))
+
+    def cross(a, b):
+        x,y,z = a
+        i,j,k = b
+        return y*k-z*j, z*i-x*k, x*j-y*i
+
+    def norm(vec):
+        size = dot(vec,vec)**0.5
+        return tuple(x/size for x in vec) if size else vec
+
+    a = norm(cross(sub(first[1],first[0]), sub(first[2],first[0])))
+    b = norm(cross(sub(second[1],second[0]), sub(second[2],second[0])))
+    direction = cross(a,b)
+    if dot(direction,direction) <= 1e-16:
+        distance = abs(dot(sub(second[0],first[0]),a))
+        if distance > epsilon:
+            return {"kind":"DISJOINT_PARALLEL","plane_separation": distance}
+        # Clip the projected triangle against the other triangle's edge half-planes.
+        axes = [i for i in range(3) if i != max(range(3), key=lambda i: abs(a[i]))]
+        project = lambda p: tuple(p[i] for i in axes)
+        polygon, clip = list(map(project, first)), list(map(project, second))
+        def side(p,q,r):
+            return (q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0])
+        winding = 1 if side(*clip) >= 0 else -1
+        for u,v in zip(clip,clip[1:]+clip[:1]):
+            edges = list(zip(polygon,polygon[1:]+polygon[:1]))
+            polygon = []
+            for p,q in edges:
+                dp,dq = winding*side(u,v,p),winding*side(u,v,q)
+                if dp >= 0:
+                    polygon.append(p)
+                if (dp < 0) != (dq < 0):
+                    f = dp/(dp-dq)
+                    polygon.append(tuple(x+f*(y-x) for x,y in zip(p,q)))
+        area = abs(sum(p[0]*q[1]-q[0]*p[1]
+                       for p,q in zip(polygon,polygon[1:]+polygon[:1])))*0.5
+        return {"kind":"COPLANAR_OVERLAP" if area > epsilon**2 else "COPLANAR_TOUCH_OR_SEPARATION",
+                "projected_area":area,"plane_separation":distance}
+    direction = norm(direction)
+    def section(triangle, origin, normal):
+        heights = [dot(sub(p,origin),normal) for p in triangle]
+        points = [dot(p,direction) for p,h in zip(triangle,heights) if abs(h) <= epsilon]
+        for i,j in ((0,1),(1,2),(2,0)):
+            if heights[i]*heights[j] < 0:
+                t = heights[i]/(heights[i]-heights[j])
+                points.append(dot(tuple(x+t*(y-x) for x,y in zip(triangle[i],triangle[j])),direction))
+        return (min(points),max(points)) if points else None, heights
+    u, du = section(first,second[0],b)
+    v, dv = section(second,first[0],a)
+    length = min(u[1],v[1])-max(u[0],v[0]) if u and v else None
+    strict = all(min(values) < -epsilon and max(values) > epsilon for values in (du,dv))
+    kind = "CROSSING" if length is not None and length > epsilon and strict else (
+        "TOUCH" if length is not None and length >= -epsilon else "DISJOINT")
+    return {"kind":kind,"signed_interval_overlap":length,"signed_plane_distances":[du,dv],"epsilon":epsilon}
+
+
 def audit(obj):
     mesh = obj.data
     mesh.calc_loop_triangles()
     world = [tuple(obj.matrix_world @ vertex.co) for vertex in mesh.vertices]
     triangles = []
     records = []
-    for tri in mesh.loop_triangles:
+    for triangle_id, tri in enumerate(mesh.loop_triangles):
         ids = tuple(int(i) for i in tri.vertices)
         if min(world[i][0] for i in ids) >= GUARD[1] or max(world[i][0] for i in ids) <= GUARD[0]:
             continue
-        records.append({"face_id": int(tri.polygon_index), "vertex_ids": ids})
+        records.append({"face_id": int(tri.polygon_index), "triangle_id": triangle_id, "vertex_ids": ids})
         triangles.append(ids)
     if not triangles:
         raise ValueError("No triangles in guarded junction region")
@@ -62,7 +125,8 @@ def audit(obj):
                 "min": [min(v[axis] for v in xyz) for axis in range(3)],
                 "max": [max(v[axis] for v in xyz) for axis in range(3)],
             },
-            "contact_class": "BVH_OVERLAP_UNCONFIRMED",
+            "intersection": triangle_crossing([world[k] for k in left["vertex_ids"]],
+                                             [world[k] for k in right["vertex_ids"]]),
         })
     return {
         "object": obj.name, "guard_x": list(GUARD),

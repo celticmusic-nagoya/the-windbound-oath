@@ -141,7 +141,7 @@ jobs:
           for view in cg_review front left right elevated shore_detail sunset; do test -s "/tmp/c10-render/$view.png"; done
           sha256sum /tmp/c10-render/* > /tmp/c10-render/SHA256SUMS
       - name: Verify archived C10 source and reuse its reference renders
-        if: env.SCULPT == 'true' || (env.BLUEPRINT == 'true' && steps.blueprint_cache.outputs.cache-hit != 'true')
+        if: env.SCULPT == 'true' || env.RETOPO == 'true' || (env.BLUEPRINT == 'true' && steps.blueprint_cache.outputs.cache-hit != 'true')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -199,6 +199,48 @@ jobs:
           python tools/production_qa/download_actions_artifact.py --repo "$GITHUB_REPOSITORY" --artifact-id 14585742052 --expected-zip-sha256 d0fb1933530b76c4ca4da8053da53937040fa3c7b47d8fe787bf40cafe218a14 --output /tmp/lind-junction-input.zip
           unzip -p /tmp/lind-junction-input.zip candidate/junction_UNAPPROVED.blend > /tmp/junction_UNAPPROVED.blend
           /tmp/two-blender53/blender -b --disable-autoexec --python-exit-code 1 --python tools/production_qa/junction_contact_faces.py -- /tmp/junction_UNAPPROVED.blend "$root/junction_contact_faces.json" --expected-sha256 "$JUNCTION_SHA"
+      - name: Retopologize the measured wall and verify its blueprint
+        if: env.RETOPO == 'true' && hashFiles('tools/production_qa/lind_blueprint/retopo_junction.py') != ''
+        run: |
+          set -euo pipefail
+          root=/tmp/lind-retopo
+          tools=tools/production_qa/lind_blueprint
+          bpy=/tmp/two-blender53/blender
+          exec > >(tee "$root/execution.log") 2>&1
+          export LIBGL_ALWAYS_SOFTWARE=1
+          "$bpy" -b --disable-autoexec --python-exit-code 1 --python "$tools/retopo_junction.py" -- /tmp/junction_UNAPPROVED.blend "$root"
+          candidate="$root/junction_retopo_UNAPPROVED.blend"
+          sha="$(sha256sum "$candidate" | cut -d ' ' -f 1)"
+          second="$(mktemp -d)/blueprint"
+          for out in "$root/blueprint" "$second"; do
+            "$bpy" -b --disable-autoexec "$candidate" --python-exit-code 1 --python "$tools/export_blueprint.py" -- "$out" --source-sha "$sha" --input-ref "$GITHUB_SHA:artifact:14585742052:retopo" --texture-register "$(dirname "$C9_SOURCE")/cc0_manifest.json"
+          done
+          diff -qr "$root/blueprint" "$second"
+          set +e
+          xvfb-run -a "$bpy" -b --disable-autoexec --python-exit-code 1 --python "$tools/rebuild.py" -- "$root/blueprint" --render --determinism-verified
+          result=$?
+          set -e
+          mkdir -p "$root/baseline"
+          cp /tmp/lind-c10-source/{cg_review,front,shore_detail,elevated}.png "$root/baseline/"
+          unzip -p /tmp/lind-junction-input.zip candidate/cg_review.png > "$root/baseline/pre_retopo.png"
+          xvfb-run -a "$bpy" -b --disable-autoexec "$candidate" --python-exit-code 1 --python "$tools/retopo_visuals.py" -- "$root"
+          python "$tools/compare.py" assets/approved/game/cliff/sunset_background.png "$root/baseline/cg_review.png" "$root/blueprint/verification/source.png" "$root/review" --c9-label "C10 source" --c10-label "C10 local retopo"
+          (cd "$root" && find . -type f ! -name SHA256SUMS ! -name execution.log -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+          python -c 'import json,sys; sys.exit(not all(json.load(open(sys.argv[1]))["checks"].values()))' "$root/local_qa.json"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always() && env.RETOPO == 'true'
+        with:
+          name: lind-cliff-retopo-review-${{ github.sha }}
+          path: |
+            /tmp/lind-retopo/*.json
+            /tmp/lind-retopo/*.svg
+            /tmp/lind-retopo/*.log
+            /tmp/lind-retopo/visuals/
+            /tmp/lind-retopo/review/
+            /tmp/lind-retopo/blueprint/qa.json
+            /tmp/lind-retopo/blueprint/verification/
+          retention-days: 14
       - uses: actions/upload-artifact@v4
         if: always() && env.RETOPO == 'true'
         with:
