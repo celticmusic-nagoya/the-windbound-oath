@@ -30,10 +30,12 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
   const terrain = new Set();
   const bark = new Set();
   const rock = new Set();
+  const road = new Set();
   root.traverse((mesh) => {
     if (!mesh.isMesh || !mesh.material) return;
     const name = mesh.material.name;
     if (/Slate and weathered limestone|Windward olive turf/.test(name)) terrain.add(mesh.material);
+    if (photo && name === 'Weathered ochre footpath') road.add(mesh.material);
     if (name === 'M_eco_bark') bark.add(mesh.material);
     if (moss && /Damp lower bedrock|Wet boulders and talus|Moss over loose/.test(name)) rock.add(mesh.material);
   });
@@ -81,7 +83,11 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         ${photo ? `
           vec3 grassPhoto = texture2D(photoGrass, coastPoint.xz * .75).rgb;
           vec3 dirtPhoto = texture2D(photoDirt, coastPoint.xz * .75).rgb;
-          grass = mix(dirtPhoto, grassPhoto, smoothstep(.22,.68,pattern));
+          // Preserve art-directed green chroma; borrow photographic luminance/detail.
+          float grassLight = dot(grassPhoto, vec3(.2126,.7152,.0722));
+          float exposed = smoothstep(.76,.93,pattern) * .22;
+          grass *= clamp(.55 + grassLight * 2.2, .65, 1.5);
+          grass = mix(grass, dirtPhoto * vec3(.65,.78,.55), exposed);
         ` : ''}
         float cover = smoothstep(.55,.86,surfaceNormal.y + (pattern-.5)*.20) *
                       smoothstep(3.3,5.0,coastPoint.y);
@@ -101,6 +107,14 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       if (moss) addMossResponse(shader, 'mix(1.0, .94 + pattern * .10, cover)');
     };
     material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo' : '');
+  }
+  for (const material of road) {
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.roadPhoto = { value: photo.stony_dirt_path };
+      shader.vertexShader = 'varying vec3 roadPoint;\n' + shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n roadPoint = (modelMatrix * vec4(position,1.0)).xyz;');
+      shader.fragmentShader = 'varying vec3 roadPoint; uniform sampler2D roadPhoto;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(roadPhoto,roadPoint.xz*.75).rgb, .65);');
+    };
+    material.customProgramCacheKey = () => 'cliff-photo-road-v1';
   }
   for (const material of rock) bindRockMoss(material, moss);
   for (const material of bark) {
