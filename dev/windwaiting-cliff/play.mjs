@@ -42,7 +42,7 @@ function batchMeadow(root, nodes) {
 
 async function play() {
   const loader = new GLTFLoader();
-  const [gltf, data, moss, placement, photo] = await Promise.all([
+  const [gltf, data, moss, photo, placement] = await Promise.all([
     loader.loadAsync(new URL('cliff.glb', asset).href),
     fetch(new URL('navigation.json', asset)).then((response) => {
       if (!response.ok) throw new Error('Navigation HTTP ' + response.status);
