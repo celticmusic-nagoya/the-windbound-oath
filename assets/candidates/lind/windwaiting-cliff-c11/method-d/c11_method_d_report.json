@@ -1,0 +1,181 @@
+{
+  "status": "CANDIDATE_ONLY",
+  "method": "D_slit_removal_cdt_membrane_channel",
+  "source_sha256": "d0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545",
+  "candidate_sha256": "61181a1fb2528bc54da3a2fd384e7086d460e41e8d71d8bd5c08e715f48942db",
+  "slit_ids_file_sha256": "e755b0d18a9244719f6aa7800e1cded50e812cf0edff6ca662f5ffc94d11f261",
+  "carrier_geometry_sha256": "8b863289eb85b5b06fa21aa2f62c551cc068d180eb703a8262741909698a1103",
+  "before": {
+    "vertices": 37720,
+    "faces": 37783,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0
+  },
+  "after": {
+    "vertices": 39332,
+    "faces": 41642,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0
+  },
+  "local_self_contacts": {
+    "before": 0,
+    "after": 0
+  },
+  "missing_outside_vertices": 0,
+  "removed_original_vertices": 646,
+  "rails": {
+    "west_fracture": {
+      "region_rings": 2,
+      "components": [
+        {
+          "fill_path": "projected_cdt_height_membrane",
+          "carve_clearance_clamped": 0,
+          "contact_relax_passes": 1,
+          "projection_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "projection_attempts": [
+            {
+              "normal": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "simple": true
+            }
+          ],
+          "region_faces_removed": 450,
+          "perimeter_vertices_locked": 130,
+          "old_interior_vertices_removed": 375,
+          "new_vertices": 1067,
+          "new_faces": 2262,
+          "faces_flipped_by_winding": 0,
+          "membrane_max_residual": 9.90608975293128e-07,
+          "uv_fit_rms": 0.0038286955037779027
+        },
+        {
+          "fill_path": "projected_cdt_height_membrane",
+          "carve_clearance_clamped": 0,
+          "contact_relax_passes": 1,
+          "projection_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "projection_attempts": [
+            {
+              "normal": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "simple": true
+            }
+          ],
+          "region_faces_removed": 20,
+          "perimeter_vertices_locked": 16,
+          "old_interior_vertices_removed": 8,
+          "new_vertices": 28,
+          "new_faces": 70,
+          "faces_flipped_by_winding": 0,
+          "membrane_max_residual": 8.077350144297668e-07,
+          "uv_fit_rms": 0.0001919730423233619
+        }
+      ],
+      "slit_vertices_in_window": 193,
+      "slit_vertices_remaining": []
+    },
+    "central_fracture": {
+      "region_rings": 1,
+      "components": [
+        {
+          "fill_path": "projected_cdt_height_membrane",
+          "carve_clearance_clamped": 0,
+          "contact_relax_passes": 2,
+          "projection_normal": [
+            0.42262,
+            -0.90631,
+            0.0
+          ],
+          "projection_attempts": [
+            {
+              "normal": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "simple": false
+            },
+            {
+              "normal": [
+                -0.2079,
+                -0.9781,
+                0.0
+              ],
+              "simple": false
+            },
+            {
+              "normal": [
+                0.2079,
+                -0.9781,
+                0.0
+              ],
+              "simple": false
+            },
+            {
+              "normal": [
+                0.0,
+                -0.9397,
+                0.342
+              ],
+              "simple": false
+            },
+            {
+              "normal": [
+                -0.4226,
+                -0.9063,
+                0.0
+              ],
+              "simple": false
+            },
+            {
+              "normal": [
+                0.4226,
+                -0.9063,
+                0.0
+              ],
+              "simple": true
+            }
+          ],
+          "region_faces_removed": 439,
+          "perimeter_vertices_locked": 112,
+          "old_interior_vertices_removed": 263,
+          "new_vertices": 1163,
+          "new_faces": 2436,
+          "faces_flipped_by_winding": 0,
+          "membrane_max_residual": 9.79849635984742e-07,
+          "uv_fit_rms": 0.010009505382820992
+        }
+      ],
+      "slit_vertices_in_window": 195,
+      "slit_vertices_remaining": []
+    }
+  },
+  "checks": {
+    "closed_manifold": true,
+    "no_degenerate_faces": true,
+    "no_new_local_self_contacts": true,
+    "outside_vertices_unchanged": true,
+    "consistent_winding": true,
+    "all_slit_vertices_removed": true,
+    "source_sha_intact": true
+  },
+  "G1": "BLOCKED",
+  "G2": "NOT_RUN",
+  "G3": "PARTIAL_LOCAL",
+  "G4": "NOT_RUN"
+}

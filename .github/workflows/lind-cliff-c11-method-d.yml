@@ -1,0 +1,92 @@
+name: C11 Method D slit-to-channel rebuild (UNAPPROVED candidate)
+# Reproduces Claude's local Method D run in CI: removes the two junction
+# boolean slits (root cause of the C11 "blade" artifacts) and refills them as
+# authored fracture channels. Candidate only; no adoption, merge or canon change.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - '.github/workflows/lind-cliff-c11-method-d.yml'
+      - 'tools/production_qa/lind_blueprint/c11_method_d_channel.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: lind-cliff-c11-blender-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  method-d:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download SHA-pinned C11 Method C input
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/c11-source /tmp/c11-d
+          gh api repos/${{ github.repository }}/actions/artifacts/14606190629/zip > /tmp/c11-source/c11.zip
+          unzip -p /tmp/c11-source/c11.zip c11_recess_patch_UNAPPROVED.blend > /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend
+          echo 'd0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545  /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend' | sha256sum -c -
+      - name: Install SHA-verified official Blender 5.3.0
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          python3 - "$work/checksums" "$work/expected.sha256" "$name" <<'PY'
+          import re,sys
+          from pathlib import Path
+          matches=[]
+          for line in Path(sys.argv[1]).read_text().splitlines():
+              if sys.argv[3] in line:
+                  hashes=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',line)
+                  if len(hashes)!=1: raise SystemExit('Invalid upstream SHA row')
+                  matches.append(hashes[0].lower())
+          if len(matches)!=1: raise SystemExit('Expected exactly one upstream SHA')
+          Path(sys.argv[2]).write_text(f'{matches[0]}  {sys.argv[3]}\n')
+          PY
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Run Method D (fail-closed checks)
+        run: |
+          set -euo pipefail
+          timeout 900 /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 \
+            --python tools/production_qa/lind_blueprint/c11_method_d_channel.py -- \
+            /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend \
+            assets/candidates/lind/windwaiting-cliff-c11/method-d/c11_boolean_slit_vertex_ids.json /tmp/c11-d
+          test -s /tmp/c11-d/c11_method_d_channel_UNAPPROVED.blend
+          python3 - <<'PY'
+          import json
+          ci = json.load(open('/tmp/c11-d/c11_method_d_report.json'))
+          local = json.load(open('assets/candidates/lind/windwaiting-cliff-c11/method-d/c11_method_d_report.json'))
+          assert all(ci['checks'].values()), ci['checks']
+          ci['reproduces_claude_local_geometry'] = ci['carrier_geometry_sha256'] == local['carrier_geometry_sha256']
+          ci['reproduces_claude_local_file'] = ci['candidate_sha256'] == local['candidate_sha256']
+          json.dump(ci, open('/tmp/c11-d/c11_method_d_report.json', 'w'), indent=2)
+          print('REPRO', ci['reproduces_claude_local_geometry'], ci['reproduces_claude_local_file'])
+          PY
+      - name: Fixed-camera review render (unchanged C11 review cameras)
+        run: |
+          set -euo pipefail
+          timeout 900 /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 \
+            --python tools/production_qa/lind_blueprint/c11_render_review.py -- \
+            /tmp/c11-d/c11_method_d_channel_UNAPPROVED.blend /tmp/c11-d/review
+          test -s /tmp/c11-d/review/c11_front.png
+          (cd /tmp/c11-d && sha256sum c11_method_d_channel_UNAPPROVED.blend c11_method_d_report.json review/*.png > SHA256SUMS)
+      - name: Preserve candidate, report and renders, even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c11-method-d-${{ github.sha }}
+          path: /tmp/c11-d/
+          if-no-files-found: warn
+          retention-days: 30

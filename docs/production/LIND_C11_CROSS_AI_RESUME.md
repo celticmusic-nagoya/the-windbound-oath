@@ -16,3 +16,6 @@ Owner: Draft PR #421, branch `feature/lind-cliff-rock-art-study-20261118`. Do no
 
 ## Operational limits
 GitHub Actions continues an already running job without ChatGPT/Claude/Codex chat access, but these AI sessions are not automatically restarted or handed credentials by this document. Artifact retention is finite; before expiry, preserve approved durable metadata in the existing PR/branch or repository as appropriate. No new paid AI API, main merge, deletion, publication, or canon adoption is authorized.
+
+## 2026-11-20 Claude — Method D (latest pointer)
+Blade root cause traced to the junction-stage boolean slits (`sculpt_junction.py`), not C11 B/C. Method D candidate, evidence, attempt ledger and next tasks: [LIND_C11_METHOD_D_HANDOFF_20261120.md](LIND_C11_METHOD_D_HANDOFF_20261120.md). CI reproduction: `.github/workflows/lind-cliff-c11-method-d.yml`. G2 NOT_RUN (independent), G3 PARTIAL_LOCAL, G4 NOT_RUN.
