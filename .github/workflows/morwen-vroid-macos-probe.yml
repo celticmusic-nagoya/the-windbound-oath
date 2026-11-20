@@ -60,10 +60,14 @@ jobs:
           screencapture -x evidence/before-input.png
           swift -e 'import Vision; import Foundation; let r = VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/before-input.png > evidence/welcome-text.txt
           if grep -qx true evidence/input-access.txt && grep -qx '1024 768' evidence/input-access.txt && grep -Fxq 'Get Started' evidence/welcome-text.txt; then
-            swift -e 'import CoreGraphics; import Foundation; let p = CGPoint(x:512,y:578); CGEvent(mouseEventSource:nil,mouseType:.leftMouseDown,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cghidEventTap); usleep(120000); CGEvent(mouseEventSource:nil,mouseType:.leftMouseUp,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cghidEventTap)'
+            swift -e 'import CoreGraphics; import Foundation; let p = CGPoint(x:512,y:578); let s = CGEventSource(stateID:.combinedSessionState); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(500000); for t in [CGEventType.leftMouseDown,.leftMouseUp] { if let e = CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left) { e.setIntegerValueField(.mouseEventClickState,value:1); e.post(tap:.cgSessionEventTap) }; usleep(250000) }'
             sleep 20
             screencapture -x evidence/after-get-started.png
-            echo CLICK_ATTEMPTED > evidence/gui-action.txt
+            if cmp -s evidence/before-input.png evidence/after-get-started.png; then
+              echo NO_SCREEN_CHANGE > evidence/gui-action.txt
+            else
+              echo SCREEN_CHANGED_REVIEW_REQUIRED > evidence/gui-action.txt
+            fi
           else
             echo INPUT_ACCESS_OR_DISPLAY_BLOCKED > evidence/gui-action.txt
           fi
