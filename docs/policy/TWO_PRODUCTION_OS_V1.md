@@ -1,0 +1,23 @@
+# TWO Production OS v1.0 — director approved 2026-11-21
+Scope: all chats, AI agents, automations and workstreams. All 15 measures below are approved policy and phased implementation targets, not claims of working infrastructure. No new canon or asset adoption, paid service, publication or future main merge without separate approval. Existing safe production continues in its owning PR.
+
+1. Compact AGENTS and machine-readable policy registry/rules: current rules only, historical rules excluded; preserve Git history and evidence. Validate schema and precedence; do not bypass legacy validators.
+2. Shared task queue: task ID, owner, branch/HEAD, dependencies, input SHA, scope, deliverable, acceptance tests, lease and stop condition. Resume prior valid work.
+3. Production lock: atomic compare-and-swap acquisition, fencing token, expiry/recovery, one writer per conflicting file/asset; concurrent read-only QA allowed. Test races and stale leases.
+4. Content-addressed reuse: hash inputs, scripts, dependency/runtime versions, settings and QA contract; verify output hashes, availability, provenance and retention. Invalidate changed or expired outputs.
+5. Common Actions dispatcher: path/dependency-aware routing, concurrency and reusable workflows; avoid duplicated jobs; protect running work/checkpoints. No automatic paid execution. Use meaningful milestones, not per-click runs.
+6. Preview-first staged rendering: structural checks, clay/viewport previews, material preview, independent art review, final render only when warranted. Actual visual evidence, matched cameras, native source/reopen and G1–G4 remain mandatory.
+7. Blueprint data: orthographic landmarks, scale, silhouettes, sections, material regions, constraints and uncertainty; distinguish measurement from inferred depth/topology. Preserve canon.
+8. Modular asset factory: face/hair/body/wardrobe/equipment/rig and rock/building/vegetation/road/water/VFX; shared interfaces, independent QA and reuse. Protect accepted modules.
+9. Indexed Blender Asset Browser or equivalent: source, license, SHA, pivot/scale, LOD/collision, candidate/approved status. Reuse qualified assets, keep native masters.
+10. Adaptive causal retry v3: two same-cause failures trigger reassessment, not mandatory stop. Continue only with evidenced corrective hypothesis, bounded budget and measurable delta; preserve cumulative ledger across branches/agents. Stop or switch wasteful methods. Align and regression-test validators, never evade them.
+11. Dynamic agent allocation: demonstrated capability, quality, availability, cost and reproducibility; independent review wherever possible. Never claim external execution without evidence.
+12. Mobile-first Production Studio: task/PR/run/asset/QA status and authenticated actual previews; use read-only view first, no public secrets or unauthenticated write endpoints. Existing authorized storage only.
+13. Isolated playable 3D integration scene: GLB/VRM, camera, lighting, collision, traversal, animation, WebGL/Android memory/frame time/load/draw calls; preserve shipped game and SAVE. Provisional local coordinates not canonical placement.
+14. Shared material factory: licensed scans/photo-derived PBR and authored stylized materials, source hashes, calibrated scale/color space, compare actual previews, verify runtime texture budgets.
+15. Measure lead time to accepted output, reuse, duplicate execution, G2/G3/G4 results, manual interventions, Actions time per accepted deliverable and regression. PR/CI count is not progress.
+
+## Rollout and acceptance
+Phase 1: policy alignment, existing PR/workflow inventory, retry validator compatibility and deduplication. Phase 2: queue/atomic leases, SHA reuse, checkpoint recovery and dispatch. Phase 3: real reusable asset/material and blueprint/module contracts. Phase 4: isolated playable integration and mobile Studio. Audit existing implementations and owners before changes; parallel independent tasks allowed; no unnecessary new PR. Each capability needs actual tests and evidence before VERIFIED. Prefer a small working vertical slice over a large new management system. Measure baseline before targets: exploratory reductions of duplicate rendering 80%, environment setup 70%, handoff 70%, manual intervention 80%, unnecessary remake 50%, integration rework 50%; these are aspirational, not measured or guaranteed. Do not invent numeric Android performance limits.
+## Mandatory continuity
+Read main AGENTS.md, POLICY_REGISTRY.json, PRODUCTION_RULES.json and SESSION_CONTINUITY_INDEX.md at each task start; retrieve private canon, live HEAD/PR/actions/artifacts. If blocked, continue independent safe work. Approved policy is not implementation PASS. All adoption and release gates remain binding.
