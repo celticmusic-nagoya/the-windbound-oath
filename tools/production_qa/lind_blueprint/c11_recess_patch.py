@@ -151,78 +151,56 @@ def main():
             json.dumps(diagnostic, indent=2), encoding="utf-8")
         if len(region) < 16 or len(interior_original) < 3:
             raise RuntimeError("Patch lacks adequate interior topology; diagnose before another inset")
-        # Method B: replace the selected face island with a recessed duplicate.
-        # Original vertices remain in place; only faces in the bounded island
-        # are replaced. A duplicate of each island vertex forms the new floor,
-        # and an explicit quad strip joins the old perimeter to the new rim.
-        # No inset_region operation is used.
-        source_faces = [(face, [v for v in face.verts]) for face in region]
-        source_vertices = {v for _, vertices in source_faces for v in vertices}
-        duplicate = {v: bm.verts.new(v.co.copy()) for v in source_vertices}
-        for v, copy in duplicate.items():
-            height = max(0.0, min(1.0, (v.co.z - BOTTOM_Z) / (TOP_Z - BOTTOM_Z)))
-            # The rim and floor both recede; a height-dependent, asymmetric
-            # setback creates a non-planar wall rather than an exterior ridge.
-            skew = 0.72 + 0.28 * height + 0.14 * (v.co.x - SEAM_X) / HALF_WIDTH
-            copy.co.y += DEPTH * max(0.4, skew)
-        # Preserve face winding and all nonselected face connections.
-        for face, vertices in source_faces:
-            bm.faces.new([duplicate[v] for v in vertices])
-        # Each perimeter edge belongs to exactly one selected face.
-        # Follow that face's winding to make a consistent bridge strip.
-        for edge in perimeter_edges:
-            selected = [face for face in edge.link_faces if face in face_set]
-            if len(selected) != 1:
-                raise RuntimeError("Ambiguous patch edge adjacency; STOP")
-            winding = list(selected[0].verts)
-            pair = None
-            for i, vertex in enumerate(winding):
-                nxt = winding[(i + 1) % len(winding)]
-                if vertex in edge.verts and nxt in edge.verts:
-                    pair = (vertex, nxt)
-                    break
-            if pair is None:
-                raise RuntimeError("Cannot orient perimeter edge; STOP")
-            a, b = pair
-            bm.faces.new((a, b, duplicate[b], duplicate[a]))
-        bmesh.ops.delete(bm, geom=region, context="FACES_ONLY")
-        # FACES_ONLY intentionally leaves orphaned old interior edges.
-        # These caused 582 nonmanifold edges in run 44680771747.
-        # Remove only the original interior vertices that no longer support
-        # any surviving face; protected exterior/boundary vertices stay intact.
-        orphan_interior = [v for v in source_vertices
-                           if v.is_valid and v.index not in boundary
-                           and not any(face.is_valid for face in v.link_faces)]
-        protected = [(v, tuple(v.co)) for v in bm.verts
-                     if v not in orphan_interior and v in source_vertices]
-        if any(v in boundary for v in (vertex.index for vertex in orphan_interior)):
-            raise RuntimeError("Protected boundary would be removed; STOP")
-        bmesh.ops.delete(bm, geom=orphan_interior, context="VERTS")
-        if any(not vertex.is_valid or tuple(vertex.co) != old
-               for vertex, old in protected):
-            raise RuntimeError("Protected source vertex changed; STOP")
-        removed_interior_count = len(orphan_interior)
-        diagnostic["decision"] = "BOUNDARY_LOCKED_FACE_REPLACEMENT"
-        diagnostic["replacement_faces"] = len(source_faces)
-        diagnostic["bridge_faces"] = len(perimeter_edges)
-        diagnostic["new_vertices"] = len(duplicate)
+        # Method C: deform the EXISTING connected surface, with zero offset
+        # at the protected perimeter. Unlike the rejected duplicate-face
+        # method, no vertical perimeter strip or extra sheet is generated.
+        from math import sqrt
+        boundary_vertices = [bm.verts[i] for i in sorted(boundary)]
+        selected_vertices = {v for face in region for v in face.verts}
+        interior_vertices = [v for v in selected_vertices if v.index not in boundary]
+        if not interior_vertices:
+            raise RuntimeError("No editable interior vertices; STOP")
+        # Distance in the local XZ section; taper displacement smoothly to
+        # zero as the surface approaches the original perimeter.
+        max_distance = max(
+            min(sqrt((v.co.x-b.co.x)**2 + (v.co.z-b.co.z)**2)
+                for b in boundary_vertices)
+            for v in interior_vertices
+        )
+        if max_distance < 1e-6:
+            raise RuntimeError("Degenerate patch width; STOP")
+        moved_interior = 0
+        for v in interior_vertices:
+            distance = min(sqrt((v.co.x-b.co.x)**2 + (v.co.z-b.co.z)**2)
+                           for b in boundary_vertices)
+            t = min(1.0, distance / max_distance)
+            smooth = t*t*(3.0-2.0*t)
+            height = max(0.0, min(1.0, (v.co.z-BOTTOM_Z)/(TOP_Z-BOTTOM_Z)))
+            asymmetry = max(0.45, 0.75 + 0.20*height +
+                            0.10*(v.co.x-SEAM_X)/HALF_WIDTH)
+            v.co.y += DEPTH * smooth * asymmetry
+            moved_interior += 1
+        diagnostic["decision"] = "CONTINUOUS_SURFACE_RECESS_METHOD_C"
+        diagnostic["moved_interior_vertices"] = moved_interior
+        diagnostic["new_faces"] = 0
+        diagnostic["new_vertices"] = 0
+        diagnostic["max_section_distance"] = max_distance
         (output / "c11_geometry_diagnostic.json").write_text(
             json.dumps(diagnostic, indent=2), encoding="utf-8")
+        removed_interior_count = 0
         bm.normal_update()
         bm.to_mesh(obj.data)
         obj.data.update()
     finally:
         bm.free()
     after = topology(obj)
-    # Original vertex indices are not stable after deleting the replaced
-    # interior; compare the protected coordinates as a multiset instead.
-    from collections import Counter
-    protected_original = Counter(original[i] for i in range(original_count)
-                                 if i not in interior_original)
-    final_coords = Counter(tuple(v.co) for v in obj.data.vertices)
-    missing_protected = sum(max(0, count - final_coords[coord])
-                            for coord, count in protected_original.items())
-    moved_original = [] if missing_protected == 0 else ["PROTECTED_COORDINATES_MISSING"]
+    # Method C retains vertex indices; only selected interior may move.
+    moved_original = [
+        i for i, (v, old) in enumerate(zip(obj.data.vertices, original))
+        if tuple(v.co) != old
+    ]
+    unexpected_moved = [i for i in moved_original if i not in interior_original]
+    missing_protected = len(unexpected_moved)
     report = {
         "status": "CANDIDATE_ONLY", "source_sha256": SOURCE_SHA,
         "before": before, "after": after,
@@ -230,6 +208,7 @@ def main():
         "discovered_component_sizes": [len(group) for group in components],
         "boundary_original_vertices": len(boundary),
         "changed_original_vertex_ids": moved_original[:40],
+        "unexpected_moved_original_ids": unexpected_moved[:40],
         "changed_original_vertex_count": len(moved_original),
         "original_vertex_count": original_count,
         "final_vertex_count": len(obj.data.vertices),
