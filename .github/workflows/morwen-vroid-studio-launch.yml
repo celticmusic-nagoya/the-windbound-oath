@@ -14,27 +14,30 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 20
     steps:
-      - name: Match official publisher download to observed installer hash
+      - name: Verify previously supplied signed installer before bounded launch
         shell: pwsh
         run: |
           $ErrorActionPreference='Stop'
           New-Item -ItemType Directory -Force evidence | Out-Null
           $expected='617b59733cbbd6044d1826997157cf5ead8134d7efb8ac393f2614298fe87893'
-          $report=[ordered]@{status='BLOCKED';officialMatch='NOT_RUN';installation='NOT_RUN';launch='NOT_RUN';editing='NOT_RUN';export='NOT_RUN'}
+          $report=[ordered]@{status='BLOCKED';officialMatch='UNVERIFIED';source='previously user-supplied Drive installer';attachmentMatch='NOT_RUN';pinnedSourceMatch='NOT_RUN';installation='NOT_RUN';launch='NOT_RUN';editing='NOT_RUN';export='NOT_RUN'}
           try {
-            $page=Invoke-WebRequest -Uri 'https://vroid.com/studio' -TimeoutSec 30
-            $urls=@([regex]::Matches($page.Content,'https://download\.vroid\.com/dist/[A-Za-z0-9]+/VRoidStudio-v2\.16\.0-win\.exe') | ForEach-Object Value | Select-Object -Unique)
-            if($urls.Count -ne 1){throw "Exact 2.16.0 official download link not uniquely exposed; no executable will run"}
-            $report.officialUrl=$urls[0]
+            # User authorized supplied installer; official web endpoint returned HTTP 403.
+            # This is the previously verified Drive source, NOT a verified copy of the chat attachment.
             $installer=Join-Path $env:RUNNER_TEMP 'VRoidStudio-v2.16.0-win.exe'
-            Invoke-WebRequest -Uri $urls[0] -OutFile $installer -MaximumRedirection 0 -TimeoutSec 240
+            python -m pip install --disable-pip-version-check --no-input 'gdown==5.2.0'
+            if($LASTEXITCODE -ne 0){throw 'gdown installation failed'}
+            python -m gdown --id '1G7vBJfw46Yo9vD-n_GzAs3jvzyGl9lfA' --output $installer --no-cookies
+            if($LASTEXITCODE -ne 0){throw 'Pinned Drive transfer failed'}
+            if((Get-Item $installer).Length -ne 482150144){throw 'Installer length mismatch'}
             $report.sha256=(Get-FileHash -Algorithm SHA256 $installer).Hash
-            if($report.sha256 -ine $expected){throw 'Official installer SHA mismatch'}
+            if($report.sha256 -ine $expected){throw 'Pinned installer SHA mismatch'}
             $sig=Get-AuthenticodeSignature $installer
             $report.signature=[string]$sig.Status
             $report.publisher=$sig.SignerCertificate.Subject
             if($sig.Status -ne 'Valid' -or $report.publisher -notmatch '^CN=pixiv Inc\.,'){throw 'Publisher signature verification failed'}
-            $report.officialMatch='PASS'
+            if($sig.SignerCertificate.Thumbprint -ine '9E6FAFADF17FDAA9DC89ED0BB0EADCC21CCC2DA7'){throw 'Signer certificate differs from verified source'}
+            $report.pinnedSourceMatch='PASS'
             if(-not [Environment]::UserInteractive -or (Get-Process -Id $PID).SessionId -eq 0){throw 'No interactive desktop'}
             $dest=Join-Path $env:RUNNER_TEMP 'vroid-studio'
             $args=@('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/DIR="'+$dest+'"')
