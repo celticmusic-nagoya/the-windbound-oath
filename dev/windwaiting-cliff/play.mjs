@@ -123,6 +123,24 @@ async function play() {
     const selectedPlacement = query.get('meadow') === '1' ? densifyMeadow(placement, ground, data) : placement;
     vegetation = await createVegetation({ loader, base: ecoRoot, placement: selectedPlacement, root: scene,
       initialStrength: query.get('wind') === '0' ? 0 : 0.65 });
+    // ECO materials are cloned and instantiated after adaptSurfaces executes.
+    // Preserve wind shader hooks; only bind maps on confirmed UV-bearing bark.
+    if (photo) {
+      const applied = new Set();
+      scene.getObjectByName('Vegetation overlays')?.traverse(mesh => {
+        if (!mesh.isMesh || !/bark/i.test(mesh.material?.name || '') || !mesh.geometry.hasAttribute('uv')) return;
+        const m = mesh.material;
+        m.color.setRGB(1,1,1);
+        m.vertexColors = false;
+        m.map = photo.bark_brown_02;
+        m.normalMap = photo.bark_brown_02_normal;
+        m.roughnessMap = photo.bark_brown_02_roughness;
+        m.roughness = 1;
+        m.needsUpdate = true;
+        applied.add(m);
+      });
+      if (!applied.size) throw new Error('Photo bark: no UV-bearing ECO bark material matched');
+    }
     const windButton = document.querySelector('#wind-toggle');
     function setWind(strength) {
       vegetation.setStrength(strength);
