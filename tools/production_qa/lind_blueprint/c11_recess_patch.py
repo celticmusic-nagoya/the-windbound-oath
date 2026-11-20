@@ -151,6 +151,18 @@ def main():
             json.dumps(diagnostic, indent=2), encoding="utf-8")
         if len(region) < 16 or len(interior_original) < 3:
             raise RuntimeError("Patch lacks adequate interior topology; diagnose before another inset")
+        # C11 inset approach has failed twice on this exact C10 source.
+        # Lock out the known-bad algorithm instead of spending another runner
+        # or risking a misleading candidate. The diagnostic remains reusable
+        # by the forthcoming boundary-locked face-replacement implementation.
+        diagnostic["decision"] = "INSET_METHOD_RETIRED"
+        diagnostic["reason"] = "Inset did not produce independently selectable inner faces"
+        diagnostic["next_method"] = "boundary-locked local face replacement"
+        (output / "c11_geometry_diagnostic.json").write_text(
+            json.dumps(diagnostic, indent=2), encoding="utf-8")
+        raise RuntimeError(
+            "C11_INSET_RETIRED: geometry diagnosis saved; use boundary-locked face replacement"
+        )
         # Preserve all original vertices. Inset makes a new inner ring;
         # this is a structural change from the rejected two-plane deformation.
         inset = bmesh.ops.inset_region(
