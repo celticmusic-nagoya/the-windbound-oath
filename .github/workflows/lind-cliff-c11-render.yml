@@ -1,0 +1,86 @@
+name: C11 cliff bounded Blender render
+on:
+  workflow_dispatch:
+    inputs:
+      source_artifact_id:
+        description: "Existing C10 artifact ID containing exact SHA-verified hero_fracture_UNAPPROVED.blend"
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: lind-cliff-c11-render-${{ github.ref }}-${{ inputs.source_artifact_id }}
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      SOURCE_SHA: 0b6b0f3f6e8e270594cdac5fc81008ffe5210b7e98de352d826360dfd6676508
+      ARTIFACT_ID: ${{ inputs.source_artifact_id }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check source artifact ID and download without guessing
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$ARTIFACT_ID" =~ ^[0-9]{6,20}$ ]] || { echo "Invalid artifact ID"; exit 1; }
+          mkdir -p /tmp/c11-source /tmp/c11-output
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > /tmp/c11-source/archive.zip
+          unzip -q /tmp/c11-source/archive.zip -d /tmp/c11-source/unpacked
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,os,sys
+          root=Path('/tmp/c11-source/unpacked')
+          matches=list(root.rglob('hero_fracture_UNAPPROVED.blend'))
+          verified=[p for p in matches if hashlib.sha256(p.read_bytes()).hexdigest()==os.environ['SOURCE_SHA']]
+          if len(verified)!=1:
+              raise SystemExit(f'BLOCKED: expected exactly one matching hero .blend; found {len(verified)} matching of {len(matches)} named candidates')
+          with open(os.environ['GITHUB_ENV'],'a') as f: f.write(f'C11_SOURCE={verified[0]}\n')
+          print('C11_INPUT_SHA_PASS')
+          PY
+      - name: Install Blender 5.3.0 with upstream SHA verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          python3 - "$work/checksums" "$work/expected.sha256" "$name" <<'PY'
+          import re,sys
+          from pathlib import Path
+          matches=[]
+          for line in Path(sys.argv[1]).read_text().splitlines():
+              if sys.argv[3] in line:
+                  hashes=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',line)
+                  if len(hashes)!=1: raise SystemExit('Invalid upstream SHA row')
+                  matches.append(hashes[0].lower())
+          if len(matches)!=1: raise SystemExit('Expected exactly one upstream SHA')
+          Path(sys.argv[2]).write_text(f'{matches[0]}  {sys.argv[3]}\n')
+          PY
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Execute C11 bounded geometry patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          xvfb-run -a /tmp/two-blender53/blender -b --factory-startup --disable-autoexec --python-exit-code 1 \
+            --python tools/production_qa/lind_blueprint/c11_recess_patch.py -- "$C11_SOURCE" /tmp/c11-output
+          test -s /tmp/c11-output/c11_recess_patch_UNAPPROVED.blend
+          sha256sum /tmp/c11-output/* > /tmp/c11-output/SHA256SUMS
+      - name: Save candidate and failure evidence for next AI session
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c11-candidate-unapproved-${{ github.run_id }}
+          path: /tmp/c11-output/
+          retention-days: 30
+          if-no-files-found: warn
