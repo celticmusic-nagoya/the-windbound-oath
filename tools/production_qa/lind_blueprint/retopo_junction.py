@@ -59,6 +59,45 @@ def split_wall(mesh):
         bm.free()
 
 
+def sample_sections(obj, planes, center):
+    """Clip evaluated cage triangles into Y/Z slices around the contact."""
+    mesh = obj.data
+    mesh.calc_loop_triangles()
+    points = [obj.matrix_world @ vertex.co for vertex in mesh.vertices]
+    slices = [[] for _ in planes]
+    for triangle in mesh.loop_triangles:
+        xyz = [points[i] for i in triangle.vertices]
+        if any(max(abs(v[axis]-center[axis]) for v in xyz) > 2 for axis in (1,2)):
+            continue
+        for index, plane in enumerate(planes):
+            hits = []
+            for a,b in zip(xyz,xyz[1:]+xyz[:1]):
+                if (a.x < plane <= b.x) or (b.x < plane <= a.x):
+                    hits.append(tuple(a.lerp(b,(plane-a.x)/(b.x-a.x))))
+            if len(hits) == 2 and hits[0] != hits[1]:
+                slices[index].append((triangle.polygon_index, hits))
+    return slices
+
+
+def write_sections(root, before, after, planes, center):
+    for index, (plane, prior, current) in enumerate(zip(planes, before, after), 1):
+        rows = ['<svg xmlns="http://www.w3.org/2000/svg" width="920" height="460">',
+                '<rect width="920" height="460" fill="#f2f5f5"/>',
+                f'<text x="20" y="30">X = {plane:.6f} BU | Y horizontal; Z vertical | candidate-local</text>']
+        for offset, label, segments in ((10,"Cut candidate",prior),(465,"Retopology",current)):
+            rows.append(f'<text x="{offset+10}" y="60">{label}</text>')
+            rows.append(f'<clipPath id="s{offset}"><rect x="{offset}" y="65" width="435" height="370"/></clipPath>')
+            rows.append(f'<g clip-path="url(#s{offset})">')
+            for face, hits in segments:
+                coords = " ".join(f"{offset+215+(p[1]-center[1])*380:.4f},"
+                                  f"{244-(p[2]-center[2])*380:.4f}" for p in hits)
+                rows.append(f'<polyline points="{coords}" fill="none" stroke="#285f73" '
+                            f'stroke-width="2"><title>face {face}</title></polyline>')
+            rows.append("</g>")
+        rows.append("</svg>")
+        (root / f"fracture_section_{index}.svg").write_text("\n".join(rows), encoding="utf8")
+
+
 def write_detail(root, before, after, obj, replacement):
     bounds = [p for pair in before["pairs"] for tri in pair["triangles"] for p in tri["world_xyz"]]
     center = [(min(p[i] for p in bounds)+max(p[i] for p in bounds))/2 for i in range(3)]
@@ -112,10 +151,15 @@ def main():
         for pair in before["pairs"]
     ):
         raise ValueError("Locked geometry no longer has the two measured crossings")
+    positions = [p for pair in before["pairs"] for tri in pair["triangles"] for p in tri["world_xyz"]]
+    center = [(min(p[i] for p in positions)+max(p[i] for p in positions))/2 for i in range(3)]
+    planes = [center[0]+offset for offset in (-.023,0,.023)]
+    section_before = sample_sections(obj, planes, center)
     original_xyz = [tuple(vertex.co) for vertex in obj.data.vertices]
     old_surface = surface(obj.data, {WALL})
     old_wall = obj.data.polygons[WALL]
     old_wall_slot = old_wall.material_index
+    boundary_ids = list(old_wall.vertices)
     old_wall_uv = {obj.data.loops[k].vertex_index: tuple(tuple(layer.uv[k].vector)
                     for layer in obj.data.uv_layers) for k in old_wall.loop_indices}
     scene_before = scene_record(scene)
@@ -157,6 +201,12 @@ def main():
     destination = out / "junction_retopo_UNAPPROVED.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(destination), compress=True)
     write_detail(out, before, after, obj, replacement)
+    write_sections(out, section_before, sample_sections(obj, planes, center), planes, center)
+    write(out / "fixed_wall_boundary.json", {
+        "coordinates": "candidate local XYZ in BU",
+        "vertices": [{"id": i, "before": original_xyz[i], "after": list(obj.data.vertices[i].co)}
+                     for i in boundary_ids]
+    })
     write(out / "local_qa.json", {"checks":checks,"before":stats_before,"after":stats,
                                   "source_sha256":SOURCE_SHA,"candidate_sha256":sha(destination),
                                   "replacement_face_ids":sorted(replacement),"visible":visibility,

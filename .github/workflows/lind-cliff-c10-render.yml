@@ -101,13 +101,9 @@ jobs:
           test -s "$SOURCE"
           file "$SOURCE"
           /tmp/two-blender53/blender -b --factory-startup --python assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py -- "$SOURCE" /tmp/c10-render
-      - name: Install headless EGL and Mesa runtime for EEVEE
-        if: steps.blueprint_cache.outputs.cache-hit != 'true'
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libegl1 libgl1-mesa-dri libopengl0 libgl1 xvfb
-          ldconfig -p | grep -F libEGL.so.1
+      - name: Prepare headless rendering
+        if: env.RETOPO != 'true' && steps.blueprint_cache.outputs.cache-hit != 'true'
+        run: tools/production_qa/lind_blueprint/prepare_headless.sh
       - name: Independent C10 topology audit (non-destructive)
         if: env.BLUEPRINT != 'true' && env.SCULPT != 'true' && env.RETOPO != 'true'
         run: |
@@ -199,7 +195,7 @@ jobs:
           python tools/production_qa/download_actions_artifact.py --repo "$GITHUB_REPOSITORY" --artifact-id 14585742052 --expected-zip-sha256 d0fb1933530b76c4ca4da8053da53937040fa3c7b47d8fe787bf40cafe218a14 --output /tmp/lind-junction-input.zip
           unzip -p /tmp/lind-junction-input.zip candidate/junction_UNAPPROVED.blend > /tmp/junction_UNAPPROVED.blend
           /tmp/two-blender53/blender -b --disable-autoexec --python-exit-code 1 --python tools/production_qa/junction_contact_faces.py -- /tmp/junction_UNAPPROVED.blend "$root/junction_contact_faces.json" --expected-sha256 "$JUNCTION_SHA"
-      - name: Retopologize the measured wall and verify its blueprint
+      - name: Retopologize the measured wall and export its blueprint
         if: env.RETOPO == 'true' && hashFiles('tools/production_qa/lind_blueprint/retopo_junction.py') != ''
         run: |
           set -euo pipefail
@@ -207,7 +203,6 @@ jobs:
           tools=tools/production_qa/lind_blueprint
           bpy=/tmp/two-blender53/blender
           exec > >(tee "$root/execution.log") 2>&1
-          export LIBGL_ALWAYS_SOFTWARE=1
           "$bpy" -b --disable-autoexec --python-exit-code 1 --python "$tools/retopo_junction.py" -- /tmp/junction_UNAPPROVED.blend "$root"
           candidate="$root/junction_retopo_UNAPPROVED.blend"
           sha="$(sha256sum "$candidate" | cut -d ' ' -f 1)"
@@ -216,6 +211,17 @@ jobs:
             "$bpy" -b --disable-autoexec "$candidate" --python-exit-code 1 --python "$tools/export_blueprint.py" -- "$out" --source-sha "$sha" --input-ref "$GITHUB_SHA:artifact:14585742052:retopo" --texture-register "$(dirname "$C9_SOURCE")/cc0_manifest.json"
           done
           diff -qr "$root/blueprint" "$second"
+      - name: Verify reconstruction and render candidate
+        if: env.RETOPO == 'true' && hashFiles('tools/production_qa/lind_blueprint/retopo_junction.py') != ''
+        run: |
+          set -euo pipefail
+          root=/tmp/lind-retopo
+          tools=tools/production_qa/lind_blueprint
+          bpy=/tmp/two-blender53/blender
+          candidate="$root/junction_retopo_UNAPPROVED.blend"
+          exec > >(tee -a "$root/execution.log") 2>&1
+          "$tools/prepare_headless.sh"
+          export LIBGL_ALWAYS_SOFTWARE=1
           set +e
           xvfb-run -a "$bpy" -b --disable-autoexec --python-exit-code 1 --python "$tools/rebuild.py" -- "$root/blueprint" --render --determinism-verified
           result=$?
