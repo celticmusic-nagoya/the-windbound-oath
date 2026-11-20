@@ -33,3 +33,14 @@
 
 ## Next independent executable work
 Check exact official Linux release hashes and `TRUST.md` source, review bridge files statically, and record export schema. Do not require the user's Android phone to run desktop software. Continue Blender voxel head artifact QA separately.
+
+## Verified upstream trust and bridge preflight (2026-11-20)
+
+Static primary-source review completed (not a binary installation):
+- Upstream `Rackta/HairHarpy:TRUST.md` explicitly documents **unsigned** Windows releases, publisher-supplied `SHA256SUMS.txt` / Linux `SHA256SUMS-linux.txt`, portable packages, and optional bridge add-ons under `resources/bridge/`. Upstream states the Blender bridge listens on **127.0.0.1 only**; this is a publisher claim, not independently observed network behavior.
+- Upstream `README.md` confirms a separate Qt/Vulkan graphical application, not a Blender plug-in, with Linux glibc 2.35+, X11/XWayland and Vulkan 1.1 requirements; the repository is source-available rather than freely redistributable.
+- Sources: https://github.com/Rackta/HairHarpy/blob/main/TRUST.md and https://github.com/Rackta/HairHarpy/blob/main/README.md . GitHub blob SHA (not original release archive SHA): TRUST.md `702ae221b940392ac374534d42ac17001f6c0ab8`; README.md `ab1e9d5e3404d668ac24e2a0f58b45ba63e76ede`.
+
+**Practical environment decision:** keep HairHarpy isolated from the successful Blender 5.3 CPU Actions pipeline. On a future approved graphical Vulkan-capable machine/runner, fetch the pinned v2.0.0 release and matching publisher checksum list, verify the downloaded archive hash before executing, inspect the bridge Python scripts, and use a test-only local loopback connection. Disable bridge when not in use; do not expose its listener beyond loopback. Save the HairHarpy native project plus exported test mesh; import into a *copy* of the Blender scene, measure UV/normals/face counts/scale, and render four angles. No binary or third-party source may be committed without license and provenance review.
+
+**Stop/exit:** no suitable Vulkan/X11 runner or hash mismatch => BLOCKED; no paid runner by default. Continue Blender-native authored sculpt independently. This review establishes only upstream-document inspection PASS; installation, bridge execution, actual mesh export/import, G1–G4 remain NOT_RUN. Do not repeat the already successful Blender 5.3 smoke tests in Actions runs 44553193163 / 44554802279.
