@@ -223,6 +223,12 @@ jobs:
                 sleep 2
                 capture_state eye-restored
               fi
+              # When native Undo does not restore a slider, restore using the same verified control.
+              if grep -Fq '0.194' evidence/eye-undo.txt; then
+                "$gui" slider 0.869 0.236 0.919 0.236 0.6
+                sleep 2
+                capture_state eye-inverse
+              fi
               echo EYE_TRIAL_REVIEW_REQUIRED > evidence/authoring-status.txt
             else
               echo BLOCKED_EYE_CONTROL_STATE > evidence/authoring-status.txt
