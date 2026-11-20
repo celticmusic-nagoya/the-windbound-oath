@@ -1,5 +1,10 @@
 name: Morwen visual QA handoff from existing artifact
 on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - tools/production_qa/build_visual_qa_handoff.py
+      - .github/workflows/morwen-visual-qa-handoff.yml
   workflow_dispatch:
     inputs:
       source_run_id:
@@ -17,7 +22,33 @@ concurrency:
   group: morwen-visual-qa-handoff-${{ inputs.source_run_id }}-${{ inputs.artifact_name }}
   cancel-in-progress: false
 jobs:
+  smoke-handoff:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile and exercise deterministic handoff on synthetic fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/production_qa/build_visual_qa_handoff.py
+          mkdir -p /tmp/two-fixture /tmp/two-fixture-out
+          printf 'QA_FIXTURE_NOT_A_RENDER\\n' > /tmp/two-fixture/fixture.txt
+          python3 tools/production_qa/build_visual_qa_handoff.py --input /tmp/two-fixture --output /tmp/two-fixture-out --asset morwen-test
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          p=pathlib.Path('/tmp/two-fixture/fixture.txt')
+          d=json.loads(pathlib.Path('/tmp/two-fixture-out/visual_qa_handoff.json').read_text())
+          assert d['inputs'][0]['sha256']==hashlib.sha256(p.read_bytes()).hexdigest()
+          assert d['gates']['G2']=='NOT_RUN'
+          assert d['scope']=='EVIDENCE_ONLY_NO_ARTISTIC_PASS'
+          print('SYNTHETIC_HANDOFF_SMOKE_PASS_NOT_RENDER')
+          PY
   package-evidence:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
