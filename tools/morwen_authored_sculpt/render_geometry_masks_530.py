@@ -11,7 +11,7 @@ from mathutils import Vector
 out=Path(sys.argv[sys.argv.index("--")+1]);out.mkdir(parents=True,exist_ok=True)
 names=("GEO-head_stylized","GEO-body_female_stylized")
 views={"front":(0,-1,0),"right":(1,0,0),"back":(0,1,0),"left":(-1,0,0)}
-report={"status":"GEOMETRY_MASK_ONLY_NOT_CANON_ALIGNED","blender":bpy.app.version_string,"render_contract":{"engine":"BLENDER_EEVEE","resolution":[384,1024],"orthographic":True,"alpha":"TRANSPARENT","color":"WHITE_UNLIT"},"objects":[]}
+report={"status":"GEOMETRY_MASK_ONLY_NOT_CANON_ALIGNED","blender":bpy.app.version_string,"render_contract":{"engine":"CYCLES_CPU","resolution":[384,1024],"orthographic":True,"alpha":"TRANSPARENT","color":"WHITE_UNLIT"},"objects":[]}
 for name in names:
     ob=bpy.data.objects.get(name)
     if ob is None or ob.type!="MESH":raise RuntimeError("SOURCE_OBJECT_MISSING:"+name)
@@ -29,7 +29,7 @@ for name in names:
     cam=bpy.data.objects.new("Blueprint_mask_camera",cam_data)
     bpy.context.scene.collection.objects.link(cam)
     bpy.context.scene.camera=cam
-    cam_data.type="ORTHO";cam_data.ortho_scale=extent*1.25
+    cam_data.type="ORTHO"\n    # Vertical ortho_scale is NOT the horizontal field of view. At 384:1024,\n    # frame horizontal span = ortho_scale * 384/1024. Fit both dimensions.\n    aspect=384/1024\n    fit_width=max(bounds_x for bounds_x in (\n        max(c.x for c in corners)-min(c.x for c in corners),\n        max(c.y for c in corners)-min(c.y for c in corners)))\n    fit_height=max(c.z for c in corners)-min(c.z for c in corners)\n    cam_data.ortho_scale=max(fit_height,fit_width/aspect)*1.12
     scene=bpy.context.scene
     scene.render.engine="CYCLES"
     scene.cycles.device="CPU"
@@ -59,7 +59,7 @@ for name in names:
         # frame much narrower. Capture this contract rather than claiming fit.
         scene.render.filepath=str(out/(slug+"_"+view+"_mask.png"))
         bpy.ops.render.render(write_still=True)
-        record["views"][view]={"file":Path(scene.render.filepath).name,"camera_matrix_world":[[float(cam.matrix_world[r][c]) for c in range(4)] for r in range(4)],"ortho_scale":cam_data.ortho_scale}
+        record["views"][view]={"file":Path(scene.render.filepath).name,"camera_matrix_world":[[float(cam.matrix_world[r][c]) for c in range(4)] for r in range(4)],"ortho_scale":cam_data.ortho_scale,"frame_width_world":cam_data.ortho_scale*aspect}
     report["objects"].append(record)
     bpy.data.objects.remove(cam,do_unlink=True)
 (out/"geometry_mask_contract.json").write_text(json.dumps(report,indent=2)+"\n")
