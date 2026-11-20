@@ -1,0 +1,109 @@
+{
+  "version": "1.0",
+  "implementation_status": "POLICY_ONLY",
+  "approval_required": [
+    "main_merge",
+    "formal_adoption",
+    "canon_change",
+    "destructive_deletion",
+    "publication",
+    "added_cost",
+    "protected_production_asset_change"
+  ],
+  "qa": {
+    "required": [
+      "G1",
+      "G2",
+      "G3",
+      "G4"
+    ],
+    "verdicts": [
+      "PASS",
+      "FAIL",
+      "BLOCKED",
+      "NOT_RUN"
+    ],
+    "independent_art_review": true
+  },
+  "retry": {
+    "policy": "v3",
+    "reassess_after_same_cause_failures": 2,
+    "hard_cap": null,
+    "evidence_required": true
+  },
+  "ownership": {
+    "one_writer_per_conflicting_file": true,
+    "one_pr_per_asset_stage_owner": true,
+    "atomic_lease_required": true
+  },
+  "execution": {
+    "preview_first": true,
+    "checkpoint_reopen": true,
+    "hash_reuse": true,
+    "milestone_first": true,
+    "avoid_duplicate_ci": true
+  },
+  "provisional_local_coordinates": true,
+  "measures": [
+    {
+      "id": 1,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 2,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 3,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 4,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 5,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 6,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 7,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 8,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 9,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 10,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 11,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 12,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 13,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 14,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    },
+    {
+      "id": 15,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    }
+  ]
+}
