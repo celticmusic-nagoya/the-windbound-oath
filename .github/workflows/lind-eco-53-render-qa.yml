@@ -1,5 +1,9 @@
 name: LIND ECO Blender 5.3 candidate render and QA
 on:
+  push:
+    branches: [feature/lind-ecology-01]
+    paths:
+      - '.github/workflows/lind-eco-53-render-qa.yml'
   workflow_dispatch:
     inputs:
       shot:
@@ -62,7 +66,7 @@ jobs:
           rm -f assets/candidates/LIND-ECO-01/eco_kit_v1/renders/renders.json
       - name: Render selected evidence views
         env:
-          SHOT: ${{ inputs.shot }}
+          SHOT: ${{ inputs.shot || 'lineup_small' }}
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/render_eco.py -- --shot "$SHOT"
       - name: Verify rendered PNG hashes against manifest
