@@ -154,9 +154,12 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         diffuseColor.rgb *= mix(stoneColor, grass, cover);
       `);
       if (moss) addMossResponse(shader, 'mix(1.0, .94 + pattern * .10, cover)');
-      if (photo) addPhotoResponse(shader, 'coastPoint', 'cover', 'photoNormal', 'photoRough');
+      if (photo) {
+        addPhotoResponse(shader, 'coastPoint', 'cover', 'photoNormal', 'photoRough');
+        addRockPhotoResponse(shader, photo, 'coastPoint', 'surfaceNormal', moss ? '(1.0-cover)*(1.0-mossMask)' : '1.0-cover');
+      }
     };
-    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-shoulder' : '');
+    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-shoulder-rock-v12' : '');
   }
   for (const material of road) {
     material.onBeforeCompile = (shader) => {
@@ -170,7 +173,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
     };
     material.customProgramCacheKey = () => 'cliff-photo-road-v3';
   }
-  for (const material of rock) bindRockMoss(material, moss);
+  for (const material of rock) bindRockMoss(material, moss, photo);
   for (const material of bark) {
     material.color = new T.Color(photo ? 0xffffff : 0x5c432b);
     if (photo) { material.map = photo.bark_brown_02; material.normalMap = photo.bark_brown_02_normal; material.roughnessMap = photo.bark_brown_02_roughness; material.roughness = 1; material.needsUpdate = true; }
@@ -227,7 +230,7 @@ function addMossResponse(shader, terrainRoughness = '1.0') {
   `);
 }
 
-function bindRockMoss(material, moss) {
+function bindRockMoss(material, moss, photo) {
   if (material.name.includes('Moss over loose')) material.color.setRGB(.16, .145, .125);
   material.onBeforeCompile = (shader) => {
     bindMossUniforms(shader, moss);
@@ -249,6 +252,41 @@ function bindRockMoss(material, moss) {
       `,
     );
     addMossResponse(shader);
+    if (photo) addRockPhotoResponse(shader, photo, 'rockPoint', 'rockNormal', '1.0-mossMask');
   };
-  material.customProgramCacheKey = () => 'cliff-rock-moss-v2';
+  material.customProgramCacheKey = () => photo ? 'cliff-rock-moss-photo-v12' : 'cliff-rock-moss-v2';
+}
+
+const rockPhotoGLSL = `
+uniform sampler2D rockPhotoNormal, rockPhotoRough;
+vec3 rockWeights(vec3 n) {
+  vec3 w = pow(abs(n), vec3(5.0));
+  return w / max(dot(w, vec3(1.0)), .001);
+}
+float rockRoughAt(vec3 p, vec3 n) {
+  vec3 w = rockWeights(n);
+  return dot(w, vec3(texture2D(rockPhotoRough,p.zy*.22).r,
+    texture2D(rockPhotoRough,p.xz*.22).r, texture2D(rockPhotoRough,p.xy*.22).r));
+}
+vec3 rockSlopeAt(vec3 p, vec3 n) {
+  vec3 w = rockWeights(n);
+  vec2 x = texture2D(rockPhotoNormal,p.zy*.22).rg*2.-1.;
+  vec2 y = texture2D(rockPhotoNormal,p.xz*.22).rg*2.-1.;
+  vec2 z = texture2D(rockPhotoNormal,p.xy*.22).rg*2.-1.;
+  return mat3(viewMatrix)*(w.x*vec3(0.,x.y,x.x)+w.y*vec3(y.x,0.,y.y)+w.z*vec3(z.x,z.y,0.));
+}
+`;
+function addRockPhotoResponse(shader, photo, point, direction, mask) {
+  shader.uniforms.rockPhotoNormal = { value: photo.rock_boulder_dry_normal };
+  shader.uniforms.rockPhotoRough = { value: photo.rock_boulder_dry_roughness };
+  shader.fragmentShader = rockPhotoGLSL + shader.fragmentShader;
+  shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `
+    #include <roughnessmap_fragment>
+    roughnessFactor = mix(roughnessFactor, rockRoughAt(${point}, ${direction}), (${mask})*.65);
+  `).replace('#include <normal_fragment_maps>', `
+    #include <normal_fragment_maps>
+    vec3 rockPhotoSlope = rockSlopeAt(${point}, ${direction});
+    rockPhotoSlope -= normal*dot(rockPhotoSlope,normal);
+    normal = normalize(normal + rockPhotoSlope*(${mask})*.35);
+  `);
 }
