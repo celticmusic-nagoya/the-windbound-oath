@@ -10,10 +10,6 @@ on:
       - tools/morwen_authored_sculpt/render_isolated_face_parts.py
       - tools/morwen_authored_sculpt/render_combined_face_candidate.py
   workflow_dispatch:
-  pull_request:
-    paths:
-      - .github/workflows/morwen-legacy-face-audit.yml
-      - tools/morwen_authored_sculpt/audit_legacy_face_modules.py
 permissions:
   contents: read
   actions: read
