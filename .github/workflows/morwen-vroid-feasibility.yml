@@ -162,47 +162,74 @@ jobs:
           persist-credentials: false
       - name: Install pinned Blender 5.3
         run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/vrm-app
-      - name: Download verified upstream VRM add-on release asset and test Blender import
+      - name: Download pinned Blender 5.3 extension ZIP and validate manifest
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/morwen-vrm-addon
           python3 - <<'PY'
-          import json,urllib.request,pathlib,hashlib,zipfile
+          import hashlib, json, pathlib, stat, tomllib, urllib.request, zipfile
           out=pathlib.Path('/tmp/morwen-vrm-addon')
-          report={'addon':'VRM Add-on for Blender','tag':'v4.10.5','download':'NOT_RUN','addonRegistration':'NOT_RUN','vrmImport':'NOT_RUN','status':'BLOCKED'}
+          report={'addon':'VRM Add-on for Blender','tag':'v4.10.5','download':'NOT_RUN','extensionManifest':'NOT_RUN','addonRegistration':'NOT_RUN','vrmImport':'NOT_RUN','status':'BLOCKED'}
           try:
-              # Release URL is pinned to the exact upstream tag + standard add-on asset.
-              # Avoid unauthenticated GitHub REST API rate limits observed in run 44663207442.
-              asset_name='VRM_Addon_for_Blender-4_10_5.zip'
+              asset_name='VRM_Addon_for_Blender-Extension-4_10_5.zip'
               url='https://github.com/saturday06/VRM-Addon-for-Blender/releases/download/v4.10.5/'+asset_name
-              req=urllib.request.Request(url,headers={'User-Agent':'TWO-VRM-Addon-Compatibility/1.0'})
-              with urllib.request.urlopen(req,timeout=120) as response: data=response.read(80*1024*1024+1)
-              if len(data)>80*1024*1024: raise RuntimeError('Asset too large')
-              archive=out/'vrm-addon.zip';archive.write_bytes(data)
-              if not zipfile.is_zipfile(archive): raise RuntimeError('Downloaded asset is not a ZIP')
-              digest=hashlib.sha256(data).hexdigest()
-              report.update(download='PASS',sha256=digest,asset=asset_name,sourceUrl=url,integrity='SHA256_COMPUTED_NOT_UPSTREAM_VERIFIED')
-              report['status']='DOWNLOADED_NOT_REGISTERED'
-          except Exception as e: report['error']=str(e)
+              request=urllib.request.Request(url,headers={'User-Agent':'TWO-VRM-Addon-Compatibility/1.0'})
+              with urllib.request.urlopen(request,timeout=120) as response:
+                  data=response.read(80*1024*1024+1)
+              if len(data)>80*1024*1024: raise RuntimeError('Extension ZIP too large')
+              archive=out/'vrm-extension.zip'
+              archive.write_bytes(data)
+              if not zipfile.is_zipfile(archive): raise RuntimeError('Downloaded file is not a ZIP')
+              with zipfile.ZipFile(archive) as z:
+                  names=z.namelist()
+                  if 'blender_manifest.toml' not in names:
+                      raise RuntimeError('Blender extension manifest missing from archive root; no install')
+                  if sum(i.file_size for i in z.infolist())>160*1024*1024:
+                      raise RuntimeError('Unsafe expanded ZIP size')
+                  for entry in z.infolist():
+                      p=pathlib.PurePosixPath(entry.filename)
+                      if p.is_absolute() or '..' in p.parts or chr(92) in entry.filename:
+                          raise RuntimeError('Unsafe ZIP member path')
+                      if stat.S_IFMT(entry.external_attr >> 16)==stat.S_IFLNK:
+                          raise RuntimeError('ZIP symlink rejected')
+                  manifest=tomllib.loads(z.read('blender_manifest.toml').decode('utf-8'))
+              if manifest.get('id')!='vrm' or manifest.get('version')!='4.10.5':
+                  raise RuntimeError('Unexpected extension identity/version')
+              min_blender=tuple(int(x) for x in manifest['blender_version_min'].split('.'))
+              max_blender=tuple(int(x) for x in manifest['blender_version_max'].split('.'))
+              if not (min_blender <= (5,3,0) < max_blender):
+                  raise RuntimeError('Manifest does not support Blender 5.3')
+              report.update(download='PASS',extensionManifest='PASS',asset=asset_name,sourceUrl=url,
+                            sha256=hashlib.sha256(data).hexdigest(),
+                            integrity='SHA256_COMPUTED_NOT_UPSTREAM_VERIFIED',status='DOWNLOADED_NOT_REGISTERED')
+          except Exception as exc:
+              report['error']=str(exc)
           (out/'download_qa.json').write_text(json.dumps(report,indent=2))
           print(json.dumps(report,indent=2))
-          if report['download']!='PASS': raise SystemExit(1)
+          if report['download']!='PASS' or report['extensionManifest']!='PASS':
+              raise SystemExit(1)
           PY
-          /tmp/two-blender-530/vrm-app/blender -b --factory-startup --python-exit-code 1 --python-expr "
-          import bpy,zipfile,pathlib,json,sys
+      - name: Install extension using Blender 5.3 CLI and check registration
+        shell: bash
+        run: |
+          set -euo pipefail
+          export BLENDER_USER_CONFIG=/tmp/morwen-vrm-addon/user-config
+          export BLENDER_USER_SCRIPTS=/tmp/morwen-vrm-addon/user-scripts
+          mkdir -p "$BLENDER_USER_CONFIG" "$BLENDER_USER_SCRIPTS"
+          /tmp/two-blender-530/vrm-app/blender --command extension repo-list
+          /tmp/two-blender-530/vrm-app/blender --command extension install-file -r user_default -e /tmp/morwen-vrm-addon/vrm-extension.zip
+          /tmp/two-blender-530/vrm-app/blender -b --python-exit-code 1 --python-expr "
+          import bpy,json,pathlib
           root=pathlib.Path('/tmp/morwen-vrm-addon')
-          z=zipfile.ZipFile(root/'vrm-addon.zip')
-          names=z.namelist()
-          if not any(x.endswith('vrm/__init__.py') for x in names): raise RuntimeError('VRM add-on package missing')
-          for x in names:
-              p=pathlib.PurePosixPath(x)
-              if p.is_absolute() or '..' in p.parts: raise RuntimeError('Unsafe ZIP path')
-          bpy.ops.preferences.addon_install(filepath=str(root/'vrm-addon.zip'),overwrite=True)
-          bpy.ops.preferences.addon_enable(module='VRM_Addon_for_Blender')
-          loaded=[k for k in bpy.context.preferences.addons.keys() if 'vrm' in k.lower()]
-          if not loaded: raise RuntimeError('VRM add-on not enabled')
-          report={'blender':bpy.app.version_string,'enabledModules':loaded,'addonRegistration':'PASS','vrmImport':'NOT_RUN_NO_LICENSED_VRM_INPUT','status':'ADDON_REGISTERED_NOT_MODEL_TESTED'}
+          modules=[str(k) for k in bpy.context.preferences.addons.keys()]
+          vrm=[k for k in modules if k.endswith('.vrm')]
+          if not vrm: raise RuntimeError('VRM extension not registered in Blender session: '+str(modules))
+          if not hasattr(bpy.ops.import_scene,'vrm') and not hasattr(bpy.ops.wm,'vrm_import'):
+              raise RuntimeError('VRM import operator not registered')
+          report={'blender':bpy.app.version_string,'enabledModules':vrm,
+                  'addonRegistration':'PASS','vrmImport':'NOT_RUN_NO_LICENSED_VRM_INPUT',
+                  'status':'EXTENSION_REGISTERED_NOT_MODEL_TESTED'}
           (root/'blender_qa.json').write_text(json.dumps(report,indent=2))
           print(json.dumps(report,indent=2))
           "
