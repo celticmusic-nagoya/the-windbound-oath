@@ -81,24 +81,55 @@ def main():
                 region.append(face)
         if len(region) < 8:
             raise RuntimeError(f"Insufficient local faces ({len(region)}); STOP")
+        # The original coordinate window intersects multiple disconnected islands.
+        # Select the single largest connected component deterministically; reject
+        # tiny components rather than silently modifying unrelated coastal faces.
+        pending = set(region)
+        components = []
+        while pending:
+            seed = min(pending, key=lambda face: face.index)
+            pending.remove(seed)
+            stack, component = [seed], {seed}
+            while stack:
+                face = stack.pop()
+                for edge in face.edges:
+                    for neighbor in edge.link_faces:
+                        if neighbor in pending:
+                            pending.remove(neighbor)
+                            component.add(neighbor)
+                            stack.append(neighbor)
+            components.append(component)
+        components.sort(key=lambda group: (-len(group), min(f.index for f in group)))
+        region = sorted(components[0], key=lambda face: face.index)
+        if len(region) < 8:
+            raise RuntimeError("Largest connected island too small; STOP")
         face_set = set(region)
-        boundary = {v.index for f in region for e in f.edges
-                    if sum(link in face_set for link in e.link_faces) == 1
-                    for v in e.verts}
+        perimeter_edges = [edge for face in region for edge in face.edges
+                           if sum(link in face_set for link in edge.link_faces) == 1]
+        perimeter_edges = list(set(perimeter_edges))
+        boundary = {v.index for edge in perimeter_edges for v in edge.verts}
         if len(boundary) < 6:
             raise RuntimeError("Patch boundary invalid; STOP")
-        # A bounded cavity requires a single connected face island and one perimeter.
-        pending = set(region)
-        stack = [pending.pop()]
+        # Require exactly one closed perimeter: every perimeter vertex has degree 2.
+        degree = {}
+        for edge in perimeter_edges:
+            for vertex in edge.verts:
+                degree[vertex.index] = degree.get(vertex.index, 0) + 1
+        if any(count != 2 for count in degree.values()):
+            raise RuntimeError("Patch perimeter not a closed simple loop; STOP")
+        perimeter_neighbors = {}
+        for edge in perimeter_edges:
+            a, b = [v.index for v in edge.verts]
+            perimeter_neighbors.setdefault(a, set()).add(b)
+            perimeter_neighbors.setdefault(b, set()).add(a)
+        seen, stack = set(), [min(boundary)]
         while stack:
-            face = stack.pop()
-            for edge in face.edges:
-                for neighbor in edge.link_faces:
-                    if neighbor in pending:
-                        pending.remove(neighbor)
-                        stack.append(neighbor)
-        if pending:
-            raise RuntimeError("Disjoint patch islands; STOP")
+            current = stack.pop()
+            if current not in seen:
+                seen.add(current)
+                stack.extend(perimeter_neighbors[current] - seen)
+        if seen != boundary:
+            raise RuntimeError("Multiple perimeter loops; STOP")
         # Preserve all original vertices. Inset makes a new inner ring;
         # this is a structural change from the rejected two-plane deformation.
         inset = bmesh.ops.inset_region(
@@ -132,6 +163,7 @@ def main():
         "status": "CANDIDATE_ONLY", "source_sha256": SOURCE_SHA,
         "before": before, "after": after,
         "selected_face_count": len(region),
+        "discovered_component_sizes": [len(group) for group in components],
         "boundary_original_vertices": len(boundary),
         "changed_original_vertex_ids": moved_original[:40],
         "changed_original_vertex_count": len(moved_original),
