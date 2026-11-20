@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sys
 
+import bmesh
 import bpy
 
 HERE = Path(__file__).resolve().parent
@@ -31,6 +32,7 @@ STATIONS = (
 )
 # At the validated fracture, keep all original wall vertices and a collar.
 LOCKED_X = (-8.10, -7.50)
+CROWN_FACE = 37383
 
 
 def smooth(t):
@@ -68,6 +70,35 @@ def deformation(point):
             weight*(shift*(.55+.45*height)+crest_lowering))
 
 
+def lock_crown_tessellation(mesh):
+    """Write the source tessellation of the measured crown face as explicit triangles."""
+    mesh.calc_loop_triangles()
+    triangles = [list(tri.vertices) for tri in mesh.loop_triangles if tri.polygon_index == CROWN_FACE]
+    if len(mesh.polygons[CROWN_FACE].vertices) != 45 or len(triangles) != 43:
+        raise ValueError("Protected source crown no longer matches the audited topology")
+    bm = bmesh.new()
+    try:
+        bm.from_mesh(mesh)
+        bm.faces.ensure_lookup_table()
+        bm.verts.ensure_lookup_table()
+        face = bm.faces[CROWN_FACE]
+        material, smooth = face.material_index, face.smooth
+        layers = list(bm.loops.layers.uv.values())
+        uv = {loop.vert.index: [loop[layer].uv.copy() for layer in layers] for loop in face.loops}
+        bm.faces.remove(face)
+        for ids in triangles:
+            new = bm.faces.new([bm.verts[i] for i in ids])
+            new.material_index, new.smooth = material, smooth
+            for loop in new.loops:
+                for layer, coords in zip(layers, uv[loop.vert.index]):
+                    loop[layer].uv = coords
+        bm.to_mesh(mesh)
+        mesh.update()
+    finally:
+        bm.free()
+    return triangles
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("source", type=Path)
@@ -85,6 +116,9 @@ def main():
     baseline, _ = sculpt_junction.mesh_stats(obj)
     before_scene = scene_record(scene)
     points = [tuple(v.co) for v in mesh.vertices]
+    crown_triangles = lock_crown_tessellation(mesh)
+    if points != [tuple(v.co) for v in mesh.vertices]:
+        raise ValueError("Crown triangulation modified stable vertex IDs or locations")
     world, inverse = obj.matrix_world, obj.matrix_world.inverted()
     changed = []
     protected = []
@@ -123,6 +157,7 @@ def main():
     destination = out/"bedrock_wall_UNAPPROVED.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(destination),compress=True)
     write(out/"bedrock_vertex_diff.json", {"axis":"+X along coast, +Y inland, +Z up", "units":"provisional BU",
+          "source_crown_face":CROWN_FACE,"source_crown_triangles":crown_triangles,
           "scope_x":GUARD,"locked_x":LOCKED_X,"authored_stations":STATIONS,"vertices":changed})
     write(out/"local_qa.json",{"source_sha256":SOURCE_SHA,"candidate_sha256":sha(destination),
           "checks":checks,"before":baseline,"after":after,"visibility":visibility,
