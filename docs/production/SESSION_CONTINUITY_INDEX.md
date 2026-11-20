@@ -58,3 +58,5 @@ ChatGPT: use GitHub connector **download_workflow_artifact** to retrieve ZIP int
 
 Check expiration before handoff; preserve needed binaries via existing authorized storage and retention processes, flag at-risk artifacts in owning PR. Never expose signed URLs, tokens or private canon; no new public release, paid storage or unauthorized external transfer. No duplicate CI, no asset adoption or merge implied. Verified ChatGPT transport pilot: [PR #421](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/421#issuecomment-7037011453), run 44713884694, artifact 14617769408; other clients and durable retention remain unverified.
 
+
+- **2026-11-20 shared performance:** Follow AGENTS.md director-approved 3D production efficiency. Native checkpoint restoration and verified archive caching are in #427 (runtime QA pending); render optimization must be benchmarked before shared implementation adoption. No unfinished asset merge.
