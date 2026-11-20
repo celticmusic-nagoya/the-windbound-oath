@@ -55,6 +55,11 @@ jobs:
       - name: Build candidate ecology geometry
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/build_eco_assets.py -- --out /tmp/lind_eco
+      - name: Isolate current run from historical render provenance
+        run: |
+          # The checkout is ephemeral. Keep tracked historical evidence untouched in Git;
+          # do not mix old geometry SHA records with a freshly rebuilt candidate.
+          rm -f assets/candidates/LIND-ECO-01/eco_kit_v1/renders/renders.json
       - name: Render selected evidence views
         env:
           SHOT: ${{ inputs.shot }}
@@ -63,6 +68,21 @@ jobs:
       - name: Verify rendered PNG hashes against manifest
         run: |
           python3 tools/map_blender/lind/ecology/audit_render_provenance.py
+      - name: Stage only current-run evidence for upload
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, shutil
+          root=pathlib.Path("assets/candidates/LIND-ECO-01/eco_kit_v1/renders")
+          out=pathlib.Path("/tmp/lind-eco-current-run")
+          out.mkdir(exist_ok=True)
+          reg=root/"renders.json"
+          if reg.is_file():
+              shutil.copy2(reg,out/reg.name)
+              for name in json.loads(reg.read_text()).get("files",{}):
+                  p=root/name
+                  if p.is_file(): shutil.copy2(p,out/name)
+          PY
       - name: Upload candidate render evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -70,6 +90,6 @@ jobs:
           name: lind-eco-53-candidate-evidence
           path: |
             /tmp/lind_eco/eco_kit_build.json
-            assets/candidates/LIND-ECO-01/eco_kit_v1/renders/
+            /tmp/lind-eco-current-run/
           retention-days: 7
           if-no-files-found: warn
