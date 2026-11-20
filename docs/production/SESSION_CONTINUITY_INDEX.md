@@ -76,3 +76,6 @@ Read the latest director-approved continuous deliverable-first production sectio
 
 ## Milestone-based Actions execution — 2026-11-21
 Mandatory for all AI and workstreams: follow the latest AGENTS.md milestone-based Actions section. Replace isolated-operation production jobs with bounded meaningful authoring, in-session QA/correction, recoverable native checkpoints and explicit stop reasons. #427 and #421 retain their respective implementations; verify active workflows and owners before migrating. Policy merge alone does not validate runtime behavior. No paid resources or unauthorized adoption.
+
+## Continuous visual progress evidence — 2026-11-21
+All AI follow the latest AGENTS.md visual evidence policy: unrestricted useful captures, incremental authorized artifact publishing during long jobs where supported, direct actual image display on status requests, and no screenshot-only job termination. #427/#421 owners implement and verify on their branches; policy alone does not establish live screenshot availability.
