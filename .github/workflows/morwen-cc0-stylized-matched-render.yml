@@ -1,0 +1,60 @@
+name: Morwen source-only stylized base matched render
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - .github/workflows/morwen-cc0-stylized-matched-render.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: morwen-stylized-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Static syntax and exact pinned source verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/render_official_base_candidates_530.py
+          bash -n tools/production_qa/install_blender_530.sh
+          mkdir -p /tmp/morwen-stylized-source
+          curl --fail --location --retry 2 --max-time 180 --output /tmp/morwen-stylized-source/source.zip https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip
+          echo '811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515  /tmp/morwen-stylized-source/source.zip' | sha256sum -c -
+          python3 - <<'PY'
+          import zipfile,pathlib
+          p=pathlib.Path('/tmp/morwen-stylized-source')
+          with zipfile.ZipFile(p/'source.zip') as z:
+              assert z.testzip() is None
+              names=[n for n in z.namelist() if n.endswith('human_base_meshes_bundle.blend')]
+              assert len(names)==1
+              (p/'source.blend').write_bytes(z.read(names[0]))
+          PY
+      - name: Install pinned Blender 5.3
+        run: bash tools/production_qa/install_blender_530.sh /tmp/two-blender-530/app
+      - name: Render real untouched source candidates with CPU Cycles
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-stylized-source/output
+          /tmp/two-blender-530/app/blender -b --factory-startup --python-exit-code 1 --python tools/morwen_authored_sculpt/render_official_base_candidates_530.py -- /tmp/morwen-stylized-source/output /tmp/morwen-stylized-source/source.blend
+          test -s /tmp/morwen-stylized-source/output/head_front.png
+          test -s /tmp/morwen-stylized-source/output/body_female_front.png
+          test -s /tmp/morwen-stylized-source/output/source_candidate_qa.json
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-stylized-source/output/head_source_candidate.blend --python-exit-code 1 --python-expr 'import bpy; assert any(o.type=="MESH" for o in bpy.data.objects); print("STYLIZED_HEAD_REOPEN_PASS")'
+          /tmp/two-blender-530/app/blender -b /tmp/morwen-stylized-source/output/body_female_source_candidate.blend --python-exit-code 1 --python-expr 'import bpy; assert any(o.type=="MESH" for o in bpy.data.objects); print("STYLIZED_BODY_REOPEN_PASS")'
+          (cd /tmp/morwen-stylized-source/output && sha256sum *.blend *.png *.json > SHA256SUMS)
+      - name: Upload actual source mesh comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-blender-studio-stylized-source-only-not-adopted
+          path: /tmp/morwen-stylized-source/output/
+          retention-days: 14
+          if-no-files-found: warn
