@@ -67,8 +67,8 @@ jobs:
       - name: Download previously generated render evidence (read-only)
         env:
           GH_TOKEN: ${{ github.token }}
-          SOURCE_RUN: ${{ inputs.source_run_id }}
-          SOURCE_ARTIFACT: ${{ inputs.artifact_name }}
+          SOURCE_RUN: ${{ inputs.source_run_id || '44671624893' }}
+          SOURCE_ARTIFACT: ${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}
         shell: bash
         run: |
           set -euo pipefail
