@@ -77,9 +77,13 @@ jobs:
           New-Item -ItemType Directory -Force -Path evidence | Out-Null
           $report = [ordered]@{source='user-provided Google Drive file';fileId='1G7vBJfw46Yo9vD-n_GzAs3jvzyGl9lfA';claimedName='VRoidStudio-v2.16.0-win.exe';download='NOT_RUN';sha256='NOT_RUN';authenticode='NOT_RUN';installation='NOT_RUN';launch='NOT_RUN';status='BLOCKED';reasons=@()}
           try {
-            $url='https://drive.google.com/uc?export=download&id=1G7vBJfw46Yo9vD-n_GzAs3jvzyGl9lfA'
+            # Large public Drive files use a confirmation/token flow; direct /uc returned a 2,568-byte HTML page in run 44661074875.
+            # gdown handles that flow. The downloaded executable is NEVER run or uploaded.
             $destination=Join-Path $env:RUNNER_TEMP 'vroid-installer-untrusted.exe'
-            Invoke-WebRequest -Uri $url -OutFile $destination -MaximumRedirection 5 -TimeoutSec 240
+            python -m pip install --disable-pip-version-check --no-input 'gdown==5.2.0'
+            if ($LASTEXITCODE -ne 0) { throw 'gdown installation failed' }
+            python -m gdown --id '1G7vBJfw46Yo9vD-n_GzAs3jvzyGl9lfA' --output $destination --no-cookies
+            if ($LASTEXITCODE -ne 0) { throw 'gdown Drive transfer failed; do not retry automatically' }
             $bytes=(Get-Item $destination).Length
             $report.downloadedBytes=$bytes
             if ($bytes -lt 400000000 -or $bytes -gt 550000000) { throw "Unexpected downloaded size $bytes; possibly Drive HTML consent page" }
