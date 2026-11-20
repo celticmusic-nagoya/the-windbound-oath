@@ -56,6 +56,7 @@ def audit(obj):
         pairs.append({
             "triangle_indices": [i, j],
             "face_ids": [left["face_id"], right["face_id"]],
+            "triangles": [dict(row, local_xyz=[list(mesh.vertices[k].co) for k in row["vertex_ids"]], world_xyz=[world[k] for k in row["vertex_ids"]], normal=list(mesh.polygons[row["face_id"]].normal), material_slot=mesh.polygons[row["face_id"]].material_index, loops=[{"id": k, "vertex": mesh.loops[k].vertex_index, "uv": {layer.name: list(layer.uv[k].vector) for layer in mesh.uv_layers}} for k in mesh.polygons[row["face_id"]].loop_indices]) for row in (left, right)],
             "vertex_ids": [list(left["vertex_ids"]), list(right["vertex_ids"])],
             "world_aabb": {
                 "min": [min(v[axis] for v in xyz) for axis in range(3)],
