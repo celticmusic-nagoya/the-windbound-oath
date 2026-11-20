@@ -47,10 +47,15 @@ jobs:
           exe="$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")"
           file "$app/Contents/MacOS/$exe" > evidence/binary.txt
           test "$(uname -m)" = arm64
-          "$app/Contents/MacOS/$exe" -logFile "$GITHUB_WORKSPACE/evidence/player.log" > evidence/stdout.txt 2>&1 &
+          # Prior ARM64 run exited 127: Unity could not open custom log path.
+          # Use Unity standard output logging; no workspace path dependency.
+          "$app/Contents/MacOS/$exe" -logFile - > evidence/stdout.txt 2>&1 &
           pid=$!
           sleep 45
           ps -axo pid,comm > evidence/processes.txt
+          if [ -d "$HOME/Library/Logs" ]; then
+            find "$HOME/Library/Logs" -maxdepth 4 -name Player.log -exec cp {} evidence/ \;
+          fi
           screencapture -x evidence/screen.png || true
           if [ -d "$HOME/Library/Logs/DiagnosticReports" ]; then
             find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -iname '*vroid*' -exec cp {} evidence/ \;
