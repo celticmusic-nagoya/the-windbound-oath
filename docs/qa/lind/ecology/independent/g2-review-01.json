@@ -1,0 +1,270 @@
+{
+ "review_id": "G2_REVIEW_01",
+ "task": "LIND-ECO-01",
+ "lane": "ECO",
+ "gate": "G2",
+ "reviewer": "independent (not author)",
+ "date": "2026-11-17",
+ "overall_verdict": "FAIL",
+ "inputs_sha256": {
+  "renders/eco_lineup_large_wind0.png": "a69340457492310cf1a06b278782638b9b5375fec8151c075950460ca00779e4",
+  "renders/eco_lineup_small_wind0.png": "955d78b5314a72eee9a434d125984353fa22e3775a91cf013b4ffc4270d8d96f",
+  "renders/renders.json": "4a969dfde064bf9f00d50d54cb1a156f498c52301af393a890688e400f6bf650",
+  "textures/grass_card_lod1.png": "fe11cba8211fd92e72422c9548babe0988d1f5ebba96f3e578b108e7457fd7b7",
+  "textures/leaf_spray_apple.png": "03ddbc141a75a57da57f7fd84ec330b20cf144f55e9acb38752d9a0c37cb6277",
+  "textures/leaf_spray_broadleaf.png": "2a86eb8b029d8bb7e887fedfd7ea457036d0fabd14f559cf4078478e47de3e44",
+  "textures/leaf_spray_needle.png": "4dfc24ff3a9b6a78d9195207abfbf3b35b5ed6428c6769a5af5eb8d5922e818b",
+  "refs/lind_world_master_abbb3997.png": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+  "approved/world/rilde_village.png": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "approved/game/cliff/sunset_background.png": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "approved/game/rilde_story/raid/attack_background_only.png": "a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e",
+  "docs/qa/lind/ecology/PRIOR_HISTORY.md": "23a0a1558bc9ca8d6ee8b0a408910031aeb10b7bdf5852a6182bb3de8ae81481",
+  "context_only:/tmp/lind_eco/eco_kit_build.json": "8cb2a05aa3a88d6d2e05103215a38316333a55ff36e9969e6a67208d6dc53ac8",
+  "context_only:tools/.../eco_assets.py": "f000838d4b5fa2c1b56c034af6c960dbc2fb079650dee4645cb56d4369cfd612",
+  "context_only:tools/.../render_eco.py": "e1b3585ad636be70a28fd101e1179a8cf2a8bbb12a308f2210d2c95ac9df8631"
+ },
+ "world_master_sha_verified": true,
+ "lineup_render_sha_matches_renders_json": true,
+ "provenance_findings": [
+  "Lineup renders dated 2026-11-16 18:20/18:27; textures, generator scripts and build json dated 2026-11-17 00:44-00:45. Renders predate the current build; renders.json records no script/geometry/texture hashes, so the reviewed renders cannot be tied to current geometry.",
+  "render_eco.py lineup_large places eco_tree_conifer_a (x=7.6), eco_rocks_river (x=-12) and eco_rocks_coastal (x=-15.6); none are visible in the reviewed PNG (conifer slot between forest_tall and hedgerow is empty).",
+  "eco_water_module_wind0_f12.png changed during review (now f8f0817e..., renders.json says f57e1e08...): manifest stale; kit was in flux. Water module out of scope."
+ ],
+ "textures": {
+  "all": {
+   "mode": "RGBA",
+   "alpha_values": "binary 0/255 only (partial fraction 0.000)",
+   "rgb_under_alpha0": "filled with mean leaf colour (good: no light/dark halo under filtering)"
+  },
+  "grass_card_lod1.png": {
+   "size": [
+    256,
+    512
+   ],
+   "alpha_min": 0,
+   "alpha_max": 255,
+   "frac_transparent": 0.786,
+   "mip32_coverage_change": "0.214->0.186 (-13%, thins at distance)",
+   "defect": "blades rasterised as chains of dots/stipple (undersampled thin strokes), hard binary edge"
+  },
+  "leaf_spray_apple.png": {
+   "size": [
+    512,
+    512
+   ],
+   "alpha_min": 0,
+   "alpha_max": 255,
+   "frac_transparent": 0.853,
+   "lum_std": 12.2,
+   "alpha_IoU_vs_broadleaf": 0.654,
+   "defect": "pinnate compound spray identical in layout to broadleaf; apple leaves are simple ovate spur clusters"
+  },
+  "leaf_spray_broadleaf.png": {
+   "size": [
+    512,
+    512
+   ],
+   "alpha_min": 0,
+   "alpha_max": 255,
+   "frac_transparent": 0.815,
+   "lum_std": 11.1,
+   "defect": "single flat vector pinnate spray (ash/sumac-like), one hue, minimal value variation: reads clip-art, not painterly"
+  },
+  "leaf_spray_needle.png": {
+   "size": [
+    512,
+    512
+   ],
+   "alpha_min": 0,
+   "alpha_max": 255,
+   "frac_transparent": 0.787,
+   "lum_std": 6.5,
+   "mip32_coverage_change": "0.213->0.257 (+20%, conifer will bloat/darken at distance)",
+   "note": "conifer not present in reviewed render"
+  }
+ },
+ "colour_metrics_green_pixels": {
+  "render_trees": {
+   "hue_med": 97,
+   "sat_med": 0.47,
+   "val_p5_p50_p95": [
+    0.03,
+    0.18,
+    0.39
+   ]
+  },
+  "render_hedge": {
+   "hue_med": 92,
+   "sat_med": 0.38,
+   "val_p5_p50_p95": [
+    0.27,
+    0.41,
+    0.53
+   ]
+  },
+  "rilde_village_approved": {
+   "hue_med": 86,
+   "sat_med": 0.4,
+   "val_p5_p50_p95": [
+    0.13,
+    0.31,
+    0.53
+   ]
+  },
+  "world_master": {
+   "hue_med": 103,
+   "sat_med": 0.35,
+   "val_p5_p50_p95": [
+    0.15,
+    0.31,
+    0.52
+   ]
+  },
+  "reading": "tree crowns ~40% darker at median with crushed near-black core (p5 0.03 vs 0.13) and no warm sunlit tops (p95 0.39 vs 0.52); hedge is brighter than trees -> kit internally inconsistent"
+ },
+ "assets": [
+  {
+   "asset": "deciduous tree",
+   "id": "eco_tree_deciduous_a",
+   "verdict": "FAIL",
+   "dims_m": [
+    8.14,
+    5.68,
+    6.03
+   ]
+  },
+  {
+   "asset": "apple tree",
+   "id": "eco_tree_apple_a",
+   "verdict": "FAIL",
+   "dims_m": [
+    5.6,
+    5.08,
+    4.52
+   ]
+  },
+  {
+   "asset": "second tree",
+   "id": "eco_tree_forest_tall_a",
+   "verdict": "FAIL",
+   "dims_m": [
+    7.64,
+    6.52,
+    7.82
+   ]
+  },
+  {
+   "asset": "hedgerow",
+   "id": "eco_hedgerow",
+   "verdict": "FAIL",
+   "dims_m": [
+    4.75,
+    0.91,
+    1.32
+   ]
+  },
+  {
+   "asset": "haystack",
+   "id": "eco_haystack",
+   "verdict": "PASS",
+   "dims_m": [
+    3.24,
+    3.14,
+    2.74
+   ],
+   "limit": "form/readability only; warm-light colour coherence NOT_RUN"
+  },
+  {
+   "asset": "livestock",
+   "id": "eco_cow_blockout",
+   "verdict": "BLOCKOUT_NOT_ART",
+   "dims_m": [
+    0.51,
+    2.58,
+    1.23
+   ]
+  },
+  {
+   "asset": "wheat patch",
+   "id": "eco_wheat_patch",
+   "verdict": "FAIL",
+   "dims_m": [
+    3.48,
+    2.19,
+    1.28
+   ]
+  },
+  {
+   "asset": "vegetable rows",
+   "id": "eco_vegetable_rows",
+   "verdict": "FAIL",
+   "dims_m": [
+    3.0,
+    2.25,
+    0.26
+   ]
+  },
+  {
+   "asset": "flowers",
+   "id": "eco_flower_patch",
+   "verdict": "FAIL",
+   "dims_m": [
+    2.71,
+    1.61,
+    0.68
+   ]
+  },
+  {
+   "asset": "fence",
+   "id": "eco_fence_post_rail",
+   "verdict": "FAIL",
+   "dims_m": [
+    6.78,
+    0.22,
+    1.16
+   ]
+  },
+  {
+   "asset": "chicken",
+   "id": "eco_chicken_hen_a",
+   "verdict": "BLOCKOUT_NOT_ART",
+   "dims_m": [
+    0.26,
+    0.59,
+    0.48
+   ]
+  },
+  {
+   "asset": "grass clumps (6 variants + LOD1 card)",
+   "id": "eco_grass_*, eco_sedge_bank, eco_reed_riverside, eco_grass_card_lod1",
+   "verdict": "FAIL",
+   "prior_history": "Not a VEG-F1 repeat (code: off-centre tillers, droop, seed heads, vertex colour = ECO-G1). This is the first G2 FAIL recorded for ECO-G1 (code marks geometry 'attempt 2'). Measurable hypothesis (dense tuft, darker core/lighter crown at 48/96 px) NOT MET. Next fix must be structural, not blade count/seed (VEG-F1x stopped)."
+  }
+ ],
+ "not_judged": {
+  "wind_motion": "NOT_RUN (no wind=1 frame or wind pair rendered)",
+  "warm_target_lighting": "NOT_RUN (neutral grey ground/blue-grey sky preview only)",
+  "game_camera_25_30deg": "NOT_RUN (lineup camera ~16 deg elevation)",
+  "human_scale_proxy": "NOT_RUN (no 1.75 m figure in renders; scale judged from build json dims)",
+  "conifer_and_rocks": "NOT_RENDERED in reviewed lineup",
+  "lod_transitions_and_mip_behaviour_in_engine": "NOT_RUN (offline mip coverage measured only)",
+  "perf_budget": "NOT_RUN (no budget given; wheat 73k tris, flowers 30k, hedge 35k noted)"
+ },
+ "prioritised_fixes": [
+  "P1 Re-render from the current build; renders.json must carry script/geometry/texture SHAs; include conifer+rocks, a 1.75 m human proxy, game camera (25-30 deg), warm key light matched to approved art, and a wind=0/wind=1 pair.",
+  "P2 Tree crown rebuild (deciduous, forest_tall): lobed cluster crown + leaf-cluster cards oriented to crown normals (not branch direction) + transferred/bent normals and translucency; kill spiky starburst silhouette, visible card rims and black interior.",
+  "P3 Repaint leaf textures: species-specific (broadleaf lobed/ovate clusters, apple spur rosettes), painterly value/hue variation, supersampled soft edges, coverage-preserving mips.",
+  "P4 Apple tree: visible trunk/scaffolds under a rounded orchard crown; readable fruit clusters at 96 px.",
+  "P5 Grass ECO-G1 structural change: add basal mass layer (dense short-blade/shell ring at the crown) so tillers fuse into one tuft; warmer/saturated tip ramp; re-raster LOD1 card with AA (fix dotted blades); stop tall_lax blades lying flat on ground.",
+  "P6 Livestock: replace metaball blockout with a modelled/textured cow at 1.3-1.5 m withers (current reads as a white goat).",
+  "P7 Chicken: replace slab wings/bib/flat fan tail with shaped feather-group geometry and plumage texture.",
+  "P8 Fence: rough-hewn split rails (not 7.6 cm round dowels), dark weathered grain, varied posts, rails seated/nailed; match approved village fence.",
+  "P9 Beds: wheat golden warm with ear readability and edge density taper; vegetable soil as furrows blended to terrain (remove tray edges and grey dots), irregular spacing/varied crops; flowers grown in a grass bed with larger purple spikes and daisies.",
+  "P10 Hedgerow: irregular plan/height, colour matched to trees (darker interior), remove stray bare stubs at ends, blend base into grass."
+ ],
+ "outputs": [
+  "/home/claude/qa/eco/G2_REVIEW_01.md",
+  "/home/claude/qa/eco/g2-review-01.json"
+ ],
+ "scratch_dir": "/home/claude/qa/eco/work (crops/downsamples, review evidence only)"
+}

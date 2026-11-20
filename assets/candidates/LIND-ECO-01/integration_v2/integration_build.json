@@ -1,0 +1,2444 @@
+{
+ "schema": "two.lind.eco.integration.v2",
+ "task_id": "LIND-ECO-01",
+ "blender": "5.3.0",
+ "seed_new_assets": 20261120,
+ "kit_combined_geometry_sha256": "344e32294e0c66f769979c7be1d5f594911646bf51c5fcb393eb83190fa66cba",
+ "selection": {
+  "eco_tree_deciduous_a": {
+   "verdict": "PACKAGE",
+   "reason": "oak cloud crown; matches rounded oaks of rilde_village.png and cliff CG foreground tree",
+   "geometry_sha256": "46e21961d43b53dcf586fe154bb44472b5527153746c2b83d64899040d2a476a",
+   "matches_kit_build": true,
+   "tris_lod0": 10647
+  },
+  "eco_tree_forest_tall_a": {
+   "verdict": "PACKAGE",
+   "reason": "beech ovoid; woodland edge / Moss Forest approach",
+   "geometry_sha256": "e6b25246f116b59b5f52f143e6bee96180de9c8f1ed8bdaa9210a73b47e7e6ae",
+   "matches_kit_build": true,
+   "tris_lod0": 12539
+  },
+  "eco_tree_apple_a": {
+   "verdict": "PACKAGE",
+   "reason": "orchard only; not in cliff zone",
+   "geometry_sha256": "e7b3331b97e8cb178d3bba9a16722ef5bd38c60663fab9c0a62040851cce3047",
+   "matches_kit_build": true,
+   "tris_lod0": 7829
+  },
+  "eco_tree_conifer_a": {
+   "verdict": "PACKAGE",
+   "reason": "conifers visible on rilde_village.png hills; background/forest only",
+   "geometry_sha256": "09794df452db689a9e55ac7b98f76c203f2f05a002379cbdbc697d6dcc785502",
+   "matches_kit_build": true,
+   "tris_lod0": 19122
+  },
+  "eco_hedgerow": {
+   "verdict": "PACKAGE",
+   "reason": "HEDGE-F2 cluster shell; field boundaries",
+   "geometry_sha256": "a7cd6468bdf91b7b41289cdf0349fcb4224828c48683fef0df1388f10397d778",
+   "matches_kit_build": true,
+   "tris_lod0": 5016
+  },
+  "eco_grass_tuft_short": {
+   "verdict": "PACKAGE",
+   "reason": "ECO-G2 accent tuft over turf; paths/verges",
+   "geometry_sha256": "bee8e9807f954f35e66a381d7a2d480538e3cfa78e7e21d8cc3543cbd6d93219",
+   "matches_kit_build": true,
+   "tris_lod0": 2652
+  },
+  "eco_grass_meadow": {
+   "verdict": "PACKAGE",
+   "reason": "ECO-G2 accent clump with seed stems",
+   "geometry_sha256": "d0d39b923bd389dc39ad5d83b403874cfbf393b59907c4d34ab6fd42ebf02ee9",
+   "matches_kit_build": true,
+   "tris_lod0": 3838
+  },
+  "eco_grass_tall_lax": {
+   "verdict": "PACKAGE",
+   "reason": "field margins, fence feet",
+   "geometry_sha256": "d811c359dd0ee9bf6ab1138092e9e20b37fdb1f223b557680d87f987381bb0c7",
+   "matches_kit_build": true,
+   "tris_lod0": 4840
+  },
+  "eco_grass_coastal_dune": {
+   "verdict": "PACKAGE",
+   "reason": "wind-combed accent for exposed cliff edge only; never as the carpet",
+   "geometry_sha256": "d79cab166649a9394b6257117e9d65b81d6072e3500b915cc709b318bcc5f44c",
+   "matches_kit_build": true,
+   "tris_lod0": 4412
+  },
+  "eco_sedge_bank": {
+   "verdict": "PACKAGE",
+   "reason": "river banks (rilde_village.png river)",
+   "geometry_sha256": "a2dbd800547c4db57fa0942251fae27dfaf11f101d5bd14ca927fee5ef15616c",
+   "matches_kit_build": true,
+   "tris_lod0": 3002
+  },
+  "eco_reed_riverside": {
+   "verdict": "PACKAGE",
+   "reason": "river banks, sparse",
+   "geometry_sha256": "6098a91ba879c8640f99e7b2079ce7088dfa95a8daef1807bc65c8c630a99bc9",
+   "matches_kit_build": true,
+   "tris_lod0": 2510
+  },
+  "eco_grass_card_lod1": {
+   "verdict": "SUPERSEDED",
+   "reason": "stippled binary-alpha card (G2-01 defect); replaced by per-asset LOD2 impostors",
+   "geometry_sha256": "06d7b2ea9139bd0c0597f83c98ca4185717ac60a0979dc08792a26179368c7b2",
+   "matches_kit_build": true,
+   "tris_lod0": 6
+  },
+  "eco_flower_patch": {
+   "verdict": "SUPERSEDED",
+   "reason": "red poppies absent from both approved CGs; split into CG-matched clumps below",
+   "geometry_sha256": "d070dac8744a258dcb01448924d96bb138edb70ad76b04808e1c875a21ea8e59",
+   "matches_kit_build": true,
+   "tris_lod0": 44952
+  },
+  "eco_wheat_patch": {
+   "verdict": "DEFER",
+   "reason": "farmland crop, not in this vegetation pass",
+   "geometry_sha256": "18eb8059a04cc3735de6f64c14f1c50fd71a86fb7496e99871661360e7bda8ca",
+   "matches_kit_build": true,
+   "tris_lod0": 59902
+  },
+  "eco_vegetable_rows": {
+   "verdict": "DEFER",
+   "reason": "farmland crop, not in this vegetation pass",
+   "geometry_sha256": "c37f5e937628fef0436805499a8608673fe0acbe6a521b20231ca26cb85b939e",
+   "matches_kit_build": true,
+   "tris_lod0": 19122
+  },
+  "eco_haystack": {
+   "verdict": "DEFER",
+   "reason": "farm prop",
+   "geometry_sha256": "4d3ec2054d4497816537917eb2431811a7328e82e470d04dea8e8fdc769b7385",
+   "matches_kit_build": true,
+   "tris_lod0": 7218
+  },
+  "eco_fence_post_rail": {
+   "verdict": "DEFER",
+   "reason": "boundary prop, not vegetation",
+   "geometry_sha256": "c15890de6e36e7f09e5dc1f79ab3d7d7f922383e187989059ddac27f027a55be",
+   "matches_kit_build": true,
+   "tris_lod0": 592
+  },
+  "eco_rocks_river": {
+   "verdict": "DEFER",
+   "reason": "rock lane (PR #421 owns cliff rock); used only as a moss-placement preview surface",
+   "geometry_sha256": "a889987333b0fdabc64b7ba35b1d5f58489e3226af200af35d8373eed73dee13",
+   "matches_kit_build": true,
+   "tris_lod0": 8960
+  },
+  "eco_rocks_coastal": {
+   "verdict": "EXCLUDE",
+   "reason": "independent G2 FAIL: inflated smooth proxy boulders",
+   "geometry_sha256": "8749ba728209808897f9b0d8963ae81afd7c841b77f9f4fd6bbaa71347300fd1",
+   "matches_kit_build": true,
+   "tris_lod0": 17920
+  },
+  "eco_river_water": {
+   "verdict": "DEFER",
+   "reason": "water lane",
+   "geometry_sha256": "fda6caa086a74699fd260cf2b444a9b8e20add03a5fc72bdab7649e80f8f4c47",
+   "matches_kit_build": true,
+   "tris_lod0": 3840
+  },
+  "eco_river_bank": {
+   "verdict": "DEFER",
+   "reason": "preview terrain, replaced by WORLD terrain",
+   "geometry_sha256": "ac2c1eeff3a50c4848bd14b6ca1c5bb68b98a40f1dd5d4509747fc58537cad63",
+   "matches_kit_build": true,
+   "tris_lod0": 3360
+  },
+  "eco_chicken_hen_blockout": {
+   "verdict": "EXCLUDE",
+   "reason": "STRUCTURAL_BLOCKOUT_NOT_ART",
+   "geometry_sha256": "474ad60c94f5f59417c98d85bd8fd7c39e0b6728dd8c72b2b6d21a5888878ce7",
+   "matches_kit_build": true,
+   "tris_lod0": 5232
+  },
+  "eco_cow_blockout": {
+   "verdict": "EXCLUDE",
+   "reason": "STRUCTURAL_BLOCKOUT_NOT_ART",
+   "geometry_sha256": "6064525ce3c4c39306e66c2f0ab1710c550dc97c6040c2b78b65bff50ed2a01b",
+   "matches_kit_build": true,
+   "tris_lod0": 6897
+  }
+ },
+ "new_assets": {
+  "eco_turf_meadow_a": {
+   "stats": {
+    "blades": 1318,
+    "straw": 125,
+    "tall": 72,
+    "size_m": 2.0,
+    "density_per_m2": 520.0,
+    "method": "TURF-T1 stratified continuous turf, swell+patch fields, feathered superellipse"
+   },
+   "geometry_sha256": "8686e6ad0edb70ae7a1caee0beb355e967e11dc0fc61e54e6bc0498035b1dc09",
+   "tris_lod0": 6590,
+   "dims_m": [
+    1.925,
+    1.901,
+    0.294
+   ]
+  },
+  "eco_flower_daisy_clump": {
+   "stats": {
+    "flowers": 13,
+    "method": "FLOWER-F2 single-species colony + rosette + turf skirt"
+   },
+   "geometry_sha256": "5c81ca751a5795705d3c7059d3bd0224ce3c2ea12acbe0d34e26c6a1352bba77",
+   "tris_lod0": 4718,
+   "dims_m": [
+    0.597,
+    0.554,
+    0.39
+   ]
+  },
+  "eco_flower_violet_cushion": {
+   "stats": {
+    "heads": 15,
+    "method": "FLOWER-F2 leaf cushion + globular heads"
+   },
+   "geometry_sha256": "cfff1c389c1d80c4a544a7e31f16d64c6ccf17d9cafeb7088ca296ee69eb2f2f",
+   "tris_lod0": 3390,
+   "dims_m": [
+    0.41,
+    0.394,
+    0.267
+   ]
+  },
+  "eco_flower_spike_clump": {
+   "stats": {
+    "spikes": 5,
+    "method": "FLOWER-F2 spike colony + rosette + turf skirt"
+   },
+   "geometry_sha256": "5e32059a2fcc21d81e0765917f0b874e6a2e3567dba3363dcf96188ea6b21d61",
+   "tris_lod0": 1330,
+   "dims_m": [
+    0.489,
+    0.452,
+    0.834
+   ]
+  },
+  "eco_moss_cushion_a": {
+   "stats": {
+    "radius_m": 0.32,
+    "height_m": 0.055,
+    "method": "MOSS-M1 displaced dome/mat + tileable PBR"
+   },
+   "geometry_sha256": "880dffff1ea082b15f0bcc606da3c2f3032cb33f359c12f7181ca15b298a6b0f",
+   "tris_lod0": 680,
+   "dims_m": [
+    0.498,
+    0.622,
+    0.084
+   ]
+  },
+  "eco_moss_mat_b": {
+   "stats": {
+    "radius_m": 0.55,
+    "height_m": 0.012,
+    "method": "MOSS-M1 displaced dome/mat + tileable PBR"
+   },
+   "geometry_sha256": "6977f3d63b575a906e2c13b40aeb327d4b0e8cf54ab4c2808dc58755028648d1",
+   "tris_lod0": 572,
+   "dims_m": [
+    0.965,
+    1.009,
+    0.029
+   ]
+  },
+  "eco_shrub_round_a": {
+   "stats": {
+    "branches": 75,
+    "leaf_cards": 187,
+    "apples": 0,
+    "lobes": 4,
+    "max_depth": 3,
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
+    "leaf_texture": "beech",
+    "height_m": 1.169
+   },
+   "geometry_sha256": "7f27fa0b7d1ffdc35fed6706f2eafec555044a1eac4908331eff49e4bbf52fc0",
+   "tris_lod0": 2473,
+   "dims_m": [
+    2.258,
+    2.53,
+    1.299
+   ]
+  }
+ },
+ "packaged": {
+  "eco_tree_deciduous_a": {
+   "category": "tree",
+   "placement_rule": "tree_broadleaf",
+   "wind": [
+    0.22,
+    0.32,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_bark",
+    "M_eco_leafcard_oak"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_tree_deciduous_a_LOD0.glb",
+     "tris": 10647,
+     "dims_m": [
+      6.96,
+      7.216,
+      5.951
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_oak",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 980928
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_tree_deciduous_a_LOD1.glb",
+     "tris": 2446,
+     "dims_m": [
+      7.368,
+      7.488,
+      6.215
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_oak",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 550572
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_tree_deciduous_a_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      7.36,
+      7.36,
+      7.36
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_tree_deciduous_a_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 588192
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_tree_deciduous_a_LOD2_atlas.png",
+    "span_m": 7.36,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_tree_forest_tall_a": {
+   "category": "tree",
+   "placement_rule": "tree_woodland",
+   "wind": [
+    0.28,
+    0.28,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_bark",
+    "M_eco_leafcard_beech"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_tree_forest_tall_a_LOD0.glb",
+     "tris": 12539,
+     "dims_m": [
+      6.425,
+      6.261,
+      7.886
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_beech",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 1121752
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_tree_forest_tall_a_LOD1.glb",
+     "tris": 3051,
+     "dims_m": [
+      6.593,
+      6.526,
+      8.05
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_beech",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 667372
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_tree_forest_tall_a_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      7.985,
+      7.985,
+      7.985
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_tree_forest_tall_a_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 589744
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_tree_forest_tall_a_LOD2_atlas.png",
+    "span_m": 7.985,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_tree_apple_a": {
+   "category": "tree",
+   "placement_rule": "tree_orchard",
+   "wind": [
+    0.16,
+    0.36,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_bark",
+    "M_eco_leafcard_apple",
+    "M_eco_apple"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_tree_apple_a_LOD0.glb",
+     "tris": 7829,
+     "dims_m": [
+      5.625,
+      4.542,
+      3.846
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_apple",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       },
+       {
+        "name": "GM_eco_fruit_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 3,
+      "bytes": 745612
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_tree_apple_a_LOD1.glb",
+     "tris": 2030,
+     "dims_m": [
+      5.894,
+      4.59,
+      3.904
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_apple",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       },
+       {
+        "name": "GM_eco_fruit_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 3,
+      "bytes": 487524
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_tree_apple_a_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      5.737,
+      5.737,
+      5.737
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_tree_apple_a_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 424428
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_tree_apple_a_LOD2_atlas.png",
+    "span_m": 5.737,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_tree_conifer_a": {
+   "category": "tree",
+   "placement_rule": "tree_conifer",
+   "wind": [
+    0.2,
+    0.25,
+    0.25
+   ],
+   "source_material_slots": [
+    "M_eco_bark",
+    "M_eco_leafcard_needle"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_tree_conifer_a_LOD0.glb",
+     "tris": 19122,
+     "dims_m": [
+      7.096,
+      7.108,
+      7.99
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_needle",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 1974176
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_tree_conifer_a_LOD1.glb",
+     "tris": 5988,
+     "dims_m": [
+      7.32,
+      7.633,
+      8.144
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_needle",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 1108548
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_tree_conifer_a_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      8.15,
+      8.15,
+      8.15
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_tree_conifer_a_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 549788
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_tree_conifer_a_LOD2_atlas.png",
+    "span_m": 8.15,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_hedgerow": {
+   "category": "shrub",
+   "placement_rule": "hedgerow",
+   "wind": [
+    0.06,
+    0.45,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_bark",
+    "M_eco_leafcard_oak"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_hedgerow_LOD0.glb",
+     "tris": 5016,
+     "dims_m": [
+      4.943,
+      1.637,
+      1.687
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_oak",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 673280
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_hedgerow_LOD1.glb",
+     "tris": 1317,
+     "dims_m": [
+      5.016,
+      1.54,
+      1.857
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_oak",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 475684
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_hedgerow_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      5.042,
+      5.042,
+      5.042
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_hedgerow_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 175108
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_hedgerow_LOD2_atlas.png",
+    "span_m": 5.042,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_shrub_round_a": {
+   "category": "shrub",
+   "placement_rule": "shrub_low",
+   "wind": [
+    0.07,
+    0.45,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_bark",
+    "M_eco_leafcard_beech"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_shrub_round_a_LOD0.glb",
+     "tris": 2473,
+     "dims_m": [
+      2.258,
+      2.53,
+      1.299
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_beech",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 553552
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_shrub_round_a_LOD1.glb",
+     "tris": 621,
+     "dims_m": [
+      2.28,
+      2.56,
+      1.356
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_bark_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       },
+       {
+        "name": "GM_eco_leafcard_beech",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 468320
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_shrub_round_a_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      2.58,
+      2.58,
+      2.58
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_shrub_round_a_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 454772
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_shrub_round_a_LOD2_atlas.png",
+    "span_m": 2.58,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_grass_tuft_short": {
+   "category": "grass",
+   "placement_rule": "grass_accent",
+   "wind": [
+    0.05,
+    0.7,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_grass_tuft_short_LOD0.glb",
+     "tris": 2652,
+     "dims_m": [
+      0.397,
+      0.316,
+      0.229
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 101680
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_grass_tuft_short_LOD1.glb",
+     "tris": 1240,
+     "dims_m": [
+      0.372,
+      0.346,
+      0.247
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 48420
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_grass_tuft_short_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.393,
+      0.393,
+      0.393
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_grass_tuft_short_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 151144
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_grass_tuft_short_LOD2_atlas.png",
+    "span_m": 0.393,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_grass_meadow": {
+   "category": "grass",
+   "placement_rule": "grass_accent",
+   "wind": [
+    0.08,
+    0.6,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_grass_meadow_LOD0.glb",
+     "tris": 3838,
+     "dims_m": [
+      0.549,
+      0.75,
+      0.72
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 139096
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_grass_meadow_LOD1.glb",
+     "tris": 1571,
+     "dims_m": [
+      0.6,
+      0.707,
+      0.789
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 57920
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_grass_meadow_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.849,
+      0.849,
+      0.849
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_grass_meadow_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 172820
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_grass_meadow_LOD2_atlas.png",
+    "span_m": 0.849,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_grass_tall_lax": {
+   "category": "grass",
+   "placement_rule": "grass_margin",
+   "wind": [
+    0.12,
+    0.55,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_grass_tall_lax_LOD0.glb",
+     "tris": 4840,
+     "dims_m": [
+      0.936,
+      1.08,
+      1.024
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 178992
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_grass_tall_lax_LOD1.glb",
+     "tris": 2152,
+     "dims_m": [
+      1.043,
+      1.093,
+      1.026
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 80848
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_grass_tall_lax_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      1.132,
+      1.132,
+      1.132
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_grass_tall_lax_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 159056
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_grass_tall_lax_LOD2_atlas.png",
+    "span_m": 1.132,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_grass_coastal_dune": {
+   "category": "grass",
+   "placement_rule": "grass_cliff_edge",
+   "wind": [
+    0.09,
+    0.6,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_grass_coastal_dune_LOD0.glb",
+     "tris": 4412,
+     "dims_m": [
+      0.793,
+      0.579,
+      0.786
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 162524
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_grass_coastal_dune_LOD1.glb",
+     "tris": 1862,
+     "dims_m": [
+      0.856,
+      0.543,
+      0.867
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 68772
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_grass_coastal_dune_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.841,
+      0.841,
+      0.841
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_grass_coastal_dune_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 170836
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_grass_coastal_dune_LOD2_atlas.png",
+    "span_m": 0.841,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_sedge_bank": {
+   "category": "grass",
+   "placement_rule": "riverbank",
+   "wind": [
+    0.1,
+    0.5,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_sedge_bank_LOD0.glb",
+     "tris": 3002,
+     "dims_m": [
+      0.969,
+      0.929,
+      0.967
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 111784
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_sedge_bank_LOD1.glb",
+     "tris": 1369,
+     "dims_m": [
+      1.03,
+      0.987,
+      1.078
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 52124
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_sedge_bank_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.996,
+      0.996,
+      0.996
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_sedge_bank_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 147024
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_sedge_bank_LOD2_atlas.png",
+    "span_m": 0.996,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_reed_riverside": {
+   "category": "grass",
+   "placement_rule": "riverbank",
+   "wind": [
+    0.14,
+    0.5,
+    0.3
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_reed_riverside_LOD0.glb",
+     "tris": 2510,
+     "dims_m": [
+      1.316,
+      1.169,
+      1.526
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 90988
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_reed_riverside_LOD1.glb",
+     "tris": 1110,
+     "dims_m": [
+      1.472,
+      1.224,
+      1.641
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 40896
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_reed_riverside_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      1.549,
+      1.549,
+      1.549
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_reed_riverside_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 145968
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_reed_riverside_LOD2_atlas.png",
+    "span_m": 1.549,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_turf_meadow_a": {
+   "category": "turf",
+   "placement_rule": "turf_carpet",
+   "wind": [
+    0.04,
+    0.7,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_grass"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_turf_meadow_a_LOD0.glb",
+     "tris": 6590,
+     "dims_m": [
+      1.925,
+      1.901,
+      0.294
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 373244
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_turf_meadow_a_LOD1.glb",
+     "tris": 1850,
+     "dims_m": [
+      1.89,
+      1.856,
+      0.347
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_foliage_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 105900
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_turf_meadow_a_LOD2.glb",
+     "tris": 2,
+     "dims_m": [
+      1.963,
+      1.963,
+      0.0
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_turf_meadow_a_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 936240
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_turf_meadow_a_LOD2_top.png",
+    "span_m": 1.963,
+    "views": [
+     "top_-Z"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_flower_daisy_clump": {
+   "category": "flower",
+   "placement_rule": "flower_meadow",
+   "wind": [
+    0.06,
+    0.6,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_flower"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_flower_daisy_clump_LOD0.glb",
+     "tris": 4718,
+     "dims_m": [
+      0.597,
+      0.554,
+      0.39
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 198620
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_flower_daisy_clump_LOD1.glb",
+     "tris": 2844,
+     "dims_m": [
+      0.612,
+      0.545,
+      0.397
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 122000
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_flower_daisy_clump_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.609,
+      0.609,
+      0.609
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_daisy_clump_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 402540
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_flower_daisy_clump_LOD2_atlas.png",
+    "span_m": 0.609,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_flower_violet_cushion": {
+   "category": "flower",
+   "placement_rule": "flower_cliff_cushion",
+   "wind": [
+    0.03,
+    0.6,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_flower"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_flower_violet_cushion_LOD0.glb",
+     "tris": 3390,
+     "dims_m": [
+      0.41,
+      0.394,
+      0.267
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 133144
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_flower_violet_cushion_LOD1.glb",
+     "tris": 2025,
+     "dims_m": [
+      0.421,
+      0.41,
+      0.271
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 78764
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_flower_violet_cushion_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.419,
+      0.419,
+      0.419
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_violet_cushion_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 399580
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_flower_violet_cushion_LOD2_atlas.png",
+    "span_m": 0.419,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_flower_spike_clump": {
+   "category": "flower",
+   "placement_rule": "flower_village",
+   "wind": [
+    0.07,
+    0.55,
+    0.35
+   ],
+   "source_material_slots": [
+    "M_eco_flower"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_flower_spike_clump_LOD0.glb",
+     "tris": 1330,
+     "dims_m": [
+      0.489,
+      0.452,
+      0.834
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 72556
+     }
+    },
+    {
+     "lod": 1,
+     "file": "glb/eco_flower_spike_clump_LOD1.glb",
+     "tris": 750,
+     "dims_m": [
+      0.454,
+      0.466,
+      0.82
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_vcol",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": false,
+        "normalTexture": false,
+        "metallicRoughnessTexture": false
+       }
+      ],
+      "images": 0,
+      "bytes": 40988
+     }
+    },
+    {
+     "lod": 2,
+     "file": "glb/eco_flower_spike_clump_LOD2.glb",
+     "tris": 4,
+     "dims_m": [
+      0.851,
+      0.851,
+      0.851
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_flower_spike_clump_LOD2",
+        "alphaMode": "MASK",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 254576
+     }
+    }
+   ],
+   "impostor": {
+    "atlas": "eco_flower_spike_clump_LOD2_atlas.png",
+    "span_m": 0.851,
+    "views": [
+     "front_-Y",
+     "side_+X"
+    ],
+    "samples": 16
+   }
+  },
+  "eco_moss_cushion_a": {
+   "category": "moss",
+   "placement_rule": "moss_cushion",
+   "wind": null,
+   "source_material_slots": [
+    "M_eco_moss"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_moss_cushion_a_LOD0.glb",
+     "tris": 680,
+     "dims_m": [
+      0.498,
+      0.622,
+      0.084
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_moss",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 656256
+     }
+    }
+   ]
+  },
+  "eco_moss_mat_b": {
+   "category": "moss",
+   "placement_rule": "moss_mat",
+   "wind": null,
+   "source_material_slots": [
+    "M_eco_moss"
+   ],
+   "lods": [
+    {
+     "lod": 0,
+     "file": "glb/eco_moss_mat_b_LOD0.glb",
+     "tris": 572,
+     "dims_m": [
+      0.965,
+      1.009,
+      0.029
+     ],
+     "glb": {
+      "attributes": [
+       "COLOR_0",
+       "NORMAL",
+       "POSITION",
+       "TANGENT",
+       "TEXCOORD_0",
+       "_WIND_WEIGHT"
+      ],
+      "materials": [
+       {
+        "name": "GM_eco_moss",
+        "alphaMode": "OPAQUE",
+        "alphaCutoff": null,
+        "doubleSided": true,
+        "baseColorTexture": true,
+        "normalTexture": true,
+        "metallicRoughnessTexture": true
+       }
+      ],
+      "images": 3,
+      "bytes": 652480
+     }
+    }
+   ]
+  }
+ },
+ "albedo_gain_by_source_material": {
+  "M_eco_leafcard_oak": 1.3,
+  "M_eco_leafcard_beech": 1.25,
+  "M_eco_leafcard_apple": 1.2,
+  "M_eco_leafcard_needle": 1.1,
+  "M_eco_grass": 1.12,
+  "M_eco_flower": 1.0,
+  "M_eco_bark": 0.95
+ },
+ "lod1_rules": {
+  "tree": [
+   0.5,
+   1.3
+  ],
+  "shrub": [
+   0.5,
+   1.3
+  ],
+  "grass": [
+   0.45,
+   1.12
+  ],
+  "turf": [
+   0.28,
+   1.18
+  ],
+  "flower": [
+   0.6,
+   1.08
+  ],
+  "moss": null
+ },
+ "prevailing_wind_xy": [
+  0.9593654274940491,
+  -0.2821663022041321
+ ],
+ "status": "CANDIDATE_FOR_INTEGRATION_TEST — not adopted; G2 independent NOT_RUN for v2 assets; G4 NOT_RUN"
+}
