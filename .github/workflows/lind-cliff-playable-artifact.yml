@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   archive:
@@ -35,6 +36,18 @@ jobs:
           sha256sum -c assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
           node tests/field/windwaiting-cliff-nav.test.mjs
           node tests/field/windwaiting-cliff-eco.test.mjs
+      - name: Reuse verified photo material artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lind-photo-material-3330d3bcdfc05df9801acaebc17c8abd624f4391
+          run-id: 44735960468
+          github-token: ${{ github.token }}
+          path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
+      - name: Verify photo candidate and runtime syntax
+        run: |
+          (cd assets/candidates/lind/windwaiting-cliff-playable/photo-pbr && sha256sum -c SHA256SUMS)
+          node --check dev/windwaiting-cliff/surface.mjs
+          node --check dev/windwaiting-cliff/play.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: windwaiting-cliff-playable-${{ github.sha }}
