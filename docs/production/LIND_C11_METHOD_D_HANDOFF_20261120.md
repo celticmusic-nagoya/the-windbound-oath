@@ -34,38 +34,43 @@ change, main merge, deletion or publication. Read latest main `AGENTS.md` and
 
 Script `tools/production_qa/lind_blueprint/c11_method_d_channel.py` (Blender 5.3.0, input
 SHA-locked to Method C `d0e91ae7…`). Per fracture rail: select slit faces + topological
-k-ring (west 2, central 1), split into connected components, delete each island while
+k-ring (west 2, central 1; growth limited to the seaward wall, never across the
+crest top), split into connected components, delete each island while
 keeping every perimeter vertex bit-for-bit, refill with a projected constrained-Delaunay
-triangulation (first fold-free axis from a fixed azimuth/elevation grid; convex-disk
-parameterisation fallback), solve a harmonic height membrane from the perimeter, then
+triangulation (axis chosen from a fixed azimuth/elevation grid: simple perimeter
+polygon AND least perimeter foreshortening; convex-disk parameterisation fallback), solve a harmonic height membrane from the perimeter, then
 carve an authored asymmetric fracture channel along +Y (width/depth > 1.5, rounded lip,
 dipping bedding ledges, low-amplitude grain) faded to zero at the perimeter. Carve is
 clearance-limited and contact-relaxed against untouched geometry. UVs fitted by
-least squares from perimeter UVs (RMS 0.004 / 0.0002 / 0.010). No boolean, no extra sheet.
+least squares from perimeter UVs (RMS values in the report). No boolean, no extra sheet.
 
 Attempt ledger (same defect "C11 blade"): B FAIL, C FAIL (Codex/ChatGPT record);
 D1 geometric-tube + projected membrane → curtain over recess + serrated crest (self-QA
 FAIL, not committed); D2 ring + poke/3D Laplacian → fan triangles, 125 contacts (FAIL,
-not committed); **D3 = this candidate**. Do not rerun D1/D2 families.
+not committed); D3a (commit b31ca5f, CI run 44699120142, artifact 14612470395) → blades
+removed but west crest wedge from a grazing −Y projection (self-QA FAIL, evidence
+`review/selfqa_D3a_*`); **D3b = this candidate** (projection scored by perimeter
+squeeze, ring growth stopped at crest lip). Do not rerun D1/D2 families.
 
 ## 3. Result (local, Blender 5.3.0 official build, SHA-verified)
 
-- Candidate `c11_method_d_channel_UNAPPROVED.blend` SHA-256
-  `61181a1fb2528bc54da3a2fd384e7086d460e41e8d71d8bd5c08e715f48942db`; carrier geometry
-  SHA-256 `8b863289eb85b5b06fa21aa2f62c551cc068d180eb703a8262741909698a1103`.
-  Two independent local runs byte-identical.
-- Carrier 37720 → 39332 verts, 37783 → 41642 faces; 0 boundary / 0 non-manifold /
+- Identity = carrier geometry SHA-256
+  `b3d289124c8a8fb724de4ca30d25e57ea1e7a90f620ccee2640c5c91a2a7c934` (vertex coords +
+  face indices; identical across independent local runs and expected in CI). The
+  `.blend` container SHA varies with output location, so compare geometry SHA.
+- Carrier 37720 → 39721 verts, 37783 → 42416 faces; 0 boundary / 0 non-manifold /
   0 degenerate; consistent winding; local self-contacts 0 → 0; all 388 slit vertices
   removed; all vertices outside rebuilt islands unchanged; source SHA intact.
 - Fixed-camera review (unchanged `c11_render_review.py`, front/oblique/low):
-  `review/`. Both blades are gone in all three views.
+  `review/`. Both blades are gone in all three views; crest skyline continuous.
 
 ## 4. QA status
 
 - G1: BLOCKED (no formal map-scale approval; unchanged).
 - G2: **NOT_RUN independently.** Author self-review: blade defect resolved; remaining
-  concerns — refill reads slightly soft/lumpy vs faceted surroundings (west), crest notch
-  where the west slit crossed the lip, pre-existing C10 staircase bands. Not a PASS.
+  concerns — refill reads slightly soft/lumpy vs faceted surroundings (west), a small
+  blurred fleck near the west crest in the front view to verify, pre-existing C10
+  staircase bands. Not a PASS.
 - G3: PARTIAL_LOCAL (carrier-local topology/contacts/winding/UV only). Whole-scene G3,
   LOD/UV texel density and custom-normal review NOT_RUN.
 - G4: NOT_RUN.
@@ -73,7 +78,7 @@ not committed); **D3 = this candidate**. Do not rerun D1/D2 families.
 ## 5. Next executable tasks
 
 1. **Codex (technical QA):** check workflow `lind-cliff-c11-method-d.yml` run on this
-   commit; confirm `reproduces_claude_local_geometry`; run independent topology/contact/
+   commit; confirm `reproduces_claude_local_geometry` (geometry SHA, not file SHA); run independent topology/contact/
    UV/normal audit on the Artifact `.blend`; do not edit Claude's script in parallel.
 2. **ChatGPT (independent art QA, non-author):** compare `review/C11_methodC_vs_methodD_fixed_cameras.jpg`
    and the Artifact renders against the official CG (`assets/approved/game/cliff/sunset_background.png`);

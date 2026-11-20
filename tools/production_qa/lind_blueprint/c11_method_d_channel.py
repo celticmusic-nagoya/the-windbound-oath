@@ -209,7 +209,10 @@ def ring_region(bm, seed_faces, rings, min_z):
         for f in frontier:
             for e in f.edges:
                 for g in e.link_faces:
-                    if g not in region and all(v.co.z > min_z for v in g.verts):
+                    # grow only over the seaward wall: never across the crest
+                    # top inland of the lip (prevents crest-top folds/wedges)
+                    if g not in region and all(v.co.z > min_z and v.co.y < FRONT_Y - 0.2
+                                               for v in g.verts):
                         nxt.add(g)
         region |= nxt
         frontier = nxt
@@ -333,18 +336,36 @@ def fill_component(bm, rail, region, lay):
                   key=lambda p: abs(p[0]) + p[1])
     cands = [axis(az, el) for az, el in grid]
     cands += [(avg * (1 - m) + Vector((0, -1, 0)) * m).normalized() for m in (0.35, 0.0)]
-    tried, basis = [], None
+    # Score every candidate axis: perimeter must be a simple polygon, and the
+    # removed island should be as close to a height field as possible (least
+    # area whose normal faces away from / grazes the axis). Taking merely the
+    # first simple axis produced a crest wedge on grazing crest-top faces.
+    face_data = [(f.normal.copy(), f.calc_area()) for f in region]
+    total_area = sum(a for _, a in face_data) or 1.0
+    tried, basis, best = [], None, None
     for N in cands:
         U = Vector((0, 0, 1)).cross(N).normalized()
         V = N.cross(U).normalized()
-        poly = [(v.co.dot(U), v.co.dot(V)) for v in loop]
-        n = len(poly)
-        simple = not any(segs_intersect(poly[i], poly[(i + 1) % n], poly[j], poly[(j + 1) % n])
+        poly_c = [(v.co.dot(U), v.co.dot(V)) for v in loop]
+        n = len(poly_c)
+        simple = not any(segs_intersect(poly_c[i], poly_c[(i + 1) % n], poly_c[j], poly_c[(j + 1) % n])
                          for i in range(n) for j in range(i + 2, n) if not (i == 0 and j == n - 1))
-        tried.append({"normal": [round(c, 4) for c in N], "simple": simple})
-        if simple:
-            basis = (N, U, V)
-            break
+        # perimeter squeeze: share of perimeter length foreshortened below 35 %
+        # in the projection (crest-top edges seen edge-on create wedges)
+        plen = sq = 0.0
+        for i in range(n):
+            a3 = (loop[i].co - loop[(i + 1) % n].co).length
+            a2 = math.hypot(poly_c[i][0] - poly_c[(i + 1) % n][0], poly_c[i][1] - poly_c[(i + 1) % n][1])
+            plen += a3
+            if a2 < 0.35 * a3:
+                sq += a3
+        graze = sq / (plen or 1.0)
+        tried.append({"normal": [round(c, 4) for c in N], "simple": simple, "perimeter_squeeze_fraction": round(graze, 4)})
+        if simple and (best is None or graze < best[0] - 1e-9):
+            best = (graze, (N, U, V), poly_c)
+    if best is not None:
+        basis = best[1]
+        poly = best[2]
     if basis is None:
         return fill_component_disk(bm, rail, region, lay, loop, inner_old, tried)
     N, U, V = basis
@@ -486,7 +507,8 @@ def fill_component(bm, rail, region, lay):
         f.smooth = True
         f.normal_update()
     return faces, loop, {
-        "fill_path": "projected_cdt_height_membrane", "carve_clearance_clamped": clamped, "contact_relax_passes": relax_passes,
+        "fill_path": "projected_cdt_height_membrane", "carve_clearance_clamped": clamped,
+        "perimeter_squeeze_fraction": best[0], "contact_relax_passes": relax_passes,
         "projection_normal": [round(c, 5) for c in N], "projection_attempts": tried,
         "region_faces_removed": len(region), "perimeter_vertices_locked": len(loop),
         "old_interior_vertices_removed": len(inner_old),

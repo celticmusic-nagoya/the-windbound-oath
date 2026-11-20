@@ -70,9 +70,8 @@ jobs:
           local = json.load(open('assets/candidates/lind/windwaiting-cliff-c11/method-d/c11_method_d_report.json'))
           assert all(ci['checks'].values()), ci['checks']
           ci['reproduces_claude_local_geometry'] = ci['carrier_geometry_sha256'] == local['carrier_geometry_sha256']
-          ci['reproduces_claude_local_file'] = ci['candidate_sha256'] == local['candidate_sha256']
-          json.dump(ci, open('/tmp/c11-d/c11_method_d_report.json', 'w'), indent=2)
-          print('REPRO', ci['reproduces_claude_local_geometry'], ci['reproduces_claude_local_file'])
+                    json.dump(ci, open('/tmp/c11-d/c11_method_d_report.json', 'w'), indent=2)
+          print('REPRO_GEOMETRY', ci['reproduces_claude_local_geometry'])
           PY
       - name: Fixed-camera review render (unchanged C11 review cameras)
         run: |

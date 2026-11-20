@@ -2,9 +2,9 @@
   "status": "CANDIDATE_ONLY",
   "method": "D_slit_removal_cdt_membrane_channel",
   "source_sha256": "d0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545",
-  "candidate_sha256": "61181a1fb2528bc54da3a2fd384e7086d460e41e8d71d8bd5c08e715f48942db",
+  "candidate_sha256": "c5090f951bc06d56e6f4ffd909b2af4cba3802609b670474bee35734fd25024c",
   "slit_ids_file_sha256": "e755b0d18a9244719f6aa7800e1cded50e812cf0edff6ca662f5ffc94d11f261",
-  "carrier_geometry_sha256": "8b863289eb85b5b06fa21aa2f62c551cc068d180eb703a8262741909698a1103",
+  "carrier_geometry_sha256": "b3d289124c8a8fb724de4ca30d25e57ea1e7a90f620ccee2640c5c91a2a7c934",
   "before": {
     "vertices": 37720,
     "faces": 37783,
@@ -13,8 +13,8 @@
     "degenerate_faces": 0
   },
   "after": {
-    "vertices": 39332,
-    "faces": 41642,
+    "vertices": 39721,
+    "faces": 42416,
     "boundary_edges": 0,
     "nonmanifold_edges": 0,
     "degenerate_faces": 0
@@ -24,7 +24,7 @@
     "after": 0
   },
   "missing_outside_vertices": 0,
-  "removed_original_vertices": 646,
+  "removed_original_vertices": 644,
   "rails": {
     "west_fracture": {
       "region_rings": 2,
@@ -32,11 +32,12 @@
         {
           "fill_path": "projected_cdt_height_membrane",
           "carve_clearance_clamped": 0,
+          "perimeter_squeeze_fraction": 0.013729374159996935,
           "contact_relax_passes": 1,
           "projection_normal": [
-            0.0,
-            -1.0,
-            0.0
+            -0.19537,
+            -0.91916,
+            0.34202
           ],
           "projection_attempts": [
             {
@@ -45,25 +46,288 @@
                 -1.0,
                 0.0
               ],
-              "simple": true
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.2218
+            },
+            {
+              "normal": [
+                -0.2079,
+                -0.9781,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.2007
+            },
+            {
+              "normal": [
+                0.2079,
+                -0.9781,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.2325
+            },
+            {
+              "normal": [
+                0.0,
+                -0.9397,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0954
+            },
+            {
+              "normal": [
+                -0.4226,
+                -0.9063,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.024
+            },
+            {
+              "normal": [
+                0.4226,
+                -0.9063,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0936
+            },
+            {
+              "normal": [
+                -0.1954,
+                -0.9192,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0137
+            },
+            {
+              "normal": [
+                0.1954,
+                -0.9192,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0917
+            },
+            {
+              "normal": [
+                0.0,
+                -0.8192,
+                0.5736
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0228
+            },
+            {
+              "normal": [
+                -0.6428,
+                -0.766,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0303
+            },
+            {
+              "normal": [
+                0.6428,
+                -0.766,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1135
+            },
+            {
+              "normal": [
+                -0.3971,
+                -0.8517,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.3971,
+                -0.8517,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1238
+            },
+            {
+              "normal": [
+                -0.1703,
+                -0.8013,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0228
+            },
+            {
+              "normal": [
+                0.1703,
+                -0.8013,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0228
+            },
+            {
+              "normal": [
+                0.0,
+                -0.6428,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1047
+            },
+            {
+              "normal": [
+                -0.3462,
+                -0.7424,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0091
+            },
+            {
+              "normal": [
+                0.3462,
+                -0.7424,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.057
+            },
+            {
+              "normal": [
+                -0.604,
+                -0.7198,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.604,
+                -0.7198,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1418
+            },
+            {
+              "normal": [
+                -0.1336,
+                -0.6287,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0987
+            },
+            {
+              "normal": [
+                0.1336,
+                -0.6287,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0987
+            },
+            {
+              "normal": [
+                -0.2717,
+                -0.5826,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0742
+            },
+            {
+              "normal": [
+                0.2717,
+                -0.5826,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0742
+            },
+            {
+              "normal": [
+                -0.5265,
+                -0.6275,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.5265,
+                -0.6275,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0592
+            },
+            {
+              "normal": [
+                -0.4132,
+                -0.4924,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.4132,
+                -0.4924,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.6505,
+                -0.7573,
+                0.0584
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0118
+            },
+            {
+              "normal": [
+                -0.8742,
+                -0.4792,
+                0.0785
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0062
             }
           ],
-          "region_faces_removed": 450,
-          "perimeter_vertices_locked": 130,
-          "old_interior_vertices_removed": 375,
-          "new_vertices": 1067,
-          "new_faces": 2262,
+          "region_faces_removed": 446,
+          "perimeter_vertices_locked": 126,
+          "old_interior_vertices_removed": 373,
+          "new_vertices": 1437,
+          "new_faces": 2998,
           "faces_flipped_by_winding": 0,
-          "membrane_max_residual": 9.90608975293128e-07,
-          "uv_fit_rms": 0.0038286955037779027
+          "membrane_max_residual": 9.820793609449652e-07,
+          "uv_fit_rms": 0.003917739460727052
         },
         {
           "fill_path": "projected_cdt_height_membrane",
           "carve_clearance_clamped": 0,
+          "perimeter_squeeze_fraction": 0.0,
           "contact_relax_passes": 1,
           "projection_normal": [
-            0.0,
-            -1.0,
+            -0.20791,
+            -0.97815,
             0.0
           ],
           "projection_attempts": [
@@ -73,16 +337,278 @@
                 -1.0,
                 0.0
               ],
-              "simple": true
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.3115
+            },
+            {
+              "normal": [
+                -0.2079,
+                -0.9781,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.2079,
+                -0.9781,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.4691
+            },
+            {
+              "normal": [
+                0.0,
+                -0.9397,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.4226,
+                -0.9063,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.4226,
+                -0.9063,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.5205
+            },
+            {
+              "normal": [
+                -0.1954,
+                -0.9192,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.1954,
+                -0.9192,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.3933
+            },
+            {
+              "normal": [
+                0.0,
+                -0.8192,
+                0.5736
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.6428,
+                -0.766,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.6428,
+                -0.766,
+                0.0
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.2917
+            },
+            {
+              "normal": [
+                -0.3971,
+                -0.8517,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.3971,
+                -0.8517,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.5205
+            },
+            {
+              "normal": [
+                -0.1703,
+                -0.8013,
+                0.5736
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.1703,
+                -0.8013,
+                0.5736
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.0,
+                -0.6428,
+                0.766
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.3462,
+                -0.7424,
+                0.5736
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.3462,
+                -0.7424,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.604,
+                -0.7198,
+                0.342
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.604,
+                -0.7198,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.134
+            },
+            {
+              "normal": [
+                -0.1336,
+                -0.6287,
+                0.766
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.1336,
+                -0.6287,
+                0.766
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.2717,
+                -0.5826,
+                0.766
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.2717,
+                -0.5826,
+                0.766
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.5265,
+                -0.6275,
+                0.5736
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.5265,
+                -0.6275,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.4132,
+                -0.4924,
+                0.766
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.4132,
+                -0.4924,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.6778,
+                -0.6945,
+                0.2414
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.8784,
+                -0.3614,
+                0.3128
+              ],
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0
             }
           ],
           "region_faces_removed": 20,
           "perimeter_vertices_locked": 16,
           "old_interior_vertices_removed": 8,
-          "new_vertices": 28,
-          "new_faces": 70,
+          "new_vertices": 45,
+          "new_faces": 104,
           "faces_flipped_by_winding": 0,
-          "membrane_max_residual": 8.077350144297668e-07,
+          "membrane_max_residual": 7.766081715487871e-07,
           "uv_fit_rms": 0.0001919730423233619
         }
       ],
@@ -95,6 +621,7 @@
         {
           "fill_path": "projected_cdt_height_membrane",
           "carve_clearance_clamped": 0,
+          "perimeter_squeeze_fraction": 0.01034892901352754,
           "contact_relax_passes": 2,
           "projection_normal": [
             0.42262,
@@ -108,7 +635,8 @@
                 -1.0,
                 0.0
               ],
-              "simple": false
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.3841
             },
             {
               "normal": [
@@ -116,7 +644,8 @@
                 -0.9781,
                 0.0
               ],
-              "simple": false
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.3955
             },
             {
               "normal": [
@@ -124,7 +653,8 @@
                 -0.9781,
                 0.0
               ],
-              "simple": false
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.3052
             },
             {
               "normal": [
@@ -132,7 +662,8 @@
                 -0.9397,
                 0.342
               ],
-              "simple": false
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.4454
             },
             {
               "normal": [
@@ -140,7 +671,8 @@
                 -0.9063,
                 0.0
               ],
-              "simple": false
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.2007
             },
             {
               "normal": [
@@ -148,7 +680,224 @@
                 -0.9063,
                 0.0
               ],
-              "simple": true
+              "simple": true,
+              "perimeter_squeeze_fraction": 0.0103
+            },
+            {
+              "normal": [
+                -0.1954,
+                -0.9192,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.4553
+            },
+            {
+              "normal": [
+                0.1954,
+                -0.9192,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.2415
+            },
+            {
+              "normal": [
+                0.0,
+                -0.8192,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.2209
+            },
+            {
+              "normal": [
+                -0.6428,
+                -0.766,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0341
+            },
+            {
+              "normal": [
+                0.6428,
+                -0.766,
+                0.0
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0054
+            },
+            {
+              "normal": [
+                -0.3971,
+                -0.8517,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1285
+            },
+            {
+              "normal": [
+                0.3971,
+                -0.8517,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.1703,
+                -0.8013,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.2219
+            },
+            {
+              "normal": [
+                0.1703,
+                -0.8013,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1712
+            },
+            {
+              "normal": [
+                0.0,
+                -0.6428,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1927
+            },
+            {
+              "normal": [
+                -0.3462,
+                -0.7424,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.101
+            },
+            {
+              "normal": [
+                0.3462,
+                -0.7424,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0294
+            },
+            {
+              "normal": [
+                -0.604,
+                -0.7198,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0734
+            },
+            {
+              "normal": [
+                0.604,
+                -0.7198,
+                0.342
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.1336,
+                -0.6287,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1879
+            },
+            {
+              "normal": [
+                0.1336,
+                -0.6287,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.1453
+            },
+            {
+              "normal": [
+                -0.2717,
+                -0.5826,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.148
+            },
+            {
+              "normal": [
+                0.2717,
+                -0.5826,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0903
+            },
+            {
+              "normal": [
+                -0.5265,
+                -0.6275,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.07
+            },
+            {
+              "normal": [
+                0.5265,
+                -0.6275,
+                0.5736
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                -0.4132,
+                -0.4924,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0382
+            },
+            {
+              "normal": [
+                0.4132,
+                -0.4924,
+                0.766
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
+            },
+            {
+              "normal": [
+                0.6869,
+                -0.7257,
+                0.0392
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0054
+            },
+            {
+              "normal": [
+                0.9064,
+                -0.4193,
+                0.0517
+              ],
+              "simple": false,
+              "perimeter_squeeze_fraction": 0.0
             }
           ],
           "region_faces_removed": 439,
