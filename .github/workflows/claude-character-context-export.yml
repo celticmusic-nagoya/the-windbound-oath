@@ -1,0 +1,35 @@
+name: Claude character context export
+on:
+  push:
+    branches: [export/claude-character-context-20261120]
+    paths: ['.github/workflows/claude-character-context-export.yml']
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: c513f9420f4a99a9b8d61f53f1e3d0b5217c680b
+      - run: |
+          set -euo pipefail
+          mkdir -p /tmp/context
+          cp 'AGENTS.md' /tmp/context/
+          cp 'docs/production/SESSION_CONTINUITY_INDEX.md' /tmp/context/
+          cp 'docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md' /tmp/context/
+          cp 'docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md' /tmp/context/
+          cp 'docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md' /tmp/context/
+          cp 'docs/policy/PROVISIONAL_LOCAL_3D_PRODUCTION_APPROVAL_20261118.md' /tmp/context/
+          cp 'docs/production/BLENDER_VERSION_STANDARD_20261118.md' /tmp/context/
+          cp 'docs/policy/MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md' /tmp/context/
+          cp 'docs/policy/MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md' /tmp/context/
+          cp 'docs/production/HIGH_END_3D_CHARACTER_RESEARCH_SHARED_20261119.md' /tmp/context/
+          test "$(find /tmp/context -name '*.md' | wc -l)" -eq 10
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TWO_Claude_Character_Context
+          path: /tmp/context/*.md
+          if-no-files-found: error
+          retention-days: 7
