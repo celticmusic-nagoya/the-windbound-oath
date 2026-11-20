@@ -160,54 +160,8 @@ jobs:
               fi
             fi
           fi
-          if [ -s evidence/model.vroid ] && grep -Fxq SOURCE_CANDIDATE_SAVED evidence/save-status.txt; then
-            # Export icon verified on saved editor screenshot (1024x768).
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let p=CGPoint(x:d.minX+927*d.width/1024,y:d.minY+77*d.height/768); let s=CGEventSource(stateID:.combinedSessionState); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
-            sleep 5
-            screencapture -x evidence/export-menu.png
-            swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/export-menu.png > evidence/export-menu-text.txt
-            if grep -Fxq 'Export as VRM' evidence/export-menu-text.txt; then
-              if swift "$RUNNER_TEMP/vroid-click.swift" evidence/export-menu.png 'Export as VRM' 'Export as VRM' > evidence/export-click.txt; then
-                sleep 10
-                screencapture -x evidence/vrm-options.png
-                if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-options.png Export 'Export as VRM' > evidence/vrm-export-click.txt; then
-                  sleep 8
-                  screencapture -x evidence/vrm-metadata.png
-                  swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-metadata.png > evidence/vrm-metadata-text.txt
-                  if grep -Fq 'VRM Settings' evidence/vrm-metadata-text.txt && grep -Fq 'Avatar Name' evidence/vrm-metadata-text.txt && grep -Fq 'Creators' evidence/vrm-metadata-text.txt; then
-                    swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); for (y,v) in [(451.0,"TWO_Morwen_Base_M01B"),(545.0,"0.1"),(639.0,"Glendalough_jp")] { let p=CGPoint(x:d.minX+500*d.width/1024,y:d.minY+y*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(200000) }; let k=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:true); let u=Array(v.utf16); u.withUnsafeBufferPointer { k?.keyboardSetUnicodeString(stringLength:u.count,unicodeString:$0.baseAddress!) }; k?.post(tap:.cgSessionEventTap); usleep(400000) }'
-                    screencapture -x evidence/vrm-metadata-filled.png
-                    swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-metadata-filled.png > evidence/vrm-metadata-filled-text.txt
-                    if grep -Fq TWO_Morwen_Base_M01B evidence/vrm-metadata-filled-text.txt && grep -Fq Glendalough_jp evidence/vrm-metadata-filled-text.txt; then
-                      swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+650*d.width/1024,y:d.minY+650*d.height/768); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); for _ in 0..<12 { CGEvent(scrollWheelEvent2Source:s,units:.line,wheelCount:1,wheel1:-12,wheel2:0,wheel3:0)?.post(tap:.cgSessionEventTap); usleep(150000) }'
-                      sleep 2
-                      screencapture -x evidence/vrm-metadata-bottom.png
-                      if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-metadata-bottom.png 'Alterations allowed' 'Redistribution' > evidence/alterations-click.txt; then
-                        sleep 2
-                        screencapture -x evidence/vrm-permissions.png
-                        # The dialog has two Export buttons. Use the foreground button verified at (505,594).
-                        swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let p=CGPoint(x:d.minX+505*d.width/1024,y:d.minY+594*d.height/768); let s=CGEventSource(stateID:.combinedSessionState); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
-                        sleep 8
-                        screencapture -x evidence/vrm-native-save.png
-                        swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/vrm-native-save.png > evidence/vrm-native-save-text.txt
-                        if grep -Eq '^(E |[[:space:]]*)Documents$' evidence/vrm-native-save-text.txt && grep -Eq '^TWO_Morwen_Base_M[0O]1B && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
-                          if swift "$RUNNER_TEMP/vroid-click.swift" evidence/vrm-native-save.png Save 'Save As:' > evidence/vrm-save-click.txt; then
-                            sleep 30
-                            find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -type f -print > evidence/vrm-saved-files.txt
-                            while IFS= read -r v; do test -s "$v" && cp "$v" evidence/model.vrm; done < evidence/vrm-saved-files.txt
-                            if [ -s evidence/model.vrm ]; then
-                              shasum -a 256 evidence/model.vrm > evidence/vrm-sha256.txt
-                              python3 -c 'import struct,json; f=open("evidence/model.vrm","rb"); magic,ver,total=struct.unpack("<4sII",f.read(12)); n,t=struct.unpack("<I4s",f.read(8)); assert magic==b"glTF" and ver==2 and t==b"JSON"; d=json.loads(f.read(n)); m=d["extensions"]["VRMC_vrm"]["meta"]; print(json.dumps(m,indent=2)); assert m["name"]=="TWO_Morwen_Base_M01B" and m["authors"]==["Glendalough_jp"]; assert m["allowRedistribution"] is False and m["modification"]=="allowModification"' > evidence/vrm-validation.txt 2>&1 && echo VRM_METADATA_PASS > evidence/vrm-status.txt || echo VRM_REVIEW_REQUIRED > evidence/vrm-status.txt
-                            fi
-                          fi
-                        fi
-                      fi
-                    fi
-                  fi
-                fi
-              fi
-            fi
-          fi
+          # Native editor checkpoint only; VRM export deferred until director-approved art gate.
+          echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
             cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
@@ -236,7 +190,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: morwen-m01b-bob-candidate-not-adopted
+          name: morwen-native-editor-checkpoint-not-adopted
           path: evidence/
           retention-days: 7
  evidence/vrm-native-save-text.txt && grep -Fq 'Save As:' evidence/vrm-native-save-text.txt && [ -z "$(find "$HOME/Documents" -maxdepth 1 -iname '*.vrm' -print)" ]; then
