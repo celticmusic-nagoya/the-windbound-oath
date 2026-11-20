@@ -40,6 +40,38 @@ function batchMeadow(root, nodes) {
   }
 }
 
+// Opt-in local meadow candidate. Keep the approved placement input immutable.
+function densifyMeadow(placement, ground, data) {
+  const result = { ...placement, instances: [...placement.instances],
+    roles: { ...placement.roles, meadowNear: { range: 9 } } };
+  const a = new T.Vector2(8,-17.25), b = new T.Vector2(-5.2,-2.8);
+  const span = b.clone().sub(a), lateral = new T.Vector2(-span.y,span.x).normalize();
+  let seed = 421;
+  const random = () => { seed = (Math.imul(seed,1664525)+1013904223) >>> 0; return seed/4294967296; };
+  const terrain = ground.filter(m => m.material?.name !== 'Weathered ochre footpath');
+  const route = ground.filter(m => m.material?.name === 'Weathered ochre footpath');
+  const accepted = [];
+  for (let i=0; i<160 && accepted.length<40; i++) {
+    const point = a.clone().addScaledVector(span, .04+.92*random())
+      .addScaledVector(lateral,(random()<.5?-1:1)*(1.3+3.7*random()));
+    const x=point.x,z=point.y;
+    if (data.obstacles.some(([bx,bz,r])=>Math.hypot(x-bx,z-bz)<r+.45)) continue;
+    if (result.instances.some(o=>Math.hypot(x-o.xy[0],z+o.xy[1])<.8)) continue;
+    ray.set(new T.Vector3(x,data.rayTop,z),down);
+    if (ray.intersectObjects(route,false).length) continue;
+    const hit=ray.intersectObjects(terrain,false)[0];
+    if (!hit?.face || hit.point.y<5) continue;
+    const n=hit.face.normal.clone().applyMatrix3(new T.Matrix3().getNormalMatrix(hit.object.matrixWorld)).normalize();
+    if (n.y<.86) continue;
+    const scale=.55+.25*random();
+    const item={asset:'eco_turf_meadow_a',role:'meadowNear',xy:[x,-z],
+      height:hit.point.y,sink:.025,normal:[n.x,-n.z,n.y],align:.7,
+      scale,radius:.5,yaw:random()*Math.PI*2};
+    accepted.push(item); result.instances.push(item);
+  }
+  return result;
+}
+
 async function play() {
   const loader = new GLTFLoader();
   const [gltf, data, moss, photo, placement] = await Promise.all([
@@ -87,7 +119,9 @@ async function play() {
     for (const [name, object] of nodes) {
       if (/^eco_(grass|flower|tree)_/.test(name)) object.visible = false;
     }
-    vegetation = await createVegetation({ loader, base: ecoRoot, placement, root: scene,
+    scene.updateMatrixWorld(true);
+    const selectedPlacement = query.get('meadow') === '1' ? densifyMeadow(placement, ground, data) : placement;
+    vegetation = await createVegetation({ loader, base: ecoRoot, placement: selectedPlacement, root: scene,
       initialStrength: query.get('wind') === '0' ? 0 : 0.65 });
     const windButton = document.querySelector('#wind-toggle');
     function setWind(strength) {
