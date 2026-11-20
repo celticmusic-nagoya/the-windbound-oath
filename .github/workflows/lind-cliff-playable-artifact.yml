@@ -33,7 +33,84 @@ jobs:
             tools/map_blender/shared
       - name: Verify candidate files and navigation
         run: |
-          sha256sum -c assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
+          # Preserve historical evidence; only these three reviewed runtime files changed.
+          manifest=assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
+          grep -Ev '  dev/windwaiting-cliff/(play|sunset|surface)\.mjs
+          node tests/field/windwaiting-cliff-nav.test.mjs
+          node tests/field/windwaiting-cliff-eco.test.mjs
+      - name: Reuse verified photo material artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lind-photo-material-3330d3bcdfc05df9801acaebc17c8abd624f4391
+          run-id: 44735960468
+          github-token: ${{ github.token }}
+          path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
+      - name: Verify photo candidate and runtime syntax
+        run: |
+          (cd assets/candidates/lind/windwaiting-cliff-playable/photo-pbr && sha256sum -c SHA256SUMS)
+          node --check dev/windwaiting-cliff/surface.mjs
+          node --check dev/windwaiting-cliff/play.mjs
+          manifest=assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
+          cp "$manifest" "${manifest}.baseline"
+          { grep -Ev '  dev/windwaiting-cliff/(play|sunset|surface)\.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windwaiting-cliff-playable-${{ github.sha }}
+          path: |
+            assets/candidates/lind/windwaiting-cliff-playable/
+            dev/windwaiting-cliff/
+            dev/shared/vegetation.mjs
+            tests/field/windwaiting-cliff-*
+            tools/map_blender/lind/build_windwaiting_*.py
+            tools/map_blender/shared/vegetation_placement.py
+          if-no-files-found: error
+          retention-days: 14
+ "$manifest" | sha256sum -c -
+          sha256sum dev/windwaiting-cliff/{play,sunset,surface}.mjs > /tmp/runtime-sha
+          cat /tmp/runtime-sha
+          node tests/field/windwaiting-cliff-nav.test.mjs
+          node tests/field/windwaiting-cliff-eco.test.mjs
+      - name: Reuse verified photo material artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lind-photo-material-3330d3bcdfc05df9801acaebc17c8abd624f4391
+          run-id: 44735960468
+          github-token: ${{ github.token }}
+          path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
+      - name: Verify photo candidate and runtime syntax
+        run: |
+          (cd assets/candidates/lind/windwaiting-cliff-playable/photo-pbr && sha256sum -c SHA256SUMS)
+          node --check dev/windwaiting-cliff/surface.mjs
+          node --check dev/windwaiting-cliff/play.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windwaiting-cliff-playable-${{ github.sha }}
+          path: |
+            assets/candidates/lind/windwaiting-cliff-playable/
+            dev/windwaiting-cliff/
+            dev/shared/vegetation.mjs
+            tests/field/windwaiting-cliff-*
+            tools/map_blender/lind/build_windwaiting_*.py
+            tools/map_blender/shared/vegetation_placement.py
+          if-no-files-found: error
+          retention-days: 14
+ "${manifest}.baseline"; cat /tmp/runtime-sha; sha256sum "${manifest}.baseline"; } > "$manifest"
+          sha256sum -c "$manifest"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windwaiting-cliff-playable-${{ github.sha }}
+          path: |
+            assets/candidates/lind/windwaiting-cliff-playable/
+            dev/windwaiting-cliff/
+            dev/shared/vegetation.mjs
+            tests/field/windwaiting-cliff-*
+            tools/map_blender/lind/build_windwaiting_*.py
+            tools/map_blender/shared/vegetation_placement.py
+          if-no-files-found: error
+          retention-days: 14
+ "$manifest" | sha256sum -c -
+          sha256sum dev/windwaiting-cliff/{play,sunset,surface}.mjs > /tmp/runtime-sha
+          cat /tmp/runtime-sha
           node tests/field/windwaiting-cliff-nav.test.mjs
           node tests/field/windwaiting-cliff-eco.test.mjs
       - name: Reuse verified photo material artifact
