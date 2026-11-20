@@ -214,6 +214,20 @@ jobs:
           mkdir -p /tmp/morwen-base-audit/geometry-masks
           /tmp/two-blender-530/audit-app/blender -b /tmp/morwen-base-audit/source.blend --python-exit-code 1 --python tools/morwen_authored_sculpt/render_geometry_masks_530.py -- /tmp/morwen-base-audit/geometry-masks
           test -s /tmp/morwen-base-audit/geometry-masks/geometry_mask_contract.json
+      - name: Validate JavaScript pose overlay viewer
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check tools/morwen_authored_sculpt/pose_viewer/viewer.js
+          test -s tools/morwen_authored_sculpt/pose_viewer/index.html
+      - name: Upload local-only JavaScript pose viewer
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-530-local-pose-overlay-viewer
+          path: tools/morwen_authored_sculpt/pose_viewer/
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload actual geometry silhouette masks
         if: always()
         uses: actions/upload-artifact@v4
