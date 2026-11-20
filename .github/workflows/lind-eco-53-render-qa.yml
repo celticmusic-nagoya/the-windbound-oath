@@ -57,6 +57,15 @@ jobs:
           tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
           /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
           rm -rf "$work"
+      - name: Install Pillow into isolated Blender Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          BLENDER_PY="$(find /tmp/two-blender53 -path '*/python/bin/python3*' -type f -executable | sort | head -n 1)"
+          test -n "$BLENDER_PY"
+          "$BLENDER_PY" -m ensurepip --upgrade
+          "$BLENDER_PY" -m pip install --disable-pip-version-check --no-cache-dir 'Pillow==11.3.0'
+          "$BLENDER_PY" -c 'from PIL import Image; print("Pillow available to Blender")'
       - name: Build candidate ecology geometry
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/build_eco_assets.py -- --out /tmp/lind_eco
