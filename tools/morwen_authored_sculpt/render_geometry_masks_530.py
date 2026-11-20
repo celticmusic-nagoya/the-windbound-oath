@@ -29,7 +29,15 @@ for name in names:
     cam=bpy.data.objects.new("Blueprint_mask_camera",cam_data)
     bpy.context.scene.collection.objects.link(cam)
     bpy.context.scene.camera=cam
-    cam_data.type="ORTHO"\n    # Vertical ortho_scale is NOT the horizontal field of view. At 384:1024,\n    # frame horizontal span = ortho_scale * 384/1024. Fit both dimensions.\n    aspect=384/1024\n    fit_width=max(bounds_x for bounds_x in (\n        max(c.x for c in corners)-min(c.x for c in corners),\n        max(c.y for c in corners)-min(c.y for c in corners)))\n    fit_height=max(c.z for c in corners)-min(c.z for c in corners)\n    cam_data.ortho_scale=max(fit_height,fit_width/aspect)*1.12
+    cam_data.type="ORTHO"
+    # Vertical ortho_scale is NOT the horizontal field of view. At 384:1024,
+    # frame horizontal span = ortho_scale * 384/1024. Fit both dimensions.
+    aspect=384/1024
+    fit_width=max(bounds_x for bounds_x in (
+        max(c.x for c in corners)-min(c.x for c in corners),
+        max(c.y for c in corners)-min(c.y for c in corners)))
+    fit_height=max(c.z for c in corners)-min(c.z for c in corners)
+    cam_data.ortho_scale=max(fit_height,fit_width/aspect)*1.12
     scene=bpy.context.scene
     scene.render.engine="CYCLES"
     scene.cycles.device="CPU"
@@ -62,5 +70,6 @@ for name in names:
         record["views"][view]={"file":Path(scene.render.filepath).name,"camera_matrix_world":[[float(cam.matrix_world[r][c]) for c in range(4)] for r in range(4)],"ortho_scale":cam_data.ortho_scale,"frame_width_world":cam_data.ortho_scale*aspect}
     report["objects"].append(record)
     bpy.data.objects.remove(cam,do_unlink=True)
-(out/"geometry_mask_contract.json").write_text(json.dumps(report,indent=2)+"\n")
+(out/"geometry_mask_contract.json").write_text(json.dumps(report,indent=2)+"
+")
 print("MORWEN_SOURCE_MASK_RENDER_PASS")
