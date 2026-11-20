@@ -17,7 +17,8 @@ function distantCoast(scene, sunDirection) {
     {x:-8,z:78,w:31,d:12,h:7.2,phase:3.7},
     {x:39,z:65,w:18,d:8,h:4.6,phase:5.1}
   ];
-  const n=96, rings=18;
+  // Vista budget: 3 * 48 * (2*8-1) = 2160 triangles, below the existing 2304 cap.
+  const n=48, rings=8;
   for (const island of islands) {
     const start=positions.length/3;
     for(let j=0;j<=rings;j++) for(let i=0;i<=n;i++){
