@@ -1,3 +1,6 @@
+## Director-approved continuous 3D production and expansion — 2026-11-21
+Mandatory for all AI agents and automations: read [Continuous 3D authoring, recovery and world expansion](../policy/CONTINUOUS_3D_AUTHORING_AND_WORLD_EXPANSION_20261121.md). Batch safe authoring, recover UI context with undo/redo, copy/paste, restore native checkpoints and resume actual work; render, independently QA, correct and continue without routine approval pauses. Apply causal retry v3, preserve originals and avoid duplicate CI. Expand village, cliff, meadows and forest in parallel with reusable assets, density and traversal QA; after Morwen succeeds extend validated methods to diverse canonical character/NPC candidates. No new canon, formal adoption, asset main merge, publication, destruction or added costs without approval.
+
 ## Director decision — continuous native character authoring (2026-11-20)
 Mandatory for all AI agents and automations: follow the continuous native character authoring policy at the top of [AGENTS.md](../../AGENTS.md). Batch blueprint-driven GUI edits, save meaningful native checkpoints, capture actual visual progress and provisional-complete multi-angle screenshots before VRM export, without routine approval pauses or per-control CI restarts. Existing Morwen PR #427 remains the owner; G1–G4 and all asset adoption gates remain unchanged.
 
