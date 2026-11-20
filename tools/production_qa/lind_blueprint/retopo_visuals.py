@@ -31,7 +31,7 @@ def main():
     image.save()
     rgb = [v for i,v in enumerate(changes) if i % 4 != 3]
     (out / "visual_delta.json").write_text(json.dumps({
-        "dimensions":size, "compared":"same cg_review camera, cut candidate before vs after retopo",
+        "dimensions":size, "compared":"same cg_review camera, locked input vs new candidate",
         "max_decoded_rgb_delta":max(rgb), "mean_decoded_rgb_delta":sum(rgb)/len(rgb),
         "changed_pixels":sum(any(changes[i:i+3]) for i in range(0,len(changes),4)),
         "difference_display_gain":8
