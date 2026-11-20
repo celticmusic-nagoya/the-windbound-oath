@@ -140,6 +140,10 @@ jobs:
           dialog_visible() {
             grep -Eiq 'Cancel' "evidence/$1.txt" && grep -Eiq 'Open|Choose' "evidence/$1.txt"
           }
+          mkdir -p "$HOME/Documents"
+          test ! -e "$HOME/Documents/Morwen-resume.vroid"
+          cp "$RUNNER_TEMP/Morwen-resume.vroid" "$HOME/Documents/Morwen-resume.vroid"
+          cmp "$RUNNER_TEMP/Morwen-resume.vroid" "$HOME/Documents/Morwen-resume.vroid"
           reopen_native() {
             local attempt before after
             for attempt in 1 2 3; do
@@ -174,14 +178,10 @@ jobs:
             sleep 5
             if reopen_native; then
               capture_state open-dialog
-              "$gui" key 5 cmd shift
-              sleep 2
-              capture_state go-to-folder
-              if grep -Eiq 'Go to|folder|path' evidence/go-to-folder.txt; then
-                printf '%s' "$RUNNER_TEMP/Morwen-resume.vroid" | pbcopy
-                "$gui" key 9 cmd
-                "$gui" key 36
-                sleep 3
+              # The observed chooser defaults to Documents; avoid clipboard and Go to Folder.
+              if grep -Fqi 'Documents' evidence/open-dialog.txt; then
+                "$gui" click-label evidence/open-dialog.png 'Morwen-resume.vroid' 'Cancel' > evidence/file-click.txt 2>&1 || true
+                sleep 2
                 capture_state open-selected
                 if dialog_visible open-selected && grep -Fqi 'Morwen-resume' evidence/open-selected.txt; then
                   "$gui" key 36
