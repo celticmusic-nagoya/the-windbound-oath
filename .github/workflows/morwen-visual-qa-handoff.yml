@@ -39,6 +39,7 @@ jobs:
           [[ "$SOURCE_RUN" =~ ^[0-9]{5,20}$ ]]
           [[ "$SOURCE_ARTIFACT" =~ ^[a-zA-Z0-9_.-]{3,120}$ ]]
   smoke-handoff:
+    needs: preflight
     if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 3
