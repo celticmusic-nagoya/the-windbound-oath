@@ -5,6 +5,7 @@ on:
     paths:
       - 'assets/candidates/lind/windwaiting-cliff-c10/**'
       - 'tools/production_qa/lind_blueprint/**'
+      - '!tools/production_qa/lind_blueprint/c11_recess_patch.py'
       - 'tools/production_qa/junction_contact_faces.py'
   workflow_dispatch:
     inputs:
