@@ -16,7 +16,7 @@ permissions:
 jobs:
   archive:
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
         with:
@@ -52,6 +52,22 @@ jobs:
           sha256sum dev/windwaiting-cliff/{play,sunset,surface}.mjs "$root/SHA256SUMS.baseline" >> "$root/SHA256SUMS"
           find "$root/photo-pbr" -type f -print0 | sort -z | xargs -0 sha256sum >> "$root/SHA256SUMS"
           sha256sum -c "$root/SHA256SUMS"
+      - name: Render fixed-camera WebGL comparison
+        run: |
+          python3 -m venv /tmp/photo-qa
+          /tmp/photo-qa/bin/pip install playwright==1.51.0
+          /tmp/photo-qa/bin/python -m playwright install --with-deps chromium
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/photo-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" || true' EXIT
+          /tmp/photo-qa/bin/python tests/field/windwaiting-cliff-photo.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: photo-comparison-${{ github.sha }}
+          path: photo-comparison/
+          if-no-files-found: warn
+          retention-days: 14
       - uses: actions/upload-artifact@v4
         with:
           name: windwaiting-cliff-playable-${{ github.sha }}
