@@ -1,0 +1,26 @@
+name: TWO checkpoint contract tests (no Blender or AI API)
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths:
+      - tools/production_qa/two_checkpoint.py
+      - tools/production_qa/test_two_checkpoint.py
+      - .github/workflows/two-checkpoint-contract-test.yml
+permissions:
+  contents: read
+concurrency:
+  group: two-checkpoint-contract-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check syntax and reproducible fail-closed handoff
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/production_qa/two_checkpoint.py tools/production_qa/test_two_checkpoint.py
+          python3 -m unittest discover -s tools/production_qa -p test_two_checkpoint.py -v
