@@ -1,0 +1,48 @@
+name: T3 Code zero-cost read-only evaluation
+
+# No T3 Code install, credentials, agents, remote servers or paid APIs.
+# This workflow checks package metadata and host prerequisites only.
+on:
+  push:
+    branches:
+      - infra/t3code-zero-cost-evaluation-20261120
+    paths:
+      - .github/workflows/t3code-zero-cost-readonly-eval.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t3code-readonly-eval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  inspect:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Report runtime and free-tier assumptions
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Node: $(node --version)"
+          echo "npm: $(npm --version)"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Repository visibility: ${{ github.event.repository.private == true && 'private' || 'public' }}"
+          echo "No third-party package executed; no credentials supplied."
+          echo "Billing cannot be verified by this workflow. Stop if the repository is private or paid runner is selected."
+      - name: Inspect public package metadata without executing T3
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm view t3 version dist.tarball dist.integrity license --json --fetch-retries=1 --fetch-timeout=12000 | tee t3-npm-metadata.json
+          test -s t3-npm-metadata.json
+          echo "Metadata only: T3 server start, provider auth, and remote access NOT_RUN."
+      - name: Publish metadata evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3code-readonly-package-metadata
+          path: t3-npm-metadata.json
+          retention-days: 1
