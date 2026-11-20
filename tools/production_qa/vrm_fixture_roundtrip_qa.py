@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Blender-side isolated VRM fixture import/render QA; no canonical assets."""
+"""Blender-side isolated VRM fixture import/render/roundtrip QA; no canonical assets."""
 import bpy
 import hashlib
 import json
@@ -50,9 +50,30 @@ try:
         report["render"] = "PASS" if (root / "fixture_render.png").is_file() else "FAIL"
     else:
         report["render"] = "BLOCKED_NO_MESH"
-    report["export"] = "NOT_RUN_FIXTURE_VALIDATION_ONLY"
-    report["reimport"] = "NOT_RUN_FIXTURE_VALIDATION_ONLY"
-    report["status"] = "IMPORTED_NOT_ROUNDTRIPPED"
+    # Export only to a throwaway QA directory. Failure is evidence, not a PASS.
+    exported = root / "roundtrip.vrm"
+    if hasattr(bpy.ops.export_scene, "vrm"):
+        try:
+            result = bpy.ops.export_scene.vrm(filepath=str(exported))
+            if "FINISHED" not in result or not exported.is_file() or exported.stat().st_size == 0:
+                raise RuntimeError("VRM export did not produce a nonempty file: " + str(result))
+            report["export"] = "PASS"
+            report["export_sha256"] = hashlib.sha256(exported.read_bytes()).hexdigest()
+            bpy.ops.wm.read_factory_settings(use_empty=True)
+            imported = bpy.ops.import_scene.vrm(filepath=str(exported))
+            if "FINISHED" not in imported:
+                raise RuntimeError("VRM reimport did not finish: " + str(imported))
+            report["reimport_armatures"] = sum(o.type == "ARMATURE" for o in bpy.data.objects)
+            if report["reimport_armatures"] < 1:
+                raise RuntimeError("Roundtrip reimport lost armature")
+            report["reimport"] = "PASS"
+        except Exception as exc:
+            report["roundtrip_error"] = str(exc)
+            report["export"] = "FAIL" if report["export"] != "PASS" else "PASS"
+            report["reimport"] = "FAIL" if report["export"] == "PASS" else "NOT_RUN"
+    else:
+        report["export"] = "BLOCKED_OPERATOR_UNAVAILABLE"
+    report["status"] = "ROUNDTRIP_PASS" if report["export"] == "PASS" and report["reimport"] == "PASS" else "ROUNDTRIP_INCOMPLETE"
 except Exception as exc:
     report["error"] = str(exc)
     report["status"] = "FAIL"
