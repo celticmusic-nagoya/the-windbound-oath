@@ -59,6 +59,28 @@ jobs:
           print(json.dumps(report,indent=2))
           if not passed: raise SystemExit('Reference hash or dimensions mismatch')
           PY
+      - name: Extract measured alpha silhouette landmarks from verified four views
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/morwen_authored_sculpt/extract_layer0_silhouette_landmarks.py /tmp/morwen-layer0 /tmp/morwen-layer0
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/morwen-layer0')
+          source=json.loads((root/'reference_verification.json').read_text())
+          measurements=json.loads((root/'reference_silhouette_landmarks.json').read_text())
+          assert source['status']=='PASS'
+          assert set(measurements['source_views'])=={'front','right','back','left'}
+          for row in source['sources']:
+              measured=measurements['source_views'][row['view']]
+              assert measured['sha256']==row['sha256']
+              assert measured['image_size']==row['dimensions']
+              assert len(measured['silhouette_scanlines'])==15
+              assert all(x['measured'] and x['anatomical_identity']=='UNDETERMINED' for x in measured['silhouette_scanlines'])
+          print('MORWEN_FOUR_VIEW_ALPHA_MEASUREMENT_QA_PASS')
+          PY
       - name: Preserve immutable reference QA evidence
         if: always()
         uses: actions/upload-artifact@v4
