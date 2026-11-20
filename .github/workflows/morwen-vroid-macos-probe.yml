@@ -207,7 +207,26 @@ jobs:
             "$gui" vroid-shortcut face || true
             sleep 3
             capture_state editor-face-return || true
-            echo TAB_NAVIGATION_REVIEW_REQUIRED > evidence/authoring-status.txt
+            # Reversible eye-width trial on the restored copy, not a canonical value.
+            if grep -Fq 'Eye Size X' evidence/editor-face-return.txt && grep -Fq '0.634' evidence/editor-face-return.txt; then
+              "$gui" slider 0.919 0.236 0.869 0.236 0.6
+              sleep 2
+              capture_state eye-trial
+              "$gui" vroid-shortcut undo
+              sleep 2
+              capture_state eye-undo
+              if grep -Fq '0.634' evidence/eye-undo.txt && ! grep -Fq '0.634' evidence/eye-trial.txt; then
+                "$gui" vroid-shortcut redo
+                sleep 2
+                capture_state eye-redo
+                "$gui" vroid-shortcut undo
+                sleep 2
+                capture_state eye-restored
+              fi
+              echo EYE_TRIAL_REVIEW_REQUIRED > evidence/authoring-status.txt
+            else
+              echo BLOCKED_EYE_CONTROL_STATE > evidence/authoring-status.txt
+            fi
           else
             echo BLOCKED_NATIVE_REOPEN > evidence/authoring-status.txt
           fi
