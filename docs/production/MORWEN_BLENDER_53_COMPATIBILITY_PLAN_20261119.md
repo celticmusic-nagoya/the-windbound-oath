@@ -32,3 +32,16 @@ Official Blender Foundation release: **Blender 5.3.0 released November 10, 2026*
 - Decision: **Blender 5.3.0 GO for new, isolated Morwen authoring scenes**. Existing 5.2.4 source remains unchanged. Do not claim existing sculpt/rig/animation/glTF/Android migration PASS.
 - HairHarpy actual GUI/Vulkan execution and export remain **NOT_RUN**. No hair asset or G2 art pass.
 - Avoid repeating the proven version smoke or reference-only tests. Next useful action is a true authored facial sculpt with independent render/art QA, and separate HairHarpy graphical-capability check.
+
+## Director correction — VRoid-derived anime base is NOT rejected (2026-11-20)
+
+**Decision clarification:** Past G2 FAIL applies to the specific previous mesh/alteration methods and their insufficient design/measurement preparation, NOT to VRoid Studio or anime-styled VRoid-derived base meshes as a class. It is incorrect to disqualify VRoid because a prior attempt did not match the official Morwen design. An anime-styled VRoid base may be closer to the intended visual language than an unmodified realistic CC0 human base. No base selection is formally adopted by this clarification.
+
+**Required fair comparison before selecting a base:**
+1. Lock approved Layer 0 four-view reference, SHA-256, camera/projection assumptions and canonical design landmarks. Record measured vs estimated values separately.
+2. Prepare a detailed 3D production blueprint with front/side/back/quarter silhouette, eye/socket and face proportions, hair volume/parting, neck/shoulder landmarks, asymmetric costume constraints, geometry targets and provisional local coordinates. Do not infer unobservable back-side topology from a single image.
+3. Compare three independent candidates: (A) clean, legally reusable anime VRoid/VRM-derived base; (B) newly authored stylized sculpt; (C) unmodified licensed realistic CC0 base requiring stylization. Use matched cameras, lighting, normalized scale, clay renders and the same design/QA criteria. Do not assume realistic base is the default.
+4. Score silhouette/landmark error, sculptability and topology, deformation/Shape Key preservation, facial expression rig compatibility, licensing, total correction time and final-size readability. Distinguish a base's potential from the previous modification method's failure. Keep past FAIL evidence, and avoid repeating stopped mesh-repair methods without a structural change.
+5. Select the best supported method from actual geometry and independent art QA; record G1–G4 individually. If reference dimensions or candidate rights are missing, mark that subtask BLOCKED while proceeding with independent reference measurement and design work.
+
+**Execution status:** direction corrected; blueprint and controlled candidate renders NOT_RUN; no VRoid candidate is approved or rejected by this note. Preserve the original VRoid/VRM files and previous candidate QA artifacts unchanged.
