@@ -113,7 +113,7 @@ jobs:
           let a = r.results ?? []
           let labels = a.compactMap { $0.topCandidates(1).first?.string }
           print(labels.joined(separator:" | "))
-          guard labels.contains(where:{$0.contains(CommandLine.arguments[3])}), let o = a.first(where:{$0.topCandidates(1).first?.string == CommandLine.arguments[2]}) else { print("SCREEN_NOT_VERIFIED"); exit(2) }
+          guard labels.contains(where:{$0.contains(CommandLine.arguments[3])}), let o = a.first(where:{ let t = $0.topCandidates(1).first?.string.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""; return t == CommandLine.arguments[2] || (CommandLine.arguments[2] == "Open" && t == "• Open") }) else { print("SCREEN_NOT_VERIFIED"); exit(2) }
           let d = CGDisplayBounds(CGMainDisplayID())
           let offset: CGFloat = CommandLine.arguments[2] == "Fem" ? -116 : 0
           let p = CGPoint(x:d.minX + o.boundingBox.midX*d.width,y:d.minY+(1-o.boundingBox.midY)*d.height+offset*d.height/768)
@@ -122,38 +122,60 @@ jobs:
           usleep(500000)
           for t in [CGEventType.leftMouseDown,.leftMouseUp] { if let e = CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left) { e.setIntegerValueField(.mouseEventClickState,value:1); e.post(tap:.cgSessionEventTap) }; usleep(250000) }
           SWIFT
-          if [ -s evidence/after-agreement.png ] && grep -qx true evidence/input-access.txt; then
-            if swift "$RUNNER_TEMP/vroid-click.swift" evidence/after-agreement.png Skip 'Welcome to VRoid Studio' > evidence/skip-status.txt; then
+          # Preserve immutable input before attempting any GUI action.
+          cp "$RUNNER_TEMP/Morwen-resume.vroid" evidence/input-model.vroid
+          shasum -a 256 evidence/input-model.vroid > evidence/input-model-sha256.txt
+          echo NATIVE_REOPEN_NOT_VERIFIED > evidence/reopen-status.txt
+          reopen_native() {
+            local attempt
+            for attempt in 1 2; do
+              screencapture -x "evidence/home-attempt-$attempt.png" || return 1
+              if swift "$RUNNER_TEMP/vroid-click.swift" "evidence/home-attempt-$attempt.png" Open 'Recently Edited' > "evidence/open-click-$attempt.txt"; then
+                return 0
+              fi
               sleep 5
-              screencapture -x evidence/home.png
-              # Open a verified copy of the existing native source, never regenerate it.
-              # Use Studio's own native file chooser; OS document association rejected this format.
-              swift "$RUNNER_TEMP/vroid-click.swift" evidence/home.png Open 'Recently Edited' > evidence/open-click.txt
+            done
+            return 1
+          }
+          if [ -s evidence/after-agreement.png ] && grep -qx true evidence/input-access.txt; then
+            swift "$RUNNER_TEMP/vroid-click.swift" evidence/after-agreement.png Skip 'Welcome to VRoid Studio' > evidence/skip-status.txt || true
+            sleep 5
+            if reopen_native; then
               sleep 4
               screencapture -x evidence/open-dialog.png
-              # macOS Go to Folder dialog, enter verified absolute path.
-              osascript -e 'tell application "System Events" to keystroke "g" using {command down, shift down}'
+              # Use CGEvent, already exercised by native save, rather than System Events authorization.
+              cat > "$RUNNER_TEMP/native-open-key.swift" <<'KEYSWIFT'
+          import Foundation
+          import CoreGraphics
+          let source = CGEventSource(stateID: .combinedSessionState)
+          let key = CGKeyCode(Int(CommandLine.arguments[1])!)
+          for down in [true,false] {
+            if let e = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: down) {
+              if CommandLine.arguments.count > 2 { e.flags = CommandLine.arguments[2] == "go" ? [.maskCommand,.maskShift] : [.maskCommand] }
+              e.post(tap: .cgSessionEventTap)
+            }
+            usleep(150000)
+          }
+          KEYSWIFT
+              swift "$RUNNER_TEMP/native-open-key.swift" 5 go
               sleep 2
               printf '%s' "$RUNNER_TEMP/Morwen-resume.vroid" | pbcopy
-              osascript -e 'tell application "System Events" to keystroke "v" using command down'
-              osascript -e 'tell application "System Events" to key code 36'
+              swift "$RUNNER_TEMP/native-open-key.swift" 9 paste
+              swift "$RUNNER_TEMP/native-open-key.swift" 36
               sleep 3
               screencapture -x evidence/open-selected.png
-              osascript -e 'tell application "System Events" to key code 36'
+              swift "$RUNNER_TEMP/native-open-key.swift" 36
               sleep 35
               screencapture -x evidence/resumed-editor.png
               swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/resumed-editor.png > evidence/resumed-editor-text.txt
               if grep -Fq 'Morwen-resume' evidence/resumed-editor-text.txt; then
                 echo NATIVE_REOPEN_REVIEW_REQUIRED > evidence/reopen-status.txt
-              else
-                echo NATIVE_REOPEN_NOT_VERIFIED > evidence/reopen-status.txt
               fi
+            else
+              echo BLOCKED_OPEN_SCREEN_NOT_VERIFIED > evidence/reopen-status.txt
             fi
           fi
-          # Preserve input independently; a resumed screenshot is not evidence of an edited save.
-          cp "$RUNNER_TEMP/Morwen-resume.vroid" evidence/input-model.vroid
-          shasum -a 256 evidence/input-model.vroid > evidence/input-model-sha256.txt
-          test -s evidence/resumed-editor.png
+          screencapture -x evidence/final-recovery-screen.png || true
           # Native editor checkpoint only; VRM export deferred until director-approved art gate.
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
