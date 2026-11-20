@@ -1,0 +1,59 @@
+name: Morwen visual QA handoff from existing artifact
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Existing successful render workflow run ID (no rerender)
+        required: true
+        type: string
+      artifact_name:
+        description: Existing artifact name (must contain PNG, blend or QA files)
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: morwen-visual-qa-handoff-${{ inputs.source_run_id }}-${{ inputs.artifact_name }}
+  cancel-in-progress: false
+jobs:
+  package-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate supplied source identifiers
+        env:
+          SOURCE_RUN: ${{ inputs.source_run_id }}
+          SOURCE_ARTIFACT: ${{ inputs.artifact_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_RUN" =~ ^[0-9]{5,20}$ ]] || { echo 'Invalid run ID'; exit 2; }
+          [[ "$SOURCE_ARTIFACT" =~ ^[a-zA-Z0-9_.-]{3,120}$ ]] || { echo 'Invalid artifact name'; exit 2; }
+      - name: Download previously generated render evidence (read-only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ inputs.source_run_id }}
+          SOURCE_ARTIFACT: ${{ inputs.artifact_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-existing-render
+          gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" --name "$SOURCE_ARTIFACT" --dir /tmp/two-existing-render
+          test -n "$(find /tmp/two-existing-render -type f -print -quit)"
+      - name: Generate deterministic Claude/Codex evidence handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/build_visual_qa_handoff.py --input /tmp/two-existing-render --output /tmp/two-visual-qa-handoff --asset morwen
+          python3 -m json.tool /tmp/two-visual-qa-handoff/visual_qa_handoff.json >/dev/null
+      - name: Upload QA handoff only (no AI API or rerender)
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-visual-qa-handoff-${{ inputs.source_run_id }}
+          path: /tmp/two-visual-qa-handoff/visual_qa_handoff.json
+          if-no-files-found: error
+          retention-days: 7
