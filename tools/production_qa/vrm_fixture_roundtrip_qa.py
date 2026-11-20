@@ -40,24 +40,6 @@ try:
         raise RuntimeError("No armature imported")
     report["import"] = "PASS"
     stage("import_pass")
-    # A render requires actual visible mesh geometry; no fabricated success.
-    if meshes:
-        bpy.ops.object.camera_add(location=(3, -5, 2))
-        cam = bpy.context.object
-        direction = -cam.location
-        cam.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
-        bpy.context.scene.camera = cam
-        bpy.context.scene.render.engine = "BLENDER_EEVEE"
-        bpy.context.scene.render.resolution_x = 512
-        bpy.context.scene.render.resolution_y = 512
-        bpy.context.scene.render.resolution_percentage = 100
-        bpy.context.scene.render.filepath = str(root / "fixture_render.png")
-        stage("render_start")
-        bpy.ops.render.render(write_still=True)
-        stage("render_returned")
-        report["render"] = "PASS" if (root / "fixture_render.png").is_file() else "FAIL"
-    else:
-        report["render"] = "BLOCKED_NO_MESH"
     # Export only to a throwaway QA directory. Failure is evidence, not a PASS.
     exported = root / "roundtrip.vrm"
     if hasattr(bpy.ops.export_scene, "vrm"):
@@ -89,12 +71,45 @@ try:
     else:
         report["export"] = "BLOCKED_OPERATOR_UNAVAILABLE"
     stage("roundtrip_complete")
-    report["status"] = "ROUNDTRIP_PASS" if report["export"] == "PASS" and report["reimport"] == "PASS" else "ROUNDTRIP_INCOMPLETE"
+    # Use software CPU Cycles instead of headless EEVEE/Vulkan/EGL on GitHub runners.
+    # The prior EEVEE attempt crashed after import (exit 134, missing libEGL.so.1).
+    # Test the actual mesh currently present after export/reimport.
+    render_meshes = [o for o in bpy.data.objects if o.type == "MESH"]
+    if render_meshes:
+        try:
+            bpy.ops.object.camera_add(location=(3, -5, 2))
+            cam = bpy.context.object
+            direction = -cam.location
+            cam.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+            bpy.context.scene.camera = cam
+            bpy.context.scene.render.engine = "CYCLES"
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.scene.cycles.samples = 16
+            bpy.context.scene.render.resolution_x = 512
+            bpy.context.scene.render.resolution_y = 512
+            bpy.context.scene.render.resolution_percentage = 100
+            bpy.context.scene.render.image_settings.file_format = "PNG"
+            bpy.context.scene.render.filepath = str(root / "fixture_render.png")
+            stage("render_cpu_cycles_start")
+            bpy.ops.render.render(write_still=True)
+            stage("render_cpu_cycles_returned")
+            report["render"] = "PASS" if (root / "fixture_render.png").is_file() else "FAIL_NO_PNG"
+        except Exception as exc:
+            report["render"] = "FAIL"
+            report["render_error"] = str(exc)
+    else:
+        report["render"] = "BLOCKED_NO_MESH"
+    if report["export"] == "PASS" and report["reimport"] == "PASS" and report["render"] == "PASS":
+        report["status"] = "FULL_FIXTURE_QA_PASS"
+    elif report["export"] == "PASS" and report["reimport"] == "PASS":
+        report["status"] = "ROUNDTRIP_PASS_RENDER_INCOMPLETE"
+    else:
+        report["status"] = "ROUNDTRIP_INCOMPLETE"
 except Exception as exc:
     report["error"] = str(exc)
     report["status"] = "FAIL"
 finally:
     save()
     print(json.dumps(report, indent=2))
-if report["import"] != "PASS" or report["export"] != "PASS" or report["reimport"] != "PASS":
+if report["import"] != "PASS" or report["export"] != "PASS" or report["reimport"] != "PASS" or report["render"] != "PASS":
     raise SystemExit(1)
