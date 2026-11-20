@@ -4,7 +4,6 @@ on:
     branches: [feature/morwen-artdirected-sculpt-20261119]
     paths:
       - tools/production_qa/build_visual_qa_handoff.py
-      - .github/workflows/morwen-visual-qa-handoff.yml
   workflow_dispatch:
     inputs:
       source_run_id:
