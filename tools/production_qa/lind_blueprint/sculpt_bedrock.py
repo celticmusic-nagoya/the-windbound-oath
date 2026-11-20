@@ -76,7 +76,7 @@ def main():
     source, out = args.source.resolve(), args.output.resolve()
     if bpy.app.version != (5,3,0) or sha(source) != SOURCE_SHA or out in source.parents:
         raise ValueError("Expected Blender 5.3.0 and the locked retopology candidate")
-    out.mkdir(parents=True)
+    out.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.open_mainfile(filepath=str(source))
     scene = bpy.context.scene
     obj = scene.objects[TARGET]
