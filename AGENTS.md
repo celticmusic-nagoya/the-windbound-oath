@@ -1,3 +1,6 @@
+## Director-approved parallel world production v2 — 2026-11-20
+Mandatory for all agents and automations: read [Art-Directed Hybrid World Production 2.0](docs/policy/ART_DIRECTED_HYBRID_WORLD_PRODUCTION_V2.md). Cliff, village and forest proceed independently; preserve cliff E/C12/rock candidates and shift from isolated refinement to scene-level review. Audit existing HOME/BUILD/ECO/ROUTE owners before work, reuse modular assets, build real scenes and test gameplay early in provisional environments. No quality-gate waiver or unfinished asset adoption. Retry v3 remains authoritative; explicit approval required for main changes, deletion and publication. This policy supersedes conflicting cliff-first scheduling only.
+
 ## Mandatory cross-AI binary artifact sharing — director approved 2026-11-20
 
 For all asset and game workstreams, use the owning PR and authenticated GitHub Actions artifact ZIP as the shared binary transport. Record producing commit, run ID, artifact ID, expiration, exact relative paths, SHA256SUMS (and manifest SHA-256), editable source, previews, QA, geometry hash when applicable, and candidate/approved status. Reuse matching outputs; never rerender solely to transfer files.
