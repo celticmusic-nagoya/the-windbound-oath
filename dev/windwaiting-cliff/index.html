@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>風待ちの崖｜TWO 試遊</title>
+<link rel="icon" href="data:,">
+<style>
+:root{color-scheme:dark;font:14px/1.5 system-ui,sans-serif;background:#1c2637;color:#fff4db}
+*{box-sizing:border-box}body{margin:0}canvas{display:block;width:100vw;height:100dvh;touch-action:none;outline-offset:-3px}
+header,footer{position:fixed;left:max(16px,env(safe-area-inset-left));padding:10px 14px;background:#16202de8;border:1px solid #f1ca8c55;border-radius:8px;max-width:calc(100vw - 32px)}
+header{top:12px;pointer-events:none}h1{font:600 20px Georgia,serif;letter-spacing:.08em;margin:0}p{margin:2px 0}
+footer{bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center}button{font:inherit;padding:6px 10px;background:#38404a;border:1px solid #bd9b67;border-radius:5px;color:inherit;white-space:nowrap}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+<canvas tabindex="0" aria-label="風待ちの崖の試遊画面"></canvas>
+<header><h1>風待ちの崖</h1><p id="status" role="status">試遊シーンを読み込み中</p></header>
+<footer><span>WASD・矢印／クリック・タップで移動　ドラッグで視点旋回</span><button type="button">出発点へ</button></footer>
+<script type="module" src="./play.mjs"></script>
+</html>

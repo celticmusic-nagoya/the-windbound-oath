@@ -1,0 +1,42 @@
+name: Lind cliff playable candidate archive
+
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - .github/workflows/lind-cliff-playable-artifact.yml
+      - assets/candidates/lind/windwaiting-cliff-playable/**
+      - dev/windwaiting-cliff/**
+      - tests/field/windwaiting-cliff-*
+      - tools/map_blender/lind/build_windwaiting_playable.py
+
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            assets/candidates/lind/windwaiting-cliff-playable
+            dev/windwaiting-cliff
+            tests/field
+            tools/map_blender/lind
+      - name: Verify candidate files and navigation
+        run: |
+          sha256sum -c assets/candidates/lind/windwaiting-cliff-playable/SHA256SUMS
+          node tests/field/windwaiting-cliff-nav.test.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windwaiting-cliff-playable-${{ github.sha }}
+          path: |
+            assets/candidates/lind/windwaiting-cliff-playable/
+            dev/windwaiting-cliff/
+            tests/field/windwaiting-cliff-*
+            tools/map_blender/lind/build_windwaiting_playable.py
+          if-no-files-found: error
+          retention-days: 14
