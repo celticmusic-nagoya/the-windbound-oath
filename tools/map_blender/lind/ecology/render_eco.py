@@ -350,7 +350,7 @@ def shot_water(samples):
 
 
 
-def shot_coastal_sward(samples):
+def shot_coastal_sward(samples, understory=False):
     """Noncanonical Atlantic cliff grass placement study; not a cliff geometry edit.
 
     Seeded spatially heterogeneous clumps, a bare wind-scoured strip, and rock pockets.
@@ -382,12 +382,38 @@ def shot_coastal_sward(samples):
             place(stage, aid, (x, y, -0.025),
                   rot_z=rng.uniform(-0.18, 0.18), scale=rng.uniform(0.65, 1.06))
             placed += 1
+    if understory:
+        # Distinct ECO-G2 low understorey, not the twice-failed radial VEG-F1 method.
+        # Keep base scatter RNG identical so the two images isolate this single change.
+        low_rng = L.new_rng(20261120, "coastal_understory_v2")
+        low_count = 0
+        for ix in range(55):
+            for iy in range(27):
+                x = -3.8 + (ix + low_rng.random()) * 0.14
+                y = -1.7 + (iy + low_rng.random()) * 0.17
+                edge = 0.45 + 0.35 * math.sin(x * 1.4) + 0.12 * math.sin(x * 3.2)
+                density = 0.85 if y > edge else (0.53 if y > -0.8 else 0.025)
+                if any((x-rx)**2 + (y-ry)**2 < rr**2
+                       for rx, ry, rr in ((-2.4, 0.5, 0.8), (2.0, 1.6, 0.95), (0.4, 2.6, 0.6))):
+                    continue
+                if low_rng.random() >= density:
+                    continue
+                place(stage, "eco_grass_tuft_short", (x, y, -0.02),
+                      rot_z=low_rng.uniform(-0.3, 0.3),
+                      scale=low_rng.uniform(0.30, 0.49))
+                low_count += 1
+        print("COASTAL_UNDERSTORY_V2 clumps=", low_count, "seed=20261120")
     print("COASTAL_SWARD_CANDIDATE clumps=", placed, "seed=20261120")
     lights(sc, sun_elev=30, sun_az=-42)
     setup_render(sc, 1280, 720, samples)
     camera(sc, (5.3, -7.0, 4.0), (0, 0.55, 0.12), 37.0)
     L.set_channel(sc, wind=0.65)
-    return [render(sc, "eco_coastal_sward_candidate_wind065")]
+    return [render(sc, "eco_coastal_sward_understory_v2_wind065" if understory
+                   else "eco_coastal_sward_candidate_wind065")]
+
+
+def shot_coastal_sward_v2(samples):
+    return shot_coastal_sward(samples, understory=True)
 
 
 ICON_ITEMS = ["eco_tree_deciduous_a", "eco_tree_apple_a", "eco_tree_forest_tall_a", "eco_tree_conifer_a",
@@ -423,8 +449,8 @@ def shot_icons(samples):
 
 SHOTS = {"lineup_large": shot_lineup_large, "lineup_small": shot_lineup_small, "vignette": shot_vignette,
          "closeup": shot_closeup, "windpair": shot_windpair, "icons": shot_icons, "water": shot_water,
-         "gameview": shot_gameview, "coastal_sward": shot_coastal_sward}
-DEFAULT_SAMPLES = {"lineup_large": 40, "lineup_small": 48, "vignette": 48, "closeup": 48, "windpair": 24, "icons": 24, "water": 32, "gameview": 40, "coastal_sward": 24}
+         "gameview": shot_gameview, "coastal_sward": shot_coastal_sward, "coastal_sward_v2": shot_coastal_sward_v2}
+DEFAULT_SAMPLES = {"lineup_large": 40, "lineup_small": 48, "vignette": 48, "closeup": 48, "windpair": 24, "icons": 24, "water": 32, "gameview": 40, "coastal_sward": 24, "coastal_sward_v2": 24}
 
 
 def provenance():
