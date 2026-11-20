@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/lind-eco-53-render-qa.yml'
       - 'tools/map_blender/lind/ecology/eco_assets.py'
+      - 'tools/map_blender/lind/ecology/render_eco.py'
   workflow_dispatch:
     inputs:
       shot:
@@ -16,6 +17,7 @@ on:
           - lineup_small
           - lineup_large
           - closeup
+          - coastal_sward
           - all
 permissions:
   contents: read
@@ -77,7 +79,7 @@ jobs:
           rm -rf /tmp/lind-eco-current-run
       - name: Render selected evidence views
         env:
-          SHOT: ${{ inputs.shot || 'lineup_small' }}
+          SHOT: ${{ inputs.shot || 'coastal_sward' }}
         run: |
           /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/render_eco.py -- --shot "$SHOT"
       - name: Verify rendered PNG hashes against manifest
