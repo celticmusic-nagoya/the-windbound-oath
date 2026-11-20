@@ -66,6 +66,24 @@ jobs:
           name: morwen-vroid-studio-feasibility-not-adopted
           path: evidence/studio.json
           retention-days: 7
+  studio-gui-readiness:
+    runs-on: windows-2022
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Inspect GUI session and graphics readiness without executing installer
+        shell: pwsh
+        run: ./tools/production_qa/probe_vroid_windows_gui.ps1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-vroid-windows-gui-readiness-no-execution
+          path: evidence/vroid_windows_gui_readiness.json
+          if-no-files-found: warn
+          retention-days: 7
+
   studio-drive-provenance:
     runs-on: windows-2022
     timeout-minutes: 20
