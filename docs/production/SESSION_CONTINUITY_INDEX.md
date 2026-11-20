@@ -73,3 +73,6 @@ Read the director-approved autonomous GUI production section in AGENTS.md. PR #4
 
 ## Continuous deliverable-first production — 2026-11-21
 Read the latest director-approved continuous deliverable-first production section in AGENTS.md. All agents integrate QA and recovery into actual production rather than stopping after individual operation tests. Morwen #427: meaningful intermediate and pre-VRM screenshots directly visible in chat, native editable checkpoints preserved, routine reports suppressed. Authenticated artifact transport remains required for cross-agent handoff; formal adoption gates unchanged.
+
+## Milestone-based Actions execution — 2026-11-21
+Mandatory for all AI and workstreams: follow the latest AGENTS.md milestone-based Actions section. Replace isolated-operation production jobs with bounded meaningful authoring, in-session QA/correction, recoverable native checkpoints and explicit stop reasons. #427 and #421 retain their respective implementations; verify active workflows and owners before migrating. Policy merge alone does not validate runtime behavior. No paid resources or unauthorized adoption.
