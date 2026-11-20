@@ -11,7 +11,7 @@ from mathutils import Vector
 out=Path(sys.argv[sys.argv.index("--")+1]);out.mkdir(parents=True,exist_ok=True)
 names=("GEO-head_stylized","GEO-body_female_stylized")
 views={"front":(0,-1,0),"right":(1,0,0),"back":(0,1,0),"left":(-1,0,0)}
-report={"status":"GEOMETRY_MASK_ONLY_NOT_CANON_ALIGNED","blender":bpy.app.version_string,"render_contract":{"engine":"BLENDER_EEVEE_NEXT","resolution":[384,1024],"orthographic":True,"alpha":"TRANSPARENT","color":"WHITE_UNLIT"},"objects":[]}
+report={"status":"GEOMETRY_MASK_ONLY_NOT_CANON_ALIGNED","blender":bpy.app.version_string,"render_contract":{"engine":"BLENDER_EEVEE","resolution":[384,1024],"orthographic":True,"alpha":"TRANSPARENT","color":"WHITE_UNLIT"},"objects":[]}
 for name in names:
     ob=bpy.data.objects.get(name)
     if ob is None or ob.type!="MESH":raise RuntimeError("SOURCE_OBJECT_MISSING:"+name)
