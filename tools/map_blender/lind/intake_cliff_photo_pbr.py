@@ -6,7 +6,7 @@ import urllib.request
 import argparse
 
 ASSETS = {"sparse_grass": "Amal Kumar", "stony_dirt_path": "eye-candy.xyz"}
-CHANNELS = {"diff": "basecolor", "nor_gl": "normal", "rough": "roughness"}
+CHANNELS = {"basecolor": ("diff", "diffuse", "albedo", "basecolor", "color"), "normal": ("nor_gl", "normal_gl", "normal"), "roughness": ("rough", "roughness")}
 
 def get(url):
     with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "TWO-material-intake/1.0"}), timeout=45) as response:
@@ -23,12 +23,20 @@ def main():
         manifest = {"asset_status": "candidate", "source_url": "https://polyhaven.com/a/" + asset,
                     "author": author, "license": "CC0", "license_evidence_url": "https://polyhaven.com/a/" + asset,
                     "capture_location_claim": "unknown", "textures": {}}
-        for source, role in CHANNELS.items():
-            entry = files[source]["1k"]["jpg"]
+        print(asset, "available channels:", sorted(files), flush=True)
+        for role, aliases in CHANNELS.items():
+            source = next((key for key in files if key.lower() in aliases), None)
+            if source is None:
+                raise ValueError(f"{asset}: missing {role}; available={sorted(files)}")
+            variants = files[source].get("1k", {})
+            fmt = next((key for key in ("jpg", "png") if key in variants), None)
+            if fmt is None:
+                raise ValueError(f"{asset}/{source}: missing supported 1k image; available={sorted(variants)}")
+            entry = variants[fmt]
             data = get(entry["url"])
             if len(data) != entry["size"] or hashlib.md5(data).hexdigest() != entry["md5"]:
                 raise ValueError("Provider checksum mismatch: " + asset + "/" + source)
-            path = dst / (role + ".jpg")
+            path = dst / (role + "." + fmt)
             if path.exists() and path.read_bytes() != data:
                 raise FileExistsError(path)
             path.write_bytes(data)
