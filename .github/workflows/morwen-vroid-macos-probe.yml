@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14629004819/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "419e20e8aadafeea1d4f6ca07767a864c907b4205d75e38151a8115d97adfdd9  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14675265708/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "bc9c2b4afc33e22f28a2e24cbedecd8b91d0f6348e36d2e319c4d09ca843e716  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +50,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected
+              assert hashlib.sha256(data).hexdigest()==expected=="1220fc8660887cfb5d15a0e0210fea94adce98b25622322e3e521fb4eb337e82"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -211,18 +211,15 @@ jobs:
             sleep 3
             capture_state hair-before
             if grep -Fq 'Main Color' evidence/hair-before.txt && grep -Fq '#825A46' evidence/hair-before.txt; then
-              "$gui" click 0.895 0.206
+              # Observed swatch at x759,y158 on 1024x768; inspect actual popup before typing.
+              "$gui" click 0.742 0.206
               sleep 2
               capture_state hair-color-control
-              if grep -Fq 'Main Color' evidence/hair-color-control.txt && grep -Fq '#825A46' evidence/hair-color-control.txt; then
-                "$gui" key 0 cmd
-                "$gui" text '#6B426B'
-                "$gui" key 36
-                sleep 3
-                "$gui" click 0.65 0.18
-                sleep 2
-                capture_state hair-authored
+              if grep -Eiq 'Hex|HSV|RGB' evidence/hair-color-control.txt; then
+                "$gui" click-label evidence/hair-color-control.png '#825A46' 'Hex' > evidence/hair-hex-click.txt 2>&1 || true
+                capture_state hair-color-focus
               fi
+              capture_state hair-authored
             fi
             for tab in body outfit; do
               if [ "$tab" = body ]; then "$gui" click 0.295 0.099; else "$gui" click 0.384 0.099; fi
@@ -256,7 +253,7 @@ jobs:
                 echo "SAVE_DIALOG_UNVERIFIED attempt=$attempt" >> evidence/save-retry.txt
                 break
               fi
-              if [ "$attempt" -le 2 ]; then
+              if [ "$attempt" -gt 1 ]; then
                 "$gui" key 1 cmd
               else
                 "$gui" click 0.027 0.100
