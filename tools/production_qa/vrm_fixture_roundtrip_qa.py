@@ -80,5 +80,5 @@ except Exception as exc:
 finally:
     save()
     print(json.dumps(report, indent=2))
-if report["import"] != "PASS":
+if report["import"] != "PASS" or report["export"] != "PASS" or report["reimport"] != "PASS":
     raise SystemExit(1)
