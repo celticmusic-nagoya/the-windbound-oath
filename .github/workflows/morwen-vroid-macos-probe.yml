@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14675265708/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "bc9c2b4afc33e22f28a2e24cbedecd8b91d0f6348e36d2e319c4d09ca843e716  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14675018048/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "4abfd75b517e7b12cf693bf8aa81e02f9e208a2930ab07726927b3a0f194aac6  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +50,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="1220fc8660887cfb5d15a0e0210fea94adce98b25622322e3e521fb4eb337e82"
+              assert hashlib.sha256(data).hexdigest()==expected=="4b64322f84fb58748e417b338e619e763ce7b647476dd33f349c511ffb3673cf"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -215,9 +215,22 @@ jobs:
               "$gui" click 0.742 0.206
               sleep 2
               capture_state hair-color-control
-              if grep -Eiq 'Hex|HSV|RGB' evidence/hair-color-control.txt; then
-                "$gui" click-label evidence/hair-color-control.png '#825A46' 'Hex' > evidence/hair-hex-click.txt 2>&1 || true
-                capture_state hair-color-focus
+              # Popup geometry verified from run 44827943572: inner hex field x727 y135.
+              if [ "$(grep -o '#825A46' evidence/hair-color-control.txt | wc -l | tr -d ' ')" -ge 2 ]; then
+                "$gui" click 0.710 0.176
+                "$gui" key 0 cmd
+                "$gui" text '#6B426B'
+                "$gui" key 36
+                sleep 2
+                capture_state hair-color-entered
+                "$gui" click 0.43 0.18
+                sleep 2
+                capture_state hair-color-closed
+                if grep -Fiq '#6B426B' evidence/hair-color-closed.txt; then
+                  echo COLOR_VALUE_CHANGED_REVIEW_REQUIRED > evidence/hair-color-status.txt
+                else
+                  echo COLOR_CHANGE_NOT_VERIFIED > evidence/hair-color-status.txt
+                fi
               fi
               capture_state hair-authored
             fi
