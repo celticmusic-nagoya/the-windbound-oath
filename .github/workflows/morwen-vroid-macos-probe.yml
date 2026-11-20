@@ -219,22 +219,29 @@ jobs:
                 "$gui" text '#6B426B'
                 "$gui" key 36
                 sleep 3
+                "$gui" click 0.65 0.18
+                sleep 2
                 capture_state hair-authored
               fi
             fi
             for tab in body outfit; do
-              "$gui" vroid-shortcut "$tab"
+              if [ "$tab" = body ]; then "$gui" click 0.295 0.099; else "$gui" click 0.384 0.099; fi
               sleep 3
               capture_state "authoring-$tab"
             done
-            "$gui" vroid-shortcut face
+            "$gui" click 0.095 0.099
             sleep 3
             capture_state pre-save
             if grep -Fq 'Morwen-resume.vroid*' evidence/pre-save.txt; then
-              "$gui" vroid-shortcut save-copy
+              "$gui" click 0.027 0.100
+              sleep 2
+              capture_state save-menu
+              if grep -Eiq "Save As|Save" evidence/save-menu.txt; then
+                "$gui" click-label evidence/save-menu.png "Save As" "Save" || "$gui" click-label evidence/save-menu.png "Save" "Save" || true
+              fi
               sleep 3
               capture_state save-dialog
-              if grep -Eiq 'Save As|Save Name' evidence/save-dialog.txt && grep -Fqi 'Documents' evidence/save-dialog.txt; then
+              if grep -Eiq 'Save As|Save Name|Save' evidence/save-dialog.txt && grep -Fqi 'Documents' evidence/save-dialog.txt; then
                 "$gui" key 0 cmd
                 "$gui" text 'Morwen-M02-authoring'
                 "$gui" key 36
