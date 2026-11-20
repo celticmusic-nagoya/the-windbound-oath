@@ -70,6 +70,5 @@ for name in names:
         record["views"][view]={"file":Path(scene.render.filepath).name,"camera_matrix_world":[[float(cam.matrix_world[r][c]) for c in range(4)] for r in range(4)],"ortho_scale":cam_data.ortho_scale,"frame_width_world":cam_data.ortho_scale*aspect}
     report["objects"].append(record)
     bpy.data.objects.remove(cam,do_unlink=True)
-(out/"geometry_mask_contract.json").write_text(json.dumps(report,indent=2)+"
-")
+(out/"geometry_mask_contract.json").write_text(json.dumps(report,indent=2)+chr(10))
 print("MORWEN_SOURCE_MASK_RENDER_PASS")
