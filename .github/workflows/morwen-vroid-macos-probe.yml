@@ -88,7 +88,8 @@ jobs:
           print(labels.joined(separator:" | "))
           guard labels.contains(where:{$0.contains(CommandLine.arguments[3])}), let o = a.first(where:{$0.topCandidates(1).first?.string == CommandLine.arguments[2]}) else { print("SCREEN_NOT_VERIFIED"); exit(2) }
           let d = CGDisplayBounds(CGMainDisplayID())
-          let p = CGPoint(x:d.minX + o.boundingBox.midX*d.width,y:d.minY+(1-o.boundingBox.midY)*d.height)
+          let offset: CGFloat = CommandLine.arguments[2] == "Fem" ? -116 : 0
+          let p = CGPoint(x:d.minX + o.boundingBox.midX*d.width,y:d.minY+(1-o.boundingBox.midY)*d.height+offset*d.height/768)
           let s = CGEventSource(stateID:.combinedSessionState)
           CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap)
           usleep(500000)
@@ -108,6 +109,8 @@ jobs:
             if swift "$RUNNER_TEMP/vroid-click.swift" evidence/new-model.png Fem 'Select a base to start with' > evidence/fem-status.txt; then
               sleep 45
               screencapture -x evidence/fem-editor.png
+              swift -e 'import Vision; import Foundation; let r = VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/fem-editor.png > evidence/fem-editor-text.txt
+              if grep -Fq "Select a base to start with" evidence/fem-editor-text.txt; then echo SELECTION_STILL_OPEN > evidence/fem-result.txt; else echo EDITOR_REVIEW_REQUIRED > evidence/fem-result.txt; fi
             fi
           fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
