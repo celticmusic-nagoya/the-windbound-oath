@@ -19,12 +19,26 @@ export function sunset(scene, sea, sun) {
     fragmentShader: `
       uniform vec3 sun;
       varying vec3 point;
+      float hash21(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
+      float noise21(vec2 p) {
+        vec2 i = floor(p), f = fract(p);
+        f = f*f*(3.-2.*f);
+        return mix(mix(hash21(i),hash21(i+vec2(1.,0.)),f.x),
+                   mix(hash21(i+vec2(0.,1.)),hash21(i+vec2(1.)),f.x),f.y);
+      }
       void main() {
         vec3 d = normalize(point - cameraPosition);
         float s = max(dot(d, sun), 0.);
         float up = clamp(d.y, 0., 1.);
         vec3 base = mix(vec3(.62,.24,.17), vec3(.045,.104,.31), smoothstep(0., .68, up));
         base += vec3(.48,.20,.031) * pow(s, 18.);
+        // Static world-direction clouds preserve deterministic zero-wind captures.
+        vec2 uv = d.xz / max(d.y + .22, .22);
+        vec2 q = uv * vec2(1.8, 4.4);
+        float n = .57*noise21(q) + .28*noise21(q*2.1+13.) + .15*noise21(q*4.3);
+        float cloud = smoothstep(.48,.72,n) * smoothstep(.025,.14,d.y) * (1.-smoothstep(.65,.95,d.y));
+        vec3 cloudTint = mix(vec3(.22,.18,.28),vec3(.95,.49,.24),pow(s,4.));
+        base = mix(base, cloudTint, cloud*.75);
         float rays = smoothstep(.99989, .99995, s);
         gl_FragColor = vec4(base + rays * vec3(3., 1.35, .36), 1.);
         #include <tonemapping_fragment>
