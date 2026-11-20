@@ -469,3 +469,7 @@ Scope: character/background/UI assets, sprites, masks, reference sheets, and ima
 7. **Evidence.** Track asset ID, canonical reference, attempt count, structural analysis, observed delta, QA status, and next deliverable. Preserve originals. Report blocked/unrun work accurately.
 
 Precedence: this section governs asset-generation attempt counting and forward progress. It does not waive repository safety rules, canonical asset protection, task-specific prohibitions on publishing or merging, or existing approval gates.
+
+
+## Director-approved 3D production efficiency — 2026-11-20
+All agents shall preserve native editable checkpoints (including .vroid), restore verified copies rather than regenerate, cache version-pinned installers with SHA/signature verification, and batch GUI edits and multi-view renders. GitHub-hosted runners are ephemeral; cache does not guarantee immediate allocation. Evaluate Cycles persistent data, adaptive sampling and denoising against matched baseline renders; Eevee previews are not final art QA. Record wall time, memory, settings and output equivalence; reuse matching artifacts. Preserve Blender 5.2.4 and qualify 5.3 independently. No paid runner/API without explicit approval. Do not treat untested optimizations as validated or merge unfinished assets. Morwen #427 owns native restore and Blender cache trials; map #421 consumes validated common changes only.
