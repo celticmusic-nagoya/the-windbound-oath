@@ -65,3 +65,6 @@ Check expiration before handoff; preserve needed binaries via existing authorize
 
 
 - **2026-11-20 shared performance:** Follow AGENTS.md director-approved 3D production efficiency. Native checkpoint restoration and verified archive caching are in #427 (runtime QA pending); render optimization must be benchmarked before shared implementation adoption. No unfinished asset merge.
+
+## Autonomous GUI production — 2026-11-21
+Read the director-approved autonomous GUI production section in AGENTS.md. PR #427 owns native checkpoint restoration, app-specific shortcuts and recovery QA; run 44812638361 / artifact 14668767481 is the reopen evidence pointer. Shortcut/Undo/Redo execution remains individually unqualified; no asset adoption. Other agents reuse verified procedures only and qualify application-specific controls before integration.
