@@ -129,11 +129,12 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
           float meadowEdge = grain(coastPoint.xz * .52);
           float meadowMix = smoothstep(.25,.78,meadowPatch*.78+meadowEdge*.22);
           grass = mix(vec3(.037,.102,.031), vec3(.21,.30,.085), meadowMix);
-          grass *= .84 + pattern*.32;
+          // Correlate meadow color and exposed soil with the same low-frequency field, not pixel-scale procedural grain.
+          grass *= mix(.94,1.06,meadowEdge);
           vec3 dirtPhoto = texture2D(photoDirt, coastPoint.xz * .75).rgb;
           // Preserve art-directed green chroma; borrow photographic luminance/detail.
           float grassLight = dot(grassPhoto, vec3(.2126,.7152,.0722));
-          float exposed = smoothstep(.76,.93,pattern) * .12;
+          float exposed = smoothstep(.68,.88,grain(coastPoint.xz*.39 + vec2(11.2,4.1))) * .22;
           grass *= clamp(.83 + grassLight * .95, .85, 1.22);
           grass = mix(grass, dirtPhoto * vec3(.65,.78,.55), exposed);
           ${roadMeshes.length ? 'grass = mix(grass, dirtPhoto * vec3(1.05,1.02,.90), routeShoulder(coastPoint.xz)*.75);' : ''}
@@ -141,7 +142,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         float cover = smoothstep(.55,.86,surfaceNormal.y + (pattern-.5)*.20) *
                       smoothstep(3.3,5.0,coastPoint.y);
         ${moss ? `
-          grass = mix(grass, vec3(.25,.27,.085), smoothstep(.60,.94,fineGrain) * .32);
+          ${photo ? '' : 'grass = mix(grass, vec3(.25,.27,.085), smoothstep(.60,.94,fineGrain) * .32);'}
           float mossMask = 0.0;
           vec2 mossUV = coastPoint.xz * 2.0;
           vec3 stoneColor = grass;
@@ -159,7 +160,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         addRockPhotoResponse(shader, photo, 'coastPoint', 'surfaceNormal', moss ? '(1.0-cover)*(1.0-mossMask)' : '1.0-cover');
       }
     };
-    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-shoulder-rock-v12' : '');
+    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo-meadow-coherent-v13' : '');
   }
   for (const material of road) {
     material.onBeforeCompile = (shader) => {
