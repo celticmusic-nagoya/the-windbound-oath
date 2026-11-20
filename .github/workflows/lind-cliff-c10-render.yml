@@ -3,14 +3,9 @@ on:
   push:
     branches: [feature/lind-cliff-rock-art-study-20261118]
     paths:
-      - '.github/workflows/lind-cliff-c10-render.yml'
       - 'assets/candidates/lind/windwaiting-cliff-c10/**'
       - 'tools/production_qa/lind_blueprint/**'
       - 'tools/production_qa/junction_contact_faces.py'
-  pull_request:
-    paths:
-      - '.github/workflows/lind-cliff-c10-render.yml'
-      - 'assets/candidates/lind/windwaiting-cliff-c10/**'
   workflow_dispatch:
     inputs:
       blueprint:
@@ -24,7 +19,27 @@ concurrency:
   group: lind-cliff-c10-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: false
 jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          persist-credentials: false
+      - name: Validate C10 production scripts and inputs before Blender download
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s assets/candidates/lind/windwaiting-cliff-c9/C9-B/C_UNAPPROVED.blend
+          test -s assets/approved/game/cliff/sunset_background.png
+          python3 -m compileall -q tools/production_qa/lind_blueprint
+          python3 -m py_compile assets/candidates/lind/windwaiting-cliff-c10/sculpt_c10.py
+          python3 -m py_compile tools/production_qa/audit_lind_c10_mesh.py
+          python3 -m py_compile tools/production_qa/junction_contact_faces.py
+          bash -n tools/production_qa/lind_blueprint/prepare_headless.sh
   render:
+    needs: preflight
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-24.04
     env:
