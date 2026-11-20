@@ -1,0 +1,77 @@
+name: Morwen VRoid Studio verified launch (no model adoption)
+on:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths: [.github/workflows/morwen-vroid-studio-launch.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: morwen-vroid-studio-launch
+  cancel-in-progress: false
+jobs:
+  verified-launch:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - name: Match official publisher download to observed installer hash
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force evidence | Out-Null
+          $expected='617b59733cbbd6044d1826997157cf5ead8134d7efb8ac393f2614298fe87893'
+          $report=[ordered]@{status='BLOCKED';officialMatch='NOT_RUN';installation='NOT_RUN';launch='NOT_RUN';editing='NOT_RUN';export='NOT_RUN'}
+          try {
+            $page=Invoke-WebRequest -Uri 'https://vroid.com/studio' -TimeoutSec 30
+            $urls=@([regex]::Matches($page.Content,'https://download\.vroid\.com/dist/[A-Za-z0-9]+/VRoidStudio-v2\.16\.0-win\.exe') | ForEach-Object Value | Select-Object -Unique)
+            if($urls.Count -ne 1){throw "Exact 2.16.0 official download link not uniquely exposed; no executable will run"}
+            $report.officialUrl=$urls[0]
+            $installer=Join-Path $env:RUNNER_TEMP 'VRoidStudio-v2.16.0-win.exe'
+            Invoke-WebRequest -Uri $urls[0] -OutFile $installer -MaximumRedirection 0 -TimeoutSec 240
+            $report.sha256=(Get-FileHash -Algorithm SHA256 $installer).Hash
+            if($report.sha256 -ine $expected){throw 'Official installer SHA mismatch'}
+            $sig=Get-AuthenticodeSignature $installer
+            $report.signature=[string]$sig.Status
+            $report.publisher=$sig.SignerCertificate.Subject
+            if($sig.Status -ne 'Valid' -or $report.publisher -notmatch '^CN=pixiv Inc\.,'){throw 'Publisher signature verification failed'}
+            $report.officialMatch='PASS'
+            if(-not [Environment]::UserInteractive -or (Get-Process -Id $PID).SessionId -eq 0){throw 'No interactive desktop'}
+            $dest=Join-Path $env:RUNNER_TEMP 'vroid-studio'
+            $args=@('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/DIR="'+$dest+'"')
+            $p=Start-Process -FilePath $installer -ArgumentList $args -PassThru
+            if(-not $p.WaitForExit(240000)){Stop-Process -Id $p.Id -Force;throw 'Installer timeout'}
+            if($p.ExitCode -ne 0){throw "Installer exit $($p.ExitCode)"}
+            $exe=Join-Path $dest 'VRoidStudio.exe'
+            if(-not (Test-Path $exe)){throw 'Installed executable absent'}
+            $report.installation='PASS'
+            $app=Start-Process -FilePath $exe -PassThru
+            Start-Sleep -Seconds 45
+            $app.Refresh()
+            if($app.HasExited){throw "VRoid exited $($app.ExitCode)"}
+            $report.processAlive=$true
+            $report.windowTitle=$app.MainWindowTitle
+            $report.windowHandle=$app.MainWindowHandle.ToInt64()
+            Add-Type -AssemblyName System.Windows.Forms
+            Add-Type -AssemblyName System.Drawing
+            $bounds=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+            $bmp=New-Object Drawing.Bitmap($bounds.Width,$bounds.Height)
+            $g=[Drawing.Graphics]::FromImage($bmp)
+            try {
+              $g.CopyFromScreen($bounds.Location,[Drawing.Point]::Empty,$bounds.Size)
+              $bmp.Save((Join-Path (Get-Location) 'evidence/launch.png'),[Drawing.Imaging.ImageFormat]::Png)
+            } finally {$g.Dispose();$bmp.Dispose()}
+            $report.launch='PROCESS_ALIVE_SCREENSHOT_REVIEW_REQUIRED'
+            $report.status='LAUNCH_CANDIDATE_UNVERIFIED'
+          } catch {$report.error=$_.Exception.Message; throw}
+          finally {
+            if($app -and -not $app.HasExited){Stop-Process -Id $app.Id -ErrorAction SilentlyContinue}
+            $report | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 evidence/launch_qa.json
+            Get-Content evidence/launch_qa.json
+          }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-vroid-verified-launch-evidence
+          path: evidence/
+          retention-days: 7
+          if-no-files-found: error
