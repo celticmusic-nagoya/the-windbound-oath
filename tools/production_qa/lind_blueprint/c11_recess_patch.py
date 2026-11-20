@@ -17,7 +17,7 @@ import bpy
 from mathutils import Vector
 
 SOURCE_SHA = "0b6b0f3f6e8e270594cdac5fc81008ffe5210b7e98de352d826360dfd6676508"
-TARGET = "C9 B carrier"
+TARGET = "Cliff C8 B | joinable coastal segment"
 SEAM_X = -5.95
 HALF_WIDTH = 0.46
 BOTTOM_Z, TOP_Z = 0.45, 4.25
@@ -61,7 +61,7 @@ def main():
     bpy.ops.wm.open_mainfile(filepath=str(source))
     candidates = [obj for obj in bpy.data.objects if obj.type == "MESH" and obj.name == TARGET]
     if len(candidates) != 1:
-        raise RuntimeError("Expected exactly one verified carrier; names must be audited")
+        raise RuntimeError("Expected exactly one verified carrier; available meshes: " + repr([o.name for o in bpy.data.objects if o.type == "MESH"]))
     obj = candidates[0]
     before = topology(obj)
     original = [tuple(v.co) for v in obj.data.vertices]
