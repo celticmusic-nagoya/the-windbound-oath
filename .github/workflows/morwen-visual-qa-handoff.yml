@@ -21,6 +21,23 @@ concurrency:
   group: morwen-visual-qa-handoff-${{ github.event_name }}-${{ github.sha }}-${{ inputs.source_run_id }}-${{ inputs.artifact_name }}
   cancel-in-progress: false
 jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate generator syntax and expected inputs before packaging
+        shell: bash
+        env:
+          SOURCE_RUN: ${{ inputs.source_run_id || '44671624893' }}
+          SOURCE_ARTIFACT: ${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/production_qa/build_visual_qa_handoff.py
+          [[ "$SOURCE_RUN" =~ ^[0-9]{5,20}$ ]]
+          [[ "$SOURCE_ARTIFACT" =~ ^[a-zA-Z0-9_.-]{3,120}$ ]]
   smoke-handoff:
     if: github.event_name == 'push'
     runs-on: ubuntu-24.04
@@ -48,6 +65,7 @@ jobs:
           print('SYNTHETIC_HANDOFF_SMOKE_PASS_NOT_RENDER')
           PY
   package-evidence:
+    needs: preflight
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
