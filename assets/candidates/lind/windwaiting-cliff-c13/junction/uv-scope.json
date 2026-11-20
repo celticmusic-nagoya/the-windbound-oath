@@ -1,0 +1,215 @@
+{
+  "claude_reproduction": {
+    "faces": 3755,
+    "ring_faces": 531,
+    "zero_area_uv": 0,
+    "flipped_uv": 0,
+    "overlap_pairs": 0,
+    "overlap_pairs_repair_internal": 0,
+    "overlap_pairs_repair_vs_ring": 0,
+    "texel_scale_ratio_median": 0.8384,
+    "texel_scale_ratio_p5_p95": [
+      0.5839,
+      1.1655
+    ],
+    "anisotropy_median": 11.429,
+    "anisotropy_p95": 20.066,
+    "ring_anisotropy_median": 6.9739,
+    "ring_anisotropy_p95": 27.2239
+  },
+  "exact_repair_face_count": 3756,
+  "rounded_unordered_repair_face_count": 3755,
+  "exact_minus_rounded_ids": [
+    39112
+  ],
+  "cross_face_pairs": 5483,
+  "cross_in_claude_ring": 0,
+  "ring_levels": [
+    [
+      13,
+      131
+    ],
+    [
+      14,
+      225
+    ],
+    [
+      15,
+      2330
+    ],
+    [
+      16,
+      1362
+    ],
+    [
+      17,
+      1088
+    ],
+    [
+      18,
+      263
+    ],
+    [
+      19,
+      84
+    ]
+  ],
+  "cross_with_preexisting_external_face_overlap": 5483,
+  "unique_external_faces": 24,
+  "unique_external_faces_preexisting_overlap": 24,
+  "material_index_pairs": [
+    [
+      0,
+      2,
+      5483
+    ]
+  ],
+  "external_normal": {
+    "inland": 5483
+  },
+  "external_center_side": {
+    "inland": 5483
+  },
+  "face_center_distance_BU": {
+    "min": 29.667047370444752,
+    "median": 31.11818702690322,
+    "max": 32.02735694120525
+  },
+  "uses": [
+    {
+      "material": "Slate and weathered limestone",
+      "node": "TEX_COORD",
+      "image": null,
+      "coordinates": [],
+      "projection": null,
+      "extension": null,
+      "uv_map": null,
+      "output_links": [
+        "TEX_NOISE",
+        "TEX_NOISE"
+      ]
+    },
+    {
+      "material": "Slate and weathered limestone",
+      "node": "TEX_COORD",
+      "image": null,
+      "coordinates": [],
+      "projection": null,
+      "extension": null,
+      "uv_map": null,
+      "output_links": [
+        "VECT_MATH"
+      ]
+    },
+    {
+      "material": "Slate and weathered limestone",
+      "node": "TEX_IMAGE",
+      "image": "rock_face_01_arm_1k.jpg",
+      "coordinates": [
+        {
+          "node": "VECT_MATH",
+          "socket": "Vector",
+          "via": [
+            {
+              "node": "NEW_GEOMETRY",
+              "socket": "Position",
+              "via": []
+            }
+          ]
+        }
+      ],
+      "projection": "BOX",
+      "extension": "REPEAT",
+      "uv_map": null,
+      "output_links": [
+        "SEPARATE_COLOR"
+      ]
+    },
+    {
+      "material": "Slate and weathered limestone",
+      "node": "TEX_IMAGE",
+      "image": "rock_face_01_diff_1k.jpg",
+      "coordinates": [
+        {
+          "node": "VECT_MATH",
+          "socket": "Vector",
+          "via": [
+            {
+              "node": "NEW_GEOMETRY",
+              "socket": "Position",
+              "via": []
+            }
+          ]
+        }
+      ],
+      "projection": "BOX",
+      "extension": "REPEAT",
+      "uv_map": null,
+      "output_links": [
+        "MIX_RGB"
+      ]
+    },
+    {
+      "material": "Slate and weathered limestone",
+      "node": "TEX_IMAGE",
+      "image": "rock_face_01_nor_gl_1k.jpg",
+      "coordinates": [
+        {
+          "node": "VECT_MATH",
+          "socket": "Vector",
+          "via": [
+            {
+              "node": "TEX_COORD",
+              "socket": "UV",
+              "via": []
+            }
+          ]
+        }
+      ],
+      "projection": "FLAT",
+      "extension": "REPEAT",
+      "uv_map": null,
+      "output_links": [
+        "NORMAL_MAP"
+      ]
+    },
+    {
+      "material": "Slate and weathered limestone",
+      "node": "NORMAL_MAP",
+      "image": null,
+      "coordinates": [],
+      "projection": null,
+      "extension": null,
+      "uv_map": "Coast tile | U periodic",
+      "output_links": [
+        "BSDF_PRINCIPLED"
+      ]
+    },
+    {
+      "material": "Windward olive turf",
+      "node": "TEX_COORD",
+      "image": null,
+      "coordinates": [],
+      "projection": null,
+      "extension": null,
+      "uv_map": null,
+      "output_links": [
+        "TEX_NOISE",
+        "TEX_NOISE"
+      ]
+    },
+    {
+      "material": "Damp lower bedrock",
+      "node": "TEX_COORD",
+      "image": null,
+      "coordinates": [],
+      "projection": null,
+      "extension": null,
+      "uv_map": null,
+      "output_links": [
+        "TEX_NOISE",
+        "TEX_NOISE"
+      ]
+    }
+  ]
+}
