@@ -151,35 +151,47 @@ def main():
             json.dumps(diagnostic, indent=2), encoding="utf-8")
         if len(region) < 16 or len(interior_original) < 3:
             raise RuntimeError("Patch lacks adequate interior topology; diagnose before another inset")
-        # C11 inset approach has failed twice on this exact C10 source.
-        # Lock out the known-bad algorithm instead of spending another runner
-        # or risking a misleading candidate. The diagnostic remains reusable
-        # by the forthcoming boundary-locked face-replacement implementation.
-        diagnostic["decision"] = "INSET_METHOD_RETIRED"
-        diagnostic["reason"] = "Inset did not produce independently selectable inner faces"
-        diagnostic["next_method"] = "boundary-locked local face replacement"
+        # Method B: replace the selected face island with a recessed duplicate.
+        # Original vertices remain in place; only faces in the bounded island
+        # are replaced. A duplicate of each island vertex forms the new floor,
+        # and an explicit quad strip joins the old perimeter to the new rim.
+        # No inset_region operation is used.
+        source_faces = [(face, [v for v in face.verts]) for face in region]
+        source_vertices = {v for _, vertices in source_faces for v in vertices}
+        duplicate = {v: bm.verts.new(v.co.copy()) for v in source_vertices}
+        for v, copy in duplicate.items():
+            height = max(0.0, min(1.0, (v.co.z - BOTTOM_Z) / (TOP_Z - BOTTOM_Z)))
+            # The rim and floor both recede; a height-dependent, asymmetric
+            # setback creates a non-planar wall rather than an exterior ridge.
+            skew = 0.72 + 0.28 * height + 0.14 * (v.co.x - SEAM_X) / HALF_WIDTH
+            copy.co.y += DEPTH * max(0.4, skew)
+        # Preserve face winding and all nonselected face connections.
+        for face, vertices in source_faces:
+            bm.faces.new([duplicate[v] for v in vertices])
+        # Each perimeter edge belongs to exactly one selected face.
+        # Follow that face's winding to make a consistent bridge strip.
+        for edge in perimeter_edges:
+            selected = [face for face in edge.link_faces if face in face_set]
+            if len(selected) != 1:
+                raise RuntimeError("Ambiguous patch edge adjacency; STOP")
+            winding = list(selected[0].verts)
+            pair = None
+            for i, vertex in enumerate(winding):
+                nxt = winding[(i + 1) % len(winding)]
+                if vertex in edge.verts and nxt in edge.verts:
+                    pair = (vertex, nxt)
+                    break
+            if pair is None:
+                raise RuntimeError("Cannot orient perimeter edge; STOP")
+            a, b = pair
+            bm.faces.new((a, b, duplicate[b], duplicate[a]))
+        bmesh.ops.delete(bm, geom=region, context="FACES_ONLY")
+        diagnostic["decision"] = "BOUNDARY_LOCKED_FACE_REPLACEMENT"
+        diagnostic["replacement_faces"] = len(source_faces)
+        diagnostic["bridge_faces"] = len(perimeter_edges)
+        diagnostic["new_vertices"] = len(duplicate)
         (output / "c11_geometry_diagnostic.json").write_text(
             json.dumps(diagnostic, indent=2), encoding="utf-8")
-        raise RuntimeError(
-            "C11_INSET_RETIRED: geometry diagnosis saved; use boundary-locked face replacement"
-        )
-        # Preserve all original vertices. Inset makes a new inner ring;
-        # this is a structural change from the rejected two-plane deformation.
-        inset = bmesh.ops.inset_region(
-            bm, faces=region, thickness=0.11, depth=0.0,
-            use_boundary=True, use_even_offset=True)
-        inner = [f for f in inset["faces"] if f.is_valid and
-                 all(v.index not in boundary for v in f.verts)]
-        if not inner:
-            raise RuntimeError("Inset did not produce independent interior faces")
-        inner_vertices = {v for f in inner for v in f.verts if v.index not in boundary}
-        # Depth convention must be verified against actual carrier orientation:
-        # positive local Y is inland in this candidate. The nonuniform floor
-        # gives a genuine recessed cavity, not a painted seam.
-        for v in inner_vertices:
-            t = max(0.0, min(1.0, (v.co.z - BOTTOM_Z) / (TOP_Z - BOTTOM_Z)))
-            skew = 0.72 + 0.28 * t + 0.14 * (v.co.x - SEAM_X) / HALF_WIDTH
-            v.co.y += DEPTH * skew
         bm.normal_update()
         bm.to_mesh(obj.data)
         obj.data.update()
