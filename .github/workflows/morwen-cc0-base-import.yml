@@ -7,11 +7,6 @@ on:
       - .github/workflows/morwen-cc0-base-import.yml
       - tools/production_qa/install_blender_530.sh
       - .github/workflows/morwen-blender-530-compat.yml
-  pull_request:
-    branches: [feature/morwen-authored-sculpt-20261118]
-    paths:
-      - tools/morwen_authored_sculpt/import_cc0_makehuman_base.py
-      - .github/workflows/morwen-cc0-base-import.yml
   workflow_dispatch:
 permissions:
   contents: read
