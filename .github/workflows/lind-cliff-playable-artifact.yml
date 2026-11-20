@@ -38,8 +38,8 @@ jobs:
       - name: Reuse verified photo material artifact
         uses: actions/download-artifact@v4
         with:
-          name: lind-photo-material-3330d3bcdfc05df9801acaebc17c8abd624f4391
-          run-id: 44735960468
+          name: lind-photo-material-0da460b2e0acd20bf9d2274bcdc1749165425d4d
+          run-id: 44818357345
           github-token: ${{ github.token }}
           path: assets/candidates/lind/windwaiting-cliff-playable/photo-pbr
       - name: Verify and archive candidate hashes

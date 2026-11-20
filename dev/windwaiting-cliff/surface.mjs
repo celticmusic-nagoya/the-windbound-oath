@@ -17,7 +17,7 @@ export async function loadMossTextures(base) {
 export async function loadPhotoSurfaces(base) {
   const loader = new T.TextureLoader();
   const result = {};
-  for (const asset of ['sparse_grass', 'stony_dirt_path']) {
+  for (const asset of ['sparse_grass', 'stony_dirt_path', 'rock_boulder_dry', 'bark_brown_02']) {
     const dir = new URL(asset + '/', base);
     const response = await fetch(new URL('manifest.json', dir));
     if (!response.ok) throw new Error('Photo manifest HTTP ' + response.status);
@@ -77,7 +77,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       return smoothstep(-.45,.15,edge+irregular)*endMask;
     }
   `;
-  const stone = [...terrain].find((material) => material.map)?.map;
+  const stone = photo?.rock_boulder_dry ?? [...terrain].find((material) => material.map)?.map;
   if (stone) stone.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   for (const material of terrain) {
     material.map = null;
@@ -172,7 +172,8 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
   }
   for (const material of rock) bindRockMoss(material, moss);
   for (const material of bark) {
-    material.color = new T.Color(0x5c432b);
+    material.color = new T.Color(photo ? 0xffffff : 0x5c432b);
+    if (photo) { material.map = photo.bark_brown_02; material.normalMap = photo.bark_brown_02_normal; material.roughnessMap = photo.bark_brown_02_roughness; material.roughness = 1; material.needsUpdate = true; }
     material.vertexColors = false;
   }
 }
