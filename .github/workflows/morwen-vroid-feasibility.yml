@@ -1,0 +1,92 @@
+name: Morwen VRoid Studio and Hub feasibility (manual, no adoption)
+on:
+  workflow_dispatch:
+    inputs:
+      studio_installer_url:
+        description: 'Official HTTPS direct Windows installer URL (leave empty to mark download BLOCKED)'
+        required: false
+        type: string
+      studio_sha256:
+        description: 'Expected official installer SHA-256 (required when URL supplied)'
+        required: false
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: morwen-vroid-feasibility-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  studio-windows:
+    runs-on: windows-2022
+    timeout-minutes: 18
+    steps:
+      - name: Probe Windows environment and official Studio landing page
+        shell: pwsh
+        env:
+          INSTALLER_URL: ${{ inputs.studio_installer_url }}
+          INSTALLER_SHA256: ${{ inputs.studio_sha256 }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path evidence | Out-Null
+          $report = [ordered]@{ subject='VRoid Studio'; os=[Environment]::OSVersion.VersionString; interactiveDesktop=[Environment]::UserInteractive; download='NOT_RUN'; installerExecution='NOT_RUN'; GUIAutomation='NOT_RUN'; status='BLOCKED'; reasons=@() }
+          try {
+            $r = Invoke-WebRequest -Uri 'https://vroid.com/studio' -Method Get -MaximumRedirection 5 -TimeoutSec 30
+            $report.landingHttpStatus = [int]$r.StatusCode
+          } catch { $report.reasons += ('Official landing page probe: ' + $_.Exception.Message) }
+          if ([string]::IsNullOrWhiteSpace($env:INSTALLER_URL)) {
+            $report.reasons += 'Official direct installer URL not provided; do not scrape/download arbitrary binaries'
+          } elseif ($env:INSTALLER_URL -notmatch '^https://' -or $env:INSTALLER_SHA256 -notmatch '^[0-9a-fA-F]{64}$') {
+            $report.reasons += 'HTTPS URL and independently supplied 64-character SHA-256 required'
+          } else {
+            try {
+              $uri = [Uri]$env:INSTALLER_URL
+              if ($uri.Host -notin @('vroid.com','download.vroid.com','hub.vroid.com','pixiv.net','www.pixiv.net')) { throw 'Installer URL host not allowlisted; verify official delivery origin before adding it' }
+              $destination = Join-Path $env:TEMP 'vroid-installer.exe'
+              Invoke-WebRequest -Uri $uri -OutFile $destination -MaximumRedirection 3 -TimeoutSec 180
+              $actual = (Get-FileHash -Algorithm SHA256 -Path $destination).Hash
+              $report.download = 'PASS'
+              $report.actualSha256 = $actual
+              if ($actual -ine $env:INSTALLER_SHA256) { throw 'SHA-256 mismatch; installer will not execute' }
+              $report.sha256 = 'PASS'
+              $report.status = 'DOWNLOADED_VERIFIED_NOT_EXECUTED'
+              $report.reasons += 'Silent-install arguments and GUI compatibility are unverified; no unattended execution'
+            } catch {
+              $report.status = 'BLOCKED'
+              $report.reasons += $_.Exception.Message
+            }
+          }
+          $report | ConvertTo-Json -Depth 6 | Set-Content -Encoding utf8 evidence/studio.json
+          Get-Content evidence/studio.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-vroid-studio-feasibility-not-adopted
+          path: evidence/studio.json
+          retention-days: 7
+  hub-api:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check public Hub site without authentication or model downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python3 - <<'PY'
+          import json,urllib.request,urllib.error,pathlib
+          report={"subject":"VRoid Hub","type":"hosted web service, not downloadable desktop software","siteProbe":"NOT_RUN","apiAuth":"BLOCKED","vrmDownload":"BLOCKED","reasons":["No OAuth credentials or model-specific license authorization provided; no model download attempted"]}
+          try:
+              req=urllib.request.Request("https://hub.vroid.com/",headers={"User-Agent":"TWO-feasibility-check/1.0"})
+              with urllib.request.urlopen(req,timeout=20) as r:
+                  report["siteProbe"]="PASS" if r.status==200 else "HTTP_"+str(r.status)
+                  report["httpStatus"]=r.status
+          except Exception as e: report["siteProbe"]="BLOCKED";report["siteError"]=str(e)
+          pathlib.Path("evidence/hub.json").write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          print(json.dumps(report,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-vroid-hub-feasibility-not-adopted
+          path: evidence/hub.json
+          retention-days: 7
