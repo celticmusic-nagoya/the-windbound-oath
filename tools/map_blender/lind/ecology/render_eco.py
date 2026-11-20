@@ -349,6 +349,47 @@ def shot_water(samples):
     return outs
 
 
+
+def shot_coastal_sward(samples):
+    """Noncanonical Atlantic cliff grass placement study; not a cliff geometry edit.
+
+    Seeded spatially heterogeneous clumps, a bare wind-scoured strip, and rock pockets.
+    Preview plane is staging only. Uses ECO-G2 coastal grass, no old VEG-F1 method.
+    """
+    sc, lib, stage = open_kit()
+    rng = L.new_rng(20261120, "coastal_sward_01")
+    ground(stage, size=18, mat=L.mat_ground("M_coastal_preview", (0.16, 0.17, 0.13), (0.27, 0.29, 0.20)))
+    # Noncanonical rock props only; no changes to PR #421 cliff or approved CG.
+    for x, y, scale in ((-2.4, 0.5, 0.9), (2.0, 1.6, 1.1), (0.4, 2.6, 0.7)):
+        place(stage, "eco_rocks_coastal", (x, y, -0.11),
+              rot_z=rng.uniform(0, math.tau), scale=scale)
+    placed = 0
+    # Stratified jitter instead of repeated aligned clumps; irregular sward density.
+    for ix in range(32):
+        for iy in range(18):
+            x = -3.8 + (ix + rng.random()) * 0.24
+            y = -1.7 + (iy + rng.random()) * 0.25
+            # Coastal exposure: scoured edge at y < -0.8; inland sward behind.
+            edge = 0.45 + 0.35 * math.sin(x * 1.4) + 0.12 * math.sin(x * 3.2)
+            density = 0.78 if y > edge else (0.35 if y > -0.8 else 0.06)
+            # Explicit exclusion around visible rocks, preserving exposed stone.
+            if any((x-rx)**2 + (y-ry)**2 < rr**2
+                   for rx, ry, rr in ((-2.4, 0.5, 0.8), (2.0, 1.6, 0.95), (0.4, 2.6, 0.6))):
+                continue
+            if rng.random() >= density:
+                continue
+            aid = "eco_grass_coastal_dune" if rng.random() < 0.82 else "eco_grass_tuft_short"
+            place(stage, aid, (x, y, -0.025),
+                  rot_z=rng.uniform(-0.18, 0.18), scale=rng.uniform(0.65, 1.06))
+            placed += 1
+    print("COASTAL_SWARD_CANDIDATE clumps=", placed, "seed=20261120")
+    lights(sc, sun_elev=30, sun_az=-42)
+    setup_render(sc, 1280, 720, samples)
+    camera(sc, (5.3, -7.0, 4.0), (0, 0.55, 0.12), 37.0)
+    L.set_channel(sc, wind=0.65)
+    return [render(sc, "eco_coastal_sward_candidate_wind065")]
+
+
 ICON_ITEMS = ["eco_tree_deciduous_a", "eco_tree_apple_a", "eco_tree_forest_tall_a", "eco_tree_conifer_a",
               "eco_hedgerow", "eco_haystack", "eco_rocks_river", "eco_rocks_coastal", "eco_sedge_bank",
               "eco_wheat_patch", "eco_vegetable_rows", "eco_flower_patch", "eco_fence_post_rail",
@@ -382,8 +423,8 @@ def shot_icons(samples):
 
 SHOTS = {"lineup_large": shot_lineup_large, "lineup_small": shot_lineup_small, "vignette": shot_vignette,
          "closeup": shot_closeup, "windpair": shot_windpair, "icons": shot_icons, "water": shot_water,
-         "gameview": shot_gameview}
-DEFAULT_SAMPLES = {"lineup_large": 40, "lineup_small": 48, "vignette": 48, "closeup": 48, "windpair": 24, "icons": 24, "water": 32, "gameview": 40}
+         "gameview": shot_gameview, "coastal_sward": shot_coastal_sward}
+DEFAULT_SAMPLES = {"lineup_large": 40, "lineup_small": 48, "vignette": 48, "closeup": 48, "windpair": 24, "icons": 24, "water": 32, "gameview": 40, "coastal_sward": 24}
 
 
 def provenance():
