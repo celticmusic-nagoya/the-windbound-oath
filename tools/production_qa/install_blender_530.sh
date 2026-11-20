@@ -20,7 +20,21 @@ for row in rows:
 if len(matches)!=1: raise SystemExit("OFFICIAL_CHECKSUM_NOT_UNIQUE")
 Path(sys.argv[2]).write_text(matches[0]+"  "+sys.argv[3]+chr(10))
 PY
-curl --fail --location --retry 1 --connect-timeout 20 --max-time 600 "$base/$name" -o "$work/$name"
+# Optional archive cache; always verify against freshly retrieved official checksum.
+cache_dir="${TWO_BLENDER_ARCHIVE_CACHE:-$HOME/.cache/two-blender-archives}"
+mkdir -p "$cache_dir"
+expected="$(cut -d ' ' -f1 "$work/expected.sha256")"
+cached="$cache_dir/$expected-$name"
+if [ -f "$cached" ] && printf '%s  %s\n' "$expected" "$cached" | sha256sum -c -; then
+  cp "$cached" "$work/$name"
+  echo TWO_BLENDER_ARCHIVE_CACHE_HIT
+else
+  curl --fail --location --retry 1 --connect-timeout 20 --max-time 600 "$base/$name" -o "$work/$name"
+  (cd "$work" && sha256sum -c expected.sha256)
+  cp "$work/$name" "$cached.tmp.$"
+  mv "$cached.tmp.$" "$cached"
+  echo TWO_BLENDER_ARCHIVE_CACHE_MISS
+fi
 (cd "$work" && sha256sum -c expected.sha256)
 mkdir -p "$destination"
 tar -xJf "$work/$name" -C "$destination" --strip-components=1
