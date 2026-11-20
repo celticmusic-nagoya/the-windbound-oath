@@ -1,3 +1,6 @@
+## Director-approved parallel world production v2 — 2026-11-20
+Mandatory for all agents and automations: read [Art-Directed Hybrid World Production 2.0](../policy/ART_DIRECTED_HYBRID_WORLD_PRODUCTION_V2.md). Cliff, village and forest proceed independently; preserve cliff E/C12/rock candidates and shift from isolated refinement to scene-level review. Audit existing HOME/BUILD/ECO/ROUTE owners before work, reuse modular assets, build real scenes and test gameplay early in provisional environments. No quality-gate waiver or unfinished asset adoption. Retry v3 remains authoritative; explicit approval required for main changes, deletion and publication. This policy supersedes conflicting cliff-first scheduling only.
+
 # TWO｜セッションをまたぐ制作引き継ぎの入口
 
 Status: LIVE INDEX / 2026-11-18. This index is navigation and verified status, **not a new canonical lore source**. Always re-fetch current GitHub state; timestamps and PR numbers here can become stale.
