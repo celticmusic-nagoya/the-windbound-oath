@@ -35,7 +35,7 @@ jobs:
           SOURCE_ARTIFACT: ${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}
         run: |
           set -euo pipefail
-          python3 -m py_compile tools/production_qa/build_visual_qa_handoff.py
+          python3 -m py_compile tools/production_qa/build_visual_qa_handoff.py tools/production_qa/two_checkpoint.py
           [[ "$SOURCE_RUN" =~ ^[0-9]{5,20}$ ]]
           [[ "$SOURCE_ARTIFACT" =~ ^[a-zA-Z0-9_.-]{3,120}$ ]]
   smoke-handoff:
@@ -109,17 +109,30 @@ jobs:
           set -euo pipefail
           python3 tools/production_qa/build_visual_qa_handoff.py --input /tmp/two-existing-render --output /tmp/two-visual-qa-handoff --asset morwen
           python3 -m json.tool /tmp/two-visual-qa-handoff/visual_qa_handoff.json >/dev/null
+      - name: Write resumable evidence checkpoint (no G1-G4 approval)
+        if: steps.reuse.outputs.cache-hit != 'true'
+        shell: bash
+        env:
+          CURRENT_HEAD: ${{ github.sha }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/two_checkpoint.py --evidence /tmp/two-existing-render --output /tmp/two-visual-qa-handoff/stage_checkpoint.json --asset morwen --stage visual_qa_handoff --owner unassigned --pr 427 --branch "$CURRENT_BRANCH" --head-sha "$CURRENT_HEAD"
+          python3 tools/production_qa/two_checkpoint.py --validate /tmp/two-visual-qa-handoff/stage_checkpoint.json
       - name: Verify reused or newly generated handoff
         shell: bash
         run: |
           set -euo pipefail
           test -s /tmp/two-visual-qa-handoff/visual_qa_handoff.json
           python3 -m json.tool /tmp/two-visual-qa-handoff/visual_qa_handoff.json >/dev/null
+          if [[ -f /tmp/two-visual-qa-handoff/stage_checkpoint.json ]]; then python3 tools/production_qa/two_checkpoint.py --validate /tmp/two-visual-qa-handoff/stage_checkpoint.json; fi
       - name: Upload QA handoff only (no AI API or rerender)
         if: steps.reuse.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: morwen-visual-qa-handoff-${{ inputs.source_run_id || '44671624893' }}
-          path: /tmp/two-visual-qa-handoff/visual_qa_handoff.json
+          path: |
+            /tmp/two-visual-qa-handoff/visual_qa_handoff.json
+            /tmp/two-visual-qa-handoff/stage_checkpoint.json
           if-no-files-found: error
           retention-days: 7
