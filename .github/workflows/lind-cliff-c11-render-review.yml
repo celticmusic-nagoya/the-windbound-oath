@@ -25,9 +25,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/c11-source /tmp/c11-output
-          gh api repos/${{ github.repository }}/actions/artifacts/14604318546/zip > /tmp/c11-source/c11.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/14606190629/zip > /tmp/c11-source/c11.zip
           unzip -p /tmp/c11-source/c11.zip c11_recess_patch_UNAPPROVED.blend > /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend
-          test -s /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend
+          echo 'd0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545  /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend' | sha256sum -c -
       - name: Install SHA-verified official Blender 5.3.0
         run: |
           set -euo pipefail
