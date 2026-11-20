@@ -1,3 +1,6 @@
+## Director-approved continuous 3D production and expansion — 2026-11-21
+Mandatory for all AI agents and automations: read [Continuous 3D authoring, recovery and world expansion](docs/policy/CONTINUOUS_3D_AUTHORING_AND_WORLD_EXPANSION_20261121.md). Batch safe authoring, recover UI context with undo/redo, copy/paste, restore native checkpoints and resume actual work; render, independently QA, correct and continue without routine approval pauses. Apply causal retry v3, preserve originals and avoid duplicate CI. Expand village, cliff, meadows and forest in parallel with reusable assets, density and traversal QA; after Morwen succeeds extend validated methods to diverse canonical character/NPC candidates. No new canon, formal adoption, asset main merge, publication, destruction or added costs without approval.
+
 ## Director-approved continuous native character authoring — 2026-11-20
 
 Mandatory for ChatGPT, Codex, Claude, Gemini and automations performing character production. Follow the blueprint-first and causal retry v3 policies; for Morwen use the approved Layer 0 four-angle references and measured/assumption-labeled landmarks.
