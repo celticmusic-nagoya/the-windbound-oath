@@ -37,6 +37,7 @@ jobs:
       SCULPT: 'false'
       RETOPO: 'false'
       BEDROCK: 'false'
+      HERO: 'false'
       JUNCTION_CANDIDATE: junction_retopo_UNAPPROVED.blend
     timeout-minutes: 35
     steps:
@@ -52,6 +53,12 @@ jobs:
           if git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
             if ! git diff --quiet "$BEFORE" HEAD -- assets/candidates/lind/windwaiting-cliff-c10; then
               echo "BLUEPRINT=false" >> "$GITHUB_ENV"
+            elif ! git diff --quiet "$BEFORE" HEAD -- tools/production_qa/lind_blueprint/sculpt_hero.py; then
+              echo "BLUEPRINT=false" >> "$GITHUB_ENV"
+              echo "RETOPO=true" >> "$GITHUB_ENV"
+              echo "BEDROCK=true" >> "$GITHUB_ENV"
+              echo "HERO=true" >> "$GITHUB_ENV"
+              echo "JUNCTION_CANDIDATE=hero_fracture_UNAPPROVED.blend" >> "$GITHUB_ENV"
             elif ! git diff --quiet "$BEFORE" HEAD -- tools/production_qa/lind_blueprint/sculpt_bedrock.py; then
               echo "BLUEPRINT=false" >> "$GITHUB_ENV"
               echo "RETOPO=true" >> "$GITHUB_ENV"
@@ -209,8 +216,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/lind-retopo
-          python tools/production_qa/download_actions_artifact.py --repo "$GITHUB_REPOSITORY" --artifact-id 14587169190 --expected-zip-sha256 a72e8dfefb2d1f159885ca0c79bd0dc15118c4853e5cda5948163130994ea2e4 --output /tmp/lind-bedrock-input.zip
-          unzip -p /tmp/lind-bedrock-input.zip junction_retopo_UNAPPROVED.blend > /tmp/junction_retopo_UNAPPROVED.blend
+          if [[ "$HERO" == true ]]; then
+            python tools/production_qa/download_actions_artifact.py --repo "$GITHUB_REPOSITORY" --artifact-id 14590827331 --expected-zip-sha256 a4741a790c76af4c37fc45c8fff7d727bad5670c910fbe802140024d7fb0826f --output /tmp/lind-bedrock-input.zip
+            unzip -p /tmp/lind-bedrock-input.zip bedrock_wall_UNAPPROVED.blend > /tmp/junction_retopo_UNAPPROVED.blend
+          else
+            python tools/production_qa/download_actions_artifact.py --repo "$GITHUB_REPOSITORY" --artifact-id 14587169190 --expected-zip-sha256 a72e8dfefb2d1f159885ca0c79bd0dc15118c4853e5cda5948163130994ea2e4 --output /tmp/lind-bedrock-input.zip
+            unzip -p /tmp/lind-bedrock-input.zip junction_retopo_UNAPPROVED.blend > /tmp/junction_retopo_UNAPPROVED.blend
+          fi
       - name: Sculpt the bedrock wall and export its blueprint
         if: env.BEDROCK == 'true'
         run: |
@@ -219,12 +231,18 @@ jobs:
           scripts=tools/production_qa/lind_blueprint
           bpy=/tmp/two-blender53/blender
           exec > >(tee "$root/execution.log") 2>&1
-          "$bpy" -b --disable-autoexec --python-exit-code 1 --python "$scripts/sculpt_bedrock.py" -- /tmp/junction_retopo_UNAPPROVED.blend "$root"
+          script=sculpt_bedrock.py
+          source_artifact=14587169190
+          if [[ "$HERO" == true ]]; then
+            script=sculpt_hero.py
+            source_artifact=14590827331
+          fi
+          "$bpy" -b --disable-autoexec --python-exit-code 1 --python "$scripts/$script" -- /tmp/junction_retopo_UNAPPROVED.blend "$root"
           candidate="$root/$JUNCTION_CANDIDATE"
           sha="$(sha256sum "$candidate" | cut -d ' ' -f 1)"
           second="$(mktemp -d)/blueprint"
           for out in "$root/blueprint" "$second"; do
-            "$bpy" -b --disable-autoexec "$candidate" --python-exit-code 1 --python "$scripts/export_blueprint.py" -- "$out" --source-sha "$sha" --input-ref "$GITHUB_SHA:artifact:14587169190:sculpt" --texture-register "$(dirname "$C9_SOURCE")/cc0_manifest.json"
+            "$bpy" -b --disable-autoexec "$candidate" --python-exit-code 1 --python "$scripts/export_blueprint.py" -- "$out" --source-sha "$sha" --input-ref "$GITHUB_SHA:artifact:$source_artifact:sculpt" --texture-register "$(dirname "$C9_SOURCE")/cc0_manifest.json"
           done
           diff -qr "$root/blueprint" "$second"
       - name: Retopologize the measured wall and export its blueprint

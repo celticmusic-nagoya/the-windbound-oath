@@ -301,7 +301,7 @@ def main():
     shutil.copyfile(source, out / "master.blend")
     if sha(out / "master.blend") != args.source_sha or sha(source) != args.source_sha:
         raise ValueError("Master/source copy check failed")
-    write(out / "qa.json", {"G1": "BLOCKED", "G2": "NOT_RUN" if scene.get("candidate") in {"C10_JUNCTION_RETOPO_UNAPPROVED", "C10_BEDROCK_WALL_UNAPPROVED"} else "FAIL", "G3": "NOT_RUN", "G4": "NOT_RUN",
+    write(out / "qa.json", {"G1": "BLOCKED", "G2": "NOT_RUN" if scene.get("candidate") in {"C10_JUNCTION_RETOPO_UNAPPROVED", "C10_BEDROCK_WALL_UNAPPROVED", "C10_HERO_FRACTURE_UNAPPROVED"} else "FAIL", "G3": "NOT_RUN", "G4": "NOT_RUN",
                             "source_integrity": "PASS", "round_trip": "NOT_RUN",
                             "fixed_camera_pixels": "NOT_RUN", "rerun": "NOT_RUN",
                             "geometry_tolerance_blender_units": TOLERANCE,
