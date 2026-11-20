@@ -113,6 +113,15 @@ jobs:
               if grep -Fq "Select a base to start with" evidence/fem-editor-text.txt; then echo SELECTION_STILL_OPEN > evidence/fem-result.txt; else echo EDITOR_REVIEW_REQUIRED > evidence/fem-result.txt; fi
             fi
           fi
+          if [ -s evidence/fem-editor-text.txt ] && grep -Fq 'Untitled*' evidence/fem-editor-text.txt && grep -Fxq 'Face Sets' evidence/fem-editor-text.txt; then
+            # Save the newly generated candidate using the native macOS shortcut.
+            swift -e 'import CoreGraphics; import Foundation; let s = CGEventSource(stateID:.combinedSessionState); for down in [true,false] { let e=CGEvent(keyboardEventSource:s,virtualKey:1,keyDown:down); e?.flags = .maskCommand; e?.post(tap:.cgSessionEventTap); usleep(250000) }'
+            sleep 5
+            screencapture -x evidence/save-dialog.png
+            swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/save-dialog.png > evidence/save-dialog-text.txt
+            # Capture dialog for review; do not guess path or overwrite an existing file.
+            echo SAVE_DIALOG_REVIEW_REQUIRED > evidence/save-status.txt
+          fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
             cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
