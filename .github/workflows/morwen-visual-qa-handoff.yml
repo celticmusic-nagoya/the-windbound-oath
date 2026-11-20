@@ -19,7 +19,7 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: morwen-visual-qa-handoff-${{ inputs.source_run_id }}-${{ inputs.artifact_name }}
+  group: morwen-visual-qa-handoff-${{ github.event_name }}-${{ github.sha }}-${{ inputs.source_run_id }}-${{ inputs.artifact_name }}
   cancel-in-progress: false
 jobs:
   smoke-handoff:
@@ -48,7 +48,7 @@ jobs:
           print('SYNTHETIC_HANDOFF_SMOKE_PASS_NOT_RENDER')
           PY
   package-evidence:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -57,8 +57,8 @@ jobs:
           persist-credentials: false
       - name: Validate supplied source identifiers
         env:
-          SOURCE_RUN: ${{ inputs.source_run_id }}
-          SOURCE_ARTIFACT: ${{ inputs.artifact_name }}
+          SOURCE_RUN: ${{ inputs.source_run_id || '44671624893' }}
+          SOURCE_ARTIFACT: ${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -84,7 +84,7 @@ jobs:
       - name: Upload QA handoff only (no AI API or rerender)
         uses: actions/upload-artifact@v4
         with:
-          name: morwen-visual-qa-handoff-${{ inputs.source_run_id }}
+          name: morwen-visual-qa-handoff-${{ inputs.source_run_id || '44671624893' }}
           path: /tmp/two-visual-qa-handoff/visual_qa_handoff.json
           if-no-files-found: error
           retention-days: 7
