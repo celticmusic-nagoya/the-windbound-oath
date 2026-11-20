@@ -140,6 +140,19 @@ jobs:
               fi
             fi
           fi
+          if [ -s evidence/model.vroid ] && grep -Fxq SOURCE_CANDIDATE_SAVED evidence/save-status.txt; then
+            # Export icon verified on saved editor screenshot (1024x768).
+            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let p=CGPoint(x:d.minX+927*d.width/1024,y:d.minY+77*d.height/768); let s=CGEventSource(stateID:.combinedSessionState); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
+            sleep 5
+            screencapture -x evidence/export-menu.png
+            swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/export-menu.png > evidence/export-menu-text.txt
+            if grep -Fxq 'Export as VRM' evidence/export-menu-text.txt; then
+              if swift "$RUNNER_TEMP/vroid-click.swift" evidence/export-menu.png 'Export as VRM' 'Export as VRM' > evidence/export-click.txt; then
+                sleep 10
+                screencapture -x evidence/vrm-options.png
+              fi
+            fi
+          fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
             cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
