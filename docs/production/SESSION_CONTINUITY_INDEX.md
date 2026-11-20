@@ -1,3 +1,6 @@
+## Director decision — continuous native character authoring (2026-11-20)
+Mandatory for all AI agents and automations: follow the continuous native character authoring policy at the top of [AGENTS.md](../../AGENTS.md). Batch blueprint-driven GUI edits, save meaningful native checkpoints, capture actual visual progress and provisional-complete multi-angle screenshots before VRM export, without routine approval pauses or per-control CI restarts. Existing Morwen PR #427 remains the owner; G1–G4 and all asset adoption gates remain unchanged.
+
 ## Director-approved parallel world production v2 — 2026-11-20
 Mandatory for all agents and automations: read [Art-Directed Hybrid World Production 2.0](../policy/ART_DIRECTED_HYBRID_WORLD_PRODUCTION_V2.md). Cliff, village and forest proceed independently; preserve cliff E/C12/rock candidates and shift from isolated refinement to scene-level review. Audit existing HOME/BUILD/ECO/ROUTE owners before work, reuse modular assets, build real scenes and test gameplay early in provisional environments. No quality-gate waiver or unfinished asset adoption. Retry v3 remains authoritative; explicit approval required for main changes, deletion and publication. This policy supersedes conflicting cliff-first scheduling only.
 
