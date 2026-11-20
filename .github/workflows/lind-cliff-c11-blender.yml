@@ -1,6 +1,10 @@
 name: C11 cliff recessed patch Blender 5.3 candidate
 on:
   workflow_dispatch:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - '.github/workflows/lind-cliff-c11-blender.yml'
 permissions:
   contents: read
   actions: read
