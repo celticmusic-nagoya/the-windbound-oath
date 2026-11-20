@@ -55,6 +55,18 @@ jobs:
           sleep 45
           screencapture -x evidence/screen-60s.png || true
           sleep 30
+          # Verify the welcome screen text before issuing a bounded input event.
+          swift -e 'import Cocoa; import CoreGraphics; print(CGPreflightPostEventAccess()); print(CGDisplayPixelsWide(CGMainDisplayID()), CGDisplayPixelsHigh(CGMainDisplayID()))' > evidence/input-access.txt 2>&1
+          screencapture -x evidence/before-input.png
+          swift -e 'import Vision; import Foundation; let r = VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/before-input.png > evidence/welcome-text.txt
+          if grep -qx true evidence/input-access.txt && grep -qx '1024 768' evidence/input-access.txt && grep -Fxq 'Get Started' evidence/welcome-text.txt; then
+            swift -e 'import CoreGraphics; import Foundation; let p = CGPoint(x:512,y:578); CGEvent(mouseEventSource:nil,mouseType:.leftMouseDown,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cghidEventTap); usleep(120000); CGEvent(mouseEventSource:nil,mouseType:.leftMouseUp,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cghidEventTap)'
+            sleep 20
+            screencapture -x evidence/after-get-started.png
+            echo CLICK_ATTEMPTED > evidence/gui-action.txt
+          else
+            echo INPUT_ACCESS_OR_DISPLAY_BLOCKED > evidence/gui-action.txt
+          fi
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
             cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
