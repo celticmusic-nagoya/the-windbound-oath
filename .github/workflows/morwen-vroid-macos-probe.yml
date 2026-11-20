@@ -6,6 +6,7 @@ on:
     paths: ['.github/workflows/morwen-vroid-macos-probe.yml']
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: morwen-vroid-macos-probe
   cancel-in-progress: false
@@ -21,11 +22,37 @@ jobs:
           uname -m >> evidence/environment.txt
           df -h >> evidence/environment.txt
           system_profiler SPDisplaysDataType >> evidence/environment.txt
+      - name: Cache verified installer download
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/vroid.dmg
+          key: vroid-macos-arm64-2.16.0-d3d8900b6397e9ed7
+      - name: Restore native checkpoint
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14629004819/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "419e20e8aadafeea1d4f6ca07767a864c907b4205d75e38151a8115d97adfdd9  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os, zipfile, pathlib, hashlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"checkpoint.zip") as z:
+              item=z.getinfo("model.vroid")
+              assert 0 < item.file_size < 100_000_000
+              data=z.read(item)
+              expected=z.read("model-sha256.txt").decode().split()[0]
+              assert hashlib.sha256(data).hexdigest()==expected
+              (p/"Morwen-resume.vroid").write_bytes(data)
+          PY
       - name: Download official DMG and inspect signature
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --proto '=https' --max-time 420 --output "$RUNNER_TEMP/vroid.dmg" 'https://download.vroid.com/dist/2cbXSb76Bf/VRoidStudio-v2.16.0-mac.dmg'
+          if [ ! -s "$RUNNER_TEMP/vroid.dmg" ]; then
+            curl --fail --location --proto '=https' --max-time 420 --output "$RUNNER_TEMP/vroid.dmg" 'https://download.vroid.com/dist/2cbXSb76Bf/VRoidStudio-v2.16.0-mac.dmg'
+          fi
           shasum -a 256 "$RUNNER_TEMP/vroid.dmg" | tee evidence/dmg-sha256.txt
           echo "d3d8900b6397e9ed7cea640c679b07dfff011eb9fc393533e26419f5fcf546f6  $RUNNER_TEMP/vroid.dmg" | shasum -a 256 -c
           hdiutil verify "$RUNNER_TEMP/vroid.dmg" > evidence/dmg-verify.txt 2>&1
@@ -99,73 +126,22 @@ jobs:
             if swift "$RUNNER_TEMP/vroid-click.swift" evidence/after-agreement.png Skip 'Welcome to VRoid Studio' > evidence/skip-status.txt; then
               sleep 5
               screencapture -x evidence/home.png
-              if swift "$RUNNER_TEMP/vroid-click.swift" evidence/home.png New 'Sample Models' > evidence/new-status.txt; then
-                sleep 15
-                screencapture -x evidence/new-model.png
+              # Open a verified copy of the existing native source, never regenerate it.
+              open -a "$app" "$RUNNER_TEMP/Morwen-resume.vroid"
+              sleep 35
+              screencapture -x evidence/resumed-editor.png
+              swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/resumed-editor.png > evidence/resumed-editor-text.txt
+              if grep -Fq 'Morwen-resume' evidence/resumed-editor-text.txt; then
+                echo NATIVE_REOPEN_REVIEW_REQUIRED > evidence/reopen-status.txt
+              else
+                echo NATIVE_REOPEN_NOT_VERIFIED > evidence/reopen-status.txt
               fi
             fi
           fi
-          if [ -s evidence/new-model.png ] && grep -qx true evidence/input-access.txt; then
-            if swift "$RUNNER_TEMP/vroid-click.swift" evidence/new-model.png Fem 'Select a base to start with' > evidence/fem-status.txt; then
-              sleep 45
-              screencapture -x evidence/fem-editor.png
-              swift -e 'import Vision; import Foundation; let r = VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/fem-editor.png > evidence/fem-editor-text.txt
-              if grep -Fq "Select a base to start with" evidence/fem-editor-text.txt; then echo SELECTION_STILL_OPEN > evidence/fem-result.txt; else echo EDITOR_REVIEW_REQUIRED > evidence/fem-result.txt; fi
-            fi
-          fi
-          if [ -s evidence/fem-editor-text.txt ] && grep -Fq 'Untitled*' evidence/fem-editor-text.txt && grep -Fxq 'Face Sets' evidence/fem-editor-text.txt; then
-            # M01 exploratory face preset, chosen from verified M00 editor screenshot.
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+120*d.width/1024,y:d.minY+378*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
-            sleep 5
-            screencapture -x evidence/m01-face.png
-            swift "$RUNNER_TEMP/vroid-click.swift" evidence/m01-face.png Hairstyle 'Face Sets' > evidence/m01-hair-tab.txt
-            sleep 5
-            screencapture -x evidence/m01-hair-options.png
-            # Verified 1024x768 hairstyle sets screenshot: second row right bob.
-            swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); guard (r.results ?? []).contains(where:{$0.topCandidates(1).first?.string == "Hairstyle Sets"}) else { exit(2) }' evidence/m01-hair-options.png
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+223*d.width/1024,y:d.minY+378*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
-            sleep 15
-            screencapture -x evidence/m01-bob.png
-            # Open verified Main Color control; inspect picker before changing values.
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+760*d.width/1024,y:d.minY+158*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(300000) }'
-            sleep 3
-            screencapture -x evidence/m01-color-picker.png
-            # Provisional source hair midtone sampled from front reference: RGB 107,66,107.
-            # Verified picker screenshot has editable HEX at (727,135).
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+727*d.width/1024,y:d.minY+135*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(200000) }; let a=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:true); a?.flags = .maskCommand; a?.post(tap:.cgSessionEventTap); let u=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:false); u?.flags = .maskCommand; u?.post(tap:.cgSessionEventTap); let chars=Array("#6B426B".utf16); let e=CGEvent(keyboardEventSource:s,virtualKey:0,keyDown:true); e?.keyboardSetUnicodeString(stringLength:chars.count,unicodeString:chars); e?.post(tap:.cgSessionEventTap); for down in [true,false] { CGEvent(keyboardEventSource:s,virtualKey:36,keyDown:down)?.post(tap:.cgSessionEventTap) }'
-            sleep 3
-            screencapture -x evidence/m01-purple-picker.png
-            # Click outside overlay rather than Escape (Escape did not dismiss picker).
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let s=CGEventSource(stateID:.combinedSessionState); let p=CGPoint(x:d.minX+340*d.width/1024,y:d.minY+150*d.height/768); for t in [CGEventType.mouseMoved,.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(200000) }'
-            sleep 3
-            screencapture -x evidence/m01-purple-editor.png
-            echo 'M01 face preset row 2 column 1; bob row 2 column 2; visual review required' > evidence/candidate.txt
-            # Verified editor screenshot: hamburger at (28,77) on 1024x768 logical display.
-            swift -e 'import CoreGraphics; import Foundation; let d=CGDisplayBounds(CGMainDisplayID()); let p=CGPoint(x:d.minX+28*d.width/1024,y:d.minY+77*d.height/768); let s=CGEventSource(stateID:.combinedSessionState); CGEvent(mouseEventSource:s,mouseType:.mouseMoved,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(500000); for t in [CGEventType.leftMouseDown,.leftMouseUp] { CGEvent(mouseEventSource:s,mouseType:t,mouseCursorPosition:p,mouseButton:.left)?.post(tap:.cgSessionEventTap); usleep(250000) }'
-            sleep 5
-            screencapture -x evidence/save-dialog.png
-            swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/save-dialog.png > evidence/save-dialog-text.txt
-            # Capture dialog for review; do not guess path or overwrite an existing file.
-            if swift "$RUNNER_TEMP/vroid-click.swift" evidence/save-dialog.png Save 'Save As' > evidence/save-click.txt; then
-              sleep 5
-              screencapture -x evidence/native-save.png
-              swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { print(o.topCandidates(1).first?.string ?? "") }' evidence/native-save.png > evidence/native-save-text.txt
-              if grep -Fxq model evidence/native-save-text.txt && grep -Fxq Documents evidence/native-save-text.txt && [ ! -e "$HOME/Documents/model.vroid" ]; then
-                if swift "$RUNNER_TEMP/vroid-click.swift" evidence/native-save.png Save 'Save As:' > evidence/native-save-click.txt; then
-                  sleep 15
-                  screencapture -x evidence/after-native-save.png
-                  find "$HOME/Documents" -maxdepth 3 -type f -iname '*.vroid' -print > evidence/saved-files.txt
-                  if [ -s "$HOME/Documents/model.vroid" ]; then
-                    cp "$HOME/Documents/model.vroid" evidence/model.vroid
-                    shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
-                    echo SOURCE_CANDIDATE_SAVED > evidence/save-status.txt
-                  else
-                    echo SOURCE_FILE_NOT_FOUND > evidence/save-status.txt
-                  fi
-                fi
-              fi
-            fi
-          fi
+          # Preserve input independently; a resumed screenshot is not evidence of an edited save.
+          cp "$RUNNER_TEMP/Morwen-resume.vroid" evidence/input-model.vroid
+          shasum -a 256 evidence/input-model.vroid > evidence/input-model-sha256.txt
+          test -s evidence/resumed-editor.png
           # Native editor checkpoint only; VRM export deferred until director-approved art gate.
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
