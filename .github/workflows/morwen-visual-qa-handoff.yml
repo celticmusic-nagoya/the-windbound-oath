@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/two-visual-qa-handoff
-          key: morwen-visual-qa-v2-${{ inputs.source_run_id || '44671624893' }}-${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}-${{ hashFiles('tools/production_qa/build_visual_qa_handoff.py') }}
+          key: morwen-visual-qa-v2-${{ inputs.source_run_id || '44671624893' }}-${{ inputs.artifact_name || 'morwen-530-source-geometry-mask-diagnostics-not-adopted' }}-${{ hashFiles('tools/production_qa/build_visual_qa_handoff.py', 'tools/production_qa/two_checkpoint.py') }}
       - name: Validate supplied source identifiers
         if: steps.reuse.outputs.cache-hit != 'true'
         env:
@@ -125,7 +125,8 @@ jobs:
           set -euo pipefail
           test -s /tmp/two-visual-qa-handoff/visual_qa_handoff.json
           python3 -m json.tool /tmp/two-visual-qa-handoff/visual_qa_handoff.json >/dev/null
-          if [[ -f /tmp/two-visual-qa-handoff/stage_checkpoint.json ]]; then python3 tools/production_qa/two_checkpoint.py --validate /tmp/two-visual-qa-handoff/stage_checkpoint.json; fi
+          test -s /tmp/two-visual-qa-handoff/stage_checkpoint.json
+          python3 tools/production_qa/two_checkpoint.py --validate /tmp/two-visual-qa-handoff/stage_checkpoint.json
       - name: Upload QA handoff only (no AI API or rerender)
         if: steps.reuse.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v4
