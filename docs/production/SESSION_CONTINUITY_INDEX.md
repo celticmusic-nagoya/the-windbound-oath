@@ -2,6 +2,9 @@
 
 Status: LIVE INDEX / 2026-11-18. This index is navigation and verified status, **not a new canonical lore source**. Always re-fetch current GitHub state; timestamps and PR numbers here can become stale.
 
+## Adaptive agent allocation (director approved 2026-11-20)
+Read the adaptive cross-agent production policy at the top of [AGENTS.md](../../AGENTS.md). Ownership is task-specific, not model-fixed. For C11 see [PR #421](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/421); Claude preferred for detailed sculpting if available, Codex for technical QA, ChatGPT for independent review. Verify live HEAD and artifact status before work; no external agent has been confirmed running.
+
 ## Mandatory startup (ChatGPT / Codex / Claude / other agents)
 1. Read current `main:AGENTS.md`, this index and latest director-approved policies. Check the branch, HEAD, open PRs, Actions, artifacts and changed-file contents **before** editing.
 2. Read the **private** `celticmusic-nagoya/the-windbound-oath-handoff` repository on `main`: `reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md`, `CANON_ADDENDUM.md`, `CANON_STATUS.md`. If inaccessible, mark lore-dependent work `CANON_SOURCE_UNAVAILABLE`. Never duplicate full private lore into the public repo.
