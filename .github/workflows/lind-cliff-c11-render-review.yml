@@ -59,6 +59,7 @@ jobs:
           test -s /tmp/c11-output/sections.json
           test -s /tmp/c11-output/carrier_only.png
           test -s /tmp/c11-output/without_carrier.png
+          test -s /tmp/c11-output/suspect_faces.png
           (cd /tmp/c11-output && sha256sum *.png sections.json > SHA256SUMS)
       - name: Preserve report and candidate, even on failure
         if: always()
