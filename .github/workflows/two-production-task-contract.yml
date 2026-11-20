@@ -1,0 +1,79 @@
+name: TWO production task contract
+on:
+  pull_request:
+    paths:
+      - 'tools/qa/two_task_*.py'
+      - '.github/workflows/two-production-task-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  identity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    outputs:
+      key: ${{ steps.key.outputs.key }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - id: key
+        run: |
+          python3 -m unittest discover -s tools/qa -p 'two_task_*.py' -v
+          python3 - <<'PY'
+          import hashlib, os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'tools/qa')
+          from two_task_key import task_key
+          paths = sorted(str(p) for p in Path('tools/qa').glob('two_task_*.py'))
+          hashes = {p: hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths}
+          workflow = Path('.github/workflows/two-production-task-contract.yml')
+          spec = dict(asset='production-os', stage='contract-test', method='stdlib', inputs=hashes, toolchain={'python': hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest()}, settings={'workflow': hashlib.sha256(workflow.read_bytes()).hexdigest()})
+          key = task_key(spec)
+          import json
+          from two_task_manifest import build
+          root = Path('contract-output')
+          root.mkdir()
+          (root/'fixture.txt').write_text('synthetic transport test only')
+          manifest = build(root,spec,['fixture.txt'],os.environ['GITHUB_SHA'],int(os.environ['GITHUB_RUN_ID']),'PASS')
+          (root/'manifest.json').write_text(json.dumps(manifest))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('key=' + key + '\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: production-contract-fixture
+          path: contract-output/
+          retention-days: 1
+          if-no-files-found: error
+  serialized-contract:
+    needs: identity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    concurrency:
+      group: two-production-task-${{ needs.identity.outputs.key }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tools/qa -p 'two_task_*.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: production-contract-fixture
+          path: contract-output
+      - env:
+          EXPECTED_KEY: ${{ needs.identity.outputs.key }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'tools/qa')
+          from two_task_artifact import verify
+          root = Path('contract-output')
+          m = json.loads((root/'manifest.json').read_text())
+          if m['producer_head'] != os.environ['GITHUB_SHA'] or m['run_id'] != int(os.environ['GITHUB_RUN_ID']):
+              raise ValueError('producer mismatch')
+          assert verify(root,m,os.environ['EXPECTED_KEY'])
+          print('Cross-runner synthetic artifact verification PASS')
+          PY

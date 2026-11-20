@@ -1,0 +1,74 @@
+name: TWO chat-triggered offline QA (no AI API)
+on:
+  push:
+    branches: [feature/nightly-automation-setup-01]
+    paths:
+      - 'tools/qa/requests/offline-qa-*.json'
+permissions:
+  contents: read
+concurrency:
+  group: two-chat-qa-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  offline-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      QA_OUT: /tmp/two-chat-qa
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate single new request, immutable request name and approved mode
+        shell: bash
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$QA_OUT"
+          python3 - <<'PY'
+          import json,os,re,subprocess
+          from pathlib import Path
+          before=os.environ['BEFORE']
+          if not re.fullmatch(r'[a-f0-9]{40}',before) or before=='0'*40:
+              raise SystemExit('BLOCKED: missing prior commit for new request audit')
+          lines=subprocess.check_output(['git','diff','--name-status',before,'HEAD','--','tools/qa/requests/'],text=True).splitlines()
+          additions=[x.split('\t',1)[1] for x in lines if x.startswith('A\t')]
+          if len(lines)!=1 or len(additions)!=1:
+              raise SystemExit('BLOCKED: exactly one newly added request required')
+          path=additions[0]
+          if not re.fullmatch(r'tools/qa/requests/offline-qa-[a-z0-9-]{8,64}\.json',path):
+              raise SystemExit('BLOCKED: invalid immutable request filename')
+          data=json.loads(Path(path).read_text())
+          if set(data)!={'schema','mode','request_id','reason'}:
+              raise SystemExit('BLOCKED: unsupported request fields')
+          if data['schema']!='two.qa.request.v1' or data['mode']!='offline_qa':
+              raise SystemExit('BLOCKED: only existing offline QA allowed')
+          if not isinstance(data['request_id'],str) or not re.fullmatch(r'[a-z0-9-]{8,64}',data['request_id']):
+              raise SystemExit('BLOCKED: invalid request id')
+          if path!=f"tools/qa/requests/offline-qa-{data['request_id']}.json":
+              raise SystemExit('BLOCKED: request ID and filename mismatch')
+          if not isinstance(data['reason'],str) or len(data['reason'])>240:
+              raise SystemExit('BLOCKED: invalid reason')
+          Path(os.environ['QA_OUT'],'request.json').write_text(json.dumps(data,indent=2,sort_keys=True)+'\n')
+          print('TWO_CHAT_REQUEST_VALIDATED')
+          PY
+      - name: Run existing bounded offline QA
+        shell: bash
+        run: python3 tools/qa/run_nightly.py --out "$QA_OUT"
+      - name: Preserve logs and result for cross-session handoff
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-chat-offline-qa-${{ github.run_id }}
+          path: /tmp/two-chat-qa/
+          retention-days: 14
+          if-no-files-found: warn
