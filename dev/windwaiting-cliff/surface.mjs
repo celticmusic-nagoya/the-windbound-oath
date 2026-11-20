@@ -13,7 +13,20 @@ export async function loadMossTextures(base) {
   return { color: textures[0], normal: textures[1], orm: textures[2] };
 }
 
-export function adaptSurfaces(root, renderer, moss = null) {
+// Optional, same-origin photo material candidate; no network dependency during normal play.
+export async function loadPhotoSurfaces(base) {
+  const loader = new T.TextureLoader();
+  const result = {};
+  for (const asset of ['sparse_grass', 'stony_dirt_path']) {
+    const map = await loader.loadAsync(new URL(asset + '/basecolor.jpg', base).href);
+    map.colorSpace = T.SRGBColorSpace;
+    map.wrapS = map.wrapT = T.RepeatWrapping;
+    result[asset] = map;
+  }
+  return result;
+}
+
+export function adaptSurfaces(root, renderer, moss = null, photo = null) {
   const terrain = new Set();
   const bark = new Set();
   const rock = new Set();
@@ -32,6 +45,10 @@ export function adaptSurfaces(root, renderer, moss = null) {
     material.color.setRGB(1, 1, 1);
     material.onBeforeCompile = (shader) => {
       shader.uniforms.coastStone = { value: stone };
+      if (photo) {
+        shader.uniforms.photoGrass = { value: photo.sparse_grass };
+        shader.uniforms.photoDirt = { value: photo.stony_dirt_path };
+      }
       shader.vertexShader = 'varying vec3 coastPoint;\n' + shader.vertexShader.replace(
         '#include <begin_vertex>', '#include <begin_vertex>\n coastPoint = (modelMatrix * vec4(position, 1.0)).xyz;',
       );
@@ -39,6 +56,7 @@ export function adaptSurfaces(root, renderer, moss = null) {
       shader.fragmentShader = `
         varying vec3 coastPoint;
         uniform sampler2D coastStone;
+        ${photo ? 'uniform sampler2D photoGrass, photoDirt;' : ''}
         ${moss ? mossGLSL : ""}
         float grainHash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
         float grain(vec2 p) {
@@ -60,6 +78,11 @@ export function adaptSurfaces(root, renderer, moss = null) {
         float fineGrain = grain(coastPoint.xz * 14.);
         float pattern = grain(coastPoint.xz * .83) * .64 + fineGrain * .36;
         vec3 grass = mix(vec3(.058,.092,.020), vec3(.25,.28,.055), pattern);
+        ${photo ? `
+          vec3 grassPhoto = texture2D(photoGrass, coastPoint.xz * .75).rgb;
+          vec3 dirtPhoto = texture2D(photoDirt, coastPoint.xz * .75).rgb;
+          grass = mix(dirtPhoto, grassPhoto, smoothstep(.22,.68,pattern));
+        ` : ''}
         float cover = smoothstep(.55,.86,surfaceNormal.y + (pattern-.5)*.20) *
                       smoothstep(3.3,5.0,coastPoint.y);
         ${moss ? `
@@ -77,7 +100,7 @@ export function adaptSurfaces(root, renderer, moss = null) {
       `);
       if (moss) addMossResponse(shader, 'mix(1.0, .94 + pattern * .10, cover)');
     };
-    material.customProgramCacheKey = () => moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1';
+    material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo' : '');
   }
   for (const material of rock) bindRockMoss(material, moss);
   for (const material of bark) {
