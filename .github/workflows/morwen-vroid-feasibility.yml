@@ -63,6 +63,47 @@ jobs:
           name: morwen-vroid-studio-feasibility-not-adopted
           path: evidence/studio.json
           retention-days: 7
+  studio-drive-provenance:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - name: Fetch user-provided Drive installer and inspect signature without executing
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path evidence | Out-Null
+          $report = [ordered]@{source='user-provided Google Drive file';fileId='1G7vBJfw46Yo9vD-n_GzAs3jvzyGl9lfA';claimedName='VRoidStudio-v2.16.0-win.exe';download='NOT_RUN';sha256='NOT_RUN';authenticode='NOT_RUN';installation='NOT_RUN';launch='NOT_RUN';status='BLOCKED';reasons=@()}
+          try {
+            $url='https://drive.google.com/uc?export=download&id=1G7vBJfw46Yo9vD-n_GzAs3jvzyGl9lfA'
+            $destination=Join-Path $env:RUNNER_TEMP 'vroid-installer-untrusted.exe'
+            Invoke-WebRequest -Uri $url -OutFile $destination -MaximumRedirection 5 -TimeoutSec 240
+            $bytes=(Get-Item $destination).Length
+            $report.downloadedBytes=$bytes
+            if ($bytes -lt 400000000 -or $bytes -gt 550000000) { throw "Unexpected downloaded size $bytes; possibly Drive HTML consent page" }
+            $stream=[System.IO.File]::OpenRead($destination)
+            try { $magic=New-Object byte[] 2; [void]$stream.Read($magic,0,2) } finally { $stream.Dispose() }
+            if ($magic[0] -ne 77 -or $magic[1] -ne 90) { throw 'Downloaded file lacks MZ executable header' }
+            $report.download='PASS'
+            $report.sha256=(Get-FileHash -Algorithm SHA256 $destination).Hash
+            $signature=Get-AuthenticodeSignature -FilePath $destination
+            $report.authenticode=[string]$signature.Status
+            $report.signerSubject=if($signature.SignerCertificate){$signature.SignerCertificate.Subject}else{$null}
+            $report.signerThumbprint=if($signature.SignerCertificate){$signature.SignerCertificate.Thumbprint}else{$null}
+            $report.status=if($signature.Status -eq 'Valid'){'SIGNATURE_VALID_ORIGIN_NOT_YET_VERIFIED'}else{'BLOCKED'}
+            $report.reasons+= 'Do not execute until official publisher and independent hash provenance have been verified'
+          } catch {
+            $report.status='BLOCKED'
+            $report.reasons+= $_.Exception.Message
+          } finally {
+            $report | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 evidence/drive_installer_provenance.json
+            Get-Content evidence/drive_installer_provenance.json
+          }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-vroid-user-drive-installer-provenance-no-execution
+          path: evidence/drive_installer_provenance.json
+          retention-days: 7
   hub-api:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
