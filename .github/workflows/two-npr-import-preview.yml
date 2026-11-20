@@ -1,17 +1,5 @@
 name: TWO NPR import preview and portable glTF candidate
 on:
-  push:
-    branches:
-      - feature/morwen-authored-sculpt-20261118
-      - feature/morwen-artdirected-sculpt-20261119
-    paths:
-      - tools/morwen_authored_sculpt/**
-      - .github/workflows/two-npr-import-preview.yml
-  pull_request:
-    branches: [main, feature/morwen-authored-sculpt-20261118]
-    paths:
-      - tools/morwen_authored_sculpt/**
-      - .github/workflows/two-npr-import-preview.yml
   workflow_dispatch:
     inputs:
       input_model:
