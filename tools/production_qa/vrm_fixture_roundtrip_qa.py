@@ -59,7 +59,12 @@ try:
                 raise RuntimeError("VRM export did not produce a nonempty file: " + str(result))
             report["export"] = "PASS"
             report["export_sha256"] = hashlib.sha256(exported.read_bytes()).hexdigest()
-            bpy.ops.wm.read_factory_settings(use_empty=True)
+            # Keep the registered VRM extension enabled; factory reset would disable it.
+            bpy.ops.object.select_all(action="SELECT")
+            bpy.ops.object.delete(use_global=False)
+            for armature in list(bpy.data.armatures):
+                if armature.users == 0:
+                    bpy.data.armatures.remove(armature)
             imported = bpy.ops.import_scene.vrm(filepath=str(exported))
             if "FINISHED" not in imported:
                 raise RuntimeError("VRM reimport did not finish: " + str(imported))
