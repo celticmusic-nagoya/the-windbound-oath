@@ -1,4 +1,4 @@
-name: C11 cliff fixed-camera review Blender 5.3
+name: C11 cliff isolated clay and section diagnosis
 on:
   workflow_dispatch:
   push:
@@ -52,19 +52,19 @@ jobs:
           mkdir -p /tmp/two-blender53
           tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
           /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
-      - name: Render fixed camera review views
+      - name: Isolate carrier and inspect local sections
         run: |
           set -euo pipefail
-          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/production_qa/lind_blueprint/c11_render_review.py -- /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend /tmp/c11-output
-          test -s /tmp/c11-output/c11_front.png
-          test -s /tmp/c11-output/c11_oblique.png
-          test -s /tmp/c11-output/c11_low.png
-          (cd /tmp/c11-output && sha256sum *.png > SHA256SUMS)
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/production_qa/lind_blueprint/c11_isolation_diagnostic.py -- /tmp/c11-source/c11_recess_patch_UNAPPROVED.blend /tmp/c11-output
+          test -s /tmp/c11-output/sections.json
+          test -s /tmp/c11-output/carrier_only.png
+          test -s /tmp/c11-output/without_carrier.png
+          (cd /tmp/c11-output && sha256sum *.png sections.json > SHA256SUMS)
       - name: Preserve report and candidate, even on failure
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: c11-review-${{ github.sha }}
+          name: c11-isolation-${{ github.sha }}
           path: /tmp/c11-output/
           if-no-files-found: warn
           retention-days: 14
