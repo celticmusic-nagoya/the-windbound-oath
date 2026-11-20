@@ -19,11 +19,16 @@ report = {
 }
 def save():
     (root / "qa.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+def stage(name):
+    report["current_stage"] = name
+    save()
+    print("VRM_QA_STAGE " + name, flush=True)
 try:
     if not source.is_file():
         raise RuntimeError("Missing fixture")
     if not hasattr(bpy.ops.import_scene, "vrm") or not bpy.ops.import_scene.vrm.poll():
         raise RuntimeError("VRM import operator unavailable")
+    stage("import_start")
     result = bpy.ops.import_scene.vrm(filepath=str(source))
     if "FINISHED" not in result:
         raise RuntimeError("VRM import returned " + str(result))
@@ -34,6 +39,7 @@ try:
     if not arms:
         raise RuntimeError("No armature imported")
     report["import"] = "PASS"
+    stage("import_pass")
     # A render requires actual visible mesh geometry; no fabricated success.
     if meshes:
         bpy.ops.object.camera_add(location=(3, -5, 2))
@@ -46,7 +52,9 @@ try:
         bpy.context.scene.render.resolution_y = 512
         bpy.context.scene.render.resolution_percentage = 100
         bpy.context.scene.render.filepath = str(root / "fixture_render.png")
+        stage("render_start")
         bpy.ops.render.render(write_still=True)
+        stage("render_returned")
         report["render"] = "PASS" if (root / "fixture_render.png").is_file() else "FAIL"
     else:
         report["render"] = "BLOCKED_NO_MESH"
@@ -54,6 +62,7 @@ try:
     exported = root / "roundtrip.vrm"
     if hasattr(bpy.ops.export_scene, "vrm"):
         try:
+            stage("export_start")
             result = bpy.ops.export_scene.vrm(filepath=str(exported))
             if "FINISHED" not in result or not exported.is_file() or exported.stat().st_size == 0:
                 raise RuntimeError("VRM export did not produce a nonempty file: " + str(result))
@@ -65,6 +74,7 @@ try:
             for armature in list(bpy.data.armatures):
                 if armature.users == 0:
                     bpy.data.armatures.remove(armature)
+            stage("reimport_start")
             imported = bpy.ops.import_scene.vrm(filepath=str(exported))
             if "FINISHED" not in imported:
                 raise RuntimeError("VRM reimport did not finish: " + str(imported))
@@ -78,6 +88,7 @@ try:
             report["reimport"] = "FAIL" if report["export"] == "PASS" else "NOT_RUN"
     else:
         report["export"] = "BLOCKED_OPERATOR_UNAVAILABLE"
+    stage("roundtrip_complete")
     report["status"] = "ROUNDTRIP_PASS" if report["export"] == "PASS" and report["reimport"] == "PASS" else "ROUNDTRIP_INCOMPLETE"
 except Exception as exc:
     report["error"] = str(exc)
