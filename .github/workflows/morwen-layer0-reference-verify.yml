@@ -4,8 +4,6 @@ on:
     branches: [feature/morwen-artdirected-sculpt-20261119]
     paths: [.github/workflows/morwen-layer0-reference-verify.yml]
   workflow_dispatch:
-  pull_request:
-    paths: [.github/workflows/morwen-layer0-reference-verify.yml]
 permissions:
   contents: read
 jobs:
