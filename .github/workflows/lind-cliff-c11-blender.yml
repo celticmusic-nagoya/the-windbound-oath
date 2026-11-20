@@ -1,0 +1,68 @@
+name: C11 cliff recessed patch Blender 5.3 candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths:
+      - '.github/workflows/lind-cliff-c11-blender.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: lind-cliff-c11-blender-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download exact C10 hero input artifact and verify source SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/c11-source /tmp/c11-output
+          gh api repos/${{ github.repository }}/actions/artifacts/14591689110/zip > /tmp/c11-source/c10.zip
+          unzip -p /tmp/c11-source/c10.zip hero_fracture_UNAPPROVED.blend > /tmp/c11-source/hero_fracture_UNAPPROVED.blend
+          echo '0b6b0f3f6e8e270594cdac5fc81008ffe5210b7e98de352d826360dfd6676508  /tmp/c11-source/hero_fracture_UNAPPROVED.blend' | sha256sum -c -
+      - name: Install SHA-verified official Blender 5.3.0
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          python3 - "$work/checksums" "$work/expected.sha256" "$name" <<'PY'
+          import re,sys
+          from pathlib import Path
+          matches=[]
+          for line in Path(sys.argv[1]).read_text().splitlines():
+              if sys.argv[3] in line:
+                  hashes=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',line)
+                  if len(hashes)!=1: raise SystemExit('Invalid upstream SHA row')
+                  matches.append(hashes[0].lower())
+          if len(matches)!=1: raise SystemExit('Expected exactly one upstream SHA')
+          Path(sys.argv[2]).write_text(f'{matches[0]}  {sys.argv[3]}\n')
+          PY
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Execute C11 bounded patch and topology gate
+        run: |
+          set -euo pipefail
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/production_qa/lind_blueprint/c11_recess_patch.py -- /tmp/c11-source/hero_fracture_UNAPPROVED.blend /tmp/c11-output
+          test -s /tmp/c11-output/c11_recess_patch_UNAPPROVED.blend
+          sha256sum /tmp/c11-output/c11_recess_patch_UNAPPROVED.blend > /tmp/c11-output/SHA256SUMS
+      - name: Preserve report and candidate, even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c11-blender-${{ github.sha }}
+          path: /tmp/c11-output/
+          if-no-files-found: warn
+          retention-days: 14
