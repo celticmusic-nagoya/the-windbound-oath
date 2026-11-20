@@ -18,10 +18,18 @@ export async function loadPhotoSurfaces(base) {
   const loader = new T.TextureLoader();
   const result = {};
   for (const asset of ['sparse_grass', 'stony_dirt_path']) {
-    const map = await loader.loadAsync(new URL(asset + '/basecolor.jpg', base).href);
-    map.colorSpace = T.SRGBColorSpace;
-    map.wrapS = map.wrapT = T.RepeatWrapping;
-    result[asset] = map;
+    const dir = new URL(asset + '/', base);
+    const response = await fetch(new URL('manifest.json', dir));
+    if (!response.ok) throw new Error('Photo manifest HTTP ' + response.status);
+    const manifest = await response.json();
+    for (const role of ['basecolor', 'normal', 'roughness']) {
+      const filename = manifest.textures[role].path;
+      if (!/^[a-z]+\.(jpg|png)$/.test(filename)) throw new Error('Invalid photo texture path');
+      const map = await loader.loadAsync(new URL(filename, dir).href);
+      if (role === 'basecolor') map.colorSpace = T.SRGBColorSpace;
+      map.wrapS = map.wrapT = T.RepeatWrapping;
+      result[asset + (role === 'basecolor' ? '' : '_' + role)] = map;
+    }
   }
   return result;
 }
@@ -50,6 +58,8 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       if (photo) {
         shader.uniforms.photoGrass = { value: photo.sparse_grass };
         shader.uniforms.photoDirt = { value: photo.stony_dirt_path };
+        shader.uniforms.photoNormal = { value: photo.sparse_grass_normal };
+        shader.uniforms.photoRough = { value: photo.sparse_grass_roughness };
       }
       shader.vertexShader = 'varying vec3 coastPoint;\n' + shader.vertexShader.replace(
         '#include <begin_vertex>', '#include <begin_vertex>\n coastPoint = (modelMatrix * vec4(position, 1.0)).xyz;',
@@ -58,7 +68,7 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
       shader.fragmentShader = `
         varying vec3 coastPoint;
         uniform sampler2D coastStone;
-        ${photo ? 'uniform sampler2D photoGrass, photoDirt;' : ''}
+        ${photo ? 'uniform sampler2D photoGrass, photoDirt, photoNormal, photoRough;' : ''}
         ${moss ? mossGLSL : ""}
         float grainHash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
         float grain(vec2 p) {
@@ -105,22 +115,43 @@ export function adaptSurfaces(root, renderer, moss = null, photo = null) {
         diffuseColor.rgb *= mix(stoneColor, grass, cover);
       `);
       if (moss) addMossResponse(shader, 'mix(1.0, .94 + pattern * .10, cover)');
+      if (photo) addPhotoResponse(shader, 'coastPoint', 'cover', 'photoNormal', 'photoRough');
     };
     material.customProgramCacheKey = () => (moss ? 'cliff-coastal-surface-eco-v2' : 'cliff-coastal-surface-v1') + (photo ? '-photo' : '');
   }
   for (const material of road) {
     material.onBeforeCompile = (shader) => {
       shader.uniforms.roadPhoto = { value: photo.stony_dirt_path };
+      shader.uniforms.roadNormal = { value: photo.stony_dirt_path_normal };
+      shader.uniforms.roadRough = { value: photo.stony_dirt_path_roughness };
       shader.vertexShader = 'varying vec3 roadPoint;\n' + shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n roadPoint = (modelMatrix * vec4(position,1.0)).xyz;');
-      shader.fragmentShader = 'varying vec3 roadPoint; uniform sampler2D roadPhoto;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(roadPhoto,roadPoint.xz*.75).rgb, .65);');
+      shader.fragmentShader = 'varying vec3 roadPoint; uniform sampler2D roadPhoto, roadNormal, roadRough;\n' + shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(roadPhoto,roadPoint.xz*.75).rgb, .65);');
+      addPhotoResponse(shader, 'roadPoint', '1.0', 'roadNormal', 'roadRough');
     };
-    material.customProgramCacheKey = () => 'cliff-photo-road-v1';
+    material.customProgramCacheKey = () => 'cliff-photo-road-v2';
   }
   for (const material of rock) bindRockMoss(material, moss);
   for (const material of bark) {
     material.color = new T.Color(0x5c432b);
     material.vertexColors = false;
   }
+}
+
+// World X/-Z tangent convention: the horizontal photo UV uses X/Z,
+// so the OpenGL green channel follows increasing world Z.
+function addPhotoResponse(shader, point, mask, normalMap, roughMap) {
+  shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `
+    #include <roughnessmap_fragment>
+    roughnessFactor = mix(roughnessFactor, texture2D(${roughMap}, ${point}.xz*.75).r, ${mask}*.65);
+  `).replace('#include <normal_fragment_maps>', `
+    #include <normal_fragment_maps>
+    vec3 photoN = texture2D(${normalMap}, ${point}.xz*.75).rgb*2.0-1.0;
+    vec3 photoX = mat3(viewMatrix)*vec3(1.,0.,0.);
+    vec3 photoZ = mat3(viewMatrix)*vec3(0.,0.,1.);
+    vec3 photoSlope = photoX*photoN.x + photoZ*photoN.y;
+    photoSlope -= normal*dot(photoSlope,normal);
+    normal = normalize(normal + photoSlope * ${mask} * .35);
+  `);
 }
 
 const mossGLSL = `
