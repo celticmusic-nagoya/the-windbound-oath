@@ -1,0 +1,57 @@
+name: Morwen VRoid macOS compatibility probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/morwen-artdirected-sculpt-20261119]
+    paths: ['.github/workflows/morwen-vroid-macos-probe.yml']
+permissions:
+  contents: read
+concurrency:
+  group: morwen-vroid-macos-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: macos-15-intel
+    timeout-minutes: 20
+    steps:
+      - name: Environment
+        run: |
+          mkdir -p evidence
+          sw_vers > evidence/environment.txt
+          uname -m >> evidence/environment.txt
+          df -h >> evidence/environment.txt
+          system_profiler SPDisplaysDataType >> evidence/environment.txt
+      - name: Download official DMG and inspect signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --proto '=https' --max-time 420 --output "$RUNNER_TEMP/vroid.dmg" 'https://download.vroid.com/dist/2cbXSb76Bf/VRoidStudio-v2.16.0-mac.dmg'
+          shasum -a 256 "$RUNNER_TEMP/vroid.dmg" | tee evidence/dmg-sha256.txt
+          hdiutil verify "$RUNNER_TEMP/vroid.dmg" > evidence/dmg-verify.txt 2>&1
+          mkdir -p "$RUNNER_TEMP/vroid-mount"
+          hdiutil attach -readonly -nobrowse -mountpoint "$RUNNER_TEMP/vroid-mount" "$RUNNER_TEMP/vroid.dmg"
+          app="$(find "$RUNNER_TEMP/vroid-mount" -maxdepth 2 -name '*.app' -print -quit)"
+          test -n "$app"
+          codesign --verify --deep --strict "$app" > evidence/signature-verify.txt 2>&1
+          codesign -dv --verbose=4 "$app" > evidence/signature-details.txt 2>&1
+          spctl --assess --type execute -vv "$app" > evidence/gatekeeper.txt 2>&1
+          ditto "$app" "$RUNNER_TEMP/VRoidStudio.app"
+          hdiutil detach "$RUNNER_TEMP/vroid-mount"
+      - name: Launch signed application and collect evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          app="$RUNNER_TEMP/VRoidStudio.app"
+          /usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$app/Contents/Info.plist" > evidence/version.txt
+          open -a "$app" --args -logFile "$GITHUB_WORKSPACE/evidence/player.log"
+          sleep 45
+          ps -axo pid,comm | grep -i '[V]Roid' > evidence/processes.txt
+          screencapture -x evidence/screen.png
+          test -s evidence/screen.png
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vroid-macos-probe-evidence
+          path: evidence/
+          retention-days: 7
