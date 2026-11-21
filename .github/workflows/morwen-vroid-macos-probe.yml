@@ -290,6 +290,12 @@ jobs:
               "$gui" click 0.023 0.100
               sleep 4
               capture_state hair-exit-result
+              if grep -Fq 'Close Hairstyle Editor' evidence/hair-exit-result.txt && grep -Fq 'Save as new item' evidence/hair-exit-result.txt; then
+                "$gui" click-label evidence/hair-exit-result.png 'Save as new item' 'Close Hairstyle Editor'
+                sleep 5
+                capture_state hair-custom-save-result
+                cp evidence/hair-custom-save-result.txt evidence/hair-exit-result.txt
+              fi
               if grep -Fq 'Edit Preset' evidence/hair-exit-result.txt || grep -Eiq 'Cancel|Discard|Delete|Save Changes' evidence/hair-exit-result.txt; then
                 echo BLOCKED_HAIR_EXIT_REVIEW_REQUIRED > evidence/authoring-status.txt
                 exit 1
