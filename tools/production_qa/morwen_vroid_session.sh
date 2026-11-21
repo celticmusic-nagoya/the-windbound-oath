@@ -228,6 +228,15 @@ case "$MODE" in
     views reopened 0
     views reopenedclose 6
     face_cat "$CAT_IRIS"; capture_state reopened-iris
+    for axis in x y; do
+      case "$axis" in x) pattern='^Iris Size \(X\)$';; y) pattern='^Iris Size \(Y\)$';; esac
+      expected=$(awk -v tag="iris-$axis" '$1==tag {print $3}' evidence/face-edits.txt)
+      actual=$("$row" evidence/reopened-iris.png "$pattern" | awk '{print $1}') || exit 1
+      if [ -z "$expected" ] || [ "$actual" != "$expected" ]; then
+        echo BLOCKED_IRIS_REOPEN_VALUE_MISMATCH > evidence/authoring-status.txt
+        exit 1
+      fi
+    done
     if ! grep -Fqi '793F91' evidence/reopened-iris.txt; then echo IRIS_COLOUR_REOPEN_REVIEW_REQUIRED >> evidence/face-edits.txt; fi
     echo NATIVE_FACE_BATCH5_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
     ;;
