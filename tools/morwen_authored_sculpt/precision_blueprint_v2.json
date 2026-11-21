@@ -1,0 +1,1051 @@
+{
+  "version": "2.0-draft",
+  "status": "PROVISIONAL_2D_TARGETS_NOT_ADOPTED",
+  "source_artifact": 14602858760,
+  "source_run": 44679568515,
+  "extends": "layer0_landmarks_v1.json",
+  "units": "original 384x1024 pixels; manual visual estimates, not calibrated 3D",
+  "face": {
+    "front": {
+      "eye_image_left_outer": [
+        169,
+        121
+      ],
+      "eye_image_left_inner": [
+        199,
+        122
+      ],
+      "eye_image_right_inner": [
+        229,
+        122
+      ],
+      "eye_image_right_outer": [
+        258,
+        121
+      ],
+      "mouth_image_left": [
+        206,
+        159
+      ],
+      "mouth_image_right": [
+        222,
+        159
+      ],
+      "jaw_image_left": [
+        181,
+        160
+      ],
+      "jaw_image_right": [
+        247,
+        160
+      ],
+      "uncertainty_px": 5
+    },
+    "right": {
+      "nose_tip": [
+        274,
+        137
+      ],
+      "chin": [
+        252,
+        177
+      ],
+      "mouth_center": [
+        266,
+        155
+      ],
+      "ear_upper": [
+        188,
+        110
+      ],
+      "ear_lower": [
+        195,
+        143
+      ],
+      "uncertainty_px": 6
+    }
+  },
+  "hair": {
+    "front_groups": [
+      {
+        "id": "fringe_center",
+        "guide_px": [
+          [
+            215,
+            36
+          ],
+          [
+            214,
+            77
+          ],
+          [
+            202,
+            116
+          ]
+        ]
+      },
+      {
+        "id": "image_left_side",
+        "guide_px": [
+          [
+            199,
+            38
+          ],
+          [
+            164,
+            85
+          ],
+          [
+            149,
+            146
+          ],
+          [
+            163,
+            188
+          ]
+        ]
+      },
+      {
+        "id": "image_right_side",
+        "guide_px": [
+          [
+            229,
+            38
+          ],
+          [
+            262,
+            83
+          ],
+          [
+            279,
+            151
+          ],
+          [
+            255,
+            188
+          ]
+        ]
+      }
+    ],
+    "right_groups": [
+      {
+        "id": "rear_volume",
+        "guide_px": [
+          [
+            196,
+            28
+          ],
+          [
+            145,
+            56
+          ],
+          [
+            113,
+            126
+          ],
+          [
+            151,
+            191
+          ]
+        ]
+      },
+      {
+        "id": "temple_lock",
+        "guide_px": [
+          [
+            233,
+            38
+          ],
+          [
+            215,
+            94
+          ],
+          [
+            219,
+            160
+          ],
+          [
+            241,
+            191
+          ]
+        ]
+      }
+    ],
+    "guide_status": "manual projected authoring hypotheses; not strand count, 3D curves or exact boundaries",
+    "uncertainty_px": 10
+  },
+  "metrics": {
+    "eye_spacing_over_head_height": 0.32098765432098764,
+    "front_hair_hem_span_over_head_height": 0.7962962962962963,
+    "right_nose_projection_over_head_height": 0.13664596273291926,
+    "left_nose_projection_over_head_height": 0.15527950310559005,
+    "shoulder_span_over_head_height_estimate": 0.9629629629629629
+  },
+  "body": {
+    "source": "reference_silhouette_landmarks.json in artifact 14602858760",
+    "status": "alpha silhouette only; joint locations and hidden depth not established",
+    "scanlines": {
+      "method": "actual original alpha >=128, inclusive x bounds, not anatomical sections; arms and gaps included",
+      "ys": [
+        80,
+        125,
+        160,
+        190,
+        220,
+        300,
+        380,
+        430,
+        500,
+        580,
+        700,
+        800,
+        930,
+        990
+      ],
+      "views": {
+        "front": [
+          [
+            139,
+            284
+          ],
+          [
+            122,
+            298
+          ],
+          [
+            115,
+            306
+          ],
+          [
+            148,
+            276
+          ],
+          [
+            131,
+            297
+          ],
+          [
+            118,
+            311
+          ],
+          [
+            98,
+            330
+          ],
+          [
+            84,
+            343
+          ],
+          [
+            63,
+            364
+          ],
+          [
+            123,
+            301
+          ],
+          [
+            151,
+            272
+          ],
+          [
+            142,
+            281
+          ],
+          [
+            162,
+            261
+          ],
+          [
+            154,
+            271
+          ]
+        ],
+        "right": [
+          [
+            119,
+            291
+          ],
+          [
+            102,
+            266
+          ],
+          [
+            95,
+            264
+          ],
+          [
+            130,
+            242
+          ],
+          [
+            167,
+            241
+          ],
+          [
+            178,
+            309
+          ],
+          [
+            192,
+            285
+          ],
+          [
+            154,
+            284
+          ],
+          [
+            147,
+            278
+          ],
+          [
+            166,
+            269
+          ],
+          [
+            170,
+            242
+          ],
+          [
+            146,
+            218
+          ],
+          [
+            166,
+            214
+          ],
+          [
+            157,
+            290
+          ]
+        ],
+        "back": [
+          [
+            96,
+            246
+          ],
+          [
+            79,
+            261
+          ],
+          [
+            74,
+            269
+          ],
+          [
+            106,
+            236
+          ],
+          [
+            87,
+            256
+          ],
+          [
+            73,
+            270
+          ],
+          [
+            55,
+            287
+          ],
+          [
+            41,
+            301
+          ],
+          [
+            22,
+            321
+          ],
+          [
+            83,
+            264
+          ],
+          [
+            110,
+            234
+          ],
+          [
+            99,
+            243
+          ],
+          [
+            117,
+            222
+          ],
+          [
+            107,
+            232
+          ]
+        ],
+        "left": [
+          [
+            81,
+            254
+          ],
+          [
+            109,
+            273
+          ],
+          [
+            110,
+            277
+          ],
+          [
+            130,
+            243
+          ],
+          [
+            134,
+            208
+          ],
+          [
+            66,
+            197
+          ],
+          [
+            91,
+            185
+          ],
+          [
+            91,
+            226
+          ],
+          [
+            97,
+            234
+          ],
+          [
+            108,
+            208
+          ],
+          [
+            131,
+            204
+          ],
+          [
+            156,
+            230
+          ],
+          [
+            162,
+            211
+          ],
+          [
+            85,
+            221
+          ]
+        ]
+      }
+    }
+  },
+  "wardrobe": {
+    "status": "PARTIAL_PROJECTED_EXTENTS_18",
+    "modules": [
+      {
+        "id": "hat",
+        "visible": "bent pointed crown, broad brim, gold bands, floral ornament and pendant on decorated side",
+        "method": "separate crown/brim mesh, trim curves, removable ornament"
+      },
+      {
+        "id": "mantle",
+        "visible": "short shoulder cape, gold edging and crest on back and decorated shoulder",
+        "method": "separate layered cloth shell"
+      },
+      {
+        "id": "long_cape",
+        "visible": "multiple draped angular tails, purple lining, ornate gold borders",
+        "method": "authored cloth panels, independent hem curves, layered embroidery texture"
+      },
+      {
+        "id": "bodice",
+        "visible": "fitted dark jacket, gold seams, front closures and waist chains",
+        "method": "editable jacket base, separate hardware"
+      },
+      {
+        "id": "sleeves",
+        "visible": "fitted long sleeves with cuffs",
+        "method": "separate sleeve panels and cuffs"
+      },
+      {
+        "id": "skirt",
+        "visible": "short purple plaid pleated skirt",
+        "method": "folded mesh with plaid UV alignment"
+      },
+      {
+        "id": "hosiery",
+        "visible": "dark knee-high socks per canon; upper edge visible below skirt",
+        "method": "body-conforming layer, verify length against canon"
+      },
+      {
+        "id": "boots",
+        "visible": "ankle boots, heels, front lacing and buckle straps",
+        "method": "separate sole upper hardware"
+      },
+      {
+        "id": "satchel",
+        "visible": "brown crossbody satchel and strap visible on back and decorated profile; omitted on left approved variant",
+        "method": "separate bag strap and buckles; no mirror duplication"
+      },
+      {
+        "id": "book_vials_glasses",
+        "visible": "book held in master, waist vials and round spectacles",
+        "method": "separate rigid accessories, held book not fused to hand"
+      }
+    ],
+    "rule": "select editable licensed templates only after matching approved clothed design; no invented details",
+    "reference_candidates": [
+      "assets/companions/morwen/master/morwen-full-body-v3.png",
+      "assets/companions/morwen/reference/morwen-design-sheet-v3.png",
+      "assets/official/characters/morwen/turnaround/"
+    ],
+    "source": {
+      "run": 44847939236,
+      "artifact": 14683737147,
+      "archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc",
+      "size_px": [
+        1024,
+        1536
+      ],
+      "registration": "three side/rear hashes match registered originals; master is three-quarter not orthographic"
+    },
+    "uncertainties": [
+      "left side reference deliberately omits satchel, hat flower/ribbon and shoulder crest; not proof of absence on other side",
+      "hidden lining seams and depth unknown",
+      "no calibrated cloth dimensions or exact metric scale",
+      "no material roughness values measured"
+    ],
+    "projected_vertical_extents": {
+      "method": "manual approximate visible extents on SHA-verified 1024x1536 source review grid; estimated endpoint uncertainty ±12 px, not calibrated, not surface lengths",
+      "views": {
+        "back": {
+          "sha256": "9cf2f27448303aa60c603f0f32a7baada234fec8cae5108bf8103a9ae7547e69",
+          "parts": {
+            "hat": [
+              10,
+              331
+            ],
+            "mantle": [
+              379,
+              550
+            ],
+            "cape": [
+              522,
+              1283
+            ],
+            "bag": [
+              649,
+              823
+            ],
+            "boots": [
+              1280,
+              1522
+            ]
+          }
+        },
+        "left": {
+          "sha256": "d858c428c64007596302057453f414dd43c580bc1546b9578c3d1dfb0af17591",
+          "parts": {
+            "hat": [
+              10,
+              341
+            ],
+            "mantle": [
+              365,
+              522
+            ],
+            "cape": [
+              515,
+              1440
+            ],
+            "skirt": [
+              737,
+              850
+            ],
+            "sock": [
+              894,
+              1270
+            ],
+            "boot": [
+              1270,
+              1502
+            ]
+          }
+        },
+        "right": {
+          "sha256": "7eeff76ac07f631c14cb536e0e08346cfe815247a88520fb5a68cf0e877e5548",
+          "parts": {
+            "hat": [
+              10,
+              355
+            ],
+            "mantle": [
+              369,
+              529
+            ],
+            "cape": [
+              526,
+              1502
+            ],
+            "skirt": [
+              761,
+              908
+            ],
+            "bag": [
+              710,
+              870
+            ],
+            "sock": [
+              905,
+              1266
+            ],
+            "boot": [
+              1270,
+              1522
+            ]
+          }
+        }
+      }
+    },
+    "back_review": {
+      "source_sha256": "9cf2f27448303aa60c603f0f32a7baada234fec8cae5108bf8103a9ae7547e69",
+      "coordinate_system": "1024x1536 source pixels xyxy, visually estimated review regions not exact part bounds; occlusion and overlapping fabric included",
+      "regions": {
+        "hat": [
+          285,
+          10,
+          747,
+          331
+        ],
+        "mantle": [
+          290,
+          380,
+          705,
+          550
+        ],
+        "bag": [
+          556,
+          630,
+          721,
+          815
+        ],
+        "cape": [
+          112,
+          522,
+          912,
+          1300
+        ],
+        "boots": [
+          410,
+          1280,
+          590,
+          1522
+        ]
+      },
+      "sample_colors": {
+        "cape": {
+          "xyxy": [
+            460,
+            870,
+            480,
+            890
+          ],
+          "median_rgb": "#98587D"
+        },
+        "bag": {
+          "xyxy": [
+            604,
+            750,
+            625,
+            770
+          ],
+          "median_rgb": "#834D57"
+        },
+        "boot": {
+          "xyxy": [
+            435,
+            1420,
+            450,
+            1440
+          ],
+          "median_rgb": "#4B3051"
+        },
+        "gold_like_pixels": {
+          "median_rgb": "#F2B77A",
+          "count": 68833,
+          "filter": "100<=y<1200, R>180,G>120,G-B>35,alpha>200; includes non-trim gold-like pixels; not a pure material sample"
+        }
+      },
+      "color_status": "illustrated appearance only; not PBR base color",
+      "construction_candidates": [
+        "separate crown and brim; gold piping follows brim edge",
+        "mantle overlaps cape and carries book/laurel crest centrally on back",
+        "crossbody strap overlays mantle, routes diagonally to rear-right image bag; attachment concealed in places",
+        "cape panels terminate in curved hanging points, border follows each hem; separate embroidery UV layer",
+        "boots independent soles, heels and cuff buckles"
+      ]
+    }
+  },
+  "materials": {
+    "hair_provisional_target": "#6B426B",
+    "status": "target not measured source palette; sample multiple source patches and label illustration shading vs PBR"
+  },
+  "mesh": {
+    "status": "NOT_RUN",
+    "required": [
+      "actual vertices/edges/faces",
+      "normals",
+      "UV",
+      "material slots",
+      "weights",
+      "shape keys",
+      "deformation tests"
+    ],
+    "proposed_loops": [
+      "eyelids",
+      "mouth",
+      "jaw transition",
+      "shoulder",
+      "elbow",
+      "hip",
+      "knee"
+    ]
+  },
+  "parameter_mapping": {
+    "status": "LIVE_LABELS_AND_RESPONSE_REQUIRED",
+    "eyes": [
+      "Eye Size X",
+      "Eye Size Y",
+      "Eyes Position (X)",
+      "Eyes Position (Y)",
+      "Rotate Eye Socket"
+    ],
+    "nose": "inspect live controls and compare profile",
+    "mouth": "inspect live controls and compare width",
+    "outline": "inspect live controls and compare jaw silhouette",
+    "hair": "guide and control point editor; measure rendered result"
+  },
+  "qa": {
+    "G1": "PARTIAL",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "independent_review": "required"
+  },
+  "master_sections": [
+    {
+      "id": 1,
+      "name": "orthographic body",
+      "status": "MEASURED_2D"
+    },
+    {
+      "id": 2,
+      "name": "head",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 3,
+      "name": "eyes",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 4,
+      "name": "hair",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 5,
+      "name": "body structure",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 6,
+      "name": "wardrobe",
+      "status": "PARTIAL_VISIBLE_MODULES"
+    },
+    {
+      "id": 7,
+      "name": "equipment",
+      "status": "PARTIAL_VISIBLE_MODULES"
+    },
+    {
+      "id": 8,
+      "name": "materials",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 9,
+      "name": "topology",
+      "status": "NOT_RUN_MODEL_REQUIRED"
+    },
+    {
+      "id": 10,
+      "name": "UV",
+      "status": "NOT_RUN_MODEL_REQUIRED"
+    },
+    {
+      "id": 11,
+      "name": "rig",
+      "status": "NOT_RUN_MODEL_REQUIRED"
+    },
+    {
+      "id": 12,
+      "name": "parameter mapping",
+      "status": "PARTIAL"
+    }
+  ],
+  "face_front_review": {
+    "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+    "method": "manual visible point placement on 3x enlarged source crop; image left/right, estimated uncertainty 3px, independent QA pending",
+    "points": {
+      "left_outer_eye": [
+        169,
+        120
+      ],
+      "left_inner_eye": [
+        201,
+        120
+      ],
+      "right_inner_eye": [
+        228,
+        120
+      ],
+      "right_outer_eye": [
+        258,
+        120
+      ],
+      "left_iris_center": [
+        188,
+        125
+      ],
+      "right_iris_center": [
+        239,
+        125
+      ],
+      "left_iris_bottom": [
+        188,
+        133
+      ],
+      "right_iris_bottom": [
+        239,
+        133
+      ],
+      "nose_tip": [
+        214,
+        144
+      ],
+      "mouth_left": [
+        206,
+        159
+      ],
+      "mouth_right": [
+        222,
+        159
+      ],
+      "chin": [
+        214,
+        180
+      ]
+    },
+    "projected_metrics_px": {
+      "eye_width_left": 32,
+      "eye_width_right": 30,
+      "iris_center_distance": 51,
+      "inner_eye_gap": 27,
+      "mouth_width": 16,
+      "nose_to_chin_vertical": 36
+    },
+    "limits": "iris centers are visual estimates, not eyeball center; no hidden anatomy or calibrated stereo"
+  },
+  "profile_hair_review": {
+    "method": "manual projected guides on verified source crops enlarged 3x; suggested control polygons, not measured strand centerlines or thickness",
+    "views": {
+      "right": {
+        "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+        "face": {
+          "nose": [
+            274,
+            137
+          ],
+          "mouth": [
+            264,
+            157
+          ],
+          "chin": [
+            251,
+            178
+          ],
+          "ear": [
+            195,
+            125
+          ]
+        },
+        "guides": [
+          [
+            [
+              235,
+              33
+            ],
+            [
+              224,
+              79
+            ],
+            [
+              216,
+              118
+            ],
+            [
+              232,
+              147
+            ]
+          ],
+          [
+            [
+              225,
+              29
+            ],
+            [
+              213,
+              90
+            ],
+            [
+              207,
+              151
+            ],
+            [
+              231,
+              193
+            ]
+          ],
+          [
+            [
+              175,
+              22
+            ],
+            [
+              133,
+              73
+            ],
+            [
+              104,
+              147
+            ],
+            [
+              122,
+              183
+            ]
+          ]
+        ]
+      },
+      "left": {
+        "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+        "face": {
+          "nose": [
+            98,
+            137
+          ],
+          "mouth": [
+            108,
+            157
+          ],
+          "chin": [
+            122,
+            178
+          ],
+          "ear": [
+            180,
+            125
+          ]
+        },
+        "guides": [
+          [
+            [
+              119,
+              33
+            ],
+            [
+              142,
+              79
+            ],
+            [
+              150,
+              118
+            ],
+            [
+              134,
+              147
+            ]
+          ],
+          [
+            [
+              130,
+              29
+            ],
+            [
+              157,
+              90
+            ],
+            [
+              166,
+              151
+            ],
+            [
+              142,
+              193
+            ]
+          ],
+          [
+            [
+              198,
+              22
+            ],
+            [
+              239,
+              73
+            ],
+            [
+              266,
+              147
+            ],
+            [
+              248,
+              183
+            ]
+          ]
+        ]
+      }
+    },
+    "guide_order": [
+      "short temple",
+      "long side lock",
+      "rear mass"
+    ],
+    "status": "PARTIAL_PROPOSED_GUIDES",
+    "depth_and_thickness": "model required; independent QA pending"
+  },
+  "topology_comparator_m00": {
+    "status": "MEASURED_COMPARATOR_ONLY_NOT_CURRENT_CANDIDATE",
+    "source": "TWO_Morwen_Base_M00.vrm",
+    "sha256": "3e9808779877ec4f3faa601f253807fd3a3128802fc640d44492ed5a0569a32f",
+    "method": "GLB JSON accessor counts; shared POSITION accessor counted once per mesh; indexed triangles per primitive summed; UV and joint attribute presence only",
+    "meshes": [
+      {
+        "name": "Face (merged)(Clone)",
+        "vertices": 3989,
+        "triangles": 7010,
+        "primitives": 7
+      },
+      {
+        "name": "Body (merged)",
+        "vertices": 7639,
+        "triangles": 12517,
+        "primitives": 5
+      }
+    ],
+    "vertices": 11628,
+    "triangles": 19527,
+    "skins": 2,
+    "humanoid_bones": 54,
+    "all_primitives_have_texcoord0_and_joints0": true,
+    "limits": "UV overlap, weights, deformation, edge loops, current native model and adoption gates not verified"
+  }
+}
