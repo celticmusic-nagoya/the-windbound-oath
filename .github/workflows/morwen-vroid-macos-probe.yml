@@ -340,8 +340,16 @@ jobs:
               if grep -Eiq 'Cancel' "evidence/save-before-$attempt.txt" && grep -Eiq 'Save As|Save' "evidence/save-before-$attempt.txt"; then
                 :
               elif grep -Fqi 'Morwen-resume' "evidence/save-before-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite|Cancel' "evidence/save-before-$attempt.txt"; then
-                if [ "$attempt" -eq 1 ]; then
-                  "$gui" key 1 cmd
+                if [ "$attempt" -le 2 ]; then
+                  # Prefer the native visible menu; shortcut-only attempts failed in run 44855165393.
+                  "$gui" click 0.027 0.100
+                  sleep 2
+                  capture_state "save-menu-$attempt"
+                  if grep -Eiq 'Save' "evidence/save-menu-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite|Close Hairstyle Editor' "evidence/save-menu-$attempt.txt"; then
+                    "$gui" click-label "evidence/save-menu-$attempt.png" 'Save' || true
+                  else
+                    echo "SAVE_MENU_NOT_VERIFIED attempt=$attempt" >> evidence/save-retry.txt
+                  fi
                 else
                   "$gui" vroid-shortcut save-copy
                 fi
