@@ -129,6 +129,37 @@
         "matched_render_optimization_trials": true,
         "quality_adjusted_metrics": true,
         "status": "NOT_RUN"
+      },
+      "deliverable_driven": {
+        "required": true,
+        "targets": {
+          "world": "one_coherent_area_candidate",
+          "character": "one_complete_character_candidate",
+          "npc_batch_planning_count": [
+            3,
+            5
+          ]
+        },
+        "vroid_first": true,
+        "allow_dependency_based_session_split": true,
+        "p0": [
+          "session_controller",
+          "blueprint_engine",
+          "qa_engine",
+          "ai_orchestration",
+          "character_factory",
+          "world_factory"
+        ],
+        "p1": [
+          "npc_factory",
+          "material_factory",
+          "render_engine",
+          "asset_library"
+        ],
+        "reuse_production_os": true,
+        "require_actual_native_outputs": true,
+        "require_verified_vertical_slice": true,
+        "status": "POLICY_APPROVED_RUNTIME_NOT_RUN"
       }
     }
   },
