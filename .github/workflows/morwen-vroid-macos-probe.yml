@@ -1,5 +1,6 @@
 name: Morwen VRoid macOS compatibility probe
 on:
+  workflow_dispatch:
   push:
     branches: [feature/morwen-artdirected-sculpt-20261119]
     paths: ['.github/workflows/morwen-vroid-macos-probe.yml', 'tools/production_qa/morwen_vroid_session.sh']
@@ -89,7 +90,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Claude lease: resume batch-3 candidate (run 44875972332).
+          # ChatGPT lease: resume batch-3 candidate (run 44875972332).
           gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14696650765/zip" > "$RUNNER_TEMP/checkpoint.zip"
           echo "9fb186d6c5c24e72029b7b0433db3b942d40bdcd3900e5d01419d796a69d2619  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
@@ -346,7 +347,7 @@ jobs:
             exit 1
           fi
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
-          MORWEN_SESSION_MODE=survey
+          MORWEN_SESSION_MODE=edit
           # shellcheck source=/dev/null
           source tools/production_qa/morwen_vroid_session.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
