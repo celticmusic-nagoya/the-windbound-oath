@@ -86,12 +86,46 @@ jobs:
                   lines.append(f'<path d="M{x:.3f} {y:.3f} L{X:.3f} {Y:.3f}" fill="none" stroke="#243c55" stroke-width="0.65"/>')
               lines.append(f'<path d="M100 790 h{k}" stroke="black" stroke-width="3"/><text x="100" y="820" font-size="14">1 BU | section span {xmax-xmin:.3f} x {ymax-ymin:.3f} BU</text></svg>')
               (out/(name+'.svg')).write_text(''.join(lines))
+          # Orthographic architectural views from exact pinned native geometry.
+          scene=bpy.context.scene
+          cam=bpy.data.objects.new('BLUEPRINT_CAMERA',bpy.data.cameras.new('BLUEPRINT_CAMERA'))
+          scene.collection.objects.link(cam)
+          scene.camera=cam
+          cam.data.type='ORTHO'
+          cam.data.ortho_scale=15
+          scene.render.engine='BLENDER_WORKBENCH'
+          scene.display.shading.light='STUDIO'
+          scene.display.shading.color_type='MATERIAL'
+          scene.display.shading.show_shadows=True
+          scene.display.shading.show_cavity=True
+          scene.render.resolution_x=1200
+          scene.render.resolution_y=900
+          scene.render.resolution_percentage=100
+          scene.render.image_settings.file_format='PNG'
+          original={o.name:o.hide_render for o in scene.objects}
+          for o in scene.objects:
+              if o.type=='MESH' and not o.name.startswith('GEO_'): o.hide_render=True
+          def view(name,pos,target,scale):
+              cam.location=pos
+              cam.rotation_euler=(Vector(target)-cam.location).to_track_quat('-Z','Y').to_euler()
+              cam.data.ortho_scale=scale
+              scene.render.filepath=str(out/(name+'.png'))
+              bpy.ops.render.render(write_still=True)
+          for name,pos in [('exterior-front',(0,-25,3)),('exterior-rear',(0,25,3)),('exterior-left',(-25,0,3)),('exterior-right',(25,0,3)),('exterior-roof',(0,0,25))]:
+              view(name,pos,(0,0,3),15)
+          # Interior furniture and floor only: isolated module, not a complete wall cutaway.
+          for o in scene.objects:
+              if o.type=='MESH': o.hide_render=not (o.name.startswith('GEO_AIDANHOUSE_INT_') and 'CEILING' not in o.name)
+          view('interior-floor-furniture',(0,0,25),(0,0,0),10)
+          view('interior-axonometric',(12,-15,18),(0,0,0),12)
+          for o in scene.objects:
+              if o.name in original:o.hide_render=original[o.name]
           print('MEASURED_BLUEPRINT_CREATED',len(rows),len(anchors))
           PY
           /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python /tmp/measure.py
           sha256sum -c /tmp/blueprint/source.sha256
           cd /tmp/blueprint
-          sha256sum *.svg *.json *.gz source.sha256 provenance-warning.txt > SHA256SUMS
+          sha256sum *.png *.svg *.json *.gz source.sha256 provenance-warning.txt > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
