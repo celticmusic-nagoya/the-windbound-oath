@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14681343932/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "b308744a97702158109fd42bfff05ab0b0a31e2369adc836358a0dd0e4593860  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14682621753/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "f6b3398c54fa1c5c8d60967602670ba64af18087d07ff0bfc1e433a40f9860ea  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +50,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="b68621fcfc9d50b045192a0fc2db7e1cbdeb2c191d97283f8ff8e4a30f0fa9b6"
+              assert hashlib.sha256(data).hexdigest()==expected=="1b99f2a12c39500e274bf3c55c89166591e2c1fbf6e78b5817c99f64b45e1117"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -256,15 +256,19 @@ jobs:
             "$gui" vroid-shortcut face
             sleep 3
             capture_state face-refinement-before
-            # Inspect actual category labels before authoring; never click a guessed slider.
-            for category in Eyes Nose Mouth Face; do
-              if "$gui" click-label evidence/face-refinement-before.png "$category" "Face Sets"; then
-                sleep 2
-                capture_state "face-category-$category"
-                "$gui" vroid-shortcut face
-                sleep 2
-                capture_state face-refinement-before
-              fi
+            # Observed 1024x768 face controls; small reversible candidate adjustments.
+            if grep -Fq 'Eye Size X' evidence/face-refinement-before.txt && grep -Fq '0.467' evidence/face-refinement-before.txt && grep -Fq '0.361' evidence/face-refinement-before.txt; then
+              "$gui" slider 0.901 0.236 0.888 0.236 0.6
+              "$gui" slider 0.889 0.327 0.877 0.327 0.6
+              sleep 2
+              capture_state face-eye-refined
+            fi
+            # Actual sidebar icons from run 44844321107.
+            for spec in 'eyes 0.232' 'nose 0.732' 'mouth 0.857' 'outline 0.795'; do
+              read -r category y <<< "$spec"
+              "$gui" click 0.023 "$y"
+              sleep 2
+              capture_state "face-category-$category"
             done
             "$gui" vroid-shortcut hair
             sleep 3
@@ -275,7 +279,7 @@ jobs:
               sleep 3
               capture_state hair-front-category
               if grep -Eiq 'Edit Hairstyle|Edit Hair' evidence/hair-front-category.txt; then
-                "$gui" click-label evidence/hair-front-category.png "Edit Hairstyle" || true
+                "$gui" click 0.855 0.214
                 sleep 4
                 capture_state hair-strand-editor
               fi
@@ -285,11 +289,11 @@ jobs:
               sleep 3
               capture_state "authoring-$tab"
             done
-            # Reversible clothing base candidate, not official uniform.
+            # Preserve the saved clothing candidate; do not reapply preset.
             if grep -Fq 'Whole Sets' evidence/authoring-outfit.txt; then
-              "$gui" click 0.118 0.535
-              sleep 4
-              capture_state outfit-tailored-base
+              "$gui" click 0.023 0.232
+              sleep 3
+              capture_state outfit-top-category
             fi
             "$gui" click 0.095 0.099
             sleep 3
