@@ -27,8 +27,9 @@ def run(browser, url, out, mode):
     blueprint = int(mode == "blueprint")
     cliff_v2 = int(mode == "cliff-v2")
     cliff_v3 = int(mode == "cliff-v3")
+    cliff_v3d = int(mode == "cliff-v3d")
     composition = int(mode not in ("baseline", "vertex-color-off"))
-    mode_query = f"composition={composition}&hero-cliff={hero}&headland={headland}&cliff-blueprint={blueprint}&cliff-v2={cliff_v2}&cliff-v3={cliff_v3}"
+    mode_query = f"composition={composition}&hero-cliff={hero}&headland={headland}&cliff-blueprint={blueprint}&cliff-v2={cliff_v2}&cliff-v3={cliff_v3}&cliff-v3d={cliff_v3d}"
     page.goto(f"{url}/dev/windwaiting-cliff/?qa&fixed-water&wind=0&photo=1&vista=1&{mode_query}",
               wait_until="domcontentloaded")
     try:
@@ -86,7 +87,7 @@ def main():
             "--disable-dev-shm-usage", "--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--no-sandbox",
         ])
         results = {mode: run(browser, args.base_url, args.output, mode)
-                   for mode in ("baseline", "vertex-color-off", "candidate", "hero-cliff", "headland", "blueprint", "cliff-v2", "cliff-v3")}
+                   for mode in ("baseline", "vertex-color-off", "candidate", "hero-cliff", "headland", "blueprint", "cliff-v2", "cliff-v3", "cliff-v3d")}
         browser.close()
     for key in ("position", "camera", "groundHeight"):
         assert len({json.dumps(result[key]) for result in results.values()}) == 1, key
@@ -98,6 +99,7 @@ def main():
     assert results["blueprint"]["triangles"] <= results["headland"]["triangles"] + 1000
     assert results["cliff-v2"]["triangles"] <= results["blueprint"]["triangles"] + 3000
     assert results["cliff-v3"]["triangles"] <= results["cliff-v2"]["triangles"] + 3000
+    assert results["cliff-v3d"]["triangles"] <= results["cliff-v3"]["triangles"] + 3000
     (args.output / "webgl-photo-qa.json").write_text(json.dumps(results, indent=2) + "\n")
 
 
