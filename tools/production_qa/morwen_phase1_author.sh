@@ -5,6 +5,7 @@ record() { printf '%s\t%s\n' "$1" "$2" >> evidence/phase1-stages.tsv; }
 trial() {
   local tag="$1" cat="$2" label="$3" delta="$4"
   face_cat "$cat"
+  if [ "$tag" = brow-arch ]; then "$gui" scroll 0.89 0.60 -12 0; sleep 1; fi
   if slider_by "$tag" "$label" "$delta"; then
     record "$tag" EDITED_REVIEW_REQUIRED
   else
@@ -14,8 +15,8 @@ trial() {
 views phase1-before 25
 # Provisional small reversible trials: strengthen nose relief and widen mouth.
 # The exact native slider-to-projection mapping is not yet calibrated.
-trial nose-size 0.729 '^Nose Size$' 0.010
-trial mouth-width 0.792 '^Mouth Width$' 0.008
+record nose-size PRESERVED_PRIOR_CHECKPOINT
+record mouth-width PRESERVED_PRIOR_CHECKPOINT
 trial brow-arch "$CAT_BROW" '^Eyebrows Arch$' 0.006
 views phase1-after 0
 # Hair editor and body controls are not qualified for shape changes. Preserve them.
@@ -33,7 +34,7 @@ verify_trial() {
   local tag="$1" cat="$2" label="$3" actual expected
   expected=$(awk -v t="$tag" '$1==t {print $3}' evidence/face-edits.txt)
   if [ -z "$expected" ]; then return 0; fi
-  face_cat "$cat"; capture_state "phase1-reopen-$tag"
+  face_cat "$cat"; if [ "$tag" = brow-arch ]; then "$gui" scroll 0.89 0.60 -12 0; sleep 1; fi; capture_state "phase1-reopen-$tag"
   actual=$("$row" "evidence/phase1-reopen-$tag.png" "$label" | awk '{print $1}') || actual=UNKNOWN
   if [ "$actual" = "$expected" ]; then record "$tag" REOPEN_VALUE_MATCH; else record "$tag" REOPEN_VALUE_MISMATCH; fi
 }
