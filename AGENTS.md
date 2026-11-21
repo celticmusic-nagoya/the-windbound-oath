@@ -1,6 +1,6 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
-- Mandatory Morwen VRoid-first sequence: read [director-approved policy](docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). Continue native authoring to achievable reference fidelity before VRM/Blender; blueprint in parallel. No premature method switch without explicit director approval.
+- Mandatory Morwen VRoid-first sequence: read [director-approved policy](docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). Continue native authoring to achievable reference fidelity before VRM/Blender; blueprint in parallel. Prioritize qualified HairHarpy v2.0.0 for hair beyond native VRoid capabilities before Blender hair sculpting. No premature method switch without explicit director approval.
 
 Director-approved TWO Production OS v1.0 (2026-11-21). Applies to ChatGPT, Codex, Claude, Gemini, all other agents and automations. Current authoritative entry point; old instructions in Git history, old branches, chat/project uploads and historical documents are not active. Later explicit director approval prevails; never infer approval.
 
