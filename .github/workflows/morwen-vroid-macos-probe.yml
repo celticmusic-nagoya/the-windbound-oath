@@ -284,6 +284,21 @@ jobs:
                 capture_state hair-strand-editor
               fi
             fi
+            # Run 44852919743: Edit Preset is a modal authoring context; normal save shortcuts do not exit it.
+            capture_state hair-mode-check
+            if grep -Fq 'Edit Preset' evidence/hair-mode-check.txt && grep -Fq 'Hair Groups' evidence/hair-mode-check.txt; then
+              "$gui" click 0.023 0.100
+              sleep 4
+              capture_state hair-exit-result
+              if grep -Fq 'Edit Preset' evidence/hair-exit-result.txt || grep -Eiq 'Cancel|Discard|Delete|Save Changes' evidence/hair-exit-result.txt; then
+                echo BLOCKED_HAIR_EXIT_REVIEW_REQUIRED > evidence/authoring-status.txt
+                exit 1
+              fi
+              if ! grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/hair-exit-result.txt; then
+                echo BLOCKED_MAIN_EDITOR_NOT_VERIFIED > evidence/authoring-status.txt
+                exit 1
+              fi
+            fi
             for tab in body outfit; do
               if [ "$tab" = body ]; then "$gui" click 0.295 0.099; else "$gui" click 0.384 0.099; fi
               sleep 3
