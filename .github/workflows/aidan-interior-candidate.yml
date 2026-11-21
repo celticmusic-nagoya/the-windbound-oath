@@ -159,7 +159,7 @@ jobs:
           bpy.ops.wm.open_mainfile(filepath=str(path))
           assert bpy.data.objects[furniture.name if False else 'GEO_AIDANHOUSE_INT_FURNITURE'].modifiers.get('Interior furniture softened joinery')
           assert all(signature(bpy.data.objects[n])==h for n,h in protected.items())
-          (out/'qa.json').write_text(json.dumps(dict(status='CANDIDATE',G1='BLOCKED',G2='NOT_RUN',G3='NOT_RUN',G4='NOT_RUN',native_reopen=True,protected_meshes=len(protected),anchors_preserved=len(anchors),textile_materials=changes,bevel_BU=.006,restored_maps=restored,source_provenance='Historical QA SHA mismatch remains unresolved'),indent=2))
+          (out/'qa.json').write_text(json.dumps(dict(status='CANDIDATE',G1='BLOCKED',G2='NOT_RUN',G3='NOT_RUN',G4='NOT_RUN',native_reopen=True,protected_meshes=len(protected),anchors_preserved=len(anchors),textile_materials=changes,joinery='cupboard frames, strap hinges, knobs, table stretchers',bevel_BU=.006,restored_maps=restored,source_provenance='Historical QA SHA mismatch remains unresolved'),indent=2))
           PY
           /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python /tmp/refine.py
           sha256sum -c /tmp/blueprint/source.sha256
