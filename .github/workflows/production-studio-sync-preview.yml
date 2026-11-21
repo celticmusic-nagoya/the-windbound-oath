@@ -1,0 +1,29 @@
+name: Production Studio sync preview
+on:
+  pull_request:
+    paths:
+      - 'tools/production-studio/**'
+      - '.github/workflows/production-studio-sync-preview.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: studio-sync-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  stage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bash tools/production-studio/sync-preview.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-sync-preview
+          path: ${{ runner.temp }}/studio-site/
+          if-no-files-found: error
