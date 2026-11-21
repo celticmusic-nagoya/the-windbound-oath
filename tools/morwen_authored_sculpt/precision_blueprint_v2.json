@@ -183,10 +183,263 @@
   },
   "body": {
     "source": "reference_silhouette_landmarks.json in artifact 14602858760",
-    "status": "alpha silhouette only; joint locations and hidden depth not established"
+    "status": "alpha silhouette only; joint locations and hidden depth not established",
+    "scanlines": {
+      "method": "actual original alpha >=128, inclusive x bounds, not anatomical sections; arms and gaps included",
+      "ys": [
+        80,
+        125,
+        160,
+        190,
+        220,
+        300,
+        380,
+        430,
+        500,
+        580,
+        700,
+        800,
+        930,
+        990
+      ],
+      "views": {
+        "front": [
+          [
+            139,
+            284
+          ],
+          [
+            122,
+            298
+          ],
+          [
+            115,
+            306
+          ],
+          [
+            148,
+            276
+          ],
+          [
+            131,
+            297
+          ],
+          [
+            118,
+            311
+          ],
+          [
+            98,
+            330
+          ],
+          [
+            84,
+            343
+          ],
+          [
+            63,
+            364
+          ],
+          [
+            123,
+            301
+          ],
+          [
+            151,
+            272
+          ],
+          [
+            142,
+            281
+          ],
+          [
+            162,
+            261
+          ],
+          [
+            154,
+            271
+          ]
+        ],
+        "right": [
+          [
+            119,
+            291
+          ],
+          [
+            102,
+            266
+          ],
+          [
+            95,
+            264
+          ],
+          [
+            130,
+            242
+          ],
+          [
+            167,
+            241
+          ],
+          [
+            178,
+            309
+          ],
+          [
+            192,
+            285
+          ],
+          [
+            154,
+            284
+          ],
+          [
+            147,
+            278
+          ],
+          [
+            166,
+            269
+          ],
+          [
+            170,
+            242
+          ],
+          [
+            146,
+            218
+          ],
+          [
+            166,
+            214
+          ],
+          [
+            157,
+            290
+          ]
+        ],
+        "back": [
+          [
+            96,
+            246
+          ],
+          [
+            79,
+            261
+          ],
+          [
+            74,
+            269
+          ],
+          [
+            106,
+            236
+          ],
+          [
+            87,
+            256
+          ],
+          [
+            73,
+            270
+          ],
+          [
+            55,
+            287
+          ],
+          [
+            41,
+            301
+          ],
+          [
+            22,
+            321
+          ],
+          [
+            83,
+            264
+          ],
+          [
+            110,
+            234
+          ],
+          [
+            99,
+            243
+          ],
+          [
+            117,
+            222
+          ],
+          [
+            107,
+            232
+          ]
+        ],
+        "left": [
+          [
+            81,
+            254
+          ],
+          [
+            109,
+            273
+          ],
+          [
+            110,
+            277
+          ],
+          [
+            130,
+            243
+          ],
+          [
+            134,
+            208
+          ],
+          [
+            66,
+            197
+          ],
+          [
+            91,
+            185
+          ],
+          [
+            91,
+            226
+          ],
+          [
+            97,
+            234
+          ],
+          [
+            108,
+            208
+          ],
+          [
+            131,
+            204
+          ],
+          [
+            156,
+            230
+          ],
+          [
+            162,
+            211
+          ],
+          [
+            85,
+            221
+          ]
+        ]
+      }
+    }
   },
   "wardrobe": {
-    "status": "BLOCKED_ADOPTED_CLOTHED_REFERENCE_BYTES_NOT_INSPECTED",
+    "status": "BLOCKED_BINARY_VISUAL_INSPECTION_AND_REFERENCE_PRECEDENCE",
     "modules": [
       "collar",
       "torso",
@@ -196,7 +449,12 @@
       "footwear",
       "reference-defined accessories"
     ],
-    "rule": "select editable licensed templates only after matching approved clothed design; no invented details"
+    "rule": "select editable licensed templates only after matching approved clothed design; no invented details",
+    "reference_candidates": [
+      "assets/companions/morwen/master/morwen-full-body-v3.png",
+      "assets/companions/morwen/reference/morwen-design-sheet-v3.png",
+      "assets/official/characters/morwen/turnaround/"
+    ]
   },
   "materials": {
     "hair_provisional_target": "#6B426B",
@@ -243,5 +501,67 @@
     "G3": "NOT_RUN",
     "G4": "NOT_RUN",
     "independent_review": "required"
-  }
+  },
+  "master_sections": [
+    {
+      "id": 1,
+      "name": "orthographic body",
+      "status": "MEASURED_2D"
+    },
+    {
+      "id": 2,
+      "name": "head",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 3,
+      "name": "eyes",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 4,
+      "name": "hair",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 5,
+      "name": "body structure",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 6,
+      "name": "wardrobe",
+      "status": "BLOCKED_REFERENCE"
+    },
+    {
+      "id": 7,
+      "name": "equipment",
+      "status": "BLOCKED_REFERENCE"
+    },
+    {
+      "id": 8,
+      "name": "materials",
+      "status": "PARTIAL"
+    },
+    {
+      "id": 9,
+      "name": "topology",
+      "status": "NOT_RUN_MODEL_REQUIRED"
+    },
+    {
+      "id": 10,
+      "name": "UV",
+      "status": "NOT_RUN_MODEL_REQUIRED"
+    },
+    {
+      "id": 11,
+      "name": "rig",
+      "status": "NOT_RUN_MODEL_REQUIRED"
+    },
+    {
+      "id": 12,
+      "name": "parameter mapping",
+      "status": "PARTIAL"
+    }
+  ]
 }
