@@ -1,4 +1,4 @@
-name: Rilde inn photo PBR comparison
+name: Rilde inn full PBR restoration and roof comparison
 on:
   push:
     branches: [feature/lind-village-world-integration-plan-01]
@@ -29,16 +29,44 @@ jobs:
           mkdir -p /tmp/blender
           tar -xJf "$archive" -C /tmp/blender --strip-components=1
           /tmp/blender/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
-      - name: Acquire previously ledgered CC0 stone microdetail
+      - name: Restore all required CC0 wall and timber maps
         run: |
+          set -eu
           mkdir -p /tmp/rilde-out /tmp/rilde-textures
           cd /tmp/rilde-textures
-          base=https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry
-          for map in nor_gl rough; do
-            curl -fsSL --max-time 90 "$base/rock_boulder_dry_${map}_1k.jpg" -o "rock_boulder_dry_${map}_1k.jpg"
-          done
-          printf '%s\n' '5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595  rock_boulder_dry_nor_gl_1k.jpg' 'cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130  rock_boulder_dry_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_diff_1k.jpg' -o 'rock_boulder_dry_diff_1k.jpg'
+          echo '20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c  rock_boulder_dry_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_nor_gl_1k.jpg' -o 'rock_boulder_dry_nor_gl_1k.jpg'
+          echo '5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595  rock_boulder_dry_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_rough_1k.jpg' -o 'rock_boulder_dry_rough_1k.jpg'
+          echo 'cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130  rock_boulder_dry_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_diff_1k.jpg' -o 'rough_wood_diff_1k.jpg'
+          echo 'abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98  rough_wood_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_nor_gl_1k.jpg' -o 'rough_wood_nor_gl_1k.jpg'
+          echo '3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011  rough_wood_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_rough_1k.jpg' -o 'rough_wood_rough_1k.jpg'
+          echo '4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09  rough_wood_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_diff_1k.jpg' -o 'weathered_brown_planks_diff_1k.jpg'
+          echo '94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29  weathered_brown_planks_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_nor_gl_1k.jpg' -o 'weathered_brown_planks_nor_gl_1k.jpg'
+          echo '8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393  weathered_brown_planks_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_rough_1k.jpg' -o 'weathered_brown_planks_rough_1k.jpg'
+          echo 'b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9  weathered_brown_planks_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_diff_2k.jpg' -o 'yellow_stone_wall_diff_2k.jpg'
+          echo 'c180712e9ddbdb5bf09542b6fae7f012  yellow_stone_wall_diff_2k.jpg' | md5sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_nor_gl_2k.jpg' -o 'yellow_stone_wall_nor_gl_2k.jpg'
+          echo '67b08d1e7ea232a22ba9b875ab849278  yellow_stone_wall_nor_gl_2k.jpg' | md5sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_rough_2k.jpg' -o 'yellow_stone_wall_rough_2k.jpg'
+          echo '73489c781dfa64a196810c2e321db256  yellow_stone_wall_rough_2k.jpg' | md5sum -c -
           sha256sum *.jpg > /tmp/rilde-out/source.sha256
+          sudo apt-get install -y python3-pil
+          /usr/bin/python3 - <<'PY'
+          from PIL import Image
+          for k in ('diff','nor_gl','rough'):
+              im=Image.open('yellow_stone_wall_'+k+'_2k.jpg')
+              im.resize((1024,1024),Image.Resampling.LANCZOS).save('yellow_stone_wall_'+k+'_1k.png')
+          PY
+          sha256sum *.png > /tmp/rilde-out/derived.sha256
       - name: Matched inn previews and native candidate
         run: |
           cat > /tmp/rilde_compare.py <<'PY'
@@ -57,6 +85,8 @@ jobs:
           B.add_lighting('peaceful')
           camera=B.frame_camera(cfg,objs,960,720)
           stats=B.mesh_stats(objs)
+          assert not B.KM.REPORT['missing'], B.KM.REPORT
+          assert len(B.KM.REPORT['loaded']) == 12, B.KM.REPORT
           B.render_to(str(out/'baseline.png'))
           changed=[]
           for mat in bpy.data.materials:
@@ -90,7 +120,7 @@ jobs:
           LIND_BUILD_TEX=/tmp/rilde-textures /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python /tmp/rilde_compare.py
           /tmp/blender/blender -b /tmp/rilde-out/inn_photo_microdetail.blend --python-exit-code 1 --python-expr 'import bpy; assert all(i.packed_file for i in bpy.data.images if i.source=="FILE")'
           cd /tmp/rilde-out
-          sha256sum *.png *.blend *.json source.sha256 > SHA256SUMS
+          sha256sum *.png *.blend *.json source.sha256 derived.sha256 > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
