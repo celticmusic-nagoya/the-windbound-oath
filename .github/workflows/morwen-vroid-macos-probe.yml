@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14682621753/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "f6b3398c54fa1c5c8d60967602670ba64af18087d07ff0bfc1e433a40f9860ea  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14689515736/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "242f46d4f8e245c5670813b51fe0c843d0757c3d4261c31ba0deb1a2a933d7be  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +50,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="1b99f2a12c39500e274bf3c55c89166591e2c1fbf6e78b5817c99f64b45e1117"
+              assert hashlib.sha256(data).hexdigest()==expected=="e9e36e411f5bdd63f248f0a6c0aac3e814d651c1bd66b56787255f1c7abcfd4e"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -204,6 +204,7 @@ jobs:
             fi
           fi
           screencapture -x evidence/final-recovery-screen.png || true
+          # Restore latest saved candidate; do not repeat previous edits unless observed old values remain.
           # Continuous authoring on a verified copy; retain evidence even if save is blocked.
           if grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt; then
             "$gui" vroid-shortcut face
@@ -322,7 +323,7 @@ jobs:
             # The Documents file is a disposable working copy, not the immutable input.
             recover_saved_copy() {
               local candidate
-              for candidate in "$HOME/Documents/Morwen-resume.vroid" "$HOME/Documents/Morwen-M02-authoring.vroid"; do
+              for candidate in "$HOME/Documents/Morwen-resume.vroid" "$HOME/Documents/Morwen-M03-authoring.vroid"; do
                 if [ -s "$candidate" ] && ! cmp -s "$candidate" evidence/input-model.vroid; then
                   cp "$candidate" evidence/model.vroid
                   shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
@@ -362,12 +363,12 @@ jobs:
               fi
               capture_state "save-dialog-$attempt"
               if grep -Eiq 'Cancel' "evidence/save-dialog-$attempt.txt" && grep -Eiq 'Save As|Save' "evidence/save-dialog-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite' "evidence/save-dialog-$attempt.txt"; then
-                if grep -Fqi 'Documents' "evidence/save-dialog-$attempt.txt" && [ ! -e "$HOME/Documents/Morwen-M02-authoring.vroid" ]; then
+                if grep -Fqi 'Documents' "evidence/save-dialog-$attempt.txt" && [ ! -e "$HOME/Documents/Morwen-M03-authoring.vroid" ]; then
                   "$gui" key 0 cmd
-                  "$gui" text Morwen-M02-authoring
+                  "$gui" text Morwen-M03-authoring
                   sleep 2
                   capture_state "save-name-$attempt"
-                  if grep -Fqi 'Morwen-M02-authoring' "evidence/save-name-$attempt.txt"; then
+                  if grep -Fqi 'Morwen-M03-authoring' "evidence/save-name-$attempt.txt"; then
                     "$gui" key 36
                   fi
                 fi
