@@ -792,5 +792,68 @@
       "name": "parameter mapping",
       "status": "PARTIAL"
     }
-  ]
+  ],
+  "face_front_review": {
+    "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+    "method": "manual visible point placement on 3x enlarged source crop; image left/right, estimated uncertainty 3px, independent QA pending",
+    "points": {
+      "left_outer_eye": [
+        169,
+        120
+      ],
+      "left_inner_eye": [
+        201,
+        120
+      ],
+      "right_inner_eye": [
+        228,
+        120
+      ],
+      "right_outer_eye": [
+        258,
+        120
+      ],
+      "left_iris_center": [
+        188,
+        125
+      ],
+      "right_iris_center": [
+        239,
+        125
+      ],
+      "left_iris_bottom": [
+        188,
+        133
+      ],
+      "right_iris_bottom": [
+        239,
+        133
+      ],
+      "nose_tip": [
+        214,
+        144
+      ],
+      "mouth_left": [
+        206,
+        159
+      ],
+      "mouth_right": [
+        222,
+        159
+      ],
+      "chin": [
+        214,
+        180
+      ]
+    },
+    "projected_metrics_px": {
+      "eye_width_left": 32,
+      "eye_width_right": 30,
+      "iris_center_distance": 51,
+      "inner_eye_gap": 27,
+      "mouth_width": 16,
+      "nose_to_chin_vertical": 36
+    },
+    "limits": "iris centers are visual estimates, not eyeball center; no hidden anatomy or calibrated stereo"
+  }
 }
