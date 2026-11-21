@@ -2,7 +2,7 @@ name: Morwen VRoid macOS compatibility probe
 on:
   push:
     branches: [feature/morwen-artdirected-sculpt-20261119]
-    paths: ['.github/workflows/morwen-vroid-macos-probe.yml']
+    paths: ['.github/workflows/morwen-vroid-macos-probe.yml', 'tools/production_qa/morwen_vroid_session.sh']
 permissions:
   contents: read
   actions: read
@@ -89,8 +89,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14690913144/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "35aad310b29acf4275ed781037d8fc1f26f345dee1dc076bdf122544d79a52d2  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          # Claude lease: resume reopened face candidate (run 44871527985).
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14694109635/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "d3b9574a7e07ad400e22f1223f0d342d5d2fc260f47d01bb6fb7559cf996f2aa  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -98,34 +99,9 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="57e8dc139333dbbe353bdf07f36eab70cfffa02a22271b4a17cc013ea2f40616"
+              assert hashlib.sha256(data).hexdigest()=="6999703a198714c35a416d2a74e5a0f1a179eb64d464301b7932d6e2258aa23c"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
-      - name: Restore saved face candidate for reopen QA
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14693801775/zip" > "$RUNNER_TEMP/face-candidate.zip"
-          echo "726084f1285b89e416da906edca4abd5221e6f79278b1a6e921b6d753cb14cdb  $RUNNER_TEMP/face-candidate.zip" | shasum -a 256 -c
-          python3 - <<'PYCODE'
-          from pathlib import Path
-          from zipfile import ZipFile
-          from hashlib import sha256
-          import os
-          temp = Path(os.environ["RUNNER_TEMP"])
-          with ZipFile(temp / "face-candidate.zip") as archive:
-              item = archive.getinfo("model.vroid")
-              assert 0 < item.file_size < 100_000_000
-              model = archive.read(item)
-              assert sha256(model).hexdigest() == "6999703a198714c35a416d2a74e5a0f1a179eb64d464301b7932d6e2258aa23c"
-              (temp / "Face.vroid").write_bytes(model)
-              for name in ("face-edits.txt", "nose-saved-value.txt", "mouth-saved-value.txt", "chin-saved-value.txt"):
-                  assert archive.getinfo(name).file_size < 4096
-                  Path("evidence", name).write_bytes(archive.read(name))
-          PYCODE
       - name: Download official DMG and inspect signature
         shell: bash
         run: |
@@ -369,107 +345,10 @@ jobs:
             echo BLOCKED_SOURCE_REOPEN > evidence/authoring-status.txt
             exit 1
           fi
-          "$gui" vroid-shortcut face
-          sleep 2
-          "$gui" zoom 0.50 0.50 25 0
-          sleep 2
-          capture_views before
-          working="$HOME/Documents/Morwen-resume.vroid"
-          saved="$HOME/Documents/Face.vroid"
-          test ! -e "$saved"
-          chin_pattern='^Jaw Position\s*\(Y\)\s*\|?$'
-          if [ -s "$RUNNER_TEMP/Face.vroid" ]; then
-            try_saved_copy "$RUNNER_TEMP/Face.vroid"
-            cp "$RUNNER_TEMP/Face.vroid" evidence/model.vroid
-            nose_ok=true
-            mouth_ok=true
-            chin_ok=true
-          else
-            # Projected Layer 0 targets: mouth/iris span 16/51, chin 21 px below mouth,
-            # profile nose extends ~10 px beyond mouth. Slider values are provisional.
-            select_face_panel 0.732
-            nose_ok=false
-            edit_row nose '^Nose Size$' 0.012 && nose_ok=true
-            select_face_panel 0.795
-            mouth_ok=false
-            edit_row mouth '^Mouth Width$' -0.018 0.006 && mouth_ok=true
-            select_face_panel 0.232
-            select_face_panel 0.169
-            chin_ok=false
-            edit_row chin "$chin_pattern" 0.009 && chin_ok=true
-            capture_views after
-            if ! ( "$nose_ok" || "$mouth_ok" || "$chin_ok" ); then
-              echo BLOCKED_NO_VERIFIED_FACE_EDITS > evidence/authoring-status.txt
-              exit 1
-            fi
-            capture_state save-before
-            grep -Fqi 'Morwen-resume' evidence/save-before.txt
-            "$gui" key 1 cmd
-            sleep 5
-            capture_state save-shortcut
-            if ! try_saved_copy "$working"; then
-              "$gui" click 0.027 0.100
-              sleep 2
-              capture_state save-menu
-              grep -Fq 'Back to model selection' evidence/save-menu.txt
-              grep -Fq 'Save As' evidence/save-menu.txt
-              "$gui" click 0.03125 0.14583
-              sleep 6
-              capture_state save-menu-result
-            fi
-            if ! try_saved_copy "$working"; then
-              echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
-              exit 1
-            fi
-            cp "$working" evidence/model.vroid
-          fi
-          shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
-          echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
-          cp evidence/model.vroid "$saved"
-          "$gui" click 0.027 0.100
-          sleep 2
-          capture_state reopen-menu
-          "$gui" click-label evidence/reopen-menu.png 'Back to model selection' 'Save As'
-          sleep 6
-          reopen_native
-          capture_state checkpoint-open-dialog
-          dialog_visible checkpoint-open-dialog
-          grep -Fqi Documents evidence/checkpoint-open-dialog.txt
-          # The verified chooser shows the Face.vroid copy before Morwen-resume.vroid.
-          # OCR can insert spaces into filenames, so use its observed file row as a fallback.
-          if ! "$gui" click-label evidence/checkpoint-open-dialog.png "${saved##*/}" 'Cancel'; then
-            grep -Eiq 'Face[[:space:]]*\.[[:space:]]*vroid.*Morwen-resume' evidence/checkpoint-open-dialog.txt
-            test "$(find "$HOME/Documents" -maxdepth 1 -name '*.vroid' | wc -l | tr -d ' ')" = 2
-            "$gui" click 0.340 0.286
-          fi
-          sleep 2
-          capture_state checkpoint-open-selected
-          dialog_visible checkpoint-open-selected
-          grep -Eiq 'Face[[:space:]]*\.[[:space:]]*vroid' evidence/checkpoint-open-selected.txt
-          "$gui" key 36
-          sleep 30
-          capture_state checkpoint-reopened
-          grep -Eiq 'VRoid Studio.*Face[[:space:]]*\.[[:space:]]*vroid' evidence/checkpoint-reopened.txt
-          grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/checkpoint-reopened.txt
-          cmp "$saved" evidence/model.vroid
-          "$gui" zoom 0.50 0.50 25 0
-          sleep 2
-          capture_views reopened
-          select_face_panel 0.732
-          if "$nose_ok" && check_row nose '^Nose Size$'; then echo NOSE_REOPEN_VERIFIED >> evidence/face-edits.txt; else nose_ok=false; fi
-          select_face_panel 0.795
-          if "$mouth_ok" && check_row mouth '^Mouth Width$'; then echo MOUTH_REOPEN_VERIFIED >> evidence/face-edits.txt; else mouth_ok=false; fi
-          select_face_panel 0.232
-          select_face_panel 0.169
-          if "$chin_ok" && check_row chin "$chin_pattern"; then echo CHIN_REOPEN_VERIFIED >> evidence/face-edits.txt; else chin_ok=false; fi
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
-          if "$nose_ok" && "$mouth_ok" && "$chin_ok"; then
-            echo NATIVE_FACE_CONTROLS_REOPEN_VERIFIED_VISUAL_REVIEW_REQUIRED > evidence/authoring-status.txt
-          else
-            echo NATIVE_REOPENED_FACE_CONTROLS_PARTIAL > evidence/authoring-status.txt
-            exit 1
-          fi
-          # Native editor checkpoint only; VRM export deferred until director-approved art gate.
+          MORWEN_SESSION_MODE=survey
+          # shellcheck source=/dev/null
+          source tools/production_qa/morwen_vroid_session.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
