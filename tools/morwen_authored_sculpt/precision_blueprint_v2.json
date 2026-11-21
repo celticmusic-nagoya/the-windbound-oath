@@ -855,5 +855,171 @@
       "nose_to_chin_vertical": 36
     },
     "limits": "iris centers are visual estimates, not eyeball center; no hidden anatomy or calibrated stereo"
+  },
+  "profile_hair_review": {
+    "method": "manual projected guides on verified source crops enlarged 3x; suggested control polygons, not measured strand centerlines or thickness",
+    "views": {
+      "right": {
+        "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+        "face": {
+          "nose": [
+            274,
+            137
+          ],
+          "mouth": [
+            264,
+            157
+          ],
+          "chin": [
+            251,
+            178
+          ],
+          "ear": [
+            195,
+            125
+          ]
+        },
+        "guides": [
+          [
+            [
+              235,
+              33
+            ],
+            [
+              224,
+              79
+            ],
+            [
+              216,
+              118
+            ],
+            [
+              232,
+              147
+            ]
+          ],
+          [
+            [
+              225,
+              29
+            ],
+            [
+              213,
+              90
+            ],
+            [
+              207,
+              151
+            ],
+            [
+              231,
+              193
+            ]
+          ],
+          [
+            [
+              175,
+              22
+            ],
+            [
+              133,
+              73
+            ],
+            [
+              104,
+              147
+            ],
+            [
+              122,
+              183
+            ]
+          ]
+        ]
+      },
+      "left": {
+        "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+        "face": {
+          "nose": [
+            98,
+            137
+          ],
+          "mouth": [
+            108,
+            157
+          ],
+          "chin": [
+            122,
+            178
+          ],
+          "ear": [
+            180,
+            125
+          ]
+        },
+        "guides": [
+          [
+            [
+              119,
+              33
+            ],
+            [
+              142,
+              79
+            ],
+            [
+              150,
+              118
+            ],
+            [
+              134,
+              147
+            ]
+          ],
+          [
+            [
+              130,
+              29
+            ],
+            [
+              157,
+              90
+            ],
+            [
+              166,
+              151
+            ],
+            [
+              142,
+              193
+            ]
+          ],
+          [
+            [
+              198,
+              22
+            ],
+            [
+              239,
+              73
+            ],
+            [
+              266,
+              147
+            ],
+            [
+              248,
+              183
+            ]
+          ]
+        ]
+      }
+    },
+    "guide_order": [
+      "short temple",
+      "long side lock",
+      "rear mass"
+    ],
+    "status": "PARTIAL_PROPOSED_GUIDES",
+    "depth_and_thickness": "model required; independent QA pending"
   }
 }
