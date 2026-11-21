@@ -16,3 +16,10 @@ References: existing layer0_landmarks_v1.json, precision blueprint handoff, main
 - Texture import/export https://vroid.pixiv.help/hc/en-us/articles/4405430561817-How-to-use-the-Texture-Editor
 - Reusable custom items https://vroid.pixiv.help/hc/en-us/articles/900005583186-How-to-Use-Custom-Items
 Exact version-specific body/clothing slider names, palette samples and GUI coordinates remain NOT_VERIFIED. Native batch execution NOT_RUN. No G1–G4 approval.
+
+## Director-approved modular garment reuse (2026-11-21)
+The director authorizes actively adapting suitable existing garment parts to the approved Layer 0 four views and approved clothed design. This is production permission, not asset adoption or permission to purchase. Protect the uniform v3.0 design. Resolve actual clothed reference provenance and SHA before selecting final geometry or colors; Layer 0 governs body/hair, clothed reference governs garment construction.
+- Start with native editable VRoid garment templates and independently licensed reusable meshes. Compare collar, sleeves, torso, skirt/hem, hosiery, footwear and separately modeled straps/accessories only where visible in the adopted reference. Select by silhouette and construction, not default texture. Do not invent covered details.
+- Keep original template and license record; author custom items and layered textures separately, reshape fit, seam placement and thickness; preserve asymmetry and attachment points. Use Blender for unsupported three-dimensional trims, fasteners and accessories. No paid assets, redistribution or incompatible licenses without approval.
+- Work against actual front, side and rear reference images, then inspect silhouette, intersections, deformation and material at game display size. Record source, hash, license and changes. Save native checkpoint before export. Existing PR #427 owns work; no competing run while current editor session is active.
+- Current successor run 44844321107 is in progress; reuse its output only after actual archive/model validation. Garment selection and strand authoring remain unverified until visible evidence. No G1–G4 adoption implied.
