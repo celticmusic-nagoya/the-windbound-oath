@@ -439,21 +439,80 @@
     }
   },
   "wardrobe": {
-    "status": "BLOCKED_BINARY_VISUAL_INSPECTION_AND_REFERENCE_PRECEDENCE",
+    "status": "VISIBLE_MODULES_IDENTIFIED_DIMENSIONS_PENDING",
     "modules": [
-      "collar",
-      "torso",
-      "sleeves",
-      "hem",
-      "hosiery",
-      "footwear",
-      "reference-defined accessories"
+      {
+        "id": "hat",
+        "visible": "bent pointed crown, broad brim, gold bands, floral ornament and pendant on decorated side",
+        "method": "separate crown/brim mesh, trim curves, removable ornament"
+      },
+      {
+        "id": "mantle",
+        "visible": "short shoulder cape, gold edging and crest on back and decorated shoulder",
+        "method": "separate layered cloth shell"
+      },
+      {
+        "id": "long_cape",
+        "visible": "multiple draped angular tails, purple lining, ornate gold borders",
+        "method": "authored cloth panels, independent hem curves, layered embroidery texture"
+      },
+      {
+        "id": "bodice",
+        "visible": "fitted dark jacket, gold seams, front closures and waist chains",
+        "method": "editable jacket base, separate hardware"
+      },
+      {
+        "id": "sleeves",
+        "visible": "fitted long sleeves with cuffs",
+        "method": "separate sleeve panels and cuffs"
+      },
+      {
+        "id": "skirt",
+        "visible": "short purple plaid pleated skirt",
+        "method": "folded mesh with plaid UV alignment"
+      },
+      {
+        "id": "hosiery",
+        "visible": "dark knee-high socks per canon; upper edge visible below skirt",
+        "method": "body-conforming layer, verify length against canon"
+      },
+      {
+        "id": "boots",
+        "visible": "ankle boots, heels, front lacing and buckle straps",
+        "method": "separate sole upper hardware"
+      },
+      {
+        "id": "satchel",
+        "visible": "brown crossbody satchel and strap visible on back and decorated profile; omitted on left approved variant",
+        "method": "separate bag strap and buckles; no mirror duplication"
+      },
+      {
+        "id": "book_vials_glasses",
+        "visible": "book held in master, waist vials and round spectacles",
+        "method": "separate rigid accessories, held book not fused to hand"
+      }
     ],
     "rule": "select editable licensed templates only after matching approved clothed design; no invented details",
     "reference_candidates": [
       "assets/companions/morwen/master/morwen-full-body-v3.png",
       "assets/companions/morwen/reference/morwen-design-sheet-v3.png",
       "assets/official/characters/morwen/turnaround/"
+    ],
+    "source": {
+      "run": 44847939236,
+      "artifact": 14683737147,
+      "archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc",
+      "size_px": [
+        1024,
+        1536
+      ],
+      "registration": "three side/rear hashes match registered originals; master is three-quarter not orthographic"
+    },
+    "uncertainties": [
+      "left side reference deliberately omits satchel, hat flower/ribbon and shoulder crest; not proof of absence on other side",
+      "hidden lining seams and depth unknown",
+      "no calibrated cloth dimensions or exact metric scale",
+      "no material roughness values measured"
     ]
   },
   "materials": {
@@ -531,12 +590,12 @@
     {
       "id": 6,
       "name": "wardrobe",
-      "status": "BLOCKED_REFERENCE"
+      "status": "PARTIAL_VISIBLE_MODULES"
     },
     {
       "id": 7,
       "name": "equipment",
-      "status": "BLOCKED_REFERENCE"
+      "status": "PARTIAL_VISIBLE_MODULES"
     },
     {
       "id": 8,
