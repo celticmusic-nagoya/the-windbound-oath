@@ -1,0 +1,33 @@
+name: Production Studio QA
+on:
+  pull_request:
+    paths:
+      - 'tools/production-studio/**'
+      - '.github/workflows/production-studio-qa.yml'
+permissions:
+  contents: read
+concurrency:
+  group: studio-qa-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: tools/production-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
+      - run: npx playwright install --with-deps chromium
+      - run: node studio-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: studio-browser-qa
+          path: tools/production-studio/qa-output/
+          if-no-files-found: warn
