@@ -89,6 +89,13 @@ jobs:
           sleep 45
           screencapture -x evidence/screen-60s.png || true
           sleep 30
+          # Finder-only startup is not an editor failure; bounded activation recovery.
+          if ! osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' | grep -qi VRoid; then
+            open -a "$app"
+            sleep 45
+            osascript -e 'tell application id "net.pixiv.vroid.macosx" to activate' || true
+            sleep 20
+          fi
           # Verify the welcome screen text before issuing a bounded input event.
           swift -e 'import Cocoa; import CoreGraphics; print(CGPreflightPostEventAccess()); print(CGDisplayPixelsWide(CGMainDisplayID()), CGDisplayPixelsHigh(CGMainDisplayID()))' > evidence/input-access.txt 2>&1
           screencapture -x evidence/before-input.png
@@ -249,14 +256,28 @@ jobs:
             "$gui" vroid-shortcut face
             sleep 3
             capture_state face-refinement-before
-            if grep -Fq 'Rotate Eye Socket' evidence/face-refinement-before.txt && grep -Fq -- '-0.749' evidence/face-refinement-before.txt; then
-              "$gui" slider 0.766 0.600 0.825 0.600 0.6
-              sleep 2
-              capture_state face-socket-refined
-              if grep -Fq 'Eye Size Y' evidence/face-socket-refined.txt && grep -Fq '0.361' evidence/face-socket-refined.txt; then
-                "$gui" slider 0.889 0.327 0.875 0.327 0.6
+            # Inspect actual category labels before authoring; never click a guessed slider.
+            for category in Eyes Nose Mouth Face; do
+              if "$gui" click-label evidence/face-refinement-before.png "$category" "Face Sets"; then
                 sleep 2
-                capture_state face-refined
+                capture_state "face-category-$category"
+                "$gui" vroid-shortcut face
+                sleep 2
+                capture_state face-refinement-before
+              fi
+            done
+            "$gui" vroid-shortcut hair
+            sleep 3
+            capture_state hair-category-start
+            # Hairstyle Sets has no strand editor. Select observed front-hair category icon.
+            if grep -Fq 'Hairstyle Sets' evidence/hair-category-start.txt; then
+              "$gui" click 0.023 0.229
+              sleep 3
+              capture_state hair-front-category
+              if grep -Eiq 'Edit Hairstyle|Edit Hair' evidence/hair-front-category.txt; then
+                "$gui" click-label evidence/hair-front-category.png "Edit Hairstyle" || true
+                sleep 4
+                capture_state hair-strand-editor
               fi
             fi
             for tab in body outfit; do
