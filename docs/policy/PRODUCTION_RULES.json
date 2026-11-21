@@ -50,7 +50,49 @@
     "checkpoint_reopen": true,
     "hash_reuse": true,
     "milestone_first": true,
-    "avoid_duplicate_ci": true
+    "avoid_duplicate_ci": true,
+    "multi_stage_batches": {
+      "required": true,
+      "policy": "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md",
+      "character_phases": [
+        [
+          "face",
+          "hair",
+          "body"
+        ],
+        [
+          "wardrobe",
+          "equipment"
+        ]
+      ],
+      "world_phases": [
+        [
+          "terrain",
+          "rock",
+          "architecture",
+          "interfaces"
+        ],
+        [
+          "materials",
+          "vegetation",
+          "props",
+          "lighting"
+        ],
+        [
+          "collision",
+          "traversal",
+          "optimization",
+          "integration"
+        ]
+      ],
+      "target_minutes": [
+        60,
+        120
+      ],
+      "continue_independent_stages": true,
+      "checkpoint_each_milestone": true,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    }
   },
   "provisional_local_coordinates": true,
   "measures": [
