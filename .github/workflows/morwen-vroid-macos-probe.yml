@@ -1,6 +1,7 @@
 name: Morwen VRoid macOS compatibility probe
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     branches: [feature/morwen-artdirected-sculpt-20261119]
     paths: ['.github/workflows/morwen-vroid-macos-probe.yml', 'tools/production_qa/morwen_vroid_session.sh']
@@ -16,6 +17,9 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: feature/morwen-artdirected-sculpt-20261119
+          persist-credentials: false
       - name: Exact checkout preflight
         run: |
           mkdir -p evidence
@@ -96,7 +100,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # ChatGPT lease: resume batch-3 candidate (run 44875972332).
+          # ChatGPT lease: resume batch-4 candidate (run 44880208603).
           gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14703052245/zip" > "$RUNNER_TEMP/checkpoint.zip"
           echo "646713e71e505876a2d93ad7ce02dbd6f74582833cd098571bc9c265816d0db0  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
