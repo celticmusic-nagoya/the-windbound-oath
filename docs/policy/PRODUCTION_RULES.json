@@ -105,7 +105,30 @@
         "authenticated_allowlisted_commands": true,
         "bounded_wait": true,
         "timeout_checkpoint_resume": true,
-        "adapter_status": "NOT_RUN"
+        "adapter_status": "NOT_RUN",
+        "short_wait_required": false
+      },
+      "session_budget": {
+        "planning_minutes": [
+          60,
+          120
+        ],
+        "planning_target_is_hard_cap": false,
+        "standard_public_runner_max_minutes": 360,
+        "verify_billing_and_effective_timeout": true,
+        "reserve_checkpoint_upload_time": true,
+        "productive_long_session_allowed": true,
+        "genuine_review_wait_allowed": true,
+        "artificial_keepalive": false
+      },
+      "efficiency": {
+        "incremental_durable_checkpoints": true,
+        "immutable_snapshot_qa": true,
+        "stale_feedback_rejection": true,
+        "dirty_dependency_checks": true,
+        "matched_render_optimization_trials": true,
+        "quality_adjusted_metrics": true,
+        "status": "NOT_RUN"
       }
     }
   },
