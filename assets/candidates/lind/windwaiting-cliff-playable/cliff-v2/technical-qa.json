@@ -1,0 +1,29 @@
+{
+  "status": "provisional",
+  "official_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "road_coordinates_sha256_before_after": "e641913b84fbeafd07ef0e6991a87538362fcd005c4001ff5fb519a312d91d4a",
+  "native_support": {
+    "walkable_samples": 11372,
+    "vegetation_samples": 54,
+    "max_height_delta_BU": 9.5367431640625e-07
+  },
+  "topology": {
+    "nonmanifold_edges": 0,
+    "nonadjacent_overlap_candidates": 0,
+    "classified_contacts": [],
+    "triangles": 78366
+  },
+  "reopened_native": "PASS",
+  "pbr_glb": {
+    "normal_uv": 0,
+    "distinct_tangents": 1646,
+    "normal_strength": 0.6200000047683716,
+    "base_color_normal_roughness": "present"
+  },
+  "gates": {
+    "G1": "BLOCKED: official CG SHA checked; dimensions and placement remain provisional",
+    "G2": "FAIL: independent visual review",
+    "G3": "PASS within checked scene geometry, UV, native reopen, GLB and actual rendering",
+    "G4": "NOT_RUN overall: isolated desktop WebGL PASS; main game and Android device NOT_RUN"
+  }
+}

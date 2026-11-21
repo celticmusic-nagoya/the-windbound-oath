@@ -123,7 +123,7 @@ def mesh_record(obj):
     }
 
 
-def main():
+def main(stations=STATIONS, section_profile=section, prepare_rock=None, prepare_carrier=None):
     parser=argparse.ArgumentParser()
     parser.add_argument("output",type=Path)
     out=parser.parse_args(sys.argv[sys.argv.index("--")+1:]).output.resolve()
@@ -136,7 +136,7 @@ def main():
     old=bpy.data.objects[HEADLAND]
     road=bpy.data.objects["Coastal footpath"]
     image=next(n.image for n in old.data.materials[0].node_tree.nodes if n.type=="TEX_IMAGE")
-    new=previous.build_rock(image,STATIONS,section)
+    new=previous.build_rock(image,stations,section_profile)
     material_source=json.loads((previous.BASE/"photo-pbr/rock_boulder_dry/manifest.json").read_text())
     rock_nodes=new.data.materials[0].node_tree
     shader=next(n for n in rock_nodes.nodes if n.type=="BSDF_PRINCIPLED")
@@ -160,6 +160,8 @@ def main():
             rock_nodes.links.new(uv_node.outputs["UV"],node.inputs["Vector"])
         if node.type=="NORMAL_MAP":
             node.uv_map=uv_node.uv_map
+    if prepare_rock is not None:
+        prepare_rock(new,shader)
     blockers=[(carrier.name,bvh(carrier))]
     for item in scene.objects:
         if item.type=="MESH" and (item.name.startswith("C10 large rock") or item.name.startswith("eco_tree")) and not item.hide_render:
@@ -169,6 +171,7 @@ def main():
     foliage=json.loads((previous.BASE/"eco-v2/placement.json").read_text())["instances"]
     foliage_rays=[Vector((*item["xy"],18)) for item in foliage]
     before=expected_ground([carrier,old],rays+foliage_rays)
+    carrier_qa=prepare_carrier(carrier,rays+foliage_rays) if prepare_carrier is not None else None
     unjoined=expected_ground([carrier,new],rays+foliage_rays)
     assert max(abs(a-b) for a,b in zip(before,unjoined)) < 1e-5, [(tuple(ray),round(b-a,4)) for ray,a,b in zip(rays+foliage_rays,before,unjoined) if abs(a-b)>1e-5][:20]
     # Keep both editable operands in the native file; only the welded result renders.
@@ -241,7 +244,7 @@ def main():
         "measurement":{"carrier":mesh_record(carrier),"loft":mesh_record(new),"joined":mesh_record(joined),
                        "road":mesh_record(road)},
         "pbr_source":material_source,"uv_layer_names":uv_layers,
-        "candidate_stations_BU":STATIONS,"candidate_section_profiles_BU":[section(s) for s in STATIONS],
+        "candidate_stations_BU":stations,"candidate_section_profiles_BU":[section_profile(s) for s in stations],
         "cg_image_measurement":{"raster_px":[836,471],"polygons":previous.TRACE,
               "projected_faces_px2":{k:previous.area(v) for k,v in previous.TRACE.items() if k!="foreground_occluder"}},
         "inference":{"cg_depth":"not recoverable from one perspective image",
@@ -250,7 +253,7 @@ def main():
         "gameplay":{"walkable_samples":len(rays),"vegetation_samples":len(foliage_rays),"max_height_delta_BU":delta},
         "joined_qa":{"nonmanifold_edges":open_edges,"nonadjacent_overlap_candidates":len(contacts),"classified_contacts":contacts,
                      "triangles":len(triangles)},
-        "visibility":visibility,
+        "visibility":visibility,"carrier_edit":carrier_qa,
     }
     (out/"structure.json").write_text(json.dumps(result,separators=(",",":"))+"\n")
     for name,rows in visibility.items():
