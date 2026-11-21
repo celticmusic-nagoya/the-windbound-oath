@@ -11,7 +11,8 @@ const asset = new URL('../../assets/candidates/lind/windwaiting-cliff-playable/'
 const query = new URLSearchParams(location.search);
 const legacy = query.get('eco') === 'legacy';
 const heroCliff = query.get('hero-cliff') === '1';
-const composition = heroCliff || query.get('composition') === '1';
+const headland = query.get('headland') === '1';
+const composition = headland || heroCliff || query.get('composition') === '1';
 const compositionRoot = new URL('composition-v1/', asset);
 const ecoRoot = new URL('eco-v2/', asset);
 const ray = new T.Raycaster();
@@ -100,8 +101,9 @@ async function play() {
   scene.add(gltf.scene);
   const nodes = new Map();
   gltf.scene.traverse((object) => { if (object.userData.name) nodes.set(object.userData.name, object); });
-  if (heroCliff) {
-    const url = new URL('hero-cliff-v1/hero-cliff.glb', asset);
+  if (headland || heroCliff) {
+    const path = headland ? 'headland-v1/headland.glb' : 'hero-cliff-v1/hero-cliff.glb';
+    const url = new URL(path, asset);
     const candidate = await loader.loadAsync(url.href);
     const carrier = nodes.get(data.ground[0]);
     if (!carrier) throw new Error('Missing baseline cliff carrier');
