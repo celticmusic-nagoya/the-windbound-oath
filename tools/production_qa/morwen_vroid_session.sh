@@ -209,6 +209,105 @@ case "$MODE" in
     survey_hair
     echo SURVEY_COMPLETE_NO_EDIT_NO_SAVE > evidence/authoring-status.txt
     ;;
+  phase1)
+    # Preserve verified Batch5 iris; qualify independent controls before editing.
+    views phase1-input 25
+    face_cat "$CAT_IRIS"; capture_state phase1-iris
+    for axis in x y; do
+      case "$axis" in x) pattern='^Iris Size \(X\)    views before 25
+    views beforeclose 6
+    # Batch5: restore intended iris dimensions, preserving Batch4 chin.
+    face_cat "$CAT_IRIS"
+    slider_by iris-x '^Iris Size \(X\)$' 0.017 || exit 1
+    slider_by iris-y '^Iris Size \(Y\)$' 0.022 || exit 1
+    awk '$1=="iris-x" && $3+0>$2+0 {x=1} $1=="iris-y" && $3+0>$2+0 {y=1} END {exit !(x&&y)}' evidence/face-edits.txt || exit 1
+    "$gui" zoom 0.50 0.42 -6 0
+    views after 0
+    views afterclose 6
+    "$gui" zoom 0.50 0.42 -6 0
+    if ! native_save; then echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
+    echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
+    if ! reopen_copy; then echo SAVED_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
+    "$gui" zoom 0.50 0.42 25 0
+    views reopened 0
+    views reopenedclose 6
+    face_cat "$CAT_IRIS"; capture_state reopened-iris
+    for axis in x y; do
+      case "$axis" in x) pattern='^Iris Size \(X\)$';; y) pattern='^Iris Size \(Y\)$';; esac
+      expected=$(awk -v tag="iris-$axis" '$1==tag {print $3}' evidence/face-edits.txt)
+      actual=$("$row" evidence/reopened-iris.png "$pattern" | awk '{print $1}') || exit 1
+      if [ -z "$expected" ] || [ "$actual" != "$expected" ]; then
+        echo BLOCKED_IRIS_REOPEN_VALUE_MISMATCH > evidence/authoring-status.txt
+        exit 1
+      fi
+    done
+    if ! grep -Fqi '793F91' evidence/reopened-iris.txt; then echo IRIS_COLOUR_REOPEN_REVIEW_REQUIRED >> evidence/face-edits.txt; fi
+    echo NATIVE_FACE_BATCH5_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
+    ;;
+  *)
+    echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
+    exit 1
+    ;;
+esac
+; expected=0.141;; y) pattern='^Iris Size \(Y\)    views before 25
+    views beforeclose 6
+    # Batch5: restore intended iris dimensions, preserving Batch4 chin.
+    face_cat "$CAT_IRIS"
+    slider_by iris-x '^Iris Size \(X\)$' 0.017 || exit 1
+    slider_by iris-y '^Iris Size \(Y\)$' 0.022 || exit 1
+    awk '$1=="iris-x" && $3+0>$2+0 {x=1} $1=="iris-y" && $3+0>$2+0 {y=1} END {exit !(x&&y)}' evidence/face-edits.txt || exit 1
+    "$gui" zoom 0.50 0.42 -6 0
+    views after 0
+    views afterclose 6
+    "$gui" zoom 0.50 0.42 -6 0
+    if ! native_save; then echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
+    echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
+    if ! reopen_copy; then echo SAVED_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
+    "$gui" zoom 0.50 0.42 25 0
+    views reopened 0
+    views reopenedclose 6
+    face_cat "$CAT_IRIS"; capture_state reopened-iris
+    for axis in x y; do
+      case "$axis" in x) pattern='^Iris Size \(X\)$';; y) pattern='^Iris Size \(Y\)$';; esac
+      expected=$(awk -v tag="iris-$axis" '$1==tag {print $3}' evidence/face-edits.txt)
+      actual=$("$row" evidence/reopened-iris.png "$pattern" | awk '{print $1}') || exit 1
+      if [ -z "$expected" ] || [ "$actual" != "$expected" ]; then
+        echo BLOCKED_IRIS_REOPEN_VALUE_MISMATCH > evidence/authoring-status.txt
+        exit 1
+      fi
+    done
+    if ! grep -Fqi '793F91' evidence/reopened-iris.txt; then echo IRIS_COLOUR_REOPEN_REVIEW_REQUIRED >> evidence/face-edits.txt; fi
+    echo NATIVE_FACE_BATCH5_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
+    ;;
+  *)
+    echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
+    exit 1
+    ;;
+esac
+; expected=0.194;; esac
+      actual=$("$row" evidence/phase1-iris.png "$pattern" | awk '{print $1}') || actual=UNKNOWN
+      printf '%s %s %s\n' "$axis" "$expected" "$actual" >> evidence/phase1-baseline.txt
+    done
+    survey_face_categories
+    survey_hair
+    # Body tab is selected by observed header text, not guessed coordinates.
+    capture_state phase1-header
+    if "$gui" click-label evidence/phase1-header.png 'Body' 'Outfit'; then
+      sleep 2
+      capture_state phase1-body-top
+      "$gui" scroll 0.89 0.60 -12 0
+      sleep 1
+      capture_state phase1-body-mid
+      "$gui" scroll 0.89 0.60 -12 0
+      sleep 1
+      capture_state phase1-body-end
+    else
+      echo BODY_TAB_NOT_VERIFIED >> evidence/phase1-baseline.txt
+    fi
+    cp evidence/input-model.vroid evidence/model.vroid
+    shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
+    echo PHASE1_CONTROL_QUALIFICATION_ONLY_NO_EDITS > evidence/authoring-status.txt
+    ;;
   edit)
     views before 25
     views beforeclose 6
