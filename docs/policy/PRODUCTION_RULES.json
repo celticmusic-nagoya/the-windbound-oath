@@ -29,7 +29,16 @@
     "policy": "v3",
     "reassess_after_same_cause_failures": 2,
     "hard_cap": null,
-    "evidence_required": true
+    "evidence_required": true,
+    "autonomous_recovery": {
+      "required": true,
+      "exact_byte_preflight_required": true,
+      "diagnose_from_logs_and_artifacts": true,
+      "unchanged_failed_revision_retry": false,
+      "preserve_checkpoint": true,
+      "continue_safe_work_without_routine_approval": true,
+      "verify_execution_and_outputs": true
+    }
   },
   "ownership": {
     "one_writer_per_conflicting_file": true,
