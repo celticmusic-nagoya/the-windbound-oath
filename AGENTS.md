@@ -4,6 +4,8 @@
 
 Director-approved TWO Production OS v1.0 (2026-11-21). Applies to ChatGPT, Codex, Claude, Gemini, all other agents and automations. Current authoritative entry point; old instructions in Git history, old branches, chat/project uploads and historical documents are not active. Later explicit director approval prevails; never infer approval.
 
+- Mandatory cross-workstream blueprint-first / target-backward production: read the dedicated section in [Production OS](docs/policy/TWO_PRODUCTION_OS_V1.md). Complete the relevant measured blueprint before precision authoring; independent modules may continue.
+
 ## Start and authority
 - Every task read current main [Production OS](docs/policy/TWO_PRODUCTION_OS_V1.md), [policy registry](docs/policy/POLICY_REGISTRY.json), [machine-readable rules](docs/policy/PRODUCTION_RULES.json), [active detailed directives](docs/policy/ACTIVE_PRODUCTION_DIRECTIVES_20261121.md) and [session index](docs/production/SESSION_CONTINUITY_INDEX.md), then relevant scoped policies. Verify live main, branch/HEAD, existing PR ownership, Actions/artifacts and actual files. Do not repeat completed work.
 - Private canon: celticmusic-nagoya/the-windbound-oath-handoff main, reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md, CANON_ADDENDUM.md and CANON_STATUS.md. Later explicit adoption > addenda/status > main Bible > history. Preserve status labels 確定 / 脚本採用案 / 未決定 / 撤回 / 要コード照合. Never copy private lore or secrets into public repository. If unavailable mark CANON_SOURCE_UNAVAILABLE; continue independent work. Aidan, Fiona, Morwen are 18. Preserve official designs, SHA, licenses, adopted assets and story/gameplay behavior; code is not canon.
