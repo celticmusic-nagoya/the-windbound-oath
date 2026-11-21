@@ -1,0 +1,1 @@
+Measured candidate evidence; archive approved 2026-11-21. Not final model adoption. G1 provenance mismatch remains. Source run 44850191454; artifact 14684514477. ZIP includes seven views, sections and geometry JSON. Separate locally authored PDFs not included.
