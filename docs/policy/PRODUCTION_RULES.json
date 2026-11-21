@@ -91,7 +91,22 @@
       ],
       "continue_independent_stages": true,
       "checkpoint_each_milestone": true,
-      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION",
+      "viewport_first": {
+        "required": true,
+        "matched_blueprint_checks": true,
+        "correct_in_session": true,
+        "selective_downstream_qa": true,
+        "final_render_required": true,
+        "checkpoint_resume": true,
+        "dynamic_dependency_batches": true,
+        "efficiency_metrics": true,
+        "live_review": "UNVERIFIED_OPTIONAL",
+        "authenticated_allowlisted_commands": true,
+        "bounded_wait": true,
+        "timeout_checkpoint_resume": true,
+        "adapter_status": "NOT_RUN"
+      }
     }
   },
   "provisional_local_coordinates": true,

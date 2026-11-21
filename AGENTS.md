@@ -1,6 +1,6 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
-- Mandatory multi-stage batches: [shared policy](docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md). Character face/hair/body then wardrobe/equipment; world geometry/interfaces then materials/scene then runtime QA. Combine safe ready stages in one session; preserve checkpoints and independent QA.
+- Mandatory multi-stage batches: [shared policy](docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md). Character face/hair/body then wardrobe/equipment; world geometry/interfaces then materials/scene then runtime QA. Combine safe ready stages in one session; preserve checkpoints and independent QA. Viewport-first in-session correction, selective QA and verified checkpoint resume are mandatory; live review bridge is optional and unverified.
 
 - Mandatory Morwen VRoid-first sequence: read [director-approved policy](docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). Continue native authoring to achievable reference fidelity before VRM/Blender; blueprint in parallel. Prioritize qualified HairHarpy v2.0.0 for hair beyond native VRoid capabilities before Blender hair sculpting. No premature method switch without explicit director approval.
 
