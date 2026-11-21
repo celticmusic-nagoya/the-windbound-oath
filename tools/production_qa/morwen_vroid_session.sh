@@ -212,52 +212,11 @@ case "$MODE" in
   edit)
     views before 25
     views beforeclose 6
-    # Batch 4: locate chin control from actual OCR, no speculative coordinates.
     face_cat "$CAT_FACESET"
     for n in 0 1 2 3 4 5; do
       capture_state "batch4-outline-$n"
-      if "$row" "evidence/batch4-outline-$n.png" '^Chin (Width|Size X)    grep -c HEX_SET evidence/face-edits.txt > evidence/hex-count.txt || true
-    "$gui" zoom 0.50 0.42 -6 0
-    views after 0
-    views afterclose 6
-    "$gui" zoom 0.50 0.42 -6 0
-    if ! native_save; then echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
-    echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
-    if ! reopen_copy; then echo SAVED_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
-    "$gui" zoom 0.50 0.42 25 0
-    views reopened 0
-    views reopenedclose 6
-    face_cat "$CAT_IRIS"; capture_state reopened-iris
-    if ! grep -Fqi '9E6233' evidence/reopened-iris.txt; then echo IRIS_COLOUR_CHANGED_AFTER_REOPEN >> evidence/face-edits.txt; fi
-    echo NATIVE_FACE_BATCH4_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
-    ;;
-  *)
-    echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
-    exit 1
-    ;;
-esac
- >/dev/null; then
-        slider_by chin-width '^Chin (Width|Size X)    grep -c HEX_SET evidence/face-edits.txt > evidence/hex-count.txt || true
-    "$gui" zoom 0.50 0.42 -6 0
-    views after 0
-    views afterclose 6
-    "$gui" zoom 0.50 0.42 -6 0
-    if ! native_save; then echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
-    echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
-    if ! reopen_copy; then echo SAVED_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
-    "$gui" zoom 0.50 0.42 25 0
-    views reopened 0
-    views reopenedclose 6
-    face_cat "$CAT_IRIS"; capture_state reopened-iris
-    if ! grep -Fqi '9E6233' evidence/reopened-iris.txt; then echo IRIS_COLOUR_CHANGED_AFTER_REOPEN >> evidence/face-edits.txt; fi
-    echo NATIVE_FACE_BATCH1_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
-    ;;
-  *)
-    echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
-    exit 1
-    ;;
-esac
- -0.025 || exit 1
+      if "$row" "evidence/batch4-outline-$n.png" '^Chin (Width|Size X)$' >/dev/null; then
+        slider_by chin-width '^Chin (Width|Size X)$' -0.025 || exit 1
         break
       fi
       "$gui" scroll 0.89 0.60 -8 0; sleep 1
@@ -276,7 +235,7 @@ esac
     views reopenedclose 6
     face_cat "$CAT_IRIS"; capture_state reopened-iris
     if ! grep -Fqi '9E6233' evidence/reopened-iris.txt; then echo IRIS_COLOUR_CHANGED_AFTER_REOPEN >> evidence/face-edits.txt; fi
-    echo NATIVE_FACE_BATCH1_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
+    echo NATIVE_FACE_BATCH4_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
     ;;
   *)
     echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
