@@ -1,0 +1,53 @@
+# Sourced inside qualified native session. Candidate trials, not adopted shape.
+set -o pipefail
+printf 'stage\tstatus\n' > evidence/phase1-stages.tsv
+record() { printf '%s\t%s\n' "$1" "$2" >> evidence/phase1-stages.tsv; }
+trial() {
+  local tag="$1" cat="$2" label="$3" delta="$4"
+  face_cat "$cat"
+  if slider_by "$tag" "$label" "$delta"; then
+    record "$tag" EDITED_REVIEW_REQUIRED
+  else
+    record "$tag" BLOCKED_CONTROL_OR_RESPONSE
+  fi
+}
+views phase1-before 25
+# Provisional small reversible trials: strengthen nose relief and widen mouth.
+# The exact native slider-to-projection mapping is not yet calibrated.
+trial nose-size 0.729 '^Nose Size$' 0.010
+trial mouth-width 0.792 '^Mouth Width$' 0.008
+trial brow-arch "$CAT_BROW" '^Eyebrows Arch$' 0.006
+views phase1-after 0
+# Hair editor and body controls are not qualified for shape changes. Preserve them.
+record hair BLOCKED_STRAND_EDITOR_UNQUALIFIED
+record body BLOCKED_PROJECTION_AND_CONTROLS_UNQUALIFIED
+if ! native_save; then
+  echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
+  exit 1
+fi
+if ! reopen_copy; then
+  echo BLOCKED_NATIVE_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt
+  exit 1
+fi
+verify_trial() {
+  local tag="$1" cat="$2" label="$3" actual expected
+  expected=$(awk -v t="$tag" '$1==t {print $3}' evidence/face-edits.txt)
+  if [ -z "$expected" ]; then return 0; fi
+  face_cat "$cat"; capture_state "phase1-reopen-$tag"
+  actual=$("$row" "evidence/phase1-reopen-$tag.png" "$label" | awk '{print $1}') || actual=UNKNOWN
+  if [ "$actual" = "$expected" ]; then record "$tag" REOPEN_VALUE_MATCH; else record "$tag" REOPEN_VALUE_MISMATCH; fi
+}
+verify_trial nose-size 0.729 '^Nose Size$'
+verify_trial mouth-width 0.792 '^Mouth Width$'
+verify_trial brow-arch "$CAT_BROW" '^Eyebrows Arch$'
+face_cat "$CAT_IRIS"; capture_state phase1-reopen-iris
+for axis in x y; do
+  case "$axis" in x) pattern='^Iris Size \(X\)$'; expected=0.141;; y) pattern='^Iris Size \(Y\)$'; expected=0.194;; esac
+  actual=$("$row" evidence/phase1-reopen-iris.png "$pattern" | awk '{print $1}') || actual=UNKNOWN
+  if [ "$actual" = "$expected" ]; then record "iris-$axis" PRESERVED; else record "iris-$axis" REOPEN_VALUE_MISMATCH; fi
+done
+views phase1-reopened 25
+echo PARTIAL_NATIVE_FACE_CANDIDATE_ART_QA_REQUIRED_HAIR_BODY_BLOCKED > evidence/authoring-status.txt
+if grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then exit 1; fi
+# Partial production must not be reported as a complete phase.
+exit 2
