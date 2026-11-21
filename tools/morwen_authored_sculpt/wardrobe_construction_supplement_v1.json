@@ -1,0 +1,155 @@
+{
+  "status": "PROVISIONAL_CONSTRUCTION_SPEC_MODEL_DEPENDENCIES_BLOCKED",
+  "extends": {
+    "path": "tools/morwen_authored_sculpt/precision_blueprint_v2.json",
+    "main_blob": "ea55e2bcaf5cddc4af3b012e738d075a83ae66b1"
+  },
+  "source": {
+    "run": 44847939236,
+    "artifact": 14683737147,
+    "archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc"
+  },
+  "modules": [
+    {
+      "id": "hat",
+      "panels": "crown/brim/band/ornament",
+      "connections": "brim joins crown; decorated side only",
+      "deformation": "head; accessory attachment",
+      "native_candidate": "external accessory if native unsupported",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "mantle",
+      "panels": "neck opening/shoulder panels/hem binding",
+      "connections": "neck closure; overlaps jacket and cape",
+      "deformation": "neck/shoulders; arm raise",
+      "native_candidate": "native layered top candidate",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "long_cape",
+      "panels": "back panel/side panels/lining/hem binding",
+      "connections": "shoulder yoke; free hanging tails; lining inside",
+      "deformation": "shoulder/back; hip and stride clearance",
+      "native_candidate": "native long coat candidate",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "bodice",
+      "panels": "front/back/side panels/closure",
+      "connections": "shoulder/side seams; skirt waist overlap",
+      "deformation": "torso/waist; bend",
+      "native_candidate": "native fitted top candidate",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "sleeves",
+      "panels": "upper/lower sleeve/cuff",
+      "connections": "armhole and cuff seams",
+      "deformation": "shoulder/elbow/wrist",
+      "native_candidate": "native top sleeves",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "skirt",
+      "panels": "waistband/pleat panels/hem",
+      "connections": "waistband joins pleats; plaid follows grain",
+      "deformation": "pelvis; stride clearance",
+      "native_candidate": "native pleated skirt candidate",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "hosiery",
+      "panels": "leg tube/top welt",
+      "connections": "top welt below knee per official knee-high classification; verify depiction",
+      "deformation": "leg; knee flex",
+      "native_candidate": "native socks",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "boots",
+      "panels": "upper/sole/heel/lacing/buckle",
+      "connections": "sole perimeter; ankle closure",
+      "deformation": "foot/ankle; floor contact",
+      "native_candidate": "native shoes candidate",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "satchel",
+      "panels": "front/back/gusset/flap/strap/buckle",
+      "connections": "diagonal strap and bag anchors; no mirrored duplication",
+      "deformation": "torso; sway and hip clearance",
+      "native_candidate": "independent accessory after native readiness",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    },
+    {
+      "id": "book_vials_glasses",
+      "panels": "book covers/pages; vial bodies/holders; frames/lenses",
+      "connections": "hand grip; belt attachments; nose/ear supports",
+      "deformation": "hand/waist/head",
+      "native_candidate": "independent accessory after native readiness",
+      "status": "PROPOSED_CONSTRUCTION_NOT_MEASURED",
+      "pattern_dimensions": null,
+      "actual_template_id": null,
+      "uv_sha256": null,
+      "mesh_topology": null
+    }
+  ],
+  "constraints": {
+    "scale": "provisional only",
+    "asymmetry": "preserve source-specific omitted decorations; do not mirror",
+    "material": "inherit v2 appearance samples; no measured PBR constants",
+    "seam_allowance": "derive from actual body and template; not a fixed canon value",
+    "acceptance": [
+      "match inherited projected extents under matched cameras",
+      "verify actual template and UV before texture placement",
+      "inspect visible seams and overlap",
+      "no unintended clipping in tested poses",
+      "save and reopen native checkpoint",
+      "independent visual QA before export"
+    ]
+  },
+  "blocked": [
+    "actual native UV exports and template IDs",
+    "fitted body surface measurements",
+    "hidden seam/depth design verification",
+    "actual topology, weights and pose tests"
+  ],
+  "next": "acquire native template UV and control response; author material swatches independently; do not claim full pattern completion"
+}
