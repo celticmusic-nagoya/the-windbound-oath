@@ -151,5 +151,45 @@
     "hidden seam/depth design verification",
     "actual topology, weights and pose tests"
   ],
-  "next": "acquire native template UV and control response; author material swatches independently; do not claim full pattern completion"
+  "next": "acquire native template UV and control response; author material swatches independently; do not claim full pattern completion",
+  "review_evidence": {
+    "local_json_sha256": "5ae9f6130c575e9ea242eddb4e60c899b68ca202091f2a32702e7d4c420c443b",
+    "local_png_sha256": "f8e4b42461162fd7f20f74a9c37fe3aedac9ab680b5787e712d4e1c9b779dd9c",
+    "status": "local originals only; not uploaded",
+    "projection_uncertainty": "±35px review boxes; inherited ±12px estimates remain distinct"
+  },
+  "cross_section_order": {
+    "torso": [
+      "body",
+      "bodice",
+      "long_cape",
+      "mantle",
+      "strap"
+    ],
+    "waist": [
+      "body",
+      "skirt waistband",
+      "bodice overlap",
+      "belt and hardware"
+    ],
+    "cape_hem": [
+      "outer fabric",
+      "lining",
+      "edge binding"
+    ]
+  },
+  "cross_section_status": "PROPOSED, actual thickness and clearance unknown",
+  "pose_tests": [
+    "neutral",
+    "walk",
+    "elbow flex",
+    "arm raise",
+    "torso bend"
+  ],
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
 }
