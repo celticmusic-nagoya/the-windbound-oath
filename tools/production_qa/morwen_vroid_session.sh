@@ -212,21 +212,11 @@ case "$MODE" in
   edit)
     views before 25
     views beforeclose 6
-    face_cat "$CAT_FACESET"
-    # Attempt 2 evidence: six pages reached nose only, not chin.
-    chin_pattern='^Chin (Width|Size X|Size \(X\))$'
-    found=0
-    for n in $(seq 0 24); do
-      capture_state "batch4-outline-$n"
-      if "$row" "evidence/batch4-outline-$n.png" "$chin_pattern" >/dev/null; then
-        slider_by chin-width "$chin_pattern" -0.025 || { echo BLOCKED_CHIN_EDIT > evidence/authoring-status.txt; exit 1; }
-        found=1
-        break
-      fi
-      "$gui" scroll 0.89 0.60 -8 0; sleep 1
-    done
-    if [ "$found" != 1 ]; then echo BLOCKED_CHIN_CONTROL_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
-    awk '$1=="chin-width" && $3+0 < $2+0 {ok=1} END {exit !ok}' evidence/face-edits.txt || { echo BLOCKED_CHIN_DIRECTION > evidence/authoring-status.txt; exit 1; }
+    # Batch5: restore intended iris dimensions, preserving Batch4 chin.
+    face_cat "$CAT_IRIS"
+    slider_by iris-x '^Iris Size \(X\)$' 0.017 || exit 1
+    slider_by iris-y '^Iris Size \(Y\)$' 0.022 || exit 1
+    awk '$1=="iris-x" && $3+0>$2+0 {x=1} $1=="iris-y" && $3+0>$2+0 {y=1} END {exit !(x&&y)}' evidence/face-edits.txt || exit 1
     "$gui" zoom 0.50 0.42 -6 0
     views after 0
     views afterclose 6
@@ -239,7 +229,7 @@ case "$MODE" in
     views reopenedclose 6
     face_cat "$CAT_IRIS"; capture_state reopened-iris
     if ! grep -Fqi '793F91' evidence/reopened-iris.txt; then echo IRIS_COLOUR_REOPEN_REVIEW_REQUIRED >> evidence/face-edits.txt; fi
-    echo NATIVE_FACE_BATCH4_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
+    echo NATIVE_FACE_BATCH5_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
     ;;
   *)
     echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
