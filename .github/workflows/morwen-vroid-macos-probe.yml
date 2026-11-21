@@ -89,9 +89,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Claude lease: resume reopened face candidate (run 44871527985).
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14694109635/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "d3b9574a7e07ad400e22f1223f0d342d5d2fc260f47d01bb6fb7559cf996f2aa  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          # Claude lease: resume batch-1 candidate (run 44873786133).
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14694838234/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "69c255b8e32ffae8a6d33c3bc6f23f5fa8620c257138e6de792852dbb8e34191  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -99,7 +99,7 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              assert hashlib.sha256(data).hexdigest()=="6999703a198714c35a416d2a74e5a0f1a179eb64d464301b7932d6e2258aa23c"
+              assert hashlib.sha256(data).hexdigest()=="0e42deee63c25c4d9f9c078050358c8dcf441c3835f82a8d950cd743f30db1fa"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
