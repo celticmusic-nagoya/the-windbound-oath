@@ -29,7 +29,7 @@ for layer in scene.view_layers:
     layer.material_override=None
 # Orthogonal colors identify named components carried through the exact union.
 colors={"main":(.28,.80,1.0),"shoulder-a":(1.0,.60,.20),
-        "shoulder-b":(.96,.38,.62),"tidal-root":(.65,.86,.33)}
+        "shoulder-b":(.96,.38,.62),"tidal-root":(.65,.86,.33),"landward-tie":(.71,.64,.47)}
 width,height=418,235
 image=bpy.data.images.new("V3 ID visibility",width=width,height=height)
 depth=bpy.data.images.new("V3 ID depth",width=width,height=height)

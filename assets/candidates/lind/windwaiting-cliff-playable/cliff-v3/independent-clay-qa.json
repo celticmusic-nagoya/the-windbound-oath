@@ -3,24 +3,22 @@
   "verdict": "FAIL",
   "photo_pbr": "HOLD",
   "reviewer": "Independent read-only ChatGPT agent",
+  "compared_to_commit": "bc4253e3f811ea984dac78d4a8b9fcb27455291b",
   "reviewed_images_sha256": {
-    "comparison.png": "8b0c26e45d7883ab03e497b1608fb27b988c266d5b5aa5dde6e85ca429c96723",
-    "clay-sunset.png": "bf48660b279606784ed9e1267fe97347974970c6cff8ab3a5d81f828e110f86c",
-    "clay-front.png": "75daefee8197722ed2d7943c8df25eb1d682a780a39dd76cd44abbe4226f00a5",
-    "clay-overhead.png": "030a88c61bd714f02e1a7bff6f83bab0f3f12cfe2b2db2be5007c725f7ab898e",
-    "clay-side.png": "a12e516e01772bbbc0d38e3e657393ebcfdea4781475a310c5ea306540148701",
-    "visible-ids.png": "f9fbdcd85e800adbb4828ce112ebbf8ce03a86ff815ea3c0175126173aa5ba1e",
-    "visible-depth.png": "8e58a73cf6a313aef5d1be7fec416a8b9f085f9d09dff1ca56b9885a2788c45b",
-    "cliff-v3-photo-spawn.png": "a1495f3d485071339f1da6136b7f4dd7c43d49e25410e0e26d4b080b0d1c592d"
+    "clay-sunset.png": "9b937c964c351fa8decfb1aefdc93f32815976bb164cf04286573e751684de71",
+    "clay-front.png": "4ec2c40079bf0ffa26546401f979df5a6a5d8d922fbf3de0134dec8357e4e8e1",
+    "clay-overhead.png": "1e300715048e290d5eb5e70fe7a7044ff199b18508d17bc6c1b795d2dcd39526",
+    "clay-side.png": "4050cb6de5612bf045c73f9c49720ed66307e381387aa0f7763b0b0149ec812a",
+    "cliff-v3-photo-spawn.png": "983f36c3cdcd0c1435715214c8aac11d2441a1ec14904ef337fa5b9b5af185e0",
+    "visible-ids.png": "f45cf81da89edbcbc421333f7a49f08714a4e828be355714e5d52a9239b906f1"
   },
   "native_identifiers_sha256": {
-    "cliff-v3_UNAPPROVED.blend": "d995f32c924a483c708a018919524b3c757bfc39f2a5f462c6ec0de9e1e5ef77",
-    "cliff-v3.glb": "262bc9643d3eb8a67dfa495c330d7b21b35ba56174f78c9ecbe9fcd7490a7177"
+    "cliff-v3_UNAPPROVED.blend": "09247018e01220174fe09cbbf8a093d23cfd42d8db8a37dd2fc7dbb2537edea6",
+    "cliff-v3.glb": "f47be5a14d7145f592adf55b8ae8f147455e4959d84b4bf5f58e0d8fbcaf525b"
   },
   "observations": [
-    "V2の尖った輪郭が幅広い頂部になり、正面・上方・側面で段差と奥行きが読める。",
-    "固定夕景では岩肩Aが見えるが、岩肩Bは全露岩4,156画素中63画素。前景が谷と岩壁下端を隠す。",
-    "正式CGの連続的な陸側の斜面と不規則な稜線に対し、V3は角の立った壁と独立した岩の塊に見える。",
-    "正面・上方・側面に暗い陸側接合が残り、試遊出発点では主岬が独立した岩のように見える。"
+    "結合後も正面では主岬左に暗い縦の割れ目、上方では細い溝、側面では接合線が残る。",
+    "WebGLの主岬は独立岩に見える。固定夕景では谷と下端の遮蔽が続く。",
+    "部位IDの固定夕景で接合岩盤0画素、岩肩Bは63画素。岩肩Aは795画素に増加。"
   ]
 }

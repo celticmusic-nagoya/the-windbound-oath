@@ -72,6 +72,9 @@ def main():
             axs[0].add_patch(Polygon(plan,facecolor=COLORS[name],edgecolor="#173553",alpha=.55,label=name))
             levels=np.asarray(part["levels"])
             axs[1].plot(levels[:,2],levels[:,0],marker=".",color=COLORS[name],label=name)
+        if "landward_tie_footprint_BU" in data:
+            axs[0].add_patch(Polygon(data["landward_tie_footprint_BU"],facecolor="#c0a776",
+                                     edgecolor="#645130",alpha=.55,label="landward tie"))
         axs[0].set(xlim=(-7.5,11.5),ylim=(-28,1),xlabel="X (BU)",ylabel="Y (BU)",
                    title="Authored footprint by component")
         axs[0].set_aspect("equal")
