@@ -28,6 +28,29 @@ jobs:
           grep "$archive" sums | sha256sum -c -
           mkdir -p /tmp/blender /tmp/blueprint
           tar -xJf "$archive" -C /tmp/blender --strip-components=1
+      - name: Restore nine pinned CC0 maps
+        run: |
+          set -eu
+          mkdir -p /tmp/home-pbr
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_diff_1k.jpg' -o "/tmp/home-pbr/rock_boulder_dry_diff_1k.jpg"
+          echo '20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c  /tmp/home-pbr/rock_boulder_dry_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_nor_gl_1k.jpg' -o "/tmp/home-pbr/rock_boulder_dry_nor_gl_1k.jpg"
+          echo '5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595  /tmp/home-pbr/rock_boulder_dry_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_rough_1k.jpg' -o "/tmp/home-pbr/rock_boulder_dry_rough_1k.jpg"
+          echo 'cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130  /tmp/home-pbr/rock_boulder_dry_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_diff_1k.jpg' -o "/tmp/home-pbr/rough_wood_diff_1k.jpg"
+          echo 'abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98  /tmp/home-pbr/rough_wood_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_nor_gl_1k.jpg' -o "/tmp/home-pbr/rough_wood_nor_gl_1k.jpg"
+          echo '3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011  /tmp/home-pbr/rough_wood_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_rough_1k.jpg' -o "/tmp/home-pbr/rough_wood_rough_1k.jpg"
+          echo '4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09  /tmp/home-pbr/rough_wood_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_diff_1k.jpg' -o "/tmp/home-pbr/weathered_brown_planks_diff_1k.jpg"
+          echo '94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29  /tmp/home-pbr/weathered_brown_planks_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_nor_gl_1k.jpg' -o "/tmp/home-pbr/weathered_brown_planks_nor_gl_1k.jpg"
+          echo '8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393  /tmp/home-pbr/weathered_brown_planks_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_rough_1k.jpg' -o "/tmp/home-pbr/weathered_brown_planks_rough_1k.jpg"
+          echo 'b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9  /tmp/home-pbr/weathered_brown_planks_rough_1k.jpg' | sha256sum -c -
+          sha256sum /tmp/home-pbr/*.jpg > /tmp/blueprint/texture.sha256
       - name: Refine furniture and textile detail on isolated native copy
         run: |
           set -eu
@@ -59,6 +82,17 @@ jobs:
               scene.render.image_settings.file_format='PNG'
               scene.render.filepath=str(out/(name+'.png'))
               bpy.ops.render.render(write_still=True)
+          restored=[]
+          for im in bpy.data.images:
+              if im.source!='FILE' or im.packed_file: continue
+              target=Path('/tmp/home-pbr')/Path(im.filepath).name
+              assert target.is_file(), im.filepath
+              im.filepath=str(target)
+              im.reload()
+              assert im.size[0]>0 and im.size[1]>0, im.name
+              im.pack()
+              restored.append(im.name)
+          assert len(restored)==9, restored
           render('baseline')
           # Non-destructive micro-bevel: preserve silhouette, floor placement and collision.
           mod=furniture.modifiers.new('Interior furniture softened joinery','BEVEL')
@@ -86,19 +120,20 @@ jobs:
           assert all(signature(bpy.data.objects[n])==h for n,h in protected.items())
           assert all([list(x) for x in bpy.data.objects[n].matrix_world]==m for n,m in anchors.items())
           render('candidate')
-          bpy.ops.file.pack_all()
+          assert all(im.packed_file for im in bpy.data.images if im.source=='FILE')
           path=out/'aidan_interior_c02.blend'
           bpy.ops.wm.save_as_mainfile(filepath=str(path),compress=True)
           bpy.ops.wm.open_mainfile(filepath=str(path))
           assert bpy.data.objects[furniture.name if False else 'GEO_AIDANHOUSE_INT_FURNITURE'].modifiers.get('Interior furniture softened joinery')
           assert all(signature(bpy.data.objects[n])==h for n,h in protected.items())
-          (out/'qa.json').write_text(json.dumps(dict(status='CANDIDATE',G1='BLOCKED',G2='NOT_RUN',G3='NOT_RUN',G4='NOT_RUN',native_reopen=True,protected_meshes=len(protected),anchors_preserved=len(anchors),textile_materials=changes,bevel_BU=.006,source_provenance='Historical QA SHA mismatch remains unresolved'),indent=2))
+          (out/'qa.json').write_text(json.dumps(dict(status='CANDIDATE',G1='BLOCKED',G2='NOT_RUN',G3='NOT_RUN',G4='NOT_RUN',native_reopen=True,protected_meshes=len(protected),anchors_preserved=len(anchors),textile_materials=changes,bevel_BU=.006,restored_maps=restored,source_provenance='Historical QA SHA mismatch remains unresolved'),indent=2))
           PY
           /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python /tmp/refine.py
           sha256sum -c /tmp/blueprint/source.sha256
           cd /tmp/blueprint
-          sha256sum *.png *.blend *.json source.sha256 > SHA256SUMS
+          sha256sum *.png *.blend *.json source.sha256 texture.sha256 > SHA256SUMS
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: aidan-interior-c02
           path: /tmp/blueprint
