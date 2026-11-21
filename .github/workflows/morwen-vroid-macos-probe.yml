@@ -16,6 +16,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      - name: Exact checkout preflight
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/checkout-sha.txt
+          shasum -a 256 tools/production_qa/morwen_vroid_session.sh | tee evidence/session-script-sha256.txt
+          bash -n tools/production_qa/morwen_vroid_session.sh
       - name: Compile shared GUI controls
         run: |
           mkdir -p evidence
