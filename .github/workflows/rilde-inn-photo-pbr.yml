@@ -1,0 +1,99 @@
+name: Rilde inn photo PBR comparison
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/rilde-inn-photo-pbr.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rilde-inn-photo-pbr
+  cancel-in-progress: false
+jobs:
+  comparison:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: f54a6856494d2cd5ad5124cf85b02981e05c8b63
+          persist-credentials: false
+      - name: Install verified Blender
+        run: |
+          set -eu
+          base=https://mirror.blender.org/release/Blender5.3
+          archive=blender-5.3.0-linux-x64.tar.xz
+          curl -fsSL --max-time 90 "$base/blender-5.3.0.sha256" -o sums
+          curl -fsSL --max-time 540 "$base/$archive" -o "$archive"
+          grep "$archive" sums | sha256sum -c -
+          mkdir -p /tmp/blender
+          tar -xJf "$archive" -C /tmp/blender --strip-components=1
+          /tmp/blender/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Acquire previously ledgered CC0 stone microdetail
+        run: |
+          mkdir -p /tmp/rilde-out /tmp/rilde-textures
+          cd /tmp/rilde-textures
+          base=https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry
+          for map in nor_gl rough; do
+            curl -fsSL --max-time 90 "$base/rock_boulder_dry_${map}_1k.jpg" -o "rock_boulder_dry_${map}_1k.jpg"
+          done
+          printf '%s\n' '5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595  rock_boulder_dry_nor_gl_1k.jpg' 'cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130  rock_boulder_dry_rough_1k.jpg' | sha256sum -c -
+          sha256sum *.jpg > /tmp/rilde-out/source.sha256
+      - name: Matched inn previews and native candidate
+        run: |
+          cat > /tmp/rilde_compare.py <<'PY'
+          import sys, os, json, hashlib
+          from pathlib import Path
+          import bpy
+          sys.path.insert(0, str(Path.cwd()/'tools/map_blender/lind/buildings'))
+          import build_village_buildings as B
+          out=Path('/tmp/rilde-out')
+          B.reset_scene()
+          cfg,info=B.kit_config.load_config(B.REPO)
+          building=B.Building('inn',cfg,'peaceful')
+          building.build()
+          objs=building.emit()
+          B.setup_render(cfg,960,720,24)
+          B.add_lighting('peaceful')
+          camera=B.frame_camera(cfg,objs,960,720)
+          stats=B.mesh_stats(objs)
+          B.render_to(str(out/'baseline.png'))
+          changed=[]
+          for mat in bpy.data.materials:
+              if mat.name not in ('MAT_SLATE_BLUEGRAY_A','MAT_SLATE_RIDGE_A'): continue
+              nt=mat.node_tree
+              bs=next(n for n in nt.nodes if n.type=='BSDF_PRINCIPLED')
+              uv=nt.nodes.new('ShaderNodeUVMap'); uv.uv_map='UVMap'
+              scale=nt.nodes.new('ShaderNodeVectorMath'); scale.operation='SCALE'; scale.inputs['Scale'].default_value=2
+              nt.links.new(uv.outputs[0],scale.inputs[0])
+              for kind in ('nor_gl','rough'):
+                  im=bpy.data.images.load('/tmp/rilde-textures/rock_boulder_dry_'+kind+'_1k.jpg',check_existing=True)
+                  im.colorspace_settings.name='Non-Color'; im.pack()
+                  t=nt.nodes.new('ShaderNodeTexImage'); t.image=im
+                  nt.links.new(scale.outputs[0],t.inputs[0])
+                  if kind=='nor_gl':
+                      nm=nt.nodes.new('ShaderNodeNormalMap'); nm.inputs['Strength'].default_value=.35
+                      nt.links.new(t.outputs[0],nm.inputs['Color'])
+                      nt.links.new(nm.outputs[0],bs.inputs['Normal'])
+                  else:
+                      mix=nt.nodes.new('ShaderNodeMath'); mix.operation='MULTIPLY_ADD'
+                      mix.inputs[1].default_value=.35; mix.inputs[2].default_value=.4
+                      nt.links.new(t.outputs[0],mix.inputs[0]); nt.links.new(mix.outputs[0],bs.inputs['Roughness'])
+              changed.append(mat.name)
+          assert len(changed)==2, changed
+          assert B.mesh_stats(objs)==stats
+          B.render_to(str(out/'candidate.png'))
+          bpy.ops.file.pack_all()
+          bpy.ops.wm.save_as_mainfile(filepath=str(out/'inn_photo_microdetail.blend'),compress=True)
+          (out/'qa.json').write_text(json.dumps(dict(status='CANDIDATE_NOT_ART_APPROVED',source='Poly Haven rock_boulder_dry CC0; stone microdetail proxy, not slate photograph',camera=camera,mesh=stats,changed=changed,other_materials=B.KM.REPORT,blender=bpy.app.version_string,G2='NOT_RUN',G4='NOT_RUN'),indent=2))
+          PY
+          LIND_BUILD_TEX=/tmp/rilde-textures /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python /tmp/rilde_compare.py
+          /tmp/blender/blender -b /tmp/rilde-out/inn_photo_microdetail.blend --python-exit-code 1 --python-expr 'import bpy; assert all(i.packed_file for i in bpy.data.images if i.source=="FILE")'
+          cd /tmp/rilde-out
+          sha256sum *.png *.blend *.json source.sha256 > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rilde-inn-photo-pbr-comparison
+          path: /tmp/rilde-out
+          retention-days: 7
