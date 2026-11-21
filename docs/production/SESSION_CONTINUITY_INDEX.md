@@ -1,7 +1,7 @@
 # Current mandatory entry — Production OS v1.0 (2026-11-21)
 
 ## Director decision — mandatory Morwen VRoid-first sequence (2026-11-21)
-Read [VRoid-first authoring](../policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). #427 retains ownership; maximize native fidelity before export/Blender, complete blueprint in parallel. Standalone hair GLBs are reference-only at this stage. No premature method switch without director approval. Supersedes conflicting historical next-step pointers.
+Read [VRoid-first authoring](../policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). #427 retains ownership; maximize native fidelity before export/Blender, complete blueprint in parallel. Standalone hair GLBs are reference-only at this stage. Prioritize qualified HairHarpy v2.0.0 for hair beyond native VRoid capabilities before Blender hair sculpting. No premature method switch without director approval. Supersedes conflicting historical next-step pointers.
 
 All agents/chats/automations must read [AGENTS.md](../../AGENTS.md), [Production OS](../policy/TWO_PRODUCTION_OS_V1.md), [registry](../policy/POLICY_REGISTRY.json), [rules](../policy/PRODUCTION_RULES.json) and [active directives](../policy/ACTIVE_PRODUCTION_DIRECTIVES_20261121.md) from current main. All 15 measures director-approved; implementation and runtime verification remain separate. Old retry v2, automatic main merge and 2D final-art policies are inactive. Existing asset PR owners remain unchanged; verify live pointers below. Existing historical entries are evidence, not instructions overriding the current registry.
 
