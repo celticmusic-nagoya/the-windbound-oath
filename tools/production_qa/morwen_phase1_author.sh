@@ -1,5 +1,7 @@
 # Sourced inside qualified native session. Candidate trials, not adopted shape.
 set -o pipefail
+# Fail closed before any edits if the restored checkpoint is not the intended native original.
+printf "%s  %s\n" ef10e454474dcd3f9713d088d2fd0bfc777cd663865f34edf9a3eaac87a76238 evidence/input-model.vroid | shasum -a 256 -c || { echo BLOCKED_WRONG_INPUT > evidence/authoring-status.txt; exit 1; }
 printf 'stage\tstatus\n' > evidence/phase1-stages.tsv
 record() { printf '%s\t%s\n' "$1" "$2" >> evidence/phase1-stages.tsv; }
 trial() {
