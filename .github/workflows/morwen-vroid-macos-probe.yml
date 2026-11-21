@@ -98,8 +98,8 @@ jobs:
         run: |
           set -euo pipefail
           # ChatGPT lease: resume verified batch-5 candidate (run 44950148004).
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14725632171/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "d163c15a86394afff846a0f9407223e7a77b02120cdb44c4ba28b8f42bb5c726  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14727533115/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "884af385b9ae10fd2f5544baab6089905c0b452b4de7dc96ffd60c96c7bc1f69  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -107,7 +107,7 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              assert hashlib.sha256(data).hexdigest()=="869f48e15723147eadb555b732c5e89c44a4e6df1a3d3d105eb85fd84e321f77"
+              assert hashlib.sha256(data).hexdigest()=="ef10e454474dcd3f9713d088d2fd0bfc777cd663865f34edf9a3eaac87a76238"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -361,7 +361,9 @@ jobs:
           bash -n "$RUNNER_TEMP/session-helpers.sh"
           bash -n tools/production_qa/morwen_phase1_author.sh
           source "$RUNNER_TEMP/session-helpers.sh"
-          source tools/production_qa/morwen_phase1_author.sh
+          # Do not replay completed candidate edits; next stage requires qualified operations.
+          echo BLOCKED_NEXT_STAGE_NOT_QUALIFIED > evidence/authoring-status.txt
+          exit 2
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
