@@ -159,40 +159,23 @@ jobs:
               capture_state "$before" || continue
               if dialog_visible "$before"; then return 0; fi
               if grep -Fq 'Recently Edited' "evidence/$before.txt"; then
-                if [ "$attempt" -le 2 ]; then
-                  "$gui" click-label "evidence/$before.png" Open 'Recently Edited' > "evidence/open-click-$attempt.txt" 2>&1 || true
-                else
-                  # Different method after two observations: standard macOS Open shortcut.
-                  "$gui" key 31 cmd || true
+                # Run 44856646403 actual 1024x768 capture: menu Save row (32,112), Save As (46,146).
+                # Do not toggle an already-open menu; OCR may group Save and Cmd+S.
+                if ! grep -Fq 'Back to model selection' "evidence/save-before-$attempt.txt"; then
+                  "$gui" click 0.027 0.100
+                  sleep 2
                 fi
-              else
-                # Escape is reversible; never accept an unknown dialog.
-                "$gui" key 53 || true
-              fi
-              sleep 4
-              capture_state "$after" || continue
-              if dialog_visible "$after"; then return 0; fi
-              if ! grep -Fq 'Recently Edited' "evidence/$after.txt"; then
-                "$gui" key 53 || true
-                sleep 2
-                capture_state "recovery-$attempt" || true
-              fi
-            done
-            return 1
-          }
-          if [ -s evidence/after-agreement.png ] && grep -qx true evidence/input-access.txt; then
-            swift "$RUNNER_TEMP/vroid-click.swift" evidence/after-agreement.png Skip 'Welcome to VRoid Studio' > evidence/skip-status.txt || true
-            sleep 5
-            if reopen_native; then
-              capture_state open-dialog
-              # The observed chooser defaults to Documents; avoid clipboard and Go to Folder.
-              if grep -Fqi 'Documents' evidence/open-dialog.txt; then
-                "$gui" click-label evidence/open-dialog.png 'Morwen-resume.vroid' 'Cancel' > evidence/file-click.txt 2>&1 || true
-                sleep 2
-                capture_state open-selected
-                if dialog_visible open-selected && grep -Fqi 'Morwen-resume' evidence/open-selected.txt; then
-                  "$gui" key 36
-                  sleep 35
+                capture_state "save-menu-$attempt"
+                if grep -Fq 'Back to model selection' "evidence/save-menu-$attempt.txt" && grep -Fq 'Save As' "evidence/save-menu-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite|Close Hairstyle Editor' "evidence/save-menu-$attempt.txt"; then
+                  if [ "$attempt" -eq 1 ]; then
+                    "$gui" click 0.03125 0.14583
+                  else
+                    "$gui" click 0.04492 0.19010
+                  fi
+                else
+                  echo "SAVE_MENU_NOT_VERIFIED attempt=$attempt" >> evidence/save-retry.txt
+                fi
+                sleep 35
                   capture_state resumed-editor
                   if grep -Eiq 'Face|Hairstyle|Body|Outfit' evidence/resumed-editor.txt && ! dialog_visible resumed-editor; then
                     echo NATIVE_REOPEN_REVIEW_REQUIRED > evidence/reopen-status.txt
