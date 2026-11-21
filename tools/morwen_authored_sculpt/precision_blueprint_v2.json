@@ -439,7 +439,7 @@
     }
   },
   "wardrobe": {
-    "status": "VISIBLE_MODULES_IDENTIFIED_DIMENSIONS_PENDING",
+    "status": "PARTIAL_PROJECTED_EXTENTS_18",
     "modules": [
       {
         "id": "hat",
@@ -513,7 +513,99 @@
       "hidden lining seams and depth unknown",
       "no calibrated cloth dimensions or exact metric scale",
       "no material roughness values measured"
-    ]
+    ],
+    "projected_vertical_extents": {
+      "method": "manual approximate visible extents on SHA-verified 1024x1536 source review grid; estimated endpoint uncertainty ±12 px, not calibrated, not surface lengths",
+      "views": {
+        "back": {
+          "sha256": "9cf2f27448303aa60c603f0f32a7baada234fec8cae5108bf8103a9ae7547e69",
+          "parts": {
+            "hat": [
+              10,
+              331
+            ],
+            "mantle": [
+              379,
+              550
+            ],
+            "cape": [
+              522,
+              1283
+            ],
+            "bag": [
+              649,
+              823
+            ],
+            "boots": [
+              1280,
+              1522
+            ]
+          }
+        },
+        "left": {
+          "sha256": "d858c428c64007596302057453f414dd43c580bc1546b9578c3d1dfb0af17591",
+          "parts": {
+            "hat": [
+              10,
+              341
+            ],
+            "mantle": [
+              365,
+              522
+            ],
+            "cape": [
+              515,
+              1440
+            ],
+            "skirt": [
+              737,
+              850
+            ],
+            "sock": [
+              894,
+              1270
+            ],
+            "boot": [
+              1270,
+              1502
+            ]
+          }
+        },
+        "right": {
+          "sha256": "7eeff76ac07f631c14cb536e0e08346cfe815247a88520fb5a68cf0e877e5548",
+          "parts": {
+            "hat": [
+              10,
+              355
+            ],
+            "mantle": [
+              369,
+              529
+            ],
+            "cape": [
+              526,
+              1502
+            ],
+            "skirt": [
+              761,
+              908
+            ],
+            "bag": [
+              710,
+              870
+            ],
+            "sock": [
+              905,
+              1266
+            ],
+            "boot": [
+              1270,
+              1522
+            ]
+          }
+        }
+      }
+    }
   },
   "materials": {
     "hair_provisional_target": "#6B426B",
