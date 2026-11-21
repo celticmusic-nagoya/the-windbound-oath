@@ -605,6 +605,84 @@
           }
         }
       }
+    },
+    "back_review": {
+      "source_sha256": "9cf2f27448303aa60c603f0f32a7baada234fec8cae5108bf8103a9ae7547e69",
+      "coordinate_system": "1024x1536 source pixels xyxy, visually estimated review regions not exact part bounds; occlusion and overlapping fabric included",
+      "regions": {
+        "hat": [
+          285,
+          10,
+          747,
+          331
+        ],
+        "mantle": [
+          290,
+          380,
+          705,
+          550
+        ],
+        "bag": [
+          556,
+          630,
+          721,
+          815
+        ],
+        "cape": [
+          112,
+          522,
+          912,
+          1300
+        ],
+        "boots": [
+          410,
+          1280,
+          590,
+          1522
+        ]
+      },
+      "sample_colors": {
+        "cape": {
+          "xyxy": [
+            460,
+            870,
+            480,
+            890
+          ],
+          "median_rgb": "#98587D"
+        },
+        "bag": {
+          "xyxy": [
+            604,
+            750,
+            625,
+            770
+          ],
+          "median_rgb": "#834D57"
+        },
+        "boot": {
+          "xyxy": [
+            435,
+            1420,
+            450,
+            1440
+          ],
+          "median_rgb": "#4B3051"
+        },
+        "gold_like_pixels": {
+          "median_rgb": "#F2B77A",
+          "count": 68833,
+          "filter": "100<=y<1200, R>180,G>120,G-B>35,alpha>200; includes non-trim gold-like pixels; not a pure material sample"
+        }
+      },
+      "color_status": "illustrated appearance only; not PBR base color",
+      "construction_candidates": [
+        "separate crown and brim; gold piping follows brim edge",
+        "mantle overlaps cape and carries book/laurel crest centrally on back",
+        "crossbody strap overlays mantle, routes diagonally to rear-right image bag; attachment concealed in places",
+        "cape panels terminate in curved hanging points, border follows each hem; separate embroidery UV layer",
+        "boots independent soles, heels and cuff buckles"
+      ]
     }
   },
   "materials": {
