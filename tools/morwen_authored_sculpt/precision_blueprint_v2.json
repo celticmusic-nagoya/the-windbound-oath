@@ -1,0 +1,247 @@
+{
+  "version": "2.0-draft",
+  "status": "PROVISIONAL_2D_TARGETS_NOT_ADOPTED",
+  "source_artifact": 14602858760,
+  "source_run": 44679568515,
+  "extends": "layer0_landmarks_v1.json",
+  "units": "original 384x1024 pixels; manual visual estimates, not calibrated 3D",
+  "face": {
+    "front": {
+      "eye_image_left_outer": [
+        169,
+        121
+      ],
+      "eye_image_left_inner": [
+        199,
+        122
+      ],
+      "eye_image_right_inner": [
+        229,
+        122
+      ],
+      "eye_image_right_outer": [
+        258,
+        121
+      ],
+      "mouth_image_left": [
+        206,
+        159
+      ],
+      "mouth_image_right": [
+        222,
+        159
+      ],
+      "jaw_image_left": [
+        181,
+        160
+      ],
+      "jaw_image_right": [
+        247,
+        160
+      ],
+      "uncertainty_px": 5
+    },
+    "right": {
+      "nose_tip": [
+        274,
+        137
+      ],
+      "chin": [
+        252,
+        177
+      ],
+      "mouth_center": [
+        266,
+        155
+      ],
+      "ear_upper": [
+        188,
+        110
+      ],
+      "ear_lower": [
+        195,
+        143
+      ],
+      "uncertainty_px": 6
+    }
+  },
+  "hair": {
+    "front_groups": [
+      {
+        "id": "fringe_center",
+        "guide_px": [
+          [
+            215,
+            36
+          ],
+          [
+            214,
+            77
+          ],
+          [
+            202,
+            116
+          ]
+        ]
+      },
+      {
+        "id": "image_left_side",
+        "guide_px": [
+          [
+            199,
+            38
+          ],
+          [
+            164,
+            85
+          ],
+          [
+            149,
+            146
+          ],
+          [
+            163,
+            188
+          ]
+        ]
+      },
+      {
+        "id": "image_right_side",
+        "guide_px": [
+          [
+            229,
+            38
+          ],
+          [
+            262,
+            83
+          ],
+          [
+            279,
+            151
+          ],
+          [
+            255,
+            188
+          ]
+        ]
+      }
+    ],
+    "right_groups": [
+      {
+        "id": "rear_volume",
+        "guide_px": [
+          [
+            196,
+            28
+          ],
+          [
+            145,
+            56
+          ],
+          [
+            113,
+            126
+          ],
+          [
+            151,
+            191
+          ]
+        ]
+      },
+      {
+        "id": "temple_lock",
+        "guide_px": [
+          [
+            233,
+            38
+          ],
+          [
+            215,
+            94
+          ],
+          [
+            219,
+            160
+          ],
+          [
+            241,
+            191
+          ]
+        ]
+      }
+    ],
+    "guide_status": "manual projected authoring hypotheses; not strand count, 3D curves or exact boundaries",
+    "uncertainty_px": 10
+  },
+  "metrics": {
+    "eye_spacing_over_head_height": 0.32098765432098764,
+    "front_hair_hem_span_over_head_height": 0.7962962962962963,
+    "right_nose_projection_over_head_height": 0.13664596273291926,
+    "left_nose_projection_over_head_height": 0.15527950310559005,
+    "shoulder_span_over_head_height_estimate": 0.9629629629629629
+  },
+  "body": {
+    "source": "reference_silhouette_landmarks.json in artifact 14602858760",
+    "status": "alpha silhouette only; joint locations and hidden depth not established"
+  },
+  "wardrobe": {
+    "status": "BLOCKED_ADOPTED_CLOTHED_REFERENCE_BYTES_NOT_INSPECTED",
+    "modules": [
+      "collar",
+      "torso",
+      "sleeves",
+      "hem",
+      "hosiery",
+      "footwear",
+      "reference-defined accessories"
+    ],
+    "rule": "select editable licensed templates only after matching approved clothed design; no invented details"
+  },
+  "materials": {
+    "hair_provisional_target": "#6B426B",
+    "status": "target not measured source palette; sample multiple source patches and label illustration shading vs PBR"
+  },
+  "mesh": {
+    "status": "NOT_RUN",
+    "required": [
+      "actual vertices/edges/faces",
+      "normals",
+      "UV",
+      "material slots",
+      "weights",
+      "shape keys",
+      "deformation tests"
+    ],
+    "proposed_loops": [
+      "eyelids",
+      "mouth",
+      "jaw transition",
+      "shoulder",
+      "elbow",
+      "hip",
+      "knee"
+    ]
+  },
+  "parameter_mapping": {
+    "status": "LIVE_LABELS_AND_RESPONSE_REQUIRED",
+    "eyes": [
+      "Eye Size X",
+      "Eye Size Y",
+      "Eyes Position (X)",
+      "Eyes Position (Y)",
+      "Rotate Eye Socket"
+    ],
+    "nose": "inspect live controls and compare profile",
+    "mouth": "inspect live controls and compare width",
+    "outline": "inspect live controls and compare jaw silhouette",
+    "hair": "guide and control point editor; measure rendered result"
+  },
+  "qa": {
+    "G1": "PARTIAL",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "independent_review": "required"
+  }
+}
