@@ -346,7 +346,7 @@ jobs:
             exit 1
           fi
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
-          MORWEN_SESSION_MODE=survey
+          MORWEN_SESSION_MODE=edit
           # shellcheck source=/dev/null
           source tools/production_qa/morwen_vroid_session.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt

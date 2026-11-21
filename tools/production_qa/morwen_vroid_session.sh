@@ -70,13 +70,145 @@ survey_hair() {
   sleep 2
 }
 
+
+# ---- edit helpers (Claude lease) ------------------------------------------
+face_cat() { face_tab; "$gui" click 0.023 "$1"; sleep 2; }
+CAT_IRIS=0.293; CAT_BROW=0.479; CAT_LINER=0.603; CAT_LASH=0.668; CAT_FACESET=0.169
+
+# set_hex TAG ROW_Y_FRACTION HEX : click the hex field at row y, replace, verify OCR.
+set_hex() {
+  local tag="$1" y="$2" hex="$3"
+  "$gui" click 0.854 "$y"
+  sleep 1
+  "$gui" key 0 cmd
+  "$gui" text "#${hex#\#}"
+  "$gui" key 36
+  sleep 2
+  capture_state "hex-$tag"
+  if grep -Fqi "#${hex#\#}" "evidence/hex-$tag.txt"; then
+    echo "$tag HEX_SET $hex" >> evidence/face-edits.txt; return 0
+  fi
+  echo "$tag HEX_NOT_VERIFIED $hex" >> evidence/face-edits.txt
+  "$gui" key 53; return 1
+}
+
+# slider_to TAG PATTERN DELTA_FRACTION : uses face-row locator from the workflow.
+slider_by() {
+  local tag="$1" pattern="$2" delta="$3" hit v x y v2
+  capture_state "$tag-loc"
+  hit=$("$row" "evidence/$tag-loc.png" "$pattern") || {
+    echo "$tag CONTROL_NOT_VERIFIED" >> evidence/face-edits.txt; return 1; }
+  read -r v x y <<< "$hit"
+  "$gui" slider "$x" "$y" "$(awk -v a="$x" -v d="$delta" 'BEGIN{print a+d}')" "$y" 0.5
+  sleep 1
+  capture_state "$tag-after"
+  hit=$("$row" "evidence/$tag-after.png" "$pattern") || { echo "$tag VALUE_NOT_VERIFIED" >> evidence/face-edits.txt; return 1; }
+  read -r v2 x y <<< "$hit"
+  echo "$tag $v $v2" >> evidence/face-edits.txt
+  [ "$v" != "$v2" ]
+}
+
+saved_differs() {
+  python3 - "$1" <<'PY2'
+import sys, zipfile, hashlib
+def digest(path):
+    with zipfile.ZipFile(path) as z:
+        assert z.testzip() is None
+        return {n: hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist() if 'thumbnail' not in n.lower()}
+a, b = digest("evidence/input-model.vroid"), digest(sys.argv[1])
+changed = sorted(n for n in set(a) | set(b) if a.get(n) != b.get(n))
+open("evidence/saved-diff.txt", "w").write("\n".join(changed) + "\n")
+sys.exit(0 if changed else 1)
+PY2
+}
+
+native_save() {
+  local working="$HOME/Documents/Morwen-resume.vroid"
+  capture_state save-before
+  "$gui" key 1 cmd
+  sleep 6
+  capture_state save-shortcut
+  if ! saved_differs "$working"; then
+    "$gui" click 0.027 0.100; sleep 2
+    capture_state save-menu
+    grep -Fq 'Save As' evidence/save-menu.txt || { "$gui" key 53; return 1; }
+    "$gui" click 0.03125 0.14583; sleep 6
+    capture_state save-menu-result
+    saved_differs "$working" || return 1
+  fi
+  cp "$working" evidence/model.vroid
+  shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
+}
+
+reopen_copy() {
+  local copy="$HOME/Documents/Morwen-c1.vroid"
+  test ! -e "$copy"
+  cp evidence/model.vroid "$copy"
+  "$gui" click 0.027 0.100; sleep 2
+  capture_state reopen-menu
+  "$gui" click-label evidence/reopen-menu.png 'Back to model selection' 'Save As'
+  sleep 6
+  reopen_native || return 1
+  capture_state checkpoint-open-dialog
+  dialog_visible checkpoint-open-dialog || return 1
+  if ! "$gui" click-label evidence/checkpoint-open-dialog.png 'Morwen-c1.vroid' 'Cancel'; then
+    grep -Eiq 'Morwen-c1.*Morwen-resume' evidence/checkpoint-open-dialog.txt || return 1
+    "$gui" click 0.340 0.286
+  fi
+  sleep 2
+  capture_state checkpoint-open-selected
+  grep -Eiq 'Morwen-c1' evidence/checkpoint-open-selected.txt || return 1
+  "$gui" key 36
+  sleep 30
+  capture_state checkpoint-reopened
+  grep -Eiq 'VRoid Studio.*Morwen-c1' evidence/checkpoint-reopened.txt || return 1
+  cmp "$copy" evidence/model.vroid
+}
+
+face_batch_1() {
+  # Layer 0 front: violet iris (upper #260430 -> lower #DF95DB, mid tint),
+  # dark plum upper lash/liner mass, larger iris; brows hidden by fringe -> hair-dark.
+  face_cat "$CAT_IRIS";  capture_state cat-iris; set_hex iris "$(hex_row_y cat-iris)" 7A3E92 || true
+  slider_by iris-x '^Iris Size \(X\)\s*\|?$' 0.018 || true
+  slider_by iris-y '^Iris Size \(Y\)\s*\|?$' 0.022 || true
+  face_cat "$CAT_LASH";  capture_state cat-lash;  set_hex lash  "$(hex_row_y cat-lash)" 2A1730 || true
+  face_cat "$CAT_LINER"; capture_state cat-liner; set_hex liner "$(hex_row_y cat-liner)" 2B1631 || true
+  face_cat "$CAT_BROW";  capture_state cat-brow;  set_hex brow  "$(hex_row_y cat-brow)" 4A2B4E || true
+  face_cat "$CAT_FACESET"
+  slider_by eye-y '^Eye Size Y\s*\|?$' 0.008 || true
+}
+
+# y fraction of the first '#XXXXXX' OCR box in the right panel.
+hex_row_y() {
+  swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { if let t=o.topCandidates(1).first?.string, t.range(of:"^#[0-9A-Fa-f]{6}",options:.regularExpression) != nil, o.boundingBox.midX > 0.75 { print(1-o.boundingBox.midY); exit(0) } }; print("0.449")' "evidence/$1.png"
+}
+
 case "$MODE" in
   survey)
     views std 25
-    views close 30
+    views close 8
     survey_face_categories
     survey_hair
     echo SURVEY_COMPLETE_NO_EDIT_NO_SAVE > evidence/authoring-status.txt
+    ;;
+  edit)
+    views before 25
+    views beforeclose 6
+    face_batch_1
+    grep -c HEX_SET evidence/face-edits.txt > evidence/hex-count.txt || true
+    "$gui" zoom 0.50 0.42 -6 0
+    views after 0
+    views afterclose 6
+    "$gui" zoom 0.50 0.42 -6 0
+    if ! native_save; then echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
+    echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
+    if ! reopen_copy; then echo SAVED_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt; exit 1; fi
+    "$gui" zoom 0.50 0.42 25 0
+    views reopened 0
+    views reopenedclose 6
+    face_cat "$CAT_IRIS"; capture_state reopened-iris
+    if grep -Fqi '#7A3E92' evidence/reopened-iris.txt; then echo IRIS_REOPEN_VERIFIED >> evidence/face-edits.txt; fi
+    echo NATIVE_FACE_BATCH1_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
     ;;
   *)
     echo "BLOCKED_UNKNOWN_MODE $MODE" > evidence/authoring-status.txt
