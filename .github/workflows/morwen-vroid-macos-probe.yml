@@ -311,24 +311,35 @@ jobs:
               done
               return 1
             }
+            # A context-only navigation does not constitute a changed native model.
+            # Save to a unique path via the native Save As dialog, with verified context.
             for attempt in 1 2 3; do
               if recover_saved_copy; then break; fi
               capture_state "save-before-$attempt"
-              if ! grep -Fqi 'Morwen-resume.vroid' "evidence/save-before-$attempt.txt"; then
+              if grep -Eiq 'Cancel' "evidence/save-before-$attempt.txt" && grep -Eiq 'Save As|Save' "evidence/save-before-$attempt.txt"; then
+                :
+              elif grep -Fqi 'Morwen-resume' "evidence/save-before-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite|Cancel' "evidence/save-before-$attempt.txt"; then
+                if [ "$attempt" -eq 1 ]; then
+                  "$gui" key 1 cmd
+                else
+                  "$gui" vroid-shortcut save-copy
+                fi
+                sleep 3
+              else
                 echo "SAVE_CONTEXT_UNVERIFIED attempt=$attempt" >> evidence/save-retry.txt
                 break
               fi
-              if grep -Eiq 'Cancel|Replace|Overwrite' "evidence/save-before-$attempt.txt"; then
-                echo "SAVE_DIALOG_UNVERIFIED attempt=$attempt" >> evidence/save-retry.txt
-                break
-              fi
-              if [ "$attempt" -gt 1 ]; then
-                "$gui" key 1 cmd
-              else
-                "$gui" click 0.027 0.100
-                sleep 2
-                capture_state "save-menu-$attempt"
-                "$gui" click-label "evidence/save-menu-$attempt.png" "Save" "Save" || true
+              capture_state "save-dialog-$attempt"
+              if grep -Eiq 'Cancel' "evidence/save-dialog-$attempt.txt" && grep -Eiq 'Save As|Save' "evidence/save-dialog-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite' "evidence/save-dialog-$attempt.txt"; then
+                if grep -Fqi 'Documents' "evidence/save-dialog-$attempt.txt" && [ ! -e "$HOME/Documents/Morwen-M02-authoring.vroid" ]; then
+                  "$gui" key 0 cmd
+                  "$gui" text Morwen-M02-authoring
+                  sleep 2
+                  capture_state "save-name-$attempt"
+                  if grep -Fqi 'Morwen-M02-authoring' "evidence/save-name-$attempt.txt"; then
+                    "$gui" key 36
+                  fi
+                fi
               fi
               sleep 8
               capture_state "save-after-$attempt"
