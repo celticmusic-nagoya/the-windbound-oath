@@ -1021,5 +1021,31 @@
     ],
     "status": "PARTIAL_PROPOSED_GUIDES",
     "depth_and_thickness": "model required; independent QA pending"
+  },
+  "topology_comparator_m00": {
+    "status": "MEASURED_COMPARATOR_ONLY_NOT_CURRENT_CANDIDATE",
+    "source": "TWO_Morwen_Base_M00.vrm",
+    "sha256": "3e9808779877ec4f3faa601f253807fd3a3128802fc640d44492ed5a0569a32f",
+    "method": "GLB JSON accessor counts; shared POSITION accessor counted once per mesh; indexed triangles per primitive summed; UV and joint attribute presence only",
+    "meshes": [
+      {
+        "name": "Face (merged)(Clone)",
+        "vertices": 3989,
+        "triangles": 7010,
+        "primitives": 7
+      },
+      {
+        "name": "Body (merged)",
+        "vertices": 7639,
+        "triangles": 12517,
+        "primitives": 5
+      }
+    ],
+    "vertices": 11628,
+    "triangles": 19527,
+    "skins": 2,
+    "humanoid_bones": 54,
+    "all_primitives_have_texcoord0_and_joints0": true,
+    "limits": "UV overlap, weights, deformation, edge loops, current native model and adoption gates not verified"
   }
 }
