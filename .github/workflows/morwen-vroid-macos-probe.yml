@@ -361,9 +361,7 @@ jobs:
           bash -n "$RUNNER_TEMP/session-helpers.sh"
           bash -n tools/production_qa/morwen_phase1_author.sh
           source "$RUNNER_TEMP/session-helpers.sh"
-          # Do not replay completed candidate edits; next stage requires qualified operations.
-          echo BLOCKED_NEXT_STAGE_NOT_QUALIFIED > evidence/authoring-status.txt
-          exit 2
+          source tools/production_qa/morwen_phase1_author.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
