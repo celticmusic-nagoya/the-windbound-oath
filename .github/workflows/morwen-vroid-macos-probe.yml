@@ -2,9 +2,6 @@ name: Morwen VRoid macOS compatibility probe
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    branches: [feature/morwen-artdirected-sculpt-20261119]
-    paths: ['.github/workflows/morwen-vroid-macos-probe.yml', 'tools/production_qa/morwen_vroid_session.sh']
 permissions:
   contents: read
   actions: read
@@ -14,7 +11,7 @@ concurrency:
 jobs:
   probe:
     runs-on: macos-15
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,9 +97,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # ChatGPT lease: resume batch-4 candidate (run 44880208603).
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14703052245/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "646713e71e505876a2d93ad7ce02dbd6f74582833cd098571bc9c265816d0db0  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          # ChatGPT lease: resume verified batch-5 candidate (run 44950148004).
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14725632171/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "d163c15a86394afff846a0f9407223e7a77b02120cdb44c4ba28b8f42bb5c726  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -110,7 +107,7 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              assert hashlib.sha256(data).hexdigest()=="2833745daeb5f0c585a02d90a0ea1785be71436804ffeb5e188b8f7c2aa48df7"
+              assert hashlib.sha256(data).hexdigest()=="869f48e15723147eadb555b732c5e89c44a4e6df1a3d3d105eb85fd84e321f77"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -357,7 +354,7 @@ jobs:
             exit 1
           fi
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
-          MORWEN_SESSION_MODE=edit
+          MORWEN_SESSION_MODE=phase1
           # shellcheck source=/dev/null
           source tools/production_qa/morwen_vroid_session.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
